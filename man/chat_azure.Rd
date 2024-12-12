@@ -70,13 +70,14 @@ from OpenAI.
 \subsection{Authentication}{
 
 \code{chat_azure()} supports API keys and the \code{credentials} parameter, but it also
-picks up on Azure service principals automatically when the
-\code{AZURE_TENANT_ID}, \code{AZURE_CLIENT_ID}, and \code{AZURE_CLIENT_SECRET} environment
-variables are set.
-
-Finally, in interactive sessions it will also attempt to use Microsoft Entra
-ID authentication -- much like the Azure CLI -- if no API key has been
-provided.
+makes use of:
+\itemize{
+\item Azure service principals (when the \code{AZURE_TENANT_ID}, \code{AZURE_CLIENT_ID},
+and \code{AZURE_CLIENT_SECRET} environment variables are set).
+\item Interactive Entra ID authentication, like the Azure CLI.
+\item Viewer-based credentials on Posit Connect. Requires the \pkg{connectcreds}
+package.
+}
 }
 }
 \examples{

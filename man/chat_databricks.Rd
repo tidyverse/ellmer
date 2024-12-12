@@ -69,6 +69,8 @@ model. Specifically, it supports:
 \item User account via OAuth (OAuth U2M)
 \item Authentication via the Databricks CLI
 \item Posit Workbench-managed credentials
+\item Viewer-based credentials on Posit Connect. Requires the \pkg{connectcreds}
+package.
 }
 }
 

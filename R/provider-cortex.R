@@ -21,6 +21,8 @@ NULL
 #'   to one) environment variables.
 #' - Posit Workbench-managed Snowflake credentials for the corresponding
 #'   `account`.
+#' - Viewer-based credentials on Posit Connect. Requires the \pkg{connectcreds}
+#'   package.
 #'
 #' ## Known limitations
 #'

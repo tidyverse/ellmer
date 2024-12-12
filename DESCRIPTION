@@ -29,6 +29,7 @@ Imports:
 Suggests:
     base64enc,
     bslib,
+    connectcreds,
     curl (>= 6.0.1),
     gitcreds,
     knitr,

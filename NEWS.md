@@ -42,6 +42,10 @@
 * `chat_bedrock()` now handles temporary IAM credentials better (#261,
   @atheriel).
 
+* `chat_azure()`, `chat_databricks()`, `chat_snowflake()`, and
+  `chat_cortex_analyst()` now detect viewer-based credentials when running on
+  Posit Connect (#285, @atheriel).
+
 # ellmer 0.1.0
 
 * New `chat_vllm()` to chat with models served by vLLM (#140).

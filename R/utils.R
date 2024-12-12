@@ -114,3 +114,10 @@ credentials_cache <- function(key) {
     clear = function() env_unbind(the$credentials_cache, key)
   )
 }
+
+has_connect_viewer_token <- function(...) {
+  if (!is_installed("connectcreds")) {
+    return(FALSE)
+  }
+  connectcreds::has_viewer_token(...)
+}

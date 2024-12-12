@@ -14,13 +14,13 @@ NULL
 #' ## Authentication
 #'
 #' `chat_azure()` supports API keys and the `credentials` parameter, but it also
-#' picks up on Azure service principals automatically when the
-#' `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, and `AZURE_CLIENT_SECRET` environment
-#' variables are set.
+#' makes use of:
 #'
-#' Finally, in interactive sessions it will also attempt to use Microsoft Entra
-#' ID authentication -- much like the Azure CLI -- if no API key has been
-#' provided.
+#' - Azure service principals (when the `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`,
+#'   and `AZURE_CLIENT_SECRET` environment variables are set).
+#' - Interactive Entra ID authentication, like the Azure CLI.
+#' - Viewer-based credentials on Posit Connect. Requires the \pkg{connectcreds}
+#'   package.
 #'
 #' @param endpoint Azure OpenAI endpoint url with protocol and hostname, i.e.
 #'  `https://{your-resource-name}.openai.azure.com`. Defaults to using the
@@ -214,6 +214,16 @@ default_azure_credentials <- function(api_key = NULL, token = NULL) {
     return(function() list(Authorization = paste("Bearer", token)))
   }
 
+  azure_openai_scope <- "https://cognitiveservices.azure.com/.default"
+
+  # Detect viewer-based credentials from Posit Connect.
+  if (has_connect_viewer_token(scope = azure_openai_scope)) {
+    return(function() {
+      token <- connectcreds::connect_viewer_token(scope = azure_openai_scope)
+      list(Authorization = paste("Bearer", token$access_token))
+    })
+  }
+
   # Detect Azure service principals.
   tenant_id <- Sys.getenv("AZURE_TENANT_ID")
   client_id <- Sys.getenv("AZURE_CLIENT_ID")
@@ -236,9 +246,7 @@ default_azure_credentials <- function(api_key = NULL, token = NULL) {
       token <- oauth_token_cached(
         client,
         oauth_flow_client_credentials,
-        flow_params = list(
-          scope = "https://cognitiveservices.azure.com/.default"
-        ),
+        flow_params = list(scope = azure_openai_scope),
         # Don't use the cached token when testing.
         reauth = is_testing()
       )
@@ -267,7 +275,7 @@ default_azure_credentials <- function(api_key = NULL, token = NULL) {
         oauth_flow_auth_code,
         flow_params = list(
           auth_url = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-          scope = "https://cognitiveservices.azure.com/.default offline_access",
+          scope = paste(azure_openai_scope, "offline_access"),
           redirect_uri = "http://localhost:8400",
           auth_params = list(prompt = "select_account")
         )
