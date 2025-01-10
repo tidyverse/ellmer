@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_openai()` should be less likely to timeout when not streaming chat results (#213).
+
 # ellmer 0.1.0
 
 * New `chat_vllm()` to chat with models served by vLLM (#140).
