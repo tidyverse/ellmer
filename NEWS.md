@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_deepseek()` provides support for DeepSeek models (#242)
+
 * `print(Chat)` no longer wraps long lines, making it easier to read code and bulleted lists (#246).
 
 * `chat_openai()` should be less likely to timeout when not streaming chat results (#213).

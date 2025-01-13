@@ -116,6 +116,8 @@ method(chat_request, ProviderOpenAI) <- function(provider,
   req <- req_error(req, body = function(resp) {
     if (resp_content_type(resp) == "application/json") {
       resp_body_json(resp)$error$message
+    } else if (resp_content_type(resp) == "text/plain") {
+      resp_body_string(resp)
     }
   })
 
