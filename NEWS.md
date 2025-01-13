@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `option(ellmer_verbosity)` is no longer supported; instead use the standard httr2 verbosity functions which now support streaming data.
 * `chat_openai()` should be less likely to timeout when not streaming chat results (#213).
 
 # ellmer 0.1.0
