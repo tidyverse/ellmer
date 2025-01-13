@@ -102,7 +102,7 @@ ContentText <- new_class(
   properties = list(text = prop_string()),
 )
 method(format, ContentText) <- function(x, ...) {
-  paste0(unlist(strwrap(x@text, width = getOption("width"))), collapse = "\n")
+  x@text
 }
 
 method(contents_text, ContentText) <- function(content) {
