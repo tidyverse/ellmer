@@ -167,7 +167,11 @@ method(as_json, list(ProviderDatabricks, ContentText)) <- function(provider, x) 
 }
 
 databricks_workspace <- function() {
-  key_get("DATABRICKS_HOST")
+  host <- key_get("DATABRICKS_HOST")
+  if (!is.null(host) && !grepl("^https?://", host)) {
+    host <- paste0("https://", host)
+  }
+  host
 }
 
 # Try various ways to get Databricks credentials. This implements a subset of

@@ -83,3 +83,20 @@ test_that("M2M authentication requests look correct", {
   })
   expect_equal(databricks_token(), "token")
 })
+
+test_that("workspace detection handles URLs with and without an https prefix", {
+  withr::with_envvar(
+    c(DATABRICKS_HOST = "example.cloud.databricks.com"),
+    expect_equal(
+      databricks_workspace(),
+      "https://example.cloud.databricks.com"
+    )
+  )
+  withr::with_envvar(
+    c(DATABRICKS_HOST = "https://example.cloud.databricks.com"),
+    expect_equal(
+      databricks_workspace(),
+      "https://example.cloud.databricks.com"
+    )
+  )
+})

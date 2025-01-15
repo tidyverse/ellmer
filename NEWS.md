@@ -7,6 +7,9 @@
 * `chat_azure()` now has a `credentials` argument to make authentication against
   Azure more flexible (#248, @atheriel).
 
+* `chat_databricks()` now handles the `DATABRICKS_HOST` environment variable
+  correctly whether it includes an HTTPS prefix or not (#252, @atheriel).
+
 # ellmer 0.1.0
 
 * New `chat_vllm()` to chat with models served by vLLM (#140).
