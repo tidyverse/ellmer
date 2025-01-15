@@ -100,3 +100,14 @@ test_that("workspace detection handles URLs with and without an https prefix", {
     )
   )
 })
+
+test_that("the user agent respects SPARK_CONNECT_USER_AGENT when set", {
+  withr::with_envvar(
+    c(SPARK_CONNECT_USER_AGENT = NA),
+    expect_match(databricks_user_agent(), "^r-ellmer")
+  )
+  withr::with_envvar(
+    c(SPARK_CONNECT_USER_AGENT = "testing"),
+    expect_match(databricks_user_agent(), "^testing r-ellmer")
+  )
+})

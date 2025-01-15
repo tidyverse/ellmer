@@ -10,6 +10,9 @@
 * `chat_databricks()` now handles the `DATABRICKS_HOST` environment variable
   correctly whether it includes an HTTPS prefix or not (#252, @atheriel).
 
+* `chat_databricks()` now respects the `SPARK_CONNECT_USER_AGENT` environment
+  variable when making requests (#254, @atheriel).
+
 # ellmer 0.1.0
 
 * New `chat_vllm()` to chat with models served by vLLM (#140).

@@ -89,6 +89,7 @@ method(chat_request, ProviderDatabricks) <- function(provider,
   req <- req_auth_bearer_token(req,
     databricks_token(provider@base_url, provider@token)
   )
+  req <- req_user_agent(req, databricks_user_agent())
   req <- req_retry(req, max_tries = 2)
   req <- req_error(req, body = function(resp) {
     if (resp_content_type(resp) == "application/json") {
@@ -172,6 +173,14 @@ databricks_workspace <- function() {
     host <- paste0("https://", host)
   }
   host
+}
+
+databricks_user_agent <- function() {
+  user_agent <- paste0("r-ellmer/", utils::packageVersion("ellmer"))
+  if (nchar(Sys.getenv("SPARK_CONNECT_USER_AGENT")) != 0) {
+    user_agent <- paste(Sys.getenv("SPARK_CONNECT_USER_AGENT"), user_agent)
+  }
+  user_agent
 }
 
 # Try various ways to get Databricks credentials. This implements a subset of
