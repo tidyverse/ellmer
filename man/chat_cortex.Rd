@@ -5,7 +5,7 @@
 \title{Create a chatbot that speaks to the Snowflake Cortex Analyst}
 \usage{
 chat_cortex(
-  account = Sys.getenv("SNOWFLAKE_ACCOUNT"),
+  account = snowflake_account(),
   credentials = NULL,
   model_spec = NULL,
   model_file = NULL,
@@ -15,7 +15,8 @@ chat_cortex(
 }
 \arguments{
 \item{account}{A Snowflake \href{https://docs.snowflake.com/en/user-guide/admin-account-identifier}{account identifier},
-e.g. \code{"testorg-test_account"}.}
+e.g. \code{"testorg-test_account"}. Defaults to the value of the
+\code{SNOWFLAKE_ACCOUNT} environment variable.}
 
 \item{credentials}{A list of authentication headers to pass into
 \code{\link[httr2:req_headers]{httr2::req_headers()}}, a function that returns them when passed
@@ -55,6 +56,9 @@ reference to an existing file in a Snowflake Stage.
 Note that Cortex does not support multi-turn, so it will not remember
 previous messages. Nor does it support registering tools, and attempting to
 do so will result in an error.
+
+See \code{\link[=chat_snowflake]{chat_snowflake()}} to chat with more general-purpose models hosted on
+Snowflake.
 \subsection{Authentication}{
 
 \code{chat_cortex()} picks up the following ambient Snowflake credentials:

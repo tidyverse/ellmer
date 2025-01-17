@@ -15,6 +15,11 @@
 * `chat_databricks()` now respects the `SPARK_CONNECT_USER_AGENT` environment
   variable when making requests (#254, @atheriel).
 
+* A new `chat_snowflake()` allows chatting with models hosted through
+  Snowflake's [Cortex LLM REST
+  API](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api)
+  (#258, @atheriel).
+
 # ellmer 0.1.0
 
 * New `chat_vllm()` to chat with models served by vLLM (#140).

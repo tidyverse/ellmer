@@ -20,6 +20,9 @@ NULL
 #' previous messages. Nor does it support registering tools, and attempting to
 #' do so will result in an error.
 #'
+#' See [chat_snowflake()] to chat with more general-purpose models hosted on
+#' Snowflake.
+#'
 #' ## Authentication
 #'
 #' `chat_cortex()` picks up the following ambient Snowflake credentials:
@@ -33,7 +36,8 @@ NULL
 #'   `account`.
 #'
 #' @param account A Snowflake [account identifier](https://docs.snowflake.com/en/user-guide/admin-account-identifier),
-#'   e.g. `"testorg-test_account"`.
+#'   e.g. `"testorg-test_account"`. Defaults to the value of the
+#'   `SNOWFLAKE_ACCOUNT` environment variable.
 #' @param credentials A list of authentication headers to pass into
 #'   [`httr2::req_headers()`], a function that returns them when passed
 #'   `account` as a parameter, or `NULL` to use ambient credentials.
@@ -50,7 +54,7 @@ NULL
 #' )
 #' chat$chat("What questions can I ask?")
 #' @export
-chat_cortex <- function(account = Sys.getenv("SNOWFLAKE_ACCOUNT"),
+chat_cortex <- function(account = snowflake_account(),
                         credentials = NULL,
                         model_spec = NULL,
                         model_file = NULL,
@@ -84,7 +88,7 @@ ProviderCortex <- new_class(
   parent = Provider,
   constructor = function(account, credentials, model_spec = NULL,
                          model_file = NULL, extra_args = list()) {
-    base_url <- paste0("https://", account, ".snowflakecomputing.com")
+    base_url <- snowflake_url(account)
     extra_args <- compact(list2(
       semantic_model = model_spec,
       semantic_model_file = model_file,
@@ -124,6 +128,7 @@ method(chat_request, ProviderCortex) <- function(provider,
   req <- httr2::req_headers(req, !!!creds, .redact = "Authorization")
   req <- req_retry(req, max_tries = 2)
   req <- req_timeout(req, 60)
+  req <- req_user_agent(req, snowflake_user_agent())
 
   # Snowflake doesn't document the error response format for Cortex Analyst at
   # this time, but empirically errors look like the following:
@@ -136,15 +141,6 @@ method(chat_request, ProviderCortex) <- function(provider,
   # }
   req <- req_error(req, body = function(resp) resp_body_json(resp)$message)
 
-  # Snowflake uses the User Agent header to identify "parter applications",
-  # so identify requests as coming from "r_ellmer" (unless an explicit
-  # partner application is set via the ambient SF_PARTNER environment
-  # variable).
-  req <- req_user_agent(req, ellmer_user_agent())
-  if (nchar(Sys.getenv("SF_PARTNER")) != 0) {
-    req <- req_user_agent(req, Sys.getenv("SF_PARTNER"))
-  }
-
   # Cortex does not yet support multi-turn chats.
   turns <- tail(turns, n = 1)
   messages <- as_json(provider, turns)
@@ -154,10 +150,6 @@ method(chat_request, ProviderCortex) <- function(provider,
   req <- req_body_json(req, data)
 
   req
-}
-
-ellmer_user_agent <- function() {
-  paste0("r_ellmer/", utils::packageVersion("ellmer"))
 }
 
 # Cortex -> ellmer --------------------------------------------------------------
