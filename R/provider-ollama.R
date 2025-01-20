@@ -2,8 +2,10 @@
 #'
 #' @description
 #' To use `chat_ollama()` first download and install
-#' [Ollama](https://ollama.com). Then install some models from the command line,
-#' e.g. with `ollama pull llama3.1` or `ollama pull gemma2`.
+#' [Ollama](https://ollama.com). Then install some models either from the
+#' command line (e.g. with `ollama pull llama3.1`) or within R using
+#' {[ollamar](https://hauselin.github.io/ollama-r)} (e.g.
+#' `ollamar::pull("llama3.1")`).
 #'
 #' This function is a lightweight wrapper around [chat_openai()] with
 #' the defaults tweaked for ollama.

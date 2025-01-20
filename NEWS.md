@@ -1,7 +1,19 @@
 # ellmer (development version)
 
 * `option(ellmer_verbosity)` is no longer supported; instead use the standard httr2 verbosity functions which now support streaming data.
+
+* `print(Chat)` no longer wraps long lines, making it easier to read code and bulleted lists (#246).
+
 * `chat_openai()` should be less likely to timeout when not streaming chat results (#213).
+
+* `chat_azure()` now has a `credentials` argument to make authentication against
+  Azure more flexible (#248, @atheriel).
+
+* `chat_databricks()` now handles the `DATABRICKS_HOST` environment variable
+  correctly whether it includes an HTTPS prefix or not (#252, @atheriel).
+
+* `chat_databricks()` now respects the `SPARK_CONNECT_USER_AGENT` environment
+  variable when making requests (#254, @atheriel).
 
 # ellmer 0.1.0
 

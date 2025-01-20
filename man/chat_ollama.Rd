@@ -48,8 +48,10 @@ A \link{Chat} object.
 }
 \description{
 To use \code{chat_ollama()} first download and install
-\href{https://ollama.com}{Ollama}. Then install some models from the command line,
-e.g. with \verb{ollama pull llama3.1} or \verb{ollama pull gemma2}.
+\href{https://ollama.com}{Ollama}. Then install some models either from the
+command line (e.g. with \verb{ollama pull llama3.1}) or within R using
+{\href{https://hauselin.github.io/ollama-r}{ollamar}} (e.g.
+\code{ollamar::pull("llama3.1")}).
 
 This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}} with
 the defaults tweaked for ollama.

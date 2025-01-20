@@ -116,7 +116,7 @@ test_that("has a basic print method", {
   chat <- chat_openai(
     "You're a helpful assistant that returns very minimal output",
     turns = list(
-      Turn("user", "What's 1 + 1? What's 1 + 2?"),
+      Turn("user", "What's 1 + 1?\nWhat's 1 + 2?"),
       Turn("assistant", "2\n\n3", tokens = c(15, 5))
     )
   )
