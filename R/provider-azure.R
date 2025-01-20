@@ -109,10 +109,8 @@ method(chat_request, ProviderAzure) <- function(provider,
   req <- request(provider@base_url)
   req <- req_url_path_append(req, "/chat/completions")
   req <- req_url_query(req, `api-version` = provider@api_version)
-  # Note: could use req_headers_redacted() here but it requires a very new
-  # httr2 version.
   if (nchar(provider@api_key)) {
-    req <- req_headers(req, `api-key` = provider@api_key, .redact = "api-key")
+    req <- req_headers_redacted(req, `api-key` = provider@api_key)
   }
   req <- req_headers(req, !!!provider@credentials(), .redact = "Authorization")
   req <- req_retry(req, max_tries = 2)

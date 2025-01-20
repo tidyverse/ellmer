@@ -80,15 +80,10 @@ method(chat_request, ProviderClaude) <- function(provider,
   req <- request(provider@base_url)
   # https://docs.anthropic.com/en/api/messages
   req <- req_url_path_append(req, "/messages")
-
-  req <- req_headers(req,
-    # <https://docs.anthropic.com/en/api/versioning>
-    `anthropic-version` = "2023-06-01",
-    # <https://docs.anthropic.com/en/api/getting-started#authentication>
-    `x-api-key` = provider@api_key,
-    .redact = "x-api-key"
-  )
-
+  # <https://docs.anthropic.com/en/api/versioning>
+  req <- req_headers(req, `anthropic-version` = "2023-06-01")
+  # <https://docs.anthropic.com/en/api/getting-started#authentication>
+  req <- req_headers_redacted(req, `x-api-key` = provider@api_key)
   # <https://docs.anthropic.com/en/api/rate-limits>
   req <- req_retry(req, max_tries = 2)
 
