@@ -65,6 +65,13 @@ A \link{Chat} object.
 The \href{https://azure.microsoft.com/en-us/products/ai-services/openai-service}{Azure OpenAI server}
 hosts a number of open source models as well as proprietary models
 from OpenAI.
+\subsection{Authentication}{
+
+\code{chat_azure()} supports API keys and the \code{credentials} parameter, but it also
+picks up on Azure service principals automatically when the
+\code{AZURE_TENANT_ID}, \code{AZURE_CLIENT_ID}, and \code{AZURE_CLIENT_SECRET} environment
+variables are set.
+}
 }
 \examples{
 \dontrun{

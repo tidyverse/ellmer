@@ -11,6 +11,13 @@ NULL
 #' hosts a number of open source models as well as proprietary models
 #' from OpenAI.
 #'
+#' ## Authentication
+#'
+#' `chat_azure()` supports API keys and the `credentials` parameter, but it also
+#' picks up on Azure service principals automatically when the
+#' `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, and `AZURE_CLIENT_SECRET` environment
+#' variables are set.
+#'
 #' @param endpoint Azure OpenAI endpoint url with protocol and hostname, i.e.
 #'  `https://{your-resource-name}.openai.azure.com`. Defaults to using the
 #'   value of the `AZURE_OPENAI_ENDPOINT` envinronment variable.
@@ -151,6 +158,38 @@ method(chat_request, ProviderAzure) <- function(provider,
 default_azure_credentials <- function(api_key = NULL, token = NULL) {
   if (!is.null(token)) {
     return(function() list(Authorization = paste("Bearer", token)))
+  }
+
+  # Detect Azure service principals.
+  tenant_id <- Sys.getenv("AZURE_TENANT_ID")
+  client_id <- Sys.getenv("AZURE_CLIENT_ID")
+  client_secret <- Sys.getenv("AZURE_CLIENT_SECRET")
+  if (nchar(tenant_id) && nchar(client_id) && nchar(client_secret)) {
+    # Service principals use an OAuth client credentials flow. We cache the token
+    # so we don't need to perform this flow before each turn.
+    client <- oauth_client(
+      client_id,
+      token_url = paste0(
+        "https://login.microsoftonline.com/",
+        tenant_id,
+        "/oauth2/v2.0/token"
+      ),
+      secret = client_secret,
+      auth = "body",
+      name = "ellmer-azure-sp"
+    )
+    return(function() {
+      token <- oauth_token_cached(
+        client,
+        oauth_flow_client_credentials,
+        flow_params = list(
+          scope = "https://cognitiveservices.azure.com/.default"
+        ),
+        # Don't use the cached token when testing.
+        reauth = is_testing()
+      )
+      list(Authorization = paste("Bearer", token$access_token))
+    })
   }
 
   # If we have an API key, rely on that for credentials.

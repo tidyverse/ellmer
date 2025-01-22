@@ -54,3 +54,20 @@ test_that("Azure request headers are generated correctly", {
   req <- chat_request(p, FALSE, list(turn))
   expect_snapshot(req)
 })
+
+test_that("service principal authentication requests look correct", {
+  withr::local_envvar(
+    AZURE_TENANT_ID = "aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e",
+    AZURE_CLIENT_ID = "id",
+    AZURE_CLIENT_SECRET = "secret"
+  )
+  local_mocked_responses(function(req) {
+    # Snapshot relevant fields of the outgoing request.
+    expect_snapshot(
+      list(url = req$url, headers = req$headers, body = req$body$data)
+    )
+    response_json(body = list(access_token = "token"))
+  })
+  source <- default_azure_credentials()
+  expect_equal(source(), list(Authorization = "Bearer token"))
+})
