@@ -236,6 +236,17 @@ method(as_json, list(ProviderClaude, ContentText)) <- function(provider, x) {
   list(type = "text", text = x@text)
 }
 
+method(as_json, list(ProviderClaude, ContentPDF)) <- function(provider, x) {
+  list(
+    type = "document",
+    source = list(
+      type = "base64",
+      media_type = x@type,
+      data = x@data
+    )
+  )
+}
+
 method(as_json, list(ProviderClaude, ContentImageRemote)) <- function(provider, x) {
   cli::cli_abort("Claude doesn't support remote images")
 }
