@@ -53,6 +53,13 @@ pretty_json <- function(x) {
   jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
 }
 
+prettify <- function(x) {
+  tryCatch(
+    jsonlite::prettify(x),
+    error = function(cnd) x
+  )
+}
+
 check_echo <- function(echo = NULL) {
   if (is.null(echo) || identical(echo, c("none", "text", "all"))) {
     if (env_is_user_facing(parent.frame(2)) && !is_testing()) {

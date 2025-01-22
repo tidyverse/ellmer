@@ -75,6 +75,7 @@ Collate:
     'provider-github.R'
     'provider-groq.R'
     'provider-ollama.R'
+    'provider-open-router.R'
     'provider-perplexity.R'
     'provider-snowflake.R'
     'provider-vllm.R'
