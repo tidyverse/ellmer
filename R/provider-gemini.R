@@ -65,7 +65,7 @@ method(chat_request, ProviderGemini) <- function(provider,
 
 
   req <- request(provider@base_url)
-  req <- req_headers(req, "x-goog-api-key" = provider@api_key, .redact = "x-goog-api-key")
+  req <- req_headers_redacted(req, "x-goog-api-key" = provider@api_key)
   req <- req_retry(req, max_tries = 2)
   req <- req_error(req, body = function(resp) {
     json <- resp_body_json(resp, check_type = FALSE)

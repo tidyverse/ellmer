@@ -26,6 +26,7 @@ test_that("Azure request headers are generated correctly", {
     endpoint = endpoint,
     deployment_id = deployment_id,
     api_version = "2024-06-01",
+    api_key = "key",
     credentials = default_azure_credentials("key")
   )
   req <- chat_request(p, FALSE, list(turn))
@@ -36,7 +37,19 @@ test_that("Azure request headers are generated correctly", {
     endpoint = endpoint,
     deployment_id = deployment_id,
     api_version = "2024-06-01",
+    api_key = "",
     credentials = default_azure_credentials("", "token")
+  )
+  req <- chat_request(p, FALSE, list(turn))
+  expect_snapshot(req)
+
+  # Both.
+  p <- ProviderAzure(
+    endpoint = endpoint,
+    deployment_id = deployment_id,
+    api_version = "2024-06-01",
+    api_key = "key",
+    credentials = default_azure_credentials("key", "token")
   )
   req <- chat_request(p, FALSE, list(turn))
   expect_snapshot(req)
