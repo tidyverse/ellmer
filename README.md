@@ -34,6 +34,7 @@ ellmer supports a wide variety of model providers:
 - AWS Bedrock: `chat_bedrock()`.
 - Azure OpenAI: `chat_azure()`.
 - Databricks: `chat_databricks()`.
+- DeepSeek: `chat_deepseek()`.
 - GitHub model marketplace: `chat_github()`.
 - Google Gemini: `chat_gemini()`.
 - Groq: `chat_groq()`.
