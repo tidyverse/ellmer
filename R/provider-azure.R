@@ -121,7 +121,10 @@ method(chat_request, ProviderAzure) <- function(provider,
   }
   req <- req_headers(req, !!!provider@credentials(), .redact = "Authorization")
   req <- req_retry(req, max_tries = 2)
-  req <- req_error(req, body = function(resp) resp_body_json(resp)$message)
+  req <- req_error(req, body = function(resp) {
+    error <- resp_body_json(resp)$error
+    paste0(error$code, ": ", error$message)
+  })
 
   messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
   tools <- as_json(provider, unname(tools))

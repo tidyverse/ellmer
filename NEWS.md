@@ -27,6 +27,9 @@
 * `chat_azure()` now picks up credentials from Azure service principals
   automatically (#263, @atheriel).
 
+* `chat_azure()` now reports better error messages when the underlying HTTP
+  requests fail (#269, @atheriel).
+
 # ellmer 0.1.0
 
 * New `chat_vllm()` to chat with models served by vLLM (#140).
