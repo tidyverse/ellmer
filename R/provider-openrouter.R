@@ -45,6 +45,10 @@ chat_openrouter <- function(
   Chat$new(provider = provider, turns = turns, echo = echo)
 }
 
+chat_openrouter_test <- function(...) {
+  chat_openrouter(..., model = "openai/gpt-4o-mini-2024-07-18")
+}
+
 ProviderOpenRouter <- new_class(
   "ProviderOpenRouter",
   parent = ProviderOpenAI,
