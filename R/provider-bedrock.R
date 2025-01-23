@@ -35,7 +35,8 @@ chat_bedrock <- function(system_prompt = NULL,
                          echo = NULL) {
 
   check_installed("paws.common", "AWS authentication")
-  credentials <- paws_credentials(profile)
+  cache <- aws_creds_cache(profile)
+  credentials <- paws_credentials(profile, cache = cache)
 
   turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
@@ -45,7 +46,8 @@ chat_bedrock <- function(system_prompt = NULL,
     base_url = "",
     model = model,
     profile = profile,
-    credentials = credentials
+    region = credentials$region,
+    cache = cache
   )
 
   Chat$new(provider = provider, turns = turns, echo = echo)
@@ -57,7 +59,8 @@ ProviderBedrock <- new_class(
   properties = list(
     model = prop_string(),
     profile = prop_string(allow_null = TRUE),
-    credentials = class_list
+    region = prop_string(),
+    cache = class_list
   )
 )
 
@@ -69,7 +72,7 @@ method(chat_request, ProviderBedrock) <- function(provider,
                                                   extra_args = list()) {
 
   req <- request(paste0(
-    "https://bedrock-runtime.", provider@credentials$region, ".amazonaws.com"
+    "https://bedrock-runtime.", provider@region, ".amazonaws.com"
   ))
   req <- req_url_path_append(
     req,
@@ -77,11 +80,12 @@ method(chat_request, ProviderBedrock) <- function(provider,
     provider@model,
     if (stream) "converse-stream" else "converse"
   )
+  creds <- paws_credentials(provider@profile, provider@cache)
   req <- req_auth_aws_v4(
     req,
-    aws_access_key_id = provider@credentials$access_key_id,
-    aws_secret_access_key = provider@credentials$secret_access_key,
-    aws_session_token = provider@credentials$session_token
+    aws_access_key_id = creds$access_key_id,
+    aws_secret_access_key = creds$secret_access_key,
+    aws_session_token = creds$session_token
   )
 
   req <- req_error(req, body = function(resp) {
@@ -297,15 +301,38 @@ method(as_json, list(ProviderBedrock, ToolDef)) <- function(provider, x) {
 
 # Helpers ----------------------------------------------------------------
 
-paws_credentials <- function(profile) {
-  if (is_testing()) {
-    tryCatch(
-      paws.common::locate_credentials(profile),
+paws_credentials <- function(profile, cache = aws_creds_cache(profile),
+                             reauth = FALSE) {
+  creds <- cache$get()
+  if (reauth || is.null(creds) || creds$expiration < Sys.time()) {
+    cache$clear()
+    try_fetch(
+      creds <- locate_aws_credentials(profile),
       error = function(cnd) {
-        testthat::skip("Failed to locate AWS credentails")
+        if (is_testing()) {
+          testthat::skip("Failed to locate AWS credentails")
+        }
+        cli::cli_abort("No IAM credentials found.", parent = cnd)
       }
     )
-  } else {
-    paws.common::locate_credentials(profile)
+    cache$set(creds)
   }
+  creds
 }
+
+# Wrapper for paws.common::locate_credentials() so we can mock it in tests.
+locate_aws_credentials <- function(profile) {
+  paws.common::locate_credentials(profile)
+}
+
+# In-memory cache for AWS credentials. Analogous to httr2:::cache_mem().
+aws_creds_cache <- function(profile) {
+  key <- hash(profile)
+  list(
+    get = function() env_get(the$aws_credentials_cache, key, default = NULL),
+    set = function(creds) env_poke(the$aws_credentials_cache, key, creds),
+    clear = function() env_unbind(the$aws_credentials_cache, key)
+  )
+}
+
+the$aws_credentials_cache <- new_environment()

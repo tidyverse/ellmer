@@ -39,6 +39,9 @@
   disambiguate it from `chat_snowflake()` (which *also* uses "Cortex") (#275,
   @atheriel).
 
+* `chat_bedrock()` now handles temporary IAM credentials better (#261,
+  @atheriel).
+
 # ellmer 0.1.0
 
 * New `chat_vllm()` to chat with models served by vLLM (#140).
