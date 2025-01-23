@@ -6,9 +6,6 @@ NULL
 #' @description
 #' Sign up at <https://platform.deepseek.com>.
 #'
-#' This function is a lightweight wrapper around [chat_openai()] with
-#' default settings tailored for DeepSeek.
-#'
 #' ## Known limitations
 #'
 #' * Structured data extraction is not supported..

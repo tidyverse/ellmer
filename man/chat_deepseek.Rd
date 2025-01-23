@@ -50,9 +50,6 @@ A \link{Chat} object.
 }
 \description{
 Sign up at \url{https://platform.deepseek.com}.
-
-This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}} with
-default settings tailored for DeepSeek.
 \subsection{Known limitations}{
 \itemize{
 \item Structured data extraction is not supported..
