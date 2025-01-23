@@ -18,6 +18,10 @@ NULL
 #' `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, and `AZURE_CLIENT_SECRET` environment
 #' variables are set.
 #'
+#' Finally, in interactive sessions it will also attempt to use Microsoft Entra
+#' ID authentication -- much like the Azure CLI -- if no API key has been
+#' provided.
+#'
 #' @param endpoint Azure OpenAI endpoint url with protocol and hostname, i.e.
 #'  `https://{your-resource-name}.openai.azure.com`. Defaults to using the
 #'   value of the `AZURE_OPENAI_ENDPOINT` envinronment variable.
@@ -137,7 +141,27 @@ method(chat_request, ProviderAzure) <- function(provider,
   req <- req_retry(req, max_tries = 2)
   req <- req_error(req, body = function(resp) {
     error <- resp_body_json(resp)$error
-    paste0(error$code, ": ", error$message)
+    msg <- paste0(error$code, ": ", error$message)
+    # Try to be helpful in the (common) case that the user or service
+    # principal is missing the necessary role.
+    # See: https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/role-based-access-control
+    bad_rbac <- identical(
+      error$message,
+      "Principal does not have access to API/Operation."
+    )
+    if (bad_rbac) {
+      msg <- c(
+        "*" = msg,
+        "i" = cli::format_inline(
+          "Your user or service principal likely needs one of the following
+        roles: {.emph Cognitive Services OpenAI User},
+        {.emph Cognitive Services OpenAI Contributor}, or
+        {.emph Cognitive Services Contributor}.",
+          keep_whitespace = FALSE
+        )
+      )
+    }
+    msg
   })
 
   messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
@@ -212,6 +236,31 @@ default_azure_credentials <- function(api_key = NULL, token = NULL) {
   # If we have an API key, rely on that for credentials.
   if (nchar(api_key)) {
     return(function() list())
+  }
+
+  # Masquerade as the Azure CLI.
+  client_id <- "04b07795-8ddb-461a-bbee-02f9e1bf7b46"
+  if (is_interactive() && !is_hosted_session()) {
+    client <- oauth_client(
+      client_id,
+      token_url = "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+      secret = "",
+      auth = "body",
+      name = paste0("ellmer-", client_id)
+    )
+    return(function() {
+      token <- oauth_token_cached(
+        client,
+        oauth_flow_auth_code,
+        flow_params = list(
+          auth_url = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+          scope = "https://cognitiveservices.azure.com/.default offline_access",
+          redirect_uri = "http://localhost:8400",
+          auth_params = list(prompt = "select_account")
+        )
+      )
+      list(Authorization = paste("Bearer", token$access_token))
+    })
   }
 
   if (is_testing()) {

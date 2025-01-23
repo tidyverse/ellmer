@@ -73,6 +73,10 @@ from OpenAI.
 picks up on Azure service principals automatically when the
 \code{AZURE_TENANT_ID}, \code{AZURE_CLIENT_ID}, and \code{AZURE_CLIENT_SECRET} environment
 variables are set.
+
+Finally, in interactive sessions it will also attempt to use Microsoft Entra
+ID authentication -- much like the Azure CLI -- if no API key has been
+provided.
 }
 }
 \examples{

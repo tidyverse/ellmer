@@ -37,6 +37,9 @@
 * The `token` argument to `chat_azure()` has been deprecated. Use ambient
   credentials or the `credentials` argument instead (#257, @atheriel).
 
+* `chat_azure()` attempts to use interactive Entra ID authentication if no other
+  credentials are available (#273, @atheriel).
+
 # ellmer 0.1.0
 
 * New `chat_vllm()` to chat with models served by vLLM (#140).
