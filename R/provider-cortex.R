@@ -10,6 +10,20 @@ NULL
 #' Chat with the LLM-powered [Snowflake Cortex
 #' Analyst](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst).
 #'
+#' ## Authentication
+#'
+#' `chat_cortex()` picks up the following ambient Snowflake credentials:
+#'
+#' - A static OAuth token defined via the `SNOWFLAKE_TOKEN` environment
+#'   variable.
+#' - Key-pair authentication credentials defined via the `SNOWFLAKE_USER` and
+#'   `SNOWFLAKE_PRIVATE_KEY` (which can be a PEM-encoded private key or a path
+#'   to one) environment variables.
+#' - Posit Workbench-managed Snowflake credentials for the corresponding
+#'   `account`.
+#'
+#' ## Known limitations
+#'
 #' Unlike most comparable model APIs, Cortex does not take a system prompt.
 #' Instead, the caller must provide a "semantic model" describing available
 #' tables, their meaning, and verified queries that can be run against them as a
@@ -22,18 +36,6 @@ NULL
 #'
 #' See [chat_snowflake()] to chat with more general-purpose models hosted on
 #' Snowflake.
-#'
-#' ## Authentication
-#'
-#' `chat_cortex()` picks up the following ambient Snowflake credentials:
-#'
-#' - A static OAuth token defined via the `SNOWFLAKE_TOKEN` environment
-#'   variable.
-#' - Key-pair authentication credentials defined via the `SNOWFLAKE_USER` and
-#'   `SNOWFLAKE_PRIVATE_KEY` (which can be a PEM-encoded private key or a path
-#'   to one) environment variables.
-#' - Posit Workbench-managed Snowflake credentials for the corresponding
-#'   `account`.
 #'
 #' @param account A Snowflake [account identifier](https://docs.snowflake.com/en/user-guide/admin-account-identifier),
 #'   e.g. `"testorg-test_account"`. Defaults to the value of the

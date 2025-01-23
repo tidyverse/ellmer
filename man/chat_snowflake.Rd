@@ -52,12 +52,6 @@ A \link{Chat} object.
 \description{
 The Snowflake provider allows you to interact with LLM models available
 through the \href{https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api}{Cortex LLM REST API}.
-
-Note that Snowflake-hosted models do not support images, tool calling, or
-structured outputs.
-
-See \code{\link[=chat_cortex]{chat_cortex()}} to chat with the Snowflake Cortex Analyst rather than a
-general-purpose model.
 \subsection{Authentication}{
 
 \code{chat_snowflake()} picks up the following ambient Snowflake credentials:
@@ -70,6 +64,15 @@ to one) environment variables.
 \item Posit Workbench-managed Snowflake credentials for the corresponding
 \code{account}.
 }
+}
+
+\subsection{Known limitations}{
+
+Note that Snowflake-hosted models do not support images, tool calling, or
+structured outputs.
+
+See \code{\link[=chat_cortex]{chat_cortex()}} to chat with the Snowflake Cortex Analyst rather than a
+general-purpose model.
 }
 }
 \examples{

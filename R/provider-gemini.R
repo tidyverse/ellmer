@@ -6,6 +6,7 @@ NULL
 
 #' Chat with a Google Gemini model
 #'
+#' ## Authentication
 #' To authenticate, we recommend saving your
 #' [API key](https://aistudio.google.com/app/apikey) to
 #' the `GOOGLE_API_KEY` env var in your `.Renviron`

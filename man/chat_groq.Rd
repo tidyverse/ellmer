@@ -56,8 +56,10 @@ Sign up at \url{https://groq.com}.
 
 This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}} with
 the defaults tweaked for groq.
+\subsection{Known limitations}{
 
-It does not currently support structured data extraction.
+groq does not currently support structured data extraction.
+}
 }
 \examples{
 \dontrun{

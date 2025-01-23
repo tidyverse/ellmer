@@ -5,10 +5,6 @@
 #' models](https://docs.databricks.com/en/machine-learning/model-serving/score-foundation-models.html)
 #' and can also serve as a gateway for external models hosted by a third party.
 #'
-#' Databricks models do not support images, but they do support structured
-#' outputs. Tool calling support is also very limited at present; too limited
-#' for `ellmer`'s tool calling features to work properly at all.
-#'
 #' ## Authentication
 #'
 #' `chat_databricks()` picks up on ambient Databricks credentials for a subset
@@ -21,6 +17,12 @@
 #' - User account via OAuth (OAuth U2M)
 #' - Authentication via the Databricks CLI
 #' - Posit Workbench-managed credentials
+#'
+#' ## Known limitations
+#'
+#' Databricks models do not support images, but they do support structured
+#' outputs. Tool calling support is also very limited at present and is
+#' currently not supported by ellmer.
 #'
 #' @family chatbots
 #' @param workspace The URL of a Databricks workspace, e.g.

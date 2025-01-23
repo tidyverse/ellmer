@@ -42,11 +42,13 @@ A \link{Chat} object.
 \href{https://aws.amazon.com/bedrock/}{AWS Bedrock} provides a number of chat
 based models, including those Anthropic's
 \href{https://aws.amazon.com/bedrock/claude/}{Claude}.
+\subsection{Authentication}{
 
 Authenthication is handled through \{paws.common\}, so if authenthication
 does not work for you automatically, you'll need to follow the advice
 at \url{https://www.paws-r-sdk.com/#credentials}. In particular, if your
 org uses AWS SSO, you'll need to run \verb{aws sso login} at the terminal.
+}
 }
 \examples{
 \dontrun{

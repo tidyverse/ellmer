@@ -13,6 +13,8 @@ NULL
 #' models via the API; instead, you will need to sign up (and pay for) a
 #' [developer account](https://console.anthropic.com/)
 #'
+#' ## Authentication
+#' 
 #' To authenticate, we recommend saving your
 #' [API key](https://console.anthropic.com/account/keys) to
 #' the `ANTHROPIC_API_KEY` env var in your `.Renviron`

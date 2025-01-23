@@ -8,12 +8,6 @@ NULL
 #' The Snowflake provider allows you to interact with LLM models available
 #' through the [Cortex LLM REST API](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api).
 #'
-#' Note that Snowflake-hosted models do not support images, tool calling, or
-#' structured outputs.
-#'
-#' See [chat_cortex()] to chat with the Snowflake Cortex Analyst rather than a
-#' general-purpose model.
-#'
 #' ## Authentication
 #'
 #' `chat_snowflake()` picks up the following ambient Snowflake credentials:
@@ -25,6 +19,13 @@ NULL
 #'   to one) environment variables.
 #' - Posit Workbench-managed Snowflake credentials for the corresponding
 #'   `account`.
+#'
+#' ## Known limitations
+#' Note that Snowflake-hosted models do not support images, tool calling, or
+#' structured outputs.
+#'
+#' See [chat_cortex()] to chat with the Snowflake Cortex Analyst rather than a
+#' general-purpose model.
 #'
 #' @inheritParams chat_openai
 #' @inheritParams chat_cortex

@@ -11,6 +11,8 @@ NULL
 #' based models, including those Anthropic's
 #' [Claude](https://aws.amazon.com/bedrock/claude/).
 #'
+#' ## Authentication
+#' 
 #' Authenthication is handled through \{paws.common\}, so if authenthication
 #' does not work for you automatically, you'll need to follow the advice
 #' at <https://www.paws-r-sdk.com/#credentials>. In particular, if your

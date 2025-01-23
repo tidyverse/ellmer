@@ -58,10 +58,6 @@ A \link{Chat} object.
 \description{
 Databricks provides out-of-the-box access to a number of \href{https://docs.databricks.com/en/machine-learning/model-serving/score-foundation-models.html}{foundation models}
 and can also serve as a gateway for external models hosted by a third party.
-
-Databricks models do not support images, but they do support structured
-outputs. Tool calling support is also very limited at present; too limited
-for \code{ellmer}'s tool calling features to work properly at all.
 \subsection{Authentication}{
 
 \code{chat_databricks()} picks up on ambient Databricks credentials for a subset
@@ -74,6 +70,13 @@ model. Specifically, it supports:
 \item Authentication via the Databricks CLI
 \item Posit Workbench-managed credentials
 }
+}
+
+\subsection{Known limitations}{
+
+Databricks models do not support images, but they do support structured
+outputs. Tool calling support is also very limited at present and is
+currently not supported by ellmer.
 }
 }
 \examples{

@@ -46,6 +46,21 @@ A \link{Chat} object.
 }
 \description{
 Chat with the LLM-powered \href{https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst}{Snowflake Cortex Analyst}.
+\subsection{Authentication}{
+
+\code{chat_cortex()} picks up the following ambient Snowflake credentials:
+\itemize{
+\item A static OAuth token defined via the \code{SNOWFLAKE_TOKEN} environment
+variable.
+\item Key-pair authentication credentials defined via the \code{SNOWFLAKE_USER} and
+\code{SNOWFLAKE_PRIVATE_KEY} (which can be a PEM-encoded private key or a path
+to one) environment variables.
+\item Posit Workbench-managed Snowflake credentials for the corresponding
+\code{account}.
+}
+}
+
+\subsection{Known limitations}{
 
 Unlike most comparable model APIs, Cortex does not take a system prompt.
 Instead, the caller must provide a "semantic model" describing available
@@ -59,18 +74,6 @@ do so will result in an error.
 
 See \code{\link[=chat_snowflake]{chat_snowflake()}} to chat with more general-purpose models hosted on
 Snowflake.
-\subsection{Authentication}{
-
-\code{chat_cortex()} picks up the following ambient Snowflake credentials:
-\itemize{
-\item A static OAuth token defined via the \code{SNOWFLAKE_TOKEN} environment
-variable.
-\item Key-pair authentication credentials defined via the \code{SNOWFLAKE_USER} and
-\code{SNOWFLAKE_PRIVATE_KEY} (which can be a PEM-encoded private key or a path
-to one) environment variables.
-\item Posit Workbench-managed Snowflake credentials for the corresponding
-\code{account}.
-}
 }
 }
 \examples{
