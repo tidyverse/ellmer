@@ -81,6 +81,17 @@ method(chat_request, ProviderOpenRouter) <- function(
   req
 }
 
+method(value_turn, ProviderOpenRouter) <- function(provider, result, has_type = FALSE) {
+  # https://openrouter.ai/docs/errors
+  check_openrouter_error(result$error)
+
+  value_turn(
+    super(provider, ProviderOpenAI),
+    result = result,
+    has_type = has_type
+  )
+}
+
 method(stream_parse, ProviderOpenRouter) <- function(provider, event) {
   if (is.null(event)) {
     cli::cli_abort("Connection closed unexpectedly")
@@ -90,15 +101,28 @@ method(stream_parse, ProviderOpenRouter) <- function(provider, event) {
     return(NULL)
   }
 
-  data <- jsonlite::parse_json(event$data)
+  result <- jsonlite::parse_json(event$data)
+  check_openrouter_error(result$error)
+  result
+}
 
-  if (!is.null(data$error)) {
-    message <- data$error$message
-    details <- gsub(" ", "\u00a0", prettify(data$error$metadata$raw$data %||% ""), fixed = TRUE)
-    cli::cli_abort(c("{message}", i = "{details}"))
+check_openrouter_error <- function(error, call = caller_env()) {
+  if (is.null(error)) {
+    return()
+  }
+  message <- error$message
+  if (is.null(error$metadata$raw$data)) {
+    details <- NULL
+  } else {
+    details <- prettify(error$metadata$raw$data)
+    # don't line wrap
+    details <- gsub(" ", "\u00a0", details, fixed = TRUE)
   }
 
-  data
+  abort(
+    c("message", i = if (!is.null(details)) details),
+    call = call
+  )
 }
 
 method(chat_resp_stream, ProviderOpenRouter) <- function(provider, resp) {
@@ -108,6 +132,7 @@ method(chat_resp_stream, ProviderOpenRouter) <- function(provider, resp) {
       break
     }
 
+    # https://openrouter.ai/docs/responses#sse-streaming-comments
     if (!identical(event$data, character())) {
       break
     }
