@@ -40,6 +40,7 @@ ellmer supports a wide variety of model providers:
 - Groq: `chat_groq()`.
 - Ollama: `chat_ollama()`.
 - OpenAI: `chat_openai()`.
+- OpenRouter: `chat_openrouter()`.
 - perplexity.ai: `chat_perplexity()`.
 - Snowflake Cortex: `chat_cortex()`.
 - VLLM: `chat_vllm()`.

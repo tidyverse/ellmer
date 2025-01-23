@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_openrouter()` provides support for OpenRouter models (#212)
+
 * `chat_deepseek()` provides support for DeepSeek models (#242)
 
 * `option(ellmer_verbosity)` is no longer supported; instead use the standard httr2 verbosity functions which now support streaming data.
