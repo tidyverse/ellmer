@@ -1,7 +1,24 @@
 #' @include provider-openai.R
 NULL
 
-chat_open_router <- function(
+#' Chat with one of the many models hosted on OpenRouter
+#'
+#' @description
+#' Sign up at <https://openrouter.ai>.
+#'
+#' Support for features depends on the underlying model that you use; see
+#' <https://openrouter.ai/models> for details.
+#'
+#' @export
+#' @family chatbots
+#' @inheritParams chat_openai
+#' @inherit chat_openai return
+#' @examples
+#' \dontrun{
+#' chat <- chat_openrouter()
+#' chat$chat("Tell me three jokes about statisticians")
+#' }
+chat_openrouter <- function(
   system_prompt = NULL,
   turns = NULL,
   api_key = openrouter_key(),

@@ -84,6 +84,7 @@ Other chatbots:
 \code{\link{chat_github}()},
 \code{\link{chat_groq}()},
 \code{\link{chat_ollama}()},
+\code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()}
 }
 \concept{chatbots}
