@@ -6,7 +6,7 @@
 #' support PDF input, so check the documentation for the provider you are using.
 #'
 #' @param path Path to a PDF file
-#' @param compress Whether to compress the PDF before sending. Requires the qpdf package to be installed
+#' @param compress Whether to compress the PDF before sending. Requires the qpdf package to be installed.
 #' @return A ContentPDF object
 #' @export
 content_pdf_file <- function(path, compress = FALSE) {
@@ -36,6 +36,7 @@ content_pdf_file <- function(path, compress = FALSE) {
 }
 
 #' @rdname content_pdf_file
+#' @param url The URL to a remote PDF file
 #' @export
 content_pdf_url <- function(url, compress = FALSE) {
   if (grepl("^data:", url)) {

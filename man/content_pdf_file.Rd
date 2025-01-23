@@ -12,7 +12,9 @@ content_pdf_url(url, compress = FALSE)
 \arguments{
 \item{path}{Path to a PDF file}
 
-\item{compress}{Whether to compress the PDF before sending. Requires the qpdf package to be installed}
+\item{compress}{Whether to compress the PDF before sending. Requires the qpdf package to be installed.}
+
+\item{url}{The URL to a remote PDF file}
 }
 \value{
 A ContentPDF object
