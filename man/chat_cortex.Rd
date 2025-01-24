@@ -41,61 +41,10 @@ the console).
 
 Note this only affects the \code{chat()} method.}
 }
-\value{
-A \link{Chat} object.
-}
 \description{
-Chat with the LLM-powered \href{https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst}{Snowflake Cortex Analyst}.
-\subsection{Authentication}{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-\code{chat_cortex()} picks up the following ambient Snowflake credentials:
-\itemize{
-\item A static OAuth token defined via the \code{SNOWFLAKE_TOKEN} environment
-variable.
-\item Key-pair authentication credentials defined via the \code{SNOWFLAKE_USER} and
-\code{SNOWFLAKE_PRIVATE_KEY} (which can be a PEM-encoded private key or a path
-to one) environment variables.
-\item Posit Workbench-managed Snowflake credentials for the corresponding
-\code{account}.
+\code{\link[=chat_cortex]{chat_cortex()}} was renamed to \code{\link[=chat_cortex_analyst]{chat_cortex_analyst()}} to distinguish it from
+the more general-purpose Snowflake Cortex chat function, \code{\link[=chat_snowflake]{chat_snowflake()}}.
 }
-}
-
-\subsection{Known limitations}{
-
-Unlike most comparable model APIs, Cortex does not take a system prompt.
-Instead, the caller must provide a "semantic model" describing available
-tables, their meaning, and verified queries that can be run against them as a
-starting point. The semantic model can be passed as a YAML string or via
-reference to an existing file in a Snowflake Stage.
-
-Note that Cortex does not support multi-turn, so it will not remember
-previous messages. Nor does it support registering tools, and attempting to
-do so will result in an error.
-
-See \code{\link[=chat_snowflake]{chat_snowflake()}} to chat with more general-purpose models hosted on
-Snowflake.
-}
-}
-\examples{
-\dontshow{if (has_credentials("cortex")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-chat <- chat_cortex(
-  model_file = "@my_db.my_schema.my_stage/model.yaml"
-)
-chat$chat("What questions can I ask?")
-\dontshow{\}) # examplesIf}
-}
-\seealso{
-Other chatbots: 
-\code{\link{chat_bedrock}()},
-\code{\link{chat_claude}()},
-\code{\link{chat_databricks}()},
-\code{\link{chat_deepseek}()},
-\code{\link{chat_gemini}()},
-\code{\link{chat_github}()},
-\code{\link{chat_groq}()},
-\code{\link{chat_ollama}()},
-\code{\link{chat_openai}()},
-\code{\link{chat_openrouter}()},
-\code{\link{chat_perplexity}()}
-}
-\concept{chatbots}
+\keyword{internal}

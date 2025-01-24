@@ -51,17 +51,19 @@ NULL
 #' @inherit chat_openai return
 #' @family chatbots
 #' @examplesIf has_credentials("cortex")
-#' chat <- chat_cortex(
+#' chat <- chat_cortex_analyst(
 #'   model_file = "@my_db.my_schema.my_stage/model.yaml"
 #' )
 #' chat$chat("What questions can I ask?")
 #' @export
-chat_cortex <- function(account = snowflake_account(),
-                        credentials = NULL,
-                        model_spec = NULL,
-                        model_file = NULL,
-                        api_args = list(),
-                        echo = c("none", "text", "all")) {
+chat_cortex_analyst <- function(
+  account = snowflake_account(),
+  credentials = NULL,
+  model_spec = NULL,
+  model_file = NULL,
+  api_args = list(),
+  echo = c("none", "text", "all")
+) {
   check_string(account, allow_empty = FALSE)
   check_string(model_spec, allow_empty = FALSE, allow_null = TRUE)
   check_string(model_file, allow_empty = FALSE, allow_null = TRUE)
@@ -83,6 +85,36 @@ chat_cortex <- function(account = snowflake_account(),
   )
 
   Chat$new(provider = provider, turns = NULL, echo = echo)
+}
+
+#' Create a chatbot that speaks to the Snowflake Cortex Analyst
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' [chat_cortex()] was renamed to [chat_cortex_analyst()] to distinguish it from
+#' the more general-purpose Snowflake Cortex chat function, [chat_snowflake()].
+#'
+#' @inheritParams chat_cortex_analyst
+#' @keywords internal
+#' @export
+chat_cortex <- function(
+  account = snowflake_account(),
+  credentials = NULL,
+  model_spec = NULL,
+  model_file = NULL,
+  api_args = list(),
+  echo = c("none", "text", "all")
+) {
+  lifecycle::deprecate_warn("0.1.1", "chat_cortex()", "chat_cortex_analyst()")
+  chat_cortex_analyst(
+    account = account,
+    credentials = credentials,
+    model_spec = model_spec,
+    model_file = model_file,
+    api_args = api_args,
+    echo = echo
+  )
 }
 
 ProviderCortex <- new_class(

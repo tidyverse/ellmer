@@ -11,7 +11,7 @@ chat_azure(
   system_prompt = NULL,
   turns = NULL,
   api_key = NULL,
-  token = NULL,
+  token = deprecated(),
   credentials = NULL,
   api_args = list(),
   echo = c("none", "text", "all")
@@ -36,7 +36,9 @@ scratch.}
 supply this directly, but instead set the \code{AZURE_OPENAI_API_KEY}
 environment variable.}
 
-\item{token}{A literal Azure token to use for authentication.}
+\item{token}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} A literal Azure token to use
+for authentication. Deprecated in favour of ambient Azure credentials or
+an explicit \code{credentials} argument.}
 
 \item{credentials}{A list of authentication headers to pass into
 \code{\link[httr2:req_headers]{httr2::req_headers()}}, a function that returns them, or \code{NULL} to use

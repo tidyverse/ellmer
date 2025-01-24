@@ -134,7 +134,7 @@ test_that("a simple Cortex chatbot works", {
     Sys.getenv("SNOWFLAKE_ACCOUNT") == "",
     "SNOWFLAKE_ACCOUNT is not configured"
   )
-  chat <- chat_cortex(
+  chat <- chat_cortex_analyst(
     model_spec = "name: empty
 description: An empty semantic model specification.
 tables: []

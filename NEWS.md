@@ -30,6 +30,13 @@
 * `chat_azure()` now reports better error messages when the underlying HTTP
   requests fail (#269, @atheriel).
 
+* `chat_cortex()` has been renamed `chat_cortex_analyst()` to better
+  disambiguate it from `chat_snowflake()` (which *also* uses "Cortex") (#275,
+  @atheriel).
+
+* The `token` argument to `chat_azure()` has been deprecated. Use ambient
+  credentials or the `credentials` argument instead (#257, @atheriel).
+
 # ellmer 0.1.0
 
 * New `chat_vllm()` to chat with models served by vLLM (#140).

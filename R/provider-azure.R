@@ -26,7 +26,9 @@ NULL
 #' @param api_key An API key to use for authentication. You generally should not
 #'   supply this directly, but instead set the `AZURE_OPENAI_API_KEY`
 #'   environment variable.
-#' @param token A literal Azure token to use for authentication.
+#' @param token `r lifecycle::badge("deprecated")` A literal Azure token to use
+#'   for authentication. Deprecated in favour of ambient Azure credentials or
+#'   an explicit `credentials` argument.
 #' @param credentials A list of authentication headers to pass into
 #'   [`httr2::req_headers()`], a function that returns them, or `NULL` to use
 #'   `token` or `api_key` to generate these headers instead. This is an escape
@@ -47,10 +49,22 @@ chat_azure <- function(endpoint = azure_endpoint(),
                        system_prompt = NULL,
                        turns = NULL,
                        api_key = NULL,
-                       token = NULL,
+                       token = deprecated(),
                        credentials = NULL,
                        api_args = list(),
                        echo = c("none", "text", "all")) {
+  if (lifecycle::is_present(token)) {
+    lifecycle::deprecate_warn(
+      when = "0.1.1",
+      what = "chat_azure(token)",
+      details = "Support for the static `token` argument (which quickly \
+                 expires) will be dropped in next release. Use ambient Azure \
+                 credentials instead, or pass an explicit `credentials` \
+                 argument."
+    )
+  } else {
+    token <- NULL
+  }
   check_string(endpoint)
   check_string(deployment_id)
   api_version <- set_default(api_version, "2024-06-01")

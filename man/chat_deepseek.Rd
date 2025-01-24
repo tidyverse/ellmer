@@ -68,13 +68,14 @@ chat$chat("Tell me three jokes about statisticians")
 Other chatbots: 
 \code{\link{chat_bedrock}()},
 \code{\link{chat_claude}()},
-\code{\link{chat_cortex}()},
+\code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
 \code{\link{chat_gemini}()},
 \code{\link{chat_github}()},
 \code{\link{chat_groq}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()}
 }
 \concept{chatbots}

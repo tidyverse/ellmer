@@ -9,8 +9,9 @@ silence_r_cmd_check_note <- function() {
 }
 
 ## usethis namespace: start
-#' @import rlang
 #' @import httr2
+#' @import rlang
 #' @import S7
+#' @importFrom lifecycle deprecated
 ## usethis namespace: end
 NULL
