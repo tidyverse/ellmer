@@ -11,13 +11,6 @@ NULL
 #' hosts a number of open source models as well as proprietary models
 #' from OpenAI.
 #'
-#' ## Authentication
-#'
-#' `chat_azure()` supports API keys and the `credentials` parameter, but it also
-#' picks up on Azure service principals automatically when the
-#' `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, and `AZURE_CLIENT_SECRET` environment
-#' variables are set.
-#'
 #' @param endpoint Azure OpenAI endpoint url with protocol and hostname, i.e.
 #'  `https://{your-resource-name}.openai.azure.com`. Defaults to using the
 #'   value of the `AZURE_OPENAI_ENDPOINT` envinronment variable.
@@ -53,14 +46,15 @@ chat_azure <- function(endpoint = azure_endpoint(),
                        echo = c("none", "text", "all")) {
   check_string(endpoint)
   check_string(deployment_id)
-  api_version <- set_default(api_version, "2024-06-01")
+  api_version <- set_default(api_version, "2024-10-21")
   turns <- normalize_turns(turns, system_prompt)
   check_exclusive(token, credentials, .require = FALSE)
   check_string(api_key, allow_null = TRUE)
   api_key <- api_key %||% Sys.getenv("AZURE_OPENAI_API_KEY")
   check_string(token, allow_null = TRUE)
   echo <- check_echo(echo)
- if (is_list(credentials)) {
+
+  if (is_list(credentials)) {
     static_credentials <- force(credentials)
     credentials <- function() static_credentials
   }
@@ -77,6 +71,19 @@ chat_azure <- function(endpoint = azure_endpoint(),
   )
   Chat$new(provider = provider, turns = turns, echo = echo)
 }
+
+chat_azure_test <- function(system_prompt = NULL, ...) {
+  api_key <- key_get("AZURE_OPENAI_API_KEY")
+
+  chat_azure(
+    ...,
+    system_prompt = system_prompt,
+    api_key = api_key,
+    endpoint = "https://ai-hwickhamai260967855527.openai.azure.com",
+    deployment_id = "gpt-4o-mini"
+  )
+}
+
 
 ProviderAzure <- new_class(
   "ProviderAzure",
@@ -161,38 +168,6 @@ method(chat_request, ProviderAzure) <- function(provider,
 default_azure_credentials <- function(api_key = NULL, token = NULL) {
   if (!is.null(token)) {
     return(function() list(Authorization = paste("Bearer", token)))
-  }
-
-  # Detect Azure service principals.
-  tenant_id <- Sys.getenv("AZURE_TENANT_ID")
-  client_id <- Sys.getenv("AZURE_CLIENT_ID")
-  client_secret <- Sys.getenv("AZURE_CLIENT_SECRET")
-  if (nchar(tenant_id) && nchar(client_id) && nchar(client_secret)) {
-    # Service principals use an OAuth client credentials flow. We cache the token
-    # so we don't need to perform this flow before each turn.
-    client <- oauth_client(
-      client_id,
-      token_url = paste0(
-        "https://login.microsoftonline.com/",
-        tenant_id,
-        "/oauth2/v2.0/token"
-      ),
-      secret = client_secret,
-      auth = "body",
-      name = "ellmer-azure-sp"
-    )
-    return(function() {
-      token <- oauth_token_cached(
-        client,
-        oauth_flow_client_credentials,
-        flow_params = list(
-          scope = "https://cognitiveservices.azure.com/.default"
-        ),
-        # Don't use the cached token when testing.
-        reauth = is_testing()
-      )
-      list(Authorization = paste("Bearer", token$access_token))
-    })
   }
 
   # If we have an API key, rely on that for credentials.
