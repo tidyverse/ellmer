@@ -189,3 +189,38 @@ snowflake_user_agent <- function() {
   }
   user_agent
 }
+
+snowflake_keypair_token <- function(
+  account,
+  user,
+  key,
+  cache = snowflake_keypair_cache(account, key),
+  lifetime = 600L,
+  reauth = FALSE
+) {
+  # Producing a signed JWT is a fairly expensive operation (in the order of
+  # ~10ms), but adding a cache speeds this up approximately 500x.
+  creds <- cache$get()
+  if (reauth || is.null(creds) || creds$expiry < Sys.time()) {
+    cache$clear()
+    expiry <- Sys.time() + lifetime
+    # We can't use openssl::fingerprint() here because it uses a different
+    # algorithm.
+    fp <- openssl::base64_encode(
+      openssl::sha256(openssl::write_der(key$pubkey))
+    )
+    sub <- toupper(paste0(account, ".", user))
+    iss <- paste0(sub, ".SHA256:", fp)
+    # Note: Snowflake employs a malformed issuer claim, so we have to inject it
+    # manually after jose's validation phase.
+    claim <- jwt_claim("dummy", sub, exp = as.integer(expiry))
+    claim$iss <- iss
+    creds <- list(expiry = expiry, token = jwt_encode_sig(claim, key))
+    cache$set(creds)
+  }
+  creds$token
+}
+
+snowflake_keypair_cache <- function(account, key) {
+  credentials_cache(key = hash(c("sf", account, openssl::fingerprint(key))))
+}

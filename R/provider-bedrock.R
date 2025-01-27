@@ -325,14 +325,6 @@ locate_aws_credentials <- function(profile) {
   paws.common::locate_credentials(profile)
 }
 
-# In-memory cache for AWS credentials. Analogous to httr2:::cache_mem().
 aws_creds_cache <- function(profile) {
-  key <- hash(profile)
-  list(
-    get = function() env_get(the$aws_credentials_cache, key, default = NULL),
-    set = function(creds) env_poke(the$aws_credentials_cache, key, creds),
-    clear = function() env_unbind(the$aws_credentials_cache, key)
-  )
+  credentials_cache(key = hash(c("aws", profile)))
 }
-
-the$aws_credentials_cache <- new_environment()

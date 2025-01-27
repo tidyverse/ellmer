@@ -418,18 +418,7 @@ cortex_credentials <- function(account = Sys.getenv("SNOWFLAKE_ACCOUNT"),
   if (nchar(user) != 0 && nchar(private_key) != 0) {
     check_installed("jose", "for key-pair authentication")
     key <- openssl::read_key(private_key)
-    # We can't use openssl::fingerprint() here because it uses a different
-    # algorithm.
-    fp <- openssl::base64_encode(
-      openssl::sha256(openssl::write_der(key$pubkey))
-    )
-    sub <- toupper(paste0(account, ".", user))
-    iss <- paste0(sub, ".SHA256:", fp)
-    # Note: Snowflake employs a malformed issuer claim, so we have to inject it
-    # manually after jose's validation phase.
-    claim <- httr2::jwt_claim("dummy", sub)
-    claim$iss <- iss
-    token <- httr2::jwt_encode_sig(claim, key)
+    token <- snowflake_keypair_token(account, user, key)
     return(
       list(
         Authorization = paste("Bearer", token),

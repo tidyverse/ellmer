@@ -105,3 +105,12 @@ has_credentials <- function(provider) {
   )
 
 }
+
+# In-memory cache for credentials. Analogous to httr2:::cache_mem().
+credentials_cache <- function(key) {
+  list(
+    get = function() env_get(the$credentials_cache, key, default = NULL),
+    set = function(creds) env_poke(the$credentials_cache, key, creds),
+    clear = function() env_unbind(the$credentials_cache, key)
+  )
+}

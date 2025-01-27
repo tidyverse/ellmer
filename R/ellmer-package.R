@@ -3,6 +3,7 @@
 "_PACKAGE"
 
 the <- new_environment()
+the$credentials_cache <- new_environment()
 
 silence_r_cmd_check_note <- function() {
   later::later()
