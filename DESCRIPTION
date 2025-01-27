@@ -4,6 +4,7 @@ Version: 0.1.0.9000
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre")),
     person("Joe", "Cheng", role = "aut"),
+    person("Aaron", "Jacobs", role = "aut"),
     person("Posit Software, PBC", role = c("cph", "fnd"))
   )
 Description: Chat with large language models from a range of providers
