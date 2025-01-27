@@ -42,9 +42,10 @@ test_that("can extract data", {
 })
 
 test_that("can use images", {
+  skip("Run manually; 24 hour rate limit")
   chat_fun <- chat_azure_test
 
-  test_images_inline(chat_fun)
+  httr2::with_verbosity(test_images_inline(chat_fun), 2)
   test_images_remote(chat_fun)
 })
 
