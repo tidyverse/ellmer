@@ -26,8 +26,8 @@ e.g. \code{"testorg-test_account"}. Defaults to the value of the
 \code{SNOWFLAKE_ACCOUNT} environment variable.}
 
 \item{credentials}{A list of authentication headers to pass into
-\code{\link[httr2:req_headers]{httr2::req_headers()}}, a function that returns them when passed
-\code{account} as a parameter, or \code{NULL} to use ambient credentials.}
+\code{\link[httr2:req_headers]{httr2::req_headers()}}, a function that returns them when called, or
+\code{NULL} to use ambient credentials.}
 
 \item{model}{The model to use for the chat. The default, \code{NULL}, will pick
 a reasonable default, and tell you about. We strongly recommend explicitly

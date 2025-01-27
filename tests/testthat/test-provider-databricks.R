@@ -64,8 +64,20 @@ test_that("Databricks PATs are detected correctly", {
     DATABRICKS_HOST = "https://example.cloud.databricks.com",
     DATABRICKS_TOKEN = "token"
   )
-  expect_equal(databricks_token(), "token")
-  expect_equal(databricks_token(token = "another token"), "another token")
+  credentials <- default_databricks_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
+})
+
+test_that("Databricks CLI tokens are detected correctly", {
+  withr::local_envvar(
+    DATABRICKS_HOST = "https://example.cloud.databricks.com",
+    DATABRICKS_CLI_PATH = "echo"
+  )
+  local_mocked_bindings(
+    databricks_cli_token = function(path, host) "token"
+  )
+  credentials <- default_databricks_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
 })
 
 test_that("M2M authentication requests look correct", {
@@ -81,7 +93,8 @@ test_that("M2M authentication requests look correct", {
     )
     response_json(body = list(access_token = "token"))
   })
-  expect_equal(databricks_token(), "token")
+  credentials <- default_databricks_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
 })
 
 test_that("workspace detection handles URLs with and without an https prefix", {

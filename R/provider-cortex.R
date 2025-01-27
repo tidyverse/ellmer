@@ -41,8 +41,8 @@ NULL
 #'   e.g. `"testorg-test_account"`. Defaults to the value of the
 #'   `SNOWFLAKE_ACCOUNT` environment variable.
 #' @param credentials A list of authentication headers to pass into
-#'   [`httr2::req_headers()`], a function that returns them when passed
-#'   `account` as a parameter, or `NULL` to use ambient credentials.
+#'   [`httr2::req_headers()`], a function that returns them when called, or
+#'   `NULL`, the default, to use ambient credentials.
 #' @param model_spec A semantic model specification, or `NULL` when
 #'   using `model_file` instead.
 #' @param model_file Path to a semantic model file stored in a Snowflake Stage,
@@ -75,6 +75,7 @@ chat_cortex_analyst <- function(
     credentials <- function(account) static_credentials
   }
   check_function(credentials, allow_null = TRUE)
+  credentials <- credentials %||% default_snowflake_credentials(account)
 
   provider <- ProviderCortex(
     account = account,
@@ -136,7 +137,7 @@ ProviderCortex <- new_class(
   },
   properties = list(
     account = prop_string(),
-    credentials = class_function | NULL,
+    credentials = class_function,
     extra_args = class_list
   )
 )
@@ -158,8 +159,7 @@ method(chat_request, ProviderCortex) <- function(provider,
 
   req <- request(provider@base_url)
   req <- req_url_path_append(req, "/api/v2/cortex/analyst/message")
-  creds <- cortex_credentials(provider@account, provider@credentials)
-  req <- httr2::req_headers(req, !!!creds, .redact = "Authorization")
+  req <- req_headers(req, !!!provider@credentials(), .redact = "Authorization")
   req <- req_retry(req, max_tries = 2)
   req <- req_timeout(req, 60)
   req <- req_user_agent(req, snowflake_user_agent())
@@ -390,60 +390,10 @@ method(format, ContentSql) <- function(x, ...) {
 # Credential handling ----------------------------------------------------------
 
 cortex_credentials_exist <- function(...) {
-  tryCatch(is_list(cortex_credentials(...)), error = function(e) FALSE)
-}
-
-cortex_credentials <- function(account = Sys.getenv("SNOWFLAKE_ACCOUNT"),
-                               credentials = NULL) {
-  # User-supplied credentials.
-  if (!is.null(credentials)) {
-    return(credentials(account))
-  }
-
-  token <- Sys.getenv("SNOWFLAKE_TOKEN")
-  if (nchar(token) != 0) {
-    return(
-      list(
-        Authorization = paste("Bearer", token),
-        # See: https://docs.snowflake.com/en/developer-guide/snowflake-rest-api/authentication#using-oauth
-        `X-Snowflake-Authorization-Token-Type` = "OAUTH"
-      )
-    )
-  }
-
-  # Support for Snowflake key-pair authentication.
-  # See: https://docs.snowflake.com/en/developer-guide/snowflake-rest-api/authentication#generate-a-jwt-token
-  user <- Sys.getenv("SNOWFLAKE_USER")
-  private_key <- Sys.getenv("SNOWFLAKE_PRIVATE_KEY")
-  if (nchar(user) != 0 && nchar(private_key) != 0) {
-    check_installed("jose", "for key-pair authentication")
-    key <- openssl::read_key(private_key)
-    token <- snowflake_keypair_token(account, user, key)
-    return(
-      list(
-        Authorization = paste("Bearer", token),
-        `X-Snowflake-Authorization-Token-Type` = "KEYPAIR_JWT"
-      )
-    )
-  }
-
-  # Check for Workbench-managed credentials.
-  sf_home <- Sys.getenv("SNOWFLAKE_HOME")
-  if (grepl("posit-workbench", sf_home, fixed = TRUE)) {
-    token <- workbench_snowflake_token(account, sf_home)
-    if (!is.null(token)) {
-      return(list(
-        Authorization = paste("Bearer", token),
-        `X-Snowflake-Authorization-Token-Type` = "OAUTH"
-      ))
-    }
-  }
-
-  if (is_testing()) {
-    testthat::skip("no Snowflake credentials available")
-  }
-
-  cli::cli_abort("No Snowflake credentials are available.")
+  tryCatch(
+    is_list(default_snowflake_credentials(...)),
+    error = function(e) FALSE
+  )
 }
 
 # Reads Posit Workbench-managed Snowflake credentials from a

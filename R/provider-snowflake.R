@@ -51,6 +51,7 @@ chat_snowflake <- function(system_prompt = NULL,
     credentials <- function(account) static_credentials
   }
   check_function(credentials, allow_null = TRUE)
+  credentials <- credentials %||% default_snowflake_credentials(account)
 
   provider <- ProviderSnowflake(
     base_url = snowflake_url(account),
@@ -70,7 +71,7 @@ ProviderSnowflake <- new_class(
   parent = ProviderOpenAI,
   properties = list(
     account = prop_string(),
-    credentials = class_function | NULL
+    credentials = class_function
   )
 )
 
@@ -102,8 +103,7 @@ method(chat_request, ProviderSnowflake) <- function(provider,
 
   req <- request(provider@base_url)
   req <- req_url_path_append(req, "/api/v2/cortex/inference:complete")
-  creds <- cortex_credentials(provider@account, provider@credentials)
-  req <- req_headers(req, !!!creds, .redact = "Authorization")
+  req <- req_headers(req, !!!provider@credentials(), .redact = "Authorization")
   req <- req_retry(req, max_tries = 2)
   req <- req_timeout(req, 60)
   req <- req_user_agent(req, snowflake_user_agent())
@@ -188,6 +188,57 @@ snowflake_user_agent <- function() {
     user_agent <- Sys.getenv("SF_PARTNER")
   }
   user_agent
+}
+
+default_snowflake_credentials <- function(account = snowflake_account()) {
+  token <- Sys.getenv("SNOWFLAKE_TOKEN")
+  if (nchar(token) != 0) {
+    return(function() {
+      list(
+        Authorization = paste("Bearer", token),
+        # See: https://docs.snowflake.com/en/developer-guide/snowflake-rest-api/authentication#using-oauth
+        `X-Snowflake-Authorization-Token-Type` = "OAUTH"
+      )
+    })
+  }
+
+  # Support for Snowflake key-pair authentication.
+  # See: https://docs.snowflake.com/en/developer-guide/snowflake-rest-api/authentication#generate-a-jwt-token
+  user <- Sys.getenv("SNOWFLAKE_USER")
+  private_key <- Sys.getenv("SNOWFLAKE_PRIVATE_KEY")
+  if (nchar(user) != 0 && nchar(private_key) != 0) {
+    check_installed("jose", "for key-pair authentication")
+    key <- openssl::read_key(private_key)
+    return(function() {
+      token <- snowflake_keypair_token(account, user, key)
+      list(
+        Authorization = paste("Bearer", token),
+        `X-Snowflake-Authorization-Token-Type` = "KEYPAIR_JWT"
+      )
+    })
+  }
+
+  # Check for Workbench-managed credentials.
+  sf_home <- Sys.getenv("SNOWFLAKE_HOME")
+  if (grepl("posit-workbench", sf_home, fixed = TRUE)) {
+    token <- workbench_snowflake_token(account, sf_home)
+    if (!is.null(token)) {
+      return(function() {
+        # Ensure we get an up-to-date token.
+        token <- workbench_snowflake_token(account, sf_home)
+        list(
+          Authorization = paste("Bearer", token),
+          `X-Snowflake-Authorization-Token-Type` = "OAUTH"
+        )
+      })
+    }
+  }
+
+  if (is_testing()) {
+    testthat::skip("no Snowflake credentials available")
+  }
+
+  cli::cli_abort("No Snowflake credentials are available.")
 }
 
 snowflake_keypair_token <- function(

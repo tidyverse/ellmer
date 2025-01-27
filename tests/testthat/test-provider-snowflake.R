@@ -20,9 +20,11 @@ test_that("can make simple streaming request", {
 test_that("defaults are reported", {
   # Setting a dummy account ensures we don't skip this test, even if there are
   # no Snowflake credentials available.
-  withr::local_envvar(SNOWFLAKE_ACCOUNT = "testorg-test_account")
-  credentials <- function(account) list()
-  expect_snapshot(. <- chat_snowflake(credentials = credentials))
+  withr::local_envvar(
+    SNOWFLAKE_ACCOUNT = "testorg-test_account",
+    SNOWFLAKE_TOKEN = "token"
+  )
+  expect_snapshot(. <- chat_snowflake())
 })
 
 test_that("respects turns interface", {
@@ -57,12 +59,7 @@ test_that("can use images", {
 
 # Auth --------------------------------------------------------------------
 
-test_that("Snowflake keypair token caching works as expected", {
-  skip_if_not_installed("jose")
-
-  # Random RSA key for testing.
-  testkey <- openssl::read_key(
-    "-----BEGIN PRIVATE KEY-----
+test_snowflake_key <- "-----BEGIN PRIVATE KEY-----
 MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCbxG4OC5HU9QlK
 dmtbQCa7r+uoKyDSisxqJQchfkDy64v6V6WsovI8evUGPQpkAbqsmXY3DR3T/Mco
 P2oHyzGsfd2t7v6NLHNtGbMiEJYjVJvOw52Yn1m4WH5bEtl5JP/8W2qyTdr6qym+
@@ -91,7 +88,12 @@ OdYSh6YfkxhsBGp6hHefOTWuoto4zHZ98uuu0GD8NkzGmnZApZ7It1MiH+SZPG9w
 AK4HbizZMWlkvg87OphvnQhC
 -----END PRIVATE KEY-----
 "
-  )
+
+test_that("Snowflake keypair token caching works as expected", {
+  skip_if_not_installed("jose")
+
+  # Random RSA key for testing.
+  testkey <- openssl::read_key(test_snowflake_key)
 
   token1 <- snowflake_keypair_token("test1", "user", testkey)
   token2 <- snowflake_keypair_token("test2", "user", testkey)
@@ -121,5 +123,44 @@ AK4HbizZMWlkvg87OphvnQhC
   )
   expect_false(
     identical(token2, snowflake_keypair_token("test1", "user", testkey))
+  )
+})
+
+test_that("Snowflake OAuth tokens are detected correctly", {
+  withr::local_envvar(
+    SNOWFLAKE_ACCOUNT = "testorg-test_account",
+    SNOWFLAKE_TOKEN = "token"
+  )
+  credentials <- default_snowflake_credentials()
+  expect_identical(
+    credentials(),
+    list(
+      Authorization = "Bearer token",
+      `X-Snowflake-Authorization-Token-Type` = "OAUTH"
+    )
+  )
+})
+
+test_that("Snowflake key-pair credentials are detected correctly", {
+  skip_if_not_installed("jose")
+
+  withr::local_envvar(
+    SNOWFLAKE_ACCOUNT = "testorg-test_account",
+    SNOWFLAKE_USER = "user",
+    SNOWFLAKE_PRIVATE_KEY = test_snowflake_key
+  )
+  # Warm the cache so we can compare more easily.
+  token <- snowflake_keypair_token(
+    "testorg-test_account",
+    "user",
+    openssl::read_key(test_snowflake_key)
+  )
+  credentials <- default_snowflake_credentials()
+  expect_identical(
+    credentials(),
+    list(
+      Authorization = paste("Bearer", token),
+      `X-Snowflake-Authorization-Token-Type` = "KEYPAIR_JWT"
+    )
   )
 })
