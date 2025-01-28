@@ -58,6 +58,14 @@ chat_ollama <- function(system_prompt = NULL,
   )
 }
 
+chat_ollama_test <- function(..., model = "llama3.3") {
+  if (!has_ollama()) {
+    skip("ollama not found")
+  }
+
+  chat_ollama(..., model = model)
+}
+
 ollama_models <- function(base_url = "http://localhost:11434") {
   req <- request(base_url)
   req <- req_url_path(req, "api/tags")
