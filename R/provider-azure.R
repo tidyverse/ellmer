@@ -57,6 +57,7 @@ chat_azure <- function(endpoint = azure_endpoint(),
                        credentials = NULL,
                        api_args = list(),
                        echo = c("none", "text", "all")) {
+  check_exclusive(token, credentials, .require = FALSE)
   if (lifecycle::is_present(token)) {
     lifecycle::deprecate_warn(
       when = "0.1.1",
@@ -73,7 +74,6 @@ chat_azure <- function(endpoint = azure_endpoint(),
   check_string(deployment_id)
   api_version <- set_default(api_version, "2024-10-21")
   turns <- normalize_turns(turns, system_prompt)
-  check_exclusive(token, credentials, .require = FALSE)
   check_string(api_key, allow_null = TRUE)
   api_key <- api_key %||% Sys.getenv("AZURE_OPENAI_API_KEY")
   check_string(token, allow_null = TRUE)
