@@ -59,6 +59,9 @@ the defaults tweaked for ollama.
 \itemize{
 \item Tool calling is not supported with streaming (i.e. when \code{echo} is
 \code{"text"} or \code{"all"})
+\item Models can only use 2048 input tokens, and there's no way
+to get them to use more, except by creating a custom model with a
+different default.
 \item Tool calling generally seems quite weak, at least with the models I have
 tried it with.
 }

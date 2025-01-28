@@ -25,6 +25,7 @@ Useful links:
 Authors:
 \itemize{
   \item Joe Cheng
+  \item Aaron Jacobs
 }
 
 Other contributors:
