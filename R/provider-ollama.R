@@ -63,7 +63,7 @@ chat_ollama <- function(system_prompt = NULL,
 
 chat_ollama_test <- function(..., model = "llama3.3") {
   if (!has_ollama()) {
-    skip("ollama not found")
+    testthat::skip("ollama not found")
   }
 
   chat_ollama(..., model = model)
