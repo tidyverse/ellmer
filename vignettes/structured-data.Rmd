@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-When using an LLM to extract data from text or images, you can ask the chatbot to nicely format it, in JSON or any other format that you like. This will generally work well most of the time, but there's no guarantee that you'll get the exact format that you want. In particular, if you're trying to get JSON, find that it's typically surrounded in ```` ```json ````, and you'll occassionally get text that isn't actually valid JSON. To avoid these challenges you can use a recent LLM feature: **structured data** (aka structured output). With structured data, you supply a type specification that exactly defines the object structure that you want and the LLM will guarantee that's what you get back.
+When using an LLM to extract data from text or images, you can ask the chatbot to format it in JSON or any other format that you like. This works well most of the time, but there's no guarantee that you'll get the exact format you want. In particular, if you're trying to get JSON, you'll find that it's typically surrounded in ```` ```json ````, and you'll occasionally get text that isn't valid JSON. To avoid these problems, you can use a recent LLM feature: **structured data** (aka structured output). With structured data, you supply the type specification that defines the object structure you want and the LLM ensures that's what you'll get back.
 
 ```{r setup}
 #| cache: false
