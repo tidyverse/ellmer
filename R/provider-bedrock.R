@@ -32,14 +32,21 @@ chat_bedrock <- function(system_prompt = NULL,
                          turns = NULL,
                          model = NULL,
                          profile = NULL,
-                         echo = NULL) {
+                         echo = NULL,
+                         api_args = NULL,
+                         verbose = FALSE) {
 
   check_installed("paws.common", "AWS authentication")
   cache <- aws_creds_cache(profile)
   credentials <- paws_credentials(profile, cache = cache)
 
+  # Validate api_args if present
+  if (!is.null(api_args)) {
+    validate_parameters(api_args, model)
+  }
+
   turns <- normalize_turns(turns, system_prompt)
-  model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
+  model <- set_default(model, "us.anthropic.claude-3-5-sonnet-20240620-v1:0")
   echo <- check_echo(echo)
 
   provider <- ProviderBedrock(
@@ -47,7 +54,9 @@ chat_bedrock <- function(system_prompt = NULL,
     model = model,
     profile = profile,
     region = credentials$region,
-    cache = cache
+    cache = cache,
+    api_args = if (is.null(api_args)) list() else api_args,
+    verbose = verbose
   )
 
   Chat$new(provider = provider, turns = turns, echo = echo)
@@ -60,9 +69,40 @@ ProviderBedrock <- new_class(
     model = prop_string(),
     profile = prop_string(allow_null = TRUE),
     region = prop_string(),
-    cache = class_list
+    cache = class_list,
+    api_args = class_list,
+    verbose = class_logical
   )
 )
+
+validate_parameters <- function(api_args, model) {
+  # Check for unsupported parameters in Llama models
+  if (grepl("llama", model, ignore.case = TRUE)) {
+    if (!is.null(api_args$top_k)) {
+      cli::cli_abort("top_k parameter is not supported for Llama models")
+    }
+    if (!is.null(api_args$stop_sequences)) {
+      cli::cli_abort("stop_sequences parameter is not supported for Llama models")
+    }
+  }
+  
+  # Validate temperature
+  if (!is.null(api_args$temperature) && (api_args$temperature < 0 || api_args$temperature > 1)) {
+    cli::cli_abort("temperature must be a numeric value between 0 and 1, inclusive")
+  }
+  
+  # Validate top_p
+  if (!is.null(api_args$top_p) && (api_args$top_p < 0 || api_args$top_p > 1)) {
+    cli::cli_abort("top_p must be a numeric value between 0 and 1, inclusive")
+  }
+  
+  # Validate top_k
+  if (!is.null(api_args$top_k)) {
+    if (!is.numeric(api_args$top_k) || api_args$top_k <= 0 || api_args$top_k %% 1 != 0) {
+      cli::cli_abort("top_k must be a positive integer")
+    }
+  }
+}
 
 method(chat_request, ProviderBedrock) <- function(provider,
                                                   stream = TRUE,
@@ -70,6 +110,11 @@ method(chat_request, ProviderBedrock) <- function(provider,
                                                   tools = list(),
                                                   type = NULL,
                                                   extra_args = list()) {
+
+  # Validate parameters if api_args are present
+  if (length(provider@api_args) > 0) {
+    validate_parameters(provider@api_args, provider@model)
+  }
 
   req <- request(paste0(
     "https://bedrock-runtime.", provider@region, ".amazonaws.com"
@@ -87,6 +132,16 @@ method(chat_request, ProviderBedrock) <- function(provider,
     aws_secret_access_key = creds$secret_access_key,
     aws_session_token = creds$session_token
   )
+
+  if (provider@verbose) { 
+    cli::cli_h3("AWS Credentials")
+    cli::cli_alert_info(paste0("Profile: ", provider@profile, 
+    "; Key: ", paste0(creds$access_key_id), 
+    "; Secret: ", paste0(substr(creds$secret_access_key, 1, 2), 
+                        paste(rep("*", 4), collapse = "")), 
+    "; Session: ", creds$session_token, 
+    "; Region: ", provider@region)) 
+  }
 
   req <- req_error(req, body = function(resp) {
     body <- resp_body_json(resp)
@@ -122,17 +177,56 @@ method(chat_request, ProviderBedrock) <- function(provider,
     toolConfig <- NULL
   }
 
-  # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
-  req <- req_body_json(req, list(
+  # Build request body
+  body <- list(
     messages = messages,
     system = system,
     toolConfig = toolConfig
-  ))
+  )
 
-  req
+  # Add inference configuration from api_args if present
+  if (length(provider@api_args) > 0) {
+    inference_config <- list()
+    
+    # Convert snake_case parameters to camelCase for API
+    if (!is.null(provider@api_args$max_tokens)) {
+      inference_config$maxTokens <- provider@api_args$max_tokens
+    }
+    if (!is.null(provider@api_args$temperature)) {
+      inference_config$temperature <- provider@api_args$temperature
+    }
+    if (!is.null(provider@api_args$top_p)) {
+      inference_config$topP <- provider@api_args$top_p
+    }
+    if (!is.null(provider@api_args$top_k)) {
+      inference_config$topK <- provider@api_args$top_k
+    }
+    if (!is.null(provider@api_args$stop_sequences)) {
+      inference_config$stopSequences <- provider@api_args$stop_sequences
+    }
+    
+    # Only add inferenceConfig if we have parameters
+    if (length(inference_config) > 0) {
+      body$inferenceConfig <- inference_config
+    }
+  }
+
+  req <- req_body_json(req, body)
+
+  if (provider@verbose) {
+    cli::cli_h3("Request Body")
+    cat(jsonlite::toJSON(body, auto_unbox = TRUE, pretty = TRUE), "\n")
+    # Use standard header redaction with logical value
+    req <- httr2::req_verbose(req)
+  }
+
+  return(req)
 }
 
 method(chat_resp_stream, ProviderBedrock) <- function(provider, resp) {
+  if (provider@verbose) {
+    cli::cli_h3("Response Stream")
+  }
   resp_stream_aws(resp)
 }
 
@@ -145,15 +239,22 @@ method(stream_parse, ProviderBedrock) <- function(provider, event) {
 
   body <- event$body
   body$event_type <- event$headers$`:event-type`
-  body$p <- NULL # padding?
+  body$p <- NULL # padding? Looks like: "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ",
+
+  if (provider@verbose) {
+    cli::cli_h3("Response Chunk")
+    cat(jsonlite::toJSON(body, auto_unbox = TRUE, pretty = TRUE), "\n")
+  }
 
   body
 }
+
 method(stream_text, ProviderBedrock) <- function(provider, event) {
   if (event$event_type == "contentBlockDelta") {
     event$delta$text
   }
 }
+
 method(stream_merge_chunks, ProviderBedrock) <- function(provider, result, chunk) {
   i <- chunk$contentBlockIndex + 1
 
@@ -200,6 +301,12 @@ method(stream_merge_chunks, ProviderBedrock) <- function(provider, result, chunk
 }
 
 method(value_turn, ProviderBedrock) <- function(provider, result, has_type = FALSE) {
+  # Print response if verbose mode is enabled
+  if (provider@verbose) {
+    cli::cli_h3("Response Body")
+    cat(jsonlite::toJSON(result, auto_unbox = TRUE, pretty = TRUE), "\n")
+  }
+
   contents <- lapply(result$output$message$content, function(content) {
     if (has_name(content, "text")) {
       ContentText(content$text)
@@ -310,7 +417,7 @@ paws_credentials <- function(profile, cache = aws_creds_cache(profile),
       creds <- locate_aws_credentials(profile),
       error = function(cnd) {
         if (is_testing()) {
-          testthat::skip("Failed to locate AWS credentails")
+          testthat::skip("Failed to locate AWS credentials")
         }
         cli::cli_abort("No IAM credentials found.", parent = cnd)
       }
