@@ -270,3 +270,18 @@ as_content <- function(x, error_call = caller_env()) {
     )
   }
 }
+
+#' @rdname Content
+#' @export
+ContentPDF <- new_class(
+  "ContentPDF", 
+  parent = Content,
+  properties = list(
+    type = prop_string(),
+    data = prop_string()
+  )
+)
+
+method(format, ContentPDF) <- function(x, ...) {
+  "<PDF document>"
+}

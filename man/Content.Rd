@@ -8,6 +8,7 @@
 \alias{ContentImageInline}
 \alias{ContentToolRequest}
 \alias{ContentToolResult}
+\alias{ContentPDF}
 \title{Content types received from and sent to a chatbot}
 \usage{
 Content()
@@ -27,6 +28,8 @@ ContentToolRequest(
 )
 
 ContentToolResult(id = stop("Required"), value = NULL, error = NULL)
+
+ContentPDF(type = stop("Required"), data = stop("Required"))
 }
 \arguments{
 \item{text}{A single string.}
