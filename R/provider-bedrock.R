@@ -119,7 +119,7 @@ chat_bedrock <- function(system_prompt = NULL,
   }
 
   turns <- normalize_turns(turns, system_prompt)
-  model <- set_default(model, "us.anthropic.claude-3-5-sonnet-20240620-v1:0")
+  model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
   echo <- check_echo(echo)
 
   provider <- ProviderBedrock(
