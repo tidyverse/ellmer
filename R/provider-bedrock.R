@@ -7,26 +7,99 @@ NULL
 #' Chat with an AWS bedrock model
 #'
 #' @description
-#' [AWS Bedrock](https://aws.amazon.com/bedrock/) provides a number of chat
-#' based models, including those Anthropic's
-#' [Claude](https://aws.amazon.com/bedrock/claude/).
+#' [AWS Bedrock](https://aws.amazon.com/bedrock/) provides a number of
+#' language models, including those from Anthropic's
+#' [Claude](https://aws.amazon.com/bedrock/claude/), using the Bedrock
+#' [Converse API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html).
+#' Although Ellmer provides a default model, you'll need to
+#' specify a model that you actually have access to using the `model` argument.
+#' If using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/), 
+#' you'll need to use the inference profile ID for 
+#' any model argument, e.g., `model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"`.
+#' For examples of tool usage, asynchronous input, and other advanced features,
+#' visit the [vignettes](https://posit-dev.github.io/ellmer/vignettes/) section 
+#' of the repo.
 #'
 #' ## Authentication
-#' 
-#' Authenthication is handled through \{paws.common\}, so if authenthication
+#'
+#' Authentication is handled through \{paws.common\}, so if authentication
 #' does not work for you automatically, you'll need to follow the advice
 #' at <https://www.paws-r-sdk.com/#credentials>. In particular, if your
 #' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 #'
 #' @param profile AWS profile to use.
+#' @param api_args Optional list of arguments passed to the Bedrock API. Use 
+#'   this to customize model behavior. Valid arguments are: `temperature`, 
+#'   `top_p`, `top_k`, `stop_sequences`, and `max_tokens`, though certain 
+#'   models may not support every parameter. Check the AWS Bedrock model 
+#'   documentation for specifics. Note that different model families 
+#'   (Claude, Nova, Llama, etc.) may natively use different parameter 
+#'   names for the same concept, e.g., max_tokens, max_new_tokens, or 
+#'   max_gen_len. However, Ellmer uses the parameter names above 
+#'   for consistency across all models, and the Converse API conveniently 
+#'   handles the mapping from these to the model-specific native 
+#'   parameter names.
+#' @param verbose Logical. When TRUE, prints AWS credentials, 
+#'   request and response headers/bodies for debugging.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
 #' @export
 #' @examples
 #' \dontrun{
+#' # Basic usage
 #' chat <- chat_bedrock()
 #' chat$chat("Tell me three jokes about statisticians")
+#'
+#' # Using custom API parameters
+#' chat <- chat_bedrock(
+#'   model = "us.meta.llama3-2-3b-instruct-v1:0",
+#'   api_args = list(
+#'     temperature = 0.7,
+#'     max_tokens = 2000
+#'   )
+#' )
+#'
+#' # Enable verbose output for debugging requests and responses
+#' chat <- chat_bedrock(verbose = TRUE)
+#'
+#' # Custom system prompt with API parameters
+#' chat <- chat_bedrock(
+#'   system_prompt = "You are a helpful data science assistant",
+#'   api_args = list(temperature = 0.5)
+#' )
+#' 
+#' # Use a non-default AWS profile in ~/.aws/credentials
+#' chat <- chat_bedrock(profile = "my_profile_name")
+#'
+#' # Image interpretation when using a vision capable model
+#' chat <- chat_bedrock(
+#'   model = "us.meta.llama3-2-11b-instruct-v1:0"
+#' )
+#' chat$chat(
+#'   "What's in this image?",
+#'   content_image_file("path/to/image.jpg")
+#' )
+#' 
+#' # The echo argument, "none", "text", and "all" determines whether
+#' # input and/or output is echoed to the console. Also of note, "none" uses a
+#' # non-streaming endpoint, whereas "text", "all", or TRUE uses a streaming endpoint.
+#' # You can use verbose=TRUE to verify which endpoint is used.
+#' chat <- chat_bedrock(verbose = TRUE) 
+#' chat$chat("What is 1 + 1?")  # Streaming response
+#' resp <- chat$chat("What is 1 + 1?", echo = "none")  # Non-streaming response
+#' resp  # View response
+#' 
+#' # Use echo = "none" in the client constructor to suppress streaming response
+#' chat <- chat_bedrock(echo = "none")
+#' resp <- chat$chat("What is 1 + 1?")  # Non-streaming response
+#' resp  # View response
+#' chat$chat("What is 1 + 1?", echo=TRUE)  # Overrides client echo arg, uses streaming
+#' 
+#' # $stream returns a generator, requiring concatentation of the streamed responses.
+#' resp <- chat$stream("What is the capital of France?")  # resp is a generator object
+#' chunks <- coro::collect(resp)  # returns list of partial text responses
+#' complete_response <- paste(chunks, collapse="")  # Full text response, no echo
 #' }
 chat_bedrock <- function(system_prompt = NULL,
                          turns = NULL,
@@ -177,6 +250,7 @@ method(chat_request, ProviderBedrock) <- function(provider,
     toolConfig <- NULL
   }
 
+  # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
   # Build request body
   body <- list(
     messages = messages,
@@ -188,7 +262,7 @@ method(chat_request, ProviderBedrock) <- function(provider,
   if (length(provider@api_args) > 0) {
     inference_config <- list()
     
-    # Convert snake_case parameters to camelCase for API
+    # Convert snake_case parameters to camelCase for Converse API
     if (!is.null(provider@api_args$max_tokens)) {
       inference_config$maxTokens <- provider@api_args$max_tokens
     }
@@ -216,7 +290,6 @@ method(chat_request, ProviderBedrock) <- function(provider,
   if (provider@verbose) {
     cli::cli_h3("Request Body")
     cat(jsonlite::toJSON(body, auto_unbox = TRUE, pretty = TRUE), "\n")
-    # Use standard header redaction with logical value
     req <- httr2::req_verbose(req)
   }
 
