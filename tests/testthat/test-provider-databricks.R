@@ -64,8 +64,20 @@ test_that("Databricks PATs are detected correctly", {
     DATABRICKS_HOST = "https://example.cloud.databricks.com",
     DATABRICKS_TOKEN = "token"
   )
-  expect_equal(databricks_token(), "token")
-  expect_equal(databricks_token(token = "another token"), "another token")
+  credentials <- default_databricks_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
+})
+
+test_that("Databricks CLI tokens are detected correctly", {
+  withr::local_envvar(
+    DATABRICKS_HOST = "https://example.cloud.databricks.com",
+    DATABRICKS_CLI_PATH = "echo"
+  )
+  local_mocked_bindings(
+    databricks_cli_token = function(path, host) "token"
+  )
+  credentials <- default_databricks_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
 })
 
 test_that("M2M authentication requests look correct", {
@@ -81,7 +93,8 @@ test_that("M2M authentication requests look correct", {
     )
     response_json(body = list(access_token = "token"))
   })
-  expect_equal(databricks_token(), "token")
+  credentials <- default_databricks_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
 })
 
 test_that("workspace detection handles URLs with and without an https prefix", {
@@ -110,4 +123,16 @@ test_that("the user agent respects SPARK_CONNECT_USER_AGENT when set", {
     c(SPARK_CONNECT_USER_AGENT = "testing"),
     expect_match(databricks_user_agent(), "^testing r-ellmer")
   )
+})
+
+test_that("tokens can be requested from a Connect server", {
+  skip_if_not_installed("connectcreds")
+
+  withr::local_envvar(
+    DATABRICKS_HOST = "https://example.cloud.databricks.com",
+    DATABRICKS_TOKEN = "token"
+  )
+  connectcreds::local_mocked_connect_responses(token = "token")
+  credentials <- default_databricks_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
 })

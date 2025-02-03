@@ -1,7 +1,7 @@
 # defaults are reported
 
     Code
-      . <- chat_snowflake(credentials = credentials)
+      . <- chat_snowflake()
     Message
       Using model = "llama3.1-70b".
 
