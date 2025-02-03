@@ -39,8 +39,6 @@ NULL
 #'   for consistency across all models, and the Converse API conveniently 
 #'   handles the mapping from these to the model-specific native 
 #'   parameter names.
-#' @param verbose Logical. When TRUE, prints AWS credentials, 
-#'   request and response headers/bodies for debugging.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -51,7 +49,7 @@ NULL
 #' chat <- chat_bedrock()
 #' chat$chat("Tell me three jokes about statisticians")
 #'
-#' # Using custom API parameters
+#' # Using Llama3 with custom API parameters
 #' chat <- chat_bedrock(
 #'   model = "us.meta.llama3-2-3b-instruct-v1:0",
 #'   api_args = list(
@@ -60,15 +58,12 @@ NULL
 #'   )
 #' )
 #'
-#' # Enable verbose output for debugging requests and responses
-#' chat <- chat_bedrock(verbose = TRUE)
-#'
 #' # Custom system prompt with API parameters
 #' chat <- chat_bedrock(
 #'   system_prompt = "You are a helpful data science assistant",
 #'   api_args = list(temperature = 0.5)
 #' )
-#' 
+#'
 #' # Use a non-default AWS profile in ~/.aws/credentials
 #' chat <- chat_bedrock(profile = "my_profile_name")
 #'
@@ -80,22 +75,21 @@ NULL
 #'   "What's in this image?",
 #'   content_image_file("path/to/image.jpg")
 #' )
-#' 
+#'
 #' # The echo argument, "none", "text", and "all" determines whether
 #' # input and/or output is echoed to the console. Also of note, "none" uses a
 #' # non-streaming endpoint, whereas "text", "all", or TRUE uses a streaming endpoint.
-#' # You can use verbose=TRUE to verify which endpoint is used.
-#' chat <- chat_bedrock(verbose = TRUE) 
+#' chat <- chat_bedrock()
 #' chat$chat("What is 1 + 1?")  # Streaming response
 #' resp <- chat$chat("What is 1 + 1?", echo = "none")  # Non-streaming response
 #' resp  # View response
-#' 
+#'
 #' # Use echo = "none" in the client constructor to suppress streaming response
 #' chat <- chat_bedrock(echo = "none")
 #' resp <- chat$chat("What is 1 + 1?")  # Non-streaming response
 #' resp  # View response
 #' chat$chat("What is 1 + 1?", echo=TRUE)  # Overrides client echo arg, uses streaming
-#' 
+#'
 #' # $stream returns a generator, requiring concatentation of the streamed responses.
 #' resp <- chat$stream("What is the capital of France?")  # resp is a generator object
 #' chunks <- coro::collect(resp)  # returns list of partial text responses
@@ -106,8 +100,7 @@ chat_bedrock <- function(system_prompt = NULL,
                          model = NULL,
                          profile = NULL,
                          echo = NULL,
-                         api_args = NULL,
-                         verbose = FALSE) {
+                         api_args = NULL) {
 
   check_installed("paws.common", "AWS authentication")
   cache <- aws_creds_cache(profile)
@@ -128,8 +121,7 @@ chat_bedrock <- function(system_prompt = NULL,
     profile = profile,
     region = credentials$region,
     cache = cache,
-    api_args = if (is.null(api_args)) list() else api_args,
-    verbose = verbose
+    api_args = if (is.null(api_args)) list() else api_args
   )
 
   Chat$new(provider = provider, turns = turns, echo = echo)
@@ -143,8 +135,7 @@ ProviderBedrock <- new_class(
     profile = prop_string(allow_null = TRUE),
     region = prop_string(),
     cache = class_list,
-    api_args = class_list,
-    verbose = class_logical
+    api_args = class_list
   )
 )
 
@@ -206,16 +197,6 @@ method(chat_request, ProviderBedrock) <- function(provider,
     aws_session_token = creds$session_token
   )
 
-  if (provider@verbose) { 
-    cli::cli_h3("AWS Credentials")
-    cli::cli_alert_info(paste0("Profile: ", provider@profile, 
-    "; Key: ", paste0(creds$access_key_id), 
-    "; Secret: ", paste0(substr(creds$secret_access_key, 1, 2), 
-                        paste(rep("*", 4), collapse = "")), 
-    "; Session: ", creds$session_token, 
-    "; Region: ", provider@region)) 
-  }
-
   req <- req_error(req, body = function(resp) {
     body <- resp_body_json(resp)
     body$Message %||% body$message
@@ -252,15 +233,16 @@ method(chat_request, ProviderBedrock) <- function(provider,
 
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
   # Build request body
-  body <- list(
+  body <- compact(list(
     messages = messages,
     system = system,
     toolConfig = toolConfig
-  )
+  ))
 
   # Add inference configuration from api_args if present
   if (length(provider@api_args) > 0) {
     inference_config <- list()
+    additional_model_request_fields <- list()
     
     # Convert snake_case parameters to camelCase for Converse API
     if (!is.null(provider@api_args$max_tokens)) {
@@ -272,9 +254,16 @@ method(chat_request, ProviderBedrock) <- function(provider,
     if (!is.null(provider@api_args$top_p)) {
       inference_config$topP <- provider@api_args$top_p
     }
-    if (!is.null(provider@api_args$top_k)) {
+    # Nova has q unique structure for top K, whereas Claude accepts it via inference_config
+    # For testing purposes, top K = 1 is equivalent to temperature = 0
+    # https://docs.aws.amazon.com/nova/latest/userguide/using-converse-api.html
+    if ((!is.null(provider@api_args$top_k)) && grepl("nova", model, ignore.case = TRUE)) {
+      additional_model_request_fields$inferenceConfig <- list(topK = provider@api_args$top_k)
+    }
+    else if (!is.null(provider@api_args$top_k)) {
       inference_config$topK <- provider@api_args$top_k
     }
+
     if (!is.null(provider@api_args$stop_sequences)) {
       inference_config$stopSequences <- provider@api_args$stop_sequences
     }
@@ -283,23 +272,20 @@ method(chat_request, ProviderBedrock) <- function(provider,
     if (length(inference_config) > 0) {
       body$inferenceConfig <- inference_config
     }
+    
+    # Add additionalModelRequestFields if we have parameters
+    # It's possible to pass through any other parameters here in a future release
+    if (length(additional_model_request_fields) > 0) {
+      body$additionalModelRequestFields <- additional_model_request_fields
+    }
   }
 
   req <- req_body_json(req, body)
-
-  if (provider@verbose) {
-    cli::cli_h3("Request Body")
-    cat(jsonlite::toJSON(body, auto_unbox = TRUE, pretty = TRUE), "\n")
-    req <- httr2::req_verbose(req)
-  }
 
   return(req)
 }
 
 method(chat_resp_stream, ProviderBedrock) <- function(provider, resp) {
-  if (provider@verbose) {
-    cli::cli_h3("Response Stream")
-  }
   resp_stream_aws(resp)
 }
 
@@ -313,11 +299,6 @@ method(stream_parse, ProviderBedrock) <- function(provider, event) {
   body <- event$body
   body$event_type <- event$headers$`:event-type`
   body$p <- NULL # padding? Looks like: "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ",
-
-  if (provider@verbose) {
-    cli::cli_h3("Response Chunk")
-    cat(jsonlite::toJSON(body, auto_unbox = TRUE, pretty = TRUE), "\n")
-  }
 
   body
 }
@@ -374,12 +355,6 @@ method(stream_merge_chunks, ProviderBedrock) <- function(provider, result, chunk
 }
 
 method(value_turn, ProviderBedrock) <- function(provider, result, has_type = FALSE) {
-  # Print response if verbose mode is enabled
-  if (provider@verbose) {
-    cli::cli_h3("Response Body")
-    cat(jsonlite::toJSON(result, auto_unbox = TRUE, pretty = TRUE), "\n")
-  }
-
   contents <- lapply(result$output$message$content, function(content) {
     if (has_name(content, "text")) {
       ContentText(content$text)

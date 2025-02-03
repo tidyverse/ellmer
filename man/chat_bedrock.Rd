@@ -10,8 +10,7 @@ chat_bedrock(
   model = NULL,
   profile = NULL,
   echo = NULL,
-  api_args = NULL,
-  verbose = FALSE
+  api_args = NULL
 )
 }
 \arguments{
@@ -48,9 +47,6 @@ max_gen_len. However, Ellmer uses the parameter names above
 for consistency across all models, and the Converse API conveniently
 handles the mapping from these to the model-specific native
 parameter names.}
-
-\item{verbose}{Logical. When TRUE, prints AWS credentials,
-request and response headers/bodies for debugging.}
 }
 \value{
 A \link{Chat} object.
@@ -82,7 +78,7 @@ org uses AWS SSO, you'll need to run \verb{aws sso login} at the terminal.
 chat <- chat_bedrock()
 chat$chat("Tell me three jokes about statisticians")
 
-# Using custom API parameters
+# Using Llama3 with custom API parameters
 chat <- chat_bedrock(
   model = "us.meta.llama3-2-3b-instruct-v1:0",
   api_args = list(
@@ -90,9 +86,6 @@ chat <- chat_bedrock(
     max_tokens = 2000
   )
 )
-
-# Enable verbose output for debugging requests and responses
-chat <- chat_bedrock(verbose = TRUE)
 
 # Custom system prompt with API parameters
 chat <- chat_bedrock(
@@ -115,8 +108,7 @@ chat$chat(
 # The echo argument, "none", "text", and "all" determines whether
 # input and/or output is echoed to the console. Also of note, "none" uses a
 # non-streaming endpoint, whereas "text", "all", or TRUE uses a streaming endpoint.
-# You can use verbose=TRUE to verify which endpoint is used.
-chat <- chat_bedrock(verbose = TRUE) 
+chat <- chat_bedrock()
 chat$chat("What is 1 + 1?")  # Streaming response
 resp <- chat$chat("What is 1 + 1?", echo = "none")  # Non-streaming response
 resp  # View response
