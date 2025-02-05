@@ -109,3 +109,11 @@ test_that("service principal authentication requests look correct", {
   source <- default_azure_credentials()
   expect_equal(source(), list(Authorization = "Bearer token"))
 })
+
+test_that("tokens can be requested from a Connect server", {
+  skip_if_not_installed("connectcreds")
+
+  connectcreds::local_mocked_connect_responses(token = "token")
+  credentials <- default_azure_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
+})

@@ -19,6 +19,8 @@ NULL
 #'   to one) environment variables.
 #' - Posit Workbench-managed Snowflake credentials for the corresponding
 #'   `account`.
+#' - Viewer-based credentials on Posit Connect. Requires the \pkg{connectcreds}
+#'   package.
 #'
 #' ## Known limitations
 #' Note that Snowflake-hosted models do not support images, tool calling, or
@@ -191,6 +193,18 @@ snowflake_user_agent <- function() {
 }
 
 default_snowflake_credentials <- function(account = snowflake_account()) {
+  # Detect viewer-based credentials from Posit Connect.
+  url <- snowflake_url(account)
+  if (is_installed("connectcreds") && connectcreds::has_viewer_token(url)) {
+    return(function() {
+      token <- connectcreds::connect_viewer_token(url)
+      list(
+        Authorization = paste("Bearer", token$access_token),
+        `X-Snowflake-Authorization-Token-Type` = "OAUTH"
+      )
+    })
+  }
+
   token <- Sys.getenv("SNOWFLAKE_TOKEN")
   if (nchar(token) != 0) {
     return(function() {

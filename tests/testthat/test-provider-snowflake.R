@@ -164,3 +164,18 @@ test_that("Snowflake key-pair credentials are detected correctly", {
     )
   )
 })
+
+test_that("tokens can be requested from a Connect server", {
+  skip_if_not_installed("connectcreds")
+
+  withr::local_envvar(SNOWFLAKE_ACCOUNT = "testorg-test_account")
+  connectcreds::local_mocked_connect_responses(token = "token")
+  credentials <- default_snowflake_credentials()
+  expect_identical(
+    credentials(),
+    list(
+      Authorization = "Bearer token",
+      `X-Snowflake-Authorization-Token-Type` = "OAUTH"
+    )
+  )
+})

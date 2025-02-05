@@ -20,7 +20,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Hadley Wickham \email{hadley@posit.co}
+\strong{Maintainer}: Hadley Wickham \email{hadley@posit.co} (\href{https://orcid.org/0000-0003-4757-117X}{ORCID})
 
 Authors:
 \itemize{
@@ -30,7 +30,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Posit Software, PBC [copyright holder, funder]
+  \item Posit Software, PBC (03wc8by49) [copyright holder, funder]
 }
 
 }

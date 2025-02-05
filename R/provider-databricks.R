@@ -17,6 +17,8 @@
 #' - User account via OAuth (OAuth U2M)
 #' - Authentication via the Databricks CLI
 #' - Posit Workbench-managed credentials
+#' - Viewer-based credentials on Posit Connect. Requires the \pkg{connectcreds}
+#'   package.
 #'
 #' ## Known limitations
 #'
@@ -192,6 +194,14 @@ databricks_user_agent <- function() {
 # the "Databricks client unified authentication" model.
 default_databricks_credentials <- function(workspace = databricks_workspace()) {
   host <- gsub("https://|/$", "", workspace)
+
+  # Detect viewer-based credentials from Posit Connect.
+  if (has_connect_viewer_token(resource = workspace)) {
+    return(function() {
+      token <- connectcreds::connect_viewer_token(workspace)
+      list(Authorization = paste("Bearer", token$access_token))
+    })
+  }
 
   # An explicit PAT takes precedence over everything else.
   token <- Sys.getenv("DATABRICKS_TOKEN")
