@@ -54,7 +54,7 @@ ellmer supports a wide variety of model providers:
 
 ### Provider/model choice
 
-If you're using ellmer inside your organisation, you'll be limited to what your IT department allows, which is likely to be one provided by a big cloud provider, e.g. `chat_azure()`, `chat_bedrock()`, `chat_databricks()`, or `chat_snowflake()`.
+If you're using ellmer inside an organisation, you may have internal policies that limit you to models from big cloud providers, e.g. `chat_azure()`, `chat_bedrock()`, `chat_databricks()`, or `chat_snowflake()`.
 
 If you're using ellmer for your own exploration, you'll have a lot more freedom, so we have a few recommendations to help you get started:
 
@@ -66,11 +66,11 @@ If you're using ellmer for your own exploration, you'll have a lot more freedom,
 
 ### Authentication
 
-Authentication works a little differently depending on whether you're using a personal or organisational account. If you're using a personal account, you will need to get an API key from the provider and save it in an environment variable. When deploying, you'll need to make sure If you deploy to another system, you'll need to ensure that this environment variable is also available in your deployment environment.
+Authentication works a little differently depending on the provider. A few popular ones (including OpenAI and Anthropic) require you to obtain an API key. We recommend you save it in an environment variable rather than using it directly in your code, and if you deploy an app or report that uses ellmer to another system, you'll need to ensure that this environment variable is available there, too.
 
-If you're using an organisational account and you're using Posit Workbench and/or Posit Connect, ellmer integrates seamlessly with their credential management. For the supported endpoints (currently `chat_azure()`, `chat_bedrock()`, `chat_databricks()`, `chat_snowflake()`), this means that auth will just work in Workbench, without you having to worry about it (if it doesn't, you'll need to talk to your server admin so that they can set it up). When deploying to Connect, you'll need to make a choice: do you want to use a service account or viewer-based credentials.
+ellmer also automatically detects many of the OAuth or IAM-based credentials used by the big cloud providers (currently `chat_azure()`, `chat_bedrock()`, `chat_databricks()`, `chat_snowflake()`). That includes credentials for these platforms managed by Posit Workbench and Posit Connect.
 
-If you're not using Posit products, you'll need to work with your system administrator. ellmer has been designed to work with a variety of auth mechanisms, and we're happy to add more if needed.
+If you find cases where ellmer cannot detect credentials from one of these cloud providers, feel free to open an issue; we're happy to add more auth mechanisms if needed.
 
 ## Using ellmer
 
