@@ -261,6 +261,17 @@ method(as_json, list(ProviderBedrock, ContentImageInline)) <- function(provider,
   )
 }
 
+method(as_json, list(ProviderBedrock, ContentPDF)) <- function(provider, x) {
+  list(
+    type = "document",
+    document = list(
+      name = "document",
+      format = "pdf",
+      source = list(bytes = x@data)
+    )
+  )
+}
+
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ToolUseBlock.html
 method(as_json, list(ProviderBedrock, ContentToolRequest)) <- function(provider, x) {
   list(
