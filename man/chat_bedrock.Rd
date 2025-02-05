@@ -9,8 +9,8 @@ chat_bedrock(
   turns = NULL,
   model = NULL,
   profile = NULL,
-  echo = NULL,
-  api_args = NULL
+  api_args = list(),
+  echo = NULL
 )
 }
 \arguments{
@@ -26,6 +26,22 @@ choosing a model for all but the most casual use.}
 
 \item{profile}{AWS profile to use.}
 
+\item{api_args}{Named list of arbitrary extra arguments appended to the body
+of every chat API call. Valid arguments are:
+\itemize{
+\item \code{max_tokens}: Maximum number of tokens to generate before stopping.
+\item \code{temperature}: Controls the randomness of the output. Higher values
+produce more random and creative responses. Range [0, 1].
+\item \code{top_p}: Controls the diversity of the output. Higher values produce
+more diverse responses. Range [0, 1]. Temperature is typically
+preferred.
+\item \code{top_k}: Controls the number of possible next tokens to consider for
+the next token in the output. Higher values produce more diverse
+responses. A positive integer. Temperature is typically preferred.
+\item \code{stop_sequences}: A list of strings to stop the model from generating
+more tokens.
+}}
+
 \item{echo}{One of the following options:
 \itemize{
 \item \code{none}: don't emit any output (default when running in a function).
@@ -35,18 +51,6 @@ the console).
 }
 
 Note this only affects the \code{chat()} method.}
-
-\item{api_args}{Optional list of arguments passed to the Bedrock API. Use
-this to customize model behavior. Valid arguments are: \code{temperature},
-\code{top_p}, \code{top_k}, \code{stop_sequences}, and \code{max_tokens}, though certain
-models may not support every parameter. Check the AWS Bedrock model
-documentation for specifics. Note that different model families
-(Claude, Nova, Llama, etc.) may natively use different parameter
-names for the same concept, e.g., max_tokens, max_new_tokens, or
-max_gen_len. However, Ellmer uses the parameter names above
-for consistency across all models, and the Converse API conveniently
-handles the mapping from these to the model-specific native
-parameter names.}
 }
 \value{
 A \link{Chat} object.
@@ -77,52 +81,6 @@ org uses AWS SSO, you'll need to run \verb{aws sso login} at the terminal.
 # Basic usage
 chat <- chat_bedrock()
 chat$chat("Tell me three jokes about statisticians")
-
-# Using Llama3 with custom API parameters
-chat <- chat_bedrock(
-  model = "us.meta.llama3-2-3b-instruct-v1:0",
-  api_args = list(
-    temperature = 0.7,
-    max_tokens = 2000
-  )
-)
-
-# Custom system prompt with API parameters
-chat <- chat_bedrock(
-  system_prompt = "You are a helpful data science assistant",
-  api_args = list(temperature = 0.5)
-)
-
-# Use a non-default AWS profile in ~/.aws/credentials
-chat <- chat_bedrock(profile = "my_profile_name")
-
-# Image interpretation when using a vision capable model
-chat <- chat_bedrock(
-  model = "us.meta.llama3-2-11b-instruct-v1:0"
-)
-chat$chat(
-  "What's in this image?",
-  content_image_file("path/to/image.jpg")
-)
-
-# The echo argument, "none", "text", and "all" determines whether
-# input and/or output is echoed to the console. Also of note, "none" uses a
-# non-streaming endpoint, whereas "text", "all", or TRUE uses a streaming endpoint.
-chat <- chat_bedrock()
-chat$chat("What is 1 + 1?")  # Streaming response
-resp <- chat$chat("What is 1 + 1?", echo = "none")  # Non-streaming response
-resp  # View response
-
-# Use echo = "none" in the client constructor to suppress streaming response
-chat <- chat_bedrock(echo = "none")
-resp <- chat$chat("What is 1 + 1?")  # Non-streaming response
-resp  # View response
-chat$chat("What is 1 + 1?", echo=TRUE)  # Overrides client echo arg, uses streaming
-
-# $stream returns a generator, requiring concatentation of the streamed responses.
-resp <- chat$stream("What is the capital of France?")  # resp is a generator object
-chunks <- coro::collect(resp)  # returns list of partial text responses
-complete_response <- paste(chunks, collapse="")  # Full text response, no echo
 }
 }
 \seealso{
