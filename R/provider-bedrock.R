@@ -52,18 +52,18 @@ NULL
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
 chat_bedrock <- function(system_prompt = NULL,
-                            turns = NULL,
-                            model = NULL,
-                            profile = NULL,
-                            api_args = list(),
-                            echo = NULL) {
+                         turns = NULL,
+                         model = NULL,
+                         profile = NULL,
+                         api_args = list(),
+                         echo = NULL) {
 
   check_installed("paws.common", "AWS authentication")
   cache <- aws_creds_cache(profile)
   credentials <- paws_credentials(profile, cache = cache)
 
   turns <- normalize_turns(turns, system_prompt)
-  model <- set_default(model, "us.anthropic.claude-3-5-sonnet-20240620-v1:0")
+  model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
   echo <- check_echo(echo)
 
   provider <- ProviderBedrock(
