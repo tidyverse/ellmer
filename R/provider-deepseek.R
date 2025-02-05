@@ -15,6 +15,7 @@ NULL
 #' @export
 #' @family chatbots
 #' @inheritParams chat_openai
+#' @param base_url The base URL to the endpoint; the default uses DeepSeek.
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
@@ -23,6 +24,7 @@ NULL
 #' }
 chat_deepseek <- function(system_prompt = NULL,
                           turns = NULL,
+                          base_url = "https://api.deepseek.com",
                           api_key = deepseek_key(),
                           model = NULL,
                           seed = NULL,
@@ -38,7 +40,7 @@ chat_deepseek <- function(system_prompt = NULL,
   }
 
   provider <- ProviderDeepSeek(
-    base_url = "https://api.deepseek.com",
+    base_url = base_url,
     model = model,
     seed = seed,
     extra_args = api_args,
