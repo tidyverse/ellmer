@@ -75,6 +75,11 @@ Chat <- R6::R6Class("Chat",
       }
     },
 
+    #' @description Retrieve the model name
+    get_model = function() {
+      private$provider@model
+    },
+
     #' @description Update the system prompt
     #' @param value A string giving the new system prompt
     set_system_prompt = function(value) {
