@@ -60,10 +60,6 @@ A \link{Chat} object.
 language models, including those from Anthropic's
 \href{https://aws.amazon.com/bedrock/claude/}{Claude}, using the Bedrock
 \href{https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html}{Converse API}.
-
-For examples of tool usage, asynchronous input, and other advanced features,
-visit the \href{https://posit-dev.github.io/ellmer/vignettes/}{vignettes} section
-of the repo.
 \subsection{Authentication}{
 
 Authentication is handled through \{paws.common\}, so if authentication

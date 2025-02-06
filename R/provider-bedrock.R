@@ -12,10 +12,6 @@ NULL
 #' [Claude](https://aws.amazon.com/bedrock/claude/), using the Bedrock
 #' [Converse API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html).
 #'
-#' For examples of tool usage, asynchronous input, and other advanced features,
-#' visit the [vignettes](https://posit-dev.github.io/ellmer/vignettes/) section
-#' of the repo.
-#'
 #' ## Authentication
 #'
 #' Authentication is handled through \{paws.common\}, so if authentication
