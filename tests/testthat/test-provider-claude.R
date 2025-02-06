@@ -46,3 +46,9 @@ test_that("can use images", {
   test_images_inline(chat_fun)
   test_images_remote_error(chat_fun)
 })
+
+test_that("can use pdfs", {
+  chat_fun <- chat_claude
+
+  test_pdf_local(chat_fun)
+})

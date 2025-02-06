@@ -176,3 +176,15 @@ test_images_remote_error <- function(chat_fun) {
   )
   expect_length(chat$get_turns(), 0)
 }
+
+# PDF ---------------------------------------------------------------------
+
+test_pdf_local <- function(chat_fun) {
+  chat <- chat_fun()
+  response <- chat$chat(
+    "What's the title of this document?",
+    content_pdf_file(test_path("apples.pdf"))
+  )
+  expect_match(response, "Apples are tasty")
+  expect_match(chat$chat("What apple is not tasty?"), "red delicious")
+}

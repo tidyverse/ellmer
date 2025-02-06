@@ -3,25 +3,25 @@
 \name{content_pdf_file}
 \alias{content_pdf_file}
 \alias{content_pdf_url}
-\title{Create PDF content from a file or URL}
+\title{Encode PDFs content for chat input}
 \usage{
-content_pdf_file(path, compress = FALSE)
+content_pdf_file(path)
 
-content_pdf_url(url, compress = FALSE)
+content_pdf_url(url)
 }
 \arguments{
-\item{path}{Path to a PDF file}
-
-\item{compress}{Whether to compress the PDF before sending. Requires the qpdf package to be installed.}
+\item{path, url}{Path or URL to a PDF file.}
 
 \item{url}{The URL to a remote PDF file}
 }
 \value{
-A ContentPDF object
+A \code{ContentPDF} object
 }
 \description{
-These functions are used to prepare PDFs as input to the
-chatbot. The \code{content_pdf_url()} function is used to provide a URL to an
-PDF file, while \code{content_pdf_file()} is used to for local PDF files.  Not all providers
-support PDF input, so check the documentation for the provider you are using.
+These functions are used to prepare PDFs as input to the chatbot. The
+\code{content_pdf_url()} function is used to provide a URL to an PDF file,
+while \code{content_pdf_file()} is used to for local PDF files.
+
+Not all providers support PDF input, so check the documentation for the
+provider you are using.
 }

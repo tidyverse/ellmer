@@ -4,7 +4,7 @@
 \alias{content_image_url}
 \alias{content_image_file}
 \alias{content_image_plot}
-\title{Encode image content for chat input}
+\title{Encode images for chat input}
 \usage{
 content_image_url(url, detail = c("auto", "low", "high"))
 

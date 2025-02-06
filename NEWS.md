@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* New `content_pdf_file()` and `content_pdf_url()` allow you to upload PDFs to supported models. Models that currently support PDFs are Google Gemini and Claude Anthropic. With help from @walkerke and @andrie (#265).
+
 * `chat_gemini()` now defaults to using the gemini-2.0-flash model.
 
 * `chat_azure()` now defaults `api_version = "2024-10-21"` which includes data for structured data extraction (#271).

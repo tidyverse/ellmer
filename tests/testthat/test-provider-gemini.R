@@ -48,6 +48,12 @@ test_that("can use images", {
   test_images_remote_error(chat_fun)
 })
 
+test_that("can use pdfs", {
+  chat_fun <- chat_gemini
+
+  test_pdf_local(chat_fun)
+})
+
 # chunk merging ----------------------------------------------------------
 
 test_that("can merge text output", {
