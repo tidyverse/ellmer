@@ -11,8 +11,6 @@ content_pdf_url(url)
 }
 \arguments{
 \item{path, url}{Path or URL to a PDF file.}
-
-\item{url}{The URL to a remote PDF file}
 }
 \value{
 A \code{ContentPDF} object

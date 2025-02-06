@@ -24,7 +24,6 @@ content_pdf_file <- function(path) {
 }
 
 #' @rdname content_pdf_file
-#' @param url The URL to a remote PDF file
 #' @export
 content_pdf_url <- function(url) {
   if (grepl("^data:", url)) {
