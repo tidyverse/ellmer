@@ -121,3 +121,10 @@ has_connect_viewer_token <- function(...) {
   }
   connectcreds::has_viewer_token(...)
 }
+
+modify_list <- function(x, y) {
+  if (is.null(x)) return(y)
+  if (is.null(y)) return(x)
+
+  utils::modifyList(x, y)
+}

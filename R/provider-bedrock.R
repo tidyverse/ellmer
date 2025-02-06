@@ -11,13 +11,9 @@ NULL
 #' language models, including those from Anthropic's
 #' [Claude](https://aws.amazon.com/bedrock/claude/), using the Bedrock
 #' [Converse API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html).
-#' Although Ellmer provides a default model, you'll need to
-#' specify a model that you actually have access to using the `model` argument.
-#' If using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/), 
-#' you'll need to use the inference profile ID for 
-#' any model argument, e.g., `model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"`.
+#'
 #' For examples of tool usage, asynchronous input, and other advanced features,
-#' visit the [vignettes](https://posit-dev.github.io/ellmer/vignettes/) section 
+#' visit the [vignettes](https://posit-dev.github.io/ellmer/vignettes/) section
 #' of the repo.
 #'
 #' ## Authentication
@@ -28,19 +24,25 @@ NULL
 #' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 #'
 #' @param profile AWS profile to use.
+#' @param model ellmer provides a default model, but you'll typically need to
+#'   you'll specify a model that you actually have access to.
+#'
+#'   If you're using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
+#'   you'll need to use the inference profile ID, e.g.
+#'   `model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"`.
 #' @param api_args Named list of arbitrary extra arguments appended to the body
-#'   of every chat API call. Valid arguments are: 
-#'   * `max_tokens`: Maximum number of tokens to generate before stopping.
-#'   * `temperature`: Controls the randomness of the output. Higher values
-#'     produce more random and creative responses. Range \[0, 1\].
-#'   * `top_p`: Controls the diversity of the output. Higher values produce
-#'     more diverse responses. Range \[0, 1\]. Temperature is typically
-#'     preferred.
-#'   * `top_k`: Controls the number of possible next tokens to consider for
-#'     the next token in the output. Higher values produce more diverse
-#'     responses. A positive integer. Temperature is typically preferred.
-#'   * `stop_sequences`: A list of strings to stop the model from generating
-#'     additional tokens if encountered in the response.
+#'   of every chat API call. Some useful arguments include:
+#'
+#'   ```R
+#'   api_args = list(
+#'     inferenceConfig = list(
+#'       maxTokens = 100,
+#'       temperature = 0.7,
+#'       topP = 0.9,
+#'       topK = 20
+#'     )
+#'   )
+#'   ```
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -147,35 +149,15 @@ method(chat_request, ProviderBedrock) <- function(provider,
     toolConfig <- NULL
   }
 
-  # Merge provider extra_args with call-specific args
-  extra_args <- utils::modifyList(provider@extra_args, extra_args)
-
-  # Extract inference configuration parameters from extra_args
-  inference_params <- c("max_tokens", "temperature", "top_p", "top_k", "stop_sequences")
-
-  # Convert snake_case to camelCase for Converse API inferenceConfig params
-  param_mapping <- c(
-    max_tokens = "maxTokens",
-    top_p = "topP",
-    top_k = "topK",
-    temperature = "temperature",
-    stop_sequences = "stopSequences"
-  )
-  
-  # Handle standard inference parameters
-  inference_config <- compact(sapply(inference_params, function(param) {
-    extra_args[[param]]
-  }, simplify = FALSE, USE.NAMES = TRUE))
-
-  names(inference_config) <- param_mapping[names(inference_config)]
-
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
-  req <- req_body_json(req, compact(list2(
+  body <- list(
     messages = messages,
     system = system,
-    toolConfig = toolConfig,
-    inferenceConfig = inference_config
-  )))
+    toolConfig = toolConfig
+  )
+  extra_args <- utils::modifyList(provider@extra_args, extra_args)
+  body <- modify_list(body, extra_args)
+  req <- req_body_json(req, body)
 
   req
 }

@@ -1,3 +1,18 @@
+# handles errors
+
+    Code
+      chat$chat("What is 1 + 1?", echo = FALSE)
+    Condition
+      Error in `req_perform()`:
+      ! HTTP 400 Bad Request.
+      * STRING_VALUE cannot be converted to Float
+    Code
+      chat$chat("What is 1 + 1?", echo = TRUE)
+    Condition
+      Error in `req_perform_connection()`:
+      ! HTTP 400 Bad Request.
+      * STRING_VALUE cannot be converted to Float
+
 # defaults are reported
 
     Code
@@ -19,6 +34,6 @@
     Code
       . <- chat$chat("What's in this image?", image_remote)
     Condition
-      Error:
+      Error in `method(as_json, list(ellmer::ProviderBedrock, ellmer::ContentImageRemote))`:
       ! Bedrock doesn't support remote images
 

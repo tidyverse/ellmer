@@ -11,6 +11,26 @@ test_that("can make simple streaming request", {
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })
 
+test_that("can set api args", {
+  chat <- chat_bedrock(
+    api_args = list(inferenceConfig = list(maxTokens = 1)),
+    echo = FALSE
+  )
+  result <- chat$chat("Who are the reindeer?")
+  expect_true(nchar(result) < 10)
+})
+
+test_that("handles errors", {
+  chat <- chat_bedrock(
+    api_args = list(inferenceConfig = list(temperature = "hot")),
+    echo = FALSE
+  )
+  expect_snapshot(error = TRUE, {
+    chat$chat("What is 1 + 1?", echo = FALSE)
+    chat$chat("What is 1 + 1?", echo = TRUE)
+  })
+})
+
 # Common provider interface -----------------------------------------------
 
 test_that("defaults are reported", {
@@ -54,13 +74,13 @@ test_that("AWS credential caching works as expected", {
     locate_aws_credentials = function(profile) {
       if (!is.null(profile) && profile == "test") {
         list(
-          access_key = "key1",
+          access_key_id = "key1",
           secret_key = "secret1",
           expiration = Sys.time() + 3600
         )
       } else {
         list(
-          access_key = "key2",
+          access_key_id = "key2",
           secret_key = "secret2",
           expiration = Sys.time() + 3600
         )
@@ -68,13 +88,13 @@ test_that("AWS credential caching works as expected", {
     }
   )
 
-  creds1 <- paws_credentials(profile = "test")
-  creds2 <- paws_credentials(profile = NULL)
+  creds1 <- paws_credentials(profile = "test", reauth = TRUE)
+  creds2 <- paws_credentials(profile = NULL, reauth = TRUE)
 
   # Verify different credentials were returned.
   expect_false(identical(creds1, creds2))
-  expect_equal(creds1$access_key, "key1")
-  expect_equal(creds2$access_key, "key2")
+  expect_equal(creds1$access_key_id, "key1")
+  expect_equal(creds2$access_key_id, "key2")
 
   # Verify cached credentials match original ones.
   expect_identical(creds1, paws_credentials(profile = "test"))

@@ -20,27 +20,27 @@ chat_bedrock(
 previous conversation). If not provided, the conversation begins from
 scratch.}
 
-\item{model}{The model to use for the chat. The default, \code{NULL}, will pick
-a reasonable default, and tell you about. We strongly recommend explicitly
-choosing a model for all but the most casual use.}
+\item{model}{ellmer provides a default model, but you'll typically need to
+you'll specify a model that you actually have access to.
+
+If you're using \href{https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/}{cross-region inference},
+you'll need to use the inference profile ID, e.g.
+\code{model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"}.}
 
 \item{profile}{AWS profile to use.}
 
 \item{api_args}{Named list of arbitrary extra arguments appended to the body
-of every chat API call. Valid arguments are:
-\itemize{
-\item \code{max_tokens}: Maximum number of tokens to generate before stopping.
-\item \code{temperature}: Controls the randomness of the output. Higher values
-produce more random and creative responses. Range [0, 1].
-\item \code{top_p}: Controls the diversity of the output. Higher values produce
-more diverse responses. Range [0, 1]. Temperature is typically
-preferred.
-\item \code{top_k}: Controls the number of possible next tokens to consider for
-the next token in the output. Higher values produce more diverse
-responses. A positive integer. Temperature is typically preferred.
-\item \code{stop_sequences}: A list of strings to stop the model from generating
-more tokens.
-}}
+of every chat API call. Some useful arguments include:
+
+\if{html}{\out{<div class="sourceCode R">}}\preformatted{api_args = list(
+  inferenceConfig = list(
+    maxTokens = 100,
+    temperature = 0.7,
+    topP = 0.9,
+    topK = 20
+  )
+)
+}\if{html}{\out{</div>}}}
 
 \item{echo}{One of the following options:
 \itemize{
@@ -60,11 +60,7 @@ A \link{Chat} object.
 language models, including those from Anthropic's
 \href{https://aws.amazon.com/bedrock/claude/}{Claude}, using the Bedrock
 \href{https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html}{Converse API}.
-Although Ellmer provides a default model, you'll need to
-specify a model that you actually have access to using the \code{model} argument.
-If using \href{https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/}{cross-region inference},
-you'll need to use the inference profile ID for
-any model argument, e.g., \code{model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"}.
+
 For examples of tool usage, asynchronous input, and other advanced features,
 visit the \href{https://posit-dev.github.io/ellmer/vignettes/}{vignettes} section
 of the repo.
