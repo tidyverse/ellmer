@@ -12,7 +12,7 @@ NULL
 #' [Claude](https://aws.amazon.com/bedrock/claude/).
 #'
 #' ## Authentication
-#' 
+#'
 #' Authenthication is handled through \{paws.common\}, so if authenthication
 #' does not work for you automatically, you'll need to follow the advice
 #' at <https://www.paws-r-sdk.com/#credentials>. In particular, if your
@@ -262,6 +262,17 @@ method(as_json, list(ProviderBedrock, ContentImageInline)) <- function(provider,
   list(
     image = list(
       format = type,
+      source = list(bytes = x@data)
+    )
+  )
+}
+
+# https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_DocumentBlock.html
+method(as_json, list(ProviderBedrock, ContentPDF)) <- function(provider, x) {
+  list(
+    document = list(
+      name = "document",
+      format = "pdf",
       source = list(bytes = x@data)
     )
   )

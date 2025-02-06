@@ -46,6 +46,13 @@ test_that("can use images", {
   test_images_remote_error(chat_fun)
 })
 
+test_that("can use pdfs", {
+  chat_fun <- chat_bedrock
+
+  test_pdf_local(chat_fun)
+})
+
+
 # Auth --------------------------------------------------------------------
 
 test_that("AWS credential caching works as expected", {
