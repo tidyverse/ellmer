@@ -25,6 +25,8 @@
       Headers:
       * api-key: "<REDACTED>"
       Body: json encoded data
+      Options:
+      * timeout: 60
       Policies:
       * retry_max_tries: 2
       * retry_on_failure: FALSE
@@ -44,6 +46,8 @@
       Headers:
       * Authorization: "<REDACTED>"
       Body: json encoded data
+      Options:
+      * timeout: 60
       Policies:
       * retry_max_tries: 2
       * retry_on_failure: FALSE
@@ -64,6 +68,8 @@
       * api-key: "<REDACTED>"
       * Authorization: "<REDACTED>"
       Body: json encoded data
+      Options:
+      * timeout: 60
       Policies:
       * retry_max_tries: 2
       * retry_on_failure: FALSE

@@ -18,7 +18,7 @@
 
 * `print(Chat)` no longer wraps long lines, making it easier to read code and bulleted lists (#246).
 
-* `chat_openai()` should be less likely to timeout when not streaming chat results (#213).
+* All providers now wait for up to 60s to get the complete response. You can increase this with, e.g., `option(ellmer_timeout_s = 120)` (#213, #300).
 
 * Support for Azure Entra ID authentication in `chat_azure()` has improved
   greatly. API keys are now optional and we can pick up on ambient credentials

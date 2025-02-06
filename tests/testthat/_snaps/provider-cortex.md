@@ -40,8 +40,7 @@
       * X-Snowflake-Authorization-Token-Type: "OAUTH"
       Body: json encoded data
       Options:
-      * timeout_ms: 60000
-      * connecttimeout: 0
+      * timeout: 60
       * useragent: "<ellmer_user_agent>"
       Policies:
       * retry_max_tries: 2

@@ -106,7 +106,7 @@ method(chat_request, ProviderSnowflake) <- function(provider,
   req <- req_url_path_append(req, "/api/v2/cortex/inference:complete")
   req <- req_headers(req, !!!provider@credentials(), .redact = "Authorization")
   req <- req_retry(req, max_tries = 2)
-  req <- req_timeout(req, 60)
+  req <- ellmer_req_timeout(req, stream)
   req <- req_user_agent(req, snowflake_user_agent())
 
   # Snowflake-specific error response handling:

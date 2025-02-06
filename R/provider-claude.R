@@ -92,6 +92,7 @@ method(chat_request, ProviderClaude) <- function(provider,
     is_transient = function(resp) resp_status(resp) %in% c(429, 503, 529),
     max_tries = 2
   )
+  req <- ellmer_req_timeout(req, stream)
 
   # <https://docs.anthropic.com/en/api/errors>
   req <- req_error(req, body = function(resp) {

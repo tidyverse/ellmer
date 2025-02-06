@@ -151,6 +151,7 @@ method(chat_request, ProviderAzure) <- function(provider,
   }
   req <- req_headers(req, !!!provider@credentials(), .redact = "Authorization")
   req <- req_retry(req, max_tries = 2)
+  req <- ellmer_req_timeout(req, stream)
   req <- req_error(req, body = function(resp) {
     error <- resp_body_json(resp)$error
     msg <- paste0(error$code, ": ", error$message)

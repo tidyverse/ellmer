@@ -97,6 +97,7 @@ method(chat_request, ProviderDatabricks) <- function(provider,
   req <- req_headers(req, !!!provider@credentials(), .redact = "Authorization")
   req <- req_user_agent(req, databricks_user_agent())
   req <- req_retry(req, max_tries = 2)
+  req <- ellmer_req_timeout(req, stream)
   req <- req_error(req, body = function(resp) {
     if (resp_content_type(resp) == "application/json") {
       # Databrick's "OpenAI-compatible" API has a slightly incompatible error
