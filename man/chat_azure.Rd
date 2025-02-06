@@ -11,7 +11,7 @@ chat_azure(
   system_prompt = NULL,
   turns = NULL,
   api_key = NULL,
-  token = NULL,
+  token = deprecated(),
   credentials = NULL,
   api_args = list(),
   echo = c("none", "text", "all")
@@ -36,7 +36,9 @@ scratch.}
 supply this directly, but instead set the \code{AZURE_OPENAI_API_KEY}
 environment variable.}
 
-\item{token}{A literal Azure token to use for authentication.}
+\item{token}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} A literal Azure token to use
+for authentication. Deprecated in favour of ambient Azure credentials or
+an explicit \code{credentials} argument.}
 
 \item{credentials}{A list of authentication headers to pass into
 \code{\link[httr2:req_headers]{httr2::req_headers()}}, a function that returns them, or \code{NULL} to use
@@ -65,6 +67,18 @@ A \link{Chat} object.
 The \href{https://azure.microsoft.com/en-us/products/ai-services/openai-service}{Azure OpenAI server}
 hosts a number of open source models as well as proprietary models
 from OpenAI.
+\subsection{Authentication}{
+
+\code{chat_azure()} supports API keys and the \code{credentials} parameter, but it also
+makes use of:
+\itemize{
+\item Azure service principals (when the \code{AZURE_TENANT_ID}, \code{AZURE_CLIENT_ID},
+and \code{AZURE_CLIENT_SECRET} environment variables are set).
+\item Interactive Entra ID authentication, like the Azure CLI.
+\item Viewer-based credentials on Posit Connect. Requires the \pkg{connectcreds}
+package.
+}
+}
 }
 \examples{
 \dontrun{

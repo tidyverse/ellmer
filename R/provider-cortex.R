@@ -10,16 +10,6 @@ NULL
 #' Chat with the LLM-powered [Snowflake Cortex
 #' Analyst](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst).
 #'
-#' Unlike most comparable model APIs, Cortex does not take a system prompt.
-#' Instead, the caller must provide a "semantic model" describing available
-#' tables, their meaning, and verified queries that can be run against them as a
-#' starting point. The semantic model can be passed as a YAML string or via
-#' reference to an existing file in a Snowflake Stage.
-#'
-#' Note that Cortex does not support multi-turn, so it will not remember
-#' previous messages. Nor does it support registering tools, and attempting to
-#' do so will result in an error.
-#'
 #' ## Authentication
 #'
 #' `chat_cortex()` picks up the following ambient Snowflake credentials:
@@ -31,12 +21,30 @@ NULL
 #'   to one) environment variables.
 #' - Posit Workbench-managed Snowflake credentials for the corresponding
 #'   `account`.
+#' - Viewer-based credentials on Posit Connect. Requires the \pkg{connectcreds}
+#'   package.
+#'
+#' ## Known limitations
+#'
+#' Unlike most comparable model APIs, Cortex does not take a system prompt.
+#' Instead, the caller must provide a "semantic model" describing available
+#' tables, their meaning, and verified queries that can be run against them as a
+#' starting point. The semantic model can be passed as a YAML string or via
+#' reference to an existing file in a Snowflake Stage.
+#'
+#' Note that Cortex does not support multi-turn, so it will not remember
+#' previous messages. Nor does it support registering tools, and attempting to
+#' do so will result in an error.
+#'
+#' See [chat_snowflake()] to chat with more general-purpose models hosted on
+#' Snowflake.
 #'
 #' @param account A Snowflake [account identifier](https://docs.snowflake.com/en/user-guide/admin-account-identifier),
-#'   e.g. `"testorg-test_account"`.
+#'   e.g. `"testorg-test_account"`. Defaults to the value of the
+#'   `SNOWFLAKE_ACCOUNT` environment variable.
 #' @param credentials A list of authentication headers to pass into
-#'   [`httr2::req_headers()`], a function that returns them when passed
-#'   `account` as a parameter, or `NULL` to use ambient credentials.
+#'   [`httr2::req_headers()`], a function that returns them when called, or
+#'   `NULL`, the default, to use ambient credentials.
 #' @param model_spec A semantic model specification, or `NULL` when
 #'   using `model_file` instead.
 #' @param model_file Path to a semantic model file stored in a Snowflake Stage,
@@ -45,17 +53,19 @@ NULL
 #' @inherit chat_openai return
 #' @family chatbots
 #' @examplesIf has_credentials("cortex")
-#' chat <- chat_cortex(
+#' chat <- chat_cortex_analyst(
 #'   model_file = "@my_db.my_schema.my_stage/model.yaml"
 #' )
 #' chat$chat("What questions can I ask?")
 #' @export
-chat_cortex <- function(account = Sys.getenv("SNOWFLAKE_ACCOUNT"),
-                        credentials = NULL,
-                        model_spec = NULL,
-                        model_file = NULL,
-                        api_args = list(),
-                        echo = c("none", "text", "all")) {
+chat_cortex_analyst <- function(
+  account = snowflake_account(),
+  credentials = NULL,
+  model_spec = NULL,
+  model_file = NULL,
+  api_args = list(),
+  echo = c("none", "text", "all")
+) {
   check_string(account, allow_empty = FALSE)
   check_string(model_spec, allow_empty = FALSE, allow_null = TRUE)
   check_string(model_file, allow_empty = FALSE, allow_null = TRUE)
@@ -67,6 +77,7 @@ chat_cortex <- function(account = Sys.getenv("SNOWFLAKE_ACCOUNT"),
     credentials <- function(account) static_credentials
   }
   check_function(credentials, allow_null = TRUE)
+  credentials <- credentials %||% default_snowflake_credentials(account)
 
   provider <- ProviderCortex(
     account = account,
@@ -79,12 +90,42 @@ chat_cortex <- function(account = Sys.getenv("SNOWFLAKE_ACCOUNT"),
   Chat$new(provider = provider, turns = NULL, echo = echo)
 }
 
+#' Create a chatbot that speaks to the Snowflake Cortex Analyst
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' [chat_cortex()] was renamed to [chat_cortex_analyst()] to distinguish it from
+#' the more general-purpose Snowflake Cortex chat function, [chat_snowflake()].
+#'
+#' @inheritParams chat_cortex_analyst
+#' @keywords internal
+#' @export
+chat_cortex <- function(
+  account = snowflake_account(),
+  credentials = NULL,
+  model_spec = NULL,
+  model_file = NULL,
+  api_args = list(),
+  echo = c("none", "text", "all")
+) {
+  lifecycle::deprecate_warn("0.1.1", "chat_cortex()", "chat_cortex_analyst()")
+  chat_cortex_analyst(
+    account = account,
+    credentials = credentials,
+    model_spec = model_spec,
+    model_file = model_file,
+    api_args = api_args,
+    echo = echo
+  )
+}
+
 ProviderCortex <- new_class(
   "ProviderCortex",
   parent = Provider,
   constructor = function(account, credentials, model_spec = NULL,
                          model_file = NULL, extra_args = list()) {
-    base_url <- paste0("https://", account, ".snowflakecomputing.com")
+    base_url <- snowflake_url(account)
     extra_args <- compact(list2(
       semantic_model = model_spec,
       semantic_model_file = model_file,
@@ -98,7 +139,7 @@ ProviderCortex <- new_class(
   },
   properties = list(
     account = prop_string(),
-    credentials = class_function | NULL,
+    credentials = class_function,
     extra_args = class_list
   )
 )
@@ -120,10 +161,10 @@ method(chat_request, ProviderCortex) <- function(provider,
 
   req <- request(provider@base_url)
   req <- req_url_path_append(req, "/api/v2/cortex/analyst/message")
-  creds <- cortex_credentials(provider@account, provider@credentials)
-  req <- httr2::req_headers(req, !!!creds, .redact = "Authorization")
+  req <- req_headers(req, !!!provider@credentials(), .redact = "Authorization")
   req <- req_retry(req, max_tries = 2)
   req <- req_timeout(req, 60)
+  req <- req_user_agent(req, snowflake_user_agent())
 
   # Snowflake doesn't document the error response format for Cortex Analyst at
   # this time, but empirically errors look like the following:
@@ -136,15 +177,6 @@ method(chat_request, ProviderCortex) <- function(provider,
   # }
   req <- req_error(req, body = function(resp) resp_body_json(resp)$message)
 
-  # Snowflake uses the User Agent header to identify "parter applications",
-  # so identify requests as coming from "r_ellmer" (unless an explicit
-  # partner application is set via the ambient SF_PARTNER environment
-  # variable).
-  req <- req_user_agent(req, ellmer_user_agent())
-  if (nchar(Sys.getenv("SF_PARTNER")) != 0) {
-    req <- req_user_agent(req, Sys.getenv("SF_PARTNER"))
-  }
-
   # Cortex does not yet support multi-turn chats.
   turns <- tail(turns, n = 1)
   messages <- as_json(provider, turns)
@@ -154,10 +186,6 @@ method(chat_request, ProviderCortex) <- function(provider,
   req <- req_body_json(req, data)
 
   req
-}
-
-ellmer_user_agent <- function() {
-  paste0("r_ellmer/", utils::packageVersion("ellmer"))
 }
 
 # Cortex -> ellmer --------------------------------------------------------------
@@ -364,71 +392,10 @@ method(format, ContentSql) <- function(x, ...) {
 # Credential handling ----------------------------------------------------------
 
 cortex_credentials_exist <- function(...) {
-  tryCatch(is_list(cortex_credentials(...)), error = function(e) FALSE)
-}
-
-cortex_credentials <- function(account = Sys.getenv("SNOWFLAKE_ACCOUNT"),
-                               credentials = NULL) {
-  # User-supplied credentials.
-  if (!is.null(credentials)) {
-    return(credentials(account))
-  }
-
-  token <- Sys.getenv("SNOWFLAKE_TOKEN")
-  if (nchar(token) != 0) {
-    return(
-      list(
-        Authorization = paste("Bearer", token),
-        # See: https://docs.snowflake.com/en/developer-guide/snowflake-rest-api/authentication#using-oauth
-        `X-Snowflake-Authorization-Token-Type` = "OAUTH"
-      )
-    )
-  }
-
-  # Support for Snowflake key-pair authentication.
-  # See: https://docs.snowflake.com/en/developer-guide/snowflake-rest-api/authentication#generate-a-jwt-token
-  user <- Sys.getenv("SNOWFLAKE_USER")
-  private_key <- Sys.getenv("SNOWFLAKE_PRIVATE_KEY")
-  if (nchar(user) != 0 && nchar(private_key) != 0) {
-    check_installed("jose", "for key-pair authentication")
-    key <- openssl::read_key(private_key)
-    # We can't use openssl::fingerprint() here because it uses a different
-    # algorithm.
-    fp <- openssl::base64_encode(
-      openssl::sha256(openssl::write_der(key$pubkey))
-    )
-    sub <- toupper(paste0(account, ".", user))
-    iss <- paste0(sub, ".SHA256:", fp)
-    # Note: Snowflake employs a malformed issuer claim, so we have to inject it
-    # manually after jose's validation phase.
-    claim <- httr2::jwt_claim("dummy", sub)
-    claim$iss <- iss
-    token <- httr2::jwt_encode_sig(claim, key)
-    return(
-      list(
-        Authorization = paste("Bearer", token),
-        `X-Snowflake-Authorization-Token-Type` = "KEYPAIR_JWT"
-      )
-    )
-  }
-
-  # Check for Workbench-managed credentials.
-  sf_home <- Sys.getenv("SNOWFLAKE_HOME")
-  if (grepl("posit-workbench", sf_home, fixed = TRUE)) {
-    token <- workbench_snowflake_token(account, sf_home)
-    if (!is.null(token)) {
-      return(list(
-        Authorization = paste("Bearer", token),
-        `X-Snowflake-Authorization-Token-Type` = "OAUTH"
-      ))
-    }
-  }
-
-  if (is_testing()) {
-    testthat::skip("no Snowflake credentials available")
-  }
-
-  cli::cli_abort("No Snowflake credentials are available.")
+  tryCatch(
+    is_list(default_snowflake_credentials(...)),
+    error = function(e) FALSE
+  )
 }
 
 # Reads Posit Workbench-managed Snowflake credentials from a

@@ -9,7 +9,9 @@ NULL
 #' This function is a lightweight wrapper around [chat_openai()] with
 #' the defaults tweaked for groq.
 #'
-#' It does not currently support structured data extraction.
+#' ## Known limitations
+#'
+#' groq does not currently support structured data extraction.
 #'
 #' @export
 #' @family chatbots

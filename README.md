@@ -34,13 +34,15 @@ ellmer supports a wide variety of model providers:
 - AWS Bedrock: `chat_bedrock()`.
 - Azure OpenAI: `chat_azure()`.
 - Databricks: `chat_databricks()`.
+- DeepSeek: `chat_deepseek()`.
 - GitHub model marketplace: `chat_github()`.
 - Google Gemini: `chat_gemini()`.
 - Groq: `chat_groq()`.
 - Ollama: `chat_ollama()`.
 - OpenAI: `chat_openai()`.
+- OpenRouter: `chat_openrouter()`.
 - perplexity.ai: `chat_perplexity()`.
-- Snowflake Cortex: `chat_cortex()`.
+- Snowflake Cortex: `chat_snowflake()` and `chat_cortex_analyst()`.
 - VLLM: `chat_vllm()`.
 
 ## Model choice
@@ -61,7 +63,10 @@ recommendations to help you get started:
 
 - `chat_gemini()` is great for large prompts because it has a much
   larger context window than other models. It allows up to 1 million
-  tokens, compared to Claude 3.5 Sonnet’s 200k and GPT-4o’s 128k.
+  tokens, compared to Claude 3.5 Sonnet’s 200k and GPT-4o’s 128k. It
+  also comes with a generous free tier (with the downside that [your
+  data is used](https://ai.google.dev/gemini-api/terms#unpaid-services)
+  to improve the model).
 
 - `chat_ollama()`, which uses [Ollama](https://ollama.com), allows you
   to run models on your own computer. While the biggest models you can

@@ -59,6 +59,9 @@ the defaults tweaked for ollama.
 \itemize{
 \item Tool calling is not supported with streaming (i.e. when \code{echo} is
 \code{"text"} or \code{"all"})
+\item Models can only use 2048 input tokens, and there's no way
+to get them to use more, except by creating a custom model with a
+different default.
 \item Tool calling generally seems quite weak, at least with the models I have
 tried it with.
 }
@@ -74,12 +77,14 @@ chat$chat("Tell me three jokes about statisticians")
 Other chatbots: 
 \code{\link{chat_bedrock}()},
 \code{\link{chat_claude}()},
-\code{\link{chat_cortex}()},
+\code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
+\code{\link{chat_deepseek}()},
 \code{\link{chat_gemini}()},
 \code{\link{chat_github}()},
 \code{\link{chat_groq}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()}
 }
 \concept{chatbots}

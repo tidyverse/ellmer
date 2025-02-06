@@ -58,10 +58,6 @@ A \link{Chat} object.
 \description{
 Databricks provides out-of-the-box access to a number of \href{https://docs.databricks.com/en/machine-learning/model-serving/score-foundation-models.html}{foundation models}
 and can also serve as a gateway for external models hosted by a third party.
-
-Databricks models do not support images, but they do support structured
-outputs. Tool calling support is also very limited at present; too limited
-for \code{ellmer}'s tool calling features to work properly at all.
 \subsection{Authentication}{
 
 \code{chat_databricks()} picks up on ambient Databricks credentials for a subset
@@ -73,7 +69,16 @@ model. Specifically, it supports:
 \item User account via OAuth (OAuth U2M)
 \item Authentication via the Databricks CLI
 \item Posit Workbench-managed credentials
+\item Viewer-based credentials on Posit Connect. Requires the \pkg{connectcreds}
+package.
 }
+}
+
+\subsection{Known limitations}{
+
+Databricks models do not support images, but they do support structured
+outputs. Tool calling support is also very limited at present and is
+currently not supported by ellmer.
 }
 }
 \examples{
@@ -86,12 +91,14 @@ chat$chat("Tell me three jokes about statisticians")
 Other chatbots: 
 \code{\link{chat_bedrock}()},
 \code{\link{chat_claude}()},
-\code{\link{chat_cortex}()},
+\code{\link{chat_cortex_analyst}()},
+\code{\link{chat_deepseek}()},
 \code{\link{chat_gemini}()},
 \code{\link{chat_github}()},
 \code{\link{chat_groq}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()}
 }
 \concept{chatbots}

@@ -48,10 +48,13 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
+\subsection{Authentication}{
+
 To authenticate, we recommend saving your
 \href{https://aistudio.google.com/app/apikey}{API key} to
 the \code{GOOGLE_API_KEY} env var in your \code{.Renviron}
 (which you can easily edit by calling \code{usethis::edit_r_environ()}).
+}
 }
 \examples{
 \dontrun{
@@ -63,12 +66,14 @@ chat$chat("Tell me three jokes about statisticians")
 Other chatbots: 
 \code{\link{chat_bedrock}()},
 \code{\link{chat_claude}()},
-\code{\link{chat_cortex}()},
+\code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
+\code{\link{chat_deepseek}()},
 \code{\link{chat_github}()},
 \code{\link{chat_groq}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()}
 }
 \concept{chatbots}

@@ -53,6 +53,13 @@ pretty_json <- function(x) {
   jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
 }
 
+prettify <- function(x) {
+  tryCatch(
+    jsonlite::prettify(x),
+    error = function(cnd) x
+  )
+}
+
 check_echo <- function(echo = NULL) {
   if (is.null(echo) || identical(echo, c("none", "text", "all"))) {
     if (env_is_user_facing(parent.frame(2)) && !is_testing()) {
@@ -97,4 +104,20 @@ has_credentials <- function(provider) {
     cli::cli_abort("Unknown model {model}.")
   )
 
+}
+
+# In-memory cache for credentials. Analogous to httr2:::cache_mem().
+credentials_cache <- function(key) {
+  list(
+    get = function() env_get(the$credentials_cache, key, default = NULL),
+    set = function(creds) env_poke(the$credentials_cache, key, creds),
+    clear = function() env_unbind(the$credentials_cache, key)
+  )
+}
+
+has_connect_viewer_token <- function(...) {
+  if (!is_installed("connectcreds")) {
+    return(FALSE)
+  }
+  connectcreds::has_viewer_token(...)
 }

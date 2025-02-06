@@ -56,8 +56,10 @@ Sign up at \url{https://groq.com}.
 
 This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}} with
 the defaults tweaked for groq.
+\subsection{Known limitations}{
 
-It does not currently support structured data extraction.
+groq does not currently support structured data extraction.
+}
 }
 \examples{
 \dontrun{
@@ -69,12 +71,14 @@ chat$chat("Tell me three jokes about statisticians")
 Other chatbots: 
 \code{\link{chat_bedrock}()},
 \code{\link{chat_claude}()},
-\code{\link{chat_cortex}()},
+\code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
+\code{\link{chat_deepseek}()},
 \code{\link{chat_gemini}()},
 \code{\link{chat_github}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()}
 }
 \concept{chatbots}

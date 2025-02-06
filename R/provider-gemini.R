@@ -6,6 +6,7 @@ NULL
 
 #' Chat with a Google Gemini model
 #'
+#' ## Authentication
 #' To authenticate, we recommend saving your
 #' [API key](https://aistudio.google.com/app/apikey) to
 #' the `GOOGLE_API_KEY` env var in your `.Renviron`
@@ -31,7 +32,7 @@ chat_gemini <- function(system_prompt = NULL,
                             api_args = list(),
                             echo = NULL) {
   turns <- normalize_turns(turns, system_prompt)
-  model <- set_default(model, "gemini-1.5-flash")
+  model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
 
   provider <- ProviderGemini(
@@ -74,11 +75,11 @@ method(chat_request, ProviderGemini) <- function(provider,
 
   req <- req_url_path_append(req, "models")
   if (stream) {
-    # https://ai.google.dev/api/generate-content
+    # https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
     req <- req_url_path_append(req, paste0(provider@model, ":", "streamGenerateContent"))
     req <- req_url_query(req, alt = "sse")
   } else {
-    # https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
+    # https://ai.google.dev/api/generate-content#method:-models.generatecontent
     req <- req_url_path_append(req, paste0(provider@model, ":", "generateContent"))
   }
 
@@ -108,7 +109,7 @@ method(chat_request, ProviderGemini) <- function(provider,
   }
   extra_args <- utils::modifyList(provider@extra_args, extra_args)
 
-  body <- compact(list(
+  body <- compact(list2(
     contents = contents,
     tools = tools,
     systemInstruction = system,

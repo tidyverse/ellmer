@@ -13,6 +13,8 @@ NULL
 #' models via the API; instead, you will need to sign up (and pay for) a
 #' [developer account](https://console.anthropic.com/)
 #'
+#' ## Authentication
+#'
 #' To authenticate, we recommend saving your
 #' [API key](https://console.anthropic.com/account/keys) to
 #' the `ANTHROPIC_API_KEY` env var in your `.Renviron`
@@ -85,7 +87,12 @@ method(chat_request, ProviderClaude) <- function(provider,
   # <https://docs.anthropic.com/en/api/getting-started#authentication>
   req <- req_headers_redacted(req, `x-api-key` = provider@api_key)
   # <https://docs.anthropic.com/en/api/rate-limits>
-  req <- req_retry(req, max_tries = 2)
+  req <- req_retry(
+    req,
+    # <https://docs.anthropic.com/en/api/errors#http-errors>
+    is_transient = function(resp) resp_status(resp) %in% c(429, 503, 529),
+    max_tries = 2
+  )
 
   # <https://docs.anthropic.com/en/api/errors>
   req <- req_error(req, body = function(resp) {

@@ -4,9 +4,7 @@ test_that("can make simple batch request", {
   )
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  # Note: the Databricks models don't seem to take "as terse as possible" very
-  # seriously, and return more verbose responses than expected.
-  # expect_equal(chat$last_turn()@tokens, c(26, 5))
+  expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -64,8 +62,20 @@ test_that("Databricks PATs are detected correctly", {
     DATABRICKS_HOST = "https://example.cloud.databricks.com",
     DATABRICKS_TOKEN = "token"
   )
-  expect_equal(databricks_token(), "token")
-  expect_equal(databricks_token(token = "another token"), "another token")
+  credentials <- default_databricks_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
+})
+
+test_that("Databricks CLI tokens are detected correctly", {
+  withr::local_envvar(
+    DATABRICKS_HOST = "https://example.cloud.databricks.com",
+    DATABRICKS_CLI_PATH = "echo"
+  )
+  local_mocked_bindings(
+    databricks_cli_token = function(path, host) "token"
+  )
+  credentials <- default_databricks_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
 })
 
 test_that("M2M authentication requests look correct", {
@@ -81,7 +91,8 @@ test_that("M2M authentication requests look correct", {
     )
     response_json(body = list(access_token = "token"))
   })
-  expect_equal(databricks_token(), "token")
+  credentials <- default_databricks_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
 })
 
 test_that("workspace detection handles URLs with and without an https prefix", {
@@ -110,4 +121,16 @@ test_that("the user agent respects SPARK_CONNECT_USER_AGENT when set", {
     c(SPARK_CONNECT_USER_AGENT = "testing"),
     expect_match(databricks_user_agent(), "^testing r-ellmer")
   )
+})
+
+test_that("tokens can be requested from a Connect server", {
+  skip_if_not_installed("connectcreds")
+
+  withr::local_envvar(
+    DATABRICKS_HOST = "https://example.cloud.databricks.com",
+    DATABRICKS_TOKEN = "token"
+  )
+  connectcreds::local_mocked_connect_responses(token = "token")
+  credentials <- default_databricks_credentials()
+  expect_equal(credentials(), list(Authorization = "Bearer token"))
 })
