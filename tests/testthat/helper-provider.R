@@ -93,7 +93,12 @@ test_tools_parallel <- function(chat_fun) {
 }
 
 test_tools_sequential <- function(chat_fun, total_calls) {
-  chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
+  chat <- chat_fun(system_prompt = "
+    Use provided tool calls to find the weather forecast and suitable
+    equipment for a variety of weather conditions.
+
+    In your response, be very terse and omit punctuation.
+  ")
 
   forecast <- function(city) if (city == "New York") "rainy" else "sunny"
   equipment <- function(weather) if (weather == "rainy") "umbrella" else "sunscreen"
