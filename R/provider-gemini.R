@@ -32,7 +32,7 @@ chat_gemini <- function(system_prompt = NULL,
                             api_args = list(),
                             echo = NULL) {
   turns <- normalize_turns(turns, system_prompt)
-  model <- set_default(model, "gemini-1.5-flash")
+  model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
 
   provider <- ProviderGemini(

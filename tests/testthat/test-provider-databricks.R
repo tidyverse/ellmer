@@ -4,9 +4,7 @@ test_that("can make simple batch request", {
   )
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  # Note: the Databricks models don't seem to take "as terse as possible" very
-  # seriously, and return more verbose responses than expected.
-  # expect_equal(chat$last_turn()@tokens, c(26, 5))
+  expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
