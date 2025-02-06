@@ -3,7 +3,7 @@
     Code
       . <- chat_gemini()
     Message
-      Using model = "gemini-1.5-flash".
+      Using model = "gemini-2.0-flash".
 
 # all tool variations work
 

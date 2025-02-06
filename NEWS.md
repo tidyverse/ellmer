@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_gemini()` now defaults to using the gemini-2.0-flash model.
+
 * `chat_azure()` now defaults `api_version = "2024-10-21"` which includes data for structured data extraction (#271).
 
 * `chat_openrouter()` provides support for OpenRouter models (#212)
