@@ -68,7 +68,7 @@ If you're using ellmer for your own exploration, you'll have a lot more freedom,
 
 Authentication works a little differently depending on the provider. A few popular ones (including OpenAI and Anthropic) require you to obtain an API key. We recommend you save it in an environment variable rather than using it directly in your code, and if you deploy an app or report that uses ellmer to another system, you'll need to ensure that this environment variable is available there, too.
 
-ellmer also automatically detects many of the OAuth or IAM-based credentials used by the big cloud providers (currently `chat_azure()`, `chat_bedrock()`, `chat_databricks()`, `chat_snowflake()`). That includes credentials for these platforms managed by Posit Workbench and Posit Connect.
+ellmer also automatically detects many of the OAuth or IAM-based credentials used by the big cloud providers (currently `chat_azure()`, `chat_bedrock()`, `chat_databricks()`, `chat_snowflake()`). That includes credentials for these platforms managed by [Posit Workbench](https://docs.posit.co/ide/server-pro/user/posit-workbench/managed-credentials/managed-credentials.html) and [Posit Connect](https://docs.posit.co/connect/user/oauth-integrations/#adding-oauth-integrations-to-deployed-content).
 
 If you find cases where ellmer cannot detect credentials from one of these cloud providers, feel free to open an issue; we're happy to add more auth mechanisms if needed.
 
