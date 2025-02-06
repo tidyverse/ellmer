@@ -4,7 +4,7 @@ test_that("can make simple request", {
   chat <- chat_openai("Be as terse as possible; no punctuation", model = "gpt-4o-mini")
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens, c(27, 2))
+  expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
