@@ -27,10 +27,11 @@ test_that("respects turns interface", {
 test_that("all tool variations work", {
   chat_fun <- chat_claude
 
-  test_tools_simple(chat_fun)
+  retry_test(test_tools_simple(chat_fun))
   test_tools_async(chat_fun)
   test_tools_parallel(chat_fun)
-  test_tools_sequential(chat_fun, total_calls = 6)
+  # Claude sometimes returns an empty string
+  retry_test(test_tools_sequential(chat_fun, total_calls = 6))
 })
 
 test_that("can extract data", {
