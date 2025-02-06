@@ -61,6 +61,7 @@ Collate:
     'utils-coro.R'
     'chat.R'
     'content-image.R'
+    'content-pdf.R'
     'content-tools.R'
     'ellmer-package.R'
     'httr2.R'

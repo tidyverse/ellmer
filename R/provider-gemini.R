@@ -32,7 +32,7 @@ chat_gemini <- function(system_prompt = NULL,
                             api_args = list(),
                             echo = NULL) {
   turns <- normalize_turns(turns, system_prompt)
-  model <- set_default(model, "gemini-1.5-flash")
+  model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
 
   provider <- ProviderGemini(
@@ -207,6 +207,15 @@ method(as_json, list(ProviderGemini, ContentText)) <- function(provider, x) {
   } else {
     list(text = x@text)
   }
+}
+
+method(as_json, list(ProviderGemini, ContentPDF)) <- function(provider, x) {
+  list(
+    inlineData = list(
+      mimeType = x@type,
+      data = x@data
+    )
+  )
 }
 
 # https://ai.google.dev/api/caching#FileData

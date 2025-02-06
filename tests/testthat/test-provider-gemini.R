@@ -4,7 +4,7 @@ test_that("can make simple request", {
   chat <- chat_gemini("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens, c(17, 2))
+  expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -29,11 +29,10 @@ test_that("respects turns interface", {
 test_that("all tool variations work", {
   chat_fun <- chat_gemini
 
-  # Gemini tool calls seem fairly unreliable so we retry once
-  retry_test(test_tools_simple(chat_fun))
-  retry_test(test_tools_async(chat_fun))
-  retry_test(test_tools_parallel(chat_fun))
-  retry_test(test_tools_sequential(chat_fun, total_calls = 6))
+  test_tools_simple(chat_fun)
+  test_tools_async(chat_fun)
+  test_tools_parallel(chat_fun)
+  test_tools_sequential(chat_fun, total_calls = 6)
 })
 
 test_that("can extract data", {
@@ -47,6 +46,12 @@ test_that("can use images", {
 
   test_images_inline(chat_fun)
   test_images_remote_error(chat_fun)
+})
+
+test_that("can use pdfs", {
+  chat_fun <- chat_gemini
+
+  test_pdf_local(chat_fun)
 })
 
 # chunk merging ----------------------------------------------------------

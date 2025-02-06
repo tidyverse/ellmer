@@ -1,5 +1,4 @@
-
-#' Encode image content for chat input
+#' Encode images for chat input
 #'
 #' These functions are used to prepare image URLs and files for input to the
 #' chatbot. The `content_image_url()` function is used to provide a URL to an
@@ -36,15 +35,8 @@ content_image_url <- function(url, detail = c("auto", "low", "high")) {
   detail <- arg_match(detail)
 
   if (grepl("^data:", url)) {
-    # https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/data
-    parts <- strsplit(sub("^data:", "", url), ";")[[1]]
-    if (length(parts) != 2 || !grepl("^base64,", parts[[2]])) {
-      cli::cli_abort("{.arg url} is not a valid data url.")
-    }
-    content_type <- parts[[1]]
-    base64 <- sub("^base64,", "", parts[[2]])
-
-    ContentImageInline(content_type, base64)
+    parsed <- parse_data_url(url)
+    ContentImageInline(parsed$content_type, parsed$base64)
   } else {
     ContentImageRemote(url = url, detail = detail)
   }
@@ -154,4 +146,18 @@ content_image_plot <- function(width = 768, height = 768) {
   grDevices::dev.set(old)
 
   content_image_file(path, "image/png", resize = "none")
+}
+
+
+parse_data_url <- function(url, error_call = caller_env()) {
+  # https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/data
+  parts <- strsplit(sub("^data:", "", url), ";")[[1]]
+  if (length(parts) != 2 || !grepl("^base64,", parts[[2]])) {
+    cli::cli_abort("{.arg url} is not a valid data url.", call = error_call)
+  }
+
+  list(
+    content_type = parts[[1]],
+    base64 = sub("^base64,", "", parts[[2]])
+  )
 }

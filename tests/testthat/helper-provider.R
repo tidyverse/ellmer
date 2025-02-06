@@ -93,7 +93,12 @@ test_tools_parallel <- function(chat_fun) {
 }
 
 test_tools_sequential <- function(chat_fun, total_calls) {
-  chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
+  chat <- chat_fun(system_prompt = "
+    Use provided tool calls to find the weather forecast and suitable
+    equipment for a variety of weather conditions.
+
+    In your response, be very terse and omit punctuation.
+  ")
 
   forecast <- function(city) if (city == "New York") "rainy" else "sunny"
   equipment <- function(weather) if (weather == "rainy") "umbrella" else "sunscreen"
@@ -170,4 +175,16 @@ test_images_remote_error <- function(chat_fun) {
     error = TRUE
   )
   expect_length(chat$get_turns(), 0)
+}
+
+# PDF ---------------------------------------------------------------------
+
+test_pdf_local <- function(chat_fun) {
+  chat <- chat_fun()
+  response <- chat$chat(
+    "What's the title of this document?",
+    content_pdf_file(test_path("apples.pdf"))
+  )
+  expect_match(response, "Apples are tasty")
+  expect_match(chat$chat("What apple is not tasty?"), "red delicious")
 }

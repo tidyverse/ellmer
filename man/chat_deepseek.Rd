@@ -7,6 +7,7 @@
 chat_deepseek(
   system_prompt = NULL,
   turns = NULL,
+  base_url = "https://api.deepseek.com",
   api_key = deepseek_key(),
   model = NULL,
   seed = NULL,
@@ -20,6 +21,8 @@ chat_deepseek(
 \item{turns}{A list of \link{Turn}s to start the chat with (i.e., continuing a
 previous conversation). If not provided, the conversation begins from
 scratch.}
+
+\item{base_url}{The base URL to the endpoint; the default uses DeepSeek.}
 
 \item{api_key}{The API key to use for authentication. You generally should
 not supply this directly, but instead set the \code{OPENAI_API_KEY} environment
