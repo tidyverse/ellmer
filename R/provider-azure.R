@@ -141,8 +141,7 @@ method(chat_request, ProviderAzure) <- function(provider,
                                                 stream = TRUE,
                                                 turns = list(),
                                                 tools = list(),
-                                                type = NULL,
-                                                extra_args = list()) {
+                                                type = NULL) {
 
   req <- request(provider@base_url)
   req <- req_url_path_append(req, "/chat/completions")
@@ -179,7 +178,6 @@ method(chat_request, ProviderAzure) <- function(provider,
 
   messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
   tools <- as_json(provider, unname(tools))
-  extra_args <- utils::modifyList(provider@extra_args, extra_args)
 
   if (!is.null(type)) {
     response_format <- list(
@@ -194,17 +192,17 @@ method(chat_request, ProviderAzure) <- function(provider,
     response_format <- NULL
   }
 
-  data <- compact(list2(
+  body <- compact(list2(
     messages = messages,
     model = provider@model,
     seed = provider@seed,
     stream = stream,
     stream_options = if (stream) list(include_usage = TRUE),
     tools = tools,
-    response_format = response_format,
-    !!!extra_args
+    response_format = response_format
   ))
-  req <- req_body_json(req, data)
+  body <- modify_list(body, provider@extra_args)
+  req <- req_body_json(req, body)
 
   req
 }

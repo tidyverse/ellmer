@@ -91,8 +91,7 @@ method(chat_request, ProviderBedrock) <- function(provider,
                                                   stream = TRUE,
                                                   turns = list(),
                                                   tools = list(),
-                                                  type = NULL,
-                                                  extra_args = list()) {
+                                                  type = NULL) {
 
   req <- request(paste0(
     "https://bedrock-runtime.", provider@region, ".amazonaws.com"
@@ -151,8 +150,7 @@ method(chat_request, ProviderBedrock) <- function(provider,
     system = system,
     toolConfig = toolConfig
   )
-  extra_args <- utils::modifyList(provider@extra_args, extra_args)
-  body <- modify_list(body, extra_args)
+  body <- modify_list(body, provider@extra_args)
   req <- req_body_json(req, body)
 
   req

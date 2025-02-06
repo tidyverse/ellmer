@@ -61,8 +61,7 @@ method(chat_request, ProviderGemini) <- function(provider,
                                                  stream = TRUE,
                                                  turns = list(),
                                                  tools = list(),
-                                                 type = NULL,
-                                                 extra_args = list()) {
+                                                 type = NULL) {
 
 
   req <- request(provider@base_url)
@@ -107,15 +106,15 @@ method(chat_request, ProviderGemini) <- function(provider,
   } else {
     tools <- NULL
   }
-  extra_args <- utils::modifyList(provider@extra_args, extra_args)
 
-  body <- compact(list2(
+  body <- compact(list(
     contents = contents,
     tools = tools,
     systemInstruction = system,
-    generationConfig = generation_config,
-    !!!extra_args
+    generationConfig = generation_config
   ))
+  body <- modify_list(body, provider@extra_args)
+
   req <- req_body_json(req, body)
 
   req

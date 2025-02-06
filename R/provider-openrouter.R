@@ -63,16 +63,14 @@ method(chat_request, ProviderOpenRouter) <- function(
   stream = TRUE,
   turns = list(),
   tools = list(),
-  type = NULL,
-  extra_args = list()
+  type = NULL
 ) {
   req <- chat_request(
     super(provider, ProviderOpenAI),
     stream = stream,
     turns = turns,
     tools = tools,
-    type = type,
-    extra_args = extra_args
+    type = type
   )
 
   # https://openrouter.ai/docs/api-keys

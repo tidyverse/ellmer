@@ -5,8 +5,7 @@ chat_perform <- function(provider,
                          mode = c("value", "stream", "async-stream", "async-value"),
                          turns,
                          tools = list(),
-                         type = NULL,
-                         extra_args = list()) {
+                         type = NULL) {
 
   mode <- arg_match(mode)
   stream <- mode %in% c("stream", "async-stream")
@@ -16,8 +15,7 @@ chat_perform <- function(provider,
     turns = turns,
     tools = tools,
     stream = stream,
-    type = type,
-    extra_args = extra_args
+    type = type
   )
 
   switch(mode,

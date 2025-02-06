@@ -150,8 +150,7 @@ method(chat_request, ProviderCortex) <- function(provider,
                                                  stream = TRUE,
                                                  turns = list(),
                                                  tools = list(),
-                                                 type = NULL,
-                                                 extra_args = list()) {
+                                                 type = NULL) {
   if (length(tools) != 0) {
     cli::cli_abort("Tools are not supported by Cortex.")
   }
@@ -180,10 +179,10 @@ method(chat_request, ProviderCortex) <- function(provider,
   # Cortex does not yet support multi-turn chats.
   turns <- tail(turns, n = 1)
   messages <- as_json(provider, turns)
-  extra_args <- utils::modifyList(provider@extra_args, extra_args)
 
-  data <- compact(list2(messages = messages, stream = stream, !!!extra_args))
-  req <- req_body_json(req, data)
+  body <- list(messages = messages, stream = stream)
+  body <- modify_list(body, provider@extra_args)
+  req <- req_body_json(req, body)
 
   req
 }

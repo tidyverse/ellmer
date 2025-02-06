@@ -76,8 +76,7 @@ method(chat_request, ProviderClaude) <- function(provider,
                                                  stream = TRUE,
                                                  turns = list(),
                                                  tools = list(),
-                                                 type = NULL,
-                                                 extra_args = list()) {
+                                                 type = NULL) {
 
   req <- request(provider@base_url)
   # https://docs.anthropic.com/en/api/messages
@@ -125,7 +124,6 @@ method(chat_request, ProviderClaude) <- function(provider,
   }
   tools <- as_json(provider, unname(tools))
 
-  extra_args <- utils::modifyList(provider@extra_args, extra_args)
   body <- compact(list2(
     model = provider@model,
     system = system,
@@ -134,8 +132,8 @@ method(chat_request, ProviderClaude) <- function(provider,
     max_tokens = provider@max_tokens,
     tools = tools,
     tool_choice = tool_choice,
-    !!!extra_args
   ))
+  body <- modify_list(body, provider@extra_args)
   req <- req_body_json(req, body)
 
   req

@@ -82,8 +82,7 @@ method(chat_request, ProviderSnowflake) <- function(provider,
                                                     stream = TRUE,
                                                     turns = list(),
                                                     tools = list(),
-                                                    type = NULL,
-                                                    extra_args = list()) {
+                                                    type = NULL) {
   if (length(tools) != 0) {
     cli::cli_abort(
       "Tool calling is not supported.",
@@ -114,15 +113,14 @@ method(chat_request, ProviderSnowflake) <- function(provider,
   req <- req_error(req, body = function(resp) resp_body_json(resp)$message)
 
   messages <- as_json(provider, turns)
-  extra_args <- utils::modifyList(provider@extra_args, extra_args)
 
-  data <- compact(list2(
+  body <- list(
     messages = messages,
     model = provider@model,
-    stream = stream,
-    !!!extra_args
-  ))
-  req <- req_body_json(req, data)
+    stream = stream
+  )
+  body <- modify_list(body, provider@extra_args)
+  req <- req_body_json(req, body)
 
   req
 }

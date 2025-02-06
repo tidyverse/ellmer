@@ -29,7 +29,7 @@ Provider <- new_class(
 # Create a request------------------------------------
 
 chat_request <- new_generic("chat_request", "provider",
-  function(provider, stream = TRUE, turns = list(), tools = list(), type = NULL, extra_args = list()) {
+  function(provider, stream = TRUE, turns = list(), tools = list(), type = NULL) {
     S7_dispatch()
   }
 )
