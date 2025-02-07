@@ -69,7 +69,7 @@ The `%...>%` operator from the `promises` package is used to push the asynchrono
 ```
 library(shiny)
 library(bslib)
-library(elmer)
+library(ellmer)
 library(promises)
 
 ui <- page_sidebar(
