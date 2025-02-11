@@ -8,7 +8,7 @@ chat_gemini(
   system_prompt = NULL,
   turns = NULL,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  api_key = gemini_key(),
+  api_key = NULL,
   model = NULL,
   api_args = list(),
   echo = NULL
@@ -25,7 +25,7 @@ scratch.}
 
 \item{api_key}{The API key to use for authentication. You generally should
 not supply this directly, but instead set the \code{GOOGLE_API_KEY} environment
-variable.}
+variable. Or leave it as \code{NULL} to use ambient credentials.}
 
 \item{model}{The model to use for the chat. The default, \code{NULL}, will pick
 a reasonable default, and tell you about. We strongly recommend explicitly
@@ -54,6 +54,12 @@ To authenticate, we recommend saving your
 \href{https://aistudio.google.com/app/apikey}{API key} to
 the \code{GOOGLE_API_KEY} env var in your \code{.Renviron}
 (which you can easily edit by calling \code{usethis::edit_r_environ()}).
+
+By default, \code{chat_gemini()} will use Google's default application credentials
+if there is no API key provided. This requires the \pkg{gargle} package.
+
+It can also pick up on viewer-based credentials on Posit Connect. This in
+turn requires the \pkg{connectcreds} package.
 }
 }
 \examples{

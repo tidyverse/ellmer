@@ -6,15 +6,23 @@ NULL
 
 #' Chat with a Google Gemini model
 #'
+#' @description
+#'
 #' ## Authentication
 #' To authenticate, we recommend saving your
 #' [API key](https://aistudio.google.com/app/apikey) to
 #' the `GOOGLE_API_KEY` env var in your `.Renviron`
 #' (which you can easily edit by calling `usethis::edit_r_environ()`).
 #'
+#' By default, `chat_gemini()` will use Google's default application credentials
+#' if there is no API key provided. This requires the \pkg{gargle} package.
+#'
+#' It can also pick up on viewer-based credentials on Posit Connect. This in
+#' turn requires the \pkg{connectcreds} package.
+#'
 #' @param api_key The API key to use for authentication. You generally should
 #'   not supply this directly, but instead set the `GOOGLE_API_KEY` environment
-#'   variable.
+#'   variable. Or leave it as `NULL` to use ambient credentials.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -27,19 +35,26 @@ NULL
 chat_gemini <- function(system_prompt = NULL,
                             turns = NULL,
                             base_url = "https://generativelanguage.googleapis.com/v1beta/",
-                            api_key = gemini_key(),
+                            api_key = NULL,
                             model = NULL,
                             api_args = list(),
                             echo = NULL) {
   turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
+  check_string(api_key, allow_null = TRUE)
+  api_key <- api_key %||% Sys.getenv("GOOGLE_API_KEY")
+  credentials <- NULL
+  if (!nchar(api_key)) {
+    credentials <- default_google_credentials()
+  }
 
   provider <- ProviderGemini(
     base_url = base_url,
     model = model,
     extra_args = api_args,
-    api_key = api_key
+    api_key = api_key,
+    credentials = credentials
   )
   Chat$new(provider = provider, turns = turns, echo = echo)
 }
@@ -48,14 +63,11 @@ ProviderGemini <- new_class(
   "ProviderGemini",
   parent = Provider,
   properties = list(
-    api_key = prop_string(),
+    api_key = prop_string(allow_null = TRUE),
+    credentials = class_function | NULL,
     model = prop_string()
   )
 )
-
-gemini_key <- function() {
-  key_get("GOOGLE_API_KEY")
-}
 
 method(chat_request, ProviderGemini) <- function(provider,
                                                  stream = TRUE,
@@ -65,7 +77,16 @@ method(chat_request, ProviderGemini) <- function(provider,
 
 
   req <- request(provider@base_url)
-  req <- req_headers_redacted(req, "x-goog-api-key" = provider@api_key)
+  if (nchar(provider@api_key)) {
+    req <- req_headers_redacted(req, "x-goog-api-key" = provider@api_key)
+  } else {
+    # TODO: Can use req_headers_redacted() when !!! is supported.
+    req <- req_headers(
+      req,
+      !!!provider@credentials(),
+      .redact = "Authorization"
+    )
+  }
   req <- req_retry(req, max_tries = 2)
   req <- ellmer_req_timeout(req, stream)
   req <- req_error(req, body = function(resp) {
@@ -401,3 +422,66 @@ merge_gemini_chunks <- merge_objects(
   promptFeedback = merge_last(),
   usageMetadata = merge_last()
 )
+
+default_google_credentials <- function() {
+  gemini_scope <- "https://www.googleapis.com/auth/generative-language.retriever"
+
+  # Detect viewer-based credentials from Posit Connect.
+  if (has_connect_viewer_token(scope = gemini_scope)) {
+    return(function() {
+      token <- connectcreds::connect_viewer_token(scope = gemini_scope)
+      list(Authorization = paste("Bearer", token$access_token))
+    })
+  }
+
+  if (is_testing()) {
+    testthat::skip_if_not_installed("gargle")
+  }
+
+  check_installed("gargle", "for Google authentication")
+  gargle::with_cred_funs(
+    funs = list(
+      # We don't want to use *all* of gargle's default credential functions --
+      # in particular, we don't want to try and authenticate using the bundled
+      # OAuth client -- so winnow down the list.
+      credentials_app_default = gargle::credentials_app_default
+    ),
+    {
+      token <- gargle::token_fetch(scopes = gemini_scope)
+    },
+    action = "replace"
+  )
+
+  if (is.null(token) && is_testing()) {
+    testthat::skip("no Google credentials available")
+  }
+
+  if (is.null(token)) {
+    cli::cli_abort(
+      c(
+        "No Google credentials are available.",
+        "i" = "Try suppling an API key or configuring Google's application default credentials."
+      )
+    )
+  }
+
+  # gargle emits an httr-style token, which we awkwardly shim into something
+  # httr2 can work with.
+
+  if (!token$can_refresh()) {
+    # TODO: Not really sure what to do in this case when the token expires.
+    return(function() {
+      list(Authorization = paste("Bearer", token$credentials$access_token))
+    })
+  }
+
+  # gargle tokens don't track the expiry time, so we do it ourselves (with a
+  # grace period).
+  expiry <- Sys.time() + token$credentials$expires_in - 5
+  return(function() {
+    if (expiry < Sys.time()) {
+      token$refresh()
+    }
+    list(Authorization = paste("Bearer", token$credentials$access_token))
+  })
+}
