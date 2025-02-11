@@ -76,5 +76,9 @@ on_load(chat_perform_async_stream <- coro::async_generator(function(provider, re
 # Request helpers --------------------------------------------------------------
 
 ellmer_req_timeout <- function(req, stream) {
-  req_options(req, timeout = getOption("ellmer_timeout_s", 60))
+  req_options(
+    req,
+    timeout = getOption("ellmer_timeout_s", 60),
+    connecttimeout = getOption("ellmer_connecttimeout_s", 60),
+  )
 }
