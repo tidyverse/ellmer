@@ -123,10 +123,9 @@ test_that("Cortex API requests are generated correctly", {
   )
   req <- chat_request(p, FALSE, list(turn))
   expect_snapshot(
-    req,
+    req_dry_run(req),
     transform = function(x) gsub(snowflake_user_agent(), "<ellmer_user_agent>", x, fixed = TRUE)
   )
-  expect_snapshot(req$body$data)
 })
 
 test_that("a simple Cortex chatbot works", {

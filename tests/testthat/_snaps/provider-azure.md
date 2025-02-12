@@ -17,66 +17,84 @@
 # Azure request headers are generated correctly
 
     Code
-      req
-    Message
-      <httr2_request>
-      POST
-      https://ai-hwickhamai260967855527.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-06-01
-      Headers:
-      * api-key: "<REDACTED>"
-      Body: json encoded data
-      Options:
-      * timeout: 60
-      Policies:
-      * retry_max_tries: 2
-      * retry_on_failure: FALSE
-      * retry_failure_threshold: Inf
-      * retry_failure_timeout: 30
-      * retry_realm: "ai-hwickhamai260967855527.openai.azure.com"
-      * error_body: a function
+      req_dry_run(req)
+    Output
+      POST /openai/deployments/gpt-4o-mini/chat/completions HTTP/1.1
+      accept: */*
+      api-key: <REDACTED>
+      content-type: application/json
+      user-agent: <httr2 user agent>
+      
+      {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "What is 1 + 1?"
+              }
+            ]
+          }
+        ],
+        "model": "gpt-4o-mini",
+        "stream": false
+      }
 
 ---
 
     Code
-      req
-    Message
-      <httr2_request>
-      POST
-      https://ai-hwickhamai260967855527.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-06-01
-      Headers:
-      * Authorization: "<REDACTED>"
-      Body: json encoded data
-      Options:
-      * timeout: 60
-      Policies:
-      * retry_max_tries: 2
-      * retry_on_failure: FALSE
-      * retry_failure_threshold: Inf
-      * retry_failure_timeout: 30
-      * retry_realm: "ai-hwickhamai260967855527.openai.azure.com"
-      * error_body: a function
+      req_dry_run(req)
+    Output
+      POST /openai/deployments/gpt-4o-mini/chat/completions HTTP/1.1
+      accept: */*
+      authorization: <REDACTED>
+      content-type: application/json
+      user-agent: <httr2 user agent>
+      
+      {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "What is 1 + 1?"
+              }
+            ]
+          }
+        ],
+        "model": "gpt-4o-mini",
+        "stream": false
+      }
 
 ---
 
     Code
-      req
-    Message
-      <httr2_request>
-      POST
-      https://ai-hwickhamai260967855527.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-06-01
-      Headers:
-      * api-key: "<REDACTED>"
-      * Authorization: "<REDACTED>"
-      Body: json encoded data
-      Options:
-      * timeout: 60
-      Policies:
-      * retry_max_tries: 2
-      * retry_on_failure: FALSE
-      * retry_failure_threshold: Inf
-      * retry_failure_timeout: 30
-      * retry_realm: "ai-hwickhamai260967855527.openai.azure.com"
-      * error_body: a function
+      req_dry_run(req)
+    Output
+      POST /openai/deployments/gpt-4o-mini/chat/completions HTTP/1.1
+      accept: */*
+      api-key: <REDACTED>
+      authorization: <REDACTED>
+      content-type: application/json
+      user-agent: <httr2 user agent>
+      
+      {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "What is 1 + 1?"
+              }
+            ]
+          }
+        ],
+        "model": "gpt-4o-mini",
+        "stream": false
+      }
 
 # service principal authentication requests look correct
 

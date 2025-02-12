@@ -30,52 +30,28 @@
 # Cortex API requests are generated correctly
 
     Code
-      req
-    Message
-      <httr2_request>
-      POST
-      https://testorg-test_account.snowflakecomputing.com/api/v2/cortex/analyst/message
-      Headers:
-      * Authorization: "<REDACTED>"
-      * X-Snowflake-Authorization-Token-Type: "OAUTH"
-      Body: json encoded data
-      Options:
-      * timeout: 60
-      * useragent: "<ellmer_user_agent>"
-      Policies:
-      * retry_max_tries: 2
-      * retry_on_failure: FALSE
-      * retry_failure_threshold: Inf
-      * retry_failure_timeout: 30
-      * retry_realm: "testorg-test_account.snowflakecomputing.com"
-      * error_body: a function
-
----
-
-    Code
-      req$body$data
+      req_dry_run(req)
     Output
-      $messages
-      $messages[[1]]
-      $messages[[1]]$role
-      [1] "user"
+      POST /api/v2/cortex/analyst/message HTTP/1.1
+      accept: */*
+      authorization: <REDACTED>
+      content-type: application/json
+      user-agent: <ellmer_user_agent>
+      x-snowflake-authorization-token-type: OAUTH
       
-      $messages[[1]]$content
-      $messages[[1]]$content[[1]]
-      $messages[[1]]$content[[1]]$type
-      [1] "text"
-      
-      $messages[[1]]$content[[1]]$text
-      [1] "Tell me about my data."
-      
-      
-      
-      
-      
-      $stream
-      [1] FALSE
-      
-      $semantic_model_file
-      [1] "@my_db.my_schema.my_stage/model.yaml"
-      
+      {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Tell me about my data."
+              }
+            ]
+          }
+        ],
+        "stream": false,
+        "semantic_model_file": "@my_db.my_schema.my_stage/model.yaml"
+      }
 
