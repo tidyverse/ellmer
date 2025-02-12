@@ -1,7 +1,9 @@
 # ellmer (development version)
 
-* All providers now allow for up to 60s for the connection phase to take. You can
-  increase this with, e.g., `option(ellmer_connecttimeout_s = 120)` (#318, @CorradoLanera).
+* All providers now allow for up to 60s for the underlying curl connection
+  phase, alongside the existing 60s timeout. Some providers are known to time
+  out on complex queries early otherwise. You can increase this with, e.g.,
+  `option(ellmer_connecttimeout_s = 120)` (#318, @CorradoLanera).
 
 # ellmer 0.1.1
 
