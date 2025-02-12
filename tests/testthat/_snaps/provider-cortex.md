@@ -30,25 +30,46 @@
 # Cortex API requests are generated correctly
 
     Code
-      req
-    Message
-      <httr2_request>
-      POST
-      https://testorg-test_account.snowflakecomputing.com/api/v2/cortex/analyst/message
-      Headers:
-      * Authorization: "<REDACTED>"
-      * X-Snowflake-Authorization-Token-Type: "OAUTH"
-      Body: json encoded data
-      Options:
-      * timeout: 60
-      * useragent: "<ellmer_user_agent>"
-      Policies:
-      * retry_max_tries: 2
-      * retry_on_failure: FALSE
-      * retry_failure_threshold: Inf
-      * retry_failure_timeout: 30
-      * retry_realm: "testorg-test_account.snowflakecomputing.com"
-      * error_body: a function
+      list(url = req$url, headers = req$headers, body = req$body$data)
+    Output
+      $url
+      [1] "https://testorg-test_account.snowflakecomputing.com/api/v2/cortex/analyst/message"
+      
+      $headers
+      $headers$Authorization
+      [1] "Bearer obfuscated"
+      
+      $headers$`X-Snowflake-Authorization-Token-Type`
+      [1] "OAUTH"
+      
+      attr(,"redact")
+      [1] "Authorization"
+      
+      $body
+      $body$messages
+      $body$messages[[1]]
+      $body$messages[[1]]$role
+      [1] "user"
+      
+      $body$messages[[1]]$content
+      $body$messages[[1]]$content[[1]]
+      $body$messages[[1]]$content[[1]]$type
+      [1] "text"
+      
+      $body$messages[[1]]$content[[1]]$text
+      [1] "Tell me about my data."
+      
+      
+      
+      
+      
+      $body$stream
+      [1] FALSE
+      
+      $body$semantic_model_file
+      [1] "@my_db.my_schema.my_stage/model.yaml"
+      
+      
 
 ---
 
