@@ -4,7 +4,8 @@
 \alias{create_tool_def}
 \title{Create metadata for a tool}
 \usage{
-create_tool_def(topic, model = "gpt-4o", echo = interactive(), verbose = FALSE)
+create_tool_def(topic, model = "gpt-4o", chat = NULL,
+  echo = interactive(), verbose = FALSE)
 }
 \arguments{
 \item{topic}{A symbol or string literal naming the function to create
@@ -12,6 +13,8 @@ metadata for. Can also be an expression of the form \code{pkg::fun}.}
 
 \item{model}{The OpenAI model to use for generating the metadata. Defaults to
 "gpt-4o".}
+
+\item{chat}{A Chat object}
 
 \item{echo}{Emit the registration code to the console. Defaults to \code{TRUE} in
 interactive sessions.}
@@ -49,6 +52,7 @@ sure to review the generated code before using it!
   create_tool_def(rnorm)
   create_tool_def(stats::rnorm)
   create_tool_def("rnorm")
+  create_tool_def("rnorm", chat = chat_azure("gpt-4o-mini", system_prompt = get_tool_prompt()))
 }
 
 }
