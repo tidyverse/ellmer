@@ -90,7 +90,7 @@ create_tool_def <- function(topic,
 
   if(!inherits(chat,"Chat"))
     chat <- chat_openai(system_prompt = get_tool_prompt(), model = model, echo = echo)
-  
+
   chat$chat(payload)
 }
 
@@ -186,7 +186,11 @@ extract_comments_and_signature <- function(func) {
   paste0(comments, "\n", sig)
 }
 
-# returns the system prompt used for creating tool metadata
+#' System prompt for creating tool metadata
+#'
+#' @return string
+#'
+#' @export
 get_tool_prompt <- function(){
     tool_prompt <- readLines(system.file("tool_prompt.md", package = "ellmer"), warn = FALSE)
     tool_prompt <- paste(tool_prompt, collapse = "\n")
