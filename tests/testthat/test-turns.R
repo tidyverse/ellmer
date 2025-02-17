@@ -32,6 +32,22 @@ test_that("normalize_turns throws useful errors", {
 })
 
 
+test_that("as_user_turn gives useful errors", {
+  expect_snapshot(error = TRUE, {
+    as_user_turn(list())
+    as_user_turn(list(x = 1))
+    as_user_turn(1)
+  })
+})
+
+test_that("as_user_turns gives useful errors", {
+  x <- list(list(1))
+  expect_snapshot(error = TRUE, {
+    as_user_turns(1)
+    as_user_turns(x)
+  })
+})
+
 test_that("can extract text easily", {
 
   turn <- Turn("assistant", list(

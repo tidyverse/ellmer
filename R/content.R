@@ -254,7 +254,7 @@ method(contents_markdown, ContentJson) <- function(content) {
 
 # Helpers ----------------------------------------------------------------------
 
-as_content <- function(x, error_call = caller_env()) {
+as_content <- function(x, error_call = caller_env(), error_arg = "...") {
   if (is.null(x)) {
     list()
   } else if (is.character(x)) {
@@ -265,7 +265,7 @@ as_content <- function(x, error_call = caller_env()) {
     stop_input_type(
       x,
       what = "made up strings or <content> objects",
-      arg = "...",
+      arg = error_arg,
       error_call = error_call
     )
   }
@@ -274,7 +274,7 @@ as_content <- function(x, error_call = caller_env()) {
 #' @rdname Content
 #' @export
 ContentPDF <- new_class(
-  "ContentPDF", 
+  "ContentPDF",
   parent = Content,
   properties = list(
     type = prop_string(),

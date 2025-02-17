@@ -36,19 +36,19 @@
       POST
       https://testorg-test_account.snowflakecomputing.com/api/v2/cortex/analyst/message
       Headers:
-      * Authorization: "<REDACTED>"
+      * Authorization                       : <REDACTED>
       * X-Snowflake-Authorization-Token-Type: "OAUTH"
       Body: json encoded data
       Options:
-      * timeout: 60
+      * timeout  : 60
       * useragent: "<ellmer_user_agent>"
       Policies:
-      * retry_max_tries: 2
-      * retry_on_failure: FALSE
+      * retry_max_tries        : 2
+      * retry_on_failure       : FALSE
       * retry_failure_threshold: Inf
-      * retry_failure_timeout: 30
-      * retry_realm: "testorg-test_account.snowflakecomputing.com"
-      * error_body: a function
+      * retry_failure_timeout  : 30
+      * retry_realm            : "testorg-test_account.snowflakecomputing.com"
+      * error_body             : <function>
 
 ---
 
