@@ -67,7 +67,8 @@ Chat <- R6::R6Class("Chat",
     },
 
     #' @description Add a pair of turns to the chat.
-    #' @param user,system A pair of [Turn]s.
+    #' @param user The user [Turn].
+    #' @param system The system [Turn].
     add_turn = function(user, system) {
       check_turn(user)
       check_turn(system)
@@ -153,6 +154,7 @@ Chat <- R6::R6Class("Chat",
 
     #' @description Submit multiple prompts in parallel. Returns a list of
     #'   [Chat] objects, one for each prompt.
+    #' @param prompts A list of user prompts.
     #' @param max_active The maximum number of simultaenous requests to send.
     #' @param rpm Maximum number of requests per minute.
     chat_parallel = function(prompts, max_active = 10, rpm = 500) {
@@ -179,13 +181,6 @@ Chat <- R6::R6Class("Chat",
         chat$add_turn(user_turn, turn)
         chat
       })
-    },
-
-    chat_batch = function(prompts) {
-      turns <- as_user_turns(prompts)
-
-      batch_init(private$provider, )
-
     },
 
     #' @description Extract structured data

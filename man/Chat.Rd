@@ -29,12 +29,14 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-new}{\code{Chat$new()}}
 \item \href{#method-Chat-get_turns}{\code{Chat$get_turns()}}
 \item \href{#method-Chat-set_turns}{\code{Chat$set_turns()}}
+\item \href{#method-Chat-add_turn}{\code{Chat$add_turn()}}
 \item \href{#method-Chat-get_system_prompt}{\code{Chat$get_system_prompt()}}
 \item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
 \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
 \item \href{#method-Chat-tokens}{\code{Chat$tokens()}}
 \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
 \item \href{#method-Chat-chat}{\code{Chat$chat()}}
+\item \href{#method-Chat-chat_parallel}{\code{Chat$chat_parallel()}}
 \item \href{#method-Chat-extract_data}{\code{Chat$extract_data()}}
 \item \href{#method-Chat-extract_data_async}{\code{Chat$extract_data_async()}}
 \item \href{#method-Chat-chat_async}{\code{Chat$chat_async()}}
@@ -109,6 +111,25 @@ Replace existing turns with a new list.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{value}}{A list of \link{Turn}s.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-add_turn"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-add_turn}{}}}
+\subsection{Method \code{add_turn()}}{
+Add a pair of turns to the chat.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$add_turn(user, system)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{user}}{The user \link{Turn}.}
+
+\item{\code{system}}{The system \link{Turn}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -203,6 +224,28 @@ simple string (probably Markdown).
 \item{\code{echo}}{Whether to emit the response to stdout as it is received. If
 \code{NULL}, then the value of \code{echo} set when the chat object was created
 will be used.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-chat_parallel"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-chat_parallel}{}}}
+\subsection{Method \code{chat_parallel()}}{
+Submit multiple prompts in parallel. Returns a list of
+\link{Chat} objects, one for each prompt.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_parallel(prompts, max_active = 10, rpm = 500)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{prompts}}{A list of user prompts.}
+
+\item{\code{max_active}}{The maximum number of simultaenous requests to send.}
+
+\item{\code{rpm}}{Maximum number of requests per minute.}
 }
 \if{html}{\out{</div>}}
 }
