@@ -14,14 +14,9 @@
       [1] "https://example.cloud.databricks.com/oidc/v1/token"
       
       $headers
-      $headers$Authorization
-      [1] "Basic aWQ6c2VjcmV0"
-      
-      $headers$Accept
-      [1] "application/json"
-      
-      attr(,"redact")
-      [1] "Authorization"
+      <httr2_headers>
+      Authorization: <REDACTED>
+      Accept: application/json
       
       $body
       $body$grant_type

@@ -66,6 +66,18 @@ Chat <- R6::R6Class("Chat",
       invisible(self)
     },
 
+    #' @description Add a pair of turns to the chat.
+    #' @param user The user [Turn].
+    #' @param system The system [Turn].
+    add_turn = function(user, system) {
+      check_turn(user)
+      check_turn(system)
+
+      private$.turns[[length(private$.turns) + 1]] <- user
+      private$.turns[[length(private$.turns) + 1]] <- system
+      invisible(self)
+    },
+
     #' @description If set, the system prompt, it not, `NULL`.
     get_system_prompt = function() {
       if (private$has_system_prompt()) {
@@ -138,6 +150,37 @@ Chat <- R6::R6Class("Chat",
 
       text <- self$last_turn()@text
       if (echo == "none") text else invisible(text)
+    },
+
+    #' @description Submit multiple prompts in parallel. Returns a list of
+    #'   [Chat] objects, one for each prompt.
+    #' @param prompts A list of user prompts.
+    #' @param max_active The maximum number of simultaenous requests to send.
+    #' @param rpm Maximum number of requests per minute.
+    chat_parallel = function(prompts, max_active = 10, rpm = 500) {
+      turns <- as_user_turns(prompts)
+
+      reqs <- map(turns, function(user_turn) {
+        chat_request(
+          provider = private$provider,
+          turns = c(private$.turns, list(user_turn)),
+          tools = private$tools,
+          stream = FALSE,
+        )}
+      )
+      reqs <- map(reqs, function(req) {
+        req_throttle(req, capacity = rpm, fill_time_s = 60)
+      })
+
+      resps <- req_perform_parallel(reqs, max_active = max_active)
+      json <- map(resps, resp_body_json)
+
+      map2(json, turns, function(json, user_turn) {
+        chat <- self$clone()
+        turn <- value_turn(private$provider, json)
+        chat$add_turn(user_turn, turn)
+        chat
+      })
     },
 
     #' @description Extract structured data
@@ -284,15 +327,6 @@ Chat <- R6::R6Class("Chat",
     echo = NULL,
     tools = list(),
 
-    add_turn = function(x) {
-      if (!S7_inherits(x, Turn)) {
-        cli::cli_abort("Invalid input", .internal = TRUE)
-      }
-
-      private$.turns[[length(private$.turns) + 1]] <- x
-      invisible(self)
-    },
-
     add_user_contents = function(contents) {
       stopifnot(is.list(contents))
       if (length(contents) == 0) {
@@ -390,8 +424,7 @@ Chat <- R6::R6Class("Chat",
           cat_line(format(turn), prefix = "< ")
         }
       }
-      private$add_turn(user_turn)
-      private$add_turn(turn)
+      self$add_turn(user_turn, turn)
 
       coro::exhausted()
     }),
@@ -439,8 +472,7 @@ Chat <- R6::R6Class("Chat",
           yield(text)
         }
       }
-      private$add_turn(user_turn)
-      private$add_turn(turn)
+      self$add_turn(user_turn, turn)
       coro::exhausted()
     }),
 

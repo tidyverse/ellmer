@@ -81,20 +81,42 @@ method(contents_markdown, Turn) <- function(content) {
   paste0(unlist(lapply(content@contents, contents_markdown)), collapse = "\n\n")
 }
 
-user_turn <- function(..., .error_call = caller_env()) {
-  if (...length() == 0) {
-    cli::cli_abort("Must supply at least one input.", error_call = .error_call)
+user_turn <- function(..., .call = caller_env()) {
+  as_user_turn(list2(...), call = .call, arg = "...")
+}
+
+as_user_turn <- function(contents, call = caller_env(), arg = "...") {
+  if (length(contents) == 0) {
+    cli::cli_abort("{.arg {arg}} must contain at least one input.", call = call)
+  }
+  if (is_named(contents)) {
+    cli::cli_abort("{.arg {arg}} must be unnamed.", call = call)
   }
 
-  check_dots_unnamed(call = .error_call)
-  input <- list2(...)
-  contents <- lapply(input, as_content, error_call = .error_call)
-
+  contents <- lapply(contents, as_content, error_call = call, error_arg = arg)
   Turn("user", contents)
+}
+
+as_user_turns <- function(prompts, call = caller_env(), arg = caller_arg(prompts)) {
+  if (!is.list(prompts)) {
+    stop_input_type(prompts, "a list", call = call, arg = arg)
+  }
+  turns <- map(seq_along(prompts), function(i) {
+    this_arg <- paste0(arg, "[[", i, "]]")
+    as_user_turn(prompts[[i]], call = call, arg = this_arg)
+  })
+
+  turns
 }
 
 is_system_prompt <- function(x) {
   x@role == "system"
+}
+
+check_turn <- function(x, call = caller_env(), arg = caller_arg(x)) {
+  if (!S7_inherits(x, Turn)) {
+    stop_input_type(x, "a <Turn>", call = call, arg = arg)
+  }
 }
 
 normalize_turns <- function(turns = NULL,

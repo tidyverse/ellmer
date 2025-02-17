@@ -4,9 +4,7 @@
       chat$chat(question = "Are unicorns real?")
     Condition
       Error in `chat$chat()`:
-      ! Arguments in `...` must be passed by position, not name.
-      x Problematic argument:
-      * question = "Are unicorns real?"
+      ! `...` must be unnamed.
     Code
       chat$chat(TRUE)
     Condition
