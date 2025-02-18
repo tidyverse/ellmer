@@ -72,15 +72,8 @@ anthropic_key_exists <- function() {
   key_exists("ANTHROPIC_API_KEY")
 }
 
-method(chat_request, ProviderClaude) <- function(provider,
-                                                 stream = TRUE,
-                                                 turns = list(),
-                                                 tools = list(),
-                                                 type = NULL) {
-
+method(base_request, ProviderClaude) <- function(provider) {
   req <- request(provider@base_url)
-  # https://docs.anthropic.com/en/api/messages
-  req <- req_url_path_append(req, "/messages")
   # <https://docs.anthropic.com/en/api/versioning>
   req <- req_headers(req, `anthropic-version` = "2023-06-01")
   # <https://docs.anthropic.com/en/api/getting-started#authentication>
@@ -101,6 +94,37 @@ method(chat_request, ProviderClaude) <- function(provider,
       paste0(json$error$message, " [", json$error$type, "]")
     }
   })
+
+  req
+}
+
+# Chat ------------------------------------------------------------------------
+
+method(chat_request, ProviderClaude) <- function(provider,
+                                                 stream = TRUE,
+                                                 turns = list(),
+                                                 tools = list(),
+                                                 type = NULL) {
+  req <- base_request(provider)
+  # https://docs.anthropic.com/en/api/messages
+  req <- req_url_path_append(req, "/messages")
+
+  body <- chat_body(
+    provider,
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+  req <- req_body_json(req, body)
+  req
+}
+
+method(chat_body, ProviderClaude) <- function(provider,
+                                              stream = TRUE,
+                                              turns = list(),
+                                              tools = list(),
+                                              type = NULL) {
 
   if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
     system <- turns[[1]]@text
@@ -134,10 +158,69 @@ method(chat_request, ProviderClaude) <- function(provider,
     tools = tools,
     tool_choice = tool_choice,
   ))
-  body <- modify_list(body, provider@extra_args)
-  req <- req_body_json(req, body)
+  modify_list(body, provider@extra_args)
+}
 
-  req
+# Batch chat -------------------------------------------------------------------
+
+# https://docs.anthropic.com/en/api/creating-message-batches
+method(batch_submit, ProviderClaude) <- function(provider, turns, type = NULL) {
+  req <- provider_request(provider)
+  req <- req_url_path_append(req, "/messages/batches")
+
+  requests <- map(seq_along(turns), function(i) {
+    params <- chat_body(
+      provider,
+      stream = FALSE,
+      turns = turns[[i]],
+      type = type
+    )
+    list(
+      custom_id = paste0("chat-", i),
+      params = body
+    )
+  })
+  req <- req_body_json(req, list(requests = requests))
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+# https://docs.anthropic.com/en/api/retrieving-message-batches
+method(batch_poll, ProviderClaude) <- function(provider, batch) {
+  req <- provider_request(provider)
+  req <- req_url_path_append(req, "/messages/batches/", batch$id)
+  resp <- req_perform(req)
+  body <- resp_body_json(resp)
+
+  list(
+    done = body$processing_status == "ended",
+    status = list(
+      processing = body$request_counts$processing,
+      succeeded = body$request_counts$completed,
+      failed = body$request_counts$errored +
+        body$request_counts$cancelled +
+        body$request_counts$expired
+    ),
+    body = body
+  )
+}
+
+# https://docs.anthropic.com/en/api/retrieving-message-batch-results
+method(batch_retrieve, ProviderClaude) <- function(provider, batch) {
+  req <- provider_request(provider)
+  req <- req_url_path(batch$results_url)
+  req <- req_progress(req, "down")
+
+  path <- withr::local_tempfile()
+  req <- req_perform(req, path = path)
+
+  #
+  jsonlite::stream_in(path, function(page) {
+    # Parse json a page at a time
+  })
+
+  # Re-align to match inputs
 }
 
 # Claude -> ellmer --------------------------------------------------------------
