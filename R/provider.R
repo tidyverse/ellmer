@@ -28,11 +28,26 @@ Provider <- new_class(
 
 # Create a request------------------------------------
 
+base_request <- new_generic("base_request", "provider",
+  function(provider) {
+    S7_dispatch()
+  }
+)
+
 chat_request <- new_generic("chat_request", "provider",
   function(provider, stream = TRUE, turns = list(), tools = list(), type = NULL) {
     S7_dispatch()
   }
 )
+
+chat_body <- new_generic(
+  "chat_body",
+  "provider",
+  function(provider, stream = TRUE, turns = list(), tools = list(), type = NULL) {
+    S7_dispatch()
+  }
+)
+
 
 chat_resp_stream <- new_generic("chat_resp_stream", "provider",
   function(provider, resp) {
@@ -75,3 +90,29 @@ method(as_json, list(Provider, class_list)) <- function(provider, x) {
 method(as_json, list(Provider, ContentJson)) <- function(provider, x) {
   as_json(provider, ContentText("<structured data/>"))
 }
+
+# Batch API ---------------------------------------------------------------
+
+batch_submit <- new_generic(
+  "batch_submit",
+  "provider",
+  function(provider, turns, type = NULL) {
+    S7_dispatch()
+  }
+)
+
+batch_poll <- new_generic(
+  "batch_poll",
+  "provider",
+  function(provider, batch) {
+    S7_dispatch()
+  }
+)
+
+batch_retrieve <- new_generic(
+  "batch_retrieve",
+  "provider",
+  function(provider, batch) {
+    S7_dispatch()
+  }
+)
