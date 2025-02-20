@@ -91,7 +91,7 @@ create_tool_def <- function(topic,
   if(!inherits(chat,"Chat")){
     chat <- chat_openai(system_prompt = get_tool_prompt(), model = model, echo = echo)
   } else {
-    cat <- chat$clone()
+    chat <- chat$clone()
     chat$set_system_prompt(get_tool_prompt())
     chat$set_turns(list())
   }
