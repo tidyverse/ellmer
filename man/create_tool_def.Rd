@@ -4,8 +4,13 @@
 \alias{create_tool_def}
 \title{Create metadata for a tool}
 \usage{
-create_tool_def(topic, model = "gpt-4o", chat = NULL,
-  echo = interactive(), verbose = FALSE)
+create_tool_def(
+  topic,
+  model = "gpt-4o",
+  chat = NULL,
+  echo = interactive(),
+  verbose = FALSE
+)
 }
 \arguments{
 \item{topic}{A symbol or string literal naming the function to create
