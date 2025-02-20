@@ -1,3 +1,12 @@
+# ellmer (development version)
+
+* `chat_gemini()` can now authenticate with Google default application
+  credentials (including service accounts, etc). This requires the `gargle`
+  package (#317, @atheriel).
+
+* `chat_gemini()` now detects viewer-based credentials when running on Posit
+  Connect (#320, @atheriel).
+
 # ellmer 0.1.1
 
 ## Lifecycle changes
