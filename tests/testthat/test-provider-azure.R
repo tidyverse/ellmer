@@ -68,7 +68,7 @@ test_that("Azure request headers are generated correctly", {
     credentials = default_azure_credentials("key")
   )
   req <- chat_request(p, FALSE, list(turn))
-  expect_snapshot(req)
+  expect_snapshot(req$headers)
 
   # Token.
   p <- ProviderAzure(
@@ -79,7 +79,7 @@ test_that("Azure request headers are generated correctly", {
     credentials = default_azure_credentials("", "token")
   )
   req <- chat_request(p, FALSE, list(turn))
-  expect_snapshot(req)
+  expect_snapshot(req$headers)
 
   # Both.
   p <- ProviderAzure(
@@ -90,7 +90,7 @@ test_that("Azure request headers are generated correctly", {
     credentials = default_azure_credentials("key", "token")
   )
   req <- chat_request(p, FALSE, list(turn))
-  expect_snapshot(req)
+  expect_snapshot(req$headers)
 })
 
 test_that("service principal authentication requests look correct", {
