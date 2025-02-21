@@ -7,7 +7,7 @@
 gemini_upload(
   path,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  api_key = Sys.getenv("GOOGLE_API_KEY"),
+  api_key = NULL,
   mime_type = NULL
 )
 }
@@ -27,8 +27,12 @@ If not specified, will be guesses from the file extension.}
 A \verb{<ContentUploaded>} object that can be passed to \verb{$chat()}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 This function uploads a file then waits for Gemini to finish processing it
-so that you can immediately use it in a prompt.
+so that you can immediately use it in a prompt. It's experimental because
+it's currently Gemini specific, and we expect other providers to evolve
+similar feature in the future.
 
 Uploaded files are automatically deleted after 2 days. Each file must be
 less than 2 GB and you can upload a total of 20 GB. ellmer doesn't currently

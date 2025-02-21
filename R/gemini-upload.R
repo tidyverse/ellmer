@@ -1,8 +1,12 @@
 #' Upload a file to gemini
 #'
 #' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' This function uploads a file then waits for Gemini to finish processing it
-#' so that you can immediately use it in a prompt.
+#' so that you can immediately use it in a prompt. It's experimental because
+#' it's currently Gemini specific, and we expect other providers to evolve
+#' similar feature in the future.
 #'
 #' Uploaded files are automatically deleted after 2 days. Each file must be
 #' less than 2 GB and you can upload a total of 20 GB. ellmer doesn't currently
@@ -26,28 +30,31 @@
 gemini_upload <- function(
   path,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  api_key = Sys.getenv("GOOGLE_API_KEY"),
+  api_key = NULL,
   mime_type = NULL
 ) {
+
+  credentials <- default_google_credentials(api_key)
+
   mime_type <- mime_type %||% guess_mime_type(path)
 
   upload_url <- gemini_upload_init(
     path = path,
     base_url = base_url,
-    api_key = api_key,
+    credentials = credentials,
     mime_type = mime_type
   )
 
   status <- gemini_upload_send(
     upload_url = upload_url,
     path = path,
-    api_key = api_key
+    credentials = credentials
   )
 
   cli::cli_progress_bar(format = "{cli::pb_spin} Processing [{cli::pb_elapsed}] ")
   while (status$state == "PROCESSING") {
     cli::cli_progress_update()
-    status <- gemini_upload_status(status$uri, api_key)
+    status <- gemini_upload_status(status$uri, credentials)
     Sys.sleep(0.5)
   }
   if (status$state == "FAILED") {
@@ -58,44 +65,47 @@ gemini_upload <- function(
 }
 
 # https://ai.google.dev/api/files#method:-media.upload
-gemini_upload_init <- function(path, base_url, api_key, mime_type) {
+gemini_upload_init <- function(path, base_url, credentials, mime_type) {
   file_size <- file.size(path)
-  display_name <- fs::path_file(path)
+  display_name <- basename(path)
 
-  req <- request(base_url) |>
-  req_url_path("upload/v1beta/files") |>
-  req_headers_redacted("x-goog-api-key" = api_key) |>
-  req_headers(
+  req <- request(base_url)
+  req <- ellmer_req_credentials(req, credentials)
+  req <- req_url_path(req, "upload/v1beta/files")
+  req <- req_headers(req,
     "X-Goog-Upload-Protocol" = "resumable",
     "X-Goog-Upload-Command" = "start",
     "X-Goog-Upload-Header-Content-Length" = toString(file_size),
     "X-Goog-Upload-Header-Content-Type" = mime_type,
-  ) |>
-  req_body_json(list(file = list(display_name = display_name)))
+  )
+  req <- req_body_json(req, list(file = list(display_name = display_name)))
 
   resp <- req_perform(req)
   resp_header(resp, "x-goog-upload-url")
 }
 
-gemini_upload_send <- function(upload_url, path, api_key) {
+gemini_upload_send <- function(upload_url, path, credentials) {
   file_size <- file.size(path)
 
-  req <- request(upload_url) |>
-  req_headers_redacted("x-goog-api-key" = api_key) |>
-    req_headers(
-      "Content-Length" = toString(file_size),
-      "X-Goog-Upload-Offset" = "0",
-      "X-Goog-Upload-Command" = "upload, finalize"
-    ) |>
-    req_body_file(path) |>
-    req_progress("up")
+  req <- request(upload_url)
+  req <- ellmer_req_credentials(req, credentials)
+  req <- req_headers(req,
+    "Content-Length" = toString(file_size),
+    "X-Goog-Upload-Offset" = "0",
+    "X-Goog-Upload-Command" = "upload, finalize"
+  )
+  req <- req_body_file(req, path)
+  req <- req_progress(req, "up")
+
   resp <- req_perform(req)
   resp_body_json(resp)$file
 }
 
-gemini_upload_status <- function(uri, api_key) {
-  resp <- req_perform(request(uri) |>
-    req_headers_redacted("x-goog-api-key" = api_key))
+gemini_upload_status <- function(uri, credentials) {
+  req <- request(uri)
+  req <- ellmer_req_credentials(req, credentials)
+
+  resp <- req_perform(req)
   resp_body_json(resp)
 }
 
