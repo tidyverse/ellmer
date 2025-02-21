@@ -65,6 +65,7 @@ Collate:
     'content-pdf.R'
     'content-tools.R'
     'ellmer-package.R'
+    'gemini-upload.R'
     'httr2.R'
     'import-standalone-obj-type.R'
     'import-standalone-purrr.R'
