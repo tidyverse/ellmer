@@ -252,6 +252,24 @@ method(contents_markdown, ContentJson) <- function(content) {
   sprintf('```json\n%s\n```\n', pretty_json(content@value))
 }
 
+ContentUploaded <- new_class(
+  "ContentUploaded",
+  parent = Content,
+  properties = list(
+    uri = prop_string(),
+    mime_type = prop_string(default = "")
+  )
+)
+method(format, ContentUploaded) <- function(x, ...) {
+  cli::format_inline("[{.strong uploaded file}]: [{x@mime_type}]")
+}
+method(contents_html, ContentUploaded) <- function(content) {
+  sprintf("[uploaded %s file]", content@mime_type)
+}
+method(contents_markdown, ContentUploaded) <- function(content) {
+  sprintf("`[uploaded %s file]`", content@mime_type)
+}
+
 # Helpers ----------------------------------------------------------------------
 
 as_content <- function(x, error_call = caller_env()) {

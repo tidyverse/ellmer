@@ -160,7 +160,7 @@ method(chat_request, ProviderCortex) <- function(provider,
 
   req <- request(provider@base_url)
   req <- req_url_path_append(req, "/api/v2/cortex/analyst/message")
-  req <- req_headers(req, !!!provider@credentials(), .redact = "Authorization")
+  req <- ellmer_req_credentials(req, provider@credentials)
   req <- req_retry(req, max_tries = 2)
   req <- ellmer_req_timeout(req, stream)
   req <- req_user_agent(req, snowflake_user_agent())

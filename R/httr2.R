@@ -78,3 +78,9 @@ on_load(chat_perform_async_stream <- coro::async_generator(function(provider, re
 ellmer_req_timeout <- function(req, stream) {
   req_options(req, timeout = getOption("ellmer_timeout_s", 60))
 }
+
+ellmer_req_credentials <- function(req, credentials_fun) {
+  # TODO: simplify once req_headers_redacted() supports !!!
+  credentials <- credentials_fun()
+  req_headers(req, !!!credentials, .redact = names(credentials))
+}

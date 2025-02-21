@@ -37,7 +37,7 @@
       https://testorg-test_account.snowflakecomputing.com/api/v2/cortex/analyst/message
       Headers:
       * Authorization: "<REDACTED>"
-      * X-Snowflake-Authorization-Token-Type: "OAUTH"
+      * X-Snowflake-Authorization-Token-Type: "<REDACTED>"
       Body: json encoded data
       Options:
       * timeout: 60
