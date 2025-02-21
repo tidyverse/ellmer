@@ -240,6 +240,16 @@ method(as_json, list(ProviderGemini, ContentPDF)) <- function(provider, x) {
 }
 
 # https://ai.google.dev/api/caching#FileData
+method(as_json, list(ProviderGemini, ContentUploaded)) <- function(provider, x) {
+  list(
+    fileData = list(
+      mimeType = x@mime_type,
+      fileUri = x@uri
+    )
+  )
+}
+
+# https://ai.google.dev/api/caching#FileData
 method(as_json, list(ProviderGemini, ContentImageRemote)) <- function(provider, x) {
   cli::cli_abort("Gemini doesn't support remote images")
 }
