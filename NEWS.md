@@ -1,7 +1,9 @@
 # ellmer (development version)
 
 * New `$chat_parallel()` and `$extract_data_parallel()` make it easier to
-  perform multiple actions in parallel (#143).
+  perform multiple actions in parallel (#143). Note that Claude is limited
+  primarily by the output tokens per limit (OTPM) which is estimated from the
+  `max_tokens` parameter, which defaults to 4096.
 
 * `chat_gemini()` can now authenticate with Google default application
   credentials (including service accounts, etc). This requires the `gargle`
