@@ -173,9 +173,10 @@ Chat <- R6::R6Class("Chat",
       })
 
       resps <- req_perform_parallel(reqs, max_active = max_active)
-      json <- map(resps, resp_body_json)
+      ok <- !map_lgl(resps, is.null)
+      json <- map(resps[ok], resp_body_json)
 
-      map2(json, turns, function(json, user_turn) {
+      map2(json, turns[ok], function(json, user_turn) {
         chat <- self$clone()
         turn <- value_turn(private$provider, json)
         chat$add_turn(user_turn, turn)
