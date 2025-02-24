@@ -160,18 +160,13 @@ Chat <- R6::R6Class("Chat",
     chat_parallel = function(prompts, max_active = 10, rpm = 500) {
       turns <- as_user_turns(prompts)
 
-      reqs <- map(turns, function(user_turn) {
-        chat_request(
-          provider = private$provider,
-          turns = c(private$.turns, list(user_turn)),
-          tools = private$tools,
-          stream = FALSE,
-        )}
+      reqs <- parallel_requests(
+        provider = private$provider,
+        existing_turns = private$.turns,
+        tools = private$tools,
+        new_turns = turns,
+        rpm = rpm
       )
-      reqs <- map(reqs, function(req) {
-        req_throttle(req, capacity = rpm, fill_time_s = 60)
-      })
-
       resps <- req_perform_parallel(reqs, max_active = max_active)
       ok <- !map_lgl(resps, is.null)
       json <- map(resps[ok], resp_body_json)
@@ -213,23 +208,50 @@ Chat <- R6::R6Class("Chat",
       ))
 
       turn <- self$last_turn()
-      is_json <- map_lgl(turn@contents, S7_inherits, ContentJson)
-      n <- sum(is_json)
-      if (n != 1) {
-        cli::cli_abort("Data extraction failed: {n} data results recieved.")
-      }
+      extract_data(turn, type, convert = convert, needs_wrapper = needs_wrapper)
+    },
 
-      json <- turn@contents[[which(is_json)]]
-      out <- json@value
+    #' @description Submit multiple prompts in parallel. Returns a list of
+    #'   extracted data, one for each prompt.
+    #' @param prompts A list of user prompts.
+    #' @param type A type specification for the extracted data. Should be
+    #'   created with a [`type_()`][type_boolean] function.
+    #' @param convert Automatically convert from JSON lists to R data types
+    #'   using the schema. For example, this will turn arrays of objects into
+    #'  data frames and arrays of strings into a character vector.
+    #' @param max_active The maximum number of simultaenous requests to send.
+    #' @param rpm Maximum number of requests per minute.
+    extract_data_parallel = function(
+      prompts,
+      type,
+      convert = TRUE,
+      max_active = 10,
+      rpm = 500
+    ) {
+      turns <- as_user_turns(prompts)
+      check_bool(convert)
 
+      needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
       if (needs_wrapper) {
-        out <- out$wrapper
-        type <- type@properties[[1]]
+        type <- type_object(wrapper = type)
       }
-      if (convert) {
-        out <- convert_from_type(out, type)
-      }
-      out
+
+      reqs <- parallel_requests(
+        provider = private$provider,
+        existing_turns = private$.turns,
+        new_turns = turns,
+        tools = private$tools,
+        type = type,
+        rpm = rpm
+      )
+      resps <- req_perform_parallel(reqs, max_active = max_active)
+      ok <- !map_lgl(resps, is.null)
+      json <- map(resps[ok], resp_body_json)
+
+      map(json, function(json) {
+        turn <- value_turn(private$provider, json, has_type = TRUE)
+        extract_data(turn, type, convert = convert, needs_wrapper = needs_wrapper)
+      })
     },
 
     #' @description Extract structured data, asynchronously. Returns a promise
@@ -536,4 +558,24 @@ method(contents_markdown, new_S3_class("Chat")) <- function(content, heading_lev
   }
 
   paste(res, collapse="\n\n")
+}
+
+extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
+  is_json <- map_lgl(turn@contents, S7_inherits, ContentJson)
+  n <- sum(is_json)
+  if (n != 1) {
+    cli::cli_abort("Data extraction failed: {n} data results recieved.")
+  }
+
+  json <- turn@contents[[which(is_json)]]
+  out <- json@value
+
+  if (needs_wrapper) {
+    out <- out$wrapper
+    type <- type@properties[[1]]
+  }
+  if (convert) {
+    out <- convert_from_type(out, type)
+  }
+  out
 }

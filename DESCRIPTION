@@ -59,6 +59,7 @@ Collate:
     'content.R'
     'provider.R'
     'as-json.R'
+    'chat-parallel.R'
     'utils-coro.R'
     'chat.R'
     'content-image.R'
@@ -94,5 +95,5 @@ Collate:
     'utils-merge.R'
     'utils.R'
     'zzz.R'
-Remotes:  
+Remotes: 
     r-lib/httr2
