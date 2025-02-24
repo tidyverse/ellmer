@@ -1,5 +1,8 @@
 # ellmer (development version)
 
+* New `$chat_parallel()` and `$extract_data_parallel()` make it easier to
+  perform multiple actions in parallel (#143).
+
 * `chat_gemini()` can now authenticate with Google default application
   credentials (including service accounts, etc). This requires the `gargle`
   package (#317, @atheriel).
