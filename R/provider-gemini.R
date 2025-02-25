@@ -8,6 +8,8 @@ NULL
 #'
 #' @description
 #'
+#' See [gemini_upload()] to upload files (PDFs, images, video, audio, etc.)
+#'
 #' ## Authentication
 #' To authenticate, we recommend saving your
 #' [API key](https://aistudio.google.com/app/apikey) to
