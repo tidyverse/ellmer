@@ -33,7 +33,6 @@ gemini_upload <- function(
   api_key = NULL,
   mime_type = NULL
 ) {
-
   credentials <- default_google_credentials(api_key)
 
   mime_type <- mime_type %||% guess_mime_type(path)
@@ -50,16 +49,7 @@ gemini_upload <- function(
     path = path,
     credentials = credentials
   )
-
-  cli::cli_progress_bar(format = "{cli::pb_spin} Processing [{cli::pb_elapsed}] ")
-  while (status$state == "PROCESSING") {
-    cli::cli_progress_update()
-    status <- gemini_upload_status(status$uri, credentials)
-    Sys.sleep(0.5)
-  }
-  if (status$state == "FAILED") {
-    cli::cli_abort("Upload failed: {status$error$message}")
-  }
+  gemini_upload_wait(status, credentials)
 
   ContentUploaded(uri = status$uri, mime_type = status$mimeType)
 }
@@ -107,6 +97,21 @@ gemini_upload_status <- function(uri, credentials) {
 
   resp <- req_perform(req)
   resp_body_json(resp)
+}
+
+gemini_upload_wait <- function(status, credentials) {
+  cli::cli_progress_bar(format = "{cli::pb_spin} Processing [{cli::pb_elapsed}] ")
+
+  while (status$state == "PROCESSING") {
+    cli::cli_progress_update()
+    status <- gemini_upload_status(status$uri, credentials)
+    Sys.sleep(0.5)
+  }
+  if (status$state == "FAILED") {
+    cli::cli_abort("Upload failed: {status$error$message}")
+  }
+
+  invisible()
 }
 
 # Helpers ----------------------------------------------------------------------
