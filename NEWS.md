@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `gemini_upload()` lets you upload files to Gemini (#310).
+
 * `chat_gemini()` can now authenticate with Google default application
   credentials (including service accounts, etc). This requires the `gargle`
   package (#317, @atheriel).
