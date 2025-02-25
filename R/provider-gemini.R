@@ -8,6 +8,8 @@ NULL
 #'
 #' @description
 #'
+#' See [gemini_upload()] to upload files (PDFs, images, video, audio, etc.)
+#'
 #' ## Authentication
 #' To authenticate, we recommend saving your
 #' [API key](https://aistudio.google.com/app/apikey) to
@@ -42,12 +44,7 @@ chat_gemini <- function(system_prompt = NULL,
   turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
-  check_string(api_key, allow_null = TRUE)
-  api_key <- api_key %||% Sys.getenv("GOOGLE_API_KEY")
-  credentials <- NULL
-  if (!nchar(api_key)) {
-    credentials <- default_google_credentials()
-  }
+  credentials <- default_google_credentials(api_key)
 
   provider <- ProviderGemini(
     base_url = base_url,
@@ -77,16 +74,7 @@ method(chat_request, ProviderGemini) <- function(provider,
 
 
   req <- request(provider@base_url)
-  if (nchar(provider@api_key)) {
-    req <- req_headers_redacted(req, "x-goog-api-key" = provider@api_key)
-  } else {
-    # TODO: Can use req_headers_redacted() when !!! is supported.
-    req <- req_headers(
-      req,
-      !!!provider@credentials(),
-      .redact = "Authorization"
-    )
-  }
+  req <- ellmer_req_credentials(req, provider@credentials)
   req <- req_retry(req, max_tries = 2)
   req <- ellmer_req_timeout(req, stream)
   req <- req_error(req, body = function(resp) {
@@ -235,6 +223,16 @@ method(as_json, list(ProviderGemini, ContentPDF)) <- function(provider, x) {
     inlineData = list(
       mimeType = x@type,
       data = x@data
+    )
+  )
+}
+
+# https://ai.google.dev/api/caching#FileData
+method(as_json, list(ProviderGemini, ContentUploaded)) <- function(provider, x) {
+  list(
+    fileData = list(
+      mimeType = x@mime_type,
+      fileUri = x@uri
     )
   )
 }
@@ -423,8 +421,16 @@ merge_gemini_chunks <- merge_objects(
   usageMetadata = merge_last()
 )
 
-default_google_credentials <- function() {
+default_google_credentials <- function(api_key = NULL, error_call = caller_env()) {
   gemini_scope <- "https://www.googleapis.com/auth/generative-language.retriever"
+
+  check_string(api_key, allow_null = TRUE, call = error_call)
+  api_key <- api_key %||% Sys.getenv("GOOGLE_API_KEY")
+  if (nchar(api_key) > 0) {
+    return(function() {
+      list("x-goog-api-key" = api_key)
+    })
+  }
 
   # Detect viewer-based credentials from Posit Connect.
   if (has_connect_viewer_token(scope = gemini_scope)) {
@@ -461,7 +467,8 @@ default_google_credentials <- function() {
       c(
         "No Google credentials are available.",
         "i" = "Try suppling an API key or configuring Google's application default credentials."
-      )
+      ),
+      call = error_call
     )
   }
 
