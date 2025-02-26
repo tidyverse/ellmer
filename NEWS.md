@@ -1,5 +1,10 @@
 # ellmer (development version)
 
+* New `$chat_batch()` and `$extract_data_batch()` make it possible to use the
+  "batch" API provided by Claude, OpenAI, and Gemini (#143). Batch request are
+  typically 50% cheaper than regular requests but can take up to 24 hours to
+  complete.
+
 * New `$chat_parallel()` and `$extract_data_parallel()` make it easier to
   perform multiple actions in parallel (#143). For Claude, note that the number
   of active connections is limited primarily by the output tokens per limit
