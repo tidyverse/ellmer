@@ -173,8 +173,31 @@ Chat <- R6::R6Class("Chat",
 
       map2(json, turns[ok], function(json, user_turn) {
         chat <- self$clone()
-        turn <- value_turn(private$provider, json)
-        chat$add_turn(user_turn, turn)
+        ai_turn <- value_turn(private$provider, json)
+        chat$add_turn(user_turn, user_turn)
+        chat
+      })
+    },
+
+    #' @description Submit multiple prompts in parallel. Returns a list of
+    #'   [Chat] objects, one for each prompt.
+    #' @param prompts A list of user prompts.
+    #' @param max_active The maximum number of simultaenous requests to send.
+    #' @param rpm Maximum number of requests per minute.
+    chat_batch = function(prompts) {
+      turns <- as_user_turns(prompts)
+      new_turns <- map(turns, function(new_turn) c(private$.turns, list(new_turn)))
+
+      batch <- batch_submit(private$provider, new_turns)
+      batch <- batch_wait(provider, batch)
+      results <- batch_retrieve(provider, batch)
+
+      ok <- map_lgl(results, function(x) x$type == "succeeded")
+
+      map2(results[ok], turns[ok], function(result, user_turn) {
+        chat <- self$clone()
+        ai_turn <- value_turn(private$provider, result$message)
+        chat$add_turn(user_turn, ai_turn)
         chat
       })
     },

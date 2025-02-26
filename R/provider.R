@@ -116,3 +116,11 @@ batch_retrieve <- new_generic(
     S7_dispatch()
   }
 )
+
+batch_info <- new_generic(
+  "batch_info",
+  "provider",
+  function(provider, batch) {
+    S7_dispatch()
+  }
+)

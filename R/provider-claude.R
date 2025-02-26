@@ -165,7 +165,7 @@ method(chat_body, ProviderClaude) <- function(provider,
 
 # https://docs.anthropic.com/en/api/creating-message-batches
 method(batch_submit, ProviderClaude) <- function(provider, turns, type = NULL) {
-  req <- provider_request(provider)
+  req <- base_request(provider)
   req <- req_url_path_append(req, "/messages/batches")
 
   requests <- map(seq_along(turns), function(i) {
@@ -177,7 +177,7 @@ method(batch_submit, ProviderClaude) <- function(provider, turns, type = NULL) {
     )
     list(
       custom_id = paste0("chat-", i),
-      params = body
+      params = params
     )
   })
   req <- req_body_json(req, list(requests = requests))
@@ -188,39 +188,40 @@ method(batch_submit, ProviderClaude) <- function(provider, turns, type = NULL) {
 
 # https://docs.anthropic.com/en/api/retrieving-message-batches
 method(batch_poll, ProviderClaude) <- function(provider, batch) {
-  req <- provider_request(provider)
+  req <- base_request(provider)
   req <- req_url_path_append(req, "/messages/batches/", batch$id)
   resp <- req_perform(req)
-  body <- resp_body_json(resp)
+  resp_body_json(resp)
+}
+
+method(batch_info, ProviderClaude) <- function(provider, batch) {
+  counts <- batch$request_counts
 
   list(
-    done = body$processing_status == "ended",
-    status = list(
-      processing = body$request_counts$processing,
-      succeeded = body$request_counts$completed,
-      failed = body$request_counts$errored +
-        body$request_counts$cancelled +
-        body$request_counts$expired
-    ),
-    body = body
+    working = batch$processing_status != "ended",
+    counts = list(
+      processing = counts$processing,
+      succeeded = counts$succeeded,
+      failed = counts$errored + counts$canceled + counts$expired
+    )
   )
 }
 
 # https://docs.anthropic.com/en/api/retrieving-message-batch-results
 method(batch_retrieve, ProviderClaude) <- function(provider, batch) {
-  req <- provider_request(provider)
-  req <- req_url_path(batch$results_url)
+  req <- base_request(provider)
+  req <- req_url(req, batch$results_url)
   req <- req_progress(req, "down")
 
   path <- withr::local_tempfile()
   req <- req_perform(req, path = path)
 
-  #
-  jsonlite::stream_in(path, function(page) {
-    # Parse json a page at a time
-  })
+  lines <- readLines(path, warn = FALSE)
+  json <- lapply(lines, jsonlite::fromJSON, simplifyVector = FALSE)
 
-  # Re-align to match inputs
+  ids <- as.numeric(gsub("chat-", "", map_chr(json, "[[", "custom_id")))
+  results <- lapply(json, "[[", "result")
+  results[order(ids)]
 }
 
 # Claude -> ellmer --------------------------------------------------------------
