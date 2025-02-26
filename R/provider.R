@@ -135,3 +135,18 @@ batch_info <- new_generic(
     S7_dispatch()
   }
 )
+
+batch_result_ok <- new_generic(
+  "batch_result_ok",
+  "provider",
+  function(provider, result) {
+    S7_dispatch()
+  }
+)
+batch_result_turn <- new_generic(
+  "batch_result_turn",
+  "provider",
+  function(provider, result, has_type = FALSE) {
+    S7_dispatch()
+  }
+)

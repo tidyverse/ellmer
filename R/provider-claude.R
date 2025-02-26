@@ -228,6 +228,14 @@ method(batch_retrieve, ProviderClaude) <- function(provider, batch) {
   results[order(ids)]
 }
 
+method(batch_result_ok, ProviderClaude) <- function(provider, result) {
+  result$type == "succeeded"
+}
+
+method(batch_result_turn, ProviderClaude) <- function(provider, result, has_type = FALSE) {
+  value_turn(provider, result$message, has_type = has_type)
+}
+
 # Claude -> ellmer --------------------------------------------------------------
 
 method(stream_parse, ProviderClaude) <- function(provider, event) {
