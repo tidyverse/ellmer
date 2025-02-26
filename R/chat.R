@@ -185,6 +185,8 @@ Chat <- R6::R6Class("Chat",
     #' @param max_active The maximum number of simultaenous requests to send.
     #' @param rpm Maximum number of requests per minute.
     chat_batch = function(prompts) {
+      check_has_batch_support(private$provider)
+
       turns <- as_user_turns(prompts)
       new_turns <- map(turns, function(new_turn) c(private$.turns, list(new_turn)))
 

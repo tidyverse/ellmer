@@ -21,3 +21,15 @@ batch_wait <- function(provider, batch) {
 
   batch
 }
+
+
+check_has_batch_support <- function(provider, call = caller_env()) {
+  if (has_batch_support(provider)) {
+    return()
+  }
+
+  cli::cli_abort(
+    "Batch requests are not currently supported by this provider.",
+    call = call
+  )
+}

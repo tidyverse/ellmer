@@ -163,6 +163,10 @@ method(chat_body, ProviderClaude) <- function(provider,
 
 # Batch chat -------------------------------------------------------------------
 
+method(has_batch_support, ProviderClaude) <- function(provider) {
+  TRUE
+}
+
 # https://docs.anthropic.com/en/api/creating-message-batches
 method(batch_submit, ProviderClaude) <- function(provider, turns, type = NULL) {
   req <- base_request(provider)

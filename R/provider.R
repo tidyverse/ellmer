@@ -93,6 +93,17 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x) {
 
 # Batch API ---------------------------------------------------------------
 
+has_batch_support <- new_generic(
+  "has_batch_support",
+  "provider",
+  function(provider) {
+    S7_dispatch()
+  }
+)
+method(has_batch_support, class_any) <- function(provider) {
+  FALSE
+}
+
 batch_submit <- new_generic(
   "batch_submit",
   "provider",
