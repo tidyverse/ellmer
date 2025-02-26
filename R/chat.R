@@ -279,6 +279,28 @@ Chat <- R6::R6Class("Chat",
       })
     },
 
+    extract_data_batch = function(prompts, type, convert = TRUE) {
+      check_has_batch_support(private$provider)
+      turns <- as_user_turns(prompts)
+      check_bool(convert)
+
+      needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
+      if (needs_wrapper) {
+        type <- type_object(wrapper = type)
+      }
+
+      new_turns <- map(turns, function(new_turn) c(private$.turns, list(new_turn)))
+      batch <- batch_submit(private$provider, new_turns, type = type)
+      batch <- batch_wait(provider, batch)
+      results <- batch_retrieve(provider, batch)
+
+      ok <- map_lgl(results, function(x) x$type == "succeeded")
+      map2(results[ok], turns[ok], function(result, user_turn) {
+        turn <- value_turn(private$provider, result$message, has_type = TRUE)
+        extract_data(turn, type, convert = convert, needs_wrapper = needs_wrapper)
+      })
+    },
+
     #' @description Extract structured data, asynchronously. Returns a promise
     #'   that resolves to an object matching the type specification.
     #' @param ... The input to send to the chatbot. Will typically include
