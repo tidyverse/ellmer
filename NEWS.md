@@ -1,5 +1,16 @@
 # ellmer (development version)
 
+* New `$chat_parallel()` and `$extract_data_parallel()` make it easier to
+  perform multiple actions in parallel (#143). For Claude, note that the number
+  of active connections is limited primarily by the output tokens per limit
+  (OTPM) which is estimated from the `max_tokens` parameter, which defaults to
+  4096. That means if you're limited to 16,000 OPTM, you should use at
+  most 16,000 / 4096 = ~4 active connections (or decrease `max_tokens` to
+  get more). Parallel calls with OpenAI and Gemini are much simpler in
+  my experience.
+
+* `gemini_upload()` lets you upload files to Gemini (#310).
+
 * `chat_gemini()` can now authenticate with Google default application
   credentials (including service accounts, etc). This requires the `gargle`
   package (#317, @atheriel).
