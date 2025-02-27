@@ -77,6 +77,11 @@ chat_ollama_test <- function(..., model = "llama3.2:1b") {
     testthat::skip("ollama not found")
   }
 
+  testthat::skip_if_not(
+    model %in% ollama_models(),
+    sprintf("Ollama: model '%s' is not installed", model)
+  )
+
   chat_ollama(..., model = model)
 }
 
