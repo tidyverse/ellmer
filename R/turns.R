@@ -48,13 +48,15 @@ Turn <- new_class(
     text = new_property(
       class = class_character,
       getter = function(self) contents_text(self)
-    )
+    ),
+    completed = new_property(class = class_POSIXct)
   ),
   constructor = function(role,
                          contents = list(),
                          json = list(),
-                         tokens = c(0, 0)) {
-
+                         tokens = c(0, 0),
+                         completed = Sys.time()) {
+    
    if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
     }
@@ -63,7 +65,8 @@ Turn <- new_class(
       role = role,
       contents = contents,
       json = json,
-      tokens = tokens
+      tokens = tokens,
+      completed = completed
     )
   }
 )

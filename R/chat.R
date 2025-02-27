@@ -399,6 +399,7 @@ Chat <- R6::R6Class("Chat",
         cat_line(format(user_turn), prefix = "> ")
       }
 
+      user_turn@completed <- Sys.time()
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "stream" else "value",
@@ -447,6 +448,7 @@ Chat <- R6::R6Class("Chat",
           cat_line(format(turn), prefix = "< ")
         }
       }
+      turn@completed <- Sys.time()
       self$add_turn(user_turn, turn)
 
       coro::exhausted()
@@ -455,6 +457,7 @@ Chat <- R6::R6Class("Chat",
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
     submit_turns_async = async_generator_method(function(self, private, user_turn, stream, echo, type = NULL) {
+      user_turn@completed <- Sys.time()
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "async-stream" else "async-value",
@@ -495,6 +498,7 @@ Chat <- R6::R6Class("Chat",
           yield(text)
         }
       }
+      turn@completed <- Sys.time()
       self$add_turn(user_turn, turn)
       coro::exhausted()
     }),

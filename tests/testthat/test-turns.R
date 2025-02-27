@@ -58,3 +58,17 @@ test_that("can extract text easily", {
   expect_equal(turn@text, "ABCDEF")
 
 })
+
+test_that("turns have completion timestamps", {
+  before <- Sys.time()
+  turn <- Turn("user", "hello")
+  after <- Sys.time()
+  
+  expect_s3_class(turn@completed, "POSIXct")
+  expect_true(turn@completed >= before)
+  expect_true(turn@completed <= after)
+  
+  other_time <- as.POSIXct("2023-01-01")
+  turn@completed <- other_time
+  expect_equal(turn@completed, other_time)
+})

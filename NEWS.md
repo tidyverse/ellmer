@@ -1,5 +1,8 @@
 # ellmer (development version)
 
+* `Turn` objects now include a POSIXct timestamp in the `completed` slot that 
+  records when the turn was completed (#337, @simonpcouch).
+
 * New `$chat_parallel()` and `$extract_data_parallel()` make it easier to
   perform multiple actions in parallel (#143). For Claude, note that the number
   of active connections is limited primarily by the output tokens per limit
