@@ -150,7 +150,13 @@ normalize_turns <- function(turns = NULL,
   }
 
   if (!is.null(system_prompt)) {
-    system_turn <- Turn("system", system_prompt)
+    # set shared `@completed` so as not to trigger 
+    # `identical(turns[[1]], system_turn)` error (#337)
+    system_turn <- Turn(
+      "system",
+      system_prompt,
+      completed = turns[[1]]@completed
+    )
 
     # No turns; start with just the system prompt
     if (length(turns) == 0) {
