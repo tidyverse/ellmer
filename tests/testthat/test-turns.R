@@ -3,16 +3,27 @@ test_that("system prompt is applied correctly", {
   sys_msg <- Turn("system", sys_prompt)
   user_msg <- Turn("user", "bar")
 
+  standardize_completed <- function(turn) {
+    turn@completed <- NULL
+    turn
+  }
+
+  expect_equal_turns <- function(object, expected, ...) {
+    object <- purrr::map(object, standardize_completed)
+    expected <- purrr::map(expected, standardize_completed)
+    expect_equal(object, expected, ...)
+  } 
+
   expect_equal(normalize_turns(), list())
   expect_equal(normalize_turns(list(user_msg)), list(user_msg))
   expect_equal(normalize_turns(list(sys_msg)), list(sys_msg))
 
-  expect_equal(normalize_turns(list(), sys_prompt), list(sys_msg))
-  expect_equal(
+  expect_equal_turns(normalize_turns(list(), sys_prompt), list(sys_msg))
+  expect_equal_turns(
     normalize_turns(list(user_msg), sys_prompt),
     list(sys_msg, user_msg)
   )
-  expect_equal(
+  expect_equal_turns(
     normalize_turns(list(sys_msg, user_msg), sys_prompt),
     list(sys_msg, user_msg)
   )

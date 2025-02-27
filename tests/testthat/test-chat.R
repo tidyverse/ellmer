@@ -26,7 +26,14 @@ test_that("can retrieve system prompt with last_turn()", {
   expect_equal(chat1$last_turn("system"), NULL)
 
   chat2 <- chat_openai(system_prompt = "You are from New Zealand")
-  expect_equal(chat2$last_turn("system"), Turn("system", "You are from New Zealand"))
+  expect_equal(
+    chat2$last_turn("system"),
+    Turn(
+      "system",
+      "You are from New Zealand",
+      completed = chat2$last_turn("system")@completed
+    )
+  )
 })
 
 test_that("can get and set turns", {
