@@ -47,19 +47,30 @@ chat_ollama <- function(system_prompt = NULL,
       i = "Locally installed models: {.str {models}}."
     ))
   }
+
+  turns <- normalize_turns(turns, system_prompt)
   echo <- check_echo(echo)
 
-  chat_openai(
-    system_prompt = system_prompt,
-    turns = turns,
+  provider <- ProviderOllama(
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
-    api_key = "ollama", # ignored
     model = model,
     seed = seed,
-    api_args = api_args,
-    echo = echo
+    extra_args = api_args,
+    api_key = "ollama" # ignored
   )
+
+  Chat$new(provider = provider, turns = turns, echo = echo)
 }
+
+ProviderOllama <- new_class(
+  "ProviderOllama",
+  parent = ProviderOpenAI,
+  properties = list(
+    api_key = prop_string(),
+    model = prop_string(),
+    seed = prop_number_whole(allow_null = TRUE)
+  )
+)
 
 chat_ollama_test <- function(..., model = "llama3.3") {
   if (!has_ollama()) {
@@ -88,5 +99,31 @@ has_ollama <- function(base_url = "http://localhost:11434") {
       TRUE
     },
     httr2_error = function(cnd) FALSE
+  )
+}
+
+method(as_json, list(ProviderOllama, TypeObject)) <- function(provider, x) {
+  if (x@additional_properties) {
+    cli::cli_abort("{.arg .additional_properties} not supported for OpenAI.")
+  }
+
+  names <- names2(x@properties)
+  properties <- lapply(x@properties, function(x) {
+    out <- as_json(provider, x)
+    # Ollama with OpenAPI-compat API doesn't support arrays for type (ollama/ollama#5990)
+    # if (!x@required) {
+    #   out$type <- c(out$type, "null")
+    # }
+    out
+  })
+
+  names(properties) <- names
+
+  list(
+    type = "object",
+    description = x@description %||% "",
+    properties = properties,
+    required = as.list(names),
+    additionalProperties = FALSE
   )
 }
