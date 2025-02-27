@@ -18,6 +18,8 @@
 * `chat_gemini()` now detects viewer-based credentials when running on Posit
   Connect (#320, @atheriel).
 
+* `chat_ollama()` now works with `tool()` definitions with optional arguments (#342, @gadenbuie).
+
 # ellmer 0.1.1
 
 ## Lifecycle changes
