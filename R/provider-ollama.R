@@ -72,7 +72,7 @@ ProviderOllama <- new_class(
   )
 )
 
-chat_ollama_test <- function(..., model = "llama3.3") {
+chat_ollama_test <- function(..., model = "llama3.2:1b") {
   if (!has_ollama()) {
     testthat::skip("ollama not found")
   }
