@@ -72,15 +72,8 @@ anthropic_key_exists <- function() {
   key_exists("ANTHROPIC_API_KEY")
 }
 
-method(chat_request, ProviderClaude) <- function(provider,
-                                                 stream = TRUE,
-                                                 turns = list(),
-                                                 tools = list(),
-                                                 type = NULL) {
-
+method(base_request, ProviderClaude) <- function(provider) {
   req <- request(provider@base_url)
-  # https://docs.anthropic.com/en/api/messages
-  req <- req_url_path_append(req, "/messages")
   # <https://docs.anthropic.com/en/api/versioning>
   req <- req_headers(req, `anthropic-version` = "2023-06-01")
   # <https://docs.anthropic.com/en/api/getting-started#authentication>
@@ -101,6 +94,37 @@ method(chat_request, ProviderClaude) <- function(provider,
       paste0(json$error$message, " [", json$error$type, "]")
     }
   })
+
+  req
+}
+
+# Chat ------------------------------------------------------------------------
+
+method(chat_request, ProviderClaude) <- function(provider,
+                                                 stream = TRUE,
+                                                 turns = list(),
+                                                 tools = list(),
+                                                 type = NULL) {
+  req <- base_request(provider)
+  # https://docs.anthropic.com/en/api/messages
+  req <- req_url_path_append(req, "/messages")
+
+  body <- chat_body(
+    provider,
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+  req <- req_body_json(req, body)
+  req
+}
+
+method(chat_body, ProviderClaude) <- function(provider,
+                                              stream = TRUE,
+                                              turns = list(),
+                                              tools = list(),
+                                              type = NULL) {
 
   if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
     system <- turns[[1]]@text
@@ -134,10 +158,82 @@ method(chat_request, ProviderClaude) <- function(provider,
     tools = tools,
     tool_choice = tool_choice,
   ))
-  body <- modify_list(body, provider@extra_args)
-  req <- req_body_json(req, body)
+  modify_list(body, provider@extra_args)
+}
 
-  req
+# Batch chat -------------------------------------------------------------------
+
+method(has_batch_support, ProviderClaude) <- function(provider) {
+  TRUE
+}
+
+# https://docs.anthropic.com/en/api/creating-message-batches
+method(batch_submit, ProviderClaude) <- function(provider, turns, type = NULL) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/messages/batches")
+
+  requests <- map(seq_along(turns), function(i) {
+    params <- chat_body(
+      provider,
+      stream = FALSE,
+      turns = turns[[i]],
+      type = type
+    )
+    list(
+      custom_id = paste0("chat-", i),
+      params = params
+    )
+  })
+  req <- req_body_json(req, list(requests = requests))
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+# https://docs.anthropic.com/en/api/retrieving-message-batches
+method(batch_poll, ProviderClaude) <- function(provider, batch) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/messages/batches/", batch$id)
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+method(batch_info, ProviderClaude) <- function(provider, batch) {
+  counts <- batch$request_counts
+
+  list(
+    working = batch$processing_status != "ended",
+    counts = list(
+      processing = counts$processing,
+      succeeded = counts$succeeded,
+      failed = counts$errored + counts$canceled + counts$expired
+    )
+  )
+}
+
+# https://docs.anthropic.com/en/api/retrieving-message-batch-results
+method(batch_retrieve, ProviderClaude) <- function(provider, batch) {
+  req <- base_request(provider)
+  req <- req_url(req, batch$results_url)
+  req <- req_progress(req, "down")
+
+  path <- withr::local_tempfile()
+  req <- req_perform(req, path = path)
+
+  lines <- readLines(path, warn = FALSE)
+  json <- lapply(lines, jsonlite::fromJSON, simplifyVector = FALSE)
+
+  ids <- as.numeric(gsub("chat-", "", map_chr(json, "[[", "custom_id")))
+  results <- lapply(json, "[[", "result")
+  results[order(ids)]
+}
+
+method(batch_result_ok, ProviderClaude) <- function(provider, result) {
+  result$type == "succeeded"
+}
+
+method(batch_result_turn, ProviderClaude) <- function(provider, result, has_type = FALSE) {
+  value_turn(provider, result$message, has_type = has_type)
 }
 
 # Claude -> ellmer --------------------------------------------------------------

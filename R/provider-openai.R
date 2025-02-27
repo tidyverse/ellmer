@@ -95,15 +95,8 @@ openai_key <- function() {
   key_get("OPENAI_API_KEY")
 }
 
-# https://platform.openai.com/docs/api-reference/chat/create
-method(chat_request, ProviderOpenAI) <- function(provider,
-                                                 stream = TRUE,
-                                                 turns = list(),
-                                                 tools = list(),
-                                                 type = NULL) {
-
+method(base_request, ProviderOpenAI) <- function(provider) {
   req <- request(provider@base_url)
-  req <- req_url_path_append(req, "/chat/completions")
   req <- req_auth_bearer_token(req, provider@api_key)
   req <- req_retry(req, max_tries = 2)
   req <- ellmer_req_timeout(req, stream)
@@ -115,6 +108,36 @@ method(chat_request, ProviderOpenAI) <- function(provider,
       resp_body_string(resp)
     }
   })
+
+  req
+}
+
+# https://platform.openai.com/docs/api-reference/chat/create
+method(chat_request, ProviderOpenAI) <- function(provider,
+                                                 stream = TRUE,
+                                                 turns = list(),
+                                                 tools = list(),
+                                                 type = NULL) {
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/chat/completions")
+
+  body <- chat_body(provider,
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+  req <- req_body_json(req, body)
+
+  req
+}
+
+method(chat_body, ProviderOpenAI) <- function(provider,
+                                             stream = TRUE,
+                                             turns = list(),
+                                             tools = list(),
+                                             type = NULL) {
 
   messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
   tools <- as_json(provider, unname(tools))
@@ -142,11 +165,108 @@ method(chat_request, ProviderOpenAI) <- function(provider,
     response_format = response_format
   ))
   body <- utils::modifyList(body, provider@extra_args)
-  req <- req_body_json(req, body)
 
-  req
+  body
 }
 
+# Batched requests -------------------------------------------------------------
+
+method(has_batch_support, ProviderOpenAI) <- function(provider) {
+  TRUE
+}
+
+# https://platform.openai.com/docs/api-reference/batch
+method(batch_submit, ProviderOpenAI) <- function(provider, turns, type = NULL) {
+  path <- withr::local_tempfile()
+
+  # First put the requests in a file
+  # https://platform.openai.com/docs/api-reference/batch/request-input
+  requests <- map(seq_along(turns), function(i) {
+    body <- chat_body(provider, stream = FALSE, turns = turns[[i]], type = type)
+
+    list(
+      custom_id = paste0("chat-", i),
+      method = "POST",
+      url = "/v1/chat/completions",
+      body = body
+    )
+  })
+  json <- map_chr(requests, jsonlite::toJSON, auto_unbox = TRUE)
+  writeLines(json, path)
+  # Then upload it
+  uploaded <- openai_upload(provider, path)
+
+  # Now we can submit the
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/batches")
+  req <- req_body_json(req, list(
+    input_file_id = uploaded$id,
+    endpoint = "/v1/chat/completions",
+    completion_window = "24h"
+  ))
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+# https://platform.openai.com/docs/api-reference/batch/retrieve
+openai_upload <- function(provider, path, purpose = "batch") {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/files")
+  req <- req_body_multipart(req, purpose = purpose, file = curl::form_file(path))
+  req <- req_progress(req, "up")
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+# https://docs.anthropic.com/en/api/retrieving-message-batches
+method(batch_poll, ProviderOpenAI) <- function(provider, batch) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/batches/", batch$id)
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+method(batch_info, ProviderOpenAI) <- function(provider, batch) {
+  counts <- batch$request_counts
+
+  list(
+    working = batch$status != "completed",
+    counts = list(
+      processing = counts$total - counts$completed,
+      succeeded = counts$completed,
+      failed = counts$failed
+    )
+  )
+}
+
+# https://docs.anthropic.com/en/api/retrieving-message-batch-results
+method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
+  path <- withr::local_tempfile()
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/files/", batch$output_file_id, "/content")
+  req <- req_progress(req, "down")
+  resp <- req_perform(req, path = path)
+
+  lines <- readLines(path, warn = FALSE)
+  json <- lapply(lines, jsonlite::fromJSON, simplifyVector = FALSE)
+
+  ids <- as.numeric(gsub("chat-", "", map_chr(json, "[[", "custom_id")))
+  results <- lapply(json, "[[", "response")
+  results[order(ids)]
+}
+
+
+method(batch_result_ok, ProviderOpenAI) <- function(provider, result) {
+  result$status_code == 200
+}
+
+method(batch_result_turn, ProviderOpenAI) <- function(provider, result, has_type = FALSE) {
+  value_turn(provider, result$body, has_type = has_type)
+}
 # OpenAI -> ellmer --------------------------------------------------------------
 
 method(stream_parse, ProviderOpenAI) <- function(provider, event) {

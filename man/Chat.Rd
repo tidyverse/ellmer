@@ -37,6 +37,7 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
 \item \href{#method-Chat-chat}{\code{Chat$chat()}}
 \item \href{#method-Chat-chat_parallel}{\code{Chat$chat_parallel()}}
+\item \href{#method-Chat-chat_batch}{\code{Chat$chat_batch()}}
 \item \href{#method-Chat-extract_data}{\code{Chat$extract_data()}}
 \item \href{#method-Chat-extract_data_parallel}{\code{Chat$extract_data_parallel()}}
 \item \href{#method-Chat-extract_data_async}{\code{Chat$extract_data_async()}}
@@ -237,6 +238,28 @@ Submit multiple prompts in parallel. Returns a list of
 \link{Chat} objects, one for each prompt.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Chat$chat_parallel(prompts, max_active = 10, rpm = 500)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{prompts}}{A list of user prompts.}
+
+\item{\code{max_active}}{The maximum number of simultaenous requests to send.}
+
+\item{\code{rpm}}{Maximum number of requests per minute.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-chat_batch"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-chat_batch}{}}}
+\subsection{Method \code{chat_batch()}}{
+Submit multiple prompts in parallel. Returns a list of
+\link{Chat} objects, one for each prompt.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_batch(prompts)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

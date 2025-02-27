@@ -100,12 +100,12 @@ gemini_upload_status <- function(uri, credentials) {
 }
 
 gemini_upload_wait <- function(status, credentials) {
-  cli::cli_progress_bar(format = "{cli::pb_spin} Processing [{cli::pb_elapsed}] ")
+  cli::cli_progress_bar(format = "{cli::pb_spin} Processing... [{cli::pb_elapsed}] ")
 
   while (status$state == "PROCESSING") {
     cli::cli_progress_update()
     status <- gemini_upload_status(status$uri, credentials)
-    Sys.sleep(0.5)
+    Sys.sleep(1)
   }
   if (status$state == "FAILED") {
     cli::cli_abort("Upload failed: {status$error$message}")
