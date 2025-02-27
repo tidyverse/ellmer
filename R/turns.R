@@ -26,6 +26,7 @@ NULL
 #' @param tokens A numeric vector of length 2 representing the number of
 #'   input and output tokens (respectively) used in this turn. Currently
 #'   only recorded for assistant turns.
+#' @param completed A POSIXct timestamp indicating when the turn completed.
 #' @export
 #' @return An S7 `Turn` object
 #' @examples
