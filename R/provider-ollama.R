@@ -73,6 +73,8 @@ ProviderOllama <- new_class(
 )
 
 chat_ollama_test <- function(..., model = "llama3.2:1b") {
+  # model: Note that tests require a model with tool capabilities
+  
   if (!has_ollama()) {
     testthat::skip("ollama not found")
   }

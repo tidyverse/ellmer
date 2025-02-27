@@ -15,5 +15,54 @@ test_that("can make simple streaming request", {
 
 # Common provider interface -----------------------------------------------
 
+test_that("can chat with tool request", {
+  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+
+  add_two_numbers <- function(x, y = 0) x + y
+  chat$register_tool(
+    tool(
+      add_two_numbers,
+      "Add two numbers together.",
+      x = type_number("The first number"),
+      y = type_number("The second number", required = FALSE)
+    )
+  )
+
+  # Ollama tool calling is very inconsistent, esp. with small models, so we
+  # just test that the model still works when a tool call is registered.
+  expect_no_error(
+    coro::collect(chat$stream("What is 1 + 1?"))
+  )
+})
+
 # Currently no other tests because I can't find a model that returns reliable
 # results and is reasonably performant.
+
+# Custom -----------------------------------------------------------------
+
+test_that("as_json specialised for Ollama", {
+  stub <- ProviderOllama(base_url = "", api_key = "", model = "")
+
+  expect_snapshot(
+    as_json(stub, type_object(.additional_properties = TRUE)),
+    error = TRUE
+  )
+
+  obj <- type_object(
+    x = type_number(required = FALSE),
+    y = type_string(required = TRUE)
+  )
+  expect_equal(
+    as_json(stub, obj),
+    list(
+      type = "object",
+      description = "",
+      properties = list(
+        x = list(type = c("number"), description = ""),
+        y = list(type = c("string"), description = "")
+      ),
+      required = list("y"),
+      additionalProperties = FALSE
+    )
+  )
+})
