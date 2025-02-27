@@ -114,20 +114,14 @@ method(as_json, list(ProviderOllama, TypeObject)) <- function(provider, x) {
     cli::cli_abort("{.arg .additional_properties} not supported for Ollama.")
   }
 
-  names <- names2(x@properties)
-
-  properties <- lapply(x@properties, as_json, provider = provider)
-
   # Unlike OpenAI, Ollama uses the `required` field to list required tool args
-  is_required <- vapply(x@properties, function(t) t@required, logical(1))
-
-  names(properties) <- names
+  required <- map_lgl(x@properties, function(prop) prop@required)
 
   list(
     type = "object",
     description = x@description %||% "",
-    properties = properties,
-    required = as.list(names[is_required]),
+    properties = as_json(provider, x@properties),
+    required = as.list(names2(x@properties)[required]),
     additionalProperties = FALSE
   )
 }
