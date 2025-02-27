@@ -9,8 +9,8 @@ test_that("system prompt is applied correctly", {
   }
 
   expect_equal_turns <- function(object, expected, ...) {
-    object <- purrr::map(object, standardize_completed)
-    expected <- purrr::map(expected, standardize_completed)
+    object <- lapply(object, standardize_completed)
+    expected <- lapply(expected, standardize_completed)
     expect_equal(object, expected, ...)
   } 
 
