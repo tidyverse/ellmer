@@ -109,18 +109,15 @@ has_ollama <- function(base_url = "http://localhost:11434") {
 
 method(as_json, list(ProviderOllama, TypeObject)) <- function(provider, x) {
   if (x@additional_properties) {
-    cli::cli_abort("{.arg .additional_properties} not supported for OpenAI.")
+    cli::cli_abort("{.arg .additional_properties} not supported for Ollama.")
   }
 
   names <- names2(x@properties)
-  properties <- lapply(x@properties, function(x) {
-    out <- as_json(provider, x)
-    # Ollama with OpenAPI-compat API doesn't support arrays for type (ollama/ollama#5990)
-    # if (!x@required) {
-    #   out$type <- c(out$type, "null")
-    # }
-    out
-  })
+
+  properties <- lapply(x@properties, as_json, provider = provider)
+
+  # Unlike OpenAI, Ollama uses the `required` field to list required tool args
+  is_required <- vapply(x@properties, function(t) t@required, logical(1))
 
   names(properties) <- names
 
@@ -128,7 +125,7 @@ method(as_json, list(ProviderOllama, TypeObject)) <- function(provider, x) {
     type = "object",
     description = x@description %||% "",
     properties = properties,
-    required = as.list(names),
+    required = as.list(names[is_required]),
     additionalProperties = FALSE
   )
 }
