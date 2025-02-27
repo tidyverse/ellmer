@@ -290,7 +290,8 @@ method(as_json, list(ProviderOpenAI, TypeObject)) <- function(provider, x) {
   names <- names2(x@properties)
   properties <- lapply(x@properties, function(x) {
     out <- as_json(provider, x)
-    if (!x@required) {
+    if (!x@required && provider@api_key != "ollama") {
+      # Ollama doesn't support arrays for type (ollama/ollama#5990)
       out$type <- c(out$type, "null")
     }
     out
