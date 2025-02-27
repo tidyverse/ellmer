@@ -28,7 +28,7 @@
 #'   interactive sessions.
 #' @param verbose If `TRUE`, print the input we send to the LLM, which may be
 #'   useful for debugging unexpectedly poor results.
-#' @param chat A Chat object
+#' @param chat A Chat object to used as template. If NULL (the default) is uses `chat_openai`.
 #'
 #' @return A `register_tool` call that you can copy and paste into your code.
 #'   Returned invisibly if `echo` is `TRUE`.
@@ -39,7 +39,7 @@
 #'   create_tool_def(rnorm)
 #'   create_tool_def(stats::rnorm)
 #'   create_tool_def("rnorm")
-#'   create_tool_def("rnorm", chat = chat_azure("gpt-4o-mini", system_prompt = get_tool_prompt()))
+#'   create_tool_def("rnorm", chat = chat_azure())
 #' }
 #'
 #' @export
@@ -88,12 +88,12 @@ create_tool_def <- function(topic,
     cli::cli_rule(cli::style_bold("Response"))
   }
 
-  if(!inherits(chat,"Chat")){
-    chat <- chat_openai(system_prompt = get_tool_prompt(), model = model, echo = echo)
-  } else {
+  if(inherits(chat,"Chat")){
     chat <- chat$clone()
     chat$set_system_prompt(get_tool_prompt())
     chat$set_turns(list())
+  } else {
+    chat <- chat_openai(system_prompt = get_tool_prompt(), model = model, echo = echo)
   }
 
   chat$chat(payload)
@@ -193,7 +193,7 @@ extract_comments_and_signature <- function(func) {
 
 
 get_tool_prompt <- function(){
-    tool_prompt <- readLines(system.file("tool_prompt.md", package = "ellmer"), warn = FALSE)
-    tool_prompt <- paste(tool_prompt, collapse = "\n")
-    return(tool_prompt)
+  tool_prompt <- readLines(system.file("tool_prompt.md", package = "ellmer"), warn = FALSE)
+  tool_prompt <- paste(tool_prompt, collapse = "\n")
+  return(tool_prompt)
 }

@@ -19,7 +19,7 @@ metadata for. Can also be an expression of the form \code{pkg::fun}.}
 \item{model}{The OpenAI model to use for generating the metadata. Defaults to
 "gpt-4o".}
 
-\item{chat}{A Chat object}
+\item{chat}{A Chat object to used as template. If NULL (the default) is uses \code{chat_openai}.}
 
 \item{echo}{Emit the registration code to the console. Defaults to \code{TRUE} in
 interactive sessions.}
@@ -57,7 +57,7 @@ sure to review the generated code before using it!
   create_tool_def(rnorm)
   create_tool_def(stats::rnorm)
   create_tool_def("rnorm")
-  create_tool_def("rnorm", chat = chat_azure("gpt-4o-mini", system_prompt = get_tool_prompt()))
+  create_tool_def("rnorm", chat = chat_azure())
 }
 
 }
