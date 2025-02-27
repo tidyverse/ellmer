@@ -156,7 +156,7 @@ normalize_turns <- function(turns = NULL,
     system_turn <- Turn(
       "system",
       system_prompt,
-      completed = turns[[1]]@completed
+      completed = if (length(turns) == 0) Sys.time() else turns[[1]]@completed
     )
 
     # No turns; start with just the system prompt
