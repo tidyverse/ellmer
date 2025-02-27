@@ -31,7 +31,7 @@ test_that("can retrieve system prompt with last_turn()", {
     Turn(
       "system",
       "You are from New Zealand",
-      completed = chat2$last_turn("system")@completed
+      completed = NULL
     )
   )
 })
