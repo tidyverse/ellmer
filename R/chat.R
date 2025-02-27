@@ -448,7 +448,6 @@ Chat <- R6::R6Class("Chat",
           cat_line(format(turn), prefix = "< ")
         }
       }
-      turn@completed <- Sys.time()
       self$add_turn(user_turn, turn)
 
       coro::exhausted()
@@ -498,7 +497,6 @@ Chat <- R6::R6Class("Chat",
           yield(text)
         }
       }
-      turn@completed <- Sys.time()
       self$add_turn(user_turn, turn)
       coro::exhausted()
     }),
