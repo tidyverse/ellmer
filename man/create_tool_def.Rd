@@ -6,8 +6,8 @@
 \usage{
 create_tool_def(
   topic,
-  model = "gpt-4o",
   chat = NULL,
+  model = deprecated(),
   echo = interactive(),
   verbose = FALSE
 )
@@ -16,10 +16,11 @@ create_tool_def(
 \item{topic}{A symbol or string literal naming the function to create
 metadata for. Can also be an expression of the form \code{pkg::fun}.}
 
-\item{model}{The OpenAI model to use for generating the metadata. Defaults to
-"gpt-4o".}
+\item{chat}{A \code{Chat} object used to generate the output. If \code{NULL}
+(the default) uses \code{\link[=chat_openai]{chat_openai()}}.}
 
-\item{chat}{A Chat object to used as template. If NULL (the default) is uses \code{chat_openai}.}
+\item{model}{\code{lifecycle::badge("deprecated")} Formally used for definining
+the model used by the chat. Now supply \code{chat} instead.}
 
 \item{echo}{Emit the registration code to the console. Defaults to \code{TRUE} in
 interactive sessions.}
