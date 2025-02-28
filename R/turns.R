@@ -57,7 +57,7 @@ Turn <- new_class(
                          json = list(),
                          tokens = c(0, 0),
                          completed = Sys.time()) {
-    
+
    if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
     }
@@ -151,27 +151,20 @@ normalize_turns <- function(turns = NULL,
   }
 
   if (!is.null(system_prompt)) {
-    system_turn <- Turn(
-      "system",
-      system_prompt,
-      completed = NULL
-    )
- 
+    system_turn <- Turn("system", system_prompt, completed = NULL)
+
     # No turns; start with just the system prompt
     if (length(turns) == 0) {
       turns <- list(system_turn)
     } else if (turns[[1]]@role != "system") {
       turns <- c(list(system_turn), turns)
+    } else if (overwrite || identical(turns[[1]], system_turn)) {
+      # Duplicate system prompt; don't need to do anything
     } else {
-      # Set shared `@completed` so that we can use `identical()` (#337)
-      first_turn <- turns[[1]]
-      first_turn@completed <- NULL
-      if (!overwrite && !identical(first_turn, system_turn)) {
-        cli::cli_abort(
-          "`system_prompt` and `turns[[1]]` can't contain conflicting system prompts.",
-          call = error_call
-        )
-      }
+      cli::cli_abort(
+        "`system_prompt` and `turns[[1]]` can't contain conflicting system prompts.",
+        call = error_call
+      )
     }
   }
 

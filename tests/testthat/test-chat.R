@@ -191,26 +191,26 @@ test_that("can retrieve last_turn for user and assistant", {
 
 test_that("chat messages get timestamped in sequence", {
   chat <- chat_openai()
-  
+
   before_send <- Sys.time()
   chat$chat("What's 1 + 1?")
   after_receive <- Sys.time()
   turns <- chat$get_turns()
-  
+
   expect_true(turns[[1]]@completed >= before_send)
   expect_true(turns[[1]]@completed <= turns[[2]]@completed)
-  
+
   expect_true(turns[[2]]@completed >= turns[[1]]@completed)
   expect_true(turns[[2]]@completed <= after_receive)
 })
 
 test_that("parallel chat messages get timestamped correctly", {
   chat <- chat_openai()
-  
+
   before_send <- Sys.time()
   results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
   after_receive <- Sys.time()
-  
+
   turns1 <- results[[1]]$get_turns()
   turns2 <- results[[2]]$get_turns()
 
@@ -225,14 +225,14 @@ test_that("parallel chat messages get timestamped correctly", {
 
 test_that("async chat messages get timestamped in sequence", {
   chat <- chat_openai()
-  
+
   before_send <- Sys.time()
   promise <- chat$chat_async("What's 1 + 1?")
   result <- sync(promise)
   after_receive <- Sys.time()
-  
+
   turns <- chat$get_turns()
-  
+
   expect_true(turns[[1]]@completed >= before_send)
   expect_true(turns[[1]]@completed <= turns[[2]]@completed)
   expect_true(turns[[2]]@completed <= after_receive)

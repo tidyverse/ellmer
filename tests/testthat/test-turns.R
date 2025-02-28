@@ -1,6 +1,8 @@
+
+
 test_that("system prompt is applied correctly", {
   sys_prompt <- "foo"
-  sys_msg <- Turn("system", sys_prompt)
+  sys_msg <- Turn("system", sys_prompt, completed = NULL)
   user_msg <- Turn("user", "bar")
 
   standardize_completed <- function(turn) {
@@ -12,7 +14,7 @@ test_that("system prompt is applied correctly", {
     object <- lapply(object, standardize_completed)
     expected <- lapply(expected, standardize_completed)
     expect_equal(object, expected, ...)
-  } 
+  }
 
   expect_equal(normalize_turns(), list())
   expect_equal(normalize_turns(list(user_msg)), list(user_msg))
@@ -74,11 +76,11 @@ test_that("turns have completion timestamps", {
   before <- Sys.time()
   turn <- Turn("user", "hello")
   after <- Sys.time()
-  
+
   expect_s3_class(turn@completed, "POSIXct")
   expect_true(turn@completed >= before)
   expect_true(turn@completed <= after)
-  
+
   other_time <- as.POSIXct("2023-01-01")
   turn@completed <- other_time
   expect_equal(turn@completed, other_time)

@@ -102,7 +102,8 @@ Chat <- R6::R6Class("Chat",
       }
       # Add prompt, if new
       if (is.character(value)) {
-        private$.turns <- c(list(Turn("system", value)), private$.turns)
+        system_turn <- Turn("system", value, completed = NULL)
+        private$.turns <- c(list(system_turn), private$.turns)
       }
       invisible(self)
     },
@@ -399,7 +400,6 @@ Chat <- R6::R6Class("Chat",
         cat_line(format(user_turn), prefix = "> ")
       }
 
-      user_turn@completed <- Sys.time()
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "stream" else "value",
@@ -456,7 +456,6 @@ Chat <- R6::R6Class("Chat",
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
     submit_turns_async = async_generator_method(function(self, private, user_turn, stream, echo, type = NULL) {
-      user_turn@completed <- Sys.time()
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "async-stream" else "async-value",
