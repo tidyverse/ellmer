@@ -22,13 +22,14 @@
 #'
 #' @param topic A symbol or string literal naming the function to create
 #'   metadata for. Can also be an expression of the form `pkg::fun`.
-#' @param model The OpenAI model to use for generating the metadata. Defaults to
-#'  "gpt-4o".
+#' @param chat A `Chat` object used to generate the output. If `NULL`
+#'   (the default) uses [chat_openai()].
+#' @param model `lifecycle::badge("deprecated")` Formally used for definining
+#'   the model used by the chat. Now supply `chat` instead.
 #' @param echo Emit the registration code to the console. Defaults to `TRUE` in
 #'   interactive sessions.
 #' @param verbose If `TRUE`, print the input we send to the LLM, which may be
 #'   useful for debugging unexpectedly poor results.
-#' @param chat A Chat object to used as template. If NULL (the default) is uses `chat_openai`.
 #'
 #' @return A `register_tool` call that you can copy and paste into your code.
 #'   Returned invisibly if `echo` is `TRUE`.
@@ -44,11 +45,34 @@
 #'
 #' @export
 create_tool_def <- function(topic,
-                            model = "gpt-4o",
                             chat = NULL,
+                            model = deprecated(),
                             echo = interactive(),
                             verbose = FALSE) {
+
   expr <- enexpr(topic)
+
+  check_exclusive(model, chat, .require = FALSE)
+  if (lifecycle::is_present(model)) {
+    lifecycle::deprecate_warn(
+      when = "1.0.0",
+      what = "create_tool_def(model)",
+      with = "create_tool_def(chat)"
+    )
+    chat <- chat_openai(model = model)
+  }
+  if (is.null(chat)) {
+    chat <- chat_openai()
+  } else if (is_chat(chat)) {
+    chat <- chat$clone()
+  } else {
+    stop_input_type(chat, "a <Chat> object", allow_null = TRUE)
+  }
+  check_echo(echo)
+  check_bool(verbose)
+
+  tool_prompt <- read_file(system.file("tool_prompt.md", package = "ellmer"))
+  chat$set_system_prompt(tool_prompt)
 
   pkg <- NULL
   fun <- format(expr)
@@ -88,17 +112,8 @@ create_tool_def <- function(topic,
     cli::cli_rule(cli::style_bold("Response"))
   }
 
-  if(inherits(chat,"Chat")){
-    chat <- chat$clone()
-    chat$set_system_prompt(get_tool_prompt())
-    chat$set_turns(list())
-  } else {
-    chat <- chat_openai(system_prompt = get_tool_prompt(), model = model, echo = echo)
-  }
-
-  chat$chat(payload)
+  chat$chat(payload, echo = echo)
 }
-
 
 help_to_text <- function(help_files) {
   file_contents <- NULL
@@ -189,11 +204,4 @@ extract_comments_and_signature <- function(func) {
   }
 
   paste0(comments, "\n", sig)
-}
-
-
-get_tool_prompt <- function(){
-  tool_prompt <- readLines(system.file("tool_prompt.md", package = "ellmer"), warn = FALSE)
-  tool_prompt <- paste(tool_prompt, collapse = "\n")
-  return(tool_prompt)
 }

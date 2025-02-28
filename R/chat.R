@@ -466,6 +466,10 @@ Chat <- R6::R6Class("Chat",
   )
 )
 
+is_chat <- function(x) {
+  inherits(x, "Chat")
+}
+
 #' @export
 print.Chat <- function(x, ...) {
   turns <- x$get_turns(include_system_prompt = TRUE)

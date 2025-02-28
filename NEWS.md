@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `create_tool_def()` can now use any Chat instance (#118, @pedrobtz).
+
 * `chat_gemini()` can now authenticate with Google default application
   credentials (including service accounts, etc). This requires the `gargle`
   package (#317, @atheriel).
