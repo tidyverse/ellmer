@@ -48,6 +48,7 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
+See \code{\link[=gemini_upload]{gemini_upload()}} to upload files (PDFs, images, video, audio, etc.)
 \subsection{Authentication}{
 
 To authenticate, we recommend saving your

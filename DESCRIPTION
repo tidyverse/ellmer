@@ -20,7 +20,7 @@ Imports:
     cli,
     coro (>= 1.1.0),
     glue,
-    httr2 (>= 1.1.0),
+    httr2 (>= 1.1.0.9000),
     jsonlite,
     later (>= 1.4.0),
     lifecycle,
@@ -59,6 +59,7 @@ Collate:
     'content.R'
     'provider.R'
     'as-json.R'
+    'chat-parallel.R'
     'utils-coro.R'
     'chat.R'
     'content-image.R'
@@ -79,6 +80,7 @@ Collate:
     'provider-cortex.R'
     'provider-databricks.R'
     'provider-deepseek.R'
+    'provider-gemini-upload.R'
     'provider-gemini.R'
     'provider-github.R'
     'provider-groq.R'
@@ -94,3 +96,5 @@ Collate:
     'utils-merge.R'
     'utils.R'
     'zzz.R'
+Remotes: 
+    r-lib/httr2
