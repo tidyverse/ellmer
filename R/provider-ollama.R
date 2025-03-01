@@ -117,11 +117,11 @@ method(as_json, list(ProviderOllama, TypeObject)) <- function(provider, x) {
   # Unlike OpenAI, Ollama uses the `required` field to list required tool args
   required <- map_lgl(x@properties, function(prop) prop@required)
 
-  list(
+  compact(list(
     type = "object",
     description = x@description %||% "",
     properties = as_json(provider, x@properties),
     required = as.list(names2(x@properties)[required]),
     additionalProperties = FALSE
-  )
+  ))
 }

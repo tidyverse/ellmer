@@ -28,6 +28,10 @@ test_that("can chat with tool request", {
     )
   )
 
+  # Tool with no properties
+  current_time <- function() Sys.time()
+  chat$register_tool(tool(current_time, "Current system time"))
+
   # Ollama tool calling is very inconsistent, esp. with small models, so we
   # just test that the model still works when a tool call is registered.
   expect_no_error(
