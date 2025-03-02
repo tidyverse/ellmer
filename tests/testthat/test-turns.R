@@ -1,5 +1,3 @@
-
-
 test_that("system prompt is applied correctly", {
   sys_prompt <- "foo"
   sys_msg <- Turn("system", sys_prompt, completed = NULL)
