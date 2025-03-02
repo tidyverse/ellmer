@@ -3,6 +3,8 @@
 * `Turn` objects now include a POSIXct timestamp in the `completed` slot that 
   records when the turn was completed (#337, @simonpcouch).
 
+* `create_tool_def()` can now use any Chat instance (#118, @pedrobtz).
+
 * New `$chat_parallel()` and `$extract_data_parallel()` make it easier to
   perform multiple actions in parallel (#143). For Claude, note that the number
   of active connections is limited primarily by the output tokens per limit
@@ -20,6 +22,8 @@
 
 * `chat_gemini()` now detects viewer-based credentials when running on Posit
   Connect (#320, @atheriel).
+
+* `chat_ollama()` now works with `tool()` definitions with optional arguments or empty properties (#342, #348, @gadenbuie).
 
 # ellmer 0.1.1
 

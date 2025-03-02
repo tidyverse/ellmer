@@ -94,9 +94,9 @@ chat$register_tool(tool(
 ))
 ```
 
-This is a fair amount of code to write, even for such a simple function as `get_current_time`. Fortunately, you don't have to write this by hand! I generated the above `register_tool` call by calling `create_tool_metadata(get_current_time)`, which printed that code at the console. `create_tool_metadata()` works by passing the function's signature and documentation to GPT-4o, and asking it to generate the `register_tool` call for you.
+This is a fair amount of code to write, even for such a simple function as `get_current_time`. Fortunately, you don't have to write this by hand! I generated the above `register_tool` call by calling `create_tool_def(get_current_time)`, which printed that code at the console. `create_tool_def()` works by passing the function's signature and documentation to GPT-4o, and asking it to generate the `register_tool` call for you.
 
-Note that `create_tool_metadata()` may not create perfect results, so you must review the generated code before using it. But it is a huge time-saver nonetheless, and removes the tedious boilerplate generation you'd have to do otherwise.
+Note that `create_tool_def()` may not create perfect results, so you must review the generated code before using it. But it is a huge time-saver nonetheless, and removes the tedious boilerplate generation you'd have to do otherwise.
 
 ### Using the tool
 
