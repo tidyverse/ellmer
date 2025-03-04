@@ -84,3 +84,14 @@ ellmer_req_credentials <- function(req, credentials_fun) {
   credentials <- credentials_fun()
   req_headers(req, !!!credentials, .redact = names(credentials))
 }
+
+ellmer_req_user_agent <- function(req, override = "") {
+  ua <- if (identical(override, "")) ellmer_user_agent() else override
+  req_user_agent(req, ua)
+}
+ellmer_user_agent <- function() {
+  paste0("r-ellmer/", utils::packageVersion("ellmer"))
+}
+transform_user_agent <- function(x) {
+  gsub(ellmer_user_agent(), "<ellmer_user_agent>", x, fixed = TRUE)
+}

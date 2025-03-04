@@ -26,7 +26,8 @@
       * api-key: <REDACTED>
       Body: json encoded data
       Options:
-      * timeout: 60
+      * timeout  : 60
+      * useragent: "<ellmer_user_agent>"
       Policies:
       * retry_max_tries        : 2
       * retry_on_failure       : FALSE
@@ -47,7 +48,8 @@
       * Authorization: <REDACTED>
       Body: json encoded data
       Options:
-      * timeout: 60
+      * timeout  : 60
+      * useragent: "<ellmer_user_agent>"
       Policies:
       * retry_max_tries        : 2
       * retry_on_failure       : FALSE
@@ -69,7 +71,8 @@
       * Authorization: <REDACTED>
       Body: json encoded data
       Options:
-      * timeout: 60
+      * timeout  : 60
+      * useragent: "<ellmer_user_agent>"
       Policies:
       * retry_max_tries        : 2
       * retry_on_failure       : FALSE

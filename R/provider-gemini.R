@@ -77,6 +77,7 @@ method(chat_request, ProviderGemini) <- function(provider,
   req <- ellmer_req_credentials(req, provider@credentials)
   req <- req_retry(req, max_tries = 2)
   req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_user_agent(req)
   req <- req_error(req, body = function(resp) {
     json <- resp_body_json(resp, check_type = FALSE)
     json$error$message

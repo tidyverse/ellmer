@@ -107,7 +107,10 @@ method(chat_request, ProviderSnowflake) <- function(provider,
   req <- ellmer_req_credentials(req, provider@credentials)
   req <- req_retry(req, max_tries = 2)
   req <- ellmer_req_timeout(req, stream)
-  req <- req_user_agent(req, snowflake_user_agent())
+  # Snowflake uses the User Agent header to identify "parter applications", so
+  # identify requests as coming from "r_ellmer" (unless an explicit partner
+  # application is set via the ambient SF_PARTNER environment variable).
+  req <- ellmer_req_user_agent(req, Sys.getenv("SF_PARTNER"))
 
   # Snowflake-specific error response handling:
   req <- req_error(req, body = function(resp) resp_body_json(resp)$message)
@@ -177,17 +180,6 @@ snowflake_account <- function() {
 
 snowflake_url <- function(account) {
   paste0("https://", account, ".snowflakecomputing.com")
-}
-
-# Snowflake uses the User Agent header to identify "parter applications", so
-# identify requests as coming from "r_ellmer" (unless an explicit partner
-# application is set via the ambient SF_PARTNER environment variable).
-snowflake_user_agent <- function() {
-  user_agent <- paste0("r_ellmer/", utils::packageVersion("ellmer"))
-  if (nchar(Sys.getenv("SF_PARTNER")) != 0) {
-    user_agent <- Sys.getenv("SF_PARTNER")
-  }
-  user_agent
 }
 
 default_snowflake_credentials <- function(account = snowflake_account()) {
