@@ -1,6 +1,9 @@
 # ellmer (development version)
 
-* `Turn` objects now include a POSIXct timestamp in the `completed` slot that 
+* `provider_claude()` now defaults to Sonnet 3.7 and displays the default
+  model (336).
+
+* `Turn` objects now include a POSIXct timestamp in the `completed` slot that
   records when the turn was completed (#337, @simonpcouch).
 
 * `create_tool_def()` can now use any Chat instance (#118, @pedrobtz).
