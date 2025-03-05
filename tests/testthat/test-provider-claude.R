@@ -52,3 +52,13 @@ test_that("can use pdfs", {
 
   test_pdf_local(chat_fun)
 })
+
+# Custom features --------------------------------------------------------
+
+test_that("can set beta headers", {
+  chat <- chat_claude_test(beta_headers = c("a", "b"))
+  provider <- chat$.__enclos_env__$private$provider
+
+  req <- chat_request(provider)
+  expect_equal(req$headers$`anthropic-beta`, c("a", "b"))
+})
