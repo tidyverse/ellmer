@@ -42,7 +42,6 @@ chat_claude <- function(system_prompt = NULL,
   turns <- normalize_turns(turns, system_prompt)
   echo <- check_echo(echo)
 
-
   model <- set_default(model, "claude-3-7-sonnet-latest")
 
   provider <- ProviderClaude(
