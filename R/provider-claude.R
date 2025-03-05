@@ -42,7 +42,7 @@ chat_claude <- function(system_prompt = NULL,
   turns <- normalize_turns(turns, system_prompt)
   echo <- check_echo(echo)
 
-  model <- model %||% "claude-3-5-sonnet-latest"
+  model <- set_default(model, "claude-3-7-sonnet-latest")
 
   provider <- ProviderClaude(
     model = model,
@@ -53,6 +53,10 @@ chat_claude <- function(system_prompt = NULL,
   )
 
   Chat$new(provider = provider, turns = turns, echo = echo)
+}
+
+chat_claude_test <- function(..., model = "claude-3-5-sonnet-latest") {
+  chat_claude(model = model, ...)
 }
 
 ProviderClaude <- new_class(
@@ -254,7 +258,13 @@ method(as_json, list(ProviderClaude, ContentPDF)) <- function(provider, x) {
 }
 
 method(as_json, list(ProviderClaude, ContentImageRemote)) <- function(provider, x) {
-  cli::cli_abort("Claude doesn't support remote images")
+  list(
+    type = "image",
+    source = list(
+      type = "url",
+      url = x@url
+    )
+  )
 }
 
 method(as_json, list(ProviderClaude, ContentImageInline)) <- function(provider, x) {
