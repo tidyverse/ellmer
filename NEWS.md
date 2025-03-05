@@ -5,8 +5,12 @@
 
 * `provider_claude()` now supports `content_image_url()` (#347).
 
-* `provider_claude()` now defaults to Sonnet 3.7 and displays the default
-  model (336).
+* `chat_claude()` gains `beta_header` argument to opt-in to beta features (#339).
+
+* `chat_claude()` now supports `content_image_url()` (#347).
+
+* `chat_claude()` now defaults to Sonnet 3.7 and displays the default
+  model (#336).
 
 * `Turn` objects now include a POSIXct timestamp in the `completed` slot that
   records when the turn was completed (#337, @simonpcouch).
