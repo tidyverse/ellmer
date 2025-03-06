@@ -30,68 +30,37 @@
 # Cortex API requests are generated correctly
 
     Code
-      list(url = req$url, headers = req$headers, body = req$body$data)
+      req$url
     Output
-      $url
       [1] "https://testorg-test_account.snowflakecomputing.com/api/v2/cortex/analyst/message"
-      
-      $headers
-      <httr2_headers>
-      Authorization: <REDACTED>
-      X-Snowflake-Authorization-Token-Type: <REDACTED>
-      
-      $body
-      $body$messages
-      $body$messages[[1]]
-      $body$messages[[1]]$role
-      [1] "user"
-      
-      $body$messages[[1]]$content
-      $body$messages[[1]]$content[[1]]
-      $body$messages[[1]]$content[[1]]$type
-      [1] "text"
-      
-      $body$messages[[1]]$content[[1]]$text
-      [1] "Tell me about my data."
-      
-      
-      
-      
-      
-      $body$stream
-      [1] FALSE
-      
-      $body$semantic_model_file
-      [1] "@my_db.my_schema.my_stage/model.yaml"
-      
-      
 
 ---
 
     Code
-      req$body$data
+      req$headers
     Output
-      $messages
-      $messages[[1]]
-      $messages[[1]]$role
-      [1] "user"
-      
-      $messages[[1]]$content
-      $messages[[1]]$content[[1]]
-      $messages[[1]]$content[[1]]$type
-      [1] "text"
-      
-      $messages[[1]]$content[[1]]$text
-      [1] "Tell me about my data."
-      
-      
-      
-      
-      
-      $stream
-      [1] FALSE
-      
-      $semantic_model_file
-      [1] "@my_db.my_schema.my_stage/model.yaml"
-      
+      <httr2_headers>
+      Authorization: <REDACTED>
+      X-Snowflake-Authorization-Token-Type: <REDACTED>
+
+---
+
+    Code
+      print_json(req$body$data)
+    Output
+      {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Tell me about my data."
+              }
+            ]
+          }
+        ],
+        "stream": false,
+        "semantic_model_file": "@my_db.my_schema.my_stage/model.yaml"
+      }
 

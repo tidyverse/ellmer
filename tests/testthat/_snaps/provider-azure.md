@@ -17,27 +17,27 @@
 # Azure request headers are generated correctly
 
     Code
-      req$headers
+      str(req$headers)
     Output
-      <httr2_headers>
-      api-key: <REDACTED>
+       <httr2_headers>
+       $ api-key: chr "key"
 
 ---
 
     Code
-      req$headers
+      str(req$headers)
     Output
-      <httr2_headers>
-      Authorization: <REDACTED>
+       <httr2_headers>
+       $ Authorization: chr "Bearer token"
 
 ---
 
     Code
-      req$headers
+      str(req$headers)
     Output
-      <httr2_headers>
-      api-key: <REDACTED>
-      Authorization: <REDACTED>
+       <httr2_headers>
+       $ api-key      : chr "key"
+       $ Authorization: chr "Bearer token"
 
 # service principal authentication requests look correct
 
