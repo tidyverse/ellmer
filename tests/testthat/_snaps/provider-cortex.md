@@ -36,14 +36,9 @@
       [1] "https://testorg-test_account.snowflakecomputing.com/api/v2/cortex/analyst/message"
       
       $headers
-      $headers$Authorization
-      [1] "Bearer obfuscated"
-      
-      $headers$`X-Snowflake-Authorization-Token-Type`
-      [1] "OAUTH"
-      
-      attr(,"redact")
-      [1] "Authorization"
+      <httr2_headers>
+      Authorization: <REDACTED>
+      X-Snowflake-Authorization-Token-Type: <REDACTED>
       
       $body
       $body$messages

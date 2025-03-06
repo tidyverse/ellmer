@@ -107,6 +107,7 @@ method(chat_request, ProviderOpenAI) <- function(provider,
   req <- req_auth_bearer_token(req, provider@api_key)
   req <- req_retry(req, max_tries = 2)
   req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_user_agent(req)
 
   req <- req_error(req, body = function(resp) {
     if (resp_content_type(resp) == "application/json") {

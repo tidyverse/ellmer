@@ -149,9 +149,10 @@ method(chat_request, ProviderAzure) <- function(provider,
   if (nchar(provider@api_key)) {
     req <- req_headers_redacted(req, `api-key` = provider@api_key)
   }
-  req <- req_headers(req, !!!provider@credentials(), .redact = "Authorization")
+  req <- ellmer_req_credentials(req, provider@credentials)
   req <- req_retry(req, max_tries = 2)
   req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_user_agent(req)
   req <- req_error(req, body = function(resp) {
     error <- resp_body_json(resp)$error
     msg <- paste0(error$code, ": ", error$message)

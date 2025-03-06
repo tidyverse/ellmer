@@ -22,8 +22,10 @@
 #'
 #' @param topic A symbol or string literal naming the function to create
 #'   metadata for. Can also be an expression of the form `pkg::fun`.
-#' @param model The OpenAI model to use for generating the metadata. Defaults to
-#'  "gpt-4o".
+#' @param chat A `Chat` object used to generate the output. If `NULL`
+#'   (the default) uses [chat_openai()].
+#' @param model `lifecycle::badge("deprecated")` Formally used for definining
+#'   the model used by the chat. Now supply `chat` instead.
 #' @param echo Emit the registration code to the console. Defaults to `TRUE` in
 #'   interactive sessions.
 #' @param verbose If `TRUE`, print the input we send to the LLM, which may be
@@ -38,14 +40,39 @@
 #'   create_tool_def(rnorm)
 #'   create_tool_def(stats::rnorm)
 #'   create_tool_def("rnorm")
+#'   create_tool_def("rnorm", chat = chat_azure())
 #' }
 #'
 #' @export
 create_tool_def <- function(topic,
-                            model = "gpt-4o",
+                            chat = NULL,
+                            model = deprecated(),
                             echo = interactive(),
                             verbose = FALSE) {
+
   expr <- enexpr(topic)
+
+  check_exclusive(model, chat, .require = FALSE)
+  if (lifecycle::is_present(model)) {
+    lifecycle::deprecate_warn(
+      when = "1.0.0",
+      what = "create_tool_def(model)",
+      with = "create_tool_def(chat)"
+    )
+    chat <- chat_openai(model = model)
+  }
+  if (is.null(chat)) {
+    chat <- chat_openai()
+  } else if (is_chat(chat)) {
+    chat <- chat$clone()
+  } else {
+    stop_input_type(chat, "a <Chat> object", allow_null = TRUE)
+  }
+  check_echo(echo)
+  check_bool(verbose)
+
+  tool_prompt <- read_file(system.file("tool_prompt.md", package = "ellmer"))
+  chat$set_system_prompt(tool_prompt)
 
   pkg <- NULL
   fun <- format(expr)
@@ -74,9 +101,6 @@ create_tool_def <- function(topic,
 
   topic_str <- format(expr)
 
-  tool_prompt <- readLines(system.file("tool_prompt.md", package = "ellmer"), warn = FALSE)
-  tool_prompt <- paste(tool_prompt, collapse = "\n")
-
   payload <- paste0(
     "Function name: ", topic_str,
     "\n\nFunction documentation:\n\n", help_text
@@ -88,10 +112,8 @@ create_tool_def <- function(topic,
     cli::cli_rule(cli::style_bold("Response"))
   }
 
-  chat <- chat_openai(system_prompt = tool_prompt, model = model, echo = echo)
-  chat$chat(payload)
+  chat$chat(payload, echo = echo)
 }
-
 
 help_to_text <- function(help_files) {
   file_contents <- NULL

@@ -26,6 +26,8 @@ NULL
 #'   not supply this directly, but instead set the `ANTHROPIC_API_KEY` environment
 #'   variable.
 #' @param max_tokens Maximum number of tokens to generate before stopping.
+#' @param beta_headers Optionally, a character vector of beta headers to opt-in
+#'   claude features that are still in beta.
 #' @family chatbots
 #' @export
 #' @examplesIf has_credentials("claude")
@@ -37,22 +39,28 @@ chat_claude <- function(system_prompt = NULL,
                             model = NULL,
                             api_args = list(),
                             base_url = "https://api.anthropic.com/v1",
+                            beta_headers = character(),
                             api_key = anthropic_key(),
                             echo = NULL) {
   turns <- normalize_turns(turns, system_prompt)
   echo <- check_echo(echo)
 
-  model <- model %||% "claude-3-5-sonnet-latest"
+  model <- set_default(model, "claude-3-7-sonnet-latest")
 
   provider <- ProviderClaude(
     model = model,
     max_tokens = max_tokens,
     extra_args = api_args,
     base_url = base_url,
+    beta_headers = beta_headers,
     api_key = api_key
   )
 
   Chat$new(provider = provider, turns = turns, echo = echo)
+}
+
+chat_claude_test <- function(..., model = "claude-3-5-sonnet-latest") {
+  chat_claude(model = model, ...)
 }
 
 ProviderClaude <- new_class(
@@ -61,7 +69,8 @@ ProviderClaude <- new_class(
   properties = list(
     api_key = prop_string(),
     model = prop_string(),
-    max_tokens = prop_number_whole(min = 1)
+    max_tokens = prop_number_whole(min = 1),
+    beta_headers = class_character
   )
 )
 
@@ -93,6 +102,10 @@ method(chat_request, ProviderClaude) <- function(provider,
     max_tries = 2
   )
   req <- ellmer_req_timeout(req, stream)
+
+  if (length(provider@beta_headers) > 0) {
+    req <- req_headers(req, `anthropic-beta` = provider@beta_headers)
+  }
 
   # <https://docs.anthropic.com/en/api/errors>
   req <- req_error(req, body = function(resp) {
@@ -254,7 +267,13 @@ method(as_json, list(ProviderClaude, ContentPDF)) <- function(provider, x) {
 }
 
 method(as_json, list(ProviderClaude, ContentImageRemote)) <- function(provider, x) {
-  cli::cli_abort("Claude doesn't support remote images")
+  list(
+    type = "image",
+    source = list(
+      type = "url",
+      url = x@url
+    )
+  )
 }
 
 method(as_json, list(ProviderClaude, ContentImageInline)) <- function(provider, x) {

@@ -26,7 +26,14 @@ test_that("can retrieve system prompt with last_turn()", {
   expect_equal(chat1$last_turn("system"), NULL)
 
   chat2 <- chat_openai(system_prompt = "You are from New Zealand")
-  expect_equal(chat2$last_turn("system"), Turn("system", "You are from New Zealand"))
+  expect_equal(
+    chat2$last_turn("system"),
+    Turn(
+      "system",
+      "You are from New Zealand",
+      completed = NULL
+    )
+  )
 })
 
 test_that("can get and set turns", {
@@ -101,12 +108,46 @@ test_that("can perform a simple async batch chat", {
   expect_match(chat$last_turn()@contents[[1]]@text, rainbow_re, ignore.case = TRUE)
 })
 
+test_that("can chat in parallel", {
+  chat <- chat_openai("Just give me answers, no punctuation")
+  results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
+
+  expect_type(results, "list")
+  expect_length(results, 2)
+
+  expect_s3_class(results[[1]], "Chat")
+  expect_s3_class(results[[2]], "Chat")
+
+  expect_equal(results[[1]]$last_turn()@contents[[1]]@text, "2")
+  expect_equal(results[[2]]$last_turn()@contents[[1]]@text, "4")
+})
+
 test_that("can extract structured data", {
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai()
   data <- chat$extract_data("John, age 15, won first prize", type = person)
   expect_equal(data, list(name = "John", age = 15))
+})
+
+test_that("can extract data in parallel", {
+  person <- type_object(name = type_string(), age = type_integer())
+
+  chat <- chat_openai()
+  data <- chat$extract_data_parallel(
+    list(
+      "John, age 15, won first prize",
+      "Jane, age 16, won second prize"
+    ),
+    type = person
+  )
+  expect_equal(
+    data,
+    list(
+      list(name = "John", age = 15),
+      list(name = "Jane", age = 16)
+    )
+  )
 })
 
 test_that("can extract structured data (async)", {
@@ -146,4 +187,53 @@ test_that("can retrieve last_turn for user and assistant", {
   chat$chat("Hi")
   expect_equal(chat$last_turn("user")@role, "user")
   expect_equal(chat$last_turn("assistant")@role, "assistant")
+})
+
+test_that("chat messages get timestamped in sequence", {
+  chat <- chat_openai()
+
+  before_send <- Sys.time()
+  chat$chat("What's 1 + 1?")
+  after_receive <- Sys.time()
+  turns <- chat$get_turns()
+
+  expect_true(turns[[1]]@completed >= before_send)
+  expect_true(turns[[1]]@completed <= turns[[2]]@completed)
+
+  expect_true(turns[[2]]@completed >= turns[[1]]@completed)
+  expect_true(turns[[2]]@completed <= after_receive)
+})
+
+test_that("parallel chat messages get timestamped correctly", {
+  chat <- chat_openai()
+
+  before_send <- Sys.time()
+  results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
+  after_receive <- Sys.time()
+
+  turns1 <- results[[1]]$get_turns()
+  turns2 <- results[[2]]$get_turns()
+
+  expect_true(turns1[[1]]@completed >= before_send)
+  expect_true(turns1[[1]]@completed <= turns1[[2]]@completed)
+  expect_true(turns1[[2]]@completed <= after_receive)
+
+  expect_true(turns2[[1]]@completed >= before_send)
+  expect_true(turns2[[1]]@completed <= turns2[[2]]@completed)
+  expect_true(turns2[[2]]@completed <= after_receive)
+})
+
+test_that("async chat messages get timestamped in sequence", {
+  chat <- chat_openai()
+
+  before_send <- Sys.time()
+  promise <- chat$chat_async("What's 1 + 1?")
+  result <- sync(promise)
+  after_receive <- Sys.time()
+
+  turns <- chat$get_turns()
+
+  expect_true(turns[[1]]@completed >= before_send)
+  expect_true(turns[[1]]@completed <= turns[[2]]@completed)
+  expect_true(turns[[2]]@completed <= after_receive)
 })

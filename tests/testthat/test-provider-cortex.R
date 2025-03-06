@@ -124,16 +124,12 @@ test_that("Cortex API requests are generated correctly", {
   req <- chat_request(p, FALSE, list(turn))
   expect_snapshot(
     list(url = req$url, headers = req$headers, body = req$body$data),
-    transform = function(x) gsub(snowflake_user_agent(), "<ellmer_user_agent>", x, fixed = TRUE)
+    transform = transform_user_agent
   )
   expect_snapshot(req$body$data)
 })
 
 test_that("a simple Cortex chatbot works", {
-  skip_if(
-    Sys.getenv("SNOWFLAKE_ACCOUNT") == "",
-    "SNOWFLAKE_ACCOUNT is not configured"
-  )
   chat <- chat_cortex_analyst(
     model_spec = "name: empty
 description: An empty semantic model specification.

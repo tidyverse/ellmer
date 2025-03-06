@@ -78,3 +78,20 @@ on_load(chat_perform_async_stream <- coro::async_generator(function(provider, re
 ellmer_req_timeout <- function(req, stream) {
   req_options(req, timeout = getOption("ellmer_timeout_s", 60))
 }
+
+ellmer_req_credentials <- function(req, credentials_fun) {
+  # TODO: simplify once req_headers_redacted() supports !!!
+  credentials <- credentials_fun()
+  req_headers(req, !!!credentials, .redact = names(credentials))
+}
+
+ellmer_req_user_agent <- function(req, override = "") {
+  ua <- if (identical(override, "")) ellmer_user_agent() else override
+  req_user_agent(req, ua)
+}
+ellmer_user_agent <- function() {
+  paste0("r-ellmer/", utils::packageVersion("ellmer"))
+}
+transform_user_agent <- function(x) {
+  gsub(ellmer_user_agent(), "<ellmer_user_agent>", x, fixed = TRUE)
+}
