@@ -108,14 +108,39 @@ Chat <- R6::R6Class("Chat",
       invisible(self)
     },
 
-    #' @description List the number of tokens consumed by each assistant turn.
-    #'   Currently tokens are recorded for assistant turns only; so user
-    #'   turns will have zeros.
-    tokens = function() {
-      tokens <- vapply(private$.turns, function(turn) turn@tokens, double(2))
-      tokens <- t(tokens)
-      colnames(tokens) <- c("input", "output")
-      tokens
+    #' @description A data frame with a `tokens` column that proides the 
+    #'   number of input tokens used by user turns and the number of 
+    #'   output tokens used by assistant turns.
+    #' @param include_system_prompt Whether to include the system prompt in 
+    #'   the turns (if any exists).
+    tokens = function(include_system_prompt = FALSE) {
+      turns <- self$get_turns(include_system_prompt = FALSE)
+      assistant_turns <- keep(turns, function(x) x@role == "assistant")
+      if (length(assistant_turns) == 0) {
+        return(data.frame(role = character(), tokens = double()))
+      }
+
+      n <- length(assistant_turns)
+      tokens <- t(vapply(assistant_turns, function(turn) turn@tokens, double(2)))
+      if (n > 1) {
+        # Compute just the new tokens
+        tokens[-1, 1] <- tokens[seq(2, n), 1] - 
+          (tokens[seq(1, n - 1), 1] + tokens[seq(1, n - 1), 2])
+      }
+      # collapse into a single vector
+      tokens_v <- c(t(tokens))
+      
+      tokens_df <- data.frame(
+        role = rep(c("user", "assistant"), times = n),
+        tokens = tokens_v
+      )
+      
+      if (include_system_prompt && private$has_system_prompt()) {
+        # How do we compute this?
+        tokens_df <- rbind(data.frame(role = "system", tokens = 0), tokens_df)
+      }
+
+      tokens_df
     },
 
     #' @description The last turn returned by the assistant.
@@ -533,16 +558,29 @@ is_chat <- function(x) {
 #' @export
 print.Chat <- function(x, ...) {
   turns <- x$get_turns(include_system_prompt = TRUE)
-  tokens <- colSums(x$tokens())
-  cat(paste0("<Chat turns=", length(turns), " tokens=", tokens[1], "/", tokens[2], ">\n"))
-  for (turn in turns) {
+  
+  tokens <- x$tokens(include_system_prompt = TRUE)
+  tokens_user <- sum(tokens$tokens[tokens$role == "user"])
+  tokens_assistant <- sum(tokens$tokens[tokens$role == "assistant"])
+
+  cat(paste0(
+    "<Chat", 
+    " turns=", length(turns), 
+    " tokens=", tokens_user, "/", tokens_assistant, 
+    ">\n"
+  ))
+  
+  for (i in seq_along(turns)) {
+    turn <- turns[[i]]
+    
     color <- switch(turn@role,
       user = cli::col_blue,
       assistant = cli::col_green,
       system = cli::col_br_white,
       identity
     )
-    cli::cat_rule(cli::format_inline("{color(turn@role)}"))
+
+    cli::cat_rule(cli::format_inline("{color(turn@role)} [{tokens$tokens[[i]]}]"))
     for (content in turn@contents) {
       cat_line(format(content))
     }

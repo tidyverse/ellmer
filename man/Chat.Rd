@@ -176,13 +176,21 @@ Update the system prompt
 \if{html}{\out{<a id="method-Chat-tokens"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-tokens}{}}}
 \subsection{Method \code{tokens()}}{
-List the number of tokens consumed by each assistant turn.
-Currently tokens are recorded for assistant turns only; so user
-turns will have zeros.
+A data frame with a \code{tokens} column that proides the
+number of input tokens used by user turns and the number of
+output tokens used by assistant turns.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$tokens()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$tokens(include_system_prompt = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{include_system_prompt}}{Whether to include the system prompt in
+the turns (if any exists).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Chat-last_turn"></a>}}
