@@ -17,66 +17,27 @@
 # Azure request headers are generated correctly
 
     Code
-      req
-    Message
-      <httr2_request>
-      POST
-      https://ai-hwickhamai260967855527.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-06-01
-      Headers:
-      * api-key: "<REDACTED>"
-      Body: json encoded data
-      Options:
-      * timeout: 60
-      Policies:
-      * retry_max_tries: 2
-      * retry_on_failure: FALSE
-      * retry_failure_threshold: Inf
-      * retry_failure_timeout: 30
-      * retry_realm: "ai-hwickhamai260967855527.openai.azure.com"
-      * error_body: a function
+      str(req$headers)
+    Output
+       <httr2_headers>
+       $ api-key: chr "key"
 
 ---
 
     Code
-      req
-    Message
-      <httr2_request>
-      POST
-      https://ai-hwickhamai260967855527.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-06-01
-      Headers:
-      * Authorization: "<REDACTED>"
-      Body: json encoded data
-      Options:
-      * timeout: 60
-      Policies:
-      * retry_max_tries: 2
-      * retry_on_failure: FALSE
-      * retry_failure_threshold: Inf
-      * retry_failure_timeout: 30
-      * retry_realm: "ai-hwickhamai260967855527.openai.azure.com"
-      * error_body: a function
+      str(req$headers)
+    Output
+       <httr2_headers>
+       $ Authorization: chr "Bearer token"
 
 ---
 
     Code
-      req
-    Message
-      <httr2_request>
-      POST
-      https://ai-hwickhamai260967855527.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-06-01
-      Headers:
-      * api-key: "<REDACTED>"
-      * Authorization: "<REDACTED>"
-      Body: json encoded data
-      Options:
-      * timeout: 60
-      Policies:
-      * retry_max_tries: 2
-      * retry_on_failure: FALSE
-      * retry_failure_threshold: Inf
-      * retry_failure_timeout: 30
-      * retry_realm: "ai-hwickhamai260967855527.openai.azure.com"
-      * error_body: a function
+      str(req$headers)
+    Output
+       <httr2_headers>
+       $ api-key      : chr "key"
+       $ Authorization: chr "Bearer token"
 
 # service principal authentication requests look correct
 
@@ -87,11 +48,8 @@
       [1] "https://login.microsoftonline.com/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/oauth2/v2.0/token"
       
       $headers
-      $headers$Accept
-      [1] "application/json"
-      
-      attr(,"redact")
-      character(0)
+      <httr2_headers>
+      Accept: application/json
       
       $body
       $body$grant_type

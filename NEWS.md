@@ -5,6 +5,50 @@
   out on complex queries early otherwise. You can increase this with, e.g.,
   `option(ellmer_connecttimeout_s = 120)` (#318, @CorradoLanera).
 
+* `Chat$tokens()` now returns a data frame of tokens, correctly aligned to the
+  individual turn. The print method now uses this to show how many input/output
+  tokens each turn used (#354).
+
+* All requests now set a custom User-Agent that identifies that the requests
+  comes from ellmer (#341).
+
+* `provider_claude()` now supports `content_image_url()` (#347).
+
+* `chat_claude()` gains `beta_header` argument to opt-in to beta features (#339).
+
+* `chat_claude()` now supports `content_image_url()` (#347).
+
+* `chat_claude()` now defaults to Sonnet 3.7 and displays the default
+  model (#336).
+
+* `Turn` objects now include a POSIXct timestamp in the `completed` slot that
+  records when the turn was completed (#337, @simonpcouch).
+
+* `create_tool_def()` can now use any Chat instance (#118, @pedrobtz).
+
+* New experimental `$chat_parallel()` and `$extract_data_parallel()` make it
+  easier to perform multiple actions in parallel (#143). This is experimental
+  because I'm not 100% sure that the shape of the user interface is correct,
+  particularly as it pertains to handling errors.
+
+  For Claude, note that the number of active connections is limited primarily
+  by the output tokens per limit (OTPM) which is estimated from the `max_tokens` parameter, which defaults to 4096. That means if you're limited to 16,000
+  OPTM, you should use at most 16,000 / 4096 = ~4 active connections (or
+  decrease `max_tokens`).
+
+  Parallel calls with OpenAI and Gemini are much simpler in my experience.
+
+* `gemini_upload()` lets you upload files to Gemini (#310).
+
+* `chat_gemini()` can now authenticate with Google default application
+  credentials (including service accounts, etc). This requires the `gargle`
+  package (#317, @atheriel).
+
+* `chat_gemini()` now detects viewer-based credentials when running on Posit
+  Connect (#320, @atheriel).
+
+* `chat_ollama()` now works with `tool()` definitions with optional arguments or empty properties (#342, #348, @gadenbuie).
+
 # ellmer 0.1.1
 
 ## Lifecycle changes

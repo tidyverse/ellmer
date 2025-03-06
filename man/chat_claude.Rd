@@ -11,6 +11,7 @@ chat_claude(
   model = NULL,
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
+  beta_headers = character(),
   api_key = anthropic_key(),
   echo = NULL
 )
@@ -32,6 +33,9 @@ choosing a model for all but the most casual use.}
 of every chat API call.}
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
+
+\item{beta_headers}{Optionally, a character vector of beta headers to opt-in
+claude features that are still in beta.}
 
 \item{api_key}{The API key to use for authentication. You generally should
 not supply this directly, but instead set the \code{ANTHROPIC_API_KEY} environment
