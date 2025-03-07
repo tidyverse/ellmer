@@ -84,6 +84,7 @@ Collate:
     'provider-gemini.R'
     'provider-github.R'
     'provider-groq.R'
+    'provider-huggingface.r'
     'provider-ollama.R'
     'provider-openrouter.R'
     'provider-perplexity.R'
