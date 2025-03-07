@@ -43,7 +43,7 @@ chat_hf <- function(system_prompt = NULL,
   chat_openai(
     system_prompt = system_prompt,
     turns = turns,
-    # modify base_url for hugging face compatability with openai
+    # modify base_url for hugging face compatibility with openai
     base_url = paste0(base_url, model, "/v1"),
     api_key = api_key,
     model = model,
