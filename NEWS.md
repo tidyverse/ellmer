@@ -27,7 +27,8 @@
   particularly as it pertains to handling errors.
 
   For Claude, note that the number of active connections is limited primarily
-  by the output tokens per limit (OTPM) which is estimated from the `max_tokens` parameter, which defaults to 4096. That means if you're limited to 16,000
+  by the output tokens per limit (OTPM) which is estimated from the `max_tokens` 
+  parameter, which defaults to 4096. That means if you're limited to 16,000
   OPTM, you should use at most 16,000 / 4096 = ~4 active connections (or
   decrease `max_tokens`).
 
