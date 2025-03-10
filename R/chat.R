@@ -116,9 +116,6 @@ Chat <- R6::R6Class("Chat",
     tokens = function(include_system_prompt = FALSE) {
       turns <- self$get_turns(include_system_prompt = FALSE)
       assistant_turns <- keep(turns, function(x) x@role == "assistant")
-      if (length(assistant_turns) == 0) {
-        return(data.frame(role = character(), tokens = double()))
-      }
 
       n <- length(assistant_turns)
       tokens <- t(vapply(assistant_turns, function(turn) turn@tokens, double(2)))

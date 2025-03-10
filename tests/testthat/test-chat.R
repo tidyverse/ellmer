@@ -158,6 +158,12 @@ test_that("can extract structured data (async)", {
   expect_equal(data, list(name = "John", age = 15))
 })
 
+test_that("can retrieve tokens", {
+  chat <- chat_openai("abc")
+  expect_true(nrow(chat$tokens(FALSE)), 0)
+  expect_true(nrow(chat$tokens(TRUE)), 1))
+})
+
 test_that("has a basic print method", {
   chat <- chat_openai(
     "You're a helpful assistant that returns very minimal output",
