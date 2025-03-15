@@ -56,9 +56,9 @@ chat$extract_data(
 
 To define your desired type specification (also known as a **schema**), you use the `type_()` functions. (You might already be familiar with these if you've done any function calling, as discussed in `vignette("function-calling")`). The type functions can be divided into three main groups:
 
-* **Scalars** represent single values, of which there are five types: `type_boolean()`, `type_integer()`, `type_number()`, `type_string()`, and `type_enum()`, representing a single logical, integer, double, string, and factor value respectively.
+* **Scalars** represent five types of single values, `type_boolean()`, `type_integer()`, `type_number()`, `type_string()`, and `type_enum()`, which represent a single logical, integer, double, string, and factor value respectively.
 
-* **Arrays** represent any number of values of the same type and are created with `type_array()`. You must always supply the `item` argument which specifies the type of each individual element. Arrays of scalars are very similar to R's atomic vectors:
+* **Arrays** represent any number of values of the same type. They are created with `type_array()`. You must always supply the `item` argument which specifies the type for each individual element. Arrays of scalars are very similar to R's atomic vectors:
 
   ```{r}
   #| cache: false
@@ -75,7 +75,7 @@ To define your desired type specification (also known as a **schema**), you use 
   list_of_integers <- type_array(items = type_integer_vector)
   ```
 
-* **Objects** represent a collection of named values and are created with `type_object()`. Objects can contain any number of scalars, arrays, and other objects. They are similar to named lists in R.
+* **Objects** represent a collection of named values. They are created with `type_object()`. Objects can contain any number of scalars, arrays, and other objects. They are similar to named lists in R.
 
   ```{r}
   #| cache: false
@@ -86,9 +86,9 @@ To define your desired type specification (also known as a **schema**), you use 
   )
   ```
 
-Using these type specifications ensures that the LLM will return JSON. But ellmer goes one step further to convert the results to their most natural R representation. This currently converts arrays of boolean, integers, numbers, and strings into logical, integer, numeric, and character vectors, and arrays of objects into data frames. You can opt-out of this and get plain lists instead by setting `convert = FALSE` in `$extract_data()`.
+Using these type specifications ensures that the LLM will return JSON. But ellmer goes one step further to convert the results to the closest R analog. Currently, this converts arrays of boolean, integers, numbers, and strings into logical, integer, numeric, and character vectors. Arrays of objects are converted into data frames. You can opt-out of this and get plain lists by setting `convert = FALSE` in `$extract_data()`.
 
-As well as the definition of the types, you need to provide the LLM with some information about what you actually want. This is the purpose of the first argument, `description`, which is a string that describes the data that you want. This is a good place to ask nicely for other attributes you'll like the value to possess (e.g. minimum or maximum values, date formats, ...). You aren't guaranteed that these requests will be honoured, but the LLM will usually make a best effort to do so.
+In addition to defining types, you need to provide the LLM with some information about what you actually want. This is the purpose of the first argument, `description`, which is a string that describes the data that you want. This is a good place to ask nicely for other attributes you'll like the value to have (e.g. minimum or maximum values, date formats, ...). There's no guarantee that these requests will be honoured, but the LLM will usually make a best effort to do so.
 
 ```{r}
 #| cache: false
@@ -103,7 +103,7 @@ type_type_person <- type_object(
 )
 ```
 
-Now we'll dive into some examples before coming back to talk more data types details.
+Now we'll dive into some examples before coming back to talk more about the details of data types.
 
 ## Examples
 
