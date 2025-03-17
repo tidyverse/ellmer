@@ -107,7 +107,7 @@ Now we'll dive into some examples before coming back to talk more data types det
 
 ## Examples
 
-The following examples are [closely inspired by the Claude documentation](https://github.com/anthropics/anthropic-cookbook/blob/main/tool_use/extracting_structured_json.ipynb) and hint at some of the ways you can use structured data extraction.
+The following examples, which are [closely inspired by the Claude documentation](https://github.com/anthropics/anthropic-cookbook/blob/main/tool_use/extracting_structured_json.ipynb), hint at some of the ways you can use structured data extraction.
 
 ### Example 1: Article summarisation
 
@@ -177,7 +177,7 @@ chat <- chat_openai()
 str(chat$extract_data(text, type = type_sentiment))
 ```
 
-Note that we've asked nicely for the scores to sum 1, and they do in this example (at least when I ran the code), but it's not guaranteed.
+Note that while we've asked nicely for the scores to sum 1, which they do in this example (at least when I ran the code), this is not guaranteed.
 
 ### Example 4: Text classification
 
@@ -231,14 +231,13 @@ chat <- chat_claude()
 str(chat$extract_data(prompt, type = type_characteristics))
 ```
 
-This examples only works with Claude, not GPT or Gemini, because only Claude
-supports adding arbitrary additional properties.
+This example only works with Claude, not GPT or Gemini, because only Claude supports adding additional, arbitrary properties.
 
 ### Example 6: Extracting data from an image
 
-This example comes from [Dan Nguyen](https://gist.github.com/dannguyen/faaa56cebf30ad51108a9fe4f8db36d8) and you can see other interesting applications at that link. The goal is to extract structured data from this screenshot:
+The final example comes from [Dan Nguyen](https://gist.github.com/dannguyen/faaa56cebf30ad51108a9fe4f8db36d8) (you can see other interesting applications at that link). The goal is to extract structured data from this screenshot:
 
-![A screenshot of schedule A: a table showing assets and "unearned" income](congressional-assets.png)
+![Screenshot of schedule A: a table showing assets and "unearned" income](congressional-assets.png)
 
 Even without any descriptions, ChatGPT does pretty well:
 
@@ -298,9 +297,9 @@ chat$extract_data(prompt, type = type_article)
 str(data)
 ```
 
-Note that I've used more of an explict prompt here. For this example, I found that this generated better results, and it's a useful place to put additional instructions.
+Note that I've used more of an explict prompt here. For this example, I found that this generated better results and that it's a useful place to put additional instructions.
 
-If let the LLM know that the fields are all optional, it'll instead return `NULL` for the missing fields:
+If I let the LLM know that the fields are all optional, it'll return `NULL` for the missing fields:
 
 ```{r}
 #| label: type-optional
@@ -315,7 +314,7 @@ chat$extract_data(prompt, type = type_article)
 
 ### Data frames
 
-If you want to define a data frame like object, you might be tempted to create a definition similar to what R uses: an object (i.e. a named list) containing multiple vectors (i.e. arrays):
+If you want to define a data frame like object, you might be tempted to create a definition similar to what R uses: an object (i.e., a named list) containing multiple vectors (i.e., an array):
 
 ```{r}
 #| cache: false
@@ -327,7 +326,7 @@ type_my_df <- type_object(
 )
 ```
 
-This however, is not quite right becuase there's no way to specify that each array should have the same length. Instead you need to turn the data structure "inside out", and instead create an array of objects:
+This, however, is not quite right becuase there's no way to specify that each array should have the same length. Instead, you'll need to turn the data structure "inside out" and create an array of objects:
 
 ```{r}
 #| cache: false
@@ -341,7 +340,7 @@ type_my_df <- type_array(
 )
 ```
 
-If you're familiar with the terms between row-oriented and column-oriented data frames, this is the same idea. Since most language don't possess vectorisation like R, row-oriented structures tend to be much more common in the wild.
+If you're familiar with the terms row-oriented and column-oriented data frames, this is the same idea. Since most languages don't possess vectorisation like R, row-oriented structures tend to be much more common in the wild.
 
 ## Token usage
 
