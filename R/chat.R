@@ -4,7 +4,7 @@ NULL
 #' A chat
 #'
 #' @description
-#' A `Chat` is an sequence of sequence of user and assistant [Turn]s sent
+#' A `Chat` is a sequence of user and assistant [Turn]s sent
 #' to a specific [Provider]. A `Chat` is a mutable R6 object that takes care of
 #' managing the state associated with the chat; i.e. it records the messages
 #' that you send to the server, and the messages that you receive back.
