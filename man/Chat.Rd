@@ -7,7 +7,7 @@
 A Chat object
 }
 \description{
-A \code{Chat} is an sequence of sequence of user and assistant \link{Turn}s sent
+A \code{Chat} is a sequence of user and assistant \link{Turn}s sent
 to a specific \link{Provider}. A \code{Chat} is a mutable R6 object that takes care of
 managing the state associated with the chat; i.e. it records the messages
 that you send to the server, and the messages that you receive back.
