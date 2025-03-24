@@ -32,20 +32,38 @@ chat_perplexity <- function(system_prompt = NULL,
                             api_args = list(),
                             echo = NULL) {
 
+  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "llama-3.1-sonar-small-128k-online")
+  echo <- check_echo(echo)
 
-  chat_openai(
-    system_prompt = system_prompt,
-    turns = turns,
+  if (is_testing() && is.null(seed)) {
+    seed <- seed %||% 1014
+  }
+
+  provider <- ProviderPerplexity(
     base_url = base_url,
-    api_key = api_key,
     model = model,
     seed = seed,
-    api_args = api_args,
-    echo = echo
+    extra_args = api_args,
+    api_key = api_key
   )
+
+  Chat$new(provider = provider, turns = turns, echo = echo)
 }
 
 perplexity_key <- function() {
   key_get("PERPLEXITY_API_KEY")
+}
+
+ProviderPerplexity <- new_class(
+  "ProviderPerplexity",
+  parent = ProviderOpenAI
+)
+
+method(stream_parse, ProviderPerplexity) <- function(provider, event) {
+  if (is.null(event) || identical(event$data, "[DONE]")) {
+    return(NULL)
+  }
+
+  jsonlite::parse_json(event$data)
 }
