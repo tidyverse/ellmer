@@ -18,8 +18,7 @@ NULL
 #' @examplesIf has_credentials("openai")
 #' chat <- chat_openai(echo = TRUE)
 #' chat$chat("Tell me a funny joke")
-Chat <- R6::R6Class(
-  "Chat",
+Chat <- R6::R6Class("Chat",
   public = list(
     #' @param provider A provider object.
     #' @param turns An unnamed list of turns to start the chat with (i.e.,
@@ -109,34 +108,30 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
-    #' @description A data frame with a `tokens` column that proides the
-    #'   number of input tokens used by user turns and the number of
+    #' @description A data frame with a `tokens` column that proides the 
+    #'   number of input tokens used by user turns and the number of 
     #'   output tokens used by assistant turns.
-    #' @param include_system_prompt Whether to include the system prompt in
+    #' @param include_system_prompt Whether to include the system prompt in 
     #'   the turns (if any exists).
     tokens = function(include_system_prompt = FALSE) {
       turns <- self$get_turns(include_system_prompt = FALSE)
       assistant_turns <- keep(turns, function(x) x@role == "assistant")
 
       n <- length(assistant_turns)
-      tokens <- t(vapply(
-        assistant_turns,
-        function(turn) turn@tokens,
-        double(2)
-      ))
+      tokens <- t(vapply(assistant_turns, function(turn) turn@tokens, double(2)))
       if (n > 1) {
         # Compute just the new tokens
-        tokens[-1, 1] <- tokens[seq(2, n), 1] -
+        tokens[-1, 1] <- tokens[seq(2, n), 1] - 
           (tokens[seq(1, n - 1), 1] + tokens[seq(1, n - 1), 2])
       }
       # collapse into a single vector
       tokens_v <- c(t(tokens))
-
+      
       tokens_df <- data.frame(
         role = rep(c("user", "assistant"), times = n),
         tokens = tokens_v
       )
-
+      
       if (include_system_prompt && private$has_system_prompt()) {
         # How do we compute this?
         tokens_df <- rbind(data.frame(role = "system", tokens = 0), tokens_df)
@@ -154,8 +149,7 @@ Chat <- R6::R6Class(
       role <- arg_match(role)
 
       n <- length(private$.turns)
-      switch(
-        role,
+      switch(role,
         system = if (private$has_system_prompt()) private$.turns[[1]],
         assistant = if (n > 1) private$.turns[[n]],
         user = if (n > 1) private$.turns[[n - 1]]
@@ -175,11 +169,7 @@ Chat <- R6::R6Class(
 
       # Returns a single turn (the final response from the assistant), even if
       # multiple rounds of back and forth happened.
-      coro::collect(private$chat_impl(
-        turn,
-        stream = echo != "none",
-        echo = echo
-      ))
+      coro::collect(private$chat_impl(turn, stream = echo != "none", echo = echo))
 
       text <- self$last_turn()@text
       if (echo == "none") text else invisible(text)
@@ -287,12 +277,7 @@ Chat <- R6::R6Class(
 
       map(json, function(json) {
         turn <- value_turn(private$provider, json, has_type = TRUE)
-        extract_data(
-          turn,
-          type,
-          convert = convert,
-          needs_wrapper = needs_wrapper
-        )
+        extract_data(turn, type, convert = convert, needs_wrapper = needs_wrapper)
       })
     },
 
@@ -446,29 +431,16 @@ Chat <- R6::R6Class(
       if (private$.turns[[i]]@role != "user") {
         private$.turns[[i + 1]] <- Turn("user", contents)
       } else {
-        private$.turns[[i]]@contents <- c(
-          private$.turns[[i]]@contents,
-          contents
-        )
+        private$.turns[[i]]@contents <- c(private$.turns[[i]]@contents, contents)
       }
       invisible(self)
     },
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
-    chat_impl = generator_method(function(
-      self,
-      private,
-      user_turn,
-      stream,
-      echo
-    ) {
-      while (!is.null(user_turn)) {
-        for (chunk in private$submit_turns(
-          user_turn,
-          stream = stream,
-          echo = echo
-        )) {
+    chat_impl = generator_method(function(self, private, user_turn, stream, echo) {
+      while(!is.null(user_turn)) {
+        for (chunk in private$submit_turns(user_turn, stream = stream, echo = echo)) {
           yield(chunk)
         }
         user_turn <- private$invoke_tools()
@@ -477,19 +449,9 @@ Chat <- R6::R6Class(
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
-    chat_impl_async = async_generator_method(function(
-      self,
-      private,
-      user_turn,
-      stream,
-      echo
-    ) {
-      while (!is.null(user_turn)) {
-        for (chunk in await_each(private$submit_turns_async(
-          user_turn,
-          stream = stream,
-          echo = echo
-        ))) {
+    chat_impl_async = async_generator_method(function(self, private, user_turn, stream, echo) {
+      while(!is.null(user_turn)) {
+        for (chunk in await_each(private$submit_turns_async(user_turn, stream = stream, echo = echo))) {
           yield(chunk)
         }
         user_turn <- await(private$invoke_tools_async())
@@ -501,14 +463,8 @@ Chat <- R6::R6Class(
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
-    submit_turns = generator_method(function(
-      self,
-      private,
-      user_turn,
-      stream,
-      echo,
-      type = NULL
-    ) {
+    submit_turns = generator_method(function(self, private, user_turn, stream, echo, type = NULL) {
+
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
       }
@@ -550,11 +506,7 @@ Chat <- R6::R6Class(
           cat_line(formatted, prefix = "< ")
         }
       } else {
-        turn <- value_turn(
-          private$provider,
-          response,
-          has_type = !is.null(type)
-        )
+        turn <- value_turn(private$provider, response, has_type = !is.null(type))
         text <- turn@text
         if (!is.null(text)) {
           text <- paste0(text, "\n")
@@ -572,14 +524,7 @@ Chat <- R6::R6Class(
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
-    submit_turns_async = async_generator_method(function(
-      self,
-      private,
-      user_turn,
-      stream,
-      echo,
-      type = NULL
-    ) {
+    submit_turns_async = async_generator_method(function(self, private, user_turn, stream, echo, type = NULL) {
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "async-stream" else "async-value",
@@ -653,36 +598,29 @@ is_chat <- function(x) {
 #' @export
 print.Chat <- function(x, ...) {
   turns <- x$get_turns(include_system_prompt = TRUE)
-
+  
   tokens <- x$tokens(include_system_prompt = TRUE)
   tokens_user <- sum(tokens$tokens[tokens$role == "user"])
   tokens_assistant <- sum(tokens$tokens[tokens$role == "assistant"])
 
   cat(paste0(
-    "<Chat",
-    " turns=",
-    length(turns),
-    " tokens=",
-    tokens_user,
-    "/",
-    tokens_assistant,
+    "<Chat", 
+    " turns=", length(turns), 
+    " tokens=", tokens_user, "/", tokens_assistant, 
     ">\n"
   ))
-
+  
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
-
-    color <- switch(
-      turn@role,
+    
+    color <- switch(turn@role,
       user = cli::col_blue,
       assistant = cli::col_green,
       system = cli::col_br_white,
       identity
     )
 
-    cli::cat_rule(cli::format_inline(
-      "{color(turn@role)} [{tokens$tokens[[i]]}]"
-    ))
+    cli::cat_rule(cli::format_inline("{color(turn@role)} [{tokens$tokens[[i]]}]"))
     for (content in turn@contents) {
       cat_line(format(content))
     }
@@ -691,10 +629,7 @@ print.Chat <- function(x, ...) {
   invisible(x)
 }
 
-method(contents_markdown, new_S3_class("Chat")) <- function(
-  content,
-  heading_level = 2
-) {
+method(contents_markdown, new_S3_class("Chat")) <- function(content, heading_level = 2) {
   turns <- content$get_turns()
   if (length(turns) == 0) {
     return("")
@@ -709,7 +644,7 @@ method(contents_markdown, new_S3_class("Chat")) <- function(
     res[i] <- glue::glue("{hh} {role}\n\n{contents_markdown(turns[[i]])}")
   }
 
-  paste(res, collapse = "\n\n")
+  paste(res, collapse="\n\n")
 }
 
 extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
