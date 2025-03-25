@@ -45,6 +45,7 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-stream_async}{\code{Chat$stream_async()}}
 \item \href{#method-Chat-register_tool}{\code{Chat$register_tool()}}
 \item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
+\item \href{#method-Chat-register_tools}{\code{Chat$register_tools()}}
 \item \href{#method-Chat-clone}{\code{Chat$clone()}}
 }
 }
@@ -417,7 +418,7 @@ yields string promises.
 \if{latex}{\out{\hypertarget{method-Chat-register_tool}{}}}
 \subsection{Method \code{register_tool()}}{
 Register a tool (an R function) that the chatbot can use.
-If the chatbot decides to use the function,  ellmer will automatically
+If the chatbot decides to use the function, ellmer will automatically
 call it and submit the results back.
 
 The return value of the function. Generally, this should either be a
@@ -446,6 +447,26 @@ Retrieve the list of registered tools.
 \if{html}{\out{<div class="r">}}\preformatted{Chat$get_tools()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-register_tools"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-register_tools}{}}}
+\subsection{Method \code{register_tools()}}{
+Registers multiple tools for the chatbot by iterating
+through a list of \code{tools} and calling \code{register_tool()} for each entry.
+Tools are indexed by their \verb{@name} property, overwriting any existing
+tools with matching names.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$register_tools(tools)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tools}}{A list of tools defined by \code{\link[=tool]{tool()}}.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Chat-clone"></a>}}
