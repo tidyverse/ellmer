@@ -45,7 +45,7 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-stream_async}{\code{Chat$stream_async()}}
 \item \href{#method-Chat-register_tool}{\code{Chat$register_tool()}}
 \item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
-\item \href{#method-Chat-register_tools}{\code{Chat$register_tools()}}
+\item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
 \item \href{#method-Chat-clone}{\code{Chat$clone()}}
 }
 }
@@ -449,24 +449,39 @@ Retrieve the list of registered tools.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-register_tools"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-register_tools}{}}}
-\subsection{Method \code{register_tools()}}{
-Registers multiple tools for the chatbot by iterating
-through a list of \code{tools} and calling \code{register_tool()} for each entry.
-Tools are indexed by their \verb{@name} property, overwriting any existing
-tools with matching names.
+\if{html}{\out{<a id="method-Chat-set_tools"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-set_tools}{}}}
+\subsection{Method \code{set_tools()}}{
+Sets the available tools for the chatbot by managing a
+collection of tool definitions. This method allows either replacing all
+existing tools or merging new tools with existing ones, and is designed
+for programmatic interaction with chat tools. To register a single tool
+with a \code{Chat}, use \code{register_tool()}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$register_tools(tools)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$set_tools(tools, action = c("replace", "merge"))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tools}}{A list of tools defined by \code{\link[=tool]{tool()}}.}
+\item{\code{tools}}{A list of tool definitions created with \code{\link[=tool]{tool()}}.}
+
+\item{\code{action}}{Character string specifying how to handle the new tools:
+\itemize{
+\item \code{"replace"}: Removes all existing tools and sets only the provided
+tools
+\item \code{"merge"}: Adds the new tools to existing ones, replacing any tools
+with matching names
+}}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+When merging tools (\code{action = "merge"}), any existing tool with
+the same name as a new tool will be overwritten by the new definition.
+This allows for updating specific tools while preserving others.
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Chat-clone"></a>}}

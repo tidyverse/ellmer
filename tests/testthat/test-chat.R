@@ -269,29 +269,28 @@ test_that("chat can get and register a list of tools", {
     chat$register_tool(tool)
   }
 
-  chat2$register_tools(tools)
+  chat2$set_tools(tools)
 
   expect_equal(chat$get_tools(), tools)
   expect_equal(chat2$get_tools(), chat$get_tools())
 
-  # replacing a tool by name overwrites existing tools
-  tool_r_version_2 <- tool(
+  # action = "replace" overwrites existing tools
+  tool_r_major <- tool(
     function() R.version$major,
     .description = "Get the major version of R",
-    .name = "r_version"
+    .name = "r_version_major"
   )
-  new_tools <- tools
-  new_tools[[2]] <- tool_r_version_2
-
-  chat$register_tool(tool_r_version_2)
-  chat2$register_tools(new_tools)
-
+  new_tools <- list("r_version_major" = tool_r_major)
+  chat$set_tools(new_tools)
   expect_equal(chat$get_tools(), new_tools)
-  expect_equal(chat2$get_tools(), chat$get_tools())
 
-  # register_tools() throws with helpful message if given just a tool
+  # action = "merge" merges new tools with old tools
+  chat2$set_tools(new_tools, action = "merge")
+  expect_equal(chat2$get_tools(), c(tools, new_tools))
+
+  # set_tools() throws with helpful message if given just a tool
   expect_snapshot(
     error = TRUE,
-    chat$register_tools(tools[[1]])
+    chat$set_tools(tools[[1]])
   )
 })

@@ -17,9 +17,9 @@
 # chat can get and register a list of tools
 
     Code
-      chat$register_tools(tools[[1]])
+      chat$set_tools(tools[[1]])
     Condition
-      Error in `chat$register_tools()`:
+      Error in `chat$set_tools()`:
       ! `tools` must be a list of tools created with `ellmer::tool()`.
       i Did you mean to call `$register_tool()`?
 

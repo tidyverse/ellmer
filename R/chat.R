@@ -390,18 +390,35 @@ Chat <- R6::R6Class(
       private$tools
     },
 
-    #' @description Registers multiple tools for the chatbot by iterating
-    #'   through a list of `tools` and calling `register_tool()` for each entry.
-    #'   Tools are indexed by their `@name` property, overwriting any existing
-    #'   tools with matching names.
-    #' @param tools A list of tools defined by [ellmer::tool()].
-    register_tools = function(tools) {
+    #' @description Sets the available tools for the chatbot by managing a
+    #'   collection of tool definitions. This method allows either replacing all
+    #'   existing tools or merging new tools with existing ones, and is designed
+    #'   for programmatic interaction with chat tools. To register a single tool
+    #'   with a `Chat`, use `register_tool()`.
+    #'
+    #' @param tools A list of tool definitions created with [ellmer::tool()].
+    #' @param action Character string specifying how to handle the new tools:
+    #'   * `"replace"`: Removes all existing tools and sets only the provided
+    #'     tools
+    #'   * `"merge"`: Adds the new tools to existing ones, replacing any tools
+    #'     with matching names
+    #'
+    #' @details When merging tools (`action = "merge"`), any existing tool with
+    #'   the same name as a new tool will be overwritten by the new definition.
+    #'   This allows for updating specific tools while preserving others.
+    set_tools = function(tools, action = c("replace", "merge")) {
       if (!is_list(tools)) {
         msg <- "{.arg tools} must be a list of tools created with {.fn ellmer::tool}."
         if (S7_inherits(tools, ToolDef)) {
           msg <- c(msg, "i" = "Did you mean to call {.code $register_tool()}?")
         }
         cli::cli_abort(msg)
+      }
+
+      action = arg_match(action)
+
+      if (action == "replace") {
+        private$tools <- list()
       }
 
       for (tool_def in tools) {
