@@ -1,5 +1,8 @@
 # ellmer (development version)
 
+* `live_browser()` now initializes `shinychat::chat_ui()` with the messages from
+  the chat turns, rather than replaying the turns server-side (#381).
+
 * `Chat$tokens()` now returns a data frame of tokens, correctly aligned to the
   individual turn. The print method now uses this to show how many input/output
   tokens each turn used (#354).
