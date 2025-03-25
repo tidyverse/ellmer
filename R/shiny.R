@@ -73,22 +73,25 @@ live_console <- function(chat, quiet = FALSE) {
 live_browser <- function(chat, quiet = FALSE) {
   check_installed(c("bslib", "shiny", "shinychat"))
 
+  messages <- map(chat$get_turns(), function(turn) {
+    content <- contents_markdown(turn)
+    if (is.null(content) || identical(content, "")) {
+      return(NULL)
+    }
+    list(role = turn@role, content = content)
+  })
+  messages <- compact(messages)
+
   ui <- bslib::page_fillable(
-    shinychat::chat_ui("chat", height = "100%"),
+    shinychat::chat_ui("chat", height = "100%", messages = messages),
     shiny::actionButton(
-      "close_btn", "",
+      "close_btn",
+      label = "",
       class = "btn-close",
       style = "position: fixed; top: 6px; right: 6px;"
     )
   )
   server <- function(input, output, session) {
-    for (turn in chat$get_turns()) {
-      shinychat::chat_append_message("chat", list(
-        role = turn@role,
-        content = contents_markdown(turn)
-      ))
-    }
-
     shiny::observeEvent(input$chat_user_input, {
       stream <- chat$stream_async(input$chat_user_input)
       shinychat::chat_append("chat", stream)
