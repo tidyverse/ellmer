@@ -368,6 +368,11 @@ Chat <- R6::R6Class("Chat",
 
       private$tools[[tool_def@name]] <- tool_def
       invisible(self)
+    },
+
+    #' @description Retrieve the list of registered tools.
+    get_tools = function() {
+      private$tools
     }
   ),
   private = list(

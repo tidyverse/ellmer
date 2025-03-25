@@ -44,6 +44,7 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-stream}{\code{Chat$stream()}}
 \item \href{#method-Chat-stream_async}{\code{Chat$stream_async()}}
 \item \href{#method-Chat-register_tool}{\code{Chat$register_tool()}}
+\item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
 \item \href{#method-Chat-clone}{\code{Chat$clone()}}
 }
 }
@@ -435,6 +436,16 @@ alone until the entire request is JSON-serialized.
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_tools"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_tools}{}}}
+\subsection{Method \code{get_tools()}}{
+Retrieve the list of registered tools.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_tools()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Chat-clone"></a>}}
