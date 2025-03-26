@@ -97,13 +97,13 @@ dots_named <- function(...) {
 #' @param provider Provider name.
 #' @export
 has_credentials <- function(provider) {
-  switch(provider,
+  switch(
+    provider,
     cortex = cortex_credentials_exist(),
     openai = openai_key_exists(),
     claude = anthropic_key_exists(),
     cli::cli_abort("Unknown model {model}.")
   )
-
 }
 
 # In-memory cache for credentials. Analogous to httr2:::cache_mem().

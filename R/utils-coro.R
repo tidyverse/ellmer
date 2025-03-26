@@ -76,7 +76,10 @@ deferred_method_transform <- function(lambda_expr, transformer, eval_env) {
 check_args <- function(fn) {
   arg_names <- names(formals(fn))
   if (length(arg_names) < 2) {
-    cli::cli_abort("Function must have at least two arguments.", .internal = TRUE)
+    cli::cli_abort(
+      "Function must have at least two arguments.",
+      .internal = TRUE
+    )
   } else if (arg_names[[1]] != "self") {
     cli::cli_abort("First argument must be {.arg self}.", .internal = TRUE)
   } else if (arg_names[[2]] != "private") {

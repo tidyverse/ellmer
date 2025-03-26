@@ -20,10 +20,10 @@ test_that("can convert arrays of basic types to simple vectors", {
 test_that("can covert array of arrays to lists of vectors", {
   expect_equal(
     convert_from_type(
-       list(list(1, 2), list(3, 4)),
-       type_array(items = type_array(items = type_integer()))
-     ),
-     list(c(1L, 2L), c(3L, 4L))
+      list(list(1, 2), list(3, 4)),
+      type_array(items = type_array(items = type_integer()))
+    ),
+    list(c(1L, 2L), c(3L, 4L))
   )
 })
 
@@ -41,10 +41,12 @@ test_that("can covert arrays of objects to data framnes", {
   expect_equal(
     convert_from_type(
       list(list(x = 1, y = "x"), list(x = 3, y = "y")),
-      type_array(items = type_object(
-        x = type_integer(),
-        y = type_string()
-      ))
+      type_array(
+        items = type_object(
+          x = type_integer(),
+          y = type_string()
+        )
+      )
     ),
     data.frame(x = c(1L, 3L), y = c("x", "y"))
   )

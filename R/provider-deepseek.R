@@ -22,15 +22,16 @@ NULL
 #' chat <- chat_deepseek()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_deepseek <- function(system_prompt = NULL,
-                          turns = NULL,
-                          base_url = "https://api.deepseek.com",
-                          api_key = deepseek_key(),
-                          model = NULL,
-                          seed = NULL,
-                          api_args = list(),
-                          echo = NULL) {
-
+chat_deepseek <- function(
+  system_prompt = NULL,
+  turns = NULL,
+  base_url = "https://api.deepseek.com",
+  api_key = deepseek_key(),
+  model = NULL,
+  seed = NULL,
+  api_args = list(),
+  echo = NULL
+) {
   turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "deepseek-chat")
   echo <- check_echo(echo)

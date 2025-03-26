@@ -23,15 +23,16 @@
 #' chat <- chat_perplexity()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_perplexity <- function(system_prompt = NULL,
-                            turns = NULL,
-                            base_url = "https://api.perplexity.ai/",
-                            api_key = perplexity_key(),
-                            model = NULL,
-                            seed = NULL,
-                            api_args = list(),
-                            echo = NULL) {
-
+chat_perplexity <- function(
+  system_prompt = NULL,
+  turns = NULL,
+  base_url = "https://api.perplexity.ai/",
+  api_key = perplexity_key(),
+  model = NULL,
+  seed = NULL,
+  api_args = list(),
+  echo = NULL
+) {
   model <- set_default(model, "llama-3.1-sonar-small-128k-online")
 
   chat_openai(

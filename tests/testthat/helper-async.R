@@ -7,7 +7,8 @@ sync <- function(expr) {
   success <- NULL
   error <- NULL
 
-  promises::then(p,
+  promises::then(
+    p,
     function(result) {
       success <<- result
       done <<- TRUE

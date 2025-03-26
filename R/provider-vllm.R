@@ -20,15 +20,16 @@ NULL
 #' chat <- chat_vllm("http://my-vllm.com")
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_vllm <- function(base_url,
-                      system_prompt = NULL,
-                      turns = NULL,
-                      model,
-                      seed = NULL,
-                      api_args = list(),
-                      api_key = vllm_key(),
-                      echo = NULL) {
-
+chat_vllm <- function(
+  base_url,
+  system_prompt = NULL,
+  turns = NULL,
+  model,
+  seed = NULL,
+  api_args = list(),
+  api_key = vllm_key(),
+  echo = NULL
+) {
   check_string(base_url)
   turns <- normalize_turns(turns, system_prompt)
   check_string(api_key)

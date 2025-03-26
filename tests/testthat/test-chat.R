@@ -1,8 +1,10 @@
 test_that("can get and set the system prompt", {
-  chat <- chat_openai(turns = list(
-    Turn("user", "Hi"),
-    Turn("assistant", "Hello")
-  ))
+  chat <- chat_openai(
+    turns = list(
+      Turn("user", "Hi"),
+      Turn("assistant", "Hello")
+    )
+  )
 
   # NULL -> NULL
   chat$set_system_prompt(NULL)
@@ -70,7 +72,9 @@ test_that("can perform a simple batch chat", {
 test_that("can perform a simple async batch chat", {
   chat <- chat_openai()
 
-  result <- chat$chat_async("What's 1 + 1. Just give me the answer, no punctuation")
+  result <- chat$chat_async(
+    "What's 1 + 1. Just give me the answer, no punctuation"
+  )
   expect_s3_class(result, "promise")
 
   result <- sync(result)
@@ -81,31 +85,43 @@ test_that("can perform a simple async batch chat", {
 test_that("can perform a simple streaming chat", {
   chat <- chat_openai()
 
-  chunks <- coro::collect(chat$stream("
+  chunks <- coro::collect(chat$stream(
+    "
     What are the canonical colors of the ROYGBIV rainbow?
     Put each colour on its own line. Don't use punctuation.
-  "))
+  "
+  ))
   expect_gt(length(chunks), 2)
 
   rainbow_re <- "^red *\norange *\nyellow *\ngreen *\nblue *\nindigo *\nviolet *\n?$"
   expect_match(paste(chunks, collapse = ""), rainbow_re, ignore.case = TRUE)
-  expect_match(chat$last_turn()@contents[[1]]@text, rainbow_re, ignore.case = TRUE)
+  expect_match(
+    chat$last_turn()@contents[[1]]@text,
+    rainbow_re,
+    ignore.case = TRUE
+  )
 })
 
 test_that("can perform a simple async batch chat", {
   chat <- chat_openai()
 
-  chunks <- coro::async_collect(chat$stream_async("
+  chunks <- coro::async_collect(chat$stream_async(
+    "
     What are the canonical colors of the ROYGBIV rainbow?
     Put each colour on its own line. Don't use punctuation.
-  "))
+  "
+  ))
   expect_s3_class(chunks, "promise")
 
   chunks <- sync(chunks)
   expect_gt(length(chunks), 2)
   rainbow_re <- "^red *\norange *\nyellow *\ngreen *\nblue *\nindigo *\nviolet *\n?$"
   expect_match(paste(chunks, collapse = ""), rainbow_re, ignore.case = TRUE)
-  expect_match(chat$last_turn()@contents[[1]]@text, rainbow_re, ignore.case = TRUE)
+  expect_match(
+    chat$last_turn()@contents[[1]]@text,
+    rainbow_re,
+    ignore.case = TRUE
+  )
 })
 
 test_that("can chat in parallel", {
@@ -154,7 +170,10 @@ test_that("can extract structured data (async)", {
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai()
-  data <- sync(chat$extract_data_async("John, age 15, won first prize", type = person))
+  data <- sync(chat$extract_data_async(
+    "John, age 15, won first prize",
+    type = person
+  ))
   expect_equal(data, list(name = "John", age = 15))
 })
 

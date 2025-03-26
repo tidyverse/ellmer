@@ -76,17 +76,21 @@ live_browser <- function(chat, quiet = FALSE) {
   ui <- bslib::page_fillable(
     shinychat::chat_ui("chat", height = "100%"),
     shiny::actionButton(
-      "close_btn", "",
+      "close_btn",
+      "",
       class = "btn-close",
       style = "position: fixed; top: 6px; right: 6px;"
     )
   )
   server <- function(input, output, session) {
     for (turn in chat$get_turns()) {
-      shinychat::chat_append_message("chat", list(
-        role = turn@role,
-        content = contents_markdown(turn)
-      ))
+      shinychat::chat_append_message(
+        "chat",
+        list(
+          role = turn@role,
+          content = contents_markdown(turn)
+        )
+      )
     }
 
     shiny::observeEvent(input$chat_user_input, {

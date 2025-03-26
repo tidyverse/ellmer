@@ -34,13 +34,15 @@ NULL
 #' chat <- chat_gemini()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_gemini <- function(system_prompt = NULL,
-                            turns = NULL,
-                            base_url = "https://generativelanguage.googleapis.com/v1beta/",
-                            api_key = NULL,
-                            model = NULL,
-                            api_args = list(),
-                            echo = NULL) {
+chat_gemini <- function(
+  system_prompt = NULL,
+  turns = NULL,
+  base_url = "https://generativelanguage.googleapis.com/v1beta/",
+  api_key = NULL,
+  model = NULL,
+  api_args = list(),
+  echo = NULL
+) {
   turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
@@ -66,13 +68,13 @@ ProviderGemini <- new_class(
   )
 )
 
-method(chat_request, ProviderGemini) <- function(provider,
-                                                 stream = TRUE,
-                                                 turns = list(),
-                                                 tools = list(),
-                                                 type = NULL) {
-
-
+method(chat_request, ProviderGemini) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   req <- request(provider@base_url)
   req <- ellmer_req_credentials(req, provider@credentials)
   req <- req_retry(req, max_tries = 2)
@@ -86,11 +88,17 @@ method(chat_request, ProviderGemini) <- function(provider,
   req <- req_url_path_append(req, "models")
   if (stream) {
     # https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
-    req <- req_url_path_append(req, paste0(provider@model, ":", "streamGenerateContent"))
+    req <- req_url_path_append(
+      req,
+      paste0(provider@model, ":", "streamGenerateContent")
+    )
     req <- req_url_query(req, alt = "sse")
   } else {
     # https://ai.google.dev/api/generate-content#method:-models.generatecontent
-    req <- req_url_path_append(req, paste0(provider@model, ":", "generateContent"))
+    req <- req_url_path_append(
+      req,
+      paste0(provider@model, ":", "generateContent")
+    )
   }
 
   if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
@@ -143,14 +151,22 @@ method(stream_parse, ProviderGemini) <- function(provider, event) {
 method(stream_text, ProviderGemini) <- function(provider, event) {
   event$candidates[[1]]$content$parts[[1]]$text
 }
-method(stream_merge_chunks, ProviderGemini) <- function(provider, result, chunk) {
+method(stream_merge_chunks, ProviderGemini) <- function(
+  provider,
+  result,
+  chunk
+) {
   if (is.null(result)) {
     chunk
   } else {
     merge_gemini_chunks(result, chunk)
   }
 }
-method(value_turn, ProviderGemini) <- function(provider, result, has_type = FALSE) {
+method(value_turn, ProviderGemini) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
   message <- result$candidates[[1]]$content
 
   contents <- lapply(message$parts, function(content) {
@@ -229,7 +245,10 @@ method(as_json, list(ProviderGemini, ContentPDF)) <- function(provider, x) {
 }
 
 # https://ai.google.dev/api/caching#FileData
-method(as_json, list(ProviderGemini, ContentUploaded)) <- function(provider, x) {
+method(as_json, list(ProviderGemini, ContentUploaded)) <- function(
+  provider,
+  x
+) {
   list(
     fileData = list(
       mimeType = x@mime_type,
@@ -239,12 +258,18 @@ method(as_json, list(ProviderGemini, ContentUploaded)) <- function(provider, x) 
 }
 
 # https://ai.google.dev/api/caching#FileData
-method(as_json, list(ProviderGemini, ContentImageRemote)) <- function(provider, x) {
+method(as_json, list(ProviderGemini, ContentImageRemote)) <- function(
+  provider,
+  x
+) {
   cli::cli_abort("Gemini doesn't support remote images")
 }
 
 # https://ai.google.dev/api/caching#Blob
-method(as_json, list(ProviderGemini, ContentImageInline)) <- function(provider, x) {
+method(as_json, list(ProviderGemini, ContentImageInline)) <- function(
+  provider,
+  x
+) {
   list(
     inlineData = list(
       mimeType = x@type,
@@ -254,7 +279,10 @@ method(as_json, list(ProviderGemini, ContentImageInline)) <- function(provider, 
 }
 
 # https://ai.google.dev/api/caching#FunctionCall
-method(as_json, list(ProviderGemini, ContentToolRequest)) <- function(provider, x) {
+method(as_json, list(ProviderGemini, ContentToolRequest)) <- function(
+  provider,
+  x
+) {
   list(
     functionCall = list(
       name = x@id,
@@ -264,7 +292,10 @@ method(as_json, list(ProviderGemini, ContentToolRequest)) <- function(provider, 
 }
 
 # https://ai.google.dev/api/caching#FunctionResponse
-method(as_json, list(ProviderGemini, ContentToolResult)) <- function(provider, x) {
+method(as_json, list(ProviderGemini, ContentToolResult)) <- function(
+  provider,
+  x
+) {
   list(
     functionResponse = list(
       name = x@id,
@@ -303,7 +334,12 @@ merge_last <- function() {
 merge_identical <- function() {
   function(left, right, path = NULL) {
     if (!identical(left, right)) {
-      stop("Expected identical values, but got ", deparse(left), " and ", deparse(right))
+      stop(
+        "Expected identical values, but got ",
+        deparse(left),
+        " and ",
+        deparse(right)
+      )
     }
     left
   }
@@ -336,9 +372,15 @@ merge_objects <- function(...) {
   function(left, right, path = NULL) {
     # cat(paste(collapse = "", path), "\n")
     stopifnot(is.list(left), is.list(right), all(nzchar(names(spec))))
-    mapply(names(spec), spec, FUN = function(key, value) {
-      value(left[[key]], right[[key]], c(path, ".", key))
-    }, USE.NAMES = TRUE, SIMPLIFY = FALSE)
+    mapply(
+      names(spec),
+      spec,
+      FUN = function(key, value) {
+        value(left[[key]], right[[key]], c(path, ".", key))
+      },
+      USE.NAMES = TRUE,
+      SIMPLIFY = FALSE
+    )
   }
 }
 
@@ -383,23 +425,27 @@ merge_parts <- function() {
     joined <- c(left, right)
 
     # Identify text parts
-    is_text <- map_lgl(joined, ~is.list(.x) && identical(names(.x), "text"))
+    is_text <- map_lgl(joined, ~ is.list(.x) && identical(names(.x), "text"))
 
     # Create groups for contiguous sections
     groups <- cumsum(c(TRUE, diff(is_text) != 0))
 
     # Split into groups and process each
     split_parts <- split(joined, groups)
-    merged_split_parts <- map2(split_parts, split(is_text, groups), function(parts, is_text_group) {
-      if (!is_text_group[[1]]) {
-        # Non-text group: return parts unchanged
-        return(parts)
-      } else {
-        # Text group: merge text values
-        text_values <- map_chr(parts, ~.x[["text"]])
-        list(list(text = paste0(text_values, collapse = "")))
+    merged_split_parts <- map2(
+      split_parts,
+      split(is_text, groups),
+      function(parts, is_text_group) {
+        if (!is_text_group[[1]]) {
+          # Non-text group: return parts unchanged
+          return(parts)
+        } else {
+          # Text group: merge text values
+          text_values <- map_chr(parts, ~ .x[["text"]])
+          list(list(text = paste0(text_values, collapse = "")))
+        }
       }
-    })
+    )
     unlist(merged_split_parts, recursive = FALSE, use.names = FALSE)
   }
 }
@@ -422,7 +468,10 @@ merge_gemini_chunks <- merge_objects(
   usageMetadata = merge_last()
 )
 
-default_google_credentials <- function(api_key = NULL, error_call = caller_env()) {
+default_google_credentials <- function(
+  api_key = NULL,
+  error_call = caller_env()
+) {
   gemini_scope <- "https://www.googleapis.com/auth/generative-language.retriever"
 
   check_string(api_key, allow_null = TRUE, call = error_call)

@@ -60,14 +60,15 @@ test_that("as_user_turns gives useful errors", {
 })
 
 test_that("can extract text easily", {
-
-  turn <- Turn("assistant", list(
-    ContentText("ABC"),
-    ContentImage(),
-    ContentText("DEF")
-  ))
+  turn <- Turn(
+    "assistant",
+    list(
+      ContentText("ABC"),
+      ContentImage(),
+      ContentText("DEF")
+    )
+  )
   expect_equal(turn@text, "ABCDEF")
-
 })
 
 test_that("turns have completion timestamps", {
