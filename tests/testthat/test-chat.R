@@ -284,13 +284,15 @@ test_that("chat can get and register a list of tools", {
   chat$set_tools(new_tools)
   expect_equal(chat$get_tools(), new_tools)
 
-  # action = "merge" merges new tools with old tools
-  chat2$set_tools(new_tools, action = "merge")
-  expect_equal(chat2$get_tools(), c(tools, new_tools))
-
   # set_tools() throws with helpful message if given just a tool
   expect_snapshot(
     error = TRUE,
     chat$set_tools(tools[[1]])
+  )
+
+  # set_tools() throws with helpful message if not all items are tools
+  expect_snapshot(
+    error = TRUE,
+    chat$set_tools(c(tools, list("foo")))
   )
 })

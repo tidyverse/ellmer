@@ -452,36 +452,19 @@ Retrieve the list of registered tools.
 \if{html}{\out{<a id="method-Chat-set_tools"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-set_tools}{}}}
 \subsection{Method \code{set_tools()}}{
-Sets the available tools for the chatbot by managing a
-collection of tool definitions. This method allows either replacing all
-existing tools or merging new tools with existing ones, and is designed
-for programmatic interaction with chat tools. To register a single tool
-with a \code{Chat}, use \code{register_tool()}.
+Sets the available tools. For expert use only; most users
+should use \code{register_tool()}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$set_tools(tools, action = c("replace", "merge"))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$set_tools(tools)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{tools}}{A list of tool definitions created with \code{\link[=tool]{tool()}}.}
-
-\item{\code{action}}{Character string specifying how to handle the new tools:
-\itemize{
-\item \code{"replace"}: Removes all existing tools and sets only the provided
-tools
-\item \code{"merge"}: Adds the new tools to existing ones, replacing any tools
-with matching names
-}}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-When merging tools (\code{action = "merge"}), any existing tool with
-the same name as a new tool will be overwritten by the new definition.
-This allows for updating specific tools while preserving others.
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Chat-clone"></a>}}
