@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `$extract_data()` now works better for arrays when `required = FALSE` (#384).
+
 * `live_browser()` now initializes `shinychat::chat_ui()` with the messages from
   the chat turns, rather than replaying the turns server-side (#381).
 

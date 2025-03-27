@@ -17,6 +17,15 @@ test_that("can convert arrays of basic types to simple vectors", {
   )
 })
 
+test_that("can convert arrays of optional basic types to simple vectors", {
+  type <- type_array(items = type_boolean(required = FALSE))
+  expect_equal(convert_from_type(list(FALSE, TRUE), type), c(FALSE, TRUE))
+  expect_equal(convert_from_type(list(NULL, TRUE), type), c(NA, TRUE))
+
+  type <- type_array(items = type_integer(required = FALSE))
+  expect_identical(convert_from_type(list(NULL), type), NA_integer_)
+})
+
 test_that("can covert array of arrays to lists of vectors", {
   expect_equal(
     convert_from_type(
