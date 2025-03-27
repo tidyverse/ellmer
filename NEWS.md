@@ -1,5 +1,8 @@
 # ellmer (development version)
 
+* `chat_gemini()` can now handle responses that include citation metadata 
+  (#358).
+
 * `live_browser()` now initializes `shinychat::chat_ui()` with the messages from
   the chat turns, rather than replaying the turns server-side (#381).
 

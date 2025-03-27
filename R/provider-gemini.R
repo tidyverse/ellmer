@@ -325,6 +325,10 @@ merge_optional <- function(merge_func) {
   function(left, right, path = NULL) {
     if (is.null(left) && is.null(right)) {
       NULL
+    } else if (is.null(left)) {
+      right
+    } else if (is.null(right)) {
+      left
     } else {
       merge_func(left, right, path)
     }
@@ -405,6 +409,7 @@ merge_parts <- function() {
 }
 
 # Put it all together...
+# https://ai.google.dev/api/generate-content#v1beta.GenerateContentResponse
 merge_gemini_chunks <- merge_objects(
   candidates = merge_candidate_lists(
     content = merge_objects(
