@@ -266,7 +266,11 @@ method(as_json, list(ProviderClaude, Turn)) <- function(provider, x) {
 }
 
 method(as_json, list(ProviderClaude, ContentText)) <- function(provider, x) {
-  list(type = "text", text = x@text)
+  if (is_whitespace(x@text)) {
+    list(type = "text", text = "[empty string]")
+  } else {
+    list(type = "text", text = x@text)
+  }
 }
 
 method(as_json, list(ProviderClaude, ContentPDF)) <- function(provider, x) {

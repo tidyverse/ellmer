@@ -62,3 +62,9 @@ test_that("can set beta headers", {
   req <- chat_request(provider)
   expect_equal(req$headers$`anthropic-beta`, c("a", "b"))
 })
+
+test_that("can work with whitespace only outputs (#376)", {
+  chat <- chat_claude()
+  expect_equal(chat$chat("Respond with only two blank lines"), "\n")
+  expect_equal(chat$chat("What's 1+1? Just give me the number"), "2")
+})
