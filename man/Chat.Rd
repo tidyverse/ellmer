@@ -44,6 +44,8 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-stream}{\code{Chat$stream()}}
 \item \href{#method-Chat-stream_async}{\code{Chat$stream_async()}}
 \item \href{#method-Chat-register_tool}{\code{Chat$register_tool()}}
+\item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
+\item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
 \item \href{#method-Chat-clone}{\code{Chat$clone()}}
 }
 }
@@ -416,7 +418,7 @@ yields string promises.
 \if{latex}{\out{\hypertarget{method-Chat-register_tool}{}}}
 \subsection{Method \code{register_tool()}}{
 Register a tool (an R function) that the chatbot can use.
-If the chatbot decides to use the function,  ellmer will automatically
+If the chatbot decides to use the function, ellmer will automatically
 call it and submit the results back.
 
 The return value of the function. Generally, this should either be a
@@ -432,6 +434,34 @@ alone until the entire request is JSON-serialized.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{tool_def}}{Tool definition created by \code{\link[=tool]{tool()}}.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_tools"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_tools}{}}}
+\subsection{Method \code{get_tools()}}{
+Retrieve the list of registered tools.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_tools()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-set_tools"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-set_tools}{}}}
+\subsection{Method \code{set_tools()}}{
+Sets the available tools. For expert use only; most users
+should use \code{register_tool()}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$set_tools(tools)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tools}}{A list of tool definitions created with \code{\link[=tool]{tool()}}.}
 }
 \if{html}{\out{</div>}}
 }

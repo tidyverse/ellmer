@@ -266,3 +266,52 @@ test_that("async chat messages get timestamped in sequence", {
   expect_true(turns[[1]]@completed <= turns[[2]]@completed)
   expect_true(turns[[2]]@completed <= after_receive)
 })
+
+test_that("chat can get and register a list of tools", {
+  chat <- chat_openai(api_key = "not required")
+  chat2 <- chat_openai(api_key = "not required")
+
+  tools <- list(
+    "sys_time" = tool(
+      function() strftime(Sys.time(), "%F %T"),
+      .description = "Get the current system time",
+      .name = "sys_time"
+    ),
+    "r_version" = tool(
+      function() R.version.string,
+      .description = "Get the R version of the current session",
+      .name = "r_version"
+    )
+  )
+
+  for (tool in tools) {
+    chat$register_tool(tool)
+  }
+
+  chat2$set_tools(tools)
+
+  expect_equal(chat$get_tools(), tools)
+  expect_equal(chat2$get_tools(), chat$get_tools())
+
+  # action = "replace" overwrites existing tools
+  tool_r_major <- tool(
+    function() R.version$major,
+    .description = "Get the major version of R",
+    .name = "r_version_major"
+  )
+  new_tools <- list("r_version_major" = tool_r_major)
+  chat$set_tools(new_tools)
+  expect_equal(chat$get_tools(), new_tools)
+
+  # set_tools() throws with helpful message if given just a tool
+  expect_snapshot(
+    error = TRUE,
+    chat$set_tools(tools[[1]])
+  )
+
+  # set_tools() throws with helpful message if not all items are tools
+  expect_snapshot(
+    error = TRUE,
+    chat$set_tools(c(tools, list("foo")))
+  )
+})

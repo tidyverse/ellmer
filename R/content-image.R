@@ -8,7 +8,7 @@
 #'   `data:` URL or a regular URL. Valid image types are PNG, JPEG, WebP, and
 #'   non-animated GIF.
 #' @param detail The [detail
-#'   setting](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding)
+#'   setting](https://platform.openai.com/docs/guides/images/image-input-requirements)
 #'   for this image. Can be `"auto"`, `"low"`, or `"high"`.
 #' @returns An input object suitable for including in the `...` parameter of
 #'   the `chat()`, `stream()`, `chat_async()`, or `stream_async()` methods.
@@ -50,7 +50,7 @@ content_image_url <- function(url, detail = c("auto", "low", "high")) {
 #'   `"auto"`, the content type is inferred from the file extension.
 #' @param resize If `"low"`, resize images to fit within 512x512. If `"high"`,
 #'   resize to fit within 2000x768 or 768x2000. (See the [OpenAI
-#'   docs](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding)
+#'   docs](https://platform.openai.com/docs/guides/images/image-input-requirements)
 #'   for more on why these specific sizes are used.) If `"none"`, do not resize.
 #'
 #'   You can also pass a custom string to resize the image to a specific size,
@@ -74,7 +74,7 @@ content_image_file <- function(path, content_type = "auto", resize = "low") {
 
   if (content_type == "auto") {
     # OpenAI supports .png, .jpeg, .jpg, .webp, .gif
-    # https://platform.openai.com/docs/guides/vision/what-type-of-files-can-i-upload
+    # https://platform.openai.com/docs/guides/images/image-input-requirements
     ext <- tolower(tools::file_ext(path))
     content_type <- switch(
       ext,

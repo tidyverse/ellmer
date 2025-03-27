@@ -367,7 +367,7 @@ Chat <- R6::R6Class(
     },
 
     #' @description Register a tool (an R function) that the chatbot can use.
-    #'   If the chatbot decides to use the function,  ellmer will automatically
+    #'   If the chatbot decides to use the function, ellmer will automatically
     #'   call it and submit the results back.
     #'
     #'   The return value of the function. Generally, this should either be a
@@ -382,6 +382,33 @@ Chat <- R6::R6Class(
       }
 
       private$tools[[tool_def@name]] <- tool_def
+      invisible(self)
+    },
+
+    #' @description Retrieve the list of registered tools.
+    get_tools = function() {
+      private$tools
+    },
+
+    #' @description Sets the available tools. For expert use only; most users
+    #'   should use `register_tool()`.
+    #'
+    #' @param tools A list of tool definitions created with [ellmer::tool()].
+    set_tools = function(tools) {
+      if (!is_list(tools) || !all(map_lgl(tools, S7_inherits, ToolDef))) {
+        msg <- "{.arg tools} must be a list of tools created with {.fn ellmer::tool}."
+        if (S7_inherits(tools, ToolDef)) {
+          msg <- c(msg, "i" = "Did you mean to call {.code $register_tool()}?")
+        }
+        cli::cli_abort(msg)
+      }
+
+      private$tools <- list()
+      
+      for (tool_def in tools) {
+        self$register_tool(tool_def)
+      }
+
       invisible(self)
     }
   ),
