@@ -2,6 +2,9 @@
 
 * `$extract_data()` now works better for arrays when `required = FALSE` (#384).
 
+* `chat_claude()` and `chat_bedrock()` no longer choke after receiving an 
+  output that consists only of whitespace (#376).
+
 * `live_browser()` now initializes `shinychat::chat_ui()` with the messages from
   the chat turns, rather than replaying the turns server-side (#381).
 

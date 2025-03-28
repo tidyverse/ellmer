@@ -128,3 +128,7 @@ modify_list <- function(x, y) {
 
   utils::modifyList(x, y)
 }
+
+is_whitespace <- function(x) {
+  grepl("^(\\s|\n)*$", x)
+}

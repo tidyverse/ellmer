@@ -284,7 +284,11 @@ method(as_json, list(ProviderBedrock, Turn)) <- function(provider, x) {
 }
 
 method(as_json, list(ProviderBedrock, ContentText)) <- function(provider, x) {
-  list(text = x@text)
+  if (is_whitespace(x@text)) {
+    list(text = "[empty string]")
+  } else {
+    list(text = x@text)
+  }
 }
 
 method(as_json, list(ProviderBedrock, ContentImageRemote)) <- function(

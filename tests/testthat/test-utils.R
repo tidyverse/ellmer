@@ -10,3 +10,11 @@ test_that("informative error if no key", {
   expect_false(key_exists("FOO"))
   expect_snapshot(key_get("FOO"), error = TRUE)
 })
+
+test_that("detects whitespace", {
+  expect_true(is_whitespace("\n\n\n \t"))
+  expect_true(is_whitespace(""))
+
+  expect_false(is_whitespace("a"))
+  expect_false(is_whitespace("."))
+})
