@@ -123,8 +123,13 @@ chat_cortex <- function(
 ProviderCortex <- new_class(
   "ProviderCortex",
   parent = Provider,
-  constructor = function(account, credentials, model_spec = NULL,
-                         model_file = NULL, extra_args = list()) {
+  constructor = function(
+    account,
+    credentials,
+    model_spec = NULL,
+    model_file = NULL,
+    extra_args = list()
+  ) {
     base_url <- snowflake_url(account)
     extra_args <- compact(list2(
       semantic_model = model_spec,
@@ -146,11 +151,13 @@ ProviderCortex <- new_class(
 
 # See: https://docs.snowflake.com/en/developer-guide/snowflake-rest-api/reference/cortex-analyst
 #      https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst/tutorials/tutorial-1#step-3-create-a-streamlit-app-to-talk-to-your-data-through-cortex-analyst
-method(chat_request, ProviderCortex) <- function(provider,
-                                                 stream = TRUE,
-                                                 turns = list(),
-                                                 tools = list(),
-                                                 type = NULL) {
+method(chat_request, ProviderCortex) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   if (length(tools) != 0) {
     cli::cli_abort("Tools are not supported by Cortex.")
   }
@@ -222,12 +229,17 @@ method(stream_text, ProviderCortex) <- function(provider, event) {
     }
   } else {
     cli::cli_abort(
-      "Unknown chunk type {.str {event$type}}.", .internal = TRUE
+      "Unknown chunk type {.str {event$type}}.",
+      .internal = TRUE
     )
   }
 }
 
-method(stream_merge_chunks, ProviderCortex) <- function(provider, result, chunk) {
+method(stream_merge_chunks, ProviderCortex) <- function(
+  provider,
+  result,
+  chunk
+) {
   if (!is.null(chunk$status)) {
     # Skip status messages.
     result
@@ -244,11 +256,13 @@ method(stream_merge_chunks, ProviderCortex) <- function(provider, result, chunk)
     # Only suggestion-type chunks are emitted piecemeal.
     if (identical(chunk$type, "suggestions")) {
       result[[idx]]$suggestions <- c(
-        result[[idx]]$suggestions, elt$suggestions
+        result[[idx]]$suggestions,
+        elt$suggestions
       )
     } else {
       cli::cli_abort(
-        "Unmergeable chunk type {.str {chunk$type}}.", .internal = TRUE
+        "Unmergeable chunk type {.str {chunk$type}}.",
+        .internal = TRUE
       )
     }
     result
@@ -267,13 +281,19 @@ cortex_chunk_to_message <- function(x) {
     )
   } else {
     cli::cli_abort(
-      "Unknown chunk type {.str {x$type}}.", .internal = TRUE
+      "Unknown chunk type {.str {x$type}}.",
+      .internal = TRUE
     )
   }
 }
 
-method(value_turn, ProviderCortex) <- function(provider, result, has_type = FALSE) {
-  if (!is_named(result)) { # streaming
+method(value_turn, ProviderCortex) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
+  if (!is_named(result)) {
+    # streaming
     role <- "assistant"
     content <- result
   } else {
@@ -294,7 +314,9 @@ method(value_turn, ProviderCortex) <- function(provider, result, has_type = FALS
         ContentText(x$text)
       } else if (identical(x$type, "suggestions")) {
         if (!has_name(x, "suggestions")) {
-          cli::cli_abort("'suggestions'-type content must have a 'suggestions' field.")
+          cli::cli_abort(
+            "'suggestions'-type content must have a 'suggestions' field."
+          )
         }
         ContentSuggestions(unlist(x$suggestions))
       } else if (identical(x$type, "sql")) {
@@ -303,7 +325,10 @@ method(value_turn, ProviderCortex) <- function(provider, result, has_type = FALS
         }
         ContentSql(x$statement)
       } else {
-        cli::cli_abort("Unknown content type {.str {x$type}} in response.", .internal = TRUE)
+        cli::cli_abort(
+          "Unknown content type {.str {x$type}} in response.",
+          .internal = TRUE
+        )
       }
     })
   )
@@ -336,7 +361,10 @@ ContentSuggestions <- new_class(
   properties = list(suggestions = class_character)
 )
 
-method(as_json, list(ProviderCortex, ContentSuggestions)) <- function(provider, x) {
+method(as_json, list(ProviderCortex, ContentSuggestions)) <- function(
+  provider,
+  x
+) {
   list(type = "suggestions", suggestions = as.list(x@suggestions))
 }
 

@@ -62,7 +62,8 @@ gemini_upload_init <- function(path, base_url, credentials, mime_type) {
   req <- request(base_url)
   req <- ellmer_req_credentials(req, credentials)
   req <- req_url_path(req, "upload/v1beta/files")
-  req <- req_headers(req,
+  req <- req_headers(
+    req,
     "X-Goog-Upload-Protocol" = "resumable",
     "X-Goog-Upload-Command" = "start",
     "X-Goog-Upload-Header-Content-Length" = toString(file_size),
@@ -79,7 +80,8 @@ gemini_upload_send <- function(upload_url, path, credentials) {
 
   req <- request(upload_url)
   req <- ellmer_req_credentials(req, credentials)
-  req <- req_headers(req,
+  req <- req_headers(
+    req,
     "Content-Length" = toString(file_size),
     "X-Goog-Upload-Offset" = "0",
     "X-Goog-Upload-Command" = "upload, finalize"
@@ -100,7 +102,9 @@ gemini_upload_status <- function(uri, credentials) {
 }
 
 gemini_upload_wait <- function(status, credentials) {
-  cli::cli_progress_bar(format = "{cli::pb_spin} Processing [{cli::pb_elapsed}] ")
+  cli::cli_progress_bar(
+    format = "{cli::pb_spin} Processing [{cli::pb_elapsed}] "
+  )
 
   while (status$state == "PROCESSING") {
     cli::cli_progress_update()

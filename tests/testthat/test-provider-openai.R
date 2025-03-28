@@ -1,14 +1,20 @@
 # Getting started --------------------------------------------------------
 
 test_that("can make simple request", {
-  chat <- chat_openai("Be as terse as possible; no punctuation", model = "gpt-4o-mini")
+  chat <- chat_openai(
+    "Be as terse as possible; no punctuation",
+    model = "gpt-4o-mini"
+  )
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
   expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
-  chat <- chat_openai("Be as terse as possible; no punctuation", model = "gpt-4o-mini")
+  chat <- chat_openai(
+    "Be as terse as possible; no punctuation",
+    model = "gpt-4o-mini"
+  )
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })

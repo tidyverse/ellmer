@@ -1,4 +1,3 @@
-
 # Common provider interface -----------------------------------------------
 
 test_that("defaults are reported", {

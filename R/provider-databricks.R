@@ -49,13 +49,15 @@
 #' chat <- chat_databricks()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_databricks <- function(workspace = databricks_workspace(),
-                            system_prompt = NULL,
-                            turns = NULL,
-                            model = NULL,
-                            token = NULL,
-                            api_args = list(),
-                            echo = c("none", "text", "all")) {
+chat_databricks <- function(
+  workspace = databricks_workspace(),
+  system_prompt = NULL,
+  turns = NULL,
+  model = NULL,
+  token = NULL,
+  api_args = list(),
+  echo = c("none", "text", "all")
+) {
   check_string(workspace, allow_empty = FALSE)
   check_string(token, allow_empty = FALSE, allow_null = TRUE)
   model <- set_default(model, "databricks-dbrx-instruct")
@@ -84,11 +86,13 @@ ProviderDatabricks <- new_class(
   properties = list(credentials = class_function)
 )
 
-method(chat_request, ProviderDatabricks) <- function(provider,
-                                                     stream = TRUE,
-                                                     turns = list(),
-                                                     tools = list(),
-                                                     type = NULL) {
+method(chat_request, ProviderDatabricks) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   req <- request(provider@base_url)
   # Note: this API endpoint is undocumented and seems to exist primarily for
   # compatibility with the OpenAI Python SDK. The documented endpoint is
@@ -168,7 +172,10 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
   }
 }
 
-method(as_json, list(ProviderDatabricks, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderDatabricks, ContentText)) <- function(
+  provider,
+  x
+) {
   # Databricks only seems to support textual content.
   x@text
 }

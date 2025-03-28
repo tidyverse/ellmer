@@ -51,14 +51,16 @@ NULL
 #' ")
 #'
 #' chat$chat("Tell me three funny jokes about statistcians")
-chat_openai <- function(system_prompt = NULL,
-                            turns = NULL,
-                            base_url = "https://api.openai.com/v1",
-                            api_key = openai_key(),
-                            model = NULL,
-                            seed = NULL,
-                            api_args = list(),
-                            echo = c("none", "text", "all")) {
+chat_openai <- function(
+  system_prompt = NULL,
+  turns = NULL,
+  base_url = "https://api.openai.com/v1",
+  api_key = openai_key(),
+  model = NULL,
+  seed = NULL,
+  api_args = list(),
+  echo = c("none", "text", "all")
+) {
   turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
@@ -96,12 +98,13 @@ openai_key <- function() {
 }
 
 # https://platform.openai.com/docs/api-reference/chat/create
-method(chat_request, ProviderOpenAI) <- function(provider,
-                                                 stream = TRUE,
-                                                 turns = list(),
-                                                 tools = list(),
-                                                 type = NULL) {
-
+method(chat_request, ProviderOpenAI) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   req <- request(provider@base_url)
   req <- req_url_path_append(req, "/chat/completions")
   req <- req_auth_bearer_token(req, provider@api_key)
@@ -167,17 +170,25 @@ method(stream_text, ProviderOpenAI) <- function(provider, event) {
   } else {
     event$choices[[1]]$delta$content
   }
-
 }
-method(stream_merge_chunks, ProviderOpenAI) <- function(provider, result, chunk) {
+method(stream_merge_chunks, ProviderOpenAI) <- function(
+  provider,
+  result,
+  chunk
+) {
   if (is.null(result)) {
     chunk
   } else {
     merge_dicts(result, chunk)
   }
 }
-method(value_turn, ProviderOpenAI) <- function(provider, result, has_type = FALSE) {
-  if (has_name(result$choices[[1]], "delta")) { # streaming
+method(value_turn, ProviderOpenAI) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
+  if (has_name(result$choices[[1]], "delta")) {
+    # streaming
     message <- result$choices[[1]]$delta
   } else {
     message <- result$choices[[1]]$message
@@ -202,7 +213,10 @@ method(value_turn, ProviderOpenAI) <- function(provider, result, has_type = FALS
     result$usage$prompt_tokens %||% NA_integer_,
     result$usage$completion_tokens %||% NA_integer_
   )
-  tokens_log(paste0("OpenAI-", gsub("https?://", "", provider@base_url)), tokens)
+  tokens_log(
+    paste0("OpenAI-", gsub("https?://", "", provider@base_url)),
+    tokens
+  )
 
   Turn(message$role, content, json = result, tokens = tokens)
 }
@@ -214,7 +228,6 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
     list(
       list(role = "system", content = x@contents[[1]]@text)
     )
-
   } else if (x@role == "user") {
     # Each tool result needs to go in its own message with role "tool"
     is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
@@ -237,7 +250,11 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
     tool_calls <- as_json(provider, x@contents[is_tool])
 
     list(
-      compact(list(role = "assistant", content = content, tool_calls = tool_calls))
+      compact(list(
+        role = "assistant",
+        content = content,
+        tool_calls = tool_calls
+      ))
     )
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
@@ -248,11 +265,17 @@ method(as_json, list(ProviderOpenAI, ContentText)) <- function(provider, x) {
   list(type = "text", text = x@text)
 }
 
-method(as_json, list(ProviderOpenAI, ContentImageRemote)) <- function(provider, x) {
+method(as_json, list(ProviderOpenAI, ContentImageRemote)) <- function(
+  provider,
+  x
+) {
   list(type = "image_url", image_url = list(url = x@url))
 }
 
-method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(provider, x) {
+method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(
+  provider,
+  x
+) {
   list(
     type = "image_url",
     image_url = list(
@@ -261,7 +284,10 @@ method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(provider, 
   )
 }
 
-method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(provider, x) {
+method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(
+  provider,
+  x
+) {
   json_args <- jsonlite::toJSON(x@arguments)
   list(
     id = x@id,

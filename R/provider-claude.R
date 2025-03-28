@@ -33,15 +33,17 @@ NULL
 #' @examplesIf has_credentials("claude")
 #' chat <- chat_claude()
 #' chat$chat("Tell me three jokes about statisticians")
-chat_claude <- function(system_prompt = NULL,
-                            turns = NULL,
-                            max_tokens = 4096,
-                            model = NULL,
-                            api_args = list(),
-                            base_url = "https://api.anthropic.com/v1",
-                            beta_headers = character(),
-                            api_key = anthropic_key(),
-                            echo = NULL) {
+chat_claude <- function(
+  system_prompt = NULL,
+  turns = NULL,
+  max_tokens = 4096,
+  model = NULL,
+  api_args = list(),
+  base_url = "https://api.anthropic.com/v1",
+  beta_headers = character(),
+  api_key = anthropic_key(),
+  echo = NULL
+) {
   turns <- normalize_turns(turns, system_prompt)
   echo <- check_echo(echo)
 
@@ -81,12 +83,13 @@ anthropic_key_exists <- function() {
   key_exists("ANTHROPIC_API_KEY")
 }
 
-method(chat_request, ProviderClaude) <- function(provider,
-                                                 stream = TRUE,
-                                                 turns = list(),
-                                                 tools = list(),
-                                                 type = NULL) {
-
+method(chat_request, ProviderClaude) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   req <- request(provider@base_url)
   # https://docs.anthropic.com/en/api/messages
   req <- req_url_path_append(req, "/messages")
@@ -125,7 +128,8 @@ method(chat_request, ProviderClaude) <- function(provider,
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
-      fun = function(...) {},
+      fun = function(...) {
+      },
       name = "_structured_tool_call",
       description = "Extract structured data",
       arguments = type_object(data = type)
@@ -172,7 +176,11 @@ method(stream_text, ProviderClaude) <- function(provider, event) {
     event$delta$text
   }
 }
-method(stream_merge_chunks, ProviderClaude) <- function(provider, result, chunk) {
+method(stream_merge_chunks, ProviderClaude) <- function(
+  provider,
+  result,
+  chunk
+) {
   if (chunk$type == "ping") {
     # nothing to do
   } else if (chunk$type == "message_start") {
@@ -185,7 +193,9 @@ method(stream_merge_chunks, ProviderClaude) <- function(provider, result, chunk)
     } else if (chunk$delta$type == "input_json_delta") {
       if (chunk$delta$partial_json != "") {
         # See issue #228 about partial_json sometimes being ""
-        paste(result$content[[chunk$index + 1L]]$input) <- chunk$delta$partial_json
+        paste(
+          result$content[[chunk$index + 1L]]$input
+        ) <- chunk$delta$partial_json
       }
     } else {
       cli::cli_inform(c("!" = "Unknown delta type {.str {chunk$delta$type}}."))
@@ -211,7 +221,11 @@ method(stream_merge_chunks, ProviderClaude) <- function(provider, result, chunk)
   result
 }
 
-method(value_turn, ProviderClaude) <- function(provider, result, has_type = FALSE) {
+method(value_turn, ProviderClaude) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
   contents <- lapply(result$content, function(content) {
     if (content$type == "text") {
       ContentText(content$text)
@@ -266,7 +280,10 @@ method(as_json, list(ProviderClaude, ContentPDF)) <- function(provider, x) {
   )
 }
 
-method(as_json, list(ProviderClaude, ContentImageRemote)) <- function(provider, x) {
+method(as_json, list(ProviderClaude, ContentImageRemote)) <- function(
+  provider,
+  x
+) {
   list(
     type = "image",
     source = list(
@@ -276,7 +293,10 @@ method(as_json, list(ProviderClaude, ContentImageRemote)) <- function(provider, 
   )
 }
 
-method(as_json, list(ProviderClaude, ContentImageInline)) <- function(provider, x) {
+method(as_json, list(ProviderClaude, ContentImageInline)) <- function(
+  provider,
+  x
+) {
   list(
     type = "image",
     source = list(
@@ -288,7 +308,10 @@ method(as_json, list(ProviderClaude, ContentImageInline)) <- function(provider, 
 }
 
 # https://docs.anthropic.com/en/docs/build-with-claude/tool-use#handling-tool-use-and-tool-result-content-blocks
-method(as_json, list(ProviderClaude, ContentToolRequest)) <- function(provider, x) {
+method(as_json, list(ProviderClaude, ContentToolRequest)) <- function(
+  provider,
+  x
+) {
   list(
     type = "tool_use",
     id = x@id,
@@ -298,7 +321,10 @@ method(as_json, list(ProviderClaude, ContentToolRequest)) <- function(provider, 
 }
 
 # https://docs.anthropic.com/en/docs/build-with-claude/tool-use#handling-tool-use-and-tool-result-content-blocks
-method(as_json, list(ProviderClaude, ContentToolResult)) <- function(provider, x) {
+method(as_json, list(ProviderClaude, ContentToolResult)) <- function(
+  provider,
+  x
+) {
   list(
     type = "tool_result",
     tool_use_id = x@id,
@@ -314,7 +340,6 @@ method(as_json, list(ProviderClaude, ToolDef)) <- function(provider, x) {
     input_schema = compact(as_json(provider, x@arguments))
   )
 }
-
 
 
 # Helpers ----------------------------------------------------------------

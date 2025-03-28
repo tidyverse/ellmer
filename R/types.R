@@ -161,10 +161,12 @@ type_array <- function(description = NULL, items, required = TRUE) {
 #'   properties that are not explicitly listed? Only supported by Claude.
 #' @export
 #' @rdname type_boolean
-type_object <- function(.description = NULL,
-                        ...,
-                        .required = TRUE,
-                        .additional_properties = FALSE) {
+type_object <- function(
+  .description = NULL,
+  ...,
+  .required = TRUE,
+  .additional_properties = FALSE
+) {
   TypeObject(
     properties = list2(...),
     description = .description,
@@ -182,7 +184,8 @@ convert_from_type <- function(x, type) {
         x[is_null] <- list(NA)
       }
 
-      switch(type@items@type,
+      switch(
+        type@items@type,
         boolean = as.logical(x),
         integer = as.integer(x),
         number = as.numeric(x),
@@ -196,7 +199,10 @@ convert_from_type <- function(x, type) {
     } else if (S7_inherits(type@items, TypeObject)) {
       cols <- lapply(names(type@items@properties), function(name) {
         vals <- lapply(x, function(y) y[[name]])
-        convert_from_type(vals, type_array(items = type@items@properties[[name]]))
+        convert_from_type(
+          vals,
+          type_array(items = type@items@properties[[name]])
+        )
       })
       names(cols) <- names(type@items@properties)
       list2DF(cols)

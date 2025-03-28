@@ -36,13 +36,15 @@ NULL
 #' chat <- chat_snowflake()
 #' chat$chat("Tell me a joke in the form of a SQL query.")
 #' @export
-chat_snowflake <- function(system_prompt = NULL,
-                           turns = NULL,
-                           account = snowflake_account(),
-                           credentials = NULL,
-                           model = NULL,
-                           api_args = list(),
-                           echo = c("none", "text", "all")) {
+chat_snowflake <- function(
+  system_prompt = NULL,
+  turns = NULL,
+  account = snowflake_account(),
+  credentials = NULL,
+  model = NULL,
+  api_args = list(),
+  echo = c("none", "text", "all")
+) {
   turns <- normalize_turns(turns, system_prompt)
   check_string(account, allow_empty = FALSE)
   model <- set_default(model, "llama3.1-70b")
@@ -78,11 +80,13 @@ ProviderSnowflake <- new_class(
 )
 
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#api-reference
-method(chat_request, ProviderSnowflake) <- function(provider,
-                                                    stream = TRUE,
-                                                    turns = list(),
-                                                    tools = list(),
-                                                    type = NULL) {
+method(chat_request, ProviderSnowflake) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   if (length(tools) != 0) {
     cli::cli_abort(
       "Tool calling is not supported.",
@@ -140,7 +144,11 @@ method(stream_parse, ProviderSnowflake) <- function(provider, event) {
   jsonlite::parse_json(event$data)
 }
 
-method(value_turn, ProviderSnowflake) <- function(provider, result, has_type = FALSE) {
+method(value_turn, ProviderSnowflake) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
   deltas <- compact(sapply(result$choices, function(x) x$delta$content))
   content <- list(as_content(paste(deltas, collapse = "")))
   tokens <- c(

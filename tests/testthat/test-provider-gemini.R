@@ -69,10 +69,13 @@ test_that("can merge text output", {
   out <- merge_gemini_chunks(out, chunks[[3]])
 
   expect_equal(out$candidates[[1]]$content$parts[[1]]$text, "abc")
-  expect_equal(out$usageMetadata, list(
-    promptTokenCount = 5,
-    candidatesTokenCount = 17,
-    totalTokenCount = 22
-  ))
+  expect_equal(
+    out$usageMetadata,
+    list(
+      promptTokenCount = 5,
+      candidatesTokenCount = 17,
+      totalTokenCount = 22
+    )
+  )
   expect_equal(out$candidates[[1]]$finishReason, "STOP")
 })

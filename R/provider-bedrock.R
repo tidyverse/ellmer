@@ -49,13 +49,14 @@ NULL
 #' chat <- chat_bedrock()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_bedrock <- function(system_prompt = NULL,
-                         turns = NULL,
-                         model = NULL,
-                         profile = NULL,
-                         api_args = list(),
-                         echo = NULL) {
-
+chat_bedrock <- function(
+  system_prompt = NULL,
+  turns = NULL,
+  model = NULL,
+  profile = NULL,
+  api_args = list(),
+  echo = NULL
+) {
   check_installed("paws.common", "AWS authentication")
   cache <- aws_creds_cache(profile)
   credentials <- paws_credentials(profile, cache = cache)
@@ -87,14 +88,17 @@ ProviderBedrock <- new_class(
   )
 )
 
-method(chat_request, ProviderBedrock) <- function(provider,
-                                                  stream = TRUE,
-                                                  turns = list(),
-                                                  tools = list(),
-                                                  type = NULL) {
-
+method(chat_request, ProviderBedrock) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   req <- request(paste0(
-    "https://bedrock-runtime.", provider@region, ".amazonaws.com"
+    "https://bedrock-runtime.",
+    provider@region,
+    ".amazonaws.com"
   ))
   req <- req_url_path_append(
     req,
@@ -125,7 +129,8 @@ method(chat_request, ProviderBedrock) <- function(provider,
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
-      fun = function(...) {},
+      fun = function(...) {
+      },
       name = "structured_tool_call__",
       description = "Extract structured data",
       arguments = type_object(data = type)
@@ -180,7 +185,11 @@ method(stream_text, ProviderBedrock) <- function(provider, event) {
   }
 }
 
-method(stream_merge_chunks, ProviderBedrock) <- function(provider, result, chunk) {
+method(stream_merge_chunks, ProviderBedrock) <- function(
+  provider,
+  result,
+  chunk
+) {
   i <- chunk$contentBlockIndex + 1
 
   if (chunk$event_type == "messageStart") {
@@ -197,7 +206,10 @@ method(stream_merge_chunks, ProviderBedrock) <- function(provider, result, chunk
     } else if (has_name(chunk$delta, "toolUse")) {
       paste(result$content[[i]]$toolUse$input) <- chunk$delta$toolUse$input
     } else {
-      cli::cli_abort("Unknown chunk type {names(chunk$delta)}", .internal = TRUE)
+      cli::cli_abort(
+        "Unknown chunk type {names(chunk$delta)}",
+        .internal = TRUE
+      )
     }
   } else if (chunk$event_type == "contentBlockStop") {
     if (has_name(result$content[[i]], "toolUse")) {
@@ -225,7 +237,11 @@ method(stream_merge_chunks, ProviderBedrock) <- function(provider, result, chunk
   result
 }
 
-method(value_turn, ProviderBedrock) <- function(provider, result, has_type = FALSE) {
+method(value_turn, ProviderBedrock) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
   contents <- lapply(result$output$message$content, function(content) {
     if (has_name(content, "text")) {
       ContentText(content$text)
@@ -271,13 +287,20 @@ method(as_json, list(ProviderBedrock, ContentText)) <- function(provider, x) {
   list(text = x@text)
 }
 
-method(as_json, list(ProviderBedrock, ContentImageRemote)) <- function(provider, x) {
+method(as_json, list(ProviderBedrock, ContentImageRemote)) <- function(
+  provider,
+  x
+) {
   cli::cli_abort("Bedrock doesn't support remote images")
 }
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ImageBlock.html
-method(as_json, list(ProviderBedrock, ContentImageInline)) <- function(provider, x) {
-  type <- switch(x@type,
+method(as_json, list(ProviderBedrock, ContentImageInline)) <- function(
+  provider,
+  x
+) {
+  type <- switch(
+    x@type,
     "image/png" = "png",
     "image/gif" = "gif",
     "image/jpeg" = "jpeg",
@@ -308,7 +331,10 @@ method(as_json, list(ProviderBedrock, ContentPDF)) <- function(provider, x) {
 }
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ToolUseBlock.html
-method(as_json, list(ProviderBedrock, ContentToolRequest)) <- function(provider, x) {
+method(as_json, list(ProviderBedrock, ContentToolRequest)) <- function(
+  provider,
+  x
+) {
   list(
     toolUse = list(
       toolUseId = x@id,
@@ -319,7 +345,10 @@ method(as_json, list(ProviderBedrock, ContentToolRequest)) <- function(provider,
 }
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ToolResultBlock.html
-method(as_json, list(ProviderBedrock, ContentToolResult)) <- function(provider, x) {
+method(as_json, list(ProviderBedrock, ContentToolResult)) <- function(
+  provider,
+  x
+) {
   list(
     toolResult = list(
       toolUseId = x@id,
@@ -341,8 +370,11 @@ method(as_json, list(ProviderBedrock, ToolDef)) <- function(provider, x) {
 
 # Helpers ----------------------------------------------------------------
 
-paws_credentials <- function(profile, cache = aws_creds_cache(profile),
-                             reauth = FALSE) {
+paws_credentials <- function(
+  profile,
+  cache = aws_creds_cache(profile),
+  reauth = FALSE
+) {
   creds <- cache$get()
   if (reauth || is.null(creds) || creds$expiration < Sys.time()) {
     cache$clear()
