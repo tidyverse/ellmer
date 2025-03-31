@@ -7,7 +7,8 @@
 chat_claude(
   system_prompt = NULL,
   turns = NULL,
-  max_tokens = 4096,
+  params = NULL,
+  max_tokens = deprecated(),
   model = NULL,
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",

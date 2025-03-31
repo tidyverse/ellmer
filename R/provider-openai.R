@@ -57,7 +57,8 @@ chat_openai <- function(
   base_url = "https://api.openai.com/v1",
   api_key = openai_key(),
   model = NULL,
-  seed = NULL,
+  params = NULL,
+  seed = deprecated(),
   api_args = list(),
   echo = c("none", "text", "all")
 ) {
@@ -65,18 +66,34 @@ chat_openai <- function(
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
-  if (is_testing() && is.null(seed)) {
-    seed <- seed %||% 1014
+  params <- params %||% params()
+  if (lifecycle::is_present(seed)) {
+    lifecycle::deprecate_warn(
+      when = "0.2.0",
+      what = "chat_openai(seed)",
+      with = "chat_openai(params)"
+    )
+    params$seed <- seed
   }
 
   provider <- ProviderOpenAI(
     base_url = base_url,
     model = model,
-    seed = seed,
+    params = params,
     extra_args = api_args,
     api_key = api_key
   )
   Chat$new(provider = provider, turns = turns, echo = echo)
+}
+
+chat_openai_test <- function(..., model = "gpt-4o-mini", params = NULL) {
+  params <- params %||% params()
+  if (is_testing()) {
+    params$seed <- params$seed %||% 1014
+    params$temperature <- params$temperature %||% 0
+  }
+
+  chat_openai(model = model, params = params, ...)
 }
 
 ProviderOpenAI <- new_class(
@@ -85,6 +102,7 @@ ProviderOpenAI <- new_class(
   properties = list(
     api_key = prop_string(),
     model = prop_string(),
+    # no longer used by OpenAI itself; but subclasses still need it
     seed = prop_number_whole(allow_null = TRUE)
   )
 )
@@ -136,10 +154,13 @@ method(chat_request, ProviderOpenAI) <- function(
     response_format <- NULL
   }
 
-  body <- compact(list(
+  params <- chat_params(provider, provider@params)
+  params$seed <- params$seed %||% provider@seed
+
+  body <- compact(list2(
     messages = messages,
     model = provider@model,
-    seed = provider@seed,
+    !!!params,
     stream = stream,
     stream_options = if (stream) list(include_usage = TRUE),
     tools = tools,
@@ -149,6 +170,22 @@ method(chat_request, ProviderOpenAI) <- function(
   req <- req_body_json(req, body)
 
   req
+}
+
+method(chat_params, ProviderOpenAI) <- function(provider, params) {
+  standardise_params(
+    params,
+    c(
+      temperature = "temperature",
+      top_p = "top_p",
+      frequency_penalty = "frequency_penalty",
+      presence_penalty = "presence_penalty",
+      seed = "seed",
+      max_tokens = "max_completion_tokens",
+      logprobs = "logprobs",
+      stop = "stop_sequences"
+    )
+  )
 }
 
 # OpenAI -> ellmer --------------------------------------------------------------

@@ -17,6 +17,14 @@ retry_test <- function(code, retries = 1) {
   eval(get_expr(code), get_env(code))
 }
 
+# Params -----------------------------------------------------------------
+
+test_params_stop <- function(chat_fun) {
+  chat <- chat_fun(params = params(stop_sequences = "cool"))
+  out <- chat$chat("Repeat after the following phrase: Dogs are cool")
+  expect_equal(out, "Dogs are ")
+}
+
 # Turns ------------------------------------------------------------------
 
 test_turns_system <- function(chat_fun) {

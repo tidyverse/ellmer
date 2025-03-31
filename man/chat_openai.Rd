@@ -10,7 +10,8 @@ chat_openai(
   base_url = "https://api.openai.com/v1",
   api_key = openai_key(),
   model = NULL,
-  seed = NULL,
+  params = NULL,
+  seed = deprecated(),
   api_args = list(),
   echo = c("none", "text", "all")
 )

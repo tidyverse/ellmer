@@ -1,5 +1,16 @@
 # ellmer (development version)
 
+* `chat_claude()`, `chat_openai()`, and `chat_gemini()` now have a `params` 
+  argument that allows you to specify common model paramaters (like `seed`
+  and `temperature`). Support for other models will grow as you request it 
+  (#280).
+
+* `chat_claude(max_tokens =)` is now deprecated in favour of 
+  `chat_claude(params = )` (#280).
+
+* `chat_openai(seed =)` is now deprecated in favour of 
+  `chat_openai(params = )` (#280).
+
 * `$extract_data()` now works better for arrays when `required = FALSE` (#384).
 
 * `chat_claude()` and `chat_bedrock()` no longer choke after receiving an 

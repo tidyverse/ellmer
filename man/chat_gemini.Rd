@@ -10,6 +10,7 @@ chat_gemini(
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL,
   model = NULL,
+  params = NULL,
   api_args = list(),
   echo = NULL
 )

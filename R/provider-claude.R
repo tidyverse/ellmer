@@ -36,7 +36,8 @@ NULL
 chat_claude <- function(
   system_prompt = NULL,
   turns = NULL,
-  max_tokens = 4096,
+  params = NULL,
+  max_tokens = deprecated(),
   model = NULL,
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
@@ -49,9 +50,19 @@ chat_claude <- function(
 
   model <- set_default(model, "claude-3-7-sonnet-latest")
 
+  params <- params %||% params()
+  if (lifecycle::is_present(max_tokens)) {
+    lifecycle::deprecate_warn(
+      when = "0.2.0",
+      what = "chat_claude(max_tokens)",
+      with = "chat_claude(params)"
+    )
+    params$max_tokens <- max_tokens
+  }
+
   provider <- ProviderClaude(
     model = model,
-    max_tokens = max_tokens,
+    params = params %||% params(),
     extra_args = api_args,
     base_url = base_url,
     beta_headers = beta_headers,
@@ -61,8 +72,17 @@ chat_claude <- function(
   Chat$new(provider = provider, turns = turns, echo = echo)
 }
 
-chat_claude_test <- function(..., model = "claude-3-5-sonnet-latest") {
-  chat_claude(model = model, ...)
+chat_claude_test <- function(
+  ...,
+  model = "claude-3-5-sonnet-latest",
+  params = NULL
+) {
+  params <- params %||% params()
+  if (is_testing()) {
+    params$temperature <- params$temperature %||% 0
+  }
+
+  chat_claude(model = model, params = params, ...)
 }
 
 ProviderClaude <- new_class(
@@ -71,7 +91,6 @@ ProviderClaude <- new_class(
   properties = list(
     api_key = prop_string(),
     model = prop_string(),
-    max_tokens = prop_number_whole(min = 1),
     beta_headers = class_character
   )
 )
@@ -142,19 +161,41 @@ method(chat_request, ProviderClaude) <- function(
   }
   tools <- as_json(provider, unname(tools))
 
+  params <- chat_params(provider, provider@params)
+
   body <- compact(list2(
     model = provider@model,
     system = system,
     messages = messages,
     stream = stream,
-    max_tokens = provider@max_tokens,
     tools = tools,
     tool_choice = tool_choice,
+    !!!params
   ))
   body <- modify_list(body, provider@extra_args)
   req <- req_body_json(req, body)
 
   req
+}
+
+method(chat_params, ProviderClaude) <- function(provider, params) {
+  params <- standardise_params(
+    params,
+    c(
+      temperature = "temperature",
+      top_p = "top_p",
+      top_k = "top_k",
+      max_tokens = "max_tokens",
+      stop_sequences = "stop_sequences"
+    )
+  )
+
+  # Unlike other providers, Claude requires that this be set
+  params$max_tokens <- params$max_tokens %||% 4096
+
+  params$stop_sequences <- as.list(params$stop_sequences)
+
+  params
 }
 
 # Claude -> ellmer --------------------------------------------------------------

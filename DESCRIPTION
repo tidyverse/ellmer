@@ -71,6 +71,7 @@ Collate:
     'import-standalone-purrr.R'
     'import-standalone-types-check.R'
     'interpolate.R'
+    'params.R'
     'tools-def.R'
     'turns.R'
     'provider-openai.R'
