@@ -35,8 +35,14 @@ params(
 \item{logprobs}{Include the log probabilities in the output?}
 
 \item{stop_sequences}{A character vector of tokens to stop generation on.}
+
+\item{...}{Additional named parameters to send to the provider.}
 }
 \description{
+This helper function makes it easier to create a list of parameters used
+across many models. The parameter names are automatically standardised and
+included in the correctly place in the API call.
+
 Note that parameters that are not supported by a given provider will generate
 a warning, not an error. This allows you to use the same set of parameters
 across multiple providers.
