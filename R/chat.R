@@ -385,6 +385,11 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
+    #' @description Get the underlying provider object. For expert use only.
+    get_provider = function() {
+      private$provider
+    },
+
     #' @description Retrieve the list of registered tools.
     get_tools = function() {
       private$tools

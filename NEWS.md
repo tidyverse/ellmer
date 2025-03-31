@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `Chat$get_provider()` lets you access the underlying provider object, if needed (#202).
+
 * `$extract_data()` now works better for arrays when `required = FALSE` (#384).
 
 * `chat_claude()` and `chat_bedrock()` no longer choke after receiving an 
