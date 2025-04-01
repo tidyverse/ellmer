@@ -16,7 +16,7 @@
 #' @param presence_penalty Presence penalty for generated tokens.
 #' @param seed Seed for random number generator.
 #' @param max_tokens Maximum number of tokens to generate.
-#' @param logprobs Include the log probabilities in the output?
+#' @param log_probs Include the log probabilities in the output?
 #' @param stop_sequences A character vector of tokens to stop generation on.
 #' @param ... Additional named parameters to send to the provider.
 #' @export
@@ -28,7 +28,7 @@ params <- function(
   presence_penalty = NULL,
   seed = NULL,
   max_tokens = NULL,
-  logprobs = NULL,
+  log_probs = NULL,
   stop_sequences = NULL,
   ...
 ) {
@@ -39,7 +39,7 @@ params <- function(
   check_number_decimal(presence_penalty, allow_null = TRUE)
   check_number_whole(seed, allow_null = TRUE)
   check_number_whole(max_tokens, allow_null = TRUE, min = 1)
-  check_bool(logprobs, allow_null = TRUE)
+  check_bool(log_probs, allow_null = TRUE)
   check_character(stop_sequences, allow_null = TRUE)
 
   compact(list2(
@@ -50,7 +50,7 @@ params <- function(
     presence_penalty = presence_penalty,
     seed = seed,
     max_tokens = max_tokens,
-    logprobs = logprobs,
+    log_probs = log_probs,
     stop_sequences = stop_sequences,
     extra_args = list2(...)
   ))

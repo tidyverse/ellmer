@@ -36,10 +36,10 @@
       Error in `params()`:
       ! `max_tokens` must be a whole number or `NULL`, not the string "x".
     Code
-      params(logprobs = 1)
+      params(log_probs = 1)
     Condition
       Error in `params()`:
-      ! `logprobs` must be `TRUE`, `FALSE`, or `NULL`, not the number 1.
+      ! `log_probs` must be `TRUE`, `FALSE`, or `NULL`, not the number 1.
     Code
       params(stop_sequences = 1)
     Condition

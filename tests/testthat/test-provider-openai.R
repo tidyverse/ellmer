@@ -56,13 +56,13 @@ test_that("can use images", {
 
 # Custom tests -----------------------------------------------------------------
 
-test_that("can retrieve logprobs (#115)", {
-  chat <- chat_openai_test(params = params(logprobs = TRUE))
+test_that("can retrieve log_probs (#115)", {
+  chat <- chat_openai_test(params = params(log_probs = TRUE))
   pieces <- coro::collect(chat$stream("Hi"))
 
-  logprops <- chat$last_turn()@json$choices[[1]]$logprobs$content
+  logprobs <- chat$last_turn()@json$choices[[1]]$logprobs$content
   expect_equal(
-    length(logprops),
+    length(logprobs),
     length(pieces) - 2 # leading "" + trailing \n
   )
 })

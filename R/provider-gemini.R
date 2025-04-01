@@ -149,7 +149,7 @@ method(chat_params, ProviderGemini) <- function(provider, params) {
       presencePenalty = "presence_penalty",
       seed = "seed",
       maxOutputTokens = "max_tokens",
-      responseLogprobs = "logprobs",
+      responseLogprobs = "log_probs",
       stopSequences = "stop_sequences"
     )
   )

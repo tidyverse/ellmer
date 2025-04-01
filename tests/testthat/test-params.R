@@ -13,7 +13,7 @@ test_that("checks its inputs", {
     params(presence_penalty = "x")
     params(seed = "x")
     params(max_tokens = "x")
-    params(logprobs = 1)
+    params(log_probs = 1)
     params(stop_sequences = 1)
   })
 })

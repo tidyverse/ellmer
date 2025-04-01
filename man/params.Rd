@@ -12,7 +12,7 @@ params(
   presence_penalty = NULL,
   seed = NULL,
   max_tokens = NULL,
-  logprobs = NULL,
+  log_probs = NULL,
   stop_sequences = NULL,
   ...
 )
@@ -32,7 +32,7 @@ params(
 
 \item{max_tokens}{Maximum number of tokens to generate.}
 
-\item{logprobs}{Include the log probabilities in the output?}
+\item{log_probs}{Include the log probabilities in the output?}
 
 \item{stop_sequences}{A character vector of tokens to stop generation on.}
 
