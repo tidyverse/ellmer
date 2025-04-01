@@ -1,5 +1,8 @@
 # ellmer (development version)
 
+* New `interpolate_package()` to make it easier to interpolate from prompts
+  stored in the `inst/prompts` inside a package (#164).
+
 * `Chat$get_provider()` lets you access the underlying provider object, if needed (#202).
 
 * `$extract_data()` now works better for arrays when `required = FALSE` (#384).
