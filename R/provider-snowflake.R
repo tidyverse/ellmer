@@ -134,16 +134,6 @@ method(chat_request, ProviderSnowflake) <- function(
 
 # Snowflake -> ellmer --------------------------------------------------------
 
-method(stream_parse, ProviderSnowflake) <- function(provider, event) {
-  # Snowflake's SSEs look much like the OpenAI ones, except in their
-  # handling of EOF.
-  if (is.null(event)) {
-    # This seems to be how Snowflake's backend signals that the stream is done.
-    return(NULL)
-  }
-  jsonlite::parse_json(event$data)
-}
-
 method(value_turn, ProviderSnowflake) <- function(
   provider,
   result,

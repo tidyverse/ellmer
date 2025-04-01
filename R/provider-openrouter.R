@@ -99,11 +99,7 @@ method(value_turn, ProviderOpenRouter) <- function(
 }
 
 method(stream_parse, ProviderOpenRouter) <- function(provider, event) {
-  if (is.null(event)) {
-    cli::cli_abort("Connection closed unexpectedly")
-  }
-
-  if (identical(event$data, "[DONE]")) {
+  if (is.null(event) || identical(event$data, "[DONE]")) {
     return(NULL)
   }
 
