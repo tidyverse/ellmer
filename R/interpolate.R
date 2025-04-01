@@ -74,3 +74,6 @@ interpolate_package <- function(
 read_file <- function(path) {
   file_contents <- readChar(path, file.size(path))
 }
+
+# for mocking
+system.file <- NULL
