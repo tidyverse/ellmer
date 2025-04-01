@@ -75,5 +75,5 @@ test_that("continues to work after whitespace only outputs (#376)", {
 
 test_that("max_tokens is deprecated", {
   expect_snapshot(chat <- chat_claude_test(max_tokens = 10))
-  expect_equal(chat$.__enclos_env__$private$provider@params$max_tokens, 10)
+  expect_equal(chat$get_provider()@params$max_tokens, 10)
 })
