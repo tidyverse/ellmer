@@ -13,8 +13,8 @@ NULL
 #'
 #' ## Authentication
 #'
-#' `chat_azure()` supports API keys and the `credentials` parameter, but it also
-#' makes use of:
+#' `chat_azure_openai()` supports API keys and the `credentials` parameter, but
+#' it also makes use of:
 #'
 #' - Azure service principals (when the `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`,
 #'   and `AZURE_CLIENT_SECRET` environment variables are set).
@@ -42,10 +42,10 @@ NULL
 #' @export
 #' @examples
 #' \dontrun{
-#' chat <- chat_azure(deployment_id = "gpt-4o-mini")
+#' chat <- chat_azure_openai(deployment_id = "gpt-4o-mini")
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_azure <- function(
+chat_azure_openai <- function(
   endpoint = azure_endpoint(),
   deployment_id,
   params = NULL,
@@ -62,7 +62,7 @@ chat_azure <- function(
   if (lifecycle::is_present(token)) {
     lifecycle::deprecate_warn(
       when = "0.1.1",
-      what = "chat_azure(token)",
+      what = "chat_azure_openai(token)",
       details = "Support for the static `token` argument (which quickly \
                  expires) will be dropped in next release. Use ambient Azure \
                  credentials instead, or pass an explicit `credentials` \
@@ -88,7 +88,7 @@ chat_azure <- function(
   check_function(credentials, allow_null = TRUE)
   credentials <- credentials %||% default_azure_credentials(api_key, token)
 
-  provider <- ProviderAzure(
+  provider <- ProviderAzureOpenAI(
     name = "Azure/OpenAI",
     base_url = paste0(endpoint, "/openai/deployments/", deployment_id),
     model = deployment_id,
@@ -101,12 +101,24 @@ chat_azure <- function(
   Chat$new(provider = provider, turns = turns, echo = echo)
 }
 
-chat_azure_test <- function(system_prompt = NULL, ..., params = NULL) {
+#' @rdname deprecated
+#'
+#' @description
+#' * [chat_azure()] was deprecated in v0.2.0, please use [chat_azure_openai()]
+#'   instead.
+#'
+#' @export
+chat_azure <- function(...) {
+  lifecycle::deprecate_warn("0.2.0", "chat_azure()", "chat_azure_openai()")
+  chat_azure_openai(...)
+}
+
+chat_azure_openai_test <- function(system_prompt = NULL, ...) {
   api_key <- key_get("AZURE_OPENAI_API_KEY")
   default_params <- params(seed = 1014, temperature = 0)
   params <- modify_list(default_params, params %||% params())
 
-  chat_azure(
+  chat_azure_openai(
     ...,
     system_prompt = system_prompt,
     api_key = api_key,
@@ -116,8 +128,8 @@ chat_azure_test <- function(system_prompt = NULL, ..., params = NULL) {
   )
 }
 
-ProviderAzure <- new_class(
-  "ProviderAzure",
+ProviderAzureOpenAI <- new_class(
+  "ProviderAzureOpenAI",
   parent = ProviderOpenAI,
   properties = list(
     credentials = class_function,
@@ -131,7 +143,7 @@ azure_endpoint <- function() {
 }
 
 # https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#chat-completions
-method(chat_request, ProviderAzure) <- function(
+method(chat_request, ProviderAzureOpenAI) <- function(
   provider,
   stream = TRUE,
   turns = list(),
