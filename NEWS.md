@@ -1,5 +1,13 @@
 # ellmer (development version)
 
+* Several chat functions were renamed to better align with the companies
+  providing the API (#382, @gadenbuie):
+  
+  * `chat_azure_openai()` replaces `chat_azure()`
+  * `chat_aws_bedrock()` replaces `chat_bedrock()`
+  * `chat_claude()` is now an alias for `chat_anthropic()`
+  * `chat_gemini()` is now an alias for `chat_google_gemini()`
+
 * `Provider` gains `name` and `model` fields (#406). These are now reported when
   you print a chat object and used in `token_usage()`.
 
