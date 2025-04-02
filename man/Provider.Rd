@@ -15,6 +15,8 @@ Provider(
 \arguments{
 \item{name}{Name of the provider.}
 
+\item{model}{Name of the model.}
+
 \item{base_url}{The base URL for the API.}
 
 \item{params}{A list of standard parameters created by \code{\link[=params]{params()}}.}

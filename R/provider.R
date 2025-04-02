@@ -14,6 +14,7 @@ NULL
 #'
 #' @export
 #' @param name Name of the provider.
+#' @param model Name of the model.
 #' @param base_url The base URL for the API.
 #' @param params A list of standard parameters created by [params()].
 #' @param extra_args Arbitrary extra arguments to be included in the request body.
