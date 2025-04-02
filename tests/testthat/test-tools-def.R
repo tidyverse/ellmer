@@ -51,13 +51,9 @@ test_that("tool_annotations(): allows additional properties", {
 test_that("tool() allows annotations", {
   annotations <- tool_annotations(title = "My Tool", read_only_hint = TRUE)
 
+  # fmt: skip
   expect_equal(
-    tool(
-      function() {
-      },
-      "My tool",
-      .annotations = annotations
-    )@annotations,
+    tool(function() { }, "My tool", .annotations = annotations)@annotations,
     annotations
   )
 })
