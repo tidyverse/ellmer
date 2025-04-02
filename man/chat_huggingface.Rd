@@ -24,10 +24,9 @@ scratch.}
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
-\item{api_key}{The API key to use for authentication. You should not
-supply this directly; instead, store your Hugging Face API key as an
-environment variable (\code{HUGGINGFACE_API_KEY}) in your \code{.Renviron} file.
-Use \code{usethis::edit_r_environ()} to modify it.}
+\item{api_key}{The API key to use for authentication. You generally should
+not supply this directly, but instead set the \code{HUGGINGFACE_API_KEY} environment
+variable.}
 
 \item{model}{The model to use for the chat. The default, \code{NULL}, will pick
 a reasonable default, and tell you about. We strongly recommend explicitly

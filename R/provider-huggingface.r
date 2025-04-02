@@ -16,10 +16,9 @@
 #'   carefully choose the model.
 #'
 #' @family chatbots
-#' @param api_key The API key to use for authentication. You should not
-#'   supply this directly; instead, store your Hugging Face API key as an
-#'   environment variable (`HUGGINGFACE_API_KEY`) in your `.Renviron` file.
-#'   Use `usethis::edit_r_environ()` to modify it.
+#' @param api_key The API key to use for authentication. You generally should
+#'   not supply this directly, but instead set the `HUGGINGFACE_API_KEY` environment
+#'   variable.
 #' @export
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
