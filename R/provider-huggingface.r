@@ -12,8 +12,8 @@
 #' ## Known limitations
 #'
 #' * Some models do not support the chat interface or parts of it, for example
-#' `google/gemma-2-2b-it` does not support a system prompt. You will need to
-#'  carefully choose the model.
+#'   `google/gemma-2-2b-it` does not support a system prompt. You will need to
+#'   carefully choose the model.
 #'
 #' @family chatbots
 #' @param api_key The API key to use for authentication. You should not
