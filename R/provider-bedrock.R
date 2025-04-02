@@ -46,10 +46,10 @@ NULL
 #' @examples
 #' \dontrun{
 #' # Basic usage
-#' chat <- chat_bedrock()
+#' chat <- chat_aws_bedrock()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_bedrock <- function(
+chat_aws_bedrock <- function(
   system_prompt = NULL,
   turns = NULL,
   model = NULL,
@@ -65,7 +65,7 @@ chat_bedrock <- function(
   model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
   echo <- check_echo(echo)
 
-  provider <- ProviderBedrock(
+  provider <- ProviderAWSBedrock(
     name = "AWS/Bedrock",
     base_url = "",
     model = model,
@@ -78,8 +78,20 @@ chat_bedrock <- function(
   Chat$new(provider = provider, turns = turns, echo = echo)
 }
 
-ProviderBedrock <- new_class(
-  "ProviderBedrock",
+#' @rdname deprecated
+#'
+#' @description
+#' * [chat_bedrock()] was deprecated in v0.2.0, please use [chat_aws_bedrock()]
+#'   instead.
+#'
+#' @export
+chat_bedrock <- function(...) {
+  lifecycle::deprecate_warn("0.2.0", "chat_bedrock()", "chat_aws_bedrock()")
+  chat_aws_bedrock(...)
+}
+
+ProviderAWSBedrock <- new_class(
+  "ProviderAWSBedrock",
   parent = Provider,
   properties = list(
     profile = prop_string(allow_null = TRUE),
@@ -88,7 +100,7 @@ ProviderBedrock <- new_class(
   )
 )
 
-method(chat_request, ProviderBedrock) <- function(
+method(chat_request, ProviderAWSBedrock) <- function(
   provider,
   stream = TRUE,
   turns = list(),
@@ -161,13 +173,13 @@ method(chat_request, ProviderBedrock) <- function(
   req
 }
 
-method(chat_resp_stream, ProviderBedrock) <- function(provider, resp) {
+method(chat_resp_stream, ProviderAWSBedrock) <- function(provider, resp) {
   resp_stream_aws(resp)
 }
 
 # Bedrock -> ellmer -------------------------------------------------------------
 
-method(stream_parse, ProviderBedrock) <- function(provider, event) {
+method(stream_parse, ProviderAWSBedrock) <- function(provider, event) {
   if (is.null(event)) {
     return()
   }
@@ -179,13 +191,13 @@ method(stream_parse, ProviderBedrock) <- function(provider, event) {
   body
 }
 
-method(stream_text, ProviderBedrock) <- function(provider, event) {
+method(stream_text, ProviderAWSBedrock) <- function(provider, event) {
   if (event$event_type == "contentBlockDelta") {
     event$delta$text
   }
 }
 
-method(stream_merge_chunks, ProviderBedrock) <- function(
+method(stream_merge_chunks, ProviderAWSBedrock) <- function(
   provider,
   result,
   chunk
@@ -237,7 +249,7 @@ method(stream_merge_chunks, ProviderBedrock) <- function(
   result
 }
 
-method(value_turn, ProviderBedrock) <- function(
+method(value_turn, ProviderAWSBedrock) <- function(
   provider,
   result,
   has_type = FALSE
@@ -272,7 +284,7 @@ method(value_turn, ProviderBedrock) <- function(
 # ellmer -> Bedrock -------------------------------------------------------------
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ContentBlock.html
-method(as_json, list(ProviderBedrock, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderAWSBedrock, Turn)) <- function(provider, x) {
   if (x@role == "system") {
     # bedrock passes system prompt as separate arg
     NULL
@@ -283,7 +295,10 @@ method(as_json, list(ProviderBedrock, Turn)) <- function(provider, x) {
   }
 }
 
-method(as_json, list(ProviderBedrock, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderAWSBedrock, ContentText)) <- function(
+  provider,
+  x
+) {
   if (is_whitespace(x@text)) {
     list(text = "[empty string]")
   } else {
@@ -291,7 +306,7 @@ method(as_json, list(ProviderBedrock, ContentText)) <- function(provider, x) {
   }
 }
 
-method(as_json, list(ProviderBedrock, ContentImageRemote)) <- function(
+method(as_json, list(ProviderAWSBedrock, ContentImageRemote)) <- function(
   provider,
   x
 ) {
@@ -299,7 +314,7 @@ method(as_json, list(ProviderBedrock, ContentImageRemote)) <- function(
 }
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ImageBlock.html
-method(as_json, list(ProviderBedrock, ContentImageInline)) <- function(
+method(as_json, list(ProviderAWSBedrock, ContentImageInline)) <- function(
   provider,
   x
 ) {
@@ -321,7 +336,7 @@ method(as_json, list(ProviderBedrock, ContentImageInline)) <- function(
 }
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_DocumentBlock.html
-method(as_json, list(ProviderBedrock, ContentPDF)) <- function(provider, x) {
+method(as_json, list(ProviderAWSBedrock, ContentPDF)) <- function(provider, x) {
   list(
     document = list(
       #> This field is vulnerable to prompt injections, because the model
@@ -335,7 +350,7 @@ method(as_json, list(ProviderBedrock, ContentPDF)) <- function(provider, x) {
 }
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ToolUseBlock.html
-method(as_json, list(ProviderBedrock, ContentToolRequest)) <- function(
+method(as_json, list(ProviderAWSBedrock, ContentToolRequest)) <- function(
   provider,
   x
 ) {
@@ -349,7 +364,7 @@ method(as_json, list(ProviderBedrock, ContentToolRequest)) <- function(
 }
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ToolResultBlock.html
-method(as_json, list(ProviderBedrock, ContentToolResult)) <- function(
+method(as_json, list(ProviderAWSBedrock, ContentToolResult)) <- function(
   provider,
   x
 ) {
@@ -362,7 +377,7 @@ method(as_json, list(ProviderBedrock, ContentToolResult)) <- function(
   )
 }
 
-method(as_json, list(ProviderBedrock, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(provider, x) {
   list(
     toolSpec = list(
       name = x@name,

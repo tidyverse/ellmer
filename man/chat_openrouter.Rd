@@ -65,7 +65,7 @@ chat$chat("Tell me three jokes about statisticians")
 }
 \seealso{
 Other chatbots: 
-\code{\link{chat_bedrock}()},
+\code{\link{chat_aws_bedrock}()},
 \code{\link{chat_claude}()},
 \code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
