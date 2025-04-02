@@ -13,19 +13,12 @@ NULL
 #' You will need to sign up for a developer account (and pay for it) at the
 #' [developer platform](https://platform.openai.com).
 #'
-#' For authentication, we recommend saving your
-#' [API key](https://platform.openai.com/account/api-keys) to
-#' the `OPENAI_API_KEY` environment variable in your `.Renviron` file.
-#' You can easily edit this file by calling `usethis::edit_r_environ()`.
-#'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
 #' @param turns A list of [Turn]s to start the chat with (i.e., continuing a
 #'   previous conversation). If not provided, the conversation begins from
 #'   scratch.
 #' @param base_url The base URL to the endpoint; the default uses OpenAI.
-#' @param api_key The API key to use for authentication. You generally should
-#'   not supply this directly, but instead set the `OPENAI_API_KEY` environment
-#'   variable.
+#' @param api_key `r api_key_param("OPENAI_API_KEY")`
 #' @param model The model to use for the chat. The default, `NULL`, will pick
 #'   a reasonable default, and tell you about. We strongly recommend explicitly
 #'   choosing a model for all but the most casual use.

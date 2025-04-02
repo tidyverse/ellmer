@@ -25,9 +25,11 @@ scratch.}
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
-\item{api_key}{The API key to use for authentication. You generally should
-not supply this directly, but instead set the \code{OPENAI_API_KEY} environment
-variable.}
+\item{api_key}{API key to use for authentication.
+
+You generally should not supply this directly, but instead set the \code{OPENAI_API_KEY} environment variable.
+The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{model}{The model to use for the chat. The default, \code{NULL}, will pick
 a reasonable default, and tell you about. We strongly recommend explicitly
@@ -61,11 +63,6 @@ mostly under the \href{https://chat.openai.com/}{ChatGPT} brand.
 Note that a ChatGPT Plus membership does not grant access to the API.
 You will need to sign up for a developer account (and pay for it) at the
 \href{https://platform.openai.com}{developer platform}.
-
-For authentication, we recommend saving your
-\href{https://platform.openai.com/account/api-keys}{API key} to
-the \code{OPENAI_API_KEY} environment variable in your \code{.Renviron} file.
-You can easily edit this file by calling \code{usethis::edit_r_environ()}.
 }
 \examples{
 \dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

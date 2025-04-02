@@ -10,9 +10,7 @@ NULL
 #' `chat_vllm()` to connect to endpoints powered by vLLM.
 #'
 #' @inheritParams chat_openai
-#' @param api_key The API key to use for authentication. You generally should
-#'   not supply this directly, but instead set the `VLLM_API_KEY` environment
-#'   variable.
+#' @param api_key `r api_key_param("VLLM_API_KEY")`
 #' @inherit chat_openai return
 #' @export
 #' @examples

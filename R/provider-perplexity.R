@@ -13,9 +13,7 @@
 #'
 #' @export
 #' @family chatbots
-#' @param api_key The API key to use for authentication. You generally should
-#'   not supply this directly, but instead set the `PERPLEXITY_API_KEY` environment
-#'   variable.
+#' @param api_key `r api_key_param("PERPLEXITY_API_KEY")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
