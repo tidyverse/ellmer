@@ -246,7 +246,7 @@ method(value_turn, ProviderOpenAI) <- function(
     tokens
   )
 
-  Turn(message$role, content, json = result, tokens = tokens)
+  Turn(message$role %||% "assistant", content, json = result, tokens = tokens)
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------
