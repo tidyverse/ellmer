@@ -7,6 +7,7 @@
 chat_azure(
   endpoint = azure_endpoint(),
   deployment_id,
+  params = NULL,
   api_version = NULL,
   system_prompt = NULL,
   turns = NULL,
@@ -23,6 +24,8 @@ chat_azure(
 value of the \code{AZURE_OPENAI_ENDPOINT} envinronment variable.}
 
 \item{deployment_id}{Deployment id for the model you want to use.}
+
+\item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
 \item{api_version}{The API version to use.}
 
