@@ -38,10 +38,10 @@ dynamic data into a static prompt:
 \item \code{interpolate()} works with a string.
 \item \code{interpolate_file()} works with a file.
 \item \code{interpolate_package()} works with a file in the \code{insts/prompt}
-directory ofpackage.
+directory of a package.
 }
 
-Compared to glue, they you to wrap dynamic values in \code{{{ }}}, making it
+Compared to glue, dynamic values should be wrapped in \code{{{ }}}, making it
 easier to include R code and JSON in your prompt.
 }
 \examples{

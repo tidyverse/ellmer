@@ -8,9 +8,9 @@
 #' * `interpolate()` works with a string.
 #' * `interpolate_file()` works with a file.
 #' * `interpolate_package()` works with a file in the `insts/prompt`
-#'   directory ofpackage.
+#'   directory of a package.
 #'
-#' Compared to glue, they you to wrap dynamic values in `{{ }}`, making it
+#' Compared to glue, dynamic values should be wrapped in `{{ }}`, making it
 #' easier to include R code and JSON in your prompt.
 #'
 #' @param prompt A prompt string. You should not generally expose this
