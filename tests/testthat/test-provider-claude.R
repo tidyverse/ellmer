@@ -17,6 +17,12 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_claude())
 })
 
+test_that("supports standard parameters", {
+  chat_fun <- chat_gemini
+
+  test_params_stop(chat_fun)
+})
+
 test_that("respects turns interface", {
   chat_fun <- chat_claude_test
 
@@ -65,4 +71,9 @@ test_that("continues to work after whitespace only outputs (#376)", {
   chat <- chat_claude()
   chat$chat("Respond with only two blank lines")
   expect_equal(chat$chat("What's 1+1? Just give me the number"), "2")
+})
+
+test_that("max_tokens is deprecated", {
+  expect_snapshot(chat <- chat_claude_test(max_tokens = 10))
+  expect_equal(chat$get_provider()@params$max_tokens, 10)
 })

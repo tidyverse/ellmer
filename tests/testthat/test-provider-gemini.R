@@ -19,6 +19,12 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_gemini())
 })
 
+test_that("supports standard parameters", {
+  chat_fun <- chat_gemini
+
+  test_params_stop(chat_fun)
+})
+
 test_that("respects turns interface", {
   chat_fun <- chat_gemini
 

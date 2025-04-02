@@ -14,6 +14,7 @@ NULL
 #'
 #' @export
 #' @param base_url The base URL for the API.
+#' @param params A list of standard parameters created by [params()].
 #' @param extra_args Arbitrary extra arguments to be included in the request body.
 #' @return An S7 Provider object.
 #' @examples
@@ -22,6 +23,7 @@ Provider <- new_class(
   "Provider",
   properties = list(
     base_url = prop_string(),
+    params = class_list,
     extra_args = class_list
   )
 )
@@ -52,6 +54,14 @@ chat_resp_stream <- new_generic(
 method(chat_resp_stream, Provider) <- function(provider, resp) {
   resp_stream_sse(resp)
 }
+
+chat_params <- new_generic(
+  "chat_params",
+  "provider",
+  function(provider, params) {
+    S7_dispatch()
+  }
+)
 
 # Extract data from streaming results ------------------------------------
 

@@ -1,20 +1,14 @@
 # Getting started --------------------------------------------------------
 
 test_that("can make simple request", {
-  chat <- chat_openai(
-    "Be as terse as possible; no punctuation",
-    model = "gpt-4o-mini"
-  )
+  chat <- chat_openai_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
   expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
-  chat <- chat_openai(
-    "Be as terse as possible; no punctuation",
-    model = "gpt-4o-mini"
-  )
+  chat <- chat_openai_test("Be as terse as possible; no punctuation")
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })
@@ -25,15 +19,21 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_openai())
 })
 
+test_that("supports standard parameters", {
+  chat_fun <- chat_openai_test
+
+  test_params_stop(chat_fun)
+})
+
 test_that("respects turns interface", {
-  chat_fun <- function(...) chat_openai(..., model = "gpt-4o-mini")
+  chat_fun <- chat_openai_test
 
   test_turns_system(chat_fun)
   test_turns_existing(chat_fun)
 })
 
 test_that("all tool variations work", {
-  chat_fun <- function(...) chat_openai(..., model = "gpt-4o-mini")
+  chat_fun <- chat_openai_test
 
   test_tools_simple(chat_fun)
   test_tools_async(chat_fun)
@@ -42,13 +42,13 @@ test_that("all tool variations work", {
 })
 
 test_that("can extract data", {
-  chat_fun <- function(...) chat_openai(..., model = "gpt-4o-mini")
+  chat_fun <- chat_openai_test
 
   test_data_extraction(chat_fun)
 })
 
 test_that("can use images", {
-  chat_fun <- function(...) chat_openai(..., model = "gpt-4o-mini")
+  chat_fun <- chat_openai_test
 
   test_images_inline(chat_fun)
   test_images_remote(chat_fun)
@@ -56,13 +56,13 @@ test_that("can use images", {
 
 # Custom tests -----------------------------------------------------------------
 
-test_that("can retrieve logprobs (#115)", {
-  chat <- chat_openai(api_args = list(logprobs = TRUE))
+test_that("can retrieve log_probs (#115)", {
+  chat <- chat_openai_test(params = params(log_probs = TRUE))
   pieces <- coro::collect(chat$stream("Hi"))
 
-  logprops <- chat$last_turn()@json$choices[[1]]$logprobs$content
+  logprobs <- chat$last_turn()@json$choices[[1]]$logprobs$content
   expect_equal(
-    length(logprops),
+    length(logprobs),
     length(pieces) - 2 # leading "" + trailing \n
   )
 })
@@ -88,4 +88,9 @@ test_that("as_json specialised for OpenAI", {
       additionalProperties = FALSE
     )
   )
+})
+
+test_that("seed is deprecated, but still honored", {
+  expect_snapshot(chat <- chat_openai_test(seed = 1))
+  expect_equal(chat$get_provider()@params$seed, 1)
 })

@@ -3,6 +3,17 @@
 * New `interpolate_package()` to make it easier to interpolate from prompts
   stored in the `inst/prompts` inside a package (#164).
 
+* `chat_claude()`, `chat_openai()`, and `chat_gemini()` now have a `params` 
+  argument that allows you to specify common model paramaters (like `seed`
+  and `temperature`). Support for other models will grow as you request it 
+  (#280).
+
+* `chat_claude(max_tokens =)` is now deprecated in favour of 
+  `chat_claude(params = )` (#280).
+
+* `chat_openai(seed =)` is now deprecated in favour of 
+  `chat_openai(params = )` (#280).
+
 * `Chat$get_provider()` lets you access the underlying provider object, if needed (#202).
 
 * `$extract_data()` now works better for arrays when `required = FALSE` (#384).
@@ -142,7 +153,7 @@
 
 * Streaming ollama results works once again (#117).
 
-* Streaming OpenAI results now capture more results, including `logprops` (#115).
+* Streaming OpenAI results now capture more results, including `logprobs` (#115).
 
 * New `interpolate()` and `prompt_file()` make it easier to create prompts that are a mix of static text and dynamic values.
 

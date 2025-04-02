@@ -40,6 +40,7 @@ chat_gemini <- function(
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL,
   model = NULL,
+  params = NULL,
   api_args = list(),
   echo = NULL
 ) {
@@ -51,6 +52,7 @@ chat_gemini <- function(
   provider <- ProviderGemini(
     base_url = base_url,
     model = model,
+    params = params %||% params(),
     extra_args = api_args,
     api_key = api_key,
     credentials = credentials
@@ -107,13 +109,10 @@ method(chat_request, ProviderGemini) <- function(
     system <- list(parts = list(text = ""))
   }
 
+  generation_config <- chat_params(provider, provider@params)
   if (!is.null(type)) {
-    generation_config <- list(
-      response_mime_type = "application/json",
-      response_schema = as_json(provider, type)
-    )
-  } else {
-    generation_config <- NULL
+    generation_config$response_mime_type <- "application/json"
+    generation_config$response_schema <- as_json(provider, type)
   }
 
   contents <- as_json(provider, turns)
@@ -137,6 +136,23 @@ method(chat_request, ProviderGemini) <- function(
   req <- req_body_json(req, body)
 
   req
+}
+
+method(chat_params, ProviderGemini) <- function(provider, params) {
+  standardise_params(
+    params,
+    c(
+      temperature = "temperature",
+      topP = "top_p",
+      topK = "top_k",
+      frequencyPenalty = "frequency_penalty",
+      presencePenalty = "presence_penalty",
+      seed = "seed",
+      maxOutputTokens = "max_tokens",
+      responseLogprobs = "log_probs",
+      stopSequences = "stop_sequences"
+    )
+  )
 }
 
 # Gemini -> ellmer --------------------------------------------------------------

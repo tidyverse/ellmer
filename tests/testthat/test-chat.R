@@ -1,5 +1,5 @@
 test_that("can get and set the system prompt", {
-  chat <- chat_openai(
+  chat <- chat_openai_test(
     turns = list(
       Turn("user", "Hi"),
       Turn("assistant", "Hello")
@@ -24,7 +24,7 @@ test_that("can get and set the system prompt", {
 })
 
 test_that("can retrieve system prompt with last_turn()", {
-  chat1 <- chat_openai()
+  chat1 <- chat_openai_test()
   expect_equal(chat1$last_turn("system"), NULL)
 
   chat2 <- chat_openai(system_prompt = "You are from New Zealand")
@@ -48,12 +48,12 @@ test_that("can get and set turns", {
 })
 
 test_that("can get model", {
-  chat <- chat_openai(model = "abc")
+  chat <- chat_openai_test(model = "abc")
   expect_equal(chat$get_model(), "abc")
 })
 
 test_that("setting turns usually preserves, but can set system prompt", {
-  chat <- chat_openai(system_prompt = "You're a funny guy")
+  chat <- chat_openai_test(system_prompt = "You're a funny guy")
   chat$set_turns(list())
   expect_equal(chat$get_system_prompt(), "You're a funny guy")
 
@@ -62,7 +62,7 @@ test_that("setting turns usually preserves, but can set system prompt", {
 })
 
 test_that("can perform a simple batch chat", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
 
   result <- chat$chat("What's 1 + 1. Just give me the answer, no punctuation")
   expect_equal(result, "2")
@@ -70,7 +70,7 @@ test_that("can perform a simple batch chat", {
 })
 
 test_that("can perform a simple async batch chat", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
 
   result <- chat$chat_async(
     "What's 1 + 1. Just give me the answer, no punctuation"
@@ -83,7 +83,7 @@ test_that("can perform a simple async batch chat", {
 })
 
 test_that("can perform a simple streaming chat", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
 
   chunks <- coro::collect(chat$stream(
     "
@@ -103,7 +103,7 @@ test_that("can perform a simple streaming chat", {
 })
 
 test_that("can perform a simple async batch chat", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
 
   chunks <- coro::async_collect(chat$stream_async(
     "
@@ -125,7 +125,7 @@ test_that("can perform a simple async batch chat", {
 })
 
 test_that("can chat in parallel", {
-  chat <- chat_openai("Just give me answers, no punctuation")
+  chat <- chat_openai_test("Just give me answers, no punctuation")
   results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
 
   expect_type(results, "list")
@@ -141,7 +141,7 @@ test_that("can chat in parallel", {
 test_that("can extract structured data", {
   person <- type_object(name = type_string(), age = type_integer())
 
-  chat <- chat_openai()
+  chat <- chat_openai_test()
   data <- chat$extract_data("John, age 15, won first prize", type = person)
   expect_equal(data, list(name = "John", age = 15))
 })
@@ -149,7 +149,7 @@ test_that("can extract structured data", {
 test_that("can extract data in parallel", {
   person <- type_object(name = type_string(), age = type_integer())
 
-  chat <- chat_openai()
+  chat <- chat_openai_test()
   data <- chat$extract_data_parallel(
     list(
       "John, age 15, won first prize",
@@ -169,7 +169,7 @@ test_that("can extract data in parallel", {
 test_that("can extract structured data (async)", {
   person <- type_object(name = type_string(), age = type_integer())
 
-  chat <- chat_openai()
+  chat <- chat_openai_test()
   data <- sync(chat$extract_data_async(
     "John, age 15, won first prize",
     type = person
@@ -178,7 +178,7 @@ test_that("can extract structured data (async)", {
 })
 
 test_that("can retrieve tokens with or without system prompt", {
-  chat <- chat_openai("abc")
+  chat <- chat_openai_test("abc")
   expect_equal(nrow(chat$tokens(FALSE)), 0)
   expect_equal(nrow(chat$tokens(TRUE)), 1)
 

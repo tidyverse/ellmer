@@ -4,10 +4,12 @@
 \alias{Provider}
 \title{A chatbot provider}
 \usage{
-Provider(base_url = stop("Required"), extra_args = list())
+Provider(base_url = stop("Required"), params = list(), extra_args = list())
 }
 \arguments{
 \item{base_url}{The base URL for the API.}
+
+\item{params}{A list of standard parameters created by \code{\link[=params]{params()}}.}
 
 \item{extra_args}{Arbitrary extra arguments to be included in the request body.}
 }
