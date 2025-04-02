@@ -27,9 +27,7 @@ NULL
 #'   value of the `AZURE_OPENAI_ENDPOINT` envinronment variable.
 #' @param deployment_id Deployment id for the model you want to use.
 #' @param api_version The API version to use.
-#' @param api_key An API key to use for authentication. You generally should not
-#'   supply this directly, but instead set the `AZURE_OPENAI_API_KEY`
-#'   environment variable.
+#' @param api_key `r api_key_param("AZURE_OPENAI_API_KEY")`
 #' @param token `r lifecycle::badge("deprecated")` A literal Azure token to use
 #'   for authentication. Deprecated in favour of ambient Azure credentials or
 #'   an explicit `credentials` argument.

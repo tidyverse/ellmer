@@ -16,9 +16,11 @@ gemini_upload(
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
-\item{api_key}{The API key to use for authentication. You generally should
-not supply this directly, but instead set the \code{GOOGLE_API_KEY} environment
-variable. Or leave it as \code{NULL} to use ambient credentials.}
+\item{api_key}{API key to use for authentication.
+
+You generally should not supply this directly, but instead set the \code{GOOGLE_API_KEY} environment variable.
+The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{mime_type}{Optionally, specify the mime type of the file.
 If not specified, will be guesses from the file extension.}

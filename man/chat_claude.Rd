@@ -41,9 +41,11 @@ with \code{\link[=modifyList]{modifyList()}}.}
 \item{beta_headers}{Optionally, a character vector of beta headers to opt-in
 claude features that are still in beta.}
 
-\item{api_key}{The API key to use for authentication. You generally should
-not supply this directly, but instead set the \code{ANTHROPIC_API_KEY} environment
-variable.}
+\item{api_key}{API key to use for authentication.
+
+You generally should not supply this directly, but instead set the \code{ANTHROPIC_API_KEY} environment variable.
+The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{echo}{One of the following options:
 \itemize{
@@ -63,14 +65,7 @@ A \link{Chat} object.
 models under the \href{https://www.anthropic.com/claude}{Claude} moniker.
 Note that a Claude Pro membership does not give you the ability to call
 models via the API; instead, you will need to sign up (and pay for) a
-\href{https://console.anthropic.com/}{developer account}
-\subsection{Authentication}{
-
-To authenticate, we recommend saving your
-\href{https://console.anthropic.com/account/keys}{API key} to
-the \code{ANTHROPIC_API_KEY} env var in your \code{.Renviron}
-(which you can easily edit by calling \code{usethis::edit_r_environ()}).
-}
+\href{https://console.anthropic.com/}{developer account}.
 }
 \examples{
 \dontshow{if (has_credentials("claude")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

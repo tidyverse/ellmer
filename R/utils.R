@@ -132,3 +132,23 @@ modify_list <- function(x, y) {
 is_whitespace <- function(x) {
   grepl("^(\\s|\n)*$", x)
 }
+
+paste_c <- function(...) {
+  paste(c(...), collapse = "")
+}
+
+api_key_param <- function(key) {
+  paste_c(
+    "API key to use for authentication.\n",
+    "\n",
+    c(
+      "You generally should not supply this directly, but instead set the ",
+      c("`", key, "`"),
+      " environment variable.\n"
+    ),
+    c(
+      "The best place to set this is in `.Renviron`,
+      which you can easily edit by calling `usethis::edit_r_environ()`."
+    )
+  )
+}
