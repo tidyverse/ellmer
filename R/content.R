@@ -270,6 +270,37 @@ method(contents_markdown, ContentUploaded) <- function(content) {
   sprintf("`[uploaded %s file]`", content@mime_type)
 }
 
+# Thinking ---------------------------------------------------------------------
+
+#' @rdname Content
+#' @export
+ContentThinking <- new_class(
+  "ContentThinking",
+  parent = Content,
+  properties = list(
+    thinking = prop_string(),
+    extra = class_list
+  )
+)
+
+method(format, ContentThinking) <- function(x, ...) {
+  paste("<thinking>\n", x@thinking, "\n</thinking>\n")
+}
+
+method(contents_text, ContentThinking) <- function(content) {
+  content@thinking
+}
+
+method(contents_html, ContentThinking) <- function(content) {
+  check_installed("commonmark")
+  commonmark::markdown_html(content@thinking)
+}
+
+method(contents_markdown, ContentThinking) <- function(content) {
+  content@thinking
+}
+
+
 # Helpers ----------------------------------------------------------------------
 
 as_content <- function(x, error_call = caller_env(), error_arg = "...") {

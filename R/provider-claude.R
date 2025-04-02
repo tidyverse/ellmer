@@ -229,15 +229,20 @@ method(stream_merge_chunks, ProviderClaude) <- function(
   } else if (chunk$type == "content_block_start") {
     result$content[[chunk$index + 1L]] <- chunk$content_block
   } else if (chunk$type == "content_block_delta") {
+    # https://docs.anthropic.com/en/api/messages-streaming#delta-types
+    i <- chunk$index + 1L
+    
     if (chunk$delta$type == "text_delta") {
-      paste(result$content[[chunk$index + 1L]]$text) <- chunk$delta$text
+      paste(result$content[[i]]$text) <- chunk$delta$text
     } else if (chunk$delta$type == "input_json_delta") {
       if (chunk$delta$partial_json != "") {
         # See issue #228 about partial_json sometimes being ""
-        paste(
-          result$content[[chunk$index + 1L]]$input
-        ) <- chunk$delta$partial_json
+        paste(result$content[[i]]$input) <- chunk$delta$partial_json
       }
+    } else if (chunk$delta$type == "thinking_delta") {
+      paste(result$content[[i]]$thinking) <- chunk$delta$thinking
+    } else if (chunk$delta$type == "signature_delta") {
+      paste(result$content[[i]]$signature) <- chunk$delta$signature
     } else {
       cli::cli_inform(c("!" = "Unknown delta type {.str {chunk$delta$type}}."))
     }
@@ -279,6 +284,11 @@ method(value_turn, ProviderClaude) <- function(
         }
         ContentToolRequest(content$id, content$name, content$input)
       }
+    } else if (content$type == "thinking") {
+      ContentThinking(
+        content$thinking,
+        extra = list(signature = content$signature)
+      )
     } else {
       cli::cli_abort(
         "Unknown content type {.str {content$type}}.",
@@ -386,6 +396,20 @@ method(as_json, list(ProviderClaude, ToolDef)) <- function(provider, x) {
   )
 }
 
+method(as_json, list(ProviderClaude, ContentThinking)) <- function(
+  provider,
+  x
+) {
+  if (identical(x@thinking, "")) {
+    return()
+  }
+
+  list(
+    type = "thinking",
+    thinking = x@thinking,
+    signature = x@extra$signature
+  )
+}
 
 # Helpers ----------------------------------------------------------------
 

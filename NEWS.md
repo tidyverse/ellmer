@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_claude()` now supports the thinking content type (#396).
+
 * New `interpolate_package()` to make it easier to interpolate from prompts
   stored in the `inst/prompts` inside a package (#164).
 
