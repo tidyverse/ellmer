@@ -4,10 +4,12 @@
 #' [Hugging Face](https://huggingface.co/) hosts a variety of open-source
 #' and proprietary AI models available via their Inference API.
 #' To use the Hugging Face API, you must have an Access Token, which you can obtain
-#' from your [Hugging Face account](https://huggingface.co/settings/tokens).
+#' from your [Hugging Face account](https://huggingface.co/settings/tokens)
+#' (ensure that at least "Make calls to Inference Providers" and
+#' "Make calls to your Inference Endpoints" is checked).
 #'
 #' This function is a lightweight wrapper around [chat_openai()], with
-#' the defaults adjusted for Hugging Face. Model defaults to `meta-llama/Llama-3.1-8B-Instruct`.
+#' the defaults adjusted for Hugging Face.
 #'
 #' ## Known limitations
 #'
@@ -30,27 +32,28 @@
 chat_huggingface <- function(
   system_prompt = NULL,
   turns = NULL,
-  base_url = "https://api-inference.huggingface.co/models/",
   api_key = hf_key(),
   model = NULL,
-  seed = NULL,
   api_args = list(),
   echo = NULL
 ) {
+  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "meta-llama/Llama-3.1-8B-Instruct")
   echo <- check_echo(echo)
 
-  chat_openai(
-    system_prompt = system_prompt,
-    turns = turns,
-    # modify base_url for hugging face compatibility with openai
-    base_url = paste0(base_url, model, "/v1"),
-    api_key = api_key,
-    model = model,
-    seed = seed,
-    api_args = api_args,
-    echo = echo
+  base_url <- paste0(
+    "https://api-inference.huggingface.co/models/",
+    model,
+    "/v1"
   )
+
+  provider <- ProviderOpenAI(
+    base_url = base_url,
+    model = model,
+    extra_args = api_args,
+    api_key = api_key
+  )
+  Chat$new(provider = provider, turns = turns, echo = echo)
 }
 
 hf_key <- function() {
