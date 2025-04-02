@@ -24,7 +24,11 @@ merge_dicts <- function(left, right) {
         left[[right_k]] <- merge_lists(left_v, right_v)
       }
     } else if (!identical(class(left_v), class(right_v))) {
-      stop(paste0("additional_kwargs['", right_k, "'] already exists in this message, but with a different type."))
+      stop(paste0(
+        "additional_kwargs['",
+        right_k,
+        "'] already exists in this message, but with a different type."
+      ))
     } else {
       stop(paste0(
         "Additional kwargs key ",
@@ -40,7 +44,6 @@ merge_dicts <- function(left, right) {
 }
 
 merge_lists <- function(left, right) {
-
   if (is.null(right)) {
     return(left)
   } else if (is.null(left)) {
@@ -64,7 +67,11 @@ merge_lists <- function(left, right) {
 }
 
 find_index <- function(left, e_right) {
-  if (!is.list(e_right) || !has_name(e_right, "index") || !is.numeric(e_right$index)) {
+  if (
+    !is.list(e_right) ||
+      !has_name(e_right, "index") ||
+      !is.numeric(e_right$index)
+  ) {
     return(NA)
   }
 

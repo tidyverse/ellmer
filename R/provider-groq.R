@@ -22,15 +22,16 @@ NULL
 #' chat <- chat_groq()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_groq <- function(system_prompt = NULL,
-                      turns = NULL,
-                      base_url = "https://api.groq.com/openai/v1",
-                      api_key = groq_key(),
-                      model = NULL,
-                      seed = NULL,
-                      api_args = list(),
-                      echo = NULL) {
-
+chat_groq <- function(
+  system_prompt = NULL,
+  turns = NULL,
+  base_url = "https://api.groq.com/openai/v1",
+  api_key = groq_key(),
+  model = NULL,
+  seed = NULL,
+  api_args = list(),
+  echo = NULL
+) {
   turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "llama3-8b-8192")
   echo <- check_echo(echo)
@@ -66,7 +67,11 @@ method(as_json, list(ProviderGroq, Turn)) <- function(provider, x) {
     }
 
     list(
-      compact(list(role = "assistant", content = content, tool_calls = tool_calls))
+      compact(list(
+        role = "assistant",
+        content = content,
+        tool_calls = tool_calls
+      ))
     )
   } else {
     as_json(super(provider, ProviderOpenAI), x)

@@ -47,16 +47,18 @@ NULL
 #' chat <- chat_azure(deployment_id = "gpt-4o-mini")
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_azure <- function(endpoint = azure_endpoint(),
-                       deployment_id,
-                       api_version = NULL,
-                       system_prompt = NULL,
-                       turns = NULL,
-                       api_key = NULL,
-                       token = deprecated(),
-                       credentials = NULL,
-                       api_args = list(),
-                       echo = c("none", "text", "all")) {
+chat_azure <- function(
+  endpoint = azure_endpoint(),
+  deployment_id,
+  api_version = NULL,
+  system_prompt = NULL,
+  turns = NULL,
+  api_key = NULL,
+  token = deprecated(),
+  credentials = NULL,
+  api_args = list(),
+  echo = c("none", "text", "all")
+) {
   check_exclusive(token, credentials, .require = FALSE)
   if (lifecycle::is_present(token)) {
     lifecycle::deprecate_warn(
@@ -112,8 +114,14 @@ chat_azure_test <- function(system_prompt = NULL, ...) {
 ProviderAzure <- new_class(
   "ProviderAzure",
   parent = ProviderOpenAI,
-  constructor = function(endpoint, deployment_id, api_version, api_key,
-                         credentials, extra_args = list()) {
+  constructor = function(
+    endpoint,
+    deployment_id,
+    api_version,
+    api_key,
+    credentials,
+    extra_args = list()
+  ) {
     new_object(
       ProviderOpenAI(
         base_url = paste0(endpoint, "/openai/deployments/", deployment_id),
@@ -137,12 +145,13 @@ azure_endpoint <- function() {
 }
 
 # https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#chat-completions
-method(chat_request, ProviderAzure) <- function(provider,
-                                                stream = TRUE,
-                                                turns = list(),
-                                                tools = list(),
-                                                type = NULL) {
-
+method(chat_request, ProviderAzure) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   req <- request(provider@base_url)
   req <- req_url_path_append(req, "/chat/completions")
   req <- req_url_query(req, `api-version` = provider@api_version)

@@ -83,7 +83,11 @@ method(chat_request, ProviderOpenRouter) <- function(
   req
 }
 
-method(value_turn, ProviderOpenRouter) <- function(provider, result, has_type = FALSE) {
+method(value_turn, ProviderOpenRouter) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
   # https://openrouter.ai/docs/errors
   check_openrouter_error(result$error)
 
@@ -95,11 +99,7 @@ method(value_turn, ProviderOpenRouter) <- function(provider, result, has_type = 
 }
 
 method(stream_parse, ProviderOpenRouter) <- function(provider, event) {
-  if (is.null(event)) {
-    cli::cli_abort("Connection closed unexpectedly")
-  }
-
-  if (identical(event$data, "[DONE]")) {
+  if (is.null(event) || identical(event$data, "[DONE]")) {
     return(NULL)
   }
 
@@ -128,23 +128,27 @@ check_openrouter_error <- function(error, call = caller_env()) {
 }
 
 method(chat_resp_stream, ProviderOpenRouter) <- function(provider, resp) {
-  repeat({
-    event <- resp_stream_sse(resp)
-    if (is.null(event)) {
-      break
-    }
+  repeat
+    ({
+      event <- resp_stream_sse(resp)
+      if (is.null(event)) {
+        break
+      }
 
-    # https://openrouter.ai/docs/responses#sse-streaming-comments
-    if (!identical(event$data, character())) {
-      break
-    }
-    Sys.sleep(0.1)
-  })
+      # https://openrouter.ai/docs/responses#sse-streaming-comments
+      if (!identical(event$data, character())) {
+        break
+      }
+      Sys.sleep(0.1)
+    })
 
   event
 }
 
-method(as_json, list(ProviderOpenRouter, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderOpenRouter, ContentText)) <- function(
+  provider,
+  x
+) {
   if (identical(x@text, "")) {
     # Tool call requests can include a Content with empty text,
     # but it doesn't like it if you send this back

@@ -35,13 +35,13 @@ test_that("can convert an object to json schema", {
     list(
       type = "object",
       description = "a",
-       properties = list(
-         integer = list(type = "integer", description = ""),
-         number = list(type = "number", description = ""),
-         string = list(type = "string", description = "")
-       ),
-       required = list("integer", "number", "string"),
-       additionalProperties = FALSE
+      properties = list(
+        integer = list(type = "integer", description = ""),
+        number = list(type = "number", description = ""),
+        string = list(type = "string", description = "")
+      ),
+      required = list("integer", "number", "string"),
+      additionalProperties = FALSE
     )
   )
 })

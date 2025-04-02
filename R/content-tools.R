@@ -59,19 +59,21 @@ invoke_tool <- function(fun, arguments, id) {
   )
 }
 
-on_load(invoke_tool_async <- coro::async(function(fun, arguments, id) {
-  if (is.null(fun)) {
-    return(ContentToolResult(id = id, error = "Unknown tool"))
-  }
-
-  tryCatch(
-    {
-      result <- await(do.call(fun, arguments))
-      ContentToolResult(id, result)
-    },
-    error = function(e) {
-      # TODO: We need to report this somehow; it's way too hidden from the user
-      ContentToolResult(id, error = conditionMessage(e))
+on_load(
+  invoke_tool_async <- coro::async(function(fun, arguments, id) {
+    if (is.null(fun)) {
+      return(ContentToolResult(id = id, error = "Unknown tool"))
     }
-  )
-}))
+
+    tryCatch(
+      {
+        result <- await(do.call(fun, arguments))
+        ContentToolResult(id, result)
+      },
+      error = function(e) {
+        # TODO: We need to report this somehow; it's way too hidden from the user
+        ContentToolResult(id, error = conditionMessage(e))
+      }
+    )
+  })
+)

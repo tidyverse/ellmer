@@ -44,12 +44,13 @@
 #' }
 #'
 #' @export
-create_tool_def <- function(topic,
-                            chat = NULL,
-                            model = deprecated(),
-                            echo = interactive(),
-                            verbose = FALSE) {
-
+create_tool_def <- function(
+  topic,
+  chat = NULL,
+  model = deprecated(),
+  echo = interactive(),
+  verbose = FALSE
+) {
   expr <- enexpr(topic)
 
   check_exclusive(model, chat, .require = FALSE)
@@ -80,17 +81,23 @@ create_tool_def <- function(topic,
   # Ensure `expr` is a string literal, a symbol, or an expression of the form
   # `pkg::fun` or `pkg:::fun`.
   if (is_call(expr)) {
-    if (!identical(expr[[1]], quote(`::`)) ||
+    if (
+      !identical(expr[[1]], quote(`::`)) ||
         !is_symbol(expr[[2]]) ||
-        !is_symbol(expr[[3]])) {
-      cli::cli_abort("Expected a symbol or a string literal, or an expression of the form `pkg::fun` or `pkg:::fun`.")
+        !is_symbol(expr[[3]])
+    ) {
+      cli::cli_abort(
+        "Expected a symbol or a string literal, or an expression of the form `pkg::fun` or `pkg:::fun`."
+      )
     }
     pkg <- as.character(expr[[2]])
     fun <- as.character(expr[[3]])
   } else if (is_symbol(expr)) {
     fun <- as.character(expr)
   } else if (!is_string(expr)) {
-    cli::cli_abort("Expected a symbol or a string literal, or an expression of the form `pkg::fun` or `pkg:::fun`.")
+    cli::cli_abort(
+      "Expected a symbol or a string literal, or an expression of the form `pkg::fun` or `pkg:::fun`."
+    )
   }
 
   help_text <- get_help_text(fun, pkg)
@@ -102,8 +109,10 @@ create_tool_def <- function(topic,
   topic_str <- format(expr)
 
   payload <- paste0(
-    "Function name: ", topic_str,
-    "\n\nFunction documentation:\n\n", help_text
+    "Function name: ",
+    topic_str,
+    "\n\nFunction documentation:\n\n",
+    help_text
   )
 
   if (isTRUE(verbose)) {
@@ -176,7 +185,7 @@ extract_comments <- function(filename, start_line) {
   if (comments_start == start_line) {
     return(NULL)
   }
-  comments_lines <- lines[comments_start:(start_line-1)]
+  comments_lines <- lines[comments_start:(start_line - 1)]
   paste(comments_lines, collapse = "\n")
 }
 

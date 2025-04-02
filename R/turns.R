@@ -52,13 +52,14 @@ Turn <- new_class(
     ),
     completed = new_property(class = class_POSIXct | NULL)
   ),
-  constructor = function(role,
-                         contents = list(),
-                         json = list(),
-                         tokens = c(0, 0),
-                         completed = Sys.time()) {
-
-   if (is.character(contents)) {
+  constructor = function(
+    role,
+    contents = list(),
+    json = list(),
+    tokens = c(0, 0),
+    completed = Sys.time()
+  ) {
+    if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
     }
     new_object(
@@ -101,7 +102,11 @@ as_user_turn <- function(contents, call = caller_env(), arg = "...") {
   Turn("user", contents)
 }
 
-as_user_turns <- function(prompts, call = caller_env(), arg = caller_arg(prompts)) {
+as_user_turns <- function(
+  prompts,
+  call = caller_env(),
+  arg = caller_arg(prompts)
+) {
   if (!is.list(prompts)) {
     stop_input_type(prompts, "a list", call = call, arg = arg)
   }
@@ -123,11 +128,12 @@ check_turn <- function(x, call = caller_env(), arg = caller_arg(x)) {
   }
 }
 
-normalize_turns <- function(turns = NULL,
-                            system_prompt = NULL,
-                            overwrite = FALSE,
-                            error_call = caller_env()) {
-
+normalize_turns <- function(
+  turns = NULL,
+  system_prompt = NULL,
+  overwrite = FALSE,
+  error_call = caller_env()
+) {
   check_character(system_prompt, allow_null = TRUE, call = error_call)
   if (length(system_prompt) > 1) {
     system_prompt <- paste(system_prompt, collapse = "\n\n")

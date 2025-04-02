@@ -4,7 +4,8 @@ prop_string <- function(default = NULL, allow_null = FALSE, allow_na = FALSE) {
 
   new_property(
     class = if (allow_null) NULL | class_character else class_character,
-    default = if (is.null(default) && !allow_null) quote(stop("Required")) else default,
+    default = if (is.null(default) && !allow_null) quote(stop("Required")) else
+      default,
     validator = function(value) {
       if (allow_null && is.null(value)) {
         return()
@@ -33,9 +34,17 @@ prop_bool <- function(default, allow_null = FALSE, allow_na = FALSE) {
 
       if (length(value) != 1) {
         if (allow_na) {
-          paste0("must be a single TRUE or FALSE, not ", obj_type_friendly(value), ".")
+          paste0(
+            "must be a single TRUE or FALSE, not ",
+            obj_type_friendly(value),
+            "."
+          )
         } else {
-          paste0("must be a single TRUE, FALSE or NA, not ", obj_type_friendly(value), ".")
+          paste0(
+            "must be a single TRUE, FALSE or NA, not ",
+            obj_type_friendly(value),
+            "."
+          )
         }
       } else if (!allow_na && is.na(value)) {
         paste0("must be a TRUE or FALSE, not NA.")
@@ -55,8 +64,14 @@ prop_list_of <- function(class, names = c("any", "all", "none")) {
         val <- value[[i]]
         if (!S7_inherits(val, class)) {
           return(paste0(
-            "must be a list of <", class@name, ">s. ",
-            "Element ", i, " is ", obj_type_friendly(val), "."
+            "must be a list of <",
+            class@name,
+            ">s. ",
+            "Element ",
+            i,
+            " is ",
+            obj_type_friendly(val),
+            "."
           ))
         }
       }
@@ -69,7 +84,13 @@ prop_list_of <- function(class, names = c("any", "all", "none")) {
   )
 }
 
-prop_number_whole <- function(default = NULL, min = NULL, max = NULL, allow_null = FALSE, allow_na = FALSE) {
+prop_number_whole <- function(
+  default = NULL,
+  min = NULL,
+  max = NULL,
+  allow_null = FALSE,
+  allow_na = FALSE
+) {
   force(allow_null)
   force(allow_na)
 

@@ -37,7 +37,6 @@ test_that("all tool variations work", {
   # they support parallel tool calls.
   #
   # See: https://docs.databricks.com/en/machine-learning/model-serving/function-calling.html#limitations
-
   # test_tools_simple(chat_databricks)
   # test_tools_async(chat_databricks)
   # test_tools_parallel(chat_databricks)

@@ -13,8 +13,8 @@ parallel_requests <- function(
       tools = tools,
       stream = FALSE,
       type = type
-    )}
-  )
+    )
+  })
   reqs <- map(reqs, function(req) {
     req_throttle(req, capacity = rpm, fill_time_s = 60)
   })

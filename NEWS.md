@@ -1,5 +1,26 @@
 # ellmer (development version)
 
+* `chat_claude()`, `chat_openai()`, and `chat_gemini()` now have a `params` 
+  argument that allows you to specify common model paramaters (like `seed`
+  and `temperature`). Support for other models will grow as you request it 
+  (#280).
+
+* `chat_claude(max_tokens =)` is now deprecated in favour of 
+  `chat_claude(params = )` (#280).
+
+* `chat_openai(seed =)` is now deprecated in favour of 
+  `chat_openai(params = )` (#280).
+
+* `Chat$get_provider()` lets you access the underlying provider object, if needed (#202).
+
+* `$extract_data()` now works better for arrays when `required = FALSE` (#384).
+
+* `chat_claude()` and `chat_bedrock()` no longer choke after receiving an 
+  output that consists only of whitespace (#376).
+
+* `live_browser()` now initializes `shinychat::chat_ui()` with the messages from
+  the chat turns, rather than replaying the turns server-side (#381).
+
 * `Chat$tokens()` now returns a data frame of tokens, correctly aligned to the
   individual turn. The print method now uses this to show how many input/output
   tokens each turn used (#354).
@@ -27,7 +48,8 @@
   particularly as it pertains to handling errors.
 
   For Claude, note that the number of active connections is limited primarily
-  by the output tokens per limit (OTPM) which is estimated from the `max_tokens` parameter, which defaults to 4096. That means if you're limited to 16,000
+  by the output tokens per limit (OTPM) which is estimated from the `max_tokens` 
+  parameter, which defaults to 4096. That means if you're limited to 16,000
   OPTM, you should use at most 16,000 / 4096 = ~4 active connections (or
   decrease `max_tokens`).
 
@@ -128,7 +150,7 @@
 
 * Streaming ollama results works once again (#117).
 
-* Streaming OpenAI results now capture more results, including `logprops` (#115).
+* Streaming OpenAI results now capture more results, including `logprobs` (#115).
 
 * New `interpolate()` and `prompt_file()` make it easier to create prompts that are a mix of static text and dynamic values.
 

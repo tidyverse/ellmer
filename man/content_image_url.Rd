@@ -17,7 +17,7 @@ content_image_plot(width = 768, height = 768)
 \verb{data:} URL or a regular URL. Valid image types are PNG, JPEG, WebP, and
 non-animated GIF.}
 
-\item{detail}{The \href{https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding}{detail setting}
+\item{detail}{The \href{https://platform.openai.com/docs/guides/images/image-input-requirements}{detail setting}
 for this image. Can be \code{"auto"}, \code{"low"}, or \code{"high"}.}
 
 \item{path}{The path to the image file to include in the chat input. Valid
@@ -28,7 +28,7 @@ file extensions are \code{.png}, \code{.jpeg}, \code{.jpg}, \code{.webp}, and (n
 \code{"auto"}, the content type is inferred from the file extension.}
 
 \item{resize}{If \code{"low"}, resize images to fit within 512x512. If \code{"high"},
-resize to fit within 2000x768 or 768x2000. (See the \href{https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding}{OpenAI docs}
+resize to fit within 2000x768 or 768x2000. (See the \href{https://platform.openai.com/docs/guides/images/image-input-requirements}{OpenAI docs}
 for more on why these specific sizes are used.) If \code{"none"}, do not resize.
 
 You can also pass a custom string to resize the image to a specific size,

@@ -28,15 +28,16 @@
 #' chat <- chat_hf()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_hf <- function(system_prompt = NULL,
-                    turns = NULL,
-                    base_url = "https://api-inference.huggingface.co/models/",
-                    api_key = hf_key(),
-                    model = NULL,
-                    seed = NULL,
-                    api_args = list(),
-                    echo = NULL) {
-
+chat_hf <- function(
+  system_prompt = NULL,
+  turns = NULL,
+  base_url = "https://api-inference.huggingface.co/models/",
+  api_key = hf_key(),
+  model = NULL,
+  seed = NULL,
+  api_args = list(),
+  echo = NULL
+) {
   model <- set_default(model, "meta-llama/Llama-3.1-8B-Instruct")
   echo <- check_echo(echo)
 

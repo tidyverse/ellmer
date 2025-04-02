@@ -72,6 +72,13 @@ test_that("can use pdfs", {
   test_pdf_local(chat_fun)
 })
 
+# Provider idiosynchronies -----------------------------------------------
+
+test_that("continues to work after whitespace only outputs (#376)", {
+  chat <- chat_bedrock()
+  chat$chat("Respond with only two blank lines")
+  expect_equal(chat$chat("What's 1+1? Just give me the number"), "2")
+})
 
 # Auth --------------------------------------------------------------------
 

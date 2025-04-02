@@ -115,7 +115,7 @@ Learn more about structured data extraction in `vignette("structure-data")`.
 
 LLMs can also be useful to solve general programming problems. For example:
 
-* Write a detailed prompt that explains how to update code to use a new version of a package. You could combine this with the rstudioapi package to allow the user to select code, transform it, and replace it in the existing text. A comprehensive example of this sort of app is [pal](https://simonpcouch.github.io/pal/), which includes prompts for automatically generating roxygen documentation blocks, updating testthat code to the 3rd edition, and converting `stop()` and `abort()` to use `cli::cli_abort()`.
+* Write a detailed prompt that explains how to update code to use a new version of a package. You could combine this with the rstudioapi package to allow the user to select code, transform it, and replace it in the existing text. A comprehensive example of this sort of app is [chores](https://simonpcouch.github.io/chores/), which includes prompts for automatically generating roxygen documentation blocks, updating testthat code to the 3rd edition, and converting `stop()` and `abort()` to use `cli::cli_abort()`.
 
 * You could automatically look up the documentation for an R function, and include it in the prompt to make it easier to figure out how to use a specific function.
 

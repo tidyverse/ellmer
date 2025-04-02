@@ -6,38 +6,8 @@ test_that("help topic extraction works", {
   expect_identical(get_help_text("print", "base"), print_help)
 })
 
-#' A function for foo-ing three numbers.
-#'
-#' @param x The first param
-#' @param y The second param
-#' @param z Take a guess
-#' @returns The result of x %foo% y %foo% z.
-has_roxygen_comments <- function(x, y, z = pi - 3.14) {
-  super_secret_code()
-}
-
-  #' A function for foo-ing three numbers.
-  #'
-  #' @param x The first param
-  #' @param y The second param
-  #' @param z Take a guess
-  #' @returns The result of x %foo% y %foo% z.
-  indented_comments <- function(x, y, z = pi - 3.14) {
-    super_secret_code()
-  }
-
-no_roxygen_comments <- function(i, j, k = pi - 3.14) {
-  super_secret_code()
-}
-
-no_srcfile <- eval(quote(
-  #' A function for foo-ing three numbers.
-  function(a, b, c = pi - 3.14) {
-    super_secret_code()
-  }
-))
-
 test_that("roxygen2 comment extraction works", {
+  sys.source(test_path("tools-def.R"), environment())
   aliased_function <- has_roxygen_comments
 
   expect_snapshot(extract_comments_and_signature(has_roxygen_comments))
@@ -47,6 +17,7 @@ test_that("roxygen2 comment extraction works", {
 })
 
 test_that("basic signature extraction works", {
+  sys.source(test_path("tools-def.R"), environment())
   expect_snapshot(extract_comments_and_signature(no_roxygen_comments))
 })
 
