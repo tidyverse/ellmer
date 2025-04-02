@@ -79,7 +79,7 @@ chat_openai <- function(
   }
 
   provider <- ProviderOpenAI(
-    name = "OpenAI/ChatGPT",
+    name = "OpenAI",
     base_url = base_url,
     model = model,
     params = params,

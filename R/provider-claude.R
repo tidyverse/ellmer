@@ -61,7 +61,7 @@ chat_claude <- function(
   }
 
   provider <- ProviderClaude(
-    name = "Anthropic/Claude",
+    name = "Anthropic",
     model = model,
     params = params %||% params(),
     extra_args = api_args,
