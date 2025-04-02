@@ -1,5 +1,5 @@
 test_that("can make simple request", {
-  chat <- chat_hf(
+  chat <- chat_huggingface(
     "Be as terse as possible; no punctuation",
     model = "meta-llama/Llama-3.1-8B-Instruct"
   )

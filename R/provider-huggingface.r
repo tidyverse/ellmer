@@ -25,10 +25,10 @@
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
-#' chat <- chat_hf()
+#' chat <- chat_huggingface()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_hf <- function(
+chat_huggingface <- function(
   system_prompt = NULL,
   turns = NULL,
   base_url = "https://api-inference.huggingface.co/models/",
