@@ -62,13 +62,16 @@ test_that("Azure request headers are generated correctly", {
     role = "user",
     contents = list(ContentText("What is 1 + 1?"))
   )
-  endpoint <- "https://ai-hwickhamai260967855527.openai.azure.com"
   deployment_id <- "gpt-4o-mini"
+  base_url <- paste0(
+    "https://ai-hwickhamai260967855527.openai.azure.com/openai/deployments/",
+    deployment_id
+  )
 
   # API key.
   p <- ProviderAzure(
-    endpoint = endpoint,
-    deployment_id = deployment_id,
+    base_url = base_url,
+    model = deployment_id,
     api_version = "2024-06-01",
     api_key = "key",
     credentials = default_azure_credentials("key")
@@ -79,8 +82,8 @@ test_that("Azure request headers are generated correctly", {
 
   # Token.
   p <- ProviderAzure(
-    endpoint = endpoint,
-    deployment_id = deployment_id,
+    base_url = base_url,
+    model = deployment_id,
     api_version = "2024-06-01",
     api_key = "",
     credentials = default_azure_credentials("", "token")
@@ -91,8 +94,8 @@ test_that("Azure request headers are generated correctly", {
 
   # Both.
   p <- ProviderAzure(
-    endpoint = endpoint,
-    deployment_id = deployment_id,
+    base_url = base_url,
+    model = deployment_id,
     api_version = "2024-06-01",
     api_key = "key",
     credentials = default_azure_credentials("key", "token")
