@@ -8,8 +8,7 @@ NULL
 #'
 #' ## Known limitations
 #'
-#' * Structured data extraction is not supported..
-#' * Function calling is currently [unstable](https://api-docs.deepseek.com/guides/function_calling).
+#' * Structured data extraction is not supported.
 #' * Images are not supported.
 #'
 #' @export

@@ -56,8 +56,7 @@ A \link{Chat} object.
 Sign up at \url{https://platform.deepseek.com}.
 \subsection{Known limitations}{
 \itemize{
-\item Structured data extraction is not supported..
-\item Function calling is currently \href{https://api-docs.deepseek.com/guides/function_calling}{unstable}.
+\item Structured data extraction is not supported.
 \item Images are not supported.
 }
 }
