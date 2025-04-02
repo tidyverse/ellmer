@@ -11,20 +11,13 @@ NULL
 #' See [gemini_upload()] to upload files (PDFs, images, video, audio, etc.)
 #'
 #' ## Authentication
-#' To authenticate, we recommend saving your
-#' [API key](https://aistudio.google.com/app/apikey) to
-#' the `GOOGLE_API_KEY` env var in your `.Renviron`
-#' (which you can easily edit by calling `usethis::edit_r_environ()`).
-#'
 #' By default, `chat_gemini()` will use Google's default application credentials
 #' if there is no API key provided. This requires the \pkg{gargle} package.
 #'
 #' It can also pick up on viewer-based credentials on Posit Connect. This in
 #' turn requires the \pkg{connectcreds} package.
 #'
-#' @param api_key The API key to use for authentication. You generally should
-#'   not supply this directly, but instead set the `GOOGLE_API_KEY` environment
-#'   variable. Or leave it as `NULL` to use ambient credentials.
+#' @param api_key `r api_key_param("GOOGLE_API_KEY")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots

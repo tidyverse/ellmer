@@ -3,11 +3,14 @@
 \name{interpolate}
 \alias{interpolate}
 \alias{interpolate_file}
+\alias{interpolate_package}
 \title{Helpers for interpolating data into prompts}
 \usage{
 interpolate(prompt, ..., .envir = parent.frame())
 
 interpolate_file(path, ..., .envir = parent.frame())
+
+interpolate_package(package, path, ..., .envir = parent.frame())
 }
 \arguments{
 \item{prompt}{A prompt string. You should not generally expose this
@@ -21,6 +24,8 @@ wrapping in another function. See \code{vignette("wrappers", package = "glue")}
 for more details.}
 
 \item{path}{A path to a prompt file (often a \code{.md}).}
+
+\item{package}{Package name.}
 }
 \value{
 A \{glue\} string.
@@ -28,9 +33,16 @@ A \{glue\} string.
 \description{
 These functions are lightweight wrappers around
 \href{https://glue.tidyverse.org/}{glue} that make it easier to interpolate
-dynamic data into a static prompt. Compared to glue, these functions
-expect you to wrap dynamic values in \code{{{ }}}, making it easier to include
-R code and JSON in your prompt.
+dynamic data into a static prompt:
+\itemize{
+\item \code{interpolate()} works with a string.
+\item \code{interpolate_file()} works with a file.
+\item \code{interpolate_package()} works with a file in the \code{insts/prompt}
+directory of a package.
+}
+
+Compared to glue, dynamic values should be wrapped in \code{{{ }}}, making it
+easier to include R code and JSON in your prompt.
 }
 \examples{
 joke <- "You're a cool dude who loves to make jokes. Tell me a joke about {{topic}}."

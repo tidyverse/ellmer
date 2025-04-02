@@ -1,10 +1,17 @@
 #' Helpers for interpolating data into prompts
 #'
+#' @description
 #' These functions are lightweight wrappers around
 #' [glue](https://glue.tidyverse.org/) that make it easier to interpolate
-#' dynamic data into a static prompt. Compared to glue, these functions
-#' expect you to wrap dynamic values in `{{ }}`, making it easier to include
-#' R code and JSON in your prompt.
+#' dynamic data into a static prompt:
+#'
+#' * `interpolate()` works with a string.
+#' * `interpolate_file()` works with a file.
+#' * `interpolate_package()` works with a file in the `insts/prompt`
+#'   directory of a package.
+#'
+#' Compared to glue, dynamic values should be wrapped in `{{ }}`, making it
+#' easier to include R code and JSON in your prompt.
 #'
 #' @param prompt A prompt string. You should not generally expose this
 #'   to the end user, since glue interpolation makes it easy to run arbitrary
@@ -51,6 +58,22 @@ interpolate_file <- function(path, ..., .envir = parent.frame()) {
   interpolate(string, ..., .envir = .envir)
 }
 
+#' @param package Package name.
+#' @rdname interpolate
+#' @export
+interpolate_package <- function(
+  package,
+  path,
+  ...,
+  .envir = parent.frame()
+) {
+  path <- system.file("prompts", path, package = package)
+  interpolate_file(path, ..., .envir = .envir)
+}
+
 read_file <- function(path) {
   file_contents <- readChar(path, file.size(path))
 }
+
+# for mocking
+system.file <- NULL

@@ -11,20 +11,11 @@ NULL
 #' models under the [Claude](https://www.anthropic.com/claude) moniker.
 #' Note that a Claude Pro membership does not give you the ability to call
 #' models via the API; instead, you will need to sign up (and pay for) a
-#' [developer account](https://console.anthropic.com/)
-#'
-#' ## Authentication
-#'
-#' To authenticate, we recommend saving your
-#' [API key](https://console.anthropic.com/account/keys) to
-#' the `ANTHROPIC_API_KEY` env var in your `.Renviron`
-#' (which you can easily edit by calling `usethis::edit_r_environ()`).
+#' [developer account](https://console.anthropic.com/).
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
-#' @param api_key The API key to use for authentication. You generally should
-#'   not supply this directly, but instead set the `ANTHROPIC_API_KEY` environment
-#'   variable.
+#' @param api_key `r api_key_param("ANTHROPIC_API_KEY")`
 #' @param max_tokens Maximum number of tokens to generate before stopping.
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
 #'   claude features that are still in beta.
