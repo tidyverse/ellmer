@@ -77,7 +77,7 @@ Other chatbots:
 \code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
 \code{\link{chat_deepseek}()},
-\code{\link{chat_gemini}()},
+\code{\link{chat_google_gemini}()},
 \code{\link{chat_groq}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},

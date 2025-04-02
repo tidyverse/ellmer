@@ -20,7 +20,7 @@ test_that("defaults are reported", {
 })
 
 test_that("supports standard parameters", {
-  chat_fun <- chat_azure_test
+  chat_fun <- chat_azure_openai_test
 
   test_params_stop(chat_fun)
 })
