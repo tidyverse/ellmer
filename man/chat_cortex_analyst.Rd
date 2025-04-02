@@ -90,6 +90,7 @@ chat$chat("What questions can I ask?")
 \seealso{
 Other chatbots: 
 \code{\link{chat_aws_bedrock}()},
+\code{\link{chat_azure_openai}()},
 \code{\link{chat_claude}()},
 \code{\link{chat_databricks}()},
 \code{\link{chat_deepseek}()},

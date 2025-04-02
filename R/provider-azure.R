@@ -39,6 +39,7 @@ NULL
 #'   need to be refreshed.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
+#' @family chatbots
 #' @export
 #' @examples
 #' \dontrun{

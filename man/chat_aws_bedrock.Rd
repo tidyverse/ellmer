@@ -77,6 +77,7 @@ chat$chat("Tell me three jokes about statisticians")
 }
 \seealso{
 Other chatbots: 
+\code{\link{chat_azure_openai}()},
 \code{\link{chat_claude}()},
 \code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
