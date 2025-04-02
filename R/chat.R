@@ -119,11 +119,13 @@ Chat <- R6::R6Class(
       assistant_turns <- keep(turns, function(x) x@role == "assistant")
 
       n <- length(assistant_turns)
-      tokens <- t(vapply(
+      tokens_acc <- t(vapply(
         assistant_turns,
         function(turn) turn@tokens,
         double(2)
       ))
+
+      tokens <- tokens_acc
       if (n > 1) {
         # Compute just the new tokens
         tokens[-1, 1] <- tokens[seq(2, n), 1] -
@@ -131,18 +133,43 @@ Chat <- R6::R6Class(
       }
       # collapse into a single vector
       tokens_v <- c(t(tokens))
+      tokens_acc_v <- c(t(tokens_acc))
 
       tokens_df <- data.frame(
         role = rep(c("user", "assistant"), times = n),
-        tokens = tokens_v
+        tokens = tokens_v,
+        tokens_total = tokens_acc_v
       )
 
       if (include_system_prompt && private$has_system_prompt()) {
         # How do we compute this?
-        tokens_df <- rbind(data.frame(role = "system", tokens = 0), tokens_df)
+        tokens_df <- rbind(
+          data.frame(role = "system", tokens = 0, tokens_total = 0),
+          tokens_df
+        )
       }
 
       tokens_df
+    },
+
+    #' @description The total price of all turns in this chat.
+    get_price = function() {
+      turns <- self$get_turns(include_system_prompt = FALSE)
+      assistant_turns <- keep(turns, function(x) x@role == "assistant")
+
+      n <- length(assistant_turns)
+      tokens <- t(vapply(
+        assistant_turns,
+        function(turn) turn@tokens,
+        double(2)
+      ))
+
+      find_price(
+        private$provider@name,
+        private$provider@model,
+        sum(tokens[, 1]),
+        sum(tokens[, 2])
+      )
     },
 
     #' @description The last turn returned by the assistant.
@@ -645,16 +672,31 @@ print.Chat <- function(x, ...) {
   turns <- x$get_turns(include_system_prompt = TRUE)
 
   tokens <- x$tokens(include_system_prompt = TRUE)
-  tokens_user <- sum(tokens$tokens[tokens$role == "user"])
-  tokens_assistant <- sum(tokens$tokens[tokens$role == "assistant"])
 
-  cat(paste_c(
-    "<Chat",
-    c(" ", provider@name, "/", provider@model),
-    c(" turns=", length(turns)),
-    c(" tokens=", tokens_user, "/", tokens_assistant),
+  tokens_user <- sum(tokens$tokens_total[tokens$role == "user"])
+  tokens_assistant <- sum(tokens$tokens_total[tokens$role == "assistant"])
+  price <- find_price(
+    provider@name,
+    provider@model,
+    tokens_user,
+    tokens_assistant
+  )
+
+  cat(
+    paste_c(
+      "<Chat",
+      c(" ", provider@name, "/", provider@model),
+      c(" turns=", length(turns)),
+      c(
+        " tokens=",
+        tokens_user,
+        "/",
+        tokens_assistant,
+        if (!is.na(price)) c("/", format(price))
+      )
+    ),
     ">\n"
-  ))
+  )
 
   for (i in seq_along(turns)) {
     turn <- turns[[i]]

@@ -202,11 +202,11 @@ method(value_turn, ProviderGemini) <- function(
   })
   contents <- compact(contents)
   usage <- result$usageMetadata
-  tokens <- c(
-    usage$promptTokenCount %||% NA_integer_,
-    usage$candidatesTokenCount %||% NA_integer_
+  tokens <- tokens_log(
+    provider,
+    input = usage$promptTokenCount,
+    output = usage$candidatesTokenCount
   )
-  tokens_log(provider, tokens)
 
   Turn("assistant", contents, json = result, tokens = tokens)
 }

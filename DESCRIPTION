@@ -97,3 +97,5 @@ Collate:
     'utils-merge.R'
     'utils.R'
     'zzz.R'
+Depends: 
+    R (>= 3.5)

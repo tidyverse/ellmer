@@ -278,8 +278,11 @@ method(value_turn, ProviderClaude) <- function(
     }
   })
 
-  tokens <- c(result$usage$input_tokens, result$usage$output_tokens)
-  tokens_log(provider, tokens)
+  tokens <- tokens_log(
+    provider,
+    input = result$usage$input_tokens,
+    output = result$usage$output_tokens
+  )
 
   Turn(result$role, contents, json = result, tokens = tokens)
 }
@@ -377,6 +380,11 @@ method(as_json, list(ProviderClaude, ToolDef)) <- function(provider, x) {
   )
 }
 
+# Pricing ----------------------------------------------------------------------
+
+method(standardise_model, ProviderClaude) <- function(provider, model) {
+  gsub("-(latest|\\d{8})$", "", model)
+}
 
 # Helpers ----------------------------------------------------------------
 
