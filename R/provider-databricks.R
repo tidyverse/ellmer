@@ -69,6 +69,7 @@ chat_databricks <- function(
     credentials <- default_databricks_credentials(workspace)
   }
   provider <- ProviderDatabricks(
+    name = "Databricks",
     base_url = workspace,
     model = model,
     extra_args = api_args,

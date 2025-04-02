@@ -54,6 +54,7 @@ chat_ollama <- function(
   echo <- check_echo(echo)
 
   provider <- ProviderOllama(
+    name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
     model = model,
     seed = seed,

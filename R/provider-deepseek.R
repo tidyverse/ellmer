@@ -41,6 +41,7 @@ chat_deepseek <- function(
   }
 
   provider <- ProviderDeepSeek(
+    name = "DeepSeek",
     base_url = base_url,
     model = model,
     seed = seed,

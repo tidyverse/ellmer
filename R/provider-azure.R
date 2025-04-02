@@ -89,6 +89,7 @@ chat_azure <- function(
   credentials <- credentials %||% default_azure_credentials(api_key, token)
 
   provider <- ProviderAzure(
+    name = "Azure/OpenAI",
     endpoint = endpoint,
     deployment_id = deployment_id,
     api_version = api_version,
@@ -115,6 +116,7 @@ ProviderAzure <- new_class(
   "ProviderAzure",
   parent = ProviderOpenAI,
   constructor = function(
+    name,
     endpoint,
     deployment_id,
     api_version,
@@ -124,6 +126,7 @@ ProviderAzure <- new_class(
   ) {
     new_object(
       ProviderOpenAI(
+        name = name,
         base_url = paste0(endpoint, "/openai/deployments/", deployment_id),
         model = deployment_id,
         api_key = api_key,

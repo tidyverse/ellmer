@@ -61,6 +61,7 @@ test_that("Azure request headers are generated correctly", {
 
   # API key.
   p <- ProviderAzure(
+    name = "Azure",
     endpoint = endpoint,
     deployment_id = deployment_id,
     api_version = "2024-06-01",
@@ -73,6 +74,7 @@ test_that("Azure request headers are generated correctly", {
 
   # Token.
   p <- ProviderAzure(
+    name = "Azure",
     endpoint = endpoint,
     deployment_id = deployment_id,
     api_version = "2024-06-01",
@@ -85,6 +87,7 @@ test_that("Azure request headers are generated correctly", {
 
   # Both.
   p <- ProviderAzure(
+    name = "Azure",
     endpoint = endpoint,
     deployment_id = deployment_id,
     api_version = "2024-06-01",

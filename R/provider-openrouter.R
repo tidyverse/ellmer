@@ -36,6 +36,7 @@ chat_openrouter <- function(
   }
 
   provider <- ProviderOpenRouter(
+    name = "OpenRouter",
     base_url = "https://openrouter.ai/api/v1",
     model = model,
     seed = seed,

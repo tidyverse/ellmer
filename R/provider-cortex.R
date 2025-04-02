@@ -80,6 +80,7 @@ chat_cortex_analyst <- function(
   credentials <- credentials %||% default_snowflake_credentials(account)
 
   provider <- ProviderCortex(
+    name = "Snowflake/CortexAnalyst",
     account = account,
     credentials = credentials,
     model_spec = model_spec,
@@ -124,6 +125,7 @@ ProviderCortex <- new_class(
   "ProviderCortex",
   parent = Provider,
   constructor = function(
+    name,
     account,
     credentials,
     model_spec = NULL,
@@ -137,7 +139,12 @@ ProviderCortex <- new_class(
       !!!extra_args
     ))
     new_object(
-      Provider(base_url = base_url, extra_args = extra_args),
+      Provider(
+        name = name,
+        base_url = base_url,
+        extra_args = extra_args,
+        model = ""
+      ),
       account = account,
       credentials = credentials
     )
@@ -148,6 +155,15 @@ ProviderCortex <- new_class(
     extra_args = class_list
   )
 )
+
+provider_cortex_test <- function(..., credentials = function(account) list()) {
+  ProviderCortex(
+    name = "Cortex",
+    account = "testorg-test_account",
+    credentials = credentials,
+    ...
+  )
+}
 
 # See: https://docs.snowflake.com/en/developer-guide/snowflake-rest-api/reference/cortex-analyst
 #      https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst/tutorials/tutorial-1#step-3-create-a-streamlit-app-to-talk-to-your-data-through-cortex-analyst

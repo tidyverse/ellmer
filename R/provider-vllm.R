@@ -43,6 +43,7 @@ chat_vllm <- function(
   echo <- check_echo(echo)
 
   provider <- ProviderVllm(
+    name = "VLLM",
     base_url = base_url,
     model = model,
     seed = seed,

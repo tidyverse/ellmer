@@ -66,6 +66,7 @@ chat_bedrock <- function(
   echo <- check_echo(echo)
 
   provider <- ProviderBedrock(
+    name = "AWS/Bedrock",
     base_url = "",
     model = model,
     profile = profile,
@@ -81,7 +82,6 @@ ProviderBedrock <- new_class(
   "ProviderBedrock",
   parent = Provider,
   properties = list(
-    model = prop_string(),
     profile = prop_string(allow_null = TRUE),
     region = prop_string(),
     cache = class_list
@@ -264,7 +264,7 @@ method(value_turn, ProviderBedrock) <- function(
   })
 
   tokens <- c(result$usage$inputTokens, result$usage$outputTokens)
-  tokens_log("Bedrock", tokens)
+  tokens_log(provider, tokens)
 
   Turn(result$output$message$role, contents, json = result, tokens = tokens)
 }

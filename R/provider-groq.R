@@ -41,6 +41,7 @@ chat_groq <- function(
   }
 
   provider <- ProviderGroq(
+    name = "Groq",
     base_url = base_url,
     model = model,
     seed = seed,

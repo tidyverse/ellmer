@@ -641,20 +641,18 @@ is_chat <- function(x) {
 
 #' @export
 print.Chat <- function(x, ...) {
+  provider <- x$get_provider()
   turns <- x$get_turns(include_system_prompt = TRUE)
 
   tokens <- x$tokens(include_system_prompt = TRUE)
   tokens_user <- sum(tokens$tokens[tokens$role == "user"])
   tokens_assistant <- sum(tokens$tokens[tokens$role == "assistant"])
 
-  cat(paste0(
+  cat(paste_c(
     "<Chat",
-    " turns=",
-    length(turns),
-    " tokens=",
-    tokens_user,
-    "/",
-    tokens_assistant,
+    c(" ", provider@name, "/", provider@model),
+    c(" turns=", length(turns)),
+    c(" tokens=", tokens_user, "/", tokens_assistant),
     ">\n"
   ))
 

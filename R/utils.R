@@ -132,3 +132,7 @@ modify_list <- function(x, y) {
 is_whitespace <- function(x) {
   grepl("^(\\s|\n)*$", x)
 }
+
+paste_c <- function(...) {
+  paste(c(...), collapse = "")
+}
