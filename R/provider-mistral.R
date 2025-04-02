@@ -5,7 +5,8 @@
 #'
 #' ## Known limitations
 #'
-#'
+#' * Tool calling is unstable.
+#' * Images require a model that supports images.
 #'
 #' @export
 #' @family chatbots
