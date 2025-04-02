@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* New `chat_mistral()` for models hosted at <https://mistral.ai> (#319).
+
 * New `interpolate_package()` to make it easier to interpolate from prompts
   stored in the `inst/prompts` inside a package (#164).
 
