@@ -10,8 +10,7 @@ chat_openai(
   base_url = "https://api.openai.com/v1",
   api_key = openai_key(),
   model = NULL,
-  params = NULL,
-  seed = deprecated(),
+  seed = NULL,
   api_args = list(),
   echo = c("none", "text", "all")
 )
@@ -35,8 +34,6 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 a reasonable default, and tell you about. We strongly recommend explicitly
 choosing a model for all but the most casual use.}
 
-\item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
-
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output
 more reproducible.}
 
@@ -53,6 +50,8 @@ the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 }
 \value{
 A \link{Chat} object.
@@ -85,6 +84,7 @@ Other chatbots:
 \code{\link{chat_gemini}()},
 \code{\link{chat_github}()},
 \code{\link{chat_groq}()},
+\code{\link{chat_huggingface}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()}
