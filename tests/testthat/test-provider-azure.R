@@ -19,6 +19,12 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_azure_test())
 })
 
+test_that("supports standard parameters", {
+  chat_fun <- chat_azure_test
+
+  test_params_stop(chat_fun)
+})
+
 test_that("respects turns interface", {
   chat_fun <- chat_azure_test
 

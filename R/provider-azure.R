@@ -50,6 +50,7 @@ NULL
 chat_azure <- function(
   endpoint = azure_endpoint(),
   deployment_id,
+  params = NULL,
   api_version = NULL,
   system_prompt = NULL,
   turns = NULL,
@@ -74,6 +75,7 @@ chat_azure <- function(
   }
   check_string(endpoint)
   check_string(deployment_id)
+  params <- params %||% params()
   api_version <- set_default(api_version, "2024-10-21")
   turns <- normalize_turns(turns, system_prompt)
   check_string(api_key, allow_null = TRUE)
@@ -89,8 +91,9 @@ chat_azure <- function(
   credentials <- credentials %||% default_azure_credentials(api_key, token)
 
   provider <- ProviderAzure(
-    endpoint = endpoint,
-    deployment_id = deployment_id,
+    base_url = paste0(endpoint, "/openai/deployments/", deployment_id),
+    model = deployment_id,
+    params = params,
     api_version = api_version,
     api_key = api_key,
     credentials = credentials,
@@ -99,40 +102,24 @@ chat_azure <- function(
   Chat$new(provider = provider, turns = turns, echo = echo)
 }
 
-chat_azure_test <- function(system_prompt = NULL, ...) {
+chat_azure_test <- function(system_prompt = NULL, ..., params = NULL) {
   api_key <- key_get("AZURE_OPENAI_API_KEY")
+  default_params <- params(seed = 1014, temperature = 0)
+  params <- modify_list(default_params, params %||% params())
 
   chat_azure(
     ...,
     system_prompt = system_prompt,
     api_key = api_key,
     endpoint = "https://ai-hwickhamai260967855527.openai.azure.com",
-    deployment_id = "gpt-4o-mini"
+    deployment_id = "gpt-4o-mini",
+    params = params
   )
 }
 
 ProviderAzure <- new_class(
   "ProviderAzure",
   parent = ProviderOpenAI,
-  constructor = function(
-    endpoint,
-    deployment_id,
-    api_version,
-    api_key,
-    credentials,
-    extra_args = list()
-  ) {
-    new_object(
-      ProviderOpenAI(
-        base_url = paste0(endpoint, "/openai/deployments/", deployment_id),
-        model = deployment_id,
-        api_key = api_key,
-        extra_args = extra_args
-      ),
-      api_version = api_version,
-      credentials = credentials
-    )
-  },
   properties = list(
     credentials = class_function,
     api_version = prop_string()
@@ -203,14 +190,15 @@ method(chat_request, ProviderAzure) <- function(
     response_format <- NULL
   }
 
+  params <- chat_params(provider, provider@params)
   body <- compact(list2(
     messages = messages,
     model = provider@model,
-    seed = provider@seed,
     stream = stream,
     stream_options = if (stream) list(include_usage = TRUE),
     tools = tools,
-    response_format = response_format
+    response_format = response_format,
+    !!!params
   ))
   body <- modify_list(body, provider@extra_args)
   req <- req_body_json(req, body)
