@@ -222,7 +222,7 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
   } else if (chunk$type == "content_block_delta") {
     # https://docs.anthropic.com/en/api/messages-streaming#delta-types
     i <- chunk$index + 1L
-    
+
     if (chunk$delta$type == "text_delta") {
       paste(result$content[[i]]$text) <- chunk$delta$text
     } else if (chunk$delta$type == "input_json_delta") {
@@ -387,7 +387,7 @@ method(as_json, list(ProviderAnthropic, ToolDef)) <- function(provider, x) {
   )
 }
 
-method(as_json, list(ProviderClaude, ContentThinking)) <- function(
+method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
   provider,
   x
 ) {
