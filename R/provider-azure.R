@@ -57,7 +57,7 @@ chat_azure_openai <- function(
   token = deprecated(),
   credentials = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
   check_exclusive(token, credentials, .require = FALSE)
   if (lifecycle::is_present(token)) {

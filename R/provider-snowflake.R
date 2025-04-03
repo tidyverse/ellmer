@@ -43,7 +43,7 @@ chat_snowflake <- function(
   credentials = NULL,
   model = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
   turns <- normalize_turns(turns, system_prompt)
   check_string(account, allow_empty = FALSE)

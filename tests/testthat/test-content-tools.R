@@ -159,3 +159,38 @@ test_that("invoke_tool_async returns a ContentToolResult", {
   expect_equal(res@request@tool, tool_ctr)
   expect_equal(res@request@arguments, list())
 })
+
+test_that("$chat() echoes tool requests and results", {
+  chat <- chat_openai_test(
+    "Be very terse, not even punctuation.",
+    echo = "text"
+  )
+  chat$register_tool(tool(function() "2024-01-01", "Return the current date"))
+  chat$register_tool(tool(
+    function() stop("User denied tool request"),
+    "Ask user to enter a password"
+  ))
+
+  expect_snapshot(
+    {
+      chat$chat("What's the current date in Y-M-D format?")
+      chat$chat("Ask the user to enter a password")
+      chat
+    },
+    transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
+  )
+})
+
+test_that("invoke_tools() echoes tool requests and results", {
+  turn <- turn_with_tool_requests()
+
+  expect_silent(invoke_tools(turn))
+  expect_snapshot(. <- invoke_tools(turn, echo = "output"))
+})
+
+test_that("invoke_tools_async() echoes tool requests and results", {
+  turn <- turn_with_tool_requests()
+
+  expect_silent(sync(invoke_tools_async(turn)))
+  expect_snapshot(. <- sync(invoke_tools_async(turn, echo = "output")))
+})

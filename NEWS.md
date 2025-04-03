@@ -1,5 +1,10 @@
 # ellmer (development version)
 
+* `echo = "output"` replaces the now-deprecated `echo = "text"` option in
+  `Chat$chat()`. When using `echo = "output"`, additional output, such as tool
+  requests and results, are shown as they occur. When `echo = "none"`, tool
+  call failures are emitted as warnings (#366, @gadenbuie).
+
 * `ContentToolResult` objects can now be returned directly from the `tool()`
   function and now includes additional information (#398 #399, @gadenbuie):
 

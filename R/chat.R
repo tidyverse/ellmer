@@ -487,15 +487,22 @@ Chat <- R6::R6Class(
       stream,
       echo
     ) {
+      tool_errors <- list()
+      withr::defer(warn_tool_errors(tool_errors))
+
       while (!is.null(user_turn)) {
-        for (chunk in private$submit_turns(
-          user_turn,
-          stream = stream,
-          echo = echo
-        )) {
+        # fmt: skip
+        for (chunk in private$submit_turns(user_turn, stream = stream, echo = echo)) {
           yield(chunk)
         }
-        user_turn <- private$invoke_tools()
+
+        user_turn <- private$invoke_tools(echo = echo)
+
+        if (echo == "all") {
+          cat(format(user_turn))
+        } else if (echo == "none") {
+          tool_errors <- c(tool_errors, turn_get_tool_errors(user_turn))
+        }
       }
     }),
 
@@ -508,17 +515,21 @@ Chat <- R6::R6Class(
       stream,
       echo
     ) {
+      tool_errors <- list()
+      withr::defer(warn_tool_errors(tool_errors))
+
       while (!is.null(user_turn)) {
-        for (chunk in await_each(private$submit_turns_async(
-          user_turn,
-          stream = stream,
-          echo = echo
-        ))) {
+        # fmt: skip
+        for (chunk in await_each(private$submit_turns_async(user_turn, stream = stream, echo = echo))) {
           yield(chunk)
         }
-        user_turn <- await(private$invoke_tools_async())
+
+        user_turn <- await(private$invoke_tools_async(echo = echo))
+
         if (echo == "all") {
           cat(format(user_turn))
+        } else if (echo == "none") {
+          tool_errors <- c(tool_errors, turn_get_tool_errors(user_turn))
         }
       }
     }),
@@ -545,10 +556,9 @@ Chat <- R6::R6Class(
         type = type
       )
       emit <- emitter(echo)
+      any_text <- FALSE
 
       if (stream) {
-        result <- list()
-        any_text <- FALSE
         result <- NULL
         for (chunk in response) {
           text <- stream_text(private$provider, chunk)
@@ -562,18 +572,6 @@ Chat <- R6::R6Class(
         }
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
         turn <- private$match_tools(turn)
-
-        # Ensure turns always end in a newline
-        if (any_text) {
-          emit("\n")
-          yield("\n")
-        }
-
-        if (echo == "all") {
-          is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
-          formatted <- map_chr(turn@contents[!is_text], format)
-          cat_line(formatted, prefix = "< ")
-        }
       } else {
         turn <- value_turn(
           private$provider,
@@ -584,14 +582,25 @@ Chat <- R6::R6Class(
 
         text <- turn@text
         if (!is.null(text)) {
-          text <- paste0(text, "\n")
           emit(text)
           yield(text)
-        }
-        if (echo == "all") {
-          cat_line(format(turn), prefix = "< ")
+          any_text <- TRUE
         }
       }
+
+      # Ensure turns always end in a newline
+      if (any_text) {
+        emit("\n")
+        yield("\n")
+      }
+
+      if (echo == "all") {
+        is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+        formatted <- map_chr(turn@contents[!is_text], format)
+        cat_line(formatted, prefix = "< ")
+      }
+      # When `echo="output"`, tool calls are emitted in `invoke_tools()`
+
       self$add_turn(user_turn, turn)
 
       coro::exhausted()
@@ -615,9 +624,9 @@ Chat <- R6::R6Class(
         type = type
       )
       emit <- emitter(echo)
+      any_text <- FALSE
 
       if (stream) {
-        any_text <- FALSE
         result <- NULL
         for (chunk in await_each(response)) {
           text <- stream_text(private$provider, chunk)
@@ -630,24 +639,32 @@ Chat <- R6::R6Class(
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
-
-        # Ensure turns always end in a newline
-        if (any_text) {
-          emit("\n")
-          yield("\n")
-        }
       } else {
         result <- await(response)
 
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
         text <- turn@text
         if (!is.null(text)) {
-          text <- paste0(text, "\n")
           emit(text)
           yield(text)
+          any_text <- TRUE
         }
       }
       turn <- private$match_tools(turn)
+
+      # Ensure turns always end in a newline
+      if (any_text) {
+        emit("\n")
+        yield("\n")
+      }
+
+      if (echo == "all") {
+        is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+        formatted <- map_chr(turn@contents[!is_text], format)
+        cat_line(formatted, prefix = "< ")
+      }
+      # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
+
       self$add_turn(user_turn, turn)
       coro::exhausted()
     }),
@@ -666,16 +683,16 @@ Chat <- R6::R6Class(
       turn
     },
 
-    invoke_tools = function() {
-      tool_results <- invoke_tools(self$last_turn())
+    invoke_tools = function(echo = "none") {
+      tool_results <- invoke_tools(self$last_turn(), echo = echo)
       if (length(tool_results) == 0) {
         return()
       }
       Turn("user", tool_results)
     },
 
-    invoke_tools_async = async_method(function(self, private) {
-      tool_results <- await(invoke_tools_async(self$last_turn()))
+    invoke_tools_async = async_method(function(self, private, echo = "none") {
+      tool_results <- await(invoke_tools_async(self$last_turn(), echo = echo))
       if (length(tool_results) == 0) {
         return()
       }

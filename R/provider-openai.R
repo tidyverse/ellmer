@@ -55,7 +55,7 @@ chat_openai <- function(
   params = NULL,
   seed = deprecated(),
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
   turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gpt-4o")

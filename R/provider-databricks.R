@@ -56,7 +56,7 @@ chat_databricks <- function(
   model = NULL,
   token = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
   check_string(workspace, allow_empty = FALSE)
   check_string(token, allow_empty = FALSE, allow_null = TRUE)

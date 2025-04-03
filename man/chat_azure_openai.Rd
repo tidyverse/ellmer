@@ -15,7 +15,7 @@ chat_azure_openai(
   token = deprecated(),
   credentials = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 )
 }
 \arguments{

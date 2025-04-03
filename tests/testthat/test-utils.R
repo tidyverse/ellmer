@@ -18,3 +18,9 @@ test_that("detects whitespace", {
   expect_false(is_whitespace("a"))
   expect_false(is_whitespace("."))
 })
+
+test_that('echo="output" replaces echo="text"', {
+  lifecycle::expect_deprecated(
+    expect_equal(check_echo("text"), "output")
+  )
+})
