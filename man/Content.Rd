@@ -96,7 +96,7 @@ objects.
 \item \code{ContentToolRequest}: a request to perform a tool call (sent by the
 assistant).
 \item \code{ContentToolResult}: the result of calling the tool (sent by the user).
-This object is automatically created from the return value of calling the
+This object is automatically created from the value returned by calling the
 \code{\link[=tool]{tool()}} function. Alternatively, expert users can return a
 \code{ContentToolResult} from a \code{\link[=tool]{tool()}} function to include additional data or
 to customize the display of the result.

@@ -71,7 +71,7 @@ contents_markdown <- new_generic("contents_markdown", "content")
 #' * `ContentToolRequest`: a request to perform a tool call (sent by the
 #'    assistant).
 #' * `ContentToolResult`: the result of calling the tool (sent by the user).
-#'   This object is automatically created from the return value of calling the
+#'   This object is automatically created from the value returned by calling the
 #'   [tool()] function. Alternatively, expert users can return a
 #'   `ContentToolResult` from a [tool()] function to include additional data or
 #'   to customize the display of the result.
