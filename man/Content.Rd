@@ -8,6 +8,7 @@
 \alias{ContentImageInline}
 \alias{ContentToolRequest}
 \alias{ContentToolResult}
+\alias{ContentThinking}
 \alias{ContentPDF}
 \title{Content types received from and sent to a chatbot}
 \usage{
@@ -28,6 +29,8 @@ ContentToolRequest(
 )
 
 ContentToolResult(id = stop("Required"), value = NULL, error = NULL)
+
+ContentThinking(thinking = stop("Required"), extra = list())
 
 ContentPDF(type = stop("Required"), data = stop("Required"))
 }

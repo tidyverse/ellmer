@@ -25,14 +25,6 @@ replacement.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-\subsection{Deprecated in v0.1.1}{
-\itemize{
-\item \code{\link[=chat_cortex]{chat_cortex()}} was renamed in v0.1.1 to \code{\link[=chat_cortex_analyst]{chat_cortex_analyst()}} to
-distinguish it from the more general-purpose Snowflake Cortex chat
-function, \code{\link[=chat_snowflake]{chat_snowflake()}}.
-}
-}
-
 \subsection{Deprecated in v0.2.0}{
 \itemize{
 \item \code{\link[=chat_azure]{chat_azure()}} was deprecated in v0.2.0, please use \code{\link[=chat_azure_openai]{chat_azure_openai()}}
@@ -43,6 +35,14 @@ instead.
 instead.
 \item \code{\link[=chat_gemini]{chat_gemini()}} was deprecated in v0.2.0, please use \code{\link[=chat_google_gemini]{chat_google_gemini()}}
 instead.
+}
+}
+
+\subsection{Deprecated in v0.1.1}{
+\itemize{
+\item \code{\link[=chat_cortex]{chat_cortex()}} was renamed in v0.1.1 to \code{\link[=chat_cortex_analyst]{chat_cortex_analyst()}} to
+distinguish it from the more general-purpose Snowflake Cortex chat
+function, \code{\link[=chat_snowflake]{chat_snowflake()}}.
 }
 }
 }

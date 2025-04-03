@@ -3,12 +3,6 @@
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' ## Deprecated in v0.1.1
-#'
-#' * [chat_cortex()] was renamed in v0.1.1 to [chat_cortex_analyst()] to
-#'   distinguish it from the more general-purpose Snowflake Cortex chat
-#'   function, [chat_snowflake()].
-#'
 #' ## Deprecated in v0.2.0
 #'
 #' * [chat_azure()] was deprecated in v0.2.0, please use [chat_azure_openai()]
@@ -19,6 +13,12 @@
 #'   instead.
 #' * [chat_gemini()] was deprecated in v0.2.0, please use [chat_google_gemini()]
 #'   instead.
+#'
+#' ## Deprecated in v0.1.1
+#'
+#' * [chat_cortex()] was renamed in v0.1.1 to [chat_cortex_analyst()] to
+#'   distinguish it from the more general-purpose Snowflake Cortex chat
+#'   function, [chat_snowflake()].
 #'
 #' @param ... Additional arguments passed from the deprecated function to its
 #'   replacement.
