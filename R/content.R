@@ -198,21 +198,40 @@ method(format, ContentToolRequest) <- function(x, ...) {
 
 #' @rdname Content
 #' @export
-#' @param value,error Either the results of calling the function if
-#'   it succeeded, otherwise the error message, as a string. One of
-#'   `value` and `error` will always be `NULL`.
+#' @param value The results of calling the tool function, if it succeeded.
+#' @param error The error message, as a string, or the error condition thrown
+#'   as a result of a failure when calling the tool function. Must be `NULL`
+#'   when the tool call is successful.
 ContentToolResult <- new_class(
   "ContentToolResult",
   parent = Content,
   properties = list(
     id = prop_string(),
     value = class_any,
-    error = prop_string(allow_null = TRUE)
+    error = new_property(
+      class = NULL | class_character | new_S3_class("condition"),
+      default = NULL,
+      validator = function(value) {
+        if (is.null(value) || inherits(value, "condition")) {
+          return()
+        }
+
+        if (is.character(value) && length(value) == 1) {
+          return()
+        }
+
+        paste0(
+          "must be a single string or a condition object, not ",
+          obj_type_friendly(value),
+          "."
+        )
+      }
+    )
   )
 )
 method(format, ContentToolResult) <- function(x, ...) {
   if (tool_errored(x)) {
-    value <- paste0(cli::col_red("Error: "), x@error)
+    value <- paste0(cli::col_red("Error: "), tool_error_string(x))
   } else {
     value <- x@value
   }
@@ -220,9 +239,12 @@ method(format, ContentToolResult) <- function(x, ...) {
 }
 
 tool_errored <- function(x) !is.null(x@error)
+tool_error_string <- function(x) {
+  if (inherits(x@error, "condition")) conditionMessage(x@error) else x@error
+}
 tool_string <- function(x) {
   if (tool_errored(x)) {
-    paste0("Tool calling failed with error ", x@error)
+    paste0("Tool calling failed with error ", tool_error_string(x))
   } else if (inherits(x@value, "AsIs")) {
     x@value
   } else if (inherits(x@value, "json")) {
