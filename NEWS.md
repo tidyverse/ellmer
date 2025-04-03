@@ -1,5 +1,12 @@
 # ellmer (development version)
 
+* ellmer now tracks the cost of input and output tokens. The cost is displayed
+  when you print a `Chat` object, in `tokens_usage()`, and with 
+  `Chat$get_cost()`. This is our best effort at computing the cost, but you 
+  should treat it as an estimate not the exact price. Unfortunately LLM APIs
+  currently make it very hard to figure out exactly how much your queries are
+  costing (#203).
+
 * `ContentToolResult` objects now include the error condition in the `error`
   property when a tool call fails (#421, @gadenbuie).
 
