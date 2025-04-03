@@ -184,13 +184,16 @@ method(contents_markdown, ContentImageInline) <- function(content) {
 #'   Automatically managed by \pkg{ellmer}.
 #' @param name Function name
 #' @param arguments Named list of arguments to call the function with.
+#' @param tool ellmer automatically matches a tool request to the tools defined
+#'   for the chatbot. If `NULL`, the request did not match a defined tool.
 ContentToolRequest <- new_class(
   "ContentToolRequest",
   parent = Content,
   properties = list(
     id = prop_string(),
     name = prop_string(),
-    arguments = class_list
+    arguments = class_list,
+    tool = NULL | ToolDef
   )
 )
 method(format, ContentToolRequest) <- function(x, ...) {
@@ -212,10 +215,7 @@ method(format, ContentToolRequest) <- function(x, ...) {
 #'   isn't included in the `value` that's shown to the LLM. Useful for including
 #'   additional data for displaying the tool result in a client, like a Shiny
 #'   app, without including the data in the response to the LLM.
-#' @param call_tool,call_args The [tool()] definition and the args requested in
-#'   the tool call. As with `id`, these values are filled in by \pkg{ellmer}
-#'   when the tool is invoked. `call_tool` may be `NULL` when the LLM requests
-#'   a non-existent tool.
+#' @param request The [ContentToolRequest] associated with the tool result.
 ContentToolResult <- new_class(
   "ContentToolResult",
   parent = Content,
@@ -239,8 +239,7 @@ ContentToolResult <- new_class(
     ),
     extra = class_list,
     id = prop_string(allow_null = TRUE),
-    call_tool = NULL | ToolDef,
-    call_args = class_list
+    request = NULL | ContentToolRequest
   )
 )
 method(format, ContentToolResult) <- function(x, ...) {

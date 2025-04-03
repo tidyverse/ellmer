@@ -25,7 +25,8 @@ ContentImageInline(type = stop("Required"), data = NULL)
 ContentToolRequest(
   id = stop("Required"),
   name = stop("Required"),
-  arguments = list()
+  arguments = list(),
+  tool = NULL
 )
 
 ContentToolResult(
@@ -33,8 +34,7 @@ ContentToolResult(
   error = NULL,
   extra = list(),
   id = NULL,
-  call_tool = NULL,
-  call_args = list()
+  request = NULL
 )
 
 ContentThinking(thinking = stop("Required"), extra = list())
@@ -59,6 +59,9 @@ Automatically managed by \pkg{ellmer}.}
 
 \item{arguments}{Named list of arguments to call the function with.}
 
+\item{tool}{ellmer automatically matches a tool request to the tools defined
+for the chatbot. If \code{NULL}, the request did not match a defined tool.}
+
 \item{value}{The results of calling the tool function, if it succeeded.}
 
 \item{error}{The error message, as a string, or the error condition thrown
@@ -67,10 +70,7 @@ when the tool call is successful.}
 
 \item{extra}{Additional data.}
 
-\item{call_tool, call_args}{The \code{\link[=tool]{tool()}} definition and the args requested in
-the tool call. As with \code{id}, these values are filled in by \pkg{ellmer}
-when the tool is invoked. \code{call_tool} may be \code{NULL} when the LLM requests
-a non-existent tool.}
+\item{request}{The \link{ContentToolRequest} associated with the tool result.}
 
 \item{thinking}{The text of the thinking output.}
 }
