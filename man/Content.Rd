@@ -28,7 +28,14 @@ ContentToolRequest(
   arguments = list()
 )
 
-ContentToolResult(id = stop("Required"), value = NULL, error = NULL)
+ContentToolResult(
+  value = NULL,
+  error = NULL,
+  extra = list(),
+  id = NULL,
+  call_tool = NULL,
+  call_args = list()
+)
 
 ContentThinking(thinking = stop("Required"), extra = list())
 
@@ -45,7 +52,8 @@ ContentPDF(type = stop("Required"), data = stop("Required"))
 
 \item{data}{Base64 encoded image data.}
 
-\item{id}{Tool call id (used to associate a request and a result)}
+\item{id}{Tool call id (used to associate a request and a result).
+Automatically managed by \pkg{ellmer}.}
 
 \item{name}{Function name}
 
@@ -57,9 +65,14 @@ ContentPDF(type = stop("Required"), data = stop("Required"))
 as a result of a failure when calling the tool function. Must be \code{NULL}
 when the tool call is successful.}
 
-\item{thinking}{The text of the thinking output.}
-
 \item{extra}{Additional data.}
+
+\item{call_tool, call_args}{The \code{\link[=tool]{tool()}} definition and the args requested in
+the tool call. As with \code{id}, these values are filled in by \pkg{ellmer}
+when the tool is invoked. \code{call_tool} may be \code{NULL} when the LLM requests
+a non-existent tool.}
+
+\item{thinking}{The text of the thinking output.}
 }
 \value{
 S7 objects that all inherit from \code{Content}

@@ -1,3 +1,4 @@
+#' @include tools-def.R
 #' @include utils-S7.R
 NULL
 
@@ -175,7 +176,8 @@ method(contents_markdown, ContentImageInline) <- function(content) {
 
 #' @rdname Content
 #' @export
-#' @param id Tool call id (used to associate a request and a result)
+#' @param id Tool call id (used to associate a request and a result).
+#'   Automatically managed by \pkg{ellmer}.
 #' @param name Function name
 #' @param arguments Named list of arguments to call the function with.
 ContentToolRequest <- new_class(
@@ -202,11 +204,18 @@ method(format, ContentToolRequest) <- function(x, ...) {
 #' @param error The error message, as a string, or the error condition thrown
 #'   as a result of a failure when calling the tool function. Must be `NULL`
 #'   when the tool call is successful.
+#' @param extra Optional additional data associated with the tool result that
+#'   isn't included in the `value` that's shown to the LLM. Useful for including
+#'   additional data for displaying the tool result in a client, like a Shiny
+#'   app, without including the data in the response to the LLM.
+#' @param call_tool,call_args The [tool()] definition and the args requested in
+#'   the tool call. As with `id`, these values are filled in by \pkg{ellmer}
+#'   when the tool is invoked. `call_tool` may be `NULL` when the LLM requests
+#'   a non-existent tool.
 ContentToolResult <- new_class(
   "ContentToolResult",
   parent = Content,
   properties = list(
-    id = prop_string(),
     value = class_any,
     error = new_property(
       class = NULL | class_character | new_S3_class("condition"),
@@ -223,7 +232,11 @@ ContentToolResult <- new_class(
           "."
         )
       }
-    )
+    ),
+    extra = class_list,
+    id = prop_string(allow_null = TRUE),
+    call_tool = NULL | ToolDef,
+    call_args = class_list
   )
 )
 method(format, ContentToolResult) <- function(x, ...) {
