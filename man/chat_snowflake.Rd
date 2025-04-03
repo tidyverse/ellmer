@@ -74,8 +74,8 @@ package.
 Note that Snowflake-hosted models do not support images, tool calling, or
 structured outputs.
 
-See \code{\link[=chat_cortex]{chat_cortex()}} to chat with the Snowflake Cortex Analyst rather than a
-general-purpose model.
+See \code{\link[=chat_cortex_analyst]{chat_cortex_analyst()}} to chat with the Snowflake Cortex Analyst rather
+than a general-purpose model.
 }
 }
 \examples{

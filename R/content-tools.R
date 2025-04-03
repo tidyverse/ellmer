@@ -44,7 +44,7 @@ extract_tool_requests <- function(contents) {
   contents[is_tool_request]
 }
 
-# Also need to handle edge caess: https://platform.openai.com/docs/guides/function-calling/edge-cases
+# Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases
 invoke_tool <- function(fun, arguments, id) {
   if (is.null(fun)) {
     return(ContentToolResult(id = id, error = "Unknown tool"))
@@ -54,7 +54,7 @@ invoke_tool <- function(fun, arguments, id) {
     ContentToolResult(id, do.call(fun, arguments)),
     error = function(e) {
       # TODO: We need to report this somehow; it's way too hidden from the user
-      ContentToolResult(id, error = conditionMessage(e))
+      ContentToolResult(id, error = e)
     }
   )
 }
@@ -72,7 +72,7 @@ on_load(
       },
       error = function(e) {
         # TODO: We need to report this somehow; it's way too hidden from the user
-        ContentToolResult(id, error = conditionMessage(e))
+        ContentToolResult(id, error = e)
       }
     )
   })
