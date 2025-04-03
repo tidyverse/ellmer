@@ -60,3 +60,10 @@ test_that("thinking has useful representations", {
   )
   expect_snapshot(cat(contents_html(ct)))
 })
+
+test_that("ContentToolResult@error requires a string or an error condition", {
+  expect_snapshot(error = TRUE, {
+    ContentToolResult("id", error = TRUE)
+    ContentToolResult("id", error = c("one", "two"))
+  })
+})

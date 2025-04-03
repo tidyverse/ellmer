@@ -12,7 +12,7 @@ NULL
 #'
 #' ## Authentication
 #'
-#' `chat_cortex()` picks up the following ambient Snowflake credentials:
+#' `chat_cortex_analyst()` picks up the following ambient Snowflake credentials:
 #'
 #' - A static OAuth token defined via the `SNOWFLAKE_TOKEN` environment
 #'   variable.
@@ -79,7 +79,7 @@ chat_cortex_analyst <- function(
   check_function(credentials, allow_null = TRUE)
   credentials <- credentials %||% default_snowflake_credentials(account)
 
-  provider <- ProviderCortex(
+  provider <- ProviderSnowflakeCortexAnalyst(
     name = "Snowflake/CortexAnalyst",
     account = account,
     credentials = credentials,
@@ -91,38 +91,8 @@ chat_cortex_analyst <- function(
   Chat$new(provider = provider, turns = NULL, echo = echo)
 }
 
-#' Create a chatbot that speaks to the Snowflake Cortex Analyst
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' [chat_cortex()] was renamed to [chat_cortex_analyst()] to distinguish it from
-#' the more general-purpose Snowflake Cortex chat function, [chat_snowflake()].
-#'
-#' @inheritParams chat_cortex_analyst
-#' @keywords internal
-#' @export
-chat_cortex <- function(
-  account = snowflake_account(),
-  credentials = NULL,
-  model_spec = NULL,
-  model_file = NULL,
-  api_args = list(),
-  echo = c("none", "text", "all")
-) {
-  lifecycle::deprecate_warn("0.1.1", "chat_cortex()", "chat_cortex_analyst()")
-  chat_cortex_analyst(
-    account = account,
-    credentials = credentials,
-    model_spec = model_spec,
-    model_file = model_file,
-    api_args = api_args,
-    echo = echo
-  )
-}
-
-ProviderCortex <- new_class(
-  "ProviderCortex",
+ProviderSnowflakeCortexAnalyst <- new_class(
+  "ProviderSnowflakeCortexAnalyst",
   parent = Provider,
   constructor = function(
     name,
@@ -157,7 +127,7 @@ ProviderCortex <- new_class(
 )
 
 provider_cortex_test <- function(..., credentials = function(account) list()) {
-  ProviderCortex(
+  ProviderSnowflakeCortexAnalyst(
     name = "Cortex",
     account = "testorg-test_account",
     credentials = credentials,
@@ -167,7 +137,7 @@ provider_cortex_test <- function(..., credentials = function(account) list()) {
 
 # See: https://docs.snowflake.com/en/developer-guide/snowflake-rest-api/reference/cortex-analyst
 #      https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst/tutorials/tutorial-1#step-3-create-a-streamlit-app-to-talk-to-your-data-through-cortex-analyst
-method(chat_request, ProviderCortex) <- function(
+method(chat_request, ProviderSnowflakeCortexAnalyst) <- function(
   provider,
   stream = TRUE,
   turns = list(),
@@ -212,7 +182,10 @@ method(chat_request, ProviderCortex) <- function(
 
 # Cortex -> ellmer --------------------------------------------------------------
 
-method(stream_parse, ProviderCortex) <- function(provider, event) {
+method(stream_parse, ProviderSnowflakeCortexAnalyst) <- function(
+  provider,
+  event
+) {
   # While undocumented, Cortex seems to mostly follow OpenAI API conventions for
   # streaming, although Cortex uses a specific JSON payload rather than in-band
   # signalling that the stream has ended.
@@ -223,7 +196,10 @@ method(stream_parse, ProviderCortex) <- function(provider, event) {
   }
 }
 
-method(stream_text, ProviderCortex) <- function(provider, event) {
+method(stream_text, ProviderSnowflakeCortexAnalyst) <- function(
+  provider,
+  event
+) {
   if (!is.null(event$status_message)) {
     # Skip status messages like "Interpreting question" or "Generating
     # suggestions".
@@ -251,7 +227,7 @@ method(stream_text, ProviderCortex) <- function(provider, event) {
   }
 }
 
-method(stream_merge_chunks, ProviderCortex) <- function(
+method(stream_merge_chunks, ProviderSnowflakeCortexAnalyst) <- function(
   provider,
   result,
   chunk
@@ -303,7 +279,7 @@ cortex_chunk_to_message <- function(x) {
   }
 }
 
-method(value_turn, ProviderCortex) <- function(
+method(value_turn, ProviderSnowflakeCortexAnalyst) <- function(
   provider,
   result,
   has_type = FALSE
@@ -356,7 +332,10 @@ method(value_turn, ProviderCortex) <- function(
 # Cortex supports not only "text" content, but also bespoke "suggestions" and
 # "sql" types.
 
-method(as_json, list(ProviderCortex, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderSnowflakeCortexAnalyst, Turn)) <- function(
+  provider,
+  x
+) {
   role <- x@role
   if (role == "assistant") {
     role <- "analyst"
@@ -367,7 +346,10 @@ method(as_json, list(ProviderCortex, Turn)) <- function(provider, x) {
   )
 }
 
-method(as_json, list(ProviderCortex, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderSnowflakeCortexAnalyst, ContentText)) <- function(
+  provider,
+  x
+) {
   list(type = "text", text = x@text)
 }
 
@@ -377,7 +359,10 @@ ContentSuggestions <- new_class(
   properties = list(suggestions = class_character)
 )
 
-method(as_json, list(ProviderCortex, ContentSuggestions)) <- function(
+method(
+  as_json,
+  list(ProviderSnowflakeCortexAnalyst, ContentSuggestions)
+) <- function(
   provider,
   x
 ) {
@@ -411,7 +396,10 @@ ContentSql <- new_class(
   properties = list(statement = prop_string())
 )
 
-method(as_json, list(ProviderCortex, ContentSql)) <- function(provider, x) {
+method(as_json, list(ProviderSnowflakeCortexAnalyst, ContentSql)) <- function(
+  provider,
+  x
+) {
   list(type = "sql", statement = x@statement)
 }
 

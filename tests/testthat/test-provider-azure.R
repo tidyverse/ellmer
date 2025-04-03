@@ -1,14 +1,14 @@
 # Getting started --------------------------------------------------------
 
 test_that("can make simple request", {
-  chat <- chat_azure_test("Be as terse as possible; no punctuation")
+  chat <- chat_azure_openai_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
   expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
-  chat <- chat_azure_test("Be as terse as possible; no punctuation")
+  chat <- chat_azure_openai_test("Be as terse as possible; no punctuation")
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })
@@ -16,24 +16,24 @@ test_that("can make simple streaming request", {
 # Common provider interface -----------------------------------------------
 
 test_that("defaults are reported", {
-  expect_snapshot(. <- chat_azure_test())
+  expect_snapshot(. <- chat_azure_openai_test())
 })
 
 test_that("supports standard parameters", {
-  chat_fun <- chat_azure_test
+  chat_fun <- chat_azure_openai_test
 
   test_params_stop(chat_fun)
 })
 
 test_that("respects turns interface", {
-  chat_fun <- chat_azure_test
+  chat_fun <- chat_azure_openai_test
 
   test_turns_system(chat_fun)
   test_turns_existing(chat_fun)
 })
 
 test_that("all tool variations work", {
-  chat_fun <- chat_azure_test
+  chat_fun <- chat_azure_openai_test
 
   test_tools_simple(chat_fun)
   test_tools_async(chat_fun)
@@ -42,14 +42,14 @@ test_that("all tool variations work", {
 })
 
 test_that("can extract data", {
-  chat_fun <- chat_azure_test
+  chat_fun <- chat_azure_openai_test
 
   test_data_extraction(chat_fun)
 })
 
 test_that("can use images", {
   skip("Run manually; 24 hour rate limit")
-  chat_fun <- chat_azure_test
+  chat_fun <- chat_azure_openai_test
 
   httr2::with_verbosity(test_images_inline(chat_fun), 2)
   test_images_remote(chat_fun)
@@ -69,7 +69,7 @@ test_that("Azure request headers are generated correctly", {
   )
 
   # API key.
-  p <- ProviderAzure(
+  p <- ProviderAzureOpenAI(
     name = "Azure",
     base_url = base_url,
     model = deployment_id,
@@ -82,7 +82,7 @@ test_that("Azure request headers are generated correctly", {
   expect_snapshot(str(req$headers))
 
   # Token.
-  p <- ProviderAzure(
+  p <- ProviderAzureOpenAI(
     name = "Azure",
     base_url = base_url,
     model = deployment_id,
@@ -95,7 +95,7 @@ test_that("Azure request headers are generated correctly", {
   expect_snapshot(str(req$headers))
 
   # Both.
-  p <- ProviderAzure(
+  p <- ProviderAzureOpenAI(
     name = "Azure",
     base_url = base_url,
     model = deployment_id,

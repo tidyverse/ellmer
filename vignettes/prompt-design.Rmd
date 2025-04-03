@@ -19,7 +19,7 @@ options(ellmer_seed = 1337)
 # Manually ratchet claude variability way down to hopefully make generated
 # code better match my prose.
 chat_claude <- function(...) {
-  ellmer::chat_claude(..., api_args = list(temperature = 0))
+  ellmer::chat_anthropic(..., api_args = list(temperature = 0))
 }
 ```
 
@@ -71,7 +71,7 @@ question <- "
 "
 ```
 
-I'll use `chat_claude()` for this problem because in our experience it does the best job of generating code.
+I'll use `chat_anthropic()` for this problem because in our experience it does the best job of generating code.
 
 ### Basic flavour
 
@@ -79,7 +79,7 @@ When I don't provide a system prompt, I sometimes get answers in different langu
 
 ```{r}
 #| label: code-basic
-chat <- chat_claude()
+chat <- chat_anthropic()
 chat$chat(question)
 ```
 
@@ -87,7 +87,7 @@ I can ensure that I always get R code in a specific style by providing a system 
 
 ```{r}
 #| label: code-r
-chat <- chat_claude(system_prompt = "
+chat <- chat_anthropic(system_prompt = "
   You are an expert R programmer who prefers the tidyverse.
 ")
 chat$chat(question)
@@ -99,7 +99,7 @@ Since I'm mostly interested in the code, I ask it to drop the explanation and sa
 
 ```{r}
 #| label: code-r-minimal
-chat <- chat_claude(system_prompt = "
+chat <- chat_anthropic(system_prompt = "
   You are an expert R programmer who prefers the tidyverse.
   Just give me the code. I don't want any explanation or sample data.
 ")
@@ -110,13 +110,13 @@ And of course, if you want a different style of R code, just ask for it:
 
 ```{r}
 #| label: code-styles
-chat <- chat_claude(system_prompt = "
+chat <- chat_anthropic(system_prompt = "
   You are an expert R programmer who prefers data.table.
   Just give me the code. I don't want any explanation or sample data.
 ")
 chat$chat(question)
 
-chat <- chat_claude(system_prompt = "
+chat <- chat_anthropic(system_prompt = "
   You are an expert R programmer who prefers base R.
   Just give me the code. I don't want any explanation or sample data.
 ")
@@ -129,7 +129,7 @@ If there's something about the output that you don't like, try being more explic
 
 ```{r}
 #| label: code-explicit
-chat <- chat_claude(system_prompt = "
+chat <- chat_anthropic(system_prompt = "
   You are an expert R programmer who prefers the tidyverse.
   Just give me the code. I don't want any explanation or sample data.
 
@@ -149,7 +149,7 @@ You could provide a different prompt if you were looking for more explanation of
 
 ```{r}
 #| label: code-teacher
-chat <- chat_claude(system_prompt = "
+chat <- chat_anthropic(system_prompt = "
   You are an expert R teacher.
   I am a new R user who wants to improve my programming skills.
   Help me understand the code you produce by explaining each function call with
@@ -165,7 +165,7 @@ You can imagine LLMs as being a sort of an average of the internet at a given po
 
 ```{r}
 #| label: code-new-feature
-chat <- chat_claude(system_prompt = "
+chat <- chat_anthropic(system_prompt = "
   You are an expert R programmer.
   Just give me the code; no explanation in text.
   Use the `.by` argument rather than `group_by()`.

@@ -15,7 +15,7 @@
 #' @returns (Invisibly) The input `chat`.
 #' @examples
 #' \dontrun{
-#' chat <- chat_claude()
+#' chat <- chat_anthropic()
 #' live_console(chat)
 #' live_browser(chat)
 #' }

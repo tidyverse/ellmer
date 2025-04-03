@@ -47,3 +47,7 @@ reference:
     contents:
       - contents_text
       - params
+
+  - title: Deprecated functions
+    contents:
+      - deprecated
