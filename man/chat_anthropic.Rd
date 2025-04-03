@@ -2,23 +2,9 @@
 % Please edit documentation in R/provider-claude.R
 \name{chat_anthropic}
 \alias{chat_anthropic}
-\alias{chat_claude}
 \title{Chat with an Anthropic Claude model}
 \usage{
 chat_anthropic(
-  system_prompt = NULL,
-  turns = NULL,
-  params = NULL,
-  max_tokens = deprecated(),
-  model = NULL,
-  api_args = list(),
-  base_url = "https://api.anthropic.com/v1",
-  beta_headers = character(),
-  api_key = anthropic_key(),
-  echo = NULL
-)
-
-chat_claude(
   system_prompt = NULL,
   turns = NULL,
   params = NULL,
@@ -81,11 +67,6 @@ Note that a Claude Pro membership does not give you the ability to call
 models via the API; instead, you will need to sign up (and pay for) a
 \href{https://console.anthropic.com/}{developer account}.
 }
-\section{Functions}{
-\itemize{
-\item \code{chat_claude()}: An alias for \code{chat_anthropic()}.
-
-}}
 \examples{
 \dontshow{if (has_credentials("claude")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 chat <- chat_anthropic()

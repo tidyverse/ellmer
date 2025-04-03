@@ -2,21 +2,9 @@
 % Please edit documentation in R/provider-gemini.R
 \name{chat_google_gemini}
 \alias{chat_google_gemini}
-\alias{chat_gemini}
 \title{Chat with a Google Gemini model}
 \usage{
 chat_google_gemini(
-  system_prompt = NULL,
-  turns = NULL,
-  base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  api_key = NULL,
-  model = NULL,
-  params = NULL,
-  api_args = list(),
-  echo = NULL
-)
-
-chat_gemini(
   system_prompt = NULL,
   turns = NULL,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
@@ -77,11 +65,6 @@ It can also pick up on viewer-based credentials on Posit Connect. This in
 turn requires the \pkg{connectcreds} package.
 }
 }
-\section{Functions}{
-\itemize{
-\item \code{chat_gemini()}: An alias for \code{chat_google_gemini()}.
-
-}}
 \examples{
 \dontrun{
 chat <- chat_google_gemini()
