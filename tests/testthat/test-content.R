@@ -46,3 +46,17 @@ test_that("turn contents can be converted to text, markdown and HTML", {
   skip_if_not_installed("commonmark")
   expect_snapshot(cat(contents_html(turn)))
 })
+
+
+# Content types ----------------------------------------------------------------
+
+test_that("thinking has useful representations", {
+  ct <- ContentThinking("A **thought**.")
+  expect_equal(contents_text(ct), NULL)
+  expect_equal(format(ct), "<thinking>\nA **thought**.\n</thinking>\n")
+  expect_equal(
+    contents_markdown(ct),
+    "<thinking>\nA **thought**.\n</thinking>\n"
+  )
+  expect_snapshot(cat(contents_html(ct)))
+})

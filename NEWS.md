@@ -8,6 +8,13 @@
   * `chat_anthropic()` replaces `chat_claude()`
   * `chat_google_gemini()` replaces `chat_gemini()`
 
+* `chat_claude()` now supports the thinking content type (#396).
+
+* `tool()` gains an `.annotations` argument that can be created with the
+  `tool_annotations()` helper. Tool annotations are described in the
+  [Model Context Protocol](https://modelcontextprotocol.io/introduction) and can
+  be used to describe the tool to clients. (#402, @gadenbuie)
+
 * `Provider` gains `name` and `model` fields (#406). These are now reported when
   you print a chat object and used in `token_usage()`.
 
