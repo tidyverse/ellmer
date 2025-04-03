@@ -1,5 +1,8 @@
 # ellmer (development version)
 
+* `ContentToolResult` objects now include the error condition in the `error`
+  property when a tool call fails (#421, @gadenbuie).
+
 * `chat_claude()` now supports the thinking content type (#396).
 
 * `tool()` gains an `.annotations` argument that can be created with the
