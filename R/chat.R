@@ -169,7 +169,7 @@ Chat <- R6::R6Class(
       ))
 
       if (include == "last") {
-        tokens <- tokens[nrow(tokens, ), , drop = FALSE]
+        tokens <- tokens[nrow(tokens), , drop = FALSE]
       }
 
       get_token_cost(

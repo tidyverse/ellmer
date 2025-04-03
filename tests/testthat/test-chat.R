@@ -208,6 +208,9 @@ test_that("print method shows cumulative tokens & cost", {
     )
   )
   expect_snapshot(chat)
+
+  expect_equal(chat$get_cost(), dollars(0.1275))
+  expect_equal(chat$get_cost("last"), dollars(0.085))
 })
 
 test_that("can optionally echo", {
