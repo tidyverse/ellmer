@@ -6,8 +6,7 @@ invoke_tools <- function(turn, tools) {
   tool_requests <- extract_tool_requests(turn@contents)
 
   lapply(tool_requests, function(call) {
-    fun <- tools[[call@name]]@fun
-    result <- invoke_tool(fun, call@arguments, call@id)
+    result <- invoke_tool(tools[[call@name]], call@arguments, call@id)
 
     if (promises::is.promise(result@value)) {
       cli::cli_abort(c(
@@ -31,8 +30,7 @@ on_load(
     # We call it this way instead of a more natural for + await_each() because
     # we want to run all the async tool calls in parallel
     result_promises <- lapply(tool_requests, function(call) {
-      fun <- tools[[call@name]]@fun
-      invoke_tool_async(fun, call@arguments, call@id)
+      invoke_tool_async(tools[[call@name]], call@arguments, call@id)
     })
 
     promises::promise_all(.list = result_promises)
@@ -44,35 +42,62 @@ extract_tool_requests <- function(contents) {
   contents[is_tool_request]
 }
 
+tool_result_factory <- function(tool, arguments, id) {
+  function(result = NULL, error = NULL) {
+    if (S7_inherits(result, ContentToolResult)) {
+      result@id <- id
+      result@call_tool <- tool
+      result@call_args <- arguments
+      return(result)
+    }
+
+    ContentToolResult(
+      value = result,
+      error = error,
+      id = id,
+      call_tool = tool,
+      call_args = arguments
+    )
+  }
+}
+
 # Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases
-invoke_tool <- function(fun, arguments, id) {
-  if (is.null(fun)) {
-    return(ContentToolResult(id = id, error = "Unknown tool"))
+invoke_tool <- function(tool, arguments, id) {
+  tool_result <- tool_result_factory(tool, arguments, id)
+
+  if (is.null(tool) || is.null(tool@fun)) {
+    return(tool_result(error = "Unknown tool"))
   }
 
+  fun <- tool@fun
+
   tryCatch(
-    ContentToolResult(id, do.call(fun, arguments)),
+    tool_result(do.call(fun, arguments)),
     error = function(e) {
       # TODO: We need to report this somehow; it's way too hidden from the user
-      ContentToolResult(id, error = e)
+      tool_result(error = e)
     }
   )
 }
 
 on_load(
-  invoke_tool_async <- coro::async(function(fun, arguments, id) {
-    if (is.null(fun)) {
-      return(ContentToolResult(id = id, error = "Unknown tool"))
+  invoke_tool_async <- coro::async(function(tool, arguments, id) {
+    tool_result <- tool_result_factory(tool, arguments, id)
+
+    if (is.null(tool) || is.null(tool@fun)) {
+      return(tool_result(error = "Unknown tool"))
     }
+
+    fun <- tool@fun
 
     tryCatch(
       {
         result <- await(do.call(fun, arguments))
-        ContentToolResult(id, result)
+        tool_result(result)
       },
       error = function(e) {
         # TODO: We need to report this somehow; it's way too hidden from the user
-        ContentToolResult(id, error = e)
+        tool_result(error = e)
       }
     )
   })

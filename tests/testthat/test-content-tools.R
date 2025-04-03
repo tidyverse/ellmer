@@ -1,18 +1,25 @@
-test_that("invoke_tool returns a tool_result", {
-  res <- invoke_tool(function() 1, list(), id = "x")
+test_that("invoke_tool returns a ContentToolResult", {
+  tool <- tool(function() 1, "A tool", .name = "my_tool")
+
+  res <- invoke_tool(tool, list(), id = "x")
   expect_s3_class(res, "ellmer::ContentToolResult")
   expect_equal(res@id, "x")
   expect_equal(res@error, NULL)
   expect_false(tool_errored(res))
   expect_equal(res@value, 1)
+  expect_equal(res@call_tool, tool)
+  expect_equal(res@call_args, list())
 
-  res <- invoke_tool(function() 1, list(x = 1), id = "x")
+  res <- invoke_tool(tool, list(x = 1), id = "x")
   expect_s3_class(res, "ellmer::ContentToolResult")
   expect_equal(res@id, "x")
   expect_s3_class(res@error, "condition")
   expect_true(tool_errored(res))
   expect_equal(tool_error_string(res), "unused argument (x = 1)")
   expect_equal(res@value, NULL)
+  expect_equal(res@extra, list())
+  expect_equal(res@call_tool, tool)
+  expect_equal(res@call_args, list(x = 1))
 
   res <- invoke_tool(NULL, list(x = 1), id = "x")
   expect_s3_class(res, "ellmer::ContentToolResult")
@@ -21,23 +28,48 @@ test_that("invoke_tool returns a tool_result", {
   expect_equal(tool_error_string(res), "Unknown tool")
   expect_true(tool_errored(res))
   expect_equal(res@value, NULL)
-})
+  expect_equal(res@extra, list())
+  expect_equal(res@call_tool, NULL)
+  expect_equal(res@call_args, list(x = 1))
 
-test_that("invoke_tool_async returns a tool_result", {
-  res <- sync(invoke_tool_async(function() 1, list(), id = "x"))
+  tool_ctr <- tool(
+    function() ContentToolResult(value = 1, extra = list(a = 1)),
+    "A tool that returns ContentToolResult"
+  )
+  res <- invoke_tool(tool_ctr, list(), id = "x")
   expect_s3_class(res, "ellmer::ContentToolResult")
   expect_equal(res@id, "x")
   expect_equal(res@error, NULL)
   expect_false(tool_errored(res))
   expect_equal(res@value, 1)
+  expect_equal(res@extra, list(a = 1))
+  expect_equal(res@call_tool, tool_ctr)
+  expect_equal(res@call_args, list())
+})
 
-  res <- sync(invoke_tool_async(function() 1, list(x = 1), id = "x"))
+test_that("invoke_tool_async returns a ContentToolResult", {
+  tool <- tool(function() 1, "A tool", .name = "my_tool")
+
+  res <- sync(invoke_tool_async(tool, list(), id = "x"))
+  expect_s3_class(res, "ellmer::ContentToolResult")
+  expect_equal(res@id, "x")
+  expect_equal(res@error, NULL)
+  expect_false(tool_errored(res))
+  expect_equal(res@value, 1)
+  expect_equal(res@extra, list())
+  expect_equal(res@call_tool, tool)
+  expect_equal(res@call_args, list())
+
+  res <- sync(invoke_tool_async(tool, list(x = 1), id = "x"))
   expect_s3_class(res, "ellmer::ContentToolResult")
   expect_equal(res@id, "x")
   expect_s3_class(res@error, "condition")
   expect_equal(tool_error_string(res), "unused argument (x = 1)")
   expect_true(tool_errored(res))
   expect_equal(res@value, NULL)
+  expect_equal(res@extra, list())
+  expect_equal(res@call_tool, tool)
+  expect_equal(res@call_args, list(x = 1))
 
   res <- sync(invoke_tool_async(NULL, list(x = 1), id = "x"))
   expect_s3_class(res, "ellmer::ContentToolResult")
@@ -46,4 +78,21 @@ test_that("invoke_tool_async returns a tool_result", {
   expect_equal(tool_error_string(res), "Unknown tool")
   expect_true(tool_errored(res))
   expect_equal(res@value, NULL)
+  expect_equal(res@extra, list())
+  expect_equal(res@call_tool, NULL)
+  expect_equal(res@call_args, list(x = 1))
+
+  tool_ctr <- tool(
+    function() ContentToolResult(value = 1, extra = list(a = 1)),
+    "A tool that returns ContentToolResult"
+  )
+  res <- sync(invoke_tool_async(tool_ctr, list(), id = "x"))
+  expect_s3_class(res, "ellmer::ContentToolResult")
+  expect_equal(res@id, "x")
+  expect_equal(res@error, NULL)
+  expect_false(tool_errored(res))
+  expect_equal(res@value, 1)
+  expect_equal(res@extra, list(a = 1))
+  expect_equal(res@call_tool, tool_ctr)
+  expect_equal(res@call_args, list())
 })
