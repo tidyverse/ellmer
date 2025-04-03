@@ -1,5 +1,13 @@
 # ellmer (development version)
 
+* `ContentToolResult` objects can now be returned directly from the `tool()`
+  function and now include additional information (#398 #399, @gadenbuie):
+
+  * `extra`: A list of additional data associated with the tool result that is
+    not shown to the chatbot.
+  * `call_tool`: The `tool()` definition of the tool used to satisfy the request.
+  * `call_args`: The arguments used when calling the tool.
+
 * `ContentToolResult` objects now include the error condition in the `error`
   property when a tool call fails (#421, @gadenbuie).
 
