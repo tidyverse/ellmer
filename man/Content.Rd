@@ -8,6 +8,7 @@
 \alias{ContentImageInline}
 \alias{ContentToolRequest}
 \alias{ContentToolResult}
+\alias{ContentThinking}
 \alias{ContentPDF}
 \title{Content types received from and sent to a chatbot}
 \usage{
@@ -28,6 +29,8 @@ ContentToolRequest(
 )
 
 ContentToolResult(id = stop("Required"), value = NULL, error = NULL)
+
+ContentThinking(thinking = stop("Required"), extra = list())
 
 ContentPDF(type = stop("Required"), data = stop("Required"))
 }
@@ -53,6 +56,10 @@ ContentPDF(type = stop("Required"), data = stop("Required"))
 \item{error}{The error message, as a string, or the error condition thrown
 as a result of a failure when calling the tool function. Must be \code{NULL}
 when the tool call is successful.}
+
+\item{thinking}{The text of the thinking output.}
+
+\item{extra}{Additional data.}
 }
 \value{
 S7 objects that all inherit from \code{Content}
