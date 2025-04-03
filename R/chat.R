@@ -152,11 +152,15 @@ Chat <- R6::R6Class(
       tokens_df
     },
 
-    #' @description The total price of all turns in this chat.
-    get_price = function() {
+    #' @description The cost of this chat
+    #' @param include The default, `"all"`, gives the total cumulative cost
+    #'   of this chat. Alternativelly, use `"last"` to get the cost of just the
+    #'   most recent turn.
+    get_cost = function(include = c("all", "last")) {
+      include <- arg_match(include)
+
       turns <- self$get_turns(include_system_prompt = FALSE)
       assistant_turns <- keep(turns, function(x) x@role == "assistant")
-
       n <- length(assistant_turns)
       tokens <- t(vapply(
         assistant_turns,
@@ -164,11 +168,15 @@ Chat <- R6::R6Class(
         double(2)
       ))
 
+      if (include == "last") {
+        tokens <- tokens[nrow(tokens, ), , drop = FALSE]
+      }
+
       find_price(
         private$provider@name,
         private$provider@model,
-        sum(tokens[, 1]),
-        sum(tokens[, 2])
+        input = sum(tokens[, 1]),
+        output = sum(tokens[, 2])
       )
     },
 
@@ -675,28 +683,21 @@ print.Chat <- function(x, ...) {
 
   tokens_user <- sum(tokens$tokens_total[tokens$role == "user"])
   tokens_assistant <- sum(tokens$tokens_total[tokens$role == "assistant"])
-  price <- find_price(
-    provider@name,
-    provider@model,
-    tokens_user,
-    tokens_assistant
-  )
+  cost <- x$get_cost()
 
-  cat(
-    paste_c(
-      "<Chat",
-      c(" ", provider@name, "/", provider@model),
-      c(" turns=", length(turns)),
-      c(
-        " tokens=",
-        tokens_user,
-        "/",
-        tokens_assistant,
-        if (!is.na(price)) c("/", format(price))
-      )
+  cat(paste_c(
+    "<Chat",
+    c(" ", provider@name, "/", provider@model),
+    c(" turns=", length(turns)),
+    c(
+      " tokens=",
+      tokens_user,
+      "/",
+      tokens_assistant
     ),
+    if (!is.na(cost)) c(" ", format(cost)),
     ">\n"
-  )
+  ))
 
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
