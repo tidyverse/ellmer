@@ -64,9 +64,17 @@ chat_anthropic <- function(
   Chat$new(provider = provider, turns = turns, echo = echo)
 }
 
-#' @describeIn chat_anthropic An alias for `chat_anthropic()`.
+#' @rdname deprecated
+#'
+#' @description
+#' * [chat_claude()] was deprecated in v0.2.0, please use [chat_anthropic()]
+#'   instead.
+#'
 #' @export
-chat_claude <- chat_anthropic
+chat_claude <- function(...) {
+  lifecycle::deprecate_warn("0.2.0", "chat_claude()", "chat_anthropic()")
+  chat_anthropic(...)
+}
 
 chat_anthropic_test <- function(
   ...,

@@ -5,7 +5,7 @@
   
   * `chat_azure_openai()` replaces `chat_azure()`
   * `chat_aws_bedrock()` replaces `chat_bedrock()`
-  * `chat_claude()` is now an alias for `chat_anthropic()`
+  * `chat_anthropic()` replaces `chat_claude()`
   * `chat_gemini()` is now an alias for `chat_google_gemini()`
 
 * `Provider` gains `name` and `model` fields (#406). These are now reported when

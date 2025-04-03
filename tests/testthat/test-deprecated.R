@@ -16,3 +16,10 @@ test_that("chat_bedrock() is deprecated", {
     "chat_aws_bedrock"
   )
 })
+
+test_that("chat_claude() is deprecated", {
+  lifecycle::expect_deprecated(
+    chat_claude(api_key = "key"),
+    "chat_anthropic"
+  )
+})
