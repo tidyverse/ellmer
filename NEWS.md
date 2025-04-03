@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* The `echo` can now be set by `options(ellmer_echo = "none")`.
+
 * `chat_claude()` now supports the thinking content type (#396).
 
 * `tool()` gains an `.annotations` argument that can be created with the

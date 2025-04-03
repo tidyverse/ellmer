@@ -61,18 +61,22 @@ prettify <- function(x) {
 }
 
 check_echo <- function(echo = NULL) {
-  if (is.null(echo) || identical(echo, c("none", "text", "all"))) {
-    if (env_is_user_facing(parent.frame(2)) && !is_testing()) {
-      "text"
-    } else {
-      "none"
+  args <- c("none", "text", "all")
+  if (identical(echo, args)) {
+    echo <- getOption("ellmer_echo", NULL)
+    if (identical(echo, args)) {
+      echo <- "text"
     }
-  } else if (isTRUE(echo)) {
+  }
+  if (is.null(echo)) {
+    return(if (env_is_user_facing(parent.frame(2)) && !is_testing()) "text" else "none")
+  }
+  if (isTRUE(echo)) {
     "text"
   } else if (isFALSE(echo)) {
     "none"
   } else {
-    arg_match(echo, c("none", "text", "all"))
+    arg_match(echo, args)
   }
 }
 
