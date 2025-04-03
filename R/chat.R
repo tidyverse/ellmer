@@ -154,7 +154,7 @@ Chat <- R6::R6Class(
 
     #' @description The cost of this chat
     #' @param include The default, `"all"`, gives the total cumulative cost
-    #'   of this chat. Alternativelly, use `"last"` to get the cost of just the
+    #'   of this chat. Alternatively, use `"last"` to get the cost of just the
     #'   most recent turn.
     get_cost = function(include = c("all", "last")) {
       include <- arg_match(include)

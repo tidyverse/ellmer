@@ -4,7 +4,7 @@ library(dplyr)
 
 # OpenAI -----------------------------------------------------------------------
 
-# Can't download with httr2/rvest: {curl} doesn't support brotli encoing
+# Can't download with httr2/rvest: {curl} doesn't support brotli encoding
 # Can't download with curl: as page requires javascript
 # Can't download with safari: saved page doesn't contain any content
 # So used ChatGPT with pasted HTML at
