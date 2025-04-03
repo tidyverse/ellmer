@@ -18,6 +18,6 @@
     Code
       token_usage()
     Output
-            provider model    input output   price
-      1 testprovider  test 12300000 678000 1.23678
+            provider model    input output price
+      1 testprovider  test 12300000 678000 $1.24
 

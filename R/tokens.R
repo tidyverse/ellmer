@@ -83,7 +83,7 @@ ellmer_price <- function(x) {
 }
 #' @export
 format.ellmer_price <- function(x, ...) {
-  paste0("$", format(unclass(x), nsmall = 2))
+  paste0(ifelse(is.na(x), "", "$"), format(unclass(round(x, 2)), nsmall = 2))
 }
 #' @export
 print.ellmer_price <- function(x, ...) {

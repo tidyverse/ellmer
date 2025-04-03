@@ -40,3 +40,9 @@ test_that("token_usage() shows price if available", {
   tokens_log(provider, 123e5, 678e3)
   expect_snapshot(token_usage())
 })
+
+test_that("price is formatted nicely", {
+  expect_equal(format(ellmer_price(NA)), "NA")
+  expect_equal(format(ellmer_price(0.0001)), "$0.00")
+  expect_equal(format(ellmer_price(c(10, 1))), c("$10.00", "$ 1.00"))
+})
