@@ -3,7 +3,7 @@
     Code
       chat
     Output
-      <Chat turns=3 tokens=15/5>
+      <Chat OpenAI/gpt-4o turns=3 tokens=15/5>
       -- system [0] ------------------------------------------------------------------
       You're a helpful assistant that returns very minimal output
       -- user [15] -------------------------------------------------------------------

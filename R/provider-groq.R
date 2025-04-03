@@ -15,6 +15,7 @@ NULL
 #'
 #' @export
 #' @family chatbots
+#' @param api_key `r api_key_param("GROQ_API_KEY")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
@@ -41,6 +42,7 @@ chat_groq <- function(
   }
 
   provider <- ProviderGroq(
+    name = "Groq",
     base_url = base_url,
     model = model,
     seed = seed,

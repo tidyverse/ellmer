@@ -40,7 +40,7 @@ test_that("turn contents can be converted to text, markdown and HTML", {
     turn,
     Turn("assistant", list(ContentText("Here's your answer.")))
   )
-  chat <- Chat$new(Provider("https://example.com/api"), turns = turns)
+  chat <- Chat$new(test_provider(), turns = turns)
   expect_snapshot(cat(contents_markdown(chat)))
 
   skip_if_not_installed("commonmark")

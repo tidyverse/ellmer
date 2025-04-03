@@ -1,4 +1,9 @@
-tokens_log <- function(name, tokens) {
+tokens_log <- function(provider, tokens) {
+  # TODO: probably should make this store in a data frame, but will tackle
+  # when implementing token costs.
+
+  name <- paste0(provider@name, "/", provider@model)
+
   if (is.null(the$tokens)) {
     the$tokens <- list()
   }
@@ -11,7 +16,14 @@ tokens_log <- function(name, tokens) {
   invisible()
 }
 
-tokens_reset <- function() {
+local_tokens <- function(frame = parent.frame()) {
+  old <- the$tokens
+  the$tokens <- NULL
+
+  defer(the$tokens <- old, env = frame)
+}
+
+tokens_set <- function() {
   the$tokens <- NULL
   invisible()
 }

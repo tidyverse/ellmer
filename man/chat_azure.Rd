@@ -7,6 +7,7 @@
 chat_azure(
   endpoint = azure_endpoint(),
   deployment_id,
+  params = NULL,
   api_version = NULL,
   system_prompt = NULL,
   turns = NULL,
@@ -24,6 +25,8 @@ value of the \code{AZURE_OPENAI_ENDPOINT} envinronment variable.}
 
 \item{deployment_id}{Deployment id for the model you want to use.}
 
+\item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
+
 \item{api_version}{The API version to use.}
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
@@ -32,9 +35,11 @@ value of the \code{AZURE_OPENAI_ENDPOINT} envinronment variable.}
 previous conversation). If not provided, the conversation begins from
 scratch.}
 
-\item{api_key}{An API key to use for authentication. You generally should not
-supply this directly, but instead set the \code{AZURE_OPENAI_API_KEY}
-environment variable.}
+\item{api_key}{API key to use for authentication.
+
+You generally should not supply this directly, but instead set the \code{AZURE_OPENAI_API_KEY} environment variable.
+The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{token}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} A literal Azure token to use
 for authentication. Deprecated in favour of ambient Azure credentials or

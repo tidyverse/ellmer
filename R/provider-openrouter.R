@@ -11,6 +11,7 @@ NULL
 #'
 #' @export
 #' @family chatbots
+#' @param api_key `r api_key_param("OPENROUTER_API_KEY")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
@@ -36,6 +37,7 @@ chat_openrouter <- function(
   }
 
   provider <- ProviderOpenRouter(
+    name = "OpenRouter",
     base_url = "https://openrouter.ai/api/v1",
     model = model,
     seed = seed,

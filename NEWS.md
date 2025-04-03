@@ -2,13 +2,16 @@
 
 * `chat_claude()` now supports the thinking content type (#396).
 
+* `Provider` gains `name` and `model` fields (#406). These are now reported when
+  you print a chat object and used in `token_usage()`.
+
 * New `interpolate_package()` to make it easier to interpolate from prompts
   stored in the `inst/prompts` inside a package (#164).
 
-* `chat_claude()`, `chat_openai()`, and `chat_gemini()` now have a `params` 
-  argument that allows you to specify common model paramaters (like `seed`
-  and `temperature`). Support for other models will grow as you request it 
-  (#280).
+* `chat_azure()`, `chat_claude()`, `chat_openai()`, and `chat_gemini()` now have 
+  a `params`  argument that allows you to specify common model paramaters (like 
+  `seed` and `temperature`). Support for other models will grow as you request 
+  it (#280).
 
 * `chat_claude(max_tokens =)` is now deprecated in favour of 
   `chat_claude(params = )` (#280).

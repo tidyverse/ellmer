@@ -13,20 +13,32 @@ NULL
 #' the various generics that control the behavior of each provider.
 #'
 #' @export
+#' @param name Name of the provider.
+#' @param model Name of the model.
 #' @param base_url The base URL for the API.
 #' @param params A list of standard parameters created by [params()].
 #' @param extra_args Arbitrary extra arguments to be included in the request body.
 #' @return An S7 Provider object.
 #' @examples
-#' Provider(base_url = "https://cool-models.com")
+#' Provider(
+#'   name = "CoolModels",
+#'   model = "my_model",
+#'   base_url = "https://cool-models.com"
+#' )
 Provider <- new_class(
   "Provider",
   properties = list(
+    name = prop_string(),
+    model = prop_string(),
     base_url = prop_string(),
     params = class_list,
     extra_args = class_list
   )
 )
+
+test_provider <- function(name = "", model = "", base_url = "", ...) {
+  Provider(name = name, model = model, base_url = base_url, ...)
+}
 
 # Create a request------------------------------------
 

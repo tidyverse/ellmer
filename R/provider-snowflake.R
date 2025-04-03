@@ -58,6 +58,7 @@ chat_snowflake <- function(
   credentials <- credentials %||% default_snowflake_credentials(account)
 
   provider <- ProviderSnowflake(
+    name = "Snowflake/Cortex",
     base_url = snowflake_url(account),
     account = account,
     credentials = credentials,
@@ -145,7 +146,7 @@ method(value_turn, ProviderSnowflake) <- function(
     result$usage$prompt_tokens %||% NA_integer_,
     result$usage$completion_tokens %||% NA_integer_
   )
-  tokens_log(paste0("Snowflake-", provider@account), tokens)
+  tokens_log(provider, tokens)
   Turn(
     # Snowflake's response format seems to omit the role.
     "assistant",

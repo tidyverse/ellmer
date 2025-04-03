@@ -21,9 +21,11 @@ chat_openrouter(
 previous conversation). If not provided, the conversation begins from
 scratch.}
 
-\item{api_key}{The API key to use for authentication. You generally should
-not supply this directly, but instead set the \code{OPENAI_API_KEY} environment
-variable.}
+\item{api_key}{API key to use for authentication.
+
+You generally should not supply this directly, but instead set the \code{OPENROUTER_API_KEY} environment variable.
+The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{model}{The model to use for the chat. The default, \code{NULL}, will pick
 a reasonable default, and tell you about. We strongly recommend explicitly

@@ -66,7 +66,10 @@ test_tools_simple <- function(chat_fun) {
   chat$register_tool(tool(function() "2024-01-01", "Return the current date"))
 
   expect_output(
-    result <- chat$chat("What's the current date in YMD format?", echo = TRUE),
+    result <- chat$chat(
+      "What's the current date in Y-M-D format?",
+      echo = TRUE
+    ),
     "2024-01-01"
   )
   expect_match(result, "2024-01-01")
@@ -82,7 +85,7 @@ test_tools_async <- function(chat_fun) {
     "Return the current date"
   ))
 
-  result <- sync(chat$chat_async("What's the current date in YMD format?"))
+  result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
   expect_match(result, "2024-01-01")
 
   expect_snapshot(chat$chat("Great. Do it again."), error = TRUE)
