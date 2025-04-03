@@ -55,18 +55,6 @@ chat_google_gemini <- function(
   Chat$new(provider = provider, turns = turns, echo = echo)
 }
 
-#' @rdname deprecated
-#'
-#' @description
-#' * [chat_gemini()] was deprecated in v0.2.0, please use [chat_google_gemini()]
-#'   instead.
-#'
-#' @export
-chat_gemini <- function(...) {
-  lifecycle::deprecate_warn("0.2.0", "chat_gemini()", "chat_google_gemini()")
-  chat_google_gemini(...)
-}
-
 ProviderGoogleGemini <- new_class(
   "ProviderGoogleGemini",
   parent = Provider,

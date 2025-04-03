@@ -78,18 +78,6 @@ chat_aws_bedrock <- function(
   Chat$new(provider = provider, turns = turns, echo = echo)
 }
 
-#' @rdname deprecated
-#'
-#' @description
-#' * [chat_bedrock()] was deprecated in v0.2.0, please use [chat_aws_bedrock()]
-#'   instead.
-#'
-#' @export
-chat_bedrock <- function(...) {
-  lifecycle::deprecate_warn("0.2.0", "chat_bedrock()", "chat_aws_bedrock()")
-  chat_aws_bedrock(...)
-}
-
 ProviderAWSBedrock <- new_class(
   "ProviderAWSBedrock",
   parent = Provider,

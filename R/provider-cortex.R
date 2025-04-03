@@ -91,19 +91,6 @@ chat_cortex_analyst <- function(
   Chat$new(provider = provider, turns = NULL, echo = echo)
 }
 
-#' @rdname deprecated
-#'
-#' @description
-#' * [chat_cortex()] was renamed in v0.1.1 to [chat_cortex_analyst()] to
-#'   distinguish it from the more general-purpose Snowflake Cortex chat
-#'   function, [chat_snowflake()].
-#'
-#' @export
-chat_cortex <- function(...) {
-  lifecycle::deprecate_warn("0.1.1", "chat_cortex()", "chat_cortex_analyst()")
-  chat_cortex_analyst(...)
-}
-
 ProviderSnowflakeCortexAnalyst <- new_class(
   "ProviderSnowflakeCortexAnalyst",
   parent = Provider,

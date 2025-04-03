@@ -102,17 +102,6 @@ chat_azure_openai <- function(
   Chat$new(provider = provider, turns = turns, echo = echo)
 }
 
-#' @rdname deprecated
-#'
-#' @description
-#' * [chat_azure()] was deprecated in v0.2.0, please use [chat_azure_openai()]
-#'   instead.
-#'
-#' @export
-chat_azure <- function(...) {
-  lifecycle::deprecate_warn("0.2.0", "chat_azure()", "chat_azure_openai()")
-  chat_azure_openai(...)
-}
 
 chat_azure_openai_test <- function(system_prompt = NULL, ...) {
   api_key <- key_get("AZURE_OPENAI_API_KEY")
