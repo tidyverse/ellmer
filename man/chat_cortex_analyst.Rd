@@ -49,7 +49,7 @@ A \link{Chat} object.
 Chat with the LLM-powered \href{https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst}{Snowflake Cortex Analyst}.
 \subsection{Authentication}{
 
-\code{chat_cortex()} picks up the following ambient Snowflake credentials:
+\code{chat_cortex_analyst()} picks up the following ambient Snowflake credentials:
 \itemize{
 \item A static OAuth token defined via the \code{SNOWFLAKE_TOKEN} environment
 variable.

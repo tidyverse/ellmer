@@ -12,7 +12,7 @@ NULL
 #'
 #' ## Authentication
 #'
-#' `chat_cortex()` picks up the following ambient Snowflake credentials:
+#' `chat_cortex_analyst()` picks up the following ambient Snowflake credentials:
 #'
 #' - A static OAuth token defined via the `SNOWFLAKE_TOKEN` environment
 #'   variable.
