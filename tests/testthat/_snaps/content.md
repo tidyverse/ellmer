@@ -116,3 +116,12 @@
       
       <pre><code>SELECT * FROM mtcars</code></pre>
 
+# thinking has useful representations
+
+    Code
+      cat(contents_html(ct))
+    Output
+      <details><summary>Thinking</summary>
+      <p>A <strong>thought</strong>.</p>
+      </details>
+

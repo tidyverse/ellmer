@@ -284,22 +284,21 @@ ContentThinking <- new_class(
 )
 
 method(format, ContentThinking) <- function(x, ...) {
-  paste("<thinking>\n", x@thinking, "\n</thinking>\n")
-}
-
-method(contents_text, ContentThinking) <- function(content) {
-  content@thinking
+  paste0("<thinking>\n", x@thinking, "\n</thinking>\n")
 }
 
 method(contents_html, ContentThinking) <- function(content) {
   check_installed("commonmark")
-  commonmark::markdown_html(content@thinking)
+  paste0(
+    "<details><summary>Thinking</summary>\n",
+    commonmark::markdown_html(content@thinking),
+    "</details>\n"
+  )
 }
 
 method(contents_markdown, ContentThinking) <- function(content) {
-  content@thinking
+  format(content)
 }
-
 
 # Helpers ----------------------------------------------------------------------
 
