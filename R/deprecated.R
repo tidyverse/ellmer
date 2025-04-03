@@ -5,14 +5,10 @@
 #'
 #' ## Deprecated in v0.2.0
 #'
-#' * [chat_azure()] was deprecated in v0.2.0, please use [chat_azure_openai()]
-#'   instead.
-#' * [chat_bedrock()] was deprecated in v0.2.0, please use [chat_aws_bedrock()]
-#'   instead.
-#' * [chat_claude()] was deprecated in v0.2.0, please use [chat_anthropic()]
-#'   instead.
-#' * [chat_gemini()] was deprecated in v0.2.0, please use [chat_google_gemini()]
-#'   instead.
+#' * [chat_azure()] was renamed to [chat_azure_openai()].
+#' * [chat_bedrock()] was renamed to [chat_aws_bedrock()].
+#' * [chat_claude()] was renamed to [chat_anthropic()].
+#' * [chat_gemini()] was renamed to [chat_google_gemini()].
 #'
 #' ## Deprecated in v0.1.1
 #'

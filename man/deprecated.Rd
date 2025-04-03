@@ -27,14 +27,10 @@ replacement.}
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 \subsection{Deprecated in v0.2.0}{
 \itemize{
-\item \code{\link[=chat_azure]{chat_azure()}} was deprecated in v0.2.0, please use \code{\link[=chat_azure_openai]{chat_azure_openai()}}
-instead.
-\item \code{\link[=chat_bedrock]{chat_bedrock()}} was deprecated in v0.2.0, please use \code{\link[=chat_aws_bedrock]{chat_aws_bedrock()}}
-instead.
-\item \code{\link[=chat_claude]{chat_claude()}} was deprecated in v0.2.0, please use \code{\link[=chat_anthropic]{chat_anthropic()}}
-instead.
-\item \code{\link[=chat_gemini]{chat_gemini()}} was deprecated in v0.2.0, please use \code{\link[=chat_google_gemini]{chat_google_gemini()}}
-instead.
+\item \code{\link[=chat_azure]{chat_azure()}} was renamed to \code{\link[=chat_azure_openai]{chat_azure_openai()}}.
+\item \code{\link[=chat_bedrock]{chat_bedrock()}} was renamed to \code{\link[=chat_aws_bedrock]{chat_aws_bedrock()}}.
+\item \code{\link[=chat_claude]{chat_claude()}} was renamed to \code{\link[=chat_anthropic]{chat_anthropic()}}.
+\item \code{\link[=chat_gemini]{chat_gemini()}} was renamed to \code{\link[=chat_google_gemini]{chat_google_gemini()}}.
 }
 }
 
