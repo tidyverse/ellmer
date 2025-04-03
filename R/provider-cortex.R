@@ -91,34 +91,17 @@ chat_cortex_analyst <- function(
   Chat$new(provider = provider, turns = NULL, echo = echo)
 }
 
-#' Create a chatbot that speaks to the Snowflake Cortex Analyst
+#' @rdname deprecated
 #'
 #' @description
-#' `r lifecycle::badge("deprecated")`
+#' * [chat_cortex()] was renamed in v0.1.1 to [chat_cortex_analyst()] to
+#'   distinguish it from the more general-purpose Snowflake Cortex chat
+#'   function, [chat_snowflake()].
 #'
-#' [chat_cortex()] was renamed to [chat_cortex_analyst()] to distinguish it from
-#' the more general-purpose Snowflake Cortex chat function, [chat_snowflake()].
-#'
-#' @inheritParams chat_cortex_analyst
-#' @keywords internal
 #' @export
-chat_cortex <- function(
-  account = snowflake_account(),
-  credentials = NULL,
-  model_spec = NULL,
-  model_file = NULL,
-  api_args = list(),
-  echo = c("none", "text", "all")
-) {
+chat_cortex <- function(...) {
   lifecycle::deprecate_warn("0.1.1", "chat_cortex()", "chat_cortex_analyst()")
-  chat_cortex_analyst(
-    account = account,
-    credentials = credentials,
-    model_spec = model_spec,
-    model_file = model_file,
-    api_args = api_args,
-    echo = echo
-  )
+  chat_cortex_analyst(...)
 }
 
 ProviderSnowflakeCortexAnalyst <- new_class(

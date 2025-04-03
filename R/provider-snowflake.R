@@ -30,7 +30,7 @@ NULL
 #' general-purpose model.
 #'
 #' @inheritParams chat_openai
-#' @inheritParams chat_cortex
+#' @inheritParams chat_cortex_analyst
 #' @inherit chat_openai return
 #' @examplesIf has_credentials("cortex")
 #' chat <- chat_snowflake()
