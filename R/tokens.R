@@ -64,29 +64,29 @@ token_usage <- function() {
   }
 
   out <- the$tokens
-  out$price <- find_price(out$provider, out$model, out$input, out$output)
+  out$price <- get_token_cost(out$provider, out$model, out$input, out$output)
   out
 }
 
-# Pricing ----------------------------------------------------------------------
+# Cost ----------------------------------------------------------------------
 
-find_price <- function(provider, model, input, output) {
+get_token_cost <- function(provider, model, input, output) {
   idx <- tokens_match(provider, model, prices$provider, prices$model)
 
   input_price <- input * prices$input[idx] / 1e6
   output_price <- output * prices$output[idx] / 1e6
-  ellmer_price(input_price + output_price)
+  dollars(input_price + output_price)
 }
 
-ellmer_price <- function(x) {
-  structure(x, class = c("ellmer_price", "numeric"))
+dollars <- function(x) {
+  structure(x, class = c("ellmer_dollars", "numeric"))
 }
 #' @export
-format.ellmer_price <- function(x, ...) {
+format.ellmer_dollars <- function(x, ...) {
   paste0(ifelse(is.na(x), "", "$"), format(unclass(round(x, 2)), nsmall = 2))
 }
 #' @export
-print.ellmer_price <- function(x, ...) {
+print.ellmer_dollars <- function(x, ...) {
   print(format(x), quote = FALSE)
   invisible(x)
 }

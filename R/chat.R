@@ -172,7 +172,7 @@ Chat <- R6::R6Class(
         tokens <- tokens[nrow(tokens, ), , drop = FALSE]
       }
 
-      find_price(
+      get_token_cost(
         private$provider@name,
         private$provider@model,
         input = sum(tokens[, 1]),

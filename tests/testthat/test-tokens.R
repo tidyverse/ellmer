@@ -21,8 +21,8 @@ test_that("can retrieve and log tokens", {
 })
 
 test_that("can compute price of tokens", {
-  expect_equal(find_price("OpenAI", "gpt-4o", 1e6, 0), ellmer_price(2.5))
-  expect_equal(find_price("OpenAI", "gpt-4o", 0, 1e6), ellmer_price(10))
+  expect_equal(get_token_cost("OpenAI", "gpt-4o", 1e6, 0), dollars(2.5))
+  expect_equal(get_token_cost("OpenAI", "gpt-4o", 0, 1e6), dollars(10))
 })
 
 test_that("token_usage() shows price if available", {
@@ -42,7 +42,7 @@ test_that("token_usage() shows price if available", {
 })
 
 test_that("price is formatted nicely", {
-  expect_equal(format(ellmer_price(NA)), "NA")
-  expect_equal(format(ellmer_price(0.0001)), "$0.00")
-  expect_equal(format(ellmer_price(c(10, 1))), c("$10.00", "$ 1.00"))
+  expect_equal(format(dollars(NA)), "NA")
+  expect_equal(format(dollars(0.0001)), "$0.00")
+  expect_equal(format(dollars(c(10, 1))), c("$10.00", "$ 1.00"))
 })
