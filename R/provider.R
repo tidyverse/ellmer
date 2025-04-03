@@ -42,6 +42,18 @@ test_provider <- function(name = "", model = "", base_url = "", ...) {
 
 # Create a request------------------------------------
 
+base_request <- new_generic("base_request", "provider", function(provider) {
+  S7_dispatch()
+})
+
+base_request_error <- new_generic(
+  "base_request_error",
+  "provider",
+  function(provider, req) {
+    S7_dispatch()
+  }
+)
+
 chat_request <- new_generic(
   "chat_request",
   "provider",
@@ -55,6 +67,47 @@ chat_request <- new_generic(
     S7_dispatch()
   }
 )
+
+method(chat_request, Provider) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, chat_path(provider))
+
+  body <- chat_body(
+    provider = provider,
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+  body <- modify_list(body, provider@extra_args)
+  req <- req_body_json(req, body)
+
+  req
+}
+
+chat_body <- new_generic(
+  "chat_body",
+  "provider",
+  function(
+    provider,
+    stream = TRUE,
+    turns = list(),
+    tools = list(),
+    type = NULL
+  ) {
+    S7_dispatch()
+  }
+)
+
+chat_path <- new_generic("chat_path", "provider", function(provider) {
+  S7_dispatch()
+})
 
 chat_resp_stream <- new_generic(
   "chat_resp_stream",

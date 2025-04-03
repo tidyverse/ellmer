@@ -80,33 +80,7 @@ ProviderSnowflakeCortex <- new_class(
   )
 )
 
-# See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#api-reference
-method(chat_request, ProviderSnowflakeCortex) <- function(
-  provider,
-  stream = TRUE,
-  turns = list(),
-  tools = list(),
-  type = NULL
-) {
-  if (length(tools) != 0) {
-    cli::cli_abort(
-      "Tool calling is not supported.",
-      call = quote(chat_snowflake())
-    )
-  }
-  if (!is.null(type) != 0) {
-    cli::cli_abort(
-      "Structured data extraction is not supported.",
-      call = quote(chat_snowflake())
-    )
-  }
-  if (!stream) {
-    cli::cli_abort(
-      "Non-streaming responses are not supported.",
-      call = quote(chat_snowflake())
-    )
-  }
-
+method(base_request, ProviderSnowflakeCortex) <- function(provider) {
   req <- request(provider@base_url)
   req <- req_url_path_append(req, "/api/v2/cortex/inference:complete")
   req <- ellmer_req_credentials(req, provider@credentials)
@@ -120,17 +94,34 @@ method(chat_request, ProviderSnowflakeCortex) <- function(
   # Snowflake-specific error response handling:
   req <- req_error(req, body = function(resp) resp_body_json(resp)$message)
 
-  messages <- as_json(provider, turns)
+  req
+}
 
-  body <- list(
+# See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#api-reference
+method(chat_body, ProviderSnowflakeCortex) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  call <- quote(chat_snowflake())
+  if (length(tools) != 0) {
+    cli::cli_abort("Tool calling is not supported.", call = call)
+  }
+  if (!is.null(type) != 0) {
+    cli::cli_abort("Structured data extraction is not supported.", call = call)
+  }
+  if (!stream) {
+    cli::cli_abort("Non-streaming responses are not supported.", call = call)
+  }
+
+  messages <- as_json(provider, turns)
+  list(
     messages = messages,
     model = provider@model,
     stream = stream
   )
-  body <- modify_list(body, provider@extra_args)
-  req <- req_body_json(req, body)
-
-  req
 }
 
 # Snowflake -> ellmer --------------------------------------------------------
