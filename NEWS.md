@@ -5,8 +5,7 @@
 
   * `extra`: A list of additional data associated with the tool result that is
     not shown to the chatbot.
-  * `call_tool`: The `tool()` definition of the tool used to satisfy the request.
-  * `call_args`: The arguments used when calling the tool.
+  * `request`: The `ContentToolRequest` that triggered the tool call.
 
 * `ContentToolResult` objects now include the error condition in the `error`
   property when a tool call fails (#421, @gadenbuie).
