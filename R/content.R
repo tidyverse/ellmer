@@ -212,11 +212,8 @@ ContentToolResult <- new_class(
       class = NULL | class_character | new_S3_class("condition"),
       default = NULL,
       validator = function(value) {
-        if (is.null(value) || inherits(value, "condition")) {
-          return()
-        }
-
-        if (is.character(value) && length(value) == 1) {
+        ok <- is.null(value) || is_string(value) || inherits(value, "condition")
+        if (ok) {
           return()
         }
 
