@@ -6,7 +6,7 @@
   * `chat_azure_openai()` replaces `chat_azure()`
   * `chat_aws_bedrock()` replaces `chat_bedrock()`
   * `chat_anthropic()` replaces `chat_claude()`
-  * `chat_gemini()` is now an alias for `chat_google_gemini()`
+  * `chat_google_gemini()` replaces `chat_gemini()`
 
 * `Provider` gains `name` and `model` fields (#406). These are now reported when
   you print a chat object and used in `token_usage()`.

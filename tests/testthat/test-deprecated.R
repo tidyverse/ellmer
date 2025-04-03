@@ -23,3 +23,10 @@ test_that("chat_claude() is deprecated", {
     "chat_anthropic"
   )
 })
+
+test_that("chat_gemini() is deprecated", {
+  lifecycle::expect_deprecated(
+    chat_gemini(api_key = "key"),
+    "chat_google_gemini"
+  )
+})
