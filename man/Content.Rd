@@ -54,6 +54,10 @@ ContentPDF(type = stop("Required"), data = stop("Required"))
 \item{value, error}{Either the results of calling the function if
 it succeeded, otherwise the error message, as a string. One of
 \code{value} and \code{error} will always be \code{NULL}.}
+
+\item{thinking}{The text of the thinking output.}
+
+\item{extra}{Additional data.}
 }
 \value{
 S7 objects that all inherit from \code{Content}
