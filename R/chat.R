@@ -620,7 +620,6 @@ Chat <- R6::R6Class(
     match_tools = function(turn) {
       if (is.null(turn)) return(NULL)
 
-      is_tool_req <- map_lgl(turn@contents, S7_inherits, ContentToolRequest)
       turn@contents <- map(turn@contents, function(content) {
         if (!S7_inherits(content, ContentToolRequest)) {
           return(content)
