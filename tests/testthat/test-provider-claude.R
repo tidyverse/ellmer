@@ -79,7 +79,7 @@ test_that("max_tokens is deprecated", {
 })
 
 test_that("strips suffix from model name", {
-  provider <- ProviderClaude("", model = "", api_key = "")
+  provider <- ProviderClaude("", model = "", base_url = "", api_key = "")
   expect_equal(
     standardise_model(provider, "claude-3-7-sonnet-latest"),
     "claude-3-7-sonnet"
