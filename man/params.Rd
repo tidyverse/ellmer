@@ -2,7 +2,7 @@
 % Please edit documentation in R/params.R
 \name{params}
 \alias{params}
-\title{Standard model parmeters}
+\title{Standard model parameters}
 \usage{
 params(
   temperature = NULL,

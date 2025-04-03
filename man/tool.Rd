@@ -4,7 +4,7 @@
 \alias{tool}
 \title{Define a tool}
 \usage{
-tool(.fun, .description, ..., .name = NULL)
+tool(.fun, .description, ..., .name = NULL, .annotations = list())
 }
 \arguments{
 \item{.fun}{The function to be invoked when the tool is called.}
@@ -17,6 +17,10 @@ function. Each element should be created by a \code{\link[=type_boolean]{type_*(
 function.}
 
 \item{.name}{The name of the function.}
+
+\item{.annotations}{Additional properties that describe the tool and its
+behavior. Usually created by \code{\link[=tool_annotations]{tool_annotations()}}, where you can find a
+description of the annotation properties recommended by the \href{https://modelcontextprotocol.io/introduction}{Model Context Protocol}.}
 }
 \value{
 An S7 \code{ToolDef} object.

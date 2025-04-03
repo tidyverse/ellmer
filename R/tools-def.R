@@ -15,6 +15,10 @@ NULL
 #' @param .name The name of the function.
 #' @param .description A detailed description of what the function does.
 #'   Generally, the more information that you can provide here, the better.
+#' @param .annotations Additional properties that describe the tool and its
+#'   behavior. Usually created by [tool_annotations()], where you can find a
+#'   description of the annotation properties recommended by the [Model Context
+#'   Protocol](https://modelcontextprotocol.io/introduction).
 #' @param ... Name-type pairs that define the arguments accepted by the
 #'   function. Each element should be created by a [`type_*()`][type_boolean]
 #'   function.
@@ -43,7 +47,7 @@ NULL
 #' # Look at the chat history to see how tool calling works:
 #' # Assistant sends a tool request which is evaluated locally and
 #' # results are send back in a tool result.
-tool <- function(.fun, .description, ..., .name = NULL) {
+tool <- function(.fun, .description, ..., .name = NULL, .annotations = list()) {
   if (is.null(.name)) {
     fun_expr <- enexpr(.fun)
     if (is.name(fun_expr)) {
@@ -56,8 +60,63 @@ tool <- function(.fun, .description, ..., .name = NULL) {
     fun = .fun,
     name = .name,
     description = .description,
-    arguments = type_object(...)
+    arguments = type_object(...),
+    annotations = .annotations
   )
+}
+
+#' Tool annotations
+#'
+#' @description
+#' Tool annotations are additional properties that can be used to describe a
+#' tool to clients, for example a Shiny app or another user interface.
+#'
+#' The annotations in `tool_annotations()` are drawn from the [Model Context
+#' Protocol](https://modelcontextprotocol.io/introduction) and are considered
+#' *hints*. Tool authors should use these annotations to communicate tool
+#' properties, but users should note that these annotations are not guaranteed.
+#'
+#' @param title A human-readable title for the tool.
+#' @param read_only_hint If `TRUE`, the tool does not modify its environment.
+#' @param open_world_hint If `TRUE`, the tool may interact with an "open world"
+#'   of external entities. If `FALSE`, the tool's domain of interaction is
+#'   closed. For example, the world of a web search tool is open, but the world
+#'   of a memory tool is not.
+#' @param idempotent_hint If `TRUE`, calling the tool repeatedly with the same
+#'   arguments will have no additional effect on its environment. (Only
+#'   meaningful when `read_only_hint` is `FALSE`.)
+#' @param destructive_hint If `TRUE`, the tool may perform destructive updates
+#'   to its environment, otherwise it only performs additive updates. (Only
+#'   meaningful when `read_only_hint` is `FALSE`.)
+#' @param ... Additional named parameters to include in the tool annotations.
+#'
+#' @return A list of tool annotations.
+#'
+#' @export
+tool_annotations <- function(
+  title = NULL,
+  read_only_hint = NULL,
+  open_world_hint = NULL,
+  idempotent_hint = NULL,
+  destructive_hint = NULL,
+  ...
+) {
+  # Snake-cased names and descriptions from the MCP 2025-03-26 Schema
+  # https://github.com/modelcontextprotocol/specification/blob/72516795/schema/2025-03-26/schema.json#L2050-L2074
+  check_character(title, allow_null = TRUE)
+  check_bool(read_only_hint, allow_null = TRUE)
+  check_bool(open_world_hint, allow_null = TRUE)
+  check_bool(idempotent_hint, allow_null = TRUE)
+  check_bool(destructive_hint, allow_null = TRUE)
+
+  compact(list2(
+    title = title,
+    read_only_hint = read_only_hint,
+    open_world_hint = open_world_hint,
+    idempotent_hint = idempotent_hint,
+    destructive_hint = destructive_hint,
+    ...
+  ))
 }
 
 
@@ -67,7 +126,8 @@ ToolDef <- new_class(
     name = prop_string(),
     fun = class_function,
     description = prop_string(),
-    arguments = TypeObject
+    arguments = TypeObject,
+    annotations = class_list
   )
 )
 unique_tool_name <- function() {

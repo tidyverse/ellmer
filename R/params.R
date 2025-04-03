@@ -1,4 +1,4 @@
-#' Standard model parmeters
+#' Standard model parameters
 #'
 #' @description
 #' This helper function makes it easier to create a list of parameters used

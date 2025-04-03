@@ -27,6 +27,7 @@ reference:
   - title: Tools and structured data
     contents:
       - tool
+      - tool_annotations
       - type_boolean
 
   - title: Objects
