@@ -209,7 +209,7 @@ The cost of this chat
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{include}}{The default, \code{"all"}, gives the total cumulative cost
-of this chat. Alternativelly, use \code{"last"} to get the cost of just the
+of this chat. Alternatively, use \code{"last"} to get the cost of just the
 most recent turn.}
 }
 \if{html}{\out{</div>}}
