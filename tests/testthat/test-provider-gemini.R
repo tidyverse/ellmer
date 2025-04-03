@@ -87,7 +87,7 @@ test_that("can merge text output", {
 })
 
 test_that("strips suffix from model name", {
-  provider <- ProviderGemini("", model = "", base_url = "", api_key = "")
+  provider <- ProviderGoogleGemini("", model = "", base_url = "", api_key = "")
   expect_equal(
     standardise_model(provider, "gemini-1.0-pro"),
     "gemini-1.0-pro"

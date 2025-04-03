@@ -406,7 +406,7 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
 }
 # Pricing ----------------------------------------------------------------------
 
-method(standardise_model, ProviderClaude) <- function(provider, model) {
+method(standardise_model, ProviderAnthropic) <- function(provider, model) {
   gsub("-(latest|\\d{8})$", "", model)
 }
 

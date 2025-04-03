@@ -565,7 +565,7 @@ default_google_credentials <- function(
 
 # Pricing ----------------------------------------------------------------------
 
-method(standardise_model, ProviderGemini) <- function(provider, model) {
+method(standardise_model, ProviderGoogleGemini) <- function(provider, model) {
   # https://ai.google.dev/gemini-api/docs/models#model-versions
   # <model>-<generation>-<variation>-...
   gsub("^([^-]+-[^-]+-[^-]+).*$", "\\1", model)
