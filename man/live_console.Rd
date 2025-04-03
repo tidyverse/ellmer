@@ -29,7 +29,7 @@ you chat because your turns will be appended to the history.
 }
 \examples{
 \dontrun{
-chat <- chat_claude()
+chat <- chat_anthropic()
 live_console(chat)
 live_browser(chat)
 }

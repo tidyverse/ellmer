@@ -1,7 +1,7 @@
 # defaults are reported
 
     Code
-      . <- chat_gemini()
+      . <- chat_google_gemini()
     Message
       Using model = "gemini-2.0-flash".
 
