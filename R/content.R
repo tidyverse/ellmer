@@ -273,6 +273,8 @@ method(contents_markdown, ContentUploaded) <- function(content) {
 # Thinking ---------------------------------------------------------------------
 
 #' @rdname Content
+#' @param thinking The text of the thinking output.
+#' @param extra Additional data.
 #' @export
 ContentThinking <- new_class(
   "ContentThinking",
