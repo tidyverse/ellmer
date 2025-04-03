@@ -552,3 +552,11 @@ default_google_credentials <- function(
     list(Authorization = paste("Bearer", token$credentials$access_token))
   })
 }
+
+# Pricing ----------------------------------------------------------------------
+
+method(standardise_model, ProviderGemini) <- function(provider, model) {
+  # https://ai.google.dev/gemini-api/docs/models#model-versions
+  # <model>-<generation>-<variation>-...
+  gsub("^([^-]+-[^-]+-[^-]+).*$", "\\1", model)
+}
