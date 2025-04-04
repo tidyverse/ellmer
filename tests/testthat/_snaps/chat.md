@@ -46,3 +46,33 @@
       Error in `chat$set_tools()`:
       ! `tools` must be a list of tools created with `ellmer::tool()`.
 
+# chat warns on tool failures
+
+    Code
+      chat$chat("What are Joe and Hadley's favorite colors?")
+    Condition
+      Warning:
+      Failed to evaluate 2 tool calls.
+      i [user_favorite_color (ID)]: User denied tool request
+      i [user_favorite_color (ID)]: User denied tool request
+    Output
+      [1] "Cannot access that information"
+    Code
+      chat
+    Output
+      <Chat OpenAI/gpt-4o-mini turns=5 tokens=219/56 $0.00>
+      -- system [0] ------------------------------------------------------------------
+      Be very terse, not even punctuation.
+      -- user [68] -------------------------------------------------------------------
+      What are Joe and Hadley's favorite colors?
+      -- assistant [50] --------------------------------------------------------------
+      [tool request (ID)]: user_favorite_color(user = 
+      "Joe")
+      [tool request (ID)]: user_favorite_color(user = 
+      "Hadley")
+      -- user [33] -------------------------------------------------------------------
+      [tool result  (ID)]: Error: User denied tool request
+      [tool result  (ID)]: Error: User denied tool request
+      -- assistant [6] ---------------------------------------------------------------
+      Cannot access that information
+
