@@ -1,5 +1,10 @@
 # ellmer (development version)
 
+* `live_browser()` now requires `{shinychat}` v0.2.0 or later which provides
+  access to the app that powers `live_browser()` via `shinychat::chat_app()`,
+  as well as Shiny module for easily including a chat interface for an ellmer
+  `Chat` object in your Shiny apps (#397, @gadenbuie).
+
 * `chat_` functions no longer take a turns object, instead use `set_turns()` 
   (#427).
 
