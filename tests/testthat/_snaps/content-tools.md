@@ -43,6 +43,6 @@
     Condition
       Warning:
       Failed to evaluate 2 tool calls.
-      i [returns_json (call1)]: The JSON was invalid: {[1, 2, 3]}
-      i [throws (call2)]: went boom!
+      x [returns_json (call1)]: The JSON was invalid: {[1, 2, 3]}
+      x [throws (call2)]: went boom!
 

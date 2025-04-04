@@ -134,10 +134,10 @@ warn_tool_errors <- function(tool_errors) {
 
   cli::cli_warn(c(
     "Failed to evaluate {length(tool_errors)} tool call{?s}.",
-    set_names(errs, "i"),
+    set_names(errs, "x"),
     "i" = if (length(errs) < length(tool_errors)) {
       cli::format_inline(
-        "... and {length(tool_errors) - length(errs)} more"
+        "{cli::symbol$ellipsis} and {length(tool_errors) - length(errs)} more."
       )
     }
   ))
