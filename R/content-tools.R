@@ -35,58 +35,50 @@ extract_tool_requests <- function(contents) {
   contents[is_tool_request]
 }
 
-as_content_tool_result_factory <- function(request) {
-  force(request)
+merge_tool_result <- function(request, result = NULL, error = NULL) {
+  check_exclusive(result, error)
 
-  function(result = NULL, error = NULL) {
-    if (S7_inherits(result, ContentToolResult)) {
-      result@id <- request@id
-      result@request <- request
-      return(result)
-    }
-
-    ContentToolResult(
-      value = result,
-      error = error,
-      id = request@id,
-      request = request
-    )
+  if (!is.null(error)) {
+    ContentToolResult(error = error, id = request@id, request = request)
+  } else if (S7_inherits(result, ContentToolResult)) {
+    set_props(result, id = request@id, request = request)
+  } else {
+    ContentToolResult(value = result, id = request@id, request = request)
   }
 }
 
 # Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases
 invoke_tool <- function(request) {
-  as_content_tool_result <- as_content_tool_result_factory(request)
-
   if (is.null(request@tool)) {
-    return(as_content_tool_result(error = "Unknown tool"))
+    return(merge_tool_result(request, error = "Unknown tool"))
   }
 
   tryCatch(
-    as_content_tool_result(do.call(request@tool@fun, request@arguments)),
+    {
+      result <- do.call(request@tool@fun, request@arguments)
+      merge_tool_result(request, result)
+    },
     error = function(e) {
       # TODO: We need to report this somehow; it's way too hidden from the user
-      as_content_tool_result(error = e)
+      merge_tool_result(request, error = e)
     }
   )
 }
 
 on_load(
   invoke_tool_async <- coro::async(function(request) {
-    as_content_tool_result <- as_content_tool_result_factory(request)
-
     if (is.null(request@tool)) {
-      return(as_content_tool_result(error = "Unknown tool"))
+      return(merge_tool_result(request, error = "Unknown tool"))
     }
 
     tryCatch(
       {
         result <- await(do.call(request@tool@fun, request@arguments))
-        as_content_tool_result(result)
+        merge_tool_result(request, result)
       },
       error = function(e) {
         # TODO: We need to report this somehow; it's way too hidden from the user
-        as_content_tool_result(error = e)
+        merge_tool_result(request, error = e)
       }
     )
   })
