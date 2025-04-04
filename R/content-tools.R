@@ -118,26 +118,29 @@ turn_get_tool_errors <- function(turn = NULL) {
 
 warn_tool_errors <- function(tool_errors) {
   # tool_errors is a list of errors returned from turn_get_tool_errors()
-  if (length(tool_errors) > 0) {
-    errs <- map_chr(
-      tool_errors[seq_len(min(3, length(tool_errors)))],
-      function(result) {
-        name <- result@request@name %||% "unknown_tool"
-        id <- result@request@id
-        error <- tool_error_string(result)
-        cli::format_inline("[{.field {name}} ({id})]: {error}")
-      }
-    )
-    cli::cli_warn(c(
-      "Failed to evaluate {length(tool_errors)} tool call{?s}.",
-      set_names(errs, "i"),
-      "i" = if (length(errs) < length(tool_errors)) {
-        cli::format_inline(
-          "... and {length(tool_errors) - length(errs)} more"
-        )
-      }
-    ))
+  if (length(tool_errors) == 0) {
+    return()
   }
+
+  errs <- map_chr(
+    tool_errors[seq_len(min(3, length(tool_errors)))],
+    function(result) {
+      name <- result@request@name %||% "unknown_tool"
+      id <- result@request@id
+      error <- tool_error_string(result)
+      cli::format_inline("[{.field {name}} ({id})]: {cli_escape(error)}")
+    }
+  )
+
+  cli::cli_warn(c(
+    "Failed to evaluate {length(tool_errors)} tool call{?s}.",
+    set_names(errs, "i"),
+    "i" = if (length(errs) < length(tool_errors)) {
+      cli::format_inline(
+        "... and {length(tool_errors) - length(errs)} more"
+      )
+    }
+  ))
 }
 
 maybe_echo_tool <- function(x, echo = "output") {
