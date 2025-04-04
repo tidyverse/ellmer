@@ -62,16 +62,12 @@ test_turns_existing <- function(chat_fun) {
 # Tool calls -------------------------------------------------------------
 
 test_tools_simple <- function(chat_fun) {
+  local_reproducible_output()
+
   chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
   chat$register_tool(tool(function() "2024-01-01", "Return the current date"))
 
-  expect_output(
-    result <- chat$chat(
-      "What's the current date in Y-M-D format?",
-      echo = TRUE
-    ),
-    "2024-01-01"
-  )
+  result <- chat$chat("What's the current date in Y-M-D format?")
   expect_match(result, "2024-01-01")
 
   result <- chat$chat("What month is it? Provide the full name")
