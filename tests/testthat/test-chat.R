@@ -22,6 +22,17 @@ test_that("can get and set the system prompt", {
   expect_equal(chat$get_system_prompt(), NULL)
 })
 
+test_that("system prompt can be a vector", {
+  chat <- chat_openai_test(c("This is", "the system prompt"))
+  expect_equal(chat$get_system_prompt(), "This is\n\nthe system prompt")
+})
+
+test_that("system prompt must be a character vector", {
+  expect_snapshot(error = TRUE, {
+    chat_openai_test(1)
+  })
+})
+
 test_that("can retrieve system prompt with last_turn()", {
   chat1 <- chat_openai_test()
   expect_equal(chat1$last_turn("system"), NULL)

@@ -92,9 +92,13 @@ Chat <- R6::R6Class(
     },
 
     #' @description Update the system prompt
-    #' @param value A string giving the new system prompt
+    #' @param value A character vector giving the new system prompt
     set_system_prompt = function(value) {
-      check_string(value, allow_null = TRUE)
+      check_character(value, allow_null = TRUE)
+      if (length(value) > 1) {
+        value <- paste(value, collapse = "\n\n")
+      }
+
       # Remove prompt, if present
       if (private$has_system_prompt()) {
         private$.turns <- private$.turns[-1]

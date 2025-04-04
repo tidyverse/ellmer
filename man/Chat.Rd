@@ -166,7 +166,7 @@ Update the system prompt
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{value}}{A string giving the new system prompt}
+\item{\code{value}}{A character vector giving the new system prompt}
 }
 \if{html}{\out{</div>}}
 }

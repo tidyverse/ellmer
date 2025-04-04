@@ -1,3 +1,11 @@
+# system prompt must be a character vector
+
+    Code
+      chat_openai_test(1)
+    Condition
+      Error in `self$set_system_prompt()`:
+      ! `value` must be a character vector or `NULL`, not the number 1.
+
 # has a basic print method
 
     Code
