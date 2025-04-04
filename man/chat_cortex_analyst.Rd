@@ -10,7 +10,7 @@ chat_cortex_analyst(
   model_spec = NULL,
   model_file = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 )
 }
 \arguments{

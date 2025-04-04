@@ -25,7 +25,7 @@ chat_openrouter <- function(
   model = NULL,
   seed = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)

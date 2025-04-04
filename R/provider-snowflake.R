@@ -42,7 +42,7 @@ chat_snowflake <- function(
   credentials = NULL,
   model = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
   check_string(account, allow_empty = FALSE)
   model <- set_default(model, "llama3.1-70b")

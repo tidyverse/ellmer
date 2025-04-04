@@ -159,3 +159,40 @@ test_that("invoke_tool_async returns a ContentToolResult", {
   expect_equal(res@request@tool, tool_ctr)
   expect_equal(res@request@arguments, list())
 })
+
+test_that("invoke_tools() echoes tool requests and results", {
+  turn <- turn_with_tool_requests()
+
+  expect_silent(invoke_tools(turn))
+  expect_snapshot(. <- invoke_tools(turn, echo = "output"))
+})
+
+test_that("invoke_tools_async() echoes tool requests and results", {
+  turn <- turn_with_tool_requests()
+
+  expect_silent(sync(invoke_tools_async(turn)))
+  expect_snapshot(. <- sync(invoke_tools_async(turn, echo = "output")))
+})
+
+test_that("tool error warnings", {
+  errors <- list(
+    ContentToolResult(
+      error = "The JSON was invalid: {[1, 2, 3]}",
+      request = ContentToolRequest(
+        id = "call1",
+        name = "returns_json"
+      )
+    ),
+    ContentToolResult(
+      error = rlang::catch_cnd(stop("went boom!")),
+      request = ContentToolRequest(
+        id = "call2",
+        name = "throws"
+      )
+    )
+  )
+
+  expect_snapshot(
+    warn_tool_errors(errors)
+  )
+})

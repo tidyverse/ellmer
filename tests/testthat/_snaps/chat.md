@@ -54,3 +54,41 @@
       Error in `chat$set_tools()`:
       ! `tools` must be a list of tools created with `ellmer::tool()`.
 
+# chat warns on tool failures
+
+    Code
+      chat$chat("What are Joe, Hadley, Simon, and Tom's favorite colors?")
+    Condition
+      Warning:
+      Failed to evaluate 4 tool calls.
+      x [user_favorite_color (ID)]: User denied tool request
+      x [user_favorite_color (ID)]: User denied tool request
+      x [user_favorite_color (ID)]: User denied tool request
+      i ... and 1 more.
+    Output
+      [1] "Cannot access favorite colors."
+    Code
+      chat
+    Output
+      <Chat OpenAI/gpt-4o-mini turns=5 tokens=287/89 $0.00>
+      -- system [0] ------------------------------------------------------------------
+      Be very terse, not even punctuation.
+      -- user [74] -------------------------------------------------------------------
+      What are Joe, Hadley, Simon, and Tom's favorite colors?
+      -- assistant [82] --------------------------------------------------------------
+      [tool request (ID)]: user_favorite_color(user = 
+      "Joe")
+      [tool request (ID)]: user_favorite_color(user = 
+      "Hadley")
+      [tool request (ID)]: user_favorite_color(user = 
+      "Simon")
+      [tool request (ID)]: user_favorite_color(user = 
+      "Tom")
+      -- user [57] -------------------------------------------------------------------
+      [tool result  (ID)]: Error: User denied tool request
+      [tool result  (ID)]: Error: User denied tool request
+      [tool result  (ID)]: Error: User denied tool request
+      [tool result  (ID)]: Error: User denied tool request
+      -- assistant [7] ---------------------------------------------------------------
+      Cannot access favorite colors.
+

@@ -1,8 +1,12 @@
+#' @include turns.R
+NULL
+
 # Results a content list
-invoke_tools <- function(turn) {
+invoke_tools <- function(turn, echo = "none") {
   tool_requests <- extract_tool_requests(turn@contents)
 
   lapply(tool_requests, function(request) {
+    maybe_echo_tool(request, echo = echo)
     result <- invoke_tool(request)
 
     if (promises::is.promise(result@value)) {
@@ -12,18 +16,27 @@ invoke_tools <- function(turn) {
       ))
     }
 
+    maybe_echo_tool(result, echo = echo)
     result
   })
 }
 
 on_load(
-  invoke_tools_async <- coro::async(function(turn, tools) {
+  invoke_tools_async <- coro::async(function(turn, tools, echo = "none") {
     tool_requests <- extract_tool_requests(turn@contents)
 
     # We call it this way instead of a more natural for + await_each() because
     # we want to run all the async tool calls in parallel
     result_promises <- lapply(tool_requests, function(request) {
+      maybe_echo_tool(request, echo = echo)
+
       invoke_tool_async(request)
+    })
+
+    result_promises <- lapply(result_promises, function(p) {
+      p$then(function(result) {
+        maybe_echo_tool(result, echo = echo)
+      })
     })
 
     promises::promise_all(.list = result_promises)
@@ -83,3 +96,105 @@ on_load(
     )
   })
 )
+
+turn_get_tool_errors <- function(turn = NULL) {
+  if (is.null(turn)) return(NULL)
+  stopifnot(S7_inherits(turn, Turn))
+
+  if (length(turn@contents) == 0) {
+    return(NULL)
+  }
+
+  is_result <- map_lgl(turn@contents, S7_inherits, ContentToolResult)
+  if (!any(is_result)) {
+    return(NULL)
+  }
+
+  is_error <- map_lgl(turn@contents[is_result], tool_errored)
+
+  res <- turn@contents[is_result][is_error]
+  if (length(res)) res else NULL
+}
+
+warn_tool_errors <- function(tool_errors) {
+  # tool_errors is a list of errors returned from turn_get_tool_errors()
+  if (length(tool_errors) == 0) {
+    return()
+  }
+
+  errs <- map_chr(
+    tool_errors[seq_len(min(3, length(tool_errors)))],
+    function(result) {
+      name <- result@request@name %||% "unknown_tool"
+      id <- result@request@id
+      error <- tool_error_string(result)
+      cli::format_inline("[{.field {name}} ({id})]: {cli_escape(error)}")
+    }
+  )
+
+  cli::cli_warn(c(
+    "Failed to evaluate {length(tool_errors)} tool call{?s}.",
+    set_names(errs, "x"),
+    "i" = if (length(errs) < length(tool_errors)) {
+      cli::format_inline(
+        "{cli::symbol$ellipsis} and {length(tool_errors) - length(errs)} more."
+      )
+    }
+  ))
+}
+
+maybe_echo_tool <- function(x, echo = "output") {
+  if (!identical(echo, "output")) {
+    return(invisible(x))
+  }
+
+  if (S7_inherits(x, ContentToolRequest)) {
+    cli::cli_text(
+      cli::col_blue(cli::symbol$circle),
+      " [{cli::col_blue('tool call')}] ",
+      cli_escape(format(x, show = "call"))
+    )
+    return(invisible(x))
+  }
+
+  if (!S7_inherits(x, ContentToolResult)) {
+    # neither tool result or request
+    return(invisible(x))
+  }
+
+  # ContentToolResult ----
+  if (tool_errored(x)) {
+    icon <- cli::col_red(cli::symbol$stop)
+    header <- cli::col_red("Error: ")
+    value <- tool_error_string(x)
+  } else {
+    icon <- cli::col_green(cli::symbol$record)
+    header <- ""
+    value <- tool_string(x)
+  }
+
+  value <- cli::style_italic(value)
+
+  if (grepl("\n", value)) {
+    lines <- strsplit(value, "\n")[[1]]
+    lines <- c(
+      lines[seq_len(min(5, length(lines)))],
+      if (length(lines) > 5) cli::symbol$ellipsis
+    )
+    lines <- cli::style_italic(lines)
+    cli::cli_text("{icon} #> {header}{cli_escape(lines[1])}")
+    for (line in lines[-1]) {
+      cli::cli_text("\u00a0\u00a0#> {cli_escape(line)}")
+    }
+  } else {
+    max_width <- cli::console_width() - 7
+    if (nchar(value) > max_width) {
+      value <- substring(value, 1, max_width)
+      value <- paste0(value, cli::symbol$ellipsis)
+    }
+    value <- cli::style_italic(value)
+    cli::cli_text("{icon} #> {header}{cli_escape(value)}")
+  }
+
+  invisible(x)
+}

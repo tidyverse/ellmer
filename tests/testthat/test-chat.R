@@ -339,3 +339,22 @@ test_that("chat can get and register a list of tools", {
     chat$set_tools(c(tools, list("foo")))
   )
 })
+
+test_that("chat warns on tool failures", {
+  chat <- chat_openai_test("Be very terse, not even punctuation.")
+
+  chat$register_tool(tool(
+    function(user) stop("User denied tool request"),
+    "Find out a user's favorite color",
+    user = type_string("User's name"),
+    .name = "user_favorite_color"
+  ))
+
+  expect_snapshot(
+    {
+      chat$chat("What are Joe, Hadley, Simon, and Tom's favorite colors?")
+      chat
+    },
+    transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
+  )
+})

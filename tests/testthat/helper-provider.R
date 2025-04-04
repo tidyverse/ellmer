@@ -88,7 +88,11 @@ test_tools_async <- function(chat_fun) {
   result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
   expect_match(result, "2024-01-01")
 
-  expect_snapshot(chat$chat("Great. Do it again."), error = TRUE)
+  expect_snapshot(
+    chat$chat("Great. Do it again."),
+    error = TRUE,
+    transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
+  )
 }
 
 test_tools_parallel <- function(chat_fun) {

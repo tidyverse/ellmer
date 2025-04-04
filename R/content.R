@@ -196,12 +196,22 @@ ContentToolRequest <- new_class(
     tool = NULL | ToolDef
   )
 )
-method(format, ContentToolRequest) <- function(x, ...) {
+method(format, ContentToolRequest) <- function(
+  x,
+  ...,
+  show = c("all", "call")
+) {
+  show <- arg_match(show)
+
   if (length(x@arguments) == 0) {
     call <- call2(x@name)
   } else {
     call <- call2(x@name, !!!x@arguments)
   }
+  if (show == "call") {
+    return(format(call))
+  }
+
   cli::format_inline("[{.strong tool request} ({x@id})]: {format(call)}")
 }
 
@@ -242,13 +252,30 @@ ContentToolResult <- new_class(
     request = NULL | ContentToolRequest
   )
 )
-method(format, ContentToolResult) <- function(x, ...) {
+method(format, ContentToolResult) <- function(
+  x,
+  ...,
+  show = c("all", "header")
+) {
+  show <- arg_match(show)
+
+  header <- cli::format_inline("[{.strong tool result}  ({x@request@id})]:")
+
+  if (show == "header") {
+    return(header)
+  }
+
   if (tool_errored(x)) {
     value <- paste0(cli::col_red("Error: "), tool_error_string(x))
   } else {
-    value <- x@value
+    value <- tool_string(x)
   }
-  cli::format_inline("[{.strong tool result}  ({x@request@id})]: {value}")
+
+  if (!is_string(value) || !grepl("\n", value)) {
+    paste0(header, " ", value)
+  } else {
+    paste(c(header, value), collapse = "\n")
+  }
 }
 
 tool_errored <- function(x) !is.null(x@error)
