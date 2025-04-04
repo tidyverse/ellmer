@@ -202,9 +202,7 @@ method(format, ContentToolRequest) <- function(x, ...) {
   } else {
     call <- call2(x@name, !!!x@arguments)
   }
-  cli::format_inline(
-    "[{.strong tool request}\u00a0({x@id})]: {format(call)}"
-  )
+  cli::format_inline("[{.strong tool request} ({x@id})]: {format(call)}")
 }
 
 #' @rdname Content
