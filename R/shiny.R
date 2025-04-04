@@ -71,7 +71,8 @@ live_console <- function(chat, quiet = FALSE) {
 #' @export
 #' @rdname live_console
 live_browser <- function(chat, quiet = FALSE) {
-  check_installed(c("shiny", "shinychat"))
+  check_installed("shiny")
+  check_installed("shinychat", version = "0.1.1.9001")
 
   if (!isTRUE(quiet)) {
     cli::cat_boxx(
