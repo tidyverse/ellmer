@@ -11,18 +11,28 @@ capture_sink <- function(prefix, func, width = 64) {
 
 sink_test_equal <- function(prefix, expected, func, width = 64) {
   value <- capture_sink(prefix, func, width = width)
-  rlang::inject(expect_equal(value, {{expected}}))
+  rlang::inject(expect_equal(value, {{ expected }}))
 }
 
 test_that("wrap + prefix interactions", {
-  sink_test_equal(prefix = ">>>", expected = ">>>\n", function(sink) {
-    sink("\n")
-  }, width = 12)
+  sink_test_equal(
+    prefix = ">>>",
+    expected = ">>>\n",
+    function(sink) {
+      sink("\n")
+    },
+    width = 12
+  )
 
-  sink_test_equal(prefix = "> ", expected = "> a\n> b\n", function(sink) {
-    sink("a\n")
-    sink("b\n")
-  }, width = 12)
+  sink_test_equal(
+    prefix = "> ",
+    expected = "> a\n> b\n",
+    function(sink) {
+      sink("a\n")
+      sink("b\n")
+    },
+    width = 12
+  )
 
   sink_test_equal(
     prefix = "> ",
@@ -68,13 +78,25 @@ test_that("more realistic wrap examples", {
   for (prefix in c("?> ", "")) {
     for (width in c(70, 10000)) {
       rlang::inject({
-        expect_snapshot(cat(capture_sink(prefix = !!prefix, width = !!width, function(sink) {
-          sink("It was the best of times, it was the worst of times, it was the age ")
-          sink("of wisdom, it was the age of foolishness, it was the epoch of belief")
-          sink(", it was the epoch of incredulity, it was the season of Light, it wa")
-          sink("s the season of Darkness, it was the spring of hope, it was the wint")
-          sink("er of despair.")
-        })))
+        expect_snapshot(cat(capture_sink(
+          prefix = !!prefix,
+          width = !!width,
+          function(sink) {
+            sink(
+              "It was the best of times, it was the worst of times, it was the age "
+            )
+            sink(
+              "of wisdom, it was the age of foolishness, it was the epoch of belief"
+            )
+            sink(
+              ", it was the epoch of incredulity, it was the season of Light, it wa"
+            )
+            sink(
+              "s the season of Darkness, it was the spring of hope, it was the wint"
+            )
+            sink("er of despair.")
+          }
+        )))
       })
     }
   }

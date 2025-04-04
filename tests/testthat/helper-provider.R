@@ -17,6 +17,14 @@ retry_test <- function(code, retries = 1) {
   eval(get_expr(code), get_env(code))
 }
 
+# Params -----------------------------------------------------------------
+
+test_params_stop <- function(chat_fun) {
+  chat <- chat_fun(params = params(stop_sequences = "cool"))
+  out <- chat$chat("Repeat after the following phrase: Dogs are cool")
+  expect_equal(out, "Dogs are ")
+}
+
 # Turns ------------------------------------------------------------------
 
 test_turns_system <- function(chat_fun) {
@@ -27,17 +35,22 @@ test_turns_system <- function(chat_fun) {
   expect_match(resp, "CHRISTOPHER ROBIN")
   expect_length(chat$get_turns(), 2)
 
-  chat <- chat_fun(turns = list(Turn("system", system_prompt)))
+  chat <- chat_fun()
+  chat$set_turns(list(Turn("system", system_prompt)))
   resp <- chat$chat("What is the name of Winnie the Pooh's human friend?")
   expect_match(resp, "CHRISTOPHER ROBIN")
   expect_length(chat$get_turns(), 2)
 }
 
 test_turns_existing <- function(chat_fun) {
-  chat <- chat_fun(turns = list(
+  chat <- chat_fun()
+  chat$set_turns(list(
     Turn("system", "Return very minimal output; no punctuation."),
     Turn("user", "List the names of any 8 of Santa's 9 reindeer."),
-    Turn("assistant", "Dasher, Dancer, Vixen, Comet, Cupid, Donner, Blitzen, and Rudolph.")
+    Turn(
+      "assistant",
+      "Dasher, Dancer, Vixen, Comet, Cupid, Donner, Blitzen, and Rudolph."
+    )
   ))
   expect_length(chat$get_turns(), 2)
 
@@ -53,7 +66,10 @@ test_tools_simple <- function(chat_fun) {
   chat$register_tool(tool(function() "2024-01-01", "Return the current date"))
 
   expect_output(
-    result <- chat$chat("What's the current date in YMD format?", echo = TRUE),
+    result <- chat$chat(
+      "What's the current date in Y-M-D format?",
+      echo = TRUE
+    ),
     "2024-01-01"
   )
   expect_match(result, "2024-01-01")
@@ -64,12 +80,19 @@ test_tools_simple <- function(chat_fun) {
 
 test_tools_async <- function(chat_fun) {
   chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
-  chat$register_tool(tool(coro::async(function() "2024-01-01"), "Return the current date"))
+  chat$register_tool(tool(
+    coro::async(function() "2024-01-01"),
+    "Return the current date"
+  ))
 
-  result <- sync(chat$chat_async("What's the current date in YMD format?"))
+  result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
   expect_match(result, "2024-01-01")
 
-  expect_snapshot(chat$chat("Great. Do it again."), error = TRUE)
+  expect_snapshot(
+    chat$chat("Great. Do it again."),
+    error = TRUE,
+    transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
+  )
 }
 
 test_tools_parallel <- function(chat_fun) {
@@ -83,25 +106,30 @@ test_tools_parallel <- function(chat_fun) {
     person = type_string("Name of a person")
   ))
 
-  result <- chat$chat("
+  result <- chat$chat(
+    "
     What are Joe and Hadley's favourite colours?
     Answer like name1: colour1, name2: colour2
-  ")
+  "
+  )
   expect_match(result, "Joe: sage green")
   expect_match(result, "Hadley: red")
   expect_length(chat$get_turns(), 4)
 }
 
 test_tools_sequential <- function(chat_fun, total_calls) {
-  chat <- chat_fun(system_prompt = "
+  chat <- chat_fun(
+    system_prompt = "
     Use provided tool calls to find the weather forecast and suitable
     equipment for a variety of weather conditions.
 
     In your response, be very terse and omit punctuation.
-  ")
+  "
+  )
 
   forecast <- function(city) if (city == "New York") "rainy" else "sunny"
-  equipment <- function(weather) if (weather == "rainy") "umbrella" else "sunscreen"
+  equipment <- function(weather)
+    if (weather == "rainy") "umbrella" else "sunscreen"
   chat$register_tool(tool(
     forecast,
     "Gets the weather forecast for a city",
@@ -137,11 +165,17 @@ test_data_extraction <- function(chat_fun) {
 
   chat <- chat_fun()
   data <- chat$extract_data(prompt, type = article_summary)
-  expect_mapequal(data, list(title = "Apples are tasty", author = "Hadley Wickham"))
+  expect_mapequal(
+    data,
+    list(title = "Apples are tasty", author = "Hadley Wickham")
+  )
 
   # Check that we can do it again
   data <- chat$extract_data(prompt, type = article_summary)
-  expect_mapequal(data, list(title = "Apples are tasty", author = "Hadley Wickham"))
+  expect_mapequal(
+    data,
+    list(title = "Apples are tasty", author = "Hadley Wickham")
+  )
 }
 
 # Images -----------------------------------------------------------------

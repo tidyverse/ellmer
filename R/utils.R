@@ -61,18 +61,27 @@ prettify <- function(x) {
 }
 
 check_echo <- function(echo = NULL) {
-  if (is.null(echo) || identical(echo, c("none", "text", "all"))) {
+  if (identical(echo, "text")) {
+    lifecycle::deprecate_soft(
+      when = "0.2.0",
+      what = I('`echo = "text"`'),
+      with = I('`echo = "output"`')
+    )
+    echo <- "output"
+  }
+
+  if (is.null(echo) || identical(echo, c("none", "output", "all"))) {
     if (env_is_user_facing(parent.frame(2)) && !is_testing()) {
-      "text"
+      "output"
     } else {
       "none"
     }
   } else if (isTRUE(echo)) {
-    "text"
+    "output"
   } else if (isFALSE(echo)) {
     "none"
   } else {
-    arg_match(echo, c("none", "text", "all"))
+    arg_match(echo, c("none", "output", "all"))
   }
 }
 
@@ -97,13 +106,13 @@ dots_named <- function(...) {
 #' @param provider Provider name.
 #' @export
 has_credentials <- function(provider) {
-  switch(provider,
+  switch(
+    provider,
     cortex = cortex_credentials_exist(),
     openai = openai_key_exists(),
     claude = anthropic_key_exists(),
     cli::cli_abort("Unknown model {model}.")
   )
-
 }
 
 # In-memory cache for credentials. Analogous to httr2:::cache_mem().
@@ -127,4 +136,33 @@ modify_list <- function(x, y) {
   if (is.null(y)) return(x)
 
   utils::modifyList(x, y)
+}
+
+is_whitespace <- function(x) {
+  grepl("^(\\s|\n)*$", x)
+}
+
+paste_c <- function(...) {
+  paste(c(...), collapse = "")
+}
+
+cli_escape <- function(x) {
+  x <- gsub("{", "{{", x, fixed = TRUE)
+  gsub("}", "}}", x, fixed = TRUE)
+}
+
+api_key_param <- function(key) {
+  paste_c(
+    "API key to use for authentication.\n",
+    "\n",
+    c(
+      "You generally should not supply this directly, but instead set the ",
+      c("`", key, "`"),
+      " environment variable.\n"
+    ),
+    c(
+      "The best place to set this is in `.Renviron`,
+      which you can easily edit by calling `usethis::edit_r_environ()`."
+    )
+  )
 }

@@ -227,7 +227,7 @@ prompt <- "
   </description>
 "
 
-chat <- chat_claude()
+chat <- chat_anthropic()
 str(chat$extract_data(prompt, type = type_characteristics))
 ```
 

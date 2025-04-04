@@ -49,17 +49,17 @@
 #' chat <- chat_databricks()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_databricks <- function(workspace = databricks_workspace(),
-                            system_prompt = NULL,
-                            turns = NULL,
-                            model = NULL,
-                            token = NULL,
-                            api_args = list(),
-                            echo = c("none", "text", "all")) {
+chat_databricks <- function(
+  workspace = databricks_workspace(),
+  system_prompt = NULL,
+  model = NULL,
+  token = NULL,
+  api_args = list(),
+  echo = c("none", "output", "all")
+) {
   check_string(workspace, allow_empty = FALSE)
   check_string(token, allow_empty = FALSE, allow_null = TRUE)
   model <- set_default(model, "databricks-dbrx-instruct")
-  turns <- normalize_turns(turns, system_prompt)
   echo <- check_echo(echo)
   if (!is.null(token)) {
     credentials <- function() list(Authorization = paste("Bearer", token))
@@ -67,6 +67,7 @@ chat_databricks <- function(workspace = databricks_workspace(),
     credentials <- default_databricks_credentials(workspace)
   }
   provider <- ProviderDatabricks(
+    name = "Databricks",
     base_url = workspace,
     model = model,
     extra_args = api_args,
@@ -75,7 +76,7 @@ chat_databricks <- function(workspace = databricks_workspace(),
     # empty string here anyway to make S7::validate() happy.
     api_key = ""
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderDatabricks <- new_class(
@@ -84,11 +85,13 @@ ProviderDatabricks <- new_class(
   properties = list(credentials = class_function)
 )
 
-method(chat_request, ProviderDatabricks) <- function(provider,
-                                                     stream = TRUE,
-                                                     turns = list(),
-                                                     tools = list(),
-                                                     type = NULL) {
+method(chat_request, ProviderDatabricks) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   req <- request(provider@base_url)
   # Note: this API endpoint is undocumented and seems to exist primarily for
   # compatibility with the OpenAI Python SDK. The documented endpoint is
@@ -143,7 +146,11 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
     is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
     if (any(is_tool)) {
       return(lapply(x@contents[is_tool], function(tool) {
-        list(role = "tool", content = tool_string(tool), tool_call_id = tool@id)
+        list(
+          role = "tool",
+          content = tool_string(tool),
+          tool_call_id = tool@request@id
+        )
       }))
     }
     if (length(x@contents) > 1) {
@@ -168,7 +175,10 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
   }
 }
 
-method(as_json, list(ProviderDatabricks, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderDatabricks, ContentText)) <- function(
+  provider,
+  x
+) {
   # Databricks only seems to support textual content.
   x@text
 }

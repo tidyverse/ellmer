@@ -13,8 +13,8 @@
     Code
       normalize_turns(list(sys_msg, user_msg), 1)
     Condition
-      Error:
-      ! `system_prompt` must be a character vector or `NULL`, not the number 1.
+      Error in `normalize_turns()`:
+      ! `system_prompt` must be a single string or `NULL`, not the number 1.
     Code
       normalize_turns(list(sys_msg, user_msg), "foo2")
     Condition

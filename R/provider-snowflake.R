@@ -26,24 +26,24 @@ NULL
 #' Note that Snowflake-hosted models do not support images, tool calling, or
 #' structured outputs.
 #'
-#' See [chat_cortex()] to chat with the Snowflake Cortex Analyst rather than a
-#' general-purpose model.
+#' See [chat_cortex_analyst()] to chat with the Snowflake Cortex Analyst rather
+#' than a general-purpose model.
 #'
 #' @inheritParams chat_openai
-#' @inheritParams chat_cortex
+#' @inheritParams chat_cortex_analyst
 #' @inherit chat_openai return
 #' @examplesIf has_credentials("cortex")
 #' chat <- chat_snowflake()
 #' chat$chat("Tell me a joke in the form of a SQL query.")
 #' @export
-chat_snowflake <- function(system_prompt = NULL,
-                           turns = NULL,
-                           account = snowflake_account(),
-                           credentials = NULL,
-                           model = NULL,
-                           api_args = list(),
-                           echo = c("none", "text", "all")) {
-  turns <- normalize_turns(turns, system_prompt)
+chat_snowflake <- function(
+  system_prompt = NULL,
+  account = snowflake_account(),
+  credentials = NULL,
+  model = NULL,
+  api_args = list(),
+  echo = c("none", "output", "all")
+) {
   check_string(account, allow_empty = FALSE)
   model <- set_default(model, "llama3.1-70b")
   echo <- check_echo(echo)
@@ -55,7 +55,8 @@ chat_snowflake <- function(system_prompt = NULL,
   check_function(credentials, allow_null = TRUE)
   credentials <- credentials %||% default_snowflake_credentials(account)
 
-  provider <- ProviderSnowflake(
+  provider <- ProviderSnowflakeCortex(
+    name = "Snowflake/Cortex",
     base_url = snowflake_url(account),
     account = account,
     credentials = credentials,
@@ -65,11 +66,11 @@ chat_snowflake <- function(system_prompt = NULL,
     api_key = ""
   )
 
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-ProviderSnowflake <- new_class(
-  "ProviderSnowflake",
+ProviderSnowflakeCortex <- new_class(
+  "ProviderSnowflakeCortex",
   parent = ProviderOpenAI,
   properties = list(
     account = prop_string(),
@@ -78,11 +79,13 @@ ProviderSnowflake <- new_class(
 )
 
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#api-reference
-method(chat_request, ProviderSnowflake) <- function(provider,
-                                                    stream = TRUE,
-                                                    turns = list(),
-                                                    tools = list(),
-                                                    type = NULL) {
+method(chat_request, ProviderSnowflakeCortex) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   if (length(tools) != 0) {
     cli::cli_abort(
       "Tool calling is not supported.",
@@ -130,24 +133,18 @@ method(chat_request, ProviderSnowflake) <- function(provider,
 
 # Snowflake -> ellmer --------------------------------------------------------
 
-method(stream_parse, ProviderSnowflake) <- function(provider, event) {
-  # Snowflake's SSEs look much like the OpenAI ones, except in their
-  # handling of EOF.
-  if (is.null(event)) {
-    # This seems to be how Snowflake's backend signals that the stream is done.
-    return(NULL)
-  }
-  jsonlite::parse_json(event$data)
-}
-
-method(value_turn, ProviderSnowflake) <- function(provider, result, has_type = FALSE) {
+method(value_turn, ProviderSnowflakeCortex) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
   deltas <- compact(sapply(result$choices, function(x) x$delta$content))
   content <- list(as_content(paste(deltas, collapse = "")))
-  tokens <- c(
-    result$usage$prompt_tokens %||% NA_integer_,
-    result$usage$completion_tokens %||% NA_integer_
+  tokens <- tokens_log(
+    provider,
+    input = result$usage$prompt_tokens,
+    output = result$usage$completion_tokens
   )
-  tokens_log(paste0("Snowflake-", provider@account), tokens)
   Turn(
     # Snowflake's response format seems to omit the role.
     "assistant",
@@ -161,14 +158,17 @@ method(value_turn, ProviderSnowflake) <- function(provider, result, has_type = F
 
 # Snowflake only supports simple textual messages.
 
-method(as_json, list(ProviderSnowflake, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(provider, x) {
   list(
     role = x@role,
     content = as_json(provider, x@contents[[1]])
   )
 }
 
-method(as_json, list(ProviderSnowflake, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderSnowflakeCortex, ContentText)) <- function(
+  provider,
+  x
+) {
   x@text
 }
 

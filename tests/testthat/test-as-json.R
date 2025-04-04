@@ -1,18 +1,16 @@
 test_that("can convert basic types to json schema", {
-  stub <- Provider("")
-
   expect_equal(
-    as_json(stub, type_boolean("desc")),
+    as_json(test_provider(), type_boolean("desc")),
     list(type = "boolean", description = "desc")
   )
 
   expect_equal(
-    as_json(stub, type_enum("desc", letters[1:3])),
+    as_json(test_provider(), type_enum("desc", letters[1:3])),
     list(type = "string", description = "desc", enum = as.list(letters[1:3]))
   )
 
   expect_equal(
-    as_json(stub, type_array("a", type_boolean("b"))),
+    as_json(test_provider(), type_array("a", type_boolean("b"))),
     list(
       type = "array",
       description = "a",
@@ -22,7 +20,6 @@ test_that("can convert basic types to json schema", {
 })
 
 test_that("can convert an object to json schema", {
-  stub <- Provider("")
   obj <- type_object(
     "a",
     integer = type_integer(),
@@ -31,17 +28,17 @@ test_that("can convert an object to json schema", {
   )
 
   expect_equal(
-    as_json(stub, obj),
+    as_json(test_provider(), obj),
     list(
       type = "object",
       description = "a",
-       properties = list(
-         integer = list(type = "integer", description = ""),
-         number = list(type = "number", description = ""),
-         string = list(type = "string", description = "")
-       ),
-       required = list("integer", "number", "string"),
-       additionalProperties = FALSE
+      properties = list(
+        integer = list(type = "integer", description = ""),
+        number = list(type = "number", description = ""),
+        string = list(type = "string", description = "")
+      ),
+      required = list("integer", "number", "string"),
+      additionalProperties = FALSE
     )
   )
 })

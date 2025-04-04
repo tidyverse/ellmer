@@ -1,5 +1,6 @@
 test_that("can get and set the system prompt", {
-  chat <- chat_openai(turns = list(
+  chat <- chat_openai_test()
+  chat$set_turns(list(
     Turn("user", "Hi"),
     Turn("assistant", "Hello")
   ))
@@ -21,8 +22,19 @@ test_that("can get and set the system prompt", {
   expect_equal(chat$get_system_prompt(), NULL)
 })
 
+test_that("system prompt can be a vector", {
+  chat <- chat_openai_test(c("This is", "the system prompt"))
+  expect_equal(chat$get_system_prompt(), "This is\n\nthe system prompt")
+})
+
+test_that("system prompt must be a character vector", {
+  expect_snapshot(error = TRUE, {
+    chat_openai_test(1)
+  })
+})
+
 test_that("can retrieve system prompt with last_turn()", {
-  chat1 <- chat_openai()
+  chat1 <- chat_openai_test()
   expect_equal(chat1$last_turn("system"), NULL)
 
   chat2 <- chat_openai(system_prompt = "You are from New Zealand")
@@ -46,12 +58,12 @@ test_that("can get and set turns", {
 })
 
 test_that("can get model", {
-  chat <- chat_openai(model = "abc")
+  chat <- chat_openai_test(model = "abc")
   expect_equal(chat$get_model(), "abc")
 })
 
 test_that("setting turns usually preserves, but can set system prompt", {
-  chat <- chat_openai(system_prompt = "You're a funny guy")
+  chat <- chat_openai_test(system_prompt = "You're a funny guy")
   chat$set_turns(list())
   expect_equal(chat$get_system_prompt(), "You're a funny guy")
 
@@ -60,7 +72,7 @@ test_that("setting turns usually preserves, but can set system prompt", {
 })
 
 test_that("can perform a simple batch chat", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
 
   result <- chat$chat("What's 1 + 1. Just give me the answer, no punctuation")
   expect_equal(result, "2")
@@ -68,9 +80,11 @@ test_that("can perform a simple batch chat", {
 })
 
 test_that("can perform a simple async batch chat", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
 
-  result <- chat$chat_async("What's 1 + 1. Just give me the answer, no punctuation")
+  result <- chat$chat_async(
+    "What's 1 + 1. Just give me the answer, no punctuation"
+  )
   expect_s3_class(result, "promise")
 
   result <- sync(result)
@@ -79,37 +93,49 @@ test_that("can perform a simple async batch chat", {
 })
 
 test_that("can perform a simple streaming chat", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
 
-  chunks <- coro::collect(chat$stream("
+  chunks <- coro::collect(chat$stream(
+    "
     What are the canonical colors of the ROYGBIV rainbow?
     Put each colour on its own line. Don't use punctuation.
-  "))
+  "
+  ))
   expect_gt(length(chunks), 2)
 
   rainbow_re <- "^red *\norange *\nyellow *\ngreen *\nblue *\nindigo *\nviolet *\n?$"
   expect_match(paste(chunks, collapse = ""), rainbow_re, ignore.case = TRUE)
-  expect_match(chat$last_turn()@contents[[1]]@text, rainbow_re, ignore.case = TRUE)
+  expect_match(
+    chat$last_turn()@contents[[1]]@text,
+    rainbow_re,
+    ignore.case = TRUE
+  )
 })
 
 test_that("can perform a simple async batch chat", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
 
-  chunks <- coro::async_collect(chat$stream_async("
+  chunks <- coro::async_collect(chat$stream_async(
+    "
     What are the canonical colors of the ROYGBIV rainbow?
     Put each colour on its own line. Don't use punctuation.
-  "))
+  "
+  ))
   expect_s3_class(chunks, "promise")
 
   chunks <- sync(chunks)
   expect_gt(length(chunks), 2)
   rainbow_re <- "^red *\norange *\nyellow *\ngreen *\nblue *\nindigo *\nviolet *\n?$"
   expect_match(paste(chunks, collapse = ""), rainbow_re, ignore.case = TRUE)
-  expect_match(chat$last_turn()@contents[[1]]@text, rainbow_re, ignore.case = TRUE)
+  expect_match(
+    chat$last_turn()@contents[[1]]@text,
+    rainbow_re,
+    ignore.case = TRUE
+  )
 })
 
 test_that("can chat in parallel", {
-  chat <- chat_openai("Just give me answers, no punctuation")
+  chat <- chat_openai_test("Just give me answers, no punctuation")
   results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
 
   expect_type(results, "list")
@@ -125,7 +151,7 @@ test_that("can chat in parallel", {
 test_that("can extract structured data", {
   person <- type_object(name = type_string(), age = type_integer())
 
-  chat <- chat_openai()
+  chat <- chat_openai_test()
   data <- chat$extract_data("John, age 15, won first prize", type = person)
   expect_equal(data, list(name = "John", age = 15))
 })
@@ -133,7 +159,7 @@ test_that("can extract structured data", {
 test_that("can extract data in parallel", {
   person <- type_object(name = type_string(), age = type_integer())
 
-  chat <- chat_openai()
+  chat <- chat_openai_test()
   data <- chat$extract_data_parallel(
     list(
       "John, age 15, won first prize",
@@ -153,30 +179,47 @@ test_that("can extract data in parallel", {
 test_that("can extract structured data (async)", {
   person <- type_object(name = type_string(), age = type_integer())
 
-  chat <- chat_openai()
-  data <- sync(chat$extract_data_async("John, age 15, won first prize", type = person))
+  chat <- chat_openai_test()
+  data <- sync(chat$extract_data_async(
+    "John, age 15, won first prize",
+    type = person
+  ))
   expect_equal(data, list(name = "John", age = 15))
 })
 
 test_that("can retrieve tokens with or without system prompt", {
-  chat <- chat_openai("abc")
-  expect_equal(nrow(chat$tokens(FALSE)), 0)
-  expect_equal(nrow(chat$tokens(TRUE)), 1)
+  chat <- chat_openai_test("abc")
+  expect_equal(nrow(chat$get_tokens(FALSE)), 0)
+  expect_equal(nrow(chat$get_tokens(TRUE)), 1)
 
   chat <- chat_openai()
-  expect_equal(nrow(chat$tokens(FALSE)), 0)
-  expect_equal(nrow(chat$tokens(TRUE)), 0)
+  expect_equal(nrow(chat$get_tokens(FALSE)), 0)
+  expect_equal(nrow(chat$get_tokens(TRUE)), 0)
 })
 
 test_that("has a basic print method", {
   chat <- chat_openai(
-    "You're a helpful assistant that returns very minimal output",
-    turns = list(
-      Turn("user", "What's 1 + 1?\nWhat's 1 + 2?"),
-      Turn("assistant", "2\n\n3", tokens = c(15, 5))
-    )
+    "You're a helpful assistant that returns very minimal output"
   )
+  chat$set_turns(list(
+    Turn("user", "What's 1 + 1?\nWhat's 1 + 2?"),
+    Turn("assistant", "2\n\n3", tokens = c(15, 5))
+  ))
   expect_snapshot(chat)
+})
+
+test_that("print method shows cumulative tokens & cost", {
+  chat <- chat_openai()
+  chat$set_turns(list(
+    Turn("user", "Input 1"),
+    Turn("assistant", "Output 1", tokens = c(15000, 500)),
+    Turn("user", "Input 2"),
+    Turn("assistant", "Output 1", tokens = c(30000, 1000))
+  ))
+  expect_snapshot(chat)
+
+  expect_equal(chat$get_cost(), dollars(0.1275))
+  expect_equal(chat$get_cost("last"), dollars(0.085))
 })
 
 test_that("can optionally echo", {
@@ -294,5 +337,21 @@ test_that("chat can get and register a list of tools", {
   expect_snapshot(
     error = TRUE,
     chat$set_tools(c(tools, list("foo")))
+  )
+})
+
+test_that("chat warns on tool failures", {
+  chat <- chat_openai_test("Be very terse, not even punctuation.")
+
+  chat$register_tool(tool(
+    function(user) stop("User denied tool request"),
+    "Find out a user's favorite color",
+    user = type_string("User's name"),
+    .name = "user_favorite_color"
+  ))
+
+  expect_snapshot(
+    . <- chat$chat("What are Joe, Hadley, Simon, and Tom's favorite colors?"),
+    transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
   )
 })

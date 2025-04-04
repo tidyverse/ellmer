@@ -3,14 +3,14 @@ test_that("system prompt is applied correctly", {
   sys_msg <- Turn("system", sys_prompt, completed = NULL)
   user_msg <- Turn("user", "bar")
 
-  standardize_completed <- function(turn) {
+  standardise_completed <- function(turn) {
     turn@completed <- NULL
     turn
   }
 
   expect_equal_turns <- function(object, expected, ...) {
-    object <- lapply(object, standardize_completed)
-    expected <- lapply(expected, standardize_completed)
+    object <- lapply(object, standardise_completed)
+    expected <- lapply(expected, standardise_completed)
     expect_equal(object, expected, ...)
   }
 
@@ -60,14 +60,15 @@ test_that("as_user_turns gives useful errors", {
 })
 
 test_that("can extract text easily", {
-
-  turn <- Turn("assistant", list(
-    ContentText("ABC"),
-    ContentImage(),
-    ContentText("DEF")
-  ))
+  turn <- Turn(
+    "assistant",
+    list(
+      ContentText("ABC"),
+      ContentImage(),
+      ContentText("DEF")
+    )
+  )
   expect_equal(turn@text, "ABCDEF")
-
 })
 
 test_that("turns have completion timestamps", {

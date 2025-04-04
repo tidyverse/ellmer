@@ -29,13 +29,14 @@
 #' chat <- chat_ollama(model = "llama3.2")
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_ollama <- function(system_prompt = NULL,
-                        turns = NULL,
-                        base_url = "http://localhost:11434",
-                        model,
-                        seed = NULL,
-                        api_args = list(),
-                        echo = NULL) {
+chat_ollama <- function(
+  system_prompt = NULL,
+  base_url = "http://localhost:11434",
+  model,
+  seed = NULL,
+  api_args = list(),
+  echo = NULL
+) {
   if (!has_ollama(base_url)) {
     cli::cli_abort("Can't find locally running ollama.")
   }
@@ -48,10 +49,10 @@ chat_ollama <- function(system_prompt = NULL,
     ))
   }
 
-  turns <- normalize_turns(turns, system_prompt)
   echo <- check_echo(echo)
 
   provider <- ProviderOllama(
+    name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
     model = model,
     seed = seed,
@@ -59,7 +60,7 @@ chat_ollama <- function(system_prompt = NULL,
     api_key = "ollama" # ignored
   )
 
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderOllama <- new_class(
@@ -74,7 +75,7 @@ ProviderOllama <- new_class(
 
 chat_ollama_test <- function(..., model = "llama3.2:1b") {
   # model: Note that tests require a model with tool capabilities
-  
+
   if (!has_ollama()) {
     testthat::skip("ollama not found")
   }

@@ -18,14 +18,11 @@ NULL
 #' @examplesIf has_credentials("openai")
 #' chat <- chat_openai(echo = TRUE)
 #' chat$chat("Tell me a funny joke")
-Chat <- R6::R6Class("Chat",
+Chat <- R6::R6Class(
+  "Chat",
   public = list(
     #' @param provider A provider object.
-    #' @param turns An unnamed list of turns to start the chat with (i.e.,
-    #'   continuing a previous conversation). If `NULL` or zero-length list, the
-    #'   conversation begins from scratch.
-    #' @param seed Optional integer seed that ChatGPT uses to try and make output
-    #'   more reproducible.
+    #' @param system_prompt System prompt to start the conversation with.
     #' @param echo One of the following options:
     #'   * `none`: don't emit any output (default when running in a function).
     #'   * `text`: echo text output as it streams in (default when running at
@@ -33,10 +30,10 @@ Chat <- R6::R6Class("Chat",
     #'   * `all`: echo all input and output.
     #'
     #'  Note this only affects the `chat()` method.
-    initialize = function(provider, turns, seed = NULL, echo = "none") {
+    initialize = function(provider, system_prompt = NULL, echo = "none") {
       private$provider <- provider
-      private$.turns <- turns %||% list()
       private$echo <- echo
+      self$set_system_prompt(system_prompt)
     },
 
     #' @description Retrieve the turns that have been sent and received so far
@@ -93,9 +90,13 @@ Chat <- R6::R6Class("Chat",
     },
 
     #' @description Update the system prompt
-    #' @param value A string giving the new system prompt
+    #' @param value A character vector giving the new system prompt
     set_system_prompt = function(value) {
-      check_string(value, allow_null = TRUE)
+      check_character(value, allow_null = TRUE)
+      if (length(value) > 1) {
+        value <- paste(value, collapse = "\n\n")
+      }
+
       # Remove prompt, if present
       if (private$has_system_prompt()) {
         private$.turns <- private$.turns[-1]
@@ -108,36 +109,75 @@ Chat <- R6::R6Class("Chat",
       invisible(self)
     },
 
-    #' @description A data frame with a `tokens` column that proides the 
-    #'   number of input tokens used by user turns and the number of 
+    #' @description A data frame with a `tokens` column that proides the
+    #'   number of input tokens used by user turns and the number of
     #'   output tokens used by assistant turns.
-    #' @param include_system_prompt Whether to include the system prompt in 
+    #' @param include_system_prompt Whether to include the system prompt in
     #'   the turns (if any exists).
-    tokens = function(include_system_prompt = FALSE) {
+    get_tokens = function(include_system_prompt = FALSE) {
       turns <- self$get_turns(include_system_prompt = FALSE)
       assistant_turns <- keep(turns, function(x) x@role == "assistant")
 
       n <- length(assistant_turns)
-      tokens <- t(vapply(assistant_turns, function(turn) turn@tokens, double(2)))
+      tokens_acc <- t(vapply(
+        assistant_turns,
+        function(turn) turn@tokens,
+        double(2)
+      ))
+
+      tokens <- tokens_acc
       if (n > 1) {
         # Compute just the new tokens
-        tokens[-1, 1] <- tokens[seq(2, n), 1] - 
+        tokens[-1, 1] <- tokens[seq(2, n), 1] -
           (tokens[seq(1, n - 1), 1] + tokens[seq(1, n - 1), 2])
       }
       # collapse into a single vector
       tokens_v <- c(t(tokens))
-      
+      tokens_acc_v <- c(t(tokens_acc))
+
       tokens_df <- data.frame(
         role = rep(c("user", "assistant"), times = n),
-        tokens = tokens_v
+        tokens = tokens_v,
+        tokens_total = tokens_acc_v
       )
-      
+
       if (include_system_prompt && private$has_system_prompt()) {
         # How do we compute this?
-        tokens_df <- rbind(data.frame(role = "system", tokens = 0), tokens_df)
+        tokens_df <- rbind(
+          data.frame(role = "system", tokens = 0, tokens_total = 0),
+          tokens_df
+        )
       }
 
       tokens_df
+    },
+
+    #' @description The cost of this chat
+    #' @param include The default, `"all"`, gives the total cumulative cost
+    #'   of this chat. Alternatively, use `"last"` to get the cost of just the
+    #'   most recent turn.
+    get_cost = function(include = c("all", "last")) {
+      include <- arg_match(include)
+
+      turns <- self$get_turns(include_system_prompt = FALSE)
+      assistant_turns <- keep(turns, function(x) x@role == "assistant")
+      n <- length(assistant_turns)
+      tokens <- t(vapply(
+        assistant_turns,
+        function(turn) turn@tokens,
+        double(2)
+      ))
+
+      if (include == "last") {
+        tokens <- tokens[nrow(tokens), , drop = FALSE]
+      }
+
+      get_token_cost(
+        private$provider@name,
+        private$provider@model,
+        input = sum(tokens[, 1]),
+        output = sum(tokens[, 2])
+      )
     },
 
     #' @description The last turn returned by the assistant.
@@ -149,7 +189,8 @@ Chat <- R6::R6Class("Chat",
       role <- arg_match(role)
 
       n <- length(private$.turns)
-      switch(role,
+      switch(
+        role,
         system = if (private$has_system_prompt()) private$.turns[[1]],
         assistant = if (n > 1) private$.turns[[n]],
         user = if (n > 1) private$.turns[[n - 1]]
@@ -169,7 +210,11 @@ Chat <- R6::R6Class("Chat",
 
       # Returns a single turn (the final response from the assistant), even if
       # multiple rounds of back and forth happened.
-      coro::collect(private$chat_impl(turn, stream = echo != "none", echo = echo))
+      coro::collect(private$chat_impl(
+        turn,
+        stream = echo != "none",
+        echo = echo
+      ))
 
       text <- self$last_turn()@text
       if (echo == "none") text else invisible(text)
@@ -277,7 +322,12 @@ Chat <- R6::R6Class("Chat",
 
       map(json, function(json) {
         turn <- value_turn(private$provider, json, has_type = TRUE)
-        extract_data(turn, type, convert = convert, needs_wrapper = needs_wrapper)
+        extract_data(
+          turn,
+          type,
+          convert = convert,
+          needs_wrapper = needs_wrapper
+        )
       })
     },
 
@@ -370,6 +420,11 @@ Chat <- R6::R6Class("Chat",
       invisible(self)
     },
 
+    #' @description Get the underlying provider object. For expert use only.
+    get_provider = function() {
+      private$provider
+    },
+
     #' @description Retrieve the list of registered tools.
     get_tools = function() {
       private$tools
@@ -389,7 +444,7 @@ Chat <- R6::R6Class("Chat",
       }
 
       private$tools <- list()
-      
+
       for (tool_def in tools) {
         self$register_tool(tool_def)
       }
@@ -400,7 +455,7 @@ Chat <- R6::R6Class("Chat",
   private = list(
     provider = NULL,
 
-    .turns = NULL,
+    .turns = list(),
     echo = NULL,
     tools = list(),
 
@@ -415,40 +470,80 @@ Chat <- R6::R6Class("Chat",
       if (private$.turns[[i]]@role != "user") {
         private$.turns[[i + 1]] <- Turn("user", contents)
       } else {
-        private$.turns[[i]]@contents <- c(private$.turns[[i]]@contents, contents)
+        private$.turns[[i]]@contents <- c(
+          private$.turns[[i]]@contents,
+          contents
+        )
       }
       invisible(self)
     },
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
-    chat_impl = generator_method(function(self, private, user_turn, stream, echo) {
-      while(!is.null(user_turn)) {
+    chat_impl = generator_method(function(
+      self,
+      private,
+      user_turn,
+      stream,
+      echo
+    ) {
+      tool_errors <- list()
+      withr::defer(warn_tool_errors(tool_errors))
+
+      while (!is.null(user_turn)) {
+        # fmt: skip
         for (chunk in private$submit_turns(user_turn, stream = stream, echo = echo)) {
           yield(chunk)
         }
-        user_turn <- private$invoke_tools()
+
+        user_turn <- private$invoke_tools(echo = echo)
+
+        if (echo == "all") {
+          cat(format(user_turn))
+        } else if (echo == "none") {
+          tool_errors <- c(tool_errors, turn_get_tool_errors(user_turn))
+        }
       }
     }),
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
-    chat_impl_async = async_generator_method(function(self, private, user_turn, stream, echo) {
-      while(!is.null(user_turn)) {
+    chat_impl_async = async_generator_method(function(
+      self,
+      private,
+      user_turn,
+      stream,
+      echo
+    ) {
+      tool_errors <- list()
+      withr::defer(warn_tool_errors(tool_errors))
+
+      while (!is.null(user_turn)) {
+        # fmt: skip
         for (chunk in await_each(private$submit_turns_async(user_turn, stream = stream, echo = echo))) {
           yield(chunk)
         }
-        user_turn <- await(private$invoke_tools_async())
+
+        user_turn <- await(private$invoke_tools_async(echo = echo))
+
         if (echo == "all") {
           cat(format(user_turn))
+        } else if (echo == "none") {
+          tool_errors <- c(tool_errors, turn_get_tool_errors(user_turn))
         }
       }
     }),
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
-    submit_turns = generator_method(function(self, private, user_turn, stream, echo, type = NULL) {
-
+    submit_turns = generator_method(function(
+      self,
+      private,
+      user_turn,
+      stream,
+      echo,
+      type = NULL
+    ) {
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
       }
@@ -461,10 +556,9 @@ Chat <- R6::R6Class("Chat",
         type = type
       )
       emit <- emitter(echo)
+      any_text <- FALSE
 
       if (stream) {
-        result <- list()
-        any_text <- FALSE
         result <- NULL
         for (chunk in response) {
           text <- stream_text(private$provider, chunk)
@@ -477,30 +571,36 @@ Chat <- R6::R6Class("Chat",
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
-
-        # Ensure turns always end in a newline
-        if (any_text) {
-          emit("\n")
-          yield("\n")
-        }
-
-        if (echo == "all") {
-          is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
-          formatted <- map_chr(turn@contents[!is_text], format)
-          cat_line(formatted, prefix = "< ")
-        }
+        turn <- private$match_tools(turn)
       } else {
-        turn <- value_turn(private$provider, response, has_type = !is.null(type))
+        turn <- value_turn(
+          private$provider,
+          response,
+          has_type = !is.null(type)
+        )
+        turn <- private$match_tools(turn)
+
         text <- turn@text
         if (!is.null(text)) {
-          text <- paste0(text, "\n")
           emit(text)
           yield(text)
-        }
-        if (echo == "all") {
-          cat_line(format(turn), prefix = "< ")
+          any_text <- TRUE
         }
       }
+
+      # Ensure turns always end in a newline
+      if (any_text) {
+        emit("\n")
+        yield("\n")
+      }
+
+      if (echo == "all") {
+        is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+        formatted <- map_chr(turn@contents[!is_text], format)
+        cat_line(formatted, prefix = "< ")
+      }
+      # When `echo="output"`, tool calls are emitted in `invoke_tools()`
+
       self$add_turn(user_turn, turn)
 
       coro::exhausted()
@@ -508,7 +608,14 @@ Chat <- R6::R6Class("Chat",
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
-    submit_turns_async = async_generator_method(function(self, private, user_turn, stream, echo, type = NULL) {
+    submit_turns_async = async_generator_method(function(
+      self,
+      private,
+      user_turn,
+      stream,
+      echo,
+      type = NULL
+    ) {
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "async-stream" else "async-value",
@@ -517,9 +624,9 @@ Chat <- R6::R6Class("Chat",
         type = type
       )
       emit <- emitter(echo)
+      any_text <- FALSE
 
       if (stream) {
-        any_text <- FALSE
         result <- NULL
         for (chunk in await_each(response)) {
           text <- stream_text(private$provider, chunk)
@@ -532,37 +639,60 @@ Chat <- R6::R6Class("Chat",
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
-
-        # Ensure turns always end in a newline
-        if (any_text) {
-          emit("\n")
-          yield("\n")
-        }
       } else {
         result <- await(response)
 
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
         text <- turn@text
         if (!is.null(text)) {
-          text <- paste0(text, "\n")
           emit(text)
           yield(text)
+          any_text <- TRUE
         }
       }
+      turn <- private$match_tools(turn)
+
+      # Ensure turns always end in a newline
+      if (any_text) {
+        emit("\n")
+        yield("\n")
+      }
+
+      if (echo == "all") {
+        is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+        formatted <- map_chr(turn@contents[!is_text], format)
+        cat_line(formatted, prefix = "< ")
+      }
+      # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
+
       self$add_turn(user_turn, turn)
       coro::exhausted()
     }),
 
-    invoke_tools = function() {
-      tool_results <- invoke_tools(self$last_turn(), private$tools)
+    match_tools = function(turn) {
+      if (is.null(turn)) return(NULL)
+
+      turn@contents <- map(turn@contents, function(content) {
+        if (!S7_inherits(content, ContentToolRequest)) {
+          return(content)
+        }
+        content@tool <- private$tools[[content@name]]
+        content
+      })
+
+      turn
+    },
+
+    invoke_tools = function(echo = "none") {
+      tool_results <- invoke_tools(self$last_turn(), echo = echo)
       if (length(tool_results) == 0) {
         return()
       }
       Turn("user", tool_results)
     },
 
-    invoke_tools_async = async_method(function(self, private) {
-      tool_results <- await(invoke_tools_async(self$last_turn(), private$tools))
+    invoke_tools_async = async_method(function(self, private, echo = "none") {
+      tool_results <- await(invoke_tools_async(self$last_turn(), echo = echo))
       if (length(tool_results) == 0) {
         return()
       }
@@ -581,30 +711,43 @@ is_chat <- function(x) {
 
 #' @export
 print.Chat <- function(x, ...) {
+  provider <- x$get_provider()
   turns <- x$get_turns(include_system_prompt = TRUE)
-  
-  tokens <- x$tokens(include_system_prompt = TRUE)
-  tokens_user <- sum(tokens$tokens[tokens$role == "user"])
-  tokens_assistant <- sum(tokens$tokens[tokens$role == "assistant"])
 
-  cat(paste0(
-    "<Chat", 
-    " turns=", length(turns), 
-    " tokens=", tokens_user, "/", tokens_assistant, 
+  tokens <- x$get_tokens(include_system_prompt = TRUE)
+
+  tokens_user <- sum(tokens$tokens_total[tokens$role == "user"])
+  tokens_assistant <- sum(tokens$tokens_total[tokens$role == "assistant"])
+  cost <- x$get_cost()
+
+  cat(paste_c(
+    "<Chat",
+    c(" ", provider@name, "/", provider@model),
+    c(" turns=", length(turns)),
+    c(
+      " tokens=",
+      tokens_user,
+      "/",
+      tokens_assistant
+    ),
+    if (!is.na(cost)) c(" ", format(cost)),
     ">\n"
   ))
-  
+
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
-    
-    color <- switch(turn@role,
+
+    color <- switch(
+      turn@role,
       user = cli::col_blue,
       assistant = cli::col_green,
       system = cli::col_br_white,
       identity
     )
 
-    cli::cat_rule(cli::format_inline("{color(turn@role)} [{tokens$tokens[[i]]}]"))
+    cli::cat_rule(cli::format_inline(
+      "{color(turn@role)} [{tokens$tokens[[i]]}]"
+    ))
     for (content in turn@contents) {
       cat_line(format(content))
     }
@@ -613,7 +756,10 @@ print.Chat <- function(x, ...) {
   invisible(x)
 }
 
-method(contents_markdown, new_S3_class("Chat")) <- function(content, heading_level = 2) {
+method(contents_markdown, new_S3_class("Chat")) <- function(
+  content,
+  heading_level = 2
+) {
   turns <- content$get_turns()
   if (length(turns) == 0) {
     return("")
@@ -628,7 +774,7 @@ method(contents_markdown, new_S3_class("Chat")) <- function(content, heading_lev
     res[i] <- glue::glue("{hh} {role}\n\n{contents_markdown(turns[[i]])}")
   }
 
-  paste(res, collapse="\n\n")
+  paste(res, collapse = "\n\n")
 }
 
 extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {

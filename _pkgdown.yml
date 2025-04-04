@@ -27,6 +27,7 @@ reference:
   - title: Tools and structured data
     contents:
       - tool
+      - tool_annotations
       - type_boolean
 
   - title: Objects
@@ -45,3 +46,8 @@ reference:
   - title: Utilities
     contents:
       - contents_text
+      - params
+
+  - title: Deprecated functions
+    contents:
+      - deprecated
