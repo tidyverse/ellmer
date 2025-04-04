@@ -5,6 +5,9 @@
   as well as Shiny module for easily including a chat interface for an ellmer
   `Chat` object in your Shiny apps (#397, @gadenbuie).
 
+* `chat_gemini()` can now handle responses that include citation metadata 
+  (#358).
+
 * `chat_` functions no longer take a turns object, instead use `set_turns()` 
   (#427).
 

@@ -388,6 +388,12 @@ merge_optional <- function(merge_func) {
 merge_objects <- function(...) {
   spec <- list(...)
   function(left, right, path = NULL) {
+    if (is.null(left)) {
+      return(right)
+    } else if (is.null(right)) {
+      return(left)
+    }
+
     # cat(paste(collapse = "", path), "\n")
     stopifnot(is.list(left), is.list(right), all(nzchar(names(spec))))
     mapply(
@@ -469,6 +475,7 @@ merge_parts <- function() {
 }
 
 # Put it all together...
+# https://ai.google.dev/api/generate-content#v1beta.GenerateContentResponse
 merge_gemini_chunks <- merge_objects(
   candidates = merge_candidate_lists(
     content = merge_objects(
