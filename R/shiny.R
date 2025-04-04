@@ -71,36 +71,8 @@ live_console <- function(chat, quiet = FALSE) {
 #' @export
 #' @rdname live_console
 live_browser <- function(chat, quiet = FALSE) {
-  check_installed(c("bslib", "shiny", "shinychat"))
-
-  messages <- map(chat$get_turns(), function(turn) {
-    content <- contents_markdown(turn)
-    if (is.null(content) || identical(content, "")) {
-      return(NULL)
-    }
-    list(role = turn@role, content = content)
-  })
-  messages <- compact(messages)
-
-  ui <- bslib::page_fillable(
-    shinychat::chat_ui("chat", height = "100%", messages = messages),
-    shiny::actionButton(
-      "close_btn",
-      label = "",
-      class = "btn-close",
-      style = "position: fixed; top: 6px; right: 6px;"
-    )
-  )
-  server <- function(input, output, session) {
-    shiny::observeEvent(input$chat_user_input, {
-      stream <- chat$stream_async(input$chat_user_input)
-      shinychat::chat_append("chat", stream)
-    })
-
-    shiny::observeEvent(input$close_btn, {
-      shiny::stopApp()
-    })
-  }
+  check_installed("shiny")
+  check_installed("shinychat", version = "0.1.1.9001")
 
   if (!isTRUE(quiet)) {
     cli::cat_boxx(
@@ -111,7 +83,7 @@ live_browser <- function(chat, quiet = FALSE) {
   }
 
   tryCatch(
-    shiny::runGadget(shiny::shinyApp(ui, server, options = list(quiet = TRUE))),
+    shiny::runGadget(shinychat::chat_app(chat, options = list(quiet = TRUE))),
     interrupt = function(cnd) NULL
   )
   invisible(chat)
