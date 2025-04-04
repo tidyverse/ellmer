@@ -33,9 +33,7 @@ Chat <- R6::R6Class(
     initialize = function(provider, system_prompt = NULL, echo = "none") {
       private$provider <- provider
       private$echo <- echo
-      if (!is.null(system_prompt)) {
-        self$set_system_prompt(system_prompt)
-      }
+      self$set_system_prompt(system_prompt)
     },
 
     #' @description Retrieve the turns that have been sent and received so far
