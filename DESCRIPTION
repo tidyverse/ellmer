@@ -58,6 +58,7 @@ RoxygenNote: 7.3.2
 Collate:
     'utils-S7.R'
     'types.R'
+    'tools-def.R'
     'content.R'
     'provider.R'
     'as-json.R'
@@ -75,7 +76,6 @@ Collate:
     'import-standalone-types-check.R'
     'interpolate.R'
     'params.R'
-    'tools-def.R'
     'turns.R'
     'provider-openai.R'
     'provider-azure.R'
