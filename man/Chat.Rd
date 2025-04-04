@@ -33,7 +33,7 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-get_system_prompt}{\code{Chat$get_system_prompt()}}
 \item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
 \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
-\item \href{#method-Chat-tokens}{\code{Chat$tokens()}}
+\item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
 \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
 \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
 \item \href{#method-Chat-chat}{\code{Chat$chat()}}
@@ -177,14 +177,14 @@ Update the system prompt
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-tokens"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-tokens}{}}}
-\subsection{Method \code{tokens()}}{
+\if{html}{\out{<a id="method-Chat-get_tokens"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_tokens}{}}}
+\subsection{Method \code{get_tokens()}}{
 A data frame with a \code{tokens} column that proides the
 number of input tokens used by user turns and the number of
 output tokens used by assistant turns.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$tokens(include_system_prompt = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_tokens(include_system_prompt = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

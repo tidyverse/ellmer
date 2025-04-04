@@ -114,7 +114,7 @@ Chat <- R6::R6Class(
     #'   output tokens used by assistant turns.
     #' @param include_system_prompt Whether to include the system prompt in
     #'   the turns (if any exists).
-    tokens = function(include_system_prompt = FALSE) {
+    get_tokens = function(include_system_prompt = FALSE) {
       turns <- self$get_turns(include_system_prompt = FALSE)
       assistant_turns <- keep(turns, function(x) x@role == "assistant")
 
@@ -679,7 +679,7 @@ print.Chat <- function(x, ...) {
   provider <- x$get_provider()
   turns <- x$get_turns(include_system_prompt = TRUE)
 
-  tokens <- x$tokens(include_system_prompt = TRUE)
+  tokens <- x$get_tokens(include_system_prompt = TRUE)
 
   tokens_user <- sum(tokens$tokens_total[tokens$role == "user"])
   tokens_assistant <- sum(tokens$tokens_total[tokens$role == "assistant"])
