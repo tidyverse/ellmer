@@ -6,7 +6,6 @@
 \usage{
 chat_github(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "https://models.inference.ai.azure.com/",
   api_key = github_key(),
   model = NULL,
@@ -17,10 +16,6 @@ chat_github(
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
-
-\item{turns}{A list of \link{Turn}s to start the chat with (i.e., continuing a
-previous conversation). If not provided, the conversation begins from
-scratch.}
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 

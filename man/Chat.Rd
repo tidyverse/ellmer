@@ -56,7 +56,7 @@ chat$chat("Tell me a funny joke")
 \if{latex}{\out{\hypertarget{method-Chat-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$new(provider, turns, seed = NULL, echo = "none")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$new(provider, system_prompt = NULL, echo = "none")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -64,12 +64,7 @@ chat$chat("Tell me a funny joke")
 \describe{
 \item{\code{provider}}{A provider object.}
 
-\item{\code{turns}}{An unnamed list of turns to start the chat with (i.e.,
-continuing a previous conversation). If \code{NULL} or zero-length list, the
-conversation begins from scratch.}
-
-\item{\code{seed}}{Optional integer seed that ChatGPT uses to try and make output
-more reproducible.}
+\item{\code{system_prompt}}{System prompt to start the conversation with.}
 
 \item{\code{echo}}{One of the following options:
 \itemize{

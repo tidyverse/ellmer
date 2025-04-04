@@ -10,7 +10,6 @@ chat_azure_openai(
   params = NULL,
   api_version = NULL,
   system_prompt = NULL,
-  turns = NULL,
   api_key = NULL,
   token = deprecated(),
   credentials = NULL,
@@ -30,10 +29,6 @@ value of the \code{AZURE_OPENAI_ENDPOINT} envinronment variable.}
 \item{api_version}{The API version to use.}
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
-
-\item{turns}{A list of \link{Turn}s to start the chat with (i.e., continuing a
-previous conversation). If not provided, the conversation begins from
-scratch.}
 
 \item{api_key}{API key to use for authentication.
 

@@ -51,7 +51,6 @@ NULL
 #' }
 chat_aws_bedrock <- function(
   system_prompt = NULL,
-  turns = NULL,
   model = NULL,
   profile = NULL,
   api_args = list(),
@@ -61,7 +60,6 @@ chat_aws_bedrock <- function(
   cache <- aws_creds_cache(profile)
   credentials <- paws_credentials(profile, cache = cache)
 
-  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
   echo <- check_echo(echo)
 
@@ -75,7 +73,7 @@ chat_aws_bedrock <- function(
     extra_args = api_args
   )
 
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderAWSBedrock <- new_class(

@@ -21,14 +21,12 @@ NULL
 #' }
 chat_openrouter <- function(
   system_prompt = NULL,
-  turns = NULL,
   api_key = openrouter_key(),
   model = NULL,
   seed = NULL,
   api_args = list(),
   echo = c("none", "text", "all")
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
@@ -44,7 +42,7 @@ chat_openrouter <- function(
     extra_args = api_args,
     api_key = api_key
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 chat_openrouter_test <- function(...) {

@@ -88,7 +88,7 @@ chat_cortex_analyst <- function(
     extra_args = api_args
   )
 
-  Chat$new(provider = provider, turns = NULL, echo = echo)
+  Chat$new(provider = provider, echo = echo)
 }
 
 ProviderSnowflakeCortexAnalyst <- new_class(

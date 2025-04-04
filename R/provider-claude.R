@@ -26,7 +26,6 @@ NULL
 #' chat$chat("Tell me three jokes about statisticians")
 chat_anthropic <- function(
   system_prompt = NULL,
-  turns = NULL,
   params = NULL,
   max_tokens = deprecated(),
   model = NULL,
@@ -36,7 +35,6 @@ chat_anthropic <- function(
   api_key = anthropic_key(),
   echo = NULL
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   echo <- check_echo(echo)
 
   model <- set_default(model, "claude-3-7-sonnet-latest")
@@ -61,7 +59,7 @@ chat_anthropic <- function(
     api_key = api_key
   )
 
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 chat_anthropic_test <- function(

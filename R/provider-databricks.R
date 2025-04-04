@@ -52,7 +52,6 @@
 chat_databricks <- function(
   workspace = databricks_workspace(),
   system_prompt = NULL,
-  turns = NULL,
   model = NULL,
   token = NULL,
   api_args = list(),
@@ -61,7 +60,6 @@ chat_databricks <- function(
   check_string(workspace, allow_empty = FALSE)
   check_string(token, allow_empty = FALSE, allow_null = TRUE)
   model <- set_default(model, "databricks-dbrx-instruct")
-  turns <- normalize_turns(turns, system_prompt)
   echo <- check_echo(echo)
   if (!is.null(token)) {
     credentials <- function() list(Authorization = paste("Bearer", token))
@@ -78,7 +76,7 @@ chat_databricks <- function(
     # empty string here anyway to make S7::validate() happy.
     api_key = ""
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderDatabricks <- new_class(

@@ -6,7 +6,6 @@
 \usage{
 chat_snowflake(
   system_prompt = NULL,
-  turns = NULL,
   account = snowflake_account(),
   credentials = NULL,
   model = NULL,
@@ -16,10 +15,6 @@ chat_snowflake(
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
-
-\item{turns}{A list of \link{Turn}s to start the chat with (i.e., continuing a
-previous conversation). If not provided, the conversation begins from
-scratch.}
 
 \item{account}{A Snowflake \href{https://docs.snowflake.com/en/user-guide/admin-account-identifier}{account identifier},
 e.g. \code{"testorg-test_account"}. Defaults to the value of the

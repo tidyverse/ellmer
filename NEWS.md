@@ -1,5 +1,8 @@
 # ellmer (development version)
 
+* `chat_` functions no longer take a turns object, instead use `set_turns()` 
+  (#427).
+
 * ellmer now tracks the cost of input and output tokens. The cost is displayed
   when you print a `Chat` object, in `tokens_usage()`, and with 
   `Chat$get_cost()`. This is our best effort at computing the cost, but you 

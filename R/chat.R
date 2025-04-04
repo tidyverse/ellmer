@@ -22,11 +22,7 @@ Chat <- R6::R6Class(
   "Chat",
   public = list(
     #' @param provider A provider object.
-    #' @param turns An unnamed list of turns to start the chat with (i.e.,
-    #'   continuing a previous conversation). If `NULL` or zero-length list, the
-    #'   conversation begins from scratch.
-    #' @param seed Optional integer seed that ChatGPT uses to try and make output
-    #'   more reproducible.
+    #' @param system_prompt System prompt to start the conversation with.
     #' @param echo One of the following options:
     #'   * `none`: don't emit any output (default when running in a function).
     #'   * `text`: echo text output as it streams in (default when running at
@@ -34,10 +30,12 @@ Chat <- R6::R6Class(
     #'   * `all`: echo all input and output.
     #'
     #'  Note this only affects the `chat()` method.
-    initialize = function(provider, turns, seed = NULL, echo = "none") {
+    initialize = function(provider, system_prompt = NULL, echo = "none") {
       private$provider <- provider
-      private$.turns <- turns %||% list()
       private$echo <- echo
+      if (!is.null(system_prompt)) {
+        self$set_system_prompt(system_prompt)
+      }
     },
 
     #' @description Retrieve the turns that have been sent and received so far
@@ -455,7 +453,7 @@ Chat <- R6::R6Class(
   private = list(
     provider = NULL,
 
-    .turns = NULL,
+    .turns = list(),
     echo = NULL,
     tools = list(),
 

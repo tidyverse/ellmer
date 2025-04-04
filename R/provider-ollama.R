@@ -31,7 +31,6 @@
 #' }
 chat_ollama <- function(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "http://localhost:11434",
   model,
   seed = NULL,
@@ -50,7 +49,6 @@ chat_ollama <- function(
     ))
   }
 
-  turns <- normalize_turns(turns, system_prompt)
   echo <- check_echo(echo)
 
   provider <- ProviderOllama(
@@ -62,7 +60,7 @@ chat_ollama <- function(
     api_key = "ollama" # ignored
   )
 
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderOllama <- new_class(

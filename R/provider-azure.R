@@ -52,7 +52,6 @@ chat_azure_openai <- function(
   params = NULL,
   api_version = NULL,
   system_prompt = NULL,
-  turns = NULL,
   api_key = NULL,
   token = deprecated(),
   credentials = NULL,
@@ -76,7 +75,6 @@ chat_azure_openai <- function(
   check_string(deployment_id)
   params <- params %||% params()
   api_version <- set_default(api_version, "2024-10-21")
-  turns <- normalize_turns(turns, system_prompt)
   check_string(api_key, allow_null = TRUE)
   api_key <- api_key %||% Sys.getenv("AZURE_OPENAI_API_KEY")
   check_string(token, allow_null = TRUE)
@@ -99,7 +97,7 @@ chat_azure_openai <- function(
     credentials = credentials,
     extra_args = api_args
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 

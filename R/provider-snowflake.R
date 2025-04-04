@@ -38,14 +38,12 @@ NULL
 #' @export
 chat_snowflake <- function(
   system_prompt = NULL,
-  turns = NULL,
   account = snowflake_account(),
   credentials = NULL,
   model = NULL,
   api_args = list(),
   echo = c("none", "text", "all")
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   check_string(account, allow_empty = FALSE)
   model <- set_default(model, "llama3.1-70b")
   echo <- check_echo(echo)
@@ -68,7 +66,7 @@ chat_snowflake <- function(
     api_key = ""
   )
 
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderSnowflakeCortex <- new_class(

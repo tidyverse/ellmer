@@ -30,7 +30,6 @@ NULL
 #' }
 chat_google_gemini <- function(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL,
   model = NULL,
@@ -38,7 +37,6 @@ chat_google_gemini <- function(
   api_args = list(),
   echo = NULL
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
   credentials <- default_google_credentials(api_key)
@@ -52,7 +50,7 @@ chat_google_gemini <- function(
     api_key = api_key,
     credentials = credentials
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderGoogleGemini <- new_class(

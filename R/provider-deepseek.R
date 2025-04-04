@@ -24,7 +24,6 @@ NULL
 #' }
 chat_deepseek <- function(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "https://api.deepseek.com",
   api_key = deepseek_key(),
   model = NULL,
@@ -32,7 +31,6 @@ chat_deepseek <- function(
   api_args = list(),
   echo = NULL
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "deepseek-chat")
   echo <- check_echo(echo)
 
@@ -48,7 +46,7 @@ chat_deepseek <- function(
     extra_args = api_args,
     api_key = api_key
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderDeepSeek <- new_class("ProviderDeepSeek", parent = ProviderOpenAI)
