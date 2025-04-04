@@ -29,13 +29,7 @@ ContentToolRequest(
   tool = NULL
 )
 
-ContentToolResult(
-  value = NULL,
-  error = NULL,
-  extra = list(),
-  id = NULL,
-  request = NULL
-)
+ContentToolResult(value = NULL, error = NULL, extra = list(), request = NULL)
 
 ContentThinking(thinking = stop("Required"), extra = list())
 
@@ -70,7 +64,8 @@ when the tool call is successful.}
 
 \item{extra}{Additional data.}
 
-\item{request}{The \link{ContentToolRequest} associated with the tool result.}
+\item{request}{The \link{ContentToolRequest} associated with the tool result,
+automatically added by \pkg{ellmer} when evaluating the tool call.}
 
 \item{thinking}{The text of the thinking output.}
 }

@@ -315,7 +315,7 @@ method(as_json, list(ProviderGoogleGemini, ContentToolResult)) <- function(
 ) {
   list(
     functionResponse = list(
-      name = x@id,
+      name = x@request@id,
       response = list(value = tool_string(x))
     )
   )

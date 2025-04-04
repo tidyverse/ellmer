@@ -67,7 +67,11 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x) {
 
     tools <- keep(x@contents, S7_inherits, ContentToolResult)
     tools_out <- lapply(tools, function(tool) {
-      list(role = "tool", content = tool_string(tool), tool_call_id = tool@id)
+      list(
+        role = "tool",
+        content = tool_string(tool),
+        tool_call_id = tool@request@id
+      )
     })
 
     c(texts_out, tools_out)

@@ -373,7 +373,7 @@ method(as_json, list(ProviderAnthropic, ContentToolResult)) <- function(
 ) {
   list(
     type = "tool_result",
-    tool_use_id = x@id,
+    tool_use_id = x@request@id,
     content = tool_string(x),
     is_error = tool_errored(x)
   )

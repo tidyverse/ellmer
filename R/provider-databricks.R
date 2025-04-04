@@ -148,7 +148,11 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
     is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
     if (any(is_tool)) {
       return(lapply(x@contents[is_tool], function(tool) {
-        list(role = "tool", content = tool_string(tool), tool_call_id = tool@id)
+        list(
+          role = "tool",
+          content = tool_string(tool),
+          tool_call_id = tool@request@id
+        )
       }))
     }
     if (length(x@contents) > 1) {

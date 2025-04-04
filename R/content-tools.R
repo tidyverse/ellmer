@@ -39,11 +39,11 @@ merge_tool_result <- function(request, result = NULL, error = NULL) {
   check_exclusive(result, error)
 
   if (!is.null(error)) {
-    ContentToolResult(error = error, id = request@id, request = request)
+    ContentToolResult(error = error, request = request)
   } else if (S7_inherits(result, ContentToolResult)) {
-    set_props(result, id = request@id, request = request)
+    set_props(result, request = request)
   } else {
-    ContentToolResult(value = result, id = request@id, request = request)
+    ContentToolResult(value = result, request = request)
   }
 }
 

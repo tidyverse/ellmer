@@ -215,7 +215,8 @@ method(format, ContentToolRequest) <- function(x, ...) {
 #'   isn't included in the `value` that's shown to the LLM. Useful for including
 #'   additional data for displaying the tool result in a client, like a Shiny
 #'   app, without including the data in the response to the LLM.
-#' @param request The [ContentToolRequest] associated with the tool result.
+#' @param request The [ContentToolRequest] associated with the tool result,
+#'   automatically added by \pkg{ellmer} when evaluating the tool call.
 ContentToolResult <- new_class(
   "ContentToolResult",
   parent = Content,
@@ -238,7 +239,6 @@ ContentToolResult <- new_class(
       }
     ),
     extra = class_list,
-    id = prop_string(allow_null = TRUE),
     request = NULL | ContentToolRequest
   )
 )
@@ -248,7 +248,7 @@ method(format, ContentToolResult) <- function(x, ...) {
   } else {
     value <- x@value
   }
-  cli::format_inline("[{.strong tool result}  ({x@id})]: {value}")
+  cli::format_inline("[{.strong tool result}  ({x@request@id})]: {value}")
 }
 
 tool_errored <- function(x) !is.null(x@error)

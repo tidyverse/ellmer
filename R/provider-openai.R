@@ -264,7 +264,11 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
     }
 
     tools <- lapply(x@contents[is_tool], function(tool) {
-      list(role = "tool", content = tool_string(tool), tool_call_id = tool@id)
+      list(
+        role = "tool",
+        content = tool_string(tool),
+        tool_call_id = tool@request@id
+      )
     })
 
     c(user, tools)

@@ -358,7 +358,7 @@ method(as_json, list(ProviderAWSBedrock, ContentToolResult)) <- function(
 ) {
   list(
     toolResult = list(
-      toolUseId = x@id,
+      toolUseId = x@request@id,
       content = list(list(text = tool_string(x))),
       status = if (tool_errored(x)) "error" else "success"
     )
