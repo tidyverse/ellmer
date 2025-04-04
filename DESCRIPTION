@@ -16,6 +16,8 @@ Description: Chat with large language models from a range of providers
 License: MIT + file LICENSE
 URL: https://ellmer.tidyverse.org, https://github.com/tidyverse/ellmer
 BugReports: https://github.com/tidyverse/ellmer/issues
+Depends: 
+    R (>= 4.1)
 Imports:
     cli,
     coro (>= 1.1.0),

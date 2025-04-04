@@ -3,7 +3,7 @@
     Code
       chat
     Output
-      <Chat OpenAI/gpt-4o turns=3 tokens=15/5>
+      <Chat OpenAI/gpt-4o turns=3 tokens=15/5 $0.00>
       -- system [0] ------------------------------------------------------------------
       You're a helpful assistant that returns very minimal output
       -- user [15] -------------------------------------------------------------------
@@ -13,6 +13,21 @@
       2
       
       3
+
+# print method shows cumulative tokens & cost
+
+    Code
+      chat
+    Output
+      <Chat OpenAI/gpt-4o turns=4 tokens=45000/1500 $0.13>
+      -- user [15000] ----------------------------------------------------------------
+      Input 1
+      -- assistant [500] -------------------------------------------------------------
+      Output 1
+      -- user [14500] ----------------------------------------------------------------
+      Input 2
+      -- assistant [1000] ------------------------------------------------------------
+      Output 1
 
 # chat can get and register a list of tools
 

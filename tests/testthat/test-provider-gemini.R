@@ -60,7 +60,7 @@ test_that("can use pdfs", {
   test_pdf_local(chat_fun)
 })
 
-# chunk merging ----------------------------------------------------------
+# custom behaviour -------------------------------------------------------------
 
 test_that("can merge text output", {
   # output from "tell me a joke" with text changed
@@ -84,4 +84,24 @@ test_that("can merge text output", {
     )
   )
   expect_equal(out$candidates[[1]]$finishReason, "STOP")
+})
+
+test_that("strips suffix from model name", {
+  provider <- ProviderGoogleGemini("", model = "", base_url = "", api_key = "")
+  expect_equal(
+    standardise_model(provider, "gemini-1.0-pro"),
+    "gemini-1.0-pro"
+  )
+  expect_equal(
+    standardise_model(provider, "gemini-1.0-pro-latest"),
+    "gemini-1.0-pro"
+  )
+  expect_equal(
+    standardise_model(provider, "gemini-1.0-pro-001"),
+    "gemini-1.0-pro"
+  )
+  expect_equal(
+    standardise_model(provider, "gemini-2.0-pro-exp-02-05"),
+    "gemini-2.0-pro"
+  )
 })

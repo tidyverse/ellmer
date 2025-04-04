@@ -237,12 +237,11 @@ method(value_turn, ProviderOpenAI) <- function(
     })
     content <- c(content, calls)
   }
-  tokens <- c(
-    result$usage$prompt_tokens %||% NA_integer_,
-    result$usage$completion_tokens %||% NA_integer_
+  tokens <- tokens_log(
+    provider,
+    input = result$usage$prompt_tokens,
+    output = result$usage$completion_tokens
   )
-  tokens_log(provider, tokens)
-
   Turn(message$role, content, json = result, tokens = tokens)
 }
 

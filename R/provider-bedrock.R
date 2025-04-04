@@ -263,8 +263,11 @@ method(value_turn, ProviderAWSBedrock) <- function(
     }
   })
 
-  tokens <- c(result$usage$inputTokens, result$usage$outputTokens)
-  tokens_log(provider, tokens)
+  tokens <- tokens_log(
+    provider,
+    input = result$usage$inputTokens,
+    output = result$usage$outputTokens
+  )
 
   Turn(result$output$message$role, contents, json = result, tokens = tokens)
 }

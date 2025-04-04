@@ -288,8 +288,11 @@ method(value_turn, ProviderAnthropic) <- function(
     }
   })
 
-  tokens <- c(result$usage$input_tokens, result$usage$output_tokens)
-  tokens_log(provider, tokens)
+  tokens <- tokens_log(
+    provider,
+    input = result$usage$input_tokens,
+    output = result$usage$output_tokens
+  )
 
   Turn(result$role, contents, json = result, tokens = tokens)
 }
@@ -400,6 +403,11 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
     thinking = x@thinking,
     signature = x@extra$signature
   )
+}
+# Pricing ----------------------------------------------------------------------
+
+method(standardise_model, ProviderAnthropic) <- function(provider, model) {
+  gsub("-(latest|\\d{8})$", "", model)
 }
 
 # Helpers ----------------------------------------------------------------

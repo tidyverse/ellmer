@@ -103,7 +103,7 @@ chat_azure_openai <- function(
 }
 
 
-chat_azure_openai_test <- function(system_prompt = NULL, ...) {
+chat_azure_openai_test <- function(system_prompt = NULL, params = NULL, ...) {
   api_key <- key_get("AZURE_OPENAI_API_KEY")
   default_params <- params(seed = 1014, temperature = 0)
   params <- modify_list(default_params, params %||% params())

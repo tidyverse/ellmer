@@ -198,6 +198,21 @@ test_that("has a basic print method", {
   expect_snapshot(chat)
 })
 
+test_that("print method shows cumulative tokens & cost", {
+  chat <- chat_openai(
+    turns = list(
+      Turn("user", "Input 1"),
+      Turn("assistant", "Output 1", tokens = c(15000, 500)),
+      Turn("user", "Input 2"),
+      Turn("assistant", "Output 1", tokens = c(30000, 1000))
+    )
+  )
+  expect_snapshot(chat)
+
+  expect_equal(chat$get_cost(), dollars(0.1275))
+  expect_equal(chat$get_cost("last"), dollars(0.085))
+})
+
 test_that("can optionally echo", {
   chat <- chat_openai("Repeat the input back to me exactly", echo = TRUE)
   expect_output(chat$chat("Echo this."), "Echo this.")

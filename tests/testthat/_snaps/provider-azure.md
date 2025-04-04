@@ -1,7 +1,7 @@
 # defaults are reported
 
     Code
-      . <- chat_azure_test()
+      . <- chat_azure_openai_test()
     Message
       Using api_version = "2024-10-21".
 

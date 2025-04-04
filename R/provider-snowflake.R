@@ -142,11 +142,11 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
 ) {
   deltas <- compact(sapply(result$choices, function(x) x$delta$content))
   content <- list(as_content(paste(deltas, collapse = "")))
-  tokens <- c(
-    result$usage$prompt_tokens %||% NA_integer_,
-    result$usage$completion_tokens %||% NA_integer_
+  tokens <- tokens_log(
+    provider,
+    input = result$usage$prompt_tokens,
+    output = result$usage$completion_tokens
   )
-  tokens_log(provider, tokens)
   Turn(
     # Snowflake's response format seems to omit the role.
     "assistant",

@@ -34,6 +34,7 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
 \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
 \item \href{#method-Chat-tokens}{\code{Chat$tokens()}}
+\item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
 \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
 \item \href{#method-Chat-chat}{\code{Chat$chat()}}
 \item \href{#method-Chat-chat_parallel}{\code{Chat$chat_parallel()}}
@@ -191,6 +192,25 @@ output tokens used by assistant turns.
 \describe{
 \item{\code{include_system_prompt}}{Whether to include the system prompt in
 the turns (if any exists).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_cost"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_cost}{}}}
+\subsection{Method \code{get_cost()}}{
+The cost of this chat
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_cost(include = c("all", "last"))}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{include}}{The default, \code{"all"}, gives the total cumulative cost
+of this chat. Alternatively, use \code{"last"} to get the cost of just the
+most recent turn.}
 }
 \if{html}{\out{</div>}}
 }
