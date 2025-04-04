@@ -62,8 +62,6 @@ test_turns_existing <- function(chat_fun) {
 # Tool calls -------------------------------------------------------------
 
 test_tools_simple <- function(chat_fun) {
-  local_reproducible_output()
-
   chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
   chat$register_tool(tool(function() "2024-01-01", "Return the current date"))
 
