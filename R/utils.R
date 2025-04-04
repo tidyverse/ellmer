@@ -146,6 +146,11 @@ paste_c <- function(...) {
   paste(c(...), collapse = "")
 }
 
+cli_escape <- function(x) {
+  x <- gsub("{", "{{", x, fixed = TRUE)
+  gsub("}", "}}", x, fixed = TRUE)
+}
+
 api_key_param <- function(key) {
   paste_c(
     "API key to use for authentication.\n",

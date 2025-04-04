@@ -196,12 +196,22 @@ ContentToolRequest <- new_class(
     tool = NULL | ToolDef
   )
 )
-method(format, ContentToolRequest) <- function(x, ...) {
+method(format, ContentToolRequest) <- function(
+  x,
+  ...,
+  show = c("all", "call")
+) {
+  show <- arg_match(show)
+
   if (length(x@arguments) == 0) {
     call <- call2(x@name)
   } else {
     call <- call2(x@name, !!!x@arguments)
   }
+  if (show == "call") {
+    return(format(call))
+  }
+
   cli::format_inline("[{.strong tool request} ({x@id})]: {format(call)}")
 }
 

@@ -145,13 +145,12 @@ maybe_echo_tool <- function(x, echo = "output") {
     return(invisible(x))
   }
 
-  cli_escape <- function(x) {
-    x <- gsub("{", "{{", x, fixed = TRUE)
-    gsub("}", "}}", x, fixed = TRUE)
-  }
-
   if (S7_inherits(x, ContentToolRequest)) {
-    cli::cli_alert(cli_escape(format(x)))
+    cli::cli_text(
+      cli::col_blue(cli::symbol$circle),
+      " [{cli::col_blue('tool call')}] ",
+      cli_escape(format(x, show = "call"))
+    )
     return(invisible(x))
   }
 
@@ -162,38 +161,36 @@ maybe_echo_tool <- function(x, echo = "output") {
 
   # ContentToolResult ----
   if (tool_errored(x)) {
-    alert <- cli::cli_alert_warning
+    icon <- cli::col_red(cli::symbol$stop)
+    header <- cli::col_red("Error: ")
     value <- tool_error_string(x)
   } else {
-    alert <- cli::cli_alert_success
+    icon <- cli::col_green(cli::symbol$record)
+    header <- ""
     value <- tool_string(x)
   }
 
-  header <- cli_escape(format(x, show = "header"))
-  # force two spaces between result and ID (will be removed by cli_alert if not)
-  header <- sub("  ", "\u00a0\u00a0", header, fixed = TRUE)
+  value <- cli::style_italic(value)
 
-  is_short_line <- !grepl("\n", value)
-
-  if (tool_errored(x)) {
-    if (is_short_line) {
-      value <- paste(cli::col_red("Error:"), value)
-    } else {
-      header <- paste(header, cli::col_red("Tool calling failed with error:"))
-    }
-  }
-
-  if (is_short_line) {
-    alert(cli_escape(paste(header, value)))
-  } else {
-    alert(header)
-    cli::cli_div(
-      class = "padded",
-      theme = list(.padded = list("margin-left" = 2))
+  if (grepl("\n", value)) {
+    lines <- strsplit(value, "\n")[[1]]
+    lines <- c(
+      lines[seq_len(min(5, length(lines)))],
+      if (length(lines) > 5) cli::symbol$ellipsis
     )
-    cli::cli_verbatim(cli::style_italic(value))
-    cli::cli_verbatim("")
-    cli::cli_end()
+    lines <- cli::style_italic(lines)
+    cli::cli_text("{icon} #> {header}{cli_escape(lines[1])}")
+    for (line in lines[-1]) {
+      cli::cli_text("\u00a0\u00a0#> {cli_escape(line)}")
+    }
+  } else {
+    max_width <- cli::console_width() - 7
+    if (nchar(value) > max_width) {
+      value <- substring(value, 1, max_width)
+      value <- paste0(value, cli::symbol$ellipsis)
+    }
+    value <- cli::style_italic(value)
+    cli::cli_text("{icon} #> {header}{cli_escape(value)}")
   }
 
   invisible(x)

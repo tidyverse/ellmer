@@ -3,15 +3,15 @@
     Code
       chat$chat("What's the current date in Y-M-D format?")
     Message
-      > [tool request (ID)]: tool_001()
-      v [tool result  (ID)]: 2024-01-01
+      ( ) [tool call] tool_001()
+      o #> 2024-01-01
     Output
       2024-01-01
     Code
       chat$chat("Ask the user to enter a password")
     Message
-      > [tool request (ID)]: tool_002()
-      ! [tool result  (ID)]: Error: User denied tool request
+      ( ) [tool call] tool_002()
+      # #> Error: User denied tool request
     Output
       User denied request
     Code
@@ -42,44 +42,36 @@
     Code
       . <- invoke_tools(turn, echo = "output")
     Message
-      > [tool request (x1)]: my_tool()
-      v [tool result  (x1)]: 1
-      > [tool request (x2)]: my_tool(x = 1)
-      ! [tool result  (x2)]: Error: unused argument (x = 1)
-      > [tool request (x3)]: tool_list()
-      v [tool result  (x3)]: {"a":1,"b":2}
-      > [tool request (x4)]: tool_chr()
-      v [tool result  (x4)]:
-        a
-        b
-        c
-      
-      > [tool request (x5)]: tool_abort()
-      ! [tool result  (x5)]: Tool calling failed with error:
-        Unexpected input
-        i Please revise and try again.
-      
+      ( ) [tool call] my_tool()
+      o #> 1
+      ( ) [tool call] my_tool(x = 1)
+      # #> Error: unused argument (x = 1)
+      ( ) [tool call] tool_list()
+      o #> {{"a":1,"b":2}}
+      ( ) [tool call] tool_chr()
+      o #> a
+        #> b
+        #> c
+      ( ) [tool call] tool_abort()
+      # #> Error: Unexpected input
+        #> i Please revise and try again.
 
 # invoke_tools_async() echoes tool requests and results
 
     Code
       . <- sync(invoke_tools_async(turn, echo = "output"))
     Message
-      > [tool request (x1)]: my_tool()
-      > [tool request (x2)]: my_tool(x = 1)
-      > [tool request (x3)]: tool_list()
-      > [tool request (x4)]: tool_chr()
-      > [tool request (x5)]: tool_abort()
-      ! [tool result  (x2)]: Error: unused argument (x = 1)
-      ! [tool result  (x5)]: Tool calling failed with error:
-        Unexpected input
-        i Please revise and try again.
-      
-      v [tool result  (x1)]: 1
-      v [tool result  (x3)]: {"a":1,"b":2}
-      v [tool result  (x4)]:
-        a
-        b
-        c
-      
+      ( ) [tool call] my_tool()
+      ( ) [tool call] my_tool(x = 1)
+      ( ) [tool call] tool_list()
+      ( ) [tool call] tool_chr()
+      ( ) [tool call] tool_abort()
+      # #> Error: unused argument (x = 1)
+      # #> Error: Unexpected input
+        #> i Please revise and try again.
+      o #> 1
+      o #> {{"a":1,"b":2}}
+      o #> a
+        #> b
+        #> c
 
