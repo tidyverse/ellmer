@@ -342,10 +342,7 @@ test_that("chat warns on tool failures", {
   ))
 
   expect_snapshot(
-    {
-      chat$chat("What are Joe, Hadley, Simon, and Tom's favorite colors?")
-      chat
-    },
+    . <- chat$chat("What are Joe, Hadley, Simon, and Tom's favorite colors?"),
     transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
   )
 })
