@@ -6,6 +6,8 @@
   * `extra`: A list of additional data associated with the tool result that is
     not shown to the chatbot.
   * `request`: The `ContentToolRequest` that triggered the tool call.
+    `ContentToolResult` no longer has an `id` property, instead the tool call
+    ID can be retrieved from `request@id`.
 
 * `ContentToolRequest` gains a `tool` property that includes the `tool()`
   definition when a request is matched to a tool by ellmer (#423, @gadenbuie).
