@@ -35,7 +35,7 @@ extract_tool_requests <- function(contents) {
   contents[is_tool_request]
 }
 
-merge_tool_result <- function(request, result = NULL, error = NULL) {
+new_tool_result <- function(request, result = NULL, error = NULL) {
   check_exclusive(result, error)
 
   if (!is.null(error)) {
@@ -50,17 +50,17 @@ merge_tool_result <- function(request, result = NULL, error = NULL) {
 # Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases
 invoke_tool <- function(request) {
   if (is.null(request@tool)) {
-    return(merge_tool_result(request, error = "Unknown tool"))
+    return(new_tool_result(request, error = "Unknown tool"))
   }
 
   tryCatch(
     {
       result <- do.call(request@tool@fun, request@arguments)
-      merge_tool_result(request, result)
+      new_tool_result(request, result)
     },
     error = function(e) {
       # TODO: We need to report this somehow; it's way too hidden from the user
-      merge_tool_result(request, error = e)
+      new_tool_result(request, error = e)
     }
   )
 }
@@ -68,17 +68,17 @@ invoke_tool <- function(request) {
 on_load(
   invoke_tool_async <- coro::async(function(request) {
     if (is.null(request@tool)) {
-      return(merge_tool_result(request, error = "Unknown tool"))
+      return(new_tool_result(request, error = "Unknown tool"))
     }
 
     tryCatch(
       {
         result <- await(do.call(request@tool@fun, request@arguments))
-        merge_tool_result(request, result)
+        new_tool_result(request, result)
       },
       error = function(e) {
         # TODO: We need to report this somehow; it's way too hidden from the user
-        merge_tool_result(request, error = e)
+        new_tool_result(request, error = e)
       }
     )
   })
