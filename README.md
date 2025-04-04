@@ -36,7 +36,8 @@ ellmer supports a wide variety of model providers:
 - Databricks: `chat_databricks()`.
 - DeepSeek: `chat_deepseek()`.
 - GitHub model marketplace: `chat_github()`.
-- Google Gemini: `chat_google_gemini()`.
+- Google Gemini/Vertex AI: `chat_google_gemini()`,
+  `chat_google_vertex()`.
 - Groq: `chat_groq()`.
 - Ollama: `chat_ollama()`.
 - OpenAI: `chat_openai()`.

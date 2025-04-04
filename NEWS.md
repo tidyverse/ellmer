@@ -109,7 +109,7 @@
 
   Parallel calls with OpenAI and Gemini are much simpler in my experience.
 
-* `gemini_upload()` lets you upload files to Gemini (#310).
+* `google_upload()` lets you upload files to Google Gemini or Vertex AI (#310).
 
 * `chat_gemini()` can now authenticate with Google default application
   credentials (including service accounts, etc). This requires the `gargle`
