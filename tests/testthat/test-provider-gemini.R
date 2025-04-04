@@ -62,6 +62,14 @@ test_that("can use pdfs", {
 
 # custom behaviour -------------------------------------------------------------
 
+test_that("vertex generates expected base_url", {
+  chat <- chat_google_vertex("{location}", "{project}")
+
+  service_endpoint <- "https://{location}-aiplatform.googleapis.com/v1"
+  model <- "/projects/{project}/locations/{location}/publishers/google/"
+  expect_equal(chat$get_provider()@base_url, paste0(service_endpoint, model))
+})
+
 test_that("can merge text output", {
   # output from "tell me a joke" with text changed
   messages <- c(

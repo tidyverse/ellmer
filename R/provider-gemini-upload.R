@@ -22,12 +22,12 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' file <- gemini_upload("path/to/file.pdf")
+#' file <- google_upload("path/to/file.pdf")
 #'
 #' chat <- chat_openai()
 #' chat$chat(file, "Give me a three paragraph summary of this PDF")
 #' }
-gemini_upload <- function(
+google_upload <- function(
   path,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL,
@@ -37,25 +37,25 @@ gemini_upload <- function(
 
   mime_type <- mime_type %||% guess_mime_type(path)
 
-  upload_url <- gemini_upload_init(
+  upload_url <- google_upload_init(
     path = path,
     base_url = base_url,
     credentials = credentials,
     mime_type = mime_type
   )
 
-  status <- gemini_upload_send(
+  status <- google_upload_send(
     upload_url = upload_url,
     path = path,
     credentials = credentials
   )
-  gemini_upload_wait(status, credentials)
+  google_upload_wait(status, credentials)
 
   ContentUploaded(uri = status$uri, mime_type = status$mimeType)
 }
 
 # https://ai.google.dev/api/files#method:-media.upload
-gemini_upload_init <- function(path, base_url, credentials, mime_type) {
+google_upload_init <- function(path, base_url, credentials, mime_type) {
   file_size <- file.size(path)
   display_name <- basename(path)
 
@@ -75,7 +75,7 @@ gemini_upload_init <- function(path, base_url, credentials, mime_type) {
   resp_header(resp, "x-goog-upload-url")
 }
 
-gemini_upload_send <- function(upload_url, path, credentials) {
+google_upload_send <- function(upload_url, path, credentials) {
   file_size <- file.size(path)
 
   req <- request(upload_url)
@@ -93,7 +93,7 @@ gemini_upload_send <- function(upload_url, path, credentials) {
   resp_body_json(resp)$file
 }
 
-gemini_upload_status <- function(uri, credentials) {
+google_upload_status <- function(uri, credentials) {
   req <- request(uri)
   req <- ellmer_req_credentials(req, credentials)
 
@@ -101,14 +101,14 @@ gemini_upload_status <- function(uri, credentials) {
   resp_body_json(resp)
 }
 
-gemini_upload_wait <- function(status, credentials) {
+google_upload_wait <- function(status, credentials) {
   cli::cli_progress_bar(
     format = "{cli::pb_spin} Processing [{cli::pb_elapsed}] "
   )
 
   while (status$state == "PROCESSING") {
     cli::cli_progress_update()
-    status <- gemini_upload_status(status$uri, credentials)
+    status <- google_upload_status(status$uri, credentials)
     Sys.sleep(0.5)
   }
   if (status$state == "FAILED") {
