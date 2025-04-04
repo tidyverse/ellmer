@@ -379,10 +379,6 @@ merge_optional <- function(merge_func) {
   function(left, right, path = NULL) {
     if (is.null(left) && is.null(right)) {
       NULL
-    } else if (is.null(left)) {
-      right
-    } else if (is.null(right)) {
-      left
     } else {
       merge_func(left, right, path)
     }
@@ -392,6 +388,12 @@ merge_optional <- function(merge_func) {
 merge_objects <- function(...) {
   spec <- list(...)
   function(left, right, path = NULL) {
+    if (is.null(left)) {
+      return(right)
+    } else if (is.null(right)) {
+      return(left)
+    }
+
     # cat(paste(collapse = "", path), "\n")
     stopifnot(is.list(left), is.list(right), all(nzchar(names(spec))))
     mapply(
