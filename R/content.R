@@ -78,12 +78,16 @@ contents_markdown <- new_generic("contents_markdown", "content")
 #'
 #' @export
 #' @return S7 objects that all inherit from `Content`
+#' @param extra Optional, provider-specific, data associated with the content.
+#'   For `ContentToolResult`, this can be used to include additional data in the
+#'   result that isn't included in the `value` that's shown to the LLM, but is
+#'   shown to the user in a client, like a Shiny app.
 #' @examples
 #' Content()
 #' ContentText("Tell me a joke")
 #' ContentImageRemote("https://www.r-project.org/Rlogo.png")
 #' ContentToolRequest(id = "abc", name = "mean", arguments = list(x = 1:5))
-Content <- new_class("Content")
+Content <- new_class("Content", properties = list(extra = class_list))
 
 method(contents_text, Content) <- function(content) {
   NULL
@@ -105,6 +109,9 @@ ContentText <- new_class(
   "ContentText",
   parent = Content,
   properties = list(text = prop_string()),
+  constructor = function(text, extra = list()) {
+    new_object(Content(extra = extra), text = text)
+  }
 )
 method(format, ContentText) <- function(x, ...) {
   x@text
@@ -142,7 +149,10 @@ ContentImageRemote <- new_class(
   properties = list(
     url = prop_string(),
     detail = prop_string(default = "")
-  )
+  ),
+  constructor = function(url, detail = "", extra = list()) {
+    new_object(Content(extra = extra), url = url, detail = detail)
+  }
 )
 method(format, ContentImageRemote) <- function(x, ...) {
   cli::format_inline("[{.strong remote image}]: {.url {x@url}}")
@@ -164,7 +174,10 @@ ContentImageInline <- new_class(
   properties = list(
     type = prop_string(),
     data = prop_string(allow_null = TRUE)
-  )
+  ),
+  constructor = function(type, data = NULL, extra = list()) {
+    new_object(Content(extra = extra), type = type, data = data)
+  }
 )
 method(format, ContentImageInline) <- function(x, ...) {
   cli::format_inline("[{.strong inline image}]")
@@ -194,7 +207,22 @@ ContentToolRequest <- new_class(
     name = prop_string(),
     arguments = class_list,
     tool = NULL | ToolDef
-  )
+  ),
+  constructor = function(
+    id,
+    name,
+    arguments = list(),
+    tool = NULL,
+    extra = list()
+  ) {
+    new_object(
+      Content(extra = extra),
+      id = id,
+      name = name,
+      arguments = arguments,
+      tool = tool
+    )
+  }
 )
 method(format, ContentToolRequest) <- function(
   x,
@@ -221,10 +249,6 @@ method(format, ContentToolRequest) <- function(
 #' @param error The error message, as a string, or the error condition thrown
 #'   as a result of a failure when calling the tool function. Must be `NULL`
 #'   when the tool call is successful.
-#' @param extra Optional additional data associated with the tool result that
-#'   isn't included in the `value` that's shown to the LLM. Useful for including
-#'   additional data for displaying the tool result in a client, like a Shiny
-#'   app, without including the data in the response to the LLM.
 #' @param request The [ContentToolRequest] associated with the tool result,
 #'   automatically added by \pkg{ellmer} when evaluating the tool call.
 ContentToolResult <- new_class(
@@ -248,9 +272,21 @@ ContentToolResult <- new_class(
         )
       }
     ),
-    extra = class_list,
     request = NULL | ContentToolRequest
-  )
+  ),
+  constructor = function(
+    value = NULL,
+    error = NULL,
+    request = NULL,
+    extra = list()
+  ) {
+    new_object(
+      Content(extra = extra),
+      value = value,
+      error = error,
+      request = request
+    )
+  }
 )
 method(format, ContentToolResult) <- function(
   x,
@@ -299,7 +335,13 @@ tool_string <- function(x) {
 ContentJson <- new_class(
   "ContentJson",
   parent = Content,
-  properties = list(value = class_any)
+  properties = list(value = class_any),
+  constructor = function(value, extra = list()) {
+    new_object(
+      Content(extra = extra),
+      value = value
+    )
+  }
 )
 method(format, ContentJson) <- function(x, ...) {
   paste0(
@@ -320,7 +362,14 @@ ContentUploaded <- new_class(
   properties = list(
     uri = prop_string(),
     mime_type = prop_string(default = "")
-  )
+  ),
+  constructor = function(uri, mime_type = "", extra = list()) {
+    new_object(
+      Content(extra = extra),
+      uri = uri,
+      mime_type = mime_type
+    )
+  }
 )
 method(format, ContentUploaded) <- function(x, ...) {
   cli::format_inline("[{.strong uploaded file}]: [{x@mime_type}]")
@@ -336,15 +385,19 @@ method(contents_markdown, ContentUploaded) <- function(content) {
 
 #' @rdname Content
 #' @param thinking The text of the thinking output.
-#' @param extra Additional data.
 #' @export
 ContentThinking <- new_class(
   "ContentThinking",
   parent = Content,
   properties = list(
-    thinking = prop_string(),
-    extra = class_list
-  )
+    thinking = prop_string()
+  ),
+  constructor = function(thinking, extra = list()) {
+    new_object(
+      Content(extra = extra),
+      thinking = thinking
+    )
+  }
 )
 
 method(format, ContentThinking) <- function(x, ...) {

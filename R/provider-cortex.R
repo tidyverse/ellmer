@@ -356,7 +356,10 @@ method(as_json, list(ProviderSnowflakeCortexAnalyst, ContentText)) <- function(
 ContentSuggestions <- new_class(
   "ContentSuggestions",
   parent = Content,
-  properties = list(suggestions = class_character)
+  properties = list(suggestions = class_character),
+  constructor = function(suggestions, extra = list()) {
+    new_object(Content(extra = extra), suggestions = suggestions)
+  }
 )
 
 method(
@@ -393,7 +396,10 @@ method(format, ContentSuggestions) <- function(x, ...) {
 ContentSql <- new_class(
   "ContentSql",
   parent = Content,
-  properties = list(statement = prop_string())
+  properties = list(statement = prop_string()),
+  constructor = function(statement, extra = list()) {
+    new_object(Content(extra = extra), statement = statement)
+  }
 )
 
 method(as_json, list(ProviderSnowflakeCortexAnalyst, ContentSql)) <- function(

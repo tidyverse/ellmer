@@ -12,30 +12,30 @@
 \alias{ContentPDF}
 \title{Content types received from and sent to a chatbot}
 \usage{
-Content()
+Content(extra = list())
 
-ContentText(text = stop("Required"))
+ContentText(text, extra = list())
 
-ContentImage()
+ContentImage(extra = list())
 
-ContentImageRemote(url = stop("Required"), detail = "")
+ContentImageRemote(url, detail = "", extra = list())
 
-ContentImageInline(type = stop("Required"), data = NULL)
+ContentImageInline(type, data = NULL, extra = list())
 
-ContentToolRequest(
-  id = stop("Required"),
-  name = stop("Required"),
-  arguments = list(),
-  tool = NULL
-)
+ContentToolRequest(id, name, arguments = list(), tool = NULL, extra = list())
 
-ContentToolResult(value = NULL, error = NULL, extra = list(), request = NULL)
+ContentToolResult(value = NULL, error = NULL, request = NULL, extra = list())
 
-ContentThinking(thinking = stop("Required"), extra = list())
+ContentThinking(thinking, extra = list())
 
-ContentPDF(type = stop("Required"), data = stop("Required"))
+ContentPDF(extra = list(), type = stop("Required"), data = stop("Required"))
 }
 \arguments{
+\item{extra}{Optional, provider-specific, data associated with the content.
+For \code{ContentToolResult}, this can be used to include additional data in the
+result that isn't included in the \code{value} that's shown to the LLM, but is
+shown to the user in a client, like a Shiny app.}
+
 \item{text}{A single string.}
 
 \item{url}{URL to a remote image.}
@@ -61,8 +61,6 @@ for the chatbot. If \code{NULL}, the request did not match a defined tool.}
 \item{error}{The error message, as a string, or the error condition thrown
 as a result of a failure when calling the tool function. Must be \code{NULL}
 when the tool call is successful.}
-
-\item{extra}{Additional data.}
 
 \item{request}{The \link{ContentToolRequest} associated with the tool result,
 automatically added by \pkg{ellmer} when evaluating the tool call.}
