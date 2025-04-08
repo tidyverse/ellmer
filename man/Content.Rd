@@ -8,6 +8,7 @@
 \alias{ContentImageInline}
 \alias{ContentToolRequest}
 \alias{ContentToolResult}
+\alias{ContentThinking}
 \alias{ContentPDF}
 \title{Content types received from and sent to a chatbot}
 \usage{
@@ -24,10 +25,13 @@ ContentImageInline(type = stop("Required"), data = NULL)
 ContentToolRequest(
   id = stop("Required"),
   name = stop("Required"),
-  arguments = list()
+  arguments = list(),
+  tool = NULL
 )
 
-ContentToolResult(id = stop("Required"), value = NULL, error = NULL)
+ContentToolResult(value = NULL, error = NULL, extra = list(), request = NULL)
+
+ContentThinking(thinking = stop("Required"), extra = list())
 
 ContentPDF(type = stop("Required"), data = stop("Required"))
 }
@@ -42,15 +46,28 @@ ContentPDF(type = stop("Required"), data = stop("Required"))
 
 \item{data}{Base64 encoded image data.}
 
-\item{id}{Tool call id (used to associate a request and a result)}
+\item{id}{Tool call id (used to associate a request and a result).
+Automatically managed by \pkg{ellmer}.}
 
 \item{name}{Function name}
 
 \item{arguments}{Named list of arguments to call the function with.}
 
-\item{value, error}{Either the results of calling the function if
-it succeeded, otherwise the error message, as a string. One of
-\code{value} and \code{error} will always be \code{NULL}.}
+\item{tool}{ellmer automatically matches a tool request to the tools defined
+for the chatbot. If \code{NULL}, the request did not match a defined tool.}
+
+\item{value}{The results of calling the tool function, if it succeeded.}
+
+\item{error}{The error message, as a string, or the error condition thrown
+as a result of a failure when calling the tool function. Must be \code{NULL}
+when the tool call is successful.}
+
+\item{extra}{Additional data.}
+
+\item{request}{The \link{ContentToolRequest} associated with the tool result,
+automatically added by \pkg{ellmer} when evaluating the tool call.}
+
+\item{thinking}{The text of the thinking output.}
 }
 \value{
 S7 objects that all inherit from \code{Content}
@@ -74,6 +91,10 @@ objects.
 \item \code{ContentToolRequest}: a request to perform a tool call (sent by the
 assistant).
 \item \code{ContentToolResult}: the result of calling the tool (sent by the user).
+This object is automatically created from the value returned by calling the
+\code{\link[=tool]{tool()}} function. Alternatively, expert users can return a
+\code{ContentToolResult} from a \code{\link[=tool]{tool()}} function to include additional data or
+to customize the display of the result.
 }
 }
 \examples{

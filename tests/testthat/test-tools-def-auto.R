@@ -23,7 +23,7 @@ test_that("basic signature extraction works", {
 
 test_that("checks its inputs", {
   expect_snapshot(error = TRUE, {
-    create_tool_def(print, model = "gpt-4", chat = chat_gemini())
+    create_tool_def(print, model = "gpt-4", chat = chat_google_gemini())
     create_tool_def(print, chat = 1)
   })
 })

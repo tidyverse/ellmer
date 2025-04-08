@@ -18,11 +18,7 @@ sample_cortex_message <- list(
 )
 
 test_that("Cortex messages are converted to turns correctly", {
-  p <- ProviderCortex(
-    account = "testorg-test_account",
-    credentials = function(account) list()
-  )
-
+  p <- provider_cortex_test()
   expect_equal(
     # Tests roundtrip conversion.
     as_json(p, value_turn(p, sample_cortex_message)),
@@ -31,10 +27,7 @@ test_that("Cortex messages are converted to turns correctly", {
 })
 
 test_that("Cortex turn formatting", {
-  p <- ProviderCortex(
-    account = "testorg-test_account",
-    credentials = function(account) list()
-  )
+  p <- provider_cortex_test()
   turn <- value_turn(p, sample_cortex_message)
   expect_snapshot(cat(turn@text))
   expect_snapshot(cat(format(turn)))
@@ -89,10 +82,7 @@ test_that("Cortex chunks are converted to messages correctly", {
       index = 2
     )
   )
-  p <- ProviderCortex(
-    account = "testorg-test_account",
-    credentials = function(account) list()
-  )
+  p <- provider_cortex_test()
   result <- NULL
   output <- ""
   for (chunk in chunks) {
@@ -113,8 +103,7 @@ test_that("Cortex API requests are generated correctly", {
       ContentText("Tell me about my data.")
     )
   )
-  p <- ProviderCortex(
-    account = "testorg-test_account",
+  p <- provider_cortex_test(
     credentials = function(account)
       list(
         Authorization = paste("Bearer", "obfuscated"),

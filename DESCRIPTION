@@ -1,6 +1,6 @@
 Package: ellmer
 Title: Chat with Large Language Models
-Version: 0.1.1
+Version: 0.1.1.9000
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4757-117X")),
@@ -16,6 +16,8 @@ Description: Chat with large language models from a range of providers
 License: MIT + file LICENSE
 URL: https://ellmer.tidyverse.org, https://github.com/tidyverse/ellmer
 BugReports: https://github.com/tidyverse/ellmer/issues
+Depends: 
+    R (>= 4.1)
 Imports:
     cli,
     coro (>= 1.1.0),
@@ -56,6 +58,7 @@ RoxygenNote: 7.3.2
 Collate:
     'utils-S7.R'
     'types.R'
+    'tools-def.R'
     'content.R'
     'provider.R'
     'as-json.R'
@@ -64,7 +67,9 @@ Collate:
     'chat.R'
     'content-image.R'
     'content-pdf.R'
+    'turns.R'
     'content-tools.R'
+    'deprecated.R'
     'ellmer-package.R'
     'httr2.R'
     'import-standalone-obj-type.R'
@@ -72,8 +77,6 @@ Collate:
     'import-standalone-types-check.R'
     'interpolate.R'
     'params.R'
-    'tools-def.R'
-    'turns.R'
     'provider-openai.R'
     'provider-azure.R'
     'provider-bedrock.R'

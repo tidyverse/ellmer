@@ -213,7 +213,7 @@ cat_word_wrap <- function(
 }
 
 emitter <- function(echo, prefix) {
-  if (echo == "text") {
+  if (echo == "output") {
     cat_word_wrap()
   } else if (echo == "all") {
     cat_word_wrap(prefix = "< ")

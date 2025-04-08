@@ -13,19 +13,9 @@ NULL
 #' You will need to sign up for a developer account (and pay for it) at the
 #' [developer platform](https://platform.openai.com).
 #'
-#' For authentication, we recommend saving your
-#' [API key](https://platform.openai.com/account/api-keys) to
-#' the `OPENAI_API_KEY` environment variable in your `.Renviron` file.
-#' You can easily edit this file by calling `usethis::edit_r_environ()`.
-#'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
-#' @param turns A list of [Turn]s to start the chat with (i.e., continuing a
-#'   previous conversation). If not provided, the conversation begins from
-#'   scratch.
 #' @param base_url The base URL to the endpoint; the default uses OpenAI.
-#' @param api_key The API key to use for authentication. You generally should
-#'   not supply this directly, but instead set the `OPENAI_API_KEY` environment
-#'   variable.
+#' @param api_key `r api_key_param("OPENAI_API_KEY")`
 #' @param model The model to use for the chat. The default, `NULL`, will pick
 #'   a reasonable default, and tell you about. We strongly recommend explicitly
 #'   choosing a model for all but the most casual use.
@@ -55,16 +45,14 @@ NULL
 #' chat$chat("Tell me three funny jokes about statisticians")
 chat_openai <- function(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "https://api.openai.com/v1",
   api_key = openai_key(),
   model = NULL,
   params = NULL,
   seed = deprecated(),
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
@@ -79,13 +67,14 @@ chat_openai <- function(
   }
 
   provider <- ProviderOpenAI(
+    name = "OpenAI",
     base_url = base_url,
     model = model,
     params = params,
     extra_args = api_args,
     api_key = api_key
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 chat_openai_test <- function(..., model = "gpt-4o-mini", params = NULL) {
@@ -103,7 +92,6 @@ ProviderOpenAI <- new_class(
   parent = Provider,
   properties = list(
     api_key = prop_string(),
-    model = prop_string(),
     # no longer used by OpenAI itself; but subclasses still need it
     seed = prop_number_whole(allow_null = TRUE)
   )
@@ -244,15 +232,11 @@ method(value_turn, ProviderOpenAI) <- function(
     })
     content <- c(content, calls)
   }
-  tokens <- c(
-    result$usage$prompt_tokens %||% NA_integer_,
-    result$usage$completion_tokens %||% NA_integer_
+  tokens <- tokens_log(
+    provider,
+    input = result$usage$prompt_tokens,
+    output = result$usage$completion_tokens
   )
-  tokens_log(
-    paste0("OpenAI-", gsub("https?://", "", provider@base_url)),
-    tokens
-  )
-
   Turn(message$role %||% "assistant", content, json = result, tokens = tokens)
 }
 
@@ -274,7 +258,11 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
     }
 
     tools <- lapply(x@contents[is_tool], function(tool) {
-      list(role = "tool", content = tool_string(tool), tool_call_id = tool@id)
+      list(
+        role = "tool",
+        content = tool_string(tool),
+        tool_call_id = tool@request@id
+      )
     })
 
     c(user, tools)

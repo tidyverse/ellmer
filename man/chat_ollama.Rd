@@ -6,7 +6,6 @@
 \usage{
 chat_ollama(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "http://localhost:11434",
   model,
   seed = NULL,
@@ -16,10 +15,6 @@ chat_ollama(
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
-
-\item{turns}{A list of \link{Turn}s to start the chat with (i.e., continuing a
-previous conversation). If not provided, the conversation begins from
-scratch.}
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
@@ -76,13 +71,14 @@ chat$chat("Tell me three jokes about statisticians")
 }
 \seealso{
 Other chatbots: 
-\code{\link{chat_bedrock}()},
-\code{\link{chat_claude}()},
+\code{\link{chat_anthropic}()},
+\code{\link{chat_aws_bedrock}()},
+\code{\link{chat_azure_openai}()},
 \code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
 \code{\link{chat_deepseek}()},
-\code{\link{chat_gemini}()},
 \code{\link{chat_github}()},
+\code{\link{chat_google_gemini}()},
 \code{\link{chat_groq}()},
 \code{\link{chat_openai}()},
 \code{\link{chat_openrouter}()},

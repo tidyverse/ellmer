@@ -26,11 +26,11 @@ NULL
 #' Note that Snowflake-hosted models do not support images, tool calling, or
 #' structured outputs.
 #'
-#' See [chat_cortex()] to chat with the Snowflake Cortex Analyst rather than a
-#' general-purpose model.
+#' See [chat_cortex_analyst()] to chat with the Snowflake Cortex Analyst rather
+#' than a general-purpose model.
 #'
 #' @inheritParams chat_openai
-#' @inheritParams chat_cortex
+#' @inheritParams chat_cortex_analyst
 #' @inherit chat_openai return
 #' @examplesIf has_credentials("cortex")
 #' chat <- chat_snowflake()
@@ -38,14 +38,12 @@ NULL
 #' @export
 chat_snowflake <- function(
   system_prompt = NULL,
-  turns = NULL,
   account = snowflake_account(),
   credentials = NULL,
   model = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   check_string(account, allow_empty = FALSE)
   model <- set_default(model, "llama3.1-70b")
   echo <- check_echo(echo)
@@ -57,7 +55,8 @@ chat_snowflake <- function(
   check_function(credentials, allow_null = TRUE)
   credentials <- credentials %||% default_snowflake_credentials(account)
 
-  provider <- ProviderSnowflake(
+  provider <- ProviderSnowflakeCortex(
+    name = "Snowflake/Cortex",
     base_url = snowflake_url(account),
     account = account,
     credentials = credentials,
@@ -67,11 +66,11 @@ chat_snowflake <- function(
     api_key = ""
   )
 
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-ProviderSnowflake <- new_class(
-  "ProviderSnowflake",
+ProviderSnowflakeCortex <- new_class(
+  "ProviderSnowflakeCortex",
   parent = ProviderOpenAI,
   properties = list(
     account = prop_string(),
@@ -80,7 +79,7 @@ ProviderSnowflake <- new_class(
 )
 
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#api-reference
-method(chat_request, ProviderSnowflake) <- function(
+method(chat_request, ProviderSnowflakeCortex) <- function(
   provider,
   stream = TRUE,
   turns = list(),
@@ -138,14 +137,17 @@ method(chat_request, ProviderSnowflake) <- function(
 
 # Snowflake only supports simple textual messages.
 
-method(as_json, list(ProviderSnowflake, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(provider, x) {
   list(
     role = x@role,
     content = as_json(provider, x@contents[[1]])
   )
 }
 
-method(as_json, list(ProviderSnowflake, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderSnowflakeCortex, ContentText)) <- function(
+  provider,
+  x
+) {
   x@text
 }
 

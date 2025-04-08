@@ -4,9 +4,19 @@
 \alias{Provider}
 \title{A chatbot provider}
 \usage{
-Provider(base_url = stop("Required"), params = list(), extra_args = list())
+Provider(
+  name = stop("Required"),
+  model = stop("Required"),
+  base_url = stop("Required"),
+  params = list(),
+  extra_args = list()
+)
 }
 \arguments{
+\item{name}{Name of the provider.}
+
+\item{model}{Name of the model.}
+
 \item{base_url}{The base URL for the API.}
 
 \item{params}{A list of standard parameters created by \code{\link[=params]{params()}}.}
@@ -28,5 +38,9 @@ To add support for a new backend, you will need to subclass \code{Provider}
 the various generics that control the behavior of each provider.
 }
 \examples{
-Provider(base_url = "https://cool-models.com")
+Provider(
+  name = "CoolModels",
+  model = "my_model",
+  base_url = "https://cool-models.com"
+)
 }

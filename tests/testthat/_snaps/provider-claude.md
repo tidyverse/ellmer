@@ -1,7 +1,7 @@
 # defaults are reported
 
     Code
-      . <- chat_claude()
+      . <- chat_anthropic()
     Message
       Using model = "claude-3-7-sonnet-latest".
 
@@ -17,9 +17,9 @@
 # max_tokens is deprecated
 
     Code
-      chat <- chat_claude_test(max_tokens = 10)
+      chat <- chat_anthropic_test(max_tokens = 10)
     Condition
       Warning:
-      The `max_tokens` argument of `chat_claude()` is deprecated as of ellmer 0.2.0.
+      The `max_tokens` argument of `chat_anthropic()` is deprecated as of ellmer 0.2.0.
       i Please use the `params` argument instead.
 

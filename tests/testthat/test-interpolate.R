@@ -17,3 +17,14 @@ test_that("can interpolate from a file", {
   path <- withr::local_tempfile(lines = "{{x}}")
   expect_equal(interpolate_file(path, x = 1), glue::glue("1"))
 })
+
+test_that("can interpolate from a package", {
+  path <- withr::local_tempfile(lines = "{{x}}")
+  local_mocked_bindings(
+    system.file = function(..., package = "base") {
+      if (package == "test") path else stop("package not found")
+    }
+  )
+
+  expect_equal(interpolate_package("test", "bar.md", x = 1), glue::glue("1"))
+})

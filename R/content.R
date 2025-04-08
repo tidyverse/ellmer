@@ -1,3 +1,4 @@
+#' @include tools-def.R
 #' @include utils-S7.R
 NULL
 
@@ -70,6 +71,10 @@ contents_markdown <- new_generic("contents_markdown", "content")
 #' * `ContentToolRequest`: a request to perform a tool call (sent by the
 #'    assistant).
 #' * `ContentToolResult`: the result of calling the tool (sent by the user).
+#'   This object is automatically created from the value returned by calling the
+#'   [tool()] function. Alternatively, expert users can return a
+#'   `ContentToolResult` from a [tool()] function to include additional data or
+#'   to customize the display of the result.
 #'
 #' @export
 #' @return S7 objects that all inherit from `Content`
@@ -175,54 +180,111 @@ method(contents_markdown, ContentImageInline) <- function(content) {
 
 #' @rdname Content
 #' @export
-#' @param id Tool call id (used to associate a request and a result)
+#' @param id Tool call id (used to associate a request and a result).
+#'   Automatically managed by \pkg{ellmer}.
 #' @param name Function name
 #' @param arguments Named list of arguments to call the function with.
+#' @param tool ellmer automatically matches a tool request to the tools defined
+#'   for the chatbot. If `NULL`, the request did not match a defined tool.
 ContentToolRequest <- new_class(
   "ContentToolRequest",
   parent = Content,
   properties = list(
     id = prop_string(),
     name = prop_string(),
-    arguments = class_list
+    arguments = class_list,
+    tool = NULL | ToolDef
   )
 )
-method(format, ContentToolRequest) <- function(x, ...) {
+method(format, ContentToolRequest) <- function(
+  x,
+  ...,
+  show = c("all", "call")
+) {
+  show <- arg_match(show)
+
   if (length(x@arguments) == 0) {
     call <- call2(x@name)
   } else {
     call <- call2(x@name, !!!x@arguments)
   }
+  if (show == "call") {
+    return(format(call))
+  }
+
   cli::format_inline("[{.strong tool request} ({x@id})]: {format(call)}")
 }
 
 #' @rdname Content
 #' @export
-#' @param value,error Either the results of calling the function if
-#'   it succeeded, otherwise the error message, as a string. One of
-#'   `value` and `error` will always be `NULL`.
+#' @param value The results of calling the tool function, if it succeeded.
+#' @param error The error message, as a string, or the error condition thrown
+#'   as a result of a failure when calling the tool function. Must be `NULL`
+#'   when the tool call is successful.
+#' @param extra Optional additional data associated with the tool result that
+#'   isn't included in the `value` that's shown to the LLM. Useful for including
+#'   additional data for displaying the tool result in a client, like a Shiny
+#'   app, without including the data in the response to the LLM.
+#' @param request The [ContentToolRequest] associated with the tool result,
+#'   automatically added by \pkg{ellmer} when evaluating the tool call.
 ContentToolResult <- new_class(
   "ContentToolResult",
   parent = Content,
   properties = list(
-    id = prop_string(),
     value = class_any,
-    error = prop_string(allow_null = TRUE)
+    error = new_property(
+      class = NULL | class_character | new_S3_class("condition"),
+      default = NULL,
+      validator = function(value) {
+        ok <- is.null(value) || is_string(value) || inherits(value, "condition")
+        if (ok) {
+          return()
+        }
+
+        paste0(
+          "must be a single string or a condition object, not ",
+          obj_type_friendly(value),
+          "."
+        )
+      }
+    ),
+    extra = class_list,
+    request = NULL | ContentToolRequest
   )
 )
-method(format, ContentToolResult) <- function(x, ...) {
-  if (tool_errored(x)) {
-    value <- paste0(cli::col_red("Error: "), x@error)
-  } else {
-    value <- x@value
+method(format, ContentToolResult) <- function(
+  x,
+  ...,
+  show = c("all", "header")
+) {
+  show <- arg_match(show)
+
+  header <- cli::format_inline("[{.strong tool result}  ({x@request@id})]:")
+
+  if (show == "header") {
+    return(header)
   }
-  cli::format_inline("[{.strong tool result}  ({x@id})]: {value}")
+
+  if (tool_errored(x)) {
+    value <- paste0(cli::col_red("Error: "), tool_error_string(x))
+  } else {
+    value <- tool_string(x)
+  }
+
+  if (!is_string(value) || !grepl("\n", value)) {
+    paste0(header, " ", value)
+  } else {
+    paste(c(header, value), collapse = "\n")
+  }
 }
 
 tool_errored <- function(x) !is.null(x@error)
+tool_error_string <- function(x) {
+  if (inherits(x@error, "condition")) conditionMessage(x@error) else x@error
+}
 tool_string <- function(x) {
   if (tool_errored(x)) {
-    paste0("Tool calling failed with error ", x@error)
+    paste0("Tool calling failed with error ", tool_error_string(x))
   } else if (inherits(x@value, "AsIs")) {
     x@value
   } else if (inherits(x@value, "json")) {
@@ -268,6 +330,38 @@ method(contents_html, ContentUploaded) <- function(content) {
 }
 method(contents_markdown, ContentUploaded) <- function(content) {
   sprintf("`[uploaded %s file]`", content@mime_type)
+}
+
+# Thinking ---------------------------------------------------------------------
+
+#' @rdname Content
+#' @param thinking The text of the thinking output.
+#' @param extra Additional data.
+#' @export
+ContentThinking <- new_class(
+  "ContentThinking",
+  parent = Content,
+  properties = list(
+    thinking = prop_string(),
+    extra = class_list
+  )
+)
+
+method(format, ContentThinking) <- function(x, ...) {
+  paste0("<thinking>\n", x@thinking, "\n</thinking>\n")
+}
+
+method(contents_html, ContentThinking) <- function(content) {
+  check_installed("commonmark")
+  paste0(
+    "<details><summary>Thinking</summary>\n",
+    commonmark::markdown_html(content@thinking),
+    "</details>\n"
+  )
+}
+
+method(contents_markdown, ContentThinking) <- function(content) {
+  format(content)
 }
 
 # Helpers ----------------------------------------------------------------------

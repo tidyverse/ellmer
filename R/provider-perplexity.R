@@ -13,9 +13,7 @@
 #'
 #' @export
 #' @family chatbots
-#' @param api_key The API key to use for authentication. You generally should
-#'   not supply this directly, but instead set the `PERPLEXITY_API_KEY` environment
-#'   variable.
+#' @param api_key `r api_key_param("PERPLEXITY_API_KEY")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
@@ -25,7 +23,6 @@
 #' }
 chat_perplexity <- function(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "https://api.perplexity.ai/",
   api_key = perplexity_key(),
   model = NULL,
@@ -37,7 +34,6 @@ chat_perplexity <- function(
 
   chat_openai(
     system_prompt = system_prompt,
-    turns = turns,
     base_url = base_url,
     api_key = api_key,
     model = model,

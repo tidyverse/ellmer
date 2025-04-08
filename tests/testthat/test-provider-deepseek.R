@@ -26,15 +26,14 @@ test_that("respects turns interface", {
   test_turns_existing(chat_fun)
 })
 
-# Only partially works
-# test_that("all tool variations work", {
-#   chat_fun <- chat_deepseek
+test_that("all tool variations work", {
+  chat_fun <- chat_deepseek
 
-#   test_tools_simple(chat_fun)
-#   test_tools_async(chat_fun)
-#   test_tools_parallel(chat_fun)
-#   test_tools_sequential(chat_fun, total_calls = 6)
-# })
+  test_tools_simple(chat_fun)
+  test_tools_async(chat_fun)
+  test_tools_parallel(chat_fun)
+  test_tools_sequential(chat_fun, total_calls = 6)
+})
 
 # # Doesn't support data extraction
 # test_that("can extract data", {
