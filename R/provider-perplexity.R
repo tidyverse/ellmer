@@ -23,7 +23,6 @@
 #' }
 chat_perplexity <- function(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "https://api.perplexity.ai/",
   api_key = perplexity_key(),
   model = NULL,
@@ -35,7 +34,6 @@ chat_perplexity <- function(
 
   chat_openai(
     system_prompt = system_prompt,
-    turns = turns,
     base_url = base_url,
     api_key = api_key,
     model = model,

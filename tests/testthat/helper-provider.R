@@ -35,23 +35,23 @@ test_turns_system <- function(chat_fun) {
   expect_match(resp, "CHRISTOPHER ROBIN")
   expect_length(chat$get_turns(), 2)
 
-  chat <- chat_fun(turns = list(Turn("system", system_prompt)))
+  chat <- chat_fun()
+  chat$set_turns(list(Turn("system", system_prompt)))
   resp <- chat$chat("What is the name of Winnie the Pooh's human friend?")
   expect_match(resp, "CHRISTOPHER ROBIN")
   expect_length(chat$get_turns(), 2)
 }
 
 test_turns_existing <- function(chat_fun) {
-  chat <- chat_fun(
-    turns = list(
-      Turn("system", "Return very minimal output; no punctuation."),
-      Turn("user", "List the names of any 8 of Santa's 9 reindeer."),
-      Turn(
-        "assistant",
-        "Dasher, Dancer, Vixen, Comet, Cupid, Donner, Blitzen, and Rudolph."
-      )
+  chat <- chat_fun()
+  chat$set_turns(list(
+    Turn("system", "Return very minimal output; no punctuation."),
+    Turn("user", "List the names of any 8 of Santa's 9 reindeer."),
+    Turn(
+      "assistant",
+      "Dasher, Dancer, Vixen, Comet, Cupid, Donner, Blitzen, and Rudolph."
     )
-  )
+  ))
   expect_length(chat$get_turns(), 2)
 
   resp <- chat$chat("Who is the remaining one? Just give the name")
@@ -65,13 +65,7 @@ test_tools_simple <- function(chat_fun) {
   chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
   chat$register_tool(tool(function() "2024-01-01", "Return the current date"))
 
-  expect_output(
-    result <- chat$chat(
-      "What's the current date in Y-M-D format?",
-      echo = TRUE
-    ),
-    "2024-01-01"
-  )
+  result <- chat$chat("What's the current date in Y-M-D format?")
   expect_match(result, "2024-01-01")
 
   result <- chat$chat("What month is it? Provide the full name")
@@ -88,7 +82,11 @@ test_tools_async <- function(chat_fun) {
   result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
   expect_match(result, "2024-01-01")
 
-  expect_snapshot(chat$chat("Great. Do it again."), error = TRUE)
+  expect_snapshot(
+    chat$chat("Great. Do it again."),
+    error = TRUE,
+    transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
+  )
 }
 
 test_tools_parallel <- function(chat_fun) {

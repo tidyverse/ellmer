@@ -13,22 +13,46 @@ NULL
 #' the various generics that control the behavior of each provider.
 #'
 #' @export
+#' @param name Name of the provider.
+#' @param model Name of the model.
 #' @param base_url The base URL for the API.
 #' @param params A list of standard parameters created by [params()].
 #' @param extra_args Arbitrary extra arguments to be included in the request body.
 #' @return An S7 Provider object.
 #' @examples
-#' Provider(base_url = "https://cool-models.com")
+#' Provider(
+#'   name = "CoolModels",
+#'   model = "my_model",
+#'   base_url = "https://cool-models.com"
+#' )
 Provider <- new_class(
   "Provider",
   properties = list(
+    name = prop_string(),
+    model = prop_string(),
     base_url = prop_string(),
     params = class_list,
     extra_args = class_list
   )
 )
 
+test_provider <- function(name = "", model = "", base_url = "", ...) {
+  Provider(name = name, model = model, base_url = base_url, ...)
+}
+
 # Create a request------------------------------------
+
+base_request <- new_generic("base_request", "provider", function(provider) {
+  S7_dispatch()
+})
+
+base_request_error <- new_generic(
+  "base_request_error",
+  "provider",
+  function(provider, req) {
+    S7_dispatch()
+  }
+)
 
 chat_request <- new_generic(
   "chat_request",
@@ -43,6 +67,47 @@ chat_request <- new_generic(
     S7_dispatch()
   }
 )
+
+method(chat_request, Provider) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, chat_path(provider))
+
+  body <- chat_body(
+    provider = provider,
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+  body <- modify_list(body, provider@extra_args)
+  req <- req_body_json(req, body)
+
+  req
+}
+
+chat_body <- new_generic(
+  "chat_body",
+  "provider",
+  function(
+    provider,
+    stream = TRUE,
+    turns = list(),
+    tools = list(),
+    type = NULL
+  ) {
+    S7_dispatch()
+  }
+)
+
+chat_path <- new_generic("chat_path", "provider", function(provider) {
+  S7_dispatch()
+})
 
 chat_resp_stream <- new_generic(
   "chat_resp_stream",
@@ -100,4 +165,18 @@ method(as_json, list(Provider, class_list)) <- function(provider, x) {
 
 method(as_json, list(Provider, ContentJson)) <- function(provider, x) {
   as_json(provider, ContentText("<structured data/>"))
+}
+
+# Pricing ---------------------------------------------------------------------
+
+standardise_model <- new_generic(
+  "standardise_model",
+  "provider",
+  function(provider, model) {
+    S7_dispatch()
+  }
+)
+
+method(standardise_model, Provider) <- function(provider, model) {
+  model
 }

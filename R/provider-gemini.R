@@ -11,8 +11,9 @@ NULL
 #' See [gemini_upload()] to upload files (PDFs, images, video, audio, etc.)
 #'
 #' ## Authentication
-#' By default, `chat_gemini()` will use Google's default application credentials
-#' if there is no API key provided. This requires the \pkg{gargle} package.
+#' By default, `chat_google_gemini()` will use Google's default application
+#' credentials if there is no API key provided. This requires the \pkg{gargle}
+#' package.
 #'
 #' It can also pick up on viewer-based credentials on Posit Connect. This in
 #' turn requires the \pkg{connectcreds} package.
@@ -24,12 +25,11 @@ NULL
 #' @export
 #' @examples
 #' \dontrun{
-#' chat <- chat_gemini()
+#' chat <- chat_google_gemini()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_gemini <- function(
+chat_google_gemini <- function(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL,
   model = NULL,
@@ -37,12 +37,12 @@ chat_gemini <- function(
   api_args = list(),
   echo = NULL
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
   credentials <- default_google_credentials(api_key)
 
-  provider <- ProviderGemini(
+  provider <- ProviderGoogleGemini(
+    name = "Google/Gemini",
     base_url = base_url,
     model = model,
     params = params %||% params(),
@@ -50,11 +50,11 @@ chat_gemini <- function(
     api_key = api_key,
     credentials = credentials
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-ProviderGemini <- new_class(
-  "ProviderGemini",
+ProviderGoogleGemini <- new_class(
+  "ProviderGoogleGemini",
   parent = Provider,
   properties = list(
     api_key = prop_string(allow_null = TRUE),
@@ -63,7 +63,7 @@ ProviderGemini <- new_class(
   )
 )
 
-method(chat_request, ProviderGemini) <- function(
+method(chat_request, ProviderGoogleGemini) <- function(
   provider,
   stream = TRUE,
   turns = list(),
@@ -131,7 +131,7 @@ method(chat_request, ProviderGemini) <- function(
   req
 }
 
-method(chat_params, ProviderGemini) <- function(provider, params) {
+method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
   standardise_params(
     params,
     c(
@@ -150,17 +150,17 @@ method(chat_params, ProviderGemini) <- function(provider, params) {
 
 # Gemini -> ellmer --------------------------------------------------------------
 
-method(stream_parse, ProviderGemini) <- function(provider, event) {
+method(stream_parse, ProviderGoogleGemini) <- function(provider, event) {
   if (is.null(event)) {
     NULL
   } else {
     jsonlite::parse_json(event$data)
   }
 }
-method(stream_text, ProviderGemini) <- function(provider, event) {
+method(stream_text, ProviderGoogleGemini) <- function(provider, event) {
   event$candidates[[1]]$content$parts[[1]]$text
 }
-method(stream_merge_chunks, ProviderGemini) <- function(
+method(stream_merge_chunks, ProviderGoogleGemini) <- function(
   provider,
   result,
   chunk
@@ -171,7 +171,7 @@ method(stream_merge_chunks, ProviderGemini) <- function(
     merge_gemini_chunks(result, chunk)
   }
 }
-method(value_turn, ProviderGemini) <- function(
+method(value_turn, ProviderGoogleGemini) <- function(
   provider,
   result,
   has_type = FALSE
@@ -201,11 +201,11 @@ method(value_turn, ProviderGemini) <- function(
   })
   contents <- compact(contents)
   usage <- result$usageMetadata
-  tokens <- c(
-    usage$promptTokenCount %||% NA_integer_,
-    usage$candidatesTokenCount %||% NA_integer_
+  tokens <- tokens_log(
+    provider,
+    input = usage$promptTokenCount,
+    output = usage$candidatesTokenCount
   )
-  tokens_log("Gemini", tokens)
 
   Turn("assistant", contents, json = result, tokens = tokens)
 }
@@ -213,7 +213,7 @@ method(value_turn, ProviderGemini) <- function(
 # ellmer -> Gemini --------------------------------------------------------------
 
 # https://ai.google.dev/api/caching#Content
-method(as_json, list(ProviderGemini, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderGoogleGemini, Turn)) <- function(provider, x) {
   if (x@role == "system") {
     # System messages go in the top-level API parameter
   } else if (x@role == "user") {
@@ -226,7 +226,7 @@ method(as_json, list(ProviderGemini, Turn)) <- function(provider, x) {
 }
 
 
-method(as_json, list(ProviderGemini, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderGoogleGemini, ToolDef)) <- function(provider, x) {
   compact(list(
     name = x@name,
     description = x@description,
@@ -234,7 +234,10 @@ method(as_json, list(ProviderGemini, ToolDef)) <- function(provider, x) {
   ))
 }
 
-method(as_json, list(ProviderGemini, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderGoogleGemini, ContentText)) <- function(
+  provider,
+  x
+) {
   if (identical(x@text, "")) {
     # Gemini tool call requests can include a Content with empty text,
     # but it doesn't like it if you send this back
@@ -244,7 +247,10 @@ method(as_json, list(ProviderGemini, ContentText)) <- function(provider, x) {
   }
 }
 
-method(as_json, list(ProviderGemini, ContentPDF)) <- function(provider, x) {
+method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
+  provider,
+  x
+) {
   list(
     inlineData = list(
       mimeType = x@type,
@@ -254,7 +260,7 @@ method(as_json, list(ProviderGemini, ContentPDF)) <- function(provider, x) {
 }
 
 # https://ai.google.dev/api/caching#FileData
-method(as_json, list(ProviderGemini, ContentUploaded)) <- function(
+method(as_json, list(ProviderGoogleGemini, ContentUploaded)) <- function(
   provider,
   x
 ) {
@@ -267,7 +273,7 @@ method(as_json, list(ProviderGemini, ContentUploaded)) <- function(
 }
 
 # https://ai.google.dev/api/caching#FileData
-method(as_json, list(ProviderGemini, ContentImageRemote)) <- function(
+method(as_json, list(ProviderGoogleGemini, ContentImageRemote)) <- function(
   provider,
   x
 ) {
@@ -275,7 +281,7 @@ method(as_json, list(ProviderGemini, ContentImageRemote)) <- function(
 }
 
 # https://ai.google.dev/api/caching#Blob
-method(as_json, list(ProviderGemini, ContentImageInline)) <- function(
+method(as_json, list(ProviderGoogleGemini, ContentImageInline)) <- function(
   provider,
   x
 ) {
@@ -288,7 +294,7 @@ method(as_json, list(ProviderGemini, ContentImageInline)) <- function(
 }
 
 # https://ai.google.dev/api/caching#FunctionCall
-method(as_json, list(ProviderGemini, ContentToolRequest)) <- function(
+method(as_json, list(ProviderGoogleGemini, ContentToolRequest)) <- function(
   provider,
   x
 ) {
@@ -301,19 +307,22 @@ method(as_json, list(ProviderGemini, ContentToolRequest)) <- function(
 }
 
 # https://ai.google.dev/api/caching#FunctionResponse
-method(as_json, list(ProviderGemini, ContentToolResult)) <- function(
+method(as_json, list(ProviderGoogleGemini, ContentToolResult)) <- function(
   provider,
   x
 ) {
   list(
     functionResponse = list(
-      name = x@id,
+      name = x@request@id,
       response = list(value = tool_string(x))
     )
   )
 }
 
-method(as_json, list(ProviderGemini, TypeObject)) <- function(provider, x) {
+method(as_json, list(ProviderGoogleGemini, TypeObject)) <- function(
+  provider,
+  x
+) {
   if (x@additional_properties) {
     cli::cli_abort("{.arg .additional_properties} not supported for Gemini.")
   }
@@ -379,6 +388,12 @@ merge_optional <- function(merge_func) {
 merge_objects <- function(...) {
   spec <- list(...)
   function(left, right, path = NULL) {
+    if (is.null(left)) {
+      return(right)
+    } else if (is.null(right)) {
+      return(left)
+    }
+
     # cat(paste(collapse = "", path), "\n")
     stopifnot(is.list(left), is.list(right), all(nzchar(names(spec))))
     mapply(
@@ -460,6 +475,7 @@ merge_parts <- function() {
 }
 
 # Put it all together...
+# https://ai.google.dev/api/generate-content#v1beta.GenerateContentResponse
 merge_gemini_chunks <- merge_objects(
   candidates = merge_candidate_lists(
     content = merge_objects(
@@ -550,4 +566,12 @@ default_google_credentials <- function(
     }
     list(Authorization = paste("Bearer", token$credentials$access_token))
   })
+}
+
+# Pricing ----------------------------------------------------------------------
+
+method(standardise_model, ProviderGoogleGemini) <- function(provider, model) {
+  # https://ai.google.dev/gemini-api/docs/models#model-versions
+  # <model>-<generation>-<variation>-...
+  gsub("^([^-]+-[^-]+-[^-]+).*$", "\\1", model)
 }

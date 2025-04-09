@@ -52,16 +52,14 @@
 chat_databricks <- function(
   workspace = databricks_workspace(),
   system_prompt = NULL,
-  turns = NULL,
   model = NULL,
   token = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
   check_string(workspace, allow_empty = FALSE)
   check_string(token, allow_empty = FALSE, allow_null = TRUE)
   model <- set_default(model, "databricks-dbrx-instruct")
-  turns <- normalize_turns(turns, system_prompt)
   echo <- check_echo(echo)
   if (!is.null(token)) {
     credentials <- function() list(Authorization = paste("Bearer", token))
@@ -69,6 +67,7 @@ chat_databricks <- function(
     credentials <- default_databricks_credentials(workspace)
   }
   provider <- ProviderDatabricks(
+    name = "Databricks",
     base_url = workspace,
     model = model,
     extra_args = api_args,
@@ -77,7 +76,7 @@ chat_databricks <- function(
     # empty string here anyway to make S7::validate() happy.
     api_key = ""
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderDatabricks <- new_class(
@@ -86,57 +85,52 @@ ProviderDatabricks <- new_class(
   properties = list(credentials = class_function)
 )
 
-method(chat_request, ProviderDatabricks) <- function(
+method(base_request, ProviderDatabricks) <- function(provider) {
+  req <- request(provider@base_url)
+  req <- ellmer_req_credentials(req, provider@credentials)
+  req <- req_retry(req, max_tries = 2)
+  req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_user_agent(req, databricks_user_agent())
+  req <- base_request_error(provider, req)
+  req
+}
+
+method(chat_body, ProviderDatabricks) <- function(
   provider,
   stream = TRUE,
   turns = list(),
   tools = list(),
   type = NULL
 ) {
-  req <- request(provider@base_url)
+  body <- chat_body(
+    super(provider, ProviderOpenAI),
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+
+  # Databricks doensn't support stream options
+  body$stream_options <- NULL
+
+  body
+}
+
+method(chat_path, ProviderDatabricks) <- function(provider) {
   # Note: this API endpoint is undocumented and seems to exist primarily for
   # compatibility with the OpenAI Python SDK. The documented endpoint is
   # `/serving-endpoints/<model>/invocations`.
-  req <- req_url_path_append(req, "/serving-endpoints/chat/completions")
-  req <- ellmer_req_credentials(req, provider@credentials)
-  req <- ellmer_req_user_agent(req, databricks_user_agent())
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
-  req <- req_error(req, body = function(resp) {
+  "/serving-endpoints/chat/completions"
+}
+
+method(base_request_error, ProviderDatabricks) <- function(provider, req) {
+  req_error(req, body = function(resp) {
     if (resp_content_type(resp) == "application/json") {
       # Databrick's "OpenAI-compatible" API has a slightly incompatible error
       # response format, which we account for here.
       resp_body_json(resp)$message
     }
   })
-
-  messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
-  tools <- as_json(provider, unname(tools))
-
-  if (!is.null(type)) {
-    response_format <- list(
-      type = "json_schema",
-      json_schema = list(
-        name = "structured_data",
-        schema = as_json(provider, type),
-        strict = TRUE
-      )
-    )
-  } else {
-    response_format <- NULL
-  }
-
-  body <- compact(list(
-    messages = messages,
-    model = provider@model,
-    stream = stream,
-    tools = tools,
-    response_format = response_format
-  ))
-  body <- modify_list(body, provider@extra_args)
-  req <- req_body_json(req, body)
-
-  req
 }
 
 method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
@@ -147,7 +141,11 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
     is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
     if (any(is_tool)) {
       return(lapply(x@contents[is_tool], function(tool) {
-        list(role = "tool", content = tool_string(tool), tool_call_id = tool@id)
+        list(
+          role = "tool",
+          content = tool_string(tool),
+          tool_call_id = tool@request@id
+        )
       }))
     }
     if (length(x@contents) > 1) {

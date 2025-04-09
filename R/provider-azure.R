@@ -13,8 +13,8 @@ NULL
 #'
 #' ## Authentication
 #'
-#' `chat_azure()` supports API keys and the `credentials` parameter, but it also
-#' makes use of:
+#' `chat_azure_openai()` supports API keys and the `credentials` parameter, but
+#' it also makes use of:
 #'
 #' - Azure service principals (when the `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`,
 #'   and `AZURE_CLIENT_SECRET` environment variables are set).
@@ -39,30 +39,30 @@ NULL
 #'   need to be refreshed.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
+#' @family chatbots
 #' @export
 #' @examples
 #' \dontrun{
-#' chat <- chat_azure(deployment_id = "gpt-4o-mini")
+#' chat <- chat_azure_openai(deployment_id = "gpt-4o-mini")
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
-chat_azure <- function(
+chat_azure_openai <- function(
   endpoint = azure_endpoint(),
   deployment_id,
   params = NULL,
   api_version = NULL,
   system_prompt = NULL,
-  turns = NULL,
   api_key = NULL,
   token = deprecated(),
   credentials = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
   check_exclusive(token, credentials, .require = FALSE)
   if (lifecycle::is_present(token)) {
     lifecycle::deprecate_warn(
       when = "0.1.1",
-      what = "chat_azure(token)",
+      what = "chat_azure_openai(token)",
       details = "Support for the static `token` argument (which quickly \
                  expires) will be dropped in next release. Use ambient Azure \
                  credentials instead, or pass an explicit `credentials` \
@@ -75,7 +75,6 @@ chat_azure <- function(
   check_string(deployment_id)
   params <- params %||% params()
   api_version <- set_default(api_version, "2024-10-21")
-  turns <- normalize_turns(turns, system_prompt)
   check_string(api_key, allow_null = TRUE)
   api_key <- api_key %||% Sys.getenv("AZURE_OPENAI_API_KEY")
   check_string(token, allow_null = TRUE)
@@ -88,7 +87,8 @@ chat_azure <- function(
   check_function(credentials, allow_null = TRUE)
   credentials <- credentials %||% default_azure_credentials(api_key, token)
 
-  provider <- ProviderAzure(
+  provider <- ProviderAzureOpenAI(
+    name = "Azure/OpenAI",
     base_url = paste0(endpoint, "/openai/deployments/", deployment_id),
     model = deployment_id,
     params = params,
@@ -97,15 +97,16 @@ chat_azure <- function(
     credentials = credentials,
     extra_args = api_args
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-chat_azure_test <- function(system_prompt = NULL, ..., params = NULL) {
+
+chat_azure_openai_test <- function(system_prompt = NULL, params = NULL, ...) {
   api_key <- key_get("AZURE_OPENAI_API_KEY")
   default_params <- params(seed = 1014, temperature = 0)
   params <- modify_list(default_params, params %||% params())
 
-  chat_azure(
+  chat_azure_openai(
     ...,
     system_prompt = system_prompt,
     api_key = api_key,
@@ -115,8 +116,8 @@ chat_azure_test <- function(system_prompt = NULL, ..., params = NULL) {
   )
 }
 
-ProviderAzure <- new_class(
-  "ProviderAzure",
+ProviderAzureOpenAI <- new_class(
+  "ProviderAzureOpenAI",
   parent = ProviderOpenAI,
   properties = list(
     credentials = class_function,
@@ -130,24 +131,20 @@ azure_endpoint <- function() {
 }
 
 # https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#chat-completions
-method(chat_request, ProviderAzure) <- function(
-  provider,
-  stream = TRUE,
-  turns = list(),
-  tools = list(),
-  type = NULL
-) {
-  req <- request(provider@base_url)
-  req <- req_url_path_append(req, "/chat/completions")
+method(base_request, ProviderAzureOpenAI) <- function(provider) {
+  req <- base_request(super(provider, ProviderOpenAI))
+  req <- req_headers(req, Authorization = NULL)
+
   req <- req_url_query(req, `api-version` = provider@api_version)
   if (nchar(provider@api_key)) {
     req <- req_headers_redacted(req, `api-key` = provider@api_key)
   }
   req <- ellmer_req_credentials(req, provider@credentials)
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
-  req <- ellmer_req_user_agent(req)
-  req <- req_error(req, body = function(resp) {
+  req
+}
+
+method(base_request_error, ProviderAzureOpenAI) <- function(provider, req) {
+  req_error(req, body = function(resp) {
     error <- resp_body_json(resp)$error
     msg <- paste0(error$code, ": ", error$message)
     # Try to be helpful in the (common) case that the user or service
@@ -171,37 +168,6 @@ method(chat_request, ProviderAzure) <- function(
     }
     msg
   })
-
-  messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
-  tools <- as_json(provider, unname(tools))
-
-  if (!is.null(type)) {
-    response_format <- list(
-      type = "json_schema",
-      json_schema = list(
-        name = "structured_data",
-        schema = as_json(provider, type),
-        strict = TRUE
-      )
-    )
-  } else {
-    response_format <- NULL
-  }
-
-  params <- chat_params(provider, provider@params)
-  body <- compact(list2(
-    messages = messages,
-    model = provider@model,
-    stream = stream,
-    stream_options = if (stream) list(include_usage = TRUE),
-    tools = tools,
-    response_format = response_format,
-    !!!params
-  ))
-  body <- modify_list(body, provider@extra_args)
-  req <- req_body_json(req, body)
-
-  req
 }
 
 default_azure_credentials <- function(api_key = NULL, token = NULL) {

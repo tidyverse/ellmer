@@ -14,7 +14,7 @@
 #' [file an issue](https://github.com/tidyverse/ellmer/issues) if this would
 #' be useful for you.
 #'
-#' @inheritParams chat_gemini
+#' @inheritParams chat_google_gemini
 #' @param path Path to a file to upload.
 #' @param mime_type Optionally, specify the mime type of the file.
 #'   If not specified, will be guesses from the file extension.

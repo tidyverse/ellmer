@@ -21,7 +21,6 @@ NULL
 chat_vllm <- function(
   base_url,
   system_prompt = NULL,
-  turns = NULL,
   model,
   seed = NULL,
   api_args = list(),
@@ -29,7 +28,6 @@ chat_vllm <- function(
   echo = NULL
 ) {
   check_string(base_url)
-  turns <- normalize_turns(turns, system_prompt)
   check_string(api_key)
   if (missing(model)) {
     models <- vllm_models(base_url, api_key)
@@ -41,13 +39,14 @@ chat_vllm <- function(
   echo <- check_echo(echo)
 
   provider <- ProviderVllm(
+    name = "VLLM",
     base_url = base_url,
     model = model,
     seed = seed,
     extra_args = api_args,
     api_key = api_key
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 chat_vllm_test <- function(...) {

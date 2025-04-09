@@ -68,13 +68,14 @@ test_that("Databricks PATs are detected correctly", {
 test_that("Databricks CLI tokens are detected correctly", {
   withr::local_envvar(
     DATABRICKS_HOST = "https://example.cloud.databricks.com",
-    DATABRICKS_CLI_PATH = "echo"
+    DATABRICKS_CLI_PATH = "echo",
+    DATABRICKS_CLIENT_ID = NA,
+    DATABRICKS_CLIENT_SECRET = NA
   )
-  local_mocked_bindings(
-    databricks_cli_token = function(path, host) "token"
-  )
+  local_mocked_bindings(databricks_cli_token = function(path, host) "cli_token")
+
   credentials <- default_databricks_credentials()
-  expect_equal(credentials(), list(Authorization = "Bearer token"))
+  expect_equal(credentials(), list(Authorization = "Bearer cli_token"))
 })
 
 test_that("M2M authentication requests look correct", {

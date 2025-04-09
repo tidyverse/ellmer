@@ -33,7 +33,8 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-get_system_prompt}{\code{Chat$get_system_prompt()}}
 \item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
 \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
-\item \href{#method-Chat-tokens}{\code{Chat$tokens()}}
+\item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
+\item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
 \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
 \item \href{#method-Chat-chat}{\code{Chat$chat()}}
 \item \href{#method-Chat-chat_parallel}{\code{Chat$chat_parallel()}}
@@ -55,7 +56,7 @@ chat$chat("Tell me a funny joke")
 \if{latex}{\out{\hypertarget{method-Chat-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$new(provider, turns, seed = NULL, echo = "none")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$new(provider, system_prompt = NULL, echo = "none")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -63,12 +64,7 @@ chat$chat("Tell me a funny joke")
 \describe{
 \item{\code{provider}}{A provider object.}
 
-\item{\code{turns}}{An unnamed list of turns to start the chat with (i.e.,
-continuing a previous conversation). If \code{NULL} or zero-length list, the
-conversation begins from scratch.}
-
-\item{\code{seed}}{Optional integer seed that ChatGPT uses to try and make output
-more reproducible.}
+\item{\code{system_prompt}}{System prompt to start the conversation with.}
 
 \item{\code{echo}}{One of the following options:
 \itemize{
@@ -170,20 +166,20 @@ Update the system prompt
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{value}}{A string giving the new system prompt}
+\item{\code{value}}{A character vector giving the new system prompt}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-tokens"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-tokens}{}}}
-\subsection{Method \code{tokens()}}{
+\if{html}{\out{<a id="method-Chat-get_tokens"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_tokens}{}}}
+\subsection{Method \code{get_tokens()}}{
 A data frame with a \code{tokens} column that proides the
 number of input tokens used by user turns and the number of
 output tokens used by assistant turns.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$tokens(include_system_prompt = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_tokens(include_system_prompt = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -191,6 +187,25 @@ output tokens used by assistant turns.
 \describe{
 \item{\code{include_system_prompt}}{Whether to include the system prompt in
 the turns (if any exists).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_cost"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_cost}{}}}
+\subsection{Method \code{get_cost()}}{
+The cost of this chat
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_cost(include = c("all", "last"))}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{include}}{The default, \code{"all"}, gives the total cumulative cost
+of this chat. Alternatively, use \code{"last"} to get the cost of just the
+most recent turn.}
 }
 \if{html}{\out{</div>}}
 }
