@@ -228,7 +228,11 @@ method(value_turn, ProviderOpenAI) <- function(
   }
 
   if (has_type) {
-    json <- jsonlite::parse_json(message$content[[1]])
+    if (is_string(message$content)) {
+      json <- jsonlite::parse_json(message$content[[1]])
+    } else {
+      json <- message$content
+    }
     content <- list(ContentJson(json))
   } else {
     content <- lapply(message$content, as_content)
