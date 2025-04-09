@@ -95,6 +95,27 @@ method(base_request, ProviderDatabricks) <- function(provider) {
   req
 }
 
+method(chat_body, ProviderDatabricks) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  body <- chat_body(
+    super(provider, ProviderOpenAI),
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+
+  # Databricks doensn't support stream options
+  body$stream_options <- NULL
+
+  body
+}
+
 method(chat_path, ProviderDatabricks) <- function(provider) {
   # Note: this API endpoint is undocumented and seems to exist primarily for
   # compatibility with the OpenAI Python SDK. The documented endpoint is
