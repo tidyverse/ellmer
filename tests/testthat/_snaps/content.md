@@ -116,3 +116,27 @@
       
       <pre><code>SELECT * FROM mtcars</code></pre>
 
+# thinking has useful representations
+
+    Code
+      cat(contents_html(ct))
+    Output
+      <details><summary>Thinking</summary>
+      <p>A <strong>thought</strong>.</p>
+      </details>
+
+# ContentToolResult@error requires a string or an error condition
+
+    Code
+      ContentToolResult("id", error = TRUE)
+    Condition
+      Error:
+      ! <ellmer::ContentToolResult> object properties are invalid:
+      - @error must be <NULL>, <character>, or S3<condition>, not <logical>
+    Code
+      ContentToolResult("id", error = c("one", "two"))
+    Condition
+      Error:
+      ! <ellmer::ContentToolResult> object properties are invalid:
+      - @error must be a single string or a condition object, not a character vector.
+

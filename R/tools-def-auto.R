@@ -40,7 +40,7 @@
 #'   create_tool_def(rnorm)
 #'   create_tool_def(stats::rnorm)
 #'   create_tool_def("rnorm")
-#'   create_tool_def("rnorm", chat = chat_azure())
+#'   create_tool_def("rnorm", chat = chat_azure_openai())
 #' }
 #'
 #' @export

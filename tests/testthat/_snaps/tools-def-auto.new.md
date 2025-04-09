@@ -36,7 +36,7 @@
 # checks its inputs
 
     Code
-      create_tool_def(print, model = "gpt-4", chat = chat_gemini())
+      create_tool_def(print, model = "gpt-4", chat = chat_google_gemini())
     Condition
       Error in `create_tool_def()`:
       ! Exactly one of `model` or `chat` must be supplied.

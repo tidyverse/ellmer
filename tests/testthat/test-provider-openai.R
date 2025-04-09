@@ -70,7 +70,7 @@ test_that("can retrieve log_probs (#115)", {
 # Custom -----------------------------------------------------------------
 
 test_that("as_json specialised for OpenAI", {
-  stub <- ProviderOpenAI(base_url = "", api_key = "", model = "")
+  stub <- ProviderOpenAI(name = "", base_url = "", api_key = "", model = "")
 
   expect_snapshot(
     as_json(stub, type_object(.additional_properties = TRUE)),

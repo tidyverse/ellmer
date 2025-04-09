@@ -7,11 +7,10 @@
 chat_databricks(
   workspace = databricks_workspace(),
   system_prompt = NULL,
-  turns = NULL,
   model = NULL,
   token = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 )
 }
 \arguments{
@@ -20,10 +19,6 @@ chat_databricks(
 environment variable \code{DATABRICKS_HOST}, if set.}
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
-
-\item{turns}{A list of \link{Turn}s to start the chat with (i.e., continuing a
-previous conversation). If not provided, the conversation begins from
-scratch.}
 
 \item{model}{The model to use for the chat. The default, \code{NULL}, will pick a
 reasonable default, and tell you about. We strongly recommend explicitly
@@ -90,14 +85,16 @@ chat$chat("Tell me three jokes about statisticians")
 }
 \seealso{
 Other chatbots: 
-\code{\link{chat_bedrock}()},
-\code{\link{chat_claude}()},
+\code{\link{chat_anthropic}()},
+\code{\link{chat_aws_bedrock}()},
+\code{\link{chat_azure_openai}()},
 \code{\link{chat_cortex_analyst}()},
 \code{\link{chat_deepseek}()},
-\code{\link{chat_gemini}()},
 \code{\link{chat_github}()},
+\code{\link{chat_google_gemini}()},
 \code{\link{chat_groq}()},
 \code{\link{chat_huggingface}()},
+\code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
 \code{\link{chat_openrouter}()},

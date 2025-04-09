@@ -1,9 +1,65 @@
 # ellmer (development version)
 
-* `chat_claude()`, `chat_openai()`, and `chat_gemini()` now have a `params` 
-  argument that allows you to specify common model paramaters (like `seed`
-  and `temperature`). Support for other models will grow as you request it 
-  (#280).
+* New `chat_mistral()` for models hosted at <https://mistral.ai> (#319).
+
+* `chat_gemini()` can now handle responses that include citation metadata 
+  (#358).
+
+* `chat_` functions no longer take a turns object, instead use `set_turns()` 
+  (#427).
+
+* `echo = "output"` replaces the now-deprecated `echo = "text"` option in
+  `Chat$chat()`. When using `echo = "output"`, additional output, such as tool
+  requests and results, are shown as they occur. When `echo = "none"`, tool
+  call failures are emitted as warnings (#366, @gadenbuie).
+
+* `ContentToolResult` objects can now be returned directly from the `tool()`
+  function and now includes additional information (#398 #399, @gadenbuie):
+
+  * `extra`: A list of additional data associated with the tool result that is
+    not shown to the chatbot.
+  * `request`: The `ContentToolRequest` that triggered the tool call.
+    `ContentToolResult` no longer has an `id` property, instead the tool call
+    ID can be retrieved from `request@id`.
+
+* `ContentToolRequest` gains a `tool` property that includes the `tool()`
+  definition when a request is matched to a tool by ellmer (#423, @gadenbuie).
+
+* ellmer now tracks the cost of input and output tokens. The cost is displayed
+  when you print a `Chat` object, in `tokens_usage()`, and with 
+  `Chat$get_cost()`. This is our best effort at computing the cost, but you 
+  should treat it as an estimate rather than the exact price. Unfortunately LLM APIs
+  currently make it very hard to figure out exactly how much your queries are
+  costing (#203).
+
+* `ContentToolResult` objects now include the error condition in the `error`
+  property when a tool call fails (#421, @gadenbuie).
+
+* Several chat functions were renamed to better align with the companies
+  providing the API (#382, @gadenbuie):
+  
+  * `chat_azure_openai()` replaces `chat_azure()`
+  * `chat_aws_bedrock()` replaces `chat_bedrock()`
+  * `chat_anthropic()` replaces `chat_claude()`
+  * `chat_google_gemini()` replaces `chat_gemini()`
+
+* `chat_claude()` now supports the thinking content type (#396).
+
+* `tool()` gains an `.annotations` argument that can be created with the
+  `tool_annotations()` helper. Tool annotations are described in the
+  [Model Context Protocol](https://modelcontextprotocol.io/introduction) and can
+  be used to describe the tool to clients. (#402, @gadenbuie)
+
+* `Provider` gains `name` and `model` fields (#406). These are now reported when
+  you print a chat object and used in `token_usage()`.
+
+* New `interpolate_package()` to make it easier to interpolate from prompts
+  stored in the `inst/prompts` inside a package (#164).
+
+* `chat_azure()`, `chat_claude()`, `chat_openai()`, and `chat_gemini()` now have 
+  a `params`  argument that allows you to specify common model paramaters (like 
+  `seed` and `temperature`). Support for other models will grow as you request 
+  it (#280).
 
 * `chat_claude(max_tokens =)` is now deprecated in favour of 
   `chat_claude(params = )` (#280).
@@ -21,9 +77,9 @@
 * `live_browser()` now initializes `shinychat::chat_ui()` with the messages from
   the chat turns, rather than replaying the turns server-side (#381).
 
-* `Chat$tokens()` now returns a data frame of tokens, correctly aligned to the
-  individual turn. The print method now uses this to show how many input/output
-  tokens each turn used (#354).
+* `Chat$tokens()` is now called `Chat$get_tokens()` and returns a data frame of 
+  tokens, correctly aligned to the individual turn. The print method now uses 
+  this to show how many input/output tokens each turn used (#354).
 
 * All requests now set a custom User-Agent that identifies that the requests
   comes from ellmer (#341).
@@ -55,7 +111,7 @@
 
   Parallel calls with OpenAI and Gemini are much simpler in my experience.
 
-* `gemini_upload()` lets you upload files to Gemini (#310).
+* `google_upload()` lets you upload files to Google Gemini or Vertex AI (#310).
 
 * `chat_gemini()` can now authenticate with Google default application
   credentials (including service accounts, etc). This requires the `gargle`

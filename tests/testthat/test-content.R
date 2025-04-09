@@ -40,9 +40,31 @@ test_that("turn contents can be converted to text, markdown and HTML", {
     turn,
     Turn("assistant", list(ContentText("Here's your answer.")))
   )
-  chat <- Chat$new(Provider("https://example.com/api"), turns = turns)
+  chat <- Chat$new(test_provider())
+  chat$set_turns(turns)
   expect_snapshot(cat(contents_markdown(chat)))
 
   skip_if_not_installed("commonmark")
   expect_snapshot(cat(contents_html(turn)))
+})
+
+
+# Content types ----------------------------------------------------------------
+
+test_that("thinking has useful representations", {
+  ct <- ContentThinking("A **thought**.")
+  expect_equal(contents_text(ct), NULL)
+  expect_equal(format(ct), "<thinking>\nA **thought**.\n</thinking>\n")
+  expect_equal(
+    contents_markdown(ct),
+    "<thinking>\nA **thought**.\n</thinking>\n"
+  )
+  expect_snapshot(cat(contents_html(ct)))
+})
+
+test_that("ContentToolResult@error requires a string or an error condition", {
+  expect_snapshot(error = TRUE, {
+    ContentToolResult("id", error = TRUE)
+    ContentToolResult("id", error = c("one", "two"))
+  })
 })

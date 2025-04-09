@@ -25,7 +25,6 @@
 #' }
 chat_github <- function(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "https://models.inference.ai.azure.com/",
   api_key = github_key(),
   model = NULL,
@@ -40,7 +39,6 @@ chat_github <- function(
 
   chat_openai(
     system_prompt = system_prompt,
-    turns = turns,
     base_url = base_url,
     api_key = api_key,
     model = model,

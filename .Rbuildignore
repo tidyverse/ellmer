@@ -13,3 +13,4 @@ _cache/
 ^CRAN-SUBMISSION$
 ^[\.]?air\.toml$
 ^\.vscode$
+^data-raw$

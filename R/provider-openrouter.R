@@ -11,6 +11,7 @@ NULL
 #'
 #' @export
 #' @family chatbots
+#' @param api_key `r api_key_param("OPENROUTER_API_KEY")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
@@ -20,14 +21,12 @@ NULL
 #' }
 chat_openrouter <- function(
   system_prompt = NULL,
-  turns = NULL,
   api_key = openrouter_key(),
   model = NULL,
   seed = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
@@ -36,13 +35,14 @@ chat_openrouter <- function(
   }
 
   provider <- ProviderOpenRouter(
+    name = "OpenRouter",
     base_url = "https://openrouter.ai/api/v1",
     model = model,
     seed = seed,
     extra_args = api_args,
     api_key = api_key
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 chat_openrouter_test <- function(...) {
@@ -58,21 +58,8 @@ openrouter_key <- function() {
   key_get("OPENROUTER_API_KEY")
 }
 
-method(chat_request, ProviderOpenRouter) <- function(
-  provider,
-  stream = TRUE,
-  turns = list(),
-  tools = list(),
-  type = NULL
-) {
-  req <- chat_request(
-    super(provider, ProviderOpenAI),
-    stream = stream,
-    turns = turns,
-    tools = tools,
-    type = type
-  )
-
+method(base_request, ProviderOpenRouter) <- function(provider) {
+  req <- base_request(super(provider, ProviderOpenAI))
   # https://openrouter.ai/docs/api-keys
   req <- req_headers(
     req,

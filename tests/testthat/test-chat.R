@@ -1,10 +1,9 @@
 test_that("can get and set the system prompt", {
-  chat <- chat_openai_test(
-    turns = list(
-      Turn("user", "Hi"),
-      Turn("assistant", "Hello")
-    )
-  )
+  chat <- chat_openai_test()
+  chat$set_turns(list(
+    Turn("user", "Hi"),
+    Turn("assistant", "Hello")
+  ))
 
   # NULL -> NULL
   chat$set_system_prompt(NULL)
@@ -21,6 +20,17 @@ test_that("can get and set the system prompt", {
   # string -> NULL
   chat$set_system_prompt(NULL)
   expect_equal(chat$get_system_prompt(), NULL)
+})
+
+test_that("system prompt can be a vector", {
+  chat <- chat_openai_test(c("This is", "the system prompt"))
+  expect_equal(chat$get_system_prompt(), "This is\n\nthe system prompt")
+})
+
+test_that("system prompt must be a character vector", {
+  expect_snapshot(error = TRUE, {
+    chat_openai_test(1)
+  })
 })
 
 test_that("can retrieve system prompt with last_turn()", {
@@ -179,23 +189,37 @@ test_that("can extract structured data (async)", {
 
 test_that("can retrieve tokens with or without system prompt", {
   chat <- chat_openai_test("abc")
-  expect_equal(nrow(chat$tokens(FALSE)), 0)
-  expect_equal(nrow(chat$tokens(TRUE)), 1)
+  expect_equal(nrow(chat$get_tokens(FALSE)), 0)
+  expect_equal(nrow(chat$get_tokens(TRUE)), 1)
 
   chat <- chat_openai()
-  expect_equal(nrow(chat$tokens(FALSE)), 0)
-  expect_equal(nrow(chat$tokens(TRUE)), 0)
+  expect_equal(nrow(chat$get_tokens(FALSE)), 0)
+  expect_equal(nrow(chat$get_tokens(TRUE)), 0)
 })
 
 test_that("has a basic print method", {
   chat <- chat_openai(
-    "You're a helpful assistant that returns very minimal output",
-    turns = list(
-      Turn("user", "What's 1 + 1?\nWhat's 1 + 2?"),
-      Turn("assistant", "2\n\n3", tokens = c(15, 5))
-    )
+    "You're a helpful assistant that returns very minimal output"
   )
+  chat$set_turns(list(
+    Turn("user", "What's 1 + 1?\nWhat's 1 + 2?"),
+    Turn("assistant", "2\n\n3", tokens = c(15, 5))
+  ))
   expect_snapshot(chat)
+})
+
+test_that("print method shows cumulative tokens & cost", {
+  chat <- chat_openai()
+  chat$set_turns(list(
+    Turn("user", "Input 1"),
+    Turn("assistant", "Output 1", tokens = c(15000, 500)),
+    Turn("user", "Input 2"),
+    Turn("assistant", "Output 1", tokens = c(30000, 1000))
+  ))
+  expect_snapshot(chat)
+
+  expect_equal(chat$get_cost(), dollars(0.1275))
+  expect_equal(chat$get_cost("last"), dollars(0.085))
 })
 
 test_that("can optionally echo", {
@@ -313,5 +337,21 @@ test_that("chat can get and register a list of tools", {
   expect_snapshot(
     error = TRUE,
     chat$set_tools(c(tools, list("foo")))
+  )
+})
+
+test_that("chat warns on tool failures", {
+  chat <- chat_openai_test("Be very terse, not even punctuation.")
+
+  chat$register_tool(tool(
+    function(user) stop("User denied tool request"),
+    "Find out a user's favorite color",
+    user = type_string("User's name"),
+    .name = "user_favorite_color"
+  ))
+
+  expect_snapshot(
+    . <- chat$chat("What are Joe, Hadley, Simon, and Tom's favorite colors?"),
+    transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
   )
 })
