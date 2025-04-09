@@ -105,3 +105,32 @@ test_that("strips suffix from model name", {
     "gemini-2.0-pro"
   )
 })
+
+test_that("can handle citations", {
+  # based on "Write me a 5-paragraph essay on the history of the tidyverse."
+  messages <- c(
+    '{"candidates": [{"content": {"parts": [{"text": "a"}]}, "role": "model"}]}',
+    '{"candidates": [{
+      "content": {"parts": [{"text": "a"}]},
+      "role": "model",
+      "citationMetadata": {
+        "citationSources": [
+          {
+            "startIndex": 1,
+            "endIndex": 2,
+            "uri": "https://example.com",
+            "license": ""
+          }
+        ]
+      }
+    }]}'
+  )
+  chunks <- lapply(messages, jsonlite::parse_json)
+
+  out <- merge_gemini_chunks(chunks[[1]], chunks[[2]])
+  source <- out$candidates[[1]]$citationMetadata$citationSources[[1]]
+  expect_equal(source$startIndex, 1)
+  expect_equal(source$endIndex, 2)
+  expect_equal(source$uri, "https://example.com")
+  expect_equal(source$license, "")
+})

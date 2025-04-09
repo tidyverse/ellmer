@@ -1,5 +1,28 @@
 # ellmer (development version)
 
+* `chat_gemini()` can now handle responses that include citation metadata 
+  (#358).
+
+* `chat_` functions no longer take a turns object, instead use `set_turns()` 
+  (#427).
+
+* `echo = "output"` replaces the now-deprecated `echo = "text"` option in
+  `Chat$chat()`. When using `echo = "output"`, additional output, such as tool
+  requests and results, are shown as they occur. When `echo = "none"`, tool
+  call failures are emitted as warnings (#366, @gadenbuie).
+
+* `ContentToolResult` objects can now be returned directly from the `tool()`
+  function and now includes additional information (#398 #399, @gadenbuie):
+
+  * `extra`: A list of additional data associated with the tool result that is
+    not shown to the chatbot.
+  * `request`: The `ContentToolRequest` that triggered the tool call.
+    `ContentToolResult` no longer has an `id` property, instead the tool call
+    ID can be retrieved from `request@id`.
+
+* `ContentToolRequest` gains a `tool` property that includes the `tool()`
+  definition when a request is matched to a tool by ellmer (#423, @gadenbuie).
+
 * ellmer now tracks the cost of input and output tokens. The cost is displayed
   when you print a `Chat` object, in `tokens_usage()`, and with 
   `Chat$get_cost()`. This is our best effort at computing the cost, but you 
@@ -52,9 +75,9 @@
 * `live_browser()` now initializes `shinychat::chat_ui()` with the messages from
   the chat turns, rather than replaying the turns server-side (#381).
 
-* `Chat$tokens()` now returns a data frame of tokens, correctly aligned to the
-  individual turn. The print method now uses this to show how many input/output
-  tokens each turn used (#354).
+* `Chat$tokens()` is now called `Chat$get_tokens()` and returns a data frame of 
+  tokens, correctly aligned to the individual turn. The print method now uses 
+  this to show how many input/output tokens each turn used (#354).
 
 * All requests now set a custom User-Agent that identifies that the requests
   comes from ellmer (#341).

@@ -61,18 +61,27 @@ prettify <- function(x) {
 }
 
 check_echo <- function(echo = NULL) {
-  if (is.null(echo) || identical(echo, c("none", "text", "all"))) {
+  if (identical(echo, "text")) {
+    lifecycle::deprecate_soft(
+      when = "0.2.0",
+      what = I('`echo = "text"`'),
+      with = I('`echo = "output"`')
+    )
+    echo <- "output"
+  }
+
+  if (is.null(echo) || identical(echo, c("none", "output", "all"))) {
     if (env_is_user_facing(parent.frame(2)) && !is_testing()) {
-      "text"
+      "output"
     } else {
       "none"
     }
   } else if (isTRUE(echo)) {
-    "text"
+    "output"
   } else if (isFALSE(echo)) {
     "none"
   } else {
-    arg_match(echo, c("none", "text", "all"))
+    arg_match(echo, c("none", "output", "all"))
   }
 }
 
@@ -135,6 +144,11 @@ is_whitespace <- function(x) {
 
 paste_c <- function(...) {
   paste(c(...), collapse = "")
+}
+
+cli_escape <- function(x) {
+  x <- gsub("{", "{{", x, fixed = TRUE)
+  gsub("}", "}}", x, fixed = TRUE)
 }
 
 api_key_param <- function(key) {

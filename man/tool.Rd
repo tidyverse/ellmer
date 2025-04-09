@@ -7,7 +7,11 @@
 tool(.fun, .description, ..., .name = NULL, .annotations = list())
 }
 \arguments{
-\item{.fun}{The function to be invoked when the tool is called.}
+\item{.fun}{The function to be invoked when the tool is called. The return
+value of the function is sent back to the chatbot.
+
+Expert users can customize the tool result by returning a
+\link{ContentToolResult} object.}
 
 \item{.description}{A detailed description of what the function does.
 Generally, the more information that you can provide here, the better.}

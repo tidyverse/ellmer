@@ -6,7 +6,6 @@
 \usage{
 chat_aws_bedrock(
   system_prompt = NULL,
-  turns = NULL,
   model = NULL,
   profile = NULL,
   api_args = list(),
@@ -15,10 +14,6 @@ chat_aws_bedrock(
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
-
-\item{turns}{A list of \link{Turn}s to start the chat with (i.e., continuing a
-previous conversation). If not provided, the conversation begins from
-scratch.}
 
 \item{model}{ellmer provides a default model, but you'll typically need to
 you'll specify a model that you actually have access to.

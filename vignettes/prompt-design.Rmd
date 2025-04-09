@@ -263,7 +263,7 @@ instruct_weight <- r"(
   {"name": "ground cinnamon", "quantity": 2, "unit": "teaspoon"}
 )"
 
-chat <- chat_openai(c(instruct_json, instruct_weight))
+chat <- chat_openai(paste(instruct_json, instruct_weight))
 chat$chat(ingredients)
 ```
 

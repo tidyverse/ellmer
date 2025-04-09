@@ -38,14 +38,12 @@ NULL
 #' @export
 chat_snowflake <- function(
   system_prompt = NULL,
-  turns = NULL,
   account = snowflake_account(),
   credentials = NULL,
   model = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   check_string(account, allow_empty = FALSE)
   model <- set_default(model, "llama3.1-70b")
   echo <- check_echo(echo)
@@ -68,7 +66,7 @@ chat_snowflake <- function(
     api_key = ""
   )
 
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderSnowflakeCortex <- new_class(
@@ -125,27 +123,6 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
 }
 
 # Snowflake -> ellmer --------------------------------------------------------
-
-method(value_turn, ProviderSnowflakeCortex) <- function(
-  provider,
-  result,
-  has_type = FALSE
-) {
-  deltas <- compact(sapply(result$choices, function(x) x$delta$content))
-  content <- list(as_content(paste(deltas, collapse = "")))
-  tokens <- tokens_log(
-    provider,
-    input = result$usage$prompt_tokens,
-    output = result$usage$completion_tokens
-  )
-  Turn(
-    # Snowflake's response format seems to omit the role.
-    "assistant",
-    content,
-    json = result,
-    tokens = tokens
-  )
-}
 
 # ellmer -> Snowflake --------------------------------------------------------
 

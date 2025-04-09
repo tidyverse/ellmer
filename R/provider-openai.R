@@ -14,9 +14,6 @@ NULL
 #' [developer platform](https://platform.openai.com).
 #'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
-#' @param turns A list of [Turn]s to start the chat with (i.e., continuing a
-#'   previous conversation). If not provided, the conversation begins from
-#'   scratch.
 #' @param base_url The base URL to the endpoint; the default uses OpenAI.
 #' @param api_key `r api_key_param("OPENAI_API_KEY")`
 #' @param model The model to use for the chat. The default, `NULL`, will pick
@@ -48,16 +45,14 @@ NULL
 #' chat$chat("Tell me three funny jokes about statisticians")
 chat_openai <- function(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "https://api.openai.com/v1",
   api_key = openai_key(),
   model = NULL,
   params = NULL,
   seed = deprecated(),
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
@@ -79,7 +74,7 @@ chat_openai <- function(
     extra_args = api_args,
     api_key = api_key
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 chat_openai_test <- function(..., model = "gpt-4o-mini", params = NULL) {
@@ -252,7 +247,7 @@ method(value_turn, ProviderOpenAI) <- function(
     input = result$usage$prompt_tokens,
     output = result$usage$completion_tokens
   )
-  Turn(message$role, content, json = result, tokens = tokens)
+  Turn(message$role %||% "assistant", content, json = result, tokens = tokens)
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------
@@ -273,7 +268,11 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
     }
 
     tools <- lapply(x@contents[is_tool], function(tool) {
-      list(role = "tool", content = tool_string(tool), tool_call_id = tool@id)
+      list(
+        role = "tool",
+        content = tool_string(tool),
+        tool_call_id = tool@request@id
+      )
     })
 
     c(user, tools)

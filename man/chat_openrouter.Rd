@@ -6,20 +6,15 @@
 \usage{
 chat_openrouter(
   system_prompt = NULL,
-  turns = NULL,
   api_key = openrouter_key(),
   model = NULL,
   seed = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 )
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
-
-\item{turns}{A list of \link{Turn}s to start the chat with (i.e., continuing a
-previous conversation). If not provided, the conversation begins from
-scratch.}
 
 \item{api_key}{API key to use for authentication.
 

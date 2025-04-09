@@ -30,7 +30,6 @@ NULL
 #' }
 chat_google_gemini <- function(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL,
   model = NULL,
@@ -38,7 +37,6 @@ chat_google_gemini <- function(
   api_args = list(),
   echo = NULL
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
   credentials <- default_google_credentials(api_key)
@@ -52,7 +50,7 @@ chat_google_gemini <- function(
     api_key = api_key,
     credentials = credentials
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderGoogleGemini <- new_class(
@@ -315,7 +313,7 @@ method(as_json, list(ProviderGoogleGemini, ContentToolResult)) <- function(
 ) {
   list(
     functionResponse = list(
-      name = x@id,
+      name = x@request@id,
       response = list(value = tool_string(x))
     )
   )
@@ -390,6 +388,12 @@ merge_optional <- function(merge_func) {
 merge_objects <- function(...) {
   spec <- list(...)
   function(left, right, path = NULL) {
+    if (is.null(left)) {
+      return(right)
+    } else if (is.null(right)) {
+      return(left)
+    }
+
     # cat(paste(collapse = "", path), "\n")
     stopifnot(is.list(left), is.list(right), all(nzchar(names(spec))))
     mapply(
@@ -471,6 +475,7 @@ merge_parts <- function() {
 }
 
 # Put it all together...
+# https://ai.google.dev/api/generate-content#v1beta.GenerateContentResponse
 merge_gemini_chunks <- merge_objects(
   candidates = merge_candidate_lists(
     content = merge_objects(

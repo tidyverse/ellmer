@@ -6,7 +6,6 @@
 \usage{
 chat_anthropic(
   system_prompt = NULL,
-  turns = NULL,
   params = NULL,
   max_tokens = deprecated(),
   model = NULL,
@@ -19,10 +18,6 @@ chat_anthropic(
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
-
-\item{turns}{A list of \link{Turn}s to start the chat with (i.e., continuing a
-previous conversation). If not provided, the conversation begins from
-scratch.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 

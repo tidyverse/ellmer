@@ -1,3 +1,11 @@
+# system prompt must be a character vector
+
+    Code
+      chat_openai_test(1)
+    Condition
+      Error in `self$set_system_prompt()`:
+      ! `value` must be a character vector or `NULL`, not the number 1.
+
 # has a basic print method
 
     Code
@@ -45,4 +53,16 @@
     Condition
       Error in `chat$set_tools()`:
       ! `tools` must be a list of tools created with `ellmer::tool()`.
+
+# chat warns on tool failures
+
+    Code
+      . <- chat$chat("What are Joe, Hadley, Simon, and Tom's favorite colors?")
+    Condition
+      Warning:
+      Failed to evaluate 4 tool calls.
+      x [user_favorite_color (ID)]: User denied tool request
+      x [user_favorite_color (ID)]: User denied tool request
+      x [user_favorite_color (ID)]: User denied tool request
+      i ... and 1 more.
 

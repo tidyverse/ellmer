@@ -25,7 +25,6 @@ NULL
 #' }
 chat_groq <- function(
   system_prompt = NULL,
-  turns = NULL,
   base_url = "https://api.groq.com/openai/v1",
   api_key = groq_key(),
   model = NULL,
@@ -33,7 +32,6 @@ chat_groq <- function(
   api_args = list(),
   echo = NULL
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "llama3-8b-8192")
   echo <- check_echo(echo)
 
@@ -49,7 +47,7 @@ chat_groq <- function(
     extra_args = api_args,
     api_key = api_key
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderGroq <- new_class("ProviderGroq", parent = ProviderOpenAI)

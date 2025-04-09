@@ -64,7 +64,7 @@ chat_cortex_analyst <- function(
   model_spec = NULL,
   model_file = NULL,
   api_args = list(),
-  echo = c("none", "text", "all")
+  echo = c("none", "output", "all")
 ) {
   check_string(account, allow_empty = FALSE)
   check_string(model_spec, allow_empty = FALSE, allow_null = TRUE)
@@ -88,7 +88,7 @@ chat_cortex_analyst <- function(
     extra_args = api_args
   )
 
-  Chat$new(provider = provider, turns = NULL, echo = echo)
+  Chat$new(provider = provider, echo = echo)
 }
 
 ProviderSnowflakeCortexAnalyst <- new_class(
