@@ -75,6 +75,7 @@ Other chatbots:
 \code{\link{chat_deepseek}()},
 \code{\link{chat_github}()},
 \code{\link{chat_google_gemini}()},
+\code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
 \code{\link{chat_openrouter}()},

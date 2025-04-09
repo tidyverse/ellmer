@@ -5,6 +5,8 @@
   as well as Shiny module for easily including a chat interface for an ellmer
   `Chat` object in your Shiny apps (#397, @gadenbuie).
 
+* New `chat_mistral()` for models hosted at <https://mistral.ai> (#319).
+
 * `chat_gemini()` can now handle responses that include citation metadata 
   (#358).
 
