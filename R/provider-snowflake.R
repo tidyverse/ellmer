@@ -80,7 +80,6 @@ ProviderSnowflakeCortex <- new_class(
 
 method(base_request, ProviderSnowflakeCortex) <- function(provider) {
   req <- request(provider@base_url)
-  req <- req_url_path_append(req, "/api/v2/cortex/inference:complete")
   req <- ellmer_req_credentials(req, provider@credentials)
   req <- req_retry(req, max_tries = 2)
   req <- ellmer_req_timeout(req, stream)
@@ -93,6 +92,10 @@ method(base_request, ProviderSnowflakeCortex) <- function(provider) {
   req <- req_error(req, body = function(resp) resp_body_json(resp)$message)
 
   req
+}
+
+method(chat_path, ProviderSnowflakeCortex) <- function(provider) {
+  "/api/v2/cortex/inference:complete"
 }
 
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#api-reference
