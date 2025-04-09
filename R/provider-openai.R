@@ -48,7 +48,8 @@ chat_openai <- function(
   base_url = "https://api.openai.com/v1",
   api_key = openai_key(),
   model = NULL,
-  seed = NULL,
+  params = NULL,
+  seed = lifecycle::deprecated(),
   api_args = list(),
   echo = c("none", "output", "all")
 ) {

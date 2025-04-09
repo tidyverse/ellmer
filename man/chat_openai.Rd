@@ -9,7 +9,8 @@ chat_openai(
   base_url = "https://api.openai.com/v1",
   api_key = openai_key(),
   model = NULL,
-  seed = NULL,
+  params = NULL,
+  seed = lifecycle::deprecated(),
   api_args = list(),
   echo = c("none", "output", "all")
 )
@@ -29,6 +30,8 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 a reasonable default, and tell you about. We strongly recommend explicitly
 choosing a model for all but the most casual use.}
 
+\item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
+
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output
 more reproducible.}
 
@@ -45,8 +48,6 @@ the console).
 }
 
 Note this only affects the \code{chat()} method.}
-
-\item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 }
 \value{
 A \link{Chat} object.
