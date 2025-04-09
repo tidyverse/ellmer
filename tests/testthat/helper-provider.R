@@ -174,23 +174,27 @@ test_data_extraction <- function(chat_fun) {
 
 # Images -----------------------------------------------------------------
 
-test_images_inline <- function(chat_fun) {
+test_images_inline <- function(chat_fun, test_shape = TRUE) {
   chat <- chat_fun()
   response <- chat$chat(
     "What's in this image? (Be sure to mention the outside shape)",
     content_image_file(system.file("httr2.png", package = "ellmer"))
   )
-  expect_match(response, "hex")
+  if (test_shape) {
+    expect_match(response, "hex")
+  }
   expect_match(response, "baseball")
 }
 
-test_images_remote <- function(chat_fun) {
+test_images_remote <- function(chat_fun, test_shape = TRUE) {
   chat <- chat_fun()
   response <- chat$chat(
     "What's in this image? (Be sure to mention the outside shape)",
     content_image_url("https://httr2.r-lib.org/logo.png")
   )
-  expect_match(response, "hex")
+  if (test_shape) {
+    expect_match(response, "hex")
+  }
   expect_match(response, "baseball")
 }
 

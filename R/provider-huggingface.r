@@ -17,6 +17,10 @@
 #'   `google/gemma-2-2b-it` does not support a system prompt. You will need to
 #'   carefully choose the model.
 #'
+#' * No tool calling support.
+#'
+#' * Parameter support is hit or miss.
+#'
 #' @family chatbots
 #' @param api_key The API key to use for authentication. You generally should
 #'   not supply this directly, but instead set the `HUGGINGFACE_API_KEY` environment
@@ -31,6 +35,7 @@
 #' }
 chat_huggingface <- function(
   system_prompt = NULL,
+  params = NULL,
   api_key = hf_key(),
   model = NULL,
   api_args = list(),
@@ -38,6 +43,7 @@ chat_huggingface <- function(
 ) {
   model <- set_default(model, "meta-llama/Llama-3.1-8B-Instruct")
   echo <- check_echo(echo)
+  params <- params %||% params()
 
   base_url <- paste0(
     "https://api-inference.huggingface.co/models/",
@@ -45,14 +51,67 @@ chat_huggingface <- function(
     "/v1"
   )
 
-  provider <- ProviderOpenAI(
+  provider <- ProviderHuggingFace(
     name = "HuggingFace",
     base_url = base_url,
     model = model,
+    params = params,
     extra_args = api_args,
     api_key = api_key
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+}
+
+ProviderHuggingFace <- new_class("ProviderHuggingFace", parent = ProviderOpenAI)
+
+chat_huggingface_test <- function(..., model = NULL) {
+  model <- model %||% "meta-llama/Llama-3.1-8B-Instruct"
+  chat_huggingface(model = model, ...)
+}
+
+# https://platform.openai.com/docs/api-reference/chat/create
+method(chat_body, ProviderHuggingFace) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  if (length(tools) > 0) {
+    cli::cli_abort("HuggingFace does not currently support tools.")
+  }
+
+  body <- chat_body(
+    super(provider, ProviderOpenAI),
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+
+  messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
+  tools <- as_json(provider, unname(tools))
+
+  if (!is.null(type)) {
+    body$response_format <- list(
+      type = "json",
+      value = as_json(provider, type)
+    )
+  }
+
+  body
+}
+
+method(as_json, list(ProviderHuggingFace, ContentToolResult)) <- function(
+  provider,
+  x
+) {
+  list(
+    role = "tool",
+    content = tool_string(x),
+    name = x@request@name,
+    tool_call_id = x@request@id
+  )
 }
 
 hf_key <- function() {

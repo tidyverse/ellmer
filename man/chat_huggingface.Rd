@@ -6,6 +6,7 @@
 \usage{
 chat_huggingface(
   system_prompt = NULL,
+  params = NULL,
   api_key = hf_key(),
   model = NULL,
   api_args = list(),
@@ -14,6 +15,8 @@ chat_huggingface(
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
+
+\item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
 \item{api_key}{The API key to use for authentication. You generally should
 not supply this directly, but instead set the \code{HUGGINGFACE_API_KEY} environment
@@ -55,6 +58,8 @@ the defaults adjusted for Hugging Face.
 \item Some models do not support the chat interface or parts of it, for example
 \verb{google/gemma-2-2b-it} does not support a system prompt. You will need to
 carefully choose the model.
+\item No tool calling support.
+\item Parameter support is hit or miss.
 }
 }
 }
