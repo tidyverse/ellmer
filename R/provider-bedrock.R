@@ -26,6 +26,11 @@ NULL
 #'   If you're using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
 #'   you'll need to use the inference profile ID, e.g.
 #'   `model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"`.
+#' @param endpoint Optional. A custom endpoint URL (including protocol,
+#'   hostname, and any base path) to use instead of the default AWS Bedrock
+#'   runtime endpoint constructed from the region (e.g.,
+#'   `https://bedrock-runtime.us-east-1.amazonaws.com`). Trailing slashes
+#'   will be automatically removed.
 #' @param api_args Named list of arbitrary extra arguments appended to the body
 #'   of every chat API call. Some useful arguments include:
 #'
@@ -54,18 +59,24 @@ chat_aws_bedrock <- function(
   model = NULL,
   profile = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  endpoint = NULL
 ) {
   check_installed("paws.common", "AWS authentication")
   cache <- aws_creds_cache(profile)
   credentials <- paws_credentials(profile, cache = cache)
-
+  
   model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
   echo <- check_echo(echo)
 
+  # Clean endpoint URL if provided
+  if (!is.null(endpoint) && nzchar(endpoint)) {
+    endpoint <- sub("/$", "", endpoint)
+  }
+
   provider <- ProviderAWSBedrock(
     name = "AWS/Bedrock",
-    base_url = "",
+    base_url = endpoint %||% "",
     model = model,
     profile = profile,
     region = credentials$region,
@@ -93,11 +104,13 @@ method(chat_request, ProviderAWSBedrock) <- function(
   tools = list(),
   type = NULL
 ) {
-  req <- request(paste0(
-    "https://bedrock-runtime.",
-    provider@region,
-    ".amazonaws.com"
-  ))
+  # Use custom endpoint if provided, otherwise construct default
+  if (nzchar(provider@base_url)) {
+    base_url <- provider@base_url
+  } else {
+    base_url <- paste0("https://bedrock-runtime.", provider@region, ".amazonaws.com")
+  }
+  req <- request(base_url)
   req <- req_url_path_append(
     req,
     "model",
