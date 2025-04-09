@@ -174,7 +174,7 @@ Chat <- R6::R6Class(
 
       get_token_cost(
         private$provider@name,
-        private$provider@model,
+        standardise_model(private$provider, private$provider@model),
         input = sum(tokens[, 1]),
         output = sum(tokens[, 2])
       )
