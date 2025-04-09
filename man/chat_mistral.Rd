@@ -6,7 +6,6 @@
 \usage{
 chat_mistral(
   system_prompt = NULL,
-  turns = NULL,
   params = NULL,
   api_key = mistral_key(),
   model = NULL,
