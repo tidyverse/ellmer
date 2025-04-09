@@ -63,7 +63,11 @@ test_turns_existing <- function(chat_fun) {
 
 test_tools_simple <- function(chat_fun) {
   chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
-  chat$register_tool(tool(function() "2024-01-01", "Return the current date"))
+  chat$register_tool(tool(
+    function() "2024-01-01",
+    "Return the current date",
+    .name = "current_date"
+  ))
 
   result <- chat$chat("What's the current date in Y-M-D format?")
   expect_match(result, "2024-01-01")
