@@ -19,7 +19,6 @@ chat_google_vertex(
   location,
   project_id,
   system_prompt = NULL,
-  api_key = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),

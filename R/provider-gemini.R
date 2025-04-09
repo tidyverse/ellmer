@@ -64,7 +64,6 @@ chat_google_vertex <- function(
   location,
   project_id,
   system_prompt = NULL,
-  api_key = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -72,7 +71,7 @@ chat_google_vertex <- function(
 ) {
   model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
-  credentials <- default_google_credentials(api_key)
+  credentials <- default_google_credentials()
 
   # https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
   base_url <- paste_c(
