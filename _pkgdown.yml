@@ -22,7 +22,7 @@ reference:
       - content_pdf_url
       - starts_with("live_")
       - interpolate
-      - gemini_upload
+      - google_upload
 
   - title: Tools and structured data
     contents:

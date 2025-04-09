@@ -4,11 +4,14 @@
 #' @include tools-def.R
 NULL
 
-#' Chat with a Google Gemini model
+#' Chat with a Google Gemini or Vertex AI model
 #'
 #' @description
+#' Google's AI offering is broken up into two parts: Gemini and Vertex AI.
+#' Most enterprises are likely to use Vertex AI, and individuals are likely
+#' to use Gemini.
 #'
-#' See [gemini_upload()] to upload files (PDFs, images, video, audio, etc.)
+#' Use [google_upload()] to upload files (PDFs, images, video, audio, etc.)
 #'
 #' ## Authentication
 #' By default, `chat_google_gemini()` will use Google's default application
@@ -40,6 +43,43 @@ chat_google_gemini <- function(
   model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
   credentials <- default_google_credentials(api_key)
+
+  provider <- ProviderGoogleGemini(
+    name = "Google/Gemini",
+    base_url = base_url,
+    model = model,
+    params = params %||% params(),
+    extra_args = api_args,
+    api_key = api_key,
+    credentials = credentials
+  )
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+}
+
+#' @export
+#' @rdname chat_google_gemini
+#' @param location Location, e.g. `us-east1`, `me-central1`, `africa-south1`.
+#' @param project_id Project ID.
+chat_google_vertex <- function(
+  location,
+  project_id,
+  system_prompt = NULL,
+  model = NULL,
+  params = NULL,
+  api_args = list(),
+  echo = NULL
+) {
+  model <- set_default(model, "gemini-2.0-flash")
+  echo <- check_echo(echo)
+  credentials <- default_google_credentials()
+
+  # https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
+  base_url <- paste_c(
+    c("https://", location, "-aiplatform.googleapis.com/v1"),
+    c("/projects/", project_id),
+    c("/locations/", location),
+    "/publishers/google/"
+  )
 
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",

@@ -2,12 +2,23 @@
 % Please edit documentation in R/provider-gemini.R
 \name{chat_google_gemini}
 \alias{chat_google_gemini}
-\title{Chat with a Google Gemini model}
+\alias{chat_google_vertex}
+\title{Chat with a Google Gemini or Vertex AI model}
 \usage{
 chat_google_gemini(
   system_prompt = NULL,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL,
+  model = NULL,
+  params = NULL,
+  api_args = list(),
+  echo = NULL
+)
+
+chat_google_vertex(
+  location,
+  project_id,
+  system_prompt = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -44,12 +55,20 @@ the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{location}{Location, e.g. \code{us-east1}, \code{me-central1}, \code{africa-south1}.}
+
+\item{project_id}{Project ID.}
 }
 \value{
 A \link{Chat} object.
 }
 \description{
-See \code{\link[=gemini_upload]{gemini_upload()}} to upload files (PDFs, images, video, audio, etc.)
+Google's AI offering is broken up into two parts: Gemini and Vertex AI.
+Most enterprises are likely to use Vertex AI, and individuals are likely
+to use Gemini.
+
+Use \code{\link[=google_upload]{google_upload()}} to upload files (PDFs, images, video, audio, etc.)
 \subsection{Authentication}{
 
 By default, \code{chat_google_gemini()} will use Google's default application

@@ -131,24 +131,20 @@ azure_endpoint <- function() {
 }
 
 # https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#chat-completions
-method(chat_request, ProviderAzureOpenAI) <- function(
-  provider,
-  stream = TRUE,
-  turns = list(),
-  tools = list(),
-  type = NULL
-) {
-  req <- request(provider@base_url)
-  req <- req_url_path_append(req, "/chat/completions")
+method(base_request, ProviderAzureOpenAI) <- function(provider) {
+  req <- base_request(super(provider, ProviderOpenAI))
+  req <- req_headers(req, Authorization = NULL)
+
   req <- req_url_query(req, `api-version` = provider@api_version)
   if (nchar(provider@api_key)) {
     req <- req_headers_redacted(req, `api-key` = provider@api_key)
   }
   req <- ellmer_req_credentials(req, provider@credentials)
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
-  req <- ellmer_req_user_agent(req)
-  req <- req_error(req, body = function(resp) {
+  req
+}
+
+method(base_request_error, ProviderAzureOpenAI) <- function(provider, req) {
+  req_error(req, body = function(resp) {
     error <- resp_body_json(resp)$error
     msg <- paste0(error$code, ": ", error$message)
     # Try to be helpful in the (common) case that the user or service
@@ -172,37 +168,6 @@ method(chat_request, ProviderAzureOpenAI) <- function(
     }
     msg
   })
-
-  messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
-  tools <- as_json(provider, unname(tools))
-
-  if (!is.null(type)) {
-    response_format <- list(
-      type = "json_schema",
-      json_schema = list(
-        name = "structured_data",
-        schema = as_json(provider, type),
-        strict = TRUE
-      )
-    )
-  } else {
-    response_format <- NULL
-  }
-
-  params <- chat_params(provider, provider@params)
-  body <- compact(list2(
-    messages = messages,
-    model = provider@model,
-    stream = stream,
-    stream_options = if (stream) list(include_usage = TRUE),
-    tools = tools,
-    response_format = response_format,
-    !!!params
-  ))
-  body <- modify_list(body, provider@extra_args)
-  req <- req_body_json(req, body)
-
-  req
 }
 
 default_azure_credentials <- function(api_key = NULL, token = NULL) {
