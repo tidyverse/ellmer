@@ -6,7 +6,6 @@
 \usage{
 chat_huggingface(
   system_prompt = NULL,
-  turns = NULL,
   api_key = hf_key(),
   model = NULL,
   api_args = list(),

@@ -31,13 +31,11 @@
 #' }
 chat_huggingface <- function(
   system_prompt = NULL,
-  turns = NULL,
   api_key = hf_key(),
   model = NULL,
   api_args = list(),
   echo = NULL
 ) {
-  turns <- normalize_turns(turns, system_prompt)
   model <- set_default(model, "meta-llama/Llama-3.1-8B-Instruct")
   echo <- check_echo(echo)
 
@@ -48,12 +46,13 @@ chat_huggingface <- function(
   )
 
   provider <- ProviderOpenAI(
+    name = "HuggingFace",
     base_url = base_url,
     model = model,
     extra_args = api_args,
     api_key = api_key
   )
-  Chat$new(provider = provider, turns = turns, echo = echo)
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 hf_key <- function() {
