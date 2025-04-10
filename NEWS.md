@@ -1,5 +1,13 @@
 # ellmer (development version)
 
+* `$extract_data(convert = TRUE)` now converts `NULL` to `NA` for 
+  `type_boolean()`, `type_integer()`, `type_number()`, and `type_string()` 
+  (#445).
+
+* `interpolate()` and friends are now vectorised so you can generate multiple
+  prompts for (e.g.) a data frame of inputs. They also now return a specially
+  classed object with a custom print method (#445).
+
 * `live_browser()` now requires `{shinychat}` v0.2.0 or later which provides
   access to the app that powers `live_browser()` via `shinychat::chat_app()`,
   as well as Shiny module for easily including a chat interface for an ellmer

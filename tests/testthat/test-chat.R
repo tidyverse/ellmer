@@ -79,6 +79,14 @@ test_that("can perform a simple batch chat", {
   expect_equal(chat$last_turn()@contents[[1]]@text, "2")
 })
 
+test_that("can't chat with multiple prompts", {
+  chat <- chat_openai_test()
+  prompt <- interpolate("{{x}}", x = 1:2)
+  expect_snapshot(error = TRUE, {
+    chat$chat(prompt)
+  })
+})
+
 test_that("can perform a simple async batch chat", {
   chat <- chat_openai_test()
 
@@ -167,13 +175,7 @@ test_that("can extract data in parallel", {
     ),
     type = person
   )
-  expect_equal(
-    data,
-    list(
-      list(name = "John", age = 15),
-      list(name = "Jane", age = 16)
-    )
-  )
+  expect_equal(data, data.frame(name = c("John", "Jane"), age = c(15, 16)))
 })
 
 test_that("can extract structured data (async)", {

@@ -10,10 +10,34 @@
     Condition
       Error in `interpolate()`:
       ! All elements of `...` must be named
+
+# has a nice print method
+
     Code
-      interpolate("{{x}}", x = 1:2)
-    Condition
-      Error in `interpolate()`:
-      ! Must generate a single string.
-      i Did you accidentally include a vector in `...``?
+      interpolate("Hi!")
+    Output
+      [1] | Hi!
+
+# print method truncates many elements
+
+    Code
+      print(prompt, max_items = 1)
+    Output
+      [1] | x
+          | y
+      ... and 1 more.
+    Code
+      print(prompt, max_lines = 2)
+    Output
+      [1] | x
+          | y
+          | ...
+      ... and 1 more.
+    Code
+      print(prompt, max_lines = 3)
+    Output
+      [1] | x
+          | y
+      [2] | a
+          | ...
 

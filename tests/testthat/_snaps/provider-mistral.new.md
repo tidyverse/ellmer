@@ -2,6 +2,8 @@
 
     Code
       chat$chat("Hi")
+    Message
+      > Waiting 11s for retry backoff
     Condition
       Error in `req_perform()`:
       ! HTTP 400 Bad Request.

@@ -45,7 +45,7 @@
       as_user_turns(1)
     Condition
       Error:
-      ! `1` must be a list, not the number 1.
+      ! `1` must be a list or prompt, not the number 1.
     Code
       as_user_turns(x)
     Condition

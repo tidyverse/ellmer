@@ -107,8 +107,8 @@ as_user_turns <- function(
   call = caller_env(),
   arg = caller_arg(prompts)
 ) {
-  if (!is.list(prompts)) {
-    stop_input_type(prompts, "a list", call = call, arg = arg)
+  if (!is.list(prompts) && !is_prompt(prompts)) {
+    stop_input_type(prompts, "a list or prompt", call = call, arg = arg)
   }
   turns <- map(seq_along(prompts), function(i) {
     this_arg <- paste0(arg, "[[", i, "]]")
