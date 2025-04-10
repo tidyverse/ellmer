@@ -39,6 +39,7 @@ ellmer supports a wide variety of model providers:
 - Google Gemini/Vertex AI: `chat_google_gemini()`,
   `chat_google_vertex()`.
 - Groq: `chat_groq()`.
+- Mistral: `chat_mistral()`.
 - Ollama: `chat_ollama()`.
 - OpenAI: `chat_openai()`.
 - OpenRouter: `chat_openrouter()`.
