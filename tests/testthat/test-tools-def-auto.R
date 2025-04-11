@@ -7,7 +7,7 @@ test_that("help topic extraction works", {
 })
 
 test_that("roxygen2 comment extraction works", {
-  sys.source(test_path("tools-def.R"), environment())
+  sys.source(test_path("tools-def.R"), environment(), keep.source = TRUE)
   aliased_function <- has_roxygen_comments
 
   expect_snapshot(extract_comments_and_signature(has_roxygen_comments))
@@ -17,7 +17,7 @@ test_that("roxygen2 comment extraction works", {
 })
 
 test_that("basic signature extraction works", {
-  sys.source(test_path("tools-def.R"), environment())
+  sys.source(test_path("tools-def.R"), environment(), keep.source = TRUE)
   expect_snapshot(extract_comments_and_signature(no_roxygen_comments))
 })
 

@@ -87,7 +87,6 @@ chat_google_vertex <- function(
     model = model,
     params = params %||% params(),
     extra_args = api_args,
-    api_key = api_key,
     credentials = credentials
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
