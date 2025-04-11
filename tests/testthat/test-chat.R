@@ -71,6 +71,7 @@ test_that("setting turns usually preserves, but can set system prompt", {
   expect_equal(chat$get_system_prompt(), "You're a cool guy")
 })
 
+
 test_that("can perform a simple batch chat", {
   chat <- chat_openai_test()
 
