@@ -166,3 +166,13 @@ api_key_param <- function(key) {
     )
   )
 }
+
+param_model <- function(default, provider = NULL) {
+  paste_c(
+    "The model to use for the chat",
+    if (!is.null(default)) c(" (defaults to \"", default, "\")"),
+    ".\n",
+    if (!is.null(provider))
+      c("Use `models_", provider, "()` to see all options.\n")
+  )
+}

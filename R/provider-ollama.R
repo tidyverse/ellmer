@@ -21,6 +21,8 @@
 #'   tried it with.
 #'
 #' @inheritParams chat_openai
+#' @param model The model to use for the chat. Use `models_ollama()` to list
+#'   available models.
 #' @inherit chat_openai return
 #' @family chatbots
 #' @export
@@ -42,7 +44,7 @@ chat_ollama <- function(
   }
 
   if (missing(model)) {
-    models <- ollama_models(base_url)
+    models <- models_ollama(base_url)$name
     cli::cli_abort(c(
       "Must specify {.arg model}.",
       i = "Locally installed models: {.str {models}}."
@@ -88,14 +90,26 @@ chat_ollama_test <- function(..., model = "llama3.2:1b") {
   chat_ollama(..., model = model)
 }
 
-ollama_models <- function(base_url = "http://localhost:11434") {
+#' @export
+#' @rdname chat_ollama
+models_ollama <- function(base_url = "http://localhost:11434") {
   req <- request(base_url)
   req <- req_url_path(req, "api/tags")
   resp <- req_perform(req)
   json <- resp_body_json(resp)
 
   names <- map_chr(json$models, "[[", "name")
-  gsub(":latest$", "", names)
+  names <- gsub(":latest$", "", names)
+
+  size <- map_dbl(json$models, "[[", "size")
+  modified_at <- as.POSIXct(map_chr(json$models, "[[", "modified_at"))
+
+  df <- data.frame(
+    name = names,
+    size = size,
+    modified_at = modified_at
+  )
+  df[order(df$name, df$modified_at), ]
 }
 
 has_ollama <- function(base_url = "http://localhost:11434") {
