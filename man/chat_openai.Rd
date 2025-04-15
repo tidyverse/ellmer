@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-openai.R
 \name{chat_openai}
 \alias{chat_openai}
+\alias{models_openai}
 \title{Chat with an OpenAI model}
 \usage{
 chat_openai(
@@ -14,6 +15,8 @@ chat_openai(
   api_args = list(),
   echo = c("none", "output", "all")
 )
+
+models_openai(base_url = "https://api.openai.com/v1", api_key = openai_key())
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
@@ -26,9 +29,9 @@ You generally should not supply this directly, but instead set the \code{OPENAI_
 The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
-\item{model}{The model to use for the chat. The default, \code{NULL}, will pick
-a reasonable default, and tell you about. We strongly recommend explicitly
-choosing a model for all but the most casual use.}
+\item{model}{The model to use for the chat (defaults to "gpt-4o").
+We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
+Use \code{models_openai()} to see all options.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 

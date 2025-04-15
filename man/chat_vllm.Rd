@@ -19,9 +19,9 @@ chat_vllm(
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{model}{The model to use for the chat. The default, \code{NULL}, will pick
-a reasonable default, and tell you about. We strongly recommend explicitly
-choosing a model for all but the most casual use.}
+\item{model}{The model to use for the chat (defaults to "gpt-4o").
+We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
+Use \code{models_openai()} to see all options.}
 
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output
 more reproducible.}

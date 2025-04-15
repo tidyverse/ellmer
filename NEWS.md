@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `models_google_gemini()`, `models_anthropic()`, `models_openai()`, and `models_ollama()` list available models for Google Gemini, Anthropic, OpenAI, and Ollama respectively. Different providers return different metadata so they are only guaranteed to return a data frame with at least an `id` column (#296).
+
 * `$extract_data(convert = TRUE)` now converts `NULL` to `NA` for 
   `type_boolean()`, `type_integer()`, `type_number()`, and `type_string()` 
   (#445).
