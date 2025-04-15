@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-claude.R
 \name{chat_anthropic}
 \alias{chat_anthropic}
+\alias{models_anthropic}
 \title{Chat with an Anthropic Claude model}
 \usage{
 chat_anthropic(
@@ -15,6 +16,11 @@ chat_anthropic(
   api_key = anthropic_key(),
   echo = NULL
 )
+
+models_anthropic(
+  base_url = "https://api.anthropic.com/v1",
+  api_key = anthropic_key()
+)
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
@@ -24,6 +30,7 @@ chat_anthropic(
 \item{max_tokens}{Maximum number of tokens to generate before stopping.}
 
 \item{model}{The model to use for the chat (defaults to "claude-3-7-sonnet-latest").
+We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_anthropic()} to see all options.}
 
 \item{api_args}{Named list of arbitrary extra arguments appended to the body

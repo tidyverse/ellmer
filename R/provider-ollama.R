@@ -21,8 +21,7 @@
 #'   tried it with.
 #'
 #' @inheritParams chat_openai
-#' @param model The model to use for the chat. Use `models_ollama()` to list
-#'   available models.
+#' @param model `r param_model(NULL, "ollama")`
 #' @inherit chat_openai return
 #' @family chatbots
 #' @export
@@ -101,15 +100,15 @@ models_ollama <- function(base_url = "http://localhost:11434") {
   names <- map_chr(json$models, "[[", "name")
   names <- gsub(":latest$", "", names)
 
-  size <- map_dbl(json$models, "[[", "size")
   modified_at <- as.POSIXct(map_chr(json$models, "[[", "modified_at"))
+  size <- map_dbl(json$models, "[[", "size")
 
   df <- data.frame(
-    name = names,
-    size = size,
-    modified_at = modified_at
+    id = names,
+    created_at = modified_at,
+    size = size
   )
-  df[order(df$name, df$modified_at), ]
+  df[order(-xtfrm(df$created_at)), ]
 }
 
 has_ollama <- function(base_url = "http://localhost:11434") {

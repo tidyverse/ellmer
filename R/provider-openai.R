@@ -16,9 +16,7 @@ NULL
 #' @param system_prompt A system prompt to set the behavior of the assistant.
 #' @param base_url The base URL to the endpoint; the default uses OpenAI.
 #' @param api_key `r api_key_param("OPENAI_API_KEY")`
-#' @param model The model to use for the chat. The default, `NULL`, will pick
-#'   a reasonable default, and tell you about. We strongly recommend explicitly
-#'   choosing a model for all but the most casual use.
+#' @param model `r param_model("gpt-4o", "openai")`
 #' @param params Common model parameters, usually created by [params()].
 #' @param seed Optional integer seed that ChatGPT uses to try and make output
 #'   more reproducible.
@@ -365,4 +363,37 @@ method(as_json, list(ProviderOpenAI, TypeObject)) <- function(provider, x) {
     required = as.list(names),
     additionalProperties = FALSE
   )
+}
+
+# Models -----------------------------------------------------------------------
+
+#' @rdname chat_openai
+#' @export
+models_openai <- function(
+  base_url = "https://api.openai.com/v1",
+  api_key = openai_key()
+) {
+  provider <- ProviderOpenAI(
+    name = "openai",
+    model = "",
+    base_url = base_url,
+    api_key = api_key
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, "[[", "id")
+  created <- .POSIXct(map_int(json$data, "[[", "created"))
+  owned_by <- map_chr(json$data, "[[", "owned_by")
+
+  df <- data.frame(
+    id = id,
+    created_ats = created,
+    owned_by = owned_by
+  )
+  df[order(-xtfrm(df$created)), ]
 }

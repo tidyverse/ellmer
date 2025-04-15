@@ -63,35 +63,6 @@ chat_anthropic <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-models_anthropic <- function(
-  base_url = "https://api.anthropic.com/v1",
-  api_key = anthropic_key()
-) {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    model = "",
-    base_url = base_url,
-    api_key = api_key
-  )
-
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/models")
-  resp <- req_perform(req)
-
-  json <- resp_body_json(resp)
-
-  id <- map_chr(json$data, "[[", "id")
-  display_name <- map_chr(json$data, "[[", "display_name")
-  created_at <- as.POSIXct(map_chr(json$data, "[[", "created_at"))
-
-  df <- data.frame(
-    id = id,
-    display_name = display_name,
-    created_at = created_at
-  )
-  df[order(-xtfrm(df$created_at)), ]
-}
-
 chat_anthropic_test <- function(
   ...,
   model = "claude-3-5-sonnet-latest",
@@ -439,6 +410,39 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
 
 method(standardise_model, ProviderAnthropic) <- function(provider, model) {
   gsub("-(latest|\\d{8})$", "", model)
+}
+
+# Models -----------------------------------------------------------------------
+
+#' @export
+#' @rdname chat_anthropic
+models_anthropic <- function(
+  base_url = "https://api.anthropic.com/v1",
+  api_key = anthropic_key()
+) {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    model = "",
+    base_url = base_url,
+    api_key = api_key
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, "[[", "id")
+  display_name <- map_chr(json$data, "[[", "display_name")
+  created_at <- as.POSIXct(map_chr(json$data, "[[", "created_at"))
+
+  df <- data.frame(
+    id = id,
+    name = display_name,
+    created_at = created_at
+  )
+  df[order(-xtfrm(df$created_at)), ]
 }
 
 # Helpers ----------------------------------------------------------------
