@@ -80,6 +80,11 @@ test_that("can perform a simple batch chat", {
   expect_equal(chat$last_turn()@contents[[1]]@text, "2")
 })
 
+test_that("can chat with a single prompt", {
+  chat <- chat_openai_test()
+  expect_no_error(chat$chat(interpolate("What's 1 + 1?")))
+})
+
 test_that("can't chat with multiple prompts", {
   chat <- chat_openai_test()
   prompt <- interpolate("{{x}}", x = 1:2)
