@@ -4,7 +4,14 @@
 \alias{tool}
 \title{Define a tool}
 \usage{
-tool(.fun, .description, ..., .name = NULL, .annotations = list())
+tool(
+  .fun,
+  .description,
+  ...,
+  .name = NULL,
+  .convert = TRUE,
+  .annotations = list()
+)
 }
 \arguments{
 \item{.fun}{The function to be invoked when the tool is called. The return
@@ -21,6 +28,9 @@ function. Each element should be created by a \code{\link[=type_boolean]{type_*(
 function.}
 
 \item{.name}{The name of the function.}
+
+\item{.convert}{Should JSON inputs be automatically convert to their
+R data type equivalents? Defaults to \code{TRUE}.}
 
 \item{.annotations}{Additional properties that describe the tool and its
 behavior. Usually created by \code{\link[=tool_annotations]{tool_annotations()}}, where you can find a

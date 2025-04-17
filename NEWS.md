@@ -2,6 +2,9 @@
 
 * Bumped default time out up to 5 minutes (#451, #321).
 
+* BREAKING CHANGE: Tools are now invoked with their inputs coerced to standard 
+  R data structures (#461).
+
 * `$extract_data(convert = TRUE)` now converts `NULL` to `NA` for 
   `type_boolean()`, `type_integer()`, `type_number()`, and `type_string()` 
   (#445).

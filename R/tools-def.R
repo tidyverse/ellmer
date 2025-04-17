@@ -23,6 +23,8 @@ NULL
 #'   behavior. Usually created by [tool_annotations()], where you can find a
 #'   description of the annotation properties recommended by the [Model Context
 #'   Protocol](https://modelcontextprotocol.io/introduction).
+#' @param .convert Should JSON inputs be automatically convert to their
+#'   R data type equivalents? Defaults to `TRUE`.
 #' @param ... Name-type pairs that define the arguments accepted by the
 #'   function. Each element should be created by a [`type_*()`][type_boolean]
 #'   function.
@@ -51,7 +53,14 @@ NULL
 #' # Look at the chat history to see how tool calling works:
 #' # Assistant sends a tool request which is evaluated locally and
 #' # results are send back in a tool result.
-tool <- function(.fun, .description, ..., .name = NULL, .annotations = list()) {
+tool <- function(
+  .fun,
+  .description,
+  ...,
+  .name = NULL,
+  .convert = TRUE,
+  .annotations = list()
+) {
   if (is.null(.name)) {
     fun_expr <- enexpr(.fun)
     if (is.name(fun_expr)) {
@@ -65,6 +74,7 @@ tool <- function(.fun, .description, ..., .name = NULL, .annotations = list()) {
     name = .name,
     description = .description,
     arguments = type_object(...),
+    convert = .convert,
     annotations = .annotations
   )
 }
@@ -131,6 +141,7 @@ ToolDef <- new_class(
     fun = class_function,
     description = prop_string(),
     arguments = TypeObject,
+    convert = prop_bool(TRUE),
     annotations = class_list
   )
 )
