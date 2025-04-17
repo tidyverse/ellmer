@@ -177,7 +177,9 @@ type_object <- function(
 
 
 convert_from_type <- function(x, type) {
-  if (S7_inherits(type, TypeArray)) {
+  if (!type@required && is.null(x)) {
+    NULL
+  } else if (S7_inherits(type, TypeArray)) {
     if (S7_inherits(type@items, TypeBasic)) {
       is_null <- map_lgl(x, is.null)
       x[is_null] <- list(NA)

@@ -33,6 +33,20 @@ test_that("can convert arrays of optional basic types to simple vectors", {
   expect_identical(convert_from_type(list(NULL), type), NA_integer_)
 })
 
+test_that("missing & optional components are list as NULL", {
+  type <- type_array(items = type_integer(), required = FALSE)
+  expect_equal(convert_from_type(NULL, type), NULL)
+
+  type <- type_integer(required = FALSE)
+  expect_equal(convert_from_type(NULL, type), NULL)
+
+  type <- type_object(
+    x = type_integer(),
+    y = type_integer(required = FALSE)
+  )
+  expect_equal(convert_from_type(list(x = 1), type), list(x = 1, y = NULL))
+})
+
 test_that("can covert array of arrays to lists of vectors", {
   expect_equal(
     convert_from_type(
