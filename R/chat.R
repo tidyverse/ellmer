@@ -283,14 +283,15 @@ Chat <- R6::R6Class(
 
     #' @description `r lifecycle::badge("experimental")`
     #'
-    #'   Submit multiple prompts in parallel. Returns a list of
-    #'   extracted data, one for each prompt.
-    #' @param prompts A list of user prompts.
+    #'   Submit multiple prompts in parallel.
+    #' @param prompts A vector created by [interpolate()] or a list
+    #'   of character vectors.
     #' @param type A type specification for the extracted data. Should be
     #'   created with a [`type_()`][type_boolean] function.
-    #' @param convert Automatically convert from JSON lists to R data types
-    #'   using the schema. For example, this will turn arrays of objects into
-    #'  data frames and arrays of strings into a character vector.
+    #' @param convert If `TRUE`, automatically convert from JSON lists to R
+    #'   data types using the schema. This typically works best when `type` is
+    #'   `type_object()` as this will give you a data frame with one column for
+    #'   each property. If `FALSE`, returns a list.
     #' @param max_active The maximum number of simultaenous requests to send.
     #' @param rpm Maximum number of requests per minute.
     extract_data_parallel = function(
@@ -305,7 +306,9 @@ Chat <- R6::R6Class(
 
       needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
       if (needs_wrapper) {
-        type <- type_object(wrapper = type)
+        w_type <- type_object(wrapper = type)
+      } else {
+        w_type <- type
       }
 
       reqs <- parallel_requests(
@@ -313,22 +316,23 @@ Chat <- R6::R6Class(
         existing_turns = private$.turns,
         new_turns = turns,
         tools = private$tools,
-        type = type,
+        type = w_type,
         rpm = rpm
       )
       resps <- req_perform_parallel(reqs, max_active = max_active)
       ok <- !map_lgl(resps, is.null)
       json <- map(resps[ok], resp_body_json)
 
-      map(json, function(json) {
+      rows <- map(json, function(json) {
         turn <- value_turn(private$provider, json, has_type = TRUE)
-        extract_data(
-          turn,
-          type,
-          convert = convert,
-          needs_wrapper = needs_wrapper
-        )
+        extract_data(turn, type, convert = FALSE, needs_wrapper = needs_wrapper)
       })
+
+      if (convert) {
+        convert_from_type(rows, type_array(items = type))
+      } else {
+        rows
+      }
     },
 
     #' @description Extract structured data, asynchronously. Returns a promise

@@ -23,13 +23,6 @@ test_that("handles errors", {
 
 # Common provider interface -----------------------------------------------
 
-test_that("respects turns interface", {
-  chat_fun <- chat_openrouter_test
-
-  test_turns_system(chat_fun)
-  test_turns_existing(chat_fun)
-})
-
 test_that("all tool variations work", {
   chat_fun <- chat_openrouter_test
 

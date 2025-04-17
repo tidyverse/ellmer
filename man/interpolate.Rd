@@ -53,4 +53,6 @@ interpolate(joke, topic = "bananas")
 # Or allow interpolate to find them in the current environment:
 topic <- "applies"
 interpolate(joke)
+
+
 }

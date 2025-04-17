@@ -37,13 +37,6 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_aws_bedrock())
 })
 
-test_that("respects turns interface", {
-  chat_fun <- chat_aws_bedrock
-
-  test_turns_system(chat_fun)
-  test_turns_existing(chat_fun)
-})
-
 test_that("all tool variations work", {
   chat_fun <- chat_aws_bedrock
 

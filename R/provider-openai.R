@@ -49,7 +49,7 @@ chat_openai <- function(
   api_key = openai_key(),
   model = NULL,
   params = NULL,
-  seed = deprecated(),
+  seed = lifecycle::deprecated(),
   api_args = list(),
   echo = c("none", "output", "all")
 ) {
@@ -120,7 +120,14 @@ method(base_request, ProviderOpenAI) <- function(provider) {
 method(base_request_error, ProviderOpenAI) <- function(provider, req) {
   req_error(req, body = function(resp) {
     if (resp_content_type(resp) == "application/json") {
-      resp_body_json(resp)$error$message
+      error <- resp_body_json(resp)$error
+      if (is_string(error)) {
+        error
+      } else if (is.list(error)) {
+        error$message
+      } else {
+        prettify(resp_body_string(resp))
+      }
     } else if (resp_content_type(resp) == "text/plain") {
       resp_body_string(resp)
     }
