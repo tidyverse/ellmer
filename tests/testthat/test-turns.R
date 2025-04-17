@@ -84,3 +84,7 @@ test_that("turns have completion timestamps", {
   turn@completed <- other_time
   expect_equal(turn@completed, other_time)
 })
+
+test_that("turns have a reasonable print method", {
+  expect_snapshot(Turn("user", "hello"))
+})

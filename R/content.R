@@ -371,7 +371,7 @@ as_content <- function(x, error_call = caller_env(), error_arg = "...") {
     list()
   } else if (is_prompt(x)) {
     if (length(x) == 1) {
-      x[[1]]
+      ContentText(x[[1]])
     } else {
       cli::cli_abort(
         "{.arg {error_arg}} can only accept a single prompt.",

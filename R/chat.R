@@ -741,20 +741,10 @@ print.Chat <- function(x, ...) {
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
 
-    color <- switch(
-      turn@role,
-      user = cli::col_blue,
-      assistant = cli::col_green,
-      system = cli::col_br_white,
-      identity
-    )
-
     cli::cat_rule(cli::format_inline(
-      "{color(turn@role)} [{tokens$tokens[[i]]}]"
+      "{color_role(turn@role)} [{tokens$tokens[[i]]}]"
     ))
-    for (content in turn@contents) {
-      cat_line(format(content))
-    }
+    cat(format(turns[[i]]))
   }
 
   invisible(x)
