@@ -62,13 +62,23 @@ new_tool_result <- function(request, result = NULL, error = NULL) {
 
 # Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases
 invoke_tool <- function(request) {
-  if (is.null(request@tool)) {
+  tool <- request@tool
+
+  if (is.null(tool)) {
     return(new_tool_result(request, error = "Unknown tool"))
+  }
+
+  args <- request@arguments
+  if (tool@convert) {
+    arg_names <- names(tool@arguments@properties)
+    args[arg_names] <- lapply(arg_names, function(name) {
+      convert_from_type(args[[name]], tool@arguments@properties[[name]])
+    })
   }
 
   tryCatch(
     {
-      result <- do.call(request@tool@fun, request@arguments)
+      result <- do.call(request@tool@fun, args)
       new_tool_result(request, result)
     },
     error = function(e) {

@@ -174,6 +174,29 @@ test_that("invoke_tools_async() echoes tool requests and results", {
   expect_snapshot(. <- sync(invoke_tools_async(turn, echo = "output")))
 })
 
+test_that("invoke_tools() converts to R data structures", {
+  out <- NULL
+  tool <- tool(
+    function(x, y) {
+      out <<- list(x = x, y = y)
+    },
+    "A tool",
+    x = type_array(items = type_number()),
+    y = type_array(items = type_string())
+  )
+
+  res <- invoke_tool(
+    ContentToolRequest(
+      id = "x",
+      name = "my_tool",
+      arguments = list(x = list(1, 2, NULL), y = list()),
+      tool = tool
+    )
+  )
+  expect_equal(out$x, c(1, 2, NA))
+  expect_equal(out$y, character())
+})
+
 test_that("tool error warnings", {
   errors <- list(
     ContentToolResult(
