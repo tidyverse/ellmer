@@ -18,12 +18,15 @@ test_that("defaults are reported", {
 })
 
 test_that("supports standard parameters", {
+  local_cassette_test("anthropic-params")
   chat_fun <- chat_anthropic_test
 
   test_params_stop(chat_fun)
 })
 
 test_that("all tool variations work", {
+  local_cassette_test("anthropic-tools")
+
   chat_fun <- chat_anthropic_test
 
   retry_test(test_tools_simple(chat_fun))

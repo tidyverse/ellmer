@@ -15,7 +15,11 @@
 #'
 #' @export
 #' @examplesIf has_credentials("openai")
-#' chat <- chat_openai(echo = TRUE)
+#' \dontshow{
+#'   vcr::vcr_configure(dir = system.file("vcr", package = "ellmer"))
+#'   vcr::insert_cassette("content_image_url")
+#' }
+#' chat <- chat_openai(echo = FALSE)
 #' chat$chat(
 #'   "What do you see in these images?",
 #'   content_image_url("https://www.r-project.org/Rlogo.png"),
@@ -24,13 +28,14 @@
 #'
 #' \dontshow{dev.control('enable')}
 #' plot(waiting ~ eruptions, data = faithful)
-#' chat <- chat_openai(echo = TRUE)
+#' chat <- chat_openai(echo = FALSE)
 #' chat$chat(
 #'   "Describe this plot in one paragraph, as suitable for inclusion in
 #'    alt-text. You should briefly describe the plot type, the axes, and
 #'    2-5 major visual patterns.",
 #'    content_image_plot()
 #' )
+#' \dontshow{vcr::eject_cassette()}
 content_image_url <- function(url, detail = c("auto", "low", "high")) {
   detail <- arg_match(detail)
 
@@ -93,7 +98,7 @@ content_image_file <- function(path, content_type = "auto", resize = "low") {
   } else {
     check_installed("magick", "to resize images")
 
-    img <- magick::image_read(path)
+    img <- magick::image_read(path, strip = TRUE)
 
     if (resize == "low") {
       img <- magick::image_resize(img, "512x512>")
