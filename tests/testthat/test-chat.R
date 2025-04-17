@@ -192,8 +192,8 @@ test_that("can get tokens and/or cost", {
     include_tokens = TRUE
   )
   expect_contains(names(data), c("input_tokens", "output_tokens"))
-  expect_true(data$input_tokens > 0, c(TRUE, TRUE))
-  expect_true(data$output_tokens > 0, c(TRUE, TRUE))
+  expect_equal(data$input_tokens > 0, c(TRUE, TRUE))
+  expect_equal(data$output_tokens > 0, c(TRUE, TRUE))
 
   data <- chat$extract_data_parallel(
     list("John, age 15", "Jane, age 16"),
@@ -201,7 +201,7 @@ test_that("can get tokens and/or cost", {
     include_cost = TRUE
   )
   expect_contains(names(data), "cost")
-  expect_true(data$cost > 0, c(TRUE, TRUE))
+  expect_equal(data$cost > 0, c(TRUE, TRUE))
 
   data <- chat$extract_data_parallel(
     list("John, age 15", "Jane, age 16"),
