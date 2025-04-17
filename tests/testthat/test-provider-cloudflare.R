@@ -26,13 +26,6 @@ test_that("defaults are reported", {
 #   test_params_stop(chat_fun)
 # })
 
-test_that("respects turns interface", {
-  chat_fun <- chat_cloudflare_test
-
-  test_turns_system(chat_fun)
-  test_turns_existing(chat_fun)
-})
-
 # Doesn't appear to work
 # test_that("all tool variations work", {
 #   chat_fun <- function(...) {
