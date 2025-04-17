@@ -172,12 +172,7 @@ Chat <- R6::R6Class(
         tokens <- tokens[nrow(tokens), , drop = FALSE]
       }
 
-      get_token_cost(
-        private$provider@name,
-        standardise_model(private$provider, private$provider@model),
-        input = sum(tokens[, 1]),
-        output = sum(tokens[, 2])
-      )
+      private$compute_cost(input = sum(tokens[, 1]), output = sum(tokens[, 2]))
     },
 
     #' @description The last turn returned by the assistant.
@@ -294,10 +289,17 @@ Chat <- R6::R6Class(
     #'   each property. If `FALSE`, returns a list.
     #' @param max_active The maximum number of simultaenous requests to send.
     #' @param rpm Maximum number of requests per minute.
+    #' @param include_token If `TRUE`, and the result is a data frame, will
+    #'   add `input_tokens` and `output_tokens` columns giving the total input
+    #'   and output tokens for each prompt.
+    #' @param include_cost If `TRUE`, and the result is a data frame, will
+    #'   add `cost` column giving the cost of each prompt.
     extract_data_parallel = function(
       prompts,
       type,
       convert = TRUE,
+      include_tokens = FALSE,
+      include_cost = FALSE,
       max_active = 10,
       rpm = 500
     ) {
@@ -323,16 +325,35 @@ Chat <- R6::R6Class(
       ok <- !map_lgl(resps, is.null)
       json <- map(resps[ok], resp_body_json)
 
-      rows <- map(json, function(json) {
-        turn <- value_turn(private$provider, json, has_type = TRUE)
+      turns <- map(json, function(json) {
+        value_turn(private$provider, json, has_type = TRUE)
+      })
+      rows <- map(turns, function(turn) {
         extract_data(turn, type, convert = FALSE, needs_wrapper = needs_wrapper)
       })
 
       if (convert) {
-        convert_from_type(rows, type_array(items = type))
+        out <- convert_from_type(rows, type_array(items = type))
       } else {
-        rows
+        out <- rows
       }
+
+      if (is.data.frame(out) && (include_tokens || include_cost)) {
+        tokens <- t(vapply(turns, \(turn) turn@tokens, integer(2)))
+
+        if (include_tokens) {
+          out$input_tokens <- tokens[, 1]
+          out$output_tokens <- tokens[, 2]
+        }
+
+        if (include_cost) {
+          out$cost <- private$compute_cost(
+            input = tokens[, 1],
+            output = tokens[, 2]
+          )
+        }
+      }
+      out
     },
 
     #' @description Extract structured data, asynchronously. Returns a promise
@@ -705,6 +726,15 @@ Chat <- R6::R6Class(
 
     has_system_prompt = function() {
       length(private$.turns) > 0 && private$.turns[[1]]@role == "system"
+    },
+
+    compute_cost = function(input, output) {
+      get_token_cost(
+        private$provider@name,
+        standardise_model(private$provider, private$provider@model),
+        input = input,
+        output = output
+      )
     }
   )
 )
