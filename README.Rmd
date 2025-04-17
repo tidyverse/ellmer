@@ -45,6 +45,7 @@ ellmer supports a wide variety of model providers:
 * GitHub model marketplace: `chat_github()`.
 * Google Gemini/Vertex AI: `chat_google_gemini()`, `chat_google_vertex()`.
 * Groq: `chat_groq()`.
+* Hugging Face: `chat_huggingface()`.
 * Mistral: `chat_mistral()`.
 * Ollama: `chat_ollama()`.
 * OpenAI: `chat_openai()`.

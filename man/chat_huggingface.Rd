@@ -55,12 +55,16 @@ This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_ope
 the defaults adjusted for Hugging Face.
 \subsection{Known limitations}{
 \itemize{
+\item Parameter support is hit or miss.
+\item Tool calling is currently broken in the API.
+\item While images are technically supported, I couldn't find any models that
+returned useful respones.
 \item Some models do not support the chat interface or parts of it, for example
 \verb{google/gemma-2-2b-it} does not support a system prompt. You will need to
 carefully choose the model.
-\item No tool calling support.
-\item Parameter support is hit or miss.
 }
+
+So overall, not something we could recommend at the moment.
 }
 }
 \examples{

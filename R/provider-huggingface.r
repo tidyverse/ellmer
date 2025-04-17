@@ -13,13 +13,15 @@
 #'
 #' ## Known limitations
 #'
+#' * Parameter support is hit or miss.
+#' * Tool calling is currently broken in the API.
+#' * While images are technically supported, I couldn't find any models that
+#'   returned useful respones.
 #' * Some models do not support the chat interface or parts of it, for example
 #'   `google/gemma-2-2b-it` does not support a system prompt. You will need to
 #'   carefully choose the model.
 #'
-#' * No tool calling support.
-#'
-#' * Parameter support is hit or miss.
+#' So overall, not something we could recommend at the moment.
 #'
 #' @family chatbots
 #' @param api_key The API key to use for authentication. You generally should
@@ -78,6 +80,7 @@ method(chat_body, ProviderHuggingFace) <- function(
   type = NULL
 ) {
   if (length(tools) > 0) {
+    # https://github.com/huggingface/text-generation-inference/issues/2986
     cli::cli_abort("HuggingFace does not currently support tools.")
   }
 
