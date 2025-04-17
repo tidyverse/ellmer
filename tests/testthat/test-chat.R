@@ -143,20 +143,6 @@ test_that("can perform a simple async batch chat", {
   )
 })
 
-test_that("can chat in parallel", {
-  chat <- chat_openai_test("Just give me answers, no punctuation")
-  results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
-
-  expect_type(results, "list")
-  expect_length(results, 2)
-
-  expect_s3_class(results[[1]], "Chat")
-  expect_s3_class(results[[2]], "Chat")
-
-  expect_equal(results[[1]]$last_turn()@contents[[1]]@text, "2")
-  expect_equal(results[[2]]$last_turn()@contents[[1]]@text, "4")
-})
-
 test_that("can extract structured data", {
   person <- type_object(name = type_string(), age = type_integer())
 

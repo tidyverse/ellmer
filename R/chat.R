@@ -228,25 +228,7 @@ Chat <- R6::R6Class(
     #' @param max_active The maximum number of simultaenous requests to send.
     #' @param rpm Maximum number of requests per minute.
     chat_parallel = function(prompts, max_active = 10, rpm = 500) {
-      turns <- as_user_turns(prompts)
-
-      reqs <- parallel_requests(
-        provider = private$provider,
-        existing_turns = private$.turns,
-        tools = private$tools,
-        new_turns = turns,
-        rpm = rpm
-      )
-      resps <- req_perform_parallel(reqs, max_active = max_active)
-      ok <- !map_lgl(resps, is.null)
-      json <- map(resps[ok], resp_body_json)
-
-      map2(json, turns[ok], function(json, user_turn) {
-        chat <- self$clone()
-        turn <- value_turn(private$provider, json)
-        chat$add_turn(user_turn, turn)
-        chat
-      })
+      chat_parallel(self, prompts, max_active = max_active, rpm = rpm)
     },
 
     #' @description Extract structured data
@@ -575,14 +557,14 @@ Chat <- R6::R6Class(
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
-        turn <- private$match_tools(turn)
+        turn <- match_tools(turn, private$tools)
       } else {
         turn <- value_turn(
           private$provider,
           response,
           has_type = !is.null(type)
         )
-        turn <- private$match_tools(turn)
+        turn <- match_tools(turn, private$tools)
 
         text <- turn@text
         if (!is.null(text)) {
@@ -654,7 +636,7 @@ Chat <- R6::R6Class(
           any_text <- TRUE
         }
       }
-      turn <- private$match_tools(turn)
+      turn <- match_tools(turn, private$tools)
 
       # Ensure turns always end in a newline
       if (any_text) {
@@ -673,34 +655,12 @@ Chat <- R6::R6Class(
       coro::exhausted()
     }),
 
-    match_tools = function(turn) {
-      if (is.null(turn)) return(NULL)
-
-      turn@contents <- map(turn@contents, function(content) {
-        if (!S7_inherits(content, ContentToolRequest)) {
-          return(content)
-        }
-        content@tool <- private$tools[[content@name]]
-        content
-      })
-
-      turn
-    },
-
     invoke_tools = function(echo = "none") {
-      tool_results <- invoke_tools(self$last_turn(), echo = echo)
-      if (length(tool_results) == 0) {
-        return()
-      }
-      Turn("user", tool_results)
+      invoke_tools(self$last_turn(), echo = echo)
     },
 
     invoke_tools_async = async_method(function(self, private, echo = "none") {
-      tool_results <- await(invoke_tools_async(self$last_turn(), echo = echo))
-      if (length(tool_results) == 0) {
-        return()
-      }
-      Turn("user", tool_results)
+      await(invoke_tools_async(self$last_turn(), echo = echo))
     }),
 
     has_system_prompt = function() {
