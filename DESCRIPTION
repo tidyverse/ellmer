@@ -32,7 +32,6 @@ Imports:
     S7 (>= 0.2.0)
 Suggests:
     base64enc,
-    bslib,
     connectcreds,
     curl (>= 6.0.1),
     gargle,
@@ -43,11 +42,13 @@ Suggests:
     paws.common,
     rmarkdown,
     shiny,
-    shinychat (>= 0.1.1),
+    shinychat (>= 0.1.1.9001),
     testthat (>= 3.0.0),
     withr
 VignetteBuilder:
     knitr
+Remotes: 
+    posit-dev/shinychat
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true

@@ -214,6 +214,19 @@ convert_from_type <- function(x, type) {
       convert_from_type(x[[name]], type@properties[[name]])
     })
     set_names(out, names(type@properties))
+  } else if (S7_inherits(type, TypeBasic)) {
+    if (is.null(x)) {
+      switch(
+        type@type,
+        boolean = NA,
+        integer = NA_integer_,
+        number = NA_real_,
+        string = NA_character_,
+        cli::cli_abort("Unknown type {type@type}", .internal = TRUE)
+      )
+    } else {
+      x
+    }
   } else {
     x
   }

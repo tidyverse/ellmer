@@ -28,14 +28,6 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_snowflake())
 })
 
-test_that("respects turns interface", {
-  # Snowflake models don't support non-streaming responses, so these tests do
-  # not yet work.
-  #
-  # test_turns_system(chat_snowflake)
-  # test_turns_existing(chat_snowflake)
-})
-
 test_that("all tool variations work", {
   # Snowflake models don't support tool calling.
   #

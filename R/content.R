@@ -369,6 +369,15 @@ method(contents_markdown, ContentThinking) <- function(content) {
 as_content <- function(x, error_call = caller_env(), error_arg = "...") {
   if (is.null(x)) {
     list()
+  } else if (is_prompt(x)) {
+    if (length(x) == 1) {
+      x[[1]]
+    } else {
+      cli::cli_abort(
+        "{.arg {error_arg}} can only accept a single prompt.",
+        call = error_call
+      )
+    }
   } else if (is.character(x)) {
     ContentText(paste0(x, collapse = "\n\n"))
   } else if (S7_inherits(x, Content)) {

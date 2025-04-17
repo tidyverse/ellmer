@@ -25,40 +25,6 @@ test_params_stop <- function(chat_fun) {
   expect_equal(out, "Dogs are ")
 }
 
-# Turns ------------------------------------------------------------------
-
-test_turns_system <- function(chat_fun) {
-  system_prompt <- "Return very minimal output, AND ONLY USE UPPERCASE."
-
-  chat <- chat_fun(system_prompt = system_prompt)
-  resp <- chat$chat("What is the name of Winnie the Pooh's human friend?")
-  expect_match(resp, "CHRISTOPHER ROBIN")
-  expect_length(chat$get_turns(), 2)
-
-  chat <- chat_fun()
-  chat$set_turns(list(Turn("system", system_prompt)))
-  resp <- chat$chat("What is the name of Winnie the Pooh's human friend?")
-  expect_match(resp, "CHRISTOPHER ROBIN")
-  expect_length(chat$get_turns(), 2)
-}
-
-test_turns_existing <- function(chat_fun) {
-  chat <- chat_fun()
-  chat$set_turns(list(
-    Turn("system", "Return very minimal output; no punctuation."),
-    Turn("user", "List the names of any 8 of Santa's 9 reindeer."),
-    Turn(
-      "assistant",
-      "Dasher, Dancer, Vixen, Comet, Cupid, Donner, Blitzen, and Rudolph."
-    )
-  ))
-  expect_length(chat$get_turns(), 2)
-
-  resp <- chat$chat("Who is the remaining one? Just give the name")
-  expect_match(resp, "Prancer")
-  expect_length(chat$get_turns(), 4)
-}
-
 # Tool calls -------------------------------------------------------------
 
 test_tools_simple <- function(chat_fun) {

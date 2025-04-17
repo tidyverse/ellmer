@@ -71,12 +71,21 @@ test_that("setting turns usually preserves, but can set system prompt", {
   expect_equal(chat$get_system_prompt(), "You're a cool guy")
 })
 
+
 test_that("can perform a simple batch chat", {
   chat <- chat_openai_test()
 
   result <- chat$chat("What's 1 + 1. Just give me the answer, no punctuation")
   expect_equal(result, "2")
   expect_equal(chat$last_turn()@contents[[1]]@text, "2")
+})
+
+test_that("can't chat with multiple prompts", {
+  chat <- chat_openai_test()
+  prompt <- interpolate("{{x}}", x = 1:2)
+  expect_snapshot(error = TRUE, {
+    chat$chat(prompt)
+  })
 })
 
 test_that("can perform a simple async batch chat", {
@@ -167,13 +176,7 @@ test_that("can extract data in parallel", {
     ),
     type = person
   )
-  expect_equal(
-    data,
-    list(
-      list(name = "John", age = 15),
-      list(name = "Jane", age = 16)
-    )
-  )
+  expect_equal(data, data.frame(name = c("John", "Jane"), age = c(15, 16)))
 })
 
 test_that("can extract structured data (async)", {

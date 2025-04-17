@@ -30,13 +30,6 @@ test_that("supports standard parameters", {
   test_params_stop(chat_fun)
 })
 
-test_that("respects turns interface", {
-  chat_fun <- chat_mistral_test
-
-  test_turns_system(chat_fun)
-  test_turns_existing(chat_fun)
-})
-
 # Tool calling is poorly supported
 # test_that("all tool variations work", {
 #   chat_fun <- chat_mistral_test

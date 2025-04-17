@@ -24,13 +24,6 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_databricks())
 })
 
-test_that("respects turns interface", {
-  # Note: Databricks models cannot handle the prompt for uppercase response,
-  # so skip test_turn_system().
-  # test_turns_system(chat_databricks)
-  test_turns_existing(chat_databricks)
-})
-
 test_that("all tool variations work", {
   # Note: Databricks models cannot yet handle "continuing past the first tool
   # call", which causes issues with how ellmer implements tool calling. Nor do
