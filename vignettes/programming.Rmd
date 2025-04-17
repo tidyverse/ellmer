@@ -119,3 +119,5 @@ capital <- function(chat, country) {
 }
 capital(chat, "France")
 ```
+
+Alternatively, if you want to embrace streaming in your UI, you may want to use [shinychat](https://posit-dev.github.io/shinychat/) (for Shiny) or [streamy](https://simonpcouch.github.io/streamy/) (for Positron/RStudio).
