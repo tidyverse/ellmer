@@ -58,21 +58,8 @@ openrouter_key <- function() {
   key_get("OPENROUTER_API_KEY")
 }
 
-method(chat_request, ProviderOpenRouter) <- function(
-  provider,
-  stream = TRUE,
-  turns = list(),
-  tools = list(),
-  type = NULL
-) {
-  req <- chat_request(
-    super(provider, ProviderOpenAI),
-    stream = stream,
-    turns = turns,
-    tools = tools,
-    type = type
-  )
-
+method(base_request, ProviderOpenRouter) <- function(provider) {
+  req <- base_request(super(provider, ProviderOpenAI))
   # https://openrouter.ai/docs/api-keys
   req <- req_headers(
     req,

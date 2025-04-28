@@ -8,7 +8,7 @@
       ( ) [tool call] my_tool(x = 1)
       # #> Error: unused argument (x = 1)
       ( ) [tool call] tool_list()
-      o #> {{"a":1,"b":2}}
+      o #> {"a":1,"b":2}
       ( ) [tool call] tool_chr()
       o #> a
         #> b
@@ -31,7 +31,7 @@
       # #> Error: Unexpected input
         #> i Please revise and try again.
       o #> 1
-      o #> {{"a":1,"b":2}}
+      o #> {"a":1,"b":2}
       o #> a
         #> b
         #> c

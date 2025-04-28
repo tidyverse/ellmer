@@ -12,12 +12,3 @@ test_that("can make simple streaming request", {
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })
-
-# Common provider interface -----------------------------------------------
-
-test_that("respects turns interface", {
-  chat_fun <- chat_vllm_test
-
-  test_turns_system(chat_fun)
-  test_turns_existing(chat_fun)
-})

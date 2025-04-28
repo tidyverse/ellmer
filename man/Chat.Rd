@@ -314,8 +314,7 @@ data frames and arrays of strings into a character vector.}
 \subsection{Method \code{extract_data_parallel()}}{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-Submit multiple prompts in parallel. Returns a list of
-extracted data, one for each prompt.
+Submit multiple prompts in parallel.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_parallel(
   prompts,
@@ -329,14 +328,16 @@ extracted data, one for each prompt.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{prompts}}{A list of user prompts.}
+\item{\code{prompts}}{A vector created by \code{\link[=interpolate]{interpolate()}} or a list
+of character vectors.}
 
 \item{\code{type}}{A type specification for the extracted data. Should be
 created with a \code{\link[=type_boolean]{type_()}} function.}
 
-\item{\code{convert}}{Automatically convert from JSON lists to R data types
-using the schema. For example, this will turn arrays of objects into
-data frames and arrays of strings into a character vector.}
+\item{\code{convert}}{If \code{TRUE}, automatically convert from JSON lists to R
+data types using the schema. This typically works best when \code{type} is
+\code{type_object()} as this will give you a data frame with one column for
+each property. If \code{FALSE}, returns a list.}
 
 \item{\code{max_active}}{The maximum number of simultaenous requests to send.}
 

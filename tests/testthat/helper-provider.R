@@ -25,53 +25,17 @@ test_params_stop <- function(chat_fun) {
   expect_equal(out, "Dogs are ")
 }
 
-# Turns ------------------------------------------------------------------
-
-test_turns_system <- function(chat_fun) {
-  system_prompt <- "Return very minimal output, AND ONLY USE UPPERCASE."
-
-  chat <- chat_fun(system_prompt = system_prompt)
-  resp <- chat$chat("What is the name of Winnie the Pooh's human friend?")
-  expect_match(resp, "CHRISTOPHER ROBIN")
-  expect_length(chat$get_turns(), 2)
-
-  chat <- chat_fun()
-  chat$set_turns(list(Turn("system", system_prompt)))
-  resp <- chat$chat("What is the name of Winnie the Pooh's human friend?")
-  expect_match(resp, "CHRISTOPHER ROBIN")
-  expect_length(chat$get_turns(), 2)
-}
-
-test_turns_existing <- function(chat_fun) {
-  chat <- chat_fun()
-  chat$set_turns(list(
-    Turn("system", "Return very minimal output; no punctuation."),
-    Turn("user", "List the names of any 8 of Santa's 9 reindeer."),
-    Turn(
-      "assistant",
-      "Dasher, Dancer, Vixen, Comet, Cupid, Donner, Blitzen, and Rudolph."
-    )
-  ))
-  expect_length(chat$get_turns(), 2)
-
-  resp <- chat$chat("Who is the remaining one? Just give the name")
-  expect_match(resp, "Prancer")
-  expect_length(chat$get_turns(), 4)
-}
-
 # Tool calls -------------------------------------------------------------
 
 test_tools_simple <- function(chat_fun) {
   chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
-  chat$register_tool(tool(function() "2024-01-01", "Return the current date"))
+  chat$register_tool(tool(
+    function() "2024-01-01",
+    "Return the current date",
+    .name = "current_date"
+  ))
 
-  expect_output(
-    result <- chat$chat(
-      "What's the current date in Y-M-D format?",
-      echo = TRUE
-    ),
-    "2024-01-01"
-  )
+  result <- chat$chat("What's the current date in Y-M-D format?")
   expect_match(result, "2024-01-01")
 
   result <- chat$chat("What month is it? Provide the full name")
@@ -180,23 +144,27 @@ test_data_extraction <- function(chat_fun) {
 
 # Images -----------------------------------------------------------------
 
-test_images_inline <- function(chat_fun) {
+test_images_inline <- function(chat_fun, test_shape = TRUE) {
   chat <- chat_fun()
   response <- chat$chat(
     "What's in this image? (Be sure to mention the outside shape)",
     content_image_file(system.file("httr2.png", package = "ellmer"))
   )
-  expect_match(response, "hex")
+  if (test_shape) {
+    expect_match(response, "hex")
+  }
   expect_match(response, "baseball")
 }
 
-test_images_remote <- function(chat_fun) {
+test_images_remote <- function(chat_fun, test_shape = TRUE) {
   chat <- chat_fun()
   response <- chat$chat(
     "What's in this image? (Be sure to mention the outside shape)",
     content_image_url("https://httr2.r-lib.org/logo.png")
   )
-  expect_match(response, "hex")
+  if (test_shape) {
+    expect_match(response, "hex")
+  }
   expect_match(response, "baseball")
 }
 

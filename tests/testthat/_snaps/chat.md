@@ -6,6 +6,14 @@
       Error in `self$set_system_prompt()`:
       ! `value` must be a character vector or `NULL`, not the number 1.
 
+# can't chat with multiple prompts
+
+    Code
+      chat$chat(prompt)
+    Condition
+      Error in `chat$chat()`:
+      ! `...` can only accept a single prompt.
+
 # has a basic print method
 
     Code

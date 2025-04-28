@@ -49,7 +49,7 @@ chat_openai <- function(
   api_key = openai_key(),
   model = NULL,
   params = NULL,
-  seed = deprecated(),
+  seed = lifecycle::deprecated(),
   api_args = list(),
   echo = c("none", "output", "all")
 ) {
@@ -105,29 +105,49 @@ openai_key <- function() {
   key_get("OPENAI_API_KEY")
 }
 
+# Base request -----------------------------------------------------------------
+
+method(base_request, ProviderOpenAI) <- function(provider) {
+  req <- request(provider@base_url)
+  req <- req_auth_bearer_token(req, provider@api_key)
+  req <- req_retry(req, max_tries = 2)
+  req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_user_agent(req)
+  req <- base_request_error(provider, req)
+  req
+}
+
+method(base_request_error, ProviderOpenAI) <- function(provider, req) {
+  req_error(req, body = function(resp) {
+    if (resp_content_type(resp) == "application/json") {
+      error <- resp_body_json(resp)$error
+      if (is_string(error)) {
+        error
+      } else if (is.list(error)) {
+        error$message
+      } else {
+        prettify(resp_body_string(resp))
+      }
+    } else if (resp_content_type(resp) == "text/plain") {
+      resp_body_string(resp)
+    }
+  })
+}
+
+# Chat endpoint ----------------------------------------------------------------
+
+method(chat_path, ProviderOpenAI) <- function(provider) {
+  "/chat/completions"
+}
+
 # https://platform.openai.com/docs/api-reference/chat/create
-method(chat_request, ProviderOpenAI) <- function(
+method(chat_body, ProviderOpenAI) <- function(
   provider,
   stream = TRUE,
   turns = list(),
   tools = list(),
   type = NULL
 ) {
-  req <- request(provider@base_url)
-  req <- req_url_path_append(req, "/chat/completions")
-  req <- req_auth_bearer_token(req, provider@api_key)
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
-  req <- ellmer_req_user_agent(req)
-
-  req <- req_error(req, body = function(resp) {
-    if (resp_content_type(resp) == "application/json") {
-      resp_body_json(resp)$error$message
-    } else if (resp_content_type(resp) == "text/plain") {
-      resp_body_string(resp)
-    }
-  })
-
   messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
   tools <- as_json(provider, unname(tools))
 
@@ -147,7 +167,7 @@ method(chat_request, ProviderOpenAI) <- function(
   params <- chat_params(provider, provider@params)
   params$seed <- params$seed %||% provider@seed
 
-  body <- compact(list2(
+  compact(list2(
     messages = messages,
     model = provider@model,
     !!!params,
@@ -156,11 +176,8 @@ method(chat_request, ProviderOpenAI) <- function(
     tools = tools,
     response_format = response_format
   ))
-  body <- utils::modifyList(body, provider@extra_args)
-  req <- req_body_json(req, body)
-
-  req
 }
+
 
 method(chat_params, ProviderOpenAI) <- function(provider, params) {
   standardise_params(
@@ -218,7 +235,11 @@ method(value_turn, ProviderOpenAI) <- function(
   }
 
   if (has_type) {
-    json <- jsonlite::parse_json(message$content[[1]])
+    if (is_string(message$content)) {
+      json <- jsonlite::parse_json(message$content[[1]])
+    } else {
+      json <- message$content
+    }
     content <- list(ContentJson(json))
   } else {
     content <- lapply(message$content, as_content)
@@ -237,7 +258,7 @@ method(value_turn, ProviderOpenAI) <- function(
     input = result$usage$prompt_tokens,
     output = result$usage$completion_tokens
   )
-  Turn(message$role, content, json = result, tokens = tokens)
+  Turn(message$role %||% "assistant", content, json = result, tokens = tokens)
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------

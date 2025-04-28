@@ -1,5 +1,25 @@
 # ellmer (development version)
 
+* New `chat_huggingface()` for models hosted at <https://huggingface.co> 
+  (#359, @s-spavound).
+
+* Bumped default time out up to 5 minutes (#451, #321).
+
+* `$extract_data(convert = TRUE)` now converts `NULL` to `NA` for 
+  `type_boolean()`, `type_integer()`, `type_number()`, and `type_string()` 
+  (#445).
+
+* `interpolate()` and friends are now vectorised so you can generate multiple
+  prompts for (e.g.) a data frame of inputs. They also now return a specially
+  classed object with a custom print method (#445).
+
+* `live_browser()` now requires `{shinychat}` v0.2.0 or later which provides
+  access to the app that powers `live_browser()` via `shinychat::chat_app()`,
+  as well as Shiny module for easily including a chat interface for an ellmer
+  `Chat` object in your Shiny apps (#397, @gadenbuie).
+
+* New `chat_mistral()` for models hosted at <https://mistral.ai> (#319).
+
 * `chat_gemini()` can now handle responses that include citation metadata 
   (#358).
 
@@ -109,7 +129,7 @@
 
   Parallel calls with OpenAI and Gemini are much simpler in my experience.
 
-* `gemini_upload()` lets you upload files to Gemini (#310).
+* `google_upload()` lets you upload files to Google Gemini or Vertex AI (#310).
 
 * `chat_gemini()` can now authenticate with Google default application
   credentials (including service accounts, etc). This requires the `gargle`

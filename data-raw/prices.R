@@ -22,9 +22,9 @@ openai <- readr::read_csv("data-raw/openai.csv")
 # fmt: skip
 anthropic <- tribble(
   ~model, ~cached_input, ~input, ~output,
-  "claude-3.7-sonnet",0.3,3,15,
-  "cluade-3.5-sonnet",0.3,3,15,
-  "claude-3.5-haiku",0.08,0.80,4,
+  "claude-3-7-sonnet",0.3,3,15,
+  "claude-3-5-sonnet",0.3,3,15,
+  "claude-3-5-haiku",0.08,0.80,4,
   "claude-3-opus",1.5,15,75,
   "claude-3-haiku",0.03,0.25,1.25
 )

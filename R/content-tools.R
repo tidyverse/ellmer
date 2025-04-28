@@ -182,9 +182,9 @@ maybe_echo_tool <- function(x, echo = "output") {
       if (length(lines) > 5) cli::symbol$ellipsis
     )
     lines <- cli::style_italic(lines)
-    cli::cli_text("{icon} #> {header}{cli_escape(lines[1])}")
+    cli::cli_text("{icon} #> {header}{lines[1]}")
     for (line in lines[-1]) {
-      cli::cli_text("\u00a0\u00a0#> {cli_escape(line)}")
+      cli::cli_text("\u00a0\u00a0#> {line}")
     }
   } else {
     max_width <- cli::console_width() - 7
@@ -193,7 +193,7 @@ maybe_echo_tool <- function(x, echo = "output") {
       value <- paste0(value, cli::symbol$ellipsis)
     }
     value <- cli::style_italic(value)
-    cli::cli_text("{icon} #> {header}{cli_escape(value)}")
+    cli::cli_text("{icon} #> {header}{value}")
   }
 
   invisible(x)

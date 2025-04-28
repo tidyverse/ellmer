@@ -87,7 +87,7 @@ on_load(
 # Request helpers --------------------------------------------------------------
 
 ellmer_req_timeout <- function(req, stream) {
-  req_options(req, timeout = getOption("ellmer_timeout_s", 60))
+  req_options(req, timeout = getOption("ellmer_timeout_s", 5 * 60))
 }
 
 ellmer_req_credentials <- function(req, credentials_fun) {

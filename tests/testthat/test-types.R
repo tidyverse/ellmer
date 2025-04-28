@@ -1,3 +1,10 @@
+test_that("optional base types converted to NA", {
+  expect_equal(convert_from_type(NULL, type_boolean()), NA)
+  expect_equal(convert_from_type(NULL, type_integer()), NA_integer_)
+  expect_equal(convert_from_type(NULL, type_number()), NA_real_)
+  expect_equal(convert_from_type(NULL, type_string()), NA_character_)
+})
+
 test_that("can convert arrays of basic types to simple vectors", {
   expect_equal(
     convert_from_type(list(FALSE, TRUE), type_array(items = type_boolean())),

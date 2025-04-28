@@ -1,5 +1,5 @@
 test_that("can upload a file an ask questions about it", {
-  upload <- gemini_upload(test_path("apples.pdf"))
+  upload <- google_upload(test_path("apples.pdf"))
 
   chat <- chat_google_gemini()
   response <- chat$chat("What's the title of this document?", upload)
