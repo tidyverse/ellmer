@@ -112,7 +112,7 @@ models_portkey <- function(
   json <- resp_body_json(resp)
 
   id <- map_chr(json$data, "[[", "id")
-  created_at <- as.POSIXct(purrr::map_vec(json$data, ~ .$created_at))
+  created_at <- as.POSIXct(map_vec(json$data, ~ .$created_at))
 
   df <- data.frame(
     id = id,
