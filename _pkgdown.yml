@@ -44,10 +44,10 @@ reference:
       to learn more about the objects if you're doing something that's only
       supported by one provider, or if you're implementing a new provider.
     contents:
-      - Turn
       - Provider
-      - Content
       - Chat
+      - Turn
+      - Content
       - Type
 
   - title: Utilities
