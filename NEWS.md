@@ -1,12 +1,18 @@
 # ellmer (development version)
 
-* New `chat_huggingface()` for models hosted at <https://huggingface.co> 
+* `$stream()` and `$stream_async()` gain support for streaming the additional
+  content types generated during a tool call. When `content = "all"` is set, the
+  streaming response yields `Content` objects, including the
+  `ContentToolRequest` and `ContentToolResult` objects used to request and
+  return tool calls (#400, @gadenbuie).
+
+* New `chat_huggingface()` for models hosted at <https://huggingface.co>
   (#359, @s-spavound).
 
 * Bumped default time out up to 5 minutes (#451, #321).
 
-* `$extract_data(convert = TRUE)` now converts `NULL` to `NA` for 
-  `type_boolean()`, `type_integer()`, `type_number()`, and `type_string()` 
+* `$extract_data(convert = TRUE)` now converts `NULL` to `NA` for
+  `type_boolean()`, `type_integer()`, `type_number()`, and `type_string()`
   (#445).
 
 * `interpolate()` and friends are now vectorised so you can generate multiple
@@ -20,10 +26,10 @@
 
 * New `chat_mistral()` for models hosted at <https://mistral.ai> (#319).
 
-* `chat_gemini()` can now handle responses that include citation metadata 
+* `chat_gemini()` can now handle responses that include citation metadata
   (#358).
 
-* `chat_` functions no longer take a turns object, instead use `set_turns()` 
+* `chat_` functions no longer take a turns object, instead use `set_turns()`
   (#427).
 
 * `echo = "output"` replaces the now-deprecated `echo = "text"` option in
@@ -44,8 +50,8 @@
   definition when a request is matched to a tool by ellmer (#423, @gadenbuie).
 
 * ellmer now tracks the cost of input and output tokens. The cost is displayed
-  when you print a `Chat` object, in `tokens_usage()`, and with 
-  `Chat$get_cost()`. This is our best effort at computing the cost, but you 
+  when you print a `Chat` object, in `tokens_usage()`, and with
+  `Chat$get_cost()`. This is our best effort at computing the cost, but you
   should treat it as an estimate rather than the exact price. Unfortunately LLM APIs
   currently make it very hard to figure out exactly how much your queries are
   costing (#203).
@@ -55,7 +61,7 @@
 
 * Several chat functions were renamed to better align with the companies
   providing the API (#382, @gadenbuie):
-  
+
   * `chat_azure_openai()` replaces `chat_azure()`
   * `chat_aws_bedrock()` replaces `chat_bedrock()`
   * `chat_anthropic()` replaces `chat_claude()`
@@ -74,29 +80,29 @@
 * New `interpolate_package()` to make it easier to interpolate from prompts
   stored in the `inst/prompts` inside a package (#164).
 
-* `chat_azure()`, `chat_claude()`, `chat_openai()`, and `chat_gemini()` now have 
-  a `params`  argument that allows you to specify common model paramaters (like 
-  `seed` and `temperature`). Support for other models will grow as you request 
+* `chat_azure()`, `chat_claude()`, `chat_openai()`, and `chat_gemini()` now have
+  a `params`  argument that allows you to specify common model paramaters (like
+  `seed` and `temperature`). Support for other models will grow as you request
   it (#280).
 
-* `chat_claude(max_tokens =)` is now deprecated in favour of 
+* `chat_claude(max_tokens =)` is now deprecated in favour of
   `chat_claude(params = )` (#280).
 
-* `chat_openai(seed =)` is now deprecated in favour of 
+* `chat_openai(seed =)` is now deprecated in favour of
   `chat_openai(params = )` (#280).
 
 * `Chat$get_provider()` lets you access the underlying provider object, if needed (#202).
 
 * `$extract_data()` now works better for arrays when `required = FALSE` (#384).
 
-* `chat_claude()` and `chat_bedrock()` no longer choke after receiving an 
+* `chat_claude()` and `chat_bedrock()` no longer choke after receiving an
   output that consists only of whitespace (#376).
 
 * `live_browser()` now initializes `shinychat::chat_ui()` with the messages from
   the chat turns, rather than replaying the turns server-side (#381).
 
-* `Chat$tokens()` is now called `Chat$get_tokens()` and returns a data frame of 
-  tokens, correctly aligned to the individual turn. The print method now uses 
+* `Chat$tokens()` is now called `Chat$get_tokens()` and returns a data frame of
+  tokens, correctly aligned to the individual turn. The print method now uses
   this to show how many input/output tokens each turn used (#354).
 
 * All requests now set a custom User-Agent that identifies that the requests
@@ -122,7 +128,7 @@
   particularly as it pertains to handling errors.
 
   For Claude, note that the number of active connections is limited primarily
-  by the output tokens per limit (OTPM) which is estimated from the `max_tokens` 
+  by the output tokens per limit (OTPM) which is estimated from the `max_tokens`
   parameter, which defaults to 4096. That means if you're limited to 16,000
   OPTM, you should use at most 16,000 / 4096 = ~4 active connections (or
   decrease `max_tokens`).
