@@ -4,7 +4,7 @@
 \alias{content_image_url}
 \alias{content_image_file}
 \alias{content_image_plot}
-\title{Encode image content for chat input}
+\title{Encode images for chat input}
 \usage{
 content_image_url(url, detail = c("auto", "low", "high"))
 
@@ -17,7 +17,7 @@ content_image_plot(width = 768, height = 768)
 \verb{data:} URL or a regular URL. Valid image types are PNG, JPEG, WebP, and
 non-animated GIF.}
 
-\item{detail}{The \href{https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding}{detail setting}
+\item{detail}{The \href{https://platform.openai.com/docs/guides/images/image-input-requirements}{detail setting}
 for this image. Can be \code{"auto"}, \code{"low"}, or \code{"high"}.}
 
 \item{path}{The path to the image file to include in the chat input. Valid
@@ -28,7 +28,7 @@ file extensions are \code{.png}, \code{.jpeg}, \code{.jpg}, \code{.webp}, and (n
 \code{"auto"}, the content type is inferred from the file extension.}
 
 \item{resize}{If \code{"low"}, resize images to fit within 512x512. If \code{"high"},
-resize to fit within 2000x768 or 768x2000. (See the \href{https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding}{OpenAI docs}
+resize to fit within 2000x768 or 768x2000. (See the \href{https://platform.openai.com/docs/guides/images/image-input-requirements}{OpenAI docs}
 for more on why these specific sizes are used.) If \code{"none"}, do not resize.
 
 You can also pass a custom string to resize the image to a specific size,
@@ -50,12 +50,12 @@ chatbot. The \code{content_image_url()} function is used to provide a URL to an
 image, while \code{content_image_file()} is used to provide the image data itself.
 }
 \examples{
-\dontshow{if (elmer:::openai_key_exists()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 chat <- chat_openai(echo = TRUE)
 chat$chat(
   "What do you see in these images?",
   content_image_url("https://www.r-project.org/Rlogo.png"),
-  content_image_file(system.file("httr2.png", package = "elmer"))
+  content_image_file(system.file("httr2.png", package = "ellmer"))
 )
 
 \dontshow{dev.control('enable')}

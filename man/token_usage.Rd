@@ -6,7 +6,14 @@
 \usage{
 token_usage()
 }
+\value{
+A data frame
+}
 \description{
 Call this function to find out the cumulative number of tokens that you
-have sent and recieved in the current session.
+have sent and recieved in the current session. The price will be shown
+if known.
+}
+\examples{
+token_usage()
 }

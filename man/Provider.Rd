@@ -4,12 +4,27 @@
 \alias{Provider}
 \title{A chatbot provider}
 \usage{
-Provider(base_url = class_missing, extra_args = class_missing)
+Provider(
+  name = stop("Required"),
+  model = stop("Required"),
+  base_url = stop("Required"),
+  params = list(),
+  extra_args = list()
+)
 }
 \arguments{
+\item{name}{Name of the provider.}
+
+\item{model}{Name of the model.}
+
 \item{base_url}{The base URL for the API.}
 
+\item{params}{A list of standard parameters created by \code{\link[=params]{params()}}.}
+
 \item{extra_args}{Arbitrary extra arguments to be included in the request body.}
+}
+\value{
+An S7 Provider object.
 }
 \description{
 A Provider captures the details of one chatbot service/API. This captures
@@ -21,4 +36,11 @@ different API.
 To add support for a new backend, you will need to subclass \code{Provider}
 (adding any additional fields that your provider needs) and then implement
 the various generics that control the behavior of each provider.
+}
+\examples{
+Provider(
+  name = "CoolModels",
+  model = "my_model",
+  base_url = "https://cool-models.com"
+)
 }

@@ -4,7 +4,13 @@
 \alias{Turn}
 \title{A user or assistant turn}
 \usage{
-Turn(role, contents = list(), json = list(), tokens = c(0, 0))
+Turn(
+  role,
+  contents = list(),
+  json = list(),
+  tokens = c(0, 0),
+  completed = Sys.time()
+)
 }
 \arguments{
 \item{role}{Either "user", "assistant", or "system".}
@@ -14,12 +20,17 @@ Turn(role, contents = list(), json = list(), tokens = c(0, 0))
 \item{json}{The serialized JSON corresponding to the underlying data of
 the turns. Currently only provided for assistant.
 
-This is useful if there's information returned by the provider that elmer
+This is useful if there's information returned by the provider that ellmer
 doesn't otherwise expose.}
 
 \item{tokens}{A numeric vector of length 2 representing the number of
 input and output tokens (respectively) used in this turn. Currently
 only recorded for assistant turns.}
+
+\item{completed}{A POSIXct timestamp indicating when the turn completed.}
+}
+\value{
+An S7 \code{Turn} object
 }
 \description{
 Every conversation with a chatbot consists of pairs of user and assistant
@@ -30,7 +41,10 @@ requests (assistant only), or tool responses (user only).
 
 Note that a call to \verb{$chat()} and related functions may result in multiple
 user-assistant turn cycles. For example, if you have registered tools,
-elmer will automatically handle the tool calling loop, which may result in
+ellmer will automatically handle the tool calling loop, which may result in
 any number of additional cycles. Learn more about tool calling in
 \code{vignette("tool-calling")}.
+}
+\examples{
+Turn(role = "user", contents = list(ContentText("Hello, world!")))
 }

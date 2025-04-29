@@ -1,9 +1,9 @@
 # defaults are reported
 
     Code
-      . <- chat_gemini()
+      . <- chat_google_gemini()
     Message
-      Using model = "gemini-1.5-flash".
+      Using model = "gemini-2.0-flash".
 
 # all tool variations work
 
@@ -19,6 +19,6 @@
     Code
       . <- chat$chat("What's in this image?", image_remote)
     Condition
-      Error:
+      Error in `method(as_json, list(ellmer::ProviderGoogleGemini, ellmer::ContentImageRemote))`:
       ! Gemini doesn't support remote images
 

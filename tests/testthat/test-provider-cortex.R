@@ -18,15 +18,17 @@ sample_cortex_message <- list(
 )
 
 test_that("Cortex messages are converted to turns correctly", {
+  p <- provider_cortex_test()
   expect_equal(
     # Tests roundtrip conversion.
-    cortex_message(cortex_message_to_turn(sample_cortex_message)),
+    as_json(p, value_turn(p, sample_cortex_message)),
     sample_cortex_message
   )
 })
 
 test_that("Cortex turn formatting", {
-  turn <- cortex_message_to_turn(sample_cortex_message)
+  p <- provider_cortex_test()
+  turn <- value_turn(p, sample_cortex_message)
   expect_snapshot(cat(turn@text))
   expect_snapshot(cat(format(turn)))
 })
@@ -80,19 +82,16 @@ test_that("Cortex chunks are converted to messages correctly", {
       index = 2
     )
   )
-  p <- ProviderCortex(
-    account = "testorg-test_account",
-    credentials = function(account) list()
-  )
+  p <- provider_cortex_test()
   result <- NULL
   output <- ""
   for (chunk in chunks) {
     result <- stream_merge_chunks(p, result, chunk)
     output <- paste0(output, stream_text(p, chunk))
   }
-  turn <- stream_turn(p, result)
+  turn <- value_turn(p, result)
   expect_equal(result, sample_cortex_message$content)
-  expect_equal(cortex_message(turn), sample_cortex_message)
+  expect_equal(as_json(p, turn), sample_cortex_message)
   # Make sure streaming output matches batch output.
   expect_equal(output, turn@text)
 })
@@ -104,25 +103,22 @@ test_that("Cortex API requests are generated correctly", {
       ContentText("Tell me about my data.")
     )
   )
-  p <- ProviderCortex(
-    account = "testorg-test_account",
-    credentials = function(account) list(
-      Authorization = paste("Bearer", "obfuscated"),
-      `X-Snowflake-Authorization-Token-Type` = "OAUTH"
-    ),
+  p <- provider_cortex_test(
+    credentials = function(account)
+      list(
+        Authorization = paste("Bearer", "obfuscated"),
+        `X-Snowflake-Authorization-Token-Type` = "OAUTH"
+      ),
     model_file = "@my_db.my_schema.my_stage/model.yaml"
   )
   req <- chat_request(p, FALSE, list(turn))
-  expect_snapshot(req)
-  expect_snapshot(req$body$data)
+  expect_snapshot(req$url)
+  expect_snapshot(req$headers)
+  expect_snapshot(print_json(req$body$data))
 })
 
 test_that("a simple Cortex chatbot works", {
-  skip_if(
-    Sys.getenv("SNOWFLAKE_ACCOUNT") == "",
-    "SNOWFLAKE_ACCOUNT is not configured"
-  )
-  chat <- chat_cortex(
+  chat <- chat_cortex_analyst(
     model_spec = "name: empty
 description: An empty semantic model specification.
 tables: []

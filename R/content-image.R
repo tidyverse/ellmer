@@ -1,5 +1,4 @@
-
-#' Encode image content for chat input
+#' Encode images for chat input
 #'
 #' These functions are used to prepare image URLs and files for input to the
 #' chatbot. The `content_image_url()` function is used to provide a URL to an
@@ -9,18 +8,18 @@
 #'   `data:` URL or a regular URL. Valid image types are PNG, JPEG, WebP, and
 #'   non-animated GIF.
 #' @param detail The [detail
-#'   setting](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding)
+#'   setting](https://platform.openai.com/docs/guides/images/image-input-requirements)
 #'   for this image. Can be `"auto"`, `"low"`, or `"high"`.
 #' @returns An input object suitable for including in the `...` parameter of
 #'   the `chat()`, `stream()`, `chat_async()`, or `stream_async()` methods.
 #'
 #' @export
-#' @examplesIf elmer:::openai_key_exists()
+#' @examplesIf has_credentials("openai")
 #' chat <- chat_openai(echo = TRUE)
 #' chat$chat(
 #'   "What do you see in these images?",
 #'   content_image_url("https://www.r-project.org/Rlogo.png"),
-#'   content_image_file(system.file("httr2.png", package = "elmer"))
+#'   content_image_file(system.file("httr2.png", package = "ellmer"))
 #' )
 #'
 #' \dontshow{dev.control('enable')}
@@ -36,15 +35,8 @@ content_image_url <- function(url, detail = c("auto", "low", "high")) {
   detail <- arg_match(detail)
 
   if (grepl("^data:", url)) {
-    # https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/data
-    parts <- strsplit(sub("^data:", "", url), ";")[[1]]
-    if (length(parts) != 2 || !grepl("^base64,", parts[[2]])) {
-      cli::cli_abort("{.arg url} is not a valid data url.")
-    }
-    content_type <- parts[[1]]
-    base64 <- sub("^base64,", "", parts[[2]])
-
-    ContentImageInline(content_type, base64)
+    parsed <- parse_data_url(url)
+    ContentImageInline(parsed$content_type, parsed$base64)
   } else {
     ContentImageRemote(url = url, detail = detail)
   }
@@ -58,7 +50,7 @@ content_image_url <- function(url, detail = c("auto", "low", "high")) {
 #'   `"auto"`, the content type is inferred from the file extension.
 #' @param resize If `"low"`, resize images to fit within 512x512. If `"high"`,
 #'   resize to fit within 2000x768 or 768x2000. (See the [OpenAI
-#'   docs](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding)
+#'   docs](https://platform.openai.com/docs/guides/images/image-input-requirements)
 #'   for more on why these specific sizes are used.) If `"none"`, do not resize.
 #'
 #'   You can also pass a custom string to resize the image to a specific size,
@@ -82,7 +74,7 @@ content_image_file <- function(path, content_type = "auto", resize = "low") {
 
   if (content_type == "auto") {
     # OpenAI supports .png, .jpeg, .jpg, .webp, .gif
-    # https://platform.openai.com/docs/guides/vision/what-type-of-files-can-i-upload
+    # https://platform.openai.com/docs/guides/images/image-input-requirements
     ext <- tolower(tools::file_ext(path))
     content_type <- switch(
       ext,
@@ -144,7 +136,7 @@ content_image_plot <- function(width = 768, height = 768) {
 
   old <- grDevices::dev.cur()
 
-  path <- tempfile("elmer-plot-", fileext = ".png")
+  path <- tempfile("ellmer-plot-", fileext = ".png")
   defer(unlink(path))
 
   grDevices::png(path, width = width, height = height)
@@ -154,4 +146,18 @@ content_image_plot <- function(width = 768, height = 768) {
   grDevices::dev.set(old)
 
   content_image_file(path, "image/png", resize = "none")
+}
+
+
+parse_data_url <- function(url, error_call = caller_env()) {
+  # https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/data
+  parts <- strsplit(sub("^data:", "", url), ";")[[1]]
+  if (length(parts) != 2 || !grepl("^base64,", parts[[2]])) {
+    cli::cli_abort("{.arg url} is not a valid data url.", call = error_call)
+  }
+
+  list(
+    content_type = parts[[1]],
+    base64 = sub("^base64,", "", parts[[2]])
+  )
 }

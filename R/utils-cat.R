@@ -13,7 +13,6 @@ cat_line <- function(..., prefix = "") {
 # it's incomplete, and render it only when the next word break (space or
 # newline) is encountered.
 
-
 # Split a string into contiguous runs of non-spaces, " ", and newline.
 #
 # split_spaces("one  two    three") => c("one", "  ", "two", "    ", "three")
@@ -71,66 +70,68 @@ sink_wordwrap <- function(sink, width) {
 }
 
 sink_wordwrap_gen <- NULL
-on_load(sink_wordwrap_gen <- coro::generator(function(sink, width) {
-  buffer <- ""
-  pos_cursor <- 1
-
-  exhausted <- FALSE
-  while (!exhausted) {
-    input <- coro::yield()
-    if (coro::is_exhausted(input)) {
-      exhausted <- TRUE
-      input <- ""
-    }
-
-    input <- paste0(buffer, input)
+on_load(
+  sink_wordwrap_gen <- coro::generator(function(sink, width) {
     buffer <- ""
+    pos_cursor <- 1
 
-    # Normalize whitespace, make our lives easier
-    input <- gsub("\r\n", "\n", input)
-    input <- gsub("\r", "\n", input)
-    input <- gsub("\t", "    ", input)
+    exhausted <- FALSE
+    while (!exhausted) {
+      input <- coro::yield()
+      if (coro::is_exhausted(input)) {
+        exhausted <- TRUE
+        input <- ""
+      }
 
-    tokens <- split_spaces(input)
-    for (i in seq_along(tokens)) {
-      token <- tokens[[i]]
-      is_last_token <- i == length(tokens)
+      input <- paste0(buffer, input)
+      buffer <- ""
 
-      token_width <- nchar(token)
-      is_space <- startsWith(token, " ")
-      # Uncomment to render whitespace
-      # token <- gsub(" ", "\u00B7", token)
+      # Normalize whitespace, make our lives easier
+      input <- gsub("\r\n", "\n", input)
+      input <- gsub("\r", "\n", input)
+      input <- gsub("\t", "    ", input)
 
-      if (token == "\n") {
-        # Always flush newlines immediately
-        sink("\n")
-        pos_cursor <- 1
-      } else if (is_last_token && !exhausted) {
-        # A trailing non-newline might not be complete; buffer it until we have
-        # more text to process
-        buffer <- token
-      } else {
-        # A regular token. See if it fits on the current line.
-        soft_wrap <- pos_cursor + token_width > width
+      tokens <- split_spaces(input)
+      for (i in seq_along(tokens)) {
+        token <- tokens[[i]]
+        is_last_token <- i == length(tokens)
 
-        if (soft_wrap && (pos_cursor != 1 || is_space)) {
-          # It doesn't fit; wrap to the next line
+        token_width <- nchar(token)
+        is_space <- startsWith(token, " ")
+        # Uncomment to render whitespace
+        # token <- gsub(" ", "\u00B7", token)
+
+        if (token == "\n") {
+          # Always flush newlines immediately
           sink("\n")
           pos_cursor <- 1
+        } else if (is_last_token && !exhausted) {
+          # A trailing non-newline might not be complete; buffer it until we have
+          # more text to process
+          buffer <- token
+        } else {
+          # A regular token. See if it fits on the current line.
+          soft_wrap <- pos_cursor + token_width > width
 
-          if (is_space) {
-            # soft-wrapping due to spaces; skip rendering the spaces
-            next
+          if (soft_wrap && (pos_cursor != 1 || is_space)) {
+            # It doesn't fit; wrap to the next line
+            sink("\n")
+            pos_cursor <- 1
+
+            if (is_space) {
+              # soft-wrapping due to spaces; skip rendering the spaces
+              next
+            }
           }
-        }
 
-        # Render the token and update the cursor
-        sink(token)
-        pos_cursor <- pos_cursor + token_width
+          # Render the token and update the cursor
+          sink(token)
+          pos_cursor <- pos_cursor + token_width
+        }
       }
     }
-  }
-}))
+  })
+)
 
 # Wrap a sink to prefix each line with a given string.
 sink_prefix <- function(sink, prefix = "") {
@@ -140,46 +141,48 @@ sink_prefix <- function(sink, prefix = "") {
 }
 
 sink_prefix_gen <- NULL
-on_load(sink_prefix_gen <- coro::generator(function(sink, prefix = "") {
-  # When at line start, the next input will be prefixed with `prefix`. (But if
-  # the next input never comes, we won't print the prefix.)
-  at_line_start <- TRUE
+on_load(
+  sink_prefix_gen <- coro::generator(function(sink, prefix = "") {
+    # When at line start, the next input will be prefixed with `prefix`. (But if
+    # the next input never comes, we won't print the prefix.)
+    at_line_start <- TRUE
 
-  # In case the prefix itself contains characters that have special meaning when
-  # used as a gsub replacement
-  prefix_escaped <- gsub(perl = TRUE, "(\\\\|\\$)", "\\\\\\1", prefix)
+    # In case the prefix itself contains characters that have special meaning when
+    # used as a gsub replacement
+    prefix_escaped <- gsub(perl = TRUE, "(\\\\|\\$)", "\\\\\\1", prefix)
 
-  repeat {
-    input <- coro::yield(invisible())
-    if (coro::is_exhausted(input)) {
-      break
+    repeat {
+      input <- coro::yield(invisible())
+      if (coro::is_exhausted(input)) {
+        break
+      }
+      if (nchar(input) == 0) {
+        next
+      }
+
+      # We have non-empty input. If we're at the start of the line, it's time to
+      # print a prefix.
+      if (at_line_start) {
+        sink(prefix)
+        at_line_start <- FALSE
+      }
+
+      # Add the prefix after each newline in the input except the last one.
+      transformed <- gsub(
+        perl = TRUE,
+        "\n(?!$)", # Matches \n that are NOT immediately followed by EOF
+        paste0("\n", prefix_escaped),
+        input
+      )
+      sink(transformed)
+
+      # If the input ends with a newline, let the _next_ input be prefixed.
+      if (endsWith(input, "\n")) {
+        at_line_start <- TRUE
+      }
     }
-    if (nchar(input) == 0) {
-      next
-    }
-
-    # We have non-empty input. If we're at the start of the line, it's time to
-    # print a prefix.
-    if (at_line_start) {
-      sink(prefix)
-      at_line_start <- FALSE
-    }
-
-    # Add the prefix after each newline in the input except the last one.
-    transformed <- gsub(
-      perl = TRUE,
-      "\n(?!$)", # Matches \n that are NOT immediately followed by EOF
-      paste0("\n", prefix_escaped),
-      input
-    )
-    sink(transformed)
-
-    # If the input ends with a newline, let the _next_ input be prefixed.
-    if (endsWith(input, "\n")) {
-      at_line_start <- TRUE
-    }
-  }
-}))
+  })
+)
 
 # cat_word_wrap() is a function that returns a function that can be used to
 # print text to the console with word wrapping. It uses the COLUMNS environment
@@ -193,7 +196,11 @@ on_load(sink_prefix_gen <- coro::generator(function(sink, prefix = "") {
 #
 # The catter buffers the last word of a line, assuming that it's incomplete. To
 # ensure that the buffer gets flushed, cat a "\n" character.
-cat_word_wrap <- function(con = stdout(), prefix = "", width = cli::console_width()) {
+cat_word_wrap <- function(
+  con = stdout(),
+  prefix = "",
+  width = cli::console_width()
+) {
   sink <- prepare_sink(cat, file = con, sep = "")
 
   if (nchar(prefix) > 0) {
@@ -206,7 +213,7 @@ cat_word_wrap <- function(con = stdout(), prefix = "", width = cli::console_widt
 }
 
 emitter <- function(echo, prefix) {
-  if (echo == "text") {
+  if (echo == "output") {
     cat_word_wrap()
   } else if (echo == "all") {
     cat_word_wrap(prefix = "< ")

@@ -4,10 +4,14 @@
 \alias{tool}
 \title{Define a tool}
 \usage{
-tool(.fun, .description, ..., .name = NULL)
+tool(.fun, .description, ..., .name = NULL, .annotations = list())
 }
 \arguments{
-\item{.fun}{The function to be invoked when the tool is called.}
+\item{.fun}{The function to be invoked when the tool is called. The return
+value of the function is sent back to the chatbot.
+
+Expert users can customize the tool result by returning a
+\link{ContentToolResult} object.}
 
 \item{.description}{A detailed description of what the function does.
 Generally, the more information that you can provide here, the better.}
@@ -17,6 +21,13 @@ function. Each element should be created by a \code{\link[=type_boolean]{type_*(
 function.}
 
 \item{.name}{The name of the function.}
+
+\item{.annotations}{Additional properties that describe the tool and its
+behavior. Usually created by \code{\link[=tool_annotations]{tool_annotations()}}, where you can find a
+description of the annotation properties recommended by the \href{https://modelcontextprotocol.io/introduction}{Model Context Protocol}.}
+}
+\value{
+An S7 \code{ToolDef} object.
 }
 \description{
 Define an R function for use by a chatbot. The function will always be
@@ -25,7 +36,7 @@ run in the current R instance.
 Learn more in \code{vignette("tool-calling")}.
 }
 \examples{
-\dontshow{if (elmer:::openai_key_exists()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # First define the metadata that the model uses to figure out when to
 # call the tool

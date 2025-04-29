@@ -1,33 +1,53 @@
-url: https://hadley.github.io/elmer/
+url: https://ellmer.tidyverse.org
 template:
   bootstrap: 5
+  package: tidytemplate
+  includes:
+    in_header: |
+      <script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
+
+development:
+  mode: auto
 
 reference:
-- title: Chatbots
-  contents:
-  - starts_with("chat_")
-  - token_usage
+  - title: Chatbots
+    contents:
+      - starts_with("chat_")
+      - token_usage
 
-- title: Chat helpers
-  contents:
-  - create_tool_def
-  - content_image_url
-  - starts_with("live_")
-  - interpolate
+  - title: Chat helpers
+    contents:
+      - create_tool_def
+      - content_image_url
+      - content_pdf_url
+      - starts_with("live_")
+      - interpolate
+      - google_upload
 
-- title: Tools and structured data
-  contents:
-  - tool
-  - type_boolean
+  - title: Tools and structured data
+    contents:
+      - tool
+      - tool_annotations
+      - type_boolean
 
-- title: Objects
-  desc: >
-    These classes abstact across behaviour differences in chat providers so
-    that for typical elmer use you don't need to worry about them. You'll need
-    to learn more about the objects if you're doing something that's only
-    supported by one provider, or if you're implementing a new provider.
-  contents:
-  - Turn
-  - Provider
-  - Content
-  - Chat
+  - title: Objects
+    desc: >
+      These classes abstact across behaviour differences in chat providers so
+      that for typical ellmer use you don't need to worry about them. You'll need
+      to learn more about the objects if you're doing something that's only
+      supported by one provider, or if you're implementing a new provider.
+    contents:
+      - Turn
+      - Provider
+      - Content
+      - Chat
+      - Type
+
+  - title: Utilities
+    contents:
+      - contents_text
+      - params
+
+  - title: Deprecated functions
+    contents:
+      - deprecated

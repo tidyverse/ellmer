@@ -49,7 +49,7 @@ async_method <- function(fn) {
 # upon first call. This is necessary because the transformation needs to be done
 # not at package build time, but after package load time.
 #
-# Elsewhere in elmer, we use rlang::on_load to defer the transformation of
+# Elsewhere in ellmer, we use rlang::on_load to defer the transformation of
 # generators until after package load time. We can't do that for R6 methods
 # because nesting R6 class definitions inside of rlang::on_load causes roxygen2
 # to get confused.
@@ -76,7 +76,10 @@ deferred_method_transform <- function(lambda_expr, transformer, eval_env) {
 check_args <- function(fn) {
   arg_names <- names(formals(fn))
   if (length(arg_names) < 2) {
-    cli::cli_abort("Function must have at least two arguments.", .internal = TRUE)
+    cli::cli_abort(
+      "Function must have at least two arguments.",
+      .internal = TRUE
+    )
   } else if (arg_names[[1]] != "self") {
     cli::cli_abort("First argument must be {.arg self}.", .internal = TRUE)
   } else if (arg_names[[2]] != "private") {

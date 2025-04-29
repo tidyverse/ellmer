@@ -8,29 +8,32 @@
 \alias{ContentImageInline}
 \alias{ContentToolRequest}
 \alias{ContentToolResult}
+\alias{ContentThinking}
+\alias{ContentPDF}
 \title{Content types received from and sent to a chatbot}
 \usage{
 Content()
 
-ContentText(text = class_missing)
+ContentText(text = stop("Required"))
 
 ContentImage()
 
-ContentImageRemote(url = class_missing, detail = class_missing)
+ContentImageRemote(url = stop("Required"), detail = "")
 
-ContentImageInline(type = class_missing, data = class_missing)
+ContentImageInline(type = stop("Required"), data = NULL)
 
 ContentToolRequest(
-  id = class_missing,
-  name = class_missing,
-  arguments = class_missing
+  id = stop("Required"),
+  name = stop("Required"),
+  arguments = list(),
+  tool = NULL
 )
 
-ContentToolResult(
-  id = class_missing,
-  value = class_missing,
-  error = class_missing
-)
+ContentToolResult(value = NULL, error = NULL, extra = list(), request = NULL)
+
+ContentThinking(thinking = stop("Required"), extra = list())
+
+ContentPDF(type = stop("Required"), data = stop("Required"))
 }
 \arguments{
 \item{text}{A single string.}
@@ -43,23 +46,41 @@ ContentToolResult(
 
 \item{data}{Base64 encoded image data.}
 
-\item{id}{Tool call id (used to associate a request and a result)}
+\item{id}{Tool call id (used to associate a request and a result).
+Automatically managed by \pkg{ellmer}.}
 
 \item{name}{Function name}
 
 \item{arguments}{Named list of arguments to call the function with.}
 
-\item{value, error}{Either the results of calling the function if
-it succeeded, otherwise the error message, as a string. One of
-\code{value} and \code{error} will always be \code{NULL}.}
+\item{tool}{ellmer automatically matches a tool request to the tools defined
+for the chatbot. If \code{NULL}, the request did not match a defined tool.}
+
+\item{value}{The results of calling the tool function, if it succeeded.}
+
+\item{error}{The error message, as a string, or the error condition thrown
+as a result of a failure when calling the tool function. Must be \code{NULL}
+when the tool call is successful.}
+
+\item{extra}{Additional data.}
+
+\item{request}{The \link{ContentToolRequest} associated with the tool result,
+automatically added by \pkg{ellmer} when evaluating the tool call.}
+
+\item{thinking}{The text of the thinking output.}
+}
+\value{
+S7 objects that all inherit from \code{Content}
 }
 \description{
-elmer abstracts away differences in the way that different \link{Provider}s
-represent various types of content, allowing you to more easily write
-code that works with any chatbot.
+Use these functions if you're writing a package that extends ellmer and need
+to customise methods for various types of content. For normal use, see
+\code{\link[=content_image_url]{content_image_url()}} and friends.
 
-This set of classes represents the various types of content that can be
-sent to and received from a provider:
+ellmer abstracts away differences in the way that different \link{Provider}s
+represent various types of content, allowing you to more easily write
+code that works with any chatbot. This set of classes represents types of
+content that can be either sent to and received from a provider:
 \itemize{
 \item \code{ContentText}: simple text (often in markdown format). This is the only
 type of content that can be streamed live as it's received.
@@ -70,5 +91,15 @@ objects.
 \item \code{ContentToolRequest}: a request to perform a tool call (sent by the
 assistant).
 \item \code{ContentToolResult}: the result of calling the tool (sent by the user).
+This object is automatically created from the value returned by calling the
+\code{\link[=tool]{tool()}} function. Alternatively, expert users can return a
+\code{ContentToolResult} from a \code{\link[=tool]{tool()}} function to include additional data or
+to customize the display of the result.
 }
+}
+\examples{
+Content()
+ContentText("Tell me a joke")
+ContentImageRemote("https://www.r-project.org/Rlogo.png")
+ContentToolRequest(id = "abc", name = "mean", arguments = list(x = 1:5))
 }

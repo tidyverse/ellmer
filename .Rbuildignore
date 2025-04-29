@@ -1,4 +1,4 @@
-^elmer\.Rproj$
+^ellmer\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^\.github$
@@ -8,3 +8,9 @@
 ^docs$
 ^pkgdown$
 ^vignettes/articles$
+_cache/
+^cran-comments\.md$
+^CRAN-SUBMISSION$
+^[\.]?air\.toml$
+^\.vscode$
+^data-raw$

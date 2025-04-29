@@ -1,42 +1,54 @@
-Package: elmer
-Title: Call LLM APIs from R
-Version: 0.0.0.9000
+Package: ellmer
+Title: Chat with Large Language Models
+Version: 0.1.1.9000
 Authors@R: c(
-    person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre")),
-    person("Posit Software, PBC", role = c("cph", "fnd"))
+    person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-4757-117X")),
+    person("Joe", "Cheng", role = "aut"),
+    person("Aaron", "Jacobs", role = "aut"),
+    person("Posit Software, PBC", role = c("cph", "fnd"),
+           comment = c(ROR = "03wc8by49"))
   )
-Description: A consistent interface for calling LLM APIs. Includes support
-    for streaming.
+Description: Chat with large language models from a range of providers
+    including 'Claude' <https://claude.ai>, 'OpenAI'
+    <https://chatgpt.com>, and more. Supports streaming, asynchronous
+    calls, tool calling, and structured data extraction.
 License: MIT + file LICENSE
-URL: https://github.com/hadley/elmer, https://hadley.github.io/elmer/
-BugReports: https://github.com/hadley/elmer/issues
+URL: https://ellmer.tidyverse.org, https://github.com/tidyverse/ellmer
+BugReports: https://github.com/tidyverse/ellmer/issues
+Depends: 
+    R (>= 4.1)
 Imports:
     cli,
-    coro,
+    coro (>= 1.1.0),
     glue,
-    httr2 (>= 1.0.5),
+    httr2 (>= 1.1.1),
     jsonlite,
+    later (>= 1.4.0),
+    lifecycle,
+    promises (>= 1.3.1),
     R6,
     rlang (>= 1.1.0),
-    S7
+    S7 (>= 0.2.0)
 Suggests:
     base64enc,
-    bslib,
+    connectcreds,
+    curl (>= 6.0.1),
+    gargle,
     gitcreds,
     knitr,
-    later,
     magick,
     openssl,
-    promises,
+    paws.common,
     rmarkdown,
     shiny,
-    shinychat (>= 0.0.0.9000),
+    shinychat (>= 0.1.1.9001),
     testthat (>= 3.0.0),
     withr
 VignetteBuilder:
     knitr
-Remotes:
-    jcheng5/shinychat
+Remotes: 
+    posit-dev/shinychat
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true
@@ -47,33 +59,47 @@ RoxygenNote: 7.3.2
 Collate:
     'utils-S7.R'
     'types.R'
+    'tools-def.R'
+    'content.R'
     'provider.R'
     'as-json.R'
+    'chat-parallel.R'
     'utils-coro.R'
     'chat.R'
     'content-image.R'
+    'content-pdf.R'
+    'turns.R'
     'content-tools.R'
-    'content.R'
-    'elmer-package.R'
+    'deprecated.R'
+    'ellmer-package.R'
     'httr2.R'
     'import-standalone-obj-type.R'
     'import-standalone-purrr.R'
     'import-standalone-types-check.R'
     'interpolate.R'
+    'params.R'
     'provider-openai.R'
     'provider-azure.R'
+    'provider-bedrock.R'
     'provider-claude.R'
-    'turns.R'
-    'provider-cortex.R'
     'provider-gemini.R'
+    'provider-cloudflare.R'
+    'provider-cortex.R'
+    'provider-databricks.R'
+    'provider-deepseek.R'
+    'provider-gemini-upload.R'
     'provider-github.R'
     'provider-groq.R'
+    'provider-huggingface.r'
+    'provider-mistral.R'
     'provider-ollama.R'
+    'provider-openrouter.R'
     'provider-perplexity.R'
+    'provider-snowflake.R'
+    'provider-vllm.R'
     'shiny.R'
     'tokens.R'
     'tools-def-auto.R'
-    'tools-def.R'
     'utils-cat.R'
     'utils-merge.R'
     'utils.R'

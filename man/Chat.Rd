@@ -3,8 +3,11 @@
 \name{Chat}
 \alias{Chat}
 \title{A chat}
+\value{
+A Chat object
+}
 \description{
-A \code{Chat} is an sequence of sequence of user and assistant \link{Turn}s sent
+A \code{Chat} is a sequence of user and assistant \link{Turn}s sent
 to a specific \link{Provider}. A \code{Chat} is a mutable R6 object that takes care of
 managing the state associated with the chat; i.e. it records the messages
 that you send to the server, and the messages that you receive back.
@@ -14,28 +17,37 @@ your behalf), it also takes care of the tool loop.
 You should generally not create this object yourself,
 but instead call \code{\link[=chat_openai]{chat_openai()}} or friends instead.
 }
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{system_prompt}}{The system prompt, if present, as a string.
-Otherwise, \code{NULL}.}
-}
-\if{html}{\out{</div>}}
+\examples{
+\dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+chat <- chat_openai(echo = TRUE)
+chat$chat("Tell me a funny joke")
+\dontshow{\}) # examplesIf}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Chat-new}{\code{Chat$new()}}
-\item \href{#method-Chat-turns}{\code{Chat$turns()}}
-\item \href{#method-Chat-tokens}{\code{Chat$tokens()}}
+\item \href{#method-Chat-get_turns}{\code{Chat$get_turns()}}
+\item \href{#method-Chat-set_turns}{\code{Chat$set_turns()}}
+\item \href{#method-Chat-add_turn}{\code{Chat$add_turn()}}
+\item \href{#method-Chat-get_system_prompt}{\code{Chat$get_system_prompt()}}
+\item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
+\item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
+\item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
+\item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
 \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
 \item \href{#method-Chat-chat}{\code{Chat$chat()}}
+\item \href{#method-Chat-chat_parallel}{\code{Chat$chat_parallel()}}
 \item \href{#method-Chat-extract_data}{\code{Chat$extract_data()}}
+\item \href{#method-Chat-extract_data_parallel}{\code{Chat$extract_data_parallel()}}
 \item \href{#method-Chat-extract_data_async}{\code{Chat$extract_data_async()}}
 \item \href{#method-Chat-chat_async}{\code{Chat$chat_async()}}
 \item \href{#method-Chat-stream}{\code{Chat$stream()}}
 \item \href{#method-Chat-stream_async}{\code{Chat$stream_async()}}
 \item \href{#method-Chat-register_tool}{\code{Chat$register_tool()}}
+\item \href{#method-Chat-get_provider}{\code{Chat$get_provider()}}
+\item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
+\item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
 \item \href{#method-Chat-clone}{\code{Chat$clone()}}
 }
 }
@@ -44,7 +56,7 @@ Otherwise, \code{NULL}.}
 \if{latex}{\out{\hypertarget{method-Chat-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$new(provider, turns, seed = NULL, echo = "none")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$new(provider, system_prompt = NULL, echo = "none")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -52,12 +64,7 @@ Otherwise, \code{NULL}.}
 \describe{
 \item{\code{provider}}{A provider object.}
 
-\item{\code{turns}}{An unnamed list of turns to start the chat with (i.e.,
-continuing a previous conversation). If \code{NULL} or zero-length list, the
-conversation begins from scratch.}
-
-\item{\code{seed}}{Optional integer seed that ChatGPT uses to try and make output
-more reproducible.}
+\item{\code{system_prompt}}{System prompt to start the conversation with.}
 
 \item{\code{echo}}{One of the following options:
 \itemize{
@@ -73,13 +80,13 @@ Note this only affects the \code{chat()} method.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-turns"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-turns}{}}}
-\subsection{Method \code{turns()}}{
-The turns that have been sent and received so far
+\if{html}{\out{<a id="method-Chat-get_turns"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_turns}{}}}
+\subsection{Method \code{get_turns()}}{
+Retrieve the turns that have been sent and received so far
 (optionally starting with the system prompt, if any).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$turns(include_system_prompt = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_turns(include_system_prompt = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -92,16 +99,116 @@ turns (if any exists).}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-tokens"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-tokens}{}}}
-\subsection{Method \code{tokens()}}{
-List the number of tokens consumed by each assistant turn.
-Currently tokens are recorded for assistant turns only; so user
-turns will have zeros.
+\if{html}{\out{<a id="method-Chat-set_turns"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-set_turns}{}}}
+\subsection{Method \code{set_turns()}}{
+Replace existing turns with a new list.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$tokens()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$set_turns(value)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{value}}{A list of \link{Turn}s.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-add_turn"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-add_turn}{}}}
+\subsection{Method \code{add_turn()}}{
+Add a pair of turns to the chat.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$add_turn(user, system)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{user}}{The user \link{Turn}.}
+
+\item{\code{system}}{The system \link{Turn}.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_system_prompt"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_system_prompt}{}}}
+\subsection{Method \code{get_system_prompt()}}{
+If set, the system prompt, it not, \code{NULL}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_system_prompt()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_model"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_model}{}}}
+\subsection{Method \code{get_model()}}{
+Retrieve the model name
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_model()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-set_system_prompt"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-set_system_prompt}{}}}
+\subsection{Method \code{set_system_prompt()}}{
+Update the system prompt
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$set_system_prompt(value)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{value}}{A character vector giving the new system prompt}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_tokens"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_tokens}{}}}
+\subsection{Method \code{get_tokens()}}{
+A data frame with a \code{tokens} column that proides the
+number of input tokens used by user turns and the number of
+output tokens used by assistant turns.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_tokens(include_system_prompt = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{include_system_prompt}}{Whether to include the system prompt in
+the turns (if any exists).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_cost"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_cost}{}}}
+\subsection{Method \code{get_cost()}}{
+The cost of this chat
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_cost(include = c("all", "last"))}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{include}}{The default, \code{"all"}, gives the total cumulative cost
+of this chat. Alternatively, use \code{"last"} to get the cost of just the
+most recent turn.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Chat-last_turn"></a>}}
@@ -149,12 +256,36 @@ will be used.}
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-chat_parallel"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-chat_parallel}{}}}
+\subsection{Method \code{chat_parallel()}}{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Submit multiple prompts in parallel. Returns a list of \link{Chat} objects,
+one for each prompt.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_parallel(prompts, max_active = 10, rpm = 500)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{prompts}}{A list of user prompts.}
+
+\item{\code{max_active}}{The maximum number of simultaenous requests to send.}
+
+\item{\code{rpm}}{Maximum number of requests per minute.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Chat-extract_data"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-extract_data}{}}}
 \subsection{Method \code{extract_data()}}{
 Extract structured data
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data(..., spec, echo = "none")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data(..., type, echo = "none", convert = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -163,12 +294,54 @@ Extract structured data
 \item{\code{...}}{The input to send to the chatbot. Will typically include
 the phrase "extract structured data".}
 
-\item{\code{spec}}{A type specification for the extracted data. Should be
+\item{\code{type}}{A type specification for the extracted data. Should be
 created with a \code{\link[=type_boolean]{type_()}} function.}
 
 \item{\code{echo}}{Whether to emit the response to stdout as it is received.
 Set to "text" to stream JSON data as it's generated (not supported by
 all providers).}
+
+\item{\code{convert}}{Automatically convert from JSON lists to R data types
+using the schema. For example, this will turn arrays of objects into
+data frames and arrays of strings into a character vector.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-extract_data_parallel"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-extract_data_parallel}{}}}
+\subsection{Method \code{extract_data_parallel()}}{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Submit multiple prompts in parallel.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_parallel(
+  prompts,
+  type,
+  convert = TRUE,
+  max_active = 10,
+  rpm = 500
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{prompts}}{A vector created by \code{\link[=interpolate]{interpolate()}} or a list
+of character vectors.}
+
+\item{\code{type}}{A type specification for the extracted data. Should be
+created with a \code{\link[=type_boolean]{type_()}} function.}
+
+\item{\code{convert}}{If \code{TRUE}, automatically convert from JSON lists to R
+data types using the schema. This typically works best when \code{type} is
+\code{type_object()} as this will give you a data frame with one column for
+each property. If \code{FALSE}, returns a list.}
+
+\item{\code{max_active}}{The maximum number of simultaenous requests to send.}
+
+\item{\code{rpm}}{Maximum number of requests per minute.}
 }
 \if{html}{\out{</div>}}
 }
@@ -180,7 +353,7 @@ all providers).}
 Extract structured data, asynchronously. Returns a promise
 that resolves to an object matching the type specification.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_async(..., spec, echo = "none")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_async(..., type, echo = "none")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -189,7 +362,7 @@ that resolves to an object matching the type specification.
 \item{\code{...}}{The input to send to the chatbot. Will typically include
 the phrase "extract structured data".}
 
-\item{\code{spec}}{A type specification for the extracted data. Should be
+\item{\code{type}}{A type specification for the extracted data. Should be
 created with a \code{\link[=type_boolean]{type_()}} function.}
 
 \item{\code{echo}}{Whether to emit the response to stdout as it is received.
@@ -262,8 +435,14 @@ yields string promises.
 \if{latex}{\out{\hypertarget{method-Chat-register_tool}{}}}
 \subsection{Method \code{register_tool()}}{
 Register a tool (an R function) that the chatbot can use.
-If the chatbot decides to use the function,  elmer will automatically
+If the chatbot decides to use the function, ellmer will automatically
 call it and submit the results back.
+
+The return value of the function. Generally, this should either be a
+string, or a JSON-serializable value. If you must have more direct
+control of the structure of the JSON that's returned, you can return a
+JSON-serializable value wrapped in \code{\link[base:AsIs]{base::I()}}, which ellmer will leave
+alone until the entire request is JSON-serialized.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Chat$register_tool(tool_def)}\if{html}{\out{</div>}}
 }
@@ -272,6 +451,44 @@ call it and submit the results back.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{tool_def}}{Tool definition created by \code{\link[=tool]{tool()}}.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_provider"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_provider}{}}}
+\subsection{Method \code{get_provider()}}{
+Get the underlying provider object. For expert use only.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_provider()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_tools"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_tools}{}}}
+\subsection{Method \code{get_tools()}}{
+Retrieve the list of registered tools.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_tools()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-set_tools"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-set_tools}{}}}
+\subsection{Method \code{set_tools()}}{
+Sets the available tools. For expert use only; most users
+should use \code{register_tool()}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$set_tools(tools)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tools}}{A list of tool definitions created with \code{\link[=tool]{tool()}}.}
 }
 \if{html}{\out{</div>}}
 }
