@@ -518,7 +518,7 @@ Chat <- R6::R6Class(
         for (chunk in chunks) {
           if (content == "all") {
             if (!S7_inherits(chunk, Content)) {
-              # assuming the alternative to `Content` is character
+              # Assumes that if the chunk is not a `Content` then it's a string
               chunk <- ContentText(chunk)
             }
           }
@@ -534,9 +534,6 @@ Chat <- R6::R6Class(
         }
 
         if (content == "all" && !is.null(user_turn)) {
-          # We could just yield the user turn here or we can keep the contract
-          # of only yielding `Content` objects
-          # yield(user_turn)
           for (ut_content in user_turn@contents) {
             yield(ut_content)
           }
@@ -567,7 +564,7 @@ Chat <- R6::R6Class(
         for (chunk in await_each(chunks)) {
           if (content == "all") {
             if (!S7_inherits(chunk, Content)) {
-              # assuming the alternative to `Content` is character
+              # Assumes that if the chunk is not a `Content` then it's a string
               chunk <- ContentText(chunk)
             }
           }
@@ -583,9 +580,6 @@ Chat <- R6::R6Class(
         }
 
         if (content == "all" && !is.null(user_turn)) {
-          # We could just yield the user turn here or we can keep the contract
-          # of only yielding `Content` objects
-          # yield(user_turn)
           for (ut_content in user_turn@contents) {
             yield(ut_content)
           }
