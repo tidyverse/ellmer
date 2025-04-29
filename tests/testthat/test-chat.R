@@ -358,3 +358,57 @@ test_that("chat warns on tool failures", {
     transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
   )
 })
+
+test_that("$stream(content='all') yields tool request/result contents", {
+  chat <- chat_openai_test("Be very terse, not even punctuation.")
+  tool_current_date <- tool(function() "2024-01-01", "Return the current date")
+  chat$register_tool(tool_current_date)
+
+  res <- coro::collect(
+    chat$stream(
+      "What's the current date in Y-M-D format?",
+      content = "all"
+    )
+  )
+
+  # 1. Tool request
+  # 2. Tool result (paired with request)
+  # 3. ...rest of assistant message
+  expect_s7_class(res[[1]], ContentToolRequest)
+  expect_equal(res[[1]]@tool, tool_current_date)
+  expect_s7_class(res[[2]], ContentToolResult)
+  expect_equal(res[[2]]@value, "2024-01-01")
+  expect_equal(res[[2]]@request, res[[1]])
+
+  for (delta in res[-(1:2)]) {
+    expect_s7_class(delta, ContentText)
+  }
+})
+
+test_that("$stream_async(content='all') yields tool request/result contents", {
+  chat <- chat_openai_test("Be very terse, not even punctuation.")
+  tool_current_date <- tool(function() "2024-01-01", "Return the current date")
+  chat$register_tool(tool_current_date)
+
+  res <- sync(
+    coro::async_collect(
+      chat$stream_async(
+        "What's the current date in Y-M-D format?",
+        content = "all"
+      )
+    )
+  )
+
+  # 1. Tool request
+  # 2. Tool result (paired with request)
+  # 3. ...rest of assistant message
+  expect_s7_class(res[[1]], ContentToolRequest)
+  expect_equal(res[[1]]@tool, tool_current_date)
+  expect_s7_class(res[[2]], ContentToolResult)
+  expect_equal(res[[2]]@value, "2024-01-01")
+  expect_equal(res[[2]]@request, res[[1]])
+
+  for (delta in res[-(1:2)]) {
+    expect_s7_class(delta, ContentText)
+  }
+})
