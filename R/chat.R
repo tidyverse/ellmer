@@ -396,7 +396,12 @@ Chat <- R6::R6Class(
     stream = function(..., content = c("text", "all")) {
       content <- arg_match(content)
       turn <- user_turn(...)
-      private$chat_impl(turn, content = content, stream = TRUE, echo = "none")
+      private$chat_impl(
+        turn,
+        yield_content = content,
+        stream = TRUE,
+        echo = "none"
+      )
     },
 
     #' @description Submit input to the chatbot, returning asynchronously
@@ -412,7 +417,7 @@ Chat <- R6::R6Class(
       turn <- user_turn(...)
       private$chat_impl_async(
         turn,
-        content = content,
+        yield_content = content,
         stream = TRUE,
         echo = "none"
       )
@@ -503,7 +508,7 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      content = "text"
+      yield_content = "text"
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
@@ -513,10 +518,10 @@ Chat <- R6::R6Class(
           user_turn,
           stream = stream,
           echo = echo,
-          content = content
+          yield_content = yield_content
         )
         for (chunk in chunks) {
-          if (content == "all") {
+          if (yield_content == "all") {
             if (!S7_inherits(chunk, Content)) {
               # Assumes that if the chunk is not a `Content` then it's a string
               chunk <- ContentText(chunk)
@@ -533,7 +538,7 @@ Chat <- R6::R6Class(
           tool_errors <- c(tool_errors, turn_get_tool_errors(user_turn))
         }
 
-        if (content == "all" && !is.null(user_turn)) {
+        if (yield_content == "all" && !is.null(user_turn)) {
           for (ut_content in user_turn@contents) {
             yield(ut_content)
           }
@@ -549,7 +554,7 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      content = "text"
+      yield_content = "text"
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
@@ -559,10 +564,10 @@ Chat <- R6::R6Class(
           user_turn,
           stream = stream,
           echo = echo,
-          content = content
+          yield_content = yield_content
         )
         for (chunk in await_each(chunks)) {
-          if (content == "all") {
+          if (yield_content == "all") {
             if (!S7_inherits(chunk, Content)) {
               # Assumes that if the chunk is not a `Content` then it's a string
               chunk <- ContentText(chunk)
@@ -579,7 +584,7 @@ Chat <- R6::R6Class(
           tool_errors <- c(tool_errors, turn_get_tool_errors(user_turn))
         }
 
-        if (content == "all" && !is.null(user_turn)) {
+        if (yield_content == "all" && !is.null(user_turn)) {
           for (ut_content in user_turn@contents) {
             yield(ut_content)
           }
@@ -596,7 +601,7 @@ Chat <- R6::R6Class(
       stream,
       echo,
       type = NULL,
-      content = "text"
+      yield_content = "text"
     ) {
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
@@ -658,7 +663,7 @@ Chat <- R6::R6Class(
         }
         # When `echo="output"`, tool calls are emitted in `invoke_tools()`
 
-        if (content == "all") {
+        if (yield_content == "all") {
           for (turn_content in contents_not_text) {
             yield(turn_content)
           }
@@ -680,7 +685,7 @@ Chat <- R6::R6Class(
       stream,
       echo,
       type = NULL,
-      content = "text"
+      yield_content = "text"
     ) {
       response <- chat_perform(
         provider = private$provider,
@@ -732,7 +737,7 @@ Chat <- R6::R6Class(
         }
         # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
 
-        if (content == "all") {
+        if (yield_content == "all") {
           for (turn_content in turn@contents[!is_text]) {
             yield(turn_content)
           }
