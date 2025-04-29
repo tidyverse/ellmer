@@ -11,7 +11,14 @@ development:
 
 reference:
   - title: Chatbots
+    desc: >
+      ellmer provides a simple interface to a wide range of LLM providers. Use
+      the `chat_` functions to initialize a `Chat` instance for a specific
+      provider and model. Once created, use the methods of the `Chat` instance
+      to send messages, receive responses, manage tools and extract structured
+      data.
     contents:
+      - Chat
       - starts_with("chat_")
       - token_usage
 
