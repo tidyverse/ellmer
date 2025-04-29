@@ -78,6 +78,7 @@ Other chatbots:
 \code{\link{chat_anthropic}()},
 \code{\link{chat_aws_bedrock}()},
 \code{\link{chat_azure_openai}()},
+\code{\link{chat_cloudflare}()},
 \code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
 \code{\link{chat_deepseek}()},
@@ -88,6 +89,7 @@ Other chatbots:
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
 \code{\link{chat_openrouter}()},
-\code{\link{chat_perplexity}()}
+\code{\link{chat_perplexity}()},
+\code{\link{chat_portkey}()}
 }
 \concept{chatbots}
