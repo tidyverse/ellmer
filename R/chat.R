@@ -667,7 +667,6 @@ Chat <- R6::R6Class(
           for (turn_content in contents_not_text) {
             yield(turn_content)
           }
-          yield("\n")
         }
       }
 
@@ -741,7 +740,6 @@ Chat <- R6::R6Class(
           for (turn_content in turn@contents[!is_text]) {
             yield(turn_content)
           }
-          yield("\n")
         }
       }
 
