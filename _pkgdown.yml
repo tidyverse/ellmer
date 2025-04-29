@@ -39,7 +39,7 @@ reference:
 
   - title: Objects
     desc: >
-      These classes abstact across behaviour differences in chat providers so
+      These classes abstract across behaviour differences in chat providers so
       that for typical ellmer use you don't need to worry about them. You'll need
       to learn more about the objects if you're doing something that's only
       supported by one provider, or if you're implementing a new provider.
