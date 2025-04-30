@@ -61,3 +61,9 @@ chat$chat("
 # results are send back in a tool result.
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+Other Tool calling: 
+\code{\link{tool_annotations}()},
+\code{\link{tool_reject}()}
+}
+\concept{Tool calling}

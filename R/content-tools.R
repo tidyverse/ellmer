@@ -1,9 +1,25 @@
 #' @include turns.R
 NULL
 
-maybe_invoke_callback <- function(cb, data) {
+maybe_invoke_callbacks_tool_request <- function(callbacks, request) {
+  cb <- callbacks$tool_request
   if (is.null(cb)) return()
-  cb$invoke(data)
+
+  tryCatch(
+    {
+      cb$invoke(request)
+      NULL
+    },
+    ellmer_tool_reject = function(e) {
+      ContentToolResult(error = e$message, request = request)
+    }
+  )
+}
+
+maybe_invoke_callbacks_tool_result <- function(callbacks, result) {
+  cb <- callbacks$tool_result
+  if (is.null(cb)) return()
+  cb$invoke(result)
 }
 
 # Results a content list
@@ -12,7 +28,12 @@ invoke_tools <- function(turn, echo = "none", callbacks = list()) {
 
   lapply(tool_requests, function(request) {
     maybe_echo_tool(request, echo = echo)
-    maybe_invoke_callback(callbacks$tool_request, request)
+    rejected <- maybe_invoke_callbacks_tool_request(callbacks, request)
+    if (!is.null(rejected)) {
+      maybe_echo_tool(rejected, echo = echo)
+      return(rejected)
+    }
+
     result <- invoke_tool(request)
 
     if (promises::is.promise(result@value)) {
@@ -23,7 +44,7 @@ invoke_tools <- function(turn, echo = "none", callbacks = list()) {
     }
 
     maybe_echo_tool(result, echo = echo)
-    maybe_invoke_callback(callbacks$tool_result, result)
+    maybe_invoke_callbacks_tool_result(callbacks, result)
     result
   })
 }
@@ -41,7 +62,11 @@ on_load(
     # we want to run all the async tool calls in parallel
     result_promises <- lapply(tool_requests, function(request) {
       maybe_echo_tool(request, echo = echo)
-      maybe_invoke_callback(callbacks$tool_request, request)
+      rejected <- maybe_invoke_callbacks_tool_request(callbacks, request)
+      if (!is.null(rejected)) {
+        maybe_echo_tool(rejected, echo = echo)
+        return(rejected)
+      }
 
       invoke_tool_async(request)
     })
@@ -49,7 +74,8 @@ on_load(
     result_promises <- lapply(result_promises, function(p) {
       p$then(function(result) {
         maybe_echo_tool(result, echo = echo)
-        maybe_invoke_callback(callbacks$tool_result, result)
+        maybe_invoke_callbacks_tool_result(callbacks, result)
+        result
       })
     })
 

@@ -403,3 +403,47 @@ test_that("chat callbacks for tool requests/results", {
     chat$register_callback("chat", function(data) NULL)
   })
 })
+
+test_that("tool calls can be rejected via `tool_request` callbacks", {
+  chat <- chat_openai_test("Be very terse, not even punctuation.")
+
+  chat$register_tool(tool(
+    function(user) "red",
+    "Find out a user's favorite color",
+    user = type_string("User's name"),
+    .name = "user_favorite_color"
+  ))
+
+  chat$register_callback("tool_request", function(request) {
+    if (request@arguments$user == "Joe") {
+      tool_reject("Joe denied the request.")
+    }
+  })
+
+  expect_snapshot(
+    . <- chat$chat(
+      "What are Joe and Hadley's favorite colors?",
+      "Write 'Joe ____ Hadley ____'. Use 'unknown' if you don't know.",
+      echo = "output"
+    )
+  )
+})
+
+test_that("tool calls can be rejected via the tool function", {
+  chat <- chat_openai_test("Be very terse, not even punctuation.")
+
+  chat$register_tool(tool(
+    function(user) if (user == "Joe") tool_reject() else "red",
+    "Find out a user's favorite color",
+    user = type_string("User's name"),
+    .name = "user_favorite_color"
+  ))
+
+  expect_snapshot(
+    . <- chat$chat(
+      "What are Joe and Hadley's favorite colors?",
+      "Write 'Joe ____ Hadley ____'. Use 'unknown' if you don't know.",
+      echo = "output"
+    )
+  )
+})
