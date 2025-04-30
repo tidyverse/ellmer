@@ -100,6 +100,7 @@ Collate:
     'shiny.R'
     'tokens.R'
     'tools-def-auto.R'
+    'utils-callbacks.R'
     'utils-cat.R'
     'utils-merge.R'
     'utils.R'
