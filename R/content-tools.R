@@ -1,12 +1,18 @@
 #' @include turns.R
 NULL
 
+maybe_invoke_callback <- function(cb, data) {
+  if (is.null(cb)) return()
+  cb$invoke(data)
+}
+
 # Results a content list
-invoke_tools <- function(turn, echo = "none") {
+invoke_tools <- function(turn, echo = "none", callbacks = list()) {
   tool_requests <- extract_tool_requests(turn@contents)
 
   lapply(tool_requests, function(request) {
     maybe_echo_tool(request, echo = echo)
+    maybe_invoke_callback(callbacks$tool_request, request)
     result <- invoke_tool(request)
 
     if (promises::is.promise(result@value)) {
@@ -17,18 +23,25 @@ invoke_tools <- function(turn, echo = "none") {
     }
 
     maybe_echo_tool(result, echo = echo)
+    maybe_invoke_callback(callbacks$tool_result, result)
     result
   })
 }
 
 on_load(
-  invoke_tools_async <- coro::async(function(turn, tools, echo = "none") {
+  invoke_tools_async <- coro::async(function(
+    turn,
+    tools,
+    echo = "none",
+    callbacks = list()
+  ) {
     tool_requests <- extract_tool_requests(turn@contents)
 
     # We call it this way instead of a more natural for + await_each() because
     # we want to run all the async tool calls in parallel
     result_promises <- lapply(tool_requests, function(request) {
       maybe_echo_tool(request, echo = echo)
+      maybe_invoke_callback(callbacks$tool_request, request)
 
       invoke_tool_async(request)
     })
@@ -36,6 +49,7 @@ on_load(
     result_promises <- lapply(result_promises, function(p) {
       p$then(function(result) {
         maybe_echo_tool(result, echo = echo)
+        maybe_invoke_callback(callbacks$tool_result, result)
       })
     })
 

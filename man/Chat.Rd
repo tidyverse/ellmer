@@ -48,6 +48,7 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-get_provider}{\code{Chat$get_provider()}}
 \item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
 \item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
+\item \href{#method-Chat-register_callback}{\code{Chat$register_callback()}}
 \item \href{#method-Chat-clone}{\code{Chat$clone()}}
 }
 }
@@ -491,6 +492,35 @@ should use \code{register_tool()}.
 \item{\code{tools}}{A list of tool definitions created with \code{\link[=tool]{tool()}}.}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-register_callback"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-register_callback}{}}}
+\subsection{Method \code{register_callback()}}{
+Register callbacks for specific events. For expert use only.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$register_callback(event, callback)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{event}}{The name of the event. Supported events include
+\code{tool_request}, and \code{tool_result}.}
+
+\item{\code{callback}}{A function to be called when the event occurs. The
+function must take at least one argument, which is the data associated
+with the event:
+\itemize{
+\item \code{tool_request} receives a \code{ContentToolRequest} object.
+\item \code{tool_result} receives a \code{ContentToolResult} object.
+}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Returns a function that can be called to remove the callback.
 }
 }
 \if{html}{\out{<hr>}}

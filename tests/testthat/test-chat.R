@@ -358,3 +358,48 @@ test_that("chat warns on tool failures", {
     transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
   )
 })
+
+test_that("chat callbacks for tool requests/results", {
+  chat <- chat_openai_test("Be very terse, not even punctuation.")
+
+  test_tool <- tool(
+    function(user) c("red", "blue")[nchar(user) %% 2 + 1],
+    .description = "Find out a user's favorite color",
+    user = type_string("User's name"),
+    .name = "user_favorite_color"
+  )
+
+  chat$register_tool(test_tool)
+
+  last_request <- NULL
+  cb_count_request <- 0
+  cb_count_result <- 0
+
+  chat$register_callback("tool_request", function(request) {
+    cb_count_request <<- cb_count_request + 1
+    cli::cli_inform(
+      "[{cb_count_request}] Tool request: {request@arguments$user}"
+    )
+
+    expect_s7_class(request, ContentToolRequest)
+    expect_equal(request@tool, test_tool)
+    last_request <<- request
+  })
+  chat$register_callback("tool_result", function(result) {
+    cb_count_result <<- cb_count_result + 1
+    cli::cli_inform("[{cb_count_result}] Tool result: {result@value}")
+
+    expect_s7_class(result, ContentToolResult)
+    expect_equal(result@request, last_request)
+  })
+
+  expect_snapshot(
+    . <- chat$chat("What are Joe and Hadley's favorite colors?")
+  )
+  expect_equal(cb_count_request, 2L)
+  expect_equal(cb_count_result, 2L)
+
+  expect_snapshot(error = TRUE, {
+    chat$register_callback("chat", function(data) NULL)
+  })
+})
