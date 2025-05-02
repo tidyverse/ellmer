@@ -63,10 +63,10 @@ chat$chat_async("How's your day going?") %...>% print()
 
 #### Shiny example
 
-For an asynchronous chat interface with Shiny, we recommend using [the shinychat package](https://posit-dev.github.io/shinychat/) which provides a chat interface for Shiny applications.
+To add an asynchronous chat interface in your Shiny application, we recommend using [the shinychat package](https://posit-dev.github.io/shinychat/).
 
-You can easily integrate a chat UI similar to the app created by `live_browser()` using shinychat's chat module with the `shinychat::chat_mod_ui()` and `shinychat::chat_mod_server()` functions.
-This module connects an `ellmer::Chat` object to `shinychat::chat_ui()` and handles non-blocking asynchronous chat interactions.
+The simplest approach is to use shinychat's Shiny module to add a chat UI to your app---similar to the app created by `live_browser()`---using the `shinychat::chat_mod_ui()` and `shinychat::chat_mod_server()` functions.
+These module functions connect an `ellmer::Chat` object to `shinychat::chat_ui()` and handle non-blocking asynchronous chat interactions automatically.
 
 ```r
 library(shiny)
@@ -88,7 +88,7 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-For fully custom streaming applications, you can use the `shinychat::markdown_stream()` function to stream responses into a Shiny UI.
+For fully custom streaming applications with a custom or no chat interface, you can use `shinychat::markdown_stream()` to stream responses into a Shiny app.
 This is particularly useful for creating interactive chat applications where you want to display responses as they are generated.
 
 The following Shiny app demonstrates `markdown_stream()` and uses both `$stream_async()` and `$chat_async()` to stream a story from an OpenAI model.
