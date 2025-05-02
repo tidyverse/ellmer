@@ -63,11 +63,39 @@ chat$chat_async("How's your day going?") %...>% print()
 
 #### Shiny example
 
-The following Shiny app uses both `$stream_async()` and `$chat_async()` to stream a story from an OpenAI model.
-We ask the user for a prompt to generate a story and then stream the story into the UI as it is generated using `shinychat::markdown_stream()`.
+For an asynchronous chat interface with Shiny, we recommend using [the shinychat package](https://posit-dev.github.io/shinychat/) which provides a chat interface for Shiny applications.
+
+You can easily integrate a chat UI similar to the app created by `live_browser()` using shinychat's chat module with the `shinychat::chat_mod_ui()` and `shinychat::chat_mod_server()` functions.
+This module connects an `ellmer::Chat` object to `shinychat::chat_ui()` and handles non-blocking asynchronous chat interactions.
+
+```r
+library(shiny)
+library(shinychat)
+
+ui <- bslib::page_fillable(
+  chat_mod_ui("chat")
+)
+
+server <- function(input, output, session) {
+  chat <- ellmer::chat_openai(
+    system_prompt = "You're a trickster who answers in riddles",
+    model = "gpt-4.1-nano"
+  )
+
+  chat_mod_server("chat", chat)
+}
+
+shinyApp(ui, server)
+```
+
+For fully custom streaming applications, you can use the `shinychat::markdown_stream()` function to stream responses into a Shiny UI.
+This is particularly useful for creating interactive chat applications where you want to display responses as they are generated.
+
+The following Shiny app demonstrates `markdown_stream()` and uses both `$stream_async()` and `$chat_async()` to stream a story from an OpenAI model.
+In the app, we ask the user for a prompt to generate a story and then stream the story into the UI.
 Then we follow up by asking the model for a story title and we use the response to update the card title.
 
-This example highlights the difference between streaming and non-streaming chat.
+This example also highlights the difference between streaming and non-streaming chat.
 Use `$stream_async()` with Shiny outputs that are designed to work with generators, like `shinychat::markdown_stream()` and `shinychat::chat_append()`.
 Use `$chat_async()` when you want the text response from the model, for example the title of the story.
 
