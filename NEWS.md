@@ -1,6 +1,17 @@
 # ellmer (development version)
 
-* New `chat_huggingface()` for models hosted at <https://huggingface.co> 
+* A new `Chat$register_callback()` method allows you to register callbacks to
+  run on `tool_request` and `tool_result`. This can be used to implement custom
+  logging or other actions when tools are called, without modifying the tool
+  function (#473, @gadenbuie).
+
+* New `tool_reject()` function can be used to reject a tool request with an
+  error message. `tool_reject()` can be called within a tool function or in a
+  `tool_request` callback registered with `Chat$register_callback()`. In the
+  latter case, rejecting a tool call will ensure that the tool function is not
+  evaluated (#473, @gadenbuie).
+
+* New `chat_huggingface()` for models hosted at <https://huggingface.co>
   (#359, @s-spavound).
 
 * Bumped default time out up to 5 minutes (#451, #321).
