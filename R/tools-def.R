@@ -187,18 +187,20 @@ tool_annotations <- function(
 #'
 #' always_allowed <- c()
 #'
+#' # ContentToolRequest
 #' chat$register_callback("tool_request", function(request) {
 #'   if (request@name %in% always_allowed) return()
 #'
 #'   answer <- utils::menu(
 #'     title = sprintf("Allow tool `%s()` to run?", request@name),
-#'     choices = c("Once", "Always", "No")
+#'     choices = c("Always", "Once", "No"),
+#'     graphics = FALSE
 #'   )
 #'
-#'   if (answer == 2) { # always
+#'   if (answer == 1) {
+#'     always_allowed <<- append(always_allowed, request@name)
+#'   } else if (answer %in% c(0, 3)) {
 #'     tool_reject()
-#'   } else if (answer %in% c(0, 3)) { # cancel or no
-#'     always_allowed <<- c(allowed, request@name)
 #'   }
 #' })
 #'
