@@ -64,7 +64,7 @@ for consent before running \emph{any}  tool.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{packaged_list_files_tool <- tool(
   function() c("app.R", "data.csv"),
- "List files in the user's current directory"
+  "List files in the user's current directory"
 )
 
 chat <- chat_openai(model = "gpt-4.1-nano")
