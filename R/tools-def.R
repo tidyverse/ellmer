@@ -192,12 +192,12 @@ tool_annotations <- function(
 #'
 #'   answer <- utils::menu(
 #'     title = sprintf("Allow tool `%s()` to run?", request@name),
-#'     choices = c("Always", "Once", "No")
+#'     choices = c("Once", "Always", "No")
 #'   )
 #'
-#'   if (answer == "No") {
+#'   if (answer == 2) { # always
 #'     tool_reject()
-#'   } else if (answer == "Always") {
+#'   } else if (answer %in% c(0, 3)) { # cancel or no
 #'     always_allowed <<- c(allowed, request@name)
 #'   }
 #' })
