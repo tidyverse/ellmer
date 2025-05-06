@@ -67,11 +67,37 @@ CallbackManager <- R6Class(
 
       # Invoke callbacks in reverse insertion order
       for (id in rev(as.integer(names(private$callbacks)))) {
-        exec(private$callbacks[[as.character(id)]], data)
+        res <- exec(private$callbacks[[as.character(id)]], data)
+        if (promises::is.promise(res)) {
+          cli::cli_abort(c(
+            "Can't use async callbacks with `$chat()` or `$stream()`.",
+            i = "Async callbacks are supported, but you must use `$chat_async()` or `$stream_async()`."
+          ))
+        }
       }
 
       invisible(NULL)
     },
+
+    #' @description
+    #' Invoke all registered callbacks asynchronously with the provided
+    #' arguments. As with `$invoke()`, callbacks are invoked in reverse order of
+    #' registration (last-in first-evaluated).
+    #'
+    #' @param data An input, such as a list or object, to pass to the callbacks.
+    #' @returns Nothing, callbacks are invoked for side effects).
+    invoke_async = async_method(function(self, private, data) {
+      if (length(private$callbacks) == 0) {
+        return(invisible(NULL))
+      }
+
+      # Invoke callbacks in reverse insertion order
+      for (id in rev(as.integer(names(private$callbacks)))) {
+        coro::await(exec(private$callbacks[[as.character(id)]], data))
+      }
+
+      invisible(NULL)
+    }),
 
     #' @description Get the number of registered callbacks.
     #' @return Integer count of callbacks.

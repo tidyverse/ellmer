@@ -16,6 +16,23 @@ maybe_invoke_callbacks_tool_request <- function(callbacks, request) {
   )
 }
 
+maybe_invoke_callbacks_tool_request_async <- coro::async(
+  function(callbacks, request) {
+    cb <- callbacks$tool_request
+    if (is.null(cb)) return()
+
+    tryCatch(
+      {
+        coro::await(cb$invoke_async(request))
+        NULL
+      },
+      ellmer_tool_reject = function(e) {
+        ContentToolResult(error = e$message, request = request)
+      }
+    )
+  }
+)
+
 maybe_invoke_callbacks_tool_result <- function(callbacks, result) {
   cb <- callbacks$tool_result
   if (is.null(cb)) return()
@@ -58,28 +75,39 @@ on_load(
   ) {
     tool_requests <- extract_tool_requests(turn@contents)
 
-    # We call it this way instead of a more natural for + await_each() because
-    # we want to run all the async tool calls in parallel
-    result_promises <- lapply(tool_requests, function(request) {
+    invoke_tool_async_wrapper <- coro::async(function(request) {
       maybe_echo_tool(request, echo = echo)
-      rejected <- maybe_invoke_callbacks_tool_request(callbacks, request)
+      rejected <- coro::await(
+        maybe_invoke_callbacks_tool_request_async(callbacks, request)
+      )
       if (!is.null(rejected)) {
         maybe_echo_tool(rejected, echo = echo)
         return(rejected)
       }
 
-      invoke_tool_async(request)
+      result <- coro::await(invoke_tool_async(request))
+      maybe_echo_tool(result, echo = echo)
+      maybe_invoke_callbacks_tool_result(callbacks, result)
+      result
     })
 
-    result_promises <- lapply(result_promises, function(p) {
-      p$then(function(result) {
-        maybe_echo_tool(result, echo = echo)
-        maybe_invoke_callbacks_tool_result(callbacks, result)
-        result
+    run_in_parallel <- getOption("ellmer.tool_async_parallel", TRUE)
+
+    if (isTRUE(run_in_parallel)) {
+      result_promises <- lapply(
+        tool_requests,
+        invoke_tool_async_wrapper
+      )
+      promises::promise_all(.list = result_promises)
+    } else {
+      gen_tool_results <- coro::async_generator(function(tool_requests) {
+        for (request in tool_requests) {
+          result <- coro::await(invoke_tool_async_wrapper(request))
+          yield(result)
+        }
       })
-    })
-
-    promises::promise_all(.list = result_promises)
+      coro::async_collect(gen_tool_results(tool_requests))
+    }
   })
 )
 
