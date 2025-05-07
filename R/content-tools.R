@@ -40,38 +40,50 @@ maybe_invoke_callbacks_tool_result <- function(callbacks, result) {
 }
 
 # Results a content list
-invoke_tools <- function(turn, echo = "none", callbacks = list()) {
-  tool_requests <- extract_tool_requests(turn@contents)
+on_load(
+  invoke_tools <- coro::generator(function(
+    turn,
+    echo = "none",
+    callbacks = list(),
+    yield_request = FALSE
+  ) {
+    tool_requests <- extract_tool_requests(turn@contents)
 
-  lapply(tool_requests, function(request) {
-    maybe_echo_tool(request, echo = echo)
-    rejected <- maybe_invoke_callbacks_tool_request(callbacks, request)
-    if (!is.null(rejected)) {
-      maybe_echo_tool(rejected, echo = echo)
-      return(rejected)
+    for (request in tool_requests) {
+      if (yield_request) {
+        yield(request)
+      }
+      maybe_echo_tool(request, echo = echo)
+      rejected <- maybe_invoke_callbacks_tool_request(callbacks, request)
+      if (!is.null(rejected)) {
+        maybe_echo_tool(rejected, echo = echo)
+        yield(rejected)
+        next
+      }
+
+      result <- invoke_tool(request)
+
+      if (promises::is.promise(result@value)) {
+        cli::cli_abort(c(
+          "Can't use async tools with `$chat()` or `$stream()`.",
+          i = "Async tools are supported, but you must use `$chat_async()` or `$stream_async()`."
+        ))
+      }
+
+      maybe_echo_tool(result, echo = echo)
+      maybe_invoke_callbacks_tool_result(callbacks, result)
+      yield(result)
     }
-
-    result <- invoke_tool(request)
-
-    if (promises::is.promise(result@value)) {
-      cli::cli_abort(c(
-        "Can't use async tools with `$chat()` or `$stream()`.",
-        i = "Async tools are supported, but you must use `$chat_async()` or `$stream_async()`."
-      ))
-    }
-
-    maybe_echo_tool(result, echo = echo)
-    maybe_invoke_callbacks_tool_result(callbacks, result)
-    result
   })
-}
+)
 
 on_load(
-  invoke_tools_async <- coro::async(function(
+  invoke_tools_async <- coro::generator(function(
     turn,
     tools,
     echo = "none",
-    callbacks = list()
+    callbacks = list(),
+    yield_request = FALSE
   ) {
     tool_requests <- extract_tool_requests(turn@contents)
 
@@ -91,22 +103,11 @@ on_load(
       result
     })
 
-    run_in_parallel <- getOption("ellmer.tool_async_parallel", TRUE)
-
-    if (isTRUE(run_in_parallel)) {
-      result_promises <- lapply(
-        tool_requests,
-        invoke_tool_async_wrapper
-      )
-      promises::promise_all(.list = result_promises)
-    } else {
-      gen_tool_results <- coro::async_generator(function(tool_requests) {
-        for (request in tool_requests) {
-          result <- coro::await(invoke_tool_async_wrapper(request))
-          yield(result)
-        }
-      })
-      coro::async_collect(gen_tool_results(tool_requests))
+    for (request in tool_requests) {
+      if (yield_request) {
+        yield(request)
+      }
+      yield(invoke_tool_async_wrapper(request))
     }
   })
 )

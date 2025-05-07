@@ -163,15 +163,23 @@ test_that("invoke_tool_async returns a ContentToolResult", {
 test_that("invoke_tools() echoes tool requests and results", {
   turn <- turn_with_tool_requests()
 
-  expect_silent(invoke_tools(turn))
-  expect_snapshot(. <- invoke_tools(turn, echo = "output"))
+  expect_silent(coro::collect(invoke_tools(turn)))
+  expect_snapshot(. <- coro::collect(invoke_tools(turn, echo = "output")))
 })
 
 test_that("invoke_tools_async() echoes tool requests and results", {
   turn <- turn_with_tool_requests()
 
-  expect_silent(sync(invoke_tools_async(turn)))
-  expect_snapshot(. <- sync(invoke_tools_async(turn, echo = "output")))
+  expect_silent(sync(
+    promises::promise_all(.list = coro::collect(invoke_tools_async(turn)))
+  ))
+  expect_snapshot(
+    . <- sync(
+      promises::promise_all(
+        .list = coro::collect(invoke_tools_async(turn, echo = "output"))
+      )
+    )
+  )
 })
 
 test_that("tool error warnings", {

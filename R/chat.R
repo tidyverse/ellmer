@@ -523,7 +523,11 @@ Chat <- R6::R6Class(
           yield(chunk)
         }
 
-        user_turn <- private$invoke_tools(echo = echo)
+        tool_results <- coro::collect(private$invoke_tools(echo = echo))
+        user_turn <- NULL
+        if (length(tool_results)) {
+          user_turn <- Turn("user", tool_results)
+        }
 
         if (echo == "all") {
           cat(format(user_turn))
@@ -551,7 +555,15 @@ Chat <- R6::R6Class(
           yield(chunk)
         }
 
-        user_turn <- await(private$invoke_tools_async(echo = echo))
+        tool_results <- coro::await(
+          coro::async_collect(
+            private$invoke_tools_async(echo = echo)
+          )
+        )
+        user_turn <- NULL
+        if (length(tool_results)) {
+          user_turn <- Turn("user", tool_results)
+        }
 
         if (echo == "all") {
           cat(format(user_turn))
@@ -710,28 +722,48 @@ Chat <- R6::R6Class(
       turn
     },
 
-    invoke_tools = function(echo = "none") {
-      tool_results <- invoke_tools(
+    invoke_tools = generator_method(function(
+      self,
+      private,
+      echo = "none",
+      yield_request = FALSE
+    ) {
+      tool_steps <- invoke_tools(
         self$last_turn(),
         echo = echo,
-        callbacks = private$callbacks
+        callbacks = private$callbacks,
+        yield_request = yield_request
       )
-      if (length(tool_results) == 0) {
-        return()
+      for (step in tool_steps) {
+        yield(step)
       }
-      Turn("user", tool_results)
-    },
+    }),
 
-    invoke_tools_async = async_method(function(self, private, echo = "none") {
-      tool_results <- await(invoke_tools_async(
+    invoke_tools_async = async_generator_method(function(
+      self,
+      private,
+      echo = "none",
+      yield_request = FALSE,
+      tool_mode = "sequential"
+    ) {
+      tool_mode <- arg_match(tool_mode, c("parallel", "sequential"))
+
+      tool_steps <- invoke_tools_async(
         self$last_turn(),
         echo = echo,
-        callbacks = private$callbacks
-      ))
-      if (length(tool_results) == 0) {
-        return()
+        callbacks = private$callbacks,
+        yield_request = yield_request
+      )
+
+      if (tool_mode == "parallel") {
+        for (step in tool_steps) {
+          yield(step)
+        }
+      } else if (tool_mode == "sequential") {
+        for (step in coro::await_each(tool_steps)) {
+          yield(step)
+        }
       }
-      Turn("user", tool_results)
     }),
 
     has_system_prompt = function() {

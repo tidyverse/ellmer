@@ -18,7 +18,9 @@ test_that("can make simple streaming request", {
 test_that("can chat with tool request", {
   chat <- chat_ollama_test("Be as terse as possible; no punctuation")
 
-  add_two_numbers <- function(x, y = 0) x + y
+  add_two_numbers <- function(x, y = 0) {
+    as.numeric(x) + as.numeric(y)
+  }
   chat$register_tool(
     tool(
       add_two_numbers,
