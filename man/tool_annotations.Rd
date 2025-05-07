@@ -44,3 +44,8 @@ The annotations in \code{tool_annotations()} are drawn from the \href{https://mo
 \emph{hints}. Tool authors should use these annotations to communicate tool
 properties, but users should note that these annotations are not guaranteed.
 }
+\seealso{
+Other tool calling helpers: 
+\code{\link{tool}()}
+}
+\concept{tool calling helpers}

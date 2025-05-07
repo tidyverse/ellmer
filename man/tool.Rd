@@ -61,3 +61,8 @@ chat$chat("
 # results are send back in a tool result.
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+Other tool calling helpers: 
+\code{\link{tool_annotations}()}
+}
+\concept{tool calling helpers}

@@ -10,7 +10,6 @@ NULL
 #'
 #' Learn more in `vignette("tool-calling")`.
 #'
-#' @export
 #' @param .fun The function to be invoked when the tool is called. The return
 #'   value of the function is sent back to the chatbot.
 #'
@@ -26,7 +25,6 @@ NULL
 #' @param ... Name-type pairs that define the arguments accepted by the
 #'   function. Each element should be created by a [`type_*()`][type_boolean]
 #'   function.
-#' @export
 #' @return An S7 `ToolDef` object.
 #' @examplesIf has_credentials("openai")
 #'
@@ -51,6 +49,9 @@ NULL
 #' # Look at the chat history to see how tool calling works:
 #' # Assistant sends a tool request which is evaluated locally and
 #' # results are send back in a tool result.
+#'
+#' @family tool calling helpers
+#' @export
 tool <- function(.fun, .description, ..., .name = NULL, .annotations = list()) {
   if (is.null(.name)) {
     fun_expr <- enexpr(.fun)
@@ -96,6 +97,7 @@ tool <- function(.fun, .description, ..., .name = NULL, .annotations = list()) {
 #'
 #' @return A list of tool annotations.
 #'
+#' @family tool calling helpers
 #' @export
 tool_annotations <- function(
   title = NULL,
