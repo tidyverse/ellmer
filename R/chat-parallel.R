@@ -32,10 +32,9 @@ chat_parallel <- function(chat, prompts, max_active = 10, rpm = 500) {
     # don't need to index because user_turns null
     conversations <- append_turns(conversations, user_turns)
 
-    assistant_turns <- ifelse(
-      needs_iter,
-      my_parallel_responses(conversations[needs_iter]),
-      list(NULL)
+    assistant_turns <- vector("list", length(user_turns))
+    assistant_turns[needs_iter] <- my_parallel_responses(
+      conversations[needs_iter]
     )
     conversations <- append_turns(conversations, assistant_turns)
   }
