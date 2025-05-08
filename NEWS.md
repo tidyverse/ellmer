@@ -47,7 +47,7 @@
   when you print a `Chat` object, in `tokens_usage()`, and with 
   `Chat$get_cost()`. You can also request costs in `$parallel_extract_data()`.
   
-  We do our best to accurlately compute the cost, but you should treat it as an 
+  We do our best to accurately compute the cost, but you should treat it as an 
   estimate rather than the exact price. Unfortunately LLM APIs currently make it
   very hard to figure out exactly how much your queries cost (#203).
 
