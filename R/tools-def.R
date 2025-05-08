@@ -10,7 +10,6 @@ NULL
 #'
 #' Learn more in `vignette("tool-calling")`.
 #'
-#' @export
 #' @param .fun The function to be invoked when the tool is called. The return
 #'   value of the function is sent back to the chatbot.
 #'
@@ -26,7 +25,6 @@ NULL
 #' @param ... Name-type pairs that define the arguments accepted by the
 #'   function. Each element should be created by a [`type_*()`][type_boolean]
 #'   function.
-#' @export
 #' @return An S7 `ToolDef` object.
 #' @examplesIf has_credentials("openai")
 #'
@@ -37,7 +35,12 @@ NULL
 #'   "Drawn numbers from a random normal distribution",
 #'   n = type_integer("The number of observations. Must be a positive integer."),
 #'   mean = type_number("The mean value of the distribution."),
-#'   sd = type_number("The standard deviation of the distribution. Must be a non-negative number.")
+#'   sd = type_number("The standard deviation of the distribution. Must be a non-negative number."),
+#'   .annotations = tool_annotations(
+#'     title = "Draw Random Normal Numbers",
+#'     read_only_hint = TRUE,
+#'     open_world_hint = FALSE
+#'   )
 #' )
 #' chat <- chat_openai()
 #' # Then register it
@@ -51,6 +54,9 @@ NULL
 #' # Look at the chat history to see how tool calling works:
 #' # Assistant sends a tool request which is evaluated locally and
 #' # results are send back in a tool result.
+#'
+#' @family tool calling helpers
+#' @export
 tool <- function(.fun, .description, ..., .name = NULL, .annotations = list()) {
   if (is.null(.name)) {
     fun_expr <- enexpr(.fun)
@@ -72,13 +78,35 @@ tool <- function(.fun, .description, ..., .name = NULL, .annotations = list()) {
 #' Tool annotations
 #'
 #' @description
-#' Tool annotations are additional properties that can be used to describe a
-#' tool to clients, for example a Shiny app or another user interface.
+#' Tool annotations are additional properties that, when passed to the
+#' `.annotations` argument of [tool()], provide additional information about the
+#' tool and its behavior. This information can be used for display to users, for
+#' example in a Shiny app or another user interface.
 #'
 #' The annotations in `tool_annotations()` are drawn from the [Model Context
 #' Protocol](https://modelcontextprotocol.io/introduction) and are considered
 #' *hints*. Tool authors should use these annotations to communicate tool
 #' properties, but users should note that these annotations are not guaranteed.
+#'
+#' @examples
+#' # See ?tool() for a full example using this function.
+#' # We're creating a tool around R's `rnorm()` function to allow the chatbot to
+#' # generate random numbers from a normal distribution.
+#' tool_rnorm <- tool(
+#'   rnorm,
+#'   # Describe the tool function to the LLM
+#'   .description = "Drawn numbers from a random normal distribution",
+#'   # Describe the parameters used by the tool function
+#'   n = type_integer("The number of observations. Must be a positive integer."),
+#'   mean = type_number("The mean value of the distribution."),
+#'   sd = type_number("The standard deviation of the distribution. Must be a non-negative number."),
+#'   # Tool annotations optionally provide additional context to the LLM
+#'   .annotations = tool_annotations(
+#'     title = "Draw Random Normal Numbers",
+#'     read_only_hint = TRUE, # the tool does not modify any state
+#'     open_world_hint = FALSE # the tool does not interact with the outside world
+#'   )
+#' )
 #'
 #' @param title A human-readable title for the tool.
 #' @param read_only_hint If `TRUE`, the tool does not modify its environment.
@@ -96,6 +124,7 @@ tool <- function(.fun, .description, ..., .name = NULL, .annotations = list()) {
 #'
 #' @return A list of tool annotations.
 #'
+#' @family tool calling helpers
 #' @export
 tool_annotations <- function(
   title = NULL,

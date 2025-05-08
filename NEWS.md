@@ -1,6 +1,10 @@
 # ellmer (development version)
 
-* New `chat_huggingface()` for models hosted at <https://huggingface.co> 
+* Added a Shiny app example in `vignette("streaming-async")` showcasing
+  asynchronous streaming with `{ellmer}` and `{shinychat}` (#131, @gadenbuie,
+  @adisarid).
+
+* New `chat_huggingface()` for models hosted at <https://huggingface.co>
   (#359, @s-spavound).
 
 * Bumped default time out up to 5 minutes (#451, #321).

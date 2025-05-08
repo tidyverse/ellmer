@@ -228,25 +228,7 @@ Chat <- R6::R6Class(
     #' @param max_active The maximum number of simultaenous requests to send.
     #' @param rpm Maximum number of requests per minute.
     chat_parallel = function(prompts, max_active = 10, rpm = 500) {
-      turns <- as_user_turns(prompts)
-
-      reqs <- parallel_requests(
-        provider = private$provider,
-        existing_turns = private$.turns,
-        tools = private$tools,
-        new_turns = turns,
-        rpm = rpm
-      )
-      resps <- req_perform_parallel(reqs, max_active = max_active)
-      ok <- !map_lgl(resps, is.null)
-      json <- map(resps[ok], resp_body_json)
-
-      map2(json, turns[ok], function(json, user_turn) {
-        chat <- self$clone()
-        turn <- value_turn(private$provider, json)
-        chat$add_turn(user_turn, turn)
-        chat
-      })
+      chat_parallel(self, prompts, max_active = max_active, rpm = rpm)
     },
 
     #' @description Extract structured data

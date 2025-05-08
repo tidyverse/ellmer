@@ -17,9 +17,11 @@ match_tools <- function(turn, tools) {
 
 # Results a content list
 invoke_tools <- function(turn, echo = "none") {
+  if (is.null(turn)) return(NULL)
+
   tool_requests <- extract_tool_requests(turn@contents)
 
-  lapply(tool_requests, function(request) {
+  tool_results <- lapply(tool_requests, function(request) {
     maybe_echo_tool(request, echo = echo)
     result <- invoke_tool(request)
 
@@ -33,6 +35,12 @@ invoke_tools <- function(turn, echo = "none") {
     maybe_echo_tool(result, echo = echo)
     result
   })
+
+  if (length(tool_results) == 0) {
+    NULL
+  } else {
+    Turn("user", tool_results)
+  }
 }
 
 on_load(
@@ -52,8 +60,14 @@ on_load(
         maybe_echo_tool(result, echo = echo)
       })
     })
+    tool_result_promises <- promises::promise_all(.list = result_promises)
+    tool_results <- await(tool_result_promises)
 
-    promises::promise_all(.list = result_promises)
+    if (length(tool_results) == 0) {
+      NULL
+    } else {
+      Turn("user", tool_results)
+    }
   })
 )
 
