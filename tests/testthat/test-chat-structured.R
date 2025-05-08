@@ -12,10 +12,10 @@ test_that("can extract data from ContentJson", {
 })
 
 test_that("can opt-out of conversion data from ContentJson", {
-  turn <- Turn("assistant", list(ContentJson(list(x = NULL))))
-  type <- type_object(x = type_integer())
-  expect_equal(extract_data(turn, type, convert = TRUE), list(x = NA_integer_))
-  expect_equal(extract_data(turn, type, convert = FALSE), list(x = NULL))
+  turn <- Turn("assistant", list(ContentJson(list(x = list(1, 2)))))
+  type <- type_object(x = type_array(items = type_integer()))
+  expect_equal(extract_data(turn, type, convert = TRUE), list(x = c(1L, 2L)))
+  expect_equal(extract_data(turn, type, convert = FALSE), list(x = list(1, 2)))
 })
 
 test_that("can extract data when wrapper is used", {
@@ -26,11 +26,11 @@ test_that("can extract data when wrapper is used", {
 
 # Type coercion ---------------------------------------------------------------
 
-test_that("optional base types converted to NA", {
-  expect_equal(convert_from_type(NULL, type_boolean()), NA)
-  expect_equal(convert_from_type(NULL, type_integer()), NA_integer_)
-  expect_equal(convert_from_type(NULL, type_number()), NA_real_)
-  expect_equal(convert_from_type(NULL, type_string()), NA_character_)
+test_that("optional base types (scalars) stay as NULL", {
+  expect_equal(convert_from_type(NULL, type_boolean(required = FALSE)), NULL)
+  expect_equal(convert_from_type(NULL, type_integer(required = FALSE)), NULL)
+  expect_equal(convert_from_type(NULL, type_number(required = FALSE)), NULL)
+  expect_equal(convert_from_type(NULL, type_string(required = FALSE)), NULL)
 })
 
 test_that("can convert arrays of basic types to simple vectors", {
@@ -52,13 +52,59 @@ test_that("can convert arrays of basic types to simple vectors", {
   )
 })
 
-test_that("can convert arrays of optional basic types to simple vectors", {
+test_that("handles empty and NULL vectors of basic types", {
   type <- type_array(items = type_boolean(required = FALSE))
   expect_equal(convert_from_type(list(FALSE, TRUE), type), c(FALSE, TRUE))
   expect_equal(convert_from_type(list(NULL, TRUE), type), c(NA, TRUE))
 
   type <- type_array(items = type_integer(required = FALSE))
+  expect_identical(convert_from_type(list(), type), integer())
   expect_identical(convert_from_type(list(NULL), type), NA_integer_)
+
+  type <- type_array(items = type_number(required = FALSE))
+  expect_identical(convert_from_type(list(), type), double())
+  expect_identical(convert_from_type(list(NULL), type), NA_real_)
+
+  type <- type_array(items = type_string(required = FALSE))
+  expect_equal(convert_from_type(list(), type), character())
+  expect_equal(convert_from_type(list(NULL), type), NA_character_)
+})
+
+test_that("completely missing optional components become NULL", {
+  type <- type_integer(required = FALSE)
+  expect_equal(convert_from_type(NULL, type), NULL)
+
+  type <- type_array(items = type_integer(), required = FALSE)
+  expect_equal(convert_from_type(NULL, type), NULL)
+
+  type <- type_object(
+    x = type_integer(),
+    y = type_integer(required = FALSE)
+  )
+  expect_equal(
+    convert_from_type(list(x = 1), type),
+    list(x = 1, y = NULL)
+  )
+})
+
+test_that("can handle missing optional values in objects (#384)", {
+  data <- list(
+    list(fruit = "Apples", year = NULL),
+    list(fruit = "Oranges", year = NULL)
+  )
+  type <- type_array(
+    items = type_object(
+      fruit = type_string(),
+      year = type_integer(required = FALSE)
+    )
+  )
+  expect_equal(
+    convert_from_type(data, type),
+    data.frame(
+      fruit = c("Apples", "Oranges"),
+      year = c(NA_integer_, NA_integer_)
+    )
+  )
 })
 
 test_that("can covert array of arrays to lists of vectors", {
