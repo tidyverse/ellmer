@@ -53,7 +53,7 @@ parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
     )
     user_turns <- map(
       assistant_turns,
-      \(turn) tool_results_as_turn(invoke_tools(turn))
+      \(turn) tool_results_as_turn(coro::collect(invoke_tools(turn)))
     )
     needs_iter <- !map_lgl(user_turns, is.null)
     if (!any(needs_iter)) {
