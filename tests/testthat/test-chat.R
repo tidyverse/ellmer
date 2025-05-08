@@ -328,7 +328,7 @@ test_that("chat can get and register a list of tools", {
 })
 
 test_that("chat warns on tool failures", {
-  chat <- chat_openai_test("Be terse")
+  chat <- chat_openai_test()
 
   chat$register_tool(tool(
     function(user) stop("User denied tool request"),
