@@ -19,9 +19,9 @@
     Code
       chat
     Output
-      <Chat OpenAI/gpt-4o turns=3 tokens=15/5 $0.00>
+      <Chat OpenAI/gpt-4.1-nano turns=3 tokens=15/5 $0.00>
       -- system [0] ------------------------------------------------------------------
-      You're a helpful assistant that returns very minimal output
+      Be terse.
       -- user [15] -------------------------------------------------------------------
       What's 1 + 1?
       What's 1 + 2?
@@ -73,4 +73,19 @@
       x [user_favorite_color (ID)]: User denied tool request
       x [user_favorite_color (ID)]: User denied tool request
       i ... and 1 more.
+
+# old extract methods are deprecated
+
+    Code
+      chat_null$extract_data()
+    Condition
+      Warning:
+      `Chat$extract_data()` was deprecated in ellmer 0.2.0.
+      i Please use `Chat$chat_structured()` instead.
+    Code
+      chat_null$extract_data_async()
+    Condition
+      Warning:
+      `Chat$extract_data_async()` was deprecated in ellmer 0.2.0.
+      i Please use `Chat$chat_structured_async()` instead.
 

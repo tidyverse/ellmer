@@ -25,12 +25,12 @@ library(ellmer)
 
 ## Structured data basics
 
-To extract structured data you call the `$extract_data()` method instead of the `$chat()` method. You'll also need to define a type specification that describes the structure of the data that you want (more on that shortly). Here's a simple example that extracts two specific values from a string:
+To extract structured data you call `$chat_structured()` instead of the `$chat()` method. You'll also need to define a type specification that describes the structure of the data that you want (more on that shortly). Here's a simple example that extracts two specific values from a string:
 
 ```{r}
 #| label: basics-text
 chat <- chat_openai()
-chat$extract_data(
+chat$chat_structured(
   "My name is Susan and I'm 13 years old",
   type = type_object(
     age = type_number(),
@@ -43,7 +43,7 @@ The same basic idea works with images too:
 
 ```{r}
 #| label: basics-image
-chat$extract_data(
+chat$chat_structured(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   type = type_object(
     primary_shape = type_string(),
@@ -86,7 +86,7 @@ To define your desired type specification (also known as a **schema**), you use 
   )
   ```
 
-Using these type specifications ensures that the LLM will return JSON. But ellmer goes one step further to convert the results to the closest R analog. Currently, this converts arrays of boolean, integers, numbers, and strings into logical, integer, numeric, and character vectors. Arrays of objects are converted into data frames. You can opt-out of this and get plain lists by setting `convert = FALSE` in `$extract_data()`.
+Using these type specifications ensures that the LLM will return JSON. But ellmer goes one step further to convert the results to the closest R analog. Currently, this converts arrays of boolean, integers, numbers, and strings into logical, integer, numeric, and character vectors. Arrays of objects are converted into data frames. You can opt-out of this and get plain lists by setting `convert = FALSE` in `$chat_structured()`.
 
 In addition to defining types, you need to provide the LLM with some information about what you actually want. This is the purpose of the first argument, `description`, which is a string that describes the data that you want. This is a good place to ask nicely for other attributes you'll like the value to have (e.g. minimum or maximum values, date formats, ...). There's no guarantee that these requests will be honoured, but the LLM will usually make a best effort to do so.
 
@@ -131,7 +131,7 @@ type_summary <- type_object(
 )
 
 chat <- chat_openai()
-data <- chat$extract_data(text, type = type_summary)
+data <- chat$chat_structured(text, type = type_summary)
 cat(data$summary)
 
 str(data)
@@ -154,7 +154,7 @@ type_named_entity <- type_object(
 type_named_entities <- type_array(items = type_named_entity)
 
 chat <- chat_openai()
-chat$extract_data(text, type = type_named_entities)
+chat$chat_structured(text, type = type_named_entities)
 ```
 
 ### Example 3: Sentiment analysis
@@ -174,7 +174,7 @@ type_sentiment <- type_object(
 )
 
 chat <- chat_openai()
-str(chat$extract_data(text, type = type_sentiment))
+str(chat$chat_structured(text, type = type_sentiment))
 ```
 
 Note that while we've asked nicely for the scores to sum 1, which they do in this example (at least when I ran the code), this is not guaranteed.
@@ -206,7 +206,7 @@ type_classification <- type_array(
 )
 
 chat <- chat_openai()
-data <- chat$extract_data(text, type = type_classification)
+data <- chat$chat_structured(text, type = type_classification)
 data
 ```
 
@@ -228,7 +228,7 @@ prompt <- "
 "
 
 chat <- chat_anthropic()
-str(chat$extract_data(prompt, type = type_characteristics))
+str(chat$chat_structured(prompt, type = type_characteristics))
 ```
 
 This example only works with Claude, not GPT or Gemini, because only Claude supports adding additional, arbitrary properties.
@@ -258,7 +258,7 @@ type_assets <- type_array(items = type_asset)
 
 chat <- chat_openai()
 image <- content_image_file("congressional-assets.png")
-data <- chat$extract_data(image, type = type_assets)
+data <- chat$chat_structured(image, type = type_assets)
 data
 ```
 
@@ -293,7 +293,7 @@ prompt <- "
 "
 
 chat <- chat_openai()
-chat$extract_data(prompt, type = type_article)
+chat$chat_structured(prompt, type = type_article)
 str(data)
 ```
 
@@ -309,7 +309,7 @@ type_article <- type_object(
   author = type_string("Name of the author", required = FALSE),
   date = type_string("Date written in YYYY-MM-DD format.", required = FALSE)
 )
-chat$extract_data(prompt, type = type_article)
+chat$chat_structured(prompt, type = type_article)
 ```
 
 ### Data frames

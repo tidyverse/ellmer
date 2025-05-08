@@ -34,10 +34,10 @@ test_that("system prompt must be a character vector", {
 })
 
 test_that("can retrieve system prompt with last_turn()", {
-  chat1 <- chat_openai_test()
+  chat1 <- chat_openai_test(system_prompt = NULL)
   expect_equal(chat1$last_turn("system"), NULL)
 
-  chat2 <- chat_openai(system_prompt = "You are from New Zealand")
+  chat2 <- chat_openai_test(system_prompt = "You are from New Zealand")
   expect_equal(
     chat2$last_turn("system"),
     Turn(
@@ -49,7 +49,7 @@ test_that("can retrieve system prompt with last_turn()", {
 })
 
 test_that("can get and set turns", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
   expect_equal(chat$get_turns(), list())
 
   turns <- list(Turn("user"), Turn("assistant"))
@@ -143,25 +143,11 @@ test_that("can perform a simple async batch chat", {
   )
 })
 
-test_that("can chat in parallel", {
-  chat <- chat_openai_test("Just give me answers, no punctuation")
-  results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
-
-  expect_type(results, "list")
-  expect_length(results, 2)
-
-  expect_s3_class(results[[1]], "Chat")
-  expect_s3_class(results[[2]], "Chat")
-
-  expect_equal(results[[1]]$last_turn()@contents[[1]]@text, "2")
-  expect_equal(results[[2]]$last_turn()@contents[[1]]@text, "4")
-})
-
 test_that("can extract structured data", {
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai_test()
-  data <- chat$extract_data("John, age 15, won first prize", type = person)
+  data <- chat$chat_structured("John, age 15, won first prize", type = person)
   expect_equal(data, list(name = "John", age = 15))
 })
 
@@ -183,7 +169,7 @@ test_that("can extract structured data (async)", {
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai_test()
-  data <- sync(chat$extract_data_async(
+  data <- sync(chat$chat_structured_async(
     "John, age 15, won first prize",
     type = person
   ))
@@ -195,15 +181,13 @@ test_that("can retrieve tokens with or without system prompt", {
   expect_equal(nrow(chat$get_tokens(FALSE)), 0)
   expect_equal(nrow(chat$get_tokens(TRUE)), 1)
 
-  chat <- chat_openai()
+  chat <- chat_openai_test(NULL)
   expect_equal(nrow(chat$get_tokens(FALSE)), 0)
   expect_equal(nrow(chat$get_tokens(TRUE)), 0)
 })
 
 test_that("has a basic print method", {
-  chat <- chat_openai(
-    "You're a helpful assistant that returns very minimal output"
-  )
+  chat <- chat_openai_test()
   chat$set_turns(list(
     Turn("user", "What's 1 + 1?\nWhat's 1 + 2?"),
     Turn("assistant", "2\n\n3", tokens = c(15, 5))
@@ -212,7 +196,7 @@ test_that("has a basic print method", {
 })
 
 test_that("print method shows cumulative tokens & cost", {
-  chat <- chat_openai()
+  chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
   chat$set_turns(list(
     Turn("user", "Input 1"),
     Turn("assistant", "Output 1", tokens = c(15000, 500)),
@@ -226,17 +210,17 @@ test_that("print method shows cumulative tokens & cost", {
 })
 
 test_that("can optionally echo", {
-  chat <- chat_openai("Repeat the input back to me exactly", echo = TRUE)
+  chat <- chat_openai_test("Repeat the input back to me exactly", echo = TRUE)
   expect_output(chat$chat("Echo this."), "Echo this.")
   expect_output(chat$chat("Echo this.", echo = FALSE), NA)
 
-  chat <- chat_openai("Repeat the input back to me exactly")
+  chat <- chat_openai_test("Repeat the input back to me exactly")
   expect_output(chat$chat("Echo this."), NA)
   expect_output(chat$chat("Echo this.", echo = TRUE), "Echo this.")
 })
 
 test_that("can retrieve last_turn for user and assistant", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
   expect_equal(chat$last_turn("user"), NULL)
   expect_equal(chat$last_turn("assistant"), NULL)
 
@@ -246,7 +230,7 @@ test_that("can retrieve last_turn for user and assistant", {
 })
 
 test_that("chat messages get timestamped in sequence", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
 
   before_send <- Sys.time()
   chat$chat("What's 1 + 1?")
@@ -260,27 +244,8 @@ test_that("chat messages get timestamped in sequence", {
   expect_true(turns[[2]]@completed <= after_receive)
 })
 
-test_that("parallel chat messages get timestamped correctly", {
-  chat <- chat_openai()
-
-  before_send <- Sys.time()
-  results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
-  after_receive <- Sys.time()
-
-  turns1 <- results[[1]]$get_turns()
-  turns2 <- results[[2]]$get_turns()
-
-  expect_true(turns1[[1]]@completed >= before_send)
-  expect_true(turns1[[1]]@completed <= turns1[[2]]@completed)
-  expect_true(turns1[[2]]@completed <= after_receive)
-
-  expect_true(turns2[[1]]@completed >= before_send)
-  expect_true(turns2[[1]]@completed <= turns2[[2]]@completed)
-  expect_true(turns2[[2]]@completed <= after_receive)
-})
-
 test_that("async chat messages get timestamped in sequence", {
-  chat <- chat_openai()
+  chat <- chat_openai_test()
 
   before_send <- Sys.time()
   promise <- chat$chat_async("What's 1 + 1?")
@@ -295,8 +260,8 @@ test_that("async chat messages get timestamped in sequence", {
 })
 
 test_that("chat can get and register a list of tools", {
-  chat <- chat_openai(api_key = "not required")
-  chat2 <- chat_openai(api_key = "not required")
+  chat <- chat_openai_test()
+  chat2 <- chat_openai_test()
 
   tools <- list(
     "sys_time" = tool(
@@ -344,7 +309,7 @@ test_that("chat can get and register a list of tools", {
 })
 
 test_that("chat warns on tool failures", {
-  chat <- chat_openai_test("Be very terse, not even punctuation.")
+  chat <- chat_openai_test()
 
   chat$register_tool(tool(
     function(user) stop("User denied tool request"),
@@ -357,4 +322,21 @@ test_that("chat warns on tool failures", {
     . <- chat$chat("What are Joe, Hadley, Simon, and Tom's favorite colors?"),
     transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
   )
+})
+
+test_that("old extract methods are deprecated", {
+  ChatNull <- R6::R6Class(
+    "ChatNull",
+    inherit = Chat,
+    public = list(
+      chat_structured = function(...) invisible(),
+      chat_structured_async = function(...) invisible()
+    )
+  )
+
+  chat_null <- ChatNull$new(provider = chat_openai()$get_provider())
+  expect_snapshot({
+    chat_null$extract_data()
+    chat_null$extract_data_async()
+  })
 })

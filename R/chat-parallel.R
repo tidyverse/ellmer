@@ -1,3 +1,118 @@
+#' Submit multiple chats in parallel
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' If you have multiple prompts, you can submit them in parallel. This is
+#' typically considerably faster if you have many prompts to evaluate.
+#'
+#' @param chat A base chat object.
+#' @param prompts A list of user prompts.
+#' @param max_active The maximum number of simultaneous requests to send.
+#'
+#'   For [chat_anthropic()], note that the number of active connections is
+#'   limited primarily by the output tokens per minute limit (OTPM) which is
+#'   estimated from the `max_tokens` parameter, which defaults to 4096. That
+#'   means if your usage tier limits you to 16,000 OTPM, you should either set
+#'   `max_active = 4` (16,000 / 4096) to decrease the number of active
+#'   connections or use [params()] in `chat_anthropic()` to decrease
+#'   `max_tokens`.
+#' @param rpm Maximum number of requests per minute.
+#' @return A list of [Chat] objects, one for each prompt.
+#' @export
+#' @examplesIf ellmer::has_credentials("openai")
+#' country <- c("Canada", "New Zealand", "Jamaica", "United States")
+#' prompts <- interpolate("What's the capital of {{country}}?")
+#'
+#' chat <- chat_openai()
+#' parallel_chat(chat, prompts)
+parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
+  my_parallel_responses <- function(conversations) {
+    parallel_responses(
+      provider = chat$get_provider(),
+      conversations = conversations,
+      tools = chat$get_tools(),
+      max_active = max_active,
+      rpm = rpm
+    )
+  }
+
+  # First build up list of cumulative
+  user_turns <- as_user_turns(prompts)
+  existing <- chat$get_turns(include_system_prompt = TRUE)
+  conversations <- append_turns(list(existing), user_turns)
+
+  # Now get the assistants response
+  assistant_turns <- my_parallel_responses(conversations)
+  conversations <- append_turns(conversations, assistant_turns)
+
+  repeat {
+    assistant_turns <- map(
+      assistant_turns,
+      \(turn) match_tools(turn, tools = chat$get_tools())
+    )
+    user_turns <- map(
+      assistant_turns,
+      \(turn) tool_results_as_turn(invoke_tools(turn))
+    )
+    needs_iter <- !map_lgl(user_turns, is.null)
+    if (!any(needs_iter)) {
+      break
+    }
+
+    # don't need to index because user_turns null
+    conversations <- append_turns(conversations, user_turns)
+
+    assistant_turns <- vector("list", length(user_turns))
+    assistant_turns[needs_iter] <- my_parallel_responses(
+      conversations[needs_iter]
+    )
+    conversations <- append_turns(conversations, assistant_turns)
+  }
+
+  map(conversations, \(turns) chat$clone()$set_turns(turns))
+}
+
+append_turns <- function(old_turns, new_turns) {
+  map2(old_turns, new_turns, function(old, new) {
+    if (is.null(new)) {
+      old
+    } else {
+      c(old, list(new))
+    }
+  })
+}
+
+parallel_responses <- function(
+  provider,
+  conversations,
+  tools,
+  max_active = 10,
+  rpm = 60
+) {
+  reqs <- map(conversations, function(turns) {
+    chat_request(
+      provider = provider,
+      turns = turns,
+      tools = tools,
+      stream = FALSE
+    )
+  })
+  reqs <- map(reqs, function(req) {
+    req_throttle(req, capacity = rpm, fill_time_s = 60)
+  })
+
+  resps <- req_perform_parallel(reqs, max_active = max_active)
+  if (any(map_lgl(resps, is.null))) {
+    cli::cli_abort("Terminated by user")
+  }
+
+  map(resps, function(resp) {
+    json <- resp_body_json(resp)
+    value_turn(provider, json)
+  })
+}
+
 parallel_requests <- function(
   provider,
   existing_turns,
@@ -14,9 +129,6 @@ parallel_requests <- function(
       stream = FALSE,
       type = type
     )
-  })
-  reqs <- map(reqs, function(req) {
-    req_throttle(req, capacity = rpm, fill_time_s = 60)
   })
 
   reqs

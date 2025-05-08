@@ -55,7 +55,12 @@ tool_rnorm <- tool(
   "Drawn numbers from a random normal distribution",
   n = type_integer("The number of observations. Must be a positive integer."),
   mean = type_number("The mean value of the distribution."),
-  sd = type_number("The standard deviation of the distribution. Must be a non-negative number.")
+  sd = type_number("The standard deviation of the distribution. Must be a non-negative number."),
+  .annotations = tool_annotations(
+    title = "Draw Random Normal Numbers",
+    read_only_hint = TRUE,
+    open_world_hint = FALSE
+  )
 )
 chat <- chat_openai()
 # Then register it
@@ -71,3 +76,8 @@ chat$chat("
 # results are send back in a tool result.
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+Other tool calling helpers: 
+\code{\link{tool_annotations}()}
+}
+\concept{tool calling helpers}
