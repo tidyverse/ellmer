@@ -220,17 +220,6 @@ Chat <- R6::R6Class(
       if (echo == "none") text else invisible(text)
     },
 
-    #' @description `r lifecycle::badge("experimental")`
-    #'
-    #'   Submit multiple prompts in parallel. Returns a list of [Chat] objects,
-    #'   one for each prompt.
-    #' @param prompts A list of user prompts.
-    #' @param max_active The maximum number of simultaenous requests to send.
-    #' @param rpm Maximum number of requests per minute.
-    chat_parallel = function(prompts, max_active = 10, rpm = 500) {
-      chat_parallel(self, prompts, max_active = max_active, rpm = rpm)
-    },
-
     #' @description Extract structured data
     #' @param ... The input to send to the chatbot. Will typically include
     #'   the phrase "extract structured data".
