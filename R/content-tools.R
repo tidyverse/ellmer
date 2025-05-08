@@ -63,7 +63,7 @@ on_load(
     callbacks = list(),
     yield_request = FALSE
   ) {
-    tool_requests <- extract_tool_requests(turn@contents)
+    tool_requests <- extract_tool_requests(turn)
 
     for (request in tool_requests) {
       if (yield_request) {
@@ -104,7 +104,7 @@ on_load(
     callbacks = list(),
     yield_request = FALSE
   ) {
-    tool_requests <- extract_tool_requests(turn@contents)
+    tool_requests <- extract_tool_requests(turn)
 
     invoke_tool_async_wrapper <- coro::async(function(request) {
       maybe_echo_tool(request, echo = echo)
@@ -137,7 +137,9 @@ gen_async_promise_all <- function(generator) {
   )
 }
 
-extract_tool_requests <- function(contents) {
+extract_tool_requests <- function(turn) {
+  if (is.null(turn)) return(NULL)
+  contents <- turn@contents
   is_tool_request <- map_lgl(contents, S7_inherits, ContentToolRequest)
   contents[is_tool_request]
 }
