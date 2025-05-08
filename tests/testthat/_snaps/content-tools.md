@@ -27,7 +27,7 @@
       ( ) [tool call] tool_list()
       ( ) [tool call] tool_chr()
       ( ) [tool call] tool_abort()
-      # #> Error: unused argument (x = 1)
+      # #> Error: Unused argument: x
       # #> Error: Unexpected input
         #> i Please revise and try again.
       o #> 1

@@ -15,7 +15,6 @@ match_tools <- function(turn, tools) {
   turn
 }
 
-# Results a content list
 invoke_tools <- function(turn, echo = "none") {
   if (is.null(turn)) return(NULL)
 
@@ -77,21 +76,15 @@ new_tool_result <- function(request, result = NULL, error = NULL) {
 
 # Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases
 invoke_tool <- function(request) {
-  tool <- request@tool
-
-  if (is.null(tool)) {
+  if (is.null(request@tool)) {
     return(new_tool_result(request, error = "Unknown tool"))
   }
 
-  args <- request@arguments
-  if (tool@convert) {
-    extra_args <- setdiff(names(args), names(tool@arguments@properties))
-    if (length(extra_args) > 0) {
-      e <- catch_cnd(cli::cli_abort("Unused argument{?s}: {extra_args}"))
-      return(new_tool_result(request, error = e))
-    }
+  args <- request_args(request)
 
-    args <- convert_from_type(args, tool@arguments)
+  if (S7_inherits(args, ContentToolResult)) {
+    # Failed to convert the arguments
+    return(args)
   }
 
   tryCatch(
@@ -112,9 +105,16 @@ on_load(
       return(new_tool_result(request, error = "Unknown tool"))
     }
 
+    args <- request_args(request)
+
+    if (S7_inherits(args, ContentToolResult)) {
+      # Failed to convert the arguments
+      return(args)
+    }
+
     tryCatch(
       {
-        result <- await(do.call(request@tool@fun, request@arguments))
+        result <- await(do.call(request@tool@fun, args))
         new_tool_result(request, result)
       },
       error = function(e) {
@@ -124,6 +124,23 @@ on_load(
     )
   })
 )
+
+request_args <- function(request) {
+  tool <- request@tool
+  args <- request@arguments
+
+  if (!tool@convert) {
+    return(args)
+  }
+
+  extra_args <- setdiff(names(args), names(tool@arguments@properties))
+  if (length(extra_args) > 0) {
+    e <- catch_cnd(cli::cli_abort("Unused argument{?s}: {extra_args}"))
+    return(new_tool_result(request, error = e))
+  }
+
+  convert_from_type(args, tool@arguments)
+}
 
 tool_results_as_turn <- function(results) {
   if (length(results) == 0) {
