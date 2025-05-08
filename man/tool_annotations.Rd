@@ -37,10 +37,38 @@ meaningful when \code{read_only_hint} is \code{FALSE}.)}
 A list of tool annotations.
 }
 \description{
-Tool annotations are additional properties that can be used to describe a
-tool to clients, for example a Shiny app or another user interface.
+Tool annotations are additional properties that, when passed to the
+\code{.annotations} argument of \code{\link[=tool]{tool()}}, provide additional information about the
+tool and its behavior. This information can be used for display to users, for
+example in a Shiny app or another user interface.
 
 The annotations in \code{tool_annotations()} are drawn from the \href{https://modelcontextprotocol.io/introduction}{Model Context Protocol} and are considered
 \emph{hints}. Tool authors should use these annotations to communicate tool
 properties, but users should note that these annotations are not guaranteed.
 }
+\examples{
+# See ?tool() for a full example using this function.
+# We're creating a tool around R's `rnorm()` function to allow the chatbot to
+# generate random numbers from a normal distribution.
+tool_rnorm <- tool(
+  rnorm,
+  # Describe the tool function to the LLM
+  .description = "Drawn numbers from a random normal distribution",
+  # Describe the parameters used by the tool function
+  n = type_integer("The number of observations. Must be a positive integer."),
+  mean = type_number("The mean value of the distribution."),
+  sd = type_number("The standard deviation of the distribution. Must be a non-negative number."),
+  # Tool annotations optionally provide additional context to the LLM
+  .annotations = tool_annotations(
+    title = "Draw Random Normal Numbers",
+    read_only_hint = TRUE, # the tool does not modify any state
+    open_world_hint = FALSE # the tool does not interact with the outside world
+  )
+)
+
+}
+\seealso{
+Other tool calling helpers: 
+\code{\link{tool}()}
+}
+\concept{tool calling helpers}

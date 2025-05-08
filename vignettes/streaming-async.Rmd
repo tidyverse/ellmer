@@ -61,7 +61,113 @@ chat$chat_async("How's your day going?") %...>% print()
 #> I'm just a computer program, so I don't have feelings, but I'm here to help you with any questions you have.
 ```
 
-TODO: Shiny example
+#### Shiny example
+
+To add an asynchronous chat interface in your Shiny application, we recommend using [the shinychat package](https://posit-dev.github.io/shinychat/).
+
+The simplest approach is to use shinychat's Shiny module to add a chat UI to your app---similar to the app created by `live_browser()`---using the `shinychat::chat_mod_ui()` and `shinychat::chat_mod_server()` functions.
+These module functions connect an `ellmer::Chat` object to `shinychat::chat_ui()` and handle non-blocking asynchronous chat interactions automatically.
+
+```r
+library(shiny)
+library(shinychat)
+
+ui <- bslib::page_fillable(
+  chat_mod_ui("chat")
+)
+
+server <- function(input, output, session) {
+  chat <- ellmer::chat_openai(
+    system_prompt = "You're a trickster who answers in riddles",
+    model = "gpt-4.1-nano"
+  )
+
+  chat_mod_server("chat", chat)
+}
+
+shinyApp(ui, server)
+```
+
+For fully custom streaming applications with a custom or no chat interface, you can use `shinychat::markdown_stream()` to stream responses into a Shiny app.
+This is particularly useful for creating interactive chat applications where you want to display responses as they are generated.
+
+The following Shiny app demonstrates `markdown_stream()` and uses both `$stream_async()` and `$chat_async()` to stream a story from an OpenAI model.
+In the app, we ask the user for a prompt to generate a story and then stream the story into the UI.
+Then we follow up by asking the model for a story title and we use the response to update the card title.
+
+This example also highlights the difference between streaming and non-streaming chat.
+Use `$stream_async()` with Shiny outputs that are designed to work with generators, like `shinychat::markdown_stream()` and `shinychat::chat_append()`.
+Use `$chat_async()` when you want the text response from the model, for example the title of the story.
+
+Also note that in most ellmer-powered Shiny apps, it's best to wrap the chat interaction in a `shiny::ExtendedTask` to avoid blocking the rest of the app while the chat is being generated.
+You can learn about `ExtendedTask` in Shiny's [_Non-blocking operations_ article](https://shiny.posit.co/r/articles/improve/nonblocking/).
+
+```
+library(shiny)
+library(bslib)
+library(ellmer)
+library(promises)
+library(shinychat)
+
+ui <- page_sidebar(
+  title = "Interactive chat with async",
+  sidebar = sidebar(
+    textAreaInput("user_query", "Tell me a story about..."),
+    input_task_button("ask_chat", label = "Generate a story")
+  ),
+  card(
+    card_header(textOutput("story_title")),
+    shinychat::output_markdown_stream("response"),
+  )
+)
+
+server <- function(input, output) {
+  chat_task <- ExtendedTask$new(function(user_query) {
+    # We're using an Extended Task for chat completions to avoid blocking the
+    # app. We also start the chat fresh each time, because the UI is not a
+    # multi-turn conversation.
+    chat <- chat_openai(
+      system_prompt = "You are a rambling chatbot who likes to tell stories but gets distracted easily.",
+      model = "gpt-4.1-nano"
+    )
+
+    # Stream the chat completion into the markdown stream. `markdown_stream()`
+    # returns a promise onto which we'll chain the follow-up task of providing
+    # a story title.
+    stream <- chat$stream_async(user_query)
+    stream_res <- shinychat::markdown_stream("response", stream)
+
+    # Follow up by asking the LLM to provide a title for the story that we
+    # return from the task.
+    stream_res$then(function(value) {
+      chat$chat_async(
+        "What is the title of the story? Reply with only the title and nothing else."
+      )
+    })
+  })
+
+  bind_task_button(chat_task, "ask_chat")
+
+  observeEvent(input$ask_chat, {
+    chat_task$invoke(input$user_query)
+  })
+
+  observe({
+    # Update the card title during generation and once complete
+    switch(
+      chat_task$status(),
+      success = story_title(chat_task$result()),
+      running = story_title("Generating your story..."),
+      error = story_title("An error occurred while generating your story.")
+    )
+  })
+
+  story_title <- reactiveVal("Your story will appear here!")
+  output$story_title <- renderText(story_title())
+}
+
+shinyApp(ui = ui, server = server)
+```
 
 ### Asynchronous streaming
 

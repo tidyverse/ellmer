@@ -176,3 +176,11 @@ color_role <- function(role) {
     role
   )
 }
+
+counter <- function() {
+  count <- 0
+  function() {
+    count <<- count + 1
+    count
+  }
+}

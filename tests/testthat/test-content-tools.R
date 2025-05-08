@@ -161,14 +161,14 @@ test_that("invoke_tool_async returns a ContentToolResult", {
 })
 
 test_that("invoke_tools() echoes tool requests and results", {
-  turn <- turn_with_tool_requests()
+  turn <- fixture_turn_with_tool_requests()
 
   expect_silent(invoke_tools(turn))
   expect_snapshot(. <- invoke_tools(turn, echo = "output"))
 })
 
 test_that("invoke_tools_async() echoes tool requests and results", {
-  turn <- turn_with_tool_requests()
+  turn <- fixture_turn_with_tool_requests()
 
   expect_silent(sync(invoke_tools_async(turn)))
   expect_snapshot(. <- sync(invoke_tools_async(turn, echo = "output")))
@@ -195,4 +195,21 @@ test_that("tool error warnings", {
   expect_snapshot(
     warn_tool_errors(errors)
   )
+})
+
+test_that("match_tools() matches tools in a turn to a list of tools", {
+  turn_single <- Turn(
+    "assistant",
+    list(ContentToolRequest("y1", "unknown", list()))
+  )
+  expect_null(turn_single@contents[[1]]@tool)
+  expect_s7_class(match_tools(turn_single, list()), Turn)
+  # unmatched requests have NULL tool
+  expect_null(match_tools(turn_single, list())@contents[[1]]@tool)
+
+  tools <- fixture_list_of_tools()
+  turn <- fixture_turn_with_tool_requests(with_tool = FALSE)
+
+  turn_matched <- match_tools(turn, tools)
+  expect_equal(turn_matched, fixture_turn_with_tool_requests(with_tool = TRUE))
 })

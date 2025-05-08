@@ -220,35 +220,6 @@ Chat <- R6::R6Class(
       if (echo == "none") text else invisible(text)
     },
 
-    #' @description `r lifecycle::badge("experimental")`
-    #'
-    #'   Submit multiple prompts in parallel. Returns a list of [Chat] objects,
-    #'   one for each prompt.
-    #' @param prompts A list of user prompts.
-    #' @param max_active The maximum number of simultaenous requests to send.
-    #' @param rpm Maximum number of requests per minute.
-    chat_parallel = function(prompts, max_active = 10, rpm = 500) {
-      turns <- as_user_turns(prompts)
-
-      reqs <- parallel_requests(
-        provider = private$provider,
-        existing_turns = private$.turns,
-        tools = private$tools,
-        new_turns = turns,
-        rpm = rpm
-      )
-      resps <- req_perform_parallel(reqs, max_active = max_active)
-      ok <- !map_lgl(resps, is.null)
-      json <- map(resps[ok], resp_body_json)
-
-      map2(json, turns[ok], function(json, user_turn) {
-        chat <- self$clone()
-        turn <- value_turn(private$provider, json)
-        chat$add_turn(user_turn, turn)
-        chat
-      })
-    },
-
     #' @description Extract structured data
     #' @param ... The input to send to the chatbot. Will typically include
     #'   the phrase "extract structured data".
@@ -260,15 +231,13 @@ Chat <- R6::R6Class(
     #' @param convert Automatically convert from JSON lists to R data types
     #'   using the schema. For example, this will turn arrays of objects into
     #'  data frames and arrays of strings into a character vector.
-    extract_data = function(..., type, echo = "none", convert = TRUE) {
+    chat_structured = function(..., type, echo = "none", convert = TRUE) {
       turn <- user_turn(...)
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
 
       needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
-      if (needs_wrapper) {
-        type <- type_object(wrapper = type)
-      }
+      type <- wrap_type_if_needed(type, needs_wrapper)
 
       coro::collect(private$submit_turns(
         turn,
@@ -305,11 +274,7 @@ Chat <- R6::R6Class(
       check_bool(convert)
 
       needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
-      if (needs_wrapper) {
-        w_type <- type_object(wrapper = type)
-      } else {
-        w_type <- type
-      }
+      w_type <- wrap_type_if_needed(type, needs_wrapper)
 
       reqs <- parallel_requests(
         provider = private$provider,
@@ -344,7 +309,7 @@ Chat <- R6::R6Class(
     #' @param echo Whether to emit the response to stdout as it is received.
     #'   Set to "text" to stream JSON data as it's generated (not supported by
     #'  all providers).
-    extract_data_async = function(..., type, echo = "none") {
+    chat_structured_async = function(..., type, echo = "none") {
       turn <- user_turn(...)
       echo <- check_echo(echo %||% private$echo)
 
@@ -454,6 +419,30 @@ Chat <- R6::R6Class(
       }
 
       invisible(self)
+    },
+
+    #' @description `r lifecycle::badge("deprecated")`
+    #' Deprecated in favour of `$chat_structured()`.
+    #' @param ... See `$chat_structured()`
+    extract_data = function(...) {
+      lifecycle::deprecate_warn(
+        "0.2.0",
+        "Chat$extract_data()",
+        "Chat$chat_structured()"
+      )
+      self$chat_structured(...)
+    },
+
+    #' @description `r lifecycle::badge("deprecated")`
+    # '  Deprecated in favour of `$chat_structured_async()`.
+    #' @param ... See `$chat_structured_async()`
+    extract_data_async = function(...) {
+      lifecycle::deprecate_warn(
+        "0.2.0",
+        "Chat$extract_data_async()",
+        "Chat$chat_structured_async()"
+      )
+      self$chat_structured_async(...)
     }
   ),
   private = list(
@@ -575,14 +564,14 @@ Chat <- R6::R6Class(
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
-        turn <- private$match_tools(turn)
+        turn <- match_tools(turn, private$tools)
       } else {
         turn <- value_turn(
           private$provider,
           response,
           has_type = !is.null(type)
         )
-        turn <- private$match_tools(turn)
+        turn <- match_tools(turn, private$tools)
 
         text <- turn@text
         if (!is.null(text)) {
@@ -654,7 +643,7 @@ Chat <- R6::R6Class(
           any_text <- TRUE
         }
       }
-      turn <- private$match_tools(turn)
+      turn <- match_tools(turn, private$tools)
 
       # Ensure turns always end in a newline
       if (any_text) {
@@ -673,34 +662,14 @@ Chat <- R6::R6Class(
       coro::exhausted()
     }),
 
-    match_tools = function(turn) {
-      if (is.null(turn)) return(NULL)
-
-      turn@contents <- map(turn@contents, function(content) {
-        if (!S7_inherits(content, ContentToolRequest)) {
-          return(content)
-        }
-        content@tool <- private$tools[[content@name]]
-        content
-      })
-
-      turn
-    },
-
     invoke_tools = function(echo = "none") {
       tool_results <- invoke_tools(self$last_turn(), echo = echo)
-      if (length(tool_results) == 0) {
-        return()
-      }
-      Turn("user", tool_results)
+      tool_results_as_turn(tool_results)
     },
 
     invoke_tools_async = async_method(function(self, private, echo = "none") {
       tool_results <- await(invoke_tools_async(self$last_turn(), echo = echo))
-      if (length(tool_results) == 0) {
-        return()
-      }
-      Turn("user", tool_results)
+      tool_results_as_turn(tool_results)
     }),
 
     has_system_prompt = function() {
@@ -769,24 +738,4 @@ method(contents_markdown, new_S3_class("Chat")) <- function(
   }
 
   paste(res, collapse = "\n\n")
-}
-
-extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
-  is_json <- map_lgl(turn@contents, S7_inherits, ContentJson)
-  n <- sum(is_json)
-  if (n != 1) {
-    cli::cli_abort("Data extraction failed: {n} data results recieved.")
-  }
-
-  json <- turn@contents[[which(is_json)]]
-  out <- json@value
-
-  if (needs_wrapper) {
-    out <- out$wrapper
-    type <- type@properties[[1]]
-  }
-  if (convert) {
-    out <- convert_from_type(out, type)
-  }
-  out
 }
