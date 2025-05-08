@@ -11,14 +11,15 @@ parallel_chat(chat, prompts, max_active = 10, rpm = 500)
 
 \item{prompts}{A list of user prompts.}
 
-\item{max_active}{The maximum number of simultaenous requests to send.
+\item{max_active}{The maximum number of simultaneous requests to send.
 
 For \code{\link[=chat_anthropic]{chat_anthropic()}}, note that the number of active connections is
-limited primarily by the output tokens per limit (OTPM) which is estimated
-from the \code{max_tokens} parameter, which defaults to 4096. That means if
-your usage tier limits you to 16,000 OTPM, you should use either set to
-\code{max_active = 4} (16,000 / 4096) to decrease the number of max tokens
-with \code{\link[=params]{params()}}.}
+limited primarily by the output tokens per minute limit (OTPM) which is
+estimated from the \code{max_tokens} parameter, which defaults to 4096. That
+means if your usage tier limits you to 16,000 OTPM, you should either set
+\code{max_active = 4} (16,000 / 4096) to decrease the number of active
+connections or use \code{\link[=params]{params()}} in \code{chat_anthropic()} to decrease
+\code{max_tokens}.}
 
 \item{rpm}{Maximum number of requests per minute.}
 }

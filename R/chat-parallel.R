@@ -8,24 +8,24 @@
 #'
 #' @param chat A base chat object.
 #' @param prompts A list of user prompts.
-#' @param max_active The maximum number of simultaenous requests to send.
+#' @param max_active The maximum number of simultaneous requests to send.
 #'
 #'   For [chat_anthropic()], note that the number of active connections is
-#'   limited primarily by the output tokens per limit (OTPM) which is estimated
-#'   from the `max_tokens` parameter, which defaults to 4096. That means if
-#'   your usage tier limits you to 16,000 OTPM, you should use either set
+#'   limited primarily by the output tokens per minute limit (OTPM) which is
+#'   estimated from the `max_tokens` parameter, which defaults to 4096. That
+#'   means if your usage tier limits you to 16,000 OTPM, you should either set
 #'   `max_active = 4` (16,000 / 4096) to decrease the number of active
-#'   connections or use [params()] in [chat_anthropic()] to decrease `max_tokens`.
+#'   connections or use [params()] in `chat_anthropic()` to decrease
+#'   `max_tokens`.
 #' @param rpm Maximum number of requests per minute.
 #' @return A list of [Chat] objects, one for each prompt.
+#' @export
 #' @examplesIf ellmer::has_credentials("openai")
 #' country <- c("Canada", "New Zealand", "Jamaica", "United States")
 #' prompts <- interpolate("What's the capital of {{country}}?")
 #'
 #' chat <- chat_openai()
 #' parallel_chat(chat, prompts)
-#'
-#' @export
 parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
   my_parallel_responses <- function(conversations) {
     parallel_responses(
