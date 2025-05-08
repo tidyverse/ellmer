@@ -1,6 +1,20 @@
 #' @include turns.R
 NULL
 
+match_tools <- function(turn, tools) {
+  if (is.null(turn)) return(NULL)
+
+  turn@contents <- map(turn@contents, function(content) {
+    if (!S7_inherits(content, ContentToolRequest)) {
+      return(content)
+    }
+    content@tool <- tools[[content@name]]
+    content
+  })
+
+  turn
+}
+
 maybe_invoke_callbacks_tool_request <- function(callbacks, request) {
   cb <- callbacks$tool_request
   if (is.null(cb)) return()

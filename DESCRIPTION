@@ -64,6 +64,7 @@ Collate:
     'provider.R'
     'as-json.R'
     'chat-parallel.R'
+    'chat-structured.R'
     'utils-coro.R'
     'chat.R'
     'content-image.R'
