@@ -120,16 +120,10 @@
 
 * `create_tool_def()` can now use any Chat instance (#118, @pedrobtz).
 
-* New experimental `$chat_parallel()` and `$extract_data_parallel()` make it
+* New experimental `parallel_chat()` and `$extract_data_parallel()` make it
   easier to perform multiple actions in parallel (#143). This is experimental
   because I'm not 100% sure that the shape of the user interface is correct,
   particularly as it pertains to handling errors.
-
-  For Claude, note that the number of active connections is limited primarily
-  by the output tokens per limit (OTPM) which is estimated from the `max_tokens` 
-  parameter, which defaults to 4096. That means if you're limited to 16,000
-  OPTM, you should use at most 16,000 / 4096 = ~4 active connections (or
-  decrease `max_tokens`).
 
   Parallel calls with OpenAI and Gemini are much simpler in my experience.
 
