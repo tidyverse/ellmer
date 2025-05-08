@@ -177,7 +177,7 @@ on_load(
   })
 )
 
-tool_results_user_turn <- function(results) {
+tool_results_as_turn <- function(results) {
   if (length(results) == 0) {
     return(NULL)
   }

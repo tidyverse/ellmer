@@ -531,7 +531,7 @@ Chat <- R6::R6Class(
             yield_request = FALSE
           )
         )
-        user_turn <- tool_results_user_turn(tool_results)
+        user_turn <- tool_results_as_turn(tool_results)
 
         if (echo == "all") {
           cat(format(user_turn))
@@ -581,7 +581,7 @@ Chat <- R6::R6Class(
           }
         }
 
-        user_turn <- tool_results_user_turn(tool_steps)
+        user_turn <- tool_results_as_turn(tool_steps)
 
         if (echo == "all") {
           cat(format(user_turn))
