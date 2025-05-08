@@ -123,17 +123,6 @@ gen_async_promise_all <- function(generator) {
   )
 }
 
-tool_results_user_turn <- function(results) {
-  if (length(results) == 0) {
-    return(NULL)
-  }
-  is_tool_result <- map_lgl(results, S7_inherits, ContentToolResult)
-  if (!any(is_tool_result)) {
-    return(NULL)
-  }
-  Turn("user", contents = results[is_tool_result])
-}
-
 extract_tool_requests <- function(contents) {
   is_tool_request <- map_lgl(contents, S7_inherits, ContentToolRequest)
   contents[is_tool_request]
@@ -187,6 +176,17 @@ on_load(
     )
   })
 )
+
+tool_results_user_turn <- function(results) {
+  if (length(results) == 0) {
+    return(NULL)
+  }
+  is_tool_result <- map_lgl(results, S7_inherits, ContentToolResult)
+  if (!any(is_tool_result)) {
+    return(NULL)
+  }
+  Turn("user", contents = results[is_tool_result])
+}
 
 turn_get_tool_errors <- function(turn = NULL) {
   if (is.null(turn)) return(NULL)
