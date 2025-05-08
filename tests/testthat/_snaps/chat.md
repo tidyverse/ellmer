@@ -19,9 +19,9 @@
     Code
       chat
     Output
-      <Chat OpenAI/gpt-4o turns=3 tokens=15/5 $0.00>
+      <Chat OpenAI/gpt-4.1-nano turns=3 tokens=15/5 $0.00>
       -- system [0] ------------------------------------------------------------------
-      You're a helpful assistant that returns very minimal output
+      Be terse.
       -- user [15] -------------------------------------------------------------------
       What's 1 + 1?
       What's 1 + 2?

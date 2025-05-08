@@ -1,5 +1,5 @@
 test_that("can chat in parallel", {
-  chat <- chat_openai_test("Be terse.", model = "gpt-4.1-nano")
+  chat <- chat_openai_test()
   chats <- parallel_chat(chat, list("What's 1 + 1?", "What's 2 + 2?"))
 
   expect_type(chats, "list")
@@ -13,7 +13,7 @@ test_that("can chat in parallel", {
 })
 
 test_that("messages get timestamped correctly", {
-  chat <- chat_openai_test(model = "gpt-4.1-nano")
+  chat <- chat_openai_test()
 
   before_send <- Sys.time()
   results <- parallel_chat(chat, list("What's 1 + 1?", "What's 2 + 2?"))
@@ -32,19 +32,19 @@ test_that("messages get timestamped correctly", {
 })
 
 test_that("can call tools in parallel", {
-  prompts <- rep(list("Roll a die."), 2)
+  prompts <- rep(list("Roll the dice, please! Reply with 'You rolled ____'"), 2)
 
-  chat <- chat_openai_test("Be terse", model = "gpt-4.1-nano")
+  chat <- chat_openai_test()
   chat$register_tool(tool(counter(), "Rolls a six-sided die.", .name = "roll"))
   chats <- parallel_chat(chat, prompts)
 
   turns_1 <- chats[[1]]$get_turns()
   expect_s3_class(turns_1[[2]]@contents[[1]], "ellmer::ContentToolRequest")
   expect_s3_class(turns_1[[3]]@contents[[1]], "ellmer::ContentToolResult")
-  expect_equal(contents_text(turns_1[[4]]), "You rolled a 1.")
+  expect_equal(contents_text(turns_1[[4]]), "You rolled 1")
 
   turns_1 <- chats[[2]]$get_turns()
-  expect_equal(contents_text(turns_1[[4]]), "You rolled a 2.")
+  expect_equal(contents_text(turns_1[[4]]), "You rolled 2")
 })
 
 test_that("can have uneven number of turns", {
@@ -55,7 +55,7 @@ test_that("can have uneven number of turns", {
     "reply with the word 'beep'"
   )
 
-  chat <- chat_openai_test("Be terse.", model = "gpt-4.1-nano")
+  chat <- chat_openai_test()
   chat$register_tool(tool(counter(), "Rolls a six-sided die.", .name = "roll"))
   chats <- parallel_chat(chat, prompts)
 
