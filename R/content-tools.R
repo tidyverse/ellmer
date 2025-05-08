@@ -80,7 +80,7 @@ invoke_tool <- function(request) {
     return(new_tool_result(request, error = "Unknown tool"))
   }
 
-  args <- request_args(request)
+  args <- tool_request_args(request)
 
   if (S7_inherits(args, ContentToolResult)) {
     # Failed to convert the arguments
@@ -105,7 +105,7 @@ on_load(
       return(new_tool_result(request, error = "Unknown tool"))
     }
 
-    args <- request_args(request)
+    args <- tool_request_args(request)
 
     if (S7_inherits(args, ContentToolResult)) {
       # Failed to convert the arguments
@@ -125,7 +125,7 @@ on_load(
   })
 )
 
-request_args <- function(request) {
+tool_request_args <- function(request) {
   tool <- request@tool
   args <- request@arguments
 
