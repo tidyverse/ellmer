@@ -23,7 +23,10 @@ chat_parallel <- function(chat, prompts, max_active = 10, rpm = 500) {
       assistant_turns,
       \(turn) match_tools(turn, tools = chat$get_tools())
     )
-    user_turns <- lapply(assistant_turns, invoke_tools)
+    user_turns <- map(
+      assistant_turns,
+      \(turn) tool_results_as_turn(invoke_tools(turn))
+    )
     needs_iter <- !map_lgl(user_turns, is.null)
     if (!any(needs_iter)) {
       break
