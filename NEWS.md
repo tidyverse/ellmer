@@ -1,6 +1,12 @@
 # ellmer (development version)
 
-* New `chat_huggingface()` for models hosted at <https://huggingface.co> 
+* `$stream()` and `$stream_async()` gain support for streaming the additional
+  content types generated during a tool call. When `content = "all"` is set, the
+  streaming response yields `Content` objects, including the
+  `ContentToolRequest` and `ContentToolResult` objects used to request and
+  return tool calls (#400, @gadenbuie).
+
+* New `chat_huggingface()` for models hosted at <https://huggingface.co>
   (#359, @s-spavound).
 
 * Bumped default time out up to 5 minutes (#451, #321).

@@ -372,9 +372,18 @@ Chat <- R6::R6Class(
     #'   that yields strings. While iterating, the generator will block while
     #'   waiting for more content from the chatbot.
     #' @param ... The input to send to the chatbot. Can be strings or images.
-    stream = function(...) {
+    #' @param content Whether the stream should yield only `"text"` or `"all"`
+    #'   content types created during the round. When `content = "all"`,
+    #'   `stream()` yields [Content] objects.
+    stream = function(..., content = c("text", "all")) {
+      content <- arg_match(content)
       turn <- user_turn(...)
-      private$chat_impl(turn, stream = TRUE, echo = "none")
+      private$chat_impl(
+        turn,
+        yield_content = content,
+        stream = TRUE,
+        echo = "none"
+      )
     },
 
     #' @description Submit input to the chatbot, returning asynchronously
@@ -382,9 +391,18 @@ Chat <- R6::R6Class(
     #'   generator](https://coro.r-lib.org/reference/async_generator.html) that
     #'   yields string promises.
     #' @param ... The input to send to the chatbot. Can be strings or images.
-    stream_async = function(...) {
+    #' @param content Whether the stream should yield only `"text"` or `"all"`
+    #'   content types created during the round. When `content = "all"`,
+    #'   `stream()` yields [Content] objects.
+    stream_async = function(..., content = c("text", "all")) {
+      content <- arg_match(content)
       turn <- user_turn(...)
-      private$chat_impl_async(turn, stream = TRUE, echo = "none")
+      private$chat_impl_async(
+        turn,
+        yield_content = content,
+        stream = TRUE,
+        echo = "none"
+      )
     },
 
     #' @description Register a tool (an R function) that the chatbot can use.
@@ -471,14 +489,26 @@ Chat <- R6::R6Class(
       private,
       user_turn,
       stream,
-      echo
+      echo,
+      yield_content = "text"
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
 
       while (!is.null(user_turn)) {
-        # fmt: skip
-        for (chunk in private$submit_turns(user_turn, stream = stream, echo = echo)) {
+        chunks <- private$submit_turns(
+          user_turn,
+          stream = stream,
+          echo = echo,
+          yield_content = yield_content
+        )
+        for (chunk in chunks) {
+          if (yield_content == "all") {
+            if (!S7_inherits(chunk, Content)) {
+              # Assumes that if the chunk is not a `Content` then it's a string
+              chunk <- ContentText(chunk)
+            }
+          }
           yield(chunk)
         }
 
@@ -488,6 +518,12 @@ Chat <- R6::R6Class(
           cat(format(user_turn))
         } else if (echo == "none") {
           tool_errors <- c(tool_errors, turn_get_tool_errors(user_turn))
+        }
+
+        if (yield_content == "all" && !is.null(user_turn)) {
+          for (ut_content in user_turn@contents) {
+            yield(ut_content)
+          }
         }
       }
     }),
@@ -499,14 +535,26 @@ Chat <- R6::R6Class(
       private,
       user_turn,
       stream,
-      echo
+      echo,
+      yield_content = "text"
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
 
       while (!is.null(user_turn)) {
-        # fmt: skip
-        for (chunk in await_each(private$submit_turns_async(user_turn, stream = stream, echo = echo))) {
+        chunks <- private$submit_turns_async(
+          user_turn,
+          stream = stream,
+          echo = echo,
+          yield_content = yield_content
+        )
+        for (chunk in await_each(chunks)) {
+          if (yield_content == "all") {
+            if (!S7_inherits(chunk, Content)) {
+              # Assumes that if the chunk is not a `Content` then it's a string
+              chunk <- ContentText(chunk)
+            }
+          }
           yield(chunk)
         }
 
@@ -516,6 +564,12 @@ Chat <- R6::R6Class(
           cat(format(user_turn))
         } else if (echo == "none") {
           tool_errors <- c(tool_errors, turn_get_tool_errors(user_turn))
+        }
+
+        if (yield_content == "all" && !is.null(user_turn)) {
+          for (ut_content in user_turn@contents) {
+            yield(ut_content)
+          }
         }
       }
     }),
@@ -528,7 +582,8 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      type = NULL
+      type = NULL,
+      yield_content = "text"
     ) {
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
@@ -580,12 +635,22 @@ Chat <- R6::R6Class(
         yield("\n")
       }
 
-      if (echo == "all") {
-        is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
-        formatted <- map_chr(turn@contents[!is_text], format)
-        cat_line(formatted, prefix = "< ")
+      is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+
+      if (any(!is_text)) {
+        contents_not_text <- turn@contents[!is_text]
+        if (echo == "all") {
+          formatted <- map_chr(contents_not_text, format)
+          cat_line(formatted, prefix = "< ")
+        }
+        # When `echo="output"`, tool calls are emitted in `invoke_tools()`
+
+        if (yield_content == "all") {
+          for (turn_content in contents_not_text) {
+            yield(turn_content)
+          }
+        }
       }
-      # When `echo="output"`, tool calls are emitted in `invoke_tools()`
 
       self$add_turn(user_turn, turn)
 
@@ -600,7 +665,8 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      type = NULL
+      type = NULL,
+      yield_content = "text"
     ) {
       response <- chat_perform(
         provider = private$provider,
@@ -644,12 +710,20 @@ Chat <- R6::R6Class(
         yield("\n")
       }
 
-      if (echo == "all") {
-        is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
-        formatted <- map_chr(turn@contents[!is_text], format)
-        cat_line(formatted, prefix = "< ")
+      is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+      if (!any(is_text)) {
+        if (echo == "all") {
+          formatted <- map_chr(turn@contents[!is_text], format)
+          cat_line(formatted, prefix = "< ")
+        }
+        # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
+
+        if (yield_content == "all") {
+          for (turn_content in turn@contents[!is_text]) {
+            yield(turn_content)
+          }
+        }
       }
-      # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
 
       self$add_turn(user_turn, turn)
       coro::exhausted()

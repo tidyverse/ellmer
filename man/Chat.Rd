@@ -400,13 +400,17 @@ Returns A \href{https://coro.r-lib.org/articles/generator.html#iterating}{coro g
 that yields strings. While iterating, the generator will block while
 waiting for more content from the chatbot.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$stream(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$stream(..., content = c("text", "all"))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{...}}{The input to send to the chatbot. Can be strings or images.}
+
+\item{\code{content}}{Whether the stream should yield only \code{"text"} or \code{"all"}
+content types created during the round. When \code{content = "all"},
+\code{stream()} yields \link{Content} objects.}
 }
 \if{html}{\out{</div>}}
 }
@@ -419,13 +423,17 @@ Submit input to the chatbot, returning asynchronously
 streaming results. Returns a \href{https://coro.r-lib.org/reference/async_generator.html}{coro async generator} that
 yields string promises.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$stream_async(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$stream_async(..., content = c("text", "all"))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{...}}{The input to send to the chatbot. Can be strings or images.}
+
+\item{\code{content}}{Whether the stream should yield only \code{"text"} or \code{"all"}
+content types created during the round. When \code{content = "all"},
+\code{stream()} yields \link{Content} objects.}
 }
 \if{html}{\out{</div>}}
 }
