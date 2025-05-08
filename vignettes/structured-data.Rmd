@@ -25,7 +25,7 @@ library(ellmer)
 
 ## Structured data basics
 
-To extract structured data you call `$chat_structured()` instead `$chat()` method. You'll also need to define a type specification that describes the structure of the data that you want (more on that shortly). Here's a simple example that extracts two specific values from a string:
+To extract structured data you call `$chat_structured()` instead of the `$chat()` method. You'll also need to define a type specification that describes the structure of the data that you want (more on that shortly). Here's a simple example that extracts two specific values from a string:
 
 ```{r}
 #| label: basics-text
