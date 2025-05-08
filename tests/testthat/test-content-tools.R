@@ -170,16 +170,18 @@ test_that("invoke_tools() echoes tool requests and results", {
 test_that("invoke_tools_async() echoes tool requests and results", {
   turn <- turn_with_tool_requests()
 
-  expect_silent(sync(
-    promises::promise_all(.list = coro::collect(invoke_tools_async(turn)))
-  ))
-  expect_snapshot(
-    . <- sync(
-      promises::promise_all(
-        .list = coro::collect(invoke_tools_async(turn, echo = "output"))
-      )
-    )
-  )
+  expect_silent(sync({
+    # Concurrent tool calls
+    gen_async_promise_all(invoke_tools_async(turn))
+    # Sequential tool calls
+    coro::async_collect(invoke_tools_async(turn))
+  }))
+  expect_snapshot({
+    # Concurrent tool calls
+    . <- sync(gen_async_promise_all(invoke_tools_async(turn, echo = "output")))
+    # Sequential tool calls
+    . <- sync(coro::async_collect(invoke_tools_async(turn, echo = "output")))
+  })
 })
 
 test_that("tool error warnings", {
