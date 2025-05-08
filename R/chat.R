@@ -675,10 +675,7 @@ Chat <- R6::R6Class(
 
     invoke_tools = function(echo = "none") {
       tool_results <- invoke_tools(self$last_turn(), echo = echo)
-      if (length(tool_results) == 0) {
-        return()
-      }
-      Turn("user", tool_results)
+      tool_results_as_turn(tool_results)
     },
 
     invoke_tools_async = async_method(function(self, private, echo = "none") {

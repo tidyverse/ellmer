@@ -111,6 +111,17 @@ on_load(
   })
 )
 
+tool_results_as_turn <- function(results) {
+  if (length(results) == 0) {
+    return(NULL)
+  }
+  is_tool_result <- map_lgl(results, S7_inherits, ContentToolResult)
+  if (!any(is_tool_result)) {
+    return(NULL)
+  }
+  Turn("user", contents = results[is_tool_result])
+}
+
 turn_get_tool_errors <- function(turn = NULL) {
   if (is.null(turn)) return(NULL)
   stopifnot(S7_inherits(turn, Turn))
