@@ -16,21 +16,23 @@ maybe_invoke_callbacks_tool_request <- function(callbacks, request) {
   )
 }
 
-maybe_invoke_callbacks_tool_request_async <- coro::async(
-  function(callbacks, request) {
-    cb <- callbacks$tool_request
-    if (is.null(cb)) return()
+on_load(
+  maybe_invoke_callbacks_tool_request_async <- coro::async(
+    function(callbacks, request) {
+      cb <- callbacks$tool_request
+      if (is.null(cb)) return()
 
-    tryCatch(
-      {
-        coro::await(cb$invoke_async(request))
-        NULL
-      },
-      ellmer_tool_reject = function(e) {
-        ContentToolResult(error = e$message, request = request)
-      }
-    )
-  }
+      tryCatch(
+        {
+          coro::await(cb$invoke_async(request))
+          NULL
+        },
+        ellmer_tool_reject = function(e) {
+          ContentToolResult(error = e$message, request = request)
+        }
+      )
+    }
+  )
 )
 
 maybe_invoke_callbacks_tool_result <- function(callbacks, result) {
