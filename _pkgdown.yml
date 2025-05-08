@@ -32,7 +32,7 @@ reference:
       - google_upload
 
   - title: Parallel and batch chat
-    content:
+    contents:
       - parallel_chat
 
   - title: Tools and structured data
