@@ -78,6 +78,9 @@ on_load(
 )
 
 on_load(
+  # invoke_tools_async is intentionally *not* an _async_ generator, instead it
+  # is a generator that returns promises. This lets the caller decide if the
+  # tasks should be run in parallel or sequentially.
   invoke_tools_async <- coro::generator(function(
     turn,
     tools,
@@ -111,6 +114,20 @@ on_load(
     }
   })
 )
+
+gen_async_promise_all <- function(generator) {
+  promises::promise_all(
+    .list = coro::collect(generator),
+  )
+}
+
+tool_results_user_turn <- function(results) {
+  is_tool_result <- map_lgl(results, S7_inherits, ContentToolResult)
+  if (!any(is_tool_result)) {
+    return(NULL)
+  }
+  Turn("user", contents = results[is_tool_result])
+}
 
 extract_tool_requests <- function(contents) {
   is_tool_request <- map_lgl(contents, S7_inherits, ContentToolRequest)

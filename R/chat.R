@@ -523,11 +523,15 @@ Chat <- R6::R6Class(
           yield(chunk)
         }
 
-        tool_results <- coro::collect(private$invoke_tools(echo = echo))
-        user_turn <- NULL
-        if (length(tool_results)) {
-          user_turn <- Turn("user", tool_results)
-        }
+        tool_results <- coro::collect(
+          invoke_tools(
+            self$last_turn(),
+            echo = echo,
+            callbacks = private$callbacks,
+            yield_request = FALSE
+          )
+        )
+        user_turn <- tool_results_user_turn(tool_results)
 
         if (echo == "all") {
           cat(format(user_turn))
@@ -544,8 +548,10 @@ Chat <- R6::R6Class(
       private,
       user_turn,
       stream,
-      echo
+      echo,
+      tool_mode = "sequential"
     ) {
+      tool_mode <- arg_match(tool_mode, c("concurrent", "sequential"))
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
 
@@ -555,15 +561,27 @@ Chat <- R6::R6Class(
           yield(chunk)
         }
 
-        tool_results <- coro::await(
-          coro::async_collect(
-            private$invoke_tools_async(echo = echo)
-          )
+        tool_calls <- invoke_tools_async(
+          self$last_turn(),
+          echo = echo,
+          callbacks = private$callbacks,
+          yield_request = FALSE
         )
-        user_turn <- NULL
-        if (length(tool_results)) {
-          user_turn <- Turn("user", tool_results)
+
+        if (tool_mode == "concurrent") {
+          tool_steps <- coro::await(gen_async_promise_all(tool_calls))
+          for (item in tool_steps) {
+            yield(item)
+          }
+        } else if (tool_mode == "sequential") {
+          tool_steps <- list()
+          for (tool_result in coro::await_each(tool_calls)) {
+            yield(tool_result)
+            tool_steps <- c(tool_steps, list(tool_result))
+          }
         }
+
+        user_turn <- tool_results_user_turn(tool_steps)
 
         if (echo == "all") {
           cat(format(user_turn))
@@ -721,50 +739,6 @@ Chat <- R6::R6Class(
 
       turn
     },
-
-    invoke_tools = generator_method(function(
-      self,
-      private,
-      echo = "none",
-      yield_request = FALSE
-    ) {
-      tool_steps <- invoke_tools(
-        self$last_turn(),
-        echo = echo,
-        callbacks = private$callbacks,
-        yield_request = yield_request
-      )
-      for (step in tool_steps) {
-        yield(step)
-      }
-    }),
-
-    invoke_tools_async = async_generator_method(function(
-      self,
-      private,
-      echo = "none",
-      yield_request = FALSE,
-      tool_mode = "sequential"
-    ) {
-      tool_mode <- arg_match(tool_mode, c("parallel", "sequential"))
-
-      tool_steps <- invoke_tools_async(
-        self$last_turn(),
-        echo = echo,
-        callbacks = private$callbacks,
-        yield_request = yield_request
-      )
-
-      if (tool_mode == "parallel") {
-        for (step in tool_steps) {
-          yield(step)
-        }
-      } else if (tool_mode == "sequential") {
-        for (step in coro::await_each(tool_steps)) {
-          yield(step)
-        }
-      }
-    }),
 
     has_system_prompt = function() {
       length(private$.turns) > 0 && private$.turns[[1]]@role == "system"
