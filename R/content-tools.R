@@ -124,6 +124,9 @@ gen_async_promise_all <- function(generator) {
 }
 
 tool_results_user_turn <- function(results) {
+  if (length(results) == 0) {
+    return(NULL)
+  }
   is_tool_result <- map_lgl(results, S7_inherits, ContentToolResult)
   if (!any(is_tool_result)) {
     return(NULL)
