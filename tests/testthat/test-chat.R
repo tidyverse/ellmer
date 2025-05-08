@@ -147,7 +147,7 @@ test_that("can extract structured data", {
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai_test()
-  data <- chat$extract_data("John, age 15, won first prize", type = person)
+  data <- chat$chat_structured("John, age 15, won first prize", type = person)
   expect_equal(data, list(name = "John", age = 15))
 })
 
@@ -169,7 +169,7 @@ test_that("can extract structured data (async)", {
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai_test()
-  data <- sync(chat$extract_data_async(
+  data <- sync(chat$chat_structured_async(
     "John, age 15, won first prize",
     type = person
   ))
@@ -343,4 +343,21 @@ test_that("chat warns on tool failures", {
     . <- chat$chat("What are Joe, Hadley, Simon, and Tom's favorite colors?"),
     transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
   )
+})
+
+test_that("old extract methods are deprecated", {
+  ChatNull <- R6::R6Class(
+    "ChatNull",
+    inherit = Chat,
+    public = list(
+      chat_structured = function(...) invisible(),
+      chat_structured_async = function(...) invisible()
+    )
+  )
+
+  chat_null <- ChatNull$new(provider = chat_openai()$get_provider())
+  expect_snapshot({
+    chat_null$extract_data()
+    chat_null$extract_data_async()
+  })
 })

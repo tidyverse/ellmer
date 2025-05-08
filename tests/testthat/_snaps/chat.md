@@ -74,3 +74,18 @@
       x [user_favorite_color (ID)]: User denied tool request
       i ... and 1 more.
 
+# old extract methods are deprecated
+
+    Code
+      chat_null$extract_data()
+    Condition
+      Warning:
+      `Chat$extract_data()` was deprecated in ellmer 0.2.0.
+      i Please use `Chat$chat_structured()` instead.
+    Code
+      chat_null$extract_data_async()
+    Condition
+      Warning:
+      `Chat$extract_data_async()` was deprecated in ellmer 0.2.0.
+      i Please use `Chat$chat_structured_async()` instead.
+

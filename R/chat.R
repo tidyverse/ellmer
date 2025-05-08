@@ -242,15 +242,13 @@ Chat <- R6::R6Class(
     #' @param convert Automatically convert from JSON lists to R data types
     #'   using the schema. For example, this will turn arrays of objects into
     #'  data frames and arrays of strings into a character vector.
-    extract_data = function(..., type, echo = "none", convert = TRUE) {
+    chat_structured = function(..., type, echo = "none", convert = TRUE) {
       turn <- user_turn(...)
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
 
       needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
-      if (needs_wrapper) {
-        type <- type_object(wrapper = type)
-      }
+      type <- wrap_type_if_needed(type, needs_wrapper)
 
       coro::collect(private$submit_turns(
         turn,
@@ -287,11 +285,7 @@ Chat <- R6::R6Class(
       check_bool(convert)
 
       needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
-      if (needs_wrapper) {
-        w_type <- type_object(wrapper = type)
-      } else {
-        w_type <- type
-      }
+      w_type <- wrap_type_if_needed(type, needs_wrapper)
 
       reqs <- parallel_requests(
         provider = private$provider,
@@ -326,7 +320,7 @@ Chat <- R6::R6Class(
     #' @param echo Whether to emit the response to stdout as it is received.
     #'   Set to "text" to stream JSON data as it's generated (not supported by
     #'  all providers).
-    extract_data_async = function(..., type, echo = "none") {
+    chat_structured_async = function(..., type, echo = "none") {
       turn <- user_turn(...)
       echo <- check_echo(echo %||% private$echo)
 
@@ -436,6 +430,30 @@ Chat <- R6::R6Class(
       }
 
       invisible(self)
+    },
+
+    #' @description `r lifecycle::badge("deprecated")`
+    #' Deprecated in favour of `$chat_structured()`.
+    #' @param ... See `$chat_structured()`
+    extract_data = function(...) {
+      lifecycle::deprecate_warn(
+        "0.2.0",
+        "Chat$extract_data()",
+        "Chat$chat_structured()"
+      )
+      self$chat_structured(...)
+    },
+
+    #' @description `r lifecycle::badge("deprecated")`
+    # '  Deprecated in favour of `$chat_structured_async()`.
+    #' @param ... See `$chat_structured_async()`
+    extract_data_async = function(...) {
+      lifecycle::deprecate_warn(
+        "0.2.0",
+        "Chat$extract_data_async()",
+        "Chat$chat_structured_async()"
+      )
+      self$chat_structured_async(...)
     }
   ),
   private = list(
@@ -739,24 +757,4 @@ method(contents_markdown, new_S3_class("Chat")) <- function(
   }
 
   paste(res, collapse = "\n\n")
-}
-
-extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
-  is_json <- map_lgl(turn@contents, S7_inherits, ContentJson)
-  n <- sum(is_json)
-  if (n != 1) {
-    cli::cli_abort("Data extraction failed: {n} data results recieved.")
-  }
-
-  json <- turn@contents[[which(is_json)]]
-  out <- json@value
-
-  if (needs_wrapper) {
-    out <- out$wrapper
-    type <- type@properties[[1]]
-  }
-  if (convert) {
-    out <- convert_from_type(out, type)
-  }
-  out
 }
