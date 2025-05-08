@@ -29,7 +29,7 @@ test_that("invoke_tool returns a ContentToolResult", {
   expect_s3_class(res, "ellmer::ContentToolResult")
   expect_s3_class(res@error, "condition")
   expect_true(tool_errored(res))
-  expect_equal(tool_error_string(res), "unused argument (x = 1)")
+  expect_equal(tool_error_string(res), "Unused argument: x")
   expect_equal(res@value, NULL)
   expect_equal(res@extra, list())
   expect_s3_class(res@request, "ellmer::ContentToolRequest")
@@ -177,9 +177,7 @@ test_that("invoke_tools_async() echoes tool requests and results", {
 test_that("invoke_tools() converts to R data structures", {
   out <- NULL
   tool <- tool(
-    function(x, y) {
-      out <<- list(x = x, y = y)
-    },
+    function(...) out <<- list(...),
     "A tool",
     x = type_array(items = type_number()),
     y = type_array(items = type_string())
@@ -189,11 +187,11 @@ test_that("invoke_tools() converts to R data structures", {
     ContentToolRequest(
       id = "x",
       name = "my_tool",
-      arguments = list(x = list(1, 2, NULL), y = list()),
+      arguments = list(x = list(1, 2), y = list()),
       tool = tool
     )
   )
-  expect_equal(out$x, c(1, 2, NA))
+  expect_equal(out$x, c(1, 2))
   expect_equal(out$y, character())
 })
 

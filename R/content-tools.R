@@ -85,10 +85,13 @@ invoke_tool <- function(request) {
 
   args <- request@arguments
   if (tool@convert) {
-    arg_names <- names(tool@arguments@properties)
-    args[arg_names] <- lapply(arg_names, function(name) {
-      convert_from_type(args[[name]], tool@arguments@properties[[name]])
-    })
+    extra_args <- setdiff(names(args), names(tool@arguments@properties))
+    if (length(extra_args) > 0) {
+      e <- catch_cnd(cli::cli_abort("Unused argument{?s}: {extra_args}"))
+      return(new_tool_result(request, error = e))
+    }
+
+    args <- convert_from_type(args, tool@arguments)
   }
 
   tryCatch(

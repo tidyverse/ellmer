@@ -6,7 +6,7 @@
       ( ) [tool call] my_tool()
       o #> 1
       ( ) [tool call] my_tool(x = 1)
-      # #> Error: unused argument (x = 1)
+      # #> Error: Unused argument: x
       ( ) [tool call] tool_list()
       o #> {"a":1,"b":2}
       ( ) [tool call] tool_chr()
