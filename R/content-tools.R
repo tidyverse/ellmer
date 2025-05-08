@@ -81,7 +81,6 @@ invoke_tool <- function(request) {
   }
 
   args <- tool_request_args(request)
-
   if (S7_inherits(args, ContentToolResult)) {
     # Failed to convert the arguments
     return(args)
@@ -106,7 +105,6 @@ on_load(
     }
 
     args <- tool_request_args(request)
-
     if (S7_inherits(args, ContentToolResult)) {
       # Failed to convert the arguments
       return(args)
