@@ -27,11 +27,17 @@ wrap_type_if_needed <- function(type, needs_wrapper = FALSE) {
 }
 
 convert_from_type <- function(x, type) {
-  if (S7_inherits(type, TypeArray)) {
+  if (is.null(x) && !type@required) {
+    x
+  } else if (S7_inherits(type, TypeArray)) {
     if (S7_inherits(type@items, TypeBasic)) {
       if (!type@items@required) {
         is_null <- map_lgl(x, is.null)
-        x[is_null] <- list(NA)
+        if (type@items@type == "string") {
+          x[is_null] <- list(NA_character_)
+        } else {
+          x[is_null] <- list(NA)
+        }
       }
 
       switch(
