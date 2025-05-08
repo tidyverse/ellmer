@@ -31,6 +31,10 @@ reference:
       - interpolate
       - google_upload
 
+  - title: Parallel and batch chat
+    contents:
+      - parallel_chat
+
   - title: Tools and structured data
     contents:
       - tool

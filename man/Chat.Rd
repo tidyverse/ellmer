@@ -37,10 +37,9 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
 \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
 \item \href{#method-Chat-chat}{\code{Chat$chat()}}
-\item \href{#method-Chat-chat_parallel}{\code{Chat$chat_parallel()}}
-\item \href{#method-Chat-extract_data}{\code{Chat$extract_data()}}
+\item \href{#method-Chat-chat_structured}{\code{Chat$chat_structured()}}
 \item \href{#method-Chat-extract_data_parallel}{\code{Chat$extract_data_parallel()}}
-\item \href{#method-Chat-extract_data_async}{\code{Chat$extract_data_async()}}
+\item \href{#method-Chat-chat_structured_async}{\code{Chat$chat_structured_async()}}
 \item \href{#method-Chat-chat_async}{\code{Chat$chat_async()}}
 \item \href{#method-Chat-stream}{\code{Chat$stream()}}
 \item \href{#method-Chat-stream_async}{\code{Chat$stream_async()}}
@@ -48,6 +47,8 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-get_provider}{\code{Chat$get_provider()}}
 \item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
 \item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
+\item \href{#method-Chat-extract_data}{\code{Chat$extract_data()}}
+\item \href{#method-Chat-extract_data_async}{\code{Chat$extract_data_async()}}
 \item \href{#method-Chat-clone}{\code{Chat$clone()}}
 }
 }
@@ -256,36 +257,12 @@ will be used.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-chat_parallel"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-chat_parallel}{}}}
-\subsection{Method \code{chat_parallel()}}{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Submit multiple prompts in parallel. Returns a list of \link{Chat} objects,
-one for each prompt.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_parallel(prompts, max_active = 10, rpm = 500)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{prompts}}{A list of user prompts.}
-
-\item{\code{max_active}}{The maximum number of simultaenous requests to send.}
-
-\item{\code{rpm}}{Maximum number of requests per minute.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-extract_data"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-extract_data}{}}}
-\subsection{Method \code{extract_data()}}{
+\if{html}{\out{<a id="method-Chat-chat_structured"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-chat_structured}{}}}
+\subsection{Method \code{chat_structured()}}{
 Extract structured data
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data(..., type, echo = "none", convert = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_structured(..., type, echo = "none", convert = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -347,13 +324,13 @@ each property. If \code{FALSE}, returns a list.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-extract_data_async"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-extract_data_async}{}}}
-\subsection{Method \code{extract_data_async()}}{
+\if{html}{\out{<a id="method-Chat-chat_structured_async"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-chat_structured_async}{}}}
+\subsection{Method \code{chat_structured_async()}}{
 Extract structured data, asynchronously. Returns a promise
 that resolves to an object matching the type specification.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_async(..., type, echo = "none")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_structured_async(..., type, echo = "none")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -489,6 +466,41 @@ should use \code{register_tool()}.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{tools}}{A list of tool definitions created with \code{\link[=tool]{tool()}}.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-extract_data"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-extract_data}{}}}
+\subsection{Method \code{extract_data()}}{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+Deprecated in favour of \verb{$chat_structured()}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{See \verb{$chat_structured()}}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-extract_data_async"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-extract_data_async}{}}}
+\subsection{Method \code{extract_data_async()}}{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_async(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{See \verb{$chat_structured_async()}}
 }
 \if{html}{\out{</div>}}
 }

@@ -147,7 +147,7 @@ test_that("can extract structured data", {
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai_test()
-  data <- chat$extract_data("John, age 15, won first prize", type = person)
+  data <- chat$chat_structured("John, age 15, won first prize", type = person)
   expect_equal(data, list(name = "John", age = 15))
 })
 
@@ -169,7 +169,7 @@ test_that("can extract structured data (async)", {
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai_test()
-  data <- sync(chat$extract_data_async(
+  data <- sync(chat$chat_structured_async(
     "John, age 15, won first prize",
     type = person
   ))
@@ -244,25 +244,6 @@ test_that("chat messages get timestamped in sequence", {
 
   expect_true(turns[[2]]@completed >= turns[[1]]@completed)
   expect_true(turns[[2]]@completed <= after_receive)
-})
-
-test_that("parallel chat messages get timestamped correctly", {
-  chat <- chat_openai()
-
-  before_send <- Sys.time()
-  results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
-  after_receive <- Sys.time()
-
-  turns1 <- results[[1]]$get_turns()
-  turns2 <- results[[2]]$get_turns()
-
-  expect_true(turns1[[1]]@completed >= before_send)
-  expect_true(turns1[[1]]@completed <= turns1[[2]]@completed)
-  expect_true(turns1[[2]]@completed <= after_receive)
-
-  expect_true(turns2[[1]]@completed >= before_send)
-  expect_true(turns2[[1]]@completed <= turns2[[2]]@completed)
-  expect_true(turns2[[2]]@completed <= after_receive)
 })
 
 test_that("async chat messages get timestamped in sequence", {
@@ -343,4 +324,21 @@ test_that("chat warns on tool failures", {
     . <- chat$chat("What are Joe, Hadley, Simon, and Tom's favorite colors?"),
     transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
   )
+})
+
+test_that("old extract methods are deprecated", {
+  ChatNull <- R6::R6Class(
+    "ChatNull",
+    inherit = Chat,
+    public = list(
+      chat_structured = function(...) invisible(),
+      chat_structured_async = function(...) invisible()
+    )
+  )
+
+  chat_null <- ChatNull$new(provider = chat_openai()$get_provider())
+  expect_snapshot({
+    chat_null$extract_data()
+    chat_null$extract_data_async()
+  })
 })

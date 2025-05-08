@@ -1,3 +1,31 @@
+# Object from ContentJSON -----------------------------------------------------
+
+test_that("useful error if no ContentJson", {
+  turn <- Turn("assistant", list(ContentText("Hello")))
+  expect_snapshot(extract_data(turn), error = TRUE)
+})
+
+test_that("can extract data from ContentJson", {
+  turn <- Turn("assistant", list(ContentJson(list(x = 1))))
+  type <- type_object(x = type_integer())
+  expect_equal(extract_data(turn, type), list(x = 1))
+})
+
+test_that("can opt-out of conversion data from ContentJson", {
+  turn <- Turn("assistant", list(ContentJson(list(x = NULL))))
+  type <- type_object(x = type_integer())
+  expect_equal(extract_data(turn, type, convert = TRUE), list(x = NA_integer_))
+  expect_equal(extract_data(turn, type, convert = FALSE), list(x = NULL))
+})
+
+test_that("can extract data when wrapper is used", {
+  turn <- Turn("assistant", list(ContentJson(list(wrapper = list(x = 1)))))
+  type <- wrap_type_if_needed(type_object(x = type_integer()), TRUE)
+  expect_equal(extract_data(turn, type, needs_wrapper = TRUE), list(x = 1))
+})
+
+# Type coercion ---------------------------------------------------------------
+
 test_that("optional base types converted to NA", {
   expect_equal(convert_from_type(NULL, type_boolean()), NA)
   expect_equal(convert_from_type(NULL, type_integer()), NA_integer_)
