@@ -575,14 +575,14 @@ Chat <- R6::R6Class(
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
-        turn <- private$match_tools(turn)
+        turn <- match_tools(turn, private$tools)
       } else {
         turn <- value_turn(
           private$provider,
           response,
           has_type = !is.null(type)
         )
-        turn <- private$match_tools(turn)
+        turn <- match_tools(turn, private$tools)
 
         text <- turn@text
         if (!is.null(text)) {
@@ -654,7 +654,7 @@ Chat <- R6::R6Class(
           any_text <- TRUE
         }
       }
-      turn <- private$match_tools(turn)
+      turn <- match_tools(turn, private$tools)
 
       # Ensure turns always end in a newline
       if (any_text) {
@@ -673,20 +673,6 @@ Chat <- R6::R6Class(
       coro::exhausted()
     }),
 
-    match_tools = function(turn) {
-      if (is.null(turn)) return(NULL)
-
-      turn@contents <- map(turn@contents, function(content) {
-        if (!S7_inherits(content, ContentToolRequest)) {
-          return(content)
-        }
-        content@tool <- private$tools[[content@name]]
-        content
-      })
-
-      turn
-    },
-
     invoke_tools = function(echo = "none") {
       tool_results <- invoke_tools(self$last_turn(), echo = echo)
       if (length(tool_results) == 0) {
@@ -697,10 +683,7 @@ Chat <- R6::R6Class(
 
     invoke_tools_async = async_method(function(self, private, echo = "none") {
       tool_results <- await(invoke_tools_async(self$last_turn(), echo = echo))
-      if (length(tool_results) == 0) {
-        return()
-      }
-      Turn("user", tool_results)
+      tool_results_as_turn(tool_results)
     }),
 
     has_system_prompt = function() {

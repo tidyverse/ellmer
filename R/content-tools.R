@@ -1,6 +1,20 @@
 #' @include turns.R
 NULL
 
+match_tools <- function(turn, tools) {
+  if (is.null(turn)) return(NULL)
+
+  turn@contents <- map(turn@contents, function(content) {
+    if (!S7_inherits(content, ContentToolRequest)) {
+      return(content)
+    }
+    content@tool <- tools[[content@name]]
+    content
+  })
+
+  turn
+}
+
 # Results a content list
 invoke_tools <- function(turn, echo = "none") {
   tool_requests <- extract_tool_requests(turn@contents)
