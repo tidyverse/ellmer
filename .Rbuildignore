@@ -14,3 +14,4 @@ _cache/
 ^[\.]?air\.toml$
 ^\.vscode$
 ^data-raw$
+^README\.yml$

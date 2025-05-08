@@ -1,0 +1,1124 @@
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
+        is Susan and I''m 13 years old"}]}],"model":"gpt-4o","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"age":{"type":"number","description":""},"name":{"type":"string","description":""}},"required":["age","name"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93044b83b8d6f081-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Apr 2025 15:39:20 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '3787'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=lJ1_5VCaNgrrn1qaqi9_r10C0BRgYmXtKjVGrqiThFI-1744645160-1.0.1.1-pPFneqTpIYwA7N35rRlJs.NedobdNowWKDv7GAP7d8EFrmmCL.LB5GMoc6CEHWnSgau52SOxkNIbv6SNHC5hjC4x3K4FCF13ZxcXx7xyNWE;
+        path=/; expires=Mon, 14-Apr-25 16:09:20 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=ptiR4738JkQjukdHImZFQYOvKQVQet87vWf67DBCljM-1744645160383-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999988'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_41ba061c5ac501ed547615da09f08ed8
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BMGBw96Ue6bDA03bW0WdWMXaBP7ul",
+          "object": "chat.completion",
+          "created": 1744645156,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":{\"age\":13,\"name\":\"Susan\"}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 74,
+            "completion_tokens": 12,
+            "total_tokens": 86,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_988a69c908"
+        }
+  recorded_at: 2025-04-14 15:39:44 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
+        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
+        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]}],"model":"gpt-4o","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"primary_shape":{"type":"string","description":""},"primary_colour":{"type":"string","description":""}},"required":["primary_shape","primary_colour"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93044b9d3b46f081-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Apr 2025 15:39:22 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '1675'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=jzbobNCN_kneOohAggwNOZ25KFGsu5Ld64k5D2nCnXI-1744645162-1.0.1.1-j2UZ_ufBWK7DwyxNyavCAV5aqXzLwGCMC35FWJ9uQIUnnZJX8l.K5V38GRof6BHuEGhk6Ds8OeJ3oWqjb3cG_DDeATgp.PkEcQjQA0BmYk8;
+        path=/; expires=Mon, 14-Apr-25 16:09:22 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=c38YdhwBrIk3D3Es0U4VIoUbHxBQkVm2_epYWpjOk.A-1744645162306-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-input-images: '50000'
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-input-images: '49999'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999217'
+      x-ratelimit-reset-input-images: 1ms
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 23ms
+      x-request-id: req_6a716dd305907c4fb97aae34043d7907
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BMGC1TeBSvhDtWSgt4K8HGlCx8ypX",
+          "object": "chat.completion",
+          "created": 1744645161,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":{\"primary_shape\":\"oval\",\"primary_colour\":\"gray and blue\"}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 339,
+            "completion_tokens": 16,
+            "total_tokens": 355,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_b7faba9ef5"
+        }
+  recorded_at: 2025-04-14 15:39:44 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"Policy\n\nThird-party
+        testing as a key ingredient of AI policy\n\nMar 25, 2024●18 min read\n\n\n\nWe
+        believe that the AI sector needs effective third-party testing for frontier
+        AI systems. Developing a testing regime and associated policy interventions
+        based on the insights of industry, government, and academia is the best way
+        to avoid societal harm—whether deliberate or accidental—from AI systems.\n\n\n\nOur
+        deployment of large-scale, generative AI systems like Claude has shown us
+        that work is needed to set up the policy environment to respond to the capabilities
+        of today’s most powerful AI models, as well as those likely to be built in
+        the future. In this post, we discuss what third-party testing looks like,
+        why it’s needed, and describe some of the research we’ve done to arrive at
+        this policy position. We also discuss how ideas around testing relate to other
+        topics on AI policy, such as openly accessible models and issues of regulatory
+        capture.\n\n\n\nPolicy overview\n\n\n\nToday’s frontier AI systems demand
+        a third-party oversight and testing regime to validate their safety. In particular,
+        we need this oversight for understanding and analyzing model behavior relating
+        to issues like election integrity, harmful discrimination, and the potential
+        for national security misuse. We also expect more powerful systems in the
+        future will demand deeper oversight - as discussed in our ‘Core views on AI
+        safety’ post, we think there’s a chance that today’s approaches to AI development
+        could yield systems of immense capability, and we expect that increasingly
+        powerful systems will need more expansive testing procedures. A robust, third-party
+        testing regime seems like a good way to complement sector-specific regulation
+        as well as develop the muscle for policy approaches that are more general
+        as well.\n\n\n\nDeveloping a third-party testing regime for the AI systems
+        of today seems to give us one of the best tools to manage the challenges of
+        AI today, while also providing infrastructure we can use for the systems of
+        the future. We expect that ultimately some form of third-party testing will
+        be a legal requirement for widely deploying AI models, but designing this
+        regime and figuring out exactly what standards AI systems should be assessed
+        against is something we’ll need to iterate on in the coming years - it’s not
+        obvious what would be appropriate or effective today, and the way to learn
+        that is to prototype such a regime and generate evidence about it.\n\n\n\nAn
+        effective third-party testing regime will:\n\n\n\nGive people and institutions
+        more trust in AI systems\n\nBe precisely scoped, such that passing its tests
+        is not so great a burden that small companies are disadvantaged by them\n\nBe
+        applied only to a narrow set of the most computationally-intensive, large-scale
+        systems; if implemented correctly, the vast majority of AI systems would not
+        be within the scope of such a testing regime\n\nProvide a means for countries
+        and groups of countries to coordinate with one another via developing shared
+        standards and experimenting with Mutual Recognition agreements\n\n\n\nSuch
+        a regime will have the following key ingredients [1]:\n\n\n\nEffective and
+        broadly-trusted tests for measuring the behavior and potential misuses of
+        a given AI system\n\nTrusted and legitimate third-parties who can administer
+        these tests and audit company testing procedures\n\nWhy we need an effective
+        testing regime\n\n\n\nThis regime is necessary because frontier AI systems—specifically,
+        large-scale generative models that consume substantial computational resources—don’t
+        neatly fit into the use-case and sector-specific frameworks of today. These
+        systems are designed to be ''everything machines'' - Gemini, ChatGPT, and
+        Claude can all be adapted to a vast number of downstream use-cases, and the
+        behavior of the downstream systems always inherits some of the capabilities
+        and weaknesses of the frontier system it relies on.\n\n\n\nThese systems are
+        extremely capable and useful, but they also present risks for serious misuse
+        or AI-caused accidents. We want to help come up with a system that greatly
+        reduces the chance of major misuses or accidents caused by AI technology,
+        while still allowing for the wide deployment of its beneficial aspects. In
+        addition to obviously wanting to prevent major accidents or misuse for its
+        own sake, major incidents are likely to lead to extreme, knee-jerk regulatory
+        actions, leading to a ''worst of both worlds'' where regulation is both stifling
+        and ineffective. We believe it is better for multiple reasons to proactively
+        design effective and carefully thought through regulation.\n\n\n\nSystems
+        also have the potential to display emergent, autonomous behaviors which could
+        lead to serious accidents - for instance, systems might insert vulnerabilities
+        into code that they are asked to produce or, when asked to carry out a complex
+        task with many steps, carry some actions which contradict human intentions.
+        Though these kinds of behaviors are inherently hard to measure, it’s worth
+        developing tools to measure for them today as insurance against these manifesting
+        in widely deployed systems.\n\n\n\nAt Anthropic, we’ve implemented self-governance
+        systems that we believe should meaningfully reduce the risk of misuse or accidents
+        from the technologies we’ve developed. Our main approach is our Responsible
+        Scaling Policy (RSP), which commits us to testing our frontier systems, like
+        Claude, for misuses and accident risks, and to deploy only models that pass
+        our safety tests. Multiple other AI developers have subsequently adopted or
+        are adopting frameworks that bear a significant resemblance to Anthropic''s
+        RSP.\n\n\n\nHowever, although Anthropic is investing in our RSP (and other
+        organizations are doing the same), we believe that this type of testing is
+        insufficient as it relies on self-governance decisions made by single, private
+        sector actors. Ultimately, testing will need to be done in a way which is
+        broadly trusted, and it will need to be applied to everyone developing frontier
+        systems. This type of industry-wide testing approach isn’t unusual - most
+        important sectors of the economy are regulated via product safety standards
+        and testing regimes, including food, medicine, automobiles, and aerospace.\n\n\n\nWhat
+        would a robust testing regime look like?\n\n\n\nA robust third-party testing
+        regime can help identify and prevent the potential risks of AI systems. It
+        will require:\n\n\n\nA shared understanding across industry, government, and
+        academia of what an AI safety testing framework looks like - what it should
+        and shouldn’t include\n\nAn initial period where companies complete practice
+        runs of implementing such testing, sometimes with third-party oversight, to
+        make sure the tests work, are feasible to run, and can be validated by a third
+        party\n\nA two-stage testing regime: there should be a very fast, automated
+        testing stage that companies apply to their systems. This stage should cover
+        a wide area and be biased towards avoiding false negatives. If this stage
+        spots potential problems, there should be a more thorough secondary test,
+        likely using expert human-led elicitation\n\nIncreased resources to the parts
+        of government that will oversee and validate tests - building and analyzing
+        tests is detailed, expensive, technical work, so governments will need to
+        find a way to fund the entities that do this\n\nA carefully scoped set of
+        mandated tests - we’ll need specific, legally mandated tests where it becomes
+        clear there are poor incentives for industry self-governance, and the benefits
+        of public safety from government oversight outweigh the regulatory burdens.
+        We should ensure this is a well scoped, small set of tests, or else we’ll
+        create regulatory burdens and increase the possibility of regulatory capture\n\nAn
+        effective balance of the assurance of safety with ease of administration of
+        these tests\n\n\n\nWhen it comes to tests, we can already identify one area
+        today where testing by third-parties seems helpful and draws on the natural
+        strengths of governments: national security risks. We should identify a set
+        of AI capabilities that, if misused, could compromise national security, then
+        test our systems for these capabilities. Such capabilities might include the
+        ability to meaningfully speed up the creation of bioweapons or to carry out
+        complex cyberattacks. (If systems are capable of this, then that would lead
+        to us changing how we deployed the model - e.g, remove certain capabilities
+        from broadly deployed models and/or gate certain model capabilities behind
+        ‘know your customer’ regimes, and ensuring relevant government agencies were
+        aware we had systems with these capabilities.) We expect there are several
+        areas where society will ultimately demand there be legitimate, third-party
+        testing approaches, and national security is just one of them.\n\n\n\nWhen
+        it comes to the third party doing the testing, there will be a multitude of
+        them and the tests will be carried out for different reasons, which we outline
+        here:\n\n\n\nPrivate companies: Companies may subcontract other companies
+        to build tests and evaluations for their systems, as we have done with firms
+        like Gryphon Scientific. We can also imagine companies doing tests for other
+        companies where the tests are mandated by law but not carried out by government
+        agencies, similar to how accounting firms audit the books of private companies.\n\nUniversities:
+        Today, many researchers at many academic institutions have free or subsidized
+        access to models developed by AI labs; in the future, we could imagine some
+        of these research institutions administering their own testing initiatives,
+        some of which may be supervised or elevated via government bodies.\n\nGovernments:
+        Some tests (we suspect, a relatively small number) may be mandated by law
+        and carried out by government actors - for instance, for testing for national
+        security misuses of AI systems. Here, government agencies may carry out the
+        tests directly.\n\n\n\nUltimately, we expect that third-party testing will
+        be accomplished by a diverse ecosystem of different organizations, similar
+        to how product safety is achieved in other parts of the economy today. Because
+        broadly commercialized, general purpose AI is a relatively new technology,
+        we don’t think the structure of this ecosystem is clear today and it will
+        become clearer through all the actors above running different testing experiments.
+        We need to start working on this testing regime today, because it will take
+        a long time to build.\n\n\n\nWe believe that we - and other participants in
+        AI development - will need to run multiple testing experiments to get this
+        right. The stakes are high: if we land on an approach that doesn’t accurately
+        measure safety but is easy to administer, we risk not doing anything substantive
+        or helpful. If we land on an approach that accurately measures safety but
+        is hard to administer, we risk creating a testing ecosystem that favors companies
+        with greater resources and thus reduces the ability for smaller actors to
+        participate.\n\n\n\nHow Anthropic will support fair, effective testing regimes\n\n\n\nIn
+        the future, Anthropic will carry out the following activities to support governments
+        in the development of effective third-party testing regimes:\n\n\n\nPrototyping
+        a testing regime via implementing our RSP and sharing what we learn\n\nTesting
+        third-party assessment of our systems via contractors and government partners\n\nDeepening
+        our frontier red teaming work to give us and the broader sector a clearer
+        sense of the risks of AI systems and their mitigations\n\nAdvocating for governments
+        to fund the agencies and organizations that could help to develop an effective
+        third-party testing regime (e.g, in the United States, NIST, the US AI Safety
+        Institute, the National AI Research Resource, the usage of DoE supercomputers
+        for AI testing, and so on)\n\nEncouraging governments to build their own ‘National
+        Research Clouds’ (like the National AI Research Resource in the US) so that
+        they can a) develop independent capacity in academia and government to build,
+        study, and test frontier AI systems, and b) work on the science of evaluating
+        AI systems, including those developed by private companies like Anthropic\n\n\n\nDeveloping
+        a testing regime and associated policy interventions based on the insights
+        of industry, government, and academia is the best way to avoid societal harm—whether
+        deliberate or accidental—from AI systems.\n\n\n\nHow testing connects to our
+        broader policy priorities\n\n\n\nOur overarching policy goal is to have appropriate
+        oversight of the AI sector. We believe this will mostly be achieved via there
+        being an effective ecosystem for third-party testing and evaluation of AI
+        systems. Here are some AI policy ideas you can expect to see us advocating
+        for in support of that:\n\n\n\nGreater funding for AI testing and evaluation
+        in government\n\n\n\nEffective testing and evaluation procedures are a necessary
+        prerequisite of any effective form of AI policy. We think that governments
+        should stand up and support institutions that develop AI evaluations, as well
+        as bringing together industry, academia, and other stakeholders to agree on
+        standards for the safety of AI systems. In the US, we specifically advocate
+        for greater funding for NIST.\n\n\n\nSupport greater evaluation of AI systems
+        through public sector infrastructure for doing AI research\n\n\n\nWe urgently
+        need to increase the number and breadth of people working to test and evaluate
+        AI systems, for both current and future risks. It’s therefore crucial that
+        governments create experimental infrastructure to help academic researchers
+        test out and evaluate frontier AI systems, and develop their own frontier
+        systems for beneficial purposes. For more information, see our support for
+        a US national research cloud via the CREATE AI Act, and our written Senate
+        testimony.\n\n\n\nDeveloping tests for specific, national security-relevant
+        capabilities\n\n\n\nWe should know if AI systems can be used in ways that
+        strengthen or (if fielded by another entity) weaken national security. Whereas
+        the private sector and academia can develop the vast majority of tests, some
+        testing and evaluation questions relate to national security capabilities
+        which are classified, so only certain governments are able to effectively
+        evaluate them. Therefore, we want to support US Government efforts to develop
+        ways of testing AI systems for national security-relevant capabilities. We
+        will also continue our own work to better understand the capabilities of our
+        own systems.\n\n\n\nScenario planning and test development for increasingly
+        advanced systems\n\n\n\nOur Responsible Scaling Policy is designed to frontload
+        work about evaluating and testing future, hypothetical capabilities of AI
+        systems. This is to ensure we have the relevant tests to better assess and
+        minimize accident and misuse risks from increasingly powerful AI systems.
+        But we don’t claim that our RSP delineates all the tests that need to be run
+        on increasingly powerful models. As AI advances driven by growing computational
+        power increase, a broader set of actors should work to anticipate the future
+        capabilities of AI systems, and develop tests for them.\n\nAspects of AI policy
+        we believe are important to discuss\n\n\n\nWhile developing our policy approach,
+        we’ve also found ourselves returning again and again to a few specific issues
+        such as openly accessible models and regulatory capture. We’ve outlined our
+        current policy thinking below but recognize these are complicated issues where
+        people often disagree.\n\n\n\nOpenly-disseminated and/or open-source models:
+        Science moves forward largely due to a culture of openness and transparency
+        around research. This is especially true in AI, where much of the currently-unfolding
+        revolution is built on the open publication of research and models like the
+        Transformer, BERT, Vision Transformers, and so on. There is also a long history
+        of open source and openly accessible systems increasing the robustness of
+        the security environment by helping a greater number of people experiment
+        with technologies and identify their potential weaknesses.\n\n\n\nWe believe
+        that the vast majority of AI systems today (perhaps even all of them) are
+        safe to openly disseminate and will be safe to broadly disseminate in the
+        future. However, we believe in the future it may be hard to reconcile a culture
+        of full open dissemination of frontier AI systems with a culture of societal
+        safety.\n\n\n\nIf — and ‘if’ is a key and unresolved point — increasingly
+        capable AI models can lead to detrimental effects, or hold the possibility
+        of catastrophic accidents, then we’ll need to adjust the norms of what is
+        openly disseminated at the frontier.\n\n\n\nSpecifically, we’ll need to ensure
+        that AI developers release their systems in a way that provides strong guarantees
+        for safety - for example, if we were to discover a meaningful misuse of our
+        model, we might put in place classifiers to detect and block attempts to elicit
+        that misuse, or we might gate the ability to finetune a system behind a ‘know
+        your customer’ rule along with contractual obligations to not finetune towards
+        a specific misuse. By comparison, if someone wanted to openly release the
+        weights of a model which was capable of the same misuse, they would need to
+        both harden the model against that misuse (e.g, via RLHF or RLAIF training)
+        and find a way to make this model resilient to attempts to fine-tune it onto
+        a dataset that would enable this misuse. We will also need to experiment with
+        disclosure processes, similar to how the security community has developed
+        norms around pre-notification of disclosures of zero days.\n\n\n\nThough what
+        we’ve described is inherently very costly we also believe it is necessary
+        - we must do everything we can to avoid AI systems enabling significant misuses
+        or causing major accidents. But carrying out any restrictions on the open
+        dissemination of AI systems depends on there being broad agreement on what
+        unacceptable misuses of AI systems or system behaviors are.\n\n\n\nAnthropic
+        is not an impartial actor here - we are a company that primarily develops
+        proprietary systems, and we don’t have the legitimacy to make claims here
+        about what should or shouldn’t be acceptable in openly disseminated systems.
+        Therefore, to resolve questions of open source models we need legitimate third
+        parties to develop testing and evaluation approaches that are broadly accepted
+        as legitimate, we need these third parties (or other trusted entities) to
+        define a narrow and serious set of misuses of AI systems as well as adverse
+        AI system behaviors, and we will need to apply these tests to models that
+        are both controlled (e.g., via API) or openly disseminated (e.g., via the
+        weights being released).\n\n\n\nThird party testing of openly disseminated
+        and closed proprietary models can generate the essential information we need
+        to understand the safety properties of the AI landscape [2]. If we don’t do
+        this, then you could end up in a situation where either a proprietary model
+        or openly accessible model directly enables a serious misuse or causes a major
+        AI accident - and if that happens, there could be significant harm to people
+        and also likely adverse regulations applied to the AI sector.\n\nRegulatory
+        capture: Any form of policy can suffer regulatory capture by a sufficiently
+        motivated and well-resourced actor: for example, a well-capitalized AI company.
+        Some of the ideas we discuss above about openly accessible models are the
+        kinds of things which themselves are prone to regulatory capture. It’s important
+        that the AI ecosystem remains robust and competitive - AI is a complicated
+        field and humanity’s best chance at getting it right likely comes from there
+        being a diverse, broad set of actors engaged in its development and oversight.\n\n\n\nWe
+        generally advocate for third-party testing and measurement initiatives because
+        they seem like the kind of policy infrastructure that helps us to identify
+        and prevent concrete harms as well as building capacity that exists independently
+        of large companies. Therefore, we think that focusing on the development of
+        third-party testing capacity can reduce the risk of regulatory capture and
+        create a level playing field for developers. Conversely, industry-led consortia
+        might have a tendency to favor approaches that involve high compliance costs
+        on the parts of companies regardless of their scale - an approach that inherently
+        advantages larger businesses which can spend more money on policy compliance.\n\nWhy
+        we’re being careful in what we advocate for in AI policy\n\n\n\nWhen developing
+        our policy positions, we assume that regulations tend to create an administrative
+        burden both for the party that enforces the regulation (e.g, the government),
+        and for the party targeted by the regulation (e.g, AI developers). Therefore,
+        we should advocate for policies that are both practical to enforce and feasible
+        to comply with. We also note that regulations tend to be accretive - once
+        passed, regulations are hard to remove. Therefore, we advocate for what we
+        see as the ‘minimal viable policy’ for creating a good AI ecosystem, and we
+        will be open to feedback.\n\n\n\nWhy AI policy is important\n\n\n\nThe AI
+        systems of today and those of the future are immensely powerful and are capable
+        of yielding great benefits to society. We also believe these systems have
+        the potential for non-trivial misuses, or could cause accidents if implemented
+        poorly. Though the vast majority of our work is technical in nature, we’ve
+        come to believe that testing is fundamental to the safety of our systems -
+        it’s not only how we better understand the capabilities and safety properties
+        of our own models, but also how third-parties can validate claims we make
+        about AI systems.\n\n\n\nWe believe that building out a third-party testing
+        ecosystem is one of the best ways for bringing more of society into the development
+        and oversight of AI systems. We hope that by publishing this post we’ve been
+        able to better articulate the benefits of third-party testing as well as outline
+        our own position for others to critique and build upon.\n\n\n\nFootnotes\n\n\n\n[1]
+        Some countries may also experiment with ‘regulatory markets’ where AI developers
+        can buy and sell AI testing services and compete with one another to try to
+        build and deploy successively safer, more useful systems.\n\n\n\n[2] For example,
+        if you openly release an AI model, it’s relatively easy for a third-party
+        to fine-tune that model on a dataset of their own choosing. Such a dataset
+        could be designed to optimize for a misuse (e.g, phishing or offensive hacking).
+        If you were able to develop technology that made it very hard to fine-tune
+        an AI model away from its original capability distribution, then it’d be easier
+        to confidently release models without potentially compromising on downstream
+        safety."}]}],"model":"gpt-4o","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"Summary
+        of the article.","properties":{"author":{"type":"string","description":"Name
+        of the article author"},"topics":{"type":"array","description":"Array of topics,
+        e.g. [\"tech\", \"politics\"]. Should be as specific as possible, and can
+        overlap.","items":{"type":"string","description":""}},"summary":{"type":"string","description":"Summary
+        of the article. One or two paragraphs max"},"coherence":{"type":"integer","description":"Coherence
+        of the article''s key points, 0-100 (inclusive)"},"persuasion":{"type":"number","description":"Article''s
+        persuasion score, 0.0-1.0 (inclusive)"}},"required":["author","topics","summary","coherence","persuasion"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93044ba99c8af081-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Apr 2025 15:39:31 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '9067'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=A3zPTMIv6n5.Dz.LAD5nDpYytQDHSnQJB6wdFruexBw-1744645171-1.0.1.1-cuo1DMiM0E3CaEBU_GStMYRVoRTkN6RSYSZxc5qQNGncqj9d7U_QrCs3TcQFQoP_5xIcPKmhgEXRtrvst6eEQpNPWI9ottzmAw_zib39bvk;
+        path=/; expires=Mon, 14-Apr-25 16:09:31 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=_S_c34RJ6ZLzSWfFMNZMlWH2LLUDpQ8w8OeM2kKdQXI-1744645171638-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1994292'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 171ms
+      x-request-id: req_d7b72a18f742899cf2efd2af612694a2
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BMGC2PyFJmAsT1oIf0lRXDjhftm2H",
+          "object": "chat.completion",
+          "created": 1744645162,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":{\"author\":\"Anthropic Team\",\"topics\":[\"AI policy\",\"AI safety\",\"third-party testing\",\"technology regulation\"],\"summary\":\"**In the growing AI landscape, third-party testing emerges as a pivotal component for policy regulation. Anthropic advocates for third-party oversight in AI development to ensure safety and minimize societal risk, addressing the challenges introduced by frontier AI systems.**\\n\\n**Key Points from the Article:**\\n\\n1. **The Need for Third-Party Testing**: With AI systems like Claude demonstrating immense capabilities and the potential for misuse, a structured third-party testing regime becomes essential. This ensures transparency and builds trust in generative AI models.\\n\\n2. **Implementation Strategy**: The proposal suggests a mix of automation and human expert assessments, echoing practices in industries like medicine and aerospace, to ensure AI models aren't prone to harmful behaviors.\\n\\n3. **Societal Benefits**: Such a regime not only minimizes the risks from AI but also sets a foundation for coordinated global standards, ensuring that AI's advances remain beneficial and alignment with public safety strategies.\\n\\n4. **Collaborative Efforts**: Success hinges on contributions from industry, academia, and government. Anthropic, through its Responsible Scaling Policy, spearheads efforts, aiming to pivot AI development towards ethically safe practices.\\n\\n5. **Challenges and Considerations**: Recognizing potential downsides, such as regulatory capture or burdensome compliance costs, Anthropic emphasizes adaptable measures informed by ongoing research and policy feedback.\\n\\nAnthropic’s vision encompasses diverse contributions from private sectors, government agencies, and interdisciplinary academic collaborations, all working towards a shared goal: a safer, ethically guided AI evolution.\",\"coherence\":87,\"persuasion\":0.8}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 4354,
+            "completion_tokens": 356,
+            "total_tokens": 4710,
+            "prompt_tokens_details": {
+              "cached_tokens": 4224,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_92f14e8683"
+        }
+  recorded_at: 2025-04-14 15:39:44 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"\n  John
+        works at Google in New York. He met with Sarah, the CEO of\n  Acme Inc., last
+        week in San Francisco.\n"}]}],"model":"gpt-4o","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
+        extracted entity name."},"type":{"type":"string","description":"The entity
+        type","enum":["person","location","organization"]},"context":{"type":"string","description":"The
+        context in which the entity appears in the text."}},"required":["name","type","context"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93044be36ca8f081-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Apr 2025 15:39:35 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '3541'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=TqIWxuUVhFbbgNNpfqR72DmTbGjE4RBHGRDt4945dQo-1744645175-1.0.1.1-.LWLLuhnL90fhhRnyEjbcm3m47a1afAVPK54QGKfWWUO66vWf_3KAdXh.gpcBuyaNQM.V7ATQdonSxWIc9jRiskCgGI.ugs0xLMfr6tjN4w;
+        path=/; expires=Mon, 14-Apr-25 16:09:35 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=KkSDNObYJoOmMt7mAzibqLyJozMbf8.HHoHTbrFUehE-1744645175374-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999971'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_e471f0a948782a6158f10488a9d71ffc
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BMGCByOMGiJel1v2W7qJDrGOXbuI1",
+          "object": "chat.completion",
+          "created": 1744645171,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John works at Google in New York.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"Sarah is the CEO of Acme Inc.; the meeting context is in San Francisco.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"John met with Sarah in San Francisco.\"}]}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 137,
+            "completion_tokens": 143,
+            "total_tokens": 280,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_92f14e8683"
+        }
+  recorded_at: 2025-04-14 15:39:44 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"\n  The
+        product was okay, but the customer service was terrible. I probably\n  won''t
+        buy from them again.\n"}]}],"model":"gpt-4o","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"Extract
+        the sentiment scores of a given text. Sentiment scores should sum to 1.","properties":{"positive_score":{"type":"number","description":"Positive
+        sentiment score, ranging from 0.0 to 1.0."},"negative_score":{"type":"number","description":"Negative
+        sentiment score, ranging from 0.0 to 1.0."},"neutral_score":{"type":"number","description":"Neutral
+        sentiment score, ranging from 0.0 to 1.0."}},"required":["positive_score","negative_score","neutral_score"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93044bfb2f77f081-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Apr 2025 15:39:36 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '712'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=F_fEYj8hJZhCtxqyYGUlDiEQszRQMQH.ckRt5CDrz5k-1744645176-1.0.1.1-rE242u_ASVjwpER8Ez2Xen._uGO0LQUbVfDjbL_d.BY7CfunuUASo90J0ztBFtfeul10Gly0V5x0czgSTsmFRxPL.VPqu9JFedGwiwLRdOE;
+        path=/; expires=Mon, 14-Apr-25 16:09:36 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=nTuWbFa2hK64YQ_t_tBmHcXjPKMEiZlANuRKovHIKSI-1744645176337-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999971'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_661c072ff138f61e4dd7fde35090849d
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BMGCFnq1OgmscNAPvGlHyhhGDi3v2",
+          "object": "chat.completion",
+          "created": 1744645175,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":{\"positive_score\":0.1,\"negative_score\":0.7,\"neutral_score\":0.2}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 164,
+            "completion_tokens": 25,
+            "total_tokens": 189,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_92f14e8683"
+        }
+  recorded_at: 2025-04-14 15:39:44 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"The new
+        quantum computing breakthrough could revolutionize the tech industry."}]}],"model":"gpt-4o","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"Array
+        of classification results. The scores should sum to 1.","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
+        category name","enum":["Politics","Sports","Technology","Entertainment","Business","Other"]},"score":{"type":"number","description":"The
+        classification score for the category, ranging from 0.0 to 1.0."}},"required":["name","score"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93044c00b979f081-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Apr 2025 15:39:37 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '1059'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=tmjuDpULt9mNjlYWxoZdRvxcaodSrKtQp2ikmXUoXas-1744645177-1.0.1.1-2.6_OTXY_geFhfVxbq04H7o9SOqpUG0pGNT9A8vthC5T.h79DEUVgYtUo5cL9H_VSUvbGNTWGk8om.KW_9tfBQOZqV5yvWg6YwPQ97LRNVk;
+        path=/; expires=Mon, 14-Apr-25 16:09:37 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=tibf1Hnjg3IIFJEwNAO3D8CVKhDyWsH3NaJ_G87zKv0-1744645177585-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999978'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_e78c8a6a83cac10b5bab034af732229f
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BMGCGEvfplRDYhJmqOWaRPPx7pE7H",
+          "object": "chat.completion",
+          "created": 1744645176,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":[{\"name\":\"Technology\",\"score\":0.9},{\"name\":\"Business\",\"score\":0.075},{\"name\":\"Other\",\"score\":0.025}]}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 132,
+            "completion_tokens": 36,
+            "total_tokens": 168,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_92f14e8683"
+        }
+  recorded_at: 2025-04-14 15:39:44 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: ''
+      string: '{"model":"claude-3-7-sonnet-latest","messages":[{"role":"user","content":[{"type":"text","text":"\n  Given
+        a description of a character, your task is to extract all the characteristics
+        of that character.\n\n  <description>\n  The man is tall, with a beard and
+        a scar on his left cheek. He has a deep voice and wears a black leather jacket.\n  <\/description>\n"}]}],"stream":false,"tools":[{"name":"_structured_tool_call","description":"Extract
+        structured data","input_schema":{"type":"object","description":"","properties":{"data":{"type":"object","description":"All
+        characteristics","properties":{},"required":[],"additionalProperties":true}},"required":["data"],"additionalProperties":false}}],"tool_choice":{"type":"tool","name":"_structured_tool_call"},"max_tokens":4096}'
+    headers:
+      anthropic-version: '2023-06-01'
+      x-api-key: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      date: Mon, 14 Apr 2025 15:39:39 GMT
+      content-type: application/json
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-04-14T15:39:37Z'
+      anthropic-ratelimit-input-tokens-limit: '40000'
+      anthropic-ratelimit-input-tokens-remaining: '40000'
+      anthropic-ratelimit-input-tokens-reset: '2025-04-14T15:39:38Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-04-14T15:39:39Z'
+      anthropic-ratelimit-tokens-limit: '56000'
+      anthropic-ratelimit-tokens-remaining: '56000'
+      anthropic-ratelimit-tokens-reset: '2025-04-14T15:39:38Z'
+      request-id: req_01Mn2koWvK2oGFjiRkkhZEFP
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 93044c08aec6f066-DFW
+      content-encoding: gzip
+    body:
+      encoding: ''
+      file: no
+      string: '{"id":"msg_01FLQck8gxjJMo6P5aQWBfCu","type":"message","role":"assistant","model":"claude-3-7-sonnet-20250219","content":[{"type":"tool_use","id":"toolu_01PyPzKzEhuCsnnMVH5ttLDm","name":"_structured_tool_call","input":{"data":{"height":"tall","facial_hair":"beard","distinguishing_marks":"scar
+        on his left cheek","voice":"deep","clothing":"black leather jacket","gender":"male"}}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":480,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":98}}'
+  recorded_at: 2025-04-14 15:39:44 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"data:image/png;base64,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"}}]}],"model":"gpt-4o","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"assert_name":{"type":"string","description":""},"owner":{"type":"string","description":""},"location":{"type":"string","description":""},"asset_value_low":{"type":"integer","description":""},"asset_value_high":{"type":"integer","description":""},"income_type":{"type":"string","description":""},"income_low":{"type":"integer","description":""},"income_high":{"type":"integer","description":""},"tx_gt_1000":{"type":"boolean","description":""}},"required":["assert_name","owner","location","asset_value_low","asset_value_high","income_type","income_low","income_high","tx_gt_1000"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93044c13efbff081-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Apr 2025 15:39:43 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '3460'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=NK4qB3HITWeLPVzRjvweE3hM2ZN8D_5Q7wwKndI62hI-1744645183-1.0.1.1-EkkPcAGlacWHfJ.GE22Cu0hoj_FCpQnbDGWO8W7FebwlJyhROLgPof.Uv8Pn5exvTLNIrrg2.VuvQrZm0PwJE52MyL4nb80RdD1UpV8KQEE;
+        path=/; expires=Mon, 14-Apr-25 16:09:43 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=gK8tjLSglUaIPdVQAAASgHsr3CJAc1cj_LRTsixowOI-1744645183086-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-input-images: '50000'
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-input-images: '49999'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999232'
+      x-ratelimit-reset-input-images: 1ms
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 23ms
+      x-request-id: req_be518cb82ca2462ed2f6066af3072b55
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BMGCJDHbFwSRdfiv8gMNJzcBNu4YT",
+          "object": "chat.completion",
+          "created": 1744645179,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":[{\"assert_name\":\"11 Zinfandel Lane - Home & Vineyard [RP]\",\"owner\":\"JT\",\"location\":\"St. Helena/Napa, CA, US\",\"asset_value_low\":5000001,\"asset_value_high\":25000000,\"income_type\":\"Grape Sales\",\"income_low\":100001,\"income_high\":1000000,\"tx_gt_1000\":true},{\"assert_name\":\"25 Point Lobos - Commercial Property [RP]\",\"owner\":\"SP\",\"location\":\"San Francisco/San Francisco, CA, US\",\"asset_value_low\":5000001,\"asset_value_high\":25000000,\"income_type\":\"Rent\",\"income_low\":100001,\"income_high\":1000000,\"tx_gt_1000\":true}]}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 405,
+            "completion_tokens": 154,
+            "total_tokens": 559,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_85bc8e3fae"
+        }
+  recorded_at: 2025-04-14 15:39:44 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"\n  Extract
+        data from the following text:\n\n  <text>\n  # Structured Data\n  By Hadley
+        Wickham\n\n  When using an LLM to extract data from text or images, you can
+        ask the chatbot to nicely format it, in JSON or any other format that you
+        like.\n  <\/text>\n"}]}],"model":"gpt-4o","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"Information
+        about an article written in markdown","properties":{"title":{"type":"string","description":"Article
+        title"},"author":{"type":"string","description":"Name of the author"},"date":{"type":"string","description":"Date
+        written in YYYY-MM-DD format."}},"required":["title","author","date"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93044c2b1dbbf081-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Apr 2025 15:39:43 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '350'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=H7XOSjx5XLmTm3APCKtDV.eJr4KNGCAao1rypCgK7Xs-1744645183-1.0.1.1-DYXEopuSj6REDB3afz.WnnQeLxwNya4Y2icKQBaIau.gJ1gjPnUvkFnP1bYXplPbgLWHpX2piVrmSMoymdgemAk56u2hhV71OlNPmIOuRfo;
+        path=/; expires=Mon, 14-Apr-25 16:09:43 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=zosRPy80T_.rvhyJUcD.Z7x_f8RIN4B0dw4PLo4YeI4-1744645183677-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999936'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 1ms
+      x-request-id: req_aa45a123c7bb09600a67138cbcab0481
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BMGCNF2Trm4NvRqvSviDq7RgUiYjp",
+          "object": "chat.completion",
+          "created": 1744645183,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":{\"title\":\"Structured Data\",\"author\":\"Hadley Wickham\",\"date\":\"\"}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 158,
+            "completion_tokens": 20,
+            "total_tokens": 178,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_fa860cbac8"
+        }
+  recorded_at: 2025-04-14 15:39:44 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"\n  Extract
+        data from the following text:\n\n  <text>\n  # Structured Data\n  By Hadley
+        Wickham\n\n  When using an LLM to extract data from text or images, you can
+        ask the chatbot to nicely format it, in JSON or any other format that you
+        like.\n  <\/text>\n"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
+        data/>"}]},{"role":"user","content":[{"type":"text","text":"\n  Extract data
+        from the following text:\n\n  <text>\n  # Structured Data\n  By Hadley Wickham\n\n  When
+        using an LLM to extract data from text or images, you can ask the chatbot
+        to nicely format it, in JSON or any other format that you like.\n  <\/text>\n"}]}],"model":"gpt-4o","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"Information
+        about an article written in markdown","properties":{"title":{"type":["string","null"],"description":"Article
+        title"},"author":{"type":["string","null"],"description":"Name of the author"},"date":{"type":["string","null"],"description":"Date
+        written in YYYY-MM-DD format."}},"required":["title","author","date"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93044c2e9886f081-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Apr 2025 15:39:44 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '474'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=c0dyeyj73nmEM7aw3U0Fi.OEJ67PhVL799klNaPomdE-1744645184-1.0.1.1-xJWHxTbXKkQ6yPUrlLfM03DOXJpPRFNOS73xF9hZPL6h2G35VOQAK9O49e8X98Ir2n.vW8mcjLXFld1J7dC40X25KL2Zzmnop.hXNkDhP5E;
+        path=/; expires=Mon, 14-Apr-25 16:09:44 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=vdfWnuQVvADkP13OecYfzgZK9_5Qs4IMS21tGNIcl1A-1744645184384-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999868'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 3ms
+      x-request-id: req_f912255b79f972ed5ecaaf3e2b4fbce3
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BMGCNz4wUjXkSKYplYDQers88pvBa",
+          "object": "chat.completion",
+          "created": 1744645183,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":{\"title\":\"Structured Data\",\"author\":\"Hadley Wickham\",\"date\":null}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 246,
+            "completion_tokens": 20,
+            "total_tokens": 266,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_fa860cbac8"
+        }
+  recorded_at: 2025-04-14 15:39:44 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0

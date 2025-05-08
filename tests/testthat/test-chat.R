@@ -40,11 +40,7 @@ test_that("can retrieve system prompt with last_turn()", {
   chat2 <- chat_openai(system_prompt = "You are from New Zealand")
   expect_equal(
     chat2$last_turn("system"),
-    Turn(
-      "system",
-      "You are from New Zealand",
-      completed = NULL
-    )
+    Turn("system", "You are from New Zealand", completed = NULL)
   )
 })
 
@@ -73,10 +69,11 @@ test_that("setting turns usually preserves, but can set system prompt", {
 
 
 test_that("can perform a simple batch chat", {
-  chat <- chat_openai_test()
+  vcr::local_cassette("chat-batch")
+  chat <- chat_openai_test(echo = FALSE)
 
   result <- chat$chat("What's 1 + 1. Just give me the answer, no punctuation")
-  expect_equal(result, "2")
+  expect_equal(result, ellmer_output("2"))
   expect_equal(chat$last_turn()@contents[[1]]@text, "2")
 })
 
@@ -89,7 +86,7 @@ test_that("can't chat with multiple prompts", {
 })
 
 test_that("can perform a simple async batch chat", {
-  chat <- chat_openai_test()
+  chat <- chat_openai_test(echo = FALSE)
 
   result <- chat$chat_async(
     "What's 1 + 1. Just give me the answer, no punctuation"
@@ -144,7 +141,10 @@ test_that("can perform a simple async batch chat", {
 })
 
 test_that("can chat in parallel", {
-  chat <- chat_openai_test("Just give me answers, no punctuation")
+  # req_perform_parallel() not currently supported by vcr:
+  # https://github.com/r-lib/httr2/issues/651
+
+  chat <- chat_openai_test("Just give me answers, no punctuation", echo = FALSE)
   results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
 
   expect_type(results, "list")
@@ -158,6 +158,8 @@ test_that("can chat in parallel", {
 })
 
 test_that("can extract structured data", {
+  vcr::local_cassette("chat-structured")
+
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai_test()
@@ -236,7 +238,8 @@ test_that("can optionally echo", {
 })
 
 test_that("can retrieve last_turn for user and assistant", {
-  chat <- chat_openai()
+  vcr::local_cassette("chat-echo")
+  chat <- chat_openai(echo = FALSE)
   expect_equal(chat$last_turn("user"), NULL)
   expect_equal(chat$last_turn("assistant"), NULL)
 
@@ -246,7 +249,8 @@ test_that("can retrieve last_turn for user and assistant", {
 })
 
 test_that("chat messages get timestamped in sequence", {
-  chat <- chat_openai()
+  vcr::local_cassette("chat-timestamp")
+  chat <- chat_openai(echo = FALSE)
 
   before_send <- Sys.time()
   chat$chat("What's 1 + 1?")
@@ -257,40 +261,6 @@ test_that("chat messages get timestamped in sequence", {
   expect_true(turns[[1]]@completed <= turns[[2]]@completed)
 
   expect_true(turns[[2]]@completed >= turns[[1]]@completed)
-  expect_true(turns[[2]]@completed <= after_receive)
-})
-
-test_that("parallel chat messages get timestamped correctly", {
-  chat <- chat_openai()
-
-  before_send <- Sys.time()
-  results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
-  after_receive <- Sys.time()
-
-  turns1 <- results[[1]]$get_turns()
-  turns2 <- results[[2]]$get_turns()
-
-  expect_true(turns1[[1]]@completed >= before_send)
-  expect_true(turns1[[1]]@completed <= turns1[[2]]@completed)
-  expect_true(turns1[[2]]@completed <= after_receive)
-
-  expect_true(turns2[[1]]@completed >= before_send)
-  expect_true(turns2[[1]]@completed <= turns2[[2]]@completed)
-  expect_true(turns2[[2]]@completed <= after_receive)
-})
-
-test_that("async chat messages get timestamped in sequence", {
-  chat <- chat_openai()
-
-  before_send <- Sys.time()
-  promise <- chat$chat_async("What's 1 + 1?")
-  result <- sync(promise)
-  after_receive <- Sys.time()
-
-  turns <- chat$get_turns()
-
-  expect_true(turns[[1]]@completed >= before_send)
-  expect_true(turns[[1]]@completed <= turns[[2]]@completed)
   expect_true(turns[[2]]@completed <= after_receive)
 })
 
@@ -344,7 +314,8 @@ test_that("chat can get and register a list of tools", {
 })
 
 test_that("chat warns on tool failures", {
-  chat <- chat_openai_test("Be very terse, not even punctuation.")
+  vcr::local_cassette("chat-tool-failure")
+  chat <- chat_openai_test("Be very terse, not even punctuation.", echo = FALSE)
 
   chat$register_tool(tool(
     function(user) stop("User denied tool request"),

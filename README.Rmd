@@ -11,6 +11,11 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+
+library(vcr)
+vcr_configure(verbose_errors = TRUE)
+insert_cassette("README", match_requests_on = c("uri", "body"))
+reg.finalizer(globalenv(), \(...) eject_cassette(), onexit = TRUE)
 ```
 
 # ellmer <a href="https://ellmer.tidyverse.org"><img src="man/figures/logo.png" align="right" height="138" alt="ellmer website" /></a>
@@ -79,14 +84,17 @@ If you find cases where ellmer cannot detect credentials from one of these cloud
 
 You can work with ellmer in several different ways, depending on whether you are working interactively or programmatically. They all start with creating a new chat object:
 
-```r
+```{r}
 library(ellmer)
 
 chat <- chat_openai(
   model = "gpt-4o-mini",
   system_prompt = "You are a friendly but terse assistant.",
+  # Force more reproducible answers
+  params = params(seed = 123, temperature = 0)
 )
 ```
+
 
 Chat objects are stateful [R6 objects](https://r6.r-lib.org): they retain the context of the conversation, so each new query builds on the previous ones. You call their methods with `$`.
 
@@ -118,12 +126,7 @@ Keep in mind that the chat object retains state, so when you enter the chat cons
 The second most interactive way to chat is to call the `chat()` method:
 
 ```{r}
-#| eval: false
-
 chat$chat("What preceding languages most influenced R?")
-#> R was primarily influenced by the S programming language, particularly S-PLUS.
-#> Other languages that had an impact include Scheme and various data analysis
-#> languages.
 ```
 
 If you initialize the chat object in the global environment, the `chat` method will stream the response to the console. When the entire response is received, it's also (invisibly) returned as a character vector. This is useful when you want to see the response as it arrives, but you don't want to enter the chat console.
@@ -131,26 +134,17 @@ If you initialize the chat object in the global environment, the `chat` method w
 If you want to ask a question about an image, you can pass one or more additional input arguments using `content_image_file()` and/or `content_image_url()`:
 
 ```{r}
-#| eval: false
-
 chat$chat(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   "Can you explain this logo?"
 )
-#> The logo of R features a stylized letter "R" in blue, enclosed in an oval
-#> shape that resembles the letter "O," signifying the programming language's
-#> name. The design conveys a modern and professional look, reflecting its use
-#> in statistical computing and data analysis. The blue color often represents
-#> trust and reliability, which aligns with R's role in data science.
 ```
 
 ### Programmatic chat
 
-The most programmatic way to chat is to create the chat object inside a function. By doing so, live streaming is automatically suppressed and `$chat()` returns the result as a string:
+The most programmatic way to chat is to create the chat object inside a function. By doing so, live streaming is automatically suppressed and `$chat()` returns the result as a nicely formatted string:
 
 ```{r}
-#| eval: false
-
 my_function <- function() {
   chat <- chat_openai(
     model = "gpt-4o-mini",
@@ -158,11 +152,9 @@ my_function <- function() {
   )
   chat$chat("Is R a functional programming language?")
 }
-my_function()
-#> [1] "Yes, R supports functional programming concepts. It allows functions to
-#> be first-class objects, supports higher-order functions, and encourages the
-#> use of functions as core components of code. However, it also supports
-#> procedural and object-oriented programming styles."
+x <- my_function()
+x
+str(x)
 ```
 
 If needed, you can manually control this behaviour with the `echo` argument. This is useful for programming with ellmer when the result is either not intended for human consumption or when you want to process the response before displaying it.
