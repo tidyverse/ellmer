@@ -17,19 +17,19 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-One of the most interesting aspects of modern chat models is their ability to make use of external tools that are defined by the caller.
+One of the most interesting aspects of modern chat models is their ability to make use of external tools defined by the caller.
 
-When making a chat request to the chat model, the caller advertises one or more tools (defined by their function name, description, and a list of expected arguments), and the chat model can choose to respond with one or more "tool calls". These tool calls are requests *from the chat model to the caller* to execute the function with the given arguments; the caller is expected to execute the functions and "return" the results by submitting another chat request with the conversation so far, plus the results. The chat model can then use those results in formulating its response, or, it may decide to make additional tool calls.
+When making a chat request to the chat model, the caller advertises one or more tools, defined by function name, description, and a list of expected arguments. The chat model then chooses to respond with one or more "tool calls". These tool calls are requests, *from the chat model back to the caller*, to execute the function with the given arguments. The caller is expected to execute the functions, receive the results, and then submit those results and another chat request into the conversation. The chat model then uses those results either to formulate its response or to make additional tool calls.
 
-*Note that the chat model does not directly execute any external tools!* It only makes requests for the caller to execute them. It's easy to think that tool calling might work like this:
+*Note that the chat model does not directly execute any external tools!* It only makes requests for the caller to execute them. It's easy to think that tool calling works like this:
 
-![Diagram showing showing the wrong mental model of tool calls: a user initiates a request that flows to the assistant, which then runs the code, and returns the result back to the user."](tool-calling-wrong.svg)
+![Diagram showing the wrong mental model of tool calls: a user initiates a request to the assistant, which then runs the code and returns the result back to the user."](tool-calling-wrong.svg)
 
-But in fact it works like this:
+In fact, it works like this:
 
-![Diagram showing the correct mental model for tool calls: a user sends a request that needs a tool call, the assistant request that the user's runs that tool, returns the result to the assistant, which uses it to generate the final answer.](tool-calling-right.svg)
+![Diagram showing the correct mental model for tool calls: a user sends a request that needs a tool call, the assistant requests that the user runs that tool and returns the result back to the assistant, which it uses to generate the final answer.](tool-calling-right.svg)
 
-The value that the chat model brings is not in helping with execution, but with knowing when it makes sense to call a tool, what values to pass as arguments, and how to use the results in formulating its response.
+The value of the chat model lies not with helping with execution but in knowing when to call a tool, what values to pass as arguments, and how to use the results in formulating its response.
 
 ```{r setup}
 library(ellmer)
@@ -37,7 +37,7 @@ library(ellmer)
 
 ### Motivating example
 
-Let's take a look at an example where we really need an external tool. Chat models generally do not know the current time, which makes questions like these impossible.
+Let's take a look at an example where we really need an external tool: computing a time interval. Since chat models generally do not know the current time, anwering a question like the following is impossible.
 
 ```{r eval=FALSE}
 chat <- chat_openai(model = "gpt-4o")
@@ -68,7 +68,7 @@ get_current_time <- function(tz = "UTC") {
 }
 ```
 
-Note that we've gone through the trouble of creating [roxygen2 comments](https://roxygen2.r-lib.org/). This is a very important step that will help the model use your tool correctly!
+Note that going through the trouble of creating [roxygen2 comments](https://roxygen2.r-lib.org/) is a very important step because it helps the model use your tool correctly!
 
 Let's test it:
 
@@ -79,7 +79,7 @@ get_current_time()
 
 ### Registering tools
 
-Now we need to tell our chat object about our `get_current_time` function. This by creating and registering a tool:
+Now we need to tell our chat object about our `get_current_time` function. We do this by creating and registering the tool:
 
 ```{r}
 chat <- chat_openai(model = "gpt-4o")
@@ -94,9 +94,9 @@ chat$register_tool(tool(
 ))
 ```
 
-This is a fair amount of code to write, even for such a simple function as `get_current_time`. Fortunately, you don't have to write this by hand! I generated the above `register_tool` call by calling `create_tool_def(get_current_time)`, which printed that code at the console. `create_tool_def()` works by passing the function's signature and documentation to GPT-4o, and asking it to generate the `register_tool` call for you.
+This is a fair amount of code to write, even for such a simple function as `get_current_time`. Fortunately, you don't have to write this by hand! I generated the above `register_tool` by calling `create_tool_def(get_current_time)` call, which prints the code to the console. `create_tool_def()` works by passing the function's signature and documentation to GPT-4o and asking it to generate the `register_tool` call for you.
 
-Note that `create_tool_def()` may not create perfect results, so you must review the generated code before using it. But it is a huge time-saver nonetheless, and removes the tedious boilerplate generation you'd have to do otherwise.
+Note that `create_tool_def()` may not produce perfect results, so you must review the generated code before using it. Nonetheless, it is a huge time-saver and removes the tedious boilerplate coding you'd need to do otherwise.
 
 ### Using the tool
 
@@ -134,12 +134,12 @@ chat$chat("How long ago exactly was the moment Neil Armstrong touched down on th
 #> This is the exact time that has elapsed since Neil Armstrong's historic touchdown on the moon.
 ```
 
-That's correct! Without any further guidance, the chat model decided to call our tool function and successfully used its result in formulating its response.
+That's correct! Without any further guidance, the chat model decided to call our tool function and successfully used the result in formulating its response.
 
 (Full disclosure: I originally tried this example with the default model of `gpt-4o-mini` and it got the tool calling right but the date math wrong, hence the explicit `model="gpt-4o"`.)
 
-This tool example was extremely simple, but you can imagine doing much more interesting things from tool functions: calling APIs, reading from or writing to a database, kicking off a complex simulation, or even calling a complementary GenAI model (like an image generator). Or if you are using ellmer in a Shiny app, you could use tools to set reactive values, setting off a chain of reactive updates.
+This tool example was extremely simple, but you can imagine doing much more interesting things with tool functions: calling APIs, reading from or writing to a database, kicking off a complex simulation, or even calling a complementary GenAI model (like an image generator). Or if you are using ellmer in a Shiny app, you could use tools to set reactive values, setting off a chain of reactive updates.
 
 ### Tool limitations
 
-Remember that tool arguments come from the chat model, and tool results are returned to the chat model. That means that only simple, {jsonlite} compatible data types can be used as inputs and outputs. It's highly recommended that you stick to strings/character, numbers, booleans/logical, null, and named or unnamed lists of those types. And you can forget about using functions, environments, external pointers, R6 classes, and other complex R objects as arguments or return values. Returning data frames seems to work OK, although be careful not to return too much data, as it all counts as tokens (i.e., they count against your context window limit and also cost you money).
+Remember that tool arguments come from the chat model, and tool results are returned to the chat model. That means that only simple, {jsonlite} compatible data types can be used as inputs and outputs. It's highly recommended that you stick to strings/character, numbers, booleans/logicals, nulls, and named or unnamed lists of those types. And you can forget about using functions, environments, external pointers, R6 classes, and other complex R objects as arguments or return values. Returning data frames seems to work OK, but be careful not to return too much data, as it all counts as tokens, which count against your context window limit and can cost you money.
