@@ -318,13 +318,19 @@ Submit input to the chatbot, and receive a promise that
 resolves with the response all at once. Returns a promise that resolves
 to a string (probably Markdown).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_async(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_async(..., tool_mode = c("concurrent", "sequential"))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{...}}{The input to send to the chatbot. Can be strings or images.}
+
+\item{\code{tool_mode}}{Whether tools should be invoked one-at-a-time
+(\code{"sequential"}) or concurrently (\code{"concurrent"}). Sequential mode is
+best for interactive applications, especially when a tool may involve
+an interactive user interface. Concurrent mode is the default and is
+best suited for automated scripts or non-interactive applications.}
 }
 \if{html}{\out{</div>}}
 }
@@ -357,13 +363,19 @@ Submit input to the chatbot, returning asynchronously
 streaming results. Returns a \href{https://coro.r-lib.org/reference/async_generator.html}{coro async generator} that
 yields string promises.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$stream_async(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$stream_async(..., tool_mode = c("concurrent", "sequential"))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{...}}{The input to send to the chatbot. Can be strings or images.}
+
+\item{\code{tool_mode}}{Whether tools should be invoked one-at-a-time
+(\code{"sequential"}) or concurrently (\code{"concurrent"}). Sequential mode is
+best for interactive applications, especially when a tool may involve
+an interactive user interface. Concurrent mode is the default and is
+best suited for automated scripts or non-interactive applications.}
 }
 \if{html}{\out{</div>}}
 }

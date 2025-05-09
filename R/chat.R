@@ -281,13 +281,24 @@ Chat <- R6::R6Class(
     #'   resolves with the response all at once. Returns a promise that resolves
     #'   to a string (probably Markdown).
     #' @param ... The input to send to the chatbot. Can be strings or images.
-    chat_async = function(...) {
+    #' @param tool_mode Whether tools should be invoked one-at-a-time
+    #'   (`"sequential"`) or concurrently (`"concurrent"`). Sequential mode is
+    #'   best for interactive applications, especially when a tool may involve
+    #'   an interactive user interface. Concurrent mode is the default and is
+    #'   best suited for automated scripts or non-interactive applications.
+    chat_async = function(..., tool_mode = c("concurrent", "sequential")) {
       turn <- user_turn(...)
+      tool_mode <- arg_match(tool_mode)
 
       # Returns a single turn (the final response from the assistant), even if
       # multiple rounds of back and forth happened.
       done <- coro::async_collect(
-        private$chat_impl_async(turn, stream = FALSE, echo = "none")
+        private$chat_impl_async(
+          turn,
+          stream = FALSE,
+          echo = "none",
+          tool_mode = tool_mode
+        )
       )
       promises::then(done, function(dummy) {
         self$last_turn()@text
@@ -310,9 +321,20 @@ Chat <- R6::R6Class(
     #'   generator](https://coro.r-lib.org/reference/async_generator.html) that
     #'   yields string promises.
     #' @param ... The input to send to the chatbot. Can be strings or images.
-    stream_async = function(...) {
+    #' @param tool_mode Whether tools should be invoked one-at-a-time
+    #'   (`"sequential"`) or concurrently (`"concurrent"`). Sequential mode is
+    #'   best for interactive applications, especially when a tool may involve
+    #'   an interactive user interface. Concurrent mode is the default and is
+    #'   best suited for automated scripts or non-interactive applications.
+    stream_async = function(..., tool_mode = c("concurrent", "sequential")) {
       turn <- user_turn(...)
-      private$chat_impl_async(turn, stream = TRUE, echo = "none")
+      tool_mode <- arg_match(tool_mode)
+      private$chat_impl_async(
+        turn,
+        stream = TRUE,
+        echo = "none",
+        tool_mode = tool_mode
+      )
     },
 
     #' @description Register a tool (an R function) that the chatbot can use.
@@ -454,7 +476,8 @@ Chat <- R6::R6Class(
       private,
       user_turn,
       stream,
-      echo
+      echo,
+      tool_mode
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
@@ -465,9 +488,16 @@ Chat <- R6::R6Class(
           yield(chunk)
         }
 
-        tool_results <- await(gen_async_promise_all(
-          invoke_tools_async(self$last_turn(), echo = echo)
-        ))
+        tool_calls <- invoke_tools_async(self$last_turn(), echo = echo)
+        if (tool_mode == "sequential") {
+          tool_results <- list()
+          for (result in coro::await_each(tool_calls)) {
+            tool_results <- c(tool_results, list(result))
+          }
+        } else {
+          tool_results <- await(gen_async_promise_all(tool_calls))
+        }
+
         user_turn <- tool_results_as_turn(tool_results)
 
         if (echo == "all") {

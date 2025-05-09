@@ -3,6 +3,10 @@
 * New `tool_reject()` function can be used to reject a tool request with an
   explanation for the rejection reason. (#490, @gadenbuie).
 
+* `$chat_async()` and `$stream_async()` gain a `tool_mode` argument to decide
+  between `"sequential"` and `"concurrent"` tool calling. This is an advanced
+  feature that primarily affects asynchronous tools (#488, @gadenbuie).
+
 * `models_google_gemini()`, `models_anthropic()`, `models_openai()`,
   `models_aws_bedrock()`, `models_ollama()` and `models_vllm()`, list available
   models for Google Gemini, Anthropic, OpenAI, AWS Bedrock, Ollama, and VLLM
