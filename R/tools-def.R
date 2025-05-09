@@ -259,7 +259,7 @@ tool_annotations <- function(
 tool_reject <- function(
   reason = "The user has chosen to disallow the tool call."
 ) {
-  check_character(reason)
+  check_string(reason)
 
   rlang::abort(
     paste("Tool call rejected.", reason),
