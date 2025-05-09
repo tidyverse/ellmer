@@ -74,6 +74,37 @@
       x [user_favorite_color (ID)]: User denied tool request
       i ... and 1 more.
 
+# chat callbacks for tool requests/results
+
+    Code
+      . <- chat$chat("What are Joe and Hadley's favorite colors?")
+    Message
+      [1] Tool request: Joe
+      [1] Tool result: blue
+      [2] Tool request: Hadley
+      [2] Tool result: red
+
+---
+
+    Code
+      chat$register_callback("chat", function(data) NULL)
+    Condition
+      Error:
+      ! `event` must be one of "tool_request" or "tool_result", not "chat".
+
+# tool calls can be rejected via `tool_request` callbacks
+
+    Code
+      . <- chat$chat("What are Joe and Hadley's favorite colors?",
+        "Write 'Joe ____ Hadley ____'. Use 'unknown' if you don't know.", echo = "output")
+    Message
+      ( ) [tool call] user_favorite_color(user = "Joe")
+      # #> Error: Tool call rejected. Joe denied the request.
+      ( ) [tool call] user_favorite_color(user = "Hadley")
+      o #> red
+    Output
+      Joe unknown Hadley red
+
 # tool calls can be rejected via the tool function
 
     Code

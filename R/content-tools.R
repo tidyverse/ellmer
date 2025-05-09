@@ -16,11 +16,23 @@ match_tools <- function(turn, tools) {
 }
 
 on_load({
-  invoke_tools <- coro::generator(function(turn, echo = "none") {
+  invoke_tools <- coro::generator(function(
+    turn,
+    echo = "none",
+    callbacks = list()
+  ) {
     tool_requests <- extract_tool_requests(turn)
 
     for (request in tool_requests) {
       maybe_echo_tool(request, echo = echo)
+
+      rejected <- maybe_invoke_callbacks_tool_request(request, callbacks)
+      if (!is.null(rejected)) {
+        maybe_echo_tool(rejected, echo = echo)
+        yield(rejected)
+        next
+      }
+
       result <- invoke_tool(request)
 
       if (promises::is.promise(result@value)) {
@@ -31,6 +43,7 @@ on_load({
       }
 
       maybe_echo_tool(result, echo = echo)
+      maybe_invoke_callbacks_tool_result(result, callbacks)
       yield(result)
     }
   })
@@ -38,13 +51,29 @@ on_load({
   # invoke_tools_async is intentionally *not* an _async_ generator, instead it
   # is a generator that returns promises. This lets the caller decide if the
   # tasks should be run in parallel or sequentially.
-  invoke_tools_async <- coro::generator(function(turn, tools, echo = "none") {
+  invoke_tools_async <- coro::generator(function(
+    turn,
+    tools,
+    echo = "none",
+    callbacks = list()
+  ) {
     tool_requests <- extract_tool_requests(turn)
 
     invoke_tool_async_wrapper <- coro::async(function(request) {
       maybe_echo_tool(request, echo = echo)
+
+      rejected <- coro::await(
+        maybe_invoke_callbacks_tool_request_async(request, callbacks)
+      )
+      if (!is.null(rejected)) {
+        maybe_echo_tool(rejected, echo = echo)
+        return(rejected)
+      }
+
       result <- coro::await(invoke_tool_async(request))
+
       maybe_echo_tool(result, echo = echo)
+      maybe_invoke_callbacks_tool_result(result, callbacks)
       result
     })
 
@@ -141,6 +170,46 @@ tool_request_args <- function(request) {
   }
 
   convert_from_type(args, tool@arguments)
+}
+
+maybe_invoke_callbacks_tool_request <- function(request, callbacks = list()) {
+  cb <- callbacks$tool_request
+  if (is.null(cb)) return()
+
+  tryCatch(
+    {
+      cb$invoke(request)
+      NULL
+    },
+    ellmer_tool_reject = function(e) {
+      ContentToolResult(error = e$message, request = request)
+    }
+  )
+}
+
+on_load(
+  maybe_invoke_callbacks_tool_request_async <- coro::async(
+    function(request, callbacks = list()) {
+      cb <- callbacks$tool_request
+      if (is.null(cb)) return()
+
+      tryCatch(
+        {
+          coro::await(cb$invoke_async(request))
+          NULL
+        },
+        ellmer_tool_reject = function(e) {
+          ContentToolResult(error = e$message, request = request)
+        }
+      )
+    }
+  )
+)
+
+maybe_invoke_callbacks_tool_result <- function(result, callbacks = list()) {
+  cb <- callbacks$tool_result
+  if (is.null(cb)) return()
+  cb$invoke(result)
 }
 
 tool_results_as_turn <- function(results) {
