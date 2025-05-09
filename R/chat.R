@@ -510,7 +510,9 @@ Chat <- R6::R6Class(
           yield(chunk)
         }
 
-        tool_results <- invoke_tools(self$last_turn(), echo = echo)
+        tool_results <- coro::collect(
+          invoke_tools(self$last_turn(), echo = echo)
+        )
         user_turn <- tool_results_as_turn(tool_results)
 
         if (echo == "all") {
@@ -539,7 +541,9 @@ Chat <- R6::R6Class(
           yield(chunk)
         }
 
-        tool_results <- await(invoke_tools_async(self$last_turn(), echo = echo))
+        tool_results <- await(gen_async_promise_all(
+          invoke_tools_async(self$last_turn(), echo = echo)
+        ))
         user_turn <- tool_results_as_turn(tool_results)
 
         if (echo == "all") {

@@ -1,7 +1,7 @@
 # invoke_tools() echoes tool requests and results
 
     Code
-      . <- invoke_tools(turn, echo = "output")
+      . <- coro::collect(invoke_tools(turn, echo = "output"))
     Message
       ( ) [tool call] my_tool()
       o #> 1
@@ -20,7 +20,7 @@
 # invoke_tools_async() echoes tool requests and results
 
     Code
-      . <- sync(invoke_tools_async(turn, echo = "output"))
+      . <- sync(gen_async_promise_all(invoke_tools_async(turn, echo = "output")))
     Message
       ( ) [tool call] my_tool()
       ( ) [tool call] my_tool(x = 1)
