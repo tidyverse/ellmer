@@ -16,9 +16,11 @@ match_tools <- function(turn, tools) {
 }
 
 invoke_tools <- function(turn, echo = "none") {
-  if (is.null(turn)) return(NULL)
+  tool_requests <- extract_tool_requests(turn)
 
-  tool_requests <- extract_tool_requests(turn@contents)
+  if (length(tool_requests) == 0) {
+    return(NULL)
+  }
 
   lapply(tool_requests, function(request) {
     maybe_echo_tool(request, echo = echo)
@@ -38,7 +40,7 @@ invoke_tools <- function(turn, echo = "none") {
 
 on_load(
   invoke_tools_async <- coro::async(function(turn, tools, echo = "none") {
-    tool_requests <- extract_tool_requests(turn@contents)
+    tool_requests <- extract_tool_requests(turn)
 
     # We call it this way instead of a more natural for + await_each() because
     # we want to run all the async tool calls in parallel
@@ -57,9 +59,11 @@ on_load(
   })
 )
 
-extract_tool_requests <- function(contents) {
-  is_tool_request <- map_lgl(contents, S7_inherits, ContentToolRequest)
-  contents[is_tool_request]
+extract_tool_requests <- function(turn) {
+  if (is.null(turn)) return(NULL)
+
+  is_tool_request <- map_lgl(turn@contents, S7_inherits, ContentToolRequest)
+  turn@contents[is_tool_request]
 }
 
 new_tool_result <- function(request, result = NULL, error = NULL) {
