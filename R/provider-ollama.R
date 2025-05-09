@@ -77,16 +77,19 @@ ProviderOllama <- new_class(
 chat_ollama_test <- function(..., model = "llama3.2:1b") {
   # model: Note that tests require a model with tool capabilities
 
-  if (!has_ollama()) {
-    testthat::skip("ollama not found")
-  }
-
+  skip_if_no_ollama()
   testthat::skip_if_not(
-    model %in% ollama_models(),
+    model %in% models_ollama()$id,
     sprintf("Ollama: model '%s' is not installed", model)
   )
 
   chat_ollama(..., model = model)
+}
+
+skip_if_no_ollama <- function() {
+  if (!has_ollama()) {
+    testthat::skip("ollama not found")
+  }
 }
 
 #' @export

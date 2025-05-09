@@ -31,7 +31,7 @@ chat_vllm <- function(
   check_string(base_url)
   check_string(api_key)
   if (missing(model)) {
-    models <- models_vllm(base_url, api_key)
+    models <- models_vllm(base_url, api_key)$id
     cli::cli_abort(c(
       "Must specify {.arg model}.",
       i = "Available models: {.str {models}}."
@@ -89,5 +89,10 @@ models_vllm <- function(base_url, api_key = vllm_key()) {
   resp <- req_perform(req)
   json <- resp_body_json(resp)
 
-  map_chr(json$data, "[[", "id")
+  data.frame(
+    id = map_chr(json$data, "[[", "id")
+    # Not accurate?
+    # created = .POSIXct(map_dbl(json$data, "[[", "created")),
+    # owned_by = map_chr(json$data, "[[", "owned_by")
+  )
 }
