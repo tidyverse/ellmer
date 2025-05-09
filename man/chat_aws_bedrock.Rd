@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-bedrock.R
 \name{chat_aws_bedrock}
 \alias{chat_aws_bedrock}
+\alias{models_aws_bedrock}
 \title{Chat with an AWS bedrock model}
 \usage{
 chat_aws_bedrock(
@@ -11,12 +12,15 @@ chat_aws_bedrock(
   api_args = list(),
   echo = NULL
 )
+
+models_aws_bedrock(profile = NULL)
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{model}{The model to use for the chat (defaults to "anthropic.claude-3-5-sonnet-20240620-v1:0").
+\item{model}{The model to use for the chat (defaults to "anthropic.claude-3-5-sonnet-20241022-v2:0").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
+Use \code{models_models_aws_bedrock()} to see all options.
 .
 
 While ellmer provides a default model, there's no guarantee that you'll

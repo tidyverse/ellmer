@@ -1,10 +1,10 @@
 # ellmer (development version)
 
 * `models_google_gemini()`, `models_anthropic()`, `models_openai()`,  
-  `models_ollama()` and `models_vllm()`, list available models for 
-  Google Gemini, Anthropic, OpenAI, Ollama, and VLLM respectively. Different 
-  providers return different metadata so they are only guaranteed to return a 
-  data frame with at least an `id` column (#296).
+  `models_aws_bedrock()`, `models_ollama()` and `models_vllm()`, list available 
+  models for Google Gemini, Anthropic, OpenAI, AWS Bedrock, Ollama, and VLLM 
+  respectively. Different providers return different metadata so they are only 
+  guaranteed to return a data frame with at least an `id` column (#296).
 
 * Added a Shiny app example in `vignette("streaming-async")` showcasing
   asynchronous streaming with `{ellmer}` and `{shinychat}` (#131, @gadenbuie,

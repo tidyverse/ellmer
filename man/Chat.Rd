@@ -297,6 +297,8 @@ Submit multiple prompts in parallel.
   prompts,
   type,
   convert = TRUE,
+  include_tokens = FALSE,
+  include_cost = FALSE,
   max_active = 10,
   rpm = 500
 )}\if{html}{\out{</div>}}
@@ -316,9 +318,16 @@ data types using the schema. This typically works best when \code{type} is
 \code{type_object()} as this will give you a data frame with one column for
 each property. If \code{FALSE}, returns a list.}
 
+\item{\code{include_cost}}{If \code{TRUE}, and the result is a data frame, will
+add \code{cost} column giving the cost of each prompt.}
+
 \item{\code{max_active}}{The maximum number of simultaenous requests to send.}
 
 \item{\code{rpm}}{Maximum number of requests per minute.}
+
+\item{\code{include_token}}{If \code{TRUE}, and the result is a data frame, will
+add \code{input_tokens} and \code{output_tokens} columns giving the total input
+and output tokens for each prompt.}
 }
 \if{html}{\out{</div>}}
 }
