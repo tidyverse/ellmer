@@ -124,12 +124,10 @@
 
 * `create_tool_def()` can now use any Chat instance (#118, @pedrobtz).
 
-* New experimental `parallel_chat()` and `$extract_data_parallel()` make it
+* New experimental `parallel_chat()` and `parallel_chat_structured()` make it
   easier to perform multiple actions in parallel (#143). This is experimental
   because I'm not 100% sure that the shape of the user interface is correct,
   particularly as it pertains to handling errors.
-
-  Parallel calls with OpenAI and Gemini are much simpler in my experience.
 
 * `google_upload()` lets you upload files to Google Gemini or Vertex AI (#310).
 

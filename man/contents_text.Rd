@@ -39,7 +39,7 @@ images and other content types.
 }
 
 These content types will continue to grow and change as ellmer evolves to
-work with more providers and as providers provide more content types.
+support more providers and as providers add more content types.
 }
 \examples{
 turns <- list(

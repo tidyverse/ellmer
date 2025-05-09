@@ -2,14 +2,26 @@
 % Please edit documentation in R/chat-parallel.R
 \name{parallel_chat}
 \alias{parallel_chat}
+\alias{parallel_chat_structured}
 \title{Submit multiple chats in parallel}
 \usage{
 parallel_chat(chat, prompts, max_active = 10, rpm = 500)
+
+parallel_chat_structured(
+  prompts,
+  type,
+  convert = TRUE,
+  include_tokens = FALSE,
+  include_cost = FALSE,
+  max_active = 10,
+  rpm = 500
+)
 }
 \arguments{
 \item{chat}{A base chat object.}
 
-\item{prompts}{A list of user prompts.}
+\item{prompts}{A vector created by \code{\link[=interpolate]{interpolate()}} or a list
+of character vectors.}
 
 \item{max_active}{The maximum number of simultaneous requests to send.
 
@@ -22,6 +34,21 @@ connections or use \code{\link[=params]{params()}} in \code{chat_anthropic()} to
 \code{max_tokens}.}
 
 \item{rpm}{Maximum number of requests per minute.}
+
+\item{type}{A type specification for the extracted data. Should be
+created with a \code{\link[=type_boolean]{type_()}} function.}
+
+\item{convert}{If \code{TRUE}, automatically convert from JSON lists to R
+data types using the schema. This typically works best when \code{type} is
+\code{type_object()} as this will give you a data frame with one column for
+each property. If \code{FALSE}, returns a list.}
+
+\item{include_cost}{If \code{TRUE}, and the result is a data frame, will
+add \code{cost} column giving the cost of each prompt.}
+
+\item{include_token}{If \code{TRUE}, and the result is a data frame, will
+add \code{input_tokens} and \code{output_tokens} columns giving the total input
+and output tokens for each prompt.}
 }
 \value{
 A list of \link{Chat} objects, one for each prompt.
