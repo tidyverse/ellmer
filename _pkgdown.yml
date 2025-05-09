@@ -39,6 +39,7 @@ reference:
     contents:
       - tool
       - tool_annotations
+      - tool_reject
       - type_boolean
 
   - title: Objects

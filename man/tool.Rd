@@ -78,6 +78,7 @@ chat$chat("
 }
 \seealso{
 Other tool calling helpers: 
-\code{\link{tool_annotations}()}
+\code{\link{tool_annotations}()},
+\code{\link{tool_reject}()}
 }
 \concept{tool calling helpers}

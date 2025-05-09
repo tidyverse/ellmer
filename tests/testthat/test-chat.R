@@ -315,6 +315,25 @@ test_that("chat warns on tool failures", {
   )
 })
 
+test_that("tool calls can be rejected via the tool function", {
+  chat <- chat_openai_test()
+
+  chat$register_tool(tool(
+    function(user) if (user == "Joe") tool_reject() else "red",
+    "Find out a user's favorite color",
+    user = type_string("User's name"),
+    .name = "user_favorite_color"
+  ))
+
+  expect_snapshot(
+    . <- chat$chat(
+      "What are Joe and Hadley's favorite colors?",
+      "Write 'Joe ____ Hadley ____'. Use 'unknown' if you don't know.",
+      echo = "output"
+    )
+  )
+})
+
 test_that("old extract methods are deprecated", {
   ChatNull <- R6::R6Class(
     "ChatNull",
