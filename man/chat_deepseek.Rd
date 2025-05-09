@@ -25,9 +25,8 @@ You generally should not supply this directly, but instead set the \code{DEEPSEE
 The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
-\item{model}{The model to use for the chat. The default, \code{NULL}, will pick
-a reasonable default, and tell you about. We strongly recommend explicitly
-choosing a model for all but the most casual use.}
+\item{model}{The model to use for the chat (defaults to "deepseek-chat").
+We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
 
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output
 more reproducible.}

@@ -12,3 +12,7 @@ test_that("can make simple streaming request", {
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })
+
+test_that("can list models", {
+  test_models(\(...) models_vllm("https://llm.nrp-nautilus.io/"))
+})

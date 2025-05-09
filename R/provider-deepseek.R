@@ -16,6 +16,7 @@ NULL
 #' @inheritParams chat_openai
 #' @param api_key `r api_key_param("DEEPSEEK_API_KEY")`
 #' @param base_url The base URL to the endpoint; the default uses DeepSeek.
+#' @param model `r param_model("deepseek-chat")`
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{

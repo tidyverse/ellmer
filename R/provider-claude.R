@@ -15,6 +15,7 @@ NULL
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
+#' @param model `r param_model("claude-3-7-sonnet-latest", "anthropic")`
 #' @param api_key `r api_key_param("ANTHROPIC_API_KEY")`
 #' @param max_tokens Maximum number of tokens to generate before stopping.
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
@@ -91,16 +92,8 @@ anthropic_key_exists <- function() {
   key_exists("ANTHROPIC_API_KEY")
 }
 
-method(chat_request, ProviderAnthropic) <- function(
-  provider,
-  stream = TRUE,
-  turns = list(),
-  tools = list(),
-  type = NULL
-) {
+method(base_request, ProviderAnthropic) <- function(provider) {
   req <- request(provider@base_url)
-  # https://docs.anthropic.com/en/api/messages
-  req <- req_url_path_append(req, "/messages")
   # <https://docs.anthropic.com/en/api/versioning>
   req <- req_headers(req, `anthropic-version` = "2023-06-01")
   # <https://docs.anthropic.com/en/api/getting-started#authentication>
@@ -126,6 +119,21 @@ method(chat_request, ProviderAnthropic) <- function(
     }
   })
 
+  req
+}
+
+
+# https://docs.anthropic.com/en/api/messages
+method(chat_path, ProviderAnthropic) <- function(provider) {
+  "messages"
+}
+method(chat_body, ProviderAnthropic) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
     system <- turns[[1]]@text
   } else {
@@ -152,7 +160,7 @@ method(chat_request, ProviderAnthropic) <- function(
 
   params <- chat_params(provider, provider@params)
 
-  body <- compact(list2(
+  compact(list2(
     model = provider@model,
     system = system,
     messages = messages,
@@ -161,10 +169,6 @@ method(chat_request, ProviderAnthropic) <- function(
     tool_choice = tool_choice,
     !!!params
   ))
-  body <- modify_list(body, provider@extra_args)
-  req <- req_body_json(req, body)
-
-  req
 }
 
 method(chat_params, ProviderAnthropic) <- function(provider, params) {
@@ -406,6 +410,41 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
 
 method(standardise_model, ProviderAnthropic) <- function(provider, model) {
   gsub("-(latest|\\d{8})$", "", model)
+}
+
+# Models -----------------------------------------------------------------------
+
+#' @export
+#' @rdname chat_anthropic
+models_anthropic <- function(
+  base_url = "https://api.anthropic.com/v1",
+  api_key = anthropic_key()
+) {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    model = "",
+    base_url = base_url,
+    api_key = api_key
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, "[[", "id")
+  display_name <- map_chr(json$data, "[[", "display_name")
+  created_at <- as.POSIXct(map_chr(json$data, "[[", "created_at"))
+
+  df <- data.frame(
+    id = id,
+    name = display_name,
+    created_at = created_at
+  )
+  model_name <- standardise_model(provider, df$id)
+  df <- cbind(df, match_prices("Anthropic", model_name))
+  df[order(-xtfrm(df$created_at)), ]
 }
 
 # Helpers ----------------------------------------------------------------

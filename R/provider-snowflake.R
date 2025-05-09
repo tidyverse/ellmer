@@ -31,6 +31,7 @@ NULL
 #'
 #' @inheritParams chat_openai
 #' @inheritParams chat_cortex_analyst
+#' @param model `r param_model("llama3.1-70b")`
 #' @inherit chat_openai return
 #' @examplesIf has_credentials("cortex")
 #' chat <- chat_snowflake()

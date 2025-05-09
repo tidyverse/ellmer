@@ -190,3 +190,12 @@ test_pdf_local <- function(chat_fun) {
   expect_match(response, "Apples are tasty")
   expect_match(chat$chat("What apple is not tasty?"), "red delicious")
 }
+
+# Models ------------------------------------------------------------------
+
+test_models <- function(models_fun) {
+  models <- models_fun()
+  expect_gt(nrow(models), 0)
+  expect_s3_class(models, "data.frame")
+  expect_contains(names(models), "id")
+}
