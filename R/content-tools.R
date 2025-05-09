@@ -16,11 +16,25 @@ match_tools <- function(turn, tools) {
 }
 
 on_load({
-  invoke_tools <- coro::generator(function(turn, echo = "none") {
+  invoke_tools <- coro::generator(function(
+    turn,
+    echo = "none",
+    on_tool_request = NULL,
+    on_tool_result = NULL
+  ) {
     tool_requests <- extract_tool_requests(turn)
 
     for (request in tool_requests) {
       maybe_echo_tool(request, echo = echo)
+
+      rejected <- maybe_on_tool_request(request, on_tool_request)
+      if (!is.null(rejected)) {
+        maybe_echo_tool(rejected, echo = echo)
+        maybe_on_tool_result(rejected, on_tool_result)
+        yield(rejected)
+        next
+      }
+
       result <- invoke_tool(request)
 
       if (promises::is.promise(result@value)) {
@@ -31,6 +45,7 @@ on_load({
       }
 
       maybe_echo_tool(result, echo = echo)
+      maybe_on_tool_result(result, on_tool_result)
       yield(result)
     }
   })
@@ -38,13 +53,31 @@ on_load({
   # invoke_tools_async is intentionally *not* an _async_ generator, instead it
   # is a generator that returns promises. This lets the caller decide if the
   # tasks should be run in parallel or sequentially.
-  invoke_tools_async <- coro::generator(function(turn, tools, echo = "none") {
+  invoke_tools_async <- coro::generator(function(
+    turn,
+    tools,
+    echo = "none",
+    on_tool_request = NULL,
+    on_tool_result = NULL
+  ) {
     tool_requests <- extract_tool_requests(turn)
 
     invoke_tool_async_wrapper <- coro::async(function(request) {
       maybe_echo_tool(request, echo = echo)
+
+      rejected <- coro::await(
+        maybe_on_tool_request_async(request, on_tool_request)
+      )
+      if (!is.null(rejected)) {
+        maybe_echo_tool(rejected, echo = echo)
+        maybe_on_tool_result(rejected, on_tool_result)
+        return(rejected)
+      }
+
       result <- coro::await(invoke_tool_async(request))
+
       maybe_echo_tool(result, echo = echo)
+      maybe_on_tool_result(result, on_tool_result)
       result
     })
 
@@ -141,6 +174,46 @@ tool_request_args <- function(request) {
   }
 
   convert_from_type(args, tool@arguments)
+}
+
+maybe_on_tool_request <- function(
+  request,
+  on_tool_request = NULL
+) {
+  if (is.null(on_tool_request)) return()
+
+  tryCatch(
+    {
+      on_tool_request(request)
+      NULL
+    },
+    ellmer_tool_reject = function(e) {
+      ContentToolResult(error = e$message, request = request)
+    }
+  )
+}
+
+on_load(
+  maybe_on_tool_request_async <- coro::async(
+    function(request, on_tool_request = NULL) {
+      if (is.null(on_tool_request)) return()
+
+      tryCatch(
+        {
+          coro::await(on_tool_request(request))
+          NULL
+        },
+        ellmer_tool_reject = function(e) {
+          ContentToolResult(error = e$message, request = request)
+        }
+      )
+    }
+  )
+)
+
+maybe_on_tool_result <- function(result, on_tool_result = NULL) {
+  if (is.null(on_tool_result)) return()
+  on_tool_result(result)
 }
 
 tool_results_as_turn <- function(results) {

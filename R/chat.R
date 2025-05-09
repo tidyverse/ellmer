@@ -33,6 +33,8 @@ Chat <- R6::R6Class(
     initialize = function(provider, system_prompt = NULL, echo = "none") {
       private$provider <- provider
       private$echo <- echo
+      private$callback_on_tool_request <- CallbackManager$new(args = "request")
+      private$callback_on_tool_result <- CallbackManager$new(args = "result")
       self$set_system_prompt(system_prompt)
     },
 
@@ -388,6 +390,26 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
+    #' @description Register a callback for a tool request event.
+    #'
+    #' @param callback A function to be called when a tool request event occurs,
+    #'   which must have `request` as its only argument.
+    #'
+    #' @return A function that can be called to remove the callback.
+    on_tool_request = function(callback) {
+      private$callback_on_tool_request$add(callback)
+    },
+
+    #' @description Register a callback for a tool result event.
+    #'
+    #' @param callback A function to be called when a tool result event occurs,
+    #'   which must have `result` as its only argument.
+    #'
+    #' @return A function that can be called to remove the callback.
+    on_tool_result = function(callback) {
+      private$callback_on_tool_result$add(callback)
+    },
+
     #' @description `r lifecycle::badge("deprecated")`
     #' Deprecated in favour of `$chat_structured()`.
     #' @param ... See `$chat_structured()`
@@ -418,6 +440,8 @@ Chat <- R6::R6Class(
     .turns = list(),
     echo = NULL,
     tools = list(),
+    callback_on_tool_request = "CallbackManager",
+    callback_on_tool_result = "CallbackManager",
 
     add_user_contents = function(contents) {
       stopifnot(is.list(contents))
@@ -457,7 +481,12 @@ Chat <- R6::R6Class(
         }
 
         tool_results <- coro::collect(
-          invoke_tools(self$last_turn(), echo = echo)
+          invoke_tools(
+            self$last_turn(),
+            echo = echo,
+            on_tool_request = private$callback_on_tool_request$invoke,
+            on_tool_result = private$callback_on_tool_result$invoke
+          )
         )
         user_turn <- tool_results_as_turn(tool_results)
 
@@ -488,7 +517,12 @@ Chat <- R6::R6Class(
           yield(chunk)
         }
 
-        tool_calls <- invoke_tools_async(self$last_turn(), echo = echo)
+        tool_calls <- invoke_tools_async(
+          self$last_turn(),
+          echo = echo,
+          on_tool_request = private$callback_on_tool_request$invoke_async,
+          on_tool_result = private$callback_on_tool_result$invoke_async
+        )
         if (tool_mode == "sequential") {
           tool_results <- list()
           for (result in coro::await_each(tool_calls)) {

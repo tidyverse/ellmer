@@ -315,6 +315,77 @@ test_that("chat warns on tool failures", {
   )
 })
 
+test_that("chat callbacks for tool requests/results", {
+  chat <- chat_openai_test()
+
+  test_tool <- tool(
+    function(user) c("red", "blue")[nchar(user) %% 2 + 1],
+    .description = "Find out a user's favorite color",
+    user = type_string("User's name"),
+    .name = "user_favorite_color"
+  )
+
+  chat$register_tool(test_tool)
+
+  last_request <- NULL
+  cb_count_request <- 0
+  cb_count_result <- 0
+
+  chat$on_tool_request(function(request) {
+    cb_count_request <<- cb_count_request + 1
+    cli::cli_inform(
+      "[{cb_count_request}] Tool request: {request@arguments$user}"
+    )
+
+    expect_s7_class(request, ContentToolRequest)
+    expect_equal(request@tool, test_tool)
+    last_request <<- request
+  })
+  chat$on_tool_result(function(result) {
+    cb_count_result <<- cb_count_result + 1
+    cli::cli_inform("[{cb_count_result}] Tool result: {result@value}")
+
+    expect_s7_class(result, ContentToolResult)
+    expect_equal(result@request, last_request)
+  })
+
+  expect_snapshot(
+    . <- chat$chat("What are Joe and Hadley's favorite colors?")
+  )
+  expect_equal(cb_count_request, 2L)
+  expect_equal(cb_count_result, 2L)
+
+  expect_snapshot(error = TRUE, {
+    chat$on_tool_request(function(data) NULL)
+    chat$on_tool_result(function(data) NULL)
+  })
+})
+
+test_that("tool calls can be rejected via `tool_request` callbacks", {
+  chat <- chat_openai_test()
+
+  chat$register_tool(tool(
+    function(user) "red",
+    "Find out a user's favorite color",
+    user = type_string("User's name"),
+    .name = "user_favorite_color"
+  ))
+
+  chat$on_tool_request(function(request) {
+    if (request@arguments$user == "Joe") {
+      tool_reject("Joe denied the request.")
+    }
+  })
+
+  expect_snapshot(
+    . <- chat$chat(
+      "What are Joe and Hadley's favorite colors?",
+      "Write 'Joe ____ Hadley ____'. Use 'unknown' if you don't know.",
+      echo = "output"
+    )
+  )
+})
+
 test_that("tool calls can be rejected via the tool function", {
   chat <- chat_openai_test()
 

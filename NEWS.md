@@ -1,7 +1,15 @@
 # ellmer (development version)
 
+* New `Chat$on_tool_request()` and `$on_tool_result()` methods allow you to
+  register callbacks to run on a tool request or tool result. These callbacks
+   can be used to implement custom logging or other actions when tools are
+  called, without modifying the tool function (#493, @gadenbuie).
+
 * New `tool_reject()` function can be used to reject a tool request with an
-  explanation for the rejection reason. (#490, @gadenbuie).
+  explanation for the rejection reason. `tool_reject()` can be called within a
+  tool function or in a `Chat$on_tool_request()` callback. In the latter case,
+  rejecting a tool call will ensure that the tool function is not evaluated
+  (#490 #493, @gadenbuie).
 
 * `$chat_async()` and `$stream_async()` gain a `tool_mode` argument to decide
   between `"sequential"` and `"concurrent"` tool calling. This is an advanced
