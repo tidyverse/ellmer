@@ -1,6 +1,22 @@
 # ellmer (development version)
 
-* `models_google_gemini()`, `models_anthropic()`, `models_openai()`, and `models_ollama()` list available models for Google Gemini, Anthropic, OpenAI, and Ollama respectively. Different providers return different metadata so they are only guaranteed to return a data frame with at least an `id` column (#296).
+* `models_google_gemini()`, `models_anthropic()`, `models_openai()`, and 
+  `models_ollama()` list available models for Google Gemini, Anthropic, OpenAI, 
+  and Ollama respectively. Different providers return different metadata so 
+  they are only guaranteed to return a data frame with at least an `id` column 
+  (#296).
+
+* Added a Shiny app example in `vignette("streaming-async")` showcasing
+  asynchronous streaming with `{ellmer}` and `{shinychat}` (#131, @gadenbuie,
+  @adisarid).
+
+* New `chat_huggingface()` for models hosted at <https://huggingface.co>
+  (#359, @s-spavound).
+
+* Bumped default time out up to 5 minutes (#451, #321).
+
+* BREAKING CHANGE: Tools are now invoked with their inputs coerced to standard 
+  R data structures (#461).
 
 * `$extract_data(convert = TRUE)` now converts `NULL` to `NA` for 
   `type_boolean()`, `type_integer()`, `type_number()`, and `type_string()` 
@@ -42,10 +58,11 @@
 
 * ellmer now tracks the cost of input and output tokens. The cost is displayed
   when you print a `Chat` object, in `tokens_usage()`, and with 
-  `Chat$get_cost()`. This is our best effort at computing the cost, but you 
-  should treat it as an estimate rather than the exact price. Unfortunately LLM APIs
-  currently make it very hard to figure out exactly how much your queries are
-  costing (#203).
+  `Chat$get_cost()`. You can also request costs in `$parallel_extract_data()`.
+  
+  We do our best to accurately compute the cost, but you should treat it as an 
+  estimate rather than the exact price. Unfortunately LLM APIs currently make it
+  very hard to figure out exactly how much your queries cost (#203).
 
 * `ContentToolResult` objects now include the error condition in the `error`
   property when a tool call fails (#421, @gadenbuie).
@@ -113,16 +130,10 @@
 
 * `create_tool_def()` can now use any Chat instance (#118, @pedrobtz).
 
-* New experimental `$chat_parallel()` and `$extract_data_parallel()` make it
+* New experimental `parallel_chat()` and `$extract_data_parallel()` make it
   easier to perform multiple actions in parallel (#143). This is experimental
   because I'm not 100% sure that the shape of the user interface is correct,
   particularly as it pertains to handling errors.
-
-  For Claude, note that the number of active connections is limited primarily
-  by the output tokens per limit (OTPM) which is estimated from the `max_tokens` 
-  parameter, which defaults to 4096. That means if you're limited to 16,000
-  OPTM, you should use at most 16,000 / 4096 = ~4 active connections (or
-  decrease `max_tokens`).
 
   Parallel calls with OpenAI and Gemini are much simpler in my experience.
 

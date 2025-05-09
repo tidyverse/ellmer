@@ -33,12 +33,14 @@ ellmer supports a wide variety of model providers:
 - Anthropic’s Claude: `chat_anthropic()`.
 - AWS Bedrock: `chat_aws_bedrock()`.
 - Azure OpenAI: `chat_azure_openai()`.
+- Cloudflare: `chat_cloudflare()`.
 - Databricks: `chat_databricks()`.
 - DeepSeek: `chat_deepseek()`.
 - GitHub model marketplace: `chat_github()`.
 - Google Gemini/Vertex AI: `chat_google_gemini()`,
   `chat_google_vertex()`.
 - Groq: `chat_groq()`.
+- Hugging Face: `chat_huggingface()`.
 - Mistral: `chat_mistral()`.
 - Ollama: `chat_ollama()`.
 - OpenAI: `chat_openai()`.

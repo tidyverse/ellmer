@@ -6,9 +6,9 @@
       ( ) [tool call] my_tool()
       o #> 1
       ( ) [tool call] my_tool(x = 1)
-      # #> Error: unused argument (x = 1)
+      # #> Error: Unused argument: x
       ( ) [tool call] tool_list()
-      o #> {{"a":1,"b":2}}
+      o #> {"a":1,"b":2}
       ( ) [tool call] tool_chr()
       o #> a
         #> b
@@ -27,11 +27,11 @@
       ( ) [tool call] tool_list()
       ( ) [tool call] tool_chr()
       ( ) [tool call] tool_abort()
-      # #> Error: unused argument (x = 1)
+      # #> Error: Unused argument: x
       # #> Error: Unexpected input
         #> i Please revise and try again.
       o #> 1
-      o #> {{"a":1,"b":2}}
+      o #> {"a":1,"b":2}
       o #> a
         #> b
         #> c

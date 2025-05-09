@@ -52,3 +52,11 @@
       Error in `FUN()`:
       ! `x[[1]]` must be made up strings or <content> objects, not the number 1.
 
+# turns have a reasonable print method
+
+    Code
+      Turn("user", "hello")
+    Output
+      <Turn: user>
+      hello
+

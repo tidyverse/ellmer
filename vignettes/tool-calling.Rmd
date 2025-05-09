@@ -140,6 +140,35 @@ That's correct! Without any further guidance, the chat model decided to call our
 
 This tool example was extremely simple, but you can imagine doing much more interesting things from tool functions: calling APIs, reading from or writing to a database, kicking off a complex simulation, or even calling a complementary GenAI model (like an image generator). Or if you are using ellmer in a Shiny app, you could use tools to set reactive values, setting off a chain of reactive updates.
 
-### Tool limitations
+### Tool inputs and outputs
 
-Remember that tool arguments come from the chat model, and tool results are returned to the chat model. That means that only simple, {jsonlite} compatible data types can be used as inputs and outputs. It's highly recommended that you stick to strings/character, numbers, booleans/logical, null, and named or unnamed lists of those types. And you can forget about using functions, environments, external pointers, R6 classes, and other complex R objects as arguments or return values. Returning data frames seems to work OK, although be careful not to return too much data, as it all counts as tokens (i.e., they count against your context window limit and also cost you money).
+Remember that tool arguments come from the LLM, and tool results are returned to the LLM. This implies that you should keep both as simple as possible.
+
+Inputs to a tool call, must be defined by `type_boolean()`, `type_integer()`, `type_number()`, `type_string()`, `type_enum()`, `type_array()`, or `type_object()`. We recommend keeping them as simple as possible, focussing on basic scalar types as much as you can.
+
+The output of the tool call will be interpreted by the LLM, just as if you had typed that information into the data. That means you'll generally want to produce text or other atomic vectors. For more complex data, ellmer will automatically serialize the result to JSON, which LLMs generally seem to be good at understanding. 
+
+To show off these ideas, here's a slightly more complicated example simulating a weather API that returns data for multiple cities at once. The `get_weather()` function returns a data frame that ellmer will automatically convert into JSON in row-major format, which our experiments suggest is good for LLMs.
+
+```{r}
+raining <- c(London = "heavy", Houston = "none", Chicago = "overcast")
+temperature <- c(London = "cool", Houston = "hot", Chicago = "warm")
+wind <- c(London = "strong", Houston = "weak", Chicago = "strong")
+
+get_weather <- function(cities) {
+  data.frame(
+    city = cities,
+    raining = unname(raining[cities]),
+    temperature = unname(temperature[cities]),
+    wind = unname(wind[cities])
+  )
+}
+chat <- chat_openai()
+chat$register_tool(tool( 
+  get_weather,
+  "Report on weather conditions in multiple cities. For efficiency, request all 
+  weather updates using a single tool call",
+  cities = type_array("City names", type_string())
+))
+chat$chat("Give me a weather udpate for London and Chicago")
+```

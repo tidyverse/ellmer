@@ -2,5 +2,8 @@
     "[r]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "Posit.air-vscode"
-    }
+    },
+    "cSpell.words": [
+        "ellmer"
+    ]
 }

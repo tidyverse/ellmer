@@ -29,7 +29,11 @@ test_params_stop <- function(chat_fun) {
 
 test_tools_simple <- function(chat_fun) {
   chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
-  chat$register_tool(tool(function() "2024-01-01", "Return the current date"))
+  chat$register_tool(tool(
+    function() "2024-01-01",
+    "Return the current date",
+    .name = "current_date"
+  ))
 
   result <- chat$chat("What's the current date in Y-M-D format?")
   expect_match(result, "2024-01-01")
@@ -124,14 +128,14 @@ test_data_extraction <- function(chat_fun) {
   "
 
   chat <- chat_fun()
-  data <- chat$extract_data(prompt, type = article_summary)
+  data <- chat$chat_structured(prompt, type = article_summary)
   expect_mapequal(
     data,
     list(title = "Apples are tasty", author = "Hadley Wickham")
   )
 
   # Check that we can do it again
-  data <- chat$extract_data(prompt, type = article_summary)
+  data <- chat$chat_structured(prompt, type = article_summary)
   expect_mapequal(
     data,
     list(title = "Apples are tasty", author = "Hadley Wickham")
@@ -140,23 +144,27 @@ test_data_extraction <- function(chat_fun) {
 
 # Images -----------------------------------------------------------------
 
-test_images_inline <- function(chat_fun) {
+test_images_inline <- function(chat_fun, test_shape = TRUE) {
   chat <- chat_fun()
   response <- chat$chat(
     "What's in this image? (Be sure to mention the outside shape)",
     content_image_file(system.file("httr2.png", package = "ellmer"))
   )
-  expect_match(response, "hex")
+  if (test_shape) {
+    expect_match(response, "hex")
+  }
   expect_match(response, "baseball")
 }
 
-test_images_remote <- function(chat_fun) {
+test_images_remote <- function(chat_fun, test_shape = TRUE) {
   chat <- chat_fun()
   response <- chat$chat(
     "What's in this image? (Be sure to mention the outside shape)",
     content_image_url("https://httr2.r-lib.org/logo.png")
   )
-  expect_match(response, "hex")
+  if (test_shape) {
+    expect_match(response, "hex")
+  }
   expect_match(response, "baseball")
 }
 

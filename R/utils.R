@@ -188,3 +188,21 @@ unrowname <- function(df) {
   rownames(df) <- NULL
   df
 }
+
+color_role <- function(role) {
+  switch(
+    role,
+    user = cli::col_blue(role),
+    assistant = cli::col_green(role),
+    system = cli::col_br_white(role),
+    role
+  )
+}
+
+counter <- function() {
+  count <- 0
+  function() {
+    count <<- count + 1
+    count
+  }
+}

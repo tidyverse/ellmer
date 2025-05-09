@@ -1,8 +1,23 @@
 #' @include turns.R
 NULL
 
-# Results a content list
+match_tools <- function(turn, tools) {
+  if (is.null(turn)) return(NULL)
+
+  turn@contents <- map(turn@contents, function(content) {
+    if (!S7_inherits(content, ContentToolRequest)) {
+      return(content)
+    }
+    content@tool <- tools[[content@name]]
+    content
+  })
+
+  turn
+}
+
 invoke_tools <- function(turn, echo = "none") {
+  if (is.null(turn)) return(NULL)
+
   tool_requests <- extract_tool_requests(turn@contents)
 
   lapply(tool_requests, function(request) {
@@ -38,7 +53,6 @@ on_load(
         maybe_echo_tool(result, echo = echo)
       })
     })
-
     promises::promise_all(.list = result_promises)
   })
 )
@@ -66,9 +80,15 @@ invoke_tool <- function(request) {
     return(new_tool_result(request, error = "Unknown tool"))
   }
 
+  args <- tool_request_args(request)
+  if (S7_inherits(args, ContentToolResult)) {
+    # Failed to convert the arguments
+    return(args)
+  }
+
   tryCatch(
     {
-      result <- do.call(request@tool@fun, request@arguments)
+      result <- do.call(request@tool@fun, args)
       new_tool_result(request, result)
     },
     error = function(e) {
@@ -84,9 +104,15 @@ on_load(
       return(new_tool_result(request, error = "Unknown tool"))
     }
 
+    args <- tool_request_args(request)
+    if (S7_inherits(args, ContentToolResult)) {
+      # Failed to convert the arguments
+      return(args)
+    }
+
     tryCatch(
       {
-        result <- await(do.call(request@tool@fun, request@arguments))
+        result <- await(do.call(request@tool@fun, args))
         new_tool_result(request, result)
       },
       error = function(e) {
@@ -96,6 +122,34 @@ on_load(
     )
   })
 )
+
+tool_request_args <- function(request) {
+  tool <- request@tool
+  args <- request@arguments
+
+  if (!tool@convert) {
+    return(args)
+  }
+
+  extra_args <- setdiff(names(args), names(tool@arguments@properties))
+  if (length(extra_args) > 0) {
+    e <- catch_cnd(cli::cli_abort("Unused argument{?s}: {extra_args}"))
+    return(new_tool_result(request, error = e))
+  }
+
+  convert_from_type(args, tool@arguments)
+}
+
+tool_results_as_turn <- function(results) {
+  if (length(results) == 0) {
+    return(NULL)
+  }
+  is_tool_result <- map_lgl(results, S7_inherits, ContentToolResult)
+  if (!any(is_tool_result)) {
+    return(NULL)
+  }
+  Turn("user", contents = results[is_tool_result])
+}
 
 turn_get_tool_errors <- function(turn = NULL) {
   if (is.null(turn)) return(NULL)
@@ -182,9 +236,9 @@ maybe_echo_tool <- function(x, echo = "output") {
       if (length(lines) > 5) cli::symbol$ellipsis
     )
     lines <- cli::style_italic(lines)
-    cli::cli_text("{icon} #> {header}{cli_escape(lines[1])}")
+    cli::cli_text("{icon} #> {header}{lines[1]}")
     for (line in lines[-1]) {
-      cli::cli_text("\u00a0\u00a0#> {cli_escape(line)}")
+      cli::cli_text("\u00a0\u00a0#> {line}")
     }
   } else {
     max_width <- cli::console_width() - 7
@@ -193,7 +247,7 @@ maybe_echo_tool <- function(x, echo = "output") {
       value <- paste0(value, cli::symbol$ellipsis)
     }
     value <- cli::style_italic(value)
-    cli::cli_text("{icon} #> {header}{cli_escape(value)}")
+    cli::cli_text("{icon} #> {header}{value}")
   }
 
   invisible(x)
