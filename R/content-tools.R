@@ -29,6 +29,7 @@ on_load({
       rejected <- maybe_invoke_callbacks_tool_request(request, callbacks)
       if (!is.null(rejected)) {
         maybe_echo_tool(rejected, echo = echo)
+        maybe_invoke_callbacks_tool_result(rejected, callbacks)
         yield(rejected)
         next
       }
@@ -67,6 +68,7 @@ on_load({
       )
       if (!is.null(rejected)) {
         maybe_echo_tool(rejected, echo = echo)
+        maybe_invoke_callbacks_tool_result(rejected, callbacks)
         return(rejected)
       }
 
