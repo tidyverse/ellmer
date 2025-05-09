@@ -241,7 +241,8 @@ method(stream_merge_chunks, ProviderGoogleGemini) <- function(
 method(value_turn, ProviderGoogleGemini) <- function(
   provider,
   result,
-  has_type = FALSE
+  has_type = FALSE,
+  completed = Sys.time()
 ) {
   message <- result$candidates[[1]]$content
 
@@ -274,7 +275,13 @@ method(value_turn, ProviderGoogleGemini) <- function(
     output = usage$candidatesTokenCount
   )
 
-  Turn("assistant", contents, json = result, tokens = tokens)
+  Turn(
+    "assistant",
+    contents,
+    json = result,
+    tokens = tokens,
+    completed = completed
+  )
 }
 
 # ellmer -> Gemini --------------------------------------------------------------

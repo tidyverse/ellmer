@@ -231,7 +231,8 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
 method(value_turn, ProviderOpenAI) <- function(
   provider,
   result,
-  has_type = FALSE
+  has_type = FALSE,
+  completed = Sys.time()
 ) {
   if (has_name(result$choices[[1]], "delta")) {
     # streaming
@@ -264,7 +265,13 @@ method(value_turn, ProviderOpenAI) <- function(
     input = result$usage$prompt_tokens,
     output = result$usage$completion_tokens
   )
-  Turn(message$role %||% "assistant", content, json = result, tokens = tokens)
+  Turn(
+    message$role %||% "assistant",
+    content,
+    json = result,
+    tokens = tokens,
+    completed = completed
+  )
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------

@@ -265,7 +265,8 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
 method(value_turn, ProviderAWSBedrock) <- function(
   provider,
   result,
-  has_type = FALSE
+  has_type = FALSE,
+  completed = Sys.time()
 ) {
   contents <- lapply(result$output$message$content, function(content) {
     if (has_name(content, "text")) {
@@ -294,7 +295,13 @@ method(value_turn, ProviderAWSBedrock) <- function(
     output = result$usage$outputTokens
   )
 
-  Turn(result$output$message$role, contents, json = result, tokens = tokens)
+  Turn(
+    result$output$message$role,
+    contents,
+    json = result,
+    tokens = tokens,
+    completed = completed
+  )
 }
 
 # ellmer -> Bedrock -------------------------------------------------------------

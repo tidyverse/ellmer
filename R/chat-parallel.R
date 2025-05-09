@@ -204,6 +204,26 @@ parallel_turns <- function(
 
   map(resps, function(resp) {
     json <- resp_body_json(resp)
-    value_turn(provider, json, has_type = !is.null(type))
+    value_turn(
+      provider,
+      json,
+      has_type = !is.null(type),
+      completed = completion_date(resp)
+    )
   })
+}
+
+completion_date <- function(resp) {
+  if (resp_header_exists(resp, "date")) {
+    parse_http_date(resp_header(resp, "date"))
+  } else {
+    Sys.time()
+  }
+}
+parse_http_date <- function(x) {
+  withr::local_locale(LC_TIME = "C")
+  # https://datatracker.ietf.org/doc/html/rfc7231#section-7.1.1.1
+  out <- as.POSIXct(strptime(x, "%a, %d %b %Y %H:%M:%S", tz = "UTC"))
+  attr(out, "tzone") <- NULL
+  out
 }
