@@ -16,3 +16,16 @@
       Error:
       ! `callback` must have the argument `data`; it currently has `x` and `y`.
 
+---
+
+    Code
+      callbacks$invoke()
+    Condition
+      Error:
+      ! argument "data" is missing, with no default
+    Code
+      callbacks$invoke(1, 2)
+    Condition
+      Error:
+      ! unused argument (2)
+

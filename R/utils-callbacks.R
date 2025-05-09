@@ -69,7 +69,7 @@ CallbackManager <- R6Class(
 
       # Invoke callbacks in reverse insertion order
       for (id in rev(as.integer(names(private$callbacks)))) {
-        coro::await(exec(private$callbacks[[as.character(id)]], data))
+        coro::await(exec(private$callbacks[[as.character(id)]], ...))
       }
 
       invisible(NULL)
@@ -85,6 +85,11 @@ CallbackManager <- R6Class(
     clear = function() {
       private$callbacks <- list()
       invisible(NULL)
+    },
+
+    #' @describeIn Get callback list
+    peek = function() {
+      private$callbacks
     }
   ),
 
