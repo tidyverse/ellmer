@@ -33,8 +33,8 @@
 #'
 #' chat <- chat_openai()
 #' parallel_chat(chat, prompts)
-#' 
-#' 
+#'
+#'
 parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
   my_parallel_turns <- function(conversations) {
     parallel_turns(
@@ -86,7 +86,7 @@ parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
 #'   data types using the schema. This typically works best when `type` is
 #'   [type_object()] as this will give you a data frame with one column for
 #'   each property. If `FALSE`, returns a list.
-#' @param include_token If `TRUE`, and the result is a data frame, will
+#' @param include_tokens If `TRUE`, and the result is a data frame, will
 #'   add `input_tokens` and `output_tokens` columns giving the total input
 #'   and output tokens for each prompt.
 #' @param include_cost If `TRUE`, and the result is a data frame, will

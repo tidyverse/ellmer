@@ -44,12 +44,12 @@ data types using the schema. This typically works best when \code{type} is
 \code{\link[=type_object]{type_object()}} as this will give you a data frame with one column for
 each property. If \code{FALSE}, returns a list.}
 
-\item{include_cost}{If \code{TRUE}, and the result is a data frame, will
-add \code{cost} column giving the cost of each prompt.}
-
-\item{include_token}{If \code{TRUE}, and the result is a data frame, will
+\item{include_tokens}{If \code{TRUE}, and the result is a data frame, will
 add \code{input_tokens} and \code{output_tokens} columns giving the total input
 and output tokens for each prompt.}
+
+\item{include_cost}{If \code{TRUE}, and the result is a data frame, will
+add \code{cost} column giving the cost of each prompt.}
 }
 \value{
 For \code{parallel_chat()}, a list of \link{Chat} objects, one for each prompt.
