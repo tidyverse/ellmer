@@ -27,9 +27,10 @@ models_portkey(
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
-\item{api_key}{A key to actual provider set in your Portkey configuration.}
+\item{api_key}{A Portkey API key.}
 
-\item{virtual_key}{Optional. See \href{https://portkey.ai/docs/product/ai-gateway/virtual-keys}{documentation}.}
+\item{virtual_key}{A virtual identifier storing LLM provider's API key. See
+\href{https://portkey.ai/docs/product/ai-gateway/virtual-keys}{documentation}.}
 
 \item{model}{The model to use for the chat. The default, \code{NULL}, will pick
 a reasonable default, and tell you about. We strongly recommend explicitly
@@ -66,7 +67,7 @@ stored inside Portkey application.
 }
 \examples{
 \dontrun{
-chat <- chat_portkey()
+chat <- chat_portkey(virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"))
 chat$chat("Tell me three jokes about statisticians")
 }
 }

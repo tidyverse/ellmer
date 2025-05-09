@@ -11,14 +11,15 @@
 #'
 #' @family chatbots
 #' @param api_key `r api_key_param("PORTKEY_API_KEY")`
-#' @param api_key A key to actual provider set in your Portkey configuration.
-#' @param virtual_key Optional. See [documentation](https://portkey.ai/docs/product/ai-gateway/virtual-keys).
+#' @param api_key A Portkey API key.
+#' @param virtual_key A virtual identifier storing LLM provider's API key. See
+#'   [documentation](https://portkey.ai/docs/product/ai-gateway/virtual-keys).
 #' @export
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
-#' chat <- chat_portkey()
+#' chat <- chat_portkey(virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"))
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
 chat_portkey <- function(
