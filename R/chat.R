@@ -510,7 +510,8 @@ Chat <- R6::R6Class(
           yield(chunk)
         }
 
-        user_turn <- private$invoke_tools(echo = echo)
+        tool_results <- invoke_tools(self$last_turn(), echo = echo)
+        user_turn <- tool_results_as_turn(tool_results)
 
         if (echo == "all") {
           cat(format(user_turn))
@@ -538,7 +539,8 @@ Chat <- R6::R6Class(
           yield(chunk)
         }
 
-        user_turn <- await(private$invoke_tools_async(echo = echo))
+        tool_results <- await(invoke_tools_async(self$last_turn(), echo = echo))
+        user_turn <- tool_results_as_turn(tool_results)
 
         if (echo == "all") {
           cat(format(user_turn))
@@ -681,16 +683,6 @@ Chat <- R6::R6Class(
 
       self$add_turn(user_turn, turn)
       coro::exhausted()
-    }),
-
-    invoke_tools = function(echo = "none") {
-      tool_results <- invoke_tools(self$last_turn(), echo = echo)
-      tool_results_as_turn(tool_results)
-    },
-
-    invoke_tools_async = async_method(function(self, private, echo = "none") {
-      tool_results <- await(invoke_tools_async(self$last_turn(), echo = echo))
-      tool_results_as_turn(tool_results)
     }),
 
     has_system_prompt = function() {
