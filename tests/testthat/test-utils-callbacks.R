@@ -7,7 +7,7 @@ test_that("CallbackManager catches argument mismatches", {
     callbacks$add(function(x, y) x + y)
   })
 
-  expect_silent(callbacks$add(function(data) force(data)))
+  expect_silent(callbacks$add(function(data) data))
   expect_silent(callbacks$invoke(data = data))
   expect_silent(callbacks$invoke(1))
 
