@@ -33,8 +33,8 @@ chat <- chat_openai()
 chat$chat_structured(
   "My name is Susan and I'm 13 years old",
   type = type_object(
-    age = type_number(),
-    name = type_string()
+    name = type_string(),
+    age = type_number()
   )
 )
 ```
@@ -48,6 +48,27 @@ chat$chat_structured(
   type = type_object(
     primary_shape = type_string(),
     primary_colour = type_string()
+  )
+)
+```
+
+If you need to extract data from multiple prompts, you can use the same techniques with `parallel_chat_structured()`. It takes the same arguments as `$chat_structured()` with two exceptions: it needs a `chat` object since it's a standalone function, not a method, and it can take a vector of prompts.
+
+```{r}
+prompts <- list(
+  "I go by Alex. 42 years on this planet and counting.",
+  "Pleased to meet you! I'm Jamal, age 27.",
+  "They call me Li Wei. Nineteen years young.",
+  "Fatima here. Just celebrated my 35th birthday last week.",
+  "The name's Robert - 51 years old and proud of it.",
+  "Kwame here - just hit the big 5-0 this year."
+)
+parallel_chat_structured(
+  chat,  
+  prompts,
+  type = type_object(
+    name = type_string(),
+    age = type_number()
   )
 )
 ```
