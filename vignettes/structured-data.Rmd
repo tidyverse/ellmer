@@ -52,7 +52,7 @@ chat$chat_structured(
 )
 ```
 
-If you need to extract data from multiple prompts, you can use the same techniques with `parallel_chat_structured()`. It takes same arguments as `$chat_structured()` with two exceptions: it needs a `chat` object since it's a standalone function, not a method, and it can take a vector of prompts.
+If you need to extract data from multiple prompts, you can use the same techniques with `parallel_chat_structured()`. It takes the same arguments as `$chat_structured()` with two exceptions: it needs a `chat` object since it's a standalone function, not a method, and it can take a vector of prompts.
 
 ```{r}
 prompts <- list(
