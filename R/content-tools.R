@@ -15,51 +15,54 @@ match_tools <- function(turn, tools) {
   turn
 }
 
-invoke_tools <- function(turn, echo = "none") {
-  if (is.null(turn)) return(NULL)
+on_load({
+  invoke_tools <- coro::generator(function(turn, echo = "none") {
+    tool_requests <- extract_tool_requests(turn)
 
-  tool_requests <- extract_tool_requests(turn@contents)
+    for (request in tool_requests) {
+      maybe_echo_tool(request, echo = echo)
+      result <- invoke_tool(request)
 
-  lapply(tool_requests, function(request) {
-    maybe_echo_tool(request, echo = echo)
-    result <- invoke_tool(request)
+      if (promises::is.promise(result@value)) {
+        cli::cli_abort(c(
+          "Can't use async tools with `$chat()` or `$stream()`.",
+          i = "Async tools are supported, but you must use `$chat_async()` or `$stream_async()`."
+        ))
+      }
 
-    if (promises::is.promise(result@value)) {
-      cli::cli_abort(c(
-        "Can't use async tools with `$chat()` or `$stream()`.",
-        i = "Async tools are supported, but you must use `$chat_async()` or `$stream_async()`."
-      ))
+      maybe_echo_tool(result, echo = echo)
+      yield(result)
     }
-
-    maybe_echo_tool(result, echo = echo)
-    result
   })
+
+  # invoke_tools_async is intentionally *not* an _async_ generator, instead it
+  # is a generator that returns promises. This lets the caller decide if the
+  # tasks should be run in parallel or sequentially.
+  invoke_tools_async <- coro::generator(function(turn, tools, echo = "none") {
+    tool_requests <- extract_tool_requests(turn)
+
+    invoke_tool_async_wrapper <- coro::async(function(request) {
+      maybe_echo_tool(request, echo = echo)
+      result <- coro::await(invoke_tool_async(request))
+      maybe_echo_tool(result, echo = echo)
+      result
+    })
+
+    for (request in tool_requests) {
+      yield(invoke_tool_async_wrapper(request))
+    }
+  })
+})
+
+gen_async_promise_all <- function(generator) {
+  promises::promise_all(.list = coro::collect(generator))
 }
 
-on_load(
-  invoke_tools_async <- coro::async(function(turn, tools, echo = "none") {
-    tool_requests <- extract_tool_requests(turn@contents)
+extract_tool_requests <- function(turn) {
+  if (is.null(turn)) return(NULL)
 
-    # We call it this way instead of a more natural for + await_each() because
-    # we want to run all the async tool calls in parallel
-    result_promises <- lapply(tool_requests, function(request) {
-      maybe_echo_tool(request, echo = echo)
-
-      invoke_tool_async(request)
-    })
-
-    result_promises <- lapply(result_promises, function(p) {
-      p$then(function(result) {
-        maybe_echo_tool(result, echo = echo)
-      })
-    })
-    promises::promise_all(.list = result_promises)
-  })
-)
-
-extract_tool_requests <- function(contents) {
-  is_tool_request <- map_lgl(contents, S7_inherits, ContentToolRequest)
-  contents[is_tool_request]
+  is_tool_request <- map_lgl(turn@contents, S7_inherits, ContentToolRequest)
+  turn@contents[is_tool_request]
 }
 
 new_tool_result <- function(request, result = NULL, error = NULL) {

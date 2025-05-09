@@ -38,7 +38,6 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
 \item \href{#method-Chat-chat}{\code{Chat$chat()}}
 \item \href{#method-Chat-chat_structured}{\code{Chat$chat_structured()}}
-\item \href{#method-Chat-extract_data_parallel}{\code{Chat$extract_data_parallel()}}
 \item \href{#method-Chat-chat_structured_async}{\code{Chat$chat_structured_async()}}
 \item \href{#method-Chat-chat_async}{\code{Chat$chat_async()}}
 \item \href{#method-Chat-stream}{\code{Chat$stream()}}
@@ -281,53 +280,6 @@ all providers).}
 \item{\code{convert}}{Automatically convert from JSON lists to R data types
 using the schema. For example, this will turn arrays of objects into
 data frames and arrays of strings into a character vector.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-extract_data_parallel"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-extract_data_parallel}{}}}
-\subsection{Method \code{extract_data_parallel()}}{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Submit multiple prompts in parallel.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_parallel(
-  prompts,
-  type,
-  convert = TRUE,
-  include_tokens = FALSE,
-  include_cost = FALSE,
-  max_active = 10,
-  rpm = 500
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{prompts}}{A vector created by \code{\link[=interpolate]{interpolate()}} or a list
-of character vectors.}
-
-\item{\code{type}}{A type specification for the extracted data. Should be
-created with a \code{\link[=type_boolean]{type_()}} function.}
-
-\item{\code{convert}}{If \code{TRUE}, automatically convert from JSON lists to R
-data types using the schema. This typically works best when \code{type} is
-\code{type_object()} as this will give you a data frame with one column for
-each property. If \code{FALSE}, returns a list.}
-
-\item{\code{include_cost}}{If \code{TRUE}, and the result is a data frame, will
-add \code{cost} column giving the cost of each prompt.}
-
-\item{\code{max_active}}{The maximum number of simultaenous requests to send.}
-
-\item{\code{rpm}}{Maximum number of requests per minute.}
-
-\item{\code{include_token}}{If \code{TRUE}, and the result is a data frame, will
-add \code{input_tokens} and \code{output_tokens} columns giving the total input
-and output tokens for each prompt.}
 }
 \if{html}{\out{</div>}}
 }
