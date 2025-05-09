@@ -3,16 +3,16 @@
     Code
       callbacks$add("foo")
     Condition
-      Error in `callbacks$add()`:
-      ! `callback` must be a function.
+      Error:
+      ! `callback` must be a function, not the string "foo".
+    Code
+      callbacks$add(function(foo) NULL)
+    Condition
+      Error:
+      ! `callback` must have the argument `data`; it currently has `foo`.
     Code
       callbacks$add(function(x, y) x + y)
     Condition
       Error:
-      ! Only the first argument of `callback` can be required.
-    Code
-      callbacks$add(function(x = 1, y) x + y)
-    Condition
-      Error:
-      ! Only the first argument of `callback` can be required.
+      ! `callback` must have the argument `data`; it currently has `x` and `y`.
 

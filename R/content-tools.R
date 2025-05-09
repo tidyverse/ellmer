@@ -19,17 +19,18 @@ on_load({
   invoke_tools <- coro::generator(function(
     turn,
     echo = "none",
-    callbacks = list()
+    on_tool_request = NULL,
+    on_tool_result = NULL
   ) {
     tool_requests <- extract_tool_requests(turn)
 
     for (request in tool_requests) {
       maybe_echo_tool(request, echo = echo)
 
-      rejected <- maybe_invoke_callbacks_tool_request(request, callbacks)
+      rejected <- maybe_on_tool_request(request, on_tool_request)
       if (!is.null(rejected)) {
         maybe_echo_tool(rejected, echo = echo)
-        maybe_invoke_callbacks_tool_result(rejected, callbacks)
+        maybe_on_tool_result(rejected, on_tool_result)
         yield(rejected)
         next
       }
@@ -44,7 +45,7 @@ on_load({
       }
 
       maybe_echo_tool(result, echo = echo)
-      maybe_invoke_callbacks_tool_result(result, callbacks)
+      maybe_on_tool_result(result, on_tool_result)
       yield(result)
     }
   })
@@ -56,7 +57,8 @@ on_load({
     turn,
     tools,
     echo = "none",
-    callbacks = list()
+    on_tool_request = NULL,
+    on_tool_result = NULL
   ) {
     tool_requests <- extract_tool_requests(turn)
 
@@ -64,18 +66,18 @@ on_load({
       maybe_echo_tool(request, echo = echo)
 
       rejected <- coro::await(
-        maybe_invoke_callbacks_tool_request_async(request, callbacks)
+        maybe_on_tool_request_async(request, on_tool_request)
       )
       if (!is.null(rejected)) {
         maybe_echo_tool(rejected, echo = echo)
-        maybe_invoke_callbacks_tool_result(rejected, callbacks)
+        maybe_on_tool_result(rejected, on_tool_result)
         return(rejected)
       }
 
       result <- coro::await(invoke_tool_async(request))
 
       maybe_echo_tool(result, echo = echo)
-      maybe_invoke_callbacks_tool_result(result, callbacks)
+      maybe_on_tool_result(result, on_tool_result)
       result
     })
 
@@ -174,13 +176,15 @@ tool_request_args <- function(request) {
   convert_from_type(args, tool@arguments)
 }
 
-maybe_invoke_callbacks_tool_request <- function(request, callbacks = list()) {
-  cb <- callbacks$tool_request
-  if (is.null(cb)) return()
+maybe_on_tool_request <- function(
+  request,
+  on_tool_request = NULL
+) {
+  if (is.null(on_tool_request)) return()
 
   tryCatch(
     {
-      cb$invoke(request)
+      on_tool_request(request)
       NULL
     },
     ellmer_tool_reject = function(e) {
@@ -190,14 +194,13 @@ maybe_invoke_callbacks_tool_request <- function(request, callbacks = list()) {
 }
 
 on_load(
-  maybe_invoke_callbacks_tool_request_async <- coro::async(
-    function(request, callbacks = list()) {
-      cb <- callbacks$tool_request
-      if (is.null(cb)) return()
+  maybe_on_tool_request_async <- coro::async(
+    function(request, on_tool_request = NULL) {
+      if (is.null(on_tool_request)) return()
 
       tryCatch(
         {
-          coro::await(cb$invoke_async(request))
+          coro::await(on_tool_request(request))
           NULL
         },
         ellmer_tool_reject = function(e) {
@@ -208,10 +211,9 @@ on_load(
   )
 )
 
-maybe_invoke_callbacks_tool_result <- function(result, callbacks = list()) {
-  cb <- callbacks$tool_result
-  if (is.null(cb)) return()
-  cb$invoke(result)
+maybe_on_tool_result <- function(result, on_tool_result = NULL) {
+  if (is.null(on_tool_result)) return()
+  on_tool_result(result)
 }
 
 tool_results_as_turn <- function(results) {

@@ -1,14 +1,13 @@
 test_that("CallbackManager catches argument mismatches", {
-  callbacks <- CallbackManager$new()
+  callbacks <- CallbackManager$new(args = "data")
 
   expect_snapshot(error = TRUE, {
     callbacks$add("foo")
+    callbacks$add(function(foo) NULL)
     callbacks$add(function(x, y) x + y)
-    callbacks$add(function(x = 1, y) x + y)
   })
 
-  expect_silent(callbacks$add(function(x, ...) x))
-  expect_silent(callbacks$add(function(x, y = 1) x + y))
+  expect_silent(callbacks$add(function(data) data))
 
   # Callbacks require one argument, but throw standard R error
   expect_error(callbacks$invoke())

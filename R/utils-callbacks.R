@@ -10,46 +10,21 @@ CallbackManager <- R6Class(
   "CallbackManager",
 
   public = list(
+    initialize = function(args = NULL) {
+      private$args <- args
+    },
+
     #' @description Add a callback function.
     #' @param callback A function to be called.
     #' @return A function that can be called to remove the callback.
-    add = function(callback) {
-      if (!is.function(callback)) {
-        cli::cli_abort("{.var callback} must be a function.")
-      }
-
-      arg_names <- fn_fmls_names(callback)
-
-      if (length(arg_names) == 0) {
-        cli::cli_abort(
-          "{.var callback} must accept at least one argument or '...'."
-        )
-      }
-
-      # Can't have more than one required arg and required arg must be first
-      is_required <- map2_lgl(
-        arg_names,
-        fn_fmls(callback),
-        function(arg, val) {
-          arg != "..." && is.symbol(val) && identical(val, quote(expr = ))
-        }
-      )
-
-      ok_args <-
-        sum(is_required) == 0 ||
-        (sum(is_required) == 1 && is_required[1])
-
-      if (!ok_args) {
-        cli::cli_abort(
-          "Only the first argument of {.var callback} can be required."
-        )
-      }
+    add = function(callback, call = caller_env()) {
+      check_function2(callback, args = private$args, call = call)
 
       id <- private$next_id()
-      private$callbacks[[as.character(id)]] <- callback
+      private$callbacks[[id]] <- callback
 
       fn_remove <- function() {
-        private$callbacks[[as.character(id)]] <- NULL
+        private$callbacks[[id]] <- NULL
         invisible(NULL)
       }
       invisible(fn_remove)
@@ -115,12 +90,70 @@ CallbackManager <- R6Class(
 
   private = list(
     callbacks = list(),
-    id = 1L,
+    args = NULL,
 
+    id = 1L,
     next_id = function() {
       id <- private$id
       private$id <- private$id + 1L
-      id
+      as.character(id)
     }
   )
 )
+
+# From https://github.com/r-lib/httr2/blob/da2724ae/R/utils.R#L179-L235
+check_function2 <- function(
+  x,
+  ...,
+  args = NULL,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
+  check_function(
+    x = x,
+    allow_null = allow_null,
+    arg = arg,
+    call = call
+  )
+
+  if (!is.null(x)) {
+    .check_function_args(
+      f = x,
+      expected_args = args,
+      arg = arg,
+      call = call
+    )
+  }
+}
+
+.check_function_args <- function(f, expected_args, arg, call) {
+  if (is_null(expected_args)) {
+    return(invisible(NULL))
+  }
+
+  actual_args <- fn_fmls_names(f) %||% character()
+  missing_args <- setdiff(expected_args, actual_args)
+  if (is_empty(missing_args)) {
+    return(invisible(NULL))
+  }
+
+  n_expected_args <- length(expected_args)
+  n_actual_args <- length(actual_args)
+
+  if (n_actual_args == 0) {
+    arg_info <- "instead it has no arguments"
+  } else {
+    arg_info <- paste0("it currently has {.arg {actual_args}}")
+  }
+
+  cli::cli_abort(
+    paste0(
+      "{.arg {arg}} must have the {cli::qty(n_expected_args)}argument{?s} {.arg {expected_args}}; ",
+      arg_info,
+      "."
+    ),
+    call = call,
+    arg = arg
+  )
+}

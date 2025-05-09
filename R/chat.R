@@ -33,10 +33,8 @@ Chat <- R6::R6Class(
     initialize = function(provider, system_prompt = NULL, echo = "none") {
       private$provider <- provider
       private$echo <- echo
-      private$callbacks <- list(
-        tool_request = CallbackManager$new(),
-        tool_result = CallbackManager$new()
-      )
+      private$callback_on_tool_request <- CallbackManager$new(args = "request")
+      private$callback_on_tool_result <- CallbackManager$new(args = "result")
       self$set_system_prompt(system_prompt)
     },
 
@@ -392,21 +390,24 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
-    #' @description Register callbacks for specific events. For expert use only.
+    #' @description Register a callback for a tool request event.
     #'
-    #' @param event The name of the event. Supported events include
-    #'   `tool_request`, and `tool_result`.
-    #' @param callback A function to be called when the event occurs. The
-    #'   function must take at least one argument, which is the data associated
-    #'   with the event:
+    #' @param callback A function to be called when a tool request event occurs,
+    #'   which must have `request` as its only argument.
     #'
-    #'   * `tool_request` receives a `ContentToolRequest` object.
-    #'   * `tool_result` receives a `ContentToolResult` object.
+    #' @return A function that can be called to remove the callback.
+    on_tool_request = function(callback) {
+      private$callback_on_tool_request$add(callback)
+    },
+
+    #' @description Register a callback for a tool result event.
     #'
-    #' @return Returns a function that can be called to remove the callback.
-    register_callback = function(event, callback) {
-      event <- arg_match(event, names(private$callbacks))
-      private$callbacks[[event]]$add(callback)
+    #' @param callback A function to be called when a tool result event occurs,
+    #'   which must have `result` as its only argument.
+    #'
+    #' @return A function that can be called to remove the callback.
+    on_tool_result = function(callback) {
+      private$callback_on_tool_result$add(callback)
     },
 
     #' @description `r lifecycle::badge("deprecated")`
@@ -439,7 +440,8 @@ Chat <- R6::R6Class(
     .turns = list(),
     echo = NULL,
     tools = list(),
-    callbacks = "list of CallbackManagers",
+    callback_on_tool_request = "CallbackManager",
+    callback_on_tool_result = "CallbackManager",
 
     add_user_contents = function(contents) {
       stopifnot(is.list(contents))
@@ -482,7 +484,8 @@ Chat <- R6::R6Class(
           invoke_tools(
             self$last_turn(),
             echo = echo,
-            callbacks = private$callbacks
+            on_tool_request = private$callback_on_tool_request$invoke,
+            on_tool_result = private$callback_on_tool_result$invoke
           )
         )
         user_turn <- tool_results_as_turn(tool_results)
@@ -517,7 +520,8 @@ Chat <- R6::R6Class(
         tool_calls <- invoke_tools_async(
           self$last_turn(),
           echo = echo,
-          callbacks = private$callbacks
+          on_tool_request = private$callback_on_tool_request$invoke_async,
+          on_tool_result = private$callback_on_tool_result$invoke_async
         )
         if (tool_mode == "sequential") {
           tool_results <- list()

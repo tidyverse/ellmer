@@ -87,10 +87,15 @@
 ---
 
     Code
-      chat$register_callback("chat", function(data) NULL)
+      chat$on_tool_request(function(data) NULL)
     Condition
       Error:
-      ! `event` must be one of "tool_request" or "tool_result", not "chat".
+      ! `callback` must have the argument `request`; it currently has `data`.
+    Code
+      chat$on_tool_result(function(data) NULL)
+    Condition
+      Error:
+      ! `callback` must have the argument `result`; it currently has `data`.
 
 # tool calls can be rejected via `tool_request` callbacks
 

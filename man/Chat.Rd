@@ -46,7 +46,8 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-get_provider}{\code{Chat$get_provider()}}
 \item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
 \item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
-\item \href{#method-Chat-register_callback}{\code{Chat$register_callback()}}
+\item \href{#method-Chat-on_tool_request}{\code{Chat$on_tool_request()}}
+\item \href{#method-Chat-on_tool_result}{\code{Chat$on_tool_result()}}
 \item \href{#method-Chat-extract_data}{\code{Chat$extract_data()}}
 \item \href{#method-Chat-extract_data_async}{\code{Chat$extract_data_async()}}
 \item \href{#method-Chat-clone}{\code{Chat$clone()}}
@@ -445,32 +446,45 @@ should use \code{register_tool()}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-register_callback"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-register_callback}{}}}
-\subsection{Method \code{register_callback()}}{
-Register callbacks for specific events. For expert use only.
+\if{html}{\out{<a id="method-Chat-on_tool_request"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-on_tool_request}{}}}
+\subsection{Method \code{on_tool_request()}}{
+Register a callback for a tool request event.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$register_callback(event, callback)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$on_tool_request(callback)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{event}}{The name of the event. Supported events include
-\code{tool_request}, and \code{tool_result}.}
-
-\item{\code{callback}}{A function to be called when the event occurs. The
-function must take at least one argument, which is the data associated
-with the event:
-\itemize{
-\item \code{tool_request} receives a \code{ContentToolRequest} object.
-\item \code{tool_result} receives a \code{ContentToolResult} object.
-}}
+\item{\code{callback}}{A function to be called when a tool request event occurs,
+which must have \code{request} as its only argument.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Returns a function that can be called to remove the callback.
+A function that can be called to remove the callback.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-on_tool_result"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-on_tool_result}{}}}
+\subsection{Method \code{on_tool_result()}}{
+Register a callback for a tool result event.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$on_tool_result(callback)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{callback}}{A function to be called when a tool result event occurs,
+which must have \code{result} as its only argument.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A function that can be called to remove the callback.
 }
 }
 \if{html}{\out{<hr>}}

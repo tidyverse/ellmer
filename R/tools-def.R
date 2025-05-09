@@ -167,10 +167,9 @@ tool_annotations <- function(
 #' @description
 #' Throws an error to reject a tool call. `tool_reject()` can be used within the
 #' tool function to indicate that the tool call should not be processed.
-#' `tool_reject()` can also be called in a `tool_request` callback registered
-#' with a `Chat` object using the `Chat$register_callback()` method. When used
-#' in the callback, the tool call is rejected before the tool function is
-#' invoked.
+#' `tool_reject()` can also be called in an `Chat$on_tool_request()` callback.
+#'  When used in the callback, the tool call is rejected before the tool
+#' function is invoked.
 #'
 #' Here's an example where `utils::askYesNo()` is used to ask the user for
 #' permission before accessing their current working directory. This happens
@@ -229,7 +228,7 @@ tool_annotations <- function(
 #' always_allowed <- c()
 #'
 #' # ContentToolRequest
-#' chat$register_callback("tool_request", function(request) {
+#' chat$on_tool_request(function(request) {
 #'   if (request@name %in% always_allowed) return()
 #'
 #'   answer <- utils::menu(

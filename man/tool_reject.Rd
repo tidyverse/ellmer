@@ -17,10 +17,9 @@ reason.
 \description{
 Throws an error to reject a tool call. \code{tool_reject()} can be used within the
 tool function to indicate that the tool call should not be processed.
-\code{tool_reject()} can also be called in a \code{tool_request} callback registered
-with a \code{Chat} object using the \code{Chat$register_callback()} method. When used
-in the callback, the tool call is rejected before the tool function is
-invoked.
+\code{tool_reject()} can also be called in an \code{Chat$on_tool_request()} callback.
+When used in the callback, the tool call is rejected before the tool
+function is invoked.
 
 Here's an example where \code{utils::askYesNo()} is used to ask the user for
 permission before accessing their current working directory. This happens
@@ -77,7 +76,7 @@ chat$register_tool(packaged_list_files_tool)
 always_allowed <- c()
 
 # ContentToolRequest
-chat$register_callback("tool_request", function(request) \{
+chat$on_tool_request(function(request) \{
   if (request@name \%in\% always_allowed) return()
 
   answer <- utils::menu(

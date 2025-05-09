@@ -331,7 +331,7 @@ test_that("chat callbacks for tool requests/results", {
   cb_count_request <- 0
   cb_count_result <- 0
 
-  chat$register_callback("tool_request", function(request) {
+  chat$on_tool_request(function(request) {
     cb_count_request <<- cb_count_request + 1
     cli::cli_inform(
       "[{cb_count_request}] Tool request: {request@arguments$user}"
@@ -341,7 +341,7 @@ test_that("chat callbacks for tool requests/results", {
     expect_equal(request@tool, test_tool)
     last_request <<- request
   })
-  chat$register_callback("tool_result", function(result) {
+  chat$on_tool_result(function(result) {
     cb_count_result <<- cb_count_result + 1
     cli::cli_inform("[{cb_count_result}] Tool result: {result@value}")
 
@@ -356,7 +356,8 @@ test_that("chat callbacks for tool requests/results", {
   expect_equal(cb_count_result, 2L)
 
   expect_snapshot(error = TRUE, {
-    chat$register_callback("chat", function(data) NULL)
+    chat$on_tool_request(function(data) NULL)
+    chat$on_tool_result(function(data) NULL)
   })
 })
 
@@ -370,7 +371,7 @@ test_that("tool calls can be rejected via `tool_request` callbacks", {
     .name = "user_favorite_color"
   ))
 
-  chat$register_callback("tool_request", function(request) {
+  chat$on_tool_request(function(request) {
     if (request@arguments$user == "Joe") {
       tool_reject("Joe denied the request.")
     }
