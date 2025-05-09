@@ -185,8 +185,11 @@ tool_annotations <- function(
 #   allow_read <- utils::askYesNo(
 #     "Would you like to allow access to your current directory?"
 #   )
-#   if (!isTRUE(allow_read)) tool_reject()
-#   c("app.R", "data.csv")
+#   if (isTRUE(allow_read)) {
+#     dir(pattern = "[.](r|R|csv)$")
+#   } else {
+#     tool_reject()
+#   }
 # }
 #
 # chat$register_tool(tool(
@@ -217,7 +220,7 @@ tool_annotations <- function(
 #
 # ```r
 # packaged_list_files_tool <- tool(
-#   function() c("app.R", "data.csv"),
+#   function() dir(pattern = "[.](r|R|csv)$"),
 #   "List files in the user's current directory"
 # )
 #
