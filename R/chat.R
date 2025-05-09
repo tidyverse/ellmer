@@ -284,9 +284,9 @@ Chat <- R6::R6Class(
     #' @param tool_mode Whether tools should be invoked one-at-a-time
     #'   (`"sequential"`) or concurrently (`"concurrent"`). Sequential mode is
     #'   best for interactive applications, especially when a tool may involve
-    #'   an interactive user interface. Concurrent mode is best for automated
-    #'   scripts or non-interactive applications.
-    chat_async = function(..., tool_mode = c("sequential", "concurrent")) {
+    #'   an interactive user interface. Concurrent mode is the default and is
+    #'   best suited for automated scripts or non-interactive applications.
+    chat_async = function(..., tool_mode = c("concurrent", "sequential")) {
       turn <- user_turn(...)
       tool_mode <- arg_match(tool_mode)
 
@@ -324,9 +324,9 @@ Chat <- R6::R6Class(
     #' @param tool_mode Whether tools should be invoked one-at-a-time
     #'   (`"sequential"`) or concurrently (`"concurrent"`). Sequential mode is
     #'   best for interactive applications, especially when a tool may involve
-    #'   an interactive user interface. Concurrent mode is best for automated
-    #'   scripts or non-interactive applications.
-    stream_async = function(..., tool_mode = c("sequential", "concurrent")) {
+    #'   an interactive user interface. Concurrent mode is the default and is
+    #'   best suited for automated scripts or non-interactive applications.
+    stream_async = function(..., tool_mode = c("concurrent", "sequential")) {
       turn <- user_turn(...)
       tool_mode <- arg_match(tool_mode)
       private$chat_impl_async(
