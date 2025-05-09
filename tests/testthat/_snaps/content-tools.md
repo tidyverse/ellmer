@@ -35,6 +35,22 @@
       o #> a
         #> b
         #> c
+    Code
+      . <- sync(coro::async_collect(invoke_tools_async(turn, echo = "output")))
+    Message
+      ( ) [tool call] my_tool()
+      o #> 1
+      ( ) [tool call] my_tool(x = 1)
+      # #> Error: Unused argument: x
+      ( ) [tool call] tool_list()
+      o #> {"a":1,"b":2}
+      ( ) [tool call] tool_chr()
+      o #> a
+        #> b
+        #> c
+      ( ) [tool call] tool_abort()
+      # #> Error: Unexpected input
+        #> i Please revise and try again.
 
 # tool error warnings
 
