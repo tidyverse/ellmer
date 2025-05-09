@@ -85,7 +85,6 @@ chat_openai_test <- function(
   params$seed <- params$seed %||% 1014
   params$temperature <- params$temperature %||% 0
 
-
   chat_openai(
     system_prompt = system_prompt,
     model = model,
