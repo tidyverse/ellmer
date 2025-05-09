@@ -8,6 +8,7 @@
 parallel_chat(chat, prompts, max_active = 10, rpm = 500)
 
 parallel_chat_structured(
+  chat,
   prompts,
   type,
   convert = TRUE,
@@ -40,7 +41,7 @@ created with a \code{\link[=type_boolean]{type_()}} function.}
 
 \item{convert}{If \code{TRUE}, automatically convert from JSON lists to R
 data types using the schema. This typically works best when \code{type} is
-\code{type_object()} as this will give you a data frame with one column for
+\code{\link[=type_object]{type_object()}} as this will give you a data frame with one column for
 each property. If \code{FALSE}, returns a list.}
 
 \item{include_cost}{If \code{TRUE}, and the result is a data frame, will
@@ -51,13 +52,18 @@ add \code{input_tokens} and \code{output_tokens} columns giving the total input
 and output tokens for each prompt.}
 }
 \value{
-A list of \link{Chat} objects, one for each prompt.
+For \code{parallel_chat()}, a list of \link{Chat} objects, one for each prompt.
+For \code{parallel_chat_structured()}, a single structured data object with one
+element for each prompt. Typically, when \code{type} is an object, this will
+will be a data frame with one row for each prompt, and one column for each
+property.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 If you have multiple prompts, you can submit them in parallel. This is
-typically considerably faster if you have many prompts to evaluate.
+typically considerably faster than submitting them in sequence, especially
+with Gemini and OpenAI.
 }
 \examples{
 \dontshow{if (ellmer::has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -66,5 +72,6 @@ prompts <- interpolate("What's the capital of {{country}}?")
 
 chat <- chat_openai()
 parallel_chat(chat, prompts)
+
 \dontshow{\}) # examplesIf}
 }
