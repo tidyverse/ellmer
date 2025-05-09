@@ -34,16 +34,16 @@ CallbackManager <- R6Class(
     #' Invoke all registered callbacks with the provided arguments. Callbacks
     #' are invoked in reverse order of registration (last-in first-evaluated).
     #'
-    #' @param data An input, such as a list or object, to pass to the callbacks.
+    #' @param ... Arguments to pass to the callbacks.
     #' @returns Nothing, callbacks are invoked for side effects).
-    invoke = function(data) {
+    invoke = function(...) {
       if (length(private$callbacks) == 0) {
         return(invisible(NULL))
       }
 
       # Invoke callbacks in reverse insertion order
       for (id in rev(as.integer(names(private$callbacks)))) {
-        res <- exec(private$callbacks[[as.character(id)]], data)
+        res <- exec(private$callbacks[[as.character(id)]], ...)
         if (promises::is.promise(res)) {
           cli::cli_abort(c(
             "Can't use async callbacks with `$chat()` or `$stream()`.",
@@ -60,9 +60,9 @@ CallbackManager <- R6Class(
     #' arguments. As with `$invoke()`, callbacks are invoked in reverse order of
     #' registration (last-in first-evaluated).
     #'
-    #' @param data An input, such as a list or object, to pass to the callbacks.
+    #' @param ... Arguments to pass to the callbacks.
     #' @returns Nothing, callbacks are invoked for side effects).
-    invoke_async = async_method(function(self, private, data) {
+    invoke_async = async_method(function(self, private, ...) {
       if (length(private$callbacks) == 0) {
         return(invisible(NULL))
       }
