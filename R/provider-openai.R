@@ -392,8 +392,8 @@ models_openai <- function(
 
   df <- data.frame(
     id = id,
-    created_ats = created,
+    created_at = created,
     owned_by = owned_by
   )
-  df[order(-xtfrm(df$created)), ]
+  df[order(-xtfrm(df$created_at)), ]
 }
