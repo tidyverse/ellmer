@@ -28,18 +28,25 @@ test_params_stop <- function(chat_fun) {
 # Tool calls -------------------------------------------------------------
 
 test_tools_simple <- function(chat_fun) {
-  chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
+  chat <- chat_fun(
+    system_prompt = "Always use a tool to answer. Reply with 'It is ____.'."
+  )
   chat$register_tool(tool(
     function() "2024-01-01",
     "Return the current date",
     .name = "current_date"
+  ))
+  chat$register_tool(tool(
+    function() "February",
+    "Return the full name of the current month",
+    .name = "current_month"
   ))
 
   result <- chat$chat("What's the current date in Y-M-D format?")
   expect_match(result, "2024-01-01")
 
   result <- chat$chat("What month is it? Provide the full name")
-  expect_match(result, "January")
+  expect_match(result, "February")
 }
 
 test_tools_async <- function(chat_fun) {
