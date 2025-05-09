@@ -362,6 +362,60 @@ test_that("chat warns on tool failures", {
   )
 })
 
+test_that("$chat_async() can run tools concurrently", {
+  res <- list()
+
+  chat <- chat_openai_test()
+  chat$register_tool(tool(
+    coro::async(function(i) {
+      res[[i]] <<- list(start = Sys.time())
+      coro::await(coro::async_sleep(0.5))
+      res[[i]]$end <<- Sys.time()
+      i
+    }),
+    .description = "Tests async tool usage",
+    .name = "test_async_tool",
+    i = type_string("ID of the tool call")
+  ))
+
+  sync(chat$chat_async(
+    "Run `test_async_tool` twice with inputs '1' and '2'.",
+    tool_mode = "concurrent"
+  ))
+
+  # The calls overlap, and both start before the first ends
+  expect_true(res[[1]]$start < res[[1]]$end)
+  expect_true(res[[2]]$start < res[[1]]$end)
+  expect_true(res[[2]]$start < res[[2]]$end)
+})
+
+test_that("$chat_async() can run tools sequentially", {
+  res <- list()
+
+  chat <- chat_openai_test()
+  chat$register_tool(tool(
+    coro::async(function(i) {
+      res[[i]] <<- list(start = Sys.time())
+      coro::await(coro::async_sleep(0.5))
+      res[[i]]$end <<- Sys.time()
+      i
+    }),
+    .description = "Tests async tool usage",
+    .name = "test_async_tool",
+    i = type_string("ID of the tool call")
+  ))
+
+  sync(chat$chat_async(
+    "Run `test_async_tool` twice with inputs '1' and '2'.",
+    tool_mode = "sequential"
+  ))
+
+  # The calls don't overlap, the first ends before the second starts
+  expect_true(res[[1]]$start < res[[1]]$end)
+  expect_true(res[[1]]$end < res[[2]]$start)
+  expect_true(res[[2]]$start < res[[2]]$end)
+})
+
 test_that("old extract methods are deprecated", {
   ChatNull <- R6::R6Class(
     "ChatNull",
