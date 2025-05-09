@@ -1,5 +1,9 @@
 # ellmer (development version)
 
+* `$chat_async()` and `$stream_async()` gain a `tool_mode` argument to decide
+  between `"sequential"` and `"concurrent"` tool calling. This is an advanced
+  feature that primarily affects asynchronous tools (#488, @gadenbuie).
+  
 * Added a Shiny app example in `vignette("streaming-async")` showcasing
   asynchronous streaming with `{ellmer}` and `{shinychat}` (#131, @gadenbuie,
   @adisarid).
