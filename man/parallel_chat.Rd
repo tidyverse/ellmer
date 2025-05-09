@@ -67,11 +67,23 @@ with Gemini and OpenAI.
 }
 \examples{
 \dontshow{if (ellmer::has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+chat <- chat_openai()
+
+# Chat ----------------------------------------------------------------------
 country <- c("Canada", "New Zealand", "Jamaica", "United States")
 prompts <- interpolate("What's the capital of {{country}}?")
-
-chat <- chat_openai()
 parallel_chat(chat, prompts)
 
+# Structured data -----------------------------------------------------------
+prompts <- list(
+  "I go by Alex. 42 years on this planet and counting.",
+  "Pleased to meet you! I'm Jamal, age 27.",
+  "They call me Li Wei. Nineteen years young.",
+  "Fatima here. Just celebrated my 35th birthday last week.",
+  "The name's Robert - 51 years old and proud of it.",
+  "Kwame here - just hit the big 5-0 this year."
+)
+type_person <- type_object(name = type_string(), age = type_number())
+parallel_chat_structured(chat, prompts, type_person)
 \dontshow{\}) # examplesIf}
 }
