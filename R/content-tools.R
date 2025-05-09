@@ -55,9 +55,7 @@ on_load({
 })
 
 gen_async_promise_all <- function(generator) {
-  promises::promise_all(
-    .list = coro::collect(generator),
-  )
+  promises::promise_all(.list = coro::collect(generator))
 }
 
 extract_tool_requests <- function(turn) {
