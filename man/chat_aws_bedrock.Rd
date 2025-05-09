@@ -15,9 +15,12 @@ chat_aws_bedrock(
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{model}{ellmer provides a default model, but you'll typically need to
-you'll specify a model that you actually have access to.
+\item{model}{The model to use for the chat (defaults to "anthropic.claude-3-5-sonnet-20240620-v1:0").
+We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
+.
 
+While ellmer provides a default model, there's no guarantee that you'll
+have access to it, so you'll need to specify a model that you can.
 If you're using \href{https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/}{cross-region inference},
 you'll need to use the inference profile ID, e.g.
 \code{model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"}.}

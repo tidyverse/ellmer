@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-vllm.R
 \name{chat_vllm}
 \alias{chat_vllm}
+\alias{models_vllm}
 \title{Chat with a model hosted by vLLM}
 \usage{
 chat_vllm(
@@ -13,15 +14,16 @@ chat_vllm(
   api_key = vllm_key(),
   echo = NULL
 )
+
+models_vllm(base_url, api_key = vllm_key())
 }
 \arguments{
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{model}{The model to use for the chat (defaults to "gpt-4o").
-We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
-Use \code{models_openai()} to see all options.}
+\item{model}{The model to use for the chat.
+Use \code{models_vllm()} to see all options.}
 
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output
 more reproducible.}

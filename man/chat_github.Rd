@@ -26,8 +26,7 @@ For headless environments, this will also look in the \code{GITHUB_PAT}
 env var.}
 
 \item{model}{The model to use for the chat (defaults to "gpt-4o").
-We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
-Use \code{models_openai()} to see all options.}
+We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
 
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output
 more reproducible.}

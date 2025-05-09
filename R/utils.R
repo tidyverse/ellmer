@@ -169,13 +169,16 @@ api_key_param <- function(key) {
 
 param_model <- function(default, provider = NULL) {
   paste_c(
-    "The model to use for the chat",
-    if (!is.null(default)) c(" (defaults to \"", default, "\")"),
-    ".\n",
     c(
-      "We regularly update the default, so we strongly recommend explicitly ",
-      "specifying a model for anything other than casual use.\n"
+      "The model to use for the chat",
+      if (!is.null(default)) c(" (defaults to \"", default, "\")"),
+      ".\n"
     ),
+    if (!is.null(default))
+      c(
+        "We regularly update the default, so we strongly recommend explicitly ",
+        "specifying a model for anything other than casual use.\n"
+      ),
     if (!is.null(provider))
       c("Use `models_", provider, "()` to see all options.\n")
   )

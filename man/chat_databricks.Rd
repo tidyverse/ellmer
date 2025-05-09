@@ -20,10 +20,10 @@ environment variable \code{DATABRICKS_HOST}, if set.}
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{model}{The model to use for the chat. The default, \code{NULL}, will pick a
-reasonable default, and tell you about. We strongly recommend explicitly
-choosing a model for all but the most casual use. Available foundational
-models include:
+\item{model}{The model to use for the chat (defaults to "databricks-dbrx-instruct").
+We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
+
+Available foundational models include:
 \itemize{
 \item \code{databricks-dbrx-instruct} (the default)
 \item \verb{databricks-mixtral-8x7b-instruct}

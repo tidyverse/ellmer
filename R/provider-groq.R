@@ -16,6 +16,7 @@ NULL
 #' @export
 #' @family chatbots
 #' @param api_key `r api_key_param("GROQ_API_KEY")`
+#' @param model `r param_model("llama3-8b-8192")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples

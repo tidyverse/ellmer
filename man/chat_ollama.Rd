@@ -22,7 +22,6 @@ models_ollama(base_url = "http://localhost:11434")
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
 \item{model}{The model to use for the chat.
-We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_ollama()} to see all options.}
 
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output

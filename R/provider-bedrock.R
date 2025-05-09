@@ -20,9 +20,10 @@ NULL
 #' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 #'
 #' @param profile AWS profile to use.
-#' @param model ellmer provides a default model, but you'll typically need to
-#'   you'll specify a model that you actually have access to.
+#' @param model `r param_model("anthropic.claude-3-5-sonnet-20240620-v1:0")`.
 #'
+#'   While ellmer provides a default model, there's no guarantee that you'll
+#'   have access to it, so you'll need to specify a model that you can.
 #'   If you're using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
 #'   you'll need to use the inference profile ID, e.g.
 #'   `model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"`.

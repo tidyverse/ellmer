@@ -25,9 +25,8 @@ You generally should not supply this directly, but instead set the \code{GROQ_AP
 The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
-\item{model}{The model to use for the chat (defaults to "gpt-4o").
-We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
-Use \code{models_openai()} to see all options.}
+\item{model}{The model to use for the chat (defaults to "llama3-8b-8192").
+We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
 
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output
 more reproducible.}
