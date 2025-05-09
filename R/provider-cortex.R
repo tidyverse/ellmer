@@ -282,7 +282,8 @@ cortex_chunk_to_message <- function(x) {
 method(value_turn, ProviderSnowflakeCortexAnalyst) <- function(
   provider,
   result,
-  has_type = FALSE
+  has_type = FALSE,
+  completed = Sys.time()
 ) {
   if (!is_named(result)) {
     # streaming
@@ -322,7 +323,8 @@ method(value_turn, ProviderSnowflakeCortexAnalyst) <- function(
           .internal = TRUE
         )
       }
-    })
+    }),
+    completed = completed
   )
 }
 

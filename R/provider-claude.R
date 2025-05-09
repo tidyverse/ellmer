@@ -263,7 +263,8 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
 method(value_turn, ProviderAnthropic) <- function(
   provider,
   result,
-  has_type = FALSE
+  has_type = FALSE,
+  completed = Sys.time()
 ) {
   contents <- lapply(result$content, function(content) {
     if (content$type == "text") {
@@ -296,7 +297,13 @@ method(value_turn, ProviderAnthropic) <- function(
     output = result$usage$output_tokens
   )
 
-  Turn(result$role, contents, json = result, tokens = tokens)
+  Turn(
+    result$role,
+    contents,
+    json = result,
+    tokens = tokens,
+    completed = completed
+  )
 }
 
 # ellmer -> Claude --------------------------------------------------------------

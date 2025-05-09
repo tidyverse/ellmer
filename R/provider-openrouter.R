@@ -74,7 +74,8 @@ method(base_request, ProviderOpenRouter) <- function(provider) {
 method(value_turn, ProviderOpenRouter) <- function(
   provider,
   result,
-  has_type = FALSE
+  has_type = FALSE,
+  completed = Sys.time()
 ) {
   # https://openrouter.ai/docs/errors
   check_openrouter_error(result$error)
@@ -82,7 +83,8 @@ method(value_turn, ProviderOpenRouter) <- function(
   value_turn(
     super(provider, ProviderOpenAI),
     result = result,
-    has_type = has_type
+    has_type = has_type,
+    completed = completed
   )
 }
 
