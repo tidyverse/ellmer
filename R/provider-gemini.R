@@ -671,11 +671,10 @@ models_google_gemini <- function(
   methods <- map(json$models, \(x) unlist(x$supportedGenerationMethods))
   can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)
 
-  df <- data.frame(
-    id = name,
-    name = display_name
-  )
-  unrowname(df[order(df$name), ][can_generate, ])
+  df <- data.frame(id = name)
+  model_name <- standardise_model(provider, df$id)
+  df <- cbind(df, match_prices("Google/Gemini", model_name))
+  unrowname(df[order(df$id), ][can_generate, ])
 }
 
 #' @rdname chat_google_gemini

@@ -406,7 +406,7 @@ models_openai <- function(
   json <- resp_body_json(resp)
 
   id <- map_chr(json$data, "[[", "id")
-  created <- .POSIXct(map_int(json$data, "[[", "created"))
+  created <- as.Date(.POSIXct(map_int(json$data, "[[", "created")))
   owned_by <- map_chr(json$data, "[[", "owned_by")
 
   df <- data.frame(
@@ -414,5 +414,6 @@ models_openai <- function(
     created_at = created,
     owned_by = owned_by
   )
+  df <- cbind(df, match_prices("OpenAI", df$id))
   df[order(-xtfrm(df$created_at)), ]
 }

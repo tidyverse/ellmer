@@ -442,6 +442,8 @@ models_anthropic <- function(
     name = display_name,
     created_at = created_at
   )
+  model_name <- standardise_model(provider, df$id)
+  df <- cbind(df, match_prices("Anthropic", model_name))
   df[order(-xtfrm(df$created_at)), ]
 }
 

@@ -206,3 +206,9 @@ counter <- function() {
     count
   }
 }
+
+match_prices <- function(provider, id) {
+  prices <- prices[prices$provider == provider, ]
+  idx <- match(id, prices$model)
+  prices[idx, c("cached_input", "input", "output")]
+}

@@ -5,6 +5,8 @@
   models for Google Gemini, Anthropic, OpenAI, AWS Bedrock, Ollama, and VLLM 
   respectively. Different providers return different metadata so they are only 
   guaranteed to return a data frame with at least an `id` column (#296).
+  Where possible (currently for Gemini, Anthropic, and OpenAI) we include
+  known token prices (per million tokens).
 
 * Added a Shiny app example in `vignette("streaming-async")` showcasing
   asynchronous streaming with `{ellmer}` and `{shinychat}` (#131, @gadenbuie,
