@@ -143,7 +143,6 @@ invoke_tool <- function(request) {
       new_tool_result(request, result)
     },
     error = function(e) {
-      # TODO: We need to report this somehow; it's way too hidden from the user
       new_tool_result(request, error = e)
     }
   )
@@ -167,7 +166,6 @@ on_load(
         new_tool_result(request, result)
       },
       error = function(e) {
-        # TODO: We need to report this somehow; it's way too hidden from the user
         new_tool_result(request, error = e)
       }
     )
