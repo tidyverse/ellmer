@@ -21,11 +21,11 @@
     Code
       callbacks$invoke()
     Condition
-      Error:
+      Error in `private$callbacks[[as.character(id)]]()`:
       ! argument "data" is missing, with no default
     Code
       callbacks$invoke(1, 2)
     Condition
-      Error:
+      Error in `private$callbacks[[as.character(id)]]()`:
       ! unused argument (2)
 
