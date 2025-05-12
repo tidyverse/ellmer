@@ -1,5 +1,11 @@
 # ellmer (development version)
 
+* `$stream()` and `$stream_async()` gain support for streaming the additional
+  content types generated during a tool call. When `content = "all"` is set, the
+  streaming response yields `Content` objects, including the
+  `ContentToolRequest` and `ContentToolResult` objects used to request and
+  return tool calls (#400, @gadenbuie).
+
 * New `Chat$on_tool_request()` and `$on_tool_result()` methods allow you to
   register callbacks to run on a tool request or tool result. These callbacks
    can be used to implement custom logging or other actions when tools are
