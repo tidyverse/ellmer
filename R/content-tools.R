@@ -57,8 +57,8 @@ on_load({
     turn,
     tools,
     echo = "none",
-    on_tool_request = NULL,
-    on_tool_result = NULL
+    on_tool_request = function(...) invisible(),
+    on_tool_result = function(...) invisible()
   ) {
     tool_requests <- extract_tool_requests(turn)
 
@@ -214,6 +214,7 @@ on_load(
 maybe_on_tool_result <- function(result, on_tool_result = NULL) {
   if (is.null(on_tool_result)) return()
   on_tool_result(result)
+  invisible()
 }
 
 tool_results_as_turn <- function(results) {

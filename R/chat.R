@@ -440,8 +440,8 @@ Chat <- R6::R6Class(
     .turns = list(),
     echo = NULL,
     tools = list(),
-    callback_on_tool_request = "CallbackManager",
-    callback_on_tool_result = "CallbackManager",
+    callback_on_tool_request = NULL,
+    callback_on_tool_result = NULL,
 
     add_user_contents = function(contents) {
       stopifnot(is.list(contents))

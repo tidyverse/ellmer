@@ -25,7 +25,7 @@ CallbackManager <- R6Class(
 
       fn_remove <- function() {
         private$callbacks[[id]] <- NULL
-        invisible(NULL)
+        invisible()
       }
       invisible(fn_remove)
     },
@@ -43,7 +43,7 @@ CallbackManager <- R6Class(
 
       # Invoke callbacks in reverse insertion order
       for (id in rev(as.integer(names(private$callbacks)))) {
-        res <- exec(private$callbacks[[as.character(id)]], ...)
+        res <- private$callbacks[[as.character(id)]](...)
         if (promises::is.promise(res)) {
           cli::cli_abort(c(
             "Can't use async callbacks with `$chat()` or `$stream()`.",
