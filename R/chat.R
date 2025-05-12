@@ -588,7 +588,7 @@ Chat <- R6::R6Class(
             tool_results <- coro::collect(tool_calls)
             if (yield_as_content) {
               # Filter out and yield tool requests before awaiting tool results
-              is_request <- map_lgl(tool_results, is_tool_result)
+              is_request <- map_lgl(tool_results, is_tool_request)
               for (tool_step in tool_results[is_request]) {
                 yield(tool_step)
               }
