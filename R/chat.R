@@ -497,14 +497,11 @@ Chat <- R6::R6Class(
         assistant_chunks <- private$submit_turns(
           user_turn,
           stream = stream,
-          echo = echo
+          echo = echo,
+          yield_as_content = yield_as_content
         )
         for (chunk in assistant_chunks) {
-          if (yield_as_content && is.character(chunk)) {
-            yield(ContentText(chunk))
-          } else {
-            yield(chunk)
-          }
+          yield(chunk)
         }
 
         assistant_turn <- self$last_turn()
@@ -559,14 +556,11 @@ Chat <- R6::R6Class(
         assistant_chunks <- private$submit_turns_async(
           user_turn,
           stream = stream,
-          echo = echo
+          echo = echo,
+          yield_as_content = yield_as_content
         )
         for (chunk in await_each(assistant_chunks)) {
-          if (yield_as_content && is.character(chunk)) {
-            yield(ContentText(chunk))
-          } else {
-            yield(chunk)
-          }
+          yield(chunk)
         }
 
         assistant_turn <- self$last_turn()
@@ -627,7 +621,8 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      type = NULL
+      type = NULL,
+      yield_as_content = FALSE
     ) {
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
@@ -649,7 +644,11 @@ Chat <- R6::R6Class(
           text <- stream_text(private$provider, chunk)
           if (!is.null(text)) {
             emit(text)
-            yield(text)
+            if (yield_as_content) {
+              yield(ContentText(text))
+            } else {
+              yield(text)
+            }
             any_text <- TRUE
           }
 
@@ -668,7 +667,11 @@ Chat <- R6::R6Class(
         text <- turn@text
         if (!is.null(text)) {
           emit(text)
-          yield(text)
+          if (yield_as_content) {
+            yield(ContentText(text))
+          } else {
+            yield(text)
+          }
           any_text <- TRUE
         }
       }
@@ -676,7 +679,11 @@ Chat <- R6::R6Class(
       # Ensure turns always end in a newline
       if (any_text) {
         emit("\n")
-        yield("\n")
+        if (yield_as_content) {
+          yield(ContentText("\n"))
+        } else {
+          yield("\n")
+        }
       }
 
       if (echo == "all") {
@@ -699,7 +706,8 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      type = NULL
+      type = NULL,
+      yield_as_content = FALSE
     ) {
       response <- chat_perform(
         provider = private$provider,
@@ -717,7 +725,11 @@ Chat <- R6::R6Class(
           text <- stream_text(private$provider, chunk)
           if (!is.null(text)) {
             emit(text)
-            yield(text)
+            if (yield_as_content) {
+              yield(ContentText(text))
+            } else {
+              yield(text)
+            }
             any_text <- TRUE
           }
 
@@ -731,7 +743,11 @@ Chat <- R6::R6Class(
         text <- turn@text
         if (!is.null(text)) {
           emit(text)
-          yield(text)
+          if (yield_as_content) {
+            yield(ContentText(text))
+          } else {
+            yield(text)
+          }
           any_text <- TRUE
         }
       }
@@ -740,7 +756,11 @@ Chat <- R6::R6Class(
       # Ensure turns always end in a newline
       if (any_text) {
         emit("\n")
-        yield("\n")
+        if (yield_as_content) {
+          yield(ContentText("\n"))
+        } else {
+          yield("\n")
+        }
       }
 
       if (echo == "all") {
