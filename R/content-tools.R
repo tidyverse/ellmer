@@ -30,7 +30,7 @@ on_load({
       rejected <- maybe_on_tool_request(request, on_tool_request)
       if (!is.null(rejected)) {
         maybe_echo_tool(rejected, echo = echo)
-        maybe_on_tool_result(rejected, on_tool_result)
+        on_tool_result(rejected)
         yield(rejected)
         next
       }
@@ -45,7 +45,7 @@ on_load({
       }
 
       maybe_echo_tool(result, echo = echo)
-      maybe_on_tool_result(result, on_tool_result)
+      on_tool_result(result)
       yield(result)
     }
   })
@@ -70,14 +70,14 @@ on_load({
       )
       if (!is.null(rejected)) {
         maybe_echo_tool(rejected, echo = echo)
-        maybe_on_tool_result(rejected, on_tool_result)
+        on_tool_result(rejected)
         return(rejected)
       }
 
       result <- coro::await(invoke_tool_async(request))
 
       maybe_echo_tool(result, echo = echo)
-      maybe_on_tool_result(result, on_tool_result)
+      on_tool_result(result)
       result
     })
 
@@ -206,17 +206,6 @@ on_load(
     }
   )
 )
-
-maybe_on_tool_result <- function(result, on_tool_result = NULL) {
-  if (is.null(on_tool_result)) return()
-  tryCatch(
-    on_tool_result(result),
-    error = function(err) {
-      warn("Error in `on_tool_result`.", parent = err)
-    }
-  )
-  invisible()
-}
 
 tool_results_as_turn <- function(results) {
   if (length(results) == 0) {
