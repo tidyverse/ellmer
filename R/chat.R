@@ -501,9 +501,10 @@ Chat <- R6::R6Class(
         )
         for (chunk in assistant_chunks) {
           if (yield_as_content && is.character(chunk)) {
-            chunk <- ContentText(chunk)
+            yield(ContentText(chunk))
+          } else {
+            yield(chunk)
           }
-          yield(chunk)
         }
 
         assistant_turn <- self$last_turn()
@@ -562,9 +563,10 @@ Chat <- R6::R6Class(
         )
         for (chunk in await_each(assistant_chunks)) {
           if (yield_as_content && is.character(chunk)) {
-            chunk <- ContentText(chunk)
+            yield(ContentText(chunk))
+          } else {
+            yield(chunk)
           }
-          yield(chunk)
         }
 
         assistant_turn <- self$last_turn()
