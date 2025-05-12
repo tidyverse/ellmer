@@ -494,22 +494,24 @@ Chat <- R6::R6Class(
       withr::defer(warn_tool_errors(tool_errors))
 
       while (!is.null(user_turn)) {
-        assistant_turn <- private$submit_turns(
+        assistant_chunks <- private$submit_turns(
           user_turn,
           stream = stream,
           echo = echo
         )
-        for (chunk in assistant_turn) {
+        for (chunk in assistant_chunks) {
           if (yield_as_content && is.character(chunk)) {
             chunk <- ContentText(chunk)
           }
           yield(chunk)
         }
 
+        assistant_turn <- self$last_turn()
         user_turn <- NULL
-        if (turn_has_tool_request(self$last_turn())) {
+
+        if (turn_has_tool_request(assistant_turn)) {
           tool_calls <- invoke_tools(
-            self$last_turn(),
+            assistant_turn,
             echo = echo,
             on_tool_request = private$callback_on_tool_request$invoke,
             on_tool_result = private$callback_on_tool_result$invoke,
@@ -553,22 +555,24 @@ Chat <- R6::R6Class(
       withr::defer(warn_tool_errors(tool_errors))
 
       while (!is.null(user_turn)) {
-        assistant_turn <- private$submit_turns_async(
+        assistant_chunks <- private$submit_turns_async(
           user_turn,
           stream = stream,
           echo = echo
         )
-        for (chunk in await_each(assistant_turn)) {
+        for (chunk in await_each(assistant_chunks)) {
           if (yield_as_content && is.character(chunk)) {
             chunk <- ContentText(chunk)
           }
           yield(chunk)
         }
 
+        assistant_turn <- self$last_turn()
         user_turn <- NULL
-        if (turn_has_tool_request(self$last_turn())) {
+
+        if (turn_has_tool_request(assistant_turn)) {
           tool_calls <- invoke_tools_async(
-            self$last_turn(),
+            assistant_turn,
             echo = echo,
             on_tool_request = private$callback_on_tool_request$invoke_async,
             on_tool_result = private$callback_on_tool_result$invoke_async,
