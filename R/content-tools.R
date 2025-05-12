@@ -19,8 +19,8 @@ on_load({
   invoke_tools <- coro::generator(function(
     turn,
     echo = "none",
-    on_tool_request = NULL,
-    on_tool_result = NULL
+    on_tool_request = function(request) invisible(),
+    on_tool_result = function(result) invisible()
   ) {
     tool_requests <- extract_tool_requests(turn)
 
@@ -57,8 +57,8 @@ on_load({
     turn,
     tools,
     echo = "none",
-    on_tool_request = function(...) invisible(),
-    on_tool_result = function(...) invisible()
+    on_tool_request = function(request) invisible(),
+    on_tool_result = function(result) invisible()
   ) {
     tool_requests <- extract_tool_requests(turn)
 
@@ -178,10 +178,8 @@ tool_request_args <- function(request) {
 
 maybe_on_tool_request <- function(
   request,
-  on_tool_request = NULL
+  on_tool_request = function(request) invisible()
 ) {
-  if (is.null(on_tool_request)) return()
-
   tryCatch(
     {
       on_tool_request(request)
@@ -195,9 +193,7 @@ maybe_on_tool_request <- function(
 
 on_load(
   maybe_on_tool_request_async <- coro::async(
-    function(request, on_tool_request = NULL) {
-      if (is.null(on_tool_request)) return()
-
+    function(request, on_tool_request = function(request) invisible()) {
       tryCatch(
         {
           coro::await(on_tool_request(request))
@@ -213,7 +209,12 @@ on_load(
 
 maybe_on_tool_result <- function(result, on_tool_result = NULL) {
   if (is.null(on_tool_result)) return()
-  on_tool_result(result)
+  tryCatch(
+    on_tool_result(result),
+    error = function(err) {
+      warn("Error in `on_tool_result`.", parent = err)
+    }
+  )
   invisible()
 }
 

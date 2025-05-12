@@ -88,7 +88,7 @@ CallbackManager <- R6Class(
     },
 
     #' @describeIn Get callback list
-    peek = function() {
+    get_callbacks = function() {
       private$callbacks
     }
   ),
