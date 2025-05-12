@@ -167,6 +167,22 @@ test_that("invoke_tools() echoes tool requests and results", {
   expect_snapshot(. <- coro::collect(invoke_tools(turn, echo = "output")))
 })
 
+test_that("invoke_tools() yields tool requests and results", {
+  turn <- fixture_turn_with_tool_requests()
+
+  steps <- coro::collect(invoke_tools(turn, yield_request = TRUE))
+  for (i in seq_along(steps)) {
+    # Threaded requests and results
+    if (i %% 2 == 1) {
+      expect_s3_class(steps[[i]], "ellmer::ContentToolRequest")
+    } else {
+      expect_s3_class(steps[[i]], "ellmer::ContentToolResult")
+      # results are paired with previous request
+      expect_equal(steps[[i]]@request, steps[[i - 1]])
+    }
+  }
+})
+
 test_that("invoke_tools_async() echoes tool requests and results", {
   turn <- fixture_turn_with_tool_requests()
 
@@ -182,6 +198,25 @@ test_that("invoke_tools_async() echoes tool requests and results", {
     # Sequential tool calls
     . <- sync(coro::async_collect(invoke_tools_async(turn, echo = "output")))
   })
+})
+
+test_that("invoke_tools_async() yields tool requests and promises results", {
+  turn <- fixture_turn_with_tool_requests()
+
+  steps <- coro::collect(invoke_tools_async(turn, yield_request = TRUE))
+
+  for (i in seq_along(steps)) {
+    # Threaded requests and promise for results
+    if (i %% 2 == 1) {
+      expect_s3_class(steps[[i]], "ellmer::ContentToolRequest")
+    } else {
+      expect_s3_class(steps[[i]], "promise")
+      result <- sync(steps[[i]])
+      expect_s3_class(result, "ellmer::ContentToolResult")
+      # results are paired with previous request
+      expect_equal(result@request, steps[[i - 1]])
+    }
+  }
 })
 
 test_that("invoke_tools() converts to R data structures", {

@@ -459,6 +459,121 @@ test_that("$chat_async() can run tools sequentially", {
   expect_true(res[[2]]$start < res[[2]]$end)
 })
 
+test_that("$stream(content='all') yields tool request/result contents", {
+  chat <- chat_openai_test()
+  tool_current_date <- tool(function() "2024-01-01", "Return the current date")
+  chat$register_tool(tool_current_date)
+
+  res <- coro::collect(
+    chat$stream(
+      "What's the current date in Y-M-D format?",
+      content = "all"
+    )
+  )
+
+  # 1. Tool request
+  # 2. Tool result (paired with request)
+  # 3. ...rest of assistant message
+  expect_s7_class(res[[1]], ContentToolRequest)
+  expect_equal(res[[1]]@tool, tool_current_date)
+  expect_s7_class(res[[2]], ContentToolResult)
+  expect_equal(res[[2]]@value, "2024-01-01")
+  expect_equal(res[[2]]@request, res[[1]])
+
+  for (delta in res[-(1:2)]) {
+    expect_s7_class(delta, ContentText)
+  }
+})
+
+test_that("$stream_async(content='all', tool_mode='concurrent') yields tool request/result contents concurrently", {
+  chat <- chat_openai_test()
+  tool_current_date <- tool(
+    coro::async(function() {
+      coro::await(coro::async_sleep(0.1))
+      "2024-01-01"
+    }),
+    "Return the current date",
+    .name = "current_date"
+  )
+  chat$register_tool(tool_current_date)
+
+  res <- sync(
+    coro::async_collect(
+      chat$stream_async(
+        "Confirm the current data by calling `current_date` twice.",
+        "Write YES if the dates match or NO if not.",
+        content = "all",
+        tool_mode = "concurrent"
+      )
+    )
+  )
+
+  # 1. Tool request 1
+  expect_s7_class(res[[1]], ContentToolRequest)
+  expect_equal(res[[1]]@tool, tool_current_date)
+  # 2. Tool request 2
+  expect_s7_class(res[[2]], ContentToolRequest)
+  expect_equal(res[[2]]@tool, tool_current_date)
+  # 3. Tool result 1
+  expect_s7_class(res[[3]], ContentToolResult)
+  expect_equal(res[[3]]@value, "2024-01-01")
+  expect_equal(res[[3]]@request, res[[1]])
+  # 4. Tool result 2
+  expect_s7_class(res[[4]], ContentToolResult)
+  expect_equal(res[[4]]@value, "2024-01-01")
+  expect_equal(res[[4]]@request, res[[2]])
+
+  # 5. ...rest of assistant message
+  for (delta in res[-(1:4)]) {
+    expect_s7_class(delta, ContentText)
+  }
+})
+
+test_that("$stream_async(content='all', tool_mode='sequential') yields tool request/result contents sequentially", {
+  chat <- chat_openai_test()
+  tool_current_date <- tool(
+    coro::async(function() {
+      coro::await(coro::async_sleep(0.1))
+      "2024-01-01"
+    }),
+    "Return the current date",
+    .name = "current_date"
+  )
+  chat$register_tool(tool_current_date)
+
+  res <- sync(
+    coro::async_collect(
+      chat$stream_async(
+        "Confirm the current data by calling `current_date` twice.",
+        "Write YES if the dates match or NO if not.",
+        content = "all",
+        tool_mode = "sequential"
+      )
+    )
+  )
+
+  # 1. Tool request 1
+  expect_s7_class(res[[1]], ContentToolRequest)
+  expect_equal(res[[1]]@tool, tool_current_date)
+  # 2. Tool result 1
+  expect_s7_class(res[[2]], ContentToolResult)
+  expect_equal(res[[2]]@value, "2024-01-01")
+  expect_equal(res[[2]]@request, res[[1]])
+  # 3. Tool request 2
+  expect_s7_class(res[[3]], ContentToolRequest)
+  expect_equal(res[[3]]@tool, tool_current_date)
+  # 4. Tool result 2
+  expect_s7_class(res[[4]], ContentToolResult)
+  expect_equal(res[[4]]@value, "2024-01-01")
+  expect_equal(res[[4]]@request, res[[3]])
+
+  # 5. ...rest of assistant message
+  for (delta in res[-(1:4)]) {
+    expect_s7_class(delta, ContentText)
+  }
+})
+
+
 test_that("old extract methods are deprecated", {
   ChatNull <- R6::R6Class(
     "ChatNull",

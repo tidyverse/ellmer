@@ -313,9 +313,18 @@ Chat <- R6::R6Class(
     #'   that yields strings. While iterating, the generator will block while
     #'   waiting for more content from the chatbot.
     #' @param ... The input to send to the chatbot. Can be strings or images.
-    stream = function(...) {
+    #' @param content Whether the stream should yield only `"text"` or `"all"`
+    #'   content types created during the round. When `content = "all"`,
+    #'   `stream()` yields [Content] objects.
+    stream = function(..., content = c("text", "all")) {
       turn <- user_turn(...)
-      private$chat_impl(turn, stream = TRUE, echo = "none")
+      content <- arg_match(content)
+      private$chat_impl(
+        turn,
+        stream = TRUE,
+        echo = "none",
+        yield_as_content = content == "all"
+      )
     },
 
     #' @description Submit input to the chatbot, returning asynchronously
@@ -328,14 +337,23 @@ Chat <- R6::R6Class(
     #'   best for interactive applications, especially when a tool may involve
     #'   an interactive user interface. Concurrent mode is the default and is
     #'   best suited for automated scripts or non-interactive applications.
-    stream_async = function(..., tool_mode = c("concurrent", "sequential")) {
+    #' @param content Whether the stream should yield only `"text"` or `"all"`
+    #'   content types created during the round. When `content = "all"`,
+    #'   `stream()` yields [Content] objects.
+    stream_async = function(
+      ...,
+      tool_mode = c("concurrent", "sequential"),
+      content = c("text", "all")
+    ) {
       turn <- user_turn(...)
       tool_mode <- arg_match(tool_mode)
+      content <- arg_match(content)
       private$chat_impl_async(
         turn,
         stream = TRUE,
         echo = "none",
-        tool_mode = tool_mode
+        tool_mode = tool_mode,
+        yield_as_content = content == "all"
       )
     },
 
@@ -469,26 +487,49 @@ Chat <- R6::R6Class(
       private,
       user_turn,
       stream,
-      echo
+      echo,
+      yield_as_content = FALSE
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
 
       while (!is.null(user_turn)) {
-        # fmt: skip
-        for (chunk in private$submit_turns(user_turn, stream = stream, echo = echo)) {
+        assistant_turn <- private$submit_turns(
+          user_turn,
+          stream = stream,
+          echo = echo
+        )
+        for (chunk in assistant_turn) {
+          if (yield_as_content && is.character(chunk)) {
+            chunk <- ContentText(chunk)
+          }
           yield(chunk)
         }
 
-        tool_results <- coro::collect(
-          invoke_tools(
-            self$last_turn(),
-            echo = echo,
-            on_tool_request = private$callback_on_tool_request$invoke,
-            on_tool_result = private$callback_on_tool_result$invoke
-          )
-        )
-        user_turn <- tool_results_as_turn(tool_results)
+        user_turn <- NULL
+        if (turn_has_tool_request(self$last_turn())) {
+          tool_calls <-
+            invoke_tools(
+              self$last_turn(),
+              echo = echo,
+              on_tool_request = private$callback_on_tool_request$invoke,
+              on_tool_result = private$callback_on_tool_result$invoke,
+              yield_request = yield_as_content
+            )
+
+          tool_results <- list()
+
+          for (tool_step in tool_calls) {
+            if (yield_as_content) {
+              yield(tool_step)
+            }
+            if (S7_inherits(tool_step, ContentToolResult)) {
+              tool_results <- c(tool_results, list(tool_step))
+            }
+          }
+
+          user_turn <- tool_results_as_turn(tool_results)
+        }
 
         if (echo == "all") {
           cat(format(user_turn))
@@ -506,33 +547,68 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      tool_mode
+      tool_mode = "concurrent",
+      yield_as_content = FALSE
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
 
       while (!is.null(user_turn)) {
-        # fmt: skip
-        for (chunk in await_each(private$submit_turns_async(user_turn, stream = stream, echo = echo))) {
+        assistant_turn <- private$submit_turns_async(
+          user_turn,
+          stream = stream,
+          echo = echo
+        )
+        for (chunk in await_each(assistant_turn)) {
+          if (yield_as_content && is.character(chunk)) {
+            chunk <- ContentText(chunk)
+          }
           yield(chunk)
         }
 
-        tool_calls <- invoke_tools_async(
-          self$last_turn(),
-          echo = echo,
-          on_tool_request = private$callback_on_tool_request$invoke_async,
-          on_tool_result = private$callback_on_tool_result$invoke_async
-        )
-        if (tool_mode == "sequential") {
-          tool_results <- list()
-          for (result in coro::await_each(tool_calls)) {
-            tool_results <- c(tool_results, list(result))
+        user_turn <- NULL
+        if (turn_has_tool_request(self$last_turn())) {
+          tool_calls <- invoke_tools_async(
+            self$last_turn(),
+            echo = echo,
+            on_tool_request = private$callback_on_tool_request$invoke_async,
+            on_tool_result = private$callback_on_tool_result$invoke_async,
+            yield_request = yield_as_content
+          )
+          if (tool_mode == "sequential") {
+            tool_results <- list()
+            for (tool_step in coro::await_each(tool_calls)) {
+              if (yield_as_content) {
+                yield(tool_step)
+              }
+              if (S7_inherits(tool_step, ContentToolResult)) {
+                tool_results <- c(tool_results, list(tool_step))
+              }
+            }
+          } else {
+            tool_results <- coro::collect(tool_calls)
+            if (yield_as_content) {
+              # Filter out and yield tool requests before awaiting tool results
+              is_request <- map_lgl(
+                tool_results,
+                S7_inherits,
+                ContentToolRequest
+              )
+              for (tool_step in tool_results[is_request]) {
+                yield(tool_step)
+              }
+              tool_results <- tool_results[!is_request]
+            }
+            tool_results <- await(promises::promise_all(.list = tool_results))
+            if (yield_as_content) {
+              for (tool_result in tool_results) {
+                yield(tool_result)
+              }
+            }
           }
-        } else {
-          tool_results <- await(gen_async_promise_all(tool_calls))
-        }
 
-        user_turn <- tool_results_as_turn(tool_results)
+          user_turn <- tool_results_as_turn(tool_results)
+        }
 
         if (echo == "all") {
           cat(format(user_turn))

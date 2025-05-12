@@ -20,12 +20,16 @@ on_load({
     turn,
     echo = "none",
     on_tool_request = function(request) invisible(),
-    on_tool_result = function(result) invisible()
+    on_tool_result = function(result) invisible(),
+    yield_request = FALSE
   ) {
     tool_requests <- extract_tool_requests(turn)
 
     for (request in tool_requests) {
       maybe_echo_tool(request, echo = echo)
+      if (yield_request) {
+        yield(request)
+      }
 
       rejected <- maybe_on_tool_request(request, on_tool_request)
       if (!is.null(rejected)) {
@@ -58,7 +62,8 @@ on_load({
     tools,
     echo = "none",
     on_tool_request = function(request) invisible(),
-    on_tool_result = function(result) invisible()
+    on_tool_result = function(result) invisible(),
+    yield_request = FALSE
   ) {
     tool_requests <- extract_tool_requests(turn)
 
@@ -82,6 +87,9 @@ on_load({
     })
 
     for (request in tool_requests) {
+      if (yield_request) {
+        yield(request)
+      }
       yield(invoke_tool_async_wrapper(request))
     }
   })
@@ -96,6 +104,13 @@ extract_tool_requests <- function(turn) {
 
   is_tool_request <- map_lgl(turn@contents, S7_inherits, ContentToolRequest)
   turn@contents[is_tool_request]
+}
+
+turn_has_tool_request <- function(turn) {
+  if (is.null(turn)) return(FALSE)
+  stopifnot(S7_inherits(turn, Turn))
+
+  some(turn@contents, S7_inherits, ContentToolRequest)
 }
 
 new_tool_result <- function(request, result = NULL, error = NULL) {
