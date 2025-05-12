@@ -508,14 +508,13 @@ Chat <- R6::R6Class(
 
         user_turn <- NULL
         if (turn_has_tool_request(self$last_turn())) {
-          tool_calls <-
-            invoke_tools(
-              self$last_turn(),
-              echo = echo,
-              on_tool_request = private$callback_on_tool_request$invoke,
-              on_tool_result = private$callback_on_tool_result$invoke,
-              yield_request = yield_as_content
-            )
+          tool_calls <- invoke_tools(
+            self$last_turn(),
+            echo = echo,
+            on_tool_request = private$callback_on_tool_request$invoke,
+            on_tool_result = private$callback_on_tool_result$invoke,
+            yield_request = yield_as_content
+          )
 
           tool_results <- list()
 
@@ -523,7 +522,7 @@ Chat <- R6::R6Class(
             if (yield_as_content) {
               yield(tool_step)
             }
-            if (S7_inherits(tool_step, ContentToolResult)) {
+            if (is_tool_result(tool_step)) {
               tool_results <- c(tool_results, list(tool_step))
             }
           }
@@ -581,7 +580,7 @@ Chat <- R6::R6Class(
               if (yield_as_content) {
                 yield(tool_step)
               }
-              if (S7_inherits(tool_step, ContentToolResult)) {
+              if (is_tool_result(tool_step)) {
                 tool_results <- c(tool_results, list(tool_step))
               }
             }
@@ -589,11 +588,7 @@ Chat <- R6::R6Class(
             tool_results <- coro::collect(tool_calls)
             if (yield_as_content) {
               # Filter out and yield tool requests before awaiting tool results
-              is_request <- map_lgl(
-                tool_results,
-                S7_inherits,
-                ContentToolRequest
-              )
+              is_request <- map_lgl(tool_results, is_tool_result)
               for (tool_step in tool_results[is_request]) {
                 yield(tool_step)
               }

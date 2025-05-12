@@ -1,11 +1,14 @@
 #' @include turns.R
 NULL
 
+is_tool_request <- function(x) S7_inherits(x, ContentToolRequest)
+is_tool_result <- function(x) S7_inherits(x, ContentToolResult)
+
 match_tools <- function(turn, tools) {
   if (is.null(turn)) return(NULL)
 
   turn@contents <- map(turn@contents, function(content) {
-    if (!S7_inherits(content, ContentToolRequest)) {
+    if (!is_tool_request(content)) {
       return(content)
     }
     content@tool <- tools[[content@name]]
@@ -102,15 +105,14 @@ gen_async_promise_all <- function(generator) {
 extract_tool_requests <- function(turn) {
   if (is.null(turn)) return(NULL)
 
-  is_tool_request <- map_lgl(turn@contents, S7_inherits, ContentToolRequest)
-  turn@contents[is_tool_request]
+  turn@contents[map_lgl(turn@contents, is_tool_request)]
 }
 
 turn_has_tool_request <- function(turn) {
   if (is.null(turn)) return(FALSE)
   stopifnot(S7_inherits(turn, Turn))
 
-  some(turn@contents, S7_inherits, ContentToolRequest)
+  some(turn@contents, is_tool_request)
 }
 
 new_tool_result <- function(request, result = NULL, error = NULL) {
@@ -118,7 +120,7 @@ new_tool_result <- function(request, result = NULL, error = NULL) {
 
   if (!is.null(error)) {
     ContentToolResult(error = error, request = request)
-  } else if (S7_inherits(result, ContentToolResult)) {
+  } else if (is_tool_result(result)) {
     set_props(result, request = request)
   } else {
     ContentToolResult(value = result, request = request)
@@ -132,7 +134,7 @@ invoke_tool <- function(request) {
   }
 
   args <- tool_request_args(request)
-  if (S7_inherits(args, ContentToolResult)) {
+  if (is_tool_result(args)) {
     # Failed to convert the arguments
     return(args)
   }
@@ -155,7 +157,7 @@ on_load(
     }
 
     args <- tool_request_args(request)
-    if (S7_inherits(args, ContentToolResult)) {
+    if (is_tool_result(args)) {
       # Failed to convert the arguments
       return(args)
     }
@@ -224,7 +226,7 @@ tool_results_as_turn <- function(results) {
   if (length(results) == 0) {
     return(NULL)
   }
-  is_tool_result <- map_lgl(results, S7_inherits, ContentToolResult)
+  is_tool_result <- map_lgl(results, is_tool_result)
   if (!any(is_tool_result)) {
     return(NULL)
   }
@@ -282,7 +284,7 @@ maybe_echo_tool <- function(x, echo = "output") {
     return(invisible(x))
   }
 
-  if (S7_inherits(x, ContentToolRequest)) {
+  if (is_tool_request(x)) {
     cli::cli_text(
       cli::col_blue(cli::symbol$circle),
       " [{cli::col_blue('tool call')}] ",
@@ -291,7 +293,7 @@ maybe_echo_tool <- function(x, echo = "output") {
     return(invisible(x))
   }
 
-  if (!S7_inherits(x, ContentToolResult)) {
+  if (!is_tool_result(x)) {
     # neither tool result or request
     return(invisible(x))
   }

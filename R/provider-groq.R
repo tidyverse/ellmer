@@ -56,7 +56,7 @@ ProviderGroq <- new_class("ProviderGroq", parent = ProviderOpenAI)
 method(as_json, list(ProviderGroq, Turn)) <- function(provider, x) {
   if (x@role == "assistant") {
     # Tool requests come out of content and go into own argument
-    is_tool <- map_lgl(x@contents, S7_inherits, ContentToolRequest)
+    is_tool <- map_lgl(x@contents, is_tool_request)
     tool_calls <- as_json(provider, x@contents[is_tool])
 
     # Grok contents is just a string. Hopefully it never sends back more

@@ -153,7 +153,7 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
     content <- as_json(provider, x@contents[[1]])
     list(list(role = "user", content = content))
   } else if (x@role == "assistant") {
-    is_tool <- map_lgl(x@contents, S7_inherits, ContentToolRequest)
+    is_tool <- map_lgl(x@contents, is_tool_request)
     if (any(is_tool)) {
       list(list(
         role = "assistant",
