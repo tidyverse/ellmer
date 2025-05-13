@@ -467,7 +467,7 @@ test_that("$stream(content='all') yields tool request/result contents", {
   res <- coro::collect(
     chat$stream(
       "What's the current date in Y-M-D format?",
-      content = "all"
+      stream = "content"
     )
   )
 
@@ -502,7 +502,7 @@ test_that("$stream_async(content='all', tool_mode='concurrent') yields tool requ
       chat$stream_async(
         "Confirm the current data by calling `current_date` twice.",
         "Write YES if the dates match or NO if not.",
-        content = "all",
+        stream = "content",
         tool_mode = "concurrent"
       )
     )
@@ -546,7 +546,7 @@ test_that("$stream_async(content='all', tool_mode='sequential') yields tool requ
       chat$stream_async(
         "Confirm the current data by calling `current_date` twice.",
         "Write YES if the dates match or NO if not.",
-        content = "all",
+        stream = "content",
         tool_mode = "sequential"
       )
     )

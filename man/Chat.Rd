@@ -346,7 +346,7 @@ Returns A \href{https://coro.r-lib.org/articles/generator.html#iterating}{coro g
 that yields strings. While iterating, the generator will block while
 waiting for more content from the chatbot.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$stream(..., content = c("text", "all"))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$stream(..., stream = c("text", "content"))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -354,9 +354,9 @@ waiting for more content from the chatbot.
 \describe{
 \item{\code{...}}{The input to send to the chatbot. Can be strings or images.}
 
-\item{\code{content}}{Whether the stream should yield only \code{"text"} or \code{"all"}
-content types created during the round. When \code{content = "all"},
-\code{stream()} yields \link{Content} objects.}
+\item{\code{stream}}{Whether the stream should yield only \code{"text"} or ellmer's
+rich content types. When \code{stream = "content"}, \code{stream()} yields
+\link{Content} objects.}
 }
 \if{html}{\out{</div>}}
 }
@@ -372,7 +372,7 @@ yields string promises.
 \if{html}{\out{<div class="r">}}\preformatted{Chat$stream_async(
   ...,
   tool_mode = c("concurrent", "sequential"),
-  content = c("text", "all")
+  stream = c("text", "content")
 )}\if{html}{\out{</div>}}
 }
 
@@ -387,9 +387,9 @@ best for interactive applications, especially when a tool may involve
 an interactive user interface. Concurrent mode is the default and is
 best suited for automated scripts or non-interactive applications.}
 
-\item{\code{content}}{Whether the stream should yield only \code{"text"} or \code{"all"}
-content types created during the round. When \code{content = "all"},
-\code{stream()} yields \link{Content} objects.}
+\item{\code{stream}}{Whether the stream should yield only \code{"text"} or ellmer's
+rich content types. When \code{stream = "content"}, \code{stream()} yields
+\link{Content} objects.}
 }
 \if{html}{\out{</div>}}
 }

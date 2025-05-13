@@ -313,17 +313,17 @@ Chat <- R6::R6Class(
     #'   that yields strings. While iterating, the generator will block while
     #'   waiting for more content from the chatbot.
     #' @param ... The input to send to the chatbot. Can be strings or images.
-    #' @param content Whether the stream should yield only `"text"` or `"all"`
-    #'   content types created during the round. When `content = "all"`,
-    #'   `stream()` yields [Content] objects.
-    stream = function(..., content = c("text", "all")) {
+    #' @param stream Whether the stream should yield only `"text"` or ellmer's
+    #'   rich content types. When `stream = "content"`, `stream()` yields
+    #'   [Content] objects.
+    stream = function(..., stream = c("text", "content")) {
       turn <- user_turn(...)
-      content <- arg_match(content)
+      stream <- arg_match(stream)
       private$chat_impl(
         turn,
         stream = TRUE,
         echo = "none",
-        yield_as_content = content == "all"
+        yield_as_content = stream == "content"
       )
     },
 
@@ -337,17 +337,17 @@ Chat <- R6::R6Class(
     #'   best for interactive applications, especially when a tool may involve
     #'   an interactive user interface. Concurrent mode is the default and is
     #'   best suited for automated scripts or non-interactive applications.
-    #' @param content Whether the stream should yield only `"text"` or `"all"`
-    #'   content types created during the round. When `content = "all"`,
-    #'   `stream()` yields [Content] objects.
+    #' @param stream Whether the stream should yield only `"text"` or ellmer's
+    #'   rich content types. When `stream = "content"`, `stream()` yields
+    #'   [Content] objects.
     stream_async = function(
       ...,
       tool_mode = c("concurrent", "sequential"),
-      content = c("text", "all")
+      stream = c("text", "content")
     ) {
       turn <- user_turn(...)
       tool_mode <- arg_match(tool_mode)
-      content <- arg_match(content)
+      stream <- arg_match(stream)
       private$chat_impl_async(
         turn,
         stream = TRUE,
