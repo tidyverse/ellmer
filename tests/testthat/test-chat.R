@@ -459,7 +459,7 @@ test_that("$chat_async() can run tools sequentially", {
   expect_true(res[[2]]$start < res[[2]]$end)
 })
 
-test_that("$stream(content='all') yields tool request/result contents", {
+test_that("$stream(stream='content') yields tool request/result contents", {
   chat <- chat_openai_test()
   tool_current_date <- tool(function() "2024-01-01", "Return the current date")
   chat$register_tool(tool_current_date)
@@ -485,7 +485,7 @@ test_that("$stream(content='all') yields tool request/result contents", {
   }
 })
 
-test_that("$stream_async(content='all', tool_mode='concurrent') yields tool request/result contents concurrently", {
+test_that("$stream_async(stream='content', tool_mode='concurrent') yields tool request/result contents concurrently", {
   chat <- chat_openai_test()
   tool_current_date <- tool(
     coro::async(function() {
@@ -529,7 +529,7 @@ test_that("$stream_async(content='all', tool_mode='concurrent') yields tool requ
   }
 })
 
-test_that("$stream_async(content='all', tool_mode='sequential') yields tool request/result contents sequentially", {
+test_that("$stream_async(stream='content', tool_mode='sequential') yields tool request/result contents sequentially", {
   chat <- chat_openai_test()
   tool_current_date <- tool(
     coro::async(function() {

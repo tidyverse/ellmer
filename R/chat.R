@@ -353,7 +353,7 @@ Chat <- R6::R6Class(
         stream = TRUE,
         echo = "none",
         tool_mode = tool_mode,
-        yield_as_content = content == "all"
+        yield_as_content = stream == "content"
       )
     },
 
