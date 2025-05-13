@@ -21,6 +21,21 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_portkey())
 })
 
+test_that("all tool variations work", {
+  chat_fun <- \(...) chat_portkey_test(virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"))
+
+  test_tools_simple(chat_fun)
+  test_tools_async(chat_fun)
+  test_tools_parallel(chat_fun)
+  test_tools_sequential(chat_fun, total_calls = 6)
+})
+
+test_that("can extract data", {
+  chat_fun <- \(...) chat_portkey_test(virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"))
+
+  test_data_extraction(chat_fun)
+})
+
 test_that("can use images", {
   chat_fun <- \(...) chat_portkey_test(virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"),
                                        model = "gpt-4.1-mini", ...)
