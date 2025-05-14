@@ -74,8 +74,7 @@ batch_chat <- function(chat, prompts, path, wait = TRUE) {
           "{cli::pb_spin} Processing... ",
           "{status$n_processing} -> {cli::col_green({status$n_succeeded})} / {cli::col_red({status$n_failed})} ",
           "[{cli::pb_elapsed}]"
-        ),
-        clear = FALSE
+        )
       )
       while (status$working) {
         Sys.sleep(0.5)
