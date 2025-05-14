@@ -406,6 +406,88 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
     signature = x@extra$signature
   )
 }
+
+# Batch chat -------------------------------------------------------------------
+
+method(has_batch_support, ProviderAnthropic) <- function(provider) {
+  TRUE
+}
+
+# https://docs.anthropic.com/en/api/creating-message-batches
+method(batch_submit, ProviderAnthropic) <- function(
+  provider,
+  conversations,
+  type = NULL
+) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/messages/batches")
+
+  requests <- map(seq_along(conversations), function(i) {
+    params <- chat_body(
+      provider,
+      stream = FALSE,
+      turns = conversations[[i]],
+      type = type
+    )
+    list(
+      custom_id = paste0("chat-", i),
+      params = params
+    )
+  })
+  req <- req_body_json(req, list(requests = requests))
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+# https://docs.anthropic.com/en/api/retrieving-message-batches
+method(batch_poll, ProviderAnthropic) <- function(provider, batch) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/messages/batches/", batch$id)
+  resp <- req_perform(req)
+
+  resp_body_json(resp)
+}
+
+method(batch_status, ProviderAnthropic) <- function(provider, batch) {
+  counts <- batch$request_counts
+  list(
+    working = batch$processing_status != "ended",
+    n_processing = batch$request_counts$processing,
+    n_succeeded = batch$request_counts$succeeded,
+    n_failed = counts$errored + counts$canceled + counts$expired
+  )
+}
+
+# https://docs.anthropic.com/en/api/retrieving-message-batch-results
+method(batch_retrieve, ProviderAnthropic) <- function(provider, batch) {
+  req <- base_request(provider)
+  req <- req_url(req, batch$results_url)
+  req <- req_progress(req, "down")
+
+  path <- withr::local_tempfile()
+  req <- req_perform(req, path = path)
+
+  lines <- readLines(path, warn = FALSE)
+  json <- lapply(lines, jsonlite::fromJSON, simplifyVector = FALSE)
+
+  ids <- as.numeric(gsub("chat-", "", map_chr(json, "[[", "custom_id")))
+  results <- lapply(json, "[[", "result")
+  results[order(ids)]
+}
+
+method(batch_result_turn, ProviderAnthropic) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
+  if (result$type == "succeeded") {
+    value_turn(provider, result$message, has_type = has_type)
+  } else {
+    NULL
+  }
+}
+
 # Pricing ----------------------------------------------------------------------
 
 method(standardise_model, ProviderAnthropic) <- function(provider, model) {

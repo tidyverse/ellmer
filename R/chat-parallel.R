@@ -5,7 +5,8 @@
 #'
 #' If you have multiple prompts, you can submit them in parallel. This is
 #' typically considerably faster than submitting them in sequence, especially
-#' with Gemini and OpenAI.
+#' with Gemini and OpenAI. If you're willing to wait longer, you might want to
+#' use [batch_chat()] instead, as it is often substantially cheaper.
 #'
 #' @param chat A base chat object.
 #' @param prompts A vector created by [interpolate()] or a list
@@ -47,6 +48,7 @@
 #' type_person <- type_object(name = type_string(), age = type_number())
 #' parallel_chat_structured(chat, prompts, type_person)
 parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
+  check_chat(chat)
   my_parallel_turns <- function(conversations) {
     parallel_turns(
       provider = chat$get_provider(),

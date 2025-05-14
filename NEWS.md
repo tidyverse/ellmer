@@ -1,5 +1,9 @@
 # ellmer (development version)
 
+* `batch_chat()` allows you to submit multiple chats to OpenAI and Anthropic's
+  batched interfaces. These only guarantee a response within 24 hours, but are
+  50% of the price of regular requests (#143).
+
 * `$stream()` and `$stream_async()` gain support for streaming the additional
   content types generated during a tool call with a new `stream` argument. When
   `stream = "content"` is set, the streaming response yields `Content` objects,

@@ -33,6 +33,7 @@ reference:
 
   - title: Parallel and batch chat
     contents:
+      - batch_chat
       - parallel_chat
 
   - title: Tools and structured data
