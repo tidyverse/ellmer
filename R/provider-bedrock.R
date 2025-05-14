@@ -20,9 +20,10 @@ NULL
 #' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 #'
 #' @param profile AWS profile to use.
-#' @param model ellmer provides a default model, but you'll typically need to
-#'   you'll specify a model that you actually have access to.
+#' @param model `r param_model("anthropic.claude-3-5-sonnet-20240620-v1:0", "models_aws_bedrock")`.
 #'
+#'   While ellmer provides a default model, there's no guarantee that you'll
+#'   have access to it, so you'll need to specify a model that you can.
 #'   If you're using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
 #'   you'll need to use the inference profile ID, e.g.
 #'   `model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"`.
@@ -74,6 +75,32 @@ chat_aws_bedrock <- function(
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+}
+
+#' @export
+#' @rdname chat_aws_bedrock
+models_aws_bedrock <- function(profile = NULL) {
+  creds <- paws_credentials(profile)
+  url <- paste0("https://bedrock.", creds$region, ".amazonaws.com")
+
+  req <- request(url)
+  req <- req_url_path(req, "foundation-models")
+  req <- req_auth_aws_v4(
+    req,
+    aws_access_key_id = creds$access_key_id,
+    aws_secret_access_key = creds$secret_access_key,
+    aws_session_token = creds$session_token
+  )
+
+  resp <- req_perform(req)
+  json <- resp_body_json(resp)
+  models <- json$modelSummaries
+
+  data.frame(
+    id = map_chr(models, "[[", "modelId"),
+    name = map_chr(models, "[[", "modelName"),
+    provider = map_chr(models, "[[", "providerName")
+  )
 }
 
 ProviderAWSBedrock <- new_class(

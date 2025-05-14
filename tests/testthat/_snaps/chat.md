@@ -19,9 +19,9 @@
     Code
       chat
     Output
-      <Chat OpenAI/gpt-4o turns=3 tokens=15/5 $0.00>
+      <Chat OpenAI/gpt-4.1-nano turns=3 tokens=15/5 $0.00>
       -- system [0] ------------------------------------------------------------------
-      You're a helpful assistant that returns very minimal output
+      Be terse.
       -- user [15] -------------------------------------------------------------------
       What's 1 + 1?
       What's 1 + 2?
@@ -73,4 +73,68 @@
       x [user_favorite_color (ID)]: User denied tool request
       x [user_favorite_color (ID)]: User denied tool request
       i ... and 1 more.
+
+# chat callbacks for tool requests/results
+
+    Code
+      . <- chat$chat("What are Joe and Hadley's favorite colors?")
+    Message
+      [1] Tool request: Joe
+      [1] Tool result: blue
+      [2] Tool request: Hadley
+      [2] Tool result: red
+
+---
+
+    Code
+      chat$on_tool_request(function(data) NULL)
+    Condition
+      Error:
+      ! `callback` must have the argument `request`; it currently has `data`.
+    Code
+      chat$on_tool_result(function(data) NULL)
+    Condition
+      Error:
+      ! `callback` must have the argument `result`; it currently has `data`.
+
+# tool calls can be rejected via `tool_request` callbacks
+
+    Code
+      . <- chat$chat("What are Joe and Hadley's favorite colors?",
+        "Write 'Joe ____ Hadley ____'. Use 'unknown' if you don't know.", echo = "output")
+    Message
+      ( ) [tool call] user_favorite_color(user = "Joe")
+      # #> Error: Tool call rejected. Joe denied the request.
+      ( ) [tool call] user_favorite_color(user = "Hadley")
+      o #> red
+    Output
+      Joe unknown Hadley red
+
+# tool calls can be rejected via the tool function
+
+    Code
+      . <- chat$chat("What are Joe and Hadley's favorite colors?",
+        "Write 'Joe ____ Hadley ____'. Use 'unknown' if you don't know.", echo = "output")
+    Message
+      ( ) [tool call] user_favorite_color(user = "Joe")
+      # #> Error: Tool call rejected. The user has chosen to disallow the tool call.
+      ( ) [tool call] user_favorite_color(user = "Hadley")
+      o #> red
+    Output
+      Joe unknown Hadley red
+
+# old extract methods are deprecated
+
+    Code
+      chat_null$extract_data()
+    Condition
+      Warning:
+      `Chat$extract_data()` was deprecated in ellmer 0.2.0.
+      i Please use `Chat$chat_structured()` instead.
+    Code
+      chat_null$extract_data_async()
+    Condition
+      Warning:
+      `Chat$extract_data_async()` was deprecated in ellmer 0.2.0.
+      i Please use `Chat$chat_structured_async()` instead.
 

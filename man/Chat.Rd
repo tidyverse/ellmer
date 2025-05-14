@@ -37,10 +37,8 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
 \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
 \item \href{#method-Chat-chat}{\code{Chat$chat()}}
-\item \href{#method-Chat-chat_parallel}{\code{Chat$chat_parallel()}}
-\item \href{#method-Chat-extract_data}{\code{Chat$extract_data()}}
-\item \href{#method-Chat-extract_data_parallel}{\code{Chat$extract_data_parallel()}}
-\item \href{#method-Chat-extract_data_async}{\code{Chat$extract_data_async()}}
+\item \href{#method-Chat-chat_structured}{\code{Chat$chat_structured()}}
+\item \href{#method-Chat-chat_structured_async}{\code{Chat$chat_structured_async()}}
 \item \href{#method-Chat-chat_async}{\code{Chat$chat_async()}}
 \item \href{#method-Chat-stream}{\code{Chat$stream()}}
 \item \href{#method-Chat-stream_async}{\code{Chat$stream_async()}}
@@ -48,6 +46,10 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-get_provider}{\code{Chat$get_provider()}}
 \item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
 \item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
+\item \href{#method-Chat-on_tool_request}{\code{Chat$on_tool_request()}}
+\item \href{#method-Chat-on_tool_result}{\code{Chat$on_tool_result()}}
+\item \href{#method-Chat-extract_data}{\code{Chat$extract_data()}}
+\item \href{#method-Chat-extract_data_async}{\code{Chat$extract_data_async()}}
 \item \href{#method-Chat-clone}{\code{Chat$clone()}}
 }
 }
@@ -256,36 +258,12 @@ will be used.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-chat_parallel"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-chat_parallel}{}}}
-\subsection{Method \code{chat_parallel()}}{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Submit multiple prompts in parallel. Returns a list of \link{Chat} objects,
-one for each prompt.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_parallel(prompts, max_active = 10, rpm = 500)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{prompts}}{A list of user prompts.}
-
-\item{\code{max_active}}{The maximum number of simultaenous requests to send.}
-
-\item{\code{rpm}}{Maximum number of requests per minute.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-extract_data"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-extract_data}{}}}
-\subsection{Method \code{extract_data()}}{
+\if{html}{\out{<a id="method-Chat-chat_structured"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-chat_structured}{}}}
+\subsection{Method \code{chat_structured()}}{
 Extract structured data
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data(..., type, echo = "none", convert = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_structured(..., type, echo = "none", convert = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -309,51 +287,13 @@ data frames and arrays of strings into a character vector.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-extract_data_parallel"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-extract_data_parallel}{}}}
-\subsection{Method \code{extract_data_parallel()}}{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Submit multiple prompts in parallel.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_parallel(
-  prompts,
-  type,
-  convert = TRUE,
-  max_active = 10,
-  rpm = 500
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{prompts}}{A vector created by \code{\link[=interpolate]{interpolate()}} or a list
-of character vectors.}
-
-\item{\code{type}}{A type specification for the extracted data. Should be
-created with a \code{\link[=type_boolean]{type_()}} function.}
-
-\item{\code{convert}}{If \code{TRUE}, automatically convert from JSON lists to R
-data types using the schema. This typically works best when \code{type} is
-\code{type_object()} as this will give you a data frame with one column for
-each property. If \code{FALSE}, returns a list.}
-
-\item{\code{max_active}}{The maximum number of simultaenous requests to send.}
-
-\item{\code{rpm}}{Maximum number of requests per minute.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-extract_data_async"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-extract_data_async}{}}}
-\subsection{Method \code{extract_data_async()}}{
+\if{html}{\out{<a id="method-Chat-chat_structured_async"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-chat_structured_async}{}}}
+\subsection{Method \code{chat_structured_async()}}{
 Extract structured data, asynchronously. Returns a promise
 that resolves to an object matching the type specification.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_async(..., type, echo = "none")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_structured_async(..., type, echo = "none")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -380,13 +320,19 @@ Submit input to the chatbot, and receive a promise that
 resolves with the response all at once. Returns a promise that resolves
 to a string (probably Markdown).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_async(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_async(..., tool_mode = c("concurrent", "sequential"))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{...}}{The input to send to the chatbot. Can be strings or images.}
+
+\item{\code{tool_mode}}{Whether tools should be invoked one-at-a-time
+(\code{"sequential"}) or concurrently (\code{"concurrent"}). Sequential mode is
+best for interactive applications, especially when a tool may involve
+an interactive user interface. Concurrent mode is the default and is
+best suited for automated scripts or non-interactive applications.}
 }
 \if{html}{\out{</div>}}
 }
@@ -400,13 +346,17 @@ Returns A \href{https://coro.r-lib.org/articles/generator.html#iterating}{coro g
 that yields strings. While iterating, the generator will block while
 waiting for more content from the chatbot.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$stream(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$stream(..., stream = c("text", "content"))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{...}}{The input to send to the chatbot. Can be strings or images.}
+
+\item{\code{stream}}{Whether the stream should yield only \code{"text"} or ellmer's
+rich content types. When \code{stream = "content"}, \code{stream()} yields
+\link{Content} objects.}
 }
 \if{html}{\out{</div>}}
 }
@@ -419,13 +369,27 @@ Submit input to the chatbot, returning asynchronously
 streaming results. Returns a \href{https://coro.r-lib.org/reference/async_generator.html}{coro async generator} that
 yields string promises.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$stream_async(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$stream_async(
+  ...,
+  tool_mode = c("concurrent", "sequential"),
+  stream = c("text", "content")
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{...}}{The input to send to the chatbot. Can be strings or images.}
+
+\item{\code{tool_mode}}{Whether tools should be invoked one-at-a-time
+(\code{"sequential"}) or concurrently (\code{"concurrent"}). Sequential mode is
+best for interactive applications, especially when a tool may involve
+an interactive user interface. Concurrent mode is the default and is
+best suited for automated scripts or non-interactive applications.}
+
+\item{\code{stream}}{Whether the stream should yield only \code{"text"} or ellmer's
+rich content types. When \code{stream = "content"}, \code{stream()} yields
+\link{Content} objects.}
 }
 \if{html}{\out{</div>}}
 }
@@ -489,6 +453,83 @@ should use \code{register_tool()}.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{tools}}{A list of tool definitions created with \code{\link[=tool]{tool()}}.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-on_tool_request"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-on_tool_request}{}}}
+\subsection{Method \code{on_tool_request()}}{
+Register a callback for a tool request event.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$on_tool_request(callback)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{callback}}{A function to be called when a tool request event occurs,
+which must have \code{request} as its only argument.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A function that can be called to remove the callback.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-on_tool_result"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-on_tool_result}{}}}
+\subsection{Method \code{on_tool_result()}}{
+Register a callback for a tool result event.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$on_tool_result(callback)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{callback}}{A function to be called when a tool result event occurs,
+which must have \code{result} as its only argument.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A function that can be called to remove the callback.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-extract_data"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-extract_data}{}}}
+\subsection{Method \code{extract_data()}}{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+Deprecated in favour of \verb{$chat_structured()}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{See \verb{$chat_structured()}}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-extract_data_async"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-extract_data_async}{}}}
+\subsection{Method \code{extract_data_async()}}{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_async(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{See \verb{$chat_structured_async()}}
 }
 \if{html}{\out{</div>}}
 }

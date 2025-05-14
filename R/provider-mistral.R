@@ -10,6 +10,7 @@
 #'
 #' @export
 #' @family chatbots
+#' @param model `r param_model("mistral-large-latest")`
 #' @param api_key `r api_key_param("MISTRAL_API_KEY")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return

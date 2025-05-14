@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-ollama.R
 \name{chat_ollama}
 \alias{chat_ollama}
+\alias{models_ollama}
 \title{Chat with a local Ollama model}
 \usage{
 chat_ollama(
@@ -12,15 +13,16 @@ chat_ollama(
   api_args = list(),
   echo = NULL
 )
+
+models_ollama(base_url = "http://localhost:11434")
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
-\item{model}{The model to use for the chat. The default, \code{NULL}, will pick
-a reasonable default, and tell you about. We strongly recommend explicitly
-choosing a model for all but the most casual use.}
+\item{model}{The model to use for the chat.
+Use \code{models_ollama()} to see all options.}
 
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output
 more reproducible.}

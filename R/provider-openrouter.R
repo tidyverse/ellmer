@@ -12,6 +12,7 @@ NULL
 #' @export
 #' @family chatbots
 #' @param api_key `r api_key_param("OPENROUTER_API_KEY")`
+#' @param model `r param_model("gpt-4o")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples

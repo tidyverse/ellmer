@@ -15,6 +15,7 @@
 #'   as described in <https://usethis.r-lib.org/articles/git-credentials.html>.
 #'   For headless environments, this will also look in the `GITHUB_PAT`
 #'   env var.
+#' @param model `r param_model("gpt-4o")`
 #' @export
 #' @inheritParams chat_openai
 #' @inherit chat_openai return

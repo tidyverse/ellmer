@@ -23,6 +23,8 @@ conversation history into markdown text.}
 A string of text, markdown or HTML.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 These generic functions can be use to convert \link{Turn} contents or \link{Content}
 objects into textual representations.
 \itemize{
@@ -35,6 +37,9 @@ and other content types.
 HTML with \code{\link[commonmark:commonmark]{commonmark::markdown_html()}}, plus HTML representations of
 images and other content types.
 }
+
+These content types will continue to grow and change as ellmer evolves to
+support more providers and as providers add more content types.
 }
 \examples{
 turns <- list(

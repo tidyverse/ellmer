@@ -3,13 +3,49 @@
 * New `chat_portkey()` and `models_portkey()` for models hosted at 
   <https://portkey.ai> (#363, @maciekbanas).
 
-* New `chat_huggingface()` for models hosted at <https://huggingface.co> 
+* `$stream()` and `$stream_async()` gain support for streaming the additional
+  content types generated during a tool call with a new `stream` argument. When
+  `stream = "content"` is set, the streaming response yields `Content` objects,
+  including the `ContentToolRequest` and `ContentToolResult` objects used to
+  request and return tool calls (#400, @gadenbuie).
+
+* New `Chat$on_tool_request()` and `$on_tool_result()` methods allow you to
+  register callbacks to run on a tool request or tool result. These callbacks
+   can be used to implement custom logging or other actions when tools are
+  called, without modifying the tool function (#493, @gadenbuie).
+
+* New `tool_reject()` function can be used to reject a tool request with an
+  explanation for the rejection reason. `tool_reject()` can be called within a
+  tool function or in a `Chat$on_tool_request()` callback. In the latter case,
+  rejecting a tool call will ensure that the tool function is not evaluated
+  (#490 #493, @gadenbuie).
+
+* `$chat_async()` and `$stream_async()` gain a `tool_mode` argument to decide
+  between `"sequential"` and `"concurrent"` tool calling. This is an advanced
+  feature that primarily affects asynchronous tools (#488, @gadenbuie).
+
+* `models_google_gemini()`, `models_anthropic()`, `models_openai()`,
+  `models_aws_bedrock()`, `models_ollama()` and `models_vllm()`, list available
+  models for Google Gemini, Anthropic, OpenAI, AWS Bedrock, Ollama, and VLLM
+  respectively. Different providers return different metadata so they are only
+  guaranteed to return a data frame with at least an `id` column (#296).
+  Where possible (currently for Gemini, Anthropic, and OpenAI) we include
+  known token prices (per million tokens).
+
+* Added a Shiny app example in `vignette("streaming-async")` showcasing
+  asynchronous streaming with `{ellmer}` and `{shinychat}` (#131, @gadenbuie,
+  @adisarid).
+
+* New `chat_huggingface()` for models hosted at <https://huggingface.co>
   (#359, @s-spavound).
 
 * Bumped default time out up to 5 minutes (#451, #321).
 
-* `$extract_data(convert = TRUE)` now converts `NULL` to `NA` for 
-  `type_boolean()`, `type_integer()`, `type_number()`, and `type_string()` 
+* BREAKING CHANGE: Tools are now invoked with their inputs coerced to standard
+  R data structures (#461).
+
+* `$extract_data(convert = TRUE)` now converts `NULL` to `NA` for
+  `type_boolean()`, `type_integer()`, `type_number()`, and `type_string()`
   (#445).
 
 * `interpolate()` and friends are now vectorised so you can generate multiple
@@ -23,10 +59,10 @@
 
 * New `chat_mistral()` for models hosted at <https://mistral.ai> (#319).
 
-* `chat_gemini()` can now handle responses that include citation metadata 
+* `chat_gemini()` can now handle responses that include citation metadata
   (#358).
 
-* `chat_` functions no longer take a turns object, instead use `set_turns()` 
+* `chat_` functions no longer take a turns object, instead use `set_turns()`
   (#427).
 
 * `echo = "output"` replaces the now-deprecated `echo = "text"` option in
@@ -47,18 +83,19 @@
   definition when a request is matched to a tool by ellmer (#423, @gadenbuie).
 
 * ellmer now tracks the cost of input and output tokens. The cost is displayed
-  when you print a `Chat` object, in `tokens_usage()`, and with 
-  `Chat$get_cost()`. This is our best effort at computing the cost, but you 
-  should treat it as an estimate rather than the exact price. Unfortunately LLM APIs
-  currently make it very hard to figure out exactly how much your queries are
-  costing (#203).
+  when you print a `Chat` object, in `tokens_usage()`, and with
+  `Chat$get_cost()`. You can also request costs in `$parallel_extract_data()`.
+
+  We do our best to accurately compute the cost, but you should treat it as an
+  estimate rather than the exact price. Unfortunately LLM APIs currently make it
+  very hard to figure out exactly how much your queries cost (#203).
 
 * `ContentToolResult` objects now include the error condition in the `error`
   property when a tool call fails (#421, @gadenbuie).
 
 * Several chat functions were renamed to better align with the companies
   providing the API (#382, @gadenbuie):
-  
+
   * `chat_azure_openai()` replaces `chat_azure()`
   * `chat_aws_bedrock()` replaces `chat_bedrock()`
   * `chat_anthropic()` replaces `chat_claude()`
@@ -77,29 +114,29 @@
 * New `interpolate_package()` to make it easier to interpolate from prompts
   stored in the `inst/prompts` inside a package (#164).
 
-* `chat_azure()`, `chat_claude()`, `chat_openai()`, and `chat_gemini()` now have 
-  a `params`  argument that allows you to specify common model paramaters (like 
-  `seed` and `temperature`). Support for other models will grow as you request 
+* `chat_azure()`, `chat_claude()`, `chat_openai()`, and `chat_gemini()` now have
+  a `params`  argument that allows you to specify common model paramaters (like
+  `seed` and `temperature`). Support for other models will grow as you request
   it (#280).
 
-* `chat_claude(max_tokens =)` is now deprecated in favour of 
+* `chat_claude(max_tokens =)` is now deprecated in favour of
   `chat_claude(params = )` (#280).
 
-* `chat_openai(seed =)` is now deprecated in favour of 
+* `chat_openai(seed =)` is now deprecated in favour of
   `chat_openai(params = )` (#280).
 
 * `Chat$get_provider()` lets you access the underlying provider object, if needed (#202).
 
 * `$extract_data()` now works better for arrays when `required = FALSE` (#384).
 
-* `chat_claude()` and `chat_bedrock()` no longer choke after receiving an 
+* `chat_claude()` and `chat_bedrock()` no longer choke after receiving an
   output that consists only of whitespace (#376).
 
 * `live_browser()` now initializes `shinychat::chat_ui()` with the messages from
   the chat turns, rather than replaying the turns server-side (#381).
 
-* `Chat$tokens()` is now called `Chat$get_tokens()` and returns a data frame of 
-  tokens, correctly aligned to the individual turn. The print method now uses 
+* `Chat$tokens()` is now called `Chat$get_tokens()` and returns a data frame of
+  tokens, correctly aligned to the individual turn. The print method now uses
   this to show how many input/output tokens each turn used (#354).
 
 * All requests now set a custom User-Agent that identifies that the requests
@@ -119,18 +156,10 @@
 
 * `create_tool_def()` can now use any Chat instance (#118, @pedrobtz).
 
-* New experimental `$chat_parallel()` and `$extract_data_parallel()` make it
+* New experimental `parallel_chat()` and `parallel_chat_structured()` make it
   easier to perform multiple actions in parallel (#143). This is experimental
   because I'm not 100% sure that the shape of the user interface is correct,
   particularly as it pertains to handling errors.
-
-  For Claude, note that the number of active connections is limited primarily
-  by the output tokens per limit (OTPM) which is estimated from the `max_tokens` 
-  parameter, which defaults to 4096. That means if you're limited to 16,000
-  OPTM, you should use at most 16,000 / 4096 = ~4 active connections (or
-  decrease `max_tokens`).
-
-  Parallel calls with OpenAI and Gemini are much simpler in my experience.
 
 * `google_upload()` lets you upload files to Google Gemini or Vertex AI (#310).
 

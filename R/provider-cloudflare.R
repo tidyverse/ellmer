@@ -14,6 +14,7 @@ NULL
 #' * Images don't appear to work.
 #'
 #' @family chatbots
+#' @param model `r param_model("meta-llama/Llama-3.3-70b-instruct-fp8-fast")`
 #' @param api_key `r api_key_param("CLOUDFLARE_API_KEY")`
 #' @param account The Cloudflare account ID. Taken from the
 #'   `CLOUDFLARE_ACCOUNT_ID` env var, if defined.

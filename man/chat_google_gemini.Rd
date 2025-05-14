@@ -3,6 +3,8 @@
 \name{chat_google_gemini}
 \alias{chat_google_gemini}
 \alias{chat_google_vertex}
+\alias{models_google_gemini}
+\alias{models_google_vertex}
 \title{Chat with a Google Gemini or Vertex AI model}
 \usage{
 chat_google_gemini(
@@ -24,6 +26,13 @@ chat_google_vertex(
   api_args = list(),
   echo = NULL
 )
+
+models_google_gemini(
+  base_url = "https://generativelanguage.googleapis.com/v1beta/",
+  api_key = NULL
+)
+
+models_google_vertex(location, project_id)
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
@@ -36,9 +45,9 @@ You generally should not supply this directly, but instead set the \code{GOOGLE_
 The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
-\item{model}{The model to use for the chat. The default, \code{NULL}, will pick
-a reasonable default, and tell you about. We strongly recommend explicitly
-choosing a model for all but the most casual use.}
+\item{model}{The model to use for the chat (defaults to "gemini-2.0-flash").
+We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
+Use \code{models_google_gemini()} to see all options.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 

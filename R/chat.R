@@ -33,6 +33,8 @@ Chat <- R6::R6Class(
     initialize = function(provider, system_prompt = NULL, echo = "none") {
       private$provider <- provider
       private$echo <- echo
+      private$callback_on_tool_request <- CallbackManager$new(args = "request")
+      private$callback_on_tool_result <- CallbackManager$new(args = "result")
       self$set_system_prompt(system_prompt)
     },
 
@@ -172,12 +174,7 @@ Chat <- R6::R6Class(
         tokens <- tokens[nrow(tokens), , drop = FALSE]
       }
 
-      get_token_cost(
-        private$provider@name,
-        standardise_model(private$provider, private$provider@model),
-        input = sum(tokens[, 1]),
-        output = sum(tokens[, 2])
-      )
+      private$compute_cost(input = sum(tokens[, 1]), output = sum(tokens[, 2]))
     },
 
     #' @description The last turn returned by the assistant.
@@ -220,35 +217,6 @@ Chat <- R6::R6Class(
       if (echo == "none") text else invisible(text)
     },
 
-    #' @description `r lifecycle::badge("experimental")`
-    #'
-    #'   Submit multiple prompts in parallel. Returns a list of [Chat] objects,
-    #'   one for each prompt.
-    #' @param prompts A list of user prompts.
-    #' @param max_active The maximum number of simultaenous requests to send.
-    #' @param rpm Maximum number of requests per minute.
-    chat_parallel = function(prompts, max_active = 10, rpm = 500) {
-      turns <- as_user_turns(prompts)
-
-      reqs <- parallel_requests(
-        provider = private$provider,
-        existing_turns = private$.turns,
-        tools = private$tools,
-        new_turns = turns,
-        rpm = rpm
-      )
-      resps <- req_perform_parallel(reqs, max_active = max_active)
-      ok <- !map_lgl(resps, is.null)
-      json <- map(resps[ok], resp_body_json)
-
-      map2(json, turns[ok], function(json, user_turn) {
-        chat <- self$clone()
-        turn <- value_turn(private$provider, json)
-        chat$add_turn(user_turn, turn)
-        chat
-      })
-    },
-
     #' @description Extract structured data
     #' @param ... The input to send to the chatbot. Will typically include
     #'   the phrase "extract structured data".
@@ -260,15 +228,13 @@ Chat <- R6::R6Class(
     #' @param convert Automatically convert from JSON lists to R data types
     #'   using the schema. For example, this will turn arrays of objects into
     #'  data frames and arrays of strings into a character vector.
-    extract_data = function(..., type, echo = "none", convert = TRUE) {
+    chat_structured = function(..., type, echo = "none", convert = TRUE) {
       turn <- user_turn(...)
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
 
       needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
-      if (needs_wrapper) {
-        type <- type_object(wrapper = type)
-      }
+      type <- wrap_type_if_needed(type, needs_wrapper)
 
       coro::collect(private$submit_turns(
         turn,
@@ -281,60 +247,6 @@ Chat <- R6::R6Class(
       extract_data(turn, type, convert = convert, needs_wrapper = needs_wrapper)
     },
 
-    #' @description `r lifecycle::badge("experimental")`
-    #'
-    #'   Submit multiple prompts in parallel.
-    #' @param prompts A vector created by [interpolate()] or a list
-    #'   of character vectors.
-    #' @param type A type specification for the extracted data. Should be
-    #'   created with a [`type_()`][type_boolean] function.
-    #' @param convert If `TRUE`, automatically convert from JSON lists to R
-    #'   data types using the schema. This typically works best when `type` is
-    #'   `type_object()` as this will give you a data frame with one column for
-    #'   each property. If `FALSE`, returns a list.
-    #' @param max_active The maximum number of simultaenous requests to send.
-    #' @param rpm Maximum number of requests per minute.
-    extract_data_parallel = function(
-      prompts,
-      type,
-      convert = TRUE,
-      max_active = 10,
-      rpm = 500
-    ) {
-      turns <- as_user_turns(prompts)
-      check_bool(convert)
-
-      needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
-      if (needs_wrapper) {
-        w_type <- type_object(wrapper = type)
-      } else {
-        w_type <- type
-      }
-
-      reqs <- parallel_requests(
-        provider = private$provider,
-        existing_turns = private$.turns,
-        new_turns = turns,
-        tools = private$tools,
-        type = w_type,
-        rpm = rpm
-      )
-      resps <- req_perform_parallel(reqs, max_active = max_active)
-      ok <- !map_lgl(resps, is.null)
-      json <- map(resps[ok], resp_body_json)
-
-      rows <- map(json, function(json) {
-        turn <- value_turn(private$provider, json, has_type = TRUE)
-        extract_data(turn, type, convert = FALSE, needs_wrapper = needs_wrapper)
-      })
-
-      if (convert) {
-        convert_from_type(rows, type_array(items = type))
-      } else {
-        rows
-      }
-    },
-
     #' @description Extract structured data, asynchronously. Returns a promise
     #'   that resolves to an object matching the type specification.
     #' @param ... The input to send to the chatbot. Will typically include
@@ -344,7 +256,7 @@ Chat <- R6::R6Class(
     #' @param echo Whether to emit the response to stdout as it is received.
     #'   Set to "text" to stream JSON data as it's generated (not supported by
     #'  all providers).
-    extract_data_async = function(..., type, echo = "none") {
+    chat_structured_async = function(..., type, echo = "none") {
       turn <- user_turn(...)
       echo <- check_echo(echo %||% private$echo)
 
@@ -371,13 +283,24 @@ Chat <- R6::R6Class(
     #'   resolves with the response all at once. Returns a promise that resolves
     #'   to a string (probably Markdown).
     #' @param ... The input to send to the chatbot. Can be strings or images.
-    chat_async = function(...) {
+    #' @param tool_mode Whether tools should be invoked one-at-a-time
+    #'   (`"sequential"`) or concurrently (`"concurrent"`). Sequential mode is
+    #'   best for interactive applications, especially when a tool may involve
+    #'   an interactive user interface. Concurrent mode is the default and is
+    #'   best suited for automated scripts or non-interactive applications.
+    chat_async = function(..., tool_mode = c("concurrent", "sequential")) {
       turn <- user_turn(...)
+      tool_mode <- arg_match(tool_mode)
 
       # Returns a single turn (the final response from the assistant), even if
       # multiple rounds of back and forth happened.
       done <- coro::async_collect(
-        private$chat_impl_async(turn, stream = FALSE, echo = "none")
+        private$chat_impl_async(
+          turn,
+          stream = FALSE,
+          echo = "none",
+          tool_mode = tool_mode
+        )
       )
       promises::then(done, function(dummy) {
         self$last_turn()@text
@@ -390,9 +313,18 @@ Chat <- R6::R6Class(
     #'   that yields strings. While iterating, the generator will block while
     #'   waiting for more content from the chatbot.
     #' @param ... The input to send to the chatbot. Can be strings or images.
-    stream = function(...) {
+    #' @param stream Whether the stream should yield only `"text"` or ellmer's
+    #'   rich content types. When `stream = "content"`, `stream()` yields
+    #'   [Content] objects.
+    stream = function(..., stream = c("text", "content")) {
       turn <- user_turn(...)
-      private$chat_impl(turn, stream = TRUE, echo = "none")
+      stream <- arg_match(stream)
+      private$chat_impl(
+        turn,
+        stream = TRUE,
+        echo = "none",
+        yield_as_content = stream == "content"
+      )
     },
 
     #' @description Submit input to the chatbot, returning asynchronously
@@ -400,9 +332,29 @@ Chat <- R6::R6Class(
     #'   generator](https://coro.r-lib.org/reference/async_generator.html) that
     #'   yields string promises.
     #' @param ... The input to send to the chatbot. Can be strings or images.
-    stream_async = function(...) {
+    #' @param tool_mode Whether tools should be invoked one-at-a-time
+    #'   (`"sequential"`) or concurrently (`"concurrent"`). Sequential mode is
+    #'   best for interactive applications, especially when a tool may involve
+    #'   an interactive user interface. Concurrent mode is the default and is
+    #'   best suited for automated scripts or non-interactive applications.
+    #' @param stream Whether the stream should yield only `"text"` or ellmer's
+    #'   rich content types. When `stream = "content"`, `stream()` yields
+    #'   [Content] objects.
+    stream_async = function(
+      ...,
+      tool_mode = c("concurrent", "sequential"),
+      stream = c("text", "content")
+    ) {
       turn <- user_turn(...)
-      private$chat_impl_async(turn, stream = TRUE, echo = "none")
+      tool_mode <- arg_match(tool_mode)
+      stream <- arg_match(stream)
+      private$chat_impl_async(
+        turn,
+        stream = TRUE,
+        echo = "none",
+        tool_mode = tool_mode,
+        yield_as_content = stream == "content"
+      )
     },
 
     #' @description Register a tool (an R function) that the chatbot can use.
@@ -454,6 +406,50 @@ Chat <- R6::R6Class(
       }
 
       invisible(self)
+    },
+
+    #' @description Register a callback for a tool request event.
+    #'
+    #' @param callback A function to be called when a tool request event occurs,
+    #'   which must have `request` as its only argument.
+    #'
+    #' @return A function that can be called to remove the callback.
+    on_tool_request = function(callback) {
+      private$callback_on_tool_request$add(callback)
+    },
+
+    #' @description Register a callback for a tool result event.
+    #'
+    #' @param callback A function to be called when a tool result event occurs,
+    #'   which must have `result` as its only argument.
+    #'
+    #' @return A function that can be called to remove the callback.
+    on_tool_result = function(callback) {
+      private$callback_on_tool_result$add(callback)
+    },
+
+    #' @description `r lifecycle::badge("deprecated")`
+    #' Deprecated in favour of `$chat_structured()`.
+    #' @param ... See `$chat_structured()`
+    extract_data = function(...) {
+      lifecycle::deprecate_warn(
+        "0.2.0",
+        "Chat$extract_data()",
+        "Chat$chat_structured()"
+      )
+      self$chat_structured(...)
+    },
+
+    #' @description `r lifecycle::badge("deprecated")`
+    # '  Deprecated in favour of `$chat_structured_async()`.
+    #' @param ... See `$chat_structured_async()`
+    extract_data_async = function(...) {
+      lifecycle::deprecate_warn(
+        "0.2.0",
+        "Chat$extract_data_async()",
+        "Chat$chat_structured_async()"
+      )
+      self$chat_structured_async(...)
     }
   ),
   private = list(
@@ -462,6 +458,8 @@ Chat <- R6::R6Class(
     .turns = list(),
     echo = NULL,
     tools = list(),
+    callback_on_tool_request = NULL,
+    callback_on_tool_result = NULL,
 
     add_user_contents = function(contents) {
       stopifnot(is.list(contents))
@@ -489,18 +487,48 @@ Chat <- R6::R6Class(
       private,
       user_turn,
       stream,
-      echo
+      echo,
+      yield_as_content = FALSE
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
 
       while (!is.null(user_turn)) {
-        # fmt: skip
-        for (chunk in private$submit_turns(user_turn, stream = stream, echo = echo)) {
+        assistant_chunks <- private$submit_turns(
+          user_turn,
+          stream = stream,
+          echo = echo,
+          yield_as_content = yield_as_content
+        )
+        for (chunk in assistant_chunks) {
           yield(chunk)
         }
 
-        user_turn <- private$invoke_tools(echo = echo)
+        assistant_turn <- self$last_turn()
+        user_turn <- NULL
+
+        if (turn_has_tool_request(assistant_turn)) {
+          tool_calls <- invoke_tools(
+            assistant_turn,
+            echo = echo,
+            on_tool_request = private$callback_on_tool_request$invoke,
+            on_tool_result = private$callback_on_tool_result$invoke,
+            yield_request = yield_as_content
+          )
+
+          tool_results <- list()
+
+          for (tool_step in tool_calls) {
+            if (yield_as_content) {
+              yield(tool_step)
+            }
+            if (is_tool_result(tool_step)) {
+              tool_results <- c(tool_results, list(tool_step))
+            }
+          }
+
+          user_turn <- tool_results_as_turn(tool_results)
+        }
 
         if (echo == "all") {
           cat(format(user_turn))
@@ -517,18 +545,65 @@ Chat <- R6::R6Class(
       private,
       user_turn,
       stream,
-      echo
+      echo,
+      tool_mode = "concurrent",
+      yield_as_content = FALSE
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
 
       while (!is.null(user_turn)) {
-        # fmt: skip
-        for (chunk in await_each(private$submit_turns_async(user_turn, stream = stream, echo = echo))) {
+        assistant_chunks <- private$submit_turns_async(
+          user_turn,
+          stream = stream,
+          echo = echo,
+          yield_as_content = yield_as_content
+        )
+        for (chunk in await_each(assistant_chunks)) {
           yield(chunk)
         }
 
-        user_turn <- await(private$invoke_tools_async(echo = echo))
+        assistant_turn <- self$last_turn()
+        user_turn <- NULL
+
+        if (turn_has_tool_request(assistant_turn)) {
+          tool_calls <- invoke_tools_async(
+            assistant_turn,
+            echo = echo,
+            on_tool_request = private$callback_on_tool_request$invoke_async,
+            on_tool_result = private$callback_on_tool_result$invoke_async,
+            yield_request = yield_as_content
+          )
+          if (tool_mode == "sequential") {
+            tool_results <- list()
+            for (tool_step in coro::await_each(tool_calls)) {
+              if (yield_as_content) {
+                yield(tool_step)
+              }
+              if (is_tool_result(tool_step)) {
+                tool_results <- c(tool_results, list(tool_step))
+              }
+            }
+          } else {
+            tool_results <- coro::collect(tool_calls)
+            if (yield_as_content) {
+              # Filter out and yield tool requests before awaiting tool results
+              is_request <- map_lgl(tool_results, is_tool_request)
+              for (tool_step in tool_results[is_request]) {
+                yield(tool_step)
+              }
+              tool_results <- tool_results[!is_request]
+            }
+            tool_results <- await(promises::promise_all(.list = tool_results))
+            if (yield_as_content) {
+              for (tool_result in tool_results) {
+                yield(tool_result)
+              }
+            }
+          }
+
+          user_turn <- tool_results_as_turn(tool_results)
+        }
 
         if (echo == "all") {
           cat(format(user_turn))
@@ -546,7 +621,8 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      type = NULL
+      type = NULL,
+      yield_as_content = FALSE
     ) {
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
@@ -568,26 +644,34 @@ Chat <- R6::R6Class(
           text <- stream_text(private$provider, chunk)
           if (!is.null(text)) {
             emit(text)
-            yield(text)
+            if (yield_as_content) {
+              yield(ContentText(text))
+            } else {
+              yield(text)
+            }
             any_text <- TRUE
           }
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
-        turn <- private$match_tools(turn)
+        turn <- match_tools(turn, private$tools)
       } else {
         turn <- value_turn(
           private$provider,
           response,
           has_type = !is.null(type)
         )
-        turn <- private$match_tools(turn)
+        turn <- match_tools(turn, private$tools)
 
         text <- turn@text
         if (!is.null(text)) {
           emit(text)
-          yield(text)
+          if (yield_as_content) {
+            yield(ContentText(text))
+          } else {
+            yield(text)
+          }
           any_text <- TRUE
         }
       }
@@ -595,7 +679,11 @@ Chat <- R6::R6Class(
       # Ensure turns always end in a newline
       if (any_text) {
         emit("\n")
-        yield("\n")
+        if (yield_as_content) {
+          yield(ContentText("\n"))
+        } else {
+          yield("\n")
+        }
       }
 
       if (echo == "all") {
@@ -618,7 +706,8 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      type = NULL
+      type = NULL,
+      yield_as_content = FALSE
     ) {
       response <- chat_perform(
         provider = private$provider,
@@ -636,7 +725,11 @@ Chat <- R6::R6Class(
           text <- stream_text(private$provider, chunk)
           if (!is.null(text)) {
             emit(text)
-            yield(text)
+            if (yield_as_content) {
+              yield(ContentText(text))
+            } else {
+              yield(text)
+            }
             any_text <- TRUE
           }
 
@@ -650,16 +743,24 @@ Chat <- R6::R6Class(
         text <- turn@text
         if (!is.null(text)) {
           emit(text)
-          yield(text)
+          if (yield_as_content) {
+            yield(ContentText(text))
+          } else {
+            yield(text)
+          }
           any_text <- TRUE
         }
       }
-      turn <- private$match_tools(turn)
+      turn <- match_tools(turn, private$tools)
 
       # Ensure turns always end in a newline
       if (any_text) {
         emit("\n")
-        yield("\n")
+        if (yield_as_content) {
+          yield(ContentText("\n"))
+        } else {
+          yield("\n")
+        }
       }
 
       if (echo == "all") {
@@ -673,38 +774,17 @@ Chat <- R6::R6Class(
       coro::exhausted()
     }),
 
-    match_tools = function(turn) {
-      if (is.null(turn)) return(NULL)
-
-      turn@contents <- map(turn@contents, function(content) {
-        if (!S7_inherits(content, ContentToolRequest)) {
-          return(content)
-        }
-        content@tool <- private$tools[[content@name]]
-        content
-      })
-
-      turn
-    },
-
-    invoke_tools = function(echo = "none") {
-      tool_results <- invoke_tools(self$last_turn(), echo = echo)
-      if (length(tool_results) == 0) {
-        return()
-      }
-      Turn("user", tool_results)
-    },
-
-    invoke_tools_async = async_method(function(self, private, echo = "none") {
-      tool_results <- await(invoke_tools_async(self$last_turn(), echo = echo))
-      if (length(tool_results) == 0) {
-        return()
-      }
-      Turn("user", tool_results)
-    }),
-
     has_system_prompt = function() {
       length(private$.turns) > 0 && private$.turns[[1]]@role == "system"
+    },
+
+    compute_cost = function(input, output) {
+      get_token_cost(
+        private$provider@name,
+        standardise_model(private$provider, private$provider@model),
+        input = input,
+        output = output
+      )
     }
   )
 )
@@ -741,20 +821,10 @@ print.Chat <- function(x, ...) {
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
 
-    color <- switch(
-      turn@role,
-      user = cli::col_blue,
-      assistant = cli::col_green,
-      system = cli::col_br_white,
-      identity
-    )
-
     cli::cat_rule(cli::format_inline(
-      "{color(turn@role)} [{tokens$tokens[[i]]}]"
+      "{color_role(turn@role)} [{tokens$tokens[[i]]}]"
     ))
-    for (content in turn@contents) {
-      cat_line(format(content))
-    }
+    cat(format(turns[[i]]))
   }
 
   invisible(x)
@@ -779,24 +849,4 @@ method(contents_markdown, new_S3_class("Chat")) <- function(
   }
 
   paste(res, collapse = "\n\n")
-}
-
-extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
-  is_json <- map_lgl(turn@contents, S7_inherits, ContentJson)
-  n <- sum(is_json)
-  if (n != 1) {
-    cli::cli_abort("Data extraction failed: {n} data results recieved.")
-  }
-
-  json <- turn@contents[[which(is_json)]]
-  out <- json@value
-
-  if (needs_wrapper) {
-    out <- out$wrapper
-    type <- type@properties[[1]]
-  }
-  if (convert) {
-    out <- convert_from_type(out, type)
-  }
-  out
 }
