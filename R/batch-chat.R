@@ -21,7 +21,7 @@
 #' deal with errors. Fortunately they don't seem to be common, but if you
 #' have ideas, please let me know!
 #'
-#' @param inheritParams parallel_chat
+#' @inheritParams parallel_chat
 #' @param path Path to file (with `.json` extension) to store state.
 #' @param wait If `TRUE`, will wait for batch to complete. If `FALSE`,
 #'   it will check once and error if the job is not complete.

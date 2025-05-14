@@ -7,12 +7,15 @@
 batch_chat(chat, prompts, path, wait = TRUE)
 }
 \arguments{
+\item{chat}{A base chat object.}
+
+\item{prompts}{A vector created by \code{\link[=interpolate]{interpolate()}} or a list
+of character vectors.}
+
 \item{path}{Path to file (with \code{.json} extension) to store state.}
 
 \item{wait}{If \code{TRUE}, will wait for batch to complete. If \code{FALSE},
 it will check once and error if the job is not complete.}
-
-\item{inheritParams}{parallel_chat}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
