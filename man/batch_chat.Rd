@@ -10,7 +10,7 @@ batch_chat(chat, prompts, path, wait = TRUE)
 \item{path}{Path to file (with \code{.json} extension) to store state.}
 
 \item{wait}{If \code{TRUE}, will wait for batch to complete. If \code{FALSE},
-it will check once, and return \code{NULL} immediately.}
+it will check once and error if the job is not complete.}
 
 \item{inheritParams}{parallel_chat}
 }

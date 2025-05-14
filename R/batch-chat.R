@@ -16,15 +16,15 @@
 #' interrupt the waiting process, then later, call `batch_chat()` to resume
 #' the process. It's up to you to delete the file once you're done with
 #' it; ellmer will not delete it for you.
-#' 
-#' This API is marked as experimental, since I don't know how to helpfully 
+#'
+#' This API is marked as experimental, since I don't know how to helpfully
 #' deal with errors. Fortunately they don't seem to be common, but if you
 #' have ideas, please let me know!
 #'
 #' @param inheritParams parallel_chat
 #' @param path Path to file (with `.json` extension) to store state.
 #' @param wait If `TRUE`, will wait for batch to complete. If `FALSE`,
-#'   it will check once, and return `NULL` immediately.
+#'   it will check once and error if the job is not complete.
 #' @examples
 #' chat <- chat_openai()
 #'
