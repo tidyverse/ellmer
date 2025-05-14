@@ -1,5 +1,8 @@
 # ellmer (development version)
 
+* New `chat_portkey()` and `models_portkey()` for models hosted at 
+  <https://portkey.ai> (#363, @maciekbanas).
+
 * New `chat_huggingface()` for models hosted at <https://huggingface.co> 
   (#359, @s-spavound).
 
