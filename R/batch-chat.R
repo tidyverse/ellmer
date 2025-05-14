@@ -3,19 +3,19 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Some providers (i.e. OpenAI and anthropic) support a batched API where you
-#' can submit many requests at once, and you get the results back within 24
-#' hours. If you want to get results back more quickly, you may want to use
-#' [parallel_chat()] instead.
+#' `batch_chat()` is currently implemented for OpenAI and Anthropic, where it
+#' uses their batch API which allow you to submit multiple requests
+#' simultaenously. You get the results back within 24 hours in return for paying
+#' 50% less than usual (but note that ellmer doesn't include this discount in
+#' its pricing metadata). If you want to get results back more quickly, you
+#' may want to use [parallel_chat()] instead.
 #'
-#' Batched requests are cheaper (usually 50% off), but ellmer does not yet
-#' reflect this discount in its pricing.
-#'
-#' Since batched requests can take up to 24 hours to complete, `batch_chat()`
-#' is designed to be resumable. You can either set `wait = FALSE` or simply
+#' Since batched requests can take a long time to complete, `batch_chat()`
+#' requires a file path that is used to store information about the batch so
+#' you never lose any work. You can either set `wait = FALSE` or simply
 #' interrupt the waiting process, then later, call `batch_chat()` to resume
-#' the process. It's up to you to delete the file once you're done with
-#' it; ellmer will not delete it for you.
+#' where you left off. Once you're done with the chat results, delete the
+#' file you created to avoid re-using previous results.
 #'
 #' This API is marked as experimental, since I don't know how to helpfully
 #' deal with errors. Fortunately they don't seem to be common, but if you
@@ -25,8 +25,8 @@
 #' @param path Path to file (with `.json` extension) to store state.
 #' @param wait If `TRUE`, will wait for batch to complete. If `FALSE`,
 #'   it will check once and error if the job is not complete.
-#' @examples
-#' chat <- chat_openai()
+#' @examplesIf has_credentials("claude")
+#' chat <- chat_anthropic()
 #'
 #' # Chat ----------------------------------------------------------------------
 #' country <- c("Canada", "New Zealand", "Jamaica", "United States")
