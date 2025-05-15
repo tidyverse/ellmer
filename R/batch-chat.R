@@ -26,13 +26,15 @@
 #' @param wait If `TRUE`, will wait for batch to complete. If `FALSE`,
 #'   it will check once and error if the job is not complete.
 #' @examplesIf has_credentials("claude")
-#' chat <- chat_anthropic()
+#' chat <- chat_openai()
 #'
 #' # Chat ----------------------------------------------------------------------
 #' country <- c("Canada", "New Zealand", "Jamaica", "United States")
 #' prompts <- interpolate("What's the capital of {{country}}?")
+#' \dontrun{
 #' chats <- batch_chat(chat, prompts, path = "capitals.json")
 #' chats
+#' }
 batch_chat <- function(chat, prompts, path, wait = TRUE) {
   check_chat(chat)
   provider <- chat$get_provider()
@@ -97,7 +99,7 @@ batch_chat <- function(chat, prompts, path, wait = TRUE) {
   }
 
   if (state$stage == "retrieving") {
-    state$results <- batch_retrieve(provider, batch)
+    state$results <- batch_retrieve(provider, state$batch)
     state$stage <- "done"
     save_state()
   }

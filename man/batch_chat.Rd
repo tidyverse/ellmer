@@ -40,12 +40,14 @@ have ideas, please let me know!
 }
 \examples{
 \dontshow{if (has_credentials("claude")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-chat <- chat_anthropic()
+chat <- chat_openai()
 
 # Chat ----------------------------------------------------------------------
 country <- c("Canada", "New Zealand", "Jamaica", "United States")
 prompts <- interpolate("What's the capital of {{country}}?")
+\dontrun{
 chats <- batch_chat(chat, prompts, path = "capitals.json")
 chats
+}
 \dontshow{\}) # examplesIf}
 }
