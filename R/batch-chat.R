@@ -159,6 +159,8 @@ BatchJob <- R6::R6Class(
         self$batch <- state$batch
         self$results <- state$results
         self$started_at <- .POSIXct(state$started_at)
+
+        self$check_hash(state$hash, call = call)
       } else {
         self$stage <- "submitting"
         self$batch <- NULL
@@ -169,10 +171,12 @@ BatchJob <- R6::R6Class(
     save_state = function() {
       jsonlite::write_json(
         list(
+          version = 1,
           stage = self$stage,
           batch = self$batch,
           results = self$results,
-          started_at = as.integer(self$started_at)
+          started_at = as.integer(self$started_at),
+          hash = self$compute_hash()
         ),
         self$path,
         auto_unbox = TRUE,
@@ -256,6 +260,31 @@ BatchJob <- R6::R6Class(
       map2(self$results, self$user_turns, function(result, user_turn) {
         batch_result_turn(self$provider, result, has_type = !is.null(self$type))
       })
+    },
+
+    compute_hash = function() {
+      # TODO: replace with JSON serialization when available
+      list(
+        provider = hash(props(self$provider)),
+        prompts = hash(lapply(self$user_turns, format)),
+        user_turns = hash(lapply(self$chat$get_turns(TRUE), format))
+      )
+    },
+
+    check_hash = function(old_hash, call = caller_env()) {
+      new_hash <- self$compute_hash()
+      same <- map2_lgl(old_hash, new_hash, `==`)
+
+      if (all(same)) {
+        return(invisible())
+      }
+      differences <- names(new_hash)[!same]
+
+      cli::cli_abort(
+        "{differences} don't match from last run.",
+        call = call,
+        class = "ellmer_batch_mismatch"
+      )
     }
   )
 )

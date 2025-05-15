@@ -1,3 +1,11 @@
+# errors if chat/provider/prompts don't match previous run
+
+    Code
+      batch_chat(chat, prompts, path)
+    Condition
+      Error in `batch_chat()`:
+      ! provider, prompts, and user_turns don't match from last run.
+
 # informative error for bad inputs
 
     Code

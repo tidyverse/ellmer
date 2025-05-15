@@ -24,6 +24,13 @@ test_that("can get chats/data from completed request", {
   expect_equal(nrow(data), 4)
 })
 
+test_that("errors if chat/provider/prompts don't match previous run", {
+  chat <- chat_anthropic_test(system_prompt = "Be cool")
+  prompts <- list("What's the capital of Iowa?")
+  path <- test_path("batch/state-capitals.json")
+  expect_snapshot(batch_chat(chat, prompts, path), error = TRUE)
+})
+
 test_that("informative error for bad inputs", {
   chat_openai <- chat_openai_test()
   chat_ollama <- chat_openai_test()
