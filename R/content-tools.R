@@ -188,7 +188,8 @@ tool_request_args <- function(request) {
     return(new_tool_result(request, error = e))
   }
 
-  convert_from_type(args, tool@arguments)
+  args <- convert_from_type(args, tool@arguments)
+  args[!map_lgl(args, is.null)]
 }
 
 maybe_on_tool_request <- function(

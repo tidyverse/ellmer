@@ -101,9 +101,16 @@ TypeObject <- new_class(
 #'   used by the LLM to determine what values to pass to the tool or what
 #'   values to extract in the structured data, so the more detail that you can
 #'   provide here, the better.
-#' @param required,.required Is the component required? If `FALSE`, and the
-#'   component does not exist in the data, the LLM may hallucinate a value.
-#'   Only applies when the element is nested inside of a `type_object()`.
+#' @param required,.required Is the component or argument required?
+#'
+#'   In type descriptions for structured data, if `required = FALSE` and the
+#'   component does not exist in the data, the LLM may hallucinate a value. Only
+#'   applies when the element is nested inside of a `type_object()`.
+#'
+#'   In tool definitions, `required = TRUE` signals that the LLM should always
+#'   provide a value. Arguments with `required = FALSE` should have a default
+#'   value in the tool function's definition. If the LLM does not provide a
+#'   value, the default value will be used.
 #' @export
 #' @examples
 #' # An integer vector
