@@ -12,25 +12,6 @@ test_that("can chat in parallel", {
   expect_equal(chats[[2]]$last_turn()@contents[[1]]@text, "4")
 })
 
-test_that("messages get timestamped correctly", {
-  chat <- chat_openai_test()
-
-  before_send <- Sys.time()
-  results <- parallel_chat(chat, list("What's 1 + 1?", "What's 2 + 2?"))
-  after_receive <- Sys.time()
-
-  turns1 <- results[[1]]$get_turns()
-  turns2 <- results[[2]]$get_turns()
-
-  expect_true(turns1[[1]]@completed >= before_send)
-  expect_true(turns1[[1]]@completed <= turns1[[2]]@completed)
-  expect_true(turns1[[2]]@completed <= after_receive)
-
-  expect_true(turns2[[1]]@completed >= before_send)
-  expect_true(turns2[[1]]@completed <= turns2[[2]]@completed)
-  expect_true(turns2[[2]]@completed <= after_receive)
-})
-
 test_that("can call tools in parallel", {
   prompts <- rep(list("Roll the dice, please! Reply with 'You rolled ____'"), 2)
 

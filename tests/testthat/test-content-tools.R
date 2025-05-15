@@ -228,14 +228,19 @@ test_that("invoke_tools() converts to R data structures", {
     y = type_array(items = type_string())
   )
 
-  res <- invoke_tool(
+  req <-
     ContentToolRequest(
       id = "x",
       name = "my_tool",
       arguments = list(x = list(1, 2), y = list()),
       tool = tool
     )
-  )
+
+  args <- tool_request_args(req)
+  expect_equal(args$x, c(1, 2))
+  expect_equal(args$y, character())
+
+  res <- invoke_tool(req)
   expect_equal(out$x, c(1, 2))
   expect_equal(out$y, character())
 })
@@ -249,16 +254,77 @@ test_that("invoke_tools_async() converts to R data structures", {
     y = type_array(items = type_string())
   )
 
-  res <- sync(invoke_tool_async(
+  req <-
     ContentToolRequest(
       id = "x",
       name = "my_tool",
       arguments = list(x = list(1, 2), y = list()),
       tool = tool
     )
-  ))
+
+  args <- tool_request_args(req)
+  expect_equal(args$x, c(1, 2))
+  expect_equal(args$y, character())
+
+  res <- sync(invoke_tool_async(req))
   expect_equal(out$x, c(1, 2))
   expect_equal(out$y, character())
+})
+
+test_that("invoke_tools() can invoke tools with args with default values", {
+  out <- NULL
+  tool <- tool(
+    function(x, y, z = "z") out <<- list(x = x, y = y, z = z),
+    "A tool",
+    x = type_array(items = type_number()),
+    y = type_array(items = type_string()),
+    z = type_array(items = type_string(), required = FALSE)
+  )
+
+  req <- ContentToolRequest(
+    id = "x",
+    name = "my_tool",
+    arguments = list(x = list(1, 2), y = NULL, z = NULL),
+    tool = tool
+  )
+
+  args <- tool_request_args(req)
+  expect_equal(args$x, c(1, 2))
+  expect_equal(args$y, character()) # Required arg
+  expect_equal(args$z, NULL) # Optional arg
+
+  res <- invoke_tool(req)
+  expect_equal(out$x, c(1, 2))
+  expect_equal(out$y, character())
+  expect_equal(out$z, "z")
+})
+
+test_that("invoke_tools_async() can invoke tools with args with default values", {
+  out <- NULL
+  tool <- tool(
+    function(x, y, z = "z") out <<- list(x = x, y = y, z = z),
+    "A tool",
+    x = type_array(items = type_number()),
+    y = type_array(items = type_string()),
+    z = type_array(items = type_string(), required = FALSE)
+  )
+
+  req <- ContentToolRequest(
+    id = "x",
+    name = "my_tool",
+    arguments = list(x = list(1, 2), y = NULL, z = NULL),
+    tool = tool
+  )
+
+  args <- tool_request_args(req)
+  expect_equal(args$x, c(1, 2))
+  expect_equal(args$y, character()) # Required arg
+  expect_equal(args$z, NULL) # Optional arg
+
+  res <- sync(invoke_tool_async(req))
+  expect_equal(out$x, c(1, 2))
+  expect_equal(out$y, character())
+  expect_equal(out$z, "z")
 })
 
 test_that("tool error warnings", {

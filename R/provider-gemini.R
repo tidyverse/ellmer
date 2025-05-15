@@ -274,7 +274,7 @@ method(value_turn, ProviderGoogleGemini) <- function(
     output = usage$candidatesTokenCount
   )
 
-  Turn("assistant", contents, json = result, tokens = tokens)
+  assistant_turn(contents, json = result, tokens = tokens)
 }
 
 # ellmer -> Gemini --------------------------------------------------------------

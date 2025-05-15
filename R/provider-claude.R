@@ -296,7 +296,7 @@ method(value_turn, ProviderAnthropic) <- function(
     output = result$usage$output_tokens
   )
 
-  Turn(result$role, contents, json = result, tokens = tokens)
+  assistant_turn(contents, json = result, tokens = tokens)
 }
 
 # ellmer -> Claude --------------------------------------------------------------
