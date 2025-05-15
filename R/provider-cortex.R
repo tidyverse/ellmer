@@ -296,7 +296,7 @@ method(value_turn, ProviderSnowflakeCortexAnalyst) <- function(
     content <- result$content
   }
 
-  Turn(
+  completion_turn(
     role = role,
     contents = lapply(content, function(x) {
       if (x$type == "text") {
