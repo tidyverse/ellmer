@@ -76,7 +76,8 @@ method(contents_record, Turn) <- function(content, ..., chat) {
       contents = lapply(content@contents, contents_record, chat = chat),
       json = content@json,
       tokens = content@tokens,
-      completed = content@completed
+      completed = content@completed,
+      # text = getter only!
     )
   )
 }
@@ -175,8 +176,6 @@ method(contents_replay_s7, S7::S7_object) <- function(cls, obj, ..., chat) {
   # Error in `ellmer::Turn`(role = "user", contents = list(), json = list(),  :
   # could not find function "ellmer::Turn"
 
-  print(cls)
-
   rlang::inject(cls(!!!obj_props))
 }
 
@@ -215,10 +214,15 @@ method(contents_record, ToolDef) <- function(content, ..., chat) {
     version = 1,
     class = class(content)[1],
     props = list(
-      name = content@name
-      # description = content$description,
-      # arguments = content$arguments,
-      # annotations = content$annotations
+      name = content@name,
+      # Do not record the function!
+      # It is not serializable and will not be neeeded after replay as the _real_ tool would be leveraged.
+      # However, keep all the other properties as the metadata could be useful.
+      fun = NULL,
+      description = content@description,
+      arguments = content@arguments,
+      convert = content@convert,
+      annotations = content@annotations
     )
   )
 }
@@ -229,16 +233,29 @@ method(contents_replay_s7, ToolDef) <- function(cls, obj, ..., chat) {
       call = caller_env()
     )
   }
-  tools <- chat$get_tools()
 
-  tool <- tools[[obj$props$name]]
-  # Return matched tool or NULL
-  return(tool)
+  tools <- chat$get_tools()
+  matched_tool <- tools[[obj$props$name]]
+
+  if (!is.null(matched_tool)) {
+    matched_tool
+  }
+
+  # If no tool is found, return placeholder tool
+  ToolDef(
+    name = obj$props$name,
+    # fun = NULL, # fun was not serialized
+    description = obj$props$description,
+    # TODO: Barret fix this
+    arguments = contents_replay(obj$props$arguments, chat = chat),
+    convert = obj$props$convert,
+    annotations = obj$props$annotations
+  )
 }
 
 tool_rnorm <- tool(
   stats::rnorm,
-  "Drawn numbers from a random normal distribution",
+  .description = "Drawn numbers from a random normal distribution",
   n = type_integer("The number of observations. Must be a positive integer."),
   mean = type_number("The mean value of the distribution."),
   sd = type_number(
