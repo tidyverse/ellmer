@@ -96,6 +96,33 @@ test_that("can round trip of ContentToolResult record/replay", {
       request = NULL
     )
   )
+
+  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+  tool_rnorm <- tool(
+    stats::rnorm,
+    "Drawn numbers from a random normal distribution",
+    n = type_integer("The number of observations. Must be a positive integer."),
+    mean = type_number("The mean value of the distribution."),
+    sd = type_number(
+      "The standard deviation of the distribution. Must be a non-negative number."
+    )
+  )
+  chat$register_tool(tool_rnorm)
+
+  expect_record_replay(
+    ContentToolResult(
+      value = "VALUE",
+      error = try(stop("boom"), silent = TRUE),
+      extra = list(extra = 1:2, b = "apple"),
+      request = ContentToolRequest(
+        "ID",
+        "tool_name",
+        list(a = 1:2, b = "apple"),
+        tool = tool_rnorm
+      )
+    ),
+    chat = chat
+  )
   # TODO: Barret test real error value
   # TODO: Barret test with request object
 })
