@@ -89,10 +89,7 @@ method(print, Turn) <- function(x, ...) {
 }
 
 completion_turn <- function(role = NULL, ...) {
-  Turn(
-    role = role %||% "assistant",
-    ...
-  )
+  Turn(role = role %||% "assistant", ...)
 }
 
 user_turn <- function(..., .call = caller_env()) {
