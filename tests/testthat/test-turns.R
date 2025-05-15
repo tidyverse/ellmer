@@ -1,29 +1,18 @@
 test_that("system prompt is applied correctly", {
   sys_prompt <- "foo"
-  sys_msg <- Turn("system", sys_prompt, completed = NULL)
+  sys_msg <- Turn("system", sys_prompt)
   user_msg <- Turn("user", "bar")
-
-  standardise_completed <- function(turn) {
-    turn@completed <- NULL
-    turn
-  }
-
-  expect_equal_turns <- function(object, expected, ...) {
-    object <- lapply(object, standardise_completed)
-    expected <- lapply(expected, standardise_completed)
-    expect_equal(object, expected, ...)
-  }
 
   expect_equal(normalize_turns(), list())
   expect_equal(normalize_turns(list(user_msg)), list(user_msg))
   expect_equal(normalize_turns(list(sys_msg)), list(sys_msg))
 
-  expect_equal_turns(normalize_turns(list(), sys_prompt), list(sys_msg))
-  expect_equal_turns(
+  expect_equal(normalize_turns(list(), sys_prompt), list(sys_msg))
+  expect_equal(
     normalize_turns(list(user_msg), sys_prompt),
     list(sys_msg, user_msg)
   )
-  expect_equal_turns(
+  expect_equal(
     normalize_turns(list(sys_msg, user_msg), sys_prompt),
     list(sys_msg, user_msg)
   )
@@ -69,20 +58,6 @@ test_that("can extract text easily", {
     )
   )
   expect_equal(turn@text, "ABCDEF")
-})
-
-test_that("turns have completion timestamps", {
-  before <- Sys.time()
-  turn <- Turn("user", "hello")
-  after <- Sys.time()
-
-  expect_s3_class(turn@completed, "POSIXct")
-  expect_true(turn@completed >= before)
-  expect_true(turn@completed <= after)
-
-  other_time <- as.POSIXct("2023-01-01")
-  turn@completed <- other_time
-  expect_equal(turn@completed, other_time)
 })
 
 test_that("turns have a reasonable print method", {

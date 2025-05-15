@@ -40,11 +40,7 @@ test_that("can retrieve system prompt with last_turn()", {
   chat2 <- chat_openai_test(system_prompt = "You are from New Zealand")
   expect_equal(
     chat2$last_turn("system"),
-    Turn(
-      "system",
-      "You are from New Zealand",
-      completed = NULL
-    )
+    Turn("system", "You are from New Zealand")
   )
 })
 
@@ -218,36 +214,6 @@ test_that("can retrieve last_turn for user and assistant", {
   chat$chat("Hi")
   expect_equal(chat$last_turn("user")@role, "user")
   expect_equal(chat$last_turn("assistant")@role, "assistant")
-})
-
-test_that("chat messages get timestamped in sequence", {
-  chat <- chat_openai_test()
-
-  before_send <- Sys.time()
-  chat$chat("What's 1 + 1?")
-  after_receive <- Sys.time()
-  turns <- chat$get_turns()
-
-  expect_true(turns[[1]]@completed >= before_send)
-  expect_true(turns[[1]]@completed <= turns[[2]]@completed)
-
-  expect_true(turns[[2]]@completed >= turns[[1]]@completed)
-  expect_true(turns[[2]]@completed <= after_receive)
-})
-
-test_that("async chat messages get timestamped in sequence", {
-  chat <- chat_openai_test()
-
-  before_send <- Sys.time()
-  promise <- chat$chat_async("What's 1 + 1?")
-  result <- sync(promise)
-  after_receive <- Sys.time()
-
-  turns <- chat$get_turns()
-
-  expect_true(turns[[1]]@completed >= before_send)
-  expect_true(turns[[1]]@completed <= turns[[2]]@completed)
-  expect_true(turns[[2]]@completed <= after_receive)
 })
 
 test_that("chat can get and register a list of tools", {

@@ -96,6 +96,7 @@ Collate:
     'provider-ollama.R'
     'provider-openrouter.R'
     'provider-perplexity.R'
+    'provider-portkey.R'
     'provider-snowflake.R'
     'provider-vllm.R'
     'shiny.R'

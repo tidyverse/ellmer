@@ -26,7 +26,6 @@ NULL
 #' @param tokens A numeric vector of length 2 representing the number of
 #'   input and output tokens (respectively) used in this turn. Currently
 #'   only recorded for assistant turns.
-#' @param completed A POSIXct timestamp indicating when the turn completed.
 #' @export
 #' @return An S7 `Turn` object
 #' @examples
@@ -49,15 +48,13 @@ Turn <- new_class(
     text = new_property(
       class = class_character,
       getter = function(self) contents_text(self)
-    ),
-    completed = new_property(class = class_POSIXct | NULL)
+    )
   ),
   constructor = function(
     role,
     contents = list(),
     json = list(),
-    tokens = c(0, 0),
-    completed = Sys.time()
+    tokens = c(0, 0)
   ) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
@@ -67,8 +64,7 @@ Turn <- new_class(
       role = role,
       contents = contents,
       json = json,
-      tokens = tokens,
-      completed = completed
+      tokens = tokens
     )
   }
 )
@@ -160,7 +156,7 @@ normalize_turns <- function(
   }
 
   if (!is.null(system_prompt)) {
-    system_turn <- Turn("system", system_prompt, completed = NULL)
+    system_turn <- Turn("system", system_prompt)
 
     # No turns; start with just the system prompt
     if (length(turns) == 0) {

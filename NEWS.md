@@ -1,5 +1,8 @@
 # ellmer (development version)
 
+* New `chat_portkey()` and `models_portkey()` for models hosted at 
+  <https://portkey.ai> (#363, @maciekbanas).
+
 * `$stream()` and `$stream_async()` gain support for streaming the additional
   content types generated during a tool call with a new `stream` argument. When
   `stream = "content"` is set, the streaming response yields `Content` objects,
@@ -147,9 +150,6 @@
 
 * `chat_claude()` now defaults to Sonnet 3.7 and displays the default
   model (#336).
-
-* `Turn` objects now include a POSIXct timestamp in the `completed` slot that
-  records when the turn was completed (#337, @simonpcouch).
 
 * `create_tool_def()` can now use any Chat instance (#118, @pedrobtz).
 
