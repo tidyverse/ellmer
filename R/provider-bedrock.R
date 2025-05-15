@@ -294,11 +294,7 @@ method(value_turn, ProviderAWSBedrock) <- function(
     output = result$usage$outputTokens
   )
 
-  assistant_turn(
-    contents,
-    json = result,
-    tokens = tokens
-  )
+  assistant_turn(contents, json = result, tokens = tokens)
 }
 
 # ellmer -> Bedrock -------------------------------------------------------------
