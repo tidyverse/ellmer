@@ -11,6 +11,10 @@ test_that("can make simple streaming request", {
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })
 
+test_that("can list models", {
+  test_models(models_anthropic)
+})
+
 # Common provider interface -----------------------------------------------
 
 test_that("defaults are reported", {

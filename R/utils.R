@@ -166,3 +166,49 @@ api_key_param <- function(key) {
     )
   )
 }
+
+param_model <- function(default, provider = NULL) {
+  paste_c(
+    c(
+      "The model to use for the chat",
+      if (!is.null(default)) c(" (defaults to \"", default, "\")"),
+      ".\n"
+    ),
+    if (!is.null(default))
+      c(
+        "We regularly update the default, so we strongly recommend explicitly ",
+        "specifying a model for anything other than casual use.\n"
+      ),
+    if (!is.null(provider))
+      c("Use `models_", provider, "()` to see all options.\n")
+  )
+}
+
+unrowname <- function(df) {
+  rownames(df) <- NULL
+  df
+}
+
+color_role <- function(role) {
+  switch(
+    role,
+    user = cli::col_blue(role),
+    assistant = cli::col_green(role),
+    system = cli::col_br_white(role),
+    role
+  )
+}
+
+counter <- function() {
+  count <- 0
+  function() {
+    count <<- count + 1
+    count
+  }
+}
+
+match_prices <- function(provider, id) {
+  prices <- prices[prices$provider == provider, ]
+  idx <- match(id, prices$model)
+  prices[idx, c("cached_input", "input", "output")]
+}

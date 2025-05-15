@@ -30,10 +30,9 @@
 #' @param workspace The URL of a Databricks workspace, e.g.
 #'   `"https://example.cloud.databricks.com"`. Will use the value of the
 #'   environment variable `DATABRICKS_HOST`, if set.
-#' @param model The model to use for the chat. The default, `NULL`, will pick a
-#'   reasonable default, and tell you about. We strongly recommend explicitly
-#'   choosing a model for all but the most casual use. Available foundational
-#'   models include:
+#' @param model `r param_model("databricks-dbrx-instruct")`
+#'
+#'   Available foundational models include:
 #'
 #'   - `databricks-dbrx-instruct` (the default)
 #'   - `databricks-mixtral-8x7b-instruct`
@@ -154,7 +153,7 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
     content <- as_json(provider, x@contents[[1]])
     list(list(role = "user", content = content))
   } else if (x@role == "assistant") {
-    is_tool <- map_lgl(x@contents, S7_inherits, ContentToolRequest)
+    is_tool <- map_lgl(x@contents, is_tool_request)
     if (any(is_tool)) {
       list(list(
         role = "assistant",

@@ -16,6 +16,7 @@ NULL
 #' @inheritParams chat_openai
 #' @param api_key `r api_key_param("DEEPSEEK_API_KEY")`
 #' @param base_url The base URL to the endpoint; the default uses DeepSeek.
+#' @param model `r param_model("deepseek-chat")`
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
@@ -76,7 +77,7 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x) {
   } else if (x@role == "assistant") {
     # Tool requests come out of content and go into own argument
     text <- detect(x@contents, S7_inherits, ContentText)
-    tools <- keep(x@contents, S7_inherits, ContentToolRequest)
+    tools <- keep(x@contents, is_tool_request)
 
     list(compact(list(
       role = "assistant",

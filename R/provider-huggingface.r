@@ -24,6 +24,7 @@
 #' So overall, not something we could recommend at the moment.
 #'
 #' @family chatbots
+#' @param model `r param_model("meta-llama/Llama-3.1-8B-Instruct")`
 #' @param api_key The API key to use for authentication. You generally should
 #'   not supply this directly, but instead set the `HUGGINGFACE_API_KEY` environment
 #'   variable.

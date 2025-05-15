@@ -22,6 +22,7 @@ NULL
 #' turn requires the \pkg{connectcreds} package.
 #'
 #' @param api_key `r api_key_param("GOOGLE_API_KEY")`
+#' @param model `r param_model("gemini-2.0-flash", "google_gemini")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -73,23 +74,25 @@ chat_google_vertex <- function(
   echo <- check_echo(echo)
   credentials <- default_google_credentials()
 
-  # https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
-  base_url <- paste_c(
-    c("https://", location, "-aiplatform.googleapis.com/v1"),
-    c("/projects/", project_id),
-    c("/locations/", location),
-    "/publishers/google/"
-  )
-
   provider <- ProviderGoogleGemini(
-    name = "Google/Gemini",
-    base_url = base_url,
+    name = "Google/Vertex",
+    base_url = vertex_url(location, project_id),
     model = model,
     params = params %||% params(),
     extra_args = api_args,
     credentials = credentials
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+}
+
+# https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
+vertex_url <- function(location, project_id) {
+  paste_c(
+    c("https://", location, "-aiplatform.googleapis.com/v1"),
+    c("/projects/", project_id),
+    c("/locations/", location),
+    "/publishers/google/"
+  )
 }
 
 ProviderGoogleGemini <- new_class(
@@ -102,13 +105,9 @@ ProviderGoogleGemini <- new_class(
   )
 )
 
-method(chat_request, ProviderGoogleGemini) <- function(
-  provider,
-  stream = TRUE,
-  turns = list(),
-  tools = list(),
-  type = NULL
-) {
+# Base request -----------------------------------------------------------------
+
+method(base_request, ProviderGoogleGemini) <- function(provider) {
   req <- request(provider@base_url)
   req <- ellmer_req_credentials(req, provider@credentials)
   req <- req_retry(req, max_tries = 2)
@@ -118,7 +117,21 @@ method(chat_request, ProviderGoogleGemini) <- function(
     json <- resp_body_json(resp, check_type = FALSE)
     json$error$message
   })
+  req
+}
 
+# Chat -------------------------------------------------------------------------
+
+method(chat_request, ProviderGoogleGemini) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  req <- base_request(provider)
+
+  # Can't use chat_path() because it varies based on stream
   req <- req_url_path_append(req, "models")
   if (stream) {
     # https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
@@ -135,6 +148,26 @@ method(chat_request, ProviderGoogleGemini) <- function(
     )
   }
 
+  body <- chat_body(
+    provider = provider,
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+  body <- modify_list(body, provider@extra_args)
+
+  req <- req_body_json(req, body)
+  req
+}
+
+method(chat_body, ProviderGoogleGemini) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
   if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
     system <- list(parts = list(text = turns[[1]]@text))
   } else {
@@ -157,17 +190,12 @@ method(chat_request, ProviderGoogleGemini) <- function(
     tools <- NULL
   }
 
-  body <- compact(list(
+  compact(list(
     contents = contents,
     tools = tools,
     systemInstruction = system,
     generationConfig = generation_config
   ))
-  body <- modify_list(body, provider@extra_args)
-
-  req <- req_body_json(req, body)
-
-  req
 }
 
 method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
@@ -613,4 +641,44 @@ method(standardise_model, ProviderGoogleGemini) <- function(provider, model) {
   # https://ai.google.dev/gemini-api/docs/models#model-versions
   # <model>-<generation>-<variation>-...
   gsub("^([^-]+-[^-]+-[^-]+).*$", "\\1", model)
+}
+
+# Models -----------------------------------------------------------------------
+
+#' @export
+#' @rdname chat_google_gemini
+models_google_gemini <- function(
+  base_url = "https://generativelanguage.googleapis.com/v1beta/",
+  api_key = NULL
+) {
+  provider <- ProviderGoogleGemini(
+    name = "gemini",
+    model = "",
+    base_url = base_url,
+    credentials = default_google_credentials(api_key)
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  name <- map_chr(json$models, "[[", "name")
+  name <- gsub("^models/", "", name)
+  display_name <- map_chr(json$models, "[[", "displayName")
+
+  methods <- map(json$models, \(x) unlist(x$supportedGenerationMethods))
+  can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)
+
+  df <- data.frame(id = name)
+  model_name <- standardise_model(provider, df$id)
+  df <- cbind(df, match_prices("Google/Gemini", model_name))
+  unrowname(df[order(df$id), ][can_generate, ])
+}
+
+#' @rdname chat_google_gemini
+#' @export
+models_google_vertex <- function(location, project_id) {
+  models_google_gemini(vertex_url(location, project_id))
 }

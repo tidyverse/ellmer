@@ -5,6 +5,8 @@ NULL
 #' Format contents into a textual representation
 #'
 #' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' These generic functions can be use to convert [Turn] contents or [Content]
 #' objects into textual representations.
 #'
@@ -17,6 +19,8 @@ NULL
 #'   HTML with [commonmark::markdown_html()], plus HTML representations of
 #'   images and other content types.
 #'
+#' These content types will continue to grow and change as ellmer evolves to
+#' support more providers and as providers add more content types.
 #' @examples
 #' turns <- list(
 #'   Turn("user", contents = list(
@@ -371,7 +375,7 @@ as_content <- function(x, error_call = caller_env(), error_arg = "...") {
     list()
   } else if (is_prompt(x)) {
     if (length(x) == 1) {
-      x[[1]]
+      ContentText(x[[1]])
     } else {
       cli::cli_abort(
         "{.arg {error_arg}} can only accept a single prompt.",

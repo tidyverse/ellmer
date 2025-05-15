@@ -14,6 +14,7 @@
 #' @export
 #' @family chatbots
 #' @param api_key `r api_key_param("PERPLEXITY_API_KEY")`
+#' @param model `r param_model("llama-3.1-sonar-small-128k-online")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples

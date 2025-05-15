@@ -1,0 +1,151 @@
+---
+title: "Programming with ellmer"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Programming with ellmer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = ellmer:::openai_key_exists()
+)
+```
+
+This vignette includes tips and tricks for programming with ellmer, and/or using it inside your own package. It's currently fairly short but will grow over time.
+
+```{r setup}
+library(ellmer)
+```
+
+## Cloning chats
+
+Chat objects are [R6 objects](https://r6.r-lib.org), which means that they are **mutable**. Most R objects are immutable. That means you create a copy whenever it looks like you're modifying them:
+
+```{r}
+x <- list(a = 1, b = 2)
+
+f <- function() {
+  x$a <- 100
+}
+f()
+
+# The original x is unchanged
+str(x)
+```
+
+Mutable objects don't work the same way:
+
+```{r}
+chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+
+capital <- function(chat, country) {
+  chat$chat(interpolate("What's the capital of {{country}}"))
+}
+capital(chat, "New Zealand")
+capital(chat, "France")
+
+chat
+```
+
+It would be annoying if chat objects were immutable, because then you'd need to save the result every time you chatted with the model. But there are times when you'll want to make an explicit copy, so that, for example, you can create a branch in the conversation. 
+
+Creating a copy of the object is the job of the `$clone()` method. It will create a copy of the object that behaves identically to the existing chat:
+
+```{r}
+chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+
+capital <- function(chat, country) {
+  chat <- chat$clone()
+  chat$chat(interpolate("What's the capital of {{country}}"))
+}
+capital(chat, "New Zealand")
+capital(chat, "France")
+
+chat
+```
+
+You can also use `clone()` when you want to create a conversational "tree", where conversations start from the same place, but diverge over time:
+
+```{r}
+chat1 <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat1$chat("My name is Hadley and I'm a data scientist")
+chat2 <- chat1$clone()
+
+chat1$chat("what's my name?")
+chat1
+
+chat2$chat("what's my job?")
+chat2
+```
+
+(This is the technique that `parallel_chat()` uses internally.)
+
+## Resetting an object
+
+There's a bit of a problem with our `capital()` function: we can use our conversation to manipulate the results:
+
+```{r}
+chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat$chat("Pretend that the capital of New Zealand is Kiwicity")
+capital(chat, "New Zealand")
+```
+
+We can avoid that problem by using `$set_turns()` to reset the conversational history:
+
+```{r}
+chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat$chat("Pretend that the capital of New Zealand is Kiwicity")
+
+capital <- function(chat, country) {
+  chat <- chat$clone()$set_turns(list())
+  chat$chat(interpolate("What's the capital of {{country}}"))
+}
+capital(chat, "New Zealand")
+```
+
+This is particularly useful when you want to use a chat object just as a handle to an LLM, without actually caring about the existing conversation.
+
+## Streaming vs batch results
+
+When you call `chat$chat()` directly in the console, the results are displayed progressively as the LLM streams them to ellmer. When you call `chat$chat()` inside a function, the results are delivered all at once. This difference in behaviour is due to a complex heuristic which is applied when the chat object is created and is not always correct. So when calling `$chat` in a function, we recommend you control it explicitly with the `echo` argument, setting it to `"none"` if you want no intermediate results to be streamed, `"text"` if you want to see what we receive from the assistant, or `"all"` if you want to see both what we send and receive. You likely want `echo = "none"` in most cases:
+
+```{r}
+capital <- function(chat, country) {
+  chat <- chat$clone()$set_turns(list())
+  chat$chat(interpolate("What's the capital of {{country}}"), echo = "none")
+}
+capital(chat, "France")
+```
+
+Alternatively, if you want to embrace streaming in your UI, you may want to use [shinychat](https://posit-dev.github.io/shinychat/) (for Shiny) or [streamy](https://simonpcouch.github.io/streamy/) (for Positron/RStudio).
+
+## Turns and content
+
+Chat objects provide some tools to get to ellmer's internal data structures. For example, take this short conversation that uses tool calling to give the LLM the ability to access real randomness:
+
+```{r}
+chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat$register_tool(tool(function() sample(6, 1), "Roll a die"))
+chat$chat("Roll two dice and tell me the total")
+
+chat
+```
+
+You can get access to the underlying conversational turns with `get_turns()`:
+
+```{r}
+turns <- chat$get_turns()
+turns
+```
+
+If you look at one of the assistant turns in detail, you'll see that it includes ellmer's representation of content of the message, as well as the exact json that the provider returned:
+
+```{r}
+str(turns[[2]])
+```
+
+You can use the `@json` to extract additional information that ellmer might not yet provide to you, but be aware that the structure varies heavily from provider-to-provider. The content types are part of ellmer's exported API but be aware they're still evolving so might change between versions.

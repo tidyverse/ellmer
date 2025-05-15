@@ -25,9 +25,8 @@ as described in \url{https://usethis.r-lib.org/articles/git-credentials.html}.
 For headless environments, this will also look in the \code{GITHUB_PAT}
 env var.}
 
-\item{model}{The model to use for the chat. The default, \code{NULL}, will pick
-a reasonable default, and tell you about. We strongly recommend explicitly
-choosing a model for all but the most casual use.}
+\item{model}{The model to use for the chat (defaults to "gpt-4o").
+We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
 
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output
 more reproducible.}
@@ -80,6 +79,7 @@ Other chatbots:
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
 \code{\link{chat_openrouter}()},
-\code{\link{chat_perplexity}()}
+\code{\link{chat_perplexity}()},
+\code{\link{chat_portkey}()}
 }
 \concept{chatbots}
