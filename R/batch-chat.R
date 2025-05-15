@@ -59,20 +59,18 @@
 #' }
 #'
 batch_chat <- function(chat, prompts, path, wait = TRUE) {
-  check_chat(chat)
-  provider <- chat$get_provider()
-  check_has_batch_support(provider)
+  job <- BatchJob$new(
+    chat = chat,
+    prompts = prompts,
+    path = path,
+    wait = wait
+  )
+  job$step_until_done()
 
-  user_turns <- as_user_turns(prompts)
-  check_string(path, allow_empty = FALSE)
-  check_bool(wait)
-
-  results <- batch_chat_process(chat, user_turns, path, wait = wait)
-
-  map2(results, user_turns, function(result, user_turn) {
-    ai_turn <- batch_result_turn(provider, result)
-    if (!is.null(ai_turn)) {
-      chat$clone()$add_turn(user_turn, ai_turn)
+  assistant_turns <- job$result_turns()
+  map2(job$user_turns, assistant_turns, function(user, assistant) {
+    if (!is.null(assistant)) {
+      chat$clone()$add_turn(user, assistant)
     } else {
       NULL
     }
@@ -94,24 +92,19 @@ batch_chat_structured <- function(
 ) {
   check_chat(chat)
   provider <- chat$get_provider()
-  check_has_batch_support(provider)
-
-  user_turns <- as_user_turns(prompts)
-  check_string(path, allow_empty = FALSE)
-  check_bool(wait)
-
   needs_wrapper <- S7_inherits(provider, ProviderOpenAI)
-  results <- batch_chat_process(
-    chat,
-    user_turns,
-    path,
-    type = wrap_type_if_needed(type, needs_wrapper),
-    wait = wait
-  )
 
-  turns <- map(results, function(result) {
-    batch_result_turn(provider, result, has_type = TRUE)
-  })
+  job <- BatchJob$new(
+    chat = chat,
+    prompts = prompts,
+    type = wrap_type_if_needed(type, needs_wrapper),
+    path = path,
+    wait = wait,
+    call = error_call
+  )
+  results <- job$step_until_done()
+  turns <- job$result_turns()
+
   multi_convert(
     turns,
     type,
@@ -122,80 +115,139 @@ batch_chat_structured <- function(
   )
 }
 
-batch_chat_process <- function(
-  chat,
-  user_turns,
-  path,
-  type = NULL,
-  wait = TRUE,
-  error_call = caller_env()
-) {
-  provider <- chat$get_provider()
+BatchJob <- R6::R6Class(
+  "BatchJob",
+  public = list(
+    chat = NULL,
+    user_turns = NULL,
+    path = NULL,
+    should_wait = TRUE,
+    type = NULL,
 
-  if (file.exists(path)) {
-    state <- jsonlite::read_json(path)
-  } else {
-    state <- list(stage = "submitting", batch = NULL, results = NULL)
-  }
+    # Internal state
+    provider = NULL,
+    stage = NULL,
+    batch = NULL,
+    results = NULL,
 
-  if (state$stage == "submitting") {
-    existing <- chat$get_turns(include_system_prompt = TRUE)
-    conversations <- append_turns(list(existing), user_turns)
-    state$batch <- batch_submit(provider, conversations, type = type)
-    state$stage <- "waiting"
-    save_state(state, path)
-  }
+    initialize = function(
+      chat,
+      prompts,
+      path,
+      type = NULL,
+      wait = TRUE,
+      call = caller_env(2)
+    ) {
+      check_chat(chat, call = call)
+      self$provider <- chat$get_provider()
+      check_has_batch_support(self$provider, call = call)
 
-  if (state$stage == "waiting") {
-    # want to ensure that we always cycle once, even when wait = FALSE
-    state$batch <- batch_poll(provider, state$batch)
-    status <- batch_status(provider, state$batch)
-    save_state(state, path)
+      user_turns <- as_user_turns(prompts, call = call)
+      check_string(path, allow_empty = FALSE, call = call)
+      check_bool(wait, call = call)
 
-    if (status$working && wait) {
-      cli::cli_progress_bar(
-        format = paste(
-          "{cli::pb_spin} Processing... ",
-          "{status$n_processing} -> {cli::col_green({status$n_succeeded})} / {cli::col_red({status$n_failed})} ",
-          "[{cli::pb_elapsed}]"
-        )
-      )
-      while (status$working) {
-        Sys.sleep(0.5)
-        cli::cli_progress_update()
-        state$batch <- batch_poll(provider, state$batch)
-        status <- batch_status(provider, state$batch)
-        save_state(state, path)
+      self$chat <- chat
+      self$user_turns <- user_turns
+      self$type <- type
+      self$path <- path
+      self$should_wait <- wait
+
+      if (file.exists(path)) {
+        state <- jsonlite::read_json(path)
+        self$stage <- state$stage
+        self$batch <- state$batch
+        self$results <- state$results
+      } else {
+        self$stage <- "submitting"
+        self$batch <- NULL
       }
-      cli::cli_process_done()
+    },
+
+    save_state = function() {
+      jsonlite::write_json(
+        list(stage = self$stage, batch = self$batch, results = self$results),
+        self$path,
+        auto_unbox = TRUE,
+        pretty = TRUE
+      )
+    },
+
+    step = function() {
+      if (self$stage == "submitting") {
+        self$submit()
+      } else if (self$stage == "waiting") {
+        self$wait()
+      } else if (self$stage == "retrieving") {
+        self$retrieve()
+      } else {
+        cli::cli_abort("Unknown stage: {self$stage}", .internal = TRUE)
+      }
+    },
+
+    step_until_done = function() {
+      while (self$stage != "done") {
+        self$step()
+      }
+      self$results
+    },
+
+    submit = function() {
+      existing <- self$chat$get_turns(include_system_prompt = TRUE)
+      conversations <- append_turns(list(existing), self$user_turns)
+
+      self$batch <- batch_submit(self$provider, conversations, type = self$type)
+      self$stage <- "waiting"
+      self$save_state()
+    },
+
+    wait = function() {
+      # want to ensure that we always cycle once, even when wait = FALSE
+      self$batch <- batch_poll(self$provider, self$batch)
+      status <- batch_status(self$provider, self$batch)
+      self$save_state()
+
+      if (status$working && self$should_wait) {
+        cli::cli_progress_bar(
+          format = paste(
+            "{cli::pb_spin} Processing... ",
+            "{status$n_processing} -> {cli::col_green({status$n_succeeded})} / {cli::col_red({status$n_failed})} ",
+            "[{cli::pb_elapsed}]"
+          )
+        )
+        while (status$working) {
+          Sys.sleep(0.5)
+          cli::cli_progress_update()
+          self$batch <- batch_poll(self$provider, self$batch)
+          status <- batch_status(self$provider, self$batch)
+          self$save_state()
+        }
+        cli::cli_process_done()
+      }
+
+      if (!status$working) {
+        self$stage <- "retrieving"
+        self$save_state()
+      } else if (!self$should_wait) {
+        cli::cli_abort("Batch is still processing.")
+      } else {
+        cli::cli_abort("Unexpected state", .internal = TRUE)
+      }
+    },
+
+    retrieve = function() {
+      self$results <- batch_retrieve(self$provider, self$batch)
+      self$stage <- "done"
+      self$save_state()
+    },
+
+    result_turns = function() {
+      map2(self$results, self$user_turns, function(result, user_turn) {
+        batch_result_turn(self$provider, result, has_type = !is.null(self$type))
+      })
     }
+  )
+)
 
-    if (!status$working) {
-      state$stage <- "retrieving"
-      save_state(state, path)
-    } else if (!wait) {
-      cli::cli_abort("Batch is still processing.")
-    } else {
-      cli::cli_abort("Unexpected state", .internal = TRUE)
-    }
-  }
-
-  if (state$stage == "retrieving") {
-    state$results <- batch_retrieve(provider, state$batch)
-    state$stage <- "done"
-    save_state(state, path)
-  }
-
-  if (state$stage != "done") {
-    cli::cli_abort("Unknown stage: {state$stage}", .internal = TRUE)
-  }
-
-  state$results
-}
-
-save_state <- function(state, path) {
-  jsonlite::write_json(state, path, auto_unbox = TRUE, pretty = TRUE)
-}
 
 check_has_batch_support <- function(provider, call = caller_env()) {
   if (has_batch_support(provider)) {
