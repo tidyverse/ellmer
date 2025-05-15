@@ -16,7 +16,13 @@ NULL
 #' * `contents_record()` will accept a [Turn] or [Content] object and return a
 #'   basic object that can be easily serialized.
 #' @export
-contents_record <- new_generic("contents_record", "content")
+contents_record <- new_generic(
+  "contents_record",
+  "content",
+  function(content, ..., chat) {
+    S7::S7_dispatch()
+  }
+)
 # #' @export
 # contents_record_prop_names <- new_generic(
 #   "contents_record_prop_names",
@@ -43,7 +49,7 @@ contents_record <- new_generic("contents_record", "content")
 #     )
 #   )
 # }
-method(contents_record, S7::S7_object) <- function(content) {
+method(contents_record, S7::S7_object) <- function(content, ..., chat) {
   prop_names <- S7::prop_names(content)
   list(
     version = 1,
@@ -52,7 +58,7 @@ method(contents_record, S7::S7_object) <- function(content) {
       lapply(prop_names, function(prop_name) {
         prop_value <- S7::prop(prop_name, object = content)
         if (S7_inherits(prop_value)) {
-          contents_record(prop_value)
+          contents_record(prop_value, chat = chat)
         } else {
           prop_value
         }
@@ -61,13 +67,13 @@ method(contents_record, S7::S7_object) <- function(content) {
     )
   )
 }
-method(contents_record, Turn) <- function(content) {
+method(contents_record, Turn) <- function(content, ..., chat) {
   list(
     version = 1,
     class = class(content)[1],
     props = list(
       role = content@role,
-      contents = lapply(content@contents, contents_record),
+      contents = lapply(content@contents, contents_record, chat = chat),
       json = content@json,
       tokens = content@tokens,
       completed = content@completed
@@ -77,7 +83,14 @@ method(contents_record, Turn) <- function(content) {
 
 #' @rdname contents_record
 #' @export
-contents_replay <- function(obj) {
+contents_replay <- function(obj, ..., chat) {
+  if (!(R6::is.R6(chat) && inherits(chat, "Chat"))) {
+    cli::cli_abort(
+      "Expected a Chat object at `chat=`, but received {.val {chat}}.",
+      call = caller_env()
+    )
+  }
+
   # Find any reason to not believe `obj` is a recorded object.
   # If not a recorded object, return it as is.
   # If it is a recorded s7 object, dispatch on the discovered class.
@@ -138,7 +151,7 @@ contents_replay <- function(obj) {
   # An error will be thrown if a method is not found,
   # however we have a fallback for the `S7::S7_object` (the root base class)
   handler <- S7::method(contents_replay_s7, cls)
-  handler(cls, obj)
+  handler(cls, obj, chat = chat)
 }
 
 #' @rdname contents_record
@@ -146,16 +159,16 @@ contents_replay <- function(obj) {
 contents_replay_s7 <- new_generic(
   "contents_replay_s7",
   "cls",
-  function(cls, obj) {
+  function(cls, obj, ..., chat) {
     S7::S7_dispatch()
   }
 )
 
 
-method(contents_replay_s7, S7::S7_object) <- function(cls, obj) {
+method(contents_replay_s7, S7::S7_object) <- function(cls, obj, ..., chat) {
   stopifnot(obj$version == 1)
 
-  obj_props <- lapply(obj$props, contents_replay)
+  obj_props <- lapply(obj$props, contents_replay, chat = chat)
   ## While this should give prettier tracebacks, it doesn't work
   # > cls_name <- rlang::sym(obj$class[1])
   # > rlang::inject((!!cls_name)(!!!obj_props))
@@ -167,37 +180,37 @@ method(contents_replay_s7, S7::S7_object) <- function(cls, obj) {
   rlang::inject(cls(!!!obj_props))
 }
 
-with_chat_env <- list2env(list())
-with_chat_set <- function(chat) {
-  if (is.null(chat)) {
-    with_chat_env$chat <- NULL
-    return()
-  }
-  if (!inherits(chat, "Chat")) {
-    cli::cli_abort(
-      "Expected a Chat object, but got {.val {chat}}.",
-      call = caller_env()
-    )
-  }
-  with_chat_env$chat <- chat
-}
-with_chat_get <- function() {
-  chat <- with_chat_env$chat
-  if (is.null(chat)) {
-    cli::cli_abort(
-      "No Chat object found in the environment.",
-      call = caller_env()
-    )
-  }
-  chat
-}
-with_chat <- function(chat, code) {
-  with_chat_set(chat)
-  on.exit(with_chat_set(NULL), add = TRUE)
-  force(code)
-}
+# with_chat_env <- list2env(list())
+# with_chat_set <- function(chat) {
+#   if (is.null(chat)) {
+#     with_chat_env$chat <- NULL
+#     return()
+#   }
+#   if (!inherits(chat, "Chat")) {
+#     cli::cli_abort(
+#       "Expected a Chat object, but got {.val {chat}}.",
+#       call = caller_env()
+#     )
+#   }
+#   with_chat_env$chat <- chat
+# }
+# with_chat_get <- function() {
+#   chat <- with_chat_env$chat
+#   if (is.null(chat)) {
+#     cli::cli_abort(
+#       "No Chat object found in the environment.",
+#       call = caller_env()
+#     )
+#   }
+#   chat
+# }
+# with_chat <- function(chat, code) {
+#   with_chat_set(chat)
+#   on.exit(with_chat_set(NULL), add = TRUE)
+#   force(code)
+# }
 
-method(contents_record, ToolDef) <- function(content) {
+method(contents_record, ToolDef) <- function(content, ..., chat) {
   list(
     version = 1,
     class = class(content)[1],
@@ -209,14 +222,13 @@ method(contents_record, ToolDef) <- function(content) {
     )
   )
 }
-method(contents_replay_s7, ToolDef) <- function(cls, obj) {
+method(contents_replay_s7, ToolDef) <- function(cls, obj, ..., chat) {
   if (obj$version != 1) {
     cli::cli_abort(
       "Unsupported version {.val {obj$version}}.",
       call = caller_env()
     )
   }
-  chat <- with_chat_get()
   tools <- chat$get_tools()
 
   tool <- tools[[obj$props$name]]

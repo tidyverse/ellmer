@@ -6,11 +6,11 @@
 \alias{contents_replay_s7}
 \title{Save and restore content}
 \usage{
-contents_record(content, ...)
+contents_record(content, ..., chat)
 
-contents_replay(obj)
+contents_replay(obj, ..., chat)
 
-contents_replay_s7(cls, obj)
+contents_replay_s7(cls, obj, ..., chat)
 }
 \description{
 These generic functions can be use to convert \link{Turn} contents or \link{Content}

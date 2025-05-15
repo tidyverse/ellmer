@@ -1,18 +1,10 @@
-tool_rnorm <- tool(
-  stats::rnorm,
-  "Drawn numbers from a random normal distribution",
-  n = type_integer("The number of observations. Must be a positive integer."),
-  mean = type_number("The mean value of the distribution."),
-  sd = type_number(
-    "The standard deviation of the distribution. Must be a non-negative number."
-  )
-)
+expect_record_replay <- function(
+  x,
+  ...,
+  chat = chat_ollama_test("Be as terse as possible; no punctuation")
+) {
+  rlang::check_dots_empty()
 
-chat <- chat_ollama(model = "llama3.2")
-chat$register_tool(tool_rnorm)
-
-
-expect_record_replay <- function(x) {
   # Simulate the full bookmarking experience:
   # * Record the object to something serializable
   # * Serialize the object to JSON via shiny; "bookmark"
@@ -20,14 +12,15 @@ expect_record_replay <- function(x) {
   # * Replay the unserialized object to the original object
   # * Check that the replayed object has the same class as the original object
   # * Check that the replayed object has the same properties as the original object
+
   # expect_silent({
-  obj <- contents_record(x)
+  obj <- contents_record(x, chat = chat)
 
   # Bbookmark
   serialized <- shiny:::toJSON(obj)
   unserialized <- shiny:::safeFromJSON(serialized)
 
-  replayed <- contents_replay(unserialized)
+  replayed <- contents_replay(unserialized, chat = chat)
   # })
 
   expect_s3_class(replayed, class(x)[1])
@@ -91,15 +84,36 @@ test_that("can round trip of ContentTool record/replay", {
   expect_record_replay(
     ContentToolRequest("ID", "tool_name", list(a = 1:2, b = "apple"))
   )
-
-  with_chat(chat, {
-  })
 })
 
 test_that("can round trip of ToolDef record/replay", {
-  with_chat(chat, {
-    expect_record_replay(tool_rnorm)
-  })
+  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+  tool_rnorm <- tool(
+    stats::rnorm,
+    "Drawn numbers from a random normal distribution",
+    n = type_integer("The number of observations. Must be a positive integer."),
+    mean = type_number("The mean value of the distribution."),
+    sd = type_number(
+      "The standard deviation of the distribution. Must be a non-negative number."
+    )
+  )
+  chat$register_tool(tool_rnorm)
+
+  # with_chat(chat, {
+  expect_record_replay(tool_rnorm, chat = chat)
+  # })
+
+  # with_chat(chat, {
+  expect_record_replay(
+    ContentToolRequest(
+      "ID",
+      "tool_name",
+      list(a = 1:2, b = "apple"),
+      tool = tool_rnorm
+    ),
+    chat = chat
+  )
+  # })
 })
 
 test_that("can round trip of ContentToolResult record/replay", {
