@@ -1,32 +1,3 @@
-expect_record_replay <- function(
-  x,
-  ...,
-  chat = chat_ollama_test("Be as terse as possible; no punctuation")
-) {
-  rlang::check_dots_empty()
-
-  # Simulate the full bookmarking experience:
-  # * Record the object to something serializable
-  # * Serialize the object to JSON via shiny; "bookmark"
-  # * Unserialize the object from JSON via shiny; "restore"
-  # * Replay the unserialized object to the original object
-  # * Check that the replayed object has the same class as the original object
-  # * Check that the replayed object has the same properties as the original object
-
-  # expect_silent({
-  obj <- contents_record(x, chat = chat)
-
-  # Bbookmark
-  serialized <- shiny:::toJSON(obj)
-  unserialized <- shiny:::safeFromJSON(serialized)
-
-  replayed <- contents_replay(unserialized, chat = chat)
-  # })
-
-  expect_s3_class(replayed, class(x)[1])
-  expect_equal(S7::props(replayed), S7::props(x))
-}
-
 # -------------------------------------------------------------------------
 
 test_that("can round trip of Content record/replay", {
