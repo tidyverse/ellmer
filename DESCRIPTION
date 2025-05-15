@@ -106,5 +106,6 @@ Collate:
     'utils-callbacks.R'
     'utils-cat.R'
     'utils-merge.R'
+    'utils-prettytime.R'
     'utils.R'
     'zzz.R'

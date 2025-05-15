@@ -141,9 +141,9 @@ parallel_chat_structured <- function(
   )
 
   multi_convert(
+    provider,
     turns,
     type,
-    needs_wrapper = needs_wrapper,
     convert = convert,
     include_tokens = include_tokens,
     include_cost = include_cost
@@ -151,13 +151,15 @@ parallel_chat_structured <- function(
 }
 
 multi_convert <- function(
+  provider,
   turns,
   type,
-  needs_wrapper = FALSE,
   convert = TRUE,
   include_tokens = FALSE,
   include_cost = FALSE
 ) {
+  needs_wrapper <- S7_inherits(provider, ProviderOpenAI)
+
   rows <- map(turns, \(turn) {
     extract_data(
       turn = turn,

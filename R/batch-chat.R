@@ -106,9 +106,9 @@ batch_chat_structured <- function(
   turns <- job$result_turns()
 
   multi_convert(
+    provider,
     turns,
     type,
-    needs_wrapper = needs_wrapper,
     convert = convert,
     include_tokens = include_tokens,
     include_cost = include_cost
