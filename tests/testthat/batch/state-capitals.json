@@ -1,20 +1,20 @@
 {
   "stage": "done",
   "batch": {
-    "id": "batch_68263853c9048190b62129f1d7e4d881",
+    "id": "batch_6826439aeefc819093f48623d99c546f",
     "object": "batch",
     "endpoint": "/v1/chat/completions",
     "errors": {},
-    "input_file_id": "file-Tj6qkRYK9mGUw9h3MwrRDy",
+    "input_file_id": "file-JwDynRXuSc1z4nYKMGN3xc",
     "completion_window": "24h",
     "status": "completed",
-    "output_file_id": "file-1PCLvNB88os7xPtCynCUp1",
+    "output_file_id": "file-WtPA7t2VDtHgrE4JPhQS1R",
     "error_file_id": {},
-    "created_at": 1747335251,
-    "in_progress_at": 1747335252,
-    "expires_at": 1747421651,
-    "finalizing_at": 1747335256,
-    "completed_at": 1747335257,
+    "created_at": 1747338138,
+    "in_progress_at": 1747338140,
+    "expires_at": 1747424538,
+    "finalizing_at": 1747338204,
+    "completed_at": 1747338206,
     "failed_at": {},
     "expired_at": {},
     "cancelling_at": {},
@@ -29,11 +29,11 @@
   "results": [
     {
       "status_code": 200,
-      "request_id": "4d4015dc98ea2275e969b2d63c271e48",
+      "request_id": "c689604f3561ca24ec0e93fdc80a94d6",
       "body": {
-        "id": "chatcmpl-BXY0c1H7nQ3og0szwzp39LcIzkSbF",
+        "id": "chatcmpl-BXYmCdoccwrJ5ytA6krb6vxwMQqfr",
         "object": "chat.completion",
-        "created": 1747335254,
+        "created": 1747338204,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
@@ -69,11 +69,11 @@
     },
     {
       "status_code": 200,
-      "request_id": "02c5577127517dcb3f988e736e70664d",
+      "request_id": "f5f00f564b11207705a299453b94585d",
       "body": {
-        "id": "chatcmpl-BXY0cbCjkkWeIJnWdTA3pdyEtevK7",
+        "id": "chatcmpl-BXYmCZHjKQ6ijxb5QPS7xA0uNyXIx",
         "object": "chat.completion",
-        "created": 1747335254,
+        "created": 1747338204,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
@@ -90,8 +90,8 @@
         ],
         "usage": {
           "prompt_tokens": 21,
-          "completion_tokens": 2,
-          "total_tokens": 23,
+          "completion_tokens": 3,
+          "total_tokens": 24,
           "prompt_tokens_details": {
             "cached_tokens": 0,
             "audio_tokens": 0
@@ -109,11 +109,11 @@
     },
     {
       "status_code": 200,
-      "request_id": "2416bad7081a3d7998fd51a5c37a2bbf",
+      "request_id": "387bbfe6b175394b52620d96836cd71d",
       "body": {
-        "id": "chatcmpl-BXY0dsLT1wxVOEFehxSHKYEs41iBu",
+        "id": "chatcmpl-BXYlC4xkY0wZBIeJNjRx0ldBu4HL5",
         "object": "chat.completion",
-        "created": 1747335255,
+        "created": 1747338142,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
@@ -130,8 +130,8 @@
         ],
         "usage": {
           "prompt_tokens": 20,
-          "completion_tokens": 3,
-          "total_tokens": 23,
+          "completion_tokens": 2,
+          "total_tokens": 22,
           "prompt_tokens_details": {
             "cached_tokens": 0,
             "audio_tokens": 0
@@ -144,16 +144,16 @@
           }
         },
         "service_tier": "default",
-        "system_fingerprint": "fp_8fd43718b3"
+        "system_fingerprint": "fp_eede8f0d45"
       }
     },
     {
       "status_code": 200,
-      "request_id": "70db7e852906df9b5d748a40e23968d2",
+      "request_id": "922d79bfe6ad33acaa1c46fca9345981",
       "body": {
-        "id": "chatcmpl-BXY0dhri3TReM4eGhqJRXXDhyt6mA",
+        "id": "chatcmpl-BXYmCKHToXu3ganrvZGrWlzEY0xuh",
         "object": "chat.completion",
-        "created": 1747335255,
+        "created": 1747338204,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
@@ -170,8 +170,8 @@
         ],
         "usage": {
           "prompt_tokens": 20,
-          "completion_tokens": 1,
-          "total_tokens": 21,
+          "completion_tokens": 2,
+          "total_tokens": 22,
           "prompt_tokens_details": {
             "cached_tokens": 0,
             "audio_tokens": 0
@@ -184,8 +184,9 @@
           }
         },
         "service_tier": "default",
-        "system_fingerprint": "fp_eede8f0d45"
+        "system_fingerprint": "fp_8fd43718b3"
       }
     }
-  ]
+  ],
+  "started_at": 1747338138
 }

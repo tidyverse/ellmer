@@ -126,6 +126,7 @@ BatchJob <- R6::R6Class(
 
     # Internal state
     provider = NULL,
+    started_at = NULL,
     stage = NULL,
     batch = NULL,
     results = NULL,
@@ -157,15 +158,22 @@ BatchJob <- R6::R6Class(
         self$stage <- state$stage
         self$batch <- state$batch
         self$results <- state$results
+        self$started_at <- .POSIXct(state$started_at)
       } else {
         self$stage <- "submitting"
         self$batch <- NULL
+        self$started_at <- Sys.time()
       }
     },
 
     save_state = function() {
       jsonlite::write_json(
-        list(stage = self$stage, batch = self$batch, results = self$results),
+        list(
+          stage = self$stage,
+          batch = self$batch,
+          results = self$results,
+          started_at = as.integer(self$started_at)
+        ),
         self$path,
         auto_unbox = TRUE,
         pretty = TRUE
@@ -206,12 +214,16 @@ BatchJob <- R6::R6Class(
       status <- batch_status(self$provider, self$batch)
       self$save_state()
 
+      elapsed <- function() {
+        pretty_sec(as.integer(Sys.time()) - as.integer(self$started_at))
+      }
+
       if (status$working && self$should_wait) {
         cli::cli_progress_bar(
           format = paste(
             "{cli::pb_spin} Processing... ",
             "{status$n_processing} -> {cli::col_green({status$n_succeeded})} / {cli::col_red({status$n_failed})} ",
-            "[{cli::pb_elapsed}]"
+            "[{elapsed()}]"
           )
         )
         while (status$working) {
