@@ -281,13 +281,12 @@ test_that("invoke_tools() can invoke tools with args with default values", {
     z = type_array(items = type_string(), required = FALSE)
   )
 
-  req <-
-    ContentToolRequest(
-      id = "x",
-      name = "my_tool",
-      arguments = list(x = list(1, 2), y = NULL, z = NULL),
-      tool = tool
-    )
+  req <- ContentToolRequest(
+    id = "x",
+    name = "my_tool",
+    arguments = list(x = list(1, 2), y = NULL, z = NULL),
+    tool = tool
+  )
 
   args <- tool_request_args(req)
   expect_equal(args$x, c(1, 2))
@@ -310,13 +309,12 @@ test_that("invoke_tools_async() can invoke tools with args with default values",
     z = type_array(items = type_string(), required = FALSE)
   )
 
-  req <-
-    ContentToolRequest(
-      id = "x",
-      name = "my_tool",
-      arguments = list(x = list(1, 2), y = NULL, z = NULL),
-      tool = tool
-    )
+  req <- ContentToolRequest(
+    id = "x",
+    name = "my_tool",
+    arguments = list(x = list(1, 2), y = NULL, z = NULL),
+    tool = tool
+  )
 
   args <- tool_request_args(req)
   expect_equal(args$x, c(1, 2))
