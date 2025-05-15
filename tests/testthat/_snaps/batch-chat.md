@@ -6,6 +6,14 @@
       Error in `batch_chat()`:
       ! provider, prompts, and user_turns don't match from last run.
 
+# errors if wait = FALSE and not complete
+
+    Code
+      job$step_until_done()
+    Condition
+      Error in `self$wait()`:
+      ! Batch is still processing.
+
 # informative error for bad inputs
 
     Code

@@ -102,7 +102,7 @@ batch_chat_structured <- function(
     wait = wait,
     call = error_call
   )
-  results <- job$step_until_done()
+  job$step_until_done()
   turns <- job$result_turns()
 
   multi_convert(
@@ -200,7 +200,7 @@ BatchJob <- R6::R6Class(
       while (self$stage != "done") {
         self$step()
       }
-      self$results
+      invisible(self)
     },
 
     submit = function() {
@@ -222,7 +222,7 @@ BatchJob <- R6::R6Class(
         pretty_sec(as.integer(Sys.time()) - as.integer(self$started_at))
       }
 
-      if (status$working && self$should_wait) {
+      if (self$should_wait) {
         cli::cli_progress_bar(
           format = paste(
             "{cli::pb_spin} Processing... ",
@@ -243,10 +243,8 @@ BatchJob <- R6::R6Class(
       if (!status$working) {
         self$stage <- "retrieving"
         self$save_state()
-      } else if (!self$should_wait) {
-        cli::cli_abort("Batch is still processing.")
       } else {
-        cli::cli_abort("Unexpected state", .internal = TRUE)
+        cli::cli_abort("Batch is still processing.")
       }
     },
 
