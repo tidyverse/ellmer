@@ -44,11 +44,13 @@ Suggests:
     shiny,
     shinychat (>= 0.1.1.9001),
     testthat (>= 3.0.0),
+    vcr (>= 1.7.0.91),
     withr
 VignetteBuilder:
     knitr
-Remotes: 
-    posit-dev/shinychat
+Remotes:  
+    posit-dev/shinychat,
+    ropensci/vcr
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true

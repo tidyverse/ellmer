@@ -20,16 +20,17 @@ retry_test <- function(code, retries = 1) {
 # Params -----------------------------------------------------------------
 
 test_params_stop <- function(chat_fun) {
-  chat <- chat_fun(params = params(stop_sequences = "cool"))
+  chat <- chat_fun(params = params(stop_sequences = "cool"), echo = FALSE)
   out <- chat$chat("Repeat after the following phrase: Dogs are cool")
-  expect_equal(out, "Dogs are ")
+  expect_equal(out, ellmer_output("Dogs are "))
 }
 
 # Tool calls -------------------------------------------------------------
 
 test_tools_simple <- function(chat_fun) {
   chat <- chat_fun(
-    system_prompt = "Always use a tool to answer. Reply with 'It is ____.'."
+    system_prompt = "Always use a tool to answer. Reply with 'It is ____.'.",
+    echo = FALSE
   )
   chat$register_tool(tool(
     function() "2024-01-01",
@@ -50,10 +51,14 @@ test_tools_simple <- function(chat_fun) {
 }
 
 test_tools_async <- function(chat_fun) {
-  chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
+  chat <- chat_fun(
+    system_prompt = "Be very terse, not even punctuation.",
+    echo = FALSE
+  )
   chat$register_tool(tool(
     coro::async(function() "2024-01-01"),
-    "Return the current date"
+    "Return the current date",
+    .name = "tool_001"
   ))
 
   result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
@@ -67,7 +72,10 @@ test_tools_async <- function(chat_fun) {
 }
 
 test_tools_parallel <- function(chat_fun) {
-  chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
+  chat <- chat_fun(
+    system_prompt = "Be very terse, not even punctuation.",
+    echo = FALSE
+  )
   favourite_color <- function(person) {
     if (person == "Joe") "sage green" else "red"
   }
@@ -94,8 +102,9 @@ test_tools_sequential <- function(chat_fun, total_calls) {
     Use provided tool calls to find the weather forecast and suitable
     equipment for a variety of weather conditions.
 
-    In your response, be very terse and omit punctuation.
-  "
+    In your response, be very terse and omit punctuation.,
+    ",
+    echo = FALSE
   )
 
   forecast <- function(city) if (city == "New York") "rainy" else "sunny"
@@ -134,7 +143,7 @@ test_data_extraction <- function(chat_fun) {
     Except for red delicious, that is. They are NOT delicious.
   "
 
-  chat <- chat_fun()
+  chat <- chat_fun(echo = FALSE)
   data <- chat$chat_structured(prompt, type = article_summary)
   expect_mapequal(
     data,
@@ -152,7 +161,7 @@ test_data_extraction <- function(chat_fun) {
 # Images -----------------------------------------------------------------
 
 test_images_inline <- function(chat_fun, test_shape = TRUE) {
-  chat <- chat_fun()
+  chat <- chat_fun(echo = FALSE)
   response <- chat$chat(
     "What's in this image? (Be sure to mention the outside shape)",
     content_image_file(system.file("httr2.png", package = "ellmer"))
@@ -164,7 +173,7 @@ test_images_inline <- function(chat_fun, test_shape = TRUE) {
 }
 
 test_images_remote <- function(chat_fun, test_shape = TRUE) {
-  chat <- chat_fun()
+  chat <- chat_fun(echo = FALSE)
   response <- chat$chat(
     "What's in this image? (Be sure to mention the outside shape)",
     content_image_url("https://httr2.r-lib.org/logo.png")
@@ -176,7 +185,7 @@ test_images_remote <- function(chat_fun, test_shape = TRUE) {
 }
 
 test_images_remote_error <- function(chat_fun) {
-  chat <- chat_fun()
+  chat <- chat_fun(echo = FALSE)
 
   image_remote <- content_image_url("https://httr2.r-lib.org/logo.png")
   expect_snapshot(
@@ -189,10 +198,11 @@ test_images_remote_error <- function(chat_fun) {
 # PDF ---------------------------------------------------------------------
 
 test_pdf_local <- function(chat_fun) {
-  chat <- chat_fun()
+  chat <- chat_fun(echo = FALSE)
   response <- chat$chat(
     "What's the title of this document?",
-    content_pdf_file(test_path("apples.pdf"))
+    content_pdf_file(test_path("apples.pdf")),
+    echo = FALSE
   )
   expect_match(response, "Apples are tasty")
   expect_match(chat$chat("What apple is not tasty?"), "red delicious")

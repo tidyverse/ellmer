@@ -47,7 +47,7 @@ chat_openai <- function(
   api_key = openai_key(),
   model = NULL,
   params = NULL,
-  seed = lifecycle::deprecated(),
+  seed = deprecated(),
   api_args = list(),
   echo = c("none", "output", "all")
 ) {
@@ -78,6 +78,7 @@ chat_openai <- function(
 chat_openai_test <- function(
   system_prompt = "Be terse.",
   ...,
+
   model = "gpt-4.1-nano",
   params = NULL
 ) {
@@ -126,14 +127,7 @@ method(base_request, ProviderOpenAI) <- function(provider) {
 method(base_request_error, ProviderOpenAI) <- function(provider, req) {
   req_error(req, body = function(resp) {
     if (resp_content_type(resp) == "application/json") {
-      error <- resp_body_json(resp)$error
-      if (is_string(error)) {
-        error
-      } else if (is.list(error)) {
-        error$message
-      } else {
-        prettify(resp_body_string(resp))
-      }
+      resp_body_json(resp)$error$message
     } else if (resp_content_type(resp) == "text/plain") {
       resp_body_string(resp)
     }
@@ -241,11 +235,7 @@ method(value_turn, ProviderOpenAI) <- function(
   }
 
   if (has_type) {
-    if (is_string(message$content)) {
-      json <- jsonlite::parse_json(message$content[[1]])
-    } else {
-      json <- message$content
-    }
+    json <- jsonlite::parse_json(message$content[[1]])
     content <- list(ContentJson(json))
   } else {
     content <- lapply(message$content, as_content)

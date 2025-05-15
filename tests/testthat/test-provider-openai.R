@@ -1,6 +1,8 @@
 # Getting started --------------------------------------------------------
 
 test_that("can make simple request", {
+  vcr::local_cassette("openai-batch")
+
   chat <- chat_openai_test()
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
@@ -25,6 +27,7 @@ test_that("defaults are reported", {
 })
 
 test_that("supports standard parameters", {
+  vcr::local_cassette("openai-parameters")
   chat_fun <- chat_openai_test
 
   test_params_stop(chat_fun)
@@ -33,19 +36,33 @@ test_that("supports standard parameters", {
 test_that("all tool variations work", {
   chat_fun <- chat_openai_test
 
-  test_tools_simple(chat_fun)
+  local({
+    vcr::local_cassette("openai-tools-simple")
+    test_tools_simple(chat_fun)
+  })
+
   test_tools_async(chat_fun)
-  test_tools_parallel(chat_fun)
-  test_tools_sequential(chat_fun, total_calls = 6)
+
+  local({
+    vcr::local_cassette("openai-tools-parallel")
+    test_tools_parallel(chat_fun)
+  })
+
+  local({
+    vcr::local_cassette("openai-tools-sequential")
+    test_tools_sequential(chat_fun, total_calls = 6)
+  })
 })
 
 test_that("can extract data", {
+  vcr::local_cassette("openai-data")
   chat_fun <- chat_openai_test
 
   test_data_extraction(chat_fun)
 })
 
 test_that("can use images", {
+  vcr::local_cassette("openai-images")
   # Needs mini to get shape correct
   chat_fun <- \(...) chat_openai_test(model = "gpt-4.1-mini", ...)
 

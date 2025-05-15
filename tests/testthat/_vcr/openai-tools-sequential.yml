@@ -1,0 +1,270 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"\n    Use provided tool calls
+        to find the weather forecast and suitable\n    equipment for a variety of
+        weather conditions.\n\n    In your response, be very terse and omit punctuation.,\n    "},{"role":"user","content":[{"type":"text","text":"What
+        should I pack for New York this weekend?"}]}],"model":"gpt-4o-mini","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"forecast","description":"Gets
+        the weather forecast for a city","strict":true,"parameters":{"type":"object","description":"","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"],"additionalProperties":false}}},{"type":"function","function":{"name":"equipment","description":"Gets
+        the equipment needed for a weather condition","strict":true,"parameters":{"type":"object","description":"","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"],"additionalProperties":false}}}]}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93bb968d6b076d84-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Tue, 06 May 2025 21:32:04 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '622'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=hQ8FwTelTKclVX5IydmiWpRpB2iprK1jc6YDeQKutYM-1746567124-1.0.1.1-k6p7KcYIhPfYinA7B_RZhL_9KPBjkYuZqT_FU0sxpOMXGSwShazYFABudL5064wpz3_jTzFDmY4MFc1uQ5VMIjC3tKwrCjV_iZEg36J4L7E;
+        path=/; expires=Tue, 06-May-25 22:02:04 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=NynUEdellP44ErKbDm_P_0Kqs29HkUgewvc1UbzVGoE-1746567124757-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '10000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '9999939'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_1ba76d39c701280668f6c5cf98935cbc
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BUKBQXLy4I7U7qOW2MgcOu9Lbcxnd",
+          "object": "chat.completion",
+          "created": 1746567124,
+          "model": "gpt-4o-mini-2024-07-18",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "call_aIGV9HJIR6Rx3YiEw9cNxDrK",
+                    "type": "function",
+                    "function": {
+                      "name": "forecast",
+                      "arguments": "{\"city\":\"New York\"}"
+                    }
+                  }
+                ],
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 120,
+            "completion_tokens": 16,
+            "total_tokens": 136,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_0392822090"
+        }
+  recorded_at: 2025-05-06 21:32:04
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"\n    Use provided tool calls
+        to find the weather forecast and suitable\n    equipment for a variety of
+        weather conditions.\n\n    In your response, be very terse and omit punctuation.,\n    "},{"role":"user","content":[{"type":"text","text":"What
+        should I pack for New York this weekend?"}]},{"role":"assistant","tool_calls":[{"id":"call_aIGV9HJIR6Rx3YiEw9cNxDrK","function":{"name":"forecast","arguments":"{\"city\":[\"New
+        York\"]}"},"type":"function"}]},{"role":"tool","content":"rainy","tool_call_id":"call_aIGV9HJIR6Rx3YiEw9cNxDrK"}],"model":"gpt-4o-mini","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"forecast","description":"Gets
+        the weather forecast for a city","strict":true,"parameters":{"type":"object","description":"","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"],"additionalProperties":false}}},{"type":"function","function":{"name":"equipment","description":"Gets
+        the equipment needed for a weather condition","strict":true,"parameters":{"type":"object","description":"","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"],"additionalProperties":false}}}]}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93bb96926d646d84-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Tue, 06 May 2025 21:32:05 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '380'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=u9z1ntNvIK_z1iLqGQRuN.dievr70x1e37YF_47JWlQ-1746567125-1.0.1.1-nGbIkXMGmsHXJ69lQm0M6XKp_FlcJhK9BXwEnNw7jRFxFYSyggVZpG20qqPKhjE.fHMgmPxOqb74hJ_T78k0MErFRh1rMAjMmyZ._ebINZ4;
+        path=/; expires=Tue, 06-May-25 22:02:05 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=jPQ78rdmswkCDzgCyhyAiNszaXvU15nUsNx5cxGnOxA-1746567125319-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '10000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '9999935'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_4ea43f554c434284366b14d3575e0a6c
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BUKBQGnbDq09OIPqgMy1ZQcp1AZ7U",
+          "object": "chat.completion",
+          "created": 1746567124,
+          "model": "gpt-4o-mini-2024-07-18",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "call_evaHXvNb2e3xhGHxDBgXWeyI",
+                    "type": "function",
+                    "function": {
+                      "name": "equipment",
+                      "arguments": "{\"weather\":\"rainy\"}"
+                    }
+                  }
+                ],
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 145,
+            "completion_tokens": 16,
+            "total_tokens": 161,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_0392822090"
+        }
+  recorded_at: 2025-05-06 21:32:05
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"\n    Use provided tool calls
+        to find the weather forecast and suitable\n    equipment for a variety of
+        weather conditions.\n\n    In your response, be very terse and omit punctuation.,\n    "},{"role":"user","content":[{"type":"text","text":"What
+        should I pack for New York this weekend?"}]},{"role":"assistant","tool_calls":[{"id":"call_aIGV9HJIR6Rx3YiEw9cNxDrK","function":{"name":"forecast","arguments":"{\"city\":[\"New
+        York\"]}"},"type":"function"}]},{"role":"tool","content":"rainy","tool_call_id":"call_aIGV9HJIR6Rx3YiEw9cNxDrK"},{"role":"assistant","tool_calls":[{"id":"call_evaHXvNb2e3xhGHxDBgXWeyI","function":{"name":"equipment","arguments":"{\"weather\":[\"rainy\"]}"},"type":"function"}]},{"role":"tool","content":"umbrella","tool_call_id":"call_evaHXvNb2e3xhGHxDBgXWeyI"}],"model":"gpt-4o-mini","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"forecast","description":"Gets
+        the weather forecast for a city","strict":true,"parameters":{"type":"object","description":"","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"],"additionalProperties":false}}},{"type":"function","function":{"name":"equipment","description":"Gets
+        the equipment needed for a weather condition","strict":true,"parameters":{"type":"object","description":"","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"],"additionalProperties":false}}}]}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93bb9695a9f96d84-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Tue, 06 May 2025 21:32:06 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '694'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=rtvb25rB9PKj21Q.aEHucA.WOr87NI0_lWNxvDsYVN0-1746567126-1.0.1.1-6T8YjjiT90ejOB0KPqeNs4HBrVpWN8YQe3UseuhcRSUntFZptlMh_iF9tIJURFT5EC3rgFQgvk.DnVHvkwcGPDXKYU2wa5a5xCcUeco8Eac;
+        path=/; expires=Tue, 06-May-25 22:02:06 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=6u.QFlnD4sqKFKs6Nq8VPz_4609RmOjrtKs2BC1SePo-1746567126163-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '10000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '9999932'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_089a2f3a51dfc8d667f42d75d4ac4379
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BUKBRT6tp9jgNB2Xby9vKNVdUoFka",
+          "object": "chat.completion",
+          "created": 1746567125,
+          "model": "gpt-4o-mini-2024-07-18",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "pack an umbrella",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 170,
+            "completion_tokens": 5,
+            "total_tokens": 175,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_0392822090"
+        }
+  recorded_at: 2025-05-06 21:32:06
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0

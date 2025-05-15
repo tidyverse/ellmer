@@ -1,0 +1,81 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        1 + 1. Just give me the answer, no punctuation"}]}],"model":"gpt-4o-mini","seed":1014,"temperature":0,"stream":false}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93781de7ffd4464e-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 28 Apr 2025 17:00:37 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '944'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=ZQAc_KrzLKzQX9PpviH5QcZ0S2r00H.11k9vH47SroE-1745859637-1.0.1.1-BX0DCFi5P87Xk8y6jlHBpg47D2Bx0UJSpKA44L5.gHfgLRftpG6ltM3kiARamc9PBv.WKRcryRNMG_odIGWjULvF67s6IlrDn1RtNvgYkWI;
+        path=/; expires=Mon, 28-Apr-25 17:30:37 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=lg81n3m8UlLyd8JdlC5bcdDCYZrbKav.x6QhcabNsfI-1745859637506-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '10000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '9999984'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_9b0f7b2323d923d6c80c31d7101f75ac
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BRM8K6OZ5EZLBQjhjJATb8FWuxoA6",
+          "object": "chat.completion",
+          "created": 1745859636,
+          "model": "gpt-4o-mini-2024-07-18",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "2",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 22,
+            "completion_tokens": 2,
+            "total_tokens": 24,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_0392822090"
+        }
+      file: no
+  recorded_at: 2025-04-28 17:00:37 GMT
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0

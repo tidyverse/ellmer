@@ -1,0 +1,186 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    status: 429
+    headers:
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93f2b6a4ec3af075-DFW
+      content-length: '337'
+      content-type: application/json; charset=utf-8
+      date: Tue, 13 May 2025 14:05:55 GMT
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=XHnaFhheHSi8WDcEzTJ6eAKJYD08OtRMHVN7HnI0leU-1747145155-1.0.1.1-Yr5SscU2fXA8ecMLKQTj7JU5PsINOn.LtqRJ6m4cHlfk4_UkH._tGL7LmCuYz7ixPZiWBaZyKpZhicG.CRPEf7o2ligPNgJJTS4IJhhsKZg;
+        path=/; expires=Tue, 13-May-25 14:35:55 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=wLrs9jzRD9wT4DExlwzzMZLUqg2DLgN1kLEomH5epR8-1747145155434-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      vary: Origin
+      x-content-type-options: nosniff
+      x-request-id: req_cacd3f4a90ef79695526f75d9e5acfff
+    body:
+      string: |
+        {
+            "error": {
+                "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.",
+                "type": "insufficient_quota",
+                "param": null,
+                "code": "insufficient_quota"
+            }
+        }
+  recorded_at: 2025-05-13 14:05:55
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93f2b7ef7983143c-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Tue, 13 May 2025 14:07:11 GMT
+      openai-organization: posit
+      openai-processing-ms: '22451'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=zpeZUaQ3S61GWeFHUgccqLb8awi6e.ku3KIJ6TsKSwU-1747145231-1.0.1.1-.Np1NoMvO8ddHnads3W_JTh6Q8ECPEkBSqgNgK5dzIjB6sdjoljGKto_yJGrQPi56Prj185Dt6MaoSwBcD2ddW56_iPMox31vh55IK.3EFg;
+        path=/; expires=Tue, 13-May-25 14:37:11 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=7n5irDWFijIZTS14a4fAESej7t5bmIqH9efvRe9LgVA-1747145231842-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '3193'
+      x-ratelimit-limit-input-images: '50000'
+      x-ratelimit-limit-requests: '200'
+      x-ratelimit-limit-tokens: '10000'
+      x-ratelimit-remaining-input-images: '49998'
+      x-ratelimit-remaining-requests: '199'
+      x-ratelimit-remaining-tokens: '8460'
+      x-ratelimit-reset-input-images: 2ms
+      x-ratelimit-reset-requests: 7m12s
+      x-ratelimit-reset-tokens: 9.24s
+      x-request-id: req_ee1d746274ffbec722d2cc6c7e83e6be
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BWkZOSl4iergxrEAJwcG6mfSoMxUr",
+          "object": "chat.completion",
+          "created": 1747145210,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "The first image is the logo for the R programming language, featuring a blue letter \"R\" inside a gray oval.\n\nThe second image is a hexagonal icon for the \"httr2\" package in R. It shows a red silhouette of a baseball player swinging a bat, with the text \"httr2\" and a \"www\" logo.",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 525,
+            "completion_tokens": 72,
+            "total_tokens": 597,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_90122d973c"
+        }
+  recorded_at: 2025-05-13 14:07:11
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 93f2b9009bff143c-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Tue, 13 May 2025 14:07:38 GMT
+      openai-organization: posit
+      openai-processing-ms: '6751'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=YrMuaGR.IIzIAZFjOfOvNDtogu3P6a15pNAsvjUSpEI-1747145258-1.0.1.1-SqsZ8RAIhld38Sl1aJUeiH5JZZFXQi8vCkBKN2_L9PTYYw_LWV5i5HpUjODomlSrWbHRX5cP8onQc3wrbWf9eyC6D8eUMKU29uePyLz4Evw;
+        path=/; expires=Tue, 13-May-25 14:37:38 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=bhLzWB3EXd_qsRH9tRINvpGKfUKL2r_Ih62ILKSlae0-1747145258828-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '6689'
+      x-ratelimit-limit-input-images: '50000'
+      x-ratelimit-limit-requests: '200'
+      x-ratelimit-limit-tokens: '10000'
+      x-ratelimit-remaining-input-images: '49999'
+      x-ratelimit-remaining-requests: '198'
+      x-ratelimit-remaining-tokens: '9191'
+      x-ratelimit-reset-input-images: 1ms
+      x-ratelimit-reset-requests: 13m41.323s
+      x-ratelimit-reset-tokens: 4.854s
+      x-request-id: req_0eb74ec563b1e5f75fcaef0cbb6378b7
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BWka4UmqVw4aWOU0ZEYDQjoKqR9We",
+          "object": "chat.completion",
+          "created": 1747145252,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "This is a scatter plot displaying the relationship between \"waiting\" times on the y-axis and \"eruptions\" durations on the x-axis. The data points form two distinct clusters, suggesting a potentially bimodal distribution. One cluster is centered around shorter eruption durations (about 2.0 to 3.0 on the x-axis) and shorter waiting times (around 50 to 70 on the y-axis). The second cluster has longer eruption durations (around 4.0 to 5.0 on the x-axis) and longer waiting times (around 70 to 90 on the y-axis). This pattern indicates a positive correlation between eruption duration and waiting time, with two prominent groupings.",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 811,
+            "completion_tokens": 143,
+            "total_tokens": 954,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_90122d973c"
+        }
+  recorded_at: 2025-05-13 14:07:38
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0

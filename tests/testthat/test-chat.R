@@ -40,11 +40,7 @@ test_that("can retrieve system prompt with last_turn()", {
   chat2 <- chat_openai_test(system_prompt = "You are from New Zealand")
   expect_equal(
     chat2$last_turn("system"),
-    Turn(
-      "system",
-      "You are from New Zealand",
-      completed = NULL
-    )
+    Turn("system", "You are from New Zealand", completed = NULL)
   )
 })
 
@@ -73,10 +69,11 @@ test_that("setting turns usually preserves, but can set system prompt", {
 
 
 test_that("can perform a simple batch chat", {
-  chat <- chat_openai_test()
+  vcr::local_cassette("chat-batch")
+  chat <- chat_openai_test(echo = FALSE)
 
   result <- chat$chat("What's 1 + 1. Just give me the answer, no punctuation")
-  expect_equal(result, "2")
+  expect_equal(result, ellmer_output("2"))
   expect_equal(chat$last_turn()@contents[[1]]@text, "2")
 })
 
@@ -94,7 +91,7 @@ test_that("can't chat with multiple prompts", {
 })
 
 test_that("can perform a simple async batch chat", {
-  chat <- chat_openai_test()
+  chat <- chat_openai_test(echo = FALSE)
 
   result <- chat$chat_async(
     "What's 1 + 1. Just give me the answer, no punctuation"
@@ -148,7 +145,26 @@ test_that("can perform a simple async batch chat", {
   )
 })
 
+test_that("can chat in parallel", {
+  # req_perform_parallel() not currently supported by vcr:
+  # https://github.com/r-lib/httr2/issues/651
+
+  chat <- chat_openai_test("Just give me answers, no punctuation", echo = FALSE)
+  results <- chat$chat_parallel(list("What's 1 + 1?", "What's 2 + 2?"))
+
+  expect_type(results, "list")
+  expect_length(results, 2)
+
+  expect_s3_class(results[[1]], "Chat")
+  expect_s3_class(results[[2]], "Chat")
+
+  expect_equal(results[[1]]$last_turn()@contents[[1]]@text, "2")
+  expect_equal(results[[2]]$last_turn()@contents[[1]]@text, "4")
+})
+
 test_that("can extract structured data", {
+  vcr::local_cassette("chat-structured")
+
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai_test()
@@ -211,7 +227,8 @@ test_that("can optionally echo", {
 })
 
 test_that("can retrieve last_turn for user and assistant", {
-  chat <- chat_openai_test()
+  vcr::local_cassette("chat-echo")
+  chat <- chat_openai_test(echo = FALSE)
   expect_equal(chat$last_turn("user"), NULL)
   expect_equal(chat$last_turn("assistant"), NULL)
 
@@ -221,7 +238,8 @@ test_that("can retrieve last_turn for user and assistant", {
 })
 
 test_that("chat messages get timestamped in sequence", {
-  chat <- chat_openai_test()
+  vcr::local_cassette("chat-timestamp")
+  chat <- chat_openai_test(echo = FALSE)
 
   before_send <- Sys.time()
   chat$chat("What's 1 + 1?")
@@ -300,7 +318,8 @@ test_that("chat can get and register a list of tools", {
 })
 
 test_that("chat warns on tool failures", {
-  chat <- chat_openai_test()
+  vcr::local_cassette("chat-tool-failure")
+  chat <- chat_openai_test(, echo = FALSE)
 
   chat$register_tool(tool(
     function(user) stop("User denied tool request"),

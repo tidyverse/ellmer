@@ -1,0 +1,815 @@
+http_interactions:
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: ''
+      string: '{"model":"claude-3-7-sonnet-latest","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
+        can I compute the mean and median of variables a, b, c, and so on,\n  all
+        the way up to z, grouped by age and sex.\n"}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+    headers:
+      anthropic-version: '2023-06-01'
+      x-api-key: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      date: Fri, 11 Apr 2025 19:26:28 GMT
+      content-type: application/json
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-04-11T19:26:20Z'
+      anthropic-ratelimit-input-tokens-limit: '40000'
+      anthropic-ratelimit-input-tokens-remaining: '40000'
+      anthropic-ratelimit-input-tokens-reset: '2025-04-11T19:26:20Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-04-11T19:26:28Z'
+      anthropic-ratelimit-tokens-limit: '56000'
+      anthropic-ratelimit-tokens-remaining: '56000'
+      anthropic-ratelimit-tokens-reset: '2025-04-11T19:26:20Z'
+      request-id: req_016EtGcgC9whopYreQYePBu6
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 92ece001e9a5284b-DFW
+      content-encoding: gzip
+    body:
+      encoding: ''
+      file: no
+      string: '{"id":"msg_01KqMBsapt5EivE9tg4a7zVr","type":"message","role":"assistant","model":"claude-3-7-sonnet-20250219","content":[{"type":"text","text":"#
+        Computing Mean and Median by Age and Sex\n\nTo compute the mean and median
+        of variables a through z grouped by age and sex, you''ll need to use a statistical
+        software package. Here''s how to approach this in several common platforms:\n\n##
+        In R\n```r\n# Assuming your data is in a dataframe called ''df''\nlibrary(dplyr)\n\nsummary_stats
+        <- df %>%\n  group_by(age, sex) %>%\n  summarize(across(a:z, list(\n    mean
+        = ~mean(., na.rm = TRUE),\n    median = ~median(., na.rm = TRUE)\n  )))\n```\n\n##
+        In Python with pandas\n```python\nimport pandas as pd\n\n# Assuming your data
+        is in a dataframe called ''df''\n# For mean\nmeans = df.groupby([''age'',
+        ''sex''])[list(''abcdefghijklmnopqrstuvwxyz'')].mean()\n\n# For median\nmedians
+        = df.groupby([''age'', ''sex''])[list(''abcdefghijklmnopqrstuvwxyz'')].median()\n\n#
+        Or combined\nsummary = df.groupby([''age'', ''sex'']).agg({col: [''mean'',
+        ''median''] for col in list(''abcdefghijklmnopqrstuvwxyz'')})\n```\n\n## In
+        SPSS\n```\nSORT CASES BY age sex.\nAGGREGATE\n  /OUTFILE=* MODE=ADDVARIABLES\n  /BREAK=age
+        sex\n  /a_mean=MEAN(a) /a_median=MEDIAN(a)\n  /b_mean=MEAN(b) /b_median=MEDIAN(b)\n  /*
+        Continue for all variables through z */\n  /z_mean=MEAN(z) /z_median=MEDIAN(z).\n```\n\n##
+        In Stata\n```stata\ncollapse (mean) a_mean=a b_mean=b ... z_mean=z ///\n         (median)
+        a_median=a b_median=b ... z_median=z, ///\n         by(age sex)\n```\n\n##
+        In SAS\n```sas\nPROC MEANS DATA=mydata MEAN MEDIAN;\n  CLASS age sex;\n  VAR
+        a b c d e f g h i j k l m n o p q r s t u v w x y z;\n  OUTPUT OUT=summary_stats
+        MEAN= MEDIAN= / AUTONAME;\nRUN;\n```\n\nThese approaches will give you the
+        mean and median values for each variable from a to z, grouped by the combinations
+        of age and sex in your dataset."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":45,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":613}}'
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: ''
+      string: '{"model":"claude-3-7-sonnet-latest","system":"\n  You are an expert
+        R programmer who prefers the tidyverse.\n","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
+        can I compute the mean and median of variables a, b, c, and so on,\n  all
+        the way up to z, grouped by age and sex.\n"}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+    headers:
+      anthropic-version: '2023-06-01'
+      x-api-key: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      date: Fri, 11 Apr 2025 19:26:35 GMT
+      content-type: application/json
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-04-11T19:26:29Z'
+      anthropic-ratelimit-input-tokens-limit: '40000'
+      anthropic-ratelimit-input-tokens-remaining: '40000'
+      anthropic-ratelimit-input-tokens-reset: '2025-04-11T19:26:29Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-04-11T19:26:35Z'
+      anthropic-ratelimit-tokens-limit: '56000'
+      anthropic-ratelimit-tokens-remaining: '56000'
+      anthropic-ratelimit-tokens-reset: '2025-04-11T19:26:29Z'
+      request-id: req_01PwAw1PLeQeJxoUbEMDfVVU
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 92ece0377d7e284b-DFW
+      content-encoding: gzip
+    body:
+      encoding: ''
+      file: no
+      string: '{"id":"msg_01ALrJRHmTwTyVzJsjDuj1u1","type":"message","role":"assistant","model":"claude-3-7-sonnet-20250219","content":[{"type":"text","text":"#
+        Computing Mean and Median by Group in R\n\nTo compute the mean and median
+        of variables a through z, grouped by age and sex, I''ll use the tidyverse
+        approach. Here''s how to do it:\n\n```r\nlibrary(tidyverse)\n\n# Assuming
+        your data is in a data frame called ''df''\nresult <- df %>%\n  # Group by
+        age and sex\n  group_by(age, sex) %>%\n  \n  # Calculate mean and median for
+        variables a through z\n  summarize(across(\n    .cols = a:z,\n    .fns = list(mean
+        = mean, median = median),\n    .names = \"{.col}_{.fn}\",\n    na.rm = TRUE\n  ))
+        %>%\n  \n  # Optional: Convert back to regular data frame\n  ungroup()\n```\n\nThis
+        code:\n1. Groups your data by age and sex\n2. Uses `across()` to apply both
+        mean and median functions to all variables from a to z\n3. Names the resulting
+        columns as \"variable_function\" (e.g., \"a_mean\", \"a_median\")\n4. Handles
+        missing values with `na.rm = TRUE`\n\nIf your variables aren''t conveniently
+        named a through z in sequence, you can use:\n\n```r\n# For specific variables\nresult
+        <- df %>%\n  group_by(age, sex) %>%\n  summarize(across(\n    .cols = c(a,
+        b, c, ..., z),\n    .fns = list(mean = mean, median = median),\n    .names
+        = \"{.col}_{.fn}\",\n    na.rm = TRUE\n  ))\n```\n\nThe result will be a tidy
+        data frame with one row per age-sex combination and columns for the mean and
+        median of each variable."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":59,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":413}}'
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: ''
+      string: '{"model":"claude-3-7-sonnet-latest","system":"\n  You are an expert
+        R programmer who prefers the tidyverse.\n  Just give me the code. I don''t
+        want any explanation or sample data.\n","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
+        can I compute the mean and median of variables a, b, c, and so on,\n  all
+        the way up to z, grouped by age and sex.\n"}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+    headers:
+      anthropic-version: '2023-06-01'
+      x-api-key: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      date: Fri, 11 Apr 2025 19:26:36 GMT
+      content-type: application/json
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-04-11T19:26:35Z'
+      anthropic-ratelimit-input-tokens-limit: '40000'
+      anthropic-ratelimit-input-tokens-remaining: '40000'
+      anthropic-ratelimit-input-tokens-reset: '2025-04-11T19:26:35Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-04-11T19:26:36Z'
+      anthropic-ratelimit-tokens-limit: '56000'
+      anthropic-ratelimit-tokens-remaining: '56000'
+      anthropic-ratelimit-tokens-reset: '2025-04-11T19:26:35Z'
+      request-id: req_016UsGCHu4v696D5AUhhsmAw
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 92ece05dcba6284b-DFW
+      content-encoding: gzip
+    body:
+      encoding: ''
+      file: no
+      string: '{"id":"msg_01Apin2qnweZaircqm22Jfsp","type":"message","role":"assistant","model":"claude-3-7-sonnet-20250219","content":[{"type":"text","text":"```r\nlibrary(tidyverse)\n\ndata
+        %>%\n  group_by(age, sex) %>%\n  summarize(across(a:z, list(mean = mean, median
+        = median), na.rm = TRUE),\n            .groups = \"drop\")\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":77,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":65}}'
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: ''
+      string: '{"model":"claude-3-7-sonnet-latest","system":"\n  You are an expert
+        R programmer who prefers data.table.\n  Just give me the code. I don''t want
+        any explanation or sample data.\n","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
+        can I compute the mean and median of variables a, b, c, and so on,\n  all
+        the way up to z, grouped by age and sex.\n"}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+    headers:
+      anthropic-version: '2023-06-01'
+      x-api-key: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      date: Fri, 11 Apr 2025 19:26:38 GMT
+      content-type: application/json
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-04-11T19:26:36Z'
+      anthropic-ratelimit-input-tokens-limit: '40000'
+      anthropic-ratelimit-input-tokens-remaining: '40000'
+      anthropic-ratelimit-input-tokens-reset: '2025-04-11T19:26:37Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-04-11T19:26:38Z'
+      anthropic-ratelimit-tokens-limit: '56000'
+      anthropic-ratelimit-tokens-remaining: '56000'
+      anthropic-ratelimit-tokens-reset: '2025-04-11T19:26:37Z'
+      request-id: req_01RCMXQXjdUgbXPnBWkXZkhD
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 92ece066d98b284b-DFW
+      content-encoding: gzip
+    body:
+      encoding: ''
+      file: no
+      string: '{"id":"msg_016AAU9VJqwCr1s2zyP6e35c","type":"message","role":"assistant","model":"claude-3-7-sonnet-20250219","content":[{"type":"text","text":"```r\nlibrary(data.table)\n\ndt[,
+        lapply(.SD, function(x) list(mean = mean(x, na.rm = TRUE), \n                                  median
+        = median(x, na.rm = TRUE))), \n    by = .(age, sex), \n    .SDcols = letters]\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":76,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":80}}'
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: ''
+      string: '{"model":"claude-3-7-sonnet-latest","system":"\n  You are an expert
+        R programmer who prefers base R.\n  Just give me the code. I don''t want any
+        explanation or sample data.\n","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
+        can I compute the mean and median of variables a, b, c, and so on,\n  all
+        the way up to z, grouped by age and sex.\n"}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+    headers:
+      anthropic-version: '2023-06-01'
+      x-api-key: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      date: Fri, 11 Apr 2025 19:26:42 GMT
+      content-type: application/json
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-04-11T19:26:38Z'
+      anthropic-ratelimit-input-tokens-limit: '40000'
+      anthropic-ratelimit-input-tokens-remaining: '40000'
+      anthropic-ratelimit-input-tokens-reset: '2025-04-11T19:26:38Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-04-11T19:26:42Z'
+      anthropic-ratelimit-tokens-limit: '56000'
+      anthropic-ratelimit-tokens-remaining: '56000'
+      anthropic-ratelimit-tokens-reset: '2025-04-11T19:26:38Z'
+      request-id: req_012jJZhu8ZgCyBRTXCEjVxt7
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 92ece0711fd6284b-DFW
+      content-encoding: gzip
+    body:
+      encoding: ''
+      file: no
+      string: '{"id":"msg_0187EXgDbFNq7bCiLucacVaJ","type":"message","role":"assistant","model":"claude-3-7-sonnet-20250219","content":[{"type":"text","text":"```r\n#
+        Assuming data frame ''df'' with variables a through z, age, and sex\nvars
+        <- letters[1:26]\nresult <- lapply(vars, function(var) {\n  formula <- as.formula(paste0(var,
+        \" ~ age + sex\"))\n  means <- aggregate(formula, data = df, FUN = mean, na.rm
+        = TRUE)\n  medians <- aggregate(formula, data = df, FUN = median, na.rm =
+        TRUE)\n  \n  means_df <- data.frame(\n    variable = var,\n    age = means$age,\n    sex
+        = means$sex,\n    mean = means[[var]]\n  )\n  \n  medians_df <- data.frame(\n    variable
+        = var,\n    age = medians$age,\n    sex = medians$sex,\n    median = medians[[var]]\n  )\n  \n  merge(means_df,
+        medians_df, by = c(\"variable\", \"age\", \"sex\"))\n})\n\nfinal_result <-
+        do.call(rbind, result)\nrownames(final_result) <- NULL\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":75,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":262}}'
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: ''
+      string: '{"model":"claude-3-7-sonnet-latest","system":"\n  You are an expert
+        R programmer who prefers the tidyverse.\n  Just give me the code. I don''t
+        want any explanation or sample data.\n\n  Follow the tidyverse style guide:\n  *
+        Spread long function calls across multiple lines.\n  * Where needed, always
+        indent function calls with two spaces.\n  * Only name arguments that are less
+        commonly used.\n  * Always use double quotes for strings.\n  * Use the base
+        pipe, `|>`, not the magrittr pipe `%>%`.\n","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
+        can I compute the mean and median of variables a, b, c, and so on,\n  all
+        the way up to z, grouped by age and sex.\n"}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+    headers:
+      anthropic-version: '2023-06-01'
+      x-api-key: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      date: Fri, 11 Apr 2025 19:26:44 GMT
+      content-type: application/json
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-04-11T19:26:42Z'
+      anthropic-ratelimit-input-tokens-limit: '40000'
+      anthropic-ratelimit-input-tokens-remaining: '40000'
+      anthropic-ratelimit-input-tokens-reset: '2025-04-11T19:26:42Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-04-11T19:26:44Z'
+      anthropic-ratelimit-tokens-limit: '56000'
+      anthropic-ratelimit-tokens-remaining: '56000'
+      anthropic-ratelimit-tokens-reset: '2025-04-11T19:26:42Z'
+      request-id: req_01EeXhKCfp3jf6G6bfpSpmfC
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 92ece08c4b98284b-DFW
+      content-encoding: gzip
+    body:
+      encoding: ''
+      file: no
+      string: '{"id":"msg_018CbE17mENE3y8bDvdV9qFN","type":"message","role":"assistant","model":"claude-3-7-sonnet-20250219","content":[{"type":"text","text":"```r\nlibrary(tidyverse)\n\ndata
+        |>\n  group_by(age, sex) |>\n  summarize(\n    across(\n      a:z,\n      list(\n        mean
+        = mean,\n        median = median\n      ),\n      na.rm = TRUE\n    ),\n    .groups
+        = \"drop\"\n  )\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":158,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":84}}'
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: ''
+      string: '{"model":"claude-3-7-sonnet-latest","system":"\n  You are an expert
+        R teacher.\n  I am a new R user who wants to improve my programming skills.\n  Help
+        me understand the code you produce by explaining each function call with\n  a
+        brief comment. For more complicated calls, add documentation to each\n  argument.
+        Just give me the code. I don''t want any explanation or sample data.\n","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
+        can I compute the mean and median of variables a, b, c, and so on,\n  all
+        the way up to z, grouped by age and sex.\n"}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+    headers:
+      anthropic-version: '2023-06-01'
+      x-api-key: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      date: Fri, 11 Apr 2025 19:26:47 GMT
+      content-type: application/json
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-04-11T19:26:44Z'
+      anthropic-ratelimit-input-tokens-limit: '40000'
+      anthropic-ratelimit-input-tokens-remaining: '40000'
+      anthropic-ratelimit-input-tokens-reset: '2025-04-11T19:26:44Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-04-11T19:26:47Z'
+      anthropic-ratelimit-tokens-limit: '56000'
+      anthropic-ratelimit-tokens-remaining: '56000'
+      anthropic-ratelimit-tokens-reset: '2025-04-11T19:26:44Z'
+      request-id: req_01JyehTsf9u6KuDgxJmaYkJh
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 92ece0962ac1284b-DFW
+      content-encoding: gzip
+    body:
+      encoding: ''
+      file: no
+      string: '{"id":"msg_016YpcEzjqrk4oe3eu1vFjfE","type":"message","role":"assistant","model":"claude-3-7-sonnet-20250219","content":[{"type":"text","text":"```r\n#
+        Load dplyr for data manipulation\nlibrary(dplyr)\n\n# Create a vector of variable
+        names from a to z\nvars <- letters\n\n# Compute mean and median for each variable,
+        grouped by age and sex\nresult <- data %>%\n  group_by(age, sex) %>%\n  summarize(\n    across(\n      .cols
+        = all_of(vars),  # Select all variables from a to z\n      .fns = list(\n        mean
+        = ~mean(., na.rm = TRUE),    # Calculate mean, removing NA values\n        median
+        = ~median(., na.rm = TRUE) # Calculate median, removing NA values\n      )\n    ),\n    .groups
+        = \"drop\"  # Drop grouping structure in result\n  )\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":118,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":178}}'
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: ''
+      string: '{"model":"claude-3-7-sonnet-latest","system":"\n  You are an expert
+        R programmer.\n  Just give me the code; no explanation in text.\n  Use the
+        `.by` argument rather than `group_by()`.\n  dplyr 1.1.0 introduced per-operation
+        grouping with the `.by` argument.\n  e.g., instead of:\n\n  transactions |>\n    group_by(company,
+        year) |>\n    mutate(total = sum(revenue))\n\n  write this:\n  transactions
+        |>\n    mutate(\n      total = sum(revenue),\n      .by = c(company, year)\n    )\n","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
+        can I compute the mean and median of variables a, b, c, and so on,\n  all
+        the way up to z, grouped by age and sex.\n"}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+    headers:
+      anthropic-version: '2023-06-01'
+      x-api-key: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      date: Fri, 11 Apr 2025 19:26:48 GMT
+      content-type: application/json
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-04-11T19:26:47Z'
+      anthropic-ratelimit-input-tokens-limit: '40000'
+      anthropic-ratelimit-input-tokens-remaining: '40000'
+      anthropic-ratelimit-input-tokens-reset: '2025-04-11T19:26:47Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-04-11T19:26:48Z'
+      anthropic-ratelimit-tokens-limit: '56000'
+      anthropic-ratelimit-tokens-remaining: '56000'
+      anthropic-ratelimit-tokens-reset: '2025-04-11T19:26:47Z'
+      request-id: req_01Ti83g6fkiAaBbdy56g6vcy
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 92ece0a91864284b-DFW
+      content-encoding: gzip
+    body:
+      encoding: ''
+      file: no
+      string: '{"id":"msg_01PQ2fqg9eiEKmC6PSGPmXNG","type":"message","role":"assistant","model":"claude-3-7-sonnet-20250219","content":[{"type":"text","text":"```r\ndata
+        |>\n  summarize(\n    across(a:z, list(mean = mean, median = median), na.rm
+        = TRUE),\n    .by = c(age, sex)\n  )\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":180,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":54}}'
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"system","content":"\n  You''re an expert baker
+        who also loves JSON. I am going to give you a list of\n  ingredients and your
+        job is to return nicely structured JSON. Just return the\n  JSON and no other
+        commentary.\n"},{"role":"user","content":[{"type":"text","text":"\n  ¾ cup
+        (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½ cup
+        (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
+        kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
+        plus 1½ teaspoons sugar\n"}]}],"model":"gpt-4o","stream":false}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 92ece0b28b716725-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 11 Apr 2025 19:26:50 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '1756'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=kMZx5sd3LzJ66D4q4xYg8forOxQ2cebteHwFPvKO7oo-1744399610-1.0.1.1-R6Indzrs_ig6z41RLHUMX3LF5.G1svNBImoaKe_21rTLn27SZb4tBrVkSBP1UpOZqBGD2TwezQaGHvYu4R.qK3I.ywuExDPd8iaLc0G5GTw;
+        path=/; expires=Fri, 11-Apr-25 19:56:50 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=STtFsjkuBytluQm5zDNplk89TfdZb9JxrYX5lSF6W0c-1744399610560-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999881'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 3ms
+      x-request-id: req_25f05d31c8f8346569a58ee9e3fcca9c
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BLEJUs79qHavaYAEzD3Mt7OR2kL4q",
+          "object": "chat.completion",
+          "created": 1744399608,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "```json\n{\n  \"ingredients\": [\n    {\n      \"name\": \"dark brown sugar\",\n      \"quantity\": \"¾ cup\",\n      \"weight\": \"150g\"\n    },\n    {\n      \"name\": \"eggs\",\n      \"quantity\": \"2\",\n      \"size\": \"large\"\n    },\n    {\n      \"name\": \"sour cream\",\n      \"quantity\": \"¾ cup\",\n      \"weight\": \"165g\"\n    },\n    {\n      \"name\": \"unsalted butter\",\n      \"quantity\": \"½ cup\",\n      \"weight\": \"113g\",\n      \"state\": \"melted\"\n    },\n    {\n      \"name\": \"vanilla extract\",\n      \"quantity\": \"1 teaspoon\"\n    },\n    {\n      \"name\": \"kosher salt\",\n      \"quantity\": \"¾ teaspoon\"\n    },\n    {\n      \"name\": \"neutral oil\",\n      \"quantity\": \"⅓ cup\",\n      \"volume\": \"80ml\"\n    },\n    {\n      \"name\": \"all-purpose flour\",\n      \"quantity\": \"1½ cups\",\n      \"weight\": \"190g\"\n    },\n    {\n      \"name\": \"sugar\",\n      \"weight\": \"150g\",\n      \"additional\": \"1½ teaspoons\"\n    }\n  ]\n}\n```",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 149,
+            "completion_tokens": 266,
+            "total_tokens": 415,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_92f14e8683"
+        }
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"system","content":"\n  You''re an expert baker
+        who also loves JSON. I am going to give you a list of\n  ingredients and your
+        job is to return nicely structured JSON. Just return the\n  JSON and no other
+        commentary.\n \n  Here are some examples of the sort of output I''m looking
+        for:\n\n  ¾ cup (150g) dark brown sugar\n  {\"name\": \"dark brown sugar\",
+        \"quantity\": 150, \"unit\": \"g\"}\n\n  ⅓ cup (80ml) neutral oil\n  {\"name\":
+        \"neutral oil\", \"quantity\": 80, \"unit\": \"ml\"}\n\n  2 t ground cinnamon\n  {\"name\":
+        \"ground cinnamon\", \"quantity\": 2, \"unit\": \"teaspoon\"}\n"},{"role":"user","content":[{"type":"text","text":"\n  ¾
+        cup (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½
+        cup (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
+        kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
+        plus 1½ teaspoons sugar\n"}]}],"model":"gpt-4o","stream":false}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 92ece0bedede6725-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 11 Apr 2025 19:26:52 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '1372'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=j4FuH954bUln0UiId0ZiV_aZonMs60WT6ICmrDYrslc-1744399612-1.0.1.1-Cr2JzGSp89j1MNHglxWDISlUpm6W64SwbrMFWAKoul18r0yIpk6Isv52oltiFtt3b_MMOLlW62alzDl5jtOHm_av6W6979GOFHCYBTvNz.o;
+        path=/; expires=Fri, 11-Apr-25 19:56:52 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=gF91G2aZ5VgsdIXCefAbJgmNkv0EO_d1WlheVJkhQI4-1744399612135-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999797'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 6ms
+      x-request-id: req_23702cfec0b8a1c1bd58e9787a18c698
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BLEJWBqwVzPIHnelIj3CQHEZHu0Fw",
+          "object": "chat.completion",
+          "created": 1744399610,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "```json\n[\n  {\"name\": \"dark brown sugar\", \"quantity\": 150, \"unit\": \"g\"},\n  {\"name\": \"large eggs\", \"quantity\": 2, \"unit\": \"count\"},\n  {\"name\": \"sour cream\", \"quantity\": 165, \"unit\": \"g\"},\n  {\"name\": \"unsalted butter, melted\", \"quantity\": 113, \"unit\": \"g\"},\n  {\"name\": \"vanilla extract\", \"quantity\": 1, \"unit\": \"teaspoon\"},\n  {\"name\": \"kosher salt\", \"quantity\": 0.75, \"unit\": \"teaspoon\"},\n  {\"name\": \"neutral oil\", \"quantity\": 80, \"unit\": \"ml\"},\n  {\"name\": \"all-purpose flour\", \"quantity\": 190, \"unit\": \"g\"},\n  {\"name\": \"sugar\", \"quantity\": 150, \"unit\": \"g\"},\n  {\"name\": \"sugar\", \"quantity\": 1.5, \"unit\": \"teaspoon\"}\n]\n```",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 258,
+            "completion_tokens": 225,
+            "total_tokens": 483,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_92f14e8683"
+        }
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"system","content":"\n  You''re an expert baker
+        who also loves JSON. I am going to give you a list of\n  ingredients and your
+        job is to return nicely structured JSON. Just return the\n  JSON and no other
+        commentary.\n\n\n\n  * If an ingredient has both weight and volume, extract
+        only the weight:\n\n  ¾ cup (150g) dark brown sugar\n  [\n    {\"name\": \"dark
+        brown sugar\", \"quantity\": 150, \"unit\": \"g\"}\n  ]\n\n* If an ingredient
+        only lists a volume, extract that.\n\n  2 t ground cinnamon\n  ⅓ cup (80ml)
+        neutral oil\n  [\n    {\"name\": \"ground cinnamon\", \"quantity\": 2, \"unit\":
+        \"teaspoon\"},\n    {\"name\": \"neutral oil\", \"quantity\": 80, \"unit\":
+        \"ml\"}\n  ]\n"},{"role":"user","content":[{"type":"text","text":"\n  ¾ cup
+        (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½ cup
+        (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
+        kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
+        plus 1½ teaspoons sugar\n"}]}],"model":"gpt-4o","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"Ingredient
+        name"},"quantity":{"type":"number","description":""},"unit":{"type":"string","description":"Unit
+        of measurement"}},"required":["name","quantity","unit"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 92ece0c9de776725-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 11 Apr 2025 19:26:53 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '1197'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=_QjMumOrq72ta_3p6gn7lwJRiivw3TC5XbchlNEEYUE-1744399613-1.0.1.1-1zKVV4ejuo4aiW_W6ljHhaeItpAclcklncpQkEb8yh3hB7yASweeW90Y5bUHmXOtFuZGSxDfjWUUaLxy4jqnZ3q9UAV_T18Pgpc2hdxncqg;
+        path=/; expires=Fri, 11-Apr-25 19:56:53 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=oibTxKrTKaFG53jVc.N2nt7HIvQwmVENa5qyliQ91E4-1744399613760-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999776'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 6ms
+      x-request-id: req_71b5b6375f85979366c114ed9710af4e
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BLEJYV8J1G7hJusoMMBZbPIezOhxD",
+          "object": "chat.completion",
+          "created": 1744399612,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":[{\"name\":\"dark brown sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"large eggs\",\"quantity\":2,\"unit\":\"count\"},{\"name\":\"sour cream\",\"quantity\":165,\"unit\":\"g\"},{\"name\":\"unsalted butter, melted\",\"quantity\":113,\"unit\":\"g\"},{\"name\":\"vanilla extract\",\"quantity\":1,\"unit\":\"teaspoon\"},{\"name\":\"kosher salt\",\"quantity\":0.75,\"unit\":\"teaspoon\"},{\"name\":\"neutral oil\",\"quantity\":80,\"unit\":\"ml\"},{\"name\":\"all-purpose flour\",\"quantity\":190,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":1.5,\"unit\":\"teaspoon\"}]}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 355,
+            "completion_tokens": 154,
+            "total_tokens": 509,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_22890b9c0a"
+        }
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: ''
+      string: '{"messages":[{"role":"system","content":"\n  You''re an expert baker
+        who also loves JSON. I am going to give you a list of\n  ingredients and your
+        job is to return nicely structured JSON. Just return the\n  JSON and no other
+        commentary.\n\n\n\n  * If an ingredient has both weight and volume, extract
+        only the weight:\n\n    ¾ cup (150g) dark brown sugar\n    [\n      {\"name\":
+        \"dark brown sugar\", \"quantity\": 150, \"unit\": \"g\", \"input\": \"¾ cup
+        (150g) dark brown sugar\"}\n    ]\n\n  * If an ingredient only lists a volume,
+        extract that.\n\n    2 t ground cinnamon\n    ⅓ cup (80ml) neutral oil\n    [\n      {\"name\":
+        \"ground cinnamon\", \"quantity\": 2, \"unit\": \"teaspoon\", \"input\": \"2
+        t ground cinnamon\"},\n      {\"name\": \"neutral oil\", \"quantity\": 80,
+        \"unit\": \"ml\", \"input\": \"⅓ cup (80ml) neutral oil\"}\n    ]\n"},{"role":"user","content":[{"type":"text","text":"\n  In
+        a large bowl, cream together one cup of softened unsalted butter and a\n  quarter
+        cup of white sugar until smooth. Beat in an egg and 1 teaspoon of\n  vanilla
+        extract. Gradually stir in 2 cups of all-purpose flour until the\n  dough
+        forms. Finally, fold in 1 cup of semisweet chocolate chips. Drop\n  spoonfuls
+        of dough onto an ungreased baking sheet and bake at 350°F (175°C)\n  for 10-12
+        minutes, or until the edges are lightly browned. Let the cookies\n  cool on
+        the baking sheet for a few minutes before transferring to a wire\n  rack to
+        cool completely. Enjoy!\n"}]}],"model":"gpt-4o","stream":false}'
+    headers:
+      Authorization: <redacted>
+  response:
+    status:
+      status_code: 200
+      message: OK
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 92ece0d2c87d6725-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 11 Apr 2025 19:26:55 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '1994'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=sBjXIS4sFjahXHnzEPRW9gloh1LqroarcNyK6nw4v6Q-1744399615-1.0.1.1-iNVCZu7eFL8OJ7TkyLWbRMwyWQi68Sj_YTyD7VJcd2ihvLzyF.CgMMzReNvSvFA5goZaMDhJDRSv13v5V4KmCl7sLl2iJsuQ849EhIss3d8;
+        path=/; expires=Fri, 11-Apr-25 19:56:55 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=rfBpaLGci0K.L_xg58Nn1rt5B3XdodZtd3X9N3Cbz50-1744399615960-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '1999667'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 9ms
+      x-request-id: req_7997f574b8d8bbec9e6a3383d3b91cbf
+    body:
+      encoding: ''
+      file: no
+      string: |
+        {
+          "id": "chatcmpl-BLEJZ3IZmPrAW2RT5dsrMmw1hswfb",
+          "object": "chat.completion",
+          "created": 1744399613,
+          "model": "gpt-4o-2024-08-06",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "```json\n[\n  {\n    \"name\": \"unsalted butter\",\n    \"quantity\": 1,\n    \"unit\": \"cup\",\n    \"input\": \"one cup of softened unsalted butter\"\n  },\n  {\n    \"name\": \"white sugar\",\n    \"quantity\": 0.25,\n    \"unit\": \"cup\",\n    \"input\": \"a quarter cup of white sugar\"\n  },\n  {\n    \"name\": \"egg\",\n    \"quantity\": 1,\n    \"unit\": \"\",\n    \"input\": \"an egg\"\n  },\n  {\n    \"name\": \"vanilla extract\",\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\",\n    \"input\": \"1 teaspoon of vanilla extract\"\n  },\n  {\n    \"name\": \"all-purpose flour\",\n    \"quantity\": 2,\n    \"unit\": \"cup\",\n    \"input\": \"2 cups of all-purpose flour\"\n  },\n  {\n    \"name\": \"semisweet chocolate chips\",\n    \"quantity\": 1,\n    \"unit\": \"cup\",\n    \"input\": \"1 cup of semisweet chocolate chips\"\n  }\n]\n```",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 366,
+            "completion_tokens": 240,
+            "total_tokens": 606,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_22890b9c0a"
+        }
+  recorded_at: 2025-04-11 19:26:55 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
