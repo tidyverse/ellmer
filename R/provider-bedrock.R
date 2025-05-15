@@ -294,8 +294,7 @@ method(value_turn, ProviderAWSBedrock) <- function(
     output = result$usage$outputTokens
   )
 
-  completion_turn(
-    result$output$message$role,
+  assistant_turn(
     contents,
     json = result,
     tokens = tokens

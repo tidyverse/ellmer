@@ -264,8 +264,7 @@ method(value_turn, ProviderOpenAI) <- function(
     input = result$usage$prompt_tokens,
     output = result$usage$completion_tokens
   )
-  completion_turn(
-    message$role,
+  assistant_turn(
     content,
     json = result,
     tokens = tokens

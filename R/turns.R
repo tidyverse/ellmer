@@ -88,8 +88,8 @@ method(print, Turn) <- function(x, ...) {
   invisible(x)
 }
 
-completion_turn <- function(role = NULL, ...) {
-  Turn(role = role %||% "assistant", ...)
+assistant_turn <- function(...) {
+  Turn(role = "assistant", ...)
 }
 
 user_turn <- function(..., .call = caller_env()) {
