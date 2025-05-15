@@ -59,6 +59,7 @@ RoxygenNote: 7.3.2
 Collate:
     'utils-S7.R'
     'types.R'
+    'ellmer-package.R'
     'tools-def.R'
     'content.R'
     'provider.R'
@@ -69,9 +70,9 @@ Collate:
     'content-image.R'
     'content-pdf.R'
     'turns.R'
+    'content-replay.R'
     'content-tools.R'
     'deprecated.R'
-    'ellmer-package.R'
     'httr2.R'
     'import-standalone-obj-type.R'
     'import-standalone-purrr.R'
