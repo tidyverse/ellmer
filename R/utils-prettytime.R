@@ -60,11 +60,3 @@ pretty_ms <- function(ms, compact = FALSE) {
 pretty_sec <- function(sec, compact = FALSE) {
   pretty_ms(sec * 1000, compact = compact)
 }
-
-pretty_dt <- function(dt, compact = FALSE) {
-  assert_diff_time(dt)
-
-  units(dt) <- "secs"
-
-  pretty_sec(as.vector(dt), compact = compact)
-}
