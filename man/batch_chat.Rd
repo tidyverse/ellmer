@@ -2,9 +2,21 @@
 % Please edit documentation in R/batch-chat.R
 \name{batch_chat}
 \alias{batch_chat}
+\alias{batch_chat_structured}
 \title{Submit multiple chats in one batch}
 \usage{
 batch_chat(chat, prompts, path, wait = TRUE)
+
+batch_chat_structured(
+  chat,
+  prompts,
+  path,
+  type,
+  wait = TRUE,
+  convert = TRUE,
+  include_tokens = FALSE,
+  include_cost = FALSE
+)
 }
 \arguments{
 \item{chat}{A base chat object.}
@@ -16,16 +28,33 @@ of character vectors.}
 
 \item{wait}{If \code{TRUE}, will wait for batch to complete. If \code{FALSE},
 it will check once and error if the job is not complete.}
+
+\item{type}{A type specification for the extracted data. Should be
+created with a \code{\link[=type_boolean]{type_()}} function.}
+
+\item{convert}{If \code{TRUE}, automatically convert from JSON lists to R
+data types using the schema. This typically works best when \code{type} is
+\code{\link[=type_object]{type_object()}} as this will give you a data frame with one column for
+each property. If \code{FALSE}, returns a list.}
+
+\item{include_tokens}{If \code{TRUE}, and the result is a data frame, will
+add \code{input_tokens} and \code{output_tokens} columns giving the total input
+and output tokens for each prompt.}
+
+\item{include_cost}{If \code{TRUE}, and the result is a data frame, will
+add \code{cost} column giving the cost of each prompt.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-\code{batch_chat()} is currently implemented for OpenAI and Anthropic, where it
-uses their batch API which allow you to submit multiple requests
-simultaenously. You get the results back within 24 hours in return for paying
-50\% less than usual (but note that ellmer doesn't include this discount in
-its pricing metadata). If you want to get results back more quickly, you
-may want to use \code{\link[=parallel_chat]{parallel_chat()}} instead.
+\code{batch_chat()} and \code{batch_chat_structured()} currently only works with
+\code{\link[=chat_openai]{chat_openai()}} and \code{\link[=chat_anthropic]{chat_anthropic()}}. They use the OpenAI and Anthropic
+batch APIs which allow you to submit multiple requests simultaenously.
+The results can take up to 24 hours to come back, but in return you pay 50\%
+less than usual (but note that ellmer doesn't include this discount in
+its pricing metadata). If you want to get results back more quickly, or
+you're working with a different provider, you may want to use
+\code{\link[=parallel_chat]{parallel_chat()}} instead.
 
 Since batched requests can take a long time to complete, \code{batch_chat()}
 requires a file path that is used to store information about the batch so
@@ -39,15 +68,34 @@ deal with errors. Fortunately they don't seem to be common, but if you
 have ideas, please let me know!
 }
 \examples{
-\dontshow{if (has_credentials("claude")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-chat <- chat_openai()
+\dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+chat <- chat_openai(model = "gpt-4.1-nano")
 
 # Chat ----------------------------------------------------------------------
-country <- c("Canada", "New Zealand", "Jamaica", "United States")
-prompts <- interpolate("What's the capital of {{country}}?")
+
 \dontrun{
-chats <- batch_chat(chat, prompts, path = "capitals.json")
+chats <- batch_chat(chat, prompts, path = "potluck.json")
 chats
+}
+
+# Structured data -----------------------------------------------------------
+prompts <- list(
+  "I go by Alex. 42 years on this planet and counting.",
+  "Pleased to meet you! I'm Jamal, age 27.",
+  "They call me Li Wei. Nineteen years young.",
+  "Fatima here. Just celebrated my 35th birthday last week.",
+  "The name's Robert - 51 years old and proud of it.",
+  "Kwame here - just hit the big 5-0 this year."
+)
+type_person <- type_object(name = type_string(), age = type_number())
+\dontrun{
+data <- batch_chat_structured(
+  chat = chat,
+  prompts = prompts,
+  path = "people-data.json",
+  type = type_person
+)
+data
 }
 \dontshow{\}) # examplesIf}
 }

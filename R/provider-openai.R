@@ -388,7 +388,8 @@ method(as_json, list(ProviderOpenAI, TypeObject)) <- function(provider, x) {
 # Batched requests -------------------------------------------------------------
 
 method(has_batch_support, ProviderOpenAI) <- function(provider) {
-  TRUE
+  # Only enable for OpenAI, not subclasses
+  identical(S7_class(provider)@parent@name, Provider@name)
 }
 
 # https://platform.openai.com/docs/api-reference/batch

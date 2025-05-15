@@ -177,7 +177,7 @@ has_batch_support <- new_generic(
     S7_dispatch()
   }
 )
-method(has_batch_support, class_any) <- function(provider) {
+method(has_batch_support, Provider) <- function(provider) {
   FALSE
 }
 

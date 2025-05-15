@@ -5,8 +5,11 @@
 #'
 #' If you have multiple prompts, you can submit them in parallel. This is
 #' typically considerably faster than submitting them in sequence, especially
-#' with Gemini and OpenAI. If you're willing to wait longer, you might want to
-#' use [batch_chat()] instead, as it is often substantially cheaper.
+#' with Gemini and OpenAI.
+#'
+#' If you're using [chat_openai()] or [chat_anthropic()] and you're willing
+#' to wait longer, you might want to use [batch_chat()] instead, as it comes
+#' with a 50% discount in return for taking up to 24 hours.
 #'
 #' @param chat A base chat object.
 #' @param prompts A vector created by [interpolate()] or a list
@@ -122,7 +125,6 @@ parallel_chat_structured <- function(
 
   provider <- chat$get_provider()
   needs_wrapper <- S7_inherits(provider, ProviderOpenAI)
-  w_type <- wrap_type_if_needed(type, needs_wrapper)
 
   # First build up list of cumulative conversations
   user_turns <- as_user_turns(prompts)
@@ -133,13 +135,36 @@ parallel_chat_structured <- function(
     provider = provider,
     conversations = conversations,
     tools = chat$get_tools(),
-    type = w_type,
+    type = wrap_type_if_needed(type, needs_wrapper),
     max_active = max_active,
     rpm = rpm
   )
 
+  multi_convert(
+    turns,
+    type,
+    needs_wrapper = needs_wrapper,
+    convert = convert,
+    include_tokens = include_tokens,
+    include_cost = include_cost
+  )
+}
+
+multi_convert <- function(
+  turns,
+  type,
+  needs_wrapper = FALSE,
+  convert = TRUE,
+  include_tokens = FALSE,
+  include_cost = FALSE
+) {
   rows <- map(turns, \(turn) {
-    extract_data(turn, w_type, convert = FALSE, needs_wrapper = needs_wrapper)
+    extract_data(
+      turn = turn,
+      type = wrap_type_if_needed(type, needs_wrapper),
+      convert = FALSE,
+      needs_wrapper = needs_wrapper
+    )
   })
 
   if (convert) {
