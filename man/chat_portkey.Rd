@@ -32,9 +32,9 @@ models_portkey(
 \item{virtual_key}{A virtual identifier storing LLM provider's API key. See
 \href{https://portkey.ai/docs/product/ai-gateway/virtual-keys}{documentation}.}
 
-\item{model}{The model to use for the chat. The default, \code{NULL}, will pick
-a reasonable default, and tell you about. We strongly recommend explicitly
-choosing a model for all but the most casual use.}
+\item{model}{The model to use for the chat (defaults to "gpt-4o").
+We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
+Use \code{models_openai()} to see all options.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
