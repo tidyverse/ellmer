@@ -16,7 +16,7 @@ Description: Chat with large language models from a range of providers
 License: MIT + file LICENSE
 URL: https://ellmer.tidyverse.org, https://github.com/tidyverse/ellmer
 BugReports: https://github.com/tidyverse/ellmer/issues
-Depends: 
+Depends:
     R (>= 4.1)
 Imports:
     cli,
@@ -42,13 +42,11 @@ Suggests:
     paws.common,
     rmarkdown,
     shiny,
-    shinychat (>= 0.1.1.9001),
+    shinychat (>= 0.2.0),
     testthat (>= 3.0.0),
     withr
 VignetteBuilder:
     knitr
-Remotes: 
-    posit-dev/shinychat
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true
