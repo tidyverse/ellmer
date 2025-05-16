@@ -65,7 +65,9 @@ chat_ollama <- function(
     model = model,
     seed = seed,
     extra_args = api_args,
-    api_key = api_key %||% ollama_key()
+    # ollama doesn't require an API key for local usage, but one might be needed
+    # if ollama is served behind a proxy (see #501)
+    api_key = api_key %||% Sys.getenv("OLLAMA_API_KEY", "ollama")
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -80,15 +82,6 @@ ProviderOllama <- new_class(
     seed = prop_number_whole(allow_null = TRUE)
   )
 )
-
-ollama_key <- function() {
-  # ollama doesn't require an API key for local usage, but one might be needed
-  # if ollama is served behind a proxy (see #501)
-  tryCatch(
-    key_get("OLLAMA_API_KEY"),
-    error = function(err) "ollama"
-  )
-}
 
 chat_ollama_test <- function(..., model = "llama3.2:1b") {
   # model: Note that tests require a model with tool capabilities
