@@ -57,7 +57,9 @@ add \code{cost} column giving the cost of each prompt.}
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 \code{batch_chat()} and \code{batch_chat_structured()} currently only work with
-\code{\link[=chat_openai]{chat_openai()}} and \code{\link[=chat_anthropic]{chat_anthropic()}}. They use the OpenAI and Anthropic
+\code{\link[=chat_openai]{chat_openai()}} and \code{\link[=chat_anthropic]{chat_anthropic()}}. They use the
+\href{https://platform.openai.com/docs/guides/batch}{OpenAI} and
+\href{https://docs.anthropic.com/en/docs/build-with-claude/batch-processing}{Anthropic}
 batch APIs which allow you to submit multiple requests simultaneously.
 The results can take up to 24 hours to complete, but in return you pay 50\%
 less than usual (but note that ellmer doesn't include this discount in
@@ -70,8 +72,9 @@ requires a file path that is used to store information about the batch so
 you never lose any work. You can either set \code{wait = FALSE} or simply
 interrupt the waiting process, then later, either call \code{batch_chat()} to
 resume where you left off or call \code{batch_chat_completed()} to see if the
-results are ready to retrieve. Once you have the results, you can delete
-the file.
+results are ready to retrieve. \code{batch_chat()} will store the chat responses
+in this file, so you can either keep it around to cache the results,
+or delete it to free up disk space.
 
 This API is marked as experimental since I don't yet know how to handle
 errors in the most helpful way. Fortunately they don't seem to be common,

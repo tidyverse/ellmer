@@ -4,7 +4,9 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' `batch_chat()` and `batch_chat_structured()` currently only work with
-#' [chat_openai()] and [chat_anthropic()]. They use the OpenAI and Anthropic
+#' [chat_openai()] and [chat_anthropic()]. They use the
+#' [OpenAI](https://platform.openai.com/docs/guides/batch) and
+#' [Anthropic](https://docs.anthropic.com/en/docs/build-with-claude/batch-processing)
 #' batch APIs which allow you to submit multiple requests simultaneously.
 #' The results can take up to 24 hours to complete, but in return you pay 50%
 #' less than usual (but note that ellmer doesn't include this discount in
@@ -17,8 +19,9 @@
 #' you never lose any work. You can either set `wait = FALSE` or simply
 #' interrupt the waiting process, then later, either call `batch_chat()` to
 #' resume where you left off or call `batch_chat_completed()` to see if the
-#' results are ready to retrieve. Once you have the results, you can delete
-#' the file.
+#' results are ready to retrieve. `batch_chat()` will store the chat responses
+#' in this file, so you can either keep it around to cache the results,
+#' or delete it to free up disk space.
 #'
 #' This API is marked as experimental since I don't yet know how to handle
 #' errors in the most helpful way. Fortunately they don't seem to be common,
@@ -248,9 +251,11 @@ BatchJob <- R6::R6Class(
       if (self$should_wait) {
         cli::cli_progress_bar(
           format = paste(
-            "{cli::pb_spin} Processing... ",
-            "{status$n_processing} -> {cli::col_green({status$n_succeeded})} / {cli::col_red({status$n_failed})} ",
-            "[{self$elapsed()}]"
+            "{cli::pb_spin} Processing...",
+            "[{self$elapsed()}]",
+            "{status$n_processing} pending |",
+            "{cli::col_green({status$n_succeeded})} done |",
+            "{cli::col_red({status$n_failed})} failed"
           )
         )
         while (status$working) {
@@ -258,7 +263,7 @@ BatchJob <- R6::R6Class(
           cli::cli_progress_update()
           status <- self$poll()
         }
-        cli::cli_process_done()
+        cli::cli_progress_done()
       }
 
       if (!status$working) {
