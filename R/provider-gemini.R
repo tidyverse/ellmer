@@ -21,7 +21,10 @@ NULL
 #' It can also pick up on viewer-based credentials on Posit Connect. This in
 #' turn requires the \pkg{connectcreds} package.
 #'
-#' @param api_key `r api_key_param("GOOGLE_API_KEY")`
+#' @param api_key `r api_key_param("GOOGLE_API_KEY")` For Gemini, you can alternatively
+#'   set `GEMINI_API_KEY`, or provide the key as a named argument:
+#'   `c(gemini = "<secret-key>")`.
+#'
 #' @param model `r param_model("gemini-2.0-flash", "google_gemini")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -568,19 +571,24 @@ default_google_credentials <- function(
   gemini_scope <- "https://www.googleapis.com/auth/generative-language.retriever"
 
   check_string(api_key, allow_null = TRUE, call = error_call)
-  api_key <- api_key %||% Sys.getenv("GOOGLE_API_KEY")
-  if (nchar(api_key) > 0) {
-    return(function() {
-      list("x-goog-api-key" = api_key)
-    })
+
+  if (is.null(api_key)) {
+    api_key <- c(google = Sys.getenv("GOOGLE_API_KEY"))
   }
 
-  if (gemini) {
-    gemini_key <- Sys.getenv("GEMINI_API_KEY")
-    if (nzchar(gemini_key)) {
-      creds <- list(key = gemini_key)
+  if (gemini && api_key == "") {
+    api_key <- c(gemini = Sys.getenv("GEMINI_API_KEY"))
+  }
+
+  if (nzchar(api_key)) {
+    if (identical(names(api_key), "gemini")) {
+      creds <- list(key = unname(api_key))
       attr(creds, "auth_location") <- "query"
       return(function() creds)
+    } else {
+      return(function() {
+        list("x-goog-api-key" = unname(api_key))
+      })
     }
   }
 
@@ -665,7 +673,11 @@ models_google_gemini <- function(
     name = "gemini",
     model = "",
     base_url = base_url,
-    credentials = default_google_credentials(api_key)
+    credentials = if (isFALSE(api_key)) {
+      default_google_credentials() # vertex
+    } else {
+      default_google_credentials(api_key, gemini = TRUE)
+    }
   )
 
   req <- base_request(provider)
@@ -690,5 +702,5 @@ models_google_gemini <- function(
 #' @rdname chat_google_gemini
 #' @export
 models_google_vertex <- function(location, project_id) {
-  models_google_gemini(vertex_url(location, project_id))
+  models_google_gemini(vertex_url(location, project_id), api_key = FALSE)
 }

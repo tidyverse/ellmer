@@ -33,7 +33,7 @@ google_upload <- function(
   api_key = NULL,
   mime_type = NULL
 ) {
-  credentials <- default_google_credentials(api_key)
+  credentials <- default_google_credentials(api_key, gemini = TRUE)
 
   mime_type <- mime_type %||% guess_mime_type(path)
 
