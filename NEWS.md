@@ -146,11 +146,11 @@
   `chat_claude(params = )` (#280).
 
 * `chat_gemini()` can now handle responses that include citation metadata
-  (#358). It detects viewer-based credentials when running on Posit
-  Connect (#320, @atheriel) and can authenticate with Google default application
-  credentials (including service accounts, etc) (#317, @atheriel). 
-  Authentication with default application credentials requires the `gargle`
-   package.
+  (#358). It uses `GEMINI_API_KEY` if set (@t-kalinowski, #513), can 
+  authenticate with Google default application credentials (including service 
+  accounts, etc) (#317, @atheriel) and use viewer-based credentials when 
+  running on Posit Connect (#320, @atheriel). Authentication with default 
+  application credentials requires the `gargle` package.
 
 * `chat_ollama()` now works with `tool()` definitions with optional arguments 
   or empty properties (#342, #348, @gadenbuie), and now accepts `api_key` and 
