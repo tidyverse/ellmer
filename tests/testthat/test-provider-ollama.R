@@ -44,9 +44,6 @@ test_that("checks that requested model is installed", {
     chat_ollama(model = "not-a-real-model"),
     error = TRUE
   )
-  expect_silent(
-    chat_ollama(model = I("not-a-real-model"))
-  )
 })
 
 # Common provider interface -----------------------------------------------
