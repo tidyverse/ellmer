@@ -1,6 +1,11 @@
 # ellmer (development version)
 
-* New `chat_portkey()` and `models_portkey()` for models hosted at 
+* `chat_ollama()` now accepts `api_key` or consults the `OLLAMA_API_KEY`
+  environment variable. This is not needed for local usage, but enables
+  bearer-token authentication when Ollama is running behind a reverse proxy
+  (#501, @gadenbuie).
+
+* New `chat_portkey()` and `models_portkey()` for models hosted at
   <https://portkey.ai> (#363, @maciekbanas).
 
 * `$stream()` and `$stream_async()` gain support for streaming the additional
