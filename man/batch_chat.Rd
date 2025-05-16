@@ -3,6 +3,7 @@
 \name{batch_chat}
 \alias{batch_chat}
 \alias{batch_chat_structured}
+\alias{batch_chat_completed}
 \title{Submit multiple chats in one batch}
 \usage{
 batch_chat(chat, prompts, path, wait = TRUE)
@@ -17,6 +18,8 @@ batch_chat_structured(
   include_tokens = FALSE,
   include_cost = FALSE
 )
+
+batch_chat_completed(chat, prompts, path)
 }
 \arguments{
 \item{chat}{A base chat object.}
@@ -24,10 +27,16 @@ batch_chat_structured(
 \item{prompts}{A vector created by \code{\link[=interpolate]{interpolate()}} or a list
 of character vectors.}
 
-\item{path}{Path to file (with \code{.json} extension) to store state.}
+\item{path}{Path to file (with \code{.json} extension) to store state.
+
+The file records a hash of the provider, the prompts, and the existing
+chat turns. If you attempt to reuse the same file with any of these being
+different, you'll get an error.}
 
 \item{wait}{If \code{TRUE}, will wait for batch to complete. If \code{FALSE},
-it will check once and error if the job is not complete.}
+it will return \code{NULL} if the batch is not complete, and you can retrieve
+the results later by re-running \code{batch_chat()} when
+\code{batch_chat_completed()} is \code{TRUE}.}
 
 \item{type}{A type specification for the extracted data. Should be
 created with a \code{\link[=type_boolean]{type_()}} function.}
@@ -47,10 +56,10 @@ add \code{cost} column giving the cost of each prompt.}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-\code{batch_chat()} and \code{batch_chat_structured()} currently only works with
+\code{batch_chat()} and \code{batch_chat_structured()} currently only work with
 \code{\link[=chat_openai]{chat_openai()}} and \code{\link[=chat_anthropic]{chat_anthropic()}}. They use the OpenAI and Anthropic
-batch APIs which allow you to submit multiple requests simultaenously.
-The results can take up to 24 hours to come back, but in return you pay 50\%
+batch APIs which allow you to submit multiple requests simultaneously.
+The results can take up to 24 hours to complete, but in return you pay 50\%
 less than usual (but note that ellmer doesn't include this discount in
 its pricing metadata). If you want to get results back more quickly, or
 you're working with a different provider, you may want to use
@@ -59,13 +68,14 @@ you're working with a different provider, you may want to use
 Since batched requests can take a long time to complete, \code{batch_chat()}
 requires a file path that is used to store information about the batch so
 you never lose any work. You can either set \code{wait = FALSE} or simply
-interrupt the waiting process, then later, call \code{batch_chat()} to resume
-where you left off. Once you're done with the chat results, delete the
-file you created to avoid re-using previous results.
+interrupt the waiting process, then later, either call \code{batch_chat()} to
+resume where you left off or call \code{batch_chat_completed()} to see if the
+results are ready to retrieve. Once you have the results, you can delete
+the file.
 
-This API is marked as experimental, since I don't know how to helpfully
-deal with errors. Fortunately they don't seem to be common, but if you
-have ideas, please let me know!
+This API is marked as experimental since I don't yet know how to handle
+errors in the most helpful way. Fortunately they don't seem to be common,
+but if you have ideas, please let me know!
 }
 \examples{
 \dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -73,6 +83,7 @@ chat <- chat_openai(model = "gpt-4.1-nano")
 
 # Chat ----------------------------------------------------------------------
 
+prompts <- interpolate("What do people from {{state.name}} bring to a potluck dinner?")
 \dontrun{
 chats <- batch_chat(chat, prompts, path = "potluck.json")
 chats

@@ -3,10 +3,10 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' `batch_chat()` and `batch_chat_structured()` currently only works with
+#' `batch_chat()` and `batch_chat_structured()` currently only work with
 #' [chat_openai()] and [chat_anthropic()]. They use the OpenAI and Anthropic
-#' batch APIs which allow you to submit multiple requests simultaenously.
-#' The results can take up to 24 hours to come back, but in return you pay 50%
+#' batch APIs which allow you to submit multiple requests simultaneously.
+#' The results can take up to 24 hours to complete, but in return you pay 50%
 #' less than usual (but note that ellmer doesn't include this discount in
 #' its pricing metadata). If you want to get results back more quickly, or
 #' you're working with a different provider, you may want to use
@@ -15,24 +15,31 @@
 #' Since batched requests can take a long time to complete, `batch_chat()`
 #' requires a file path that is used to store information about the batch so
 #' you never lose any work. You can either set `wait = FALSE` or simply
-#' interrupt the waiting process, then later, call `batch_chat()` to resume
-#' where you left off. Once you're done with the chat results, delete the
-#' file you created to avoid re-using previous results.
+#' interrupt the waiting process, then later, either call `batch_chat()` to
+#' resume where you left off or call `batch_chat_completed()` to see if the
+#' results are ready to retrieve. Once you have the results, you can delete
+#' the file.
 #'
-#' This API is marked as experimental, since I don't know how to helpfully
-#' deal with errors. Fortunately they don't seem to be common, but if you
-#' have ideas, please let me know!
+#' This API is marked as experimental since I don't yet know how to handle
+#' errors in the most helpful way. Fortunately they don't seem to be common,
+#' but if you have ideas, please let me know!
 #'
 #' @inheritParams parallel_chat
 #' @param path Path to file (with `.json` extension) to store state.
+#'
+#'   The file records a hash of the provider, the prompts, and the existing
+#'   chat turns. If you attempt to reuse the same file with any of these being
+#'   different, you'll get an error.
 #' @param wait If `TRUE`, will wait for batch to complete. If `FALSE`,
-#'   it will check once and error if the job is not complete.
+#'   it will return `NULL` if the batch is not complete, and you can retrieve
+#'   the results later by re-running `batch_chat()` when
+#'   `batch_chat_completed()` is `TRUE`.
 #' @examplesIf has_credentials("openai")
 #' chat <- chat_openai(model = "gpt-4.1-nano")
 #'
 #' # Chat ----------------------------------------------------------------------
 #'
-#  prompts <- interpolate("What do people from {{state.name}} bring to a potluck dinner?")
+#' prompts <- interpolate("What do people from {{state.name}} bring to a potluck dinner?")
 #' \dontrun{
 #' chats <- batch_chat(chat, prompts, path = "potluck.json")
 #' chats
@@ -112,6 +119,24 @@ batch_chat_structured <- function(
     convert = convert,
     include_tokens = include_tokens,
     include_cost = include_cost
+  )
+}
+
+#' @export
+#' @rdname batch_chat
+batch_chat_completed <- function(chat, prompts, path) {
+  job <- BatchJob$new(
+    chat = chat,
+    prompts = prompts,
+    path = path
+  )
+  switch(
+    job$stage,
+    "submitting" = FALSE,
+    "waiting" = !job$poll()$working,
+    "retrieving" = TRUE,
+    "done" = TRUE,
+    cli::cli_abort("Unexpected stage: {job$stage}", .internal = TRUE)
   )
 }
 
@@ -198,7 +223,9 @@ BatchJob <- R6::R6Class(
 
     step_until_done = function() {
       while (self$stage != "done") {
-        self$step()
+        if (!self$step()) {
+          return(invisible())
+        }
       }
       invisible(self)
     },
@@ -210,32 +237,25 @@ BatchJob <- R6::R6Class(
       self$batch <- batch_submit(self$provider, conversations, type = self$type)
       self$stage <- "waiting"
       self$save_state()
+      TRUE
     },
 
     wait = function() {
-      # want to ensure that we always cycle once, even when wait = FALSE
-      self$batch <- batch_poll(self$provider, self$batch)
-      status <- batch_status(self$provider, self$batch)
-      self$save_state()
-
-      elapsed <- function() {
-        pretty_sec(as.integer(Sys.time()) - as.integer(self$started_at))
-      }
+      # always poll once, even when wait = FALSE
+      status <- self$poll()
 
       if (self$should_wait) {
         cli::cli_progress_bar(
           format = paste(
             "{cli::pb_spin} Processing... ",
             "{status$n_processing} -> {cli::col_green({status$n_succeeded})} / {cli::col_red({status$n_failed})} ",
-            "[{elapsed()}]"
+            "[{self$elapsed()}]"
           )
         )
         while (status$working) {
           Sys.sleep(0.5)
           cli::cli_progress_update()
-          self$batch <- batch_poll(self$provider, self$batch)
-          status <- batch_status(self$provider, self$batch)
-          self$save_state()
+          status <- self$poll()
         }
         cli::cli_process_done()
       }
@@ -243,15 +263,26 @@ BatchJob <- R6::R6Class(
       if (!status$working) {
         self$stage <- "retrieving"
         self$save_state()
+        TRUE
       } else {
-        cli::cli_abort("Batch is still processing.")
+        FALSE
       }
+    },
+    poll = function() {
+      self$batch <- batch_poll(self$provider, self$batch)
+      self$save_state()
+
+      batch_status(self$provider, self$batch)
+    },
+    elapsed = function() {
+      pretty_sec(as.integer(Sys.time()) - as.integer(self$started_at))
     },
 
     retrieve = function() {
       self$results <- batch_retrieve(self$provider, self$batch)
       self$stage <- "done"
       self$save_state()
+      TRUE
     },
 
     result_turns = function() {
@@ -279,9 +310,11 @@ BatchJob <- R6::R6Class(
       differences <- names(new_hash)[!same]
 
       cli::cli_abort(
-        "{differences} don't match from last run.",
-        call = call,
-        class = "ellmer_batch_mismatch"
+        c(
+          "{differences} don't match stored values.",
+          i = "Do you need to pick a different {.arg path}?"
+        ),
+        call = call
       )
     }
   )

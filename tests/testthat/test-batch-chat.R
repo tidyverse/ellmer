@@ -32,6 +32,8 @@ test_that("errors if chat/provider/prompts don't match previous run", {
 })
 
 test_that("steps through in logical order, writing to disk at end step", {
+  chat <- chat_openai_test()
+  prompts <- list("What's your name")
   local_mocked_bindings(
     batch_submit = function(...) list(id = "123"),
     batch_poll = function(...) list(id = "123", results = TRUE),
@@ -42,27 +44,29 @@ test_that("steps through in logical order, writing to disk at end step", {
   path <- withr::local_tempfile()
   read_stage <- function() jsonlite::read_json(path)$stage
 
-  job <- BatchJob$new(
-    chat = chat_openai_test(),
-    prompts = list("What's your name"),
-    path = path
-  )
+  job <- BatchJob$new(chat, prompts, path)
+  completed <- \() batch_chat_completed(chat, prompts, path)
+
   expect_equal(job$stage, "submitting")
+  expect_false(completed())
 
   job$step()
   expect_equal(job$stage, "waiting")
   expect_equal(read_stage(), "waiting")
   expect_equal(job$batch, list(id = "123"))
+  expect_true(completed())
 
   job$step()
   expect_equal(job$stage, "retrieving")
   expect_equal(read_stage(), "retrieving")
   expect_equal(job$batch, list(id = "123", results = TRUE))
+  expect_true(completed())
 
   job$step()
   expect_equal(job$stage, "done")
   expect_equal(read_stage(), "done")
   expect_equal(job$results, list(x = 1, y = 2))
+  expect_true(completed())
 })
 
 test_that("can run all steps at once", {
@@ -98,7 +102,7 @@ test_that("errors if wait = FALSE and not complete", {
     path = path,
     wait = FALSE
   )
-  expect_snapshot(job$step_until_done(), error = TRUE)
+  expect_equal(job$step_until_done(), NULL)
 })
 
 test_that("informative error for bad inputs", {

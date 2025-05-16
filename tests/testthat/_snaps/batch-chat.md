@@ -4,15 +4,8 @@
       batch_chat(chat, prompts, path)
     Condition
       Error in `batch_chat()`:
-      ! provider, prompts, and user_turns don't match from last run.
-
-# errors if wait = FALSE and not complete
-
-    Code
-      job$step_until_done()
-    Condition
-      Error in `self$wait()`:
-      ! Batch is still processing.
+      ! provider, prompts, and user_turns don't match stored values.
+      i Do you need to pick a different `path`?
 
 # informative error for bad inputs
 
