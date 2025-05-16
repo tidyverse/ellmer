@@ -21,9 +21,8 @@ NULL
 #' It can also pick up on viewer-based credentials on Posit Connect. This in
 #' turn requires the \pkg{connectcreds} package.
 #'
-#' @param api_key `r api_key_param("GOOGLE_API_KEY")` For Gemini, you can alternatively
-#'   set `GEMINI_API_KEY`, or provide the key as a named argument:
-#'   `c(gemini = "<secret-key>")`.
+#' @param api_key `r api_key_param("GOOGLE_API_KEY")`
+#'   For Gemini, you can alternatively set `GEMINI_API_KEY`.
 #'
 #' @param model `r param_model("gemini-2.0-flash", "google_gemini")`
 #' @inheritParams chat_openai
@@ -571,25 +570,15 @@ default_google_credentials <- function(
   gemini_scope <- "https://www.googleapis.com/auth/generative-language.retriever"
 
   check_string(api_key, allow_null = TRUE, call = error_call)
-
-  if (is.null(api_key)) {
-    api_key <- c(google = Sys.getenv("GOOGLE_API_KEY"))
-  }
-
+  api_key <- api_key %||% Sys.getenv("GOOGLE_API_KEY")
   if (gemini && api_key == "") {
-    api_key <- c(gemini = Sys.getenv("GEMINI_API_KEY"))
+    api_key <- Sys.getenv("GEMINI_API_KEY")
   }
 
   if (nzchar(api_key)) {
-    if (identical(names(api_key), "gemini")) {
-      creds <- list(key = unname(api_key))
-      attr(creds, "auth_location") <- "query"
-      return(function() creds)
-    } else {
-      return(function() {
-        list("x-goog-api-key" = unname(api_key))
-      })
-    }
+    return(function() {
+      list("x-goog-api-key" = api_key)
+    })
   }
 
   # Detect viewer-based credentials from Posit Connect.

@@ -43,9 +43,8 @@ models_google_vertex(location, project_id)
 
 You generally should not supply this directly, but instead set the \code{GOOGLE_API_KEY} environment variable.
 The best place to set this is in \code{.Renviron},
-which you can easily edit by calling \code{usethis::edit_r_environ()}. For Gemini, you can alternatively
-set \code{GEMINI_API_KEY}, or provide the key as a named argument:
-\code{c(gemini = "<secret-key>")}.}
+which you can easily edit by calling \code{usethis::edit_r_environ()}.
+For Gemini, you can alternatively set \code{GEMINI_API_KEY}.}
 
 \item{model}{The model to use for the chat (defaults to "gemini-2.0-flash").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
