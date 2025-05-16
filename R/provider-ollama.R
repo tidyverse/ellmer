@@ -55,6 +55,16 @@ chat_ollama <- function(
       "Must specify {.arg model}.",
       i = "Locally installed models: {.str {models}}."
     ))
+  } else if (!inherits(model, "AsIs")) {
+    if (!model %in% models_ollama(base_url)$id) {
+      cli::cli_abort(
+        c(
+          "Model {.val {model}} is not installed locally.",
+          i = "Run {.code ollama pull {model}} in your terminal or {.run ollamar::pull(\"{model}\")} in R to install the model.",
+          i = "See locally installed models with {.run ellmer::models_ollama()}."
+        )
+      )
+    }
   }
 
   echo <- check_echo(echo)
