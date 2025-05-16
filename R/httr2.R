@@ -93,7 +93,11 @@ ellmer_req_timeout <- function(req, stream) {
 ellmer_req_credentials <- function(req, credentials_fun) {
   # TODO: simplify once req_headers_redacted() supports !!!
   credentials <- credentials_fun()
-  req_headers(req, !!!credentials, .redact = names(credentials))
+  if (identical(attr(credentials, "auth_location"), "query")) {
+    req_url_query(req, !!!credentials)
+  } else {
+    req_headers(req, !!!credentials, .redact = names(credentials))
+  }
 }
 
 ellmer_req_user_agent <- function(req, override = "") {

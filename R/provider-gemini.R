@@ -43,7 +43,7 @@ chat_google_gemini <- function(
 ) {
   model <- set_default(model, "gemini-2.0-flash")
   echo <- check_echo(echo)
-  credentials <- default_google_credentials(api_key)
+  credentials <- default_google_credentials(api_key, gemini = TRUE)
 
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
@@ -562,7 +562,8 @@ merge_gemini_chunks <- merge_objects(
 
 default_google_credentials <- function(
   api_key = NULL,
-  error_call = caller_env()
+  error_call = caller_env(),
+  gemini = FALSE
 ) {
   gemini_scope <- "https://www.googleapis.com/auth/generative-language.retriever"
 
@@ -572,6 +573,15 @@ default_google_credentials <- function(
     return(function() {
       list("x-goog-api-key" = api_key)
     })
+  }
+
+  if (gemini) {
+    gemini_key <- Sys.getenv("GEMINI_API_KEY")
+    if (nzchar(gemini_key)) {
+      creds <- list(key = gemini_key)
+      attr(creds, "auth_location") <- "query"
+      return(function() creds)
+    }
   }
 
   # Detect viewer-based credentials from Posit Connect.
