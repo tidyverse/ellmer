@@ -5,7 +5,7 @@
     Condition
       Error in `chat_ollama()`:
       ! Must specify `model`.
-      i Locally installed models: "llama3.2:1b".
+      i Locally installed models: "llama3".
 
 # checks that requested model is installed
 
