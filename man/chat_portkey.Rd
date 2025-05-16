@@ -27,7 +27,11 @@ models_portkey(
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
-\item{api_key}{A Portkey API key.}
+\item{api_key}{API key to use for authentication.
+
+You generally should not supply this directly, but instead set the \code{PORTKEY_API_KEY} environment variable.
+The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{virtual_key}{A virtual identifier storing LLM provider's API key. See
 \href{https://portkey.ai/docs/product/ai-gateway/virtual-keys}{documentation}.}

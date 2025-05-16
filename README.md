@@ -60,19 +60,17 @@ If you’re using ellmer for your own exploration, you’ll have a lot more
 freedom, so we have a few recommendations to help you get started:
 
 - `chat_openai()` or `chat_anthropic()` are good places to start.
-  `chat_openai()` defaults to **GPT-4o**, but you can use
-  `model = "gpt-4o-mini"` for a cheaper, lower-quality model, or
-  `model = "o1-mini"` for more complex reasoning. `chat_anthropic()` is
-  also good; it defaults to **Claude 3.5 Sonnet**, which we have found
-  to be particularly good at writing code.
+  `chat_openai()` defaults to **GPT-4.1**, but you can use
+  `model = "gpt-4-1-nano"` for a cheaper, faster model, or
+  `model = "o3"` for more complex reasoning. `chat_anthropic()` is also
+  good; it defaults to **Claude 3.7 Sonnet**, which we have found to be
+  particularly good at writing R code.
 
-- `chat_google_gemini()` is great for large prompts because it has a
-  much larger context window than other models. It allows up to 1
-  million tokens, compared to Claude 3.5 Sonnet’s 200k and GPT-4o’s
-  128k. It also comes with a generous free tier (with the downside that
-  [your data is
+- `chat_google_gemini()` is a strong model with generous free tier (with
+  the downside that [your data is
   used](https://ai.google.dev/gemini-api/terms#unpaid-services) to
-  improve the model).
+  improve the model), making it a great place to start if you don’t want
+  to spend any money.
 
 - `chat_ollama()`, which uses [Ollama](https://ollama.com), allows you
   to run models on your own computer. While the biggest models you can

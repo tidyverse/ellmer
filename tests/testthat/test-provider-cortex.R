@@ -104,11 +104,12 @@ test_that("Cortex API requests are generated correctly", {
     )
   )
   p <- provider_cortex_test(
-    credentials = function(account)
+    credentials = function(account) {
       list(
         Authorization = paste("Bearer", "obfuscated"),
         `X-Snowflake-Authorization-Token-Type` = "OAUTH"
-      ),
+      )
+    },
     model_file = "@my_db.my_schema.my_stage/model.yaml"
   )
   req <- chat_request(p, FALSE, list(turn))
