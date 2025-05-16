@@ -5,7 +5,9 @@ is_tool_request <- function(x) S7_inherits(x, ContentToolRequest)
 is_tool_result <- function(x) S7_inherits(x, ContentToolResult)
 
 match_tools <- function(turn, tools) {
-  if (is.null(turn)) return(NULL)
+  if (is.null(turn)) {
+    return(NULL)
+  }
 
   turn@contents <- map(turn@contents, function(content) {
     if (!is_tool_request(content)) {
@@ -103,13 +105,17 @@ gen_async_promise_all <- function(generator) {
 }
 
 extract_tool_requests <- function(turn) {
-  if (is.null(turn)) return(NULL)
+  if (is.null(turn)) {
+    return(NULL)
+  }
 
   turn@contents[map_lgl(turn@contents, is_tool_request)]
 }
 
 turn_has_tool_request <- function(turn) {
-  if (is.null(turn)) return(FALSE)
+  if (is.null(turn)) {
+    return(FALSE)
+  }
   stopifnot(S7_inherits(turn, Turn))
 
   some(turn@contents, is_tool_request)
@@ -235,7 +241,9 @@ tool_results_as_turn <- function(results) {
 }
 
 turn_get_tool_errors <- function(turn = NULL) {
-  if (is.null(turn)) return(NULL)
+  if (is.null(turn)) {
+    return(NULL)
+  }
   stopifnot(S7_inherits(turn, Turn))
 
   if (length(turn@contents) == 0) {

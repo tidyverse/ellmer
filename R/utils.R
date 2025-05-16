@@ -132,8 +132,12 @@ has_connect_viewer_token <- function(...) {
 }
 
 modify_list <- function(x, y) {
-  if (is.null(x)) return(y)
-  if (is.null(y)) return(x)
+  if (is.null(x)) {
+    return(y)
+  }
+  if (is.null(y)) {
+    return(x)
+  }
 
   utils::modifyList(x, y)
 }
@@ -174,13 +178,15 @@ param_model <- function(default, provider = NULL) {
       if (!is.null(default)) c(" (defaults to \"", default, "\")"),
       ".\n"
     ),
-    if (!is.null(default))
+    if (!is.null(default)) {
       c(
         "We regularly update the default, so we strongly recommend explicitly ",
         "specifying a model for anything other than casual use.\n"
-      ),
-    if (!is.null(provider))
+      )
+    },
+    if (!is.null(provider)) {
       c("Use `models_", provider, "()` to see all options.\n")
+    }
   )
 }
 
