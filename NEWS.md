@@ -76,8 +76,9 @@
   * `chat_anthropic()` replaces `chat_claude()`.
   * `chat_google_gemini()` replaces `chat_gemini()`.
 
-* `chat_claude()` now defaults to Sonnet 3.7 and displays the default
-  model (#336).
+* We have updated the default model for a couple of providers:
+  * `chat_claude()` uses Sonnet 3.7 (which it also now displays) (#336).
+  * `chat_openai()` uses GPT-4.1 (#512)
 
 ## Streaming/async
 
