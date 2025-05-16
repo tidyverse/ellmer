@@ -49,13 +49,14 @@ chat_ollama <- function(
     cli::cli_abort("Can't find locally running ollama.")
   }
 
+  models <- models_ollama(base_url)$id
+
   if (missing(model)) {
-    models <- models_ollama(base_url)$id
     cli::cli_abort(c(
       "Must specify {.arg model}.",
       i = "Locally installed models: {.str {models}}."
     ))
-  } else if (!model %in% models_ollama(base_url)$id) {
+  } else if (!model %in% models) {
     cli::cli_abort(
       c(
         "Model {.val {model}} is not installed locally.",
