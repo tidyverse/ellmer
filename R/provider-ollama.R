@@ -50,7 +50,7 @@ chat_ollama <- function(
   }
 
   if (missing(model)) {
-    models <- models_ollama(base_url)$name
+    models <- models_ollama(base_url)$id
     cli::cli_abort(c(
       "Must specify {.arg model}.",
       i = "Locally installed models: {.str {models}}."
