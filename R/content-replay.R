@@ -83,6 +83,7 @@ method(contents_record, Turn) <- function(content, ..., chat) {
 
 #' @rdname contents_record
 #' @export
+# Holy "Holy Trait" dispatching, Batman!
 contents_replay <- function(obj, ..., chat) {
   if (!(R6::is.R6(chat) && inherits(chat, "Chat"))) {
     cli::cli_abort(
@@ -128,14 +129,14 @@ contents_replay <- function(obj, ..., chat) {
   # not on an instance
   # An error will be thrown if a method is not found,
   # however we have a fallback for the `S7::S7_object` (the root base class)
-  handler <- S7::method(contents_replay_s7, cls)
+  handler <- S7::method(contents_replay_class, cls)
   handler(cls, obj, chat = chat)
 }
 
 #' @rdname contents_record
 #' @export
-contents_replay_s7 <- new_generic(
-  "contents_replay_s7",
+contents_replay_class <- new_generic(
+  "contents_replay_class",
   "cls",
   function(cls, obj, ..., chat) {
     S7::S7_dispatch()
@@ -143,7 +144,7 @@ contents_replay_s7 <- new_generic(
 )
 
 
-method(contents_replay_s7, S7::S7_object) <- function(cls, obj, ..., chat) {
+method(contents_replay_class, S7::S7_object) <- function(cls, obj, ..., chat) {
   stopifnot(obj$version == 1)
 
   obj_props <- lapply(obj$props, contents_replay, chat = chat)
@@ -174,7 +175,7 @@ method(contents_record, ToolDef) <- function(content, ..., chat) {
     )
   )
 }
-method(contents_replay_s7, ToolDef) <- function(cls, obj, ..., chat) {
+method(contents_replay_class, ToolDef) <- function(cls, obj, ..., chat) {
   if (obj$version != 1) {
     cli::cli_abort(
       "Unsupported version {.val {obj$version}}.",

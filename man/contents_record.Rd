@@ -3,22 +3,26 @@
 \name{contents_record}
 \alias{contents_record}
 \alias{contents_replay}
-\alias{contents_replay_s7}
+\alias{contents_replay_class}
 \title{Save and restore content}
 \usage{
 contents_record(content, ..., chat)
 
 contents_replay(obj, ..., chat)
 
-contents_replay_s7(cls, obj, ..., chat)
+contents_replay_class(cls, obj, ..., chat)
 }
 \description{
 These generic functions can be use to convert \link{Turn} contents or \link{Content}
 objects into easily serializable representations.
 \itemize{
-\item \code{contents_replay()} will accept a basic object and return a corresponding
-\link{Turn} or \link{Content} object.
-\item \code{contents_record()} will accept a \link{Turn} or \link{Content} object and return a
-basic object that can be easily serialized.
+\item \code{contents_record()} will accept a \link{Turn} or \link{Content} related objects and return a
+basic list that can be easily serialized.
+\item \code{contents_replay()} will accept a basic list (from \code{contents_record()}) and
+return a corresponding \link{Turn} or \link{Content} related object.
+\item \code{contents_replay_class()} is a generic function that is dispatched from
+within \code{contents_replay()}. \code{contents_replay()} will retrieve the
+corresponding contructor class from within the basic list information and
+use the class for dispatching.
 }
 }
