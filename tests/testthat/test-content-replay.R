@@ -51,9 +51,22 @@ test_that("can round trip of ContentThinking record/replay", {
 })
 
 test_that("can round trip of ContentTool record/replay", {
+  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+  tool_rnorm <- tool(
+    stats::rnorm,
+    "Drawn numbers from a random normal distribution",
+    n = type_integer("The number of observations. Must be a positive integer."),
+    mean = type_number("The mean value of the distribution."),
+    sd = type_number(
+      "The standard deviation of the distribution. Must be a non-negative number."
+    )
+  )
+  chat$register_tool(tool_rnorm)
+
   # TODO: barret - test tooldef, need to adjust replay to accept client to recontruct tooldef
   expect_record_replay(
-    ContentToolRequest("ID", "tool_name", list(a = 1:2, b = "apple"))
+    ContentToolRequest("ID", "tool_name", list(a = 1:2, b = "apple")),
+    chat = chat
   )
 })
 
@@ -70,11 +83,8 @@ test_that("can round trip of ToolDef record/replay", {
   )
   chat$register_tool(tool_rnorm)
 
-  # with_chat(chat, {
   expect_record_replay(tool_rnorm, chat = chat)
-  # })
 
-  # with_chat(chat, {
   expect_record_replay(
     ContentToolRequest(
       "ID",
@@ -84,7 +94,6 @@ test_that("can round trip of ToolDef record/replay", {
     ),
     chat = chat
   )
-  # })
 })
 
 test_that("can round trip of ContentToolResult record/replay", {
@@ -109,22 +118,31 @@ test_that("can round trip of ContentToolResult record/replay", {
   )
   chat$register_tool(tool_rnorm)
 
-  expect_record_replay(
-    ContentToolResult(
-      value = "VALUE",
-      error = try(stop("boom"), silent = TRUE),
-      extra = list(extra = 1:2, b = "apple"),
-      request = ContentToolRequest(
-        "ID",
-        "tool_name",
-        list(a = 1:2, b = "apple"),
-        tool = tool_rnorm
+  replayed <-
+    expect_record_replay(
+      ContentToolResult(
+        value = "VALUE",
+        error = try(stop("boom"), silent = TRUE),
+        extra = list(extra = 1:2, b = "apple"),
+        request = ContentToolRequest(
+          "ID",
+          "tool_name",
+          list(a = 1:2, b = "apple"),
+          tool = tool_rnorm
+        )
+      ),
+      chat = chat
+    )
+
+  tryCatch(
+    message(replayed@error), # re-throw error
+    error = function(e) {
+      expect_equal(
+        e$message,
+        "boom"
       )
-    ),
-    chat = chat
+    }
   )
-  # TODO: Barret test real error value
-  # TODO: Barret test with request object
 })
 
 test_that("can round trip of ContentUploaded record/replay", {
