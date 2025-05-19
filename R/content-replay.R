@@ -74,8 +74,7 @@ method(contents_record, Turn) <- function(content, ..., chat) {
       role = content@role,
       contents = lapply(content@contents, contents_record, chat = chat),
       json = content@json,
-      tokens = content@tokens,
-      completed = content@completed,
+      tokens = content@tokens
       # text = getter only!
     )
   )
