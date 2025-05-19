@@ -11,18 +11,43 @@ NULL
 #' These generic functions can be use to convert [Turn] contents or [Content]
 #' objects into easily serializable representations.
 #'
-#' * `contents_replay()` will accept a basic object and return a corresponding
-#'   [Turn] or [Content] object.
-#' * `contents_record()` will accept a [Turn] or [Content] object and return a
-#'   basic object that can be easily serialized.
+#' * `contents_record()` will accept a [Turn] or [Content] related objects and return a
+#'   basic list that can be easily serialized.
+#' * `contents_replay()` will accept a basic list (from `contents_record()`) and
+#'   return a corresponding [Turn] or [Content] related object.
+#' * `contents_replay_class()` is a generic function that is dispatched from
+#'   within `contents_replay()`. `contents_replay()` will retrieve the
+#'   corresponding contructor class from within the basic list information and
+#'   use the class for dispatching.
 #' @export
-contents_record <- new_generic(
-  "contents_record",
-  "content",
-  function(content, ..., chat) {
-    S7::S7_dispatch()
-  }
-)
+contents_record <-
+  #' @export
+  #' @rdname contents_record
+  contents_record <- new_generic(
+    "contents_record",
+    "content",
+    function(content, ..., chat) {
+      if (!(R6::is.R6(chat) && inherits(chat, "Chat"))) {
+        cli::cli_abort(
+          "Expected a Chat object at `chat=`, but received {.val {chat}}.",
+          call = caller_env()
+        )
+      }
+
+      recorded <- S7::S7_dispatch()
+
+      for (name in c("version", "class", "props")) {
+        if (!name %in% names(recorded)) {
+          cli::cli_abort(
+            "Expected the recorded object to have a {.val {name}} property.",
+            call = caller_env()
+          )
+        }
+      }
+
+      recorded
+    }
+  )
 method(contents_record, S7::S7_object) <- function(content, ..., chat) {
   prop_names <- S7::prop_names(content)
   list(
