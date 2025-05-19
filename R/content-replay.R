@@ -169,7 +169,7 @@ method(contents_record, ToolDef) <- function(content, ..., chat) {
       # However, keep all the other properties as the metadata could be useful.
       fun = NULL,
       description = content@description,
-      arguments = content@arguments,
+      arguments = contents_record(content@arguments, chat = chat),
       convert = content@convert,
       annotations = content@annotations
     )
@@ -187,7 +187,7 @@ method(contents_replay_class, ToolDef) <- function(cls, obj, ..., chat) {
   matched_tool <- tools[[obj$props$name]]
 
   if (!is.null(matched_tool)) {
-    matched_tool
+    return(matched_tool)
   }
 
   # If no tool is found, return placeholder tool
@@ -195,22 +195,48 @@ method(contents_replay_class, ToolDef) <- function(cls, obj, ..., chat) {
     name = obj$props$name,
     # fun = NULL, # fun was not serialized
     description = obj$props$description,
-    # TODO: Barret fix this
     arguments = contents_replay(obj$props$arguments, chat = chat),
     convert = obj$props$convert,
     annotations = obj$props$annotations
   )
 }
 
-tool_rnorm <- tool(
-  stats::rnorm,
-  .description = "Drawn numbers from a random normal distribution",
-  n = type_integer("The number of observations. Must be a positive integer."),
-  mean = type_number("The mean value of the distribution."),
-  sd = type_number(
-    "The standard deviation of the distribution. Must be a non-negative number."
+
+method(contents_record, TypeObject) <- function(content, ..., chat) {
+  list(
+    version = 1,
+    class = class(content)[1],
+    props = list(
+      description = content@description,
+      required = content@required,
+      properties = lapply(
+        content@properties,
+        contents_record,
+        chat = chat
+      ),
+      additional_properties = content@additional_properties
+    )
   )
-)
+}
+method(contents_replay_class, TypeObject) <- function(cls, obj, ..., chat) {
+  if (obj$version != 1) {
+    cli::cli_abort(
+      "Unsupported version {.val {obj$version}}.",
+      call = caller_env()
+    )
+  }
+
+  TypeObject(
+    description = obj$props$description,
+    required = obj$props$required,
+    properties = lapply(
+      obj$props$properties,
+      contents_replay,
+      chat = chat
+    ),
+    additional_properties = obj$props$additional_properties
+  )
+}
 
 
 expect_record_replay <- function(
@@ -247,4 +273,6 @@ expect_record_replay <- function(
 
   expect_s3_class(replayed, class(x)[1])
   expect_equal(S7::props(replayed), S7::props(x))
+
+  invisible(replayed)
 }
