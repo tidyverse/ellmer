@@ -147,13 +147,29 @@ method(contents_replay_class, S7::S7_object) <- function(cls, obj, ..., chat) {
   stopifnot(obj$version == 1)
 
   obj_props <- lapply(obj$props, contents_replay, chat = chat)
+
   ## While this should give prettier tracebacks, it doesn't work
-  # > cls_name <- rlang::sym(obj$class[1])
-  # > rlang::inject((!!cls_name)(!!!obj_props))
+  # > pkg_cls_name <- rlang::sym(obj$class[1])
+  # > rlang::inject((!!pkg_cls_name)(!!!obj_props))
   # Error in `ellmer::Turn`(role = "user", contents = list(), json = list(),  :
   # could not find function "ellmer::Turn"
 
-  rlang::inject(cls(!!!obj_props))
+  # Instead, use the package environment when calling the constructo
+  pkg_cls <- strsplit(obj$class[1], "::")[[1]]
+  if (length(pkg_cls) != 2) {
+    rlang::cli_abort(
+      "Invalid class name {.val {obj$class[1]}}. Explected a single `::` separator.",
+      call = caller_env()
+    )
+  }
+  pkg_name <- pkg_cls[1]
+  cls_name <- pkg_cls[2]
+  withr::with_package(
+    pkg_name,
+    {
+      rlang::inject((!!rlang::sym(cls_name))(!!!obj_props))
+    }
+  )
 }
 
 
