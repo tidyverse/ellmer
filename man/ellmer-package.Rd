@@ -26,6 +26,8 @@ Authors:
 \itemize{
   \item Joe Cheng
   \item Aaron Jacobs
+  \item Garrick Aden-Buie \email{garrick@posit.co} (\href{https://orcid.org/0000-0002-7111-0077}{ORCID})
+  \item Barret Schloerke \email{barret@posit.co} (\href{https://orcid.org/0000-0001-9986-114X}{ORCID})
 }
 
 Other contributors:
