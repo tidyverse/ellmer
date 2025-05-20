@@ -20,10 +20,9 @@ NULL
 #'   corresponding contructor class from within the basic list information and
 #'   use the class for dispatching.
 #' @export
+#' @rdname contents_record
 contents_record <-
-  #' @export
-  #' @rdname contents_record
-  contents_record <- new_generic(
+  new_generic(
     "contents_record",
     "content",
     function(content, ..., chat) {
