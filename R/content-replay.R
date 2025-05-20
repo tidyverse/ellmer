@@ -162,11 +162,17 @@ contents_replay <- function(
   cls <- get_cls_constructor(class_value[1], env = env)
 
   if (is.null(cls)) {
-    return(obj)
+    cli::cli_abort(
+      "Unable to find the S7 class: {.val {class_value[1]}}.",
+      call = caller_env()
+    )
   }
 
   if (!S7_inherits(cls)) {
-    return(obj)
+    cli::cli_abort(
+      "The object returned for {.val {class_value[1]}} is not an S7 class.",
+      call = caller_env()
+    )
   }
 
   # Manually retrieve the handler for the class as we dispatch on the class itself,
