@@ -8,9 +8,22 @@
 \usage{
 contents_record(content, ..., chat)
 
-contents_replay(obj, ..., chat)
+contents_replay(obj, ..., cls = NULL, chat, env = rlang::caller_env())
 
-contents_replay_class(cls, obj, ..., chat)
+contents_replay_class(cls, obj, ..., chat, env = rlang::caller_env())
+}
+\arguments{
+\item{content}{A \link{Turn} or \link{Content} object to be recorded.}
+
+\item{...}{Not used.}
+
+\item{chat}{A \link{Chat} object to be used for recording and replaying.}
+
+\item{obj}{A basic list (from \code{contents_record()}) to be replayed.}
+
+\item{cls}{The class constructor to be used for replaying the object.}
+
+\item{env}{The environment to find non-package classes.}
 }
 \description{
 These generic functions can be use to convert \link{Turn} contents or \link{Content}
@@ -24,5 +37,35 @@ return a corresponding \link{Turn} or \link{Content} related object.
 within \code{contents_replay()}. \code{contents_replay()} will retrieve the
 corresponding contructor class from within the basic list information and
 use the class for dispatching.
+}
+
+Note, all S7 classes should have the same class name as the variable name. Ex: \code{FooBar <- new_class("FooBar")}, not \code{OtherName <- new_class("FooBar")}. This is a requirement for when replaying the object.
+}
+\examples{
+\dontrun{
+chat <- chat_ollama(model = "llama3.2")
+turn <- Turn("user")
+turn
+#> <Turn: user>
+
+# Get the turn record
+# Note: Removes all S7 class instances
+turn_recorded <- contents_record(turn, chat = chat)
+str(turn_recorded)
+#> List of 3
+#>  $ version: num 1
+#>  $ class  : chr "ellmer::Turn"
+#>  $ props  :List of 4
+#>   ..$ role    : chr "user"
+#>   ..$ contents: list()
+#>   ..$ json    : list()
+#>   ..$ tokens  : num [1:2] 0 0
+
+# Restore the turn from the record
+# Note: This will not restore the _original_ object,
+# but a new object with the same properties
+turn_replayed <- contents_replay(turn_recorded, chat = chat)
+turn_replayed
+#> <Turn: user>
 }
 }
