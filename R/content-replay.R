@@ -22,10 +22,10 @@ NULL
 #'
 #' Note, all S7 classes should have the same class name as the variable name. Ex: `FooBar <- new_class("FooBar")`, not `OtherName <- new_class("FooBar")`. This is a requirement for when replaying the object.
 #'
-#' @param content A [Turn] or [Content] object to be recorded.
+#' @param content A [Turn] or [Content] object to have its record retrieved.
 #' @param obj A basic list (from `contents_record()`) to be replayed.
 #' @param cls The class constructor to be used for replaying the object.
-#' @param chat A [Chat] object to be used for recording and replaying.
+#' @param chat A [Chat] object to be used for context.
 #' @param env The environment to find non-package classes.
 #' @param ... Not used.
 #'
@@ -36,7 +36,7 @@ NULL
 #' turn
 #' #> <Turn: user>
 #'
-#' # Get the turn record
+#' # Get the turn's record
 #' # Note: Removes all S7 class instances
 #' turn_recorded <- contents_record(turn, chat = chat)
 #' str(turn_recorded)

@@ -13,11 +13,11 @@ contents_replay(obj, ..., cls = NULL, chat, env = rlang::caller_env())
 contents_replay_class(cls, obj, ..., chat, env = rlang::caller_env())
 }
 \arguments{
-\item{content}{A \link{Turn} or \link{Content} object to be recorded.}
+\item{content}{A \link{Turn} or \link{Content} object to have its record retrieved.}
 
 \item{...}{Not used.}
 
-\item{chat}{A \link{Chat} object to be used for recording and replaying.}
+\item{chat}{A \link{Chat} object to be used for context.}
 
 \item{obj}{A basic list (from \code{contents_record()}) to be replayed.}
 
@@ -48,7 +48,7 @@ turn <- Turn("user")
 turn
 #> <Turn: user>
 
-# Get the turn record
+# Get the turn's record
 # Note: Removes all S7 class instances
 turn_recorded <- contents_record(turn, chat = chat)
 str(turn_recorded)
