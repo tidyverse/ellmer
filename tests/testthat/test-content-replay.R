@@ -63,7 +63,6 @@ test_that("can round trip of ContentTool record/replay", {
   )
   chat$register_tool(tool_rnorm)
 
-  # TODO: barret - test tooldef, need to adjust replay to accept client to recontruct tooldef
   expect_record_replay(
     ContentToolRequest("ID", "tool_name", list(a = 1:2, b = "apple")),
     chat = chat
@@ -135,7 +134,7 @@ test_that("can round trip of ContentToolResult record/replay", {
     )
 
   tryCatch(
-    message(replayed@error), # re-throw error
+    signalCondition(replayed@error), # re-throw error
     error = function(e) {
       expect_equal(
         e$message,
@@ -151,4 +150,54 @@ test_that("can round trip of ContentUploaded record/replay", {
 
 test_that("can round trip of ContentPDF record/replay", {
   expect_record_replay(ContentPDF(type = "TYPE", data = "DATA"))
+})
+
+test_that("non-package classes are recorded/replayed by default", {
+  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+
+  LocalClass <- S7::new_class(
+    "LocalClass",
+    properties = list(
+      name = prop_string()
+    ),
+    # Make sure to unset the package being used!
+    # Within testing, it sets the package to "ellmer"
+    package = NULL
+  )
+
+  expect_record_replay(LocalClass("testname"), chat = chat)
+})
+
+
+test_that("unknown classes cause errors", {
+  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+  recorded <- contents_record(Turn("user"), chat = chat)
+  recorded$class <- "ellmer::Turn2"
+
+  expect_error(
+    contents_replay(recorded, chat = chat),
+    "Unable to find the S7 class"
+  )
+})
+
+test_that("replay classes are S7 classes", {
+  OtherName <- S7::new_class(
+    "LocalClass",
+    properties = list(
+      name = prop_string()
+    ),
+    # Make sure to unset the package being used!
+    # Within testing, it sets the package to "ellmer"
+    package = NULL
+  )
+  LocalClass <- function(name) {
+    OtherName(name = name)
+  }
+
+  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+  recorded <- contents_record(LocalClass("testname"), chat = chat)
+  expect_error(
+    contents_replay(recorded, chat = chat),
+    "is not an S7 class"
+  )
 })
