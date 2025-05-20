@@ -1,39 +1,39 @@
 # -------------------------------------------------------------------------
 
 test_that("can round trip of Content record/replay", {
-  expect_record_replay(Content())
+  test_record_replay(Content())
 })
 
 test_that("can round trip of ContentText record/replay", {
-  expect_record_replay(ContentText("hello world"))
+  test_record_replay(ContentText("hello world"))
 })
 
 test_that("can round trip of ContentImageInline record/replay", {
-  expect_record_replay(
+  test_record_replay(
     ContentImageInline("image/png", "abcd123")
   )
 })
 
 test_that("can round trip of ContentImageRemote record/replay", {
-  expect_record_replay(
+  test_record_replay(
     ContentImageRemote("https://example.com/image.jpg", detail = "")
   )
 })
 
 test_that("can round trip of ContentJson record/replay", {
-  expect_record_replay(
+  test_record_replay(
     ContentJson(list(a = 1:2, b = "apple"))
   )
 })
 
 test_that("can round trip of ContentSql record/replay", {
-  expect_record_replay(
+  test_record_replay(
     ContentSql("SELECT * FROM mtcars")
   )
 })
 
 test_that("can round trip of ContentSuggestions record/replay", {
-  expect_record_replay(
+  test_record_replay(
     ContentSuggestions(
       c(
         "What is the total quantity sold for each product last quarter?",
@@ -45,7 +45,7 @@ test_that("can round trip of ContentSuggestions record/replay", {
 })
 
 test_that("can round trip of ContentThinking record/replay", {
-  expect_record_replay(
+  test_record_replay(
     ContentThinking("A **thought**.")
   )
 })
@@ -63,7 +63,7 @@ test_that("can round trip of ContentTool record/replay", {
   )
   chat$register_tool(tool_rnorm)
 
-  expect_record_replay(
+  test_record_replay(
     ContentToolRequest("ID", "tool_name", list(a = 1:2, b = "apple")),
     chat = chat
   )
@@ -82,9 +82,9 @@ test_that("can round trip of ToolDef record/replay", {
   )
   chat$register_tool(tool_rnorm)
 
-  expect_record_replay(tool_rnorm, chat = chat)
+  test_record_replay(tool_rnorm, chat = chat)
 
-  expect_record_replay(
+  test_record_replay(
     ContentToolRequest(
       "ID",
       "tool_name",
@@ -96,7 +96,7 @@ test_that("can round trip of ToolDef record/replay", {
 })
 
 test_that("can round trip of ContentToolResult record/replay", {
-  expect_record_replay(
+  test_record_replay(
     ContentToolResult(
       value = "VALUE",
       error = NULL,
@@ -118,7 +118,7 @@ test_that("can round trip of ContentToolResult record/replay", {
   chat$register_tool(tool_rnorm)
 
   replayed <-
-    expect_record_replay(
+    test_record_replay(
       ContentToolResult(
         value = "VALUE",
         error = try(stop("boom"), silent = TRUE),
@@ -145,11 +145,11 @@ test_that("can round trip of ContentToolResult record/replay", {
 })
 
 test_that("can round trip of ContentUploaded record/replay", {
-  expect_record_replay(ContentUploaded("https://example.com/image.jpg"))
+  test_record_replay(ContentUploaded("https://example.com/image.jpg"))
 })
 
 test_that("can round trip of ContentPDF record/replay", {
-  expect_record_replay(ContentPDF(type = "TYPE", data = "DATA"))
+  test_record_replay(ContentPDF(type = "TYPE", data = "DATA"))
 })
 
 test_that("non-package classes are recorded/replayed by default", {
@@ -165,7 +165,7 @@ test_that("non-package classes are recorded/replayed by default", {
     package = NULL
   )
 
-  expect_record_replay(LocalClass("testname"), chat = chat)
+  test_record_replay(LocalClass("testname"), chat = chat)
 })
 
 

@@ -217,7 +217,7 @@ method(contents_replay_class, S7::S7_object) <- function(
       reason = "for `contents_replay()` to restore the chat content."
     )
     cls_name <- pkg_cls[2]
-    env <- rlang::pkg_env(pkg_name)
+    env <- rlang::ns_env(pkg_name)
   } else {
     cls_name <- class_value
   }
@@ -354,52 +354,11 @@ get_cls_constructor <- function(class_value, ..., env = rlang::caller_env()) {
       pkg_name,
       reason = "for `contents_replay()` to restore the chat content."
     )
-    rlang::pkg_env(pkg_name)[[cls_name]]
+    rlang::ns_env(pkg_name)[[cls_name]]
   } else {
     cli::cli_abort(
       "Invalid class name {.val {class_value[1]}}. Expected a single (or missing) `::` separator, not multiple.",
       call = caller_env()
     )
   }
-}
-
-expect_record_replay <- function(
-  x,
-  ...,
-  chat = chat_ollama_test("Be as terse as possible; no punctuation"),
-  env = rlang::caller_env()
-) {
-  rlang::check_dots_empty()
-
-  # Simulate the full bookmarking experience:
-  # * Record the object to something serializable
-  # * Serialize the object to JSON via shiny; "bookmark"
-  # * Unserialize the object from JSON via shiny; "restore"
-  # * Replay the unserialized object to the original object
-  # * Check that the replayed object has the same class as the original object
-  # * Check that the replayed object has the same properties as the original object
-
-  obj <- contents_record(x, chat = chat)
-
-  # obj_packed <- jsonlite:::pack(obj)
-
-  # Work around Shiny's terrible JSON serialization
-  # Use `as.character()` to remove the JSON class so that it is double serialized :-/
-  marshalled <- list(
-    "my_chat" = as.character(jsonlite::serializeJSON(obj))
-  )
-
-  # Bookmark
-  serialized <- shiny:::toJSON(marshalled)
-  unserialized <- shiny:::safeFromJSON(serialized)
-
-  # obj_unpacked <- jsonlite:::unpack(unserialized)
-  unmarshalled <- jsonlite::unserializeJSON(unserialized$my_chat)
-
-  replayed <- contents_replay(unmarshalled, chat = chat, env = env)
-
-  expect_s3_class(replayed, class(x)[1])
-  expect_equal(S7::props(replayed), S7::props(x))
-
-  invisible(replayed)
 }
