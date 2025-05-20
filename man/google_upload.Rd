@@ -20,7 +20,8 @@ google_upload(
 
 You generally should not supply this directly, but instead set the \code{GOOGLE_API_KEY} environment variable.
 The best place to set this is in \code{.Renviron},
-which you can easily edit by calling \code{usethis::edit_r_environ()}.}
+which you can easily edit by calling \code{usethis::edit_r_environ()}.
+For Gemini, you can alternatively set \code{GEMINI_API_KEY}.}
 
 \item{mime_type}{Optionally, specify the mime type of the file.
 If not specified, will be guesses from the file extension.}

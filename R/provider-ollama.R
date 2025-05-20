@@ -22,6 +22,12 @@
 #'
 #' @inheritParams chat_openai
 #' @param model `r param_model(NULL, "ollama")`
+#' @param api_key Ollama doesn't require an API key for local usage and in most
+#'   cases you do not need to provide an `api_key`.
+#'
+#'   However, if you're accessing an Ollama instance hosted behind a reverse
+#'   proxy or secured endpoint that enforces bearer‐token authentication, you
+#'   can set `api_key` (or the `OLLAMA_API_KEY` environment variable).
 #' @inherit chat_openai return
 #' @family chatbots
 #' @export
@@ -36,18 +42,28 @@ chat_ollama <- function(
   model,
   seed = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_key = NULL
 ) {
   if (!has_ollama(base_url)) {
     cli::cli_abort("Can't find locally running ollama.")
   }
 
+  models <- models_ollama(base_url)$id
+
   if (missing(model)) {
-    models <- models_ollama(base_url)$name
     cli::cli_abort(c(
       "Must specify {.arg model}.",
       i = "Locally installed models: {.str {models}}."
     ))
+  } else if (!model %in% models) {
+    cli::cli_abort(
+      c(
+        "Model {.val {model}} is not installed locally.",
+        i = "Run {.code ollama pull {model}} in your terminal or {.run ollamar::pull(\"{model}\")} in R to install the model.",
+        i = "See locally installed models with {.run ellmer::models_ollama()}."
+      )
+    )
   }
 
   echo <- check_echo(echo)
@@ -58,7 +74,9 @@ chat_ollama <- function(
     model = model,
     seed = seed,
     extra_args = api_args,
-    api_key = "ollama" # ignored
+    # ollama doesn't require an API key for local usage, but one might be needed
+    # if ollama is served behind a proxy (see #501)
+    api_key = api_key %||% Sys.getenv("OLLAMA_API_KEY", "ollama")
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)

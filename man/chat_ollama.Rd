@@ -11,7 +11,8 @@ chat_ollama(
   model,
   seed = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_key = NULL
 )
 
 models_ollama(base_url = "http://localhost:11434")
@@ -40,6 +41,13 @@ the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{api_key}{Ollama doesn't require an API key for local usage and in most
+cases you do not need to provide an \code{api_key}.
+
+However, if you're accessing an Ollama instance hosted behind a reverse
+proxy or secured endpoint that enforces bearer‐token authentication, you
+can set \code{api_key} (or the \code{OLLAMA_API_KEY} environment variable).}
 }
 \value{
 A \link{Chat} object.

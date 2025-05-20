@@ -88,6 +88,10 @@ method(print, Turn) <- function(x, ...) {
   invisible(x)
 }
 
+assistant_turn <- function(...) {
+  Turn(role = "assistant", ...)
+}
+
 user_turn <- function(..., .call = caller_env()) {
   as_user_turn(list2(...), call = .call, arg = "...")
 }

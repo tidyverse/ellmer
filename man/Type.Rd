@@ -27,9 +27,16 @@ used by the LLM to determine what values to pass to the tool or what
 values to extract in the structured data, so the more detail that you can
 provide here, the better.}
 
-\item{required}{Is the component required? If \code{FALSE}, and the
-component does not exist in the data, the LLM may hallucinate a value.
-Only applies when the element is nested inside of a \code{type_object()}.}
+\item{required}{Is the component or argument required?
+
+In type descriptions for structured data, if \code{required = FALSE} and the
+component does not exist in the data, the LLM may hallucinate a value. Only
+applies when the element is nested inside of a \code{type_object()}.
+
+In tool definitions, \code{required = TRUE} signals that the LLM should always
+provide a value. Arguments with \code{required = FALSE} should have a default
+value in the tool function's definition. If the LLM does not provide a
+value, the default value will be used.}
 
 \item{type}{Basic type name. Must be one of \code{boolean}, \code{integer},
 \code{number}, or \code{string}.}

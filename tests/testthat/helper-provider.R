@@ -99,8 +99,9 @@ test_tools_sequential <- function(chat_fun, total_calls) {
   )
 
   forecast <- function(city) if (city == "New York") "rainy" else "sunny"
-  equipment <- function(weather)
+  equipment <- function(weather) {
     if (weather == "rainy") "umbrella" else "sunscreen"
+  }
   chat$register_tool(tool(
     forecast,
     "Gets the weather forecast for a city",

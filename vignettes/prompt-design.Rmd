@@ -49,7 +49,7 @@ It's highly likely that you'll end up writing long, possibly multi-page prompts.
 
 * <https://github.com/posit-dev/shiny-assistant/blob/main/shinyapp/app_prompt_python.md>
 * <https://github.com/jcheng5/py-sidebot/blob/main/prompt.md>
-* <https://github.com/simonpcouch/pal/tree/main/inst/prompts>
+* <https://github.com/simonpcouch/chores/tree/main/inst/prompts>
 * <https://github.com/cpsievert/aidea/blob/main/inst/app/prompt.md>
 
 In terms of file names, if you only have one prompt in your project, call it `prompt.md`. If you have multiple prompts, give them informative names like `prompt-extract-metadata.md` or `prompt-summarize-text.md`. If you're writing a package, put your prompt(s) in `inst/prompts`, otherwise it's fine to put them in the project's root directory.

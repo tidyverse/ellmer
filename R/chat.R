@@ -793,6 +793,15 @@ is_chat <- function(x) {
   inherits(x, "Chat")
 }
 
+
+check_chat <- function(chat, call = caller_env()) {
+  if (is_chat(chat)) {
+    return(invisible())
+  }
+
+  cli::cli_abort("{.arg chat} must be a <Chat> object.", call = call)
+}
+
 #' @export
 print.Chat <- function(x, ...) {
   provider <- x$get_provider()

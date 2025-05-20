@@ -3,7 +3,7 @@
     Code
       . <- chat_openai()
     Message
-      Using model = "gpt-4o".
+      Using model = "gpt-4.1".
 
 # all tool variations work
 

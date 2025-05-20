@@ -127,7 +127,7 @@ test_that("can convert arrays of enums to factors", {
   )
 })
 
-test_that("can covert arrays of objects to data framnes", {
+test_that("can convert arrays of objects to data frames", {
   expect_equal(
     convert_from_type(
       list(list(x = 1, y = "x"), list(x = 3, y = "y")),
@@ -142,7 +142,7 @@ test_that("can covert arrays of objects to data framnes", {
   )
 })
 
-test_that("can recursive convert objets contents", {
+test_that("can recursively convert objects contents", {
   expect_equal(
     convert_from_type(
       list(x = 1, y = list(1, 2, 3)),

@@ -116,19 +116,18 @@ check_openrouter_error <- function(error, call = caller_env()) {
 }
 
 method(chat_resp_stream, ProviderOpenRouter) <- function(provider, resp) {
-  repeat
-    ({
-      event <- resp_stream_sse(resp)
-      if (is.null(event)) {
-        break
-      }
+  repeat {
+    event <- resp_stream_sse(resp)
+    if (is.null(event)) {
+      break
+    }
 
-      # https://openrouter.ai/docs/responses#sse-streaming-comments
-      if (!identical(event$data, character())) {
-        break
-      }
-      Sys.sleep(0.1)
-    })
+    # https://openrouter.ai/docs/responses#sse-streaming-comments
+    if (!identical(event$data, character())) {
+      break
+    }
+    Sys.sleep(0.1)
+  }
 
   event
 }

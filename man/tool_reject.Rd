@@ -45,18 +45,18 @@ chat$register_tool(tool(
 ))
 
 chat$chat("What files are available in my current directory?")
-#> ◯ [tool call] list_files()
+#> [tool call] list_files()
 #> Would you like to allow access to your current directory? (Yes/no/cancel) no
-#> ■ #> Error: Tool call rejected. The user has chosen to disallow the tool #' call.
+#> #> Error: Tool call rejected. The user has chosen to disallow the tool #' call.
 #> It seems I am unable to access the files in your current directory right now.
 #> If you can tell me what specific files you're looking for or if you can #' provide
 #> the list, I can assist you further.
 
 chat$chat("Try again.")
-#> ◯ [tool call] list_files()
+#> [tool call] list_files()
 #> Would you like to allow access to your current directory? (Yes/no/cancel) yes
-#> ● #> app.R
-#>   #> data.csv
+#> #> app.R
+#> #> data.csv
 #> The files available in your current directory are "app.R" and "data.csv".
 }\if{html}{\out{</div>}}
 

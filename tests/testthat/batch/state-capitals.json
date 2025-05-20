@@ -1,0 +1,198 @@
+{
+  "version": 1,
+  "stage": "done",
+  "batch": {
+    "id": "batch_6826575e8994819083aca31bb6d307de",
+    "object": "batch",
+    "endpoint": "/v1/chat/completions",
+    "errors": {},
+    "input_file_id": "file-M1HWkC3RwUDPgaWtZYjjcy",
+    "completion_window": "24h",
+    "status": "completed",
+    "output_file_id": "file-SdRQAoNeNzaFYr3YFb5hcp",
+    "error_file_id": {},
+    "created_at": 1747343198,
+    "in_progress_at": 1747343199,
+    "expires_at": 1747429598,
+    "finalizing_at": 1747343399,
+    "completed_at": 1747343400,
+    "failed_at": {},
+    "expired_at": {},
+    "cancelling_at": {},
+    "cancelled_at": {},
+    "request_counts": {
+      "total": 4,
+      "completed": 4,
+      "failed": 0
+    },
+    "metadata": {}
+  },
+  "results": [
+    {
+      "status_code": 200,
+      "request_id": "6c41082f8debff173736a0b52e07d948",
+      "body": {
+        "id": "chatcmpl-BXa7llR1CJFH3KbFBLJf4ZvvYEUj4",
+        "object": "chat.completion",
+        "created": 1747343385,
+        "model": "gpt-4.1-nano-2025-04-14",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Des Moines",
+              "refusal": {},
+              "annotations": []
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 20,
+          "completion_tokens": 2,
+          "total_tokens": 22,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "audio_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "audio_tokens": 0,
+            "accepted_prediction_tokens": 0,
+            "rejected_prediction_tokens": 0
+          }
+        },
+        "service_tier": "default",
+        "system_fingerprint": "fp_eede8f0d45"
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "881526127f188f503beb9e98d7933d01",
+      "body": {
+        "id": "chatcmpl-BXa6CU6GypSA9ODF6TKhpkHPP8jlI",
+        "object": "chat.completion",
+        "created": 1747343288,
+        "model": "gpt-4.1-nano-2025-04-14",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Albany",
+              "refusal": {},
+              "annotations": []
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 21,
+          "completion_tokens": 2,
+          "total_tokens": 23,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "audio_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "audio_tokens": 0,
+            "accepted_prediction_tokens": 0,
+            "rejected_prediction_tokens": 0
+          }
+        },
+        "service_tier": "default",
+        "system_fingerprint": "fp_eede8f0d45"
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "d35aa9cb5535dd1ea70e1c5e3c469791",
+      "body": {
+        "id": "chatcmpl-BXa6316yijIIu48fQeazyXljyjTXk",
+        "object": "chat.completion",
+        "created": 1747343279,
+        "model": "gpt-4.1-nano-2025-04-14",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Sacramento",
+              "refusal": {},
+              "annotations": []
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 20,
+          "completion_tokens": 3,
+          "total_tokens": 23,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "audio_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "audio_tokens": 0,
+            "accepted_prediction_tokens": 0,
+            "rejected_prediction_tokens": 0
+          }
+        },
+        "service_tier": "default",
+        "system_fingerprint": "fp_eede8f0d45"
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "fb17b486b4053f56120614c6fbffe571",
+      "body": {
+        "id": "chatcmpl-BXa6aPBtnciow6qc6gjEPMJ7DjgY7",
+        "object": "chat.completion",
+        "created": 1747343312,
+        "model": "gpt-4.1-nano-2025-04-14",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Austin",
+              "refusal": {},
+              "annotations": []
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 20,
+          "completion_tokens": 2,
+          "total_tokens": 22,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "audio_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "audio_tokens": 0,
+            "accepted_prediction_tokens": 0,
+            "rejected_prediction_tokens": 0
+          }
+        },
+        "service_tier": "default",
+        "system_fingerprint": "fp_eede8f0d45"
+      }
+    }
+  ],
+  "started_at": 1747343197,
+  "hash": {
+    "provider": "de1de607a44b8964f051074a91a3787e",
+    "prompts": "b8eafe281e3cc5113058d9722be3e295",
+    "user_turns": "8c1302088b9bc30258d1191db0d35705"
+  }
+}

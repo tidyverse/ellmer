@@ -1,13 +1,16 @@
-This is a resubmission fixing specified issues
-
----
-
-## R CMD check results
+# R CMD check results
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
+* The failing links do all appear to work from a real browser. 
+  (I wonder if we check if https://github.com/lwthiker/curl-impersonate gives
+  fewer false positives.)
 
-* openai doesn't seem to allow automated link checkers, but the urls returning
-  403s do work from a real browser. Similarly for the plerplexity.ai 403
-  and the bluesky 404.
+## revdepcheck results
+
+We checked 9 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 1 new problems
+ * We failed to check 0 packages
+
+GitAI fails with new ellmer, I have submitted a patch to the maintainers: https://github.com/r-world-devs/GitAI/pull/108.

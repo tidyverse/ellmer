@@ -16,7 +16,7 @@ NULL
 #' @param system_prompt A system prompt to set the behavior of the assistant.
 #' @param base_url The base URL to the endpoint; the default uses OpenAI.
 #' @param api_key `r api_key_param("OPENAI_API_KEY")`
-#' @param model `r param_model("gpt-4o", "openai")`
+#' @param model `r param_model("gpt-4.1", "openai")`
 #' @param params Common model parameters, usually created by [params()].
 #' @param seed Optional integer seed that ChatGPT uses to try and make output
 #'   more reproducible.
@@ -51,7 +51,7 @@ chat_openai <- function(
   api_args = list(),
   echo = c("none", "output", "all")
 ) {
-  model <- set_default(model, "gpt-4o")
+  model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
 
   params <- params %||% params()
@@ -264,7 +264,11 @@ method(value_turn, ProviderOpenAI) <- function(
     input = result$usage$prompt_tokens,
     output = result$usage$completion_tokens
   )
-  Turn(message$role %||% "assistant", content, json = result, tokens = tokens)
+  assistant_turn(
+    content,
+    json = result,
+    tokens = tokens
+  )
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------
@@ -382,6 +386,122 @@ method(as_json, list(ProviderOpenAI, TypeObject)) <- function(provider, x) {
     required = as.list(names),
     additionalProperties = FALSE
   )
+}
+
+
+# Batched requests -------------------------------------------------------------
+
+method(has_batch_support, ProviderOpenAI) <- function(provider) {
+  # Only enable for OpenAI, not subclasses
+  provider@name == "OpenAI"
+}
+
+# https://platform.openai.com/docs/api-reference/batch
+method(batch_submit, ProviderOpenAI) <- function(
+  provider,
+  conversations,
+  type = NULL
+) {
+  path <- withr::local_tempfile()
+
+  # First put the requests in a file
+  # https://platform.openai.com/docs/api-reference/batch/request-input
+  requests <- map(seq_along(conversations), function(i) {
+    body <- chat_body(
+      provider,
+      stream = FALSE,
+      turns = conversations[[i]],
+      type = type
+    )
+
+    list(
+      custom_id = paste0("chat-", i),
+      method = "POST",
+      url = "/v1/chat/completions",
+      body = body
+    )
+  })
+  json <- map_chr(requests, jsonlite::toJSON, auto_unbox = TRUE)
+  writeLines(json, path)
+  # Then upload it
+  uploaded <- openai_upload(provider, path)
+
+  # Now we can submit the
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/batches")
+  req <- req_body_json(
+    req,
+    list(
+      input_file_id = uploaded$id,
+      endpoint = "/v1/chat/completions",
+      completion_window = "24h"
+    )
+  )
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+# https://platform.openai.com/docs/api-reference/batch/retrieve
+openai_upload <- function(provider, path, purpose = "batch") {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/files")
+  req <- req_body_multipart(
+    req,
+    purpose = purpose,
+    file = curl::form_file(path)
+  )
+  req <- req_progress(req, "up")
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+# https://docs.anthropic.com/en/api/retrieving-message-batches
+method(batch_poll, ProviderOpenAI) <- function(provider, batch) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/batches/", batch$id)
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+method(batch_status, ProviderOpenAI) <- function(provider, batch) {
+  list(
+    working = batch$status != "completed",
+    n_processing = batch$request_counts$total - batch$request_counts$completed,
+    n_succeeded = batch$request_counts$completed,
+    n_failed = batch$request_counts$failed
+  )
+}
+
+
+# https://docs.anthropic.com/en/api/retrieving-message-batch-results
+method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
+  path <- withr::local_tempfile()
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/files/", batch$output_file_id, "/content")
+  req <- req_progress(req, "down")
+  resp <- req_perform(req, path = path)
+
+  lines <- readLines(path, warn = FALSE)
+  json <- lapply(lines, jsonlite::fromJSON, simplifyVector = FALSE)
+
+  ids <- as.numeric(gsub("chat-", "", map_chr(json, "[[", "custom_id")))
+  results <- lapply(json, "[[", "response")
+  results[order(ids)]
+}
+
+method(batch_result_turn, ProviderOpenAI) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
+  if (result$status_code == 200) {
+    value_turn(provider, result$body, has_type = has_type)
+  } else {
+    NULL
+  }
 }
 
 # Models -----------------------------------------------------------------------

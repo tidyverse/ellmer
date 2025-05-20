@@ -18,6 +18,27 @@ test_that("can list models", {
   test_models(models_ollama)
 })
 
+test_that("includes list of models in error message if `model` is missing", {
+  skip_if_no_ollama()
+
+  local_mocked_bindings(
+    models_ollama = function(...) list(id = "llama3")
+  )
+
+  expect_snapshot(chat_ollama(), error = TRUE)
+})
+
+test_that("checks that requested model is installed", {
+  skip_if_no_ollama()
+  local_mocked_bindings(
+    models_ollama = function(...) list(id = "llama3")
+  )
+  expect_snapshot(
+    chat_ollama(model = "not-a-real-model"),
+    error = TRUE
+  )
+})
+
 # Common provider interface -----------------------------------------------
 
 test_that("can chat with tool request", {

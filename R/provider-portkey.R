@@ -11,7 +11,7 @@
 #'
 #' @family chatbots
 #' @param api_key `r api_key_param("PORTKEY_API_KEY")`
-#' @param api_key A Portkey API key.
+#' @param model `r param_model("gpt-4o", "openai")`
 #' @param virtual_key A virtual identifier storing LLM provider's API key. See
 #'   [documentation](https://portkey.ai/docs/product/ai-gateway/virtual-keys).
 #' @export
@@ -94,9 +94,9 @@ method(base_request, ProviderPortkeyAI) <- function(provider) {
 #' @export
 #' @rdname chat_portkey
 models_portkey <- function(
-    base_url = "https://api.portkey.ai/v1",
-    api_key = portkeyai_key(),
-    virtual_key = NULL
+  base_url = "https://api.portkey.ai/v1",
+  api_key = portkeyai_key(),
+  virtual_key = NULL
 ) {
   provider <- ProviderPortkeyAI(
     name = "PortkeyAI",
@@ -113,7 +113,7 @@ models_portkey <- function(
   json <- resp_body_json(resp)
 
   id <- map_chr(json$data, "[[", "id")
-  created_at <- as.POSIXct(map_vec(json$data, ~ .$created_at))
+  created_at <- as.POSIXct(map_dbl(json$data, "[[", "created_at"))
 
   df <- data.frame(
     id = id,

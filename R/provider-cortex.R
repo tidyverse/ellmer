@@ -284,20 +284,10 @@ method(value_turn, ProviderSnowflakeCortexAnalyst) <- function(
   result,
   has_type = FALSE
 ) {
-  if (!is_named(result)) {
-    # streaming
-    role <- "assistant"
-    content <- result
-  } else {
-    role <- result$role
-    if (role == "analyst") {
-      role <- "assistant"
-    }
-    content <- result$content
-  }
+  is_streaming <- !is_named(result)
+  content <- if (is_streaming) result else result$content
 
-  Turn(
-    role = role,
+  assistant_turn(
     contents = lapply(content, function(x) {
       if (x$type == "text") {
         if (!has_name(x, "text")) {

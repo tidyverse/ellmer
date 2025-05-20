@@ -167,6 +167,71 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x) {
   as_json(provider, ContentText("<structured data/>"))
 }
 
+# Batch AI ---------------------------------------------------------------
+
+# Does the provider support batch uploads?
+has_batch_support <- new_generic(
+  "has_batch_support",
+  "provider",
+  function(provider) {
+    S7_dispatch()
+  }
+)
+method(has_batch_support, Provider) <- function(provider) {
+  FALSE
+}
+
+# Submit a batch, return an object "batch" object that will be passed to
+# batch_poll() and batch_retrieve()
+batch_submit <- new_generic(
+  "batch_submit",
+  "provider",
+  function(provider, conversations, type = NULL) {
+    S7_dispatch()
+  }
+)
+
+# Get batch status. Returns an opaque list.
+batch_poll <- new_generic(
+  "batch_poll",
+  "provider",
+  function(provider, batch) {
+    S7_dispatch()
+  }
+)
+
+# Given batch status, return a standardised list:
+# * working - TRUE/FALSE
+# * n_processing = number of requests still processing
+# * n_succeeded = number of requests that succeeded
+# * n_failed = number of requests that failed
+batch_status <- new_generic(
+  "batch_status",
+  "provider",
+  function(provider, batch) {
+    S7_dispatch()
+  }
+)
+
+# Download batched results
+batch_retrieve <- new_generic(
+  "batch_retrieve",
+  "provider",
+  function(provider, batch) {
+    S7_dispatch()
+  }
+)
+
+# Process a single result. Returns either a turn or NULL, if the turn
+# did not succeed
+batch_result_turn <- new_generic(
+  "batch_result_turn",
+  "provider",
+  function(provider, result, has_type = FALSE) {
+    S7_dispatch()
+  }
+)
+
 # Pricing ---------------------------------------------------------------------
 
 standardise_model <- new_generic(

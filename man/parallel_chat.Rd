@@ -64,6 +64,10 @@ property.
 If you have multiple prompts, you can submit them in parallel. This is
 typically considerably faster than submitting them in sequence, especially
 with Gemini and OpenAI.
+
+If you're using \code{\link[=chat_openai]{chat_openai()}} or \code{\link[=chat_anthropic]{chat_anthropic()}} and you're willing
+to wait longer, you might want to use \code{\link[=batch_chat]{batch_chat()}} instead, as it comes
+with a 50\% discount in return for taking up to 24 hours.
 }
 \examples{
 \dontshow{if (ellmer::has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
