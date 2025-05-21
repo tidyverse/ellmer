@@ -1,5 +1,18 @@
 # -------------------------------------------------------------------------
 
+test_that("can round trip of Turn record/replay", {
+  test_record_replay(Turn("user"))
+
+  test_record_replay(Turn(
+    "user",
+    list(
+      ContentText("hello world"),
+      ContentText("hello world2")
+    )
+  ))
+})
+
+
 test_that("can round trip of Content record/replay", {
   test_record_replay(Content())
 })

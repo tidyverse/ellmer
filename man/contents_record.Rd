@@ -8,7 +8,7 @@
 \usage{
 contents_record(content, ..., chat)
 
-contents_replay(obj, ..., cls = NULL, chat, env = rlang::caller_env())
+contents_replay(obj, ..., chat, env = rlang::caller_env())
 
 contents_replay_class(cls, obj, ..., chat, env = rlang::caller_env())
 }
@@ -21,9 +21,9 @@ contents_replay_class(cls, obj, ..., chat, env = rlang::caller_env())
 
 \item{obj}{A basic list (from \code{contents_record()}) to be replayed.}
 
-\item{cls}{The class constructor to be used for replaying the object.}
-
 \item{env}{The environment to find non-package classes.}
+
+\item{cls}{The class constructor to be used for replaying the object.}
 }
 \description{
 These generic functions can be use to convert \link{Turn} contents or \link{Content}
