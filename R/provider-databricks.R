@@ -255,11 +255,11 @@ default_databricks_credentials <- function(workspace = databricks_workspace()) {
   # When on desktop, try using the Databricks CLI for auth.
   cli_path <- Sys.getenv("DATABRICKS_CLI_PATH", "databricks")
   if (!is_hosted_session() && nchar(Sys.which(cli_path)) != 0) {
-    token <- databricks_cli_token(cli_path, host)
+    token <- databricks_cli_token(cli_path, workspace)
     if (!is.null(token)) {
       return(function() {
         # Ensure we get an up-to-date token.
-        token <- databricks_cli_token(cli_path, host)
+        token <- databricks_cli_token(cli_path, workspace)
         list(Authorization = paste("Bearer", token))
       })
     }

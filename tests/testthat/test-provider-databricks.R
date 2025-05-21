@@ -65,7 +65,12 @@ test_that("Databricks CLI tokens are detected correctly", {
     DATABRICKS_CLIENT_ID = NA,
     DATABRICKS_CLIENT_SECRET = NA
   )
-  local_mocked_bindings(databricks_cli_token = function(path, host) "cli_token")
+  local_mocked_bindings(
+    databricks_cli_token = function(path, host) {
+      stopifnot(startsWith(host, "https://"))
+      "cli_token"
+    }
+  )
 
   credentials <- default_databricks_credentials()
   expect_equal(credentials(), list(Authorization = "Bearer cli_token"))
