@@ -66,7 +66,7 @@ test_that("can round trip of ContentThinking record/replay", {
 test_that("can round trip of ContentTool record/replay", {
   chat <- chat_ollama_test("Be as terse as possible; no punctuation")
   tool_rnorm <- tool(
-    stats::rnorm,
+    rnorm,
     "Drawn numbers from a random normal distribution",
     n = type_integer("The number of observations. Must be a positive integer."),
     mean = type_number("The mean value of the distribution."),
@@ -85,7 +85,8 @@ test_that("can round trip of ContentTool record/replay", {
 test_that("can round trip of ToolDef record/replay", {
   chat <- chat_ollama_test("Be as terse as possible; no punctuation")
   tool_rnorm <- tool(
-    stats::rnorm,
+    # Use `rnorm` to avoid loading the package... this causes the name to not be auto found
+    rnorm,
     "Drawn numbers from a random normal distribution",
     n = type_integer("The number of observations. Must be a positive integer."),
     mean = type_number("The mean value of the distribution."),
@@ -105,6 +106,30 @@ test_that("can round trip of ToolDef record/replay", {
       tool = tool_rnorm
     ),
     chat = chat
+  )
+
+  recorded_tool <- contents_record(tool_rnorm, chat = chat)
+  chat_empty <- chat_ollama_test("Be as terse as possible; no punctuation")
+  replayed_tool <- contents_replay(recorded_tool, chat = chat_empty)
+
+  tool_rnorm_empty <- ToolDef(
+    # rnorm,
+    name = "rnorm",
+    description = "Drawn numbers from a random normal distribution",
+    arguments = type_object(
+      n = type_integer(
+        "The number of observations. Must be a positive integer."
+      ),
+      mean = type_number("The mean value of the distribution."),
+      sd = type_number(
+        "The standard deviation of the distribution. Must be a non-negative number."
+      )
+    ),
+  )
+
+  expect_equal(
+    replayed_tool,
+    tool_rnorm_empty
   )
 })
 

@@ -70,11 +70,7 @@ contents_record <-
         )
       }
 
-      if (
-        is_list_of_s7_objects(content)
-        # (is_unnamed_list(content) || is_named_list(content)) &&
-        # all(map_lgl(content, S7_inherits))
-      ) {
+      if (is_list_of_s7_objects(content)) {
         # If the content is a list, we need to record each element
         # and return a list of the recorded elements
         return(lapply(content, contents_record, chat = chat))
@@ -103,19 +99,12 @@ contents_record <-
     }
   )
 
-prop_is_read_only <- function(prop) {
-  is.function(prop$getter) && !is.function(prop$setter)
-}
-prop_type_is_func <- function(prop) {
-  all(class(prop) == class(S7::S7_function)) &&
-    prop$class == S7::S7_function$class
-}
 method(contents_record, S7::S7_object) <- function(content, ..., chat) {
-  # Remove read-only properties
+  class_name <- class(content)[1]
+
+  # Remove read-only props
   cls_props <- S7::S7_class(content)@properties
   prop_names <- names(cls_props)[!map_lgl(cls_props, prop_is_read_only)]
-
-  class_name <- class(content)[1]
 
   recorded_props <- setNames(
     lapply(prop_names, function(prop_name) {
@@ -123,11 +112,7 @@ method(contents_record, S7::S7_object) <- function(content, ..., chat) {
       if (S7_inherits(prop_value)) {
         # Recursive call to S7 object
         contents_record(prop_value, chat = chat)
-      } else if (
-        is_list_of_s7_objects(prop_value)
-        # (is_unnamed_list(prop_value) || is_named_list(prop_value)) &&
-        #   all(map_lgl(prop_value, S7_inherits))
-      ) {
+      } else if (is_list_of_s7_objects(prop_value)) {
         # Make record of each item in prop.
         # Do not recurse forever!
         lapply(prop_value, contents_record, chat = chat)
@@ -154,23 +139,6 @@ method(contents_record, S7::S7_object) <- function(content, ..., chat) {
 }
 
 
-# method(contents_record, Turn) <- function(content, ..., chat) {
-#   ret <- contents_record(super(content, S7::S7_object), chat = chat)
-#   ret$props$text <- NULL
-#   ret
-#   # list(
-#   #   version = 1,
-#   #   class = class(content)[1],
-#   #   props = list(
-#   #     role = content@role,
-#   #     contents = lapply(content@contents, contents_record, chat = chat),
-#   #     json = content@json,
-#   #     tokens = content@tokens
-#   #     # text = getter only!
-#   #   )
-#   # )
-# }
-
 #' @rdname contents_record
 #' @export
 # Holy "Holy Trait" dispatching, Batman!
@@ -196,27 +164,11 @@ contents_replay <- function(
   }
 
   if (!is_recorded_object(obj)) {
-    if (
-      is_list_of_recorded_objects(obj)
-      # (is_named_list(obj) || is_unnamed_list(obj)) &&
-      #   all(map_lgl(obj, is_recorded_object))
-    ) {
-      # If the object is a list, we need to replay each element
-      # and return a list of the replayed elements
+    if (is_list_of_recorded_objects(obj)) {
       return(lapply(obj, contents_replay, chat = chat, env = env))
     }
     return(obj)
   }
-
-  # if (!all(c("version", "class", "props") %in% names(obj))) {
-  #   # If the object isn't a recorded object, return it as is
-  #   if (is_named_list(obj)) {
-  #     # If the object is a named list, we need to replay each element
-  #     # and return a list of the replayed elements
-  #     return(lapply(obj, contents_replay, chat = chat, env = env))
-  #   }
-  #   return(obj)
-  # }
 
   class_value <- obj$class
   if (!(is.character(class_value) && length(class_value) > 0)) {
@@ -288,34 +240,10 @@ method(contents_replay_class, S7::S7_object) <- function(
 
   # While this seems like a bit of extra work, the tracebacks are accurate
   # vs referencing an unrelated parameter name in the traceback
-  rlang::exec(
-    cls_name,
-    !!!obj_props,
-    .env = env
-  )
+  rlang::exec(cls_name, !!!obj_props, .env = env)
 }
 
 
-# method(contents_record, ToolDef) <- function(content, ..., chat) {
-#   ret <- contents_record(super(content, S7::S7_object), chat = chat)
-#   # Do not record the function!
-#   # It is not serializable and will not be neeeded after replay as the _real_ tool would be leveraged.
-#   # However, keep all the other properties as the metadata could be useful.
-#   ret$props$fun <- NULL
-#   ret
-#   # list(
-#   #   version = 1,
-#   #   class = class(content)[1],
-#   #   props = list(
-#   #     name = content@name,
-#   #     fun = NULL,
-#   #     description = content@description,
-#   #     arguments = contents_record(content@arguments, chat = chat),
-#   #     convert = content@convert,
-#   #     annotations = content@annotations
-#   #   )
-#   # )
-# }
 method(contents_replay_class, ToolDef) <- function(
   cls,
   obj,
@@ -337,59 +265,16 @@ method(contents_replay_class, ToolDef) <- function(
     return(matched_tool)
   }
 
-  # If no tool is found, return placeholder tool
-  ToolDef(
-    name = obj$props$name,
-    # fun = NULL, # fun was not serialized
-    description = obj$props$description,
-    arguments = contents_replay(obj$props$arguments, chat = chat),
-    convert = obj$props$convert,
-    annotations = obj$props$annotations
+  # If no tool is found, return placeholder tool containing the metadata
+  ret <- contents_replay_class(
+    super(cls, S7::S7_object),
+    obj,
+    chat = chat,
+    env = env
   )
+  ret
 }
 
-
-# method(contents_record, TypeObject) <- function(content, ..., chat) {
-#   list(
-#     version = 1,
-#     class = class(content)[1],
-#     props = list(
-#       description = content@description,
-#       required = content@required,
-#       properties = lapply(
-#         content@properties,
-#         contents_record,
-#         chat = chat
-#       ),
-#       additional_properties = content@additional_properties
-#     )
-#   )
-# }
-# method(contents_replay_class, TypeObject) <- function(
-#   cls,
-#   obj,
-#   ...,
-#   chat,
-#   env = rlang::caller_env()
-# ) {
-#   if (obj$version != 1) {
-#     cli::cli_abort(
-#       "Unsupported version {.val {obj$version}}.",
-#       call = caller_env()
-#     )
-#   }
-
-#   TypeObject(
-#     description = obj$props$description,
-#     required = obj$props$required,
-#     properties = lapply(
-#       obj$props$properties,
-#       contents_replay,
-#       chat = chat
-#     ),
-#     additional_properties = obj$props$additional_properties
-#   )
-# }
 
 #' Retrieve the class constructor
 #'
@@ -429,15 +314,10 @@ get_cls_constructor <- function(class_value, ..., env = rlang::caller_env()) {
   }
 }
 
-# is_unnamed_list <- function(x) {
-#   is.list(x) &&
-#     (all(!rlang::have_name(x)))
-# }
+prop_is_read_only <- function(prop) {
+  is.function(prop$getter) && !is.function(prop$setter)
+}
 
-# is_named_list <- function(x) {
-#   is.list(x) &&
-#     (all(rlang::have_name(x)))
-# }
 is_recorded_object <- function(x) {
   is.list(x) &&
     all(c("version", "class", "props") %in% names(x))
