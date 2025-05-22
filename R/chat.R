@@ -492,6 +492,7 @@ Chat <- R6::R6Class(
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
+      start_agent_span(private$provider)
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns(
@@ -551,6 +552,8 @@ Chat <- R6::R6Class(
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
+      span <- start_agent_span(private$provider, active = FALSE)
+      withr::defer(span$end())
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns_async(
@@ -627,7 +630,7 @@ Chat <- R6::R6Class(
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
       }
-
+      span <- start_chat_span(private$provider)
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "stream" else "value",
@@ -654,9 +657,11 @@ Chat <- R6::R6Class(
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
+        record_chat_span_status(span, result)
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
         turn <- match_tools(turn, private$tools)
       } else {
+        record_chat_span_status(span, response)
         turn <- value_turn(
           private$provider,
           response,
@@ -709,6 +714,8 @@ Chat <- R6::R6Class(
       type = NULL,
       yield_as_content = FALSE
     ) {
+      span <- start_chat_span(private$provider, active = FALSE)
+      withr::defer(span$end())
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "async-stream" else "async-value",
@@ -735,10 +742,12 @@ Chat <- R6::R6Class(
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
+        record_chat_span_status(span, result)
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
       } else {
         result <- await(response)
 
+        record_chat_span_status(span, result)
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
         text <- turn@text
         if (!is.null(text)) {
