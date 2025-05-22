@@ -1,5 +1,11 @@
 # ellmer (development version)
 
+## New features
+
+## Developer tooling
+
+* Added `contents_record()`, `contents_replay()`, and `contents_replay_class()` to record and replay `Turn` related information from a `Chat` instance (#502). For example, these methods can be used for bookmarking within `{shinychat}`.
+
 # ellmer 0.2.0
 
 ## Breaking changes

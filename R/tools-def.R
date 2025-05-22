@@ -1,5 +1,6 @@
 #' @include utils-S7.R
 #' @include types.R
+#' @include ellmer-package.R
 NULL
 
 #' Define a tool
