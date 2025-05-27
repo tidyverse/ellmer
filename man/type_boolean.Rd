@@ -8,6 +8,7 @@
 \alias{type_enum}
 \alias{type_array}
 \alias{type_object}
+\alias{json_schema}
 \title{Type specifications}
 \usage{
 type_boolean(description = NULL, required = TRUE)
@@ -28,6 +29,8 @@ type_object(
   .required = TRUE,
   .additional_properties = FALSE
 )
+
+json_schema(txt)
 }
 \arguments{
 \item{description, .description}{The purpose of the component. This is
@@ -56,6 +59,8 @@ possess.}
 
 \item{.additional_properties}{Can the object have arbitrary additional
 properties that are not explicitly listed? Only supported by Claude.}
+
+\item{txt}{A JSON string, URL, or file.}
 }
 \description{
 These functions specify object types in a way that chatbots understand and

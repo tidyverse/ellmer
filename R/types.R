@@ -55,6 +55,16 @@ TypeArray <- new_class(
 )
 
 #' @export
+#' @name Type
+TypeJsonSchema <- new_class(
+  "JsonSchema",
+  Type,
+  properties = list(
+    txt = class_character
+  )
+)
+
+#' @export
 #' @rdname Type
 #' @param properties Named list of properties stored inside the object.
 #'   Each element should be an S7 `Type` object.`
@@ -180,4 +190,11 @@ type_object <- function(
     required = .required,
     additional_properties = .additional_properties
   )
+}
+
+#' @param txt A JSON string, URL, or file.
+#' @export
+#' @rdname type_boolean
+json_schema <- function(txt) {
+  TypeJsonSchema(txt = txt)
 }

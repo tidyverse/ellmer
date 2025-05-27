@@ -5,6 +5,7 @@
 \alias{TypeBasic}
 \alias{TypeEnum}
 \alias{TypeArray}
+\alias{TypeJsonSchema}
 \alias{TypeObject}
 \title{Type definitions for function calling and structured data extraction.}
 \usage{
@@ -13,6 +14,8 @@ TypeBasic(description = NULL, required = TRUE, type = stop("Required"))
 TypeEnum(description = NULL, required = TRUE, values = character(0))
 
 TypeArray(description = NULL, required = TRUE, items = Type())
+
+TypeJsonSchema(description = NULL, required = TRUE, txt = character(0))
 
 TypeObject(
   description = NULL,
@@ -45,6 +48,8 @@ value, the default value will be used.}
 
 \item{items}{The type of the array items. Can be created by any of the
 \code{type_} function.}
+
+\item{txt}{A JSON string, URL, or file.}
 
 \item{properties}{Named list of properties stored inside the object.
 Each element should be an S7 \code{Type} object.`}
