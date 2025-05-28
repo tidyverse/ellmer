@@ -57,10 +57,10 @@ TypeArray <- new_class(
 #' @export
 #' @name Type
 TypeJsonSchema <- new_class(
-  "JsonSchema",
+  "TypeJsonSchema",
   Type,
   properties = list(
-    txt = class_character
+    json = class_list
   )
 )
 
@@ -197,4 +197,17 @@ type_object <- function(
 #' @rdname type_boolean
 json_schema <- function(txt) {
   TypeJsonSchema(txt = txt)
+}
+
+#' @param text A JSON string, URL, or file.
+#' @export
+#' @rdname type_boolean
+type_from_schema <- function(text, path) {
+  check_exclusive(text, path)
+  if (!missing(text)) {
+    json <- jsonlite::fromJSON(text, simplifyVector = FALSE)
+  } else {
+    json <- jsonlite::read_json(path)
+  }
+  TypeJsonSchema(json = json)
 }

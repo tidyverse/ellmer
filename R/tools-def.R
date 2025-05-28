@@ -75,6 +75,7 @@ tool <- function(
       .name <- unique_tool_name()
     }
   }
+
   ToolDef(
     fun = .fun,
     name = .name,

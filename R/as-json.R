@@ -38,5 +38,5 @@ method(as_json, list(Provider, TypeArray)) <- function(provider, x) {
 }
 
 method(as_json, list(Provider, TypeJsonSchema)) <- function(provider, x) {
-  jsonlite::fromJSON(x@txt, simplifyVector = FALSE)
+  x@json
 }
