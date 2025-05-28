@@ -31,7 +31,7 @@ NULL
 #'
 #' @inheritParams chat_openai
 #' @inheritParams chat_cortex_analyst
-#' @param model `r param_model("llama3.1-70b")`
+#' @param model `r param_model("claude-3-7-sonnet")`
 #' @inherit chat_openai return
 #' @examplesIf has_credentials("cortex")
 #' chat <- chat_snowflake()
@@ -46,7 +46,7 @@ chat_snowflake <- function(
   echo = c("none", "output", "all")
 ) {
   check_string(account, allow_empty = FALSE)
-  model <- set_default(model, "llama3.1-70b")
+  model <- set_default(model, "claude-3-7-sonnet")
   echo <- check_echo(echo)
 
   if (is_list(credentials)) {
