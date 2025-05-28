@@ -4,6 +4,8 @@
 * `chat_databricks()` now picks up on Databricks workspace URLs set in the
   configuration file, which should improve compatibility with the Databricks CLI
   (#521, @atheriel).
+* `chat_snowflake()` no longer streams answers that include a mysterious
+  `list(type = "text", text = "")` trailer (#533, @atheriel).
 
 # ellmer 0.2.0
 

@@ -214,7 +214,7 @@ method(stream_text, ProviderOpenAI) <- function(provider, event) {
   if (length(event$choices) == 0) {
     NULL
   } else {
-    event$choices[[1]]$delta$content
+    event$choices[[1]]$delta[["content"]]
   }
 }
 method(stream_merge_chunks, ProviderOpenAI) <- function(
