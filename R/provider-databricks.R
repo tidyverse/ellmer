@@ -177,12 +177,32 @@ method(as_json, list(ProviderDatabricks, ContentText)) <- function(
   x@text
 }
 
-databricks_workspace <- function() {
-  host <- key_get("DATABRICKS_HOST")
-  if (!is.null(host) && !grepl("^https?://", host)) {
-    host <- paste0("https://", host)
+databricks_workspace <- function(error_call = caller_env()) {
+  # Default to the well-known DATABRICKS_HOST environment variable.
+  host <- Sys.getenv("DATABRICKS_HOST")
+  if (nchar(host) != 0) {
+    if (!grepl("^https?://", host)) {
+      host <- paste0("https://", host)
+    }
+    return(host)
   }
-  host
+  # If we have no environment variable, check for a Databricks config file
+  # (likely generated via the Databricks CLI or their VS Code extension).
+  cfg_file <- Sys.getenv("DATABRICKS_CONFIG_FILE", "~/.databrickscfg")
+  if (file.exists(cfg_file)) {
+    profile <- Sys.getenv("DATABRICKS_CONFIG_PROFILE", "DEFAULT")
+    host <- databricks_config_field(cfg_file, profile, "host")
+    if (!is.null(host)) {
+      return(host)
+    }
+  }
+  if (is_testing()) {
+    testthat::skip("no Databricks workspace configured")
+  }
+  cli::cli_abort(
+    "No env var {.code DATABRICKS_HOST} set or valid {.file {cfg_file}} found.",
+    call = error_call
+  )
 }
 
 databricks_user_agent <- function() {
@@ -337,18 +357,38 @@ databricks_cli_token <- function(cli_path, host) {
 # host = some-host
 # token = some-token
 workbench_databricks_token <- function(host, cfg_file) {
+  databricks_config_field(cfg_file, "workbench", "token")
+}
+
+databricks_config_field <- function(cfg_file, profile, field) {
   cfg <- readLines(cfg_file)
   # We don't attempt a full parse of the INI syntax supported by Databricks
-  # config files, instead relying on the fact that this particular file will
-  # always contain only one section.
-  if (!any(grepl(host, cfg, fixed = TRUE))) {
-    # The configuration doesn't actually apply to this host.
+  # config files and use the following approach to cheat, instead:
+  #
+  # 1. Find the indices of the profile header and the field. If none appear in
+  #    the file, we're done.
+  # 2. Find the index of the next profile header, if any.
+  # 3. Find the index -- if any -- of the field between these headers.
+  # 4. Extract the field's value.
+  profile <- which(grepl(sprintf("[%s]", profile), cfg, fixed = TRUE))
+  if (length(profile) != 1) {
     return(NULL)
   }
-  line <- grepl("token = ", cfg, fixed = TRUE)
-  token <- gsub("token = ", "", cfg[line])
-  if (nchar(token) == 0) {
+  entry <- which(grepl(field, cfg, fixed = TRUE))
+  entry <- entry[entry > profile]
+  if (!any(entry)) {
     return(NULL)
   }
-  token
+  headers <- which(startsWith(cfg, "["))
+  next_profile <- headers[headers > profile]
+  if (!any(next_profile)) {
+    next_profile <- length(cfg) + 1
+  } else {
+    next_profile <- next_profile[1]
+  }
+  entry <- entry[entry < next_profile]
+  if (length(entry) != 1) {
+    return(NULL)
+  }
+  gsub(sprintf("%s\\s*=\\s*(.*)", field), "\\1", cfg[entry])
 }
