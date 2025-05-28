@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* You can now use pre-existing JSON schemas in structured chats using `type_from_schema()` (#133, @hafen)
+
 # ellmer 0.2.0
 
 ## Breaking changes
