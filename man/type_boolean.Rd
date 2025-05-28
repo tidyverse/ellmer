@@ -88,6 +88,12 @@ must have the specified type. For example,
 \code{type_object(a = type_string(), b = type_array(type_integer()))} is
 equivalent to a list with an element called \code{a} that is a string and
 an element called \code{b} that is an integer vector.
+\item \code{type_from_schema()} allows you to specify the full schema that you want to
+get back from the LLM as a JSON schema. This is useful if you have a
+pre-defined schema that you want to use directly without manually creating
+the type using the \verb{type_*()} functions. You can point to a file with the
+\code{path} argument or provide a JSON string with \code{text}. The schema must be a
+valid JSON schema object.
 }
 }
 \examples{

@@ -108,6 +108,13 @@ TypeObject <- new_class(
 #'   equivalent to a list with an element called `a` that is a string and
 #'   an element called `b` that is an integer vector.
 #'
+#' * `type_from_schema()` allows you to specify the full schema that you want to
+#'   get back from the LLM as a JSON schema. This is useful if you have a
+#'   pre-defined schema that you want to use directly without manually creating
+#'   the type using the `type_*()` functions. You can point to a file with the
+#'   `path` argument or provide a JSON string with `text`. The schema must be a
+#'   valid JSON schema object.
+#'
 #' @param description,.description The purpose of the component. This is
 #'   used by the LLM to determine what values to pass to the tool or what
 #'   values to extract in the structured data, so the more detail that you can
