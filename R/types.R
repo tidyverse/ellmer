@@ -55,6 +55,7 @@ TypeArray <- new_class(
 )
 
 #' @export
+#' @param json A JSON schema object as a list.
 #' @name Type
 TypeJsonSchema <- new_class(
   "TypeJsonSchema",
@@ -192,7 +193,8 @@ type_object <- function(
   )
 }
 
-#' @param text A JSON string, URL, or file.
+#' @param text A JSON string.
+#' @param path A file path to a JSON file.
 #' @export
 #' @rdname type_boolean
 type_from_schema <- function(text, path) {

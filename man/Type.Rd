@@ -49,6 +49,8 @@ value, the default value will be used.}
 \item{items}{The type of the array items. Can be created by any of the
 \code{type_} function.}
 
+\item{json}{A JSON schema object as a list.}
+
 \item{properties}{Named list of properties stored inside the object.
 Each element should be an S7 \code{Type} object.`}
 

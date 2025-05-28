@@ -60,7 +60,9 @@ possess.}
 \item{.additional_properties}{Can the object have arbitrary additional
 properties that are not explicitly listed? Only supported by Claude.}
 
-\item{text}{A JSON string, URL, or file.}
+\item{text}{A JSON string.}
+
+\item{path}{A file path to a JSON file.}
 }
 \description{
 These functions specify object types in a way that chatbots understand and
