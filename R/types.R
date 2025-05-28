@@ -192,13 +192,6 @@ type_object <- function(
   )
 }
 
-#' @param txt A JSON string, URL, or file.
-#' @export
-#' @rdname type_boolean
-json_schema <- function(txt) {
-  TypeJsonSchema(txt = txt)
-}
-
 #' @param text A JSON string, URL, or file.
 #' @export
 #' @rdname type_boolean

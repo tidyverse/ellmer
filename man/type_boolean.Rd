@@ -8,7 +8,6 @@
 \alias{type_enum}
 \alias{type_array}
 \alias{type_object}
-\alias{json_schema}
 \alias{type_from_schema}
 \title{Type specifications}
 \usage{
@@ -30,8 +29,6 @@ type_object(
   .required = TRUE,
   .additional_properties = FALSE
 )
-
-json_schema(txt)
 
 type_from_schema(text, path)
 }
@@ -62,8 +59,6 @@ possess.}
 
 \item{.additional_properties}{Can the object have arbitrary additional
 properties that are not explicitly listed? Only supported by Claude.}
-
-\item{txt}{A JSON string, URL, or file.}
 
 \item{text}{A JSON string, URL, or file.}
 }
