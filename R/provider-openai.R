@@ -254,7 +254,10 @@ method(value_turn, ProviderOpenAI) <- function(
     calls <- lapply(message$tool_calls, function(call) {
       name <- call$`function`$name
       # TODO: record parsing error
-      args <- jsonlite::parse_json(call$`function`$arguments)
+      args <- tryCatch(
+        jsonlite::parse_json(call$`function`$arguments),
+        error = function(cnd) list()
+      )
       ContentToolRequest(name = name, arguments = args, id = call$id)
     })
     content <- c(content, calls)

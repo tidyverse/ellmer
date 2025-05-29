@@ -23,8 +23,7 @@
 #' ## Known limitations
 #'
 #' Databricks models do not support images, but they do support structured
-#' outputs. Tool calling support is also very limited at present and is
-#' currently not supported by ellmer.
+#' outputs and tool calls for most models.
 #'
 #' @family chatbots
 #' @param workspace The URL of a Databricks workspace, e.g.
@@ -175,6 +174,39 @@ method(as_json, list(ProviderDatabricks, ContentText)) <- function(
 ) {
   # Databricks only seems to support textual content.
   x@text
+}
+
+# See: https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#functionobject
+method(as_json, list(ProviderDatabricks, ToolDef)) <- function(provider, x) {
+  # Note: It seems that Databricks doesn't support the "strict" field, despite
+  # what their documentation says. It *is* supported for structured outputs,
+  # though. I suspect a copy & paste error in their docs.
+  compact(list(
+    type = "function",
+    "function" = compact(list(
+      name = x@name,
+      description = x@description,
+      # Use the same parameter encoding as the OpenAI provider, but only if
+      # there actually are parameters.
+      parameters = if (length(x@arguments@properties) != 0)
+        as_json(provider, x@arguments)
+    ))
+  ))
+}
+
+# https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#toolcall
+method(as_json, list(ProviderDatabricks, ContentToolRequest)) <- function(
+  provider,
+  x
+) {
+  # Databricks seems to require encoding empty arguments as an empty
+  # dictionary, rather than an empty array.
+  json_args <- jsonlite::toJSON(set_names(x@arguments))
+  list(
+    id = x@id,
+    `function` = list(name = x@name, arguments = json_args),
+    type = "function"
+  )
 }
 
 databricks_workspace <- function(error_call = caller_env()) {

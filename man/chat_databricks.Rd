@@ -73,8 +73,7 @@ package.
 \subsection{Known limitations}{
 
 Databricks models do not support images, but they do support structured
-outputs. Tool calling support is also very limited at present and is
-currently not supported by ellmer.
+outputs and tool calls for most models.
 }
 }
 \examples{

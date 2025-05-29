@@ -25,15 +25,10 @@ test_that("defaults are reported", {
 })
 
 test_that("all tool variations work", {
-  # Note: Databricks models cannot yet handle "continuing past the first tool
-  # call", which causes issues with how ellmer implements tool calling. Nor do
-  # they support parallel tool calls.
-  #
-  # See: https://docs.databricks.com/en/machine-learning/model-serving/function-calling.html#limitations
-  # test_tools_simple(chat_databricks)
-  # test_tools_async(chat_databricks)
-  # test_tools_parallel(chat_databricks)
-  # test_tools_sequential(chat_databricks, total_calls = 6)
+  test_tools_simple(chat_databricks)
+  test_tools_async(chat_databricks)
+  test_tools_parallel(chat_databricks, total_calls = 6)
+  test_tools_sequential(chat_databricks, total_calls = 6)
 })
 
 test_that("can extract data", {
@@ -176,4 +171,62 @@ test_that("tokens can be requested from a Connect server", {
   connectcreds::local_mocked_connect_responses(token = "token")
   credentials <- default_databricks_credentials()
   expect_equal(credentials(), list(Authorization = "Bearer token"))
+})
+
+test_that("chat_databricks() serializes tools correctly", {
+  withr::local_envvar(
+    DATABRICKS_HOST = "https://example.cloud.databricks.com",
+    DATABRICKS_TOKEN = "token"
+  )
+  chat <- chat_databricks(model = "databricks-claude-3-7-sonnet")
+  provider <- chat$get_provider()
+  expect_equal(
+    as_json(
+      provider,
+      tool(
+        function() format(Sys.Date()),
+        .name = "current_date",
+        .description = "Returns the current date in ISO 8601 format."
+      )
+    ),
+    list(
+      type = "function",
+      "function" = list(
+        name = "current_date",
+        description = "Returns the current date in ISO 8601 format."
+      )
+    )
+  )
+  expect_equal(
+    as_json(
+      provider,
+      tool(
+        function(person) {
+          if (person == "Joe") "sage green" else "red"
+        },
+        .name = "favourite_colour",
+        .description = "Returns a person's favourite colour.",
+        person = type_string("Name of a person")
+      )
+    ),
+    list(
+      type = "function",
+      "function" = list(
+        name = "favourite_colour",
+        description = "Returns a person's favourite colour.",
+        parameters = list(
+          type = "object",
+          description = "",
+          properties = list(
+            person = list(
+              type = "string",
+              description = "Name of a person"
+            )
+          ),
+          required = list("person"),
+          additionalProperties = FALSE
+        )
+      )
+    )
+  )
 })
