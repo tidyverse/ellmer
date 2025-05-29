@@ -25,8 +25,8 @@ NULL
 #'   with [modifyList()].
 #' @param echo One of the following options:
 #'   * `none`: don't emit any output (default when running in a function).
-#'   * `text`: echo text output as it streams in (default when running at
-#'     the console).
+#'   * `output`: echo text and tool-calling output as it streams in (default
+#'     when running at the console).
 #'   * `all`: echo all input and output.
 #'
 #'   Note this only affects the `chat()` method.

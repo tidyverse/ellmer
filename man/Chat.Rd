@@ -71,8 +71,8 @@ chat$chat("Tell me a funny joke")
 \item{\code{echo}}{One of the following options:
 \itemize{
 \item \code{none}: don't emit any output (default when running in a function).
-\item \code{text}: echo text output as it streams in (default when running at
-the console).
+\item \code{output}: echo text and tool-calling output as it streams in (default
+when running at the console).
 \item \code{all}: echo all input and output.
 }
 
