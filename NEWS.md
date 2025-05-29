@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* Add pricing information for latest generation of Claude models.
 * You can now use pre-existing JSON schemas in structured chats using `type_from_schema()` (#133, @hafen)
 * `chat_databricks()` now picks up on Databricks workspace URLs set in the
   configuration file, which should improve compatibility with the Databricks CLI

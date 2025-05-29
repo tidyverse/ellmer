@@ -17,11 +17,13 @@ openai <- readr::read_csv("data-raw/openai.csv")
 
 # Same problem as OpenAI website so do it BY FUCKING HAND
 
-# https://www.anthropic.com/pricing#anthropic-api
+# https://www.anthropic.com/pricing
 
 # fmt: skip
 anthropic <- tribble(
   ~model, ~cached_input, ~input, ~output,
+  "claude-opus-4",1.50,15,75,
+  "claude-sonnet-4",0.3,3,15,
   "claude-3-7-sonnet",0.3,3,15,
   "claude-3-5-sonnet",0.3,3,15,
   "claude-3-5-haiku",0.08,0.80,4,
