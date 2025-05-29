@@ -3,7 +3,7 @@
     Code
       . <- chat_databricks()
     Message
-      Using model = "databricks-dbrx-instruct".
+      Using model = "databricks-claude-3-7-sonnet".
 
 # M2M authentication requests look correct
 

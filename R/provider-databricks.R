@@ -30,11 +30,11 @@
 #' @param workspace The URL of a Databricks workspace, e.g.
 #'   `"https://example.cloud.databricks.com"`. Will use the value of the
 #'   environment variable `DATABRICKS_HOST`, if set.
-#' @param model `r param_model("databricks-dbrx-instruct")`
+#' @param model `r param_model("databricks-claude-3-7-sonnet")`
 #'
 #'   Available foundational models include:
 #'
-#'   - `databricks-dbrx-instruct` (the default)
+#'   - `databricks-claude-3-7-sonnet` (the default)
 #'   - `databricks-mixtral-8x7b-instruct`
 #'   - `databricks-meta-llama-3-1-70b-instruct`
 #'   - `databricks-meta-llama-3-1-405b-instruct`
@@ -58,7 +58,7 @@ chat_databricks <- function(
 ) {
   check_string(workspace, allow_empty = FALSE)
   check_string(token, allow_empty = FALSE, allow_null = TRUE)
-  model <- set_default(model, "databricks-dbrx-instruct")
+  model <- set_default(model, "databricks-claude-3-7-sonnet")
   echo <- check_echo(echo)
   if (!is.null(token)) {
     credentials <- function() list(Authorization = paste("Bearer", token))
