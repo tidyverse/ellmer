@@ -36,9 +36,7 @@ test_that("all tool variations work", {
 })
 
 test_that("can extract data", {
-  # Snowflake models don't support structured data.
-  #
-  # test_data_extraction(chat_snowflake)
+  test_data_extraction(chat_snowflake)
 })
 
 test_that("can use images", {

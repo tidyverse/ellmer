@@ -65,8 +65,7 @@ package.
 
 \subsection{Known limitations}{
 
-Note that Snowflake-hosted models do not support images, tool calling, or
-structured outputs.
+Note that Snowflake-hosted models do not support images or tool calling.
 
 See \code{\link[=chat_cortex_analyst]{chat_cortex_analyst()}} to chat with the Snowflake Cortex Analyst rather
 than a general-purpose model.

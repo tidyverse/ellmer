@@ -23,8 +23,7 @@ NULL
 #'   package.
 #'
 #' ## Known limitations
-#' Note that Snowflake-hosted models do not support images, tool calling, or
-#' structured outputs.
+#' Note that Snowflake-hosted models do not support images or tool calling.
 #'
 #' See [chat_cortex_analyst()] to chat with the Snowflake Cortex Analyst rather
 #' than a general-purpose model.
@@ -111,15 +110,38 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
   if (length(tools) != 0) {
     cli::cli_abort("Tool calling is not supported.", call = call)
   }
-  if (!is.null(type) != 0) {
-    cli::cli_abort("Structured data extraction is not supported.", call = call)
-  }
 
   messages <- as_json(provider, turns)
-  list(
+
+  if (!is.null(type)) {
+    # Note: Snowflake uses a slightly different format than OpenAI.
+    response_format <- list(type = "json", schema = as_json(provider, type))
+  } else {
+    response_format <- NULL
+  }
+
+  compact(list2(
     messages = messages,
     model = provider@model,
-    stream = stream
+    stream = stream,
+    response_format = response_format
+  ))
+}
+
+method(as_json, list(ProviderSnowflakeCortex, TypeObject)) <- function(
+  provider,
+  x
+) {
+  # Unlike OpenAI, Snowflake does not support the "additionalProperties" field.
+  names <- names2(x@properties)
+  required <- map_lgl(x@properties, function(prop) prop@required)
+  properties <- as_json(provider, x@properties)
+  names(properties) <- names
+  list(
+    type = "object",
+    description = x@description %||% "",
+    properties = properties,
+    required = as.list(names[required])
   )
 }
 

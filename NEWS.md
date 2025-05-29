@@ -10,6 +10,7 @@
   `chat_anthropic()` (#539, @atheriel).
 * `chat_snowflake()` now parses streaming outputs correctly into turns (#542,
   @atheriel).
+* `chat_snowflake()` now supports structured ouputs (#544, @atheriel).
 
 # ellmer 0.2.0
 
