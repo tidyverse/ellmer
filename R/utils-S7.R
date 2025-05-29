@@ -119,3 +119,26 @@ prop_number_whole <- function(
     }
   )
 }
+
+prop_redacted <- function(name, default = NULL, allow_null = FALSE) {
+  force(allow_null)
+  key <- new_environment()
+
+  new_property(
+    name = name,
+    default = if (is.null(default) && !allow_null) {
+      quote(stop("Required"))
+    } else {
+      default
+    },
+    getter = function(self) {
+      wref_value(prop(self, name))
+    },
+    setter = function(self, value) {
+      check_string(value, allow_null = allow_null)
+
+      prop(self, name) <- new_weakref(key, value)
+      self
+    }
+  )
+}

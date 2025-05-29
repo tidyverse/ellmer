@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* When you save a `Chat` object to disk, API keys are automatically redacted. This means that you can no longer easily resume a chat you've saved on disk (we'll figure this out in a future release) but ensures that you never accidentally save your secret key in an RDS file (#534).
 * `chat_anthropic()` now defaults to Claude Sonnet 4. 
 * Add pricing information for latest generation of Claude models.
 * You can now use pre-existing JSON schemas in structured chats using `type_from_schema()` (#133, @hafen)

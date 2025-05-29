@@ -80,7 +80,7 @@ ProviderAnthropic <- new_class(
   "ProviderAnthropic",
   parent = Provider,
   properties = list(
-    api_key = prop_string(),
+    prop_redacted("api_key"),
     beta_headers = class_character
   )
 )

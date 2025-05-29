@@ -74,7 +74,6 @@ chat_openai <- function(
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
-
 chat_openai_test <- function(
   system_prompt = "Be terse.",
   ...,
@@ -97,7 +96,7 @@ ProviderOpenAI <- new_class(
   "ProviderOpenAI",
   parent = Provider,
   properties = list(
-    api_key = prop_string(),
+    prop_redacted("api_key"),
     # no longer used by OpenAI itself; but subclasses still need it
     seed = prop_number_whole(allow_null = TRUE)
   )
