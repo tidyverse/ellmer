@@ -114,9 +114,6 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
   if (!is.null(type) != 0) {
     cli::cli_abort("Structured data extraction is not supported.", call = call)
   }
-  if (!stream) {
-    cli::cli_abort("Non-streaming responses are not supported.", call = call)
-  }
 
   messages <- as_json(provider, turns)
   list(
