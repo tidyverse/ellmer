@@ -225,3 +225,43 @@ test_that("we can merge Snowflake's chunk format", {
     )
   )
 })
+
+test_that("chat_snowflake() supports parameters", {
+  # Setting a dummy account ensures we don't skip this test, even if there are
+  # no Snowflake credentials available.
+  withr::local_envvar(
+    SNOWFLAKE_ACCOUNT = "testorg-test_account",
+    SNOWFLAKE_TOKEN = "token"
+  )
+  chat <- chat_snowflake(
+    model = "claude-3-5-sonnet",
+    params = params(
+      temperature = 0.7,
+      max_tokens = 100,
+      top_p = 0.9,
+      # This is a Snowflake-specific parameter.
+      guardrails = list(
+        enabled = TRUE
+      )
+    )
+  )
+  provider <- chat$get_provider()
+  expect_equal(
+    chat_body(provider),
+    list(
+      model = "claude-3-5-sonnet",
+      temperature = 0.7,
+      top_p = 0.9,
+      max_tokens = 100,
+      guardrails = list(enabled = TRUE),
+      stream = TRUE
+    )
+  )
+  # Warn/ignore unsupported parameters.
+  provider@params <- params(seed = 1L)
+  expect_warning(
+    out <- chat_body(provider),
+    regexp = "unsupported parameters"
+  )
+  expect_equal(out, list(model = "claude-3-5-sonnet", stream = TRUE))
+})

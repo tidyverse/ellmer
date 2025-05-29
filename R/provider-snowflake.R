@@ -41,11 +41,13 @@ chat_snowflake <- function(
   account = snowflake_account(),
   credentials = NULL,
   model = NULL,
+  params = NULL,
   api_args = list(),
   echo = c("none", "output", "all")
 ) {
   check_string(account, allow_empty = FALSE)
   model <- set_default(model, "claude-3-7-sonnet")
+  params <- params %||% params()
   echo <- check_echo(echo)
 
   if (is_list(credentials)) {
@@ -61,6 +63,7 @@ chat_snowflake <- function(
     account = account,
     credentials = credentials,
     model = model,
+    params = params,
     extra_args = api_args,
     # We need an empty api_key for S7 validation.
     api_key = ""
@@ -120,9 +123,11 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
     response_format <- NULL
   }
 
+  params <- chat_params(provider, provider@params)
   compact(list2(
     messages = messages,
     model = provider@model,
+    !!!params,
     stream = stream,
     response_format = response_format
   ))
@@ -142,6 +147,18 @@ method(as_json, list(ProviderSnowflakeCortex, TypeObject)) <- function(
     description = x@description %||% "",
     properties = properties,
     required = as.list(names[required])
+  )
+}
+
+# See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#optional-json-arguments
+method(chat_params, ProviderSnowflakeCortex) <- function(provider, params) {
+  standardise_params(
+    params,
+    c(
+      temperature = "temperature",
+      top_p = "top_p",
+      max_tokens = "max_tokens"
+    )
   )
 }
 
