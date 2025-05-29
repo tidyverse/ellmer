@@ -170,3 +170,60 @@ test_that("tokens can be requested from a Connect server", {
     )
   )
 })
+
+test_that("we can merge Snowflake's chunk format", {
+  chunk1 <- list(
+    id = "id",
+    model = "claude-3-5-sonnet",
+    choices = list(list(
+      delta = list(
+        type = "text",
+        content = "I",
+        content_list = list(list(type = "text", text = "I")),
+        text = "I"
+      )
+    )),
+    usage = structure(list(), names = character(0))
+  )
+  chunk2 <- list(
+    id = "id",
+    model = "claude-3-5-sonnet",
+    choices = list(list(
+      delta = list(
+        type = "text",
+        content = " aim to be direct and honest: I don't actually",
+        content_list = list(list(
+          type = "text",
+          text = " aim to be direct and honest: I don't actually"
+        )),
+        text = " aim to be direct and honest: I don't actually"
+      )
+    )),
+    usage = structure(list(), names = character(0))
+  )
+  expect_equal(
+    merge_snowflake_dicts(chunk1, chunk2),
+    list(
+      id = "id",
+      model = "claude-3-5-sonnet",
+      choices = list(list(
+        delta = list(
+          type = "text",
+          content = "I aim to be direct and honest: I don't actually",
+          content_list = list(
+            list(
+              type = "text",
+              text = "I"
+            ),
+            list(
+              type = "text",
+              text = " aim to be direct and honest: I don't actually"
+            )
+          ),
+          text = "I aim to be direct and honest: I don't actually"
+        )
+      )),
+      usage = structure(list(), names = character(0))
+    )
+  )
+})

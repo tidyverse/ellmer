@@ -125,6 +125,87 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
 
 # Snowflake -> ellmer --------------------------------------------------------
 
+method(stream_merge_chunks, ProviderSnowflakeCortex) <- function(
+  provider,
+  result,
+  chunk
+) {
+  if (is.null(result)) {
+    chunk
+  } else {
+    merge_snowflake_dicts(result, chunk)
+  }
+}
+
+# Identical to merge_dicts(), but with special handling for Snowflake's
+# non-indexed choices format.
+merge_snowflake_dicts <- function(left, right) {
+  for (right_k in names(right)) {
+    right_v <- right[[right_k]]
+    left_v <- left[[right_k]]
+
+    if (is.null(right_v)) {
+      if (!has_name(left, right_k)) {
+        left[right_k] <- list(NULL)
+      }
+    } else if (is.null(left_v)) {
+      left[[right_k]] <- right_v
+    } else if (identical(left_v, right_v)) {
+      next
+    } else if (is.character(left_v)) {
+      left[[right_k]] <- paste0(left_v, right_v)
+    } else if (is.integer(left_v)) {
+      left[[right_k]] <- right_v
+    } else if (is.list(left_v)) {
+      if (!is.null(names(right_v))) {
+        left[[right_k]] <- merge_dicts(left_v, right_v)
+      } else if (right_k == "choices") {
+        left[[right_k]] <- merge_snowflake_choices(left_v, right_v)
+      } else {
+        left[[right_k]] <- merge_lists(left_v, right_v)
+      }
+    } else if (!identical(class(left_v), class(right_v))) {
+      stop(paste0(
+        "additional_kwargs['",
+        right_k,
+        "'] already exists in this message, but with a different type."
+      ))
+    } else {
+      stop(paste0(
+        "Additional kwargs key ",
+        right_k,
+        " already exists in left dict and value has unsupported type ",
+        class(left[[right_k]]),
+        "."
+      ))
+    }
+  }
+
+  left
+}
+
+merge_snowflake_choices <- function(left, right) {
+  if (is.null(right)) {
+    return(left)
+  } else if (is.null(left)) {
+    return(right)
+  }
+
+  for (e in right) {
+    idx <- find_index(left, e)
+    if (is.na(idx)) {
+      idx <- 1L
+    }
+    # If a top-level "type" has been set for a chunk, it should no
+    # longer be overridden by the "type" field in future chunks.
+    if (!is.null(left[[idx]]$type) && !is.null(e$type)) {
+      e$type <- NULL
+    }
+    left[[idx]] <- merge_dicts(left[[idx]], e)
+  }
+  left
+}
+
 # ellmer -> Snowflake --------------------------------------------------------
 
 # Snowflake only supports simple textual messages.

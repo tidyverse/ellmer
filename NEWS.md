@@ -8,6 +8,8 @@
   `list(type = "text", text = "")` trailer (#533, @atheriel).
 * `chat_snowflake()` now defaults to Claude Sonnet 3.7, the same default as
   `chat_anthropic()` (#539, @atheriel).
+* `chat_snowflake()` now parses streaming outputs correctly into turns (#542,
+  @atheriel).
 
 # ellmer 0.2.0
 
