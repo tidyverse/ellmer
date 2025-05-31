@@ -627,7 +627,7 @@ Chat <- R6::R6Class(
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
       }
-
+      span <- start_chat_span(private$provider)
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "stream" else "value",
@@ -654,9 +654,11 @@ Chat <- R6::R6Class(
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
+        end_chat_span(span, result)
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
         turn <- match_tools(turn, private$tools)
       } else {
+        end_chat_span(span, response)
         turn <- value_turn(
           private$provider,
           response,
@@ -709,6 +711,7 @@ Chat <- R6::R6Class(
       type = NULL,
       yield_as_content = FALSE
     ) {
+      span <- start_chat_span(private$provider)
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "async-stream" else "async-value",
@@ -735,10 +738,12 @@ Chat <- R6::R6Class(
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
+        end_chat_span(span, result)
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
       } else {
         result <- await(response)
 
+        end_chat_span(span, result)
         turn <- value_turn(private$provider, result, has_type = !is.null(type))
         text <- turn@text
         if (!is.null(text)) {
