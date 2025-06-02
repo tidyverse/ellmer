@@ -120,9 +120,15 @@ prop_number_whole <- function(
   )
 }
 
+# Weakrefs are not serialised, so we can use them to ensure that a value
+# is never recorded by saveRDS() and friends.
 prop_redacted <- function(name, default = NULL, allow_null = FALSE) {
   force(allow_null)
-  key <- new_environment()
+
+  # Tie all weakref values to the enclosing environment of `new_property()`
+  # This ensures that all the weakrefs will go out of scope and be gc'd if
+  # the class is deleted.
+  key <- environment()
 
   new_property(
     name = name,
