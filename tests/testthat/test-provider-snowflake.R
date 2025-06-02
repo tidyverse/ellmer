@@ -170,6 +170,14 @@ test_that("tokens can be requested from a Connect server", {
 })
 
 test_that("we can merge Snowflake's chunk format", {
+  # Setting a dummy account ensures we don't skip this test, even if there are
+  # no Snowflake credentials available.
+  withr::local_envvar(
+    SNOWFLAKE_ACCOUNT = "testorg-test_account",
+    SNOWFLAKE_TOKEN = "token"
+  )
+  chat <- chat_snowflake()
+  provider <- chat$get_provider()
   chunk1 <- list(
     id = "id",
     model = "claude-3-5-sonnet",
@@ -200,25 +208,23 @@ test_that("we can merge Snowflake's chunk format", {
     usage = structure(list(), names = character(0))
   )
   expect_equal(
-    merge_snowflake_dicts(chunk1, chunk2),
+    stream_merge_chunks(
+      provider,
+      stream_merge_chunks(provider, NULL, chunk1),
+      chunk2
+    ),
     list(
       id = "id",
       model = "claude-3-5-sonnet",
       choices = list(list(
-        delta = list(
-          type = "text",
+        message = list(
           content = "I aim to be direct and honest: I don't actually",
           content_list = list(
             list(
               type = "text",
-              text = "I"
-            ),
-            list(
-              type = "text",
-              text = " aim to be direct and honest: I don't actually"
+              text = "I aim to be direct and honest: I don't actually"
             )
-          ),
-          text = "I aim to be direct and honest: I don't actually"
+          )
         )
       )),
       usage = structure(list(), names = character(0))

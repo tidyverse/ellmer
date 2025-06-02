@@ -169,80 +169,67 @@ method(stream_merge_chunks, ProviderSnowflakeCortex) <- function(
   result,
   chunk
 ) {
+  # We're aiming to make Snowflake's chunk format look the same as their non-
+  # chunked format here so downstream processing logic can be uniform. We are
+  # *not* trying to make it more sane.
   if (is.null(result)) {
-    chunk
+    # Avoid multiple encodings for text content.
+    if (chunk$choices[[1]]$delta$type == "text") {
+      chunk$choices[[1]]$delta$type <- NULL
+      chunk$choices[[1]]$delta$text <- NULL
+    }
+    # Non-streaming responses use "message" instead of "delta".
+    chunk$choices[[1]]$message <- chunk$choices[[1]]$delta
+    chunk$choices[[1]]$delta <- NULL
+    return(chunk)
+  }
+  # Note: most fields are immutable between chunks and we can ignored updates.
+  # We only care about changes to `choices[[1]]$delta` and `usage`.
+  #
+  # Note also: there is no index support in Snowflake's chunk format, so we're
+  # always assuming we can operate on the first one.
+  current <- result$choices[[1]]$message
+  delta <- chunk$choices[[1]]$delta
+  if (delta$type == "text") {
+    paste(current$content_list[[1]]$text) <- delta$text
+    current[["content"]] <- current$content_list[[1]]$text
   } else {
-    merge_snowflake_dicts(result, chunk)
+    cli::cli_abort(
+      "Unsupported content type {.str {delta$type}}.",
+      .internal = TRUE
+    )
   }
+  result$choices[[1]]$message <- current
+  result$usage <- chunk$usage
+  result
 }
 
-# Identical to merge_dicts(), but with special handling for Snowflake's
-# non-indexed choices format.
-merge_snowflake_dicts <- function(left, right) {
-  for (right_k in names(right)) {
-    right_v <- right[[right_k]]
-    left_v <- left[[right_k]]
-
-    if (is.null(right_v)) {
-      if (!has_name(left, right_k)) {
-        left[right_k] <- list(NULL)
-      }
-    } else if (is.null(left_v)) {
-      left[[right_k]] <- right_v
-    } else if (identical(left_v, right_v)) {
-      next
-    } else if (is.character(left_v)) {
-      left[[right_k]] <- paste0(left_v, right_v)
-    } else if (is.integer(left_v)) {
-      left[[right_k]] <- right_v
-    } else if (is.list(left_v)) {
-      if (!is.null(names(right_v))) {
-        left[[right_k]] <- merge_dicts(left_v, right_v)
-      } else if (right_k == "choices") {
-        left[[right_k]] <- merge_snowflake_choices(left_v, right_v)
+method(value_turn, ProviderSnowflakeCortex) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
+  raw_content <- result$choices[[1]]$message$content_list
+  contents <- lapply(raw_content, function(content) {
+    if (content$type == "text") {
+      if (has_type) {
+        ContentJson(jsonlite::parse_json(content$text))
       } else {
-        left[[right_k]] <- merge_lists(left_v, right_v)
+        ContentText(content$text)
       }
-    } else if (!identical(class(left_v), class(right_v))) {
-      stop(paste0(
-        "additional_kwargs['",
-        right_k,
-        "'] already exists in this message, but with a different type."
-      ))
     } else {
-      stop(paste0(
-        "Additional kwargs key ",
-        right_k,
-        " already exists in left dict and value has unsupported type ",
-        class(left[[right_k]]),
-        "."
-      ))
+      cli::cli_abort(
+        "Unknown content type {.str {content$type}}.",
+        .internal = TRUE
+      )
     }
-  }
-
-  left
-}
-
-merge_snowflake_choices <- function(left, right) {
-  if (is.null(right)) {
-    return(left)
-  } else if (is.null(left)) {
-    return(right)
-  }
-
-  for (e in right) {
-    idx <- find_index(left, e)
-    if (is.na(idx)) {
-      idx <- 1L
-    }
-    # If a top-level "type" has been set for a chunk, it should no
-    # longer be overridden by the "type" field in future chunks.
-    if (!is.null(left[[idx]]$type) && !is.null(e$type)) {
-      e$type <- NULL
-    }
-    left[[idx]] <- merge_dicts(left[[idx]], e)
-  }
-  left
+  })
+  tokens <- tokens_log(
+    provider,
+    input = result$usage$prompt_tokens,
+    output = result$usage$completion_tokens
+  )
+  assistant_turn(contents, json = result, tokens = tokens)
 }
 
 # ellmer -> Snowflake --------------------------------------------------------
@@ -250,17 +237,25 @@ merge_snowflake_choices <- function(left, right) {
 # Snowflake only supports simple textual messages.
 
 method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(provider, x) {
+  # Attempting to omit the `content` field and use `content_list` instead
+  # yields:
+  #
+  # > messages[0].content cannot be empty string (was '')
+  #
+  # So we emulate what Snowflake do and put the text content in both.
+  if (S7_inherits(x@contents[[1]], ContentText)) {
+    content <- x@contents[[1]]@text
+  } else if (S7_inherits(x@contents[[1]], ContentJson)) {
+    # Match the existing as_json() implementation.
+    content <- "<structured data/>"
+  } else {
+    cli::cli_abort("Unsupported content type: {.cls {class(x@contents[[1]])}}.")
+  }
   list(
     role = x@role,
-    content = as_json(provider, x@contents[[1]])
+    content = content,
+    content_list = as_json(provider, x@contents)
   )
-}
-
-method(as_json, list(ProviderSnowflakeCortex, ContentText)) <- function(
-  provider,
-  x
-) {
-  x@text
 }
 
 # Utilities ------------------------------------------------------------------
