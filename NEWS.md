@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_snowflake()` now works with tool calling (#557, @atheriel).
+
 # ellmer 0.2.1
 
 * When you save a `Chat` object to disk, API keys are automatically redacted. 
