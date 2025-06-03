@@ -59,6 +59,7 @@ reference:
   - title: Utilities
     contents:
       - contents_text
+      - contents_record
       - params
 
   - title: Deprecated functions

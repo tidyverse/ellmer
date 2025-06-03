@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+## New features
+
 * When you save a `Chat` object to disk, API keys are automatically redacted. 
   This means that you can no longer easily resume a chat you've saved on disk 
   (we'll figure this out in a future release) but ensures that you never 
@@ -22,6 +24,10 @@
 
 * `type_from_schema()` lets you to use pre-existing JSON schemas in structured 
   chats (#133, @hafen)
+
+## Developer tooling
+
+* Added `contents_record()`, `contents_replay()`, and `contents_replay_class()` to record and replay `Turn` related information from a `Chat` instance (#502). For example, these methods can be used for bookmarking within `{shinychat}`.
 
 # ellmer 0.2.0
 
