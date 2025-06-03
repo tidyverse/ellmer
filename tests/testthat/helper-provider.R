@@ -66,7 +66,7 @@ test_tools_async <- function(chat_fun) {
   )
 }
 
-test_tools_parallel <- function(chat_fun) {
+test_tools_parallel <- function(chat_fun, total_calls = 4) {
   chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
   favourite_color <- function(person) {
     if (person == "Joe") "sage green" else "red"
@@ -85,7 +85,7 @@ test_tools_parallel <- function(chat_fun) {
   )
   expect_match(result, "Joe: sage green")
   expect_match(result, "Hadley: red")
-  expect_length(chat$get_turns(), 4)
+  expect_length(chat$get_turns(), total_calls)
 }
 
 test_tools_sequential <- function(chat_fun, total_calls) {

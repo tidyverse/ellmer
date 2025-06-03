@@ -86,7 +86,7 @@ ProviderOllama <- new_class(
   "ProviderOllama",
   parent = ProviderOpenAI,
   properties = list(
-    api_key = prop_string(),
+    prop_redacted("api_key"),
     model = prop_string(),
     seed = prop_number_whole(allow_null = TRUE)
   )

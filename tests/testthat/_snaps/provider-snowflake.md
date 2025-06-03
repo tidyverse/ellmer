@@ -3,5 +3,5 @@
     Code
       . <- chat_snowflake()
     Message
-      Using model = "llama3.1-70b".
+      Using model = "claude-3-7-sonnet".
 

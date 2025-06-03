@@ -24,7 +24,7 @@
 #' \dontrun{
 #' file <- google_upload("path/to/file.pdf")
 #'
-#' chat <- chat_openai()
+#' chat <- chat_google_gemini()
 #' chat$chat(file, "Give me a three paragraph summary of this PDF")
 #' }
 google_upload <- function(

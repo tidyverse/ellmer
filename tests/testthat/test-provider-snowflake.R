@@ -1,12 +1,10 @@
 # Getting started --------------------------------------------------------
 
 test_that("can make simple request", {
-  # Snowflake models don't support non-streaming responses.
-  #
-  # chat <- chat_snowflake("Be as terse as possible; no punctuation")
-  # resp <- chat$chat("What is 1 + 1?", echo = FALSE)
-  # expect_match(resp, "2")
-  # expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
+  chat <- chat_snowflake("Be as terse as possible; no punctuation")
+  resp <- chat$chat("What is 1 + 1?", echo = FALSE)
+  expect_match(resp, "2")
+  expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -38,9 +36,7 @@ test_that("all tool variations work", {
 })
 
 test_that("can extract data", {
-  # Snowflake models don't support structured data.
-  #
-  # test_data_extraction(chat_snowflake)
+  test_data_extraction(chat_snowflake)
 })
 
 test_that("can use images", {
@@ -171,4 +167,101 @@ test_that("tokens can be requested from a Connect server", {
       `X-Snowflake-Authorization-Token-Type` = "OAUTH"
     )
   )
+})
+
+test_that("we can merge Snowflake's chunk format", {
+  chunk1 <- list(
+    id = "id",
+    model = "claude-3-5-sonnet",
+    choices = list(list(
+      delta = list(
+        type = "text",
+        content = "I",
+        content_list = list(list(type = "text", text = "I")),
+        text = "I"
+      )
+    )),
+    usage = structure(list(), names = character(0))
+  )
+  chunk2 <- list(
+    id = "id",
+    model = "claude-3-5-sonnet",
+    choices = list(list(
+      delta = list(
+        type = "text",
+        content = " aim to be direct and honest: I don't actually",
+        content_list = list(list(
+          type = "text",
+          text = " aim to be direct and honest: I don't actually"
+        )),
+        text = " aim to be direct and honest: I don't actually"
+      )
+    )),
+    usage = structure(list(), names = character(0))
+  )
+  expect_equal(
+    merge_snowflake_dicts(chunk1, chunk2),
+    list(
+      id = "id",
+      model = "claude-3-5-sonnet",
+      choices = list(list(
+        delta = list(
+          type = "text",
+          content = "I aim to be direct and honest: I don't actually",
+          content_list = list(
+            list(
+              type = "text",
+              text = "I"
+            ),
+            list(
+              type = "text",
+              text = " aim to be direct and honest: I don't actually"
+            )
+          ),
+          text = "I aim to be direct and honest: I don't actually"
+        )
+      )),
+      usage = structure(list(), names = character(0))
+    )
+  )
+})
+
+test_that("chat_snowflake() supports parameters", {
+  # Setting a dummy account ensures we don't skip this test, even if there are
+  # no Snowflake credentials available.
+  withr::local_envvar(
+    SNOWFLAKE_ACCOUNT = "testorg-test_account",
+    SNOWFLAKE_TOKEN = "token"
+  )
+  chat <- chat_snowflake(
+    model = "claude-3-5-sonnet",
+    params = params(
+      temperature = 0.7,
+      max_tokens = 100,
+      top_p = 0.9,
+      # This is a Snowflake-specific parameter.
+      guardrails = list(
+        enabled = TRUE
+      )
+    )
+  )
+  provider <- chat$get_provider()
+  expect_equal(
+    chat_body(provider),
+    list(
+      model = "claude-3-5-sonnet",
+      temperature = 0.7,
+      top_p = 0.9,
+      max_tokens = 100,
+      guardrails = list(enabled = TRUE),
+      stream = TRUE
+    )
+  )
+  # Warn/ignore unsupported parameters.
+  provider@params <- params(seed = 1L)
+  expect_warning(
+    out <- chat_body(provider),
+    regexp = "unsupported parameters"
+  )
+  expect_equal(out, list(model = "claude-3-5-sonnet", stream = TRUE))
 })

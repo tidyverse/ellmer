@@ -8,6 +8,7 @@
 \alias{type_enum}
 \alias{type_array}
 \alias{type_object}
+\alias{type_from_schema}
 \title{Type specifications}
 \usage{
 type_boolean(description = NULL, required = TRUE)
@@ -28,6 +29,8 @@ type_object(
   .required = TRUE,
   .additional_properties = FALSE
 )
+
+type_from_schema(text, path)
 }
 \arguments{
 \item{description, .description}{The purpose of the component. This is
@@ -56,6 +59,10 @@ possess.}
 
 \item{.additional_properties}{Can the object have arbitrary additional
 properties that are not explicitly listed? Only supported by Claude.}
+
+\item{text}{A JSON string.}
+
+\item{path}{A file path to a JSON file.}
 }
 \description{
 These functions specify object types in a way that chatbots understand and
@@ -81,6 +88,12 @@ must have the specified type. For example,
 \code{type_object(a = type_string(), b = type_array(type_integer()))} is
 equivalent to a list with an element called \code{a} that is a string and
 an element called \code{b} that is an integer vector.
+\item \code{type_from_schema()} allows you to specify the full schema that you want to
+get back from the LLM as a JSON schema. This is useful if you have a
+pre-defined schema that you want to use directly without manually creating
+the type using the \verb{type_*()} functions. You can point to a file with the
+\code{path} argument or provide a JSON string with \code{text}. The schema must be a
+valid JSON schema object.
 }
 }
 \examples{

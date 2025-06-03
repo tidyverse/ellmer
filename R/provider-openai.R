@@ -25,8 +25,8 @@ NULL
 #'   with [modifyList()].
 #' @param echo One of the following options:
 #'   * `none`: don't emit any output (default when running in a function).
-#'   * `text`: echo text output as it streams in (default when running at
-#'     the console).
+#'   * `output`: echo text and tool-calling output as it streams in (default
+#'     when running at the console).
 #'   * `all`: echo all input and output.
 #'
 #'   Note this only affects the `chat()` method.
@@ -74,7 +74,6 @@ chat_openai <- function(
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
-
 chat_openai_test <- function(
   system_prompt = "Be terse.",
   ...,
@@ -97,7 +96,7 @@ ProviderOpenAI <- new_class(
   "ProviderOpenAI",
   parent = Provider,
   properties = list(
-    api_key = prop_string(),
+    prop_redacted("api_key"),
     # no longer used by OpenAI itself; but subclasses still need it
     seed = prop_number_whole(allow_null = TRUE)
   )
@@ -214,7 +213,7 @@ method(stream_text, ProviderOpenAI) <- function(provider, event) {
   if (length(event$choices) == 0) {
     NULL
   } else {
-    event$choices[[1]]$delta$content
+    event$choices[[1]]$delta[["content"]]
   }
 }
 method(stream_merge_chunks, ProviderOpenAI) <- function(
@@ -254,7 +253,10 @@ method(value_turn, ProviderOpenAI) <- function(
     calls <- lapply(message$tool_calls, function(call) {
       name <- call$`function`$name
       # TODO: record parsing error
-      args <- jsonlite::parse_json(call$`function`$arguments)
+      args <- tryCatch(
+        jsonlite::parse_json(call$`function`$arguments),
+        error = function(cnd) list()
+      )
       ContentToolRequest(name = name, arguments = args, id = call$id)
     })
     content <- c(content, calls)

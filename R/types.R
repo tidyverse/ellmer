@@ -55,6 +55,17 @@ TypeArray <- new_class(
 )
 
 #' @export
+#' @param json A JSON schema object as a list.
+#' @name Type
+TypeJsonSchema <- new_class(
+  "TypeJsonSchema",
+  Type,
+  properties = list(
+    json = class_list
+  )
+)
+
+#' @export
 #' @rdname Type
 #' @param properties Named list of properties stored inside the object.
 #'   Each element should be an S7 `Type` object.`
@@ -96,6 +107,13 @@ TypeObject <- new_class(
 #'   `type_object(a = type_string(), b = type_array(type_integer()))` is
 #'   equivalent to a list with an element called `a` that is a string and
 #'   an element called `b` that is an integer vector.
+#'
+#' * `type_from_schema()` allows you to specify the full schema that you want to
+#'   get back from the LLM as a JSON schema. This is useful if you have a
+#'   pre-defined schema that you want to use directly without manually creating
+#'   the type using the `type_*()` functions. You can point to a file with the
+#'   `path` argument or provide a JSON string with `text`. The schema must be a
+#'   valid JSON schema object.
 #'
 #' @param description,.description The purpose of the component. This is
 #'   used by the LLM to determine what values to pass to the tool or what
@@ -180,4 +198,18 @@ type_object <- function(
     required = .required,
     additional_properties = .additional_properties
   )
+}
+
+#' @param text A JSON string.
+#' @param path A file path to a JSON file.
+#' @export
+#' @rdname type_boolean
+type_from_schema <- function(text, path) {
+  check_exclusive(text, path)
+  if (!missing(text)) {
+    json <- jsonlite::fromJSON(text, simplifyVector = FALSE)
+  } else {
+    json <- jsonlite::read_json(path)
+  }
+  TypeJsonSchema(json = json)
 }

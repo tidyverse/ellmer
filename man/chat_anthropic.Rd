@@ -29,7 +29,7 @@ models_anthropic(
 
 \item{max_tokens}{Maximum number of tokens to generate before stopping.}
 
-\item{model}{The model to use for the chat (defaults to "claude-3-7-sonnet-latest").
+\item{model}{The model to use for the chat (defaults to "claude-sonnet-4-20250514").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_anthropic()} to see all options.}
 
@@ -51,8 +51,8 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 \item{echo}{One of the following options:
 \itemize{
 \item \code{none}: don't emit any output (default when running in a function).
-\item \code{text}: echo text output as it streams in (default when running at
-the console).
+\item \code{output}: echo text and tool-calling output as it streams in (default
+when running at the console).
 \item \code{all}: echo all input and output.
 }
 

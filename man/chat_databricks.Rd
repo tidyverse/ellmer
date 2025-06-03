@@ -20,12 +20,12 @@ environment variable \code{DATABRICKS_HOST}, if set.}
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{model}{The model to use for the chat (defaults to "databricks-dbrx-instruct").
+\item{model}{The model to use for the chat (defaults to "databricks-claude-3-7-sonnet").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 
 Available foundational models include:
 \itemize{
-\item \code{databricks-dbrx-instruct} (the default)
+\item \code{databricks-claude-3-7-sonnet} (the default)
 \item \verb{databricks-mixtral-8x7b-instruct}
 \item \verb{databricks-meta-llama-3-1-70b-instruct}
 \item \verb{databricks-meta-llama-3-1-405b-instruct}
@@ -41,8 +41,8 @@ with \code{\link[=modifyList]{modifyList()}}.}
 \item{echo}{One of the following options:
 \itemize{
 \item \code{none}: don't emit any output (default when running in a function).
-\item \code{text}: echo text output as it streams in (default when running at
-the console).
+\item \code{output}: echo text and tool-calling output as it streams in (default
+when running at the console).
 \item \code{all}: echo all input and output.
 }
 
@@ -73,8 +73,7 @@ package.
 \subsection{Known limitations}{
 
 Databricks models do not support images, but they do support structured
-outputs. Tool calling support is also very limited at present and is
-currently not supported by ellmer.
+outputs and tool calls for most models.
 }
 }
 \examples{

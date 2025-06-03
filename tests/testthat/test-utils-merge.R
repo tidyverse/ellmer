@@ -75,3 +75,32 @@ test_that("respects index when merging lists", {
     list(a = list(list(index = 0, b = "a"), list(index = 1, b = "b")))
   )
 })
+
+test_that("we can merge OpenAI's chunk format", {
+  # Example from: https://platform.openai.com/docs/api-reference/chat-streaming/streaming
+  messages <- list(
+    '{"id":"chatcmpl-123","object":"chat.completion.chunk","created":1694268190,"model":"gpt-4o-mini", "system_fingerprint": "fp_44709d6fcb", "choices":[{"index":0,"delta":{"role":"assistant","content":""},"logprobs":null,"finish_reason":null}]}',
+    '{"id":"chatcmpl-123","object":"chat.completion.chunk","created":1694268190,"model":"gpt-4o-mini", "system_fingerprint": "fp_44709d6fcb", "choices":[{"index":0,"delta":{"content":"Hello"},"logprobs":null,"finish_reason":null}]}',
+    '{"id":"chatcmpl-123","object":"chat.completion.chunk","created":1694268190,"model":"gpt-4o-mini", "system_fingerprint": "fp_44709d6fcb", "choices":[{"index":0,"delta":{},"logprobs":null,"finish_reason":"stop"}]}'
+  )
+  chunks <- lapply(messages, jsonlite::parse_json)
+  expect_equal(
+    merge_dicts(merge_dicts(chunks[[1]], chunks[[2]]), chunks[[3]]),
+    list(
+      id = "chatcmpl-123",
+      object = "chat.completion.chunk",
+      created = 1694268190,
+      model = "gpt-4o-mini",
+      system_fingerprint = "fp_44709d6fcb",
+      choices = list(list(
+        index = 0,
+        delta = list(
+          role = "assistant",
+          content = "Hello"
+        ),
+        logprobs = NULL,
+        finish_reason = "stop"
+      ))
+    )
+  )
+})

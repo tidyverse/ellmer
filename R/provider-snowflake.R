@@ -23,15 +23,14 @@ NULL
 #'   package.
 #'
 #' ## Known limitations
-#' Note that Snowflake-hosted models do not support images, tool calling, or
-#' structured outputs.
+#' Note that Snowflake-hosted models do not support images or tool calling.
 #'
 #' See [chat_cortex_analyst()] to chat with the Snowflake Cortex Analyst rather
 #' than a general-purpose model.
 #'
 #' @inheritParams chat_openai
 #' @inheritParams chat_cortex_analyst
-#' @param model `r param_model("llama3.1-70b")`
+#' @param model `r param_model("claude-3-7-sonnet")`
 #' @inherit chat_openai return
 #' @examplesIf has_credentials("cortex")
 #' chat <- chat_snowflake()
@@ -42,11 +41,13 @@ chat_snowflake <- function(
   account = snowflake_account(),
   credentials = NULL,
   model = NULL,
+  params = NULL,
   api_args = list(),
   echo = c("none", "output", "all")
 ) {
   check_string(account, allow_empty = FALSE)
-  model <- set_default(model, "llama3.1-70b")
+  model <- set_default(model, "claude-3-7-sonnet")
+  params <- params %||% params()
   echo <- check_echo(echo)
 
   if (is_list(credentials)) {
@@ -62,6 +63,7 @@ chat_snowflake <- function(
     account = account,
     credentials = credentials,
     model = model,
+    params = params,
     extra_args = api_args,
     # We need an empty api_key for S7 validation.
     api_key = ""
@@ -111,22 +113,137 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
   if (length(tools) != 0) {
     cli::cli_abort("Tool calling is not supported.", call = call)
   }
-  if (!is.null(type) != 0) {
-    cli::cli_abort("Structured data extraction is not supported.", call = call)
-  }
-  if (!stream) {
-    cli::cli_abort("Non-streaming responses are not supported.", call = call)
-  }
 
   messages <- as_json(provider, turns)
-  list(
+
+  if (!is.null(type)) {
+    # Note: Snowflake uses a slightly different format than OpenAI.
+    response_format <- list(type = "json", schema = as_json(provider, type))
+  } else {
+    response_format <- NULL
+  }
+
+  params <- chat_params(provider, provider@params)
+  compact(list2(
     messages = messages,
     model = provider@model,
-    stream = stream
+    !!!params,
+    stream = stream,
+    response_format = response_format
+  ))
+}
+
+method(as_json, list(ProviderSnowflakeCortex, TypeObject)) <- function(
+  provider,
+  x
+) {
+  # Unlike OpenAI, Snowflake does not support the "additionalProperties" field.
+  names <- names2(x@properties)
+  required <- map_lgl(x@properties, function(prop) prop@required)
+  properties <- as_json(provider, x@properties)
+  names(properties) <- names
+  list(
+    type = "object",
+    description = x@description %||% "",
+    properties = properties,
+    required = as.list(names[required])
+  )
+}
+
+# See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#optional-json-arguments
+method(chat_params, ProviderSnowflakeCortex) <- function(provider, params) {
+  standardise_params(
+    params,
+    c(
+      temperature = "temperature",
+      top_p = "top_p",
+      max_tokens = "max_tokens"
+    )
   )
 }
 
 # Snowflake -> ellmer --------------------------------------------------------
+
+method(stream_merge_chunks, ProviderSnowflakeCortex) <- function(
+  provider,
+  result,
+  chunk
+) {
+  if (is.null(result)) {
+    chunk
+  } else {
+    merge_snowflake_dicts(result, chunk)
+  }
+}
+
+# Identical to merge_dicts(), but with special handling for Snowflake's
+# non-indexed choices format.
+merge_snowflake_dicts <- function(left, right) {
+  for (right_k in names(right)) {
+    right_v <- right[[right_k]]
+    left_v <- left[[right_k]]
+
+    if (is.null(right_v)) {
+      if (!has_name(left, right_k)) {
+        left[right_k] <- list(NULL)
+      }
+    } else if (is.null(left_v)) {
+      left[[right_k]] <- right_v
+    } else if (identical(left_v, right_v)) {
+      next
+    } else if (is.character(left_v)) {
+      left[[right_k]] <- paste0(left_v, right_v)
+    } else if (is.integer(left_v)) {
+      left[[right_k]] <- right_v
+    } else if (is.list(left_v)) {
+      if (!is.null(names(right_v))) {
+        left[[right_k]] <- merge_dicts(left_v, right_v)
+      } else if (right_k == "choices") {
+        left[[right_k]] <- merge_snowflake_choices(left_v, right_v)
+      } else {
+        left[[right_k]] <- merge_lists(left_v, right_v)
+      }
+    } else if (!identical(class(left_v), class(right_v))) {
+      stop(paste0(
+        "additional_kwargs['",
+        right_k,
+        "'] already exists in this message, but with a different type."
+      ))
+    } else {
+      stop(paste0(
+        "Additional kwargs key ",
+        right_k,
+        " already exists in left dict and value has unsupported type ",
+        class(left[[right_k]]),
+        "."
+      ))
+    }
+  }
+
+  left
+}
+
+merge_snowflake_choices <- function(left, right) {
+  if (is.null(right)) {
+    return(left)
+  } else if (is.null(left)) {
+    return(right)
+  }
+
+  for (e in right) {
+    idx <- find_index(left, e)
+    if (is.na(idx)) {
+      idx <- 1L
+    }
+    # If a top-level "type" has been set for a chunk, it should no
+    # longer be overridden by the "type" field in future chunks.
+    if (!is.null(left[[idx]]$type) && !is.null(e$type)) {
+      e$type <- NULL
+    }
+    left[[idx]] <- merge_dicts(left[[idx]], e)
+  }
+  left
+}
 
 # ellmer -> Snowflake --------------------------------------------------------
 

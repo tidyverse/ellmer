@@ -2,6 +2,29 @@
 
 ## New features
 
+* When you save a `Chat` object to disk, API keys are automatically redacted. 
+  This means that you can no longer easily resume a chat you've saved on disk 
+  (we'll figure this out in a future release) but ensures that you never 
+  accidentally save your secret key in an RDS file (#534).
+
+* `chat_anthropic()` now defaults to Claude Sonnet 4, and I've added pricing 
+  information for the latest generation of Claude models.
+
+* `chat_databricks()` now picks up on Databricks workspace URLs set in the
+  configuration file, which should improve compatibility with the Databricks CLI
+  (#521, @atheriel).
+
+* `chat_snowflake()` no longer streams answers that include a mysterious
+  `list(type = "text", text = "")` trailer (#533, @atheriel). It now parses 
+  streaming outputs correctly into turns (#542), supports structured ouputs
+  (#544), tool calling (#548), and standard model parameters (#545, @atheriel).
+
+* `chat_snowflake()` and `chat_databricks()` now default to Claude Sonnet 3.7,
+  the same default as `chat_anthropic()` (#539 and #546, @atheriel).
+
+* `type_from_schema()` lets you to use pre-existing JSON schemas in structured 
+  chats (#133, @hafen)
+
 ## Developer tooling
 
 * Added `contents_record()`, `contents_replay()`, and `contents_replay_class()` to record and replay `Turn` related information from a `Chat` instance (#502). For example, these methods can be used for bookmarking within `{shinychat}`.

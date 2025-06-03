@@ -36,3 +36,7 @@ method(as_json, list(Provider, TypeArray)) <- function(provider, x) {
     items = as_json(provider, x@items)
   )
 }
+
+method(as_json, list(Provider, TypeJsonSchema)) <- function(provider, x) {
+  x@json
+}

@@ -3,7 +3,7 @@
     Code
       . <- chat_anthropic()
     Message
-      Using model = "claude-3-7-sonnet-latest".
+      Using model = "claude-sonnet-4-20250514".
 
 # all tool variations work
 

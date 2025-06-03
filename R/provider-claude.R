@@ -15,7 +15,7 @@ NULL
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
-#' @param model `r param_model("claude-3-7-sonnet-latest", "anthropic")`
+#' @param model `r param_model("claude-sonnet-4-20250514", "anthropic")`
 #' @param api_key `r api_key_param("ANTHROPIC_API_KEY")`
 #' @param max_tokens Maximum number of tokens to generate before stopping.
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
@@ -38,7 +38,7 @@ chat_anthropic <- function(
 ) {
   echo <- check_echo(echo)
 
-  model <- set_default(model, "claude-3-7-sonnet-latest")
+  model <- set_default(model, "claude-sonnet-4-20250514")
 
   params <- params %||% params()
   if (lifecycle::is_present(max_tokens)) {
@@ -80,7 +80,7 @@ ProviderAnthropic <- new_class(
   "ProviderAnthropic",
   parent = Provider,
   properties = list(
-    api_key = prop_string(),
+    prop_redacted("api_key"),
     beta_headers = class_character
   )
 )
