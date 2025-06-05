@@ -19,7 +19,7 @@ content_pdf_file <- function(path) {
 
   ContentPDF(
     type = "application/pdf",
-    data = base64enc::base64encode(path)
+    data = base64_enc(path = path)
   )
 }
 

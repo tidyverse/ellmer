@@ -61,8 +61,6 @@ content_image_url <- function(url, detail = c("auto", "low", "high")) {
 #'   All values other than `none` require the `magick` package.
 #' @export
 content_image_file <- function(path, content_type = "auto", resize = "low") {
-  check_installed("base64enc", "to encode images")
-
   # TODO: Allow vector input?
   check_string(path, allow_empty = FALSE)
   check_string(content_type, allow_empty = FALSE)
@@ -89,7 +87,7 @@ content_image_file <- function(path, content_type = "auto", resize = "low") {
 
   # Implement resizing logic
   if (resize == "none") {
-    base64 <- base64enc::base64encode(path)
+    base64 <- base64_enc(path = path)
   } else {
     check_installed("magick", "to resize images")
 
@@ -112,7 +110,7 @@ content_image_file <- function(path, content_type = "auto", resize = "low") {
       img <- magick::image_resize(img, resize)
     }
     buf <- magick::image_write(img, format = magick::image_info(img)$format)
-    base64 <- base64enc::base64encode(buf)
+    base64 <- base64_enc(raw = buf)
   }
 
   ContentImageInline(content_type, base64)
