@@ -224,5 +224,5 @@ base64_enc <- function(path, raw) {
   if (!missing(path)) {
     raw <- readBin(path, "raw", file.info(path)$size)
   }
-  gsub("\n", "", jsonlite::base64_enc(raw), fixed = TRUE)
+  gsub("\n", "", openssl::base64_encode(raw), fixed = TRUE)
 }
