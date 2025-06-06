@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `models_github()` lists models for `chat_github()` (#561).
+
 # ellmer 0.2.1
 
 * When you save a `Chat` object to disk, API keys are automatically redacted. 
