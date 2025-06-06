@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `models_github()` lists models for `chat_github()` (#561).
+
 * `chat_snowflake()` now works with tool calling (#557, @atheriel).
 
 # ellmer 0.2.1

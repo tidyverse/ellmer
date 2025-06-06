@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-github.R
 \name{chat_github}
 \alias{chat_github}
+\alias{models_github}
 \title{Chat with a model hosted on the GitHub model marketplace}
 \usage{
 chat_github(
@@ -12,6 +13,11 @@ chat_github(
   seed = NULL,
   api_args = list(),
   echo = NULL
+)
+
+models_github(
+  base_url = "https://models.inference.ai.azure.com/",
+  api_key = github_key()
 )
 }
 \arguments{
