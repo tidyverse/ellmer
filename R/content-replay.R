@@ -52,8 +52,7 @@ contents_record <-
 
       if (!is_recorded_object(recorded)) {
         cli::cli_abort(
-          "Expected the recorded object to be a list with at least names 'version', 'class', and 'props'.",
-          call = caller_env()
+          "Expected the recorded object to be a list with at least names 'version', 'class', and 'props'."
         )
       }
 
@@ -62,8 +61,7 @@ contents_record <-
           length(recorded$class) != 1
       ) {
         cli::cli_abort(
-          "Expected the recorded object to have a single $class name, containing `::` if the class is from a package.",
-          call = caller_env()
+          "Expected the recorded object to have a single $class name, containing `::` if the class is from a package."
         )
       }
 
@@ -135,16 +133,12 @@ contents_replay <- function(obj, ..., chat, env = caller_env()) {
   cls <- get_cls_constructor(class_value[1], env = env)
 
   if (is.null(cls)) {
-    cli::cli_abort(
-      "Unable to find the S7 class: {.val {class_value[1]}}.",
-      call = caller_env()
-    )
+    cli::cli_abort("Unable to find the S7 class: {.val {class_value[1]}}.")
   }
 
   if (!S7_inherits(cls)) {
     cli::cli_abort(
-      "The object returned for {.val {class_value[1]}} is not an S7 class.",
-      call = caller_env()
+      "The object returned for {.val {class_value[1]}} is not an S7 class."
     )
   }
 
@@ -208,8 +202,7 @@ method(contents_replay_class, ToolDef) <- function(
 ) {
   if (obj$version != 1) {
     cli::cli_abort(
-      "Unsupported version {.val {obj$version}}.",
-      call = caller_env()
+      "Unsupported version {.val {obj$version}}."
     )
   }
 
@@ -263,8 +256,7 @@ get_cls_constructor <- function(class_value, ..., env = caller_env()) {
     ns_env(pkg_name)[[cls_name]]
   } else {
     cli::cli_abort(
-      "Invalid class name {.val {class_value[1]}}. Expected a single (or missing) `::` separator, not multiple.",
-      call = caller_env()
+      "Invalid class name {.val {class_value[1]}}. Expected a single (or missing) `::` separator, not multiple."
     )
   }
 }

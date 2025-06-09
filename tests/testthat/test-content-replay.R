@@ -216,6 +216,8 @@ test_that("unknown classes cause errors", {
     contents_replay(recorded, chat = chat),
     "Unable to find the S7 class"
   )
+
+  expect_snapshot(contents_replay(recorded, chat = chat), error = TRUE)
 })
 
 test_that("replay classes are S7 classes", {
@@ -238,4 +240,6 @@ test_that("replay classes are S7 classes", {
     contents_replay(recorded, chat = chat),
     "is not an S7 class"
   )
+
+  expect_snapshot(contents_replay(recorded, chat = chat), error = TRUE)
 })
