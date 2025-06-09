@@ -190,7 +190,7 @@ test_that("can round trip of ContentPDF record/replay", {
   test_record_replay(ContentPDF(type = "TYPE", data = "DATA"))
 })
 
-test_that("non-package classes are recorded/replayed by default", {
+test_that("non-ellmer classes are not recorded/replayed by default", {
   chat <- chat_openai_test()
 
   LocalClass <- S7::new_class(
@@ -203,9 +203,22 @@ test_that("non-package classes are recorded/replayed by default", {
     package = NULL
   )
 
-  test_record_replay(LocalClass("testname"), chat = chat)
+  expect_snapshot(
+    contents_record(LocalClass("testname"), chat = chat),
+    error = TRUE
+  )
+  expect_snapshot(
+    contents_replay(
+      list(
+        version = 1,
+        class = "testpkg::LocalClass",
+        props = list(name = "testname")
+      ),
+      chat = chat
+    ),
+    error = TRUE
+  )
 })
-
 
 test_that("unknown classes cause errors", {
   chat <- chat_openai_test()
