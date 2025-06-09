@@ -19,8 +19,6 @@ contents_replay(obj, ..., chat, env = caller_env())
 \item{obj}{A basic list to desierialize.}
 
 \item{env}{The environment to find non-package classes.}
-
-\item{cls}{The class constructor to be used for replaying the object.}
 }
 \description{
 These generic functions can be use to convert \link{Turn}/\link{Content} objects

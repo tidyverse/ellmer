@@ -17,7 +17,6 @@ NULL
 #'
 #' @param content A [Turn] or [Content] object to serialize.
 #' @param obj A basic list to desierialize.
-#' @param cls The class constructor to be used for replaying the object.
 #' @param chat A [Chat] object to be used for context.
 #' @param env The environment to find non-package classes.
 #' @param ... Not used.
