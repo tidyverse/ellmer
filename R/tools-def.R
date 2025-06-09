@@ -264,7 +264,7 @@ tool_reject <- function(
 ) {
   check_string(reason)
 
-  rlang::abort(
+  abort(
     paste("Tool call rejected.", reason),
     class = "ellmer_tool_reject"
   )

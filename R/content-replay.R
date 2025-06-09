@@ -159,7 +159,7 @@ contents_replay <- function(obj, ..., chat, env = caller_env()) {
 contents_replay_class <- new_generic(
   "contents_replay_class",
   "cls",
-  function(cls, obj, ..., chat, env = rlang::caller_env()) {
+  function(cls, obj, ..., chat, env = caller_env()) {
     S7::S7_dispatch()
   }
 )
@@ -170,7 +170,7 @@ method(contents_replay_class, S7::S7_object) <- function(
   obj,
   ...,
   chat,
-  env = rlang::caller_env()
+  env = caller_env()
 ) {
   stopifnot(obj$version == 1)
 
@@ -183,19 +183,19 @@ method(contents_replay_class, S7::S7_object) <- function(
     pkg_cls <- strsplit(class_value, "::")[[1]]
     pkg_name <- pkg_cls[1]
 
-    rlang::check_installed(
+    check_installed(
       pkg_name,
       reason = "for `contents_replay()` to restore the chat content."
     )
     cls_name <- pkg_cls[2]
-    env <- rlang::ns_env(pkg_name)
+    env <- ns_env(pkg_name)
   } else {
     cls_name <- class_value
   }
 
   # While this seems like a bit of extra work, the tracebacks are accurate
   # vs referencing an unrelated parameter name in the traceback
-  rlang::exec(cls_name, !!!obj_props, .env = env)
+  exec(cls_name, !!!obj_props, .env = env)
 }
 
 
@@ -204,7 +204,7 @@ method(contents_replay_class, ToolDef) <- function(
   obj,
   ...,
   chat,
-  env = rlang::caller_env()
+  env = caller_env()
 ) {
   if (obj$version != 1) {
     cli::cli_abort(
@@ -244,23 +244,23 @@ method(contents_replay_class, ToolDef) <- function(
 #' @param env The environment to find non-package class constructors.
 #' @return The constructor function for the class.
 #' @noRd
-get_cls_constructor <- function(class_value, ..., env = rlang::caller_env()) {
-  rlang::check_dots_empty()
+get_cls_constructor <- function(class_value, ..., env = caller_env()) {
+  check_dots_empty()
 
   pkg_cls <- strsplit(class_value, "::")[[1]]
   if (length(pkg_cls) == 1) {
     # If the class is not a package class, return the object as is
     # This is the case for local S7 objects
-    rlang::eval_bare(rlang::sym(pkg_cls), env = env)
+    eval_bare(sym(pkg_cls), env = env)
   } else if (length(pkg_cls) == 2) {
     pkg_name <- pkg_cls[1]
     cls_name <- pkg_cls[2]
 
-    rlang::check_installed(
+    check_installed(
       pkg_name,
       reason = "for `contents_replay()` to restore the chat content."
     )
-    rlang::ns_env(pkg_name)[[cls_name]]
+    ns_env(pkg_name)[[cls_name]]
   } else {
     cli::cli_abort(
       "Invalid class name {.val {class_value[1]}}. Expected a single (or missing) `::` separator, not multiple.",
