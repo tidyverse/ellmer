@@ -3,69 +3,46 @@
 \name{contents_record}
 \alias{contents_record}
 \alias{contents_replay}
-\alias{contents_replay_class}
 \title{Save and restore content}
 \usage{
 contents_record(content, ..., chat)
 
-contents_replay(obj, ..., chat, env = rlang::caller_env())
-
-contents_replay_class(cls, obj, ..., chat, env = rlang::caller_env())
+contents_replay(obj, ..., chat, env = caller_env())
 }
 \arguments{
-\item{content}{A \link{Turn} or \link{Content} object to have its record retrieved.}
+\item{content}{A \link{Turn} or \link{Content} object to serialize.}
 
 \item{...}{Not used.}
 
 \item{chat}{A \link{Chat} object to be used for context.}
 
-\item{obj}{A basic list (from \code{contents_record()}) to be replayed.}
+\item{obj}{A basic list to desierialize.}
 
 \item{env}{The environment to find non-package classes.}
 
 \item{cls}{The class constructor to be used for replaying the object.}
 }
 \description{
-These generic functions can be use to convert \link{Turn} contents or \link{Content}
-objects into easily serializable representations.
+These generic functions can be use to convert \link{Turn}/\link{Content} objects
+into easily serializable representations.
 \itemize{
-\item \code{contents_record()} will accept a \link{Turn} or \link{Content} related objects and return a
-basic list that can be easily serialized.
-\item \code{contents_replay()} will accept a basic list (from \code{contents_record()}) and
-return a corresponding \link{Turn} or \link{Content} related object.
-\item \code{contents_replay_class()} is a generic function that is dispatched from
-within \code{contents_replay()}. \code{contents_replay()} will retrieve the
-corresponding contructor class from within the basic list information and
-use the class for dispatching.
+\item \code{contents_record()} will accept a \link{Turn} or \link{Content} and return a
+simple list.
+\item \code{contents_replay()} will accept a simple list (from \code{contents_record()})
+and return a \link{Turn} or \link{Content} object.
 }
-
-Note, all S7 classes should have the same class name as the variable name. Ex: \code{FooBar <- new_class("FooBar")}, not \code{OtherName <- new_class("FooBar")}. This is a requirement for when replaying the object.
 }
 \examples{
-\dontrun{
-chat <- chat_ollama(model = "llama3.2")
-turn <- Turn("user")
-turn
-#> <Turn: user>
+\dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+chat <- chat_openai(model = "gpt-4.1-nano")
+chat$chat("Where is the capital of France?")
 
-# Get the turn's record
-# Note: Removes all S7 class instances
-turn_recorded <- contents_record(turn, chat = chat)
+# Serialize to a simple list
+turn_recorded <- contents_record(chat$get_turns(), chat = chat)
 str(turn_recorded)
-#> List of 3
-#>  $ version: num 1
-#>  $ class  : chr "ellmer::Turn"
-#>  $ props  :List of 4
-#>   ..$ role    : chr "user"
-#>   ..$ contents: list()
-#>   ..$ json    : list()
-#>   ..$ tokens  : num [1:2] 0 0
 
-# Restore the turn from the record
-# Note: This will not restore the _original_ object,
-# but a new object with the same properties
+# Deserialize back to S7 objects
 turn_replayed <- contents_replay(turn_recorded, chat = chat)
 turn_replayed
-#> <Turn: user>
-}
+\dontshow{\}) # examplesIf}
 }

@@ -8,54 +8,32 @@ NULL
 #' Save and restore content
 #'
 #' @description
-#' These generic functions can be use to convert [Turn] contents or [Content]
-#' objects into easily serializable representations.
+#' These generic functions can be use to convert [Turn]/[Content] objects
+#' into easily serializable representations.
 #'
-#' * `contents_record()` will accept a [Turn] or [Content] related objects and return a
-#'   basic list that can be easily serialized.
-#' * `contents_replay()` will accept a basic list (from `contents_record()`) and
-#'   return a corresponding [Turn] or [Content] related object.
-#' * `contents_replay_class()` is a generic function that is dispatched from
-#'   within `contents_replay()`. `contents_replay()` will retrieve the
-#'   corresponding contructor class from within the basic list information and
-#'   use the class for dispatching.
+#' * `contents_record()` will accept a [Turn] or [Content] and return a
+#'   simple list.
+#' * `contents_replay()` will accept a simple list (from `contents_record()`)
+#'   and return a [Turn] or [Content] object.
 #'
-#' Note, all S7 classes should have the same class name as the variable name. Ex: `FooBar <- new_class("FooBar")`, not `OtherName <- new_class("FooBar")`. This is a requirement for when replaying the object.
-#'
-#' @param content A [Turn] or [Content] object to have its record retrieved.
-#' @param obj A basic list (from `contents_record()`) to be replayed.
+#' @param content A [Turn] or [Content] object to serialize.
+#' @param obj A basic list to desierialize.
 #' @param cls The class constructor to be used for replaying the object.
 #' @param chat A [Chat] object to be used for context.
 #' @param env The environment to find non-package classes.
 #' @param ... Not used.
 #'
-#' @examples
-#' \dontrun{
-#' chat <- chat_ollama(model = "llama3.2")
-#' turn <- Turn("user")
-#' turn
-#' #> <Turn: user>
+#' @examplesIf has_credentials("openai")
+#' chat <- chat_openai(model = "gpt-4.1-nano")
+#' chat$chat("Where is the capital of France?")
 #'
-#' # Get the turn's record
-#' # Note: Removes all S7 class instances
-#' turn_recorded <- contents_record(turn, chat = chat)
+#' # Serialize to a simple list
+#' turn_recorded <- contents_record(chat$get_turns(), chat = chat)
 #' str(turn_recorded)
-#' #> List of 3
-#' #>  $ version: num 1
-#' #>  $ class  : chr "ellmer::Turn"
-#' #>  $ props  :List of 4
-#' #>   ..$ role    : chr "user"
-#' #>   ..$ contents: list()
-#' #>   ..$ json    : list()
-#' #>   ..$ tokens  : num [1:2] 0 0
 #'
-#' # Restore the turn from the record
-#' # Note: This will not restore the _original_ object,
-#' # but a new object with the same properties
+#' # Deserialize back to S7 objects
 #' turn_replayed <- contents_replay(turn_recorded, chat = chat)
 #' turn_replayed
-#' #> <Turn: user>
-#' }
 #' @export
 #' @rdname contents_record
 contents_record <-
@@ -63,12 +41,7 @@ contents_record <-
     "contents_record",
     "content",
     function(content, ..., chat) {
-      if (!(R6::is.R6(chat) && inherits(chat, "Chat"))) {
-        cli::cli_abort(
-          "Expected a Chat object at `chat=`, but received {.val {chat}}.",
-          call = caller_env()
-        )
-      }
+      check_chat(chat, call = caller_env())
 
       if (is_list_of_s7_objects(content)) {
         # If the content is a list, we need to record each element
@@ -124,12 +97,7 @@ method(contents_record, S7::S7_object) <- function(content, ..., chat) {
   )
 
   # Remove non-serializable properties
-  recorded_props <- Filter(
-    function(x) {
-      !is.function(x)
-    },
-    recorded_props
-  )
+  recorded_props <- Filter(function(x) !is.function(x), recorded_props)
 
   list(
     version = 1,
@@ -142,18 +110,8 @@ method(contents_record, S7::S7_object) <- function(content, ..., chat) {
 #' @rdname contents_record
 #' @export
 # Holy "Holy Trait" dispatching, Batman!
-contents_replay <- function(
-  obj,
-  ...,
-  chat,
-  env = rlang::caller_env()
-) {
-  if (!(R6::is.R6(chat) && inherits(chat, "Chat"))) {
-    cli::cli_abort(
-      "Expected a Chat object at `chat=`, but received {.val {chat}}.",
-      call = caller_env()
-    )
-  }
+contents_replay <- function(obj, ..., chat, env = caller_env()) {
+  check_chat(chat, call = caller_env())
 
   # Find any reason to not believe `obj` is a recorded object.
   # If not a recorded object, return it as is.
@@ -199,8 +157,6 @@ contents_replay <- function(
   handler(cls, obj, chat = chat, env = env)
 }
 
-#' @rdname contents_record
-#' @export
 contents_replay_class <- new_generic(
   "contents_replay_class",
   "cls",
@@ -319,16 +275,13 @@ prop_is_read_only <- function(prop) {
 }
 
 is_recorded_object <- function(x) {
-  is.list(x) &&
-    all(c("version", "class", "props") %in% names(x))
+  is.list(x) && all(c("version", "class", "props") %in% names(x))
 }
 
 is_list_of_s7_objects <- function(x) {
-  is.list(x) &&
-    all(map_lgl(x, S7_inherits))
+  is.list(x) && all(map_lgl(x, S7_inherits))
 }
 
 is_list_of_recorded_objects <- function(x) {
-  is.list(x) &&
-    all(map_lgl(x, is_recorded_object))
+  is.list(x) && all(map_lgl(x, is_recorded_object))
 }
