@@ -7,7 +7,7 @@
 \usage{
 contents_record(content, ..., chat)
 
-contents_replay(obj, ..., chat, env = caller_env())
+contents_replay(obj, ..., chat)
 }
 \arguments{
 \item{content}{A \link{Turn} or \link{Content} object to serialize.}
@@ -17,8 +17,6 @@ contents_replay(obj, ..., chat, env = caller_env())
 \item{chat}{A \link{Chat} object to be used for context.}
 
 \item{obj}{A basic list to desierialize.}
-
-\item{env}{The environment to find non-package classes.}
 }
 \description{
 These generic functions can be use to convert \link{Turn}/\link{Content} objects

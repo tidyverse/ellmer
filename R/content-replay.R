@@ -2,7 +2,6 @@
 #' @include turns.R
 #' @include tools-def.R
 #' @include content.R
-
 NULL
 
 #' Save and restore content
@@ -18,7 +17,6 @@ NULL
 #' @param content A [Turn] or [Content] object to serialize.
 #' @param obj A basic list to desierialize.
 #' @param chat A [Chat] object to be used for context.
-#' @param env The environment to find non-package classes.
 #' @param ... Not used.
 #'
 #' @examplesIf has_credentials("openai")
@@ -41,12 +39,6 @@ contents_record <-
     function(content, ..., chat) {
       check_chat(chat, call = caller_env())
 
-      if (is_list_of_s7_objects(content)) {
-        # If the content is a list, we need to record each element
-        # and return a list of the recorded elements
-        return(lapply(content, contents_record, chat = chat))
-      }
-
       recorded <- S7::S7_dispatch()
 
       if (!is_recorded_object(recorded)) {
@@ -61,6 +53,12 @@ contents_record <-
       ) {
         cli::cli_abort(
           "Expected the recorded object to have a single $class name, containing `::` if the class is from a package."
+        )
+      }
+
+      if (!grepl("ellmer::", recorded$class, fixed = TRUE)) {
+        cli::cli_abort(
+          "Only S7 classes from the `ellmer` package are currently supported. Received: {.val {recorded$class}}."
         )
       }
 
@@ -79,11 +77,10 @@ method(contents_record, S7::S7_object) <- function(content, ..., chat) {
     lapply(prop_names, function(prop_name) {
       prop_value <- S7::prop(prop_name, object = content)
       if (S7_inherits(prop_value)) {
-        # Recursive call to S7 object
+        # Recursive record for S7 objects
         contents_record(prop_value, chat = chat)
       } else if (is_list_of_s7_objects(prop_value)) {
-        # Make record of each item in prop.
-        # Do not recurse forever!
+        # Make record of each item in list
         lapply(prop_value, contents_record, chat = chat)
       } else {
         prop_value
@@ -106,42 +103,57 @@ method(contents_record, S7::S7_object) <- function(content, ..., chat) {
 #' @rdname contents_record
 #' @export
 # Holy "Holy Trait" dispatching, Batman!
-contents_replay <- function(obj, ..., chat, env = caller_env()) {
+contents_replay <- function(obj, ..., chat) {
   check_chat(chat, call = caller_env())
 
   # Find any reason to not believe `obj` is a recorded object.
   # If not a recorded object, return it as is.
   # If it is a recorded s7 object, dispatch on the discovered class.
 
-  if (!is.list(obj)) {
-    return(obj)
-  }
-
   if (!is_recorded_object(obj)) {
-    if (is_list_of_recorded_objects(obj)) {
-      return(lapply(obj, contents_replay, chat = chat, env = env))
-    }
-    return(obj)
+    cli::cli_abort(
+      "Expected the object to be a list with at least names 'version', 'class', and 'props'."
+    )
   }
 
-  class_value <- obj$class
-  if (!(is.character(class_value) && length(class_value) > 0)) {
-    return(obj)
+  class_name <- obj$class
+  if (!(is.character(class_name) && length(class_name) == 1)) {
+    cli::cli_abort(
+      "Expected the replay object's `'class'` value to be a single character."
+    )
   }
 
-  cls <- get_cls_constructor(class_value[1], env = env)
+  cls_name <- strsplit(class_name, "::")[[1]][2]
+  if (!grepl("ellmer::", class_name, fixed = TRUE)) {
+    cli::cli_abort(
+      "Only S7 classes from the `ellmer` package are currently supported."
+    )
+  }
+
+  cls <- pkg_env("ellmer")[[cls_name]]
+
+  if (is.null(cls)) {
+    cli::cli_abort("Unable to find the S7 class: {.val {class_name}}.")
+  }
+
+  if (!S7_inherits(cls)) {
+    cli::cli_abort(
+      "The object returned for {.val {class_name}} is not an S7 class."
+    )
+  }
+
   # Manually retrieve the handler for the class as we dispatch on the class itself,
   # not on an instance
   # An error will be thrown if a method is not found,
   # however we have a fallback for the `S7::S7_object` (the root base class)
   handler <- S7::method(contents_replay_class, cls)
-  handler(cls, obj, chat = chat, env = env)
+  handler(cls, obj, chat = chat)
 }
 
 contents_replay_class <- new_generic(
   "contents_replay_class",
   "cls",
-  function(cls, obj, ..., chat, env = caller_env()) {
+  function(cls, obj, ..., chat) {
     S7::S7_dispatch()
   }
 )
@@ -151,42 +163,34 @@ method(contents_replay_class, S7::S7_object) <- function(
   cls,
   obj,
   ...,
-  chat,
-  env = caller_env()
+  chat
 ) {
   stopifnot(obj$version == 1)
 
-  obj_props <- lapply(obj$props, contents_replay, chat = chat)
+  obj_props <- map(obj$props, function(prop_value) {
+    if (is_list_of_recorded_objects(prop_value)) {
+      # If the prop is a list of recorded objects, replay each one
+      map(prop_value, contents_replay, chat = chat)
+    } else if (is_recorded_object(prop_value)) {
+      # If the prop is a recorded object, replay it
+      contents_replay(prop_value, chat = chat)
+    } else {
+      prop_value
+    }
+  })
 
-  class_value <- obj$class[1]
-  if (grepl("::", class_value, fixed = TRUE)) {
-    # If the class is a package class, use the package name to find the constructor
-    # This allows use to reach into private namespaces within the package
-    pkg_cls <- strsplit(class_value, "::")[[1]]
-    pkg_name <- pkg_cls[1]
-
-    check_installed(
-      pkg_name,
-      reason = "for `contents_replay()` to restore the chat content."
-    )
-    cls_name <- pkg_cls[2]
-    env <- ns_env(pkg_name)
-  } else {
-    cls_name <- class_value
-  }
-
+  class_name <- obj$class[1]
+  cls_name <- strsplit(class_name, "::")[[1]][2]
   # While this seems like a bit of extra work, the tracebacks are accurate
   # vs referencing an unrelated parameter name in the traceback
-  exec(cls_name, !!!obj_props, .env = env)
+  exec(cls_name, !!!obj_props, .env = ns_env("ellmer"))
 }
-
 
 method(contents_replay_class, ToolDef) <- function(
   cls,
   obj,
   ...,
-  chat,
-  env = caller_env()
+  chat
 ) {
   if (obj$version != 1) {
     cli::cli_abort(
@@ -205,58 +209,9 @@ method(contents_replay_class, ToolDef) <- function(
   ret <- contents_replay_class(
     super(cls, S7::S7_object),
     obj,
-    chat = chat,
-    env = env
+    chat = chat
   )
   ret
-}
-
-
-#' Retrieve the class constructor
-#'
-#' @description
-#' The class for S7 Classes are stored as "package::class" in the recorded object.
-#' However, it does not mean that the class constructor is exported in the namespace.
-#' Therefore, this function will reach into the package environment to retrieve the constructor.
-#' If the class is not a _package_ class, it will return the object as is given the `env`.
-#'
-#' @param class_value The single string representing the `package::class` to retrieve the constructor.
-#' @param ... Not used.
-#' @param env The environment to find non-package class constructors.
-#' @return The constructor function for the class.
-#' @noRd
-get_cls_constructor <- function(class_value, ..., env = caller_env()) {
-  check_dots_empty()
-
-  pkg_cls <- strsplit(class_value, "::")[[1]]
-  if (length(pkg_cls) == 1) {
-    # If the class is not a package class, return the object as is
-    # This is the case for local S7 objects
-    cls <- eval_bare(sym(pkg_cls), env = env)
-  } else if (length(pkg_cls) == 2) {
-    pkg_name <- pkg_cls[1]
-    cls_name <- pkg_cls[2]
-
-    check_installed(
-      pkg_name,
-      reason = "for `contents_replay()` to restore the chat content."
-    )
-    cls <- ns_env(pkg_name)[[cls_name]]
-  } else {
-    cli::cli_abort(
-      "Invalid class name {.val {class_value[1]}}. Expected a single (or missing) `::` separator, not multiple."
-    )
-  }
-  if (is.null(cls)) {
-    cli::cli_abort("Unable to find the S7 class: {.val {class_value[1]}}.")
-  }
-
-  if (!S7_inherits(cls)) {
-    cli::cli_abort(
-      "The object returned for {.val {class_value[1]}} is not an S7 class."
-    )
-  }
-  cls
 }
 
 prop_is_read_only <- function(prop) {
