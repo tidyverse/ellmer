@@ -26,8 +26,7 @@ contents_replay(obj, ..., chat, env = caller_env())
 These generic functions can be use to convert \link{Turn}/\link{Content} objects
 into easily serializable representations.
 \itemize{
-\item \code{contents_record()} will accept a \link{Turn} or \link{Content} and return a
-simple list.
+\item \code{contents_record()} accept a \link{Turn} or \link{Content} and return a simple list.
 \item \code{contents_replay()} will accept a simple list (from \code{contents_record()})
 and return a \link{Turn} or \link{Content} object.
 }

@@ -11,8 +11,7 @@ NULL
 #' These generic functions can be use to convert [Turn]/[Content] objects
 #' into easily serializable representations.
 #'
-#' * `contents_record()` will accept a [Turn] or [Content] and return a
-#'   simple list.
+#' * `contents_record()` accept a [Turn] or [Content] and return a simple list.
 #' * `contents_replay()` will accept a simple list (from `contents_record()`)
 #'   and return a [Turn] or [Content] object.
 #'
