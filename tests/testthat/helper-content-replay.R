@@ -1,7 +1,7 @@
 test_record_replay <- function(
   x,
   ...,
-  chat = chat_ollama_test("Be as terse as possible; no punctuation"),
+  chat = chat_openai_test(),
   env = rlang::caller_env()
 ) {
   rlang::check_dots_empty()

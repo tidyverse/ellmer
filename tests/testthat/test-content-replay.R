@@ -64,7 +64,7 @@ test_that("can round trip of ContentThinking record/replay", {
 })
 
 test_that("can round trip of ContentTool record/replay", {
-  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+  chat <- chat_openai_test()
   tool_rnorm <- tool(
     rnorm,
     "Drawn numbers from a random normal distribution",
@@ -83,7 +83,7 @@ test_that("can round trip of ContentTool record/replay", {
 })
 
 test_that("can round trip of ToolDef record/replay", {
-  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+  chat <- chat_openai_test()
   tool_rnorm <- tool(
     # Use `rnorm` to avoid loading the package... this causes the name to not be auto found
     rnorm,
@@ -109,7 +109,7 @@ test_that("can round trip of ToolDef record/replay", {
   )
 
   recorded_tool <- contents_record(tool_rnorm, chat = chat)
-  chat_empty <- chat_ollama_test("Be as terse as possible; no punctuation")
+  chat_empty <- chat_openai_test()
   replayed_tool <- contents_replay(recorded_tool, chat = chat_empty)
 
   tool_rnorm_empty <- ToolDef(
@@ -143,7 +143,7 @@ test_that("can round trip of ContentToolResult record/replay", {
     )
   )
 
-  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+  chat <- chat_openai_test()
   tool_rnorm <- tool(
     stats::rnorm,
     "Drawn numbers from a random normal distribution",
@@ -191,7 +191,7 @@ test_that("can round trip of ContentPDF record/replay", {
 })
 
 test_that("non-package classes are recorded/replayed by default", {
-  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+  chat <- chat_openai_test()
 
   LocalClass <- S7::new_class(
     "LocalClass",
@@ -208,7 +208,7 @@ test_that("non-package classes are recorded/replayed by default", {
 
 
 test_that("unknown classes cause errors", {
-  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+  chat <- chat_openai_test()
   recorded <- contents_record(Turn("user"), chat = chat)
   recorded$class <- "ellmer::Turn2"
 
@@ -232,7 +232,7 @@ test_that("replay classes are S7 classes", {
     OtherName(name = name)
   }
 
-  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+  chat <- chat_openai_test()
   recorded <- contents_record(LocalClass("testname"), chat = chat)
   expect_error(
     contents_replay(recorded, chat = chat),
