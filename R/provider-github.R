@@ -81,14 +81,12 @@ models_github <- function(
   json <- resp_body_json(resp)
 
   id <- map_chr(json, "[[", "name")
-  name <- map_chr(json, "[[", "friendly_name")
   publisher <- map_chr(json, "[[", "publisher")
   license <- map_chr(json, "[[", "license")
   task <- map_chr(json, "[[", "task")
 
   data.frame(
     id = id,
-    name = name,
     publisher = publisher,
     license = license,
     task = task
