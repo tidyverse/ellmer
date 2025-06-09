@@ -206,7 +206,6 @@ extract_comments_and_signature <- function(func) {
   }
 
   start_line <- src[1]
-  end_line <- src[3]
   comments <- extract_comments(filename, start_line)
   if (is.null(comments)) {
     return(sig)

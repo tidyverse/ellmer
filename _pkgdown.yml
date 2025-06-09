@@ -65,3 +65,10 @@ reference:
   - title: Deprecated functions
     contents:
       - deprecated
+
+news:
+  releases:
+  - text: "Version 0.2.0"
+    href: https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/
+  - text: "Version 0.1.0"
+    href: https://posit.co/blog/announcing-ellmer/

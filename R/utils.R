@@ -218,3 +218,11 @@ match_prices <- function(provider, id) {
   idx <- match(id, prices$model)
   prices[idx, c("cached_input", "input", "output")]
 }
+
+base64_enc <- function(path, raw) {
+  check_exclusive(path, raw)
+  if (!missing(path)) {
+    raw <- readBin(path, "raw", file.info(path)$size)
+  }
+  gsub("\n", "", openssl::base64_encode(raw), fixed = TRUE)
+}

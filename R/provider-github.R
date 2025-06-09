@@ -60,3 +60,35 @@ github_key <- function() {
     }
   )
 }
+
+#' @rdname chat_github
+#' @export
+models_github <- function(
+  base_url = "https://models.inference.ai.azure.com/",
+  api_key = github_key()
+) {
+  provider <- ProviderOpenAI(
+    name = "github",
+    model = "",
+    base_url = base_url,
+    api_key = api_key
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json, "[[", "name")
+  publisher <- map_chr(json, "[[", "publisher")
+  license <- map_chr(json, "[[", "license")
+  task <- map_chr(json, "[[", "task")
+
+  data.frame(
+    id = id,
+    publisher = publisher,
+    license = license,
+    task = task
+  )
+}

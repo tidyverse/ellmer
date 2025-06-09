@@ -1,6 +1,15 @@
 # ellmer (development version)
 
 ## New features
+* `models_github()` lists models for `chat_github()` (#561).
+
+* `chat_snowflake()` now works with tool calling (#557, @atheriel).
+
+* Added `contents_record()`, `contents_replay()`, and `contents_replay_class()`
+  to record and replay `Turn` related information from a `Chat` instance (#502).
+  For example, these methods can be used for bookmarking within `{shinychat}`.
+
+# ellmer 0.2.1
 
 * When you save a `Chat` object to disk, API keys are automatically redacted. 
   This means that you can no longer easily resume a chat you've saved on disk 
@@ -12,22 +21,18 @@
 
 * `chat_databricks()` now picks up on Databricks workspace URLs set in the
   configuration file, which should improve compatibility with the Databricks CLI
-  (#521, @atheriel).
+  (#521, @atheriel). It now also supports tool calling (#548, @atheriel).
 
 * `chat_snowflake()` no longer streams answers that include a mysterious
   `list(type = "text", text = "")` trailer (#533, @atheriel). It now parses 
   streaming outputs correctly into turns (#542), supports structured ouputs
-  (#544), tool calling (#548), and standard model parameters (#545, @atheriel).
+  (#544), and standard model parameters (#545, @atheriel).
 
 * `chat_snowflake()` and `chat_databricks()` now default to Claude Sonnet 3.7,
   the same default as `chat_anthropic()` (#539 and #546, @atheriel).
 
 * `type_from_schema()` lets you to use pre-existing JSON schemas in structured 
   chats (#133, @hafen)
-
-## Developer tooling
-
-* Added `contents_record()`, `contents_replay()`, and `contents_replay_class()` to record and replay `Turn` related information from a `Chat` instance (#502). For example, these methods can be used for bookmarking within `{shinychat}`.
 
 # ellmer 0.2.0
 
