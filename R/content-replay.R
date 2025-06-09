@@ -131,17 +131,6 @@ contents_replay <- function(obj, ..., chat, env = caller_env()) {
   }
 
   cls <- get_cls_constructor(class_value[1], env = env)
-
-  if (is.null(cls)) {
-    cli::cli_abort("Unable to find the S7 class: {.val {class_value[1]}}.")
-  }
-
-  if (!S7_inherits(cls)) {
-    cli::cli_abort(
-      "The object returned for {.val {class_value[1]}} is not an S7 class."
-    )
-  }
-
   # Manually retrieve the handler for the class as we dispatch on the class itself,
   # not on an instance
   # An error will be thrown if a method is not found,
@@ -244,7 +233,7 @@ get_cls_constructor <- function(class_value, ..., env = caller_env()) {
   if (length(pkg_cls) == 1) {
     # If the class is not a package class, return the object as is
     # This is the case for local S7 objects
-    eval_bare(sym(pkg_cls), env = env)
+    cls <- eval_bare(sym(pkg_cls), env = env)
   } else if (length(pkg_cls) == 2) {
     pkg_name <- pkg_cls[1]
     cls_name <- pkg_cls[2]
@@ -253,12 +242,22 @@ get_cls_constructor <- function(class_value, ..., env = caller_env()) {
       pkg_name,
       reason = "for `contents_replay()` to restore the chat content."
     )
-    ns_env(pkg_name)[[cls_name]]
+    cls <- ns_env(pkg_name)[[cls_name]]
   } else {
     cli::cli_abort(
       "Invalid class name {.val {class_value[1]}}. Expected a single (or missing) `::` separator, not multiple."
     )
   }
+  if (is.null(cls)) {
+    cli::cli_abort("Unable to find the S7 class: {.val {class_value[1]}}.")
+  }
+
+  if (!S7_inherits(cls)) {
+    cli::cli_abort(
+      "The object returned for {.val {class_value[1]}} is not an S7 class."
+    )
+  }
+  cls
 }
 
 prop_is_read_only <- function(prop) {
