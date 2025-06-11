@@ -111,7 +111,7 @@ This is particularly useful when you want to use a chat object just as a handle 
 
 ## Streaming vs batch results
 
-When you call `chat$chat()` directly in the console, the results are displayed progressively as the LLM streams them to ellmer. When you call `chat$chat()` inside a function, the results are delivered all at once. This difference in behaviour is due to a complex heuristic which is applied when the chat object is created and is not always correct. So when calling `$chat` in a function, we recommend you control it explicitly with the `echo` argument, setting it to `"none"` if you want no intermediate results to be streamed, `"text"` if you want to see what we receive from the assistant, or `"all"` if you want to see both what we send and receive. You likely want `echo = "none"` in most cases:
+When you call `chat$chat()` directly in the console, the results are displayed progressively as the LLM streams them to ellmer. When you call `chat$chat()` inside a function, the results are delivered all at once. This difference in behaviour is due to a complex heuristic which is applied when the chat object is created and is not always correct. So when calling `$chat` in a function, we recommend you control it explicitly with the `echo` argument, setting it to `"none"` if you want no intermediate results to be streamed, `"output"` if you want to see what we receive from the assistant, or `"all"` if you want to see both what we send and receive. You likely want `echo = "none"` in most cases:
 
 ```{r}
 capital <- function(chat, country) {
