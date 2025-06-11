@@ -132,10 +132,10 @@ specific values from a string:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; $primary_shape</span></span>
-<span><span class="co">#&gt; [1] "letter R and oval"</span></span>
+<span><span class="co">#&gt; [1] "ellipse and letter"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $primary_colour</span></span>
-<span><span class="co">#&gt; [1] "blue and gray"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "grey and blue"</span></span></code></pre></div>
 <p>If you need to extract data from multiple prompts, you can use the
 same techniques with <code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code>. It takes
 the same arguments as <code>$chat_structured()</code> with two
@@ -159,7 +159,6 @@ function, not a method, and it can take a vector of prompts.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; [working] (0 + 0) -&gt; 5 -&gt; 1 | <span style="color: #00BB00;">■■■■■■                          </span>  17%</span></span>
-<span><span class="co">#&gt; [working] (0 + 0) -&gt; 4 -&gt; 2 | <span style="color: #00BB00;">■■■■■■■■■■■                     </span>  33%</span></span>
 <span><span class="co">#&gt; [working] (0 + 0) -&gt; 0 -&gt; 6 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100%</span></span>
 <span><span class="co">#&gt;     name age</span></span>
 <span><span class="co">#&gt; 1   Alex  42</span></span>
@@ -270,17 +269,17 @@ can use structured data extraction.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_summary</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The article argues that effective third-party testing is essential for ensuring the safety and oversight of advanced, frontier AI systems. It emphasizes that current self-governance and sector-specific regulations are insufficient for managing the broad capabilities and risks associated with large generative models. The article details the characteristics of a robust third-party testing regime, including narrowly scoped tests, a diverse ecosystem of testers (companies, universities, and governments), and phased testing approaches. It highlights the need to develop these systems collaboratively, iteratively, and with appropriate funding, especially for national security risks.</span></span>
+<span><span class="co">#&gt; The article, authored by Anthropic, argues that third-party testing and oversight are essential for ensuring the safe deployment of frontier AI systems. It outlines the need for a robust regime where trusted, independent organizations—across private firms, academia, and government—test and evaluate powerful generative AI systems for potential misuse and safety risks. The post highlights current gaps in self-regulation, points to risks like emergent dangerous behaviors, and stresses that sector-wide, trustworthy validation is required to avoid societal harms and knee-jerk regulation. </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Anthropic outlines its own commitments to supporting third-party testing, such as refining its Responsible Scaling Policy and advocating for public investment in AI evaluation infrastructure. The article also addresses the complexities of open-source AI models and warns against regulatory capture, arguing that a well-designed third-party testing regime can help balance safety, openness, and competition in the AI sector. The conclusion reaffirms that minimal, practical, and broadly legitimate policies are needed to ensure societal benefits while minimizing potential AI harms.</span></span>
+<span><span class="co">#&gt; Anthropic proposes a multi-layered, practical, and collaborative approach: starting with prototyping regimes, conducting practice assessments, prioritizing automated first-pass tests followed by expert analysis, and building public sector capacity for oversight. They discuss implications for open-source models, noting the tension between openness and safety, and warn about regulatory capture by large industry players. The article positions careful, minimally burdensome, and iteratively developed policy as the path forward, emphasizing that third-party testing is key to responsible, trustworthy AI governance and broad societal participation in AI oversight.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 5</span></span>
-<span><span class="co">#&gt;  $ author    : chr "Anthropic Policy Team (assumed, as company blog)"</span></span>
-<span><span class="co">#&gt;  $ topics    : chr [1:7] "AI policy" "AI safety" "third-party testing" "regulation" ...</span></span>
-<span><span class="co">#&gt;  $ summary   : chr "The article argues that effective third-party testing is essential for ensuring the safety and oversight of adv"| __truncated__</span></span>
-<span><span class="co">#&gt;  $ coherence : int 91</span></span>
-<span><span class="co">#&gt;  $ persuasion: num 0.88</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ author    : chr "Anthropic (organization authorship)"</span></span>
+<span><span class="co">#&gt;  $ topics    : chr [1:9] "AI policy" "AI safety" "third-party testing" "frontier AI models" ...</span></span>
+<span><span class="co">#&gt;  $ summary   : chr "The article, authored by Anthropic, argues that third-party testing and oversight are essential for ensuring th"| __truncated__</span></span>
+<span><span class="co">#&gt;  $ coherence : int 96</span></span>
+<span><span class="co">#&gt;  $ persuasion: num 0.92</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-2-named-entity-recognition">Example 2: Named entity recognition<a class="anchor" aria-label="anchor" href="#example-2-named-entity-recognition"></a>
@@ -373,13 +372,9 @@ guaranteed.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_classification</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
-<span><span class="co">#&gt;            name score</span></span>
-<span><span class="co">#&gt; 1    Technology  0.95</span></span>
-<span><span class="co">#&gt; 2      Business  0.03</span></span>
-<span><span class="co">#&gt; 3         Other  0.02</span></span>
-<span><span class="co">#&gt; 4      Politics  0.00</span></span>
-<span><span class="co">#&gt; 5        Sports  0.00</span></span>
-<span><span class="co">#&gt; 6 Entertainment  0.00</span></span></code></pre></div>
+<span><span class="co">#&gt;         name score</span></span>
+<span><span class="co">#&gt; 1 Technology  0.95</span></span>
+<span><span class="co">#&gt; 2   Business  0.05</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-5-working-with-unknown-keys">Example 5: Working with unknown keys<a class="anchor" aria-label="anchor" href="#example-5-working-with-unknown-keys"></a>
@@ -435,9 +430,9 @@ and “unearned” income</div>
 <span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/content_image_url.html">content_image_file</a></span><span class="op">(</span><span class="st">"congressional-assets.png"</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">image</span>, type <span class="op">=</span> <span class="va">type_assets</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
-<span><span class="co">#&gt;                            assert_name owner</span></span>
-<span><span class="co">#&gt; 1  11 Zinfandel Lane - Home &amp; Vineyard    JT</span></span>
-<span><span class="co">#&gt; 2 25 Point Lobos - Commercial Property    SP</span></span>
+<span><span class="co">#&gt;                                 assert_name owner</span></span>
+<span><span class="co">#&gt; 1  11 Zinfandel Lane - Home &amp; Vineyard [RP]    JT</span></span>
+<span><span class="co">#&gt; 2 25 Point Lobos - Commercial Property [RP]    SP</span></span>
 <span><span class="co">#&gt;                              location asset_value_low asset_value_high</span></span>
 <span><span class="co">#&gt; 1             St. Helena/Napa, CA, US         5000001         25000000</span></span>
 <span><span class="co">#&gt; 2 San Francisco/San Francisco, CA, US         5000001         25000000</span></span>
@@ -492,7 +487,7 @@ one in the text:</p>
 <span><span class="co">#&gt; [1] ""</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'data.frame':    2 obs. of  9 variables:</span></span>
-<span><span class="co">#&gt;  $ assert_name     : chr  "11 Zinfandel Lane - Home &amp; Vineyard" "25 Point Lobos - Commercial Property"</span></span>
+<span><span class="co">#&gt;  $ assert_name     : chr  "11 Zinfandel Lane - Home &amp; Vineyard [RP]" "25 Point Lobos - Commercial Property [RP]"</span></span>
 <span><span class="co">#&gt;  $ owner           : chr  "JT" "SP"</span></span>
 <span><span class="co">#&gt;  $ location        : chr  "St. Helena/Napa, CA, US" "San Francisco/San Francisco, CA, US"</span></span>
 <span><span class="co">#&gt;  $ asset_value_low : int  5000001 5000001</span></span>
@@ -570,14 +565,14 @@ common in the wild.</p>
 <td align="left">OpenAI</td>
 <td align="left">gpt-4.1</td>
 <td align="right">8186</td>
-<td align="right">767</td>
+<td align="right">751</td>
 <td align="right">$0.02</td>
 </tr>
 <tr class="even">
 <td align="left">Anthropic</td>
 <td align="left">claude-sonnet-4</td>
 <td align="right">481</td>
-<td align="right">96</td>
+<td align="right">95</td>
 <td align="right">$0.00</td>
 </tr>
 </tbody>
