@@ -1,8 +1,13 @@
 # ellmer (development version)
 
+## New features
 * `models_github()` lists models for `chat_github()` (#561).
 
 * `chat_snowflake()` now works with tool calling (#557, @atheriel).
+
+* Added `contents_record()`, `contents_replay()`, and `contents_replay_class()`
+  to record and replay `Turn` related information from a `Chat` instance (#502).
+  For example, these methods can be used for bookmarking within `{shinychat}`.
 
 # ellmer 0.2.1
 
