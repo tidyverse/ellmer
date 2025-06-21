@@ -37,7 +37,7 @@ An LLM is a _model_, and like all models needs some way to represent its inputs 
 
 It's important to have a rough sense of how text is converted to tokens because tokens are used to determine the cost of a model and how much context can be used to predict the next response. On average an English word needs ~1.5 tokens so a page might require 375-400 tokens and a complete book might require 75,000 to 150,000 tokens. Other languages will typically require more tokens, because (in brief) LLMs are trained on data from the internet, which is primarily in English.
 
-LLMs are priced per million tokens. State of the art models (like GPT-4.1 or Claude 3.5 sonnet) cost $2-3 per million input tokens, and $10-15 per million output tokens. Cheaper models can cost much less, e.g. GPT-4.1 nanoo costs $0.10 per million input tokens and $0.40 per million output tokens. Even $10 of API credit will give you a lot of room for experimentation, particularly with cheaper models, and prices are likely to decline as model performance improves.
+LLMs are priced per million tokens. State of the art models (like GPT-4.1 or Claude 3.5 sonnet) cost $2-3 per million input tokens, and $10-15 per million output tokens. Cheaper models can cost much less, e.g. GPT-4.1 nano costs $0.10 per million input tokens and $0.40 per million output tokens. Even $10 of API credit will give you a lot of room for experimentation, particularly with cheaper models, and prices are likely to decline as model performance improves.
 
 Tokens also used to measure the context window, which is how much text the LLM can use to generate the next response. As we'll discuss shortly, the context length includes the full state of your conversation so far (both your prompts and the model's responses), which means that cost grow rapidly with the number of conversational turns.
 
@@ -75,7 +75,7 @@ The user prompt is the question that you send to the model. There are two other 
 
 OpenAI calls this the [chain of command](https://cdn.openai.com/spec/model-spec-2024-05-08.html#follow-the-chain-of-command): if there are conflicts or inconsistencies the prompts, the platform prompt overrides the system prompt, which in turn overrides the user prompt.
 
-When you use a chat app like ChatGPT or claude.ai you can only iterate on the user prompt. But when you're programming with LLMs, you'll primarily iterate on the system prompt. For example, if you're developing an app that helps a user write tidyverse code, you'd work with the system prompt to ensure that user gets the style of code they want.
+When you use a chat app like ChatGPT or Claude.ai you can only iterate on the user prompt. But when you're programming with LLMs, you'll primarily iterate on the system prompt. For example, if you're developing an app that helps a user write tidyverse code, you'd work with the system prompt to ensure that user gets the style of code they want.
 
 Writing a good prompt, which is called __prompt design__, is key to effective use of LLMs. It is discussed in more detail in `vignette("prompt-design")`.
 
