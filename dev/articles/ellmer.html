@@ -153,7 +153,7 @@ English.</p>
 <p>LLMs are priced per million tokens. State of the art models (like
 GPT-4.1 or Claude 3.5 sonnet) cost $2-3 per million input tokens, and
 $10-15 per million output tokens. Cheaper models can cost much less,
-e.g. GPT-4.1 nanoo costs $0.10 per million input tokens and $0.40 per
+e.g. GPT-4.1 nano costs $0.10 per million input tokens and $0.40 per
 million output tokens. Even $10 of API credit will give you a lot of
 room for experimentation, particularly with cheaper models, and prices
 are likely to decline as model performance improves.</p>
@@ -169,15 +169,20 @@ printing it, and you can see total usage for a session with
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4.1"</span><span class="op">)</span></span>
 <span><span class="va">.</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Who created R?"</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=2 tokens=11/78 $0.00&gt;</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=2 tokens=11/125 $0.00&gt;</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [11] ──────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Who created R?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [78] ─────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; **R** was created by **Ross Ihaka** and **Robert Gentleman**, statisticians at the University of Auckland, New Zealand. They began developing R in **1992**, releasing it as a free software package inspired by the S language developed at Bell Labs. The first beta release was in 1995, and R has since become a widely used language for statistical computing and graphics.</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [125] ────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; **R** is a programming language and software environment for statistical computing and graphics. It was **created by Ross Ihaka and Robert Gentleman** at the University of Auckland, New Zealand, and the project began in the early 1990s. The first public release was in 1995.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; - **Ross Ihaka** and **Robert Gentleman** are widely credited as the creators of R.</span></span>
+<span><span class="co">#&gt; - The R language was inspired by the S programming language developed at Bell Laboratories by John Chambers and others.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Since its initial creation, R has been developed and maintained by the **R Core Team** and the broader open-source community.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/token_usage.html">token_usage</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   provider   model input output price</span></span>
-<span><span class="co">#&gt; 1   OpenAI gpt-4.1    11     78 $0.00</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   OpenAI gpt-4.1    11    125 $0.00</span></span></code></pre></div>
 <p>If you want to learn more about tokens and tokenizers, I’d recommend
 watching the first 20-30 minutes of <a href="https://www.youtube.com/watch?v=zduSFxRajkE" class="external-link">Let’s build the GPT
 Tokenizer</a> by Andrej Karpathy. You certainly don’t need to learn how
@@ -234,7 +239,7 @@ palette.</p></li>
 of command</a>: if there are conflicts or inconsistencies the prompts,
 the platform prompt overrides the system prompt, which in turn overrides
 the user prompt.</p>
-<p>When you use a chat app like ChatGPT or claude.ai you can only
+<p>When you use a chat app like ChatGPT or Claude.ai you can only
 iterate on the user prompt. But when you’re programming with LLMs,
 you’ll primarily iterate on the system prompt. For example, if you’re
 developing an app that helps a user write tidyverse code, you’d work

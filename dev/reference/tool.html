@@ -145,11 +145,15 @@ description of the annotation properties recommended by the <a href="https://mod
 <span class="r-in"><span><span class="st">  Give me five numbers from a random normal distribution.</span></span></span>
 <span class="r-in"><span><span class="st">"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">◯</span> [<span style="color: #0000BB;">tool call</span>] rnorm(n = 5L, mean = 0L, sd = 1L)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">●</span> #&gt; <span style="font-style: italic;">[-1.4,0.2553,-2.4373,-0.0056,0.6216]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">●</span> #&gt; <span style="font-style: italic;">[0.112,-0.134,-1.9101,-0.2792,-0.3134]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Here are five numbers drawn from a random normal distribution (mean = </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0, standard deviation = 1):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -1.40, 0.26, -2.44, -0.01, 0.62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1. 0.112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2. -0.134</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3. -1.9101</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4. -0.2792</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5. -0.3134</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Look at the chat history to see how tool calling works:</span></span></span>
 <span class="r-in"><span><span class="co"># Assistant sends a tool request which is evaluated locally and</span></span></span>

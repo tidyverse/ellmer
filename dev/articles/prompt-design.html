@@ -209,20 +209,24 @@ different languages or different styles of R code:</p>
 <span><span class="co">#&gt; ```r</span></span>
 <span><span class="co">#&gt; library(dplyr)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 1: Using dplyr with across()</span></span>
+<span><span class="co">#&gt; # Method 1: Explicit variable selection</span></span>
 <span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
 <span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
 <span><span class="co">#&gt;   summarise(across(a:z, list(mean = mean, median = median), na.rm = </span></span>
-<span><span class="co">#&gt; TRUE),</span></span>
-<span><span class="co">#&gt;             .groups = 'drop')</span></span>
+<span><span class="co">#&gt; TRUE))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 2: Using aggregate() (base R)</span></span>
-<span><span class="co">#&gt; # For means</span></span>
-<span><span class="co">#&gt; means &lt;- aggregate(. ~ age + sex, data = df[c('age', 'sex', letters)],</span></span>
-<span><span class="co">#&gt; FUN = mean)</span></span>
-<span><span class="co">#&gt; # For medians  </span></span>
-<span><span class="co">#&gt; medians &lt;- aggregate(. ~ age + sex, data = df[c('age', 'sex', </span></span>
-<span><span class="co">#&gt; letters)], FUN = median)</span></span>
+<span><span class="co">#&gt; # Method 2: Using summarise_at (older dplyr syntax)</span></span>
+<span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
+<span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
+<span><span class="co">#&gt;   summarise_at(vars(a:z), list(mean = mean, median = median), na.rm = </span></span>
+<span><span class="co">#&gt; TRUE)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; # Method 3: Base R approach</span></span>
+<span><span class="co">#&gt; result &lt;- aggregate(df[, letters], </span></span>
+<span><span class="co">#&gt;                    by = list(age = df$age, sex = df$sex), </span></span>
+<span><span class="co">#&gt;                    FUN = function(x) c(mean = mean(x, na.rm = TRUE), </span></span>
+<span><span class="co">#&gt;                                       median = median(x, na.rm = </span></span>
+<span><span class="co">#&gt; TRUE)))</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ## SQL</span></span>
@@ -249,18 +253,27 @@ different languages or different styles of R code:</p>
 <span><span class="co">#&gt;     class age sex;</span></span>
 <span><span class="co">#&gt;     var a--z;  /* Variables from a to z */</span></span>
 <span><span class="co">#&gt; run;</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; /* Or using PROC SUMMARY */</span></span>
+<span><span class="co">#&gt; proc summary data=your_dataset;</span></span>
+<span><span class="co">#&gt;     class age sex;</span></span>
+<span><span class="co">#&gt;     var a--z;</span></span>
+<span><span class="co">#&gt;     output out=results mean= median= / autoname;</span></span>
+<span><span class="co">#&gt; run;</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## SPSS Syntax</span></span>
+<span><span class="co">#&gt; ## Key considerations:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ```spss</span></span>
-<span><span class="co">#&gt; MEANS TABLES=a TO z BY age BY sex</span></span>
-<span><span class="co">#&gt;   /CELLS=MEAN MEDIAN.</span></span>
-<span><span class="co">#&gt; ```</span></span>
+<span><span class="co">#&gt; 1. **Missing values**: Most examples include `na.rm = TRUE` or </span></span>
+<span><span class="co">#&gt; equivalent to handle missing data</span></span>
+<span><span class="co">#&gt; 2. **Variable selection**: Make sure variables a-z actually exist in </span></span>
+<span><span class="co">#&gt; your dataset</span></span>
+<span><span class="co">#&gt; 3. **Data types**: Ensure the variables are numeric</span></span>
+<span><span class="co">#&gt; 4. **Output format**: The result will typically be a multi-level </span></span>
+<span><span class="co">#&gt; structure with age/sex combinations and corresponding statistics</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The pandas approach is probably most flexible if you're working in </span></span>
-<span><span class="co">#&gt; Python, and the dplyr approach is very clean for R users. Choose the </span></span>
-<span><span class="co">#&gt; method that matches your preferred tool!</span></span></code></pre>
+<span><span class="co">#&gt; Which tool are you using? I can provide more specific guidance based </span></span>
+<span><span class="co">#&gt; on your environment.</span></span></code></pre>
 <p>I can ensure that I always get R code in a specific style by
 providing a system prompt:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -534,7 +547,7 @@ features, you might need to provide the examples yourself:</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; df |&gt;</span></span>
+<span><span class="co">#&gt; data |&gt;</span></span>
 <span><span class="co">#&gt;   summarise(</span></span>
 <span><span class="co">#&gt;     across(a:z, list(mean = mean, median = median), .names = </span></span>
 <span><span class="co">#&gt; "{.col}_{.fn}"),</span></span>
@@ -592,50 +605,64 @@ page.</p>
 <span><span class="co">#&gt; [</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "dark brown sugar",</span></span>
-<span><span class="co">#&gt;     "quantity": "3/4 cup",</span></span>
-<span><span class="co">#&gt;     "weight": "150g"</span></span>
+<span><span class="co">#&gt;     "amount": 0.75,</span></span>
+<span><span class="co">#&gt;     "unit": "cup",</span></span>
+<span><span class="co">#&gt;     "weight": 150,</span></span>
+<span><span class="co">#&gt;     "weight_unit": "g"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "eggs",</span></span>
-<span><span class="co">#&gt;     "quantity": "2",</span></span>
+<span><span class="co">#&gt;     "amount": 2,</span></span>
 <span><span class="co">#&gt;     "unit": "large"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "sour cream",</span></span>
-<span><span class="co">#&gt;     "quantity": "3/4 cup",</span></span>
-<span><span class="co">#&gt;     "weight": "165g"</span></span>
+<span><span class="co">#&gt;     "amount": 0.75,</span></span>
+<span><span class="co">#&gt;     "unit": "cup",</span></span>
+<span><span class="co">#&gt;     "weight": 165,</span></span>
+<span><span class="co">#&gt;     "weight_unit": "g"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "unsalted butter",</span></span>
-<span><span class="co">#&gt;     "quantity": "1/2 cup",</span></span>
-<span><span class="co">#&gt;     "weight": "113g",</span></span>
-<span><span class="co">#&gt;     "preparation": "melted"</span></span>
+<span><span class="co">#&gt;     "amount": 0.5,</span></span>
+<span><span class="co">#&gt;     "unit": "cup",</span></span>
+<span><span class="co">#&gt;     "weight": 113,</span></span>
+<span><span class="co">#&gt;     "weight_unit": "g",</span></span>
+<span><span class="co">#&gt;     "note": "melted"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "vanilla extract",</span></span>
-<span><span class="co">#&gt;     "quantity": "1 teaspoon"</span></span>
+<span><span class="co">#&gt;     "amount": 1,</span></span>
+<span><span class="co">#&gt;     "unit": "teaspoon"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "kosher salt",</span></span>
-<span><span class="co">#&gt;     "quantity": "3/4 teaspoon"</span></span>
+<span><span class="co">#&gt;     "amount": 0.75,</span></span>
+<span><span class="co">#&gt;     "unit": "teaspoon"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "neutral oil",</span></span>
-<span><span class="co">#&gt;     "quantity": "1/3 cup",</span></span>
-<span><span class="co">#&gt;     "volume": "80ml"</span></span>
+<span><span class="co">#&gt;     "amount": 0.33,</span></span>
+<span><span class="co">#&gt;     "unit": "cup",</span></span>
+<span><span class="co">#&gt;     "volume": 80,</span></span>
+<span><span class="co">#&gt;     "volume_unit": "ml"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "all-purpose flour",</span></span>
-<span><span class="co">#&gt;     "quantity": "1 1/2 cups",</span></span>
-<span><span class="co">#&gt;     "weight": "190g"</span></span>
+<span><span class="co">#&gt;     "amount": 1.5,</span></span>
+<span><span class="co">#&gt;     "unit": "cup",</span></span>
+<span><span class="co">#&gt;     "weight": 190,</span></span>
+<span><span class="co">#&gt;     "weight_unit": "g"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "sugar",</span></span>
-<span><span class="co">#&gt;     "quantity": "150g"</span></span>
+<span><span class="co">#&gt;     "amount": 150,</span></span>
+<span><span class="co">#&gt;     "unit": "g"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "sugar",</span></span>
-<span><span class="co">#&gt;     "quantity": "1 1/2 teaspoons"</span></span>
+<span><span class="co">#&gt;     "amount": 1.5,</span></span>
+<span><span class="co">#&gt;     "unit": "teaspoon"</span></span>
 <span><span class="co">#&gt;   }</span></span>
 <span><span class="co">#&gt; ]</span></span></code></pre></div>
 <p>(I don’t know if the additional colour, “You’re an expert baker who
@@ -670,7 +697,8 @@ provide the input and output examples in such a loose format.</p>
 <span><span class="co">#&gt;   {"name": "dark brown sugar", "quantity": 150, "unit": "g"},</span></span>
 <span><span class="co">#&gt;   {"name": "large eggs", "quantity": 2, "unit": "piece"},</span></span>
 <span><span class="co">#&gt;   {"name": "sour cream", "quantity": 165, "unit": "g"},</span></span>
-<span><span class="co">#&gt;   {"name": "unsalted butter, melted", "quantity": 113, "unit": "g"},</span></span>
+<span><span class="co">#&gt;   {"name": "unsalted butter", "quantity": 113, "unit": "g", "note": </span></span>
+<span><span class="co">#&gt; "melted"},</span></span>
 <span><span class="co">#&gt;   {"name": "vanilla extract", "quantity": 1, "unit": "teaspoon"},</span></span>
 <span><span class="co">#&gt;   {"name": "kosher salt", "quantity": 0.75, "unit": "teaspoon"},</span></span>
 <span><span class="co">#&gt;   {"name": "neutral oil", "quantity": 80, "unit": "ml"},</span></span>
@@ -764,17 +792,17 @@ and that ellmer will convert it into an R data structure.</p>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">instruct_json</span>, <span class="va">instruct_weight</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">ingredients</span>, type <span class="op">=</span> <span class="va">type_ingredients</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                       name quantity     unit</span></span>
-<span><span class="co">#&gt; 1         dark brown sugar   150.00        g</span></span>
-<span><span class="co">#&gt; 2               large eggs     2.00    count</span></span>
-<span><span class="co">#&gt; 3               sour cream   165.00        g</span></span>
-<span><span class="co">#&gt; 4  unsalted butter, melted   113.00        g</span></span>
-<span><span class="co">#&gt; 5          vanilla extract     1.00 teaspoon</span></span>
-<span><span class="co">#&gt; 6              kosher salt     0.75 teaspoon</span></span>
-<span><span class="co">#&gt; 7              neutral oil    80.00       ml</span></span>
-<span><span class="co">#&gt; 8        all-purpose flour   190.00        g</span></span>
-<span><span class="co">#&gt; 9                    sugar   150.00        g</span></span>
-<span><span class="co">#&gt; 10                   sugar     1.50 teaspoon</span></span></code></pre></div>
+<span><span class="co">#&gt;                 name quantity     unit</span></span>
+<span><span class="co">#&gt; 1   dark brown sugar   150.00        g</span></span>
+<span><span class="co">#&gt; 2         large eggs     2.00     each</span></span>
+<span><span class="co">#&gt; 3         sour cream   165.00        g</span></span>
+<span><span class="co">#&gt; 4    unsalted butter   113.00        g</span></span>
+<span><span class="co">#&gt; 5    vanilla extract     1.00 teaspoon</span></span>
+<span><span class="co">#&gt; 6        kosher salt     0.75 teaspoon</span></span>
+<span><span class="co">#&gt; 7        neutral oil    80.00       ml</span></span>
+<span><span class="co">#&gt; 8  all-purpose flour   190.00        g</span></span>
+<span><span class="co">#&gt; 9              sugar   150.00        g</span></span>
+<span><span class="co">#&gt; 10             sugar     1.50 teaspoon</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="capturing-raw-input">Capturing raw input<a class="anchor" aria-label="anchor" href="#capturing-raw-input"></a>
@@ -826,7 +854,7 @@ doing a good job:</p>
 <span><span class="co">#&gt; "one cup of softened unsalted butter"},</span></span>
 <span><span class="co">#&gt;   {"name": "white sugar", "quantity": 0.25, "unit": "cup", "input": "a</span></span>
 <span><span class="co">#&gt; quarter cup of white sugar"},</span></span>
-<span><span class="co">#&gt;   {"name": "egg", "quantity": 1, "unit": "item", "input": "an egg"},</span></span>
+<span><span class="co">#&gt;   {"name": "egg", "quantity": 1, "unit": "whole", "input": "an egg"},</span></span>
 <span><span class="co">#&gt;   {"name": "vanilla extract", "quantity": 1, "unit": "teaspoon", </span></span>
 <span><span class="co">#&gt; "input": "1 teaspoon of vanilla extract"},</span></span>
 <span><span class="co">#&gt;   {"name": "all-purpose flour", "quantity": 2, "unit": "cup", "input":</span></span>
@@ -856,14 +884,14 @@ my examples.</p>
 <td align="left">Anthropic</td>
 <td align="left">claude-sonnet-4</td>
 <td align="right">802</td>
-<td align="right">2116</td>
-<td align="right">$0.03</td>
+<td align="right">2240</td>
+<td align="right">$0.04</td>
 </tr>
 <tr class="even">
 <td align="left">OpenAI</td>
 <td align="left">gpt-4.1</td>
 <td align="right">1128</td>
-<td align="right">850</td>
+<td align="right">944</td>
 <td align="right">$0.01</td>
 </tr>
 </tbody>
