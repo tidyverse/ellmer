@@ -1,0 +1,66 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    status: 200
+    headers:
+      date: Wed, 25 Jun 2025 16:48:04 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '40000'
+      anthropic-ratelimit-input-tokens-remaining: '40000'
+      anthropic-ratelimit-input-tokens-reset: '2025-06-25T16:47:50Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-06-25T16:48:05Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-06-25T16:47:49Z'
+      anthropic-ratelimit-tokens-limit: '56000'
+      anthropic-ratelimit-tokens-remaining: '56000'
+      anthropic-ratelimit-tokens-reset: '2025-06-25T16:47:50Z'
+      request-id: req_011CQVHDdkiYsdsX2Ww9QCxg
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 9555f2edfaa56c70-DFW
+      content-encoding: gzip
+    body:
+      string: '{"id":"msg_01D2YiENYVbVzAdyj8LJJNZw","type":"message","role":"assistant","model":"claude-sonnet-4-20250514","content":[{"type":"text","text":"Here
+        are several ways to compute the mean and median of variables a through z,
+        grouped by age and sex, depending on the tool you''re using:\n\n## Python
+        with pandas\n\n```python\nimport pandas as pd\nimport numpy as np\n\n# Assuming
+        your data is in a DataFrame called ''df''\n# Variables a-z plus grouping variables
+        age and sex\n\n# Method 1: Select variables a-z explicitly\nvars_a_to_z =
+        [chr(i) for i in range(ord(''a''), ord(''z'')+1)]\nresult = df.groupby([''age'',
+        ''sex''])[vars_a_to_z].agg([''mean'', ''median''])\n\n# Method 2: If a-z are
+        all your numeric columns (excluding age/sex)\nnumeric_cols = df.select_dtypes(include=[np.number]).columns.difference([''age'',
+        ''sex''])\nresult = df.groupby([''age'', ''sex''])[numeric_cols].agg([''mean'',
+        ''median''])\n\nprint(result)\n```\n\n## R\n\n```r\nlibrary(dplyr)\n\n# Method
+        1: Explicit variable selection\nresult <- df %>%\n  group_by(age, sex) %>%\n  summarise(across(a:z,
+        list(mean = mean, median = median), na.rm = TRUE))\n\n# Method 2: Using summarise_at
+        (older dplyr syntax)\nresult <- df %>%\n  group_by(age, sex) %>%\n  summarise_at(vars(a:z),
+        list(mean = mean, median = median), na.rm = TRUE)\n\n# Method 3: Base R approach\nresult
+        <- aggregate(df[, letters], \n                   by = list(age = df$age, sex
+        = df$sex), \n                   FUN = function(x) c(mean = mean(x, na.rm =
+        TRUE), \n                                      median = median(x, na.rm =
+        TRUE)))\n```\n\n## SQL\n\n```sql\nSELECT \n    age, \n    sex,\n    AVG(a)
+        as mean_a, PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY a) as median_a,\n    AVG(b)
+        as mean_b, PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY b) as median_b,\n    --
+        ... repeat for all variables c through z\n    AVG(z) as mean_z, PERCENTILE_CONT(0.5)
+        WITHIN GROUP (ORDER BY z) as median_z\nFROM your_table\nGROUP BY age, sex;\n```\n\n##
+        SAS\n\n```sas\nproc means data=your_dataset mean median;\n    class age sex;\n    var
+        a--z;  /* Variables from a to z */\nrun;\n\n/* Or using PROC SUMMARY */\nproc
+        summary data=your_dataset;\n    class age sex;\n    var a--z;\n    output
+        out=results mean= median= / autoname;\nrun;\n```\n\n## Key considerations:\n\n1.
+        **Missing values**: Most examples include `na.rm = TRUE` or equivalent to
+        handle missing data\n2. **Variable selection**: Make sure variables a-z actually
+        exist in your dataset\n3. **Data types**: Ensure the variables are numeric\n4.
+        **Output format**: The result will typically be a multi-level structure with
+        age/sex combinations and corresponding statistics\n\nWhich tool are you using?
+        I can provide more specific guidance based on your environment."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":45,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":798,"service_tier":"standard"}}'
+  recorded_at: 2025-06-25 16:48:04
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0

@@ -1,0 +1,74 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 9555fc28d93c2c96-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 25 Jun 2025 16:54:10 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '3085'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=Gsa1EcEwaQm5JRl343wZUqQ97RgAkb4mzB8et4BBWVM-1750870450-1.0.1.1-p2fs4CoVb4bSGKxjOVf8nMFZBoL6b.ZBFvAqxVfHUK2gPwiyg7ALsQjOqIszCrz3obZp7R5720zmr5AG8InQLqHSErVpC5nGjyQ_q.kDXHg;
+        path=/; expires=Wed, 25-Jun-25 17:24:10 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=TGK_i91Gzs3xqB98woH9CXVcQAcwHUlJvay_YLV6UIU-1750870450630-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '3089'
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '30000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '29999881'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_a5a9380cea13781f7493a4616717b4c2
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BmNfrDfBRDkNcUkOIBYcXXocaMOcy",
+          "object": "chat.completion",
+          "created": 1750870447,
+          "model": "gpt-4.1-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "[\n  {\n    \"ingredient\": \"dark brown sugar\",\n    \"amount\": \"¾ cup\",\n    \"weight\": \"150g\"\n  },\n  {\n    \"ingredient\": \"eggs\",\n    \"amount\": \"2\",\n    \"unit\": \"large\"\n  },\n  {\n    \"ingredient\": \"sour cream\",\n    \"amount\": \"¾ cup\",\n    \"weight\": \"165g\"\n  },\n  {\n    \"ingredient\": \"unsalted butter\",\n    \"amount\": \"½ cup\",\n    \"weight\": \"113g\",\n    \"preparation\": \"melted\"\n  },\n  {\n    \"ingredient\": \"vanilla extract\",\n    \"amount\": \"1 teaspoon\"\n  },\n  {\n    \"ingredient\": \"kosher salt\",\n    \"amount\": \"¾ teaspoon\"\n  },\n  {\n    \"ingredient\": \"neutral oil\",\n    \"amount\": \"⅓ cup\",\n    \"volume\": \"80ml\"\n  },\n  {\n    \"ingredient\": \"all-purpose flour\",\n    \"amount\": \"1½ cups\",\n    \"weight\": \"190g\"\n  },\n  {\n    \"ingredient\": \"sugar\",\n    \"amounts\": [\n      {\n        \"amount\": \"150g\"\n      },\n      {\n        \"amount\": \"1½ teaspoons\"\n      }\n    ]\n  }\n]",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 149,
+            "completion_tokens": 271,
+            "total_tokens": 420,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_51e1070cf2"
+        }
+  recorded_at: 2025-06-25 16:54:10
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0
