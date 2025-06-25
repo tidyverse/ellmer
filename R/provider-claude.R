@@ -70,9 +70,7 @@ chat_anthropic_test <- function(
   echo = "none"
 ) {
   params <- params %||% params()
-  if (is_testing()) {
-    params$temperature <- params$temperature %||% 0
-  }
+  params$temperature <- params$temperature %||% 0
 
   chat_anthropic(model = model, params = params, ..., echo = echo)
 }
