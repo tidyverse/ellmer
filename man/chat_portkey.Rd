@@ -8,8 +8,8 @@
 chat_portkey(
   system_prompt = NULL,
   base_url = "https://api.portkey.ai/v1",
-  api_key = portkeyai_key(),
-  virtual_key = NULL,
+  api_key = portkey_key(),
+  virtual_key = portkey_virtual_key(),
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -18,7 +18,7 @@ chat_portkey(
 
 models_portkey(
   base_url = "https://api.portkey.ai/v1",
-  api_key = portkeyai_key(),
+  api_key = portkey_key(),
   virtual_key = NULL
 )
 }
@@ -34,7 +34,8 @@ The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{virtual_key}{A virtual identifier storing LLM provider's API key. See
-\href{https://portkey.ai/docs/product/ai-gateway/virtual-keys}{documentation}.}
+\href{https://portkey.ai/docs/product/ai-gateway/virtual-keys}{documentation}.
+Can be read from the \code{PORTKEY_VIRTUAL_KEY} environment variable.}
 
 \item{model}{The model to use for the chat (defaults to "gpt-4o").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.

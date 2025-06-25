@@ -1,7 +1,8 @@
 # ellmer (development version)
 
+* `chat_portkey()` works once again, and now will read the virtual API key 
+  from the `PORTKEY_VIRTUAL_KEY` env var (#588).
 * `models_github()` lists models for `chat_github()` (#561).
-
 * `chat_snowflake()` now works with tool calling (#557, @atheriel).
 
 # ellmer 0.2.1
