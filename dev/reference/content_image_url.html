@@ -123,23 +123,20 @@ the <code>chat()</code>, <code>stream()</code>, <code>chat_async()</code>, or <c
 <span class="r-in"><span>  <span class="fu">content_image_url</span><span class="op">(</span><span class="st">"https://www.r-project.org/Rlogo.png"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu">content_image_file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"httr2.png"</span>, package <span class="op">=</span> <span class="st">"ellmer"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Here is what I see in each image:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Here’s what I see in the images:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1. **First Image:**  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    - This is the logo for the **R programming language**. It consists </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> of a blue capital letter "R" overlaid on a grey, stylized, partial </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> oval shape. R is a language widely used for statistical computing and </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data analysis.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    - This is the logo of **R**, a popular programming language and </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> software environment used for statistical computing and graphics.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2. **Second Image:**  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    - This is the logo for the **httr2** package, a library in R </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> designed for making HTTP requests. The design is in a hexagonal format</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (commonly used for R package logos), with a stylized script "httr2" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> and an image of a baseball player swinging a bat. The baseball theme </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> is a playful reference and makes the package easily recognizable in </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> the R community.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    - This is the hex sticker for the **httr2** package, an R package </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> designed for working with HTTP in R. The sticker features the package </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> name "httr2" in script with the image of a baseball player swinging a </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bat, which is a playful motif often used in the R community for </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> package logos.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Let me know if you need more details about either of these!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Both images are related to the **R programming ecosystem**.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">waiting</span> <span class="op">~</span> <span class="va">eruptions</span>, data <span class="op">=</span> <span class="va">faithful</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="content_image_url-1.png" alt="" width="700" height="433"></span>
@@ -152,12 +149,14 @@ the <code>chat()</code>, <code>stream()</code>, <code>chat_async()</code>, or <c
 <span class="r-in"><span>   <span class="fu">content_image_plot</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is a scatter plot with "eruptions" on the x-axis and "waiting" on</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> the y-axis. The data points are represented by small open circles. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> There is a clear positive correlation: as eruption time increases, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> waiting time also increases. The plot shows two distinct clusters of </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> points, one with shorter eruption and waiting times, and one with </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> longer eruption and waiting times. There is relatively little data in </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> the central region between the two clusters.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the y-axis. The plot displays two main clusters of points, one in the </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lower-left and one in the upper-right, indicating a positive </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> correlation between the variables. Most points are concentrated </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> between 1.5–3 for eruptions with waiting times around 50–70, and </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> between 4–5 for eruptions with waiting times around 75–90. There are </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> few points scattered between these clusters, showing a gap or bimodal </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> distribution. Each individual point represents a data pair, and no </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lines are used in the plot.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
