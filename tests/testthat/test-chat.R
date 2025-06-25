@@ -72,7 +72,7 @@ test_that("can perform a simple batch chat", {
   chat <- chat_openai_test()
 
   result <- chat$chat("What's 1 + 1. Just give me the answer, no punctuation")
-  expect_equal(result, "2")
+  expect_equal(result, ellmer_output("2"))
   expect_equal(chat$last_turn()@contents[[1]]@text, "2")
 })
 

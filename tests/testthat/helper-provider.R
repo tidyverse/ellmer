@@ -22,7 +22,7 @@ retry_test <- function(code, retries = 1) {
 test_params_stop <- function(chat_fun) {
   chat <- chat_fun(params = params(stop_sequences = "cool"))
   out <- chat$chat("Repeat after the following phrase: Dogs are cool")
-  expect_equal(out, "Dogs are ")
+  expect_equal(out, ellmer_output("Dogs are "))
 }
 
 # Tool calls -------------------------------------------------------------
