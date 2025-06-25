@@ -1,0 +1,164 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 9555ea416cb3e832-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 25 Jun 2025 16:41:54 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '679'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=NQh62jdZNEGWg9iNSKVz1jwGONbO1E0iQL3ZzYw6pmg-1750869714-1.0.1.1-z.DCSPYME0NDuwpKVhujo2KvjDuFFeJwYSg5EXj6BXLqf5m.UAIMYsvu54OsFgMtW3I9IoS8KVNWNAh1X_3KOmOqO8KGiTcx7rKH_Gr.ksE;
+        path=/; expires=Wed, 25-Jun-25 17:11:54 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=y390rrw12sNNoCOF5lyMbLz_Yjo89TCsTHY90dtTLZo-1750869714892-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '687'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999985'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_ebc8c41e940a2523d64fa17deb6a6a81
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BmNU22TY4c27nh8rIjoTQtSV8rdng",
+          "object": "chat.completion",
+          "created": 1750869714,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "call_6Sg1fBZKjZDfjaIzQAuHvNMW",
+                    "type": "function",
+                    "function": {
+                      "name": "tool_001",
+                      "arguments": "{}"
+                    }
+                  },
+                  {
+                    "id": "call_l94i0JnGtdvmYEefFx5wniWp",
+                    "type": "function",
+                    "function": {
+                      "name": "tool_001",
+                      "arguments": "{}"
+                    }
+                  }
+                ],
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 47,
+            "completion_tokens": 41,
+            "total_tokens": 88,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-06-25 16:41:54
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 9555ea471a2ae832-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 25 Jun 2025 16:41:55 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '300'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=gf3Gn4tNPWVsm_T.cW7Ef7Eg_GpzpQLbsy7D0OTM0gA-1750869715-1.0.1.1-k_DvrEebxTGZmy3PvA_EVVGuf025wvs8Uzc4fp5QvwALxc2G3QQRxP.x8mgbeL5alfDGJzDDzgBymMuslb2j0dKzKTVo48JzidO3ACmjwak;
+        path=/; expires=Wed, 25-Jun-25 17:11:55 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=9w42OloW9w0ssxMEmg5C_s98brmBn8y.iOEoc5ODbCU-1750869715418-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '305'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999981'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_25e1a5b2e23d8dcd31e43c93a678033a
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BmNU3hOMj4I3pV1WPi0VlFmXlOO0j",
+          "object": "chat.completion",
+          "created": 1750869715,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "The total is 8.",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 104,
+            "completion_tokens": 7,
+            "total_tokens": 111,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-06-25 16:41:55
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0

@@ -1,0 +1,74 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 9555e8c76c2ceb06-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 25 Jun 2025 16:40:54 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '592'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=SvM4iBPUotHAQbXNREKFdgLS91QIohI6NJbc5iHQwZI-1750869654-1.0.1.1-E0oiq9Wv9FSHeucfoSTapaa23r.YfcjBjLL3CA8yJVVsLxgV9jxvOU9dkH1OiNzFlHeJhcspDHRd5E4SOJruL49HeRb1xPUWGKCNynkEfXM;
+        path=/; expires=Wed, 25-Jun-25 17:10:54 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=ZJfYJ6hnccqMpmRpaR7WgmDwJNt7uyCP.j3JrMbP6qo-1750869654537-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '601'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999987'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_cda7f603dd8fbaa572d2099fba41b45e
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BmNT4IgqN9NBPy8tpWXNUksgohI3z",
+          "object": "chat.completion",
+          "created": 1750869654,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Paris",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 18,
+            "completion_tokens": 1,
+            "total_tokens": 19,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_f12167b370"
+        }
+  recorded_at: 2025-06-25 16:40:54
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0
