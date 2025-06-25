@@ -132,10 +132,10 @@ specific values from a string:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; $primary_shape</span></span>
-<span><span class="co">#&gt; [1] "letter and ellipse"</span></span>
+<span><span class="co">#&gt; [1] "oval and letter"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $primary_colour</span></span>
-<span><span class="co">#&gt; [1] "blue and gray"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "grey and blue"</span></span></code></pre></div>
 <p>If you need to extract data from multiple prompts, you can use the
 same techniques with <code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code>. It takes
 the same arguments as <code>$chat_structured()</code> with two
@@ -159,7 +159,7 @@ function, not a method, and it can take a vector of prompts.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; [working] (0 + 0) -&gt; 5 -&gt; 1 | <span style="color: #00BB00;">■■■■■■                          </span>  17%</span></span>
-<span><span class="co">#&gt; [working] (0 + 0) -&gt; 3 -&gt; 3 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50%</span></span>
+<span><span class="co">#&gt; [working] (0 + 0) -&gt; 4 -&gt; 2 | <span style="color: #00BB00;">■■■■■■■■■■■                     </span>  33%</span></span>
 <span><span class="co">#&gt; [working] (0 + 0) -&gt; 0 -&gt; 6 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100%</span></span>
 <span><span class="co">#&gt;     name age</span></span>
 <span><span class="co">#&gt; 1   Alex  42</span></span>
@@ -270,17 +270,15 @@ can use structured data extraction.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_summary</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span>
-<span><span class="co">#&gt; This article from Anthropic’s policy team advocates for the establishment of robust third-party testing regimes as a foundational element of AI policy, especially for cutting-edge (“frontier”) generative AI systems such as Claude, ChatGPT, and Gemini. The authors argue that self-governance by private AI companies is not sufficiently trustworthy for societal safety or regulatory legitimacy; instead, rigorous, independent oversight is needed to validate that these powerful models do not create unacceptable risks (such as election interference, discrimination, or national security threats). </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Key recommendations include designing narrowly scoped, effective tests administered by trusted third-parties across academia, government, and industry contractors. Such a system should prioritize public trust, avoid imposing undue burdens on smaller actors, enable international coordination, and adapt to new AI capabilities as technology sharpens. The article also addresses challenges in testing open-source vs. proprietary models, highlights the dangers of regulatory capture, and stresses the need for thoughtful, minimal, and future-proof regulations. Anthropic commits to supporting third-party testing, sharing learning from its Responsible Scaling Policy, and encouraging government investment in AI testing infrastructure. The ultimate goal is a diverse, legitimate ecosystem for AI oversight to maximize benefits and minimize societal harms as AI advances.</span></span>
+<span><span class="co">#&gt; This article from Anthropic outlines the urgent need for robust third-party testing of advanced (frontier) AI systems, such as large-scale generative models. The authors argue that self-governance by private AI developers, while important, is insufficient to maintain public trust or prevent misuse and accidents, especially as AI systems become more capable and general-purpose. The piece proposes a regime where independent, trusted organizations—across private, governmental, and academic sectors—test and validate the safety of powerful AI systems, similar to product safety testing in other industries (e.g., food, medicine, automobiles). Specific areas for oversight include election integrity, discrimination, and national security risks. The authors emphasize the need for standards, well-scoped policies to avoid overregulation, and the balance of open development with societal safety. They also address concerns like regulatory capture and the tension between open-source dissemination and risk management. Ultimately, the paper advocates for iterative, evidence-driven policy development and infrastructure that can flexibly address both present and future AI safety challenges.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 5</span></span>
-<span><span class="co">#&gt;  $ author    : chr "Anthropic Policy Team"</span></span>
-<span><span class="co">#&gt;  $ topics    : chr [1:8] "AI policy" "third-party testing" "AI safety" "regulation" ...</span></span>
-<span><span class="co">#&gt;  $ summary   : chr "This article from Anthropic’s policy team advocates for the establishment of robust third-party testing regimes"| __truncated__</span></span>
-<span><span class="co">#&gt;  $ coherence : int 94</span></span>
-<span><span class="co">#&gt;  $ persuasion: num 0.9</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ author    : chr "Anthropic Policy Team (implied)"</span></span>
+<span><span class="co">#&gt;  $ topics    : chr [1:10] "AI policy" "third-party testing" "AI safety" "regulation" ...</span></span>
+<span><span class="co">#&gt;  $ summary   : chr "This article from Anthropic outlines the urgent need for robust third-party testing of advanced (frontier) AI s"| __truncated__</span></span>
+<span><span class="co">#&gt;  $ coherence : int 93</span></span>
+<span><span class="co">#&gt;  $ persuasion: num 0.85</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-2-named-entity-recognition">Example 2: Named entity recognition<a class="anchor" aria-label="anchor" href="#example-2-named-entity-recognition"></a>
@@ -301,20 +299,13 @@ can use structured data extraction.</p>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_named_entities</span><span class="op">)</span></span>
-<span><span class="co">#&gt;            name         type</span></span>
-<span><span class="co">#&gt; 1          John       person</span></span>
-<span><span class="co">#&gt; 2        Google organization</span></span>
-<span><span class="co">#&gt; 3      New York     location</span></span>
-<span><span class="co">#&gt; 4         Sarah       person</span></span>
-<span><span class="co">#&gt; 5     Acme Inc. organization</span></span>
-<span><span class="co">#&gt; 6 San Francisco     location</span></span>
-<span><span class="co">#&gt;                                                                context</span></span>
-<span><span class="co">#&gt; 1                                    John works at Google in New York.</span></span>
-<span><span class="co">#&gt; 2                                    John works at Google in New York.</span></span>
-<span><span class="co">#&gt; 3                                    John works at Google in New York.</span></span>
-<span><span class="co">#&gt; 4 He met with Sarah, the CEO of Acme Inc., last week in San Francisco.</span></span>
-<span><span class="co">#&gt; 5                                          Sarah, the CEO of Acme Inc.</span></span>
-<span><span class="co">#&gt; 6                                          last week in San Francisco.</span></span></code></pre></div>
+<span><span class="co">#&gt;            name         type                                context</span></span>
+<span><span class="co">#&gt; 1          John       person           Works at Google in New York.</span></span>
+<span><span class="co">#&gt; 2        Google organization      John works at Google in New York.</span></span>
+<span><span class="co">#&gt; 3      New York     location      John works at Google in New York.</span></span>
+<span><span class="co">#&gt; 4         Sarah       person Met with John; is the CEO of Acme Inc.</span></span>
+<span><span class="co">#&gt; 5     Acme Inc. organization          Sarah is the CEO of Acme Inc.</span></span>
+<span><span class="co">#&gt; 6 San Francisco     location        John met Sarah there last week.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-3-sentiment-analysis">Example 3: Sentiment analysis<a class="anchor" aria-label="anchor" href="#example-3-sentiment-analysis"></a>
@@ -337,8 +328,8 @@ can use structured data extraction.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_sentiment</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 3</span></span>
 <span><span class="co">#&gt;  $ positive_score: num 0.05</span></span>
-<span><span class="co">#&gt;  $ negative_score: num 0.7</span></span>
-<span><span class="co">#&gt;  $ neutral_score : num 0.25</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ negative_score: num 0.75</span></span>
+<span><span class="co">#&gt;  $ neutral_score : num 0.2</span></span></code></pre></div>
 <p>Note that while we’ve asked nicely for the scores to sum 1, which
 they do in this example (at least when I ran the code), this is not
 guaranteed.</p>
@@ -373,8 +364,13 @@ guaranteed.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_classification</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
-<span><span class="co">#&gt;         name score</span></span>
-<span><span class="co">#&gt; 1 Technology     1</span></span></code></pre></div>
+<span><span class="co">#&gt;            name score</span></span>
+<span><span class="co">#&gt; 1    Technology  0.95</span></span>
+<span><span class="co">#&gt; 2      Business  0.03</span></span>
+<span><span class="co">#&gt; 3         Other  0.02</span></span>
+<span><span class="co">#&gt; 4      Politics  0.00</span></span>
+<span><span class="co">#&gt; 5        Sports  0.00</span></span>
+<span><span class="co">#&gt; 6 Entertainment  0.00</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-5-working-with-unknown-keys">Example 5: Working with unknown keys<a class="anchor" aria-label="anchor" href="#example-5-working-with-unknown-keys"></a>
@@ -565,14 +561,14 @@ common in the wild.</p>
 <td align="left">OpenAI</td>
 <td align="left">gpt-4.1</td>
 <td align="right">8186</td>
-<td align="right">761</td>
+<td align="right">776</td>
 <td align="right">$0.02</td>
 </tr>
 <tr class="even">
 <td align="left">Anthropic</td>
 <td align="left">claude-sonnet-4</td>
 <td align="right">481</td>
-<td align="right">93</td>
+<td align="right">95</td>
 <td align="right">$0.00</td>
 </tr>
 </tbody>
