@@ -132,7 +132,7 @@ specific values from a string:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; $primary_shape</span></span>
-<span><span class="co">#&gt; [1] "oval and letter"</span></span>
+<span><span class="co">#&gt; [1] "letter with oval/ring"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $primary_colour</span></span>
 <span><span class="co">#&gt; [1] "blue and grey"</span></span></code></pre></div>
@@ -159,6 +159,7 @@ function, not a method, and it can take a vector of prompts.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; [working] (0 + 0) -&gt; 5 -&gt; 1 | <span style="color: #00BB00;">■■■■■■                          </span>  17%</span></span>
+<span><span class="co">#&gt; [working] (0 + 0) -&gt; 1 -&gt; 5 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■      </span>  83%</span></span>
 <span><span class="co">#&gt; [working] (0 + 0) -&gt; 0 -&gt; 6 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100%</span></span>
 <span><span class="co">#&gt;     name age</span></span>
 <span><span class="co">#&gt; 1   Alex  42</span></span>
@@ -269,17 +270,15 @@ can use structured data extraction.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_summary</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span>
-<span><span class="co">#&gt; This article argues for the necessity of third-party testing in AI policy as a primary mechanism for ensuring the safety and trustworthiness of frontier AI systems such as large generative models. It details why current sector-specific regulatory frameworks are inadequate for addressing the general-purpose nature of advanced AI and outlines a regime for external oversight that involves industry, government, and academia. The proposed system includes carefully scoped, robust tests administered by credible third parties to prevent misuse (e.g., threats to election integrity, discrimination, national security risks) while avoiding excessive burdens that could stifle innovation or favor large corporations.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The article also addresses concerns about regulatory capture, openly-disseminated models, and the need for a diverse ecosystem to develop, test, and oversee AI systems. Anthropic positions itself as an advocate for balanced, effective regulation—and commits to transparent practices, collaboration with outside auditors, and support for public-sector AI research infrastructure. The ultimate goal is to create a flexible but trustworthy foundation for AI governance, reducing the risk of both accidental and deliberate harms without unnecessarily hampering progress.</span></span>
+<span><span class="co">#&gt; The article argues that as AI systems, especially frontier models like large-scale generative AI (e.g., Claude, ChatGPT, Gemini), become increasingly powerful and general-purpose, there is a growing need for robust third-party testing regimes to ensure their safety, prevent misuse, and build public trust. Current self-regulatory approaches, such as Anthropic's own Responsible Scaling Policy (RSP), are necessary but insufficient, as they rely on the voluntary actions of private companies. The post outlines characteristics of an effective third-party testing regime, emphasizing the need for tests that are trustworthy, precisely scoped, and limited mostly to the largest, highest-risk models. It also addresses practicalities such as the role of governments, academia, and private contractors in testing, potential regulatory capture, the importance of balancing openness with safety, and the need for minimal viable regulations that are practical to enforce and comply with. The article concludes that a well-designed ecosystem for third-party testing is critical to achieving both innovation and societal safety in AI.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 5</span></span>
-<span><span class="co">#&gt;  $ author    : chr "Anthropic"</span></span>
-<span><span class="co">#&gt;  $ topics    : chr [1:7] "AI policy" "third-party testing" "AI safety" "regulation" ...</span></span>
-<span><span class="co">#&gt;  $ summary   : chr "This article argues for the necessity of third-party testing in AI policy as a primary mechanism for ensuring t"| __truncated__</span></span>
-<span><span class="co">#&gt;  $ coherence : int 88</span></span>
-<span><span class="co">#&gt;  $ persuasion: num 0.89</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ author    : chr "Anthropic Policy Team (presumed, as it's published on the Anthropic blog with no individual author credited)"</span></span>
+<span><span class="co">#&gt;  $ topics    : chr [1:7] "AI policy" "third-party testing" "AI regulation" "AI safety" ...</span></span>
+<span><span class="co">#&gt;  $ summary   : chr "The article argues that as AI systems, especially frontier models like large-scale generative AI (e.g., Claude,"| __truncated__</span></span>
+<span><span class="co">#&gt;  $ coherence : int 92</span></span>
+<span><span class="co">#&gt;  $ persuasion: num 0.85</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-2-named-entity-recognition">Example 2: Named entity recognition<a class="anchor" aria-label="anchor" href="#example-2-named-entity-recognition"></a>
@@ -313,7 +312,7 @@ can use structured data extraction.</p>
 <span><span class="co">#&gt; 3                                    John works at Google in New York.</span></span>
 <span><span class="co">#&gt; 4 He met with Sarah, the CEO of Acme Inc., last week in San Francisco.</span></span>
 <span><span class="co">#&gt; 5                                          Sarah, the CEO of Acme Inc.</span></span>
-<span><span class="co">#&gt; 6                      He met with Sarah...last week in San Francisco.</span></span></code></pre></div>
+<span><span class="co">#&gt; 6                                          last week in San Francisco.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-3-sentiment-analysis">Example 3: Sentiment analysis<a class="anchor" aria-label="anchor" href="#example-3-sentiment-analysis"></a>
@@ -372,13 +371,9 @@ guaranteed.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_classification</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
-<span><span class="co">#&gt;            name score</span></span>
-<span><span class="co">#&gt; 1    Technology  0.95</span></span>
-<span><span class="co">#&gt; 2      Business  0.05</span></span>
-<span><span class="co">#&gt; 3      Politics  0.00</span></span>
-<span><span class="co">#&gt; 4        Sports  0.00</span></span>
-<span><span class="co">#&gt; 5 Entertainment  0.00</span></span>
-<span><span class="co">#&gt; 6         Other  0.00</span></span></code></pre></div>
+<span><span class="co">#&gt;         name score</span></span>
+<span><span class="co">#&gt; 1 Technology  0.95</span></span>
+<span><span class="co">#&gt; 2   Business  0.05</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-5-working-with-unknown-keys">Example 5: Working with unknown keys<a class="anchor" aria-label="anchor" href="#example-5-working-with-unknown-keys"></a>
@@ -434,9 +429,9 @@ and “unearned” income</div>
 <span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/content_image_url.html">content_image_file</a></span><span class="op">(</span><span class="st">"congressional-assets.png"</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">image</span>, type <span class="op">=</span> <span class="va">type_assets</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
-<span><span class="co">#&gt;                                 assert_name owner</span></span>
-<span><span class="co">#&gt; 1  11 Zinfandel Lane - Home &amp; Vineyard [RP]    JT</span></span>
-<span><span class="co">#&gt; 2 25 Point Lobos - Commercial Property [RP]    SP</span></span>
+<span><span class="co">#&gt;                            assert_name owner</span></span>
+<span><span class="co">#&gt; 1  11 Zinfandel Lane - Home &amp; Vineyard    JT</span></span>
+<span><span class="co">#&gt; 2 25 Point Lobos - Commercial Property    SP</span></span>
 <span><span class="co">#&gt;                              location asset_value_low asset_value_high</span></span>
 <span><span class="co">#&gt; 1             St. Helena/Napa, CA, US         5000001         25000000</span></span>
 <span><span class="co">#&gt; 2 San Francisco/San Francisco, CA, US         5000001         25000000</span></span>
@@ -491,7 +486,7 @@ one in the text:</p>
 <span><span class="co">#&gt; [1] ""</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'data.frame':    2 obs. of  9 variables:</span></span>
-<span><span class="co">#&gt;  $ assert_name     : chr  "11 Zinfandel Lane - Home &amp; Vineyard [RP]" "25 Point Lobos - Commercial Property [RP]"</span></span>
+<span><span class="co">#&gt;  $ assert_name     : chr  "11 Zinfandel Lane - Home &amp; Vineyard" "25 Point Lobos - Commercial Property"</span></span>
 <span><span class="co">#&gt;  $ owner           : chr  "JT" "SP"</span></span>
 <span><span class="co">#&gt;  $ location        : chr  "St. Helena/Napa, CA, US" "San Francisco/San Francisco, CA, US"</span></span>
 <span><span class="co">#&gt;  $ asset_value_low : int  5000001 5000001</span></span>
@@ -569,14 +564,14 @@ common in the wild.</p>
 <td align="left">OpenAI</td>
 <td align="left">gpt-4.1</td>
 <td align="right">8186</td>
-<td align="right">778</td>
+<td align="right">737</td>
 <td align="right">$0.02</td>
 </tr>
 <tr class="even">
 <td align="left">Anthropic</td>
 <td align="left">claude-sonnet-4</td>
 <td align="right">481</td>
-<td align="right">93</td>
+<td align="right">95</td>
 <td align="right">$0.00</td>
 </tr>
 </tbody>
