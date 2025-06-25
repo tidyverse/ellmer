@@ -36,10 +36,6 @@ chat_groq <- function(
   model <- set_default(model, "llama3-8b-8192")
   echo <- check_echo(echo)
 
-  if (is_testing() && is.null(seed)) {
-    seed <- seed %||% 1014
-  }
-
   provider <- ProviderGroq(
     name = "Groq",
     base_url = base_url,

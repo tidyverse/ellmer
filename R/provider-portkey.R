@@ -50,9 +50,7 @@ chat_portkey <- function(
 
 chat_portkey_test <- function(..., model = "gpt-4o-mini", params = NULL) {
   params <- params %||% params()
-  if (is_testing()) {
-    params$temperature <- params$temperature %||% 0
-  }
+  params$temperature <- params$temperature %||% 0
 
   chat_portkey(model = model, params = params, ...)
 }

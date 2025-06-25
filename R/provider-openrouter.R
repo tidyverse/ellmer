@@ -31,10 +31,6 @@ chat_openrouter <- function(
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
-  if (is_testing() && is.null(seed)) {
-    seed <- seed %||% 1014
-  }
-
   provider <- ProviderOpenRouter(
     name = "OpenRouter",
     base_url = "https://openrouter.ai/api/v1",
