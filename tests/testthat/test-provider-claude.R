@@ -67,7 +67,10 @@ test_that("can set beta headers", {
 test_that("continues to work after whitespace only outputs (#376)", {
   chat <- chat_anthropic()
   chat$chat("Respond with only two blank lines")
-  expect_equal(chat$chat("What's 1+1? Just give me the number"), "2")
+  expect_equal(
+    chat$chat("What's 1+1? Just give me the number"),
+    ellmer_output("2")
+  )
 })
 
 test_that("max_tokens is deprecated", {
