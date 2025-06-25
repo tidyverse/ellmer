@@ -1,0 +1,80 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"The new
+        quantum computing breakthrough could revolutionize the tech industry."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"Array
+        of classification results. The scores should sum to 1.","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
+        category name","enum":["Politics","Sports","Technology","Entertainment","Business","Other"]},"score":{"type":"number","description":"The
+        classification score for the category, ranging from 0.0 to 1.0."}},"required":["name","score"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95562d3a5aae4755-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 25 Jun 2025 17:27:41 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '4471'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=bCzb1sGizgpC5dy1NLMP5xxto9cXJX96UxBOzxQQvkw-1750872461-1.0.1.1-YWeYToEZBCQQDnd3G.TYP3FNfIFYmcoc4eENEfl5cho7sFFyDT9RIm0EuLV7jaCRl4FMTqQuNpy.PlD.uyfrmNc.DejCnkqruxuvcEil6Ac;
+        path=/; expires=Wed, 25-Jun-25 17:57:41 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=lun2z_MvE7SzTJqk0EzREaQrQP_aVlsrCFBgUItYAe8-1750872461855-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '4475'
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '30000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '29999978'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_af0523a5e9f6a80fbb035f2714fb24ab
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BmOCHByjiNza9BK6yAuuBAK9dUlhG",
+          "object": "chat.completion",
+          "created": 1750872457,
+          "model": "gpt-4.1-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":[{\"name\":\"Technology\",\"score\":0.97},{\"name\":\"Business\",\"score\":0.02},{\"name\":\"Other\",\"score\":0.01},{\"name\":\"Politics\",\"score\":0.0},{\"name\":\"Sports\",\"score\":0.0},{\"name\":\"Entertainment\",\"score\":0.0}]}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 132,
+            "completion_tokens": 65,
+            "total_tokens": 197,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_51e1070cf2"
+        }
+  recorded_at: 2025-06-25 17:27:41
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0

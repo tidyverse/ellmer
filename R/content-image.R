@@ -91,7 +91,7 @@ content_image_file <- function(path, content_type = "auto", resize = "low") {
   } else {
     check_installed("magick", "to resize images")
 
-    img <- magick::image_read(path)
+    img <- magick::image_read(path, strip = TRUE)
 
     if (resize == "low") {
       img <- magick::image_resize(img, "512x512>")
