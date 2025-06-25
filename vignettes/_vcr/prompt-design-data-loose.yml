@@ -2,49 +2,58 @@ http_interactions:
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"\n  You''re an expert baker
+        who also loves JSON. I am going to give you a list of\n  ingredients and your
+        job is to return nicely structured JSON. Just return the\n  JSON and no other
+        commentary.\n"},{"role":"user","content":[{"type":"text","text":"\n  ¾ cup
+        (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½ cup
+        (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
+        kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
+        plus 1½ teaspoons sugar\n"}]}],"model":"gpt-4.1","stream":false}'
   response:
     status: 200
     headers:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9555fc28d93c2c96-DFW
+      cf-ray: 955622a62ffae94e-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 25 Jun 2025 16:54:10 GMT
+      date: Wed, 25 Jun 2025 17:20:26 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '3085'
+      openai-processing-ms: '2106'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=Gsa1EcEwaQm5JRl343wZUqQ97RgAkb4mzB8et4BBWVM-1750870450-1.0.1.1-p2fs4CoVb4bSGKxjOVf8nMFZBoL6b.ZBFvAqxVfHUK2gPwiyg7ALsQjOqIszCrz3obZp7R5720zmr5AG8InQLqHSErVpC5nGjyQ_q.kDXHg;
-        path=/; expires=Wed, 25-Jun-25 17:24:10 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=uTpHozgd0u18HNCjM5VhFdg4lZNGT6aingHeNU7GwC4-1750872026-1.0.1.1-easr6oQ3PS_fhy8KkSNYGBX_uZEfgZh_GxWDCoRYfzMOMOt6yZU7BZAdU75QZwslvGWX6erKJix56N3hRNWn38TAN7riDVtOeCsdwcp_Rr4;
+        path=/; expires=Wed, 25-Jun-25 17:50:26 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=TGK_i91Gzs3xqB98woH9CXVcQAcwHUlJvay_YLV6UIU-1750870450630-0.0.1.1-604800000;
+      - _cfuvid=o6ZQkSLIYhPaO6q.1LQaurlKdc8hJ5XtKIrasioyKYc-1750872026195-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '3089'
+      x-envoy-upstream-service-time: '2121'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999881'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_a5a9380cea13781f7493a4616717b4c2
+      x-request-id: req_a1d77d4a411f3b3649287f6862e6dfc5
     body:
       string: |
         {
-          "id": "chatcmpl-BmNfrDfBRDkNcUkOIBYcXXocaMOcy",
+          "id": "chatcmpl-BmO5Ib8xl7DDy2rwRUn6Q6RXZLjRz",
           "object": "chat.completion",
-          "created": 1750870447,
+          "created": 1750872024,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "[\n  {\n    \"ingredient\": \"dark brown sugar\",\n    \"amount\": \"¾ cup\",\n    \"weight\": \"150g\"\n  },\n  {\n    \"ingredient\": \"eggs\",\n    \"amount\": \"2\",\n    \"unit\": \"large\"\n  },\n  {\n    \"ingredient\": \"sour cream\",\n    \"amount\": \"¾ cup\",\n    \"weight\": \"165g\"\n  },\n  {\n    \"ingredient\": \"unsalted butter\",\n    \"amount\": \"½ cup\",\n    \"weight\": \"113g\",\n    \"preparation\": \"melted\"\n  },\n  {\n    \"ingredient\": \"vanilla extract\",\n    \"amount\": \"1 teaspoon\"\n  },\n  {\n    \"ingredient\": \"kosher salt\",\n    \"amount\": \"¾ teaspoon\"\n  },\n  {\n    \"ingredient\": \"neutral oil\",\n    \"amount\": \"⅓ cup\",\n    \"volume\": \"80ml\"\n  },\n  {\n    \"ingredient\": \"all-purpose flour\",\n    \"amount\": \"1½ cups\",\n    \"weight\": \"190g\"\n  },\n  {\n    \"ingredient\": \"sugar\",\n    \"amounts\": [\n      {\n        \"amount\": \"150g\"\n      },\n      {\n        \"amount\": \"1½ teaspoons\"\n      }\n    ]\n  }\n]",
+                "content": "[\n  {\n    \"ingredient\": \"dark brown sugar\",\n    \"amount\": \"3/4 cup\",\n    \"weight\": \"150g\"\n  },\n  {\n    \"ingredient\": \"eggs\",\n    \"amount\": \"2 large\"\n  },\n  {\n    \"ingredient\": \"sour cream\",\n    \"amount\": \"3/4 cup\",\n    \"weight\": \"165g\"\n  },\n  {\n    \"ingredient\": \"unsalted butter\",\n    \"amount\": \"1/2 cup\",\n    \"weight\": \"113g\",\n    \"preparation\": \"melted\"\n  },\n  {\n    \"ingredient\": \"vanilla extract\",\n    \"amount\": \"1 teaspoon\"\n  },\n  {\n    \"ingredient\": \"kosher salt\",\n    \"amount\": \"3/4 teaspoon\"\n  },\n  {\n    \"ingredient\": \"neutral oil\",\n    \"amount\": \"1/3 cup\",\n    \"volume\": \"80ml\"\n  },\n  {\n    \"ingredient\": \"all-purpose flour\",\n    \"amount\": \"1 1/2 cups\",\n    \"weight\": \"190g\"\n  },\n  {\n    \"ingredient\": \"sugar\",\n    \"amounts\": [\n      {\n        \"weight\": \"150g\"\n      },\n      {\n        \"amount\": \"1 1/2 teaspoons\"\n      }\n    ]\n  }\n]",
                 "refusal": null,
                 "annotations": []
               },
@@ -54,8 +63,8 @@ http_interactions:
           ],
           "usage": {
             "prompt_tokens": 149,
-            "completion_tokens": 271,
-            "total_tokens": 420,
+            "completion_tokens": 280,
+            "total_tokens": 429,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -70,5 +79,5 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": "fp_51e1070cf2"
         }
-  recorded_at: 2025-06-25 16:54:10
+  recorded_at: 2025-06-25 17:20:26
 recorded_with: vcr/1.7.0.91, webmockr/2.0.0

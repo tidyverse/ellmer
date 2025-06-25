@@ -17,15 +17,18 @@ knitr::opts_chunk$set(
   eval = has_key || has_cassette
 )
 
-vcr::setup_knitr()
-
-chat_openai <- function(...) ellmer::chat_openai(..., echo = "none")
+vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
 ```
 
 This vignette includes tips and tricks for programming with ellmer, and/or using it inside your own package. It's currently fairly short but will grow over time.
 
 ```{r setup}
 library(ellmer)
+```
+
+```{r}
+#| include: false
+chat_openai <- function(...) ellmer::chat_openai(..., echo = "none")
 ```
 
 ## Cloning chats
@@ -148,6 +151,7 @@ Chat objects provide some tools to get to ellmer's internal data structures. For
 
 ```{r}
 #| cassette: turns
+set.seed(1014) # make it reproducible
 
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat$register_tool(tool(function() sample(6, 1), "Roll a die"))

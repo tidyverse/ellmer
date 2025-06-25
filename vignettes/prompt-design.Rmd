@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   eval = has_key || has_cassette
 )
-vcr::setup_knitr()
+vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
 ```
 
 This vignette gives you some advice about how to use ellmer to write prompts. We'll work through two hopefully relevant examples: a prompt that generates code and another that extracts structured data. If you've never written a prompt, I'd highly recommend reading Ethan Mollick's [Getting started with AI: Good enough prompting](https://www.oneusefulthing.org/p/getting-started-with-ai-good-enough). I think understanding his analogy about how AI works will really help you get started:
@@ -39,15 +39,8 @@ library(ellmer)
 ```{r}
 #| include: false
 
-# Manually ratchet claude variability way down to hopefully make generated
-# code better match my prose. And make sure echo is suppressed so we can use
-# vcr
-chat_anthropic <- function(...) {
-  ellmer::chat_anthropic(..., params = params(temperature = 0), echo = "none")
-}
-chat_openai <- function(...) {
-  ellmer::chat_openai(..., echo = "none")
-}
+chat_anthropic <- function(...) ellmer::chat_anthropic(..., echo = "none")
+chat_openai <- function(...) ellmer::chat_openai(..., echo = "none")
 ```
 
 ## Best practices

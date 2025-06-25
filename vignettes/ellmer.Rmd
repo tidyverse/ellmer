@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
   eval = has_key || has_cassette,
   comment = "#>"
 )
-vcr::setup_knitr()
+vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
 ```
 
 ```{r setup}
