@@ -59,6 +59,19 @@ chat_google_gemini <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
+chat_google_gemini_test <- function(
+  ...,
+  model = "gemini-2.0-flash",
+  params = NULL,
+  echo = "none"
+) {
+  params <- params %||% params()
+  params$temperature <- params$temperature %||% 0
+  params$seed <- 1014
+
+  chat_google_gemini(..., model = model, params = params, echo = echo)
+}
+
 #' @export
 #' @rdname chat_google_gemini
 #' @param location Location, e.g. `us-east1`, `me-central1`, `africa-south1`.

@@ -47,10 +47,13 @@ on_load({
       result <- invoke_tool(request)
 
       if (promises::is.promise(result@value)) {
-        cli::cli_abort(c(
-          "Can't use async tools with `$chat()` or `$stream()`.",
-          i = "Async tools are supported, but you must use `$chat_async()` or `$stream_async()`."
-        ))
+        cli::cli_abort(
+          c(
+            "Can't use async tools with `$chat()` or `$stream()`.",
+            i = "Async tools are supported, but you must use `$chat_async()` or `$stream_async()`."
+          ),
+          class = "tool_async_error"
+        )
       }
 
       maybe_echo_tool(result, echo = echo)

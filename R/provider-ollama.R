@@ -92,7 +92,7 @@ ProviderOllama <- new_class(
   )
 )
 
-chat_ollama_test <- function(..., model = "llama3.2:1b") {
+chat_ollama_test <- function(..., model = "llama3.2:1b", echo = "none") {
   # model: Note that tests require a model with tool capabilities
 
   skip_if_no_ollama()
@@ -101,7 +101,7 @@ chat_ollama_test <- function(..., model = "llama3.2:1b") {
     sprintf("Ollama: model '%s' is not installed", model)
   )
 
-  chat_ollama(..., model = model)
+  chat_ollama(..., model = model, echo = echo)
 }
 
 skip_if_no_ollama <- function() {

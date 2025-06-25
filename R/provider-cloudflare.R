@@ -82,9 +82,9 @@ method(as_json, list(ProviderCloudflare, TypeObject)) <-
   method(as_json, list(ProviderGoogleGemini, TypeObject))
 
 
-chat_cloudflare_test <- function(..., model = NULL) {
+chat_cloudflare_test <- function(..., model = NULL, echo = "none") {
   model <- model %||% "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-  chat_cloudflare(model = model, ...)
+  chat_cloudflare(model = model, ..., echo = echo)
 }
 
 cloudflare_key <- function() {

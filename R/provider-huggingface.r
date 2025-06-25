@@ -67,9 +67,9 @@ chat_huggingface <- function(
 
 ProviderHuggingFace <- new_class("ProviderHuggingFace", parent = ProviderOpenAI)
 
-chat_huggingface_test <- function(..., model = NULL) {
+chat_huggingface_test <- function(..., model = NULL, echo = "none") {
   model <- model %||% "meta-llama/Llama-3.1-8B-Instruct"
-  chat_huggingface(model = model, ...)
+  chat_huggingface(model = model, ..., echo = echo)
 }
 
 # https://platform.openai.com/docs/api-reference/chat/create

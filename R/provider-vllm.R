@@ -50,11 +50,12 @@ chat_vllm <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-chat_vllm_test <- function(...) {
+chat_vllm_test <- function(..., echo = "none") {
   chat_vllm(
     base_url = "https://llm.nrp-nautilus.io/",
     ...,
-    model = "llama3"
+    model = "llama3",
+    echo = echo
   )
 }
 

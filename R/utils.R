@@ -71,7 +71,7 @@ check_echo <- function(echo = NULL) {
   }
 
   if (is.null(echo) || identical(echo, c("none", "output", "all"))) {
-    if (env_is_user_facing(parent.frame(2)) && !is_testing()) {
+    if (env_is_user_facing(parent.frame(2))) {
       "output"
     } else {
       "none"

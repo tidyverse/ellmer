@@ -78,7 +78,8 @@ chat_openai_test <- function(
   system_prompt = "Be terse.",
   ...,
   model = "gpt-4.1-nano",
-  params = NULL
+  params = NULL,
+  echo = "none"
 ) {
   params <- params %||% params()
   params$seed <- params$seed %||% 1014
@@ -88,7 +89,8 @@ chat_openai_test <- function(
     system_prompt = system_prompt,
     model = model,
     params = params,
-    ...
+    ...,
+    echo = echo
   )
 }
 

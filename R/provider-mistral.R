@@ -50,7 +50,8 @@ chat_mistral_test <- function(
   system_prompt = NULL,
   model = "mistral-large-latest",
   params = NULL,
-  ...
+  ...,
+  echo = "none"
 ) {
   params <- params %||% params()
   params <- modify_list(list(seed = 1014, temperature = 0), params)
@@ -59,7 +60,8 @@ chat_mistral_test <- function(
     system_prompt = system_prompt,
     model = model,
     params = params,
-    ...
+    ...,
+    echo = echo
   )
 }
 
