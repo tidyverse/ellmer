@@ -188,8 +188,9 @@ method(as_json, list(ProviderDatabricks, ToolDef)) <- function(provider, x) {
       description = x@description,
       # Use the same parameter encoding as the OpenAI provider, but only if
       # there actually are parameters.
-      parameters = if (length(x@arguments@properties) != 0)
+      parameters = if (length(x@arguments@properties) != 0) {
         as_json(provider, x@arguments)
+      }
     ))
   ))
 }

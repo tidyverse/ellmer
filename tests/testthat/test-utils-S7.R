@@ -32,9 +32,9 @@ test_that("redacted values aren't saved to disk", {
 })
 
 test_that("redacted values are instance specific", {
-  # Reassure myself about the semantics of the weakrefs: even though the 
+  # Reassure myself about the semantics of the weakrefs: even though the
   # key is shared across all instances of the same class, we are still creating
-  # individual weakrefs for each instance. 
+  # individual weakrefs for each instance.
 
   Test <- new_class("Test", properties = list(prop_redacted("redacted")))
   test1 <- Test(redacted = "secret1")

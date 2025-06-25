@@ -144,8 +144,7 @@ method(chat_body, ProviderAnthropic) <- function(
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
-      fun = function(...) {
-      },
+      fun = function(...) {},
       name = "_structured_tool_call",
       description = "Extract structured data",
       arguments = type_object(data = type)

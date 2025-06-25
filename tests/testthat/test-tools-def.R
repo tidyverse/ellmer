@@ -1,12 +1,10 @@
 test_that("tool can get name", {
-  f <- function() {
-  }
+  f <- function() {}
   td <- tool(f, "")
   expect_equal(td@name, "f")
 
   td <- tool(
-    function() {
-    },
+    function() {},
     ""
   )
   expect_match(td@name, "^tool_")

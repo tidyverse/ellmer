@@ -154,8 +154,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
-      fun = function(...) {
-      },
+      fun = function(...) {},
       name = "structured_tool_call__",
       description = "Extract structured data",
       arguments = type_object(data = type)

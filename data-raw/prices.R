@@ -50,4 +50,4 @@ prices <- bind_rows(
 usethis::use_data(prices, overwrite = TRUE, internal = TRUE)
 
 # Output JSON for ingestion into `chatlas`
-jsonlite::write_json(prices, "data-raw/prices.json", pretty=TRUE)
+jsonlite::write_json(prices, "data-raw/prices.json", pretty = TRUE)
