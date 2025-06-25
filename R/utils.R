@@ -71,7 +71,11 @@ check_echo <- function(echo = NULL) {
   }
 
   if (is.null(echo) || identical(echo, c("none", "output", "all"))) {
-    if (env_is_user_facing(parent.frame(2))) {
+    option <- getOption("ellmer_echo")
+
+    if (!is.null(option)) {
+      option
+    } else if (env_is_user_facing(parent.frame(2))) {
       "output"
     } else {
       "none"
@@ -234,4 +238,22 @@ ellmer_output <- function(x) {
 print.ellmer_output <- function(x, ...) {
   cat_line(x)
   invisible(x)
+}
+
+eval_vignette <- function() {
+  name <- tools::file_path_sans_ext(knitr::current_input())
+
+  cassettes <- dir("_vcr", pattern = paste0(name, "*"))
+  has_cassette <- length(cassettes) > 0
+
+  has_key <- has_credentials("openai") && has_credentials("claude")
+  if (has_cassette && !has_key) {
+    # set up dummy keys; not used but prevent env var checks from failing
+    Sys.setenv("OPENAI_API_KEY" = "vcr")
+    Sys.setenv("ANTHROPIC_API_KEY" = "vcr")
+  }
+
+  options(ellmer_echo = "none")
+
+  has_key || has_cassette
 }

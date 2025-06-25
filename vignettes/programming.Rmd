@@ -7,16 +7,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-has_key <- ellmer:::openai_key_exists()
-has_cassette <- file.exists("programming-mutable.yml")
-
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = has_key || has_cassette
+  eval = ellmer:::eval_vignette()
 )
-
 vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
 ```
 
@@ -24,11 +21,6 @@ This vignette includes tips and tricks for programming with ellmer, and/or using
 
 ```{r setup}
 library(ellmer)
-```
-
-```{r}
-#| include: false
-chat_openai <- function(...) ellmer::chat_openai(..., echo = "none")
 ```
 
 ## Cloning chats

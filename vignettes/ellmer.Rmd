@@ -7,14 +7,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-has_key <- ellmer:::openai_key_exists()
-has_cassette <- file.exists("ellmer-token-usage.yml")
-
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
-  eval = has_key || has_cassette,
-  comment = "#>"
+  comment = "#>",
+  eval = ellmer:::eval_vignette()
 )
 vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
 ```

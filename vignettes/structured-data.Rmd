@@ -9,16 +9,11 @@ vignette: >
 
 ```{r}
 #| include: false
-
-has_key <- ellmer:::openai_key_exists()
-has_cassette <- file.exists("_vcr/structured-data-basics-text.yml")
-
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = has_key || has_cassette
+  eval = ellmer:::eval_vignette()
 )
-
 vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
 ```
 
@@ -26,12 +21,6 @@ When using an LLM to extract data from text or images, you can ask the chatbot t
 
 ```{r setup}
 library(ellmer)
-```
-
-```{r}
-#| include: false
-
-chat_openai <- function(...) ellmer::chat_openai(..., echo = "none")
 ```
 
 ## Structured data basics
