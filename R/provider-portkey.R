@@ -78,9 +78,13 @@ portkey_key <- function() {
 }
 
 portkey_virtual_key <- function() {
-  key_get("PORTKEY_VIRTUAL_KEY")
+  val <- Sys.getenv("PORTKEY_VIRTUAL_KEY")
+  if (!identical(val, "")) {
+    val
+  } else {
+    NULL
+  }
 }
-
 
 method(base_request, ProviderPortkeyAI) <- function(provider) {
   req <- request(provider@base_url)
