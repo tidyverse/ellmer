@@ -15,12 +15,7 @@ knitr::opts_chunk$set(
   eval = ellmer:::eval_vignette()
 )
 vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
-if (dir.exists("/Users/runner/work/ellmer/ellmer/check")) {
-  vcr::local_vcr_configure_log(file = "/Users/runner/work/ellmer/ellmer/check/vcr.log")
-} else {
-  vcr::local_vcr_configure_log()
-}
-  
+vcr::local_vcr_configure_log()
 ```
 
 This vignette includes tips and tricks for programming with ellmer, and/or using it inside your own package. It's currently fairly short but will grow over time.

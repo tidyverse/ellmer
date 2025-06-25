@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
   eval = ellmer:::eval_vignette()
 )
 vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
+vcr::local_vcr_configure_log()
 ```
 
 ```{r setup}
