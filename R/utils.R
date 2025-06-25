@@ -226,3 +226,12 @@ base64_enc <- function(path, raw) {
   }
   gsub("\n", "", openssl::base64_encode(raw), fixed = TRUE)
 }
+
+ellmer_output <- function(x) {
+  structure(x, class = "ellmer_output")
+}
+#' @export
+print.ellmer_output <- function(x, ...) {
+  cat_line(x)
+  invisible(x)
+}

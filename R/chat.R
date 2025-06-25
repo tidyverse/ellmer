@@ -213,7 +213,7 @@ Chat <- R6::R6Class(
         echo = echo
       ))
 
-      text <- self$last_turn()@text
+      text <- ellmer_output(self$last_turn()@text)
       if (echo == "none") text else invisible(text)
     },
 
