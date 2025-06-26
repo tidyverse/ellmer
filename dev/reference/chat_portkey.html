@@ -84,8 +84,8 @@ stored inside Portkey application.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">chat_portkey</span><span class="op">(</span></span>
 <span>  system_prompt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  base_url <span class="op">=</span> <span class="st">"https://api.portkey.ai/v1"</span>,</span>
-<span>  api_key <span class="op">=</span> <span class="fu">portkeyai_key</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  virtual_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  api_key <span class="op">=</span> <span class="fu">portkey_key</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  virtual_key <span class="op">=</span> <span class="fu">portkey_virtual_key</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -94,7 +94,7 @@ stored inside Portkey application.</p>
 <span></span>
 <span><span class="fu">models_portkey</span><span class="op">(</span></span>
 <span>  base_url <span class="op">=</span> <span class="st">"https://api.portkey.ai/v1"</span>,</span>
-<span>  api_key <span class="op">=</span> <span class="fu">portkeyai_key</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  api_key <span class="op">=</span> <span class="fu">portkey_key</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  virtual_key <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -120,7 +120,8 @@ which you can easily edit by calling <code>usethis::edit_r_environ()</code>.</p>
 
 <dt id="arg-virtual-key">virtual_key<a class="anchor" aria-label="anchor" href="#arg-virtual-key"></a></dt>
 <dd><p>A virtual identifier storing LLM provider's API key. See
-<a href="https://portkey.ai/docs/product/ai-gateway/virtual-keys" class="external-link">documentation</a>.</p></dd>
+<a href="https://portkey.ai/docs/product/ai-gateway/virtual-keys" class="external-link">documentation</a>.
+Can be read from the <code>PORTKEY_VIRTUAL_KEY</code> environment variable.</p></dd>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
