@@ -40,6 +40,8 @@ Suggests:
     knitr,
     magick,
     openssl,
+    otel (>= 0.0.0.9000),
+    otelsdk (>= 0.0.0.9000),
     paws.common,
     rmarkdown,
     shiny,
@@ -78,6 +80,7 @@ Collate:
     'import-standalone-purrr.R'
     'import-standalone-types-check.R'
     'interpolate.R'
+    'otel.R'
     'params.R'
     'provider-openai.R'
     'provider-azure.R'
@@ -108,3 +111,6 @@ Collate:
     'utils-prettytime.R'
     'utils.R'
     'zzz.R'
+Remotes: 
+    r-lib/otel,
+    r-lib/otelsdk

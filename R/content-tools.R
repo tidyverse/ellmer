@@ -148,12 +148,14 @@ invoke_tool <- function(request) {
     return(args)
   }
 
+  span <- start_tool_span(request)
   tryCatch(
     {
       result <- do.call(request@tool@fun, args)
       new_tool_result(request, result)
     },
     error = function(e) {
+      record_tool_error(span, e)
       new_tool_result(request, error = e)
     }
   )
@@ -171,12 +173,15 @@ on_load(
       return(args)
     }
 
+    span <- start_tool_span(request, active = FALSE)
+    withr::defer(span$end())
     tryCatch(
       {
         result <- await(do.call(request@tool@fun, args))
         new_tool_result(request, result)
       },
       error = function(e) {
+        record_tool_error(span, e)
         new_tool_result(request, error = e)
       }
     )
