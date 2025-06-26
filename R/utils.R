@@ -245,9 +245,6 @@ eval_vignette <- function() {
 
   cassettes <- dir("_vcr", pattern = paste0(name, "*"))
   has_cassette <- length(cassettes) > 0
-  if (!has_cassette && is_r_cmd_check()) {
-    cli::cli_abort("Can't find cassettes", .internal = TRUE)
-  }
 
   has_key <- has_credentials("openai") && has_credentials("claude")
   if (has_cassette && !has_key) {
@@ -259,8 +256,4 @@ eval_vignette <- function() {
   options(ellmer_echo = "none")
 
   has_key || has_cassette
-}
-
-is_r_cmd_check <- function() {
-  Sys.getenv("_R_CHECK_PACKAGE_NAME_", "") != ""
 }

@@ -70,7 +70,7 @@ get_current_time <- function(tz = "UTC") {
 
 # Fake it for the vignette so we always get the same results
 get_current_time <- function(tz = "UTC") {
-  format(as.POSIXct("2025-06-25 11:53:23"), tz = tz, usetz = TRUE)
+  format(as.POSIXct("2025-06-25 11:53:23", tz = "America/Chicago"), tz = tz, usetz = TRUE)
 }
 ```
 
