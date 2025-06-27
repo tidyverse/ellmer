@@ -7,12 +7,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = ellmer:::openai_key_exists()
+  eval = ellmer:::eval_vignette()
 )
+vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
 ```
 
 ## Introduction
@@ -35,24 +37,19 @@ The value that the chat model brings is not in helping with execution, but with 
 library(ellmer)
 ```
 
+
 ### Motivating example
 
 Let's take a look at an example where we really need an external tool. Chat models generally do not know the current time, which makes questions like these impossible.
 
-```{r eval=FALSE}
+```{r}
+#| cassette: no-tool
+
 chat <- chat_openai(model = "gpt-4o")
-chat$chat("How long ago exactly was the moment Neil Armstrong touched down on the moon?")
-#> Neil Armstrong touched down on the moon on July 20, 1969, at 20:17 UTC. To determine how long ago that
-#> was from the current year of 2023, we can calculate the difference in years, months, and days.
-#>
-#> From July 20, 1969, to July 20, 2023, is exactly 54 years. If today's date is after July 20, 2023, you
-#> would add the additional time since then. If it is before, you would consider slightly less than 54
-#> years.
-#>
-#> As of right now, can you confirm the current date so we can calculate the precise duration?
+chat$chat("How long ago did Neil Armstrong touch down on the moon?")
 ```
 
-Unfortunately, this example was run on September 18, 2024. Let's give the chat model the ability to determine the current time and try again.
+Since the model doesn't know what day it is, the result is incorrect.
 
 ### Defining a tool function
 
@@ -68,13 +65,21 @@ get_current_time <- function(tz = "UTC") {
 }
 ```
 
+```{r}
+#| include: false
+
+# Fake it for the vignette so we always get the same results
+get_current_time <- function(tz = "UTC") {
+  format(as.POSIXct("2025-06-25 11:53:23", tz = "America/Chicago"), tz = tz, usetz = TRUE)
+}
+```
+
 Note that we've gone through the trouble of creating [roxygen2 comments](https://roxygen2.r-lib.org/). This is a very important step that will help the model use your tool correctly!
 
 Let's test it:
 
-```{r eval=FALSE}
+```{r}
 get_current_time()
-#> [1] "2024-09-18 17:47:14 UTC"
 ```
 
 ### Registering tools
@@ -82,8 +87,6 @@ get_current_time()
 Now we need to tell our chat object about our `get_current_time` function. This by creating and registering a tool:
 
 ```{r}
-chat <- chat_openai(model = "gpt-4o")
-
 chat$register_tool(tool(
   get_current_time,
   "Gets the current time in the given time zone.",
@@ -102,39 +105,18 @@ Note that `create_tool_def()` may not create perfect results, so you must review
 
 That's all we need to do! Let's retry our query:
 
-```{r eval=FALSE}
-chat$chat("How long ago exactly was the moment Neil Armstrong touched down on the moon?")
-#> Neil Armstrong touched down on the moon on July 20, 1969, at 20:17 UTC.
-#>
-#> To calculate the time elapsed from that moment until the current time (September 18, 2024, 17:47:19
-#> UTC), we need to break it down.
-#>
-#> 1. From July 20, 1969, 20:17 UTC to July 20, 2024, 20:17 UTC is exactly 55 years.
-#> 2. From July 20, 2024, 20:17 UTC to September 18, 2024, 17:47:19 UTC, we need to further break down:
-#>
-#>    - From July 20, 2024, 20:17 UTC to September 18, 2024, 17:47:19 UTC, which is:
-#>      - 1 full month (August)
-#>      - 30 – 20 = 10 days of July
-#>      - 18 days of September until 17:47:19 UTC
-#>
-#> So, in detail:
-#>    - 55 years
-#>    - 1 month
-#>    - 28 days
-#>    - From July 20, 2024, 20:17 UTC to July 20, 2024, 17:47:19 UTC: 23 hours, 30 minutes, and 19 seconds
-#>
-#> Time Total:
-#> - 55 years
-#> - 1 month
-#> - 28 days
-#> - 23 hours
-#> - 30 minutes
-#> - 19 seconds
-#>
-#> This is the exact time that has elapsed since Neil Armstrong's historic touchdown on the moon.
+```{r}
+#| cassette: with-tool
+chat$chat("How long ago did Neil Armstrong touch down on the moon?")
 ```
 
-That's correct! Without any further guidance, the chat model decided to call our tool function and successfully used its result in formulating its response.
+That's correct! Without any further guidance, the chat model decided to call our tool function and successfully used its result in formulating its response. 
+
+If we print the chat we can see where the model decided to use the tool:
+
+```{r}
+chat
+```
 
 (Full disclosure: I originally tried this example with the default model of `gpt-4o-mini` and it got the tool calling right but the date math wrong, hence the explicit `model="gpt-4o"`.)
 
@@ -151,6 +133,8 @@ The output of the tool call will be interpreted by the LLM, just as if you had t
 To show off these ideas, here's a slightly more complicated example simulating a weather API that returns data for multiple cities at once. The `get_weather()` function returns a data frame that ellmer will automatically convert into JSON in row-major format, which our experiments suggest is good for LLMs.
 
 ```{r}
+#| cassette: inputs-outputs
+
 raining <- c(London = "heavy", Houston = "none", Chicago = "overcast")
 temperature <- c(London = "cool", Houston = "hot", Chicago = "warm")
 wind <- c(London = "strong", Houston = "weak", Chicago = "strong")

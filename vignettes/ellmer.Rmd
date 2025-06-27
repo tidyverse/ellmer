@@ -7,12 +7,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
-  eval = ellmer:::openai_key_exists(),
-  comment = "#>"
+  comment = "#>",
+  eval = ellmer:::eval_vignette()
 )
+vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
 ```
 
 ```{r setup}
@@ -44,6 +46,7 @@ Tokens also used to measure the context window, which is how much text the LLM c
 In ellmer, you can see how many tokens a conversations has used by printing it, and you can see total usage for a session with `token_usage()`.
 
 ```{r}
+#| cassette: token-usage
 chat <- chat_openai(model = "gpt-4.1")
 . <- chat$chat("Who created R?", echo = FALSE)
 chat

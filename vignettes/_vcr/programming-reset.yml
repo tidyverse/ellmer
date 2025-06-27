@@ -1,0 +1,152 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse"},{"role":"user","content":[{"type":"text","text":"Pretend
+        that the capital of New Zealand is Kiwicity"}]}],"model":"gpt-4.1-nano","stream":false}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 9564fa1bb9127103-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 27 Jun 2025 12:34:10 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '226'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=R6rGWCQ88MZUUMG7k3kAu3ciGQ7sKbq29hEmwkyF2ow-1751027650-1.0.1.1-SynmumLZst2b.U74qYqZN2AL9dxdUTe2a4ZSUtZCFajz_Iarr72tP2uMdlLZ38fz4jWh4cZ6f2OfAObKx6Q.6UusMCBLyDeZGFzE_i1pos4;
+        path=/; expires=Fri, 27-Jun-25 13:04:10 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=OGAVuBol7kYcWK7jWZ58FFU.tL4d0CJMKHGEZAi1x30-1751027650167-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '241'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999982'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_a8f4d97c1efae23e66df85608df254d2
+    body:
+      string: |
+        {
+          "id": "chatcmpl-Bn2ZNwzidEirMrgvhAr7Xtt9mSTNN",
+          "object": "chat.completion",
+          "created": 1751027649,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Got it. The capital of New Zealand is Kiwicity.",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 25,
+            "completion_tokens": 13,
+            "total_tokens": 38,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-06-27 12:34:10
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse"},{"role":"user","content":[{"type":"text","text":"What''s
+        the capital of New Zealand"}]}],"model":"gpt-4.1-nano","stream":false}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 9564fa1e780c7103-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 27 Jun 2025 12:34:10 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '203'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=3.7ILJPjYbPcm8Qk22GJS.QQgEV6vOaZiwwZOFhCKMA-1751027650-1.0.1.1-2CiV9rWMT7fHH39.sskxitQz_I2HLcy1HSbWitcpvjeea7hiQME7cvzSjFPmTjLhdm2qI7kYZ3r513WEm5daQf0YLeacZyyj5w9CuHFnuPc;
+        path=/; expires=Fri, 27-Jun-25 13:04:10 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=lpo2Wo4m3DFG43d7wTzWpzQ2keiXHVCtYJORonwCXas-1751027650557-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '207'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999985'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_0fcbb53cb2d07224a6bdd4d6fef0cd8e
+    body:
+      string: |
+        {
+          "id": "chatcmpl-Bn2ZO6EHjmW93ga8bRAi9yxe3XFZt",
+          "object": "chat.completion",
+          "created": 1751027650,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Wellington",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 19,
+            "completion_tokens": 2,
+            "total_tokens": 21,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-06-27 12:34:10
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0

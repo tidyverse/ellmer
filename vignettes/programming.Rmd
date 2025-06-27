@@ -7,12 +7,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = ellmer:::openai_key_exists()
+  eval = ellmer:::eval_vignette()
 )
+vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
 ```
 
 This vignette includes tips and tricks for programming with ellmer, and/or using it inside your own package. It's currently fairly short but will grow over time.
@@ -40,6 +42,8 @@ str(x)
 Mutable objects don't work the same way:
 
 ```{r}
+#| cassette: mutable
+
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 
 capital <- function(chat, country) {
@@ -56,6 +60,8 @@ It would be annoying if chat objects were immutable, because then you'd need to 
 Creating a copy of the object is the job of the `$clone()` method. It will create a copy of the object that behaves identically to the existing chat:
 
 ```{r}
+#| cassette: chat-clone
+
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 
 capital <- function(chat, country) {
@@ -71,6 +77,8 @@ chat
 You can also use `clone()` when you want to create a conversational "tree", where conversations start from the same place, but diverge over time:
 
 ```{r}
+#| cassette: tree
+
 chat1 <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat1$chat("My name is Hadley and I'm a data scientist")
 chat2 <- chat1$clone()
@@ -89,6 +97,8 @@ chat2
 There's a bit of a problem with our `capital()` function: we can use our conversation to manipulate the results:
 
 ```{r}
+#| cassette: uhoh
+
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
 capital(chat, "New Zealand")
@@ -97,6 +107,8 @@ capital(chat, "New Zealand")
 We can avoid that problem by using `$set_turns()` to reset the conversational history:
 
 ```{r}
+#| cassette: reset
+
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
 
@@ -114,6 +126,8 @@ This is particularly useful when you want to use a chat object just as a handle 
 When you call `chat$chat()` directly in the console, the results are displayed progressively as the LLM streams them to ellmer. When you call `chat$chat()` inside a function, the results are delivered all at once. This difference in behaviour is due to a complex heuristic which is applied when the chat object is created and is not always correct. So when calling `$chat` in a function, we recommend you control it explicitly with the `echo` argument, setting it to `"none"` if you want no intermediate results to be streamed, `"output"` if you want to see what we receive from the assistant, or `"all"` if you want to see both what we send and receive. You likely want `echo = "none"` in most cases:
 
 ```{r}
+#| cassette: capital
+
 capital <- function(chat, country) {
   chat <- chat$clone()$set_turns(list())
   chat$chat(interpolate("What's the capital of {{country}}"), echo = "none")
@@ -128,6 +142,9 @@ Alternatively, if you want to embrace streaming in your UI, you may want to use 
 Chat objects provide some tools to get to ellmer's internal data structures. For example, take this short conversation that uses tool calling to give the LLM the ability to access real randomness:
 
 ```{r}
+#| cassette: turns
+set.seed(1014) # make it reproducible
+
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat$register_tool(tool(function() sample(6, 1), "Roll a die"))
 chat$chat("Roll two dice and tell me the total")

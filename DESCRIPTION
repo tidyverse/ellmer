@@ -45,6 +45,8 @@ Suggests:
     shiny,
     shinychat (>= 0.2.0),
     testthat (>= 3.0.0),
+    vcr (>= 1.7.0.91),
+    webmockr,
     withr
 VignetteBuilder:
     knitr
@@ -108,3 +110,6 @@ Collate:
     'utils-prettytime.R'
     'utils.R'
     'zzz.R'
+Remotes:  
+    ropensci/vcr,
+    ropensci/webmockr
