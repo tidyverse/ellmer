@@ -13,36 +13,36 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95561bbb680e2e7e-DFW
+      cf-ray: 9564fcb4d9cd6bf2-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 25 Jun 2025 17:15:41 GMT
+      date: Fri, 27 Jun 2025 12:35:57 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '508'
+      openai-processing-ms: '622'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=DOshdXM3oNQZpQ9fhpx91sT2dke4_zrdIuEmuC1nGJI-1750871741-1.0.1.1-5QeaJfa_KXnqYWK8MLmN62Nl_Pbo_feC3_8IoD8F7BexIOBvUFL.hC1zvUdgRFvF1mV8CZZqC09N2GMnDA5Tn_X8imltY6mRZd9KtPhcit4;
-        path=/; expires=Wed, 25-Jun-25 17:45:41 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=oBh8PMAPBbHK85a0xEuCyUw2AVl9O1hdrLKnFDnzbbk-1751027757-1.0.1.1-sTeFImXytgmnhV1aCRJ.P7jHoTbZ6gML_Ryuhodre0o1RNbYkp0NVOhnTnBzpEo4NY7HVc.W6aoxBXqTuHPauheduAb7_49gOCU7CvcKvNo;
+        path=/; expires=Fri, 27-Jun-25 13:05:57 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=sbEwWvsPPiuq7INOHbp_I.wwM3zkXpA5yj5vFQu1rBk-1750871741280-0.0.1.1-604800000;
+      - _cfuvid=KyTIemq4cPvdbI5I_z7VV8jINzrnYXUNe5YAeiTzowI-1751027757010-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '511'
+      x-envoy-upstream-service-time: '625'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999984'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_645ae9a695b8aef9670972269f5333d1
+      x-request-id: req_ea54ad4aff08d7a29c721688668f2ddc
     body:
       string: |
         {
-          "id": "chatcmpl-BmO0iQFBTySDYggE4QtCBIg6Kz89H",
+          "id": "chatcmpl-Bn2b6rXg0G1kyH1E9TW1Q5CTo7Njg",
           "object": "chat.completion",
-          "created": 1750871740,
+          "created": 1751027756,
           "model": "gpt-4o-2024-08-06",
           "choices": [
             {
@@ -52,7 +52,7 @@ http_interactions:
                 "content": null,
                 "tool_calls": [
                   {
-                    "id": "call_KMXGg1f3Qw896lWCcSjnO6bP",
+                    "id": "call_xLXFhwnylFCufeKRG43qUtR3",
                     "type": "function",
                     "function": {
                       "name": "get_current_time",
@@ -85,14 +85,14 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": "fp_07871e2ad8"
         }
-  recorded_at: 2025-06-25 17:15:41
+  recorded_at: 2025-06-27 12:35:57
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"user","content":[{"type":"text","text":"How long
-        ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","tool_calls":[{"id":"call_KMXGg1f3Qw896lWCcSjnO6bP","function":{"name":"get_current_time","arguments":"{\"tz\":[\"UTC\"]}"},"type":"function"}]},{"role":"tool","content":"2025-06-25
-        16:53:23 UTC","tool_call_id":"call_KMXGg1f3Qw896lWCcSjnO6bP"}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Gets
+        ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","tool_calls":[{"id":"call_xLXFhwnylFCufeKRG43qUtR3","function":{"name":"get_current_time","arguments":"{\"tz\":[\"UTC\"]}"},"type":"function"}]},{"role":"tool","content":"2025-06-25
+        16:53:23 UTC","tool_call_id":"call_xLXFhwnylFCufeKRG43qUtR3"}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Gets
         the current time in the given time zone.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"The
         time zone to get the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}}]}'
   response:
@@ -101,43 +101,43 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95561bbffda42e7e-DFW
+      cf-ray: 9564fcba4fbe6bf2-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 25 Jun 2025 17:15:42 GMT
+      date: Fri, 27 Jun 2025 12:35:59 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1328'
+      openai-processing-ms: '1912'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=jWtdTpUvggB.n94CkGAIQo7.SKJSTzWFCYmL9Hloxt4-1750871742-1.0.1.1-UKADyNDES.Iy8gRVSFzfbR.CnQ7H0n8wSU.lDZhtKabpQMIn6kJMXzZfCS6.ULoAt_UOExKnE_NG6Ti59dnMsNbuwsTWhIu5Dyiy8aLPU5I;
-        path=/; expires=Wed, 25-Jun-25 17:45:42 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=9S0masKOyurH23OYLpqS.hnYSLwayzzoneiA2yE3Yx4-1751027759-1.0.1.1-LpE_2VVdgngG0funVNuD8kH09txJInK67ItZpoaMI3N7dNFP51SM7rfbCxsOGjpfbo1.dJdO5rz61zGjz71QiDAYCa1oFjDngwjIOfOJDAQ;
+        path=/; expires=Fri, 27-Jun-25 13:05:59 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=uTrYMVeHDoXJPLM.isml4TtBOjPAHtyXxpK5k1wTZ38-1750871742854-0.0.1.1-604800000;
+      - _cfuvid=vhBqPQCZ7jYX3SEd9X.LdPxxlHNF1FPwqiqFzlzNVmw-1751027759470-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1353'
+      x-envoy-upstream-service-time: '2267'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999975'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_40f635241dad02ce1db96234bcb9aaf5
+      x-request-id: req_e9d4cf104d62b89cbfeee692bb3234c9
     body:
       string: |
         {
-          "id": "chatcmpl-BmO0jPczc0BCzp3ceJIs7rNpPoYsk",
+          "id": "chatcmpl-Bn2b7XwyNGIx6eBEc9v0Mja2C7dqO",
           "object": "chat.completion",
-          "created": 1750871741,
+          "created": 1751027757,
           "model": "gpt-4o-2024-08-06",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "Neil Armstrong touched down on the moon on July 20, 1969. Using the current date (June 25, 2025), it has been almost 56 years since that historic event.",
+                "content": "Neil Armstrong touched down on the moon on July 20, 1969. As of June 25, 2025, that was 55 years, 11 months, and 5 days ago.",
                 "refusal": null,
                 "annotations": []
               },
@@ -147,8 +147,8 @@ http_interactions:
           ],
           "usage": {
             "prompt_tokens": 153,
-            "completion_tokens": 42,
-            "total_tokens": 195,
+            "completion_tokens": 43,
+            "total_tokens": 196,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -163,5 +163,5 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": "fp_07871e2ad8"
         }
-  recorded_at: 2025-06-25 17:15:42
-recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+  recorded_at: 2025-06-27 12:35:59
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0

@@ -25,36 +25,36 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 955622c4ac98e94e-DFW
+      cf-ray: 9564fbdaebce4863-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 25 Jun 2025 17:20:30 GMT
+      date: Fri, 27 Jun 2025 12:35:24 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1497'
+      openai-processing-ms: '2258'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=nYwYzCxRCgNYPGalEIyLA.yknQ3YTrSgX1nMPaIMisE-1750872030-1.0.1.1-Ngc9t.wGiWyQNT3A0FYocBPz2BsMKrwCeJw3.i0ugZ9QQALexywD6BV03vT6fRFq2mx2dQqNNbGKwIiFGLZ5KxuCoWiwfEdcYb9gY5jzjFI;
-        path=/; expires=Wed, 25-Jun-25 17:50:30 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=u5KndivZDk1OHRsvc39Fu47DGuMto.bsqtwPtyt7elY-1751027724-1.0.1.1-8hd8ujYVu2O1ceAUT11z24ejb2kUEZwV8Gu3r.0LQ215zEaFff1J_t3nJF_Ggyi1hTvY3eR54xUxXJnU57TNpynVR8rz3dBJLreyZqX5kPY;
+        path=/; expires=Fri, 27-Jun-25 13:05:24 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=baBweXKM1yB5BL5jHj9cVgw1VMFd6q1jcBZ4pmnRrEM-1750872030497-0.0.1.1-604800000;
+      - _cfuvid=0BnkHsT0PCnJqJcgzoAUim9a62zFpUJl.GJ.X7jw_LY-1751027724034-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1524'
+      x-envoy-upstream-service-time: '2261'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999776'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_75d9ac470409c894cff355016c268d92
+      x-request-id: req_d9e7c12c618d4022fd87af03011d08a4
     body:
       string: |
         {
-          "id": "chatcmpl-BmO5NjgpPfshl76gpr29QgAGSs424",
+          "id": "chatcmpl-Bn2aXTZTFJT0syrV26o5UoHpRStYm",
           "object": "chat.completion",
-          "created": 1750872029,
+          "created": 1751027721,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
@@ -87,5 +87,5 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": "fp_51e1070cf2"
         }
-  recorded_at: 2025-06-25 17:20:30
-recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+  recorded_at: 2025-06-27 12:35:24
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
