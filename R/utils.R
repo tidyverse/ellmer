@@ -6,6 +6,10 @@ is_snapshot <- function() {
   identical(Sys.getenv("TESTTHAT_IS_SNAPSHOT"), "true")
 }
 
+is_replaying <- function() {
+  as.logical(Sys.getenv("VCR_IS_REPLAYING", "FALSE"))
+}
+
 key_get <- function(name, error_call = caller_env()) {
   val <- Sys.getenv(name)
   if (!identical(val, "")) {
@@ -254,8 +258,4 @@ eval_vignette <- function() {
   options(ellmer_echo = "none")
 
   has_key || has_cassette
-}
-
-is_replaying <- function() {
-  as.logical(Sys.getenv("VCR_IS_REPLAYING", "FALSE"))
 }
