@@ -11,7 +11,10 @@ key_get <- function(name, error_call = caller_env()) {
   if (!identical(val, "")) {
     val
   } else {
-    if (is_testing()) {
+    if (is_replaying()) {
+      # this value won't get used, but we don't want to error
+      ""
+    } else if (is_testing()) {
       testthat::skip(sprintf("%s env var is not configured", name))
     } else {
       cli::cli_abort("Can't find env var {.code {name}}.", call = error_call)
@@ -247,13 +250,12 @@ eval_vignette <- function() {
   has_cassette <- length(cassettes) > 0
 
   has_key <- has_credentials("openai") && has_credentials("claude")
-  if (has_cassette && !has_key) {
-    # set up dummy keys; not used but prevent env var checks from failing
-    Sys.setenv("OPENAI_API_KEY" = "vcr")
-    Sys.setenv("ANTHROPIC_API_KEY" = "vcr")
-  }
 
   options(ellmer_echo = "none")
 
   has_key || has_cassette
+}
+
+is_replaying <- function() {
+  as.logical(Sys.getenv("VCR_IS_REPLAYING", "FALSE"))
 }
