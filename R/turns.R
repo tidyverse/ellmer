@@ -100,6 +100,9 @@ as_user_turn <- function(contents, call = caller_env(), arg = "...") {
   if (length(contents) == 0) {
     cli::cli_abort("{.arg {arg}} must contain at least one input.", call = call)
   }
+  if (length(contents) == 1){
+    contents <- list(contents)
+  }
   if (is_named(contents)) {
     cli::cli_abort("{.arg {arg}} must be unnamed.", call = call)
   }
