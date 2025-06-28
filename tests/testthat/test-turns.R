@@ -65,7 +65,6 @@ test_that("turns have a reasonable print method", {
 })
 
 test_that("as_user_turns can create lists of turns from lists of Content objects", {
-
   content_turns <- as_user_turns(
     list(
       content_image_url("https://www.r-project.org/Rlogo.png"),
@@ -76,5 +75,4 @@ test_that("as_user_turns can create lists of turns from lists of Content objects
   expect_length(content_turns, 2)
   expect_s3_class(content_turns[[1]], "ellmer::Turn")
   expect_s3_class(content_turns[[2]], "ellmer::Turn")
-
 })
