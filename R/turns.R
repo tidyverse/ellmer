@@ -100,7 +100,7 @@ as_user_turn <- function(contents, call = caller_env(), arg = "...") {
   if (length(contents) == 0) {
     cli::cli_abort("{.arg {arg}} must contain at least one input.", call = call)
   }
-  if (length(contents) == 1){
+  if (length(contents) == 1 && S7_inherits(contents, Content)) {
     contents <- list(contents)
   }
   if (is_named(contents)) {
