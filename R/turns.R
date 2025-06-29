@@ -103,6 +103,9 @@ as_user_turn <- function(contents, call = caller_env(), arg = "...") {
   if (is_named(contents)) {
     cli::cli_abort("{.arg {arg}} must be unnamed.", call = call)
   }
+  if (S7_inherits(contents, Content)) {
+    return(Turn("user", list(contents)))
+  }
 
   contents <- lapply(contents, as_content, error_call = call, error_arg = arg)
   Turn("user", contents)
