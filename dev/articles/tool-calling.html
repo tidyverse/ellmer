@@ -241,7 +241,10 @@ possible, focussing on basic scalar types as much as you can.</p>
 if you had typed that information into the data. That means you’ll
 generally want to produce text or other atomic vectors. For more complex
 data, ellmer will automatically serialize the result to JSON, which LLMs
-generally seem to be good at understanding.</p>
+generally seem to be good at understanding. If you must have more direct
+control of the structure of the JSON that’s returned, you can return a
+JSON-serializable value wrapped in <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code>, which ellmer will
+leave alone until the entire request is JSON-serialized.</p>
 <p>To show off these ideas, here’s a slightly more complicated example
 simulating a weather API that returns data for multiple cities at once.
 The <code>get_weather()</code> function returns a data frame that ellmer

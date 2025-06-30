@@ -101,6 +101,7 @@ but instead call <code><a href="chat_openai.html">chat_openai()</a></code> or fr
 <li><p><a href="#method-Chat-stream"><code>Chat$stream()</code></a></p></li>
 <li><p><a href="#method-Chat-stream_async"><code>Chat$stream_async()</code></a></p></li>
 <li><p><a href="#method-Chat-register_tool"><code>Chat$register_tool()</code></a></p></li>
+<li><p><a href="#method-Chat-register_tools"><code>Chat$register_tools()</code></a></p></li>
 <li><p><a href="#method-Chat-get_provider"><code>Chat$get_provider()</code></a></p></li>
 <li><p><a href="#method-Chat-get_tools"><code>Chat$get_tools()</code></a></p></li>
 <li><p><a href="#method-Chat-set_tools"><code>Chat$set_tools()</code></a></p></li>
@@ -461,21 +462,32 @@ rich content types. When <code>stream = "content"</code>, <code>stream()</code> 
 </div><p></p><hr><a id="method-Chat-register_tool"></a><div class="section">
 <h3 id="method-register-tool-">Method <code>register_tool()</code><a class="anchor" aria-label="anchor" href="#method-register-tool-"></a></h3>
 <p>Register a tool (an R function) that the chatbot can use.
-If the chatbot decides to use the function, ellmer will automatically
-call it and submit the results back.</p>
-<p>The return value of the function. Generally, this should either be a
-string, or a JSON-serializable value. If you must have more direct
-control of the structure of the JSON that's returned, you can return a
-JSON-serializable value wrapped in <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">base::I()</a></code>, which ellmer will leave
-alone until the entire request is JSON-serialized.</p><div class="section">
+Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calling")</a></code>.</p><div class="section">
 <h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">tool_def</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">tool</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>tool_def</code></dt>
-<dd><p>Tool definition created by <code><a href="tool.html">tool()</a></code>.</p></dd>
+<p></p><div class="arguments"><dl><dt><code>tool</code></dt>
+<dd><p>A tool definition created by <code><a href="tool.html">tool()</a></code>.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-Chat-register_tools"></a><div class="section">
+<h3 id="method-register-tools-">Method <code>register_tools()</code><a class="anchor" aria-label="anchor" href="#method-register-tools-"></a></h3>
+<p>Register a list of tools.
+Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calling")</a></code>.</p><div class="section">
+<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">register_tools</span><span class="op">(</span><span class="va">tools</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>tools</code></dt>
+<dd><p>A list of tool definitions created by <code><a href="tool.html">tool()</a></code>.</p></dd>
 
 
 </dl><p></p></div>
@@ -484,7 +496,7 @@ alone until the entire request is JSON-serialized.</p><div class="section">
 </div><p></p><hr><a id="method-Chat-get_provider"></a><div class="section">
 <h3 id="method-get-provider-">Method <code>get_provider()</code><a class="anchor" aria-label="anchor" href="#method-get-provider-"></a></h3>
 <p>Get the underlying provider object. For expert use only.</p><div class="section">
-<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
+<h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_provider</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -492,7 +504,7 @@ alone until the entire request is JSON-serialized.</p><div class="section">
 </div><p></p><hr><a id="method-Chat-get_tools"></a><div class="section">
 <h3 id="method-get-tools-">Method <code>get_tools()</code><a class="anchor" aria-label="anchor" href="#method-get-tools-"></a></h3>
 <p>Retrieve the list of registered tools.</p><div class="section">
-<h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
+<h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_tools</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -501,12 +513,12 @@ alone until the entire request is JSON-serialized.</p><div class="section">
 <h3 id="method-set-tools-">Method <code>set_tools()</code><a class="anchor" aria-label="anchor" href="#method-set-tools-"></a></h3>
 <p>Sets the available tools. For expert use only; most users
 should use <code>register_tool()</code>.</p><div class="section">
-<h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
+<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">set_tools</span><span class="op">(</span><span class="va">tools</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
+<h4 id="arguments-16">Arguments<a class="anchor" aria-label="anchor" href="#arguments-16"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>tools</code></dt>
 <dd><p>A list of tool definitions created with <code><a href="tool.html">tool()</a></code>.</p></dd>
 
@@ -517,12 +529,12 @@ should use <code>register_tool()</code>.</p><div class="section">
 </div><p></p><hr><a id="method-Chat-on_tool_request"></a><div class="section">
 <h3 id="method-on-tool-request-">Method <code>on_tool_request()</code><a class="anchor" aria-label="anchor" href="#method-on-tool-request-"></a></h3>
 <p>Register a callback for a tool request event.</p><div class="section">
-<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
+<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_tool_request</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-16">Arguments<a class="anchor" aria-label="anchor" href="#arguments-16"></a></h4>
+<h4 id="arguments-17">Arguments<a class="anchor" aria-label="anchor" href="#arguments-17"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>callback</code></dt>
 <dd><p>A function to be called when a tool request event occurs,
 which must have <code>request</code> as its only argument.</p></dd>
@@ -538,12 +550,12 @@ which must have <code>request</code> as its only argument.</p></dd>
 </div><p></p><hr><a id="method-Chat-on_tool_result"></a><div class="section">
 <h3 id="method-on-tool-result-">Method <code>on_tool_result()</code><a class="anchor" aria-label="anchor" href="#method-on-tool-result-"></a></h3>
 <p>Register a callback for a tool result event.</p><div class="section">
-<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
+<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_tool_result</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-17">Arguments<a class="anchor" aria-label="anchor" href="#arguments-17"></a></h4>
+<h4 id="arguments-18">Arguments<a class="anchor" aria-label="anchor" href="#arguments-18"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>callback</code></dt>
 <dd><p>A function to be called when a tool result event occurs,
 which must have <code>result</code> as its only argument.</p></dd>
@@ -560,12 +572,12 @@ which must have <code>result</code> as its only argument.</p></dd>
 <h3 id="method-extract-data-">Method <code>extract_data()</code><a class="anchor" aria-label="anchor" href="#method-extract-data-"></a></h3>
 <p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a>
 Deprecated in favour of <code>$chat_structured()</code>.</p><div class="section">
-<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
+<h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">extract_data</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-18">Arguments<a class="anchor" aria-label="anchor" href="#arguments-18"></a></h4>
+<h4 id="arguments-19">Arguments<a class="anchor" aria-label="anchor" href="#arguments-19"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>See <code>$chat_structured()</code></p></dd>
 
@@ -576,12 +588,12 @@ Deprecated in favour of <code>$chat_structured()</code>.</p><div class="section"
 </div><p></p><hr><a id="method-Chat-extract_data_async"></a><div class="section">
 <h3 id="method-extract-data-async-">Method <code>extract_data_async()</code><a class="anchor" aria-label="anchor" href="#method-extract-data-async-"></a></h3>
 <p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p><div class="section">
-<h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
+<h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">extract_data_async</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-19">Arguments<a class="anchor" aria-label="anchor" href="#arguments-19"></a></h4>
+<h4 id="arguments-20">Arguments<a class="anchor" aria-label="anchor" href="#arguments-20"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>See <code>$chat_structured_async()</code></p></dd>
 
@@ -592,12 +604,12 @@ Deprecated in favour of <code>$chat_structured()</code>.</p><div class="section"
 </div><p></p><hr><a id="method-Chat-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
+<h4 id="usage-25">Usage<a class="anchor" aria-label="anchor" href="#usage-25"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-20">Arguments<a class="anchor" aria-label="anchor" href="#arguments-20"></a></h4>
+<h4 id="arguments-21">Arguments<a class="anchor" aria-label="anchor" href="#arguments-21"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
