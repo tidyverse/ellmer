@@ -155,69 +155,15 @@ when running at the console).</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">chat_openai</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># has_credentials("openai")</span></span></span>
+<span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">chat_openai</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"</span></span></span>
 <span class="r-in"><span><span class="st">  What is the difference between a tibble and a data frame?</span></span></span>
 <span class="r-in"><span><span class="st">  Answer with a bulleted list</span></span></span>
 <span class="r-in"><span><span class="st">"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Printing Behavior**:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Data frame**: Prints all rows and columns by default, which can </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> clutter the console with large datasets.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Tibble**: Prints only the first 10 rows and as many columns as </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> fit on the screen. Provides a more concise and readable output.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Subsetting Behavior**:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Data frame**: Returns a vector when selecting a single column </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> with `df[, 1]`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Tibble**: Always returns a tibble/data frame, even when </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> selecting a single column.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Column Types**:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Data frame**: Converts string variables to factors by default </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (can be changed with `stringsAsFactors = FALSE`).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Tibble**: Never changes input types; strings remain as character</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> by default.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Column Names**:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Data frame**: Allows non-syntactic names (e.g., spaces), but can</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> be less strict.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Tibble**: Can have non-syntactic names but must be referred to </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> with backticks (\`).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Partial Matching**:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Data frame**: Allows partial matching of column names (not </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> recommended).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Tibble**: Does not do partial matching; column names must match </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> exactly.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Enhanced Features**:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Data frame**: Basic data structure in base R.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Tibble**: Part of the Tidyverse; supports features like </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> list-columns and better integration with tidyverse packages.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Creation**:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Data frame**: Created with `data.frame()`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Tibble**: Created with `tibble()` or `as_tibble()`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Row Names**:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Data frame**: Can contain row names by default.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - **Tibble**: Do not support row names (for consistency and </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> simplicity).</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Tell me three funny jokes about statisticians"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sure! Here are three funny jokes about statisticians:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1. **Why did the statistician drown crossing a river?**  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Because it was three feet deep on average!</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2. **How does a statistician determine they’re cold?**  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    By rejection of the null hypothesis that they are warm.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3. **Why don’t statisticians ever play hide and seek with </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mathematicians?**  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Because statisticians always sample and mathematicians always try </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> to find a general solution!</span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

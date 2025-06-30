@@ -133,18 +133,11 @@ tool. Chat models generally do not know the current time, which makes
 questions like these impossible.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4o"</span><span class="op">)</span></span>
-<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"How long ago exactly was the moment Neil Armstrong touched down on the moon?"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Neil Armstrong touched down on the moon on July 20, 1969, at 20:17 UTC. To determine how long ago that</span></span>
-<span><span class="co">#&gt; was from the current year of 2023, we can calculate the difference in years, months, and days.</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; From July 20, 1969, to July 20, 2023, is exactly 54 years. If today's date is after July 20, 2023, you</span></span>
-<span><span class="co">#&gt; would add the additional time since then. If it is before, you would consider slightly less than 54</span></span>
-<span><span class="co">#&gt; years.</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; As of right now, can you confirm the current date so we can calculate the precise duration?</span></span></code></pre></div>
-<p>Unfortunately, this example was run on September 18, 2024. Let’s give
-the chat model the ability to determine the current time and try
-again.</p>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"How long ago did Neil Armstrong touch down on the moon?"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of </span></span>
+<span><span class="co">#&gt; October 2023, that event occurred 54 years ago.</span></span></code></pre></div>
+<p>Since the model doesn’t know what day it is, the result is
+incorrect.</p>
 </div>
 <div class="section level3">
 <h3 id="defining-a-tool-function">Defining a tool function<a class="anchor" aria-label="anchor" href="#defining-a-tool-function"></a>
@@ -164,7 +157,7 @@ important step that will help the model use your tool correctly!</p>
 <p>Let’s test it:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">get_current_time</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2024-09-18 17:47:14 UTC"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2025-06-25 16:53:23 UTC"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="registering-tools">Registering tools<a class="anchor" aria-label="anchor" href="#registering-tools"></a>
@@ -173,9 +166,7 @@ important step that will help the model use your tool correctly!</p>
 <code>get_current_time</code> function. This by creating and registering
 a tool:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4o"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
 <span>  <span class="va">get_current_time</span>,</span>
 <span>  <span class="st">"Gets the current time in the given time zone."</span>,</span>
 <span>  tz <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span></span>
@@ -200,38 +191,29 @@ generation you’d have to do otherwise.</p>
 </h3>
 <p>That’s all we need to do! Let’s retry our query:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"How long ago exactly was the moment Neil Armstrong touched down on the moon?"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Neil Armstrong touched down on the moon on July 20, 1969, at 20:17 UTC.</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; To calculate the time elapsed from that moment until the current time (September 18, 2024, 17:47:19</span></span>
-<span><span class="co">#&gt; UTC), we need to break it down.</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; 1. From July 20, 1969, 20:17 UTC to July 20, 2024, 20:17 UTC is exactly 55 years.</span></span>
-<span><span class="co">#&gt; 2. From July 20, 2024, 20:17 UTC to September 18, 2024, 17:47:19 UTC, we need to further break down:</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt;    - From July 20, 2024, 20:17 UTC to September 18, 2024, 17:47:19 UTC, which is:</span></span>
-<span><span class="co">#&gt;      - 1 full month (August)</span></span>
-<span><span class="co">#&gt;      - 30 – 20 = 10 days of July</span></span>
-<span><span class="co">#&gt;      - 18 days of September until 17:47:19 UTC</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; So, in detail:</span></span>
-<span><span class="co">#&gt;    - 55 years</span></span>
-<span><span class="co">#&gt;    - 1 month</span></span>
-<span><span class="co">#&gt;    - 28 days</span></span>
-<span><span class="co">#&gt;    - From July 20, 2024, 20:17 UTC to July 20, 2024, 17:47:19 UTC: 23 hours, 30 minutes, and 19 seconds</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; Time Total:</span></span>
-<span><span class="co">#&gt; - 55 years</span></span>
-<span><span class="co">#&gt; - 1 month</span></span>
-<span><span class="co">#&gt; - 28 days</span></span>
-<span><span class="co">#&gt; - 23 hours</span></span>
-<span><span class="co">#&gt; - 30 minutes</span></span>
-<span><span class="co">#&gt; - 19 seconds</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; This is the exact time that has elapsed since Neil Armstrong's historic touchdown on the moon.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"How long ago did Neil Armstrong touch down on the moon?"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of June </span></span>
+<span><span class="co">#&gt; 25, 2025, that event occurred 55 years and almost 11 months ago.</span></span></code></pre></div>
 <p>That’s correct! Without any further guidance, the chat model decided
 to call our tool function and successfully used its result in
 formulating its response.</p>
+<p>If we print the chat we can see where the model decided to use the
+tool:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">chat</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4o turns=6 tokens=389/86 $0.00&gt;</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [19] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; How long ago did Neil Armstrong touch down on the moon?</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [31] ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that event occurred 54 years ago.</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [116] ─────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; How long ago did Neil Armstrong touch down on the moon?</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [15] ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_ZVwpQU8xbL42um8FYaQALjib)]: get_current_time(tz = "UTC")</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [23] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_ZVwpQU8xbL42um8FYaQALjib)]: 2025-06-25 16:53:23 UTC</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [40] ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of June 25, 2025, that event occurred 55 years and almost 11 months ago.</span></span></code></pre></div>
 <p>(Full disclosure: I originally tried this example with the default
 model of <code>gpt-4o-mini</code> and it got the tool calling right but
 the date math wrong, hence the explicit
@@ -265,7 +247,7 @@ simulating a weather API that returns data for multiple cities at once.
 The <code>get_weather()</code> function returns a data frame that ellmer
 will automatically convert into JSON in row-major format, which our
 experiments suggest is good for LLMs.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">raining</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"heavy"</span>, Houston <span class="op">=</span> <span class="st">"none"</span>, Chicago <span class="op">=</span> <span class="st">"overcast"</span><span class="op">)</span></span>
 <span><span class="va">temperature</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"cool"</span>, Houston <span class="op">=</span> <span class="st">"hot"</span>, Chicago <span class="op">=</span> <span class="st">"warm"</span><span class="op">)</span></span>
 <span><span class="va">wind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"strong"</span>, Houston <span class="op">=</span> <span class="st">"weak"</span>, Chicago <span class="op">=</span> <span class="st">"strong"</span><span class="op">)</span></span>
@@ -287,14 +269,12 @@ experiments suggest is good for LLMs.</p>
 <span>  cities <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="st">"City names"</span>, <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Give me a weather udpate for London and Chicago"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">◯</span> [<span style="color: #0000BB;">tool call</span>] get_weather(cities = list("London", "Chicago"))</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">●</span> #&gt; <span style="font-style: italic;">[{"city":"London","raining":"heavy","temperature":"cool","wi…</span></span></span>
-<span><span class="co">#&gt; Here's the latest weather update:</span></span>
+<span><span class="co">#&gt; Here’s your weather update:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; - London: Heavy rain, cool temperatures, with strong winds.</span></span>
-<span><span class="co">#&gt; - Chicago: Overcast skies, warm temperatures, and strong winds.</span></span>
+<span><span class="co">#&gt; - London: Heavy rain, cool temperature, and strong winds.</span></span>
+<span><span class="co">#&gt; - Chicago: Overcast skies, warm temperature, and strong winds.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Let me know if you want more details!</span></span></code></pre></div>
+<span><span class="co">#&gt; Let me know if you need more details or updates!</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
