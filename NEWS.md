@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `batch_chat_structured()` now longer gives a confusing message if prompts/path/provider don't match (#599).
 * New `ellmer_echo` option controls default value for `echo`.
 * `chat_portkey()` works once again, and now will read the virtual API key 
   from the `PORTKEY_VIRTUAL_KEY` env var (#588).
