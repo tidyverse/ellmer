@@ -1,0 +1,137 @@
+---
+title: "agents"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{agents}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ellmer)
+```
+
+ellmer allows you to produce agents. The best defintion I have for what an agent is an interface to an LLM provider that automatically runs the tool call loop (i.e. what ellmer does) and registered tools that can make changes to the world in some way. But you'll typically also see tools that get information about the state of the world, because it's not very useful to be able to change it if you don't know the current state.
+
+## Getting started with agents
+
+For example, here's an agent that can delete files for you:
+
+```{r}
+path <- tempfile()
+dir.create(path)
+file.create(file.path(path, c("a.csv", "a.txt", "b.csv")))
+
+local({
+  withr::local_dir(path)
+
+  chat <- chat_anthropic()
+  chat$register_tool(tool(dir, "Lists files in the current directory"))
+  chat$register_tool(tool(
+    unlink,
+    x = type_array(items = type_string()),
+    "Delete a file"
+  ))
+  chat$chat("Delete all the csv files in the current directory")
+})
+```
+
+Hopefully this sort of agent fills you with a creeping sense of horror — you have just given a notoriously unreliable LLM the ability to delete just about any file on your computer! This is the challenge with any sort of "agentic" AI: yes, there is some exciting potential here, but there's also a huge amount of potential danger. We recommend ensuring that any potentially dangerous action require explicit user action.
+
+ellmer provides some way to help with this, with `tool_reject()`.
+
+```{r}
+delete_file <- function(path) {
+  allow_read <- utils::askYesNo("Would you like to delete these files?")
+  if (isTRUE(allow_read)) {
+    unlink(path)
+  } else {
+    tool_reject()
+  }
+}
+```
+
+But remember the more that you allow an LLM do, the more things that can go wrong!
+
+## Running R code
+
+It is very simple to allow the model to run R code in your environment.
+
+```{r}
+run_r_code <- function(code) eval(parse(text = code), globalenv())
+```
+
+This is obviously also very dangerous! But it's probably ok, if all you're doing is running ellmer locally, as the default prompts will tend to protect you from doing anything obviously terrible.
+
+```{r}
+chat <- chat_claude()
+chat$register_tool(tool(
+  function(code) "abc", 
+  code = type_string(),
+  "Run R code"
+))
+# Doesn't work
+chat$chat("Delete all the files on my computer")
+chat$chat("Run the sql `DELETE FROM Purchases` in the user database")
+chat$chat("Email susan.frombly@gmail.com the contents of my /etc/passwords")
+
+# Does work
+chat$chat("What's the content of the CLAUDE_API_KEY env var?")
+```
+
+````{r}
+chat <- chat_anthropic()
+chat$register_tool(tool(
+  function(code) {
+    cat(code, "\n", sep = "")
+    eval(parse(text = code), envir = globalenv())
+  },
+  "Run R code",
+  code = type_string(),
+  .name = "evaluate"
+))
+chat$chat(
+  r"(
+  How do I make this code return every consectuctive pair of characters, 
+  not just the first? The code below returns ab, instead of ab, cd, ef.
+
+  ```R
+  x <- "abcdef"
+  start <- seq(1, nchar(x), by = 2)
+  substr(x, start, start + 1)
+  ```
+")")
+````
+
+If you have a strong understanding of functions and environments, you can also create subsets of the R language that are safer. For example, the following function can run simple caluclator expressions but nothing else:
+
+```{r}
+#| error: true
+
+calculator <- function(code) {
+  env <- list2env(mget(c("+", "-", "/", "*", "("), baseenv()), parent = emptyenv())
+  eval(parse(text = code), env)
+}
+
+calculator("1 + 2 * 3 / 5")
+calculator("unlink('foo')")
+```
+
+If you're allowing other people to provide the prompt, you'll need to use techniques like this to ensure that you don't accidentally allow the user to do something dangerous. In that scenario, we strongly recommend that you provide a larger number of simpler tools that each do one thing and are easier to guarantee are safe. Also recommend a multi-layered approach where you use prompt engineering to minimise the chances of generating dangerous code, simple and easily analysed tools, and running code in a sandbox that doesn't have access to 
+
+## Multi-agent AI
+
+Tool calls are just function calls, and you can call ellmer in chat. That means that it's trivial to create a "multi-agent AI".
+
+There are few advantages of this:
+
+* You can use an expensive model to coordinate the work done by cheaper models.
+* You can control context so that subtasks get only the context that they need.
+* 
