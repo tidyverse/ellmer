@@ -10,7 +10,7 @@ NULL
 #'
 #' Learn more in `vignette("tool-calling")`.
 #'
-#' @param .fun The function to be invoked when the tool is called. The return
+#' @param fun The function to be invoked when the tool is called. The return
 #'   value of the function is sent back to the chatbot.
 #'
 #'   Expert users can customize the tool result by returning a

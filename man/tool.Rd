@@ -19,6 +19,12 @@ tool(
 )
 }
 \arguments{
+\item{fun}{The function to be invoked when the tool is called. The return
+value of the function is sent back to the chatbot.
+
+Expert users can customize the tool result by returning a
+\link{ContentToolResult} object.}
+
 \item{description}{A detailed description of what the function does.
 Generally, the more information that you can provide here, the better.}
 
@@ -39,12 +45,6 @@ description of the annotation properties recommended by the \href{https://modelc
 
 \item{.name, .description, .convert, .annotations}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please switch to the non-prefixed
 equivalents.}
-
-\item{.fun}{The function to be invoked when the tool is called. The return
-value of the function is sent back to the chatbot.
-
-Expert users can customize the tool result by returning a
-\link{ContentToolResult} object.}
 }
 \value{
 An S7 \code{ToolDef} object.
