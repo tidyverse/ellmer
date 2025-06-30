@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_github()` (and other OpenAI extensions), no longer warn about `seed` (#574).
 * New `ellmer_echo` option controls default value for `echo`.
 * `chat_portkey()` works once again, and now will read the virtual API key 
   from the `PORTKEY_VIRTUAL_KEY` env var (#588).

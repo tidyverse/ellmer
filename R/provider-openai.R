@@ -55,7 +55,7 @@ chat_openai <- function(
   echo <- check_echo(echo)
 
   params <- params %||% params()
-  if (lifecycle::is_present(seed)) {
+  if (lifecycle::is_present(seed) && !is.null(seed)) {
     lifecycle::deprecate_warn(
       when = "0.2.0",
       what = "chat_openai(seed)",
