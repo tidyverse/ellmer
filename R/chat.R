@@ -15,9 +15,11 @@ NULL
 #' but instead call [chat_openai()] or friends instead.
 #'
 #' @return A Chat object
-#' @examplesIf has_credentials("openai")
-#' chat <- chat_openai(echo = TRUE)
+#' @examples
+#' \dontshow{ellmer:::vcr_example_start("Chat")}
+#' chat <- chat_openai()
 #' chat$chat("Tell me a funny joke")
+#' \dontshow{ellmer:::vcr_example_end()}
 Chat <- R6::R6Class(
   "Chat",
   public = list(

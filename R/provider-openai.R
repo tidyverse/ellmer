@@ -33,7 +33,8 @@ NULL
 #' @family chatbots
 #' @export
 #' @returns A [Chat] object.
-#' @examplesIf has_credentials("openai")
+#' @examples
+#' \dontshow{ellmer:::vcr_example_start("parallel_chat")}
 #' chat <- chat_openai()
 #' chat$chat("
 #'   What is the difference between a tibble and a data frame?
@@ -41,6 +42,7 @@ NULL
 #' ")
 #'
 #' chat$chat("Tell me three funny jokes about statisticians")
+#' \dontshow{ellmer:::vcr_example_end()}
 chat_openai <- function(
   system_prompt = NULL,
   base_url = "https://api.openai.com/v1",

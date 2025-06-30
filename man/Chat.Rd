@@ -18,10 +18,10 @@ You should generally not create this object yourself,
 but instead call \code{\link[=chat_openai]{chat_openai()}} or friends instead.
 }
 \examples{
-\dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-chat <- chat_openai(echo = TRUE)
+\dontshow{ellmer:::vcr_example_start("Chat")}
+chat <- chat_openai()
 chat$chat("Tell me a funny joke")
-\dontshow{\}) # examplesIf}
+\dontshow{ellmer:::vcr_example_end()}
 }
 \section{Methods}{
 \subsection{Public methods}{
