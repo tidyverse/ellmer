@@ -74,7 +74,7 @@ TypeObject <- new_class(
   Type,
   properties = list(
     properties = prop_list_of(Type, names = "all"),
-    additional_properties = prop_bool(TRUE)
+    additional_properties = prop_bool(FALSE)
   )
 )
 

@@ -16,7 +16,11 @@ test_that("can call tools in parallel", {
   prompts <- rep(list("Roll the dice, please! Reply with 'You rolled ____'"), 2)
 
   chat <- chat_openai_test()
-  chat$register_tool(tool(counter(), "Rolls a six-sided die.", .name = "roll"))
+  chat$register_tool(tool(
+    counter(),
+    name = "roll",
+    description = "Rolls a six-sided die."
+  ))
   chats <- parallel_chat(chat, prompts)
 
   turns_1 <- chats[[1]]$get_turns()
@@ -37,7 +41,11 @@ test_that("can have uneven number of turns", {
   )
 
   chat <- chat_openai_test()
-  chat$register_tool(tool(counter(), "Rolls a six-sided die.", .name = "roll"))
+  chat$register_tool(tool(
+    counter(),
+    name = "roll",
+    description = "Rolls a six-sided die."
+  ))
   chats <- parallel_chat(chat, prompts)
 
   lengths <- map_int(chats, \(chat) length(chat$get_turns()))
