@@ -128,7 +128,7 @@ Remember that tool arguments come from the LLM, and tool results are returned to
 
 Inputs to a tool call, must be defined by `type_boolean()`, `type_integer()`, `type_number()`, `type_string()`, `type_enum()`, `type_array()`, or `type_object()`. We recommend keeping them as simple as possible, focussing on basic scalar types as much as you can.
 
-The output of the tool call will be interpreted by the LLM, just as if you had typed that information into the data. That means you'll generally want to produce text or other atomic vectors. For more complex data, ellmer will automatically serialize the result to JSON, which LLMs generally seem to be good at understanding. 
+The output of the tool call will be interpreted by the LLM, just as if you had typed that information into the data. That means you'll generally want to produce text or other atomic vectors. For more complex data, ellmer will automatically serialize the result to JSON, which LLMs generally seem to be good at understanding.  If you must have more direct control of the structure of the JSON that's returned, you can return a JSON-serializable value wrapped in `I()`, which ellmer will leave alone until the entire request is JSON-serialized.
 
 To show off these ideas, here's a slightly more complicated example simulating a weather API that returns data for multiple cities at once. The `get_weather()` function returns a data frame that ellmer will automatically convert into JSON in row-major format, which our experiments suggest is good for LLMs.
 
