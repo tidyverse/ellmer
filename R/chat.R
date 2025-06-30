@@ -359,22 +359,33 @@ Chat <- R6::R6Class(
     },
 
     #' @description Register a tool (an R function) that the chatbot can use.
-    #'   If the chatbot decides to use the function, ellmer will automatically
-    #'   call it and submit the results back.
-    #'
-    #'   The return value of the function. Generally, this should either be a
-    #'   string, or a JSON-serializable value. If you must have more direct
-    #'   control of the structure of the JSON that's returned, you can return a
-    #'   JSON-serializable value wrapped in [base::I()], which ellmer will leave
-    #'   alone until the entire request is JSON-serialized.
-    #' @param tool_def Tool definition created by [tool()].
-    register_tool = function(tool_def) {
-      if (!S7_inherits(tool_def, ToolDef)) {
+    #'   Learn more in `vignette("tool-calling")`.
+    #' @param tool A tool definition created by [tool()].
+    register_tool = function(tool) {
+      if (!S7_inherits(tool, ToolDef)) {
         cli::cli_abort("{.arg tool} must be a <ToolDef>.")
       }
 
-      private$tools[[tool_def@name]] <- tool_def
+      private$tools[[tool@name]] <- tool
       invisible(self)
+    },
+
+    #' @description Register a list of tools.
+    #'   Learn more in `vignette("tool-calling")`.
+    #' @param tools A list of tool definitions created by [tool()].
+    register_tools = function(tools) {
+      if (!is_list(tools)) {
+        stop_input_type(tools, "a list")
+      }
+      for (i in seq_along(tools)) {
+        if (!S7_inherits(tools[[i]], ToolDef)) {
+          arg <- paste0("tools[[", i, "]]")
+          stop_input_type(tools[[i]], "a <ToolDef>", arg = arg)
+        }
+      }
+      for (tool in tools) {
+        self$register_tool(tool)
+      }
     },
 
     #' @description Get the underlying provider object. For expert use only.

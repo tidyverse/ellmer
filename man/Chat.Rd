@@ -43,6 +43,7 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-stream}{\code{Chat$stream()}}
 \item \href{#method-Chat-stream_async}{\code{Chat$stream_async()}}
 \item \href{#method-Chat-register_tool}{\code{Chat$register_tool()}}
+\item \href{#method-Chat-register_tools}{\code{Chat$register_tools()}}
 \item \href{#method-Chat-get_provider}{\code{Chat$get_provider()}}
 \item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
 \item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
@@ -400,22 +401,33 @@ rich content types. When \code{stream = "content"}, \code{stream()} yields
 \if{latex}{\out{\hypertarget{method-Chat-register_tool}{}}}
 \subsection{Method \code{register_tool()}}{
 Register a tool (an R function) that the chatbot can use.
-If the chatbot decides to use the function, ellmer will automatically
-call it and submit the results back.
-
-The return value of the function. Generally, this should either be a
-string, or a JSON-serializable value. If you must have more direct
-control of the structure of the JSON that's returned, you can return a
-JSON-serializable value wrapped in \code{\link[base:AsIs]{base::I()}}, which ellmer will leave
-alone until the entire request is JSON-serialized.
+Learn more in \code{vignette("tool-calling")}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$register_tool(tool_def)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$register_tool(tool)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tool_def}}{Tool definition created by \code{\link[=tool]{tool()}}.}
+\item{\code{tool}}{A tool definition created by \code{\link[=tool]{tool()}}.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-register_tools"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-register_tools}{}}}
+\subsection{Method \code{register_tools()}}{
+Register a list of tools.
+Learn more in \code{vignette("tool-calling")}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$register_tools(tools)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tools}}{A list of tool definitions created by \code{\link[=tool]{tool()}}.}
 }
 \if{html}{\out{</div>}}
 }

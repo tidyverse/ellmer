@@ -232,10 +232,8 @@ test_that("chat can get and register a list of tools", {
       description = "Get the R version of the current session"
     )
   )
-  for (tool_f in tools) {
-    chat$register_tool(tool_f)
-  }
 
+  chat$register_tools(tools)
   chat2$set_tools(tools)
 
   expect_equal(chat$get_tools(), tools)
@@ -262,6 +260,17 @@ test_that("chat can get and register a list of tools", {
     error = TRUE,
     chat$set_tools(c(tools, list("foo")))
   )
+})
+
+test_that("can only register tools", {
+  chat <- chat_openai_test()
+  tool_def <- tool(function() 1, "tool")
+
+  expect_snapshot(error = TRUE, {
+    chat$register_tool(1)
+    chat$register_tools(1)
+    chat$register_tools(list(tool_def, 1))
+  })
 })
 
 test_that("chat warns on tool failures", {
