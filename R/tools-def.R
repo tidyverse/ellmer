@@ -38,16 +38,11 @@ NULL
 #' # call the tool
 #' tool_rnorm <- tool(
 #'   rnorm,
-#'   "Drawn numbers from a random normal distribution",
-#'   list(
+#'   description = "Drawn numbers from a random normal distribution",
+#'   arguments = list(
 #'     n = type_integer("The number of observations. Must be a positive integer."),
 #'     mean = type_number("The mean value of the distribution."),
-#'     sd = type_number("The standard deviation of the distribution. Must be a non-negative number."),
-#'   ),
-#'   annotations = tool_annotations(
-#'     title = "Draw Random Normal Numbers",
-#'     read_only_hint = TRUE,
-#'     open_world_hint = FALSE
+#'     sd = type_number("The standard deviation of the distribution. Must be a non-negative number.")
 #'   )
 #' )
 #' tool_rnorm(n = 5, mean = 0, sd = 1)
@@ -57,11 +52,10 @@ NULL
 #' chat$register_tool(tool_rnorm)
 #'
 #' # Then ask a question that needs it.
-#' chat$chat("
-#'   Give me five numbers from a random normal distribution.
-#' ")
+#' chat$chat("Give me five numbers from a random normal distribution.")
 #'
 #' # Look at the chat history to see how tool calling works:
+#' chat
 #' # Assistant sends a tool request which is evaluated locally and
 #' # results are send back in a tool result.
 #'
