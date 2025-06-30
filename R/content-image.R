@@ -23,7 +23,7 @@
 #'   content_image_file(system.file("httr2.png", package = "ellmer"))
 #' )
 #'
-#' \dontshow{dev.control('enable')}
+#' \dontrun{
 #' plot(waiting ~ eruptions, data = faithful)
 #' chat <- chat_openai()
 #' chat$chat(
@@ -32,6 +32,7 @@
 #'    2-5 major visual patterns.",
 #'    content_image_plot()
 #' )
+#' }
 #' \dontshow{ellmer:::vcr_example_end()}
 content_image_url <- function(url, detail = c("auto", "low", "high")) {
   detail <- arg_match(detail)

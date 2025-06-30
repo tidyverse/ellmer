@@ -29,7 +29,8 @@ NULL
 #'   function.
 #' @return An S7 `ToolDef` object.
 #' @examples
-#' \dontshow{ellmer:::vcr_example_start("parallel_chat")}
+#' \dontshow{ellmer:::vcr_example_start("tool")}
+#' \dontshow{set.seed(1014)}
 #' # First define the metadata that the model uses to figure out when to
 #' # call the tool
 #' tool_rnorm <- tool(

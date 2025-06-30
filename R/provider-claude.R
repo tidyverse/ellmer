@@ -23,7 +23,7 @@ NULL
 #' @family chatbots
 #' @export
 #' @examples
-#' \dontshow{ellmer:::vcr_example_start("parallel_chat")}
+#' \dontshow{ellmer:::vcr_example_start("chat_anthropic")}
 #' chat <- chat_anthropic()
 #' chat$chat("Tell me three jokes about statisticians")
 #' \dontshow{ellmer:::vcr_example_end()}

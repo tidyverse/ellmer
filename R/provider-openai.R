@@ -34,7 +34,7 @@ NULL
 #' @export
 #' @returns A [Chat] object.
 #' @examples
-#' \dontshow{ellmer:::vcr_example_start("parallel_chat")}
+#' \dontshow{ellmer:::vcr_example_start("chat_openai")}
 #' chat <- chat_openai()
 #' chat$chat("
 #'   What is the difference between a tibble and a data frame?
