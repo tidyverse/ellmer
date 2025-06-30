@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_google_gemini()` and `chat_google_vertex()` now default to Gemini 2.5 flash (#576).
 * New `ellmer_echo` option controls default value for `echo`.
 * `chat_portkey()` works once again, and now will read the virtual API key 
   from the `PORTKEY_VIRTUAL_KEY` env var (#588).

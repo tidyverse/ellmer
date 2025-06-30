@@ -193,7 +193,11 @@ test_pdf_local <- function(chat_fun) {
     content_pdf_file(test_path("apples.pdf"))
   )
   expect_match(response, "Apples are tasty")
-  expect_match(chat$chat("What apple is not tasty?"), "red delicious")
+  expect_match(
+    chat$chat("What apple is not tasty?"),
+    "red delicious",
+    ignore.case = TRUE
+  )
 }
 
 # Models ------------------------------------------------------------------
