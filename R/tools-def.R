@@ -60,7 +60,7 @@ NULL
 #'
 #' \dontshow{ellmer:::vcr_example_end()}
 #' @family tool calling helpers
-#' @aliase ToolDef
+#' @aliases ToolDef
 #' @export
 tool <- function(
   .fun,
