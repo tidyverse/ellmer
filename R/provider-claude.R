@@ -22,9 +22,11 @@ NULL
 #'   claude features that are still in beta.
 #' @family chatbots
 #' @export
-#' @examplesIf has_credentials("claude")
+#' @examples
+#' \dontshow{ellmer:::vcr_example_start("chat_anthropic")}
 #' chat <- chat_anthropic()
 #' chat$chat("Tell me three jokes about statisticians")
+#' \dontshow{ellmer:::vcr_example_end()}
 chat_anthropic <- function(
   system_prompt = NULL,
   params = NULL,

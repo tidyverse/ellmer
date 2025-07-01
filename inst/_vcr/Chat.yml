@@ -1,0 +1,52 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"Tell
+        me a funny joke"}]}],"model":"gpt-4.1","stream":false}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 957e057da976465a-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 30 Jun 2025 13:31:00 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '573'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=e6gPMVgbrpavLPk_.XGTnd7ElQ8kqD1E05h9p_y2TBQ-1751290260-1.0.1.1-t7ipbvU9cJp4hOx.tF6k9vR2Jepd8aCgL6oIS13NQvkADB4l.qCX2s6YBeRxr8ZOaICb.N03o6QTFZ7YdQcGO5OXBhuwlk9hcNUlUeLpn60;
+        path=/; expires=Mon, 30-Jun-25 14:01:00 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=KVovGQ_hPREc2.b8pIgl2_ljuKKH6_BtUYVNTlcU6Y8-1751290260775-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '598'
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '30000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '29999993'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_38460279f1c66c165964bf1e1d81bd0b
+    body:
+      string: "{\n  \"id\": \"chatcmpl-Bo8t24UnWlODRFRkAtA0Ftj8NXidq\",\n  \"object\":
+        \"chat.completion\",\n  \"created\": 1751290260,\n  \"model\": \"gpt-4.1-2025-04-14\",\n
+        \ \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\":
+        \"assistant\",\n        \"content\": \"Why did the scarecrow win an award?
+        \ \\nBecause he was outstanding in his field! \U0001F33E\U0001F604\",\n        \"refusal\":
+        null,\n        \"annotations\": []\n      },\n      \"logprobs\": null,\n
+        \     \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\":
+        12,\n    \"completion_tokens\": 22,\n    \"total_tokens\": 34,\n    \"prompt_tokens_details\":
+        {\n      \"cached_tokens\": 0,\n      \"audio_tokens\": 0\n    },\n    \"completion_tokens_details\":
+        {\n      \"reasoning_tokens\": 0,\n      \"audio_tokens\": 0,\n      \"accepted_prediction_tokens\":
+        0,\n      \"rejected_prediction_tokens\": 0\n    }\n  },\n  \"service_tier\":
+        \"default\",\n  \"system_fingerprint\": \"fp_51e1070cf2\"\n}\n"
+  recorded_at: 2025-06-30 13:31:00
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0

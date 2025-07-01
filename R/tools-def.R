@@ -32,8 +32,9 @@ NULL
 #'   `r lifecycle::badge("deprecated")` Please switch to the non-prefixed
 #'   equivalents.
 #' @return An S7 `ToolDef` object.
-#' @examplesIf has_credentials("openai")
-#'
+#' @examples
+#' \dontshow{ellmer:::vcr_example_start("tool")}
+#' \dontshow{set.seed(1014)}
 #' # First define the metadata that the model uses to figure out when to
 #' # call the tool
 #' tool_rnorm <- tool(
@@ -59,8 +60,9 @@ NULL
 #' # Assistant sends a tool request which is evaluated locally and
 #' # results are send back in a tool result.
 #'
+#' \dontshow{ellmer:::vcr_example_end()}
 #' @family tool calling helpers
-#' @aliase ToolDef
+#' @aliases ToolDef
 #' @export
 tool <- function(
   fun,

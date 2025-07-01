@@ -67,7 +67,6 @@
 #' )
 #' data
 #' }
-#'
 #' @export
 batch_chat <- function(chat, prompts, path, wait = TRUE) {
   job <- BatchJob$new(
