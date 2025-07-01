@@ -28,8 +28,9 @@ NULL
 #'   function. Each element should be created by a [`type_*()`][type_boolean]
 #'   function.
 #' @return An S7 `ToolDef` object.
-#' @examplesIf has_credentials("openai")
-#'
+#' @examples
+#' \dontshow{ellmer:::vcr_example_start("tool")}
+#' \dontshow{set.seed(1014)}
 #' # First define the metadata that the model uses to figure out when to
 #' # call the tool
 #' tool_rnorm <- tool(
@@ -57,7 +58,9 @@ NULL
 #' # Assistant sends a tool request which is evaluated locally and
 #' # results are send back in a tool result.
 #'
+#' \dontshow{ellmer:::vcr_example_end()}
 #' @family tool calling helpers
+#' @aliases ToolDef
 #' @export
 tool <- function(
   .fun,

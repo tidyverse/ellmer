@@ -69,10 +69,10 @@ models via the API; instead, you will need to sign up (and pay for) a
 \href{https://console.anthropic.com/}{developer account}.
 }
 \examples{
-\dontshow{if (has_credentials("claude")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{ellmer:::vcr_example_start("chat_anthropic")}
 chat <- chat_anthropic()
 chat$chat("Tell me three jokes about statisticians")
-\dontshow{\}) # examplesIf}
+\dontshow{ellmer:::vcr_example_end()}
 }
 \seealso{
 Other chatbots: 

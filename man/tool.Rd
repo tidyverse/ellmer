@@ -2,6 +2,7 @@
 % Please edit documentation in R/tools-def.R
 \name{tool}
 \alias{tool}
+\alias{ToolDef}
 \title{Define a tool}
 \usage{
 tool(
@@ -46,8 +47,8 @@ run in the current R instance.
 Learn more in \code{vignette("tool-calling")}.
 }
 \examples{
-\dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
+\dontshow{ellmer:::vcr_example_start("tool")}
+\dontshow{set.seed(1014)}
 # First define the metadata that the model uses to figure out when to
 # call the tool
 tool_rnorm <- tool(
@@ -74,7 +75,8 @@ chat$chat("
 # Look at the chat history to see how tool calling works:
 # Assistant sends a tool request which is evaluated locally and
 # results are send back in a tool result.
-\dontshow{\}) # examplesIf}
+
+\dontshow{ellmer:::vcr_example_end()}
 }
 \seealso{
 Other tool calling helpers: 
