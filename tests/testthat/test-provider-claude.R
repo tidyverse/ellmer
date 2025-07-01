@@ -1,6 +1,8 @@
 test_that("can make simple batch request", {
+  vcr::local_cassette("claude-batch", match_requests_on = c("uri", "body_json"))
+
   chat <- chat_anthropic_test("Be as terse as possible; no punctuation")
-  resp <- chat$chat("What is 1 + 1?", echo = FALSE)
+  resp <- chat$chat("What is 1 + 1?")
   expect_match(resp, "2")
   expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
 })
@@ -12,6 +14,8 @@ test_that("can make simple streaming request", {
 })
 
 test_that("can list models", {
+  vcr::local_cassette("claude-list-models")
+
   test_models(models_anthropic)
 })
 
@@ -22,6 +26,10 @@ test_that("defaults are reported", {
 })
 
 test_that("supports standard parameters", {
+  vcr::local_cassette(
+    "claude-standard-params",
+    match_requests_on = c("uri", "body_json")
+  )
   chat_fun <- chat_anthropic_test
 
   test_params_stop(chat_fun)
@@ -29,21 +37,30 @@ test_that("supports standard parameters", {
 
 test_that("all tool variations work", {
   chat_fun <- chat_anthropic_test
+  # req_promise is not mockable in CRAN httr2
+  # test_tools_async(chat_fun)
 
-  retry_test(test_tools_simple(chat_fun))
-  test_tools_async(chat_fun)
+  vcr::local_cassette("claude-tool", match_requests_on = c("uri", "body_json"))
+  test_tools_simple(chat_fun)
   test_tools_parallel(chat_fun)
-  # Claude sometimes returns an empty string
-  retry_test(test_tools_sequential(chat_fun, total_calls = 6))
+  test_tools_sequential(chat_fun, total_calls = 6)
 })
 
 test_that("can extract data", {
+  vcr::local_cassette(
+    "claude-structured-data",
+    match_requests_on = c("uri", "body_json")
+  )
   chat_fun <- chat_anthropic_test
 
   test_data_extraction(chat_fun)
 })
 
 test_that("can use images", {
+  vcr::local_cassette(
+    "claude-images",
+    match_requests_on = c("uri", "body_json")
+  )
   chat_fun <- chat_anthropic_test
 
   test_images_inline(chat_fun)
@@ -51,6 +68,7 @@ test_that("can use images", {
 })
 
 test_that("can use pdfs", {
+  vcr::local_cassette("claude-pdfs", match_requests_on = c("uri", "body_json"))
   chat_fun <- chat_anthropic_test
 
   test_pdf_local(chat_fun)
@@ -65,7 +83,12 @@ test_that("can set beta headers", {
 })
 
 test_that("continues to work after whitespace only outputs (#376)", {
-  chat <- chat_anthropic()
+  vcr::local_cassette(
+    "claude-whitespace",
+    match_requests_on = c("uri", "body_json")
+  )
+
+  chat <- chat_anthropic_test()
   chat$chat("Respond with only two blank lines")
   expect_equal(
     chat$chat("What's 1+1? Just give me the number"),

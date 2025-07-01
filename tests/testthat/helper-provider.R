@@ -53,7 +53,8 @@ test_tools_async <- function(chat_fun) {
   chat <- chat_fun("Be very terse, not even punctuation.")
   chat$register_tool(tool(
     coro::async(function() "2024-01-01"),
-    "Return the current date"
+    "Return the current date",
+    .name = "current_date"
   ))
 
   result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
@@ -71,7 +72,8 @@ test_tools_parallel <- function(chat_fun, total_calls = 4) {
   chat$register_tool(tool(
     favourite_color,
     "Returns a person's favourite colour",
-    person = type_string("Name of a person")
+    person = type_string("Name of a person"),
+    .name = "favourite_color"
   ))
 
   result <- chat$chat(
@@ -102,12 +104,14 @@ test_tools_sequential <- function(chat_fun, total_calls) {
   chat$register_tool(tool(
     forecast,
     "Gets the weather forecast for a city",
-    city = type_string("City name")
+    city = type_string("City name"),
+    .name = "forecast"
   ))
   chat$register_tool(tool(
     equipment,
     "Gets the equipment needed for a weather condition",
-    weather = type_string("Weather condition")
+    weather = type_string("Weather condition"),
+    .name = "equipment"
   ))
 
   result <- chat$chat("What should I pack for New York this weekend?")
