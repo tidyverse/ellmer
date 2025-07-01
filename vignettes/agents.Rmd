@@ -16,9 +16,9 @@ knitr::opts_chunk$set(
 
 This vignette shows you how to create agents with ellmer. It's hard to find a good definition of an agent, but there are three properties that most agents seem to have in common:
 
-1. One or more tool calls that lets them inspect the state of the world.
-1. One or more tool calls that lets them make changes to the state of the world.
-1. Automatic iteration over the tool calling loop until complete.
+1.  One or more tool calls that lets them inspect the state of the world.
+2.  One or more tool calls that lets them make changes to the state of the world.
+3.  Automatic iteration over the tool calling loop until complete.
 
 ellmer automatically provides the last property; all you need to do is register the appropriate tools. That means making an agent is surprisingly simple!
 
@@ -71,9 +71,9 @@ I hope this example makes you feel nervous: we've just given an LLM the abililty
 
 Safety and security are absolutely the biggest challenges with agents right now. Generally, because the field is moving so quickly and folks are worried much more about keeping up than doing careful, reasoned, analysis, you can expect to see a lot of news about security failures due to agents over the next few years. While it's not clear what best practices will emerge in the future, we suggest a layered approach to safety that consists of at least three pieces:
 
-1. Prompt design
-2. Explicit consent
-3. Sandboxing
+1.  Prompt design
+2.  Explicit consent
+3.  Sandboxing
 
 We'll illustrate these ideas with an agent that we pretend to give the power to run R code. This lets us explore what the model will try to do, without actually doing anything dangerous.
 
@@ -150,15 +150,19 @@ delete_file <- function(path) {
 
 For hosted agents, you should be running the agent in a sandbox, i.e. a docker container or other VM.
 
-## Running R code
+## Agent examples
+
+### R code
 
 It is very simple to allow the model to run R code in your environment.
+
+Also add btw stuff so it can look up docs
 
 ```{r}
 run_r_code <- function(code) eval(parse(text = code), globalenv())
 ```
 
-````{r}
+```{r}
 chat <- chat_anthropic()
 chat$register_tool(tool(
   function(code) {
@@ -180,7 +184,7 @@ chat$chat(
   substr(x, start, start + 1)
   ```
 ")")
-````
+```
 
 If you have a strong understanding of functions and environments, you can also create subsets of the R language that are safer. For example, the following function can run simple caluclator expressions but nothing else:
 
@@ -196,7 +200,7 @@ calculator("1 + 2 * 3 / 5")
 calculator("unlink('foo')")
 ```
 
-If you're allowing other people to provide the prompt, you'll need to use techniques like this to ensure that you don't accidentally allow the user to do something dangerous. In that scenario, we strongly recommend that you provide a larger number of simpler tools that each do one thing and are easier to guarantee are safe. Also recommend a multi-layered approach where you use prompt engineering to minimise the chances of generating dangerous code, simple and easily analysed tools, and running code in a sandbox that doesn't have access to 
+If you're allowing other people to provide the prompt, you'll need to use techniques like this to ensure that you don't accidentally allow the user to do something dangerous. In that scenario, we strongly recommend that you provide a larger number of simpler tools that each do one thing and are easier to guarantee are safe. Also recommend a multi-layered approach where you use prompt engineering to minimise the chances of generating dangerous code, simple and easily analysed tools, and running code in a sandbox that doesn't have access to
 
 ## Multi-agent AI
 
@@ -204,6 +208,26 @@ Tool calls are just function calls, and you can call ellmer in chat. That means 
 
 There are few advantages of this:
 
-* You can use an expensive model to coordinate the work done by cheaper models.
-* You can control context so that subtasks get only the context that they need.
-* 
+-   Match cost to task. You can use an expensive model to coordinate the work done by cheaper models. Lower latency.
+    -   Dynamically deciding which model. Performance/price tradeoff.
+-   Work in parallel
+-   Context control
+    -   History isolation. You can control context so that subtasks get only the context that they need.
+    -   Prompt Break down big system prompt into more manageable/specialised chunks
+    -   Tools. Too many tools makes it hard for model to use right one.
+
+```{r}
+# local history
+tool(
+  function(x) chat_openai()$chat("Something {{x}}")
+)
+
+# shared history
+chat <- chat_openai()
+tool(
+  function(x) chat$chat("Something {{x}}")
+)
+
+```
+
+Search with dead ends (i.e. requires multiple web searches)
