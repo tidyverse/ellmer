@@ -38,7 +38,7 @@ NULL
 #' # call the tool
 #' tool_rnorm <- tool(
 #'   rnorm,
-#'   description = "Drawn numbers from a random normal distribution",
+#'   description = "Draw numbers from a random normal distribution",
 #'   arguments = list(
 #'     n = type_integer("The number of observations. Must be a positive integer."),
 #'     mean = type_number("The mean value of the distribution."),
