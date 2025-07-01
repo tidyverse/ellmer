@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* [BREAKING CHANGE] `tool()` has a simpler specification you now specify the `name`, `description`, and `arguments`. I have done my best to deprecate old usage and give clear errors, but I have likely missed a few edge cases. I apologise for the pain this causes, but I'm convinced that it is going to making tool usage easier and clearer (#603).
+* `tool()` now returns a function so you can call it (and/or export it from your package) (#602).
 * `chat_github()` (and other OpenAI extensions), no longer warn about `seed` (#574).
 * New `ellmer_echo` option controls default value for `echo`.
 * `chat_portkey()` works once again, and now will read the virtual API key 

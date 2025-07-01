@@ -31,11 +31,12 @@ Generally, the more information that you can provide here, the better.}
 
 \item{...}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{arguments} instead.}
 
-\item{arguments}{A named list that define the arguments accepted by the
+\item{arguments}{A named list that defines the arguments accepted by the
 function. Each element should be created by a \code{\link[=type_boolean]{type_*()}}
-function.}
+function (or \code{NULL} if you don't want the LLM to use that argument).}
 
-\item{name}{The name of the function.}
+\item{name}{The name of the function. This can be omitted if \code{fun} is an
+existing function (i.e. not defined inline).}
 
 \item{convert}{Should JSON inputs be automatically convert to their
 R data type equivalents? Defaults to \code{TRUE}.}

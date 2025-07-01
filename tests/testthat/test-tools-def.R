@@ -57,6 +57,16 @@ test_that("checks its arguments", {
   })
 })
 
+test_that("arguments must match function formals", {
+  fun <- function(x, y) {}
+
+  expect_snapshot(error = TRUE, {
+    tool(fun, "", arguments = list(z = type_number()))
+    tool(fun, "", arguments = list(x = type_number(), y = 1))
+  })
+})
+
+
 # tool_annotations() -------------------------------------------------------
 
 test_that("tool_annotations(): NULL values are stripped", {

@@ -48,6 +48,21 @@
       Error in `tool()`:
       ! `convert` must be `TRUE` or `FALSE`, not the number 1.
 
+# arguments must match function formals
+
+    Code
+      tool(fun, "", arguments = list(z = type_number()))
+    Condition
+      Error in `tool()`:
+      ! Names of `arguments` must match formals of `fun`
+      * Extra type definitions: "z"
+      * Missing type definitions: "x" and "y"
+    Code
+      tool(fun, "", arguments = list(x = type_number(), y = 1))
+    Condition
+      Error in `tool()`:
+      ! `arguments$y` must be a <Type> or NULL, not the number 1.
+
 # tool_annotations(): checks its inputs
 
     Code

@@ -15,18 +15,19 @@ NULL
 #'
 #'   Expert users can customize the tool result by returning a
 #'   [ContentToolResult] object.
-#' @param name The name of the function.
+#' @param name The name of the function. This can be omitted if `fun` is an
+#'   existing function (i.e. not defined inline).
 #' @param description A detailed description of what the function does.
 #'   Generally, the more information that you can provide here, the better.
+#' @param arguments A named list that defines the arguments accepted by the
+#'   function. Each element should be created by a [`type_*()`][type_boolean]
+#'   function (or `NULL` if you don't want the LLM to use that argument).
 #' @param annotations Additional properties that describe the tool and its
 #'   behavior. Usually created by [tool_annotations()], where you can find a
 #'   description of the annotation properties recommended by the [Model Context
 #'   Protocol](https://modelcontextprotocol.io/introduction).
 #' @param convert Should JSON inputs be automatically convert to their
 #'   R data type equivalents? Defaults to `TRUE`.
-#' @param arguments A named list that define the arguments accepted by the
-#'   function. Each element should be created by a [`type_*()`][type_boolean]
-#'   function.
 #' @param ... `r lifecycle::badge("deprecated")` Use `arguments` instead.
 #' @param .name,.description,.convert,.annotations
 #'   `r lifecycle::badge("deprecated")` Please switch to the non-prefixed
@@ -120,9 +121,7 @@ tool <- function(
     }
   }
 
-  if (!is.list(arguments) || !(length(arguments) == 0 || is_named(arguments))) {
-    stop_input_type(arguments, "a named list")
-  }
+  check_arguments(arguments, formals(fun))
 
   ToolDef(
     fun,
@@ -145,6 +144,43 @@ ToolDef <- new_class(
     annotations = class_list
   )
 )
+
+check_arguments <- function(arguments, formals, call = caller_env()) {
+  if (!is.list(arguments) || !(length(arguments) == 0 || is_named(arguments))) {
+    stop_input_type(arguments, "a named list", call = call)
+  }
+
+  extra_args <- setdiff(names(arguments), names(formals))
+  missing_args <- setdiff(names(formals), names(arguments))
+  if (length(extra_args) > 0 || length(missing_args) > 0) {
+    cli::cli_abort(
+      c(
+        "Names of {.arg arguments} must match formals of {.arg fun}",
+        "*" = if (length(extra_args) > 0) {
+          "Extra type definitions: {.val {extra_args}}"
+        },
+        "*" = if (length(missing_args) > 0) {
+          "Missing type definitions: {.val {missing_args}}"
+        }
+      ),
+      call = call
+    )
+  }
+
+  for (nm in names(arguments)) {
+    arg <- arguments[[nm]]
+    if (!is.null(arg) && !S7_inherits(arg, Type)) {
+      stop_input_type(
+        arg,
+        c("a <Type>", "NULL"),
+        arg = paste0("arguments$", nm),
+        call = call
+      )
+    }
+  }
+
+  invisible()
+}
 
 #' Tool annotations
 #'

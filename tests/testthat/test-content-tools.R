@@ -222,7 +222,7 @@ test_that("invoke_tools_async() yields tool requests and promises results", {
 test_that("invoke_tools() converts to R data structures", {
   out <- NULL
   tool <- tool(
-    function(...) out <<- list(...),
+    function(x, y) out <<- list(x = x, y = y),
     description = "A tool",
     arguments = list(
       x = type_array(items = type_number()),
@@ -249,7 +249,7 @@ test_that("invoke_tools() converts to R data structures", {
 test_that("invoke_tools_async() converts to R data structures", {
   out <- NULL
   tool <- tool(
-    function(...) out <<- list(...),
+    function(x, y) out <<- list(x = x, y = y),
     description = "A tool",
     arguments = list(
       x = type_array(items = type_number()),
