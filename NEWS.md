@@ -4,6 +4,8 @@
   from the `PORTKEY_VIRTUAL_KEY` env var (#588).
 * `models_github()` lists models for `chat_github()` (#561).
 * `chat_snowflake()` now works with tool calling (#557, @atheriel).
+* `parallel_chat_structured()` now accepts lists of Content objects as input
+  (#597, @thisisnic)
 
 # ellmer 0.2.1
 
