@@ -155,15 +155,65 @@ when running at the console).</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># has_credentials("openai")</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-msg co"><span class="r-pr">#&gt;</span> crul not installed, skipping enable</span>
 <span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">chat_openai</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"</span></span></span>
 <span class="r-in"><span><span class="st">  What is the difference between a tibble and a data frame?</span></span></span>
 <span class="r-in"><span><span class="st">  Answer with a bulleted list</span></span></span>
 <span class="r-in"><span><span class="st">"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - **Printing behavior**:  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles print a preview (first 10 rows and columns that fit on </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> screen), whereas data frames print ALL data unless told otherwise.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - **Data type preservation:**  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles never convert strings to factors by default, whereas </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data.frames (in base R &lt;4.0) automatically convert strings to factors </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> unless instructed not to.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - **Subsetting output:**  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles always return another tibble when subsetting with `[ ]`, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> while data frames may simplify the output (e.g., as a vector) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> depending on usage.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - **Column name handling:**  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles allow non-syntactic column names (e.g., names with spaces </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> or special characters) without backticks, whereas data frames require </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> syntactic names or backticks.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - **Partial matching:**  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles do **not** support partial column name matching, while </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data frames do.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - **Enhanced printing:**  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles display data types next to column names when printed; data</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> frames do not.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - **Creation:**  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles are created with `tibble()` or `as_tibble()`, while data </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> frames use `data.frame()`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - **Row names:**  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles do not support row names; data frames do.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - **Package:**  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles are part of the tidyverse (`tibble` package); data frames </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> are a base R structure.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Tell me three funny jokes about statisticians"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sure! Here are three funny jokes about statisticians:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1. **Why did the statistician bring a ladder to the bar?**  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Because he heard the drinks were on the house!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2. **How do you tell the difference between a statistician and an </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> accountant?**  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Ask them to calculate the average salary: the accountant will give </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> you the mean, the statistician will ask “what do you want it to be?”</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3. **Why do statisticians love the jungle?**  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Because of all the *sample* trees!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> crul not installed, skipping disable</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
