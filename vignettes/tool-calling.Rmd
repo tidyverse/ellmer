@@ -101,7 +101,7 @@ get_current_time()
 
 ### Registering and using tools
 
-Now we need to tell our chat object about our tool. We do this with `$register_tool()`:
+Now we need to give our chat object access to our tool. We do this with `$register_tool()`:
 
 ```{r}
 chat$register_tool(get_current_time)
