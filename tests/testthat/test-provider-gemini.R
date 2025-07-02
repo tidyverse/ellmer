@@ -30,6 +30,7 @@ test_that("supports standard parameters", {
 })
 
 test_that("all tool variations work", {
+  vcr::local_cassette("gemini-tool", match_requests_on = c("uri", "body_json"))
   chat_fun <- chat_google_gemini_test
 
   test_tools_simple(chat_fun)
@@ -44,6 +45,7 @@ test_that("can extract data", {
 })
 
 test_that("can use images", {
+  vcr::local_cassette("gemini-image", match_requests_on = c("uri", "body_json"))
   chat_fun <- chat_google_gemini_test
 
   test_images_inline(chat_fun)
