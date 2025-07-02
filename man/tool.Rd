@@ -57,6 +57,47 @@ and type defintion for the arguments.
 
 Learn more in \code{vignette("tool-calling")}.
 }
+\section{ellmer 0.3.0}{
+In ellmer 0.3.0, the definition of the \code{tool()} function changed quite
+a bit. To make it easier to update old versions, you can use an LLM with
+the following system prompt
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Help the user convert an ellmer 0.2.0 and earlier tool defintion into a
+ellmer 0.3.0 tool definition. Here's what changed:
+
+* All arguments, apart from the first should be named, and the argument
+  names no longer use `.` prefixes`. The argument order should be function,
+  name (as a string), description, then arguments, then anything
+
+* Previously `arguments` was passed as `...`, so all type specifications
+  should now be moved into a named list and passed to the `arguments`
+  argument. It can be omitted if the function has no arguments.
+
+```R
+# old
+tool(
+  add,
+  "Add two numbers together"
+  x = type_number(),
+  y = type_number()
+)
+
+# new
+tool(
+  add,
+  name = "add",
+  description = "Add two numbers together",
+  arguments = list(
+    x = type_number(),
+    y = type_number()
+  )
+)
+```
+
+Don't respond; just let the user provide function calls to convert.
+}\if{html}{\out{</div>}}
+}
+
 \examples{
 \dontshow{ellmer:::vcr_example_start("tool")}
 \dontshow{set.seed(1014)}

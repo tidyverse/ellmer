@@ -10,6 +10,48 @@ NULL
 #'
 #' Learn more in `vignette("tool-calling")`.
 #'
+#' # ellmer 0.3.0
+#'
+#' In ellmer 0.3.0, the definition of the `tool()` function changed quite
+#' a bit. To make it easier to update old versions, you can use an LLM with
+#' the following system prompt
+#'
+#' ````
+#' Help the user convert an ellmer 0.2.0 and earlier tool defintion into a
+#' ellmer 0.3.0 tool definition. Here's what changed:
+#'
+#' * All arguments, apart from the first should be named, and the argument
+#'   names no longer use `.` prefixes`. The argument order should be function,
+#'   name (as a string), description, then arguments, then anything
+#'
+#' * Previously `arguments` was passed as `...`, so all type specifications
+#'   should now be moved into a named list and passed to the `arguments`
+#'   argument. It can be omitted if the function has no arguments.
+#'
+#' ```R
+#' # old
+#' tool(
+#'   add,
+#'   "Add two numbers together"
+#'   x = type_number(),
+#'   y = type_number()
+#' )
+#'
+#' # new
+#' tool(
+#'   add,
+#'   name = "add",
+#'   description = "Add two numbers together",
+#'   arguments = list(
+#'     x = type_number(),
+#'     y = type_number()
+#'   )
+#' )
+#' ```
+#'
+#' Don't respond; just let the user provide function calls to convert.
+#' ````
+#'
 #' @param fun The function to be invoked when the tool is called. The return
 #'   value of the function is sent back to the chatbot.
 #'
