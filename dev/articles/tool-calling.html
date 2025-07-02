@@ -143,7 +143,7 @@ incorrect.</p>
 <h3 id="defining-a-tool-function">Defining a tool function<a class="anchor" aria-label="anchor" href="#defining-a-tool-function"></a>
 </h3>
 <p>The first thing we’ll do is define an R function that returns the
-current time. This will be our tool.</p>
+current time.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Gets the current time in the given time zone.</span></span>
 <span><span class="co">#'</span></span>
@@ -152,68 +152,69 @@ current time. This will be our tool.</p>
 <span><span class="va">get_current_time</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tz</span> <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, tz <span class="op">=</span> <span class="va">tz</span>, usetz <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Note that we’ve gone through the trouble of creating <a href="https://roxygen2.r-lib.org/" class="external-link">roxygen2 comments</a>. This is a very
-important step that will help the model use your tool correctly!</p>
-<p>Let’s test it:</p>
+<p>Note that we’ve gone through the trouble of creating <a href="https://roxygen2.r-lib.org/" class="external-link">roxygen2 comments</a>. This isn’t
+necessary, but as we’ll see shortly, can make it a bit easier to
+generate a tool defintion.</p>
+<p>To turn a function into a tool, we provide some additional metadata
+that the model will use:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_current_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="va">get_current_time</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"get_current_time"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Returns the current time."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    tz <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Time zone to display the current time in. Defaults to `\"UTC\"`."</span>,</span>
+<span>      required <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>This is a fair amount of code to write, even for such a simple
+function. Fortunately, you don’t have to write this by hand! I generated
+the above <code><a href="../reference/tool.html">tool()</a></code> call by calling
+<code>create_tool_def(get_current_time)</code>, which uses an LLM to
+generate the <code><a href="../reference/tool.html">tool()</a></code> call for you.
+<code><a href="../reference/create_tool_def.html">create_tool_def()</a></code> is not perfect, so you must review the
+generated code before using it, but it is a big time-saver.</p>
+<p>Note that a tool is just a special type of function so we can still
+call it:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">get_current_time</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "2025-06-25 16:53:23 UTC"</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="registering-tools">Registering tools<a class="anchor" aria-label="anchor" href="#registering-tools"></a>
+<h3 id="registering-and-using-tools">Registering and using tools<a class="anchor" aria-label="anchor" href="#registering-and-using-tools"></a>
 </h3>
-<p>Now we need to tell our chat object about our
-<code>get_current_time</code> function. This by creating and registering
-a tool:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
-<span>  <span class="va">get_current_time</span>,</span>
-<span>  <span class="st">"Gets the current time in the given time zone."</span>,</span>
-<span>  tz <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span></span>
-<span>    <span class="st">"The time zone to get the current time in. Defaults to `\"UTC\"`."</span>,</span>
-<span>    required <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>This is a fair amount of code to write, even for such a simple
-function as <code>get_current_time</code>. Fortunately, you don’t have
-to write this by hand! I generated the above <code>register_tool</code>
-call by calling <code>create_tool_def(get_current_time)</code>, which
-printed that code at the console. <code><a href="../reference/create_tool_def.html">create_tool_def()</a></code> works
-by passing the function’s signature and documentation to GPT-4o, and
-asking it to generate the <code>register_tool</code> call for you.</p>
-<p>Note that <code><a href="../reference/create_tool_def.html">create_tool_def()</a></code> may not create perfect
-results, so you must review the generated code before using it. But it
-is a huge time-saver nonetheless, and removes the tedious boilerplate
-generation you’d have to do otherwise.</p>
-</div>
-<div class="section level3">
-<h3 id="using-the-tool">Using the tool<a class="anchor" aria-label="anchor" href="#using-the-tool"></a>
-</h3>
-<p>That’s all we need to do! Let’s retry our query:</p>
+<p>Now we need to give our chat object access to our tool. We do this
+with <code>$register_tool()</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">get_current_time</span><span class="op">)</span></span></code></pre></div>
+<p>That’s all we need to do! Let’s retry our query:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"How long ago did Neil Armstrong touch down on the moon?"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of June </span></span>
-<span><span class="co">#&gt; 25, 2025, that event occurred 55 years and almost 11 months ago.</span></span></code></pre></div>
+<span><span class="co">#&gt; 25, 2025, that event occurred 55 years and approximately 11 months </span></span>
+<span><span class="co">#&gt; ago.</span></span></code></pre></div>
 <p>That’s correct! Without any further guidance, the chat model decided
 to call our tool function and successfully used its result in
 formulating its response.</p>
 <p>If we print the chat we can see where the model decided to use the
 tool:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4o turns=6 tokens=389/86 $0.00&gt;</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4o turns=6 tokens=373/86 $0.00&gt;</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [19] ──────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; How long ago did Neil Armstrong touch down on the moon?</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [31] ─────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that event occurred 54 years ago.</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [116] ─────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [108] ─────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; How long ago did Neil Armstrong touch down on the moon?</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [15] ─────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_ZVwpQU8xbL42um8FYaQALjib)]: get_current_time(tz = "UTC")</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_olBG8OUjyIj914iwNBjw35dv)]: get_current_time(tz = "UTC")</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [23] ──────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_ZVwpQU8xbL42um8FYaQALjib)]: 2025-06-25 16:53:23 UTC</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_olBG8OUjyIj914iwNBjw35dv)]: 2025-06-25 16:53:23 UTC</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [40] ─────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of June 25, 2025, that event occurred 55 years and almost 11 months ago.</span></span></code></pre></div>
+<span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of June 25, 2025, that event occurred 55 years and approximately 11 months ago.</span></span></code></pre></div>
 <p>(Full disclosure: I originally tried this example with the default
 model of <code>gpt-4o-mini</code> and it got the tool calling right but
 the date math wrong, hence the explicit
@@ -250,34 +251,59 @@ simulating a weather API that returns data for multiple cities at once.
 The <code>get_weather()</code> function returns a data frame that ellmer
 will automatically convert into JSON in row-major format, which our
 experiments suggest is good for LLMs.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">raining</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"heavy"</span>, Houston <span class="op">=</span> <span class="st">"none"</span>, Chicago <span class="op">=</span> <span class="st">"overcast"</span><span class="op">)</span></span>
-<span><span class="va">temperature</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"cool"</span>, Houston <span class="op">=</span> <span class="st">"hot"</span>, Chicago <span class="op">=</span> <span class="st">"warm"</span><span class="op">)</span></span>
-<span><span class="va">wind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"strong"</span>, Houston <span class="op">=</span> <span class="st">"weak"</span>, Chicago <span class="op">=</span> <span class="st">"strong"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_weather</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span> </span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">cities</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">raining</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"heavy"</span>, Houston <span class="op">=</span> <span class="st">"none"</span>, Chicago <span class="op">=</span> <span class="st">"overcast"</span><span class="op">)</span></span>
+<span>    <span class="va">temperature</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"cool"</span>, Houston <span class="op">=</span> <span class="st">"hot"</span>, Chicago <span class="op">=</span> <span class="st">"warm"</span><span class="op">)</span></span>
+<span>    <span class="va">wind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"strong"</span>, Houston <span class="op">=</span> <span class="st">"weak"</span>, Chicago <span class="op">=</span> <span class="st">"strong"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">get_weather</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">cities</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    city <span class="op">=</span> <span class="va">cities</span>,</span>
-<span>    raining <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">raining</span><span class="op">[</span><span class="va">cities</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>    temperature <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">temperature</span><span class="op">[</span><span class="va">cities</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>    wind <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">wind</span><span class="op">[</span><span class="va">cities</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>      city <span class="op">=</span> <span class="va">cities</span>,</span>
+<span>      raining <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">raining</span><span class="op">[</span><span class="va">cities</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>      temperature <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">temperature</span><span class="op">[</span><span class="va">cities</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>      wind <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">wind</span><span class="op">[</span><span class="va">cities</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"get_weather"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"</span></span>
+<span><span class="st">    Report on weather conditions in multiple cities. For efficiency, request </span></span>
+<span><span class="st">    all weather updates using a single tool call</span></span>
+<span><span class="st">  "</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    cities <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="st">"City names"</span>, <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Now we register and use it:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
-<span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span> </span>
-<span>  <span class="va">get_weather</span>,</span>
-<span>  <span class="st">"Report on weather conditions in multiple cities. For efficiency, request all </span></span>
-<span><span class="st">  weather updates using a single tool call"</span>,</span>
-<span>  cities <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="st">"City names"</span>, <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">get_weather</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Give me a weather udpate for London and Chicago"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Here’s your weather update:</span></span>
+<span><span class="co">#&gt; Here's the latest weather update:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; - London: Heavy rain, cool temperature, and strong winds.</span></span>
-<span><span class="co">#&gt; - Chicago: Overcast skies, warm temperature, and strong winds.</span></span>
+<span><span class="co">#&gt; - London: Heavy rain, cool temperatures, and strong winds.</span></span>
+<span><span class="co">#&gt; - Chicago: Overcast skies, warm temperatures, and strong winds.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Let me know if you need more details or updates!</span></span></code></pre></div>
+<span><span class="co">#&gt; Let me know if you need a forecast for more cities or details!</span></span></code></pre></div>
+<p>We can print the chat to confirm that the model only performed a
+single tool call:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">chat</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=4 tokens=213/65 $0.00&gt;</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [74] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Give me a weather udpate for London and Chicago</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [17] ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_0epVfhsX7e8pEy0M1NaY9Vca)]: get_weather(cities = list("London", "Chicago"))</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [48] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_0epVfhsX7e8pEy0M1NaY9Vca)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [48] ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Here's the latest weather update:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; - London: Heavy rain, cool temperatures, and strong winds.</span></span>
+<span><span class="co">#&gt; - Chicago: Overcast skies, warm temperatures, and strong winds.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Let me know if you need a forecast for more cities or details!</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
