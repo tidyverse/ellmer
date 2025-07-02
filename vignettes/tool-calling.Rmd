@@ -81,7 +81,7 @@ To turn a function into a tool, we provide some additional metadata that the mod
 ```{r}
 get_current_time <- tool(
   get_current_time,
-  name = "get_current_time"
+  name = "get_current_time",
   description = "Returns the current time.",
   arguments = list(
     tz = type_string(
