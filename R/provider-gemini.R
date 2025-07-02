@@ -24,7 +24,7 @@ NULL
 #' @param api_key `r api_key_param("GOOGLE_API_KEY")`
 #'   For Gemini, you can alternatively set `GEMINI_API_KEY`.
 #'
-#' @param model `r param_model("gemini-2.0-flash", "google_gemini")`
+#' @param model `r param_model("gemini-2.5-flash", "google_gemini")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -43,7 +43,7 @@ chat_google_gemini <- function(
   api_args = list(),
   echo = NULL
 ) {
-  model <- set_default(model, "gemini-2.0-flash")
+  model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
   credentials <- default_google_credentials(api_key, gemini = TRUE)
 
@@ -61,7 +61,7 @@ chat_google_gemini <- function(
 
 chat_google_gemini_test <- function(
   ...,
-  model = "gemini-2.0-flash",
+  model = "gemini-2.5-flash",
   params = NULL,
   echo = "none"
 ) {
@@ -85,7 +85,7 @@ chat_google_vertex <- function(
   api_args = list(),
   echo = NULL
 ) {
-  model <- set_default(model, "gemini-2.0-flash")
+  model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
   credentials <- default_google_credentials()
 

@@ -29,6 +29,11 @@ test_that("errors if chat/provider/prompts don't match previous run", {
   prompts <- list("What's the capital of Iowa?")
   path <- test_path("batch/state-capitals.json")
   expect_snapshot(batch_chat(chat, prompts, path), error = TRUE)
+
+  expect_snapshot(
+    batch_chat_structured(chat, prompts, path, type = type_string()),
+    error = TRUE
+  )
 })
 
 test_that("steps through in logical order, writing to disk at end step", {

@@ -46,7 +46,7 @@ The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.
 For Gemini, you can alternatively set \code{GEMINI_API_KEY}.}
 
-\item{model}{The model to use for the chat (defaults to "gemini-2.0-flash").
+\item{model}{The model to use for the chat (defaults to "gemini-2.5-flash").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_google_gemini()} to see all options.}
 
