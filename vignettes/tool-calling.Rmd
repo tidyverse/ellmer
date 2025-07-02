@@ -65,7 +65,7 @@ get_current_time <- function(tz = "UTC") {
 }
 ```
 
-Note that we've gone through the trouble of creating [roxygen2 comments](https://roxygen2.r-lib.org/). This is a very important step that will help the model use your tool correctly!
+Note that we've gone through the trouble of creating [roxygen2 comments](https://roxygen2.r-lib.org/). This isn't necessary, but as we'll see shortly, can make it a bit easier to generate a tool defintion.
 
 ```{r}
 #| include: false
@@ -81,17 +81,18 @@ To turn a function into a tool, we provide some additional metadata that the mod
 ```{r}
 get_current_time <- tool(
   get_current_time,
-  description = "Gets the current time in the given time zone.",
+  name = "get_current_time"
+  description = "Returns the current time.",
   arguments = list(
     tz = type_string(
-      "The time zone to get the current time in. Defaults to `\"UTC\"`.",
+      "Time zone to display the current time in. Defaults to `\"UTC\"`.",
       required = FALSE
     )
   )
 )
 ```
 
-This is a fair amount of code to write, even for such a simple function. Fortunately, you don't have to write this by hand! I generated the above `tool()` call by calling `create_tool_def(get_current_time)`, which printed that code at the console. `create_tool_def()` works by passing the function's signature and documentation to an LLM and asking it to generate the `tool()` call for you. `create_tool_def()` is not perfect, so you must review the generated code before using it. But it is a huge time-saver nonetheless, and removes the boilerplate generation you'd have to do otherwise.
+This is a fair amount of code to write, even for such a simple function. Fortunately, you don't have to write this by hand! I generated the above `tool()` call by calling `create_tool_def(get_current_time)`, which uses an LLM to generate the `tool()` call for you. `create_tool_def()` is not perfect, so you must review the generated code before using it, but it is a big time-saver.
 
 Note that a tool is just a special type of function so we can still call it:
 
