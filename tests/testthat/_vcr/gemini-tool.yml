@@ -1,0 +1,626 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
+        in Y-M-D format?"}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        the current date"},{"name":"current_month","description":"Return the full
+        name of the current month"}]},"systemInstruction":{"parts":{"text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '341'
+      content-type: application/json; charset=UTF-8
+      date: Wed, 02 Jul 2025 13:36:22 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=473
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "functionCall": {
+                      "name": "current_date",
+                      "args": {}
+                    }
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": 9.65431475682029e-06
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 46,
+            "candidatesTokenCount": 3,
+            "totalTokenCount": 49,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 46
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 3
+              }
+            ]
+          },
+          "modelVersion": "gemini-2.0-flash",
+          "responseId": "1jVlaLnLEsnbx_AP1L-H-AM"
+        }
+  recorded_at: 2025-07-02 13:36:22
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
+        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}}}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        the current date"},{"name":"current_month","description":"Return the full
+        name of the current month"}]},"systemInstruction":{"parts":{"text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '327'
+      content-type: application/json; charset=UTF-8
+      date: Wed, 02 Jul 2025 13:36:23 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=478
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "It is 2024-01-01."
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": 6.7870132625103e-08
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 63,
+            "candidatesTokenCount": 14,
+            "totalTokenCount": 77,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 63
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 14
+              }
+            ]
+          },
+          "modelVersion": "gemini-2.0-flash",
+          "responseId": "1jVlaJz3N5yYx_AP3O7BkQY"
+        }
+  recorded_at: 2025-07-02 13:36:23
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
+        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}}}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
+        is 2024-01-01."}]},{"role":"user","parts":[{"text":"What month is it? Provide
+        the full name"}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        the current date"},{"name":"current_month","description":"Return the full
+        name of the current month"}]},"systemInstruction":{"parts":{"text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '344'
+      content-type: application/json; charset=UTF-8
+      date: Wed, 02 Jul 2025 13:36:23 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=536
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "functionCall": {
+                      "name": "current_month",
+                      "args": {}
+                    }
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": 5.5207250018914538e-06
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 86,
+            "candidatesTokenCount": 3,
+            "totalTokenCount": 89,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 86
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 3
+              }
+            ]
+          },
+          "modelVersion": "gemini-2.0-flash",
+          "responseId": "1zVlaP26INyDnvgPpNCtgAI"
+        }
+  recorded_at: 2025-07-02 13:36:23
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
+        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}}}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
+        is 2024-01-01."}]},{"role":"user","parts":[{"text":"What month is it? Provide
+        the full name"}]},{"role":"model","parts":[{"functionCall":{"name":"current_month","args":{}}}]},{"role":"user","parts":[{"functionResponse":{"name":"current_month","response":{"value":"February"}}}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        the current date"},{"name":"current_month","description":"Return the full
+        name of the current month"}]},"systemInstruction":{"parts":{"text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '323'
+      content-type: application/json; charset=UTF-8
+      date: Wed, 02 Jul 2025 13:36:24 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=485
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "It is February."
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": -4.525412805378437e-06
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 94,
+            "candidatesTokenCount": 4,
+            "totalTokenCount": 98,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 94
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 4
+              }
+            ]
+          },
+          "modelVersion": "gemini-2.0-flash",
+          "responseId": "2DVlaNmoA-ernvgP8cuHmQ0"
+        }
+  recorded_at: 2025-07-02 13:36:24
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"\n    What are Joe and
+        Hadley''s favourite colours?\n    Answer like name1: colour1, name2: colour2\n  "}]}],"tools":{"functionDeclarations":[{"name":"favourite_color","description":"Returns
+        a person''s favourite colour","parameters":{"type":"object","properties":{"person":{"type":"string","description":"Name
+        of a person"}},"required":["person"]}}]},"systemInstruction":{"parts":{"text":"Be
+        very terse, not even punctuation."}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '372'
+      content-type: application/json; charset=UTF-8
+      date: Wed, 02 Jul 2025 13:36:25 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=635
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "functionCall": {
+                      "name": "favourite_color",
+                      "args": {
+                        "person": "Joe"
+                      }
+                    }
+                  },
+                  {
+                    "functionCall": {
+                      "name": "favourite_color",
+                      "args": {
+                        "person": "Hadley"
+                      }
+                    }
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": -0.00020260336300866172
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 55,
+            "candidatesTokenCount": 11,
+            "totalTokenCount": 66,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 55
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 11
+              }
+            ]
+          },
+          "modelVersion": "gemini-2.0-flash",
+          "responseId": "2DVlaPGqKIa8nvgPsprfmAw"
+        }
+  recorded_at: 2025-07-02 13:36:25
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"\n    What are Joe and
+        Hadley''s favourite colours?\n    Answer like name1: colour1, name2: colour2\n  "}]},{"role":"model","parts":[{"functionCall":{"name":"favourite_color","args":{"person":"Joe"}}},{"functionCall":{"name":"favourite_color","args":{"person":"Hadley"}}}]},{"role":"user","parts":[{"functionResponse":{"name":"favourite_color","response":{"value":"sage
+        green"}}},{"functionResponse":{"name":"favourite_color","response":{"value":"red"}}}]}],"tools":{"functionDeclarations":[{"name":"favourite_color","description":"Returns
+        a person''s favourite colour","parameters":{"type":"object","properties":{"person":{"type":"string","description":"Name
+        of a person"}},"required":["person"]}}]},"systemInstruction":{"parts":{"text":"Be
+        very terse, not even punctuation."}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '333'
+      content-type: application/json; charset=UTF-8
+      date: Wed, 02 Jul 2025 13:36:25 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=402
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "Joe: sage green, Hadley: red\n"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": -0.026365636123551264
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 77,
+            "candidatesTokenCount": 9,
+            "totalTokenCount": 86,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 77
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 9
+              }
+            ]
+          },
+          "modelVersion": "gemini-2.0-flash",
+          "responseId": "2TVlaOD6EbaonvgP0IjpiA8"
+        }
+  recorded_at: 2025-07-02 13:36:25
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What should I pack for
+        New York this weekend?"}]}],"tools":{"functionDeclarations":[{"name":"forecast","description":"Gets
+        the weather forecast for a city","parameters":{"type":"object","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"]}},{"name":"equipment","description":"Gets the
+        equipment needed for a weather condition","parameters":{"type":"object","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"]}}]},"systemInstruction":{"parts":{"text":"\n    Use
+        provided tool calls to find the weather forecast and suitable\n    equipment
+        for a variety of weather conditions.\n\n    In your response, be very terse
+        and omit punctuation.\n  "}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '354'
+      content-type: application/json; charset=UTF-8
+      date: Wed, 02 Jul 2025 13:36:26 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=597
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "functionCall": {
+                      "name": "forecast",
+                      "args": {
+                        "city": "New York"
+                      }
+                    }
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": -0.046624146401882172
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 77,
+            "candidatesTokenCount": 4,
+            "totalTokenCount": 81,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 77
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 4
+              }
+            ]
+          },
+          "modelVersion": "gemini-2.0-flash",
+          "responseId": "2TVlaISfMpyYx_AP3O7BkQY"
+        }
+  recorded_at: 2025-07-02 13:36:26
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What should I pack for
+        New York this weekend?"}]},{"role":"model","parts":[{"functionCall":{"name":"forecast","args":{"city":"New
+        York"}}}]},{"role":"user","parts":[{"functionResponse":{"name":"forecast","response":{"value":"rainy"}}}]}],"tools":{"functionDeclarations":[{"name":"forecast","description":"Gets
+        the weather forecast for a city","parameters":{"type":"object","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"]}},{"name":"equipment","description":"Gets the
+        equipment needed for a weather condition","parameters":{"type":"object","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"]}}]},"systemInstruction":{"parts":{"text":"\n    Use
+        provided tool calls to find the weather forecast and suitable\n    equipment
+        for a variety of weather conditions.\n\n    In your response, be very terse
+        and omit punctuation.\n  "}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '357'
+      content-type: application/json; charset=UTF-8
+      date: Wed, 02 Jul 2025 13:36:26 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=532
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "functionCall": {
+                      "name": "equipment",
+                      "args": {
+                        "weather": "rainy"
+                      }
+                    }
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": -2.6212090839787077e-05
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 84,
+            "candidatesTokenCount": 3,
+            "totalTokenCount": 87,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 84
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 3
+              }
+            ]
+          },
+          "modelVersion": "gemini-2.0-flash",
+          "responseId": "2jVlaNDOHJyYx_AP3O7BkQY"
+        }
+  recorded_at: 2025-07-02 13:36:26
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What should I pack for
+        New York this weekend?"}]},{"role":"model","parts":[{"functionCall":{"name":"forecast","args":{"city":"New
+        York"}}}]},{"role":"user","parts":[{"functionResponse":{"name":"forecast","response":{"value":"rainy"}}}]},{"role":"model","parts":[{"functionCall":{"name":"equipment","args":{"weather":"rainy"}}}]},{"role":"user","parts":[{"functionResponse":{"name":"equipment","response":{"value":"umbrella"}}}]}],"tools":{"functionDeclarations":[{"name":"forecast","description":"Gets
+        the weather forecast for a city","parameters":{"type":"object","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"]}},{"name":"equipment","description":"Gets the
+        equipment needed for a weather condition","parameters":{"type":"object","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"]}}]},"systemInstruction":{"parts":{"text":"\n    Use
+        provided tool calls to find the weather forecast and suitable\n    equipment
+        for a variety of weather conditions.\n\n    In your response, be very terse
+        and omit punctuation.\n  "}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '326'
+      content-type: application/json; charset=UTF-8
+      date: Wed, 02 Jul 2025 13:36:27 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=524
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "Pack an umbrella\n"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": -0.048491813242435455
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 90,
+            "candidatesTokenCount": 4,
+            "totalTokenCount": 94,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 90
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 4
+              }
+            ]
+          },
+          "modelVersion": "gemini-2.0-flash",
+          "responseId": "2zVlaJXEB8nbx_AP1L-H-AM"
+        }
+  recorded_at: 2025-07-02 13:36:27
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0

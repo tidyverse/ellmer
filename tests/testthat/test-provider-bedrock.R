@@ -45,7 +45,6 @@ test_that("all tool variations work", {
   chat_fun <- chat_aws_bedrock
 
   test_tools_simple(chat_fun)
-  test_tools_async(chat_fun)
   test_tools_parallel(chat_fun)
   test_tools_sequential(chat_fun, total_calls = 6)
 })

@@ -1,0 +1,378 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-3-5-sonnet-latest","system":"Always use a tool to
+        answer. Reply with ''It is ____.''.","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
+        the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
+        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"temperature":0,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Tue, 01 Jul 2025 21:44:47 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '80000'
+      anthropic-ratelimit-input-tokens-remaining: '80000'
+      anthropic-ratelimit-input-tokens-reset: '2025-07-01T21:44:47Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-07-01T21:44:47Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-07-01T21:44:46Z'
+      anthropic-ratelimit-tokens-limit: '96000'
+      anthropic-ratelimit-tokens-remaining: '96000'
+      anthropic-ratelimit-tokens-reset: '2025-07-01T21:44:47Z'
+      request-id: req_011CQh2iU59yw612RjF8hbQn
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 95891627ec3d49fe-DFW
+      content-encoding: gzip
+    body:
+      string: '{"id":"msg_01NEhhzZKtxnizmgzpBVBdqe","type":"message","role":"assistant","model":"claude-3-5-sonnet-20241022","content":[{"type":"text","text":"Let
+        me check the current date using the available tool."},{"type":"tool_use","id":"toolu_014LzzHvhWJvEtpX4QNVL2o8","name":"current_date","input":{}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":442,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":48,"service_tier":"standard"}}'
+  recorded_at: 2025-07-01 21:44:47
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-3-5-sonnet-latest","system":"Always use a tool to
+        answer. Reply with ''It is ____.''.","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]},{"role":"assistant","content":[{"type":"text","text":"Let
+        me check the current date using the available tool."},{"type":"tool_use","id":"toolu_014LzzHvhWJvEtpX4QNVL2o8","name":"current_date","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_014LzzHvhWJvEtpX4QNVL2o8","content":"2024-01-01","is_error":false}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
+        the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
+        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"temperature":0,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Tue, 01 Jul 2025 21:44:48 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '80000'
+      anthropic-ratelimit-input-tokens-remaining: '80000'
+      anthropic-ratelimit-input-tokens-reset: '2025-07-01T21:44:48Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-07-01T21:44:48Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-07-01T21:44:48Z'
+      anthropic-ratelimit-tokens-limit: '96000'
+      anthropic-ratelimit-tokens-remaining: '96000'
+      anthropic-ratelimit-tokens-reset: '2025-07-01T21:44:48Z'
+      request-id: req_011CQh2ic582YruN7uAEKBjA
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 958916339ca849fe-DFW
+      content-encoding: gzip
+    body:
+      string: '{"id":"msg_01RJzT5Goa3suGmBHBhspP1H","type":"message","role":"assistant","model":"claude-3-5-sonnet-20241022","content":[{"type":"text","text":"It
+        is 2024-01-01."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":507,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":14,"service_tier":"standard"}}'
+  recorded_at: 2025-07-01 21:44:48
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-3-5-sonnet-latest","system":"Always use a tool to
+        answer. Reply with ''It is ____.''.","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]},{"role":"assistant","content":[{"type":"text","text":"Let
+        me check the current date using the available tool."},{"type":"tool_use","id":"toolu_014LzzHvhWJvEtpX4QNVL2o8","name":"current_date","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_014LzzHvhWJvEtpX4QNVL2o8","content":"2024-01-01","is_error":false}]},{"role":"assistant","content":[{"type":"text","text":"It
+        is 2024-01-01."}]},{"role":"user","content":[{"type":"text","text":"What month
+        is it? Provide the full name"}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
+        the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
+        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"temperature":0,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Tue, 01 Jul 2025 21:44:50 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '80000'
+      anthropic-ratelimit-input-tokens-remaining: '80000'
+      anthropic-ratelimit-input-tokens-reset: '2025-07-01T21:44:50Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-07-01T21:44:50Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-07-01T21:44:49Z'
+      anthropic-ratelimit-tokens-limit: '96000'
+      anthropic-ratelimit-tokens-remaining: '96000'
+      anthropic-ratelimit-tokens-reset: '2025-07-01T21:44:50Z'
+      request-id: req_011CQh2igMLvKCuYocMsJzdN
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 95891639e98649fe-DFW
+      content-encoding: gzip
+    body:
+      string: '{"id":"msg_01WC1mqJwXGoJjXHH7MfVerN","type":"message","role":"assistant","model":"claude-3-5-sonnet-20241022","content":[{"type":"text","text":"Let
+        me check the current month using the available tool."},{"type":"tool_use","id":"toolu_01FNVPzgLUWaDhYa2GGcYqPD","name":"current_month","input":{}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":534,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":48,"service_tier":"standard"}}'
+  recorded_at: 2025-07-01 21:44:50
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-3-5-sonnet-latest","system":"Always use a tool to
+        answer. Reply with ''It is ____.''.","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]},{"role":"assistant","content":[{"type":"text","text":"Let
+        me check the current date using the available tool."},{"type":"tool_use","id":"toolu_014LzzHvhWJvEtpX4QNVL2o8","name":"current_date","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_014LzzHvhWJvEtpX4QNVL2o8","content":"2024-01-01","is_error":false}]},{"role":"assistant","content":[{"type":"text","text":"It
+        is 2024-01-01."}]},{"role":"user","content":[{"type":"text","text":"What month
+        is it? Provide the full name"}]},{"role":"assistant","content":[{"type":"text","text":"Let
+        me check the current month using the available tool."},{"type":"tool_use","id":"toolu_01FNVPzgLUWaDhYa2GGcYqPD","name":"current_month","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01FNVPzgLUWaDhYa2GGcYqPD","content":"February","is_error":false}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
+        the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
+        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"temperature":0,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Tue, 01 Jul 2025 21:44:51 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '80000'
+      anthropic-ratelimit-input-tokens-remaining: '80000'
+      anthropic-ratelimit-input-tokens-reset: '2025-07-01T21:44:51Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-07-01T21:44:51Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-07-01T21:44:50Z'
+      anthropic-ratelimit-tokens-limit: '96000'
+      anthropic-ratelimit-tokens-remaining: '96000'
+      anthropic-ratelimit-tokens-reset: '2025-07-01T21:44:51Z'
+      request-id: req_011CQh2ip6g177FDeNXkyrxB
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 958916453f3d49fe-DFW
+      content-encoding: gzip
+    body:
+      string: '{"id":"msg_01FgqAUj1cmEh5EWfHPLan4A","type":"message","role":"assistant","model":"claude-3-5-sonnet-20241022","content":[{"type":"text","text":"It
+        is February."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":594,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":8,"service_tier":"standard"}}'
+  recorded_at: 2025-07-01 21:44:51
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-3-5-sonnet-latest","system":"Be very terse, not even
+        punctuation.","messages":[{"role":"user","content":[{"type":"text","text":"\n    What
+        are Joe and Hadley''s favourite colours?\n    Answer like name1: colour1,
+        name2: colour2\n  "}]}],"stream":false,"tools":[{"name":"favourite_color","description":"Returns
+        a person''s favourite colour","input_schema":{"type":"object","description":"","properties":{"person":{"type":"string","description":"Name
+        of a person"}},"required":["person"],"additionalProperties":false}}],"temperature":0,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Tue, 01 Jul 2025 21:44:53 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '80000'
+      anthropic-ratelimit-input-tokens-remaining: '80000'
+      anthropic-ratelimit-input-tokens-reset: '2025-07-01T21:44:52Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-07-01T21:44:53Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-07-01T21:44:52Z'
+      anthropic-ratelimit-tokens-limit: '96000'
+      anthropic-ratelimit-tokens-remaining: '96000'
+      anthropic-ratelimit-tokens-reset: '2025-07-01T21:44:52Z'
+      request-id: req_011CQh2ivAoQ8KtsXJvDWAH5
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 9589164d8c9d49fe-DFW
+      content-encoding: gzip
+    body:
+      string: '{"id":"msg_019eymqDCASu6ceW63NZS2B9","type":"message","role":"assistant","model":"claude-3-5-sonnet-20241022","content":[{"type":"tool_use","id":"toolu_019a2YSawvRQTPUfpXf8QMS8","name":"favourite_color","input":{"person":"Joe"}},{"type":"tool_use","id":"toolu_01V4j3fVrrGJWAaGHkvhTqB5","name":"favourite_color","input":{"person":"Hadley"}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":436,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":91,"service_tier":"standard"}}'
+  recorded_at: 2025-07-01 21:44:53
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-3-5-sonnet-latest","system":"Be very terse, not even
+        punctuation.","messages":[{"role":"user","content":[{"type":"text","text":"\n    What
+        are Joe and Hadley''s favourite colours?\n    Answer like name1: colour1,
+        name2: colour2\n  "}]},{"role":"assistant","content":[{"type":"tool_use","id":"toolu_019a2YSawvRQTPUfpXf8QMS8","name":"favourite_color","input":{"person":"Joe"}},{"type":"tool_use","id":"toolu_01V4j3fVrrGJWAaGHkvhTqB5","name":"favourite_color","input":{"person":"Hadley"}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_019a2YSawvRQTPUfpXf8QMS8","content":"sage
+        green","is_error":false},{"type":"tool_result","tool_use_id":"toolu_01V4j3fVrrGJWAaGHkvhTqB5","content":"red","is_error":false}]}],"stream":false,"tools":[{"name":"favourite_color","description":"Returns
+        a person''s favourite colour","input_schema":{"type":"object","description":"","properties":{"person":{"type":"string","description":"Name
+        of a person"}},"required":["person"],"additionalProperties":false}}],"temperature":0,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Tue, 01 Jul 2025 21:44:54 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '80000'
+      anthropic-ratelimit-input-tokens-remaining: '80000'
+      anthropic-ratelimit-input-tokens-reset: '2025-07-01T21:44:54Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-07-01T21:44:54Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-07-01T21:44:54Z'
+      anthropic-ratelimit-tokens-limit: '96000'
+      anthropic-ratelimit-tokens-remaining: '96000'
+      anthropic-ratelimit-tokens-reset: '2025-07-01T21:44:54Z'
+      request-id: req_011CQh2j3yM76y2Gfj65XihG
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 958916596fba49fe-DFW
+      content-encoding: gzip
+    body:
+      string: '{"id":"msg_01Ed4mbfM7p7Mwc1t1RJYSh9","type":"message","role":"assistant","model":"claude-3-5-sonnet-20241022","content":[{"type":"text","text":"Joe:
+        sage green Hadley: red"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":593,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":13,"service_tier":"standard"}}'
+  recorded_at: 2025-07-01 21:44:54
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-3-5-sonnet-latest","system":"\n    Use provided tool
+        calls to find the weather forecast and suitable\n    equipment for a variety
+        of weather conditions.\n\n    In your response, be very terse and omit punctuation.\n  ","messages":[{"role":"user","content":[{"type":"text","text":"What
+        should I pack for New York this weekend?"}]}],"stream":false,"tools":[{"name":"forecast","description":"Gets
+        the weather forecast for a city","input_schema":{"type":"object","description":"","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"],"additionalProperties":false}},{"name":"equipment","description":"Gets
+        the equipment needed for a weather condition","input_schema":{"type":"object","description":"","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"],"additionalProperties":false}}],"temperature":0,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Tue, 01 Jul 2025 21:44:57 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '80000'
+      anthropic-ratelimit-input-tokens-remaining: '80000'
+      anthropic-ratelimit-input-tokens-reset: '2025-07-01T21:44:57Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-07-01T21:44:57Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-07-01T21:44:55Z'
+      anthropic-ratelimit-tokens-limit: '96000'
+      anthropic-ratelimit-tokens-remaining: '96000'
+      anthropic-ratelimit-tokens-reset: '2025-07-01T21:44:57Z'
+      request-id: req_011CQh2j8o4kedC8gkEGtBHu
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 9589165ea8cb49fe-DFW
+      content-encoding: gzip
+    body:
+      string: '{"id":"msg_0186oa2iaxvM3pDJQKaeLd6j","type":"message","role":"assistant","model":"claude-3-5-sonnet-20241022","content":[{"type":"text","text":"Let
+        me check the forecast for New York and suggest equipment"},{"type":"tool_use","id":"toolu_01EWhQHrpV8ERbxYNxyQwKXS","name":"forecast","input":{"city":"New
+        York"}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":511,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":64,"service_tier":"standard"}}'
+  recorded_at: 2025-07-01 21:44:57
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-3-5-sonnet-latest","system":"\n    Use provided tool
+        calls to find the weather forecast and suitable\n    equipment for a variety
+        of weather conditions.\n\n    In your response, be very terse and omit punctuation.\n  ","messages":[{"role":"user","content":[{"type":"text","text":"What
+        should I pack for New York this weekend?"}]},{"role":"assistant","content":[{"type":"text","text":"Let
+        me check the forecast for New York and suggest equipment"},{"type":"tool_use","id":"toolu_01EWhQHrpV8ERbxYNxyQwKXS","name":"forecast","input":{"city":"New
+        York"}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01EWhQHrpV8ERbxYNxyQwKXS","content":"rainy","is_error":false}]}],"stream":false,"tools":[{"name":"forecast","description":"Gets
+        the weather forecast for a city","input_schema":{"type":"object","description":"","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"],"additionalProperties":false}},{"name":"equipment","description":"Gets
+        the equipment needed for a weather condition","input_schema":{"type":"object","description":"","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"],"additionalProperties":false}}],"temperature":0,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Tue, 01 Jul 2025 21:44:59 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '80000'
+      anthropic-ratelimit-input-tokens-remaining: '80000'
+      anthropic-ratelimit-input-tokens-reset: '2025-07-01T21:44:58Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-07-01T21:44:59Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-07-01T21:44:58Z'
+      anthropic-ratelimit-tokens-limit: '96000'
+      anthropic-ratelimit-tokens-remaining: '96000'
+      anthropic-ratelimit-tokens-reset: '2025-07-01T21:44:58Z'
+      request-id: req_011CQh2jMBSwDRMyWzZnRas6
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 958916726f6549fe-DFW
+      content-encoding: gzip
+    body:
+      string: '{"id":"msg_01AFt64FxiTvzuoiEsbGVeWs","type":"message","role":"assistant","model":"claude-3-5-sonnet-20241022","content":[{"type":"text","text":"Let
+        me check what equipment you need for rainy conditions"},{"type":"tool_use","id":"toolu_01E1WVeL8e9sf9qPMjvXDtuS","name":"equipment","input":{"weather":"rainy"}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":588,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":65,"service_tier":"standard"}}'
+  recorded_at: 2025-07-01 21:44:59
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-3-5-sonnet-latest","system":"\n    Use provided tool
+        calls to find the weather forecast and suitable\n    equipment for a variety
+        of weather conditions.\n\n    In your response, be very terse and omit punctuation.\n  ","messages":[{"role":"user","content":[{"type":"text","text":"What
+        should I pack for New York this weekend?"}]},{"role":"assistant","content":[{"type":"text","text":"Let
+        me check the forecast for New York and suggest equipment"},{"type":"tool_use","id":"toolu_01EWhQHrpV8ERbxYNxyQwKXS","name":"forecast","input":{"city":"New
+        York"}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01EWhQHrpV8ERbxYNxyQwKXS","content":"rainy","is_error":false}]},{"role":"assistant","content":[{"type":"text","text":"Let
+        me check what equipment you need for rainy conditions"},{"type":"tool_use","id":"toolu_01E1WVeL8e9sf9qPMjvXDtuS","name":"equipment","input":{"weather":"rainy"}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01E1WVeL8e9sf9qPMjvXDtuS","content":"umbrella","is_error":false}]}],"stream":false,"tools":[{"name":"forecast","description":"Gets
+        the weather forecast for a city","input_schema":{"type":"object","description":"","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"],"additionalProperties":false}},{"name":"equipment","description":"Gets
+        the equipment needed for a weather condition","input_schema":{"type":"object","description":"","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"],"additionalProperties":false}}],"temperature":0,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Tue, 01 Jul 2025 21:45:00 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '80000'
+      anthropic-ratelimit-input-tokens-remaining: '80000'
+      anthropic-ratelimit-input-tokens-reset: '2025-07-01T21:45:00Z'
+      anthropic-ratelimit-output-tokens-limit: '16000'
+      anthropic-ratelimit-output-tokens-remaining: '16000'
+      anthropic-ratelimit-output-tokens-reset: '2025-07-01T21:45:00Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2025-07-01T21:44:59Z'
+      anthropic-ratelimit-tokens-limit: '96000'
+      anthropic-ratelimit-tokens-remaining: '96000'
+      anthropic-ratelimit-tokens-reset: '2025-07-01T21:45:00Z'
+      request-id: req_011CQh2jUDrx9K7XjDPAmxGt
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 9589167cdb7d49fe-DFW
+      content-encoding: gzip
+    body:
+      string: '{"id":"msg_01X6VcLUvGiNUsJKFcssKB8b","type":"message","role":"assistant","model":"claude-3-5-sonnet-20241022","content":[{"type":"text","text":"For
+        New York this weekend you should bring an umbrella since rain is expected"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":666,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":19,"service_tier":"standard"}}'
+  recorded_at: 2025-07-01 21:45:00
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0

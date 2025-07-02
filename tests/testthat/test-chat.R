@@ -216,6 +216,21 @@ test_that("can retrieve last_turn for user and assistant", {
   expect_equal(chat$last_turn("assistant")@role, "assistant")
 })
 
+test_that("can use async tools", {
+  chat <- chat_openai_test("Be very terse, not even punctuation.")
+  chat$register_tool(tool(
+    coro::async(function() "2024-01-01"),
+    "Return the current date",
+    .name = "current_date"
+  ))
+
+  result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
+  expect_match(result, "2024-01-01")
+
+  # Can't use async tools in sync context
+  expect_error(chat$chat("Great. Do it again."), class = "tool_async_error")
+})
+
 test_that("chat can get and register a list of tools", {
   chat <- chat_openai_test()
   chat2 <- chat_openai_test()

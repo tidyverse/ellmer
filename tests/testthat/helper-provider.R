@@ -49,20 +49,6 @@ test_tools_simple <- function(chat_fun) {
   expect_match(result, "February")
 }
 
-test_tools_async <- function(chat_fun) {
-  chat <- chat_fun("Be very terse, not even punctuation.")
-  chat$register_tool(tool(
-    coro::async(function() "2024-01-01"),
-    "Return the current date"
-  ))
-
-  result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
-  expect_match(result, "2024-01-01")
-
-  # Can't use async tools in sync context
-  expect_error(chat$chat("Great. Do it again."), class = "tool_async_error")
-}
-
 test_tools_parallel <- function(chat_fun, total_calls = 4) {
   chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
   favourite_color <- function(person) {
@@ -71,7 +57,8 @@ test_tools_parallel <- function(chat_fun, total_calls = 4) {
   chat$register_tool(tool(
     favourite_color,
     "Returns a person's favourite colour",
-    person = type_string("Name of a person")
+    person = type_string("Name of a person"),
+    .name = "favourite_color"
   ))
 
   result <- chat$chat(
@@ -102,12 +89,14 @@ test_tools_sequential <- function(chat_fun, total_calls) {
   chat$register_tool(tool(
     forecast,
     "Gets the weather forecast for a city",
-    city = type_string("City name")
+    city = type_string("City name"),
+    .name = "forecast"
   ))
   chat$register_tool(tool(
     equipment,
     "Gets the equipment needed for a weather condition",
-    weather = type_string("Weather condition")
+    weather = type_string("Weather condition"),
+    .name = "equipment"
   ))
 
   result <- chat$chat("What should I pack for New York this weekend?")

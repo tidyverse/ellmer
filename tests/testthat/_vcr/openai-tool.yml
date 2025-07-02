@@ -1,0 +1,696 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Always use a tool to answer.
+        Reply with ''It is ____.''."},{"role":"user","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"current_date","description":"Return
+        the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}},{"type":"function","function":{"name":"current_month","description":"Return
+        the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 958e89d469dc6b22-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 02 Jul 2025 13:37:34 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '1135'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=jswWuDoYa6FPfSnlw3U8ZObDKPAHwccInOC7WDrg5rE-1751463454-1.0.1.1-LHCg5GmMbIaEiB.c63z35T9uAnrBaC4ywT7Ur.gypmHBjyvRI4au4l2xsVwSoMOdfT_fMeYIgEDFxSUcbM7KDfEjTglYQKgQchAvxCGtQAU;
+        path=/; expires=Wed, 02-Jul-25 14:07:34 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=nxjN3ySPWdQeQc0oFSQkZtkgQFMIfa0kLZeiLNEI0aA-1751463454074-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '1142'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999973'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_7f757f696265158c803a322e9a3380dc
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BorwTlmiApnAvDZBRH201XuaGnmg1",
+          "object": "chat.completion",
+          "created": 1751463453,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "call_vlIji1dMqD7l1jzUzCw9n9Lz",
+                    "type": "function",
+                    "function": {
+                      "name": "current_date",
+                      "arguments": "{}"
+                    }
+                  },
+                  {
+                    "id": "call_yAWLxjHAClgeyETpOhsfWZrv",
+                    "type": "function",
+                    "function": {
+                      "name": "current_month",
+                      "arguments": "{}"
+                    }
+                  }
+                ],
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 78,
+            "completion_tokens": 39,
+            "total_tokens": 117,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_f12167b370"
+        }
+  recorded_at: 2025-07-02 13:37:34
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Always use a tool to answer.
+        Reply with ''It is ____.''."},{"role":"user","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]},{"role":"assistant","tool_calls":[{"id":"call_vlIji1dMqD7l1jzUzCw9n9Lz","function":{"name":"current_date","arguments":"{}"},"type":"function"},{"id":"call_yAWLxjHAClgeyETpOhsfWZrv","function":{"name":"current_month","arguments":"{}"},"type":"function"}]},{"role":"tool","content":"2024-01-01","tool_call_id":"call_vlIji1dMqD7l1jzUzCw9n9Lz"},{"role":"tool","content":"February","tool_call_id":"call_yAWLxjHAClgeyETpOhsfWZrv"}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"current_date","description":"Return
+        the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}},{"type":"function","function":{"name":"current_month","description":"Return
+        the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 958e89dc4a616b22-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 02 Jul 2025 13:37:34 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '396'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=B_Dxm1MGMU3wPRsCMIK8B5CYvYTng9yWcYGOmxnzPLE-1751463454-1.0.1.1-n2o9qDFn.uw2oeh.zrEzWckKQlnYj9DSLyVM9yz8mkrN7dBH9X4rWzZ17Z5_ZfwTGo3wLjL1Ur0HTmjSA5iJYOgGtOnNW4NM9b84EAutKkM;
+        path=/; expires=Wed, 02-Jul-25 14:07:34 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=7Y9VaOvSSTeru58Aie_Vh_NyyClTKl7F_Ii5OVf9P8w-1751463454581-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '401'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999965'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_8b7d3cc0af953bd04e773a48c4a0bd2a
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BorwUvTLCciaL3eFxqt4hWPu660Ez",
+          "object": "chat.completion",
+          "created": 1751463454,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "It is 2024-01-01.",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 138,
+            "completion_tokens": 11,
+            "total_tokens": 149,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_f12167b370"
+        }
+  recorded_at: 2025-07-02 13:37:34
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Always use a tool to answer.
+        Reply with ''It is ____.''."},{"role":"user","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]},{"role":"assistant","tool_calls":[{"id":"call_vlIji1dMqD7l1jzUzCw9n9Lz","function":{"name":"current_date","arguments":"{}"},"type":"function"},{"id":"call_yAWLxjHAClgeyETpOhsfWZrv","function":{"name":"current_month","arguments":"{}"},"type":"function"}]},{"role":"tool","content":"2024-01-01","tool_call_id":"call_vlIji1dMqD7l1jzUzCw9n9Lz"},{"role":"tool","content":"February","tool_call_id":"call_yAWLxjHAClgeyETpOhsfWZrv"},{"role":"assistant","content":[{"type":"text","text":"It
+        is 2024-01-01."}]},{"role":"user","content":[{"type":"text","text":"What month
+        is it? Provide the full name"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"current_date","description":"Return
+        the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}},{"type":"function","function":{"name":"current_month","description":"Return
+        the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 958e89dfddce6b22-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 02 Jul 2025 13:37:35 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '299'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=Yjd2akMSlieXzmW4Rqu3UnO9Cx0ze50l6.FdDc8x_Xk-1751463455-1.0.1.1-36iYG5kQLL0ZvXv.T0cp43yIDozK8LZWzXy0Wgbt7w8V66C2iRXQQaAdHhLAQQnS3xCQG1yw9v3FXMQxbO2.IJyCeZrDq1OodufTNIo_VEY;
+        path=/; expires=Wed, 02-Jul-25 14:07:35 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=licBNkDfX6v7R7YrT3DGrJmQiXZkLctWfT1KXSFUC0g-1751463455068-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '303'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999949'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_f770217cdbdf97db5dffca61ea52f3cb
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BorwUX6ebKKij7IjRUr6J2wpatr5S",
+          "object": "chat.completion",
+          "created": 1751463454,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "It is February.",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 165,
+            "completion_tokens": 5,
+            "total_tokens": 170,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_f12167b370"
+        }
+  recorded_at: 2025-07-02 13:37:35
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be very terse, not even punctuation."},{"role":"user","content":[{"type":"text","text":"\n    What
+        are Joe and Hadley''s favourite colours?\n    Answer like name1: colour1,
+        name2: colour2\n  "}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"favourite_color","description":"Returns
+        a person''s favourite colour","strict":true,"parameters":{"type":"object","description":"","properties":{"person":{"type":"string","description":"Name
+        of a person"}},"required":["person"],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 958e89e278626b22-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 02 Jul 2025 13:37:37 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '1977'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=hhsycTjAVDIY4zP8YtB8MDC6EdWXM4MIbIiqlv6tUec-1751463457-1.0.1.1-7MOLbssfhSOn1H2IxMkej.bjoGXXBEF7p6rn.bCZa9ETiviXBWlyLlJ0JbQ5moUKO0wt2Z_PBcJwCzb0XZ1UmM98gQpguCl4H7vjhIa0VXE;
+        path=/; expires=Wed, 02-Jul-25 14:07:37 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=SH5eIjfUfrTC1mz94mMJV8SrK8Gp3rTGeC1GdkBw0Ek-1751463457188-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '1987'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999962'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_06a18b115f048116261cadb401257a50
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BorwVgq8IgeVckSOLlkT3edzMn7Hd",
+          "object": "chat.completion",
+          "created": 1751463455,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "call_xbBWDUDqR27VyWX9fnvW54Vu",
+                    "type": "function",
+                    "function": {
+                      "name": "favourite_color",
+                      "arguments": "{\"person\": \"Joe\"}"
+                    }
+                  },
+                  {
+                    "id": "call_Q9ziY5LEUiVzAPg1VhDwu4Or",
+                    "type": "function",
+                    "function": {
+                      "name": "favourite_color",
+                      "arguments": "{\"person\": \"Hadley\"}"
+                    }
+                  }
+                ],
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 84,
+            "completion_tokens": 47,
+            "total_tokens": 131,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-07-02 13:37:37
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be very terse, not even punctuation."},{"role":"user","content":[{"type":"text","text":"\n    What
+        are Joe and Hadley''s favourite colours?\n    Answer like name1: colour1,
+        name2: colour2\n  "}]},{"role":"assistant","tool_calls":[{"id":"call_xbBWDUDqR27VyWX9fnvW54Vu","function":{"name":"favourite_color","arguments":"{\"person\":[\"Joe\"]}"},"type":"function"},{"id":"call_Q9ziY5LEUiVzAPg1VhDwu4Or","function":{"name":"favourite_color","arguments":"{\"person\":[\"Hadley\"]}"},"type":"function"}]},{"role":"tool","content":"sage
+        green","tool_call_id":"call_xbBWDUDqR27VyWX9fnvW54Vu"},{"role":"tool","content":"red","tool_call_id":"call_Q9ziY5LEUiVzAPg1VhDwu4Or"}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"favourite_color","description":"Returns
+        a person''s favourite colour","strict":true,"parameters":{"type":"object","description":"","properties":{"person":{"type":"string","description":"Name
+        of a person"}},"required":["person"],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 958e89efb9a86b22-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 02 Jul 2025 13:37:38 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '1163'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=TbRGD6u9GSVKMLFkDlGHhCWyT06tjKHKmbIObPIabdE-1751463458-1.0.1.1-RANQ2pQetVtrBlOFyyaiqlJ87fN8zlCudR9xZExuuYJtN6YOu_0AqJ2Rvt3_Xr5GZZz.0YZhpSDzKEBBRGh8la1GuFePxUFYqlcqgAoa9n8;
+        path=/; expires=Wed, 02-Jul-25 14:07:38 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=mgCoTP_J6J1Mxefm0NhMTDf5Vl.CQPfgIwRPVGPagxo-1751463458530-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '1172'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999957'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_ffe7b96e888be3da3becf5338d44179c
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BorwXEi3j0HsD00n9XG7X2VOdLdQy",
+          "object": "chat.completion",
+          "created": 1751463457,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Joe: sage green Hadley: red",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 150,
+            "completion_tokens": 9,
+            "total_tokens": 159,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-07-02 13:37:38
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"\n    Use provided tool calls
+        to find the weather forecast and suitable\n    equipment for a variety of
+        weather conditions.\n\n    In your response, be very terse and omit punctuation.\n  "},{"role":"user","content":[{"type":"text","text":"What
+        should I pack for New York this weekend?"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"forecast","description":"Gets
+        the weather forecast for a city","strict":true,"parameters":{"type":"object","description":"","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"],"additionalProperties":false}}},{"type":"function","function":{"name":"equipment","description":"Gets
+        the equipment needed for a weather condition","strict":true,"parameters":{"type":"object","description":"","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 958e89f83c9c6b22-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 02 Jul 2025 13:37:39 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '528'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=ok5YkN5zZDlHEaYhRdB2TAzROpOMTrMa.SNLJnunZXI-1751463459-1.0.1.1-Gt4ALDAMMNgDkpE6KWx54VPAXUuO_IL_VBxrsKPa6RrwEUCHk7i4XP1zoMMY2upTOzFs.yUzXMJbwemLuzGFyI30Uq8NL28fU7rH3aw3nVE;
+        path=/; expires=Wed, 02-Jul-25 14:07:39 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=jZgkstg8ycmqtBKlSn9JVt6E1GOTiD_3t2QUmYCFuzg-1751463459173-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '537'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999940'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_c427254aa0ab1579ab26b8c8a32ca6d8
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BorwYac77JIImVvihX1LzWVKoakWD",
+          "object": "chat.completion",
+          "created": 1751463458,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "call_MumGVlfJ2MvNxZk89QJNrYjN",
+                    "type": "function",
+                    "function": {
+                      "name": "forecast",
+                      "arguments": "{\"city\":\"New York\"}"
+                    }
+                  }
+                ],
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 120,
+            "completion_tokens": 15,
+            "total_tokens": 135,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-07-02 13:37:39
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"\n    Use provided tool calls
+        to find the weather forecast and suitable\n    equipment for a variety of
+        weather conditions.\n\n    In your response, be very terse and omit punctuation.\n  "},{"role":"user","content":[{"type":"text","text":"What
+        should I pack for New York this weekend?"}]},{"role":"assistant","tool_calls":[{"id":"call_MumGVlfJ2MvNxZk89QJNrYjN","function":{"name":"forecast","arguments":"{\"city\":[\"New
+        York\"]}"},"type":"function"}]},{"role":"tool","content":"rainy","tool_call_id":"call_MumGVlfJ2MvNxZk89QJNrYjN"}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"forecast","description":"Gets
+        the weather forecast for a city","strict":true,"parameters":{"type":"object","description":"","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"],"additionalProperties":false}}},{"type":"function","function":{"name":"equipment","description":"Gets
+        the equipment needed for a weather condition","strict":true,"parameters":{"type":"object","description":"","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 958e89fcda216b22-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 02 Jul 2025 13:37:39 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '423'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=MTglp3ZBNrUl53imjAcNRkfJxYfAqWZOSnDJzMAQPX8-1751463459-1.0.1.1-jpksuAGzDU6FysuEdW3.f0JwsZt1HJuGL7fSyl_..bQAMCxkwacp4p70cRU06MnunVItQ9nu9k7CdA_L2m0vdLVRJ_JPyIGa8bNZ0qjyaCg;
+        path=/; expires=Wed, 02-Jul-25 14:07:39 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=GdSt988y9gtpcpqYR24jEYEyMP434XgYpvVj_PajEBI-1751463459812-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '426'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999935'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_41a81d74b2ac3bb9b03e489dbd5807af
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BorwZFbaYSdkbiUG8Njedb9L9r9UE",
+          "object": "chat.completion",
+          "created": 1751463459,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "call_i4vcABQKBawzonEzWEhJZItJ",
+                    "type": "function",
+                    "function": {
+                      "name": "equipment",
+                      "arguments": "{\"weather\":\"rainy\"}"
+                    }
+                  }
+                ],
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 145,
+            "completion_tokens": 15,
+            "total_tokens": 160,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-07-02 13:37:39
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"\n    Use provided tool calls
+        to find the weather forecast and suitable\n    equipment for a variety of
+        weather conditions.\n\n    In your response, be very terse and omit punctuation.\n  "},{"role":"user","content":[{"type":"text","text":"What
+        should I pack for New York this weekend?"}]},{"role":"assistant","tool_calls":[{"id":"call_MumGVlfJ2MvNxZk89QJNrYjN","function":{"name":"forecast","arguments":"{\"city\":[\"New
+        York\"]}"},"type":"function"}]},{"role":"tool","content":"rainy","tool_call_id":"call_MumGVlfJ2MvNxZk89QJNrYjN"},{"role":"assistant","tool_calls":[{"id":"call_i4vcABQKBawzonEzWEhJZItJ","function":{"name":"equipment","arguments":"{\"weather\":[\"rainy\"]}"},"type":"function"}]},{"role":"tool","content":"umbrella","tool_call_id":"call_i4vcABQKBawzonEzWEhJZItJ"}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"forecast","description":"Gets
+        the weather forecast for a city","strict":true,"parameters":{"type":"object","description":"","properties":{"city":{"type":"string","description":"City
+        name"}},"required":["city"],"additionalProperties":false}}},{"type":"function","function":{"name":"equipment","description":"Gets
+        the equipment needed for a weather condition","strict":true,"parameters":{"type":"object","description":"","properties":{"weather":{"type":"string","description":"Weather
+        condition"}},"required":["weather"],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 958e8a007e376b22-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 02 Jul 2025 13:37:40 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '419'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=cEtCcEisp9IM4SnVFHn3lKBbqUZnS0cOzn3sxZcLRNE-1751463460-1.0.1.1-36gIT49qoeGXZWlcgrq0NzgNyiqqUnVfdFkO467DoJb08g6EJq5fe4vqJw1nQw3rQYOqz.w1LXkhvJNjG9kwVWHiwnDnMiarAgv9R2xCV9Q;
+        path=/; expires=Wed, 02-Jul-25 14:07:40 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=zjGBSy6Dfx5oH7JcOgIKAfKDun3tjCyQM.Xrxa8ikx4-1751463460387-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '421'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999931'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_6bbed560e0f4cfdfa3c74381f405bd61
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BorwZwDKTVDDHsRr9dztA1ic05M0Z",
+          "object": "chat.completion",
+          "created": 1751463459,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Pack an umbrella for New York this weekend due to rainy weather.",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 170,
+            "completion_tokens": 14,
+            "total_tokens": 184,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-07-02 13:37:40
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
