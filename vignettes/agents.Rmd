@@ -150,9 +150,7 @@ delete_file <- function(path) {
 
 For hosted agents, you should be running the agent in a sandbox, i.e. a docker container or other VM.
 
-## Agent examples
-
-### R code
+## Running R code
 
 It is very simple to allow the model to run R code in your environment.
 
@@ -162,7 +160,7 @@ Also add btw stuff so it can look up docs
 run_r_code <- function(code) eval(parse(text = code), globalenv())
 ```
 
-```{r}
+````{r}
 chat <- chat_anthropic()
 chat$register_tool(tool(
   function(code) {
@@ -184,9 +182,10 @@ chat$chat(
   substr(x, start, start + 1)
   ```
 ")")
-```
+````
 
-If you have a strong understanding of functions and environments, you can also create subsets of the R language that are safer. For example, the following function can run simple caluclator expressions but nothing else:
+
+As we discussed above, this sort of tool is dangerous if you're allowing other people to run arbitary R code. One way around this, if you have a strong understanding of functions and environments, you can also create subsets of the R language that are safer. For example, the following function can run simple caluclator expressions but nothing else:
 
 ```{r}
 #| error: true
@@ -200,7 +199,6 @@ calculator("1 + 2 * 3 / 5")
 calculator("unlink('foo')")
 ```
 
-If you're allowing other people to provide the prompt, you'll need to use techniques like this to ensure that you don't accidentally allow the user to do something dangerous. In that scenario, we strongly recommend that you provide a larger number of simpler tools that each do one thing and are easier to guarantee are safe. Also recommend a multi-layered approach where you use prompt engineering to minimise the chances of generating dangerous code, simple and easily analysed tools, and running code in a sandbox that doesn't have access to
 
 ## Multi-agent AI
 
@@ -215,6 +213,28 @@ There are few advantages of this:
     -   History isolation. You can control context so that subtasks get only the context that they need.
     -   Prompt Break down big system prompt into more manageable/specialised chunks
     -   Tools. Too many tools makes it hard for model to use right one.
+
+
+### Parallel
+
+Advanced technique, and likely to be something we provide some more user friendly wrappers for. But it's possible to call other LLMs in parallel:
+
+```{r}
+sidechat_fn <- coro::async(function(prompt) {
+  chat <- chat_openai(model = "gpt-4.1-nano")
+  coro::await(chat$chat_async(prompt))
+})
+```
+
+```{r}
+sidechat_fn <- coro::async(function(prompt) {
+  chat <- chat_openai(model = "gpt-4.1-nano")
+  chat$register_tools(btw::btw_tools("docs"))
+  coro::await(chat_docs$chat_async(prompt))
+})
+```
+
+### History control
 
 ```{r}
 # local history
