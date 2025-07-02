@@ -67,7 +67,6 @@
 #' )
 #' data
 #' }
-#'
 #' @export
 batch_chat <- function(chat, prompts, path, wait = TRUE) {
   job <- BatchJob$new(
@@ -110,8 +109,7 @@ batch_chat_structured <- function(
     prompts = prompts,
     type = wrap_type_if_needed(type, needs_wrapper),
     path = path,
-    wait = wait,
-    call = error_call
+    wait = wait
   )
   job$step_until_done()
   turns <- job$result_turns()

@@ -92,4 +92,7 @@ test_that("as_json specialised for OpenAI", {
 test_that("seed is deprecated, but still honored", {
   expect_snapshot(chat <- chat_openai_test(seed = 1))
   expect_equal(chat$get_provider()@params$seed, 1)
+
+  # NULL is also ignored since that's what subclasses use
+  expect_no_warning(chat_openai_test(seed = NULL))
 })
