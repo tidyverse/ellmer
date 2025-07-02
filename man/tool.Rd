@@ -53,7 +53,7 @@ An S7 \code{ToolDef} object.
 }
 \description{
 Annotate a function for use in tool calls, by providing a name, description,
-and type defintion for the arguments.
+and type definition for the arguments.
 
 Learn more in \code{vignette("tool-calling")}.
 }
@@ -62,11 +62,11 @@ In ellmer 0.3.0, the definition of the \code{tool()} function changed quite
 a bit. To make it easier to update old versions, you can use an LLM with
 the following system prompt
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{Help the user convert an ellmer 0.2.0 and earlier tool defintion into a
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Help the user convert an ellmer 0.2.0 and earlier tool definition into a
 ellmer 0.3.0 tool definition. Here's what changed:
 
-* All arguments, apart from the first should be named, and the argument
-  names no longer use `.` prefixes`. The argument order should be function,
+* All arguments, apart from the first, should be named, and the argument
+  names no longer use `.` prefixes. The argument order should be function,
   name (as a string), description, then arguments, then anything
 
 * Previously `arguments` was passed as `...`, so all type specifications

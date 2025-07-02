@@ -20,7 +20,7 @@ NULL
 #' Help the user convert an ellmer 0.2.0 and earlier tool definition into a
 #' ellmer 0.3.0 tool definition. Here's what changed:
 #'
-#' * All arguments, apart from the first should be named, and the argument
+#' * All arguments, apart from the first, should be named, and the argument
 #'   names no longer use `.` prefixes. The argument order should be function,
 #'   name (as a string), description, then arguments, then anything
 #'
