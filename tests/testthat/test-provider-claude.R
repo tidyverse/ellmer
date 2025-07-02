@@ -36,11 +36,9 @@ test_that("supports standard parameters", {
 })
 
 test_that("all tool variations work", {
-  chat_fun <- chat_anthropic_test
-  # req_promise is not mockable in CRAN httr2
-  # test_tools_async(chat_fun)
-
   vcr::local_cassette("claude-tool", match_requests_on = c("uri", "body_json"))
+  chat_fun <- chat_anthropic_test
+
   test_tools_simple(chat_fun)
   test_tools_parallel(chat_fun)
   test_tools_sequential(chat_fun, total_calls = 6)

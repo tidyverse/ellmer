@@ -29,7 +29,6 @@ test_that("defaults are reported", {
 #   chat_fun <- chat_huggingface_test
 
 #   test_tools_simple(chat_fun)
-#   test_tools_async(chat_fun)
 #   test_tools_parallel(chat_fun)
 #   test_tools_sequential(chat_fun, total_calls = 6)
 # })
