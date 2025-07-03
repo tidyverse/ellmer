@@ -63,58 +63,55 @@ test_tools_async <- function(chat_fun) {
   expect_error(chat$chat("Great. Do it again."), class = "tool_async_error")
 }
 
-test_tools_parallel <- function(chat_fun, total_calls = 4) {
+test_tools_parallel <- function(chat_fun) {
   chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
-  favourite_color <- function(person) {
-    if (person == "Joe") "sage green" else "red"
-  }
   chat$register_tool(tool(
-    favourite_color,
-    description = "Returns a person's favourite colour",
-    arguments = list(
-      person = type_string("Name of a person")
-    )
+    replay(c(2, 5)),
+    name = "dice",
+    description = "Rolls a six-sided die"
   ))
-
-  result <- chat$chat(
-    "
-    What are Joe and Hadley's favourite colours?
-    Answer like name1: colour1, name2: colour2
-  "
+  result <- chat$chat("Roll two dice and compute the total.")
+  expect_match(result, "7")
+  expect_equal(
+    content_types(chat$get_turns()),
+    list(
+      "ContentText",
+      c("ContentToolRequest", "ContentToolRequest"),
+      c("ContentToolResult", "ContentToolResult"),
+      "ContentText"
+    )
   )
-  expect_match(result, "Joe: sage green")
-  expect_match(result, "Hadley: red")
-  expect_length(chat$get_turns(), total_calls)
 }
 
 test_tools_sequential <- function(chat_fun, total_calls) {
-  chat <- chat_fun(
-    system_prompt = "
-    Use provided tool calls to find the weather forecast and suitable
-    equipment for a variety of weather conditions.
+  chat <- chat_fun()
+  chat$register_tool(tool(
+    function() 1,
+    name = "dice",
+    description = "Rolls a dice"
+  ))
+  chat$register_tool(tool(
+    function(roll) "Pants",
+    name = "clothes",
+    description = "Pick clothes to wear based on a dice roll",
+    arguments = list(roll = type_number())
+  ))
 
-    In your response, be very terse and omit punctuation.
-  "
+  result <- chat$chat(
+    "Which clothes should I wear today? Roll a dice to decide."
   )
-
-  forecast <- function(city) if (city == "New York") "rainy" else "sunny"
-  equipment <- function(weather) {
-    if (weather == "rainy") "umbrella" else "sunscreen"
-  }
-  chat$register_tool(tool(
-    forecast,
-    description = "Gets the weather forecast for a city",
-    arguments = list(city = type_string("City name"))
-  ))
-  chat$register_tool(tool(
-    equipment,
-    description = "Gets the equipment needed for a weather condition",
-    arguments = list(weather = type_string("Weather condition"))
-  ))
-
-  result <- chat$chat("What should I pack for New York this weekend?")
-  expect_match(result, "umbrella", ignore.case = TRUE)
-  expect_length(chat$get_turns(), total_calls)
+  expect_match(result, "pants")
+  expect_equal(
+    content_types(chat$get_turns()),
+    list(
+      "ContentText",
+      "ContentToolRequest",
+      "ContentToolResult",
+      "ContentToolRequest",
+      "ContentToolResult",
+      "ContentText"
+    )
+  )
 }
 
 # Data extraction --------------------------------------------------------

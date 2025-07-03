@@ -272,3 +272,17 @@ vcr_example_end <- function() {
   options(ellmer_echo = NULL)
   vcr::eject_cassette()
 }
+
+replay <- function(values) {
+  i <- 0
+  function() {
+    i <<- i + 1
+    values[[i]]
+  }
+}
+
+content_types <- function(turns) {
+  lapply(turns, function(turn) {
+    map_chr(turn@contents, function(x) S7_class(x)@name)
+  })
+}
