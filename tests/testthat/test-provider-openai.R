@@ -36,7 +36,7 @@ test_that("all tool variations work", {
   test_tools_simple(chat_fun)
   test_tools_async(chat_fun)
   test_tools_parallel(chat_fun)
-  test_tools_sequential(chat_fun, total_calls = 6)
+  test_tools_sequential(chat_fun)
 })
 
 test_that("can extract data", {

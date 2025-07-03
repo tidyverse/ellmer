@@ -27,8 +27,8 @@ test_that("defaults are reported", {
 test_that("all tool variations work", {
   test_tools_simple(chat_databricks)
   test_tools_async(chat_databricks)
-  test_tools_parallel(chat_databricks, total_calls = 6)
-  test_tools_sequential(chat_databricks, total_calls = 6)
+  test_tools_parallel(chat_databricks)
+  test_tools_sequential(chat_databricks)
 })
 
 test_that("can extract data", {

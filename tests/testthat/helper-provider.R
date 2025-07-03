@@ -83,7 +83,7 @@ test_tools_parallel <- function(chat_fun) {
   )
 }
 
-test_tools_sequential <- function(chat_fun, total_calls) {
+test_tools_sequential <- function(chat_fun) {
   chat <- chat_fun()
   chat$register_tool(tool(
     function() 1,
