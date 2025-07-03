@@ -95,16 +95,16 @@ To define your desired type specification (also known as a **schema**), you use 
 * **Arrays** represent any number of values of the same type. They are created with `type_array()`. You must always supply the `item` argument which specifies the type for each individual element. Arrays of scalars are very similar to R's atomic vectors:
 
   ```{r}
-  type_logical_vector <- type_array(items = type_boolean())
-  type_integer_vector <- type_array(items = type_integer())
-  type_double_vector <- type_array(items = type_number())
-  type_character_vector <- type_array(items = type_string())
+  type_logical_vector <- type_array(type_boolean())
+  type_integer_vector <- type_array(type_integer())
+  type_double_vector <- type_array(type_number())
+  type_character_vector <- type_array(type_string())
   ```
 
   You can also have arrays of arrays and arrays of objects, which more closely resemble lists with well defined structures:
 
   ```{r}
-  list_of_integers <- type_array(items = type_integer_vector)
+  list_of_integers <- type_array(type_integer_vector)
   ```
 
 * **Objects** represent a collection of named values. They are created with `type_object()`. Objects can contain any number of scalars, arrays, and other objects. They are similar to named lists in R.
@@ -113,7 +113,7 @@ To define your desired type specification (also known as a **schema**), you use 
   type_person <- type_object(
     name = type_string(),
     age = type_integer(),
-    hobbies = type_array(items = type_string())
+    hobbies = type_array(type_string())
   )
   ```
 
@@ -127,8 +127,8 @@ type_type_person <- type_object(
   name = type_string("Name"),
   age = type_integer("Age, in years."),
   hobbies = type_array(
+    type_string(), 
     "List of hobbies. Should be exclusive and brief.",
-    items = type_string()
   )
 )
 ```
@@ -154,8 +154,8 @@ type_summary <- type_object(
   "Summary of the article.",
   author = type_string("Name of the article author"),
   topics = type_array(
-    'Array of topics, e.g. ["tech", "politics"]. Should be as specific as possible, and can overlap.',
     type_string(),
+    'Array of topics, e.g. ["tech", "politics"]. Should be as specific as possible, and can overlap.'
   ),
   summary = type_string("Summary of the article. One or two paragraphs max"),
   coherence = type_integer("Coherence of the article's key points, 0-100 (inclusive)"),
@@ -182,10 +182,10 @@ text <- "
 
 type_named_entity <- type_object(
   name = type_string("The extracted entity name."),
-  type = type_enum("The entity type", c("person", "location", "organization")),
+  type = type_enum(c("person", "location", "organization"), "The entity type"),
   context = type_string("The context in which the entity appears in the text.")
 )
-type_named_entities <- type_array(items = type_named_entity)
+type_named_entities <- type_array(type_named_entity)
 
 chat <- chat_openai()
 chat$chat_structured(text, type = type_named_entities)
@@ -223,24 +223,25 @@ Note that while we've asked nicely for the scores to sum 1, which they do in thi
 
 text <- "The new quantum computing breakthrough could revolutionize the tech industry."
 
-type_classification <- type_array(
-  "Array of classification results. The scores should sum to 1.",
-  type_object(
-    name = type_enum(
-      "The category name",
-      values = c(
-        "Politics",
-        "Sports",
-        "Technology",
-        "Entertainment",
-        "Business",
-        "Other"
-      )
+type_score <- type_object(
+  name = type_enum(
+    c(
+      "Politics",
+      "Sports",
+      "Technology",
+      "Entertainment",
+      "Business",
+      "Other"
     ),
-    score = type_number(
-      "The classification score for the category, ranging from 0.0 to 1.0."
-    )
+    "The category name",
+  ),
+  score = type_number(
+    "The classification score for the category, ranging from 0.0 to 1.0."
   )
+)
+type_classification <- type_array(
+  type_score,
+  description = "Array of classification results. The scores should sum to 1."
 )
 
 chat <- chat_openai()
@@ -296,7 +297,7 @@ type_asset <- type_object(
   income_high = type_integer(),
   tx_gt_1000 = type_boolean()
 )
-type_assets <- type_array(items = type_asset)
+type_assets <- type_array(type_asset)
 
 chat <- chat_openai()
 image <- content_image_file("congressional-assets.png")
@@ -364,10 +365,10 @@ If you want to define a data frame like object, you might be tempted to create a
 
 ```{r}
 type_my_df <- type_object(
-  name = type_array(items = type_string()),
-  age = type_array(items = type_integer()),
-  height = type_array(items = type_number()),
-  weight = type_array(items = type_number())
+  name = type_array(type_string()),
+  age = type_array(type_integer()),
+  height = type_array(type_number()),
+  weight = type_array(type_number())
 )
 ```
 
@@ -375,7 +376,7 @@ This, however, is not quite right becuase there's no way to specify that each ar
 
 ```{r}
 type_my_df <- type_array(
-  items = type_object(
+  type_object(
     name = type_string(),
     age = type_integer(),
     height = type_number(),

@@ -225,8 +225,8 @@ test_that("invoke_tools() converts to R data structures", {
     function(x, y) out <<- list(x = x, y = y),
     description = "A tool",
     arguments = list(
-      x = type_array(items = type_number()),
-      y = type_array(items = type_string())
+      x = type_array(type_number()),
+      y = type_array(type_string())
     )
   )
 
@@ -252,8 +252,8 @@ test_that("invoke_tools_async() converts to R data structures", {
     function(x, y) out <<- list(x = x, y = y),
     description = "A tool",
     arguments = list(
-      x = type_array(items = type_number()),
-      y = type_array(items = type_string())
+      x = type_array(type_number()),
+      y = type_array(type_string())
     )
   )
 
@@ -280,9 +280,9 @@ test_that("invoke_tools() can invoke tools with args with default values", {
     function(x, y, z = "z") out <<- list(x = x, y = y, z = z),
     description = "A tool",
     arguments = list(
-      x = type_array(items = type_number()),
-      y = type_array(items = type_string()),
-      z = type_array(items = type_string(), required = FALSE)
+      x = type_array(type_number()),
+      y = type_array(type_string()),
+      z = type_array(type_string(), required = FALSE)
     )
   )
 
@@ -310,9 +310,9 @@ test_that("invoke_tools_async() can invoke tools with args with default values",
     function(x, y, z = "z") out <<- list(x = x, y = y, z = z),
     description = "A tool",
     arguments = list(
-      x = type_array(items = type_number()),
-      y = type_array(items = type_string()),
-      z = type_array(items = type_string(), required = FALSE)
+      x = type_array(type_number()),
+      y = type_array(type_string()),
+      z = type_array(type_string(), required = FALSE)
     )
   )
 

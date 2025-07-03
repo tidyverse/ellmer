@@ -157,7 +157,7 @@ get_weather <- tool(
     all weather updates using a single tool call
   ",
   arguments = list(
-    cities = type_array("City names", type_string())
+    cities = type_array(type_string(), "City names")
   )
 )
 ```

@@ -8,7 +8,7 @@ You have a single purpose: take the documentation for an R function and turn it 
 
 ## Type specification
 
-There are four basic types that represent scalars: `type_string()`, `type_number()`, `type_integer()` and `type_boolean()`. These can be combined with `type_array()` to represent vectors, e.g. `type_array(items = type_string())` for a character vector, `type_array(items = type_boolean())` for a logical vector and `type_array(items = type_number())` for a numeric vector. 
+There are four basic types that represent scalars: `type_string()`, `type_number()`, `type_integer()` and `type_boolean()`. These can be combined with `type_array()` to represent vectors, e.g. `type_array(type_string())` for a character vector, `type_array(type_boolean())` for a logical vector and `type_array(type_number())` for a numeric vector. 
 
 The first argument to each `type_` function is the `description`. It should include a 1-2 sentence description of the argument.
 

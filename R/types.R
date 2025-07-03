@@ -95,11 +95,11 @@ TypeObject <- new_class(
 #'   only take the specified values.
 #'
 #' * `type_array()` is equivalent to a vector in R. You can use it to represent
-#'   an atomic vector: e.g. `type_array(items = type_boolean())` is equivalent
-#'   to a logical vector and `type_array(items = type_string())` is equivalent
+#'   an atomic vector: e.g. `type_array(type_boolean())` is equivalent
+#'   to a logical vector and `type_array(type_string())` is equivalent
 #'   to a character vector). You can also use it to represent a list of more
 #'   complicated types where every element is the same type (R has no base
-#'   equivalent to this), e.g. `type_array(items = type_array(items = type_string()))`
+#'   equivalent to this), e.g. `type_array(type_array(type_string()))`
 #'   represents a list of character vectors.
 #'
 #' * `type_object()` is equivalent to a named list in R, but where every element
@@ -132,10 +132,10 @@ TypeObject <- new_class(
 #' @export
 #' @examples
 #' # An integer vector
-#' type_array(items = type_integer())
+#' type_array(type_integer())
 #'
 #' # The closest equivalent to a data frame is an array of objects
-#' type_array(items = type_object(
+#' type_array(type_object(
 #'    x = type_boolean(),
 #'    y = type_string(),
 #'    z = type_number()
@@ -168,7 +168,7 @@ type_string <- function(description = NULL, required = TRUE) {
 #' @param values Character vector of permitted values.
 #' @export
 #' @rdname type_boolean
-type_enum <- function(description = NULL, values, required = TRUE) {
+type_enum <- function(values, description = NULL, required = TRUE) {
   TypeEnum(values = values, description = description, required = required)
 }
 
@@ -176,7 +176,7 @@ type_enum <- function(description = NULL, values, required = TRUE) {
 #'   `type_` function.
 #' @export
 #' @rdname type_boolean
-type_array <- function(description = NULL, items, required = TRUE) {
+type_array <- function(items, description = NULL, required = TRUE) {
   TypeArray(items = items, description = description, required = required)
 }
 

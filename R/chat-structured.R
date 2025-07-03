@@ -55,10 +55,7 @@ convert_from_type <- function(x, type) {
     } else if (S7_inherits(type@items, TypeObject)) {
       cols <- lapply(names(type@items@properties), function(name) {
         vals <- lapply(x, function(y) y[[name]])
-        convert_from_type(
-          vals,
-          type_array(items = type@items@properties[[name]])
-        )
+        convert_from_type(vals, type_array(type@items@properties[[name]]))
       })
       names(cols) <- names(type@items@properties)
       list2DF(cols)
