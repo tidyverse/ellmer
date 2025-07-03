@@ -92,7 +92,7 @@ ProviderOllama <- new_class(
   )
 )
 
-chat_ollama_test <- function(..., model = "llama3.2:1b", echo = "none") {
+chat_ollama_test <- function(..., model = "qwen3:4b", echo = "none") {
   # model: Note that tests require a model with tool capabilities
 
   skip_if_no_ollama()

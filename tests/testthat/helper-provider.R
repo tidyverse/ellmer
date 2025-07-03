@@ -49,72 +49,55 @@ test_tools_simple <- function(chat_fun) {
   expect_match(result, "February")
 }
 
-test_tools_async <- function(chat_fun) {
-  chat <- chat_fun("Be very terse, not even punctuation.")
+test_tools_parallel <- function(chat_fun) {
+  chat <- chat_fun("Be terse")
   chat$register_tool(tool(
-    coro::async(function() "2024-01-01"),
-    description = "Return the current date"
+    replay(c(2, 5)),
+    name = "dice",
+    description = "Rolls a six-sided die"
   ))
-
-  result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
-  expect_match(result, "2024-01-01")
-
-  # Can't use async tools in sync context
-  expect_error(chat$chat("Great. Do it again."), class = "tool_async_error")
+  result <- chat$chat("Roll two dice and compute the total.")
+  expect_match(result, "7")
+  expect_equal(
+    content_types(chat$get_turns()),
+    list(
+      "ContentText",
+      c("ContentToolRequest", "ContentToolRequest"),
+      c("ContentToolResult", "ContentToolResult"),
+      "ContentText"
+    )
+  )
 }
 
-test_tools_parallel <- function(chat_fun, total_calls = 4) {
-  chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
-  favourite_color <- function(person) {
-    if (person == "Joe") "sage green" else "red"
-  }
+test_tools_sequential <- function(chat_fun) {
+  chat <- chat_fun("Be terse")
   chat$register_tool(tool(
-    favourite_color,
-    description = "Returns a person's favourite colour",
-    arguments = list(
-      person = type_string("Name of a person")
-    )
+    function() 1,
+    name = "dice",
+    description = "Rolls a dice"
+  ))
+  chat$register_tool(tool(
+    function(roll) "Pants",
+    name = "clothes",
+    description = "Pick clothes to wear based on a dice roll",
+    arguments = list(roll = type_number())
   ))
 
   result <- chat$chat(
-    "
-    What are Joe and Hadley's favourite colours?
-    Answer like name1: colour1, name2: colour2
-  "
+    "Which clothes should I wear today? Roll a dice to decide."
   )
-  expect_match(result, "Joe: sage green")
-  expect_match(result, "Hadley: red")
-  expect_length(chat$get_turns(), total_calls)
-}
-
-test_tools_sequential <- function(chat_fun, total_calls) {
-  chat <- chat_fun(
-    system_prompt = "
-    Use provided tool calls to find the weather forecast and suitable
-    equipment for a variety of weather conditions.
-
-    In your response, be very terse and omit punctuation.
-  "
+  expect_match(result, "pants", ignore.case = TRUE)
+  expect_equal(
+    content_types(chat$get_turns()),
+    list(
+      "ContentText",
+      "ContentToolRequest",
+      "ContentToolResult",
+      "ContentToolRequest",
+      "ContentToolResult",
+      "ContentText"
+    )
   )
-
-  forecast <- function(city) if (city == "New York") "rainy" else "sunny"
-  equipment <- function(weather) {
-    if (weather == "rainy") "umbrella" else "sunscreen"
-  }
-  chat$register_tool(tool(
-    forecast,
-    description = "Gets the weather forecast for a city",
-    arguments = list(city = type_string("City name"))
-  ))
-  chat$register_tool(tool(
-    equipment,
-    description = "Gets the equipment needed for a weather condition",
-    arguments = list(weather = type_string("Weather condition"))
-  ))
-
-  result <- chat$chat("What should I pack for New York this weekend?")
-  expect_match(result, "umbrella", ignore.case = TRUE)
-  expect_length(chat$get_turns(), total_calls)
 }
 
 # Data extraction --------------------------------------------------------
