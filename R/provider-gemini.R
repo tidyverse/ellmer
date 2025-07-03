@@ -103,7 +103,7 @@ chat_google_vertex <- function(
 # https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
 vertex_url <- function(location, project_id) {
   paste_c(
-    c("https://", location, "-aiplatform.googleapis.com/v1"),
+    c("https://aiplatform.googleapis.com/v1"),
     c("/projects/", project_id),
     c("/locations/", location),
     "/publishers/google/"
@@ -579,7 +579,7 @@ default_google_credentials <- function(
   error_call = caller_env(),
   gemini = FALSE
 ) {
-  gemini_scope <- "https://www.googleapis.com/auth/generative-language.retriever"
+  gemini_scope <- "https://www.googleapis.com/auth/cloud-platform"
 
   check_string(api_key, allow_null = TRUE, call = error_call)
   api_key <- api_key %||% Sys.getenv("GOOGLE_API_KEY")
