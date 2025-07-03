@@ -99,14 +99,12 @@ method(base_request, ProviderAnthropic) <- function(provider) {
   req <- req_headers(req, `anthropic-version` = "2023-06-01")
   # <https://docs.anthropic.com/en/api/getting-started#authentication>
   req <- req_headers_redacted(req, `x-api-key` = provider@api_key)
+
   # <https://docs.anthropic.com/en/api/rate-limits>
-  req <- req_retry(
-    req,
-    # <https://docs.anthropic.com/en/api/errors#http-errors>
-    is_transient = function(resp) resp_status(resp) %in% c(429, 503, 529),
-    max_tries = 2
-  )
-  req <- ellmer_req_timeout(req, stream)
+  # <https://docs.anthropic.com/en/api/errors#http-errors>
+  req <- ellmer_req_robustify(req, is_transient = function(resp) {
+    resp_status(resp) %in% c(429, 503, 529)
+  })
 
   if (length(provider@beta_headers) > 0) {
     req <- req_headers(req, `anthropic-beta` = provider@beta_headers)
