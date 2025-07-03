@@ -84,7 +84,7 @@ models_aws_bedrock <- function(profile = NULL) {
   url <- paste0("https://bedrock.", creds$region, ".amazonaws.com")
 
   req <- request(url)
-  req <- req_url_path(req, "foundation-models")
+  req <- req_url_path_append(req, "foundation-models")
   req <- req_auth_aws_v4(
     req,
     aws_access_key_id = creds$access_key_id,
