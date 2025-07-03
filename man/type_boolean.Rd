@@ -19,9 +19,9 @@ type_number(description = NULL, required = TRUE)
 
 type_string(description = NULL, required = TRUE)
 
-type_enum(description = NULL, values, required = TRUE)
+type_enum(values, description = NULL, required = TRUE)
 
-type_array(description = NULL, items, required = TRUE)
+type_array(items, description = NULL, required = TRUE)
 
 type_object(
   .description = NULL,
@@ -77,11 +77,11 @@ integer, double, and character vectors (respectively).
 \item \code{type_enum()} is equivalent to a length-1 factor; it is a string that can
 only take the specified values.
 \item \code{type_array()} is equivalent to a vector in R. You can use it to represent
-an atomic vector: e.g. \code{type_array(items = type_boolean())} is equivalent
-to a logical vector and \code{type_array(items = type_string())} is equivalent
+an atomic vector: e.g. \code{type_array(type_boolean())} is equivalent
+to a logical vector and \code{type_array(type_string())} is equivalent
 to a character vector). You can also use it to represent a list of more
 complicated types where every element is the same type (R has no base
-equivalent to this), e.g. \code{type_array(items = type_array(items = type_string()))}
+equivalent to this), e.g. \code{type_array(type_array(type_string()))}
 represents a list of character vectors.
 \item \code{type_object()} is equivalent to a named list in R, but where every element
 must have the specified type. For example,
@@ -98,10 +98,10 @@ valid JSON schema object.
 }
 \examples{
 # An integer vector
-type_array(items = type_integer())
+type_array(type_integer())
 
 # The closest equivalent to a data frame is an array of objects
-type_array(items = type_object(
+type_array(type_object(
    x = type_boolean(),
    y = type_string(),
    z = type_number()

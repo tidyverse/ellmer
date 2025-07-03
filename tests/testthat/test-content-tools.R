@@ -1,12 +1,12 @@
 test_that("invoke_tool returns a ContentToolResult", {
-  tool <- tool(function() 1, "A tool", .name = "my_tool")
+  tool_f <- tool(function() 1, name = "my_tool", description = "A tool")
 
   res <- invoke_tool(
     ContentToolRequest(
       id = "x",
       name = "my_tool",
       arguments = list(),
-      tool = tool
+      tool = tool_f
     )
   )
   expect_s3_class(res, "ellmer::ContentToolResult")
@@ -15,7 +15,7 @@ test_that("invoke_tool returns a ContentToolResult", {
   expect_equal(res@value, 1)
   expect_s3_class(res@request, "ellmer::ContentToolRequest")
   expect_equal(res@request@id, "x")
-  expect_equal(res@request@tool, tool)
+  expect_equal(res@request@tool, tool_f)
   expect_equal(res@request@arguments, list())
 
   res <- invoke_tool(
@@ -23,7 +23,7 @@ test_that("invoke_tool returns a ContentToolResult", {
       id = "x",
       name = "my_tool",
       arguments = list(x = 1),
-      tool = tool
+      tool = tool_f
     )
   )
   expect_s3_class(res, "ellmer::ContentToolResult")
@@ -34,7 +34,7 @@ test_that("invoke_tool returns a ContentToolResult", {
   expect_equal(res@extra, list())
   expect_s3_class(res@request, "ellmer::ContentToolRequest")
   expect_equal(res@request@id, "x")
-  expect_equal(res@request@tool, tool)
+  expect_equal(res@request@tool, tool_f)
   expect_equal(res@request@arguments, list(x = 1))
 
   res <- invoke_tool(
@@ -57,8 +57,8 @@ test_that("invoke_tool returns a ContentToolResult", {
 
   tool_ctr <- tool(
     function() ContentToolResult(value = 1, extra = list(a = 1)),
-    "A tool that returns ContentToolResult",
-    .name = "my_tool"
+    name = "my_tool",
+    description = "A tool that returns ContentToolResult"
   )
   res <- invoke_tool(
     ContentToolRequest(
@@ -80,14 +80,14 @@ test_that("invoke_tool returns a ContentToolResult", {
 })
 
 test_that("invoke_tool_async returns a ContentToolResult", {
-  tool <- tool(function() 1, "A tool", .name = "my_tool")
+  tool_f <- tool(function() 1, name = "my_tool", description = "A tool")
 
   res <- sync(invoke_tool_async(
     ContentToolRequest(
       id = "x",
       name = "my_tool",
       arguments = list(),
-      tool = tool
+      tool = tool_f
     )
   ))
   expect_s3_class(res, "ellmer::ContentToolResult")
@@ -96,7 +96,7 @@ test_that("invoke_tool_async returns a ContentToolResult", {
   expect_equal(res@value, 1)
   expect_s3_class(res@request, "ellmer::ContentToolRequest")
   expect_equal(res@request@id, "x")
-  expect_equal(res@request@tool, tool)
+  expect_equal(res@request@tool, tool_f)
   expect_equal(res@request@arguments, list())
 
   res <- sync(invoke_tool_async(
@@ -104,7 +104,7 @@ test_that("invoke_tool_async returns a ContentToolResult", {
       id = "x",
       name = "my_tool",
       arguments = list(x = 1),
-      tool = tool
+      tool = tool_f
     )
   ))
   expect_s3_class(res, "ellmer::ContentToolResult")
@@ -115,7 +115,7 @@ test_that("invoke_tool_async returns a ContentToolResult", {
   expect_equal(res@extra, list())
   expect_s3_class(res@request, "ellmer::ContentToolRequest")
   expect_equal(res@request@id, "x")
-  expect_equal(res@request@tool, tool)
+  expect_equal(res@request@tool, tool_f)
   expect_equal(res@request@arguments, list(x = 1))
 
   res <- sync(invoke_tool_async(
@@ -138,8 +138,8 @@ test_that("invoke_tool_async returns a ContentToolResult", {
 
   tool_ctr <- tool(
     function() ContentToolResult(value = 1, extra = list(a = 1)),
-    "A tool that returns ContentToolResult",
-    .name = "my_tool"
+    name = "my_tool",
+    description = "A tool that returns ContentToolResult"
   )
   res <- sync(invoke_tool_async(
     ContentToolRequest(
@@ -222,19 +222,20 @@ test_that("invoke_tools_async() yields tool requests and promises results", {
 test_that("invoke_tools() converts to R data structures", {
   out <- NULL
   tool <- tool(
-    function(...) out <<- list(...),
-    "A tool",
-    x = type_array(items = type_number()),
-    y = type_array(items = type_string())
+    function(x, y) out <<- list(x = x, y = y),
+    description = "A tool",
+    arguments = list(
+      x = type_array(type_number()),
+      y = type_array(type_string())
+    )
   )
 
-  req <-
-    ContentToolRequest(
-      id = "x",
-      name = "my_tool",
-      arguments = list(x = list(1, 2), y = list()),
-      tool = tool
-    )
+  req <- ContentToolRequest(
+    id = "x",
+    name = "my_tool",
+    arguments = list(x = list(1, 2), y = list()),
+    tool = tool
+  )
 
   args <- tool_request_args(req)
   expect_equal(args$x, c(1, 2))
@@ -248,10 +249,12 @@ test_that("invoke_tools() converts to R data structures", {
 test_that("invoke_tools_async() converts to R data structures", {
   out <- NULL
   tool <- tool(
-    function(...) out <<- list(...),
-    "A tool",
-    x = type_array(items = type_number()),
-    y = type_array(items = type_string())
+    function(x, y) out <<- list(x = x, y = y),
+    description = "A tool",
+    arguments = list(
+      x = type_array(type_number()),
+      y = type_array(type_string())
+    )
   )
 
   req <-
@@ -275,10 +278,12 @@ test_that("invoke_tools() can invoke tools with args with default values", {
   out <- NULL
   tool <- tool(
     function(x, y, z = "z") out <<- list(x = x, y = y, z = z),
-    "A tool",
-    x = type_array(items = type_number()),
-    y = type_array(items = type_string()),
-    z = type_array(items = type_string(), required = FALSE)
+    description = "A tool",
+    arguments = list(
+      x = type_array(type_number()),
+      y = type_array(type_string()),
+      z = type_array(type_string(), required = FALSE)
+    )
   )
 
   req <- ContentToolRequest(
@@ -303,10 +308,12 @@ test_that("invoke_tools_async() can invoke tools with args with default values",
   out <- NULL
   tool <- tool(
     function(x, y, z = "z") out <<- list(x = x, y = y, z = z),
-    "A tool",
-    x = type_array(items = type_number()),
-    y = type_array(items = type_string()),
-    z = type_array(items = type_string(), required = FALSE)
+    description = "A tool",
+    arguments = list(
+      x = type_array(type_number()),
+      y = type_array(type_string()),
+      z = type_array(type_string(), required = FALSE)
+    )
   )
 
   req <- ContentToolRequest(

@@ -86,8 +86,7 @@ ProviderDatabricks <- new_class(
 method(base_request, ProviderDatabricks) <- function(provider) {
   req <- request(provider@base_url)
   req <- ellmer_req_credentials(req, provider@credentials)
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req, databricks_user_agent())
   req <- base_request_error(provider, req)
   req

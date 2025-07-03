@@ -1,11 +1,16 @@
+test_that("can call tools directory", {
+  f <- tool(function() 1, description = "a simple function")
+  expect_equal(f(), 1)
+})
+
 test_that("tool can get name", {
   f <- function() {}
-  td <- tool(f, "")
+  td <- tool(f, description = "")
   expect_equal(td@name, "f")
 
   td <- tool(
     function() {},
-    ""
+    description = ""
   )
   expect_match(td@name, "^tool_")
 })
@@ -22,6 +27,45 @@ test_that("json_schema_parameters generates correct paramters if no arguments", 
     )
   )
 })
+
+test_that("old arguments are deprecated", {
+  expect_snapshot({
+    f <- tool(
+      function(x) x * 2,
+      .name = "double",
+      .description = "double the input",
+      x = type_number(),
+      .convert = FALSE,
+      .annotations = tool_annotations(title = "My Tool")
+    )
+  })
+
+  expect_equal(f@name, "double")
+  expect_equal(f@convert, FALSE)
+  expect_equal(f@description, "double the input")
+  expect_equal(f@arguments, TypeObject(properties = list(x = type_number())))
+  expect_equal(f@annotations, tool_annotations(title = "My Tool"))
+})
+
+test_that("checks its arguments", {
+  expect_snapshot(error = TRUE, {
+    tool(1)
+    tool(identity, 1)
+    tool(identity, "", name = 1)
+    tool(identity, "", arguments = 1)
+    tool(identity, "", convert = 1)
+  })
+})
+
+test_that("arguments must match function formals", {
+  fun <- function(x, y) {}
+
+  expect_snapshot(error = TRUE, {
+    tool(fun, "", arguments = list(z = type_number()))
+    tool(fun, "", arguments = list(x = type_number(), y = 1))
+  })
+})
+
 
 # tool_annotations() -------------------------------------------------------
 
@@ -48,10 +92,6 @@ test_that("tool_annotations(): allows additional properties", {
 
 test_that("tool() allows annotations", {
   annotations <- tool_annotations(title = "My Tool", read_only_hint = TRUE)
-
-  # fmt: skip
-  expect_equal(
-    tool(function() { }, "My tool", .annotations = annotations)@annotations,
-    annotations
-  )
+  tool_def <- tool(function() {}, description = "", annotations = annotations)
+  expect_equal(tool_def@annotations, annotations)
 })

@@ -150,7 +150,7 @@ invoke_tool <- function(request) {
 
   tryCatch(
     {
-      result <- do.call(request@tool@fun, args)
+      result <- do.call(request@tool, args)
       new_tool_result(request, result)
     },
     error = function(e) {
@@ -173,7 +173,7 @@ on_load(
 
     tryCatch(
       {
-        result <- await(do.call(request@tool@fun, args))
+        result <- await(do.call(request@tool, args))
         new_tool_result(request, result)
       },
       error = function(e) {

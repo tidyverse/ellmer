@@ -185,8 +185,8 @@ test_that("chat_databricks() serializes tools correctly", {
       provider,
       tool(
         function() format(Sys.Date()),
-        .name = "current_date",
-        .description = "Returns the current date in ISO 8601 format."
+        name = "current_date",
+        description = "Returns the current date in ISO 8601 format."
       )
     ),
     list(
@@ -204,9 +204,9 @@ test_that("chat_databricks() serializes tools correctly", {
         function(person) {
           if (person == "Joe") "sage green" else "red"
         },
-        .name = "favourite_colour",
-        .description = "Returns a person's favourite colour.",
-        person = type_string("Name of a person")
+        name = "favourite_colour",
+        description = "Returns a person's favourite colour.",
+        arguments = list(person = type_string("Name of a person"))
       )
     ),
     list(

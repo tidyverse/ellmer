@@ -223,20 +223,17 @@ test_that("chat can get and register a list of tools", {
   tools <- list(
     "sys_time" = tool(
       function() strftime(Sys.time(), "%F %T"),
-      .description = "Get the current system time",
-      .name = "sys_time"
+      name = "sys_time",
+      description = "Get the current system time"
     ),
     "r_version" = tool(
       function() R.version.string,
-      .description = "Get the R version of the current session",
-      .name = "r_version"
+      name = "r_version",
+      description = "Get the R version of the current session"
     )
   )
 
-  for (tool in tools) {
-    chat$register_tool(tool)
-  }
-
+  chat$register_tools(tools)
   chat2$set_tools(tools)
 
   expect_equal(chat$get_tools(), tools)
@@ -245,8 +242,8 @@ test_that("chat can get and register a list of tools", {
   # action = "replace" overwrites existing tools
   tool_r_major <- tool(
     function() R.version$major,
-    .description = "Get the major version of R",
-    .name = "r_version_major"
+    name = "r_version_major",
+    description = "Get the major version of R"
   )
   new_tools <- list("r_version_major" = tool_r_major)
   chat$set_tools(new_tools)
@@ -265,14 +262,25 @@ test_that("chat can get and register a list of tools", {
   )
 })
 
+test_that("can only register tools", {
+  chat <- chat_openai_test()
+  tool_def <- tool(function() 1, "tool")
+
+  expect_snapshot(error = TRUE, {
+    chat$register_tool(1)
+    chat$register_tools(1)
+    chat$register_tools(list(tool_def, 1))
+  })
+})
+
 test_that("chat warns on tool failures", {
   chat <- chat_openai_test()
 
   chat$register_tool(tool(
     function(user) stop("User denied tool request"),
-    "Find out a user's favorite color",
-    user = type_string("User's name"),
-    .name = "user_favorite_color"
+    name = "user_favorite_color",
+    description = "Find out a user's favorite color",
+    arguments = list(user = type_string("User's name"))
   ))
 
   expect_snapshot(
@@ -286,9 +294,9 @@ test_that("chat callbacks for tool requests/results", {
 
   test_tool <- tool(
     function(user) c("red", "blue")[nchar(user) %% 2 + 1],
-    .description = "Find out a user's favorite color",
-    user = type_string("User's name"),
-    .name = "user_favorite_color"
+    name = "user_favorite_color",
+    description = "Find out a user's favorite color",
+    arguments = list(user = type_string("User's name"))
   )
 
   chat$register_tool(test_tool)
@@ -332,9 +340,9 @@ test_that("tool calls can be rejected via `tool_request` callbacks", {
 
   chat$register_tool(tool(
     function(user) "red",
-    "Find out a user's favorite color",
-    user = type_string("User's name"),
-    .name = "user_favorite_color"
+    name = "user_favorite_color",
+    description = "Find out a user's favorite color",
+    arguments = list(user = type_string("User's name"))
   ))
 
   chat$on_tool_request(function(request) {
@@ -357,9 +365,9 @@ test_that("tool calls can be rejected via the tool function", {
 
   chat$register_tool(tool(
     function(user) if (user == "Joe") tool_reject() else "red",
-    "Find out a user's favorite color",
-    user = type_string("User's name"),
-    .name = "user_favorite_color"
+    name = "user_favorite_color",
+    description = "Find out a user's favorite color",
+    arguments = list(user = type_string("User's name"))
   ))
 
   expect_snapshot(
@@ -382,9 +390,9 @@ test_that("$chat_async() can run tools concurrently", {
       res[[i]]$end <<- Sys.time()
       i
     }),
-    .description = "Tests async tool usage",
-    .name = "test_async_tool",
-    i = type_string("ID of the tool call")
+    name = "test_async_tool",
+    description = "Tests async tool usage",
+    arguments = list(i = type_string("ID of the tool call"))
   ))
 
   sync(chat$chat_async(
@@ -409,9 +417,9 @@ test_that("$chat_async() can run tools sequentially", {
       res[[i]]$end <<- Sys.time()
       i
     }),
-    .description = "Tests async tool usage",
-    .name = "test_async_tool",
-    i = type_string("ID of the tool call")
+    name = "test_async_tool",
+    description = "Tests async tool usage",
+    arguments = list(i = type_string("ID of the tool call"))
   ))
 
   sync(chat$chat_async(
@@ -427,7 +435,10 @@ test_that("$chat_async() can run tools sequentially", {
 
 test_that("$stream(stream='content') yields tool request/result contents", {
   chat <- chat_openai_test()
-  tool_current_date <- tool(function() "2024-01-01", "Return the current date")
+  tool_current_date <- tool(
+    function() "2024-01-01",
+    description = "Return the current date"
+  )
   chat$register_tool(tool_current_date)
 
   res <- coro::collect(
@@ -458,8 +469,8 @@ test_that("$stream_async(stream='content', tool_mode='concurrent') yields tool r
       coro::await(coro::async_sleep(0.1))
       "2024-01-01"
     }),
-    "Return the current date",
-    .name = "current_date"
+    name = "current_date",
+    description = "Return the current date"
   )
   chat$register_tool(tool_current_date)
 
@@ -502,8 +513,8 @@ test_that("$stream_async(stream='content', tool_mode='sequential') yields tool r
       coro::await(coro::async_sleep(0.1))
       "2024-01-01"
     }),
-    "Return the current date",
-    .name = "current_date"
+    name = "current_date",
+    description = "Return the current date"
   )
   chat$register_tool(tool_current_date)
 
