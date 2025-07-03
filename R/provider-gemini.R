@@ -125,8 +125,7 @@ ProviderGoogleGemini <- new_class(
 method(base_request, ProviderGoogleGemini) <- function(provider) {
   req <- request(provider@base_url)
   req <- ellmer_req_credentials(req, provider@credentials)
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- req_error(req, body = function(resp) {
     json <- resp_body_json(resp, check_type = FALSE)
