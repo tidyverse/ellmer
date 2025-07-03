@@ -10,11 +10,11 @@ integer, double, and character vectors (respectively).
 type_enum() is equivalent to a length-1 factor; it is a string that can
 only take the specified values.
 type_array() is equivalent to a vector in R. You can use it to represent
-an atomic vector: e.g. type_array(items = type_boolean()) is equivalent
-to a logical vector and type_array(items = type_string()) is equivalent
+an atomic vector: e.g. type_array(type_boolean()) is equivalent
+to a logical vector and type_array(type_string()) is equivalent
 to a character vector). You can also use it to represent a list of more
 complicated types where every element is the same type (R has no base
-equivalent to this), e.g. type_array(items = type_array(items = type_string()))
+equivalent to this), e.g. type_array(type_array(type_string()))
 represents a list of character vectors.
 type_object() is equivalent to a named list in R, but where every element
 must have the specified type. For example,
@@ -39,11 +39,11 @@ integer, double, and character vectors (respectively).
 type_enum() is equivalent to a length-1 factor; it is a string that can
 only take the specified values.
 type_array() is equivalent to a vector in R. You can use it to represent
-an atomic vector: e.g. type_array(items = type_boolean()) is equivalent
-to a logical vector and type_array(items = type_string()) is equivalent
+an atomic vector: e.g. type_array(type_boolean()) is equivalent
+to a logical vector and type_array(type_string()) is equivalent
 to a character vector). You can also use it to represent a list of more
 complicated types where every element is the same type (R has no base
-equivalent to this), e.g. type_array(items = type_array(items = type_string()))
+equivalent to this), e.g. type_array(type_array(type_string()))
 represents a list of character vectors.
 type_object() is equivalent to a named list in R, but where every element
 must have the specified type. For example,
@@ -117,11 +117,11 @@ integer, double, and character vectors (respectively).</p></li>
 <li><p><code>type_enum()</code> is equivalent to a length-1 factor; it is a string that can
 only take the specified values.</p></li>
 <li><p><code>type_array()</code> is equivalent to a vector in R. You can use it to represent
-an atomic vector: e.g. <code>type_array(items = type_boolean())</code> is equivalent
-to a logical vector and <code>type_array(items = type_string())</code> is equivalent
+an atomic vector: e.g. <code>type_array(type_boolean())</code> is equivalent
+to a logical vector and <code>type_array(type_string())</code> is equivalent
 to a character vector). You can also use it to represent a list of more
 complicated types where every element is the same type (R has no base
-equivalent to this), e.g. <code>type_array(items = type_array(items = type_string()))</code>
+equivalent to this), e.g. <code>type_array(type_array(type_string()))</code>
 represents a list of character vectors.</p></li>
 <li><p><code>type_object()</code> is equivalent to a named list in R, but where every element
 must have the specified type. For example,
@@ -146,9 +146,9 @@ valid JSON schema object.</p></li>
 <span></span>
 <span><span class="fu">type_string</span><span class="op">(</span>description <span class="op">=</span> <span class="cn">NULL</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">type_enum</span><span class="op">(</span>description <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">values</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">type_enum</span><span class="op">(</span><span class="va">values</span>, description <span class="op">=</span> <span class="cn">NULL</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">type_array</span><span class="op">(</span>description <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">items</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">type_array</span><span class="op">(</span><span class="va">items</span>, description <span class="op">=</span> <span class="cn">NULL</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">type_object</span><span class="op">(</span></span>
 <span>  .description <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -213,7 +213,7 @@ properties that are not explicitly listed? Only supported by Claude.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># An integer vector</span></span></span>
-<span class="r-in"><span><span class="fu">type_array</span><span class="op">(</span>items <span class="op">=</span> <span class="fu">type_integer</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">type_array</span><span class="op">(</span><span class="fu">type_integer</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;ellmer::TypeArray&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ description: NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ required   : logi TRUE</span>
@@ -223,7 +223,7 @@ properties that are not explicitly listed? Only supported by Claude.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ type       : chr "integer"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The closest equivalent to a data frame is an array of objects</span></span></span>
-<span class="r-in"><span><span class="fu">type_array</span><span class="op">(</span>items <span class="op">=</span> <span class="fu">type_object</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu">type_array</span><span class="op">(</span><span class="fu">type_object</span><span class="op">(</span></span></span>
 <span class="r-in"><span>   x <span class="op">=</span> <span class="fu">type_boolean</span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>   y <span class="op">=</span> <span class="fu">type_string</span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>   z <span class="op">=</span> <span class="fu">type_number</span><span class="op">(</span><span class="op">)</span></span></span>

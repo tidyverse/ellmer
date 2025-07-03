@@ -187,14 +187,14 @@ always supply the <code>item</code> argument which specifies the type
 for each individual element. Arrays of scalars are very similar to R’s
 atomic vectors:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">type_logical_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_boolean</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">type_integer_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">type_double_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">type_character_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">type_logical_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_boolean</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">type_integer_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">type_double_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">type_character_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>You can also have arrays of arrays and arrays of objects, which more
 closely resemble lists with well defined structures:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">list_of_integers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="va">type_integer_vector</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">list_of_integers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="va">type_integer_vector</span><span class="op">)</span></span></code></pre></div>
 </li>
 <li>
 <p><strong>Objects</strong> represent a collection of named values.
@@ -205,7 +205,7 @@ named lists in R.</p>
 <code class="sourceCode R"><span><span class="va">type_person</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  hobbies <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  hobbies <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </li>
 </ul>
@@ -229,8 +229,8 @@ be honoured, but the LLM will usually make a best effort to do so.</p>
 <span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Name"</span><span class="op">)</span>,</span>
 <span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="st">"Age, in years."</span><span class="op">)</span>,</span>
 <span>  hobbies <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>, </span>
 <span>    <span class="st">"List of hobbies. Should be exclusive and brief."</span>,</span>
-<span>    items <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Now we’ll dive into some examples before coming back to talk more
@@ -255,8 +255,8 @@ can use structured data extraction.</p>
 <span>  <span class="st">"Summary of the article."</span>,</span>
 <span>  author <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Name of the article author"</span><span class="op">)</span>,</span>
 <span>  topics <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span></span>
-<span>    <span class="st">'Array of topics, e.g. ["tech", "politics"]. Should be as specific as possible, and can overlap.'</span>,</span>
 <span>    <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="st">'Array of topics, e.g. ["tech", "politics"]. Should be as specific as possible, and can overlap.'</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  summary <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Summary of the article. One or two paragraphs max"</span><span class="op">)</span>,</span>
 <span>  coherence <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="st">"Coherence of the article's key points, 0-100 (inclusive)"</span><span class="op">)</span>,</span>
@@ -290,10 +290,10 @@ can use structured data extraction.</p>
 <span></span>
 <span><span class="va">type_named_entity</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"The extracted entity name."</span><span class="op">)</span>,</span>
-<span>  type <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_enum</a></span><span class="op">(</span><span class="st">"The entity type"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person"</span>, <span class="st">"location"</span>, <span class="st">"organization"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_enum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person"</span>, <span class="st">"location"</span>, <span class="st">"organization"</span><span class="op">)</span>, <span class="st">"The entity type"</span><span class="op">)</span>,</span>
 <span>  context <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"The context in which the entity appears in the text."</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">type_named_entities</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="va">type_named_entity</span><span class="op">)</span></span>
+<span><span class="va">type_named_entities</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="va">type_named_entity</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
@@ -346,24 +346,25 @@ guaranteed.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"The new quantum computing breakthrough could revolutionize the tech industry."</span></span>
 <span></span>
-<span><span class="va">type_classification</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span></span>
-<span>  <span class="st">"Array of classification results. The scores should sum to 1."</span>,</span>
-<span>  <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
-<span>    name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_enum</a></span><span class="op">(</span></span>
-<span>      <span class="st">"The category name"</span>,</span>
-<span>      values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>        <span class="st">"Politics"</span>,</span>
-<span>        <span class="st">"Sports"</span>,</span>
-<span>        <span class="st">"Technology"</span>,</span>
-<span>        <span class="st">"Entertainment"</span>,</span>
-<span>        <span class="st">"Business"</span>,</span>
-<span>        <span class="st">"Other"</span></span>
-<span>      <span class="op">)</span></span>
+<span><span class="va">type_score</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_enum</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Politics"</span>,</span>
+<span>      <span class="st">"Sports"</span>,</span>
+<span>      <span class="st">"Technology"</span>,</span>
+<span>      <span class="st">"Entertainment"</span>,</span>
+<span>      <span class="st">"Business"</span>,</span>
+<span>      <span class="st">"Other"</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    score <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span></span>
-<span>      <span class="st">"The classification score for the category, ranging from 0.0 to 1.0."</span></span>
-<span>    <span class="op">)</span></span>
+<span>    <span class="st">"The category name"</span>,</span>
+<span>  <span class="op">)</span>,</span>
+<span>  score <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span></span>
+<span>    <span class="st">"The classification score for the category, ranging from 0.0 to 1.0."</span></span>
 <span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">type_classification</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span></span>
+<span>  <span class="va">type_score</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Array of classification results. The scores should sum to 1."</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -425,7 +426,7 @@ and “unearned” income</div>
 <span>  income_high <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  tx_gt_1000 <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_boolean</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">type_assets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="va">type_asset</span><span class="op">)</span></span>
+<span><span class="va">type_assets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="va">type_asset</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
@@ -528,17 +529,17 @@ to create a definition similar to what R uses: an object (i.e., a named
 list) containing multiple vectors (i.e., an array):</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">type_my_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
-<span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  height <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  weight <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  height <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  weight <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>This, however, is not quite right becuase there’s no way to specify
 that each array should have the same length. Instead, you’ll need to
 turn the data structure “inside out” and create an array of objects:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">type_my_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span></span>
-<span>  items <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>    name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    height <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span>,</span>
