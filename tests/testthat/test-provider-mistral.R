@@ -35,7 +35,6 @@ test_that("supports standard parameters", {
 #   chat_fun <- chat_mistral_test
 
 #   test_tools_simple(chat_fun)
-#   test_tools_async(chat_fun)
 #   test_tools_parallel(chat_fun)
 #   test_tools_sequential(chat_fun)
 # })

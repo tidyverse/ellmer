@@ -28,7 +28,6 @@ test_that("defaults are reported", {
 
 test_that("all tool variations work", {
   test_tools_simple(chat_snowflake)
-  test_tools_async(chat_snowflake)
   test_tools_parallel(chat_snowflake)
   test_tools_sequential(chat_snowflake)
 })

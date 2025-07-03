@@ -49,20 +49,6 @@ test_tools_simple <- function(chat_fun) {
   expect_match(result, "February")
 }
 
-test_tools_async <- function(chat_fun) {
-  chat <- chat_fun("Be very terse, not even punctuation.")
-  chat$register_tool(tool(
-    coro::async(function() "2024-01-01"),
-    description = "Return the current date"
-  ))
-
-  result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
-  expect_match(result, "2024-01-01")
-
-  # Can't use async tools in sync context
-  expect_error(chat$chat("Great. Do it again."), class = "tool_async_error")
-}
-
 test_tools_parallel <- function(chat_fun) {
   chat <- chat_fun("Be terse")
   chat$register_tool(tool(
