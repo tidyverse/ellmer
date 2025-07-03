@@ -41,28 +41,14 @@ test_that("checks that requested model is installed", {
 
 # Common provider interface -----------------------------------------------
 
-test_that("can chat with tool request", {
-  chat <- chat_ollama_test("Be as terse as possible; no punctuation")
+test_that("all tool variations work", {
+  test_tools_simple(chat_fun)
 
-  add_two_numbers <- function(x, y = 0) x + y
-  chat$register_tool(
-    tool(
-      add_two_numbers,
-      "Add two numbers together.",
-      x = type_number("The first number"),
-      y = type_number("The second number", required = FALSE)
-    )
-  )
+  # Work, but don't match quite the right format because they include
+  # additional (blank) ContentText
 
-  # Tool with no properties
-  current_time <- function() Sys.time()
-  chat$register_tool(tool(current_time, "Current system time"))
-
-  # Ollama tool calling is very inconsistent, esp. with small models, so we
-  # just test that the model still works when a tool call is registered.
-  expect_no_error(
-    coro::collect(chat$stream("What is 1 + 1?"))
-  )
+  # test_tools_parallel(chat_fun)
+  # test_tools_sequential(chat_fun)
 })
 
 # Currently no other tests because I can't find a model that returns reliable
