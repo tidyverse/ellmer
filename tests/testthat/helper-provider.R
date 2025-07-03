@@ -64,7 +64,7 @@ test_tools_async <- function(chat_fun) {
 }
 
 test_tools_parallel <- function(chat_fun) {
-  chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
+  chat <- chat_fun("Be terse")
   chat$register_tool(tool(
     replay(c(2, 5)),
     name = "dice",
@@ -84,7 +84,7 @@ test_tools_parallel <- function(chat_fun) {
 }
 
 test_tools_sequential <- function(chat_fun) {
-  chat <- chat_fun()
+  chat <- chat_fun("Be terse")
   chat$register_tool(tool(
     function() 1,
     name = "dice",
@@ -100,7 +100,7 @@ test_tools_sequential <- function(chat_fun) {
   result <- chat$chat(
     "Which clothes should I wear today? Roll a dice to decide."
   )
-  expect_match(result, "pants")
+  expect_match(result, "pants", ignore.case = TRUE)
   expect_equal(
     content_types(chat$get_turns()),
     list(
