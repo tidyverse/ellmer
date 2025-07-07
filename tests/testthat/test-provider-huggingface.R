@@ -25,12 +25,10 @@ test_that("defaults are reported", {
 # })
 
 # Gets stuck in infinite loop: https://github.com/huggingface/text-generation-inference/issues/2986
-# test_that("all tool variations work", {
+# test_that("supports tool calling", {
 #   chat_fun <- chat_huggingface_test
 
 #   test_tools_simple(chat_fun)
-#   test_tools_parallel(chat_fun)
-#   test_tools_sequential(chat_fun)
 # })
 
 # Can't find model that does a good job

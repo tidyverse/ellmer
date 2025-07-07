@@ -41,15 +41,13 @@ test_that("checks that requested model is installed", {
 
 # Common provider interface -----------------------------------------------
 
-test_that("all tool variations work", {
+test_that("supports tool calling", {
   chat_fun <- chat_ollama_test
   test_tools_simple(chat_fun)
 
   # Work, but don't match quite the right format because they include
   # additional (blank) ContentText
 
-  # test_tools_parallel(chat_fun)
-  # test_tools_sequential(chat_fun)
 })
 
 # Currently no other tests because I can't find a model that returns reliable

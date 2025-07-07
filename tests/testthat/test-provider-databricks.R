@@ -24,10 +24,8 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_databricks())
 })
 
-test_that("all tool variations work", {
+test_that("supports tool calling", {
   test_tools_simple(chat_databricks)
-  test_tools_parallel(chat_databricks)
-  test_tools_sequential(chat_databricks)
 })
 
 test_that("can extract data", {

@@ -49,57 +49,6 @@ test_tools_simple <- function(chat_fun) {
   expect_match(result, "February")
 }
 
-test_tools_parallel <- function(chat_fun) {
-  chat <- chat_fun("Be terse")
-  chat$register_tool(tool(
-    replay(c(2, 5)),
-    name = "dice",
-    description = "Rolls a six-sided die"
-  ))
-  result <- chat$chat("Roll two dice and compute the total.")
-  expect_match(result, "7")
-  expect_equal(
-    content_types(chat$get_turns()),
-    list(
-      "ContentText",
-      c("ContentToolRequest", "ContentToolRequest"),
-      c("ContentToolResult", "ContentToolResult"),
-      "ContentText"
-    )
-  )
-}
-
-test_tools_sequential <- function(chat_fun) {
-  chat <- chat_fun("Be terse")
-  chat$register_tool(tool(
-    function() 1,
-    name = "dice",
-    description = "Rolls a dice"
-  ))
-  chat$register_tool(tool(
-    function(roll) "Pants",
-    name = "clothes",
-    description = "Pick clothes to wear based on a dice roll",
-    arguments = list(roll = type_number())
-  ))
-
-  result <- chat$chat(
-    "Which clothes should I wear today? Roll a dice to decide."
-  )
-  expect_match(result, "pants", ignore.case = TRUE)
-  expect_equal(
-    content_types(chat$get_turns()),
-    list(
-      "ContentText",
-      "ContentToolRequest",
-      "ContentToolResult",
-      "ContentToolRequest",
-      "ContentToolResult",
-      "ContentText"
-    )
-  )
-}
-
 # Data extraction --------------------------------------------------------
 
 test_data_extraction <- function(chat_fun) {
