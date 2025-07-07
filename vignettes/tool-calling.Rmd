@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   eval = ellmer:::eval_vignette()
 )
-vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
+vcr::setup_knitr()
 ```
 
 ## Introduction
@@ -43,7 +43,8 @@ library(ellmer)
 Let's take a look at an example where we really need an external tool. Chat models generally do not know the current time, which makes questions like these impossible.
 
 ```{r}
-#| cassette: no-tool
+#| label: no-tool
+#| cassette: true
 
 chat <- chat_openai(model = "gpt-4o")
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
@@ -72,7 +73,11 @@ Note that we've gone through the trouble of creating [roxygen2 comments](https:/
 
 # Fake it for the vignette so we always get the same results
 get_current_time <- function(tz = "UTC") {
-  format(as.POSIXct("2025-06-25 11:53:23", tz = "America/Chicago"), tz = tz, usetz = TRUE)
+  format(
+    as.POSIXct("2025-06-25 11:53:23", tz = "America/Chicago"),
+    tz = tz,
+    usetz = TRUE
+  )
 }
 ```
 
@@ -111,7 +116,9 @@ chat$register_tool(get_current_time)
 That's all we need to do! Let's retry our query:
 
 ```{r}
-#| cassette: with-tool
+#| label: with-tool
+#| cassette: true
+
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
 ```
 
@@ -138,7 +145,7 @@ The output of the tool call will be interpreted by the LLM, just as if you had t
 To show off these ideas, here's a slightly more complicated example simulating a weather API that returns data for multiple cities at once. The `get_weather()` function returns a data frame that ellmer will automatically convert into JSON in row-major format, which our experiments suggest is good for LLMs.
 
 ```{r}
-get_weather <- tool( 
+get_weather <- tool(
   function(cities) {
     raining <- c(London = "heavy", Houston = "none", Chicago = "overcast")
     temperature <- c(London = "cool", Houston = "hot", Chicago = "warm")
@@ -165,7 +172,8 @@ get_weather <- tool(
 Now we register and use it:
 
 ```{r}
-#| cassette: inputs-outputs
+#| label: inputs-outputs
+#| cassette: true
 
 chat <- chat_openai()
 chat$register_tool(get_weather)

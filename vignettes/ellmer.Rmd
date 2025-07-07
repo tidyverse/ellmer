@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   eval = ellmer:::eval_vignette()
 )
-vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
+vcr::setup_knitr()
 ```
 
 ```{r setup}

@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   eval = ellmer:::eval_vignette()
 )
-vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
+vcr::setup_knitr()
 ```
 
 
@@ -72,7 +72,7 @@ When I don't provide a system prompt, I sometimes get answers in different langu
 
 ```{r}
 #| label: code-basic
-#| cassette: code-basic
+#| cassette: true
 
 chat <- chat_anthropic()
 chat$chat(question)
@@ -82,7 +82,7 @@ I can ensure that I always get R code in a specific style by providing a system 
 
 ```{r}
 #| label: code-r
-#| cassette: code-r
+#| cassette: true
 
 chat <- chat_anthropic(
   system_prompt = "
@@ -98,7 +98,7 @@ Since I'm mostly interested in the code, I ask it to drop the explanation and sa
 
 ```{r}
 #| label: code-r-minimal
-#| cassette: code-r-minimal
+#| cassette: true
 
 chat <- chat_anthropic(
   system_prompt = "
@@ -113,7 +113,7 @@ And of course, if you want a different style of R code, just ask for it:
 
 ```{r}
 #| label: code-styles
-#| cassette: code-styles
+#| cassette: true
 
 chat <- chat_anthropic(
   system_prompt = "
@@ -138,7 +138,7 @@ If there's something about the output that you don't like, try being more explic
 
 ```{r}
 #| label: code-explicit
-#| cassette: code-explicit
+#| cassette: true
 
 chat <- chat_anthropic(
   system_prompt = "
@@ -162,7 +162,7 @@ You could provide a different prompt if you were looking for more explanation of
 
 ```{r}
 #| label: code-teacher
-#| cassette: code-teacher
+#| cassette: true
 
 chat <- chat_anthropic(
   system_prompt = "
@@ -182,7 +182,7 @@ You can imagine LLMs as being a sort of an average of the internet at a given po
 
 ```{r}
 #| label: code-new-feature
-#| cassette: code-new-feature
+#| cassette: true
 
 chat <- chat_anthropic(
   system_prompt = "
@@ -235,7 +235,7 @@ If you don't have strong feelings about what the data structure should look like
 
 ```{r}
 #| label: data-loose
-#| cassette: data-loose
+#| cassette: true
 
 instruct_json <- "
   You're an expert baker who also loves JSON. I am going to give you a list of
@@ -255,7 +255,7 @@ This isn't a bad start, but I prefer to cook with weight and I only want to see 
 
 ```{r}
 #| label: data-examples
-#| cassette: data-examples
+#| cassette: true
 
 instruct_weight <- r"(
   Here are some examples of the sort of output I'm looking for:
@@ -338,7 +338,7 @@ Now that I've iterated to get a data structure I like, it seems useful to formal
 
 ```{r}
 #| label: data-structured
-#| cassette: data-structured
+#| cassette: true
 
 type_ingredient <- type_object(
   name = type_string("Ingredient name"),
@@ -395,7 +395,7 @@ Including the input text in the output makes it easier to see if it's doing a go
 
 ```{r}
 #| label: data-unstructured-input
-#| cassette: data-unstructured-input
+#| cassette: true
 
 chat <- chat_openai(c(instruct_json, instruct_weight_input))
 chat$chat(recipe)

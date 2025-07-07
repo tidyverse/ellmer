@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   eval = ellmer:::eval_vignette()
 )
-vcr::setup_knitr(match_requests_on = c("uri", "body_json"))
+vcr::setup_knitr()
 ```
 
 When using an LLM to extract data from text or images, you can ask the chatbot to format it in JSON or any other format that you like. This works well most of the time, but there's no guarantee that you'll get the exact format you want. In particular, if you're trying to get JSON, you'll find that it's typically surrounded in ```` ```json ````, and you'll occasionally get text that isn't valid JSON. To avoid these problems, you can use a recent LLM feature: **structured data** (aka structured output). With structured data, you supply the type specification that defines the object structure you want and the LLM ensures that's what you'll get back.
@@ -29,7 +29,7 @@ To extract structured data you call `$chat_structured()` instead of the `$chat()
 
 ```{r}
 #| label: basics-text
-#| cassette: basics-text
+#| cassette: true
 
 chat <- chat_openai()
 chat$chat_structured(
@@ -45,7 +45,7 @@ The same basic idea works with images too:
 
 ```{r}
 #| label: basics-image
-#| cassette: basics-image
+#| cassette: true
 
 chat$chat_structured(
   content_image_url("https://www.r-project.org/Rlogo.png"),
@@ -70,7 +70,7 @@ prompts <- list(
   "Kwame here - just hit the big 5-0 this year."
 )
 parallel_chat_structured(
-  chat,  
+  chat,
   prompts,
   type = type_object(
     name = type_string(),
@@ -95,26 +95,26 @@ To define your desired type specification (also known as a **schema**), you use 
 * **Arrays** represent any number of values of the same type. They are created with `type_array()`. You must always supply the `item` argument which specifies the type for each individual element. Arrays of scalars are very similar to R's atomic vectors:
 
   ```{r}
-  type_logical_vector <- type_array(type_boolean())
-  type_integer_vector <- type_array(type_integer())
-  type_double_vector <- type_array(type_number())
-  type_character_vector <- type_array(type_string())
+type_logical_vector <- type_array(type_boolean())
+type_integer_vector <- type_array(type_integer())
+type_double_vector <- type_array(type_number())
+type_character_vector <- type_array(type_string())
   ```
 
   You can also have arrays of arrays and arrays of objects, which more closely resemble lists with well defined structures:
 
   ```{r}
-  list_of_integers <- type_array(type_integer_vector)
+list_of_integers <- type_array(type_integer_vector)
   ```
 
 * **Objects** represent a collection of named values. They are created with `type_object()`. Objects can contain any number of scalars, arrays, and other objects. They are similar to named lists in R.
 
   ```{r}
-  type_person <- type_object(
-    name = type_string(),
-    age = type_integer(),
-    hobbies = type_array(type_string())
-  )
+type_person <- type_object(
+  name = type_string(),
+  age = type_integer(),
+  hobbies = type_array(type_string())
+)
   ```
 
 Using these type specifications ensures that the LLM will return JSON. But ellmer goes one step further to convert the results to the closest R analog. Currently, this converts arrays of boolean, integers, numbers, and strings into logical, integer, numeric, and character vectors. Arrays of objects are converted into data frames. You can opt-out of this and get plain lists by setting `convert = FALSE` in `$chat_structured()`.
@@ -127,7 +127,7 @@ type_type_person <- type_object(
   name = type_string("Name"),
   age = type_integer("Age, in years."),
   hobbies = type_array(
-    type_string(), 
+    type_string(),
     "List of hobbies. Should be exclusive and brief.",
   )
 )
@@ -143,9 +143,12 @@ The following examples, which are [closely inspired by the Claude documentation]
 
 ```{r}
 #| label: examples-summarisation
-#| cassette: examples-summarisation
+#| cassette: true
 
-text <- readLines(system.file("examples/third-party-testing.txt", package = "ellmer"))
+text <- readLines(system.file(
+  "examples/third-party-testing.txt",
+  package = "ellmer"
+))
 # url <- "https://www.anthropic.com/news/third-party-testing"
 # html <- rvest::read_html(url)
 # text <- rvest::html_text2(rvest::html_element(html, "article"))
@@ -158,7 +161,9 @@ type_summary <- type_object(
     'Array of topics, e.g. ["tech", "politics"]. Should be as specific as possible, and can overlap.'
   ),
   summary = type_string("Summary of the article. One or two paragraphs max"),
-  coherence = type_integer("Coherence of the article's key points, 0-100 (inclusive)"),
+  coherence = type_integer(
+    "Coherence of the article's key points, 0-100 (inclusive)"
+  ),
   persuasion = type_number("Article's persuasion score, 0.0-1.0 (inclusive)")
 )
 
@@ -173,7 +178,7 @@ str(data)
 
 ```{r}
 #| label: examples-named-entity
-#| cassette: examples-named-entity
+#| cassette: true
 
 text <- "
   John works at Google in New York. He met with Sarah, the CEO of
@@ -195,7 +200,7 @@ chat$chat_structured(text, type = type_named_entities)
 
 ```{r}
 #| label: examples-sentiment
-#| cassette: examples-sentiment
+#| cassette: true
 
 text <- "
   The product was okay, but the customer service was terrible. I probably
@@ -204,9 +209,15 @@ text <- "
 
 type_sentiment <- type_object(
   "Extract the sentiment scores of a given text. Sentiment scores should sum to 1.",
-  positive_score = type_number("Positive sentiment score, ranging from 0.0 to 1.0."),
-  negative_score = type_number("Negative sentiment score, ranging from 0.0 to 1.0."),
-  neutral_score = type_number("Neutral sentiment score, ranging from 0.0 to 1.0.")
+  positive_score = type_number(
+    "Positive sentiment score, ranging from 0.0 to 1.0."
+  ),
+  negative_score = type_number(
+    "Negative sentiment score, ranging from 0.0 to 1.0."
+  ),
+  neutral_score = type_number(
+    "Neutral sentiment score, ranging from 0.0 to 1.0."
+  )
 )
 
 chat <- chat_openai()
@@ -219,7 +230,7 @@ Note that while we've asked nicely for the scores to sum 1, which they do in thi
 
 ```{r}
 #| label: examples-classification
-#| cassette: examples-classification
+#| cassette: true
 
 text <- "The new quantum computing breakthrough could revolutionize the tech industry."
 
@@ -253,7 +264,7 @@ data
 
 ```{r}
 #| label: examples-unknown-keys
-#| cassette: examples-unknown-keys
+#| cassette: true
 
 type_characteristics <- type_object(
   "All characteristics",
@@ -284,7 +295,7 @@ Even without any descriptions, ChatGPT does pretty well:
 
 ```{r}
 #| label: examples-image
-#| cassette: examples-image
+#| cassette: true
 
 type_asset <- type_object(
   assert_name = type_string(),
@@ -317,7 +328,7 @@ For example, here the LLM hallucinates a date even though there isn't one in the
 
 ```{r}
 #| label: type-required
-#| cassette: type-required
+#| cassette: true
 
 type_article <- type_object(
   "Information about an article written in markdown",
@@ -348,7 +359,7 @@ If I let the LLM know that the fields are all optional, it'll return `NULL` for 
 
 ```{r}
 #| label: type-optional
-#| cassette: type-optional
+#| cassette: true
 
 type_article <- type_object(
   "Information about an article written in markdown",

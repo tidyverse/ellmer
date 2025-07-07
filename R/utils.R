@@ -262,11 +262,7 @@ eval_vignette <- function() {
 
 vcr_example_start <- function(name) {
   options(ellmer_echo = "none")
-  vcr::insert_example_cassette(
-    name,
-    package = "ellmer",
-    match_requests_on = c("uri", "body_json")
-  )
+  vcr::insert_example_cassette(name, package = "ellmer")
 }
 vcr_example_end <- function() {
   options(ellmer_echo = NULL)
