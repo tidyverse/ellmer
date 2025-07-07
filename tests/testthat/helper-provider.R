@@ -49,63 +49,6 @@ test_tools_simple <- function(chat_fun) {
   expect_match(result, "February")
 }
 
-test_tools_parallel <- function(chat_fun, total_calls = 4) {
-  chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
-  favourite_color <- function(person) {
-    if (person == "Joe") "sage green" else "red"
-  }
-  chat$register_tool(tool(
-    favourite_color,
-    name = "favourite_color",
-    description = "Returns a person's favourite colour",
-    arguments = list(
-      person = type_string("Name of a person")
-    )
-  ))
-
-  result <- chat$chat(
-    "
-    What are Joe and Hadley's favourite colours?
-    Answer like name1: colour1, name2: colour2
-  "
-  )
-  expect_match(result, "Joe: sage green")
-  expect_match(result, "Hadley: red")
-  expect_length(chat$get_turns(), total_calls)
-}
-
-test_tools_sequential <- function(chat_fun, total_calls) {
-  chat <- chat_fun(
-    system_prompt = "
-    Use provided tool calls to find the weather forecast and suitable
-    equipment for a variety of weather conditions.
-
-    In your response, be very terse and omit punctuation.
-  "
-  )
-
-  forecast <- function(city) if (city == "New York") "rainy" else "sunny"
-  equipment <- function(weather) {
-    if (weather == "rainy") "umbrella" else "sunscreen"
-  }
-  chat$register_tool(tool(
-    forecast,
-    name = "forecast",
-    description = "Gets the weather forecast for a city",
-    arguments = list(city = type_string("City name"))
-  ))
-  chat$register_tool(tool(
-    equipment,
-    name = "equipment",
-    description = "Gets the equipment needed for a weather condition",
-    arguments = list(weather = type_string("Weather condition"))
-  ))
-
-  result <- chat$chat("What should I pack for New York this weekend?")
-  expect_match(result, "umbrella", ignore.case = TRUE)
-  expect_length(chat$get_turns(), total_calls)
-}
-
 # Data extraction --------------------------------------------------------
 
 test_data_extraction <- function(chat_fun) {
