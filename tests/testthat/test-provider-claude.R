@@ -1,5 +1,5 @@
 test_that("can make simple batch request", {
-  vcr::local_cassette("claude-batch", match_requests_on = c("uri", "body_json"))
+  vcr::local_cassette("claude-batch")
 
   chat <- chat_anthropic_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?")
@@ -26,37 +26,28 @@ test_that("defaults are reported", {
 })
 
 test_that("supports standard parameters", {
-  vcr::local_cassette(
-    "claude-standard-params",
-    match_requests_on = c("uri", "body_json")
-  )
+  vcr::local_cassette("claude-standard-params")
   chat_fun <- chat_anthropic_test
 
   test_params_stop(chat_fun)
 })
 
 test_that("supports tool calling", {
-  vcr::local_cassette("claude-tool", match_requests_on = c("uri", "body_json"))
+  vcr::local_cassette("claude-tool")
   chat_fun <- chat_anthropic_test
 
   test_tools_simple(chat_fun)
 })
 
 test_that("can extract data", {
-  vcr::local_cassette(
-    "claude-structured-data",
-    match_requests_on = c("uri", "body_json")
-  )
+  vcr::local_cassette("claude-structured-data")
   chat_fun <- chat_anthropic_test
 
   test_data_extraction(chat_fun)
 })
 
 test_that("can use images", {
-  vcr::local_cassette(
-    "claude-images",
-    match_requests_on = c("uri", "body_json")
-  )
+  vcr::local_cassette("claude-images")
   chat_fun <- chat_anthropic_test
 
   test_images_inline(chat_fun)
@@ -64,7 +55,7 @@ test_that("can use images", {
 })
 
 test_that("can use pdfs", {
-  vcr::local_cassette("claude-pdfs", match_requests_on = c("uri", "body_json"))
+  vcr::local_cassette("claude-pdfs")
   chat_fun <- chat_anthropic_test
 
   test_pdf_local(chat_fun)
@@ -79,10 +70,7 @@ test_that("can set beta headers", {
 })
 
 test_that("continues to work after whitespace only outputs (#376)", {
-  vcr::local_cassette(
-    "claude-whitespace",
-    match_requests_on = c("uri", "body_json")
-  )
+  vcr::local_cassette("claude-whitespace")
 
   chat <- chat_anthropic_test()
   chat$chat("Respond with only two blank lines")
