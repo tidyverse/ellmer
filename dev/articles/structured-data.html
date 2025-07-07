@@ -151,7 +151,7 @@ function, not a method, and it can take a vector of prompts.</p>
 <span>  <span class="st">"Kwame here - just hit the big 5-0 this year."</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span></span>
-<span>  <span class="va">chat</span>,  </span>
+<span>  <span class="va">chat</span>,</span>
 <span>  <span class="va">prompts</span>,</span>
 <span>  type <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>    name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -203,9 +203,9 @@ any number of scalars, arrays, and other objects. They are similar to
 named lists in R.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">type_person</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
-<span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  hobbies <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>hobbies <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </li>
 </ul>
@@ -229,7 +229,7 @@ be honoured, but the LLM will usually make a best effort to do so.</p>
 <span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Name"</span><span class="op">)</span>,</span>
 <span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="st">"Age, in years."</span><span class="op">)</span>,</span>
 <span>  hobbies <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>, </span>
+<span>    <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    <span class="st">"List of hobbies. Should be exclusive and brief."</span>,</span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -246,7 +246,10 @@ can use structured data extraction.</p>
 <h3 id="example-1-article-summarisation">Example 1: Article summarisation<a class="anchor" aria-label="anchor" href="#example-1-article-summarisation"></a>
 </h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/third-party-testing.txt"</span>, package <span class="op">=</span> <span class="st">"ellmer"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">"examples/third-party-testing.txt"</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">"ellmer"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># url &lt;- "https://www.anthropic.com/news/third-party-testing"</span></span>
 <span><span class="co"># html &lt;- rvest::read_html(url)</span></span>
 <span><span class="co"># text &lt;- rvest::html_text2(rvest::html_element(html, "article"))</span></span>
@@ -259,7 +262,9 @@ can use structured data extraction.</p>
 <span>    <span class="st">'Array of topics, e.g. ["tech", "politics"]. Should be as specific as possible, and can overlap.'</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  summary <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Summary of the article. One or two paragraphs max"</span><span class="op">)</span>,</span>
-<span>  coherence <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="st">"Coherence of the article's key points, 0-100 (inclusive)"</span><span class="op">)</span>,</span>
+<span>  coherence <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Coherence of the article's key points, 0-100 (inclusive)"</span></span>
+<span>  <span class="op">)</span>,</span>
 <span>  persuasion <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Article's persuasion score, 0.0-1.0 (inclusive)"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -324,9 +329,15 @@ can use structured data extraction.</p>
 <span></span>
 <span><span class="va">type_sentiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Extract the sentiment scores of a given text. Sentiment scores should sum to 1."</span>,</span>
-<span>  positive_score <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Positive sentiment score, ranging from 0.0 to 1.0."</span><span class="op">)</span>,</span>
-<span>  negative_score <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Negative sentiment score, ranging from 0.0 to 1.0."</span><span class="op">)</span>,</span>
-<span>  neutral_score <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Neutral sentiment score, ranging from 0.0 to 1.0."</span><span class="op">)</span></span>
+<span>  positive_score <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Positive sentiment score, ranging from 0.0 to 1.0."</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  negative_score <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Negative sentiment score, ranging from 0.0 to 1.0."</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  neutral_score <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Neutral sentiment score, ranging from 0.0 to 1.0."</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>

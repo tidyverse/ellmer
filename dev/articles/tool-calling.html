@@ -252,7 +252,7 @@ The <code>get_weather()</code> function returns a data frame that ellmer
 will automatically convert into JSON in row-major format, which our
 experiments suggest is good for LLMs.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">get_weather</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span> </span>
+<code class="sourceCode R"><span><span class="va">get_weather</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">cities</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">raining</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"heavy"</span>, Houston <span class="op">=</span> <span class="st">"none"</span>, Chicago <span class="op">=</span> <span class="st">"overcast"</span><span class="op">)</span></span>
 <span>    <span class="va">temperature</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"cool"</span>, Houston <span class="op">=</span> <span class="st">"hot"</span>, Chicago <span class="op">=</span> <span class="st">"warm"</span><span class="op">)</span></span>
