@@ -280,15 +280,18 @@ warn_tool_errors <- function(tool_errors) {
     }
   )
 
-  cli::cli_warn(c(
-    "Failed to evaluate {length(tool_errors)} tool call{?s}.",
-    set_names(errs, "x"),
-    "i" = if (length(errs) < length(tool_errors)) {
-      cli::format_inline(
-        "{cli::symbol$ellipsis} and {length(tool_errors) - length(errs)} more."
-      )
-    }
-  ))
+  cli::cli_warn(
+    c(
+      "Failed to evaluate {length(tool_errors)} tool call{?s}.",
+      set_names(errs, "x"),
+      "i" = if (length(errs) < length(tool_errors)) {
+        cli::format_inline(
+          "{cli::symbol$ellipsis} and {length(tool_errors) - length(errs)} more."
+        )
+      }
+    ),
+    class = "ellmer_tool_failure"
+  )
 }
 
 maybe_echo_tool <- function(x, echo = "output") {
