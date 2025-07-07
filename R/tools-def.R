@@ -5,28 +5,75 @@ NULL
 #' Define a tool
 #'
 #' @description
-#' Define an R function for use by a chatbot. The function will always be
-#' run in the current R instance.
+#' Annotate a function for use in tool calls, by providing a name, description,
+#' and type definition for the arguments.
 #'
 #' Learn more in `vignette("tool-calling")`.
 #'
-#' @param .fun The function to be invoked when the tool is called. The return
+#' # ellmer 0.3.0
+#'
+#' In ellmer 0.3.0, the definition of the `tool()` function changed quite
+#' a bit. To make it easier to update old versions, you can use an LLM with
+#' the following system prompt
+#'
+#' ````
+#' Help the user convert an ellmer 0.2.0 and earlier tool definition into a
+#' ellmer 0.3.0 tool definition. Here's what changed:
+#'
+#' * All arguments, apart from the first, should be named, and the argument
+#'   names no longer use `.` prefixes. The argument order should be function,
+#'   name (as a string), description, then arguments, then anything
+#'
+#' * Previously `arguments` was passed as `...`, so all type specifications
+#'   should now be moved into a named list and passed to the `arguments`
+#'   argument. It can be omitted if the function has no arguments.
+#'
+#' ```R
+#' # old
+#' tool(
+#'   add,
+#'   "Add two numbers together"
+#'   x = type_number(),
+#'   y = type_number()
+#' )
+#'
+#' # new
+#' tool(
+#'   add,
+#'   name = "add",
+#'   description = "Add two numbers together",
+#'   arguments = list(
+#'     x = type_number(),
+#'     y = type_number()
+#'   )
+#' )
+#' ```
+#'
+#' Don't respond; just let the user provide function calls to convert.
+#' ````
+#'
+#' @param fun The function to be invoked when the tool is called. The return
 #'   value of the function is sent back to the chatbot.
 #'
 #'   Expert users can customize the tool result by returning a
 #'   [ContentToolResult] object.
-#' @param .name The name of the function.
-#' @param .description A detailed description of what the function does.
+#' @param name The name of the function. This can be omitted if `fun` is an
+#'   existing function (i.e. not defined inline).
+#' @param description A detailed description of what the function does.
 #'   Generally, the more information that you can provide here, the better.
-#' @param .annotations Additional properties that describe the tool and its
+#' @param arguments A named list that defines the arguments accepted by the
+#'   function. Each element should be created by a [`type_*()`][type_boolean]
+#'   function (or `NULL` if you don't want the LLM to use that argument).
+#' @param annotations Additional properties that describe the tool and its
 #'   behavior. Usually created by [tool_annotations()], where you can find a
 #'   description of the annotation properties recommended by the [Model Context
 #'   Protocol](https://modelcontextprotocol.io/introduction).
-#' @param .convert Should JSON inputs be automatically convert to their
+#' @param convert Should JSON inputs be automatically convert to their
 #'   R data type equivalents? Defaults to `TRUE`.
-#' @param ... Name-type pairs that define the arguments accepted by the
-#'   function. Each element should be created by a [`type_*()`][type_boolean]
-#'   function.
+#' @param ... `r lifecycle::badge("deprecated")` Use `arguments` instead.
+#' @param .name,.description,.convert,.annotations
+#'   `r lifecycle::badge("deprecated")` Please switch to the non-prefixed
+#'   equivalents.
 #' @return An S7 `ToolDef` object.
 #' @examples
 #' \dontshow{ellmer:::vcr_example_start("tool")}
@@ -35,26 +82,24 @@ NULL
 #' # call the tool
 #' tool_rnorm <- tool(
 #'   rnorm,
-#'   "Drawn numbers from a random normal distribution",
-#'   n = type_integer("The number of observations. Must be a positive integer."),
-#'   mean = type_number("The mean value of the distribution."),
-#'   sd = type_number("The standard deviation of the distribution. Must be a non-negative number."),
-#'   .annotations = tool_annotations(
-#'     title = "Draw Random Normal Numbers",
-#'     read_only_hint = TRUE,
-#'     open_world_hint = FALSE
+#'   description = "Draw numbers from a random normal distribution",
+#'   arguments = list(
+#'     n = type_integer("The number of observations. Must be a positive integer."),
+#'     mean = type_number("The mean value of the distribution."),
+#'     sd = type_number("The standard deviation of the distribution. Must be a non-negative number.")
 #'   )
 #' )
+#' tool_rnorm(n = 5, mean = 0, sd = 1)
+#'
 #' chat <- chat_openai()
 #' # Then register it
 #' chat$register_tool(tool_rnorm)
 #'
 #' # Then ask a question that needs it.
-#' chat$chat("
-#'   Give me five numbers from a random normal distribution.
-#' ")
+#' chat$chat("Give me five numbers from a random normal distribution.")
 #'
 #' # Look at the chat history to see how tool calling works:
+#' chat
 #' # Assistant sends a tool request which is evaluated locally and
 #' # results are send back in a tool result.
 #'
@@ -63,30 +108,120 @@ NULL
 #' @aliases ToolDef
 #' @export
 tool <- function(
-  .fun,
-  .description,
+  fun,
+  description,
   ...,
-  .name = NULL,
-  .convert = TRUE,
-  .annotations = list()
+  arguments = list(),
+  name = NULL,
+  convert = TRUE,
+  annotations = list(),
+  .name = deprecated(),
+  .description = deprecated(),
+  .convert = deprecated(),
+  .annotations = deprecated()
 ) {
-  if (is.null(.name)) {
-    fun_expr <- enexpr(.fun)
+  if (!missing(...)) {
+    lifecycle::deprecate_warn("0.3.0", "tool(...)", "tool(arguments)")
+    arguments <- list(...)
+  }
+  if (lifecycle::is_present(.name)) {
+    lifecycle::deprecate_warn("0.3.0", "tool(.name)", "tool(name)")
+    name <- .name
+  }
+  if (lifecycle::is_present(.description)) {
+    lifecycle::deprecate_warn(
+      "0.3.0",
+      "tool(.description)",
+      "tool(description)"
+    )
+    description <- .description
+  }
+  if (lifecycle::is_present(.convert)) {
+    lifecycle::deprecate_warn("0.3.0", "tool(.convert)", "tool(convert)")
+    convert <- .convert
+  }
+  if (lifecycle::is_present(.annotations)) {
+    lifecycle::deprecate_warn(
+      "0.3.0",
+      "tool(.annotations)",
+      "tool(annotations)"
+    )
+    annotations <- .annotations
+  }
+
+  fun_expr <- enexpr(fun)
+  check_function(fun)
+  check_string(description)
+  check_string(name, allow_null = TRUE)
+  check_bool(convert)
+
+  if (is.null(name)) {
     if (is.name(fun_expr)) {
-      .name <- as.character(fun_expr)
+      name <- as.character(fun_expr)
     } else {
-      .name <- unique_tool_name()
+      name <- unique_tool_name()
     }
   }
 
+  check_arguments(arguments, formals(fun))
+
   ToolDef(
-    fun = .fun,
-    name = .name,
-    description = .description,
-    arguments = type_object(...),
-    convert = .convert,
-    annotations = .annotations
+    fun,
+    name = name,
+    description = description,
+    arguments = TypeObject(properties = arguments),
+    convert = convert,
+    annotations = annotations
   )
+}
+
+ToolDef <- new_class(
+  "ToolDef",
+  parent = class_function,
+  properties = list(
+    name = prop_string(),
+    description = prop_string(),
+    arguments = TypeObject,
+    convert = prop_bool(TRUE),
+    annotations = class_list
+  )
+)
+
+check_arguments <- function(arguments, formals, call = caller_env()) {
+  if (!is.list(arguments) || !(length(arguments) == 0 || is_named(arguments))) {
+    stop_input_type(arguments, "a named list", call = call)
+  }
+
+  extra_args <- setdiff(names(arguments), names(formals))
+  missing_args <- setdiff(names(formals), names(arguments))
+  if (length(extra_args) > 0 || length(missing_args) > 0) {
+    cli::cli_abort(
+      c(
+        "Names of {.arg arguments} must match formals of {.arg fun}",
+        "*" = if (length(extra_args) > 0) {
+          "Extra type definitions: {.val {extra_args}}"
+        },
+        "*" = if (length(missing_args) > 0) {
+          "Missing type definitions: {.val {missing_args}}"
+        }
+      ),
+      call = call
+    )
+  }
+
+  for (nm in names(arguments)) {
+    arg <- arguments[[nm]]
+    if (!is.null(arg) && !S7_inherits(arg, Type)) {
+      stop_input_type(
+        arg,
+        c("a <Type>", "NULL"),
+        arg = paste0("arguments$", nm),
+        call = call
+      )
+    }
+  }
+
+  invisible()
 }
 
 #' Tool annotations
@@ -272,17 +407,7 @@ tool_reject <- function(
   )
 }
 
-ToolDef <- new_class(
-  "ToolDef",
-  properties = list(
-    name = prop_string(),
-    fun = class_function,
-    description = prop_string(),
-    arguments = TypeObject,
-    convert = prop_bool(TRUE),
-    annotations = class_list
-  )
-)
+
 unique_tool_name <- function() {
   the$cur_tool_id <- (the$cur_tool_id %||% 0) + 1
   sprintf("tool_%03d", the$cur_tool_id)

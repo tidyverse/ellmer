@@ -53,7 +53,7 @@ Since the model doesn't know what day it is, the result is incorrect.
 
 ### Defining a tool function
 
-The first thing we'll do is define an R function that returns the current time. This will be our tool.
+The first thing we'll do is define an R function that returns the current time. 
 
 ```{r}
 #' Gets the current time in the given time zone.
@@ -65,6 +65,8 @@ get_current_time <- function(tz = "UTC") {
 }
 ```
 
+Note that we've gone through the trouble of creating [roxygen2 comments](https://roxygen2.r-lib.org/). This isn't necessary, but as we'll see shortly, can make it a bit easier to generate a tool defintion.
+
 ```{r}
 #| include: false
 
@@ -74,34 +76,37 @@ get_current_time <- function(tz = "UTC") {
 }
 ```
 
-Note that we've gone through the trouble of creating [roxygen2 comments](https://roxygen2.r-lib.org/). This is a very important step that will help the model use your tool correctly!
+To turn a function into a tool, we provide some additional metadata that the model will use:
 
-Let's test it:
+```{r}
+get_current_time <- tool(
+  get_current_time,
+  name = "get_current_time",
+  description = "Returns the current time.",
+  arguments = list(
+    tz = type_string(
+      "Time zone to display the current time in. Defaults to `\"UTC\"`.",
+      required = FALSE
+    )
+  )
+)
+```
+
+This is a fair amount of code to write, even for such a simple function. Fortunately, you don't have to write this by hand! I generated the above `tool()` call by calling `create_tool_def(get_current_time)`, which uses an LLM to generate the `tool()` call for you. `create_tool_def()` is not perfect, so you must review the generated code before using it, but it is a big time-saver.
+
+Note that a tool is just a special type of function so we can still call it:
 
 ```{r}
 get_current_time()
 ```
 
-### Registering tools
+### Registering and using tools
 
-Now we need to tell our chat object about our `get_current_time` function. This by creating and registering a tool:
+Now we need to give our chat object access to our tool. We do this with `$register_tool()`:
 
 ```{r}
-chat$register_tool(tool(
-  get_current_time,
-  "Gets the current time in the given time zone.",
-  tz = type_string(
-    "The time zone to get the current time in. Defaults to `\"UTC\"`.",
-    required = FALSE
-  )
-))
+chat$register_tool(get_current_time)
 ```
-
-This is a fair amount of code to write, even for such a simple function as `get_current_time`. Fortunately, you don't have to write this by hand! I generated the above `register_tool` call by calling `create_tool_def(get_current_time)`, which printed that code at the console. `create_tool_def()` works by passing the function's signature and documentation to GPT-4o, and asking it to generate the `register_tool` call for you.
-
-Note that `create_tool_def()` may not create perfect results, so you must review the generated code before using it. But it is a huge time-saver nonetheless, and removes the tedious boilerplate generation you'd have to do otherwise.
-
-### Using the tool
 
 That's all we need to do! Let's retry our query:
 
@@ -133,26 +138,42 @@ The output of the tool call will be interpreted by the LLM, just as if you had t
 To show off these ideas, here's a slightly more complicated example simulating a weather API that returns data for multiple cities at once. The `get_weather()` function returns a data frame that ellmer will automatically convert into JSON in row-major format, which our experiments suggest is good for LLMs.
 
 ```{r}
+get_weather <- tool( 
+  function(cities) {
+    raining <- c(London = "heavy", Houston = "none", Chicago = "overcast")
+    temperature <- c(London = "cool", Houston = "hot", Chicago = "warm")
+    wind <- c(London = "strong", Houston = "weak", Chicago = "strong")
+
+    data.frame(
+      city = cities,
+      raining = unname(raining[cities]),
+      temperature = unname(temperature[cities]),
+      wind = unname(wind[cities])
+    )
+  },
+  name = "get_weather",
+  description = "
+    Report on weather conditions in multiple cities. For efficiency, request 
+    all weather updates using a single tool call
+  ",
+  arguments = list(
+    cities = type_array(type_string(), "City names")
+  )
+)
+```
+
+Now we register and use it:
+
+```{r}
 #| cassette: inputs-outputs
 
-raining <- c(London = "heavy", Houston = "none", Chicago = "overcast")
-temperature <- c(London = "cool", Houston = "hot", Chicago = "warm")
-wind <- c(London = "strong", Houston = "weak", Chicago = "strong")
-
-get_weather <- function(cities) {
-  data.frame(
-    city = cities,
-    raining = unname(raining[cities]),
-    temperature = unname(temperature[cities]),
-    wind = unname(wind[cities])
-  )
-}
 chat <- chat_openai()
-chat$register_tool(tool( 
-  get_weather,
-  "Report on weather conditions in multiple cities. For efficiency, request all 
-  weather updates using a single tool call",
-  cities = type_array("City names", type_string())
-))
+chat$register_tool(get_weather)
 chat$chat("Give me a weather udpate for London and Chicago")
+```
+
+We can print the chat to confirm that the model only performed a single tool call:
+
+```{r}
+chat
 ```

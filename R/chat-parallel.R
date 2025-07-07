@@ -170,7 +170,7 @@ multi_convert <- function(
   })
 
   if (convert) {
-    out <- convert_from_type(rows, type_array(items = type))
+    out <- convert_from_type(rows, type_array(type))
   } else {
     out <- rows
   }

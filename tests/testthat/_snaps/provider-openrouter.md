@@ -9,4 +9,4 @@
       chat$chat("What is 1 + 1?", echo = TRUE)
     Condition
       Error in `method(stream_parse, ellmer::ProviderOpenRouter)`:
-      ! message
+

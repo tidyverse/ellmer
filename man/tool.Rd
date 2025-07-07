@@ -6,46 +6,98 @@
 \title{Define a tool}
 \usage{
 tool(
-  .fun,
-  .description,
+  fun,
+  description,
   ...,
-  .name = NULL,
-  .convert = TRUE,
-  .annotations = list()
+  arguments = list(),
+  name = NULL,
+  convert = TRUE,
+  annotations = list(),
+  .name = deprecated(),
+  .description = deprecated(),
+  .convert = deprecated(),
+  .annotations = deprecated()
 )
 }
 \arguments{
-\item{.fun}{The function to be invoked when the tool is called. The return
+\item{fun}{The function to be invoked when the tool is called. The return
 value of the function is sent back to the chatbot.
 
 Expert users can customize the tool result by returning a
 \link{ContentToolResult} object.}
 
-\item{.description}{A detailed description of what the function does.
+\item{description}{A detailed description of what the function does.
 Generally, the more information that you can provide here, the better.}
 
-\item{...}{Name-type pairs that define the arguments accepted by the
+\item{...}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{arguments} instead.}
+
+\item{arguments}{A named list that defines the arguments accepted by the
 function. Each element should be created by a \code{\link[=type_boolean]{type_*()}}
-function.}
+function (or \code{NULL} if you don't want the LLM to use that argument).}
 
-\item{.name}{The name of the function.}
+\item{name}{The name of the function. This can be omitted if \code{fun} is an
+existing function (i.e. not defined inline).}
 
-\item{.convert}{Should JSON inputs be automatically convert to their
+\item{convert}{Should JSON inputs be automatically convert to their
 R data type equivalents? Defaults to \code{TRUE}.}
 
-\item{.annotations}{Additional properties that describe the tool and its
+\item{annotations}{Additional properties that describe the tool and its
 behavior. Usually created by \code{\link[=tool_annotations]{tool_annotations()}}, where you can find a
 description of the annotation properties recommended by the \href{https://modelcontextprotocol.io/introduction}{Model Context Protocol}.}
+
+\item{.name, .description, .convert, .annotations}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please switch to the non-prefixed
+equivalents.}
 }
 \value{
 An S7 \code{ToolDef} object.
 }
 \description{
-Define an R function for use by a chatbot. The function will always be
-run in the current R instance.
+Annotate a function for use in tool calls, by providing a name, description,
+and type definition for the arguments.
 
 Learn more in \code{vignette("tool-calling")}.
 }
+\section{ellmer 0.3.0}{
+In ellmer 0.3.0, the definition of the \code{tool()} function changed quite
+a bit. To make it easier to update old versions, you can use an LLM with
+the following system prompt
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Help the user convert an ellmer 0.2.0 and earlier tool definition into a
+ellmer 0.3.0 tool definition. Here's what changed:
+
+* All arguments, apart from the first, should be named, and the argument
+  names no longer use `.` prefixes. The argument order should be function,
+  name (as a string), description, then arguments, then anything
+
+* Previously `arguments` was passed as `...`, so all type specifications
+  should now be moved into a named list and passed to the `arguments`
+  argument. It can be omitted if the function has no arguments.
+
+```R
+# old
+tool(
+  add,
+  "Add two numbers together"
+  x = type_number(),
+  y = type_number()
+)
+
+# new
+tool(
+  add,
+  name = "add",
+  description = "Add two numbers together",
+  arguments = list(
+    x = type_number(),
+    y = type_number()
+  )
+)
+```
+
+Don't respond; just let the user provide function calls to convert.
+}\if{html}{\out{</div>}}
+}
+
 \examples{
 \dontshow{ellmer:::vcr_example_start("tool")}
 \dontshow{set.seed(1014)}
@@ -53,26 +105,24 @@ Learn more in \code{vignette("tool-calling")}.
 # call the tool
 tool_rnorm <- tool(
   rnorm,
-  "Drawn numbers from a random normal distribution",
-  n = type_integer("The number of observations. Must be a positive integer."),
-  mean = type_number("The mean value of the distribution."),
-  sd = type_number("The standard deviation of the distribution. Must be a non-negative number."),
-  .annotations = tool_annotations(
-    title = "Draw Random Normal Numbers",
-    read_only_hint = TRUE,
-    open_world_hint = FALSE
+  description = "Draw numbers from a random normal distribution",
+  arguments = list(
+    n = type_integer("The number of observations. Must be a positive integer."),
+    mean = type_number("The mean value of the distribution."),
+    sd = type_number("The standard deviation of the distribution. Must be a non-negative number.")
   )
 )
+tool_rnorm(n = 5, mean = 0, sd = 1)
+
 chat <- chat_openai()
 # Then register it
 chat$register_tool(tool_rnorm)
 
 # Then ask a question that needs it.
-chat$chat("
-  Give me five numbers from a random normal distribution.
-")
+chat$chat("Give me five numbers from a random normal distribution.")
 
 # Look at the chat history to see how tool calling works:
+chat
 # Assistant sends a tool request which is evaluated locally and
 # results are send back in a tool result.
 

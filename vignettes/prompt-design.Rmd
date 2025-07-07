@@ -346,7 +346,7 @@ type_ingredient <- type_object(
   unit = type_string("Unit of measurement")
 )
 
-type_ingredients <- type_array(items = type_ingredient)
+type_ingredients <- type_array(type_ingredient)
 
 chat <- chat_openai(c(instruct_json, instruct_weight))
 chat$chat_structured(ingredients, type = type_ingredients)

@@ -33,13 +33,13 @@ test_tools_simple <- function(chat_fun) {
   )
   chat$register_tool(tool(
     function() "2024-01-01",
-    "Return the current date",
-    .name = "current_date"
+    name = "current_date",
+    description = "Return the current date"
   ))
   chat$register_tool(tool(
     function() "February",
-    "Return the full name of the current month",
-    .name = "current_month"
+    name = "current_month",
+    description = "Return the full name of the current month"
   ))
 
   result <- chat$chat("What's the current date in Y-M-D format?")
@@ -56,9 +56,11 @@ test_tools_parallel <- function(chat_fun, total_calls = 4) {
   }
   chat$register_tool(tool(
     favourite_color,
-    "Returns a person's favourite colour",
-    person = type_string("Name of a person"),
-    .name = "favourite_color"
+    name = "favourite_color",
+    description = "Returns a person's favourite colour",
+    arguments = list(
+      person = type_string("Name of a person")
+    )
   ))
 
   result <- chat$chat(
@@ -88,15 +90,15 @@ test_tools_sequential <- function(chat_fun, total_calls) {
   }
   chat$register_tool(tool(
     forecast,
-    "Gets the weather forecast for a city",
-    city = type_string("City name"),
-    .name = "forecast"
+    name = "forecast",
+    description = "Gets the weather forecast for a city",
+    arguments = list(city = type_string("City name"))
   ))
   chat$register_tool(tool(
     equipment,
-    "Gets the equipment needed for a weather condition",
-    weather = type_string("Weather condition"),
-    .name = "equipment"
+    name = "equipment",
+    description = "Gets the equipment needed for a weather condition",
+    arguments = list(weather = type_string("Weather condition"))
   ))
 
   result <- chat$chat("What should I pack for New York this weekend?")
@@ -182,7 +184,11 @@ test_pdf_local <- function(chat_fun) {
     content_pdf_file(test_path("apples.pdf"))
   )
   expect_match(response, "Apples are tasty")
-  expect_match(chat$chat("What apple is not tasty?"), "red delicious")
+  expect_match(
+    chat$chat("What apple is not tasty?"),
+    "red delicious",
+    ignore.case = TRUE
+  )
 }
 
 # Models ------------------------------------------------------------------
