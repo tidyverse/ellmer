@@ -50,6 +50,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
 <ul><li>
+<code><a href="../reference/chat_ollama.html">models_ollama()</a></code> now includes a <code>capabilities</code> column with a comma-separated list of model capabilities (<a href="https://github.com/tidyverse/ellmer/issues/623" class="external-link">#623</a>).</li>
+<li>
 <code><a href="../reference/chat_huggingface.html">chat_huggingface()</a></code> now works much better.</li>
 <li>[BREAKING CHANGE] <code><a href="../reference/type_boolean.html">type_array()</a></code> and <code><a href="../reference/type_boolean.html">type_enum()</a></code> now have the description as the second argument and <code>items/</code>/<code>values</code> as the first. This makes them easier to use in the common case where the description isn’t necessary (<a href="https://github.com/tidyverse/ellmer/issues/610" class="external-link">#610</a>).</li>
 <li>By default, ellmer now retries requests up to 3 times, controllable with <code>option(ellmer_max_tries)</code> and will retry if the connection fails (rather than just if the request itself returns a transient error).</li>
