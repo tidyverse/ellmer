@@ -41,7 +41,7 @@ test_that("can use images", {
   skip("Run manually; 24 hour rate limit")
   chat_fun <- chat_azure_openai_test
 
-  httr2::with_verbosity(test_images_inline(chat_fun), 2)
+  test_images_inline(chat_fun)
   test_images_remote(chat_fun)
 })
 

@@ -13,15 +13,9 @@
 #'
 #' ## Known limitations
 #'
-#' * Parameter support is hit or miss.
-#' * Tool calling is currently broken in the API.
-#' * While images are technically supported, I couldn't find any models that
-#'   returned useful respones.
 #' * Some models do not support the chat interface or parts of it, for example
 #'   `google/gemma-2-2b-it` does not support a system prompt. You will need to
 #'   carefully choose the model.
-#'
-#' So overall, not something we could recommend at the moment.
 #'
 #' @family chatbots
 #' @param model `r param_model("meta-llama/Llama-3.1-8B-Instruct")`
@@ -48,11 +42,8 @@ chat_huggingface <- function(
   echo <- check_echo(echo)
   params <- params %||% params()
 
-  base_url <- paste0(
-    "https://api-inference.huggingface.co/models/",
-    model,
-    "/v1"
-  )
+  # https://huggingface.co/docs/inference-providers/en/index?python-clients=requests#http--curl
+  base_url <- "https://router.huggingface.co/v1/"
 
   provider <- ProviderHuggingFace(
     name = "HuggingFace",
@@ -67,55 +58,14 @@ chat_huggingface <- function(
 
 ProviderHuggingFace <- new_class("ProviderHuggingFace", parent = ProviderOpenAI)
 
-chat_huggingface_test <- function(..., model = NULL, echo = "none") {
-  model <- model %||% "meta-llama/Llama-3.1-8B-Instruct"
+chat_huggingface_test <- function(
+  system_prompt = "Be terse",
+  ...,
+  model = NULL,
+  echo = "none"
+) {
+  model <- model %||% "Qwen/Qwen3-4B"
   chat_huggingface(model = model, ..., echo = echo)
-}
-
-# https://platform.openai.com/docs/api-reference/chat/create
-method(chat_body, ProviderHuggingFace) <- function(
-  provider,
-  stream = TRUE,
-  turns = list(),
-  tools = list(),
-  type = NULL
-) {
-  if (length(tools) > 0) {
-    # https://github.com/huggingface/text-generation-inference/issues/2986
-    cli::cli_abort("HuggingFace does not currently support tools.")
-  }
-
-  body <- chat_body(
-    super(provider, ProviderOpenAI),
-    stream = stream,
-    turns = turns,
-    tools = tools,
-    type = type
-  )
-
-  messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
-  tools <- as_json(provider, unname(tools))
-
-  if (!is.null(type)) {
-    body$response_format <- list(
-      type = "json",
-      value = as_json(provider, type)
-    )
-  }
-
-  body
-}
-
-method(as_json, list(ProviderHuggingFace, ContentToolResult)) <- function(
-  provider,
-  x
-) {
-  list(
-    role = "tool",
-    content = tool_string(x),
-    name = x@request@name,
-    tool_call_id = x@request@id
-  )
 }
 
 hf_key <- function() {

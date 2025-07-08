@@ -69,7 +69,8 @@ test_that("Databricks CLI tokens are detected correctly", {
     DATABRICKS_HOST = NA,
     DATABRICKS_CONFIG_FILE = cfg_file,
     DATABRICKS_CLIENT_ID = NA,
-    DATABRICKS_CLIENT_SECRET = NA
+    DATABRICKS_CLIENT_SECRET = NA,
+    DATABRICKS_TOKEN = NA
   )
   local_mocked_bindings(
     databricks_cli_token = function(path, host) {
@@ -107,7 +108,8 @@ test_that("Workbench-managed Databricks credentials are detected correctly", {
     DATABRICKS_CONFIG_PROFILE = "workbench",
     DATABRICKS_HOST = "https://example.cloud.databricks.com",
     DATABRICKS_CLIENT_ID = NA,
-    DATABRICKS_CLIENT_SECRET = NA
+    DATABRICKS_CLIENT_SECRET = NA,
+    DATABRICKS_TOKEN = NA
   )
   credentials <- default_databricks_credentials()
   expect_equal(credentials(), list(Authorization = "Bearer token"))
@@ -117,7 +119,8 @@ test_that("M2M authentication requests look correct", {
   withr::local_envvar(
     DATABRICKS_HOST = "https://example.cloud.databricks.com",
     DATABRICKS_CLIENT_ID = "id",
-    DATABRICKS_CLIENT_SECRET = "secret"
+    DATABRICKS_CLIENT_SECRET = "secret",
+    DATABRICKS_TOKEN = NA
   )
   local_mocked_responses(function(req) {
     # Snapshot relevant fields of the outgoing request.
