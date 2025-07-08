@@ -18,9 +18,9 @@ This vignette shows you how to create agents with ellmer. It's hard to find a go
 
 1.  One or more tool calls that lets them inspect the state of the world.
 2.  One or more tool calls that lets them make changes to the state of the world.
-3.  Automatic iteration over the tool calling loop until complete.
+3.  Iteration that calls repeatedly calls tools and sends results back to the model until there's nothing left to do.
 
-ellmer automatically provides the last property; all you need to do is register the appropriate tools. That means making an agent is surprisingly simple!
+ellmer automatically provides the last property so all you need to do is register the appropriate tools. That means making an agent is surprisingly simple!
 
 ```{r setup}
 library(ellmer)
@@ -28,7 +28,7 @@ library(ellmer)
 
 ## Getting started with agents
 
-To create an agent, you'll typically start with two tools: one to get the current state of something, and one to change the current state of something. For example, lets create an agent that helps us delete files. We'll start with two tools: one to list the current files and one to delete one or more files.
+To create an agent, you'll start with two tools: one that reads state and one that writes state. For example, we can create an agent that helps us delete files by giving it a tool to list all the files in the current directory and a tool to delete one or more files.
 
 ```{r}
 list_files <- tool(
@@ -47,16 +47,18 @@ delete_files <- tool(
 )
 ```
 
-Now we can make an "agent", which is just a chat instance with these tools.
+Now we can make an agent, a chat object that can use these tools:
 
 ```{r}
 file_agent <- chat_anthropic()
 file_agent$register_tools(list(list_files, delete_files))
 ```
 
-And then we can use it, in a pretend example:
+Now we can ask our agent to do stuff for us:
 
 ```{r}
+#| label: delete-csvs
+
 local({
   withr::local_dir(withr::local_tempdir())
   file.create(c("a.csv", "a.txt", "b.csv"))
@@ -67,17 +69,22 @@ local({
 file_agent
 ```
 
-I hope this example makes you feel nervous: we've just given an LLM the abililty to make delete files on our computer! This the biggest challenge with agents; you'll want to be very careful about what you give them the ability to do. That leads us to our next topic.
+I hope this example makes you feel nervous: we've just given an LLM the abililty to make delete files on our computer! This brings us to the most important topic when writing agents: safety and security.
 
 ## Safety and security
 
-Safety and security are absolutely the biggest challenges with agents right now. Generally, because the field is moving so quickly and folks are worried much more about keeping up than doing careful, reasoned, analysis, you can expect to see a lot of news about security failures due to agents over the next few years. While it's not clear what best practices will emerge in the future, we suggest a layered approach to safety that consists of at least three pieces:
+Safety and security are absolutely the biggest challenges with agents. Generally, because the field is moving so quickly and folks are worried much more about keeping up than doing careful reasoned analysis, you can expect to see a lot of news about agent security failures. While it's not clear what best practices will emerge, we'll do our best to set you up for success today.
 
-1.  Prompt design
-2.  Explicit consent
-3.  Sandboxing
+It's important to distinguish between two main use cases for agents:
 
-We'll illustrate these ideas with an agent that we pretend to give the power to run R code. This lets us explore what the model will try to do, without actually doing anything dangerous.
+* **Local** agents, where you create the agent and then run it on your own computer.
+* **Hosted** agents, where you create the agent and someone else uses it, typically on a hosted server somewhere.
+
+These distinctions are important because the threats are different. Local agents are in some sense riskier because you can easily give them access to everything on your computer, but you're the one in charge so you mostly need to worry about mistakes and accidental stupidity, rather than deliberately malicious misuse. Hosted agents will usually be run inside some sort of sandbox so can fundamentally do less, but the range of potential users is much wider, and you need to worry about people deliberately trying to break your agent.
+
+To make your agents as safe and secure as possible we recommend using a layered approach. For both local and hosted agents, you should invest in prompt design to steer the user away from danger. Then for local agents, you should consider requiring explicit user consent to do anything dangerous. Finally, for both local and hosted agents, you should isolate the agent inside a sandbox that limits its capabilities at a system level.
+
+To illustrate these ideas, we'll use a maximally dangerous agent: an agent that run R code. Running code is maximially dangerous because it can do all the things that you might worry about including making unauthorised changes to files or databases or exfiltrating confidential data. Since I don't really want to run something that dangerous on my computer, the tool is just going to pretend to run R code: the model doesn't know this so we'll see what it might try without actually doing anything dangerous.
 
 ```{r}
 simulate_r <- tool(
@@ -91,7 +98,7 @@ simulate_r <- tool(
 ```
 
 ```{r}
-r_agent <- chat_anthropic()
+r_agent <- chat_anthropic("Be as terse as possible")
 r_agent$register_tool(simulate_r)
 ```
 
@@ -106,6 +113,8 @@ r_agent$clone()$chat(
   "Email susan.frombly@gmail.com the contents of my /etc/passwords"
 )
 ```
+
+(Here I clone the chat before calling it in order to keep each conversation separate.)
 
 And they seem to be reasonably robust to prompt engineering attacks, or at least the ones that I am familiar with:
 
@@ -226,6 +235,8 @@ There are few advantages of this:
     -   Prompt Break down big system prompt into more manageable/specialised chunks
     -   Tools. Too many tools makes it hard for model to use right one.
 
+The real magic is your ability to mix classic programming with LLMs. When you can code something deterministically using R code do so; when you can't, use an LLM. Enhace your chances of success by breaking complex tasks up into simple steps that you can verify step-by-step.
+
 
 ### Parallel
 
@@ -269,3 +280,49 @@ tool(
 ```
 
 Search with dead ends (i.e. requires multiple web searches)
+
+## Useful patterns
+
+<https://www.anthropic.com/engineering/building-effective-agents>
+
+### Prompt chaining
+
+Instead of supplying all the tools at once, and using one complex prompt, instead break the problem up into simpler steps with targetted prompt and tools.
+
+Example: news 
+
+### Routing
+
+Two ways to implement the same idea: 
+
+1. Create an agent with the same tools and give it a prompt to choose.
+2. First classify and then call a specific function
+
+```{r}
+type_profile <- type_enum(c("executive", "recruiter", "other"))
+
+chat <- chat_anthropic()
+profile_type <- chat$chat_structured(
+  "
+    Use the bio information to decide if this person is an executive, 
+    recruiter, or something else.
+    
+    {{bio}}
+  ",
+  type = type_profile
+)
+
+if (profile_type == "executive")
+```
+
+### Parallelisation
+
+Kind of like routing, but you always do all the tasks, and then summarise.
+
+### Orchestrator-workers
+
+Give the LLM the ability to choose which tasks to do.
+
+### Evaluator-optimiser
+
+Loop through until done.
