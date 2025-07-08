@@ -133,14 +133,14 @@ models_ollama <- function(base_url = "http://localhost:11434") {
   df[order(-xtfrm(df$created_at)), ]
 }
 
-.ollama_model_details <- new_environment()
+the$ollama_cache <- new_environment()
 
 ollama_model_details <- function(model) {
   # https://github.com/ollama/ollama/blob/main/docs/api.md#show-model-information
   url <- "http://localhost:11434/api/show"
 
-  if (model %in% names(.ollama_model_details)) {
-    return(.ollama_model_details[[model]])
+  if (env_has(the$ollama_cache, model)) {
+    return(the$ollama_cache[[model]])
   }
 
   req <- request(url)
@@ -151,7 +151,7 @@ ollama_model_details <- function(model) {
   details <- resp_body_json(resp)
 
   # Cache model information (very unlikely to change during a session)
-  assign(model, details, envir = .ollama_model_details)
+  the$ollama_cache[[model]] <- details
   details
 }
 
