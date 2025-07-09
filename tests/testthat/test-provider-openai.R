@@ -4,7 +4,10 @@ test_that("can make simple request", {
   chat <- chat_openai_test()
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
+  expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
+
+  resp <- chat$chat("Double that", echo = FALSE)
+  expect_match(resp, "4")
 })
 
 test_that("can make simple streaming request", {
@@ -17,21 +20,21 @@ test_that("can list models", {
   test_models(models_openai)
 })
 
-
 # Common provider interface -----------------------------------------------
 
 test_that("defaults are reported", {
   expect_snapshot(. <- chat_openai())
 })
 
-test_that("supports standard parameters", {
-  chat_fun <- chat_openai_test
+# No longer supports stop parameter
+# test_that("supports standard parameters", {
+#   chat_fun <- chat_openai_test
 
-  test_params_stop(chat_fun)
-})
+#   test_params_stop(chat_fun)
+# })
 
 test_that("supports tool calling", {
-  vcr::local_cassette("openai-tool")
+  vcr::local_cassette("openai-v2-tool")
   chat_fun <- chat_openai_test
 
   test_tools_simple(chat_fun)
@@ -44,7 +47,7 @@ test_that("can extract data", {
 })
 
 test_that("can use images", {
-  vcr::local_cassette("openai-image")
+  vcr::local_cassette("openai-v2-image")
   # Needs mini to get shape correct
   chat_fun <- \(...) chat_openai_test(model = "gpt-4.1-mini", ...)
 

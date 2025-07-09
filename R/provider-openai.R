@@ -88,7 +88,6 @@ chat_openai_test <- function(
   echo = "none"
 ) {
   params <- params %||% params()
-  params$seed <- params$seed %||% 1014
   params$temperature <- params$temperature %||% 0
 
   chat_openai(
@@ -149,7 +148,7 @@ method(base_request_error, ProviderOpenAI) <- function(provider, req) {
 # Chat endpoint ----------------------------------------------------------------
 
 method(chat_path, ProviderOpenAI) <- function(provider) {
-  "/chat/completions"
+  "/responses"
 }
 
 # https://platform.openai.com/docs/api-reference/chat/create
@@ -160,33 +159,31 @@ method(chat_body, ProviderOpenAI) <- function(
   tools = list(),
   type = NULL
 ) {
-  messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
+  input <- compact(unlist(as_json(provider, turns), recursive = FALSE))
   tools <- as_json(provider, unname(tools))
 
   if (!is.null(type)) {
-    response_format <- list(
-      type = "json_schema",
-      json_schema = list(
+    text <- list(
+      format = list(
+        type = "json_schema",
         name = "structured_data",
         schema = as_json(provider, type),
         strict = TRUE
       )
     )
   } else {
-    response_format <- NULL
+    text <- NULL
   }
 
   params <- chat_params(provider, provider@params)
-  params$seed <- params$seed %||% provider@seed
 
   compact(list2(
-    messages = messages,
+    input = input,
     model = provider@model,
     !!!params,
     stream = stream,
-    stream_options = if (stream) list(include_usage = TRUE),
     tools = tools,
-    response_format = response_format
+    text = text
   ))
 }
 
@@ -199,8 +196,7 @@ method(chat_params, ProviderOpenAI) <- function(provider, params) {
       top_p = "top_p",
       frequency_penalty = "frequency_penalty",
       presence_penalty = "presence_penalty",
-      seed = "seed",
-      max_completion_tokens = "max_tokens",
+      max_tokens = "max_completion_tokens",
       logprobs = "log_probs",
       top_logprobs = "top_k",
       stop = "stop_sequences"
@@ -218,74 +214,52 @@ method(stream_parse, ProviderOpenAI) <- function(provider, event) {
   jsonlite::parse_json(event$data)
 }
 method(stream_text, ProviderOpenAI) <- function(provider, event) {
-  if (length(event$choices) == 0) {
-    NULL
-  } else {
-    event$choices[[1]]$delta[["content"]]
+  if (event$type == "response.output_text.delta") {
+    event$delta
   }
 }
 method(stream_merge_chunks, ProviderOpenAI) <- function(
   provider,
   result,
   chunk
-) {
-  if (is.null(result)) {
-    chunk
-  } else {
-    merge_dicts(result, chunk)
-  }
-}
+) {}
 method(value_turn, ProviderOpenAI) <- function(
   provider,
   result,
   has_type = FALSE
 ) {
-  if (has_name(result$choices[[1]], "delta")) {
-    # streaming
-    message <- result$choices[[1]]$delta
-  } else {
-    message <- result$choices[[1]]$message
-  }
-
-  if (has_type) {
-    if (is_string(message$content)) {
-      json <- jsonlite::parse_json(message$content[[1]])
+  contents <- lapply(result$output, function(output) {
+    if (output$type == "message") {
+      if (has_type) {
+        ContentJson(jsonlite::parse_json(output$content[[1]]$text))
+      } else {
+        ContentText(output$content[[1]]$text)
+      }
+    } else if (output$type == "function_call") {
+      arguments <- jsonlite::parse_json(output$arguments)
+      ContentToolRequest(output$id, output$name, arguments)
     } else {
-      json <- message$content
-    }
-    content <- list(ContentJson(json))
-  } else {
-    content <- lapply(message$content, as_content)
-  }
-  if (has_name(message, "tool_calls")) {
-    calls <- lapply(message$tool_calls, function(call) {
-      name <- call$`function`$name
-      # TODO: record parsing error
-      args <- tryCatch(
-        jsonlite::parse_json(call$`function`$arguments),
-        error = function(cnd) list()
+      browser()
+      cli::cli_abort(
+        "Unknown content type {.str {content$type}}.",
+        .internal = TRUE
       )
-      ContentToolRequest(name = name, arguments = args, id = call$id)
-    })
-    content <- c(content, calls)
-  }
+    }
+  })
 
+  # cached_tokens <- result$usage$input_token_details$cached_tokens
   if (is.null(result$usage)) {
     tokens <- tokens_log(provider)
   } else {
-    cached_tokens <- result$usage$prompt_tokens_details$cached_tokens %||% 0
+    cached_tokens <- result$usage$input_tokens_details$cached_tokens %||% 0
     tokens <- tokens_log(
       provider,
-      input = result$usage$prompt_tokens - cached_tokens,
-      output = result$usage$completion_tokens,
+      input = result$usage$input_tokens - cached_tokens,
+      output = result$usage$output_tokens,
       cached_input = cached_tokens
     )
   }
-  assistant_turn(
-    content,
-    json = result,
-    tokens = tokens
-  )
+  assistant_turn(contents = contents, json = result, tokens = tokens)
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------
@@ -296,51 +270,42 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
       list(role = "system", content = x@contents[[1]]@text)
     )
   } else if (x@role == "user") {
-    # Each tool result needs to go in its own message with role "tool"
-    is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
-    content <- as_json(provider, x@contents[!is_tool])
-    if (length(content) > 0) {
-      user <- list(list(role = "user", content = content))
-    } else {
-      user <- list()
-    }
-
-    tools <- lapply(x@contents[is_tool], function(tool) {
-      list(
-        role = "tool",
-        content = tool_string(tool),
-        tool_call_id = tool@request@id
-      )
+    lapply(x@contents, function(x) {
+      if (S7_inherits(x, ContentText)) {
+        list(role = "user", content = x@text)
+      } else {
+        as_json(provider, x)
+      }
     })
-
-    c(user, tools)
   } else if (x@role == "assistant") {
-    # Tool requests come out of content and go into own argument
-    is_tool <- map_lgl(x@contents, is_tool_request)
-    content <- as_json(provider, x@contents[!is_tool])
-    tool_calls <- as_json(provider, x@contents[is_tool])
-
-    list(
-      compact(list(
-        role = "assistant",
-        content = content,
-        tool_calls = tool_calls
-      ))
-    )
+    as_json(provider, x@contents)
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
 }
 
 method(as_json, list(ProviderOpenAI, ContentText)) <- function(provider, x) {
-  list(type = "text", text = x@text)
+  # OpenAI uses a different format dependening on whether the text is provided
+  # by the user or generated by the assistant. Since ellmer content types don't
+  # distinguish, this method generates the assistant content and we special
+  # case the
+  list(
+    role = "assistant",
+    content = x@text
+  )
 }
 
 method(as_json, list(ProviderOpenAI, ContentImageRemote)) <- function(
   provider,
   x
 ) {
-  list(type = "image_url", image_url = list(url = x@url))
+  list(
+    type = "message",
+    role = "user",
+    content = list(
+      list(type = "input_image", image_url = x@url)
+    )
+  )
 }
 
 method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(
@@ -348,9 +313,13 @@ method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(
   x
 ) {
   list(
-    type = "image_url",
-    image_url = list(
-      url = paste0("data:", x@type, ";base64,", x@data)
+    type = "message",
+    role = "user",
+    content = list(
+      list(
+        type = "input_image",
+        image_url = paste0("data:", x@type, ";base64,", x@data)
+      )
     )
   )
 }
@@ -372,23 +341,32 @@ method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(
   provider,
   x
 ) {
-  json_args <- jsonlite::toJSON(x@arguments)
   list(
-    id = x@id,
-    `function` = list(name = x@name, arguments = json_args),
-    type = "function"
+    type = "function_call",
+    call_id = x@id,
+    name = x@name,
+    arguments = jsonlite::toJSON(x@arguments)
+  )
+}
+
+method(as_json, list(ProviderOpenAI, ContentToolResult)) <- function(
+  provider,
+  x
+) {
+  list(
+    type = "function_call_output",
+    call_id = x@request@id,
+    output = tool_string(x)
   )
 }
 
 method(as_json, list(ProviderOpenAI, ToolDef)) <- function(provider, x) {
   list(
     type = "function",
-    "function" = compact(list(
-      name = x@name,
-      description = x@description,
-      strict = TRUE,
-      parameters = as_json(provider, x@arguments)
-    ))
+    name = x@name,
+    description = x@description,
+    strict = TRUE,
+    parameters = as_json(provider, x@arguments)
   )
 }
 
@@ -447,7 +425,7 @@ method(batch_submit, ProviderOpenAI) <- function(
     list(
       custom_id = paste0("chat-", i),
       method = "POST",
-      url = "/v1/chat/completions",
+      url = "/v1/responses",
       body = body
     )
   })

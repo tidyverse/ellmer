@@ -36,14 +36,14 @@ test_tools_simple <- function(chat_fun) {
     name = "current_date",
     description = "Return the current date"
   ))
+  result <- chat$chat("What's the current date in Y-M-D format?")
+  expect_match(result, "2024-01-01")
+
   chat$register_tool(tool(
     function() "February",
     name = "current_month",
     description = "Return the full name of the current month"
   ))
-
-  result <- chat$chat("What's the current date in Y-M-D format?")
-  expect_match(result, "2024-01-01")
 
   result <- chat$chat("What month is it? Provide the full name")
   expect_match(result, "February")

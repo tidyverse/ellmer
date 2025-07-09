@@ -1,0 +1,478 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"role":"system","content":"Always use a tool to answer.
+        Reply with ''It is ____.''."},{"role":"user","content":"What''s the current
+        date in Y-M-D format?"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
+        the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}]}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95ca7b355ffefbc2-IAH
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 09 Jul 2025 20:13:20 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '655'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=dEZLZ7JJO01ysLMlFZkiulBT_MURBo21xWXvlbfhGrc-1752092000-1.0.1.1-o_N3qQEumHJg_.RtBolD8mxG2t9wVOnEvn6bs2x8VNiAQnrwwYXFhguaQa4QjlZWIyWoNk5W3PP1Wj4ili_RenSPdGrmmGwzqrA6FP5wTxw;
+        path=/; expires=Wed, 09-Jul-25 20:43:20 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=0QZ8BzsIngM4fTc0IyAFkEAgdFPoDBvMHrKqew0xbeE-1752092000348-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999724'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_8f800070b1c98e15cc948fcdd03b3409
+    body:
+      string: |-
+        {
+          "id": "resp_686ecd5fa7708198b54d73f42d3575e903f0dc7b529e5cc4",
+          "object": "response",
+          "created_at": 1752091999,
+          "status": "completed",
+          "background": false,
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "output": [
+            {
+              "id": "fc_686ecd602d648198912c8251e607a78803f0dc7b529e5cc4",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{}",
+              "call_id": "call_NVX5fmiDJcbNNksOv1ZLZpKd",
+              "name": "current_date"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
+          },
+          "service_tier": "default",
+          "store": true,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "text"
+            }
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Return the current date",
+              "name": "current_date",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 59,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 11,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 70
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2025-07-09 20:13:20
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"role":"system","content":"Always use a tool to answer.
+        Reply with ''It is ____.''."},{"role":"user","content":"What''s the current
+        date in Y-M-D format?"},{"type":"function_call","call_id":"fc_686ecd602d648198912c8251e607a78803f0dc7b529e5cc4","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_686ecd602d648198912c8251e607a78803f0dc7b529e5cc4","output":"2024-01-01"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
+        the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}]}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95ca7b3bccccfbc2-IAH
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 09 Jul 2025 20:13:21 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '499'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=6HYLyA43jpx2_qbGyqK1bgEl_c5p3xPwcPrS9aaTSLI-1752092001-1.0.1.1-_zLVg1UtyhWABsZ8h442mXmh8kH8MgPcWbp6P2CTcgZ_qJqBRpvwWiKQpwcSZZbHZvLJi8I5yb73giA6gm0nk_AoCIii29UIyjazPj1l.Ss;
+        path=/; expires=Wed, 09-Jul-25 20:43:21 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=mDXOTZuG33jSJzFolMT_XRET5LIBzVgppvVW5tNNcyw-1752092001220-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999702'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_e4f2dae041ccd4d98ed439b899123393
+    body:
+      string: |-
+        {
+          "id": "resp_686ecd60b1148199a1705bb6349b461908913f2ae1ee9fd1",
+          "object": "response",
+          "created_at": 1752092000,
+          "status": "completed",
+          "background": false,
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "output": [
+            {
+              "id": "msg_686ecd60f994819982c5e41636f7eb7f08913f2ae1ee9fd1",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "It is 2024-01-01."
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
+          },
+          "service_tier": "default",
+          "store": true,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "text"
+            }
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Return the current date",
+              "name": "current_date",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 81,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 12,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 93
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2025-07-09 20:13:21
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"role":"system","content":"Always use a tool to answer.
+        Reply with ''It is ____.''."},{"role":"user","content":"What''s the current
+        date in Y-M-D format?"},{"type":"function_call","call_id":"fc_686ecd602d648198912c8251e607a78803f0dc7b529e5cc4","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_686ecd602d648198912c8251e607a78803f0dc7b529e5cc4","output":"2024-01-01"},{"role":"assistant","content":"It
+        is 2024-01-01."},{"role":"user","content":"What month is it? Provide the full
+        name"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
+        the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
+        the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}]}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95ca7b41d92bfbc2-IAH
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 09 Jul 2025 20:13:22 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '1080'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=Fr.ZCC_iuBwD.Gcqe7kNssqd1DDRhaM7WyufIV2P8VI-1752092002-1.0.1.1-o8lL0pufSaYNQtmJndgqoinSxAG8R_XO8XCan1FeJhFqasyhkBRx76uSBXbyt3nBiojRnwtKGGYe2e0jVLHL5NORSY2IaFDYmbTmL5A.APM;
+        path=/; expires=Wed, 09-Jul-25 20:43:22 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=o7BVmzjPXPVtjEgv2Hr9sW3W4x1lGlqcqdVLsw.C9TI-1752092002776-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999658'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_2ca939f5e035903f941c4e629da0554b
+    body:
+      string: |-
+        {
+          "id": "resp_686ecd61a7e4819ab1b4c1fe76efbf810d79be5ad2e4c9f9",
+          "object": "response",
+          "created_at": 1752092001,
+          "status": "completed",
+          "background": false,
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "output": [
+            {
+              "id": "fc_686ecd626ef4819aa92fa44a81f469780d79be5ad2e4c9f9",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{}",
+              "call_id": "call_ywiVsy2WsoQDgndJCNJGlITT",
+              "name": "current_month"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
+          },
+          "service_tier": "default",
+          "store": true,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "text"
+            }
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Return the current date",
+              "name": "current_date",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            {
+              "type": "function",
+              "description": "Return the full name of the current month",
+              "name": "current_month",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 125,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 11,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 136
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2025-07-09 20:13:23
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"role":"system","content":"Always use a tool to answer.
+        Reply with ''It is ____.''."},{"role":"user","content":"What''s the current
+        date in Y-M-D format?"},{"type":"function_call","call_id":"fc_686ecd602d648198912c8251e607a78803f0dc7b529e5cc4","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_686ecd602d648198912c8251e607a78803f0dc7b529e5cc4","output":"2024-01-01"},{"role":"assistant","content":"It
+        is 2024-01-01."},{"role":"user","content":"What month is it? Provide the full
+        name"},{"type":"function_call","call_id":"fc_686ecd626ef4819aa92fa44a81f469780d79be5ad2e4c9f9","name":"current_month","arguments":"{}"},{"type":"function_call_output","call_id":"fc_686ecd626ef4819aa92fa44a81f469780d79be5ad2e4c9f9","output":"February"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
+        the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
+        the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}]}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95ca7b4c8a5bfbc2-IAH
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 09 Jul 2025 20:13:23 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '514'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=7C_SnpkDbGY5UE1B9R4Xl5aTYnR7ZfdafniZHk9eSxM-1752092003-1.0.1.1-gmDOz153YcR4aK_l3Xv6Ne45.0N4kTJMDhF4iB0TBC4iupgyyLC1kwGFYIYcBDVaKZ08K.2v.5Q9TSMDdJXDf9hKvop3JZfUFIUK_7UJlWg;
+        path=/; expires=Wed, 09-Jul-25 20:43:23 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=7D6A9t2qxmCAvbnPOkFV2dI1._VBT1OQuITvQvVvV3Y-1752092003908-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999641'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_10603c5fb3997c1f17abfc7ddcc8ceeb
+    body:
+      string: |-
+        {
+          "id": "resp_686ecd635f50819b953d823ae8db8f3e06801cb0f54bbb71",
+          "object": "response",
+          "created_at": 1752092003,
+          "status": "completed",
+          "background": false,
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "output": [
+            {
+              "id": "msg_686ecd63af7c819b89fdcf9ee80a23b406801cb0f54bbb71",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "It is February."
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
+          },
+          "service_tier": "default",
+          "store": true,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "text"
+            }
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Return the current date",
+              "name": "current_date",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            {
+              "type": "function",
+              "description": "Return the full name of the current month",
+              "name": "current_month",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 142,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 6,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 148
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2025-07-09 20:13:23
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
