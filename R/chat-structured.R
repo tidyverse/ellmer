@@ -31,23 +31,7 @@ convert_from_type <- function(x, type) {
     x
   } else if (S7_inherits(type, TypeArray)) {
     if (S7_inherits(type@items, TypeBasic)) {
-      if (!type@items@required) {
-        is_null <- map_lgl(x, is.null)
-        if (type@items@type == "string") {
-          x[is_null] <- list(NA_character_)
-        } else {
-          x[is_null] <- list(NA)
-        }
-      }
-
-      switch(
-        type@items@type,
-        boolean = as.logical(x),
-        integer = as.integer(x),
-        number = as.numeric(x),
-        string = as.character(x),
-        cli::cli_abort("Unknown type {type@items@type}", .internal = TRUE)
-      )
+      list_to_atomic(x, type@items@type)
     } else if (S7_inherits(type@items, TypeArray)) {
       lapply(x, function(y) convert_from_type(y, type@items))
     } else if (S7_inherits(type@items, TypeEnum)) {
@@ -83,4 +67,34 @@ convert_from_type <- function(x, type) {
   } else {
     x
   }
+}
+
+list_to_atomic <- function(x, type) {
+  r_type <- switch(
+    type,
+    boolean = "logical",
+    integer = "integer",
+    number = "double",
+    string = "character",
+    cli::cli_abort("Unknown type {type}", .internal = TRUE)
+  )
+
+  if (length(x) == 0) {
+    return(vector(r_type, 0))
+  }
+
+  types <- map_chr(x, typeof)
+  if (r_type == "integer") {
+    x[types == "double"] <- lapply(x[types == "double"], as.integer)
+    types[types == "double"] <- "integer"
+  } else if (r_type == "double") {
+    x[types == "integer"] <- lapply(x[types == "integer"], as.double)
+    types[types == "integer"] <- "double"
+  }
+
+  # also captures NULLs
+  wrong_type <- types != r_type
+  x[wrong_type] <- list(`mode<-`(NA, r_type))
+
+  unlist(x, use.names = FALSE)
 }
