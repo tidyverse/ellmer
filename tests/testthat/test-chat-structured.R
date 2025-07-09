@@ -87,6 +87,21 @@ test_that("completely missing optional components become NULL", {
   )
 })
 
+test_that("objects take order from type", {
+  x <- list(y = 1, x = 2)
+  type <- type_object(x = type_integer(), y = type_integer())
+  expect_equal(convert_from_type(x, type), list(x = 2, y = 1))
+})
+
+test_that("additional properties are ignored, unless specified by type", {
+  x <- list(y = 1, x = 2, z = 3)
+  type <- type_object(x = type_integer())
+  expect_equal(convert_from_type(x, type), list(x = 2))
+
+  type <- type_object(x = type_integer(), .additional_properties = TRUE)
+  expect_equal(convert_from_type(x, type), list(x = 2, y = 1, z = 3))
+})
+
 test_that("can handle missing optional values in objects (#384)", {
   data <- list(
     list(fruit = "Apples", year = NULL),
@@ -125,13 +140,19 @@ test_that("can convert arrays of enums to factors", {
 })
 
 test_that("can convert arrays of objects to data frames", {
+  x <- list(list(x = 1, y = "x"), list(x = 3, y = "y"))
+  type <- type_array(type_object(x = type_integer(), y = type_string()))
   expect_equal(
-    convert_from_type(
-      list(list(x = 1, y = "x"), list(x = 3, y = "y")),
-      type_array(type_object(x = type_integer(), y = type_string()))
-    ),
+    convert_from_type(x, type),
     data.frame(x = c(1L, 3L), y = c("x", "y"))
   )
+
+  # unless they have additional properties
+  type <- type_array(type_object(
+    x = type_integer(),
+    .additional_properties = TRUE
+  ))
+  expect_equal(convert_from_type(x, type), x)
 })
 
 test_that("can recursively convert objects contents", {

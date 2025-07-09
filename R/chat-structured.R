@@ -53,12 +53,16 @@ convert_from_type <- function(x, type) {
     } else if (S7_inherits(type@items, TypeEnum)) {
       factor(as.character(x), levels = type@items@values)
     } else if (S7_inherits(type@items, TypeObject)) {
-      cols <- lapply(names(type@items@properties), function(name) {
-        vals <- lapply(x, function(y) y[[name]])
-        convert_from_type(vals, type_array(type@items@properties[[name]]))
-      })
-      names(cols) <- names(type@items@properties)
-      list2DF(cols)
+      if (type@items@additional_properties) {
+        x
+      } else {
+        cols <- lapply(names(type@items@properties), function(name) {
+          vals <- lapply(x, function(y) y[[name]])
+          convert_from_type(vals, type_array(type@items@properties[[name]]))
+        })
+        names(cols) <- names(type@items@properties)
+        list2DF(cols)
+      }
     } else {
       x
     }
@@ -66,7 +70,13 @@ convert_from_type <- function(x, type) {
     out <- lapply(names(type@properties), function(name) {
       convert_from_type(x[[name]], type@properties[[name]])
     })
-    set_names(out, names(type@properties))
+    out <- set_names(out, names(type@properties))
+
+    if (type@additional_properties) {
+      extra_props <- setdiff(names(x), names(type@properties))
+      out <- c(out, as.list(x[extra_props]))
+    }
+    out
   } else if (S7_inherits(type, TypeBasic)) {
     if (is.null(x)) {
       switch(
