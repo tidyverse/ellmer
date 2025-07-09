@@ -125,6 +125,13 @@
       <p>A <strong>thought</strong>.</p>
       </details>
 
+# ContentToolRequest shows converted arguments
+
+    Code
+      cat(format(content))
+    Output
+      [tool request (id)]: my_tool(x = c(1, 2), y = c("a", "b"), z = "a")
+
 # ContentToolResult@error requires a string or an error condition
 
     Code
@@ -139,4 +146,3 @@
       Error:
       ! <ellmer::ContentToolResult> object properties are invalid:
       - @error must be a single string or a condition object, not a character vector.
-

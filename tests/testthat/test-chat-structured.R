@@ -70,6 +70,11 @@ test_that("handles empty and NULL vectors of basic types", {
   expect_equal(convert_from_type(list(NULL), type), NA_character_)
 })
 
+test_that("scalar enums are converted to strings", {
+  type <- type_enum(c("A", "B", "C"))
+  expect_equal(convert_from_type("A", type, tool = TRUE), "A")
+})
+
 test_that("completely missing optional components become NULL", {
   type <- type_integer(required = FALSE)
   expect_equal(convert_from_type(NULL, type), NULL)
@@ -117,9 +122,10 @@ test_that("can covert array of arrays to lists of vectors", {
   )
 })
 
-test_that("can convert arrays of enums to factors", {
+test_that("arrays of enums are converted to factors", {
+  type <- type_array(type_enum(c("x", "y", "z")))
   expect_equal(
-    convert_from_type(list("x", "y"), type_array(type_enum(c("x", "y", "z")))),
+    convert_from_type(list("x", "y"), type),
     factor(c("x", "y"), levels = c("x", "y", "z"))
   )
 })
