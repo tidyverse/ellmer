@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `Chat$chat_structured()` no longer requires a prompt (since it may be obvious from the context) (#570).
 * `models_ollama()` now includes a `capabilities` column with a comma-separated list of model capabilities (#623).
 * `chat_huggingface()` now works much better.
 * [BREAKING CHANGE] `type_array()` and `type_enum()` now have the description as the second argument and `items/`/`values` as the first. This makes them easier to use in the common case where the description isn't necessary (#610).

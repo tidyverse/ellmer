@@ -221,8 +221,9 @@ Chat <- R6::R6Class(
     },
 
     #' @description Extract structured data
-    #' @param ... The input to send to the chatbot. Will typically include
-    #'   the phrase "extract structured data".
+    #' @param ... The input to send to the chatbot. This is typically the text
+    #'   you want to extract data from, but it can be omitted if the data is
+    #'   obvious from the existing conversation.
     #' @param type A type specification for the extracted data. Should be
     #'   created with a [`type_()`][type_boolean] function.
     #' @param echo Whether to emit the response to stdout as it is received.
@@ -232,7 +233,7 @@ Chat <- R6::R6Class(
     #'   using the schema. For example, this will turn arrays of objects into
     #'  data frames and arrays of strings into a character vector.
     chat_structured = function(..., type, echo = "none", convert = TRUE) {
-      turn <- user_turn(...)
+      turn <- user_turn(..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
 
@@ -260,7 +261,7 @@ Chat <- R6::R6Class(
     #'   Set to "text" to stream JSON data as it's generated (not supported by
     #'  all providers).
     chat_structured_async = function(..., type, echo = "none") {
-      turn <- user_turn(...)
+      turn <- user_turn(..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
 
       done <- coro::async_collect(private$submit_turns_async(

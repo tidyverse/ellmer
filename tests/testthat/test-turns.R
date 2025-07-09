@@ -40,6 +40,11 @@ test_that("as_user_turn gives useful errors", {
   })
 })
 
+test_that("can opt-out of empty check", {
+  out <- as_user_turn(list(), check_empty = FALSE)
+  expect_equal(out, Turn("user"))
+})
+
 test_that("as_user_turns gives useful errors", {
   x <- list(list(1))
   expect_snapshot(error = TRUE, {
