@@ -69,14 +69,11 @@ prompts <- list(
   "The name's Robert - 51 years old and proud of it.",
   "Kwame here - just hit the big 5-0 this year."
 )
-parallel_chat_structured(
-  chat,
-  prompts,
-  type = type_object(
-    name = type_string(),
-    age = type_number()
-  )
+type_person <- type_object(
+  name = type_string(),
+  age = type_number()
 )
+parallel_chat_structured(chat, prompts, type = type_person)
 #>     name age
 #> 1   Alex  42
 #> 2  Jamal  27
@@ -86,7 +83,11 @@ parallel_chat_structured(
 #> 6  Kwame  50
 ```
 
-## Data types basics
+## Data types
+
+To extract structured data effectively, you need to understand how LLMs expect types to be defined, and how those types map to the R types you are familiar with.
+
+### Basics
 
 To define your desired type specification (also known as a **schema**), you use the `type_()` functions. (You might already be familiar with these if you've done any function calling, as discussed in `vignette("function-calling")`). The type functions can be divided into three main groups:
 
@@ -95,29 +96,29 @@ To define your desired type specification (also known as a **schema**), you use 
 * **Arrays** represent any number of values of the same type. They are created with `type_array()`. You must always supply the `item` argument which specifies the type for each individual element. Arrays of scalars are very similar to R's atomic vectors:
 
   ```{r}
-type_logical_vector <- type_array(type_boolean())
-type_integer_vector <- type_array(type_integer())
-type_double_vector <- type_array(type_number())
-type_character_vector <- type_array(type_string())
+  type_logical_vector <- type_array(type_boolean())
+  type_integer_vector <- type_array(type_integer())
+  type_double_vector <- type_array(type_number())
+  type_character_vector <- type_array(type_string())
   ```
 
   You can also have arrays of arrays and arrays of objects, which more closely resemble lists with well defined structures:
 
   ```{r}
-list_of_integers <- type_array(type_integer_vector)
+  list_of_integers <- type_array(type_integer_vector)
   ```
 
 * **Objects** represent a collection of named values. They are created with `type_object()`. Objects can contain any number of scalars, arrays, and other objects. They are similar to named lists in R.
 
   ```{r}
-type_person <- type_object(
-  name = type_string(),
-  age = type_integer(),
-  hobbies = type_array(type_string())
-)
+  type_person <- type_object(
+    name = type_string(),
+    age = type_integer(),
+    hobbies = type_array(type_string())
+  )
   ```
 
-Using these type specifications ensures that the LLM will return JSON. But ellmer goes one step further to convert the results to the closest R analog. Currently, this converts arrays of boolean, integers, numbers, and strings into logical, integer, numeric, and character vectors. Arrays of objects are converted into data frames. You can opt-out of this and get plain lists by setting `convert = FALSE` in `$chat_structured()`.
+Using these type specifications ensures that the LLM will return JSON. But ellmer goes one step further and converts the results to the closest R analog. Currently, this converts arrays of boolean, integers, numbers, and strings into logical, integer, numeric, and character vectors, and array of objects into data frames. You can opt-out of this and get plain lists by setting `convert = FALSE`.
 
 In addition to defining types, you need to provide the LLM with some information about what you actually want. This is the purpose of the first argument, `description`, which is a string that describes the data that you want. This is a good place to ask nicely for other attributes you'll like the value to have (e.g. minimum or maximum values, date formats, ...). There's no guarantee that these requests will be honoured, but the LLM will usually make a best effort to do so.
 
@@ -133,7 +134,97 @@ type_type_person <- type_object(
 )
 ```
 
-Now we'll dive into some examples before coming back to talk more about the details of data types.
+### Missing values
+
+Note that the type functions default to `required = TRUE` which means the LLM will try really hard to extract values for you:
+
+```{r}
+#| eval: false
+
+no_match <- list(
+  "I like apples",
+  "What time is it?",
+  "This cheese is 3 years old",
+  "My name is Hadley."
+)
+parallel_chat_structured(chat, no_match, type = type_person)
+#>           name        age
+#> 1         User          0
+#> 2 Current Time 1718920360
+#> 3       cheese          3
+#> 4       Hadley          0
+```
+
+You can often avoid this problem by setting `required = FALSE`:
+
+```{r}
+#| eval: false
+type_person <- type_object(
+  name = type_string(required = FALSE),
+  age = type_number(required = FALSE)
+)
+parallel_chat_structured(chat, no_match, type = type_person)
+#>     name age
+#> 1   <NA>  NA
+#> 2   <NA>  NA
+#> 3   <NA>   3
+#> 4 Hadley  NA
+```
+
+In other cases, you may need to adjust your prompt as well. Either way, we strongly recommend that you include both positive and negative examples when testing your structured data extraction code.
+
+### Data frames
+
+In most cases, you'll get a data frame because you are using `parallel_chat_structured()`, with each output row representing one input prompt. But in other cases, you might have a more complex doc where you want a data frame from a single prompt. For example, imagine that you want to extract some data about people from a table:
+
+```{r}
+prompt <- r"(
+* John Smith. Age: 30. Height: 180 cm. Weight: 80 kg.
+* Jane Doe. Age: 25. Height: 5'5". Weight: 110 lb.
+* Jose Rodriguez. Age: 40. Height: 190 cm. Weight: 90 kg.
+* June Lee | Age: 35 | Height 175 cm | Weight: 70 kg
+)"
+```
+
+In this case, you might be tempted to use a definition similar to R: an object (i.e., a named list) containing multiple vectors (i.e., an array).
+
+```{r}
+#| label: dataframe-wrong
+#| cassette: true
+
+type_people <- type_object(
+  name = type_array(type_string()),
+  age = type_array(type_integer()),
+  height = type_array(type_number("in m")),
+  weight = type_array(type_number("in kg"))
+)
+
+chat <- chat_openai()
+chat$chat_structured(prompt, type = type_people)
+```
+
+This, however, is not quite right because there's no constraint that each array should have the same length, and hence no way for ellmer to know that you really wanted a data frame. Instead, you'll need to turn the data structure "inside out" and create an array of objects:
+
+```{r}
+#| label: dataframe
+#| cassette: true
+
+type_people <- type_array(
+  type_object(
+    name = type_string(),
+    age = type_integer(),
+    height = type_number("in m"),
+    weight = type_number("in kg")
+  )
+)
+
+chat <- chat_openai()
+chat$chat_structured(prompt, type = type_people)
+```
+
+Now ellmer knows what you want and gives you a data frame.
+
+If you're familiar with the terms row-oriented and column-oriented data frames, this is the same idea. Since most languages don't possess vectorisation like R, row-oriented structures tend to be much more common in the wild.
 
 ## Examples
 
@@ -315,88 +406,6 @@ image <- content_image_file("congressional-assets.png")
 data <- chat$chat_structured(image, type = type_assets)
 data
 ```
-
-## Advanced data types
-
-Now that you've seen a few examples, it's time to get into more specifics about data type declarations.
-
-### Required vs optional
-
-By default, all components of an object are required. If you want to make some optional, set `required = FALSE`. This is a good idea if you don't think your text will always contain the required fields as LLMs may hallucinate data in order to fulfill your spec.
-
-For example, here the LLM hallucinates a date even though there isn't one in the text:
-
-```{r}
-#| label: type-required
-#| cassette: true
-
-type_article <- type_object(
-  "Information about an article written in markdown",
-  title = type_string("Article title"),
-  author = type_string("Name of the author"),
-  date = type_string("Date written in YYYY-MM-DD format.")
-)
-
-prompt <- "
-  Extract data from the following text:
-
-  <text>
-  # Structured Data
-  By Hadley Wickham
-
-  When using an LLM to extract data from text or images, you can ask the chatbot to nicely format it, in JSON or any other format that you like.
-  </text>
-"
-
-chat <- chat_openai()
-chat$chat_structured(prompt, type = type_article)
-str(data)
-```
-
-Note that I've used more of an explict prompt here. For this example, I found that this generated better results and that it's a useful place to put additional instructions.
-
-If I let the LLM know that the fields are all optional, it'll return `NULL` for the missing fields:
-
-```{r}
-#| label: type-optional
-#| cassette: true
-
-type_article <- type_object(
-  "Information about an article written in markdown",
-  title = type_string("Article title", required = FALSE),
-  author = type_string("Name of the author", required = FALSE),
-  date = type_string("Date written in YYYY-MM-DD format.", required = FALSE)
-)
-chat$chat_structured(prompt, type = type_article)
-```
-
-### Data frames
-
-If you want to define a data frame like object, you might be tempted to create a definition similar to what R uses: an object (i.e., a named list) containing multiple vectors (i.e., an array):
-
-```{r}
-type_my_df <- type_object(
-  name = type_array(type_string()),
-  age = type_array(type_integer()),
-  height = type_array(type_number()),
-  weight = type_array(type_number())
-)
-```
-
-This, however, is not quite right becuase there's no way to specify that each array should have the same length. Instead, you'll need to turn the data structure "inside out" and create an array of objects:
-
-```{r}
-type_my_df <- type_array(
-  type_object(
-    name = type_string(),
-    age = type_integer(),
-    height = type_number(),
-    weight = type_number()
-  )
-)
-```
-
-If you're familiar with the terms row-oriented and column-oriented data frames, this is the same idea. Since most languages don't possess vectorisation like R, row-oriented structures tend to be much more common in the wild.
 
 ## Token usage
 
