@@ -2,10 +2,13 @@
 % Please edit documentation in R/chat-parallel.R
 \name{parallel_chat}
 \alias{parallel_chat}
+\alias{parallel_chat_text}
 \alias{parallel_chat_structured}
 \title{Submit multiple chats in parallel}
 \usage{
 parallel_chat(chat, prompts, max_active = 10, rpm = 500)
+
+parallel_chat_text(chat, prompts, max_active = 10, rpm = 500)
 
 parallel_chat_structured(
   chat,
@@ -53,6 +56,7 @@ add \code{cost} column giving the cost of each prompt.}
 }
 \value{
 For \code{parallel_chat()}, a list of \link{Chat} objects, one for each prompt.
+For \code{parallel_chat_text()}, a character vector of text responses.
 For \code{parallel_chat_structured()}, a single structured data object with one
 element for each prompt. Typically, when \code{type} is an object, this will
 will be a data frame with one row for each prompt, and one column for each

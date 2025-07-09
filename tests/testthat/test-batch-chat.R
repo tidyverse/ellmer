@@ -14,6 +14,13 @@ test_that("can get chats/data from completed request", {
   )
   expect_length(chats, 4)
 
+  out <- batch_chat_text(
+    chat,
+    prompts,
+    path = test_path("batch/state-capitals.json")
+  )
+  expect_equal(out, c("Des Moines", "Albany", "Sacramento", "Austin"))
+
   type_state <- type_object(name = type_string("State name"))
   data <- batch_chat_structured(
     chat,

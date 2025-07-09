@@ -37,6 +37,16 @@
 #'   it will return `NULL` if the batch is not complete, and you can retrieve
 #'   the results later by re-running `batch_chat()` when
 #'   `batch_chat_completed()` is `TRUE`.
+#' @returns
+#' For `batch_chat()`, a list of [Chat] objects, one for each prompt.
+#' For `batch_chat_test()`, a character vector of text responses.
+#' For `batch_chat_structured()`, a single structured data object with one
+#' element for each prompt. Typically, when `type` is an object, this will
+#' will be a data frame with one row for each prompt, and one column for each
+#' property.
+#'
+#' For any of the aboves, will return `NULL` if `wait = FALSE` and the job
+#' is not complete.
 #' @examplesIf has_credentials("openai")
 #' chat <- chat_openai(model = "gpt-4.1-nano")
 #'
@@ -85,6 +95,13 @@ batch_chat <- function(chat, prompts, path, wait = TRUE) {
       NULL
     }
   })
+}
+
+#' @export
+#' @rdname batch_chat
+batch_chat_text <- function(chat, prompts, path, wait = TRUE) {
+  chats <- batch_chat(chat, prompts, path, wait = wait)
+  map_chr(chats, \(chat) if (is.null(chat)) NA else chat$last_turn()@text)
 }
 
 #' @export
