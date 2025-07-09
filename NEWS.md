@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_openai()`, `chat_google_gemini()`, and `chat_anthropic()` now capture the number of cached input tokens. This is primarily useful for OpenAI and Gemini since both offer implicit caching (activated automatically) yielding improved cost estimates (#466).
 * `models_ollama()` now includes a `capabilities` column with a comma-separated list of model capabilities (#623).
 * `chat_huggingface()` now works much better.
 * [BREAKING CHANGE] `type_array()` and `type_enum()` now have the description as the second argument and `items/`/`values` as the first. This makes them easier to use in the common case where the description isn't necessary (#610).

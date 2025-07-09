@@ -4,7 +4,7 @@
 \alias{Turn}
 \title{A user or assistant turn}
 \usage{
-Turn(role, contents = list(), json = list(), tokens = c(0, 0))
+Turn(role, contents = list(), json = list(), tokens = c(0, 0, 0))
 }
 \arguments{
 \item{role}{Either "user", "assistant", or "system".}
