@@ -129,8 +129,9 @@ Chat <- R6::R6Class(
         function(turn) turn@tokens,
         double(3)
       ))
-      # Combine both types of input tokens (cached and uncached)
+      # Combine counts for input tokens (cached and uncached)
       tokens_acc[, 1] <- tokens_acc[, 1] + tokens_acc[, 3]
+      # Then drop cached tokens counts
       tokens_acc <- tokens_acc[, 1:2]
 
       tokens <- tokens_acc
@@ -139,7 +140,6 @@ Chat <- R6::R6Class(
         tokens[-1, 1] <- tokens[seq(2, n), 1] -
           (tokens[seq(1, n - 1), 1] + tokens[seq(1, n - 1), 2])
       }
-      # TODO: add in cached inputs tokens
 
       # collapse into a single vector
       tokens_v <- c(t(tokens))
