@@ -146,3 +146,4 @@
       Error:
       ! <ellmer::ContentToolResult> object properties are invalid:
       - @error must be a single string or a condition object, not a character vector.
+

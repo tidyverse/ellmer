@@ -72,7 +72,7 @@ test_that("handles empty and NULL vectors of basic types", {
 
 test_that("scalar enums are converted to strings", {
   type <- type_enum(c("A", "B", "C"))
-  expect_equal(convert_from_type("A", type, tool = TRUE), "A")
+  expect_equal(convert_from_type("A", type), "A")
 })
 
 test_that("completely missing optional components become NULL", {
