@@ -102,10 +102,10 @@ the LLM ensures that’s what you’ll get back.</p>
 <div class="section level2">
 <h2 id="structured-data-basics">Structured data basics<a class="anchor" aria-label="anchor" href="#structured-data-basics"></a>
 </h2>
-<p>To extract structured data you call <code>$chat_structured()</code>
-instead of the <code>$chat()</code> method. You’ll also need to define a
-type specification that describes the structure of the data that you
-want (more on that shortly). Here’s a simple example that extracts two
+<p>To extract structured data call <code>$chat_structured()</code>
+instead of <code>$chat()</code>. You’ll also need to define a type
+specification that describes the structure of the data that you want
+(more on that shortly). Here’s a simple example that extracts two
 specific values from a string:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -136,11 +136,11 @@ specific values from a string:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $primary_colour</span></span>
 <span><span class="co">#&gt; [1] "Grey and blue"</span></span></code></pre></div>
-<p>If you need to extract data from multiple prompts, you can use the
-same techniques with <code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code>. It takes
-the same arguments as <code>$chat_structured()</code> with two
-exceptions: it needs a <code>chat</code> object since it’s a standalone
-function, not a method, and it can take a vector of prompts.</p>
+<p>If you need to extract data from multiple prompts, you can use
+<code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code>. It takes the same arguments as
+<code>$chat_structured()</code> with two exceptions: it needs a
+<code>chat</code> object since it’s a standalone function, not a method,
+and it can take a vector of prompts.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prompts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="st">"I go by Alex. 42 years on this planet and counting."</span>,</span>
@@ -150,14 +150,11 @@ function, not a method, and it can take a vector of prompts.</p>
 <span>  <span class="st">"The name's Robert - 51 years old and proud of it."</span>,</span>
 <span>  <span class="st">"Kwame here - just hit the big 5-0 this year."</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span></span>
-<span>  <span class="va">chat</span>,</span>
-<span>  <span class="va">prompts</span>,</span>
-<span>  type <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
-<span>    name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="va">type_person</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, type <span class="op">=</span> <span class="va">type_person</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     name age</span></span>
 <span><span class="co">#&gt; 1   Alex  42</span></span>
 <span><span class="co">#&gt; 2  Jamal  27</span></span>
@@ -167,34 +164,41 @@ function, not a method, and it can take a vector of prompts.</p>
 <span><span class="co">#&gt; 6  Kwame  50</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="data-types-basics">Data types basics<a class="anchor" aria-label="anchor" href="#data-types-basics"></a>
+<h2 id="data-types">Data types<a class="anchor" aria-label="anchor" href="#data-types"></a>
 </h2>
-<p>To define your desired type specification (also known as a
-<strong>schema</strong>), you use the <code>type_()</code> functions.
-(You might already be familiar with these if you’ve done any function
-calling, as discussed in <code>vignette("function-calling")</code>). The
-type functions can be divided into three main groups:</p>
+<p>To extract structured data effectively, you need to understand how
+LLMs expect types to be defined, and how those types map to the R types
+you are familiar with.</p>
+<div class="section level3">
+<h3 id="basics">Basics<a class="anchor" aria-label="anchor" href="#basics"></a>
+</h3>
+<p>To define your desired type specification (also known as a schema),
+you use the <code>type_()</code> functions. These are also used for tool
+calling (<code><a href="../articles/tool-calling.html">vignette("tool-calling")</a></code>), so you might already be
+familiar with them.The type functions can be divided into three main
+groups:</p>
 <ul>
-<li><p><strong>Scalars</strong> represent five types of single values,
+<li><p><strong>Scalars</strong> represent single values. These are
 <code><a href="../reference/type_boolean.html">type_boolean()</a></code>, <code><a href="../reference/type_boolean.html">type_integer()</a></code>,
 <code><a href="../reference/type_boolean.html">type_number()</a></code>, <code><a href="../reference/type_boolean.html">type_string()</a></code>, and
 <code><a href="../reference/type_boolean.html">type_enum()</a></code>, which represent a single logical, integer,
 double, string, and factor value respectively.</p></li>
 <li>
-<p><strong>Arrays</strong> represent any number of values of the
-same type. They are created with <code><a href="../reference/type_boolean.html">type_array()</a></code>. You must
-always supply the <code>item</code> argument which specifies the type
-for each individual element. Arrays of scalars are very similar to R’s
-atomic vectors:</p>
+<p><strong>Arrays</strong> represent a vector of values of the same
+type. They are created with <code><a href="../reference/type_boolean.html">type_array()</a></code> and require the
+<code>item</code> argument which specifies the type of each element.
+Arrays of scalars are very similar to R’s atomic vectors:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">type_logical_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_boolean</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">type_integer_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">type_double_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">type_character_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>You can also have arrays of arrays and arrays of objects, which more
-closely resemble lists with well defined structures:</p>
+<p>You can also have arrays of arrays resemble lists with well defined
+structures:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">list_of_integers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="va">type_integer_vector</span><span class="op">)</span></span></code></pre></div>
+<p>Arrays of objects (described next) are equivalent to data
+frames.</p>
 </li>
 <li>
 <p><strong>Objects</strong> represent a collection of named values.
@@ -203,26 +207,31 @@ any number of scalars, arrays, and other objects. They are similar to
 named lists in R.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">type_person</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
-<span>name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>hobbies <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  hobbies <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </li>
 </ul>
-<p>Using these type specifications ensures that the LLM will return
-JSON. But ellmer goes one step further to convert the results to the
-closest R analog. Currently, this converts arrays of boolean, integers,
-numbers, and strings into logical, integer, numeric, and character
-vectors. Arrays of objects are converted into data frames. You can
-opt-out of this and get plain lists by setting
-<code>convert = FALSE</code> in <code>$chat_structured()</code>.</p>
+<p>Under the hood, these type specifications ensures that the LLM
+returns correctly structured JSON. But ellmer goes one step further and
+converts the JSON to the closest R analog. This means:</p>
+<ul>
+<li>Scalars are converted to length-1 vectors.</li>
+<li>Arrays of scalars are converted to vectors.</li>
+<li>Arrays of arrays are converted to unnamed lists.</li>
+<li>Objects are converted to named lists.</li>
+<li>Arrays of objects are converted to data frames.</li>
+</ul>
+<p>You can opt-out of this and get plain lists by setting
+<code>convert = FALSE</code>.</p>
 <p>In addition to defining types, you need to provide the LLM with some
-information about what you actually want. This is the purpose of the
-first argument, <code>description</code>, which is a string that
-describes the data that you want. This is a good place to ask nicely for
-other attributes you’ll like the value to have (e.g. minimum or maximum
+information about what those types represent. This is the purpose of the
+first argument, <code>description</code>, a string that describes the
+data that you want. This is a good place to ask nicely for other
+attributes you’ll like the value to have (e.g. minimum or maximum
 values, date formats, …). There’s no guarantee that these requests will
-be honoured, but the LLM will usually make a best effort to do so.</p>
+be honoured, but the LLM will try.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">type_type_person</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>  <span class="st">"A person"</span>,</span>
@@ -233,8 +242,110 @@ be honoured, but the LLM will usually make a best effort to do so.</p>
 <span>    <span class="st">"List of hobbies. Should be exclusive and brief."</span>,</span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Now we’ll dive into some examples before coming back to talk more
-about the details of data types.</p>
+</div>
+<div class="section level3">
+<h3 id="missing-values">Missing values<a class="anchor" aria-label="anchor" href="#missing-values"></a>
+</h3>
+<p>The type functions default to <code>required = TRUE</code> which
+means the LLM will try really hard to extract values for you, leading to
+hallucinations if the data doesn’t exist:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">no_match</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="st">"I like apples"</span>,</span>
+<span>  <span class="st">"What time is it?"</span>,</span>
+<span>  <span class="st">"This cheese is 3 years old"</span>,</span>
+<span>  <span class="st">"My name is Hadley."</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">no_match</span>, type <span class="op">=</span> <span class="va">type_person</span><span class="op">)</span></span>
+<span><span class="co">#&gt;           name        age</span></span>
+<span><span class="co">#&gt; 1         User          0</span></span>
+<span><span class="co">#&gt; 2 Current Time 1718920360</span></span>
+<span><span class="co">#&gt; 3       cheese          3</span></span>
+<span><span class="co">#&gt; 4       Hadley          0</span></span></code></pre></div>
+<p>You can often avoid this problem by setting
+<code>required = FALSE</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">type_person</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span>required <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span>required <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">no_match</span>, type <span class="op">=</span> <span class="va">type_person</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     name age</span></span>
+<span><span class="co">#&gt; 1   &lt;NA&gt;  NA</span></span>
+<span><span class="co">#&gt; 2   &lt;NA&gt;  NA</span></span>
+<span><span class="co">#&gt; 3   &lt;NA&gt;   3</span></span>
+<span><span class="co">#&gt; 4 Hadley  NA</span></span></code></pre></div>
+<p>In other cases, you may need to adjust your prompt as well. Either
+way, we strongly recommend that you include both positive and negative
+examples when testing your structured data extraction code.</p>
+</div>
+<div class="section level3">
+<h3 id="data-frames">Data frames<a class="anchor" aria-label="anchor" href="#data-frames"></a>
+</h3>
+<p>In most cases, you’ll get a data frame because you are using
+<code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code>, where each output row
+represents one input prompt. In other cases, you might have a more
+complex document where you want a data frame from a single prompt. For
+example, imagine that you want to extract some data about people from a
+table:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">prompt</span> <span class="op">&lt;-</span> <span class="st">r"(</span></span>
+<span><span class="st">* John Smith. Age: 30. Height: 180 cm. Weight: 80 kg.</span></span>
+<span><span class="st">* Jane Doe. Age: 25. Height: 5'5". Weight: 110 lb.</span></span>
+<span><span class="st">* Jose Rodriguez. Age: 40. Height: 190 cm. Weight: 90 kg.</span></span>
+<span><span class="st">* June Lee | Age: 35 | Height 175 cm | Weight: 70 kg</span></span>
+<span><span class="st">)"</span></span></code></pre></div>
+<p>You might be tempted to use a definition similar to R: an object
+(i.e., a named list) containing multiple arrays (i.e., vectors):</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">type_people</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  height <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"in m"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  weight <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"in kg"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">prompt</span>, type <span class="op">=</span> <span class="va">type_people</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $name</span></span>
+<span><span class="co">#&gt; [1] "John Smith"     "Jane Doe"       "Jose Rodriguez" "June Lee"      </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $age</span></span>
+<span><span class="co">#&gt; [1] 30 25 40 35</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $height</span></span>
+<span><span class="co">#&gt; [1] 1.800 1.651 1.900 1.750</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $weight</span></span>
+<span><span class="co">#&gt; [1] 80.000 49.895 90.000 70.000</span></span></code></pre></div>
+<p>This doesn’t work because there’s no constraint that each array
+should have the same length, and hence no way for ellmer to know that
+you really wanted a data frame. Instead, you’ll need to turn the data
+structure “inside out” and create an array of objects:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">type_people</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    height <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"in m"</span><span class="op">)</span>,</span>
+<span>    weight <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"in kg"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">prompt</span>, type <span class="op">=</span> <span class="va">type_people</span><span class="op">)</span></span>
+<span><span class="co">#&gt;             name age height weight</span></span>
+<span><span class="co">#&gt; 1     John Smith  30  1.800 80.000</span></span>
+<span><span class="co">#&gt; 2       Jane Doe  25  1.651 49.895</span></span>
+<span><span class="co">#&gt; 3 Jose Rodriguez  40  1.900 90.000</span></span>
+<span><span class="co">#&gt; 4       June Lee  35  1.750 70.000</span></span></code></pre></div>
+<p>Now ellmer knows what you want and gives you a data frame.</p>
+<p>If you’re familiar with the terms row-oriented and column-oriented
+data frames, this is the same idea. Since most languages don’t possess
+vectorisation like R, row-oriented data frames are more common.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -245,7 +356,7 @@ can use structured data extraction.</p>
 <div class="section level3">
 <h3 id="example-1-article-summarisation">Example 1: Article summarisation<a class="anchor" aria-label="anchor" href="#example-1-article-summarisation"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
 <span>  <span class="st">"examples/third-party-testing.txt"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"ellmer"</span></span>
@@ -287,7 +398,7 @@ can use structured data extraction.</p>
 <div class="section level3">
 <h3 id="example-2-named-entity-recognition">Example 2: Named entity recognition<a class="anchor" aria-label="anchor" href="#example-2-named-entity-recognition"></a>
 </h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
 <span><span class="st">  John works at Google in New York. He met with Sarah, the CEO of</span></span>
 <span><span class="st">  Acme Inc., last week in San Francisco.</span></span>
@@ -321,7 +432,7 @@ can use structured data extraction.</p>
 <div class="section level3">
 <h3 id="example-3-sentiment-analysis">Example 3: Sentiment analysis<a class="anchor" aria-label="anchor" href="#example-3-sentiment-analysis"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
 <span><span class="st">  The product was okay, but the customer service was terrible. I probably</span></span>
 <span><span class="st">  won't buy from them again.</span></span>
@@ -354,7 +465,7 @@ guaranteed.</p>
 <div class="section level3">
 <h3 id="example-4-text-classification">Example 4: Text classification<a class="anchor" aria-label="anchor" href="#example-4-text-classification"></a>
 </h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"The new quantum computing breakthrough could revolutionize the tech industry."</span></span>
 <span></span>
 <span><span class="va">type_score</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
@@ -393,7 +504,7 @@ guaranteed.</p>
 <div class="section level3">
 <h3 id="example-5-working-with-unknown-keys">Example 5: Working with unknown keys<a class="anchor" aria-label="anchor" href="#example-5-working-with-unknown-keys"></a>
 </h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">type_characteristics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>  <span class="st">"All characteristics"</span>,</span>
 <span>  .additional_properties <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -421,7 +532,7 @@ The goal is to extract structured data from this screenshot:</p>
 and “unearned” income</div>
 </div>
 <p>Even without any descriptions, ChatGPT does pretty well:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">type_asset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>  assert_name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  owner <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -452,114 +563,6 @@ and “unearned” income</div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="advanced-data-types">Advanced data types<a class="anchor" aria-label="anchor" href="#advanced-data-types"></a>
-</h2>
-<p>Now that you’ve seen a few examples, it’s time to get into more
-specifics about data type declarations.</p>
-<div class="section level3">
-<h3 id="required-vs-optional">Required vs optional<a class="anchor" aria-label="anchor" href="#required-vs-optional"></a>
-</h3>
-<p>By default, all components of an object are required. If you want to
-make some optional, set <code>required = FALSE</code>. This is a good
-idea if you don’t think your text will always contain the required
-fields as LLMs may hallucinate data in order to fulfill your spec.</p>
-<p>For example, here the LLM hallucinates a date even though there isn’t
-one in the text:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">type_article</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
-<span>  <span class="st">"Information about an article written in markdown"</span>,</span>
-<span>  title <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Article title"</span><span class="op">)</span>,</span>
-<span>  author <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Name of the author"</span><span class="op">)</span>,</span>
-<span>  date <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Date written in YYYY-MM-DD format."</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">prompt</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
-<span><span class="st">  Extract data from the following text:</span></span>
-<span><span class="st"></span></span>
-<span><span class="st">  &lt;text&gt;</span></span>
-<span><span class="st">  # Structured Data</span></span>
-<span><span class="st">  By Hadley Wickham</span></span>
-<span><span class="st"></span></span>
-<span><span class="st">  When using an LLM to extract data from text or images, you can ask the chatbot to nicely format it, in JSON or any other format that you like.</span></span>
-<span><span class="st">  &lt;/text&gt;</span></span>
-<span><span class="st">"</span></span>
-<span></span>
-<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
-<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">prompt</span>, type <span class="op">=</span> <span class="va">type_article</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $title</span></span>
-<span><span class="co">#&gt; [1] "Structured Data"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $author</span></span>
-<span><span class="co">#&gt; [1] "Hadley Wickham"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $date</span></span>
-<span><span class="co">#&gt; [1] ""</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    2 obs. of  9 variables:</span></span>
-<span><span class="co">#&gt;  $ assert_name     : chr  "11 Zinfandel Lane - Home &amp; Vineyard [RP]" "25 Point Lobos - Commercial Property [RP]"</span></span>
-<span><span class="co">#&gt;  $ owner           : chr  "JT" "SP"</span></span>
-<span><span class="co">#&gt;  $ location        : chr  "St. Helena/Napa, CA, US" "San Francisco/San Francisco, CA, US"</span></span>
-<span><span class="co">#&gt;  $ asset_value_low : int  5000001 5000001</span></span>
-<span><span class="co">#&gt;  $ asset_value_high: int  25000000 25000000</span></span>
-<span><span class="co">#&gt;  $ income_type     : chr  "Grape Sales" "Rent"</span></span>
-<span><span class="co">#&gt;  $ income_low      : int  100001 100001</span></span>
-<span><span class="co">#&gt;  $ income_high     : int  1000000 1000000</span></span>
-<span><span class="co">#&gt;  $ tx_gt_1000      : logi  FALSE FALSE</span></span></code></pre></div>
-<p>Note that I’ve used more of an explict prompt here. For this example,
-I found that this generated better results and that it’s a useful place
-to put additional instructions.</p>
-<p>If I let the LLM know that the fields are all optional, it’ll return
-<code>NULL</code> for the missing fields:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">type_article</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
-<span>  <span class="st">"Information about an article written in markdown"</span>,</span>
-<span>  title <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Article title"</span>, required <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  author <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Name of the author"</span>, required <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  date <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Date written in YYYY-MM-DD format."</span>, required <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">prompt</span>, type <span class="op">=</span> <span class="va">type_article</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $title</span></span>
-<span><span class="co">#&gt; [1] "Structured Data"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $author</span></span>
-<span><span class="co">#&gt; [1] "Hadley Wickham"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $date</span></span>
-<span><span class="co">#&gt; NULL</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="data-frames">Data frames<a class="anchor" aria-label="anchor" href="#data-frames"></a>
-</h3>
-<p>If you want to define a data frame like object, you might be tempted
-to create a definition similar to what R uses: an object (i.e., a named
-list) containing multiple vectors (i.e., an array):</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">type_my_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
-<span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  height <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  weight <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>This, however, is not quite right becuase there’s no way to specify
-that each array should have the same length. Instead, you’ll need to
-turn the data structure “inside out” and create an array of objects:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">type_my_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
-<span>    name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    height <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    weight <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>If you’re familiar with the terms row-oriented and column-oriented
-data frames, this is the same idea. Since most languages don’t possess
-vectorisation like R, row-oriented structures tend to be much more
-common in the wild.</p>
-</div>
-</div>
-<div class="section level2">
 <h2 id="token-usage">Token usage<a class="anchor" aria-label="anchor" href="#token-usage"></a>
 </h2>
 <table class="table">
@@ -575,8 +578,8 @@ common in the wild.</p>
 <tr class="odd">
 <td align="left">OpenAI</td>
 <td align="left">gpt-4.1</td>
-<td align="right">6009</td>
-<td align="right">784</td>
+<td align="right">5991</td>
+<td align="right">888</td>
 <td align="right">0</td>
 <td align="right">$0.02</td>
 </tr>
