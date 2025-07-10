@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_aws_bedrock()`, `chat_google_gemini()`, `chat_ollama()`, and `chat_vllm()` now use a more robust method for generate model URLs from the `base_url` (#593, @benyake).
 * `Chat$chat_structured()` no longer requires a prompt (since it may be obvious from the context) (#570).
 * `models_ollama()` now includes a `capabilities` column with a comma-separated list of model capabilities (#623).
 * `chat_huggingface()` now works much better.
