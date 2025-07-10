@@ -271,16 +271,12 @@ type_characteristics <- type_object(
   .additional_properties = TRUE
 )
 
-prompt <- "
-  Given a description of a character, your task is to extract all the characteristics of that character.
-
-  <description>
+text <- "
   The man is tall, with a beard and a scar on his left cheek. He has a deep voice and wears a black leather jacket.
-  </description>
 "
 
-chat <- chat_anthropic()
-str(chat$chat_structured(prompt, type = type_characteristics))
+chat <- chat_anthropic("Extract all characteristics of supplied character")
+str(chat$chat_structured(text, type = type_characteristics))
 ```
 
 This example only works with Claude, not GPT or Gemini, because only Claude supports adding additional, arbitrary properties.

@@ -165,6 +165,19 @@ test_that("can extract structured data (async)", {
   expect_equal(data, list(name = "John", age = 15))
 })
 
+test_that("chat_structured() doesn't require a prompt", {
+  chat <- chat_openai_test()
+  chat$chat("What's the biggest city in the world? What country is it in?")
+
+  out <- chat$chat_structured(
+    type = type_object(
+      city = type_string(),
+      county = type_string()
+    )
+  )
+  expect_equal(out, list(city = "Tokyo", county = "Japan"))
+})
+
 test_that("can retrieve tokens with or without system prompt", {
   chat <- chat_openai_test("abc")
   expect_equal(nrow(chat$get_tokens(FALSE)), 0)
