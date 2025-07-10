@@ -80,6 +80,8 @@ convert_from_type <- function(x, type) {
     } else {
       x
     }
+  } else if (S7_inherits(type, TypeEnum)) {
+    as.character(x)
   } else {
     x
   }
