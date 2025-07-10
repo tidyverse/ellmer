@@ -151,7 +151,7 @@ method(chat_request, ProviderGoogleGemini) <- function(
   req <- base_request(provider)
 
   # Can't use chat_path() because it varies based on stream
-  req <- req_url_path_append(req, "models")
+  req <- req_url_path_append(req, "models/")
   if (stream) {
     # https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
     req$url <- paste0(req$url, provider@model, ":", "streamGenerateContent")
