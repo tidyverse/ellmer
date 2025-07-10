@@ -156,9 +156,10 @@ method(chat_request, ProviderGoogleGemini) <- function(
     # https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
     req$url <- paste0(req$url, provider@model, ":", "streamGenerateContent")
     req <- req_url_query(req, alt = "sse")
+    req$url <- gsub("%3A", ":", req$url, fixed = TRUE)
   } else {
     # https://ai.google.dev/api/generate-content#method:-models.generatecontent
-    req <- paste0(req$url, provider@model, ":", "generateContent")
+    req$url <- paste0(req$url, provider@model, ":", "generateContent")
   }
 
   body <- chat_body(
