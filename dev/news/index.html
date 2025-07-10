@@ -50,6 +50,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
 <ul><li>
+<code><a href="../reference/chat_openai.html">chat_openai()</a></code>, <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code>, and <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> now capture the number of cached input tokens. This is primarily useful for OpenAI and Gemini since both offer automatic caching yielding improved cost estimates (<a href="https://github.com/tidyverse/ellmer/issues/466" class="external-link">#466</a>).</li>
+<li>
 <code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code>, <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code>, <code><a href="../reference/chat_ollama.html">chat_ollama()</a></code>, and <code><a href="../reference/chat_vllm.html">chat_vllm()</a></code> now use a more robust method for generate model URLs from the <code>base_url</code> (<a href="https://github.com/tidyverse/ellmer/issues/593" class="external-link">#593</a>, <a href="https://github.com/benyake" class="external-link">@benyake</a>).</li>
 <li>
 <code>Chat$chat_structured()</code> no longer requires a prompt (since it may be obvious from the context) (<a href="https://github.com/tidyverse/ellmer/issues/570" class="external-link">#570</a>).</li>
