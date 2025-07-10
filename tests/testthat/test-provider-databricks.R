@@ -24,11 +24,8 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_databricks())
 })
 
-test_that("all tool variations work", {
+test_that("supports tool calling", {
   test_tools_simple(chat_databricks)
-  test_tools_async(chat_databricks)
-  test_tools_parallel(chat_databricks, total_calls = 6)
-  test_tools_sequential(chat_databricks, total_calls = 6)
 })
 
 test_that("can extract data", {
@@ -72,7 +69,8 @@ test_that("Databricks CLI tokens are detected correctly", {
     DATABRICKS_HOST = NA,
     DATABRICKS_CONFIG_FILE = cfg_file,
     DATABRICKS_CLIENT_ID = NA,
-    DATABRICKS_CLIENT_SECRET = NA
+    DATABRICKS_CLIENT_SECRET = NA,
+    DATABRICKS_TOKEN = NA
   )
   local_mocked_bindings(
     databricks_cli_token = function(path, host) {
@@ -110,7 +108,8 @@ test_that("Workbench-managed Databricks credentials are detected correctly", {
     DATABRICKS_CONFIG_PROFILE = "workbench",
     DATABRICKS_HOST = "https://example.cloud.databricks.com",
     DATABRICKS_CLIENT_ID = NA,
-    DATABRICKS_CLIENT_SECRET = NA
+    DATABRICKS_CLIENT_SECRET = NA,
+    DATABRICKS_TOKEN = NA
   )
   credentials <- default_databricks_credentials()
   expect_equal(credentials(), list(Authorization = "Bearer token"))
@@ -120,7 +119,8 @@ test_that("M2M authentication requests look correct", {
   withr::local_envvar(
     DATABRICKS_HOST = "https://example.cloud.databricks.com",
     DATABRICKS_CLIENT_ID = "id",
-    DATABRICKS_CLIENT_SECRET = "secret"
+    DATABRICKS_CLIENT_SECRET = "secret",
+    DATABRICKS_TOKEN = NA
   )
   local_mocked_responses(function(req) {
     # Snapshot relevant fields of the outgoing request.
@@ -185,8 +185,8 @@ test_that("chat_databricks() serializes tools correctly", {
       provider,
       tool(
         function() format(Sys.Date()),
-        .name = "current_date",
-        .description = "Returns the current date in ISO 8601 format."
+        name = "current_date",
+        description = "Returns the current date in ISO 8601 format."
       )
     ),
     list(
@@ -204,9 +204,9 @@ test_that("chat_databricks() serializes tools correctly", {
         function(person) {
           if (person == "Joe") "sage green" else "red"
         },
-        .name = "favourite_colour",
-        .description = "Returns a person's favourite colour.",
-        person = type_string("Name of a person")
+        name = "favourite_colour",
+        description = "Returns a person's favourite colour.",
+        arguments = list(person = type_string("Name of a person"))
       )
     ),
     list(

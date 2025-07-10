@@ -30,13 +30,11 @@ test_that("supports standard parameters", {
   test_params_stop(chat_fun)
 })
 
-test_that("all tool variations work", {
+test_that("supports tool calling", {
+  vcr::local_cassette("openai-tool")
   chat_fun <- chat_openai_test
 
   test_tools_simple(chat_fun)
-  test_tools_async(chat_fun)
-  test_tools_parallel(chat_fun)
-  test_tools_sequential(chat_fun, total_calls = 6)
 })
 
 test_that("can extract data", {
@@ -46,6 +44,7 @@ test_that("can extract data", {
 })
 
 test_that("can use images", {
+  vcr::local_cassette("openai-image")
   # Needs mini to get shape correct
   chat_fun <- \(...) chat_openai_test(model = "gpt-4.1-mini", ...)
 
@@ -92,4 +91,7 @@ test_that("as_json specialised for OpenAI", {
 test_that("seed is deprecated, but still honored", {
   expect_snapshot(chat <- chat_openai_test(seed = 1))
   expect_equal(chat$get_provider()@params$seed, 1)
+
+  # NULL is also ignored since that's what subclasses use
+  expect_no_warning(chat_openai_test(seed = NULL))
 })

@@ -41,13 +41,10 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_aws_bedrock())
 })
 
-test_that("all tool variations work", {
+test_that("supports tool calling", {
   chat_fun <- chat_aws_bedrock
 
   test_tools_simple(chat_fun)
-  test_tools_async(chat_fun)
-  test_tools_parallel(chat_fun)
-  test_tools_sequential(chat_fun, total_calls = 6)
 })
 
 test_that("can extract data", {

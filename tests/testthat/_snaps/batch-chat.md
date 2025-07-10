@@ -7,6 +7,15 @@
       ! provider, prompts, and user_turns don't match stored values.
       i Do you need to pick a different `path`?
 
+---
+
+    Code
+      batch_chat_structured(chat, prompts, path, type = type_string())
+    Condition
+      Error in `batch_chat_structured()`:
+      ! provider, prompts, and user_turns don't match stored values.
+      i Do you need to pick a different `path`?
+
 # informative error for bad inputs
 
     Code

@@ -1,0 +1,94 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"\n  You''re an expert baker
+        who also loves JSON. I am going to give you a list of\n  ingredients and your
+        job is to return nicely structured JSON. Just return the\n  JSON and no other
+        commentary.\n\n\n\n  * If an ingredient has both weight and volume, extract
+        only the weight:\n\n    ¾ cup (150g) dark brown sugar\n    [\n      {\"name\":
+        \"dark brown sugar\", \"quantity\": 150, \"unit\": \"g\", \"input\": \"¾ cup
+        (150g) dark brown sugar\"}\n    ]\n\n  * If an ingredient only lists a volume,
+        extract that.\n\n    2 t ground cinnamon\n    ⅓ cup (80ml) neutral oil\n    [\n      {\"name\":
+        \"ground cinnamon\", \"quantity\": 2, \"unit\": \"teaspoon\", \"input\": \"2
+        t ground cinnamon\"},\n      {\"name\": \"neutral oil\", \"quantity\": 80,
+        \"unit\": \"ml\", \"input\": \"⅓ cup (80ml) neutral oil\"}\n    ]\n"},{"role":"user","content":[{"type":"text","text":"\n  In
+        a large bowl, cream together one cup of softened unsalted butter and a\n  quarter
+        cup of white sugar until smooth. Beat in an egg and 1 teaspoon of\n  vanilla
+        extract. Gradually stir in 2 cups of all-purpose flour until the\n  dough
+        forms. Finally, fold in 1 cup of semisweet chocolate chips. Drop\n  spoonfuls
+        of dough onto an ungreased baking sheet and bake at 350°F (175°C)\n  for 10-12
+        minutes, or until the edges are lightly browned. Let the cookies\n  cool on
+        the baking sheet for a few minutes before transferring to a wire\n  rack to
+        cool completely. Enjoy!\n"}]}],"model":"gpt-4.1","stream":false}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 9564fbec5e294863-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 27 Jun 2025 12:35:26 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '2355'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=cyzSzKqDaX1lJC5VaSssSmaLplB6y5HW1rxnSD562Kk-1751027726-1.0.1.1-ieYjGreq40wNIrvBEJB3F9wPW9YyMIx0MwgOKzUjrLyYXJ1MAthoV2oXohhC45Xd2ibS.U_6k5wZqm6oNIBP5FMAeMMZJVRjeuAR9SNmhrc;
+        path=/; expires=Fri, 27-Jun-25 13:05:26 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=UczthRh6Q1elypHl2RnLSPYuucHVUq2oVWxL8ojpZLY-1751027726809-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '2548'
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '30000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '29999666'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_ce9fe6c6ead064607b9d33123dbc7145
+    body:
+      string: |
+        {
+          "id": "chatcmpl-Bn2aaNMICKWnAgLF6vKKwjf0bl8n5",
+          "object": "chat.completion",
+          "created": 1751027724,
+          "model": "gpt-4.1-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "[\n  {\"name\": \"unsalted butter\", \"quantity\": 1, \"unit\": \"cup\", \"input\": \"one cup of softened unsalted butter\"},\n  {\"name\": \"white sugar\", \"quantity\": 0.25, \"unit\": \"cup\", \"input\": \"a quarter cup of white sugar\"},\n  {\"name\": \"egg\", \"quantity\": 1, \"unit\": \"item\", \"input\": \"an egg\"},\n  {\"name\": \"vanilla extract\", \"quantity\": 1, \"unit\": \"teaspoon\", \"input\": \"1 teaspoon of vanilla extract\"},\n  {\"name\": \"all-purpose flour\", \"quantity\": 2, \"unit\": \"cup\", \"input\": \"2 cups of all-purpose flour\"},\n  {\"name\": \"semisweet chocolate chips\", \"quantity\": 1, \"unit\": \"cup\", \"input\": \"1 cup of semisweet chocolate chips\"}\n]",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 366,
+            "completion_tokens": 195,
+            "total_tokens": 561,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_b3f1157249"
+        }
+  recorded_at: 2025-06-27 12:35:26
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0

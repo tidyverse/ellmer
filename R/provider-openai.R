@@ -33,7 +33,8 @@ NULL
 #' @family chatbots
 #' @export
 #' @returns A [Chat] object.
-#' @examplesIf has_credentials("openai")
+#' @examples
+#' \dontshow{ellmer:::vcr_example_start("chat_openai")}
 #' chat <- chat_openai()
 #' chat$chat("
 #'   What is the difference between a tibble and a data frame?
@@ -41,6 +42,7 @@ NULL
 #' ")
 #'
 #' chat$chat("Tell me three funny jokes about statisticians")
+#' \dontshow{ellmer:::vcr_example_end()}
 chat_openai <- function(
   system_prompt = NULL,
   base_url = "https://api.openai.com/v1",
@@ -55,7 +57,7 @@ chat_openai <- function(
   echo <- check_echo(echo)
 
   params <- params %||% params()
-  if (lifecycle::is_present(seed)) {
+  if (lifecycle::is_present(seed) && !is.null(seed)) {
     lifecycle::deprecate_warn(
       when = "0.2.0",
       what = "chat_openai(seed)",
@@ -117,8 +119,7 @@ openai_key <- function() {
 method(base_request, ProviderOpenAI) <- function(provider) {
   req <- request(provider@base_url)
   req <- req_auth_bearer_token(req, provider@api_key)
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- base_request_error(provider, req)
   req

@@ -92,16 +92,29 @@ assistant_turn <- function(...) {
   Turn(role = "assistant", ...)
 }
 
-user_turn <- function(..., .call = caller_env()) {
-  as_user_turn(list2(...), call = .call, arg = "...")
+user_turn <- function(..., .call = caller_env(), .check_empty = TRUE) {
+  as_user_turn(
+    list2(...),
+    call = .call,
+    arg = "...",
+    check_empty = .check_empty
+  )
 }
 
-as_user_turn <- function(contents, call = caller_env(), arg = "...") {
-  if (length(contents) == 0) {
+as_user_turn <- function(
+  contents,
+  check_empty = TRUE,
+  call = caller_env(),
+  arg = "..."
+) {
+  if (check_empty && length(contents) == 0) {
     cli::cli_abort("{.arg {arg}} must contain at least one input.", call = call)
   }
   if (is_named(contents)) {
     cli::cli_abort("{.arg {arg}} must be unnamed.", call = call)
+  }
+  if (S7_inherits(contents, Content)) {
+    return(Turn("user", list(contents)))
   }
 
   contents <- lapply(contents, as_content, error_call = call, error_arg = arg)

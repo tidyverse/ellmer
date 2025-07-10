@@ -15,9 +15,11 @@ NULL
 #' but instead call [chat_openai()] or friends instead.
 #'
 #' @return A Chat object
-#' @examplesIf has_credentials("openai")
-#' chat <- chat_openai(echo = TRUE)
+#' @examples
+#' \dontshow{ellmer:::vcr_example_start("Chat")}
+#' chat <- chat_openai()
 #' chat$chat("Tell me a funny joke")
+#' \dontshow{ellmer:::vcr_example_end()}
 Chat <- R6::R6Class(
   "Chat",
   public = list(
@@ -29,7 +31,8 @@ Chat <- R6::R6Class(
     #'     when running at the console).
     #'   * `all`: echo all input and output.
     #'
-    #'  Note this only affects the `chat()` method.
+    #'  Note this only affects the `chat()` method. You can override the default
+    #'  by setting the `ellmer_echo` option.
     initialize = function(provider, system_prompt = NULL, echo = "none") {
       private$provider <- provider
       private$echo <- echo
@@ -218,8 +221,9 @@ Chat <- R6::R6Class(
     },
 
     #' @description Extract structured data
-    #' @param ... The input to send to the chatbot. Will typically include
-    #'   the phrase "extract structured data".
+    #' @param ... The input to send to the chatbot. This is typically the text
+    #'   you want to extract data from, but it can be omitted if the data is
+    #'   obvious from the existing conversation.
     #' @param type A type specification for the extracted data. Should be
     #'   created with a [`type_()`][type_boolean] function.
     #' @param echo Whether to emit the response to stdout as it is received.
@@ -229,7 +233,7 @@ Chat <- R6::R6Class(
     #'   using the schema. For example, this will turn arrays of objects into
     #'  data frames and arrays of strings into a character vector.
     chat_structured = function(..., type, echo = "none", convert = TRUE) {
-      turn <- user_turn(...)
+      turn <- user_turn(..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
 
@@ -257,7 +261,7 @@ Chat <- R6::R6Class(
     #'   Set to "text" to stream JSON data as it's generated (not supported by
     #'  all providers).
     chat_structured_async = function(..., type, echo = "none") {
-      turn <- user_turn(...)
+      turn <- user_turn(..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
 
       done <- coro::async_collect(private$submit_turns_async(
@@ -358,22 +362,33 @@ Chat <- R6::R6Class(
     },
 
     #' @description Register a tool (an R function) that the chatbot can use.
-    #'   If the chatbot decides to use the function, ellmer will automatically
-    #'   call it and submit the results back.
-    #'
-    #'   The return value of the function. Generally, this should either be a
-    #'   string, or a JSON-serializable value. If you must have more direct
-    #'   control of the structure of the JSON that's returned, you can return a
-    #'   JSON-serializable value wrapped in [base::I()], which ellmer will leave
-    #'   alone until the entire request is JSON-serialized.
-    #' @param tool_def Tool definition created by [tool()].
-    register_tool = function(tool_def) {
-      if (!S7_inherits(tool_def, ToolDef)) {
+    #'   Learn more in `vignette("tool-calling")`.
+    #' @param tool A tool definition created by [tool()].
+    register_tool = function(tool) {
+      if (!S7_inherits(tool, ToolDef)) {
         cli::cli_abort("{.arg tool} must be a <ToolDef>.")
       }
 
-      private$tools[[tool_def@name]] <- tool_def
+      private$tools[[tool@name]] <- tool
       invisible(self)
+    },
+
+    #' @description Register a list of tools.
+    #'   Learn more in `vignette("tool-calling")`.
+    #' @param tools A list of tool definitions created by [tool()].
+    register_tools = function(tools) {
+      if (!is_list(tools)) {
+        stop_input_type(tools, "a list")
+      }
+      for (i in seq_along(tools)) {
+        if (!S7_inherits(tools[[i]], ToolDef)) {
+          arg <- paste0("tools[[", i, "]]")
+          stop_input_type(tools[[i]], "a <ToolDef>", arg = arg)
+        }
+      }
+      for (tool in tools) {
+        self$register_tool(tool)
+      }
     },
 
     #' @description Get the underlying provider object. For expert use only.

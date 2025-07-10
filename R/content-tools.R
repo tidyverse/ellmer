@@ -150,7 +150,7 @@ invoke_tool <- function(request) {
 
   tryCatch(
     {
-      result <- do.call(request@tool@fun, args)
+      result <- do.call(request@tool, args)
       new_tool_result(request, result)
     },
     error = function(e) {
@@ -173,7 +173,7 @@ on_load(
 
     tryCatch(
       {
-        result <- await(do.call(request@tool@fun, args))
+        result <- await(do.call(request@tool, args))
         new_tool_result(request, result)
       },
       error = function(e) {
@@ -280,15 +280,18 @@ warn_tool_errors <- function(tool_errors) {
     }
   )
 
-  cli::cli_warn(c(
-    "Failed to evaluate {length(tool_errors)} tool call{?s}.",
-    set_names(errs, "x"),
-    "i" = if (length(errs) < length(tool_errors)) {
-      cli::format_inline(
-        "{cli::symbol$ellipsis} and {length(tool_errors) - length(errs)} more."
-      )
-    }
-  ))
+  cli::cli_warn(
+    c(
+      "Failed to evaluate {length(tool_errors)} tool call{?s}.",
+      set_names(errs, "x"),
+      "i" = if (length(errs) < length(tool_errors)) {
+        cli::format_inline(
+          "{cli::symbol$ellipsis} and {length(tool_errors) - length(errs)} more."
+        )
+      }
+    ),
+    class = "ellmer_tool_failure"
+  )
 }
 
 maybe_echo_tool <- function(x, echo = "output") {

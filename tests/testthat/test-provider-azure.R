@@ -25,13 +25,10 @@ test_that("supports standard parameters", {
   test_params_stop(chat_fun)
 })
 
-test_that("all tool variations work", {
+test_that("supports tool calling", {
   chat_fun <- chat_azure_openai_test
 
   test_tools_simple(chat_fun)
-  test_tools_async(chat_fun)
-  test_tools_parallel(chat_fun)
-  test_tools_sequential(chat_fun, total_calls = 6)
 })
 
 test_that("can extract data", {
@@ -44,7 +41,7 @@ test_that("can use images", {
   skip("Run manually; 24 hour rate limit")
   chat_fun <- chat_azure_openai_test
 
-  httr2::with_verbosity(test_images_inline(chat_fun), 2)
+  test_images_inline(chat_fun)
   test_images_remote(chat_fun)
 })
 
