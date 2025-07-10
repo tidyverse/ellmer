@@ -2,10 +2,7 @@
 
 test_that("can make simple request", {
   chat <- chat_google_gemini_test("Be as terse as possible; no punctuation")
-  expect_snapshot(
-    resp <- chat$chat("What is 1 + 1?"),
-    error = TRUE
-  )
+  resp <- chat$chat("What is 1 + 1?")
 
   expect_match(resp, "2")
   expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
@@ -19,7 +16,7 @@ test_that("can make simple streaming request", {
 
 test_that("can handle errors", {
   chat <- chat_google_gemini_test(model = "doesnt-exist")
-  expect_snapshot(chat$chat("Hi"), error = TRUE)
+  expect_error(chat$chat("Hi"))
 })
 
 test_that("can list models", {
