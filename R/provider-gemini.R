@@ -154,17 +154,11 @@ method(chat_request, ProviderGoogleGemini) <- function(
   req <- req_url_path_append(req, "models")
   if (stream) {
     # https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
-    req <- req_url_path_append(
-      req,
-      paste0(provider@model, ":", "streamGenerateContent")
-    )
+    req$url <- paste0(req$url, provider@model, ":", "streamGenerateContent")
     req <- req_url_query(req, alt = "sse")
   } else {
     # https://ai.google.dev/api/generate-content#method:-models.generatecontent
-    req <- req_url_path_append(
-      req,
-      paste0(provider@model, ":", "generateContent")
-    )
+    req <- paste0(req$url, provider@model, ":", "generateContent")
   }
 
   body <- chat_body(
