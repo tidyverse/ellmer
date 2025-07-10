@@ -106,7 +106,7 @@ To define your desired type specification (also known as a schema), you use the 
 
   ```{r}
   list_of_integers <- type_array(type_integer_vector)
-  ``` 
+  ```
 
   Arrays of objects (described next) are equivalent to data frames.
 
