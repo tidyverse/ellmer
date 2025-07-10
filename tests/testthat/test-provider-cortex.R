@@ -114,7 +114,7 @@ test_that("Cortex API requests are generated correctly", {
   )
   req <- chat_request(p, FALSE, list(turn))
   expect_snapshot(req$url)
-  expect_snapshot(req$headers)
+  expect_snapshot(str(req_get_headers(req, "reveal")))
   expect_snapshot(print_json(req$body$data))
 })
 

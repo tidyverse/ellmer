@@ -125,7 +125,11 @@ test_that("M2M authentication requests look correct", {
   local_mocked_responses(function(req) {
     # Snapshot relevant fields of the outgoing request.
     expect_snapshot(
-      list(url = req$url, headers = req$headers, body = req$body$data)
+      list(
+        url = req$url,
+        headers = req_get_headers(req, "reveal"),
+        body = req_get_body(req)
+      )
     )
     response_json(body = list(access_token = "token"))
   })

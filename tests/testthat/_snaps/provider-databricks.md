@@ -1,22 +1,19 @@
-# defaults are reported
-
-    Code
-      . <- chat_databricks()
-    Message
-      Using model = "databricks-claude-3-7-sonnet".
-
 # M2M authentication requests look correct
 
     Code
-      list(url = req$url, headers = req$headers, body = req$body$data)
+      list(url = req$url, headers = req_get_headers(req, "reveal"), body = req_get_body(
+        req))
     Output
       $url
       [1] "https://example.cloud.databricks.com/oidc/v1/token"
       
       $headers
-      <httr2_headers>
-      Authorization: <REDACTED>
-      Accept: application/json
+      $headers$Authorization
+      [1] "Basic aWQ6c2VjcmV0"
+      
+      $headers$Accept
+      [1] "application/json"
+      
       
       $body
       $body$grant_type

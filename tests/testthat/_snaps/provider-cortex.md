@@ -37,11 +37,11 @@
 ---
 
     Code
-      req$headers
+      str(req_get_headers(req, "reveal"))
     Output
-      <httr2_headers>
-      Authorization: <REDACTED>
-      X-Snowflake-Authorization-Token-Type: <REDACTED>
+      List of 2
+       $ Authorization                       : chr "Bearer obfuscated"
+       $ X-Snowflake-Authorization-Token-Type: chr "OAUTH"
 
 ---
 
