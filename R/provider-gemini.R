@@ -151,16 +151,24 @@ method(chat_request, ProviderGoogleGemini) <- function(
   req <- base_request(provider)
 
   # Can't use chat_path() because it varies based on stream
-  req <- req_url_path_append(req, "models/")
+  req <- req_url_path_append(req, "models")
   if (stream) {
     # https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
-    req$url <- paste0(req$url, provider@model, ":", "streamGenerateContent")
+    req <- req_url_path_append(
+      req,
+      paste0(provider@model, ":", "streamGenerateContent")
+    )
     req <- req_url_query(req, alt = "sse")
-    req$url <- gsub("%3A", ":", req$url, fixed = TRUE)
   } else {
     # https://ai.google.dev/api/generate-content#method:-models.generatecontent
-    req$url <- paste0(req$url, provider@model, ":", "generateContent")
+    req <- req_url_path_append(
+      req,
+      paste0(provider@model, ":", "generateContent")
+    )
   }
+  # Hack around weirdness in httr2 1.1.0 + linux (?) curl that causes ":"
+  # to get escaped
+  req$url <- gsub("%3A", ":", req$url, fixed = TRUE)
 
   body <- chat_body(
     provider = provider,
