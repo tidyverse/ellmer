@@ -61,7 +61,7 @@ google_upload_init <- function(path, base_url, credentials, mime_type) {
 
   req <- request(base_url)
   req <- ellmer_req_credentials(req, credentials)
-  req <- req_url_path(req, "upload/v1beta/files")
+  req <- req_url_path_append(req, "upload/v1beta/files")
   req <- req_headers(
     req,
     "X-Goog-Upload-Protocol" = "resumable",

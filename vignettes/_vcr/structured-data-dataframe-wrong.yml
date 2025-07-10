@@ -1,0 +1,81 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"\n* John
+        Smith. Age: 30. Height: 180 cm. Weight: 80 kg.\n* Jane Doe. Age: 25. Height:
+        5''5\". Weight: 110 lb.\n* Jose Rodriguez. Age: 40. Height: 190 cm. Weight:
+        90 kg.\n* June Lee | Age: 35 | Height 175 cm | Weight: 70 kg\n"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"array","description":"","items":{"type":"string","description":""}},"age":{"type":"array","description":"","items":{"type":"integer","description":""}},"height":{"type":"array","description":"","items":{"type":"number","description":"in
+        m"}},"weight":{"type":"array","description":"","items":{"type":"number","description":"in
+        kg"}}},"required":["name","age","height","weight"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95c9531dfd3f8787-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 09 Jul 2025 16:51:12 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '804'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=wxBW__bsHyfZElgBVSbUz8rN7ihpptrHxkUdfIGxswc-1752079872-1.0.1.1-uvkAwyfiizl_Yj.iH0dG1okDsnrPoRtoBQYfq1KMpSWAEcehxj4idq0lyluRr8iHfry6KdQzCL8CPhbvMa59uqReux1nl8ExbWt0A95uXQY;
+        path=/; expires=Wed, 09-Jul-25 17:21:12 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=Q9WRUHxtrBmvVAuhjLjdX6wrj7fKZC_WIwgsqo30joE-1752079872740-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '808'
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '30000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '29999942'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_002ec1f0989633d95bb5d97155dd5f12
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BrSIhgflrK8rB9sFiqYQIXWUyZKq9",
+          "object": "chat.completion",
+          "created": 1752079871,
+          "model": "gpt-4.1-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"wrapper\":{\"name\":[\"John Smith\",\"Jane Doe\",\"Jose Rodriguez\",\"June Lee\"],\"age\":[30,25,40,35],\"height\":[1.8,1.651,1.9,1.75],\"weight\":[80,49.895,90,70]}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 206,
+            "completion_tokens": 59,
+            "total_tokens": 265,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_51e1070cf2"
+        }
+  recorded_at: 2025-07-09 16:51:12
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0

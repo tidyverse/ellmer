@@ -1,10 +1,16 @@
 on_load(
-  the$tokens <- tokens_row(character(), character(), numeric(), numeric())
+  the$tokens <- tokens_row()
 )
 
-tokens_log <- function(provider, input = NULL, output = NULL) {
+tokens_log <- function(
+  provider,
+  input = NULL,
+  output = NULL,
+  cached_input = NULL
+) {
   input <- input %||% 0
   output <- output %||% 0
+  cached_input <- cached_input %||% 0
 
   model <- standardise_model(provider, provider@model)
 
@@ -12,19 +18,32 @@ tokens_log <- function(provider, input = NULL, output = NULL) {
   i <- tokens_match(provider@name, model, the$tokens$provider, the$tokens$model)
 
   if (is.na(i)) {
-    new_row <- tokens_row(provider@name, model, input, output)
+    new_row <- tokens_row(provider@name, model, input, output, cached_input)
     the$tokens <- rbind(the$tokens, new_row)
   } else {
     the$tokens$input[i] <- the$tokens$input[i] + input
     the$tokens$output[i] <- the$tokens$output[i] + output
+    the$tokens$cached_input[i] <- the$tokens$cached_input[i] + cached_input
   }
 
   # Returns value to be passed to Turn
-  c(input, output)
+  c(input, output, cached_input)
 }
 
-tokens_row <- function(provider, model, input, output) {
-  data.frame(provider = provider, model = model, input = input, output = output)
+tokens_row <- function(
+  provider = character(0),
+  model = character(0),
+  input = numeric(0),
+  output = numeric(0),
+  cached_input = numeric(0)
+) {
+  data.frame(
+    provider = provider,
+    model = model,
+    input = input,
+    output = output,
+    cached_input = cached_input
+  )
 }
 
 tokens_match <- function(
@@ -42,7 +61,7 @@ tokens_match <- function(
 
 local_tokens <- function(frame = parent.frame()) {
   old <- the$tokens
-  the$tokens <- tokens_row(character(), character(), numeric(), numeric())
+  the$tokens <- tokens_row()
 
   defer(the$tokens <- old, env = frame)
 }
@@ -64,18 +83,32 @@ token_usage <- function() {
   }
 
   out <- the$tokens
-  out$price <- get_token_cost(out$provider, out$model, out$input, out$output)
+  out$price <- get_token_cost(
+    out$provider,
+    out$model,
+    out$input,
+    out$output,
+    out$cached_input
+  )
   out
 }
 
 # Cost ----------------------------------------------------------------------
 
-get_token_cost <- function(provider, model, input, output) {
+get_token_cost <- function(
+  provider,
+  model,
+  input,
+  output,
+  cached_input
+) {
   idx <- tokens_match(provider, model, prices$provider, prices$model)
 
   input_price <- input * prices$input[idx] / 1e6
   output_price <- output * prices$output[idx] / 1e6
-  dollars(input_price + output_price)
+  cached_input_price <- cached_input * prices$cached_input[idx] / 1e6
+
+  dollars(input_price + output_price + cached_input_price)
 }
 
 dollars <- function(x) {

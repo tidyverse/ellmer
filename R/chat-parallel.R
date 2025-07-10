@@ -176,11 +176,12 @@ multi_convert <- function(
   }
 
   if (is.data.frame(out) && (include_tokens || include_cost)) {
-    tokens <- t(vapply(turns, \(turn) turn@tokens, integer(2)))
+    tokens <- t(vapply(turns, \(turn) turn@tokens, integer(3)))
 
     if (include_tokens) {
       out$input_tokens <- tokens[, 1]
       out$output_tokens <- tokens[, 2]
+      out$cached_input_tokens <- tokens[, 3]
     }
 
     if (include_cost) {
@@ -188,7 +189,8 @@ multi_convert <- function(
         provider@name,
         standardise_model(provider, provider@model),
         input = tokens[, 1],
-        output = tokens[, 2]
+        output = tokens[, 2],
+        cached_input = tokens[, 3]
       )
     }
   }
