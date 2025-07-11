@@ -1,3 +1,14 @@
+# chat_snowflake_cortex() is deprecated
+
+    Code
+      chat_cortex_analyst(model_spec = "test")
+    Condition
+      Warning:
+      `char_cortex_analyst()` was deprecated in ellmer 0.3.0.
+      i Please use `chat_snowflake()` instead.
+    Output
+      <Chat Snowflake/CortexAnalyst/ turns=0 tokens=0/0>
+
 # Cortex turn formatting
 
     Code

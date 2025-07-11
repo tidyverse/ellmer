@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_cortex_analyst()` is now deprecated; please use `chat_snowflake()` instead (#640).
 * `chat_openai()`, `chat_google_gemini()`, and `chat_anthropic()` now capture the number of cached input tokens. This is primarily useful for OpenAI and Gemini since both offer automatic caching yielding improved cost estimates (#466).
 * `chat_aws_bedrock()`, `chat_google_gemini()`, `chat_ollama()`, and `chat_vllm()` now use a more robust method for generate model URLs from the `base_url` (#593, @benyake).
 * `Chat$chat_structured()` no longer requires a prompt (since it may be obvious from the context) (#570).
