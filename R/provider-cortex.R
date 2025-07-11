@@ -7,6 +7,11 @@ NULL
 #' Create a chatbot that speaks to the Snowflake Cortex Analyst
 #'
 #' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' Please use [chat_snowflake()] instead as that appears to be where Snowflake
+#' is putting their efforts.
+#'
 #' Chat with the LLM-powered [Snowflake Cortex
 #' Analyst](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst).
 #'
@@ -66,6 +71,12 @@ chat_cortex_analyst <- function(
   api_args = list(),
   echo = c("none", "output", "all")
 ) {
+  lifecycle::deprecate_warn(
+    "0.3.0",
+    "char_cortex_analyst()",
+    "chat_snowflake()"
+  )
+
   check_string(account, allow_empty = FALSE)
   check_string(model_spec, allow_empty = FALSE, allow_null = TRUE)
   check_string(model_file, allow_empty = FALSE, allow_null = TRUE)

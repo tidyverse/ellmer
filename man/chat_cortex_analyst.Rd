@@ -46,6 +46,11 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+Please use \code{\link[=chat_snowflake]{chat_snowflake()}} instead as that appears to be where Snowflake
+is putting their efforts.
+
 Chat with the LLM-powered \href{https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst}{Snowflake Cortex Analyst}.
 \subsection{Authentication}{
 
