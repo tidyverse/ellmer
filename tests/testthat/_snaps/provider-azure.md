@@ -33,8 +33,7 @@
 # service principal authentication requests look correct
 
     Code
-      str(list(url = req$url, headers = req_get_headers(req, "reveal"), body = req_get_body(
-        req)))
+      str(request_summary(req))
     Output
       List of 3
        $ url    : chr "https://login.microsoftonline.com/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/oauth2/v2.0/token"

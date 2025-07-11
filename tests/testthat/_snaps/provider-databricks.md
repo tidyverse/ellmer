@@ -1,26 +1,14 @@
 # M2M authentication requests look correct
 
     Code
-      list(url = req$url, headers = req_get_headers(req, "reveal"), body = req_get_body(
-        req))
+      str(request_summary(req))
     Output
-      $url
-      [1] "https://example.cloud.databricks.com/oidc/v1/token"
-      
-      $headers
-      $headers$Authorization
-      [1] "Basic aWQ6c2VjcmV0"
-      
-      $headers$Accept
-      [1] "application/json"
-      
-      
-      $body
-      $body$grant_type
-      [1] "client_credentials"
-      
-      $body$scope
-      [1] "all-apis"
-      
-      
+      List of 3
+       $ url    : chr "https://example.cloud.databricks.com/oidc/v1/token"
+       $ headers:List of 2
+        ..$ Authorization: chr "Basic aWQ6c2VjcmV0"
+        ..$ Accept       : chr "application/json"
+       $ body   :List of 2
+        ..$ grant_type: 'AsIs' chr "client_credentials"
+        ..$ scope     : 'AsIs' chr "all-apis"
 

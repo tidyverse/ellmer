@@ -104,13 +104,7 @@ test_that("service principal authentication requests look correct", {
   )
   local_mocked_responses(function(req) {
     # Snapshot relevant fields of the outgoing request.
-    expect_snapshot(
-      str(list(
-        url = req$url,
-        headers = req_get_headers(req, "reveal"),
-        body = req_get_body(req)
-      ))
-    )
+    expect_snapshot(str(request_summary(req)))
     response_json(body = list(access_token = "token"))
   })
   source <- default_azure_credentials()
