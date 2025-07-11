@@ -128,11 +128,6 @@ method(base_request, ProviderGoogleGemini) <- function(provider) {
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- req_error(req, body = function(resp) {
-    sink(stderr())
-    print(resp)
-    print(resp_headers(resp))
-    sink()
-
     json <- resp_body_json(resp, check_type = FALSE)
     json$error$message
   })
@@ -166,8 +161,8 @@ method(chat_request, ProviderGoogleGemini) <- function(
       paste0(provider@model, ":", "generateContent")
     )
   }
-  # Hack around weirdness in httr2 1.1.0 + linux (?) curl that causes ":"
-  # to get escaped
+  # Hack around new httr2 1.2.0 feature that causes ":" to be escaped
+  # This shouldn't matter in principle, but google doesn't seem to like it
   req$url <- gsub("%3A", ":", req$url, fixed = TRUE)
 
   body <- chat_body(
