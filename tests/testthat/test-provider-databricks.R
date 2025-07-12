@@ -124,9 +124,7 @@ test_that("M2M authentication requests look correct", {
   )
   local_mocked_responses(function(req) {
     # Snapshot relevant fields of the outgoing request.
-    expect_snapshot(
-      list(url = req$url, headers = req$headers, body = req$body$data)
-    )
+    expect_snapshot(str(request_summary(req)))
     response_json(body = list(access_token = "token"))
   })
   credentials <- default_databricks_credentials()

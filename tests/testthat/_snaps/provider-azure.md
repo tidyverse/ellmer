@@ -1,59 +1,47 @@
 # defaults are reported
 
     Code
-      . <- chat_azure_openai_test()
+      . <- chat_azure_openai("endpoint", "deployment_id")
     Message
       Using api_version = "2024-10-21".
 
 # Azure request headers are generated correctly
 
     Code
-      str(req$headers)
+      str(req_get_headers(req, "reveal"))
     Output
-       <httr2_headers>
+      List of 1
        $ api-key: chr "key"
 
 ---
 
     Code
-      str(req$headers)
+      str(req_get_headers(req, "reveal"))
     Output
-       <httr2_headers>
+      List of 1
        $ Authorization: chr "Bearer token"
 
 ---
 
     Code
-      str(req$headers)
+      str(req_get_headers(req, "reveal"))
     Output
-       <httr2_headers>
+      List of 2
        $ api-key      : chr "key"
        $ Authorization: chr "Bearer token"
 
 # service principal authentication requests look correct
 
     Code
-      list(url = req$url, headers = req$headers, body = req$body$data)
+      str(request_summary(req))
     Output
-      $url
-      [1] "https://login.microsoftonline.com/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/oauth2/v2.0/token"
-      
-      $headers
-      <httr2_headers>
-      Accept: application/json
-      
-      $body
-      $body$grant_type
-      [1] "client_credentials"
-      
-      $body$scope
-      [1] "https%3A%2F%2Fcognitiveservices.azure.com%2F.default"
-      
-      $body$client_id
-      [1] "id"
-      
-      $body$client_secret
-      [1] "secret"
-      
-      
+      List of 3
+       $ url    : chr "https://login.microsoftonline.com/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/oauth2/v2.0/token"
+       $ headers:List of 1
+        ..$ Accept: chr "application/json"
+       $ body   :List of 4
+        ..$ grant_type   : 'AsIs' chr "client_credentials"
+        ..$ scope        : 'AsIs' chr "https%3A%2F%2Fcognitiveservices.azure.com%2F.default"
+        ..$ client_id    : 'AsIs' chr "id"
+        ..$ client_secret: 'AsIs' chr "secret"
 

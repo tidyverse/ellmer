@@ -30,37 +30,21 @@
 # Cortex API requests are generated correctly
 
     Code
-      req$url
+      str(request_summary(req))
     Output
-      [1] "https://testorg-test_account.snowflakecomputing.com/api/v2/cortex/analyst/message"
-
----
-
-    Code
-      req$headers
-    Output
-      <httr2_headers>
-      Authorization: <REDACTED>
-      X-Snowflake-Authorization-Token-Type: <REDACTED>
-
----
-
-    Code
-      print_json(req$body$data)
-    Output
-      {
-        "messages": [
-          {
-            "role": "user",
-            "content": [
-              {
-                "type": "text",
-                "text": "Tell me about my data."
-              }
-            ]
-          }
-        ],
-        "stream": false,
-        "semantic_model_file": "@my_db.my_schema.my_stage/model.yaml"
-      }
+      List of 3
+       $ url    : chr "https://testorg-test_account.snowflakecomputing.com/api/v2/cortex/analyst/message"
+       $ headers:List of 2
+        ..$ Authorization                       : chr "Bearer obfuscated"
+        ..$ X-Snowflake-Authorization-Token-Type: chr "OAUTH"
+       $ body   :List of 3
+        ..$ messages           :List of 1
+        .. ..$ :List of 2
+        .. .. ..$ role   : chr "user"
+        .. .. ..$ content:List of 1
+        .. .. .. ..$ :List of 2
+        .. .. .. .. ..$ type: chr "text"
+        .. .. .. .. ..$ text: chr "Tell me about my data."
+        ..$ stream             : logi FALSE
+        ..$ semantic_model_file: chr "@my_db.my_schema.my_stage/model.yaml"
 

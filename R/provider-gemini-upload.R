@@ -71,6 +71,7 @@ google_upload_init <- function(path, base_url, credentials, mime_type) {
   )
   req <- req_body_json(req, list(file = list(display_name = display_name)))
 
+  print(req$url)
   resp <- req_perform(req)
   resp_header(resp, "x-goog-upload-url")
 }

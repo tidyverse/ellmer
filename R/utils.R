@@ -282,3 +282,11 @@ content_types <- function(turns) {
     map_chr(turn@contents, function(x) S7_class(x)@name)
   })
 }
+
+request_summary <- function(req) {
+  list(
+    url = req_get_url(req),
+    headers = req_get_headers(req, "reveal"),
+    body = req_get_body(req)
+  )
+}

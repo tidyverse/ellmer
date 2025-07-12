@@ -66,7 +66,8 @@ test_that("can use pdfs", {
 test_that("can set beta headers", {
   chat <- chat_anthropic_test(beta_headers = c("a", "b"))
   req <- chat_request(chat$get_provider())
-  expect_equal(req$headers$`anthropic-beta`, c("a", "b"))
+  headers <- req_get_headers(req)
+  expect_equal(headers$`anthropic-beta`, "a,b")
 })
 
 test_that("continues to work after whitespace only outputs (#376)", {

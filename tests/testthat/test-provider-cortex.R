@@ -113,9 +113,7 @@ test_that("Cortex API requests are generated correctly", {
     model_file = "@my_db.my_schema.my_stage/model.yaml"
   )
   req <- chat_request(p, FALSE, list(turn))
-  expect_snapshot(req$url)
-  expect_snapshot(req$headers)
-  expect_snapshot(print_json(req$body$data))
+  expect_snapshot(str(request_summary(req)))
 })
 
 test_that("a simple Cortex chatbot works", {
