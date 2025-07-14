@@ -24,8 +24,9 @@
 #'   connections or use [params()] in `chat_anthropic()` to decrease
 #'   `max_tokens`.
 #' @param rpm Maximum number of requests per minute.
-#' @return
+#' @returns
 #' For `parallel_chat()`, a list of [Chat] objects, one for each prompt.
+#' For `parallel_chat_text()`, a character vector of text responses.
 #' For `parallel_chat_structured()`, a single structured data object with one
 #' element for each prompt. Typically, when `type` is an object, this will
 #' will be a data frame with one row for each prompt, and one column for each
@@ -97,6 +98,13 @@ parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
   }
 
   map(conversations, \(turns) chat$clone()$set_turns(turns))
+}
+
+#' @rdname parallel_chat
+#' @export
+parallel_chat_text <- function(chat, prompts, max_active = 10, rpm = 500) {
+  chats <- parallel_chat(chat, prompts, max_active = max_active, rpm = rpm)
+  map_chr(chats, \(chat) chat$last_turn()@text)
 }
 
 #' @param type A type specification for the extracted data. Should be

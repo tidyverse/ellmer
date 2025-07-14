@@ -14,6 +14,14 @@ test_that("can chat in parallel", {
   expect_equal(chats[[2]]$last_turn()@contents[[1]]@text, "4")
 })
 
+test_that("can just get text parallel ", {
+  vcr::local_cassette("parallel-basic")
+
+  chat <- chat_openai_test()
+  out <- parallel_chat_text(chat, list("What's 1 + 1?", "What's 2 + 2?"))
+  expect_equal(out, c("2", "4"))
+})
+
 test_that("can call tools in parallel", {
   vcr::local_cassette("parallel-tool")
 

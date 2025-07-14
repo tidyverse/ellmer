@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New `parallel_chat_text()` and `batch_chat_text()` make it easier to just get the text response from multiple prompts (#510).
 * Tool requests now show converted arguments when printed (#517).
 * Type conversion does a better job with `type_object(.additional_properties = TRUE)` (#519).
 * `chat_cortex_analyst()` is now deprecated; please use `chat_snowflake()` instead (#640).
