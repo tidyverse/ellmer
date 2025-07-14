@@ -192,7 +192,7 @@ test_that("has a basic print method", {
   chat <- chat_openai_test()
   chat$set_turns(list(
     Turn("user", "What's 1 + 1?\nWhat's 1 + 2?"),
-    Turn("assistant", "2\n\n3", tokens = c(15, 5))
+    Turn("assistant", "2\n\n3", tokens = c(10, 5, 5))
   ))
   expect_snapshot(chat)
 })
@@ -201,9 +201,9 @@ test_that("print method shows cumulative tokens & cost", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
   chat$set_turns(list(
     Turn("user", "Input 1"),
-    Turn("assistant", "Output 1", tokens = c(15000, 500)),
+    Turn("assistant", "Output 1", tokens = c(15000, 500, 0)),
     Turn("user", "Input 2"),
-    Turn("assistant", "Output 1", tokens = c(30000, 1000))
+    Turn("assistant", "Output 1", tokens = c(30000, 1000, 0))
   ))
   expect_snapshot(chat)
 

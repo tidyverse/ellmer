@@ -38,10 +38,10 @@ Turn <- new_class(
     json = class_list,
     tokens = new_property(
       class_numeric,
-      default = c(NA_real_, NA_real_),
+      default = c(NA_real_, NA_real_, NA_real_),
       validator = function(value) {
-        if (length(value) != 2) {
-          "must be length two"
+        if (length(value) != 3) {
+          "must be length three"
         }
       }
     ),
@@ -54,7 +54,7 @@ Turn <- new_class(
     role,
     contents = list(),
     json = list(),
-    tokens = c(0, 0)
+    tokens = c(0, 0, 0)
   ) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))

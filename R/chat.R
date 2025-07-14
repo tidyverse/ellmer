@@ -127,8 +127,12 @@ Chat <- R6::R6Class(
       tokens_acc <- t(vapply(
         assistant_turns,
         function(turn) turn@tokens,
-        double(2)
+        double(3)
       ))
+      # Combine counts for input tokens (cached and uncached)
+      tokens_acc[, 1] <- tokens_acc[, 1] + tokens_acc[, 3]
+      # Then drop cached tokens counts
+      tokens_acc <- tokens_acc[, 1:2]
 
       tokens <- tokens_acc
       if (n > 1) {
@@ -136,6 +140,7 @@ Chat <- R6::R6Class(
         tokens[-1, 1] <- tokens[seq(2, n), 1] -
           (tokens[seq(1, n - 1), 1] + tokens[seq(1, n - 1), 2])
       }
+
       # collapse into a single vector
       tokens_v <- c(t(tokens))
       tokens_acc_v <- c(t(tokens_acc))
@@ -170,14 +175,18 @@ Chat <- R6::R6Class(
       tokens <- t(vapply(
         assistant_turns,
         function(turn) turn@tokens,
-        double(2)
+        double(3)
       ))
 
       if (include == "last") {
         tokens <- tokens[nrow(tokens), , drop = FALSE]
       }
 
-      private$compute_cost(input = sum(tokens[, 1]), output = sum(tokens[, 2]))
+      private$compute_cost(
+        input = sum(tokens[, 1]),
+        output = sum(tokens[, 2]),
+        cached_input = sum(tokens[, 3])
+      )
     },
 
     #' @description The last turn returned by the assistant.
@@ -793,12 +802,13 @@ Chat <- R6::R6Class(
       length(private$.turns) > 0 && private$.turns[[1]]@role == "system"
     },
 
-    compute_cost = function(input, output) {
+    compute_cost = function(input, output, cached_input) {
       get_token_cost(
         private$provider@name,
         standardise_model(private$provider, private$provider@model),
         input = input,
-        output = output
+        output = output,
+        cached_input = cached_input
       )
     }
   )

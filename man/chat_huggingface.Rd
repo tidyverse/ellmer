@@ -72,7 +72,6 @@ Other chatbots:
 \code{\link{chat_aws_bedrock}()},
 \code{\link{chat_azure_openai}()},
 \code{\link{chat_cloudflare}()},
-\code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
 \code{\link{chat_deepseek}()},
 \code{\link{chat_github}()},

@@ -15,8 +15,17 @@ supports a wide variety of LLM providers and implements a rich set of
 features including streaming outputs, tool/function calling, structured
 data extraction, and more.
 
-(Looking for something similar to ellmer for python? Check out
-[chatlas](https://github.com/posit-dev/chatlas)!)
+ellmer is one of a number of LLM-related packages created by Posit:
+
+- Looking for something similar in python? Check out
+  [chatlas](https://github.com/posit-dev/chatlas)!
+- Want to evaluate your LLMs? Try
+  [vitals](https://vitals.tidyverse.org).
+- Need RAG? Take a look at [ragnar](https://ragnar.tidyverse.org).
+- Want to make a beautiful LLM powered chatbot? Consider
+  [shinychat](https://posit-dev.github.io/shinychat/).
+- Working with MCP? Check out
+  [mcptools](https://posit-dev.github.io/mcptools/).
 
 ## Installation
 

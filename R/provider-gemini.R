@@ -162,6 +162,8 @@ method(chat_request, ProviderGoogleGemini) <- function(
     )
   }
 
+  req <- unencode_colon(req)
+
   body <- chat_body(
     provider = provider,
     stream = stream,
@@ -284,8 +286,9 @@ method(value_turn, ProviderGoogleGemini) <- function(
   usage <- result$usageMetadata
   tokens <- tokens_log(
     provider,
-    input = usage$promptTokenCount,
-    output = usage$candidatesTokenCount
+    input = usage$promptTokenCount - (usage$cachedContentTokenCount %||% 0),
+    output = usage$candidatesTokenCount,
+    cached_input = usage$cachedContentTokenCount
   )
 
   assistant_turn(contents, json = result, tokens = tokens)
