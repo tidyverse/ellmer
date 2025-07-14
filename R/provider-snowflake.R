@@ -32,7 +32,7 @@ NULL
 #' @inheritParams chat_cortex_analyst
 #' @param model `r param_model("claude-3-7-sonnet")`
 #' @inherit chat_openai return
-#' @examplesIf has_credentials("cortex")
+#' @examplesIf has_credentials("snowflake")
 #' chat <- chat_snowflake()
 #' chat$chat("Tell me a joke in the form of a SQL query.")
 #' @export
