@@ -98,5 +98,5 @@ list_to_atomic <- function(x, type) {
   wrong_type <- types != r_type
   x[wrong_type] <- list(`mode<-`(NA, r_type))
 
-  unlist(x, use.names = FALSE)
+  unlist(x, use.names = FALSE, recursive = FALSE)
 }
