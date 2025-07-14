@@ -132,6 +132,13 @@
     Output
       [tool request (id)]: my_tool(x = c(1, 2), y = c("a", "b"), z = "a")
 
+---
+
+    Code
+      cat(format(content))
+    Output
+      [tool request (id)]: my_tool(x = c(123, 123, 123, 123, 123, 123, 123, 123, 123, 123, ...)
+
 # ContentToolResult@error requires a string or an error condition
 
     Code

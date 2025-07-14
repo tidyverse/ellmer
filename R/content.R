@@ -213,7 +213,12 @@ method(format, ContentToolRequest) <- function(
     arguments <- x@arguments
   }
   call <- call2(x@name, !!!arguments)
-  call_str <- deparse1(call)
+  call_str <- deparse(call)
+  if (length(call_str) > 1) {
+    open <- 
+    call_str <- paste0(call_str[1], "...)")
+  }
+
   if (show == "call") {
     return(call_str)
   }

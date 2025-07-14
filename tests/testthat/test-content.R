@@ -80,6 +80,15 @@ test_that("ContentToolRequest shows converted arguments", {
     tool = my_tool
   )
   expect_snapshot(cat(format(content)))
+
+  # and very long arguments are truncated
+  content <- ContentToolRequest(
+    "id",
+    name = "my_tool",
+    arguments = list(x = rep(123, 1000), y = c("a", "b"), z = "a"),
+    tool = my_tool
+  )
+  expect_snapshot(cat(format(content)))
 })
 
 test_that("ContentToolResult@error requires a string or an error condition", {
