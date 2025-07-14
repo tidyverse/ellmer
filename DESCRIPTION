@@ -80,6 +80,7 @@ Collate:
     'import-standalone-types-check.R'
     'interpolate.R'
     'params.R'
+    'provider-any.R'
     'provider-openai.R'
     'provider-azure.R'
     'provider-bedrock.R'
@@ -109,5 +110,5 @@ Collate:
     'utils-prettytime.R'
     'utils.R'
     'zzz.R'
-Remotes:  
+Remotes: 
     ropensci/vcr
