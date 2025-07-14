@@ -15,7 +15,7 @@ test_that("can chat in parallel", {
 })
 
 test_that("can just get text parallel ", {
-  # TODO: reuse same cassette as above
+  vcr::local_cassette("parallel-basic")
 
   chat <- chat_openai_test()
   out <- parallel_chat_text(chat, list("What's 1 + 1?", "What's 2 + 2?"))
