@@ -148,13 +148,41 @@ property.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># ellmer::has_credentials("openai")</span></span></span>
-<span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Chat ----------------------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">country</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Canada"</span>, <span class="st">"New Zealand"</span>, <span class="st">"Jamaica"</span>, <span class="st">"United States"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">prompts</span> <span class="op">&lt;-</span> <span class="fu"><a href="interpolate.html">interpolate</a></span><span class="op">(</span><span class="st">"What's the capital of {{country}}?"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">parallel_chat</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 tokens=13/7 $0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> [13] ──────────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What's the capital of Canada?</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [7] ──────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of Canada is Ottawa.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 tokens=14/11 $0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> [14] ──────────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What's the capital of New Zealand?</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [11] ─────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of New Zealand is **Wellington**.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 tokens=13/10 $0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> [13] ──────────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What's the capital of Jamaica?</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [10] ─────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of Jamaica is **Kingston**.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 tokens=14/12 $0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> [14] ──────────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What's the capital of United States?</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [12] ─────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of the United States is Washington, D.C.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Structured data -----------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">prompts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
@@ -167,7 +195,13 @@ property.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">type_person</span> <span class="op">&lt;-</span> <span class="fu"><a href="type_boolean.html">type_object</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>, age <span class="op">=</span> <span class="fu"><a href="type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">parallel_chat_structured</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, <span class="va">type_person</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     name age</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   Alex  42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Jamal  27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Li Wei  19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Fatima  35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Robert  51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Kwame  50</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

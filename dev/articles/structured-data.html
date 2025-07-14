@@ -154,6 +154,8 @@ and it can take a vector of prompts.</p>
 <span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, type <span class="op">=</span> <span class="va">type_person</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     name age</span></span>
 <span><span class="co">#&gt; 1   Alex  42</span></span>
@@ -206,7 +208,7 @@ They are created with <code><a href="../reference/type_boolean.html">type_object
 any number of scalars, arrays, and other objects. They are similar to
 named lists in R.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">type_person</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">type_person2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  hobbies <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -233,7 +235,7 @@ attributes you’ll like the value to have (e.g. minimum or maximum
 values, date formats, …). There’s no guarantee that these requests will
 be honoured, but the LLM will try.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">type_type_person</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">type_person3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>  <span class="st">"A person"</span>,</span>
 <span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Name"</span><span class="op">)</span>,</span>
 <span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="st">"Age, in years."</span><span class="op">)</span>,</span>
@@ -248,7 +250,9 @@ be honoured, but the LLM will try.</p>
 </h3>
 <p>The type functions default to <code>required = TRUE</code> which
 means the LLM will try really hard to extract values for you, leading to
-hallucinations if the data doesn’t exist:</p>
+hallucinations if the data doesn’t exist. Lets go back to our initial
+example extracting names and ages, and give it some inputs that don’t
+have names and/or ages.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">no_match</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="st">"I like apples"</span>,</span>
@@ -257,11 +261,11 @@ hallucinations if the data doesn’t exist:</p>
 <span>  <span class="st">"My name is Hadley."</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">no_match</span>, type <span class="op">=</span> <span class="va">type_person</span><span class="op">)</span></span>
-<span><span class="co">#&gt;           name        age</span></span>
-<span><span class="co">#&gt; 1         User          0</span></span>
-<span><span class="co">#&gt; 2 Current Time 1718920360</span></span>
-<span><span class="co">#&gt; 3       cheese          3</span></span>
-<span><span class="co">#&gt; 4       Hadley          0</span></span></code></pre></div>
+<span><span class="co">#&gt;                       name age</span></span>
+<span><span class="co">#&gt; 1                  unknown   0</span></span>
+<span><span class="co">#&gt; 2 Current Time Unavailable   0</span></span>
+<span><span class="co">#&gt; 3                   cheese   3</span></span>
+<span><span class="co">#&gt; 4                   Hadley   0</span></span></code></pre></div>
 <p>You can often avoid this problem by setting
 <code>required = FALSE</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -273,7 +277,7 @@ hallucinations if the data doesn’t exist:</p>
 <span><span class="co">#&gt;     name age</span></span>
 <span><span class="co">#&gt; 1   &lt;NA&gt;  NA</span></span>
 <span><span class="co">#&gt; 2   &lt;NA&gt;  NA</span></span>
-<span><span class="co">#&gt; 3   &lt;NA&gt;   3</span></span>
+<span><span class="co">#&gt; 3 cheese   3</span></span>
 <span><span class="co">#&gt; 4 Hadley  NA</span></span></code></pre></div>
 <p>In other cases, you may need to adjust your prompt as well. Either
 way, we strongly recommend that you include both positive and negative
@@ -578,8 +582,8 @@ and “unearned” income</div>
 <tr class="odd">
 <td align="left">OpenAI</td>
 <td align="left">gpt-4.1</td>
-<td align="right">5991</td>
-<td align="right">888</td>
+<td align="right">7036</td>
+<td align="right">1059</td>
 <td align="right">0</td>
 <td align="right">$0.02</td>
 </tr>
