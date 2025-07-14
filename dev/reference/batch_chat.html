@@ -119,6 +119,8 @@ but if you have ideas, please let me know!</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">batch_chat</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, <span class="va">path</span>, wait <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">batch_chat_text</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, <span class="va">path</span>, wait <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">batch_chat_structured</span><span class="op">(</span></span>
 <span>  <span class="va">chat</span>,</span>
 <span>  <span class="va">prompts</span>,</span>
@@ -183,6 +185,17 @@ and output tokens for each prompt.</p></dd>
 add <code>cost</code> column giving the cost of each prompt.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>For <code>batch_chat()</code>, a list of <a href="Chat.html">Chat</a> objects, one for each prompt.
+For <code>batch_chat_test()</code>, a character vector of text responses.
+For <code>batch_chat_structured()</code>, a single structured data object with one
+element for each prompt. Typically, when <code>type</code> is an object, this will
+will be a data frame with one row for each prompt, and one column for each
+property.</p>
+<p>For any of the aboves, will return <code>NULL</code> if <code>wait = FALSE</code> and the job
+is not complete.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

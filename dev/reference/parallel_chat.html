@@ -74,6 +74,8 @@ with a 50% discount in return for taking up to 24 hours.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parallel_chat</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, max_active <span class="op">=</span> <span class="fl">10</span>, rpm <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">parallel_chat_text</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, max_active <span class="op">=</span> <span class="fl">10</span>, rpm <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">parallel_chat_structured</span><span class="op">(</span></span>
 <span>  <span class="va">chat</span>,</span>
 <span>  <span class="va">prompts</span>,</span>
@@ -140,6 +142,7 @@ add <code>cost</code> column giving the cost of each prompt.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>For <code>parallel_chat()</code>, a list of <a href="Chat.html">Chat</a> objects, one for each prompt.
+For <code>parallel_chat_text()</code>, a character vector of text responses.
 For <code>parallel_chat_structured()</code>, a single structured data object with one
 element for each prompt. Typically, when <code>type</code> is an object, this will
 will be a data frame with one row for each prompt, and one column for each
