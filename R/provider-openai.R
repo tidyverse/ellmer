@@ -264,10 +264,13 @@ method(value_turn, ProviderOpenAI) <- function(
     })
     content <- c(content, calls)
   }
+
+  cached_tokens <- result$usage$prompt_tokens_details$cached_tokens %||% 0
   tokens <- tokens_log(
     provider,
-    input = result$usage$prompt_tokens,
-    output = result$usage$completion_tokens
+    input = result$usage$prompt_tokens - cached_tokens,
+    output = result$usage$completion_tokens,
+    cached_input = cached_tokens
   )
   assistant_turn(
     content,

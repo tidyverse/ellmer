@@ -291,7 +291,8 @@ method(value_turn, ProviderAnthropic) <- function(
   tokens <- tokens_log(
     provider,
     input = result$usage$input_tokens,
-    output = result$usage$output_tokens
+    output = result$usage$output_tokens,
+    cached_input = result$usage$cache_read_input_tokens
   )
 
   assistant_turn(contents, json = result, tokens = tokens)
