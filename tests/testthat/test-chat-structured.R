@@ -67,6 +67,13 @@ test_that("values of wrong type are silently converted to NA", {
   )
 })
 
+test_that("values of incorrect length silently truncated", {
+  expect_equal(
+    convert_from_type(list(c(1, 2), c()), type_array(type_number())),
+    c(1, NA)
+  )
+})
+
 test_that("handles empty and NULL vectors of basic types", {
   type <- type_array(type_boolean(required = FALSE))
   expect_equal(convert_from_type(list(FALSE, TRUE), type), c(FALSE, TRUE))
@@ -84,6 +91,7 @@ test_that("handles empty and NULL vectors of basic types", {
   expect_equal(convert_from_type(list(), type), character())
   expect_equal(convert_from_type(list(NULL), type), NA_character_)
 })
+
 
 test_that("completely missing optional components become NULL", {
   type <- type_integer(required = FALSE)

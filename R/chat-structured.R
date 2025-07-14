@@ -94,9 +94,12 @@ list_to_atomic <- function(x, type) {
     types[integers] <- "double"
   }
 
-  # also captures NULLs
+  # silently replace incorrect types (incl NULLs) to NA
   wrong_type <- types != r_type
   x[wrong_type] <- list(`mode<-`(NA, r_type))
+
+  # silently truncate incorrect lengths to 1
+  x[lengths(x) != 1] <- lapply(x[lengths(x) != 1], \(x) x[1])
 
   unlist(x, use.names = FALSE, recursive = FALSE)
 }
