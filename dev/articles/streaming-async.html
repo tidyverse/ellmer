@@ -90,7 +90,7 @@
 <div class="section level3">
 <h3 id="streaming-results">Streaming results<a class="anchor" aria-label="anchor" href="#streaming-results"></a>
 </h3>
-<p>The <code>chat()</code> method does not return any results until the
+<p>The <code><a href="../reference/chat-any.html">chat()</a></code> method does not return any results until the
 entire response is received. (It can <em>print</em> the streaming
 results to the console but it <em>returns</em> the result only when the
 response is complete.)</p>
@@ -129,7 +129,7 @@ Shiny applications where using the methods described above would block
 the Shiny app for other users for the duration of each response.</p>
 <p>To use async chat, call
 <code>chat_async()</code>/<code>stream_async()</code> instead of
-<code>chat()</code>/<code>stream()</code>. The <code>_async</code>
+<code><a href="../reference/chat-any.html">chat()</a></code>/<code>stream()</code>. The <code>_async</code>
 variants take the same arguments for construction but return a promise
 instead of the actual response.</p>
 <p>Remember that chat objects are stateful; they preserve the
@@ -142,7 +142,7 @@ chat sessions, create multiple chat objects.</p>
 <h3 id="asynchronous-chat">Asynchronous chat<a class="anchor" aria-label="anchor" href="#asynchronous-chat"></a>
 </h3>
 <p>For asynchronous, non-streaming chat, you’d use the
-<code>chat()</code> method as before, but handle the result as a promise
+<code><a href="../reference/chat-any.html">chat()</a></code> method as before, but handle the result as a promise
 instead of a string.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/promises/" class="external-link">promises</a></span><span class="op">)</span></span>
