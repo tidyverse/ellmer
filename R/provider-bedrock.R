@@ -131,6 +131,8 @@ method(chat_request, ProviderAWSBedrock) <- function(
     provider@model,
     if (stream) "converse-stream" else "converse"
   )
+  req <- unencode_colon(req) # model might contain `:` (#646)
+
   creds <- paws_credentials(provider@profile, provider@cache)
   req <- req_auth_aws_v4(
     req,

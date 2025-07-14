@@ -282,3 +282,18 @@ content_types <- function(turns) {
     map_chr(turn@contents, function(x) S7_class(x)@name)
   })
 }
+
+request_summary <- function(req) {
+  list(
+    url = req_get_url(req),
+    headers = req_get_headers(req, "reveal"),
+    body = req_get_body(req)
+  )
+}
+
+unencode_colon <- function(req) {
+  # Hack around new httr2 1.2.0 feature that causes ":" to be escaped
+  # This shouldn't matter in principle, but google doesn't seem to like it
+  req$url <- gsub("%3A", ":", req$url, fixed = TRUE)
+  req
+}

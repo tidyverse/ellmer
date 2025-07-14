@@ -29,7 +29,7 @@
 #' }
 google_upload <- function(
   path,
-  base_url = "https://generativelanguage.googleapis.com/v1beta/",
+  base_url = "https://generativelanguage.googleapis.com/",
   api_key = NULL,
   mime_type = NULL
 ) {
