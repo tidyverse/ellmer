@@ -4,13 +4,18 @@ test_that("can make simple request", {
   chat <- chat_google_gemini_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?")
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
+  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
   chat <- chat_google_gemini_test("Be as terse as possible; no punctuation")
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
+})
+
+test_that("can handle errors", {
+  chat <- chat_google_gemini_test(model = "doesnt-exist")
+  expect_snapshot(chat$chat("Hi"), error = TRUE)
 })
 
 test_that("can list models", {

@@ -1,4 +1,6 @@
 test_that("can chat in parallel", {
+  vcr::local_cassette("parallel-basic")
+
   chat <- chat_openai_test()
   chats <- parallel_chat(chat, list("What's 1 + 1?", "What's 2 + 2?"))
 
@@ -21,6 +23,8 @@ test_that("can just get text parallel ", {
 })
 
 test_that("can call tools in parallel", {
+  vcr::local_cassette("parallel-tool")
+
   prompts <- rep(list("Roll the dice, please! Reply with 'You rolled ____'"), 2)
 
   chat <- chat_openai_test()
@@ -41,6 +45,8 @@ test_that("can call tools in parallel", {
 })
 
 test_that("can have uneven number of turns", {
+  vcr::local_cassette("parallel-tool-uneven")
+
   prompts <- list(
     "Roll the dice, please! Reply with 'You rolled ____'",
     "reply with the word 'boop'",
@@ -66,6 +72,8 @@ test_that("can have uneven number of turns", {
 # structured data --------------------------------------------------------------
 
 test_that("can extract data in parallel", {
+  vcr::local_cassette("parallel-data")
+
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai_test()
@@ -81,6 +89,8 @@ test_that("can extract data in parallel", {
 })
 
 test_that("can get tokens and/or cost", {
+  vcr::local_cassette("parallel-data-cost")
+
   # These are pretty weak, but it's hard to know how to do better.
   person <- type_object(name = type_string(), age = type_integer())
 

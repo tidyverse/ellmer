@@ -17,6 +17,14 @@ sample_cortex_message <- list(
   )
 )
 
+test_that("chat_snowflake_cortex() is deprecated", {
+  withr::local_envvar(
+    SNOWFLAKE_ACCOUNT = "account",
+    SNOWFLAKE_TOKEN = "token"
+  )
+  expect_snapshot(chat_cortex_analyst(model_spec = "test"))
+})
+
 test_that("Cortex messages are converted to turns correctly", {
   p <- provider_cortex_test()
   expect_equal(
@@ -113,12 +121,11 @@ test_that("Cortex API requests are generated correctly", {
     model_file = "@my_db.my_schema.my_stage/model.yaml"
   )
   req <- chat_request(p, FALSE, list(turn))
-  expect_snapshot(req$url)
-  expect_snapshot(req$headers)
-  expect_snapshot(print_json(req$body$data))
+  expect_snapshot(str(request_summary(req)))
 })
 
 test_that("a simple Cortex chatbot works", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   chat <- chat_cortex_analyst(
     model_spec = "name: empty
 description: An empty semantic model specification.

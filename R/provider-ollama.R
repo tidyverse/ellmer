@@ -114,7 +114,7 @@ skip_if_no_ollama <- function() {
 #' @rdname chat_ollama
 models_ollama <- function(base_url = "http://localhost:11434") {
   req <- request(base_url)
-  req <- req_url_path(req, "api/tags")
+  req <- req_url_path_append(req, "api/tags")
   resp <- req_perform(req)
   json <- resp_body_json(resp)
 
@@ -167,7 +167,7 @@ has_ollama <- function(base_url = "http://localhost:11434") {
   tryCatch(
     {
       req <- request(base_url)
-      req <- req_url_path(req, "api/tags")
+      req <- req_url_path_append(req, "api/tags")
       req_perform(req)
       TRUE
     },

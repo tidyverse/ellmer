@@ -224,6 +224,21 @@ check_arguments <- function(arguments, formals, call = caller_env()) {
   invisible()
 }
 
+check_tool <- function(x, arg = caller_arg(x), call = caller_env()) {
+  if (!S7_inherits(x, ToolDef)) {
+    stop_input_type(x, "a <ToolDef>", arg = arg, call = call)
+  }
+}
+
+check_tools <- function(x, arg = caller_arg(x), call = caller_env()) {
+  if (!is_list(x)) {
+    stop_input_type(x, "a list", arg = arg, call = call)
+  }
+  for (i in seq_along(x)) {
+    check_tool(x[[i]], arg = paste0(arg, "[[", i, "]]"), call = call)
+  }
+}
+
 #' Tool annotations
 #'
 #' @description
