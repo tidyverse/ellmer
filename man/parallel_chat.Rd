@@ -89,5 +89,5 @@ prompts <- list(
 )
 type_person <- type_object(name = type_string(), age = type_number())
 parallel_chat_structured(chat, prompts, type_person)
-\dontshow{ellmer:::vcr_example_stop()}
+\dontshow{ellmer:::vcr_example_end()}
 }

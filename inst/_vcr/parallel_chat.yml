@@ -11,43 +11,43 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f173a7eaa5143d-DFW
+      cf-ray: 95f186a93ca06c55-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:43:55 GMT
+      date: Mon, 14 Jul 2025 13:56:53 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '589'
+      openai-processing-ms: '465'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=V.YIZCQseOkRhxjp2o0mS79oR8NH5gxkJ8UlQkMLha8-1752500635-1.0.1.1-8ny75sTtUXeGf_PATbIiXPXlamarmMcA5_RNdCW.KGLrHpnN90meeRck6aFaP1lLj7AFEAOgIRPvKQHAiFS3CWU0yjLPX8iNJR7Wxe6JhkM;
-        path=/; expires=Mon, 14-Jul-25 14:13:55 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=jYJnid8Mh64vsgq87QXQRzLvCkafL6h5tVb.BKfdtMA-1752501413-1.0.1.1-bzko84TCQ8CJPemMe8cBGGO1N66CI0mhM7HniyzWekPW.d01QMoGmUeGPq1ubr6spEEsmCS9rSBjp8rGts.x3LlzDS6kVSXoIYGVUvJ1KHI;
+        path=/; expires=Mon, 14-Jul-25 14:26:53 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=Zbb56V_vbMAu1n35M7ZUqVeHSBOjE3lFu7vIQMX0.vY-1752500635498-0.0.1.1-604800000;
+      - _cfuvid=IFKhHzGf_ij8W5kWiL7VI6D4JE5jOqr7fnhrtUmRRBU-1752501413852-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '591'
+      x-envoy-upstream-service-time: '481'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999989'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_4d4efded5c708699b7e6f8359ec7e3d8
+      x-request-id: req_cb4a6504689de34a288b428839b367d5
     body:
       string: |
         {
-          "id": "chatcmpl-BtDlCj3RjUF2oCyMEV1nfGSguDhrt",
+          "id": "chatcmpl-BtDxlHcd5aPXItTo63t0Wzi2bx6AM",
           "object": "chat.completion",
-          "created": 1752500634,
+          "created": 1752501413,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "The capital of Canada is **Ottawa**.",
+                "content": "The capital of Canada is Ottawa.",
                 "refusal": null,
                 "annotations": []
               },
@@ -57,8 +57,8 @@ http_interactions:
           ],
           "usage": {
             "prompt_tokens": 13,
-            "completion_tokens": 10,
-            "total_tokens": 23,
+            "completion_tokens": 7,
+            "total_tokens": 20,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -71,9 +71,9 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": null
+          "system_fingerprint": "fp_51e1070cf2"
         }
-  recorded_at: 2025-07-14 13:43:55
+  recorded_at: 2025-07-14 13:56:53
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -86,36 +86,36 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f173ac1e75143d-DFW
+      cf-ray: 95f186acbfdd6c55-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:43:56 GMT
+      date: Mon, 14 Jul 2025 13:56:54 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '635'
+      openai-processing-ms: '383'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=NuuvuiP2J48lcCfqxIcs3i4v2aKdeRLku0v.PcNKDDs-1752500636-1.0.1.1-P0eDi1sNNFhKyx_DHZotM.ii1hMrD7A.PqoSr.2r3xCHQrNH0TYPynlNAJQAHBjh95mnyhVHNQ5eieFZNH91KQknENybJ7fUPM7tFDPskZo;
-        path=/; expires=Mon, 14-Jul-25 14:13:56 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=dEsDKSu34RLx8CDudoLhI26nscjXDn1xnr_.RWyPGMY-1752501414-1.0.1.1-8YxzqMKm95F6X3Tch7oqbG1fIRvVeB1PJlLCGJh_Gu7bs2fueXkfgd6CpSVvGUrYyaPCgwUTmaW5gzttlk_X5DJK2AOUGHMTMVhfvlymeRU;
+        path=/; expires=Mon, 14-Jul-25 14:26:54 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=T19wQNx8D0cov1KQmq4EsONIat.385qdUTSRWR6Rwp8-1752500636261-0.0.1.1-604800000;
+      - _cfuvid=7ZkaDSrlh2LtYRRFCVodDs9V5ifSxqTEOJuXWb6wkMc-1752501414305-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '666'
+      x-envoy-upstream-service-time: '386'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999989'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_a0d32db58da2b99d364e876aee0353b6
+      x-request-id: req_861298412dd6c8d6b901bb4025ce80c2
     body:
       string: |
         {
-          "id": "chatcmpl-BtDlD5g8WHxiFcull6tcfn9Zbcach",
+          "id": "chatcmpl-BtDxli0ZxR0kzSB6WTpuYfaA9mSVx",
           "object": "chat.completion",
-          "created": 1752500635,
+          "created": 1752501413,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
@@ -148,7 +148,7 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-14 13:43:56
+  recorded_at: 2025-07-14 13:56:54
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -161,36 +161,36 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f173b16ab5143d-DFW
+      cf-ray: 95f186af9ac86c55-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:43:57 GMT
+      date: Mon, 14 Jul 2025 13:56:56 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '893'
+      openai-processing-ms: '1685'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=uIu69uyYIK7T2udOKx8NCyOY84WJAYRPU1Sk578ljHc-1752500637-1.0.1.1-g4sxfUpOODTALVvknTyFvtQQlBAhbOcl1w5Sq1CNE2PVmhfhssH8es9QjZRIr7qLy9u6vhS9NoWzhLPOQZzFUtKBiRQY_c5EiCoecPJ0QZc;
-        path=/; expires=Mon, 14-Jul-25 14:13:57 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=jjXEoU3yhbaH8laAkT4eCSRxo2IvUR77BaiVfHmUu4Q-1752501416-1.0.1.1-f3I7TH4Qs6iVuGSUo8zx_y0JiyHM1pkGp5FVo2C6MjH07qXNp5lRB5lt8Tq0ClgZ0sePfXe_Axn2BNU2tQh37KiurGIA0QT1LPGijkgV4q0;
+        path=/; expires=Mon, 14-Jul-25 14:26:56 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=nqzZuvm0a3ODOBY2NUFPvuRk52vWcB8fnpiArgNH7W0-1752500637316-0.0.1.1-604800000;
+      - _cfuvid=T6Cwg7LkKTFfHQ9PDXuoENACu_QENVE1l9bjRYhGovk-1752501416090-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '896'
+      x-envoy-upstream-service-time: '1692'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999989'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_a1ec93093f98819692b2a9620a5b61c6
+      x-request-id: req_d515c4c8380246e9885d1f13e5fcd470
     body:
       string: |
         {
-          "id": "chatcmpl-BtDlEwsr42CZaOpHgjWTU0mLcgBoK",
+          "id": "chatcmpl-BtDxm0oRtWXml16bNNx3ayv5VHfXQ",
           "object": "chat.completion",
-          "created": 1752500636,
+          "created": 1752501414,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
@@ -223,7 +223,7 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-14 13:43:57
+  recorded_at: 2025-07-14 13:56:56
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -236,43 +236,43 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f173b77fe7143d-DFW
+      cf-ray: 95f186bb1e3c6c55-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:43:58 GMT
+      date: Mon, 14 Jul 2025 13:56:56 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '611'
+      openai-processing-ms: '283'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=2u6KX5TnSW3xkhXUqqceg2bpJVeurdLvOED_txyGvSg-1752500638-1.0.1.1-YhyO33Lc6eSPbeDBNIwGsCTxBHnbOqz1toPIG7VxcbFpDxzMkbvUsdglowUUn5iZDapxliHdC8QRE8lJ3e6Xfn4Y2p7jF9gtU5dQpEXnPjY;
-        path=/; expires=Mon, 14-Jul-25 14:13:58 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=cyagzM1BZxWUPCsydGQV9NKOgCKJI7qk9No98Sw3jE4-1752501416-1.0.1.1-3LUDfYtYZfzx.Q1F4wZTc9NlfGB8O4jRAKTceo8j.ReoEqgTPJZhl0smW3_WsO6_ikzNP5G4fNJtkg6GPhtzQoVALyc2oS5.02qQLnPLtl4;
+        path=/; expires=Mon, 14-Jul-25 14:26:56 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=mtXWPaBWpzsicwHEn7cWJutIuI6DjfsAkNb_b89sAQQ-1752500638044-0.0.1.1-604800000;
+      - _cfuvid=e8Ak2hfwL7SW4y.H.gTiNzXT6XFDSnEn8azaS2KGm8A-1752501416528-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '614'
+      x-envoy-upstream-service-time: '287'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999989'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_b7963b656f519c1030598f640cab9633
+      x-request-id: req_4be80d6a605e6e5de47cea8f73702676
     body:
       string: |
         {
-          "id": "chatcmpl-BtDlFFdwjHFc6MXs8yUi15WyTTBsa",
+          "id": "chatcmpl-BtDxooyCbZ1QlXpyFfoOkWFv6IaC7",
           "object": "chat.completion",
-          "created": 1752500637,
+          "created": 1752501416,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "The capital of the United States is **Washington, D.C.**",
+                "content": "The capital of the United States is Washington, D.C.",
                 "refusal": null,
                 "annotations": []
               },
@@ -282,8 +282,8 @@ http_interactions:
           ],
           "usage": {
             "prompt_tokens": 14,
-            "completion_tokens": 14,
-            "total_tokens": 28,
+            "completion_tokens": 12,
+            "total_tokens": 26,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -296,9 +296,9 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": null
+          "system_fingerprint": "fp_51e1070cf2"
         }
-  recorded_at: 2025-07-14 13:43:58
+  recorded_at: 2025-07-14 13:56:56
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -311,36 +311,36 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f173bd1ca0143d-DFW
+      cf-ray: 95f186bed9d56c55-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:43:59 GMT
+      date: Mon, 14 Jul 2025 13:56:57 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '890'
+      openai-processing-ms: '350'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=busXoC1GYqbkykeJPwOoHIUpTV.UCyhsskyxCeXEEes-1752500639-1.0.1.1-j98xyZM0dWYxKFmy.0ZVzdiCxSzhCPI_124EI6HekeROUVUNN79ThJNqgUAwzs7RFhYdZH9HGNl4.JdIJMLMeGY.KDTKJ0JqxVdbwTynEAc;
-        path=/; expires=Mon, 14-Jul-25 14:13:59 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=HdRcIutPfQcdkkiACnX5IqM2qwaAvSCyCZZLUS_dMtc-1752501417-1.0.1.1-Sd6bcb7h8eAQPcXs4lC__KWtiBsUmwQCRT6MhiXDDaO6UF88bSWjF3hW6RRNRY8WeecSeuaiIfSR.LYv46N7IJRUJf1hsUKRCkcBF3eIJGU;
+        path=/; expires=Mon, 14-Jul-25 14:26:57 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=Pzb6csiIstdWwPLq2IS1w9am5zF0jCgTfE2n0Is41JM-1752500639202-0.0.1.1-604800000;
+      - _cfuvid=2N5sS1yJ4eEracomFjMi0I1z8D8wNhHzHITtk9FQiKc-1752501417169-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '897'
+      x-envoy-upstream-service-time: '355'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999984'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_f163df8340e401292a4c5df647d45c47
+      x-request-id: req_05e6ef9da570cfa19ff816e0b6829579
     body:
       string: |
         {
-          "id": "chatcmpl-BtDlGqPAGlNgFYqdoxISa2ntIJi5o",
+          "id": "chatcmpl-BtDxoRbsjPrb7sfuNMuJwRT85Bqe2",
           "object": "chat.completion",
-          "created": 1752500638,
+          "created": 1752501416,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
@@ -373,7 +373,7 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-14 13:43:59
+  recorded_at: 2025-07-14 13:56:57
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -386,36 +386,36 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f173c35a27143d-DFW
+      cf-ray: 95f186c18c6a6c55-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:43:59 GMT
+      date: Mon, 14 Jul 2025 13:56:57 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '416'
+      openai-processing-ms: '412'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=prqI_.hGihOu3HR5avpARFWlt9JQtr0StwTVyOadax0-1752500639-1.0.1.1-19xk6rqjrb90WgxOfVzAn194EKSgcFn6nREqY6By8PMf3gmPuX3ytVhUjtgH7u5L4sVYUHw604rRxbdNIAOQhYyhIZxxeUeP_UY3N6waYA8;
-        path=/; expires=Mon, 14-Jul-25 14:13:59 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=5.PEniUfE7wSD6vAqKe5Hus1m0U7ny.2fKR.ME48me0-1752501417-1.0.1.1-pB7m36sYS79EJ1nG95ikoZphtK0EMsKHesLMPeUWJZBP40QDV1XKUnqJv_NlCKWl0HBQBkaAEMZkrki7bXZOXHwNBLkFO5HPtbnNVrnx5fk;
+        path=/; expires=Mon, 14-Jul-25 14:26:57 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=OKt_JtEciYek0Cwi46NW_mQZ5dGwLdXRNN_L5kMngNo-1752500639744-0.0.1.1-604800000;
+      - _cfuvid=ZWkzeSSygTyOAZ6Bmu0_EDRSflOOr6I5sQwNQzCFbAY-1752501417678-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '420'
+      x-envoy-upstream-service-time: '419'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999988'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_bc0861522c99a5f14e6fe5e6e28bf27b
+      x-request-id: req_981b88e308272a6532f65457b9c16410
     body:
       string: |
         {
-          "id": "chatcmpl-BtDlHUgT69FrspuK0NEdiLZbEC1ep",
+          "id": "chatcmpl-BtDxpZdVEXsf6oAE8P6ijyOShnTGa",
           "object": "chat.completion",
-          "created": 1752500639,
+          "created": 1752501417,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
@@ -446,9 +446,9 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": null
+          "system_fingerprint": "fp_799e4ca3f1"
         }
-  recorded_at: 2025-07-14 13:43:59
+  recorded_at: 2025-07-14 13:56:57
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -461,36 +461,36 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f173c73db2143d-DFW
+      cf-ray: 95f186c4bf9e6c55-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:44:00 GMT
+      date: Mon, 14 Jul 2025 13:56:58 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '244'
+      openai-processing-ms: '399'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=FhO5zekIsGGcU4knqzecqQjDUxvnQg7_n_bM7OkE7aE-1752500640-1.0.1.1-QDd69p.MPzGv.Qb9fM0Cb.SyatYZLVIFcp0ZpihDyERjAJvpu3olgHlT.QETcNFID2MR8HQjyPuUQ4IIXHh6_6HHo5Ioy6pjLzFoQI0YQZ4;
-        path=/; expires=Mon, 14-Jul-25 14:14:00 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=Ti4kzigQqgTVUqxTGD.2LDIQc12gEpF5XfQ7N7.sng8-1752501418-1.0.1.1-QYU0.7dr29XbjUxHBtgO3J0_JEwATieQPZHGVT0f5ko0qS1fdz7i9vf4uWnyhq8L5xuCJ.mbg6Fo4i0SU5oECm0iGXqyttKudVgizRMdAG8;
+        path=/; expires=Mon, 14-Jul-25 14:26:58 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=IIFLVWrazkDaM0C1ZupN1gjBtIIHWLEXeYN5XSoJN_A-1752500640192-0.0.1.1-604800000;
+      - _cfuvid=_WcC5gb3VGqXeK35.NUg1Oi6mPSOsnZpA7VFswJtSdc-1752501418173-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '247'
+      x-envoy-upstream-service-time: '404'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999987'
+      x-ratelimit-remaining-tokens: '29999986'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_ebcecb4f71d549aa529a9ce578087471
+      x-request-id: req_05ed1a843a511e4591d0a7ea9e2b5f4b
     body:
       string: |
         {
-          "id": "chatcmpl-BtDlHP8ClvKq3Rd8pJxDLZx29QDC0",
+          "id": "chatcmpl-BtDxphW8CtbLWHRXnwTtfaZjn4GlB",
           "object": "chat.completion",
-          "created": 1752500639,
+          "created": 1752501417,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
@@ -523,7 +523,7 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-14 13:44:00
+  recorded_at: 2025-07-14 13:56:58
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -536,36 +536,36 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f173c97fb3143d-DFW
+      cf-ray: 95f186c87b196c55-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:44:00 GMT
+      date: Mon, 14 Jul 2025 13:56:58 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '338'
+      openai-processing-ms: '389'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=aNmJ_jQmOMMr3kKQOoV59dIibhWKIjZ03iMbcMuk4sQ-1752500640-1.0.1.1-tfdnZ848kPqS1wCWa9F8TkQK3P.Jcww1t2pEbwshoWsdpy8R_U3OL5lGD7jt8OImmBXlhqmH7TCBEfSma3.H381nVO.IhIc0FVWGfosDd9c;
-        path=/; expires=Mon, 14-Jul-25 14:14:00 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=9yDmWPrA0fDrdFlXWRkG.7rZlXnC2UzNbXa7xUDiVJw-1752501418-1.0.1.1-lhO8nshMErduj376NWhD6NOiknPV5nDprf6TKvA.8v0g1DiVKF1fVpRtW8eJHt7wkTbl1Vzw.AQThA0VjT1HjuASaYxRCqicriih8COLagI;
+        path=/; expires=Mon, 14-Jul-25 14:26:58 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=cKDDWvcEe9YysjR5_aNkuTH8rmv9c_KxzhyePQIPU9w-1752500640635-0.0.1.1-604800000;
+      - _cfuvid=5p_6FzuqYwpA3gDioTn.1MeTrjB.Gs8wIjHZfNHHLi0-1752501418749-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '341'
+      x-envoy-upstream-service-time: '393'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999984'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_68e4b46eea4a35c1b7af61bea65b0d36
+      x-request-id: req_d80299f1e6fc1b37486c8197ac281a01
     body:
       string: |
         {
-          "id": "chatcmpl-BtDlI6yW5F0dDl8fuSbK4KUcXhzWf",
+          "id": "chatcmpl-BtDxqsw7oq3gK8V8gsvIP9XbTYkcC",
           "object": "chat.completion",
-          "created": 1752500640,
+          "created": 1752501418,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
@@ -598,7 +598,7 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-14 13:44:00
+  recorded_at: 2025-07-14 13:56:58
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -611,36 +611,36 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f173cc39fa143d-DFW
+      cf-ray: 95f186cb5d936c55-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:44:01 GMT
+      date: Mon, 14 Jul 2025 13:56:59 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '411'
+      openai-processing-ms: '663'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=04dDr8mCMUAVmbnraQujPAT.BZQEhWlD82fFgYFPUmY-1752500641-1.0.1.1-RQrrV.kpX7.V8t1aHAe9yuUQL96FkXFGJ5P2SIEKwXeHkMDRI7b1r07JTJLaa9BiHdNGBHzVCNxFEswS2JN3zNEkFMuscHO6IG9UzUn7M50;
-        path=/; expires=Mon, 14-Jul-25 14:14:01 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=B5czyWRZ84ponOhVUzQqqIsxYQDmftCwO7nYCQqDDus-1752501419-1.0.1.1-xSjkC9FsbOKt_zaPTly9W5X5yIZTBHKlMZL34U1XEomBjv5KX5Zf91legqcFQDt7PzIEKBtM7RzlY_Tb2rMwQF3Oq35PwXrKc.V_vy7RWls;
+        path=/; expires=Mon, 14-Jul-25 14:26:59 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=jJP2He7pOWj3pb5ZCxM8Ax_tLEYF7vz46j4CKYZld5c-1752500641135-0.0.1.1-604800000;
+      - _cfuvid=HvgBWxja3UuxDgEuULMXezkaRn8bKHrm2SFf9_YgSO8-1752501419526-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '414'
+      x-envoy-upstream-service-time: '668'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999984'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6f965d15f609da462dd906bb23892254
+      x-request-id: req_2b3e04f5a0d2ec29810f42bd76f7cc79
     body:
       string: |
         {
-          "id": "chatcmpl-BtDlI0lgfsFp0h1YUBwXV30z0fKLs",
+          "id": "chatcmpl-BtDxqdll7fCBbk0vsX7hs1uHFRD4G",
           "object": "chat.completion",
-          "created": 1752500640,
+          "created": 1752501418,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
@@ -673,7 +673,7 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-14 13:44:01
+  recorded_at: 2025-07-14 13:56:59
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -686,36 +686,36 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f173cf6d0e143d-DFW
+      cf-ray: 95f186d04a8d6c55-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:44:01 GMT
+      date: Mon, 14 Jul 2025 13:57:00 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '492'
+      openai-processing-ms: '1103'
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=8Fx70myhNSAWnrp4ugSvxqoYo6VZOcgPwrMoSMLJzQo-1752500641-1.0.1.1-l53bimKetAC23Eio3vyQ4RAx1ZBpL9aiIidmjz9DuFYf0vUXsoAOtAtd5fY71SpCkCz34QzstwUvgo8yoBtM9V2gwnJZ1b2rnjtXgghy27o;
-        path=/; expires=Mon, 14-Jul-25 14:14:01 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=ZOg8RHHOn4Lp1fXaBYXupX4OAMNcKAWQfMOT99W.GOA-1752501420-1.0.1.1-Pc65Sq4jcITwLQUNSo7Ei3TmKhPthKgvBdqnpGM5GNjScB17SvFb8CKznq1M8XYhRejudxLIXK.n0csXlNzlIfR0FvWzZeu5qiV0YgikXmM;
+        path=/; expires=Mon, 14-Jul-25 14:27:00 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=6XgHjcSlB.5na2u9awTs1JmbpEKLqXYh2YpafgMspbQ-1752500641740-0.0.1.1-604800000;
+      - _cfuvid=1uYChodWr.szDK8OtNyFr99IDMYlGZoC3DI.b3qd4fM-1752501420729-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '500'
+      x-envoy-upstream-service-time: '1120'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999986'
+      x-ratelimit-remaining-tokens: '29999987'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_ac3dc30e1aad62d016f0605627cf1566
+      x-request-id: req_b4529da997702e658966356c2c130708
     body:
       string: |
         {
-          "id": "chatcmpl-BtDlJQTzYGfgvR6xDijbtbyL392Fn",
+          "id": "chatcmpl-BtDxr4qHuM4QKJtx4GAKerFR3AmQl",
           "object": "chat.completion",
-          "created": 1752500641,
+          "created": 1752501419,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
@@ -748,1326 +748,5 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-14 13:44:01
-- request:
-    method: GET
-    uri: https://api.github.com/repos/tidyverse/ellmer
-  response:
-    status: 200
-    headers:
-      date: Mon, 14 Jul 2025 13:44:23 GMT
-      content-type: application/json; charset=utf-8
-      cache-control: private, max-age=60, s-maxage=60
-      vary: Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With
-      etag: W/"64abac5fbe63378a5a09ed2349a858a0c9bb0759964e45e52d4f384f4a17b8c4"
-      last-modified: Sat, 12 Jul 2025 21:02:07 GMT
-      x-oauth-scopes: repo, workflow
-      x-accepted-oauth-scopes: repo
-      x-github-media-type: github.v3; format=json
-      x-github-api-version-selected: '2022-11-28'
-      x-ratelimit-limit: '5000'
-      x-ratelimit-remaining: '4950'
-      x-ratelimit-reset: '1752501164'
-      x-ratelimit-used: '50'
-      x-ratelimit-resource: core
-      access-control-expose-headers: ETag, Link, Location, Retry-After, X-GitHub-OTP,
-        X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource,
-        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
-        X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset
-      access-control-allow-origin: '*'
-      strict-transport-security: max-age=31536000; includeSubdomains; preload
-      x-frame-options: deny
-      x-content-type-options: nosniff
-      x-xss-protection: '0'
-      referrer-policy: origin-when-cross-origin, strict-origin-when-cross-origin
-      content-security-policy: default-src 'none'
-      content-encoding: gzip
-      x-github-request-id: D978:31F525:D5A174F:1B0CF16F:687509B7
-      server: github.com
-    body:
-      string: '{"id":848499483,"node_id":"R_kgDOMpMTGw","name":"ellmer","full_name":"tidyverse/ellmer","private":false,"owner":{"login":"tidyverse","id":22032646,"node_id":"MDEyOk9yZ2FuaXphdGlvbjIyMDMyNjQ2","avatar_url":"https://avatars.githubusercontent.com/u/22032646?v=4","gravatar_id":"","url":"https://api.github.com/users/tidyverse","html_url":"https://github.com/tidyverse","followers_url":"https://api.github.com/users/tidyverse/followers","following_url":"https://api.github.com/users/tidyverse/following{/other_user}","gists_url":"https://api.github.com/users/tidyverse/gists{/gist_id}","starred_url":"https://api.github.com/users/tidyverse/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/tidyverse/subscriptions","organizations_url":"https://api.github.com/users/tidyverse/orgs","repos_url":"https://api.github.com/users/tidyverse/repos","events_url":"https://api.github.com/users/tidyverse/events{/privacy}","received_events_url":"https://api.github.com/users/tidyverse/received_events","type":"Organization","user_view_type":"public","site_admin":false},"html_url":"https://github.com/tidyverse/ellmer","description":"Call
-        LLM APIs from R","fork":false,"url":"https://api.github.com/repos/tidyverse/ellmer","forks_url":"https://api.github.com/repos/tidyverse/ellmer/forks","keys_url":"https://api.github.com/repos/tidyverse/ellmer/keys{/key_id}","collaborators_url":"https://api.github.com/repos/tidyverse/ellmer/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/tidyverse/ellmer/teams","hooks_url":"https://api.github.com/repos/tidyverse/ellmer/hooks","issue_events_url":"https://api.github.com/repos/tidyverse/ellmer/issues/events{/number}","events_url":"https://api.github.com/repos/tidyverse/ellmer/events","assignees_url":"https://api.github.com/repos/tidyverse/ellmer/assignees{/user}","branches_url":"https://api.github.com/repos/tidyverse/ellmer/branches{/branch}","tags_url":"https://api.github.com/repos/tidyverse/ellmer/tags","blobs_url":"https://api.github.com/repos/tidyverse/ellmer/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/tidyverse/ellmer/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/tidyverse/ellmer/git/refs{/sha}","trees_url":"https://api.github.com/repos/tidyverse/ellmer/git/trees{/sha}","statuses_url":"https://api.github.com/repos/tidyverse/ellmer/statuses/{sha}","languages_url":"https://api.github.com/repos/tidyverse/ellmer/languages","stargazers_url":"https://api.github.com/repos/tidyverse/ellmer/stargazers","contributors_url":"https://api.github.com/repos/tidyverse/ellmer/contributors","subscribers_url":"https://api.github.com/repos/tidyverse/ellmer/subscribers","subscription_url":"https://api.github.com/repos/tidyverse/ellmer/subscription","commits_url":"https://api.github.com/repos/tidyverse/ellmer/commits{/sha}","git_commits_url":"https://api.github.com/repos/tidyverse/ellmer/git/commits{/sha}","comments_url":"https://api.github.com/repos/tidyverse/ellmer/comments{/number}","issue_comment_url":"https://api.github.com/repos/tidyverse/ellmer/issues/comments{/number}","contents_url":"https://api.github.com/repos/tidyverse/ellmer/contents/{+path}","compare_url":"https://api.github.com/repos/tidyverse/ellmer/compare/{base}...{head}","merges_url":"https://api.github.com/repos/tidyverse/ellmer/merges","archive_url":"https://api.github.com/repos/tidyverse/ellmer/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/tidyverse/ellmer/downloads","issues_url":"https://api.github.com/repos/tidyverse/ellmer/issues{/number}","pulls_url":"https://api.github.com/repos/tidyverse/ellmer/pulls{/number}","milestones_url":"https://api.github.com/repos/tidyverse/ellmer/milestones{/number}","notifications_url":"https://api.github.com/repos/tidyverse/ellmer/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/tidyverse/ellmer/labels{/name}","releases_url":"https://api.github.com/repos/tidyverse/ellmer/releases{/id}","deployments_url":"https://api.github.com/repos/tidyverse/ellmer/deployments","created_at":"2024-08-27T21:55:59Z","updated_at":"2025-07-12T21:02:07Z","pushed_at":"2025-07-14T13:31:58Z","git_url":"git://github.com/tidyverse/ellmer.git","ssh_url":"git@github.com:tidyverse/ellmer.git","clone_url":"https://github.com/tidyverse/ellmer.git","svn_url":"https://github.com/tidyverse/ellmer","homepage":"https://ellmer.tidyverse.org/","size":9471,"stargazers_count":481,"watchers_count":481,"language":"R","has_issues":true,"has_projects":false,"has_downloads":true,"has_wiki":false,"has_pages":true,"has_discussions":false,"forks_count":86,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":63,"license":{"key":"other","name":"Other","spdx_id":"NOASSERTION","url":null,"node_id":"MDc6TGljZW5zZTA="},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":86,"open_issues":63,"watchers":481,"default_branch":"main","permissions":{"admin":true,"maintain":true,"push":true,"triage":true,"pull":true},"temp_clone_token":"","allow_squash_merge":true,"allow_merge_commit":false,"allow_rebase_merge":true,"allow_auto_merge":false,"delete_branch_on_merge":true,"allow_update_branch":false,"use_squash_pr_title_as_default":false,"squash_merge_commit_message":"COMMIT_MESSAGES","squash_merge_commit_title":"COMMIT_OR_PR_TITLE","merge_commit_message":"PR_TITLE","merge_commit_title":"MERGE_MESSAGE","custom_properties":{},"organization":{"login":"tidyverse","id":22032646,"node_id":"MDEyOk9yZ2FuaXphdGlvbjIyMDMyNjQ2","avatar_url":"https://avatars.githubusercontent.com/u/22032646?v=4","gravatar_id":"","url":"https://api.github.com/users/tidyverse","html_url":"https://github.com/tidyverse","followers_url":"https://api.github.com/users/tidyverse/followers","following_url":"https://api.github.com/users/tidyverse/following{/other_user}","gists_url":"https://api.github.com/users/tidyverse/gists{/gist_id}","starred_url":"https://api.github.com/users/tidyverse/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/tidyverse/subscriptions","organizations_url":"https://api.github.com/users/tidyverse/orgs","repos_url":"https://api.github.com/users/tidyverse/repos","events_url":"https://api.github.com/users/tidyverse/events{/privacy}","received_events_url":"https://api.github.com/users/tidyverse/received_events","type":"Organization","user_view_type":"public","site_admin":false},"security_and_analysis":{"secret_scanning":{"status":"disabled"},"secret_scanning_push_protection":{"status":"disabled"},"dependabot_security_updates":{"status":"disabled"},"secret_scanning_non_provider_patterns":{"status":"disabled"},"secret_scanning_validity_checks":{"status":"disabled"}},"network_count":86,"subscribers_count":18}'
-  recorded_at: 2025-07-14 13:44:23
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f175b32917143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:18 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '311'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=QwqOD32sfGqkGRLR1tsf6kk0asm5MOCJRbaxx4dZJE0-1752500718-1.0.1.1-i_ABSKdypztLvE8mW4L636dBTRvTgSxgEIWEmlGfq4t.0ViBnuwq1nipZVs1vzrMStcNL2ZGcHBmFqzPKtKA9W3aBkWVcODN72D4VSpBq0s;
-        path=/; expires=Mon, 14-Jul-25 14:15:18 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=Kl4Sf2RJhxZzGAEhjAX2sz8siVneoDyQZ1DFwiNPWrQ-1752500718947-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '317'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999988'
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_7849f33ca376fe622aed0e19435784fd
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDmYyxfFETzbAcjq6qzfSMGqmMS5",
-          "object": "chat.completion",
-          "created": 1752500718,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Susan\",\"age\":13}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 74,
-            "completion_tokens": 11,
-            "total_tokens": 85,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:45:18
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"primary_shape":{"type":"string","description":""},"primary_colour":{"type":"string","description":""}},"required":["primary_shape","primary_colour"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f175b63b68143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:21 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '2113'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=LWrbr2mm4vJS.PcFbNY2Q7PceRbnfwQQMPu_wEnEQyY-1752500721-1.0.1.1-T.RNA2Kz.d3S54qygTCuKhjkBnJxF.jQX5F5D3FipjUvSvN0RFTlxQxthYWTwmz5aKnPGfGEHHt1X8VA5v_XmpMRgs_2_.tYa1zV0DPLuzc;
-        path=/; expires=Mon, 14-Jul-25 14:15:21 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=dU1KlikdVUM.gUoUku42lkMDeOi7FjfiTpxNF483cx0-1752500721244-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '979'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999217'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_bc01caab5513656358e0cfbac29805a8
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDmac6ejJLeVcHMz8uMj30bpuwy9",
-          "object": "chat.completion",
-          "created": 1752500720,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"primary_shape\":\"letter R overlaid on an oval\",\"primary_colour\":\"blue (R), gray (oval)\"}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 339,
-            "completion_tokens": 26,
-            "total_tokens": 365,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:45:21
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"I go by Alex.
-        42 years on this planet and counting."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f175c52ee6143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:23 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '2376'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=B5sAbLVLh65akGO8w9xj49DoToECgOHWGHicJitkP2s-1752500723-1.0.1.1-XRypVs.X35UAneUbeMaDbV1q8LDQn.ynDCWf.H8PRAMQT24vGg.FZ3qnb.pbJCxHh7erBfpR.6TZua1obUfb4twjW9MloKgIw6Ya3vb2G.4;
-        path=/; expires=Mon, 14-Jul-25 14:15:23 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=mw1.xTEaM1twhRst.GdD7txJTQSFbis5e._TUxSXmXU-1752500723982-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '538'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999197'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_3a530e4a116cd97114a7abf0bc91b39d
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDmdfw5OP92e2bCdSbguhaLAiLUs",
-          "object": "chat.completion",
-          "created": 1752500723,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Alex\",\"age\":42}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 363,
-            "completion_tokens": 11,
-            "total_tokens": 374,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:45:23
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"Pleased to meet
-        you! I''m Jamal, age 27."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f175d51bb6143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:25 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '946'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=e3WpJA39IHnsuWDb1d0HqqXkljS21PNi1pVSiIc5mLM-1752500725-1.0.1.1-o.1XWujLZ0OKUGmln7YERhUTxo5Nq2QaCEL_UHosIWw.JEebILcS8iA8yBgCUDYlZ0FsDMeeqQZiQuhdriGwt7JoGwxOQaueFbVE2guKiP0;
-        path=/; expires=Mon, 14-Jul-25 14:15:25 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=LjfTpOQLT6.8VAFl1Qyye61IOLn9Rmm3ppeJGeeCxW4-1752500725033-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '661'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999200'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_a7403c46762ae6a33a7ea28fad1b34ff
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDme0wa6qOgIeLtiwWnTTgrDpelH",
-          "object": "chat.completion",
-          "created": 1752500724,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Jamal\",\"age\":27}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 363,
-            "completion_tokens": 12,
-            "total_tokens": 375,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": "fp_51e1070cf2"
-        }
-  recorded_at: 2025-07-14 13:45:25
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"They call me Li
-        Wei. Nineteen years young."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f175dbe9ff143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:26 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1165'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=T1P.SpQRxNaRb2IV6pu9Yus_ihWF8rUsXdjNBJ4xdZo-1752500726-1.0.1.1-yKXP5.6vfOIByqw0niAOLiOfQ940C51KHfkqgJHM_FVzKzyuxPCflKaaxtiTvFfHWGju.IVWtQAkqFIr.FI4NTKctfqJbXXRLsqLD6wP638;
-        path=/; expires=Mon, 14-Jul-25 14:15:26 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=ICojmAO38tnoXnv8FP3KoaqJ9X2CmmFwpWqXR_Z6YDA-1752500726326-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '615'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999199'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_8e244330b549d8b6feca1a5075d45902
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDmfduLmJHECJdx1MAFlim2WRVtJ",
-          "object": "chat.completion",
-          "created": 1752500725,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Li Wei\",\"age\":19}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 361,
-            "completion_tokens": 12,
-            "total_tokens": 373,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:45:26
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"Fatima here. Just
-        celebrated my 35th birthday last week."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f175e3d9de143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:28 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1752'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=S40uaq6lJZTJbYJ_qkiv6R8P7GktS6Idgc.2ifdbRGU-1752500728-1.0.1.1-RLuqPAVNchuYEbMvrTeCx95s1CW.LOpmGAzzXfm44vAQqc_kna5Gv0b7mL2mv1NOZqRNvLidxs2WSGlfN4E_qypUOGXUqgQ5773KgpCqzTY;
-        path=/; expires=Mon, 14-Jul-25 14:15:28 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=10TBb6JdqI6CYzw2stOd8.CY7m4IwmrqvQL5LgvJXUE-1752500728201-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '876'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999196'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_938464e9234e1c7ce1f4fa1439cf7552
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDmhrxzga4pYRBKZne89aLouBPy5",
-          "object": "chat.completion",
-          "created": 1752500727,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Fatima\",\"age\":35}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 363,
-            "completion_tokens": 12,
-            "total_tokens": 375,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:45:28
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"The name''s Robert
-        - 51 years old and proud of it."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f175ef9d34143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:29 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1609'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=ZRt3J5mVLFozH08qkpqS6t35wjJF1nm5PG0xwrG_WuY-1752500729-1.0.1.1-IocfYNVsGyjan28Gwhrkd_55y4ygKC7Xypy7hrp73b6SYAAdkv_8NRYu8EtdAX8JyyOWqfXITlo706OXEPeJoagiL.V9HTd_VBgz.afBfIw;
-        path=/; expires=Mon, 14-Jul-25 14:15:29 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=TsqzI.dM2D6uVgRXgIVJZW0Q5UKif.z0Bo5FQ5uavmg-1752500729921-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '613'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999197'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_a57562b9b7cabc0e488f437c435653fb
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDmjIUG3zEIbcI4kKuE5ddpUjCF5",
-          "object": "chat.completion",
-          "created": 1752500729,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Robert\",\"age\":51}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 363,
-            "completion_tokens": 11,
-            "total_tokens": 374,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:45:29
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"Kwame here - just
-        hit the big 5-0 this year."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f175fa4806143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:31 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1234'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=GTGLDZM4YBzdfsHKfE08Jnf1VxtTUA4FAAOXpTEdOGQ-1752500731-1.0.1.1-5I5ONHrJpdWOMOh0714DpFT8mDBmofc1BdGy4tCLE.GvVtTgYbhadX6pYjixZjI3d2o2CV1pnxSuoO6pxf2Cuf8hiWm.d5MGGz3nhOvHE5U;
-        path=/; expires=Mon, 14-Jul-25 14:15:31 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=l54HQVaJCjchlI7aSwpJQhEwtCSuNpJjDXgP.lEs.xU-1752500731286-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '660'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999198'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_00ad52576e98c8eee9ba03857ed32696
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDmkxGAfZUJezZyr2bIVTvYrlUdD",
-          "object": "chat.completion",
-          "created": 1752500730,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Kwame\",\"age\":50}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 364,
-            "completion_tokens": 12,
-            "total_tokens": 376,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:45:31
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"I like apples"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""},"hobbies":{"type":"array","description":"","items":{"type":"string","description":""}}},"required":["name","age","hobbies"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f176031f24143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:37 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '5762'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=6gcok.jaIPbyKziUDnhNdwzUj7i8Sm9MMN.8ewX5ovo-1752500737-1.0.1.1-43Cww.oBKpMidEHohpDNPP1FvdlXNOsw_mhGjmLZ9GttQTjkZje013IV_HqMeIOAnbsT06_3c_0HQUfylEy8U5Ji1KPHEws0a6wm.0g.4TM;
-        path=/; expires=Mon, 14-Jul-25 14:15:37 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=ISy97QJGZnavz8ieowFq4CCE9ciVKks8B7auQhngiJI-1752500737211-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '5167'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999207'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_8350e1d795a04037fd2cc6e13348ebf3
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDmmlxEB0OCDAvMD90AT9kIJYmV8",
-          "object": "chat.completion",
-          "created": 1752500732,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Susan\",\"age\":13,\"hobbies\":[\"apples\"]}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 371,
-            "completion_tokens": 18,
-            "total_tokens": 389,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:45:37
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"What time is it?"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""},"hobbies":{"type":"array","description":"","items":{"type":"string","description":""}}},"required":["name","age","hobbies"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f17627fd9a143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:39 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1864'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=jB5FhEIr_gL5epkY1EQ3Yp7i1Wi.5o5TKMXvXYNaogQ-1752500739-1.0.1.1-5z71trAr5PUlifIXYyauEI7sLZqBI70RcofEzuL22c5DpxplSjzCzMT1aSqeJHDm2hzWuGWszzzkIB5L1lRYvmZra40csdqrv7i8RwlOx_M;
-        path=/; expires=Mon, 14-Jul-25 14:15:39 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=mOkBiJ32N8AJD1YZIY6bjesZtPLSW13RGcHSMoDzL8w-1752500739182-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '555'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999205'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_a8f7a7165dceb7fab25331b0bd9b109e
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDms4tm0BPgyVTYxp2YmZZ8VfJaI",
-          "object": "chat.completion",
-          "created": 1752500738,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Susan\",\"age\":13,\"hobbies\":[]}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 373,
-            "completion_tokens": 15,
-            "total_tokens": 388,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": "fp_51e1070cf2"
-        }
-  recorded_at: 2025-07-14 13:45:39
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"This cheese is
-        3 years old"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""},"hobbies":{"type":"array","description":"","items":{"type":"string","description":""}}},"required":["name","age","hobbies"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f17634388f143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:41 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1921'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=Q913lgfAoNUXFEMUn7_TBfA2ctI8nMRtAU4IY.FjRUY-1752500741-1.0.1.1-st62SiEeClUkgXXTJ14ndnDt5zLYYiCCBDLGtDXjz.jYWOyr27Pc1qbAIgjEbjKxiqh10XPiukzVHPJ9E.UInR5mwOQNiWMa9e2XCS40bJk;
-        path=/; expires=Mon, 14-Jul-25 14:15:41 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=dXjgUiZuIjmEZXk0yGchIKygHq.72IGem_Gw5XA5.C0-1752500741224-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '763'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999203'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_6da8ea67ddf33cbc5ac9f05e8d80eb94
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDmu25yXhJ6hDLWDaQAhcszIPJlV",
-          "object": "chat.completion",
-          "created": 1752500740,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"cheese\",\"age\":3,\"hobbies\":[]}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 375,
-            "completion_tokens": 16,
-            "total_tokens": 391,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:45:41
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"My name is Hadley."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""},"hobbies":{"type":"array","description":"","items":{"type":"string","description":""}}},"required":["name","age","hobbies"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f17640dbb8143d-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:45:43 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '2221'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=Ova8RlIdwa7jy9cD3rP3Qe2CeQebwLanyeAtw2pavt4-1752500743-1.0.1.1-m1CG3Kjf.kD0iu.p1lBDnfLRquKkPO33G7pr1tSmCc08J52damxgSSYkKM6aAsTl6Z8itBUWyqSxUqVGogWCWE5Vv2FXC4KXUHKRE9h_qbU;
-        path=/; expires=Mon, 14-Jul-25 14:15:43 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=L_jDk36mgFL.DU4OmvwSoFimQQZ8PaSFcZbOtpNuN2s-1752500743553-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1278'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999206'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_0ac26a598c4366d80791a9e3854bbace
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDmwLJ4SOfthYrt7WXhRUCHnpET0",
-          "object": "chat.completion",
-          "created": 1752500742,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Hadley\",\"age\":0,\"hobbies\":[]}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 374,
-            "completion_tokens": 16,
-            "total_tokens": 390,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:45:43
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"I like apples"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""},"hobbies":{"type":"array","description":"","items":{"type":"string","description":""}}},"required":["name","age","hobbies"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f17b9a3924f040-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:49:23 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1622'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=dPsR0Nz76SZ0U2MtEpq6_bSJyf7_53wA0VleMP1bWag-1752500963-1.0.1.1-aZjPLDEauiPK7L0m5XgLCT8u99QkzPc5cABMQjspLxRLRzFgzp9_wvDto6QGH3K34VfXaADIVdqI0EKpG0j03QTs3mk.L7jT.RsVgBsFscI;
-        path=/; expires=Mon, 14-Jul-25 14:19:23 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=Q10d6xp.N.DTkIicTyiPGMLbOIQr5UIiF_N4Lr26cdc-1752500963061-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '695'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999207'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_ff164ae118d9c921cfbde0d9a0ac9230
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDqU0YmutuYaHIF4FlUxu6Trl8zX",
-          "object": "chat.completion",
-          "created": 1752500962,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Susan\",\"age\":13,\"hobbies\":[\"apples\"]}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 371,
-            "completion_tokens": 18,
-            "total_tokens": 389,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:49:23
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"What time is it?"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""},"hobbies":{"type":"array","description":"","items":{"type":"string","description":""}}},"required":["name","age","hobbies"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f17babc915f040-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:49:24 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1583'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=aW8JLxD3FDMMbGNtcaUNCnHzrcqF6u84loMaipNWyRs-1752500964-1.0.1.1-JrHErIf_BsfmARVdmpoJ8Lb4naCPlSYJzhu4ts7MHZnnjE_PQAKv3XuBHwyg5wfMrtTudQJmgQcnu3CUTcsv8HhNoECwvHDOhTELl6KuX2I;
-        path=/; expires=Mon, 14-Jul-25 14:19:24 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=KlzVbfRUxUdne4V3H0DKM.AZkBN8Tg7ai71Le2PoFdo-1752500964805-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '598'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999206'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_31d1f6bdd08c08c5d04b10192be2e578
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDqWzAMKKii0TM8csDdahUxdTxU6",
-          "object": "chat.completion",
-          "created": 1752500964,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Susan\",\"age\":13,\"hobbies\":[]}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 373,
-            "completion_tokens": 15,
-            "total_tokens": 388,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:49:24
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"This cheese is
-        3 years old"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""},"hobbies":{"type":"array","description":"","items":{"type":"string","description":""}}},"required":["name","age","hobbies"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f17bb64b3bf040-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:49:26 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1360'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=S8J_6JLq5RCVHJzoo8gFv3p1i0eE4PWoCQWr6J5JBAk-1752500966-1.0.1.1-_Gu1DyZELZ11RQ0MEB.XIosE197EI4m6SAncCA67q6TVrxzUZEruEW3MSWyTjAmKwAZ9iPeSTKrot_iUl6aBAk5RL4FPvUPtLC4spK5GF2c;
-        path=/; expires=Mon, 14-Jul-25 14:19:26 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=CvgtkRuzscPGxGVbwwGGgzlfpaqMEqaA9ErCLpl2SsU-1752500966400-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '817'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999203'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_92045ac4c9a0e8f7d867ace8470fa6c3
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDqXZtA6eVUAZfDc0J4jQgHw55vb",
-          "object": "chat.completion",
-          "created": 1752500965,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"cheese\",\"age\":3,\"hobbies\":[]}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 375,
-            "completion_tokens": 16,
-            "total_tokens": 391,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:49:26
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"text","text":"My name is Hadley."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""},"hobbies":{"type":"array","description":"","items":{"type":"string","description":""}}},"required":["name","age","hobbies"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 95f17bc04cd5f040-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Mon, 14 Jul 2025 13:49:27 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1229'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=r0RjHAd7iSo4yleV.exW3WFVc5J6ounrIPQpjqOiRE8-1752500967-1.0.1.1-F_7eA3nbcRrLReOqfbXu1l8HgW3zuGUZfaFpSS8kedd6joydHfCU7Xc43C_zyAnSd3Q4zbmqXTTG409OVONAlXwWWVrDWY3RtPv7RR5QSm8;
-        path=/; expires=Mon, 14-Jul-25 14:19:27 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=A9N9RNeV9PXhI7hXKy0HLY5AKmQkPJFWIl7lBpUqkN0-1752500967723-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '670'
-      x-ratelimit-limit-input-images: '250000'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-input-images: '249999'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999205'
-      x-ratelimit-reset-input-images: 0s
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_2b531af0a3eeb0215b381a5703af4269
-    body:
-      string: |
-        {
-          "id": "chatcmpl-BtDqZhcLx5JpzRfrcEfv04V1znOly",
-          "object": "chat.completion",
-          "created": 1752500967,
-          "model": "gpt-4.1-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":{\"name\":\"Hadley\",\"age\":0,\"hobbies\":[]}}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 374,
-            "completion_tokens": 16,
-            "total_tokens": 390,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": null
-        }
-  recorded_at: 2025-07-14 13:49:27
+  recorded_at: 2025-07-14 13:57:00
 recorded_with: VCR-vcr/1.7.1.93

@@ -51,7 +51,7 @@
 #' )
 #' type_person <- type_object(name = type_string(), age = type_number())
 #' parallel_chat_structured(chat, prompts, type_person)
-#' \dontshow{ellmer:::vcr_example_stop()}
+#' \dontshow{ellmer:::vcr_example_end()}
 parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
   check_chat(chat)
   my_parallel_turns <- function(conversations) {
