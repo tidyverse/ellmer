@@ -271,8 +271,9 @@ Extract structured data
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{The input to send to the chatbot. Will typically include
-the phrase "extract structured data".}
+\item{\code{...}}{The input to send to the chatbot. This is typically the text
+you want to extract data from, but it can be omitted if the data is
+obvious from the existing conversation.}
 
 \item{\code{type}}{A type specification for the extracted data. Should be
 created with a \code{\link[=type_boolean]{type_()}} function.}

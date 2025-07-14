@@ -165,6 +165,19 @@ test_that("can extract structured data (async)", {
   expect_equal(data, list(name = "John", age = 15))
 })
 
+test_that("chat_structured() doesn't require a prompt", {
+  chat <- chat_openai_test()
+  chat$chat("What's the biggest city in the world? What country is it in?")
+
+  out <- chat$chat_structured(
+    type = type_object(
+      city = type_string(),
+      county = type_string()
+    )
+  )
+  expect_equal(out, list(city = "Tokyo", county = "Japan"))
+})
+
 test_that("can retrieve tokens with or without system prompt", {
   chat <- chat_openai_test("abc")
   expect_equal(nrow(chat$get_tokens(FALSE)), 0)
@@ -179,7 +192,7 @@ test_that("has a basic print method", {
   chat <- chat_openai_test()
   chat$set_turns(list(
     Turn("user", "What's 1 + 1?\nWhat's 1 + 2?"),
-    Turn("assistant", "2\n\n3", tokens = c(15, 5))
+    Turn("assistant", "2\n\n3", tokens = c(10, 5, 5))
   ))
   expect_snapshot(chat)
 })
@@ -188,9 +201,9 @@ test_that("print method shows cumulative tokens & cost", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
   chat$set_turns(list(
     Turn("user", "Input 1"),
-    Turn("assistant", "Output 1", tokens = c(15000, 500)),
+    Turn("assistant", "Output 1", tokens = c(15000, 500, 0)),
     Turn("user", "Input 2"),
-    Turn("assistant", "Output 1", tokens = c(30000, 1000))
+    Turn("assistant", "Output 1", tokens = c(30000, 1000, 0))
   ))
   expect_snapshot(chat)
 

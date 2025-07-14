@@ -92,6 +92,11 @@ test_that("handles empty and NULL vectors of basic types", {
   expect_equal(convert_from_type(list(NULL), type), NA_character_)
 })
 
+test_that("scalar enums are converted to strings", {
+  type <- type_enum(c("A", "B", "C"))
+  expect_equal(convert_from_type("A", type), "A")
+})
+
 
 test_that("completely missing optional components become NULL", {
   type <- type_integer(required = FALSE)
@@ -108,6 +113,24 @@ test_that("completely missing optional components become NULL", {
     convert_from_type(list(x = 1), type),
     list(x = 1, y = NULL)
   )
+})
+
+test_that("objects take order from type", {
+  x <- list(y = 1, x = 2)
+  type1 <- type_object(x = type_integer(), y = type_integer())
+  expect_equal(convert_from_type(x, type1), list(x = 2, y = 1))
+
+  type2 <- type_object(x = type_integer(), .additional_properties = TRUE)
+  expect_equal(convert_from_type(x, type2), list(x = 2, y = 1))
+})
+
+test_that("additional properties are ignored, unless specified by type", {
+  x <- list(y = 1, x = 2, z = 3)
+  type <- type_object(x = type_integer())
+  expect_equal(convert_from_type(x, type), list(x = 2))
+
+  type <- type_object(x = type_integer(), .additional_properties = TRUE)
+  expect_equal(convert_from_type(x, type), list(x = 2, y = 1, z = 3))
 })
 
 test_that("can handle missing optional values in objects (#384)", {
@@ -140,20 +163,37 @@ test_that("can covert array of arrays to lists of vectors", {
   )
 })
 
-test_that("can convert arrays of enums to factors", {
+test_that("arrays of enums are converted to factors", {
+  type <- type_array(type_enum(c("x", "y", "z")))
   expect_equal(
-    convert_from_type(list("x", "y"), type_array(type_enum(c("x", "y", "z")))),
+    convert_from_type(list("x", "y"), type),
     factor(c("x", "y"), levels = c("x", "y", "z"))
   )
 })
 
 test_that("can convert arrays of objects to data frames", {
+  x <- list(list(x = 1, y = "x"), list(x = 3, y = "y"))
+  type <- type_array(type_object(x = type_integer(), y = type_string()))
   expect_equal(
-    convert_from_type(
-      list(list(x = 1, y = "x"), list(x = 3, y = "y")),
-      type_array(type_object(x = type_integer(), y = type_string()))
-    ),
+    convert_from_type(x, type),
     data.frame(x = c(1L, 3L), y = c("x", "y"))
+  )
+
+  # unless they have additional properties
+  type <- type_array(type_object(
+    x = type_integer(),
+    .additional_properties = TRUE
+  ))
+  expect_equal(convert_from_type(x, type), x)
+
+  # in which case the order should still be preserved
+  type2 <- type_array(type_object(
+    y = type_integer(),
+    .additional_properties = TRUE
+  ))
+  expect_equal(
+    convert_from_type(x, type2),
+    list(list(y = "x", x = 1), list(y = "y", x = 3))
   )
 })
 

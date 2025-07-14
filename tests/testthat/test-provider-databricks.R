@@ -4,7 +4,7 @@ test_that("can make simple batch request", {
   )
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
+  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -124,9 +124,7 @@ test_that("M2M authentication requests look correct", {
   )
   local_mocked_responses(function(req) {
     # Snapshot relevant fields of the outgoing request.
-    expect_snapshot(
-      list(url = req$url, headers = req$headers, body = req$body$data)
-    )
+    expect_snapshot(str(request_summary(req)))
     response_json(body = list(access_token = "token"))
   })
   credentials <- default_databricks_credentials()

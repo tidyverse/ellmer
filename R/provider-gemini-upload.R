@@ -29,7 +29,7 @@
 #' }
 google_upload <- function(
   path,
-  base_url = "https://generativelanguage.googleapis.com/v1beta/",
+  base_url = "https://generativelanguage.googleapis.com/",
   api_key = NULL,
   mime_type = NULL
 ) {
@@ -61,7 +61,7 @@ google_upload_init <- function(path, base_url, credentials, mime_type) {
 
   req <- request(base_url)
   req <- ellmer_req_credentials(req, credentials)
-  req <- req_url_path(req, "upload/v1beta/files")
+  req <- req_url_path_append(req, "upload/v1beta/files")
   req <- req_headers(
     req,
     "X-Goog-Upload-Protocol" = "resumable",

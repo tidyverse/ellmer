@@ -31,7 +31,8 @@
 #' will be a data frame with one row for each prompt, and one column for each
 #' property.
 #' @export
-#' @examplesIf ellmer::has_credentials("openai")
+#' @examples
+#' \dontshow{ellmer:::vcr_example_start("parallel_chat")}
 #' chat <- chat_openai()
 #'
 #' # Chat ----------------------------------------------------------------------
@@ -50,6 +51,7 @@
 #' )
 #' type_person <- type_object(name = type_string(), age = type_number())
 #' parallel_chat_structured(chat, prompts, type_person)
+#' \dontshow{ellmer:::vcr_example_end()}
 parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
   check_chat(chat)
   my_parallel_turns <- function(conversations) {
@@ -176,11 +178,12 @@ multi_convert <- function(
   }
 
   if (is.data.frame(out) && (include_tokens || include_cost)) {
-    tokens <- t(vapply(turns, \(turn) turn@tokens, integer(2)))
+    tokens <- t(vapply(turns, \(turn) turn@tokens, integer(3)))
 
     if (include_tokens) {
       out$input_tokens <- tokens[, 1]
       out$output_tokens <- tokens[, 2]
+      out$cached_input_tokens <- tokens[, 3]
     }
 
     if (include_cost) {
@@ -188,7 +191,8 @@ multi_convert <- function(
         provider@name,
         standardise_model(provider, provider@model),
         input = tokens[, 1],
-        output = tokens[, 2]
+        output = tokens[, 2],
+        cached_input = tokens[, 3]
       )
     }
   }

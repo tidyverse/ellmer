@@ -70,7 +70,7 @@ to wait longer, you might want to use \code{\link[=batch_chat]{batch_chat()}} in
 with a 50\% discount in return for taking up to 24 hours.
 }
 \examples{
-\dontshow{if (ellmer::has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{ellmer:::vcr_example_start("parallel_chat")}
 chat <- chat_openai()
 
 # Chat ----------------------------------------------------------------------
@@ -89,5 +89,5 @@ prompts <- list(
 )
 type_person <- type_object(name = type_string(), age = type_number())
 parallel_chat_structured(chat, prompts, type_person)
-\dontshow{\}) # examplesIf}
+\dontshow{ellmer:::vcr_example_end()}
 }
