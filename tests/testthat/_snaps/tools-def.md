@@ -63,6 +63,24 @@
       Error in `tool()`:
       ! `arguments$y` must be a <Type> or NULL, not the number 1.
 
+# can check tool/tools
+
+    Code
+      check_tool(1)
+    Condition
+      Error:
+      ! `1` must be a <ToolDef>, not the number 1.
+    Code
+      check_tools(1)
+    Condition
+      Error:
+      ! `1` must be a list, not the number 1.
+    Code
+      check_tools(x)
+    Condition
+      Error:
+      ! `x[[1]]` must be a <ToolDef>, not the number 1.
+
 # tool_annotations(): checks its inputs
 
     Code

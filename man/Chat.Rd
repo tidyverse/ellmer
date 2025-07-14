@@ -296,7 +296,7 @@ data frames and arrays of strings into a character vector.}
 Extract structured data, asynchronously. Returns a promise
 that resolves to an object matching the type specification.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_structured_async(..., type, echo = "none")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_structured_async(..., type, echo = "none", convert = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -311,6 +311,10 @@ created with a \code{\link[=type_boolean]{type_()}} function.}
 \item{\code{echo}}{Whether to emit the response to stdout as it is received.
 Set to "text" to stream JSON data as it's generated (not supported by
 all providers).}
+
+\item{\code{convert}}{Automatically convert from JSON lists to R data types
+using the schema. For example, this will turn arrays of objects into
+data frames and arrays of strings into a character vector.}
 }
 \if{html}{\out{</div>}}
 }

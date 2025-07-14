@@ -237,10 +237,10 @@ Chat <- R6::R6Class(
     #'   created with a [`type_()`][type_boolean] function.
     #' @param echo Whether to emit the response to stdout as it is received.
     #'   Set to "text" to stream JSON data as it's generated (not supported by
-    #'  all providers).
+    #'   all providers).
     #' @param convert Automatically convert from JSON lists to R data types
     #'   using the schema. For example, this will turn arrays of objects into
-    #'  data frames and arrays of strings into a character vector.
+    #'   data frames and arrays of strings into a character vector.
     chat_structured = function(..., type, echo = "none", convert = TRUE) {
       turn <- user_turn(..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
@@ -268,10 +268,17 @@ Chat <- R6::R6Class(
     #'   created with a [`type_()`][type_boolean] function.
     #' @param echo Whether to emit the response to stdout as it is received.
     #'   Set to "text" to stream JSON data as it's generated (not supported by
-    #'  all providers).
-    chat_structured_async = function(..., type, echo = "none") {
+    #'   all providers).
+    #' @param convert Automatically convert from JSON lists to R data types
+    #'   using the schema. For example, this will turn arrays of objects into
+    #'   data frames and arrays of strings into a character vector.
+    chat_structured_async = function(..., type, echo = "none", convert = TRUE) {
       turn <- user_turn(..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
+      check_bool(convert)
+
+      needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
+      type <- wrap_type_if_needed(type, needs_wrapper)
 
       done <- coro::async_collect(private$submit_turns_async(
         turn,
@@ -279,16 +286,15 @@ Chat <- R6::R6Class(
         stream = echo != "none",
         echo = echo
       ))
+
       promises::then(done, function(dummy) {
         turn <- self$last_turn()
-        is_json <- map_lgl(turn@contents, S7_inherits, ContentJson)
-        n <- sum(is_json)
-        if (n != 1) {
-          cli::cli_abort("Data extraction failed: {n} data results recieved.")
-        }
-
-        json <- turn@contents[[which(is_json)]]
-        json@value
+        extract_data(
+          turn,
+          type,
+          convert = convert,
+          needs_wrapper = needs_wrapper
+        )
       })
     },
 
@@ -374,9 +380,7 @@ Chat <- R6::R6Class(
     #'   Learn more in `vignette("tool-calling")`.
     #' @param tool A tool definition created by [tool()].
     register_tool = function(tool) {
-      if (!S7_inherits(tool, ToolDef)) {
-        cli::cli_abort("{.arg tool} must be a <ToolDef>.")
-      }
+      check_tool(tool)
 
       private$tools[[tool@name]] <- tool
       invisible(self)
@@ -386,18 +390,12 @@ Chat <- R6::R6Class(
     #'   Learn more in `vignette("tool-calling")`.
     #' @param tools A list of tool definitions created by [tool()].
     register_tools = function(tools) {
-      if (!is_list(tools)) {
-        stop_input_type(tools, "a list")
-      }
-      for (i in seq_along(tools)) {
-        if (!S7_inherits(tools[[i]], ToolDef)) {
-          arg <- paste0("tools[[", i, "]]")
-          stop_input_type(tools[[i]], "a <ToolDef>", arg = arg)
-        }
-      }
+      check_tools(tools)
+
       for (tool in tools) {
         self$register_tool(tool)
       }
+      invisible(self)
     },
 
     #' @description Get the underlying provider object. For expert use only.
@@ -415,20 +413,12 @@ Chat <- R6::R6Class(
     #'
     #' @param tools A list of tool definitions created with [ellmer::tool()].
     set_tools = function(tools) {
-      if (!is_list(tools) || !all(map_lgl(tools, S7_inherits, ToolDef))) {
-        msg <- "{.arg tools} must be a list of tools created with {.fn ellmer::tool}."
-        if (S7_inherits(tools, ToolDef)) {
-          msg <- c(msg, "i" = "Did you mean to call {.code $register_tool()}?")
-        }
-        cli::cli_abort(msg)
-      }
+      check_tools(tools)
 
       private$tools <- list()
-
       for (tool_def in tools) {
         self$register_tool(tool_def)
       }
-
       invisible(self)
     },
 
@@ -484,25 +474,6 @@ Chat <- R6::R6Class(
     tools = list(),
     callback_on_tool_request = NULL,
     callback_on_tool_result = NULL,
-
-    add_user_contents = function(contents) {
-      stopifnot(is.list(contents))
-      if (length(contents) == 0) {
-        return(invisible(self))
-      }
-
-      i <- length(private$.turns)
-
-      if (private$.turns[[i]]@role != "user") {
-        private$.turns[[i + 1]] <- Turn("user", contents)
-      } else {
-        private$.turns[[i]]@contents <- c(
-          private$.turns[[i]]@contents,
-          contents
-        )
-      }
-      invisible(self)
-    },
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.

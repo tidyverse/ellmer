@@ -1,37 +1,15 @@
-# can only register tools
+# can only set/register tools
 
-    Code
-      chat$register_tool(1)
-    Condition
-      Error in `chat$register_tool()`:
-      ! `tool` must be a <ToolDef>.
-    Code
-      chat$register_tools(1)
-    Condition
-      Error in `chat$register_tools()`:
-      ! `tools` must be a list, not the number 1.
     Code
       chat$register_tools(list(tool_def, 1))
     Condition
       Error in `chat$register_tools()`:
       ! `tools[[2]]` must be a <ToolDef>, not the number 1.
-
-# chat can get and register a list of tools
-
     Code
-      chat$set_tools(tools[[1]])
+      chat$set_tools(list(tool_def, 1))
     Condition
       Error in `chat$set_tools()`:
-      ! `tools` must be a list of tools created with `ellmer::tool()`.
-      i Did you mean to call `$register_tool()`?
-
----
-
-    Code
-      chat$set_tools(c(tools, list("foo")))
-    Condition
-      Error in `chat$set_tools()`:
-      ! `tools` must be a list of tools created with `ellmer::tool()`.
+      ! `tools[[2]]` must be a <ToolDef>, not the number 1.
 
 # chat warns on tool failures
 

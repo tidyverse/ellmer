@@ -1,13 +1,12 @@
 # Registry ---------------------------------------------------------------------
 
-test_that("can only register tools", {
+test_that("can only set/register tools", {
   chat <- chat_openai_test()
   tool_def <- tool(function() 1, "tool")
 
   expect_snapshot(error = TRUE, {
-    chat$register_tool(1)
-    chat$register_tools(1)
     chat$register_tools(list(tool_def, 1))
+    chat$set_tools(list(tool_def, 1))
   })
 })
 
@@ -43,18 +42,6 @@ test_that("chat can get and register a list of tools", {
   new_tools <- list("r_version_major" = tool_r_major)
   chat$set_tools(new_tools)
   expect_equal(chat$get_tools(), new_tools)
-
-  # set_tools() throws with helpful message if given just a tool
-  expect_snapshot(
-    error = TRUE,
-    chat$set_tools(tools[[1]])
-  )
-
-  # set_tools() throws with helpful message if not all items are tools
-  expect_snapshot(
-    error = TRUE,
-    chat$set_tools(c(tools, list("foo")))
-  )
 })
 
 # Execution --------------------------------------------------------------------

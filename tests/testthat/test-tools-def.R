@@ -66,6 +66,14 @@ test_that("arguments must match function formals", {
   })
 })
 
+test_that("can check tool/tools", {
+  x <- list(1)
+  expect_snapshot(error = TRUE, {
+    check_tool(1)
+    check_tools(1)
+    check_tools(x)
+  })
+})
 
 # tool_annotations() -------------------------------------------------------
 
