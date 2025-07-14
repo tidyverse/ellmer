@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New `chat()` allows you to chat with any provider using a string like `chat("anthropic")` or `chat("openai/gpt-4.1-nano")` (#361).
 * New `parallel_chat_text()` and `batch_chat_text()` make it easier to just get the text response from multiple prompts (#510).
 * Tool requests now show converted arguments when printed (#517).
 * Type conversion does a better job with `type_object(.additional_properties = TRUE)` (#519).
