@@ -54,7 +54,8 @@ convert_from_type <- function(x, type) {
       factor(as.character(x), levels = type@items@values)
     } else if (S7_inherits(type@items, TypeObject)) {
       if (type@items@additional_properties) {
-        x
+        # don't convert to data frame, but put known properties first
+        lapply(x, \(y) y[union(names(type@items@properties), names(y))])
       } else {
         cols <- lapply(names(type@items@properties), function(name) {
           vals <- lapply(x, function(y) y[[name]])
