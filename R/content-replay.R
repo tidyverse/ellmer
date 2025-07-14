@@ -1,7 +1,4 @@
-#' @include utils-S7.R
-#' @include turns.R
 #' @include tools-def.R
-#' @include content.R
 NULL
 
 #' Save and restore content
@@ -32,50 +29,46 @@ NULL
 #' turn_replayed
 #' @export
 #' @rdname contents_record
-contents_record <-
-  new_generic(
-    "contents_record",
-    "content",
-    function(content, ..., chat) {
-      check_chat(chat, call = caller_env())
+contents_record <- new_generic(
+  "contents_record",
+  "content",
+  function(content, ..., chat) {
+    check_chat(chat, call = caller_env())
 
-      recorded <- S7::S7_dispatch()
+    recorded <- S7_dispatch()
 
-      if (!is_recorded_object(recorded)) {
-        cli::cli_abort(
-          "Expected the recorded object to be a list with at least names 'version', 'class', and 'props'."
-        )
-      }
-
-      if (
-        !is.character(recorded$class) ||
-          length(recorded$class) != 1
-      ) {
-        cli::cli_abort(
-          "Expected the recorded object to have a single $class name, containing `::` if the class is from a package."
-        )
-      }
-
-      if (!grepl("ellmer::", recorded$class, fixed = TRUE)) {
-        cli::cli_abort(
-          "Only S7 classes from the `ellmer` package are currently supported. Received: {.val {recorded$class}}."
-        )
-      }
-
-      recorded
+    if (!is_recorded_object(recorded)) {
+      cli::cli_abort(
+        "Expected the recorded object to be a list with at least names 'version', 'class', and 'props'."
+      )
     }
-  )
 
-method(contents_record, S7::S7_object) <- function(content, ..., chat) {
-  class_name <- class(content)[1]
+    if (!is.character(recorded$class) || length(recorded$class) != 1) {
+      cli::cli_abort(
+        "Expected the recorded object to have a single $class name, containing `::` if the class is from a package."
+      )
+    }
+
+    if (!grepl("ellmer::", recorded$class, fixed = TRUE)) {
+      cli::cli_abort(
+        "Only S7 classes from the `ellmer` package are currently supported. Received: {.val {recorded$class}}."
+      )
+    }
+
+    recorded
+  }
+)
+
+method(contents_record, S7_object) <- function(content, ..., chat) {
+  class_name <- class(content)[[1]]
 
   # Remove read-only props
-  cls_props <- S7::S7_class(content)@properties
+  cls_props <- S7_class(content)@properties
   prop_names <- names(cls_props)[!map_lgl(cls_props, prop_is_read_only)]
 
   recorded_props <- setNames(
     lapply(prop_names, function(prop_name) {
-      prop_value <- S7::prop(prop_name, object = content)
+      prop_value <- prop(prop_name, object = content)
       if (S7_inherits(prop_value)) {
         # Recursive record for S7 objects
         contents_record(prop_value, chat = chat)
@@ -145,8 +138,8 @@ contents_replay <- function(obj, ..., chat) {
   # Manually retrieve the handler for the class as we dispatch on the class itself,
   # not on an instance
   # An error will be thrown if a method is not found,
-  # however we have a fallback for the `S7::S7_object` (the root base class)
-  handler <- S7::method(contents_replay_class, cls)
+  # however we have a fallback for the `S7_object` (the root base class)
+  handler <- method(contents_replay_class, cls)
   handler(cls, obj, chat = chat)
 }
 
@@ -154,17 +147,12 @@ contents_replay_class <- new_generic(
   "contents_replay_class",
   "cls",
   function(cls, obj, ..., chat) {
-    S7::S7_dispatch()
+    S7_dispatch()
   }
 )
 
 
-method(contents_replay_class, S7::S7_object) <- function(
-  cls,
-  obj,
-  ...,
-  chat
-) {
+method(contents_replay_class, S7_object) <- function(cls, obj, ..., chat) {
   stopifnot(obj$version == 1)
 
   obj_props <- map(obj$props, function(prop_value) {
@@ -186,12 +174,7 @@ method(contents_replay_class, S7::S7_object) <- function(
   exec(cls_name, !!!obj_props, .env = ns_env("ellmer"))
 }
 
-method(contents_replay_class, ToolDef) <- function(
-  cls,
-  obj,
-  ...,
-  chat
-) {
+method(contents_replay_class, ToolDef) <- function(cls, obj, ..., chat) {
   if (obj$version != 1) {
     cli::cli_abort(
       "Unsupported version {.val {obj$version}}."
@@ -207,7 +190,7 @@ method(contents_replay_class, ToolDef) <- function(
 
   # If no tool is found, return placeholder tool containing the metadata
   ret <- contents_replay_class(
-    super(cls, S7::S7_object),
+    super(cls, S7_object),
     obj,
     chat = chat
   )

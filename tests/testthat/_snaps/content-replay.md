@@ -1,4 +1,4 @@
-# non-ellmer classes are recorded/replayed by default
+# non-ellmer classes are not recorded/replayed by default
 
     Code
       contents_record(LocalClass("testname"), chat = chat)

@@ -67,11 +67,11 @@ test_that("can round trip of ContentTool record/replay", {
   chat <- chat_openai_test()
   tool_rnorm <- tool(
     rnorm,
-    "Drawn numbers from a random normal distribution",
-    n = type_integer("The number of observations. Must be a positive integer."),
-    mean = type_number("The mean value of the distribution."),
-    sd = type_number(
-      "The standard deviation of the distribution. Must be a non-negative number."
+    description = "Drawn numbers from a random normal distribution",
+    arguments = list(
+      n = type_integer("The number of observations."),
+      mean = type_number("The mean value of the distribution."),
+      sd = type_number("The standard deviation of the distribution.")
     )
   )
   chat$register_tool(tool_rnorm)
@@ -85,19 +85,17 @@ test_that("can round trip of ContentTool record/replay", {
 test_that("can round trip of ToolDef record/replay", {
   chat <- chat_openai_test()
   tool_rnorm <- tool(
-    # Use `rnorm` to avoid loading the package... this causes the name to not be auto found
     rnorm,
-    "Drawn numbers from a random normal distribution",
-    n = type_integer("The number of observations. Must be a positive integer."),
-    mean = type_number("The mean value of the distribution."),
-    sd = type_number(
-      "The standard deviation of the distribution. Must be a non-negative number."
+    description = "Drawn numbers from a random normal distribution",
+    arguments = list(
+      n = type_integer("The number of observations."),
+      mean = type_number("The mean value of the distribution."),
+      sd = type_number("The standard deviation of the distribution.")
     )
   )
-  chat$register_tool(tool_rnorm)
-
   test_record_replay(tool_rnorm, chat = chat)
 
+  chat$register_tool(tool_rnorm)
   test_record_replay(
     ContentToolRequest(
       "ID",
@@ -117,20 +115,13 @@ test_that("can round trip of ToolDef record/replay", {
     name = "rnorm",
     description = "Drawn numbers from a random normal distribution",
     arguments = type_object(
-      n = type_integer(
-        "The number of observations. Must be a positive integer."
-      ),
+      n = type_integer("The number of observations."),
       mean = type_number("The mean value of the distribution."),
-      sd = type_number(
-        "The standard deviation of the distribution. Must be a non-negative number."
-      )
+      sd = type_number("The standard deviation of the distribution.")
     ),
   )
 
-  expect_equal(
-    replayed_tool,
-    tool_rnorm_empty
-  )
+  expect_equal(replayed_tool, tool_rnorm_empty)
 })
 
 test_that("can round trip of ContentToolResult record/replay", {
@@ -145,12 +136,12 @@ test_that("can round trip of ContentToolResult record/replay", {
 
   chat <- chat_openai_test()
   tool_rnorm <- tool(
-    stats::rnorm,
-    "Drawn numbers from a random normal distribution",
-    n = type_integer("The number of observations. Must be a positive integer."),
-    mean = type_number("The mean value of the distribution."),
-    sd = type_number(
-      "The standard deviation of the distribution. Must be a non-negative number."
+    rnorm,
+    description = "Drawn numbers from a random normal distribution",
+    arguments = list(
+      n = type_integer("The number of observations."),
+      mean = type_number("The mean value of the distribution."),
+      sd = type_number("The standard deviation of the distribution.")
     )
   )
   chat$register_tool(tool_rnorm)
