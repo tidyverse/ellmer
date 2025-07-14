@@ -59,7 +59,8 @@ chat$chat_structured(
 If you need to extract data from multiple prompts, you can use `parallel_chat_structured()`. It takes the same arguments as `$chat_structured()` with two exceptions: it needs a `chat` object since it's a standalone function, not a method, and it can take a vector of prompts.
 
 ```{r}
-#| eval: false
+#| label: parallel
+#| cassette: true
 
 prompts <- list(
   "I go by Alex. 42 years on this planet and counting.",
@@ -73,14 +74,8 @@ type_person <- type_object(
   name = type_string(),
   age = type_number()
 )
+chat <- chat_openai()
 parallel_chat_structured(chat, prompts, type = type_person)
-#>     name age
-#> 1   Alex  42
-#> 2  Jamal  27
-#> 3 Li Wei  19
-#> 4 Fatima  35
-#> 5 Robert  51
-#> 6  Kwame  50
 ```
 
 ## Data types
@@ -113,7 +108,7 @@ To define your desired type specification (also known as a schema), you use the 
 * **Objects** represent a collection of named values. They are created with `type_object()`. Objects can contain any number of scalars, arrays, and other objects. They are similar to named lists in R.
 
   ```{r}
-  type_person <- type_object(
+  type_person2 <- type_object(
     name = type_string(),
     age = type_integer(),
     hobbies = type_array(type_string())
@@ -133,7 +128,7 @@ You can opt-out of this and get plain lists by setting `convert = FALSE`.
 In addition to defining types, you need to provide the LLM with some information about what those types represent. This is the purpose of the first argument, `description`, a string that describes the data that you want. This is a good place to ask nicely for other attributes you'll like the value to have (e.g. minimum or maximum values, date formats, ...). There's no guarantee that these requests will be honoured, but the LLM will try.
 
 ```{r}
-type_type_person <- type_object(
+type_person3 <- type_object(
   "A person",
   name = type_string("Name"),
   age = type_integer("Age, in years."),
@@ -146,10 +141,11 @@ type_type_person <- type_object(
 
 ### Missing values
 
-The type functions default to `required = TRUE` which means the LLM will try really hard to extract values for you, leading to hallucinations if the data doesn't exist:
+The type functions default to `required = TRUE` which means the LLM will try really hard to extract values for you, leading to hallucinations if the data doesn't exist. Lets go back to our initial example extracting names and ages, and give it some inputs that don't have names and/or ages.
 
 ```{r}
-#| eval: false
+#| label: parallel-missing
+#| cassette: true
 
 no_match <- list(
   "I like apples",
@@ -158,27 +154,18 @@ no_match <- list(
   "My name is Hadley."
 )
 parallel_chat_structured(chat, no_match, type = type_person)
-#>           name        age
-#> 1         User          0
-#> 2 Current Time 1718920360
-#> 3       cheese          3
-#> 4       Hadley          0
 ```
 
 You can often avoid this problem by setting `required = FALSE`:
 
 ```{r}
-#| eval: false
+#| label: parallel-missing-2
+#| cassette: true
 type_person <- type_object(
   name = type_string(required = FALSE),
   age = type_number(required = FALSE)
 )
 parallel_chat_structured(chat, no_match, type = type_person)
-#>     name age
-#> 1   <NA>  NA
-#> 2   <NA>  NA
-#> 3   <NA>   3
-#> 4 Hadley  NA
 ```
 
 In other cases, you may need to adjust your prompt as well. Either way, we strongly recommend that you include both positive and negative examples when testing your structured data extraction code.

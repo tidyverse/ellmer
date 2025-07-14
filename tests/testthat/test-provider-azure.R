@@ -16,7 +16,8 @@ test_that("can make simple streaming request", {
 # Common provider interface -----------------------------------------------
 
 test_that("defaults are reported", {
-  expect_snapshot(. <- chat_azure_openai_test())
+  withr::local_envvar(AZURE_OPENAI_API_KEY = "key")
+  expect_snapshot(. <- chat_azure_openai("endpoint", "deployment_id"))
 })
 
 test_that("supports standard parameters", {
@@ -68,8 +69,7 @@ test_that("Azure request headers are generated correctly", {
     credentials = default_azure_credentials("key")
   )
   req <- chat_request(p, FALSE, list(turn))
-  attr(req$headers, "redact") <- character()
-  expect_snapshot(str(req$headers))
+  expect_snapshot(str(req_get_headers(req, "reveal")))
 
   # Token.
   p <- ProviderAzureOpenAI(
@@ -81,8 +81,7 @@ test_that("Azure request headers are generated correctly", {
     credentials = default_azure_credentials("", "token")
   )
   req <- chat_request(p, FALSE, list(turn))
-  attr(req$headers, "redact") <- character()
-  expect_snapshot(str(req$headers))
+  expect_snapshot(str(req_get_headers(req, "reveal")))
 
   # Both.
   p <- ProviderAzureOpenAI(
@@ -94,8 +93,7 @@ test_that("Azure request headers are generated correctly", {
     credentials = default_azure_credentials("key", "token")
   )
   req <- chat_request(p, FALSE, list(turn))
-  attr(req$headers, "redact") <- character()
-  expect_snapshot(str(req$headers))
+  expect_snapshot(str(req_get_headers(req, "reveal")))
 })
 
 test_that("service principal authentication requests look correct", {
@@ -106,9 +104,7 @@ test_that("service principal authentication requests look correct", {
   )
   local_mocked_responses(function(req) {
     # Snapshot relevant fields of the outgoing request.
-    expect_snapshot(
-      list(url = req$url, headers = req$headers, body = req$body$data)
-    )
+    expect_snapshot(str(request_summary(req)))
     response_json(body = list(access_token = "token"))
   })
   source <- default_azure_credentials()

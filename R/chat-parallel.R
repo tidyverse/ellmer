@@ -31,7 +31,8 @@
 #' will be a data frame with one row for each prompt, and one column for each
 #' property.
 #' @export
-#' @examplesIf ellmer::has_credentials("openai")
+#' @examples
+#' \dontshow{ellmer:::vcr_example_start("parallel_chat")}
 #' chat <- chat_openai()
 #'
 #' # Chat ----------------------------------------------------------------------
@@ -50,6 +51,7 @@
 #' )
 #' type_person <- type_object(name = type_string(), age = type_number())
 #' parallel_chat_structured(chat, prompts, type_person)
+#' \dontshow{ellmer:::vcr_example_end()}
 parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
   check_chat(chat)
   my_parallel_turns <- function(conversations) {
