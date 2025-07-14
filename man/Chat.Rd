@@ -2,7 +2,7 @@
 % Please edit documentation in R/chat.R
 \name{Chat}
 \alias{Chat}
-\title{A chat}
+\title{The Chat object}
 \value{
 A Chat object
 }

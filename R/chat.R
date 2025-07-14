@@ -1,7 +1,7 @@
 #' @include utils-coro.R
 NULL
 
-#' A chat
+#' The Chat object
 #'
 #' @description
 #' A `Chat` is a sequence of user and assistant [Turn]s sent

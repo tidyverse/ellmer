@@ -18,8 +18,9 @@ reference:
       to send messages, receive responses, manage tools and extract structured
       data.
     contents:
-      - Chat
+      - chat
       - starts_with("chat_")
+      - Chat
       - token_usage
 
   - title: Chat helpers
@@ -51,7 +52,6 @@ reference:
       supported by one provider, or if you're implementing a new provider.
     contents:
       - Provider
-      - Chat
       - Turn
       - Content
       - Type
