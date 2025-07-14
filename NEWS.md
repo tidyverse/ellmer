@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* If you interrupt a chat, none of the turns are recorded. Previously some fraction of the turns were recorded, possibly leaving the chat object in a broken state (#459).
 * Tool requests now show converted arguments when printed (#517).
 * Type conversion does a better job with `type_object(.additional_properties = TRUE)` (#519).
 * `chat_cortex_analyst()` is now deprecated; please use `chat_snowflake()` instead (#640).

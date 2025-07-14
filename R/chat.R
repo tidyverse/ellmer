@@ -217,6 +217,7 @@ Chat <- R6::R6Class(
       turn <- user_turn(...)
       echo <- check_echo(echo %||% private$echo)
 
+      defer(private$buffer_reset())
       # Returns a single turn (the final response from the assistant), even if
       # multiple rounds of back and forth happened.
       coro::collect(private$chat_impl(
@@ -224,6 +225,7 @@ Chat <- R6::R6Class(
         stream = echo != "none",
         echo = echo
       ))
+      private$buffer_commit()
 
       text <- ellmer_output(self$last_turn()@text)
       if (echo == "none") text else invisible(text)
@@ -249,12 +251,14 @@ Chat <- R6::R6Class(
       needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
+      defer(private$buffer_reset())
       coro::collect(private$submit_turns(
         turn,
         type = type,
         stream = echo != "none",
         echo = echo
       ))
+      private$buffer_commit()
 
       turn <- self$last_turn()
       extract_data(turn, type, convert = convert, needs_wrapper = needs_wrapper)
@@ -280,6 +284,7 @@ Chat <- R6::R6Class(
       needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
+      defer(private$buffer_reset())
       done <- coro::async_collect(private$submit_turns_async(
         turn,
         type = type,
@@ -288,6 +293,7 @@ Chat <- R6::R6Class(
       ))
 
       promises::then(done, function(dummy) {
+        private$buffer_commit()
         turn <- self$last_turn()
         extract_data(
           turn,
@@ -313,6 +319,7 @@ Chat <- R6::R6Class(
 
       # Returns a single turn (the final response from the assistant), even if
       # multiple rounds of back and forth happened.
+      defer(private$buffer_reset())
       done <- coro::async_collect(
         private$chat_impl_async(
           turn,
@@ -321,7 +328,9 @@ Chat <- R6::R6Class(
           tool_mode = tool_mode
         )
       )
+
       promises::then(done, function(dummy) {
+        private$buffer_commit()
         self$last_turn()@text
       })
     },
@@ -475,6 +484,24 @@ Chat <- R6::R6Class(
     callback_on_tool_request = NULL,
     callback_on_tool_result = NULL,
 
+    turns_buffer = list(),
+    buffer_append = function(turn) {
+      private$turns_buffer[[length(private$turns_buffer) + 1]] <- turn
+      invisible()
+    },
+    buffer_peek = function() {
+      private$turns_buffer[[length(private$turns_buffer)]]
+    },
+    buffer_commit = function() {
+      private$.turns <- c(private$.turns, private$turns_buffer)
+      private$turns_buffer <- list()
+      invisible()
+    },
+    buffer_reset = function() {
+      private$turns_buffer <- list()
+      invisible()
+    },
+
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
     chat_impl = generator_method(function(
@@ -499,7 +526,7 @@ Chat <- R6::R6Class(
           yield(chunk)
         }
 
-        assistant_turn <- self$last_turn()
+        assistant_turn <- private$buffer_peek()
         user_turn <- NULL
 
         if (turn_has_tool_request(assistant_turn)) {
@@ -523,6 +550,7 @@ Chat <- R6::R6Class(
           }
 
           user_turn <- tool_results_as_turn(tool_results)
+          self$buffer_append(user_turn)
         }
 
         if (echo == "all") {
@@ -623,10 +651,11 @@ Chat <- R6::R6Class(
         cat_line(format(user_turn), prefix = "> ")
       }
 
+      private$buffer_append(user_turn)
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "stream" else "value",
-        turns = c(private$.turns, list(user_turn)),
+        turns = c(private$.turns, private$turns_buffer),
         tools = private$tools,
         type = type
       )
@@ -670,6 +699,7 @@ Chat <- R6::R6Class(
           any_text <- TRUE
         }
       }
+      private$buffer_append(turn)
 
       # Ensure turns always end in a newline
       if (any_text) {
@@ -688,8 +718,6 @@ Chat <- R6::R6Class(
       }
       # When `echo="output"`, tool calls are emitted in `invoke_tools()`
 
-      self$add_turn(user_turn, turn)
-
       coro::exhausted()
     }),
 
@@ -704,10 +732,11 @@ Chat <- R6::R6Class(
       type = NULL,
       yield_as_content = FALSE
     ) {
+      private$buffer_append(user_turn)
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "async-stream" else "async-value",
-        turns = c(private$.turns, list(user_turn)),
+        turns = c(private$.turns, private$turns_buffer),
         tools = private$tools,
         type = type
       )
@@ -747,6 +776,7 @@ Chat <- R6::R6Class(
         }
       }
       turn <- match_tools(turn, private$tools)
+      private$buffer_append(turn)
 
       # Ensure turns always end in a newline
       if (any_text) {
@@ -765,7 +795,6 @@ Chat <- R6::R6Class(
       }
       # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
 
-      self$add_turn(user_turn, turn)
       coro::exhausted()
     }),
 
