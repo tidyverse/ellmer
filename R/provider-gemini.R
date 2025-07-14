@@ -161,9 +161,8 @@ method(chat_request, ProviderGoogleGemini) <- function(
       paste0(provider@model, ":", "generateContent")
     )
   }
-  # Hack around new httr2 1.2.0 feature that causes ":" to be escaped
-  # This shouldn't matter in principle, but google doesn't seem to like it
-  req$url <- gsub("%3A", ":", req$url, fixed = TRUE)
+
+  req <- unencode_colon(req)
 
   body <- chat_body(
     provider = provider,
