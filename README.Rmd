@@ -28,7 +28,7 @@ ellmer is one of a number of LLM-related packages created by Posit:
 * Want to evaluate your LLMs? Try [vitals](https://vitals.tidyverse.org).
 * Need RAG? Take a look at [ragnar](https://ragnar.tidyverse.org).
 * Want to make a beautiful LLM powered chatbot? Consider [shinychat](https://posit-dev.github.io/shinychat/).
-* Need MCP? Check out [mcptools](https://posit-dev.github.io/mcptools/).
+* Working with MCP? Check out [mcptools](https://posit-dev.github.io/mcptools/).
 
 ## Installation
 
