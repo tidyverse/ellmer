@@ -1,0 +1,478 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"Roll
+        the dice, please! Reply with ''You rolled ____''"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"roll","description":"Rolls
+        a six-sided die.","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95f166e28c9d6ab6-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Jul 2025 13:35:12 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '292'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=Th2_FZo5LXfxvN0wo8xzEyPMBu1fkuu2i5WgdwEu5xQ-1752500112-1.0.1.1-pF4Ro6Y1Ix2J7f6IDChk9ak6mnOflFZUSY2VK95KsF4x4uv0ek6x3a_xE.ht4NPIVKa1ybc2TOWwKvlyoTeeIW0ddi40XmUwcJS4hi9Bb7c;
+        path=/; expires=Mon, 14-Jul-25 14:05:12 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=j.CZIotY0bSLWVOXm7H1eZ4AewqkMJkDVAF2w4NGReE-1752500112489-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '299'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999982'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_ed1c55f2b16778a82d62c6d16ed43a5c
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BtDcmoyF7l0gGFOqqbWZ4NrvyiAXt",
+          "object": "chat.completion",
+          "created": 1752500112,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "call_KzcwCYKajFpre80FodETpuqa",
+                    "type": "function",
+                    "function": {
+                      "name": "roll",
+                      "arguments": "{}"
+                    }
+                  }
+                ],
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 52,
+            "completion_tokens": 9,
+            "total_tokens": 61,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": null
+        }
+  recorded_at: 2025-07-14 13:35:12
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"reply
+        with the word ''boop''"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"roll","description":"Rolls
+        a six-sided die.","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95f166e7ba5d6ab6-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Jul 2025 13:35:13 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '177'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=.Q9bihpk6nf9c9RJZG88sT1Ny.PtYOJJMMttvK8vjsA-1752500113-1.0.1.1-4LP2CJ2mTfms5FWVI6aY1Y3M_Bhj.DQ6ViU6KgBojozsuqGKN8YARhE1K_2rhpbF2h4Pls.dF01kz3nxSkKtQIyOb1zrPXw93R8W5pQ0Sks;
+        path=/; expires=Mon, 14-Jul-25 14:05:13 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=o04sO0P6wMKcSkNq9aTlGDnKFbfDHPTW9vx2bea.BO8-1752500113330-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '180'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999987'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_5637626c4b70125d58d0fce8b3b0e677
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BtDcnuwmSkavS9EERnozUQTBd3bp9",
+          "object": "chat.completion",
+          "created": 1752500113,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "boop",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 47,
+            "completion_tokens": 3,
+            "total_tokens": 50,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": null
+        }
+  recorded_at: 2025-07-14 13:35:13
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"Roll
+        the dice, please! Reply with ''You rolled ____''"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"roll","description":"Rolls
+        a six-sided die.","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95f166ece8566ab6-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Jul 2025 13:35:13 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '257'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=xrOs5H_chG8RQKlS7rl09wqenW6ajqUkzJCxQroFK8M-1752500113-1.0.1.1-NJ08R3NdTxYfVg.fMbrXoCHZYaCBIVba0xt.F8yHf1z.8oKXwv37L9Q1VarOj47tVn5mpzsrRgU7OHRDyJmkmNDwfycPnm77FK4VSAbuEt4;
+        path=/; expires=Mon, 14-Jul-25 14:05:13 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=Gr_xwxVXiIrM8wC9x_Lh18bC6Ewk_DPQz6Gl_PoKONY-1752500113728-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '261'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999982'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_c959dce8fc3bd03a6e89b52f14190cfd
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BtDcn3UlTc1aACCBHXf5yAg1TSZrV",
+          "object": "chat.completion",
+          "created": 1752500113,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "call_VEEo1PMuf1UVQuskHF5VUKDL",
+                    "type": "function",
+                    "function": {
+                      "name": "roll",
+                      "arguments": "{}"
+                    }
+                  }
+                ],
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 52,
+            "completion_tokens": 9,
+            "total_tokens": 61,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": null
+        }
+  recorded_at: 2025-07-14 13:35:13
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"reply
+        with the word ''beep''"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"roll","description":"Rolls
+        a six-sided die.","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95f166ef8fa76ab6-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Jul 2025 13:35:14 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '215'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=PGqAybjrBov3Zy4Lklet1ZZap125BrnpkQPSYoFaJW0-1752500114-1.0.1.1-kHFYTy.nl6aw_CoDLyziexW6HqxZal0fMHwUl0R4ZuAid7jlg4Sserw8ejujVfkecNd96HL4AwbnS150Qevr5sUIvYmRS8hsebVAMoIMF9o;
+        path=/; expires=Mon, 14-Jul-25 14:05:14 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=CE1X4jCNHzjanzTSmUO2lGaYKUflt6oHOU2l2BNWmOY-1752500114458-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '219'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999987'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_0d32d93b3240ea9a9b25a9d7a6c14152
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BtDcoxjf1bJoq2aKdPBP4vZIlUvzL",
+          "object": "chat.completion",
+          "created": 1752500114,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "beep",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 47,
+            "completion_tokens": 3,
+            "total_tokens": 50,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": null
+        }
+  recorded_at: 2025-07-14 13:35:14
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"Roll
+        the dice, please! Reply with ''You rolled ____''"}]},{"role":"assistant","tool_calls":[{"id":"call_KzcwCYKajFpre80FodETpuqa","function":{"name":"roll","arguments":"{}"},"type":"function"}]},{"role":"tool","content":"1","tool_call_id":"call_KzcwCYKajFpre80FodETpuqa"}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"roll","description":"Rolls
+        a six-sided die.","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95f166f4ad126ab6-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Jul 2025 13:35:15 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '216'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=8yAFvey0JVPFKs5yNHvHDANw5ve6gPjM29peTCrH9I4-1752500115-1.0.1.1-jxXgDr7e6RMETJRVXPgtAG4bmrimzYJqy3y9dYgfbUHPQis5FZquegSP_eHRLW2pREXDMS_DG.2E2v2FjIoAuICBznj3GPH29JzKK8GfwmI;
+        path=/; expires=Mon, 14-Jul-25 14:05:15 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=uQcKQygzlpWTa86hCJDWBd.0KS402y0Cr49Lmrm9jBw-1752500115460-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '229'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999978'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_9b368bde82addb53941d98b3484a9a08
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BtDcpyy0wPj54l5IxEOG9F93rZ1H4",
+          "object": "chat.completion",
+          "created": 1752500115,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "You rolled 1",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 69,
+            "completion_tokens": 5,
+            "total_tokens": 74,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": null
+        }
+  recorded_at: 2025-07-14 13:35:15
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"Roll
+        the dice, please! Reply with ''You rolled ____''"}]},{"role":"assistant","tool_calls":[{"id":"call_VEEo1PMuf1UVQuskHF5VUKDL","function":{"name":"roll","arguments":"{}"},"type":"function"}]},{"role":"tool","content":"2","tool_call_id":"call_VEEo1PMuf1UVQuskHF5VUKDL"}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"roll","description":"Rolls
+        a six-sided die.","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95f166f9eb316ab6-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Jul 2025 13:35:15 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '182'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=_GqM.iRBaDoBaiBzkLilbLKEiBnn_VKaICuWmtBechs-1752500115-1.0.1.1-LuByBbuW611c7p_6EP0M76BIh2W75aJg7U4kGoLKwt9HZ3z3QX9OgV9xcZ_iuhtTC8tW1g5vZHL6uiti8zc17QlL.E3gsmNOnKGicVLua0Q;
+        path=/; expires=Mon, 14-Jul-25 14:05:15 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=.Z9.MqgojE0jW4OzPAKHDqQtUSDN39nHPR41Isi8mZw-1752500115731-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '188'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999979'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_125ae66c2d2e3d3552963ceb1b1a40fc
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BtDcpiDdAep5dVucwbIah7NPST3xG",
+          "object": "chat.completion",
+          "created": 1752500115,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "You rolled 2",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 69,
+            "completion_tokens": 5,
+            "total_tokens": 74,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": null
+        }
+  recorded_at: 2025-07-14 13:35:15
+recorded_with: VCR-vcr/1.7.1.93

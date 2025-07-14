@@ -50,11 +50,12 @@ chat_vllm <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-chat_vllm_test <- function(...) {
+chat_vllm_test <- function(..., echo = "none") {
   chat_vllm(
     base_url = "https://llm.nrp-nautilus.io/",
     ...,
-    model = "llama3"
+    model = "llama3",
+    echo = echo
   )
 }
 
@@ -85,7 +86,7 @@ vllm_key <- function() {
 models_vllm <- function(base_url, api_key = vllm_key()) {
   req <- request(base_url)
   req <- req_auth_bearer_token(req, api_key)
-  req <- req_url_path(req, "/v1/models")
+  req <- req_url_path_append(req, "/v1/models")
   resp <- req_perform(req)
   json <- resp_body_json(resp)
 

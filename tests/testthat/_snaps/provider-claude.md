@@ -5,15 +5,6 @@
     Message
       Using model = "claude-sonnet-4-20250514".
 
-# all tool variations work
-
-    Code
-      chat$chat("Great. Do it again.")
-    Condition
-      Error:
-      ! Can't use async tools with `$chat()` or `$stream()`.
-      i Async tools are supported, but you must use `$chat_async()` or `$stream_async()`.
-
 # max_tokens is deprecated
 
     Code

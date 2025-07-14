@@ -24,14 +24,16 @@
 #'   connections or use [params()] in `chat_anthropic()` to decrease
 #'   `max_tokens`.
 #' @param rpm Maximum number of requests per minute.
-#' @return
+#' @returns
 #' For `parallel_chat()`, a list of [Chat] objects, one for each prompt.
+#' For `parallel_chat_text()`, a character vector of text responses.
 #' For `parallel_chat_structured()`, a single structured data object with one
 #' element for each prompt. Typically, when `type` is an object, this will
 #' will be a data frame with one row for each prompt, and one column for each
 #' property.
 #' @export
-#' @examplesIf ellmer::has_credentials("openai")
+#' @examples
+#' \dontshow{ellmer:::vcr_example_start("parallel_chat")}
 #' chat <- chat_openai()
 #'
 #' # Chat ----------------------------------------------------------------------
@@ -50,6 +52,7 @@
 #' )
 #' type_person <- type_object(name = type_string(), age = type_number())
 #' parallel_chat_structured(chat, prompts, type_person)
+#' \dontshow{ellmer:::vcr_example_end()}
 parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
   check_chat(chat)
   my_parallel_turns <- function(conversations) {
@@ -95,6 +98,13 @@ parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
   }
 
   map(conversations, \(turns) chat$clone()$set_turns(turns))
+}
+
+#' @rdname parallel_chat
+#' @export
+parallel_chat_text <- function(chat, prompts, max_active = 10, rpm = 500) {
+  chats <- parallel_chat(chat, prompts, max_active = max_active, rpm = rpm)
+  map_chr(chats, \(chat) chat$last_turn()@text)
 }
 
 #' @param type A type specification for the extracted data. Should be
@@ -170,17 +180,18 @@ multi_convert <- function(
   })
 
   if (convert) {
-    out <- convert_from_type(rows, type_array(items = type))
+    out <- convert_from_type(rows, type_array(type))
   } else {
     out <- rows
   }
 
   if (is.data.frame(out) && (include_tokens || include_cost)) {
-    tokens <- t(vapply(turns, \(turn) turn@tokens, integer(2)))
+    tokens <- t(vapply(turns, \(turn) turn@tokens, integer(3)))
 
     if (include_tokens) {
       out$input_tokens <- tokens[, 1]
       out$output_tokens <- tokens[, 2]
+      out$cached_input_tokens <- tokens[, 3]
     }
 
     if (include_cost) {
@@ -188,7 +199,8 @@ multi_convert <- function(
         provider@name,
         standardise_model(provider, provider@model),
         input = tokens[, 1],
-        output = tokens[, 2]
+        output = tokens[, 2],
+        cached_input = tokens[, 3]
       )
     }
   }

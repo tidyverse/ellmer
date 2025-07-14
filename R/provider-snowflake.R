@@ -32,7 +32,7 @@ NULL
 #' @inheritParams chat_cortex_analyst
 #' @param model `r param_model("claude-3-7-sonnet")`
 #' @inherit chat_openai return
-#' @examplesIf has_credentials("cortex")
+#' @examplesIf has_credentials("snowflake")
 #' chat <- chat_snowflake()
 #' chat$chat("Tell me a joke in the form of a SQL query.")
 #' @export
@@ -84,8 +84,7 @@ ProviderSnowflakeCortex <- new_class(
 method(base_request, ProviderSnowflakeCortex) <- function(provider) {
   req <- request(provider@base_url)
   req <- ellmer_req_credentials(req, provider@credentials)
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_robustify(req)
   # Snowflake uses the User Agent header to identify "parter applications", so
   # identify requests as coming from "r_ellmer" (unless an explicit partner
   # application is set via the ambient SF_PARTNER environment variable).

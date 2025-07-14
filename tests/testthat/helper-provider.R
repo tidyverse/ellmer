@@ -22,7 +22,7 @@ retry_test <- function(code, retries = 1) {
 test_params_stop <- function(chat_fun) {
   chat <- chat_fun(params = params(stop_sequences = "cool"))
   out <- chat$chat("Repeat after the following phrase: Dogs are cool")
-  expect_equal(out, "Dogs are ")
+  expect_equal(out, ellmer_output("Dogs are "))
 }
 
 # Tool calls -------------------------------------------------------------
@@ -33,13 +33,13 @@ test_tools_simple <- function(chat_fun) {
   )
   chat$register_tool(tool(
     function() "2024-01-01",
-    "Return the current date",
-    .name = "current_date"
+    name = "current_date",
+    description = "Return the current date"
   ))
   chat$register_tool(tool(
     function() "February",
-    "Return the full name of the current month",
-    .name = "current_month"
+    name = "current_month",
+    description = "Return the full name of the current month"
   ))
 
   result <- chat$chat("What's the current date in Y-M-D format?")
@@ -47,75 +47,6 @@ test_tools_simple <- function(chat_fun) {
 
   result <- chat$chat("What month is it? Provide the full name")
   expect_match(result, "February")
-}
-
-test_tools_async <- function(chat_fun) {
-  chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
-  chat$register_tool(tool(
-    coro::async(function() "2024-01-01"),
-    "Return the current date"
-  ))
-
-  result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
-  expect_match(result, "2024-01-01")
-
-  expect_snapshot(
-    chat$chat("Great. Do it again."),
-    error = TRUE,
-    transform = function(value) gsub(" \\(\\w+_[a-z0-9A-Z]+\\)", " (ID)", value)
-  )
-}
-
-test_tools_parallel <- function(chat_fun, total_calls = 4) {
-  chat <- chat_fun(system_prompt = "Be very terse, not even punctuation.")
-  favourite_color <- function(person) {
-    if (person == "Joe") "sage green" else "red"
-  }
-  chat$register_tool(tool(
-    favourite_color,
-    "Returns a person's favourite colour",
-    person = type_string("Name of a person")
-  ))
-
-  result <- chat$chat(
-    "
-    What are Joe and Hadley's favourite colours?
-    Answer like name1: colour1, name2: colour2
-  "
-  )
-  expect_match(result, "Joe: sage green")
-  expect_match(result, "Hadley: red")
-  expect_length(chat$get_turns(), total_calls)
-}
-
-test_tools_sequential <- function(chat_fun, total_calls) {
-  chat <- chat_fun(
-    system_prompt = "
-    Use provided tool calls to find the weather forecast and suitable
-    equipment for a variety of weather conditions.
-
-    In your response, be very terse and omit punctuation.
-  "
-  )
-
-  forecast <- function(city) if (city == "New York") "rainy" else "sunny"
-  equipment <- function(weather) {
-    if (weather == "rainy") "umbrella" else "sunscreen"
-  }
-  chat$register_tool(tool(
-    forecast,
-    "Gets the weather forecast for a city",
-    city = type_string("City name")
-  ))
-  chat$register_tool(tool(
-    equipment,
-    "Gets the equipment needed for a weather condition",
-    weather = type_string("Weather condition")
-  ))
-
-  result <- chat$chat("What should I pack for New York this weekend?")
-  expect_match(result, "umbrella", ignore.case = TRUE)
-  expect_length(chat$get_turns(), total_calls)
 }
 
 # Data extraction --------------------------------------------------------
@@ -196,7 +127,11 @@ test_pdf_local <- function(chat_fun) {
     content_pdf_file(test_path("apples.pdf"))
   )
   expect_match(response, "Apples are tasty")
-  expect_match(chat$chat("What apple is not tasty?"), "red delicious")
+  expect_match(
+    chat$chat("What apple is not tasty?"),
+    "red delicious",
+    ignore.case = TRUE
+  )
 }
 
 # Models ------------------------------------------------------------------

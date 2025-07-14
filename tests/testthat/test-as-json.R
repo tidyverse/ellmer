@@ -5,12 +5,12 @@ test_that("can convert basic types to json schema", {
   )
 
   expect_equal(
-    as_json(test_provider(), type_enum("desc", letters[1:3])),
+    as_json(test_provider(), type_enum(letters[1:3], "desc")),
     list(type = "string", description = "desc", enum = as.list(letters[1:3]))
   )
 
   expect_equal(
-    as_json(test_provider(), type_array("a", type_boolean("b"))),
+    as_json(test_provider(), type_array(type_boolean("b"), "a")),
     list(
       type = "array",
       description = "a",

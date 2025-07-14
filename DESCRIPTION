@@ -26,7 +26,7 @@ Imports:
     cli,
     coro (>= 1.1.0),
     glue,
-    httr2 (>= 1.1.1),
+    httr2 (>= 1.2.0),
     jsonlite,
     later (>= 1.4.0),
     lifecycle,
@@ -47,13 +47,14 @@ Suggests:
     shiny,
     shinychat (>= 0.2.0),
     testthat (>= 3.0.0),
+    vcr (>= 1.7.0.91),
     withr
 VignetteBuilder:
     knitr
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-Config/testthat/start-first: test-provider-*
+Config/testthat/start-first: chat, provider*
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -82,6 +83,7 @@ Collate:
     'import-standalone-types-check.R'
     'interpolate.R'
     'params.R'
+    'provider-any.R'
     'provider-openai.R'
     'provider-azure.R'
     'provider-bedrock.R'
@@ -111,3 +113,5 @@ Collate:
     'utils-prettytime.R'
     'utils.R'
     'zzz.R'
+Remotes: 
+    ropensci/vcr

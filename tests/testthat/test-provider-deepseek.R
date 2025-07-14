@@ -4,7 +4,7 @@ test_that("can make simple request", {
   chat <- chat_deepseek("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
+  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -19,13 +19,10 @@ test_that("defaults are reported", {
   expect_snapshot(. <- chat_deepseek())
 })
 
-test_that("all tool variations work", {
+test_that("supports tool calling", {
   chat_fun <- chat_deepseek
 
   test_tools_simple(chat_fun)
-  test_tools_async(chat_fun)
-  test_tools_parallel(chat_fun)
-  test_tools_sequential(chat_fun, total_calls = 6)
 })
 
 # # Doesn't support data extraction

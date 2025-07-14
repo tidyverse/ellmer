@@ -22,9 +22,11 @@ NULL
 #'   claude features that are still in beta.
 #' @family chatbots
 #' @export
-#' @examplesIf has_credentials("claude")
+#' @examples
+#' \dontshow{ellmer:::vcr_example_start("chat_anthropic")}
 #' chat <- chat_anthropic()
 #' chat$chat("Tell me three jokes about statisticians")
+#' \dontshow{ellmer:::vcr_example_end()}
 chat_anthropic <- function(
   system_prompt = NULL,
   params = NULL,
@@ -66,14 +68,13 @@ chat_anthropic <- function(
 chat_anthropic_test <- function(
   ...,
   model = "claude-3-5-sonnet-latest",
-  params = NULL
+  params = NULL,
+  echo = "none"
 ) {
   params <- params %||% params()
-  if (is_testing()) {
-    params$temperature <- params$temperature %||% 0
-  }
+  params$temperature <- params$temperature %||% 0
 
-  chat_anthropic(model = model, params = params, ...)
+  chat_anthropic(model = model, params = params, ..., echo = echo)
 }
 
 ProviderAnthropic <- new_class(
@@ -98,14 +99,12 @@ method(base_request, ProviderAnthropic) <- function(provider) {
   req <- req_headers(req, `anthropic-version` = "2023-06-01")
   # <https://docs.anthropic.com/en/api/getting-started#authentication>
   req <- req_headers_redacted(req, `x-api-key` = provider@api_key)
+
   # <https://docs.anthropic.com/en/api/rate-limits>
-  req <- req_retry(
-    req,
-    # <https://docs.anthropic.com/en/api/errors#http-errors>
-    is_transient = function(resp) resp_status(resp) %in% c(429, 503, 529),
-    max_tries = 2
-  )
-  req <- ellmer_req_timeout(req, stream)
+  # <https://docs.anthropic.com/en/api/errors#http-errors>
+  req <- ellmer_req_robustify(req, is_transient = function(resp) {
+    resp_status(resp) %in% c(429, 503, 529)
+  })
 
   if (length(provider@beta_headers) > 0) {
     req <- req_headers(req, `anthropic-beta` = provider@beta_headers)
@@ -144,8 +143,7 @@ method(chat_body, ProviderAnthropic) <- function(
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
-      fun = function(...) {
-      },
+      function(...) {},
       name = "_structured_tool_call",
       description = "Extract structured data",
       arguments = type_object(data = type)
@@ -293,7 +291,8 @@ method(value_turn, ProviderAnthropic) <- function(
   tokens <- tokens_log(
     provider,
     input = result$usage$input_tokens,
-    output = result$usage$output_tokens
+    output = result$usage$output_tokens,
+    cached_input = result$usage$cache_read_input_tokens
   )
 
   assistant_turn(contents, json = result, tokens = tokens)

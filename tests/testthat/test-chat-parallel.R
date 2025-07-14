@@ -1,4 +1,6 @@
 test_that("can chat in parallel", {
+  vcr::local_cassette("parallel-basic")
+
   chat <- chat_openai_test()
   chats <- parallel_chat(chat, list("What's 1 + 1?", "What's 2 + 2?"))
 
@@ -12,11 +14,25 @@ test_that("can chat in parallel", {
   expect_equal(chats[[2]]$last_turn()@contents[[1]]@text, "4")
 })
 
+test_that("can just get text parallel ", {
+  vcr::local_cassette("parallel-basic")
+
+  chat <- chat_openai_test()
+  out <- parallel_chat_text(chat, list("What's 1 + 1?", "What's 2 + 2?"))
+  expect_equal(out, c("2", "4"))
+})
+
 test_that("can call tools in parallel", {
+  vcr::local_cassette("parallel-tool")
+
   prompts <- rep(list("Roll the dice, please! Reply with 'You rolled ____'"), 2)
 
   chat <- chat_openai_test()
-  chat$register_tool(tool(counter(), "Rolls a six-sided die.", .name = "roll"))
+  chat$register_tool(tool(
+    counter(),
+    name = "roll",
+    description = "Rolls a six-sided die."
+  ))
   chats <- parallel_chat(chat, prompts)
 
   turns_1 <- chats[[1]]$get_turns()
@@ -29,6 +45,8 @@ test_that("can call tools in parallel", {
 })
 
 test_that("can have uneven number of turns", {
+  vcr::local_cassette("parallel-tool-uneven")
+
   prompts <- list(
     "Roll the dice, please! Reply with 'You rolled ____'",
     "reply with the word 'boop'",
@@ -37,7 +55,11 @@ test_that("can have uneven number of turns", {
   )
 
   chat <- chat_openai_test()
-  chat$register_tool(tool(counter(), "Rolls a six-sided die.", .name = "roll"))
+  chat$register_tool(tool(
+    counter(),
+    name = "roll",
+    description = "Rolls a six-sided die."
+  ))
   chats <- parallel_chat(chat, prompts)
 
   lengths <- map_int(chats, \(chat) length(chat$get_turns()))
@@ -50,6 +72,8 @@ test_that("can have uneven number of turns", {
 # structured data --------------------------------------------------------------
 
 test_that("can extract data in parallel", {
+  vcr::local_cassette("parallel-data")
+
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai_test()
@@ -65,6 +89,8 @@ test_that("can extract data in parallel", {
 })
 
 test_that("can get tokens and/or cost", {
+  vcr::local_cassette("parallel-data-cost")
+
   # These are pretty weak, but it's hard to know how to do better.
   person <- type_object(name = type_string(), age = type_integer())
 

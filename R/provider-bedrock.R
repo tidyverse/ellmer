@@ -84,7 +84,7 @@ models_aws_bedrock <- function(profile = NULL) {
   url <- paste0("https://bedrock.", creds$region, ".amazonaws.com")
 
   req <- request(url)
-  req <- req_url_path(req, "foundation-models")
+  req <- req_url_path_append(req, "foundation-models")
   req <- req_auth_aws_v4(
     req,
     aws_access_key_id = creds$access_key_id,
@@ -131,6 +131,8 @@ method(chat_request, ProviderAWSBedrock) <- function(
     provider@model,
     if (stream) "converse-stream" else "converse"
   )
+  req <- unencode_colon(req) # model might contain `:` (#646)
+
   creds <- paws_credentials(provider@profile, provider@cache)
   req <- req_auth_aws_v4(
     req,
@@ -154,8 +156,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
-      fun = function(...) {
-      },
+      fun = function(...) {},
       name = "structured_tool_call__",
       description = "Extract structured data",
       arguments = type_object(data = type)

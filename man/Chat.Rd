@@ -2,7 +2,7 @@
 % Please edit documentation in R/chat.R
 \name{Chat}
 \alias{Chat}
-\title{A chat}
+\title{The Chat object}
 \value{
 A Chat object
 }
@@ -18,10 +18,10 @@ You should generally not create this object yourself,
 but instead call \code{\link[=chat_openai]{chat_openai()}} or friends instead.
 }
 \examples{
-\dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-chat <- chat_openai(echo = TRUE)
+\dontshow{ellmer:::vcr_example_start("Chat")}
+chat <- chat_openai()
 chat$chat("Tell me a funny joke")
-\dontshow{\}) # examplesIf}
+\dontshow{ellmer:::vcr_example_end()}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -43,6 +43,7 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-stream}{\code{Chat$stream()}}
 \item \href{#method-Chat-stream_async}{\code{Chat$stream_async()}}
 \item \href{#method-Chat-register_tool}{\code{Chat$register_tool()}}
+\item \href{#method-Chat-register_tools}{\code{Chat$register_tools()}}
 \item \href{#method-Chat-get_provider}{\code{Chat$get_provider()}}
 \item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
 \item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
@@ -76,7 +77,8 @@ when running at the console).
 \item \code{all}: echo all input and output.
 }
 
-Note this only affects the \code{chat()} method.}
+Note this only affects the \code{chat()} method. You can override the default
+by setting the \code{ellmer_echo} option.}
 }
 \if{html}{\out{</div>}}
 }
@@ -269,8 +271,9 @@ Extract structured data
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{The input to send to the chatbot. Will typically include
-the phrase "extract structured data".}
+\item{\code{...}}{The input to send to the chatbot. This is typically the text
+you want to extract data from, but it can be omitted if the data is
+obvious from the existing conversation.}
 
 \item{\code{type}}{A type specification for the extracted data. Should be
 created with a \code{\link[=type_boolean]{type_()}} function.}
@@ -293,7 +296,7 @@ data frames and arrays of strings into a character vector.}
 Extract structured data, asynchronously. Returns a promise
 that resolves to an object matching the type specification.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_structured_async(..., type, echo = "none")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$chat_structured_async(..., type, echo = "none", convert = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -308,6 +311,10 @@ created with a \code{\link[=type_boolean]{type_()}} function.}
 \item{\code{echo}}{Whether to emit the response to stdout as it is received.
 Set to "text" to stream JSON data as it's generated (not supported by
 all providers).}
+
+\item{\code{convert}}{Automatically convert from JSON lists to R data types
+using the schema. For example, this will turn arrays of objects into
+data frames and arrays of strings into a character vector.}
 }
 \if{html}{\out{</div>}}
 }
@@ -399,22 +406,33 @@ rich content types. When \code{stream = "content"}, \code{stream()} yields
 \if{latex}{\out{\hypertarget{method-Chat-register_tool}{}}}
 \subsection{Method \code{register_tool()}}{
 Register a tool (an R function) that the chatbot can use.
-If the chatbot decides to use the function, ellmer will automatically
-call it and submit the results back.
-
-The return value of the function. Generally, this should either be a
-string, or a JSON-serializable value. If you must have more direct
-control of the structure of the JSON that's returned, you can return a
-JSON-serializable value wrapped in \code{\link[base:AsIs]{base::I()}}, which ellmer will leave
-alone until the entire request is JSON-serialized.
+Learn more in \code{vignette("tool-calling")}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$register_tool(tool_def)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$register_tool(tool)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tool_def}}{Tool definition created by \code{\link[=tool]{tool()}}.}
+\item{\code{tool}}{A tool definition created by \code{\link[=tool]{tool()}}.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-register_tools"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-register_tools}{}}}
+\subsection{Method \code{register_tools()}}{
+Register a list of tools.
+Learn more in \code{vignette("tool-calling")}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$register_tools(tools)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tools}}{A list of tool definitions created by \code{\link[=tool]{tool()}}.}
 }
 \if{html}{\out{</div>}}
 }

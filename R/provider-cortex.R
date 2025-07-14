@@ -7,6 +7,11 @@ NULL
 #' Create a chatbot that speaks to the Snowflake Cortex Analyst
 #'
 #' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' Please use [chat_snowflake()] instead as that appears to be where Snowflake
+#' is putting their efforts.
+#'
 #' Chat with the LLM-powered [Snowflake Cortex
 #' Analyst](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst).
 #'
@@ -51,13 +56,6 @@ NULL
 #'   or `NULL` when using `model_spec` instead.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
-#' @family chatbots
-#' @examplesIf has_credentials("cortex")
-#' chat <- chat_cortex_analyst(
-#'   model_file = "@my_db.my_schema.my_stage/model.yaml"
-#' )
-#' chat$chat("What questions can I ask?")
-#' @export
 chat_cortex_analyst <- function(
   account = snowflake_account(),
   credentials = NULL,
@@ -66,6 +64,12 @@ chat_cortex_analyst <- function(
   api_args = list(),
   echo = c("none", "output", "all")
 ) {
+  lifecycle::deprecate_warn(
+    "0.3.0",
+    "char_cortex_analyst()",
+    "chat_snowflake()"
+  )
+
   check_string(account, allow_empty = FALSE)
   check_string(model_spec, allow_empty = FALSE, allow_null = TRUE)
   check_string(model_file, allow_empty = FALSE, allow_null = TRUE)
@@ -154,8 +158,7 @@ method(chat_request, ProviderSnowflakeCortexAnalyst) <- function(
   req <- request(provider@base_url)
   req <- req_url_path_append(req, "/api/v2/cortex/analyst/message")
   req <- ellmer_req_credentials(req, provider@credentials)
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req, Sys.getenv("SF_PARTNER"))
 
   # Snowflake doesn't document the error response format for Cortex Analyst at
@@ -412,7 +415,7 @@ method(format, ContentSql) <- function(x, ...) {
 
 # Credential handling ----------------------------------------------------------
 
-cortex_credentials_exist <- function(...) {
+snowflake_credentials_exist <- function(...) {
   tryCatch(
     is_list(default_snowflake_credentials(...)),
     error = function(e) FALSE

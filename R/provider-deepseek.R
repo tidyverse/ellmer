@@ -35,10 +35,6 @@ chat_deepseek <- function(
   model <- set_default(model, "deepseek-chat")
   echo <- check_echo(echo)
 
-  if (is_testing() && is.null(seed)) {
-    seed <- seed %||% 1014
-  }
-
   provider <- ProviderDeepSeek(
     name = "DeepSeek",
     base_url = base_url,

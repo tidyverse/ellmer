@@ -50,7 +50,8 @@ chat_mistral_test <- function(
   system_prompt = NULL,
   model = "mistral-large-latest",
   params = NULL,
-  ...
+  ...,
+  echo = "none"
 ) {
   params <- params %||% params()
   params <- modify_list(list(seed = 1014, temperature = 0), params)
@@ -59,13 +60,14 @@ chat_mistral_test <- function(
     system_prompt = system_prompt,
     model = model,
     params = params,
-    ...
+    ...,
+    echo = echo
   )
 }
 
 method(base_request, ProviderMistral) <- function(provider) {
   req <- base_request(super(provider, ProviderOpenAI))
-  req <- req_retry(req, max_tries = 2, after = function(resp) {
+  req <- ellmer_req_robustify(req, after = function(resp) {
     as.numeric(resp_header(resp, "ratelimitbysize-reset", NA))
   })
   req <- req_error(req, body = function(resp) {

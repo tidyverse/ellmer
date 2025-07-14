@@ -24,7 +24,7 @@ NULL
 #' @param api_key `r api_key_param("GOOGLE_API_KEY")`
 #'   For Gemini, you can alternatively set `GEMINI_API_KEY`.
 #'
-#' @param model `r param_model("gemini-2.0-flash", "google_gemini")`
+#' @param model `r param_model("gemini-2.5-flash", "google_gemini")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -43,7 +43,7 @@ chat_google_gemini <- function(
   api_args = list(),
   echo = NULL
 ) {
-  model <- set_default(model, "gemini-2.0-flash")
+  model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
   credentials <- default_google_credentials(api_key, gemini = TRUE)
 
@@ -59,6 +59,19 @@ chat_google_gemini <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
+chat_google_gemini_test <- function(
+  ...,
+  model = "gemini-2.5-flash",
+  params = NULL,
+  echo = "none"
+) {
+  params <- params %||% params()
+  params$temperature <- params$temperature %||% 0
+  params$seed <- 1014
+
+  chat_google_gemini(..., model = model, params = params, echo = echo)
+}
+
 #' @export
 #' @rdname chat_google_gemini
 #' @param location Location, e.g. `us-east1`, `me-central1`, `africa-south1`.
@@ -72,7 +85,7 @@ chat_google_vertex <- function(
   api_args = list(),
   echo = NULL
 ) {
-  model <- set_default(model, "gemini-2.0-flash")
+  model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
   credentials <- default_google_credentials()
 
@@ -112,8 +125,7 @@ ProviderGoogleGemini <- new_class(
 method(base_request, ProviderGoogleGemini) <- function(provider) {
   req <- request(provider@base_url)
   req <- ellmer_req_credentials(req, provider@credentials)
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- req_error(req, body = function(resp) {
     json <- resp_body_json(resp, check_type = FALSE)
@@ -149,6 +161,8 @@ method(chat_request, ProviderGoogleGemini) <- function(
       paste0(provider@model, ":", "generateContent")
     )
   }
+
+  req <- unencode_colon(req)
 
   body <- chat_body(
     provider = provider,
@@ -272,8 +286,9 @@ method(value_turn, ProviderGoogleGemini) <- function(
   usage <- result$usageMetadata
   tokens <- tokens_log(
     provider,
-    input = usage$promptTokenCount,
-    output = usage$candidatesTokenCount
+    input = usage$promptTokenCount - (usage$cachedContentTokenCount %||% 0),
+    output = usage$candidatesTokenCount,
+    cached_input = usage$cachedContentTokenCount
   )
 
   assistant_turn(contents, json = result, tokens = tokens)

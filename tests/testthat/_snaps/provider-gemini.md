@@ -1,18 +1,18 @@
+# can handle errors
+
+    Code
+      chat$chat("Hi")
+    Condition
+      Error in `req_perform()`:
+      ! HTTP 404 Not Found.
+      i models/doesnt-exist is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+
 # defaults are reported
 
     Code
       . <- chat_google_gemini()
     Message
-      Using model = "gemini-2.0-flash".
-
-# all tool variations work
-
-    Code
-      chat$chat("Great. Do it again.")
-    Condition
-      Error:
-      ! Can't use async tools with `$chat()` or `$stream()`.
-      i Async tools are supported, but you must use `$chat_async()` or `$stream_async()`.
+      Using model = "gemini-2.5-flash".
 
 # can use images
 

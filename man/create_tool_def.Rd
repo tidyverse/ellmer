@@ -35,14 +35,14 @@ Returned invisibly if \code{echo} is \code{TRUE}.
 \description{
 In order to use a function as a tool in a chat, you need to craft the right
 call to \code{\link[=tool]{tool()}}. This function helps you do that for documented functions by
-extracting the function's R documentation and creating a \code{tool()} call for
-you, using an LLM. It's meant to be used interactively while writing your
+extracting the function's R documentation and using an LLM to generate the
+\code{tool()} call. It's meant to be used interactively while writing your
 code, not as part of your final code.
 
 If the function has package documentation, that will be used. Otherwise, if
 the source code of the function can be automatically detected, then the
 comments immediately preceding the function are used (especially helpful if
-those are Roxygen comments). If neither are available, then just the function
+those are roxygen2 comments). If neither are available, then just the function
 signature is used.
 
 Note that this function is inherently imperfect. It can't handle all possible
