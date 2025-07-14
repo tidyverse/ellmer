@@ -56,13 +56,6 @@ NULL
 #'   or `NULL` when using `model_spec` instead.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
-#' @family chatbots
-#' @examplesIf has_credentials("cortex")
-#' chat <- chat_cortex_analyst(
-#'   model_file = "@my_db.my_schema.my_stage/model.yaml"
-#' )
-#' chat$chat("What questions can I ask?")
-#' @export
 chat_cortex_analyst <- function(
   account = snowflake_account(),
   credentials = NULL,
@@ -422,7 +415,7 @@ method(format, ContentSql) <- function(x, ...) {
 
 # Credential handling ----------------------------------------------------------
 
-cortex_credentials_exist <- function(...) {
+snowflake_credentials_exist <- function(...) {
   tryCatch(
     is_list(default_snowflake_credentials(...)),
     error = function(e) FALSE

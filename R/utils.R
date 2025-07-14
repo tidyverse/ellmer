@@ -119,7 +119,7 @@ dots_named <- function(...) {
 has_credentials <- function(provider) {
   switch(
     provider,
-    cortex = cortex_credentials_exist(),
+    snowflake = snowflake_credentials_exist(),
     openai = openai_key_exists(),
     claude = anthropic_key_exists(),
     cli::cli_abort("Unknown model {model}.")

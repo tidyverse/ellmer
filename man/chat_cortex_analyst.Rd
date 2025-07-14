@@ -84,31 +84,3 @@ See \code{\link[=chat_snowflake]{chat_snowflake()}} to chat with more general-pu
 Snowflake.
 }
 }
-\examples{
-\dontshow{if (has_credentials("cortex")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-chat <- chat_cortex_analyst(
-  model_file = "@my_db.my_schema.my_stage/model.yaml"
-)
-chat$chat("What questions can I ask?")
-\dontshow{\}) # examplesIf}
-}
-\seealso{
-Other chatbots: 
-\code{\link{chat_anthropic}()},
-\code{\link{chat_aws_bedrock}()},
-\code{\link{chat_azure_openai}()},
-\code{\link{chat_cloudflare}()},
-\code{\link{chat_databricks}()},
-\code{\link{chat_deepseek}()},
-\code{\link{chat_github}()},
-\code{\link{chat_google_gemini}()},
-\code{\link{chat_groq}()},
-\code{\link{chat_huggingface}()},
-\code{\link{chat_mistral}()},
-\code{\link{chat_ollama}()},
-\code{\link{chat_openai}()},
-\code{\link{chat_openrouter}()},
-\code{\link{chat_perplexity}()},
-\code{\link{chat_portkey}()}
-}
-\concept{chatbots}
