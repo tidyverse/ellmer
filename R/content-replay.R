@@ -16,44 +16,16 @@ NULL
 #' @param chat A [Chat] object to be used for context.
 #' @param ... Not used.
 #'
-#' @examplesIf has_credentials("openai")
-#' chat <- chat_openai(model = "gpt-4.1-nano")
-#' chat$chat("Where is the capital of France?")
-#'
-#' # Serialize to a simple list
-#' turn_recorded <- contents_record(chat$get_turns(), chat = chat)
-#' str(turn_recorded)
-#'
-#' # Deserialize back to S7 objects
-#' turn_replayed <- contents_replay(turn_recorded, chat = chat)
-#' turn_replayed
+#' @keywords internal
 #' @export
-#' @rdname contents_record
 contents_record <- new_generic(
   "contents_record",
   "content",
   function(content, ..., chat) {
-    check_chat(chat, call = caller_env())
+    check_chat(chat)
 
     recorded <- S7_dispatch()
-
-    if (!is_recorded_object(recorded)) {
-      cli::cli_abort(
-        "Expected the recorded object to be a list with at least names 'version', 'class', and 'props'."
-      )
-    }
-
-    if (!is.character(recorded$class) || length(recorded$class) != 1) {
-      cli::cli_abort(
-        "Expected the recorded object to have a single $class name, containing `::` if the class is from a package."
-      )
-    }
-
-    if (!grepl("ellmer::", recorded$class, fixed = TRUE)) {
-      cli::cli_abort(
-        "Only S7 classes from the `ellmer` package are currently supported. Received: {.val {recorded$class}}."
-      )
-    }
+    check_recorded(recorded)
 
     recorded
   }
@@ -97,41 +69,17 @@ method(contents_record, S7_object) <- function(content, ..., chat) {
 #' @export
 # Holy "Holy Trait" dispatching, Batman!
 contents_replay <- function(obj, ..., chat) {
-  check_chat(chat, call = caller_env())
+  check_chat(chat)
+  check_recorded(obj)
 
-  # Find any reason to not believe `obj` is a recorded object.
-  # If not a recorded object, return it as is.
-  # If it is a recorded s7 object, dispatch on the discovered class.
-
-  if (!is_recorded_object(obj)) {
-    cli::cli_abort(
-      "Expected the object to be a list with at least names 'version', 'class', and 'props'."
-    )
-  }
-
-  class_name <- obj$class
-  if (!(is.character(class_name) && length(class_name) == 1)) {
-    cli::cli_abort(
-      "Expected the replay object's `'class'` value to be a single character."
-    )
-  }
-
-  cls_name <- strsplit(class_name, "::")[[1]][2]
-  if (!grepl("ellmer::", class_name, fixed = TRUE)) {
-    cli::cli_abort(
-      "Only S7 classes from the `ellmer` package are currently supported."
-    )
-  }
-
-  cls <- pkg_env("ellmer")[[cls_name]]
-
+  class_name <- gsub("^ellmer::", "", obj$class)
+  cls <- pkg_env("ellmer")[[class_name]]
   if (is.null(cls)) {
-    cli::cli_abort("Unable to find the S7 class: {.val {class_name}}.")
+    cli::cli_abort("Unable to find the S7 class: {.val {obj$class}}.")
   }
-
   if (!S7_inherits(cls)) {
     cli::cli_abort(
-      "The object returned for {.val {class_name}} is not an S7 class."
+      "The object returned for {.val {obj$class}} is not an S7 class."
     )
   }
 
@@ -153,8 +101,6 @@ contents_replay_class <- new_generic(
 
 
 method(contents_replay_class, S7_object) <- function(cls, obj, ..., chat) {
-  stopifnot(obj$version == 1)
-
   obj_props <- map(obj$props, function(prop_value) {
     if (is_list_of_recorded_objects(prop_value)) {
       # If the prop is a list of recorded objects, replay each one
@@ -175,12 +121,6 @@ method(contents_replay_class, S7_object) <- function(cls, obj, ..., chat) {
 }
 
 method(contents_replay_class, ToolDef) <- function(cls, obj, ..., chat) {
-  if (obj$version != 1) {
-    cli::cli_abort(
-      "Unsupported version {.val {obj$version}}."
-    )
-  }
-
   tools <- chat$get_tools()
   matched_tool <- tools[[obj$props$name]]
 
@@ -189,13 +129,11 @@ method(contents_replay_class, ToolDef) <- function(cls, obj, ..., chat) {
   }
 
   # If no tool is found, return placeholder tool containing the metadata
-  ret <- contents_replay_class(
-    super(cls, S7_object),
-    obj,
-    chat = chat
-  )
+  ret <- contents_replay_class(super(cls, S7_object), obj, chat = chat)
   ret
 }
+
+# Helpers ----------------------------------------------------------------------
 
 prop_is_read_only <- function(prop) {
   is.function(prop$getter) && !is.function(prop$setter)
@@ -211,4 +149,31 @@ is_list_of_s7_objects <- function(x) {
 
 is_list_of_recorded_objects <- function(x) {
   is.list(x) && all(map_lgl(x, is_recorded_object))
+}
+
+check_recorded <- function(recorded, call = caller_env()) {
+  if (!is_recorded_object(recorded)) {
+    cli::cli_abort(
+      "Expected the recorded object to be a list with at least names 'version', 'class', and 'props'.",
+      call = call
+    )
+  }
+
+  if (!identical(recorded$version, 1)) {
+    cli::cli_abort("Unsupported version {.val {recorded$version}}.")
+  }
+
+  if (!is_string(recorded$class)) {
+    cli::cli_abort(
+      "Expected the recorded object to have a single $class name, containing `::` if the class is from a package.",
+      call = call
+    )
+  }
+
+  if (!grepl("ellmer::", recorded$class, fixed = TRUE)) {
+    cli::cli_abort(
+      "Only S7 classes from the `ellmer` package are currently supported. Received: {.val {recorded$class}}.",
+      call = call
+    )
+  }
 }

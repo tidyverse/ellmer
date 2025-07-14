@@ -27,17 +27,4 @@ into easily serializable representations.
 and return a \link{Turn} or \link{Content} object.
 }
 }
-\examples{
-\dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-chat <- chat_openai(model = "gpt-4.1-nano")
-chat$chat("Where is the capital of France?")
-
-# Serialize to a simple list
-turn_recorded <- contents_record(chat$get_turns(), chat = chat)
-str(turn_recorded)
-
-# Deserialize back to S7 objects
-turn_replayed <- contents_replay(turn_recorded, chat = chat)
-turn_replayed
-\dontshow{\}) # examplesIf}
-}
+\keyword{internal}

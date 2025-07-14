@@ -1,5 +1,3 @@
-# -------------------------------------------------------------------------
-
 test_that("can round trip of Turn record/replay", {
   test_record_replay(Turn("user"))
 
@@ -12,40 +10,19 @@ test_that("can round trip of Turn record/replay", {
   ))
 })
 
-
-test_that("can round trip of Content record/replay", {
+test_that("can round trip simple content types", {
   test_record_replay(Content())
-})
-
-test_that("can round trip of ContentText record/replay", {
   test_record_replay(ContentText("hello world"))
+  test_record_replay(ContentImageInline("image/png", "abcd123"))
+  test_record_replay(ContentImageRemote("https://example.com/image.jpg"))
+  test_record_replay(ContentJson(list(a = 1:2, b = "apple")))
+  test_record_replay(ContentSql("SELECT * FROM mtcars"))
+  test_record_replay(ContentThinking("A **thought**."))
+  test_record_replay(ContentUploaded("https://example.com/image.jpg"))
+  test_record_replay(ContentPDF(type = "TYPE", data = "DATA"))
 })
 
-test_that("can round trip of ContentImageInline record/replay", {
-  test_record_replay(
-    ContentImageInline("image/png", "abcd123")
-  )
-})
-
-test_that("can round trip of ContentImageRemote record/replay", {
-  test_record_replay(
-    ContentImageRemote("https://example.com/image.jpg", detail = "")
-  )
-})
-
-test_that("can round trip of ContentJson record/replay", {
-  test_record_replay(
-    ContentJson(list(a = 1:2, b = "apple"))
-  )
-})
-
-test_that("can round trip of ContentSql record/replay", {
-  test_record_replay(
-    ContentSql("SELECT * FROM mtcars")
-  )
-})
-
-test_that("can round trip of ContentSuggestions record/replay", {
+test_that("can round trip of ContentSuggestions", {
   test_record_replay(
     ContentSuggestions(
       c(
@@ -54,12 +31,6 @@ test_that("can round trip of ContentSuggestions record/replay", {
         "What is the average price of products in the 'electronics' category?"
       )
     )
-  )
-})
-
-test_that("can round trip of ContentThinking record/replay", {
-  test_record_replay(
-    ContentThinking("A **thought**.")
   )
 })
 
@@ -74,176 +45,65 @@ test_that("can round trip of ContentTool record/replay", {
       sd = type_number("The standard deviation of the distribution.")
     )
   )
-  chat$register_tool(tool_rnorm)
-
-  test_record_replay(
-    ContentToolRequest("ID", "tool_name", list(a = 1:2, b = "apple")),
-    chat = chat
-  )
-})
-
-test_that("can round trip of ToolDef record/replay", {
-  chat <- chat_openai_test()
-  tool_rnorm <- tool(
-    rnorm,
-    description = "Drawn numbers from a random normal distribution",
-    arguments = list(
-      n = type_integer("The number of observations."),
-      mean = type_number("The mean value of the distribution."),
-      sd = type_number("The standard deviation of the distribution.")
-    )
-  )
+  # Can round trip tooldef
   test_record_replay(tool_rnorm, chat = chat)
-
   chat$register_tool(tool_rnorm)
-  test_record_replay(
-    ContentToolRequest(
-      "ID",
-      "tool_name",
-      list(a = 1:2, b = "apple"),
-      tool = tool_rnorm
-    ),
-    chat = chat
+
+  # And request/result
+  request_no_tool <- ContentToolRequest(
+    "ID",
+    "tool_name",
+    list(a = 1:2, b = "apple")
   )
-
-  recorded_tool <- contents_record(tool_rnorm, chat = chat)
-  chat_empty <- chat_openai_test()
-  replayed_tool <- contents_replay(recorded_tool, chat = chat_empty)
-
-  tool_rnorm_empty <- ToolDef(
-    # rnorm,
-    name = "rnorm",
-    description = "Drawn numbers from a random normal distribution",
-    arguments = type_object(
-      n = type_integer("The number of observations."),
-      mean = type_number("The mean value of the distribution."),
-      sd = type_number("The standard deviation of the distribution.")
-    ),
+  request_tool <- ContentToolRequest(
+    "ID",
+    "tool_name",
+    list(a = 1:2, b = "apple"),
+    tool = tool_rnorm
   )
-
-  expect_equal(replayed_tool, tool_rnorm_empty)
+  result <- ContentToolResult(
+    value = "VALUE",
+    extra = list(extra = 1:2, b = "apple")
+  )
+  test_record_replay(request_no_tool, chat = chat)
+  test_record_replay(request_tool, chat = chat)
+  test_record_replay(result, chat = chat)
 })
 
-test_that("can round trip of ContentToolResult record/replay", {
-  test_record_replay(
-    ContentToolResult(
-      value = "VALUE",
-      error = NULL,
-      extra = list(extra = 1:2, b = "apple"),
-      request = NULL
-    )
-  )
 
+test_that("checks recorded value types", {
   chat <- chat_openai_test()
-  tool_rnorm <- tool(
-    rnorm,
-    description = "Drawn numbers from a random normal distribution",
-    arguments = list(
-      n = type_integer("The number of observations."),
-      mean = type_number("The mean value of the distribution."),
-      sd = type_number("The standard deviation of the distribution.")
-    )
-  )
-  chat$register_tool(tool_rnorm)
 
-  replayed <-
-    test_record_replay(
-      ContentToolResult(
-        value = "VALUE",
-        error = try(stop("boom"), silent = TRUE),
-        extra = list(extra = 1:2, b = "apple"),
-        request = ContentToolRequest(
-          "ID",
-          "tool_name",
-          list(a = 1:2, b = "apple"),
-          tool = tool_rnorm
-        )
-      ),
-      chat = chat
-    )
-
-  tryCatch(
-    signalCondition(replayed@error), # re-throw error
-    error = function(e) {
-      expect_equal(
-        e$message,
-        "boom"
-      )
-    }
-  )
-})
-
-test_that("can round trip of ContentUploaded record/replay", {
-  test_record_replay(ContentUploaded("https://example.com/image.jpg"))
-})
-
-test_that("can round trip of ContentPDF record/replay", {
-  test_record_replay(ContentPDF(type = "TYPE", data = "DATA"))
+  bad_names <- list()
+  bad_version <- list(version = 2, class = "ellmer::Content", props = list())
+  bad_class <- list(version = 1, class = c("a", "b"), props = list())
+  expect_snapshot(error = TRUE, {
+    contents_replay(bad_names, chat = chat)
+    contents_replay(bad_version, chat = chat)
+    contents_replay(bad_class, chat = chat)
+  })
 })
 
 test_that("non-ellmer classes are not recorded/replayed by default", {
   chat <- chat_openai_test()
 
-  LocalClass <- S7::new_class(
-    "LocalClass",
-    properties = list(
-      name = prop_string()
-    ),
-    # Make sure to unset the package being used!
-    # Within testing, it sets the package to "ellmer"
-    package = NULL
-  )
+  LocalClass <- S7::new_class("LocalClass", package = "foo")
+  recorded <- list(version = 1, class = "foo::LocalClass", props = list())
 
-  expect_snapshot(
-    contents_record(LocalClass("testname"), chat = chat),
-    error = TRUE
-  )
-  expect_snapshot(
-    contents_replay(
-      list(
-        version = 1,
-        class = "testpkg::LocalClass",
-        props = list(name = "testname")
-      ),
-      chat = chat
-    ),
-    error = TRUE
-  )
+  expect_snapshot(error = TRUE, {
+    contents_record(LocalClass(), chat = chat)
+    contents_replay(recorded, chat = chat)
+  })
 })
 
-test_that("unknown classes cause errors", {
+test_that("replayed objects must be existing S7 classes", {
   chat <- chat_openai_test()
-  recorded <- contents_record(Turn("user"), chat = chat)
-  recorded$class <- "ellmer::Turn2"
 
-  expect_error(
-    contents_replay(recorded, chat = chat),
-    "Unable to find the S7 class"
-  )
+  doesnt_exist <- list(version = 1, class = "ellmer::Turn2", props = list())
+  not_s7 <- list(version = 1, class = "ellmer::chat_openai", props = list())
 
-  expect_snapshot(contents_replay(recorded, chat = chat), error = TRUE)
-})
-
-test_that("replay classes are S7 classes", {
-  OtherName <- S7::new_class(
-    "LocalClass",
-    properties = list(
-      name = prop_string()
-    ),
-    # Make sure to unset the package being used!
-    # Within testing, it sets the package to "ellmer"
-    package = NULL
-  )
-  LocalClass <- function(name) {
-    OtherName(name = name)
-  }
-
-  chat <- chat_openai_test()
-  recorded <- contents_record(LocalClass("testname"), chat = chat)
-  expect_error(
-    contents_replay(recorded, chat = chat),
-    "is not an S7 class"
-  )
-
-  expect_snapshot(contents_replay(recorded, chat = chat), error = TRUE)
+  expect_snapshot(error = TRUE, {
+    contents_replay(doesnt_exist, chat = chat)
+    contents_replay(not_s7, chat = chat)
+  })
 })
