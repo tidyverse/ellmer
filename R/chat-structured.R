@@ -85,11 +85,13 @@ list_to_atomic <- function(x, type) {
 
   types <- map_chr(x, typeof)
   if (r_type == "integer") {
-    x[types == "double"] <- lapply(x[types == "double"], as.integer)
-    types[types == "double"] <- "integer"
+    doubles <- which(types == "double")
+    x[doubles] <- lapply(x[doubles], as.integer)
+    types[doubles] <- "integer"
   } else if (r_type == "double") {
-    x[types == "integer"] <- lapply(x[types == "integer"], as.double)
-    types[types == "integer"] <- "double"
+    integers <- which(types == "integer")
+    x[integers] <- lapply(x[integers], as.double)
+    types[integers] <- "double"
   }
 
   # also captures NULLs
