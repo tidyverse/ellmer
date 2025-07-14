@@ -29,7 +29,7 @@
 #' }
 google_upload <- function(
   path,
-  base_url = "https://generativelanguage.googleapis.com/v1beta/",
+  base_url = "https://generativelanguage.googleapis.com/",
   api_key = NULL,
   mime_type = NULL
 ) {
@@ -71,7 +71,6 @@ google_upload_init <- function(path, base_url, credentials, mime_type) {
   )
   req <- req_body_json(req, list(file = list(display_name = display_name)))
 
-  print(req$url)
   resp <- req_perform(req)
   resp_header(resp, "x-goog-upload-url")
 }

@@ -1,0 +1,32 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/upload/v1beta/files
+    body:
+      string: '{"file":{"display_name":"apples.pdf"}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-length: '0'
+      content-type: text/plain; charset=utf-8
+      date: Mon, 14 Jul 2025 13:55:32 GMT
+      server: UploadServer
+      x-goog-upload-chunk-granularity: '8388608'
+      x-goog-upload-control-url: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=ABgVH8-nT8wa1MhkLwnxHPcE4x_2zlbfrir5gmlo_D59ddVYVPKrsWCwUn7RZX8AUcly4A6c8_WM5RSc8buNptPOn5zJkv6QRcC5WLN705SozA&upload_protocol=resumable
+      x-goog-upload-header-content-type: application/json; charset=UTF-8
+      x-goog-upload-header-vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-goog-upload-header-x-google-backends: unix:/tmp/esfbackend.1752484049.461034.3579546
+      x-goog-upload-header-x-google-esf-cloud-client-params: 'backend_service_name:
+        "generativelanguage.googleapis.com" backend_fully_qualified_method: "google.ai.generativelanguage.v1beta.FileService.CreateFile"'
+      x-goog-upload-header-x-google-gfe-backend-request-cost: '18.2810'
+      x-goog-upload-header-x-google-security-signals: FRAMEWORK=ONE_PLATFORM,ENV=borg,ENV_DEBUG=borg_user:genai-api;borg_job:prod.genai-api
+      x-goog-upload-header-x-google-session-info: GgQYECgLIAE6IxIhZ2VuZXJhdGl2ZWxhbmd1YWdlLmdvb2dsZWFwaXMuY29t
+      x-goog-upload-status: active
+      x-goog-upload-url: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=ABgVH8-nT8wa1MhkLwnxHPcE4x_2zlbfrir5gmlo_D59ddVYVPKrsWCwUn7RZX8AUcly4A6c8_WM5RSc8buNptPOn5zJkv6QRcC5WLN705SozA&upload_protocol=resumable
+      x-guploader-uploadid: ABgVH8-nT8wa1MhkLwnxHPcE4x_2zlbfrir5gmlo_D59ddVYVPKrsWCwUn7RZX8AUcly4A6c8_WM5RSc8buNptPOn5zJkv6QRcC5WLN705SozA
+  recorded_at: 2025-07-14 13:55:32
+recorded_with: VCR-vcr/1.7.1.93
