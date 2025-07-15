@@ -1,3 +1,15 @@
+test_that("can serialize simple objects", {
+  expect_equal(
+    contents_record(Content()),
+    recorded_object("ellmer::Content", set_names(list()))
+  )
+
+  expect_equal(
+    contents_record(ContentText("hello world")),
+    recorded_object("ellmer::ContentText", list(text = "hello world"))
+  )
+})
+
 test_that("can round trip of Turn record/replay", {
   test_record_replay(Turn("user"))
 
@@ -34,76 +46,56 @@ test_that("can round trip of ContentSuggestions", {
   )
 })
 
-test_that("can round trip of ContentTool record/replay", {
-  chat <- chat_openai_test()
-  tool_rnorm <- tool(
-    rnorm,
-    description = "Drawn numbers from a random normal distribution",
-    arguments = list(
-      n = type_integer("The number of observations."),
-      mean = type_number("The mean value of the distribution."),
-      sd = type_number("The standard deviation of the distribution.")
-    )
-  )
-  # Can round trip tooldef
-  test_record_replay(tool_rnorm, chat = chat)
-  chat$register_tool(tool_rnorm)
-
-  # And request/result
-  request_no_tool <- ContentToolRequest(
+test_that("can round trip of ContentToolRequest/ContentToolResult", {
+  request <- ContentToolRequest(
     "ID",
     "tool_name",
     list(a = 1:2, b = "apple")
-  )
-  request_tool <- ContentToolRequest(
-    "ID",
-    "tool_name",
-    list(a = 1:2, b = "apple"),
-    tool = tool_rnorm
   )
   result <- ContentToolResult(
     value = "VALUE",
     extra = list(extra = 1:2, b = "apple")
   )
-  test_record_replay(request_no_tool, chat = chat)
-  test_record_replay(request_tool, chat = chat)
-  test_record_replay(result, chat = chat)
+  test_record_replay(request)
+  test_record_replay(result)
 })
 
+test_that("can re-match tools", {
+  turn <- Turn("user", list(ContentToolRequest("123", "mytool")))
+  recorded <- contents_record(turn)
+
+  mytool <- tool(function() {}, "mytool")
+  replayed <- contents_replay(recorded, tools = list(mytool = mytool))
+  expect_equal(replayed@contents[[1]]@tool, mytool)
+})
 
 test_that("checks recorded value types", {
-  chat <- chat_openai_test()
-
   bad_names <- list()
   bad_version <- list(version = 2, class = "ellmer::Content", props = list())
   bad_class <- list(version = 1, class = c("a", "b"), props = list())
   expect_snapshot(error = TRUE, {
-    contents_replay(bad_names, chat = chat)
-    contents_replay(bad_version, chat = chat)
-    contents_replay(bad_class, chat = chat)
+    contents_replay(bad_names)
+    contents_replay(bad_version)
+    contents_replay(bad_class)
   })
 })
 
 test_that("non-ellmer classes are not recorded/replayed by default", {
-  chat <- chat_openai_test()
-
   LocalClass <- S7::new_class("LocalClass", package = "foo")
   recorded <- list(version = 1, class = "foo::LocalClass", props = list())
 
   expect_snapshot(error = TRUE, {
-    contents_record(LocalClass(), chat = chat)
-    contents_replay(recorded, chat = chat)
+    contents_record(LocalClass())
+    contents_replay(recorded)
   })
 })
 
 test_that("replayed objects must be existing S7 classes", {
-  chat <- chat_openai_test()
-
   doesnt_exist <- list(version = 1, class = "ellmer::Turn2", props = list())
   not_s7 <- list(version = 1, class = "ellmer::chat_openai", props = list())
 
   expect_snapshot(error = TRUE, {
-    contents_replay(doesnt_exist, chat = chat)
-    contents_replay(not_s7, chat = chat)
+    contents_replay(doesnt_exist)
+    contents_replay(not_s7)
   })
 })

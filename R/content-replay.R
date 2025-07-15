@@ -1,142 +1,102 @@
 #' @include tools-def.R
 NULL
 
-#' Save and restore content
+#' Record and replay content
 #'
 #' @description
 #' These generic functions can be use to convert [Turn]/[Content] objects
-#' into easily serializable representations.
+#' into easily serializable representations (i.e. lists and atomic vectors).
 #'
-#' * `contents_record()` accept a [Turn] or [Content] and return a simple list.
-#' * `contents_replay()` will accept a simple list (from `contents_record()`)
-#'   and return a [Turn] or [Content] object.
+#' * `contents_record()` accepts a [Turn] or [Content] and return a simple list.
+#' * `contents_replay()` takes the output of `contents_record()` and returns
+#'   a [Turn] or [Content] object.
 #'
-#' @param content A [Turn] or [Content] object to serialize.
-#' @param obj A basic list to desierialize.
-#' @param chat A [Chat] object to be used for context.
-#' @param ... Not used.
-#'
+#' @param x A [Turn] or [Content] object to serialize; or a serialized object
+#'   to replay.
+#' @param tools A named list of tools
 #' @keywords internal
 #' @export
-contents_record <- new_generic(
-  "contents_record",
-  "content",
-  function(content, ..., chat) {
-    check_chat(chat)
+contents_record <- function(x) {
+  class_name <- class(x)[[1]]
 
-    recorded <- S7_dispatch()
-    check_recorded(recorded)
-
-    recorded
-  }
-)
-
-method(contents_record, S7_object) <- function(content, ..., chat) {
-  class_name <- class(content)[[1]]
-
-  # Remove read-only props
-  cls_props <- S7_class(content)@properties
-  prop_names <- names(cls_props)[!map_lgl(cls_props, prop_is_read_only)]
-
-  recorded_props <- setNames(
-    lapply(prop_names, function(prop_name) {
-      prop_value <- prop(prop_name, object = content)
-      if (S7_inherits(prop_value)) {
-        # Recursive record for S7 objects
-        contents_record(prop_value, chat = chat)
-      } else if (is_list_of_s7_objects(prop_value)) {
-        # Make record of each item in list
-        lapply(prop_value, contents_record, chat = chat)
-      } else {
-        prop_value
-      }
-    }),
-    prop_names
-  )
-
-  # Remove non-serializable properties
-  recorded_props <- Filter(function(x) !is.function(x), recorded_props)
-
-  list(
-    version = 1,
-    class = class_name,
-    props = recorded_props
-  )
-}
-
-
-#' @rdname contents_record
-#' @export
-# Holy "Holy Trait" dispatching, Batman!
-contents_replay <- function(obj, ..., chat) {
-  check_chat(chat)
-  check_recorded(obj)
-
-  class_name <- gsub("^ellmer::", "", obj$class)
-  cls <- pkg_env("ellmer")[[class_name]]
-  if (is.null(cls)) {
-    cli::cli_abort("Unable to find the S7 class: {.val {obj$class}}.")
-  }
-  if (!S7_inherits(cls)) {
+  if (!grepl("^ellmer::", class_name)) {
     cli::cli_abort(
-      "The object returned for {.val {obj$class}} is not an S7 class."
+      "Only S7 classes from the `ellmer` package are currently supported. Received: {.val {class_name}}."
     )
   }
 
-  # Manually retrieve the handler for the class as we dispatch on the class itself,
-  # not on an instance
-  # An error will be thrown if a method is not found,
-  # however we have a fallback for the `S7_object` (the root base class)
-  handler <- method(contents_replay_class, cls)
-  handler(cls, obj, chat = chat)
+  # Assume that we can replay attributes (the underlying data in an S7 object)
+  # to the constructor, i.e. do.call(S7_class(obj), attributes(obj))
+  # This avoids inspecting read-only and/or dynamic properties
+  attr <- attributes(x)
+  serializable_props <- intersect(prop_names(x), names(attr))
+
+  # Don't serialize the actual tool definition, as it really belongs to the
+  # Chat object() and on replay we will re-apply by matching to existing tools
+  if (class_name == "ellmer::ContentToolRequest") {
+    serializable_props <- setdiff(serializable_props, "tool")
+  }
+
+  prop_values <- lapply(attr[serializable_props], function(value) {
+    if (S7_inherits(value)) {
+      # Recursive record for S7 objects
+      contents_record(value)
+    } else if (is_list_of_s7_objects(value)) {
+      # Make record of each item in list
+      lapply(value, contents_record)
+    } else {
+      value
+    }
+  })
+
+  recorded_object(class_name, prop_values)
 }
 
-contents_replay_class <- new_generic(
-  "contents_replay_class",
-  "cls",
-  function(cls, obj, ..., chat) {
-    S7_dispatch()
+#' @rdname contents_record
+#' @export
+contents_replay <- function(x, tools = list()) {
+  check_recorded(x)
+
+  class_name <- gsub("^ellmer::", "", x$class)
+  cls <- pkg_env("ellmer")[[class_name]]
+  if (is.null(cls)) {
+    cli::cli_abort("Unable to find the S7 class: {.val {x$class}}.")
   }
-)
+  if (!S7_inherits(cls)) {
+    cli::cli_abort(
+      "The object returned for {.val {x$class}} is not an S7 class."
+    )
+  }
 
-
-method(contents_replay_class, S7_object) <- function(cls, obj, ..., chat) {
-  obj_props <- map(obj$props, function(prop_value) {
+  obj_props <- map(x$props, function(prop_value) {
     if (is_list_of_recorded_objects(prop_value)) {
       # If the prop is a list of recorded objects, replay each one
-      map(prop_value, contents_replay, chat = chat)
+      map(prop_value, contents_replay, tools = tools)
     } else if (is_recorded_object(prop_value)) {
       # If the prop is a recorded object, replay it
-      contents_replay(prop_value, chat = chat)
+      contents_replay(prop_value, tools = tools)
     } else {
       prop_value
     }
   })
 
-  class_name <- obj$class[1]
-  cls_name <- strsplit(class_name, "::")[[1]][2]
-  # While this seems like a bit of extra work, the tracebacks are accurate
-  # vs referencing an unrelated parameter name in the traceback
-  exec(cls_name, !!!obj_props, .env = ns_env("ellmer"))
-}
+  # This is a bit of overkill, but gives nicer tracebacks
+  out <- exec(class_name, !!!obj_props, .env = ns_env("ellmer"))
 
-method(contents_replay_class, ToolDef) <- function(cls, obj, ..., chat) {
-  tools <- chat$get_tools()
-  matched_tool <- tools[[obj$props$name]]
-
-  if (!is.null(matched_tool)) {
-    return(matched_tool)
+  if (class_name == "Turn") {
+    out <- match_tools(out, tools)
   }
-
-  # If no tool is found, return placeholder tool containing the metadata
-  ret <- contents_replay_class(super(cls, S7_object), obj, chat = chat)
-  ret
+  out
 }
 
 # Helpers ----------------------------------------------------------------------
 
-prop_is_read_only <- function(prop) {
-  is.function(prop$getter) && !is.function(prop$setter)
+recorded_object <- function(class, props) {
+  list(
+    version = 1,
+    class = class,
+    props = props
+  )
 }
 
 is_recorded_object <- function(x) {

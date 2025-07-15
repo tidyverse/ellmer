@@ -3,20 +3,17 @@
 \name{contents_record}
 \alias{contents_record}
 \alias{contents_replay}
-\title{Save and restore content}
+\title{Record and replay content}
 \usage{
-contents_record(content, ..., chat)
+contents_record(x)
 
-contents_replay(obj, ..., chat)
+contents_replay(x, tools = list())
 }
 \arguments{
-\item{content}{A \link{Turn} or \link{Content} object to serialize.}
+\item{x}{A \link{Turn} or \link{Content} object to serialize; or a serialized object
+to replay.}
 
-\item{...}{Not used.}
-
-\item{chat}{A \link{Chat} object to be used for context.}
-
-\item{obj}{A basic list to desierialize.}
+\item{tools}{A named list of tools}
 }
 \description{
 These generic functions can be use to convert \link{Turn}/\link{Content} objects
