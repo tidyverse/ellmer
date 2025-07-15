@@ -64,7 +64,7 @@ It's important to note that a request includes not only the current user prompt,
 
 * The cost of a conversation grows quadratically with the number of turns: if you want to save money, keep your conversations short.
 
-* Each response is affected by all previous prompts and responses. This can make a converstion get stuck in a local optimum, so it's generally better to iterate by starting a new conversation with a better prompt rather than having a long back-and-forth.
+* Each response is affected by all previous prompts and responses. This can make a conversation get stuck in a local optimum, so it's generally better to iterate by starting a new conversation with a better prompt rather than having a long back-and-forth.
 
 * ellmer has full control over the conversational history. Because it's ellmer's responsibility to send the previous turns of the conversation, it's possible to start a conversation with one model and finish it with another.
 
@@ -76,7 +76,7 @@ The user prompt is the question that you send to the model. There are two other 
 
 * The **system prompt** (aka developer prompt), which is set when you create a new conversation, and affects every response. It's used to provide additional instructions to the model, shaping its responses to your needs. For example, you might use the system prompt to ask the model to always respond in Spanish or to write dependency-free base R code. You can also use the system prompt to provide the model with information it wouldn't otherwise know, like the details of your database schema, or your preferred ggplot2 theme and color palette.
 
-OpenAI calls this the [chain of command](https://cdn.openai.com/spec/model-spec-2024-05-08.html#follow-the-chain-of-command): if there are conflicts or inconsistencies the prompts, the platform prompt overrides the system prompt, which in turn overrides the user prompt.
+OpenAI calls this the [chain of command](https://cdn.openai.com/spec/model-spec-2024-05-08.html#follow-the-chain-of-command): if there are conflicts or inconsistencies in the prompts, the platform prompt overrides the system prompt, which in turn overrides the user prompt.
 
 When you use a chat app like ChatGPT or Claude.ai you can only iterate on the user prompt. But when you're programming with LLMs, you'll primarily iterate on the system prompt. For example, if you're developing an app that helps a user write tidyverse code, you'd work with the system prompt to ensure that user gets the style of code they want.
 
