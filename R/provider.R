@@ -140,6 +140,8 @@ stream_parse <- new_generic(
     S7_dispatch()
   }
 )
+
+# Extract text that should be printed to the console
 stream_text <- new_generic(
   "stream_text",
   "provider",

@@ -152,6 +152,7 @@ method(chat_body, ProviderOpenAI) <- function(
   tools <- as_json(provider, unname(tools))
 
   if (!is.null(type)) {
+    # https://platform.openai.com/docs/api-reference/responses/create#responses-create-text
     text <- list(
       format = list(
         type = "json_schema",
@@ -164,6 +165,7 @@ method(chat_body, ProviderOpenAI) <- function(
     text <- NULL
   }
 
+  # https://platform.openai.com/docs/api-reference/responses/create#responses-create-include
   params <- chat_params(provider, provider@params)
   if (isTRUE(params$log_probs)) {
     include <- list("message.output_text.logprobs")
@@ -209,6 +211,7 @@ method(stream_parse, ProviderOpenAI) <- function(provider, event) {
   jsonlite::parse_json(event$data)
 }
 method(stream_text, ProviderOpenAI) <- function(provider, event) {
+  # https://platform.openai.com/docs/api-reference/responses-streaming/response/output_text/delta
   if (event$type == "response.output_text.delta") {
     event$delta
   }
@@ -217,7 +220,13 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
   provider,
   result,
   chunk
-) {}
+) {
+  # https://platform.openai.com/docs/api-reference/responses-streaming/response/completed
+  if (chunk$type == "response.completed") {
+    chunk$response
+  }
+}
+
 method(value_turn, ProviderOpenAI) <- function(
   provider,
   result,
