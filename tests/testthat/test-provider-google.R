@@ -35,7 +35,7 @@ test_that("supports standard parameters", {
 })
 
 test_that("supports tool calling", {
-  vcr::local_cassette("gemini-tool")
+  vcr::local_cassette("google-tool")
   chat_fun <- chat_google_gemini_test
 
   test_tools_simple(chat_fun)
@@ -48,7 +48,7 @@ test_that("can extract data", {
 })
 
 test_that("can use images", {
-  vcr::local_cassette("gemini-image")
+  vcr::local_cassette("google-image")
   chat_fun <- chat_google_gemini_test
 
   test_images_inline(chat_fun)
