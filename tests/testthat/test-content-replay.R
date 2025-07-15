@@ -60,23 +60,18 @@ test_that("can round trip of ContentToolRequest/ContentToolResult", {
   test_record_replay(result)
 })
 
-test_that("can re-match tools", {
+test_that("can re-match tools if present", {
   turn <- Turn("user", list(ContentToolRequest("123", "mytool")))
   recorded <- contents_record(turn)
 
   mytool <- tool(function() {}, "mytool")
   replayed <- contents_replay(recorded, tools = list(mytool = mytool))
   expect_equal(replayed@contents[[1]]@tool, mytool)
-})
 
-test_that("restoring a missing tool returns NULL", {
-  turn <- Turn("user", list(ContentToolRequest("123", "mytool")))
-  recorded <- contents_record(turn)
-
+  # If no match, it still works, but tool is left as NULL
   replayed <- contents_replay(recorded, tools = list())
   expect_equal(replayed@contents[[1]]@tool, NULL)
 })
-
 
 test_that("checks recorded value types", {
   bad_names <- list()
