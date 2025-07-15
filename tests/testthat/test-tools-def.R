@@ -67,6 +67,7 @@ test_that("checks its arguments", {
     tool(1)
     tool(identity, 1)
     tool(identity, "", name = 1)
+    tool(identity, "", name = "...")
     tool(identity, "", arguments = 1)
     tool(identity, "", convert = 1)
   })

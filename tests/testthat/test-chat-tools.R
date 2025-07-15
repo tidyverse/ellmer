@@ -10,6 +10,14 @@ test_that("can only set/register tools", {
   })
 })
 
+test_that("overwriting a tool yields a message", {
+  my_tool <- tool(function() 1, "desc", name = "my_tool")
+
+  chat <- chat_openai_test()
+  chat$register_tool(my_tool)
+  expect_snapshot(chat$register_tool(my_tool))
+})
+
 test_that("chat can get and register a list of tools", {
   chat <- chat_openai_test()
   chat2 <- chat_openai_test()

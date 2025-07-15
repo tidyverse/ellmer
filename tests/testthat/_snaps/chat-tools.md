@@ -11,6 +11,13 @@
       Error in `chat$set_tools()`:
       ! `tools[[2]]` must be a <ToolDef>, not the number 1.
 
+# overwriting a tool yields a message
+
+    Code
+      chat$register_tool(my_tool)
+    Message
+      Replacing existing my_tool tool.
+
 # chat warns on tool failures
 
     Code
