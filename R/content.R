@@ -215,8 +215,8 @@ method(format, ContentToolRequest) <- function(
   call <- call2(x@name, !!!arguments)
   call_str <- deparse(call)
   if (length(call_str) > 1) {
-    open <- 
-    call_str <- paste0(call_str[1], "...)")
+    open <-
+      call_str <- paste0(call_str[1], "...)")
   }
 
   if (show == "call") {
@@ -410,7 +410,8 @@ ContentPDF <- new_class(
   parent = Content,
   properties = list(
     type = prop_string(),
-    data = prop_string()
+    data = prop_string(),
+    filename = prop_string()
   )
 )
 
