@@ -51,7 +51,6 @@ chat_openai <- function(
   api_key = openai_key(),
   model = NULL,
   params = NULL,
-  seed = lifecycle::deprecated(),
   api_args = list(),
   api_headers = character(),
   echo = c("none", "output", "all")
@@ -59,21 +58,11 @@ chat_openai <- function(
   model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
 
-  params <- params %||% params()
-  if (lifecycle::is_present(seed) && !is.null(seed)) {
-    lifecycle::deprecate_warn(
-      when = "0.2.0",
-      what = "chat_openai(seed)",
-      with = "chat_openai(params)"
-    )
-    params$seed <- seed
-  }
-
   provider <- ProviderOpenAI(
     name = "OpenAI",
     base_url = base_url,
     model = model,
-    params = params,
+    params = params %||% params(),
     extra_args = api_args,
     extra_headers = api_headers,
     api_key = api_key
@@ -151,7 +140,7 @@ method(chat_path, ProviderOpenAI) <- function(provider) {
   "/responses"
 }
 
-# https://platform.openai.com/docs/api-reference/chat/create
+# https://platform.openai.com/docs/api-reference/responses
 method(chat_body, ProviderOpenAI) <- function(
   provider,
   stream = TRUE,
@@ -176,14 +165,22 @@ method(chat_body, ProviderOpenAI) <- function(
   }
 
   params <- chat_params(provider, provider@params)
+  if (isTRUE(params$log_probs)) {
+    include <- list("message.output_text.logprobs")
+  } else {
+    include <- NULL
+  }
+  params$log_probs <- NULL
 
   compact(list2(
     input = input,
+    include = include,
     model = provider@model,
     !!!params,
     stream = stream,
     tools = tools,
-    text = text
+    text = text,
+    store = FALSE
   ))
 }
 
@@ -195,11 +192,9 @@ method(chat_params, ProviderOpenAI) <- function(provider, params) {
       temperature = "temperature",
       top_p = "top_p",
       frequency_penalty = "frequency_penalty",
-      presence_penalty = "presence_penalty",
-      max_tokens = "max_completion_tokens",
-      logprobs = "log_probs",
-      top_logprobs = "top_k",
-      stop = "stop_sequences"
+      max_tokens = "max_output_tokens",
+      log_probs = "log_probs",
+      top_logprobs = "top_k"
     )
   )
 }

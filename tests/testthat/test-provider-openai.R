@@ -34,7 +34,7 @@ test_that("defaults are reported", {
 # })
 
 test_that("supports tool calling", {
-  vcr::local_cassette("openai-v2-tool")
+  # vcr::local_cassette("openai-v2-tool")
   chat_fun <- chat_openai_test
 
   test_tools_simple(chat_fun)
@@ -47,7 +47,7 @@ test_that("can extract data", {
 })
 
 test_that("can use images", {
-  vcr::local_cassette("openai-v2-image")
+  # vcr::local_cassette("openai-v2-image")
   # Needs mini to get shape correct
   chat_fun <- \(...) chat_openai_test(model = "gpt-4.1-mini", ...)
 
@@ -73,13 +73,8 @@ test_that("can match prices for some common models", {
 
 test_that("can retrieve log_probs (#115)", {
   chat <- chat_openai_test(params = params(log_probs = TRUE))
-  pieces <- coro::collect(chat$stream("Hi"))
-
-  logprobs <- chat$last_turn()@json$choices[[1]]$logprobs$content
-  expect_equal(
-    length(logprobs),
-    length(pieces) - 2 # leading "" + trailing \n
-  )
+  chat$chat("Hi")
+  expect_length(chat$last_turn()@json$output[[1]]$content[[1]]$logprobs, 2)
 })
 
 test_that("structured data work with and without wrapper", {
@@ -118,12 +113,4 @@ test_that("as_json specialised for OpenAI", {
       additionalProperties = FALSE
     )
   )
-})
-
-test_that("seed is deprecated, but still honored", {
-  expect_snapshot(chat <- chat_openai_test(seed = 1))
-  expect_equal(chat$get_provider()@params$seed, 1)
-
-  # NULL is also ignored since that's what subclasses use
-  expect_no_warning(chat_openai_test(seed = NULL))
 })
