@@ -3,9 +3,10 @@
     Code
       f
     Output
-      # <ellmer::ToolDef>
-      # my_fun(x, y)
-      # a simple function
+      # <ellmer::ToolDef> my_fun(x, y)
+      # @name: my_fun
+      # @description: a simple function
+      # @convert: TRUE
       #
       function(x = 1, y = 2) {
           x + y

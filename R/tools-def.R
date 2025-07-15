@@ -191,9 +191,10 @@ ToolDef <- new_class(
 method(print, ToolDef) <- function(x, ...) {
   fake_call <- call2(x@name, !!!syms(names(x@arguments@properties)))
 
-  cat_line("# <ellmer::ToolDef>")
-  cat_line("# ", deparse1(fake_call))
-  cat_line("# ", x@description)
+  cat_line("# <ellmer::ToolDef> ", deparse1(fake_call))
+  cat_line("# @name: ", x@name)
+  cat_line("# @description: ", x@description)
+  cat_line("# @convert: ", x@convert)
   cat_line("#")
   print(S7_data(x))
 
