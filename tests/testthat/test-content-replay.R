@@ -31,7 +31,7 @@ test_that("can round trip simple content types", {
   test_record_replay(ContentSql("SELECT * FROM mtcars"))
   test_record_replay(ContentThinking("A **thought**."))
   test_record_replay(ContentUploaded("https://example.com/image.jpg"))
-  test_record_replay(ContentPDF(type = "TYPE", data = "DATA"))
+  test_record_replay(ContentPDF("TYPE", "DATA", "FILENAME"))
 })
 
 test_that("can round trip of ContentSuggestions", {
