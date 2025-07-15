@@ -1,4 +1,4 @@
-#' @include provider-gemini.R
+#' @include provider-google.R
 NULL
 
 #' Chat with a model hosted on CloudFlare

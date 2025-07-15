@@ -60,8 +60,10 @@ on_load(
 
     repeat {
       event <- chat_resp_stream(provider, resp)
+      # TODO: use exported httr2 API: https://github.com/r-lib/httr2/issues/776
       if (is.null(event) && !resp_stream_is_complete(resp)) {
-        fds <- curl::multi_fdset(resp$body)
+        conn <- resp$body$.__enclos_env__$private$conn
+        fds <- curl::multi_fdset(conn)
         await(promises::promise(function(resolve, reject) {
           later::later_fd(
             resolve,
