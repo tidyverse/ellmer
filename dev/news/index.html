@@ -50,6 +50,10 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
 <ul><li>
+<code><a href="../reference/tool.html">tool()</a></code> now checks that the <code>name</code> is valid (<a href="https://github.com/tidyverse/ellmer/issues/625" class="external-link">#625</a>)</li>
+<li>
+<code>Chat$register_tool()</code> now messages when you replace an existing tool (<a href="https://github.com/tidyverse/ellmer/issues/625" class="external-link">#625</a>).</li>
+<li>
 <code>content_pdf_*()</code> now works with <code><a href="../reference/chat_openai.html">chat_openai()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/650" class="external-link">#650</a>).</li>
 <li>Added <code><a href="../reference/contents_record.html">contents_record()</a></code> and <code><a href="../reference/contents_record.html">contents_replay()</a></code> to record and replay <code>Turn</code> related information from a <code>Chat</code> instance (<a href="https://github.com/tidyverse/ellmer/issues/502" class="external-link">#502</a>). For example, these methods can be used for bookmarking within {shinychat}.</li>
 <li>New <code><a href="../reference/chat-any.html">chat()</a></code> allows you to chat with any provider using a string like <code>chat("anthropic")</code> or <code>chat("openai/gpt-4.1-nano")</code> (<a href="https://github.com/tidyverse/ellmer/issues/361" class="external-link">#361</a>).</li>
