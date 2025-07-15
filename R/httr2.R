@@ -60,7 +60,7 @@ on_load(
 
     repeat {
       event <- chat_resp_stream(provider, resp)
-      if (is.null(event) && !resp_stream_is_complete(resp$body)) {
+      if (is.null(event) && !resp_stream_is_complete(resp)) {
         fds <- curl::multi_fdset(resp$body)
         await(promises::promise(function(resolve, reject) {
           later::later_fd(

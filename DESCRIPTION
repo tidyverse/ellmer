@@ -1,6 +1,6 @@
 Package: ellmer
 Title: Chat with Large Language Models
-Version: 0.2.1.9000
+Version: 0.2.1.9001
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4757-117X")),
@@ -8,6 +8,8 @@ Authors@R: c(
     person("Aaron", "Jacobs", role = "aut"),
     person("Garrick", "Aden-Buie", , "garrick@posit.co", role = "aut",
            comment = c(ORCID = "0000-0002-7111-0077")),
+    person("Barret", "Schloerke", , "barret@posit.co", role = "aut",
+           comment = c(ORCID = "0000-0001-9986-114X")),
     person("Posit Software, PBC", role = c("cph", "fnd"),
            comment = c(ROR = "03wc8by49"))
   )
@@ -59,6 +61,7 @@ RoxygenNote: 7.3.2
 Collate:
     'utils-S7.R'
     'types.R'
+    'ellmer-package.R'
     'tools-def.R'
     'content.R'
     'provider.R'
@@ -70,10 +73,10 @@ Collate:
     'chat.R'
     'content-image.R'
     'content-pdf.R'
+    'content-replay.R'
     'turns.R'
     'content-tools.R'
     'deprecated.R'
-    'ellmer-package.R'
     'httr2.R'
     'import-standalone-obj-type.R'
     'import-standalone-purrr.R'
