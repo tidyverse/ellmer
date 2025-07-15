@@ -188,6 +188,18 @@ ToolDef <- new_class(
   )
 )
 
+method(print, ToolDef) <- function(x, ...) {
+  fake_call <- call2(x@name, !!!syms(names(x@arguments@properties)))
+
+  cat_line("# <ellmer::ToolDef>")
+  cat_line("# ", deparse1(fake_call))
+  cat_line("# ", x@description)
+  cat_line("#")
+  print(S7_data(x))
+
+  invisible(x)
+}
+
 check_arguments <- function(arguments, formals, call = caller_env()) {
   if (!is.list(arguments) || !(length(arguments) == 0 || is_named(arguments))) {
     stop_input_type(arguments, "a named list", call = call)

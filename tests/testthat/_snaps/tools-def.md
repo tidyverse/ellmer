@@ -1,3 +1,16 @@
+# tools have a print method
+
+    Code
+      f
+    Output
+      # <ellmer::ToolDef>
+      # my_fun(x, y)
+      # a simple function
+      #
+      function(x = 1, y = 2) {
+          x + y
+        }
+
 # old arguments are deprecated
 
     Code

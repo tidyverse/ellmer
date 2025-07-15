@@ -3,6 +3,21 @@ test_that("can call tools directory", {
   expect_equal(f(), 1)
 })
 
+test_that("tools have a print method", {
+  fun <- function(x = 1, y = 2) {
+    x + y
+  }
+  environment(fun) <- globalenv()
+
+  f <- tool(
+    fun,
+    name = "my_fun",
+    arguments = list(x = type_string(), y = type_number()),
+    description = "a simple function"
+  )
+  expect_snapshot(f)
+})
+
 test_that("tool can get name", {
   f <- function() {}
   td <- tool(f, description = "")
