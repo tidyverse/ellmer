@@ -46,6 +46,7 @@ prices <- bind_rows(
   anthropic |> mutate(provider = "Anthropic"),
   gemini |> mutate(provider = "Google/Gemini")
 )
+prices <- prices |> arrange(model, provider)
 
 usethis::use_data(prices, overwrite = TRUE, internal = TRUE)
 
