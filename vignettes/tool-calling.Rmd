@@ -29,7 +29,7 @@ When making a chat request to the chat model, the caller advertises one or more 
 
 But in fact it works like this:
 
-![Diagram showing the correct mental model for tool calls: a user sends a request that needs a tool call, the assistant request that the user's runs that tool, returns the result to the assistant, which uses it to generate the final answer.](tool-calling-right.svg)
+![Diagram showing the correct mental model for tool calls: a user sends a request that needs a tool call, the assistant requests that the user runs that tool, returns the result to the assistant, which uses it to generate the final answer.](tool-calling-right.svg)
 
 The value that the chat model brings is not in helping with execution, but with knowing when it makes sense to call a tool, what values to pass as arguments, and how to use the results in formulating its response.
 
