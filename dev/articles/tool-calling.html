@@ -107,16 +107,15 @@ calls.</p>
 tools!</em> It only makes requests for the caller to execute them. It’s
 easy to think that tool calling might work like this:</p>
 <div class="float">
-<img src="tool-calling-wrong.svg" alt="Diagram showing showing the wrong mental model of tool calls: a user initiates a request that flows to the assistant, which then runs the code, and returns the result back to the user.”"><div class="figcaption">Diagram showing showing the wrong mental model
-of tool calls: a user initiates a request that flows to the assistant,
-which then runs the code, and returns the result back to the
-user.”</div>
+<img src="tool-calling-wrong.svg" alt="Diagram showing the wrong mental model of tool calls: a user initiates a request that flows to the assistant, which then runs the code, and returns the result back to the user.”"><div class="figcaption">Diagram showing the wrong mental model of tool
+calls: a user initiates a request that flows to the assistant, which
+then runs the code, and returns the result back to the user.”</div>
 </div>
 <p>But in fact it works like this:</p>
 <div class="float">
-<img src="tool-calling-right.svg" alt="Diagram showing the correct mental model for tool calls: a user sends a request that needs a tool call, the assistant request that the user’s runs that tool, returns the result to the assistant, which uses it to generate the final answer."><div class="figcaption">Diagram showing the correct mental model for
+<img src="tool-calling-right.svg" alt="Diagram showing the correct mental model for tool calls: a user sends a request that needs a tool call, the assistant requests that the user runs that tool, returns the result to the assistant, which uses it to generate the final answer."><div class="figcaption">Diagram showing the correct mental model for
 tool calls: a user sends a request that needs a tool call, the assistant
-request that the user’s runs that tool, returns the result to the
+requests that the user runs that tool, returns the result to the
 assistant, which uses it to generate the final answer.</div>
 </div>
 <p>The value that the chat model brings is not in helping with

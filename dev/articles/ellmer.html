@@ -201,7 +201,7 @@ means that:</p>
 turns: if you want to save money, keep your conversations
 short.</p></li>
 <li><p>Each response is affected by all previous prompts and responses.
-This can make a converstion get stuck in a local optimum, so it’s
+This can make a conversation get stuck in a local optimum, so it’s
 generally better to iterate by starting a new conversation with a better
 prompt rather than having a long back-and-forth.</p></li>
 <li><p>ellmer has full control over the conversational history. Because
@@ -231,9 +231,9 @@ database schema, or your preferred ggplot2 theme and color
 palette.</p></li>
 </ul>
 <p>OpenAI calls this the <a href="https://cdn.openai.com/spec/model-spec-2024-05-08.html#follow-the-chain-of-command" class="external-link">chain
-of command</a>: if there are conflicts or inconsistencies the prompts,
-the platform prompt overrides the system prompt, which in turn overrides
-the user prompt.</p>
+of command</a>: if there are conflicts or inconsistencies in the
+prompts, the platform prompt overrides the system prompt, which in turn
+overrides the user prompt.</p>
 <p>When you use a chat app like ChatGPT or Claude.ai you can only
 iterate on the user prompt. But when you’re programming with LLMs,
 you’ll primarily iterate on the system prompt. For example, if you’re
@@ -275,12 +275,12 @@ prompt because LLMs were trained on data prior to your package’s
 existence. You can create a surprisingly useful tool just by preloading
 the prompt with your README and vignettes. This is how the <a href="https://github.com/jcheng5/ellmer-assistant" class="external-link">ellmer assistant</a>
 works.</p></li>
-<li><p>Build language specific prompts for R and/or python. <a href="https://shiny.posit.co/blog/posts/shiny-assistant/" class="external-link">Shiny
-assistant</a> helps you build shiny apps (either in R or python) by
+<li><p>Build language specific prompts for R and/or Python. <a href="https://shiny.posit.co/blog/posts/shiny-assistant/" class="external-link">Shiny
+Assistant</a> helps you build shiny apps (either in R or Python) by
 combining a <a href="https://github.com/posit-dev/shiny-assistant/blob/main/shinyapp/app_prompt.md" class="external-link">prompt</a>
 that gives general advice on building apps with a prompt for <a href="https://github.com/posit-dev/shiny-assistant/blob/main/shinyapp/app_prompt_r.md" class="external-link">R</a>
-or <a href="https://github.com/posit-dev/shiny-assistant/blob/main/shinyapp/app_prompt_python.md" class="external-link">python</a>.
-The python prompt is very detailed because there’s much less information
+or <a href="https://github.com/posit-dev/shiny-assistant/blob/main/shinyapp/app_prompt_Python.md" class="external-link">python</a>.
+The Python prompt is very detailed because there’s much less information
 about Shiny for Python in the existing LLM knowledgebases.</p></li>
 <li><p>Help people find the answers to their questions. Even if you’ve
 written a bunch of documentation for something, you might find that you
