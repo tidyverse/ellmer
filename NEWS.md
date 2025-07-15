@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* Added `contents_record()`, `contents_replay()`, and `contents_replay_class()` to record and replay `Turn` related information from a `Chat` instance (#502). For example, these methods can be used for bookmarking within {shinychat}.
+* Added `contents_record()` and `contents_replay()` to record and replay `Turn` related information from a `Chat` instance (#502). For example, these methods can be used for bookmarking within {shinychat}.
 * New `chat()` allows you to chat with any provider using a string like `chat("anthropic")` or `chat("openai/gpt-4.1-nano")` (#361).
 * New `parallel_chat_text()` and `batch_chat_text()` make it easier to just get the text response from multiple prompts (#510).
 * Tool requests now show converted arguments when printed (#517).
