@@ -58,7 +58,7 @@ contents_replay <- function(x, tools = list()) {
   check_recorded(x)
 
   class_name <- gsub("^ellmer::", "", x$class)
-  cls <- pkg_env("ellmer")[[class_name]]
+  cls <- ns_env("ellmer")[[class_name]]
   if (is.null(cls)) {
     cli::cli_abort("Unable to find the S7 class: {.val {x$class}}.")
   }
