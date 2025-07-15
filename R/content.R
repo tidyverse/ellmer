@@ -404,6 +404,7 @@ as_content <- function(x, error_call = caller_env(), error_arg = "...") {
 }
 
 #' @rdname Content
+#' @param filename File name, used to identify the PDF.
 #' @export
 ContentPDF <- new_class(
   "ContentPDF",

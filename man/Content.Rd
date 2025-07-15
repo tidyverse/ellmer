@@ -33,7 +33,11 @@ ContentToolResult(value = NULL, error = NULL, extra = list(), request = NULL)
 
 ContentThinking(thinking = stop("Required"), extra = list())
 
-ContentPDF(type = stop("Required"), data = stop("Required"))
+ContentPDF(
+  type = stop("Required"),
+  data = stop("Required"),
+  filename = stop("Required")
+)
 }
 \arguments{
 \item{text}{A single string.}
@@ -68,6 +72,8 @@ when the tool call is successful.}
 automatically added by \pkg{ellmer} when evaluating the tool call.}
 
 \item{thinking}{The text of the thinking output.}
+
+\item{filename}{File name, used to identify the PDF.}
 }
 \value{
 S7 objects that all inherit from \code{Content}
