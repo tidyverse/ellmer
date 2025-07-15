@@ -17,11 +17,11 @@ to replay.}
 }
 \description{
 These generic functions can be use to convert \link{Turn}/\link{Content} objects
-into easily serializable representations.
+into easily serializable representations (i.e. lists and atomic vectors).
 \itemize{
-\item \code{contents_record()} accept a \link{Turn} or \link{Content} and return a simple list.
-\item \code{contents_replay()} will accept a simple list (from \code{contents_record()})
-and return a \link{Turn} or \link{Content} object.
+\item \code{contents_record()} accepts a \link{Turn} or \link{Content} and return a simple list.
+\item \code{contents_replay()} takes the output of \code{contents_record()} and returns
+a \link{Turn} or \link{Content} object.
 }
 }
 \keyword{internal}
