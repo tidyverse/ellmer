@@ -215,8 +215,8 @@ method(format, ContentToolRequest) <- function(
   call <- call2(x@name, !!!arguments)
   call_str <- deparse(call)
   if (length(call_str) > 1) {
-    open <- 
-    call_str <- paste0(call_str[1], "...)")
+    open <-
+      call_str <- paste0(call_str[1], "...)")
   }
 
   if (show == "call") {
@@ -404,13 +404,15 @@ as_content <- function(x, error_call = caller_env(), error_arg = "...") {
 }
 
 #' @rdname Content
+#' @param filename File name, used to identify the PDF.
 #' @export
 ContentPDF <- new_class(
   "ContentPDF",
   parent = Content,
   properties = list(
     type = prop_string(),
-    data = prop_string()
+    data = prop_string(),
+    filename = prop_string()
   )
 )
 

@@ -346,6 +346,19 @@ method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(
   )
 }
 
+method(as_json, list(ProviderOpenAI, ContentPDF)) <- function(
+  provider,
+  x
+) {
+  list(
+    type = "file",
+    file = list(
+      filename = x@filename,
+      file_data = paste0("data:application/pdf;base64,", x@data)
+    )
+  )
+}
+
 method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(
   provider,
   x

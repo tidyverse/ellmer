@@ -52,6 +52,14 @@ test_that("can use images", {
   test_images_remote(chat_fun)
 })
 
+test_that("can use pdfs", {
+  vcr::local_cassette("openai-pdf")
+  chat_fun <- chat_openai_test
+
+  test_pdf_local(chat_fun)
+})
+
+
 # Custom tests -----------------------------------------------------------------
 
 test_that("can retrieve log_probs (#115)", {
