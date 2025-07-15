@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
-<ul><li>New <code><a href="../reference/chat-any.html">chat()</a></code> allows you to chat with any provider using a string like <code>chat("anthropic")</code> or <code>chat("openai/gpt-4.1-nano")</code> (<a href="https://github.com/tidyverse/ellmer/issues/361" class="external-link">#361</a>).</li>
+<ul><li>Added <code><a href="../reference/contents_record.html">contents_record()</a></code> and <code><a href="../reference/contents_record.html">contents_replay()</a></code> to record and replay <code>Turn</code> related information from a <code>Chat</code> instance (<a href="https://github.com/tidyverse/ellmer/issues/502" class="external-link">#502</a>). For example, these methods can be used for bookmarking within {shinychat}.</li>
+<li>New <code><a href="../reference/chat-any.html">chat()</a></code> allows you to chat with any provider using a string like <code>chat("anthropic")</code> or <code>chat("openai/gpt-4.1-nano")</code> (<a href="https://github.com/tidyverse/ellmer/issues/361" class="external-link">#361</a>).</li>
 <li>New <code><a href="../reference/parallel_chat.html">parallel_chat_text()</a></code> and <code><a href="../reference/batch_chat.html">batch_chat_text()</a></code> make it easier to just get the text response from multiple prompts (<a href="https://github.com/tidyverse/ellmer/issues/510" class="external-link">#510</a>).</li>
 <li>Tool requests now show converted arguments when printed (<a href="https://github.com/tidyverse/ellmer/issues/517" class="external-link">#517</a>).</li>
 <li>Type conversion does a better job with <code>type_object(.additional_properties = TRUE)</code> (<a href="https://github.com/tidyverse/ellmer/issues/519" class="external-link">#519</a>).</li>
@@ -238,7 +239,7 @@
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
+  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="http://schloerke.com" class="external-link">Barret Schloerke</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
