@@ -248,6 +248,10 @@ print.ellmer_output <- function(x, ...) {
 }
 
 eval_vignette <- function() {
+  if (modern_vcr()) {
+    return(FALSE)
+  }
+
   name <- tools::file_path_sans_ext(knitr::current_input())
 
   cassettes <- dir("_vcr", pattern = paste0(name, "*"))
