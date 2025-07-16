@@ -248,7 +248,7 @@ print.ellmer_output <- function(x, ...) {
 }
 
 eval_vignette <- function() {
-  if (modern_vcr()) {
+  if (!modern_vcr()) {
     return(FALSE)
   }
 
