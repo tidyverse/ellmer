@@ -7,7 +7,11 @@ We checked 14 reverse dependencies, comparing R CMD check results across CRAN an
 
 Issues with CRAN packages are summarised below.
 
-### Failed to check
+### New problems
+(This reports the first line of each new failure)
+
+* chattr
+  checking tests ... ERROR
 
 * autoslider.core (NA)
 * chattr          (NA)

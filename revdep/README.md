@@ -2,20 +2,6 @@
 
 ## Failed to check (14)
 
-|package         |version |error |warning |note |
-|:---------------|:-------|:-----|:-------|:----|
-|autoslider.core |?       |      |        |     |
-|chattr          |?       |      |        |     |
-|chores          |?       |      |        |     |
-|emend           |?       |      |        |     |
-|gander          |?       |      |        |     |
-|GitAI           |?       |      |        |     |
-|hellmer         |?       |      |        |     |
-|ragnar          |?       |      |        |     |
-|shinychat       |?       |      |        |     |
-|statlingua      |?       |      |        |     |
-|streamy         |?       |      |        |     |
-|tidyllm         |?       |      |        |     |
-|valentine       |?       |      |        |     |
-|vitals          |?       |      |        |     |
-
+|package |version |error  |warning |note |
+|:-------|:-------|:------|:-------|:----|
+|[chattr](problems.md#chattr)|0.3.0   |__+1__ |        |     |
