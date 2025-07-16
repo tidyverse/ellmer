@@ -55,7 +55,7 @@ test_that("chat can get and register a list of tools", {
 # Execution --------------------------------------------------------------------
 
 test_that("can handle parallel tools", {
-  vcr::local_cassette("chat-tools-parallel")
+  vcr_local_cassette("chat-tools-parallel")
 
   chat <- chat_openai_test("Be terse")
   chat$register_tool(tool(
@@ -77,7 +77,7 @@ test_that("can handle parallel tools", {
 })
 
 test_that("can handle sequential tools", {
-  vcr::local_cassette("chat-tools-sequential")
+  vcr_local_cassette("chat-tools-sequential")
 
   chat <- chat_openai_test("Be terse")
   chat$register_tool(tool(
@@ -110,7 +110,7 @@ test_that("can handle sequential tools", {
 })
 
 test_that("chat warns on tool failures", {
-  vcr::local_cassette("chat-tools-failure")
+  vcr_local_cassette("chat-tools-failure")
   chat <- chat_openai_test()
 
   chat$register_tool(tool(
@@ -127,7 +127,7 @@ test_that("chat warns on tool failures", {
 })
 
 test_that("tool calls can be rejected via `tool_request` callbacks", {
-  vcr::local_cassette("chat-tools-reject-callback")
+  vcr_local_cassette("chat-tools-reject-callback")
   chat <- chat_openai_test()
 
   chat$register_tool(tool(
@@ -154,7 +154,7 @@ test_that("tool calls can be rejected via `tool_request` callbacks", {
 })
 
 test_that("tool calls can be rejected via the tool function", {
-  vcr::local_cassette("chat-tools-reject-tool-function")
+  vcr_local_cassette("chat-tools-reject-tool-function")
   chat <- chat_openai_test()
 
   chat$register_tool(tool(
@@ -192,7 +192,7 @@ test_that("can use async tools", {
 })
 
 test_that("chat callbacks for tool requests/results", {
-  vcr::local_cassette("chat-tools-callbacks")
+  vcr_local_cassette("chat-tools-callbacks")
   chat <- chat_openai_test()
 
   test_tool <- tool(

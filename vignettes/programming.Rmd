@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   eval = ellmer:::eval_vignette()
 )
-vcr::setup_knitr()
+ellmer:::vcr_setup_knitr()
 ```
 
 This vignette includes tips and tricks for programming with ellmer, and/or using it inside your own package. It's currently fairly short but will grow over time.

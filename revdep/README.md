@@ -1,8 +1,21 @@
 # Revdeps
 
-## New problems (1)
+## Failed to check (14)
 
-|package |version |error  |warning |note |
-|:-------|:-------|:------|:-------|:----|
-|[GitAI](problems.md#gitai)|0.1.0   |__+1__ |        |     |
+|package         |version |error |warning |note |
+|:---------------|:-------|:-----|:-------|:----|
+|autoslider.core |?       |      |        |     |
+|chattr          |?       |      |        |     |
+|chores          |?       |      |        |     |
+|emend           |?       |      |        |     |
+|gander          |?       |      |        |     |
+|GitAI           |?       |      |        |     |
+|hellmer         |?       |      |        |     |
+|ragnar          |?       |      |        |     |
+|shinychat       |?       |      |        |     |
+|statlingua      |?       |      |        |     |
+|streamy         |?       |      |        |     |
+|tidyllm         |?       |      |        |     |
+|valentine       |?       |      |        |     |
+|vitals          |?       |      |        |     |
 
