@@ -47,7 +47,7 @@ Suggests:
     shiny,
     shinychat (>= 0.2.0),
     testthat (>= 3.0.0),
-    vcr (>= 1.7.0.91),
+    vcr,
     withr
 VignetteBuilder:
     knitr
