@@ -60,42 +60,33 @@ chat_aws_bedrock <- function(
 ) {
   check_installed("paws.common", "AWS authentication")
   check_string(base_url, allow_null = TRUE)
-  model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
+  base_url <- base_url %||%
+    \(x) sprintf("https://bedrock-runtime.%s.amazonaws.com", x)
   echo <- check_echo(echo)
 
-  cache <- aws_creds_cache(profile)
-  credentials <- paws_credentials(profile, cache = cache)
-  base_url <- base_url %||%
-    paste0("https://bedrock-runtime.", credentials$region, ".amazonaws.com")
-
-  provider <- ProviderAWSBedrock(
-    name = "AWS/Bedrock",
+  provider <- provider_aws_bedrock(
     base_url = base_url,
     model = model,
     profile = profile,
-    region = credentials$region,
-    cache = cache,
     extra_args = api_args
   )
-
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
+
 
 #' @export
 #' @rdname chat_aws_bedrock
 models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
-  creds <- paws_credentials(profile)
-  base_url <- base_url %||%
-    paste0("https://bedrock.", creds$region, ".amazonaws.com")
+  check_string(base_url, allow_null = TRUE)
+  base_url <- base_url %||% \(x) sprintf("https://bedrock.%s.amazonaws.com", x)
 
-  req <- request(base_url)
-  req <- req_url_path_append(req, "foundation-models")
-  req <- req_auth_aws_v4(
-    req,
-    aws_access_key_id = creds$access_key_id,
-    aws_secret_access_key = creds$secret_access_key,
-    aws_session_token = creds$session_token
+  provider <- provider_aws_bedrock(
+    base_url = base_url,
+    model = "",
+    profile = profile,
   )
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "foundation-models")
 
   resp <- req_perform(req)
   json <- resp_body_json(resp)
@@ -110,6 +101,32 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
   df
 }
 
+provider_aws_bedrock <- function(
+  base_url,
+  model = "",
+  profile = NULL,
+  extra_args = list()
+) {
+  cache <- aws_creds_cache(profile)
+  credentials <- paws_credentials(profile, cache = cache)
+
+  if (is.function(base_url)) {
+    base_url <- base_url(credentials$region)
+  }
+
+  model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
+
+  ProviderAWSBedrock(
+    name = "AWS/Bedrock",
+    base_url = base_url,
+    model = model,
+    profile = profile,
+    region = credentials$region,
+    cache = cache,
+    extra_args = extra_args
+  )
+}
+
 ProviderAWSBedrock <- new_class(
   "ProviderAWSBedrock",
   parent = Provider,
@@ -120,6 +137,29 @@ ProviderAWSBedrock <- new_class(
   )
 )
 
+method(base_request, ProviderAWSBedrock) <- function(provider) {
+  creds <- paws_credentials(provider@profile, provider@cache)
+
+  req <- request(provider@base_url)
+  req <- req_auth_aws_v4(
+    req,
+    aws_access_key_id = creds$access_key_id,
+    aws_secret_access_key = creds$secret_access_key,
+    aws_session_token = creds$session_token
+  )
+  req <- ellmer_req_robustify(req)
+  req <- ellmer_req_user_agent(req)
+  req <- base_request_error(provider, req)
+  req
+}
+
+method(base_request_error, ProviderAWSBedrock) <- function(provider, req) {
+  req_error(req, body = function(resp) {
+    body <- resp_body_json(resp)
+    body$Message %||% body$message
+  })
+}
+
 method(chat_request, ProviderAWSBedrock) <- function(
   provider,
   stream = TRUE,
@@ -127,7 +167,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
   tools = list(),
   type = NULL
 ) {
-  req <- request(provider@base_url)
+  req <- base_request(provider)
   req <- req_url_path_append(
     req,
     "model",
@@ -135,19 +175,6 @@ method(chat_request, ProviderAWSBedrock) <- function(
     if (stream) "converse-stream" else "converse"
   )
   req <- unencode_colon(req) # model might contain `:` (#646)
-
-  creds <- paws_credentials(provider@profile, provider@cache)
-  req <- req_auth_aws_v4(
-    req,
-    aws_access_key_id = creds$access_key_id,
-    aws_secret_access_key = creds$secret_access_key,
-    aws_session_token = creds$session_token
-  )
-
-  req <- req_error(req, body = function(resp) {
-    body <- resp_body_json(resp)
-    body$Message %||% body$message
-  })
 
   if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
     system <- list(list(text = turns[[1]]@text))
