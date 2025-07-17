@@ -34,7 +34,6 @@ provider_lookup <- tribble(
   "gemini", "Google/Gemini",
   "vertex_ai-language-models", "Google/Vertex",
   "openrouter", "OpenRouter",
-  "databricks", "Databricks",
   "azure", "Azure/OpenAI",
   "bedrock", "AWS/Bedrock",
   "mistral", "Mistral",
