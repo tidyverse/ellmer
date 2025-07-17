@@ -534,7 +534,7 @@ models_openai <- function(
   api_key = openai_key()
 ) {
   provider <- ProviderOpenAI(
-    name = "openai",
+    name = "OpenAI",
     model = "",
     base_url = base_url,
     api_key = api_key
@@ -555,6 +555,6 @@ models_openai <- function(
     created_at = created,
     owned_by = owned_by
   )
-  df <- cbind(df, match_prices("OpenAI", df$id))
+  df <- cbind(df, match_prices(provider@name, df$id))
   df[order(-xtfrm(df$created_at)), ]
 }
