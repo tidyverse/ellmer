@@ -78,6 +78,8 @@ chat <- chat_openai()
 parallel_chat_structured(chat, prompts, type = type_person)
 ```
 
+(Note that structured data extraction automatically disables tool calling. You can work around this limitation by doing a regular `$chat()` and then using `$chat_structured()`.)
+
 ## Data types
 
 To extract structured data effectively, you need to understand how LLMs expect types to be defined, and how those types map to the R types you are familiar with.

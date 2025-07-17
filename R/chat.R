@@ -630,7 +630,7 @@ Chat <- R6::R6Class(
         provider = private$provider,
         mode = if (stream) "stream" else "value",
         turns = c(private$.turns, list(user_turn)),
-        tools = private$tools,
+        tools = if (is.null(type)) private$tools,
         type = type
       )
       emit <- emitter(echo)
@@ -711,7 +711,7 @@ Chat <- R6::R6Class(
         provider = private$provider,
         mode = if (stream) "async-stream" else "async-value",
         turns = c(private$.turns, list(user_turn)),
-        tools = private$tools,
+        tools = if (is.null(type)) private$tools,
         type = type
       )
       emit <- emitter(echo)
