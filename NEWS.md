@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* Now use prices data aggregated by LiteLLM. This considerably expands the number of providers and models that include cost information (#659).
 * `tool()` now checks that the `name` is valid (#625)
 * `Chat$register_tool()` now messages when you replace an existing tool (#625).
 * `content_pdf_*()` now works with `chat_openai()` (#650).
