@@ -487,12 +487,6 @@ method(batch_result_turn, ProviderAnthropic) <- function(
   }
 }
 
-# Pricing ----------------------------------------------------------------------
-
-method(standardise_model, ProviderAnthropic) <- function(provider, model) {
-  gsub("-(latest|\\d{8})$", "", model)
-}
-
 # Models -----------------------------------------------------------------------
 
 #' @export
@@ -523,8 +517,7 @@ models_anthropic <- function(
     name = display_name,
     created_at = created_at
   )
-  model_name <- standardise_model(provider, df$id)
-  df <- cbind(df, match_prices("Anthropic", model_name))
+  df <- cbind(df, match_prices("Anthropic", df$id))
   df[order(-xtfrm(df$created_at)), ]
 }
 

@@ -779,7 +779,7 @@ Chat <- R6::R6Class(
     compute_cost = function(input, output, cached_input) {
       get_token_cost(
         private$provider@name,
-        standardise_model(private$provider, private$provider@model),
+        private$provider@model,
         input = input,
         output = output,
         cached_input = cached_input

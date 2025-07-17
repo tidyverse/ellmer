@@ -101,11 +101,13 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
   json <- resp_body_json(resp)
   models <- json$modelSummaries
 
-  data.frame(
+  df <- data.frame(
     id = map_chr(models, "[[", "modelId"),
     name = map_chr(models, "[[", "modelName"),
     provider = map_chr(models, "[[", "providerName")
   )
+  df <- cbind(df, match_prices("AWS/Bedrock", df$id))
+  df
 }
 
 ProviderAWSBedrock <- new_class(

@@ -197,7 +197,7 @@ multi_convert <- function(
     if (include_cost) {
       out$cost <- get_token_cost(
         provider@name,
-        standardise_model(provider, provider@model),
+        provider@model,
         input = tokens[, 1],
         output = tokens[, 2],
         cached_input = tokens[, 3]

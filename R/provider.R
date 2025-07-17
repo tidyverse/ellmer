@@ -231,17 +231,3 @@ batch_result_turn <- new_generic(
     S7_dispatch()
   }
 )
-
-# Pricing ---------------------------------------------------------------------
-
-standardise_model <- new_generic(
-  "standardise_model",
-  "provider",
-  function(provider, model) {
-    S7_dispatch()
-  }
-)
-
-method(standardise_model, Provider) <- function(provider, model) {
-  model
-}

@@ -1,6 +1,7 @@
 # ellmer (development version)
 
 * `Chat$chat_structured()` now suppresses tool use. If you need to use tools and structured data together, first `$chat()` to use any tools needed, and then `$chat_structured()` to extract the data you need.
+* Now use prices data aggregated by LiteLLM. This considerably expands the number of providers and models that include cost information (#659).
 * `chat_aws_bedrock()` now allows you to set the `base_url()` (#441).
 * `tool()` now checks that the `name` is valid (#625)
 * `Chat$register_tool()` now messages when you replace an existing tool (#625).
