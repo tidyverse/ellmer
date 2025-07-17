@@ -249,7 +249,7 @@ Chat <- R6::R6Class(
       needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
-      coro::collect(private$submit_turns(
+      coro::collect(private$chat_impl(
         turn,
         type = type,
         stream = echo != "none",
@@ -280,7 +280,7 @@ Chat <- R6::R6Class(
       needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
-      done <- coro::async_collect(private$submit_turns_async(
+      done <- coro::async_collect(private$chat_impl_async(
         turn,
         type = type,
         stream = echo != "none",
@@ -486,6 +486,7 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
+      type = NULL,
       yield_as_content = FALSE
     ) {
       tool_errors <- list()
@@ -496,6 +497,7 @@ Chat <- R6::R6Class(
           user_turn,
           stream = stream,
           echo = echo,
+          type = type,
           yield_as_content = yield_as_content
         )
         for (chunk in assistant_chunks) {
@@ -544,6 +546,7 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
+      type = NULL,
       tool_mode = "concurrent",
       yield_as_content = FALSE
     ) {
@@ -555,6 +558,7 @@ Chat <- R6::R6Class(
           user_turn,
           stream = stream,
           echo = echo,
+          type = type,
           yield_as_content = yield_as_content
         )
         for (chunk in await_each(assistant_chunks)) {

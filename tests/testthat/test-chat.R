@@ -178,6 +178,18 @@ test_that("chat_structured() doesn't require a prompt", {
   expect_equal(out, list(city = "Tokyo", county = "Japan"))
 })
 
+test_that("chat_structured works with tool calls", {
+  chat <- chat_openai_test()
+  chat$register_tool(tool(
+    function() 3,
+    name = "dice",
+    description = "roll a dice"
+  ))
+
+  out <- chat$chat_structured("Roll a dice", type = type_number())
+  expect_equal(out, 3)
+})
+
 test_that("can retrieve tokens with or without system prompt", {
   chat <- chat_openai_test("abc")
   expect_equal(nrow(chat$get_tokens(FALSE)), 0)
