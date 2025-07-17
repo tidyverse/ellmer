@@ -52,21 +52,25 @@ NULL
 #' }
 chat_aws_bedrock <- function(
   system_prompt = NULL,
+  base_url = NULL,
   model = NULL,
   profile = NULL,
   api_args = list(),
   echo = NULL
 ) {
   check_installed("paws.common", "AWS authentication")
-  cache <- aws_creds_cache(profile)
-  credentials <- paws_credentials(profile, cache = cache)
-
+  check_string(base_url, allow_null = TRUE)
   model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
   echo <- check_echo(echo)
 
+  cache <- aws_creds_cache(profile)
+  credentials <- paws_credentials(profile, cache = cache)
+  base_url <- base_url %||%
+    paste0("https://bedrock-runtime.", credentials$region, ".amazonaws.com")
+
   provider <- ProviderAWSBedrock(
     name = "AWS/Bedrock",
-    base_url = "",
+    base_url = base_url,
     model = model,
     profile = profile,
     region = credentials$region,
@@ -79,11 +83,12 @@ chat_aws_bedrock <- function(
 
 #' @export
 #' @rdname chat_aws_bedrock
-models_aws_bedrock <- function(profile = NULL) {
+models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
   creds <- paws_credentials(profile)
-  url <- paste0("https://bedrock.", creds$region, ".amazonaws.com")
+  base_url <- base_url %||%
+    paste0("https://bedrock.", creds$region, ".amazonaws.com")
 
-  req <- request(url)
+  req <- request(base_url)
   req <- req_url_path_append(req, "foundation-models")
   req <- req_auth_aws_v4(
     req,
@@ -120,11 +125,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
   tools = list(),
   type = NULL
 ) {
-  req <- request(paste0(
-    "https://bedrock-runtime.",
-    provider@region,
-    ".amazonaws.com"
-  ))
+  req <- request(provider@base_url)
   req <- req_url_path_append(
     req,
     "model",
@@ -156,7 +157,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
-      fun = function(...) {},
+      function(...) {},
       name = "structured_tool_call__",
       description = "Extract structured data",
       arguments = type_object(data = type)
