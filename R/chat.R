@@ -246,7 +246,7 @@ Chat <- R6::R6Class(
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
 
-      needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
+      needs_wrapper <- type_needs_wrapper(type, private$provider)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
       coro::collect(private$submit_turns(
@@ -277,7 +277,7 @@ Chat <- R6::R6Class(
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
 
-      needs_wrapper <- S7_inherits(private$provider, ProviderOpenAI)
+      needs_wrapper <- type_needs_wrapper(type, private$provider)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
       done <- coro::async_collect(private$submit_turns_async(

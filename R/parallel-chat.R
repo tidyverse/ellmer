@@ -134,7 +134,7 @@ parallel_chat_structured <- function(
   check_bool(convert)
 
   provider <- chat$get_provider()
-  needs_wrapper <- S7_inherits(provider, ProviderOpenAI)
+  needs_wrapper <- type_needs_wrapper(type, provider)
 
   # First build up list of cumulative conversations
   user_turns <- as_user_turns(prompts)
@@ -168,7 +168,7 @@ multi_convert <- function(
   include_tokens = FALSE,
   include_cost = FALSE
 ) {
-  needs_wrapper <- S7_inherits(provider, ProviderOpenAI)
+  needs_wrapper <- type_needs_wrapper(type, provider)
 
   rows <- map(turns, \(turn) {
     extract_data(

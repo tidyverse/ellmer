@@ -119,7 +119,7 @@ batch_chat_structured <- function(
 ) {
   check_chat(chat)
   provider <- chat$get_provider()
-  needs_wrapper <- S7_inherits(provider, ProviderOpenAI)
+  needs_wrapper <- type_needs_wrapper(type, provider)
 
   job <- BatchJob$new(
     chat = chat,

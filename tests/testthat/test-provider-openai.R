@@ -79,6 +79,21 @@ test_that("can retrieve log_probs (#115)", {
   )
 })
 
+test_that("structured data work with and without wrapper", {
+  chat <- chat_openai_test()
+  out <- chat$chat_structured(
+    "Extract the number: apple, green, eleven",
+    type = type_number()
+  )
+  expect_equal(out, 11)
+
+  out <- chat$chat_structured(
+    "Extract the number: apple, green, eleven",
+    type = type_object(number = type_number())
+  )
+  expect_equal(out, list(number = 11))
+})
+
 # Custom -----------------------------------------------------------------
 
 test_that("as_json specialised for OpenAI", {
