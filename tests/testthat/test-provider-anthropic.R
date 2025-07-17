@@ -86,14 +86,9 @@ test_that("max_tokens is deprecated", {
   expect_equal(chat$get_provider()@params$max_tokens, 10)
 })
 
-test_that("strips suffix from model name", {
-  provider <- ProviderAnthropic("", model = "", base_url = "", api_key = "")
-  expect_equal(
-    standardise_model(provider, "claude-3-7-sonnet-latest"),
-    "claude-3-7-sonnet"
-  )
-  expect_equal(
-    standardise_model(provider, "claude-3-7-sonnet-20250219"),
-    "claude-3-7-sonnet"
-  )
+test_that("can match prices for some common models", {
+  provider <- chat_anthropic_test()$get_provider()
+  
+  expect_true(has_cost(provider, "claude-sonnet-4-20250514"))
+  expect_true(has_cost(provider, "claude-3-7-sonnet-latest"))
 })

@@ -659,12 +659,6 @@ default_google_credentials <- function(
 
 # Pricing ----------------------------------------------------------------------
 
-method(standardise_model, ProviderGoogleGemini) <- function(provider, model) {
-  # https://ai.google.dev/gemini-api/docs/models#model-versions
-  # <model>-<generation>-<variation>-...
-  gsub("^([^-]+-[^-]+-[^-]+).*$", "\\1", model)
-}
-
 # Models -----------------------------------------------------------------------
 
 #' @export
@@ -674,7 +668,7 @@ models_google_gemini <- function(
   api_key = NULL
 ) {
   provider <- ProviderGoogleGemini(
-    name = "gemini",
+    name = "Google/Gemini",
     model = "",
     base_url = base_url,
     credentials = if (isFALSE(api_key)) {
@@ -698,8 +692,7 @@ models_google_gemini <- function(
   can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)
 
   df <- data.frame(id = name)
-  model_name <- standardise_model(provider, df$id)
-  df <- cbind(df, match_prices("Google/Gemini", model_name))
+  df <- cbind(df, match_prices(provider@name, df$id))
   unrowname(df[order(df$id), ][can_generate, ])
 }
 

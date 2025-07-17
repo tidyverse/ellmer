@@ -12,13 +12,21 @@ tokens_log <- function(
   output <- output %||% 0
   cached_input <- cached_input %||% 0
 
-  model <- standardise_model(provider, provider@model)
-
-  name <- function(provider, model) paste0(provider, "/", model)
-  i <- tokens_match(provider@name, model, the$tokens$provider, the$tokens$model)
+  i <- tokens_match(
+    provider@name,
+    provider@model,
+    the$tokens$provider,
+    the$tokens$model
+  )
 
   if (is.na(i)) {
-    new_row <- tokens_row(provider@name, model, input, output, cached_input)
+    new_row <- tokens_row(
+      provider@name,
+      provider@model,
+      input,
+      output,
+      cached_input
+    )
     the$tokens <- rbind(the$tokens, new_row)
   } else {
     the$tokens$input[i] <- the$tokens$input[i] + input
@@ -94,6 +102,10 @@ token_usage <- function() {
 }
 
 # Cost ----------------------------------------------------------------------
+
+has_cost <- function(provider, model) {
+  !is.na(tokens_match(provider@name, model, prices$provider, prices$model))
+}
 
 get_token_cost <- function(
   provider,
