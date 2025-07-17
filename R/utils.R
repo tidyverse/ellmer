@@ -248,6 +248,10 @@ print.ellmer_output <- function(x, ...) {
 }
 
 eval_vignette <- function() {
+  if (!modern_vcr()) {
+    return(FALSE)
+  }
+
   name <- tools::file_path_sans_ext(knitr::current_input())
 
   cassettes <- dir("_vcr", pattern = paste0(name, "*"))
@@ -261,13 +265,33 @@ eval_vignette <- function() {
 }
 
 vcr_example_start <- function(name) {
+  if (!modern_vcr()) {
+    return()
+  }
   options(ellmer_echo = "none")
-  vcr::insert_example_cassette(name, package = "ellmer")
+  getNamespace("vcr")$insert_example_cassette(name, package = "ellmer")
 }
 vcr_example_end <- function() {
+  if (!modern_vcr()) {
+    return()
+  }
   options(ellmer_echo = NULL)
-  vcr::eject_cassette()
+  getNamespace("vcr")$eject_cassette()
 }
+vcr_local_cassette <- function(..., frame = parent.frame()) {
+  if (!modern_vcr()) {
+    return()
+  }
+  getNamespace("vcr")$local_cassette(..., frame = frame)
+}
+vcr_setup_knitr <- function(...) {
+  if (!modern_vcr()) {
+    return()
+  }
+  getNamespace("vcr")$setup_knitr(...)
+}
+
+modern_vcr <- function() utils::packageVersion("vcr") > "1.7.0"
 
 replay <- function(values) {
   i <- 0

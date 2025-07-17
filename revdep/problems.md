@@ -38,4 +38,3 @@ Run `revdepcheck::cloud_details(, "chattr")` for more info
       Error: Test failures
       Execution halted
     ```
-
