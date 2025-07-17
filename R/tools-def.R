@@ -163,6 +163,9 @@ tool <- function(
       name <- unique_tool_name()
     }
   }
+  if (!grepl("^[a-zA-Z0-9_-]+$", name)) {
+    cli::cli_abort("{.arg name} must contain only letters, numbers, - and _.")
+  }
 
   check_arguments(arguments, formals(fun))
 

@@ -52,6 +52,11 @@
       Error in `tool()`:
       ! `name` must be a single string or `NULL`, not the number 1.
     Code
+      tool(identity, "", name = "...")
+    Condition
+      Error in `tool()`:
+      ! `name` must contain only letters, numbers, - and _.
+    Code
       tool(identity, "", arguments = 1)
     Condition
       Error in `tool()`:

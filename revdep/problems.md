@@ -1,14 +1,14 @@
-# GitAI
+# chattr
 
 <details>
 
-* Version: 0.1.0
-* GitHub: NA
-* Source code: https://github.com/cran/GitAI
-* Date/Publication: 2025-02-20 18:40:16 UTC
-* Number of recursive dependencies: 74
+* Version: 0.3.0
+* GitHub: https://github.com/mlverse/chattr
+* Source code: https://github.com/cran/chattr
+* Date/Publication: 2025-05-28 18:30:02 UTC
+* Number of recursive dependencies: 77
 
-Run `revdepcheck::cloud_details(, "GitAI")` for more info
+Run `revdepcheck::cloud_details(, "chattr")` for more info
 
 </details>
 
@@ -24,17 +24,17 @@ Run `revdepcheck::cloud_details(, "GitAI")` for more info
       > #
       > # Where should you do additional test configuration?
       > # Learn more about the roles of various files in:
-      > # * https://r-pkgs.org/testing-design.html#sec-tests-files-overview
-      > # * https://testthat.r-lib.org/articles/special-files.html
+      > # * https://r-pkgs.org/tests.html
+      > # * https://testthat.r-lib.org/reference/test_package.html#special-files
     ...
-       4.   └─GitAI (local) `<fn>`(model = "gpt-4o-mini", seed = NULL, echo = "none")
-       5.     └─GitAI:::mock_chat_method(...) at tests/testthat/setup.R:46:3
-       6.       ├─rlang::exec(provider_class, !!!provider_args) at tests/testthat/setup.R:24:3
-       7.       └─ellmer (local) `<S7_class>`(...)
-       8.         ├─S7::new_object(...)
-       9.         └─ellmer::Provider(...)
+       22.     └─cli::cli_abort(...)
+       23.       └─rlang::abort(...)
       
-      [ FAIL 4 | WARN 5 | SKIP 7 | PASS 35 ]
+      [ FAIL 1 | WARN 1 | SKIP 26 | PASS 38 ]
+      Deleting unused snapshots:
+      • app-server/001.json
+      • app-server/002.json
+      • app-server/003.json
       Error: Test failures
       Execution halted
     ```
