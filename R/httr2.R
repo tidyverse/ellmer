@@ -5,11 +5,12 @@ chat_perform <- function(
   provider,
   mode = c("value", "stream", "async-stream", "async-value"),
   turns,
-  tools = list(),
+  tools = NULL,
   type = NULL
 ) {
   mode <- arg_match(mode)
   stream <- mode %in% c("stream", "async-stream")
+  tools <- tools %||% list()
 
   req <- chat_request(
     provider = provider,
