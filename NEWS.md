@@ -1,6 +1,7 @@
 # ellmer (development version)
 
 * Now use prices data aggregated by LiteLLM. This considerably expands the number of providers and models that include cost information (#659).
+* `chat_aws_bedrock()` now allows you to set the `base_url()` (#441).
 * `tool()` now checks that the `name` is valid (#625)
 * `Chat$register_tool()` now messages when you replace an existing tool (#625).
 * `content_pdf_*()` now works with `chat_openai()` (#650).

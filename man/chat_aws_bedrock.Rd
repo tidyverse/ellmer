@@ -7,16 +7,19 @@
 \usage{
 chat_aws_bedrock(
   system_prompt = NULL,
+  base_url = NULL,
   model = NULL,
   profile = NULL,
   api_args = list(),
   echo = NULL
 )
 
-models_aws_bedrock(profile = NULL)
+models_aws_bedrock(profile = NULL, base_url = NULL)
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
+
+\item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
 \item{model}{The model to use for the chat (defaults to "anthropic.claude-3-5-sonnet-20240620-v1:0").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
