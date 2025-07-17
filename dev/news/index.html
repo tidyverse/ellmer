@@ -49,7 +49,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
-<ul><li>Now use prices data aggregated by LiteLLM. This considerably expands the number of providers and models that include cost information (<a href="https://github.com/tidyverse/ellmer/issues/659" class="external-link">#659</a>).</li>
+<ul><li>
+<code>Chat$chat_structured()</code> now suppresses tool use. If you need to use tools and structured data together, first <code>$chat()</code> to use any tools needed, and then <code>$chat_structured()</code> to extract the data you need.</li>
+<li>Now use prices data aggregated by LiteLLM. This considerably expands the number of providers and models that include cost information (<a href="https://github.com/tidyverse/ellmer/issues/659" class="external-link">#659</a>).</li>
 <li>
 <code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> now allows you to set the <code>base_url()</code> (<a href="https://github.com/tidyverse/ellmer/issues/441" class="external-link">#441</a>).</li>
 <li>

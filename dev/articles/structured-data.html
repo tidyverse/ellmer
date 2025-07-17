@@ -164,6 +164,10 @@ and it can take a vector of prompts.</p>
 <span><span class="co">#&gt; 4 Fatima  35</span></span>
 <span><span class="co">#&gt; 5 Robert  51</span></span>
 <span><span class="co">#&gt; 6  Kwame  50</span></span></code></pre></div>
+<p>(Note that structured data extraction automatically disables tool
+calling. You can work around this limitation by doing a regular
+<code>$chat()</code> and then using
+<code>$chat_structured()</code>.)</p>
 </div>
 <div class="section level2">
 <h2 id="data-types">Data types<a class="anchor" aria-label="anchor" href="#data-types"></a>
