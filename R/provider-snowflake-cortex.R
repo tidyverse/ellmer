@@ -179,6 +179,7 @@ method(chat_request, ProviderSnowflakeCortexAnalyst) <- function(
   body <- list(messages = messages, stream = stream)
   body <- modify_list(body, provider@extra_args)
   req <- req_body_json(req, body)
+  req <- req_headers(req, !!!provider@extra_headers)
 
   req
 }

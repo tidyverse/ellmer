@@ -174,6 +174,7 @@ method(chat_request, ProviderGoogleGemini) <- function(
   body <- modify_list(body, provider@extra_args)
 
   req <- req_body_json(req, body)
+  req <- req_headers(req, !!!provider@extra_headers)
   req
 }
 
