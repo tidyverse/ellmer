@@ -56,6 +56,7 @@ chat_aws_bedrock <- function(
   model = NULL,
   profile = NULL,
   api_args = list(),
+  api_headers = character(),
   echo = NULL
 ) {
   check_installed("paws.common", "AWS authentication")
@@ -75,7 +76,8 @@ chat_aws_bedrock <- function(
     profile = profile,
     region = credentials$region,
     cache = cache,
-    extra_args = api_args
+    extra_args = api_args,
+    extra_headers = api_headers
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)

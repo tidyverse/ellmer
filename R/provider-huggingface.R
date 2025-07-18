@@ -36,7 +36,8 @@ chat_huggingface <- function(
   api_key = hf_key(),
   model = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 ) {
   model <- set_default(model, "meta-llama/Llama-3.1-8B-Instruct")
   echo <- check_echo(echo)
@@ -51,7 +52,8 @@ chat_huggingface <- function(
     model = model,
     params = params,
     extra_args = api_args,
-    api_key = api_key
+    api_key = api_key,
+    extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }

@@ -10,7 +10,8 @@ chat_huggingface(
   api_key = hf_key(),
   model = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 )
 }
 \arguments{
@@ -38,6 +39,9 @@ when running at the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{api_headers}{Named character vector of arbitrary extra headers appended
+to every chat API call.}
 }
 \value{
 A \link{Chat} object.

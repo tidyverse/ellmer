@@ -41,6 +41,7 @@ chat_google_gemini <- function(
   model = NULL,
   params = NULL,
   api_args = list(),
+  api_headers = character(),
   echo = NULL
 ) {
   model <- set_default(model, "gemini-2.5-flash")
@@ -53,6 +54,7 @@ chat_google_gemini <- function(
     model = model,
     params = params %||% params(),
     extra_args = api_args,
+    extra_headers = api_headers,
     api_key = api_key,
     credentials = credentials
   )
@@ -83,6 +85,7 @@ chat_google_vertex <- function(
   model = NULL,
   params = NULL,
   api_args = list(),
+  api_headers = character(),
   echo = NULL
 ) {
   model <- set_default(model, "gemini-2.5-flash")
@@ -95,6 +98,7 @@ chat_google_vertex <- function(
     model = model,
     params = params %||% params(),
     extra_args = api_args,
+    extra_headers = api_headers,
     credentials = credentials
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)

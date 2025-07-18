@@ -53,7 +53,8 @@ chat_databricks <- function(
   model = NULL,
   token = NULL,
   api_args = list(),
-  echo = c("none", "output", "all")
+  echo = c("none", "output", "all"),
+  api_headers = character()
 ) {
   check_string(workspace, allow_empty = FALSE)
   check_string(token, allow_empty = FALSE, allow_null = TRUE)
@@ -72,7 +73,8 @@ chat_databricks <- function(
     credentials = credentials,
     # Databricks APIs use bearer tokens, not API keys, but we need to pass an
     # empty string here anyway to make S7::validate() happy.
-    api_key = ""
+    api_key = "",
+    extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }

@@ -31,7 +31,8 @@ chat_github <- function(
   model = NULL,
   seed = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 ) {
   check_installed("gitcreds")
 
@@ -45,7 +46,8 @@ chat_github <- function(
     model = model,
     seed = seed,
     api_args = api_args,
-    echo = echo
+    echo = echo,
+    api_headers = api_headers
   )
 }
 

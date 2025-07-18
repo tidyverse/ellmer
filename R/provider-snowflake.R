@@ -43,7 +43,8 @@ chat_snowflake <- function(
   model = NULL,
   params = NULL,
   api_args = list(),
-  echo = c("none", "output", "all")
+  echo = c("none", "output", "all"),
+  api_headers = character()
 ) {
   check_string(account, allow_empty = FALSE)
   model <- set_default(model, "claude-3-7-sonnet")
@@ -66,7 +67,8 @@ chat_snowflake <- function(
     params = params,
     extra_args = api_args,
     # We need an empty api_key for S7 validation.
-    api_key = ""
+    api_key = "",
+    extra_headers = api_headers
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)

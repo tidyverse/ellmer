@@ -43,7 +43,8 @@ chat_ollama <- function(
   seed = NULL,
   api_args = list(),
   echo = NULL,
-  api_key = NULL
+  api_key = NULL,
+  api_headers = character()
 ) {
   if (!has_ollama(base_url)) {
     cli::cli_abort("Can't find locally running ollama.")
@@ -76,7 +77,8 @@ chat_ollama <- function(
     extra_args = api_args,
     # ollama doesn't require an API key for local usage, but one might be needed
     # if ollama is served behind a proxy (see #501)
-    api_key = api_key %||% Sys.getenv("OLLAMA_API_KEY", "ollama")
+    api_key = api_key %||% Sys.getenv("OLLAMA_API_KEY", "ollama"),
+    extra_headers = api_headers
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)

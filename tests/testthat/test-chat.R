@@ -247,3 +247,11 @@ test_that("old extract methods are deprecated", {
     chat_null$extract_data_async()
   })
 })
+
+test_that("api_headers parameter works correctly", {
+  chat <- chat_openai_test(api_headers = c("X-Test" = "value"))
+  expect_equal(chat$get_provider()@extra_headers, c("X-Test" = "value"))
+
+  req <- chat_request(chat$get_provider())
+  expect_equal(req_get_headers(req), list("X-Test" = "value"))
+})

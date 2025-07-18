@@ -26,7 +26,8 @@ chat_mistral <- function(
   model = NULL,
   seed = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 ) {
   params <- params %||% params()
   model <- set_default(model, "mistral-large-latest")
@@ -39,7 +40,8 @@ chat_mistral <- function(
     params = params,
     seed = seed,
     extra_args = api_args,
-    api_key = api_key
+    api_key = api_key,
+    extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }

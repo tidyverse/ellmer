@@ -31,7 +31,8 @@ chat_groq <- function(
   model = NULL,
   seed = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 ) {
   model <- set_default(model, "llama3-8b-8192")
   echo <- check_echo(echo)
@@ -42,7 +43,8 @@ chat_groq <- function(
     model = model,
     seed = seed,
     extra_args = api_args,
-    api_key = api_key
+    api_key = api_key,
+    extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }

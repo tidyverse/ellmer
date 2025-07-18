@@ -20,6 +20,8 @@ NULL
 #' @param max_tokens Maximum number of tokens to generate before stopping.
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
 #'   claude features that are still in beta.
+#' @param api_headers Named character vector of arbitrary extra headers appended
+#'   to every chat API call.
 #' @family chatbots
 #' @export
 #' @examples
@@ -36,6 +38,7 @@ chat_anthropic <- function(
   base_url = "https://api.anthropic.com/v1",
   beta_headers = character(),
   api_key = anthropic_key(),
+  api_headers = character(),
   echo = NULL
 ) {
   echo <- check_echo(echo)
@@ -57,6 +60,7 @@ chat_anthropic <- function(
     model = model,
     params = params %||% params(),
     extra_args = api_args,
+    extra_headers = api_headers,
     base_url = base_url,
     beta_headers = beta_headers,
     api_key = api_key

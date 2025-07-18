@@ -12,7 +12,8 @@ chat_vllm(
   seed = NULL,
   api_args = list(),
   api_key = vllm_key(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 )
 
 models_vllm(base_url, api_key = vllm_key())
@@ -47,6 +48,9 @@ when running at the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{api_headers}{Named character vector of arbitrary extra headers appended
+to every chat API call.}
 }
 \value{
 A \link{Chat} object.

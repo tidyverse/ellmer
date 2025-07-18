@@ -12,7 +12,8 @@ chat_ollama(
   seed = NULL,
   api_args = list(),
   echo = NULL,
-  api_key = NULL
+  api_key = NULL,
+  api_headers = character()
 )
 
 models_ollama(base_url = "http://localhost:11434")
@@ -48,6 +49,9 @@ cases you do not need to provide an \code{api_key}.
 However, if you're accessing an Ollama instance hosted behind a reverse
 proxy or secured endpoint that enforces bearer‐token authentication, you
 can set \code{api_key} (or the \code{OLLAMA_API_KEY} environment variable).}
+
+\item{api_headers}{Named character vector of arbitrary extra headers appended
+to every chat API call.}
 }
 \value{
 A \link{Chat} object.

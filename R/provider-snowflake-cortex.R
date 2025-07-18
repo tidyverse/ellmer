@@ -62,7 +62,8 @@ chat_cortex_analyst <- function(
   model_spec = NULL,
   model_file = NULL,
   api_args = list(),
-  echo = c("none", "output", "all")
+  echo = c("none", "output", "all"),
+  api_headers = character()
 ) {
   lifecycle::deprecate_warn(
     "0.3.0",
@@ -89,7 +90,8 @@ chat_cortex_analyst <- function(
     credentials = credentials,
     model_spec = model_spec,
     model_file = model_file,
-    extra_args = api_args
+    extra_args = api_args,
+    extra_headers = api_headers
   )
 
   Chat$new(provider = provider, echo = echo)
@@ -104,7 +106,8 @@ ProviderSnowflakeCortexAnalyst <- new_class(
     credentials,
     model_spec = NULL,
     model_file = NULL,
-    extra_args = list()
+    extra_args = list(),
+    extra_headers = character()
   ) {
     base_url <- snowflake_url(account)
     extra_args <- compact(list2(
@@ -117,7 +120,8 @@ ProviderSnowflakeCortexAnalyst <- new_class(
         name = name,
         base_url = base_url,
         extra_args = extra_args,
-        model = ""
+        model = "",
+        extra_headers = extra_headers
       ),
       account = account,
       credentials = credentials

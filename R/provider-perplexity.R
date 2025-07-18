@@ -29,7 +29,8 @@ chat_perplexity <- function(
   model = NULL,
   seed = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 ) {
   model <- set_default(model, "llama-3.1-sonar-small-128k-online")
 
@@ -40,7 +41,8 @@ chat_perplexity <- function(
     model = model,
     seed = seed,
     api_args = api_args,
-    echo = echo
+    echo = echo,
+    api_headers = api_headers
   )
 }
 

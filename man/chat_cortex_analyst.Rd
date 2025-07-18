@@ -10,7 +10,8 @@ chat_cortex_analyst(
   model_spec = NULL,
   model_file = NULL,
   api_args = list(),
-  echo = c("none", "output", "all")
+  echo = c("none", "output", "all"),
+  api_headers = character()
 )
 }
 \arguments{
@@ -41,6 +42,9 @@ when running at the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{api_headers}{Named character vector of arbitrary extra headers appended
+to every chat API call.}
 }
 \value{
 A \link{Chat} object.

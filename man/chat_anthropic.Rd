@@ -14,6 +14,7 @@ chat_anthropic(
   base_url = "https://api.anthropic.com/v1",
   beta_headers = character(),
   api_key = anthropic_key(),
+  api_headers = character(),
   echo = NULL
 )
 
@@ -47,6 +48,9 @@ claude features that are still in beta.}
 You generally should not supply this directly, but instead set the \code{ANTHROPIC_API_KEY} environment variable.
 The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.}
+
+\item{api_headers}{Named character vector of arbitrary extra headers appended
+to every chat API call.}
 
 \item{echo}{One of the following options:
 \itemize{

@@ -13,7 +13,8 @@ chat_portkey(
   model = NULL,
   params = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 )
 
 models_portkey(
@@ -56,6 +57,9 @@ when running at the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{api_headers}{Named character vector of arbitrary extra headers appended
+to every chat API call.}
 }
 \value{
 A \link{Chat} object.

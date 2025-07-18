@@ -11,6 +11,7 @@ chat_aws_bedrock(
   model = NULL,
   profile = NULL,
   api_args = list(),
+  api_headers = character(),
   echo = NULL
 )
 
@@ -46,6 +47,9 @@ of every chat API call. Some useful arguments include:
   )
 )
 }\if{html}{\out{</div>}}}
+
+\item{api_headers}{Named character vector of arbitrary extra headers appended
+to every chat API call.}
 
 \item{echo}{One of the following options:
 \itemize{

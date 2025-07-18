@@ -56,7 +56,8 @@ chat_azure_openai <- function(
   token = deprecated(),
   credentials = NULL,
   api_args = list(),
-  echo = c("none", "output", "all")
+  echo = c("none", "output", "all"),
+  api_headers = character()
 ) {
   check_exclusive(token, credentials, .require = FALSE)
   if (lifecycle::is_present(token)) {
@@ -95,7 +96,8 @@ chat_azure_openai <- function(
     api_version = api_version,
     api_key = api_key,
     credentials = credentials,
-    extra_args = api_args
+    extra_args = api_args,
+    extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }

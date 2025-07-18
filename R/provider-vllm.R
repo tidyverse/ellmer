@@ -26,7 +26,8 @@ chat_vllm <- function(
   seed = NULL,
   api_args = list(),
   api_key = vllm_key(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 ) {
   check_string(base_url)
   check_string(api_key)
@@ -45,7 +46,8 @@ chat_vllm <- function(
     model = model,
     seed = seed,
     extra_args = api_args,
-    api_key = api_key
+    api_key = api_key,
+    extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
