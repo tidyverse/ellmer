@@ -16,3 +16,4 @@ _cache/
 ^data-raw$
 ^_dev$
 ^revdep$
+^\.claude$
