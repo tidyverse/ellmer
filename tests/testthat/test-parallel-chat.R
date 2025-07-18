@@ -85,12 +85,11 @@ test_that("can extract data in parallel", {
   expect_equal(data, data.frame(name = c("John", "Jane"), age = c(15, 16)))
 })
 
-test_that("can get tokens and/or cost", {
-  vcr::local_cassette("parallel-data-cost")
-
+test_that("can get tokens", {
+  vcr::local_cassette("parallel-data")
   person <- type_object(name = type_string(), age = type_integer())
-
   chat <- chat_openai_test()
+
   data <- parallel_chat_structured(
     chat,
     list("John, age 15", "Jane, age 16"),
@@ -101,6 +100,12 @@ test_that("can get tokens and/or cost", {
   expect_contains(names(data), c("input_tokens", "output_tokens"))
   expect_equal(data$input_tokens > 0, c(TRUE, TRUE))
   expect_equal(data$output_tokens > 0, c(TRUE, TRUE))
+})
+
+test_that("can get cost", {
+  vcr::local_cassette("parallel-data")
+  person <- type_object(name = type_string(), age = type_integer())
+  chat <- chat_openai_test()
 
   data <- parallel_chat_structured(
     chat,
@@ -110,6 +115,12 @@ test_that("can get tokens and/or cost", {
   )
   expect_contains(names(data), "cost")
   expect_equal(data$cost > 0, c(TRUE, TRUE))
+})
+
+test_that("can get tokens & cost", {
+  vcr::local_cassette("parallel-data")
+  person <- type_object(name = type_string(), age = type_integer())
+  chat <- chat_openai_test()
 
   data <- parallel_chat_structured(
     chat,
