@@ -50,6 +50,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
 <ul><li>
+<code>Chat$chat_structured()</code> and friends no longer unnecessarily wrap <code><a href="../reference/type_boolean.html">type_object()</a></code> for <code><a href="../reference/chat_openai.html">chat_openai()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/671" class="external-link">#671</a>)</li>
+<li>
 <code>Chat$chat_structured()</code> now suppresses tool use. If you need to use tools and structured data together, first <code>$chat()</code> to use any tools needed, and then <code>$chat_structured()</code> to extract the data you need.</li>
 <li>Now use prices data aggregated by LiteLLM. This considerably expands the number of providers and models that include cost information (<a href="https://github.com/tidyverse/ellmer/issues/659" class="external-link">#659</a>).</li>
 <li>

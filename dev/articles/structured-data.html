@@ -132,10 +132,10 @@ specific values from a string:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; $primary_shape</span></span>
-<span><span class="co">#&gt; [1] "Oval and letter R"</span></span>
+<span><span class="co">#&gt; [1] "letter and oval"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $primary_colour</span></span>
-<span><span class="co">#&gt; [1] "Grey and blue"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "blue and gray"</span></span></code></pre></div>
 <p>If you need to extract data from multiple prompts, you can use
 <code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code>. It takes the same arguments as
 <code>$chat_structured()</code> with two exceptions: it needs a
@@ -265,11 +265,11 @@ have names and/or ages.</p>
 <span>  <span class="st">"My name is Hadley."</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">no_match</span>, type <span class="op">=</span> <span class="va">type_person</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                       name age</span></span>
-<span><span class="co">#&gt; 1                  unknown   0</span></span>
-<span><span class="co">#&gt; 2 Current Time Unavailable   0</span></span>
-<span><span class="co">#&gt; 3                   cheese   3</span></span>
-<span><span class="co">#&gt; 4                   Hadley   0</span></span></code></pre></div>
+<span><span class="co">#&gt;      name age</span></span>
+<span><span class="co">#&gt; 1 Unknown   0</span></span>
+<span><span class="co">#&gt; 2    &lt;NA&gt;  NA</span></span>
+<span><span class="co">#&gt; 3  cheese   3</span></span>
+<span><span class="co">#&gt; 4  Hadley   0</span></span></code></pre></div>
 <p>You can often avoid this problem by setting
 <code>required = FALSE</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -326,7 +326,7 @@ table:</p>
 <span><span class="co">#&gt; [1] 1.800 1.651 1.900 1.750</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $weight</span></span>
-<span><span class="co">#&gt; [1] 80.000 49.895 90.000 70.000</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 80.0 49.9 90.0 70.0</span></span></code></pre></div>
 <p>This doesn’t work because there’s no constraint that each array
 should have the same length, and hence no way for ellmer to know that
 you really wanted a data frame. Instead, you’ll need to turn the data
@@ -345,10 +345,10 @@ structure “inside out” and create an array of objects:</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">prompt</span>, type <span class="op">=</span> <span class="va">type_people</span><span class="op">)</span></span>
 <span><span class="co">#&gt;             name age height weight</span></span>
-<span><span class="co">#&gt; 1     John Smith  30  1.800 80.000</span></span>
-<span><span class="co">#&gt; 2       Jane Doe  25  1.651 49.895</span></span>
-<span><span class="co">#&gt; 3 Jose Rodriguez  40  1.900 90.000</span></span>
-<span><span class="co">#&gt; 4       June Lee  35  1.750 70.000</span></span></code></pre></div>
+<span><span class="co">#&gt; 1     John Smith  30   1.80   80.0</span></span>
+<span><span class="co">#&gt; 2       Jane Doe  25   1.65   49.9</span></span>
+<span><span class="co">#&gt; 3 Jose Rodriguez  40   1.90   90.0</span></span>
+<span><span class="co">#&gt; 4       June Lee  35   1.75   70.0</span></span></code></pre></div>
 <p>Now ellmer knows what you want and gives you a data frame.</p>
 <p>If you’re familiar with the terms row-oriented and column-oriented
 data frames, this is the same idea. Since most languages don’t possess
@@ -391,17 +391,15 @@ can use structured data extraction.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_summary</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The article advocates for a robust third-party testing regime as the cornerstone of effective AI policy, particularly for 'frontier' generative AI models that have broad capabilities and potential for misuse. It argues that such models do not fit existing sector-specific regulatory frameworks and pose significant risks—including threats to election integrity, national security, and discriminatory behaviors. The article provides a thorough overview of what an effective testing regime should include: trustworthy and effective tests, legitimate and capable third-party auditors, clear standards co-developed by industry, government, and academia, and a focus on a small subset of the most capable AI models to avoid stifling innovation among smaller actors. It makes the case that self-governance by private companies is insufficient, and coordination among multiple stakeholders is needed to instill public trust and prevent both major incidents and overbearing regulation.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; It also addresses policy complexities around open-source models and the risks of regulatory capture by large tech firms, stressing that third-party testing helps keep the ecosystem competitive and trusted. The article details Anthropic’s responsible scaling policies, ongoing public advocacy (such as for more government funding for AI oversight), recommendations for national research infrastructure, and the need for careful, minimal regulatory interventions. It concludes that building a diverse, broadly-accepted third-party testing ecosystem is essential for the responsible development and societal oversight of AI systems, and welcomes public critique and collaboration on these ideas.</span></span>
+<span><span class="co">#&gt; The article argues that effective third-party testing is essential to AI policy for managing the risks and societal impacts of frontier AI systems such as large-scale generative models. Anthropic promotes a regime where AI models, especially the most powerful and general-purpose ones, undergo third-party evaluation to ensure safety, limit misuse (in domains like election integrity and national security), and build public trust. The article details what a robust third-party testing regime should include: trusted tests, credible assessors, and a balance between safety assurance and regulatory burden. It advocates for multi-actor involvement (companies, universities, governments), iterative prototyping, and funding for governmental infrastructure to drive effective regulation while avoiding overly burdensome procedures that stifle innovation or entrench large incumbents. The article emphasizes the need to balance openness in AI research, the necessity for safety-related limits on open dissemination of powerful models, and the risks of regulatory capture. Anthropic outlines its own contributions and affirms a cautious, feedback-driven approach to advocating AI policy. Ultimately, third-party testing is positioned as a linchpin for safe and trustworthy AI development.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 5</span></span>
-<span><span class="co">#&gt;  $ author    : chr "Anthropic Policy Team"</span></span>
-<span><span class="co">#&gt;  $ topics    : chr [1:11] "AI policy" "third-party testing" "AI safety" "regulation" ...</span></span>
-<span><span class="co">#&gt;  $ summary   : chr "The article advocates for a robust third-party testing regime as the cornerstone of effective AI policy, partic"| __truncated__</span></span>
+<span><span class="co">#&gt;  $ author    : chr "Anthropic (not specified by individual name)"</span></span>
+<span><span class="co">#&gt;  $ topics    : chr [1:9] "AI policy" "AI safety" "third-party testing" "AI regulation" ...</span></span>
+<span><span class="co">#&gt;  $ summary   : chr "The article argues that effective third-party testing is essential to AI policy for managing the risks and soci"| __truncated__</span></span>
 <span><span class="co">#&gt;  $ coherence : int 95</span></span>
-<span><span class="co">#&gt;  $ persuasion: num 0.87</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ persuasion: num 0.91</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-2-named-entity-recognition">Example 2: Named entity recognition<a class="anchor" aria-label="anchor" href="#example-2-named-entity-recognition"></a>
@@ -434,7 +432,7 @@ can use structured data extraction.</p>
 <span><span class="co">#&gt; 2                John works at Google in New York.</span></span>
 <span><span class="co">#&gt; 3                John works at Google in New York.</span></span>
 <span><span class="co">#&gt; 4          He met with Sarah, the CEO of Acme Inc.</span></span>
-<span><span class="co">#&gt; 5                    Sarah is the CEO of Acme Inc.</span></span>
+<span><span class="co">#&gt; 5                      Sarah, the CEO of Acme Inc.</span></span>
 <span><span class="co">#&gt; 6 He met with Sarah... last week in San Francisco.</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -464,8 +462,8 @@ can use structured data extraction.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_sentiment</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 3</span></span>
 <span><span class="co">#&gt;  $ positive_score: num 0.05</span></span>
-<span><span class="co">#&gt;  $ negative_score: num 0.85</span></span>
-<span><span class="co">#&gt;  $ neutral_score : num 0.1</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ negative_score: num 0.7</span></span>
+<span><span class="co">#&gt;  $ neutral_score : num 0.25</span></span></code></pre></div>
 <p>Note that while we’ve asked nicely for the scores to sum 1, which
 they do in this example (at least when I ran the code), this is not
 guaranteed.</p>
@@ -501,13 +499,10 @@ guaranteed.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_classification</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
-<span><span class="co">#&gt;            name score</span></span>
-<span><span class="co">#&gt; 1    Technology  0.98</span></span>
-<span><span class="co">#&gt; 2      Business  0.02</span></span>
-<span><span class="co">#&gt; 3      Politics  0.00</span></span>
-<span><span class="co">#&gt; 4        Sports  0.00</span></span>
-<span><span class="co">#&gt; 5 Entertainment  0.00</span></span>
-<span><span class="co">#&gt; 6         Other  0.00</span></span></code></pre></div>
+<span><span class="co">#&gt;         name score</span></span>
+<span><span class="co">#&gt; 1 Technology  0.95</span></span>
+<span><span class="co">#&gt; 2   Business  0.03</span></span>
+<span><span class="co">#&gt; 3      Other  0.02</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-5-working-with-unknown-keys">Example 5: Working with unknown keys<a class="anchor" aria-label="anchor" href="#example-5-working-with-unknown-keys"></a>
@@ -565,9 +560,9 @@ and “unearned” income</div>
 <span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/content_image_url.html">content_image_file</a></span><span class="op">(</span><span class="st">"congressional-assets.png"</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">image</span>, type <span class="op">=</span> <span class="va">type_assets</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
-<span><span class="co">#&gt;                                 assert_name owner</span></span>
-<span><span class="co">#&gt; 1  11 Zinfandel Lane - Home &amp; Vineyard [RP]    JT</span></span>
-<span><span class="co">#&gt; 2 25 Point Lobos - Commercial Property [RP]    SP</span></span>
+<span><span class="co">#&gt;                            assert_name owner</span></span>
+<span><span class="co">#&gt; 1  11 Zinfandel Lane - Home &amp; Vineyard    JT</span></span>
+<span><span class="co">#&gt; 2 25 Point Lobos - Commercial Property    SP</span></span>
 <span><span class="co">#&gt;                              location asset_value_low asset_value_high</span></span>
 <span><span class="co">#&gt; 1             St. Helena/Napa, CA, US         5000001         25000000</span></span>
 <span><span class="co">#&gt; 2 San Francisco/San Francisco, CA, US         5000001         25000000</span></span>
@@ -600,8 +595,8 @@ and “unearned” income</div>
 <tr class="odd">
 <td align="left">OpenAI</td>
 <td align="left">gpt-4.1</td>
-<td align="right">7036</td>
-<td align="right">1059</td>
+<td align="right">6835</td>
+<td align="right">923</td>
 <td align="right">0</td>
 <td align="right">$0.02</td>
 </tr>
