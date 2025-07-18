@@ -18,6 +18,7 @@ NULL
 #' @param base_url The base URL for the API.
 #' @param params A list of standard parameters created by [params()].
 #' @param extra_args Arbitrary extra arguments to be included in the request body.
+#' @param extra_headers Arbitrary extra headers to be added to the request.
 #' @return An S7 Provider object.
 #' @examples
 #' Provider(
@@ -32,7 +33,8 @@ Provider <- new_class(
     model = prop_string(),
     base_url = prop_string(),
     params = class_list,
-    extra_args = class_list
+    extra_args = class_list,
+    extra_headers = class_character
   )
 )
 

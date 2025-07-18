@@ -9,7 +9,8 @@ Provider(
   model = stop("Required"),
   base_url = stop("Required"),
   params = list(),
-  extra_args = list()
+  extra_args = list(),
+  extra_headers = character(0)
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ Provider(
 \item{params}{A list of standard parameters created by \code{\link[=params]{params()}}.}
 
 \item{extra_args}{Arbitrary extra arguments to be included in the request body.}
+
+\item{extra_headers}{Arbitrary extra headers to be added to the request.}
 }
 \value{
 An S7 Provider object.
