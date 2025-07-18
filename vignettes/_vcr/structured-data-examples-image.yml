@@ -10,23 +10,24 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9564fc71f8238d27-DFW
+      cf-ray: 96125b71dbf7511a-MSP
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 27 Jun 2025 12:35:49 GMT
+      date: Fri, 18 Jul 2025 13:34:37 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '3655'
+      openai-processing-ms: '3950'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=BQxUQB_OsbTYpEuz4CudnrVU.NF0YIeD3PJDlKwlFYA-1751027749-1.0.1.1-LnD82.FegVAk4X821KrejmToC2U1IQ.sPqtn3nMMrFVs3fuVqcFrDq5GaHVaRCf8G6ZwmuxrznsoyEgCUQc5_u_O0g77USAzNrh22jKMUs4;
-        path=/; expires=Fri, 27-Jun-25 13:05:49 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=1Vv.HnFCqXGRd1XEp4vJWQggZgT6zZGf7rTrX2zMSOg-1752845677-1.0.1.1-MhLUG3JaZJnjn7zS2JjUHuPF.STh84wEhyPRBAnd5R6FPzrLxYAQrahI6ICg41snjWZ.TEZa7mggBqUyMrwnMt0L7onTlSay6Ui_gmYi6nc;
+        path=/; expires=Fri, 18-Jul-25 14:04:37 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=iSjbDrHfPfNiE3xg5vmKdA6wl2FxVGSRC3u9rT37jA4-1751027749319-0.0.1.1-604800000;
+      - _cfuvid=jolTq0kJUBXzWRWVmnceYJBI5wO62FZsbka6.TIMyYc-1752845677319-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '3622'
+      x-envoy-upstream-service-time: '3859'
       x-ratelimit-limit-input-images: '250000'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
@@ -36,20 +37,20 @@ http_interactions:
       x-ratelimit-reset-input-images: 0s
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_4ad8049f3db8592d0d71ea5829c47b2c
+      x-request-id: req_7e5e3d720073782426325da41db48136
     body:
       string: |
         {
-          "id": "chatcmpl-Bn2avCgIIf39NiXDQuKemn51dnpLC",
+          "id": "chatcmpl-BufWLiWRVX474ymYomWKKqo16bmEL",
           "object": "chat.completion",
-          "created": 1751027745,
+          "created": 1752845673,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "{\"wrapper\":[{\"assert_name\":\"11 Zinfandel Lane - Home & Vineyard [RP]\",\"owner\":\"JT\",\"location\":\"St. Helena/Napa, CA, US\",\"asset_value_low\":5000001,\"asset_value_high\":25000000,\"income_type\":\"Grape Sales\",\"income_low\":100001,\"income_high\":1000000,\"tx_gt_1000\":false},{\"assert_name\":\"25 Point Lobos - Commercial Property [RP]\",\"owner\":\"SP\",\"location\":\"San Francisco/San Francisco, CA, US\",\"asset_value_low\":5000001,\"asset_value_high\":25000000,\"income_type\":\"Rent\",\"income_low\":100001,\"income_high\":1000000,\"tx_gt_1000\":false}]}",
+                "content": "{\"wrapper\":[{\"assert_name\":\"11 Zinfandel Lane - Home & Vineyard\",\"owner\":\"JT\",\"location\":\"St. Helena/Napa, CA, US\",\"asset_value_low\":5000001,\"asset_value_high\":25000000,\"income_type\":\"Grape Sales\",\"income_low\":100001,\"income_high\":1000000,\"tx_gt_1000\":false},{\"assert_name\":\"25 Point Lobos - Commercial Property\",\"owner\":\"SP\",\"location\":\"San Francisco/San Francisco, CA, US\",\"asset_value_low\":5000001,\"asset_value_high\":25000000,\"income_type\":\"Rent\",\"income_low\":100001,\"income_high\":1000000,\"tx_gt_1000\":false}]}",
                 "refusal": null,
                 "annotations": []
               },
@@ -58,9 +59,9 @@ http_interactions:
             }
           ],
           "usage": {
-            "prompt_tokens": 405,
-            "completion_tokens": 153,
-            "total_tokens": 558,
+            "prompt_tokens": 409,
+            "completion_tokens": 147,
+            "total_tokens": 556,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -73,7 +74,7 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_51e1070cf2"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-06-27 12:35:49
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-07-18 13:34:37
+recorded_with: VCR-vcr/1.7.1.93

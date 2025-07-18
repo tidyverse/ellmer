@@ -300,57 +300,58 @@ http_interactions:
         If you were able to develop technology that made it very hard to fine-tune
         an AI model away from its original capability distribution, then it’d be easier
         to confidently release models without potentially compromising on downstream
-        safety."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"object","description":"Summary
+        safety."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"Summary
         of the article.","properties":{"author":{"type":"string","description":"Name
         of the article author"},"topics":{"type":"array","description":"Array of topics,
         e.g. [\"tech\", \"politics\"]. Should be as specific as possible, and can
         overlap.","items":{"type":"string","description":""}},"summary":{"type":"string","description":"Summary
         of the article. One or two paragraphs max"},"coherence":{"type":"integer","description":"Coherence
         of the article''s key points, 0-100 (inclusive)"},"persuasion":{"type":"number","description":"Article''s
-        persuasion score, 0.0-1.0 (inclusive)"}},"required":["author","topics","summary","coherence","persuasion"],"additionalProperties":false}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+        persuasion score, 0.0-1.0 (inclusive)"}},"required":["author","topics","summary","coherence","persuasion"],"additionalProperties":false},"strict":true}}}'
   response:
     status: 200
     headers:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9564fc260fec8d27-DFW
+      cf-ray: 96125b241f70511a-MSP
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 27 Jun 2025 12:35:38 GMT
+      date: Fri, 18 Jul 2025 13:34:27 GMT
       openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '4927'
+      openai-processing-ms: '6258'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=fUzWIJ0hjDYRk.gXbhVvVgmEb_Hglo6MClGUWFqEOeo-1751027738-1.0.1.1-4V._E751Fnq8dbukH853sOdlg29f0dAPEWCyIu9O.0QTKuJ3NOvj4.40Ef9TjiBGmH.u7lowmwtR6L3QN0NMpU9YqVr0D.x0JZ.qYWuuaLg;
-        path=/; expires=Fri, 27-Jun-25 13:05:38 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=baK.2.7tKzuTHzoaZDymuJbr1rj_zuzGTnEDDtERDZI-1752845667-1.0.1.1-r.baHk_6IydN1LWwNDzG2QK2uIIRFNqsqO9VItR6o._GwazvlXZXYSl.hd7gthPNqLtFFVP6giTGVzHAYw_H.Muq1LJemQ_maVBoHwdKp8I;
+        path=/; expires=Fri, 18-Jul-25 14:04:27 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=oYswJhzy7IBwDhQFZdKstXqzZs_8m0IhWWgyEEHSwVE-1751027738434-0.0.1.1-604800000;
+      - _cfuvid=pg7kOK4NwczowtheAjWJqqfJpIfatXfQRxcu9lNljPw-1752845667181-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '4939'
+      x-envoy-upstream-service-time: '6264'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29994291'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 11ms
-      x-request-id: req_74d3c7050678ff1b8fe9a3ee0b87bd35
+      x-request-id: req_afe6b8c37e7a33cc68d5e9d12bf6f50e
     body:
       string: |
         {
-          "id": "chatcmpl-Bn2ajkLZJYeLLdE5CAFDql96AR68v",
+          "id": "chatcmpl-BufW9umcHCBc5JkDZa0xWRt5BgIsn",
           "object": "chat.completion",
-          "created": 1751027733,
+          "created": 1752845661,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "{\"wrapper\":{\"author\":\"Anthropic Policy Team\",\"topics\":[\"AI policy\",\"third-party testing\",\"AI safety\",\"regulation\",\"national security\",\"open-source AI\",\"regulatory capture\",\"responsible scaling\",\"government funding\",\"product safety\",\"AI risk management\"],\"summary\":\"The article advocates for a robust third-party testing regime as the cornerstone of effective AI policy, particularly for 'frontier' generative AI models that have broad capabilities and potential for misuse. It argues that such models do not fit existing sector-specific regulatory frameworks and pose significant risks—including threats to election integrity, national security, and discriminatory behaviors. The article provides a thorough overview of what an effective testing regime should include: trustworthy and effective tests, legitimate and capable third-party auditors, clear standards co-developed by industry, government, and academia, and a focus on a small subset of the most capable AI models to avoid stifling innovation among smaller actors. It makes the case that self-governance by private companies is insufficient, and coordination among multiple stakeholders is needed to instill public trust and prevent both major incidents and overbearing regulation.\\n\\nIt also addresses policy complexities around open-source models and the risks of regulatory capture by large tech firms, stressing that third-party testing helps keep the ecosystem competitive and trusted. The article details Anthropic’s responsible scaling policies, ongoing public advocacy (such as for more government funding for AI oversight), recommendations for national research infrastructure, and the need for careful, minimal regulatory interventions. It concludes that building a diverse, broadly-accepted third-party testing ecosystem is essential for the responsible development and societal oversight of AI systems, and welcomes public critique and collaboration on these ideas.\",\"coherence\":95,\"persuasion\":0.87}}",
+                "content": "{\"author\":\"Anthropic (not specified by individual name)\",\"topics\":[\"AI policy\",\"AI safety\",\"third-party testing\",\"AI regulation\",\"AI evaluation\",\"open-source AI\",\"regulatory capture\",\"Responsible Scaling Policy\",\"national security and AI\"],\"summary\":\"The article argues that effective third-party testing is essential to AI policy for managing the risks and societal impacts of frontier AI systems such as large-scale generative models. Anthropic promotes a regime where AI models, especially the most powerful and general-purpose ones, undergo third-party evaluation to ensure safety, limit misuse (in domains like election integrity and national security), and build public trust. The article details what a robust third-party testing regime should include: trusted tests, credible assessors, and a balance between safety assurance and regulatory burden. It advocates for multi-actor involvement (companies, universities, governments), iterative prototyping, and funding for governmental infrastructure to drive effective regulation while avoiding overly burdensome procedures that stifle innovation or entrench large incumbents. The article emphasizes the need to balance openness in AI research, the necessity for safety-related limits on open dissemination of powerful models, and the risks of regulatory capture. Anthropic outlines its own contributions and affirms a cautious, feedback-driven approach to advocating AI policy. Ultimately, third-party testing is positioned as a linchpin for safe and trustworthy AI development.\",\"coherence\":95,\"persuasion\":0.91}",
                 "refusal": null,
                 "annotations": []
               },
@@ -359,9 +360,9 @@ http_interactions:
             }
           ],
           "usage": {
-            "prompt_tokens": 4354,
-            "completion_tokens": 344,
-            "total_tokens": 4698,
+            "prompt_tokens": 4343,
+            "completion_tokens": 284,
+            "total_tokens": 4627,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -374,7 +375,7 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_51e1070cf2"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-06-27 12:35:38
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-07-18 13:34:27
+recorded_with: VCR-vcr/1.7.1.93
