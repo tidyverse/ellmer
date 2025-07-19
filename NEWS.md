@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-## Lifecycle
+## New features
 
 * New `chat()` allows you to chat with any provider using a string like `chat("anthropic")` or `chat("openai/gpt-4.1-nano")` (#361).
 
