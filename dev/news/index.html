@@ -49,58 +49,59 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
-<ul><li>
-<code>Chat$chat_structured()</code> and friends no longer unnecessarily wrap <code><a href="../reference/type_boolean.html">type_object()</a></code> for <code><a href="../reference/chat_openai.html">chat_openai()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/671" class="external-link">#671</a>)</li>
+<div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li><p>New <code><a href="../reference/chat-any.html">chat()</a></code> allows you to chat with any provider using a string like <code>chat("anthropic")</code> or <code>chat("openai/gpt-4.1-nano")</code> (<a href="https://github.com/tidyverse/ellmer/issues/361" class="external-link">#361</a>).</p></li>
+<li><p><code><a href="../reference/tool.html">tool()</a></code> has a simpler specification: you now specify the <code>name</code>, <code>description</code>, and <code>arguments</code>. I have done my best to deprecate old usage and give clear errors, but I have likely missed a few edge cases. I apologize for any pain that this causes, but I’m convinced that it is going to make tool usage easier and clearer in the long run. If you have many calls to convert, <code><a href="../reference/tool.html">?tool</a></code> contains a prompt that will help you use an LLM to convert them (<a href="https://github.com/tidyverse/ellmer/issues/603" class="external-link">#603</a>). It also now returns a function so that you can call it (and/or export it from your package) (<a href="https://github.com/tidyverse/ellmer/issues/602" class="external-link">#602</a>).</p></li>
+<li><p><code><a href="../reference/type_boolean.html">type_array()</a></code> and <code><a href="../reference/type_boolean.html">type_enum()</a></code> now have the description as the second argument and <code>items</code>/<code>values</code> as the first. This makes them easier to use in the common case where the description isn’t necessary (<a href="https://github.com/tidyverse/ellmer/issues/610" class="external-link">#610</a>).</p></li>
+<li><p>ellmer now retries requests up to 3 times, controllable with <code>option(ellmer_max_tries)</code>, and will retry if the connection fails (rather than just if the request itself returns a transient error). The default timeout, controlled by <code>option(ellmer_timeout_s)</code>, now applies to the initial connection phase. Together, these changes should make it much more likely for ellmer requests to succeed.</p></li>
+<li><p>New <code><a href="../reference/parallel_chat.html">parallel_chat_text()</a></code> and <code><a href="../reference/batch_chat.html">batch_chat_text()</a></code> make it easier to just get the text response from multiple prompts (<a href="https://github.com/tidyverse/ellmer/issues/510" class="external-link">#510</a>).</p></li>
+<li><p>ellmer’s cost estimates are considerably improved. <code><a href="../reference/chat_openai.html">chat_openai()</a></code>, <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code>, and <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> capture the number of cached input tokens. This is primarily useful for OpenAI and Gemini since both offer automatic caching, yielding improved cost estimates (<a href="https://github.com/tidyverse/ellmer/issues/466" class="external-link">#466</a>). We also have a better source of pricing data, LiteLLM. This considerably expands the number of providers and models that include cost information (<a href="https://github.com/tidyverse/ellmer/issues/659" class="external-link">#659</a>).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-and-minor-improvements-development-version">Bug fixes and minor improvements<a class="anchor" aria-label="anchor" href="#bug-fixes-and-minor-improvements-development-version"></a></h3>
+<ul><li>The new <code>ellmer_echo</code> option controls the default value for <code>echo</code>.</li>
 <li>
-<code>Chat$chat_structured()</code> now suppresses tool use. If you need to use tools and structured data together, first <code>$chat()</code> to use any tools needed, and then <code>$chat_structured()</code> to extract the data you need.</li>
-<li>Now use prices data aggregated by LiteLLM. This considerably expands the number of providers and models that include cost information (<a href="https://github.com/tidyverse/ellmer/issues/659" class="external-link">#659</a>).</li>
+<code><a href="../reference/batch_chat.html">batch_chat_structured()</a></code> provides clear messaging when prompts/path/provider don’t match (<a href="https://github.com/tidyverse/ellmer/issues/599" class="external-link">#599</a>).</li>
 <li>
-<code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> now allows you to set the <code>base_url()</code> (<a href="https://github.com/tidyverse/ellmer/issues/441" class="external-link">#441</a>).</li>
+<code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> allows you to set the <code>base_url()</code> (<a href="https://github.com/tidyverse/ellmer/issues/441" class="external-link">#441</a>).</li>
 <li>
-<code><a href="../reference/tool.html">tool()</a></code> now checks that the <code>name</code> is valid (<a href="https://github.com/tidyverse/ellmer/issues/625" class="external-link">#625</a>)</li>
+<code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code>, <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code>, <code><a href="../reference/chat_ollama.html">chat_ollama()</a></code>, and <code><a href="../reference/chat_vllm.html">chat_vllm()</a></code> use a more robust method to generate model URLs from the <code>base_url</code> (<a href="https://github.com/tidyverse/ellmer/issues/593" class="external-link">#593</a>, <a href="https://github.com/benyake" class="external-link">@benyake</a>).</li>
 <li>
-<code>Chat$register_tool()</code> now messages when you replace an existing tool (<a href="https://github.com/tidyverse/ellmer/issues/625" class="external-link">#625</a>).</li>
+<code><a href="../reference/chat_cortex_analyst.html">chat_cortex_analyst()</a></code> is deprecated; please use <code><a href="../reference/chat_snowflake.html">chat_snowflake()</a></code> instead (<a href="https://github.com/tidyverse/ellmer/issues/640" class="external-link">#640</a>).</li>
 <li>
-<code>content_pdf_*()</code> now works with <code><a href="../reference/chat_openai.html">chat_openai()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/650" class="external-link">#650</a>).</li>
-<li>Added <code><a href="../reference/contents_record.html">contents_record()</a></code> and <code><a href="../reference/contents_record.html">contents_replay()</a></code> to record and replay <code>Turn</code> related information from a <code>Chat</code> instance (<a href="https://github.com/tidyverse/ellmer/issues/502" class="external-link">#502</a>). For example, these methods can be used for bookmarking within {shinychat}.</li>
-<li>New <code><a href="../reference/chat-any.html">chat()</a></code> allows you to chat with any provider using a string like <code>chat("anthropic")</code> or <code>chat("openai/gpt-4.1-nano")</code> (<a href="https://github.com/tidyverse/ellmer/issues/361" class="external-link">#361</a>).</li>
-<li>New <code><a href="../reference/parallel_chat.html">parallel_chat_text()</a></code> and <code><a href="../reference/batch_chat.html">batch_chat_text()</a></code> make it easier to just get the text response from multiple prompts (<a href="https://github.com/tidyverse/ellmer/issues/510" class="external-link">#510</a>).</li>
-<li>Tool requests now show converted arguments when printed (<a href="https://github.com/tidyverse/ellmer/issues/517" class="external-link">#517</a>).</li>
-<li>Type conversion does a better job with <code>type_object(.additional_properties = TRUE)</code> (<a href="https://github.com/tidyverse/ellmer/issues/519" class="external-link">#519</a>).</li>
+<code><a href="../reference/chat_github.html">chat_github()</a></code> (and other OpenAI extensions) no longer warn about <code>seed</code> (<a href="https://github.com/tidyverse/ellmer/issues/574" class="external-link">#574</a>).</li>
 <li>
-<code><a href="../reference/chat_cortex_analyst.html">chat_cortex_analyst()</a></code> is now deprecated; please use <code><a href="../reference/chat_snowflake.html">chat_snowflake()</a></code> instead (<a href="https://github.com/tidyverse/ellmer/issues/640" class="external-link">#640</a>).</li>
+<code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> and <code><a href="../reference/chat_google_gemini.html">chat_google_vertex()</a></code> default to Gemini 2.5 flash (<a href="https://github.com/tidyverse/ellmer/issues/576" class="external-link">#576</a>).</li>
 <li>
-<code><a href="../reference/chat_openai.html">chat_openai()</a></code>, <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code>, and <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> now capture the number of cached input tokens. This is primarily useful for OpenAI and Gemini since both offer automatic caching yielding improved cost estimates (<a href="https://github.com/tidyverse/ellmer/issues/466" class="external-link">#466</a>).</li>
+<code><a href="../reference/chat_huggingface.html">chat_huggingface()</a></code> works much better.</li>
 <li>
-<code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code>, <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code>, <code><a href="../reference/chat_ollama.html">chat_ollama()</a></code>, and <code><a href="../reference/chat_vllm.html">chat_vllm()</a></code> now use a more robust method for generate model URLs from the <code>base_url</code> (<a href="https://github.com/tidyverse/ellmer/issues/593" class="external-link">#593</a>, <a href="https://github.com/benyake" class="external-link">@benyake</a>).</li>
+<code><a href="../reference/chat_openai.html">chat_openai()</a></code> supports <code>content_pdf_()</code> (<a href="https://github.com/tidyverse/ellmer/issues/650" class="external-link">#650</a>).</li>
+<li>
+<code><a href="../reference/chat_portkey.html">chat_portkey()</a></code> works once again, and reads the virtual API key from the <code>PORTKEY_VIRTUAL_KEY</code> env var (<a href="https://github.com/tidyverse/ellmer/issues/588" class="external-link">#588</a>).</li>
+<li>
+<code><a href="../reference/chat_snowflake.html">chat_snowflake()</a></code> works with tool calling (<a href="https://github.com/tidyverse/ellmer/issues/557" class="external-link">#557</a>, <a href="https://github.com/atheriel" class="external-link">@atheriel</a>).</li>
+<li>
+<code>Chat$chat_structured()</code> and friends no longer unnecessarily wrap <code><a href="../reference/type_boolean.html">type_object()</a></code> for <code><a href="../reference/chat_openai.html">chat_openai()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/671" class="external-link">#671</a>).</li>
+<li>
+<code>Chat$chat_structured()</code> suppresses tool use. If you need to use tools and structured data together, first use <code>$chat()</code> for any needed tools, then <code>$chat_structured()</code> to extract the data you need.</li>
 <li>
 <code>Chat$chat_structured()</code> no longer requires a prompt (since it may be obvious from the context) (<a href="https://github.com/tidyverse/ellmer/issues/570" class="external-link">#570</a>).</li>
 <li>
-<code><a href="../reference/chat_ollama.html">models_ollama()</a></code> now includes a <code>capabilities</code> column with a comma-separated list of model capabilities (<a href="https://github.com/tidyverse/ellmer/issues/623" class="external-link">#623</a>).</li>
+<code>Chat$register_tool()</code> shows a message when you replace an existing tool (<a href="https://github.com/tidyverse/ellmer/issues/625" class="external-link">#625</a>).</li>
 <li>
-<code><a href="../reference/chat_huggingface.html">chat_huggingface()</a></code> now works much better.</li>
-<li>[BREAKING CHANGE] <code><a href="../reference/type_boolean.html">type_array()</a></code> and <code><a href="../reference/type_boolean.html">type_enum()</a></code> now have the description as the second argument and <code>items/</code>/<code>values</code> as the first. This makes them easier to use in the common case where the description isn’t necessary (<a href="https://github.com/tidyverse/ellmer/issues/610" class="external-link">#610</a>).</li>
-<li>By default, ellmer now retries requests up to 3 times, controllable with <code>option(ellmer_max_tries)</code> and will retry if the connection fails (rather than just if the request itself returns a transient error).</li>
-<li>The default timeout, controlled by <code>option(ellmer_timeout_s)</code>, now applies to the initial connection phase.</li>
-<li>[BREAKING CHANGE] <code><a href="../reference/tool.html">tool()</a></code> has a simpler specification: you now specify the <code>name</code>, <code>description</code>, and <code>arguments</code>. I have done my best to deprecate old usage and give clear errors, but I have likely missed a few edge cases. I apologise for the pain this causes, but I’m convinced that it is going to making tool usage easier and clearer. If you have many calls to convert, <code><a href="../reference/tool.html">?tool</a></code> contains a prompt that will help you use an LLM to convert them. (<a href="https://github.com/tidyverse/ellmer/issues/603" class="external-link">#603</a>).</li>
-<li>
-<code><a href="../reference/tool.html">tool()</a></code> now returns a function so you can call it (and/or export it from your package) (<a href="https://github.com/tidyverse/ellmer/issues/602" class="external-link">#602</a>).</li>
-<li>
-<code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> and <code><a href="../reference/chat_google_gemini.html">chat_google_vertex()</a></code> now default to Gemini 2.5 flash (<a href="https://github.com/tidyverse/ellmer/issues/576" class="external-link">#576</a>).</li>
-<li>
-<code><a href="../reference/batch_chat.html">batch_chat_structured()</a></code> now longer gives a confusing message if prompts/path/provider don’t match (<a href="https://github.com/tidyverse/ellmer/issues/599" class="external-link">#599</a>).</li>
-<li>
-<code><a href="../reference/chat_github.html">chat_github()</a></code> (and other OpenAI extensions), no longer warn about <code>seed</code> (<a href="https://github.com/tidyverse/ellmer/issues/574" class="external-link">#574</a>).</li>
-<li>New <code>ellmer_echo</code> option controls default value for <code>echo</code>.</li>
-<li>
-<code><a href="../reference/chat_portkey.html">chat_portkey()</a></code> works once again, and now will read the virtual API key from the <code>PORTKEY_VIRTUAL_KEY</code> env var (<a href="https://github.com/tidyverse/ellmer/issues/588" class="external-link">#588</a>).</li>
+<code><a href="../reference/contents_record.html">contents_record()</a></code> and <code><a href="../reference/contents_record.html">contents_replay()</a></code> record and replay <code>Turn</code> related information from a <code>Chat</code> instance (<a href="https://github.com/tidyverse/ellmer/issues/502" class="external-link">#502</a>). These methods can be used for bookmarking within {shinychat}.</li>
 <li>
 <code><a href="../reference/chat_github.html">models_github()</a></code> lists models for <code><a href="../reference/chat_github.html">chat_github()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/561" class="external-link">#561</a>).</li>
 <li>
-<code><a href="../reference/chat_snowflake.html">chat_snowflake()</a></code> now works with tool calling (<a href="https://github.com/tidyverse/ellmer/issues/557" class="external-link">#557</a>, <a href="https://github.com/atheriel" class="external-link">@atheriel</a>).</li>
+<code><a href="../reference/chat_ollama.html">models_ollama()</a></code> includes a <code>capabilities</code> column with a comma-separated list of model capabilities (<a href="https://github.com/tidyverse/ellmer/issues/623" class="external-link">#623</a>).</li>
 <li>
-<code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code> now accepts lists of Content objects in prompt argument (<a href="https://github.com/tidyverse/ellmer/issues/597" class="external-link">#597</a>, <a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>).</li>
+<code><a href="../reference/parallel_chat.html">parallel_chat()</a></code> and friends accept lists of <code>Content</code> objects in the <code>prompt</code> (<a href="https://github.com/tidyverse/ellmer/issues/597" class="external-link">#597</a>, <a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>).</li>
+<li>Tool requests show converted arguments when printed (<a href="https://github.com/tidyverse/ellmer/issues/517" class="external-link">#517</a>).</li>
+<li>
+<code><a href="../reference/tool.html">tool()</a></code> checks that the <code>name</code> is valid (<a href="https://github.com/tidyverse/ellmer/issues/625" class="external-link">#625</a>).</li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="ellmer-021">ellmer 0.2.1<a class="anchor" aria-label="anchor" href="#ellmer-021"></a></h2><p class="text-muted">CRAN release: 2025-06-03</p>
 <ul><li><p>When you save a <code>Chat</code> object to disk, API keys are automatically redacted. This means that you can no longer easily resume a chat you’ve saved on disk (we’ll figure this out in a future release) but ensures that you never accidentally save your secret key in an RDS file (<a href="https://github.com/tidyverse/ellmer/issues/534" class="external-link">#534</a>).</p></li>
