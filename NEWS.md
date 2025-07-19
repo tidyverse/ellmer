@@ -17,29 +17,29 @@
 
 ## Bug fixes and minor improvements
 
-* New `ellmer_echo` option controls the default value for `echo`.
-* `batch_chat_structured()` no longer gives a confusing message when prompts/path/provider don't match (#599).
-* `chat_aws_bedrock()` now allows you to set the `base_url()` (#441).
-* `chat_aws_bedrock()`, `chat_google_gemini()`, `chat_ollama()`, and `chat_vllm()` now use a more robust method to generate model URLs from the `base_url` (#593, @benyake).
-* `chat_cortex_analyst()` is now deprecated; please use `chat_snowflake()` instead (#640).
+* The new `ellmer_echo` option controls the default value for `echo`.
+* `batch_chat_structured()` provides clear messaging when prompts/path/provider don't match (#599).
+* `chat_aws_bedrock()` allows you to set the `base_url()` (#441).
+* `chat_aws_bedrock()`, `chat_google_gemini()`, `chat_ollama()`, and `chat_vllm()` use a more robust method to generate model URLs from the `base_url` (#593, @benyake).
+* `chat_cortex_analyst()` is deprecated; please use `chat_snowflake()` instead (#640).
 * `chat_github()` (and other OpenAI extensions) no longer warn about `seed` (#574).
-* `chat_google_gemini()` and `chat_google_vertex()` now default to Gemini 2.5 flash (#576).
-* `chat_huggingface()` now works much better.
-* `chat_openai()`, `chat_google_gemini()`, and `chat_anthropic()` now capture the number of cached input tokens. This is primarily useful for OpenAI and Gemini since both offer automatic caching, yielding improved cost estimates (#466).
-* `chat_openai()` now supports `content_pdf_()` (#650).
-* `chat_portkey()` works once again, and now reads the virtual API key from the `PORTKEY_VIRTUAL_KEY` env var (#588).
-* `chat_snowflake()` now works with tool calling (#557, @atheriel).
+* `chat_google_gemini()` and `chat_google_vertex()` default to Gemini 2.5 flash (#576).
+* `chat_huggingface()` works much better.
+* `chat_openai()`, `chat_google_gemini()`, and `chat_anthropic()` capture the number of cached input tokens. This is primarily useful for OpenAI and Gemini since both offer automatic caching, yielding improved cost estimates (#466).
+* `chat_openai()` supports `content_pdf_()` (#650).
+* `chat_portkey()` works once again, and reads the virtual API key from the `PORTKEY_VIRTUAL_KEY` env var (#588).
+* `chat_snowflake()` works with tool calling (#557, @atheriel).
 * `Chat$chat_structured()` and friends no longer unnecessarily wrap `type_object()` for `chat_openai()` (#671).
-* `Chat$chat_structured()` now suppresses tool use. If you need to use tools and structured data together, first use `$chat()` for any needed tools, then `$chat_structured()` to extract the data you need.
+* `Chat$chat_structured()` suppresses tool use. If you need to use tools and structured data together, first use `$chat()` for any needed tools, then `$chat_structured()` to extract the data you need.
 * `Chat$chat_structured()` no longer requires a prompt (since it may be obvious from the context) (#570).
-* `Chat$register_tool()` now shows a message when you replace an existing tool (#625).
+* `Chat$register_tool()` shows a message when you replace an existing tool (#625).
 * `contents_record()` and `contents_replay()` record and replay `Turn` related information from a `Chat` instance (#502). These methods can be used for bookmarking within {shinychat}.
 * `models_github()` lists models for `chat_github()` (#561).
-* `models_ollama()` now includes a `capabilities` column with a comma-separated list of model capabilities (#623).
-* ellmer now uses price data aggregated by LiteLLM. This considerably expands the number of providers and models that include cost information (#659).
-* `parallel_chat()` and friends now accept lists of `Content` objects in the `prompt` (#597, @thisisnic).
-* Tool requests now show converted arguments when printed (#517).
-* `tool()` now checks that the `name` is valid (#625).
+* `models_ollama()` includes a `capabilities` column with a comma-separated list of model capabilities (#623).
+* ellmer uses price data aggregated by LiteLLM. This considerably expands the number of providers and models that include cost information (#659).
+* `parallel_chat()` and friends accept lists of `Content` objects in the `prompt` (#597, @thisisnic).
+* Tool requests show converted arguments when printed (#517).
+* `tool()` checks that the `name` is valid (#625).
 
 # ellmer 0.2.1
 
