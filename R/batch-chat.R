@@ -315,7 +315,7 @@ BatchJob <- R6::R6Class(
     compute_hash = function() {
       # TODO: replace with JSON serialization when available
       list(
-        provider = hash(props(self$provider)),
+        provider = hash(provider_hash(self$provider)),
         prompts = hash(lapply(self$user_turns, format)),
         user_turns = hash(lapply(self$chat$get_turns(TRUE), format))
       )
@@ -341,6 +341,15 @@ BatchJob <- R6::R6Class(
   )
 )
 
+provider_hash <- function(x) {
+  props <- props(x)
+
+  # Backward compatible hashing after introduction of new properties
+  if (length(props$extra_headers) == 0) {
+    props$extra_headers <- NULL
+  }
+  props
+}
 
 check_has_batch_support <- function(provider, call = caller_env()) {
   if (has_batch_support(provider)) {
