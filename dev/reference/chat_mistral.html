@@ -85,7 +85,8 @@ Images require a model that supports images.
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  echo <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  echo <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  api_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -130,6 +131,11 @@ with <code><a href="https://rdrr.io/r/utils/modifyList.html" class="external-lin
 when running at the console).</p></li>
 <li><p><code>all</code>: echo all input and output.</p></li>
 </ul><p>Note this only affects the <code><a href="chat-any.html">chat()</a></code> method.</p></dd>
+
+
+<dt id="arg-api-headers">api_headers<a class="anchor" aria-label="anchor" href="#arg-api-headers"></a></dt>
+<dd><p>Named character vector of arbitrary extra headers appended
+to every chat API call.</p></dd>
 
 </dl></div>
     <div class="section level2">
