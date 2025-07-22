@@ -166,8 +166,6 @@ method(chat_request, ProviderGoogleGemini) <- function(
     )
   }
 
-  req <- unencode_colon(req)
-
   body <- chat_body(
     provider = provider,
     stream = stream,

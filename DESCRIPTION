@@ -26,7 +26,7 @@ Imports:
     cli,
     coro (>= 1.1.0),
     glue,
-    httr2 (>= 1.2.0),
+    httr2 (>= 1.2.1),
     jsonlite,
     later (>= 1.4.0),
     lifecycle,
@@ -47,7 +47,7 @@ Suggests:
     shiny,
     shinychat (>= 0.2.0),
     testthat (>= 3.0.0),
-    vcr (>= 1.7.0.91),
+    vcr (>= 2.0.0),
     withr
 VignetteBuilder:
     knitr

@@ -290,10 +290,3 @@ request_summary <- function(req) {
     body = req_get_body(req)
   )
 }
-
-unencode_colon <- function(req) {
-  # Hack around new httr2 1.2.0 feature that causes ":" to be escaped
-  # This shouldn't matter in principle, but google doesn't seem to like it
-  req$url <- gsub("%3A", ":", req$url, fixed = TRUE)
-  req
-}

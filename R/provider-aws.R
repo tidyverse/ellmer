@@ -178,7 +178,6 @@ method(chat_request, ProviderAWSBedrock) <- function(
     provider@model,
     if (stream) "converse-stream" else "converse"
   )
-  req <- unencode_colon(req) # model might contain `:` (#646)
 
   if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
     system <- list(list(text = turns[[1]]@text))
