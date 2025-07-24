@@ -14,13 +14,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignette shows you how to create agents with ellmer. It's hard to find a good definition of an agent, but there are three properties that most agents seem to have in common:
+This vignette shows you how to create agents with ellmer. As you'll learn, if you know how to write an R function, it's easy to write an AI agent!
+
+But what is an agent? It's hard to find a good definition, but there are three properties that most agents seem to possess:
 
 1.  One or more tool calls that lets them inspect the state of the world.
 2.  One or more tool calls that lets them make changes to the state of the world.
-3.  Iteration that calls repeatedly calls tools and sends results back to the model until there's nothing left to do.
+3.  An iterative loop that repeatedly calls tools and sends results back to the model until there are no more requests.
 
-ellmer automatically provides the last property so all you need to do is register the appropriate tools. That means making an agent is surprisingly simple!
+ellmer automatically the tool (property 3) so all you need to do is register the appropriate tools. That means making an agent is surprisingly simple.
 
 ```{r setup}
 library(ellmer)
@@ -47,14 +49,14 @@ delete_files <- tool(
 )
 ```
 
-Now we can make an agent, a chat object that can use these tools:
+Now we can make an agent, a chat object with these tools:
 
 ```{r}
 file_agent <- chat_anthropic()
 file_agent$register_tools(list(list_files, delete_files))
 ```
 
-Now we can ask our agent to do stuff for us:
+And we can ask our agent to do stuff for us:
 
 ```{r}
 #| label: delete-csvs
@@ -69,7 +71,7 @@ local({
 file_agent
 ```
 
-I hope this example makes you feel nervous: we've just given an LLM the abililty to make delete files on our computer! This brings us to the most important topic when writing agents: safety and security.
+I hope this example makes you feel nervous: we've just given an LLM the abililty to delete files on our computer! This brings us to one of most important topics when writing agents: safety and security.
 
 ## Safety and security
 
@@ -283,7 +285,19 @@ Search with dead ends (i.e. requires multiple web searches)
 
 ## Useful patterns
 
-<https://www.anthropic.com/engineering/building-effective-agents>
+Anthropic published a useful blog post laying out some commonly patterns for agent workflows at <https://www.anthropic.com/engineering/building-effective-agents>. Anthropic's defintion of agents:
+
+> Agents [...] are systems where LLMs dynamically direct their own processes and tool usage, maintaining control over how they accomplish tasks.
+
+This is aligned with our defintion above, albeit a little less precise.
+
+### The augmented LLM
+
+Anthropic defines the augmented LLM as "an LLM enhanced with augmentations such as retrieval, tools, and memory". This isn't the clearest of definitions since both retrieval and memory can be implemented as tool (and indeed must be in the APIs of all providers at August 2025). But retrieval and memory are both useful tools:
+
+* If you want to retrieve additional data from a directory of files, you can use [ragnar](https://ragnar.tidyverse.org).
+* If you want to retrieve R documentation you could use btw.
+* There are a few approaches to providing memory, a long-term file that the LLM can write to maintain state across multiple sessions.
 
 ### Prompt chaining
 
