@@ -113,5 +113,3 @@ Collate:
     'utils-prettytime.R'
     'utils.R'
     'zzz.R'
-Remotes: 
-    ropensci/vcr
