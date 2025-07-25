@@ -47,7 +47,6 @@ test_that("supports tool calling", {
 
   # Work, but don't match quite the right format because they include
   # additional (blank) ContentText
-
 })
 
 # Currently no other tests because I can't find a model that returns reliable
