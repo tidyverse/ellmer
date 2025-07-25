@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.1.9001</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -49,8 +50,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="ellmer-030">ellmer 0.3.0<a class="anchor" aria-label="anchor" href="#ellmer-030"></a></h2><p class="text-muted">CRAN release: 2025-07-24</p>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-0-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
 <ul><li><p>New <code><a href="../reference/chat-any.html">chat()</a></code> allows you to chat with any provider using a string like <code>chat("anthropic")</code> or <code>chat("openai/gpt-4.1-nano")</code> (<a href="https://github.com/tidyverse/ellmer/issues/361" class="external-link">#361</a>).</p></li>
 <li><p><code><a href="../reference/tool.html">tool()</a></code> has a simpler specification: you now specify the <code>name</code>, <code>description</code>, and <code>arguments</code>. I have done my best to deprecate old usage and give clear errors, but I have likely missed a few edge cases. I apologize for any pain that this causes, but I’m convinced that it is going to make tool usage easier and clearer in the long run. If you have many calls to convert, <code><a href="../reference/tool.html">?tool</a></code> contains a prompt that will help you use an LLM to convert them (<a href="https://github.com/tidyverse/ellmer/issues/603" class="external-link">#603</a>). It also now returns a function so that you can call it (and/or export it from your package) (<a href="https://github.com/tidyverse/ellmer/issues/602" class="external-link">#602</a>).</p></li>
 <li><p><code><a href="../reference/type_boolean.html">type_array()</a></code> and <code><a href="../reference/type_boolean.html">type_enum()</a></code> now have the description as the second argument and <code>items</code>/<code>values</code> as the first. This makes them easier to use in the common case where the description isn’t necessary (<a href="https://github.com/tidyverse/ellmer/issues/610" class="external-link">#610</a>).</p></li>
@@ -59,7 +63,7 @@
 <li><p>ellmer’s cost estimates are considerably improved. <code><a href="../reference/chat_openai.html">chat_openai()</a></code>, <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code>, and <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> capture the number of cached input tokens. This is primarily useful for OpenAI and Gemini since both offer automatic caching, yielding improved cost estimates (<a href="https://github.com/tidyverse/ellmer/issues/466" class="external-link">#466</a>). We also have a better source of pricing data, LiteLLM. This considerably expands the number of providers and models that include cost information (<a href="https://github.com/tidyverse/ellmer/issues/659" class="external-link">#659</a>).</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-and-minor-improvements-development-version">Bug fixes and minor improvements<a class="anchor" aria-label="anchor" href="#bug-fixes-and-minor-improvements-development-version"></a></h3>
+<h3 id="bug-fixes-and-minor-improvements-0-3-0">Bug fixes and minor improvements<a class="anchor" aria-label="anchor" href="#bug-fixes-and-minor-improvements-0-3-0"></a></h3>
 <ul><li>The new <code>ellmer_echo</code> option controls the default value for <code>echo</code>.</li>
 <li>
 <code><a href="../reference/batch_chat.html">batch_chat_structured()</a></code> provides clear messaging when prompts/path/provider don’t match (<a href="https://github.com/tidyverse/ellmer/issues/599" class="external-link">#599</a>).</li>
