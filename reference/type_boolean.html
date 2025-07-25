@@ -10,11 +10,11 @@ integer, double, and character vectors (respectively).
 type_enum() is equivalent to a length-1 factor; it is a string that can
 only take the specified values.
 type_array() is equivalent to a vector in R. You can use it to represent
-an atomic vector: e.g. type_array(items = type_boolean()) is equivalent
-to a logical vector and type_array(items = type_string()) is equivalent
+an atomic vector: e.g. type_array(type_boolean()) is equivalent
+to a logical vector and type_array(type_string()) is equivalent
 to a character vector). You can also use it to represent a list of more
 complicated types where every element is the same type (R has no base
-equivalent to this), e.g. type_array(items = type_array(items = type_string()))
+equivalent to this), e.g. type_array(type_array(type_string()))
 represents a list of character vectors.
 type_object() is equivalent to a named list in R, but where every element
 must have the specified type. For example,
@@ -39,11 +39,11 @@ integer, double, and character vectors (respectively).
 type_enum() is equivalent to a length-1 factor; it is a string that can
 only take the specified values.
 type_array() is equivalent to a vector in R. You can use it to represent
-an atomic vector: e.g. type_array(items = type_boolean()) is equivalent
-to a logical vector and type_array(items = type_string()) is equivalent
+an atomic vector: e.g. type_array(type_boolean()) is equivalent
+to a logical vector and type_array(type_string()) is equivalent
 to a character vector). You can also use it to represent a list of more
 complicated types where every element is the same type (R has no base
-equivalent to this), e.g. type_array(items = type_array(items = type_string()))
+equivalent to this), e.g. type_array(type_array(type_string()))
 represents a list of character vectors.
 type_object() is equivalent to a named list in R, but where every element
 must have the specified type. For example,
@@ -65,7 +65,7 @@ valid JSON schema object.
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,6 +86,7 @@ valid JSON schema object.
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -102,7 +103,7 @@ valid JSON schema object.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Type specifications</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/pkgdown-v0.2.1/R/types.R" class="external-link"><code>R/types.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/types.R" class="external-link"><code>R/types.R</code></a></small>
       <div class="d-none name"><code>type_boolean.Rd</code></div>
     </div>
 
@@ -117,11 +118,11 @@ integer, double, and character vectors (respectively).</p></li>
 <li><p><code>type_enum()</code> is equivalent to a length-1 factor; it is a string that can
 only take the specified values.</p></li>
 <li><p><code>type_array()</code> is equivalent to a vector in R. You can use it to represent
-an atomic vector: e.g. <code>type_array(items = type_boolean())</code> is equivalent
-to a logical vector and <code>type_array(items = type_string())</code> is equivalent
+an atomic vector: e.g. <code>type_array(type_boolean())</code> is equivalent
+to a logical vector and <code>type_array(type_string())</code> is equivalent
 to a character vector). You can also use it to represent a list of more
 complicated types where every element is the same type (R has no base
-equivalent to this), e.g. <code>type_array(items = type_array(items = type_string()))</code>
+equivalent to this), e.g. <code>type_array(type_array(type_string()))</code>
 represents a list of character vectors.</p></li>
 <li><p><code>type_object()</code> is equivalent to a named list in R, but where every element
 must have the specified type. For example,
@@ -146,9 +147,9 @@ valid JSON schema object.</p></li>
 <span></span>
 <span><span class="fu">type_string</span><span class="op">(</span>description <span class="op">=</span> <span class="cn">NULL</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">type_enum</span><span class="op">(</span>description <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">values</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">type_enum</span><span class="op">(</span><span class="va">values</span>, description <span class="op">=</span> <span class="cn">NULL</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">type_array</span><span class="op">(</span>description <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">items</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">type_array</span><span class="op">(</span><span class="va">items</span>, description <span class="op">=</span> <span class="cn">NULL</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">type_object</span><span class="op">(</span></span>
 <span>  .description <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -213,7 +214,7 @@ properties that are not explicitly listed? Only supported by Claude.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># An integer vector</span></span></span>
-<span class="r-in"><span><span class="fu">type_array</span><span class="op">(</span>items <span class="op">=</span> <span class="fu">type_integer</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">type_array</span><span class="op">(</span><span class="fu">type_integer</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;ellmer::TypeArray&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ description: NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ required   : logi TRUE</span>
@@ -223,7 +224,7 @@ properties that are not explicitly listed? Only supported by Claude.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ type       : chr "integer"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The closest equivalent to a data frame is an array of objects</span></span></span>
-<span class="r-in"><span><span class="fu">type_array</span><span class="op">(</span>items <span class="op">=</span> <span class="fu">type_object</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu">type_array</span><span class="op">(</span><span class="fu">type_object</span><span class="op">(</span></span></span>
 <span class="r-in"><span>   x <span class="op">=</span> <span class="fu">type_boolean</span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>   y <span class="op">=</span> <span class="fu">type_string</span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>   z <span class="op">=</span> <span class="fu">type_number</span><span class="op">(</span><span class="op">)</span></span></span>
@@ -271,7 +272,7 @@ properties that are not explicitly listed? Only supported by Claude.</p></dd>
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
+  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="http://schloerke.com" class="external-link">Barret Schloerke</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

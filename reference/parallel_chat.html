@@ -19,7 +19,7 @@ with a 50% discount in return for taking up to 24 hours."><meta property="og:ima
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,7 @@ with a 50% discount in return for taking up to 24 hours."><meta property="og:ima
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -56,7 +57,7 @@ with a 50% discount in return for taking up to 24 hours."><meta property="og:ima
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Submit multiple chats in parallel</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/pkgdown-v0.2.1/R/chat-parallel.R" class="external-link"><code>R/chat-parallel.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/parallel-chat.R" class="external-link"><code>R/parallel-chat.R</code></a></small>
       <div class="d-none name"><code>parallel_chat.Rd</code></div>
     </div>
 
@@ -73,6 +74,8 @@ with a 50% discount in return for taking up to 24 hours.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parallel_chat</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, max_active <span class="op">=</span> <span class="fl">10</span>, rpm <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">parallel_chat_text</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, max_active <span class="op">=</span> <span class="fl">10</span>, rpm <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">parallel_chat_structured</span><span class="op">(</span></span>
 <span>  <span class="va">chat</span>,</span>
@@ -140,6 +143,7 @@ add <code>cost</code> column giving the cost of each prompt.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>For <code>parallel_chat()</code>, a list of <a href="Chat.html">Chat</a> objects, one for each prompt.
+For <code>parallel_chat_text()</code>, a character vector of text responses.
 For <code>parallel_chat_structured()</code>, a single structured data object with one
 element for each prompt. Typically, when <code>type</code> is an object, this will
 will be a data frame with one row for each prompt, and one column for each
@@ -156,18 +160,18 @@ property.</p>
 <span class="r-in"><span><span class="va">prompts</span> <span class="op">&lt;-</span> <span class="fu"><a href="interpolate.html">interpolate</a></span><span class="op">(</span><span class="st">"What's the capital of {{country}}?"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">parallel_chat</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 tokens=13/7 $0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 tokens=13/10 $0.00&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> [13] ──────────────────────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> What's the capital of Canada?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [7] ──────────────────────────────────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of Canada is Ottawa.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [10] ─────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of Canada is **Ottawa**.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 tokens=14/8 $0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 tokens=14/11 $0.00&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> [14] ──────────────────────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> What's the capital of New Zealand?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [8] ──────────────────────────────────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of New Zealand is Wellington.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [11] ─────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of New Zealand is **Wellington**.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 tokens=13/10 $0.00&gt;</span>
@@ -211,7 +215,7 @@ property.</p>
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
+  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="http://schloerke.com" class="external-link">Barret Schloerke</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -49,7 +49,7 @@ but if you have ideas, please let me know!"><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,6 +70,7 @@ but if you have ideas, please let me know!"><meta property="og:image" content="h
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -86,7 +87,7 @@ but if you have ideas, please let me know!"><meta property="og:image" content="h
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Submit multiple chats in one batch</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/pkgdown-v0.2.1/R/batch-chat.R" class="external-link"><code>R/batch-chat.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/batch-chat.R" class="external-link"><code>R/batch-chat.R</code></a></small>
       <div class="d-none name"><code>batch_chat.Rd</code></div>
     </div>
 
@@ -118,6 +119,8 @@ but if you have ideas, please let me know!</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">batch_chat</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, <span class="va">path</span>, wait <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">batch_chat_text</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, <span class="va">path</span>, wait <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">batch_chat_structured</span><span class="op">(</span></span>
 <span>  <span class="va">chat</span>,</span>
@@ -183,10 +186,22 @@ and output tokens for each prompt.</p></dd>
 add <code>cost</code> column giving the cost of each prompt.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>For <code>batch_chat()</code>, a list of <a href="Chat.html">Chat</a> objects, one for each prompt.
+For <code>batch_chat_test()</code>, a character vector of text responses.
+For <code>batch_chat_structured()</code>, a single structured data object with one
+element for each prompt. Typically, when <code>type</code> is an object, this will
+will be a data frame with one row for each prompt, and one column for each
+property.</p>
+<p>For any of the aboves, will return <code>NULL</code> if <code>wait = FALSE</code> and the job
+is not complete.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># has_credentials("openai")</span></span></span>
+<span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Chat ----------------------------------------------------------------------</span></span></span>
 <span class="r-in"><span></span></span>
@@ -215,6 +230,7 @@ add <code>cost</code> column giving the cost of each prompt.</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -224,7 +240,7 @@ add <code>cost</code> column giving the cost of each prompt.</p></dd>
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
+  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="http://schloerke.com" class="external-link">Barret Schloerke</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

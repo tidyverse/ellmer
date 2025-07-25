@@ -1,5 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://ellmer.tidyverse.org/404.html</loc></url>
+<url><loc>https://ellmer.tidyverse.org/CLAUDE.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/LICENSE-text.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/LICENSE.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/articles/ellmer.html</loc></url>
@@ -18,6 +19,7 @@
 <url><loc>https://ellmer.tidyverse.org/reference/Turn.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/Type.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/batch_chat.html</loc></url>
+<url><loc>https://ellmer.tidyverse.org/reference/chat-any.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/chat_anthropic.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/chat_aws_bedrock.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/chat_azure_openai.html</loc></url>
@@ -39,6 +41,7 @@
 <url><loc>https://ellmer.tidyverse.org/reference/chat_vllm.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/content_image_url.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/content_pdf_file.html</loc></url>
+<url><loc>https://ellmer.tidyverse.org/reference/contents_record.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/contents_text.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/create_tool_def.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/deprecated.html</loc></url>

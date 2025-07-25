@@ -47,7 +47,7 @@ tried it with.
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,6 +68,7 @@ tried it with.
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -84,7 +85,7 @@ tried it with.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Chat with a local Ollama model</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/pkgdown-v0.2.1/R/provider-ollama.R" class="external-link"><code>R/provider-ollama.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/provider-ollama.R" class="external-link"><code>R/provider-ollama.R</code></a></small>
       <div class="d-none name"><code>chat_ollama.Rd</code></div>
     </div>
 
@@ -118,7 +119,8 @@ tried it with.</p></li>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  echo <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  api_key <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  api_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">models_ollama</span><span class="op">(</span>base_url <span class="op">=</span> <span class="st">"http://localhost:11434"</span><span class="op">)</span></span></code></pre></div>
@@ -157,7 +159,7 @@ with <code><a href="https://rdrr.io/r/utils/modifyList.html" class="external-lin
 <li><p><code>output</code>: echo text and tool-calling output as it streams in (default
 when running at the console).</p></li>
 <li><p><code>all</code>: echo all input and output.</p></li>
-</ul><p>Note this only affects the <code>chat()</code> method.</p></dd>
+</ul><p>Note this only affects the <code><a href="chat-any.html">chat()</a></code> method.</p></dd>
 
 
 <dt id="arg-api-key">api_key<a class="anchor" aria-label="anchor" href="#arg-api-key"></a></dt>
@@ -166,6 +168,11 @@ cases you do not need to provide an <code>api_key</code>.</p>
 <p>However, if you're accessing an Ollama instance hosted behind a reverse
 proxy or secured endpoint that enforces bearer‐token authentication, you
 can set <code>api_key</code> (or the <code>OLLAMA_API_KEY</code> environment variable).</p></dd>
+
+
+<dt id="arg-api-headers">api_headers<a class="anchor" aria-label="anchor" href="#arg-api-headers"></a></dt>
+<dd><p>Named character vector of arbitrary extra headers appended
+to every chat API call.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -179,7 +186,6 @@ can set <code>api_key</code> (or the <code>OLLAMA_API_KEY</code> environment var
 <code><a href="chat_aws_bedrock.html">chat_aws_bedrock</a>()</code>,
 <code><a href="chat_azure_openai.html">chat_azure_openai</a>()</code>,
 <code><a href="chat_cloudflare.html">chat_cloudflare</a>()</code>,
-<code><a href="chat_cortex_analyst.html">chat_cortex_analyst</a>()</code>,
 <code><a href="chat_databricks.html">chat_databricks</a>()</code>,
 <code><a href="chat_deepseek.html">chat_deepseek</a>()</code>,
 <code><a href="chat_github.html">chat_github</a>()</code>,
@@ -208,7 +214,7 @@ can set <code>api_key</code> (or the <code>OLLAMA_API_KEY</code> environment var
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
+  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="http://schloerke.com" class="external-link">Barret Schloerke</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

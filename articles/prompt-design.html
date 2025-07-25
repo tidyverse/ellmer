@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news">
 <li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -80,7 +81,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Prompt design</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/pkgdown-v0.2.1/vignettes/prompt-design.Rmd" class="external-link"><code>vignettes/prompt-design.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/vignettes/prompt-design.Rmd" class="external-link"><code>vignettes/prompt-design.Rmd</code></a></small>
       <div class="d-none name"><code>prompt-design.Rmd</code></div>
     </div>
 
@@ -186,21 +187,20 @@ different languages or different styles of R code:</p>
 <span><span class="co">#&gt; import numpy as np</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # Assuming your data is in a DataFrame called 'df'</span></span>
-<span><span class="co">#&gt; # Variables a-z plus grouping variables age and sex</span></span>
+<span><span class="co">#&gt; # Variables a-z are columns, along with 'age' and 'sex'</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 1: Select variables a-z explicitly</span></span>
-<span><span class="co">#&gt; vars_a_to_z = [chr(i) for i in range(ord('a'), ord('z')+1)]</span></span>
-<span><span class="co">#&gt; result = df.groupby(['age', 'sex'])[vars_a_to_z].agg(['mean', </span></span>
-<span><span class="co">#&gt; 'median'])</span></span>
+<span><span class="co">#&gt; # Get all columns from 'a' to 'z'</span></span>
+<span><span class="co">#&gt; variables = [chr(i) for i in range(ord('a'), ord('z')+1)]</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 2: If a-z are all your numeric columns (excluding age/sex)</span></span>
-<span><span class="co">#&gt; numeric_cols = </span></span>
-<span><span class="co">#&gt; df.select_dtypes(include=[np.number]).columns.difference(['age', </span></span>
-<span><span class="co">#&gt; 'sex'])</span></span>
-<span><span class="co">#&gt; result = df.groupby(['age', 'sex'])[numeric_cols].agg(['mean', </span></span>
-<span><span class="co">#&gt; 'median'])</span></span>
+<span><span class="co">#&gt; # Method 1: Using agg() with multiple functions</span></span>
+<span><span class="co">#&gt; result = df.groupby(['age', 'sex'])[variables].agg(['mean', 'median'])</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; print(result)</span></span>
+<span><span class="co">#&gt; # Method 2: Separate calculations</span></span>
+<span><span class="co">#&gt; means = df.groupby(['age', 'sex'])[variables].mean()</span></span>
+<span><span class="co">#&gt; medians = df.groupby(['age', 'sex'])[variables].median()</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; # Method 3: Using describe() for more statistics</span></span>
+<span><span class="co">#&gt; summary = df.groupby(['age', 'sex'])[variables].describe()</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ## R</span></span>
@@ -208,21 +208,24 @@ different languages or different styles of R code:</p>
 <span><span class="co">#&gt; ```r</span></span>
 <span><span class="co">#&gt; library(dplyr)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 1: Using dplyr with across()</span></span>
+<span><span class="co">#&gt; # Method 1: Using dplyr</span></span>
 <span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
 <span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
 <span><span class="co">#&gt;   summarise(across(a:z, list(mean = mean, median = median), na.rm = </span></span>
-<span><span class="co">#&gt; TRUE),</span></span>
-<span><span class="co">#&gt;             .groups = 'drop')</span></span>
+<span><span class="co">#&gt; TRUE))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 2: Using aggregate() (base R)</span></span>
-<span><span class="co">#&gt; vars_to_summarize &lt;- paste0(letters, collapse = "+")</span></span>
-<span><span class="co">#&gt; formula_mean &lt;- as.formula(paste("cbind(", vars_to_summarize, ") ~ age</span></span>
-<span><span class="co">#&gt; + sex"))</span></span>
+<span><span class="co">#&gt; # Method 2: Using aggregate()</span></span>
+<span><span class="co">#&gt; means &lt;- aggregate(. ~ age + sex, data = df[c('age', 'sex', letters)],</span></span>
+<span><span class="co">#&gt; FUN = mean)</span></span>
+<span><span class="co">#&gt; medians &lt;- aggregate(. ~ age + sex, data = df[c('age', 'sex', </span></span>
+<span><span class="co">#&gt; letters)], FUN = median)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; means &lt;- aggregate(formula_mean, data = df, FUN = mean, na.rm = TRUE)</span></span>
-<span><span class="co">#&gt; medians &lt;- aggregate(formula_mean, data = df, FUN = median, na.rm = </span></span>
-<span><span class="co">#&gt; TRUE)</span></span>
+<span><span class="co">#&gt; # Method 3: Using data.table</span></span>
+<span><span class="co">#&gt; library(data.table)</span></span>
+<span><span class="co">#&gt; dt &lt;- as.data.table(df)</span></span>
+<span><span class="co">#&gt; result &lt;- dt[, lapply(.SD, function(x) list(mean = mean(x), median = </span></span>
+<span><span class="co">#&gt; median(x))), </span></span>
+<span><span class="co">#&gt;              by = .(age, sex), .SDcols = letters]</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ## SQL</span></span>
@@ -248,6 +251,12 @@ different languages or different styles of R code:</p>
 <span><span class="co">#&gt; proc means data=your_dataset mean median;</span></span>
 <span><span class="co">#&gt;     class age sex;</span></span>
 <span><span class="co">#&gt;     var a--z;  /* Variables from a to z */</span></span>
+<span><span class="co">#&gt; run;</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; /* Or using PROC SUMMARY */</span></span>
+<span><span class="co">#&gt; proc summary data=your_dataset;</span></span>
+<span><span class="co">#&gt;     class age sex;</span></span>
+<span><span class="co">#&gt;     var a--z;</span></span>
 <span><span class="co">#&gt;     output out=summary_stats mean= median= / autoname;</span></span>
 <span><span class="co">#&gt; run;</span></span>
 <span><span class="co">#&gt; ```</span></span>
@@ -255,26 +264,13 @@ different languages or different styles of R code:</p>
 <span><span class="co">#&gt; ## SPSS Syntax</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ```spss</span></span>
-<span><span class="co">#&gt; AGGREGATE</span></span>
-<span><span class="co">#&gt;   /OUTFILE=* MODE=ADDVARIABLES</span></span>
-<span><span class="co">#&gt;   /BREAK=age sex</span></span>
-<span><span class="co">#&gt;   /a_mean a_median = MEAN MEDIAN(a)</span></span>
-<span><span class="co">#&gt;   /b_mean b_median = MEAN MEDIAN(b)</span></span>
-<span><span class="co">#&gt;   /* Continue for all variables through z */</span></span>
-<span><span class="co">#&gt;   /z_mean z_median = MEAN MEDIAN(z).</span></span>
+<span><span class="co">#&gt; MEANS TABLES=a TO z BY age BY sex</span></span>
+<span><span class="co">#&gt;   /CELLS=MEAN MEDIAN.</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The **pandas approach** is probably the most flexible and commonly </span></span>
-<span><span class="co">#&gt; used. The key points are:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 1. **Group by** your categorical variables (age, sex)</span></span>
-<span><span class="co">#&gt; 2. **Select** the variables you want to summarize (a through z)</span></span>
-<span><span class="co">#&gt; 3. **Apply** the aggregation functions (mean, median)</span></span>
-<span><span class="co">#&gt; 4. Handle **missing values** appropriately (na.rm=TRUE in R, </span></span>
-<span><span class="co">#&gt; skipna=True in pandas)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Which tool are you planning to use? I can provide more specific </span></span>
-<span><span class="co">#&gt; guidance based on your preferred platform.</span></span></code></pre>
+<span><span class="co">#&gt; The pandas approach is probably most flexible if you're using Python, </span></span>
+<span><span class="co">#&gt; as it gives you a clean DataFrame with hierarchical columns showing </span></span>
+<span><span class="co">#&gt; both statistics for each variable. Which tool are you planning to use?</span></span></code></pre>
 <p>I can ensure that I always get R code in a specific style by
 providing a system prompt:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -285,14 +281,15 @@ providing a system prompt:</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Here are a few efficient ways to compute the mean and median of </span></span>
-<span><span class="co">#&gt; variables a through z, grouped by age and sex using tidyverse:</span></span>
+<pre><code><span><span class="co">#&gt; Here are a few ways to compute the mean and median of variables a </span></span>
+<span><span class="co">#&gt; through z, grouped by age and sex using tidyverse:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ## Method 1: Using `across()` with `summarise()` (Recommended)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ```r</span></span>
 <span><span class="co">#&gt; library(dplyr)</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; # If you want separate columns for mean and median</span></span>
 <span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
 <span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
 <span><span class="co">#&gt;   summarise(</span></span>
@@ -300,32 +297,15 @@ providing a system prompt:</p>
 <span><span class="co">#&gt; "{.col}_{.fn}"),</span></span>
 <span><span class="co">#&gt;     .groups = "drop"</span></span>
 <span><span class="co">#&gt;   )</span></span>
-<span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## Method 2: If you want separate mean and median tables</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; # For means</span></span>
-<span><span class="co">#&gt; means &lt;- df %&gt;%</span></span>
+<span><span class="co">#&gt; # If you want a longer format that's easier to work with</span></span>
+<span><span class="co">#&gt; result_long &lt;- df %&gt;%</span></span>
 <span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
-<span><span class="co">#&gt;   summarise(across(a:z, mean), .groups = "drop")</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # For medians  </span></span>
-<span><span class="co">#&gt; medians &lt;- df %&gt;%</span></span>
-<span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
-<span><span class="co">#&gt;   summarise(across(a:z, median), .groups = "drop")</span></span>
-<span><span class="co">#&gt; ```</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## Method 3: Using `pivot_longer()` for a tidy format</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; library(dplyr)</span></span>
-<span><span class="co">#&gt; library(tidyr)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; result_tidy &lt;- df %&gt;%</span></span>
-<span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
-<span><span class="co">#&gt;   summarise(across(a:z, list(mean = mean, median = median)), .groups =</span></span>
-<span><span class="co">#&gt; "drop") %&gt;%</span></span>
+<span><span class="co">#&gt;   summarise(</span></span>
+<span><span class="co">#&gt;     across(a:z, list(mean = mean, median = median), .names = </span></span>
+<span><span class="co">#&gt; "{.col}_{.fn}"),</span></span>
+<span><span class="co">#&gt;     .groups = "drop"</span></span>
+<span><span class="co">#&gt;   ) %&gt;%</span></span>
 <span><span class="co">#&gt;   pivot_longer(</span></span>
 <span><span class="co">#&gt;     cols = -c(age, sex),</span></span>
 <span><span class="co">#&gt;     names_to = c("variable", "statistic"),</span></span>
@@ -334,24 +314,56 @@ providing a system prompt:</p>
 <span><span class="co">#&gt;   )</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## Method 4: Handling missing values</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; If your data might contain `NA` values:</span></span>
+<span><span class="co">#&gt; ## Method 2: If you need to handle missing values</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ```r</span></span>
 <span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
 <span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
 <span><span class="co">#&gt;   summarise(</span></span>
-<span><span class="co">#&gt;     across(a:z, list(mean = ~mean(.x, na.rm = TRUE), </span></span>
-<span><span class="co">#&gt;                      median = ~median(.x, na.rm = TRUE)), </span></span>
-<span><span class="co">#&gt;            .names = "{.col}_{.fn}"),</span></span>
+<span><span class="co">#&gt;     across(a:z, list(</span></span>
+<span><span class="co">#&gt;       mean = ~mean(.x, na.rm = TRUE),</span></span>
+<span><span class="co">#&gt;       median = ~median(.x, na.rm = TRUE)</span></span>
+<span><span class="co">#&gt;     ), .names = "{.col}_{.fn}"),</span></span>
 <span><span class="co">#&gt;     .groups = "drop"</span></span>
 <span><span class="co">#&gt;   )</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The first method is usually the most practical as it gives you all </span></span>
-<span><span class="co">#&gt; statistics in one wide table with clear column names like `a_mean`, </span></span>
-<span><span class="co">#&gt; `a_median`, `b_mean`, `b_median`, etc.</span></span></code></pre>
+<span><span class="co">#&gt; ## Method 3: Using `pivot_longer()` first (alternative approach)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ```r</span></span>
+<span><span class="co">#&gt; library(dplyr)</span></span>
+<span><span class="co">#&gt; library(tidyr)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
+<span><span class="co">#&gt;   pivot_longer(cols = a:z, names_to = "variable", values_to = "value")</span></span>
+<span><span class="co">#&gt; %&gt;%</span></span>
+<span><span class="co">#&gt;   group_by(age, sex, variable) %&gt;%</span></span>
+<span><span class="co">#&gt;   summarise(</span></span>
+<span><span class="co">#&gt;     mean = mean(value, na.rm = TRUE),</span></span>
+<span><span class="co">#&gt;     median = median(value, na.rm = TRUE),</span></span>
+<span><span class="co">#&gt;     .groups = "drop"</span></span>
+<span><span class="co">#&gt;   )</span></span>
+<span><span class="co">#&gt; ```</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ## Method 4: If you want to specify variables by pattern</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ```r</span></span>
+<span><span class="co">#&gt; # If your variables follow a pattern or you want to be more selective</span></span>
+<span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
+<span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
+<span><span class="co">#&gt;   summarise(</span></span>
+<span><span class="co">#&gt;     across(matches("^[a-z]$"), list(mean = mean, median = median), </span></span>
+<span><span class="co">#&gt; .names = "{.col}_{.fn}"),</span></span>
+<span><span class="co">#&gt;     .groups = "drop"</span></span>
+<span><span class="co">#&gt;   )</span></span>
+<span><span class="co">#&gt; ```</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The first method is generally the most efficient and produces a wide </span></span>
+<span><span class="co">#&gt; format that's easy to read. The third method produces a long format </span></span>
+<span><span class="co">#&gt; that's often more convenient for further analysis or visualization.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Choose the method that best fits your data structure and analysis </span></span>
+<span><span class="co">#&gt; needs!</span></span></code></pre>
 <p>Note that I’m using both a system prompt (which defines the general
 behaviour) and a user prompt (which asks the specific question). You
 could put all this content in the user prompt and get similar results,
@@ -391,6 +403,7 @@ it:</p>
 <pre><code><span><span class="co">#&gt; ```r</span></span>
 <span><span class="co">#&gt; library(data.table)</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; # Assuming your data is in a data.table called 'dt'</span></span>
 <span><span class="co">#&gt; dt[, lapply(.SD, function(x) list(mean = mean(x, na.rm = TRUE), </span></span>
 <span><span class="co">#&gt;                                   median = median(x, na.rm = TRUE))), </span></span>
 <span><span class="co">#&gt;    by = .(age, sex), </span></span>
@@ -407,8 +420,19 @@ it:</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; aggregate(. ~ age + sex, data = df, FUN = function(x) c(mean = mean(x,</span></span>
-<span><span class="co">#&gt; na.rm = TRUE), median = median(x, na.rm = TRUE)))</span></span>
+<span><span class="co">#&gt; aggregate(. ~ age + sex, data = df[c("age", "sex", letters)], FUN = </span></span>
+<span><span class="co">#&gt; function(x) c(mean = mean(x), median = median(x)))</span></span>
+<span><span class="co">#&gt; ```</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Or if you want separate columns for means and medians:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ```r</span></span>
+<span><span class="co">#&gt; means &lt;- aggregate(. ~ age + sex, data = df[c("age", "sex", letters)],</span></span>
+<span><span class="co">#&gt; FUN = mean)</span></span>
+<span><span class="co">#&gt; medians &lt;- aggregate(. ~ age + sex, data = df[c("age", "sex", </span></span>
+<span><span class="co">#&gt; letters)], FUN = median)</span></span>
+<span><span class="co">#&gt; names(medians)[-(1:2)] &lt;- paste0(names(medians)[-(1:2)], "_median")</span></span>
+<span><span class="co">#&gt; merge(means, medians, by = c("age", "sex"))</span></span>
 <span><span class="co">#&gt; ```</span></span></code></pre>
 </div>
 <div class="section level3">
@@ -436,7 +460,7 @@ so I provide more details about what I do want:</p>
 <pre><code><span><span class="co">#&gt; ```r</span></span>
 <span><span class="co">#&gt; library(dplyr)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; df |&gt;</span></span>
+<span><span class="co">#&gt; data |&gt;</span></span>
 <span><span class="co">#&gt;   group_by(age, sex) |&gt;</span></span>
 <span><span class="co">#&gt;   summarise(</span></span>
 <span><span class="co">#&gt;     across(</span></span>
@@ -464,25 +488,21 @@ explanation of the code:</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; # Load required library for data manipulation</span></span>
-<span><span class="co">#&gt; library(dplyr)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Group data by age and sex, then calculate mean and median for </span></span>
-<span><span class="co">#&gt; variables a through z</span></span>
-<span><span class="co">#&gt; result &lt;- data %&gt;%</span></span>
-<span><span class="co">#&gt;   group_by(age, sex) %&gt;%  # Create groups based on age and sex </span></span>
-<span><span class="co">#&gt; combinations</span></span>
+<span><span class="co">#&gt; # Compute mean and median for variables a through z, grouped by age </span></span>
+<span><span class="co">#&gt; and sex</span></span>
+<span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
+<span><span class="co">#&gt;   group_by(age, sex) %&gt;%  # Group data by age and sex categories</span></span>
 <span><span class="co">#&gt;   summarise(</span></span>
 <span><span class="co">#&gt;     across(</span></span>
 <span><span class="co">#&gt;       .cols = a:z,  # Select all columns from 'a' to 'z'</span></span>
 <span><span class="co">#&gt;       .fns = list(</span></span>
 <span><span class="co">#&gt;         mean = ~ mean(.x, na.rm = TRUE),    # Calculate mean, removing</span></span>
-<span><span class="co">#&gt; NA values</span></span>
+<span><span class="co">#&gt; missing values</span></span>
 <span><span class="co">#&gt;         median = ~ median(.x, na.rm = TRUE) # Calculate median, </span></span>
-<span><span class="co">#&gt; removing NA values</span></span>
+<span><span class="co">#&gt; removing missing values</span></span>
 <span><span class="co">#&gt;       ),</span></span>
-<span><span class="co">#&gt;       .names = "{.col}_{.fn}"  # Name format: variable_function (e.g.,</span></span>
-<span><span class="co">#&gt; a_mean, a_median)</span></span>
+<span><span class="co">#&gt;       .names = "{.col}_{.fn}"  # Name format: variable_statistic </span></span>
+<span><span class="co">#&gt; (e.g., a_mean, a_median)</span></span>
 <span><span class="co">#&gt;     ),</span></span>
 <span><span class="co">#&gt;     .groups = "drop"  # Remove grouping structure from result</span></span>
 <span><span class="co">#&gt;   )</span></span>
@@ -575,72 +595,59 @@ page.</p>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="va">instruct_json</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
-<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">ingredients</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; ```json</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">ingredients</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "dark brown sugar",</span></span>
-<span><span class="co">#&gt;     "quantity": 0.75,</span></span>
-<span><span class="co">#&gt;     "unit": "cup",</span></span>
-<span><span class="co">#&gt;     "weight": 150,</span></span>
-<span><span class="co">#&gt;     "weight_unit": "g"</span></span>
+<span><span class="co">#&gt;     "amount": "3/4 cup",</span></span>
+<span><span class="co">#&gt;     "weight": "150g"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "eggs",</span></span>
-<span><span class="co">#&gt;     "quantity": 2,</span></span>
+<span><span class="co">#&gt;     "amount": "2",</span></span>
 <span><span class="co">#&gt;     "unit": "large"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "sour cream",</span></span>
-<span><span class="co">#&gt;     "quantity": 0.75,</span></span>
-<span><span class="co">#&gt;     "unit": "cup",</span></span>
-<span><span class="co">#&gt;     "weight": 165,</span></span>
-<span><span class="co">#&gt;     "weight_unit": "g"</span></span>
+<span><span class="co">#&gt;     "amount": "3/4 cup",</span></span>
+<span><span class="co">#&gt;     "weight": "165g"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "unsalted butter",</span></span>
-<span><span class="co">#&gt;     "quantity": 0.5,</span></span>
-<span><span class="co">#&gt;     "unit": "cup",</span></span>
-<span><span class="co">#&gt;     "weight": 113,</span></span>
-<span><span class="co">#&gt;     "weight_unit": "g",</span></span>
-<span><span class="co">#&gt;     "note": "melted"</span></span>
+<span><span class="co">#&gt;     "amount": "1/2 cup",</span></span>
+<span><span class="co">#&gt;     "weight": "113g",</span></span>
+<span><span class="co">#&gt;     "preparation": "melted"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "vanilla extract",</span></span>
-<span><span class="co">#&gt;     "quantity": 1,</span></span>
-<span><span class="co">#&gt;     "unit": "teaspoon"</span></span>
+<span><span class="co">#&gt;     "amount": "1 teaspoon"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "kosher salt",</span></span>
-<span><span class="co">#&gt;     "quantity": 0.75,</span></span>
-<span><span class="co">#&gt;     "unit": "teaspoon"</span></span>
+<span><span class="co">#&gt;     "amount": "3/4 teaspoon"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "neutral oil",</span></span>
-<span><span class="co">#&gt;     "quantity": 0.33,</span></span>
-<span><span class="co">#&gt;     "unit": "cup",</span></span>
-<span><span class="co">#&gt;     "volume": 80,</span></span>
-<span><span class="co">#&gt;     "volume_unit": "ml"</span></span>
+<span><span class="co">#&gt;     "amount": "1/3 cup",</span></span>
+<span><span class="co">#&gt;     "volume": "80ml"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "all-purpose flour",</span></span>
-<span><span class="co">#&gt;     "quantity": 1.5,</span></span>
-<span><span class="co">#&gt;     "unit": "cup",</span></span>
-<span><span class="co">#&gt;     "weight": 190,</span></span>
-<span><span class="co">#&gt;     "weight_unit": "g"</span></span>
+<span><span class="co">#&gt;     "amount": "1 1/2 cups",</span></span>
+<span><span class="co">#&gt;     "weight": "190g"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "ingredient": "sugar",</span></span>
-<span><span class="co">#&gt;     "quantity": 150,</span></span>
-<span><span class="co">#&gt;     "unit": "g"</span></span>
-<span><span class="co">#&gt;   },</span></span>
-<span><span class="co">#&gt;   {</span></span>
-<span><span class="co">#&gt;     "ingredient": "sugar",</span></span>
-<span><span class="co">#&gt;     "quantity": 1.5,</span></span>
-<span><span class="co">#&gt;     "unit": "teaspoon"</span></span>
+<span><span class="co">#&gt;     "amounts": [</span></span>
+<span><span class="co">#&gt;       {</span></span>
+<span><span class="co">#&gt;         "amount": "150g"</span></span>
+<span><span class="co">#&gt;       },</span></span>
+<span><span class="co">#&gt;       {</span></span>
+<span><span class="co">#&gt;         "amount": "1 1/2 teaspoons"</span></span>
+<span><span class="co">#&gt;       }</span></span>
+<span><span class="co">#&gt;     ]</span></span>
 <span><span class="co">#&gt;   }</span></span>
-<span><span class="co">#&gt; ]</span></span>
-<span><span class="co">#&gt; ```</span></span></code></pre>
+<span><span class="co">#&gt; ]</span></span></code></pre></div>
 <p>(I don’t know if the additional colour, “You’re an expert baker who
 also loves JSON”, does anything, but I like to think this helps the LLM
 get into the right mindset of a very nerdy baker.)</p>
@@ -652,7 +659,7 @@ get into the right mindset of a very nerdy baker.)</p>
 want to see volumes if weight isn’t available so I provide a couple of
 examples of what I’m looking for. I was pleasantly suprised that I can
 provide the input and output examples in such a loose format.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">instruct_weight</span> <span class="op">&lt;-</span> <span class="st">r"(</span></span>
 <span><span class="st">  Here are some examples of the sort of output I'm looking for:</span></span>
 <span><span class="st"></span></span>
@@ -673,7 +680,8 @@ provide the input and output examples in such a loose format.</p>
 <span><span class="co">#&gt;   {"name": "dark brown sugar", "quantity": 150, "unit": "g"},</span></span>
 <span><span class="co">#&gt;   {"name": "large eggs", "quantity": 2, "unit": "count"},</span></span>
 <span><span class="co">#&gt;   {"name": "sour cream", "quantity": 165, "unit": "g"},</span></span>
-<span><span class="co">#&gt;   {"name": "unsalted butter, melted", "quantity": 113, "unit": "g"},</span></span>
+<span><span class="co">#&gt;   {"name": "unsalted butter", "quantity": 113, "unit": "g", "note": </span></span>
+<span><span class="co">#&gt; "melted"},</span></span>
 <span><span class="co">#&gt;   {"name": "vanilla extract", "quantity": 1, "unit": "teaspoon"},</span></span>
 <span><span class="co">#&gt;   {"name": "kosher salt", "quantity": 0.75, "unit": "teaspoon"},</span></span>
 <span><span class="co">#&gt;   {"name": "neutral oil", "quantity": 80, "unit": "ml"},</span></span>
@@ -687,7 +695,7 @@ trying to accomplish. I’m not sure if this helps the LLM or not, but it
 certainly makes it easier for me to understand the organisation of the
 whole prompt and check that I’ve covered the key pieces I’m interested
 in.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">instruct_weight</span> <span class="op">&lt;-</span> <span class="st">r"(</span></span>
 <span><span class="st">  * If an ingredient has both weight and volume, extract only the weight:</span></span>
 <span><span class="st"></span></span>
@@ -716,7 +724,7 @@ ingredients are specified. For later analysis, I always want quantities
 to be number, even if they were originally fractions, or the if the
 units aren’t precise (like a pinch). It made me realise that some
 ingredients are unitless.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">instruct_unit</span> <span class="op">&lt;-</span> <span class="st">r"(</span></span>
 <span><span class="st">* If the unit uses a fraction, convert it to a decimal.</span></span>
 <span><span class="st"></span></span>
@@ -755,29 +763,29 @@ useful to formalise it and tell the LLM exactly what I’m looking for
 when dealing with structured data. This guarantees that the LLM will
 only return JSON, that the JSON will have the fields that you expect,
 and that ellmer will convert it into an R data structure.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">type_ingredient</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Ingredient name"</span><span class="op">)</span>,</span>
 <span>  quantity <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  unit <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Unit of measurement"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">type_ingredients</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span>items <span class="op">=</span> <span class="va">type_ingredient</span><span class="op">)</span></span>
+<span><span class="va">type_ingredients</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="va">type_ingredient</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">instruct_json</span>, <span class="va">instruct_weight</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">ingredients</span>, type <span class="op">=</span> <span class="va">type_ingredients</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                 name quantity     unit</span></span>
-<span><span class="co">#&gt; 1   dark brown sugar   150.00        g</span></span>
-<span><span class="co">#&gt; 2               eggs     2.00    large</span></span>
-<span><span class="co">#&gt; 3         sour cream   165.00        g</span></span>
-<span><span class="co">#&gt; 4    unsalted butter   113.00        g</span></span>
-<span><span class="co">#&gt; 5    vanilla extract     1.00 teaspoon</span></span>
-<span><span class="co">#&gt; 6        kosher salt     0.75 teaspoon</span></span>
-<span><span class="co">#&gt; 7        neutral oil    80.00       ml</span></span>
-<span><span class="co">#&gt; 8  all-purpose flour   190.00        g</span></span>
-<span><span class="co">#&gt; 9              sugar   150.00        g</span></span>
-<span><span class="co">#&gt; 10             sugar     1.50 teaspoon</span></span></code></pre></div>
+<span><span class="co">#&gt;                       name quantity     unit</span></span>
+<span><span class="co">#&gt; 1         dark brown sugar   150.00        g</span></span>
+<span><span class="co">#&gt; 2                     eggs     2.00    large</span></span>
+<span><span class="co">#&gt; 3               sour cream   165.00        g</span></span>
+<span><span class="co">#&gt; 4  unsalted butter, melted   113.00        g</span></span>
+<span><span class="co">#&gt; 5          vanilla extract     1.00 teaspoon</span></span>
+<span><span class="co">#&gt; 6              kosher salt     0.75 teaspoon</span></span>
+<span><span class="co">#&gt; 7              neutral oil    80.00       ml</span></span>
+<span><span class="co">#&gt; 8        all-purpose flour   190.00        g</span></span>
+<span><span class="co">#&gt; 9                    sugar   150.00        g</span></span>
+<span><span class="co">#&gt; 10                   sugar     1.50 teaspoon</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="capturing-raw-input">Capturing raw input<a class="anchor" aria-label="anchor" href="#capturing-raw-input"></a>
@@ -787,7 +795,7 @@ ingredient names in the output. This doesn’t make much difference in
 this simple example but it makes it much easier to align the input with
 the output and to start developing automated measures of how well my
 prompt is doing.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">instruct_weight_input</span> <span class="op">&lt;-</span> <span class="st">r"(</span></span>
 <span><span class="st">  * If an ingredient has both weight and volume, extract only the weight:</span></span>
 <span><span class="st"></span></span>
@@ -807,7 +815,7 @@ prompt is doing.</p>
 <span><span class="st">)"</span></span></code></pre></div>
 <p>I think this is particularly important if you’re working with even
 less structured text. For example, imagine you had this text:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">recipe</span> <span class="op">&lt;-</span> <span class="st">r"(</span></span>
 <span><span class="st">  In a large bowl, cream together one cup of softened unsalted butter and a</span></span>
 <span><span class="st">  quarter cup of white sugar until smooth. Beat in an egg and 1 teaspoon of</span></span>
@@ -820,7 +828,7 @@ less structured text. For example, imagine you had this text:</p>
 <span><span class="st">)"</span></span></code></pre></div>
 <p>Including the input text in the output makes it easier to see if it’s
 doing a good job:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">instruct_json</span>, <span class="va">instruct_weight_input</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">recipe</span><span class="op">)</span></span>
@@ -829,7 +837,7 @@ doing a good job:</p>
 <span><span class="co">#&gt; "one cup of softened unsalted butter"},</span></span>
 <span><span class="co">#&gt;   {"name": "white sugar", "quantity": 0.25, "unit": "cup", "input": "a</span></span>
 <span><span class="co">#&gt; quarter cup of white sugar"},</span></span>
-<span><span class="co">#&gt;   {"name": "egg", "quantity": 1, "unit": "unit", "input": "an egg"},</span></span>
+<span><span class="co">#&gt;   {"name": "egg", "quantity": 1, "unit": "item", "input": "an egg"},</span></span>
 <span><span class="co">#&gt;   {"name": "vanilla extract", "quantity": 1, "unit": "teaspoon", </span></span>
 <span><span class="co">#&gt; "input": "1 teaspoon of vanilla extract"},</span></span>
 <span><span class="co">#&gt;   {"name": "all-purpose flour", "quantity": 2, "unit": "cup", "input":</span></span>
@@ -847,26 +855,37 @@ my examples.</p>
 <h2 id="token-usage">Token usage<a class="anchor" aria-label="anchor" href="#token-usage"></a>
 </h2>
 <table class="table">
+<colgroup>
+<col width="14%">
+<col width="37%">
+<col width="8%">
+<col width="10%">
+<col width="19%">
+<col width="8%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">provider</th>
 <th align="left">model</th>
 <th align="right">input</th>
 <th align="right">output</th>
+<th align="right">cached_input</th>
 <th align="right">price</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left">Anthropic</td>
-<td align="left">claude-sonnet-4</td>
+<td align="left">claude-sonnet-4-20250514</td>
 <td align="right">802</td>
-<td align="right">1933</td>
+<td align="right">2121</td>
+<td align="right">0</td>
 <td align="right">$0.03</td>
 </tr>
 <tr class="even">
 <td align="left">OpenAI</td>
 <td align="left">gpt-4.1</td>
 <td align="right">1128</td>
-<td align="right">942</td>
+<td align="right">860</td>
+<td align="right">0</td>
 <td align="right">$0.01</td>
 </tr>
 </tbody>
@@ -881,7 +900,7 @@ my examples.</p>
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
+  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="http://schloerke.com" class="external-link">Barret Schloerke</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

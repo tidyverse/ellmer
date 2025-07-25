@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -59,10 +60,10 @@
 
       <dl><dt>
 
-          <code><a href="Chat.html">Chat</a></code>
+          <code><a href="chat-any.html">chat()</a></code>
 
         </dt>
-        <dd>A chat</dd>
+        <dd>Chat with any provider</dd>
       </dl><dl><dt>
 
           <code><a href="chat_anthropic.html">chat_anthropic()</a></code> <code><a href="chat_anthropic.html">models_anthropic()</a></code>
@@ -90,7 +91,7 @@
       </dl><dl><dt>
 
           <code><a href="chat_cortex_analyst.html">chat_cortex_analyst()</a></code>
-
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
         <dd>Create a chatbot that speaks to the Snowflake Cortex Analyst</dd>
       </dl><dl><dt>
@@ -107,7 +108,7 @@
         <dd>Chat with a model hosted on DeepSeek</dd>
       </dl><dl><dt>
 
-          <code><a href="chat_github.html">chat_github()</a></code>
+          <code><a href="chat_github.html">chat_github()</a></code> <code><a href="chat_github.html">models_github()</a></code>
 
         </dt>
         <dd>Chat with a model hosted on the GitHub model marketplace</dd>
@@ -179,6 +180,12 @@
         <dd>Chat with a model hosted by vLLM</dd>
       </dl><dl><dt>
 
+          <code><a href="Chat.html">Chat</a></code>
+
+        </dt>
+        <dd>The Chat object</dd>
+      </dl><dl><dt>
+
           <code><a href="token_usage.html">token_usage()</a></code>
 
         </dt>
@@ -243,13 +250,13 @@
 
       <dl><dt>
 
-          <code><a href="batch_chat.html">batch_chat()</a></code> <code><a href="batch_chat.html">batch_chat_structured()</a></code> <code><a href="batch_chat.html">batch_chat_completed()</a></code>
+          <code><a href="batch_chat.html">batch_chat()</a></code> <code><a href="batch_chat.html">batch_chat_text()</a></code> <code><a href="batch_chat.html">batch_chat_structured()</a></code> <code><a href="batch_chat.html">batch_chat_completed()</a></code>
           <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Submit multiple chats in one batch</dd>
       </dl><dl><dt>
 
-          <code><a href="parallel_chat.html">parallel_chat()</a></code> <code><a href="parallel_chat.html">parallel_chat_structured()</a></code>
+          <code><a href="parallel_chat.html">parallel_chat()</a></code> <code><a href="parallel_chat.html">parallel_chat_text()</a></code> <code><a href="parallel_chat.html">parallel_chat_structured()</a></code>
           <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Submit multiple chats in parallel</dd>
@@ -307,12 +314,6 @@
         <dd>A chatbot provider</dd>
       </dl><dl><dt>
 
-          <code><a href="Chat.html">Chat</a></code>
-
-        </dt>
-        <dd>A chat</dd>
-      </dl><dl><dt>
-
           <code><a href="Turn.html">Turn()</a></code>
 
         </dt>
@@ -348,6 +349,12 @@
         <dd>Format contents into a textual representation</dd>
       </dl><dl><dt>
 
+          <code><a href="contents_record.html">contents_record()</a></code> <code><a href="contents_record.html">contents_replay()</a></code>
+
+        </dt>
+        <dd>Record and replay content</dd>
+      </dl><dl><dt>
+
           <code><a href="params.html">params()</a></code>
 
         </dt>
@@ -377,7 +384,7 @@
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
+  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="http://schloerke.com" class="external-link">Barret Schloerke</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news">
 <li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -84,7 +85,14 @@
 <!-- badges: start -->
 
 <p>ellmer makes it easy to use large language models (LLM) from R. It supports a wide variety of LLM providers and implements a rich set of features including streaming outputs, tool/function calling, structured data extraction, and more.</p>
-<p>(Looking for something similar to ellmer for python? Check out <a href="https://github.com/posit-dev/chatlas" class="external-link">chatlas</a>!)</p>
+<p>ellmer is one of a number of LLM-related packages created by Posit:</p>
+<ul>
+<li>Looking for something similar in python? Check out <a href="https://github.com/posit-dev/chatlas" class="external-link">chatlas</a>!</li>
+<li>Want to evaluate your LLMs? Try <a href="https://vitals.tidyverse.org" class="external-link">vitals</a>.</li>
+<li>Need RAG? Take a look at <a href="https://ragnar.tidyverse.org" class="external-link">ragnar</a>.</li>
+<li>Want to make a beautiful LLM powered chatbot? Consider <a href="https://posit-dev.github.io/shinychat/" class="external-link">shinychat</a>.</li>
+<li>Working with MCP? Check out <a href="https://posit-dev.github.io/mcptools/" class="external-link">mcptools</a>.</li>
+</ul>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -121,7 +129,7 @@
 <p>If you’re using ellmer inside an organisation, you may have internal policies that limit you to models from big cloud providers, e.g. <code><a href="reference/chat_azure_openai.html">chat_azure_openai()</a></code>, <code><a href="reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code>, <code><a href="reference/chat_databricks.html">chat_databricks()</a></code>, or <code><a href="reference/chat_snowflake.html">chat_snowflake()</a></code>.</p>
 <p>If you’re using ellmer for your own exploration, you’ll have a lot more freedom, so we have a few recommendations to help you get started:</p>
 <ul>
-<li><p><code><a href="reference/chat_openai.html">chat_openai()</a></code> or <code><a href="reference/chat_anthropic.html">chat_anthropic()</a></code> are good places to start. <code><a href="reference/chat_openai.html">chat_openai()</a></code> defaults to <strong>GPT-4.1</strong>, but you can use <code>model = "gpt-4-1-nano"</code> for a cheaper, faster model, or <code>model = "o3"</code> for more complex reasoning. <code><a href="reference/chat_anthropic.html">chat_anthropic()</a></code> is also good; it defaults to <strong>Claude 3.7 Sonnet</strong>, which we have found to be particularly good at writing R code.</p></li>
+<li><p><code><a href="reference/chat_openai.html">chat_openai()</a></code> or <code><a href="reference/chat_anthropic.html">chat_anthropic()</a></code> are good places to start. <code><a href="reference/chat_openai.html">chat_openai()</a></code> defaults to <strong>GPT-4.1</strong>, but you can use <code>model = "gpt-4-1-nano"</code> for a cheaper, faster model, or <code>model = "o3"</code> for more complex reasoning. <code><a href="reference/chat_anthropic.html">chat_anthropic()</a></code> is also good; it defaults to <strong>Claude 4.0 Sonnet</strong>, which we have found to be particularly good at writing R code.</p></li>
 <li><p><code><a href="reference/chat_google_gemini.html">chat_google_gemini()</a></code> is a strong model with generous free tier (with the downside that <a href="https://ai.google.dev/gemini-api/terms#unpaid-services" class="external-link">your data is used</a> to improve the model), making it a great place to start if you don’t want to spend any money.</p></li>
 <li><p><code><a href="reference/chat_ollama.html">chat_ollama()</a></code>, which uses <a href="https://ollama.com" class="external-link">Ollama</a>, allows you to run models on your own computer. While the biggest models you can run locally aren’t as good as the state of the art hosted models, they don’t share your data and are effectively free.</p></li>
 </ul>
@@ -141,10 +149,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/chat_openai.html">chat_openai</a></span><span class="op">(</span></span>
-<span>  model <span class="op">=</span> <span class="st">"gpt-4o-mini"</span>,</span>
-<span>  system_prompt <span class="op">=</span> <span class="st">"You are a friendly but terse assistant."</span>,</span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="st">"Be terse"</span>, model <span class="op">=</span> <span class="st">"gpt-4o-mini"</span><span class="op">)</span></span></code></pre></div>
 <p>Chat objects are stateful <a href="https://r6.r-lib.org" class="external-link">R6 objects</a>: they retain the context of the conversation, so each new query builds on the previous ones. You call their methods with <code>$</code>.</p>
 <div class="section level3">
 <h3 id="interactive-chat-console">Interactive chat console<a class="anchor" aria-label="anchor" href="#interactive-chat-console"></a>
@@ -168,12 +173,11 @@
 <div class="section level3">
 <h3 id="interactive-method-call">Interactive method call<a class="anchor" aria-label="anchor" href="#interactive-method-call"></a>
 </h3>
-<p>The second most interactive way to chat is to call the <code>chat()</code> method:</p>
+<p>The second most interactive way to chat is to call the <code><a href="reference/chat-any.html">chat()</a></code> method:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"What preceding languages most influenced R?"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R was primarily influenced by the S programming language, particularly S-PLUS.</span></span>
-<span><span class="co">#&gt; Other languages that had an impact include Scheme and various data analysis</span></span>
-<span><span class="co">#&gt; languages.</span></span></code></pre></div>
+<span><span class="co">#&gt; R was most influenced by S, and to some extent by languages like Lisp, Fortran,</span></span>
+<span><span class="co">#&gt; and Scheme.</span></span></code></pre></div>
 <p>If you initialize the chat object in the global environment, the <code>chat</code> method will stream the response to the console. When the entire response is received, it’s also (invisibly) returned as a character vector. This is useful when you want to see the response as it arrives, but you don’t want to enter the chat console.</p>
 <p>If you want to ask a question about an image, you can pass one or more additional input arguments using <code><a href="reference/content_image_url.html">content_image_file()</a></code> and/or <code><a href="reference/content_image_url.html">content_image_url()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -181,29 +185,22 @@
 <span>  <span class="fu"><a href="reference/content_image_url.html">content_image_url</a></span><span class="op">(</span><span class="st">"https://www.r-project.org/Rlogo.png"</span><span class="op">)</span>,</span>
 <span>  <span class="st">"Can you explain this logo?"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; The logo of R features a stylized letter "R" in blue, enclosed in an oval</span></span>
-<span><span class="co">#&gt; shape that resembles the letter "O," signifying the programming language's</span></span>
-<span><span class="co">#&gt; name. The design conveys a modern and professional look, reflecting its use</span></span>
-<span><span class="co">#&gt; in statistical computing and data analysis. The blue color often represents</span></span>
-<span><span class="co">#&gt; trust and reliability, which aligns with R's role in data science.</span></span></code></pre></div>
+<span><span class="co">#&gt; The logo features the letter "R" in blue, surrounded by a circular gray design.</span></span>
+<span><span class="co">#&gt; This design symbolizes the programming language R, which is widely used for </span></span>
+<span><span class="co">#&gt; statistical computing and data analysis. The circular shape often represents </span></span>
+<span><span class="co">#&gt; data or continuity, aligning with R's focus on data manipulation and analysis.</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="programmatic-chat">Programmatic chat<a class="anchor" aria-label="anchor" href="#programmatic-chat"></a>
+<h3 id="streaming-vs-capturing">Streaming vs capturing<a class="anchor" aria-label="anchor" href="#streaming-vs-capturing"></a>
 </h3>
-<p>The most programmatic way to chat is to create the chat object inside a function. By doing so, live streaming is automatically suppressed and <code>$chat()</code> returns the result as a string:</p>
+<p>In most circumstances, ellmer will stream the output to the console. You can take control of this by setting the <code>echo</code> argument either when creating the chat object or when calling <code>$chat()</code>. Set <code>echo = "none"</code> to return a string instead:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/chat_openai.html">chat_openai</a></span><span class="op">(</span></span>
-<span>    model <span class="op">=</span> <span class="st">"gpt-4o-mini"</span>,</span>
-<span>    system_prompt <span class="op">=</span> <span class="st">"You are a friendly but terse assistant."</span>,</span>
-<span>  <span class="op">)</span></span>
-<span>  <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Is R a functional programming language?"</span><span class="op">)</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="st">"Be terse"</span>, model <span class="op">=</span> <span class="st">"gpt-4o-mini"</span>, echo <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span>  <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"What is 6 times 7?"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="fu">my_function</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Yes, R supports functional programming concepts. It allows functions to</span></span>
-<span><span class="co">#&gt; be first-class objects, supports higher-order functions, and encourages the</span></span>
-<span><span class="co">#&gt; use of functions as core components of code. However, it also supports</span></span>
-<span><span class="co">#&gt; procedural and object-oriented programming styles."</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">my_function</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  'ellmer_output' chr "42."</span></span></code></pre></div>
 <p>If needed, you can manually control this behaviour with the <code>echo</code> argument. This is useful for programming with ellmer when the result is either not intended for human consumption or when you want to process the response before displaying it.</p>
 </div>
 </div>
@@ -255,6 +252,8 @@
 <li>
 <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-7111-0077" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 <li>
+<a href="http://schloerke.com" class="external-link">Barret Schloerke</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9986-114X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>
 <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a> <br><small class="roles"> Copyright holder, funder </small>  <a href="https://ror.org/03wc8by49" class="external-link"><img src="https://raw.githubusercontent.com/ror-community/ror-logos/main/ror-icon-rgb.svg" class="ror" alt="ROR"></a> </li>
 </ul>
 </div>
@@ -268,7 +267,7 @@
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
+  <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, Joe Cheng, Aaron Jacobs, <a href="https://garrickadenbuie.com" class="external-link">Garrick Aden-Buie</a>, <a href="http://schloerke.com" class="external-link">Barret Schloerke</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
