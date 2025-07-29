@@ -17,7 +17,7 @@ data extraction, and more.
 
 ellmer is one of a number of LLM-related packages created by Posit:
 
-- Looking for something similar in python? Check out
+- Looking for something similar in Python? Check out
   [chatlas](https://github.com/posit-dev/chatlas)!
 - Want to evaluate your LLMs? Try
   [vitals](https://vitals.tidyverse.org).
