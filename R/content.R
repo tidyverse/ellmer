@@ -214,13 +214,12 @@ method(format, ContentToolRequest) <- function(
   }
   call <- call2(x@name, !!!arguments)
   call_str <- deparse(call)
-  if (length(call_str) > 1) {
-    open <-
-      call_str <- paste0(call_str[1], "...)")
-  }
-
   if (show == "call") {
     return(call_str)
+  }
+
+  if (length(call_str) > 1) {
+    call_str <- paste0(call_str[1], "...)")
   }
 
   cli::format_inline("[{.strong tool request} ({x@id})]: {call_str}")
