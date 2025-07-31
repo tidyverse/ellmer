@@ -10,6 +10,10 @@
 
 * `contents_replay()` now also restores the tool definition in `ContentToolResult` objects (in `@request@tool`) (#693).
 
+* `chat_snowflake()` now supports Privatelink accounts (#694, @robert-norberg).
+
+* `chat_snowflake()` now works against Snowflake's latest API changes (#692, @robert-norberg).
+
 # ellmer 0.3.0
 
 ## New features
