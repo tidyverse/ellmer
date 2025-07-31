@@ -49,6 +49,9 @@ contents_record <- function(x) {
 }
 
 #' @rdname contents_record
+#' @param .envir The environment in which to look for class definitions. Used
+#'   when the recorded objects include classes that extend [ellmer::Turn] or
+#'   [ellmer::Content] but are not from the \pkg{ellmer} package itself.
 #' @export
 contents_replay <- function(x, tools = list(), .envir = parent.frame()) {
   check_recorded(x)
