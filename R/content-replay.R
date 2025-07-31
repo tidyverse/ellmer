@@ -27,8 +27,10 @@ contents_record <- function(x) {
   attr <- attributes(x)
   serializable_props <- intersect(prop_names(x), names(attr))
 
-  # Don't serialize the actual tool definition, as it really belongs to the
-  # Chat object() and on replay we will re-apply by matching to existing tools
+  # Don't serialize the actual tool definition, as it really belongs to the Chat
+  # object() and on replay we will re-apply by matching to existing tools. Note
+  # that it's not possible for users to extend this class because ellmer always
+  # creates the tool request object, so we can check the class directly.
   if (class_name == "ellmer::ContentToolRequest") {
     serializable_props <- setdiff(serializable_props, "tool")
   }
