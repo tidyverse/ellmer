@@ -14,7 +14,7 @@ match_tools <- function(turn, tools) {
       if (is.null(content@tool)) {
         content@tool <- tools[[content@name]]
       }
-      return(tool)
+      return(content)
     }
 
     if (is_tool_result(content)) {
