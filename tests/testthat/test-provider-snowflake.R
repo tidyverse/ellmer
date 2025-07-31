@@ -149,6 +149,20 @@ test_that("Snowflake key-pair credentials are detected correctly", {
   )
 })
 
+test_that("snowflake account identifier is extracted from privatelink account and used in JWT claim", {
+  skip_if_not_installed("jose")
+
+  testkey <- openssl::read_key(test_snowflake_key)
+  token <- snowflake_keypair_token(
+    account = "mycompany.us-east-1.privatelink",
+    user = "testuser",
+    key = testkey
+  )
+  pubkey <- as.list(testkey)$pubkey
+  decoded <- jose::jwt_decode_sig(token, pubkey = pubkey)
+  expect_equal(decoded$sub, "MYCOMPANY.TESTUSER")
+})
+
 test_that("tokens can be requested from a Connect server", {
   skip_if_not_installed("connectcreds")
 
