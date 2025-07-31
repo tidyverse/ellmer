@@ -284,7 +284,6 @@ method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(provider, x) {
   }
   list(
     role = x@role,
-    content = content,
     content_list = as_json(provider, x@contents)
   )
 }
