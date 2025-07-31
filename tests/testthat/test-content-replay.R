@@ -73,6 +73,23 @@ test_that("can re-match tools if present", {
   expect_equal(replayed@contents[[1]]@tool, NULL)
 })
 
+test_that("can re-match tools if present in tool results", {
+  mytool <- tool(function() {}, "mytool")
+
+  request <- ContentToolRequest("123", "mytool", tool = mytool)
+  result <- ContentToolResult("value", request = request)
+
+  turn <- Turn("user", list(result))
+  recorded <- contents_record(turn)
+
+  replayed <- contents_replay(recorded, tools = list(mytool = mytool))
+  expect_equal(replayed@contents[[1]]@request@tool, mytool)
+
+  # If no match, it still works, but tool is left as NULL
+  replayed <- contents_replay(recorded, tools = list())
+  expect_null(replayed@contents[[1]]@request@tool)
+})
+
 test_that("checks recorded value types", {
   bad_names <- list()
   bad_version <- list(version = 2, class = "ellmer::Content", props = list())
