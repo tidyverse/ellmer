@@ -194,7 +194,7 @@ tool_request_args <- function(request) {
   tool <- request@tool
   args <- request@arguments
 
-  if (!tool@convert) {
+  if (is.null(tool) || !isTRUE(tool@convert)) {
     return(args)
   }
 
