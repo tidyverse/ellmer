@@ -86,29 +86,17 @@ contents_replay <- function(x, tools = list(), .envir = parent.frame()) {
 # Helpers ----------------------------------------------------------------------
 
 check_is_ellmer_object <- function(x) {
-  if (S7_inherits(x, ellmer::Content)) {
+  if (S7_inherits(x, ellmer::Content) || S7_inherits(x, ellmer::Turn)) {
     return(invisible(x))
   }
 
-  class_name <- class(x)[[1]]
-
-  if (grepl("^ellmer::", class_name)) {
-    return(invisible(x))
-  }
-
-  if (S7_inherits(x)) {
-    while (!is.null(x@parent)) {
-      x <- x@parent
-      if (S7_inherits(x, ellmer::Content) || S7_inherits(x, ellmer::Turn)) {
-        return(invisible(x))
-      }
-    }
-  }
-
-  cli::cli_abort(c(
-    "Only S7 classes from or that extend classes from {.pkg ellmer} are currently supported.",
-    "i" = "Received: {.val {class_name}}."
-  ))
+  cli::cli_abort(
+    c(
+      "Cannot record or replay {.obj_type_friendly {x}}.",
+      "i" = "Only {.code ellmer::Content} or {.code ellmer::Turn} classes or subclasses are currently supported."
+    ),
+    call = caller_env()
+  )
 }
 
 recorded_object <- function(class, props) {
