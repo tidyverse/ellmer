@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `contents_record()` and `contents_replay()` now record and replay custom classes that extend ellmer's `Turn` or `Content` classes (#689).
+
 * `contents_replay()` now also restores the tool definition in `ContentToolResult` objects (in `@request@tool`) (#693).
 
 # ellmer 0.3.0
