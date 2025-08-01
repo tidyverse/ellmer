@@ -11,16 +11,13 @@ match_tools <- function(turn, tools) {
 
   turn@contents <- map(turn@contents, function(content) {
     if (is_tool_request(content)) {
-      if (is.null(content@tool)) {
-        content@tool <- tools[[content@name]]
-      }
+      content@tool <- content@tool %||% tools[[content@name]]
       return(content)
     }
 
     if (is_tool_result(content)) {
-      if (is.null(content@request@tool)) {
-        content@request@tool <- tools[[content@request@name]]
-      }
+      content@request@tool <-
+        content@request@tool %||% tools[[content@request@name]]
       return(content)
     }
 
