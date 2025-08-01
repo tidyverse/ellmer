@@ -58,7 +58,7 @@ contents_record <- function(x) {
 contents_replay <- function(x, tools = list(), .envir = parent.frame()) {
   check_recorded(x)
 
-  x_class <- recorded_class_info(x, .envir = .envir)
+  class <- recorded_class_info(x, .envir = .envir)
 
   obj_props <- map(x$props, function(prop_value) {
     if (is_list_of_recorded_objects(prop_value)) {
@@ -72,12 +72,12 @@ contents_replay <- function(x, tools = list(), .envir = parent.frame()) {
     }
   })
 
-  env <- if (!is.null(x_class$pkg)) ns_env(x_class$pkg) else .envir
+  env <- if (!is.null(class$pkg)) ns_env(class$pkg) else .envir
 
   # This is a bit of overkill, but gives nicer tracebacks
-  out <- exec(x_class$name, !!!obj_props, .env = env)
+  out <- exec(class$name, !!!obj_props, .env = env)
 
-  if (x_class$name == "Turn") {
+  if (class$name == "Turn") {
     out <- match_tools(out, tools)
   }
   out
@@ -143,7 +143,7 @@ recorded_class_info <- function(x, .envir = parent.frame()) {
   class_split <- strsplit(x$class, "::")[[1]]
   if (length(class_split) > 2) {
     cli::cli_abort(
-      "Expected the class to be in the form `package::ClassName`, got: {.val {x$class}}.",
+      "Expected the class to be in the form `package::ClassName`, not {.val {x$class}}.",
       call = caller_env()
     )
   }
