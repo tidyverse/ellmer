@@ -40,8 +40,14 @@ chat <- function(
 
   dots <- dots_list(..., params = params, echo = echo)
 
-  # Drop unused arguments...
   chat_fun_fmls <- fn_fmls_names(chat_fun)
+  if (!"model" %in% chat_fun_fmls || !"system_prompt" %in% chat_fun_fmls) {
+    cli::cli_abort(
+      "{.fn ellmer::chat} does not support {.fn ellmer::{provider_name}}, please call it directly.",
+    )
+  }
+
+  # Drop unused arguments...
   if ("..." %in% chat_fun_fmls) {
     # If the function accepts `...`, we assume all arguments are accepted
     args_matched <- names(dots)
