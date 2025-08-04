@@ -17,3 +17,11 @@ test_that("can set model or use default", {
   expect_equal(chat2$get_provider()@name, "OpenAI")
   expect_equal(chat2$get_provider()@model, "gpt-4.1-mini")
 })
+
+test_that("works for chat functions that don't include `params`", {
+  expect_s3_class(chat("ollama/qwen3:4b"), "Chat")
+
+  chat <- chat("ollama/qwen3:4b")
+  expect_equal(chat$get_provider()@name, "Ollama")
+  expect_equal(chat$get_provider()@model, "qwen3:4b")
+})
