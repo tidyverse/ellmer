@@ -19,7 +19,8 @@ test_that("can set model or use default", {
 })
 
 test_that("works for chat functions that don't include `params`", {
-  chat <- chat("ollama/qwen3:4b")
+  model <- chat_ollama_test("qwen3:4b")$get_provider()@model
+  chat <- chat(paste0("ollama/", model))
   expect_equal(chat$get_provider()@name, "Ollama")
   expect_equal(chat$get_provider()@model, "qwen3:4b")
 })
@@ -34,8 +35,9 @@ test_that("warns if given arguments that aren't used by provider", {
     "Update `test-provider-any.R`, `chat_ollama` now accepts `params`."
   )
 
+  model <- chat_ollama_test("qwen3:4b")$get_provider()@model
   expect_snapshot(
-    chat("ollama/qwen3:4b", params = params(temperature = 0.5))
+    chat(paste0("ollama/", model), params = params(temperature = 0.5))
   )
 })
 

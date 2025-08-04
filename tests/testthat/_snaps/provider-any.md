@@ -34,7 +34,7 @@
 ---
 
     Code
-      chat("ollama/qwen3:4b", params = params(temperature = 0.5))
+      chat(paste0("ollama/", model), params = params(temperature = 0.5))
     Condition
       Warning:
       Ignoring `params` argument that is not used by `ellmer::chat_ollama()`.
