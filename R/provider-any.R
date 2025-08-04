@@ -38,11 +38,25 @@ chat <- function(
     cli::cli_abort("Can't find provider {.code ellmer::{provider_name}()}.")
   }
 
-  chat_fun(
+  dots <- dots_list(..., params = params, echo = echo)
+
+  # Drop unused arguments, with a warning
+  args_matched <- intersect(names(dots), fn_fmls_names(chat_fun))
+  args_ignored <- setdiff(names(dots), args_matched)
+  if (length(args_ignored) > 0) {
+    cli::cli_warn(
+      "Ignoring {.var {args_ignored}} argument{?s} that {?is/are} not used by {.fn ellmer::{provider_name}}.",
+    )
+  }
+
+  # A bit overkill, but ensures the chat_*() function appears in tracebacks
+  chat_call <- call2(
+    provider_name,
     model = model,
-    ...,
     system_prompt = system_prompt,
-    params = params,
-    echo = echo
+    !!!dots[args_matched],
+    .ns = "ellmer"
   )
+
+  eval(chat_call)
 }
