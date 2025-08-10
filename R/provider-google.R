@@ -76,7 +76,8 @@ chat_google_gemini_test <- function(
 
 #' @export
 #' @rdname chat_google_gemini
-#' @param location Location, e.g. `us-east1`, `me-central1`, `africa-south1`.
+#' @param location Location, e.g. `us-east1`, `me-central1`, `africa-south1` or
+#' `global`.
 #' @param project_id Project ID.
 chat_google_vertex <- function(
   location,
@@ -105,11 +106,28 @@ chat_google_vertex <- function(
 }
 
 # https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
-vertex_url <- function(location, project_id) {
-  paste_c(
-    c("https://", location, "-aiplatform.googleapis.com/v1"),
+vertex_url <- function(location, project_id, list_models = FALSE) {
+  location_base <- paste0(location, "-")
+  if (location == "global") {
+    location_base <- ""
+  }
+
+  api_ver <- "v1"
+  if (list_models) {
+    api_ver <- "v1beta1"
+  }
+
+  proj_and_loc <- paste_c(
     c("/projects/", project_id),
-    c("/locations/", location),
+    c("/locations/", location)
+  )
+  if (list_models) {
+    proj_and_loc <- ""
+  }
+
+  paste_c(
+    c("https://", location_base, "aiplatform.googleapis.com/", api_ver),
+    proj_and_loc,
     "/publishers/google/"
   )
 }
@@ -587,6 +605,10 @@ default_google_credentials <- function(
 ) {
   gemini_scope <- "https://www.googleapis.com/auth/generative-language.retriever"
 
+  if (!gemini) {
+    gemini_scope <- "https://www.googleapis.com/auth/cloud-platform"
+  }
+
   check_string(api_key, allow_null = TRUE, call = error_call)
   api_key <- api_key %||% Sys.getenv("GOOGLE_API_KEY")
   if (gemini && api_key == "") {
@@ -687,20 +709,29 @@ models_google_gemini <- function(
 
   json <- resp_body_json(resp)
 
+  if (isFALSE(api_key)) { # if Vertex
+    name <- map_chr(json$publisherModels, "[[", "name")
+    name <- gsub("^publishers/google/models/", "", name)
+    # this is the closest to "generateContent" in "supportedGenerationMethods" for Gemini
+    # https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/publishers.models
+    can_generate <- json$publisherModels |> map_lgl(\(x) "openGenerationAiStudio" %in% names(x$supportedActions))
+  } else {
   name <- map_chr(json$models, "[[", "name")
   name <- gsub("^models/", "", name)
   display_name <- map_chr(json$models, "[[", "displayName")
 
   methods <- map(json$models, \(x) unlist(x$supportedGenerationMethods))
   can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)
+  }
 
   df <- data.frame(id = name)
   df <- cbind(df, match_prices(provider@name, df$id))
-  unrowname(df[order(df$id), ][can_generate, ])
+  df <- df[can_generate, ]
+  unrowname(df[order(df$id), ])
 }
 
 #' @rdname chat_google_gemini
 #' @export
 models_google_vertex <- function(location, project_id) {
-  models_google_gemini(vertex_url(location, project_id), api_key = FALSE)
+  models_google_gemini(vertex_url(location, project_id, list_models = TRUE), api_key = FALSE)
 }
