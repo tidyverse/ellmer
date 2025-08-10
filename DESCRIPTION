@@ -41,6 +41,7 @@ Suggests:
     gitcreds,
     knitr,
     magick,
+    mockery,
     openssl,
     paws.common,
     rmarkdown,

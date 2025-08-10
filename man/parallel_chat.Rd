@@ -4,6 +4,7 @@
 \alias{parallel_chat}
 \alias{parallel_chat_text}
 \alias{parallel_chat_structured}
+\alias{parallel_chat_structured_robust}
 \title{Submit multiple chats in parallel}
 \usage{
 parallel_chat(chat, prompts, max_active = 10, rpm = 500)
@@ -19,6 +20,18 @@ parallel_chat_structured(
   include_cost = FALSE,
   max_active = 10,
   rpm = 500
+)
+
+parallel_chat_structured_robust(
+  chat,
+  prompts,
+  type,
+  convert = TRUE,
+  include_tokens = FALSE,
+  include_cost = FALSE,
+  max_active = 10,
+  rpm = 500,
+  on_error = c("continue", "return", "stop")
 )
 }
 \arguments{
@@ -53,6 +66,11 @@ and output tokens for each prompt.}
 
 \item{include_cost}{If \code{TRUE}, and the result is a data frame, will
 add \code{cost} column giving the cost of each prompt.}
+
+\item{on_error}{Character string specifying how to handle errors:
+\code{"continue"} (default) continues processing all prompts, returning NA for failed ones,
+\code{"return"} returns work completed so far when an error occurs,
+\code{"stop"} stops on first error like the original function.}
 }
 \value{
 For \code{parallel_chat()}, a list of \link{Chat} objects, one for each prompt.
@@ -61,6 +79,10 @@ For \code{parallel_chat_structured()}, a single structured data object with one
 element for each prompt. Typically, when \code{type} is an object, this will
 will be a data frame with one row for each prompt, and one column for each
 property.
+
+\code{\link[=parallel_chat_structured_robust]{parallel_chat_structured_robust()}} returns the same as
+\code{\link[=parallel_chat_structured]{parallel_chat_structured()}}, but with NA values for failed prompts instead
+of throwing an error. The output length always matches the input length.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -72,6 +94,11 @@ with Gemini and OpenAI.
 If you're using \code{\link[=chat_openai]{chat_openai()}} or \code{\link[=chat_anthropic]{chat_anthropic()}} and you're willing
 to wait longer, you might want to use \code{\link[=batch_chat]{batch_chat()}} instead, as it comes
 with a 50\% discount in return for taking up to 24 hours.
+
+\code{\link[=parallel_chat_structured_robust]{parallel_chat_structured_robust()}} is similar to
+\code{\link[=parallel_chat_structured]{parallel_chat_structured()}}, but continues processing even when individual
+prompts fail. Failed prompts return proper NA structures that match the type
+specification instead of stopping the entire process.
 }
 \examples{
 \dontshow{ellmer:::vcr_example_start("parallel_chat")}
