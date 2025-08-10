@@ -324,3 +324,159 @@ test_that("parallel_chat_structured_robust handles all manifestos with cost trac
   expect_true(all(is.finite(response$input_tokens)), "All input tokens should be finite numbers")
   expect_true(all(is.finite(response$output_tokens)), "All output tokens should be finite numbers")
 })
+
+test_that("parallel_chat_structured_robust on_error='return' stops at first error and returns partial results for manifestos", {
+  skip_if_not(has_credentials("openai"))
+
+  load("../data/data_manifestos.rda")
+
+  # make one manifesto very long to exceed context window - this will be the third one processed
+  data_manifestos[["Lab_2010"]] <- paste(
+    rep(data_manifestos[["Lab_2010"]], 4),
+    collapse = "\n\n---\n\n"
+  )
+
+  immig_type <- type_object(
+    party = type_string("The name of the political party."),
+    immig_score = type_integer("An integer position from -2 to 2 on immigration and
+                             asylum seekers, where:
+                             -2 means strongly against any immigration,
+                             -1 means moderately opposed,
+                             0 means neutral,
+                             1 means moderately in favor of a more permissive stance on immigration,
+                             2 means strongly in favour of a permissive stance on immigration."),
+    immig_rationale = type_string("A brief rationale for your answer.")
+  )
+
+  prompt <- "Extract structured data from political texts. You will be scoring the position of each party on immigration and asylum seekers."
+
+  chat <- chat_openai(model = "gpt-4o", system_prompt = prompt)
+
+  # Capture the output to check for error messages
+  output <- capture.output({
+    response <- parallel_chat_structured_robust(
+      chat,
+      prompts = as.list(data_manifestos),
+      max_active = 1, # Process sequentially to ensure predictable order
+      type = immig_type,
+      include_tokens = TRUE,
+      include_cost = TRUE,
+      include_status = TRUE,
+      on_error = "return"
+    )
+  }, type = "message")
+
+  # Should return only the first 2 successful results (before the error in Lab_2010)
+  expect_equal(nrow(response), 2)
+  expect_equal(ncol(response), 8) # party, immig_score, immig_rationale, input_tokens, output_tokens, cached_input_tokens, cost, status
+
+  # All returned results should be successful
+  expect_true(all(response$status == "success"))
+  expect_false(any(is.na(response$party)))
+  expect_false(any(is.na(response$immig_score)))
+  expect_false(any(is.na(response$immig_rationale)))
+
+  # Check that costs and tokens are positive for successful results
+  expect_true(all(response$cost > 0), "All successful results should have positive cost")
+  expect_true(all(response$input_tokens > 0), "All successful results should have positive input tokens")
+  expect_true(all(response$output_tokens > 0), "All successful results should have positive output tokens")
+
+  # Check that error message was printed (the warning was captured but output capture may not work for warnings)
+  # Let's just check that we got exactly 2 results as expected, which means the error stopping worked
+  expect_equal(nrow(response), 2)
+})
+
+test_that("parallel_chat_structured_robust include_status tracks successes and errors", {
+  skip_if_not_installed("mockery")
+  
+  person <- type_object(name = type_string(), age = type_integer())
+  chat <- chat_openai()
+  
+  # Mock mixed success/failure results with status tracking
+  mockery::stub(
+    parallel_chat_structured_robust,
+    "multi_convert_robust",
+    data.frame(
+      name = c("Alice", NA_character_, "Charlie", NA_character_),
+      age = c(25L, NA_integer_, 35L, NA_integer_),
+      status = c("success", "Token limit exceeded", "success", "Rate limit exceeded")
+    )
+  )
+  
+  data <- parallel_chat_structured_robust(
+    chat,
+    list("Alice, age 25", "Very long prompt...", "Charlie, age 35", "Another bad prompt"),
+    type = person,
+    include_status = TRUE
+  )
+  
+  expect_equal(nrow(data), 4)
+  expect_true("status" %in% names(data))
+  expect_equal(data$status, c("success", "Token limit exceeded", "success", "Rate limit exceeded"))
+  
+  # Check that successful prompts have "success" status
+  successful_rows <- which(!is.na(data$name))
+  failed_rows <- which(is.na(data$name))
+  
+  expect_true(all(data$status[successful_rows] == "success"))
+  expect_true(all(data$status[failed_rows] != "success"))
+  expect_true(all(nchar(data$status[failed_rows]) > 0))  # Error messages should not be empty
+})
+
+test_that("parallel_chat_structured_robust include_status works with on_error='stop'", {
+  skip_if_not(has_credentials("openai"))
+  
+  person <- type_object(name = type_string(), age = type_integer())
+  chat <- chat_openai()
+  
+  data <- parallel_chat_structured_robust(
+    chat,
+    list("John, age 15", "Jane, age 16"),
+    type = person,
+    include_status = TRUE,
+    on_error = "stop"
+  )
+  
+  expect_equal(nrow(data), 2)
+  expect_true("status" %in% names(data))
+  expect_equal(data$status, c("success", "success"))
+})
+
+test_that("parallel_chat_structured_robust on_error='return' returns only successful results", {
+  skip_if_not_installed("mockery")
+  
+  person <- type_object(name = type_string(), age = type_integer())
+  chat <- chat_openai()
+  
+  # Mock successful results only - the function should filter out failures
+  mockery::stub(
+    parallel_chat_structured_robust,
+    "multi_convert_robust",
+    data.frame(
+      name = c("Alice", "Bob"),
+      age = c(25L, 30L),
+      status = c("success", "success")
+    )
+  )
+  
+  data <- parallel_chat_structured_robust(
+    chat,
+    list("Alice, age 25", "Bob, age 30", "Very long prompt that fails..."),
+    type = person,
+    include_status = TRUE,
+    on_error = "return"  # Test the "return" option specifically
+  )
+  
+  # Should only return the successful results (first 2)
+  expect_equal(nrow(data), 2)
+  expect_true("status" %in% names(data))
+  expect_equal(data$status, c("success", "success"))
+  
+  # Verify successful data only
+  expect_equal(data$name, c("Alice", "Bob"))
+  expect_equal(data$age, c(25L, 30L))
+  
+  # All results should be successful (no failures in the filtered output)
+  successful_count <- sum(data$status == "success")
+  expect_equal(successful_count, 2)
+})

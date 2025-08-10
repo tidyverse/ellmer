@@ -29,6 +29,7 @@ parallel_chat_structured_robust(
   convert = TRUE,
   include_tokens = FALSE,
   include_cost = FALSE,
+  include_status = FALSE,
   max_active = 10,
   rpm = 500,
   on_error = c("continue", "return", "stop")
@@ -67,9 +68,13 @@ and output tokens for each prompt.}
 \item{include_cost}{If \code{TRUE}, and the result is a data frame, will
 add \code{cost} column giving the cost of each prompt.}
 
+\item{include_status}{If \code{TRUE}, and the result is a data frame, will
+add \code{status} column with \code{"success"} for successful prompts and error
+messages for failed prompts.}
+
 \item{on_error}{Character string specifying how to handle errors:
-\code{"continue"} (default) continues processing all prompts, returning NA for failed ones,
-\code{"return"} returns work completed so far when an error occurs,
+\code{"continue"} (default) continues processing all prompts, returning NA for failed ones (maintains input length),
+\code{"return"} stops at first error and returns only successful results processed before the error, printing the error message,
 \code{"stop"} stops on first error like the original function.}
 }
 \value{
@@ -82,7 +87,9 @@ property.
 
 \code{\link[=parallel_chat_structured_robust]{parallel_chat_structured_robust()}} returns the same as
 \code{\link[=parallel_chat_structured]{parallel_chat_structured()}}, but with NA values for failed prompts instead
-of throwing an error. The output length always matches the input length.
+of throwing an error. For \code{on_error="continue"}, output length always matches
+input length. For \code{on_error="return"}, returns only successful results processed
+before the first error.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
