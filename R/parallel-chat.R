@@ -167,7 +167,7 @@ parallel_chat_structured <- function(
 #' specification instead of stopping the entire process.
 #'
 #' @param include_status If `TRUE`, and the result is a data frame, will
-#'   add `status` column with `"success"` for successful prompts and error 
+#'   add `status` column with `"success"` for successful prompts and error
 #'   messages for failed prompts.
 #' @param on_error Character string specifying how to handle errors:
 #'   `"continue"` (default) continues processing all prompts, returning NA for failed ones (maintains input length),
@@ -175,7 +175,7 @@ parallel_chat_structured <- function(
 #'   `"stop"` stops on first error like the original function.
 #' @returns [parallel_chat_structured_robust()] returns the same as
 #'   [parallel_chat_structured()], but with NA values for failed prompts instead
-#'   of throwing an error. For `on_error="continue"`, output length always matches 
+#'   of throwing an error. For `on_error="continue"`, output length always matches
 #'   input length. For `on_error="return"`, returns only successful results processed
 #'   before the first error.
 #' @export
@@ -205,7 +205,7 @@ parallel_chat_structured_robust <- function(
       max_active = max_active,
       rpm = rpm
     )
-    
+
     # Add status column with all "success" since original function stops on error
     if (include_status && is.data.frame(result)) {
       result$status <- rep("success", nrow(result))
@@ -234,7 +234,7 @@ parallel_chat_structured_robust <- function(
     on_error = on_error
   )
 
-  multi_convert_robust(
+  result <- multi_convert_robust(
     provider,
     turns,
     type,
@@ -244,6 +244,17 @@ parallel_chat_structured_robust <- function(
     include_status = include_status,
     on_error = on_error
   )
+
+  # For "continue" mode, check if there were any errors and inform user
+  if (on_error == "continue") {
+    error_turns <- map_lgl(turns, ~ inherits(.x, "error_turn"))
+    if (any(error_turns)) {
+      n_errors <- sum(error_turns)
+      message("Some prompts produced errors (", n_errors, " out of ", length(prompts), "). Use include_status = TRUE to see error details.")
+    }
+  }
+
+  result
 }
 
 multi_convert <- function(
@@ -331,7 +342,7 @@ multi_convert_robust <- function(
       })
     }
   })
-  
+
   # For "return" mode, only include non-NULL results (successful ones)
   if (on_error == "return") {
     non_null_indices <- !map_lgl(turns, is.null)
@@ -342,7 +353,7 @@ multi_convert_robust <- function(
     results <- results[successful_indices]
     turns <- turns[successful_indices]
   }
-  
+
   # Extract data and status separately
   rows <- map(results, ~ .x$data)
   status_info <- map_chr(results, ~ .x$status)
@@ -381,7 +392,7 @@ multi_convert_robust <- function(
         )
       }
     }
-    
+
     # Add status column if requested
     if (include_status) {
       out$status <- status_info
@@ -500,7 +511,7 @@ parallel_turns_robust <- function(
     results <- vector("list", length(reqs))
     first_error_index <- NULL
     first_error_message <- NULL
-    
+
     for (i in seq_along(reqs)) {
       tryCatch({
         resp <- httr2::req_perform(reqs[[i]])
@@ -520,7 +531,7 @@ parallel_turns_robust <- function(
           class = "error_turn"
         )
       })
-      
+
       # Stop at first error
       if (!is.null(first_error_index)) {
         # Print the error message
@@ -529,13 +540,13 @@ parallel_turns_robust <- function(
         break
       }
     }
-    
+
     return(results)
   } else {
     # Use httr2's parallel processing for "continue" and "stop" modes
     httr2_on_error <- if (on_error == "continue") "continue" else "stop"
     resps <- req_perform_parallel(reqs, max_active = max_active, on_error = httr2_on_error)
-    
+
     # Check for user termination
     if (any(map_lgl(resps, is.null))) {
       cli::cli_abort("Terminated by user")
@@ -544,7 +555,7 @@ parallel_turns_robust <- function(
     # Process responses with individual error handling
     return(map(seq_along(resps), function(i) {
       resp <- resps[[i]]
-      
+
       if (inherits(resp, "error")) {
         # Return a special error turn that will be handled downstream
         structure(
