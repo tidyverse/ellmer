@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `contents_replay()` now also restores the tool definition in `ContentToolResult` objects (in `@request@tool`) (#693).
+
 # ellmer 0.3.0
 
 ## New features
