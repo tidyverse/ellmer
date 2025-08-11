@@ -102,7 +102,7 @@ NULL
 #' # Look at the chat history to see how tool calling works:
 #' chat
 #' # Assistant sends a tool request which is evaluated locally and
-#' # results are send back in a tool result.
+#' # results are sent back in a tool result.
 #'
 #' \dontshow{ellmer:::vcr_example_end()}
 #' @family tool calling helpers
