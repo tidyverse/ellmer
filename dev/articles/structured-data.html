@@ -557,19 +557,9 @@ and “unearned” income</div>
 <span><span class="va">type_assets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="va">type_asset</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/content_image_url.html">content_image_file</a></span><span class="op">(</span><span class="st">"congressional-assets.png"</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">image</span>, type <span class="op">=</span> <span class="va">type_assets</span><span class="op">)</span></span>
-<span><span class="va">data</span></span>
-<span><span class="co">#&gt;                            assert_name owner</span></span>
-<span><span class="co">#&gt; 1  11 Zinfandel Lane - Home &amp; Vineyard    JT</span></span>
-<span><span class="co">#&gt; 2 25 Point Lobos - Commercial Property    SP</span></span>
-<span><span class="co">#&gt;                              location asset_value_low asset_value_high</span></span>
-<span><span class="co">#&gt; 1             St. Helena/Napa, CA, US         5000001         25000000</span></span>
-<span><span class="co">#&gt; 2 San Francisco/San Francisco, CA, US         5000001         25000000</span></span>
-<span><span class="co">#&gt;   income_type income_low income_high tx_gt_1000</span></span>
-<span><span class="co">#&gt; 1 Grape Sales     100001     1000000      FALSE</span></span>
-<span><span class="co">#&gt; 2        Rent     100001     1000000      FALSE</span></span></code></pre></div>
+<span><span class="va">data</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -596,8 +586,8 @@ and “unearned” income</div>
 <tr class="odd">
 <td align="left">OpenAI</td>
 <td align="left">gpt-4.1</td>
-<td align="right">6835</td>
-<td align="right">923</td>
+<td align="right">6426</td>
+<td align="right">776</td>
 <td align="right">0</td>
 <td align="right">$0.02</td>
 </tr>
