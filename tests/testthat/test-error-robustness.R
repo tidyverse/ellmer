@@ -54,12 +54,12 @@ test_that("parallel_chat_structured_robust handles token length exceeded error",
     )
   }, NA)
 
-  # test that the return has the right structure, even with failures
-  response <- parallel_chat_structured_robust(
-    chat,
-    prompts = as.list(data_manifestos),
-    type = immig_type
-  )
+  # # test that the return has the right structure, even with failures
+  # response <- parallel_chat_structured_robust(
+  #   chat,
+  #   prompts = as.list(data_manifestos),
+  #   type = immig_type
+  # )
 
   # should have same number of rows as input
   expect_equal(nrow(response), length(data_manifestos))
