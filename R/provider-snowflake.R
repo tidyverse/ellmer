@@ -284,7 +284,6 @@ method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(provider, x) {
   }
   list(
     role = x@role,
-    content = content,
     content_list = as_json(provider, x@contents)
   )
 }
@@ -435,7 +434,13 @@ snowflake_keypair_token <- function(
     fp <- openssl::base64_encode(
       openssl::sha256(openssl::write_der(key$pubkey))
     )
-    sub <- toupper(paste0(account, ".", user))
+    if (grepl(".+\\.privatelink$", account)) {
+      # account identifier is everything up to the first period
+      account_identifier <- gsub("^([^.]*).+", "\\1", account)
+    } else {
+      account_identifier <- account
+    }
+    sub <- toupper(paste0(account_identifier, ".", user))
     iss <- paste0(sub, ".SHA256:", fp)
     # Note: Snowflake employs a malformed issuer claim, so we have to inject it
     # manually after jose's validation phase.
