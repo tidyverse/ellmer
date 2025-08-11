@@ -257,7 +257,7 @@ parallel_chat_structured_robust <- function(
         warning(paste0("Prompt ", error_indices[i], ": ", error_messages[i]),
                 call. = FALSE, immediate. = FALSE)
       }
-      
+
       # Issue a summary message that will be immediately visible
       n_errors <- length(error_indices)
       message("Some prompts produced errors (", n_errors, " out of ", length(prompts), "). Use warnings() to see error details.")

@@ -388,10 +388,10 @@ test_that("parallel_chat_structured_robust on_error='return' stops at first erro
 
 test_that("parallel_chat_structured_robust include_status tracks successes and errors", {
   skip_if_not_installed("mockery")
-  
+
   person <- type_object(name = type_string(), age = type_integer())
   chat <- chat_openai()
-  
+
   # Mock mixed success/failure results with status tracking
   mockery::stub(
     parallel_chat_structured_robust,
@@ -402,22 +402,22 @@ test_that("parallel_chat_structured_robust include_status tracks successes and e
       status = c("success", "Token limit exceeded", "success", "Rate limit exceeded")
     )
   )
-  
+
   data <- parallel_chat_structured_robust(
     chat,
     list("Alice, age 25", "Very long prompt...", "Charlie, age 35", "Another bad prompt"),
     type = person,
     include_status = TRUE
   )
-  
+
   expect_equal(nrow(data), 4)
   expect_true("status" %in% names(data))
   expect_equal(data$status, c("success", "Token limit exceeded", "success", "Rate limit exceeded"))
-  
+
   # Check that successful prompts have "success" status
   successful_rows <- which(!is.na(data$name))
   failed_rows <- which(is.na(data$name))
-  
+
   expect_true(all(data$status[successful_rows] == "success"))
   expect_true(all(data$status[failed_rows] != "success"))
   expect_true(all(nchar(data$status[failed_rows]) > 0))  # Error messages should not be empty
@@ -425,10 +425,10 @@ test_that("parallel_chat_structured_robust include_status tracks successes and e
 
 test_that("parallel_chat_structured_robust include_status works with on_error='stop'", {
   skip_if_not(has_credentials("openai"))
-  
+
   person <- type_object(name = type_string(), age = type_integer())
   chat <- chat_openai()
-  
+
   data <- parallel_chat_structured_robust(
     chat,
     list("John, age 15", "Jane, age 16"),
@@ -436,7 +436,7 @@ test_that("parallel_chat_structured_robust include_status works with on_error='s
     include_status = TRUE,
     on_error = "stop"
   )
-  
+
   expect_equal(nrow(data), 2)
   expect_true("status" %in% names(data))
   expect_equal(data$status, c("success", "success"))
@@ -444,10 +444,10 @@ test_that("parallel_chat_structured_robust include_status works with on_error='s
 
 test_that("parallel_chat_structured_robust on_error='return' returns only successful results", {
   skip_if_not_installed("mockery")
-  
+
   person <- type_object(name = type_string(), age = type_integer())
   chat <- chat_openai()
-  
+
   # Mock successful results only - the function should filter out failures
   mockery::stub(
     parallel_chat_structured_robust,
@@ -458,7 +458,7 @@ test_that("parallel_chat_structured_robust on_error='return' returns only succes
       status = c("success", "success")
     )
   )
-  
+
   data <- parallel_chat_structured_robust(
     chat,
     list("Alice, age 25", "Bob, age 30", "Very long prompt that fails..."),
@@ -466,16 +466,16 @@ test_that("parallel_chat_structured_robust on_error='return' returns only succes
     include_status = TRUE,
     on_error = "return"  # Test the "return" option specifically
   )
-  
+
   # Should only return the successful results (first 2)
   expect_equal(nrow(data), 2)
   expect_true("status" %in% names(data))
   expect_equal(data$status, c("success", "success"))
-  
+
   # Verify successful data only
   expect_equal(data$name, c("Alice", "Bob"))
   expect_equal(data$age, c(25L, 30L))
-  
+
   # All results should be successful (no failures in the filtered output)
   successful_count <- sum(data$status == "success")
   expect_equal(successful_count, 2)
@@ -483,10 +483,10 @@ test_that("parallel_chat_structured_robust on_error='return' returns only succes
 
 test_that("parallel_chat_structured_robust on_error='continue' issues warnings for errors", {
   skip_if_not_installed("mockery")
-  
+
   person <- type_object(name = type_string(), age = type_integer())
   chat <- chat_openai()
-  
+
   # Mock the multi_convert_robust function directly to avoid the value_turn complexity
   mockery::stub(
     parallel_chat_structured_robust,
@@ -497,7 +497,7 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings f
       status = c("success", "Token limit exceeded", "success", "Rate limit exceeded")
     )
   )
-  
+
   # Mock the parallel_turns_robust to return error_turns for failed prompts
   mockery::stub(
     parallel_chat_structured_robust,
@@ -513,10 +513,10 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings f
       structure(list(error = "Rate limit exceeded", index = 4, type_spec = person), class = "error_turn")
     )
   )
-  
+
   # Clear any existing warnings
   suppressWarnings({})
-  
+
   # Capture message about errors
   expect_message({
     data <- parallel_chat_structured_robust(
@@ -527,17 +527,17 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings f
       on_error = "continue"
     )
   }, "Some prompts produced errors \\(2 out of 4\\). Use warnings\\(\\) to see error details")
-  
-  # Check that results are as expected
+
+    # Check that results are as expected
   expect_equal(nrow(data), 4)
   expect_true("status" %in% names(data))
-  
+
   # Check successful vs failed results
   successful_rows <- which(data$status == "success")
   failed_rows <- which(data$status != "success")
   expect_equal(successful_rows, c(1, 3))
   expect_equal(failed_rows, c(2, 4))
-  
+
   # Clear warnings for other tests
   suppressWarnings({})
 })
@@ -568,7 +568,7 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings w
   prompt <- "Extract structured data from political texts. You will be scoring the position of each party on immigration and asylum seekers."
 
   chat <- chat_openai(model = "gpt-4o", system_prompt = prompt)
-  
+
   # Clear any existing warnings
   suppressWarnings({})
 
@@ -585,11 +585,11 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings w
 
   # Should have same number of rows as input (maintains length)
   expect_equal(nrow(response), length(data_manifestos))
-  
+
   # Check that some prompts failed (have NA values)
   has_nas <- apply(response[, c("party", "immig_score", "immig_rationale")], 1, function(row) any(is.na(row)))
   expect_true(any(has_nas), "At least one prompt should fail and produce NAs")
-  
+
   # The warning expectation above already confirms the warnings were issued
   # No need to check warnings() separately since the expect_warning caught it
 })
