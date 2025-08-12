@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_anthropic()` drops empty assistant turns to avoid API errors (#710).
+
 * `contents_replay()` now also restores the tool definition in `ContentToolResult` objects (in `@request@tool`) (#693).
 
 # ellmer 0.3.0
