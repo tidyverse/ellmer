@@ -309,6 +309,11 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x) {
     # claude passes system prompt as separate arg
     NULL
   } else if (x@role %in% c("user", "assistant")) {
+    if (x@role == "assistant" && identical(x@contents, list())) {
+      # Drop empty assistant turns to avoid an API error
+      # (all messages must have non-empty content)
+      return(NULL)
+    }
     list(role = x@role, content = as_json(provider, x@contents))
   } else {
     cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)
