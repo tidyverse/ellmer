@@ -1,6 +1,7 @@
 # ellmer (development version)
 
 * `contents_replay()` now also restores the tool definition in `ContentToolResult` objects (in `@request@tool`) (#693).
+* In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services.
 
 # ellmer 0.3.0
 
