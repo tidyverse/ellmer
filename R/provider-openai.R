@@ -270,7 +270,7 @@ method(value_turn, ProviderOpenAI) <- function(
   }
 
   if (is.null(result$usage)) {
-    tokens <- tokens_log(provider, input = NULL, output = NULL, cached_input = NULL)
+    tokens <- tokens_log(provider)
   } else {
     cached_tokens <- result$usage$prompt_tokens_details$cached_tokens %||% 0
     tokens <- tokens_log(
