@@ -47,7 +47,7 @@ NULL
 #' \dontshow{ellmer:::vcr_example_end()}
 chat_openai <- function(
   system_prompt = NULL,
-  base_url = "https://api.openai.com/v1",
+  base_url = Sys.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
   api_key = openai_key(),
   model = NULL,
   params = NULL,
