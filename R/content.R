@@ -203,7 +203,7 @@ ContentToolRequest <- new_class(
 method(format, ContentToolRequest) <- function(
   x,
   ...,
-  show = c("all", "call")
+  show = c("all", "call", "call_short")
 ) {
   show <- arg_match(show)
 
@@ -220,6 +220,10 @@ method(format, ContentToolRequest) <- function(
 
   if (length(call_str) > 1) {
     call_str <- paste0(call_str[1], "...)")
+  }
+
+  if (show == "call_short") {
+    return(call_str)
   }
 
   cli::format_inline("[{.strong tool request} ({x@id})]: {call_str}")

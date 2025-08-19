@@ -307,14 +307,10 @@ maybe_echo_tool <- function(x, echo = "output") {
   }
 
   if (is_tool_request(x)) {
-    call_str <- format(x, show = "call")
-    if (length(call_str) > 1) {
-      call_str <- paste0(call_str[1], "...)")
-    }
     cli::cli_text(
       cli::col_blue(cli::symbol$circle),
       " [{cli::col_blue('tool call')}] ",
-      cli_escape(call_str)
+      cli_escape(format(x, show = "call_short"))
     )
     return(invisible(x))
   }
