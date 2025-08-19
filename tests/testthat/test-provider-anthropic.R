@@ -88,7 +88,26 @@ test_that("max_tokens is deprecated", {
 
 test_that("can match prices for some common models", {
   provider <- chat_anthropic_test()$get_provider()
-  
+
   expect_true(has_cost(provider, "claude-sonnet-4-20250514"))
   expect_true(has_cost(provider, "claude-3-7-sonnet-latest"))
+})
+
+test_that("removes empty final chat messages", {
+  chat <- chat_anthropic_test()
+  chat$set_turns(
+    list(
+      Turn("user", "Don't say anything"),
+      Turn("assistant")
+    )
+  )
+
+  turns_json <- as_json(chat$get_provider(), chat$get_turns())
+
+  expect_length(turns_json, 1)
+  expect_equal(turns_json[[1]]$role, "user")
+  expect_equal(
+    turns_json[[1]]$content,
+    list(list(type = "text", text = "Don't say anything"))
+  )
 })
