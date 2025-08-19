@@ -120,6 +120,60 @@ test_that("non-ellmer classes are not recorded/replayed by default", {
   })
 })
 
+test_that("packaged classes that extend ellmer classes can be replayed", {
+  env <- rlang::current_env()
+
+  local_mocked_bindings(
+    ns_env = function(x) {
+      if (x == "foo") {
+        return(env)
+      }
+      rlang::ns_env(x)
+    }
+  )
+
+  LocalContentText <- S7::new_class(
+    "LocalContentText",
+    package = "foo",
+    parent = ellmer::ContentText
+  )
+
+  test_record_replay(LocalContentText("hello world"))
+  test_record_replay(
+    Turn("user", list(LocalContentText(text = "hello world")))
+  )
+})
+
+test_that("local classes that extend ellmer classes can be replayed", {
+  LocalContentText <- S7::new_class(
+    "LocalContentText",
+    package = NULL,
+    parent = ellmer::ContentText
+  )
+
+  test_record_replay(LocalContentText("hello world"))
+  test_record_replay(
+    Turn("user", list(LocalContentText(text = "hello world")))
+  )
+})
+
+test_that("local classes that extend ellmer classes can be replayed", {
+  test_content <- S7::new_class(
+    "LocalContentText",
+    package = NULL,
+    parent = ellmer::ContentText
+  )
+
+  LocalContentText <- function(...) {
+    test_content(...)
+  }
+
+  expect_snapshot(
+    error = TRUE,
+    test_record_replay(test_content("hello world"))
+  )
+})
+
 test_that("replayed objects must be existing S7 classes", {
   doesnt_exist <- list(version = 1, class = "ellmer::Turn2", props = list())
   not_s7 <- list(version = 1, class = "ellmer::chat_openai", props = list())

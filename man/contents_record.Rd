@@ -7,13 +7,17 @@
 \usage{
 contents_record(x)
 
-contents_replay(x, tools = list())
+contents_replay(x, tools = list(), .envir = parent.frame())
 }
 \arguments{
 \item{x}{A \link{Turn} or \link{Content} object to serialize; or a serialized object
 to replay.}
 
 \item{tools}{A named list of tools}
+
+\item{.envir}{The environment in which to look for class definitions. Used
+when the recorded objects include classes that extend \link{Turn} or
+\link{Content} but are not from the \pkg{ellmer} package itself.}
 }
 \description{
 These generic functions can be use to convert \link{Turn}/\link{Content} objects
