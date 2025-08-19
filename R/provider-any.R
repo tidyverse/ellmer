@@ -55,14 +55,7 @@ chat <- function(
     # Otherwise, match arguments against the function's formal arguments
     args_matched <- intersect(names(dots), fn_fmls_names(chat_fun))
     # with a warning for user-provided arguments that are not used
-    args_ignored <- setdiff(
-      names(dots),
-      c(
-        if (missing(params)) "params",
-        if (missing(echo)) "echo",
-        args_matched
-      )
-    )
+    args_ignored <- setdiff(names(dots), c("params", "echo", args_matched))
     if (length(args_ignored) > 0) {
       cli::cli_warn(
         "Ignoring {.var {args_ignored}} argument{?s} that {?is/are} not used by {.fn ellmer::{provider_name}}.",
