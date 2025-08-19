@@ -6,7 +6,7 @@ client:
 
 ## Chat functions with echo only (no params)
 
-- [ ] **chat_aws_bedrock**
+- [x] **chat_aws_bedrock**
   - [AWS Bedrock Converse API InferenceConfiguration](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InferenceConfiguration.html)
   - **Supported Parameters:**
     - `temperature` - Controls randomness in response generation (0.0 to 1.0)
