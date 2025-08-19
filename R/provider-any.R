@@ -40,27 +40,13 @@ chat <- function(
 
   dots <- dots_list(..., params = params, echo = echo)
 
-  chat_fun_fmls <- fn_fmls_names(chat_fun)
-  if (!"model" %in% chat_fun_fmls || !"system_prompt" %in% chat_fun_fmls) {
-    cli::cli_abort(
-      "{.fn ellmer::chat} does not support {.fn ellmer::{provider_name}}, please call it directly.",
+  # Drop unused arguments, with a warning
+  args_matched <- intersect(names(dots), fn_fmls_names(chat_fun))
+  args_ignored <- setdiff(names(dots), args_matched)
+  if (length(args_ignored) > 0) {
+    cli::cli_warn(
+      "Ignoring {.var {args_ignored}} argument{?s} that {?is/are} not used by {.fn ellmer::{provider_name}}.",
     )
-  }
-
-  # Drop unused arguments...
-  if ("..." %in% chat_fun_fmls) {
-    # If the function accepts `...`, we assume all arguments are accepted
-    args_matched <- names(dots)
-  } else {
-    # Otherwise, match arguments against the function's formal arguments
-    args_matched <- intersect(names(dots), fn_fmls_names(chat_fun))
-    # with a warning for user-provided arguments that are not used
-    args_ignored <- setdiff(names(dots), c("params", "echo", args_matched))
-    if (length(args_ignored) > 0) {
-      cli::cli_warn(
-        "Ignoring {.var {args_ignored}} argument{?s} that {?is/are} not used by {.fn ellmer::{provider_name}}.",
-      )
-    }
   }
 
   # A bit overkill, but ensures the chat_*() function appears in tracebacks
