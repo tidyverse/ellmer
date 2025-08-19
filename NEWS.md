@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services (#706).
+* In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services (#706, @stevegbrooks).
 
 * `chat_anthropic()` drops empty assistant turns to avoid API errors (#710).
 
