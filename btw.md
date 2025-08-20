@@ -28,15 +28,17 @@ across multiple providers.
 
 ## Chat functions with echo only (no params)
 
-Supported parameters are listed as `<ellmer standard name> = <provider API name>`.
+Supported parameters are listed as `<provider name> = <standard name>`.
+
+Here’s the list with each mapping rewritten to swap the order (right-hand side first, equals, then left-hand side). Example applied: stop = stop_sequences.
 
 - [x] **chat_aws_bedrock**
   - [AWS Bedrock Converse API InferenceConfiguration](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InferenceConfiguration.html)
   - Supported parameters:
-    - `temperature = temperature`
-    - `top_p = topP`
-    - `max_tokens = maxTokens`
-    - `stop_sequences = stopSequences`
+    - `temperature = temperature` → `temperature = temperature` (unchanged)
+    - `topP = top_p`
+    - `maxTokens = max_tokens`
+    - `stopSequences = stop_sequences`
 
 - [x] **chat_databricks**
   - [Databricks Foundation Model APIs Chat Request](https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#chat-request)
@@ -45,7 +47,7 @@ Supported parameters are listed as `<ellmer standard name> = <provider API name>
     - `top_p = top_p`
     - `top_k = top_k`
     - `max_tokens = max_tokens`
-    - `stop_sequences = stop`
+    - `stop = stop_sequences`
 
 - [x] **chat_deepseek**
   - [Chat Completions API](https://api-docs.deepseek.com/api/create-chat-completion)
@@ -55,10 +57,9 @@ Supported parameters are listed as `<ellmer standard name> = <provider API name>
     - `max_tokens = max_tokens`
     - `frequency_penalty = frequency_penalty`
     - `presence_penalty = presence_penalty`
-    - `log_probs = logprobs`
-    - `top_k = top_logprobs`
-    - `stop_sequences = stop`
-
+    - `logprobs = log_probs`
+    - `top_logprobs = top_k`
+    - `stop = stop_sequences`
 
 - [ ] **chat_github**
   - [REST API endpoints for models inference](https://docs.github.com/en/rest/models/inference?apiVersion=2022-11-28)
@@ -67,7 +68,7 @@ Supported parameters are listed as `<ellmer standard name> = <provider API name>
     - `max_tokens = max_tokens`
     - `presence_penalty = presence_penalty`
     - `seed = seed`
-    - `stop_sequences = stop`
+    - `stop = stop_sequences`
     - `temperature = temperature`
     - `top_p = top_p`
 
@@ -75,13 +76,13 @@ Supported parameters are listed as `<ellmer standard name> = <provider API name>
   - [Groq Chat Completions API Reference](https://console.groq.com/docs/api-reference#chat-create)
   - Supported parameters:
     - `frequency_penalty = frequency_penalty`
-    - `log_probs = logprobs`
-    - `max_tokens = max_completion_tokens`
+    - `logprobs = log_probs`
+    - `max_completion_tokens = max_tokens`
     - `presence_penalty = presence_penalty`
     - `seed = seed`
-    - `stop_sequences = stop`
+    - `stop = stop_sequences`
     - `temperature = temperature`
-    - `top_k = top_logprobs`
+    - `top_logprobs = top_k`
     - `top_p = top_p`
 
 - [ ] **chat_ollama**
@@ -90,7 +91,7 @@ Supported parameters are listed as `<ellmer standard name> = <provider API name>
     - `frequency_penalty = frequency_penalty`
     - `presence_penalty = presence_penalty`
     - `seed = seed`
-    - `stop_sequences = stop`
+    - `stop = stop_sequences`
     - `temperature = temperature`
     - `top_p = top_p`
     - `max_tokens = max_tokens`
@@ -105,8 +106,8 @@ Supported parameters are listed as `<ellmer standard name> = <provider API name>
     - `presence_penalty = presence_penalty`
     - `seed = seed`
     - `max_tokens = max_tokens`
-    - `log_probs = logprobs`
-    - `stop_sequences = stop`
+    - `logprobs = log_probs`
+    - `stop = stop_sequences`
 
 - [ ] **chat_perplexity**
   - [Perplexity Chat Completions API](https://docs.perplexity.ai/api-reference/chat-completions-post)
@@ -168,8 +169,9 @@ method(chat_params, ProviderExample) <- function(provider, params) {
   standardise_params(
     params,
     c(
-      # Map ellmer standard names to provider API names
-      max_tokens = "maxTokens",
+      # Map provider API parameter names to ellmer standard names
+      maxTokens = "max_tokens",
+      {providerName} = "{standardName}",  # <- Replace with param names
       # ... only the parameters that the provider supports ...
     )
   )

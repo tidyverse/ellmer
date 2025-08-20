@@ -177,9 +177,9 @@ method(chat_params, ProviderAWSBedrock) <- function(provider, params) {
     params,
     c(
       temperature = "temperature",
-      top_p = "topP",
-      max_tokens = "maxTokens",
-      stop_sequences = "stopSequences"
+      topP = "top_p",
+      maxTokens = "max_tokens",
+      stopSequences = "stop_sequences"
     )
   )
 }

@@ -62,11 +62,11 @@ method(chat_params, ProviderDeepSeek) <- function(provider, params) {
       frequency_penalty = "frequency_penalty",
       max_tokens = "max_tokens",
       presence_penalty = "presence_penalty",
-      stop_sequences = "stop",
+      stop = "stop_sequences",
       temperature = "temperature",
       top_p = "top_p",
-      log_probs = "logprobs",
-      top_k = "top_logprobs"
+      logprobs = "log_probs",
+      top_logprobs = "top_k"
     )
   )
 }
