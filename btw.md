@@ -4,100 +4,134 @@ client:
   model: us.anthropic.claude-sonnet-4-20250514-v1:0
 ---
 
+## About `ellmer::params()`
+
+This helper function makes it easier to create a list of parameters used
+across many models. The parameter names are automatically standardised and
+included in the correctly place in the API call.
+
+Note that parameters that are not supported by a given provider will generate
+a warning, not an error. This allows you to use the same set of parameters
+across multiple providers.
+
+```r
+#' @param temperature Temperature of the sampling distribution.
+#' @param top_p The cumulative probability for token selection.
+#' @param top_k The number of highest probability vocabulary tokens to keep.
+#' @param frequency_penalty Frequency penalty for generated tokens.
+#' @param presence_penalty Presence penalty for generated tokens.
+#' @param seed Seed for random number generator.
+#' @param max_tokens Maximum number of tokens to generate.
+#' @param log_probs Include the log probabilities in the output?
+#' @param stop_sequences A character vector of tokens to stop generation on.
+```
+
 ## Chat functions with echo only (no params)
 
 - [x] **chat_aws_bedrock**
   - [AWS Bedrock Converse API InferenceConfiguration](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InferenceConfiguration.html)
-  - **Supported Parameters:**
-    - `temperature` - Controls randomness in response generation (0.0 to 1.0)
-    - `top_p` - Nucleus sampling parameter (0.0 to 1.0)
-    - `max_tokens` - Maximum number of tokens to generate
-    - `stop_sequences` - List of stop sequences (up to 4 items)
+  - Supported parameters:
+    - `temperature = temperature`
+    - `top_p = topP`
+    - `max_tokens = maxTokens`
+    - `stop_sequences = stopSequences`
 
 - [x] **chat_databricks**
   - [Databricks Foundation Model APIs Chat Request](https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#chat-request)
-  - **Supported Parameters:**
-    - `temperature` - Sampling temperature for randomness (0.0 to 2.0)
-    - `top_p` - Nucleus sampling threshold (0.0 to 1.0)
-    - `top_k` - Top-k filtering for most likely tokens
-    - `max_tokens` - Maximum number of tokens to generate
-    - `stop` - Stop sequences (string or list of strings)
+  - Supported parameters:
+    - `temperature = temperature`
+    - `top_p = top_p`
+    - `top_k = top_k`
+    - `max_tokens = max_tokens`
+    - `stop_sequences = stop`
 
 - [ ] **chat_deepseek**
-  - [Chat Completions API](https://platform.deepseek.com/api-docs/api/create-chat-completion)
-  - **Supported Parameters (OpenAI-compatible):**
-    - `temperature` - Controls randomness (0.0 to 2.0)
-    - `top_p` - Nucleus sampling parameter (0.0 to 1.0)
-    - `max_tokens` - Maximum tokens to generate
-    - `stop` - Stop sequences
-    - `frequency_penalty` - Frequency penalty for repetition
-    - `presence_penalty` - Presence penalty for new topics
+  - [Chat Completions API](https://api-docs.deepseek.com/api/create-chat-completion)
+  - Supported parameters:
+    - `temperature = temperature`
+    - `top_p = top_p`
+    - `max_tokens = max_tokens`
+    - `frequency_penalty = frequency_penalty`
+    - `presence_penalty = presence_penalty`
+    - `seed = seed`
+    - `log_probs = logprobs`
+    - `top_k = top_logprobs`
+    - `stop_sequences = stop`
+
 
 - [ ] **chat_github**
-  - Since GitHub Models uses OpenAI-compatible APIs but the specific parameter documentation wasn't fully visible in the API reference tables, GitHub Models likely supports OpenAI-standard parameters. However, based on the quickstart examples showing `modelParameters` with `temperature`, it appears to support at least basic parameters.
-  - **Supported Parameters (likely):**
-    - `temperature` - Controls randomness in response generation
-    - Additional parameters would need verification from the full API specification
-  - [GitHub Models Quickstart](https://docs.github.com/en/github-models/quickstart)
+  - [REST API endpoints for models inference](https://docs.github.com/en/rest/models/inference?apiVersion=2022-11-28)
+  - Supported parameters:
+    - `temperature = temperature`
+    - `top_p = top_p`
+    - `max_tokens = max_tokens`
+    - `frequency_penalty = frequency_penalty`
+    - `presence_penalty = presence_penalty`
+    - `seed = seed`
+    - `stop_sequences = stop`
 
 - [ ] **chat_groq**
   - [Groq Chat Completions API Reference](https://console.groq.com/docs/api-reference#chat-create)
-  - **Supported Parameters:**
-    - `temperature` - Sampling temperature between 0 and 2 (default: 1)
-    - `top_p` - Nucleus sampling parameter between 0 and 1 (default: 1)
-    - `max_completion_tokens` - Maximum number of tokens to generate
-    - `seed` - Seed for deterministic sampling
-    - `frequency_penalty` - Frequency penalty for generated tokens (range: -2 to 2, default: 0)
-    - `presence_penalty` - Presence penalty for generated tokens (range: -2 to 2, default: 0)
-    - `stop` - Stop sequences (up to 4 sequences)
+  - Supported parameters:
+    - `temperature = temperature`
+    - `top_p = top_p`
+    - `top_k = top_k`
+    - `max_tokens = max_completion_tokens`
+    - `frequency_penalty = frequency_penalty`
+    - `presence_penalty = presence_penalty`
+    - `seed = seed`
+    - `log_probs = logprobs`
+    - `stop_sequences = stop`
+
 
 - [ ] **chat_ollama**
   - [Ollama Chat API Documentation](https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-chat-completion)
-  - **Supported Parameters (via options object):**
-    - `temperature` - Sampling temperature (shown in examples)
-    - `top_p` - Nucleus sampling parameter (shown in examples)
-    - `top_k` - Top-k sampling parameter (shown in examples)
-    - `seed` - Seed for reproducible outputs (shown in examples)
-    - `frequency_penalty` - Frequency penalty for repetition (shown in examples)
-    - `presence_penalty` - Presence penalty for new topics (shown in examples)
-    - `stop` - Stop sequences (shown in examples)
-    - `num_predict` - Maximum number of tokens to generate (equivalent to max_tokens)
+  - Supported parameters
+    - `temperature = temperature`
+    - `top_p = top_p`
+    - `top_k = top_k`
+    - `max_tokens = max_tokens`
+    - `frequency_penalty = frequency_penalty`
+    - `presence_penalty = presence_penalty`
+    - `seed = seed`
+    - `stop_sequences = stop`
 
 - [ ] **chat_openrouter**
   - [OpenRouter API Parameters](https://openrouter.ai/docs/api-reference/parameters)
-  - **Supported Parameters:**
-    - `temperature` - Controls randomness in response generation (0.0 to 2.0)
-    - `top_p` - Nucleus sampling parameter for token selection (0.0 to 1.0)
-    - `top_k` - Limits model's choice of tokens at each step (0 or above)
-    - `max_tokens` - Maximum number of tokens to generate (1 or above)
-    - `stop` - Stop generation sequences (array)
-    - `frequency_penalty` - Reduces repetition based on token frequency (-2.0 to 2.0)
-    - `presence_penalty` - Reduces repetition of tokens from input (-2.0 to 2.0)
-    - `seed` - Deterministic sampling seed (integer)
-    - `logprobs` - Return log probabilities of output tokens (boolean)
+  - Supported parameters:
+    - `temperature = temperature`
+    - `top_p = top_p`
+    - `top_k = top_k`
+    - `max_tokens = max_tokens`
+    - `frequency_penalty = frequency_penalty`
+    - `presence_penalty = presence_penalty`
+    - `seed = seed`
+    - `log_probs = logprobs`
+    - `stop_sequences = stop`
 
 - [ ] **chat_perplexity**
   - [Perplexity Chat Completions API](https://docs.perplexity.ai/api-reference/chat-completions-post)
-  - **Supported Parameters:**
-    - `temperature` - Controls randomness in response generation (0 to 2, default: 0.2)
-    - `top_p` - Nucleus sampling threshold (0 to 1, default: 0.9)
-    - `top_k` - Top-k filtering for most likely tokens (number, default: 0)
-    - `max_tokens` - Maximum number of completion tokens (integer)
-    - `frequency_penalty` - Decreases likelihood of repetition based on frequency (0 to 2.0, default: 0)
-    - `presence_penalty` - Increases likelihood of discussing new topics (0 to 2.0, default: 0)
+  - Supported parameters:
+    - `temperature = temperature`
+    - `top_p = top_p`
+    - `top_k = top_k`
+    - `max_tokens = max_tokens`
+    - `frequency_penalty = frequency_penalty`
+    - `presence_penalty = presence_penalty`
+    - `stop_sequences = stop`
 
 - [ ] **chat_vllm**
   - [vLLM OpenAI Compatible Server](https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html)
-  - **Supported Parameters (OpenAI-compatible):**
-    - `temperature` - Controls randomness in response generation
-    - `top_p` - Nucleus sampling parameter
-    - `top_k` - Top-k sampling parameter (vLLM-specific, passed via extra_body)
-    - `max_tokens` - Maximum number of tokens to generate
-    - `stop` - Stop sequences
-    - `frequency_penalty` - Frequency penalty for repetition
-    - `presence_penalty` - Presence penalty for new topics
-    - `seed` - Seed for deterministic sampling
-    - `logprobs` - Return log probabilities
+  - Supported parameters:
+    - `temperature = temperature`
+    - `top_p = top_p`
+    - `top_k = top_k`
+    - `max_tokens = max_tokens`
+    - `frequency_penalty = frequency_penalty`
+    - `presence_penalty = presence_penalty`
+    - `seed = seed`
+    - `log_probs = logprobs`
+    - `stop_sequences = stop`
 
 ## How to implement `params` support
 
@@ -137,19 +171,17 @@ chat_example <- function(...) {
 ```
 
 ### 3. Add chat_params method
-Implement a `chat_params()` method that maps standardized parameter names to provider-specific names:
+Implement a `chat_params()` method that maps standardized parameter names to provider-specific names. Include a link to the provider's documentation for reference.
 
 ```r
 method(chat_params, ProviderExample) <- function(provider, params) {
+  # Link to documentation for provider-specific parameters
   standardise_params(
     params,
     c(
       # Map ellmer standard names to provider API names
-      temperature = "temperature",
-      top_p = "top_p",
-      max_tokens = "max_tokens",  # or maxTokens, max_completion_tokens, etc.
-      stop_sequences = "stop",    # or stopSequences, stop_sequences, etc.
-      # ... other supported parameters
+      max_tokens = "maxTokens",
+      # ... only the parameters that the provider supports ...
     )
   )
 }
