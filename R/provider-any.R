@@ -38,8 +38,8 @@ chat <- function(
     cli::cli_abort("Can't find provider {.code ellmer::{provider_name}()}.")
   }
 
-  chat_fun_fmls <- fn_fmls_names(chat_fun)
-  if (!"model" %in% chat_fun_fmls || !"system_prompt" %in% chat_fun_fmls) {
+  # chat() only supports chat_ functions that use `model` and `system_prompt`
+  if (any(!c("model", "system_prompt") %in% fn_fmls_names(chat_fun))) {
     cli::cli_abort(
       "{.fn ellmer::chat} does not support {.fn ellmer::{provider_name}}, please call it directly.",
     )
