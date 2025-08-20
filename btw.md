@@ -109,7 +109,7 @@ Here’s the list with each mapping rewritten to swap the order (right-hand side
     - `logprobs = log_probs`
     - `stop = stop_sequences`
 
-- [ ] **chat_perplexity**
+- [x] **chat_perplexity**
   - [Perplexity Chat Completions API](https://docs.perplexity.ai/api-reference/chat-completions-post)
   - Supported parameters:
     - `max_tokens = max_tokens`
