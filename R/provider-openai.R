@@ -202,6 +202,7 @@ method(chat_params, ProviderOpenAI) <- function(provider, params) {
       seed = "seed",
       max_completion_tokens = "max_tokens",
       logprobs = "log_probs",
+      top_logprobs = "top_k",
       stop = "stop_sequences"
     )
   )
