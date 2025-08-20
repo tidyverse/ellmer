@@ -84,6 +84,9 @@ test_data_extraction <- function(chat_fun) {
 # Images -----------------------------------------------------------------
 
 test_images_inline <- function(chat_fun, test_shape = TRUE) {
+  # has a subtle dependency on imagemagick
+  skip_on_cran()
+
   chat <- chat_fun()
   response <- chat$chat(
     "What's in this image? (Be sure to mention the outside shape)",

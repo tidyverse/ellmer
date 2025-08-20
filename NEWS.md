@@ -1,7 +1,10 @@
 # ellmer (development version)
 
-* `chat()` now ignores arguments, with a warning, that don't apply to the
-  underlying `chat_*()` provider function (#698).
+* In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services (#706, @stevegbrooks).
+
+* `chat_anthropic()` drops empty assistant turns to avoid API errors (#710).
+
+* `contents_record()` and `contents_replay()` now record and replay custom classes that extend ellmer's `Turn` or `Content` classes (#689).
 
 * `contents_replay()` now also restores the tool definition in `ContentToolResult` objects (in `@request@tool`) (#693).
 
