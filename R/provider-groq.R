@@ -17,6 +17,7 @@ NULL
 #' @family chatbots
 #' @param api_key `r api_key_param("GROQ_API_KEY")`
 #' @param model `r param_model("llama3-8b-8192")`
+#' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
@@ -29,6 +30,7 @@ chat_groq <- function(
   base_url = "https://api.groq.com/openai/v1",
   api_key = groq_key(),
   model = NULL,
+  params = NULL,
   seed = NULL,
   api_args = list(),
   echo = NULL,
@@ -37,10 +39,14 @@ chat_groq <- function(
   model <- set_default(model, "llama3-8b-8192")
   echo <- check_echo(echo)
 
+  # https://console.groq.com/docs/api-reference#chat-create (same as OpenAI)
+  params <- params %||% params()
+
   provider <- ProviderGroq(
     name = "Groq",
     base_url = base_url,
     model = model,
+    params = params,
     seed = seed,
     extra_args = api_args,
     api_key = api_key,

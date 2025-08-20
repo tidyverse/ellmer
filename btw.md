@@ -72,7 +72,7 @@ Here’s the list with each mapping rewritten to swap the order (right-hand side
     - `temperature = temperature`
     - `top_p = top_p`
 
-- [ ] **chat_groq**
+- [x] **chat_groq**
   - [Groq Chat Completions API Reference](https://console.groq.com/docs/api-reference#chat-create)
   - Supported parameters:
     - `frequency_penalty = frequency_penalty`
