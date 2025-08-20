@@ -20,6 +20,7 @@ test_that("can set model or use default", {
 
 test_that("works for chat functions that don't include `params`", {
   local_mocked_bindings(
+    has_ollama = function(...) TRUE,
     models_ollama = function(...) {
       list(id = "qwen3:4b")
     }
