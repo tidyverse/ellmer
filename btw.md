@@ -85,7 +85,7 @@ Here’s the list with each mapping rewritten to swap the order (right-hand side
     - `top_logprobs = top_k`
     - `top_p = top_p`
 
-- [ ] **chat_ollama**
+- [x] **chat_ollama**
   - [Ollama Chat API Documentation](https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-chat-completion)
   - Supported parameters
     - `frequency_penalty = frequency_penalty`
