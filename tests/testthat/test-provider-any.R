@@ -19,6 +19,11 @@ test_that("can set model or use default", {
 })
 
 test_that("works for chat functions that don't include `params`", {
+  local_mocked_bindings(
+    models_ollama = function(...) {
+      list(id = "qwen3:4b")
+    }
+  )
   expect_s3_class(chat("ollama/qwen3:4b"), "Chat")
 
   chat <- chat("ollama/qwen3:4b")
