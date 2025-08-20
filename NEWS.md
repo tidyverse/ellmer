@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_openai()` now uses `OPENAI_BASE_URL`, if set, for the `base_url`. Similarly, `chat_ollama()` also uses `OLLAMA_BASE_URL` if set (#713).
+
 * In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services (#706, @stevegbrooks).
 
 * `chat_anthropic()` drops empty assistant turns to avoid API errors (#710).
