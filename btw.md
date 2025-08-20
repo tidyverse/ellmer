@@ -61,7 +61,7 @@ Here’s the list with each mapping rewritten to swap the order (right-hand side
     - `top_logprobs = top_k`
     - `stop = stop_sequences`
 
-- [ ] **chat_github**
+- [x] **chat_github**
   - [REST API endpoints for models inference](https://docs.github.com/en/rest/models/inference?apiVersion=2022-11-28)
   - Supported parameters:
     - `frequency_penalty = frequency_penalty`
