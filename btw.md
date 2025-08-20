@@ -28,6 +28,8 @@ across multiple providers.
 
 ## Chat functions with echo only (no params)
 
+Supported parameters are listed as `<ellmer standard name> = <provider API name>`.
+
 - [x] **chat_aws_bedrock**
   - [AWS Bedrock Converse API InferenceConfiguration](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InferenceConfiguration.html)
   - Supported parameters:
@@ -45,7 +47,7 @@ across multiple providers.
     - `max_tokens = max_tokens`
     - `stop_sequences = stop`
 
-- [ ] **chat_deepseek**
+- [x] **chat_deepseek**
   - [Chat Completions API](https://api-docs.deepseek.com/api/create-chat-completion)
   - Supported parameters:
     - `temperature = temperature`
@@ -53,7 +55,6 @@ across multiple providers.
     - `max_tokens = max_tokens`
     - `frequency_penalty = frequency_penalty`
     - `presence_penalty = presence_penalty`
-    - `seed = seed`
     - `log_probs = logprobs`
     - `top_k = top_logprobs`
     - `stop_sequences = stop`
@@ -62,39 +63,37 @@ across multiple providers.
 - [ ] **chat_github**
   - [REST API endpoints for models inference](https://docs.github.com/en/rest/models/inference?apiVersion=2022-11-28)
   - Supported parameters:
-    - `temperature = temperature`
-    - `top_p = top_p`
-    - `max_tokens = max_tokens`
     - `frequency_penalty = frequency_penalty`
+    - `max_tokens = max_tokens`
     - `presence_penalty = presence_penalty`
     - `seed = seed`
     - `stop_sequences = stop`
+    - `temperature = temperature`
+    - `top_p = top_p`
 
 - [ ] **chat_groq**
   - [Groq Chat Completions API Reference](https://console.groq.com/docs/api-reference#chat-create)
   - Supported parameters:
-    - `temperature = temperature`
-    - `top_p = top_p`
-    - `top_k = top_k`
-    - `max_tokens = max_completion_tokens`
     - `frequency_penalty = frequency_penalty`
+    - `log_probs = logprobs`
+    - `max_tokens = max_completion_tokens`
     - `presence_penalty = presence_penalty`
     - `seed = seed`
-    - `log_probs = logprobs`
     - `stop_sequences = stop`
-
+    - `temperature = temperature`
+    - `top_k = top_logprobs`
+    - `top_p = top_p`
 
 - [ ] **chat_ollama**
   - [Ollama Chat API Documentation](https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-chat-completion)
   - Supported parameters
-    - `temperature = temperature`
-    - `top_p = top_p`
-    - `top_k = top_k`
-    - `max_tokens = max_tokens`
     - `frequency_penalty = frequency_penalty`
     - `presence_penalty = presence_penalty`
     - `seed = seed`
     - `stop_sequences = stop`
+    - `temperature = temperature`
+    - `top_p = top_p`
+    - `max_tokens = max_tokens`
 
 - [ ] **chat_openrouter**
   - [OpenRouter API Parameters](https://openrouter.ai/docs/api-reference/parameters)
@@ -102,36 +101,26 @@ across multiple providers.
     - `temperature = temperature`
     - `top_p = top_p`
     - `top_k = top_k`
-    - `max_tokens = max_tokens`
     - `frequency_penalty = frequency_penalty`
     - `presence_penalty = presence_penalty`
     - `seed = seed`
+    - `max_tokens = max_tokens`
     - `log_probs = logprobs`
     - `stop_sequences = stop`
 
 - [ ] **chat_perplexity**
   - [Perplexity Chat Completions API](https://docs.perplexity.ai/api-reference/chat-completions-post)
   - Supported parameters:
+    - `max_tokens = max_tokens`
     - `temperature = temperature`
     - `top_p = top_p`
     - `top_k = top_k`
-    - `max_tokens = max_tokens`
-    - `frequency_penalty = frequency_penalty`
     - `presence_penalty = presence_penalty`
-    - `stop_sequences = stop`
+    - `frequency_penalty = frequency_penalty`
 
 - [ ] **chat_vllm**
   - [vLLM OpenAI Compatible Server](https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html)
-  - Supported parameters:
-    - `temperature = temperature`
-    - `top_p = top_p`
-    - `top_k = top_k`
-    - `max_tokens = max_tokens`
-    - `frequency_penalty = frequency_penalty`
-    - `presence_penalty = presence_penalty`
-    - `seed = seed`
-    - `log_probs = logprobs`
-    - `stop_sequences = stop`
+  - OpenAI-compatible, use inherited OpenAI behavior
 
 ## How to implement `params` support
 
