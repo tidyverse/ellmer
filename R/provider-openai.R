@@ -200,7 +200,7 @@ method(chat_params, ProviderOpenAI) <- function(provider, params) {
       frequency_penalty = "frequency_penalty",
       presence_penalty = "presence_penalty",
       seed = "seed",
-      max_tokens = "max_completion_tokens",
+      max_completion_tokens = "max_tokens",
       logprobs = "log_probs",
       stop = "stop_sequences"
     )
