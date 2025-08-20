@@ -96,7 +96,7 @@ Here’s the list with each mapping rewritten to swap the order (right-hand side
     - `top_p = top_p`
     - `max_tokens = max_tokens`
 
-- [ ] **chat_openrouter**
+- [x] **chat_openrouter**
   - [OpenRouter API Parameters](https://openrouter.ai/docs/api-reference/parameters)
   - Supported parameters:
     - `temperature = temperature`
