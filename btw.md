@@ -14,7 +14,7 @@ client:
     - `max_tokens` - Maximum number of tokens to generate
     - `stop_sequences` - List of stop sequences (up to 4 items)
 
-- [ ] **chat_databricks**
+- [x] **chat_databricks**
   - [Databricks Foundation Model APIs Chat Request](https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#chat-request)
   - **Supported Parameters:**
     - `temperature` - Sampling temperature for randomness (0.0 to 2.0)
