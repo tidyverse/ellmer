@@ -119,7 +119,7 @@ Here’s the list with each mapping rewritten to swap the order (right-hand side
     - `presence_penalty = presence_penalty`
     - `frequency_penalty = frequency_penalty`
 
-- [ ] **chat_vllm**
+- [x] **chat_vllm**
   - [vLLM OpenAI Compatible Server](https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html)
   - OpenAI-compatible, use inherited OpenAI behavior
 
