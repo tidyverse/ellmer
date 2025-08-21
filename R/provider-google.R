@@ -106,7 +106,9 @@ chat_google_vertex <- function(
 }
 
 # https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
-vertex_url <- function(location, project_id, list_models = FALSE) {
+vertex_url <- function(location, project_id) {
+  # for location "global", there is no location in the final base URL
+  # https://github.com/googleapis/python-genai/blob/cc9e470326e0c1b84ec3ce9891c9f96f6c74688e/google/genai/_api_client.py#L646-L654
   location_base <- paste0(location, "-")
   if (location == "global") {
     location_base <- ""
@@ -606,6 +608,7 @@ default_google_credentials <- function(
   gemini_scope <- "https://www.googleapis.com/auth/generative-language.retriever"
 
   if (!gemini) {
+    # https://github.com/googleapis/python-genai/blob/cc9e470326e0c1b84ec3ce9891c9f96f6c74688e/google/genai/_api_client.py#L184
     gemini_scope <- "https://www.googleapis.com/auth/cloud-platform"
   }
 
