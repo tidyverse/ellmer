@@ -47,7 +47,7 @@ NULL
 #' \dontshow{ellmer:::vcr_example_end()}
 chat_openai <- function(
   system_prompt = NULL,
-  base_url = "https://api.openai.com/v1",
+  base_url = Sys.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
   api_key = openai_key(),
   model = NULL,
   params = NULL,
@@ -269,13 +269,17 @@ method(value_turn, ProviderOpenAI) <- function(
     content <- c(content, calls)
   }
 
-  cached_tokens <- result$usage$prompt_tokens_details$cached_tokens %||% 0
-  tokens <- tokens_log(
-    provider,
-    input = result$usage$prompt_tokens - cached_tokens,
-    output = result$usage$completion_tokens,
-    cached_input = cached_tokens
-  )
+  if (is.null(result$usage)) {
+    tokens <- tokens_log(provider)
+  } else {
+    cached_tokens <- result$usage$prompt_tokens_details$cached_tokens %||% 0
+    tokens <- tokens_log(
+      provider,
+      input = result$usage$prompt_tokens - cached_tokens,
+      output = result$usage$completion_tokens,
+      cached_input = cached_tokens
+    )
+  }
   assistant_turn(
     content,
     json = result,

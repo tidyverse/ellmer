@@ -1,6 +1,18 @@
 # ellmer (development version)
 
+* `chat_openai()` now uses `OPENAI_BASE_URL`, if set, for the `base_url`. Similarly, `chat_ollama()` also uses `OLLAMA_BASE_URL` if set (#713).
+
+* In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services (#706, @stevegbrooks).
+
+* `chat_anthropic()` drops empty assistant turns to avoid API errors (#710).
+
+* `contents_record()` and `contents_replay()` now record and replay custom classes that extend ellmer's `Turn` or `Content` classes (#689).
+
 * `contents_replay()` now also restores the tool definition in `ContentToolResult` objects (in `@request@tool`) (#693).
+
+* `chat_snowflake()` now supports Privatelink accounts (#694, @robert-norberg).
+
+* `chat_snowflake()` now works against Snowflake's latest API changes (#692, @robert-norberg).
 
 # ellmer 0.3.0
 
@@ -44,12 +56,12 @@
 
 # ellmer 0.2.1
 
-* When you save a `Chat` object to disk, API keys are automatically redacted. 
-  This means that you can no longer easily resume a chat you've saved on disk 
-  (we'll figure this out in a future release) but ensures that you never 
+* When you save a `Chat` object to disk, API keys are automatically redacted.
+  This means that you can no longer easily resume a chat you've saved on disk
+  (we'll figure this out in a future release) but ensures that you never
   accidentally save your secret key in an RDS file (#534).
 
-* `chat_anthropic()` now defaults to Claude Sonnet 4, and I've added pricing 
+* `chat_anthropic()` now defaults to Claude Sonnet 4, and I've added pricing
   information for the latest generation of Claude models.
 
 * `chat_databricks()` now picks up on Databricks workspace URLs set in the
@@ -57,14 +69,14 @@
   (#521, @atheriel). It now also supports tool calling (#548, @atheriel).
 
 * `chat_snowflake()` no longer streams answers that include a mysterious
-  `list(type = "text", text = "")` trailer (#533, @atheriel). It now parses 
+  `list(type = "text", text = "")` trailer (#533, @atheriel). It now parses
   streaming outputs correctly into turns (#542), supports structured ouputs
   (#544), and standard model parameters (#545, @atheriel).
 
 * `chat_snowflake()` and `chat_databricks()` now default to Claude Sonnet 3.7,
   the same default as `chat_anthropic()` (#539 and #546, @atheriel).
 
-* `type_from_schema()` lets you to use pre-existing JSON schemas in structured 
+* `type_from_schema()` lets you to use pre-existing JSON schemas in structured
   chats (#133, @hafen)
 
 # ellmer 0.2.0
@@ -73,36 +85,36 @@
 
 * We have made a number of refinements to the way ellmer converts JSON
   to R data structures. These are breaking changes, although we don't expect
-  them to affect much code in the wild. Most importantly, tools are now invoked 
+  them to affect much code in the wild. Most importantly, tools are now invoked
   with their inputs coerced to standard R data structures (#461); opt-out
   by setting `convert = FALSE` in `tool()`.
 
-  Additionally ellmer now converts `NULL` to `NA` for `type_boolean()`, 
-  `type_integer()`, `type_number()`, and `type_string()` (#445), and does a 
+  Additionally ellmer now converts `NULL` to `NA` for `type_boolean()`,
+  `type_integer()`, `type_number()`, and `type_string()` (#445), and does a
   better job with arrays when `required = FALSE` (#384).
 
 * `chat_` functions no longer have a `turn` argument. If you need to set the
-  turns, you can now use `Chat$set_turns()` (#427). Additionally, 
-  `Chat$tokens()` has been renamed to `Chat$get_tokens()` and returns a data 
-  frame of tokens, correctly aligned to the individual turn. The print method 
-  now uses this to show how many input/output tokens were used by each turn 
+  turns, you can now use `Chat$set_turns()` (#427). Additionally,
+  `Chat$tokens()` has been renamed to `Chat$get_tokens()` and returns a data
+  frame of tokens, correctly aligned to the individual turn. The print method
+  now uses this to show how many input/output tokens were used by each turn
   (#354).
 
 ## New features
 
 * Two new interfaces help you do multiple chats with a single function call:
 
-  * `batch_chat()` and `batch_chat_structured()` allow you to submit multiple 
-    chats to OpenAI and Anthropic's batched interfaces. These only guarantee a 
-    response within 24 hours, but are 50% of the price of regular requests 
+  * `batch_chat()` and `batch_chat_structured()` allow you to submit multiple
+    chats to OpenAI and Anthropic's batched interfaces. These only guarantee a
+    response within 24 hours, but are 50% of the price of regular requests
     (#143).
 
   * `parallel_chat()` and `parallel_chat_structured()` work with any provider
     and allow you to submit multiple chats in parallel (#143). This doesn't give
     you any cost savings, but it's can be much, much faster.
 
-  This new family of functions is experimental because I'm not 100% sure that 
-  the shape of the user interface is correct, particularly as it pertains to 
+  This new family of functions is experimental because I'm not 100% sure that
+  the shape of the user interface is correct, particularly as it pertains to
   handling errors.
 
 * `google_upload()` lets you upload files to Google Gemini or Vertex AI (#310).
@@ -118,14 +130,14 @@
 
 * `interpolate()` and friends are now vectorised so you can generate multiple
   prompts for (e.g.) a data frame of inputs. They also now return a specially
-  classed object with a custom print method (#445). New `interpolate_package()` 
-  makes it easier to interpolate from prompts stored in the `inst/prompts` 
+  classed object with a custom print method (#445). New `interpolate_package()`
+  makes it easier to interpolate from prompts stored in the `inst/prompts`
   directory inside a package (#164).
 
-* `chat_anthropic()`, `chat_azure()`, `chat_openai()`, and `chat_gemini()` now 
-  take a `params` argument, that coupled with the `params()` helper, makes it 
-  easy to specify common model parameters (like `seed` and `temperature`) 
-  across providers. Support for other providers will grow as you request it 
+* `chat_anthropic()`, `chat_azure()`, `chat_openai()`, and `chat_gemini()` now
+  take a `params` argument, that coupled with the `params()` helper, makes it
+  easy to specify common model parameters (like `seed` and `temperature`)
+  across providers. Support for other providers will grow as you request it
   (#280).
 
 * ellmer now tracks the cost of input and output tokens. The cost is displayed
@@ -145,7 +157,7 @@
   * `chat_portkey()` and `models_portkey()` for models hosted at
     <https://portkey.ai> (#363, @maciekbanas).
 
-* We also renamed (with deprecation) a few functions to make the naming 
+* We also renamed (with deprecation) a few functions to make the naming
   scheme more consistent (#382, @gadenbuie):
 
   * `chat_azure_openai()` replaces `chat_azure()`.
@@ -159,17 +171,17 @@
 
 ## Developer tooling
 
-* New `Chat$get_provider()` lets you access the underlying provider object 
+* New `Chat$get_provider()` lets you access the underlying provider object
   (#202).
 
-* `Chat$chat_async()` and `Chat$stream_async()` gain a `tool_mode` argument to 
-  decide between `"sequential"` and `"concurrent"` tool calling. This is an 
+* `Chat$chat_async()` and `Chat$stream_async()` gain a `tool_mode` argument to
+  decide between `"sequential"` and `"concurrent"` tool calling. This is an
   advanced feature that primarily affects asynchronous tools (#488, @gadenbuie).
 
-* `Chat$stream()` and `Chat$stream_async()` gain support for streaming the 
-  additional content types generated during a tool call with a new `stream` 
-  argument. When `stream = "content"` is set, the streaming response yields 
-  `Content` objects, including the `ContentToolRequest` and `ContentToolResult` 
+* `Chat$stream()` and `Chat$stream_async()` gain support for streaming the
+  additional content types generated during a tool call with a new `stream`
+  argument. When `stream = "content"` is set, the streaming response yields
+  `Content` objects, including the `ContentToolRequest` and `ContentToolResult`
   objects used to request and return tool calls (#400, @gadenbuie).
 
 * New `Chat$on_tool_request()` and `$on_tool_result()` methods allow you to
@@ -177,7 +189,7 @@
   can be used to implement custom logging or other actions when tools are
   called, without modifying the tool function (#493, @gadenbuie).
 
-* `Chat$chat(echo = "output")` replaces the now-deprecated `echo = "text"` 
+* `Chat$chat(echo = "output")` replaces the now-deprecated `echo = "text"`
   option. When using `echo = "output"`, additional output, such as tool
   requests and results, are shown as they occur. When `echo = "none"`, tool
   call failures are emitted as warnings (#366, @gadenbuie).
@@ -191,7 +203,7 @@
     `ContentToolResult` no longer has an `id` property, instead the tool call
     ID can be retrieved from `request@id`.
 
-  They also include the error condition in the `error` property when a tool call 
+  They also include the error condition in the `error` property when a tool call
   fails (#421, @gadenbuie).
 
 * `ContentToolRequest` gains a `tool` property that includes the `tool()`
@@ -211,31 +223,31 @@
 ## Minor improvements and bug fixes
 
 * All requests now set a custom User-Agent that identifies that the requests
-  come from ellmer (#341). The default timeout has been increased to 
+  come from ellmer (#341). The default timeout has been increased to
   5 minutes (#451, #321).
 
-* `chat_anthropic()` now supports the thinking content type (#396), and 
-  `content_image_url()` (#347). It gains a `beta_header` argument to opt-in 
-  to beta features (#339). It (along with `chat_bedrock()`) no longer chokes 
+* `chat_anthropic()` now supports the thinking content type (#396), and
+  `content_image_url()` (#347). It gains a `beta_header` argument to opt-in
+  to beta features (#339). It (along with `chat_bedrock()`) no longer chokes
   after receiving an output that consists only of whitespace (#376).
   Finally, `chat_anthropic(max_tokens =)` is now deprecated in favour of
   `chat_anthropic(params = )` (#280).
 
-* `chat_google_gemini()` and `chat_google_vertex()` gain more ways to 
-  authenticate. They can use `GEMINI_API_KEY` if set (@t-kalinowski, #513), 
-  authenticate with Google default application credentials (including service 
-  accounts, etc) (#317, @atheriel) and use viewer-based credentials when 
-  running on Posit Connect (#320, @atheriel). Authentication with default 
-  application credentials requires the {gargle} package. They now also can now 
+* `chat_google_gemini()` and `chat_google_vertex()` gain more ways to
+  authenticate. They can use `GEMINI_API_KEY` if set (@t-kalinowski, #513),
+  authenticate with Google default application credentials (including service
+  accounts, etc) (#317, @atheriel) and use viewer-based credentials when
+  running on Posit Connect (#320, @atheriel). Authentication with default
+  application credentials requires the {gargle} package. They now also can now
   handle responses that include citation metadata (#358).
 
-* `chat_ollama()` now works with `tool()` definitions with optional arguments 
-  or empty properties (#342, #348, @gadenbuie), and now accepts `api_key` and 
-  consults the `OLLAMA_API_KEY` environment variable. This is not needed for 
-  local usage, but enables bearer-token authentication when Ollama is running 
+* `chat_ollama()` now works with `tool()` definitions with optional arguments
+  or empty properties (#342, #348, @gadenbuie), and now accepts `api_key` and
+  consults the `OLLAMA_API_KEY` environment variable. This is not needed for
+  local usage, but enables bearer-token authentication when Ollama is running
   behind a reverse proxy (#501, @gadenbuie).
 
-* `chat_openai(seed =)` is now deprecated in favour of `chat_openai(params = )` 
+* `chat_openai(seed =)` is now deprecated in favour of `chat_openai(params = )`
   (#280).
 
 * `create_tool_def()` can now use any Chat instance (#118, @pedrobtz).

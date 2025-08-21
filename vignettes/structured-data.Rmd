@@ -382,6 +382,8 @@ Even without any descriptions, ChatGPT does pretty well:
 ```{r}
 #| label: examples-image
 #| cassette: true
+#| # Skip on CRAN because it has a subtle dependency on imagemagick
+#| eval: !expr ellmer:::has_credentials("openai")
 
 type_asset <- type_object(
   assert_name = type_string(),

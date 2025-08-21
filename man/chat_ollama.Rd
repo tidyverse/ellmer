@@ -7,7 +7,7 @@
 \usage{
 chat_ollama(
   system_prompt = NULL,
-  base_url = "http://localhost:11434",
+  base_url = Sys.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
   model,
   seed = NULL,
   api_args = list(),

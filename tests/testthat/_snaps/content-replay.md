@@ -22,12 +22,21 @@
       contents_record(LocalClass())
     Condition
       Error in `contents_record()`:
-      ! Only S7 classes from the `ellmer` package are currently supported. Received: "foo::LocalClass".
+      ! Cannot record or replay a <foo::LocalClass> object.
+      i Only `ellmer::Content` or `ellmer::Turn` classes or subclasses are currently supported.
     Code
       contents_replay(recorded)
     Condition
+      Error in `loadNamespace()`:
+      ! there is no package called 'foo'
+
+# local classes that extend ellmer classes can be replayed
+
+    Code
+      test_record_replay(test_content("hello world"))
+    Condition
       Error in `contents_replay()`:
-      ! Only S7 classes from the `ellmer` package are currently supported. Received: "foo::LocalClass".
+      ! Expected the object named `LocalContentText` to be an S7 class, not a function.
 
 # replayed objects must be existing S7 classes
 
@@ -35,10 +44,10 @@
       contents_replay(doesnt_exist)
     Condition
       Error in `contents_replay()`:
-      ! Unable to find the S7 class: "ellmer::Turn2".
+      ! Unable to find the S7 class: `ellmer::Turn2`.
     Code
       contents_replay(not_s7)
     Condition
       Error in `contents_replay()`:
-      ! The object returned for "ellmer::chat_openai" is not an S7 class.
+      ! Expected the object named `ellmer::chat_openai` to be an S7 class, not a function.
 
