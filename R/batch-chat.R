@@ -332,7 +332,7 @@ BatchJob <- R6::R6Class(
 
       cli::cli_abort(
         c(
-          "{differences} don't match stored values.",
+          "{differences} {?does/do}n't match stored value{?s}.",
           i = "Do you need to pick a different {.arg path}?"
         ),
         call = call
