@@ -709,19 +709,21 @@ models_google_gemini <- function(
 
   json <- resp_body_json(resp)
 
-  if (isFALSE(api_key)) { # if Vertex
+  if (isFALSE(api_key)) {
+    # if Vertex
     name <- map_chr(json$publisherModels, "[[", "name")
     name <- gsub("^publishers/google/models/", "", name)
     # this is the closest to "generateContent" in "supportedGenerationMethods" for Gemini
     # https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/publishers.models
-    can_generate <- json$publisherModels |> map_lgl(\(x) "openGenerationAiStudio" %in% names(x$supportedActions))
+    can_generate <- json$publisherModels |>
+      map_lgl(\(x) "openGenerationAiStudio" %in% names(x$supportedActions))
   } else {
-  name <- map_chr(json$models, "[[", "name")
-  name <- gsub("^models/", "", name)
-  display_name <- map_chr(json$models, "[[", "displayName")
+    name <- map_chr(json$models, "[[", "name")
+    name <- gsub("^models/", "", name)
+    display_name <- map_chr(json$models, "[[", "displayName")
 
-  methods <- map(json$models, \(x) unlist(x$supportedGenerationMethods))
-  can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)
+    methods <- map(json$models, \(x) unlist(x$supportedGenerationMethods))
+    can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)
   }
 
   df <- data.frame(id = name)
