@@ -114,22 +114,10 @@ vertex_url <- function(location, project_id) {
     location_base <- ""
   }
 
-  api_ver <- "v1"
-  if (list_models) {
-    api_ver <- "v1beta1"
-  }
-
-  proj_and_loc <- paste_c(
-    c("/projects/", project_id),
-    c("/locations/", location)
-  )
-  if (list_models) {
-    proj_and_loc <- ""
-  }
-
   paste_c(
-    c("https://", location_base, "aiplatform.googleapis.com/", api_ver),
-    proj_and_loc,
+    c("https://", location_base, "aiplatform.googleapis.com/v1"),
+    c("/projects/", project_id),
+    c("/locations/", location),
     "/publishers/google/"
   )
 }
@@ -738,5 +726,24 @@ models_google_gemini <- function(
 #' @rdname chat_google_gemini
 #' @export
 models_google_vertex <- function(location, project_id) {
-  models_google_gemini(vertex_url(location, project_id, list_models = TRUE), api_key = FALSE)
+  lifecycle::deprecate_warn(
+    "0.3.0.9000",
+    "models_google_vertex(project_id)"
+  )
+
+  location_base <- paste0(location, "-")
+
+  if (location == "global") {
+    location_base <- ""
+  }
+
+  base_url <- paste_c(
+    c("https://", location_base, "aiplatform.googleapis.com/v1beta1"),
+    "/publishers/google/"
+  )
+
+  models_google_gemini(
+    base_url,
+    api_key = FALSE
+  )
 }
