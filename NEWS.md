@@ -14,6 +14,12 @@
 
 * `chat_snowflake()` now works against Snowflake's latest API changes (#692, @robert-norberg).
 
+* `chat_google_vertex()` authentication was fixed using broader scope (#704, @netique)  
+
+* `chat_google_vertex()` can now use `global` project location (#704, @netique)  
+
+* `models_google_vertex()` was fixed, argument `project_id` is now deprecated (#704, @netique)  
+
 # ellmer 0.3.0
 
 ## New features
