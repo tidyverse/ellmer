@@ -203,7 +203,7 @@ ContentToolRequest <- new_class(
 method(format, ContentToolRequest) <- function(
   x,
   ...,
-  show = c("all", "call")
+  show = c("all", "call", "call_short")
 ) {
   show <- arg_match(show)
 
@@ -214,12 +214,15 @@ method(format, ContentToolRequest) <- function(
   }
   call <- call2(x@name, !!!arguments)
   call_str <- deparse(call)
-  if (length(call_str) > 1) {
-    open <-
-      call_str <- paste0(call_str[1], "...)")
+  if (show == "call") {
+    return(call_str)
   }
 
-  if (show == "call") {
+  if (length(call_str) > 1) {
+    call_str <- paste0(call_str[1], "...)")
+  }
+
+  if (show == "call_short") {
     return(call_str)
   }
 
