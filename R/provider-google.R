@@ -23,7 +23,6 @@ NULL
 #'
 #' @param api_key `r api_key_param("GOOGLE_API_KEY")`
 #'   For Gemini, you can alternatively set `GEMINI_API_KEY`.
-#'
 #' @param model `r param_model("gemini-2.5-flash", "google_gemini")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -46,7 +45,7 @@ chat_google_gemini <- function(
 ) {
   model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
-  credentials <- default_google_credentials(api_key, gemini = TRUE)
+  credentials <- default_google_credentials(api_key, variant = "gemini")
 
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
@@ -77,7 +76,7 @@ chat_google_gemini_test <- function(
 #' @export
 #' @rdname chat_google_gemini
 #' @param location Location, e.g. `us-east1`, `me-central1`, `africa-south1` or
-#' `global`.
+#'   `global`.
 #' @param project_id Project ID.
 chat_google_vertex <- function(
   location,
@@ -89,9 +88,12 @@ chat_google_vertex <- function(
   api_headers = character(),
   echo = NULL
 ) {
+  check_string(location)
+  check_string(project_id)
+
   model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
-  credentials <- default_google_credentials()
+  credentials <- default_google_credentials(variant = "vertex")
 
   provider <- ProviderGoogleGemini(
     name = "Google/Vertex",
@@ -109,13 +111,10 @@ chat_google_vertex <- function(
 vertex_url <- function(location, project_id) {
   # for location "global", there is no location in the final base URL
   # https://github.com/googleapis/python-genai/blob/cc9e470326e0c1b84ec3ce9891c9f96f6c74688e/google/genai/_api_client.py#L646-L654
-  location_base <- paste0(location, "-")
-  if (location == "global") {
-    location_base <- ""
-  }
 
   paste_c(
-    c("https://", location_base, "aiplatform.googleapis.com/v1"),
+    c("https://", google_location(location), "aiplatform.googleapis.com"),
+    "/v1",
     c("/projects/", project_id),
     c("/locations/", location),
     "/publishers/google/"
@@ -591,18 +590,20 @@ merge_gemini_chunks <- merge_objects(
 default_google_credentials <- function(
   api_key = NULL,
   error_call = caller_env(),
-  gemini = FALSE
+  variant = c("gemini", "vertex")
 ) {
-  gemini_scope <- "https://www.googleapis.com/auth/generative-language.retriever"
+  variant <- arg_match(variant)
 
-  if (!gemini) {
+  gemini_scope <- switch(
+    variant,
+    gemini = "https://www.googleapis.com/auth/generative-language.retriever",
     # https://github.com/googleapis/python-genai/blob/cc9e470326e0c1b84ec3ce9891c9f96f6c74688e/google/genai/_api_client.py#L184
-    gemini_scope <- "https://www.googleapis.com/auth/cloud-platform"
-  }
+    vertex = "https://www.googleapis.com/auth/cloud-platform"
+  )
 
   check_string(api_key, allow_null = TRUE, call = error_call)
   api_key <- api_key %||% Sys.getenv("GOOGLE_API_KEY")
-  if (gemini && api_key == "") {
+  if (variant == "gemini" && api_key == "") {
     api_key <- Sys.getenv("GEMINI_API_KEY")
   }
 
@@ -683,15 +684,16 @@ models_google_gemini <- function(
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL
 ) {
+  if (isFALSE(api_key)) {
+    credentials <- default_google_credentials(variant = "vertex")
+  } else {
+    credentials <- default_google_credentials(api_key, variant = "gemini")
+  }
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
     model = "",
     base_url = base_url,
-    credentials = if (isFALSE(api_key)) {
-      default_google_credentials() # vertex
-    } else {
-      default_google_credentials(api_key, gemini = TRUE)
-    }
+    credentials = credentials
   )
 
   req <- base_request(provider)
@@ -725,25 +727,21 @@ models_google_gemini <- function(
 
 #' @rdname chat_google_gemini
 #' @export
-models_google_vertex <- function(location, project_id) {
-  lifecycle::deprecate_warn(
-    "0.3.0.9000",
-    "models_google_vertex(project_id)"
-  )
-
-  location_base <- paste0(location, "-")
-
-  if (location == "global") {
-    location_base <- ""
+models_google_vertex <- function(location, project_id = deprecated()) {
+  check_string(location)
+  if (lifecycle::is_present(project_id)) {
+    lifecycle::deprecate_warn("0.3.1", "models_google_vertex(project_id)")
   }
 
   base_url <- paste_c(
-    c("https://", location_base, "aiplatform.googleapis.com/v1beta1"),
+    c("https://", google_location(location), "aiplatform.googleapis.com"),
+    "/v1beta1",
     "/publishers/google/"
   )
 
-  models_google_gemini(
-    base_url,
-    api_key = FALSE
-  )
+  models_google_gemini(base_url, api_key = FALSE)
+}
+
+google_location <- function(location) {
+  if (location == "global") "" else paste0(location, "-")
 }
