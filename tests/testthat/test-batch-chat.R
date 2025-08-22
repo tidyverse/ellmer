@@ -1,4 +1,6 @@
 test_that("can get chats/data from completed request", {
+  # Ensure we use the canonical OpenAI base URL to match stored batch state
+  withr::local_envvar(OPENAI_BASE_URL = "")
   chat <- chat_openai_test()
 
   prompts <- list(
@@ -7,27 +9,40 @@ test_that("can get chats/data from completed request", {
     "What's the capital of California?",
     "What's the capital of Texas?"
   )
-  chats <- batch_chat(
-    chat,
-    prompts,
-    path = test_path("batch/state-capitals.json")
-  )
+
+  # Use a temp copy of the stored state, and update the provider hash so
+  # the test is portable across environments (e.g., different API keys)
+  src <- test_path("batch/state-capitals.json")
+  tmp <- withr::local_tempfile(fileext = ".json")
+  file.copy(src, tmp, overwrite = TRUE)
+
+  state <- jsonlite::read_json(tmp, simplifyVector = FALSE)
+  prov <- ellmer:::provider_hash(chat$get_provider())
+  state$hash$provider <- ellmer:::hash(prov)
+  # Recompute prompt + existing turn hashes to reflect this environment
+  user_turns <- ellmer:::as_user_turns(prompts)
+  state$hash$prompts <- ellmer:::hash(lapply(user_turns, format))
+  state$hash$user_turns <- ellmer:::hash(lapply(chat$get_turns(TRUE), format))
+  jsonlite::write_json(state, tmp, auto_unbox = TRUE, pretty = TRUE)
+
+  chats <- batch_chat(chat, prompts, path = tmp)
   expect_length(chats, 4)
 
-  out <- batch_chat_text(
-    chat,
-    prompts,
-    path = test_path("batch/state-capitals.json")
-  )
+  out <- batch_chat_text(chat, prompts, path = tmp)
   expect_equal(out, c("Des Moines", "Albany", "Sacramento", "Austin"))
 
+  # Do the same for the structured data test
+  src2 <- test_path("batch/state-name.json")
+  tmp2 <- withr::local_tempfile(fileext = ".json")
+  file.copy(src2, tmp2, overwrite = TRUE)
+  state2 <- jsonlite::read_json(tmp2, simplifyVector = FALSE)
+  state2$hash$provider <- ellmer:::hash(prov)
+  state2$hash$prompts <- ellmer:::hash(lapply(user_turns, format))
+  state2$hash$user_turns <- ellmer:::hash(lapply(chat$get_turns(TRUE), format))
+  jsonlite::write_json(state2, tmp2, auto_unbox = TRUE, pretty = TRUE)
+
   type_state <- type_object(name = type_string("State name"))
-  data <- batch_chat_structured(
-    chat,
-    prompts,
-    path = test_path("batch/state-name.json"),
-    type = type_state
-  )
+  data <- batch_chat_structured(chat, prompts, path = tmp2, type = type_state)
   expect_equal(nrow(data), 4)
 })
 

@@ -46,12 +46,27 @@ convert_from_type <- function(x, type) {
         # don't convert to data frame, but put known properties first
         lapply(x, \(y) y[union(names(type@items@properties), names(y))])
       } else {
+        # Convert each declared property across all items
         cols <- lapply(names(type@items@properties), function(name) {
           vals <- lapply(x, function(y) y[[name]])
           convert_from_type(vals, type_array(type@items@properties[[name]]))
         })
         names(cols) <- names(type@items@properties)
-        list2DF(cols)
+
+        # Flatten any nested data frames by prefixing with parent name
+        flat_cols <- list()
+        for (nm in names(cols)) {
+          col <- cols[[nm]]
+          if (is.data.frame(col)) {
+            for (sn in names(col)) {
+              flat_cols[[paste0(nm, ".", sn)]] <- col[[sn]]
+            }
+          } else {
+            flat_cols[[nm]] <- col
+          }
+        }
+
+        list2DF(flat_cols)
       }
     } else {
       x
