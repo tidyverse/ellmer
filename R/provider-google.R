@@ -713,6 +713,7 @@ models_google <- function(
   credentials <- switch(
     variant,
     vertiex = default_google_credentials(variant = "vertex"),
+    vertex = default_google_credentials(variant = "vertex"),
     gemini = default_google_credentials(api_key, variant = "gemini")
   )
   provider <- ProviderGoogleGemini(
