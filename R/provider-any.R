@@ -20,27 +20,12 @@ chat <- function(
   check_string(name, allow_empty = FALSE)
   pieces <- strsplit(name, "/", fixed = TRUE)[[1]]
 
-  provider <- model <- NULL
-
   if (length(pieces) == 1) {
     provider <- pieces[[1]]
-  } else if (length(pieces) >= 2) {
+    model <- NULL
+  } else {
     provider <- pieces[[1]]
-    if (length(pieces) == 2) {
-      model <- pieces[[2]]
-    } else if (provider == "github") {
-      # GitHub model names use the `provider/model` format
-      model <- paste(pieces[-1], collapse = "/")
-    } else {
-      # invalid format
-      provider <- NULL
-    }
-  }
-
-  if (is.null(provider)) {
-    cli::cli_abort(
-      "{.arg name} must be in form {.str provider} or {.str provider/model}."
-    )
+    model <- paste(pieces[-1], collapse = "/")
   }
 
   provider_fn_name <- paste0("chat_", provider)
