@@ -681,11 +681,40 @@ models_google_gemini <- function(
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL
 ) {
-  if (isFALSE(api_key)) {
-    credentials <- default_google_credentials(variant = "vertex")
-  } else {
-    credentials <- default_google_credentials(api_key, variant = "gemini")
+  check_string(base_url)
+  check_string(api_key, allow_null = TRUE)
+
+  models_google(base_url, api_key, variant = "gemini")
+}
+
+#' @rdname chat_google_gemini
+#' @export
+models_google_vertex <- function(location, project_id = deprecated()) {
+  check_string(location)
+  if (lifecycle::is_present(project_id)) {
+    lifecycle::deprecate_warn("0.3.1", "models_google_vertex(project_id)")
   }
+
+  base_url <- paste_c(
+    c("https://", google_location(location), "aiplatform.googleapis.com"),
+    "/v1beta1",
+    "/publishers/google/"
+  )
+
+  models_google(base_url, variant = "vertex")
+}
+
+models_google <- function(
+  base_url = "https://generativelanguage.googleapis.com/v1beta/",
+  api_key = NULL,
+  variant = c("gemini", "vertex")
+) {
+  variant <- arg_match(variant)
+  credentials <- switch(
+    variant,
+    vertiex = default_google_credentials(variant = "vertex"),
+    gemini = default_google_credentials(api_key, variant = "gemini")
+  )
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
     model = "",
@@ -699,8 +728,7 @@ models_google_gemini <- function(
 
   json <- resp_body_json(resp)
 
-  if (isFALSE(api_key)) {
-    # if Vertex
+  if (variant == "vertex") {
     name <- map_chr(json$publisherModels, "[[", "name")
     name <- gsub("^publishers/google/models/", "", name)
     # this is the closest to "generateContent" in "supportedGenerationMethods" for Gemini
@@ -720,23 +748,6 @@ models_google_gemini <- function(
   df <- cbind(df, match_prices(provider@name, df$id))
   df <- df[can_generate, ]
   unrowname(df[order(df$id), ])
-}
-
-#' @rdname chat_google_gemini
-#' @export
-models_google_vertex <- function(location, project_id = deprecated()) {
-  check_string(location)
-  if (lifecycle::is_present(project_id)) {
-    lifecycle::deprecate_warn("0.3.1", "models_google_vertex(project_id)")
-  }
-
-  base_url <- paste_c(
-    c("https://", google_location(location), "aiplatform.googleapis.com"),
-    "/v1beta1",
-    "/publishers/google/"
-  )
-
-  models_google_gemini(base_url, api_key = FALSE)
 }
 
 # for location "global", there is no location in the final base URL
