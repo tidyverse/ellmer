@@ -23,13 +23,18 @@ chat <- function(
   if (length(pieces) == 1) {
     provider <- pieces[[1]]
     model <- NULL
-  } else if (length(pieces) == 2) {
+  } else if (length(pieces) >= 2) {
     provider <- pieces[[1]]
-    model <- pieces[[2]]
-  } else {
-    cli::cli_abort(
-      "{.arg name} must be in form {.str provider} or {.str provider/model}."
-    )
+    if (provider == "github") {
+      # GitHub model names use the `provider/model` format
+      model <- paste(pieces[-1], collapse = "/")
+    } else if (length(pieces) > 2) {
+      cli::cli_abort(
+        "{.arg name} must be in form {.str provider} or {.str provider/model}."
+      )
+    } else {
+      model <- pieces[[2]]
+    }
   }
 
   provider_name <- paste0("chat_", pieces[[1]])
