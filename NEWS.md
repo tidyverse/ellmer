@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_github()` now uses the `https://models.github.ai/inference` endpoint and `chat()` supports GitHub models in the format `chat("github/openai/gpt-4.1")` (#726).
+
 * `chat_openai()` now uses `OPENAI_BASE_URL`, if set, for the `base_url`. Similarly, `chat_ollama()` also uses `OLLAMA_BASE_URL` if set (#713).
 
 * In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services (#706, @stevegbrooks).
