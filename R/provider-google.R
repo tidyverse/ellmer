@@ -109,9 +109,6 @@ chat_google_vertex <- function(
 
 # https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
 vertex_url <- function(location, project_id) {
-  # for location "global", there is no location in the final base URL
-  # https://github.com/googleapis/python-genai/blob/cc9e470326e0c1b84ec3ce9891c9f96f6c74688e/google/genai/_api_client.py#L646-L654
-
   paste_c(
     c("https://", google_location(location), "aiplatform.googleapis.com"),
     "/v1",
@@ -742,6 +739,8 @@ models_google_vertex <- function(location, project_id = deprecated()) {
   models_google_gemini(base_url, api_key = FALSE)
 }
 
+# for location "global", there is no location in the final base URL
+# https://github.com/googleapis/python-genai/blob/cc9e470326e0c1b84ec3ce9891c9f96f6c74688e/google/genai/_api_client.py#L646-L654
 google_location <- function(location) {
   if (location == "global") "" else paste0(location, "-")
 }
