@@ -689,11 +689,9 @@ models_google_gemini <- function(
 
 #' @rdname chat_google_gemini
 #' @export
-models_google_vertex <- function(location, project_id = deprecated()) {
+models_google_vertex <- function(location, project_id) {
   check_string(location)
-  if (lifecycle::is_present(project_id)) {
-    lifecycle::deprecate_warn("0.3.1", "models_google_vertex(project_id)")
-  }
+  check_string(project_id)
 
   base_url <- paste_c(
     c("https://", google_location(location), "aiplatform.googleapis.com"),
@@ -701,29 +699,38 @@ models_google_vertex <- function(location, project_id = deprecated()) {
     "/publishers/google/"
   )
 
-  models_google(base_url, variant = "vertex")
+  models_google(base_url, project_id = project_id, variant = "vertex")
 }
 
 models_google <- function(
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL,
+  project_id = NULL,
   variant = c("gemini", "vertex")
 ) {
   variant <- arg_match(variant)
   credentials <- switch(
     variant,
-    vertiex = default_google_credentials(variant = "vertex"),
     vertex = default_google_credentials(variant = "vertex"),
     gemini = default_google_credentials(api_key, variant = "gemini")
   )
+  api_headers <- switch(
+    variant,
+    vertex = c(`x-goog-user-project` = project_id),
+    gemini = character()
+  )
+
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
     model = "",
     base_url = base_url,
+    # https://cloud.google.com/docs/authentication/troubleshoot-adc#user-creds-client-based
+    extra_headers = api_headers,
     credentials = credentials
   )
 
   req <- base_request(provider)
+  req <- req_headers(req, !!!provider@extra_headers)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)
 

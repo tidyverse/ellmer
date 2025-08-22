@@ -34,7 +34,7 @@ models_google_gemini(
   api_key = NULL
 )
 
-models_google_vertex(location, project_id = deprecated())
+models_google_vertex(location, project_id)
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
