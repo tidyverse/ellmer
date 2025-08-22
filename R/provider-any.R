@@ -20,12 +20,10 @@ chat <- function(
   check_string(name, allow_empty = FALSE)
   pieces <- strsplit(name, "/", fixed = TRUE)[[1]]
 
-  provider <- NULL
-  model <- NULL
+  provider <- model <- NULL
 
   if (length(pieces) == 1) {
     provider <- pieces[[1]]
-    model <- NULL
   } else if (length(pieces) >= 2) {
     provider <- pieces[[1]]
     if (length(pieces) == 2) {
@@ -35,7 +33,7 @@ chat <- function(
       model <- paste(pieces[-1], collapse = "/")
     } else {
       # invalid format
-      provider <- model <- NULL
+      provider <- NULL
     }
   }
 
