@@ -20,27 +20,35 @@ chat <- function(
   check_string(name, allow_empty = FALSE)
   pieces <- strsplit(name, "/", fixed = TRUE)[[1]]
 
+  provider <- NULL
+  model <- NULL
+
   if (length(pieces) == 1) {
     provider <- pieces[[1]]
     model <- NULL
   } else if (length(pieces) >= 2) {
     provider <- pieces[[1]]
-    if (provider == "github") {
+    if (length(pieces) == 2) {
+      model <- pieces[[2]]
+    } else if (provider == "github") {
       # GitHub model names use the `provider/model` format
       model <- paste(pieces[-1], collapse = "/")
-    } else if (length(pieces) > 2) {
-      cli::cli_abort(
-        "{.arg name} must be in form {.str provider} or {.str provider/model}."
-      )
     } else {
-      model <- pieces[[2]]
+      # invalid format
+      provider <- model <- NULL
     }
   }
 
-  provider_name <- paste0("chat_", pieces[[1]])
-  chat_fun <- env_get(asNamespace("ellmer"), provider_name, default = NULL)
+  if (is.null(provider)) {
+    cli::cli_abort(
+      "{.arg name} must be in form {.str provider} or {.str provider/model}."
+    )
+  }
+
+  provider_fn_name <- paste0("chat_", provider)
+  chat_fun <- env_get(asNamespace("ellmer"), provider_fn_name, default = NULL)
   if (is.null(chat_fun)) {
-    cli::cli_abort("Can't find provider {.code ellmer::{provider_name}()}.")
+    cli::cli_abort("Can't find provider {.code ellmer::{provider_fn_name}()}.")
   }
 
   chat_fun(
