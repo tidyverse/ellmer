@@ -28,6 +28,7 @@
 #'   However, if you're accessing an Ollama instance hosted behind a reverse
 #'   proxy or secured endpoint that enforces bearer‐token authentication, you
 #'   can set `api_key` (or the `OLLAMA_API_KEY` environment variable).
+#' @param params Common model parameters, usually created by [params()].
 #' @inherit chat_openai return
 #' @family chatbots
 #' @export
@@ -41,6 +42,7 @@ chat_ollama <- function(
   base_url = Sys.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
   model,
   seed = NULL,
+  params = NULL,
   api_args = list(),
   echo = NULL,
   api_key = NULL,
@@ -69,11 +71,14 @@ chat_ollama <- function(
 
   echo <- check_echo(echo)
 
+  params <- params %||% params()
+
   provider <- ProviderOllama(
     name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
     model = model,
     seed = seed,
+    params = params,
     extra_args = api_args,
     # ollama doesn't require an API key for local usage, but one might be needed
     # if ollama is served behind a proxy (see #501)
@@ -93,6 +98,22 @@ ProviderOllama <- new_class(
     seed = prop_number_whole(allow_null = TRUE)
   )
 )
+
+method(chat_params, ProviderOllama) <- function(provider, params) {
+  # https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-chat-completion
+  standardise_params(
+    params,
+    c(
+      frequency_penalty = "frequency_penalty",
+      presence_penalty = "presence_penalty",
+      seed = "seed",
+      stop = "stop_sequences",
+      temperature = "temperature",
+      top_p = "top_p",
+      max_tokens = "max_tokens"
+    )
+  )
+}
 
 chat_ollama_test <- function(..., model = "qwen3:4b", echo = "none") {
   # model: Note that tests require a model with tool capabilities

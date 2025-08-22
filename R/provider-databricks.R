@@ -39,6 +39,7 @@
 #'   - `databricks-meta-llama-3-1-405b-instruct`
 #' @param token An authentication token for the Databricks workspace, or
 #'   `NULL` to use ambient credentials.
+#' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @export
@@ -52,6 +53,7 @@ chat_databricks <- function(
   system_prompt = NULL,
   model = NULL,
   token = NULL,
+  params = NULL,
   api_args = list(),
   echo = c("none", "output", "all"),
   api_headers = character()
@@ -65,10 +67,14 @@ chat_databricks <- function(
   } else {
     credentials <- default_databricks_credentials(workspace)
   }
+
+  params <- params %||% params()
+
   provider <- ProviderDatabricks(
     name = "Databricks",
     base_url = workspace,
     model = model,
+    params = params,
     extra_args = api_args,
     credentials = credentials,
     # Databricks APIs use bearer tokens, not API keys, but we need to pass an
@@ -109,10 +115,27 @@ method(chat_body, ProviderDatabricks) <- function(
     type = type
   )
 
-  # Databricks doensn't support stream options
+  params <- chat_params(provider, provider@params)
+  body <- modify_list(body, params)
+
+  # Databricks doesn't support stream options
   body$stream_options <- NULL
 
   body
+}
+
+method(chat_params, ProviderDatabricks) <- function(provider, params) {
+  # https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#chat-request
+  standardise_params(
+    params,
+    c(
+      temperature = "temperature",
+      top_p = "topP",
+      top_k = "topK",
+      max_tokens = "maxTokens",
+      stop_sequences = "stopSequences"
+    )
+  )
 }
 
 method(chat_path, ProviderDatabricks) <- function(provider) {

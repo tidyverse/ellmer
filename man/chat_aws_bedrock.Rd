@@ -10,6 +10,7 @@ chat_aws_bedrock(
   base_url = NULL,
   model = NULL,
   profile = NULL,
+  params = NULL,
   api_args = list(),
   api_headers = character(),
   echo = NULL
@@ -34,6 +35,8 @@ you'll need to use the inference profile ID, e.g.
 \code{model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"}.}
 
 \item{profile}{AWS profile to use.}
+
+\item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
 \item{api_args}{Named list of arbitrary extra arguments appended to the body
 of every chat API call. Some useful arguments include:

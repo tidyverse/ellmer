@@ -1,3 +1,6 @@
+#' @include provider-openai.R
+NULL
+
 #' Chat with a model hosted on perplexity.ai
 #'
 #' @description
@@ -15,6 +18,7 @@
 #' @family chatbots
 #' @param api_key `r api_key_param("PERPLEXITY_API_KEY")`
 #' @param model `r param_model("llama-3.1-sonar-small-128k-online")`
+#' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
@@ -28,21 +32,46 @@ chat_perplexity <- function(
   api_key = perplexity_key(),
   model = NULL,
   seed = NULL,
+  params = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
 ) {
   model <- set_default(model, "llama-3.1-sonar-small-128k-online")
+  echo <- check_echo(echo)
 
-  chat_openai(
-    system_prompt = system_prompt,
+  params <- params %||% params()
+
+  provider <- ProviderPerplexity(
+    name = "Perplexity",
     base_url = base_url,
-    api_key = api_key,
     model = model,
     seed = seed,
-    api_args = api_args,
-    echo = echo,
-    api_headers = api_headers
+    params = params,
+    extra_args = api_args,
+    api_key = api_key,
+    extra_headers = api_headers
+  )
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+}
+
+ProviderPerplexity <- new_class(
+  "ProviderPerplexity",
+  parent = ProviderOpenAI,
+)
+
+method(chat_params, ProviderPerplexity) <- function(provider, params) {
+  # https://docs.perplexity.ai/api-reference/chat-completions-post
+  standardise_params(
+    params,
+    c(
+      max_tokens = "max_tokens",
+      temperature = "temperature",
+      top_p = "top_p",
+      top_k = "top_k",
+      presence_penalty = "presence_penalty",
+      frequency_penalty = "frequency_penalty"
+    )
   )
 }
 
