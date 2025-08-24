@@ -1,18 +1,22 @@
 # ellmer (development version)
 
-* `chat_openai()` now uses `OPENAI_BASE_URL`, if set, for the `base_url`. Similarly, `chat_ollama()` also uses `OLLAMA_BASE_URL` if set (#713).
-
-* In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services (#706, @stevegbrooks).
-
 * `chat_anthropic()` drops empty assistant turns to avoid API errors (#710).
 
-* `contents_record()` and `contents_replay()` now record and replay custom classes that extend ellmer's `Turn` or `Content` classes (#689).
+* `chat_github()` now uses the `https://models.github.ai/inference` endpoint and `chat()` supports GitHub models in the format `chat("github/openai/gpt-4.1")` (#726).
 
-* `contents_replay()` now also restores the tool definition in `ContentToolResult` objects (in `@request@tool`) (#693).
+* `chat_google_vertex()` authentication was fixed using broader scope (#704, @netique)
 
-* `chat_snowflake()` now supports Privatelink accounts (#694, @robert-norberg).
+* `chat_google_vertex()` can now use `global` project location (#704, @netique)
 
-* `chat_snowflake()` now works against Snowflake's latest API changes (#692, @robert-norberg).
+* `chat_openai()` now uses `OPENAI_BASE_URL`, if set, for the `base_url`. Similarly, `chat_ollama()` also uses `OLLAMA_BASE_URL` if set (#713).
+
+* `contents_record()` and `contents_replay()` now record and replay custom classes that extend ellmer's `Turn` or `Content` classes (#689). `contents_replay()` now also restores the tool definition in `ContentToolResult` objects (in `@request@tool`) (#693).
+
+* `chat_snowflake()` now supports Privatelink accounts (#694, @robert-norberg). and works against Snowflake's latest API changes (#692, @robert-norberg).
+
+* `models_google_vertex()` was fixed, argument `project_id` is now deprecated (#704, @netique)
+
+* In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services (#706, @stevegbrooks).
 
 * `chat_google_vertex()` authentication was fixed using broader scope (#704, @netique)  
 

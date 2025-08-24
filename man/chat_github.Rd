@@ -7,7 +7,7 @@
 \usage{
 chat_github(
   system_prompt = NULL,
-  base_url = "https://models.inference.ai.azure.com/",
+  base_url = "https://models.github.ai/inference/",
   api_key = github_key(),
   model = NULL,
   seed = NULL,
@@ -16,21 +16,18 @@ chat_github(
   api_headers = character()
 )
 
-models_github(
-  base_url = "https://models.inference.ai.azure.com/",
-  api_key = github_key()
-)
+models_github(base_url = "https://models.github.ai/", api_key = github_key())
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
-\item{api_key}{The API key to use for authentication. You generally should
-not supply this directly, but instead manage your GitHub credentials
-as described in \url{https://usethis.r-lib.org/articles/git-credentials.html}.
-For headless environments, this will also look in the \code{GITHUB_PAT}
-env var.}
+\item{api_key}{API key to use for authentication.
+
+You generally should not supply this directly, but instead set the \code{GITHUB_PAT} environment variable.
+The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{model}{The model to use for the chat (defaults to "gpt-4o").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
@@ -59,13 +56,16 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
-GitHub (via Azure) hosts a number of open source and OpenAI models.
-To access the GitHub model marketplace, you will need to apply for and
-be accepted into the beta access program. See
-\url{https://github.com/marketplace/models} for details.
+GitHub Models hosts a number of open source and OpenAI models. To access the
+GitHub model marketplace, you will need to apply for and be accepted into the
+beta access program. See \url{https://github.com/marketplace/models} for details.
 
 This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}} with
-the defaults tweaked for the GitHub model marketplace.
+the defaults tweaked for the GitHub Models marketplace.
+
+GitHub also suports the Azure AI Inference SDK, which you can use by setting
+\code{base_url} to \code{"https://models.inference.ai.azure.com/"}. This endpoint was
+used in \pkg{ellmer} v0.3.0 and earlier.
 }
 \examples{
 \dontrun{
