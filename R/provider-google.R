@@ -714,22 +714,19 @@ models_google <- function(
     vertex = default_google_credentials(variant = "vertex"),
     gemini = default_google_credentials(api_key, variant = "gemini")
   )
-  api_headers <- switch(
-    variant,
-    vertex = c(`x-goog-user-project` = project_id),
-    gemini = character()
-  )
 
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
     model = "",
     base_url = base_url,
     # https://cloud.google.com/docs/authentication/troubleshoot-adc#user-creds-client-based
-    extra_headers = api_headers,
     credentials = credentials
   )
 
   req <- base_request(provider)
+  if (variant == "vertex") {
+    req <- req_headers(req, `x-goog-user-project` = project_id)
+  }
   req <- req_headers(req, !!!provider@extra_headers)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)
