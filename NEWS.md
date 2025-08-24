@@ -18,6 +18,12 @@
 
 * In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services (#706, @stevegbrooks).
 
+* `chat_google_vertex()` authentication was fixed using broader scope (#704, @netique)  
+
+* `chat_google_vertex()` can now use `global` project location (#704, @netique)  
+
+* `models_google_vertex()` was fixed to follow the updated API (#704, @netique)  
+
 # ellmer 0.3.0
 
 ## New features
