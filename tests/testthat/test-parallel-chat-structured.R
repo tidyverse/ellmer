@@ -80,7 +80,11 @@ test_that("parallel_chat_structured robustness to data.frame conversion", {
 test_that("multi_convert handles double token counts (Gemini-like)", {
   # Minimal nested schema
   dim_score <- type_object(score = type_integer(), evidence = type_string())
-  schema <- type_object(Party = type_string(), economic = dim_score, social = dim_score)
+  schema <- type_object(
+    Party = type_string(),
+    economic = dim_score,
+    social = dim_score
+  )
 
   # Provider resembling Gemini (name/model only; cost may be NA which is fine)
   provider <- test_provider(name = "Google/Gemini", model = "gemini-2.5-pro")
