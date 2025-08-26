@@ -535,15 +535,23 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings f
   suppressWarnings({})
 
   # Capture message about errors
-  expect_message({
-    data <- parallel_chat_structured_robust(
-      chat,
-      list("Alice, age 25", "Bad prompt 1", "Charlie, age 35", "Bad prompt 2"),
-      type = person,
-      include_status = TRUE,
-      on_error = "continue"
-    )
-  }, "Some prompts produced errors \\(2 out of 4\\). Use warnings\\(\\) to see error details")
+  expect_message(
+    {
+      data <- parallel_chat_structured_robust(
+        chat,
+        list(
+          "Alice, age 25",
+          "Bad prompt 1",
+          "Charlie, age 35",
+          "Bad prompt 2"
+        ),
+        type = person,
+        include_status = TRUE,
+        on_error = "continue"
+      )
+    },
+    "Some prompts produced errors \\(2 out of 4\\). Use warnings\\(\\) to see error details"
+  )
 
     # Check that results are as expected
   expect_equal(nrow(data), 4)
