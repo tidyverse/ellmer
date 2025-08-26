@@ -266,7 +266,13 @@ parallel_chat_structured_robust <- function(
 
       # Issue a summary message that will be immediately visible
       n_errors <- length(error_indices)
-      message("Some prompts produced errors (", n_errors, " out of ", length(prompts), "). Use warnings() to see error details.")
+      message(
+        "Some prompts produced errors (",
+        n_errors,
+        " out of ",
+        length(prompts),
+        "). Use warnings() to see error details."
+      )
     }
   }
 
@@ -341,21 +347,24 @@ multi_convert_robust <- function(
         status = turn$error
       )
     } else {
-      tryCatch({
-        data <- extract_data(
-          turn = turn,
-          type = wrap_type_if_needed(type, needs_wrapper),
-          convert = FALSE,
-          needs_wrapper = needs_wrapper
-        )
-        list(data = data, status = "success")
-      }, error = function(e) {
-        # If extraction fails, return NA structure
-        list(
-          data = create_na_structure(type, needs_wrapper),
-          status = conditionMessage(e)
-        )
-      })
+      tryCatch(
+        {
+          data <- extract_data(
+            turn = turn,
+            type = wrap_type_if_needed(type, needs_wrapper),
+            convert = FALSE,
+            needs_wrapper = needs_wrapper
+          )
+          list(data = data, status = "success")
+        },
+        error = function(e) {
+          # If extraction fails, return NA structure
+          list(
+            data = create_na_structure(type, needs_wrapper),
+            status = conditionMessage(e)
+          )
+        }
+      )
     }
   })
 
@@ -376,16 +385,22 @@ multi_convert_robust <- function(
     out <- rows
   }
 
-  if (is.data.frame(out) && (include_tokens || include_cost || include_status)) {
+  if (
+    is.data.frame(out) && (include_tokens || include_cost || include_status)
+  ) {
     # Handle token information for both successful and failed turns
     if (include_tokens || include_cost) {
-      tokens <- t(vapply(turns, function(turn) {
-        if (is_error_turn(turn)) {
-          c(0L, 0L, 0L)
-        } else {
-          turn@tokens
-        }
-      }, integer(3)))
+      tokens <- t(vapply(
+        turns,
+        function(turn) {
+          if (is_error_turn(turn)) {
+            c(0L, 0L, 0L)
+          } else {
+            turn@tokens
+          }
+        },
+        integer(3)
+      ))
 
       if (include_tokens) {
         out$input_tokens <- tokens[, 1]
@@ -436,7 +451,8 @@ create_na_structure <- function(type, needs_wrapper = FALSE) {
 
 create_na_for_type <- function(type_spec) {
   if (S7_inherits(type_spec, TypeBasic)) {
-    switch(type_spec@type,
+    switch(
+      type_spec@type,
       "string" = NA_character_,
       "integer" = NA_integer_,
       "number" = NA_real_,
@@ -524,19 +540,28 @@ parallel_turns_robust <- function(
     error_index <- NA_integer_
     error_message <- NULL
     for (i in seq_along(reqs)) {
-      tryCatch({
-        resp <- httr2::req_perform(reqs[[i]])
-        json <- resp_body_json(resp)
-        results[[length(results) + 1L]] <- value_turn(provider, json, has_type = !is.null(type))
-      }, error = function(e) {
-        error_happened <<- TRUE
-        error_index <<- i
-        error_message <<- conditionMessage(e)
-        NULL
-      })
+      tryCatch(
+        {
+          resp <- httr2::req_perform(reqs[[i]])
+          json <- resp_body_json(resp)
+          results[[length(results) + 1L]] <- value_turn(
+            provider,
+            json,
+            has_type = !is.null(type)
+          )
+        },
+        error = function(e) {
+          error_happened <<- TRUE
+          error_index <<- i
+          error_message <<- conditionMessage(e)
+          NULL
+        }
+      )
       if (error_happened) {
         cli::cli_warn("Error in prompt {error_index}: {error_message}")
-        cli::cli_inform("Returning results for first {error_index - 1} successful prompt{?s}")
+        cli::cli_inform(
+          "Returning results for first {error_index - 1} successful prompt{?s}"
+        )
         break
       }
     }
@@ -544,7 +569,11 @@ parallel_turns_robust <- function(
   } else {
     # Use httr2's parallel processing for "continue" and "stop" modes
     httr2_on_error <- if (on_error == "continue") "continue" else "stop"
-    resps <- req_perform_parallel(reqs, max_active = max_active, on_error = httr2_on_error)
+    resps <- req_perform_parallel(
+      reqs,
+      max_active = max_active,
+      on_error = httr2_on_error
+    )
 
     # Check for user termination
     if (any(map_lgl(resps, is.null))) {
@@ -565,18 +594,21 @@ parallel_turns_robust <- function(
         )
       } else {
         # Process successful response
-        tryCatch({
-          json <- resp_body_json(resp)
-          value_turn(provider, json, has_type = !is.null(type))
-        }, error = function(e) {
-          # Return a special error turn for JSON parsing errors
-          structure(
-            list(
-              error = conditionMessage(e)
-            ),
-            class = "error_turn"
-          )
-        })
+        tryCatch(
+          {
+            json <- resp_body_json(resp)
+            value_turn(provider, json, has_type = !is.null(type))
+          },
+          error = function(e) {
+            # Return a special error turn for JSON parsing errors
+            structure(
+              list(
+                error = conditionMessage(e)
+              ),
+              class = "error_turn"
+            )
+          }
+        )
       }
     }))
   }
