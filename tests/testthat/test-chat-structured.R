@@ -2,7 +2,11 @@
 
 test_that("useful error if no ContentJson", {
   turn <- Turn("assistant", list(ContentText("Hello")))
-  expect_snapshot(extract_data(turn), error = TRUE)
+  expect_error(
+    extract_data(turn),
+    "Data extraction failed: 0 data results received.",
+    fixed = TRUE
+  )
 })
 
 test_that("can extract data from ContentJson", {
