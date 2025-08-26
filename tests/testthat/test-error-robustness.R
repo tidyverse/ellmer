@@ -527,7 +527,10 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings f
       # Third prompt succeeds
       structure(list(content = "success"), class = "turn"),
       # Fourth prompt fails
-      structure(list(error = "Rate limit exceeded", index = 4, type_spec = person), class = "error_turn")
+      structure(
+        list(error = "Rate limit exceeded", index = 4, type_spec = person),
+        class = "error_turn"
+      )
     )
   )
 
