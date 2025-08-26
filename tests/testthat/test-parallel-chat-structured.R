@@ -138,7 +138,11 @@ test_that("multi_convert handles double token counts (Gemini-like)", {
       names(out)
   ))
   # Token columns should be integer-coercible and non-negative
-  expect_true(all(out$input_tokens >= 0 & out$output_tokens >= 0 & out$cached_input_tokens >= 0))
+  expect_true(all(
+    out$input_tokens >= 0 &
+      out$output_tokens >= 0 &
+      out$cached_input_tokens >= 0
+  ))
 })
 
 test_that("convert_from_type flattens nested object columns", {
