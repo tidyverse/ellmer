@@ -191,7 +191,13 @@ test_that("convert_from_type flattens multiple nested object columns", {
   expect_equal(nrow(out), 2)
   expect_setequal(
     names(out),
-    c("Party", "economic.score", "economic.evidence", "social.score", "social.evidence")
+    c(
+      "Party",
+      "economic.score",
+      "economic.evidence",
+      "social.score",
+      "social.evidence"
+    )
   )
   expect_identical(out$Party, c("A", "B"))
   expect_identical(out$`economic.score`, c(1L, 2L))
