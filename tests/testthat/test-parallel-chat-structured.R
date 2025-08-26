@@ -101,8 +101,16 @@ test_that("multi_convert handles double token counts (Gemini-like)", {
     social = list(score = 4L, evidence = "s2")
   )
 
-  t1 <- Turn("assistant", contents = list(ContentJson(j1)), tokens = c(10, 5, 0) + 0.0) # doubles
-  t2 <- Turn("assistant", contents = list(ContentJson(j2)), tokens = c(20, 6, 1) + 0.0) # doubles
+  t1 <- Turn(
+    "assistant",
+    contents = list(ContentJson(j1)),
+    tokens = c(10, 5, 0) + 0.0
+  ) # doubles
+  t2 <- Turn(
+    "assistant",
+    contents = list(ContentJson(j2)),
+    tokens = c(20, 6, 1) + 0.0
+  ) # doubles
 
   out <- multi_convert(
     provider = provider,
