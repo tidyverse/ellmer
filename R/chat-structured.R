@@ -13,24 +13,44 @@ extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE, prom
     json_indices <- which(is_json)
     json1 <- turn@contents[[json_indices[1]]]
     json2 <- turn@contents[[json_indices[2]]]
-    
     val1 <- json1@value
     val2 <- json2@value
-    
     if (identical(val1, val2)) {
       # Duplicate case - use the first one
-      index_msg <- if (!is.null(prompt_index)) paste0(" (prompt ", prompt_index, ")") else ""
-      warning("Found duplicate JSON responses, using the first one", index_msg, ".", call. = FALSE, immediate. = TRUE)
+      index_msg <- if (!is.null(prompt_index)) {
+        paste0(" (prompt ", prompt_index, ")")
+      } else {
+        ""
+      }
+      warning(
+        "Found duplicate JSON responses, using the first one",
+        index_msg,
+        ".",
+        call. = FALSE,
+        immediate. = TRUE
+      )
       out <- val1
     } else {
       # Different JSON objects - use the last one (likely the final response)
-      index_msg <- if (!is.null(prompt_index)) paste0(" (prompt ", prompt_index, ")") else ""
-      warning("Found multiple different JSON responses, using the last one", index_msg, ".", call. = FALSE, immediate. = TRUE)
+      index_msg <- if (!is.null(prompt_index)) {
+        paste0(" (prompt ", prompt_index, ")")
+      } else {
+        ""
+      }
+      warning(
+        "Found multiple different JSON responses, using the last one",
+        index_msg,
+        ".",
+        call. = FALSE,
+        immediate. = TRUE
+      )
       out <- val2
     }
   } else {
     # More than 2 JSON objects - this is unexpected
-    cli::cli_abort("Data extraction failed: {n} data results received. Expected 1 or 2.")
+    cli::cli_abort(
+      "Data extraction failed: {n} data results received. Expected 1 or 2."
+    )
   }
 
   if (needs_wrapper) {

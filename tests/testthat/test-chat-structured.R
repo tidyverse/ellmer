@@ -27,12 +27,14 @@ test_that("can extract data when wrapper is used", {
 test_that("handles duplicate identical JSON responses", {
   # This test covers the Bedrock duplicate JSON issue
   json_data <- list(name = "John", age = 25)
-  turn <- Turn("assistant", list(
-    ContentJson(json_data),
-    ContentJson(json_data)  # Identical duplicate
-  ))
+  turn <- Turn(
+    "assistant",
+    list(
+      ContentJson(json_data),
+      ContentJson(json_data) # Identical duplicate
+    )
+  )
   type <- type_object(name = type_string(), age = type_integer())
-  
   # Should warn about duplicates and use the first one
   expect_warning(
     result <- extract_data(turn, type),
@@ -44,12 +46,14 @@ test_that("handles duplicate identical JSON responses", {
 test_that("handles duplicate identical JSON responses with prompt index", {
   # Test that prompt index is included in warning message
   json_data <- list(score = 42)
-  turn <- Turn("assistant", list(
-    ContentJson(json_data),
-    ContentJson(json_data)
-  ))
+  turn <- Turn(
+    "assistant",
+    list(
+      ContentJson(json_data),
+      ContentJson(json_data)
+    )
+  )
   type <- type_object(score = type_integer())
-  
   expect_warning(
     extract_data(turn, type, prompt_index = 3),
     "Found duplicate JSON responses, using the first one \\(prompt 3\\)"
@@ -58,12 +62,14 @@ test_that("handles duplicate identical JSON responses with prompt index", {
 
 test_that("handles different JSON responses", {
   # This test covers the case where two different JSON objects are returned
-  turn <- Turn("assistant", list(
-    ContentJson(list(name = "John", age = 25)),
-    ContentJson(list(name = "Jane", age = 30))  # Different data
-  ))
+  turn <- Turn(
+    "assistant",
+    list(
+      ContentJson(list(name = "John", age = 25)),
+      ContentJson(list(name = "Jane", age = 30)) # Different data
+    )
+  )
   type <- type_object(name = type_string(), age = type_integer())
-  
   # Should warn about multiple responses and use the last one
   expect_warning(
     result <- extract_data(turn, type),
@@ -73,12 +79,14 @@ test_that("handles different JSON responses", {
 })
 
 test_that("handles different JSON responses with prompt index", {
-  turn <- Turn("assistant", list(
-    ContentJson(list(value = 1)),
-    ContentJson(list(value = 2))
-  ))
+  turn <- Turn(
+    "assistant",
+    list(
+      ContentJson(list(value = 1)),
+      ContentJson(list(value = 2))
+    )
+  )
   type <- type_object(value = type_integer())
-  
   expect_warning(
     extract_data(turn, type, prompt_index = 5),
     "Found multiple different JSON responses, using the last one \\(prompt 5\\)"
@@ -87,13 +95,15 @@ test_that("handles different JSON responses with prompt index", {
 
 test_that("errors on more than 2 JSON responses", {
   # Should error if there are more than 2 JSON objects
-  turn <- Turn("assistant", list(
-    ContentJson(list(x = 1)),
-    ContentJson(list(x = 2)),
-    ContentJson(list(x = 3))
-  ))
+  turn <- Turn(
+    "assistant",
+    list(
+      ContentJson(list(x = 1)),
+      ContentJson(list(x = 2)),
+      ContentJson(list(x = 3))
+    )
+  )
   type <- type_object(x = type_integer())
-  
   expect_error(
     extract_data(turn, type),
     "Data extraction failed: 3 data results received. Expected 1 or 2."
