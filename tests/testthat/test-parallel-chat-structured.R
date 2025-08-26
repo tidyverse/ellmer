@@ -90,8 +90,16 @@ test_that("multi_convert handles double token counts (Gemini-like)", {
   provider <- test_provider(name = "Google/Gemini", model = "gemini-2.5-pro")
 
   # Two assistant turns with JSON content matching schema and double token counts
-  j1 <- list(Party = "A", economic = list(score = 1L, evidence = "e1"), social = list(score = 2L, evidence = "s1"))
-  j2 <- list(Party = "B", economic = list(score = 3L, evidence = "e2"), social = list(score = 4L, evidence = "s2"))
+  j1 <- list(
+    Party = "A",
+    economic = list(score = 1L, evidence = "e1"),
+    social = list(score = 2L, evidence = "s1")
+  )
+  j2 <- list(
+    Party = "B",
+    economic = list(score = 3L, evidence = "e2"),
+    social = list(score = 4L, evidence = "s2")
+  )
 
   t1 <- Turn("assistant", contents = list(ContentJson(j1)), tokens = c(10, 5, 0) + 0.0) # doubles
   t2 <- Turn("assistant", contents = list(ContentJson(j2)), tokens = c(20, 6, 1) + 0.0) # doubles
