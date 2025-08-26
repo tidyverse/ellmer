@@ -187,7 +187,11 @@ multi_convert <- function(
 
   if (is.data.frame(out) && (include_tokens || include_cost)) {
     # Coerce to integer to handle providers that return doubles
-    tokens <- t(vapply(turns, function(turn) as.integer(turn@tokens), integer(3)))
+    tokens <- t(vapply(
+      turns,
+      function(turn) as.integer(turn@tokens),
+      integer(3)
+    ))
 
     if (include_tokens) {
       out$input_tokens <- tokens[, 1]
