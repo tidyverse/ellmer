@@ -578,7 +578,8 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings w
                              -1 means moderately opposed,
                              0 means neutral,
                              1 means moderately in favor of a more permissive stance on immigration,
-                             2 means strongly in favour of a permissive stance on immigration."),
+                             2 means strongly in favour of a permissive stance on immigration."
+    ),
     immig_rationale = type_string("A brief rationale for your answer.")
   )
 
