@@ -23,7 +23,6 @@ NULL
 #'
 #' @param api_key `r api_key_param("GOOGLE_API_KEY")`
 #'   For Gemini, you can alternatively set `GEMINI_API_KEY`.
-#'
 #' @param model `r param_model("gemini-2.5-flash", "google_gemini")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -46,7 +45,7 @@ chat_google_gemini <- function(
 ) {
   model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
-  credentials <- default_google_credentials(api_key, gemini = TRUE)
+  credentials <- default_google_credentials(api_key, variant = "gemini")
 
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
@@ -76,7 +75,8 @@ chat_google_gemini_test <- function(
 
 #' @export
 #' @rdname chat_google_gemini
-#' @param location Location, e.g. `us-east1`, `me-central1`, `africa-south1`.
+#' @param location Location, e.g. `us-east1`, `me-central1`, `africa-south1` or
+#'   `global`.
 #' @param project_id Project ID.
 chat_google_vertex <- function(
   location,
@@ -88,9 +88,12 @@ chat_google_vertex <- function(
   api_headers = character(),
   echo = NULL
 ) {
+  check_string(location)
+  check_string(project_id)
+
   model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
-  credentials <- default_google_credentials()
+  credentials <- default_google_credentials(variant = "vertex")
 
   provider <- ProviderGoogleGemini(
     name = "Google/Vertex",
@@ -107,7 +110,8 @@ chat_google_vertex <- function(
 # https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
 vertex_url <- function(location, project_id) {
   paste_c(
-    c("https://", location, "-aiplatform.googleapis.com/v1"),
+    c("https://", google_location(location), "aiplatform.googleapis.com"),
+    "/v1",
     c("/projects/", project_id),
     c("/locations/", location),
     "/publishers/google/"
@@ -583,13 +587,20 @@ merge_gemini_chunks <- merge_objects(
 default_google_credentials <- function(
   api_key = NULL,
   error_call = caller_env(),
-  gemini = FALSE
+  variant = c("gemini", "vertex")
 ) {
-  gemini_scope <- "https://www.googleapis.com/auth/generative-language.retriever"
+  variant <- arg_match(variant)
+
+  gemini_scope <- switch(
+    variant,
+    gemini = "https://www.googleapis.com/auth/generative-language.retriever",
+    # https://github.com/googleapis/python-genai/blob/cc9e470326e0c1b84ec3ce9891c9f96f6c74688e/google/genai/_api_client.py#L184
+    vertex = "https://www.googleapis.com/auth/cloud-platform"
+  )
 
   check_string(api_key, allow_null = TRUE, call = error_call)
   api_key <- api_key %||% Sys.getenv("GOOGLE_API_KEY")
-  if (gemini && api_key == "") {
+  if (variant == "gemini" && api_key == "") {
     api_key <- Sys.getenv("GEMINI_API_KEY")
   }
 
@@ -670,37 +681,82 @@ models_google_gemini <- function(
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL
 ) {
-  provider <- ProviderGoogleGemini(
-    name = "Google/Gemini",
-    model = "",
-    base_url = base_url,
-    credentials = if (isFALSE(api_key)) {
-      default_google_credentials() # vertex
-    } else {
-      default_google_credentials(api_key, gemini = TRUE)
-    }
-  )
+  check_string(base_url)
+  check_string(api_key, allow_null = TRUE)
 
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/models")
-  resp <- req_perform(req)
-
-  json <- resp_body_json(resp)
-
-  name <- map_chr(json$models, "[[", "name")
-  name <- gsub("^models/", "", name)
-  display_name <- map_chr(json$models, "[[", "displayName")
-
-  methods <- map(json$models, \(x) unlist(x$supportedGenerationMethods))
-  can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)
-
-  df <- data.frame(id = name)
-  df <- cbind(df, match_prices(provider@name, df$id))
-  unrowname(df[order(df$id), ][can_generate, ])
+  models_google(base_url, api_key, variant = "gemini")
 }
 
 #' @rdname chat_google_gemini
 #' @export
 models_google_vertex <- function(location, project_id) {
-  models_google_gemini(vertex_url(location, project_id), api_key = FALSE)
+  check_string(location)
+  check_string(project_id)
+
+  base_url <- paste_c(
+    c("https://", google_location(location), "aiplatform.googleapis.com"),
+    "/v1beta1",
+    "/publishers/google/"
+  )
+
+  models_google(base_url, project_id = project_id, variant = "vertex")
+}
+
+models_google <- function(
+  base_url = "https://generativelanguage.googleapis.com/v1beta/",
+  api_key = NULL,
+  project_id = NULL,
+  variant = c("gemini", "vertex")
+) {
+  variant <- arg_match(variant)
+  credentials <- switch(
+    variant,
+    vertex = default_google_credentials(variant = "vertex"),
+    gemini = default_google_credentials(api_key, variant = "gemini")
+  )
+
+  provider <- ProviderGoogleGemini(
+    name = "Google/Gemini",
+    model = "",
+    base_url = base_url,
+    # https://cloud.google.com/docs/authentication/troubleshoot-adc#user-creds-client-based
+    credentials = credentials
+  )
+
+  req <- base_request(provider)
+  if (variant == "vertex") {
+    req <- req_headers(req, `x-goog-user-project` = project_id)
+  }
+  req <- req_headers(req, !!!provider@extra_headers)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  if (variant == "vertex") {
+    name <- map_chr(json$publisherModels, "[[", "name")
+    name <- gsub("^publishers/google/models/", "", name)
+    # this is the closest to "generateContent" in "supportedGenerationMethods" for Gemini
+    # https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/publishers.models
+    can_generate <- json$publisherModels |>
+      map_lgl(\(x) "openGenerationAiStudio" %in% names(x$supportedActions))
+  } else {
+    name <- map_chr(json$models, "[[", "name")
+    name <- gsub("^models/", "", name)
+    display_name <- map_chr(json$models, "[[", "displayName")
+
+    methods <- map(json$models, \(x) unlist(x$supportedGenerationMethods))
+    can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)
+  }
+
+  df <- data.frame(id = name)
+  df <- cbind(df, match_prices(provider@name, df$id))
+  df <- df[can_generate, ]
+  unrowname(df[order(df$id), ])
+}
+
+# for location "global", there is no location in the final base URL
+# https://github.com/googleapis/python-genai/blob/cc9e470326e0c1b84ec3ce9891c9f96f6c74688e/google/genai/_api_client.py#L646-L654
+google_location <- function(location) {
+  if (location == "global") "" else paste0(location, "-")
 }
