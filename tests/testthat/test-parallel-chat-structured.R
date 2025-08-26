@@ -56,7 +56,9 @@ test_that("parallel_chat_structured robustness to data.frame conversion", {
   expect_type(df$`social.score`, "integer")
   expect_type(df$`economic.evidence`, "character")
   expect_type(df$`social.evidence`, "character")
-  expect_true(all(is.na(df$`economic.evidence`) | nzchar(df$`economic.evidence`)))
+  expect_true(all(
+    is.na(df$`economic.evidence`) | nzchar(df$`economic.evidence`)
+  ))
   expect_true(all(is.na(df$`social.evidence`) | nzchar(df$`social.evidence`)))
   expect_true(all(df$input_tokens >= 0))
   expect_true(all(df$output_tokens >= 0))
