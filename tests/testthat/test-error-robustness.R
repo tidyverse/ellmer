@@ -607,7 +607,11 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings w
   expect_equal(nrow(response), length(data_manifestos))
 
   # Check that some prompts failed (have NA values)
-  has_nas <- apply(response[, c("party", "immig_score", "immig_rationale")], 1, function(row) any(is.na(row)))
+  has_nas <- apply(
+    response[, c("party", "immig_score", "immig_rationale")],
+    1,
+    function(row) any(is.na(row))
+  )
   expect_true(any(has_nas), "At least one prompt should fail and produce NAs")
 
   # The warning expectation above already confirms the warnings were issued
