@@ -523,7 +523,10 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings f
       # First prompt succeeds - mock a turn without error_turn class
       structure(list(content = "success"), class = "turn"),
       # Second prompt fails
-      structure(list(error = "Token limit exceeded", index = 2, type_spec = person), class = "error_turn"),
+      structure(
+        list(error = "Token limit exceeded", index = 2, type_spec = person),
+        class = "error_turn"
+      ),
       # Third prompt succeeds
       structure(list(content = "success"), class = "turn"),
       # Fourth prompt fails
