@@ -45,14 +45,17 @@ test_that("parallel_chat_structured_robust handles token length exceeded error",
   chat <- chat_openai(model = "gpt-4o", system_prompt = prompt)
 
   # This should not throw an error, unlike the regular version
-  expect_error({
-    response <- parallel_chat_structured_robust(
-      chat,
-      prompts = as.list(data_manifestos),
-      max_active = 1,
-      type = immig_type
-    )
-  }, NA)
+  expect_error(
+    {
+      response <- parallel_chat_structured_robust(
+        chat,
+        prompts = as.list(data_manifestos),
+        max_active = 1,
+        type = immig_type
+      )
+    },
+    NA
+  )
 
   # # test that the return has the right structure, even with failures
   # response <- parallel_chat_structured_robust(
