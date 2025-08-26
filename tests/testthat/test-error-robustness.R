@@ -587,15 +587,18 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings w
   suppressWarnings({})
 
   # This should issue message for failed prompts
-  expect_message({
-    response <- parallel_chat_structured_robust(
-      chat,
-      prompts = as.list(data_manifestos),
-      type = immig_type,
-      include_status = TRUE,
-      on_error = "continue"
-    )
-  }, "Some prompts produced errors.*Use warnings\\(\\) to see error details")
+  expect_message(
+    {
+      response <- parallel_chat_structured_robust(
+        chat,
+        prompts = as.list(data_manifestos),
+        type = immig_type,
+        include_status = TRUE,
+        on_error = "continue"
+      )
+    },
+    "Some prompts produced errors.*Use warnings\\(\\) to see error details"
+  )
 
   # Should have same number of rows as input (maintains length)
   expect_equal(nrow(response), length(data_manifestos))
