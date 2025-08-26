@@ -377,9 +377,18 @@ test_that("parallel_chat_structured_robust on_error='return' stops at first erro
   expect_false(any(is.na(response$immig_rationale)))
 
   # Check that costs and tokens are positive for successful results
-  expect_true(all(response$cost > 0), "All successful results should have positive cost")
-  expect_true(all(response$input_tokens > 0), "All successful results should have positive input tokens")
-  expect_true(all(response$output_tokens > 0), "All successful results should have positive output tokens")
+  expect_true(
+    all(response$cost > 0),
+    "All successful results should have positive cost"
+  )
+  expect_true(
+    all(response$input_tokens > 0),
+    "All successful results should have positive input tokens"
+  )
+  expect_true(
+    all(response$output_tokens > 0),
+    "All successful results should have positive output tokens"
+  )
 
   # Check that error message was printed (the warning was captured but output capture may not work for warnings)
   # Let's just check that we got exactly 2 results as expected, which means the error stopping worked
