@@ -564,7 +564,7 @@ test_that("parallel_chat_structured_robust on_error='continue' issues warnings f
     "Some prompts produced errors \\(2 out of 4\\). Use warnings\\(\\) to see error details"
   )
 
-    # Check that results are as expected
+  # Check that results are as expected
   expect_equal(nrow(data), 4)
   expect_true("status" %in% names(data))
 
