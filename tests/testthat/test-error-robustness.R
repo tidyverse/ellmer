@@ -414,7 +414,12 @@ test_that("parallel_chat_structured_robust include_status tracks successes and e
 
   data <- parallel_chat_structured_robust(
     chat,
-    list("Alice, age 25", "Very long prompt...", "Charlie, age 35", "Another bad prompt"),
+    list(
+      "Alice, age 25",
+      "Very long prompt...",
+      "Charlie, age 35",
+      "Another bad prompt"
+    ),
     type = person,
     include_status = TRUE
   )
