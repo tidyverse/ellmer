@@ -242,7 +242,12 @@ test_that("parallel_chat_structured_robust handles mixed success/failure scenari
 
   data <- parallel_chat_structured_robust(
     chat,
-    list("Alice, age 25", "Bad prompt", "Charlie, age 35", "Another bad prompt"),
+    list(
+      "Alice, age 25",
+      "Bad prompt",
+      "Charlie, age 35",
+      "Another bad prompt"
+    ),
     type = person,
     include_tokens = TRUE
   )
