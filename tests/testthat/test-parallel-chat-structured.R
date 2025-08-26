@@ -123,10 +123,20 @@ test_that("multi_convert handles double token counts (Gemini-like)", {
 
   expect_s3_class(out, "data.frame")
   expect_equal(nrow(out), 2)
-  expect_true(all(c(
-    "Party", "economic.score", "economic.evidence", "social.score", "social.evidence",
-    "input_tokens", "output_tokens", "cached_input_tokens", "cost"
-  ) %in% names(out)))
+  expect_true(all(
+    c(
+      "Party",
+      "economic.score",
+      "economic.evidence",
+      "social.score",
+      "social.evidence",
+      "input_tokens",
+      "output_tokens",
+      "cached_input_tokens",
+      "cost"
+    ) %in%
+      names(out)
+  ))
   # Token columns should be integer-coercible and non-negative
   expect_true(all(out$input_tokens >= 0 & out$output_tokens >= 0 & out$cached_input_tokens >= 0))
 })
