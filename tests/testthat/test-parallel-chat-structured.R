@@ -175,8 +175,16 @@ test_that("convert_from_type flattens multiple nested object columns", {
     social = dim_score
   )
   x <- list(
-    list(Party = "A", economic = list(score = 1L, evidence = "e1"), social = list(score = 3L, evidence = "s1")),
-    list(Party = "B", economic = list(score = 2L, evidence = "e2"), social = list(score = 4L, evidence = "s2"))
+    list(
+      Party = "A",
+      economic = list(score = 1L, evidence = "e1"),
+      social = list(score = 3L, evidence = "s1")
+    ),
+    list(
+      Party = "B",
+      economic = list(score = 2L, evidence = "e2"),
+      social = list(score = 4L, evidence = "s2")
+    )
   )
   out <- convert_from_type(x, type_array(schema))
   expect_s3_class(out, "data.frame")
