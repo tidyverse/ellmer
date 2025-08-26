@@ -6,10 +6,10 @@
       Error in `chat()`:
       ! `name` must be a single string, not absent.
     Code
-      chat("a/b/c")
+      chat("")
     Condition
       Error in `chat()`:
-      ! `name` must be in form "provider" or "provider/model".
+      ! `name` must be a single string, not the empty string "".
     Code
       chat("susan")
     Condition

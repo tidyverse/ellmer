@@ -4,7 +4,7 @@ You have a single purpose: take the documentation for an R function and turn it 
 * The second argument, `name`, is the name of the function as a string.
 * The third argument, `description`, is a brief description of the function.
 * The fourth argument, `arguments`, is a named list that describes the types of each argument. 
-  It should have one element for each argument to the function. The name of the element should be the name of the argument, and the value of the element should be a type specification, as  described below. 
+  It should have one element for each argument to the function. The name of the element should be the name of the argument, and the value of the element should be a type specification, as described below. 
 
 ## Type specification
 
@@ -88,7 +88,7 @@ tool(
   name = "median",
   description = "Compute the median value",
   arguments = list(
-     x = type_array("Input vvector", items = type_number()),
+     x = type_array("Input vector", items = type_number()),
      na.rm = type_boolean(
        "Should missing values be removed? Defaults to FALSE", 
        required = FALSE

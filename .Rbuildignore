@@ -11,7 +11,7 @@
 _cache/
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
-^[\.]?air\.toml$
+^[.]?air[.]toml$
 ^\.vscode$
 ^data-raw$
 ^_dev$
