@@ -157,4 +157,3 @@ test_that("convert_from_type flattens multiple nested object columns", {
   expect_identical(out$`social.score`, c(3L, 4L))
   expect_identical(out$`social.evidence`, c("s1", "s2"))
 })
-
