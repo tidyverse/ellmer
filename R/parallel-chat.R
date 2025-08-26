@@ -205,7 +205,8 @@ parallel_chat_structured_robust <- function(
   conversations <- append_turns(list(existing), user_turns)
 
   # Handle stop behavior up front using switch for clarity
-  switch(on_error,
+  switch(
+    on_error,
     stop = {
       result <- parallel_chat_structured(
         chat = chat,
