@@ -1,7 +1,6 @@
 extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE, prompt_index = NULL) {
   is_json <- map_lgl(turn@contents, S7_inherits, ContentJson)
   n <- sum(is_json)
-  
   if (n == 0) {
     cli::cli_abort("Data extraction failed: 0 data results received.")
   } else if (n == 1) {
