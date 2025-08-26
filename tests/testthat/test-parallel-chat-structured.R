@@ -31,14 +31,25 @@ test_that("parallel_chat_structured robustness to data.frame conversion", {
   )
   expect_s3_class(df, "data.frame")
   expect_equal(nrow(df), length(prompts))
-  expect_true(all(c(
-    "Party",
-    "economic.score", "economic.evidence",
-    "social.score", "social.evidence"
-  ) %in% names(df)))
-  expect_true(all(c(
-    "input_tokens", "output_tokens", "cached_input_tokens", "cost"
-  ) %in% names(df)))
+  expect_true(all(
+    c(
+      "Party",
+      "economic.score",
+      "economic.evidence",
+      "social.score",
+      "social.evidence"
+    ) %in%
+      names(df)
+  ))
+  expect_true(all(
+    c(
+      "input_tokens",
+      "output_tokens",
+      "cached_input_tokens",
+      "cost"
+    ) %in%
+      names(df)
+  ))
 
   # Basic value checks: types and token non-negativity
   expect_type(df$`economic.score`, "integer")
