@@ -257,8 +257,11 @@ parallel_chat_structured_robust <- function(
 
       # Issue warnings for each error so they can be retrieved with warnings()
       for (i in seq_along(error_indices)) {
-        warning(paste0("Prompt ", error_indices[i], ": ", error_messages[i]),
-                call. = FALSE, immediate. = FALSE)
+        warning(
+          paste0("Prompt ", error_indices[i], ": ", error_messages[i]),
+          call. = FALSE,
+          immediate. = FALSE
+        )
       }
 
       # Issue a summary message that will be immediately visible
