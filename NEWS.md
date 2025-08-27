@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* ellmer now supports tools that return image or PDF content types, for example using `content_image_file()` or `content_image_pdf()`. (#735)
+
 # ellmer 0.3.1
 
 * `chat_anthropic()` drops empty assistant turns to avoid API errors (#710).
