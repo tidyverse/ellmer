@@ -280,7 +280,7 @@ tool_results_separate_content <- function(turn) {
           ContentText("</tool-content>")
         )
       )
-      result <- set_props(result, value = "[see below]")
+      result@value <- "[see below]"
     }
 
     # Check for extra content in list items
@@ -297,10 +297,7 @@ tool_results_separate_content <- function(turn) {
               ContentText("</tool-content>")
             )
           )
-          result <- set_props(
-            result,
-            value = sprintf("[see below: item %d]", j)
-          )
+          result@value[[j]] <- sprintf("[see below: item %d]", j)
         }
       }
     }

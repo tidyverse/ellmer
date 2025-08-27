@@ -848,3 +848,26 @@ test_that("tool_results_separate_content() handles no tool results", {
   expect_length(data$contents, 2)
   expect_equal(data$contents, user_turn@contents)
 })
+
+test_that("tool_results_separate_content() handles list result values", {
+  request <- ContentToolRequest("x1", "my_tool", list())
+  result <- ContentToolResult(
+    list(
+      content_image_url("https://placecat.com/200/200"),
+      "not an image",
+      content_image_url("https://placecat.com/300/300")
+    ),
+    request = request
+  )
+  user_turn <- Turn("user", list(result))
+  data <- tool_results_separate_content(user_turn)
+
+  expect_length(data$tool_results, 1)
+  expect_length(data$tool_results[[1]]@value, 3)
+  # Images are replaced with text placeholders in the tool result
+  expect_true(every(data$tool_results[[1]]@value, is.character))
+
+  expect_length(data$contents, 3 * 2)
+  expect_equal(data$contents[[2]], result@value[[1]])
+  expect_equal(data$contents[[5]], result@value[[3]])
+})
