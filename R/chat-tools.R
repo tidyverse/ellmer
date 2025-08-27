@@ -247,7 +247,45 @@ tool_results_as_turn <- function(results) {
   if (!any(is_tool_result)) {
     return(NULL)
   }
-  Turn("user", contents = results[is_tool_result])
+
+  results <- results[is_tool_result]
+
+  # Move any extra content (image/pdf) out of the tool result and into the user
+  # turn we use to encapsulate the tool results. This lets us support additional
+  # content types that aren't directly supported in tool results by most APIs.
+  extra_content <- list()
+  for (i in seq_along(results)) {
+    result <- results[[i]]
+    id <- result@request@id
+    if (is_extra_content(result@value)) {
+      extra_content <- c(
+        extra_content,
+        list(ContentText(sprintf("From tool %s:", id)), result@value)
+      )
+      results[[i]]@value <- "[see below]"
+    }
+
+    if (is_list(result@value)) {
+      for (j in seq_along(result@value)) {
+        if (is_extra_content(result@value[[j]])) {
+          extra_content <- c(
+            extra_content,
+            list(
+              ContentText(sprintf("From tool %s, item %d:", id, j)),
+              result@value[[j]]
+            )
+          )
+          results[[i]]@value[[j]] <- sprintf("[see below: item %d]", j)
+        }
+      }
+    }
+  }
+
+  Turn("user", contents = c(results, extra_content))
+}
+
+is_extra_content <- function(x) {
+  S7::S7_inherits(x, ContentImage) || S7::S7_inherits(x, ContentPDF)
 }
 
 turn_get_tool_errors <- function(turn = NULL) {
@@ -328,7 +366,7 @@ maybe_echo_tool <- function(x, echo = "output") {
   } else {
     icon <- cli::col_green(cli::symbol$record)
     header <- ""
-    value <- tool_string(x)
+    value <- tool_string(x, force = TRUE)
   }
 
   value <- cli::style_italic(value)

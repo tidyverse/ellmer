@@ -312,7 +312,8 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
       )
     })
 
-    c(user, tools)
+    # API errors if tool results do not follow previous assistant turn
+    c(tools, user)
   } else if (x@role == "assistant") {
     # Tool requests come out of content and go into own argument
     is_tool <- map_lgl(x@contents, is_tool_request)

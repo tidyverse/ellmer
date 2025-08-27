@@ -142,7 +142,7 @@ ContentImage <- new_class(
 #' @param detail Not currently used.
 ContentImageRemote <- new_class(
   "ContentImageRemote",
-  parent = Content,
+  parent = ContentImage,
   properties = list(
     url = prop_string(),
     detail = prop_string(default = "")
@@ -164,7 +164,7 @@ method(contents_markdown, ContentImageRemote) <- function(content) {
 #' @param data Base64 encoded image data.
 ContentImageInline <- new_class(
   "ContentImageInline",
-  parent = Content,
+  parent = ContentImage,
   properties = list(
     type = prop_string(),
     data = prop_string(allow_null = TRUE)
@@ -282,7 +282,7 @@ method(format, ContentToolResult) <- function(
   if (tool_errored(x)) {
     value <- paste0(cli::col_red("Error: "), tool_error_string(x))
   } else {
-    value <- tool_string(x)
+    value <- tool_string(x, force = TRUE)
   }
 
   if (!is_string(value) || !grepl("\n", value)) {
@@ -296,7 +296,7 @@ tool_errored <- function(x) !is.null(x@error)
 tool_error_string <- function(x) {
   if (inherits(x@error, "condition")) conditionMessage(x@error) else x@error
 }
-tool_string <- function(x) {
+tool_string <- function(x, force = FALSE) {
   if (tool_errored(x)) {
     paste0("Tool calling failed with error ", tool_error_string(x))
   } else if (inherits(x@value, "AsIs")) {
@@ -306,7 +306,18 @@ tool_string <- function(x) {
   } else if (is.character(x@value)) {
     paste(x@value, collapse = "\n")
   } else {
-    jsonlite::toJSON(x@value, auto_unbox = TRUE)
+    tryCatch(
+      jsonlite::toJSON(x@value, auto_unbox = TRUE, force = force),
+      error = function(err) {
+        cli::cli_abort(
+          c(
+            "Could not convert tool result from {.obj_type_friendly {x@value}} to JSON.",
+            "i" = "If you are the tool author, update the tool to convert the result to a string or JSON."
+          ),
+          parent = err
+        )
+      }
+    )
   }
 }
 
