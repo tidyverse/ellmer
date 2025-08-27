@@ -260,7 +260,11 @@ tool_results_as_turn <- function(results) {
     if (is_extra_content(result@value)) {
       extra_content <- c(
         extra_content,
-        list(ContentText(sprintf("From tool %s:", id)), result@value)
+        list(
+          ContentText(sprintf('<content tool-call-id="%s">', id)),
+          result@value,
+          ContentText("</content>")
+        )
       )
       results[[i]]@value <- "[see below]"
     }
@@ -271,8 +275,11 @@ tool_results_as_turn <- function(results) {
           extra_content <- c(
             extra_content,
             list(
-              ContentText(sprintf("From tool %s, item %d:", id, j)),
-              result@value[[j]]
+              ContentText(
+                sprintf('<content tool-call-id="%s" item="%d">', id, j)
+              ),
+              result@value[[j]],
+              ContentText("</content>")
             )
           )
           results[[i]]@value[[j]] <- sprintf("[see below: item %d]", j)
