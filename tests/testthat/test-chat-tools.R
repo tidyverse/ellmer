@@ -786,3 +786,65 @@ test_that("match_tools() matches tools in a turn to a list of tools", {
   turn_matched <- match_tools(turn, tools)
   expect_equal(turn_matched, fixture_turn_with_tool_requests(with_tool = TRUE))
 })
+
+test_that("tool_results_separate_content() splits tool results and content", {
+  request <- ContentToolRequest("x1", "my_tool", list())
+  result <- ContentToolResult(
+    content_image_url("https://placecat.com/200/200"),
+    request = request
+  )
+  user_turn <- tool_results_as_turn(list(result))
+
+  data <- tool_results_separate_content(user_turn)
+  expect_length(data$tool_results, 1)
+  expect_s7_class(data$tool_results[[1]], ContentToolResult)
+  expect_true(is.character(data$tool_results[[1]]@value))
+
+  expect_length(data$contents, 3)
+  expect_equal(data$contents[[2]], result@value)
+  expect_s7_class(data$contents[[1]], ContentText)
+  expect_s7_class(data$contents[[3]], ContentText)
+})
+
+test_that("tool_results_separate_content() keeps content order", {
+  request <- ContentToolRequest("x1", "my_tool", list())
+  result <- ContentToolResult(
+    content_image_url("https://placecat.com/200/200"),
+    request = request
+  )
+  user_turn <- Turn(
+    "user",
+    list(
+      ContentText("Here is a cat image:"),
+      result,
+      ContentText("Isn't it cute?")
+    )
+  )
+
+  data <- tool_results_separate_content(user_turn)
+  expect_length(data$tool_results, 1)
+  expect_s7_class(data$tool_results[[1]], ContentToolResult)
+  expect_true(is.character(data$tool_results[[1]]@value))
+
+  expect_length(data$contents, 5)
+  expect_equal(data$contents[[1]]@text, "Here is a cat image:")
+  expect_s7_class(data$contents[[2]], ContentText) # Added text for tool result
+  expect_equal(data$contents[[3]], result@value)
+  expect_s7_class(data$contents[[4]], ContentText) # Closing text for tool result
+  expect_equal(data$contents[[5]]@text, "Isn't it cute?")
+})
+
+test_that("tool_results_separate_content() handles no tool results", {
+  user_turn <- Turn(
+    "user",
+    list(
+      ContentText("Hello!"),
+      ContentText("How are you?")
+    )
+  )
+
+  data <- tool_results_separate_content(user_turn)
+  expect_length(data$tool_results, 0)
+  expect_length(data$contents, 2)
+  expect_equal(data$contents, user_turn@contents)
+})
