@@ -247,52 +247,71 @@ tool_results_as_turn <- function(results) {
   if (!any(is_tool_result)) {
     return(NULL)
   }
-
-  results <- results[is_tool_result]
-
-  # Move any extra content (image/pdf) out of the tool result and into the user
-  # turn we use to encapsulate the tool results. This lets us support additional
-  # content types that aren't directly supported in tool results by most APIs.
-  extra_content <- list()
-  for (i in seq_along(results)) {
-    result <- results[[i]]
-    id <- result@request@id
-    if (is_extra_content(result@value)) {
-      extra_content <- c(
-        extra_content,
-        list(
-          ContentText(sprintf('<content tool-call-id="%s">', id)),
-          result@value,
-          ContentText("</content>")
-        )
-      )
-      results[[i]]@value <- "[see below]"
-    }
-
-    if (is_list(result@value)) {
-      for (j in seq_along(result@value)) {
-        if (is_extra_content(result@value[[j]])) {
-          extra_content <- c(
-            extra_content,
-            list(
-              ContentText(
-                sprintf('<content tool-call-id="%s" item="%d">', id, j)
-              ),
-              result@value[[j]],
-              ContentText("</content>")
-            )
-          )
-          results[[i]]@value[[j]] <- sprintf("[see below: item %d]", j)
-        }
-      }
-    }
-  }
-
-  Turn("user", contents = c(results, extra_content))
+  Turn("user", contents = results[is_tool_result])
 }
 
 is_extra_content <- function(x) {
   S7::S7_inherits(x, ContentImage) || S7::S7_inherits(x, ContentPDF)
+}
+
+tool_results_separate_content <- function(turn) {
+  if (!some(turn@contents, is_tool_result)) {
+    return(list(tool_results = list(), contents = turn@contents))
+  }
+
+  tool_results <- list()
+  contents <- list()
+
+  for (result in turn@contents) {
+    if (!is_tool_result(result)) {
+      contents <- c(contents, list(result))
+      next
+    }
+
+    id <- result@request@id
+
+    # Check for extra content in the result value
+    if (is_extra_content(result@value)) {
+      contents <- c(
+        contents,
+        list(
+          ContentText(sprintf('<tool-content tool-call-id="%s">', id)),
+          result@value,
+          ContentText("</tool-content>")
+        )
+      )
+      result <- set_props(result, value = "[see below]")
+    }
+
+    # Check for extra content in list items
+    if (is_list(result@value)) {
+      for (j in seq_along(result@value)) {
+        if (is_extra_content(result@value[[j]])) {
+          contents <- c(
+            contents,
+            list(
+              ContentText(
+                sprintf('<tool-content tool-call-id="%s" item="%d">', id, j)
+              ),
+              result@value[[j]],
+              ContentText("</tool-content>")
+            )
+          )
+          result <- set_props(
+            result,
+            value = sprintf("[see below: item %d]", j)
+          )
+        }
+      }
+    }
+
+    tool_results <- c(tool_results, list(result))
+  }
+
+  list(
+    tool_results = if (length(tool_results) > 0) tool_results else NULL,
+    contents = contents
+  )
 }
 
 turn_get_tool_errors <- function(turn = NULL) {

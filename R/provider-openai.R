@@ -295,16 +295,17 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
       list(role = "system", content = x@contents[[1]]@text)
     )
   } else if (x@role == "user") {
-    # Each tool result needs to go in its own message with role "tool"
-    is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
-    content <- as_json(provider, x@contents[!is_tool])
-    if (length(content) > 0) {
+    data <- tool_results_separate_content(x)
+
+    if (length(data$contents) > 0) {
+      content <- as_json(provider, data$contents)
       user <- list(list(role = "user", content = content))
     } else {
       user <- list()
     }
 
-    tools <- lapply(x@contents[is_tool], function(tool) {
+    # Each tool result needs to go in its own message with role "tool"
+    tools <- lapply(data$tool_results, function(tool) {
       list(
         role = "tool",
         content = tool_string(tool),

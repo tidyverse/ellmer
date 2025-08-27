@@ -137,11 +137,11 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
     list(list(role = "system", content = x@contents[[1]]@text))
   } else if (x@role == "user") {
     # Each tool result needs to go in its own message with role "tool".
-    is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
-    if (any(is_tool)) {
-      # If Databricks starts supporting image/pdf content, we'll need to
-      # separate tool results from other content types here
-      return(lapply(x@contents[is_tool], function(tool) {
+    data <- tool_results_separate_content(x)
+    if (length(data$tool_results) > 0) {
+      # If Databricks starts supporting image/pdf content, we'll need to merge
+      # tool results with other content instead of just returning here.
+      return(lapply(data$tool_results, function(tool) {
         list(
           role = "tool",
           content = tool_string(tool),
