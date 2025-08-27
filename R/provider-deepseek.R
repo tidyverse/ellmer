@@ -71,7 +71,7 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x) {
       )
     })
 
-    c(texts_out, tools_out)
+    c(tools_out, texts_out)
   } else if (x@role == "assistant") {
     # Tool requests come out of content and go into own argument
     text <- detect(x@contents, S7_inherits, ContentText)
