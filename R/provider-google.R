@@ -308,7 +308,11 @@ method(as_json, list(ProviderGoogleGemini, Turn)) <- function(provider, x) {
   if (x@role == "system") {
     # System messages go in the top-level API parameter
   } else if (x@role == "user") {
-    list(role = x@role, parts = as_json(provider, x@contents))
+    data <- tool_results_separate_content(x)
+    list(
+      role = x@role,
+      parts = as_json(provider, c(data$tool_results, data$contents))
+    )
   } else if (x@role == "assistant") {
     list(role = "model", parts = as_json(provider, x@contents))
   } else {

@@ -54,7 +54,7 @@ Since the model doesn't know what day it is, the result is incorrect.
 
 ### Defining a tool function
 
-The first thing we'll do is define an R function that returns the current time. 
+The first thing we'll do is define an R function that returns the current time.
 
 ```{r}
 #' Gets the current time in the given time zone.
@@ -122,7 +122,7 @@ That's all we need to do! Let's retry our query:
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
 ```
 
-That's correct! Without any further guidance, the chat model decided to call our tool function and successfully used its result in formulating its response. 
+That's correct! Without any further guidance, the chat model decided to call our tool function and successfully used its result in formulating its response.
 
 If we print the chat we can see where the model decided to use the tool:
 
@@ -160,7 +160,7 @@ get_weather <- tool(
   },
   name = "get_weather",
   description = "
-    Report on weather conditions in multiple cities. For efficiency, request 
+    Report on weather conditions in multiple cities. For efficiency, request
     all weather updates using a single tool call
   ",
   arguments = list(
@@ -177,11 +177,64 @@ Now we register and use it:
 
 chat <- chat_openai()
 chat$register_tool(get_weather)
-chat$chat("Give me a weather udpate for London and Chicago")
+chat$chat("Give me a weather update for London and Chicago")
 ```
 
 We can print the chat to confirm that the model only performed a single tool call:
 
 ```{r}
 chat
+```
+
+### Image and PDF tool output
+
+ellmer allow tools to return image or PDF content that can be returned with the tool result, if the LLM or API supports vision capabilities.
+
+Simply return a `content_image_file()`, `content_pdf_file()`, or similar content type from the tool function.
+For example, here's a simple tool to screenshot a website:
+
+```{r}
+#| eval: false
+
+screenshot_website <- tool(
+  function(url) {
+    tmpf <- withr::local_tempfile(fileext = ".png")
+    webshot2::webshot(url, file = tmpf)
+    content_image_file(tmpf)
+  },
+  name = "screenshot_website",
+  description = "Take a screenshot of a website.",
+  arguments = list(
+    url = type_string("The URL of the website")
+  )
+)
+```
+
+You could use this tool to allow the LLM to "see" websites, like [the tidyverse website](https://tidyverse.org):
+
+```{r}
+#| eval: false
+
+chat <- chat_openai()
+#> Using model = "gpt-4.1".
+chat$register_tool(screenshot_website)
+chat$chat("Describe the design aesthetic of https://tidyverse.org")
+#> https://tidyverse.org screenshot completed
+#> The design aesthetic of the Tidyverse website (https://tidyverse.org) is
+#> clean, modern, and minimalistic, with several distinct features:
+#>
+#> - **Color Palette**: The overall site uses a lot of white space with navy
+#>   and dark backgrounds for some elements, accentuated by the colorful
+#>   hexagonal logos for various R packages.
+#> - **Typography**: Simple, sans-serif fonts contribute to readability and
+#>   a contemporary look.
+#> - **Hexagonal Icons**: Prominent display of tidyverse package logos in
+#>   hexagonal shapes, emphasizing the modular, package-oriented
+#>   nature of the Tidyverse.
+#> - **Layout**: A balanced, spacious two-column layout. The left side
+#>   features graphic elements; the right side provides concise, text-based
+#>   information.
+#>
+#> Overall, the design communicates clarity, ease of use, and a focus on
+#> modern data science tools.
 ```
