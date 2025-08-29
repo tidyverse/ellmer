@@ -114,7 +114,7 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
-    #' @description A data frame with a `tokens` column that proides the
+    #' @description A data frame with a `tokens` column that provides the
     #'   number of input tokens used by user turns and the number of
     #'   output tokens used by assistant turns.
     #' @param include_system_prompt Whether to include the system prompt in

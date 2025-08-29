@@ -179,7 +179,7 @@ Update the system prompt
 \if{html}{\out{<a id="method-Chat-get_tokens"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-get_tokens}{}}}
 \subsection{Method \code{get_tokens()}}{
-A data frame with a \code{tokens} column that proides the
+A data frame with a \code{tokens} column that provides the
 number of input tokens used by user turns and the number of
 output tokens used by assistant turns.
 \subsection{Usage}{

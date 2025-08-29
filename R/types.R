@@ -180,7 +180,7 @@ type_array <- function(items, description = NULL, required = TRUE) {
   TypeArray(items = items, description = description, required = required)
 }
 
-#' @param ... Name-type pairs defineing the components that the object must
+#' @param ... Name-type pairs defining the components that the object must
 #'   possess.
 #' @param .additional_properties Can the object have arbitrary additional
 #'   properties that are not explicitly listed? Only supported by Claude.

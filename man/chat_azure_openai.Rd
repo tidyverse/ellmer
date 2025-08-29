@@ -21,7 +21,7 @@ chat_azure_openai(
 \arguments{
 \item{endpoint}{Azure OpenAI endpoint url with protocol and hostname, i.e.
 \verb{https://\{your-resource-name\}.openai.azure.com}. Defaults to using the
-value of the \code{AZURE_OPENAI_ENDPOINT} envinronment variable.}
+value of the \code{AZURE_OPENAI_ENDPOINT} environment variable.}
 
 \item{deployment_id}{Deployment id for the model you want to use.}
 
