@@ -19,7 +19,7 @@ the defaults tweaked for Perplexity AI."><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@ the defaults tweaked for Perplexity AI."><meta property="og:image" content="http
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Chat with a model hosted on perplexity.ai</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/provider-perplexity.R" class="external-link"><code>R/provider-perplexity.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.3.2/R/provider-perplexity.R" class="external-link"><code>R/provider-perplexity.R</code></a></small>
       <div class="d-none name"><code>chat_perplexity.Rd</code></div>
     </div>
 
@@ -79,6 +79,7 @@ the defaults tweaked for Perplexity AI.</p>
 <span>  api_key <span class="op">=</span> <span class="fu">perplexity_key</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  echo <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -112,6 +113,10 @@ We regularly update the default, so we strongly recommend explicitly specifying 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
 <dd><p>Optional integer seed that ChatGPT uses to try and make output
 more reproducible.</p></dd>
+
+
+<dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
+<dd><p>Common model parameters, usually created by <code><a href="params.html">params()</a></code>.</p></dd>
 
 
 <dt id="arg-api-args">api_args<a class="anchor" aria-label="anchor" href="#arg-api-args"></a></dt>

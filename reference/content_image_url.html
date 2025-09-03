@@ -11,7 +11,7 @@ image, while content_image_file() is used to provide the image data itself."><me
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ image, while content_image_file() is used to provide the image data itself."><me
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Encode images for chat input</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/content-image.R" class="external-link"><code>R/content-image.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.3.2/R/content-image.R" class="external-link"><code>R/content-image.R</code></a></small>
       <div class="d-none name"><code>content_image_url.Rd</code></div>
     </div>
 
@@ -117,31 +117,14 @@ the <code><a href="chat-any.html">chat()</a></code>, <code>stream()</code>, <cod
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="st">"What do you see in these images?"</span>,</span></span>
 <span class="r-in"><span>  <span class="fu">content_image_url</span><span class="op">(</span><span class="st">"https://www.r-project.org/Rlogo.png"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu">content_image_file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"httr2.png"</span>, package <span class="op">=</span> <span class="st">"ellmer"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Here is what I see in the images:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1. **First Image:**  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    - This is the logo of the R programming language, which is widely </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> used for statistical computing and graphics. The logo features a </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> stylized letter "R" in blue, backed by a gray oval.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2. **Second Image:**  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    - This is the hex sticker/logo for the **httr2** package, an R </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> package for working with HTTP in a modern, user-friendly way. The </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> image features a stylized illustration of a baseball player swinging a</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> bat, with the text "httr2" above. There is also a small "WWW" symbol, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> referencing web-related functionality.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Both images are related to the R programming language and illustrate </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tools/packages used for data science and programming.</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">waiting</span> <span class="op">~</span> <span class="va">eruptions</span>, data <span class="op">=</span> <span class="va">faithful</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span></span></span>

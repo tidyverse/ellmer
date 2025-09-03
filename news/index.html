@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,9 +45,20 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/tidyverse/ellmer/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.3.2/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.2" id="ellmer-032">ellmer 0.3.2<a class="anchor" aria-label="anchor" href="#ellmer-032"></a></h2><p class="text-muted">CRAN release: 2025-09-03</p>
+<ul><li>
+<code><a href="../reference/chat-any.html">chat()</a></code> is now compatible with most <code>chat_</code> functions (<a href="https://github.com/tidyverse/ellmer/issues/699" class="external-link">#699</a>).
+<ul><li>
+<code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code>, <code><a href="../reference/chat_databricks.html">chat_databricks()</a></code>, <code><a href="../reference/chat_deepseek.html">chat_deepseek()</a></code>, <code><a href="../reference/chat_github.html">chat_github()</a></code>, <code><a href="../reference/chat_groq.html">chat_groq()</a></code>, <code><a href="../reference/chat_ollama.html">chat_ollama()</a></code>, <code><a href="../reference/chat_openrouter.html">chat_openrouter()</a></code>, <code><a href="../reference/chat_perplexity.html">chat_perplexity()</a></code>, and <code><a href="../reference/chat_vllm.html">chat_vllm()</a></code> now support a <code>params</code> argument that accepts common model parameters from <code><a href="../reference/params.html">params()</a></code>.</li>
+<li>The <code>deployment_id</code> argument in <code><a href="../reference/chat_azure_openai.html">chat_azure_openai()</a></code> was deprecated and replaced with <code>model</code> to better align with other providers.</li>
+</ul></li>
+<li>
+<code><a href="../reference/chat_openai.html">chat_openai()</a></code> now correctly maps <code>max_tokens</code> and <code>top_k</code> from <code><a href="../reference/params.html">params()</a></code> to the OpenAI API parameters (<a href="https://github.com/tidyverse/ellmer/issues/699" class="external-link">#699</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.1" id="ellmer-031">ellmer 0.3.1<a class="anchor" aria-label="anchor" href="#ellmer-031"></a></h2><p class="text-muted">CRAN release: 2025-08-24</p>
 <ul><li><p><code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> drops empty assistant turns to avoid API errors (<a href="https://github.com/tidyverse/ellmer/issues/710" class="external-link">#710</a>).</p></li>
@@ -57,7 +68,7 @@
 <li><p><code><a href="../reference/chat_openai.html">chat_openai()</a></code> now uses <code>OPENAI_BASE_URL</code>, if set, for the <code>base_url</code>. Similarly, <code><a href="../reference/chat_ollama.html">chat_ollama()</a></code> also uses <code>OLLAMA_BASE_URL</code> if set (<a href="https://github.com/tidyverse/ellmer/issues/713" class="external-link">#713</a>).</p></li>
 <li><p><code><a href="../reference/contents_record.html">contents_record()</a></code> and <code><a href="../reference/contents_record.html">contents_replay()</a></code> now record and replay custom classes that extend ellmer’s <code>Turn</code> or <code>Content</code> classes (<a href="https://github.com/tidyverse/ellmer/issues/689" class="external-link">#689</a>). <code><a href="../reference/contents_record.html">contents_replay()</a></code> now also restores the tool definition in <code>ContentToolResult</code> objects (in <code>@request@tool</code>) (<a href="https://github.com/tidyverse/ellmer/issues/693" class="external-link">#693</a>).</p></li>
 <li><p><code><a href="../reference/chat_snowflake.html">chat_snowflake()</a></code> now supports Privatelink accounts (<a href="https://github.com/tidyverse/ellmer/issues/694" class="external-link">#694</a>, <a href="https://github.com/robert-norberg" class="external-link">@robert-norberg</a>). and works against Snowflake’s latest API changes (<a href="https://github.com/tidyverse/ellmer/issues/692" class="external-link">#692</a>, <a href="https://github.com/robert-norberg" class="external-link">@robert-norberg</a>).</p></li>
-<li><p><code><a href="../reference/chat_google_gemini.html">models_google_vertex()</a></code> was fixed, argument <code>project_id</code> is now deprecated (<a href="https://github.com/tidyverse/ellmer/issues/704" class="external-link">#704</a>, <a href="https://github.com/netique" class="external-link">@netique</a>)</p></li>
+<li><p><code><a href="../reference/chat_google_gemini.html">models_google_vertex()</a></code> works once again (<a href="https://github.com/tidyverse/ellmer/issues/704" class="external-link">#704</a>, <a href="https://github.com/netique" class="external-link">@netique</a>)</p></li>
 <li><p>In the <code>value_turn()</code> method for OpenAI providers, <code>usage</code> is checked if <code>NULL</code> before logging tokens to avoid errors when streaming with some OpenAI-compatible services (<a href="https://github.com/tidyverse/ellmer/issues/706" class="external-link">#706</a>, <a href="https://github.com/stevegbrooks" class="external-link">@stevegbrooks</a>).</p></li>
 </ul></div>
     <div class="section level2">

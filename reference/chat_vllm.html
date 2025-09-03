@@ -11,7 +11,7 @@ chat_vllm() to connect to endpoints powered by vLLM."><meta property="og:image" 
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ chat_vllm() to connect to endpoints powered by vLLM."><meta property="og:image" 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Chat with a model hosted by vLLM</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/provider-vllm.R" class="external-link"><code>R/provider-vllm.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.3.2/R/provider-vllm.R" class="external-link"><code>R/provider-vllm.R</code></a></small>
       <div class="d-none name"><code>chat_vllm.Rd</code></div>
     </div>
 
@@ -66,6 +66,7 @@ provides an efficient and convenient LLMs model server. You can use
 <span>  system_prompt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">model</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  api_key <span class="op">=</span> <span class="fu">vllm_key</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  echo <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -95,6 +96,10 @@ Use <code>models_vllm()</code> to see all options.</p></dd>
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
 <dd><p>Optional integer seed that ChatGPT uses to try and make output
 more reproducible.</p></dd>
+
+
+<dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
+<dd><p>Common model parameters, usually created by <code><a href="params.html">params()</a></code>.</p></dd>
 
 
 <dt id="arg-api-args">api_args<a class="anchor" aria-label="anchor" href="#arg-api-args"></a></dt>
