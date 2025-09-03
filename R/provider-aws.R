@@ -228,31 +228,24 @@ method(chat_request, ProviderAWSBedrock) <- function(
     toolConfig <- NULL
   }
 
-  # Get standardized params and merge with manual api_args
-  params <- chat_params(provider, provider@params)
-
   # Merge params into inferenceConfig, giving precedence to manual api_args
-  inference_config <- modify_list(
-    params,
-    provider@extra_args$inferenceConfig %||% list()
-  )
+  params <- chat_params(provider, provider@params)
+  extra_args <- provider@extra_args
 
-  # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
-  body <- list(
-    messages = messages,
-    system = system,
-    toolConfig = toolConfig
-  )
-
-  # Add inferenceConfig if we have any parameters
-  if (length(inference_config) > 0) {
-    body$inferenceConfig <- inference_config
+  if (length(params) > 0) {
+    extra_args$inferenceConfig <- modify_list(
+      params,
+      extra_args$inferenceConfig %||% list()
+    )
   }
 
-  # Apply any remaining api_args (excluding inferenceConfig which we handled above)
-  remaining_args <- provider@extra_args
-  remaining_args$inferenceConfig <- NULL
-  body <- modify_list(body, remaining_args)
+  # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
+  body <- compact(list2(
+    messages = messages,
+    system = system,
+    toolConfig = toolConfig,
+    !!!extra_args
+  ))
 
   req <- req_body_json(req, body)
   req <- req_headers(req, !!!provider@extra_headers)

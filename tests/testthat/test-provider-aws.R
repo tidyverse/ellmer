@@ -24,6 +24,16 @@ test_that("can set api args", {
   expect_true(nchar(result) < 10)
 })
 
+test_that("api args overwrite params", {
+  chat <- chat_aws_bedrock(
+    api_args = list(inferenceConfig = list(maxTokens = 1)),
+    params = params(max_tokens = 100),
+    echo = FALSE
+  )
+  result <- chat$chat("Who are the reindeer?")
+  expect_true(nchar(result) < 10)
+})
+
 test_that("handles errors", {
   chat <- chat_aws_bedrock(
     api_args = list(inferenceConfig = list(temperature = "hot")),
