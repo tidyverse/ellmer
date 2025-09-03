@@ -235,12 +235,11 @@ method(chat_request, ProviderAWSBedrock) <- function(
   extra_args$inferenceConfig <- modify_list(params, extra_args$inferenceConfig)
 
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
-  body <- compact(dots_list(
+  body <- compact(list2(
     messages = messages,
     system = system,
     toolConfig = toolConfig,
-    !!!extra_args,
-    .homonyms = "first"
+    !!!extra_args
   ))
 
   req <- req_body_json(req, body)
