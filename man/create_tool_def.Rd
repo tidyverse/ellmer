@@ -19,7 +19,7 @@ metadata for. Can also be an expression of the form \code{pkg::fun}.}
 \item{chat}{A \code{Chat} object used to generate the output. If \code{NULL}
 (the default) uses \code{\link[=chat_openai]{chat_openai()}}.}
 
-\item{model}{\code{lifecycle::badge("deprecated")} Formally used for definining
+\item{model}{\code{lifecycle::badge("deprecated")} Formally used for defining
 the model used by the chat. Now supply \code{chat} instead.}
 
 \item{echo}{Emit the registration code to the console. Defaults to \code{TRUE} in

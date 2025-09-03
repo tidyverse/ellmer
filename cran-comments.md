@@ -2,10 +2,11 @@
 
 0 errors | 0 warnings | 1 note
 
-* The failing links do all appear to work from a real browser. 
-  (I wonder if we check if https://github.com/lwthiker/curl-impersonate gives
-  fewer false positives.)
+* The failing links do all appear to work from a real browser.
 
 ## revdepcheck results
 
-chattr is broken; I have submitted a patch at https://github.com/mlverse/chattr/pull/145.
+We checked 14 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages

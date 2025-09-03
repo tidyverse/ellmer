@@ -54,7 +54,7 @@ value, the default value will be used.}
 \item{items}{The type of the array items. Can be created by any of the
 \code{type_} function.}
 
-\item{...}{Name-type pairs defineing the components that the object must
+\item{...}{Name-type pairs defining the components that the object must
 possess.}
 
 \item{.additional_properties}{Can the object have arbitrary additional

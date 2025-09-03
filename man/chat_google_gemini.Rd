@@ -71,7 +71,8 @@ when running at the console).
 
 Note this only affects the \code{chat()} method.}
 
-\item{location}{Location, e.g. \code{us-east1}, \code{me-central1}, \code{africa-south1}.}
+\item{location}{Location, e.g. \code{us-east1}, \code{me-central1}, \code{africa-south1} or
+\code{global}.}
 
 \item{project_id}{Project ID.}
 }

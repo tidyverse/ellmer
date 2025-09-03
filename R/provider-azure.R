@@ -24,7 +24,7 @@ NULL
 #'
 #' @param endpoint Azure OpenAI endpoint url with protocol and hostname, i.e.
 #'  `https://{your-resource-name}.openai.azure.com`. Defaults to using the
-#'   value of the `AZURE_OPENAI_ENDPOINT` envinronment variable.
+#'   value of the `AZURE_OPENAI_ENDPOINT` environment variable.
 #' @param model The **deployment id** for the model you want to use.
 #' @param deployment_id `r lifecycle::badge("deprecated")` Use `model` instead.
 #' @param api_version The API version to use.
