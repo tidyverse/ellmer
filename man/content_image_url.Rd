@@ -50,7 +50,7 @@ chatbot. The \code{content_image_url()} function is used to provide a URL to an
 image, while \code{content_image_file()} is used to provide the image data itself.
 }
 \examples{
-\dontshow{ellmer:::vcr_example_start("content_image_url")}
+\dontrun{
 chat <- chat_openai()
 chat$chat(
   "What do you see in these images?",
@@ -58,7 +58,6 @@ chat$chat(
   content_image_file(system.file("httr2.png", package = "ellmer"))
 )
 
-\dontrun{
 plot(waiting ~ eruptions, data = faithful)
 chat <- chat_openai()
 chat$chat(
@@ -68,5 +67,4 @@ chat$chat(
    content_image_plot()
 )
 }
-\dontshow{ellmer:::vcr_example_end()}
 }
