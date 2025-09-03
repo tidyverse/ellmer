@@ -238,11 +238,12 @@ method(chat_request, ProviderAWSBedrock) <- function(
   )
 
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
-  body <- compact(list2(
+  body <- compact(dots_list(
     messages = messages,
     system = system,
     toolConfig = toolConfig,
-    !!!extra_args
+    !!!extra_args,
+    .homonyms = "first"
   ))
 
   req <- req_body_json(req, body)
