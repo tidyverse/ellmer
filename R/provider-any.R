@@ -46,6 +46,6 @@ chat <- function(
     ...,
     system_prompt = system_prompt,
     params = params,
-    echo = echo
+    echo = check_echo(echo)
   )
 }
