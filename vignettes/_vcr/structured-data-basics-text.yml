@@ -1,0 +1,78 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
+        is Susan and I''m 13 years old"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}}}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 96125ab33d7b511a-MSP
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 18 Jul 2025 13:34:03 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '448'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=x1KYUONagWxs2VLRRiOu7P3MRn4cllK5LPzO8_Km8Zg-1752845643-1.0.1.1-whwUhohzOjCklGy4J32Y4wxM5yt11uStsH6S1k.85j3.9CCCbrRLHRffpC6WIsx0Y4cBIXlHWGTL45NwcvXEAB30ybmd1OCrteuRT_UxCRE;
+        path=/; expires=Fri, 18-Jul-25 14:04:03 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=W4cchMOa_.Gu5Unu0iSHudtdrR4Yg11Tbej07WNz9.Q-1752845643599-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '455'
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '30000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '29999988'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_50b36d4b81f5045466381f76e984d0e6
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BufVrIInLJiF8X7GeHsVVP7plb0yF",
+          "object": "chat.completion",
+          "created": 1752845643,
+          "model": "gpt-4.1-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"name\":\"Susan\",\"age\":13}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 63,
+            "completion_tokens": 9,
+            "total_tokens": 72,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": null
+        }
+  recorded_at: 2025-07-18 13:34:03
+recorded_with: VCR-vcr/1.7.1.93

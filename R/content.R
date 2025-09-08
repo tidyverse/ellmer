@@ -203,20 +203,30 @@ ContentToolRequest <- new_class(
 method(format, ContentToolRequest) <- function(
   x,
   ...,
-  show = c("all", "call")
+  show = c("all", "call", "call_short")
 ) {
   show <- arg_match(show)
 
-  if (length(x@arguments) == 0) {
-    call <- call2(x@name)
-  } else {
-    call <- call2(x@name, !!!x@arguments)
+  arguments <- tool_request_args(x)
+  if (is_tool_result(arguments)) {
+    # Failed to convert the arguments so just use unconverted
+    arguments <- x@arguments
   }
+  call <- call2(x@name, !!!arguments)
+  call_str <- deparse(call)
   if (show == "call") {
-    return(format(call))
+    return(call_str)
   }
 
-  cli::format_inline("[{.strong tool request} ({x@id})]: {format(call)}")
+  if (length(call_str) > 1) {
+    call_str <- paste0(call_str[1], "...)")
+  }
+
+  if (show == "call_short") {
+    return(call_str)
+  }
+
+  cli::format_inline("[{.strong tool request} ({x@id})]: {call_str}")
 }
 
 #' @rdname Content
@@ -397,13 +407,15 @@ as_content <- function(x, error_call = caller_env(), error_arg = "...") {
 }
 
 #' @rdname Content
+#' @param filename File name, used to identify the PDF.
 #' @export
 ContentPDF <- new_class(
   "ContentPDF",
   parent = Content,
   properties = list(
     type = prop_string(),
-    data = prop_string()
+    data = prop_string(),
+    filename = prop_string()
   )
 )
 

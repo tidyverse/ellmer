@@ -39,6 +39,7 @@
 #'   - `databricks-meta-llama-3-1-405b-instruct`
 #' @param token An authentication token for the Databricks workspace, or
 #'   `NULL` to use ambient credentials.
+#' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @export
@@ -52,8 +53,10 @@ chat_databricks <- function(
   system_prompt = NULL,
   model = NULL,
   token = NULL,
+  params = NULL,
   api_args = list(),
-  echo = c("none", "output", "all")
+  echo = c("none", "output", "all"),
+  api_headers = character()
 ) {
   check_string(workspace, allow_empty = FALSE)
   check_string(token, allow_empty = FALSE, allow_null = TRUE)
@@ -64,15 +67,20 @@ chat_databricks <- function(
   } else {
     credentials <- default_databricks_credentials(workspace)
   }
+
+  params <- params %||% params()
+
   provider <- ProviderDatabricks(
     name = "Databricks",
     base_url = workspace,
     model = model,
+    params = params,
     extra_args = api_args,
     credentials = credentials,
     # Databricks APIs use bearer tokens, not API keys, but we need to pass an
     # empty string here anyway to make S7::validate() happy.
-    api_key = ""
+    api_key = "",
+    extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
@@ -86,8 +94,7 @@ ProviderDatabricks <- new_class(
 method(base_request, ProviderDatabricks) <- function(provider) {
   req <- request(provider@base_url)
   req <- ellmer_req_credentials(req, provider@credentials)
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req, databricks_user_agent())
   req <- base_request_error(provider, req)
   req
@@ -108,10 +115,27 @@ method(chat_body, ProviderDatabricks) <- function(
     type = type
   )
 
-  # Databricks doensn't support stream options
+  params <- chat_params(provider, provider@params)
+  body <- modify_list(body, params)
+
+  # Databricks doesn't support stream options
   body$stream_options <- NULL
 
   body
+}
+
+method(chat_params, ProviderDatabricks) <- function(provider, params) {
+  # https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#chat-request
+  standardise_params(
+    params,
+    c(
+      temperature = "temperature",
+      top_p = "topP",
+      top_k = "topK",
+      max_tokens = "maxTokens",
+      stop_sequences = "stopSequences"
+    )
+  )
 }
 
 method(chat_path, ProviderDatabricks) <- function(provider) {
@@ -188,8 +212,9 @@ method(as_json, list(ProviderDatabricks, ToolDef)) <- function(provider, x) {
       description = x@description,
       # Use the same parameter encoding as the OpenAI provider, but only if
       # there actually are parameters.
-      parameters = if (length(x@arguments@properties) != 0)
+      parameters = if (length(x@arguments@properties) != 0) {
         as_json(provider, x@arguments)
+      }
     ))
   ))
 }

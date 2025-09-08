@@ -2,11 +2,14 @@
 % Please edit documentation in R/batch-chat.R
 \name{batch_chat}
 \alias{batch_chat}
+\alias{batch_chat_text}
 \alias{batch_chat_structured}
 \alias{batch_chat_completed}
 \title{Submit multiple chats in one batch}
 \usage{
 batch_chat(chat, prompts, path, wait = TRUE)
+
+batch_chat_text(chat, prompts, path, wait = TRUE)
 
 batch_chat_structured(
   chat,
@@ -52,6 +55,17 @@ and output tokens for each prompt.}
 
 \item{include_cost}{If \code{TRUE}, and the result is a data frame, will
 add \code{cost} column giving the cost of each prompt.}
+}
+\value{
+For \code{batch_chat()}, a list of \link{Chat} objects, one for each prompt.
+For \code{batch_chat_test()}, a character vector of text responses.
+For \code{batch_chat_structured()}, a single structured data object with one
+element for each prompt. Typically, when \code{type} is an object, this will
+will be a data frame with one row for each prompt, and one column for each
+property.
+
+For any of the aboves, will return \code{NULL} if \code{wait = FALSE} and the job
+is not complete.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

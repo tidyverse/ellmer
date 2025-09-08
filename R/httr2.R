@@ -5,11 +5,12 @@ chat_perform <- function(
   provider,
   mode = c("value", "stream", "async-stream", "async-value"),
   turns,
-  tools = list(),
+  tools = NULL,
   type = NULL
 ) {
   mode <- arg_match(mode)
   stream <- mode %in% c("stream", "async-stream")
+  tools <- tools %||% list()
 
   req <- chat_request(
     provider = provider,
@@ -60,8 +61,8 @@ on_load(
 
     repeat {
       event <- chat_resp_stream(provider, resp)
-      if (is.null(event) && isIncomplete(resp$body)) {
-        fds <- curl::multi_fdset(resp$body)
+      if (is.null(event) && !resp_stream_is_complete(resp)) {
+        fds <- resp$body$get_fdset()
         await(promises::promise(function(resolve, reject) {
           later::later_fd(
             resolve,
@@ -86,8 +87,18 @@ on_load(
 
 # Request helpers --------------------------------------------------------------
 
-ellmer_req_timeout <- function(req, stream) {
-  req_options(req, timeout = getOption("ellmer_timeout_s", 5 * 60))
+ellmer_req_robustify <- function(req, is_transient = NULL, after = NULL) {
+  req <- req_timeout(req, getOption("ellmer_timeout_s", 5 * 60))
+
+  req <- req_retry(
+    req,
+    max_tries = getOption("ellmer_max_tries", 3),
+    is_transient = is_transient,
+    after = after,
+    retry_on_failure = TRUE
+  )
+
+  req
 }
 
 ellmer_req_credentials <- function(req, credentials_fun) {

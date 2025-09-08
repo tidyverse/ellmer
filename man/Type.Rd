@@ -21,7 +21,7 @@ TypeObject(
   description = NULL,
   required = TRUE,
   properties = list(),
-  additional_properties = TRUE
+  additional_properties = FALSE
 )
 }
 \arguments{

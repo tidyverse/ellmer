@@ -1,0 +1,231 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse"},{"role":"user","content":[{"type":"text","text":"My
+        name is Hadley and I''m a data scientist"}]}],"model":"gpt-4.1-nano","stream":false}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 9564fa08eec87103-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 27 Jun 2025 12:34:07 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '251'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=7D7CA4Wt21IfNvOiZcrO8iFKTWJvWAAnknQtk.Qv4iE-1751027647-1.0.1.1-r..63Ptfx.QVp_KZ2gX.Nm0u.FPjbHO_lIF56SyJLa9_DCGYM9vfbsLmRoFfWRPzvYGr2juUSgAViCf14qYpD7mctcc6NdnGtFajvMcEMzE;
+        path=/; expires=Fri, 27-Jun-25 13:04:07 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=KUNzx.SQVt0Rutw5KjDNLdIncXXF_.2PtQqpVhi1QDI-1751027647815-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '256'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999984'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_3ed41617ad2d83b1f5f86730475f84c8
+    body:
+      string: |
+        {
+          "id": "chatcmpl-Bn2ZLtVihsd4isiuZPwxka5h80ukz",
+          "object": "chat.completion",
+          "created": 1751027647,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Hello, Hadley. Nice to meet you.",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 23,
+            "completion_tokens": 10,
+            "total_tokens": 33,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-06-27 12:34:07
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse"},{"role":"user","content":[{"type":"text","text":"My
+        name is Hadley and I''m a data scientist"}]},{"role":"assistant","content":[{"type":"text","text":"Hello,
+        Hadley. Nice to meet you."}]},{"role":"user","content":[{"type":"text","text":"what''s
+        my name?"}]}],"model":"gpt-4.1-nano","stream":false}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 9564fa0fee7d7103-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 27 Jun 2025 12:34:08 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '260'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=rdJAq8E3lF2prE0wumAf.hspc02caf_.NxXEdvCe.6I-1751027648-1.0.1.1-Cq32hk8eKfomkRx0IRK36Cpz2XytbfbMzOLZBOqZhndcncMubIkACXtgkwOEOJbQN4ZASgWndbIc_p73aQnlIwTRDO5WLWRw8_U6i.P3W30;
+        path=/; expires=Fri, 27-Jun-25 13:04:08 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=blhp0Y0T2dPqOo347FvNzxiLd6GXN3r2MW7lrCnWDhk-1751027648291-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '267'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999970'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_ad9d7241c86225805fe1119a2f68bc1b
+    body:
+      string: |
+        {
+          "id": "chatcmpl-Bn2ZMZRw4uLnWYByNUUdztp28hc0H",
+          "object": "chat.completion",
+          "created": 1751027648,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Hadley.",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 46,
+            "completion_tokens": 3,
+            "total_tokens": 49,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-06-27 12:34:08
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse"},{"role":"user","content":[{"type":"text","text":"My
+        name is Hadley and I''m a data scientist"}]},{"role":"assistant","content":[{"type":"text","text":"Hello,
+        Hadley. Nice to meet you."}]},{"role":"user","content":[{"type":"text","text":"what''s
+        my job?"}]}],"model":"gpt-4.1-nano","stream":false}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 9564fa12cd427103-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 27 Jun 2025 12:34:08 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '164'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=5e.gKPcFA5mM7HOsyAqGr17JbcEJ.6FOL_dNHs78k0A-1751027648-1.0.1.1-Z4kaBQWyLiLb3BQdtQcderMapLEkasRJl1APUMlWh1lmkEpPzhX7XdBkR6g2P.K.AufVBo8qLqv.MY.cgvWiUvOQEQfZbq3J67zfShivQNg;
+        path=/; expires=Fri, 27-Jun-25 13:04:08 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=g9nHixKem7xsV_lsWetciLlF6xcXHiSpj17aXPtO.E8-1751027648673-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '167'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999971'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_3b695dd79d539d1b43b0c8512ea3bb06
+    body:
+      string: |
+        {
+          "id": "chatcmpl-Bn2ZMihoWwjRwws85PtqzYfAQadin",
+          "object": "chat.completion",
+          "created": 1751027648,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Data scientist.",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 46,
+            "completion_tokens": 3,
+            "total_tokens": 49,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-06-27 12:34:08
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0

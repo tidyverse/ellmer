@@ -19,7 +19,8 @@ content_pdf_file <- function(path) {
 
   ContentPDF(
     type = "application/pdf",
-    data = base64_enc(path = path)
+    data = base64_enc(path = path),
+    filename = basename(path)
   )
 }
 
@@ -28,15 +29,20 @@ content_pdf_file <- function(path) {
 content_pdf_url <- function(url) {
   if (grepl("^data:", url)) {
     parsed <- parse_data_url(url)
-    ContentPDF(parsed$content_type, parsed$base64)
+    ContentPDF(parsed$content_type, parsed$base64, unique_pdf_name())
   } else {
     # TODO: need seperate ContentPDFRemote type so we can use file upload
     # apis where they exist. Might need some kind of mutable state so can
     # record point to uploaded file.
-    path <- tempfile(fileext = ".pdf")
+    path <- tempfile(pattern = basename(url), fileext = ".pdf")
     on.exit(unlink(path))
 
     resp <- httr2::req_perform(httr2::request(url), path = path)
     content_pdf_file(path)
   }
+}
+
+unique_pdf_name <- function() {
+  the$cur_pdf_id <- (the$cur_pdf_id %||% 0) + 1
+  sprintf("file_%03d.pdf", the$cur_pdf_id)
 }

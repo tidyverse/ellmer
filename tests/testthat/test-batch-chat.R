@@ -14,6 +14,13 @@ test_that("can get chats/data from completed request", {
   )
   expect_length(chats, 4)
 
+  out <- batch_chat_text(
+    chat,
+    prompts,
+    path = test_path("batch/state-capitals.json")
+  )
+  expect_equal(out, c("Des Moines", "Albany", "Sacramento", "Austin"))
+
   type_state <- type_object(name = type_string("State name"))
   data <- batch_chat_structured(
     chat,
@@ -29,6 +36,11 @@ test_that("errors if chat/provider/prompts don't match previous run", {
   prompts <- list("What's the capital of Iowa?")
   path <- test_path("batch/state-capitals.json")
   expect_snapshot(batch_chat(chat, prompts, path), error = TRUE)
+
+  expect_snapshot(
+    batch_chat_structured(chat, prompts, path, type = type_string()),
+    error = TRUE
+  )
 })
 
 test_that("steps through in logical order, writing to disk at end step", {

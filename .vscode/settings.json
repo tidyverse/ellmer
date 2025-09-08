@@ -3,7 +3,14 @@
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "Posit.air-vscode"
     },
+    "[quarto]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "quarto.quarto"
+    },
     "cSpell.words": [
         "ellmer"
-    ]
+    ],
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true
 }

@@ -37,6 +37,16 @@
 #'   it will return `NULL` if the batch is not complete, and you can retrieve
 #'   the results later by re-running `batch_chat()` when
 #'   `batch_chat_completed()` is `TRUE`.
+#' @returns
+#' For `batch_chat()`, a list of [Chat] objects, one for each prompt.
+#' For `batch_chat_test()`, a character vector of text responses.
+#' For `batch_chat_structured()`, a single structured data object with one
+#' element for each prompt. Typically, when `type` is an object, this will
+#' will be a data frame with one row for each prompt, and one column for each
+#' property.
+#'
+#' For any of the aboves, will return `NULL` if `wait = FALSE` and the job
+#' is not complete.
 #' @examplesIf has_credentials("openai")
 #' chat <- chat_openai(model = "gpt-4.1-nano")
 #'
@@ -67,7 +77,6 @@
 #' )
 #' data
 #' }
-#'
 #' @export
 batch_chat <- function(chat, prompts, path, wait = TRUE) {
   job <- BatchJob$new(
@@ -90,6 +99,13 @@ batch_chat <- function(chat, prompts, path, wait = TRUE) {
 
 #' @export
 #' @rdname batch_chat
+batch_chat_text <- function(chat, prompts, path, wait = TRUE) {
+  chats <- batch_chat(chat, prompts, path, wait = wait)
+  map_chr(chats, \(chat) if (is.null(chat)) NA else chat$last_turn()@text)
+}
+
+#' @export
+#' @rdname batch_chat
 #' @inheritParams parallel_chat_structured
 batch_chat_structured <- function(
   chat,
@@ -103,15 +119,14 @@ batch_chat_structured <- function(
 ) {
   check_chat(chat)
   provider <- chat$get_provider()
-  needs_wrapper <- S7_inherits(provider, ProviderOpenAI)
+  needs_wrapper <- type_needs_wrapper(type, provider)
 
   job <- BatchJob$new(
     chat = chat,
     prompts = prompts,
     type = wrap_type_if_needed(type, needs_wrapper),
     path = path,
-    wait = wait,
-    call = error_call
+    wait = wait
   )
   job$step_until_done()
   turns <- job$result_turns()
@@ -300,7 +315,7 @@ BatchJob <- R6::R6Class(
     compute_hash = function() {
       # TODO: replace with JSON serialization when available
       list(
-        provider = hash(props(self$provider)),
+        provider = hash(provider_hash(self$provider)),
         prompts = hash(lapply(self$user_turns, format)),
         user_turns = hash(lapply(self$chat$get_turns(TRUE), format))
       )
@@ -317,7 +332,7 @@ BatchJob <- R6::R6Class(
 
       cli::cli_abort(
         c(
-          "{differences} don't match stored values.",
+          "{differences} {?does/do}n't match stored value{?s}.",
           i = "Do you need to pick a different {.arg path}?"
         ),
         call = call
@@ -326,6 +341,15 @@ BatchJob <- R6::R6Class(
   )
 )
 
+provider_hash <- function(x) {
+  props <- props(x)
+
+  # Backward compatible hashing after introduction of new properties
+  if (length(props$extra_headers) == 0) {
+    props$extra_headers <- NULL
+  }
+  props
+}
 
 check_has_batch_support <- function(provider, call = caller_env()) {
   if (has_batch_support(provider)) {

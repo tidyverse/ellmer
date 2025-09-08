@@ -18,6 +18,7 @@ NULL
 #' @param base_url The base URL for the API.
 #' @param params A list of standard parameters created by [params()].
 #' @param extra_args Arbitrary extra arguments to be included in the request body.
+#' @param extra_headers Arbitrary extra headers to be added to the request.
 #' @return An S7 Provider object.
 #' @examples
 #' Provider(
@@ -32,7 +33,8 @@ Provider <- new_class(
     model = prop_string(),
     base_url = prop_string(),
     params = class_list,
-    extra_args = class_list
+    extra_args = class_list,
+    extra_headers = class_character
   )
 )
 
@@ -87,6 +89,7 @@ method(chat_request, Provider) <- function(
   )
   body <- modify_list(body, provider@extra_args)
   req <- req_body_json(req, body)
+  req <- req_headers(req, !!!provider@extra_headers)
 
   req
 }
@@ -231,17 +234,3 @@ batch_result_turn <- new_generic(
     S7_dispatch()
   }
 )
-
-# Pricing ---------------------------------------------------------------------
-
-standardise_model <- new_generic(
-  "standardise_model",
-  "provider",
-  function(provider, model) {
-    S7_dispatch()
-  }
-)
-
-method(standardise_model, Provider) <- function(provider, model) {
-  model
-}

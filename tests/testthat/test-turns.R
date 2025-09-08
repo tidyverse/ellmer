@@ -40,6 +40,11 @@ test_that("as_user_turn gives useful errors", {
   })
 })
 
+test_that("can opt-out of empty check", {
+  out <- as_user_turn(list(), check_empty = FALSE)
+  expect_equal(out, Turn("user"))
+})
+
 test_that("as_user_turns gives useful errors", {
   x <- list(list(1))
   expect_snapshot(error = TRUE, {
@@ -62,4 +67,17 @@ test_that("can extract text easily", {
 
 test_that("turns have a reasonable print method", {
   expect_snapshot(Turn("user", "hello"))
+})
+
+test_that("as_user_turns can create lists of turns from lists of Content objects", {
+  content_turns <- as_user_turns(
+    list(
+      content_image_url("https://www.r-project.org/Rlogo.png"),
+      content_image_url("https://www.r-project.org/Rlogo.png")
+    )
+  )
+
+  expect_length(content_turns, 2)
+  expect_s3_class(content_turns[[1]], "ellmer::Turn")
+  expect_s3_class(content_turns[[2]], "ellmer::Turn")
 })

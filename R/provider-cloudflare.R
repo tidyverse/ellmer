@@ -1,4 +1,4 @@
-#' @include provider-gemini.R
+#' @include provider-google.R
 NULL
 
 #' Chat with a model hosted on CloudFlare
@@ -36,7 +36,8 @@ chat_cloudflare <- function(
   api_key = cloudflare_key(),
   model = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 ) {
   # List at https://developers.cloudflare.com/workers-ai/models/
   # `@cf` appears to be part of the model name
@@ -54,7 +55,8 @@ chat_cloudflare <- function(
     model = model,
     params = params,
     api_key = api_key,
-    extra_args = api_args
+    extra_args = api_args,
+    extra_headers = api_headers
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -82,9 +84,9 @@ method(as_json, list(ProviderCloudflare, TypeObject)) <-
   method(as_json, list(ProviderGoogleGemini, TypeObject))
 
 
-chat_cloudflare_test <- function(..., model = NULL) {
+chat_cloudflare_test <- function(..., model = NULL, echo = "none") {
   model <- model %||% "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-  chat_cloudflare(model = model, ...)
+  chat_cloudflare(model = model, ..., echo = echo)
 }
 
 cloudflare_key <- function() {

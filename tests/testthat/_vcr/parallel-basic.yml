@@ -1,0 +1,152 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What''s
+        1 + 1?"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95f16598d8636ab6-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Jul 2025 13:34:19 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '277'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=3mON_KPp_Ij17EAoXhoql1EVbnfDxNUzC5weYqZZm4U-1752500059-1.0.1.1-DFYXATpuuRq0QDF2Zju96.2mVPN4AlNogelfM.INQOmD8yXkOY8Ba1gaabeCRwTKIQcslaqJJl_fxWuknMWn4HL18g7_kDSIsxYfR9dlCto;
+        path=/; expires=Mon, 14-Jul-25 14:04:19 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=MH8qV7gcEoOcHeOXyOLM7xYADK1nFiyr1sPAOGTbvBQ-1752500059752-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '297'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999990'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_b092cd956c5fca2485ccaaba42636263
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BtDbvEkGQlQ9ZzPLUvi94gmR77HH3",
+          "object": "chat.completion",
+          "created": 1752500059,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "2",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 21,
+            "completion_tokens": 1,
+            "total_tokens": 22,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_38343a2f8f"
+        }
+  recorded_at: 2025-07-14 13:34:19
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What''s
+        2 + 2?"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 95f1659dbe076ab6-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Mon, 14 Jul 2025 13:34:20 GMT
+      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
+      openai-processing-ms: '127'
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=RRGLpMw7t2AwONAYhNrGvN1veGKUYp083o.2DcWpNT4-1752500060-1.0.1.1-kNTN0REAgyLhll1TayDH2Bx9mNAc2ECaCl6.m7X.vJQIn5Gv.qdgAeagetKVmai5Ujf6L3gvqP0xocwOtaN6sLiZxycadgiZxqtKBFEVpmE;
+        path=/; expires=Mon, 14-Jul-25 14:04:20 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=JYxS6SN9pAPbLPO3DoK8LGehVd9XW34jNbMlSPGgFj8-1752500060196-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '137'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999990'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_824516848f8fa0109ba13d2bede0db69
+    body:
+      string: |
+        {
+          "id": "chatcmpl-BtDbw6qB3HUzwWKjNN03hhMH3r0L3",
+          "object": "chat.completion",
+          "created": 1752500060,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "4",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 21,
+            "completion_tokens": 1,
+            "total_tokens": 22,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": null
+        }
+  recorded_at: 2025-07-14 13:34:20
+recorded_with: VCR-vcr/1.7.1.93

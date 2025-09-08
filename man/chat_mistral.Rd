@@ -11,7 +11,8 @@ chat_mistral(
   model = NULL,
   seed = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 )
 }
 \arguments{
@@ -44,6 +45,9 @@ when running at the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{api_headers}{Named character vector of arbitrary extra headers appended
+to every chat API call.}
 }
 \value{
 A \link{Chat} object.
@@ -69,7 +73,6 @@ Other chatbots:
 \code{\link{chat_aws_bedrock}()},
 \code{\link{chat_azure_openai}()},
 \code{\link{chat_cloudflare}()},
-\code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
 \code{\link{chat_deepseek}()},
 \code{\link{chat_github}()},

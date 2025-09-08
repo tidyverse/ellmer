@@ -1,19 +1,35 @@
 fixture_list_of_tools <- function() {
   list(
-    tool_scalar = tool(function() 1, "Tool", .name = "tool_scalar"),
-    my_tool = tool(function() 1, "Tool", .name = "my_tool"),
+    tool_scalar = tool(
+      function() 1,
+      name = "tool_scalar",
+      description = "Tool"
+    ),
+    my_tool = tool(
+      function() 1,
+      name = "my_tool",
+      description = "Tool"
+    ),
     tool_list = tool(
       function() list(a = 1, b = 2),
-      "Tool",
-      .name = "tool_list"
+      name = "tool_list",
+      description = "Tool"
     ),
-    tool_chr = tool(function() letters[1:3], "Tool", .name = "tool_chr"),
-    tool_abort = tool(.description = "Tool", .name = "tool_abort", function() {
-      cli::cli_abort(c(
-        "Unexpected input",
-        "i" = "Please revise and try again."
-      ))
-    })
+    tool_chr = tool(
+      function() letters[1:3],
+      name = "tool_chr",
+      description = "Tool"
+    ),
+    tool_abort = tool(
+      function() {
+        cli::cli_abort(c(
+          "Unexpected input",
+          "i" = "Please revise and try again."
+        ))
+      },
+      name = "tool_abort",
+      description = "Tool"
+    )
   )
 }
 

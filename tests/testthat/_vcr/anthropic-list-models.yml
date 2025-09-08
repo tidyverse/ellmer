@@ -1,0 +1,33 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://api.anthropic.com/v1/models
+  response:
+    status: 200
+    headers:
+      date: Tue, 01 Jul 2025 14:00:02 GMT
+      content-type: application/json
+      request-id: req_011CQgRH5DTgCCdQD2JwZbk1
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      via: 1.1 google
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 95866d6998dcf061-DFW
+      content-encoding: gzip
+    body:
+      string: '{"data":[{"type":"model","id":"claude-opus-4-20250514","display_name":"Claude
+        Opus 4","created_at":"2025-05-22T00:00:00Z"},{"type":"model","id":"claude-sonnet-4-20250514","display_name":"Claude
+        Sonnet 4","created_at":"2025-05-22T00:00:00Z"},{"type":"model","id":"claude-3-7-sonnet-20250219","display_name":"Claude
+        Sonnet 3.7","created_at":"2025-02-24T00:00:00Z"},{"type":"model","id":"claude-3-5-sonnet-20241022","display_name":"Claude
+        Sonnet 3.5 (New)","created_at":"2024-10-22T00:00:00Z"},{"type":"model","id":"claude-3-5-haiku-20241022","display_name":"Claude
+        Haiku 3.5","created_at":"2024-10-22T00:00:00Z"},{"type":"model","id":"claude-3-5-sonnet-20240620","display_name":"Claude
+        Sonnet 3.5 (Old)","created_at":"2024-06-20T00:00:00Z"},{"type":"model","id":"claude-3-haiku-20240307","display_name":"Claude
+        Haiku 3","created_at":"2024-03-07T00:00:00Z"},{"type":"model","id":"claude-3-opus-20240229","display_name":"Claude
+        Opus 3","created_at":"2024-02-29T00:00:00Z"},{"type":"model","id":"claude-3-sonnet-20240229","display_name":"Claude
+        Sonnet 3","created_at":"2024-02-29T00:00:00Z"},{"type":"model","id":"claude-2.1","display_name":"Claude
+        2.1","created_at":"2023-11-21T00:00:00Z"},{"type":"model","id":"claude-2.0","display_name":"Claude
+        2.0","created_at":"2023-07-11T00:00:00Z"}],"has_more":false,"first_id":"claude-opus-4-20250514","last_id":"claude-2.0"}'
+  recorded_at: 2025-07-01 14:00:02
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0

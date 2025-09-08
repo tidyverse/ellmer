@@ -28,29 +28,48 @@ chat_deepseek <- function(
   base_url = "https://api.deepseek.com",
   api_key = deepseek_key(),
   model = NULL,
+  params = NULL,
   seed = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 ) {
   model <- set_default(model, "deepseek-chat")
   echo <- check_echo(echo)
 
-  if (is_testing() && is.null(seed)) {
-    seed <- seed %||% 1014
-  }
+  params <- params %||% params()
 
   provider <- ProviderDeepSeek(
     name = "DeepSeek",
     base_url = base_url,
     model = model,
+    params = params,
     seed = seed,
     extra_args = api_args,
-    api_key = api_key
+    api_key = api_key,
+    extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 ProviderDeepSeek <- new_class("ProviderDeepSeek", parent = ProviderOpenAI)
+
+method(chat_params, ProviderDeepSeek) <- function(provider, params) {
+  # https://platform.deepseek.com/api-docs/api/create-chat-completion
+  standardise_params(
+    params,
+    c(
+      frequency_penalty = "frequency_penalty",
+      max_tokens = "max_tokens",
+      presence_penalty = "presence_penalty",
+      stop = "stop_sequences",
+      temperature = "temperature",
+      top_p = "top_p",
+      logprobs = "log_probs",
+      top_logprobs = "top_k"
+    )
+  )
+}
 
 method(as_json, list(ProviderDeepSeek, ContentText)) <- function(provider, x) {
   x@text

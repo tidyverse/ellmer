@@ -18,8 +18,9 @@ reference:
       to send messages, receive responses, manage tools and extract structured
       data.
     contents:
-      - Chat
+      - chat
       - starts_with("chat_")
+      - Chat
       - token_usage
 
   - title: Chat helpers
@@ -51,7 +52,6 @@ reference:
       supported by one provider, or if you're implementing a new provider.
     contents:
       - Provider
-      - Chat
       - Turn
       - Content
       - Type
@@ -59,6 +59,7 @@ reference:
   - title: Utilities
     contents:
       - contents_text
+      - contents_record
       - params
 
   - title: Deprecated functions
@@ -67,6 +68,8 @@ reference:
 
 news:
   releases:
+  - text: "Version 0.3.0"
+    href: https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/
   - text: "Version 0.2.0"
     href: https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/
   - text: "Version 0.1.0"

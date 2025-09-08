@@ -8,21 +8,25 @@ test_that("can retrieve and log tokens", {
   local_tokens()
   provider <- test_provider("testprovider", "test")
 
-  expect_equal(tokens_log(provider, 10, 50), c(10, 50))
-  expect_equal(the$tokens, tokens_row("testprovider", "test", 10, 50))
+  expect_equal(tokens_log(provider, 0, 0, 100), c(0, 0, 100))
+  expect_equal(the$tokens, tokens_row("testprovider", "test", 0, 0, 100))
 
-  expect_equal(tokens_log(provider, 0, 10), c(0, 10))
-  expect_equal(the$tokens, tokens_row("testprovider", "test", 10, 60))
+  expect_equal(tokens_log(provider, 10, 50), c(10, 50, 0))
+  expect_equal(the$tokens, tokens_row("testprovider", "test", 10, 50, 100))
 
-  expect_equal(tokens_log(provider), c(0, 0))
-  expect_equal(the$tokens, tokens_row("testprovider", "test", 10, 60))
+  expect_equal(tokens_log(provider, 0, 10), c(0, 10, 0))
+  expect_equal(the$tokens, tokens_row("testprovider", "test", 10, 60, 100))
+
+  expect_equal(tokens_log(provider), c(0, 0, 0))
+  expect_equal(the$tokens, tokens_row("testprovider", "test", 10, 60, 100))
 
   expect_snapshot(token_usage())
 })
 
 test_that("can compute price of tokens", {
-  expect_equal(get_token_cost("OpenAI", "gpt-4o", 1e6, 0), dollars(2.5))
-  expect_equal(get_token_cost("OpenAI", "gpt-4o", 0, 1e6), dollars(10))
+  expect_equal(get_token_cost("OpenAI", "gpt-4o", 1e6, 0, 0), dollars(2.5))
+  expect_equal(get_token_cost("OpenAI", "gpt-4o", 0, 1e6, 0), dollars(10))
+  expect_equal(get_token_cost("OpenAI", "gpt-4o", 0, 0, 1e6), dollars(1.25))
 })
 
 test_that("token_usage() shows price if available", {
@@ -32,7 +36,8 @@ test_that("token_usage() shows price if available", {
       provider = "testprovider",
       model = "test",
       input = 0.10,
-      output = 0.01
+      output = 0.01,
+      cached_input = 0
     )
   )
   provider <- test_provider("testprovider", "test")

@@ -1,6 +1,6 @@
 Package: ellmer
 Title: Chat with Large Language Models
-Version: 0.2.1.9000
+Version: 0.3.2.9000
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4757-117X")),
@@ -8,6 +8,8 @@ Authors@R: c(
     person("Aaron", "Jacobs", role = "aut"),
     person("Garrick", "Aden-Buie", , "garrick@posit.co", role = "aut",
            comment = c(ORCID = "0000-0002-7111-0077")),
+    person("Barret", "Schloerke", , "barret@posit.co", role = "aut",
+           comment = c(ORCID = "0000-0001-9986-114X")),
     person("Posit Software, PBC", role = c("cph", "fnd"),
            comment = c(ROR = "03wc8by49"))
   )
@@ -24,7 +26,7 @@ Imports:
     cli,
     coro (>= 1.1.0),
     glue,
-    httr2 (>= 1.1.1),
+    httr2 (>= 1.2.1),
     jsonlite,
     later (>= 1.4.0),
     lifecycle,
@@ -37,6 +39,7 @@ Suggests:
     curl (>= 6.0.1),
     gargle,
     gitcreds,
+    jose,
     knitr,
     magick,
     openssl,
@@ -47,62 +50,65 @@ Suggests:
     shiny,
     shinychat (>= 0.2.0),
     testthat (>= 3.0.0),
+    vcr (>= 2.0.0),
     withr
 VignetteBuilder:
     knitr
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-Config/testthat/start-first: test-provider-*
+Config/testthat/start-first: chat, provider*
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Collate:
     'utils-S7.R'
     'types.R'
+    'ellmer-package.R'
     'tools-def.R'
     'content.R'
     'provider.R'
     'as-json.R'
     'batch-chat.R'
-    'chat-parallel.R'
     'chat-structured.R'
+    'turns.R'
+    'chat-tools.R'
     'utils-coro.R'
     'chat.R'
     'content-image.R'
     'content-pdf.R'
-    'turns.R'
-    'content-tools.R'
+    'content-replay.R'
     'deprecated.R'
-    'ellmer-package.R'
     'httr2.R'
     'import-standalone-obj-type.R'
     'import-standalone-purrr.R'
     'import-standalone-types-check.R'
     'interpolate.R'
     'otel.R'
+    'live.R'
+    'parallel-chat.R'
     'params.R'
+    'provider-anthropic.R'
+    'provider-any.R'
+    'provider-aws.R'
     'provider-openai.R'
     'provider-azure.R'
-    'provider-bedrock.R'
-    'provider-claude.R'
-    'provider-gemini.R'
+    'provider-google.R'
     'provider-cloudflare.R'
-    'provider-cortex.R'
     'provider-databricks.R'
     'provider-deepseek.R'
-    'provider-gemini-upload.R'
     'provider-github.R'
+    'provider-google-upload.R'
     'provider-groq.R'
-    'provider-huggingface.r'
+    'provider-huggingface.R'
     'provider-mistral.R'
     'provider-ollama.R'
     'provider-openrouter.R'
     'provider-perplexity.R'
     'provider-portkey.R'
+    'provider-snowflake-cortex.R'
     'provider-snowflake.R'
     'provider-vllm.R'
-    'shiny.R'
     'tokens.R'
     'tools-def-auto.R'
     'utils-callbacks.R'
@@ -111,6 +117,6 @@ Collate:
     'utils-prettytime.R'
     'utils.R'
     'zzz.R'
-Remotes: 
+Remotes:
     r-lib/otel,
     r-lib/otelsdk

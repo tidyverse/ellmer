@@ -32,7 +32,7 @@ NULL
 #' @inheritParams chat_cortex_analyst
 #' @param model `r param_model("claude-3-7-sonnet")`
 #' @inherit chat_openai return
-#' @examplesIf has_credentials("cortex")
+#' @examplesIf has_credentials("snowflake")
 #' chat <- chat_snowflake()
 #' chat$chat("Tell me a joke in the form of a SQL query.")
 #' @export
@@ -43,7 +43,8 @@ chat_snowflake <- function(
   model = NULL,
   params = NULL,
   api_args = list(),
-  echo = c("none", "output", "all")
+  echo = c("none", "output", "all"),
+  api_headers = character()
 ) {
   check_string(account, allow_empty = FALSE)
   model <- set_default(model, "claude-3-7-sonnet")
@@ -66,7 +67,8 @@ chat_snowflake <- function(
     params = params,
     extra_args = api_args,
     # We need an empty api_key for S7 validation.
-    api_key = ""
+    api_key = "",
+    extra_headers = api_headers
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -84,8 +86,7 @@ ProviderSnowflakeCortex <- new_class(
 method(base_request, ProviderSnowflakeCortex) <- function(provider) {
   req <- request(provider@base_url)
   req <- ellmer_req_credentials(req, provider@credentials)
-  req <- req_retry(req, max_tries = 2)
-  req <- ellmer_req_timeout(req, stream)
+  req <- ellmer_req_robustify(req)
   # Snowflake uses the User Agent header to identify "parter applications", so
   # identify requests as coming from "r_ellmer" (unless an explicit partner
   # application is set via the ambient SF_PARTNER environment variable).
@@ -283,7 +284,6 @@ method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(provider, x) {
   }
   list(
     role = x@role,
-    content = content,
     content_list = as_json(provider, x@contents)
   )
 }
@@ -434,6 +434,10 @@ snowflake_keypair_token <- function(
     fp <- openssl::base64_encode(
       openssl::sha256(openssl::write_der(key$pubkey))
     )
+    if (grepl(".+\\.privatelink$", account)) {
+      # account identifier is everything up to the first period
+      account <- gsub("^([^.]*).+", "\\1", account)
+    }
     sub <- toupper(paste0(account, ".", user))
     iss <- paste0(sub, ".SHA256:", fp)
     # Note: Snowflake employs a malformed issuer claim, so we have to inject it

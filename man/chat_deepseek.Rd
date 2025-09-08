@@ -9,9 +9,11 @@ chat_deepseek(
   base_url = "https://api.deepseek.com",
   api_key = deepseek_key(),
   model = NULL,
+  params = NULL,
   seed = NULL,
   api_args = list(),
-  echo = NULL
+  echo = NULL,
+  api_headers = character()
 )
 }
 \arguments{
@@ -27,6 +29,8 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{model}{The model to use for the chat (defaults to "deepseek-chat").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
+
+\item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output
 more reproducible.}
@@ -44,6 +48,9 @@ when running at the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{api_headers}{Named character vector of arbitrary extra headers appended
+to every chat API call.}
 }
 \value{
 A \link{Chat} object.
@@ -69,7 +76,6 @@ Other chatbots:
 \code{\link{chat_aws_bedrock}()},
 \code{\link{chat_azure_openai}()},
 \code{\link{chat_cloudflare}()},
-\code{\link{chat_cortex_analyst}()},
 \code{\link{chat_databricks}()},
 \code{\link{chat_github}()},
 \code{\link{chat_google_gemini}()},

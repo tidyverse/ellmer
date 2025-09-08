@@ -3,20 +3,13 @@
     Code
       chat$chat("What is 1 + 1?", echo = FALSE)
     Condition
-      Error in `method(value_turn, ellmer::ProviderOpenRouter)`:
-      ! message
+      Error in `req_perform()`:
+      ! HTTP 400 Bad Request.
+      * Expected temperature to be a number, received "hot"
     Code
       chat$chat("What is 1 + 1?", echo = TRUE)
     Condition
-      Error in `method(stream_parse, ellmer::ProviderOpenRouter)`:
-      ! message
-
-# all tool variations work
-
-    Code
-      chat$chat("Great. Do it again.")
-    Condition
-      Error in `FUN()`:
-      ! Can't use async tools with `$chat()` or `$stream()`.
-      i Async tools are supported, but you must use `$chat_async()` or `$stream_async()`.
+      Error in `req_perform_connection()`:
+      ! HTTP 400 Bad Request.
+      * Expected temperature to be a number, received "hot"
 

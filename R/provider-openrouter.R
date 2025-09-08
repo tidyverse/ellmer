@@ -13,6 +13,7 @@ NULL
 #' @family chatbots
 #' @param api_key `r api_key_param("OPENROUTER_API_KEY")`
 #' @param model `r param_model("gpt-4o")`
+#' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
@@ -25,35 +26,55 @@ chat_openrouter <- function(
   api_key = openrouter_key(),
   model = NULL,
   seed = NULL,
+  params = NULL,
   api_args = list(),
-  echo = c("none", "output", "all")
+  echo = c("none", "output", "all"),
+  api_headers = character()
 ) {
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
-  if (is_testing() && is.null(seed)) {
-    seed <- seed %||% 1014
-  }
+  params <- params %||% params()
 
   provider <- ProviderOpenRouter(
     name = "OpenRouter",
     base_url = "https://openrouter.ai/api/v1",
     model = model,
     seed = seed,
+    params = params,
     extra_args = api_args,
-    api_key = api_key
+    api_key = api_key,
+    extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-chat_openrouter_test <- function(...) {
-  chat_openrouter(..., model = "openai/gpt-4o-mini-2024-07-18")
+chat_openrouter_test <- function(..., echo = "none") {
+  chat_openrouter(..., model = "openai/gpt-4o-mini-2024-07-18", echo = echo)
 }
 
 ProviderOpenRouter <- new_class(
   "ProviderOpenRouter",
   parent = ProviderOpenAI,
 )
+
+method(chat_params, ProviderOpenRouter) <- function(provider, params) {
+  # https://openrouter.ai/docs/api-reference/parameters
+  standardise_params(
+    params,
+    c(
+      temperature = "temperature",
+      top_p = "top_p",
+      top_k = "top_k",
+      frequency_penalty = "frequency_penalty",
+      presence_penalty = "presence_penalty",
+      seed = "seed",
+      max_tokens = "max_tokens",
+      logprobs = "log_probs",
+      stop = "stop_sequences"
+    )
+  )
+}
 
 openrouter_key <- function() {
   key_get("OPENROUTER_API_KEY")
