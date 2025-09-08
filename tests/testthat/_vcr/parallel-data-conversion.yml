@@ -1,0 +1,458 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"Party
+        A manifesto: invest in services, progressive social policies."}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"Party":{"type":"string","description":""},"economic":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false},"social":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false}},"required":["Party","economic","social"],"additionalProperties":false},"strict":true}}}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 972f217c881afede-SIN
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 22 Aug 2025 03:02:23 GMT
+      openai-organization: lse-dsi-tjq985
+      openai-processing-ms: '1026'
+      openai-project: proj_PfY56xogVN6qxFa8oRdsFLte
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=bNo.mi6gTtF58GVZ7n3xVI9q0Vy0vLmNv1QspXWIuBM-1755831743-1.0.1.1-Cgbe_ySua.ljveQCBdiKzYWCF4sDBjE4eYfJeXgk96PvaZ9YME8LAza9ODv8M6XfFRRZGfzNfMbvi_xcOHDuD99_TCV0lEIqz1YDziVeinA;
+        path=/; expires=Fri, 22-Aug-25 03:32:23 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=ni30FsqMqwiHYosrTZhK1f7yBjPIYRwfRcRgfVW2Kh4-1755831743425-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '1095'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999977'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_58ef36f034ef44c38864d30f9a6e1265
+    body:
+      string: |
+        {
+          "id": "chatcmpl-C7CKkA4WxDq5C6cY0BEcEJs33mS9v",
+          "object": "chat.completion",
+          "created": 1755831742,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"Party\":\"Party A\",\"economic\":{\"score\":7,\"evidence\":\"Focus on investing in services suggests a moderate to high emphasis on social welfare.\"},\"social\":{\"score\":8,\"evidence\":\"Progressive social policies indicate a strong commitment to social equality and inclusion.\"}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 122,
+            "completion_tokens": 55,
+            "total_tokens": 177,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_c4c155951e"
+        }
+  recorded_at: 2025-08-22 03:02:23
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"Party
+        B manifesto: cut taxes, conservative social policies."}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"Party":{"type":"string","description":""},"economic":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false},"social":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false}},"required":["Party","economic","social"],"additionalProperties":false},"strict":true}}}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 972f218cec5efede-SIN
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 22 Aug 2025 03:02:24 GMT
+      openai-organization: lse-dsi-tjq985
+      openai-processing-ms: '816'
+      openai-project: proj_PfY56xogVN6qxFa8oRdsFLte
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=_.b6Mbj_SUiRJVZ_uLjHfyGQWQs6WbfnGVYAshYa8C0-1755831744-1.0.1.1-fXqA7hONe.GZM7CYAfgVwCxa59opw6skMVeoI2nra.cUfEXCw64SXUaGS5.RtSBJrHdmk5ae3Kp2CimviQW9vD23biH7F4QEsMgsFSm5iPw;
+        path=/; expires=Fri, 22-Aug-25 03:32:24 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=1ihlBjWsFuvYUZkYePAHWCFOCeIWYQ72gL2ddujenII-1755831744793-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '866'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999980'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_9f474eb389fb4fa2b948dc6e11f2c621
+    body:
+      string: |
+        {
+          "id": "chatcmpl-C7CKlr1ptWgjxKxXnz48zjezU32u1",
+          "object": "chat.completion",
+          "created": 1755831743,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"Party\":\"Party B\",\"economic\":{\"score\":8,\"evidence\":\"Proposes to cut taxes, indicating a conservative fiscal stance.\"},\"social\":{\"score\":3,\"evidence\":\"Supports conservative social policies, suggesting traditional values.\"}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 121,
+            "completion_tokens": 47,
+            "total_tokens": 168,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_e91a518ddb"
+        }
+  recorded_at: 2025-08-22 03:02:24
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"Party
+        C manifesto: balanced budget, centrist social policies."}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"Party":{"type":"string","description":""},"economic":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false},"social":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false}},"required":["Party","economic","social"],"additionalProperties":false},"strict":true}}}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 972f21954ff4fede-SIN
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 22 Aug 2025 03:02:26 GMT
+      openai-organization: lse-dsi-tjq985
+      openai-processing-ms: '704'
+      openai-project: proj_PfY56xogVN6qxFa8oRdsFLte
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=tnLBWhPRc1A4YXHn69F4S5UdtuJuV52M3sYTYZ5WoiI-1755831746-1.0.1.1-YxhNoDaO.dMEg.FjlJZxEbsS6HM5xdNGEXAYmL2ufHrJ_nL1O88T41k7r.lvcHAUs89ScSKlD17J4ahfSOGjWXljcfjoy55tOdSlSOCUtMs;
+        path=/; expires=Fri, 22-Aug-25 03:32:26 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=UnQkNX9YMTAOEc3R1YQhSWkdbgLY5_fKmV7QTrtPzkA-1755831746221-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '871'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999977'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_9051b84afbd24b7b852d2b510fcbfaa3
+    body:
+      string: |
+        {
+          "id": "chatcmpl-C7CKnVMaD8SKmjOk9UFnMPq2fV0n5",
+          "object": "chat.completion",
+          "created": 1755831745,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"Party\":\"Party C\",\"economic\":{\"score\":7,\"evidence\":\"Advocates for a balanced budget, indicating fiscal responsibility.\"},\"social\":{\"score\":5,\"evidence\":\"Supports centrist social policies, suggesting moderate social stance.\"}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 122,
+            "completion_tokens": 49,
+            "total_tokens": 171,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_e91a518ddb"
+        }
+  recorded_at: 2025-08-22 03:02:26
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"Party
+        A manifesto: invest in services, progressive social policies."}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"Party":{"type":"string","description":""},"economic":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false},"social":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false}},"required":["Party","economic","social"],"additionalProperties":false},"strict":true}}}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 972f219e9cd5fede-SIN
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 22 Aug 2025 03:02:27 GMT
+      openai-organization: lse-dsi-tjq985
+      openai-processing-ms: '1040'
+      openai-project: proj_PfY56xogVN6qxFa8oRdsFLte
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=S5j25BrSaUhWakcXW8.vYYClt68T6zf9.aoQD2eca5s-1755831747-1.0.1.1-y3bFRCkMdSjVIy7Iqia4AKj5gjroxd8seqfuG7saN8XjPjcPqqOuvXb.HcYK8OdT9.cmFd4UkIA8GSn4MDGr5I1GUyg2CUGp2jtU0Dih7_8;
+        path=/; expires=Fri, 22-Aug-25 03:32:27 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=ldhnRX2WgRYvSqCf.3zxLmgsumbWVztxxqHsLIx3r.M-1755831747651-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '1063'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999977'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_54894df7ba434ee6b1d4041d9d1e4606
+    body:
+      string: |
+        {
+          "id": "chatcmpl-C7CKovNHytavimiCiHG81AdjmRTN9",
+          "object": "chat.completion",
+          "created": 1755831746,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"Party\":\"Party A\",\"economic\":{\"score\":7,\"evidence\":\"Focus on investing in services suggests a moderate to high emphasis on social spending.\"},\"social\":{\"score\":8,\"evidence\":\"Progressive social policies indicate strong support for social equality and rights.\"}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 122,
+            "completion_tokens": 54,
+            "total_tokens": 176,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_c4c155951e"
+        }
+  recorded_at: 2025-08-22 03:02:27
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"Party
+        B manifesto: cut taxes, conservative social policies."}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"Party":{"type":"string","description":""},"economic":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false},"social":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false}},"required":["Party","economic","social"],"additionalProperties":false},"strict":true}}}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 972f21a74a57fede-SIN
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 22 Aug 2025 03:02:29 GMT
+      openai-organization: lse-dsi-tjq985
+      openai-processing-ms: '876'
+      openai-project: proj_PfY56xogVN6qxFa8oRdsFLte
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=JDfDQPCjJcwCx.8v2CbUSkwr0OMDAHRyN71gnm0nyrk-1755831749-1.0.1.1-DA_2QoD0ltI39RGFZjduyzIfw74244HWm3AElGRvsd0NhNAEazSx_H7MWqux1LAFT_z0PIyIiE.6z6m33_HJWl3SpEd8s3XvSZWt_sPVB.0;
+        path=/; expires=Fri, 22-Aug-25 03:32:29 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=hQyzh4fcc9CW8x3xIw.jSbu5X_l9ifW3IQkmr9wvEqs-1755831749363-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '947'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999980'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_43129b0f28e346e3baee85006668505b
+    body:
+      string: |
+        {
+          "id": "chatcmpl-C7CKqB9piaDbjFphwO9ycMaFuL0FW",
+          "object": "chat.completion",
+          "created": 1755831748,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"Party\":\"Party B\",\"economic\":{\"score\":8,\"evidence\":\"Proposes to cut taxes, indicating a conservative fiscal stance.\"},\"social\":{\"score\":3,\"evidence\":\"Supports conservative social policies, suggesting traditional values.\"}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 121,
+            "completion_tokens": 47,
+            "total_tokens": 168,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_e91a518ddb"
+        }
+  recorded_at: 2025-08-22 03:02:29
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"Party
+        C manifesto: balanced budget, centrist social policies."}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"Party":{"type":"string","description":""},"economic":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false},"social":{"type":"object","description":"","properties":{"score":{"type":"integer","description":""},"evidence":{"type":"string","description":""}},"required":["score","evidence"],"additionalProperties":false}},"required":["Party","economic","social"],"additionalProperties":false},"strict":true}}}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 972f21b1faecfede-SIN
+      content-encoding: gzip
+      content-type: application/json
+      date: Fri, 22 Aug 2025 03:02:30 GMT
+      openai-organization: lse-dsi-tjq985
+      openai-processing-ms: '1074'
+      openai-project: proj_PfY56xogVN6qxFa8oRdsFLte
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=u7q.UpQzDu_ccb9vx7LMCA0Xwy.5ruQisWOmhA86Uek-1755831750-1.0.1.1-gfI5R2FfZcPjVESJ7Wtmf3f8sY59THu839WSI6pe5ayc72CaOyTD8S1gLzX3PT5566A0JXsb42kojhbJYUbKBcwW9o3LPWMcNOsG3mLr9R0;
+        path=/; expires=Fri, 22-Aug-25 03:32:30 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=zMyGga5FiwtcRqgKG7pCSi3sR.pBeNtA24RS2EeFr_I-1755831750982-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '1149'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999980'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_56934240c62e49eab4d2023ea823dad1
+    body:
+      string: |
+        {
+          "id": "chatcmpl-C7CKrzENZX35V99j9M71ebtpCJBcG",
+          "object": "chat.completion",
+          "created": 1755831749,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "{\"Party\":\"Party C\",\"economic\":{\"score\":7,\"evidence\":\"Advocates for a balanced budget, indicating fiscal responsibility.\"},\"social\":{\"score\":5,\"evidence\":\"Centrist social policies suggest moderate social stances.\"}}",
+                "refusal": null,
+                "annotations": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 122,
+            "completion_tokens": 48,
+            "total_tokens": 170,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": "fp_e91a518ddb"
+        }
+  recorded_at: 2025-08-22 03:02:30
+recorded_with: VCR-vcr/2.0.0
