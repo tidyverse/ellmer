@@ -33,7 +33,8 @@ on_load({
     echo = "none",
     on_tool_request = function(request) invisible(),
     on_tool_result = function(result) invisible(),
-    yield_request = FALSE
+    yield_request = FALSE,
+    parent_ospan = NULL
   ) {
     tool_requests <- extract_tool_requests(turn)
 
@@ -51,7 +52,7 @@ on_load({
         next
       }
 
-      result <- invoke_tool(request)
+      result <- invoke_tool(request, parent_ospan = parent_ospan)
 
       if (promises::is.promise(result@value)) {
         cli::cli_abort(
@@ -78,7 +79,8 @@ on_load({
     echo = "none",
     on_tool_request = function(request) invisible(),
     on_tool_result = function(result) invisible(),
-    yield_request = FALSE
+    yield_request = FALSE,
+    parent_ospan = NULL
   ) {
     tool_requests <- extract_tool_requests(turn)
 
@@ -94,7 +96,7 @@ on_load({
         return(rejected)
       }
 
-      result <- coro::await(invoke_tool_async(request))
+      result <- coro::await(invoke_tool_async(request, parent_ospan))
 
       maybe_echo_tool(result, echo = echo)
       on_tool_result(result)
@@ -144,7 +146,7 @@ new_tool_result <- function(request, result = NULL, error = NULL) {
 }
 
 # Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases
-invoke_tool <- function(request) {
+invoke_tool <- function(request, parent_ospan = NULL) {
   if (is.null(request@tool)) {
     return(new_tool_result(request, error = "Unknown tool"))
   }
@@ -155,21 +157,23 @@ invoke_tool <- function(request) {
     return(args)
   }
 
-  span <- start_tool_span(request)
+  tool_ospan <- create_tool_ospan(request, parent_ospan = parent_ospan)
+  activate_and_cleanup_ospan(tool_ospan, ospan_promise_domain = FALSE)
+
   tryCatch(
     {
       result <- do.call(request@tool, args)
       new_tool_result(request, result)
     },
     error = function(e) {
-      record_tool_error(span, e)
+      record_tool_ospan_error(tool_ospan, e)
       new_tool_result(request, error = e)
     }
   )
 }
 
 on_load(
-  invoke_tool_async <- coro::async(function(request) {
+  invoke_tool_async <- coro::async(function(request, parent_ospan = NULL) {
     if (is.null(request@tool)) {
       return(new_tool_result(request, error = "Unknown tool"))
     }
@@ -180,15 +184,18 @@ on_load(
       return(args)
     }
 
-    span <- start_tool_span(request, active = FALSE)
-    withr::defer(span$end())
+    tool_ospan <- create_tool_ospan(request, parent_ospan = parent_ospan)
+    # Must activate the span in a promise domain so that it propagates to
+    # async calls made by the tool function.
+    activate_and_cleanup_ospan(tool_ospan, ospan_promise_domain = TRUE)
+
     tryCatch(
       {
         result <- await(do.call(request@tool, args))
         new_tool_result(request, result)
       },
       error = function(e) {
-        record_tool_error(span, e)
+        record_tool_ospan_error(tool_ospan, e)
         new_tool_result(request, error = e)
       }
     )

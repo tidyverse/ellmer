@@ -490,14 +490,17 @@ Chat <- R6::R6Class(
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
-      start_agent_span(private$provider)
+
+      agent_ospan <- create_agent_ospan(private$provider)
+      withr::defer(promises::end_ospan(agent_ospan))
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns(
           user_turn,
           stream = stream,
           echo = echo,
-          yield_as_content = yield_as_content
+          yield_as_content = yield_as_content,
+          parent_ospan = agent_ospan
         )
         for (chunk in assistant_chunks) {
           yield(chunk)
@@ -512,7 +515,8 @@ Chat <- R6::R6Class(
             echo = echo,
             on_tool_request = private$callback_on_tool_request$invoke,
             on_tool_result = private$callback_on_tool_result$invoke,
-            yield_request = yield_as_content
+            yield_request = yield_as_content,
+            parent_ospan = agent_ospan
           )
 
           tool_results <- list()
@@ -550,15 +554,18 @@ Chat <- R6::R6Class(
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
-      span <- start_agent_span(private$provider, active = FALSE)
-      withr::defer(span$end())
+
+      agent_ospan <- create_agent_ospan(private$provider)
+      withr::defer(promises::end_ospan(agent_ospan))
+      # local_ospan_promise_domain()
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns_async(
           user_turn,
           stream = stream,
           echo = echo,
-          yield_as_content = yield_as_content
+          yield_as_content = yield_as_content,
+          parent_ospan = agent_ospan
         )
         for (chunk in await_each(assistant_chunks)) {
           yield(chunk)
@@ -573,11 +580,12 @@ Chat <- R6::R6Class(
             echo = echo,
             on_tool_request = private$callback_on_tool_request$invoke_async,
             on_tool_result = private$callback_on_tool_result$invoke_async,
-            yield_request = yield_as_content
+            yield_request = yield_as_content,
+            parent_ospan = agent_ospan
           )
           if (tool_mode == "sequential") {
             tool_results <- list()
-            for (tool_step in coro::await_each(tool_calls)) {
+            for (tool_step in await_each(tool_calls)) {
               if (yield_as_content) {
                 yield(tool_step)
               }
@@ -586,7 +594,9 @@ Chat <- R6::R6Class(
               }
             }
           } else {
+            # otel::with_active_span(agent_ospan, {
             tool_results <- coro::collect(tool_calls)
+            # })
             if (yield_as_content) {
               # Filter out and yield tool requests before awaiting tool results
               is_request <- map_lgl(tool_results, is_tool_request)
@@ -623,12 +633,18 @@ Chat <- R6::R6Class(
       stream,
       echo,
       type = NULL,
-      yield_as_content = FALSE
+      yield_as_content = FALSE,
+      parent_ospan = NULL
     ) {
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
       }
-      span <- start_chat_span(private$provider)
+      chat_ospan <- create_chat_ospan(
+        private$provider,
+        parent_ospan = parent_ospan
+      )
+      activate_and_cleanup_ospan(chat_ospan)
+
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "stream" else "value",
@@ -655,11 +671,15 @@ Chat <- R6::R6Class(
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
-        record_chat_span_status(span, result)
-        turn <- value_turn(private$provider, result, has_type = !is.null(type))
+        record_chat_ospan_status(chat_ospan, result)
+        turn <- value_turn(
+          private$provider,
+          result,
+          has_type = !is.null(type)
+        )
         turn <- match_tools(turn, private$tools)
       } else {
-        record_chat_span_status(span, response)
+        record_chat_ospan_status(chat_ospan, response)
         turn <- value_turn(
           private$provider,
           response,
@@ -710,23 +730,33 @@ Chat <- R6::R6Class(
       stream,
       echo,
       type = NULL,
-      yield_as_content = FALSE
+      yield_as_content = FALSE,
+      parent_ospan = NULL
     ) {
-      span <- start_chat_span(private$provider, active = FALSE)
-      withr::defer(span$end())
-      response <- chat_perform(
-        provider = private$provider,
-        mode = if (stream) "async-stream" else "async-value",
-        turns = c(private$.turns, list(user_turn)),
-        tools = if (is.null(type)) private$tools,
-        type = type
+      chat_ospan <- create_chat_ospan(
+        private$provider,
+        parent_ospan = parent_ospan
       )
+      withr::defer(promises::end_ospan(chat_ospan))
+      # activate_and_cleanup_ospan(chat_ospan)
+
+      promises::with_ospan_promise_domain({
+        otel::with_active_span(chat_ospan, {
+          response <- chat_perform(
+            provider = private$provider,
+            mode = if (stream) "async-stream" else "async-value",
+            turns = c(private$.turns, list(user_turn)),
+            tools = if (is.null(type)) private$tools,
+            type = type
+          )
+        })
+      })
       emit <- emitter(echo)
       any_text <- FALSE
 
       if (stream) {
         result <- NULL
-        for (chunk in await_each(response)) {
+        for (chunk in coro::await_each(response)) {
           text <- stream_text(private$provider, chunk)
           if (!is.null(text)) {
             emit(text)
@@ -740,13 +770,21 @@ Chat <- R6::R6Class(
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
-        record_chat_span_status(span, result)
-        turn <- value_turn(private$provider, result, has_type = !is.null(type))
+        record_chat_ospan_status(chat_ospan, result)
+        turn <- value_turn(
+          private$provider,
+          result,
+          has_type = !is.null(type)
+        )
       } else {
         result <- await(response)
 
-        record_chat_span_status(span, result)
-        turn <- value_turn(private$provider, result, has_type = !is.null(type))
+        record_chat_ospan_status(chat_ospan, result)
+        turn <- value_turn(
+          private$provider,
+          result,
+          has_type = !is.null(type)
+        )
         text <- turn@text
         if (!is.null(text)) {
           emit(text)
