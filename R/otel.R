@@ -1,6 +1,23 @@
-default_tracer <- function() {
-  otel::get_tracer("ellmer")
-}
+otel_tracer_name <- "co.posit.r-package.ellmer"
+
+# Inspired by httr2:::get_tracer() / shiny:::get_tracer()
+# Using local scope avoids an environment object lookup on each call.
+default_tracer <- local({
+  tracer <- NULL
+  function() {
+    if (!is.null(tracer)) {
+      return(tracer)
+    }
+    if (testthat::is_testing()) {
+      # Don't cache the tracer in unit tests. It interferes with tracer provider
+      # injection in otelsdk::with_otel_record().
+      return(otel::get_tracer())
+    }
+    tracer <<- otel::get_tracer()
+    tracer
+  }
+})
+
 
 # Only activate the span if it is non-NULL. If activated, ensure it is
 # automatically ended when the activation scope exits. If
