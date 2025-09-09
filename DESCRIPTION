@@ -55,9 +55,9 @@ Suggests:
 VignetteBuilder:
     knitr
 Remotes:
-    rstudio/promises,
     r-lib/otel,
     r-lib/otelsdk
+    rstudio/promises#179
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true

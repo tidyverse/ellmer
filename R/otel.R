@@ -15,7 +15,7 @@ activate_and_cleanup_ospan <- function(
 ) {
   if (!is.null(ospan)) {
     if (ospan_promise_domain) {
-      local_ospan_promise_domain(activation_scope)
+      promises::local_ospan_promise_domain(activation_scope)
     }
     otel::local_active_span(
       ospan,
@@ -23,38 +23,6 @@ activate_and_cleanup_ospan <- function(
       activation_scope = activation_scope
     )
   }
-}
-
-# If any otel spans are activated within the current promise domain, they will
-# be automatically restored during promise restoration.
-local_ospan_promise_domain <- function(activation_scope = parent.frame()) {
-  local_promise_domain(
-    promises:::create_otel_ospan_handoff_promise_domain(),
-    .local_envir = activation_scope
-  )
-}
-
-# Modifies the current promise domain to include `domain` for the local scope.
-local_promise_domain <- function(
-  domain,
-  .local_envir = parent.frame(),
-  replace = FALSE
-) {
-  oldval <- promises:::current_promise_domain()
-  globals <- promises:::globals
-  if (replace) {
-    globals$domain <- domain
-  } else {
-    globals$domain <- promises:::compose_domains(oldval, domain)
-  }
-  withr::defer(
-    {
-      globals$domain <- oldval
-    },
-    envir = .local_envir
-  )
-
-  invisible()
 }
 
 
