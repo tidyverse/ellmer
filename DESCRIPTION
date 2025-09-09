@@ -30,6 +30,7 @@ Imports:
     jsonlite,
     later (>= 1.4.0),
     lifecycle,
+    otel (>= 0.2.0),
     promises (>= 1.3.3.9001),
     R6,
     rlang (>= 1.1.0),
@@ -43,8 +44,6 @@ Suggests:
     knitr,
     magick,
     openssl,
-    otel (>= 0.0.0.9000),
-    otelsdk (>= 0.0.0.9000),
     paws.common,
     rmarkdown,
     shiny,
@@ -55,9 +54,8 @@ Suggests:
 VignetteBuilder:
     knitr
 Remotes:
-    r-lib/otel,
-    r-lib/otelsdk
     rstudio/promises#179
+Config/Needs/check: r-lib/otelsdk
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true

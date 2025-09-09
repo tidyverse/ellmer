@@ -1,7 +1,4 @@
 default_tracer <- function() {
-  if (!is_installed("otel")) {
-    return(NULL)
-  }
   otel::get_tracer("ellmer")
 }
 
