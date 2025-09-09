@@ -5,6 +5,9 @@ default_tracer <- function() {
   otel::get_tracer("ellmer")
 }
 
+# Only activate the span if it is non-NULL. If activated, ensure it is
+# automatically ended when the activation scope exits. If
+# ospan_promise_domain is TRUE, also ensure that the active span is reactivated upon promise domain restoration.
 activate_and_cleanup_ospan <- function(
   ospan,
   activation_scope = parent.frame(),
@@ -12,7 +15,7 @@ activate_and_cleanup_ospan <- function(
 ) {
   if (!is.null(ospan)) {
     if (ospan_promise_domain) {
-      local_ospan_promise_domain()
+      local_ospan_promise_domain(activation_scope)
     }
     otel::local_active_span(
       ospan,
@@ -22,13 +25,16 @@ activate_and_cleanup_ospan <- function(
   }
 }
 
-local_ospan_promise_domain <- function(.local_envir = parent.frame()) {
+# If any otel spans are activated within the current promise domain, they will
+# be automatically restored during promise restoration.
+local_ospan_promise_domain <- function(activation_scope = parent.frame()) {
   local_promise_domain(
     promises:::create_otel_ospan_handoff_promise_domain(),
-    .local_envir = .local_envir
+    .local_envir = activation_scope
   )
 }
 
+# Modifies the current promise domain to include `domain` for the local scope.
 local_promise_domain <- function(
   domain,
   .local_envir = parent.frame(),
@@ -51,45 +57,32 @@ local_promise_domain <- function(
   invisible()
 }
 
-create_chat_ospan <- function(
+
+local_chat_ospan <- function(
   provider,
   parent_ospan = NULL,
+  local_envir = parent.frame(),
   tracer = default_tracer()
 ) {
-  promises::create_ospan(
-    sprintf("chat %s", provider@model),
-    tracer = tracer,
-    options = list(
-      parent = parent_ospan,
-      kind = "CLIENT"
-    ),
-    attributes = list(
-      "gen_ai.operation.name" = "chat",
-      "gen_ai.system" = tolower(provider@name),
-      "gen_ai.request.model" = provider@model
+  chat_ospan <-
+    promises::create_ospan(
+      sprintf("chat %s", provider@model),
+      tracer = tracer,
+      options = list(
+        parent = parent_ospan,
+        kind = "CLIENT"
+      ),
+      attributes = list(
+        "gen_ai.operation.name" = "chat",
+        "gen_ai.system" = tolower(provider@name),
+        "gen_ai.request.model" = provider@model
+      )
     )
-  )
-}
 
-# # Starts an Open Telemetry span that abides by the semantic conventions for
-# # Generative AI completions.
-# #
-# # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/#inference
-# with_chat_ospan_async <- function(provider, expr, tracer = default_tracer()) {
-#   promises::with_ospan_promise_domain({
-#     promises::with_ospan_async(
-#       sprintf("chat %s", provider@model),
-#       expr,
-#       tracer = tracer,
-#       options = list(kind = "CLIENT"),
-#       attributes = list(
-#         "gen_ai.operation.name" = "chat",
-#         "gen_ai.system" = tolower(provider@name),
-#         "gen_ai.request.model" = provider@model
-#       )
-#     )
-#   })
-# }
+  withr::defer(promises::end_ospan(chat_ospan), envir = local_envir)
+
+  chat_ospan
+}
 
 record_chat_ospan_status <- function(span, result) {
   if (is.null(span) || !span$is_recording()) {
@@ -101,6 +94,7 @@ record_chat_ospan_status <- function(span, result) {
   if (!is.null(result$id)) {
     span$set_attribute("gen_ai.response.id", result$id)
   }
+  # TODO: Fixme @atheriel!
   # if (!is.null(result$usage)) {
   #   span$set_attribute("gen_ai.usage.input_tokens", result$usage$prompt_tokens)
   #   span$set_attribute(
@@ -116,52 +110,43 @@ record_chat_ospan_status <- function(span, result) {
 # Starts an Open Telemetry span that abides by the semantic conventions for
 # Generative AI tool calls.
 #
+# Must be activated for the calling scope.
+#
 # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/#execute-tool-span
-create_tool_ospan <- function(
+start_local_active_tool_ospan <- function(
   request,
   parent_ospan = NULL,
+  local_envir = parent.frame(),
   tracer = default_tracer()
 ) {
-  promises::create_ospan(
-    sprintf("execute_tool %s", request@tool@name),
-    tracer = tracer,
-    options = list(
-      parent = parent_ospan,
-      kind = "INTERNAL"
-    ),
-    attributes = compact(list(
-      "gen_ai.operation.name" = "execute_tool",
-      "gen_ai.tool.name" = request@tool@name,
-      "gen_ai.tool.description" = request@tool@description,
-      "gen_ai.tool.call.id" = request@id
-    ))
-  )
+  tool_ospan <-
+    promises::create_ospan(
+      sprintf("execute_tool %s", request@tool@name),
+      tracer = tracer,
+      options = list(
+        parent = parent_ospan,
+        kind = "INTERNAL"
+      ),
+      attributes = compact(list(
+        "gen_ai.operation.name" = "execute_tool",
+        "gen_ai.tool.name" = request@tool@name,
+        "gen_ai.tool.description" = request@tool@description,
+        "gen_ai.tool.call.id" = request@id
+      ))
+    )
+
+  activate_and_cleanup_ospan(tool_ospan, local_envir)
+
+  tool_ospan
 }
 
-# with_tool_ospan_async <- function(request, expr, tracer = default_tracer()) {
-#   promises::with_ospan_promise_domain({
-#     promises::with_ospan_async(
-#       sprintf("execute_tool %s", request@tool@name),
-#       expr,
-#       tracer = tracer,
-#       options = list(kind = "INTERNAL"),
-#       attributes = compact(list(
-#         "gen_ai.operation.name" = "execute_tool",
-#         "gen_ai.tool.name" = request@tool@name,
-#         "gen_ai.tool.description" = request@tool@description,
-#         "gen_ai.tool.call.id" = request@id
-#       ))
-#     )
-#   })
-# }
-
-record_tool_ospan_error <- function(span, error) {
-  if (is.null(span) || !span$is_recording()) {
+record_tool_ospan_error <- function(ospan, error) {
+  if (is.null(ospan) || !ospan$is_recording()) {
     return()
   }
-  span$record_exception(error)
-  span$set_status("error")
-  span$set_attribute("error.type", class(error)[1])
+  ospan$record_exception(error)
+  ospan$set_status("error")
+  ospan$set_attribute("error.type", class(error)[1])
 }
 
 
@@ -169,57 +154,21 @@ record_tool_ospan_error <- function(span, error) {
 # Generative AI "agents".
 #
 # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/#inference
-create_agent_ospan <- function(
+local_agent_ospan <- function(
   provider,
-  tracer = default_tracer()
+  tracer = default_tracer(),
+  local_envir = parent.frame()
 ) {
-  promises::create_ospan(
-    "invoke_agent",
-    tracer = tracer,
-    options = list(kind = "CLIENT"),
-    attributes = list(
-      "gen_ai.operation.name" = "chat",
-      "gen_ai.system" = tolower(provider@name)
+  agent_ospan <-
+    promises::create_ospan(
+      "invoke_agent",
+      tracer = tracer,
+      options = list(kind = "CLIENT"),
+      attributes = list(
+        "gen_ai.operation.name" = "chat",
+        "gen_ai.system" = tolower(provider@name)
+      )
     )
-  )
-}
-
-# with_agent_ospan_async <- function(provider, expr, tracer = default_tracer()) {
-#   promises::with_ospan_promise_domain({
-#     promises::with_ospan_async(
-#       "invoke_agent",
-#       expr,
-#       tracer = tracer,
-#       options = list(kind = "CLIENT"),
-#       attributes = list(
-#         "gen_ai.operation.name" = "chat",
-#         "gen_ai.system" = tolower(provider@name)
-#       )
-#     )
-#   })
-# }
-
-# ------------------------
-
-gen_adapt_map <- coro::generator(function(.i, .fn, ...) {
-  for (x in .i) {
-    yield(.fn(x, ...))
-  }
-})
-
-
-# prev_gen %>% gen_adapt_ospan(chat_ospan)
-gen_adapt_ospan <- function(x, ospan) {
-  gen_adapt_map(x, function(xi) {
-    local_ospan_promise_domain()
-    otel::local_active_span(ospan)
-    message("Activated ospan.   : ", ospan$name, " - ", ospan$span_id)
-    withr::defer(message(
-      "deactivating ospan : ",
-      ospan$name,
-      " - ",
-      ospan$span_id
-    ))
-    force(xi)
-  })
+  withr::defer(promises::end_ospan(agent_ospan), envir = local_envir)
+  agent_ospan
 }

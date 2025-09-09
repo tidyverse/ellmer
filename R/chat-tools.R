@@ -157,8 +157,10 @@ invoke_tool <- function(request, parent_ospan = NULL) {
     return(args)
   }
 
-  tool_ospan <- create_tool_ospan(request, parent_ospan = parent_ospan)
-  activate_and_cleanup_ospan(tool_ospan, ospan_promise_domain = FALSE)
+  tool_ospan <- start_local_active_tool_ospan(
+    request,
+    parent_ospan = parent_ospan
+  )
 
   tryCatch(
     {
@@ -184,7 +186,10 @@ on_load(
       return(args)
     }
 
-    tool_ospan <- create_tool_ospan(request, parent_ospan = parent_ospan)
+    tool_ospan <- start_local_active_tool_ospan(
+      request,
+      parent_ospan = parent_ospan
+    )
     # Must activate the span in a promise domain so that it propagates to
     # async calls made by the tool function.
     activate_and_cleanup_ospan(tool_ospan, ospan_promise_domain = TRUE)

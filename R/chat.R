@@ -491,8 +491,7 @@ Chat <- R6::R6Class(
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
 
-      agent_ospan <- create_agent_ospan(private$provider)
-      withr::defer(promises::end_ospan(agent_ospan))
+      agent_ospan <- local_agent_ospan(private$provider)
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns(
@@ -555,9 +554,7 @@ Chat <- R6::R6Class(
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
 
-      agent_ospan <- create_agent_ospan(private$provider)
-      withr::defer(promises::end_ospan(agent_ospan))
-      # local_ospan_promise_domain()
+      agent_ospan <- local_agent_ospan(private$provider)
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns_async(
@@ -639,11 +636,11 @@ Chat <- R6::R6Class(
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
       }
-      chat_ospan <- create_chat_ospan(
+
+      chat_ospan <- local_chat_ospan(
         private$provider,
         parent_ospan = parent_ospan
       )
-      activate_and_cleanup_ospan(chat_ospan)
 
       response <- chat_perform(
         provider = private$provider,
@@ -733,12 +730,10 @@ Chat <- R6::R6Class(
       yield_as_content = FALSE,
       parent_ospan = NULL
     ) {
-      chat_ospan <- create_chat_ospan(
+      chat_ospan <- local_chat_ospan(
         private$provider,
         parent_ospan = parent_ospan
       )
-      withr::defer(promises::end_ospan(chat_ospan))
-      # activate_and_cleanup_ospan(chat_ospan)
 
       promises::with_ospan_promise_domain({
         otel::with_active_span(chat_ospan, {
