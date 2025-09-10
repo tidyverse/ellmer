@@ -642,13 +642,19 @@ Chat <- R6::R6Class(
         parent_ospan = parent_ospan
       )
 
-      response <- chat_perform(
-        provider = private$provider,
-        mode = if (stream) "stream" else "value",
-        turns = c(private$.turns, list(user_turn)),
-        tools = if (is.null(type)) private$tools,
-        type = type
-      )
+      promises::with_ospan_promise_domain({
+        otel::with_active_span(chat_ospan, {
+          response <- chat_perform(
+            provider = private$provider,
+            mode = if (stream) "stream" else "value",
+            turns = c(private$.turns, list(user_turn)),
+            tools = if (is.null(type)) private$tools,
+            type = type,
+            parent_ospan = chat_ospan
+          )
+        })
+      })
+
       emit <- emitter(echo)
       any_text <- FALSE
 
@@ -742,7 +748,8 @@ Chat <- R6::R6Class(
             mode = if (stream) "async-stream" else "async-value",
             turns = c(private$.turns, list(user_turn)),
             tools = if (is.null(type)) private$tools,
-            type = type
+            type = type,
+            parent_ospan = chat_ospan
           )
         })
       })
