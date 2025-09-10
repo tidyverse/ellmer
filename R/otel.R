@@ -33,9 +33,12 @@ activate_and_cleanup_ospan <- function(
     }
     otel::local_active_span(
       ospan,
-      end_on_exit = TRUE,
+      end_on_exit = FALSE,
       activation_scope = activation_scope
     )
+    # For some reason, when using `end_on_exit = TRUE` above, an error would occur during `spn$end(status = "auto")`. When using `withr::defer()` here, it works fine.
+    # TODO: Set status?
+    withr::defer(promises::end_ospan(ospan), envir = activation_scope)
   }
 }
 
