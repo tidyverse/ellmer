@@ -151,22 +151,21 @@ models_ollama <- function(base_url = "http://localhost:11434") {
     id = names,
     created_at = modified_at,
     size = size,
-    capabilities = ollama_model_capabilities(names)
+    capabilities = ollama_model_capabilities(base_url, names)
   )
   df[order(-xtfrm(df$created_at)), ]
 }
 
 the$ollama_cache <- new_environment()
 
-ollama_model_details <- function(model) {
+ollama_model_details <- function(base_url, model) {
   # https://github.com/ollama/ollama/blob/main/docs/api.md#show-model-information
-  url <- "http://localhost:11434/api/show"
-
   if (env_has(the$ollama_cache, model)) {
     return(the$ollama_cache[[model]])
   }
 
-  req <- request(url)
+  req <- request(base_url)
+  req <- req_url_path_append(req, "api/show")
   req <- req_body_json(req, list(model = model, verbose = FALSE))
 
   resp <- req_perform(req)
@@ -178,9 +177,9 @@ ollama_model_details <- function(model) {
   details
 }
 
-ollama_model_capabilities <- function(models) {
+ollama_model_capabilities <- function(base_url, models) {
   res <- map(models, function(m) {
-    tryCatch(ollama_model_details(m), error = function(e) NULL)
+    tryCatch(ollama_model_details(base_url, m), error = function(e) NULL)
   })
   map_chr(res, \(x) paste(x$capabilities, collapse = ","))
 }

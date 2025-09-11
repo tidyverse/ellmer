@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `models_ollama()` was fixed to correctly query model capabilities from remote Ollama servers (#746).
+
 # ellmer 0.3.2
 
 * `chat()` is now compatible with most `chat_` functions (#699).
