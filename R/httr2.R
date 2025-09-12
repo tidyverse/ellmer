@@ -6,7 +6,8 @@ chat_perform <- function(
   mode = c("value", "stream", "async-stream", "async-value"),
   turns,
   tools = NULL,
-  type = NULL
+  type = NULL,
+  parent_ospan = NULL
 ) {
   mode <- arg_match(mode)
   stream <- mode %in% c("stream", "async-stream")
@@ -23,9 +24,13 @@ chat_perform <- function(
   switch(
     mode,
     "value" = chat_perform_value(provider, req),
-    "stream" = chat_perform_stream(provider, req),
+    "stream" = chat_perform_stream(provider, req, parent_ospan = parent_ospan),
     "async-value" = chat_perform_async_value(provider, req),
-    "async-stream" = chat_perform_async_stream(provider, req)
+    "async-stream" = chat_perform_async_stream(
+      provider,
+      req,
+      parent_ospan = parent_ospan
+    )
   )
 }
 
@@ -34,7 +39,14 @@ chat_perform_value <- function(provider, req) {
 }
 
 on_load(
-  chat_perform_stream <- coro::generator(function(provider, req) {
+  chat_perform_stream <- coro::generator(function(
+    provider,
+    req,
+    parent_ospan = NULL
+  ) {
+    if (!is.null(parent_ospan)) {
+      otel::local_active_span(parent_ospan)
+    }
     resp <- req_perform_connection(req)
     on.exit(close(resp))
 
@@ -55,7 +67,15 @@ chat_perform_async_value <- function(provider, req) {
 }
 
 on_load(
-  chat_perform_async_stream <- coro::async_generator(function(provider, req) {
+  chat_perform_async_stream <- coro::async_generator(function(
+    provider,
+    req,
+    parent_ospan = NULL
+  ) {
+    if (!is.null(parent_ospan)) {
+      promises::local_ospan_promise_domain()
+      otel::local_active_span(parent_ospan)
+    }
     resp <- req_perform_connection(req, blocking = FALSE)
     on.exit(close(resp))
 

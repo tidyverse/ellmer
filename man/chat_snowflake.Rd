@@ -79,7 +79,7 @@ than a general-purpose model.
 }
 }
 \examples{
-\dontshow{if (has_credentials("snowflake")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (has_credentials("snowflake")) withAutoprint(\{ # examplesIf}
 chat <- chat_snowflake()
 chat$chat("Tell me a joke in the form of a SQL query.")
 \dontshow{\}) # examplesIf}
