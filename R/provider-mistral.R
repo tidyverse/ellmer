@@ -147,9 +147,9 @@ models_mistral <- function(
 
   json <- resp_body_json(resp)
 
-  id <- purrr::map_chr(json$data, `[[`, "id")
-  display_name <- purrr::map_chr(json$data, `[[`, "name")
-  created_at <- as.POSIXct(purrr::map_int(json$data, `[[`, "created"))
+  id <- map_chr(json$data, `[[`, "id")
+  display_name <- map_chr(json$data, `[[`, "name")
+  created_at <- as.POSIXct(map_int(json$data, `[[`, "created"))
 
   df <- data.frame(
     id = id,
