@@ -118,7 +118,40 @@ method(chat_params, ProviderMistral) <- function(provider, params) {
   )
 }
 
-
 mistral_key <- function() {
   key_get("MISTRAL_API_KEY")
+}
+
+# Models -----------------------------------------------------------------------
+
+#' @export
+#' @rdname chat_mistral
+models_mistral <- function(
+  base_url = "https://api.mistral.ai/v1/",
+  api_key = mistral_key()
+) {
+  provider <- ProviderMistral(
+    name = "Mistrak",
+    model = "",
+    base_url = base_url,
+    api_key = api_key
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- purrr::map_chr(json$data, `[[`, "id")
+  display_name <- purrr::map_chr(json$data, `[[`, "name")
+  created_at <- as.POSIXct(purrr::map_int(json$data, `[[`, "created"))
+
+  df <- data.frame(
+    id = id,
+    name = display_name,
+    created_at = created_at
+  )
+  df <- cbind(df, ellmer:::match_prices("Mistral", df$id))
+  return(df)
 }
