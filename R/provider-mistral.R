@@ -122,6 +122,10 @@ mistral_key <- function() {
   key_get("MISTRAL_API_KEY")
 }
 
+mistral_key_exists <- function() {
+  key_exists("MISTRAL_API_KEY")
+}
+
 # Models -----------------------------------------------------------------------
 
 #' @export
