@@ -7,11 +7,11 @@ NULL
 #' Chat with an Anthropic Claude model
 #'
 #' @description
-#' [Anthropic](https://www.anthropic.com) provides a number of chat based
-#' models under the [Claude](https://www.anthropic.com/claude) moniker.
-#' Note that a Claude Pro membership does not give you the ability to call
-#' models via the API; instead, you will need to sign up (and pay for) a
-#' [developer account](https://console.anthropic.com/).
+#' [Anthropic](https://www.anthropic.com) provides a number of chat based models
+#' under the [Claude](https://claude.com/product/overview) moniker. Note that a
+#' Claude Pro membership does not give you the ability to call models via the
+#' API; instead, you will need to sign up (and pay for) a
+#' [developer account](https://platform.claude.com/).
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
