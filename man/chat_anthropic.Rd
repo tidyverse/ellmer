@@ -66,11 +66,11 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
-\href{https://www.anthropic.com}{Anthropic} provides a number of chat based
-models under the \href{https://www.anthropic.com/claude}{Claude} moniker.
-Note that a Claude Pro membership does not give you the ability to call
-models via the API; instead, you will need to sign up (and pay for) a
-\href{https://console.anthropic.com/}{developer account}.
+\href{https://www.anthropic.com}{Anthropic} provides a number of chat based models
+under the \href{https://claude.com/product/overview}{Claude} moniker. Note that a
+Claude Pro membership does not give you the ability to call models via the
+API; instead, you will need to sign up (and pay for) a
+\href{https://platform.claude.com/}{developer account}.
 }
 \examples{
 \dontshow{ellmer:::vcr_example_start("chat_anthropic")}
