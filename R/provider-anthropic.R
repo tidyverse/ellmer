@@ -69,7 +69,7 @@ chat_anthropic <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-#' @describeIn chat_anthropic An alias for `chat_anthropic()`.
+#' @rdname chat_anthropic
 #' @export
 chat_claude <- chat_anthropic
 
