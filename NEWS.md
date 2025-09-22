@@ -2,6 +2,8 @@
 
 * `models_ollama()` was fixed to correctly query model capabilities from remote Ollama servers (#746).
 
+* `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758).
+
 # ellmer 0.3.2
 
 * `chat()` is now compatible with most `chat_` functions (#699).

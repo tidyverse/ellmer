@@ -5,7 +5,6 @@
 \alias{chat_cortex}
 \alias{chat_azure}
 \alias{chat_bedrock}
-\alias{chat_claude}
 \alias{chat_gemini}
 \title{Deprecated functions}
 \usage{
@@ -14,8 +13,6 @@ chat_cortex(...)
 chat_azure(...)
 
 chat_bedrock(...)
-
-chat_claude(...)
 
 chat_gemini(...)
 }
