@@ -27,6 +27,8 @@
 #' @examples
 #' \dontrun{
 #' file <- anthropic_upload_file("path/to/file.pdf")
+#' chat <- chat_anthropic(beta_headers = "files-api-2025-04-14")
+#' chat$chat("Please summarize the document.", file)
 #'
 
 anthropic_upload_file <- function(
