@@ -17,13 +17,6 @@ test_that("chat_bedrock() is deprecated", {
   )
 })
 
-test_that("chat_claude() is deprecated", {
-  lifecycle::expect_deprecated(
-    chat_claude(api_key = "key"),
-    "chat_anthropic"
-  )
-})
-
 test_that("chat_gemini() is deprecated", {
   lifecycle::expect_deprecated(
     chat_gemini(api_key = "key"),

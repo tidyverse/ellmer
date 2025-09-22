@@ -95,7 +95,7 @@ errors in the most helpful way. Fortunately they don't seem to be common,
 but if you have ideas, please let me know!
 }
 \examples{
-\dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (has_credentials("openai")) withAutoprint(\{ # examplesIf}
 chat <- chat_openai(model = "gpt-4.1-nano")
 
 # Chat ----------------------------------------------------------------------
