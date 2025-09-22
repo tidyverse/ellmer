@@ -2,10 +2,24 @@
 % Please edit documentation in R/provider-anthropic.R
 \name{chat_anthropic}
 \alias{chat_anthropic}
+\alias{chat_claude}
 \alias{models_anthropic}
 \title{Chat with an Anthropic Claude model}
 \usage{
 chat_anthropic(
+  system_prompt = NULL,
+  params = NULL,
+  max_tokens = deprecated(),
+  model = NULL,
+  api_args = list(),
+  base_url = "https://api.anthropic.com/v1",
+  beta_headers = character(),
+  api_key = anthropic_key(),
+  api_headers = character(),
+  echo = NULL
+)
+
+chat_claude(
   system_prompt = NULL,
   params = NULL,
   max_tokens = deprecated(),
@@ -72,6 +86,11 @@ Claude Pro membership does not give you the ability to call models via the
 API; instead, you will need to sign up (and pay for) a
 \href{https://platform.claude.com/}{developer account}.
 }
+\section{Functions}{
+\itemize{
+\item \code{chat_claude()}: An alias for \code{chat_anthropic()}.
+
+}}
 \examples{
 \dontshow{ellmer:::vcr_example_start("chat_anthropic")}
 chat <- chat_anthropic()

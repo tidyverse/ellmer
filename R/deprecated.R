@@ -51,13 +51,6 @@ chat_bedrock <- function(...) {
 
 #' @rdname deprecated
 #' @export
-chat_claude <- function(...) {
-  lifecycle::deprecate_warn("0.2.0", "chat_claude()", "chat_anthropic()")
-  chat_anthropic(...)
-}
-
-#' @rdname deprecated
-#' @export
 chat_gemini <- function(...) {
   lifecycle::deprecate_warn("0.2.0", "chat_gemini()", "chat_google_gemini()")
   chat_google_gemini(...)

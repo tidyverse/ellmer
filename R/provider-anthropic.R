@@ -69,6 +69,10 @@ chat_anthropic <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
+#' @describeIn chat_anthropic An alias for `chat_anthropic()`.
+#' @export
+chat_claude <- chat_anthropic
+
 chat_anthropic_test <- function(
   ...,
   model = "claude-3-5-sonnet-latest",
