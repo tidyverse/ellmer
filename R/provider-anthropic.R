@@ -339,6 +339,19 @@ method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(provider, x) {
   )
 }
 
+method(as_json, list(ProviderAnthropic, ContentAnthropicFile)) <- function(
+  provider,
+  x
+) {
+  list(
+    type = x@block_type,
+    source = list(
+      type = "file",
+      file_id = x@file_id
+    )
+  )
+}
+
 method(as_json, list(ProviderAnthropic, ContentImageRemote)) <- function(
   provider,
   x

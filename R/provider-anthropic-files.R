@@ -25,42 +25,54 @@
 #'   object may change as the API evolves.
 #' @export
 #' @examples
+#' \dontrun{
+#' file <- anthropic_upload_file("path/to/file.pdf")
+#'
 
 anthropic_upload_file <- function(
-  path,
+  fpath,
   base_url = "https://api.anthropic.com/v1/files",
   beta_headers = "files-api-2025-04-14",
   api_key = anthropic_key()
 ) {
   res <- anthropic_init(base_url, beta_headers, api_key)
-  res <- req_body_multipart(res, file = path)
+  res <- req_body_multipart(
+    res,
+    file = curl::form_file(
+      fpath,
+      type = guess_mime_type(fpath)
+    )
+  )
   resp <- req_perform(res)
 
   if (resp$status_code != 200) {
     stop("File upload failed: ", resp$status_code, call. = FALSE)
   }
 
-  ContentUploaded(
-    uri = paste0(base_url, "/", resp_body_json(resp)$data$id),
-    mime_type = resp_body_json(resp)$data$mime_type
-  )
+  anthropic_create_content(resp_body_json(resp))
 }
 
 anthropic_upload_file_raw <- function(
-  path,
+  fpath,
   base_url = "https://api.anthropic.com/v1/files",
   beta_headers = "files-api-2025-04-14",
   api_key = anthropic_key()
 ) {
   res <- anthropic_init(base_url, beta_headers, api_key)
-  res <- req_body_multipart(res, file = path)
+  res <- req_body_multipart(
+    res,
+    file = curl::form_file(
+      fpath,
+      type = guess_mime_type(fpath)
+    )
+  )
   resp <- req_perform(res)
 
   if (resp$status_code != 200) {
     stop("File upload failed: ", resp$status_code, call. = FALSE)
   }
 
-  resp_body_json(resp)$data[[1]]
+  resp_body_json(resp)
 }
 
 anthropic_init <- function(url, beta_headers, api_key) {
@@ -71,10 +83,66 @@ anthropic_init <- function(url, beta_headers, api_key) {
   res
 }
 
+anthropic_create_content <- function(response) {
+  mime_type <- response$mime_type
+  switch(
+    mime_type,
+    "application/pdf" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "document"
+    ),
+    "text/plain" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "document"
+    ),
+    "image/jpeg" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "image"
+    ),
+    "image/png" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "image"
+    ),
+    "image/gif" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "image"
+    ),
+    "image/webp" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "image"
+    ),
+    "text/csv" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "container_upload"
+    ),
+    "application/json" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "container_upload"
+    ),
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "container_upload"
+    ),
+    "application/vnd.ms-excel" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "container_upload"
+    ),
+    "text/xml" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "container_upload"
+    ),
+    "application/xml" = ContentAnthropicFile(
+      file_id = response$id,
+      block_type = "container_upload"
+    )
+  )
+}
+
 anthropic_list_files <- function(
-    base_url = "https://api.anthropic.com/v1/files",
-    api_key = anthropic_key(),
-    beta_headers = "files-api-2025-04-14") {
+  base_url = "https://api.anthropic.com/v1/files",
+  api_key = anthropic_key(),
+  beta_headers = "files-api-2025-04-14"
+) {
   res <- anthropic_init(base_url, beta_headers, api_key)
   resp <- req_perform(res)
 
@@ -82,7 +150,7 @@ anthropic_list_files <- function(
     stop("Failed to list files: ", resp$status_code, call. = FALSE)
   }
 
-  return resp_body_json($resp)$data
+  resp_body_json(resp)$data
 }
 
 anthropic_get_fileinfo <- function(
@@ -99,7 +167,7 @@ anthropic_get_fileinfo <- function(
     stop("Failed to get file info: ", resp)
   }
 
-  return resp_body_json($resp)$data[[1]]
+  anthropic_create_content(resp_body_json(resp))
 }
 
 anthropic_download_file <- function(
@@ -116,7 +184,7 @@ anthropic_download_file <- function(
     stop("Failed to download file: ", resp$status_code, call. = FALSE)
   }
 
-  return resp_body_string(resp)
+  resp_body_string(resp)
 }
 
 anthropic_delete_file <- function(
@@ -134,5 +202,5 @@ anthropic_delete_file <- function(
     stop("Failed to delete file: ", resp$status_code, call. = FALSE)
   }
 
-  return invisible(TRUE)
+  return(invisible())
 }
