@@ -160,6 +160,125 @@ parallel_chat_structured <- function(
   )
 }
 
+#' @description
+#' [parallel_chat_structured_robust()] is similar to
+#' [parallel_chat_structured()], but continues processing even when individual
+#' prompts fail. Failed prompts return proper NA structures that match the type
+#' specification instead of stopping the entire process.
+#'
+#' @param include_status If `TRUE`, and the result is a data frame, will
+#'   add `status` column with `"success"` for successful prompts and error
+#'   messages for failed prompts.
+#' @param on_error Character string specifying how to handle errors:
+#'   `"continue"` (default) continues processing all prompts, returning NA for failed ones (maintains input length),
+#'   `"return"` stops at first error and returns only successful results processed before the error, printing the error message,
+#'   `"stop"` stops on first error like the original function.
+#' @returns [parallel_chat_structured_robust()] returns the same as
+#'   [parallel_chat_structured()], but with NA values for failed prompts instead
+#'   of throwing an error. For `on_error="continue"`, output length always matches
+#'   input length. For `on_error="return"`, returns only successful results processed
+#'   before the first error.
+#' @export
+#' @rdname parallel_chat
+parallel_chat_structured_robust <- function(
+  chat,
+  prompts,
+  type,
+  convert = TRUE,
+  include_tokens = FALSE,
+  include_cost = FALSE,
+  include_status = FALSE,
+  max_active = 10,
+  rpm = 500,
+  on_error = c("continue", "return", "stop")
+) {
+  on_error <- arg_match(on_error)
+  check_bool(convert)
+  check_bool(include_status)
+
+  provider <- chat$get_provider()
+  needs_wrapper <- type_needs_wrapper(type, provider)
+
+  # First build up list of cumulative conversations
+  user_turns <- as_user_turns(prompts)
+  existing <- chat$get_turns(include_system_prompt = TRUE)
+  conversations <- append_turns(list(existing), user_turns)
+
+  # Handle stop behavior up front using switch for clarity
+  switch(
+    on_error,
+    stop = {
+      result <- parallel_chat_structured(
+        chat = chat,
+        prompts = prompts,
+        type = type,
+        convert = convert,
+        include_tokens = include_tokens,
+        include_cost = include_cost,
+        max_active = max_active,
+        rpm = rpm
+      )
+      if (include_status && is.data.frame(result)) {
+        result$status <- rep("success", nrow(result))
+      }
+      return(result)
+    },
+    continue = NULL,
+    return = NULL
+  )
+
+  assistant_turns <- parallel_turns_robust(
+    provider = provider,
+    conversations = conversations,
+    tools = chat$get_tools(),
+    type = wrap_type_if_needed(type, needs_wrapper),
+    max_active = max_active,
+    rpm = rpm,
+    on_error = on_error
+  )
+
+  result <- multi_convert_robust(
+    provider,
+    assistant_turns,
+    type,
+    convert = convert,
+    include_tokens = include_tokens,
+    include_cost = include_cost,
+    include_status = include_status,
+    on_error = on_error
+  )
+
+  # For "continue" mode, check if there were any errors and warn user
+  if (on_error == "continue") {
+    error_turns <- map_lgl(assistant_turns, is_error_turn)
+    if (any(error_turns)) {
+      error_indices <- which(error_turns)
+      error_messages <- map_chr(assistant_turns[error_turns], ~ .x$error)
+
+      # Issue warnings for each error so they can be retrieved with warnings()
+      for (i in seq_along(error_indices)) {
+        warning(
+          paste0("Prompt ", error_indices[i], ": ", error_messages[i]),
+          call. = FALSE,
+          immediate. = FALSE
+        )
+      }
+
+      # Issue a summary message that will be immediately visible
+      n_errors <- length(error_indices)
+      message(
+        "Some prompts produced errors (",
+        n_errors,
+        " out of ",
+        length(prompts),
+        "). Use warnings() to see error details."
+      )
+    }
+  }
+
+  result
+}
+
 multi_convert <- function(
   provider,
   turns,
@@ -207,6 +326,148 @@ multi_convert <- function(
   out
 }
 
+multi_convert_robust <- function(
+  provider,
+  turns,
+  type,
+  convert = TRUE,
+  include_tokens = FALSE,
+  include_cost = FALSE,
+  include_status = FALSE,
+  on_error = "continue"
+) {
+  needs_wrapper <- type_needs_wrapper(type, provider)
+
+  # Process turns and collect both data and status
+  results <- map(turns, function(turn) {
+    if (inherits(turn, "error_turn")) {
+      # Create proper NA structure for failed prompts
+      list(
+        data = create_na_structure(type, needs_wrapper),
+        status = turn$error
+      )
+    } else {
+      tryCatch(
+        {
+          data <- extract_data(
+            turn = turn,
+            type = wrap_type_if_needed(type, needs_wrapper),
+            convert = FALSE,
+            needs_wrapper = needs_wrapper
+          )
+          list(data = data, status = "success")
+        },
+        error = function(e) {
+          # If extraction fails, return NA structure
+          list(
+            data = create_na_structure(type, needs_wrapper),
+            status = conditionMessage(e)
+          )
+        }
+      )
+    }
+  })
+
+  # For "return" mode, keep only successful results processed before first error
+  if (on_error == "return") {
+    successful_indices <- map_lgl(results, ~ .x$status == "success")
+    results <- results[successful_indices]
+    turns <- turns[successful_indices]
+  }
+
+  # Extract data and status separately
+  rows <- map(results, ~ .x$data)
+  status_info <- map_chr(results, ~ .x$status)
+
+  if (convert) {
+    out <- convert_from_type(rows, type_array(type))
+  } else {
+    out <- rows
+  }
+
+  if (
+    is.data.frame(out) && (include_tokens || include_cost || include_status)
+  ) {
+    # Handle token information for both successful and failed turns
+    if (include_tokens || include_cost) {
+      tokens <- t(vapply(
+        turns,
+        function(turn) {
+          if (is_error_turn(turn)) {
+            c(0L, 0L, 0L)
+          } else {
+            turn@tokens
+          }
+        },
+        integer(3)
+      ))
+
+      if (include_tokens) {
+        out$input_tokens <- tokens[, 1]
+        out$output_tokens <- tokens[, 2]
+        out$cached_input_tokens <- tokens[, 3]
+      }
+
+      if (include_cost) {
+        out$cost <- get_token_cost(
+          provider@name,
+          provider@model,
+          input = tokens[, 1],
+          output = tokens[, 2],
+          cached_input = tokens[, 3]
+        )
+      }
+    }
+
+    # Add status column if requested
+    if (include_status) {
+      out$status <- status_info
+    }
+  }
+  out
+}
+
+create_na_structure <- function(type, needs_wrapper = FALSE) {
+  actual_type <- if (needs_wrapper) type@properties[[1]] else type
+
+  if (S7_inherits(actual_type, TypeObject)) {
+    # For type objects, create NA values for each property
+    prop_names <- names(actual_type@properties)
+    structure(
+      lapply(prop_names, function(prop_name) {
+        prop_type <- actual_type@properties[[prop_name]]
+        create_na_for_type(prop_type)
+      }),
+      names = prop_names
+    )
+  } else if (S7_inherits(actual_type, TypeArray)) {
+    # For arrays, return empty list or appropriate structure
+    list()
+  } else {
+    # For basic types
+    create_na_for_type(actual_type)
+  }
+}
+
+create_na_for_type <- function(type_spec) {
+  if (S7_inherits(type_spec, TypeBasic)) {
+    switch(
+      type_spec@type,
+      "string" = NA_character_,
+      "integer" = NA_integer_,
+      "number" = NA_real_,
+      "boolean" = NA,
+      NA
+    )
+  } else if (S7_inherits(type_spec, TypeArray)) {
+    list()
+  } else if (S7_inherits(type_spec, TypeObject)) {
+    create_na_structure(type_spec, needs_wrapper = FALSE)
+  } else {
+    NA
+  }
+}
+
 append_turns <- function(old_turns, new_turns) {
   map2(old_turns, new_turns, function(old, new) {
     if (is.null(new)) {
@@ -248,3 +509,109 @@ parallel_turns <- function(
     value_turn(provider, json, has_type = !is.null(type))
   })
 }
+
+parallel_turns_robust <- function(
+  provider,
+  conversations,
+  tools,
+  type = NULL,
+  max_active = 10,
+  rpm = 60,
+  on_error = "continue"
+) {
+  reqs <- map(conversations, function(turns) {
+    chat_request(
+      provider = provider,
+      turns = turns,
+      type = type,
+      tools = tools,
+      stream = FALSE
+    )
+  })
+  reqs <- map(reqs, function(req) {
+    req_throttle(req, capacity = rpm, fill_time_s = 60)
+  })
+
+  # For "return" mode, process sequentially and stop at first error,
+  # returning only the successful results processed before it
+  if (on_error == "return") {
+    results <- list()
+    error_happened <- FALSE
+    error_index <- NA_integer_
+    error_message <- NULL
+    for (i in seq_along(reqs)) {
+      tryCatch(
+        {
+          resp <- httr2::req_perform(reqs[[i]])
+          json <- resp_body_json(resp)
+          results[[length(results) + 1L]] <- value_turn(
+            provider,
+            json,
+            has_type = !is.null(type)
+          )
+        },
+        error = function(e) {
+          error_happened <<- TRUE
+          error_index <<- i
+          error_message <<- conditionMessage(e)
+          NULL
+        }
+      )
+      if (error_happened) {
+        cli::cli_warn("Error in prompt {error_index}: {error_message}")
+        cli::cli_inform(
+          "Returning results for first {error_index - 1} successful prompt{?s}"
+        )
+        break
+      }
+    }
+    return(results)
+  } else {
+    # Use httr2's parallel processing for "continue" and "stop" modes
+    httr2_on_error <- if (on_error == "continue") "continue" else "stop"
+    resps <- req_perform_parallel(
+      reqs,
+      max_active = max_active,
+      on_error = httr2_on_error
+    )
+
+    # Check for user termination
+    if (any(map_lgl(resps, is.null))) {
+      cli::cli_abort("Terminated by user")
+    }
+
+    # Process responses with individual error handling
+    return(map(seq_along(resps), function(i) {
+      resp <- resps[[i]]
+
+      if (inherits(resp, "error")) {
+        # Return a special error turn that will be handled downstream
+        structure(
+          list(
+            error = conditionMessage(resp)
+          ),
+          class = "error_turn"
+        )
+      } else {
+        # Process successful response
+        tryCatch(
+          {
+            json <- resp_body_json(resp)
+            value_turn(provider, json, has_type = !is.null(type))
+          },
+          error = function(e) {
+            # Return a special error turn for JSON parsing errors
+            structure(
+              list(
+                error = conditionMessage(e)
+              ),
+              class = "error_turn"
+            )
+          }
+        )
+      }
+    }))
+  }
+}
+
+is_error_turn <- function(x) inherits(x, "error_turn")
