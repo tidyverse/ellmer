@@ -18,6 +18,12 @@ test_that("can handle errors", {
   expect_snapshot(chat$chat("Hi"), error = TRUE)
 })
 
+test_that("can list models", {
+  vcr::local_cassette("mistral-list-models")
+
+  test_models(models_mistral)
+})
+
 # Common provider interface -----------------------------------------------
 
 test_that("defaults are reported", {
