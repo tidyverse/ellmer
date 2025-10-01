@@ -7,7 +7,7 @@
 #'
 #' * `interpolate()` works with a string.
 #' * `interpolate_file()` works with a file.
-#' * `interpolate_package()` works with a file in the `insts/prompt`
+#' * `interpolate_package()` works with a file in the `inst/prompts`
 #'   directory of a package.
 #'
 #' Compared to glue, dynamic values should be wrapped in `{{ }}`, making it
@@ -46,7 +46,8 @@ interpolate <- function(prompt, ..., .envir = parent.frame()) {
   ellmer_prompt(out)
 }
 
-#' @param path A path to a prompt file (often a `.md`).
+#' @param path A path to a prompt file (often a `.md`). In
+#'   `interpolate_package()`, this path is relative to `inst/prompts`.
 #' @rdname interpolate
 #' @export
 interpolate_file <- function(path, ..., .envir = parent.frame()) {

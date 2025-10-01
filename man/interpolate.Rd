@@ -23,7 +23,8 @@ code.}
 wrapping in another function. See \code{vignette("wrappers", package = "glue")}
 for more details.}
 
-\item{path}{A path to a prompt file (often a \code{.md}).}
+\item{path}{A path to a prompt file (often a \code{.md}). In
+\code{interpolate_package()}, this path is relative to \code{inst/prompts}.}
 
 \item{package}{Package name.}
 }
@@ -37,7 +38,7 @@ dynamic data into a static prompt:
 \itemize{
 \item \code{interpolate()} works with a string.
 \item \code{interpolate_file()} works with a file.
-\item \code{interpolate_package()} works with a file in the \code{insts/prompt}
+\item \code{interpolate_package()} works with a file in the \code{inst/prompts}
 directory of a package.
 }
 
