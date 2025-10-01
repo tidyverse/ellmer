@@ -51,6 +51,7 @@ interpolate <- function(prompt, ..., .envir = parent.frame()) {
 #' @rdname interpolate
 #' @export
 interpolate_file <- function(path, ..., .envir = parent.frame()) {
+  check_string(path)
   string <- read_file(path)
   interpolate(string, ..., .envir = .envir)
 }
@@ -64,12 +65,22 @@ interpolate_package <- function(
   ...,
   .envir = parent.frame()
 ) {
+  check_string(path)
+
   path <- system.file("prompts", path, package = package)
+
+  if (!nzchar(path)) {
+    cli::cli_abort(c(
+      "{.pkg {package}} does not have {.val {path}} in its {.field prompts/} directory.",
+      "i" = 'Run {.run dir(system.file("prompts", package = "{package}"))} to see available prompts.'
+    ))
+  }
+
   interpolate_file(path, ..., .envir = .envir)
 }
 
 read_file <- function(path) {
-  file_contents <- readChar(path, file.size(path))
+  readChar(path, file.size(path))
 }
 
 # Prompt class -----------------------------------------------------------------
