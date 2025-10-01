@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `interpolate_package()` now provides an informative error if the requested prompt file is not found in the package's `prompts/` directory (#763).
+
 * `models_ollama()` was fixed to correctly query model capabilities from remote Ollama servers (#746).
 
 * `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758).
