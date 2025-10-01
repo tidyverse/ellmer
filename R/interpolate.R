@@ -67,16 +67,16 @@ interpolate_package <- function(
 ) {
   check_string(path)
 
-  path <- system.file("prompts", path, package = package)
+  path_pkg <- system.file("prompts", path, package = package)
 
-  if (!nzchar(path)) {
+  if (!nzchar(path_pkg)) {
     cli::cli_abort(c(
       "{.pkg {package}} does not have {.val {path}} in its {.field prompts/} directory.",
       "i" = 'Run {.run dir(system.file("prompts", package = "{package}"))} to see available prompts.'
     ))
   }
 
-  interpolate_file(path, ..., .envir = .envir)
+  interpolate_file(path_pkg, ..., .envir = .envir)
 }
 
 read_file <- function(path) {
