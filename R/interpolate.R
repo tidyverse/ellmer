@@ -80,6 +80,12 @@ interpolate_package <- function(
 }
 
 read_file <- function(path) {
+  if (!file.exists(path)) {
+    cli::cli_abort(
+      "{.arg path} {.path {path}} does not exist.",
+      call = caller_env()
+    )
+  }
   readChar(path, file.size(path))
 }
 
