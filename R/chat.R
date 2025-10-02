@@ -132,7 +132,7 @@ Chat <- R6::R6Class(
       # Combine counts for input tokens (cached and uncached)
       tokens_acc[, 1] <- tokens_acc[, 1] + tokens_acc[, 3]
       # Then drop cached tokens counts
-      tokens_acc <- tokens_acc[, , drop = FALSE]
+      tokens_acc <- tokens_acc[,, drop = FALSE]
 
       tokens <- tokens_acc
       if (n > 1) {
