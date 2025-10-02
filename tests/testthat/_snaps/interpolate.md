@@ -41,3 +41,17 @@
       [2] | a
           | ...
 
+# errors if the path does not exist
+
+    Code
+      interpolate_file("does-not-exist.md", x = 1)
+    Condition
+      Error in `interpolate_file()`:
+      ! `path` 'does-not-exist.md' does not exist.
+    Code
+      interpolate_package("ellmer", "does-not-exist.md", x = 1)
+    Condition
+      Error in `interpolate_package()`:
+      ! ellmer does not have "does-not-exist.md" in its prompts/ directory.
+      i Run `dir(system.file("prompts", package = "ellmer"))` to see available prompts.
+
