@@ -4,7 +4,7 @@ glue that make it easier to interpolate
 dynamic data into a static prompt:
 interpolate() works with a string.
 interpolate_file() works with a file.
-interpolate_package() works with a file in the insts/prompt
+interpolate_package() works with a file in the inst/prompts
 directory of a package.
 
 
@@ -14,7 +14,7 @@ glue that make it easier to interpolate
 dynamic data into a static prompt:
 interpolate() works with a string.
 interpolate_file() works with a file.
-interpolate_package() works with a file in the insts/prompt
+interpolate_package() works with a file in the inst/prompts
 directory of a package.
 
 
@@ -74,7 +74,7 @@ easier to include R code and JSON in your prompt."><meta property="og:image" con
 <a href="https://glue.tidyverse.org/" class="external-link">glue</a> that make it easier to interpolate
 dynamic data into a static prompt:</p><ul><li><p><code>interpolate()</code> works with a string.</p></li>
 <li><p><code>interpolate_file()</code> works with a file.</p></li>
-<li><p><code>interpolate_package()</code> works with a file in the <code>insts/prompt</code>
+<li><p><code>interpolate_package()</code> works with a file in the <code>inst/prompts</code>
 directory of a package.</p></li>
 </ul><p>Compared to glue, dynamic values should be wrapped in <code>{{ }}</code>, making it
 easier to include R code and JSON in your prompt.</p>
@@ -110,7 +110,8 @@ for more details.</p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
-<dd><p>A path to a prompt file (often a <code>.md</code>).</p></dd>
+<dd><p>A path to a prompt file (often a <code>.md</code>). In
+<code>interpolate_package()</code>, this path is relative to <code>inst/prompts</code>.</p></dd>
 
 
 <dt id="arg-package">package<a class="anchor" aria-label="anchor" href="#arg-package"></a></dt>
