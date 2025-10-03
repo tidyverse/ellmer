@@ -48,9 +48,17 @@ convert_from_type <- function(x, type) {
       } else {
         cols <- lapply(names(type@items@properties), function(name) {
           vals <- lapply(x, function(y) y[[name]])
-          convert_from_type(vals, type_array(type@items@properties[[name]]))
+          result <- convert_from_type(vals, type_array(type@items@properties[[name]]))
+          if (is.data.frame(result)) {
+            # Preserve column names by prefixing with the property name
+            result_list <- as.list(result)
+            names(result_list) <- paste0(name, ".", names(result))
+            result_list
+          } else {
+            stats::setNames(list(result), name)
+          }
         })
-        names(cols) <- names(type@items@properties)
+        cols <- unlist(cols, recursive = FALSE)
         list2DF(cols)
       }
     } else {
