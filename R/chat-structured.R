@@ -48,7 +48,10 @@ convert_from_type <- function(x, type) {
       } else {
         cols <- lapply(names(type@items@properties), function(name) {
           vals <- lapply(x, function(y) y[[name]])
-          result <- convert_from_type(vals, type_array(type@items@properties[[name]]))
+          result <- convert_from_type(
+            vals,
+            type_array(type@items@properties[[name]])
+          )
           if (is.data.frame(result)) {
             # Preserve column names by prefixing with the property name
             result_list <- as.list(result)
