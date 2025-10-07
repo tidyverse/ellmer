@@ -22,6 +22,7 @@ test_that("print method truncates many elements", {
     print(prompt, max_items = 1)
     print(prompt, max_lines = 2)
     print(prompt, max_lines = 3)
+    print(ellmer_prompt("a\nb\nc\nd\ne"), max_lines = 3)
   })
 })
 
