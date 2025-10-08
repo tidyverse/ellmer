@@ -1,3 +1,15 @@
+test_that("structured data is round-tripped", {
+  chat <- chat_openai_test()
+  data <- chat$chat_structured(
+    "Generate the name and age of a random person.",
+    type = type_object(
+      name = type_string(),
+      age = type_number()
+    )
+  )
+  expect_match(chat$chat("What is the name of the person?"), data$name)
+})
+
 # Object from ContentJSON -----------------------------------------------------
 
 test_that("useful error if no ContentJson", {
