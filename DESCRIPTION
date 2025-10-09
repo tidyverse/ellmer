@@ -72,6 +72,7 @@ Collate:
     'chat-structured.R'
     'turns.R'
     'chat-tools.R'
+    'chat-utils.R'
     'utils-coro.R'
     'chat.R'
     'content-image.R'
