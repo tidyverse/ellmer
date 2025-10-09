@@ -108,6 +108,38 @@ General advice:
 - `vignettes/` - Documentation and examples
 - `.github/workflows/` - CI/CD with R CMD check
 
+## S7
+
+ellmer uses the S7 OOP system.
+
+**Key concepts:**
+
+- **Classes**: Define classes with `new_class()`, specifying a name and properties (typed data fields). Properties are accessed using `@` syntax
+- **Generics and methods**: Create generic functions with `new_generic()` and register class-specific implementations using `method(generic, class) <- implementation`
+- **Inheritance**: Classes can inherit from parent classes using the `parent` argument, enabling code reuse through method dispatch up the class hierarchy
+- **Validation**: Properties are automatically type-checked based on their definitions
+
+**Basic example:**
+
+```r
+# Define a class
+Dog <- new_class("Dog", properties = list(
+  name = class_character,
+  age = class_numeric
+))
+
+# Create an instance
+lola <- Dog(name = "Lola", age = 11)
+
+# Access properties
+lola@age  # 11
+
+# Define generic and method
+speak <- new_generic("speak", "x")
+method(speak, Dog) <- function(x) "Woof"
+speak(lola)  # "Woof"
+```
+
 ## Development Notes
 
 ### Testing Strategy
