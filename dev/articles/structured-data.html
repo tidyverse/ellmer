@@ -214,9 +214,9 @@ any number of scalars, arrays, and other objects. They are similar to
 named lists in R.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">type_person2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
-<span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  hobbies <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>hobbies <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </li>
 </ul>
@@ -354,6 +354,13 @@ structure “inside out” and create an array of objects:</p>
 <p>If you’re familiar with the terms row-oriented and column-oriented
 data frames, this is the same idea. Since most languages don’t possess
 vectorisation like R, row-oriented data frames are more common.</p>
+<p>Note that you’ll generally wanted to avoid nesting objects in inside
+of objects as this will generate a data frame where each column is
+itself a data frame. This is a valid data structure in R, but you’ll
+find it easier to understand if you convert it to a tibble, since the
+tibble print method makes it more clear what’s going on. You can also
+use <code>tidyr::unpack()</code> to unpack these df-columns back into a
+regular flat data frame.</p>
 </div>
 </div>
 <div class="section level2">
