@@ -35,7 +35,7 @@ General advice:
 ### Code style
 
 - Use newspaper style/high-level first function organisation. Main logic at the top and helper functions should come below.
-- Only define inside of functions unless they are very brief.
+- Don't define functions inside of functions unless they are very brief.
 - Error messages should use `cli::cli_abort()` and follow the tidyverse style guide (https://style.tidyverse.org/errors.html)
 
 ## Architecture
