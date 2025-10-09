@@ -422,3 +422,22 @@ ContentPDF <- new_class(
 method(format, ContentPDF) <- function(x, ...) {
   "<PDF document>"
 }
+
+#' @rdname Content
+#' @param file_id File ID assigned by Anthropic Files API.
+#' @param block_type Content Block Type, document/image/container_upload.
+#' See [Anthropic Files API documentation]
+#' (https://docs.claude.com/en/docs/build-with-claude/files#document-blocks).
+#' @export
+ContentAnthropicFile <- new_class(
+  "ContentAnthropicFile",
+  parent = Content,
+  properties = list(
+    block_type = prop_string(),
+    file_id = prop_string()
+  )
+)
+
+method(format, ContentAnthropicFile) <- function(x, ...) {
+  "<Anthropic File>"
+}
