@@ -106,6 +106,9 @@ print.ellmer_prompt <- function(
   max_items = 20,
   max_lines = max_items * 10
 ) {
+  check_number_whole(max_items, min = 1)
+  check_number_whole(max_lines, min = 1)
+
   n <- length(x)
   n_extra <- length(x) - max_items
   if (n_extra > 0) {
@@ -128,46 +131,21 @@ print.ellmer_prompt <- function(
   x <- gsub("\n", paste0("\n", exdent), x)
 
   lines <- strsplit(x, "\n")
-  ids <- rep(seq_along(lines), length(lines))
-  n_lines_items <- map_int(lines, length)
+  ids <- rep(seq_along(x), lengths(lines))
+  first <- c(TRUE, ids[-length(ids)] != ids[-1])
+  lines <- unlist(lines)
 
-  if (sum(n_lines_items) > max_lines) {
-    total_lines <- 0
-    drop <- integer()
-    for (i in seq_along(lines)) {
-      if (total_lines > 0 && total_lines >= max_lines) {
-        drop <- c(drop, i)
-        next
-      }
-
-      if ((total_lines + n_lines_items[[i]]) <= max_lines) {
-        # Keep this item, it fits entirely
-        total_lines <- total_lines + n_lines_items[[i]]
-        next
-      }
-
-      # This item needs to be truncated
-      n_show <- max_lines - total_lines
-      n_hidden <- n_lines_items[[i]] - n_show
-
-      lines[[i]] <- lines[[i]][seq_len(n_show)]
-      lines[[i]] <- c(
-        lines[[i]],
-        paste0(
-          exdent,
-          cli::col_grey(cli::format_inline("...and {n_hidden} more line{?s}."))
-        )
-      )
-      total_lines <- total_lines + length(lines[[i]])
+  if (length(lines) > max_lines) {
+    if (first[max_lines + 1]) {
+      max_lines <- if (ids[max_lines] > 1) max_lines - 1 else max(max_lines, 1)
     }
 
-    if (length(drop) > 0) {
-      lines <- lines[-drop]
-    }
-    n_extra <- n - length(lines)
+    lines <- lines[seq_len(max_lines)]
+    lines <- c(lines, paste0(exdent, "..."))
+    n_extra <- n - ids[max_lines]
   }
 
-  cat(unlist(lines), sep = "\n")
+  cat(lines, sep = "\n")
   if (n_extra > 0) {
     cat("... and ", n_extra, " more.\n", sep = "")
   }

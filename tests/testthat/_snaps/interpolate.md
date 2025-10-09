@@ -31,6 +31,7 @@
     Output
       [1] | x
           | y
+          | ...
       ... and 1 more.
     Code
       print(prompt, max_lines = 3)
@@ -38,14 +39,14 @@
       [1] | x
           | y
       [2] | a
-          | ...and 4 more lines.
+          | ...
     Code
       print(ellmer_prompt("a\nb\nc\nd\ne"), max_lines = 3)
     Output
       [1] | a
           | b
           | c
-          | ...and 2 more lines.
+          | ...
 
 # errors if the path does not exist
 
