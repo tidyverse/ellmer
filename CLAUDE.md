@@ -6,26 +6,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ellmer is an R package that provides a unified interface to multiple Large Language Model (LLM) providers. It supports features like streaming outputs, tool/function calling, structured data extraction, and asynchronous processing.
 
-## Development Commands
+## Key development commands
+
+General advice:
+* When running R from the console, always run it with `--quiet --vanilla`
+* Always run `air format .` after generating code
 
 ### Testing
-- `R CMD check` - Full package check (used in CI)
-- `testthat::test_check("ellmer")` - Run all tests via testthat
-- `devtools::test()` - Run tests interactively during development
-- Tests use VCR cassettes for HTTP mocking (located in `tests/testthat/_vcr/`)
-- Test configuration includes parallel execution and specific test ordering
 
-### Building and Documentation
-- `devtools::document()` - Generate documentation from roxygen2 comments
-- `pkgdown::build_site()` - Build package website
-- `devtools::build()` - Build package tarball
-- `devtools::install()` - Install package locally for development
+- Use `devtools::test()` to run all tests
+- Use `devtools::test_file("tests/testthat/test-filename.R")` to run tests in a specific file
+- DO NOT USE `devtools::test_active_file()`
+- All testing functions automatically load code; you don't needs to.
 
-### Package Structure
-- Uses standard R package structure with DESCRIPTION, NAMESPACE, and man/ directories
-- Source code organized in R/ directory with provider-specific files
-- Vignettes in vignettes/ directory demonstrate key features
-- Tests in tests/testthat/ with snapshot testing enabled
+- All new code should have an accompanying test.
+- Tests for `R/{name}.R` go in `tests/testthat/test-{name}.R`.
+- If there are existing tests, place new tests next to similar existing tests.
+
+### Documentation
+
+- Run `devtools::document()` after changing any roxygen2 docs.
+- Every user facing function should be exported and have roxygen2 documentation.
+- Whenever you add a new documentation file, make sure to also add the topic name to `_pkgdown.yml`.
+- Run `pkgdown::check_pkgdown()` to check that all topics are included in the reference index.
+- Use sentence case for all headings
 
 ## Architecture
 
