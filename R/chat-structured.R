@@ -51,7 +51,7 @@ convert_from_type <- function(x, type) {
           convert_from_type(vals, type_array(type@items@properties[[name]]))
         })
         names(cols) <- names(type@items@properties)
-        list_to_df(cols)
+        vctrs::new_data_frame(cols)
       }
     } else {
       x
@@ -120,21 +120,4 @@ list_to_atomic <- function(x, type) {
   x[lengths(x) != 1] <- lapply(x[lengths(x) != 1], \(x) x[1])
 
   unlist(x, use.names = FALSE, recursive = FALSE)
-}
-
-# adapted from base::list2DF() - the primary change is to use NROW() instead of
-# length() in order to support data frame columns
-list_to_df <- function(x = list()) {
-  stopifnot(is.list(x))
-
-  ncol <- length(x)
-  nrow <- if (ncol == 0) 0 else NROW(x[[1]])
-
-  if (is.null(names(x))) {
-    names(x) <- character(n)
-  }
-
-  class(x) <- "data.frame"
-  attr(x, "row.names") <- .set_row_names(nrow)
-  x
 }
