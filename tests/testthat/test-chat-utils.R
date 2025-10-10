@@ -1,9 +1,9 @@
-test_that("find_chat() takes string or chat", {
+test_that("as_chat() takes string or chat", {
   chat <- chat_openai_test()
-  expect_equal(find_chat(chat), chat)
+  expect_equal(as_chat(chat), chat)
 
-  expect_equal(find_chat("openai/gpt-4.1-nano"), chat("openai/gpt-4.1-nano"))
+  expect_equal(as_chat("openai/gpt-4.1-nano"), chat("openai/gpt-4.1-nano"))
 
   chat <- 1
-  expect_snapshot(find_chat(chat), error = TRUE)
+  expect_snapshot(as_chat(chat), error = TRUE)
 })

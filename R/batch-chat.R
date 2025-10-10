@@ -79,7 +79,7 @@
 #' }
 #' @export
 batch_chat <- function(chat, prompts, path, wait = TRUE) {
-  chat <- find_chat(chat)
+  chat <- as_chat(chat)
 
   job <- BatchJob$new(
     chat = chat,
@@ -102,7 +102,7 @@ batch_chat <- function(chat, prompts, path, wait = TRUE) {
 #' @export
 #' @rdname batch_chat
 batch_chat_text <- function(chat, prompts, path, wait = TRUE) {
-  chat <- find_chat(chat)
+  chat <- as_chat(chat)
   chats <- batch_chat(chat, prompts, path, wait = wait)
   map_chr(chats, \(chat) if (is.null(chat)) NA else chat$last_turn()@text)
 }
@@ -120,7 +120,7 @@ batch_chat_structured <- function(
   include_tokens = FALSE,
   include_cost = FALSE
 ) {
-  chat <- find_chat(chat)
+  chat <- as_chat(chat)
   provider <- chat$get_provider()
   needs_wrapper <- type_needs_wrapper(type, provider)
 

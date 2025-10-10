@@ -55,7 +55,7 @@
 #' parallel_chat_structured(chat, prompts, type_person)
 #' \dontshow{ellmer:::vcr_example_end()}
 parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
-  chat <- find_chat(chat)
+  chat <- as_chat(chat)
 
   my_parallel_turns <- function(conversations) {
     parallel_turns(
@@ -105,7 +105,7 @@ parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
 #' @rdname parallel_chat
 #' @export
 parallel_chat_text <- function(chat, prompts, max_active = 10, rpm = 500) {
-  chat <- find_chat(chat)
+  chat <- as_chat(chat)
   chats <- parallel_chat(chat, prompts, max_active = max_active, rpm = rpm)
   map_chr(chats, \(chat) chat$last_turn()@text)
 }
@@ -133,7 +133,7 @@ parallel_chat_structured <- function(
   max_active = 10,
   rpm = 500
 ) {
-  chat <- find_chat(chat)
+  chat <- as_chat(chat)
   turns <- as_user_turns(prompts)
   check_bool(convert)
 
