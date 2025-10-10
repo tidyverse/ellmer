@@ -47,6 +47,7 @@ The same basic idea works with images too:
 #| label: basics-image
 #| cassette: true
 
+chat <- chat_openai()
 chat$chat_structured(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   type = type_object(
