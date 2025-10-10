@@ -289,10 +289,11 @@ method(value_turn, ProviderAnthropic) <- function(
         extra = list(signature = content$signature)
       )
     } else {
-      cli::cli_abort(
+      cli::cli_warn(
         "Unknown content type {.str {content$type}}.",
         .internal = TRUE
       )
+      ContentUnknown(content)
     }
   })
 

@@ -79,6 +79,9 @@ contents_markdown <- new_generic("contents_markdown", "content")
 #'   [tool()] function. Alternatively, expert users can return a
 #'   `ContentToolResult` from a [tool()] function to include additional data or
 #'   to customize the display of the result.
+#' * `ContentUnknown` is used as a fallback for content types that we don't
+#'   recognise. There's no guarantee that it'll work when resubmitting the chat
+#'   but it unblocks one step and makes debugging a little easier.
 #'
 #' @export
 #' @return S7 objects that all inherit from `Content`
@@ -125,6 +128,32 @@ method(contents_html, ContentText) <- function(content) {
 
 method(contents_markdown, ContentText) <- function(content) {
   content@text
+}
+
+
+#' @export
+#' @rdname Content
+ContentUnknown <- new_class(
+  "ContentUnknown",
+  parent = Content,
+  properties = list(json = class_any),
+)
+method(format, ContentUnknown) <- function(x, ...) {
+  json <- pretty_json(x@json)
+  if (nchar(json) > 500) {
+    paste0(substr(json, 1, 500), "...")
+  } else {
+    json
+  }
+}
+method(contents_text, ContentUnknown) <- function(content) {
+  pretty_json(content@json)
+}
+method(contents_html, ContentUnknown) <- function(content) {
+  paste0("<pre>", pretty_json(content@json), "</pre>")
+}
+method(contents_markdown, ContentUnknown) <- function(content) {
+  paste0("```json\n", pretty_json(content@json), "\n```")
 }
 
 # Images -----------------------------------------------------------------

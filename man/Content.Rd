@@ -3,6 +3,7 @@
 \name{Content}
 \alias{Content}
 \alias{ContentText}
+\alias{ContentUnknown}
 \alias{ContentImage}
 \alias{ContentImageRemote}
 \alias{ContentImageInline}
@@ -15,6 +16,8 @@
 Content()
 
 ContentText(text = stop("Required"))
+
+ContentUnknown(json = NULL)
 
 ContentImage()
 
@@ -101,6 +104,9 @@ This object is automatically created from the value returned by calling the
 \code{\link[=tool]{tool()}} function. Alternatively, expert users can return a
 \code{ContentToolResult} from a \code{\link[=tool]{tool()}} function to include additional data or
 to customize the display of the result.
+\item \code{ContentUnknown} is used as a fallback for content types that we don't
+recognise. There's no guarantee that it'll work when resubmitting the chat
+but it unblocks one step and makes debugging a little easier.
 }
 }
 \examples{

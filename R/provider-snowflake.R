@@ -243,10 +243,11 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
         content$input %||% list()
       )
     } else {
-      cli::cli_abort(
+      cli::cli_warn(
         "Unknown content type {.str {content$type}}.",
         .internal = TRUE
       )
+      ContentUnknown(content)
     }
   })
   tokens <- tokens_log(

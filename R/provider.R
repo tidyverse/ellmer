@@ -170,6 +170,10 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x) {
   as_json(provider, ContentText("<structured data/>"))
 }
 
+method(as_json, list(Provider, ContentUnknown)) <- function(provider, x) {
+  x@json
+}
+
 # Batch AI ---------------------------------------------------------------
 
 # Does the provider support batch uploads?

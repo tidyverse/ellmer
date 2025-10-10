@@ -1,8 +1,9 @@
 {
-  "enableAllProjectMcpServers": false,
   "permissions": {
     "allow": [
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(air format:*)"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": false
 }
