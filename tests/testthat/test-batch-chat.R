@@ -128,7 +128,7 @@ test_that("informative error for bad inputs", {
   )
 
   expect_snapshot(error = TRUE, {
-    batch_chat("x")
+    batch_chat(1)
     batch_chat(chat_ollama)
     batch_chat(chat_openai, "a")
     batch_chat(chat_openai, list("a"), path = 1)

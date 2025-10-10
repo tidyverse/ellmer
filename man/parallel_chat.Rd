@@ -22,7 +22,8 @@ parallel_chat_structured(
 )
 }
 \arguments{
-\item{chat}{A base chat object.}
+\item{chat}{A chat object created by a \code{chat_} function, or a
+string passed to \code{\link[=chat]{chat()}}.}
 
 \item{prompts}{A vector created by \code{\link[=interpolate]{interpolate()}} or a list
 of character vectors.}
