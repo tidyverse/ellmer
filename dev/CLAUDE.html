@@ -56,35 +56,32 @@
 <p>ellmer is an R package that provides a unified interface to multiple Large Language Model (LLM) providers. It supports features like streaming outputs, tool/function calling, structured data extraction, and asynchronous processing.</p>
 </div>
 <div class="section level2">
-<h2 id="development-commands">Development Commands<a class="anchor" aria-label="anchor" href="#development-commands"></a></h2>
+<h2 id="key-development-commands">Key development commands<a class="anchor" aria-label="anchor" href="#key-development-commands"></a></h2>
+<p>General advice: * When running R from the console, always run it with <code>--quiet --vanilla</code> * Always run <code>air format .</code> after generating code</p>
 <div class="section level3">
 <h3 id="testing">Testing<a class="anchor" aria-label="anchor" href="#testing"></a></h3>
-<ul><li>
-<code>R CMD check</code> - Full package check (used in CI)</li>
-<li>
-<code>testthat::test_check("ellmer")</code> - Run all tests via testthat</li>
-<li>
-<code>devtools::test()</code> - Run tests interactively during development</li>
-<li>Tests use VCR cassettes for HTTP mocking (located in <code>tests/testthat/_vcr/</code>)</li>
-<li>Test configuration includes parallel execution and specific test ordering</li>
+<ul><li><p>Tests for <code>R/{name}.R</code> go in <code>tests/testthat/test-{name}.R</code>.</p></li>
+<li><p>Use <code>devtools::test(reporter = "check")</code> to run all tests</p></li>
+<li><p>Use <code>devtools::test(filter = "name", reporter = "check")</code> to run tests for <code>R/{name}.R</code></p></li>
+<li><p>DO NOT USE <code>devtools::test_active_file()</code></p></li>
+<li><p>All testing functions automatically load code; you don’t need to.</p></li>
+<li><p>All new code should have an accompanying test.</p></li>
+<li><p>If there are existing tests, place new tests next to similar existing tests.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="building-and-documentation">Building and Documentation<a class="anchor" aria-label="anchor" href="#building-and-documentation"></a></h3>
-<ul><li>
-<code>devtools::document()</code> - Generate documentation from roxygen2 comments</li>
-<li>
-<code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> - Build package website</li>
-<li>
-<code>devtools::build()</code> - Build package tarball</li>
-<li>
-<code>devtools::install()</code> - Install package locally for development</li>
+<h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a></h3>
+<ul><li>Run <code>devtools::document()</code> after changing any roxygen2 docs.</li>
+<li>Every user facing function should be exported and have roxygen2 documentation.</li>
+<li>Whenever you add a new documentation file, make sure to also add the topic name to <code>_pkgdown.yml</code>.</li>
+<li>Run <code><a href="https://pkgdown.r-lib.org/reference/check_pkgdown.html" class="external-link">pkgdown::check_pkgdown()</a></code> to check that all topics are included in the reference index.</li>
+<li>Use sentence case for all headings</li>
+<li>User facing changes should be briefly described in NEWS.md, following the tidyverse style guide (<a href="https://style.tidyverse.org/news.html" class="external-link uri">https://style.tidyverse.org/news.html</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="package-structure">Package Structure<a class="anchor" aria-label="anchor" href="#package-structure"></a></h3>
-<ul><li>Uses standard R package structure with DESCRIPTION, NAMESPACE, and man/ directories</li>
-<li>Source code organized in R/ directory with provider-specific files</li>
-<li>Vignettes in vignettes/ directory demonstrate key features</li>
-<li>Tests in tests/testthat/ with snapshot testing enabled</li>
+<h3 id="code-style">Code style<a class="anchor" aria-label="anchor" href="#code-style"></a></h3>
+<ul><li>Use newspaper style/high-level first function organisation. Main logic at the top and helper functions should come below.</li>
+<li>Don’t define functions inside of functions unless they are very brief.</li>
+<li>Error messages should use <code><a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli::cli_abort()</a></code> and follow the tidyverse style guide (<a href="https://style.tidyverse.org/errors.html" class="external-link uri">https://style.tidyverse.org/errors.html</a>)</li>
 </ul></div>
 </div>
 <div class="section level2">
@@ -149,6 +146,38 @@
 </ul></div>
 </div>
 <div class="section level2">
+<h2 id="s7">S7<a class="anchor" aria-label="anchor" href="#s7"></a></h2>
+<p>ellmer uses the S7 OOP system.</p>
+<p><strong>Key concepts:</strong></p>
+<ul><li>
+<strong>Classes</strong>: Define classes with <code>new_class()</code>, specifying a name and properties (typed data fields). Properties are accessed using <code>@</code> syntax</li>
+<li>
+<strong>Generics and methods</strong>: Create generic functions with <code>new_generic()</code> and register class-specific implementations using <code>method(generic, class) &lt;- implementation</code>
+</li>
+<li>
+<strong>Inheritance</strong>: Classes can inherit from parent classes using the <code>parent</code> argument, enabling code reuse through method dispatch up the class hierarchy</li>
+<li>
+<strong>Validation</strong>: Properties are automatically type-checked based on their definitions</li>
+</ul><p><strong>Basic example:</strong></p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Define a class</span></span>
+<span><span class="va">Dog</span> <span class="op">&lt;-</span> <span class="fu">new_class</span><span class="op">(</span><span class="st">"Dog"</span>, properties <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="va">class_character</span>,</span>
+<span>  age <span class="op">=</span> <span class="va">class_numeric</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create an instance</span></span>
+<span><span class="va">lola</span> <span class="op">&lt;-</span> <span class="fu">Dog</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Lola"</span>, age <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Access properties</span></span>
+<span><span class="va">lola</span><span class="op">@</span><span class="va">age</span>  <span class="co"># 11</span></span>
+<span></span>
+<span><span class="co"># Define generic and method</span></span>
+<span><span class="va">speak</span> <span class="op">&lt;-</span> <span class="fu">new_generic</span><span class="op">(</span><span class="st">"speak"</span>, <span class="st">"x"</span><span class="op">)</span></span>
+<span><span class="fu">method</span><span class="op">(</span><span class="va">speak</span>, <span class="va">Dog</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="st">"Woof"</span></span>
+<span><span class="fu">speak</span><span class="op">(</span><span class="va">lola</span><span class="op">)</span>  <span class="co"># "Woof"</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="development-notes">Development Notes<a class="anchor" aria-label="anchor" href="#development-notes"></a></h2>
 <div class="section level3">
 <h3 id="testing-strategy">Testing Strategy<a class="anchor" aria-label="anchor" href="#testing-strategy"></a></h3>
@@ -165,7 +194,7 @@
 <li>Standalone imports minimize external dependencies</li>
 </ul></div>
 <div class="section level3">
-<h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a></h3>
+<h3 id="documentation-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1"></a></h3>
 <ul><li>Roxygen2 comments for all exported functions</li>
 <li>Vignettes demonstrate key use cases</li>
 <li>pkgdown site provides comprehensive documentation</li>
