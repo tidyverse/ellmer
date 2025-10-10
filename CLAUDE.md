@@ -14,13 +14,13 @@ General advice:
 
 ### Testing
 
-- Use `devtools::test()` to run all tests
-- Use `devtools::test_file("tests/testthat/test-filename.R")` to run tests in a specific file
+- Tests for `R/{name}.R` go in `tests/testthat/test-{name}.R`.
+- Use `devtools::test(reporter = "check")` to run all tests
+- Use `devtools::test(filter = "name", reporter = "check")` to run tests for `R/{name}.R`
 - DO NOT USE `devtools::test_active_file()`
-- All testing functions automatically load code; you don't needs to.
+- All testing functions automatically load code; you don't need to.
 
 - All new code should have an accompanying test.
-- Tests for `R/{name}.R` go in `tests/testthat/test-{name}.R`.
 - If there are existing tests, place new tests next to similar existing tests.
 
 ### Documentation
