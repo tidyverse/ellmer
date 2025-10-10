@@ -283,10 +283,11 @@ method(value_turn, ProviderGoogleGemini) <- function(
         content$functionCall$args
       )
     } else {
-      cli::cli_abort(
+      cli::cli_warn(
         "Unknown content type with names {.str {names(content)}}.",
         .internal = TRUE
       )
+      ContentUnknown(content)
     }
   })
   contents <- compact(contents)

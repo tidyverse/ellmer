@@ -255,6 +255,7 @@ method(value_turn, ProviderOpenAI) <- function(
     }
     content <- list(ContentJson(json))
   } else {
+    # FIXME: as_content is for user facing code; shouldn't be calling it here
     content <- lapply(message$content, as_content)
   }
   if (has_name(message, "tool_calls")) {
