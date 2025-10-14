@@ -197,6 +197,26 @@ test_that("can convert arrays of objects to data frames", {
   )
 })
 
+test_that("array of object with nested objects becomes packed data frame", {
+  type <- type_array(
+    type_object(
+      x = type_object(a = type_integer()),
+      y = type_object(a = type_integer())
+    )
+  )
+
+  data <- list(
+    list(x = list(a = 1), y = list(a = 3)),
+    list(x = list(a = 5), y = list(a = 7))
+  )
+
+  out <- convert_from_type(data, type)
+  expect_equal(nrow(out), 2)
+  expect_named(out, c("x", "y"))
+  expect_equal(out$x, data.frame(a = c(1, 5)))
+  expect_equal(out$y, data.frame(a = c(3, 7)))
+})
+
 test_that("can recursively convert objects contents", {
   expect_equal(
     convert_from_type(

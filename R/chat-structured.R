@@ -51,7 +51,7 @@ convert_from_type <- function(x, type) {
           convert_from_type(vals, type_array(type@items@properties[[name]]))
         })
         names(cols) <- names(type@items@properties)
-        list2DF(cols)
+        vctrs::new_data_frame(cols)
       }
     } else {
       x

@@ -93,16 +93,16 @@ To define your desired type specification (also known as a schema), you use the 
 * **Arrays** represent a vector of values of the same type. They are created with `type_array()` and require the `item` argument which specifies the type of each element. Arrays of scalars are very similar to R's atomic vectors:
 
   ```{r}
-  type_logical_vector <- type_array(type_boolean())
-  type_integer_vector <- type_array(type_integer())
-  type_double_vector <- type_array(type_number())
-  type_character_vector <- type_array(type_string())
+type_logical_vector <- type_array(type_boolean())
+type_integer_vector <- type_array(type_integer())
+type_double_vector <- type_array(type_number())
+type_character_vector <- type_array(type_string())
   ```
 
   You can also have arrays of arrays resemble lists with well defined structures:
 
   ```{r}
-  list_of_integers <- type_array(type_integer_vector)
+list_of_integers <- type_array(type_integer_vector)
   ```
 
   Arrays of objects (described next) are equivalent to data frames.
@@ -110,11 +110,11 @@ To define your desired type specification (also known as a schema), you use the 
 * **Objects** represent a collection of named values. They are created with `type_object()`. Objects can contain any number of scalars, arrays, and other objects. They are similar to named lists in R.
 
   ```{r}
-  type_person2 <- type_object(
-    name = type_string(),
-    age = type_integer(),
-    hobbies = type_array(type_string())
-  )
+type_person2 <- type_object(
+  name = type_string(),
+  age = type_integer(),
+  hobbies = type_array(type_string())
+)
   ```
 
 Under the hood, these type specifications ensures that the LLM returns correctly structured JSON. But ellmer goes one step further and converts the JSON to the closest R analog. This means:
@@ -223,7 +223,10 @@ chat$chat_structured(prompt, type = type_people)
 
 Now ellmer knows what you want and gives you a data frame.
 
-If you're familiar with the terms row-oriented and column-oriented data frames, this is the same idea. Since most languages don't possess vectorisation like R, row-oriented data frames are more common.
+If you're familiar with the terms row-oriented and column-oriented data frames, this is the same idea. Since most languages don't possess
+vectorisation like R, row-oriented data frames are more common.
+
+Note that you'll generally wanted to avoid nesting objects in inside of objects as this will generate a data frame where each column is itself a data frame. This is a valid data structure in R, but you'll find it easier to understand if you convert it to a tibble, since the tibble print method makes it more clear what's going on. You can also use `tidyr::unpack()` to unpack these df-columns back into a regular flat data frame.
 
 ## Examples
 

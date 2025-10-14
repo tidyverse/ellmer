@@ -6,26 +6,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ellmer is an R package that provides a unified interface to multiple Large Language Model (LLM) providers. It supports features like streaming outputs, tool/function calling, structured data extraction, and asynchronous processing.
 
-## Development Commands
+## Key development commands
+
+General advice:
+* When running R from the console, always run it with `--quiet --vanilla`
+* Always run `air format .` after generating code
 
 ### Testing
-- `R CMD check` - Full package check (used in CI)
-- `testthat::test_check("ellmer")` - Run all tests via testthat
-- `devtools::test()` - Run tests interactively during development
-- Tests use VCR cassettes for HTTP mocking (located in `tests/testthat/_vcr/`)
-- Test configuration includes parallel execution and specific test ordering
 
-### Building and Documentation
-- `devtools::document()` - Generate documentation from roxygen2 comments
-- `pkgdown::build_site()` - Build package website
-- `devtools::build()` - Build package tarball
-- `devtools::install()` - Install package locally for development
+- Tests for `R/{name}.R` go in `tests/testthat/test-{name}.R`.
+- Use `devtools::test(reporter = "check")` to run all tests
+- Use `devtools::test(filter = "name", reporter = "check")` to run tests for `R/{name}.R`
+- DO NOT USE `devtools::test_active_file()`
+- All testing functions automatically load code; you don't need to.
 
-### Package Structure
-- Uses standard R package structure with DESCRIPTION, NAMESPACE, and man/ directories
-- Source code organized in R/ directory with provider-specific files
-- Vignettes in vignettes/ directory demonstrate key features
-- Tests in tests/testthat/ with snapshot testing enabled
+- All new code should have an accompanying test.
+- If there are existing tests, place new tests next to similar existing tests.
+
+### Documentation
+
+- Run `devtools::document()` after changing any roxygen2 docs.
+- Every user facing function should be exported and have roxygen2 documentation.
+- Whenever you add a new documentation file, make sure to also add the topic name to `_pkgdown.yml`.
+- Run `pkgdown::check_pkgdown()` to check that all topics are included in the reference index.
+- Use sentence case for all headings
+- User facing changes should be briefly described in NEWS.md, following the tidyverse style guide (https://style.tidyverse.org/news.html).
+
+### Code style
+
+- Use newspaper style/high-level first function organisation. Main logic at the top and helper functions should come below.
+- Don't define functions inside of functions unless they are very brief.
+- Error messages should use `cli::cli_abort()` and follow the tidyverse style guide (https://style.tidyverse.org/errors.html)
 
 ## Architecture
 
@@ -96,6 +107,38 @@ ellmer is an R package that provides a unified interface to multiple Large Langu
 - `tests/testthat/` - Test suite with VCR cassettes
 - `vignettes/` - Documentation and examples
 - `.github/workflows/` - CI/CD with R CMD check
+
+## S7
+
+ellmer uses the S7 OOP system.
+
+**Key concepts:**
+
+- **Classes**: Define classes with `new_class()`, specifying a name and properties (typed data fields). Properties are accessed using `@` syntax
+- **Generics and methods**: Create generic functions with `new_generic()` and register class-specific implementations using `method(generic, class) <- implementation`
+- **Inheritance**: Classes can inherit from parent classes using the `parent` argument, enabling code reuse through method dispatch up the class hierarchy
+- **Validation**: Properties are automatically type-checked based on their definitions
+
+**Basic example:**
+
+```r
+# Define a class
+Dog <- new_class("Dog", properties = list(
+  name = class_character,
+  age = class_numeric
+))
+
+# Create an instance
+lola <- Dog(name = "Lola", age = 11)
+
+# Access properties
+lola@age  # 11
+
+# Define generic and method
+speak <- new_generic("speak", "x")
+method(speak, Dog) <- function(x) "Woof"
+speak(lola)  # "Woof"
+```
 
 ## Development Notes
 

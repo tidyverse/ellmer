@@ -22,6 +22,7 @@ test_that("print method truncates many elements", {
     print(prompt, max_items = 1)
     print(prompt, max_lines = 2)
     print(prompt, max_lines = 3)
+    print(ellmer_prompt("a\nb\nc\nd\ne"), max_lines = 3)
   })
 })
 
@@ -51,4 +52,11 @@ test_that("can interpolate from a package", {
   )
 
   expect_equal(interpolate_package("test", "bar.md", x = 1), ellmer_prompt("1"))
+})
+
+test_that("errors if the path does not exist", {
+  expect_snapshot(error = TRUE, {
+    interpolate_file("does-not-exist.md", x = 1)
+    interpolate_package("ellmer", "does-not-exist.md", x = 1)
+  })
 })

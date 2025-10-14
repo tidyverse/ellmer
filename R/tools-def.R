@@ -150,7 +150,7 @@ tool <- function(
     annotations <- .annotations
   }
 
-  fun_expr <- enexpr(fun)
+  fun_expr <- substitute(fun)
   check_function(fun)
   check_string(description)
   check_string(name, allow_null = TRUE)
