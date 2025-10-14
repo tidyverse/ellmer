@@ -54,8 +54,8 @@ value, the default value will be used.}
 \item{items}{The type of the array items. Can be created by any of the
 \code{type_} function.}
 
-\item{...}{Name-type pairs defining the components that the object must
-possess.}
+\item{...}{<\code{\link[rlang:dyn-dots]{dynamic-dots}}> Name-type pairs defining
+the components that the object must possess.}
 
 \item{.additional_properties}{Can the object have arbitrary additional
 properties that are not explicitly listed? Only supported by Claude.}

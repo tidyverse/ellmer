@@ -3,56 +3,55 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"My name
-        is Susan and I''m 13 years old"}]},{"role":"assistant","content":[{"type":"text","text":"<structured
-        data/>"}]},{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"primary_shape":{"type":"string","description":""},"primary_colour":{"type":"string","description":""}},"required":["primary_shape","primary_colour"],"additionalProperties":false},"strict":true}}}'
+      string: '{"messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://www.r-project.org/Rlogo.png"}}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"primary_shape":{"type":"string","description":""},"primary_colour":{"type":"string","description":""}},"required":["primary_shape","primary_colour"],"additionalProperties":false},"strict":true}}}'
   response:
     status: 200
     headers:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 96125ab98816511a-MSP
+      cf-ray: 98be0afb8be8e8f5-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 18 Jul 2025 13:34:06 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '2099'
+      date: Thu, 09 Oct 2025 12:57:20 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '2783'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=y0d2ArCk5BcMzTmNXu9_ZHUZcJyVc6OCs29mqREjZBw-1752845646-1.0.1.1-GobSvwOoBR.GY2RykH3yFbw_rmx_l9yM7zyGTwVuJD_SDLG6sCEZlaUaMP6l8SvFfwf6jmdxtamyB3.lGB4aWFYtf6AbtzDMNceYPRbiWDo;
-        path=/; expires=Fri, 18-Jul-25 14:04:06 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=XU1VH6ao5IGqaayNN0i_Gc5yDplZb3L.gyOMGl64dME-1760014640-1.0.1.1-bdwIwsnCBSzkKcgbo0aUAL.qqAbkZcIdbr98WusUL6HwlkdJjeXpItdXYzs_KifHuYzGRUw4V7YceO4QcGiN.3R8zwA.ySdiuaTKSTVKeEM;
+        path=/; expires=Thu, 09-Oct-25 13:27:20 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=agGVgUdC_x5WSNGTXdC.5JIyveSqlKNuIlFPx7r3BkQ-1752845646044-0.0.1.1-604800000;
+      - _cfuvid=aQoMxVqMwSPoONdwA10gTK4E2KEs0Dy2FSdteFnS87U-1760014640430-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '955'
+      x-envoy-upstream-service-time: '3028'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-input-images: '250000'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-input-images: '249999'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999217'
+      x-ratelimit-remaining-tokens: '29999233'
       x-ratelimit-reset-input-images: 0s
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_54a84a310cc38408fa0c72c0a0a19aa6
+      x-request-id: req_f389cc41bf2646559dc4178c538e528c
     body:
       string: |
         {
-          "id": "chatcmpl-BufVtq2XOTAWUXZJD0eGHJadA6kiM",
+          "id": "chatcmpl-COkUoDXCdJVyrPnZJiiA5ODNHYEgJ",
           "object": "chat.completion",
-          "created": 1752845645,
+          "created": 1760014638,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "{\"primary_shape\":\"letter and oval\",\"primary_colour\":\"blue and gray\"}",
+                "content": "{\"primary_shape\":\"letter and ellipse\",\"primary_colour\":\"blue and grey\"}",
                 "refusal": null,
                 "annotations": []
               },
@@ -61,9 +60,9 @@ http_interactions:
             }
           ],
           "usage": {
-            "prompt_tokens": 332,
+            "prompt_tokens": 310,
             "completion_tokens": 15,
-            "total_tokens": 347,
+            "total_tokens": 325,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -76,7 +75,7 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": null
+          "system_fingerprint": "fp_e24a1fec47"
         }
-  recorded_at: 2025-07-18 13:34:05
-recorded_with: VCR-vcr/1.7.1.93
+  recorded_at: 2025-10-09 12:57:20
+recorded_with: VCR-vcr/2.0.0

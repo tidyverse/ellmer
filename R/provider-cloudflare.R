@@ -5,7 +5,7 @@ NULL
 #'
 #' @description
 #' [Cloudflare](https://www.cloudflare.com/developer-platform/products/workers-ai/)
-#' works AI hosts a variety of open-source AI models. To use the Cloudflare
+#' Workers AI hosts a variety of open-source AI models. To use the Cloudflare
 #' API, you must have an Account ID and an Access Token, which you can obtain
 #' [by following these instructions](https://developers.cloudflare.com/workers-ai/get-started/rest-api/).
 #'

@@ -25,7 +25,8 @@ batch_chat_structured(
 batch_chat_completed(chat, prompts, path)
 }
 \arguments{
-\item{chat}{A base chat object.}
+\item{chat}{A chat object created by a \code{chat_} function, or a
+string passed to \code{\link[=chat]{chat()}}.}
 
 \item{prompts}{A vector created by \code{\link[=interpolate]{interpolate()}} or a list
 of character vectors.}
@@ -95,7 +96,7 @@ errors in the most helpful way. Fortunately they don't seem to be common,
 but if you have ideas, please let me know!
 }
 \examples{
-\dontshow{if (has_credentials("openai")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (has_credentials("openai")) withAutoprint(\{ # examplesIf}
 chat <- chat_openai(model = "gpt-4.1-nano")
 
 # Chat ----------------------------------------------------------------------
