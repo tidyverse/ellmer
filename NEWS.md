@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New `models_mistral()` to list available models (@rplsmn, #750).
 * `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).
 * `interpolate_package()` now provides an informative error if the requested prompt file is not found in the package's `prompts/` directory (#763).
 
