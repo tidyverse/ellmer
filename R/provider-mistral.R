@@ -35,7 +35,7 @@ chat_mistral <- function(
 
   provider <- ProviderMistral(
     name = "Mistral",
-    base_url = "https://api.mistral.ai/v1/",
+    base_url = mistral_base_url,
     model = model,
     params = params,
     seed = seed,
@@ -46,6 +46,7 @@ chat_mistral <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
+mistral_base_url <- "https://api.mistral.ai/v1/"
 ProviderMistral <- new_class("ProviderMistral", parent = ProviderOpenAI)
 
 chat_mistral_test <- function(
@@ -126,14 +127,11 @@ mistral_key <- function() {
 
 #' @export
 #' @rdname chat_mistral
-models_mistral <- function(
-  base_url = "https://api.mistral.ai/v1/",
-  api_key = mistral_key()
-) {
+models_mistral <- function(api_key = mistral_key()) {
   provider <- ProviderMistral(
-    name = "Mistrak",
+    name = "Mistral",
     model = "",
-    base_url = base_url,
+    base_url = mistral_base_url,
     api_key = api_key
   )
 
@@ -152,6 +150,6 @@ models_mistral <- function(
     name = display_name,
     created_at = created_at
   )
-  df <- cbind(df, ellmer:::match_prices("Mistral", df$id))
-  return(df)
+  df <- cbind(df, match_prices("Mistral", df$id))
+  df
 }
