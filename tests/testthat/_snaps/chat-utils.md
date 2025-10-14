@@ -5,3 +5,4 @@
     Condition
       Error:
       ! `chat` must be a string or a <Chat> object, not the number 1.
+
