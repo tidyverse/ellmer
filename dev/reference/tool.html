@@ -99,7 +99,8 @@ Generally, the more information that you can provide here, the better.</p></dd>
 <dt id="arg-arguments">arguments<a class="anchor" aria-label="anchor" href="#arg-arguments"></a></dt>
 <dd><p>A named list that defines the arguments accepted by the
 function. Each element should be created by a <code><a href="type_boolean.html">type_*()</a></code>
-function (or <code>NULL</code> if you don't want the LLM to use that argument).</p></dd>
+function. Use <code><a href="type_boolean.html">type_ignore()</a></code> if you don't want the LLM to provide that
+argument (e.g., because the R function has a suitable default value).</p></dd>
 
 
 <dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>

@@ -21,6 +21,9 @@ must have the specified type. For example,
 type_object(a = type_string(), b = type_array(type_integer())) is
 equivalent to a list with an element called a that is a string and
 an element called b that is an integer vector.
+type_ignore() is used in tool calling to indicate that an argument should
+not be provided by the LLM. This is useful when the R function has a
+default value for the argument and you don't want the LLM to supply it.
 type_from_schema() allows you to specify the full schema that you want to
 get back from the LLM as a JSON schema. This is useful if you have a
 pre-defined schema that you want to use directly without manually creating
@@ -50,6 +53,9 @@ must have the specified type. For example,
 type_object(a = type_string(), b = type_array(type_integer())) is
 equivalent to a list with an element called a that is a string and
 an element called b that is an integer vector.
+type_ignore() is used in tool calling to indicate that an argument should
+not be provided by the LLM. This is useful when the R function has a
+default value for the argument and you don't want the LLM to supply it.
 type_from_schema() allows you to specify the full schema that you want to
 get back from the LLM as a JSON schema. This is useful if you have a
 pre-defined schema that you want to use directly without manually creating
@@ -129,6 +135,9 @@ must have the specified type. For example,
 <code>type_object(a = type_string(), b = type_array(type_integer()))</code> is
 equivalent to a list with an element called <code>a</code> that is a string and
 an element called <code>b</code> that is an integer vector.</p></li>
+<li><p><code>type_ignore()</code> is used in tool calling to indicate that an argument should
+not be provided by the LLM. This is useful when the R function has a
+default value for the argument and you don't want the LLM to supply it.</p></li>
 <li><p><code>type_from_schema()</code> allows you to specify the full schema that you want to
 get back from the LLM as a JSON schema. This is useful if you have a
 pre-defined schema that you want to use directly without manually creating
@@ -158,7 +167,9 @@ valid JSON schema object.</p></li>
 <span>  .additional_properties <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">type_from_schema</span><span class="op">(</span><span class="va">text</span>, <span class="va">path</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">type_from_schema</span><span class="op">(</span><span class="va">text</span>, <span class="va">path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">type_ignore</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
