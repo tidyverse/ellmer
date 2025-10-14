@@ -343,10 +343,11 @@ method(value_turn, ProviderAWSBedrock) <- function(
         )
       }
     } else {
-      cli::cli_abort(
+      cli::cli_warn(
         "Unknown content type {.str {names(content)}}.",
         .internal = TRUE
       )
+      ContentUnknown(content)
     }
   })
 

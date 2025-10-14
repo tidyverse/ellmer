@@ -315,10 +315,11 @@ method(value_turn, ProviderSnowflakeCortexAnalyst) <- function(
         }
         ContentSql(x$statement)
       } else {
-        cli::cli_abort(
+        cli::cli_warn(
           "Unknown content type {.str {x$type}} in response.",
           .internal = TRUE
         )
+        ContentUnknown(x)
       }
     })
   )
