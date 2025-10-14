@@ -81,3 +81,42 @@ test_that("as_user_turns can create lists of turns from lists of Content objects
   expect_s3_class(content_turns[[1]], "ellmer::Turn")
   expect_s3_class(content_turns[[2]], "ellmer::Turn")
 })
+
+# turn_contents_preview()
+
+test_that("ContentText shows first (truncated) text", {
+  expect_equal(
+    turn_contents_preview(Turn("user", "This is short")),
+    "Text[This is short]"
+  )
+  expect_equal(
+    turn_contents_preview(Turn(
+      "user",
+      "This is a very long message that should be truncated"
+    )),
+    "Text[This is a very long message that shou...]"
+  )
+
+  expect_equal(
+    turn_contents_preview(Turn(
+      "user",
+      list(ContentText("This is short"), ContentText("Second"))
+    )),
+    "Text[This is short], Text"
+  )
+})
+
+test_that("non-text types just show type", {
+  expect_equal(
+    turn_contents_preview(Turn("user", list(ContentImageInline("")))),
+    "ImageInline"
+  )
+
+  expect_equal(
+    turn_contents_preview(Turn(
+      "user",
+      list(ContentImageInline(""), ContentImageRemote(""))
+    )),
+    "ImageInline, ImageRemote"
+  )
+})
