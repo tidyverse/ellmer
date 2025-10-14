@@ -19,8 +19,6 @@ test_that("can handle errors", {
 })
 
 test_that("can list models", {
-  vcr::local_cassette("mistral-list-models")
-
   test_models(models_mistral)
 })
 
