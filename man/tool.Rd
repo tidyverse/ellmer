@@ -33,7 +33,8 @@ Generally, the more information that you can provide here, the better.}
 
 \item{arguments}{A named list that defines the arguments accepted by the
 function. Each element should be created by a \code{\link[=type_boolean]{type_*()}}
-function (or \code{NULL} if you don't want the LLM to use that argument).}
+function. Use \code{\link[=type_ignore]{type_ignore()}} if you don't want the LLM to provide that
+argument (e.g., because the R function has a suitable default value).}
 
 \item{name}{The name of the function. This can be omitted if \code{fun} is an
 existing function (i.e. not defined inline).}

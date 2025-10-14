@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New `type_ignore()` allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (#764).
 * `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).
 * `interpolate_package()` now provides an informative error if the requested prompt file is not found in the package's `prompts/` directory (#763).
 

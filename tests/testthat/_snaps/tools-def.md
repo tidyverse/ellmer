@@ -80,7 +80,7 @@
       tool(fun, "", arguments = list(x = type_number(), y = 1))
     Condition
       Error in `tool()`:
-      ! `arguments$y` must be a <Type> or NULL, not the number 1.
+      ! `arguments$y` must be a <Type>, not the number 1.
 
 # can check tool/tools
 
