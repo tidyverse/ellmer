@@ -50,7 +50,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
-<ul><li><p><code><a href="../reference/interpolate.html">interpolate_package()</a></code> now provides an informative error if the requested prompt file is not found in the package’s <code>prompts/</code> directory (<a href="https://github.com/tidyverse/ellmer/issues/763" class="external-link">#763</a>).</p></li>
+<ul><li><p><code>batch_chat_*()</code> and <code>parallel_chat_*()</code> now accept a string as the chat object, following the same rules as <code><a href="../reference/chat-any.html">chat()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/677" class="external-link">#677</a>).</p></li>
+<li><p><code><a href="../reference/interpolate.html">interpolate_package()</a></code> now provides an informative error if the requested prompt file is not found in the package’s <code>prompts/</code> directory (<a href="https://github.com/tidyverse/ellmer/issues/763" class="external-link">#763</a>).</p></li>
 <li><p><code><a href="../reference/chat_ollama.html">models_ollama()</a></code> was fixed to correctly query model capabilities from remote Ollama servers (<a href="https://github.com/tidyverse/ellmer/issues/746" class="external-link">#746</a>).</p></li>
 <li><p><code><a href="../reference/chat_anthropic.html">chat_claude()</a></code> is no longer deprecated and is an alias for <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code>, reflecting Anthropic’s recent rebranding of developer tools under the Claude name (<a href="https://github.com/tidyverse/ellmer/issues/758" class="external-link">#758</a>).</p></li>
 </ul></div>
