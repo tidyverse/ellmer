@@ -266,6 +266,14 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
   result
 }
 
+method(value_tokens, ProviderAnthropic) <- function(provider, json) {
+  c(
+    input = json$usage$input_tokens %||% 0,
+    output = json$usage$output_tokens %||% 0,
+    cached_input = json$usage$cache_read_input_tokens %||% 0
+  )
+}
+
 method(value_turn, ProviderAnthropic) <- function(
   provider,
   result,
@@ -296,13 +304,13 @@ method(value_turn, ProviderAnthropic) <- function(
     }
   })
 
-  tokens <- tokens_log(
+  tokens <- value_tokens(provider, result)
+  tokens_log(
     provider,
-    input = result$usage$input_tokens,
-    output = result$usage$output_tokens,
-    cached_input = result$usage$cache_read_input_tokens
+    tokens["input"],
+    tokens["output"],
+    tokens["cached_input"]
   )
-
   assistant_turn(contents, json = result, tokens = tokens)
 }
 

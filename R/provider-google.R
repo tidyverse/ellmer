@@ -261,6 +261,18 @@ method(stream_merge_chunks, ProviderGoogleGemini) <- function(
     merge_gemini_chunks(result, chunk)
   }
 }
+
+method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
+  usage <- json$usageMetadata
+  cached <- usage$cachedContentTokenCount
+
+  c(
+    input = (usage$promptTokenCount %||% 0) - (cached %||% 0),
+    output = usage$candidatesTokenCount %||% 0,
+    cached_input = cached %||% 0
+  )
+}
+
 method(value_turn, ProviderGoogleGemini) <- function(
   provider,
   result,
@@ -290,12 +302,12 @@ method(value_turn, ProviderGoogleGemini) <- function(
     }
   })
   contents <- compact(contents)
-  usage <- result$usageMetadata
-  tokens <- tokens_log(
+  tokens <- value_tokens(provider, result)
+  tokens_log(
     provider,
-    input = usage$promptTokenCount - (usage$cachedContentTokenCount %||% 0),
-    output = usage$candidatesTokenCount,
-    cached_input = usage$cachedContentTokenCount
+    tokens["input"],
+    tokens["output"],
+    tokens["cached_input"]
   )
 
   assistant_turn(contents, json = result, tokens = tokens)
