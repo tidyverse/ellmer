@@ -4,7 +4,7 @@ test_that("can make simple request", {
   chat <- chat_openai_test()
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens > 0, c(TRUE, TRUE))
+  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
 
   resp <- chat$chat("Double that", echo = FALSE)
   expect_match(resp, "4")

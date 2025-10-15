@@ -172,6 +172,7 @@ method(chat_body, ProviderOpenAI) <- function(
   } else {
     include <- NULL
   }
+  include <- c(include, list("reasoning.encrypted_content"))
   params$log_probs <- NULL
 
   compact(list2(
@@ -242,6 +243,19 @@ method(value_turn, ProviderOpenAI) <- function(
     } else if (output$type == "function_call") {
       arguments <- jsonlite::parse_json(output$arguments)
       ContentToolRequest(output$id, output$name, arguments)
+    } else if (output$type == "reasoning") {
+      # {
+      #   id: str,
+      #   summary: str,
+      #   type: "reasoning",
+      #   content: [
+      #     { text: str, type: "reasoning_text" }
+      #   ],
+      #   encrypted_content: str,
+      #   status: "in_progress" | "completed" | "incomplete"
+      # }
+      thinking <- paste0(map_chr(output$content, "[[", "text"), collapse = "")
+      ContentThinking(thinking = thinking, extra = output)
     } else {
       browser()
       cli::cli_abort(
@@ -297,6 +311,13 @@ method(as_json, list(ProviderOpenAI, ContentText)) <- function(provider, x) {
     role = "assistant",
     content = x@text
   )
+}
+
+method(as_json, list(ProviderOpenAI, ContentThinking)) <- function(
+  provider,
+  x
+) {
+  x@extra
 }
 
 method(as_json, list(ProviderOpenAI, ContentImageRemote)) <- function(
