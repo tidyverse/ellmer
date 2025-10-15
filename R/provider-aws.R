@@ -359,13 +359,6 @@ method(value_turn, ProviderAWSBedrock) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  tokens_log(
-    provider,
-    tokens["input"],
-    tokens["output"],
-    tokens["cached_input"]
-  )
-
   assistant_turn(contents, json = result, tokens = tokens)
 }
 

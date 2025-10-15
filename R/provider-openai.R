@@ -285,12 +285,7 @@ method(value_turn, ProviderOpenAI) <- function(
   }
 
   tokens <- value_tokens(provider, result)
-  tokens_log(
-    provider,
-    tokens["input"],
-    tokens["output"],
-    tokens["cached_input"]
-  )
+  tokens_log(provider, tokens)
   assistant_turn(
     content,
     json = result,

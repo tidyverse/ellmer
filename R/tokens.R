@@ -2,15 +2,11 @@ on_load(
   the$tokens <- tokens_row()
 )
 
-tokens_log <- function(
-  provider,
-  input = NULL,
-  output = NULL,
-  cached_input = NULL
-) {
-  input <- input %||% 0
-  output <- output %||% 0
-  cached_input <- cached_input %||% 0
+# tokens should be a named vector: c(input, output, cached_input)
+tokens_log <- function(provider, tokens) {
+  if (is.null(tokens)) {
+    return(invisible())
+  }
 
   i <- tokens_match(
     provider@name,
@@ -20,37 +16,33 @@ tokens_log <- function(
   )
 
   if (is.na(i)) {
-    new_row <- tokens_row(
-      provider@name,
-      provider@model,
-      input,
-      output,
-      cached_input
-    )
+    new_row <- tokens_row(provider@name, provider@model, tokens)
     the$tokens <- rbind(the$tokens, new_row)
   } else {
-    the$tokens$input[i] <- the$tokens$input[i] + input
-    the$tokens$output[i] <- the$tokens$output[i] + output
-    the$tokens$cached_input[i] <- the$tokens$cached_input[i] + cached_input
+    the$tokens$input[i] <- the$tokens$input[i] + tokens["input"]
+    the$tokens$output[i] <- the$tokens$output[i] + tokens["output"]
+    the$tokens$cached_input[i] <- the$tokens$cached_input[i] +
+      tokens["cached_input"]
   }
 
-  # Returns value to be passed to Turn
-  c(input, output, cached_input)
+  invisible()
 }
 
 tokens_row <- function(
   provider = character(0),
   model = character(0),
-  input = numeric(0),
-  output = numeric(0),
-  cached_input = numeric(0)
+  tokens = list(
+    input = numeric(0),
+    output = numeric(0),
+    cached_input = numeric(0)
+  )
 ) {
   data.frame(
     provider = provider,
     model = model,
-    input = input,
-    output = output,
-    cached_input = cached_input
+    input = tokens[["input"]],
+    output = tokens[["output"]],
+    cached_input = tokens[["cached_input"]]
   )
 }
 
