@@ -235,6 +235,20 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
     merge_dicts(result, chunk)
   }
 }
+
+method(value_tokens, ProviderOpenAI) <- function(provider, json) {
+  if (is.null(json$usage)) {
+    c(input = 0, output = 0, cached_input = 0)
+  } else {
+    cached_tokens <- json$usage$prompt_tokens_details$cached_tokens %||% 0
+    c(
+      input = json$usage$prompt_tokens - cached_tokens,
+      output = json$usage$completion_tokens,
+      cached_input = cached_tokens
+    )
+  }
+}
+
 method(value_turn, ProviderOpenAI) <- function(
   provider,
   result,
@@ -270,17 +284,13 @@ method(value_turn, ProviderOpenAI) <- function(
     content <- c(content, calls)
   }
 
-  if (is.null(result$usage)) {
-    tokens <- tokens_log(provider)
-  } else {
-    cached_tokens <- result$usage$prompt_tokens_details$cached_tokens %||% 0
-    tokens <- tokens_log(
-      provider,
-      input = result$usage$prompt_tokens - cached_tokens,
-      output = result$usage$completion_tokens,
-      cached_input = cached_tokens
-    )
-  }
+  tokens <- value_tokens(provider, result)
+  tokens_log(
+    provider,
+    tokens["input"],
+    tokens["output"],
+    tokens["cached_input"]
+  )
   assistant_turn(
     content,
     json = result,

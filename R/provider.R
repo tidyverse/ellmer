@@ -159,6 +159,19 @@ stream_merge_chunks <- new_generic(
 
 value_turn <- new_generic("value_turn", "provider")
 
+# Extract token counts from API response
+# Returns a named numeric vector: c(input, output, cached_input)
+value_tokens <- new_generic(
+  "value_tokens",
+  "provider",
+  function(provider, json) {
+    S7_dispatch()
+  }
+)
+method(value_tokens, Provider) <- function(provider, json) {
+  c(input = 0, output = 0, cached_input = 0)
+}
+
 # Convert to JSON
 as_json <- new_generic("as_json", c("provider", "x"))
 
