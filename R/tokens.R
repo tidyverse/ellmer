@@ -16,7 +16,13 @@ tokens_log <- function(provider, tokens) {
   )
 
   if (is.na(i)) {
-    new_row <- tokens_row(provider@name, provider@model, tokens)
+    new_row <- tokens_row(
+      provider@name,
+      provider@model,
+      tokens[["input"]],
+      tokens[["output"]],
+      tokens[["cached_input"]]
+    )
     the$tokens <- rbind(the$tokens, new_row)
   } else {
     the$tokens$input[i] <- the$tokens$input[i] + tokens["input"]
@@ -31,18 +37,16 @@ tokens_log <- function(provider, tokens) {
 tokens_row <- function(
   provider = character(0),
   model = character(0),
-  tokens = list(
-    input = numeric(0),
-    output = numeric(0),
-    cached_input = numeric(0)
-  )
+  input = numeric(0),
+  output = numeric(0),
+  cached_input = numeric(0)
 ) {
   data.frame(
     provider = provider,
     model = model,
-    input = tokens[["input"]],
-    output = tokens[["output"]],
-    cached_input = tokens[["cached_input"]]
+    input = input,
+    output = output,
+    cached_input = cached_input
   )
 }
 
