@@ -15,10 +15,6 @@ tokens <- function(input = 0, output = 0, cached_input = 0) {
 }
 
 tokens_log <- function(provider, tokens) {
-  if (is.null(tokens)) {
-    return(invisible())
-  }
-
   i <- tokens_match(
     provider@name,
     provider@model,
