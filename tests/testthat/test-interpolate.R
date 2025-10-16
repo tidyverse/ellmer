@@ -53,7 +53,9 @@ test_that("can interpolate from a package", {
   local_mocked_bindings(inst_path = function(...) inst_path)
 
   dir.create(file.path(inst_path, "prompts"))
-  writeLines("{{x}}", file.path(inst_path, "prompts", "bar.md"))
+  con <- file(file.path(inst_path, "prompts", "bar.md"), "wb")
+  writeLines("{{x}}", con)
+  close(con)
 
   expect_equal(interpolate_package("test", "bar.md", x = 1), ellmer_prompt("1"))
 })
