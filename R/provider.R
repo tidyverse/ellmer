@@ -169,7 +169,7 @@ value_tokens <- new_generic(
   }
 )
 method(value_tokens, Provider) <- function(provider, json) {
-  token_usage()
+  tokens()
 }
 
 # Convert to JSON
