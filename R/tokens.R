@@ -2,7 +2,18 @@ on_load(
   the$tokens <- tokens_row()
 )
 
-# tokens should be a named vector: c(input, output, cached_input)
+tokens <- function(input = 0, output = 0, cached_input = 0) {
+  check_number_whole(input, allow_null = TRUE)
+  check_number_whole(output, allow_null = TRUE)
+  check_number_whole(cached_input, allow_null = TRUE)
+
+  list(
+    input = input %||% 0,
+    output = output %||% 0,
+    cached_input = cached_input %||% 0
+  )
+}
+
 tokens_log <- function(provider, tokens) {
   if (is.null(tokens)) {
     return(invisible())
@@ -19,16 +30,16 @@ tokens_log <- function(provider, tokens) {
     new_row <- tokens_row(
       provider@name,
       provider@model,
-      tokens[["input"]],
-      tokens[["output"]],
-      tokens[["cached_input"]]
+      tokens$input,
+      tokens$output,
+      tokens$cached_input
     )
     the$tokens <- rbind(the$tokens, new_row)
   } else {
-    the$tokens$input[i] <- the$tokens$input[i] + tokens["input"]
-    the$tokens$output[i] <- the$tokens$output[i] + tokens["output"]
+    the$tokens$input[i] <- the$tokens$input[i] + tokens$input
+    the$tokens$output[i] <- the$tokens$output[i] + tokens$output
     the$tokens$cached_input[i] <- the$tokens$cached_input[i] +
-      tokens["cached_input"]
+      tokens$cached_input
   }
 
   invisible()

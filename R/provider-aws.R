@@ -325,10 +325,9 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
 }
 
 method(value_tokens, ProviderAWSBedrock) <- function(provider, json) {
-  c(
-    input = json$usage$inputTokens %||% 0,
-    output = json$usage$outputTokens %||% 0,
-    cached_input = 0
+  tokens(
+    input = json$usage$inputTokens,
+    output = json$usage$outputTokens,
   )
 }
 
@@ -359,7 +358,7 @@ method(value_turn, ProviderAWSBedrock) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  assistant_turn(contents, json = result, tokens = tokens)
+  assistant_turn(contents, json = result, tokens = unlist(tokens))
 }
 
 # ellmer -> Bedrock -------------------------------------------------------------

@@ -220,10 +220,9 @@ method(stream_merge_chunks, ProviderSnowflakeCortex) <- function(
 }
 
 method(value_tokens, ProviderSnowflakeCortex) <- function(provider, json) {
-  c(
-    input = json$usage$prompt_tokens %||% 0,
-    output = json$usage$completion_tokens %||% 0,
-    cached_input = 0
+  tokens(
+    input = json$usage$prompt_tokens,
+    output = json$usage$completion_tokens
   )
 }
 
@@ -259,7 +258,7 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
   })
   tokens <- value_tokens(provider, result)
   tokens_log(provider, tokens)
-  assistant_turn(contents, json = result, tokens = tokens)
+  assistant_turn(contents, json = result, tokens = unlist(tokens))
 }
 
 # ellmer -> Snowflake --------------------------------------------------------

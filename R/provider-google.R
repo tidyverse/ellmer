@@ -264,12 +264,12 @@ method(stream_merge_chunks, ProviderGoogleGemini) <- function(
 
 method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
   usage <- json$usageMetadata
-  cached <- usage$cachedContentTokenCount
+  cached <- usage$cachedContentTokenCount %||% 0
 
-  c(
-    input = (usage$promptTokenCount %||% 0) - (cached %||% 0),
-    output = usage$candidatesTokenCount %||% 0,
-    cached_input = cached %||% 0
+  tokens(
+    input = (usage$promptTokenCount %||% 0) - cached,
+    output = usage$candidatesTokenCount,
+    cached_input = cached
   )
 }
 
@@ -303,7 +303,7 @@ method(value_turn, ProviderGoogleGemini) <- function(
   })
   contents <- compact(contents)
   tokens <- value_tokens(provider, result)
-  assistant_turn(contents, json = result, tokens = tokens)
+  assistant_turn(contents, json = result, tokens = unlist(tokens))
 }
 
 # ellmer -> Gemini --------------------------------------------------------------

@@ -267,10 +267,10 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
 }
 
 method(value_tokens, ProviderAnthropic) <- function(provider, json) {
-  c(
-    input = json$usage$input_tokens %||% 0,
-    output = json$usage$output_tokens %||% 0,
-    cached_input = json$usage$cache_read_input_tokens %||% 0
+  tokens(
+    input = json$usage$input_tokens,
+    output = json$usage$output_tokens,
+    cached_input = json$usage$cache_read_input_tokens
   )
 }
 
@@ -306,7 +306,7 @@ method(value_turn, ProviderAnthropic) <- function(
 
   tokens <- value_tokens(provider, result)
   tokens_log(provider, tokens)
-  assistant_turn(contents, json = result, tokens = tokens)
+  assistant_turn(contents, json = result, tokens = unlist(tokens))
 }
 
 # ellmer -> Claude --------------------------------------------------------------

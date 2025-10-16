@@ -238,15 +238,15 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
 
 method(value_tokens, ProviderOpenAI) <- function(provider, json) {
   if (is.null(json$usage)) {
-    c(input = 0, output = 0, cached_input = 0)
-  } else {
-    cached_tokens <- json$usage$prompt_tokens_details$cached_tokens %||% 0
-    c(
-      input = json$usage$prompt_tokens - cached_tokens,
-      output = json$usage$completion_tokens,
-      cached_input = cached_tokens
-    )
+    return(tokens())
   }
+
+  cached_tokens <- json$usage$prompt_tokens_details$cached_tokens %||% 0
+  tokens(
+    input = json$usage$prompt_tokens - cached_tokens,
+    output = json$usage$completion_tokens,
+    cached_input = cached_tokens
+  )
 }
 
 method(value_turn, ProviderOpenAI) <- function(
@@ -286,11 +286,7 @@ method(value_turn, ProviderOpenAI) <- function(
 
   tokens <- value_tokens(provider, result)
   tokens_log(provider, tokens)
-  assistant_turn(
-    content,
-    json = result,
-    tokens = tokens
-  )
+  assistant_turn(content, json = result, tokens = unlist(tokens))
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------
