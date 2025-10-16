@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `parallel_chat_structured()` no longer errors if some results fail to parse. Instead it warns, and the corresponding rows will be filled in with the appropriate missing values (#628).
 * New `type_ignore()` allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (#764).
 * New `models_mistral()` to list available models (@rplsmn, #750).
 * `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).
