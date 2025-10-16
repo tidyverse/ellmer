@@ -59,24 +59,26 @@ interpolate_file <- function(path, ..., .envir = parent.frame()) {
 #' @param package Package name.
 #' @rdname interpolate
 #' @export
-interpolate_package <- function(
-  package,
-  path,
-  ...,
-  .envir = parent.frame()
-) {
+interpolate_package <- function(package, path, ..., .envir = parent.frame()) {
+  check_string(package)
   check_string(path)
 
-  path_pkg <- system.file("prompts", path, package = package)
+  prompts_path <- file.path(inst_path(package), "prompts")
+  if (!dir.exists(prompts_path)) {
+    cli::cli_abort(
+      "{.pkg {package}} does not have a {.field prompts/} directory."
+    )
+  }
 
-  if (!nzchar(path_pkg)) {
+  prompt_path <- file.path(prompts_path, path)
+  if (!file.exists(prompt_path)) {
     cli::cli_abort(c(
       "{.pkg {package}} does not have {.val {path}} in its {.field prompts/} directory.",
       "i" = 'Run {.run dir(system.file("prompts", package = "{package}"))} to see available prompts.'
     ))
   }
 
-  interpolate_file(path_pkg, ..., .envir = .envir)
+  interpolate_file(prompt_path, ..., .envir = .envir)
 }
 
 read_file <- function(path) {
@@ -160,5 +162,14 @@ print.ellmer_prompt <- function(
 
 # Helpers ----------------------------------------------------------------------
 
-# for mocking
-system.file <- NULL
+inst_path <- function(package) {
+  if (is_dev_package(package)) {
+    file.path(getNamespaceInfo(package, "path"), "inst")
+  } else {
+    system.file(package = package)
+  }
+}
+
+is_dev_package <- function(pkg) {
+  !is.null(.getNamespace(pkg)[[".__DEVTOOLS__"]])
+}

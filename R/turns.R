@@ -192,3 +192,17 @@ normalize_turns <- function(
 
   turns
 }
+
+turn_contents_preview <- function(turn) {
+  is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+  is_first_text <- is_text & cumsum(is_text) == 1
+
+  contents <- map2_chr(turn@contents, is_first_text, \(x, is_first_text) {
+    if (is_first_text) {
+      paste0("Text[", str_trunc(x@text, 40), "]")
+    } else {
+      sub("^ellmer::Content", "", class(x)[[1]])
+    }
+  })
+  paste(contents, collapse = ", ")
+}
