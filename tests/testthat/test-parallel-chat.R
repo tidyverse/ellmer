@@ -131,3 +131,40 @@ test_that("can get tokens & cost", {
   )
   expect_contains(names(data), c("input_tokens", "output_tokens", "cost"))
 })
+
+# error handling ---------------------------------------------------------------
+
+test_that("handles errors and NULLs in parallel functions", {
+  chat <- chat_openai(
+    api_key = "test-key",
+    base_url = "http://localhost:1234",
+    model = "mock"
+  )
+  prompts <- list("prompt1", "prompt2", "prompt3")
+  responses <- list(
+    Turn("assistant", "Success"),
+    simpleError("Request failed"),
+    NULL
+  )
+  local_mocked_bindings(parallel_turns = function(...) responses)
+
+  chats <- parallel_chat(chat, prompts)
+  expect_length(chats, 3)
+  expect_s3_class(chats[[1]], "Chat")
+  expect_s3_class(chats[[2]], "error")
+  expect_null(chats[[3]])
+
+  expect_equal(parallel_chat_text(chat, prompts), c("Success", NA, NA))
+
+  responses <- list(
+    Turn("assistant", list(ContentJson(list(x = 1))), tokens = c(10, 20, 0)),
+    simpleError("Request failed"),
+    NULL
+  )
+  type <- type_object(x = type_number())
+  out <- parallel_chat_structured(chat, prompts, type)
+  expect_s3_class(out, "data.frame")
+  expect_equal(nrow(out), 3)
+  expect_named(out, c("x", ".error"))
+  expect_equal(out$x, c(1, NA, NA))
+})
