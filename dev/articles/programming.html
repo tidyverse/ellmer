@@ -384,7 +384,8 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt;  ..  .. ..$ rejected_prediction_tokens: int 0</span></span>
 <span><span class="co">#&gt;  .. $ service_tier      : chr "default"</span></span>
 <span><span class="co">#&gt;  .. $ system_fingerprint: chr "fp_38343a2f8f"</span></span>
-<span><span class="co">#&gt;  @ tokens  : int [1:3] 47 41 0</span></span>
+<span><span class="co">#&gt;  @ tokens  : Named int [1:3] 47 41 0</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "names")= chr [1:3] "input" "output" "cached_input"</span></span>
 <span><span class="co">#&gt;  @ text    : chr ""</span></span></code></pre></div>
 <p>You can use the <code>@json</code> to extract additional information
 that ellmer might not yet provide to you, but be aware that the
