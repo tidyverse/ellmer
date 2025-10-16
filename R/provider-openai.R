@@ -237,14 +237,12 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
 }
 
 method(value_tokens, ProviderOpenAI) <- function(provider, json) {
-  if (is.null(json$usage)) {
-    return(tokens())
-  }
+  usage <- json$usage
+  cached_tokens <- usage$prompt_tokens_details$cached_tokens %||% 0
 
-  cached_tokens <- json$usage$prompt_tokens_details$cached_tokens %||% 0
   tokens(
-    input = json$usage$prompt_tokens - cached_tokens,
-    output = json$usage$completion_tokens,
+    input = (usage$prompt_tokens %||% 0) - cached_tokens,
+    output = usage$completion_tokens,
     cached_input = cached_tokens
   )
 }
