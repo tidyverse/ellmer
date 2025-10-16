@@ -788,6 +788,7 @@ Chat <- R6::R6Class(
       get_token_cost(
         private$provider@name,
         private$provider@model,
+        variant = "",
         input = input,
         output = output,
         cached_input = cached_input
