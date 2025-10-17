@@ -260,7 +260,11 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
 
 # ellmer -> Snowflake --------------------------------------------------------
 
-method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(provider, x, ...) {
+method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(
+  provider,
+  x,
+  ...
+) {
   # Attempting to omit the `content` field and use `content_list` instead
   # yields:
   #

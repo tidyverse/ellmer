@@ -304,7 +304,11 @@ method(value_turn, ProviderGoogleGemini) <- function(
 # ellmer -> Gemini --------------------------------------------------------------
 
 # https://ai.google.dev/api/caching#Content
-method(as_json, list(ProviderGoogleGemini, Turn)) <- function(provider, x, ...) {
+method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
+  provider,
+  x,
+  ...
+) {
   if (x@role == "system") {
     # System messages go in the top-level API parameter
   } else if (x@role == "user") {
@@ -317,7 +321,11 @@ method(as_json, list(ProviderGoogleGemini, Turn)) <- function(provider, x, ...) 
 }
 
 
-method(as_json, list(ProviderGoogleGemini, ToolDef)) <- function(provider, x, ...) {
+method(as_json, list(ProviderGoogleGemini, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
   compact(list(
     name = x@name,
     description = x@description,

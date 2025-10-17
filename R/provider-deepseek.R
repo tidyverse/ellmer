@@ -71,7 +71,11 @@ method(chat_params, ProviderDeepSeek) <- function(provider, params) {
   )
 }
 
-method(as_json, list(ProviderDeepSeek, ContentText)) <- function(provider, x, ...) {
+method(as_json, list(ProviderDeepSeek, ContentText)) <- function(
+  provider,
+  x,
+  ...
+) {
   x@text
 }
 

@@ -320,7 +320,11 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
   }
 }
 
-method(as_json, list(ProviderAnthropic, ContentText)) <- function(provider, x, ...) {
+method(as_json, list(ProviderAnthropic, ContentText)) <- function(
+  provider,
+  x,
+  ...
+) {
   if (is_whitespace(x@text)) {
     list(type = "text", text = "[empty string]")
   } else {
@@ -328,7 +332,11 @@ method(as_json, list(ProviderAnthropic, ContentText)) <- function(provider, x, .
   }
 }
 
-method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(provider, x, ...) {
+method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     type = "document",
     source = list(
@@ -396,7 +404,11 @@ method(as_json, list(ProviderAnthropic, ContentToolResult)) <- function(
   )
 }
 
-method(as_json, list(ProviderAnthropic, ToolDef)) <- function(provider, x, ...) {
+method(as_json, list(ProviderAnthropic, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     name = x@name,
     description = x@description,

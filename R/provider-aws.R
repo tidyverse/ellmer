@@ -417,7 +417,11 @@ method(as_json, list(ProviderAWSBedrock, ContentImageInline)) <- function(
 }
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_DocumentBlock.html
-method(as_json, list(ProviderAWSBedrock, ContentPDF)) <- function(provider, x, ...) {
+method(as_json, list(ProviderAWSBedrock, ContentPDF)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     document = list(
       #> This field is vulnerable to prompt injections, because the model
@@ -460,7 +464,11 @@ method(as_json, list(ProviderAWSBedrock, ContentToolResult)) <- function(
   )
 }
 
-method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(provider, x, ...) {
+method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     toolSpec = list(
       name = x@name,

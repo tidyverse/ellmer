@@ -197,7 +197,11 @@ has_ollama <- function(base_url = "http://localhost:11434") {
   )
 }
 
-method(as_json, list(ProviderOllama, TypeObject)) <- function(provider, x, ...) {
+method(as_json, list(ProviderOllama, TypeObject)) <- function(
+  provider,
+  x,
+  ...
+) {
   if (x@additional_properties) {
     cli::cli_abort("{.arg .additional_properties} not supported for Ollama.")
   }

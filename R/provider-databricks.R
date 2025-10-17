@@ -202,7 +202,11 @@ method(as_json, list(ProviderDatabricks, ContentText)) <- function(
 }
 
 # See: https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#functionobject
-method(as_json, list(ProviderDatabricks, ToolDef)) <- function(provider, x, ...) {
+method(as_json, list(ProviderDatabricks, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
   # Note: It seems that Databricks doesn't support the "strict" field, despite
   # what their documentation says. It *is* supported for structured outputs,
   # though. I suspect a copy & paste error in their docs.
