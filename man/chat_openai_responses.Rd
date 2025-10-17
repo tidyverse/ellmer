@@ -2,7 +2,7 @@
 % Please edit documentation in R/provider-openai-responses.R
 \name{chat_openai_responses}
 \alias{chat_openai_responses}
-\title{Chat with an OpenAI model}
+\title{Chat with an OpenAI using the responses API}
 \usage{
 chat_openai_responses(
   system_prompt = NULL,
@@ -48,23 +48,22 @@ when running at the console).
 }
 
 Note this only affects the \code{chat()} method.}
-
-\item{seed}{Optional integer seed that ChatGPT uses to try and make output
-more reproducible.}
 }
 \value{
 A \link{Chat} object.
 }
 \description{
-\href{https://openai.com/}{OpenAI} provides a number of chat-based models,
-mostly under the \href{https://chat.openai.com/}{ChatGPT} brand.
+The responses API is the latest interface to \href{https://openai.com/}{OpenAI}'s
+models. You will need to use it if you want to access the built-in tools
+like image generation and web search.
+
 Note that a ChatGPT Plus membership does not grant access to the API.
 You will need to sign up for a developer account (and pay for it) at the
 \href{https://platform.openai.com}{developer platform}.
 }
 \examples{
-\dontshow{ellmer:::vcr_example_start("chat_openai")}
-chat <- chat_openai()
+\dontshow{ellmer:::vcr_example_start("chat_openai_responses")}
+chat <- chat_openai_responses()
 chat$chat("
   What is the difference between a tibble and a data frame?
   Answer with a bulleted list
