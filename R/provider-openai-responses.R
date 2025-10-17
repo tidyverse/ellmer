@@ -45,7 +45,7 @@ NULL
 #'
 #' chat$chat("Tell me three funny jokes about statisticians")
 #' \dontshow{ellmer:::vcr_example_end()}
-chat_openai <- function(
+chat_openai_responses <- function(
   system_prompt = NULL,
   base_url = Sys.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
   api_key = openai_key(),
@@ -58,7 +58,7 @@ chat_openai <- function(
   model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
 
-  provider <- ProviderOpenAI(
+  provider <- ProviderOpenAIResponses(
     name = "OpenAI",
     base_url = base_url,
     model = model,
@@ -69,7 +69,7 @@ chat_openai <- function(
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
-chat_openai_test <- function(
+chat_openai_responses_test <- function(
   system_prompt = "Be terse.",
   ...,
   model = "gpt-4.1-nano",
@@ -79,7 +79,7 @@ chat_openai_test <- function(
   params <- params %||% params()
   params$temperature <- params$temperature %||% 0
 
-  chat_openai(
+  chat_openai_responses(
     system_prompt = system_prompt,
     model = model,
     params = params,
@@ -88,9 +88,9 @@ chat_openai_test <- function(
   )
 }
 
-ProviderOpenAI <- new_class(
-  "ProviderOpenAI",
-  parent = Provider,
+ProviderOpenAIResponses <- new_class(
+  "ProviderOpenAIResponses",
+  parent = ProviderOpenAI,
   properties = list(
     prop_redacted("api_key"),
     # no longer used by OpenAI itself; but subclasses still need it
@@ -108,7 +108,7 @@ openai_key <- function() {
 
 # Base request -----------------------------------------------------------------
 
-method(base_request, ProviderOpenAI) <- function(provider) {
+method(base_request, ProviderOpenAIResponses) <- function(provider) {
   req <- request(provider@base_url)
   req <- req_auth_bearer_token(req, provider@api_key)
   req <- ellmer_req_robustify(req)
@@ -117,7 +117,7 @@ method(base_request, ProviderOpenAI) <- function(provider) {
   req
 }
 
-method(base_request_error, ProviderOpenAI) <- function(provider, req) {
+method(base_request_error, ProviderOpenAIResponses) <- function(provider, req) {
   req_error(req, body = function(resp) {
     if (resp_content_type(resp) == "application/json") {
       error <- resp_body_json(resp)$error
@@ -136,12 +136,12 @@ method(base_request_error, ProviderOpenAI) <- function(provider, req) {
 
 # Chat endpoint ----------------------------------------------------------------
 
-method(chat_path, ProviderOpenAI) <- function(provider) {
+method(chat_path, ProviderOpenAIResponses) <- function(provider) {
   "/responses"
 }
 
 # https://platform.openai.com/docs/api-reference/responses
-method(chat_body, ProviderOpenAI) <- function(
+method(chat_body, ProviderOpenAIResponses) <- function(
   provider,
   stream = TRUE,
   turns = list(),
@@ -187,7 +187,7 @@ method(chat_body, ProviderOpenAI) <- function(
 }
 
 
-method(chat_params, ProviderOpenAI) <- function(provider, params) {
+method(chat_params, ProviderOpenAIResponses) <- function(provider, params) {
   standardise_params(
     params,
     c(
@@ -203,20 +203,20 @@ method(chat_params, ProviderOpenAI) <- function(provider, params) {
 
 # OpenAI -> ellmer --------------------------------------------------------------
 
-method(stream_parse, ProviderOpenAI) <- function(provider, event) {
+method(stream_parse, ProviderOpenAIResponses) <- function(provider, event) {
   if (is.null(event) || identical(event$data, "[DONE]")) {
     return(NULL)
   }
 
   jsonlite::parse_json(event$data)
 }
-method(stream_text, ProviderOpenAI) <- function(provider, event) {
+method(stream_text, ProviderOpenAIResponses) <- function(provider, event) {
   # https://platform.openai.com/docs/api-reference/responses-streaming/response/output_text/delta
   if (event$type == "response.output_text.delta") {
     event$delta
   }
 }
-method(stream_merge_chunks, ProviderOpenAI) <- function(
+method(stream_merge_chunks, ProviderOpenAIResponses) <- function(
   provider,
   result,
   chunk
@@ -227,7 +227,18 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
   }
 }
 
-method(value_turn, ProviderOpenAI) <- function(
+method(value_tokens, ProviderOpenAIResponses) <- function(provider, json) {
+  usage <- json$usage
+  cached_tokens <- usage$input_tokens_details$cached_tokens %||% 0
+
+  tokens(
+    input = (usage$input_tokens %||% 0) - cached_tokens,
+    output = usage$output_tokens,
+    cached_input = cached_tokens
+  )
+}
+
+method(value_turn, ProviderOpenAIResponses) <- function(
   provider,
   result,
   has_type = FALSE
@@ -264,30 +275,24 @@ method(value_turn, ProviderOpenAI) <- function(
     }
   })
 
-  # cached_tokens <- result$usage$input_token_details$cached_tokens
-  if (is.null(result$usage)) {
-    tokens <- tokens_log(provider)
-  } else {
-    cached_tokens <- result$usage$input_tokens_details$cached_tokens %||% 0
-    tokens <- tokens_log(
-      provider,
-      input = result$usage$input_tokens - cached_tokens,
-      output = result$usage$output_tokens,
-      cached_input = cached_tokens
-    )
-  }
-  assistant_turn(contents = contents, json = result, tokens = tokens)
+  tokens <- value_tokens(provider, result)
+  tokens_log(provider, tokens)
+  assistant_turn(contents = contents, json = result, tokens = unlist(tokens))
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------
 
-method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x, ...) {
+method(as_json, list(ProviderOpenAIResponses, Turn)) <- function(
+  provider,
+  x,
+  ...
+) {
   # While the user turn can contain multiple contents, the assistant turn
   # can't. Fortunately, we can send multiple user turns with out issue.
   as_json(provider, x@contents, ..., role = x@role)
 }
 
-method(as_json, list(ProviderOpenAI, ContentText)) <- function(
+method(as_json, list(ProviderOpenAIResponses, ContentText)) <- function(
   provider,
   x,
   ...,
@@ -300,7 +305,7 @@ method(as_json, list(ProviderOpenAI, ContentText)) <- function(
   )
 }
 
-method(as_json, list(ProviderOpenAI, ContentThinking)) <- function(
+method(as_json, list(ProviderOpenAIResponses, ContentThinking)) <- function(
   provider,
   x,
   ...
@@ -308,7 +313,7 @@ method(as_json, list(ProviderOpenAI, ContentThinking)) <- function(
   x@extra
 }
 
-method(as_json, list(ProviderOpenAI, ContentImageRemote)) <- function(
+method(as_json, list(ProviderOpenAIResponses, ContentImageRemote)) <- function(
   provider,
   x,
   ...
@@ -321,7 +326,7 @@ method(as_json, list(ProviderOpenAI, ContentImageRemote)) <- function(
   )
 }
 
-method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(
+method(as_json, list(ProviderOpenAIResponses, ContentImageInline)) <- function(
   provider,
   x,
   ...
@@ -337,7 +342,7 @@ method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(
   )
 }
 
-method(as_json, list(ProviderOpenAI, ContentPDF)) <- function(
+method(as_json, list(ProviderOpenAIResponses, ContentPDF)) <- function(
   provider,
   x,
   ...
@@ -353,7 +358,7 @@ method(as_json, list(ProviderOpenAI, ContentPDF)) <- function(
   )
 }
 
-method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(
+method(as_json, list(ProviderOpenAIResponses, ContentToolRequest)) <- function(
   provider,
   x,
   ...
@@ -366,7 +371,7 @@ method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(
   )
 }
 
-method(as_json, list(ProviderOpenAI, ContentToolResult)) <- function(
+method(as_json, list(ProviderOpenAIResponses, ContentToolResult)) <- function(
   provider,
   x,
   ...
@@ -378,7 +383,11 @@ method(as_json, list(ProviderOpenAI, ContentToolResult)) <- function(
   )
 }
 
-method(as_json, list(ProviderOpenAI, ToolDef)) <- function(provider, x, ...) {
+method(as_json, list(ProviderOpenAIResponses, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     type = "function",
     name = x@name,
@@ -389,7 +398,7 @@ method(as_json, list(ProviderOpenAI, ToolDef)) <- function(provider, x, ...) {
 }
 
 
-method(as_json, list(ProviderOpenAI, TypeObject)) <- function(
+method(as_json, list(ProviderOpenAIResponses, TypeObject)) <- function(
   provider,
   x,
   ...
@@ -421,13 +430,13 @@ method(as_json, list(ProviderOpenAI, TypeObject)) <- function(
 
 # Batched requests -------------------------------------------------------------
 
-method(has_batch_support, ProviderOpenAI) <- function(provider) {
+method(has_batch_support, ProviderOpenAIResponses) <- function(provider) {
   # Only enable for OpenAI, not subclasses
   provider@name == "OpenAI"
 }
 
 # https://platform.openai.com/docs/api-reference/batch
-method(batch_submit, ProviderOpenAI) <- function(
+method(batch_submit, ProviderOpenAIResponses) <- function(
   provider,
   conversations,
   type = NULL
@@ -488,14 +497,14 @@ openai_upload <- function(provider, path, purpose = "batch") {
 }
 
 # https://docs.anthropic.com/en/api/retrieving-message-batches
-method(batch_poll, ProviderOpenAI) <- function(provider, batch) {
+method(batch_poll, ProviderOpenAIResponses) <- function(provider, batch) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/batches/", batch$id)
 
   resp <- req_perform(req)
   resp_body_json(resp)
 }
-method(batch_status, ProviderOpenAI) <- function(provider, batch) {
+method(batch_status, ProviderOpenAIResponses) <- function(provider, batch) {
   list(
     working = batch$status != "completed",
     n_processing = batch$request_counts$total - batch$request_counts$completed,
@@ -506,7 +515,7 @@ method(batch_status, ProviderOpenAI) <- function(provider, batch) {
 
 
 # https://docs.anthropic.com/en/api/retrieving-message-batch-results
-method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
+method(batch_retrieve, ProviderOpenAIResponses) <- function(provider, batch) {
   path <- withr::local_tempfile()
 
   req <- base_request(provider)
@@ -522,7 +531,7 @@ method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
   results[order(ids)]
 }
 
-method(batch_result_turn, ProviderOpenAI) <- function(
+method(batch_result_turn, ProviderOpenAIResponses) <- function(
   provider,
   result,
   has_type = FALSE
@@ -542,7 +551,7 @@ models_openai <- function(
   base_url = "https://api.openai.com/v1",
   api_key = openai_key()
 ) {
-  provider <- ProviderOpenAI(
+  provider <- ProviderOpenAIResponses(
     name = "OpenAI",
     model = "",
     base_url = base_url,
