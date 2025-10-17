@@ -58,7 +58,7 @@ Config/testthat/parallel: true
 Config/testthat/start-first: chat, provider*
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Collate:
     'utils-S7.R'
     'types.R'
@@ -100,6 +100,7 @@ Collate:
     'provider-huggingface.R'
     'provider-mistral.R'
     'provider-ollama.R'
+    'provider-openai-responses.R'
     'provider-openrouter.R'
     'provider-perplexity.R'
     'provider-portkey.R'
