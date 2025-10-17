@@ -108,6 +108,7 @@ Collate:
     'provider-snowflake-cortex.R'
     'provider-snowflake.R'
     'provider-vllm.R'
+    'schema.R'
     'tokens.R'
     'tools-def-auto.R'
     'utils-callbacks.R'

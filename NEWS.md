@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New `schema_df()` to describe the schema of a data frame to an LLM (#744).
 * `interpolate_package()` now works with in-development packages loaded with devtools (#766).
 * `Chat$get_tokens()` gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (#618).
 * New `type_ignore()` allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (#764).
