@@ -235,6 +235,18 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
     merge_dicts(result, chunk)
   }
 }
+
+method(value_tokens, ProviderOpenAI) <- function(provider, json) {
+  usage <- json$usage
+  cached_tokens <- usage$prompt_tokens_details$cached_tokens %||% 0
+
+  tokens(
+    input = (usage$prompt_tokens %||% 0) - cached_tokens,
+    output = usage$completion_tokens,
+    cached_input = cached_tokens
+  )
+}
+
 method(value_turn, ProviderOpenAI) <- function(
   provider,
   result,
@@ -270,22 +282,9 @@ method(value_turn, ProviderOpenAI) <- function(
     content <- c(content, calls)
   }
 
-  if (is.null(result$usage)) {
-    tokens <- tokens_log(provider)
-  } else {
-    cached_tokens <- result$usage$prompt_tokens_details$cached_tokens %||% 0
-    tokens <- tokens_log(
-      provider,
-      input = result$usage$prompt_tokens - cached_tokens,
-      output = result$usage$completion_tokens,
-      cached_input = cached_tokens
-    )
-  }
-  assistant_turn(
-    content,
-    json = result,
-    tokens = tokens
-  )
+  tokens <- value_tokens(provider, result)
+  tokens_log(provider, tokens)
+  assistant_turn(content, json = result, tokens = unlist(tokens))
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------
