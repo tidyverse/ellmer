@@ -202,6 +202,7 @@ multi_convert <- function(
       out$cost <- get_token_cost(
         provider@name,
         provider@model,
+        variant = "",
         input = tokens[, 1],
         output = tokens[, 2],
         cached_input = tokens[, 3]
