@@ -170,7 +170,7 @@ method(chat_body, ProviderOpenAI) <- function(
 
   include <- c(
     if (isTRUE(params$log_probs)) "message.output_text.logprobs",
-    if (is_openai_reasoning(provider@model)) "reasoning.encrypted_content",
+    if (is_openai_reasoning(provider@model)) "reasoning.encrypted_content"
   )
   params$log_probs <- NULL
 
@@ -293,17 +293,11 @@ method(as_json, list(ProviderOpenAI, ContentText)) <- function(
   ...,
   role
 ) {
-  if (role %in% c("user", "system")) {
-    list(
-      role = "user",
-      content = list(list(type = "input_text", text = x@text))
-    )
-  } else {
-    assistant = list(
-      role = "assistant",
-      content = list(list(type = "output_text", text = x@text))
-    )
-  }
+  type <- if (role %in% c("user", "system")) "input_text" else "output_text"
+  list(
+    role = role,
+    content = list(list(type = type, text = x@text))
+  )
 }
 
 method(as_json, list(ProviderOpenAI, ContentThinking)) <- function(
