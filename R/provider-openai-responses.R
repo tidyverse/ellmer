@@ -98,42 +98,6 @@ ProviderOpenAIResponses <- new_class(
   )
 )
 
-openai_key_exists <- function() {
-  key_exists("OPENAI_API_KEY")
-}
-
-openai_key <- function() {
-  key_get("OPENAI_API_KEY")
-}
-
-# Base request -----------------------------------------------------------------
-
-method(base_request, ProviderOpenAIResponses) <- function(provider) {
-  req <- request(provider@base_url)
-  req <- req_auth_bearer_token(req, provider@api_key)
-  req <- ellmer_req_robustify(req)
-  req <- ellmer_req_user_agent(req)
-  req <- base_request_error(provider, req)
-  req
-}
-
-method(base_request_error, ProviderOpenAIResponses) <- function(provider, req) {
-  req_error(req, body = function(resp) {
-    if (resp_content_type(resp) == "application/json") {
-      error <- resp_body_json(resp)$error
-      if (is_string(error)) {
-        error
-      } else if (is.list(error)) {
-        error$message
-      } else {
-        prettify(resp_body_string(resp))
-      }
-    } else if (resp_content_type(resp) == "text/plain") {
-      resp_body_string(resp)
-    }
-  })
-}
-
 # Chat endpoint ----------------------------------------------------------------
 
 method(chat_path, ProviderOpenAIResponses) <- function(provider) {
@@ -203,13 +167,6 @@ method(chat_params, ProviderOpenAIResponses) <- function(provider, params) {
 
 # OpenAI -> ellmer --------------------------------------------------------------
 
-method(stream_parse, ProviderOpenAIResponses) <- function(provider, event) {
-  if (is.null(event) || identical(event$data, "[DONE]")) {
-    return(NULL)
-  }
-
-  jsonlite::parse_json(event$data)
-}
 method(stream_text, ProviderOpenAIResponses) <- function(provider, event) {
   # https://platform.openai.com/docs/api-reference/responses-streaming/response/output_text/delta
   if (event$type == "response.output_text.delta") {
@@ -397,42 +354,10 @@ method(as_json, list(ProviderOpenAIResponses, ToolDef)) <- function(
   )
 }
 
-
-method(as_json, list(ProviderOpenAIResponses, TypeObject)) <- function(
-  provider,
-  x,
-  ...
-) {
-  if (x@additional_properties) {
-    cli::cli_abort("{.arg .additional_properties} not supported for OpenAI.")
-  }
-
-  names <- names2(x@properties)
-  properties <- lapply(x@properties, function(x) {
-    out <- as_json(provider, x, ...)
-    if (!x@required) {
-      out$type <- c(out$type, "null")
-    }
-    out
-  })
-
-  names(properties) <- names
-
-  list(
-    type = "object",
-    description = x@description %||% "",
-    properties = properties,
-    required = as.list(names),
-    additionalProperties = FALSE
-  )
-}
-
-
 # Batched requests -------------------------------------------------------------
 
 method(has_batch_support, ProviderOpenAIResponses) <- function(provider) {
-  # Only enable for OpenAI, not subclasses
-  provider@name == "OpenAI"
+  TRUE
 }
 
 # https://platform.openai.com/docs/api-reference/batch
@@ -479,102 +404,6 @@ method(batch_submit, ProviderOpenAIResponses) <- function(
 
   resp <- req_perform(req)
   resp_body_json(resp)
-}
-
-# https://platform.openai.com/docs/api-reference/batch/retrieve
-openai_upload <- function(provider, path, purpose = "batch") {
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/files")
-  req <- req_body_multipart(
-    req,
-    purpose = purpose,
-    file = curl::form_file(path)
-  )
-  req <- req_progress(req, "up")
-
-  resp <- req_perform(req)
-  resp_body_json(resp)
-}
-
-# https://docs.anthropic.com/en/api/retrieving-message-batches
-method(batch_poll, ProviderOpenAIResponses) <- function(provider, batch) {
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/batches/", batch$id)
-
-  resp <- req_perform(req)
-  resp_body_json(resp)
-}
-method(batch_status, ProviderOpenAIResponses) <- function(provider, batch) {
-  list(
-    working = batch$status != "completed",
-    n_processing = batch$request_counts$total - batch$request_counts$completed,
-    n_succeeded = batch$request_counts$completed,
-    n_failed = batch$request_counts$failed
-  )
-}
-
-
-# https://docs.anthropic.com/en/api/retrieving-message-batch-results
-method(batch_retrieve, ProviderOpenAIResponses) <- function(provider, batch) {
-  path <- withr::local_tempfile()
-
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/files/", batch$output_file_id, "/content")
-  req <- req_progress(req, "down")
-  resp <- req_perform(req, path = path)
-
-  lines <- readLines(path, warn = FALSE)
-  json <- lapply(lines, jsonlite::fromJSON, simplifyVector = FALSE)
-
-  ids <- as.numeric(gsub("chat-", "", map_chr(json, "[[", "custom_id")))
-  results <- lapply(json, "[[", "response")
-  results[order(ids)]
-}
-
-method(batch_result_turn, ProviderOpenAIResponses) <- function(
-  provider,
-  result,
-  has_type = FALSE
-) {
-  if (result$status_code == 200) {
-    value_turn(provider, result$body, has_type = has_type)
-  } else {
-    NULL
-  }
-}
-
-# Models -----------------------------------------------------------------------
-
-#' @rdname chat_openai
-#' @export
-models_openai <- function(
-  base_url = "https://api.openai.com/v1",
-  api_key = openai_key()
-) {
-  provider <- ProviderOpenAIResponses(
-    name = "OpenAI",
-    model = "",
-    base_url = base_url,
-    api_key = api_key
-  )
-
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/models")
-  resp <- req_perform(req)
-
-  json <- resp_body_json(resp)
-
-  id <- map_chr(json$data, "[[", "id")
-  created <- as.Date(.POSIXct(map_int(json$data, "[[", "created")))
-  owned_by <- map_chr(json$data, "[[", "owned_by")
-
-  df <- data.frame(
-    id = id,
-    created_at = created,
-    owned_by = owned_by
-  )
-  df <- cbind(df, match_prices(provider@name, df$id))
-  df[order(-xtfrm(df$created_at)), ]
 }
 
 # Helpers ------------------------------------------------------------------

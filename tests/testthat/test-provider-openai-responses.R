@@ -91,31 +91,3 @@ test_that("structured data work with and without wrapper", {
   )
   expect_equal(out, list(number = 11))
 })
-
-# Custom -----------------------------------------------------------------
-
-test_that("as_json specialised for OpenAI", {
-  stub <- ProviderOpenAIResponses(
-    name = "",
-    base_url = "",
-    api_key = "",
-    model = ""
-  )
-
-  expect_snapshot(
-    as_json(stub, type_object(.additional_properties = TRUE)),
-    error = TRUE
-  )
-
-  obj <- type_object(x = type_number(required = FALSE))
-  expect_equal(
-    as_json(stub, obj),
-    list(
-      type = "object",
-      description = "",
-      properties = list(x = list(type = c("number", "null"), description = "")),
-      required = list("x"),
-      additionalProperties = FALSE
-    )
-  )
-})
