@@ -34,7 +34,7 @@ test_that("defaults are reported", {
 # })
 
 test_that("supports tool calling", {
-  # vcr::local_cassette("openai-v2-tool")
+  vcr::local_cassette("openai-v2-tool")
   chat_fun <- chat_openai_test
 
   test_tools_simple(chat_fun)
@@ -47,7 +47,7 @@ test_that("can extract data", {
 })
 
 test_that("can use images", {
-  # vcr::local_cassette("openai-v2-image")
+  vcr::local_cassette("openai-v2-image")
   # Needs mini to get shape correct
   chat_fun <- \(...) chat_openai_test(model = "gpt-4.1-mini", ...)
 
@@ -56,7 +56,7 @@ test_that("can use images", {
 })
 
 test_that("can use pdfs", {
-  vcr::local_cassette("openai-pdf")
+  vcr::local_cassette("openai-v2-pdf")
   chat_fun <- chat_openai_test
 
   test_pdf_local(chat_fun)

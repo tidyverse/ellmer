@@ -155,7 +155,8 @@ method(chat_resp_stream, ProviderOpenRouter) <- function(provider, resp) {
 
 method(as_json, list(ProviderOpenRouter, ContentText)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   if (identical(x@text, "")) {
     # Tool call requests can include a Content with empty text,

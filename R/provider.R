@@ -162,14 +162,20 @@ stream_merge_chunks <- new_generic(
 value_turn <- new_generic("value_turn", "provider")
 
 # Convert to JSON
-as_json <- new_generic("as_json", c("provider", "x"))
+as_json <- new_generic(
+  "as_json",
+  c("provider", "x"),
+  function(provider, x, ...) {
+    S7_dispatch()
+  }
+)
 
-method(as_json, list(Provider, class_list)) <- function(provider, x) {
-  compact(lapply(x, as_json, provider = provider))
+method(as_json, list(Provider, class_list)) <- function(provider, x, ...) {
+  compact(lapply(x, as_json, provider = provider, ...))
 }
 
-method(as_json, list(Provider, ContentJson)) <- function(provider, x) {
-  as_json(provider, ContentText("<structured data/>"))
+method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
+  as_json(provider, ContentText("<structured data/>"), ...)
 }
 
 # Batch AI ---------------------------------------------------------------

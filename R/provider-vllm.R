@@ -74,13 +74,13 @@ ProviderVllm <- new_class(
 )
 
 # Just like OpenAI but no strict
-method(as_json, list(ProviderVllm, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderVllm, ToolDef)) <- function(provider, x, ...) {
   list(
     type = "function",
     "function" = compact(list(
       name = x@name,
       description = x@description,
-      parameters = as_json(provider, x@arguments)
+      parameters = as_json(provider, x@arguments, ...)
     ))
   )
 }
