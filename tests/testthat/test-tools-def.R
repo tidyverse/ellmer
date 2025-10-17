@@ -82,6 +82,38 @@ test_that("arguments must match function formals", {
   })
 })
 
+test_that("type_ignore() filters out arguments from LLM", {
+  td <- tool(
+    \(x, y = 10) x + y,
+    description = "Add two numbers",
+    arguments = list(
+      x = type_number("First number"),
+      y = type_ignore()
+    )
+  )
+
+  # The tool definition should not include y in its arguments
+  expect_equal(names(td@arguments@properties), "x")
+  # But the function should still work with the default
+  expect_equal(td(x = 5), 15)
+})
+
+test_that("type_ignore() works with all arguments ignored", {
+  td <- tool(
+    \(x = 1, y = 2) x + y,
+    description = "Add with defaults",
+    arguments = list(
+      x = type_ignore(),
+      y = type_ignore()
+    )
+  )
+
+  # No arguments should be sent to LLM
+  expect_equal(length(td@arguments@properties), 0)
+  # Function should still work
+  expect_equal(td(), 3)
+})
+
 test_that("can check tool/tools", {
   x <- list(1)
   expect_snapshot(error = TRUE, {

@@ -22,6 +22,7 @@ test_that("print method truncates many elements", {
     print(prompt, max_items = 1)
     print(prompt, max_lines = 2)
     print(prompt, max_lines = 3)
+    print(ellmer_prompt("a\nb\nc\nd\ne"), max_lines = 3)
   })
 })
 
@@ -40,15 +41,38 @@ test_that("can take a data frame via !!!", {
 test_that("can interpolate from a file", {
   path <- withr::local_tempfile(lines = "{{x}}")
   expect_equal(interpolate_file(path, x = 1), ellmer_prompt("1"))
+
+  # and errors if file doesn't exist
+  expect_snapshot(interpolate_file("does-not-exist.md", x = 1), error = TRUE)
 })
 
+# interpolate_package() -------------------------------------------------------
+
 test_that("can interpolate from a package", {
-  path <- withr::local_tempfile(lines = "{{x}}")
-  local_mocked_bindings(
-    system.file = function(..., package = "base") {
-      if (package == "test") path else stop("package not found")
-    }
-  )
+  inst_path <- withr::local_tempdir()
+  local_mocked_bindings(inst_path = function(...) inst_path)
+
+  dir.create(file.path(inst_path, "prompts"))
+  con <- file(file.path(inst_path, "prompts", "bar.md"), "wb")
+  writeLines("{{x}}", con)
+  close(con)
 
   expect_equal(interpolate_package("test", "bar.md", x = 1), ellmer_prompt("1"))
+})
+
+test_that("informative errors if can't find prompts", {
+  inst_path <- withr::local_tempdir()
+  local_mocked_bindings(inst_path = function(...) inst_path)
+
+  expect_snapshot(interpolate_package("x", "does-not-exist.md"), error = TRUE)
+
+  dir.create(file.path(inst_path, "prompts"))
+  expect_snapshot(interpolate_package("x", "does-not-exist.md"), error = TRUE)
+})
+
+test_that("checks its inputs", {
+  expect_snapshot(error = TRUE, {
+    interpolate_package(1)
+    interpolate_package("x", 1)
+  })
 })

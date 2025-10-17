@@ -4,7 +4,7 @@ test_that("can make simple request", {
   chat <- chat_mistral_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
+  expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -16,6 +16,10 @@ test_that("can make simple streaming request", {
 test_that("can handle errors", {
   chat <- chat_mistral_test(model = "doesnt-exist")
   expect_snapshot(chat$chat("Hi"), error = TRUE)
+})
+
+test_that("can list models", {
+  test_models(models_mistral)
 })
 
 # Common provider interface -----------------------------------------------

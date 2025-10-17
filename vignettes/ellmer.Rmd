@@ -112,7 +112,7 @@ LLMs are often very good at extracting structured data from unstructured text. T
 
 Structured data extraction also works well with images. It's not the fastest or cheapest way to extract data but it makes it really easy to prototype ideas. For example, maybe you have a bunch of scanned documents that you want to index. You can convert PDFs to images (e.g. using {imagemagick}) then use structured data extraction to pull out key details.
 
-Learn more about structured data extraction in `vignette("structure-data")`.
+Learn more about structured data extraction in `vignette("structured-data")`.
 
 ### Programming
 

@@ -1,3 +1,15 @@
+test_that("structured data is round-tripped", {
+  chat <- chat_openai_test()
+  data <- chat$chat_structured(
+    "Generate the name and age of a random person.",
+    type = type_object(
+      name = type_string(),
+      age = type_number()
+    )
+  )
+  expect_match(chat$chat("What is the name of the person?"), data$name)
+})
+
 # Object from ContentJSON -----------------------------------------------------
 
 test_that("useful error if no ContentJson", {
@@ -195,6 +207,26 @@ test_that("can convert arrays of objects to data frames", {
     convert_from_type(x, type2),
     list(list(y = "x", x = 1), list(y = "y", x = 3))
   )
+})
+
+test_that("array of object with nested objects becomes packed data frame", {
+  type <- type_array(
+    type_object(
+      x = type_object(a = type_integer()),
+      y = type_object(a = type_integer())
+    )
+  )
+
+  data <- list(
+    list(x = list(a = 1), y = list(a = 3)),
+    list(x = list(a = 5), y = list(a = 7))
+  )
+
+  out <- convert_from_type(data, type)
+  expect_equal(nrow(out), 2)
+  expect_named(out, c("x", "y"))
+  expect_equal(out$x, data.frame(a = c(1, 5)))
+  expect_equal(out$y, data.frame(a = c(3, 7)))
 })
 
 test_that("can recursively convert objects contents", {
