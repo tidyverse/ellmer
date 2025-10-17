@@ -6,14 +6,20 @@
 \alias{parallel_chat_structured}
 \title{Submit multiple chats in parallel}
 \usage{
-parallel_chat(chat, prompts, max_active = 10, rpm = 500, on_error = "return")
+parallel_chat(
+  chat,
+  prompts,
+  max_active = 10,
+  rpm = 500,
+  on_error = c("return", "continue", "stop")
+)
 
 parallel_chat_text(
   chat,
   prompts,
   max_active = 10,
   rpm = 500,
-  on_error = "return"
+  on_error = c("return", "continue", "stop")
 )
 
 parallel_chat_structured(
@@ -25,7 +31,7 @@ parallel_chat_structured(
   include_cost = FALSE,
   max_active = 10,
   rpm = 500,
-  on_error = "continue"
+  on_error = c("return", "continue", "stop")
 )
 }
 \arguments{

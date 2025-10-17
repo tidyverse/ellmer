@@ -71,9 +71,10 @@ parallel_chat <- function(
   prompts,
   max_active = 10,
   rpm = 500,
-  on_error = "return"
+  on_error = c("return", "continue", "stop")
 ) {
   chat <- as_chat(chat)
+  on_error <- arg_match(on_error)
 
   my_parallel_turns <- function(conversations) {
     parallel_turns(
@@ -141,9 +142,11 @@ parallel_chat_text <- function(
   prompts,
   max_active = 10,
   rpm = 500,
-  on_error = "return"
+  on_error = c("return", "continue", "stop")
 ) {
   chat <- as_chat(chat)
+  on_error <- arg_match(on_error)
+
   chats <- parallel_chat(
     chat,
     prompts,
@@ -180,11 +183,12 @@ parallel_chat_structured <- function(
   include_cost = FALSE,
   max_active = 10,
   rpm = 500,
-  on_error = "continue"
+  on_error = c("return", "continue", "stop")
 ) {
   chat <- as_chat(chat)
   turns <- as_user_turns(prompts)
   check_bool(convert)
+  on_error <- arg_match(on_error)
 
   provider <- chat$get_provider()
   needs_wrapper <- type_needs_wrapper(type, provider)
