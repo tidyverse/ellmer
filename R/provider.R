@@ -140,8 +140,6 @@ stream_parse <- new_generic(
     S7_dispatch()
   }
 )
-
-# Extract text that should be printed to the console
 stream_text <- new_generic(
   "stream_text",
   "provider",
@@ -188,7 +186,11 @@ method(as_json, list(Provider, class_list)) <- function(provider, x, ...) {
 }
 
 method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
-  as_json(provider, ContentText("<structured data/>"), ...)
+  as_json(
+    provider,
+    ContentText(unclass(jsonlite::toJSON(x@value, auto_unbox = TRUE))),
+    ...
+  )
 }
 
 # Batch AI ---------------------------------------------------------------
