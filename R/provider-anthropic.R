@@ -311,7 +311,7 @@ method(value_turn, ProviderAnthropic) <- function(
 
 # ellmer -> Claude --------------------------------------------------------------
 
-method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
   if (x@role == "system") {
     # claude passes system prompt as separate arg
     NULL
@@ -321,13 +321,17 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x) {
       # (all messages must have non-empty content)
       return(NULL)
     }
-    list(role = x@role, content = as_json(provider, x@contents))
+    list(role = x@role, content = as_json(provider, x@contents, ...))
   } else {
     cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)
   }
 }
 
-method(as_json, list(ProviderAnthropic, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderAnthropic, ContentText)) <- function(
+  provider,
+  x,
+  ...
+) {
   if (is_whitespace(x@text)) {
     list(type = "text", text = "[empty string]")
   } else {
@@ -335,7 +339,11 @@ method(as_json, list(ProviderAnthropic, ContentText)) <- function(provider, x) {
   }
 }
 
-method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(provider, x) {
+method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     type = "document",
     source = list(
@@ -348,7 +356,8 @@ method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(provider, x) {
 
 method(as_json, list(ProviderAnthropic, ContentImageRemote)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "image",
@@ -361,7 +370,8 @@ method(as_json, list(ProviderAnthropic, ContentImageRemote)) <- function(
 
 method(as_json, list(ProviderAnthropic, ContentImageInline)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "image",
@@ -376,7 +386,8 @@ method(as_json, list(ProviderAnthropic, ContentImageInline)) <- function(
 # https://docs.anthropic.com/en/docs/build-with-claude/tool-use#handling-tool-use-and-tool-result-content-blocks
 method(as_json, list(ProviderAnthropic, ContentToolRequest)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "tool_use",
@@ -389,7 +400,8 @@ method(as_json, list(ProviderAnthropic, ContentToolRequest)) <- function(
 # https://docs.anthropic.com/en/docs/build-with-claude/tool-use#handling-tool-use-and-tool-result-content-blocks
 method(as_json, list(ProviderAnthropic, ContentToolResult)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "tool_result",
@@ -399,17 +411,22 @@ method(as_json, list(ProviderAnthropic, ContentToolResult)) <- function(
   )
 }
 
-method(as_json, list(ProviderAnthropic, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderAnthropic, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     name = x@name,
     description = x@description,
-    input_schema = compact(as_json(provider, x@arguments))
+    input_schema = compact(as_json(provider, x@arguments, ...))
   )
 }
 
 method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   if (identical(x@thinking, "")) {
     return()

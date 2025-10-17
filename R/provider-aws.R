@@ -364,12 +364,12 @@ method(value_turn, ProviderAWSBedrock) <- function(
 # ellmer -> Bedrock -------------------------------------------------------------
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ContentBlock.html
-method(as_json, list(ProviderAWSBedrock, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderAWSBedrock, Turn)) <- function(provider, x, ...) {
   if (x@role == "system") {
     # bedrock passes system prompt as separate arg
     NULL
   } else if (x@role %in% c("user", "assistant")) {
-    list(role = x@role, content = as_json(provider, x@contents))
+    list(role = x@role, content = as_json(provider, x@contents, ...))
   } else {
     cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)
   }
@@ -377,7 +377,8 @@ method(as_json, list(ProviderAWSBedrock, Turn)) <- function(provider, x) {
 
 method(as_json, list(ProviderAWSBedrock, ContentText)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   if (is_whitespace(x@text)) {
     list(text = "[empty string]")
@@ -388,7 +389,8 @@ method(as_json, list(ProviderAWSBedrock, ContentText)) <- function(
 
 method(as_json, list(ProviderAWSBedrock, ContentImageRemote)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   cli::cli_abort("Bedrock doesn't support remote images")
 }
@@ -396,7 +398,8 @@ method(as_json, list(ProviderAWSBedrock, ContentImageRemote)) <- function(
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ImageBlock.html
 method(as_json, list(ProviderAWSBedrock, ContentImageInline)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   type <- switch(
     x@type,
@@ -416,7 +419,11 @@ method(as_json, list(ProviderAWSBedrock, ContentImageInline)) <- function(
 }
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_DocumentBlock.html
-method(as_json, list(ProviderAWSBedrock, ContentPDF)) <- function(provider, x) {
+method(as_json, list(ProviderAWSBedrock, ContentPDF)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     document = list(
       #> This field is vulnerable to prompt injections, because the model
@@ -432,7 +439,8 @@ method(as_json, list(ProviderAWSBedrock, ContentPDF)) <- function(provider, x) {
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ToolUseBlock.html
 method(as_json, list(ProviderAWSBedrock, ContentToolRequest)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     toolUse = list(
@@ -446,7 +454,8 @@ method(as_json, list(ProviderAWSBedrock, ContentToolRequest)) <- function(
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ToolResultBlock.html
 method(as_json, list(ProviderAWSBedrock, ContentToolResult)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     toolResult = list(
@@ -457,12 +466,16 @@ method(as_json, list(ProviderAWSBedrock, ContentToolResult)) <- function(
   )
 }
 
-method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     toolSpec = list(
       name = x@name,
       description = x@description,
-      inputSchema = list(json = compact(as_json(provider, x@arguments)))
+      inputSchema = list(json = compact(as_json(provider, x@arguments, ...)))
     )
   )
 }

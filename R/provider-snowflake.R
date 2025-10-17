@@ -133,12 +133,13 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
 
 method(as_json, list(ProviderSnowflakeCortex, TypeObject)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   # Unlike OpenAI, Snowflake does not support the "additionalProperties" field.
   names <- names2(x@properties)
   required <- map_lgl(x@properties, function(prop) prop@required)
-  properties <- as_json(provider, x@properties)
+  properties <- as_json(provider, x@properties, ...)
   names(properties) <- names
   list(
     type = "object",
@@ -263,7 +264,11 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
 
 # ellmer -> Snowflake --------------------------------------------------------
 
-method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(
+  provider,
+  x,
+  ...
+) {
   # Attempting to omit the `content` field and use `content_list` instead
   # yields:
   #
@@ -288,21 +293,22 @@ method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(provider, x) {
   }
   list(
     role = x@role,
-    content_list = as_json(provider, x@contents)
+    content_list = as_json(provider, x@contents, ...)
   )
 }
 
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#tools-configuration
 method(as_json, list(ProviderSnowflakeCortex, ToolDef)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     tool_spec = compact(list(
       type = "generic",
       name = x@name,
       description = x@description,
-      input_schema = as_json(provider, x@arguments)
+      input_schema = as_json(provider, x@arguments, ...)
     ))
   )
 }
@@ -310,7 +316,8 @@ method(as_json, list(ProviderSnowflakeCortex, ToolDef)) <- function(
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#tools-configuration
 method(as_json, list(ProviderSnowflakeCortex, ContentToolRequest)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   input <- x@arguments
   if (length(input) == 0) {
@@ -330,7 +337,8 @@ method(as_json, list(ProviderSnowflakeCortex, ContentToolRequest)) <- function(
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#tool-results
 method(as_json, list(ProviderSnowflakeCortex, ContentToolResult)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "tool_results",
