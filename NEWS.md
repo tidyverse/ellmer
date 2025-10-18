@@ -1,5 +1,10 @@
 # ellmer (development version)
 
+* `interpolate_package()` now works with in-development packages loaded with devtools (#766).
+* `Chat$get_tokens()` gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (#618).
+* New `type_ignore()` allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (#764).
+* New `models_mistral()` to list available models (@rplsmn, #750).
+* `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).
 * `interpolate_package()` now provides an informative error if the requested prompt file is not found in the package's `prompts/` directory (#763).
 
 * `models_ollama()` was fixed to correctly query model capabilities from remote Ollama servers (#746).

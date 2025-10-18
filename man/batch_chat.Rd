@@ -25,7 +25,8 @@ batch_chat_structured(
 batch_chat_completed(chat, prompts, path)
 }
 \arguments{
-\item{chat}{A base chat object.}
+\item{chat}{A chat object created by a \code{chat_} function, or a
+string passed to \code{\link[=chat]{chat()}}.}
 
 \item{prompts}{A vector created by \code{\link[=interpolate]{interpolate()}} or a list
 of character vectors.}

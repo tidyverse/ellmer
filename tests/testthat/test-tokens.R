@@ -8,17 +8,17 @@ test_that("can retrieve and log tokens", {
   local_tokens()
   provider <- test_provider("testprovider", "test")
 
-  expect_equal(tokens_log(provider, 0, 0, 100), c(0, 0, 100))
-  expect_equal(the$tokens, tokens_row("testprovider", "test", 0, 0, 100))
+  tokens_log(provider, tokens(input = 1))
+  expect_equal(the$tokens, tokens_row("testprovider", "test", 1, 0, 0))
 
-  expect_equal(tokens_log(provider, 10, 50), c(10, 50, 0))
-  expect_equal(the$tokens, tokens_row("testprovider", "test", 10, 50, 100))
+  tokens_log(provider, tokens(output = 1))
+  expect_equal(the$tokens, tokens_row("testprovider", "test", 1, 1, 0))
 
-  expect_equal(tokens_log(provider, 0, 10), c(0, 10, 0))
-  expect_equal(the$tokens, tokens_row("testprovider", "test", 10, 60, 100))
+  tokens_log(provider, tokens(cached_input = 1))
+  expect_equal(the$tokens, tokens_row("testprovider", "test", 1, 1, 1))
 
-  expect_equal(tokens_log(provider), c(0, 0, 0))
-  expect_equal(the$tokens, tokens_row("testprovider", "test", 10, 60, 100))
+  tokens_log(provider, tokens())
+  expect_equal(the$tokens, tokens_row("testprovider", "test", 1, 1, 1))
 
   expect_snapshot(token_usage())
 })
@@ -42,7 +42,7 @@ test_that("token_usage() shows price if available", {
   )
   provider <- test_provider("testprovider", "test")
 
-  tokens_log(provider, 123e5, 678e3)
+  tokens_log(provider, tokens(input = 123e5, output = 678e3, cached_input = 0))
   expect_snapshot(token_usage())
 })
 

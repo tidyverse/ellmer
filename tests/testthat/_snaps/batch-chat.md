@@ -19,10 +19,10 @@
 # informative error for bad inputs
 
     Code
-      batch_chat("x")
+      batch_chat(1)
     Condition
       Error in `batch_chat()`:
-      ! `chat` must be a <Chat> object.
+      ! `chat` must be a string or a <Chat> object, not the number 1.
     Code
       batch_chat(chat_ollama)
     Condition

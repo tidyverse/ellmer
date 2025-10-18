@@ -9,6 +9,7 @@
 \alias{type_array}
 \alias{type_object}
 \alias{type_from_schema}
+\alias{type_ignore}
 \title{Type specifications}
 \usage{
 type_boolean(description = NULL, required = TRUE)
@@ -31,6 +32,8 @@ type_object(
 )
 
 type_from_schema(text, path)
+
+type_ignore()
 }
 \arguments{
 \item{description, .description}{The purpose of the component. This is
@@ -88,6 +91,9 @@ must have the specified type. For example,
 \code{type_object(a = type_string(), b = type_array(type_integer()))} is
 equivalent to a list with an element called \code{a} that is a string and
 an element called \code{b} that is an integer vector.
+\item \code{type_ignore()} is used in tool calling to indicate that an argument should
+not be provided by the LLM. This is useful when the R function has a
+default value for the argument and you don't want the LLM to supply it.
 \item \code{type_from_schema()} allows you to specify the full schema that you want to
 get back from the LLM as a JSON schema. This is useful if you have a
 pre-defined schema that you want to use directly without manually creating

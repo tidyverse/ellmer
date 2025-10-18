@@ -67,6 +67,10 @@ TypeJsonSchema <- new_class(
 
 #' @export
 #' @rdname Type
+TypeIgnore <- new_class("TypeIgnore", Type)
+
+#' @export
+#' @rdname Type
 #' @param properties Named list of properties stored inside the object.
 #'   Each element should be an S7 `Type` object.`
 TypeObject <- new_class(
@@ -107,6 +111,11 @@ TypeObject <- new_class(
 #'   `type_object(a = type_string(), b = type_array(type_integer()))` is
 #'   equivalent to a list with an element called `a` that is a string and
 #'   an element called `b` that is an integer vector.
+#'
+#'
+#' * `type_ignore()` is used in tool calling to indicate that an argument should
+#'   not be provided by the LLM. This is useful when the R function has a
+#'   default value for the argument and you don't want the LLM to supply it.
 #'
 #' * `type_from_schema()` allows you to specify the full schema that you want to
 #'   get back from the LLM as a JSON schema. This is useful if you have a
@@ -212,4 +221,10 @@ type_from_schema <- function(text, path) {
     json <- jsonlite::read_json(path)
   }
   TypeJsonSchema(json = json)
+}
+
+#' @export
+#' @rdname type_boolean
+type_ignore <- function() {
+  TypeIgnore()
 }

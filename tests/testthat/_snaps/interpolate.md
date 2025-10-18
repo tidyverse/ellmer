@@ -48,17 +48,41 @@
           | c
           | ...
 
-# errors if the path does not exist
+# can interpolate from a file
 
     Code
       interpolate_file("does-not-exist.md", x = 1)
     Condition
       Error in `interpolate_file()`:
       ! `path` 'does-not-exist.md' does not exist.
+
+# informative errors if can't find prompts
+
     Code
-      interpolate_package("ellmer", "does-not-exist.md", x = 1)
+      interpolate_package("x", "does-not-exist.md")
     Condition
       Error in `interpolate_package()`:
-      ! ellmer does not have "does-not-exist.md" in its prompts/ directory.
-      i Run `dir(system.file("prompts", package = "ellmer"))` to see available prompts.
+      ! x does not have a prompts/ directory.
+
+---
+
+    Code
+      interpolate_package("x", "does-not-exist.md")
+    Condition
+      Error in `interpolate_package()`:
+      ! x does not have "does-not-exist.md" in its prompts/ directory.
+      i Run `dir(system.file("prompts", package = "x"))` to see available prompts.
+
+# checks its inputs
+
+    Code
+      interpolate_package(1)
+    Condition
+      Error in `interpolate_package()`:
+      ! `package` must be a single string, not the number 1.
+    Code
+      interpolate_package("x", 1)
+    Condition
+      Error in `interpolate_package()`:
+      ! `path` must be a single string, not the number 1.
 

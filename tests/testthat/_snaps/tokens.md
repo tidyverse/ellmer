@@ -11,7 +11,7 @@
       token_usage()
     Output
             provider model input output cached_input price
-      1 testprovider  test    10     60          100    NA
+      1 testprovider  test     1      1            1    NA
 
 # token_usage() shows price if available
 

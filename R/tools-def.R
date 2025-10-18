@@ -64,7 +64,8 @@ NULL
 #'   Generally, the more information that you can provide here, the better.
 #' @param arguments A named list that defines the arguments accepted by the
 #'   function. Each element should be created by a [`type_*()`][type_boolean]
-#'   function (or `NULL` if you don't want the LLM to use that argument).
+#'   function. Use [type_ignore()] if you don't want the LLM to provide that
+#'   argument (e.g., because the R function has a suitable default value).
 #' @param annotations Additional properties that describe the tool and its
 #'   behavior. Usually created by [tool_annotations()], where you can find a
 #'   description of the annotation properties recommended by the [Model Context
@@ -169,11 +170,14 @@ tool <- function(
 
   check_arguments(arguments, formals(fun))
 
+  # Filter out TypeIgnore arguments - they should not be sent to the LLM
+  llm_arguments <- arguments[!map_lgl(arguments, S7_inherits, TypeIgnore)]
+
   ToolDef(
     fun,
     name = name,
     description = description,
-    arguments = TypeObject(properties = arguments),
+    arguments = TypeObject(properties = llm_arguments),
     convert = convert,
     annotations = annotations
   )
@@ -228,10 +232,10 @@ check_arguments <- function(arguments, formals, call = caller_env()) {
 
   for (nm in names(arguments)) {
     arg <- arguments[[nm]]
-    if (!is.null(arg) && !S7_inherits(arg, Type)) {
+    if (!S7_inherits(arg, Type)) {
       stop_input_type(
         arg,
-        c("a <Type>", "NULL"),
+        "a <Type>",
         arg = paste0("arguments$", nm),
         call = call
       )
