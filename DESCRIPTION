@@ -87,6 +87,7 @@ Collate:
     'live.R'
     'parallel-chat.R'
     'params.R'
+    'provider-anthropic-files.R'
     'provider-anthropic.R'
     'provider-any.R'
     'provider-aws.R'
