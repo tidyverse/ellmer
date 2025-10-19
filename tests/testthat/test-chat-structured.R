@@ -51,10 +51,10 @@ test_that("handles duplicate identical JSON responses", {
     )
   )
   type <- type_object(name = type_string(), age = type_integer())
-  # Should warn about duplicates and use the first one
+  # Should warn about multiple responses and use the first one
   expect_warning(
     result <- extract_data(turn, type),
-    "Found duplicate JSON responses, using the first one"
+    "Found multiple JSON responses, using the first one"
   )
   expect_equal(result, list(name = "John", age = 25))
 })
@@ -72,7 +72,7 @@ test_that("handles duplicate identical JSON responses with prompt index", {
   type <- type_object(score = type_integer())
   expect_warning(
     extract_data(turn, type, prompt_index = 3),
-    "Found duplicate JSON responses, using the first one \\(prompt 3\\)"
+    "Found multiple JSON responses, using the first one \\(prompt 3\\)"
   )
 })
 
@@ -86,12 +86,12 @@ test_that("handles different JSON responses", {
     )
   )
   type <- type_object(name = type_string(), age = type_integer())
-  # Should warn about multiple responses and use the last one
+  # Should warn about multiple responses and use the first one
   expect_warning(
     result <- extract_data(turn, type),
-    "Found multiple different JSON responses, using the last one"
+    "Found multiple JSON responses, using the first one"
   )
-  expect_equal(result, list(name = "Jane", age = 30))
+  expect_equal(result, list(name = "John", age = 25))
 })
 
 test_that("handles different JSON responses with prompt index", {
@@ -104,13 +104,14 @@ test_that("handles different JSON responses with prompt index", {
   )
   type <- type_object(value = type_integer())
   expect_warning(
-    extract_data(turn, type, prompt_index = 5),
-    "Found multiple different JSON responses, using the last one \\(prompt 5\\)"
+    result <- extract_data(turn, type, prompt_index = 5),
+    "Found multiple JSON responses, using the first one \\(prompt 5\\)"
   )
+  expect_equal(result, list(value = 1))
 })
 
-test_that("errors on more than 2 JSON responses", {
-  # Should error if there are more than 2 JSON objects
+test_that("warns on more than 2 JSON responses and uses first one", {
+  # Should warn if there are more than 2 JSON objects and use the first one
   turn <- Turn(
     "assistant",
     list(
@@ -120,10 +121,11 @@ test_that("errors on more than 2 JSON responses", {
     )
   )
   type <- type_object(x = type_integer())
-  expect_error(
-    extract_data(turn, type),
-    "Data extraction failed: 3 data results received. Expected 1 or 2."
+  expect_warning(
+    result <- extract_data(turn, type),
+    "Found multiple JSON responses, using the first one"
   )
+  expect_equal(result, list(x = 1))
 })
 
 # Type coercion ---------------------------------------------------------------

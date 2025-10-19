@@ -13,48 +13,23 @@ extract_data <- function(
     # Normal case - exactly 1 JSON object
     json <- turn@contents[[which(is_json)]]
     out <- json@value
-  } else if (n == 2) {
-    # Check if the two JSON objects are identical (duplicate case)
-    json_indices <- which(is_json)
-    json1 <- turn@contents[[json_indices[1]]]
-    json2 <- turn@contents[[json_indices[2]]]
-    val1 <- json1@value
-    val2 <- json2@value
-    if (identical(val1, val2)) {
-      # Duplicate case - use the first one
-      index_msg <- if (!is.null(prompt_index)) {
-        paste0(" (prompt ", prompt_index, ")")
-      } else {
-        ""
-      }
-      warning(
-        "Found duplicate JSON responses, using the first one",
-        index_msg,
-        ".",
-        call. = FALSE,
-        immediate. = TRUE
-      )
-      out <- val1
-    } else {
-      # Different JSON objects - use the last one (likely the final response)
-      index_msg <- if (!is.null(prompt_index)) {
-        paste0(" (prompt ", prompt_index, ")")
-      } else {
-        ""
-      }
-      warning(
-        "Found multiple different JSON responses, using the last one",
-        index_msg,
-        ".",
-        call. = FALSE,
-        immediate. = TRUE
-      )
-      out <- val2
-    }
   } else {
-    # More than 2 JSON objects - this is unexpected
-    cli::cli_abort(
-      "Data extraction failed: {n} data results received. Expected 1 or 2."
+    # Multiple JSON objects - keep the first one
+    json_indices <- which(is_json)
+    json <- turn@contents[[json_indices[1]]]
+    out <- json@value
+
+    index_msg <- if (!is.null(prompt_index)) {
+      paste0(" (prompt ", prompt_index, ")")
+    } else {
+      ""
+    }
+    warning(
+      "Found multiple JSON responses, using the first one",
+      index_msg,
+      ".",
+      call. = FALSE,
+      immediate. = TRUE
     )
   }
 
