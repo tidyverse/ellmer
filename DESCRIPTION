@@ -79,6 +79,7 @@ Collate:
     'content-pdf.R'
     'content-replay.R'
     'deprecated.R'
+    'hash.R'
     'httr2.R'
     'import-standalone-obj-type.R'
     'import-standalone-purrr.R'

@@ -1,6 +1,8 @@
 # ellmer (development version)
 
 * `parallel_chat()` and friends now have a more permissive attitude to errors. By default, they will now return when hitting the first error (rather than erroring), and you can control this behaviour with the `on_error` argument. Or if you interrupt the job, it will finish up current requests and then return all the work done so far. The main downside of this work is that the output of `parallel_chat()` is more complex: it is now a mix of `Chat` objects, error objects, and `NULL` (#628).
+* `interpolate_package()` now works with in-development packages loaded with devtools (#766).
+* `Chat$get_tokens()` gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (#618).
 * New `type_ignore()` allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (#764).
 * New `models_mistral()` to list available models (@rplsmn, #750).
 * `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).

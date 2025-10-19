@@ -332,7 +332,8 @@ method(value_turn, ProviderSnowflakeCortexAnalyst) <- function(
 
 method(as_json, list(ProviderSnowflakeCortexAnalyst, Turn)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   role <- x@role
   if (role == "assistant") {
@@ -340,13 +341,14 @@ method(as_json, list(ProviderSnowflakeCortexAnalyst, Turn)) <- function(
   }
   list(
     role = role,
-    content = as_json(provider, x@contents)
+    content = as_json(provider, x@contents, ...)
   )
 }
 
 method(as_json, list(ProviderSnowflakeCortexAnalyst, ContentText)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(type = "text", text = x@text)
 }
@@ -362,7 +364,8 @@ method(
   list(ProviderSnowflakeCortexAnalyst, ContentSuggestions)
 ) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(type = "suggestions", suggestions = as.list(x@suggestions))
 }
@@ -396,7 +399,8 @@ ContentSql <- new_class(
 
 method(as_json, list(ProviderSnowflakeCortexAnalyst, ContentSql)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(type = "sql", statement = x@statement)
 }
