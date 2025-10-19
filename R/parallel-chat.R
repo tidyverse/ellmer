@@ -96,6 +96,25 @@ parallel_chat <- function(
   assistant_turns <- my_parallel_turns(conversations)
 
   is_ok <- !map_lgl(assistant_turns, turn_failed)
+
+  # If on_error = "return" and any request failed, stop and return immediately
+  if (on_error == "return" && any(!is_ok)) {
+    # Append successful assistant turns to conversations
+    conversations[is_ok] <- append_turns(
+      conversations[is_ok],
+      assistant_turns[is_ok]
+    )
+    # Return without processing tool calls
+    return(map(seq_along(conversations), function(i) {
+      if (is_ok[[i]]) {
+        turns <- conversations[[i]]
+        chat$clone()$set_turns(turns)
+      } else {
+        assistant_turns[[i]]
+      }
+    }))
+  }
+
   repeat {
     if (!any(is_ok)) {
       break
@@ -214,7 +233,8 @@ parallel_chat_structured <- function(
     type,
     convert = convert,
     include_tokens = include_tokens,
-    include_cost = include_cost
+    include_cost = include_cost,
+    on_error = on_error
   )
 }
 
@@ -224,8 +244,22 @@ multi_convert <- function(
   type,
   convert = TRUE,
   include_tokens = FALSE,
-  include_cost = FALSE
+  include_cost = FALSE,
+  on_error = "continue"
 ) {
+  # When on_error = "return", keep only results up to and including the first error
+  # This maintains order and "stops" at the first failure, discarding any
+  # results that came after it (even if they succeeded)
+  if (on_error == "return") {
+    # Find first error or NULL
+    is_failed <- map_lgl(turns, turn_failed)
+    if (any(is_failed)) {
+      # Keep only turns up to and including the first error
+      first_error <- which(is_failed)[1]
+      turns <- turns[seq_len(first_error)]
+    }
+  }
+
   needs_wrapper <- type_needs_wrapper(type, provider)
 
   rows <- map(turns, \(turn) {
