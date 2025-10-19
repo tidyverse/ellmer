@@ -225,15 +225,36 @@ test_that("on_error = 'return' in parallel_chat_structured stops at first error"
   # Mock responses for on_error = "return": 2 successes, 1 error, then 2 more successes
   # The last 2 successes should be filtered out when on_error = "return"
   responses_return <- list(
-    Turn("assistant", list(ContentJson(list(name = "Alice", age = 30))), tokens = c(10, 20, 0)),
-    Turn("assistant", list(ContentJson(list(name = "Bob", age = 25))), tokens = c(10, 20, 0)),
+    Turn(
+      "assistant",
+      list(ContentJson(list(name = "Alice", age = 30))),
+      tokens = c(10, 20, 0)
+    ),
+    Turn(
+      "assistant",
+      list(ContentJson(list(name = "Bob", age = 25))),
+      tokens = c(10, 20, 0)
+    ),
     simpleError("Request failed"),
-    Turn("assistant", list(ContentJson(list(name = "Charlie", age = 35))), tokens = c(10, 20, 0)),
-    Turn("assistant", list(ContentJson(list(name = "Diana", age = 40))), tokens = c(10, 20, 0))
+    Turn(
+      "assistant",
+      list(ContentJson(list(name = "Charlie", age = 35))),
+      tokens = c(10, 20, 0)
+    ),
+    Turn(
+      "assistant",
+      list(ContentJson(list(name = "Diana", age = 40))),
+      tokens = c(10, 20, 0)
+    )
   )
 
   local_mocked_bindings(parallel_turns = function(...) responses_return)
-  out_return <- parallel_chat_structured(chat, prompts, person, on_error = "return")
+  out_return <- parallel_chat_structured(
+    chat,
+    prompts,
+    person,
+    on_error = "return"
+  )
 
   # Should only have 3 rows (up to and including the error at position 3)
   expect_equal(nrow(out_return), 3)
@@ -243,15 +264,36 @@ test_that("on_error = 'return' in parallel_chat_structured stops at first error"
 
   # Mock responses for on_error = "continue": all 5 requests executed
   responses_continue <- list(
-    Turn("assistant", list(ContentJson(list(name = "Alice", age = 30))), tokens = c(10, 20, 0)),
-    Turn("assistant", list(ContentJson(list(name = "Bob", age = 25))), tokens = c(10, 20, 0)),
+    Turn(
+      "assistant",
+      list(ContentJson(list(name = "Alice", age = 30))),
+      tokens = c(10, 20, 0)
+    ),
+    Turn(
+      "assistant",
+      list(ContentJson(list(name = "Bob", age = 25))),
+      tokens = c(10, 20, 0)
+    ),
     simpleError("Request failed"),
-    Turn("assistant", list(ContentJson(list(name = "Charlie", age = 35))), tokens = c(10, 20, 0)),
-    Turn("assistant", list(ContentJson(list(name = "Diana", age = 40))), tokens = c(10, 20, 0))
+    Turn(
+      "assistant",
+      list(ContentJson(list(name = "Charlie", age = 35))),
+      tokens = c(10, 20, 0)
+    ),
+    Turn(
+      "assistant",
+      list(ContentJson(list(name = "Diana", age = 40))),
+      tokens = c(10, 20, 0)
+    )
   )
 
   local_mocked_bindings(parallel_turns = function(...) responses_continue)
-  out_continue <- parallel_chat_structured(chat, prompts, person, on_error = "continue")
+  out_continue <- parallel_chat_structured(
+    chat,
+    prompts,
+    person,
+    on_error = "continue"
+  )
 
   # Should have all 5 rows (including results after the error)
   expect_equal(nrow(out_continue), 5)
