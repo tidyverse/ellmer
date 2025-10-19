@@ -24,7 +24,7 @@
 #'   metadata for. Can also be an expression of the form `pkg::fun`.
 #' @param chat A `Chat` object used to generate the output. If `NULL`
 #'   (the default) uses [chat_openai()].
-#' @param model `lifecycle::badge("deprecated")` Formally used for definining
+#' @param model `lifecycle::badge("deprecated")` Formally used for defining
 #'   the model used by the chat. Now supply `chat` instead.
 #' @param echo Emit the registration code to the console. Defaults to `TRUE` in
 #'   interactive sessions.

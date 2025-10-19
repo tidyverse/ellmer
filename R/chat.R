@@ -114,7 +114,7 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
-    #' @description A data frame with a `tokens` column that proides the
+    #' @description A data frame with a `tokens` column that provides the
     #'   number of input tokens used by user turns and the number of
     #'   output tokens used by assistant turns.
     #' @param include_system_prompt Whether to include the system prompt in
@@ -148,13 +148,21 @@ Chat <- R6::R6Class(
       tokens_df <- data.frame(
         role = rep(c("user", "assistant"), times = n),
         tokens = tokens_v,
-        tokens_total = tokens_acc_v
+        tokens_total = tokens_acc_v,
+        contents = map_chr(turns, turn_contents_preview)
       )
 
       if (include_system_prompt && private$has_system_prompt()) {
+        system_turn <- private$.turns[[1]]
+
         # How do we compute this?
         tokens_df <- rbind(
-          data.frame(role = "system", tokens = 0, tokens_total = 0),
+          data.frame(
+            role = "system",
+            tokens = 0,
+            tokens_total = 0,
+            contents = turn_contents_preview(system_turn)
+          ),
           tokens_df
         )
       }
@@ -787,19 +795,6 @@ Chat <- R6::R6Class(
     }
   )
 )
-
-is_chat <- function(x) {
-  inherits(x, "Chat")
-}
-
-
-check_chat <- function(chat, call = caller_env()) {
-  if (is_chat(chat)) {
-    return(invisible())
-  }
-
-  cli::cli_abort("{.arg chat} must be a <Chat> object.", call = call)
-}
 
 #' @export
 print.Chat <- function(x, ...) {

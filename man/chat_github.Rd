@@ -10,6 +10,7 @@ chat_github(
   base_url = "https://models.github.ai/inference/",
   api_key = github_key(),
   model = NULL,
+  params = NULL,
   seed = NULL,
   api_args = list(),
   echo = NULL,
@@ -31,6 +32,8 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{model}{The model to use for the chat (defaults to "gpt-4o").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
+
+\item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
 \item{seed}{Optional integer seed that ChatGPT uses to try and make output
 more reproducible.}

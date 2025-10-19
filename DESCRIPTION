@@ -1,6 +1,6 @@
 Package: ellmer
 Title: Chat with Large Language Models
-Version: 0.3.0.9000
+Version: 0.3.2.9000
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4757-117X")),
@@ -33,7 +33,8 @@ Imports:
     promises (>= 1.3.1),
     R6,
     rlang (>= 1.1.0),
-    S7 (>= 0.2.0)
+    S7 (>= 0.2.0),
+    vctrs
 Suggests:
     connectcreds,
     curl (>= 6.0.1),
@@ -58,7 +59,7 @@ Config/testthat/parallel: true
 Config/testthat/start-first: chat, provider*
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Collate:
     'utils-S7.R'
     'types.R'
@@ -71,6 +72,7 @@ Collate:
     'chat-structured.R'
     'turns.R'
     'chat-tools.R'
+    'chat-utils.R'
     'utils-coro.R'
     'chat.R'
     'content-image.R'

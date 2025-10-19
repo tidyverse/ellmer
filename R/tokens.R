@@ -2,16 +2,19 @@ on_load(
   the$tokens <- tokens_row()
 )
 
-tokens_log <- function(
-  provider,
-  input = NULL,
-  output = NULL,
-  cached_input = NULL
-) {
-  input <- input %||% 0
-  output <- output %||% 0
-  cached_input <- cached_input %||% 0
+tokens <- function(input = 0, output = 0, cached_input = 0) {
+  check_number_whole(input, allow_null = TRUE)
+  check_number_whole(output, allow_null = TRUE)
+  check_number_whole(cached_input, allow_null = TRUE)
 
+  list(
+    input = input %||% 0,
+    output = output %||% 0,
+    cached_input = cached_input %||% 0
+  )
+}
+
+tokens_log <- function(provider, tokens) {
   i <- tokens_match(
     provider@name,
     provider@model,
@@ -23,19 +26,19 @@ tokens_log <- function(
     new_row <- tokens_row(
       provider@name,
       provider@model,
-      input,
-      output,
-      cached_input
+      tokens$input,
+      tokens$output,
+      tokens$cached_input
     )
     the$tokens <- rbind(the$tokens, new_row)
   } else {
-    the$tokens$input[i] <- the$tokens$input[i] + input
-    the$tokens$output[i] <- the$tokens$output[i] + output
-    the$tokens$cached_input[i] <- the$tokens$cached_input[i] + cached_input
+    the$tokens$input[i] <- the$tokens$input[i] + tokens$input
+    the$tokens$output[i] <- the$tokens$output[i] + tokens$output
+    the$tokens$cached_input[i] <- the$tokens$cached_input[i] +
+      tokens$cached_input
   }
 
-  # Returns value to be passed to Turn
-  c(input, output, cached_input)
+  invisible()
 }
 
 tokens_row <- function(

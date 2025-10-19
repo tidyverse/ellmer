@@ -261,6 +261,18 @@ method(stream_merge_chunks, ProviderGoogleGemini) <- function(
     merge_gemini_chunks(result, chunk)
   }
 }
+
+method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
+  usage <- json$usageMetadata
+  cached <- usage$cachedContentTokenCount %||% 0
+
+  tokens(
+    input = (usage$promptTokenCount %||% 0) - cached,
+    output = usage$candidatesTokenCount,
+    cached_input = cached
+  )
+}
+
 method(value_turn, ProviderGoogleGemini) <- function(
   provider,
   result,
@@ -290,44 +302,46 @@ method(value_turn, ProviderGoogleGemini) <- function(
     }
   })
   contents <- compact(contents)
-  usage <- result$usageMetadata
-  tokens <- tokens_log(
-    provider,
-    input = usage$promptTokenCount - (usage$cachedContentTokenCount %||% 0),
-    output = usage$candidatesTokenCount,
-    cached_input = usage$cachedContentTokenCount
-  )
-
-  assistant_turn(contents, json = result, tokens = tokens)
+  tokens <- value_tokens(provider, result)
+  assistant_turn(contents, json = result, tokens = unlist(tokens))
 }
 
 # ellmer -> Gemini --------------------------------------------------------------
 
 # https://ai.google.dev/api/caching#Content
-method(as_json, list(ProviderGoogleGemini, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
+  provider,
+  x,
+  ...
+) {
   if (x@role == "system") {
     # System messages go in the top-level API parameter
   } else if (x@role == "user") {
-    list(role = x@role, parts = as_json(provider, x@contents))
+    list(role = x@role, parts = as_json(provider, x@contents, ...))
   } else if (x@role == "assistant") {
-    list(role = "model", parts = as_json(provider, x@contents))
+    list(role = "model", parts = as_json(provider, x@contents, ...))
   } else {
     cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)
   }
 }
 
 
-method(as_json, list(ProviderGoogleGemini, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderGoogleGemini, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
   compact(list(
     name = x@name,
     description = x@description,
-    parameters = as_json(provider, x@arguments)
+    parameters = as_json(provider, x@arguments, ...)
   ))
 }
 
 method(as_json, list(ProviderGoogleGemini, ContentText)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   if (identical(x@text, "")) {
     # Gemini tool call requests can include a Content with empty text,
@@ -340,7 +354,8 @@ method(as_json, list(ProviderGoogleGemini, ContentText)) <- function(
 
 method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     inlineData = list(
@@ -353,7 +368,8 @@ method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
 # https://ai.google.dev/api/caching#FileData
 method(as_json, list(ProviderGoogleGemini, ContentUploaded)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     fileData = list(
@@ -366,7 +382,8 @@ method(as_json, list(ProviderGoogleGemini, ContentUploaded)) <- function(
 # https://ai.google.dev/api/caching#FileData
 method(as_json, list(ProviderGoogleGemini, ContentImageRemote)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   cli::cli_abort("Gemini doesn't support remote images")
 }
@@ -374,7 +391,8 @@ method(as_json, list(ProviderGoogleGemini, ContentImageRemote)) <- function(
 # https://ai.google.dev/api/caching#Blob
 method(as_json, list(ProviderGoogleGemini, ContentImageInline)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     inlineData = list(
@@ -387,7 +405,8 @@ method(as_json, list(ProviderGoogleGemini, ContentImageInline)) <- function(
 # https://ai.google.dev/api/caching#FunctionCall
 method(as_json, list(ProviderGoogleGemini, ContentToolRequest)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     functionCall = list(
@@ -400,7 +419,8 @@ method(as_json, list(ProviderGoogleGemini, ContentToolRequest)) <- function(
 # https://ai.google.dev/api/caching#FunctionResponse
 method(as_json, list(ProviderGoogleGemini, ContentToolResult)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     functionResponse = list(
@@ -412,7 +432,8 @@ method(as_json, list(ProviderGoogleGemini, ContentToolResult)) <- function(
 
 method(as_json, list(ProviderGoogleGemini, TypeObject)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   if (x@additional_properties) {
     cli::cli_abort("{.arg .additional_properties} not supported for Gemini.")
@@ -427,7 +448,7 @@ method(as_json, list(ProviderGoogleGemini, TypeObject)) <- function(
   compact(list(
     type = "object",
     description = x@description,
-    properties = as_json(provider, x@properties),
+    properties = as_json(provider, x@properties, ...),
     required = as.list(names2(x@properties)[required])
   ))
 }

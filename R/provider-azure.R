@@ -24,8 +24,9 @@ NULL
 #'
 #' @param endpoint Azure OpenAI endpoint url with protocol and hostname, i.e.
 #'  `https://{your-resource-name}.openai.azure.com`. Defaults to using the
-#'   value of the `AZURE_OPENAI_ENDPOINT` envinronment variable.
-#' @param deployment_id Deployment id for the model you want to use.
+#'   value of the `AZURE_OPENAI_ENDPOINT` environment variable.
+#' @param model The **deployment id** for the model you want to use.
+#' @param deployment_id `r lifecycle::badge("deprecated")` Use `model` instead.
 #' @param api_version The API version to use.
 #' @param api_key `r api_key_param("AZURE_OPENAI_API_KEY")`
 #' @param token `r lifecycle::badge("deprecated")` A literal Azure token to use
@@ -43,12 +44,12 @@ NULL
 #' @export
 #' @examples
 #' \dontrun{
-#' chat <- chat_azure_openai(deployment_id = "gpt-4o-mini")
+#' chat <- chat_azure_openai(model = "gpt-4o-mini")
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
 chat_azure_openai <- function(
   endpoint = azure_endpoint(),
-  deployment_id,
+  model,
   params = NULL,
   api_version = NULL,
   system_prompt = NULL,
@@ -57,7 +58,8 @@ chat_azure_openai <- function(
   credentials = NULL,
   api_args = list(),
   echo = c("none", "output", "all"),
-  api_headers = character()
+  api_headers = character(),
+  deployment_id = deprecated()
 ) {
   check_exclusive(token, credentials, .require = FALSE)
   if (lifecycle::is_present(token)) {
@@ -72,8 +74,16 @@ chat_azure_openai <- function(
   } else {
     token <- NULL
   }
+  if (lifecycle::is_present(deployment_id)) {
+    lifecycle::deprecate_warn(
+      when = "0.4.0",
+      what = "chat_azure_openai(deployment_id=)",
+      with = "chat_azure_openai(model=)",
+    )
+    model <- deployment_id
+  }
   check_string(endpoint)
-  check_string(deployment_id)
+  check_string(model)
   params <- params %||% params()
   api_version <- set_default(api_version, "2024-10-21")
   check_string(api_key, allow_null = TRUE)
@@ -90,8 +100,8 @@ chat_azure_openai <- function(
 
   provider <- ProviderAzureOpenAI(
     name = "Azure/OpenAI",
-    base_url = paste0(endpoint, "/openai/deployments/", deployment_id),
-    model = deployment_id,
+    base_url = paste0(endpoint, "/openai/deployments/", model),
+    model = model,
     params = params,
     api_version = api_version,
     api_key = api_key,
@@ -118,7 +128,7 @@ chat_azure_openai_test <- function(
     system_prompt = system_prompt,
     api_key = api_key,
     endpoint = "https://ai-hwickhamai260967855527.openai.azure.com",
-    deployment_id = "gpt-4o-mini",
+    model = "gpt-4o-mini",
     params = params,
     echo = echo
   )

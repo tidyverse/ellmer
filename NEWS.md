@@ -1,5 +1,26 @@
 # ellmer (development version)
 
+* `interpolate_package()` now works with in-development packages loaded with devtools (#766).
+* `Chat$get_tokens()` gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (#618).
+* New `type_ignore()` allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (#764).
+* New `models_mistral()` to list available models (@rplsmn, #750).
+* `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).
+* `interpolate_package()` now provides an informative error if the requested prompt file is not found in the package's `prompts/` directory (#763).
+
+* `models_ollama()` was fixed to correctly query model capabilities from remote Ollama servers (#746).
+
+* `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758).
+
+# ellmer 0.3.2
+
+* `chat()` is now compatible with most `chat_` functions (#699).
+  * `chat_aws_bedrock()`, `chat_databricks()`, `chat_deepseek()`, `chat_github()`, `chat_groq()`, `chat_ollama()`, `chat_openrouter()`, `chat_perplexity()`, and `chat_vllm()` now support a `params` argument that accepts common model parameters from `params()`.
+  * The `deployment_id` argument in `chat_azure_openai()` was deprecated and replaced with `model` to better align with other providers.
+
+* `chat_openai()` now correctly maps `max_tokens` and `top_k` from `params()` to the OpenAI API parameters (#699).
+
+# ellmer 0.3.1
+
 * `chat_anthropic()` drops empty assistant turns to avoid API errors (#710).
 
 * `chat_github()` now uses the `https://models.github.ai/inference` endpoint and `chat()` supports GitHub models in the format `chat("github/openai/gpt-4.1")` (#726).
@@ -14,7 +35,7 @@
 
 * `chat_snowflake()` now supports Privatelink accounts (#694, @robert-norberg). and works against Snowflake's latest API changes (#692, @robert-norberg).
 
-* `models_google_vertex()` was fixed, argument `project_id` is now deprecated (#704, @netique)
+* `models_google_vertex()` works once again (#704, @netique)
 
 * In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services (#706, @stevegbrooks).
 

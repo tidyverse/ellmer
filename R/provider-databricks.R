@@ -39,6 +39,7 @@
 #'   - `databricks-meta-llama-3-1-405b-instruct`
 #' @param token An authentication token for the Databricks workspace, or
 #'   `NULL` to use ambient credentials.
+#' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @export
@@ -52,6 +53,7 @@ chat_databricks <- function(
   system_prompt = NULL,
   model = NULL,
   token = NULL,
+  params = NULL,
   api_args = list(),
   echo = c("none", "output", "all"),
   api_headers = character()
@@ -65,10 +67,14 @@ chat_databricks <- function(
   } else {
     credentials <- default_databricks_credentials(workspace)
   }
+
+  params <- params %||% params()
+
   provider <- ProviderDatabricks(
     name = "Databricks",
     base_url = workspace,
     model = model,
+    params = params,
     extra_args = api_args,
     credentials = credentials,
     # Databricks APIs use bearer tokens, not API keys, but we need to pass an
@@ -109,10 +115,27 @@ method(chat_body, ProviderDatabricks) <- function(
     type = type
   )
 
-  # Databricks doensn't support stream options
+  params <- chat_params(provider, provider@params)
+  body <- modify_list(body, params)
+
+  # Databricks doesn't support stream options
   body$stream_options <- NULL
 
   body
+}
+
+method(chat_params, ProviderDatabricks) <- function(provider, params) {
+  # https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#chat-request
+  standardise_params(
+    params,
+    c(
+      temperature = "temperature",
+      top_p = "topP",
+      top_k = "topK",
+      max_tokens = "maxTokens",
+      stop_sequences = "stopSequences"
+    )
+  )
 }
 
 method(chat_path, ProviderDatabricks) <- function(provider) {
@@ -132,7 +155,7 @@ method(base_request_error, ProviderDatabricks) <- function(provider, req) {
   })
 }
 
-method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x, ...) {
   if (x@role == "system") {
     list(list(role = "system", content = x@contents[[1]]@text))
   } else if (x@role == "user") {
@@ -150,18 +173,18 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
     if (length(x@contents) > 1) {
       cli::cli_abort("Databricks models only accept a single text input.")
     }
-    content <- as_json(provider, x@contents[[1]])
+    content <- as_json(provider, x@contents[[1]], ...)
     list(list(role = "user", content = content))
   } else if (x@role == "assistant") {
     is_tool <- map_lgl(x@contents, is_tool_request)
     if (any(is_tool)) {
       list(list(
         role = "assistant",
-        tool_calls = as_json(provider, x@contents[is_tool])
+        tool_calls = as_json(provider, x@contents[is_tool], ...)
       ))
     } else {
       # We should be able to assume that there is only one content item here.
-      content <- as_json(provider, x@contents[[1]])
+      content <- as_json(provider, x@contents[[1]], ...)
       list(list(role = "assistant", content = content))
     }
   } else {
@@ -171,14 +194,19 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x) {
 
 method(as_json, list(ProviderDatabricks, ContentText)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   # Databricks only seems to support textual content.
   x@text
 }
 
 # See: https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#functionobject
-method(as_json, list(ProviderDatabricks, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderDatabricks, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
   # Note: It seems that Databricks doesn't support the "strict" field, despite
   # what their documentation says. It *is* supported for structured outputs,
   # though. I suspect a copy & paste error in their docs.
@@ -190,7 +218,7 @@ method(as_json, list(ProviderDatabricks, ToolDef)) <- function(provider, x) {
       # Use the same parameter encoding as the OpenAI provider, but only if
       # there actually are parameters.
       parameters = if (length(x@arguments@properties) != 0) {
-        as_json(provider, x@arguments)
+        as_json(provider, x@arguments, ...)
       }
     ))
   ))
@@ -199,7 +227,8 @@ method(as_json, list(ProviderDatabricks, ToolDef)) <- function(provider, x) {
 # https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#toolcall
 method(as_json, list(ProviderDatabricks, ContentToolRequest)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   # Databricks seems to require encoding empty arguments as an empty
   # dictionary, rather than an empty array.

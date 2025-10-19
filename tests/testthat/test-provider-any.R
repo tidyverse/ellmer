@@ -22,3 +22,23 @@ test_that("can set model or use default", {
   expect_equal(chat3$get_provider()@name, "OpenAI")
   expect_equal(chat3$get_provider()@model, "provider/model")
 })
+
+test_that("works for chat functions that don't include `params`", {
+  local_mocked_bindings(
+    has_ollama = function(...) TRUE,
+    models_ollama = function(...) {
+      list(id = "qwen3:4b")
+    }
+  )
+  expect_s3_class(chat("ollama/qwen3:4b"), "Chat")
+
+  chat <- chat("ollama/qwen3:4b")
+  expect_equal(chat$get_provider()@name, "Ollama")
+  expect_equal(chat$get_provider()@model, "qwen3:4b")
+})
+
+test_that("requires `model` and `system_prompt` arguments", {
+  expect_snapshot(error = TRUE, {
+    chat("cortex_analyst")
+  })
+})

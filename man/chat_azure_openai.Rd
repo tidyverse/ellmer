@@ -6,7 +6,7 @@
 \usage{
 chat_azure_openai(
   endpoint = azure_endpoint(),
-  deployment_id,
+  model,
   params = NULL,
   api_version = NULL,
   system_prompt = NULL,
@@ -15,15 +15,16 @@ chat_azure_openai(
   credentials = NULL,
   api_args = list(),
   echo = c("none", "output", "all"),
-  api_headers = character()
+  api_headers = character(),
+  deployment_id = deprecated()
 )
 }
 \arguments{
 \item{endpoint}{Azure OpenAI endpoint url with protocol and hostname, i.e.
 \verb{https://\{your-resource-name\}.openai.azure.com}. Defaults to using the
-value of the \code{AZURE_OPENAI_ENDPOINT} envinronment variable.}
+value of the \code{AZURE_OPENAI_ENDPOINT} environment variable.}
 
-\item{deployment_id}{Deployment id for the model you want to use.}
+\item{model}{The \strong{deployment id} for the model you want to use.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
@@ -64,6 +65,8 @@ Note this only affects the \code{chat()} method.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
+
+\item{deployment_id}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{model} instead.}
 }
 \value{
 A \link{Chat} object.
@@ -87,7 +90,7 @@ package.
 }
 \examples{
 \dontrun{
-chat <- chat_azure_openai(deployment_id = "gpt-4o-mini")
+chat <- chat_azure_openai(model = "gpt-4o-mini")
 chat$chat("Tell me three jokes about statisticians")
 }
 }

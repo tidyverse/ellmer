@@ -11,7 +11,8 @@
 #' to wait longer, you might want to use [batch_chat()] instead, as it comes
 #' with a 50% discount in return for taking up to 24 hours.
 #'
-#' @param chat A base chat object.
+#' @param chat A chat object created by a `chat_` function, or a
+#'   string passed to [chat()].
 #' @param prompts A vector created by [interpolate()] or a list
 #'   of character vectors.
 #' @param max_active The maximum number of simultaneous requests to send.
@@ -54,7 +55,8 @@
 #' parallel_chat_structured(chat, prompts, type_person)
 #' \dontshow{ellmer:::vcr_example_end()}
 parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
-  check_chat(chat)
+  chat <- as_chat(chat)
+
   my_parallel_turns <- function(conversations) {
     parallel_turns(
       provider = chat$get_provider(),
@@ -103,6 +105,7 @@ parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
 #' @rdname parallel_chat
 #' @export
 parallel_chat_text <- function(chat, prompts, max_active = 10, rpm = 500) {
+  chat <- as_chat(chat)
   chats <- parallel_chat(chat, prompts, max_active = max_active, rpm = rpm)
   map_chr(chats, \(chat) chat$last_turn()@text)
 }
@@ -130,6 +133,7 @@ parallel_chat_structured <- function(
   max_active = 10,
   rpm = 500
 ) {
+  chat <- as_chat(chat)
   turns <- as_user_turns(prompts)
   check_bool(convert)
 

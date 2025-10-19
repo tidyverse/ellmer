@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-mistral.R
 \name{chat_mistral}
 \alias{chat_mistral}
+\alias{models_mistral}
 \title{Chat with a model hosted on Mistral's La Platforme}
 \usage{
 chat_mistral(
@@ -14,6 +15,8 @@ chat_mistral(
   echo = NULL,
   api_headers = character()
 )
+
+models_mistral(api_key = mistral_key())
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
