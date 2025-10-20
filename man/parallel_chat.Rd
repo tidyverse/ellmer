@@ -55,10 +55,9 @@ connections or use \code{\link[=params]{params()}} in \code{chat_anthropic()} to
 
 \item{on_error}{What to do when a request fails. One of:
 \itemize{
-\item \code{"return"} (the default): stop processing and return all responses so
-far, including any errors.
-\item \code{"continue"}: record the error and continue processing
-other requests.
+\item \code{"return"} (the default): stop processing new requests, wait for
+in flight requests to finish, then return.
+\item \code{"continue"}: keep going, performing every request.
 \item \code{"stop"}: stop processing and throw an error.
 }}
 

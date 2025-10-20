@@ -26,10 +26,9 @@
 #'   `max_tokens`.
 #' @param rpm Maximum number of requests per minute.
 #' @param on_error What to do when a request fails. One of:
-#'   * `"return"` (the default): stop processing and return all responses so
-#'      far, including any errors.
-#'   * `"continue"`: record the error and continue processing
-#'     other requests.
+#'   * `"return"` (the default): stop processing new requests, wait for
+#'      in flight requests to finish, then return.
+#'   * `"continue"`: keep going, performing every request.
 #'   * `"stop"`: stop processing and throw an error.
 #' @returns
 #' For `parallel_chat()`, a list with one element for each prompt. Each element
