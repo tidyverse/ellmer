@@ -314,14 +314,14 @@ ContentJson <- new_class(
   "ContentJson",
   parent = Content,
   properties = list(
-    # Some providers guarantee JSON returning it as part of the parsed results
-    # others return as a string, which may or may not be valid JSON. We don't
-    # want to force conversion in value_turn() since that might error, which
-    # happens rather too soon.
+    # Some providers guarantee JSON returning it as part of the parsed results.
+    # Others return as a string, which may or may not be valid JSON. We don't
+    # want to force conversion on construction() since that's likely to be
+    # inconveniently early
     data = class_any,
     string = prop_string(allow_null = TRUE),
 
-    # We provider a virtual property that always returns parsed JSON or errors
+    # Virtual property that always returns parsed JSON or errors
     parsed = new_property(getter = function(self) {
       if (is.null(self@string)) {
         self@data
