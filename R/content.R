@@ -171,6 +171,7 @@ ContentImageInline <- new_class(
   )
 )
 method(format, ContentImageInline) <- function(x, ...) {
+  show_image(x)
   cli::format_inline("[{.strong inline image}]")
 }
 method(contents_html, ContentImageInline) <- function(content) {
@@ -178,6 +179,17 @@ method(contents_html, ContentImageInline) <- function(content) {
 }
 method(contents_markdown, ContentImageInline) <- function(content) {
   sprintf('![](data:%s;base64,%s)', content@type, content@data)
+}
+
+show_image <- function(x) {
+  if (x@type != "image/png" || !is_installed("png")) {
+    return(invisible())
+  }
+
+  data <- jsonlite::base64_dec(x@data)
+  png <- png::readPNG(data)
+  grid::grid.newpage()
+  grid::grid.raster(png)
 }
 
 # Tools ------------------------------------------------------------------

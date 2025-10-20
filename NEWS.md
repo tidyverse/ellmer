@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_google_gemini()` supports image generation models (#368).
 * `parallel_chat_structured()` no longer errors if some results fail to parse. Instead it warns, and the corresponding rows will be filled in with the appropriate missing values (#628).
 * `$chat_structured()` and friends now only warn if multiple json payloads found (instead of erroring) (@kbenoit, #732).
 * `interpolate_package()` now works with in-development packages loaded with devtools (#766).

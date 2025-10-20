@@ -45,6 +45,7 @@ Suggests:
     magick,
     openssl,
     paws.common,
+    png,
     rmarkdown,
     shiny,
     shinychat (>= 0.2.0),
