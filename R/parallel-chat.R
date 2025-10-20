@@ -174,13 +174,12 @@ multi_convert <- function(
 ) {
   needs_wrapper <- type_needs_wrapper(type, provider)
 
-  rows <- imap(turns, \(turn, idx) {
+  rows <- map(turns, \(turn) {
     extract_data(
       turn = turn,
       type = wrap_type_if_needed(type, needs_wrapper),
       convert = FALSE,
-      needs_wrapper = needs_wrapper,
-      prompt_index = idx
+      needs_wrapper = needs_wrapper
     )
   })
 

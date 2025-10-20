@@ -14,11 +14,7 @@ test_that("structured data is round-tripped", {
 
 test_that("useful error if no ContentJson", {
   turn <- Turn("assistant", list(ContentText("Hello")))
-  expect_error(
-    extract_data(turn),
-    "Data extraction failed: 0 data results received.",
-    fixed = TRUE
-  )
+  expect_snapshot(extract_data(turn), error = TRUE)
 })
 
 test_that("can extract data from ContentJson", {
@@ -40,78 +36,7 @@ test_that("can extract data when wrapper is used", {
   expect_equal(extract_data(turn, type, needs_wrapper = TRUE), list(x = 1))
 })
 
-test_that("handles duplicate identical JSON responses", {
-  # This test covers the Bedrock duplicate JSON issue
-  json_data <- list(name = "John", age = 25)
-  turn <- Turn(
-    "assistant",
-    list(
-      ContentJson(json_data),
-      ContentJson(json_data) # Identical duplicate
-    )
-  )
-  type <- type_object(name = type_string(), age = type_integer())
-  # Should warn about multiple responses and use the first one
-  expect_warning(
-    result <- extract_data(turn, type),
-    "Found multiple JSON responses, using the first one"
-  )
-  expect_equal(result, list(name = "John", age = 25))
-})
-
-test_that("handles duplicate identical JSON responses with prompt index", {
-  # Test that prompt index is included in warning message
-  json_data <- list(score = 42)
-  turn <- Turn(
-    "assistant",
-    list(
-      ContentJson(json_data),
-      ContentJson(json_data)
-    )
-  )
-  type <- type_object(score = type_integer())
-  expect_warning(
-    extract_data(turn, type, prompt_index = 3),
-    "Found multiple JSON responses, using the first one \\(prompt 3\\)"
-  )
-})
-
-test_that("handles different JSON responses", {
-  # This test covers the case where two different JSON objects are returned
-  turn <- Turn(
-    "assistant",
-    list(
-      ContentJson(list(name = "John", age = 25)),
-      ContentJson(list(name = "Jane", age = 30)) # Different data
-    )
-  )
-  type <- type_object(name = type_string(), age = type_integer())
-  # Should warn about multiple responses and use the first one
-  expect_warning(
-    result <- extract_data(turn, type),
-    "Found multiple JSON responses, using the first one"
-  )
-  expect_equal(result, list(name = "John", age = 25))
-})
-
-test_that("handles different JSON responses with prompt index", {
-  turn <- Turn(
-    "assistant",
-    list(
-      ContentJson(list(value = 1)),
-      ContentJson(list(value = 2))
-    )
-  )
-  type <- type_object(value = type_integer())
-  expect_warning(
-    result <- extract_data(turn, type, prompt_index = 5),
-    "Found multiple JSON responses, using the first one \\(prompt 5\\)"
-  )
-  expect_equal(result, list(value = 1))
-})
-
-test_that("warns on more than 2 JSON responses and uses first one", {
-  # Should warn if there are more than 2 JSON objects and use the first one
+test_that("warns if multiple ContentJson (and uses first)", {
   turn <- Turn(
     "assistant",
     list(
@@ -121,10 +46,7 @@ test_that("warns on more than 2 JSON responses and uses first one", {
     )
   )
   type <- type_object(x = type_integer())
-  expect_warning(
-    result <- extract_data(turn, type),
-    "Found multiple JSON responses, using the first one"
-  )
+  expect_snapshot(result <- extract_data(turn, type))
   expect_equal(result, list(x = 1))
 })
 

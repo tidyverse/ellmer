@@ -1,37 +1,16 @@
-extract_data <- function(
-  turn,
-  type,
-  convert = TRUE,
-  needs_wrapper = FALSE,
-  prompt_index = NULL
-) {
+extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
   is_json <- map_lgl(turn@contents, S7_inherits, ContentJson)
   n <- sum(is_json)
   if (n == 0) {
-    cli::cli_abort("Data extraction failed: 0 data results received.")
-  } else if (n == 1) {
-    # Normal case - exactly 1 JSON object
-    json <- turn@contents[[which(is_json)]]
-    out <- json@value
-  } else {
-    # Multiple JSON objects - keep the first one
-    json_indices <- which(is_json)
-    json <- turn@contents[[json_indices[1]]]
-    out <- json@value
-
-    index_msg <- if (!is.null(prompt_index)) {
-      paste0(" (prompt ", prompt_index, ")")
-    } else {
-      ""
-    }
-    warning(
-      "Found multiple JSON responses, using the first one",
-      index_msg,
-      ".",
-      call. = FALSE,
-      immediate. = TRUE
-    )
+    cli::cli_abort("Data extraction failed: no JSON responses found.")
   }
+
+  if (n > 1) {
+    cli::cli_warn("Found {n} JSON response{?s}, using the first.")
+  }
+
+  json <- turn@contents[[which(is_json)[1]]]
+  out <- json@value
 
   if (needs_wrapper) {
     out <- out$wrapper
