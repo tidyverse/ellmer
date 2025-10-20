@@ -50,7 +50,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
-<ul><li><p><code><a href="../reference/interpolate.html">interpolate_package()</a></code> now works with in-development packages loaded with devtools (<a href="https://github.com/tidyverse/ellmer/issues/766" class="external-link">#766</a>).</p></li>
+<ul><li><p><code>$chat_structured()</code> and friends now only warn if multiple json payloads found (instead of erroring) (<a href="https://github.com/kbenoit" class="external-link">@kbenoit</a>, <a href="https://github.com/tidyverse/ellmer/issues/732" class="external-link">#732</a>).</p></li>
+<li><p><code><a href="../reference/interpolate.html">interpolate_package()</a></code> now works with in-development packages loaded with devtools (<a href="https://github.com/tidyverse/ellmer/issues/766" class="external-link">#766</a>).</p></li>
 <li><p><code>Chat$get_tokens()</code> gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (<a href="https://github.com/tidyverse/ellmer/issues/618" class="external-link">#618</a>).</p></li>
 <li><p>New <code><a href="../reference/type_boolean.html">type_ignore()</a></code> allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (<a href="https://github.com/tidyverse/ellmer/issues/764" class="external-link">#764</a>).</p></li>
 <li><p>New <code><a href="../reference/chat_mistral.html">models_mistral()</a></code> to list available models (<a href="https://github.com/rplsmn" class="external-link">@rplsmn</a>, <a href="https://github.com/tidyverse/ellmer/issues/750" class="external-link">#750</a>).</p></li>
