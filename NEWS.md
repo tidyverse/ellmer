@@ -2,6 +2,7 @@
 
 * `parallel_chat_structured()` now returns a tibble, since this does a better job of printing more complex data frames (#787).
 * `parallel_chat()` and friends now have a more permissive attitude to errors. By default, they will now return when hitting the first error (rather than erroring), and you can control this behaviour with the `on_error` argument. Or if you interrupt the job, it will finish up current requests and then return all the work done so far. The main downside of this work is that the output of `parallel_chat()` is more complex: it is now a mix of `Chat` objects, error objects, and `NULL` (#628).
+* `parallel_chat_structured()` no longer errors if some results fail to parse. Instead it warns, and the corresponding rows will be filled in with the appropriate missing values (#628).
 * `$chat_structured()` and friends now only warn if multiple json payloads found (instead of erroring) (@kbenoit, #732).
 * `interpolate_package()` now works with in-development packages loaded with devtools (#766).
 * `Chat$get_tokens()` gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (#618).

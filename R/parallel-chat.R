@@ -231,19 +231,35 @@ multi_convert <- function(
     if (turn_failed(turn)) {
       NULL
     } else {
-      extract_data(
-        turn = turn,
-        type = wrap_type_if_needed(type, needs_wrapper),
-        convert = FALSE,
-        needs_wrapper = needs_wrapper
+      safely(
+        extract_data(
+          turn = turn,
+          type = wrap_type_if_needed(type, needs_wrapper),
+          convert = FALSE,
+          needs_wrapper = needs_wrapper
+        )
       )
     }
   })
 
+  is_err <- map_lgl(rows, \(x) !is.null(x$error))
+  n_error <- sum(is_err)
+  if (n_error > 0) {
+    msgs <- map(rows[is_err], \(x) conditionMessage(x$error))
+    errors <- paste0(" * ", seq_along(turns)[is_err], ": ", msgs)
+
+    cli::cli_warn(c(
+      "Failed to extract data from {n_error}/{length(turns)} turns",
+      cli_escape(errors)
+    ))
+  }
+  # convert_from_type() will convert NULL to required type
+  row_data <- map(rows, \(x) x$result)
+
   if (convert) {
-    out <- convert_from_type(rows, type_array(type))
+    out <- convert_from_type(row_data, type_array(type))
   } else {
-    out <- rows
+    out <- row_data
   }
 
   if (is.data.frame(out)) {
@@ -346,4 +362,15 @@ parallel_turns <- function(
       value_turn(provider, json, has_type = !is.null(type))
     }
   })
+}
+
+# Helpers -----------------------------------------------------------------
+
+safely <- function(code) {
+  tryCatch(
+    list(result = code, error = NULL),
+    error = function(cnd) {
+      list(result = NULL, error = cnd)
+    }
+  )
 }

@@ -10,7 +10,7 @@ extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
   }
 
   json <- turn@contents[[which(is_json)[1]]]
-  out <- json@value
+  out <- json@parsed # might error
 
   if (needs_wrapper) {
     out <- out$wrapper
@@ -85,7 +85,11 @@ convert_from_type <- function(x, type) {
       x
     }
   } else if (S7_inherits(type, TypeEnum)) {
-    as.character(x)
+    if (is.null(x)) {
+      NA_character_
+    } else {
+      as.character(x)
+    }
   } else {
     x
   }

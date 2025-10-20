@@ -341,7 +341,7 @@ method(value_turn, ProviderAWSBedrock) <- function(
       ContentText(content$text)
     } else if (has_name(content, "toolUse")) {
       if (has_type) {
-        ContentJson(content$toolUse$input$data)
+        ContentJson(data = content$toolUse$input$data)
       } else {
         ContentToolRequest(
           name = content$toolUse$name,

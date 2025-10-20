@@ -236,7 +236,7 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
   contents <- lapply(raw_content, function(content) {
     if (content$type == "text") {
       if (has_type) {
-        ContentJson(jsonlite::parse_json(content$text))
+        ContentJson(string = content$text)
       } else {
         ContentText(content$text)
       }
