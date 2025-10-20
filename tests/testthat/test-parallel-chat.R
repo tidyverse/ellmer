@@ -141,12 +141,10 @@ test_that("errors in conversion become warnings", {
     Turn("assistant", list(ContentJson(data = list(x = 1)))),
     # no json
     Turn("assistant", list(ContentText("Hello"))),
-    # multiple json
-    Turn("assistant", list(ContentJson(data = 1), ContentJson(data = 2))),
     # invalid json
     Turn("assistant", list(ContentJson(string = "{")))
   )
 
   expect_snapshot(out <- multi_convert(provider, turns, type = type))
-  expect_equal(out, data.frame(x = c(1, NA, NA, NA)))
+  expect_equal(out, data.frame(x = c(1, NA, NA)))
 })

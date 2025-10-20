@@ -290,3 +290,7 @@ request_summary <- function(req) {
     body = req_get_body(req)
   )
 }
+
+str_trunc <- function(x, n) {
+  ifelse(nchar(x) > n, paste0(substr(x, 1, n - 3), "..."), x)
+}
