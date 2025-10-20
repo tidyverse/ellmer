@@ -82,7 +82,7 @@ test_that("can extract data in parallel", {
     list("John, age 15", "Jane, age 16"),
     type = person
   )
-  expect_equal(data, data.frame(name = c("John", "Jane"), age = c(15, 16)))
+  expect_equal(data, tibble::tibble(name = c("John", "Jane"), age = c(15, 16)))
 })
 
 test_that("can get tokens", {

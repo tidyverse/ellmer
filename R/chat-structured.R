@@ -55,7 +55,7 @@ convert_from_type <- function(x, type) {
           convert_from_type(vals, type_array(type@items@properties[[name]]))
         })
         names(cols) <- names(type@items@properties)
-        vctrs::new_data_frame(cols)
+        tibble::as_tibble(vctrs::new_data_frame(cols))
       }
     } else {
       x

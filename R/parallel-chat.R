@@ -40,7 +40,7 @@
 #'
 #' For `parallel_chat_structured()`, a single structured data object with one
 #' element for each prompt. Typically, when `type` is an object, this will
-#' be a data frame with one row for each prompt, and one column for each
+#' be a tibble with one row for each prompt, and one column for each
 #' property. If the output is a data frame, and some requests errors,
 #' an `.error` column will be added with the error messages.
 #' @export

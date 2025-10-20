@@ -34,6 +34,7 @@ Imports:
     R6,
     rlang (>= 1.1.0),
     S7 (>= 0.2.0),
+    tibble,
     vctrs
 Suggests:
     connectcreds,
