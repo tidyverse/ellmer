@@ -148,13 +148,21 @@ Chat <- R6::R6Class(
       tokens_df <- data.frame(
         role = rep(c("user", "assistant"), times = n),
         tokens = tokens_v,
-        tokens_total = tokens_acc_v
+        tokens_total = tokens_acc_v,
+        contents = map_chr(turns, turn_contents_preview)
       )
 
       if (include_system_prompt && private$has_system_prompt()) {
+        system_turn <- private$.turns[[1]]
+
         # How do we compute this?
         tokens_df <- rbind(
-          data.frame(role = "system", tokens = 0, tokens_total = 0),
+          data.frame(
+            role = "system",
+            tokens = 0,
+            tokens_total = 0,
+            contents = turn_contents_preview(system_turn)
+          ),
           tokens_df
         )
       }

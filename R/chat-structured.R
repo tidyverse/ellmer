@@ -1,11 +1,15 @@
 extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
   is_json <- map_lgl(turn@contents, S7_inherits, ContentJson)
   n <- sum(is_json)
-  if (n != 1) {
-    cli::cli_abort("Data extraction failed: {n} data results recieved.")
+  if (n == 0) {
+    cli::cli_abort("Data extraction failed: no JSON responses found.")
   }
 
-  json <- turn@contents[[which(is_json)]]
+  if (n > 1) {
+    cli::cli_warn("Found {n} JSON response{?s}, using the first.")
+  }
+
+  json <- turn@contents[[which(is_json)[1]]]
   out <- json@value
 
   if (needs_wrapper) {

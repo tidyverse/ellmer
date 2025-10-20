@@ -71,16 +71,20 @@ method(chat_params, ProviderDeepSeek) <- function(provider, params) {
   )
 }
 
-method(as_json, list(ProviderDeepSeek, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderDeepSeek, ContentText)) <- function(
+  provider,
+  x,
+  ...
+) {
   x@text
 }
 
-method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
   if (x@role == "user") {
     # Text and tool results go in separate messages
     texts <- keep(x@contents, S7_inherits, ContentText)
     texts_out <- lapply(texts, function(text) {
-      list(role = "user", content = as_json(provider, text))
+      list(role = "user", content = as_json(provider, text, ...))
     })
 
     tools <- keep(x@contents, S7_inherits, ContentToolResult)
@@ -100,11 +104,11 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x) {
 
     list(compact(list(
       role = "assistant",
-      content = as_json(provider, text),
-      tool_calls = as_json(provider, tools)
+      content = as_json(provider, text, ...),
+      tool_calls = as_json(provider, tools, ...)
     )))
   } else {
-    as_json(super(provider, ProviderOpenAI), x)
+    as_json(super(provider, ProviderOpenAI), x, ...)
   }
 }
 

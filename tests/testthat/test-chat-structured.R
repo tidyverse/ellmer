@@ -36,6 +36,20 @@ test_that("can extract data when wrapper is used", {
   expect_equal(extract_data(turn, type, needs_wrapper = TRUE), list(x = 1))
 })
 
+test_that("warns if multiple ContentJson (and uses first)", {
+  turn <- Turn(
+    "assistant",
+    list(
+      ContentJson(list(x = 1)),
+      ContentJson(list(x = 2)),
+      ContentJson(list(x = 3))
+    )
+  )
+  type <- type_object(x = type_integer())
+  expect_snapshot(result <- extract_data(turn, type))
+  expect_equal(result, list(x = 1))
+})
+
 # Type coercion ---------------------------------------------------------------
 
 test_that("optional base types (scalars) stay as NULL", {
