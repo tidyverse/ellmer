@@ -2,3180 +2,4839 @@
   {
     "provider": "Anthropic",
     "model": "claude-3-5-haiku-20241022",
-    "cached_input": 0.08,
+    "variant": "",
     "input": 0.8,
-    "output": 4
+    "output": 4,
+    "cached_input": 0.08
   },
   {
     "provider": "Anthropic",
     "model": "claude-3-5-haiku-latest",
-    "cached_input": 0.1,
+    "variant": "",
     "input": 1,
-    "output": 5
+    "output": 5,
+    "cached_input": 0.1
   },
   {
     "provider": "Anthropic",
     "model": "claude-3-5-sonnet-20240620",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 3,
-    "output": 15
+    "output": 15,
+    "cached_input": 0.3
   },
   {
     "provider": "Anthropic",
     "model": "claude-3-5-sonnet-20241022",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 3,
-    "output": 15
+    "output": 15,
+    "cached_input": 0.3
   },
   {
     "provider": "Anthropic",
     "model": "claude-3-5-sonnet-latest",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 3,
-    "output": 15
+    "output": 15,
+    "cached_input": 0.3
   },
   {
     "provider": "Anthropic",
     "model": "claude-3-7-sonnet-20250219",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 3,
-    "output": 15
+    "output": 15,
+    "cached_input": 0.3
   },
   {
     "provider": "Anthropic",
     "model": "claude-3-7-sonnet-latest",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 3,
-    "output": 15
+    "output": 15,
+    "cached_input": 0.3
   },
   {
     "provider": "Anthropic",
     "model": "claude-3-haiku-20240307",
-    "cached_input": 0.03,
+    "variant": "",
     "input": 0.25,
-    "output": 1.25
+    "output": 1.25,
+    "cached_input": 0.03
   },
   {
     "provider": "Anthropic",
     "model": "claude-3-opus-20240229",
-    "cached_input": 1.5,
+    "variant": "",
     "input": 15,
-    "output": 75
+    "output": 75,
+    "cached_input": 1.5
   },
   {
     "provider": "Anthropic",
     "model": "claude-3-opus-latest",
-    "cached_input": 1.5,
+    "variant": "",
     "input": 15,
-    "output": 75
+    "output": 75,
+    "cached_input": 1.5
   },
   {
     "provider": "Anthropic",
     "model": "claude-4-opus-20250514",
-    "cached_input": 1.5,
+    "variant": "",
     "input": 15,
-    "output": 75
+    "output": 75,
+    "cached_input": 1.5
   },
   {
     "provider": "Anthropic",
     "model": "claude-4-sonnet-20250514",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 3,
-    "output": 15
+    "output": 15,
+    "cached_input": 0.3
+  },
+  {
+    "provider": "Anthropic",
+    "model": "claude-4-sonnet-20250514",
+    "variant": "above_200k_tokens",
+    "input": 6,
+    "output": 22.5,
+    "cached_input": 0.6
+  },
+  {
+    "provider": "Anthropic",
+    "model": "claude-haiku-4-5",
+    "variant": "",
+    "input": 1,
+    "output": 5,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "Anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "variant": "",
+    "input": 1,
+    "output": 5,
+    "cached_input": 0.1
   },
   {
     "provider": "Anthropic",
     "model": "claude-opus-4-1",
-    "cached_input": 1.5,
+    "variant": "",
     "input": 15,
-    "output": 75
+    "output": 75,
+    "cached_input": 1.5
   },
   {
     "provider": "Anthropic",
     "model": "claude-opus-4-1-20250805",
-    "cached_input": 1.5,
+    "variant": "",
     "input": 15,
-    "output": 75
+    "output": 75,
+    "cached_input": 1.5
   },
   {
     "provider": "Anthropic",
     "model": "claude-opus-4-20250514",
-    "cached_input": 1.5,
+    "variant": "",
     "input": 15,
-    "output": 75
+    "output": 75,
+    "cached_input": 1.5
   },
   {
     "provider": "Anthropic",
     "model": "claude-sonnet-4-20250514",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 3,
-    "output": 15
+    "output": 15,
+    "cached_input": 0.3
+  },
+  {
+    "provider": "Anthropic",
+    "model": "claude-sonnet-4-20250514",
+    "variant": "above_200k_tokens",
+    "input": 6,
+    "output": 22.5,
+    "cached_input": 0.6
+  },
+  {
+    "provider": "Anthropic",
+    "model": "claude-sonnet-4-5",
+    "variant": "",
+    "input": 3,
+    "output": 15,
+    "cached_input": 0.3
+  },
+  {
+    "provider": "Anthropic",
+    "model": "claude-sonnet-4-5",
+    "variant": "above_200k_tokens",
+    "input": 6,
+    "output": 22.5,
+    "cached_input": 0.6
+  },
+  {
+    "provider": "Anthropic",
+    "model": "claude-sonnet-4-5-20250929",
+    "variant": "",
+    "input": 3,
+    "output": 15,
+    "cached_input": 0.3
+  },
+  {
+    "provider": "Anthropic",
+    "model": "claude-sonnet-4-5-20250929",
+    "variant": "above_200k_tokens",
+    "input": 6,
+    "output": 22.5,
+    "cached_input": 0.6
   },
   {
     "provider": "Azure/OpenAI",
     "model": "ada",
+    "variant": "",
     "input": 0.1,
     "output": 0
   },
   {
     "provider": "Azure/OpenAI",
     "model": "codex-mini",
-    "cached_input": 0.375,
+    "variant": "",
     "input": 1.5,
-    "output": 6
+    "output": 6,
+    "cached_input": 0.375
   },
   {
     "provider": "Azure/OpenAI",
     "model": "command-r-plus",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "Azure/OpenAI",
     "model": "computer-use-preview",
-    "input": 3,
-    "output": 12
-  },
-  {
-    "provider": "Azure/OpenAI",
-    "model": "computer-use-preview",
+    "variant": "",
     "input": 3,
     "output": 12
   },
   {
     "provider": "Azure/OpenAI",
     "model": "eu/gpt-4o-2024-08-06",
-    "cached_input": 1.375,
+    "variant": "",
     "input": 2.75,
-    "output": 11
+    "output": 11,
+    "cached_input": 1.375
   },
   {
     "provider": "Azure/OpenAI",
     "model": "eu/gpt-4o-2024-11-20",
+    "variant": "",
     "input": 2.75,
     "output": 11
   },
   {
     "provider": "Azure/OpenAI",
     "model": "eu/gpt-4o-mini-2024-07-18",
-    "cached_input": 0.083,
+    "variant": "",
     "input": 0.165,
-    "output": 0.66
+    "output": 0.66,
+    "cached_input": 0.083
   },
   {
     "provider": "Azure/OpenAI",
     "model": "eu/gpt-4o-mini-realtime-preview-2024-12-17",
-    "cached_input": 0.33,
+    "variant": "",
     "input": 0.66,
-    "output": 2.64
+    "output": 2.64,
+    "cached_input": 0.33
   },
   {
     "provider": "Azure/OpenAI",
     "model": "eu/gpt-4o-realtime-preview-2024-10-01",
-    "cached_input": 2.75,
+    "variant": "",
     "input": 5.5,
-    "output": 22
+    "output": 22,
+    "cached_input": 2.75
   },
   {
     "provider": "Azure/OpenAI",
     "model": "eu/gpt-4o-realtime-preview-2024-12-17",
-    "cached_input": 2.75,
+    "variant": "",
     "input": 5.5,
-    "output": 22
+    "output": 22,
+    "cached_input": 2.75
   },
   {
     "provider": "Azure/OpenAI",
     "model": "eu/o1-2024-12-17",
-    "cached_input": 8.25,
+    "variant": "",
     "input": 16.5,
-    "output": 66
+    "output": 66,
+    "cached_input": 8.25
   },
   {
     "provider": "Azure/OpenAI",
     "model": "eu/o1-mini-2024-09-12",
-    "cached_input": 0.605,
+    "variant": "",
     "input": 1.21,
-    "output": 4.84
+    "output": 4.84,
+    "cached_input": 0.605
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "eu/o1-mini-2024-09-12",
+    "variant": "batches",
+    "input": 0.605,
+    "output": 2.42
   },
   {
     "provider": "Azure/OpenAI",
     "model": "eu/o1-preview-2024-09-12",
-    "cached_input": 8.25,
+    "variant": "",
     "input": 16.5,
-    "output": 66
+    "output": 66,
+    "cached_input": 8.25
   },
   {
     "provider": "Azure/OpenAI",
     "model": "eu/o3-mini-2025-01-31",
-    "cached_input": 0.605,
+    "variant": "",
     "input": 1.21,
-    "output": 4.84
+    "output": 4.84,
+    "cached_input": 0.605
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "eu/o3-mini-2025-01-31",
+    "variant": "batches",
+    "input": 0.605,
+    "output": 2.42
   },
   {
     "provider": "Azure/OpenAI",
     "model": "global-standard/gpt-4o-2024-08-06",
-    "cached_input": 1.25,
+    "variant": "",
     "input": 2.5,
-    "output": 10
+    "output": 10,
+    "cached_input": 1.25
   },
   {
     "provider": "Azure/OpenAI",
     "model": "global-standard/gpt-4o-2024-11-20",
-    "cached_input": 1.25,
+    "variant": "",
     "input": 2.5,
-    "output": 10
+    "output": 10,
+    "cached_input": 1.25
   },
   {
     "provider": "Azure/OpenAI",
     "model": "global-standard/gpt-4o-mini",
+    "variant": "",
     "input": 0.15,
     "output": 0.6
   },
   {
     "provider": "Azure/OpenAI",
     "model": "global/gpt-4o-2024-08-06",
-    "cached_input": 1.25,
+    "variant": "",
     "input": 2.5,
-    "output": 10
+    "output": 10,
+    "cached_input": 1.25
   },
   {
     "provider": "Azure/OpenAI",
     "model": "global/gpt-4o-2024-11-20",
-    "cached_input": 1.25,
+    "variant": "",
     "input": 2.5,
-    "output": 10
+    "output": 10,
+    "cached_input": 1.25
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-3.5-turbo",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-3.5-turbo-0125",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-35-turbo",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-35-turbo-0125",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-35-turbo-0301",
+    "variant": "",
     "input": 0.2,
     "output": 2
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-35-turbo-0613",
+    "variant": "",
     "input": 1.5,
     "output": 2
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-35-turbo-1106",
+    "variant": "",
     "input": 1,
     "output": 2
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-35-turbo-16k",
+    "variant": "",
     "input": 3,
     "output": 4
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-35-turbo-16k-0613",
+    "variant": "",
     "input": 3,
     "output": 4
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4",
+    "variant": "",
     "input": 30,
     "output": 60
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4-0125-preview",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4-0613",
+    "variant": "",
     "input": 30,
     "output": 60
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4-1106-preview",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4-32k",
+    "variant": "",
     "input": 60,
     "output": 120
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4-32k-0613",
+    "variant": "",
     "input": 60,
     "output": 120
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4-turbo",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4-turbo-2024-04-09",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4-turbo-vision-preview",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4.1",
-    "cached_input": 0.5,
+    "variant": "",
     "input": 2,
-    "output": 8
+    "output": 8,
+    "cached_input": 0.5
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "gpt-4.1",
+    "variant": "batches",
+    "input": 1,
+    "output": 4
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4.1-2025-04-14",
-    "cached_input": 0.5,
+    "variant": "",
     "input": 2,
-    "output": 8
+    "output": 8,
+    "cached_input": 0.5
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "gpt-4.1-2025-04-14",
+    "variant": "batches",
+    "input": 1,
+    "output": 4
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4.1-mini",
-    "cached_input": 0.1,
+    "variant": "",
     "input": 0.4,
-    "output": 1.6
+    "output": 1.6,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "gpt-4.1-mini",
+    "variant": "batches",
+    "input": 0.2,
+    "output": 0.8
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4.1-mini-2025-04-14",
-    "cached_input": 0.1,
+    "variant": "",
     "input": 0.4,
-    "output": 1.6
+    "output": 1.6,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "gpt-4.1-mini-2025-04-14",
+    "variant": "batches",
+    "input": 0.2,
+    "output": 0.8
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4.1-nano",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "gpt-4.1-nano",
+    "variant": "batches",
+    "input": 0.05,
+    "output": 0.2
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4.1-nano-2025-04-14",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "gpt-4.1-nano-2025-04-14",
+    "variant": "batches",
+    "input": 0.05,
+    "output": 0.2
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4.5-preview",
-    "cached_input": 37.5,
+    "variant": "",
     "input": 75,
-    "output": 150
+    "output": 150,
+    "cached_input": 37.5
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "gpt-4.5-preview",
+    "variant": "batches",
+    "input": 37.5,
+    "output": 75
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o",
-    "cached_input": 1.25,
+    "variant": "",
     "input": 2.5,
-    "output": 10
+    "output": 10,
+    "cached_input": 1.25
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-2024-05-13",
+    "variant": "",
     "input": 5,
     "output": 15
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-2024-08-06",
-    "cached_input": 1.25,
+    "variant": "",
     "input": 2.5,
-    "output": 10
+    "output": 10,
+    "cached_input": 1.25
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-2024-11-20",
-    "cached_input": 1.25,
+    "variant": "",
     "input": 2.75,
-    "output": 11
+    "output": 11,
+    "cached_input": 1.25
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-audio-preview-2024-12-17",
+    "variant": "",
     "input": 2.5,
     "output": 10
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-mini",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.165,
-    "output": 0.66
+    "output": 0.66,
+    "cached_input": 0.075
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-mini-2024-07-18",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.165,
-    "output": 0.66
+    "output": 0.66,
+    "cached_input": 0.075
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-mini-audio-preview-2024-12-17",
+    "variant": "",
     "input": 2.5,
     "output": 10
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-mini-realtime-preview-2024-12-17",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 0.6,
-    "output": 2.4
+    "output": 2.4,
+    "cached_input": 0.3
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-mini-transcribe",
+    "variant": "",
     "input": 1.25,
     "output": 5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-mini-tts",
+    "variant": "",
     "input": 2.5,
     "output": 10
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-realtime-preview-2024-10-01",
-    "cached_input": 2.5,
+    "variant": "",
     "input": 5,
-    "output": 20
+    "output": 20,
+    "cached_input": 2.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-realtime-preview-2024-12-17",
-    "cached_input": 2.5,
+    "variant": "",
     "input": 5,
-    "output": 20
+    "output": 20,
+    "cached_input": 2.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-4o-transcribe",
+    "variant": "",
     "input": 2.5,
     "output": 10
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-5",
-    "cached_input": 0.125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.125
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-5-2025-08-07",
-    "cached_input": 0.125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.125
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-5-chat",
-    "cached_input": 0.125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.125
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-5-chat-latest",
-    "cached_input": 0.125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.125
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "gpt-5-codex",
+    "variant": "",
+    "input": 1.25,
+    "output": 10,
+    "cached_input": 0.125
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-5-mini",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.25,
-    "output": 2
+    "output": 2,
+    "cached_input": 0.025
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-5-mini-2025-08-07",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.25,
-    "output": 2
+    "output": 2,
+    "cached_input": 0.025
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-5-nano",
-    "cached_input": 0.005,
+    "variant": "",
     "input": 0.05,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.005
   },
   {
     "provider": "Azure/OpenAI",
     "model": "gpt-5-nano-2025-08-07",
-    "cached_input": 0.005,
+    "variant": "",
     "input": 0.05,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.005
   },
   {
     "provider": "Azure/OpenAI",
     "model": "mistral-large-2402",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "Azure/OpenAI",
     "model": "mistral-large-latest",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o1",
-    "cached_input": 7.5,
+    "variant": "",
     "input": 15,
-    "output": 60
+    "output": 60,
+    "cached_input": 7.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o1-2024-12-17",
-    "cached_input": 7.5,
+    "variant": "",
     "input": 15,
-    "output": 60
+    "output": 60,
+    "cached_input": 7.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o1-mini",
-    "cached_input": 0.605,
+    "variant": "",
     "input": 1.21,
-    "output": 4.84
+    "output": 4.84,
+    "cached_input": 0.605
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o1-mini-2024-09-12",
-    "cached_input": 0.55,
+    "variant": "",
     "input": 1.1,
-    "output": 4.4
+    "output": 4.4,
+    "cached_input": 0.55
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o1-preview",
-    "cached_input": 7.5,
+    "variant": "",
     "input": 15,
-    "output": 60
+    "output": 60,
+    "cached_input": 7.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o1-preview-2024-09-12",
-    "cached_input": 7.5,
+    "variant": "",
     "input": 15,
-    "output": 60
+    "output": 60,
+    "cached_input": 7.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o3",
-    "cached_input": 0.5,
+    "variant": "",
     "input": 2,
-    "output": 8
+    "output": 8,
+    "cached_input": 0.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o3-2025-04-16",
-    "cached_input": 2.5,
+    "variant": "",
     "input": 10,
-    "output": 40
+    "output": 40,
+    "cached_input": 2.5
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o3-deep-research",
-    "cached_input": 2.5,
+    "variant": "",
+    "input": 10,
+    "output": 40,
+    "cached_input": 2.5
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "o3-mini",
+    "variant": "",
+    "input": 1.1,
+    "output": 4.4,
+    "cached_input": 0.55
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "o3-mini-2025-01-31",
+    "variant": "",
+    "input": 1.1,
+    "output": 4.4,
+    "cached_input": 0.55
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "o3-pro",
+    "variant": "",
+    "input": 20,
+    "output": 80
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "o3-pro",
+    "variant": "batches",
     "input": 10,
     "output": 40
   },
   {
     "provider": "Azure/OpenAI",
-    "model": "o3-mini",
-    "cached_input": 0.55,
-    "input": 1.1,
-    "output": 4.4
-  },
-  {
-    "provider": "Azure/OpenAI",
-    "model": "o3-mini-2025-01-31",
-    "cached_input": 0.55,
-    "input": 1.1,
-    "output": 4.4
-  },
-  {
-    "provider": "Azure/OpenAI",
-    "model": "o3-pro",
+    "model": "o3-pro-2025-06-10",
+    "variant": "",
     "input": 20,
     "output": 80
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o3-pro-2025-06-10",
-    "input": 20,
-    "output": 80
+    "variant": "batches",
+    "input": 10,
+    "output": 40
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o4-mini",
-    "cached_input": 0.275,
+    "variant": "",
     "input": 1.1,
-    "output": 4.4
+    "output": 4.4,
+    "cached_input": 0.275
   },
   {
     "provider": "Azure/OpenAI",
     "model": "o4-mini-2025-04-16",
-    "cached_input": 0.275,
+    "variant": "",
     "input": 1.1,
-    "output": 4.4
+    "output": 4.4,
+    "cached_input": 0.275
   },
   {
     "provider": "Azure/OpenAI",
     "model": "text-embedding-3-large",
+    "variant": "",
     "input": 0.13,
     "output": 0
   },
   {
     "provider": "Azure/OpenAI",
     "model": "text-embedding-3-small",
+    "variant": "",
     "input": 0.02,
     "output": 0
   },
   {
     "provider": "Azure/OpenAI",
     "model": "text-embedding-ada-002",
+    "variant": "",
     "input": 0.1,
     "output": 0
   },
   {
     "provider": "Azure/OpenAI",
     "model": "us/gpt-4o-2024-08-06",
-    "cached_input": 1.375,
+    "variant": "",
     "input": 2.75,
-    "output": 11
+    "output": 11,
+    "cached_input": 1.375
   },
   {
     "provider": "Azure/OpenAI",
     "model": "us/gpt-4o-2024-11-20",
+    "variant": "",
     "input": 2.75,
     "output": 11
   },
   {
     "provider": "Azure/OpenAI",
     "model": "us/gpt-4o-mini-2024-07-18",
-    "cached_input": 0.083,
+    "variant": "",
     "input": 0.165,
-    "output": 0.66
+    "output": 0.66,
+    "cached_input": 0.083
   },
   {
     "provider": "Azure/OpenAI",
     "model": "us/gpt-4o-mini-realtime-preview-2024-12-17",
-    "cached_input": 0.33,
+    "variant": "",
     "input": 0.66,
-    "output": 2.64
+    "output": 2.64,
+    "cached_input": 0.33
   },
   {
     "provider": "Azure/OpenAI",
     "model": "us/gpt-4o-realtime-preview-2024-10-01",
-    "cached_input": 2.75,
+    "variant": "",
     "input": 5.5,
-    "output": 22
+    "output": 22,
+    "cached_input": 2.75
   },
   {
     "provider": "Azure/OpenAI",
     "model": "us/gpt-4o-realtime-preview-2024-12-17",
-    "cached_input": 2.75,
+    "variant": "",
     "input": 5.5,
-    "output": 22
+    "output": 22,
+    "cached_input": 2.75
   },
   {
     "provider": "Azure/OpenAI",
     "model": "us/o1-2024-12-17",
-    "cached_input": 8.25,
+    "variant": "",
     "input": 16.5,
-    "output": 66
+    "output": 66,
+    "cached_input": 8.25
   },
   {
     "provider": "Azure/OpenAI",
     "model": "us/o1-mini-2024-09-12",
-    "cached_input": 0.605,
+    "variant": "",
     "input": 1.21,
-    "output": 4.84
+    "output": 4.84,
+    "cached_input": 0.605
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "us/o1-mini-2024-09-12",
+    "variant": "batches",
+    "input": 0.605,
+    "output": 2.42
   },
   {
     "provider": "Azure/OpenAI",
     "model": "us/o1-preview-2024-09-12",
-    "cached_input": 8.25,
+    "variant": "",
     "input": 16.5,
-    "output": 66
+    "output": 66,
+    "cached_input": 8.25
   },
   {
     "provider": "Azure/OpenAI",
     "model": "us/o3-mini-2025-01-31",
-    "cached_input": 0.605,
+    "variant": "",
     "input": 1.21,
-    "output": 4.84
+    "output": 4.84,
+    "cached_input": 0.605
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "us/o3-mini-2025-01-31",
+    "variant": "batches",
+    "input": 0.605,
+    "output": 2.42
+  },
+  {
+    "provider": "Azure/OpenAI",
+    "model": "computer-use-preview",
+    "variant": "",
+    "input": 3,
+    "output": 12
   },
   {
     "provider": "AWS/Bedrock",
     "model": "ai21.j2-mid-v1",
+    "variant": "",
     "input": 12.5,
     "output": 12.5
   },
   {
     "provider": "AWS/Bedrock",
     "model": "ai21.j2-ultra-v1",
+    "variant": "",
     "input": 18.8,
     "output": 18.8
   },
   {
     "provider": "AWS/Bedrock",
     "model": "ai21.jamba-1-5-large-v1:0",
+    "variant": "",
     "input": 2,
     "output": 8
   },
   {
     "provider": "AWS/Bedrock",
     "model": "ai21.jamba-1-5-mini-v1:0",
+    "variant": "",
     "input": 0.2,
     "output": 0.4
   },
   {
     "provider": "AWS/Bedrock",
     "model": "ai21.jamba-instruct-v1:0",
+    "variant": "",
     "input": 0.5,
     "output": 0.7
   },
   {
     "provider": "AWS/Bedrock",
     "model": "amazon.titan-embed-image-v1",
+    "variant": "",
     "input": 0.8,
     "output": 0
   },
   {
     "provider": "AWS/Bedrock",
     "model": "amazon.titan-embed-text-v1",
+    "variant": "",
     "input": 0.1,
     "output": 0
   },
   {
     "provider": "AWS/Bedrock",
     "model": "amazon.titan-embed-text-v2:0",
+    "variant": "",
     "input": 0.2,
     "output": 0
   },
   {
     "provider": "AWS/Bedrock",
     "model": "amazon.titan-text-express-v1",
+    "variant": "",
     "input": 1.3,
     "output": 1.7
   },
   {
     "provider": "AWS/Bedrock",
     "model": "amazon.titan-text-lite-v1",
+    "variant": "",
     "input": 0.3,
     "output": 0.4
   },
   {
     "provider": "AWS/Bedrock",
     "model": "amazon.titan-text-premier-v1:0",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "AWS/Bedrock",
     "model": "anthropic.claude-3-5-haiku-20241022-v1:0",
-    "cached_input": 0.08,
+    "variant": "",
     "input": 0.8,
-    "output": 4
+    "output": 4,
+    "cached_input": 0.08
   },
   {
     "provider": "AWS/Bedrock",
     "model": "anthropic.claude-3-5-sonnet-20240620-v1:0",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "AWS/Bedrock",
     "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 3,
-    "output": 15
+    "output": 15,
+    "cached_input": 0.3
   },
   {
     "provider": "AWS/Bedrock",
     "model": "anthropic.claude-3-haiku-20240307-v1:0",
+    "variant": "",
     "input": 0.25,
     "output": 1.25
   },
   {
     "provider": "AWS/Bedrock",
     "model": "anthropic.claude-3-opus-20240229-v1:0",
+    "variant": "",
     "input": 15,
     "output": 75
   },
   {
     "provider": "AWS/Bedrock",
     "model": "anthropic.claude-3-sonnet-20240229-v1:0",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "AWS/Bedrock",
+    "model": "anthropic.claude-haiku-4-5-20251001-v1:0",
+    "variant": "",
+    "input": 1,
+    "output": 5,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "anthropic.claude-haiku-4-5@20251001",
+    "variant": "",
+    "input": 1,
+    "output": 5,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "AWS/Bedrock",
     "model": "anthropic.claude-instant-v1",
+    "variant": "",
     "input": 0.8,
     "output": 2.4
   },
   {
     "provider": "AWS/Bedrock",
     "model": "anthropic.claude-v1",
-    "input": 8,
-    "output": 24
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "anthropic.claude-v2",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "AWS/Bedrock",
     "model": "anthropic.claude-v2:1",
+    "variant": "",
     "input": 8,
     "output": 24
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "ap-northeast-1/anthropic.claude-instant-v1",
-    "input": 2.23,
-    "output": 7.55
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "ap-northeast-1/anthropic.claude-v1",
-    "input": 8,
-    "output": 24
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "ap-northeast-1/anthropic.claude-v2",
-    "input": 8,
-    "output": 24
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "ap-northeast-1/anthropic.claude-v2:1",
-    "input": 8,
-    "output": 24
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "ap-south-1/meta.llama3-70b-instruct-v1:0",
-    "input": 3.18,
-    "output": 4.2
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "ap-south-1/meta.llama3-8b-instruct-v1:0",
-    "input": 0.36,
-    "output": 0.72
   },
   {
     "provider": "AWS/Bedrock",
     "model": "apac.anthropic.claude-3-5-sonnet-20240620-v1:0",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "AWS/Bedrock",
     "model": "apac.anthropic.claude-3-5-sonnet-20241022-v2:0",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 3,
-    "output": 15
+    "output": 15,
+    "cached_input": 0.3
   },
   {
     "provider": "AWS/Bedrock",
     "model": "apac.anthropic.claude-3-haiku-20240307-v1:0",
+    "variant": "",
     "input": 0.25,
     "output": 1.25
   },
   {
     "provider": "AWS/Bedrock",
     "model": "apac.anthropic.claude-3-sonnet-20240229-v1:0",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "AWS/Bedrock",
+    "model": "apac.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "variant": "",
+    "input": 1,
+    "output": 5,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "ap-northeast-1/anthropic.claude-instant-v1",
+    "variant": "",
+    "input": 2.23,
+    "output": 7.55
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "ap-northeast-1/anthropic.claude-v1",
+    "variant": "",
+    "input": 8,
+    "output": 24
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "ap-northeast-1/anthropic.claude-v2:1",
+    "variant": "",
+    "input": 8,
+    "output": 24
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "ap-south-1/meta.llama3-70b-instruct-v1:0",
+    "variant": "",
+    "input": 3.18,
+    "output": 4.2
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "ap-south-1/meta.llama3-8b-instruct-v1:0",
+    "variant": "",
+    "input": 0.36,
+    "output": 0.72
+  },
+  {
+    "provider": "AWS/Bedrock",
     "model": "ca-central-1/meta.llama3-70b-instruct-v1:0",
+    "variant": "",
     "input": 3.05,
     "output": 4.03
   },
   {
     "provider": "AWS/Bedrock",
     "model": "ca-central-1/meta.llama3-8b-instruct-v1:0",
+    "variant": "",
     "input": 0.35,
     "output": 0.69
   },
   {
     "provider": "AWS/Bedrock",
-    "model": "cohere.command-light-text-v14",
-    "input": 0.3,
-    "output": 0.6
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "cohere.command-r-plus-v1:0",
-    "input": 3,
-    "output": 15
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "cohere.command-r-v1:0",
-    "input": 0.5,
-    "output": 1.5
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "cohere.command-text-v14",
-    "input": 1.5,
-    "output": 2
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "cohere.embed-english-v3",
-    "input": 0.1,
-    "output": 0
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "cohere.embed-multilingual-v3",
-    "input": 0.1,
-    "output": 0
-  },
-  {
-    "provider": "AWS/Bedrock",
     "model": "eu-central-1/anthropic.claude-instant-v1",
+    "variant": "",
     "input": 2.48,
     "output": 8.38
   },
   {
     "provider": "AWS/Bedrock",
     "model": "eu-central-1/anthropic.claude-v1",
-    "input": 8,
-    "output": 24
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "eu-central-1/anthropic.claude-v2",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "AWS/Bedrock",
     "model": "eu-central-1/anthropic.claude-v2:1",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "AWS/Bedrock",
     "model": "eu-west-1/meta.llama3-70b-instruct-v1:0",
+    "variant": "",
     "input": 2.86,
     "output": 3.78
   },
   {
     "provider": "AWS/Bedrock",
     "model": "eu-west-1/meta.llama3-8b-instruct-v1:0",
+    "variant": "",
     "input": 0.32,
     "output": 0.65
   },
   {
     "provider": "AWS/Bedrock",
     "model": "eu-west-2/meta.llama3-70b-instruct-v1:0",
+    "variant": "",
     "input": 3.45,
     "output": 4.55
   },
   {
     "provider": "AWS/Bedrock",
     "model": "eu-west-2/meta.llama3-8b-instruct-v1:0",
+    "variant": "",
     "input": 0.39,
     "output": 0.78
   },
   {
     "provider": "AWS/Bedrock",
     "model": "eu-west-3/mistral.mistral-7b-instruct-v0:2",
+    "variant": "",
     "input": 0.2,
     "output": 0.26
   },
   {
     "provider": "AWS/Bedrock",
     "model": "eu-west-3/mistral.mistral-large-2402-v1:0",
+    "variant": "",
     "input": 10.4,
     "output": 31.2
   },
   {
     "provider": "AWS/Bedrock",
     "model": "eu-west-3/mistral.mixtral-8x7b-instruct-v0:1",
+    "variant": "",
     "input": 0.59,
     "output": 0.91
   },
   {
     "provider": "AWS/Bedrock",
-    "model": "eu.anthropic.claude-3-5-haiku-20241022-v1:0",
-    "input": 0.25,
-    "output": 1.25
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "eu.anthropic.claude-3-5-sonnet-20240620-v1:0",
-    "input": 3,
-    "output": 15
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "eu.anthropic.claude-3-5-sonnet-20241022-v2:0",
-    "input": 3,
-    "output": 15
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "eu.anthropic.claude-3-7-sonnet-20250219-v1:0",
-    "input": 3,
-    "output": 15
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "eu.anthropic.claude-3-haiku-20240307-v1:0",
-    "input": 0.25,
-    "output": 1.25
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "eu.anthropic.claude-3-opus-20240229-v1:0",
-    "input": 15,
-    "output": 75
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "eu.anthropic.claude-3-sonnet-20240229-v1:0",
-    "input": 3,
-    "output": 15
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "eu.meta.llama3-2-1b-instruct-v1:0",
-    "input": 0.13,
-    "output": 0.13
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "eu.meta.llama3-2-3b-instruct-v1:0",
-    "input": 0.19,
-    "output": 0.19
-  },
-  {
-    "provider": "AWS/Bedrock",
     "model": "invoke/anthropic.claude-3-5-sonnet-20240620-v1:0",
+    "variant": "",
     "input": 3,
     "output": 15
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "meta.llama2-13b-chat-v1",
-    "input": 0.75,
-    "output": 1
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "meta.llama2-70b-chat-v1",
-    "input": 1.95,
-    "output": 2.56
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "meta.llama3-1-405b-instruct-v1:0",
-    "input": 5.32,
-    "output": 16
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "meta.llama3-1-70b-instruct-v1:0",
-    "input": 0.99,
-    "output": 0.99
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "meta.llama3-1-8b-instruct-v1:0",
-    "input": 0.22,
-    "output": 0.22
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "meta.llama3-2-11b-instruct-v1:0",
-    "input": 0.35,
-    "output": 0.35
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "meta.llama3-2-1b-instruct-v1:0",
-    "input": 0.1,
-    "output": 0.1
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "meta.llama3-2-3b-instruct-v1:0",
-    "input": 0.15,
-    "output": 0.15
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "meta.llama3-2-90b-instruct-v1:0",
-    "input": 2,
-    "output": 2
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "meta.llama3-70b-instruct-v1:0",
-    "input": 2.65,
-    "output": 3.5
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "meta.llama3-8b-instruct-v1:0",
-    "input": 0.3,
-    "output": 0.6
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "mistral.mistral-7b-instruct-v0:2",
-    "input": 0.15,
-    "output": 0.2
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "mistral.mistral-large-2402-v1:0",
-    "input": 8,
-    "output": 24
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "mistral.mistral-large-2407-v1:0",
-    "input": 3,
-    "output": 9
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "mistral.mistral-small-2402-v1:0",
-    "input": 1,
-    "output": 3
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "mistral.mixtral-8x7b-instruct-v0:1",
-    "input": 0.45,
-    "output": 0.7
   },
   {
     "provider": "AWS/Bedrock",
     "model": "sa-east-1/meta.llama3-70b-instruct-v1:0",
+    "variant": "",
     "input": 4.45,
     "output": 5.88
   },
   {
     "provider": "AWS/Bedrock",
     "model": "sa-east-1/meta.llama3-8b-instruct-v1:0",
+    "variant": "",
     "input": 0.5,
     "output": 1.01
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-east-1/anthropic.claude-instant-v1",
+    "variant": "",
     "input": 0.8,
     "output": 2.4
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-east-1/anthropic.claude-v1",
-    "input": 8,
-    "output": 24
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "us-east-1/anthropic.claude-v2",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-east-1/anthropic.claude-v2:1",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-east-1/meta.llama3-70b-instruct-v1:0",
+    "variant": "",
     "input": 2.65,
     "output": 3.5
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-east-1/meta.llama3-8b-instruct-v1:0",
+    "variant": "",
     "input": 0.3,
     "output": 0.6
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-east-1/mistral.mistral-7b-instruct-v0:2",
+    "variant": "",
     "input": 0.15,
     "output": 0.2
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-east-1/mistral.mistral-large-2402-v1:0",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-east-1/mistral.mixtral-8x7b-instruct-v0:1",
+    "variant": "",
     "input": 0.45,
     "output": 0.7
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-east-1/amazon.nova-pro-v1:0",
+    "variant": "",
     "input": 0.96,
     "output": 3.84
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-east-1/amazon.titan-embed-text-v1",
+    "variant": "",
     "input": 0.1,
     "output": 0
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-east-1/amazon.titan-embed-text-v2:0",
+    "variant": "",
     "input": 0.2,
     "output": 0
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-east-1/amazon.titan-text-express-v1",
+    "variant": "",
     "input": 1.3,
     "output": 1.7
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-east-1/amazon.titan-text-lite-v1",
+    "variant": "",
     "input": 0.3,
     "output": 0.4
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-east-1/amazon.titan-text-premier-v1:0",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-east-1/anthropic.claude-3-5-sonnet-20240620-v1:0",
+    "variant": "",
     "input": 3.6,
     "output": 18
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-east-1/anthropic.claude-3-haiku-20240307-v1:0",
+    "variant": "",
     "input": 0.3,
     "output": 1.5
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-east-1/meta.llama3-70b-instruct-v1:0",
+    "variant": "",
     "input": 2.65,
     "output": 3.5
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-east-1/meta.llama3-8b-instruct-v1:0",
+    "variant": "",
     "input": 0.3,
     "output": 2.65
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-west-1/amazon.nova-pro-v1:0",
+    "variant": "",
     "input": 0.96,
     "output": 3.84
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-west-1/amazon.titan-embed-text-v1",
+    "variant": "",
     "input": 0.1,
     "output": 0
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-west-1/amazon.titan-embed-text-v2:0",
+    "variant": "",
     "input": 0.2,
     "output": 0
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-west-1/amazon.titan-text-express-v1",
+    "variant": "",
     "input": 1.3,
     "output": 1.7
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-west-1/amazon.titan-text-lite-v1",
+    "variant": "",
     "input": 0.3,
     "output": 0.4
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-west-1/amazon.titan-text-premier-v1:0",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-west-1/anthropic.claude-3-5-sonnet-20240620-v1:0",
+    "variant": "",
     "input": 3.6,
     "output": 18
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-west-1/anthropic.claude-3-haiku-20240307-v1:0",
+    "variant": "",
     "input": 0.3,
     "output": 1.5
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-west-1/meta.llama3-70b-instruct-v1:0",
+    "variant": "",
     "input": 2.65,
     "output": 3.5
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-gov-west-1/meta.llama3-8b-instruct-v1:0",
+    "variant": "",
     "input": 0.3,
     "output": 2.65
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-west-1/meta.llama3-70b-instruct-v1:0",
+    "variant": "",
     "input": 2.65,
     "output": 3.5
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-west-1/meta.llama3-8b-instruct-v1:0",
+    "variant": "",
     "input": 0.3,
     "output": 0.6
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-west-2/anthropic.claude-instant-v1",
+    "variant": "",
     "input": 0.8,
     "output": 2.4
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-west-2/anthropic.claude-v1",
-    "input": 8,
-    "output": 24
-  },
-  {
-    "provider": "AWS/Bedrock",
-    "model": "us-west-2/anthropic.claude-v2",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-west-2/anthropic.claude-v2:1",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-west-2/mistral.mistral-7b-instruct-v0:2",
+    "variant": "",
     "input": 0.15,
     "output": 0.2
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-west-2/mistral.mistral-large-2402-v1:0",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us-west-2/mistral.mixtral-8x7b-instruct-v0:1",
+    "variant": "",
     "input": 0.45,
     "output": 0.7
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.anthropic.claude-3-5-haiku-20241022-v1:0",
-    "cached_input": 0.08,
+    "variant": "",
     "input": 0.8,
-    "output": 4
+    "output": 4,
+    "cached_input": 0.08
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "cohere.command-light-text-v14",
+    "variant": "",
+    "input": 0.3,
+    "output": 0.6
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "cohere.command-r-plus-v1:0",
+    "variant": "",
+    "input": 3,
+    "output": 15
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "cohere.command-r-v1:0",
+    "variant": "",
+    "input": 0.5,
+    "output": 1.5
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "cohere.command-text-v14",
+    "variant": "",
+    "input": 1.5,
+    "output": 2
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "cohere.embed-english-v3",
+    "variant": "",
+    "input": 0.1,
+    "output": 0
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "cohere.embed-multilingual-v3",
+    "variant": "",
+    "input": 0.1,
+    "output": 0
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "cohere.embed-v4:0",
+    "variant": "",
+    "input": 0.12,
+    "output": 0
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.anthropic.claude-3-5-haiku-20241022-v1:0",
+    "variant": "",
+    "input": 0.25,
+    "output": 1.25
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.anthropic.claude-3-5-sonnet-20240620-v1:0",
+    "variant": "",
+    "input": 3,
+    "output": 15
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.anthropic.claude-3-5-sonnet-20241022-v2:0",
+    "variant": "",
+    "input": 3,
+    "output": 15
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.anthropic.claude-3-7-sonnet-20250219-v1:0",
+    "variant": "",
+    "input": 3,
+    "output": 15
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.anthropic.claude-3-haiku-20240307-v1:0",
+    "variant": "",
+    "input": 0.25,
+    "output": 1.25
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.anthropic.claude-3-opus-20240229-v1:0",
+    "variant": "",
+    "input": 15,
+    "output": 75
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.anthropic.claude-3-sonnet-20240229-v1:0",
+    "variant": "",
+    "input": 3,
+    "output": 15
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "variant": "",
+    "input": 1,
+    "output": 5,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.meta.llama3-2-1b-instruct-v1:0",
+    "variant": "",
+    "input": 0.13,
+    "output": 0.13
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.meta.llama3-2-3b-instruct-v1:0",
+    "variant": "",
+    "input": 0.19,
+    "output": 0.19
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.twelvelabs.marengo-embed-2-7-v1:0",
+    "variant": "",
+    "input": 70,
+    "output": 0
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "eu.twelvelabs.pegasus-1-2-v1:0",
+    "variant": "",
+    "output": 7.5
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "jp.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "variant": "",
+    "input": 1,
+    "output": 5,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "meta.llama2-13b-chat-v1",
+    "variant": "",
+    "input": 0.75,
+    "output": 1
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "meta.llama2-70b-chat-v1",
+    "variant": "",
+    "input": 1.95,
+    "output": 2.56
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "meta.llama3-1-405b-instruct-v1:0",
+    "variant": "",
+    "input": 5.32,
+    "output": 16
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "meta.llama3-1-70b-instruct-v1:0",
+    "variant": "",
+    "input": 0.99,
+    "output": 0.99
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "meta.llama3-1-8b-instruct-v1:0",
+    "variant": "",
+    "input": 0.22,
+    "output": 0.22
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "meta.llama3-2-11b-instruct-v1:0",
+    "variant": "",
+    "input": 0.35,
+    "output": 0.35
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "meta.llama3-2-1b-instruct-v1:0",
+    "variant": "",
+    "input": 0.1,
+    "output": 0.1
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "meta.llama3-2-3b-instruct-v1:0",
+    "variant": "",
+    "input": 0.15,
+    "output": 0.15
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "meta.llama3-2-90b-instruct-v1:0",
+    "variant": "",
+    "input": 2,
+    "output": 2
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "meta.llama3-70b-instruct-v1:0",
+    "variant": "",
+    "input": 2.65,
+    "output": 3.5
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "meta.llama3-8b-instruct-v1:0",
+    "variant": "",
+    "input": 0.3,
+    "output": 0.6
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "mistral.mistral-7b-instruct-v0:2",
+    "variant": "",
+    "input": 0.15,
+    "output": 0.2
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "mistral.mistral-large-2402-v1:0",
+    "variant": "",
+    "input": 8,
+    "output": 24
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "mistral.mistral-large-2407-v1:0",
+    "variant": "",
+    "input": 3,
+    "output": 9
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "mistral.mistral-small-2402-v1:0",
+    "variant": "",
+    "input": 1,
+    "output": 3
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "mistral.mixtral-8x7b-instruct-v0:1",
+    "variant": "",
+    "input": 0.45,
+    "output": 0.7
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "twelvelabs.marengo-embed-2-7-v1:0",
+    "variant": "",
+    "input": 70,
+    "output": 0
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "twelvelabs.pegasus-1-2-v1:0",
+    "variant": "",
+    "output": 7.5
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "us.anthropic.claude-3-5-haiku-20241022-v1:0",
+    "variant": "",
+    "input": 0.8,
+    "output": 4,
+    "cached_input": 0.08
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.anthropic.claude-3-5-sonnet-20240620-v1:0",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 3,
-    "output": 15
+    "output": 15,
+    "cached_input": 0.3
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.anthropic.claude-3-haiku-20240307-v1:0",
+    "variant": "",
     "input": 0.25,
     "output": 1.25
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.anthropic.claude-3-opus-20240229-v1:0",
+    "variant": "",
     "input": 15,
     "output": 75
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.anthropic.claude-3-sonnet-20240229-v1:0",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "AWS/Bedrock",
+    "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "variant": "",
+    "input": 1,
+    "output": 5,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "AWS/Bedrock",
     "model": "us.meta.llama3-1-405b-instruct-v1:0",
+    "variant": "",
     "input": 5.32,
     "output": 16
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.meta.llama3-1-70b-instruct-v1:0",
+    "variant": "",
     "input": 0.99,
     "output": 0.99
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.meta.llama3-1-8b-instruct-v1:0",
+    "variant": "",
     "input": 0.22,
     "output": 0.22
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.meta.llama3-2-11b-instruct-v1:0",
+    "variant": "",
     "input": 0.35,
     "output": 0.35
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.meta.llama3-2-1b-instruct-v1:0",
+    "variant": "",
     "input": 0.1,
     "output": 0.1
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.meta.llama3-2-3b-instruct-v1:0",
+    "variant": "",
     "input": 0.15,
     "output": 0.15
   },
   {
     "provider": "AWS/Bedrock",
     "model": "us.meta.llama3-2-90b-instruct-v1:0",
+    "variant": "",
     "input": 2,
     "output": 2
   },
   {
+    "provider": "AWS/Bedrock",
+    "model": "us.twelvelabs.marengo-embed-2-7-v1:0",
+    "variant": "",
+    "input": 70,
+    "output": 0
+  },
+  {
+    "provider": "AWS/Bedrock",
+    "model": "us.twelvelabs.pegasus-1-2-v1:0",
+    "variant": "",
+    "output": 7.5
+  },
+  {
     "provider": "Google/Gemini",
     "model": "gemini-1.5-flash",
+    "variant": "",
     "input": 0.075,
     "output": 0.3
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-1.5-flash",
+    "variant": "above_128k_tokens",
+    "input": 0.15,
+    "output": 0.6
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-1.5-flash-001",
-    "cached_input": 0.0188,
+    "variant": "",
     "input": 0.075,
-    "output": 0.3
+    "output": 0.3,
+    "cached_input": 0.0188
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-1.5-flash-001",
+    "variant": "above_128k_tokens",
+    "input": 0.15,
+    "output": 0.6
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-1.5-flash-002",
-    "cached_input": 0.0188,
+    "variant": "",
+    "input": 0.075,
+    "output": 0.3,
+    "cached_input": 0.0188
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-1.5-flash-002",
+    "variant": "above_128k_tokens",
+    "input": 0.15,
+    "output": 0.6
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-1.5-flash-latest",
+    "variant": "",
     "input": 0.075,
     "output": 0.3
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-1.5-flash-latest",
-    "input": 0.075,
-    "output": 0.3
+    "variant": "above_128k_tokens",
+    "input": 0.15,
+    "output": 0.6
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-1.5-pro",
+    "variant": "",
+    "input": 3.5,
+    "output": 10.5
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-1.5-pro",
+    "variant": "above_128k_tokens",
+    "input": 7,
+    "output": 21
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-1.5-pro-001",
+    "variant": "",
     "input": 3.5,
     "output": 10.5
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-1.5-pro-001",
+    "variant": "above_128k_tokens",
+    "input": 7,
+    "output": 21
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-1.5-pro-002",
+    "variant": "",
     "input": 3.5,
     "output": 10.5
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-1.5-pro-002",
+    "variant": "above_128k_tokens",
+    "input": 7,
+    "output": 21
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-1.5-pro-exp-0801",
+    "variant": "",
     "input": 3.5,
     "output": 10.5
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-1.5-pro-exp-0801",
-    "input": 3.5,
-    "output": 10.5
+    "variant": "above_128k_tokens",
+    "input": 7,
+    "output": 21
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-1.5-pro-latest",
+    "variant": "",
     "input": 3.5,
     "output": 1.05
   },
   {
     "provider": "Google/Gemini",
+    "model": "gemini-1.5-pro-latest",
+    "variant": "above_128k_tokens",
+    "input": 7,
+    "output": 21
+  },
+  {
+    "provider": "Google/Gemini",
     "model": "gemini-2.0-flash",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.0-flash-001",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.0-flash-lite",
-    "cached_input": 0.0188,
+    "variant": "",
     "input": 0.075,
-    "output": 0.3
+    "output": 0.3,
+    "cached_input": 0.0188
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.0-flash-lite-preview-02-05",
-    "cached_input": 0.0188,
+    "variant": "",
     "input": 0.075,
-    "output": 0.3
+    "output": 0.3,
+    "cached_input": 0.0188
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.0-flash-live-001",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.35,
-    "output": 1.5
+    "output": 1.5,
+    "cached_input": 0.075
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.0-flash-preview-image-generation",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.5-flash",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.3,
-    "output": 2.5
+    "output": 2.5,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-2.5-flash-image-preview",
+    "variant": "",
+    "input": 0.3,
+    "output": 30,
+    "cached_input": 0.075
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.5-flash-lite",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.5-flash-lite-preview-06-17",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-2.5-flash-lite-preview-09-2025",
+    "variant": "",
+    "input": 0.1,
+    "output": 0.4,
+    "cached_input": 0.025
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.5-flash-preview-04-17",
-    "cached_input": 0.0375,
+    "variant": "",
     "input": 0.15,
-    "output": 0.6
+    "output": 0.6,
+    "cached_input": 0.0375
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.5-flash-preview-05-20",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.3,
-    "output": 2.5
+    "output": 2.5,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-2.5-flash-preview-09-2025",
+    "variant": "",
+    "input": 0.3,
+    "output": 2.5,
+    "cached_input": 0.075
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.5-flash-preview-tts",
-    "cached_input": 0.0375,
+    "variant": "",
     "input": 0.15,
-    "output": 0.6
+    "output": 0.6,
+    "cached_input": 0.0375
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.5-pro",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-2.5-pro",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.5-pro-preview-03-25",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-2.5-pro-preview-03-25",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.5-pro-preview-05-06",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-2.5-pro-preview-05-06",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.5-pro-preview-06-05",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-2.5-pro-preview-06-05",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-2.5-pro-preview-tts",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-2.5-pro-preview-tts",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-flash-latest",
+    "variant": "",
+    "input": 0.3,
+    "output": 2.5,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-flash-lite-latest",
+    "variant": "",
+    "input": 0.1,
+    "output": 0.4,
+    "cached_input": 0.025
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-gemma-2-27b-it",
+    "variant": "",
     "input": 0.35,
     "output": 1.05
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-gemma-2-9b-it",
+    "variant": "",
     "input": 0.35,
     "output": 1.05
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-pro",
+    "variant": "",
+    "input": 0.35,
+    "output": 1.05
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-pro",
+    "variant": "above_128k_tokens",
+    "input": 0.7,
+    "output": 2.1
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-pro-vision",
+    "variant": "",
     "input": 0.35,
     "output": 1.05
   },
   {
     "provider": "Google/Gemini",
     "model": "gemini-pro-vision",
-    "input": 0.35,
-    "output": 1.05
+    "variant": "above_128k_tokens",
+    "input": 0.7,
+    "output": 2.1
   },
   {
     "provider": "Mistral",
     "model": "codestral-2405",
+    "variant": "",
     "input": 1,
     "output": 3
   },
   {
     "provider": "Mistral",
     "model": "codestral-latest",
+    "variant": "",
     "input": 1,
     "output": 3
   },
   {
     "provider": "Mistral",
     "model": "codestral-mamba-latest",
+    "variant": "",
     "input": 0.25,
     "output": 0.25
   },
   {
     "provider": "Mistral",
     "model": "devstral-medium-2507",
+    "variant": "",
     "input": 0.4,
     "output": 2
   },
   {
     "provider": "Mistral",
     "model": "devstral-small-2505",
+    "variant": "",
     "input": 0.1,
     "output": 0.3
   },
   {
     "provider": "Mistral",
     "model": "devstral-small-2507",
+    "variant": "",
     "input": 0.1,
     "output": 0.3
   },
   {
     "provider": "Mistral",
     "model": "magistral-medium-2506",
+    "variant": "",
     "input": 2,
     "output": 5
   },
   {
     "provider": "Mistral",
     "model": "magistral-medium-latest",
+    "variant": "",
     "input": 2,
     "output": 5
   },
   {
     "provider": "Mistral",
     "model": "magistral-small-2506",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "Mistral",
     "model": "magistral-small-latest",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "Mistral",
     "model": "mistral-embed",
+    "variant": "",
     "input": 0.1
   },
   {
     "provider": "Mistral",
     "model": "mistral-large-2402",
+    "variant": "",
     "input": 4,
     "output": 12
   },
   {
     "provider": "Mistral",
     "model": "mistral-large-2407",
+    "variant": "",
     "input": 3,
     "output": 9
   },
   {
     "provider": "Mistral",
     "model": "mistral-large-2411",
+    "variant": "",
     "input": 2,
     "output": 6
   },
   {
     "provider": "Mistral",
     "model": "mistral-large-latest",
+    "variant": "",
     "input": 2,
     "output": 6
   },
   {
     "provider": "Mistral",
     "model": "mistral-medium",
+    "variant": "",
     "input": 2.7,
     "output": 8.1
   },
   {
     "provider": "Mistral",
     "model": "mistral-medium-2312",
+    "variant": "",
     "input": 2.7,
     "output": 8.1
   },
   {
     "provider": "Mistral",
     "model": "mistral-medium-2505",
+    "variant": "",
     "input": 0.4,
     "output": 2
   },
   {
     "provider": "Mistral",
     "model": "mistral-medium-latest",
+    "variant": "",
     "input": 0.4,
     "output": 2
   },
   {
     "provider": "Mistral",
     "model": "mistral-small",
+    "variant": "",
     "input": 0.1,
     "output": 0.3
   },
   {
     "provider": "Mistral",
     "model": "mistral-small-latest",
+    "variant": "",
     "input": 0.1,
     "output": 0.3
   },
   {
     "provider": "Mistral",
     "model": "mistral-tiny",
+    "variant": "",
     "input": 0.25,
     "output": 0.25
   },
   {
     "provider": "Mistral",
     "model": "open-codestral-mamba",
+    "variant": "",
     "input": 0.25,
     "output": 0.25
   },
   {
     "provider": "Mistral",
     "model": "open-mistral-7b",
+    "variant": "",
     "input": 0.25,
     "output": 0.25
   },
   {
     "provider": "Mistral",
     "model": "open-mistral-nemo",
+    "variant": "",
     "input": 0.3,
     "output": 0.3
   },
   {
     "provider": "Mistral",
     "model": "open-mistral-nemo-2407",
+    "variant": "",
     "input": 0.3,
     "output": 0.3
   },
   {
     "provider": "Mistral",
     "model": "open-mixtral-8x22b",
+    "variant": "",
     "input": 2,
     "output": 6
   },
   {
     "provider": "Mistral",
     "model": "open-mixtral-8x7b",
+    "variant": "",
     "input": 0.7,
     "output": 0.7
   },
   {
     "provider": "Mistral",
     "model": "pixtral-12b-2409",
+    "variant": "",
     "input": 0.15,
     "output": 0.15
   },
   {
     "provider": "Mistral",
     "model": "pixtral-large-2411",
+    "variant": "",
     "input": 2,
     "output": 6
   },
   {
     "provider": "Mistral",
     "model": "pixtral-large-latest",
+    "variant": "",
     "input": 2,
     "output": 6
   },
   {
     "provider": "OpenAI",
     "model": "chatgpt-4o-latest",
+    "variant": "",
     "input": 5,
     "output": 15
   },
   {
     "provider": "OpenAI",
     "model": "codex-mini-latest",
-    "cached_input": 0.375,
+    "variant": "",
     "input": 1.5,
-    "output": 6
+    "output": 6,
+    "cached_input": 0.375
   },
   {
     "provider": "OpenAI",
     "model": "ft:gpt-3.5-turbo",
+    "variant": "",
     "input": 3,
     "output": 6
   },
   {
     "provider": "OpenAI",
+    "model": "ft:gpt-3.5-turbo",
+    "variant": "batches",
+    "input": 1.5,
+    "output": 3
+  },
+  {
+    "provider": "OpenAI",
     "model": "ft:gpt-3.5-turbo-0125",
+    "variant": "",
     "input": 3,
     "output": 6
   },
   {
     "provider": "OpenAI",
     "model": "ft:gpt-3.5-turbo-0613",
+    "variant": "",
     "input": 3,
     "output": 6
   },
   {
     "provider": "OpenAI",
     "model": "ft:gpt-3.5-turbo-1106",
+    "variant": "",
     "input": 3,
     "output": 6
   },
   {
     "provider": "OpenAI",
     "model": "ft:gpt-4-0613",
+    "variant": "",
     "input": 30,
     "output": 60
   },
   {
     "provider": "OpenAI",
     "model": "ft:gpt-4o-2024-08-06",
+    "variant": "",
     "input": 3.75,
     "output": 15
   },
   {
     "provider": "OpenAI",
+    "model": "ft:gpt-4o-2024-08-06",
+    "variant": "batches",
+    "input": 1.875,
+    "output": 7.5
+  },
+  {
+    "provider": "OpenAI",
     "model": "ft:gpt-4o-2024-11-20",
+    "variant": "",
     "input": 3.75,
     "output": 15
   },
   {
     "provider": "OpenAI",
     "model": "ft:gpt-4o-mini-2024-07-18",
-    "cached_input": 0.15,
+    "variant": "",
     "input": 0.3,
-    "output": 1.2
+    "output": 1.2,
+    "cached_input": 0.15
+  },
+  {
+    "provider": "OpenAI",
+    "model": "ft:gpt-4o-mini-2024-07-18",
+    "variant": "batches",
+    "input": 0.15,
+    "output": 0.6
   },
   {
     "provider": "OpenAI",
     "model": "gpt-3.5-turbo",
-    "input": 1.5,
-    "output": 2
+    "variant": "",
+    "input": 0.5,
+    "output": 1.5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-3.5-turbo-0125",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-3.5-turbo-0301",
+    "variant": "",
     "input": 1.5,
     "output": 2
   },
   {
     "provider": "OpenAI",
     "model": "gpt-3.5-turbo-0613",
+    "variant": "",
     "input": 1.5,
     "output": 2
   },
   {
     "provider": "OpenAI",
     "model": "gpt-3.5-turbo-1106",
+    "variant": "",
     "input": 1,
     "output": 2
   },
   {
     "provider": "OpenAI",
     "model": "gpt-3.5-turbo-16k",
+    "variant": "",
     "input": 3,
     "output": 4
   },
   {
     "provider": "OpenAI",
     "model": "gpt-3.5-turbo-16k-0613",
+    "variant": "",
     "input": 3,
     "output": 4
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4",
+    "variant": "",
     "input": 30,
     "output": 60
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-0125-preview",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-0314",
+    "variant": "",
     "input": 30,
     "output": 60
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-0613",
+    "variant": "",
     "input": 30,
     "output": 60
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-1106-preview",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-1106-vision-preview",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-32k",
+    "variant": "",
     "input": 60,
     "output": 120
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-32k-0314",
+    "variant": "",
     "input": 60,
     "output": 120
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-32k-0613",
+    "variant": "",
     "input": 60,
     "output": 120
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-turbo",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-turbo-2024-04-09",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-turbo-preview",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4-vision-preview",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4.1",
-    "cached_input": 0.5,
+    "variant": "",
     "input": 2,
-    "output": 8
+    "output": 8,
+    "cached_input": 0.5
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4.1",
+    "variant": "batches",
+    "input": 1,
+    "output": 4
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4.1",
+    "variant": "priority",
+    "input": 3.5,
+    "output": 14,
+    "cached_input": 0.875
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4.1-2025-04-14",
-    "cached_input": 0.5,
+    "variant": "",
     "input": 2,
-    "output": 8
+    "output": 8,
+    "cached_input": 0.5
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4.1-2025-04-14",
+    "variant": "batches",
+    "input": 1,
+    "output": 4
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4.1-mini",
-    "cached_input": 0.1,
+    "variant": "",
     "input": 0.4,
-    "output": 1.6
+    "output": 1.6,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4.1-mini",
+    "variant": "batches",
+    "input": 0.2,
+    "output": 0.8
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4.1-mini",
+    "variant": "priority",
+    "input": 0.7,
+    "output": 2.8,
+    "cached_input": 0.175
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4.1-mini-2025-04-14",
-    "cached_input": 0.1,
+    "variant": "",
     "input": 0.4,
-    "output": 1.6
+    "output": 1.6,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4.1-mini-2025-04-14",
+    "variant": "batches",
+    "input": 0.2,
+    "output": 0.8
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4.1-nano",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4.1-nano",
+    "variant": "batches",
+    "input": 0.05,
+    "output": 0.2
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4.1-nano",
+    "variant": "priority",
+    "input": 0.2,
+    "output": 0.8,
+    "cached_input": 0.05
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4.1-nano-2025-04-14",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4.1-nano-2025-04-14",
+    "variant": "batches",
+    "input": 0.05,
+    "output": 0.2
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4.5-preview",
-    "cached_input": 37.5,
+    "variant": "",
     "input": 75,
-    "output": 150
+    "output": 150,
+    "cached_input": 37.5
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4.5-preview",
+    "variant": "batches",
+    "input": 37.5,
+    "output": 75
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4.5-preview-2025-02-27",
-    "cached_input": 37.5,
+    "variant": "",
     "input": 75,
-    "output": 150
+    "output": 150,
+    "cached_input": 37.5
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4.5-preview-2025-02-27",
+    "variant": "batches",
+    "input": 37.5,
+    "output": 75
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o",
-    "cached_input": 1.25,
+    "variant": "",
     "input": 2.5,
-    "output": 10
+    "output": 10,
+    "cached_input": 1.25
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o",
+    "variant": "batches",
+    "input": 1.25,
+    "output": 5
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o",
+    "variant": "priority",
+    "input": 4.25,
+    "output": 17,
+    "cached_input": 2.125
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-2024-05-13",
+    "variant": "",
     "input": 5,
     "output": 15
   },
   {
     "provider": "OpenAI",
-    "model": "gpt-4o-2024-08-06",
-    "cached_input": 1.25,
+    "model": "gpt-4o-2024-05-13",
+    "variant": "batches",
     "input": 2.5,
-    "output": 10
+    "output": 7.5
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o-2024-05-13",
+    "variant": "priority",
+    "input": 8.75,
+    "output": 26.25
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o-2024-08-06",
+    "variant": "",
+    "input": 2.5,
+    "output": 10,
+    "cached_input": 1.25
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o-2024-08-06",
+    "variant": "batches",
+    "input": 1.25,
+    "output": 5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-2024-11-20",
-    "cached_input": 1.25,
+    "variant": "",
     "input": 2.5,
-    "output": 10
+    "output": 10,
+    "cached_input": 1.25
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o-2024-11-20",
+    "variant": "batches",
+    "input": 1.25,
+    "output": 5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-audio-preview",
+    "variant": "",
     "input": 2.5,
     "output": 10
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-audio-preview-2024-10-01",
+    "variant": "",
     "input": 2.5,
     "output": 10
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-audio-preview-2024-12-17",
+    "variant": "",
     "input": 2.5,
     "output": 10
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-audio-preview-2025-06-03",
+    "variant": "",
     "input": 2.5,
     "output": 10
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-mini",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.15,
-    "output": 0.6
+    "output": 0.6,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o-mini",
+    "variant": "batches",
+    "input": 0.075,
+    "output": 0.3
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o-mini",
+    "variant": "priority",
+    "input": 0.25,
+    "output": 1,
+    "cached_input": 0.125
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-mini-2024-07-18",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.15,
-    "output": 0.6
+    "output": 0.6,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o-mini-2024-07-18",
+    "variant": "batches",
+    "input": 0.075,
+    "output": 0.3
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-mini-audio-preview",
+    "variant": "",
     "input": 0.15,
     "output": 0.6
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-mini-audio-preview-2024-12-17",
+    "variant": "",
     "input": 0.15,
     "output": 0.6
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-mini-realtime-preview",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 0.6,
-    "output": 2.4
+    "output": 2.4,
+    "cached_input": 0.3
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-mini-realtime-preview-2024-12-17",
-    "cached_input": 0.3,
+    "variant": "",
     "input": 0.6,
-    "output": 2.4
+    "output": 2.4,
+    "cached_input": 0.3
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-mini-search-preview",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.15,
-    "output": 0.6
+    "output": 0.6,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o-mini-search-preview",
+    "variant": "batches",
+    "input": 0.075,
+    "output": 0.3
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-mini-search-preview-2025-03-11",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.15,
-    "output": 0.6
+    "output": 0.6,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o-mini-search-preview-2025-03-11",
+    "variant": "batches",
+    "input": 0.075,
+    "output": 0.3
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-mini-transcribe",
+    "variant": "",
     "input": 1.25,
     "output": 5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-mini-tts",
+    "variant": "",
     "input": 2.5,
     "output": 10
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-realtime-preview",
-    "cached_input": 2.5,
+    "variant": "",
     "input": 5,
-    "output": 20
+    "output": 20,
+    "cached_input": 2.5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-realtime-preview-2024-10-01",
-    "cached_input": 2.5,
+    "variant": "",
     "input": 5,
-    "output": 20
+    "output": 20,
+    "cached_input": 2.5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-realtime-preview-2024-12-17",
-    "cached_input": 2.5,
+    "variant": "",
     "input": 5,
-    "output": 20
+    "output": 20,
+    "cached_input": 2.5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-realtime-preview-2025-06-03",
-    "cached_input": 2.5,
+    "variant": "",
     "input": 5,
-    "output": 20
+    "output": 20,
+    "cached_input": 2.5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-search-preview",
-    "cached_input": 1.25,
+    "variant": "",
     "input": 2.5,
-    "output": 10
+    "output": 10,
+    "cached_input": 1.25
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o-search-preview",
+    "variant": "batches",
+    "input": 1.25,
+    "output": 5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-search-preview-2025-03-11",
-    "cached_input": 1.25,
+    "variant": "",
     "input": 2.5,
-    "output": 10
+    "output": 10,
+    "cached_input": 1.25
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-4o-search-preview-2025-03-11",
+    "variant": "batches",
+    "input": 1.25,
+    "output": 5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-4o-transcribe",
+    "variant": "",
     "input": 2.5,
     "output": 10
   },
   {
     "provider": "OpenAI",
     "model": "gpt-5",
-    "cached_input": 0.125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.125
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5",
+    "variant": "flex",
+    "input": 0.625,
+    "output": 5,
+    "cached_input": 0.0625
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5",
+    "variant": "priority",
+    "input": 2.5,
+    "output": 20,
+    "cached_input": 0.25
   },
   {
     "provider": "OpenAI",
     "model": "gpt-5-2025-08-07",
-    "cached_input": 0.125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.125
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-2025-08-07",
+    "variant": "flex",
+    "input": 0.625,
+    "output": 5,
+    "cached_input": 0.0625
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-2025-08-07",
+    "variant": "priority",
+    "input": 2.5,
+    "output": 20,
+    "cached_input": 0.25
   },
   {
     "provider": "OpenAI",
     "model": "gpt-5-chat",
-    "cached_input": 0.125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.125
   },
   {
     "provider": "OpenAI",
     "model": "gpt-5-chat-latest",
-    "cached_input": 0.125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.125
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-codex",
+    "variant": "",
+    "input": 1.25,
+    "output": 10,
+    "cached_input": 0.125
   },
   {
     "provider": "OpenAI",
     "model": "gpt-5-mini",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.25,
-    "output": 2
+    "output": 2,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-mini",
+    "variant": "flex",
+    "input": 0.125,
+    "output": 1,
+    "cached_input": 0.0125
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-mini",
+    "variant": "priority",
+    "input": 0.45,
+    "output": 3.6,
+    "cached_input": 0.045
   },
   {
     "provider": "OpenAI",
     "model": "gpt-5-mini-2025-08-07",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.25,
-    "output": 2
+    "output": 2,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-mini-2025-08-07",
+    "variant": "flex",
+    "input": 0.125,
+    "output": 1,
+    "cached_input": 0.0125
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-mini-2025-08-07",
+    "variant": "priority",
+    "input": 0.45,
+    "output": 3.6,
+    "cached_input": 0.045
   },
   {
     "provider": "OpenAI",
     "model": "gpt-5-nano",
-    "cached_input": 0.005,
+    "variant": "",
     "input": 0.05,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.005
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-nano",
+    "variant": "flex",
+    "input": 0.025,
+    "output": 0.2,
+    "cached_input": 0.0025
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-nano",
+    "variant": "priority",
+    "input": 2.5
   },
   {
     "provider": "OpenAI",
     "model": "gpt-5-nano-2025-08-07",
-    "cached_input": 0.005,
+    "variant": "",
     "input": 0.05,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.005
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-nano-2025-08-07",
+    "variant": "flex",
+    "input": 0.025,
+    "output": 0.2,
+    "cached_input": 0.0025
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-pro",
+    "variant": "",
+    "input": 15,
+    "output": 120
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-pro",
+    "variant": "batches",
+    "input": 7.5,
+    "output": 60
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-pro-2025-10-06",
+    "variant": "",
+    "input": 15,
+    "output": 120
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-5-pro-2025-10-06",
+    "variant": "batches",
+    "input": 7.5,
+    "output": 60
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-image-1-mini",
+    "variant": "",
+    "input": 2,
+    "cached_input": 0.2
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-realtime",
+    "variant": "",
+    "input": 4,
+    "output": 16,
+    "cached_input": 0.4
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-realtime-2025-08-28",
+    "variant": "",
+    "input": 4,
+    "output": 16,
+    "cached_input": 0.4
+  },
+  {
+    "provider": "OpenAI",
+    "model": "gpt-realtime-mini",
+    "variant": "",
+    "input": 0.6,
+    "output": 2.4
   },
   {
     "provider": "OpenAI",
     "model": "o1",
-    "cached_input": 7.5,
+    "variant": "",
     "input": 15,
-    "output": 60
+    "output": 60,
+    "cached_input": 7.5
   },
   {
     "provider": "OpenAI",
     "model": "o1-2024-12-17",
-    "cached_input": 7.5,
+    "variant": "",
     "input": 15,
-    "output": 60
+    "output": 60,
+    "cached_input": 7.5
   },
   {
     "provider": "OpenAI",
     "model": "o1-mini",
-    "cached_input": 0.55,
+    "variant": "",
     "input": 1.1,
-    "output": 4.4
+    "output": 4.4,
+    "cached_input": 0.55
   },
   {
     "provider": "OpenAI",
     "model": "o1-mini-2024-09-12",
-    "cached_input": 1.5,
+    "variant": "",
     "input": 3,
-    "output": 12
+    "output": 12,
+    "cached_input": 1.5
   },
   {
     "provider": "OpenAI",
     "model": "o1-preview",
-    "cached_input": 7.5,
+    "variant": "",
     "input": 15,
-    "output": 60
+    "output": 60,
+    "cached_input": 7.5
   },
   {
     "provider": "OpenAI",
     "model": "o1-preview-2024-09-12",
-    "cached_input": 7.5,
+    "variant": "",
     "input": 15,
-    "output": 60
+    "output": 60,
+    "cached_input": 7.5
   },
   {
     "provider": "OpenAI",
     "model": "o1-pro",
+    "variant": "",
+    "input": 150,
+    "output": 600
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o1-pro",
+    "variant": "batches",
+    "input": 75,
+    "output": 300
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o1-pro-2025-03-19",
+    "variant": "",
     "input": 150,
     "output": 600
   },
   {
     "provider": "OpenAI",
     "model": "o1-pro-2025-03-19",
-    "input": 150,
-    "output": 600
+    "variant": "batches",
+    "input": 75,
+    "output": 300
   },
   {
     "provider": "OpenAI",
     "model": "o3",
-    "cached_input": 0.5,
+    "variant": "",
     "input": 2,
-    "output": 8
+    "output": 8,
+    "cached_input": 0.5
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o3",
+    "variant": "flex",
+    "input": 1,
+    "output": 4,
+    "cached_input": 0.25
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o3",
+    "variant": "priority",
+    "input": 3.5,
+    "output": 14,
+    "cached_input": 0.875
   },
   {
     "provider": "OpenAI",
     "model": "o3-2025-04-16",
-    "cached_input": 0.5,
+    "variant": "",
     "input": 2,
-    "output": 8
+    "output": 8,
+    "cached_input": 0.5
   },
   {
     "provider": "OpenAI",
     "model": "o3-deep-research",
-    "cached_input": 2.5,
+    "variant": "",
     "input": 10,
-    "output": 40
+    "output": 40,
+    "cached_input": 2.5
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o3-deep-research",
+    "variant": "batches",
+    "input": 5,
+    "output": 20
   },
   {
     "provider": "OpenAI",
     "model": "o3-deep-research-2025-06-26",
-    "cached_input": 2.5,
+    "variant": "",
+    "input": 10,
+    "output": 40,
+    "cached_input": 2.5
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o3-deep-research-2025-06-26",
+    "variant": "batches",
+    "input": 5,
+    "output": 20
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o3-mini",
+    "variant": "",
+    "input": 1.1,
+    "output": 4.4,
+    "cached_input": 0.55
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o3-mini-2025-01-31",
+    "variant": "",
+    "input": 1.1,
+    "output": 4.4,
+    "cached_input": 0.55
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o3-pro",
+    "variant": "",
+    "input": 20,
+    "output": 80
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o3-pro",
+    "variant": "batches",
     "input": 10,
     "output": 40
   },
   {
     "provider": "OpenAI",
-    "model": "o3-mini",
-    "cached_input": 0.55,
-    "input": 1.1,
-    "output": 4.4
-  },
-  {
-    "provider": "OpenAI",
-    "model": "o3-mini-2025-01-31",
-    "cached_input": 0.55,
-    "input": 1.1,
-    "output": 4.4
-  },
-  {
-    "provider": "OpenAI",
-    "model": "o3-pro",
+    "model": "o3-pro-2025-06-10",
+    "variant": "",
     "input": 20,
     "output": 80
   },
   {
     "provider": "OpenAI",
     "model": "o3-pro-2025-06-10",
-    "input": 20,
-    "output": 80
+    "variant": "batches",
+    "input": 10,
+    "output": 40
   },
   {
     "provider": "OpenAI",
     "model": "o4-mini",
-    "cached_input": 0.275,
+    "variant": "",
     "input": 1.1,
-    "output": 4.4
+    "output": 4.4,
+    "cached_input": 0.275
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o4-mini",
+    "variant": "flex",
+    "input": 0.55,
+    "output": 2.2,
+    "cached_input": 0.1375
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o4-mini",
+    "variant": "priority",
+    "input": 2,
+    "output": 8,
+    "cached_input": 0.5
   },
   {
     "provider": "OpenAI",
     "model": "o4-mini-2025-04-16",
-    "cached_input": 0.275,
+    "variant": "",
     "input": 1.1,
-    "output": 4.4
+    "output": 4.4,
+    "cached_input": 0.275
   },
   {
     "provider": "OpenAI",
     "model": "o4-mini-deep-research",
-    "cached_input": 0.5,
+    "variant": "",
     "input": 2,
-    "output": 8
+    "output": 8,
+    "cached_input": 0.5
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o4-mini-deep-research",
+    "variant": "batches",
+    "input": 1,
+    "output": 4
   },
   {
     "provider": "OpenAI",
     "model": "o4-mini-deep-research-2025-06-26",
-    "cached_input": 0.5,
+    "variant": "",
     "input": 2,
-    "output": 8
+    "output": 8,
+    "cached_input": 0.5
+  },
+  {
+    "provider": "OpenAI",
+    "model": "o4-mini-deep-research-2025-06-26",
+    "variant": "batches",
+    "input": 1,
+    "output": 4
   },
   {
     "provider": "OpenAI",
     "model": "text-embedding-3-large",
+    "variant": "",
     "input": 0.13,
     "output": 0
   },
   {
     "provider": "OpenAI",
+    "model": "text-embedding-3-large",
+    "variant": "batches",
+    "input": 0.065,
+    "output": 0
+  },
+  {
+    "provider": "OpenAI",
     "model": "text-embedding-3-small",
+    "variant": "",
     "input": 0.02,
     "output": 0
   },
   {
     "provider": "OpenAI",
+    "model": "text-embedding-3-small",
+    "variant": "batches",
+    "input": 0.01,
+    "output": 0
+  },
+  {
+    "provider": "OpenAI",
     "model": "text-embedding-ada-002",
+    "variant": "",
     "input": 0.1,
     "output": 0
   },
   {
     "provider": "OpenAI",
     "model": "text-embedding-ada-002-v2",
+    "variant": "",
     "input": 0.1,
+    "output": 0
+  },
+  {
+    "provider": "OpenAI",
+    "model": "text-embedding-ada-002-v2",
+    "variant": "batches",
+    "input": 0.05,
     "output": 0
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-2",
+    "variant": "",
     "input": 11.02,
     "output": 32.68
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-3-5-haiku",
+    "variant": "",
     "input": 1,
     "output": 5
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-3-5-haiku-20241022",
+    "variant": "",
     "input": 1,
     "output": 5
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-3-haiku",
+    "variant": "",
     "input": 0.25,
     "output": 1.25
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-3-haiku-20240307",
+    "variant": "",
     "input": 0.25,
     "output": 1.25
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-3-opus",
+    "variant": "",
     "input": 15,
     "output": 75
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-3-sonnet",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-3.5-sonnet",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-3.5-sonnet:beta",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-3.7-sonnet",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-3.7-sonnet:beta",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "OpenRouter",
     "model": "anthropic/claude-instant-v1",
+    "variant": "",
     "input": 1.63,
     "output": 5.51
   },
   {
     "provider": "OpenRouter",
+    "model": "anthropic/claude-opus-4",
+    "variant": "",
+    "input": 15,
+    "output": 75,
+    "cached_input": 1.5
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "anthropic/claude-opus-4.1",
+    "variant": "",
+    "input": 15,
+    "output": 75,
+    "cached_input": 1.5
+  },
+  {
+    "provider": "OpenRouter",
     "model": "anthropic/claude-sonnet-4",
+    "variant": "",
     "input": 3,
-    "output": 15
+    "output": 15,
+    "cached_input": 0.3
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "anthropic/claude-sonnet-4",
+    "variant": "above_200k_tokens",
+    "input": 6,
+    "output": 22.5,
+    "cached_input": 0.6
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "anthropic/claude-sonnet-4.5",
+    "variant": "",
+    "input": 3,
+    "output": 15,
+    "cached_input": 0.3
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "anthropic/claude-sonnet-4.5",
+    "variant": "above_200k_tokens",
+    "input": 6,
+    "output": 22.5,
+    "cached_input": 0.6
   },
   {
     "provider": "OpenRouter",
     "model": "bytedance/ui-tars-1.5-7b",
+    "variant": "",
     "input": 0.1,
     "output": 0.2
   },
   {
     "provider": "OpenRouter",
     "model": "cognitivecomputations/dolphin-mixtral-8x7b",
+    "variant": "",
     "input": 0.5,
     "output": 0.5
   },
   {
     "provider": "OpenRouter",
     "model": "cohere/command-r-plus",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "OpenRouter",
     "model": "databricks/dbrx-instruct",
+    "variant": "",
     "input": 0.6,
     "output": 0.6
   },
   {
     "provider": "OpenRouter",
     "model": "deepseek/deepseek-chat",
+    "variant": "",
     "input": 0.14,
     "output": 0.28
   },
   {
     "provider": "OpenRouter",
     "model": "deepseek/deepseek-chat-v3-0324",
+    "variant": "",
     "input": 0.14,
     "output": 0.28
   },
   {
     "provider": "OpenRouter",
+    "model": "deepseek/deepseek-chat-v3.1",
+    "variant": "",
+    "input": 0.2,
+    "output": 0.8
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "deepseek/deepseek-chat-v3.1",
+    "variant": "cache_hit",
+    "input": 0.02
+  },
+  {
+    "provider": "OpenRouter",
     "model": "deepseek/deepseek-coder",
+    "variant": "",
     "input": 0.14,
     "output": 0.28
   },
   {
     "provider": "OpenRouter",
     "model": "deepseek/deepseek-r1",
+    "variant": "",
     "input": 0.55,
     "output": 2.19
   },
   {
     "provider": "OpenRouter",
+    "model": "deepseek/deepseek-r1",
+    "variant": "cache_hit",
+    "input": 0.14
+  },
+  {
+    "provider": "OpenRouter",
     "model": "deepseek/deepseek-r1-0528",
+    "variant": "",
     "input": 0.5,
     "output": 2.15
   },
   {
     "provider": "OpenRouter",
+    "model": "deepseek/deepseek-r1-0528",
+    "variant": "cache_hit",
+    "input": 0.14
+  },
+  {
+    "provider": "OpenRouter",
     "model": "fireworks/firellava-13b",
+    "variant": "",
     "input": 0.2,
     "output": 0.2
   },
   {
     "provider": "OpenRouter",
     "model": "google/gemini-2.0-flash-001",
+    "variant": "",
     "input": 0.1,
     "output": 0.4
   },
   {
     "provider": "OpenRouter",
     "model": "google/gemini-2.5-flash",
+    "variant": "",
     "input": 0.3,
     "output": 2.5
   },
   {
     "provider": "OpenRouter",
     "model": "google/gemini-2.5-pro",
+    "variant": "",
     "input": 1.25,
     "output": 10
   },
   {
     "provider": "OpenRouter",
     "model": "google/gemini-pro-1.5",
+    "variant": "",
     "input": 2.5,
     "output": 7.5
   },
   {
     "provider": "OpenRouter",
     "model": "google/gemini-pro-vision",
+    "variant": "",
     "input": 0.125,
     "output": 0.375
   },
   {
     "provider": "OpenRouter",
     "model": "google/palm-2-chat-bison",
+    "variant": "",
     "input": 0.5,
     "output": 0.5
   },
   {
     "provider": "OpenRouter",
     "model": "google/palm-2-codechat-bison",
+    "variant": "",
     "input": 0.5,
     "output": 0.5
   },
   {
     "provider": "OpenRouter",
     "model": "gryphe/mythomax-l2-13b",
+    "variant": "",
     "input": 1.875,
     "output": 1.875
   },
   {
     "provider": "OpenRouter",
     "model": "jondurbin/airoboros-l2-70b-2.1",
+    "variant": "",
     "input": 13.875,
     "output": 13.875
   },
   {
     "provider": "OpenRouter",
     "model": "mancer/weaver",
+    "variant": "",
     "input": 5.625,
     "output": 5.625
   },
   {
     "provider": "OpenRouter",
     "model": "meta-llama/codellama-34b-instruct",
+    "variant": "",
     "input": 0.5,
     "output": 0.5
   },
   {
     "provider": "OpenRouter",
     "model": "meta-llama/llama-2-13b-chat",
+    "variant": "",
     "input": 0.2,
     "output": 0.2
   },
   {
     "provider": "OpenRouter",
     "model": "meta-llama/llama-2-70b-chat",
+    "variant": "",
     "input": 1.5,
     "output": 1.5
   },
   {
     "provider": "OpenRouter",
     "model": "meta-llama/llama-3-70b-instruct",
+    "variant": "",
     "input": 0.59,
     "output": 0.79
   },
   {
     "provider": "OpenRouter",
     "model": "meta-llama/llama-3-70b-instruct:nitro",
+    "variant": "",
     "input": 0.9,
     "output": 0.9
   },
   {
     "provider": "OpenRouter",
     "model": "meta-llama/llama-3-8b-instruct:extended",
+    "variant": "",
     "input": 0.225,
     "output": 2.25
   },
   {
     "provider": "OpenRouter",
     "model": "microsoft/wizardlm-2-8x22b:nitro",
+    "variant": "",
     "input": 1,
     "output": 1
   },
   {
     "provider": "OpenRouter",
     "model": "mistralai/mistral-7b-instruct",
+    "variant": "",
     "input": 0.13,
     "output": 0.13
   },
   {
     "provider": "OpenRouter",
     "model": "mistralai/mistral-large",
+    "variant": "",
     "input": 8,
     "output": 24
   },
   {
     "provider": "OpenRouter",
     "model": "mistralai/mistral-small-3.1-24b-instruct",
+    "variant": "",
     "input": 0.1,
     "output": 0.3
   },
   {
     "provider": "OpenRouter",
     "model": "mistralai/mistral-small-3.2-24b-instruct",
+    "variant": "",
     "input": 0.1,
     "output": 0.3
   },
   {
     "provider": "OpenRouter",
     "model": "mistralai/mixtral-8x22b-instruct",
+    "variant": "",
     "input": 0.65,
     "output": 0.65
   },
   {
     "provider": "OpenRouter",
     "model": "nousresearch/nous-hermes-llama2-13b",
+    "variant": "",
     "input": 0.2,
     "output": 0.2
   },
   {
     "provider": "OpenRouter",
     "model": "openai/gpt-3.5-turbo",
+    "variant": "",
     "input": 1.5,
     "output": 2
   },
   {
     "provider": "OpenRouter",
     "model": "openai/gpt-3.5-turbo-16k",
+    "variant": "",
     "input": 3,
     "output": 4
   },
   {
     "provider": "OpenRouter",
     "model": "openai/gpt-4",
+    "variant": "",
     "input": 30,
     "output": 60
   },
   {
     "provider": "OpenRouter",
     "model": "openai/gpt-4-vision-preview",
+    "variant": "",
     "input": 10,
     "output": 30
   },
   {
     "provider": "OpenRouter",
+    "model": "openai/gpt-4.1",
+    "variant": "",
+    "input": 2,
+    "output": 8,
+    "cached_input": 0.5
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "openai/gpt-4.1-2025-04-14",
+    "variant": "",
+    "input": 2,
+    "output": 8,
+    "cached_input": 0.5
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "openai/gpt-4.1-mini",
+    "variant": "",
+    "input": 0.4,
+    "output": 1.6,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "openai/gpt-4.1-mini-2025-04-14",
+    "variant": "",
+    "input": 0.4,
+    "output": 1.6,
+    "cached_input": 0.1
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "openai/gpt-4.1-nano",
+    "variant": "",
+    "input": 0.1,
+    "output": 0.4,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "openai/gpt-4.1-nano-2025-04-14",
+    "variant": "",
+    "input": 0.1,
+    "output": 0.4,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "OpenRouter",
     "model": "openai/gpt-4o",
+    "variant": "",
     "input": 2.5,
     "output": 10
   },
   {
     "provider": "OpenRouter",
     "model": "openai/gpt-4o-2024-05-13",
+    "variant": "",
     "input": 5,
     "output": 15
   },
   {
     "provider": "OpenRouter",
+    "model": "openai/gpt-5",
+    "variant": "",
+    "input": 1.25,
+    "output": 10,
+    "cached_input": 0.125
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "openai/gpt-5-chat",
+    "variant": "",
+    "input": 1.25,
+    "output": 10,
+    "cached_input": 0.125
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "openai/gpt-5-codex",
+    "variant": "",
+    "input": 1.25,
+    "output": 10,
+    "cached_input": 0.125
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "openai/gpt-5-mini",
+    "variant": "",
+    "input": 0.25,
+    "output": 2,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "openai/gpt-5-nano",
+    "variant": "",
+    "input": 0.05,
+    "output": 0.4,
+    "cached_input": 0.005
+  },
+  {
+    "provider": "OpenRouter",
     "model": "openai/gpt-oss-120b",
+    "variant": "",
     "input": 0.18,
     "output": 0.8
   },
   {
     "provider": "OpenRouter",
     "model": "openai/gpt-oss-20b",
+    "variant": "",
     "input": 0.18,
     "output": 0.8
   },
   {
     "provider": "OpenRouter",
     "model": "openai/o1",
-    "cached_input": 7.5,
+    "variant": "",
     "input": 15,
-    "output": 60
+    "output": 60,
+    "cached_input": 7.5
   },
   {
     "provider": "OpenRouter",
     "model": "openai/o1-mini",
+    "variant": "",
     "input": 3,
     "output": 12
   },
   {
     "provider": "OpenRouter",
     "model": "openai/o1-mini-2024-09-12",
+    "variant": "",
     "input": 3,
     "output": 12
   },
   {
     "provider": "OpenRouter",
     "model": "openai/o1-preview",
+    "variant": "",
     "input": 15,
     "output": 60
   },
   {
     "provider": "OpenRouter",
     "model": "openai/o1-preview-2024-09-12",
+    "variant": "",
     "input": 15,
     "output": 60
   },
   {
     "provider": "OpenRouter",
     "model": "openai/o3-mini",
+    "variant": "",
     "input": 1.1,
     "output": 4.4
   },
   {
     "provider": "OpenRouter",
     "model": "openai/o3-mini-high",
+    "variant": "",
     "input": 1.1,
     "output": 4.4
   },
   {
     "provider": "OpenRouter",
     "model": "pygmalionai/mythalion-13b",
+    "variant": "",
     "input": 1.875,
     "output": 1.875
   },
   {
     "provider": "OpenRouter",
     "model": "qwen/qwen-2.5-coder-32b-instruct",
+    "variant": "",
     "input": 0.18,
     "output": 0.18
   },
   {
     "provider": "OpenRouter",
     "model": "qwen/qwen-vl-plus",
+    "variant": "",
     "input": 0.21,
     "output": 0.63
   },
   {
     "provider": "OpenRouter",
     "model": "qwen/qwen3-coder",
+    "variant": "",
     "input": 1,
     "output": 5
   },
   {
     "provider": "OpenRouter",
     "model": "switchpoint/router",
+    "variant": "",
     "input": 0.85,
     "output": 3.4
   },
   {
     "provider": "OpenRouter",
     "model": "undi95/remm-slerp-l2-13b",
+    "variant": "",
     "input": 1.875,
     "output": 1.875
   },
   {
     "provider": "OpenRouter",
     "model": "x-ai/grok-4",
+    "variant": "",
     "input": 3,
     "output": 15
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.0-pro",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.0-pro-001",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.0-pro-002",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.0-ultra",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.0-ultra-001",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.5-flash",
+    "variant": "",
+    "input": 0.075,
+    "output": 0.3
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-1.5-flash",
+    "variant": "above_128k_tokens",
+    "input": 1,
+    "output": 0.6
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-1.5-flash-001",
+    "variant": "",
     "input": 0.075,
     "output": 0.3
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.5-flash-001",
+    "variant": "above_128k_tokens",
+    "input": 1,
+    "output": 0.6
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-1.5-flash-002",
+    "variant": "",
     "input": 0.075,
     "output": 0.3
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.5-flash-002",
-    "input": 0.075,
-    "output": 0.3
+    "variant": "above_128k_tokens",
+    "input": 1,
+    "output": 0.6
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.5-flash-exp-0827",
+    "variant": "",
     "input": 0.0047,
     "output": 0.0047
   },
   {
     "provider": "Google/Vertex",
+    "model": "gemini-1.5-flash-exp-0827",
+    "variant": "above_128k_tokens",
+    "input": 1,
+    "output": 0.0094
+  },
+  {
+    "provider": "Google/Vertex",
     "model": "gemini-1.5-flash-preview-0514",
+    "variant": "",
     "input": 0.075,
     "output": 0.0047
   },
   {
     "provider": "Google/Vertex",
+    "model": "gemini-1.5-flash-preview-0514",
+    "variant": "above_128k_tokens",
+    "input": 1,
+    "output": 0.0094
+  },
+  {
+    "provider": "Google/Vertex",
     "model": "gemini-1.5-pro",
+    "variant": "",
+    "input": 1.25,
+    "output": 5
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-1.5-pro",
+    "variant": "above_128k_tokens",
+    "input": 2.5,
+    "output": 10
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-1.5-pro-001",
+    "variant": "",
     "input": 1.25,
     "output": 5
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.5-pro-001",
+    "variant": "above_128k_tokens",
+    "input": 2.5,
+    "output": 10
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-1.5-pro-002",
+    "variant": "",
     "input": 1.25,
     "output": 5
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.5-pro-002",
-    "input": 1.25,
-    "output": 5
+    "variant": "above_128k_tokens",
+    "input": 2.5,
+    "output": 10
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.5-pro-preview-0215",
+    "variant": "",
+    "input": 0.0781,
+    "output": 0.3125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-1.5-pro-preview-0215",
+    "variant": "above_128k_tokens",
+    "input": 0.1562,
+    "output": 0.625
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-1.5-pro-preview-0409",
+    "variant": "",
     "input": 0.0781,
     "output": 0.3125
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.5-pro-preview-0409",
+    "variant": "above_128k_tokens",
+    "input": 0.1562,
+    "output": 0.625
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-1.5-pro-preview-0514",
+    "variant": "",
     "input": 0.0781,
     "output": 0.3125
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-1.5-pro-preview-0514",
-    "input": 0.0781,
-    "output": 0.3125
+    "variant": "above_128k_tokens",
+    "input": 0.1562,
+    "output": 0.625
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.0-flash",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.0-flash-001",
-    "cached_input": 0.0375,
+    "variant": "",
     "input": 0.15,
-    "output": 0.6
+    "output": 0.6,
+    "cached_input": 0.0375
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.0-flash-exp",
-    "cached_input": 0.0375,
+    "variant": "",
     "input": 0.15,
-    "output": 0.6
+    "output": 0.6,
+    "cached_input": 0.0375
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.0-flash-lite",
-    "cached_input": 0.0188,
+    "variant": "",
     "input": 0.075,
-    "output": 0.3
+    "output": 0.3,
+    "cached_input": 0.0188
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.0-flash-lite-001",
-    "cached_input": 0.0188,
+    "variant": "",
     "input": 0.075,
-    "output": 0.3
+    "output": 0.3,
+    "cached_input": 0.0188
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.0-flash-live-preview-04-09",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.5,
-    "output": 2
+    "output": 2,
+    "cached_input": 0.075
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.0-flash-preview-image-generation",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.0-pro-exp-02-05",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-2.0-pro-exp-02-05",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.5-flash",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.3,
-    "output": 2.5
+    "output": 2.5,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-2.5-flash-image",
+    "variant": "",
+    "input": 0.3,
+    "output": 2.5,
+    "cached_input": 0.03
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-2.5-flash-image-preview",
+    "variant": "",
+    "input": 0.3,
+    "output": 30,
+    "cached_input": 0.075
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.5-flash-lite",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.5-flash-lite-preview-06-17",
-    "cached_input": 0.025,
+    "variant": "",
     "input": 0.1,
-    "output": 0.4
+    "output": 0.4,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-2.5-flash-lite-preview-09-2025",
+    "variant": "",
+    "input": 0.1,
+    "output": 0.4,
+    "cached_input": 0.025
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.5-flash-preview-04-17",
-    "cached_input": 0.0375,
+    "variant": "",
     "input": 0.15,
-    "output": 0.6
+    "output": 0.6,
+    "cached_input": 0.0375
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.5-flash-preview-05-20",
-    "cached_input": 0.075,
+    "variant": "",
     "input": 0.3,
-    "output": 2.5
+    "output": 2.5,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-2.5-flash-preview-09-2025",
+    "variant": "",
+    "input": 0.3,
+    "output": 2.5,
+    "cached_input": 0.075
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.5-pro",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-2.5-pro",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.5-pro-exp-03-25",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-2.5-pro-exp-03-25",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.5-pro-preview-03-25",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-2.5-pro-preview-03-25",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.5-pro-preview-05-06",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-2.5-pro-preview-05-06",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.5-pro-preview-06-05",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-2.5-pro-preview-06-05",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-2.5-pro-preview-tts",
-    "cached_input": 0.3125,
+    "variant": "",
     "input": 1.25,
-    "output": 10
+    "output": 10,
+    "cached_input": 0.3125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-2.5-pro-preview-tts",
+    "variant": "above_200k_tokens",
+    "input": 2.5,
+    "output": 15
   },
   {
     "provider": "Google/Vertex",
     "model": "gemini-pro",
+    "variant": "",
     "input": 0.5,
     "output": 1.5
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini/gemini-2.5-flash-image",
+    "variant": "",
+    "input": 0.3,
+    "output": 2.5,
+    "cached_input": 0.03
   }
 ]
