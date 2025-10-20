@@ -4,67 +4,68 @@ template:
   package: tidytemplate
   includes:
     in_header: |
+      <script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script>
       <script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 
 development:
   mode: auto
 
 reference:
-  - title: Chatbots
-    desc: >
-      ellmer provides a simple interface to a wide range of LLM providers. Use
-      the `chat_` functions to initialize a `Chat` object for a specific
-      provider and model. Once created, use the methods of the `Chat` object
-      to send messages, receive responses, manage tools and extract structured
-      data.
-    contents:
-      - chat
-      - starts_with("chat_")
-      - Chat
-      - token_usage
+- title: Chatbots
+  desc: >
+    ellmer provides a simple interface to a wide range of LLM providers. Use
+    the `chat_` functions to initialize a `Chat` object for a specific
+    provider and model. Once created, use the methods of the `Chat` object
+    to send messages, receive responses, manage tools and extract structured
+    data.
+  contents:
+  - chat
+  - starts_with("chat_")
+  - Chat
+  - token_usage
 
-  - title: Chat helpers
-    contents:
-      - create_tool_def
-      - content_image_url
-      - content_pdf_url
-      - starts_with("live_")
-      - interpolate
-      - google_upload
+- title: Chat helpers
+  contents:
+  - create_tool_def
+  - content_image_url
+  - content_pdf_url
+  - starts_with("live_")
+  - interpolate
+  - google_upload
 
-  - title: Parallel and batch chat
-    contents:
-      - batch_chat
-      - parallel_chat
+- title: Parallel and batch chat
+  contents:
+  - batch_chat
+  - parallel_chat
 
-  - title: Tools and structured data
-    contents:
-      - tool
-      - tool_annotations
-      - tool_reject
-      - type_boolean
+- title: Tools and structured data
+  contents:
+  - tool
+  - tool_annotations
+  - tool_reject
+  - type_boolean
 
-  - title: Objects
-    desc: >
-      These classes abstract away behaviour differences in chat providers so
-      that for typical ellmer use you don't need to worry about them. You'll need
-      to learn more about the objects if you're doing something that's only
-      supported by one provider, or if you're implementing a new provider.
-    contents:
-      - Provider
-      - Turn
-      - Content
-      - Type
+- title: Objects
+  desc: >
+    These classes abstract away behaviour differences in chat providers so
+    that for typical ellmer use you don't need to worry about them. You'll need
+    to learn more about the objects if you're doing something that's only
+    supported by one provider, or if you're implementing a new provider.
+  contents:
+  - Provider
+  - Turn
+  - Content
+  - Type
 
-  - title: Utilities
-    contents:
-      - contents_text
-      - contents_record
-      - params
+- title: Utilities
+  contents:
+  - contents_text
+  - contents_record
+  - params
 
-  - title: Deprecated functions
-    contents:
-      - deprecated
+- title: Deprecated functions
+  contents:
+  - deprecated
 
 news:
   releases:
