@@ -1,6 +1,7 @@
 # ellmer (development version)
 
 * `chat_*()` functions now use a credentials functions instead of an `api_key` (#613). This means that the `api_key` is never stored in the provider object (which might be saved to disk), but is instead retrieved on demand as needed. You generally shouldn't need to use the `credentials` argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).
+* `batch_*()` now only hash the `name`, `model`, and `base_url` of the provider. This should provide some protection from accidentally reusing the same `.json` file with different providers, while still allowing you to use the same batch file across ellmer versions.
 * `parallel_chat_structured()` no longer errors if some results fail to parse. Instead it warns, and the corresponding rows will be filled in with the appropriate missing values (#628).
 * `$chat_structured()` and friends now only warn if multiple json payloads found (instead of erroring) (@kbenoit, #732).
 * `interpolate_package()` now works with in-development packages loaded with devtools (#766).

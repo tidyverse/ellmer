@@ -2,21 +2,21 @@
   "version": 1,
   "stage": "done",
   "batch": {
-    "id": "batch_68f7ff6a73048190846f4f921b721b54",
+    "id": "batch_68f802e7e2108190ae0b2eb233481ad3",
     "object": "batch",
     "endpoint": "/v1/chat/completions",
     "model": "gpt-4.1-nano-2025-04-14",
     "errors": {},
-    "input_file_id": "file-Wkhz7qnDxgsx3g89KWGFgA",
+    "input_file_id": "file-TEGbui1Bw1ofZ3xYvFfVqR",
     "completion_window": "24h",
     "status": "completed",
-    "output_file_id": "file-SP35AtVE49Hi7J2PBD2zeY",
+    "output_file_id": "file-GGXRgbHBYfoBwQcBbVfrcE",
     "error_file_id": {},
-    "created_at": 1761083242,
-    "in_progress_at": 1761083243,
-    "expires_at": 1761169642,
-    "finalizing_at": 1761083370,
-    "completed_at": 1761083372,
+    "created_at": 1761084135,
+    "in_progress_at": 1761084136,
+    "expires_at": 1761170535,
+    "finalizing_at": 1761084154,
+    "completed_at": 1761084156,
     "failed_at": {},
     "expired_at": {},
     "cancelling_at": {},
@@ -42,11 +42,11 @@
   "results": [
     {
       "status_code": 200,
-      "request_id": "ad9059d6dbe1932374b00c8496805468",
+      "request_id": "b5136d6001fbb37a42fb99848f545d95",
       "body": {
-        "id": "chatcmpl-CTEVPU0cBq4wQVkFpcvjpMfoCPl6k",
+        "id": "chatcmpl-CTEitmAMxIfqie3UvZTGmRwF9lu4J",
         "object": "chat.completion",
-        "created": 1761083307,
+        "created": 1761084143,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
@@ -77,16 +77,16 @@
           }
         },
         "service_tier": "default",
-        "system_fingerprint": "fp_f12167b370"
+        "system_fingerprint": "fp_950f36939b"
       }
     },
     {
       "status_code": 200,
-      "request_id": "7d747ca63fcb4f86b9d794dee22650b0",
+      "request_id": "bbc0f4b0f89713362ec087830839968b",
       "body": {
-        "id": "chatcmpl-CTEWNdyrZSL4ZEmiADRDTcX0p1AG0",
+        "id": "chatcmpl-CTEiyjHGDWGi9ykXF2HC41u5NBeYq",
         "object": "chat.completion",
-        "created": 1761083367,
+        "created": 1761084148,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
@@ -117,16 +117,16 @@
           }
         },
         "service_tier": "default",
-        "system_fingerprint": "fp_f12167b370"
+        "system_fingerprint": "fp_38343a2f8f"
       }
     },
     {
       "status_code": 200,
-      "request_id": "526ff0d2a519d0715dc16379ac848ad2",
+      "request_id": "865b5fb42e232299e9e249c59c960e5a",
       "body": {
-        "id": "chatcmpl-CTEWNVSQqkn5TujJNos6up0241M3K",
+        "id": "chatcmpl-CTEitJbkgtZZ679QAmrdnLcNxVVBq",
         "object": "chat.completion",
-        "created": 1761083367,
+        "created": 1761084143,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
@@ -162,11 +162,11 @@
     },
     {
       "status_code": 200,
-      "request_id": "6521d6e9300dbb82638b8b14922b6df0",
+      "request_id": "826b54ed5511d488df2bcd4d7edc46f0",
       "body": {
-        "id": "chatcmpl-CTEWN8juO0T7Klgp6r6tzrXW6yL7m",
+        "id": "chatcmpl-CTEj1muO76Fyz3ncj09eA2Sw7Q0Ce",
         "object": "chat.completion",
-        "created": 1761083367,
+        "created": 1761084151,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
@@ -201,9 +201,9 @@
       }
     }
   ],
-  "started_at": 1761083242,
+  "started_at": 1761084135,
   "hash": {
-    "provider": "8ef71f4083bd5a52830eea10fb026435",
+    "provider": "959dc7923e4dc3760a7690794dc41c2a",
     "prompts": "b8eafe281e3cc5113058d9722be3e295",
     "user_turns": "8c1302088b9bc30258d1191db0d35705"
   }

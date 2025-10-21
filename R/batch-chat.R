@@ -344,15 +344,11 @@ BatchJob <- R6::R6Class(
 )
 
 provider_hash <- function(x) {
-  props <- props(x)
-
-  # Backward compatible hashing after introduction of new properties
-  if (length(props$extra_headers) == 0) {
-    props$extra_headers <- NULL
-  }
-  props$credentials <- NULL
-
-  props
+  list(
+    name = x@name,
+    model = x@model,
+    base_url = x@base_url
+  )
 }
 
 check_has_batch_support <- function(provider, call = caller_env()) {
