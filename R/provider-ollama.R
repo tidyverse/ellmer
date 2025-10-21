@@ -28,7 +28,8 @@
 #'
 #'   However, if you're accessing an Ollama instance hosted behind a reverse
 #'   proxy or secured endpoint that enforces bearer‐token authentication, you
-#'   can set `credentials` (or the `OLLAMA_API_KEY` environment variable).
+#'   can set the `OLLAMA_API_KEY` environment variable or provide a callback
+#'   function to `credentials`.
 #' @param params Common model parameters, usually created by [params()].
 #' @inherit chat_openai return
 #' @family chatbots
@@ -47,6 +48,7 @@ chat_ollama <- function(
   api_args = list(),
   echo = NULL,
   api_key = NULL,
+  credentials = NULL,
   api_headers = character()
 ) {
   if (!has_ollama(base_url)) {
@@ -72,6 +74,20 @@ chat_ollama <- function(
 
   echo <- check_echo(echo)
 
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  # ollama doesn't require an API key for local usage, but one might be needed
+  # if ollama is served behind a proxy (see #501)
+  credentials <- credentials %||% function() Sys.getenv("OLLAMA_API_KEY", "")
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "chat_ollama(api_key)",
+      "chat_ollama(credentials)"
+    )
+    credentials <- function() api_key
+  }
+
   params <- params %||% params()
 
   provider <- ProviderOllama(
@@ -81,9 +97,8 @@ chat_ollama <- function(
     seed = seed,
     params = params,
     extra_args = api_args,
-    # ollama doesn't require an API key for local usage, but one might be needed
-    # if ollama is served behind a proxy (see #501)
-    api_key = api_key %||% Sys.getenv("OLLAMA_API_KEY", "ollama"),
+    api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
 
@@ -94,11 +109,22 @@ ProviderOllama <- new_class(
   "ProviderOllama",
   parent = ProviderOpenAI,
   properties = list(
-    prop_redacted("api_key"),
+    prop_redacted("api_key", allow_null = TRUE),
+    credentials = class_function,
     model = prop_string(),
     seed = prop_number_whole(allow_null = TRUE)
   )
 )
+
+ollama_key <- function() {
+  key <-
+    if (nzchar(key)) {
+      key
+    } else {
+      # ollama doesn't require an API key for local usage
+      NULL
+    }
+}
 
 method(chat_params, ProviderOllama) <- function(provider, params) {
   # https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-chat-completion
