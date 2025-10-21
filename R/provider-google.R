@@ -15,15 +15,19 @@ NULL
 #'
 #' ## Authentication
 #' By default, `chat_google_gemini()` will use Google's default application
-#' credentials if there is no API key provided. This requires the \pkg{gargle}
+#' credentials. This requires the \pkg{gargle}
 #' package.
+#'
+#' You can use an API key by setting env var `GOOGLE_API_KEY` or, for
+#' `chat_google_gemini()` only, `GEMINI_API_KEY`.
 #'
 #' It can also pick up on viewer-based credentials on Posit Connect. This in
 #' turn requires the \pkg{connectcreds} package.
 #'
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
-#' @param credentials `r api_key_param("GOOGLE_API_KEY")`
-#'   For Gemini, you can alternatively set `GEMINI_API_KEY`.
+#' @param credentials A function that returns a named character vector of
+#'   headers to use for authentication. You generally should not need this
+#'   argument; see above for details.
 #' @param model `r param_model("gemini-2.5-flash", "google_gemini")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -38,6 +42,7 @@ chat_google_gemini <- function(
   system_prompt = NULL,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -46,7 +51,19 @@ chat_google_gemini <- function(
 ) {
   model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
-  credentials <- default_google_credentials(api_key, variant = "gemini")
+
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "chat_google_gemini(api_key)",
+      "chat_google_gemini(credentials)"
+    )
+    credentials <- function() list("x-goog-api-key" = api_key)
+  }
+  credentials <- credentials %||%
+    default_google_credentials(api_key, variant = "gemini")
 
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
@@ -700,12 +717,24 @@ default_google_credentials <- function(
 #' @rdname chat_google_gemini
 models_google_gemini <- function(
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  api_key = NULL
+  api_key = NULL,
+  credentials = NULL
 ) {
   check_string(base_url)
-  check_string(api_key, allow_null = TRUE)
 
-  models_google(base_url, api_key, variant = "gemini")
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "models_google_gemini(api_key)",
+      "models_google_gemini(credentials)"
+    )
+    credentials <- credentials %||% function() api_key
+  }
+  credentials <- credentials %||% default_google_credentials(variant = "gemini")
+
+  models_google(base_url, credentials = credentials, variant = "gemini")
 }
 
 #' @rdname chat_google_gemini
@@ -725,16 +754,18 @@ models_google_vertex <- function(location, project_id) {
 
 models_google <- function(
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  api_key = NULL,
+  credentials = NULL,
   project_id = NULL,
   variant = c("gemini", "vertex")
 ) {
   variant <- arg_match(variant)
-  credentials <- switch(
-    variant,
-    vertex = default_google_credentials(variant = "vertex"),
-    gemini = default_google_credentials(api_key, variant = "gemini")
-  )
+  if (is.null(credentials)) {
+    credentials <- switch(
+      variant,
+      vertex = default_google_credentials(variant = "vertex"),
+      gemini = default_google_credentials(api_key, variant = "gemini")
+    )
+  }
 
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",

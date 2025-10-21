@@ -11,6 +11,7 @@ chat_google_gemini(
   system_prompt = NULL,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -31,7 +32,8 @@ chat_google_vertex(
 
 models_google_gemini(
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  api_key = NULL
+  api_key = NULL,
+  credentials = NULL
 )
 
 models_google_vertex(location, project_id)
@@ -42,6 +44,10 @@ models_google_vertex(location, project_id)
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
+
+\item{credentials}{A function that returns a named character vector of
+headers to use for authentication. You generally should not need this
+argument; see above for details.}
 
 \item{model}{The model to use for the chat (defaults to "gemini-2.5-flash").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
@@ -70,13 +76,6 @@ Note this only affects the \code{chat()} method.}
 \code{global}.}
 
 \item{project_id}{Project ID.}
-
-\item{credentials}{A function that returns the API key to use for authentication.
-
-You generally should not need this argument; instead set the \code{GOOGLE_API_KEY} environment variable.
-The best place to set this is in \code{.Renviron},
-which you can easily edit by calling \code{usethis::edit_r_environ()}.
-For Gemini, you can alternatively set \code{GEMINI_API_KEY}.}
 }
 \value{
 A \link{Chat} object.
@@ -90,8 +89,11 @@ Use \code{\link[=google_upload]{google_upload()}} to upload files (PDFs, images,
 \subsection{Authentication}{
 
 By default, \code{chat_google_gemini()} will use Google's default application
-credentials if there is no API key provided. This requires the \pkg{gargle}
+credentials. This requires the \pkg{gargle}
 package.
+
+You can use an API key by setting env var \code{GOOGLE_API_KEY} or, for
+\code{chat_google_gemini()} only, \code{GEMINI_API_KEY}.
 
 It can also pick up on viewer-based credentials on Posit Connect. This in
 turn requires the \pkg{connectcreds} package.
