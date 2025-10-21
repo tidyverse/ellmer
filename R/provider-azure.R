@@ -150,8 +150,10 @@ azure_endpoint <- function() {
 
 # https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#chat-completions
 method(base_request, ProviderAzureOpenAI) <- function(provider) {
-  req <- base_request(super(provider, ProviderOpenAI))
-  req <- req_headers(req, Authorization = NULL)
+  req <- request(provider@base_url)
+  req <- ellmer_req_robustify(req)
+  req <- ellmer_req_user_agent(req)
+  req <- base_request_error(provider, req)
 
   req <- req_url_query(req, `api-version` = provider@api_version)
   if (nchar(provider@api_key)) {

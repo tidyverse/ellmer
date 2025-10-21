@@ -27,14 +27,28 @@ chat_vllm <- function(
   seed = NULL,
   params = NULL,
   api_args = list(),
-  api_key = vllm_key(),
+  api_key = NULL,
+  credentials = NULL,
   echo = NULL,
   api_headers = character()
 ) {
   check_string(base_url)
-  check_string(api_key)
+
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  credentials <- credentials %||% function() vllm_key()
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "chat_vllm(api_key)",
+      "chat_vllm(credentials)"
+    )
+    credentials <- function() api_key
+  }
+
+  check_string(credentials())
   if (missing(model)) {
-    models <- models_vllm(base_url, api_key)$id
+    models <- models_vllm(base_url, credentials = credentials)$id
     cli::cli_abort(c(
       "Must specify {.arg model}.",
       i = "Available models: {.str {models}}."
@@ -53,6 +67,7 @@ chat_vllm <- function(
     params = params,
     extra_args = api_args,
     api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -91,9 +106,22 @@ vllm_key <- function() {
 
 #' @export
 #' @rdname chat_vllm
-models_vllm <- function(base_url, api_key = vllm_key()) {
+models_vllm <- function(base_url, api_key = NULL, credentials = NULL) {
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  credentials <- credentials %||% function() vllm_key()
+
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "models_vllm(api_key)",
+      "models_vllm(credentials)"
+    )
+    credentials <- function() api_key
+  }
+
   req <- request(base_url)
-  req <- req_auth_bearer_token(req, api_key)
+  req <- req_auth_bearer_token(req, credentials())
   req <- req_url_path_append(req, "/v1/models")
   resp <- req_perform(req)
   json <- resp_body_json(resp)

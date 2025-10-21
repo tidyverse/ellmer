@@ -22,7 +22,8 @@
 chat_mistral <- function(
   system_prompt = NULL,
   params = NULL,
-  api_key = mistral_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   seed = NULL,
   api_args = list(),
@@ -33,6 +34,18 @@ chat_mistral <- function(
   model <- set_default(model, "mistral-large-latest")
   echo <- check_echo(echo)
 
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  credentials <- credentials %||% function() mistral_key()
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "chat_mistral(api_key)",
+      "chat_mistral(credentials)"
+    )
+    credentials <- function() api_key
+  }
+
   provider <- ProviderMistral(
     name = "Mistral",
     base_url = mistral_base_url,
@@ -41,6 +54,7 @@ chat_mistral <- function(
     seed = seed,
     extra_args = api_args,
     api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)

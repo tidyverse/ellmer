@@ -48,7 +48,8 @@ NULL
 chat_openai <- function(
   system_prompt = NULL,
   base_url = Sys.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
-  api_key = openai_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   seed = lifecycle::deprecated(),
@@ -58,6 +59,18 @@ chat_openai <- function(
 ) {
   model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
+
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  credentials <- credentials %||% function() openai_key()
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "chat_openai(api_key)",
+      "chat_openai(credentials)"
+    )
+    credentials <- function() api_key
+  }
 
   params <- params %||% params()
   if (lifecycle::is_present(seed) && !is.null(seed)) {
@@ -76,7 +89,8 @@ chat_openai <- function(
     params = params,
     extra_args = api_args,
     extra_headers = api_headers,
-    api_key = api_key
+    api_key = api_key,
+    credentials = credentials
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
@@ -104,7 +118,8 @@ ProviderOpenAI <- new_class(
   "ProviderOpenAI",
   parent = Provider,
   properties = list(
-    prop_redacted("api_key"),
+    prop_redacted("api_key", allow_null = TRUE),
+    credentials = class_function,
     # no longer used by OpenAI itself; but subclasses still need it
     seed = prop_number_whole(allow_null = TRUE)
   )
@@ -122,7 +137,7 @@ openai_key <- function() {
 
 method(base_request, ProviderOpenAI) <- function(provider) {
   req <- request(provider@base_url)
-  req <- req_auth_bearer_token(req, provider@api_key)
+  req <- req_auth_bearer_token(req, provider@credentials())
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- base_request_error(provider, req)
@@ -550,13 +565,28 @@ method(batch_result_turn, ProviderOpenAI) <- function(
 #' @export
 models_openai <- function(
   base_url = "https://api.openai.com/v1",
-  api_key = openai_key()
+  api_key = NULL,
+  credentials = NULL
 ) {
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  credentials <- credentials %||% function() openai_key()
+
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "models_openai(api_key)",
+      "models_openai(credentials)"
+    )
+    credentials <- function() api_key
+  }
+
   provider <- ProviderOpenAI(
     name = "OpenAI",
     model = "",
     base_url = base_url,
-    api_key = api_key
+    api_key = api_key,
+    credentials = credentials
   )
 
   req <- base_request(provider)

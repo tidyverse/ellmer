@@ -26,7 +26,8 @@ NULL
 chat_deepseek <- function(
   system_prompt = NULL,
   base_url = "https://api.deepseek.com",
-  api_key = deepseek_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   seed = NULL,
@@ -36,6 +37,18 @@ chat_deepseek <- function(
 ) {
   model <- set_default(model, "deepseek-chat")
   echo <- check_echo(echo)
+
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  credentials <- credentials %||% function() deepseek_key()
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "chat_deepseek(api_key)",
+      "chat_deepseek(credentials)"
+    )
+    credentials <- function() api_key
+  }
 
   params <- params %||% params()
 
@@ -47,6 +60,7 @@ chat_deepseek <- function(
     seed = seed,
     extra_args = api_args,
     api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)

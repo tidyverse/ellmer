@@ -33,7 +33,8 @@
 chat_huggingface <- function(
   system_prompt = NULL,
   params = NULL,
-  api_key = hf_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   api_args = list(),
   echo = NULL,
@@ -42,6 +43,18 @@ chat_huggingface <- function(
   model <- set_default(model, "meta-llama/Llama-3.1-8B-Instruct")
   echo <- check_echo(echo)
   params <- params %||% params()
+
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  credentials <- credentials %||% function() hf_key()
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "chat_huggingface(api_key)",
+      "chat_huggingface(credentials)"
+    )
+    credentials <- function() api_key
+  }
 
   # https://huggingface.co/docs/inference-providers/en/index?python-clients=requests#http--curl
   base_url <- "https://router.huggingface.co/v1/"
@@ -53,6 +66,7 @@ chat_huggingface <- function(
     params = params,
     extra_args = api_args,
     api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)

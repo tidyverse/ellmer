@@ -26,7 +26,8 @@
 chat_portkey <- function(
   system_prompt = NULL,
   base_url = "https://api.portkey.ai/v1",
-  api_key = portkey_key(),
+  api_key = NULL,
+  credentials = NULL,
   virtual_key = portkey_virtual_key(),
   model = NULL,
   params = NULL,
@@ -37,6 +38,18 @@ chat_portkey <- function(
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  credentials <- credentials %||% function() portkey_key()
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "chat_portkey(api_key)",
+      "chat_portkey(credentials)"
+    )
+    credentials <- function() api_key
+  }
+
   params <- params %||% params()
   provider <- ProviderPortkeyAI(
     name = "PortkeyAI",
@@ -45,6 +58,7 @@ chat_portkey <- function(
     params = params,
     extra_args = api_args,
     api_key = api_key,
+    credentials = credentials,
     virtual_key = virtual_key,
     extra_headers = api_headers
   )

@@ -27,7 +27,8 @@
 chat_github <- function(
   system_prompt = NULL,
   base_url = "https://models.github.ai/inference/",
-  api_key = github_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   seed = NULL,
@@ -40,13 +41,25 @@ chat_github <- function(
   model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
 
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  credentials <- credentials %||% function() github_key()
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "chat_github(api_key)",
+      "chat_github(credentials)"
+    )
+    credentials <- function() api_key
+  }
+
   # https://docs.github.com/en/rest/models/inference?apiVersion=2022-11-28
   params <- params %||% params()
 
   chat_openai(
     system_prompt = system_prompt,
     base_url = base_url,
-    api_key = api_key,
+    credentials = credentials,
     model = model,
     params = params,
     seed = seed,

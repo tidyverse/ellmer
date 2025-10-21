@@ -37,13 +37,26 @@ chat_anthropic <- function(
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
   beta_headers = character(),
-  api_key = anthropic_key(),
+  api_key = NULL,
+  credentials = NULL,
   api_headers = character(),
   echo = NULL
 ) {
   echo <- check_echo(echo)
 
   model <- set_default(model, "claude-sonnet-4-20250514")
+
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  credentials <- credentials %||% function() anthropic_key()
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "chat_anthropic(api_key)",
+      "chat_anthropic(credentials)"
+    )
+    credentials <- function() api_key
+  }
 
   params <- params %||% params()
   if (lifecycle::is_present(max_tokens)) {
@@ -63,7 +76,8 @@ chat_anthropic <- function(
     extra_headers = api_headers,
     base_url = base_url,
     beta_headers = beta_headers,
-    api_key = api_key
+    api_key = api_key,
+    credentials = credentials
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -89,7 +103,8 @@ ProviderAnthropic <- new_class(
   "ProviderAnthropic",
   parent = Provider,
   properties = list(
-    prop_redacted("api_key"),
+    prop_redacted("api_key", allow_null = TRUE),
+    credentials = class_function,
     beta_headers = class_character
   )
 )
@@ -106,7 +121,7 @@ method(base_request, ProviderAnthropic) <- function(provider) {
   # <https://docs.anthropic.com/en/api/versioning>
   req <- req_headers(req, `anthropic-version` = "2023-06-01")
   # <https://docs.anthropic.com/en/api/getting-started#authentication>
-  req <- req_headers_redacted(req, `x-api-key` = provider@api_key)
+  req <- req_headers_redacted(req, `x-api-key` = provider@credentials())
 
   # <https://docs.anthropic.com/en/api/rate-limits>
   # <https://docs.anthropic.com/en/api/errors#http-errors>

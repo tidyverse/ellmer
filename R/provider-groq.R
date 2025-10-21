@@ -28,7 +28,8 @@ NULL
 chat_groq <- function(
   system_prompt = NULL,
   base_url = "https://api.groq.com/openai/v1",
-  api_key = groq_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   seed = NULL,
@@ -38,6 +39,18 @@ chat_groq <- function(
 ) {
   model <- set_default(model, "llama3-8b-8192")
   echo <- check_echo(echo)
+
+  check_exclusive(api_key, credentials, .require = FALSE)
+  check_function2(credentials, args = character(), allow_null = TRUE)
+  credentials <- credentials %||% function() groq_key()
+  if (!is.null(api_key)) {
+    lifecycle::deprecate_warn(
+      "0.4.0",
+      "chat_groq(api_key)",
+      "chat_groq(credentials)"
+    )
+    credentials <- function() api_key
+  }
 
   # https://console.groq.com/docs/api-reference#chat-create (same as OpenAI)
   params <- params %||% params()
@@ -50,6 +63,7 @@ chat_groq <- function(
     seed = seed,
     extra_args = api_args,
     api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
