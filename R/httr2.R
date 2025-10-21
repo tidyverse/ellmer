@@ -24,7 +24,7 @@ chat_perform <- function(
     mode,
     "value" = req_perform(req),
     "stream" = chat_perform_stream(provider, req),
-    "async-value" = chat_perform_async_value(provider, req),
+    "async-value" = req_perform_promise(req),
     "async-stream" = chat_perform_async_stream(provider, req)
   )
 }
@@ -45,10 +45,6 @@ on_load(
     }
   })
 )
-
-chat_perform_async_value <- function(provider, req) {
-  req_perform_promise(req)
-}
 
 on_load(
   chat_perform_async_stream <- coro::async_generator(function(provider, req) {
