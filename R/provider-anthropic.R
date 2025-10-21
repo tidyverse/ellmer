@@ -284,7 +284,7 @@ method(value_turn, ProviderAnthropic) <- function(
       ContentText(content$text)
     } else if (content$type == "tool_use") {
       if (has_type) {
-        ContentJson(content$input$data)
+        ContentJson(data = content$input$data)
       } else {
         if (is_string(content$input)) {
           content$input <- jsonlite::parse_json(content$input)

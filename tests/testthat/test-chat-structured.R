@@ -36,7 +36,28 @@ test_that("can extract data when wrapper is used", {
   expect_equal(extract_data(turn, type, needs_wrapper = TRUE), list(x = 1))
 })
 
+test_that("warns if multiple ContentJson (and uses first)", {
+  turn <- Turn(
+    "assistant",
+    list(
+      ContentJson(list(x = 1)),
+      ContentJson(list(x = 2)),
+      ContentJson(list(x = 3))
+    )
+  )
+  type <- type_object(x = type_integer())
+  expect_snapshot(result <- extract_data(turn, type))
+  expect_equal(result, list(x = 1))
+})
+
 # Type coercion ---------------------------------------------------------------
+
+test_that("required base types (scalars) become NA", {
+  expect_equal(convert_from_type(NULL, type_boolean()), NA)
+  expect_equal(convert_from_type(NULL, type_integer()), NA_integer_)
+  expect_equal(convert_from_type(NULL, type_number()), NA_real_)
+  expect_equal(convert_from_type(NULL, type_string()), NA_character_)
+})
 
 test_that("optional base types (scalars) stay as NULL", {
   expect_equal(convert_from_type(NULL, type_boolean(required = FALSE)), NULL)
@@ -70,6 +91,13 @@ test_that("can convert arrays of basic types to simple vectors", {
     convert_from_type(list("x", "y"), type_array(type_string())),
     c("x", "y")
   )
+})
+
+test_that("NULL turns into empty vector", {
+  expect_equal(convert_from_type(NULL, type_array(type_boolean())), logical())
+  expect_equal(convert_from_type(NULL, type_array(type_integer())), integer())
+  expect_equal(convert_from_type(NULL, type_array(type_number())), double())
+  expect_equal(convert_from_type(NULL, type_array(type_string())), character())
 })
 
 test_that("values of wrong type are silently converted to NA", {
@@ -107,6 +135,7 @@ test_that("handles empty and NULL vectors of basic types", {
 test_that("scalar enums are converted to strings", {
   type <- type_enum(c("A", "B", "C"))
   expect_equal(convert_from_type("A", type), "A")
+  expect_equal(convert_from_type(NULL, type), NA_character_)
 })
 
 
@@ -181,6 +210,11 @@ test_that("arrays of enums are converted to factors", {
     convert_from_type(list("x", "y"), type),
     factor(c("x", "y"), levels = c("x", "y", "z"))
   )
+
+  expect_equal(
+    convert_from_type(NULL, type),
+    factor(character(), levels = c("x", "y", "z"))
+  )
 })
 
 test_that("can convert arrays of objects to data frames", {
@@ -227,6 +261,22 @@ test_that("array of object with nested objects becomes packed data frame", {
   expect_named(out, c("x", "y"))
   expect_equal(out$x, data.frame(a = c(1, 5)))
   expect_equal(out$y, data.frame(a = c(3, 7)))
+})
+
+test_that("can handle mix of present and absent rows", {
+  type <- type_array(type_object(
+    x = type_integer(),
+    y = type_string()
+  ))
+  data <- list(
+    list(x = 1, y = "x"),
+    NULL,
+    list(x = 3, y = "y")
+  )
+  expect_equal(
+    convert_from_type(data, type),
+    data.frame(x = c(1L, NA_integer_, 3L), y = c("x", NA_character_, "y"))
+  )
 })
 
 test_that("can recursively convert objects contents", {

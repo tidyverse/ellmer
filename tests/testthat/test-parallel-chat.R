@@ -131,3 +131,20 @@ test_that("can get tokens & cost", {
   )
   expect_contains(names(data), c("input_tokens", "output_tokens", "cost"))
 })
+
+test_that("errors in conversion become warnings", {
+  chat <- chat_openai_test()
+  provider <- chat$get_provider()
+  type <- type_object(x = type_integer())
+
+  turns <- list(
+    Turn("assistant", list(ContentJson(data = list(x = 1)))),
+    # no json
+    Turn("assistant", list(ContentText("Hello"))),
+    # invalid json
+    Turn("assistant", list(ContentJson(string = "{")))
+  )
+
+  expect_snapshot(out <- multi_convert(provider, turns, type = type))
+  expect_equal(out, data.frame(x = c(1, NA, NA)))
+})
