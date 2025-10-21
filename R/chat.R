@@ -746,7 +746,11 @@ Chat <- R6::R6Class(
       } else {
         result <- await(response)
 
-        turn <- value_turn(private$provider, resp_body_json(result), has_type = !is.null(type))
+        turn <- value_turn(
+          private$provider,
+          resp_body_json(result),
+          has_type = !is.null(type)
+        )
         turn@duration <- resp_timing(result)[["total"]] %||% NA_real_
         text <- turn@text
         if (!is.null(text)) {
