@@ -350,6 +350,8 @@ provider_hash <- function(x) {
   if (length(props$extra_headers) == 0) {
     props$extra_headers <- NULL
   }
+  props$credentials <- NULL
+
   props
 }
 
