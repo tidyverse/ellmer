@@ -41,12 +41,7 @@ models_google_vertex(location, project_id)
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
-\item{api_key}{API key to use for authentication.
-
-You generally should not supply this directly, but instead set the \code{GOOGLE_API_KEY} environment variable.
-The best place to set this is in \code{.Renviron},
-which you can easily edit by calling \code{usethis::edit_r_environ()}.
-For Gemini, you can alternatively set \code{GEMINI_API_KEY}.}
+\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
 \item{model}{The model to use for the chat (defaults to "gemini-2.5-flash").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
@@ -75,6 +70,13 @@ Note this only affects the \code{chat()} method.}
 \code{global}.}
 
 \item{project_id}{Project ID.}
+
+\item{credentials}{A function that returns the API key to use for authentication.
+
+You generally should not need this argument; instead set the \code{GOOGLE_API_KEY} environment variable.
+The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.
+For Gemini, you can alternatively set \code{GEMINI_API_KEY}.}
 }
 \value{
 A \link{Chat} object.

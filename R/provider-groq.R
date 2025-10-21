@@ -15,7 +15,8 @@ NULL
 #'
 #' @export
 #' @family chatbots
-#' @param api_key `r api_key_param("GROQ_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("GROQ_API_KEY")`
 #' @param model `r param_model("llama3-8b-8192")`
 #' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai

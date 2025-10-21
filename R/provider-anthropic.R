@@ -16,7 +16,8 @@ NULL
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @param model `r param_model("claude-sonnet-4-20250514", "anthropic")`
-#' @param api_key `r api_key_param("ANTHROPIC_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
 #' @param max_tokens Maximum number of tokens to generate before stopping.
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
 #'   claude features that are still in beta.

@@ -19,9 +19,8 @@
 #'
 #' @family chatbots
 #' @param model `r param_model("meta-llama/Llama-3.1-8B-Instruct")`
-#' @param api_key The API key to use for authentication. You generally should
-#'   not supply this directly, but instead set the `HUGGINGFACE_API_KEY` environment
-#'   variable.
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("HUGGINGFACE_API_KEY")`
 #' @export
 #' @inheritParams chat_openai
 #' @inherit chat_openai return

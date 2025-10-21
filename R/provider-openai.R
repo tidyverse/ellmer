@@ -15,7 +15,8 @@ NULL
 #'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
 #' @param base_url The base URL to the endpoint; the default uses OpenAI.
-#' @param api_key `r api_key_param("OPENAI_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("OPENAI_API_KEY")`
 #' @param model `r param_model("gpt-4.1", "openai")`
 #' @param params Common model parameters, usually created by [params()].
 #' @param seed Optional integer seed that ChatGPT uses to try and make output

@@ -10,7 +10,8 @@
 #' stored inside Portkey application.
 #'
 #' @family chatbots
-#' @param api_key `r api_key_param("PORTKEY_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("PORTKEY_API_KEY")`
 #' @param model `r param_model("gpt-4o", "openai")`
 #' @param virtual_key A virtual identifier storing LLM provider's API key. See
 #'   [documentation](https://portkey.ai/docs/product/ai-gateway/virtual-keys).

@@ -11,7 +11,8 @@
 #' @export
 #' @family chatbots
 #' @param model `r param_model("mistral-large-latest")`
-#' @param api_key `r api_key_param("MISTRAL_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("MISTRAL_API_KEY")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples

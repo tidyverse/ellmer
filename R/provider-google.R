@@ -21,7 +21,8 @@ NULL
 #' It can also pick up on viewer-based credentials on Posit Connect. This in
 #' turn requires the \pkg{connectcreds} package.
 #'
-#' @param api_key `r api_key_param("GOOGLE_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("GOOGLE_API_KEY")`
 #'   For Gemini, you can alternatively set `GEMINI_API_KEY`.
 #' @param model `r param_model("gemini-2.5-flash", "google_gemini")`
 #' @inheritParams chat_openai

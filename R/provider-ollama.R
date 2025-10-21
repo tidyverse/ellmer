@@ -22,12 +22,13 @@
 #'
 #' @inheritParams chat_openai
 #' @param model `r param_model(NULL, "ollama")`
-#' @param api_key Ollama doesn't require an API key for local usage and in most
-#'   cases you do not need to provide an `api_key`.
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials Ollama doesn't require credentials for local usage and in most
+#'   cases you do not need to provide `credentials`.
 #'
 #'   However, if you're accessing an Ollama instance hosted behind a reverse
 #'   proxy or secured endpoint that enforces bearer‐token authentication, you
-#'   can set `api_key` (or the `OLLAMA_API_KEY` environment variable).
+#'   can set `credentials` (or the `OLLAMA_API_KEY` environment variable).
 #' @param params Common model parameters, usually created by [params()].
 #' @inherit chat_openai return
 #' @family chatbots

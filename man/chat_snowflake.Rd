@@ -22,9 +22,11 @@ chat_snowflake(
 e.g. \code{"testorg-test_account"}. Defaults to the value of the
 \code{SNOWFLAKE_ACCOUNT} environment variable.}
 
-\item{credentials}{A list of authentication headers to pass into
-\code{\link[httr2:req_headers]{httr2::req_headers()}}, a function that returns them when called, or
-\code{NULL}, the default, to use ambient credentials.}
+\item{credentials}{A function that returns the API key to use for authentication.
+
+You generally should not need this argument; instead set the \code{OPENAI_API_KEY} environment variable.
+The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{model}{The model to use for the chat (defaults to "claude-3-7-sonnet").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}

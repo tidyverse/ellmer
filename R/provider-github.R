@@ -13,7 +13,8 @@
 #' used in \pkg{ellmer} v0.3.0 and earlier.
 #'
 #' @family chatbots
-#' @param api_key `r api_key_param("GITHUB_PAT")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("GITHUB_PAT")`
 #' @param model `r param_model("gpt-4o")`
 #' @param params Common model parameters, usually created by [params()].
 #' @export

@@ -10,7 +10,8 @@ NULL
 #' `chat_vllm()` to connect to endpoints powered by vLLM.
 #'
 #' @inheritParams chat_openai
-#' @param api_key `r api_key_param("VLLM_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("VLLM_API_KEY")`
 #' @param model `r param_model(NULL, "vllm")`
 #' @param params Common model parameters, usually created by [params()].
 #' @inherit chat_openai return
