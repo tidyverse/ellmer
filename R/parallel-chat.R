@@ -265,7 +265,9 @@ parallel_turns <- function(
 
   map(resps, function(resp) {
     json <- resp_body_json(resp)
-    value_turn(provider, json, has_type = !is.null(type))
+    turn <- value_turn(provider, json, has_type = !is.null(type))
+    turn@duration <- resp_timing(resp)[["total"]] %||% NA_real_
+    turn
   })
 }
 

@@ -22,15 +22,11 @@ chat_perform <- function(
 
   switch(
     mode,
-    "value" = chat_perform_value(provider, req),
+    "value" = req_perform(req),
     "stream" = chat_perform_stream(provider, req),
     "async-value" = chat_perform_async_value(provider, req),
     "async-stream" = chat_perform_async_stream(provider, req)
   )
-}
-
-chat_perform_value <- function(provider, req) {
-  resp_body_json(req_perform(req))
 }
 
 on_load(
@@ -51,7 +47,7 @@ on_load(
 )
 
 chat_perform_async_value <- function(provider, req) {
-  promises::then(req_perform_promise(req), resp_body_json)
+  req_perform_promise(req)
 }
 
 on_load(
