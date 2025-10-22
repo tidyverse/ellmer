@@ -45,7 +45,7 @@ Mutable objects don't work the same way:
 #| label: mutable
 #| cassette: true
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat <- chat_openai("Be terse", model = "gpt-5-nano")
 
 capital <- function(chat, country) {
   chat$chat(interpolate("What's the capital of {{country}}"))
@@ -56,7 +56,7 @@ capital(chat, "France")
 chat
 ```
 
-It would be annoying if chat objects were immutable, because then you'd need to save the result every time you chatted with the model. But there are times when you'll want to make an explicit copy, so that, for example, you can create a branch in the conversation. 
+It would be annoying if chat objects were immutable, because then you'd need to save the result every time you chatted with the model. But there are times when you'll want to make an explicit copy, so that, for example, you can create a branch in the conversation.
 
 Creating a copy of the object is the job of the `$clone()` method. It will create a copy of the object that behaves identically to the existing chat:
 
@@ -64,7 +64,7 @@ Creating a copy of the object is the job of the `$clone()` method. It will creat
 #| label: chat-clone
 #| cassette: true
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat <- chat_openai("Be terse", model = "gpt-5-nano")
 
 capital <- function(chat, country) {
   chat <- chat$clone()
@@ -82,7 +82,7 @@ You can also use `clone()` when you want to create a conversational "tree", wher
 #| label: tree
 #| cassette: true
 
-chat1 <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat1 <- chat_openai("Be terse", model = "gpt-5-nano")
 chat1$chat("My name is Hadley and I'm a data scientist")
 chat2 <- chat1$clone()
 
@@ -103,7 +103,7 @@ There's a bit of a problem with our `capital()` function: we can use our convers
 #| label: uhoh
 #| cassette: true
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat <- chat_openai("Be terse", model = "gpt-5-nano")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
 capital(chat, "New Zealand")
 ```
@@ -114,7 +114,7 @@ We can avoid that problem by using `$set_turns()` to reset the conversational hi
 #| label: reset
 #| cassette: true
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat <- chat_openai("Be terse", model = "gpt-5-nano")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
 
 capital <- function(chat, country) {
@@ -152,7 +152,7 @@ Chat objects provide some tools to get to ellmer's internal data structures. For
 #| cassette: true
 set.seed(1014) # make it reproducible
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat <- chat_openai("Be terse", model = "gpt-5-nano")
 chat$register_tool(tool(function() sample(6, 1), "Roll a die"))
 chat$chat("Roll two dice and tell me the total")
 

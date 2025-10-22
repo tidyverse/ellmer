@@ -11,7 +11,7 @@
 #'
 #' @family chatbots
 #' @param api_key `r api_key_param("PORTKEY_API_KEY")`
-#' @param model `r param_model("gpt-4o", "openai")`
+#' @param model `r param_model("gpt-5", "openai")`
 #' @param virtual_key A virtual identifier storing LLM provider's API key. See
 #'   [documentation](https://portkey.ai/docs/product/ai-gateway/virtual-keys).
 #'   Can be read from the `PORTKEY_VIRTUAL_KEY` environment variable.
@@ -34,7 +34,7 @@ chat_portkey <- function(
   echo = NULL,
   api_headers = character()
 ) {
-  model <- set_default(model, "gpt-4o")
+  model <- set_default(model, "gpt-5")
   echo <- check_echo(echo)
 
   params <- params %||% params()
@@ -53,7 +53,7 @@ chat_portkey <- function(
 
 chat_portkey_test <- function(
   ...,
-  model = "gpt-4o-mini",
+  model = "gpt-5-nano",
   params = NULL,
   echo = "none"
 ) {

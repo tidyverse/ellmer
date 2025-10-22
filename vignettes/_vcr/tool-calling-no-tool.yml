@@ -4,74 +4,75 @@ http_interactions:
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"user","content":[{"type":"text","text":"How long
-        ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false}'
+        ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-5","stream":false}'
   response:
     status: 200
     headers:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9564fcab1f266bf2-DFW
+      cf-ray: 9929bc48ddd52cac-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 27 Jun 2025 12:35:55 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1207'
+      date: Wed, 22 Oct 2025 14:38:16 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '20551'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=J.67ci5o5vXqr9AnZ4Yj2q24Ruv9bK.j6XET24UDL3k-1751027755-1.0.1.1-W5DJVTRwhKS5v8720bWev93b0cJ6IaOICUslnKcQmGkdxrRN4Jnu_ZGzUt.36Gf47ecgIicJFY3LsEEsB5SY1gR9EeQzKuDN60F5yN8m3sM;
-        path=/; expires=Fri, 27-Jun-25 13:05:55 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=0TU4rkth3KxlJ.QLrZUvXAayVz.OVbRUkAbzFW_0ACs-1761143896-1.0.1.1-DqaIVw7FCSgwYyE0L2QWGQP1quAuMYa6K08cjkOMEE2LXZJ.lxUXMogKDYQVWwTofQto2nnmwy.lxC3dyVpLoJOUdEO5FXTbASwruXhr77A;
+        path=/; expires=Wed, 22-Oct-25 15:08:16 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=GWM9CpmZqMXPOZEB6QMdObM8POPy68KVL2d_d59vDig-1751027755994-0.0.1.1-604800000;
+      - _cfuvid=G_Pp9lgt2tGk5FDfh8AAeEXXxv2sxG_5RpW_CnGwxf4-1761143896600-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1211'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999984'
-      x-ratelimit-reset-requests: 6ms
+      x-envoy-upstream-service-time: '20585'
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '15000'
+      x-ratelimit-limit-tokens: '40000000'
+      x-ratelimit-remaining-requests: '14999'
+      x-ratelimit-remaining-tokens: '39999984'
+      x-ratelimit-reset-requests: 4ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_e01c994ace4114de2728f24fa3e1b3e3
+      x-request-id: req_6412436af10544ec943bc84b7c5d53cc
     body:
       string: |
         {
-          "id": "chatcmpl-Bn2b4dSmLrsTcXNOCbnKM0a039Mqu",
+          "id": "chatcmpl-CTUGKjxJtEWKZDBiypis0EHsgs7xM",
           "object": "chat.completion",
-          "created": 1751027754,
-          "model": "gpt-4o-2024-08-06",
+          "created": 1761143876,
+          "model": "gpt-5-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "Neil Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that event occurred 54 years ago.",
+                "content": "As of today (October 22, 2025), Neil Armstrong’s lunar module touchdown on July 20, 1969 at 20:17 UTC was 56 years, 3 months, and 2 days ago.",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 19,
-            "completion_tokens": 31,
-            "total_tokens": 50,
+            "prompt_tokens": 18,
+            "completion_tokens": 1336,
+            "total_tokens": 1354,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 1280,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_07871e2ad8"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-06-27 12:35:55
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-10-22 14:38:16
+recorded_with: VCR-vcr/2.0.0

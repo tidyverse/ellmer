@@ -5,7 +5,7 @@ http_interactions:
     body:
       string: '{"messages":[{"role":"user","content":[{"type":"text","text":"\n  John
         works at Google in New York. He met with Sarah, the CEO of\n  Acme Inc., last
-        week in San Francisco.\n"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
+        week in San Francisco.\n"}]}],"model":"gpt-5-mini","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
         extracted entity name."},"type":{"type":"string","description":"The entity
         type","enum":["person","location","organization"]},"context":{"type":"string","description":"The
         context in which the entity appears in the text."}},"required":["name","type","context"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
@@ -15,61 +15,61 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 96125b4d1879511a-MSP
+      cf-ray: 9929a06618faa912-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 18 Jul 2025 13:34:28 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1248'
+      date: Wed, 22 Oct 2025 14:18:58 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '4765'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=GiorKZ9KW3D4hzBS6vbwFEa99iAjtejhdFAzm2hzvzQ-1752845668-1.0.1.1-cghV7LQqCwh6ZN8xW3e_gBHd4tSExNLhial0W05AQGNg14tI98QniWA_dT_JSJOnuuuHkwTwvY6mfmLAOOFpfMxKsoyFsnIO_wvAbfB03_E;
-        path=/; expires=Fri, 18-Jul-25 14:04:28 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=_S1WvNfZXuOv1PtaFNGqETQtRkyNO_x78EmcXr0CDjU-1761142738-1.0.1.1-yXF8I5NWDhYHbOAMX38aNBQipYEMX.e.EItz8sU5WCLE0ofgLogMCn98qS54GcDdvEub1oUE806AvoE1FeL9f3oywV6YaQzysXWNSA9C1vs;
+        path=/; expires=Wed, 22-Oct-25 14:48:58 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=mz9Wd4tFQGhQ6CkmKdadi.q3GBbZXzbEpBrzvtSuZaA-1752845668745-0.0.1.1-604800000;
+      - _cfuvid=vx7Zy1sOocigCyiyVbu3ssNFstTnXVedjTgeiXQIwXo-1761142738603-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1261'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999971'
-      x-ratelimit-reset-requests: 6ms
+      x-envoy-upstream-service-time: '4792'
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '180000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '179999973'
+      x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_d5a63f1f93d97b0b717fe950a41881ba
+      x-request-id: req_65068b94a2e1430b8b800a4677ba76eb
     body:
       string: |
         {
-          "id": "chatcmpl-BufWFLXulio4TIbZSZdNAsW4KuEID",
+          "id": "chatcmpl-CTTxtwyjnRIhJSH9Ck6C46XckGI8P",
           "object": "chat.completion",
-          "created": 1752845667,
-          "model": "gpt-4.1-2025-04-14",
+          "created": 1761142733,
+          "model": "gpt-5-mini-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John works at Google in New York.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"He met with Sarah, the CEO of Acme Inc.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"Sarah, the CEO of Acme Inc.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"He met with Sarah... last week in San Francisco.\"}]}",
+                "content": "{\n  \"wrapper\": [\n    {\n      \"name\": \"John\",\n      \"type\": \"person\",\n      \"context\": \"John works at Google in New York.\"\n    },\n    {\n      \"name\": \"Google\",\n      \"type\": \"organization\",\n      \"context\": \"John works at Google in New York.\"\n    },\n    {\n      \"name\": \"New York\",\n      \"type\": \"location\",\n      \"context\": \"John works at Google in New York.\"\n    },\n    {\n      \"name\": \"Sarah\",\n      \"type\": \"person\",\n      \"context\": \"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"\n    },\n    {\n      \"name\": \"Acme Inc.\",\n      \"type\": \"organization\",\n      \"context\": \"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"\n    },\n    {\n      \"name\": \"San Francisco\",\n      \"type\": \"location\",\n      \"context\": \"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"\n    }\n  ]\n}",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 137,
-            "completion_tokens": 131,
-            "total_tokens": 268,
+            "prompt_tokens": 132,
+            "completion_tokens": 434,
+            "total_tokens": 566,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 192,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
@@ -78,5 +78,5 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-18 13:34:28
-recorded_with: VCR-vcr/1.7.1.93
+  recorded_at: 2025-10-22 14:18:58
+recorded_with: VCR-vcr/2.0.0

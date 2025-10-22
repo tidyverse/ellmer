@@ -46,7 +46,7 @@ Let's take a look at an example where we really need an external tool. Chat mode
 #| label: no-tool
 #| cassette: true
 
-chat <- chat_openai(model = "gpt-4o")
+chat <- chat_openai()
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
 ```
 
@@ -54,7 +54,7 @@ Since the model doesn't know what day it is, the result is incorrect.
 
 ### Defining a tool function
 
-The first thing we'll do is define an R function that returns the current time. 
+The first thing we'll do is define an R function that returns the current time.
 
 ```{r}
 #' Gets the current time in the given time zone.
@@ -122,15 +122,13 @@ That's all we need to do! Let's retry our query:
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
 ```
 
-That's correct! Without any further guidance, the chat model decided to call our tool function and successfully used its result in formulating its response. 
+That's correct! Without any further guidance, the chat model decided to call our tool function and successfully used its result in formulating its response.
 
 If we print the chat we can see where the model decided to use the tool:
 
 ```{r}
 chat
 ```
-
-(Full disclosure: I originally tried this example with the default model of `gpt-4o-mini` and it got the tool calling right but the date math wrong, hence the explicit `model="gpt-4o"`.)
 
 This tool example was extremely simple, but you can imagine doing much more interesting things from tool functions: calling APIs, reading from or writing to a database, kicking off a complex simulation, or even calling a complementary GenAI model (like an image generator). Or if you are using ellmer in a Shiny app, you could use tools to set reactive values, setting off a chain of reactive updates.
 
@@ -160,7 +158,7 @@ get_weather <- tool(
   },
   name = "get_weather",
   description = "
-    Report on weather conditions in multiple cities. For efficiency, request 
+    Report on weather conditions in multiple cities. For efficiency, request
     all weather updates using a single tool call
   ",
   arguments = list(

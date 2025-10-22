@@ -14,7 +14,7 @@
 #'
 #' @family chatbots
 #' @param api_key `r api_key_param("GITHUB_PAT")`
-#' @param model `r param_model("gpt-4o")`
+#' @param model `r param_model("gpt-5")`
 #' @param params Common model parameters, usually created by [params()].
 #' @export
 #' @inheritParams chat_openai
@@ -37,7 +37,7 @@ chat_github <- function(
 ) {
   check_installed("gitcreds")
 
-  model <- set_default(model, "gpt-4.1")
+  model <- set_default(model, "gpt-5")
   echo <- check_echo(echo)
 
   # https://docs.github.com/en/rest/models/inference?apiVersion=2022-11-28

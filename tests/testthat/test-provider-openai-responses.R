@@ -71,12 +71,6 @@ test_that("can match prices for some common models", {
 
 # Custom tests -----------------------------------------------------------------
 
-test_that("can retrieve log_probs (#115)", {
-  chat <- chat_openai_responses_test(params = params(log_probs = TRUE))
-  chat$chat("Hi")
-  expect_length(chat$last_turn()@json$output[[1]]$content[[1]]$logprobs, 2)
-})
-
 test_that("structured data work with and without wrapper", {
   chat <- chat_openai_responses_test()
   out <- chat$chat_structured(

@@ -5,43 +5,37 @@ http_interactions:
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  What
         is the difference between a tibble and a data frame?\n  Answer with a bulleted
-        list\n"}]}],"model":"gpt-4.1","stream":false,"store":false}'
+        list\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5","stream":false,"store":false}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9901137e8f956c68-DFW
+      cf-ray: 9929a7012cf54684-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 17 Oct 2025 16:12:26 GMT
+      date: Wed, 22 Oct 2025 14:23:48 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '14827'
+      openai-processing-ms: '24389'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=dN0pWP6cTampuP8LAqHmuOUhOVN6PBbUo.9X8U.smuo-1760717546-1.0.1.1-dPo4inYlK2TAV8khxXydTQhxTIloo40X.YJ1hA8vWzo9xaRu0sEBGV212BAzopB5Ob2C0X1iLxG50_AviLfSwLw0tAhBiY1xhzTiWPs7O6Y;
-        path=/; expires=Fri, 17-Oct-25 16:42:26 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=ti5.fQdQX7CM6IvYbaP.TczcXJIIb6OVTWh_hOG3z3A-1761143028-1.0.1.1-iQUeK0sGi2K_dl_7HokXCJIjc0_njjuMq6kTVAy6TKOkUkiPktOfEIuJkBm_1ZsdOKWYbeMDMPPpxAI01YlpcGsoBSyYKS1i7mr7heO1keI;
+        path=/; expires=Wed, 22-Oct-25 14:53:48 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=hX8_em3frN46LDaIZ8hAQazx1vXDB9GT.YbQnFyLI3k-1760717546844-0.0.1.1-604800000;
+      - _cfuvid=HW.QwatxTL9fpuM_eAqo3zoAJhUZr8U6qEMh5Fpfu1w-1761143028801-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '14833'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999951'
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_ebd3d4d11e3f473eb4cd79f6f4455466
+      x-envoy-upstream-service-time: '24393'
+      x-request-id: req_316b1165609d481484369e140c2b817d
     body:
       string: |-
         {
-          "id": "resp_0e507d7f03a61fcb0168f26adc03dc8197931a9b9c176e66e6",
+          "id": "resp_00a4aed1a1e9c6de0168f8e8dc68f08197b089a3802f536fbb",
           "object": "response",
-          "created_at": 1760717532,
+          "created_at": 1761143004,
           "status": "completed",
           "background": false,
           "billing": {
@@ -52,10 +46,16 @@ http_interactions:
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-2025-04-14",
+          "model": "gpt-5-2025-08-07",
           "output": [
             {
-              "id": "msg_0e507d7f03a61fcb0168f26addb5408197924298990429438b",
+              "id": "rs_00a4aed1a1e9c6de0168f8e8dcf5d48197a379e1550f6c763d",
+              "type": "reasoning",
+              "encrypted_content": "gAAAAABo-Oj09zohuUTJqmfG6jVV1xDiFrpVgC7AQJ-a1O8CLBvrGInzrT9cvAyYDNAIUDWWkby2U6ZEwblpKJbTf1IKWJ969ki7znt9wN9YRqP6paPgTR5akXxZNcj50s1dEI-v8YSwynNWnkYTQPITbVEDA0ea_GlIUFNvLEUS44w44Xvhdek-nCXSDDtwLBcs10lkEW39fkXGyvVHwYiVvGj2ldSNxaFk2nE7m_Tb1jY3_Kb2Obo6oORUM7kZIOPm3iKu0NsBysU_RzxYdXWTmONoSCR4MXH5YFmG9r6Vb7FzOS3rKnD5gOj7ErGquTGqlVbNOoLZhzbQi_QHUz2LwZUf7Pltoe-0Pxj79u9CvRpyo-UGAJ9tMEXU2iZaqsS_EUfZHsedwuF8RfriAm1xMWFD4g7zG6qZZgP6aK7_Shj_o5H_dTOhmyfGS48tC6jSfeOqsU__QUQ43xLORwKlFrWkmgcEB-Z16V-TPPUjDCsN73t_xAw6cS2tYsCeDgvmHtW-IQ3o76yyH9oJG1lOLI0szTG0wRMTkBGW58f4wtdUgTEp182FfHLKK4uqmpS91qHd19R2MGWZbNEEBvH7BaRM72s6kVu-uuezq10C7zg-HmqZrgahF2wj3DUWJVfgWSt3LPz-41TgKwYV-WptsTt6K0OVBoqXpre_BC9IxACXnP1xZolS-seIT91LbchPwFY8KeJe8Wh18C_QXSt5Ps8hJ_3uWn9nKjFwe-hU3jK6fUN-W73sG5GpmP3FUP4annWH7UMxWGeqwRMy41IB_QPpofFW3GiyuHC408GO5xK9WQwyowi5o12y9xRChNb6Avn0N2UC49FL1nlnYIwkgspGNVEo0QCKrJvU8bC-xTBkGUyupwVQ8I6AQnQoStQ_wrOkV3mKHMRYYyOrpFhs88DUSe5e7h473KTTpzEKQw40KpJOhyttFuA0dq04cQ57elae9jWnfCsKHBeoMQ35x3MzWhge1oYaqfGVkc8L0GHQjrSVy2ON6vBXANr2K3f-BngeA8fbdYc-P1tdX8Vc4CxvooZtCK3Mv7Lm8S35QUY-YJ9xwrmfHaV3Tp_Mx7SMVHcHyrix8VBGZeI0QTVg4T2-kBnjfy9ZvBjzGTgGIIjP95LfIPgwEDFJW8-Zhs9LG7FfuBgdMz_1akCSfiTr6kIB9oAaT5GSC97J-Sj_5cTBISPgflCviWqV58FibpRSNWTO74vQOVMs3mWRm0onPP-5zWF8TKmTKZle_KtsI570e1DRQzHCW2LD259DdGyyyrvbJR2x8PpxeMiCVDBJS70gQOfWtqdpoZMlWVaoy2zcrFkmo8l3wTx2-qt_sDqOMbBM5TCyGLzxo40r8apfpYL1hxK266aLKlhOQ4R79DwSBU2gOok9b5qsG_EP5N7PFOFbdkSUr0cRLeKpb7pV1gUlRqP0D4N0wY4bsL7cWFO-WJJwamNlcL15NlS_5fZ-_jqt3mJxpMU8Rc45EHqfUj3fU1dySoECxICGc3kEXw9WqGUo6pX7gw9q3Y5v6gRyGJ_7QL5p9xo_gUFKWThSmcLUbUY0r67xKrzgV4pC8R4aXWV27wb0LRh-xPB9XaDrNKIZjFCZl60DzuhHwGt40DI91dJ2nObfpVvHzncOiO8ZUQSws9kKSaWhOmhojTgZK3r3-1V62-AVDcqx4UKGQvljSAH7DrI9leuOLXhkJVO4y8uW3NCbitTYvrXSVKvcICgUyDLZs5knMyfQ0UfV6tsO8nHuzfOCuAffO5Rw8tZeV7D-i0sFh3_onImxKll5BqTuvXEA5jmBLvPhYrnwaI4u9DGgN9ls7I9Qb6m4NRK4gVhZbzuZPZkKlRzzhjeagpWopPk72PT_zV3-seQBGNyH3K6uWVvABx8iTXdrJSdCpxdeEoFZx_mM8FAkVPcnXgEP7nh-hX4xZWmvxDV1uNdRNQ2oYETkHoLqTc0nbRfmnMS7ckhitRKJA61yYr97dw3C7Ifg4xuy2O5LB-CCXHzu4cJkS7_aP9tLjmxRBN5pbj3cGpTtoi_gyfGdeGRY86NIdGFdkcCoZvE12UY66fcFGIZ04MgQryFY7tBhXR3zAJSE7hd9IJDQSZ0hWUmgDOP4EfYrcHgpAeFS1tfUqzC_bJpdQgUq8ZKCuB2YtL6JuQnsZTGI03L9Aj69InmyRX7k6_NoD6JQ_xhwQedF3oEpgl1dP9KfUzUH9XPz38HGjBuceNjt--o1V7fsolHqlqm9zzG_NAUntixOf1FYMCkLBPHGR0Wquy0Z_t-QkxZ6a44T-YFHKGdrp3n0dKxE0sE-KTLiwmzWi5q3o0ekAwSlXxj_JMW3m51qKS5h1Q6o_q6x9o29unzSzXoSe3uZ2JvLUiHp8K3d8sZ8OCb_JVQyjTPlbNdT9axLoXk5Hx4gI2Hmn1Bqsuph32zNjQ6ZFm-yid_9fvyGoQ280kVi-KLjAGQGxMbDcYwUjNj9CWsDoWWOp-XxJ9NerbdLObNObcfBPXCL_tUQK42Wx5Ap0nTMMdkNDQEWiOkIX0HpMB22N9g-E4h2esApLnqDqwUUwn-Zeif6HtwaRYnQk3CqCGdOcBgmRlVX5RH7Vcxtrex44UT4rSOCg7hfKgFG-E2MC9wD55rrywNBb3c2AZsievtOnsREieoz91FSnFFRe1hmTkXcohsoKJcjG7H1AI7_p3fWoNJOZdu-OAOCGIhHUAzkghwwewzfju4WhgpI5Y6baAXunkrNAEYyy9niO86cuzvQo9EEMgUkSl01D1EkA8DHcHpc-YVhphjD8iVfNZGYks3KnKkaI19c9lnC9YUn1aSbnqcK6PihVvVB01ZCJY-RHzZppi1bnu-pHKZz2e90Qnk9KsPZ9dSU0Ia0YsBMGL8cQoLbDVUOa-FEtkE15rJy2edUthZCxFRWYKF6RlXoXG7XhvsDdjJgvczkUX5B8VZ76xmi1fFKjTO2Ndc-8RGRBMUecRjkupFLt6jFD1qKJYsGzsWmnxhka5kZ7mNuOJjbn7YsAqUXDi3IDdBcrQo9t8h6QQ-rO77JLLrMDBF3iK5WBz4mA5YhVwynMU6Gg25rSmyt9aPGMxkK1pl8m0Fl6j_4HjEJIHYNsvv4J9jK57r0pha2k-hddK9iOUW2yk7d17A8eeXW4KeqLXDUlRPdbxcLWOxQWv3hYPqu6jHycNTlf8_SMCHt4JRZ3L2NDDGwUuwdFpxSGoJtz2Z6yJc2NVaqQ3FnEvSscjuNMlthYEju1TevK3YDMQVC-zsQE-cB1YWfq046LfyFTgSMVV_RQqTumVu5OI5RxYquAU4Nr92oUHeNEKa5ulHKEZKPmVm_u-842gxPB7exY1wqiuDcAWRDzLhK605DjddI-_1Q_UbJPCGeqJNwUC4chOki4w4pgaMJglb_ifxDdCJJ5n4ETUD3DfDTwyB8VzfsOdLb-T47fKN_w7CeOmx_EFeycfmgt5DfaEZdvpcsSDmWqyOT0m2P0kTkYSFDbFcHpfsWyhWdqFjBKgemDMfy4WvdO_YB36SoNVIk6HJJBgKtPyjuVS0IWqSdlDMmm26A2lMTmy-3aor9xsTRsktjbMofOaVk7-5Qcc9WBA_Ee_DsQQTr-56RddwNayOUyVmnrsELmNM4_NpcMC5WgCGM6dCCk9gzEOBmpecRzLaauKJWiau2rhrnFj9zOtqeZmH1c7EEBH2-Y19x1Ng6jAUSWwy_slSdv41bvxKJUlLe5e7XRByQV2ZIZtOnXStkzXnv4K_cnoWyn6mYMgPdKx5qAmXS1BIEkmie3StHrkpc8J92KrVH2cOT3HwxSqBvRvd-A5jHcgQFamTYg_gQoCYFd8beOR7VGVRIKQ8Cf5HmfaLvnlUc10JOXhsjpcgwRK2V5lfbHmW9dB-OojlwmRIKYmyzkJOL7ojs63bGSnfSB_KtTnHesJsYFxL1tyte3Yf0AwI5seySUQ-qu0h-aIS-XMew_OtzVHt7yP8FM0Mq-ozv9MObFZbEO51UsKZHf85bY5J4trA9zXt232PhHlLlUdAx7tQ8xfoI2DH0DCKKytRLbe0a9h5kD4EYloqH7liP0ePQgKO2nJy8afFfdp_MvwGkqagOi-mnR8UHDmP9XcT5NgazVj9f1C3e5ZoCV3OZZp2b3FlkTsOVbnhQQ4UfMpprDPWXaB_3oSJPUFTl7UJAsN1WUadzS9FFs5vOUmwF_qZ0HdAs8W4lfEShBypPkXsvBrAXdkVpFKCE87zqjRF4A10tmgF1-jfOKYdGTuka-tFScl6LJc3InB3jbCr0cc3vKrAAZOVR9pleERo3vXbK7dnXw8fvsmMnFWg8c8V8oDXMw6dCZHDe1Hn9Q5AwTupk1x2jYJqBYDLBwpXUl-eDOw2FIokkS6bCBG8YQP558-VellY7IHVOOR-DKFwVsSM9xcnRojrvGzFqdYux6v2UkmOaElphsKHP1agsFhtjp3CwSRg4LId7L0Im-8cIYEV1TGdmxSSaZBwQw_7c1RA_MPz4uMKjEvk3pxXR8peXPrEGxYUYYi400oBWXhTHM3SDjIT18q9PDBxaXWBK207R5o4D9U25h35vV6FMmp98ZYSpDk5YVQh5Tn2NbHCtebk392EcxvmHVsjmoh9utjHumm8eKsc2YJhn4zyKTsVM9scedqzfkBMHXR7Qs09TH8HcDTnARmyKHT9UwcAHjhiOV4FmOZJ6zCyFZpU93urNX4jH80TclLHP9U1IMyb06vL9DMnEBS0YYRi5UsYZZn_L-YJu1wzvugjBVYmeaE3pXTZwlAR3UXMVOh-9-TqT_FaVAgh8oMwVhKlTh6rfaYE9hDMhpxPe3qwctDfQeCsyK0HzAvVTYtFV4_5ax7CC72OTpgtO7kbmpHvoIaX7qxK9MoOAdYXIktJByo8nFu8Jk6QZ6e91ANRZqfsUUvozIXF_fD27i8sSs-vgvHoX6qUi2U0Wyb5Uu_0glzZlAA3H5zk2_ZACVLJV3-ObnIJcWwxQCb7vu6DdHInuzvHKyi982zbMcfgkz-G9l9sB_utcNla2e6L3lUL2Rtkp2jlAx6unfaTMTEyQ7VXzX9-s1tgVajDEUzHY5MKlKWOewUd2DskjTlqsgwadDkLiXmqFk73X2NF4roGoa6Ndf12A3ayTCHSTYK76zGsk75h5blJyQiod4sX0dTNV1YiVA4DS2tShAbVXJnVjGJ3JW6KxZls0EhZlWhJqhmeOIqGsTOkqYJ09IzYTysTeUcHzCaYom4TRxmFrpk9KgyunjnU54qOOq7EINl5Rm3tkYAQF7LFjeNtecDGzqy1jzBmwIj8sL00AS1CR72YOAUzYiHjVdB2cOSKGaJsOiD4PUY_bxVC4ZMGHakNHRuyH-jpVqq19w8-413T0h8blAr8-iCp7Z_8hSDZOu1CXi9ScN-P65aiNbVX377tip9C4zuGt8pgHJ3Kh1Kc29RcQKp3zowPUsM9IGvEJWc0t3PESkciaiCbQqfvEPR15PwKlisr9xQIH4HcfD4bJ0Hp4A-Z_4fw3t9UB6y24BZSTBWxkstBD-iLdCNmI9A2UHxOKVL-QWlmw-ShWkjfvur2J3Ebohi1hgYIEBoDQJ6cRBCXf1QXW4y8lqFSMyUTaREJ0v89WWMVjaL8dA5EeRsRVjLuk35zyz7oswzly89kPp8b1RKmUeb-GUrmPeFoDSoWrt7h9D-nSFyQrXnuqAFgOdMYasRv2hj5MGVLouweBjkFgKHri3C7mGjJB9W-7fHlIWgI4daT3q61ftDKOHiubmtWhiDHFh9t-jbH6M0lM8Np2kSf2EcmNsRrCziu8esKDskPMooIeucprNkxbcbEsjPqn3-t_ADswMKmqCVAmqeqAvOZwH-CKBAt_nusAIQWe3psi2WbyGOGc8cfYvrGlMlSR3si2xiqLd9MG7Uu4pUyXln582Tbz6PL8iQWFHMlws5jK-RTrluRqv65N3XO2n4D7W7nNnezMQr4v0XjmnUn47oAA7M6ShWCKC9jxSUigm_UmGNhRCBHO99wnPfqQKlcluN3We9S6Ji6yy96txgZ22x2YzSQFfMVIzPfsN69qhgrbpjne8lXuMQeHlDuX-z2ok_gcAZA6S886JU59V9HTx62ndSdKD_6STfWZstv8qGOUbad8DViZB303LKVLldyrkOGTw6eeH-7mBo5VKH4UeQP3FUAdbYM3NXPZH4tZWsIbo3uBhLcokikmUWErQ2JIkXFC5s7I4wh_9HHuQCrqDSsXRlx18wq3lE7xAjzxqpd0p2_S0CRxCACzoVh-A7StaGzu5M7I8J-xNnCrN-71zRnICGNNRVtIHqSgal9aOyJ1CjhlOj7uPCfBFfW5jDcp83bS5UXNhJgWmDO5X_-Nt-0Xe29GDywxkSyh6m7b8opn8xiFx-Q8xzSOlQ2sgZw9fQE6Cstwu7bwnLMWfF2IQf8aHr3X3LLgsD9KFwsuDEx7CnGTyxTO1cu0h28DA9i6UfsAnGlqvVuukn5SsfGbofFDITO8TDVZjsJ-4MFukmU-Au9YG9rsXsIhOiTCRL7QvPrUlEuO_AsfN0THLXQJ_IF07DZovjg2eKlrmy-FtbQssmmPKbykTP3yYDjQJpp7kHngTIz4JPjstH65L-XFhRVoOlXghPHbLstZ0g_emLeiRLqQYfi46srIIiWDTS6pxVrB2Xp4P5PkraS2hHT9uBX8a_UXB0Rwh-7-h8sWN502G0bBw6o6SEIm3paJ4yTT2yOZffNOuYnZnb5CihLr283x9ZkeaC8IYsEeuM_p0QEz8cF8JafhhL8-NblPHK6FfYzSrCeEcYZWG6Yl2i3LnIX6Uiex4XLb0n6pDSCaktMN_0rcoLk9lwUfLDXobS7Bmr6rCINLPEpD3R-Es7xkGE8sNAi2Tpl5OnP2q7UKPmQhHqh5riJXC4OZCIwPlDfatTXpyxxaqdeFQlIeA5d9ua3IOSzKziER4xo_DKqIdtsxTKZT-g-KJdBjwzki6slonnNCGnbaZwlV9664zsH5c6zb9o4Zv5A4JT8woFlS3Ldl-PWGLKKBOLGPgEWnVaOOmrX1yLX0hY6_oqsCTlq03qvQaAFvsROSM972s2x8zFa2h0LfAEkp5gpcPcBNDw0z61CIxboEKHhAtIm-72BDYBJ3CzYvy34zmAvCyby90nmKIw8j2AjrH-KEkO96vTS1wt4vUPfTQuNNsIgpts-OQR5uDYfLPhCOPYuTVRryU9wJ3WZs-JQzLgU-q4PlfjTA81knFO4ymFtl1QAqqCCKXXQEfoei4Pm026Ov8LxX16sRVHI1CT6mGfCvRLHn3LAYbPATAfAOdQwztX4JSRO4oy84G9s6NG9trIgAxwQUSZaIS1azVF5kYQ0zkS-crpbVL82GT7V4KVW972xfX-ff29261DQ00u5r3LImgi_L53LV5N2tvwn9V32DxHeRdU6r3BHFj9WAQETJx_Cn27o_H7Xv15bKG8mFGXcC-ngqo2SY3B3XXJBHFWN1BE3GQUdXb0a9961mziQ8ekYkIGbrBSvzZODw2Zj3MgyGhbKMvj5YlRPxbPWRxYEZelZhy-HCUHFZdFuHFRy-obIIOI0lUpAVl7j71L7AGaP-MxBSpCD-Iel3h8A_fdJTq4BSk4l9XflHgwHCf7Gy2ghkKvtdzFL6HV1IqqQrXzwMI2dlifq_Ui-NTUiYT7O_irGtfyJDdE12QTS7SSoie2qnAI9YwuXQScUTewZ_RjzvfOhdZzVTBwlD0Ht7oPloR3JHzRXqx0CF0DZXVPjJ0DkWNR4fZ0mT_oe0A2ZjKYttbq_TB-up6hQnqDK_CiJjOdKlEIbktV1_q5fq6iYM8sGmOTIdvESGGiClfcxHIpWDTsC4TsyGLeO9cKWt-UgYVVPJHCHXiaHYho61q6hXN9untJsfL6jHkcXQOPZ1GKyENrPcH0mdwUmraQAWZ1GU-iXWwgs9y8zIN8OJL2Bfhi29c4gE2C2Phsnfrp8CvN0NH9dCT-hgvz_2ZrecOBtwu4ncnHkbVh8hHRANo-6ync9Hb-2sw3bWWkDOPAWBDgteyqgCV7I5g8Wr0gNV19TR9XvzVBaK0Lm_nJwr7p7W1TxRehylqqzIBJl9ZyzCYe5UGqL8eSAguY5SDC-6InbnLmZF-tR18ValWQF0iWjpE0txzbP7Laj23OPBJBY_GdJp1UTOTQkM43n2kyP82X794piqQ6Rx7edPk-Gv3Lny27XmcLe5V6qPq9nyAwXx1yhaRVJZxvXvTjaYLUv6GjAyZWct8MDirBGz7lL11hew--fbidsYDjvHJ2x7XJU4voNFALVQObpFBO4Rj0k3aouwXcf92nXmFmcUs7vCBHT8ZI09Nba7XOvv3udfk3sfmscw2GODYrHi6rqAwMvN-tM6i7mYIauNQOmZQwDOtlL58hFzjZIHTWohZvrXviRtqcfBV7shKDeexWh09B68w-f8QsSd2HS2r5SXxkAqPD8P3YmhK2oaPL3_LR7UWy1Z03obCwFlyQxQBSeGBMVqd4M8U9o2_bSTa2zl5le1hgjpwJR5F6XRDTT6jm3O5Ni5fEUa9udoLXUkxd-2qOGtw3dMzqM35pGwx31wjL5bBQW8kh3DiJeF6neQitmjAYfFRNoPmo_ZR5OWVkjc0tNqXd5Mtf_8se_AgCeuJtIowVMNcqe6S0i4e13woyQc6WQCle-7qq6b5Dou-4ggYhFDbe5z6sZuMhtuJDl0og-ELCPoCGJ4WCZnmI27IE-koD5LhRf95Nbj51NYW7zI9H_vPdcMZWCKYL4DMR9-6Vm_CeMqpKo8qEdSu0hiUi9Z_ab6idrb1rxJisqDvHWRmSuPPRzNxDgOYJFl3WnkADMe1fZCvTrO9dz2qKkztZSV5xEoCvxAlSpflKWE4QHCEG_H3p2Kk0uqmB7bzxZ8wdHxEbL9AgShrPiuwQL1BKHwWLgvxXGoJ72K-B313VOpvMax8wxI0bm_XE_N-nbtHjJ9Bpn5UkJsacfKGcSvfFJaS0q2d01IBbSnvmLqsXUZchb2l81cX-C_VRDP1zzBN8HwuTLqhpGL3349_Pn9wXWuBlgxJym-K92D_7mpSnWwVjcAJCke0TZE05h1cCmNVsZjF4z8THgicsDxCsHiPAv3DPU0TMm_kcyzzunN2-FpCdz9MIC0XkuajoEDHVHnU1sfGtekypbqOwKBU__doY1kPP2CqtojVOzaP0r6sN5LI9VcOl2suKoUOgitey1hJ9kmlqeAOZdW_PBLIBEr7fzr2UZJ8xTxvQGpSwt4hNR3OxhIUoOvSLc8XvsPEiT9I3EpqYp-UJg0xDbKtVOVTcMGVbtN5o1lr66mMQ4bIPbGOCH4CyQ_1FPeX3HyeIBRNBYoVP82EfgnY_ypFwXEmDM6Cp-F6P8wgL7-14ybAFUDCm6GORtTN8pmewOtWWdp_llKfCpOnAHnZ9aIFSD32GbBhjQG5HE41dYSyQ9vfVmsw-0gwUR0_uHr3sB_WKNkjgvA-z89pptqd2HjaIKXQ8gB8VlMH5OxF-2r96lvGbJIhqZsQygsetjukhTAPYOHVHBATeq02mAWytlBWvzay1KWPUeVZFhNYx1XpL7JGXJJCfVmsybTcPSUh4djxU-oM-gidPoEsvlB5rr6LxYHw206Bw0AMSqRrxNKYq0MsxLDjNp-dFh4gS3pCQUvNK-A7wxhqnM2SX9b-HyZwJXeyktmmsuPbkXEVXOOwB4S5I_7Qi9mhz949noalCd1WTNG4Q_BSCdh_PrcIe9HjTyMNeX56hhzs2mAUCb8j51y4Bd8TJDeEkq-a0Wy70bPxmaFqdHvIOx13JwjHIJomzjuFKg_UZqo-UI0C-vnxS3hc6H8Uf60814KSiZr",
+              "summary": []
+            },
+            {
+              "id": "msg_00a4aed1a1e9c6de0168f8e8f00cfc8197a01e626cd525a94c",
               "type": "message",
               "status": "completed",
               "content": [
@@ -63,7 +63,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "- **Printing behavior**:  \n  - **Data frame:** Prints the entire dataset, which can be overwhelming for large datasets.  \n  - **Tibble:** Prints only the first 10 rows and as many columns as fit on the screen, providing a cleaner, more readable output.\n\n- **Column types**:  \n  - **Data frame:** Converts character vectors to factors by default (unless `stringsAsFactors = FALSE` is set).  \n  - **Tibble:** Never changes column types automatically; character vectors remain as characters.\n\n- **Subsetting**:  \n  - **Data frame:** Returns a vector when selecting a single column using single brackets (e.g., `df[, 1]`).  \n  - **Tibble:** Always returns a tibble, even when selecting a single column.\n\n- **Partial matching**:  \n  - **Data frame:** Allows partial matching of column names, which may cause unexpected behavior.  \n  - **Tibble:** Never does partial matching of column names; always requires exact matches.\n\n- **Row names**:  \n  - **Data frame:** Supports row names.  \n  - **Tibble:** Does not use row names.\n\n- **Performance**:  \n  - **Data frame:** Base R structure, can be slower for certain operations with large datasets.  \n  - **Tibble:** Optimized for modern workflows (though both are similar for most basic uses).\n\n- **Package implementation**:  \n  - **Data frame:** Base R object.  \n  - **Tibble:** Comes from the `tibble` package, part of the tidyverse.\n\n- **Creating new columns**:  \n  - **Data frame:** Can create new columns by reference.  \n  - **Tibble:** Creating new columns must be done using functions like `mutate()`. \n\n- **Error messages**:  \n  - **Data frame:** Sometimes gives less informative error messages.  \n  - **Tibble:** Offers more user-friendly and clear error messages.\n\nIn summary, **tibbles** are a modern reimagining of **data frames** designed for the tidyverse with enhanced usability, stricter behavior, and more predictable outputs."
+                  "text": "- Class and origin: A tibble is a modern reimagining of a data.frame (inherits from data.frame, classes: c(\"tbl_df\", \"tbl\", \"data.frame\")) with stricter, more predictable behavior.\n- Printing: Tibbles show only the first rows and columns that fit, include column types, and never print row names; data.frames print all columns and can print many rows, with no type summary.\n- Row names: Tibbles do not use row names (they\u2019re dropped or can be stored in a column); data.frames support row names.\n- Column name handling: Tibbles allow non-syntactic names and can maintain duplicates, with explicit \u201cname repair\u201d options; data.frames also allow these but without standardized repair behavior.\n- Type conversion on creation: Tibbles never convert character to factor; data.frames historically converted (stringsAsFactors=TRUE before R 4.0.0; now default FALSE).\n- Subsetting with [: tibble[, j] always returns a tibble (no drop argument needed); data.frame[, j] can return a vector by default unless drop=FALSE.\n- Subsetting with $ and [[:\n  - Tibbles never do partial matching; [[ errors on unknown columns; $ returns NULL for unknown columns without partial matching.\n  - data.frame $ can do partial matching; [[ by default uses exact=TRUE but can be used with partial matching if exact=FALSE.\n- Recycling and size checks: Tibbles are strict\u2014column assignment requires length 1 or exactly n rows; otherwise error. data.frames are more permissive and may recycle (sometimes with a warning).\n- Column types and list-columns: Both support list-columns, but tibbles emphasize stable types and won\u2019t silently change types during common operations.\n- Performance and ecosystem: Tibbles add safety checks and nicer display (slightly more overhead) and integrate tightly with the tidyverse; data.frames are base R\u2019s minimal, faster-by-default structure with broader legacy expectations (e.g., row names)."
                 }
               ],
               "role": "assistant"
@@ -73,7 +73,7 @@ http_interactions:
           "previous_response_id": null,
           "prompt_cache_key": null,
           "reasoning": {
-            "effort": null,
+            "effort": "medium",
             "summary": null
           },
           "safety_identifier": null,
@@ -92,89 +92,83 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 30,
+            "input_tokens": 29,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 444,
+            "output_tokens": 1893,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 1472
             },
-            "total_tokens": 474
+            "total_tokens": 1922
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-10-17 16:12:26
+  recorded_at: 2025-10-22 14:23:48
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  What
         is the difference between a tibble and a data frame?\n  Answer with a bulleted
-        list\n"}]},{"role":"assistant","content":[{"type":"output_text","text":"-
-        **Printing behavior**:  \n  - **Data frame:** Prints the entire dataset, which
-        can be overwhelming for large datasets.  \n  - **Tibble:** Prints only the
-        first 10 rows and as many columns as fit on the screen, providing a cleaner,
-        more readable output.\n\n- **Column types**:  \n  - **Data frame:** Converts
-        character vectors to factors by default (unless `stringsAsFactors = FALSE`
-        is set).  \n  - **Tibble:** Never changes column types automatically; character
-        vectors remain as characters.\n\n- **Subsetting**:  \n  - **Data frame:**
-        Returns a vector when selecting a single column using single brackets (e.g.,
-        `df[, 1]`).  \n  - **Tibble:** Always returns a tibble, even when selecting
-        a single column.\n\n- **Partial matching**:  \n  - **Data frame:** Allows
-        partial matching of column names, which may cause unexpected behavior.  \n  -
-        **Tibble:** Never does partial matching of column names; always requires exact
-        matches.\n\n- **Row names**:  \n  - **Data frame:** Supports row names.  \n  -
-        **Tibble:** Does not use row names.\n\n- **Performance**:  \n  - **Data frame:**
-        Base R structure, can be slower for certain operations with large datasets.  \n  -
-        **Tibble:** Optimized for modern workflows (though both are similar for most
-        basic uses).\n\n- **Package implementation**:  \n  - **Data frame:** Base
-        R object.  \n  - **Tibble:** Comes from the `tibble` package, part of the
-        tidyverse.\n\n- **Creating new columns**:  \n  - **Data frame:** Can create
-        new columns by reference.  \n  - **Tibble:** Creating new columns must be
-        done using functions like `mutate()`. \n\n- **Error messages**:  \n  - **Data
-        frame:** Sometimes gives less informative error messages.  \n  - **Tibble:**
-        Offers more user-friendly and clear error messages.\n\nIn summary, **tibbles**
-        are a modern reimagining of **data frames** designed for the tidyverse with
-        enhanced usability, stricter behavior, and more predictable outputs."}]},{"role":"user","content":[{"type":"input_text","text":"Tell
-        me three funny jokes about statisticians"}]}],"model":"gpt-4.1","stream":false,"store":false}'
+        list\n"}]},{"id":"rs_00a4aed1a1e9c6de0168f8e8dcf5d48197a379e1550f6c763d","type":"reasoning","encrypted_content":"gAAAAABo-Oj09zohuUTJqmfG6jVV1xDiFrpVgC7AQJ-a1O8CLBvrGInzrT9cvAyYDNAIUDWWkby2U6ZEwblpKJbTf1IKWJ969ki7znt9wN9YRqP6paPgTR5akXxZNcj50s1dEI-v8YSwynNWnkYTQPITbVEDA0ea_GlIUFNvLEUS44w44Xvhdek-nCXSDDtwLBcs10lkEW39fkXGyvVHwYiVvGj2ldSNxaFk2nE7m_Tb1jY3_Kb2Obo6oORUM7kZIOPm3iKu0NsBysU_RzxYdXWTmONoSCR4MXH5YFmG9r6Vb7FzOS3rKnD5gOj7ErGquTGqlVbNOoLZhzbQi_QHUz2LwZUf7Pltoe-0Pxj79u9CvRpyo-UGAJ9tMEXU2iZaqsS_EUfZHsedwuF8RfriAm1xMWFD4g7zG6qZZgP6aK7_Shj_o5H_dTOhmyfGS48tC6jSfeOqsU__QUQ43xLORwKlFrWkmgcEB-Z16V-TPPUjDCsN73t_xAw6cS2tYsCeDgvmHtW-IQ3o76yyH9oJG1lOLI0szTG0wRMTkBGW58f4wtdUgTEp182FfHLKK4uqmpS91qHd19R2MGWZbNEEBvH7BaRM72s6kVu-uuezq10C7zg-HmqZrgahF2wj3DUWJVfgWSt3LPz-41TgKwYV-WptsTt6K0OVBoqXpre_BC9IxACXnP1xZolS-seIT91LbchPwFY8KeJe8Wh18C_QXSt5Ps8hJ_3uWn9nKjFwe-hU3jK6fUN-W73sG5GpmP3FUP4annWH7UMxWGeqwRMy41IB_QPpofFW3GiyuHC408GO5xK9WQwyowi5o12y9xRChNb6Avn0N2UC49FL1nlnYIwkgspGNVEo0QCKrJvU8bC-xTBkGUyupwVQ8I6AQnQoStQ_wrOkV3mKHMRYYyOrpFhs88DUSe5e7h473KTTpzEKQw40KpJOhyttFuA0dq04cQ57elae9jWnfCsKHBeoMQ35x3MzWhge1oYaqfGVkc8L0GHQjrSVy2ON6vBXANr2K3f-BngeA8fbdYc-P1tdX8Vc4CxvooZtCK3Mv7Lm8S35QUY-YJ9xwrmfHaV3Tp_Mx7SMVHcHyrix8VBGZeI0QTVg4T2-kBnjfy9ZvBjzGTgGIIjP95LfIPgwEDFJW8-Zhs9LG7FfuBgdMz_1akCSfiTr6kIB9oAaT5GSC97J-Sj_5cTBISPgflCviWqV58FibpRSNWTO74vQOVMs3mWRm0onPP-5zWF8TKmTKZle_KtsI570e1DRQzHCW2LD259DdGyyyrvbJR2x8PpxeMiCVDBJS70gQOfWtqdpoZMlWVaoy2zcrFkmo8l3wTx2-qt_sDqOMbBM5TCyGLzxo40r8apfpYL1hxK266aLKlhOQ4R79DwSBU2gOok9b5qsG_EP5N7PFOFbdkSUr0cRLeKpb7pV1gUlRqP0D4N0wY4bsL7cWFO-WJJwamNlcL15NlS_5fZ-_jqt3mJxpMU8Rc45EHqfUj3fU1dySoECxICGc3kEXw9WqGUo6pX7gw9q3Y5v6gRyGJ_7QL5p9xo_gUFKWThSmcLUbUY0r67xKrzgV4pC8R4aXWV27wb0LRh-xPB9XaDrNKIZjFCZl60DzuhHwGt40DI91dJ2nObfpVvHzncOiO8ZUQSws9kKSaWhOmhojTgZK3r3-1V62-AVDcqx4UKGQvljSAH7DrI9leuOLXhkJVO4y8uW3NCbitTYvrXSVKvcICgUyDLZs5knMyfQ0UfV6tsO8nHuzfOCuAffO5Rw8tZeV7D-i0sFh3_onImxKll5BqTuvXEA5jmBLvPhYrnwaI4u9DGgN9ls7I9Qb6m4NRK4gVhZbzuZPZkKlRzzhjeagpWopPk72PT_zV3-seQBGNyH3K6uWVvABx8iTXdrJSdCpxdeEoFZx_mM8FAkVPcnXgEP7nh-hX4xZWmvxDV1uNdRNQ2oYETkHoLqTc0nbRfmnMS7ckhitRKJA61yYr97dw3C7Ifg4xuy2O5LB-CCXHzu4cJkS7_aP9tLjmxRBN5pbj3cGpTtoi_gyfGdeGRY86NIdGFdkcCoZvE12UY66fcFGIZ04MgQryFY7tBhXR3zAJSE7hd9IJDQSZ0hWUmgDOP4EfYrcHgpAeFS1tfUqzC_bJpdQgUq8ZKCuB2YtL6JuQnsZTGI03L9Aj69InmyRX7k6_NoD6JQ_xhwQedF3oEpgl1dP9KfUzUH9XPz38HGjBuceNjt--o1V7fsolHqlqm9zzG_NAUntixOf1FYMCkLBPHGR0Wquy0Z_t-QkxZ6a44T-YFHKGdrp3n0dKxE0sE-KTLiwmzWi5q3o0ekAwSlXxj_JMW3m51qKS5h1Q6o_q6x9o29unzSzXoSe3uZ2JvLUiHp8K3d8sZ8OCb_JVQyjTPlbNdT9axLoXk5Hx4gI2Hmn1Bqsuph32zNjQ6ZFm-yid_9fvyGoQ280kVi-KLjAGQGxMbDcYwUjNj9CWsDoWWOp-XxJ9NerbdLObNObcfBPXCL_tUQK42Wx5Ap0nTMMdkNDQEWiOkIX0HpMB22N9g-E4h2esApLnqDqwUUwn-Zeif6HtwaRYnQk3CqCGdOcBgmRlVX5RH7Vcxtrex44UT4rSOCg7hfKgFG-E2MC9wD55rrywNBb3c2AZsievtOnsREieoz91FSnFFRe1hmTkXcohsoKJcjG7H1AI7_p3fWoNJOZdu-OAOCGIhHUAzkghwwewzfju4WhgpI5Y6baAXunkrNAEYyy9niO86cuzvQo9EEMgUkSl01D1EkA8DHcHpc-YVhphjD8iVfNZGYks3KnKkaI19c9lnC9YUn1aSbnqcK6PihVvVB01ZCJY-RHzZppi1bnu-pHKZz2e90Qnk9KsPZ9dSU0Ia0YsBMGL8cQoLbDVUOa-FEtkE15rJy2edUthZCxFRWYKF6RlXoXG7XhvsDdjJgvczkUX5B8VZ76xmi1fFKjTO2Ndc-8RGRBMUecRjkupFLt6jFD1qKJYsGzsWmnxhka5kZ7mNuOJjbn7YsAqUXDi3IDdBcrQo9t8h6QQ-rO77JLLrMDBF3iK5WBz4mA5YhVwynMU6Gg25rSmyt9aPGMxkK1pl8m0Fl6j_4HjEJIHYNsvv4J9jK57r0pha2k-hddK9iOUW2yk7d17A8eeXW4KeqLXDUlRPdbxcLWOxQWv3hYPqu6jHycNTlf8_SMCHt4JRZ3L2NDDGwUuwdFpxSGoJtz2Z6yJc2NVaqQ3FnEvSscjuNMlthYEju1TevK3YDMQVC-zsQE-cB1YWfq046LfyFTgSMVV_RQqTumVu5OI5RxYquAU4Nr92oUHeNEKa5ulHKEZKPmVm_u-842gxPB7exY1wqiuDcAWRDzLhK605DjddI-_1Q_UbJPCGeqJNwUC4chOki4w4pgaMJglb_ifxDdCJJ5n4ETUD3DfDTwyB8VzfsOdLb-T47fKN_w7CeOmx_EFeycfmgt5DfaEZdvpcsSDmWqyOT0m2P0kTkYSFDbFcHpfsWyhWdqFjBKgemDMfy4WvdO_YB36SoNVIk6HJJBgKtPyjuVS0IWqSdlDMmm26A2lMTmy-3aor9xsTRsktjbMofOaVk7-5Qcc9WBA_Ee_DsQQTr-56RddwNayOUyVmnrsELmNM4_NpcMC5WgCGM6dCCk9gzEOBmpecRzLaauKJWiau2rhrnFj9zOtqeZmH1c7EEBH2-Y19x1Ng6jAUSWwy_slSdv41bvxKJUlLe5e7XRByQV2ZIZtOnXStkzXnv4K_cnoWyn6mYMgPdKx5qAmXS1BIEkmie3StHrkpc8J92KrVH2cOT3HwxSqBvRvd-A5jHcgQFamTYg_gQoCYFd8beOR7VGVRIKQ8Cf5HmfaLvnlUc10JOXhsjpcgwRK2V5lfbHmW9dB-OojlwmRIKYmyzkJOL7ojs63bGSnfSB_KtTnHesJsYFxL1tyte3Yf0AwI5seySUQ-qu0h-aIS-XMew_OtzVHt7yP8FM0Mq-ozv9MObFZbEO51UsKZHf85bY5J4trA9zXt232PhHlLlUdAx7tQ8xfoI2DH0DCKKytRLbe0a9h5kD4EYloqH7liP0ePQgKO2nJy8afFfdp_MvwGkqagOi-mnR8UHDmP9XcT5NgazVj9f1C3e5ZoCV3OZZp2b3FlkTsOVbnhQQ4UfMpprDPWXaB_3oSJPUFTl7UJAsN1WUadzS9FFs5vOUmwF_qZ0HdAs8W4lfEShBypPkXsvBrAXdkVpFKCE87zqjRF4A10tmgF1-jfOKYdGTuka-tFScl6LJc3InB3jbCr0cc3vKrAAZOVR9pleERo3vXbK7dnXw8fvsmMnFWg8c8V8oDXMw6dCZHDe1Hn9Q5AwTupk1x2jYJqBYDLBwpXUl-eDOw2FIokkS6bCBG8YQP558-VellY7IHVOOR-DKFwVsSM9xcnRojrvGzFqdYux6v2UkmOaElphsKHP1agsFhtjp3CwSRg4LId7L0Im-8cIYEV1TGdmxSSaZBwQw_7c1RA_MPz4uMKjEvk3pxXR8peXPrEGxYUYYi400oBWXhTHM3SDjIT18q9PDBxaXWBK207R5o4D9U25h35vV6FMmp98ZYSpDk5YVQh5Tn2NbHCtebk392EcxvmHVsjmoh9utjHumm8eKsc2YJhn4zyKTsVM9scedqzfkBMHXR7Qs09TH8HcDTnARmyKHT9UwcAHjhiOV4FmOZJ6zCyFZpU93urNX4jH80TclLHP9U1IMyb06vL9DMnEBS0YYRi5UsYZZn_L-YJu1wzvugjBVYmeaE3pXTZwlAR3UXMVOh-9-TqT_FaVAgh8oMwVhKlTh6rfaYE9hDMhpxPe3qwctDfQeCsyK0HzAvVTYtFV4_5ax7CC72OTpgtO7kbmpHvoIaX7qxK9MoOAdYXIktJByo8nFu8Jk6QZ6e91ANRZqfsUUvozIXF_fD27i8sSs-vgvHoX6qUi2U0Wyb5Uu_0glzZlAA3H5zk2_ZACVLJV3-ObnIJcWwxQCb7vu6DdHInuzvHKyi982zbMcfgkz-G9l9sB_utcNla2e6L3lUL2Rtkp2jlAx6unfaTMTEyQ7VXzX9-s1tgVajDEUzHY5MKlKWOewUd2DskjTlqsgwadDkLiXmqFk73X2NF4roGoa6Ndf12A3ayTCHSTYK76zGsk75h5blJyQiod4sX0dTNV1YiVA4DS2tShAbVXJnVjGJ3JW6KxZls0EhZlWhJqhmeOIqGsTOkqYJ09IzYTysTeUcHzCaYom4TRxmFrpk9KgyunjnU54qOOq7EINl5Rm3tkYAQF7LFjeNtecDGzqy1jzBmwIj8sL00AS1CR72YOAUzYiHjVdB2cOSKGaJsOiD4PUY_bxVC4ZMGHakNHRuyH-jpVqq19w8-413T0h8blAr8-iCp7Z_8hSDZOu1CXi9ScN-P65aiNbVX377tip9C4zuGt8pgHJ3Kh1Kc29RcQKp3zowPUsM9IGvEJWc0t3PESkciaiCbQqfvEPR15PwKlisr9xQIH4HcfD4bJ0Hp4A-Z_4fw3t9UB6y24BZSTBWxkstBD-iLdCNmI9A2UHxOKVL-QWlmw-ShWkjfvur2J3Ebohi1hgYIEBoDQJ6cRBCXf1QXW4y8lqFSMyUTaREJ0v89WWMVjaL8dA5EeRsRVjLuk35zyz7oswzly89kPp8b1RKmUeb-GUrmPeFoDSoWrt7h9D-nSFyQrXnuqAFgOdMYasRv2hj5MGVLouweBjkFgKHri3C7mGjJB9W-7fHlIWgI4daT3q61ftDKOHiubmtWhiDHFh9t-jbH6M0lM8Np2kSf2EcmNsRrCziu8esKDskPMooIeucprNkxbcbEsjPqn3-t_ADswMKmqCVAmqeqAvOZwH-CKBAt_nusAIQWe3psi2WbyGOGc8cfYvrGlMlSR3si2xiqLd9MG7Uu4pUyXln582Tbz6PL8iQWFHMlws5jK-RTrluRqv65N3XO2n4D7W7nNnezMQr4v0XjmnUn47oAA7M6ShWCKC9jxSUigm_UmGNhRCBHO99wnPfqQKlcluN3We9S6Ji6yy96txgZ22x2YzSQFfMVIzPfsN69qhgrbpjne8lXuMQeHlDuX-z2ok_gcAZA6S886JU59V9HTx62ndSdKD_6STfWZstv8qGOUbad8DViZB303LKVLldyrkOGTw6eeH-7mBo5VKH4UeQP3FUAdbYM3NXPZH4tZWsIbo3uBhLcokikmUWErQ2JIkXFC5s7I4wh_9HHuQCrqDSsXRlx18wq3lE7xAjzxqpd0p2_S0CRxCACzoVh-A7StaGzu5M7I8J-xNnCrN-71zRnICGNNRVtIHqSgal9aOyJ1CjhlOj7uPCfBFfW5jDcp83bS5UXNhJgWmDO5X_-Nt-0Xe29GDywxkSyh6m7b8opn8xiFx-Q8xzSOlQ2sgZw9fQE6Cstwu7bwnLMWfF2IQf8aHr3X3LLgsD9KFwsuDEx7CnGTyxTO1cu0h28DA9i6UfsAnGlqvVuukn5SsfGbofFDITO8TDVZjsJ-4MFukmU-Au9YG9rsXsIhOiTCRL7QvPrUlEuO_AsfN0THLXQJ_IF07DZovjg2eKlrmy-FtbQssmmPKbykTP3yYDjQJpp7kHngTIz4JPjstH65L-XFhRVoOlXghPHbLstZ0g_emLeiRLqQYfi46srIIiWDTS6pxVrB2Xp4P5PkraS2hHT9uBX8a_UXB0Rwh-7-h8sWN502G0bBw6o6SEIm3paJ4yTT2yOZffNOuYnZnb5CihLr283x9ZkeaC8IYsEeuM_p0QEz8cF8JafhhL8-NblPHK6FfYzSrCeEcYZWG6Yl2i3LnIX6Uiex4XLb0n6pDSCaktMN_0rcoLk9lwUfLDXobS7Bmr6rCINLPEpD3R-Es7xkGE8sNAi2Tpl5OnP2q7UKPmQhHqh5riJXC4OZCIwPlDfatTXpyxxaqdeFQlIeA5d9ua3IOSzKziER4xo_DKqIdtsxTKZT-g-KJdBjwzki6slonnNCGnbaZwlV9664zsH5c6zb9o4Zv5A4JT8woFlS3Ldl-PWGLKKBOLGPgEWnVaOOmrX1yLX0hY6_oqsCTlq03qvQaAFvsROSM972s2x8zFa2h0LfAEkp5gpcPcBNDw0z61CIxboEKHhAtIm-72BDYBJ3CzYvy34zmAvCyby90nmKIw8j2AjrH-KEkO96vTS1wt4vUPfTQuNNsIgpts-OQR5uDYfLPhCOPYuTVRryU9wJ3WZs-JQzLgU-q4PlfjTA81knFO4ymFtl1QAqqCCKXXQEfoei4Pm026Ov8LxX16sRVHI1CT6mGfCvRLHn3LAYbPATAfAOdQwztX4JSRO4oy84G9s6NG9trIgAxwQUSZaIS1azVF5kYQ0zkS-crpbVL82GT7V4KVW972xfX-ff29261DQ00u5r3LImgi_L53LV5N2tvwn9V32DxHeRdU6r3BHFj9WAQETJx_Cn27o_H7Xv15bKG8mFGXcC-ngqo2SY3B3XXJBHFWN1BE3GQUdXb0a9961mziQ8ekYkIGbrBSvzZODw2Zj3MgyGhbKMvj5YlRPxbPWRxYEZelZhy-HCUHFZdFuHFRy-obIIOI0lUpAVl7j71L7AGaP-MxBSpCD-Iel3h8A_fdJTq4BSk4l9XflHgwHCf7Gy2ghkKvtdzFL6HV1IqqQrXzwMI2dlifq_Ui-NTUiYT7O_irGtfyJDdE12QTS7SSoie2qnAI9YwuXQScUTewZ_RjzvfOhdZzVTBwlD0Ht7oPloR3JHzRXqx0CF0DZXVPjJ0DkWNR4fZ0mT_oe0A2ZjKYttbq_TB-up6hQnqDK_CiJjOdKlEIbktV1_q5fq6iYM8sGmOTIdvESGGiClfcxHIpWDTsC4TsyGLeO9cKWt-UgYVVPJHCHXiaHYho61q6hXN9untJsfL6jHkcXQOPZ1GKyENrPcH0mdwUmraQAWZ1GU-iXWwgs9y8zIN8OJL2Bfhi29c4gE2C2Phsnfrp8CvN0NH9dCT-hgvz_2ZrecOBtwu4ncnHkbVh8hHRANo-6ync9Hb-2sw3bWWkDOPAWBDgteyqgCV7I5g8Wr0gNV19TR9XvzVBaK0Lm_nJwr7p7W1TxRehylqqzIBJl9ZyzCYe5UGqL8eSAguY5SDC-6InbnLmZF-tR18ValWQF0iWjpE0txzbP7Laj23OPBJBY_GdJp1UTOTQkM43n2kyP82X794piqQ6Rx7edPk-Gv3Lny27XmcLe5V6qPq9nyAwXx1yhaRVJZxvXvTjaYLUv6GjAyZWct8MDirBGz7lL11hew--fbidsYDjvHJ2x7XJU4voNFALVQObpFBO4Rj0k3aouwXcf92nXmFmcUs7vCBHT8ZI09Nba7XOvv3udfk3sfmscw2GODYrHi6rqAwMvN-tM6i7mYIauNQOmZQwDOtlL58hFzjZIHTWohZvrXviRtqcfBV7shKDeexWh09B68w-f8QsSd2HS2r5SXxkAqPD8P3YmhK2oaPL3_LR7UWy1Z03obCwFlyQxQBSeGBMVqd4M8U9o2_bSTa2zl5le1hgjpwJR5F6XRDTT6jm3O5Ni5fEUa9udoLXUkxd-2qOGtw3dMzqM35pGwx31wjL5bBQW8kh3DiJeF6neQitmjAYfFRNoPmo_ZR5OWVkjc0tNqXd5Mtf_8se_AgCeuJtIowVMNcqe6S0i4e13woyQc6WQCle-7qq6b5Dou-4ggYhFDbe5z6sZuMhtuJDl0og-ELCPoCGJ4WCZnmI27IE-koD5LhRf95Nbj51NYW7zI9H_vPdcMZWCKYL4DMR9-6Vm_CeMqpKo8qEdSu0hiUi9Z_ab6idrb1rxJisqDvHWRmSuPPRzNxDgOYJFl3WnkADMe1fZCvTrO9dz2qKkztZSV5xEoCvxAlSpflKWE4QHCEG_H3p2Kk0uqmB7bzxZ8wdHxEbL9AgShrPiuwQL1BKHwWLgvxXGoJ72K-B313VOpvMax8wxI0bm_XE_N-nbtHjJ9Bpn5UkJsacfKGcSvfFJaS0q2d01IBbSnvmLqsXUZchb2l81cX-C_VRDP1zzBN8HwuTLqhpGL3349_Pn9wXWuBlgxJym-K92D_7mpSnWwVjcAJCke0TZE05h1cCmNVsZjF4z8THgicsDxCsHiPAv3DPU0TMm_kcyzzunN2-FpCdz9MIC0XkuajoEDHVHnU1sfGtekypbqOwKBU__doY1kPP2CqtojVOzaP0r6sN5LI9VcOl2suKoUOgitey1hJ9kmlqeAOZdW_PBLIBEr7fzr2UZJ8xTxvQGpSwt4hNR3OxhIUoOvSLc8XvsPEiT9I3EpqYp-UJg0xDbKtVOVTcMGVbtN5o1lr66mMQ4bIPbGOCH4CyQ_1FPeX3HyeIBRNBYoVP82EfgnY_ypFwXEmDM6Cp-F6P8wgL7-14ybAFUDCm6GORtTN8pmewOtWWdp_llKfCpOnAHnZ9aIFSD32GbBhjQG5HE41dYSyQ9vfVmsw-0gwUR0_uHr3sB_WKNkjgvA-z89pptqd2HjaIKXQ8gB8VlMH5OxF-2r96lvGbJIhqZsQygsetjukhTAPYOHVHBATeq02mAWytlBWvzay1KWPUeVZFhNYx1XpL7JGXJJCfVmsybTcPSUh4djxU-oM-gidPoEsvlB5rr6LxYHw206Bw0AMSqRrxNKYq0MsxLDjNp-dFh4gS3pCQUvNK-A7wxhqnM2SX9b-HyZwJXeyktmmsuPbkXEVXOOwB4S5I_7Qi9mhz949noalCd1WTNG4Q_BSCdh_PrcIe9HjTyMNeX56hhzs2mAUCb8j51y4Bd8TJDeEkq-a0Wy70bPxmaFqdHvIOx13JwjHIJomzjuFKg_UZqo-UI0C-vnxS3hc6H8Uf60814KSiZr","summary":[]},{"role":"assistant","content":[{"type":"output_text","text":"-
+        Class and origin: A tibble is a modern reimagining of a data.frame (inherits
+        from data.frame, classes: c(\"tbl_df\", \"tbl\", \"data.frame\")) with stricter,
+        more predictable behavior.\n- Printing: Tibbles show only the first rows and
+        columns that fit, include column types, and never print row names; data.frames
+        print all columns and can print many rows, with no type summary.\n- Row names:
+        Tibbles do not use row names (they’re dropped or can be stored in a column);
+        data.frames support row names.\n- Column name handling: Tibbles allow non-syntactic
+        names and can maintain duplicates, with explicit “name repair” options; data.frames
+        also allow these but without standardized repair behavior.\n- Type conversion
+        on creation: Tibbles never convert character to factor; data.frames historically
+        converted (stringsAsFactors=TRUE before R 4.0.0; now default FALSE).\n- Subsetting
+        with [: tibble[, j] always returns a tibble (no drop argument needed); data.frame[,
+        j] can return a vector by default unless drop=FALSE.\n- Subsetting with $
+        and [[:\n  - Tibbles never do partial matching; [[ errors on unknown columns;
+        $ returns NULL for unknown columns without partial matching.\n  - data.frame
+        $ can do partial matching; [[ by default uses exact=TRUE but can be used with
+        partial matching if exact=FALSE.\n- Recycling and size checks: Tibbles are
+        strict—column assignment requires length 1 or exactly n rows; otherwise error.
+        data.frames are more permissive and may recycle (sometimes with a warning).\n-
+        Column types and list-columns: Both support list-columns, but tibbles emphasize
+        stable types and won’t silently change types during common operations.\n-
+        Performance and ecosystem: Tibbles add safety checks and nicer display (slightly
+        more overhead) and integrate tightly with the tidyverse; data.frames are base
+        R’s minimal, faster-by-default structure with broader legacy expectations
+        (e.g., row names)."}]},{"role":"user","content":[{"type":"input_text","text":"Tell
+        me three funny jokes about statisticians"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5","stream":false,"store":false}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 990113dd0a986c68-DFW
+      cf-ray: 9929a79b2d8d4684-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 17 Oct 2025 16:12:33 GMT
+      date: Wed, 22 Oct 2025 14:24:05 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '6541'
+      openai-processing-ms: '16944'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=CV9kTBintBAjseCO5FpENxxzuKxEe7LKb0PqUnZKKbU-1760717553-1.0.1.1-exRJ_MJOp7R2hreY0GVEyLXpCGc4y0ZzVqfOCjaKJ5_LOYxKmLQN1hnDfl1bArIMypp_H5fBh.b5EVsEgGsgil3Mr3WfOV0aBFKba1HqOrg;
-        path=/; expires=Fri, 17-Oct-25 16:42:33 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=hwsB8L_27zUmAeLSQFOJ.bWNZO4Z.ZJOc..6Q0ArofE-1761143045-1.0.1.1-.kg9VbX2QqK3onNBSpwSIRGeT0UYkY.85bVqMiqXi0q5EQhYk1E3h5LY.NO0.I_pOxFOUW35DCPcd5AxFrn.qOYxcno_bnbdKTVZfXF_3iw;
+        path=/; expires=Wed, 22-Oct-25 14:54:05 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=zPEkX90VzOSJT2H4DyIVBAzEbKWEDQj0957JKbUOJE4-1760717553648-0.0.1.1-604800000;
+      - _cfuvid=uRMFv2HT4POCHrZeFUVagiX0_biHMzeJTlZNRJ.eNDY-1761143045987-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '6546'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999492'
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_5c02b7012ca14c7c89272b4b26b765d4
+      x-envoy-upstream-service-time: '16951'
+      x-request-id: req_7d0eac7e6eaa4cae98fdd3d07a4522c7
     body:
       string: |-
         {
-          "id": "resp_027cfa413c86401b0168f26aeb1a1c8194ba14bd75068f6e91",
+          "id": "resp_00a4aed1a1e9c6de0168f8e8f50e888197aa1ee4470a3a4bb7",
           "object": "response",
-          "created_at": 1760717547,
+          "created_at": 1761143029,
           "status": "completed",
           "background": false,
           "billing": {
@@ -185,10 +179,16 @@ http_interactions:
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-2025-04-14",
+          "model": "gpt-5-2025-08-07",
           "output": [
             {
-              "id": "msg_027cfa413c86401b0168f26aec61fc8194b745b1aa653339ac",
+              "id": "rs_00a4aed1a1e9c6de0168f8e8f5e43c8197b98945bd458c7b51",
+              "type": "reasoning",
+              "encrypted_content": "gAAAAABo-OkFYg7JY_HgfyObWD9hsSHz_49mGcIpDScXFgN1PVZbb76dnMe1Sm1DinjZD60LgYIQ13hHSFtYqTIxubPO5oNvVbDs0Et3RqWotW2NPUT4CrwxblCbFuDAIe925BVJjdWgD53hoBLra-253228s8aO7n4-y422lRxvrxdbUXzSLXplfrQVkPdI56nzgHM6KKVqsjKBQ9MDs5y99a-LRThHgLo9M6KMpTbZzOf_qLEBhNdqMKqbo49RhyXod6w0QU5GNG2l75rNen3vXR8JnkmtIU1I9UC-q4CpEhd2CGHgm2lmLXf1x887ezilKKsoh5PL87gixC9Uaz_4xieO1FRL2bXyApdNcEtLASiJH_c0IQPgbzDHRSd_62ClmyUmKoCilLMfU7qXV8YbosgP-r88Kk47uCq2PZ-OSkdeJEgMrF4cqUA0WkYyDGmKJa3rlvuCX6JBqiCkMoldcOfwEuZcat2otr0jCwljcpfL56c5IJTTWP0bOBBlLzG94bRXxZ5ljfO88SmP5v4RMzHy5wWgSZ9N2IwX2GzxQKcN7P7gbAk_G-G2PBHjnMI0eiI5ud4phWtlRpcbAyQHdjshwXSPwsXoZfZk6LatXMKGlTxYUXb8X9TR4t5AIO5fuy-_XGxpg_m7k8sQISO2rHCkgauM3XCkrdxHqPwbiLav9PoPw_IgLNggamJSR3uXnNfs5e_qi6iYNU42IsM1Y9IntQEilC-u1Q9zk7ueRQw6GoLrLAhmi77IfC3APekzkp8a6T3qH8ISdEU7JZic5n9CuAxRj7qFI2G0s1CEcSpkAmwqRuiX51JbfYWLmi0X-jOglw_phShHnTIWg8er8yqCcVfoI_o9hF1hg3w6208hBa-xTEp_3dw9GNxDejoexmLmwh_2BUf61fmFJKACrBNy-DyZ9keW-e15BOBRZOQD9owtILs_1vSmrkZRVSx7RQisvnF5b6BxJCXINMErbp7IBRCIgaZIcEpuN_G-ng5Y3YMQ3_KtFINo5R0uu0r20lH2pbi3IBfGKmnpQP0qGWDj4_XqHE0shBIVeUisVW6K1gW_QunbsIn-Ez23BBmQ3tHIkuPhNvXd7zGGl2rXqegG0kc_xuAlUV27c4xupRKnHHA6PpRfXChkTVEA3GWsjo1FqGJM7fih-bKAjWUAc4k3ZIIMpTo6x9svH02WUeucfY9lGObv4e5P01vWkrY-2gYzlNi7ZPLo_uHzrj8fQxZMBGCLTLiouX6T5GGLJgYpg2gEQJjzgv31Jgmi5ys444AeIjvry59PoombFoCcdrcBJbR1sJCziHJvTm7OWq4DgMpFDv9icVddOrLrF_Q6r0W0SaHm4ofKS-fNrAvFruEt41fclwZkq6Ljjd9x3q_OIfT7ul5ovY0SOvZU8PZT0B8e-pPq6R-kbvO9YzfQPST9uZ8RUxs2TlwTZbNO-PZsQLT8IeHJthRE3Q73d4nxqu-KYM4Xov-YZihsKVfx7K_fRSCiy3w2HLzeCmQAQEoRde561ZOpEcCKN3PC5R2JimLKFjldAX_rKry-49m80AGoV2dw3i72T9Ego71XulDhZZUdyiiK_mhI5eGKy3MtQJADdGJPpeiWPkI7QkoXirgeX5fvjfasJsu-DUyvBmwcMSCDIpmaRAFwtI5Lg0VmQaULL-B-R1PaDD88NtXfpL-BWI-RlXg5wZ0KCAATgV_LjfAzUqifGNgRsWySgH29dG6Q_fHW9lkf1hbvFrNtbTzvLBGDLcyeLaKX6EPQe1JiqqkhgjQXKDpPQNIcxMpLkU8dIKVG8U7gfwQVFzwpBFycpPsw8qTujTzkMK-3bnHaLHnCGWbX2UcmRL8FozhAiQMIfwtD3Y483z8W3L83gq1HAaTR9_eNvjP80HU4T6SHCoT-KYHFbnX03xCDsJZsvUKUDLScEgqF8iecEI1xQGiptn6ACqonlU2rHSC_D8ghydypEMPRaDV9TSnNQFnedGLzgRmOeFTY1jcJz9ZEUZmKaOU6VhmWdhuiVA9bNxt6dhswJw6RR_0tDY7R5f2TKniN2glzpT50mpwMycYNMzUWxKoXGvNeucORyyHJw3l3pZIvVNANfbBg0jfT73AnoXailEN_hoULlpcHthOVIPVSOPirhIem1OtdKiOyrukVOviJnStnNo4_DaM6pITyuQST-Y5Ox6WbweCRsKgJccStOuPnZguTgI3M3ohfnM03XC3yCORW9Ug0Uf1c8Tk0Y7MutqOjm0C-xQcA1MrV5TshprNyVZIhY5EXYtsUmYsLKwjumQihjaspEJWeFUwRWKi901OR9c3Cp8_RyqLraJ0PSUFE_EnOOAIIfTXY7xLSHk-Vd1dLAUC98urMkA7DtHz--2ZMZqbJ7UHeCwukhmWT3tI64CcFXbLa72hjcCK1cTiGPIwIOghJDqZWZGaDYYQ2wJbOLd7V2iaEQJmnCBqLPI3rFE3jSHXkfrRUAXitMJjbNcJb_v3XJ4RAhY5eFdKyPLbDkgzkTZA47tyegvhgQ3eltC9Cyz7DaqzeoydiUT3HO2VvQ_rM-fDtiqY0XKbFPbPETXYlbGaa5XhKkOcSAk647OjvGwktBNgQ47_d5L9aVmMJT-dkhZ-dOyiaJRH1cX2Xt2twyjf_ypwKaM3PachWoxUomhJ-hiSi91QiK4lLr4jxz6uTteGZs0WXsAWZbDAK1E2O3xsanW45RbUUwRa3naI5Wdk6gMEC7WYQ3TCQ7Sj-BVJE7vkpZQ-twfqvXke1kCopzdoWgrJuVoXNCs2sjOVlfyrJnkreSBQUjffExzn6h_HUB-iPAT_jvBWhRBazjPLZ1luGZlQd3rSIsFimE-DdKhjKN2-4JZKcbJDMmrb95YS4cdAomitw3BWh72HKyGb7ni5vvDCUrfkZZDHx5_Wwsv1dM4olBaaHKtaU_OLmaUTZzogHZ1_6XOzvmKmeel2ClUSkeTDexMrH3df2vMrZXt4qma7YoDy37fU6nlzJ4ibeqg4Zw10mvgDRomzTqAefYDCwJDhZcITSZsD1z4vR_BB2LE2E8mGkze1KGKB08x6RcP2BI1xnIbnMiilGGcB0OEvj7JJnpoSSyJW8GQ9LpikLzmCitaBs70APi-SEcg22cqUvLkiICaw0nHo-X08bfsqHt6HmCj7UfZoP69Yzgfpw_-ZoTCcNxeosBqxKvxY0vtfBLUGCpNXfA0OUNaTh1wlXAp3FA6NxkxUagcw35Fu1rLI84HK2IEcPo_RwOs3SwWuxfpNXvhuRvxx3lJdY_oU57KFcFQ5-2npVtp9vrMoV9D5TkwPP8-9rl1wpfV-IGVrYqDfagVKGMwJVQERuJjkHuASDnvGRwINIGW4oORytrKcaTW62EDc9F5OImAMUXsuiBW4fUt2Rj5j1_sMLcs4cllGvB_I6zgAnBKi4ccQ_o4i4cmj45XWCxcRLmM0YOwgBMpi-wmyS2w0zq5M1B-shRVUk-7Eg0B6CNbDXvBNhf12UreQFgDfDIyEcNbW7h5ulyfQY1dij8fSeMYfS6uu6om8WDx9yTpWnVhDW6wf44g47OjPBVLLRetZr24BqzTIlBpXzOi1bEE-p85u4cRjbT_fCXRzDhls6VksYLbk03jN-hR_f6RUvndUNHIHSG_zdcY7v9By7vMhXERezfT4bXrkkGeUfLpng2K0QTpsvIYBWESiVCfrImKad3mzpvbjvBbHV3QSlwZSm5mzb6Vosktgp_CK8dmVPfaMu3P16raDEfQAMXW6k_howABxvhdaIh03L9lU7lmP3vGkA7n3QpW44G_kDKvRGISeko43XOEwKIDnKb94D3xLRdjgdRWaRnaPsTqhr_8p8wNcNl68HpvlgqSo-Z3VyMOjv3B-kj2271BtYvKBhWV_a-GW_500uhGYhn3EGQ9Ledh2kSwo0lMjCi3189qht37wQszMzvBcvP2kORm27k9D0H-_7uKq36g3ENXniCNmmLhgG_xOkurabhH6JW-VGA5mdsV4r1rEZD4kzE3bXNJq0jglfdQtPbfU8XYMgz3ZY0gSIg34LnpAy5SLZ2bwFCuBzii_VjonZuyAyfO-rPHCVIkoUITIRypqCk9IinKtHA7ogU6OyVz2AqqGj9Iuxnc57Fu0hgrpTn16oyguF1SFQLpGFvAc-dt4Z5y4r3aO2CJExZ4ObfhUMa0d9e1k3tpsKKaeUZBH91ifGTeycnA8zYwc1A2m7yxJ1EkyHthpL_-Y-9DMAZzpOgujip1IssWfv0z3AN3XGWWgVmMsGGP93J2LlH0YBOTWGkH5NAFCR9HUkejmYfhWXZhP0a81aaCxGY7HzpLWTrHiMvUiz65wCzJkIsGwT2-T0ARaXiF3pjM5_C35jYkJEihzZDy6IC3gDkjkOVX3H50HVY898nNHM6UQWmgqnB5GH_CvlgWIYUYekPjNue5pjp7rWCt45G8V8E9Z3MbPNMrMW_UfzGhLJGNxxUlsVW10Le8wlVUsOikKpfvfB1Ux5PrjqjpyOuUh829ZxfxrC6y8yQJ9Qu-GqTZ2BOED3Zssia86uojII9utZVe9pUSNOZ5erXOCskXrUYg0NMTHYQ2QbXq7PFjavvtA-PsrcdwsQRVEYpGitYkAfsV4J8lJmG6nEagZI9rAcRY5nVZoGhE0QfRm1QKY-hn2GkSN7RwDtm7D-VZsBo6ZunQOcsnm625jrtQd3BrAN1prTvl6afawLD_VK8mN1UbWKnHpL7v_SxvKdKopMaxjwXfRQPghAV4Ji9kcSnwQktgWgmt6AJkHho6MMOWdRcskinhWk4DEsRN6RXt0U4X-IwnsJ3VGYz9zl3HyQlBLp9cbDraSO7nUidM0HOjGLslk1VlfB7sZivTNF-KRh9zMGlZ5Lvcwl-F6byPQ_d5TqqUWYn1iSgAgM7CeYe-qWB8OGgd4WA0-C4qKMIorilUNZ6jF0XdiD8n9QAFfBIZRMBy7vmRzjbMVHgPuB3ZXXtdFmT5Yta6T03YM1OOBjB8GKKP9b3izNFsMIYSLpqFeFipcFapehmG8yGNHJ9Om7EKLtS9wqfw-VRZpx4rt4QwCz5t5d4uzEGTzQvIt075nwVP3Z4W2Bdc7dwSYreADbA6EKM8_mxmVAWhy1jqmVZSC5PxV2-htLpU8fHPHk-pSIM-527gapkHd68Dl1NfJOJtI1f4oB8pyD6bg_RNElX_3XbVs-s3IKEHcjF25rRK1WNf7rOYrXrjxT1OANZ92V0w2krJ7guVHRzI55jDmWnirXCoJT9apObH9xkMnAcVO9PIrwpP3lM2mM_Q2KekCyvxu6lH85bTsLOaaan1vC15XdahDzVX1w0TOI1cchNDs3h6TgNWcauCLpgsqN5p4=",
+              "summary": []
+            },
+            {
+              "id": "msg_00a4aed1a1e9c6de0168f8e90544b08197b4d3954086150cbf",
               "type": "message",
               "status": "completed",
               "content": [
@@ -196,7 +196,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Sure! Here are three funny jokes about statisticians:\n\n1.  \n**Why did the statistician drown while crossing a river?**  \nBecause it was, on average, three feet deep!\n\n2.  \n**How do you tell the difference between a statistician and a mortician?**  \nThe statistician is the one who buries the results that can\u2019t be explained!\n\n3.  \n**Why did the statistician bring a ladder to the bar?**  \nBecause he heard the drinks were on the house\u2026 but wanted to check the confidence interval first!"
+                  "text": "- An engineer, a physicist, and a statistician go deer hunting. The engineer misses 1 meter to the left, the physicist misses 1 meter to the right, and the statistician shouts, \u201cWe got it!\u201d\n- I have a joke about p-values, but sadly it wasn\u2019t significant.\n- A statistician can have one foot in ice water and the other in boiling water and say, \u201cOn average, I feel fine.\u201d"
                 }
               ],
               "role": "assistant"
@@ -206,7 +206,7 @@ http_interactions:
           "previous_response_id": null,
           "prompt_cache_key": null,
           "reasoning": {
-            "effort": null,
+            "effort": "medium",
             "summary": null
           },
           "safety_identifier": null,
@@ -225,18 +225,18 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 489,
+            "input_tokens": 462,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 115,
+            "output_tokens": 803,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 704
             },
-            "total_tokens": 604
+            "total_tokens": 1265
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-10-17 16:12:33
+  recorded_at: 2025-10-22 14:24:05
 recorded_with: VCR-vcr/2.0.0

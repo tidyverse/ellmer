@@ -97,7 +97,7 @@ but if you have ideas, please let me know!
 }
 \examples{
 \dontshow{if (has_credentials("openai")) withAutoprint(\{ # examplesIf}
-chat <- chat_openai(model = "gpt-4.1-nano")
+chat <- chat_openai(model = "gpt-5-nano")
 
 # Chat ----------------------------------------------------------------------
 

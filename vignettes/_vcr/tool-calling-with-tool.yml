@@ -4,10 +4,10 @@ http_interactions:
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"user","content":[{"type":"text","text":"How long
-        ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"text","text":"Neil
-        Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that
-        event occurred 54 years ago."}]},{"role":"user","content":[{"type":"text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Returns
+        ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"text","text":"As
+        of today (October 22, 2025), Neil Armstrong’s lunar module touchdown on July
+        20, 1969 at 20:17 UTC was 56 years, 3 months, and 2 days ago."}]},{"role":"user","content":[{"type":"text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-5","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}}]}'
   response:
@@ -16,37 +16,39 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 959041a83b297399-DFW
+      cf-ray: 9929bccbecbd2cac-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 02 Jul 2025 18:37:50 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '675'
+      date: Wed, 22 Oct 2025 14:38:23 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '5977'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=lWHLj.HmEpBh9KwyDQ2vwYfFl.5gOiNQ3FLDydYQrIY-1751481470-1.0.1.1-Zvhvn0WbnC4VyL79kH2VEQYuaQ6Ohnf8JJuJ4i.FiK0Ftfc3eBjprbIoueE.t_GDnJjZ6N0UjX.qwoP2dg7v3pZ2W084V8o7iqu.dm6XvOs;
-        path=/; expires=Wed, 02-Jul-25 19:07:50 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=Dq7XR1AsQq3Fsjec2.s6bq0Fw18zi2qps2nPbh6va.s-1761143903-1.0.1.1-ieAg1mWNnc5YP8NHLx881D9yhB3TmIbNAuxij9YXkDIVuUjobp3guNXdPgosw2QEk3pFlX6.urXScJe9e.fRxaL975V0e0KhNaP.ZtEpWSo;
+        path=/; expires=Wed, 22-Oct-25 15:08:23 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=e6.2cAniIhJ90DyLfma1pVTOvWytBhI6VtdUWPfVnM4-1751481470826-0.0.1.1-604800000;
+      - _cfuvid=x2fE4YKbkpVgdf98H02gJTM0ZEuAYTFoRDKbxrX1IqA-1761143903098-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '693'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999940'
-      x-ratelimit-reset-requests: 6ms
+      x-envoy-upstream-service-time: '6117'
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '15000'
+      x-ratelimit-limit-tokens: '40000000'
+      x-ratelimit-remaining-requests: '14999'
+      x-ratelimit-remaining-tokens: '39999932'
+      x-ratelimit-reset-requests: 4ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6edf2c880c686d62ecec79b8e7499ca2
+      x-request-id: req_38ae0873491e4279ab82cb35048c8878
     body:
       string: |
         {
-          "id": "chatcmpl-Bowd4S0M9PRLjvxmks46h36Xzj8ck",
+          "id": "chatcmpl-CTUGfylttIMfJK54Dm1wqDwxX7gtc",
           "object": "chat.completion",
-          "created": 1751481470,
-          "model": "gpt-4o-2024-08-06",
+          "created": 1761143897,
+          "model": "gpt-5-2025-08-07",
           "choices": [
             {
               "index": 0,
@@ -55,7 +57,7 @@ http_interactions:
                 "content": null,
                 "tool_calls": [
                   {
-                    "id": "call_olBG8OUjyIj914iwNBjw35dv",
+                    "id": "call_YFKhBck0wyoP1Bpjyv43tUXC",
                     "type": "function",
                     "function": {
                       "name": "get_current_time",
@@ -66,39 +68,38 @@ http_interactions:
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "tool_calls"
             }
           ],
           "usage": {
-            "prompt_tokens": 158,
-            "completion_tokens": 15,
-            "total_tokens": 173,
+            "prompt_tokens": 257,
+            "completion_tokens": 408,
+            "total_tokens": 665,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 384,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_07871e2ad8"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-07-02 18:37:50
+  recorded_at: 2025-10-22 14:38:23
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"user","content":[{"type":"text","text":"How long
-        ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"text","text":"Neil
-        Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that
-        event occurred 54 years ago."}]},{"role":"user","content":[{"type":"text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","tool_calls":[{"id":"call_olBG8OUjyIj914iwNBjw35dv","function":{"name":"get_current_time","arguments":"{\"tz\":[\"UTC\"]}"},"type":"function"}]},{"role":"tool","content":"2025-06-25
-        16:53:23 UTC","tool_call_id":"call_olBG8OUjyIj914iwNBjw35dv"}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Returns
+        ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"text","text":"As
+        of today (October 22, 2025), Neil Armstrong’s lunar module touchdown on July
+        20, 1969 at 20:17 UTC was 56 years, 3 months, and 2 days ago."}]},{"role":"user","content":[{"type":"text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","tool_calls":[{"id":"call_YFKhBck0wyoP1Bpjyv43tUXC","function":{"name":"get_current_time","arguments":"{\"tz\":[\"UTC\"]}"},"type":"function"}]},{"role":"tool","content":"2025-06-25
+        16:53:23 UTC","tool_call_id":"call_YFKhBck0wyoP1Bpjyv43tUXC"}],"model":"gpt-5","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}}]}'
   response:
@@ -107,67 +108,68 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 959041b9bf0a7399-DFW
+      cf-ray: 9929bcf3a97d2cac-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 02 Jul 2025 18:37:55 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1830'
+      date: Wed, 22 Oct 2025 14:40:06 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '103327'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=OpHdoCCBXdBttFZJn0m1tCv3NWXWhutkI.NN8hKflGE-1751481475-1.0.1.1-wbVKcosbkpEoHxnnSHLEndNk7GVZbhlSPl80_qmvoYeAkK4i0sOAnVYsBhmeIKhXKdl57y8el5der6R2maB3XEI34PndtY1DuLq.RTG0t8Q;
-        path=/; expires=Wed, 02-Jul-25 19:07:55 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=h.BOqu0bVhyKQYP2tira9Plf1BjRZ5Sdj6aVdxr7PYM-1761144006-1.0.1.1-ZYmyjs_B5XZi9.2CP9oTkngpCQhJpka6jzqHuSB8bsJOycS2Y2mJxZPSPltzM_PPovHbXVPIiOm4FtBJarIRpXksKb8WPXnC4wPVhJRsS6A;
+        path=/; expires=Wed, 22-Oct-25 15:10:06 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=qcfXSe6HzsGCy2Mp4uCjljoonphmzIGJjE6EywbHbjk-1751481475251-0.0.1.1-604800000;
+      - _cfuvid=YaIRlMlXJGmTj5NmdrXtst4xXWwM4VzG93RQ5Rn8oJ4-1761144006750-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '3760'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999932'
-      x-ratelimit-reset-requests: 6ms
+      x-envoy-upstream-service-time: '103380'
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '15000'
+      x-ratelimit-limit-tokens: '40000000'
+      x-ratelimit-remaining-requests: '14999'
+      x-ratelimit-remaining-tokens: '39999925'
+      x-ratelimit-reset-requests: 4ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_fec02247ab3b7f22ebb7e011f4789721
+      x-request-id: req_bf8b80ef00b54adc86621b3cb399dc7a
     body:
       string: |
         {
-          "id": "chatcmpl-Bowd7XWEJ72sgWDTvpEEQvQ9JdqwI",
+          "id": "chatcmpl-CTUGldVBlyOLM7531RtPWMah8pNG4",
           "object": "chat.completion",
-          "created": 1751481473,
-          "model": "gpt-4o-2024-08-06",
+          "created": 1761143903,
+          "model": "gpt-5-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "Neil Armstrong touched down on the Moon on July 20, 1969. As of June 25, 2025, that event occurred 55 years and approximately 11 months ago.",
+                "content": "As of now (June 25, 2025 UTC), Neil Armstrong’s lunar module Eagle touchdown on July 20, 1969 was 55 years, 11 months, and 4 days ago.",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 196,
-            "completion_tokens": 40,
-            "total_tokens": 236,
+            "prompt_tokens": 301,
+            "completion_tokens": 2164,
+            "total_tokens": 2465,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 2112,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_07871e2ad8"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-07-02 18:37:55
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-10-22 14:40:06
+recorded_with: VCR-vcr/2.0.0

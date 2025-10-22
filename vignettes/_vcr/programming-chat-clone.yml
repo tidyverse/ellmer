@@ -4,149 +4,151 @@ http_interactions:
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"system","content":"Be terse"},{"role":"user","content":[{"type":"text","text":"What''s
-        the capital of New Zealand"}]}],"model":"gpt-4.1-nano","stream":false}'
+        the capital of New Zealand"}]}],"model":"gpt-5-nano","stream":false}'
   response:
     status: 200
     headers:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9564f9ff9fc37103-DFW
+      cf-ray: 99299973af096c66-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 27 Jun 2025 12:34:05 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '232'
+      date: Wed, 22 Oct 2025 14:14:11 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '2046'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=sdy48yu4e3GlH2xJZzBBQGRWYD.BJvvDipnT5xVwSK4-1751027645-1.0.1.1-iPs9H0rywjjR.AVcqEO8tGOQwaWoR.T2UDRz.9PEfyorwk2XG9cDWJvXMRvhUuc8jJ3g_749NXy9dvHCf93w6svWzcPmT1iJENvJv4fueiU;
-        path=/; expires=Fri, 27-Jun-25 13:04:05 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=7LMBxfZ86EGOJt5.JGlBMDKkVaytVXlx3.H7iHkblPM-1761142451-1.0.1.1-mHkig4WzHGY7SbwXvYbO98HDrRz0Zfab0Eeed8iwvc91SmOJ7ul2IF9iFbJgkjfAF.tJ28rce7DG3S5nHkWP6_fP6Cc9F7romdKl6BhoZ.w;
+        path=/; expires=Wed, 22-Oct-25 14:44:11 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=W_znHb3PpRumvUHRY_PDk_hgfyhP5CIdWNq3MDYGQ.Q-1751027645651-0.0.1.1-604800000;
+      - _cfuvid=7o3z1B6TFp2pH.WiAgODuy_sRAWKEfX8znsp5vDN56o-1761142451334-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '237'
+      x-envoy-upstream-service-time: '2072'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-limit-tokens: '180000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999985'
+      x-ratelimit-remaining-tokens: '179999988'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_0a573fadf1b563d099eb8b0534bc0642
+      x-request-id: req_6fdbbf6617aa4daf8177236d9241468c
     body:
       string: |
         {
-          "id": "chatcmpl-Bn2ZJ2x3RerX44kKeCImMiuvxB4ha",
+          "id": "chatcmpl-CTTtJiq2puAiiD0lXilhfdjEK5pCm",
           "object": "chat.completion",
-          "created": 1751027645,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "created": 1761142449,
+          "model": "gpt-5-nano-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "Wellington",
+                "content": "Wellington.",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 19,
-            "completion_tokens": 2,
-            "total_tokens": 21,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
-        }
-  recorded_at: 2025-06-27 12:34:05
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"system","content":"Be terse"},{"role":"user","content":[{"type":"text","text":"What''s
-        the capital of France"}]}],"model":"gpt-4.1-nano","stream":false}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers: X-Request-ID
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 9564fa027f3a7103-DFW
-      content-encoding: gzip
-      content-type: application/json
-      date: Fri, 27 Jun 2025 12:34:06 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '173'
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie:
-      - __cf_bm=1yc_nnhdqScW1DJm2HG6zxil6ko0Mj4j3zRpYCyct5w-1751027646-1.0.1.1-OyeSHC8cNZBJ8qRbxzRWOkv1.GcayhgsYeapBdfw4EWABrs_xLHa7o978vXcKz86MgDqAlwFa4BOK7Qa7tLE5Dz939uVXi3p93kMESlOvRw;
-        path=/; expires=Fri, 27-Jun-25 13:04:06 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=PAQNuijjkge1xDeymsweRFkUQVkZ0CUvovCRUXLqbSo-1751027646671-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '176'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999987'
-      x-ratelimit-reset-requests: 2ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_fe7b4d7deaf5f690275443508b24dad0
-    body:
-      string: |
-        {
-          "id": "chatcmpl-Bn2ZKG7IbxXjxhsiMUtp7vaYJ44ub",
-          "object": "chat.completion",
-          "created": 1751027646,
-          "model": "gpt-4.1-nano-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "Paris",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
             "prompt_tokens": 18,
-            "completion_tokens": 1,
-            "total_tokens": 19,
+            "completion_tokens": 140,
+            "total_tokens": 158,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 128,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-06-27 12:34:06
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-10-22 14:14:11
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Be terse"},{"role":"user","content":[{"type":"text","text":"What''s
+        the capital of France"}]}],"model":"gpt-5-nano","stream":false}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers: X-Request-ID
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 99299981fb676c66-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 22 Oct 2025 14:14:13 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '2403'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=r.1Dzz4tjDujA_WI1YEV76.fv5FlPYSpUldKyNB.otg-1761142453-1.0.1.1-6fbGjuoeW1wXDTW4UiTKGSmbUOciG9qMZY7EOry3kEUln9QDHImfl4PciS9C6LeyZsvUZ3hi7sJxxcPQ1vvVHQIQwK6S_VthkXJJVAI60tc;
+        path=/; expires=Wed, 22-Oct-25 14:44:13 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=2_w11ddS71g1WM5VCm2Pzx4icchQIsLpNS_yPLc2ZAI-1761142453976-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '2426'
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '180000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '179999988'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_dabb24f1c8604969b1b85b16403dc394
+    body:
+      string: |
+        {
+          "id": "chatcmpl-CTTtLlJmXK3QmwMu1BjX75gC6lteX",
+          "object": "chat.completion",
+          "created": 1761142451,
+          "model": "gpt-5-nano-2025-08-07",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Paris.",
+                "refusal": null,
+                "annotations": []
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 17,
+            "completion_tokens": 139,
+            "total_tokens": 156,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 128,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": null
+        }
+  recorded_at: 2025-10-22 14:14:13
+recorded_with: VCR-vcr/2.0.0

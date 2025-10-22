@@ -38,7 +38,7 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 \href{https://portkey.ai/docs/product/ai-gateway/virtual-keys}{documentation}.
 Can be read from the \code{PORTKEY_VIRTUAL_KEY} environment variable.}
 
-\item{model}{The model to use for the chat (defaults to "gpt-4o").
+\item{model}{The model to use for the chat (defaults to "gpt-5").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_openai()} to see all options.}
 

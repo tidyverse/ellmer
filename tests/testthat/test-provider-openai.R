@@ -25,7 +25,7 @@ test_that("defaults are reported", {
 })
 
 test_that("supports standard parameters", {
-  chat_fun <- chat_openai_test
+  chat_fun <- \(...) chat_openai_test(model = "gpt-4.1-nano", ...)
 
   test_params_stop(chat_fun)
 })
@@ -69,7 +69,10 @@ test_that("can match prices for some common models", {
 # Custom tests -----------------------------------------------------------------
 
 test_that("can retrieve log_probs (#115)", {
-  chat <- chat_openai_test(params = params(log_probs = TRUE))
+  chat <- chat_openai_test(
+    params = params(log_probs = TRUE),
+    model = "gpt-4.1-nano"
+  )
   pieces <- coro::collect(chat$stream("Hi"))
 
   logprobs <- chat$last_turn()@json$choices[[1]]$logprobs$content

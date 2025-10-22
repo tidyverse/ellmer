@@ -300,7 +300,7 @@ http_interactions:
         If you were able to develop technology that made it very hard to fine-tune
         an AI model away from its original capability distribution, then it’d be easier
         to confidently release models without potentially compromising on downstream
-        safety."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"Summary
+        safety."}]}],"model":"gpt-5-mini","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"Summary
         of the article.","properties":{"author":{"type":"string","description":"Name
         of the article author"},"topics":{"type":"array","description":"Array of topics,
         e.g. [\"tech\", \"politics\"]. Should be as specific as possible, and can
@@ -314,61 +314,61 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 96125b241f70511a-MSP
+      cf-ray: 9929a0269eb8a912-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 18 Jul 2025 13:34:27 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '6258'
+      date: Wed, 22 Oct 2025 14:18:53 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '9951'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=baK.2.7tKzuTHzoaZDymuJbr1rj_zuzGTnEDDtERDZI-1752845667-1.0.1.1-r.baHk_6IydN1LWwNDzG2QK2uIIRFNqsqO9VItR6o._GwazvlXZXYSl.hd7gthPNqLtFFVP6giTGVzHAYw_H.Muq1LJemQ_maVBoHwdKp8I;
-        path=/; expires=Fri, 18-Jul-25 14:04:27 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=VTKenvsBxhxHiURAT84sBKJlDM8UVwKbLKgV8tveApE-1761142733-1.0.1.1-4zDwzGPhrZiCkeX7Wj5ajFCSKA_s8P0_f3W3uuAAeRxQej.yR41q5BV5fGSSwhyNd6f87jXX3qMdH5iQ3dHaXzkgI9cRh_IOTMUaBPBOwRc;
+        path=/; expires=Wed, 22-Oct-25 14:48:53 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=pg7kOK4NwczowtheAjWJqqfJpIfatXfQRxcu9lNljPw-1752845667181-0.0.1.1-604800000;
+      - _cfuvid=P0igMGqZvOJay6NANkI1jhfYu5n0dxCNe61SKiw8XFo-1761142733639-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '6264'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29994291'
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 11ms
-      x-request-id: req_afe6b8c37e7a33cc68d5e9d12bf6f50e
+      x-envoy-upstream-service-time: '9991'
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '180000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '179994291'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 1ms
+      x-request-id: req_8d85d8bd4eb441a9904ff6d6d9c99936
     body:
       string: |
         {
-          "id": "chatcmpl-BufW9umcHCBc5JkDZa0xWRt5BgIsn",
+          "id": "chatcmpl-CTTxjjNCRKpYPQApWWR9aEWJD1nMI",
           "object": "chat.completion",
-          "created": 1752845661,
-          "model": "gpt-4.1-2025-04-14",
+          "created": 1761142723,
+          "model": "gpt-5-mini-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "{\"author\":\"Anthropic (not specified by individual name)\",\"topics\":[\"AI policy\",\"AI safety\",\"third-party testing\",\"AI regulation\",\"AI evaluation\",\"open-source AI\",\"regulatory capture\",\"Responsible Scaling Policy\",\"national security and AI\"],\"summary\":\"The article argues that effective third-party testing is essential to AI policy for managing the risks and societal impacts of frontier AI systems such as large-scale generative models. Anthropic promotes a regime where AI models, especially the most powerful and general-purpose ones, undergo third-party evaluation to ensure safety, limit misuse (in domains like election integrity and national security), and build public trust. The article details what a robust third-party testing regime should include: trusted tests, credible assessors, and a balance between safety assurance and regulatory burden. It advocates for multi-actor involvement (companies, universities, governments), iterative prototyping, and funding for governmental infrastructure to drive effective regulation while avoiding overly burdensome procedures that stifle innovation or entrench large incumbents. The article emphasizes the need to balance openness in AI research, the necessity for safety-related limits on open dissemination of powerful models, and the risks of regulatory capture. Anthropic outlines its own contributions and affirms a cautious, feedback-driven approach to advocating AI policy. Ultimately, third-party testing is positioned as a linchpin for safe and trustworthy AI development.\",\"coherence\":95,\"persuasion\":0.91}",
+                "content": "{\"author\":\"Anthropic\",\"topics\":[\"AI policy\",\"third-party testing\",\"AI safety\",\"national security\",\"open-source models\",\"regulatory capture\",\"government funding\",\"testing regimes\",\"Responsible Scaling Policy\"],\"summary\":\"Anthropic argues that frontier, large-scale generative AI systems require an effective, broadly trusted third-party testing regime to identify and mitigate misuse and accident risks. They propose a narrowly scoped, two-stage testing framework (automated screening followed by expert human-led evaluation), trusted third-party auditors (private firms, universities, and some government bodies), and targeted legal mandates for a small set of critical tests—particularly those related to national-security-relevant capabilities.\\n\\nThe post outlines practical steps Anthropic will take (prototyping via its Responsible Scaling Policy, third-party assessments, red-teaming, and advocacy for government funding and research infrastructure like national research clouds). It also discusses how testing connects to debates on open dissemination of models and the risk of regulatory capture, arguing that robust third-party testing can enable safer openness while reducing capture risk. Overall, they recommend iterative, evidence-driven development of testing standards and greater public investment in evaluation capacity.\",\"coherence\":92,\"persuasion\":0.82}",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 4343,
-            "completion_tokens": 284,
-            "total_tokens": 4627,
+            "prompt_tokens": 4338,
+            "completion_tokens": 575,
+            "total_tokens": 4913,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 320,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
@@ -377,5 +377,5 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-18 13:34:27
-recorded_with: VCR-vcr/1.7.1.93
+  recorded_at: 2025-10-22 14:18:53
+recorded_with: VCR-vcr/2.0.0

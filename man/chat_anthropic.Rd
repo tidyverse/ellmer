@@ -44,7 +44,7 @@ models_anthropic(
 
 \item{max_tokens}{Maximum number of tokens to generate before stopping.}
 
-\item{model}{The model to use for the chat (defaults to "claude-sonnet-4-20250514").
+\item{model}{The model to use for the chat (defaults to "claude-sonnet-4-5-20250929").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_anthropic()} to see all options.}
 
