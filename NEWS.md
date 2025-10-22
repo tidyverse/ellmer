@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `batch_*()` now only hash the `name`, `model`, and `base_url` of the provider. This should provide some protection from accidentally reusing the same `.json` file with different providers, while still allowing you to use the same batch file across ellmer versions.
+* `batch_*()` no longer hashes properties of the provider besides the `name`, `model`, and `base_url`. This should provide some protection from accidentally reusing the same `.json` file with different providers, while still allowing you to use the same batch file across ellmer versions.
 * `batch_*()` have a new `ignore_hash` argument that allows you to opt out of the check if you're confident the difference only arises because ellmer itself has changed.
 * `parallel_chat_structured()` now returns a tibble, since this does a better job of printing more complex data frames (#787).
 * `parallel_chat()` and friends now have a more permissive attitude to errors. By default, they will now return when hitting the first error (rather than erroring), and you can control this behaviour with the `on_error` argument. Or if you interrupt the job, it will finish up current requests and then return all the work done so far. The main downside of this work is that the output of `parallel_chat()` is more complex: it is now a mix of `Chat` objects, error objects, and `NULL` (#628).
