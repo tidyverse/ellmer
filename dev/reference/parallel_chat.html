@@ -73,9 +73,21 @@ with a 50% discount in return for taking up to 24 hours.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parallel_chat</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, max_active <span class="op">=</span> <span class="fl">10</span>, rpm <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parallel_chat</span><span class="op">(</span></span>
+<span>  <span class="va">chat</span>,</span>
+<span>  <span class="va">prompts</span>,</span>
+<span>  max_active <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  rpm <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>  on_error <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"return"</span>, <span class="st">"continue"</span>, <span class="st">"stop"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">parallel_chat_text</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, max_active <span class="op">=</span> <span class="fl">10</span>, rpm <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span><span class="fu">parallel_chat_text</span><span class="op">(</span></span>
+<span>  <span class="va">chat</span>,</span>
+<span>  <span class="va">prompts</span>,</span>
+<span>  max_active <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  rpm <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>  on_error <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"return"</span>, <span class="st">"continue"</span>, <span class="st">"stop"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">parallel_chat_structured</span><span class="op">(</span></span>
 <span>  <span class="va">chat</span>,</span>
@@ -85,7 +97,8 @@ with a 50% discount in return for taking up to 24 hours.</p>
 <span>  include_tokens <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  include_cost <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  max_active <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  rpm <span class="op">=</span> <span class="fl">500</span></span>
+<span>  rpm <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>  on_error <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"return"</span>, <span class="st">"continue"</span>, <span class="st">"stop"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -118,6 +131,14 @@ connections or use <code><a href="params.html">params()</a></code> in <code><a h
 <dd><p>Maximum number of requests per minute.</p></dd>
 
 
+<dt id="arg-on-error">on_error<a class="anchor" aria-label="anchor" href="#arg-on-error"></a></dt>
+<dd><p>What to do when a request fails. One of:</p><ul><li><p><code>"return"</code> (the default): stop processing new requests, wait for
+in flight requests to finish, then return.</p></li>
+<li><p><code>"continue"</code>: keep going, performing every request.</p></li>
+<li><p><code>"stop"</code>: stop processing and throw an error.</p></li>
+</ul></dd>
+
+
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>A type specification for the extracted data. Should be
 created with a <code><a href="type_boolean.html">type_()</a></code> function.</p></dd>
@@ -143,12 +164,16 @@ add <code>cost</code> column giving the cost of each prompt.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>For <code>parallel_chat()</code>, a list of <a href="Chat.html">Chat</a> objects, one for each prompt.
-For <code>parallel_chat_text()</code>, a character vector of text responses.
-For <code>parallel_chat_structured()</code>, a single structured data object with one
+    <p>For <code>parallel_chat()</code>, a list with one element for each prompt. Each element
+is either a <a href="Chat.html">Chat</a> object (if successful), a <code>NULL</code> (if the request wasn't
+performed) or an error object (if it failed).</p>
+<p>For <code>parallel_chat_text()</code>, a character vector with one element for each
+prompt. Requests that weren't succesful get an <code>NA</code>.</p>
+<p>For <code>parallel_chat_structured()</code>, a single structured data object with one
 element for each prompt. Typically, when <code>type</code> is an object, this will
-will be a data frame with one row for each prompt, and one column for each
-property.</p>
+be a tibble with one row for each prompt, and one column for each
+property. If the output is a data frame, and some requests error,
+an <code>.error</code> column will be added with the error objects.</p>
     </div>
 
     <div class="section level2">
@@ -200,13 +225,15 @@ property.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">type_person</span> <span class="op">&lt;-</span> <span class="fu"><a href="type_boolean.html">type_object</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>, age <span class="op">=</span> <span class="fu"><a href="type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">parallel_chat_structured</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, <span class="va">type_person</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     name age</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   Alex  42</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Jamal  27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Li Wei  19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Fatima  35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Robert  51</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Kwame  50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name     age</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Alex      42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Jamal     27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Li Wei    19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Fatima    35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Robert    51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Kwame     50</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

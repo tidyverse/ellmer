@@ -776,17 +776,19 @@ and that ellmer will convert it into an R data structure.</p>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">instruct_json</span>, <span class="va">instruct_weight</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">ingredients</span>, type <span class="op">=</span> <span class="va">type_ingredients</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                       name quantity     unit</span></span>
-<span><span class="co">#&gt; 1         dark brown sugar   150.00        g</span></span>
-<span><span class="co">#&gt; 2                     eggs     2.00    large</span></span>
-<span><span class="co">#&gt; 3               sour cream   165.00        g</span></span>
-<span><span class="co">#&gt; 4  unsalted butter, melted   113.00        g</span></span>
-<span><span class="co">#&gt; 5          vanilla extract     1.00 teaspoon</span></span>
-<span><span class="co">#&gt; 6              kosher salt     0.75 teaspoon</span></span>
-<span><span class="co">#&gt; 7              neutral oil    80.00       ml</span></span>
-<span><span class="co">#&gt; 8        all-purpose flour   190.00        g</span></span>
-<span><span class="co">#&gt; 9                    sugar   150.00        g</span></span>
-<span><span class="co">#&gt; 10                   sugar     1.50 teaspoon</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 3</span></span></span>
+<span><span class="co">#&gt;    name                    quantity unit    </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> dark brown sugar          150    g       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> eggs                        2    large   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> sour cream                165    g       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> unsalted butter, melted   113    g       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> vanilla extract             1    teaspoon</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> kosher salt                 0.75 teaspoon</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> neutral oil                80    ml      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> all-purpose flour         190    g       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> sugar                     150    g       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> sugar                       1.5  teaspoon</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="capturing-raw-input">Capturing raw input<a class="anchor" aria-label="anchor" href="#capturing-raw-input"></a>

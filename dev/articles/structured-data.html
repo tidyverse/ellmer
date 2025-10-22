@@ -160,13 +160,15 @@ and it can take a vector of prompts.</p>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, type <span class="op">=</span> <span class="va">type_person</span><span class="op">)</span></span>
-<span><span class="co">#&gt;     name age</span></span>
-<span><span class="co">#&gt; 1   Alex  42</span></span>
-<span><span class="co">#&gt; 2  Jamal  27</span></span>
-<span><span class="co">#&gt; 3 Li Wei  19</span></span>
-<span><span class="co">#&gt; 4 Fatima  35</span></span>
-<span><span class="co">#&gt; 5 Robert  51</span></span>
-<span><span class="co">#&gt; 6  Kwame  50</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
+<span><span class="co">#&gt;   name     age</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Alex      42</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Jamal     27</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Li Wei    19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Fatima    35</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Robert    51</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Kwame     50</span></span></code></pre></div>
 <p>(Note that structured data extraction automatically disables tool
 calling. You can work around this limitation by doing a regular
 <code>$chat()</code> and then using
@@ -268,11 +270,13 @@ have names and/or ages.</p>
 <span>  <span class="st">"My name is Hadley."</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">no_match</span>, type <span class="op">=</span> <span class="va">type_person</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      name age</span></span>
-<span><span class="co">#&gt; 1 Unknown   0</span></span>
-<span><span class="co">#&gt; 2    &lt;NA&gt;  NA</span></span>
-<span><span class="co">#&gt; 3  cheese   3</span></span>
-<span><span class="co">#&gt; 4  Hadley   0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 2</span></span></span>
+<span><span class="co">#&gt;   name      age</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Unknown     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> cheese      3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Hadley      0</span></span></code></pre></div>
 <p>You can often avoid this problem by setting
 <code>required = FALSE</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -281,11 +285,13 @@ have names and/or ages.</p>
 <span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span>required <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">no_match</span>, type <span class="op">=</span> <span class="va">type_person</span><span class="op">)</span></span>
-<span><span class="co">#&gt;     name age</span></span>
-<span><span class="co">#&gt; 1   &lt;NA&gt;  NA</span></span>
-<span><span class="co">#&gt; 2   &lt;NA&gt;  NA</span></span>
-<span><span class="co">#&gt; 3 cheese   3</span></span>
-<span><span class="co">#&gt; 4 Hadley  NA</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 2</span></span></span>
+<span><span class="co">#&gt;   name     age</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> cheese     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Hadley    <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
 <p>In other cases, you may need to adjust your prompt as well. Either
 way, we strongly recommend that you include both positive and negative
 examples when testing your structured data extraction code.</p>
@@ -293,8 +299,8 @@ examples when testing your structured data extraction code.</p>
 <div class="section level3">
 <h3 id="data-frames">Data frames<a class="anchor" aria-label="anchor" href="#data-frames"></a>
 </h3>
-<p>In most cases, you’ll get a data frame because you are using
-<code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code>, where each output row
+<p>In most cases, you’ll get a data frame (well, tibble) because you are
+using <code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code>, where each output row
 represents one input prompt. In other cases, you might have a more
 complex document where you want a data frame from a single prompt. For
 example, imagine that you want to extract some data about people from a
@@ -347,22 +353,22 @@ structure “inside out” and create an array of objects:</p>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">prompt</span>, type <span class="op">=</span> <span class="va">type_people</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             name age height weight</span></span>
-<span><span class="co">#&gt; 1     John Smith  30   1.80   80.0</span></span>
-<span><span class="co">#&gt; 2       Jane Doe  25   1.65   49.9</span></span>
-<span><span class="co">#&gt; 3 Jose Rodriguez  40   1.90   90.0</span></span>
-<span><span class="co">#&gt; 4       June Lee  35   1.75   70.0</span></span></code></pre></div>
-<p>Now ellmer knows what you want and gives you a data frame.</p>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 4</span></span></span>
+<span><span class="co">#&gt;   name             age height weight</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> John Smith        30   1.8    80  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Jane Doe          25   1.65   49.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Jose Rodriguez    40   1.9    90  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> June Lee          35   1.75   70</span></span></code></pre></div>
+<p>Now ellmer knows what you want and gives you a tibble.</p>
 <p>If you’re familiar with the terms row-oriented and column-oriented
 data frames, this is the same idea. Since most languages don’t possess
 vectorisation like R, row-oriented data frames are more common.</p>
 <p>Note that you’ll generally wanted to avoid nesting objects in inside
 of objects as this will generate a data frame where each column is
-itself a data frame. This is a valid data structure in R, but you’ll
-find it easier to understand if you convert it to a tibble, since the
-tibble print method makes it more clear what’s going on. You can also
-use <code>tidyr::unpack()</code> to unpack these df-columns back into a
-regular flat data frame.</p>
+itself a data frame. You can use <code>tidyr::unpack()</code> to unpack
+these df-columns back into a regular flat data frame, but your life will
+be simpler if you re-consider the type.</p>
 </div>
 </div>
 <div class="section level2">
@@ -430,20 +436,15 @@ can use structured data extraction.</p>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_named_entities</span><span class="op">)</span></span>
-<span><span class="co">#&gt;            name         type</span></span>
-<span><span class="co">#&gt; 1          John       person</span></span>
-<span><span class="co">#&gt; 2        Google organization</span></span>
-<span><span class="co">#&gt; 3      New York     location</span></span>
-<span><span class="co">#&gt; 4         Sarah       person</span></span>
-<span><span class="co">#&gt; 5     Acme Inc. organization</span></span>
-<span><span class="co">#&gt; 6 San Francisco     location</span></span>
-<span><span class="co">#&gt;                                            context</span></span>
-<span><span class="co">#&gt; 1                John works at Google in New York.</span></span>
-<span><span class="co">#&gt; 2                John works at Google in New York.</span></span>
-<span><span class="co">#&gt; 3                John works at Google in New York.</span></span>
-<span><span class="co">#&gt; 4          He met with Sarah, the CEO of Acme Inc.</span></span>
-<span><span class="co">#&gt; 5                      Sarah, the CEO of Acme Inc.</span></span>
-<span><span class="co">#&gt; 6 He met with Sarah... last week in San Francisco.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
+<span><span class="co">#&gt;   name          type         context                                   </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> John          person       John works at Google in New York.         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Google        organization John works at Google in New York.         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> New York      location     John works at Google in New York.         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Sarah         person       He met with Sarah, the CEO of Acme Inc.   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Acme Inc.     organization Sarah, the CEO of Acme Inc.               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> San Francisco location     He met with Sarah... last week in San Fra…</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-3-sentiment-analysis">Example 3: Sentiment analysis<a class="anchor" aria-label="anchor" href="#example-3-sentiment-analysis"></a>
@@ -509,10 +510,12 @@ guaranteed.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_classification</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
-<span><span class="co">#&gt;         name score</span></span>
-<span><span class="co">#&gt; 1 Technology  0.95</span></span>
-<span><span class="co">#&gt; 2   Business  0.03</span></span>
-<span><span class="co">#&gt; 3      Other  0.02</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
+<span><span class="co">#&gt;   name       score</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Technology  0.95</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Business    0.03</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Other       0.02</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-5-working-with-unknown-keys">Example 5: Working with unknown keys<a class="anchor" aria-label="anchor" href="#example-5-working-with-unknown-keys"></a>
