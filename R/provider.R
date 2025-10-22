@@ -186,11 +186,12 @@ method(as_json, list(Provider, class_list)) <- function(provider, x, ...) {
 }
 
 method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
-  as_json(
-    provider,
-    ContentText(unclass(jsonlite::toJSON(x@value, auto_unbox = TRUE))),
-    ...
-  )
+  if (!is.null(x@string)) {
+    string <- x@string
+  } else {
+    string <- unclass(jsonlite::toJSON(x@data, auto_unbox = TRUE))
+  }
+  as_json(provider, ContentText(string), ...)
 }
 
 # Batch AI ---------------------------------------------------------------

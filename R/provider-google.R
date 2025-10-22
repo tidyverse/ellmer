@@ -283,8 +283,7 @@ method(value_turn, ProviderGoogleGemini) <- function(
   contents <- lapply(message$parts, function(content) {
     if (has_name(content, "text")) {
       if (has_type) {
-        data <- jsonlite::parse_json(content$text)
-        ContentJson(data)
+        ContentJson(string = content$text)
       } else {
         ContentText(content$text)
       }
