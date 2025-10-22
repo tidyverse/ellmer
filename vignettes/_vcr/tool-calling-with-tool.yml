@@ -5,9 +5,12 @@ http_interactions:
     body:
       string: '{"messages":[{"role":"user","content":[{"type":"text","text":"How long
         ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"text","text":"Neil
-        Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that
-        event occurred 54 years ago."}]},{"role":"user","content":[{"type":"text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Returns
+        Armstrong touched down on the moon on **July 20, 1969**.\n\nToday’s date is
+        **June 27, 2024**.\n\nTo calculate how long ago that was:\n\nFrom July 20,
+        1969 to July 20, 2024 = **55 years**  \nAs of June 27, 2024, it’s just under
+        55 years (about 54 years and 11 months plus 1 week).\n\n**So, Neil Armstrong
+        touched down on the moon about 54 years and 11 months ago.**"}]},{"role":"user","content":[{"type":"text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}}]}'
   response:
@@ -16,37 +19,39 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 959041a83b297399-DFW
+      cf-ray: 9929a14effa469fe-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 02 Jul 2025 18:37:50 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '675'
+      date: Wed, 22 Oct 2025 14:19:31 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '563'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=lWHLj.HmEpBh9KwyDQ2vwYfFl.5gOiNQ3FLDydYQrIY-1751481470-1.0.1.1-Zvhvn0WbnC4VyL79kH2VEQYuaQ6Ohnf8JJuJ4i.FiK0Ftfc3eBjprbIoueE.t_GDnJjZ6N0UjX.qwoP2dg7v3pZ2W084V8o7iqu.dm6XvOs;
-        path=/; expires=Wed, 02-Jul-25 19:07:50 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=IjeT9vawrT8ys1nxW0_29T67hLYJuD0ELEv_4DpVjO4-1761142771-1.0.1.1-svdMAB8GVbL9z4S4dpY1ibiDcfTv9AzMthX.GhbLwq5P3A_fJ59GElD.HzUw9tXCLuWR4FG6Zq.Znwq2Q6B22CHZrTvbG9c14bXaa7hC4_0;
+        path=/; expires=Wed, 22-Oct-25 14:49:31 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=e6.2cAniIhJ90DyLfma1pVTOvWytBhI6VtdUWPfVnM4-1751481470826-0.0.1.1-604800000;
+      - _cfuvid=pX3FLYwnoITZv8ARzJlrOI9evGmMn6OD.k1GKkJJIko-1761142771651-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '693'
+      x-envoy-upstream-service-time: '584'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999940'
+      x-ratelimit-remaining-tokens: '29999876'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6edf2c880c686d62ecec79b8e7499ca2
+      x-request-id: req_2bfec7b97bde437083ad6bdc993808af
     body:
       string: |
         {
-          "id": "chatcmpl-Bowd4S0M9PRLjvxmks46h36Xzj8ck",
+          "id": "chatcmpl-CTTyVi6VXQGCWFgu92TfVfSPhbyCn",
           "object": "chat.completion",
-          "created": 1751481470,
-          "model": "gpt-4o-2024-08-06",
+          "created": 1761142771,
+          "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
               "index": 0,
@@ -55,7 +60,7 @@ http_interactions:
                 "content": null,
                 "tool_calls": [
                   {
-                    "id": "call_olBG8OUjyIj914iwNBjw35dv",
+                    "id": "call_9PX4SpmulqXE3LEm5ceFl4hv",
                     "type": "function",
                     "function": {
                       "name": "get_current_time",
@@ -71,9 +76,9 @@ http_interactions:
             }
           ],
           "usage": {
-            "prompt_tokens": 158,
+            "prompt_tokens": 241,
             "completion_tokens": 15,
-            "total_tokens": 173,
+            "total_tokens": 256,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -86,19 +91,22 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_07871e2ad8"
+          "system_fingerprint": "fp_422e2d36a8"
         }
-  recorded_at: 2025-07-02 18:37:50
+  recorded_at: 2025-10-22 14:19:31
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"user","content":[{"type":"text","text":"How long
         ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"text","text":"Neil
-        Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that
-        event occurred 54 years ago."}]},{"role":"user","content":[{"type":"text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","tool_calls":[{"id":"call_olBG8OUjyIj914iwNBjw35dv","function":{"name":"get_current_time","arguments":"{\"tz\":[\"UTC\"]}"},"type":"function"}]},{"role":"tool","content":"2025-06-25
-        16:53:23 UTC","tool_call_id":"call_olBG8OUjyIj914iwNBjw35dv"}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Returns
+        Armstrong touched down on the moon on **July 20, 1969**.\n\nToday’s date is
+        **June 27, 2024**.\n\nTo calculate how long ago that was:\n\nFrom July 20,
+        1969 to July 20, 2024 = **55 years**  \nAs of June 27, 2024, it’s just under
+        55 years (about 54 years and 11 months plus 1 week).\n\n**So, Neil Armstrong
+        touched down on the moon about 54 years and 11 months ago.**"}]},{"role":"user","content":[{"type":"text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","tool_calls":[{"id":"call_9PX4SpmulqXE3LEm5ceFl4hv","function":{"name":"get_current_time","arguments":"{\"tz\":[\"UTC\"]}"},"type":"function"}]},{"role":"tool","content":"2025-06-25
+        16:53:23 UTC","tool_call_id":"call_9PX4SpmulqXE3LEm5ceFl4hv"}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}}]}'
   response:
@@ -107,43 +115,45 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 959041b9bf0a7399-DFW
+      cf-ray: 9929a1545b2e69fe-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 02 Jul 2025 18:37:55 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1830'
+      date: Wed, 22 Oct 2025 14:19:33 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1314'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=OpHdoCCBXdBttFZJn0m1tCv3NWXWhutkI.NN8hKflGE-1751481475-1.0.1.1-wbVKcosbkpEoHxnnSHLEndNk7GVZbhlSPl80_qmvoYeAkK4i0sOAnVYsBhmeIKhXKdl57y8el5der6R2maB3XEI34PndtY1DuLq.RTG0t8Q;
-        path=/; expires=Wed, 02-Jul-25 19:07:55 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=Vc0BqQ.G2R9f1HLKNgmHLbGb2VerQGj3iwoyxSNDmlI-1761142773-1.0.1.1-m18RbnKcPfmGhLwsjzxtxO_XtseFC2Q5Uj1u.K5NE2q52rcJOPsixbhXVrKZFQZ9Vqrc73PNJ4qLrfWk9eQP3Qlrjk.nOm9GkM4DKFaCLdQ;
+        path=/; expires=Wed, 22-Oct-25 14:49:33 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=qcfXSe6HzsGCy2Mp4uCjljoonphmzIGJjE6EywbHbjk-1751481475251-0.0.1.1-604800000;
+      - _cfuvid=vDB1zy.6OpIOxRj_Ts.aUuA_irrPplD8RAM3QqlWQUs-1761142773263-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '3760'
+      x-envoy-upstream-service-time: '1335'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999932'
+      x-ratelimit-remaining-tokens: '29999869'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_fec02247ab3b7f22ebb7e011f4789721
+      x-request-id: req_ac16065ecd8747a7834d3d3966a19515
     body:
       string: |
         {
-          "id": "chatcmpl-Bowd7XWEJ72sgWDTvpEEQvQ9JdqwI",
+          "id": "chatcmpl-CTTyWsv6UyfZUqcxYb0YTFAejYbka",
           "object": "chat.completion",
-          "created": 1751481473,
-          "model": "gpt-4o-2024-08-06",
+          "created": 1761142772,
+          "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "Neil Armstrong touched down on the Moon on July 20, 1969. As of June 25, 2025, that event occurred 55 years and approximately 11 months ago.",
+                "content": "Neil Armstrong touched down on the moon on July 20, 1969. Today’s date is June 25, 2025. That means it happened almost exactly 56 years ago—about 55 years, 11 months, and 5 days ago.",
                 "refusal": null,
                 "annotations": []
               },
@@ -152,9 +162,9 @@ http_interactions:
             }
           ],
           "usage": {
-            "prompt_tokens": 196,
-            "completion_tokens": 40,
-            "total_tokens": 236,
+            "prompt_tokens": 279,
+            "completion_tokens": 55,
+            "total_tokens": 334,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -167,7 +177,7 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_07871e2ad8"
+          "system_fingerprint": "fp_422e2d36a8"
         }
-  recorded_at: 2025-07-02 18:37:55
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-10-22 14:19:33
+recorded_with: VCR-vcr/2.0.0

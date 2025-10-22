@@ -4,7 +4,7 @@ http_interactions:
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"user","content":[{"type":"text","text":"The new
-        quantum computing breakthrough could revolutionize the tech industry."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"Array
+        quantum computing breakthrough could revolutionize the tech industry."}]}],"model":"gpt-5-mini","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"Array
         of classification results. The scores should sum to 1.","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
         category name","enum":["Politics","Sports","Technology","Entertainment","Business","Other"]},"score":{"type":"number","description":"The
         classification score for the category, ranging from 0.0 to 1.0."}},"required":["name","score"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
@@ -14,61 +14,61 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 96125b5b1ed1511a-MSP
+      cf-ray: 9929a09a4e80a912-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 18 Jul 2025 13:34:30 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '876'
+      date: Wed, 22 Oct 2025 14:19:08 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '6246'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=d7fJLIF_EXeaebC8oCGT4m.KFHLxEejPyB5NYqsyq3g-1752845670-1.0.1.1-G0nHajr3j4xjWHXLvPEAFdeN2sgHf6XtZM8QUlaDjSamRfBqiiJ2DiyFI3o5ldp51eoSwwL5DRSy3Efe3jmhTYL1mRr0h_GJ2na2OYacLio;
-        path=/; expires=Fri, 18-Jul-25 14:04:30 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=X.8jvkFWpr2Ru3U49qzcio82YrCahKj1P5tjIkPYfJw-1761142748-1.0.1.1-Wm4uCw_5oHC4Z3H1wmEQUWGAxXp2h.KHfruANOi9WZv5yHkDG_18iNXFf8SrtRXw9NQN70LSwFxQ8K1HPFSCZcGvM2c_LQKAQpeHRVgpR3A;
+        path=/; expires=Wed, 22-Oct-25 14:49:08 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=2.mwGuvDOuSVQV3QKkB4rX3LRF_ITrxXzbVYK.p2elY-1752845670579-0.0.1.1-604800000;
+      - _cfuvid=H3ANZhQuOKkVvNo4JnU7RaZjZj5ciBzgb6c06KiKhtY-1761142748472-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '884'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999978'
-      x-ratelimit-reset-requests: 6ms
+      x-envoy-upstream-service-time: '6286'
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '180000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '179999979'
+      x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_da4d36d9d05f64ce6ad176450780c1be
+      x-request-id: req_e2b636f40fcd41e488eff65f594aad96
     body:
       string: |
         {
-          "id": "chatcmpl-BufWH4n9FCNGs1i5MqQxxxhJGci3I",
+          "id": "chatcmpl-CTTy2V1h8cyrvA0ib5iCdrNFWLkhj",
           "object": "chat.completion",
-          "created": 1752845669,
-          "model": "gpt-4.1-2025-04-14",
+          "created": 1761142742,
+          "model": "gpt-5-mini-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "{\"wrapper\":[{\"name\":\"Technology\",\"score\":0.95},{\"name\":\"Business\",\"score\":0.03},{\"name\":\"Other\",\"score\":0.02}]}",
+                "content": "{\"wrapper\":[{\"name\":\"Politics\",\"score\":0.0},{\"name\":\"Sports\",\"score\":0.0},{\"name\":\"Technology\",\"score\":0.85},{\"name\":\"Entertainment\",\"score\":0.0},{\"name\":\"Business\",\"score\":0.1},{\"name\":\"Other\",\"score\":0.05}]}",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 132,
-            "completion_tokens": 35,
-            "total_tokens": 167,
+            "prompt_tokens": 127,
+            "completion_tokens": 270,
+            "total_tokens": 397,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 192,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
@@ -77,5 +77,5 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-18 13:34:30
-recorded_with: VCR-vcr/1.7.1.93
+  recorded_at: 2025-10-22 14:19:08
+recorded_with: VCR-vcr/2.0.0

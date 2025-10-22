@@ -5,7 +5,7 @@ http_interactions:
     body:
       string: '{"messages":[{"role":"user","content":[{"type":"text","text":"\n  The
         product was okay, but the customer service was terrible. I probably\n  won''t
-        buy from them again.\n"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"Extract
+        buy from them again.\n"}]}],"model":"gpt-5-mini","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"Extract
         the sentiment scores of a given text. Sentiment scores should sum to 1.","properties":{"positive_score":{"type":"number","description":"Positive
         sentiment score, ranging from 0.0 to 1.0."},"negative_score":{"type":"number","description":"Negative
         sentiment score, ranging from 0.0 to 1.0."},"neutral_score":{"type":"number","description":"Neutral
@@ -16,61 +16,61 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 96125b569ff3511a-MSP
+      cf-ray: 9929a085cb51a912-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 18 Jul 2025 13:34:29 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '487'
+      date: Wed, 22 Oct 2025 14:19:01 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '3020'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=j1qlNNFkxaKxylhRJatSYhSxxn8ZzO0gy28TQb_pVsA-1752845669-1.0.1.1-J5kKt0UCygpKqH7m6eWlGtyqITGosSDqM892eP01807wa_Px3kCM0IIp28cvK5urSrTpc9exatF_ABxw7rfZlcM33ztnORINDr_N3MqMMOg;
-        path=/; expires=Fri, 18-Jul-25 14:04:29 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=l6vUOuJj9_utg.hojmH_prEDxEN1IoXrWdzkJvoSrbI-1761142741-1.0.1.1-rzwlvwxJGW8DOmhELwgLThyv31kFlxHOsMxFr57qK2GFzd0DNMecWlCa7wP3vEMUOk.Yz0k187Ng_Yy_nUsDBn3ZJayax5vTrl.Ifxz_aho;
+        path=/; expires=Wed, 22-Oct-25 14:49:01 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=fi2fGthhdkOyGTzGYYygXrJg5j0HrUALpVFV8rJk2L4-1752845669495-0.0.1.1-604800000;
+      - _cfuvid=pGjqAHkz.hvOrkCwi6kEc8WL5DODXMzwzU.dcxne7b0-1761142741984-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '490'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999972'
-      x-ratelimit-reset-requests: 6ms
+      x-envoy-upstream-service-time: '3103'
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '180000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '179999970'
+      x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6571e3617cd71c668a78a8f440eb7a33
+      x-request-id: req_234ce3583ad949ca978858c24dd8cb36
     body:
       string: |
         {
-          "id": "chatcmpl-BufWHhlGgnngwYY6qKOfAXOc9zqlV",
+          "id": "chatcmpl-CTTxzHA3FeBiIDc6rgea8LLPgL0KL",
           "object": "chat.completion",
-          "created": 1752845669,
-          "model": "gpt-4.1-2025-04-14",
+          "created": 1761142739,
+          "model": "gpt-5-mini-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "{\"positive_score\":0.05,\"negative_score\":0.7,\"neutral_score\":0.25}",
+                "content": "{\"positive_score\":0.10,\"negative_score\":0.75,\"neutral_score\":0.15}",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 153,
-            "completion_tokens": 22,
-            "total_tokens": 175,
+            "prompt_tokens": 148,
+            "completion_tokens": 291,
+            "total_tokens": 439,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 256,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
@@ -79,5 +79,5 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-18 13:34:29
-recorded_with: VCR-vcr/1.7.1.93
+  recorded_at: 2025-10-22 14:19:01
+recorded_with: VCR-vcr/2.0.0
