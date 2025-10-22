@@ -2,7 +2,7 @@
 % Please edit documentation in R/provider-openai-responses.R
 \name{chat_openai_responses}
 \alias{chat_openai_responses}
-\title{Chat with an OpenAI using the responses API}
+\title{Chat with an OpenAI model using the responses API}
 \usage{
 chat_openai_responses(
   system_prompt = NULL,
