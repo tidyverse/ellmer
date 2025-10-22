@@ -3,5 +3,5 @@
     Code
       . <- chat_openai_responses()
     Message
-      Using model = "gpt-4.1".
+      Using model = "gpt-5".
 

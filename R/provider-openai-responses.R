@@ -39,7 +39,7 @@ chat_openai_responses <- function(
   api_headers = character(),
   echo = c("none", "output", "all")
 ) {
-  model <- set_default(model, "gpt-4.1")
+  model <- set_default(model, "gpt-5")
   echo <- check_echo(echo)
 
   provider <- ProviderOpenAIResponses(
@@ -56,12 +56,11 @@ chat_openai_responses <- function(
 chat_openai_responses_test <- function(
   system_prompt = "Be terse.",
   ...,
-  model = "gpt-4.1-nano",
+  model = "gpt-5-nano",
   params = NULL,
   echo = "none"
 ) {
   params <- params %||% params()
-  params$temperature <- params$temperature %||% 0
 
   chat_openai_responses(
     system_prompt = system_prompt,

@@ -90,7 +90,7 @@ package.
 }
 \examples{
 \dontrun{
-chat <- chat_azure_openai(model = "gpt-4o-mini")
+chat <- chat_azure_openai(model = "gpt-5-nano")
 chat$chat("Tell me three jokes about statisticians")
 }
 }

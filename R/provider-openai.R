@@ -16,7 +16,7 @@ NULL
 #' @param system_prompt A system prompt to set the behavior of the assistant.
 #' @param base_url The base URL to the endpoint; the default uses OpenAI.
 #' @param api_key `r api_key_param("OPENAI_API_KEY")`
-#' @param model `r param_model("gpt-4.1", "openai")`
+#' @param model `r param_model("gpt-5", "openai")`
 #' @param params Common model parameters, usually created by [params()].
 #' @param seed Optional integer seed that ChatGPT uses to try and make output
 #'   more reproducible.
@@ -56,7 +56,7 @@ chat_openai <- function(
   api_headers = character(),
   echo = c("none", "output", "all")
 ) {
-  model <- set_default(model, "gpt-4.1")
+  model <- set_default(model, "gpt-5")
   echo <- check_echo(echo)
 
   params <- params %||% params()
@@ -83,13 +83,12 @@ chat_openai <- function(
 chat_openai_test <- function(
   system_prompt = "Be terse.",
   ...,
-  model = "gpt-4.1-nano",
+  model = "gpt-5-nano",
   params = NULL,
   echo = "none"
 ) {
   params <- params %||% params()
   params$seed <- params$seed %||% 1014
-  params$temperature <- params$temperature %||% 0
 
   chat_openai(
     system_prompt = system_prompt,

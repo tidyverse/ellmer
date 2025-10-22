@@ -44,7 +44,7 @@ NULL
 #' @export
 #' @examples
 #' \dontrun{
-#' chat <- chat_azure_openai(model = "gpt-4o-mini")
+#' chat <- chat_azure_openai(model = "gpt-5-nano")
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
 chat_azure_openai <- function(
@@ -128,7 +128,7 @@ chat_azure_openai_test <- function(
     system_prompt = system_prompt,
     api_key = api_key,
     endpoint = "https://ai-hwickhamai260967855527.openai.azure.com",
-    model = "gpt-4o-mini",
+    model = "gpt-5-nano",
     params = params,
     echo = echo
   )
