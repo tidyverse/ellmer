@@ -187,7 +187,7 @@ test_that("can handle missing optional values in objects (#384)", {
   )
   expect_equal(
     convert_from_type(data, type),
-    data.frame(
+    tibble::tibble(
       fruit = c("Apples", "Oranges"),
       year = c(NA_integer_, NA_integer_)
     )
@@ -222,7 +222,7 @@ test_that("can convert arrays of objects to data frames", {
   type <- type_array(type_object(x = type_integer(), y = type_string()))
   expect_equal(
     convert_from_type(x, type),
-    data.frame(x = c(1L, 3L), y = c("x", "y"))
+    tibble::tibble(x = c(1L, 3L), y = c("x", "y"))
   )
 
   # unless they have additional properties
@@ -256,11 +256,13 @@ test_that("array of object with nested objects becomes packed data frame", {
     list(x = list(a = 5), y = list(a = 7))
   )
 
-  out <- convert_from_type(data, type)
-  expect_equal(nrow(out), 2)
-  expect_named(out, c("x", "y"))
-  expect_equal(out$x, data.frame(a = c(1, 5)))
-  expect_equal(out$y, data.frame(a = c(3, 7)))
+  expect_equal(
+    convert_from_type(data, type),
+    tibble::tibble(
+      x = tibble::tibble(a = c(1, 5)),
+      y = tibble::tibble(a = c(3, 7))
+    )
+  )
 })
 
 test_that("can handle mix of present and absent rows", {
@@ -275,7 +277,7 @@ test_that("can handle mix of present and absent rows", {
   )
   expect_equal(
     convert_from_type(data, type),
-    data.frame(x = c(1L, NA_integer_, 3L), y = c("x", NA_character_, "y"))
+    tibble::tibble(x = c(1L, NA_integer_, 3L), y = c("x", NA_character_, "y"))
   )
 })
 

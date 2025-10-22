@@ -1,0 +1,93 @@
+# Getting started --------------------------------------------------------
+
+test_that("can make simple request", {
+  chat <- chat_openai_responses_test()
+  resp <- chat$chat("What is 1 + 1?", echo = FALSE)
+  expect_match(resp, "2")
+  expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
+
+  resp <- chat$chat("Double that", echo = FALSE)
+  expect_match(resp, "4")
+})
+
+test_that("can make simple streaming request", {
+  chat <- chat_openai_responses_test()
+  resp <- coro::collect(chat$stream("What is 1 + 1?"))
+  expect_match(paste0(unlist(resp), collapse = ""), "2")
+})
+
+test_that("can list models", {
+  test_models(models_openai)
+})
+
+# Common provider interface -----------------------------------------------
+
+test_that("defaults are reported", {
+  expect_snapshot(. <- chat_openai_responses())
+})
+
+# No longer supports stop parameter
+# test_that("supports standard parameters", {
+#   chat_fun <- chat_openai_responses_test
+
+#   test_params_stop(chat_fun)
+# })
+
+test_that("supports tool calling", {
+  vcr::local_cassette("openai-v2-tool")
+  chat_fun <- chat_openai_responses_test
+
+  test_tools_simple(chat_fun)
+})
+
+test_that("can extract data", {
+  chat_fun <- chat_openai_responses_test
+
+  test_data_extraction(chat_fun)
+})
+
+test_that("can use images", {
+  vcr::local_cassette("openai-v2-image")
+  # Needs mini to get shape correct
+  chat_fun <- \(...) chat_openai_responses_test(model = "gpt-4.1-mini", ...)
+
+  test_images_inline(chat_fun)
+  test_images_remote(chat_fun)
+})
+
+test_that("can use pdfs", {
+  vcr::local_cassette("openai-v2-pdf")
+  chat_fun <- chat_openai_responses_test
+
+  test_pdf_local(chat_fun)
+})
+
+test_that("can match prices for some common models", {
+  provider <- chat_openai_responses_test()$get_provider()
+
+  expect_true(has_cost(provider, "gpt-4.1"))
+  expect_true(has_cost(provider, "gpt-4.1-2025-04-14"))
+})
+
+# Custom tests -----------------------------------------------------------------
+
+test_that("can retrieve log_probs (#115)", {
+  chat <- chat_openai_responses_test(params = params(log_probs = TRUE))
+  chat$chat("Hi")
+  expect_length(chat$last_turn()@json$output[[1]]$content[[1]]$logprobs, 2)
+})
+
+test_that("structured data work with and without wrapper", {
+  chat <- chat_openai_responses_test()
+  out <- chat$chat_structured(
+    "Extract the number: apple, green, eleven",
+    type = type_number()
+  )
+  expect_equal(out, 11)
+
+  out <- chat$chat_structured(
+    "Extract the number: apple, green, eleven",
+    type = type_object(number = type_number())
+  )
+  expect_equal(out, list(number = 11))
+})
