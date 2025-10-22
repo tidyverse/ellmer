@@ -4,7 +4,7 @@
 #' @include tools-def.R
 NULL
 
-#' Chat with an OpenAI using the responses API
+#' Chat with an OpenAI model using the responses API
 #'
 #' @description
 #' The responses API is the latest interface to [OpenAI](https://openai.com/)'s
