@@ -4,7 +4,7 @@ http_interactions:
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"user","content":[{"type":"text","text":"Give
-        me five numbers from a random normal distribution."}]}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","function":{"name":"rnorm","description":"Draw
+        me five numbers from a random normal distribution."}]}],"model":"gpt-5","stream":false,"tools":[{"type":"function","function":{"name":"rnorm","description":"Draw
         numbers from a random normal distribution","strict":true,"parameters":{"type":"object","description":"","properties":{"n":{"type":"integer","description":"The
         number of observations. Must be a positive integer."},"mean":{"type":"number","description":"The
         mean value of the distribution."},"sd":{"type":"number","description":"The
@@ -15,37 +15,39 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 958e647d5b6e6725-DFW
+      cf-ray: 9929ab5dbee34684-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 02 Jul 2025 13:12:04 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '336'
+      date: Wed, 22 Oct 2025 14:26:28 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '5531'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=CmIZYeMKV9dpAXAUYRl6qpHF1CrC3fPppXWEbl50jbA-1751461924-1.0.1.1-WS34kRE8n8AkFwXpuCqlmzmnZpJSiHXmJBdDc3Gz_RvuGM90KilKBS7UDRaFR._1oLfp4nA2OhKDwavdolnGQbYJ9GfAR62ECYslI5U07eY;
-        path=/; expires=Wed, 02-Jul-25 13:42:04 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=uvYWB_My5aaiL.BaVBI0lvfLvvfhaUrK6o3ed0u5ycE-1761143188-1.0.1.1-vflKNOKf3f_OI0m.quKPGwl_x3LmcQjAISLWh7YIucRfu1ywn9BNbu5E_nlu8H_qp4jUCRIXD8GH6DdvUM_eIpc0Ug3umDsM1t9P9_xamR8;
+        path=/; expires=Wed, 22-Oct-25 14:56:28 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=Cp_ckh6UPIkEmwVCopmH.eCiAxXuRViq9oMs6.C_zy0-1751461924168-0.0.1.1-604800000;
+      - _cfuvid=ec390JM3P4MhVXaoPLfRFwWgkFd0oL.wB1Yc1v60ZwA-1761143188618-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '339'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999984'
-      x-ratelimit-reset-requests: 6ms
+      x-envoy-upstream-service-time: '5578'
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '15000'
+      x-ratelimit-limit-tokens: '40000000'
+      x-ratelimit-remaining-requests: '14999'
+      x-ratelimit-remaining-tokens: '39999984'
+      x-ratelimit-reset-requests: 4ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_59bc8eff1a09f9d397fec73e0c44cdf3
+      x-request-id: req_1f22e9a5d30a4e45aa3681b1622c7319
     body:
       string: |
         {
-          "id": "chatcmpl-BorXnt5IcOMDPFPkXls4D1DdFdpQX",
+          "id": "chatcmpl-CTU594Uqdj9yjYHnQpzcuLO7aPYzN",
           "object": "chat.completion",
-          "created": 1751461923,
-          "model": "gpt-4.1-2025-04-14",
+          "created": 1761143183,
+          "model": "gpt-5-2025-08-07",
           "choices": [
             {
               "index": 0,
@@ -54,7 +56,7 @@ http_interactions:
                 "content": null,
                 "tool_calls": [
                   {
-                    "id": "call_i23r8dfi9bjtZStFRX69Zz40",
+                    "id": "call_e2iTSHmno0TFe7LoLs9xGMc7",
                     "type": "function",
                     "function": {
                       "name": "rnorm",
@@ -65,35 +67,34 @@ http_interactions:
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "tool_calls"
             }
           ],
           "usage": {
-            "prompt_tokens": 96,
-            "completion_tokens": 22,
-            "total_tokens": 118,
+            "prompt_tokens": 177,
+            "completion_tokens": 223,
+            "total_tokens": 400,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 192,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_51e1070cf2"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-07-02 13:12:04
+  recorded_at: 2025-10-22 14:26:28
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"user","content":[{"type":"text","text":"Give
-        me five numbers from a random normal distribution."}]},{"role":"assistant","tool_calls":[{"id":"call_i23r8dfi9bjtZStFRX69Zz40","function":{"name":"rnorm","arguments":"{\"n\":[5],\"mean\":[0],\"sd\":[1]}"},"type":"function"}]},{"role":"tool","content":"[1.1484,-1.8218,-0.2473,-0.2442,-0.2827]","tool_call_id":"call_i23r8dfi9bjtZStFRX69Zz40"}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","function":{"name":"rnorm","description":"Draw
+        me five numbers from a random normal distribution."}]},{"role":"assistant","tool_calls":[{"id":"call_e2iTSHmno0TFe7LoLs9xGMc7","function":{"name":"rnorm","arguments":"{\"n\":[5],\"mean\":[0],\"sd\":[1]}"},"type":"function"}]},{"role":"tool","content":"[1.1484,-1.8218,-0.2473,-0.2442,-0.2827]","tool_call_id":"call_e2iTSHmno0TFe7LoLs9xGMc7"}],"model":"gpt-5","stream":false,"tools":[{"type":"function","function":{"name":"rnorm","description":"Draw
         numbers from a random normal distribution","strict":true,"parameters":{"type":"object","description":"","properties":{"n":{"type":"integer","description":"The
         number of observations. Must be a positive integer."},"mean":{"type":"number","description":"The
         mean value of the distribution."},"sd":{"type":"number","description":"The
@@ -104,67 +105,68 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 958e64831a676725-DFW
+      cf-ray: 9929ab821d294684-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 02 Jul 2025 13:12:05 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1054'
+      date: Wed, 22 Oct 2025 14:26:34 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '5956'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=aEfmPK3Po4SnthJrkVOZktZnTZlLK7Uz6Ja3OQP2A.o-1751461925-1.0.1.1-ps10IGtWxBhpa40ayJ_gm7XFY.C7hrO7D2AH4nsQp8T0d2P1I8lhctCH54L3FP9d4RSC9PQFHBSfYAtrFTAs2wb0NUK9aRnuL5Ha5QkwA74;
-        path=/; expires=Wed, 02-Jul-25 13:42:05 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=.9ozIDJnRi9dtLCAIa3QuH0ptFktJKrpIeAbd9QXc.k-1761143194-1.0.1.1-NNO6SnEofI__ijteItRMltvRsvCpUyai5aSE0bCPKDSO3dLJvGUYJ7K0MwZwoVNGKFEVVfjCfD4jW.CdEXLQ2CXmarJfbb7R3CnVmZ8r1fk;
+        path=/; expires=Wed, 22-Oct-25 14:56:34 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=759_OKaH6DmB8WoeaqkKEd9_Rl2TUcHPXptF.5ED2y8-1751461925513-0.0.1.1-604800000;
+      - _cfuvid=kBo_98RS6iFKL45f.e4M9rkrVXAezBSoDiYXEMcy8P8-1761143194965-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1057'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999972'
-      x-ratelimit-reset-requests: 6ms
+      x-envoy-upstream-service-time: '6102'
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '15000'
+      x-ratelimit-limit-tokens: '40000000'
+      x-ratelimit-remaining-requests: '14999'
+      x-ratelimit-remaining-tokens: '39999972'
+      x-ratelimit-reset-requests: 4ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_55d6ce689956fea108280435a4dc8f9c
+      x-request-id: req_98b0f16d91a84ff381c87be514fbd3d2
     body:
       string: |
         {
-          "id": "chatcmpl-BorXoZ3YUaEwN0daZoEvRNhhxMBxN",
+          "id": "chatcmpl-CTU5FhTL0J9Gg65PrcjpwPaz9e8e7",
           "object": "chat.completion",
-          "created": 1751461924,
-          "model": "gpt-4.1-2025-04-14",
+          "created": 1761143189,
+          "model": "gpt-5-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "Here are five numbers from a random normal distribution (mean = 0, standard deviation = 1):\n\n1. 1.1484\n2. -1.8218\n3. -0.2473\n4. -0.2442\n5. -0.2827",
+                "content": "1.1484, -1.8218, -0.2473, -0.2442, -0.2827",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 152,
-            "completion_tokens": 61,
-            "total_tokens": 213,
+            "prompt_tokens": 239,
+            "completion_tokens": 357,
+            "total_tokens": 596,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 320,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_51e1070cf2"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-07-02 13:12:05
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-10-22 14:26:34
+recorded_with: VCR-vcr/2.0.0
