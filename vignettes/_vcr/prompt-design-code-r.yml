@@ -3,59 +3,52 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","system":"\n  You are an expert
+      string: '{"model":"claude-sonnet-4-5-20250929","system":"\n  You are an expert
         R programmer who prefers the tidyverse.\n","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
         the way up to z, grouped by age and sex.\n"}]}],"stream":false,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Wed, 22 Oct 2025 14:15:35 GMT
+      date: Wed, 22 Oct 2025 14:34:44 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-22T14:15:27Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-10-22T14:34:39Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
-      anthropic-ratelimit-output-tokens-remaining: '399000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-22T14:15:35Z'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-10-22T14:34:44Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-22T14:15:25Z'
+      anthropic-ratelimit-requests-reset: '2025-10-22T14:34:37Z'
       anthropic-ratelimit-tokens-limit: '2400000'
-      anthropic-ratelimit-tokens-remaining: '2399000'
-      anthropic-ratelimit-tokens-reset: '2025-10-22T14:15:27Z'
-      request-id: req_011CUNNrZnoj3FyEtAnjcCgB
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-10-22T14:34:39Z'
+      request-id: req_011CUNQKVPkzSCM6CpuaV7f3
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '9570'
+      x-envoy-upstream-service-time: '6928'
       via: 1.1 google
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 99299b500c01e95a-DFW
+      cf-ray: 9929b7716c7e461a-DFW
     body:
-      string: '{"model":"claude-sonnet-4-20250514","id":"msg_012B51eACy4EBvYG8vyvnZrY","type":"message","role":"assistant","content":[{"type":"text","text":"Here
-        are several ways to compute the mean and median of variables a through z,
-        grouped by age and sex using tidyverse:\n\n## Method 1: Using `across()` with
-        `summarise()` (Recommended)\n\n```r\nlibrary(dplyr)\n\nresult <- your_data
-        %>%\n  group_by(age, sex) %>%\n  summarise(\n    across(a:z, list(mean = mean,
-        median = median), na.rm = TRUE),\n    .groups = \"drop\"\n  )\n```\n\n## Method
-        2: If you want separate operations\n\n```r\nresult <- your_data %>%\n  group_by(age,
-        sex) %>%\n  summarise(\n    across(a:z, mean, na.rm = TRUE, .names = \"{.col}_mean\"),\n    across(a:z,
-        median, na.rm = TRUE, .names = \"{.col}_median\"),\n    .groups = \"drop\"\n  )\n```\n\n##
-        Method 3: Using `pivot_longer()` for a tidy format\n\n```r\nlibrary(dplyr)\nlibrary(tidyr)\n\nresult
-        <- your_data %>%\n  group_by(age, sex) %>%\n  summarise(across(a:z, list(mean
-        = mean, median = median), na.rm = TRUE),\n            .groups = \"drop\")
-        %>%\n  pivot_longer(\n    cols = -c(age, sex),\n    names_to = c(\"variable\",
-        \"statistic\"),\n    names_sep = \"_\",\n    values_to = \"value\"\n  )\n```\n\n##
-        Method 4: If you need to specify columns more flexibly\n\n```r\n# If your
-        columns aren''t exactly a:z, you can use other selectors\nresult <- your_data
-        %>%\n  group_by(age, sex) %>%\n  summarise(\n    across(matches(\"^[a-z]$\"),
-        list(mean = mean, median = median), na.rm = TRUE),\n    .groups = \"drop\"\n  )\n```\n\nThe
-        first method is typically the most straightforward and will give you columns
-        like `a_mean`, `a_median`, `b_mean`, `b_median`, etc., with one row per age-sex
-        combination.\n\n**Note**: Make sure to handle missing values appropriately
-        by using `na.rm = TRUE` if your data contains NAs."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":61,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":547,"service_tier":"standard"}}'
-  recorded_at: 2025-10-22 14:15:35
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01WYxzpiBDSpqsxxhk4mXS1j","type":"message","role":"assistant","content":[{"type":"text","text":"Here''s
+        how to compute mean and median for variables a through z, grouped by age and
+        sex using tidyverse:\n\n```r\nlibrary(dplyr)\nlibrary(tidyr)\n\n# Option 1:
+        Using across() with summarise()\nresult <- df %>%\n  group_by(age, sex) %>%\n  summarise(\n    across(\n      a:z,\n      list(mean
+        = mean, median = median),\n      .names = \"{.col}_{.fn}\"\n    ),\n    .groups
+        = \"drop\"\n  )\n\n# Option 2: If you want long format for easier viewing\nresult_long
+        <- df %>%\n  group_by(age, sex) %>%\n  summarise(\n    across(\n      a:z,\n      list(mean
+        = mean, median = median)\n    ),\n    .groups = \"drop\"\n  ) %>%\n  pivot_longer(\n    cols
+        = -c(age, sex),\n    names_to = c(\"variable\", \"statistic\"),\n    names_sep
+        = \"_\",\n    values_to = \"value\"\n  )\n\n# Option 3: If you need to handle
+        missing values\nresult <- df %>%\n  group_by(age, sex) %>%\n  summarise(\n    across(\n      a:z,\n      list(mean
+        = ~mean(.x, na.rm = TRUE), \n           median = ~median(.x, na.rm = TRUE)),\n      .names
+        = \"{.col}_{.fn}\"\n    ),\n    .groups = \"drop\"\n  )\n```\n\nThe result
+        will have columns like `a_mean`, `a_median`, `b_mean`, `b_median`, etc., with
+        one row per age/sex combination."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":61,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":402,"service_tier":"standard"}}'
+  recorded_at: 2025-10-22 14:34:44
 recorded_with: VCR-vcr/2.0.0

@@ -21,76 +21,75 @@ http_interactions:
         of dough onto an ungreased baking sheet and bake at 350°F (175°C)\n  for 10-12
         minutes, or until the edges are lightly browned. Let the cookies\n  cool on
         the baking sheet for a few minutes before transferring to a wire\n  rack to
-        cool completely. Enjoy!\n"}]}],"model":"gpt-4.1","stream":false}'
+        cool completely. Enjoy!\n"}]}],"model":"gpt-5","stream":false}'
   response:
     status: 200
     headers:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 99299c3f080f46d7-DFW
+      cf-ray: 9929bb0deb7af048-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 22 Oct 2025 14:16:08 GMT
+      date: Wed, 22 Oct 2025 14:37:48 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '4998'
+      openai-processing-ms: '42296'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=IabQ2q11hAXXssx5KtC8DlJAl5USF2Bcu2jnQ2ypQyg-1761142568-1.0.1.1-C3lCF3bYHpCGCsk74pLu6DUZHWSTf_nXNx5HlQ_zMFj28wVMxwNJ35T6KrpS7GhB2lpaGyqYl8Gh6B695tYui68BFhlW5xm7gWyQc5UG6eQ;
-        path=/; expires=Wed, 22-Oct-25 14:46:08 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=phNdNtslMmqLLgd_8R106hieTw5cQHkK1winlYFTxz8-1761143868-1.0.1.1-6HOcaEDPl.ufjfMHzRK11w648wXL8Ir_YaJhuVTPXFvt5xHe8xb.1VsYBzUUSUs2EdfQOksqbYvbYPu7kd_oHrQFhusP6C.k7o.U4m04yHw;
+        path=/; expires=Wed, 22-Oct-25 15:07:48 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=.HCMJ8k0ETRbatWgjItALoi_rW.NbBt.X4pf4H1oxMM-1761142568744-0.0.1.1-604800000;
+      - _cfuvid=i3HcgUFrpEaV.wNpHm9yGLrr0Wwh4KhS.GzLRsmg8NY-1761143868066-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '5021'
+      x-envoy-upstream-service-time: '42439'
       x-openai-proxy-wasm: v0.1
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999667'
-      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-limit-requests: '15000'
+      x-ratelimit-limit-tokens: '40000000'
+      x-ratelimit-remaining-requests: '14999'
+      x-ratelimit-remaining-tokens: '39999666'
+      x-ratelimit-reset-requests: 4ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_345f9eac495a454e98f44e1d8c39e274
+      x-request-id: req_f15895ec90fa47b0b4e02ba99174188b
     body:
       string: |
         {
-          "id": "chatcmpl-CTTv9DEHc6KP9SWqR0FWfCea4bDe7",
+          "id": "chatcmpl-CTUFVAiciPRRtOhRQRFd1qENbhBEQ",
           "object": "chat.completion",
-          "created": 1761142563,
-          "model": "gpt-4.1-2025-04-14",
+          "created": 1761143825,
+          "model": "gpt-5-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "[\n  {\n    \"name\": \"unsalted butter\",\n    \"quantity\": 1,\n    \"unit\": \"cup\",\n    \"input\": \"one cup of softened unsalted butter\"\n  },\n  {\n    \"name\": \"white sugar\",\n    \"quantity\": 0.25,\n    \"unit\": \"cup\",\n    \"input\": \"a quarter cup of white sugar\"\n  },\n  {\n    \"name\": \"egg\",\n    \"quantity\": 1,\n    \"unit\": \"piece\",\n    \"input\": \"an egg\"\n  },\n  {\n    \"name\": \"vanilla extract\",\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\",\n    \"input\": \"1 teaspoon of vanilla extract\"\n  },\n  {\n    \"name\": \"all-purpose flour\",\n    \"quantity\": 2,\n    \"unit\": \"cup\",\n    \"input\": \"2 cups of all-purpose flour\"\n  },\n  {\n    \"name\": \"semisweet chocolate chips\",\n    \"quantity\": 1,\n    \"unit\": \"cup\",\n    \"input\": \"1 cup of semisweet chocolate chips\"\n  }\n]",
+                "content": "[\n  {\"name\": \"softened unsalted butter\", \"quantity\": 1, \"unit\": \"cup\", \"input\": \"one cup of softened unsalted butter\"},\n  {\"name\": \"white sugar\", \"quantity\": 0.25, \"unit\": \"cup\", \"input\": \"a quarter cup of white sugar\"},\n  {\"name\": \"egg\", \"quantity\": 1, \"unit\": \"count\", \"input\": \"an egg\"},\n  {\"name\": \"vanilla extract\", \"quantity\": 1, \"unit\": \"teaspoon\", \"input\": \"1 teaspoon of vanilla extract\"},\n  {\"name\": \"all-purpose flour\", \"quantity\": 2, \"unit\": \"cup\", \"input\": \"2 cups of all-purpose flour\"},\n  {\"name\": \"semisweet chocolate chips\", \"quantity\": 1, \"unit\": \"cup\", \"input\": \"1 cup of semisweet chocolate chips\"}\n]",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 366,
-            "completion_tokens": 237,
-            "total_tokens": 603,
+            "prompt_tokens": 365,
+            "completion_tokens": 2766,
+            "total_tokens": 3131,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 2560,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_564354cebb"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-10-22 14:16:08
+  recorded_at: 2025-10-22 14:37:48
 recorded_with: VCR-vcr/2.0.0

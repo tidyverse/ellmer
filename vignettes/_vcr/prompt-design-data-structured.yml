@@ -16,7 +16,7 @@ http_interactions:
         (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½ cup
         (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
         kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
-        plus 1½ teaspoons sugar\n"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"Ingredient
+        plus 1½ teaspoons sugar\n"}]}],"model":"gpt-5","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"Ingredient
         name"},"quantity":{"type":"number","description":""},"unit":{"type":"string","description":"Unit
         of measurement"}},"required":["name","quantity","unit"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
   response:
@@ -25,39 +25,39 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 99299c334a9846d7-DFW
+      cf-ray: 9929ba3da827f048-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 22 Oct 2025 14:16:03 GMT
+      date: Wed, 22 Oct 2025 14:37:05 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '1550'
+      openai-processing-ms: '32960'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=rc.ch_Dqt7D.j1n3QWOKmvW.8kfXpJpWeJDLuemgaVE-1761142563-1.0.1.1-s4JzfOk8x8tdDBOAEcbfq3JwiTiGE73D7ZGHmRnxk5te5MQSY200IyFYWAOQfHva4lUIAypMkxEAOisHXVOUHB9emC_EM1OO6bzQLbi7vY8;
-        path=/; expires=Wed, 22-Oct-25 14:46:03 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=tL3MkDs235YoF3b0iyn4pkbBBWJ_JeI7oRSDZs8WcRY-1761143825-1.0.1.1-DpOvHDEoSOgA6KXCfuah88YFGvD5azdahFAdXPJOKCAQ2_3jfzFrNlhoC2havOcyDjYUN2naHdojRUbpc_VUtgX3D06jtFNU042D6.zk_L8;
+        path=/; expires=Wed, 22-Oct-25 15:07:05 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=rKKP_SPa9FNphL_aIV2_2szwphegOG8hiWcAz3el23w-1761142563448-0.0.1.1-604800000;
+      - _cfuvid=csbe6ooWd7ziLv1VmvZ6eKSgpB1l9BfBy4vFsF_c7Rs-1761143825380-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1583'
+      x-envoy-upstream-service-time: '33076'
       x-openai-proxy-wasm: v0.1
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999776'
-      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-limit-requests: '15000'
+      x-ratelimit-limit-tokens: '40000000'
+      x-ratelimit-remaining-requests: '14999'
+      x-ratelimit-remaining-tokens: '39999776'
+      x-ratelimit-reset-requests: 4ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_23ff69e4b0d440b0a46a73b2356428d1
+      x-request-id: req_11fc48baf9264d8684c350ac94168c5f
     body:
       string: |
         {
-          "id": "chatcmpl-CTTv8EGeLXK8hYWHG8XO16pIrPzk2",
+          "id": "chatcmpl-CTUEyPgKYfHPKZnNmTC5Sk413IXoU",
           "object": "chat.completion",
-          "created": 1761142562,
-          "model": "gpt-4.1-2025-04-14",
+          "created": 1761143792,
+          "model": "gpt-5-2025-08-07",
           "choices": [
             {
               "index": 0,
@@ -67,27 +67,26 @@ http_interactions:
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 355,
-            "completion_tokens": 153,
-            "total_tokens": 508,
+            "prompt_tokens": 352,
+            "completion_tokens": 2470,
+            "total_tokens": 2822,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 2304,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_e24a1fec47"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-10-22 14:16:03
+  recorded_at: 2025-10-22 14:37:05
 recorded_with: VCR-vcr/2.0.0

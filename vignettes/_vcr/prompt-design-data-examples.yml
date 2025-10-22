@@ -14,76 +14,75 @@ http_interactions:
         cup (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½
         cup (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
         kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
-        plus 1½ teaspoons sugar\n"}]}],"model":"gpt-4.1","stream":false}'
+        plus 1½ teaspoons sugar\n"}]}],"model":"gpt-5","stream":false}'
   response:
     status: 200
     headers:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 99299c258b1f46d7-DFW
+      cf-ray: 9929b963eef4f048-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 22 Oct 2025 14:16:01 GMT
+      date: Wed, 22 Oct 2025 14:36:31 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '1848'
+      openai-processing-ms: '33845'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=Ue6X2xjrE2GKfMTvJpyZ11lU9EOhOacMzSDB1734l_Q-1761142561-1.0.1.1-RbQZkF_fOQnZsI06CkyvcvCp8Lh.Em0Cd5SjFEZ6RBrOylazi.dWHFV5UYyVPIOy63pUgpRP6MuQ2AweYlaxit9da8rKE.SAAYTGEA11uUk;
-        path=/; expires=Wed, 22-Oct-25 14:46:01 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=zWhtvL6SFznLNR1K5oPBLomt_qJAH76BKAdSAbxU9Bk-1761143791-1.0.1.1-ayfWrHMRu.0Aqh5IFThb1GGAZjRsejWNW.0bnAVQvO0L.6_868cajZAQO8tONeB_GU98Sr7OjGNW_XQfPrkmXxxGFBmMaZnZFa9Ar2wSHOE;
+        path=/; expires=Wed, 22-Oct-25 15:06:31 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=2XILKmyDAjMz7SE.KEZTe3UDGty4X.4wsZ81QRrbTjw-1761142561519-0.0.1.1-604800000;
+      - _cfuvid=0s6HyQyfc1FALvvjAV6AOOrwmcG8QD8YzPGxvgxe.G0-1761143791928-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1881'
+      x-envoy-upstream-service-time: '34429'
       x-openai-proxy-wasm: v0.1
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999798'
-      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-limit-requests: '15000'
+      x-ratelimit-limit-tokens: '40000000'
+      x-ratelimit-remaining-requests: '14999'
+      x-ratelimit-remaining-tokens: '39999798'
+      x-ratelimit-reset-requests: 4ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_ebb9bdc93f7e4579b5864aba4c25ec50
+      x-request-id: req_38f8e8e9cd974884bd18fdc64069c5e7
     body:
       string: |
         {
-          "id": "chatcmpl-CTTv5NWG8Q8eCu5b3Qey3uvlhLO5d",
+          "id": "chatcmpl-CTUEQ1ob0tzAsygCc0d3LzU9SCeR6",
           "object": "chat.completion",
-          "created": 1761142559,
-          "model": "gpt-4.1-2025-04-14",
+          "created": 1761143758,
+          "model": "gpt-5-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "[\n  {\"name\": \"dark brown sugar\", \"quantity\": 150, \"unit\": \"g\"},\n  {\"name\": \"large eggs\", \"quantity\": 2, \"unit\": \"piece\"},\n  {\"name\": \"sour cream\", \"quantity\": 165, \"unit\": \"g\"},\n  {\"name\": \"unsalted butter\", \"quantity\": 113, \"unit\": \"g\"},\n  {\"name\": \"vanilla extract\", \"quantity\": 1, \"unit\": \"teaspoon\"},\n  {\"name\": \"kosher salt\", \"quantity\": 0.75, \"unit\": \"teaspoon\"},\n  {\"name\": \"neutral oil\", \"quantity\": 80, \"unit\": \"ml\"},\n  {\"name\": \"all-purpose flour\", \"quantity\": 190, \"unit\": \"g\"},\n  {\"name\": \"sugar\", \"quantity\": 150, \"unit\": \"g\"},\n  {\"name\": \"sugar\", \"quantity\": 1.5, \"unit\": \"teaspoon\"}\n]",
+                "content": "[\n  {\"name\": \"dark brown sugar\", \"quantity\": 150, \"unit\": \"g\"},\n  {\"name\": \"large eggs\", \"quantity\": 2, \"unit\": \"count\"},\n  {\"name\": \"sour cream\", \"quantity\": 165, \"unit\": \"g\"},\n  {\"name\": \"unsalted butter, melted\", \"quantity\": 113, \"unit\": \"g\"},\n  {\"name\": \"vanilla extract\", \"quantity\": 1, \"unit\": \"teaspoon\"},\n  {\"name\": \"kosher salt\", \"quantity\": 0.75, \"unit\": \"teaspoon\"},\n  {\"name\": \"neutral oil\", \"quantity\": 80, \"unit\": \"ml\"},\n  {\"name\": \"all-purpose flour\", \"quantity\": 190, \"unit\": \"g\"},\n  {\"name\": \"sugar\", \"quantity\": 150, \"unit\": \"g\"},\n  {\"name\": \"sugar\", \"quantity\": 1.5, \"unit\": \"teaspoon\"}\n]",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 258,
-            "completion_tokens": 218,
-            "total_tokens": 476,
+            "prompt_tokens": 257,
+            "completion_tokens": 2277,
+            "total_tokens": 2534,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 2048,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_422e2d36a8"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-10-22 14:16:01
+  recorded_at: 2025-10-22 14:36:31
 recorded_with: VCR-vcr/2.0.0

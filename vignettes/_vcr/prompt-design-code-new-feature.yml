@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","system":"\n  You are an expert
+      string: '{"model":"claude-sonnet-4-5-20250929","system":"\n  You are an expert
         R programmer.\n  Just give me the code; no explanation in text.\n  Use the
         `.by` argument rather than `group_by()`.\n  dplyr 1.1.0 introduced per-operation
         grouping with the `.by` argument.\n  e.g., instead of:\n\n  transactions |>\n    group_by(company,
@@ -14,33 +14,33 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Wed, 22 Oct 2025 14:15:54 GMT
+      date: Wed, 22 Oct 2025 14:35:11 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-22T14:15:54Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-10-22T14:35:10Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
       anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-22T14:15:54Z'
+      anthropic-ratelimit-output-tokens-reset: '2025-10-22T14:35:11Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-22T14:15:52Z'
+      anthropic-ratelimit-requests-reset: '2025-10-22T14:35:08Z'
       anthropic-ratelimit-tokens-limit: '2400000'
       anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-10-22T14:15:54Z'
-      request-id: req_011CUNNtXP1NTkp9UQBNm2xj
+      anthropic-ratelimit-tokens-reset: '2025-10-22T14:35:10Z'
+      request-id: req_011CUNQMjyQsYcN3mxGaSuUF
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '2662'
+      x-envoy-upstream-service-time: '3021'
       via: 1.1 google
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 99299bf6ff2fe95a-DFW
+      cf-ray: 9929b830494a461a-DFW
     body:
-      string: '{"model":"claude-sonnet-4-20250514","id":"msg_01XrF9waJRqsWLYGtt1ManbA","type":"message","role":"assistant","content":[{"type":"text","text":"```r\ndata
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01FQnKTUcxJqjtW1oFYEeK82","type":"message","role":"assistant","content":[{"type":"text","text":"```r\ndata
         |>\n  summarise(\n    across(a:z, list(mean = mean, median = median), .names
         = \"{.col}_{.fn}\"),\n    .by = c(age, sex)\n  )\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":182,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":60,"service_tier":"standard"}}'
-  recorded_at: 2025-10-22 14:15:54
+  recorded_at: 2025-10-22 14:35:11
 recorded_with: VCR-vcr/2.0.0
