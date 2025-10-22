@@ -25,13 +25,24 @@
 #'   connections or use [params()] in `chat_anthropic()` to decrease
 #'   `max_tokens`.
 #' @param rpm Maximum number of requests per minute.
+#' @param on_error What to do when a request fails. One of:
+#'   * `"return"` (the default): stop processing new requests, wait for
+#'      in flight requests to finish, then return.
+#'   * `"continue"`: keep going, performing every request.
+#'   * `"stop"`: stop processing and throw an error.
 #' @returns
-#' For `parallel_chat()`, a list of [Chat] objects, one for each prompt.
-#' For `parallel_chat_text()`, a character vector of text responses.
+#' For `parallel_chat()`, a list with one element for each prompt. Each element
+#' is either a [Chat] object (if successful), a `NULL` (if the request wasn't
+#' performed) or an error object (if it failed).
+#'
+#' For `parallel_chat_text()`, a character vector with one element for each
+#' prompt. Requests that weren't succesful get an `NA`.
+#'
 #' For `parallel_chat_structured()`, a single structured data object with one
 #' element for each prompt. Typically, when `type` is an object, this will
-#' will be a data frame with one row for each prompt, and one column for each
-#' property.
+#' be a tibble with one row for each prompt, and one column for each
+#' property. If the output is a data frame, and some requests error,
+#' an `.error` column will be added with the error objects.
 #' @export
 #' @examples
 #' \dontshow{ellmer:::vcr_example_start("parallel_chat")}
@@ -54,8 +65,15 @@
 #' type_person <- type_object(name = type_string(), age = type_number())
 #' parallel_chat_structured(chat, prompts, type_person)
 #' \dontshow{ellmer:::vcr_example_end()}
-parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
+parallel_chat <- function(
+  chat,
+  prompts,
+  max_active = 10,
+  rpm = 500,
+  on_error = c("return", "continue", "stop")
+) {
   chat <- as_chat(chat)
+  on_error <- arg_match(on_error)
 
   my_parallel_turns <- function(conversations) {
     parallel_turns(
@@ -63,7 +81,8 @@ parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
       conversations = conversations,
       tools = chat$get_tools(),
       max_active = max_active,
-      rpm = rpm
+      rpm = rpm,
+      on_error = on_error
     )
   }
 
@@ -74,40 +93,71 @@ parallel_chat <- function(chat, prompts, max_active = 10, rpm = 500) {
 
   # Now get the assistant's response
   assistant_turns <- my_parallel_turns(conversations)
-  conversations <- append_turns(conversations, assistant_turns)
 
+  is_ok <- !map_lgl(assistant_turns, turn_failed)
   repeat {
-    assistant_turns <- map(
-      assistant_turns,
-      \(turn) match_tools(turn, tools = chat$get_tools())
+    if (!any(is_ok)) {
+      break
+    }
+    conversations[is_ok] <- append_turns(
+      conversations[is_ok],
+      assistant_turns[is_ok]
     )
-    tool_results <- map(
-      assistant_turns,
-      \(turn) coro::collect(invoke_tools(turn))
-    )
-    user_turns <- map(tool_results, tool_results_as_turn)
-    needs_iter <- !map_lgl(user_turns, is.null)
+
+    tool_turns <- map(assistant_turns[is_ok], function(turn) {
+      turn <- match_tools(turn, tools = chat$get_tools())
+      tool_results <- coro::collect(invoke_tools(turn))
+      tool_results_as_turn(tool_results)
+    })
+    needs_iter <- !map_lgl(tool_turns, is.null)
     if (!any(needs_iter)) {
       break
     }
 
-    # don't need to index because user_turns null
-    conversations <- append_turns(conversations, user_turns)
+    conversations[is_ok][needs_iter] <- append_turns(
+      conversations[is_ok][needs_iter],
+      tool_turns[needs_iter]
+    )
 
     assistant_turns <- vector("list", length(user_turns))
     assistant_turns[needs_iter] <- my_parallel_turns(conversations[needs_iter])
-    conversations <- append_turns(conversations, assistant_turns)
+    is_ok[needs_iter] <- !map_lgl(assistant_turns[needs_iter], turn_failed)
   }
 
-  map(conversations, \(turns) chat$clone()$set_turns(turns))
+  map(seq_along(conversations), function(i) {
+    if (is_ok[[i]]) {
+      turns <- conversations[[i]]
+      chat$clone()$set_turns(turns)
+    } else {
+      assistant_turns[[i]]
+    }
+  })
 }
 
 #' @rdname parallel_chat
 #' @export
-parallel_chat_text <- function(chat, prompts, max_active = 10, rpm = 500) {
+parallel_chat_text <- function(
+  chat,
+  prompts,
+  max_active = 10,
+  rpm = 500,
+  on_error = c("return", "continue", "stop")
+) {
   chat <- as_chat(chat)
-  chats <- parallel_chat(chat, prompts, max_active = max_active, rpm = rpm)
-  map_chr(chats, \(chat) chat$last_turn()@text)
+  on_error <- arg_match(on_error)
+
+  chats <- parallel_chat(
+    chat,
+    prompts,
+    max_active = max_active,
+    rpm = rpm,
+    on_error = on_error
+  )
+
+  is_ok <- !map_lgl(chats, turn_failed)
+  out <- rep(NA_character_, length(prompts))
+  out[is_ok] <- map_chr(chats[is_ok], \(chat) chat$last_turn()@text)
+  out
 }
 
 #' @param type A type specification for the extracted data. Should be
@@ -131,11 +181,13 @@ parallel_chat_structured <- function(
   include_tokens = FALSE,
   include_cost = FALSE,
   max_active = 10,
-  rpm = 500
+  rpm = 500,
+  on_error = c("return", "continue", "stop")
 ) {
   chat <- as_chat(chat)
   turns <- as_user_turns(prompts)
   check_bool(convert)
+  on_error <- arg_match(on_error)
 
   provider <- chat$get_provider()
   needs_wrapper <- type_needs_wrapper(type, provider)
@@ -151,7 +203,8 @@ parallel_chat_structured <- function(
     tools = chat$get_tools(),
     type = wrap_type_if_needed(type, needs_wrapper),
     max_active = max_active,
-    rpm = rpm
+    rpm = rpm,
+    on_error = on_error
   )
 
   multi_convert(
@@ -175,14 +228,18 @@ multi_convert <- function(
   needs_wrapper <- type_needs_wrapper(type, provider)
 
   rows <- map(turns, \(turn) {
-    safely(
-      extract_data(
-        turn = turn,
-        type = wrap_type_if_needed(type, needs_wrapper),
-        convert = FALSE,
-        needs_wrapper = needs_wrapper
+    if (turn_failed(turn)) {
+      NULL
+    } else {
+      safely(
+        extract_data(
+          turn = turn,
+          type = wrap_type_if_needed(type, needs_wrapper),
+          convert = FALSE,
+          needs_wrapper = needs_wrapper
+        )
       )
-    )
+    }
   })
 
   is_err <- map_lgl(rows, \(x) !is.null(x$error))
@@ -205,23 +262,36 @@ multi_convert <- function(
     out <- row_data
   }
 
-  if (is.data.frame(out) && (include_tokens || include_cost)) {
-    tokens <- t(vapply(turns, \(turn) turn@tokens, integer(3)))
-
-    if (include_tokens) {
-      out$input_tokens <- tokens[, 1]
-      out$output_tokens <- tokens[, 2]
-      out$cached_input_tokens <- tokens[, 3]
+  if (is.data.frame(out)) {
+    is_error <- map_lgl(turns, turn_failed)
+    if (any(is_error)) {
+      errors <- vector("list", length(turns))
+      errors[is_error] <- turns[is_error]
+      out$.error <- errors
     }
 
-    if (include_cost) {
-      out$cost <- get_token_cost(
-        provider@name,
-        provider@model,
-        input = tokens[, 1],
-        output = tokens[, 2],
-        cached_input = tokens[, 3]
-      )
+    if (include_tokens || include_cost) {
+      tokens <- t(vapply(
+        turns,
+        \(turn) if (turn_failed(turn)) c(0L, 0L, 0L) else turn@tokens,
+        integer(3)
+      ))
+
+      if (include_tokens) {
+        out$input_tokens <- tokens[, 1]
+        out$output_tokens <- tokens[, 2]
+        out$cached_input_tokens <- tokens[, 3]
+      }
+
+      if (include_cost) {
+        out$cost <- get_token_cost(
+          provider@name,
+          provider@model,
+          input = tokens[, 1],
+          output = tokens[, 2],
+          cached_input = tokens[, 3]
+        )
+      }
     }
   }
   out
@@ -237,13 +307,18 @@ append_turns <- function(old_turns, new_turns) {
   })
 }
 
+turn_failed <- function(turn) {
+  is.null(turn) || inherits(turn, "error")
+}
+
 parallel_turns <- function(
   provider,
   conversations,
   tools,
   type = NULL,
   max_active = 10,
-  rpm = 60
+  rpm = 60,
+  on_error = "return"
 ) {
   reqs <- map(conversations, function(turns) {
     chat_request(
@@ -258,14 +333,34 @@ parallel_turns <- function(
     req_throttle(req, capacity = rpm, fill_time_s = 60)
   })
 
-  resps <- req_perform_parallel(reqs, max_active = max_active)
-  if (any(map_lgl(resps, is.null))) {
-    cli::cli_abort("Terminated by user")
+  # Returns list where elements NULL, an error, or a response
+  resps <- req_perform_parallel(
+    reqs,
+    max_active = max_active,
+    on_error = on_error
+  )
+
+  is_absent <- map_lgl(resps, is.null)
+  if (any(is_absent)) {
+    n <- sum(is_absent)
+    cli::cli_warn("{n} request{?s} did not complete.")
+  }
+
+  is_error <- map_lgl(resps, inherits, "error")
+  if (any(is_error)) {
+    n <- sum(is_error)
+    cli::cli_warn("{n} request{?s} errored.")
   }
 
   map(resps, function(resp) {
-    json <- resp_body_json(resp)
-    value_turn(provider, json, has_type = !is.null(type))
+    if (is.null(resp)) {
+      NULL
+    } else if (inherits(resp, "error")) {
+      resp
+    } else {
+      json <- resp_body_json(resp)
+      value_turn(provider, json, has_type = !is.null(type))
+    }
   })
 }
 
