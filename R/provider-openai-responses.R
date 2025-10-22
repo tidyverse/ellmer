@@ -207,8 +207,16 @@ method(value_turn, ProviderOpenAIResponses) <- function(
       # }
       thinking <- paste0(map_chr(output$content, "[[", "text"), collapse = "")
       ContentThinking(thinking = thinking, extra = output)
+    } else if (output$type == "image_generation_call") {
+      mime_type <- switch(
+        output$output_format,
+        png = "image/png",
+        jpeg = "image/jpeg",
+        webp = "image/webp",
+        "unknown"
+      )
+      ContentImageInline(mime_type, output$result)
     } else {
-      browser()
       cli::cli_abort(
         "Unknown content type {.str {content$type}}.",
         .internal = TRUE

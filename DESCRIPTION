@@ -112,6 +112,7 @@ Collate:
     'provider-snowflake.R'
     'provider-vllm.R'
     'tokens.R'
+    'tools-built-in.R'
     'tools-def-auto.R'
     'utils-callbacks.R'
     'utils-cat.R'
