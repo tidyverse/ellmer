@@ -12,11 +12,13 @@
 #' conciseness and accuracy.
 #'
 #' @param df A data frame to describe.
+#' @param max_cols Maximum number of columns to includes. Defaults to 50 to
+#'   avoid accidentally generating very large prompts.
 #' @export
 #' @examples
 #' df_schema(mtcars)
 #' df_schema(iris)
-df_schema <- function(df) {
+df_schema <- function(df, max_cols = 50) {
   if (!is.data.frame(df)) {
     stop_input_type(df, "a data frame")
   }
@@ -27,10 +29,18 @@ df_schema <- function(df) {
     ncol(df)
   )
 
+  if (ncol(df) > max_cols) {
+    cli::cli_warn("Truncating to {max_cols} columns.")
+    df <- df[seq_len(max_cols)]
+    extra <- sprintf("and %i more columns", ncol(df) - max_cols)
+  } else {
+    extra <- NULL
+  }
+
   cols <- map_chr(df, col_schema)
   col_desc <- paste0("* ", names(cols), ": ", cols, recycle0 = TRUE)
 
-  desc <- paste0(c(df_desc, col_desc), collapse = "\n")
+  desc <- paste0(c(df_desc, col_desc, extra), collapse = "\n")
   ellmer_prompt(desc)
 }
 

@@ -4,10 +4,13 @@
 \alias{df_schema}
 \title{Describe the schema of a data frame, suitable for sending to an LLM}
 \usage{
-df_schema(df)
+df_schema(df, max_cols = 50)
 }
 \arguments{
 \item{df}{A data frame to describe.}
+
+\item{max_cols}{Maximum number of columns to includes. Defaults to 50 to
+avoid accidentally generating very large prompts.}
 }
 \description{
 \code{df_schema()} gives a column-by-column description of a data frame. For

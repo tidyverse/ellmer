@@ -33,6 +33,22 @@
       Error in `df_schema()`:
       ! `df` must be a data frame, not the number 1.
 
+# warns for wide data frames
+
+    Code
+      df_schema(df, max_cols = 5)
+    Condition
+      Warning:
+      Truncating to 5 columns.
+    Output
+      [1] | A data frame with 1 rows and 26 columns:
+          | * a: numeric with range [1, 1], and 0 NAs
+          | * b: numeric with range [1, 1], and 0 NAs
+          | * c: numeric with range [1, 1], and 0 NAs
+          | * d: numeric with range [1, 1], and 0 NAs
+          | * e: numeric with range [1, 1], and 0 NAs
+          | and 0 more columns
+
 # col_schema handles logical vectors
 
     Code

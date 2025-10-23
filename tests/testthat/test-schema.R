@@ -19,6 +19,11 @@ test_that("df_schema checks its inputs", {
   })
 })
 
+test_that("warns for wide data frames", {
+  df <- vctrs::new_data_frame(set_names(rep(list(1), 26), letters))
+  expect_snapshot(df_schema(df, max_cols = 5))
+})
+
 # col_schema ----------------------------------------------------------------
 
 test_that("col_schema handles logical vectors", {
