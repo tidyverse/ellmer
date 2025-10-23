@@ -58,7 +58,6 @@ chat_perplexity <- function(
     seed = seed,
     params = params,
     extra_args = api_args,
-    api_key = api_key,
     credentials = credentials,
     extra_headers = api_headers
   )

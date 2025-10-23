@@ -104,7 +104,6 @@ chat_azure_openai <- function(
     model = model,
     params = params,
     api_version = api_version,
-    api_key = api_key,
     credentials = credentials,
     extra_args = api_args,
     extra_headers = api_headers
@@ -138,7 +137,6 @@ ProviderAzureOpenAI <- new_class(
   "ProviderAzureOpenAI",
   parent = ProviderOpenAI,
   properties = list(
-    credentials = class_function,
     api_version = prop_string()
   )
 )
@@ -156,9 +154,6 @@ method(base_request, ProviderAzureOpenAI) <- function(provider) {
   req <- base_request_error(provider, req)
 
   req <- req_url_query(req, `api-version` = provider@api_version)
-  if (nchar(provider@api_key)) {
-    req <- req_headers_redacted(req, `api-key` = provider@api_key)
-  }
   req <- ellmer_req_credentials(req, provider@credentials)
   req
 }
@@ -235,9 +230,9 @@ default_azure_credentials <- function(api_key = NULL, token = NULL) {
     })
   }
 
-  # If we have an API key, rely on that for credentials.
+  # If we have an API key, include it in the credentials.
   if (nchar(api_key)) {
-    return(function() list())
+    return(function() list(`api-key` = api_key))
   }
 
   # Masquerade as the Azure CLI.

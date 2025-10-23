@@ -85,7 +85,6 @@ chat_openai <- function(
     params = params,
     extra_args = api_args,
     extra_headers = api_headers,
-    api_key = api_key,
     credentials = credentials
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -114,8 +113,6 @@ ProviderOpenAI <- new_class(
   "ProviderOpenAI",
   parent = Provider,
   properties = list(
-    prop_redacted("api_key", allow_null = TRUE),
-    credentials = class_function,
     # no longer used by OpenAI itself; but subclasses still need it
     seed = prop_number_whole(allow_null = TRUE)
   )
@@ -575,7 +572,6 @@ models_openai <- function(
     name = "OpenAI",
     model = "",
     base_url = base_url,
-    api_key = api_key,
     credentials = credentials
   )
 

@@ -34,7 +34,8 @@ Provider <- new_class(
     base_url = prop_string(),
     params = class_list,
     extra_args = class_list,
-    extra_headers = class_character
+    extra_headers = class_character,
+    credentials = class_function | NULL
   )
 )
 

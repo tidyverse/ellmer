@@ -49,7 +49,6 @@ chat_mistral <- function(
     params = params,
     seed = seed,
     extra_args = api_args,
-    api_key = api_key,
     credentials = credentials,
     extra_headers = api_headers
   )
@@ -142,7 +141,7 @@ models_mistral <- function(api_key = mistral_key()) {
     name = "Mistral",
     model = "",
     base_url = mistral_base_url,
-    api_key = api_key
+    credentials = function() api_key
   )
 
   req <- base_request(provider)

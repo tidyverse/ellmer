@@ -60,7 +60,6 @@ chat_cloudflare <- function(
     base_url = base_url,
     model = model,
     params = params,
-    api_key = api_key,
     credentials = credentials,
     extra_args = api_args,
     extra_headers = api_headers

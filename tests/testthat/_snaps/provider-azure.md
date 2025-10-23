@@ -26,8 +26,7 @@
     Code
       str(req_get_headers(req, "reveal"))
     Output
-      List of 2
-       $ api-key      : chr "key"
+      List of 1
        $ Authorization: chr "Bearer token"
 
 # service principal authentication requests look correct

@@ -72,7 +72,6 @@ chat_anthropic <- function(
     extra_headers = api_headers,
     base_url = base_url,
     beta_headers = beta_headers,
-    api_key = api_key,
     credentials = credentials
   )
 
@@ -99,8 +98,6 @@ ProviderAnthropic <- new_class(
   "ProviderAnthropic",
   parent = Provider,
   properties = list(
-    prop_redacted("api_key", allow_null = TRUE),
-    credentials = class_function,
     beta_headers = class_character
   )
 )
@@ -543,7 +540,7 @@ models_anthropic <- function(
     name = "Anthropic",
     model = "",
     base_url = base_url,
-    api_key = api_key
+    credentials = function() api_key
   )
 
   req <- base_request(provider)

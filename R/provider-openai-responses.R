@@ -77,11 +77,7 @@ chat_openai_responses_test <- function(
 ProviderOpenAIResponses <- new_class(
   "ProviderOpenAIResponses",
   parent = ProviderOpenAI,
-  properties = list(
-    prop_redacted("api_key"),
-    # no longer used by OpenAI itself; but subclasses still need it
-    seed = prop_number_whole(allow_null = TRUE)
-  )
+  properties = list()
 )
 
 # Chat endpoint ----------------------------------------------------------------

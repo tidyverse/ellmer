@@ -66,8 +66,6 @@ chat_snowflake <- function(
     model = model,
     params = params,
     extra_args = api_args,
-    # We need an empty api_key for S7 validation.
-    api_key = "",
     extra_headers = api_headers
   )
 
@@ -78,8 +76,7 @@ ProviderSnowflakeCortex <- new_class(
   "ProviderSnowflakeCortex",
   parent = ProviderOpenAI,
   properties = list(
-    account = prop_string(),
-    credentials = class_function
+    account = prop_string()
   )
 )
 

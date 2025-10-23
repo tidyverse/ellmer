@@ -92,7 +92,6 @@ chat_ollama <- function(
     seed = seed,
     params = params,
     extra_args = api_args,
-    api_key = api_key,
     credentials = credentials,
     extra_headers = api_headers
   )
@@ -104,8 +103,6 @@ ProviderOllama <- new_class(
   "ProviderOllama",
   parent = ProviderOpenAI,
   properties = list(
-    prop_redacted("api_key", allow_null = TRUE),
-    credentials = class_function,
     model = prop_string(),
     seed = prop_number_whole(allow_null = TRUE)
   )

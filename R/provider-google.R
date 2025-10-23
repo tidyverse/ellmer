@@ -72,7 +72,6 @@ chat_google_gemini <- function(
     params = params %||% params(),
     extra_args = api_args,
     extra_headers = api_headers,
-    api_key = api_key,
     credentials = credentials
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -140,8 +139,6 @@ ProviderGoogleGemini <- new_class(
   "ProviderGoogleGemini",
   parent = Provider,
   properties = list(
-    api_key = prop_string(allow_null = TRUE),
-    credentials = class_function | NULL,
     model = prop_string()
   )
 )

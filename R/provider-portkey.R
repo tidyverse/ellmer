@@ -53,7 +53,6 @@ chat_portkey <- function(
     model = model,
     params = params,
     extra_args = api_args,
-    api_key = api_key,
     credentials = credentials,
     virtual_key = virtual_key,
     extra_headers = api_headers
@@ -123,7 +122,7 @@ models_portkey <- function(
     name = "PortkeyAI",
     model = "",
     base_url = base_url,
-    api_key = api_key,
+    credentials = function() api_key,
     virtual_key = virtual_key
   )
 

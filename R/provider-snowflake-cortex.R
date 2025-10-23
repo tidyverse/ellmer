@@ -129,7 +129,6 @@ ProviderSnowflakeCortexAnalyst <- new_class(
   },
   properties = list(
     account = prop_string(),
-    credentials = class_function,
     extra_args = class_list
   )
 )

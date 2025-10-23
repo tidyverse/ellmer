@@ -81,13 +81,20 @@ github_key <- function() {
 #' @export
 models_github <- function(
   base_url = "https://models.github.ai/",
-  api_key = github_key()
+  api_key = NULL,
+  credentials = NULL
 ) {
+  credentials <- as_credentials(
+    "models_github",
+    function() github_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   provider <- ProviderOpenAI(
     name = "github",
     model = "",
-    base_url = base_url,
-    api_key = api_key
+    credentials = credentials
   )
 
   req <- base_request(provider)
