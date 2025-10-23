@@ -7,26 +7,35 @@ test_that("can get chats/data from completed request", {
     "What's the capital of California?",
     "What's the capital of Texas?"
   )
-  chats <- batch_chat(
-    chat,
-    prompts,
-    path = test_path("batch/state-capitals.json")
+  suppressWarnings(
+    chats <- batch_chat(
+      chat,
+      prompts,
+      path = test_path("batch/state-capitals.json"),
+      ignore_hash = TRUE
+    )
   )
   expect_length(chats, 4)
 
-  out <- batch_chat_text(
-    chat,
-    prompts,
-    path = test_path("batch/state-capitals.json")
+  suppressWarnings(
+    out <- batch_chat_text(
+      chat,
+      prompts,
+      path = test_path("batch/state-capitals.json"),
+      ignore_hash = TRUE
+    )
   )
   expect_equal(out, c("Des Moines.", "Albany.", "Sacramento.", "Austin."))
 
   type_state <- type_object(name = type_string("State name"))
-  data <- batch_chat_structured(
-    chat,
-    prompts,
-    path = test_path("batch/state-name.json"),
-    type = type_state
+  suppressWarnings(
+    data <- batch_chat_structured(
+      chat,
+      prompts,
+      path = test_path("batch/state-name.json"),
+      type = type_state,
+      ignore_hash = TRUE
+    )
   )
   expect_equal(nrow(data), 4)
 })

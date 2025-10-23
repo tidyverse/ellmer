@@ -24,7 +24,7 @@
       . <- batch_chat(chat, prompts, path, ignore_hash = TRUE)
     Condition
       Warning in `batch_chat()`:
-      ! prompts and user_turns don't match stored values.
+      ! provider, prompts, and user_turns don't match stored values.
 
 # informative error for bad inputs
 
