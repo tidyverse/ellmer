@@ -30,7 +30,6 @@ chat_github <- function(
   api_key = github_key(),
   model = NULL,
   params = NULL,
-  seed = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
@@ -49,7 +48,6 @@ chat_github <- function(
     api_key = api_key,
     model = model,
     params = params,
-    seed = seed,
     api_args = api_args,
     echo = echo,
     api_headers = api_headers

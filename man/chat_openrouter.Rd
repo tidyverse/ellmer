@@ -8,7 +8,6 @@ chat_openrouter(
   system_prompt = NULL,
   api_key = openrouter_key(),
   model = NULL,
-  seed = NULL,
   params = NULL,
   api_args = list(),
   echo = c("none", "output", "all"),
@@ -26,9 +25,6 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{model}{The model to use for the chat (defaults to "gpt-4o").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
-
-\item{seed}{Optional integer seed that ChatGPT uses to try and make output
-more reproducible.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 

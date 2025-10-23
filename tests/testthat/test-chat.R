@@ -231,23 +231,6 @@ test_that("can retrieve last_turn for user and assistant", {
   expect_equal(chat$last_turn("assistant")@role, "assistant")
 })
 
-test_that("old extract methods are deprecated", {
-  ChatNull <- R6::R6Class(
-    "ChatNull",
-    inherit = Chat,
-    public = list(
-      chat_structured = function(...) invisible(),
-      chat_structured_async = function(...) invisible()
-    )
-  )
-
-  chat_null <- ChatNull$new(provider = chat_openai()$get_provider())
-  expect_snapshot({
-    chat_null$extract_data()
-    chat_null$extract_data_async()
-  })
-})
-
 test_that("api_headers parameter works correctly", {
   chat <- chat_openai_test(api_headers = c("X-Test" = "value"))
   expect_equal(chat$get_provider()@extra_headers, c("X-Test" = "value"))

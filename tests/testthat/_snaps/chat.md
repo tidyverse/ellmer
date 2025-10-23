@@ -45,18 +45,3 @@
       -- assistant [1000] ------------------------------------------------------------
       Output 1
 
-# old extract methods are deprecated
-
-    Code
-      chat_null$extract_data()
-    Condition
-      Warning:
-      `Chat$extract_data()` was deprecated in ellmer 0.2.0.
-      i Please use `Chat$chat_structured()` instead.
-    Code
-      chat_null$extract_data_async()
-    Condition
-      Warning:
-      `Chat$extract_data_async()` was deprecated in ellmer 0.2.0.
-      i Please use `Chat$chat_structured_async()` instead.
-

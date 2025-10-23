@@ -31,7 +31,6 @@ chat_groq <- function(
   api_key = groq_key(),
   model = NULL,
   params = NULL,
-  seed = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
@@ -47,7 +46,6 @@ chat_groq <- function(
     base_url = base_url,
     model = model,
     params = params,
-    seed = seed,
     extra_args = api_args,
     api_key = api_key,
     extra_headers = api_headers

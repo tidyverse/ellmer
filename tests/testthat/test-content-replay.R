@@ -28,22 +28,9 @@ test_that("can round trip simple content types", {
   test_record_replay(ContentImageInline("image/png", "abcd123"))
   test_record_replay(ContentImageRemote("https://example.com/image.jpg"))
   test_record_replay(ContentJson(list(a = 1:2, b = "apple")))
-  test_record_replay(ContentSql("SELECT * FROM mtcars"))
   test_record_replay(ContentThinking("A **thought**."))
   test_record_replay(ContentUploaded("https://example.com/image.jpg"))
   test_record_replay(ContentPDF("TYPE", "DATA", "FILENAME"))
-})
-
-test_that("can round trip of ContentSuggestions", {
-  test_record_replay(
-    ContentSuggestions(
-      c(
-        "What is the total quantity sold for each product last quarter?",
-        "What is the average discount percentage for orders from the United States?",
-        "What is the average price of products in the 'electronics' category?"
-      )
-    )
-  )
 })
 
 test_that("can round trip of ContentToolRequest/ContentToolResult", {

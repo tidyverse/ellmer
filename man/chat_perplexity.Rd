@@ -9,7 +9,6 @@ chat_perplexity(
   base_url = "https://api.perplexity.ai/",
   api_key = perplexity_key(),
   model = NULL,
-  seed = NULL,
   params = NULL,
   api_args = list(),
   echo = NULL,
@@ -29,9 +28,6 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{model}{The model to use for the chat (defaults to "llama-3.1-sonar-small-128k-online").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
-
-\item{seed}{Optional integer seed that ChatGPT uses to try and make output
-more reproducible.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 

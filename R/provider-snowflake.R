@@ -25,11 +25,13 @@ NULL
 #' ## Known limitations
 #' Note that Snowflake-hosted models do not support images.
 #'
-#' See [chat_cortex_analyst()] to chat with the Snowflake Cortex Analyst rather
-#' than a general-purpose model.
-#'
 #' @inheritParams chat_openai
-#' @inheritParams chat_cortex_analyst
+#' @param account A Snowflake [account identifier](https://docs.snowflake.com/en/user-guide/admin-account-identifier),
+#'   e.g. `"testorg-test_account"`. Defaults to the value of the
+#'   `SNOWFLAKE_ACCOUNT` environment variable.
+#' @param credentials A list of authentication headers to pass into
+#'   [`httr2::req_headers()`], a function that returns them when called, or
+#'   `NULL`, the default, to use ambient credentials.
 #' @param model `r param_model("claude-3-7-sonnet")`
 #' @inherit chat_openai return
 #' @examplesIf has_credentials("snowflake")
@@ -464,4 +466,38 @@ snowflake_keypair_token <- function(
 
 snowflake_keypair_cache <- function(account, key) {
   credentials_cache(key = hash(c("sf", account, openssl::fingerprint(key))))
+}
+
+# Credential handling ----------------------------------------------------------
+
+snowflake_credentials_exist <- function(...) {
+  tryCatch(
+    is_list(default_snowflake_credentials(...)),
+    error = function(e) FALSE
+  )
+}
+
+# Reads Posit Workbench-managed Snowflake credentials from a
+# $SNOWFLAKE_HOME/connections.toml file, as used by the Snowflake Connector for
+# Python implementation. The file will look as follows:
+#
+# [workbench]
+# account = "account-id"
+# token = "token"
+# authenticator = "oauth"
+workbench_snowflake_token <- function(account, sf_home) {
+  cfg <- readLines(file.path(sf_home, "connections.toml"))
+  # We don't attempt a full parse of the TOML syntax, instead relying on the
+  # fact that this file will always contain only one section.
+  if (!any(grepl(account, cfg, fixed = TRUE))) {
+    # The configuration doesn't actually apply to this account.
+    return(NULL)
+  }
+  line <- grepl("token = ", cfg, fixed = TRUE)
+  token <- gsub("token = ", "", cfg[line])
+  if (nchar(token) == 0) {
+    return(NULL)
+  }
+  # Drop enclosing quotes.
+  gsub("\"", "", token)
 }

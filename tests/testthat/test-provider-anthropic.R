@@ -81,11 +81,6 @@ test_that("continues to work after whitespace only outputs (#376)", {
   )
 })
 
-test_that("max_tokens is deprecated", {
-  expect_snapshot(chat <- chat_anthropic_test(max_tokens = 10))
-  expect_equal(chat$get_provider()@params$max_tokens, 10)
-})
-
 test_that("can match prices for some common models", {
   provider <- chat_anthropic_test()$get_provider()
 

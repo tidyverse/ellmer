@@ -21,15 +21,7 @@ test_that("turn contents can be converted to text, markdown and HTML", {
       ContentText("User input."),
       ContentImageInline("image/png", "abcd123"),
       ContentImageRemote("https://example.com/image.jpg", detail = ""),
-      ContentJson(list(a = 1:2, b = "apple")),
-      ContentSql("SELECT * FROM mtcars"),
-      ContentSuggestions(
-        c(
-          "What is the total quantity sold for each product last quarter?",
-          "What is the average discount percentage for orders from the United States?",
-          "What is the average price of products in the 'electronics' category?"
-        )
-      )
+      ContentJson(list(a = 1:2, b = "apple"))
     )
   )
 

@@ -9,7 +9,6 @@ chat_vllm(
   base_url,
   system_prompt = NULL,
   model,
-  seed = NULL,
   params = NULL,
   api_args = list(),
   api_key = vllm_key(),
@@ -26,9 +25,6 @@ models_vllm(base_url, api_key = vllm_key())
 
 \item{model}{The model to use for the chat.
 Use \code{models_vllm()} to see all options.}
-
-\item{seed}{Optional integer seed that ChatGPT uses to try and make output
-more reproducible.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 

@@ -41,7 +41,6 @@ chat_ollama <- function(
   system_prompt = NULL,
   base_url = Sys.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
   model,
-  seed = NULL,
   params = NULL,
   api_args = list(),
   echo = NULL,
@@ -71,14 +70,11 @@ chat_ollama <- function(
 
   echo <- check_echo(echo)
 
-  params <- params %||% params()
-
   provider <- ProviderOllama(
     name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
     model = model,
-    seed = seed,
-    params = params,
+    params = params %||% params(),
     extra_args = api_args,
     # ollama doesn't require an API key for local usage, but one might be needed
     # if ollama is served behind a proxy (see #501)
@@ -94,8 +90,7 @@ ProviderOllama <- new_class(
   parent = ProviderOpenAI,
   properties = list(
     prop_redacted("api_key"),
-    model = prop_string(),
-    seed = prop_number_whole(allow_null = TRUE)
+    model = prop_string()
   )
 )
 
