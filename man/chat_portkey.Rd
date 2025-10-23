@@ -95,6 +95,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openai_responses}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()}
 }

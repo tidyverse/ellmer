@@ -261,11 +261,10 @@ method(value_turn, ProviderOpenAI) <- function(
 
   if (has_type) {
     if (is_string(message$content)) {
-      json <- jsonlite::parse_json(message$content[[1]])
+      content <- list(ContentJson(string = message$content[[1]]))
     } else {
-      json <- message$content
+      content <- list(ContentJson(data = message$content))
     }
-    content <- list(ContentJson(json))
   } else {
     content <- lapply(message$content, as_content)
   }
@@ -289,7 +288,7 @@ method(value_turn, ProviderOpenAI) <- function(
 
 # ellmer -> OpenAI --------------------------------------------------------------
 
-method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x, ...) {
   if (x@role == "system") {
     list(
       list(role = "system", content = x@contents[[1]]@text)
@@ -297,7 +296,7 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
   } else if (x@role == "user") {
     # Each tool result needs to go in its own message with role "tool"
     is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
-    content <- as_json(provider, x@contents[!is_tool])
+    content <- as_json(provider, x@contents[!is_tool], ...)
     if (length(content) > 0) {
       user <- list(list(role = "user", content = content))
     } else {
@@ -316,8 +315,8 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
   } else if (x@role == "assistant") {
     # Tool requests come out of content and go into own argument
     is_tool <- map_lgl(x@contents, is_tool_request)
-    content <- as_json(provider, x@contents[!is_tool])
-    tool_calls <- as_json(provider, x@contents[is_tool])
+    content <- as_json(provider, x@contents[!is_tool], ...)
+    tool_calls <- as_json(provider, x@contents[is_tool], ...)
 
     list(
       compact(list(
@@ -331,20 +330,26 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x) {
   }
 }
 
-method(as_json, list(ProviderOpenAI, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderOpenAI, ContentText)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(type = "text", text = x@text)
 }
 
 method(as_json, list(ProviderOpenAI, ContentImageRemote)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(type = "image_url", image_url = list(url = x@url))
 }
 
 method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "image_url",
@@ -356,7 +361,8 @@ method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(
 
 method(as_json, list(ProviderOpenAI, ContentPDF)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "file",
@@ -369,7 +375,8 @@ method(as_json, list(ProviderOpenAI, ContentPDF)) <- function(
 
 method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   json_args <- jsonlite::toJSON(x@arguments)
   list(
@@ -379,27 +386,31 @@ method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(
   )
 }
 
-method(as_json, list(ProviderOpenAI, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderOpenAI, ToolDef)) <- function(provider, x, ...) {
   list(
     type = "function",
     "function" = compact(list(
       name = x@name,
       description = x@description,
       strict = TRUE,
-      parameters = as_json(provider, x@arguments)
+      parameters = as_json(provider, x@arguments, ...)
     ))
   )
 }
 
 
-method(as_json, list(ProviderOpenAI, TypeObject)) <- function(provider, x) {
+method(as_json, list(ProviderOpenAI, TypeObject)) <- function(
+  provider,
+  x,
+  ...
+) {
   if (x@additional_properties) {
     cli::cli_abort("{.arg .additional_properties} not supported for OpenAI.")
   }
 
   names <- names2(x@properties)
   properties <- lapply(x@properties, function(x) {
-    out <- as_json(provider, x)
+    out <- as_json(provider, x, ...)
     if (!x@required) {
       out$type <- c(out$type, "null")
     }

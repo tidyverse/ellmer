@@ -2,20 +2,21 @@
   "version": 1,
   "stage": "done",
   "batch": {
-    "id": "batch_6826582985488190a4489a615c37539f",
+    "id": "batch_68f802e7e2108190ae0b2eb233481ad3",
     "object": "batch",
     "endpoint": "/v1/chat/completions",
+    "model": "gpt-4.1-nano-2025-04-14",
     "errors": {},
-    "input_file_id": "file-2ohRDLpVLSGcpcpbmMCf79",
+    "input_file_id": "file-TEGbui1Bw1ofZ3xYvFfVqR",
     "completion_window": "24h",
     "status": "completed",
-    "output_file_id": "file-4kMvA4FaKqXvw59xYMfUJW",
+    "output_file_id": "file-GGXRgbHBYfoBwQcBbVfrcE",
     "error_file_id": {},
-    "created_at": 1747343401,
-    "in_progress_at": 1747343402,
-    "expires_at": 1747429801,
-    "finalizing_at": 1747343603,
-    "completed_at": 1747343604,
+    "created_at": 1761084135,
+    "in_progress_at": 1761084136,
+    "expires_at": 1761170535,
+    "finalizing_at": 1761084154,
+    "completed_at": 1761084156,
     "failed_at": {},
     "expired_at": {},
     "cancelling_at": {},
@@ -25,23 +26,34 @@
       "completed": 4,
       "failed": 0
     },
+    "usage": {
+      "input_tokens": 213,
+      "output_tokens": 23,
+      "total_tokens": 236,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
     "metadata": {}
   },
   "results": [
     {
       "status_code": 200,
-      "request_id": "e308e441d289045e722626dd080ef6b0",
+      "request_id": "b5136d6001fbb37a42fb99848f545d95",
       "body": {
-        "id": "chatcmpl-BXaAzMTurodvGwYv20MMNPkn9Ngaz",
+        "id": "chatcmpl-CTEitmAMxIfqie3UvZTGmRwF9lu4J",
         "object": "chat.completion",
-        "created": 1747343585,
+        "created": 1761084143,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
             "index": 0,
             "message": {
               "role": "assistant",
-              "content": "{\"wrapper\":{\"name\":\"Des Moines\"}}",
+              "content": "{\"name\":\"Des Moines\"}",
               "refusal": {},
               "annotations": []
             },
@@ -50,9 +62,9 @@
           }
         ],
         "usage": {
-          "prompt_tokens": 64,
-          "completion_tokens": 8,
-          "total_tokens": 72,
+          "prompt_tokens": 53,
+          "completion_tokens": 6,
+          "total_tokens": 59,
           "prompt_tokens_details": {
             "cached_tokens": 0,
             "audio_tokens": 0
@@ -65,23 +77,23 @@
           }
         },
         "service_tier": "default",
-        "system_fingerprint": "fp_eede8f0d45"
+        "system_fingerprint": "fp_950f36939b"
       }
     },
     {
       "status_code": 200,
-      "request_id": "4ec4485816428a52a968d6f645a4d9b8",
+      "request_id": "bbc0f4b0f89713362ec087830839968b",
       "body": {
-        "id": "chatcmpl-BXaAz0hjcGCfGBDTKvDnQNEnTfJiw",
+        "id": "chatcmpl-CTEiyjHGDWGi9ykXF2HC41u5NBeYq",
         "object": "chat.completion",
-        "created": 1747343585,
+        "created": 1761084148,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
             "index": 0,
             "message": {
               "role": "assistant",
-              "content": "{\"wrapper\":{\"name\":\"Albany\"}}",
+              "content": "{\"name\":\"Albany\"}",
               "refusal": {},
               "annotations": []
             },
@@ -90,9 +102,9 @@
           }
         ],
         "usage": {
-          "prompt_tokens": 65,
-          "completion_tokens": 8,
-          "total_tokens": 73,
+          "prompt_tokens": 54,
+          "completion_tokens": 6,
+          "total_tokens": 60,
           "prompt_tokens_details": {
             "cached_tokens": 0,
             "audio_tokens": 0
@@ -105,23 +117,23 @@
           }
         },
         "service_tier": "default",
-        "system_fingerprint": "fp_eede8f0d45"
+        "system_fingerprint": "fp_38343a2f8f"
       }
     },
     {
       "status_code": 200,
-      "request_id": "cb7815c6867bb534580831eaedacc249",
+      "request_id": "865b5fb42e232299e9e249c59c960e5a",
       "body": {
-        "id": "chatcmpl-BXaAz7e7k7zRVVcrxrHp1YUpI6eXw",
+        "id": "chatcmpl-CTEitJbkgtZZ679QAmrdnLcNxVVBq",
         "object": "chat.completion",
-        "created": 1747343585,
+        "created": 1761084143,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
             "index": 0,
             "message": {
               "role": "assistant",
-              "content": "{\"wrapper\":{\"name\":\"Sacramento\"}}",
+              "content": "{\"name\":\"Sacramento\"}",
               "refusal": {},
               "annotations": []
             },
@@ -130,9 +142,9 @@
           }
         ],
         "usage": {
-          "prompt_tokens": 64,
-          "completion_tokens": 8,
-          "total_tokens": 72,
+          "prompt_tokens": 53,
+          "completion_tokens": 6,
+          "total_tokens": 59,
           "prompt_tokens_details": {
             "cached_tokens": 0,
             "audio_tokens": 0
@@ -145,23 +157,23 @@
           }
         },
         "service_tier": "default",
-        "system_fingerprint": "fp_eede8f0d45"
+        "system_fingerprint": "fp_f12167b370"
       }
     },
     {
       "status_code": 200,
-      "request_id": "2844ea0eaf101fd5a9c684d070036749",
+      "request_id": "826b54ed5511d488df2bcd4d7edc46f0",
       "body": {
-        "id": "chatcmpl-BXa839Kt3smWySomfLXaaWbVnLAWm",
+        "id": "chatcmpl-CTEj1muO76Fyz3ncj09eA2Sw7Q0Ce",
         "object": "chat.completion",
-        "created": 1747343403,
+        "created": 1761084151,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
             "index": 0,
             "message": {
               "role": "assistant",
-              "content": "{\"wrapper\":{\"name\":\"Austin\"}}",
+              "content": "{\"name\":\"Austin\"}",
               "refusal": {},
               "annotations": []
             },
@@ -170,9 +182,9 @@
           }
         ],
         "usage": {
-          "prompt_tokens": 64,
-          "completion_tokens": 7,
-          "total_tokens": 71,
+          "prompt_tokens": 53,
+          "completion_tokens": 5,
+          "total_tokens": 58,
           "prompt_tokens_details": {
             "cached_tokens": 0,
             "audio_tokens": 0
@@ -185,13 +197,13 @@
           }
         },
         "service_tier": "default",
-        "system_fingerprint": "fp_eede8f0d45"
+        "system_fingerprint": "fp_f12167b370"
       }
     }
   ],
-  "started_at": 1747343400,
+  "started_at": 1761084135,
   "hash": {
-    "provider": "de1de607a44b8964f051074a91a3787e",
+    "provider": "959dc7923e4dc3760a7690794dc41c2a",
     "prompts": "b8eafe281e3cc5113058d9722be3e295",
     "user_turns": "8c1302088b9bc30258d1191db0d35705"
   }

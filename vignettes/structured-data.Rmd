@@ -175,7 +175,7 @@ In other cases, you may need to adjust your prompt as well. Either way, we stron
 
 ### Data frames
 
-In most cases, you'll get a data frame because you are using `parallel_chat_structured()`, where each output row represents one input prompt. In other cases, you might have a more complex document where you want a data frame from a single prompt. For example, imagine that you want to extract some data about people from a table:
+In most cases, you'll get a data frame (well, tibble) because you are using `parallel_chat_structured()`, where each output row represents one input prompt. In other cases, you might have a more complex document where you want a data frame from a single prompt. For example, imagine that you want to extract some data about people from a table:
 
 ```{r}
 prompt <- r"(
@@ -222,12 +222,12 @@ chat <- chat_openai()
 chat$chat_structured(prompt, type = type_people)
 ```
 
-Now ellmer knows what you want and gives you a data frame.
+Now ellmer knows what you want and gives you a tibble.
 
 If you're familiar with the terms row-oriented and column-oriented data frames, this is the same idea. Since most languages don't possess
 vectorisation like R, row-oriented data frames are more common.
 
-Note that you'll generally wanted to avoid nesting objects in inside of objects as this will generate a data frame where each column is itself a data frame. This is a valid data structure in R, but you'll find it easier to understand if you convert it to a tibble, since the tibble print method makes it more clear what's going on. You can also use `tidyr::unpack()` to unpack these df-columns back into a regular flat data frame.
+Note that you'll generally wanted to avoid nesting objects in inside of objects as this will generate a data frame where each column is itself a data frame. You can use `tidyr::unpack()` to unpack these df-columns back into a regular flat data frame, but your life will be simpler if you re-consider the type.
 
 ## Examples
 

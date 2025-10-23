@@ -246,7 +246,7 @@ check_arguments <- function(arguments, formals, call = caller_env()) {
 }
 
 check_tool <- function(x, arg = caller_arg(x), call = caller_env()) {
-  if (!S7_inherits(x, ToolDef)) {
+  if (!S7_inherits(x, ToolDef) && !S7_inherits(x, ToolBuiltIn)) {
     stop_input_type(x, "a <ToolDef>", arg = arg, call = call)
   }
 }
