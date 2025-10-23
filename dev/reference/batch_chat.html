@@ -118,9 +118,9 @@ but if you have ideas, please let me know!</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">batch_chat</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, <span class="va">path</span>, wait <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">batch_chat</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, <span class="va">path</span>, wait <span class="op">=</span> <span class="cn">TRUE</span>, ignore_hash <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">batch_chat_text</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, <span class="va">path</span>, wait <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">batch_chat_text</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, <span class="va">path</span>, wait <span class="op">=</span> <span class="cn">TRUE</span>, ignore_hash <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">batch_chat_structured</span><span class="op">(</span></span>
 <span>  <span class="va">chat</span>,</span>
@@ -128,6 +128,7 @@ but if you have ideas, please let me know!</p>
 <span>  <span class="va">path</span>,</span>
 <span>  <span class="va">type</span>,</span>
 <span>  wait <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ignore_hash <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  convert <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  include_tokens <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  include_cost <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -162,6 +163,12 @@ different, you'll get an error.</p></dd>
 it will return <code>NULL</code> if the batch is not complete, and you can retrieve
 the results later by re-running <code>batch_chat()</code> when
 <code>batch_chat_completed()</code> is <code>TRUE</code>.</p></dd>
+
+
+<dt id="arg-ignore-hash">ignore_hash<a class="anchor" aria-label="anchor" href="#arg-ignore-hash"></a></dt>
+<dd><p>If <code>TRUE</code>, will only warn rather than error when the hash
+doesn't match. You can use this if ellmer has changed the hash structure
+and you're confident that you're reusing the same inputs.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
