@@ -4,44 +4,46 @@ http_interactions:
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What''s
-        1 + 1?"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false}'
+        1 + 1?"}]}],"model":"gpt-5-nano","seed":1014,"stream":false}'
   response:
     status: 200
     headers:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f16598d8636ab6-DFW
+      cf-ray: 9933ef5c68bf3ab9-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:34:19 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '277'
+      date: Thu, 23 Oct 2025 20:20:27 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1671'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=3mON_KPp_Ij17EAoXhoql1EVbnfDxNUzC5weYqZZm4U-1752500059-1.0.1.1-DFYXATpuuRq0QDF2Zju96.2mVPN4AlNogelfM.INQOmD8yXkOY8Ba1gaabeCRwTKIQcslaqJJl_fxWuknMWn4HL18g7_kDSIsxYfR9dlCto;
-        path=/; expires=Mon, 14-Jul-25 14:04:19 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=qk1an_o4OKRPnsU3qtlHiIlTNE1QEEaXUInrGgNTmUk-1761250827-1.0.1.1-o7.3.XHtUTnPMqlMF5DOwa3KsO5t_MWlCn3byLNNO0l5AeTpR6BlRgou6khIjD4ZQAeZlMI.WcAkpNsALPkqFZ3W9mI55.bWyTO7EQow6OI;
+        path=/; expires=Thu, 23-Oct-25 20:50:27 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=MH8qV7gcEoOcHeOXyOLM7xYADK1nFiyr1sPAOGTbvBQ-1752500059752-0.0.1.1-604800000;
+      - _cfuvid=7nixCS34LSgm1mJlZAeBimuQBSLsaMYYscI3FBF5Ii4-1761250827432-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '297'
+      x-envoy-upstream-service-time: '1721'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-limit-tokens: '180000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999990'
+      x-ratelimit-remaining-tokens: '179999991'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_b092cd956c5fca2485ccaaba42636263
+      x-request-id: req_2fe378664d754983a74eaffbd500bcd5
     body:
       string: |
         {
-          "id": "chatcmpl-BtDbvEkGQlQ9ZzPLUvi94gmR77HH3",
+          "id": "chatcmpl-CTw5J4WpxSs3V4QMf15xL76Vuu79X",
           "object": "chat.completion",
-          "created": 1752500059,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "created": 1761250825,
+          "model": "gpt-5-nano-2025-08-07",
           "choices": [
             {
               "index": 0,
@@ -51,72 +53,73 @@ http_interactions:
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 21,
-            "completion_tokens": 1,
-            "total_tokens": 22,
+            "prompt_tokens": 20,
+            "completion_tokens": 74,
+            "total_tokens": 94,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 64,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-07-14 13:34:19
+  recorded_at: 2025-10-23 20:20:27
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What''s
-        2 + 2?"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false}'
+        2 + 2?"}]}],"model":"gpt-5-nano","seed":1014,"stream":false}'
   response:
     status: 200
     headers:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95f1659dbe076ab6-DFW
+      cf-ray: 9933ef684ea13ab9-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 14 Jul 2025 13:34:20 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '127'
+      date: Thu, 23 Oct 2025 20:20:29 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1427'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=RRGLpMw7t2AwONAYhNrGvN1veGKUYp083o.2DcWpNT4-1752500060-1.0.1.1-kNTN0REAgyLhll1TayDH2Bx9mNAc2ECaCl6.m7X.vJQIn5Gv.qdgAeagetKVmai5Ujf6L3gvqP0xocwOtaN6sLiZxycadgiZxqtKBFEVpmE;
-        path=/; expires=Mon, 14-Jul-25 14:04:20 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=ruq0bFlBAkwB5oNmLWE1L_NV9CvhPNf0evWiH4kiGOU-1761250829-1.0.1.1-1O_bExXfpAy_WAFooMlywWkb9bmEE3TFx196CN1aGekKUzpA0kku71wOcN2dn8geSA56CYMgIb0YFxHEeAQHRfSHFH_GsqRIetendOsYLZA;
+        path=/; expires=Thu, 23-Oct-25 20:50:29 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=JYxS6SN9pAPbLPO3DoK8LGehVd9XW34jNbMlSPGgFj8-1752500060196-0.0.1.1-604800000;
+      - _cfuvid=2UBtLbaU.9FhguSQEpRcKrmebWKiiCLwr8pxy4J1JG0-1761250829074-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '137'
+      x-envoy-upstream-service-time: '1458'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-limit-tokens: '180000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999990'
+      x-ratelimit-remaining-tokens: '179999991'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_824516848f8fa0109ba13d2bede0db69
+      x-request-id: req_7cf5f7d6f97e40aea00f836daf640d80
     body:
       string: |
         {
-          "id": "chatcmpl-BtDbw6qB3HUzwWKjNN03hhMH3r0L3",
+          "id": "chatcmpl-CTw5Ls5lT2jWkxZTm2awyKiX5CfD6",
           "object": "chat.completion",
-          "created": 1752500060,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "created": 1761250827,
+          "model": "gpt-5-nano-2025-08-07",
           "choices": [
             {
               "index": 0,
@@ -126,20 +129,19 @@ http_interactions:
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 21,
-            "completion_tokens": 1,
-            "total_tokens": 22,
+            "prompt_tokens": 20,
+            "completion_tokens": 74,
+            "total_tokens": 94,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 64,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
@@ -148,5 +150,5 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": null
         }
-  recorded_at: 2025-07-14 13:34:20
-recorded_with: VCR-vcr/1.7.1.93
+  recorded_at: 2025-10-23 20:20:28
+recorded_with: VCR-vcr/2.0.0
