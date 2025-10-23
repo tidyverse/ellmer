@@ -36,7 +36,7 @@ models_google_gemini(
   credentials = NULL
 )
 
-models_google_vertex(location, project_id)
+models_google_vertex(location, project_id, credentials = NULL)
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
@@ -45,9 +45,8 @@ models_google_vertex(location, project_id)
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
-\item{credentials}{A function that returns a named character vector of
-headers to use for authentication. You generally should not need this
-argument; see above for details.}
+\item{credentials}{A function that returns a list of authentication headers
+or \code{NULL}, the default, to use ambient credentials. See above for details.}
 
 \item{model}{The model to use for the chat (defaults to "gemini-2.5-flash").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.

@@ -10,7 +10,8 @@ Provider(
   base_url = stop("Required"),
   params = list(),
   extra_args = list(),
-  extra_headers = character(0)
+  extra_headers = character(0),
+  credentials = function() NULL
 )
 }
 \arguments{

@@ -18,7 +18,11 @@ chat_github(
   api_headers = character()
 )
 
-models_github(base_url = "https://models.github.ai/", api_key = github_key())
+models_github(
+  base_url = "https://models.github.ai/",
+  api_key = NULL,
+  credentials = NULL
+)
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}

@@ -8,6 +8,7 @@ google_upload(
   path,
   base_url = "https://generativelanguage.googleapis.com/",
   api_key = NULL,
+  credentials = NULL,
   mime_type = NULL
 )
 }
@@ -17,6 +18,9 @@ google_upload(
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
+
+\item{credentials}{A function that returns a list of authentication headers
+or \code{NULL}, the default, to use ambient credentials. See above for details.}
 
 \item{mime_type}{Optionally, specify the mime type of the file.
 If not specified, will be guesses from the file extension.}
