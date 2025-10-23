@@ -46,6 +46,7 @@ Suggests:
     magick,
     openssl,
     paws.common,
+    png,
     rmarkdown,
     shiny,
     shinychat (>= 0.2.0),
@@ -111,6 +112,7 @@ Collate:
     'provider-snowflake.R'
     'provider-vllm.R'
     'tokens.R'
+    'tools-built-in.R'
     'tools-def-auto.R'
     'utils-callbacks.R'
     'utils-cat.R'

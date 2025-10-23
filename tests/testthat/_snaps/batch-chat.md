@@ -6,6 +6,7 @@
       Error in `batch_chat()`:
       ! provider, prompts, and user_turns don't match stored values.
       i Do you need to pick a different `path`?
+      i Or set `ignore_hash = TRUE` to ignore this check?
 
 ---
 
@@ -15,6 +16,15 @@
       Error in `batch_chat_structured()`:
       ! provider, prompts, and user_turns don't match stored values.
       i Do you need to pick a different `path`?
+      i Or set `ignore_hash = TRUE` to ignore this check?
+
+# can override hash check
+
+    Code
+      . <- batch_chat(chat, prompts, path, ignore_hash = TRUE)
+    Condition
+      Warning in `batch_chat()`:
+      ! prompts and user_turns don't match stored values.
 
 # informative error for bad inputs
 

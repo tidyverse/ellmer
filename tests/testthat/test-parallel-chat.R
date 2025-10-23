@@ -185,3 +185,23 @@ test_that("errors in conversion become warnings", {
   expect_snapshot(out <- multi_convert(provider, turns, type = type))
   expect_equal(out, tibble::tibble(x = c(1, NA, NA)))
 })
+
+test_that("assistant turns track duration in parallel", {
+  vcr::local_cassette("parallel-duration")
+
+  chat <- chat_openai_test()
+  chats <- parallel_chat(chat, list("What's 1 + 1?", "What's 2 + 2?"))
+
+  user_duration_1 <- chats[[1]]$get_turns()[[1]]@duration
+  assistant_duration_1 <- chats[[1]]$last_turn()@duration
+
+  user_duration_2 <- chats[[2]]$get_turns()[[1]]@duration
+  assistant_duration_2 <- chats[[2]]$last_turn()@duration
+
+  expect_true(is.na(user_duration_1))
+  expect_true(is.na(user_duration_2))
+
+  # These assistant durations are usually not NA, but are during replay (#479)
+  expect_true(is.na(assistant_duration_1) || assistant_duration_1 > 0)
+  expect_true(is.na(assistant_duration_2) || assistant_duration_2 > 0)
+})

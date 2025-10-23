@@ -37,6 +37,9 @@
 #'   it will return `NULL` if the batch is not complete, and you can retrieve
 #'   the results later by re-running `batch_chat()` when
 #'   `batch_chat_completed()` is `TRUE`.
+#' @param ignore_hash If `TRUE`, will only warn rather than error when the hash
+#'   doesn't match. You can use this if ellmer has changed the hash structure
+#'   and you're confident that you're reusing the same inputs.
 #' @returns
 #' For `batch_chat()`, a list of [Chat] objects, one for each prompt.
 #' For `batch_chat_test()`, a character vector of text responses.
@@ -78,14 +81,15 @@
 #' data
 #' }
 #' @export
-batch_chat <- function(chat, prompts, path, wait = TRUE) {
+batch_chat <- function(chat, prompts, path, wait = TRUE, ignore_hash = FALSE) {
   chat <- as_chat(chat)
 
   job <- BatchJob$new(
     chat = chat,
     prompts = prompts,
     path = path,
-    wait = wait
+    wait = wait,
+    ignore_hash = ignore_hash
   )
   job$step_until_done()
 
@@ -101,9 +105,21 @@ batch_chat <- function(chat, prompts, path, wait = TRUE) {
 
 #' @export
 #' @rdname batch_chat
-batch_chat_text <- function(chat, prompts, path, wait = TRUE) {
+batch_chat_text <- function(
+  chat,
+  prompts,
+  path,
+  wait = TRUE,
+  ignore_hash = FALSE
+) {
   chat <- as_chat(chat)
-  chats <- batch_chat(chat, prompts, path, wait = wait)
+  chats <- batch_chat(
+    chat,
+    prompts,
+    path,
+    wait = wait,
+    ignore_hash = ignore_hash
+  )
   map_chr(chats, \(chat) if (is.null(chat)) NA else chat$last_turn()@text)
 }
 
@@ -116,6 +132,7 @@ batch_chat_structured <- function(
   path,
   type,
   wait = TRUE,
+  ignore_hash = FALSE,
   convert = TRUE,
   include_tokens = FALSE,
   include_cost = FALSE
@@ -129,7 +146,8 @@ batch_chat_structured <- function(
     prompts = prompts,
     type = wrap_type_if_needed(type, needs_wrapper),
     path = path,
-    wait = wait
+    wait = wait,
+    ignore_hash = ignore_hash
   )
   job$step_until_done()
   turns <- job$result_turns()
@@ -169,6 +187,7 @@ BatchJob <- R6::R6Class(
     user_turns = NULL,
     path = NULL,
     should_wait = TRUE,
+    ignore_hash = FALSE,
     type = NULL,
 
     # Internal state
@@ -184,6 +203,7 @@ BatchJob <- R6::R6Class(
       path,
       type = NULL,
       wait = TRUE,
+      ignore_hash = FALSE,
       call = caller_env(2)
     ) {
       self$provider <- chat$get_provider()
@@ -192,12 +212,14 @@ BatchJob <- R6::R6Class(
       user_turns <- as_user_turns(prompts, call = call)
       check_string(path, allow_empty = FALSE, call = call)
       check_bool(wait, call = call)
+      check_bool(ignore_hash, call = call)
 
       self$chat <- chat
       self$user_turns <- user_turns
       self$type <- type
       self$path <- path
       self$should_wait <- wait
+      self$ignore_hash <- ignore_hash
 
       if (file.exists(path)) {
         state <- jsonlite::read_json(path)
@@ -332,25 +354,31 @@ BatchJob <- R6::R6Class(
       }
       differences <- names(new_hash)[!same]
 
-      cli::cli_abort(
-        c(
-          "{differences} {?does/do}n't match stored value{?s}.",
-          i = "Do you need to pick a different {.arg path}?"
-        ),
-        call = call
-      )
+      if (self$ignore_hash) {
+        cli::cli_warn(
+          c("!" = "{differences} {?does/do}n't match stored value{?s}."),
+          call = call
+        )
+      } else {
+        cli::cli_abort(
+          c(
+            "{differences} {?does/do}n't match stored value{?s}.",
+            i = "Do you need to pick a different {.arg path}?",
+            i = "Or set {.code ignore_hash = TRUE} to ignore this check?"
+          ),
+          call = call
+        )
+      }
     }
   )
 )
 
 provider_hash <- function(x) {
-  props <- props(x)
-
-  # Backward compatible hashing after introduction of new properties
-  if (length(props$extra_headers) == 0) {
-    props$extra_headers <- NULL
-  }
-  props
+  list(
+    name = x@name,
+    model = x@model,
+    base_url = x@base_url
+  )
 }
 
 check_has_batch_support <- function(provider, call = caller_env()) {
