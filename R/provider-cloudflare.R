@@ -44,17 +44,12 @@ chat_cloudflare <- function(
   echo <- check_echo(echo)
   params <- params %||% params()
 
-  check_exclusive(api_key, credentials, .require = FALSE)
-  check_function2(credentials, args = character(), allow_null = TRUE)
-  credentials <- credentials %||% function() cloudflare_key()
-  if (!is.null(api_key)) {
-    lifecycle::deprecate_warn(
-      "0.4.0",
-      "chat_cloudflare(api_key)",
-      "chat_cloudflare(credentials)"
-    )
-    credentials <- function() api_key
-  }
+  credentials <- as_credentials(
+    "chat_cloudflare",
+    function() cloudflare_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   # https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility/
   cloudflare_api <- "https://api.cloudflare.com/client/v4/accounts/"

@@ -61,17 +61,12 @@ chat_openai <- function(
   model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
 
-  check_exclusive(api_key, credentials, .require = FALSE)
-  check_function2(credentials, args = character(), allow_null = TRUE)
-  credentials <- credentials %||% function() openai_key()
-  if (!is.null(api_key)) {
-    lifecycle::deprecate_warn(
-      "0.4.0",
-      "chat_openai(api_key)",
-      "chat_openai(credentials)"
-    )
-    credentials <- function() api_key
-  }
+  credentials <- as_credentials(
+    "chat_openai",
+    function() openai_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   params <- params %||% params()
   if (lifecycle::is_present(seed) && !is.null(seed)) {
@@ -569,18 +564,12 @@ models_openai <- function(
   api_key = NULL,
   credentials = NULL
 ) {
-  check_exclusive(api_key, credentials, .require = FALSE)
-  check_function2(credentials, args = character(), allow_null = TRUE)
-  credentials <- credentials %||% function() openai_key()
-
-  if (!is.null(api_key)) {
-    lifecycle::deprecate_warn(
-      "0.4.0",
-      "models_openai(api_key)",
-      "models_openai(credentials)"
-    )
-    credentials <- function() api_key
-  }
+  credentials <- as_credentials(
+    "models_openai",
+    function() openai_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   provider <- ProviderOpenAI(
     name = "OpenAI",

@@ -36,17 +36,12 @@ chat_openrouter <- function(
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
-  check_exclusive(api_key, credentials, .require = FALSE)
-  check_function2(credentials, args = character(), allow_null = TRUE)
-  credentials <- credentials %||% function() openrouter_key()
-  if (!is.null(api_key)) {
-    lifecycle::deprecate_warn(
-      "0.4.0",
-      "chat_openrouter(api_key)",
-      "chat_openrouter(credentials)"
-    )
-    credentials <- function() api_key
-  }
+  credentials <- as_credentials(
+    "chat_openrouter",
+    function() openrouter_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   params <- params %||% params()
 

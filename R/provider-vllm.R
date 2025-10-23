@@ -35,17 +35,12 @@ chat_vllm <- function(
 ) {
   check_string(base_url)
 
-  check_exclusive(api_key, credentials, .require = FALSE)
-  check_function2(credentials, args = character(), allow_null = TRUE)
-  credentials <- credentials %||% function() vllm_key()
-  if (!is.null(api_key)) {
-    lifecycle::deprecate_warn(
-      "0.4.0",
-      "chat_vllm(api_key)",
-      "chat_vllm(credentials)"
-    )
-    credentials <- function() api_key
-  }
+  credentials <- as_credentials(
+    "chat_vllm",
+    function() vllm_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   check_string(credentials())
   if (missing(model)) {
@@ -108,18 +103,12 @@ vllm_key <- function() {
 #' @export
 #' @rdname chat_vllm
 models_vllm <- function(base_url, api_key = NULL, credentials = NULL) {
-  check_exclusive(api_key, credentials, .require = FALSE)
-  check_function2(credentials, args = character(), allow_null = TRUE)
-  credentials <- credentials %||% function() vllm_key()
-
-  if (!is.null(api_key)) {
-    lifecycle::deprecate_warn(
-      "0.4.0",
-      "models_vllm(api_key)",
-      "models_vllm(credentials)"
-    )
-    credentials <- function() api_key
-  }
+  credentials <- as_credentials(
+    "models_vllm",
+    function() vllm_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   req <- request(base_url)
   req <- req_auth_bearer_token(req, credentials())

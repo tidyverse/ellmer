@@ -42,17 +42,12 @@ chat_perplexity <- function(
   model <- set_default(model, "llama-3.1-sonar-small-128k-online")
   echo <- check_echo(echo)
 
-  check_exclusive(api_key, credentials, .require = FALSE)
-  check_function2(credentials, args = character(), allow_null = TRUE)
-  credentials <- credentials %||% function() perplexity_key()
-  if (!is.null(api_key)) {
-    lifecycle::deprecate_warn(
-      "0.4.0",
-      "chat_perplexity(api_key)",
-      "chat_perplexity(credentials)"
-    )
-    credentials <- function() api_key
-  }
+  credentials <- as_credentials(
+    "chat_perplexity",
+    function() perplexity_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   params <- params %||% params()
 

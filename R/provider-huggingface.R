@@ -43,17 +43,12 @@ chat_huggingface <- function(
   echo <- check_echo(echo)
   params <- params %||% params()
 
-  check_exclusive(api_key, credentials, .require = FALSE)
-  check_function2(credentials, args = character(), allow_null = TRUE)
-  credentials <- credentials %||% function() hf_key()
-  if (!is.null(api_key)) {
-    lifecycle::deprecate_warn(
-      "0.4.0",
-      "chat_huggingface(api_key)",
-      "chat_huggingface(credentials)"
-    )
-    credentials <- function() api_key
-  }
+  credentials <- as_credentials(
+    "chat_huggingface",
+    function() hf_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   # https://huggingface.co/docs/inference-providers/en/index?python-clients=requests#http--curl
   base_url <- "https://router.huggingface.co/v1/"

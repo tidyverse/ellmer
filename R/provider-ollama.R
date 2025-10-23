@@ -74,19 +74,14 @@ chat_ollama <- function(
 
   echo <- check_echo(echo)
 
-  check_exclusive(api_key, credentials, .require = FALSE)
-  check_function2(credentials, args = character(), allow_null = TRUE)
   # ollama doesn't require an API key for local usage, but one might be needed
   # if ollama is served behind a proxy (see #501)
-  credentials <- credentials %||% function() Sys.getenv("OLLAMA_API_KEY", "")
-  if (!is.null(api_key)) {
-    lifecycle::deprecate_warn(
-      "0.4.0",
-      "chat_ollama(api_key)",
-      "chat_ollama(credentials)"
-    )
-    credentials <- function() api_key
-  }
+  credentials <- as_credentials(
+    "chat_ollama",
+    function() Sys.getenv("OLLAMA_API_KEY", ""),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   params <- params %||% params()
 
