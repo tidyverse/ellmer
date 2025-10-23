@@ -136,7 +136,7 @@ test_that("can get tokens & cost", {
 
 test_that("handles errors and NULLs in parallel functions", {
   chat <- chat_openai(
-    api_key = "test-key",
+    credentials = \() "test-key",
     base_url = "http://localhost:1234",
     model = "mock"
   )

@@ -114,7 +114,7 @@ method(base_request, ProviderAnthropic) <- function(provider) {
   # <https://docs.anthropic.com/en/api/versioning>
   req <- req_headers(req, `anthropic-version` = "2023-06-01")
   # <https://docs.anthropic.com/en/api/getting-started#authentication>
-  req <- req_headers_redacted(req, `x-api-key` = provider@credentials())
+  req <- ellmer_req_credentials(req, provider@credentials(), "x-api-key")
 
   # <https://docs.anthropic.com/en/api/rate-limits>
   # <https://docs.anthropic.com/en/api/errors#http-errors>

@@ -63,9 +63,10 @@ chat_openai <- function(
 
   credentials <- as_credentials(
     "chat_openai",
-    function() openai_key(),
+    function() paste0("Bearer ", openai_key()),
     credentials = credentials,
-    api_key = api_key
+    api_key = api_key,
+    token = TRUE
   )
 
   params <- params %||% params()
@@ -130,7 +131,7 @@ openai_key <- function() {
 
 method(base_request, ProviderOpenAI) <- function(provider) {
   req <- request(provider@base_url)
-  req <- req_auth_bearer_token(req, provider@credentials())
+  req <- ellmer_req_credentials(req, provider@credentials(), "Authorization")
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- base_request_error(provider, req)
@@ -563,7 +564,7 @@ models_openai <- function(
 ) {
   credentials <- as_credentials(
     "models_openai",
-    function() openai_key(),
+    function() paste0("Bearer ", openai_key()),
     credentials = credentials,
     api_key = api_key
   )

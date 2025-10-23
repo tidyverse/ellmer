@@ -21,14 +21,6 @@
       List of 1
        $ Authorization: chr "Bearer token"
 
----
-
-    Code
-      str(req_get_headers(req, "reveal"))
-    Output
-      List of 1
-       $ Authorization: chr "Bearer token"
-
 # service principal authentication requests look correct
 
     Code

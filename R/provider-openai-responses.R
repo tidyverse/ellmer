@@ -42,7 +42,8 @@ chat_openai_responses <- function(
   model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
 
-  credentials <- credentials %||% \() openai_key()
+  credentials <- credentials %||% \() paste0("Bearer ", openai_key())
+  check_credentials(credentials)
 
   provider <- ProviderOpenAIResponses(
     name = "OpenAI",

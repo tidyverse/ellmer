@@ -99,11 +99,13 @@ portkey_virtual_key <- function() {
 
 method(base_request, ProviderPortkeyAI) <- function(provider) {
   req <- request(provider@base_url)
-  req <- httr2::req_headers(
+
+  req <- ellmer_req_credentials(
     req,
-    `x-portkey-api-key` = provider@credentials(),
-    `x-portkey-virtual-key` = provider@virtual_key
+    provider@credentials(),
+    "x-portkey-api-key"
   )
+  req <- httr2::req_headers(req, `x-portkey-virtual-key` = provider@virtual_key)
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- base_request_error(provider, req)

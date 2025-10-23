@@ -47,9 +47,8 @@ NULL
 #' @param account A Snowflake [account identifier](https://docs.snowflake.com/en/user-guide/admin-account-identifier),
 #'   e.g. `"testorg-test_account"`. Defaults to the value of the
 #'   `SNOWFLAKE_ACCOUNT` environment variable.
-#' @param credentials A list of authentication headers to pass into
-#'   [`httr2::req_headers()`], a function that returns them when called, or
-#'   `NULL`, the default, to use ambient credentials.
+#' @param credentials A function that returns a list of authentication headers
+#'   or `NULL`, the default, to use ambient credentials.
 #' @param model_spec A semantic model specification, or `NULL` when
 #'   using `model_file` instead.
 #' @param model_file Path to a semantic model file stored in a Snowflake Stage,
@@ -77,12 +76,8 @@ chat_cortex_analyst <- function(
   check_exclusive(model_spec, model_file)
   echo <- check_echo(echo)
 
-  if (is_list(credentials)) {
-    static_credentials <- force(credentials)
-    credentials <- function(account) static_credentials
-  }
-  check_function(credentials, allow_null = TRUE)
   credentials <- credentials %||% default_snowflake_credentials(account)
+  check_credentials(credentials)
 
   provider <- ProviderSnowflakeCortexAnalyst(
     name = "Snowflake/CortexAnalyst",
@@ -160,7 +155,7 @@ method(chat_request, ProviderSnowflakeCortexAnalyst) <- function(
 
   req <- request(provider@base_url)
   req <- req_url_path_append(req, "/api/v2/cortex/analyst/message")
-  req <- ellmer_req_credentials(req, provider@credentials)
+  req <- ellmer_req_credentials(req, provider@credentials())
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req, Sys.getenv("SF_PARTNER"))
 

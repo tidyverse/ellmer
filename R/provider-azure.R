@@ -86,17 +86,15 @@ chat_azure_openai <- function(
   check_string(model)
   params <- params %||% params()
   api_version <- set_default(api_version, "2024-10-21")
-  check_string(api_key, allow_null = TRUE)
-  api_key <- api_key %||% Sys.getenv("AZURE_OPENAI_API_KEY")
-  check_string(token, allow_null = TRUE)
-  echo <- check_echo(echo)
 
-  if (is_list(credentials)) {
-    static_credentials <- force(credentials)
-    credentials <- function() static_credentials
-  }
-  check_function(credentials, allow_null = TRUE)
-  credentials <- credentials %||% default_azure_credentials(api_key, token)
+  credentials <- as_credentials(
+    "chat_azure_openai",
+    default_azure_credentials(token),
+    credentials = credentials,
+    api_key = api_key
+  )
+
+  echo <- check_echo(echo)
 
   provider <- ProviderAzureOpenAI(
     name = "Azure/OpenAI",
@@ -111,21 +109,20 @@ chat_azure_openai <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-
 chat_azure_openai_test <- function(
   system_prompt = NULL,
   params = NULL,
   ...,
   echo = "none"
 ) {
-  api_key <- key_get("AZURE_OPENAI_API_KEY")
+  credentials <- \() key_get("AZURE_OPENAI_API_KEY")
   default_params <- params(seed = 1014, temperature = 0)
   params <- modify_list(default_params, params %||% params())
 
   chat_azure_openai(
     ...,
     system_prompt = system_prompt,
-    api_key = api_key,
+    credentials = credentials,
     endpoint = "https://ai-hwickhamai260967855527.openai.azure.com",
     model = "gpt-4o-mini",
     params = params,
@@ -154,7 +151,7 @@ method(base_request, ProviderAzureOpenAI) <- function(provider) {
   req <- base_request_error(provider, req)
 
   req <- req_url_query(req, `api-version` = provider@api_version)
-  req <- ellmer_req_credentials(req, provider@credentials)
+  req <- ellmer_req_credentials(req, provider@credentials(), "api-key")
   req
 }
 
@@ -185,7 +182,7 @@ method(base_request_error, ProviderAzureOpenAI) <- function(provider, req) {
   })
 }
 
-default_azure_credentials <- function(api_key = NULL, token = NULL) {
+default_azure_credentials <- function(token = NULL) {
   if (!is.null(token)) {
     return(function() list(Authorization = paste("Bearer", token)))
   }
@@ -231,8 +228,9 @@ default_azure_credentials <- function(api_key = NULL, token = NULL) {
   }
 
   # If we have an API key, include it in the credentials.
+  api_key <- Sys.getenv("AZURE_OPENAI_API_KEY")
   if (nchar(api_key)) {
-    return(function() list(`api-key` = api_key))
+    return(\() api_key)
   }
 
   # Masquerade as the Azure CLI.

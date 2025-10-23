@@ -1,8 +1,5 @@
 test_that("chat_azure() is deprecated", {
-  lifecycle::expect_deprecated(
-    chat_azure("foo", "bar", api_key = "key"),
-    "chat_azure_openai"
-  )
+  expect_snapshot(. <- chat_azure("foo", "bar", api_key = "key"))
 })
 
 test_that("chat_bedrock() is deprecated", {
@@ -18,8 +15,5 @@ test_that("chat_bedrock() is deprecated", {
 })
 
 test_that("chat_gemini() is deprecated", {
-  lifecycle::expect_deprecated(
-    chat_gemini(api_key = "key"),
-    "chat_google_gemini"
-  )
+  expect_snapshot(. <- chat_gemini(api_key = "key"))
 })
