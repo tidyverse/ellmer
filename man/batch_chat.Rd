@@ -7,9 +7,9 @@
 \alias{batch_chat_completed}
 \title{Submit multiple chats in one batch}
 \usage{
-batch_chat(chat, prompts, path, wait = TRUE)
+batch_chat(chat, prompts, path, wait = TRUE, ignore_hash = FALSE)
 
-batch_chat_text(chat, prompts, path, wait = TRUE)
+batch_chat_text(chat, prompts, path, wait = TRUE, ignore_hash = FALSE)
 
 batch_chat_structured(
   chat,
@@ -17,6 +17,7 @@ batch_chat_structured(
   path,
   type,
   wait = TRUE,
+  ignore_hash = FALSE,
   convert = TRUE,
   include_tokens = FALSE,
   include_cost = FALSE
@@ -41,6 +42,10 @@ different, you'll get an error.}
 it will return \code{NULL} if the batch is not complete, and you can retrieve
 the results later by re-running \code{batch_chat()} when
 \code{batch_chat_completed()} is \code{TRUE}.}
+
+\item{ignore_hash}{If \code{TRUE}, will only warn rather than error when the hash
+doesn't match. You can use this if ellmer has changed the hash structure
+and you're confident that you're reusing the same inputs.}
 
 \item{type}{A type specification for the extracted data. Should be
 created with a \code{\link[=type_boolean]{type_()}} function.}
