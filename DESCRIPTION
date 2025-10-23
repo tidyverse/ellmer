@@ -103,6 +103,7 @@ Collate:
     'provider-huggingface.R'
     'provider-mistral.R'
     'provider-ollama.R'
+    'provider-openai-responses.R'
     'provider-openrouter.R'
     'provider-perplexity.R'
     'provider-portkey.R'

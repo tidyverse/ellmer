@@ -26,6 +26,8 @@ NULL
 #' @param tokens A numeric vector of length 2 representing the number of
 #'   input and output tokens (respectively) used in this turn. Currently
 #'   only recorded for assistant turns.
+#' @param duration The duration of the request in seconds. `NA` for user turns,
+#'   numeric for assistant turns.
 #' @export
 #' @return An S7 `Turn` object
 #' @examples
@@ -45,6 +47,10 @@ Turn <- new_class(
         }
       }
     ),
+    duration = new_property(
+      class_numeric,
+      default = NA_real_
+    ),
     text = new_property(
       class = class_character,
       getter = function(self) contents_text(self)
@@ -54,7 +60,8 @@ Turn <- new_class(
     role,
     contents = list(),
     json = list(),
-    tokens = c(0, 0, 0)
+    tokens = c(0, 0, 0),
+    duration = NA_real_
   ) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
@@ -64,7 +71,8 @@ Turn <- new_class(
       role = role,
       contents = contents,
       json = json,
-      tokens = tokens
+      tokens = tokens,
+      duration = duration
     )
   }
 )
