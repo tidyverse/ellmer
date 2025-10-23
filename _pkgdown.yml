@@ -63,9 +63,6 @@ reference:
   - contents_record
   - params
 
-- title: Deprecated functions
-  contents:
-  - deprecated
 
 news:
   releases:
