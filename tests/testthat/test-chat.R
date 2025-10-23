@@ -255,3 +255,18 @@ test_that("api_headers parameter works correctly", {
   req <- chat_request(chat$get_provider())
   expect_equal(req_get_headers(req), list("X-Test" = "value"))
 })
+
+test_that("assistant turns track duration", {
+  vcr::local_cassette("chat-duration")
+
+  chat <- chat_openai_test()
+  chat$chat("What's 1 + 1?")
+
+  user_turn <- chat$get_turns()[[1]]
+  assistant_turn <- chat$last_turn()
+
+  expect_true(is.na(user_turn@duration))
+
+  # These assistant durations are usually not NA, but are during replay (#479)
+  expect_true(is.na(assistant_turn@duration) || assistant_turn@duration > 0)
+})

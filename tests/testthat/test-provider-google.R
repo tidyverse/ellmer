@@ -132,3 +132,13 @@ test_that("can handle citations", {
   expect_equal(source$uri, "https://example.com")
   expect_equal(source$license, "")
 })
+
+test_that("can generate images", {
+  vcr::local_cassette("google-image-gen")
+
+  chat <- chat_google_gemini_test(model = "gemini-2.5-flash-image")
+  chat$chat("Draw a cat")
+
+  turn <- chat$get_turns()[[2]]
+  expect_s7_class(turn@contents[[1]], ContentImageInline)
+})

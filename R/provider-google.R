@@ -311,6 +311,11 @@ method(value_turn, ProviderGoogleGemini) <- function(
         content$functionCall$name,
         content$functionCall$args
       )
+    } else if (has_name(content, "inlineData")) {
+      ContentImageInline(
+        type = content$inlineData$mimeType,
+        data = content$inlineData$data
+      )
     } else {
       cli::cli_abort(
         "Unknown content type with names {.str {names(content)}}.",
