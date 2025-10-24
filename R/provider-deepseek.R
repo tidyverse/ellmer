@@ -31,7 +31,6 @@ chat_deepseek <- function(
   credentials = NULL,
   model = NULL,
   params = NULL,
-  seed = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
@@ -53,7 +52,6 @@ chat_deepseek <- function(
     base_url = base_url,
     model = model,
     params = params,
-    seed = seed,
     extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers

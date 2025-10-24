@@ -18,7 +18,6 @@ NULL
 #' @param model `r param_model("claude-sonnet-4-20250514", "anthropic")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
-#' @param max_tokens Maximum number of tokens to generate before stopping.
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
 #'   claude features that are still in beta.
 #' @param api_headers Named character vector of arbitrary extra headers appended
@@ -33,7 +32,6 @@ NULL
 chat_anthropic <- function(
   system_prompt = NULL,
   params = NULL,
-  max_tokens = deprecated(),
   model = NULL,
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
@@ -53,16 +51,6 @@ chat_anthropic <- function(
     credentials = credentials,
     api_key = api_key
   )
-
-  params <- params %||% params()
-  if (lifecycle::is_present(max_tokens)) {
-    lifecycle::deprecate_warn(
-      when = "0.2.0",
-      what = "chat_anthropic(max_tokens)",
-      with = "chat_anthropic(params)"
-    )
-    params$max_tokens <- max_tokens
-  }
 
   provider <- ProviderAnthropic(
     name = "Anthropic",

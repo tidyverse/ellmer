@@ -32,7 +32,6 @@ chat_github <- function(
   credentials = NULL,
   model = NULL,
   params = NULL,
-  seed = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
@@ -58,7 +57,6 @@ chat_github <- function(
     credentials = credentials,
     model = model,
     params = params,
-    seed = seed,
     api_args = api_args,
     echo = echo,
     api_headers = api_headers

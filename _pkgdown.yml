@@ -61,11 +61,9 @@ reference:
   contents:
   - contents_text
   - contents_record
+  - df_schema
   - params
 
-- title: Deprecated functions
-  contents:
-  - deprecated
 
 news:
   releases:

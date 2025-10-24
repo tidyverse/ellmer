@@ -43,7 +43,6 @@ chat_ollama <- function(
   system_prompt = NULL,
   base_url = Sys.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
   model,
-  seed = NULL,
   params = NULL,
   api_args = list(),
   echo = NULL,
@@ -83,14 +82,11 @@ chat_ollama <- function(
     api_key = api_key
   )
 
-  params <- params %||% params()
-
   provider <- ProviderOllama(
     name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
     model = model,
-    seed = seed,
-    params = params,
+    params = params %||% params(),
     extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
@@ -103,8 +99,7 @@ ProviderOllama <- new_class(
   "ProviderOllama",
   parent = ProviderOpenAI,
   properties = list(
-    model = prop_string(),
-    seed = prop_number_whole(allow_null = TRUE)
+    model = prop_string()
   )
 )
 

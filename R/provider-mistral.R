@@ -26,7 +26,6 @@ chat_mistral <- function(
   api_key = NULL,
   credentials = NULL,
   model = NULL,
-  seed = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
@@ -47,7 +46,6 @@ chat_mistral <- function(
     base_url = mistral_base_url,
     model = model,
     params = params,
-    seed = seed,
     extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers

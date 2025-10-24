@@ -23,16 +23,6 @@ test_that("basic signature extraction works", {
 
 test_that("checks its inputs", {
   expect_snapshot(error = TRUE, {
-    create_tool_def(print, model = "gpt-4", chat = chat_google_gemini())
     create_tool_def(print, chat = 1)
   })
-})
-
-test_that("model is deprecated", {
-  mock <- mocked_chat("response")
-  local_mocked_bindings(chat_openai = function(...) mock)
-
-  expect_snapshot(
-    . <- create_tool_def(print, model = "gpt-4", echo = FALSE)
-  )
 })

@@ -1,6 +1,20 @@
 # ellmer (development version)
 
 * `chat_*()` functions now use a credentials functions instead of an `api_key` (#613). This means that the `api_key` is never stored in the provider object (which might be saved to disk), but is instead retrieved on demand as needed. You generally shouldn't need to use the `credentials` argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).
+* The following deprecated functions/arguments/methods have now been removed:
+  * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
+  * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)
+  * `chat_anthropic(max_tokens)` -> `chat_anthropic(params)` (0.2.0)
+  * `chat_azure()` -> `chat_azure_openai()` (0.2.0)
+  * `chat_azure_openai(token)` (0.1.1)
+  * `chat_bedrock()` -> `chat_aws_bedrock()` (0.2.0)
+  * `chat_claude()` -> `chat_anthropic()` (0.2.0)
+  * `chat_cortex()` -> `chat_snowflake()` (0.2.0)
+  * `chat_gemini()` -> `chat_google_gemini()` (0.2.0)
+  * `chat_openai(seed)` -> `chat_openai(params)` (0.2.0)
+  * `create_tool_def(model)` -> `create_tool_def(chat)` (0.2.0)
+* `chat_google_gemini()` andc`chat_openai_responses()` support image generation (#368).
+* New `schema_df()` to describe the schema of a data frame to an LLM (#744).
 * `chat_google_gemini()` and `chat_openai_responses()` support image generation (#368).
 * `batch_*()` no longer hashes properties of the provider besides the `name`, `model`, and `base_url`. This should provide some protection from accidentally reusing the same `.json` file with different providers, while still allowing you to use the same batch file across ellmer versions.
 * `batch_*()` have a new `ignore_hash` argument that allows you to opt out of the check if you're confident the difference only arises because ellmer itself has changed.

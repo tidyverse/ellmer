@@ -21,11 +21,3 @@
       Error in `chat()`:
       ! Can't find provider `ellmer::chat_susan()`.
 
-# requires `model` and `system_prompt` arguments
-
-    Code
-      chat("cortex_analyst")
-    Condition
-      Error in `chat()`:
-      ! `ellmer::chat()` does not support `ellmer::chat_cortex_analyst()`, please call it directly.
-
