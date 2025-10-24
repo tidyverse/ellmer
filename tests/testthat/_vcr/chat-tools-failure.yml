@@ -4,7 +4,7 @@ http_interactions:
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What
-        are Joe, Hadley, Simon, and Tom''s favorite colors?"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
+        are Joe, Hadley, Simon, and Tom''s favorite colors?"}]}],"model":"gpt-5-nano","seed":1014,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
         name"}},"required":["user"],"additionalProperties":false}}}]}'
   response:
@@ -13,37 +13,39 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95b79eb92d482e18-DFW
+      cf-ray: 9934039e0bf41376-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 07 Jul 2025 13:17:06 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1191'
+      date: Thu, 23 Oct 2025 20:34:19 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '3746'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=6Tof9nlHwXJtt7FusjKzwwrx2ML.6Jl0A3W3kkZfBXM-1751894226-1.0.1.1-_GWEDka8jE_T.bGzAA1xaup0ilD_EJD.A8TmLKTLaRcYm_U1flAKNkca0TqEOc_xEGvtYEi5HEkUPefxn7ytYkV_bCqe7GurhtIXN9QXPh0;
-        path=/; expires=Mon, 07-Jul-25 13:47:06 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=irz_Fp0qZtTrV7Yf_UDE_yjBrsWy6wcgcW..l.NX5p4-1761251659-1.0.1.1-daulBCfka_Uiu44Lw_MiJgrp_D82hFT0ez7d9HUTTIntJwPUs61dYRDsqihpr.Ag_G74G9ZlEL6KQ5mvyi_0ApkHxoEYGk45skNC71VeawY;
+        path=/; expires=Thu, 23-Oct-25 21:04:19 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=TwLbKNqTIS0S7zfeWqTccTIb15yugxacdk8TSaTR2yE-1751894226089-0.0.1.1-604800000;
+      - _cfuvid=AtDNuxBBfPt81uSVlLrJ3ioX39pKD8SjojJvLU0lW1Q-1761251659198-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1195'
+      x-envoy-upstream-service-time: '3795'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-limit-tokens: '180000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999981'
+      x-ratelimit-remaining-tokens: '179999982'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_0fa95f8be8cbdddbd36037697bbe3bda
+      x-request-id: req_0d8aca75313c4b2381c5c58d714dc4cb
     body:
       string: |
         {
-          "id": "chatcmpl-Bqg0OAvPRC9KtTrLB9BOhSqh8TOrY",
+          "id": "chatcmpl-CTwIhJJDgJ1OtxlAJNl0czwcnMVJ5",
           "object": "chat.completion",
-          "created": 1751894224,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "created": 1761251655,
+          "model": "gpt-5-nano-2025-08-07",
           "choices": [
             {
               "index": 0,
@@ -52,7 +54,7 @@ http_interactions:
                 "content": null,
                 "tool_calls": [
                   {
-                    "id": "call_poEvQqTJ3YQHNFRGk4xjXOmI",
+                    "id": "call_0pUKkEerwPzTTLboETzYRnNJ",
                     "type": "function",
                     "function": {
                       "name": "user_favorite_color",
@@ -60,7 +62,7 @@ http_interactions:
                     }
                   },
                   {
-                    "id": "call_hdVkgzKIx1CeyBVIbb1SIcIJ",
+                    "id": "call_PYO8PBtxq8dfGwUFgdTUW4c9",
                     "type": "function",
                     "function": {
                       "name": "user_favorite_color",
@@ -68,7 +70,7 @@ http_interactions:
                     }
                   },
                   {
-                    "id": "call_NhbuUoByzviZvMzHXcNfcOBn",
+                    "id": "call_bvuxxQ8eGFnqgYJeM0xYhBjf",
                     "type": "function",
                     "function": {
                       "name": "user_favorite_color",
@@ -76,7 +78,7 @@ http_interactions:
                     }
                   },
                   {
-                    "id": "call_4aOjglUM5sRbL19LVf0bPVDK",
+                    "id": "call_vJHybxnQtukl0ty7OIdkNwh7",
                     "type": "function",
                     "function": {
                       "name": "user_favorite_color",
@@ -87,39 +89,38 @@ http_interactions:
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "tool_calls"
             }
           ],
           "usage": {
-            "prompt_tokens": 69,
-            "completion_tokens": 81,
-            "total_tokens": 150,
+            "prompt_tokens": 153,
+            "completion_tokens": 282,
+            "total_tokens": 435,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 192,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-07-07 13:17:06
+  recorded_at: 2025-10-23 20:34:19
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What
-        are Joe, Hadley, Simon, and Tom''s favorite colors?"}]},{"role":"assistant","tool_calls":[{"id":"call_poEvQqTJ3YQHNFRGk4xjXOmI","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Joe\"]}"},"type":"function"},{"id":"call_hdVkgzKIx1CeyBVIbb1SIcIJ","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Hadley\"]}"},"type":"function"},{"id":"call_NhbuUoByzviZvMzHXcNfcOBn","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Simon\"]}"},"type":"function"},{"id":"call_4aOjglUM5sRbL19LVf0bPVDK","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Tom\"]}"},"type":"function"}]},{"role":"tool","content":"Tool
-        calling failed with error User denied tool request","tool_call_id":"call_poEvQqTJ3YQHNFRGk4xjXOmI"},{"role":"tool","content":"Tool
-        calling failed with error User denied tool request","tool_call_id":"call_hdVkgzKIx1CeyBVIbb1SIcIJ"},{"role":"tool","content":"Tool
-        calling failed with error User denied tool request","tool_call_id":"call_NhbuUoByzviZvMzHXcNfcOBn"},{"role":"tool","content":"Tool
-        calling failed with error User denied tool request","tool_call_id":"call_4aOjglUM5sRbL19LVf0bPVDK"}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
+        are Joe, Hadley, Simon, and Tom''s favorite colors?"}]},{"role":"assistant","tool_calls":[{"id":"call_0pUKkEerwPzTTLboETzYRnNJ","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Joe\"]}"},"type":"function"},{"id":"call_PYO8PBtxq8dfGwUFgdTUW4c9","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Hadley\"]}"},"type":"function"},{"id":"call_bvuxxQ8eGFnqgYJeM0xYhBjf","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Simon\"]}"},"type":"function"},{"id":"call_vJHybxnQtukl0ty7OIdkNwh7","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Tom\"]}"},"type":"function"}]},{"role":"tool","content":"Tool
+        calling failed with error User denied tool request","tool_call_id":"call_0pUKkEerwPzTTLboETzYRnNJ"},{"role":"tool","content":"Tool
+        calling failed with error User denied tool request","tool_call_id":"call_PYO8PBtxq8dfGwUFgdTUW4c9"},{"role":"tool","content":"Tool
+        calling failed with error User denied tool request","tool_call_id":"call_bvuxxQ8eGFnqgYJeM0xYhBjf"},{"role":"tool","content":"Tool
+        calling failed with error User denied tool request","tool_call_id":"call_vJHybxnQtukl0ty7OIdkNwh7"}],"model":"gpt-5-nano","seed":1014,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
         name"}},"required":["user"],"additionalProperties":false}}}]}'
   response:
@@ -128,67 +129,68 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95b79ec24f8c2e18-DFW
+      cf-ray: 993403b70c351376-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 07 Jul 2025 13:17:06 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '343'
+      date: Thu, 23 Oct 2025 20:34:28 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '8839'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=63Aw8ujyD60GvCZVJ.gHeyae.eCd.YIWmJYWyJlEYw0-1751894226-1.0.1.1-eDNX7T8Zf4kgzc8b_smVW5wbBPY44bb9KLV8LFWDrStI_GwC6nqemvW.pmEE8lzQ2f8COi.OnTKPb9MdgXPedMZvcoDAqDM3FTLf.AaJdhw;
-        path=/; expires=Mon, 07-Jul-25 13:47:06 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=ybTQJRZ2sl8kY83UCsgS2szAWabKoUgk7mNYqA5BJvo-1761251668-1.0.1.1-AIEnsKt2JNc9EMBpGj7FfIplqKG3OyHPTtIjiZkVXy2Z3X_TvTkgT4.LMuxHW8ZGCKdXPpNpxnMMusrUyJY_ZsGxECDhUyBY6s08qbSBPkI;
+        path=/; expires=Thu, 23-Oct-25 21:04:28 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=hFUb7XIW2Z6yE458w2JoU0GfHvLjFUxcV5uj5C0tuRo-1751894226958-0.0.1.1-604800000;
+      - _cfuvid=Jqa51f5ajVaspqLT7jWVnIl2WBYcKgHQCORSb.EvwWE-1761251668411-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '538'
+      x-envoy-upstream-service-time: '9001'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-limit-tokens: '180000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999921'
+      x-ratelimit-remaining-tokens: '179999922'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_09d71ca64366f8eddd2233bb425e2196
+      x-request-id: req_746807618d4c4e92a9205b417dba43b6
     body:
       string: |
         {
-          "id": "chatcmpl-Bqg0QMmL5NT3ahNBf5piu394xvIv2",
+          "id": "chatcmpl-CTwIlFYgoVcqXawYjBHtmCDNnOeDu",
           "object": "chat.completion",
-          "created": 1751894226,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "created": 1761251659,
+          "model": "gpt-5-nano-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "I am unable to access their favorite colors at this time.",
+                "content": "I can’t access that data—the tool request was denied. I don’t have Joe, Hadley, Simon, and Tom’s favorite colors.\n\nOptions:\n- authorize access or provide the colors, and I’ll answer.\n- tell me it’s a fictional scenario and I can generate plausible colors.",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 208,
-            "completion_tokens": 13,
-            "total_tokens": 221,
+            "prompt_tokens": 298,
+            "completion_tokens": 709,
+            "total_tokens": 1007,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 640,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-07-07 13:17:06
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-10-23 20:34:28
+recorded_with: VCR-vcr/2.0.0

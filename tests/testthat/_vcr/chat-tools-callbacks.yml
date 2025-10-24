@@ -4,7 +4,7 @@ http_interactions:
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What
-        are Joe and Hadley''s favorite colors?"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
+        are Joe and Hadley''s favorite colors?"}]}],"model":"gpt-5-nano","seed":1014,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
         name"}},"required":["user"],"additionalProperties":false}}}]}'
   response:
@@ -13,37 +13,39 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95b79ee4eef22e18-DFW
+      cf-ray: 993404ee19011376-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 07 Jul 2025 13:17:12 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '560'
+      date: Thu, 23 Oct 2025 20:35:13 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '3720'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=NTumqhrZVaGtiw5T6HG_NeLxYgbu_4yV3NbP30SUfns-1751894232-1.0.1.1-Tm1VICTk6F4rs7f3..vWS7uBbKY.Z7u12uGR2ZR0QCVMGSfTGoaUyHMwrsmtK.pe4ixhQ59uIC_PBmsbc14WSVKFdoRhHzp0RzF26s39dis;
-        path=/; expires=Mon, 07-Jul-25 13:47:12 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=dWT368FBKHDxsZWgNpom50oEJEXyruY8ocJgq6AOe60-1761251713-1.0.1.1-MTnaRjJ2Lv9bWCZqvYV.PbtC5tA5dCgIvDGQ29k70099sWAJLFGBFBpLqwcgx1oXxgtxjzsO5OTgd6NCHSNe5MlbAU.H3j3nlxT34q6y_1g;
+        path=/; expires=Thu, 23-Oct-25 21:05:13 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=e5wdTWTz.E9Xh3PS4PLfjfANK.bumTBlTk7ohkTrB4c-1751894232433-0.0.1.1-604800000;
+      - _cfuvid=4QuBRSHS72Zd1KwMwglREGEOFoIj3DmSkCeAW5O1jkg-1761251713165-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '564'
+      x-envoy-upstream-service-time: '4006'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-limit-tokens: '180000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999984'
+      x-ratelimit-remaining-tokens: '179999982'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_d3642c763e2aede6ab58f48a77c18de5
+      x-request-id: req_5a00d92f25cd4ad7bd4814acbc8c667f
     body:
       string: |
         {
-          "id": "chatcmpl-Bqg0Vh4RQit4GLSBlPUwpZ3yvl2Fb",
+          "id": "chatcmpl-CTwJZJ6wbQ4y28YFhFNYOTs6DefEw",
           "object": "chat.completion",
-          "created": 1751894231,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "created": 1761251709,
+          "model": "gpt-5-nano-2025-08-07",
           "choices": [
             {
               "index": 0,
@@ -52,7 +54,7 @@ http_interactions:
                 "content": null,
                 "tool_calls": [
                   {
-                    "id": "call_bEj83efeM32lV6czfoYOCbiL",
+                    "id": "call_4eVgb3gAamTYDxWlhXnagAEy",
                     "type": "function",
                     "function": {
                       "name": "user_favorite_color",
@@ -60,7 +62,7 @@ http_interactions:
                     }
                   },
                   {
-                    "id": "call_q5IcmtmRdgyYt4MWOHB2Dy3x",
+                    "id": "call_sew6Wcw4og5iBYzNDfHzNCSz",
                     "type": "function",
                     "function": {
                       "name": "user_favorite_color",
@@ -71,35 +73,34 @@ http_interactions:
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "tool_calls"
             }
           ],
           "usage": {
-            "prompt_tokens": 63,
-            "completion_tokens": 49,
-            "total_tokens": 112,
+            "prompt_tokens": 147,
+            "completion_tokens": 186,
+            "total_tokens": 333,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 128,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-07-07 13:17:12
+  recorded_at: 2025-10-23 20:35:13
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What
-        are Joe and Hadley''s favorite colors?"}]},{"role":"assistant","tool_calls":[{"id":"call_bEj83efeM32lV6czfoYOCbiL","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Joe\"]}"},"type":"function"},{"id":"call_q5IcmtmRdgyYt4MWOHB2Dy3x","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Hadley\"]}"},"type":"function"}]},{"role":"tool","content":"blue","tool_call_id":"call_bEj83efeM32lV6czfoYOCbiL"},{"role":"tool","content":"red","tool_call_id":"call_q5IcmtmRdgyYt4MWOHB2Dy3x"}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
+        are Joe and Hadley''s favorite colors?"}]},{"role":"assistant","tool_calls":[{"id":"call_4eVgb3gAamTYDxWlhXnagAEy","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Joe\"]}"},"type":"function"},{"id":"call_sew6Wcw4og5iBYzNDfHzNCSz","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Hadley\"]}"},"type":"function"}]},{"role":"tool","content":"blue","tool_call_id":"call_4eVgb3gAamTYDxWlhXnagAEy"},{"role":"tool","content":"red","tool_call_id":"call_sew6Wcw4og5iBYzNDfHzNCSz"}],"model":"gpt-5-nano","seed":1014,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
         name"}},"required":["user"],"additionalProperties":false}}}]}'
   response:
@@ -108,67 +109,68 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95b79ee9cbc12e18-DFW
+      cf-ray: 993405086c771376-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 07 Jul 2025 13:17:12 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '308'
+      date: Thu, 23 Oct 2025 20:35:16 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '3375'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=W.ZUZCrscHEwJ68v3afhSCs3kXK7t8l0CHeAdnI9LLI-1751894232-1.0.1.1-c3esJYBJkEElQ0es3aKzbib_IC9wqPXadVQxq53Gk2I094n0EAxwlSZ8_ftwG3HAfZ.Se8zRkvsLKtdOuT_00UgxPj7UftBJdniHMXXCUOU;
-        path=/; expires=Mon, 07-Jul-25 13:47:12 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=vheBCRxSRyVDrVJFZmIl0e6neWAt3cr3Fhxt_miegSA-1761251716-1.0.1.1-ahZoHaInqFdodSLQijBEodvSl3S.BYU5Wxmpg.qDzzU2enj1K5LARfAlRaYBRQnIkjEo7gayfdCRJ512w2uwcV4NdCujqvenT_fWZXZXVdg;
+        path=/; expires=Thu, 23-Oct-25 21:05:16 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=nCC395Ah1Phf6Wj4mOjtqolQRIZTAlMKW_yDMAbK23I-1751894232974-0.0.1.1-604800000;
+      - _cfuvid=E.1_bz4jL.LmNbu_OLFMAzmtsp5ai4icvH.ESZtKVHo-1761251716783-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '312'
+      x-envoy-upstream-service-time: '3395'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-limit-tokens: '180000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999978'
+      x-ratelimit-remaining-tokens: '179999979'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_8ff238b3e226044c1492a39f5fb37e14
+      x-request-id: req_d836eb14ce5a45d1807424094a0c6400
     body:
       string: |
         {
-          "id": "chatcmpl-Bqg0WeFnpsXOpAlQ0tA97OPJYWQxA",
+          "id": "chatcmpl-CTwJdD9lwGCfbdTJVI2R7kTpbLK8o",
           "object": "chat.completion",
-          "created": 1751894232,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "created": 1761251713,
+          "model": "gpt-5-nano-2025-08-07",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "Joe's favorite color is blue, and Hadley's favorite color is red.",
+                "content": "Joe: blue\nHadley: red",
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 130,
-            "completion_tokens": 16,
-            "total_tokens": 146,
+            "prompt_tokens": 220,
+            "completion_tokens": 209,
+            "total_tokens": 429,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
-              "reasoning_tokens": 0,
+              "reasoning_tokens": 192,
               "audio_tokens": 0,
               "accepted_prediction_tokens": 0,
               "rejected_prediction_tokens": 0
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "system_fingerprint": null
         }
-  recorded_at: 2025-07-07 13:17:12
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-10-23 20:35:16
+recorded_with: VCR-vcr/2.0.0

@@ -166,8 +166,11 @@ test_that("can extract structured data (async)", {
 })
 
 test_that("chat_structured() doesn't require a prompt", {
-  chat <- chat_openai_test()
-  chat$chat("What's the biggest city in the world? What country is it in?")
+  chat <- chat_openai_test(model = "gpt-5-nano")
+  chat$chat(
+    "What's the biggest city in the world by urban area population?
+    What country is it in?"
+  )
 
   out <- chat$chat_structured(
     type = type_object(

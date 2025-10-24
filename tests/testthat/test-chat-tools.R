@@ -155,7 +155,7 @@ test_that("tool calls can be rejected via `tool_request` callbacks", {
 
 test_that("tool calls can be rejected via the tool function", {
   vcr::local_cassette("chat-tools-reject-tool-function")
-  chat <- chat_openai_test()
+  chat <- chat_openai_test(model = "gpt-5-mini")
 
   chat$register_tool(tool(
     function(user) if (user == "Joe") tool_reject() else "red",
@@ -177,7 +177,10 @@ test_that("tool calls can be rejected via the tool function", {
 # Async ------------------------------------------------------------------------
 
 test_that("can use async tools", {
-  chat <- chat_openai_test("Be very terse, not even punctuation.")
+  chat <- chat_openai_test(
+    "Be very terse, not even punctuation.",
+    model = "gpt-5-mini"
+  )
   chat$register_tool(tool(
     coro::async(function() "2024-01-01"),
     name = "current_date",
