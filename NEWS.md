@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* ellmer now supports tools that return image or PDF content types, for example using `content_image_file()` or `content_image_pdf()`. (#735)
+
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
   * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)

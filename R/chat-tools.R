@@ -250,6 +250,67 @@ tool_results_as_turn <- function(results) {
   Turn("user", contents = results[is_tool_result])
 }
 
+is_extra_content <- function(x) {
+  S7::S7_inherits(x, ContentImage) || S7::S7_inherits(x, ContentPDF)
+}
+
+tool_results_separate_content <- function(turn) {
+  if (!some(turn@contents, is_tool_result)) {
+    return(list(tool_results = list(), contents = turn@contents))
+  }
+
+  tool_results <- list()
+  contents <- list()
+
+  for (result in turn@contents) {
+    if (!is_tool_result(result)) {
+      contents <- c(contents, list(result))
+      next
+    }
+
+    id <- result@request@id
+
+    # Check for extra content in the result value
+    if (is_extra_content(result@value)) {
+      contents <- c(
+        contents,
+        list(
+          ContentText(sprintf('<tool-content tool-call-id="%s">', id)),
+          result@value,
+          ContentText("</tool-content>")
+        )
+      )
+      result@value <- "[see below]"
+    }
+
+    # Check for extra content in list items
+    if (is_list(result@value)) {
+      for (j in seq_along(result@value)) {
+        if (is_extra_content(result@value[[j]])) {
+          contents <- c(
+            contents,
+            list(
+              ContentText(
+                sprintf('<tool-content tool-call-id="%s" item="%d">', id, j)
+              ),
+              result@value[[j]],
+              ContentText("</tool-content>")
+            )
+          )
+          result@value[[j]] <- sprintf("[see below: item %d]", j)
+        }
+      }
+    }
+
+    tool_results <- c(tool_results, list(result))
+  }
+
+  list(
+    tool_results = if (length(tool_results) > 0) tool_results else NULL,
+    contents = contents
+  )
+}
+
 turn_get_tool_errors <- function(turn = NULL) {
   if (is.null(turn)) {
     return(NULL)
@@ -328,7 +389,7 @@ maybe_echo_tool <- function(x, echo = "output") {
   } else {
     icon <- cli::col_green(cli::symbol$record)
     header <- ""
-    value <- tool_string(x)
+    value <- tool_string(x, force = TRUE)
   }
 
   value <- cli::style_italic(value)

@@ -79,14 +79,14 @@ method(as_json, list(ProviderDeepSeek, ContentText)) <- function(
 
 method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
   if (x@role == "user") {
+    data <- tool_results_separate_content(x)
     # Text and tool results go in separate messages
-    texts <- keep(x@contents, S7_inherits, ContentText)
+    texts <- keep(data$contents, S7_inherits, ContentText)
     texts_out <- lapply(texts, function(text) {
       list(role = "user", content = as_json(provider, text, ...))
     })
 
-    tools <- keep(x@contents, S7_inherits, ContentToolResult)
-    tools_out <- lapply(tools, function(tool) {
+    tools_out <- lapply(data$tool_results, function(tool) {
       list(
         role = "tool",
         content = tool_string(tool),
@@ -94,7 +94,7 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
       )
     })
 
-    c(texts_out, tools_out)
+    c(tools_out, texts_out)
   } else if (x@role == "assistant") {
     # Tool requests come out of content and go into own argument
     text <- detect(x@contents, S7_inherits, ContentText)
