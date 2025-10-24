@@ -84,7 +84,6 @@ Images require a model that supports images.
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_key <span class="op">=</span> <span class="fu">mistral_key</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  echo <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -115,11 +114,6 @@ which you can easily edit by calling <code>usethis::edit_r_environ()</code>.</p>
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>The model to use for the chat (defaults to "mistral-large-latest").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.</p></dd>
-
-
-<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>Optional integer seed that ChatGPT uses to try and make output
-more reproducible.</p></dd>
 
 
 <dt id="arg-api-args">api_args<a class="anchor" aria-label="anchor" href="#arg-api-args"></a></dt>

@@ -70,7 +70,6 @@ API; instead, you will need to sign up (and pay for) a
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">chat_anthropic</span><span class="op">(</span></span>
 <span>  system_prompt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  max_tokens <span class="op">=</span> <span class="fu"><a href="deprecated.html">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  base_url <span class="op">=</span> <span class="st">"https://api.anthropic.com/v1"</span>,</span>
@@ -83,7 +82,6 @@ API; instead, you will need to sign up (and pay for) a
 <span><span class="fu">chat_claude</span><span class="op">(</span></span>
 <span>  system_prompt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  max_tokens <span class="op">=</span> <span class="fu"><a href="deprecated.html">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  base_url <span class="op">=</span> <span class="st">"https://api.anthropic.com/v1"</span>,</span>
@@ -109,10 +107,6 @@ API; instead, you will need to sign up (and pay for) a
 
 <dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
 <dd><p>Common model parameters, usually created by <code><a href="params.html">params()</a></code>.</p></dd>
-
-
-<dt id="arg-max-tokens">max_tokens<a class="anchor" aria-label="anchor" href="#arg-max-tokens"></a></dt>
-<dd><p>Maximum number of tokens to generate before stopping.</p></dd>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>

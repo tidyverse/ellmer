@@ -23,7 +23,6 @@
 <url><loc>https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/chat_azure_openai.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/chat_cloudflare.html</loc></url>
-<url><loc>https://ellmer.tidyverse.org/dev/reference/chat_cortex_analyst.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/chat_databricks.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/chat_deepseek.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/chat_github.html</loc></url>
@@ -44,7 +43,6 @@
 <url><loc>https://ellmer.tidyverse.org/dev/reference/contents_record.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/contents_text.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/create_tool_def.html</loc></url>
-<url><loc>https://ellmer.tidyverse.org/dev/reference/deprecated.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/df_schema.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/ellmer-package.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/google_upload.html</loc></url>

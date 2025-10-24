@@ -100,13 +100,7 @@ sure to review the generated code before using it!</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_tool_def</span><span class="op">(</span></span>
-<span>  <span class="va">topic</span>,</span>
-<span>  chat <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  model <span class="op">=</span> <span class="fu"><a href="deprecated.html">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  echo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_tool_def</span><span class="op">(</span><span class="va">topic</span>, chat <span class="op">=</span> <span class="cn">NULL</span>, echo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -121,11 +115,6 @@ metadata for. Can also be an expression of the form <code>pkg::fun</code>.</p></
 <dt id="arg-chat">chat<a class="anchor" aria-label="anchor" href="#arg-chat"></a></dt>
 <dd><p>A <code>Chat</code> object used to generate the output. If <code>NULL</code>
 (the default) uses <code><a href="chat_openai.html">chat_openai()</a></code>.</p></dd>
-
-
-<dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
-<dd><p><code>lifecycle::badge("deprecated")</code> Formally used for defining
-the model used by the chat. Now supply <code>chat</code> instead.</p></dd>
 
 
 <dt id="arg-echo">echo<a class="anchor" aria-label="anchor" href="#arg-echo"></a></dt>
