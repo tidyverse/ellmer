@@ -179,7 +179,7 @@ test_that("tool calls can be rejected via the tool function", {
 test_that("can use async tools", {
   chat <- chat_openai_test(
     "Be very terse, not even punctuation.",
-    model = "gpt-5-mini"
+    model = "gpt-4.1-mini"
   )
   chat$register_tool(tool(
     coro::async(function() "2024-01-01"),
