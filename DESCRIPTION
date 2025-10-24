@@ -113,6 +113,7 @@ Collate:
     'tokens.R'
     'tools-built-in.R'
     'tools-def-auto.R'
+    'utils-auth.R'
     'utils-callbacks.R'
     'utils-cat.R'
     'utils-merge.R'

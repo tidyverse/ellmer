@@ -32,7 +32,7 @@ NULL
 chat_openai_responses <- function(
   system_prompt = NULL,
   base_url = Sys.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
-  api_key = openai_key(),
+  credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -42,6 +42,9 @@ chat_openai_responses <- function(
   model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
 
+  credentials <- credentials %||% \() paste0("Bearer ", openai_key())
+  check_credentials(credentials)
+
   provider <- ProviderOpenAIResponses(
     name = "OpenAI",
     base_url = base_url,
@@ -49,7 +52,7 @@ chat_openai_responses <- function(
     params = params %||% params(),
     extra_args = api_args,
     extra_headers = api_headers,
-    api_key = api_key
+    credentials = credentials
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
@@ -75,11 +78,7 @@ chat_openai_responses_test <- function(
 ProviderOpenAIResponses <- new_class(
   "ProviderOpenAIResponses",
   parent = ProviderOpenAI,
-  properties = list(
-    prop_redacted("api_key"),
-    # no longer used by OpenAI itself; but subclasses still need it
-    seed = prop_number_whole(allow_null = TRUE)
-  )
+  properties = list()
 )
 
 # Chat endpoint ----------------------------------------------------------------

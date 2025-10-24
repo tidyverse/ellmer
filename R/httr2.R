@@ -93,12 +93,6 @@ ellmer_req_robustify <- function(req, is_transient = NULL, after = NULL) {
   req
 }
 
-ellmer_req_credentials <- function(req, credentials_fun) {
-  # TODO: simplify once req_headers_redacted() supports !!!
-  credentials <- credentials_fun()
-  req_headers(req, !!!credentials, .redact = names(credentials))
-}
-
 ellmer_req_user_agent <- function(req, override = "") {
   ua <- if (identical(override, "")) ellmer_user_agent() else override
   req_user_agent(req, ua)

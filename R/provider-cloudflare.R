@@ -15,12 +15,10 @@ NULL
 #'
 #' @family chatbots
 #' @param model `r param_model("meta-llama/Llama-3.3-70b-instruct-fp8-fast")`
-#' @param api_key `r api_key_param("CLOUDFLARE_API_KEY")`
 #' @param account The Cloudflare account ID. Taken from the
 #'   `CLOUDFLARE_ACCOUNT_ID` env var, if defined.
-#' @param api_key The API key to use for authentication. You generally should
-#'   not supply this directly, but instead set the `HUGGINGFACE_API_KEY` environment
-#'   variable.
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("CLOUDFLARE_API_KEY")`
 #' @export
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -33,7 +31,8 @@ chat_cloudflare <- function(
   account = cloudflare_account(),
   system_prompt = NULL,
   params = NULL,
-  api_key = cloudflare_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   api_args = list(),
   echo = NULL,
@@ -45,6 +44,13 @@ chat_cloudflare <- function(
   echo <- check_echo(echo)
   params <- params %||% params()
 
+  credentials <- as_credentials(
+    "chat_cloudflare",
+    function() cloudflare_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   # https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility/
   cloudflare_api <- "https://api.cloudflare.com/client/v4/accounts/"
   base_url <- paste0(cloudflare_api, cloudflare_account(), "/ai/v1/")
@@ -54,7 +60,7 @@ chat_cloudflare <- function(
     base_url = base_url,
     model = model,
     params = params,
-    api_key = api_key,
+    credentials = credentials,
     extra_args = api_args,
     extra_headers = api_headers
   )

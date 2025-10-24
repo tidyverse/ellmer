@@ -16,7 +16,8 @@ NULL
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @param model `r param_model("claude-sonnet-4-20250514", "anthropic")`
-#' @param api_key `r api_key_param("ANTHROPIC_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
 #'   claude features that are still in beta.
 #' @param api_headers Named character vector of arbitrary extra headers appended
@@ -35,13 +36,21 @@ chat_anthropic <- function(
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
   beta_headers = character(),
-  api_key = anthropic_key(),
+  api_key = NULL,
+  credentials = NULL,
   api_headers = character(),
   echo = NULL
 ) {
   echo <- check_echo(echo)
 
   model <- set_default(model, "claude-sonnet-4-20250514")
+
+  credentials <- as_credentials(
+    "chat_anthropic",
+    function() anthropic_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   provider <- ProviderAnthropic(
     name = "Anthropic",
@@ -51,7 +60,7 @@ chat_anthropic <- function(
     extra_headers = api_headers,
     base_url = base_url,
     beta_headers = beta_headers,
-    api_key = api_key
+    credentials = credentials
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -77,7 +86,6 @@ ProviderAnthropic <- new_class(
   "ProviderAnthropic",
   parent = Provider,
   properties = list(
-    prop_redacted("api_key"),
     beta_headers = class_character
   )
 )
@@ -94,7 +102,7 @@ method(base_request, ProviderAnthropic) <- function(provider) {
   # <https://docs.anthropic.com/en/api/versioning>
   req <- req_headers(req, `anthropic-version` = "2023-06-01")
   # <https://docs.anthropic.com/en/api/getting-started#authentication>
-  req <- req_headers_redacted(req, `x-api-key` = provider@api_key)
+  req <- ellmer_req_credentials(req, provider@credentials(), "x-api-key")
 
   # <https://docs.anthropic.com/en/api/rate-limits>
   # <https://docs.anthropic.com/en/api/errors#http-errors>
@@ -520,7 +528,7 @@ models_anthropic <- function(
     name = "Anthropic",
     model = "",
     base_url = base_url,
-    api_key = api_key
+    credentials = function() api_key
   )
 
   req <- base_request(provider)

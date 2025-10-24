@@ -14,7 +14,8 @@ NULL
 #' @export
 #' @family chatbots
 #' @inheritParams chat_openai
-#' @param api_key `r api_key_param("DEEPSEEK_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("DEEPSEEK_API_KEY")`
 #' @param base_url The base URL to the endpoint; the default uses DeepSeek.
 #' @param model `r param_model("deepseek-chat")`
 #' @inherit chat_openai return
@@ -26,7 +27,8 @@ NULL
 chat_deepseek <- function(
   system_prompt = NULL,
   base_url = "https://api.deepseek.com",
-  api_key = deepseek_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -36,6 +38,13 @@ chat_deepseek <- function(
   model <- set_default(model, "deepseek-chat")
   echo <- check_echo(echo)
 
+  credentials <- as_credentials(
+    "chat_deepseek",
+    function() deepseek_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   params <- params %||% params()
 
   provider <- ProviderDeepSeek(
@@ -44,7 +53,7 @@ chat_deepseek <- function(
     model = model,
     params = params,
     extra_args = api_args,
-    api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)

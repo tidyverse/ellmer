@@ -130,8 +130,7 @@ test_that("informative error for bad inputs", {
   chat_ollama$.__enclos_env__$private$provider <- ProviderOllama(
     "ollama",
     "model",
-    "base_url",
-    api_key = "api_key"
+    "base_url"
   )
 
   expect_snapshot(error = TRUE, {

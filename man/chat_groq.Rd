@@ -7,7 +7,8 @@
 chat_groq(
   system_prompt = NULL,
   base_url = "https://api.groq.com/openai/v1",
-  api_key = groq_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -20,9 +21,11 @@ chat_groq(
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
-\item{api_key}{API key to use for authentication.
+\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
-You generally should not supply this directly, but instead set the \code{GROQ_API_KEY} environment variable.
+\item{credentials}{A function that returns the API key to use for authentication.
+
+You generally should not need this argument; instead set the \code{GROQ_API_KEY} environment variable.
 The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 

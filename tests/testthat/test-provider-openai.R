@@ -97,7 +97,7 @@ test_that("structured data work with and without wrapper", {
 # Custom -----------------------------------------------------------------
 
 test_that("as_json specialised for OpenAI", {
-  stub <- ProviderOpenAI(name = "", base_url = "", api_key = "", model = "")
+  stub <- ProviderOpenAI(name = "", base_url = "", model = "")
 
   expect_snapshot(
     as_json(stub, type_object(.additional_properties = TRUE)),

@@ -53,12 +53,8 @@ chat_snowflake <- function(
   params <- params %||% params()
   echo <- check_echo(echo)
 
-  if (is_list(credentials)) {
-    static_credentials <- force(credentials)
-    credentials <- function(account) static_credentials
-  }
-  check_function(credentials, allow_null = TRUE)
   credentials <- credentials %||% default_snowflake_credentials(account)
+  check_credentials(credentials)
 
   provider <- ProviderSnowflakeCortex(
     name = "Snowflake/Cortex",
@@ -68,8 +64,6 @@ chat_snowflake <- function(
     model = model,
     params = params,
     extra_args = api_args,
-    # We need an empty api_key for S7 validation.
-    api_key = "",
     extra_headers = api_headers
   )
 
@@ -80,14 +74,13 @@ ProviderSnowflakeCortex <- new_class(
   "ProviderSnowflakeCortex",
   parent = ProviderOpenAI,
   properties = list(
-    account = prop_string(),
-    credentials = class_function
+    account = prop_string()
   )
 )
 
 method(base_request, ProviderSnowflakeCortex) <- function(provider) {
   req <- request(provider@base_url)
-  req <- ellmer_req_credentials(req, provider@credentials)
+  req <- ellmer_req_credentials(req, provider@credentials())
   req <- ellmer_req_robustify(req)
   # Snowflake uses the User Agent header to identify "parter applications", so
   # identify requests as coming from "r_ellmer" (unless an explicit partner

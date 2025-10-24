@@ -31,9 +31,15 @@ google_upload <- function(
   path,
   base_url = "https://generativelanguage.googleapis.com/",
   api_key = NULL,
+  credentials = NULL,
   mime_type = NULL
 ) {
-  credentials <- default_google_credentials(api_key, variant = "gemini")
+  credentials <- as_credentials(
+    "google_upload",
+    default_google_credentials(variant = "gemini"),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   mime_type <- mime_type %||% guess_mime_type(path)
 
@@ -60,7 +66,7 @@ google_upload_init <- function(path, base_url, credentials, mime_type) {
   display_name <- basename(path)
 
   req <- request(base_url)
-  req <- ellmer_req_credentials(req, credentials)
+  req <- ellmer_req_credentials(req, credentials(), "x-goog-api-key")
   req <- req_url_path_append(req, "upload/v1beta/files")
   req <- req_headers(
     req,
@@ -79,7 +85,7 @@ google_upload_send <- function(upload_url, path, credentials) {
   file_size <- file.size(path)
 
   req <- request(upload_url)
-  req <- ellmer_req_credentials(req, credentials)
+  req <- ellmer_req_credentials(req, credentials(), "x-goog-api-key")
   req <- req_headers(
     req,
     "Content-Length" = toString(file_size),
@@ -95,7 +101,7 @@ google_upload_send <- function(upload_url, path, credentials) {
 
 google_upload_status <- function(uri, credentials) {
   req <- request(uri)
-  req <- ellmer_req_credentials(req, credentials)
+  req <- ellmer_req_credentials(req, credentials(), "x-goog-api-key")
 
   resp <- req_perform(req)
   resp_body_json(resp)

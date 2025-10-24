@@ -65,8 +65,7 @@ test_that("Azure request headers are generated correctly", {
     base_url = base_url,
     model = deployment_id,
     api_version = "2024-06-01",
-    api_key = "key",
-    credentials = default_azure_credentials("key")
+    credentials = \() "key"
   )
   req <- chat_request(p, FALSE, list(turn))
   expect_snapshot(str(req_get_headers(req, "reveal")))

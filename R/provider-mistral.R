@@ -11,7 +11,8 @@
 #' @export
 #' @family chatbots
 #' @param model `r param_model("mistral-large-latest")`
-#' @param api_key `r api_key_param("MISTRAL_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("MISTRAL_API_KEY")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
@@ -22,7 +23,8 @@
 chat_mistral <- function(
   system_prompt = NULL,
   params = NULL,
-  api_key = mistral_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   api_args = list(),
   echo = NULL,
@@ -32,13 +34,20 @@ chat_mistral <- function(
   model <- set_default(model, "mistral-large-latest")
   echo <- check_echo(echo)
 
+  credentials <- as_credentials(
+    "chat_mistral",
+    function() mistral_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   provider <- ProviderMistral(
     name = "Mistral",
     base_url = mistral_base_url,
     model = model,
     params = params,
     extra_args = api_args,
-    api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -130,7 +139,7 @@ models_mistral <- function(api_key = mistral_key()) {
     name = "Mistral",
     model = "",
     base_url = mistral_base_url,
-    api_key = api_key
+    credentials = function() api_key
   )
 
   req <- base_request(provider)
