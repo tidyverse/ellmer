@@ -4,7 +4,13 @@
 \alias{Turn}
 \title{A user or assistant turn}
 \usage{
-Turn(role, contents = list(), json = list(), tokens = c(0, 0, 0))
+Turn(
+  role,
+  contents = list(),
+  json = list(),
+  tokens = c(0, 0, 0),
+  duration = NA_real_
+)
 }
 \arguments{
 \item{role}{Either "user", "assistant", or "system".}
@@ -20,6 +26,9 @@ doesn't otherwise expose.}
 \item{tokens}{A numeric vector of length 2 representing the number of
 input and output tokens (respectively) used in this turn. Currently
 only recorded for assistant turns.}
+
+\item{duration}{The duration of the request in seconds. \code{NA} for user turns,
+numeric for assistant turns.}
 }
 \value{
 An S7 \code{Turn} object

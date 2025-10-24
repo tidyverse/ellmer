@@ -1,6 +1,6 @@
 Package: ellmer
 Title: Chat with Large Language Models
-Version: 0.3.1.9000
+Version: 0.3.2.9000
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4757-117X")),
@@ -33,7 +33,9 @@ Imports:
     promises (>= 1.3.1),
     R6,
     rlang (>= 1.1.0),
-    S7 (>= 0.2.0)
+    S7 (>= 0.2.0),
+    tibble,
+    vctrs
 Suggests:
     connectcreds,
     curl (>= 6.0.1),
@@ -44,6 +46,7 @@ Suggests:
     magick,
     openssl,
     paws.common,
+    png,
     rmarkdown,
     shiny,
     shinychat (>= 0.2.0),
@@ -58,7 +61,7 @@ Config/testthat/parallel: true
 Config/testthat/start-first: chat, provider*
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Collate:
     'utils-S7.R'
     'types.R'
@@ -71,12 +74,12 @@ Collate:
     'chat-structured.R'
     'turns.R'
     'chat-tools.R'
+    'chat-utils.R'
     'utils-coro.R'
     'chat.R'
     'content-image.R'
     'content-pdf.R'
     'content-replay.R'
-    'deprecated.R'
     'httr2.R'
     'import-standalone-obj-type.R'
     'import-standalone-purrr.R'
@@ -100,13 +103,15 @@ Collate:
     'provider-huggingface.R'
     'provider-mistral.R'
     'provider-ollama.R'
+    'provider-openai-responses.R'
     'provider-openrouter.R'
     'provider-perplexity.R'
     'provider-portkey.R'
-    'provider-snowflake-cortex.R'
     'provider-snowflake.R'
     'provider-vllm.R'
+    'schema.R'
     'tokens.R'
+    'tools-built-in.R'
     'tools-def-auto.R'
     'utils-callbacks.R'
     'utils-cat.R'

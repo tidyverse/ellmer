@@ -4,7 +4,7 @@ test_that("can make simple batch request", {
   chat <- chat_anthropic_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?")
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
+  expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -79,11 +79,6 @@ test_that("continues to work after whitespace only outputs (#376)", {
     chat$chat("What's 1+1? Just give me the number"),
     ellmer_output("2")
   )
-})
-
-test_that("max_tokens is deprecated", {
-  expect_snapshot(chat <- chat_anthropic_test(max_tokens = 10))
-  expect_equal(chat$get_provider()@params$max_tokens, 10)
 })
 
 test_that("can match prices for some common models", {

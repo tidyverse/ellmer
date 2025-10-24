@@ -15,6 +15,7 @@
 #' @family chatbots
 #' @param api_key `r api_key_param("GITHUB_PAT")`
 #' @param model `r param_model("gpt-4o")`
+#' @param params Common model parameters, usually created by [params()].
 #' @export
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -28,7 +29,7 @@ chat_github <- function(
   base_url = "https://models.github.ai/inference/",
   api_key = github_key(),
   model = NULL,
-  seed = NULL,
+  params = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
@@ -38,12 +39,15 @@ chat_github <- function(
   model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
 
+  # https://docs.github.com/en/rest/models/inference?apiVersion=2022-11-28
+  params <- params %||% params()
+
   chat_openai(
     system_prompt = system_prompt,
     base_url = base_url,
     api_key = api_key,
     model = model,
-    seed = seed,
+    params = params,
     api_args = api_args,
     echo = echo,
     api_headers = api_headers

@@ -17,6 +17,7 @@ NULL
 #' @family chatbots
 #' @param api_key `r api_key_param("GROQ_API_KEY")`
 #' @param model `r param_model("llama3-8b-8192")`
+#' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
@@ -29,7 +30,7 @@ chat_groq <- function(
   base_url = "https://api.groq.com/openai/v1",
   api_key = groq_key(),
   model = NULL,
-  seed = NULL,
+  params = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
@@ -37,11 +38,14 @@ chat_groq <- function(
   model <- set_default(model, "llama3-8b-8192")
   echo <- check_echo(echo)
 
+  # https://console.groq.com/docs/api-reference#chat-create (same as OpenAI)
+  params <- params %||% params()
+
   provider <- ProviderGroq(
     name = "Groq",
     base_url = base_url,
     model = model,
-    seed = seed,
+    params = params,
     extra_args = api_args,
     api_key = api_key,
     extra_headers = api_headers
@@ -51,11 +55,11 @@ chat_groq <- function(
 
 ProviderGroq <- new_class("ProviderGroq", parent = ProviderOpenAI)
 
-method(as_json, list(ProviderGroq, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderGroq, Turn)) <- function(provider, x, ...) {
   if (x@role == "assistant") {
     # Tool requests come out of content and go into own argument
     is_tool <- map_lgl(x@contents, is_tool_request)
-    tool_calls <- as_json(provider, x@contents[is_tool])
+    tool_calls <- as_json(provider, x@contents[is_tool], ...)
 
     # Grok contents is just a string. Hopefully it never sends back more
     # than a single text response.
@@ -73,11 +77,11 @@ method(as_json, list(ProviderGroq, Turn)) <- function(provider, x) {
       ))
     )
   } else {
-    as_json(super(provider, ProviderOpenAI), x)
+    as_json(super(provider, ProviderOpenAI), x, ...)
   }
 }
 
-method(as_json, list(ProviderGroq, TypeObject)) <- function(provider, x) {
+method(as_json, list(ProviderGroq, TypeObject)) <- function(provider, x, ...) {
   if (x@additional_properties) {
     cli::cli_abort("{.arg .additional_properties} not supported for Groq.")
   }
@@ -86,18 +90,18 @@ method(as_json, list(ProviderGroq, TypeObject)) <- function(provider, x) {
   compact(list(
     type = "object",
     description = x@description,
-    properties = as_json(provider, x@properties),
+    properties = as_json(provider, x@properties, ...),
     required = as.list(names2(x@properties)[required])
   ))
 }
 
-method(as_json, list(ProviderGroq, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderGroq, ToolDef)) <- function(provider, x, ...) {
   list(
     type = "function",
     "function" = compact(list(
       name = x@name,
       description = x@description,
-      parameters = as_json(provider, x@arguments)
+      parameters = as_json(provider, x@arguments, ...)
     ))
   )
 }

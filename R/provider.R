@@ -159,15 +159,39 @@ stream_merge_chunks <- new_generic(
 
 value_turn <- new_generic("value_turn", "provider")
 
-# Convert to JSON
-as_json <- new_generic("as_json", c("provider", "x"))
-
-method(as_json, list(Provider, class_list)) <- function(provider, x) {
-  compact(lapply(x, as_json, provider = provider))
+# Extract token counts from API response
+# Returns a named list produced by token_usage()
+value_tokens <- new_generic(
+  "value_tokens",
+  "provider",
+  function(provider, json) {
+    S7_dispatch()
+  }
+)
+method(value_tokens, Provider) <- function(provider, json) {
+  tokens()
 }
 
-method(as_json, list(Provider, ContentJson)) <- function(provider, x) {
-  as_json(provider, ContentText("<structured data/>"))
+# Convert to JSON
+as_json <- new_generic(
+  "as_json",
+  c("provider", "x"),
+  function(provider, x, ...) {
+    S7_dispatch()
+  }
+)
+
+method(as_json, list(Provider, class_list)) <- function(provider, x, ...) {
+  compact(lapply(x, as_json, provider = provider, ...))
+}
+
+method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
+  if (!is.null(x@string)) {
+    string <- x@string
+  } else {
+    string <- unclass(jsonlite::toJSON(x@data, auto_unbox = TRUE))
+  }
+  as_json(provider, ContentText(string), ...)
 }
 
 # Batch AI ---------------------------------------------------------------

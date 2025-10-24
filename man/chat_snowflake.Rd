@@ -73,13 +73,10 @@ package.
 \subsection{Known limitations}{
 
 Note that Snowflake-hosted models do not support images.
-
-See \code{\link[=chat_cortex_analyst]{chat_cortex_analyst()}} to chat with the Snowflake Cortex Analyst rather
-than a general-purpose model.
 }
 }
 \examples{
-\dontshow{if (has_credentials("snowflake")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (has_credentials("snowflake")) withAutoprint(\{ # examplesIf}
 chat <- chat_snowflake()
 chat$chat("Tell me a joke in the form of a SQL query.")
 \dontshow{\}) # examplesIf}

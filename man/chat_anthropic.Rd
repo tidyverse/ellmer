@@ -2,13 +2,25 @@
 % Please edit documentation in R/provider-anthropic.R
 \name{chat_anthropic}
 \alias{chat_anthropic}
+\alias{chat_claude}
 \alias{models_anthropic}
 \title{Chat with an Anthropic Claude model}
 \usage{
 chat_anthropic(
   system_prompt = NULL,
   params = NULL,
-  max_tokens = deprecated(),
+  model = NULL,
+  api_args = list(),
+  base_url = "https://api.anthropic.com/v1",
+  beta_headers = character(),
+  api_key = anthropic_key(),
+  api_headers = character(),
+  echo = NULL
+)
+
+chat_claude(
+  system_prompt = NULL,
+  params = NULL,
   model = NULL,
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
@@ -27,8 +39,6 @@ models_anthropic(
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
-
-\item{max_tokens}{Maximum number of tokens to generate before stopping.}
 
 \item{model}{The model to use for the chat (defaults to "claude-sonnet-4-20250514").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
@@ -66,11 +76,11 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
-\href{https://www.anthropic.com}{Anthropic} provides a number of chat based
-models under the \href{https://www.anthropic.com/claude}{Claude} moniker.
-Note that a Claude Pro membership does not give you the ability to call
-models via the API; instead, you will need to sign up (and pay for) a
-\href{https://console.anthropic.com/}{developer account}.
+\href{https://www.anthropic.com}{Anthropic} provides a number of chat based models
+under the \href{https://claude.com/product/overview}{Claude} moniker. Note that a
+Claude Pro membership does not give you the ability to call models via the
+API; instead, you will need to sign up (and pay for) a
+\href{https://platform.claude.com/}{developer account}.
 }
 \examples{
 \dontshow{ellmer:::vcr_example_start("chat_anthropic")}
@@ -92,6 +102,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openai_responses}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

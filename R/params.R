@@ -72,3 +72,16 @@ standardise_params <- function(params, provider_params) {
 
   c(standard, params$extra_args)
 }
+
+## To implement a `chat_params()` method for a new provider, use this template:
+# method(chat_params, ProviderNew) <- function(provider, params) {
+#   # <link to api docs>
+#   standardise_params(
+#     params,
+#     c(
+#       paramFromAPI = "ellmer_params_name",
+#       maxTokens = "max_tokens",
+#       # ... all supported parameters that overlap with `params()` ...
+#     )
+#   )
+# }

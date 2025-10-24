@@ -43,6 +43,13 @@ test_that("errors if chat/provider/prompts don't match previous run", {
   )
 })
 
+test_that("can override hash check", {
+  chat <- chat_openai_test(system_prompt = "Be cool")
+  prompts <- list()
+  path <- test_path("batch/state-capitals.json")
+  expect_snapshot(. <- batch_chat(chat, prompts, path, ignore_hash = TRUE))
+})
+
 test_that("steps through in logical order, writing to disk at end step", {
   chat <- chat_openai_test()
   prompts <- list("What's your name")
@@ -128,7 +135,7 @@ test_that("informative error for bad inputs", {
   )
 
   expect_snapshot(error = TRUE, {
-    batch_chat("x")
+    batch_chat(1)
     batch_chat(chat_ollama)
     batch_chat(chat_openai, "a")
     batch_chat(chat_openai, list("a"), path = 1)

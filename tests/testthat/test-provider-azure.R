@@ -4,7 +4,7 @@ test_that("can make simple request", {
   chat <- chat_azure_openai_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
+  expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -67,30 +67,6 @@ test_that("Azure request headers are generated correctly", {
     api_version = "2024-06-01",
     api_key = "key",
     credentials = default_azure_credentials("key")
-  )
-  req <- chat_request(p, FALSE, list(turn))
-  expect_snapshot(str(req_get_headers(req, "reveal")))
-
-  # Token.
-  p <- ProviderAzureOpenAI(
-    name = "Azure",
-    base_url = base_url,
-    model = deployment_id,
-    api_version = "2024-06-01",
-    api_key = "",
-    credentials = default_azure_credentials("", "token")
-  )
-  req <- chat_request(p, FALSE, list(turn))
-  expect_snapshot(str(req_get_headers(req, "reveal")))
-
-  # Both.
-  p <- ProviderAzureOpenAI(
-    name = "Azure",
-    base_url = base_url,
-    model = deployment_id,
-    api_version = "2024-06-01",
-    api_key = "key",
-    credentials = default_azure_credentials("key", "token")
   )
   req <- chat_request(p, FALSE, list(turn))
   expect_snapshot(str(req_get_headers(req, "reveal")))

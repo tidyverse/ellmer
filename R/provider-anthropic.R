@@ -7,17 +7,16 @@ NULL
 #' Chat with an Anthropic Claude model
 #'
 #' @description
-#' [Anthropic](https://www.anthropic.com) provides a number of chat based
-#' models under the [Claude](https://www.anthropic.com/claude) moniker.
-#' Note that a Claude Pro membership does not give you the ability to call
-#' models via the API; instead, you will need to sign up (and pay for) a
-#' [developer account](https://console.anthropic.com/).
+#' [Anthropic](https://www.anthropic.com) provides a number of chat based models
+#' under the [Claude](https://claude.com/product/overview) moniker. Note that a
+#' Claude Pro membership does not give you the ability to call models via the
+#' API; instead, you will need to sign up (and pay for) a
+#' [developer account](https://platform.claude.com/).
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @param model `r param_model("claude-sonnet-4-20250514", "anthropic")`
 #' @param api_key `r api_key_param("ANTHROPIC_API_KEY")`
-#' @param max_tokens Maximum number of tokens to generate before stopping.
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
 #'   claude features that are still in beta.
 #' @param api_headers Named character vector of arbitrary extra headers appended
@@ -32,7 +31,6 @@ NULL
 chat_anthropic <- function(
   system_prompt = NULL,
   params = NULL,
-  max_tokens = deprecated(),
   model = NULL,
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
@@ -44,16 +42,6 @@ chat_anthropic <- function(
   echo <- check_echo(echo)
 
   model <- set_default(model, "claude-sonnet-4-20250514")
-
-  params <- params %||% params()
-  if (lifecycle::is_present(max_tokens)) {
-    lifecycle::deprecate_warn(
-      when = "0.2.0",
-      what = "chat_anthropic(max_tokens)",
-      with = "chat_anthropic(params)"
-    )
-    params$max_tokens <- max_tokens
-  }
 
   provider <- ProviderAnthropic(
     name = "Anthropic",
@@ -68,6 +56,10 @@ chat_anthropic <- function(
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
+
+#' @rdname chat_anthropic
+#' @export
+chat_claude <- chat_anthropic
 
 chat_anthropic_test <- function(
   ...,
@@ -262,6 +254,14 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
   result
 }
 
+method(value_tokens, ProviderAnthropic) <- function(provider, json) {
+  tokens(
+    input = json$usage$input_tokens,
+    output = json$usage$output_tokens,
+    cached_input = json$usage$cache_read_input_tokens
+  )
+}
+
 method(value_turn, ProviderAnthropic) <- function(
   provider,
   result,
@@ -272,7 +272,7 @@ method(value_turn, ProviderAnthropic) <- function(
       ContentText(content$text)
     } else if (content$type == "tool_use") {
       if (has_type) {
-        ContentJson(content$input$data)
+        ContentJson(data = content$input$data)
       } else {
         if (is_string(content$input)) {
           content$input <- jsonlite::parse_json(content$input)
@@ -292,19 +292,14 @@ method(value_turn, ProviderAnthropic) <- function(
     }
   })
 
-  tokens <- tokens_log(
-    provider,
-    input = result$usage$input_tokens,
-    output = result$usage$output_tokens,
-    cached_input = result$usage$cache_read_input_tokens
-  )
-
-  assistant_turn(contents, json = result, tokens = tokens)
+  tokens <- value_tokens(provider, result)
+  tokens_log(provider, tokens)
+  assistant_turn(contents, json = result, tokens = unlist(tokens))
 }
 
 # ellmer -> Claude --------------------------------------------------------------
 
-method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
   if (x@role == "system") {
     # claude passes system prompt as separate arg
     NULL
@@ -317,14 +312,18 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x) {
     data <- tool_results_separate_content(x)
     list(
       role = x@role,
-      content = as_json(provider, c(data$tool_results, data$contents))
+      content = as_json(provider, c(data$tool_results, data$contents), ...)
     )
   } else {
     cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)
   }
 }
 
-method(as_json, list(ProviderAnthropic, ContentText)) <- function(provider, x) {
+method(as_json, list(ProviderAnthropic, ContentText)) <- function(
+  provider,
+  x,
+  ...
+) {
   if (is_whitespace(x@text)) {
     list(type = "text", text = "[empty string]")
   } else {
@@ -332,7 +331,11 @@ method(as_json, list(ProviderAnthropic, ContentText)) <- function(provider, x) {
   }
 }
 
-method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(provider, x) {
+method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     type = "document",
     source = list(
@@ -345,7 +348,8 @@ method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(provider, x) {
 
 method(as_json, list(ProviderAnthropic, ContentImageRemote)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "image",
@@ -358,7 +362,8 @@ method(as_json, list(ProviderAnthropic, ContentImageRemote)) <- function(
 
 method(as_json, list(ProviderAnthropic, ContentImageInline)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "image",
@@ -373,7 +378,8 @@ method(as_json, list(ProviderAnthropic, ContentImageInline)) <- function(
 # https://docs.anthropic.com/en/docs/build-with-claude/tool-use#handling-tool-use-and-tool-result-content-blocks
 method(as_json, list(ProviderAnthropic, ContentToolRequest)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "tool_use",
@@ -386,7 +392,8 @@ method(as_json, list(ProviderAnthropic, ContentToolRequest)) <- function(
 # https://docs.anthropic.com/en/docs/build-with-claude/tool-use#handling-tool-use-and-tool-result-content-blocks
 method(as_json, list(ProviderAnthropic, ContentToolResult)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "tool_result",
@@ -396,17 +403,22 @@ method(as_json, list(ProviderAnthropic, ContentToolResult)) <- function(
   )
 }
 
-method(as_json, list(ProviderAnthropic, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderAnthropic, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     name = x@name,
     description = x@description,
-    input_schema = compact(as_json(provider, x@arguments))
+    input_schema = compact(as_json(provider, x@arguments, ...))
   )
 }
 
 method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   if (identical(x@thinking, "")) {
     return()

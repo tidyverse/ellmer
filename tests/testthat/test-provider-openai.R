@@ -4,7 +4,7 @@ test_that("can make simple request", {
   chat <- chat_openai_test()
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
+  expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -115,12 +115,4 @@ test_that("as_json specialised for OpenAI", {
       additionalProperties = FALSE
     )
   )
-})
-
-test_that("seed is deprecated, but still honored", {
-  expect_snapshot(chat <- chat_openai_test(seed = 1))
-  expect_equal(chat$get_provider()@params$seed, 1)
-
-  # NULL is also ignored since that's what subclasses use
-  expect_no_warning(chat_openai_test(seed = NULL))
 })

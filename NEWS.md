@@ -2,6 +2,48 @@
 
 * ellmer now supports tools that return image or PDF content types, for example using `content_image_file()` or `content_image_pdf()`. (#735)
 
+* The following deprecated functions/arguments/methods have now been removed:
+  * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
+  * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)
+  * `chat_anthropic(max_tokens)` -> `chat_anthropic(params)` (0.2.0)
+  * `chat_azure()` -> `chat_azure_openai()` (0.2.0)
+  * `chat_azure_openai(token)` (0.1.1)
+  * `chat_bedrock()` -> `chat_aws_bedrock()` (0.2.0)
+  * `chat_claude()` -> `chat_anthropic()` (0.2.0)
+  * `chat_cortex()` -> `chat_snowflake()` (0.2.0)
+  * `chat_gemini()` -> `chat_google_gemini()` (0.2.0)
+  * `chat_openai(seed)` -> `chat_openai(params)` (0.2.0)
+  * `create_tool_def(model)` -> `create_tool_def(chat)` (0.2.0)
+* `chat_google_gemini()` andc`chat_openai_responses()` support image generation (#368).
+* New `schema_df()` to describe the schema of a data frame to an LLM (#744).
+* `chat_google_gemini()` and `chat_openai_responses()` support image generation (#368).
+* `batch_*()` no longer hashes properties of the provider besides the `name`, `model`, and `base_url`. This should provide some protection from accidentally reusing the same `.json` file with different providers, while still allowing you to use the same batch file across ellmer versions.
+* `batch_*()` have a new `ignore_hash` argument that allows you to opt out of the check if you're confident the difference only arises because ellmer itself has changed.
+* Turns now have a `@duration` slot. The slot is `NA` for user turns and a numeric giving the total time to complete the request for assistant turns (@simonpcouch, #798).
+* New `chat_openai_responses()` to use the new OpenAI responses API (#365).
+* `parallel_chat_structured()` now returns a tibble, since this does a better job of printing more complex data frames (#787).
+* `parallel_chat()` and friends now have a more permissive attitude to errors. By default, they will now return when hitting the first error (rather than erroring), and you can control this behaviour with the `on_error` argument. Or if you interrupt the job, it will finish up current requests and then return all the work done so far. The main downside of this work is that the output of `parallel_chat()` is more complex: it is now a mix of `Chat` objects, error objects, and `NULL` (#628).
+* `parallel_chat_structured()` no longer errors if some results fail to parse. Instead it warns, and the corresponding rows will be filled in with the appropriate missing values (#628).
+* `$chat_structured()` and friends now only warn if multiple json payloads found (instead of erroring) (@kbenoit, #732).
+* `interpolate_package()` now works with in-development packages loaded with devtools (#766).
+* `Chat$get_tokens()` gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (#618).
+* New `type_ignore()` allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (#764).
+* New `models_mistral()` to list available models (@rplsmn, #750).
+* `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).
+* `interpolate_package()` now provides an informative error if the requested prompt file is not found in the package's `prompts/` directory (#763).
+
+* `models_ollama()` was fixed to correctly query model capabilities from remote Ollama servers (#746).
+
+* `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758).
+
+# ellmer 0.3.2
+
+* `chat()` is now compatible with most `chat_` functions (#699).
+  * `chat_aws_bedrock()`, `chat_databricks()`, `chat_deepseek()`, `chat_github()`, `chat_groq()`, `chat_ollama()`, `chat_openrouter()`, `chat_perplexity()`, and `chat_vllm()` now support a `params` argument that accepts common model parameters from `params()`.
+  * The `deployment_id` argument in `chat_azure_openai()` was deprecated and replaced with `model` to better align with other providers.
+
+* `chat_openai()` now correctly maps `max_tokens` and `top_k` from `params()` to the OpenAI API parameters (#699).
+
 # ellmer 0.3.1
 
 * `chat_anthropic()` drops empty assistant turns to avoid API errors (#710).
@@ -18,7 +60,7 @@
 
 * `chat_snowflake()` now supports Privatelink accounts (#694, @robert-norberg). and works against Snowflake's latest API changes (#692, @robert-norberg).
 
-* `models_google_vertex()` was fixed, argument `project_id` is now deprecated (#704, @netique)
+* `models_google_vertex()` works once again (#704, @netique)
 
 * In the `value_turn()` method for OpenAI providers, `usage` is checked if `NULL` before logging tokens to avoid errors when streaming with some OpenAI-compatible services (#706, @stevegbrooks).
 

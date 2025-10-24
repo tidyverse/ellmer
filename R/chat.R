@@ -114,7 +114,7 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
-    #' @description A data frame with a `tokens` column that proides the
+    #' @description A data frame with a `tokens` column that provides the
     #'   number of input tokens used by user turns and the number of
     #'   output tokens used by assistant turns.
     #' @param include_system_prompt Whether to include the system prompt in
@@ -148,13 +148,21 @@ Chat <- R6::R6Class(
       tokens_df <- data.frame(
         role = rep(c("user", "assistant"), times = n),
         tokens = tokens_v,
-        tokens_total = tokens_acc_v
+        tokens_total = tokens_acc_v,
+        contents = map_chr(turns, turn_contents_preview)
       )
 
       if (include_system_prompt && private$has_system_prompt()) {
+        system_turn <- private$.turns[[1]]
+
         # How do we compute this?
         tokens_df <- rbind(
-          data.frame(role = "system", tokens = 0, tokens_total = 0),
+          data.frame(
+            role = "system",
+            tokens = 0,
+            tokens_total = 0,
+            contents = turn_contents_preview(system_turn)
+          ),
           tokens_df
         )
       }
@@ -443,30 +451,6 @@ Chat <- R6::R6Class(
     #' @return A function that can be called to remove the callback.
     on_tool_result = function(callback) {
       private$callback_on_tool_result$add(callback)
-    },
-
-    #' @description `r lifecycle::badge("deprecated")`
-    #' Deprecated in favour of `$chat_structured()`.
-    #' @param ... See `$chat_structured()`
-    extract_data = function(...) {
-      lifecycle::deprecate_warn(
-        "0.2.0",
-        "Chat$extract_data()",
-        "Chat$chat_structured()"
-      )
-      self$chat_structured(...)
-    },
-
-    #' @description `r lifecycle::badge("deprecated")`
-    # '  Deprecated in favour of `$chat_structured_async()`.
-    #' @param ... See `$chat_structured_async()`
-    extract_data_async = function(...) {
-      lifecycle::deprecate_warn(
-        "0.2.0",
-        "Chat$extract_data_async()",
-        "Chat$chat_structured_async()"
-      )
-      self$chat_structured_async(...)
     }
   ),
   private = list(
@@ -657,9 +641,10 @@ Chat <- R6::R6Class(
       } else {
         turn <- value_turn(
           private$provider,
-          response,
+          resp_body_json(response),
           has_type = !is.null(type)
         )
+        turn@duration <- resp_timing(response)[["total"]] %||% NA_real_
         turn <- match_tools(turn, private$tools)
 
         text <- turn@text
@@ -737,7 +722,12 @@ Chat <- R6::R6Class(
       } else {
         result <- await(response)
 
-        turn <- value_turn(private$provider, result, has_type = !is.null(type))
+        turn <- value_turn(
+          private$provider,
+          resp_body_json(result),
+          has_type = !is.null(type)
+        )
+        turn@duration <- resp_timing(result)[["total"]] %||% NA_real_
         text <- turn@text
         if (!is.null(text)) {
           emit(text)
@@ -787,19 +777,6 @@ Chat <- R6::R6Class(
     }
   )
 )
-
-is_chat <- function(x) {
-  inherits(x, "Chat")
-}
-
-
-check_chat <- function(chat, call = caller_env()) {
-  if (is_chat(chat)) {
-    return(invisible())
-  }
-
-  cli::cli_abort("{.arg chat} must be a <Chat> object.", call = call)
-}
 
 #' @export
 print.Chat <- function(x, ...) {

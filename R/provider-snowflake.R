@@ -25,11 +25,13 @@ NULL
 #' ## Known limitations
 #' Note that Snowflake-hosted models do not support images.
 #'
-#' See [chat_cortex_analyst()] to chat with the Snowflake Cortex Analyst rather
-#' than a general-purpose model.
-#'
 #' @inheritParams chat_openai
-#' @inheritParams chat_cortex_analyst
+#' @param account A Snowflake [account identifier](https://docs.snowflake.com/en/user-guide/admin-account-identifier),
+#'   e.g. `"testorg-test_account"`. Defaults to the value of the
+#'   `SNOWFLAKE_ACCOUNT` environment variable.
+#' @param credentials A list of authentication headers to pass into
+#'   [`httr2::req_headers()`], a function that returns them when called, or
+#'   `NULL`, the default, to use ambient credentials.
 #' @param model `r param_model("claude-3-7-sonnet")`
 #' @inherit chat_openai return
 #' @examplesIf has_credentials("snowflake")
@@ -133,12 +135,13 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
 
 method(as_json, list(ProviderSnowflakeCortex, TypeObject)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   # Unlike OpenAI, Snowflake does not support the "additionalProperties" field.
   names <- names2(x@properties)
   required <- map_lgl(x@properties, function(prop) prop@required)
-  properties <- as_json(provider, x@properties)
+  properties <- as_json(provider, x@properties, ...)
   names(properties) <- names
   list(
     type = "object",
@@ -219,6 +222,13 @@ method(stream_merge_chunks, ProviderSnowflakeCortex) <- function(
   result
 }
 
+method(value_tokens, ProviderSnowflakeCortex) <- function(provider, json) {
+  tokens(
+    input = json$usage$prompt_tokens,
+    output = json$usage$completion_tokens
+  )
+}
+
 method(value_turn, ProviderSnowflakeCortex) <- function(
   provider,
   result,
@@ -228,7 +238,7 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
   contents <- lapply(raw_content, function(content) {
     if (content$type == "text") {
       if (has_type) {
-        ContentJson(jsonlite::parse_json(content$text))
+        ContentJson(string = content$text)
       } else {
         ContentText(content$text)
       }
@@ -249,17 +259,18 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
       )
     }
   })
-  tokens <- tokens_log(
-    provider,
-    input = result$usage$prompt_tokens,
-    output = result$usage$completion_tokens
-  )
-  assistant_turn(contents, json = result, tokens = tokens)
+  tokens <- value_tokens(provider, result)
+  tokens_log(provider, tokens)
+  assistant_turn(contents, json = result, tokens = unlist(tokens))
 }
 
 # ellmer -> Snowflake --------------------------------------------------------
 
-method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(
+  provider,
+  x,
+  ...
+) {
   # Attempting to omit the `content` field and use `content_list` instead
   # yields:
   #
@@ -285,21 +296,22 @@ method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(provider, x) {
   data <- tool_results_separate_content(x)
   list(
     role = x@role,
-    content_list = as_json(provider, c(data$tool_results, data$contents))
+    content_list = as_json(provider, c(data$tool_results, data$contents), ...)
   )
 }
 
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#tools-configuration
 method(as_json, list(ProviderSnowflakeCortex, ToolDef)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     tool_spec = compact(list(
       type = "generic",
       name = x@name,
       description = x@description,
-      input_schema = as_json(provider, x@arguments)
+      input_schema = as_json(provider, x@arguments, ...)
     ))
   )
 }
@@ -307,7 +319,8 @@ method(as_json, list(ProviderSnowflakeCortex, ToolDef)) <- function(
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#tools-configuration
 method(as_json, list(ProviderSnowflakeCortex, ContentToolRequest)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   input <- x@arguments
   if (length(input) == 0) {
@@ -327,7 +340,8 @@ method(as_json, list(ProviderSnowflakeCortex, ContentToolRequest)) <- function(
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#tool-results
 method(as_json, list(ProviderSnowflakeCortex, ContentToolResult)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     type = "tool_results",
@@ -453,4 +467,38 @@ snowflake_keypair_token <- function(
 
 snowflake_keypair_cache <- function(account, key) {
   credentials_cache(key = hash(c("sf", account, openssl::fingerprint(key))))
+}
+
+# Credential handling ----------------------------------------------------------
+
+snowflake_credentials_exist <- function(...) {
+  tryCatch(
+    is_list(default_snowflake_credentials(...)),
+    error = function(e) FALSE
+  )
+}
+
+# Reads Posit Workbench-managed Snowflake credentials from a
+# $SNOWFLAKE_HOME/connections.toml file, as used by the Snowflake Connector for
+# Python implementation. The file will look as follows:
+#
+# [workbench]
+# account = "account-id"
+# token = "token"
+# authenticator = "oauth"
+workbench_snowflake_token <- function(account, sf_home) {
+  cfg <- readLines(file.path(sf_home, "connections.toml"))
+  # We don't attempt a full parse of the TOML syntax, instead relying on the
+  # fact that this file will always contain only one section.
+  if (!any(grepl(account, cfg, fixed = TRUE))) {
+    # The configuration doesn't actually apply to this account.
+    return(NULL)
+  }
+  line <- grepl("token = ", cfg, fixed = TRUE)
+  token <- gsub("token = ", "", cfg[line])
+  if (nchar(token) == 0) {
+    return(NULL)
+  }
+  # Drop enclosing quotes.
+  gsub("\"", "", token)
 }

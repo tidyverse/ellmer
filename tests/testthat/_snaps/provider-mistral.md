@@ -5,7 +5,7 @@
     Condition
       Error in `req_perform()`:
       ! HTTP 400 Bad Request.
-      * Invalid model: doesnt-exist
+      i Invalid model: doesnt-exist
 
 # defaults are reported
 

@@ -2,7 +2,7 @@ test_that("can make simple batch request", {
   chat <- chat_aws_bedrock("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
+  expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -18,6 +18,16 @@ test_that("can list models", {
 test_that("can set api args", {
   chat <- chat_aws_bedrock(
     api_args = list(inferenceConfig = list(maxTokens = 1)),
+    echo = FALSE
+  )
+  result <- chat$chat("Who are the reindeer?")
+  expect_true(nchar(result) < 10)
+})
+
+test_that("api args overwrite params", {
+  chat <- chat_aws_bedrock(
+    api_args = list(inferenceConfig = list(maxTokens = 1)),
+    params = params(max_tokens = 100),
     echo = FALSE
   )
   result <- chat$chat("Who are the reindeer?")

@@ -7,7 +7,7 @@
 #'
 #' * `interpolate()` works with a string.
 #' * `interpolate_file()` works with a file.
-#' * `interpolate_package()` works with a file in the `insts/prompt`
+#' * `interpolate_package()` works with a file in the `inst/prompts`
 #'   directory of a package.
 #'
 #' Compared to glue, dynamic values should be wrapped in `{{ }}`, making it
@@ -46,10 +46,12 @@ interpolate <- function(prompt, ..., .envir = parent.frame()) {
   ellmer_prompt(out)
 }
 
-#' @param path A path to a prompt file (often a `.md`).
+#' @param path A path to a prompt file (often a `.md`). In
+#'   `interpolate_package()`, this path is relative to `inst/prompts`.
 #' @rdname interpolate
 #' @export
 interpolate_file <- function(path, ..., .envir = parent.frame()) {
+  check_string(path)
   string <- read_file(path)
   interpolate(string, ..., .envir = .envir)
 }
@@ -57,18 +59,36 @@ interpolate_file <- function(path, ..., .envir = parent.frame()) {
 #' @param package Package name.
 #' @rdname interpolate
 #' @export
-interpolate_package <- function(
-  package,
-  path,
-  ...,
-  .envir = parent.frame()
-) {
-  path <- system.file("prompts", path, package = package)
-  interpolate_file(path, ..., .envir = .envir)
+interpolate_package <- function(package, path, ..., .envir = parent.frame()) {
+  check_string(package)
+  check_string(path)
+
+  prompts_path <- file.path(inst_path(package), "prompts")
+  if (!dir.exists(prompts_path)) {
+    cli::cli_abort(
+      "{.pkg {package}} does not have a {.field prompts/} directory."
+    )
+  }
+
+  prompt_path <- file.path(prompts_path, path)
+  if (!file.exists(prompt_path)) {
+    cli::cli_abort(c(
+      "{.pkg {package}} does not have {.val {path}} in its {.field prompts/} directory.",
+      "i" = 'Run {.run dir(system.file("prompts", package = "{package}"))} to see available prompts.'
+    ))
+  }
+
+  interpolate_file(prompt_path, ..., .envir = .envir)
 }
 
 read_file <- function(path) {
-  file_contents <- readChar(path, file.size(path))
+  if (!file.exists(path)) {
+    cli::cli_abort(
+      "{.arg path} {.path {path}} does not exist.",
+      call = caller_env()
+    )
+  }
+  readChar(path, file.size(path))
 }
 
 # Prompt class -----------------------------------------------------------------
@@ -88,6 +108,9 @@ print.ellmer_prompt <- function(
   max_items = 20,
   max_lines = max_items * 10
 ) {
+  check_number_whole(max_items, min = 1)
+  check_number_whole(max_lines, min = 1)
+
   n <- length(x)
   n_extra <- length(x) - max_items
   if (n_extra > 0) {
@@ -110,13 +133,18 @@ print.ellmer_prompt <- function(
   x <- gsub("\n", paste0("\n", exdent), x)
 
   lines <- strsplit(x, "\n")
-  ids <- rep(seq_along(x), length(lines))
+  ids <- rep(seq_along(x), lengths(lines))
+  first <- c(TRUE, ids[-length(ids)] != ids[-1])
   lines <- unlist(lines)
 
   if (length(lines) > max_lines) {
+    if (first[max_lines + 1]) {
+      max_lines <- if (ids[max_lines] > 1) max_lines - 1 else max(max_lines, 1)
+    }
+
     lines <- lines[seq_len(max_lines)]
     lines <- c(lines, paste0(exdent, "..."))
-    n_extra <- n - ids[max_lines - 1]
+    n_extra <- n - ids[max_lines]
   }
 
   cat(lines, sep = "\n")
@@ -134,5 +162,14 @@ print.ellmer_prompt <- function(
 
 # Helpers ----------------------------------------------------------------------
 
-# for mocking
-system.file <- NULL
+inst_path <- function(package) {
+  if (is_dev_package(package)) {
+    file.path(getNamespaceInfo(package, "path"), "inst")
+  } else {
+    system.file(package = package)
+  }
+}
+
+is_dev_package <- function(pkg) {
+  !is.null(.getNamespace(pkg)[[".__DEVTOOLS__"]])
+}

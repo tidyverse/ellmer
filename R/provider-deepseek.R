@@ -28,7 +28,7 @@ chat_deepseek <- function(
   base_url = "https://api.deepseek.com",
   api_key = deepseek_key(),
   model = NULL,
-  seed = NULL,
+  params = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
@@ -36,11 +36,13 @@ chat_deepseek <- function(
   model <- set_default(model, "deepseek-chat")
   echo <- check_echo(echo)
 
+  params <- params %||% params()
+
   provider <- ProviderDeepSeek(
     name = "DeepSeek",
     base_url = base_url,
     model = model,
-    seed = seed,
+    params = params,
     extra_args = api_args,
     api_key = api_key,
     extra_headers = api_headers
@@ -50,17 +52,38 @@ chat_deepseek <- function(
 
 ProviderDeepSeek <- new_class("ProviderDeepSeek", parent = ProviderOpenAI)
 
-method(as_json, list(ProviderDeepSeek, ContentText)) <- function(provider, x) {
+method(chat_params, ProviderDeepSeek) <- function(provider, params) {
+  # https://platform.deepseek.com/api-docs/api/create-chat-completion
+  standardise_params(
+    params,
+    c(
+      frequency_penalty = "frequency_penalty",
+      max_tokens = "max_tokens",
+      presence_penalty = "presence_penalty",
+      stop = "stop_sequences",
+      temperature = "temperature",
+      top_p = "top_p",
+      logprobs = "log_probs",
+      top_logprobs = "top_k"
+    )
+  )
+}
+
+method(as_json, list(ProviderDeepSeek, ContentText)) <- function(
+  provider,
+  x,
+  ...
+) {
   x@text
 }
 
-method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x) {
+method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
   if (x@role == "user") {
     data <- tool_results_separate_content(x)
     # Text and tool results go in separate messages
     texts <- keep(data$contents, S7_inherits, ContentText)
     texts_out <- lapply(texts, function(text) {
-      list(role = "user", content = as_json(provider, text))
+      list(role = "user", content = as_json(provider, text, ...))
     })
 
     tools_out <- lapply(data$tool_results, function(tool) {
@@ -79,11 +102,11 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x) {
 
     list(compact(list(
       role = "assistant",
-      content = as_json(provider, text),
-      tool_calls = as_json(provider, tools)
+      content = as_json(provider, text, ...),
+      tool_calls = as_json(provider, tools, ...)
     )))
   } else {
-    as_json(super(provider, ProviderOpenAI), x)
+    as_json(super(provider, ProviderOpenAI), x, ...)
   }
 }
 

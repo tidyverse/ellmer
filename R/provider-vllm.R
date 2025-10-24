@@ -12,6 +12,7 @@ NULL
 #' @inheritParams chat_openai
 #' @param api_key `r api_key_param("VLLM_API_KEY")`
 #' @param model `r param_model(NULL, "vllm")`
+#' @param params Common model parameters, usually created by [params()].
 #' @inherit chat_openai return
 #' @export
 #' @examples
@@ -23,7 +24,7 @@ chat_vllm <- function(
   base_url,
   system_prompt = NULL,
   model,
-  seed = NULL,
+  params = NULL,
   api_args = list(),
   api_key = vllm_key(),
   echo = NULL,
@@ -40,11 +41,14 @@ chat_vllm <- function(
   }
   echo <- check_echo(echo)
 
+  # https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html
+  params <- params %||% params()
+
   provider <- ProviderVllm(
     name = "VLLM",
     base_url = base_url,
     model = model,
-    seed = seed,
+    params = params,
     extra_args = api_args,
     api_key = api_key,
     extra_headers = api_headers
@@ -68,13 +72,13 @@ ProviderVllm <- new_class(
 )
 
 # Just like OpenAI but no strict
-method(as_json, list(ProviderVllm, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderVllm, ToolDef)) <- function(provider, x, ...) {
   list(
     type = "function",
     "function" = compact(list(
       name = x@name,
       description = x@description,
-      parameters = as_json(provider, x@arguments)
+      parameters = as_json(provider, x@arguments, ...)
     ))
   )
 }

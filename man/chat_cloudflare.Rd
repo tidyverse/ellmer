@@ -52,7 +52,7 @@ A \link{Chat} object.
 }
 \description{
 \href{https://www.cloudflare.com/developer-platform/products/workers-ai/}{Cloudflare}
-works AI hosts a variety of open-source AI models. To use the Cloudflare
+Workers AI hosts a variety of open-source AI models. To use the Cloudflare
 API, you must have an Account ID and an Access Token, which you can obtain
 \href{https://developers.cloudflare.com/workers-ai/get-started/rest-api/}{by following these instructions}.
 \subsection{Known limitations}{
@@ -82,6 +82,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openai_responses}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

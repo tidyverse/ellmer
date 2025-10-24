@@ -4,7 +4,7 @@ test_that("can make simple request", {
   chat <- chat_google_gemini_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?")
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
+  expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -131,4 +131,14 @@ test_that("can handle citations", {
   expect_equal(source$endIndex, 2)
   expect_equal(source$uri, "https://example.com")
   expect_equal(source$license, "")
+})
+
+test_that("can generate images", {
+  vcr::local_cassette("google-image-gen")
+
+  chat <- chat_google_gemini_test(model = "gemini-2.5-flash-image")
+  chat$chat("Draw a cat")
+
+  turn <- chat$get_turns()[[2]]
+  expect_s7_class(turn@contents[[1]], ContentImageInline)
 })

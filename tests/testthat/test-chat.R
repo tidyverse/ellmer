@@ -231,27 +231,25 @@ test_that("can retrieve last_turn for user and assistant", {
   expect_equal(chat$last_turn("assistant")@role, "assistant")
 })
 
-test_that("old extract methods are deprecated", {
-  ChatNull <- R6::R6Class(
-    "ChatNull",
-    inherit = Chat,
-    public = list(
-      chat_structured = function(...) invisible(),
-      chat_structured_async = function(...) invisible()
-    )
-  )
-
-  chat_null <- ChatNull$new(provider = chat_openai()$get_provider())
-  expect_snapshot({
-    chat_null$extract_data()
-    chat_null$extract_data_async()
-  })
-})
-
 test_that("api_headers parameter works correctly", {
   chat <- chat_openai_test(api_headers = c("X-Test" = "value"))
   expect_equal(chat$get_provider()@extra_headers, c("X-Test" = "value"))
 
   req <- chat_request(chat$get_provider())
   expect_equal(req_get_headers(req), list("X-Test" = "value"))
+})
+
+test_that("assistant turns track duration", {
+  vcr::local_cassette("chat-duration")
+
+  chat <- chat_openai_test()
+  chat$chat("What's 1 + 1?")
+
+  user_turn <- chat$get_turns()[[1]]
+  assistant_turn <- chat$last_turn()
+
+  expect_true(is.na(user_turn@duration))
+
+  # These assistant durations are usually not NA, but are during replay (#479)
+  expect_true(is.na(assistant_turn@duration) || assistant_turn@duration > 0)
 })
