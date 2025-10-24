@@ -109,6 +109,7 @@ Collate:
     'provider-portkey.R'
     'provider-snowflake.R'
     'provider-vllm.R'
+    'schema.R'
     'tokens.R'
     'tools-built-in.R'
     'tools-def-auto.R'
