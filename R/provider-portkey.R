@@ -107,7 +107,6 @@ models_portkey <- function(
       with = "models_portkey()",
     )
   }
-  
   provider <- ProviderPortkeyAI(
     name = "PortkeyAI",
     model = "",
