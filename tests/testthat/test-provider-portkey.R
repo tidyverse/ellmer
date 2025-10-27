@@ -2,7 +2,6 @@
 
 test_that("can make simple request", {
   chat <- chat_portkey_test(
-    virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"),
     "Be as terse as possible; no punctuation"
   )
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
@@ -12,7 +11,6 @@ test_that("can make simple request", {
 
 test_that("can make simple streaming request", {
   chat <- chat_portkey_test(
-    virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"),
     "Be as terse as possible; no punctuation"
   )
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
@@ -27,7 +25,7 @@ test_that("defaults are reported", {
 
 test_that("supports tool calling", {
   chat_fun <- \(...) {
-    chat_portkey_test(virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"))
+    chat_portkey_test()
   }
 
   test_tools_simple(chat_fun)
@@ -35,7 +33,7 @@ test_that("supports tool calling", {
 
 test_that("can extract data", {
   chat_fun <- \(...) {
-    chat_portkey_test(virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"))
+    chat_portkey_test()
   }
 
   test_data_extraction(chat_fun)
@@ -44,7 +42,6 @@ test_that("can extract data", {
 test_that("can use images", {
   chat_fun <- \(...) {
     chat_portkey_test(
-      virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"),
       model = "gpt-4.1-mini",
       ...
     )
