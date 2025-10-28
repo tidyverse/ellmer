@@ -177,24 +177,29 @@ Chat <- R6::R6Class(
     get_cost = function(include = c("all", "last")) {
       include <- arg_match(include)
 
+      tokens <- self$get_cost_details()
+      if (include == "last") {
+        tokens$cost[nrow(tokens)]
+      } else {
+        sum(tokens$cost)
+      }
+    },
+
+    #' @description The tokens and for each user-assistant turn of this chat.
+    get_cost_details = function() {
       turns <- self$get_turns(include_system_prompt = FALSE)
       assistant_turns <- keep(turns, function(x) x@role == "assistant")
-      n <- length(assistant_turns)
-      tokens <- t(vapply(
+      tokens <- as.data.frame(t(vapply(
         assistant_turns,
         function(turn) turn@tokens,
         double(3)
-      ))
-
-      if (include == "last") {
-        tokens <- tokens[nrow(tokens), , drop = FALSE]
-      }
-
-      private$compute_cost(
-        input = sum(tokens[, 1]),
-        output = sum(tokens[, 2]),
-        cached_input = sum(tokens[, 3])
+      )))
+      tokens$cost <- private$compute_cost(
+        input = tokens[, 1],
+        output = tokens[, 2],
+        cached_input = tokens[, 3]
       )
+      tokens
     },
 
     #' @description The last turn returned by the assistant.

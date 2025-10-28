@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `Chat$get_cost_details()` provides the number of tokens and cost of each user-assistant turn.
+* `chat_anthropic()` gains new `cache` parameter to control caching. By default it is set to "5m". This should (on average) reduce the cost of your chats.(#584)
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
   * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)

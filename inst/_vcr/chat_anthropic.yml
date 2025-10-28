@@ -4,44 +4,48 @@ http_interactions:
     uri: https://api.anthropic.com/v1/messages
     body:
       string: '{"model":"claude-sonnet-4-20250514","messages":[{"role":"user","content":[{"type":"text","text":"Tell
-        me three jokes about statisticians"}]}],"stream":false,"max_tokens":4096}'
+        me three jokes about statisticians","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Mon, 30 Jun 2025 21:18:27 GMT
+      date: Tue, 28 Oct 2025 16:20:36 GMT
       content-type: application/json
-      anthropic-ratelimit-input-tokens-limit: '40000'
-      anthropic-ratelimit-input-tokens-remaining: '40000'
-      anthropic-ratelimit-input-tokens-reset: '2025-06-30T21:18:23Z'
-      anthropic-ratelimit-output-tokens-limit: '16000'
-      anthropic-ratelimit-output-tokens-remaining: '16000'
-      anthropic-ratelimit-output-tokens-reset: '2025-06-30T21:18:28Z'
-      anthropic-ratelimit-requests-limit: '1000'
-      anthropic-ratelimit-requests-remaining: '999'
-      anthropic-ratelimit-requests-reset: '2025-06-30T21:18:22Z'
-      anthropic-ratelimit-tokens-limit: '56000'
-      anthropic-ratelimit-tokens-remaining: '56000'
-      anthropic-ratelimit-tokens-reset: '2025-06-30T21:18:23Z'
-      request-id: req_011CQf6toLGXDAC6KPibEKRT
+      content-encoding: gzip
+      anthropic-ratelimit-input-tokens-limit: '2000000'
+      anthropic-ratelimit-input-tokens-remaining: '2000000'
+      anthropic-ratelimit-input-tokens-reset: '2025-10-28T16:20:31Z'
+      anthropic-ratelimit-output-tokens-limit: '400000'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-10-28T16:20:36Z'
+      anthropic-ratelimit-requests-limit: '4000'
+      anthropic-ratelimit-requests-remaining: '3999'
+      anthropic-ratelimit-requests-reset: '2025-10-28T16:20:29Z'
+      anthropic-ratelimit-tokens-limit: '2400000'
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-10-28T16:20:31Z'
+      request-id: req_011CUZuFDzcSRf6uzR6FtpjQ
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      x-envoy-upstream-service-time: '6548'
       via: 1.1 google
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 9580b21bcc8af04c-DFW
-      content-encoding: gzip
+      cf-ray: 995bc2c5ef7f69df-DFW
     body:
-      string: '{"id":"msg_011F6wTy7HaMgbfgxR3dWcXY","type":"message","role":"assistant","model":"claude-sonnet-4-20250514","content":[{"type":"text","text":"Here
+      string: '{"model":"claude-sonnet-4-20250514","id":"msg_01WhQqnZVVZxRJjpvLmyW4dY","type":"message","role":"assistant","content":[{"type":"text","text":"Here
         are three jokes about statisticians:\n\n1. **The Drowning Statistician**\nA
-        statistician can have his head in an oven and his feet in ice, and he''ll
-        say that on average, he feels fine.\n\n2. **The Hiring Process**\nHow do you
-        tell the difference between an introverted statistician and an extroverted
-        statistician? The introverted one looks at his own shoes when talking to you.
-        The extroverted one looks at *your* shoes.\n\n3. **The Wedding Anniversary**\nA
-        statistician''s wife is having a baby. The statistician is pacing in the hospital
-        corridor when the nurse comes out and says, \"Congratulations! You''re the
-        father of beautiful twins!\" The statistician replies, \"Well, I suppose that''s
-        close to the national average.\""}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":179,"service_tier":"standard"}}'
-  recorded_at: 2025-06-30 21:18:27
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+        statistician is drowning in a lake that''s on average only 3 feet deep. When
+        asked how this could happen, he gasps: \"Well, it was 2 feet deep for most
+        of the way across, but then there was this 50-foot section...\"\n\n2. **The
+        Confident Statistician**\nA statistician''s wife is having a baby. After the
+        delivery, he asks the doctor, \"Is it a boy or a girl?\" The doctor replies,
+        \"Well, I can tell you with 95% confidence that it''s one of the two.\"\n\n3.
+        **The Literal Statistician**\nThree statisticians go hunting. They spot a
+        deer 100 yards away. The first statistician shoots and misses 5 feet to the
+        left. The second shoots and misses 5 feet to the right. The third statistician
+        jumps up and yells, \"We got him!\"\n\nThese jokes play on common statistical
+        concepts like averages being misleading, confidence intervals, and the difference
+        between theoretical accuracy and practical results!"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":249,"service_tier":"standard"}}'
+  recorded_at: 2025-10-28 16:20:36
+recorded_with: VCR-vcr/2.0.0

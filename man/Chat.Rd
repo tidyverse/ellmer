@@ -35,6 +35,7 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
 \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
 \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
+\item \href{#method-Chat-get_cost_details}{\code{Chat$get_cost_details()}}
 \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
 \item \href{#method-Chat-chat}{\code{Chat$chat()}}
 \item \href{#method-Chat-chat_structured}{\code{Chat$chat_structured()}}
@@ -211,6 +212,16 @@ most recent turn.}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_cost_details"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_cost_details}{}}}
+\subsection{Method \code{get_cost_details()}}{
+The tokens and for each user-assistant turn of this chat.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_cost_details()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Chat-last_turn"></a>}}

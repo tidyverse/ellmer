@@ -17,43 +17,45 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9564fb6b7c724863-DFW
+      cf-ray: 995bbb34497d2cb6-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 27 Jun 2025 12:35:10 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '6672'
+      date: Tue, 28 Oct 2025 16:15:26 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '5629'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=uhy1dBTOvMaT_n3Tee23IQ1bTz_ephDEJFpAMPVLL7c-1751027710-1.0.1.1-xbXtjNj_RbuB3z3YS_mg22lTB_LYkyy2I6bCd18UOqmjo5Y5evf_UjVO4GvtJe0mgTcnfaAahkBIYwomK79aQx_ZqYwi8EboxyNRHwEjomo;
-        path=/; expires=Fri, 27-Jun-25 13:05:10 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=XW2AWe1Xhy_JU1d7ljdeU2qUHUicJ02Vkt.mbC5QdzY-1761668126-1.0.1.1-YCmudj9uhq2tMcgFi3Ho6BYHEj4Um6cx.5xq1GPNUIejEAm8S2HurbyD5rENJMNunfAm7PfOokHPsW0IuJWh2R2b8b3.aknVYkLny30aGOk;
+        path=/; expires=Tue, 28-Oct-25 16:45:26 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=d4MK21NY2k9d65OjRyUF6gnWMnNQ6IAG6ZHepvNasOw-1751027710320-0.0.1.1-604800000;
+      - _cfuvid=jGYYcuhof_SEGNpILF.Wtnvl2Y.uLY9T5.RXrdnc5a0-1761668126101-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '6678'
+      x-envoy-upstream-service-time: '5863'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999881'
+      x-ratelimit-remaining-tokens: '29999882'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_2e2b596fb5ab6794f4532f1087c86bd4
+      x-request-id: req_3b4b0234e4f0406ea7f3770596524bba
     body:
       string: |
         {
-          "id": "chatcmpl-Bn2aFnOoZ4ywAFdwZf0inUEKCY8m4",
+          "id": "chatcmpl-CVgdsvXVWImh4bMMgEgJpj0WzavLW",
           "object": "chat.completion",
-          "created": 1751027703,
+          "created": 1761668120,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "[\n  {\n    \"ingredient\": \"dark brown sugar\",\n    \"amount\": \"3/4 cup\",\n    \"weight\": \"150g\"\n  },\n  {\n    \"ingredient\": \"eggs\",\n    \"amount\": \"2\",\n    \"unit\": \"large\"\n  },\n  {\n    \"ingredient\": \"sour cream\",\n    \"amount\": \"3/4 cup\",\n    \"weight\": \"165g\"\n  },\n  {\n    \"ingredient\": \"unsalted butter\",\n    \"amount\": \"1/2 cup\",\n    \"weight\": \"113g\",\n    \"preparation\": \"melted\"\n  },\n  {\n    \"ingredient\": \"vanilla extract\",\n    \"amount\": \"1 teaspoon\"\n  },\n  {\n    \"ingredient\": \"kosher salt\",\n    \"amount\": \"3/4 teaspoon\"\n  },\n  {\n    \"ingredient\": \"neutral oil\",\n    \"amount\": \"1/3 cup\",\n    \"volume\": \"80ml\"\n  },\n  {\n    \"ingredient\": \"all-purpose flour\",\n    \"amount\": \"1 1/2 cups\",\n    \"weight\": \"190g\"\n  },\n  {\n    \"ingredient\": \"sugar\",\n    \"amounts\": [\n      {\n        \"amount\": \"150g\"\n      },\n      {\n        \"amount\": \"1 1/2 teaspoons\"\n      }\n    ]\n  }\n]",
+                "content": "[\n  {\n    \"name\": \"dark brown sugar\",\n    \"quantity\": 0.75,\n    \"unit\": \"cup\",\n    \"weight\": 150,\n    \"weight_unit\": \"g\"\n  },\n  {\n    \"name\": \"eggs\",\n    \"quantity\": 2,\n    \"unit\": \"large\"\n  },\n  {\n    \"name\": \"sour cream\",\n    \"quantity\": 0.75,\n    \"unit\": \"cup\",\n    \"weight\": 165,\n    \"weight_unit\": \"g\"\n  },\n  {\n    \"name\": \"unsalted butter\",\n    \"quantity\": 0.5,\n    \"unit\": \"cup\",\n    \"weight\": 113,\n    \"weight_unit\": \"g\",\n    \"note\": \"melted\"\n  },\n  {\n    \"name\": \"vanilla extract\",\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"name\": \"kosher salt\",\n    \"quantity\": 0.75,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"name\": \"neutral oil\",\n    \"quantity\": 0.33,\n    \"unit\": \"cup\",\n    \"volume\": 80,\n    \"volume_unit\": \"ml\"\n  },\n  {\n    \"name\": \"all-purpose flour\",\n    \"quantity\": 1.5,\n    \"unit\": \"cup\",\n    \"weight\": 190,\n    \"weight_unit\": \"g\"\n  },\n  {\n    \"name\": \"sugar\",\n    \"quantity\": 150,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"sugar\",\n    \"quantity\": 1.5,\n    \"unit\": \"teaspoon\"\n  }\n]",
                 "refusal": null,
                 "annotations": []
               },
@@ -63,8 +65,8 @@ http_interactions:
           ],
           "usage": {
             "prompt_tokens": 149,
-            "completion_tokens": 286,
-            "total_tokens": 435,
+            "completion_tokens": 372,
+            "total_tokens": 521,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -77,7 +79,7 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_799e4ca3f1"
+          "system_fingerprint": "fp_144ea3b974"
         }
-  recorded_at: 2025-06-27 12:35:10
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-10-28 16:15:26
+recorded_with: VCR-vcr/2.0.0

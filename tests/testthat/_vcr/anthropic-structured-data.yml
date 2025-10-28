@@ -6,41 +6,41 @@ http_interactions:
       string: '{"model":"claude-3-5-sonnet-latest","messages":[{"role":"user","content":[{"type":"text","text":"\n    #
         Apples are tasty\n    By Hadley Wickham\n\n    Apples are delicious and tasty
         and I like to eat them.\n    Except for red delicious, that is. They are NOT
-        delicious.\n  "}]}],"stream":false,"tools":[{"name":"_structured_tool_call","description":"Extract
+        delicious.\n  ","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"_structured_tool_call","description":"Extract
         structured data","input_schema":{"type":"object","description":"","properties":{"data":{"type":"object","description":"Summary
         of the article. Preserve existing case.","properties":{"title":{"type":"string","description":"Content
         title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false}},"required":["data"],"additionalProperties":false}}],"tool_choice":{"type":"tool","name":"_structured_tool_call"},"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Wed, 08 Oct 2025 20:00:32 GMT
+      date: Tue, 28 Oct 2025 13:14:45 GMT
       content-type: application/json
       content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '160000'
-      anthropic-ratelimit-input-tokens-remaining: '160000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-08T20:00:31Z'
-      anthropic-ratelimit-output-tokens-limit: '32000'
-      anthropic-ratelimit-output-tokens-remaining: '32000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-08T20:00:32Z'
-      anthropic-ratelimit-requests-limit: '2000'
-      anthropic-ratelimit-requests-remaining: '1999'
-      anthropic-ratelimit-requests-reset: '2025-10-08T20:00:31Z'
-      anthropic-ratelimit-tokens-limit: '192000'
-      anthropic-ratelimit-tokens-remaining: '192000'
-      anthropic-ratelimit-tokens-reset: '2025-10-08T20:00:31Z'
-      request-id: req_011CTvKr47vAzDKP7jaJYANL
+      anthropic-ratelimit-input-tokens-limit: '400000'
+      anthropic-ratelimit-input-tokens-remaining: '400000'
+      anthropic-ratelimit-input-tokens-reset: '2025-10-28T13:14:44Z'
+      anthropic-ratelimit-output-tokens-limit: '80000'
+      anthropic-ratelimit-output-tokens-remaining: '80000'
+      anthropic-ratelimit-output-tokens-reset: '2025-10-28T13:14:45Z'
+      anthropic-ratelimit-requests-limit: '4000'
+      anthropic-ratelimit-requests-remaining: '3999'
+      anthropic-ratelimit-requests-reset: '2025-10-28T13:14:44Z'
+      anthropic-ratelimit-tokens-limit: '480000'
+      anthropic-ratelimit-tokens-remaining: '480000'
+      anthropic-ratelimit-tokens-reset: '2025-10-28T13:14:44Z'
+      request-id: req_011CUZf5ef2KmJQ48eAJZpPZ
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '986'
+      x-envoy-upstream-service-time: '949'
       via: 1.1 google
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 98b83993ab04f04c-DFW
+      cf-ray: 995ab2ab3953acd3-DFW
     body:
-      string: '{"model":"claude-3-5-sonnet-20241022","id":"msg_01YNGYBsMpzeZPu6vvPdUJDb","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_015qPr1LDGU1uRZt6mX2SuJA","name":"_structured_tool_call","input":{"data":{"title":"Apples
+      string: '{"model":"claude-3-5-sonnet-20241022","id":"msg_01SE3nvP3eqMYmErcVF6LqE3","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01U3mvm4zMp2BqkaZY3zcaLb","name":"_structured_tool_call","input":{"data":{"title":"Apples
         are tasty","author":"Hadley Wickham"}}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":518,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":54,"service_tier":"standard"}}'
-  recorded_at: 2025-10-08 20:00:32
+  recorded_at: 2025-10-28 13:14:45
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
@@ -52,39 +52,39 @@ http_interactions:
         are tasty\",\"author\":\"Hadley Wickham\"}"}]},{"role":"user","content":[{"type":"text","text":"\n    #
         Apples are tasty\n    By Hadley Wickham\n\n    Apples are delicious and tasty
         and I like to eat them.\n    Except for red delicious, that is. They are NOT
-        delicious.\n  "}]}],"stream":false,"tools":[{"name":"_structured_tool_call","description":"Extract
+        delicious.\n  ","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"_structured_tool_call","description":"Extract
         structured data","input_schema":{"type":"object","description":"","properties":{"data":{"type":"object","description":"Summary
         of the article. Preserve existing case.","properties":{"title":{"type":"string","description":"Content
         title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false}},"required":["data"],"additionalProperties":false}}],"tool_choice":{"type":"tool","name":"_structured_tool_call"},"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Wed, 08 Oct 2025 20:00:33 GMT
+      date: Tue, 28 Oct 2025 13:14:46 GMT
       content-type: application/json
       content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '160000'
-      anthropic-ratelimit-input-tokens-remaining: '160000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-08T20:00:33Z'
-      anthropic-ratelimit-output-tokens-limit: '32000'
-      anthropic-ratelimit-output-tokens-remaining: '32000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-08T20:00:33Z'
-      anthropic-ratelimit-requests-limit: '2000'
-      anthropic-ratelimit-requests-remaining: '1999'
-      anthropic-ratelimit-requests-reset: '2025-10-08T20:00:32Z'
-      anthropic-ratelimit-tokens-limit: '192000'
-      anthropic-ratelimit-tokens-remaining: '192000'
-      anthropic-ratelimit-tokens-reset: '2025-10-08T20:00:33Z'
-      request-id: req_011CTvKr9BWqFCyiQU8NLHm9
+      anthropic-ratelimit-input-tokens-limit: '400000'
+      anthropic-ratelimit-input-tokens-remaining: '400000'
+      anthropic-ratelimit-input-tokens-reset: '2025-10-28T13:14:46Z'
+      anthropic-ratelimit-output-tokens-limit: '80000'
+      anthropic-ratelimit-output-tokens-remaining: '80000'
+      anthropic-ratelimit-output-tokens-reset: '2025-10-28T13:14:46Z'
+      anthropic-ratelimit-requests-limit: '4000'
+      anthropic-ratelimit-requests-remaining: '3999'
+      anthropic-ratelimit-requests-reset: '2025-10-28T13:14:45Z'
+      anthropic-ratelimit-tokens-limit: '480000'
+      anthropic-ratelimit-tokens-remaining: '480000'
+      anthropic-ratelimit-tokens-reset: '2025-10-28T13:14:46Z'
+      request-id: req_011CUZf5jQ2f3eLEKQ2hypQ8
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '961'
+      x-envoy-upstream-service-time: '1315'
       via: 1.1 google
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 98b8399b1a97f04c-DFW
+      cf-ray: 995ab2b23dbbacd3-DFW
     body:
-      string: '{"model":"claude-3-5-sonnet-20241022","id":"msg_01RiGa8GtP8DzDvUiWAoG3eU","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01ErkaCC2S34Kwr5k7YTeTL4","name":"_structured_tool_call","input":{"data":{"title":"Apples
+      string: '{"model":"claude-3-5-sonnet-20241022","id":"msg_01VmrK6Zag5A2cYduGuqqRc1","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_015JNRMbV3TVqN7P4Snt3LqQ","name":"_structured_tool_call","input":{"data":{"title":"Apples
         are tasty","author":"Hadley Wickham"}}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":600,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":51,"service_tier":"standard"}}'
-  recorded_at: 2025-10-08 20:00:33
+  recorded_at: 2025-10-28 13:14:46
 recorded_with: VCR-vcr/2.0.0
