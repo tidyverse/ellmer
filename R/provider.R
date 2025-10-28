@@ -173,17 +173,25 @@ method(value_tokens, Provider) <- function(provider, json) {
 }
 
 # Convert to JSON
-as_json <- new_generic("as_json", c("provider", "x"))
+as_json <- new_generic(
+  "as_json",
+  c("provider", "x"),
+  function(provider, x, ...) {
+    S7_dispatch()
+  }
+)
 
-method(as_json, list(Provider, class_list)) <- function(provider, x) {
-  compact(lapply(x, as_json, provider = provider))
+method(as_json, list(Provider, class_list)) <- function(provider, x, ...) {
+  compact(lapply(x, as_json, provider = provider, ...))
 }
 
-method(as_json, list(Provider, ContentJson)) <- function(provider, x) {
-  as_json(
-    provider,
-    ContentText(unclass(jsonlite::toJSON(x@value, auto_unbox = TRUE)))
-  )
+method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
+  if (!is.null(x@string)) {
+    string <- x@string
+  } else {
+    string <- unclass(jsonlite::toJSON(x@data, auto_unbox = TRUE))
+  }
+  as_json(provider, ContentText(string), ...)
 }
 
 # Batch AI ---------------------------------------------------------------

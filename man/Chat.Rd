@@ -49,8 +49,6 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
 \item \href{#method-Chat-on_tool_request}{\code{Chat$on_tool_request()}}
 \item \href{#method-Chat-on_tool_result}{\code{Chat$on_tool_result()}}
-\item \href{#method-Chat-extract_data}{\code{Chat$extract_data()}}
-\item \href{#method-Chat-extract_data_async}{\code{Chat$extract_data_async()}}
 \item \href{#method-Chat-clone}{\code{Chat$clone()}}
 }
 }
@@ -515,41 +513,6 @@ which must have \code{result} as its only argument.}
 }
 \subsection{Returns}{
 A function that can be called to remove the callback.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-extract_data"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-extract_data}{}}}
-\subsection{Method \code{extract_data()}}{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-Deprecated in favour of \verb{$chat_structured()}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data(...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{See \verb{$chat_structured()}}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-extract_data_async"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-extract_data_async}{}}}
-\subsection{Method \code{extract_data_async()}}{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_async(...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{See \verb{$chat_structured_async()}}
-}
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

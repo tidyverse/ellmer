@@ -451,30 +451,6 @@ Chat <- R6::R6Class(
     #' @return A function that can be called to remove the callback.
     on_tool_result = function(callback) {
       private$callback_on_tool_result$add(callback)
-    },
-
-    #' @description `r lifecycle::badge("deprecated")`
-    #' Deprecated in favour of `$chat_structured()`.
-    #' @param ... See `$chat_structured()`
-    extract_data = function(...) {
-      lifecycle::deprecate_warn(
-        "0.2.0",
-        "Chat$extract_data()",
-        "Chat$chat_structured()"
-      )
-      self$chat_structured(...)
-    },
-
-    #' @description `r lifecycle::badge("deprecated")`
-    # '  Deprecated in favour of `$chat_structured_async()`.
-    #' @param ... See `$chat_structured_async()`
-    extract_data_async = function(...) {
-      lifecycle::deprecate_warn(
-        "0.2.0",
-        "Chat$extract_data_async()",
-        "Chat$chat_structured_async()"
-      )
-      self$chat_structured_async(...)
     }
   ),
   private = list(
@@ -665,9 +641,10 @@ Chat <- R6::R6Class(
       } else {
         turn <- value_turn(
           private$provider,
-          response,
+          resp_body_json(response),
           has_type = !is.null(type)
         )
+        turn@duration <- resp_timing(response)[["total"]] %||% NA_real_
         turn <- match_tools(turn, private$tools)
 
         text <- turn@text
@@ -745,7 +722,12 @@ Chat <- R6::R6Class(
       } else {
         result <- await(response)
 
-        turn <- value_turn(private$provider, result, has_type = !is.null(type))
+        turn <- value_turn(
+          private$provider,
+          resp_body_json(result),
+          has_type = !is.null(type)
+        )
+        turn@duration <- resp_timing(result)[["total"]] %||% NA_real_
         text <- turn@text
         if (!is.null(text)) {
           emit(text)

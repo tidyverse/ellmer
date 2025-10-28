@@ -24,7 +24,6 @@ chat_vllm <- function(
   base_url,
   system_prompt = NULL,
   model,
-  seed = NULL,
   params = NULL,
   api_args = list(),
   api_key = vllm_key(),
@@ -49,7 +48,6 @@ chat_vllm <- function(
     name = "VLLM",
     base_url = base_url,
     model = model,
-    seed = seed,
     params = params,
     extra_args = api_args,
     api_key = api_key,
@@ -74,13 +72,13 @@ ProviderVllm <- new_class(
 )
 
 # Just like OpenAI but no strict
-method(as_json, list(ProviderVllm, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderVllm, ToolDef)) <- function(provider, x, ...) {
   list(
     type = "function",
     "function" = compact(list(
       name = x@name,
       description = x@description,
-      parameters = as_json(provider, x@arguments)
+      parameters = as_json(provider, x@arguments, ...)
     ))
   )
 }

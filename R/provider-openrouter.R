@@ -25,7 +25,6 @@ chat_openrouter <- function(
   system_prompt = NULL,
   api_key = openrouter_key(),
   model = NULL,
-  seed = NULL,
   params = NULL,
   api_args = list(),
   echo = c("none", "output", "all"),
@@ -40,7 +39,6 @@ chat_openrouter <- function(
     name = "OpenRouter",
     base_url = "https://openrouter.ai/api/v1",
     model = model,
-    seed = seed,
     params = params,
     extra_args = api_args,
     api_key = api_key,
@@ -155,7 +153,8 @@ method(chat_resp_stream, ProviderOpenRouter) <- function(provider, resp) {
 
 method(as_json, list(ProviderOpenRouter, ContentText)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   if (identical(x@text, "")) {
     # Tool call requests can include a Content with empty text,

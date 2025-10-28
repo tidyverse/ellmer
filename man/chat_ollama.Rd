@@ -9,7 +9,6 @@ chat_ollama(
   system_prompt = NULL,
   base_url = Sys.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
   model,
-  seed = NULL,
   params = NULL,
   api_args = list(),
   echo = NULL,
@@ -26,9 +25,6 @@ models_ollama(base_url = "http://localhost:11434")
 
 \item{model}{The model to use for the chat.
 Use \code{models_ollama()} to see all options.}
-
-\item{seed}{Optional integer seed that ChatGPT uses to try and make output
-more reproducible.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
@@ -100,6 +96,7 @@ Other chatbots:
 \code{\link{chat_huggingface}()},
 \code{\link{chat_mistral}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openai_responses}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

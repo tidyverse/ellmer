@@ -9,7 +9,6 @@
 chat_anthropic(
   system_prompt = NULL,
   params = NULL,
-  max_tokens = deprecated(),
   model = NULL,
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
@@ -22,7 +21,6 @@ chat_anthropic(
 chat_claude(
   system_prompt = NULL,
   params = NULL,
-  max_tokens = deprecated(),
   model = NULL,
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
@@ -41,8 +39,6 @@ models_anthropic(
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
-
-\item{max_tokens}{Maximum number of tokens to generate before stopping.}
 
 \item{model}{The model to use for the chat (defaults to "claude-sonnet-4-20250514").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
@@ -106,6 +102,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openai_responses}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

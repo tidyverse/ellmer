@@ -1,5 +1,28 @@
 # ellmer (development version)
 
+* The following deprecated functions/arguments/methods have now been removed:
+  * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
+  * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)
+  * `chat_anthropic(max_tokens)` -> `chat_anthropic(params)` (0.2.0)
+  * `chat_azure()` -> `chat_azure_openai()` (0.2.0)
+  * `chat_azure_openai(token)` (0.1.1)
+  * `chat_bedrock()` -> `chat_aws_bedrock()` (0.2.0)
+  * `chat_claude()` -> `chat_anthropic()` (0.2.0)
+  * `chat_cortex()` -> `chat_snowflake()` (0.2.0)
+  * `chat_gemini()` -> `chat_google_gemini()` (0.2.0)
+  * `chat_openai(seed)` -> `chat_openai(params)` (0.2.0)
+  * `create_tool_def(model)` -> `create_tool_def(chat)` (0.2.0)
+* `chat_google_gemini()` andc`chat_openai_responses()` support image generation (#368).
+* New `schema_df()` to describe the schema of a data frame to an LLM (#744).
+* `chat_google_gemini()` and `chat_openai_responses()` support image generation (#368).
+* `batch_*()` no longer hashes properties of the provider besides the `name`, `model`, and `base_url`. This should provide some protection from accidentally reusing the same `.json` file with different providers, while still allowing you to use the same batch file across ellmer versions.
+* `batch_*()` have a new `ignore_hash` argument that allows you to opt out of the check if you're confident the difference only arises because ellmer itself has changed.
+* Turns now have a `@duration` slot. The slot is `NA` for user turns and a numeric giving the total time to complete the request for assistant turns (@simonpcouch, #798).
+* New `chat_openai_responses()` to use the new OpenAI responses API (#365).
+* `parallel_chat_structured()` now returns a tibble, since this does a better job of printing more complex data frames (#787).
+* `parallel_chat()` and friends now have a more permissive attitude to errors. By default, they will now return when hitting the first error (rather than erroring), and you can control this behaviour with the `on_error` argument. Or if you interrupt the job, it will finish up current requests and then return all the work done so far. The main downside of this work is that the output of `parallel_chat()` is more complex: it is now a mix of `Chat` objects, error objects, and `NULL` (#628).
+* `parallel_chat_structured()` no longer errors if some results fail to parse. Instead it warns, and the corresponding rows will be filled in with the appropriate missing values (#628).
+* `$chat_structured()` and friends now only warn if multiple json payloads found (instead of erroring) (@kbenoit, #732).
 * `interpolate_package()` now works with in-development packages loaded with devtools (#766).
 * `Chat$get_tokens()` gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (#618).
 * New `type_ignore()` allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (#764).

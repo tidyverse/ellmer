@@ -2,20 +2,21 @@
   "version": 1,
   "stage": "done",
   "batch": {
-    "id": "batch_6826575e8994819083aca31bb6d307de",
+    "id": "batch_68f802ddb59481908fc70271e9eff0f6",
     "object": "batch",
     "endpoint": "/v1/chat/completions",
+    "model": "gpt-4.1-nano-2025-04-14",
     "errors": {},
-    "input_file_id": "file-M1HWkC3RwUDPgaWtZYjjcy",
+    "input_file_id": "file-JPA9WjqJ5dYmauWGMnEijt",
     "completion_window": "24h",
     "status": "completed",
-    "output_file_id": "file-SdRQAoNeNzaFYr3YFb5hcp",
+    "output_file_id": "file-5JPzmFxLH7MtjLzL2TpjWN",
     "error_file_id": {},
-    "created_at": 1747343198,
-    "in_progress_at": 1747343199,
-    "expires_at": 1747429598,
-    "finalizing_at": 1747343399,
-    "completed_at": 1747343400,
+    "created_at": 1761084125,
+    "in_progress_at": 1761084128,
+    "expires_at": 1761170525,
+    "finalizing_at": 1761084149,
+    "completed_at": 1761084152,
     "failed_at": {},
     "expired_at": {},
     "cancelling_at": {},
@@ -25,16 +26,27 @@
       "completed": 4,
       "failed": 0
     },
+    "usage": {
+      "input_tokens": 81,
+      "output_tokens": 7,
+      "total_tokens": 88,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
     "metadata": {}
   },
   "results": [
     {
       "status_code": 200,
-      "request_id": "6c41082f8debff173736a0b52e07d948",
+      "request_id": "98d76687bb4841866c5e3660bc7aec00",
       "body": {
-        "id": "chatcmpl-BXa7llR1CJFH3KbFBLJf4ZvvYEUj4",
+        "id": "chatcmpl-CTEikVO7HRPuFV6CqMKpuwCp0iSKN",
         "object": "chat.completion",
-        "created": 1747343385,
+        "created": 1761084134,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
@@ -65,16 +77,16 @@
           }
         },
         "service_tier": "default",
-        "system_fingerprint": "fp_eede8f0d45"
+        "system_fingerprint": "fp_7c233bf9d1"
       }
     },
     {
       "status_code": 200,
-      "request_id": "881526127f188f503beb9e98d7933d01",
+      "request_id": "5c4a190dd9079087f0ee2d1cc6ecbbed",
       "body": {
-        "id": "chatcmpl-BXa6CU6GypSA9ODF6TKhpkHPP8jlI",
+        "id": "chatcmpl-CTEioj4PdLMO0B9dVarkET9n9cXzu",
         "object": "chat.completion",
-        "created": 1747343288,
+        "created": 1761084138,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
@@ -105,16 +117,16 @@
           }
         },
         "service_tier": "default",
-        "system_fingerprint": "fp_eede8f0d45"
+        "system_fingerprint": "fp_f12167b370"
       }
     },
     {
       "status_code": 200,
-      "request_id": "d35aa9cb5535dd1ea70e1c5e3c469791",
+      "request_id": "dde5e47eb23802d49bbc415a2b76599e",
       "body": {
-        "id": "chatcmpl-BXa6316yijIIu48fQeazyXljyjTXk",
+        "id": "chatcmpl-CTEisUiHnFjkZp7qyVIt9icqbf7dk",
         "object": "chat.completion",
-        "created": 1747343279,
+        "created": 1761084142,
         "model": "gpt-4.1-nano-2025-04-14",
         "choices": [
           {
@@ -122,46 +134,6 @@
             "message": {
               "role": "assistant",
               "content": "Sacramento",
-              "refusal": {},
-              "annotations": []
-            },
-            "logprobs": {},
-            "finish_reason": "stop"
-          }
-        ],
-        "usage": {
-          "prompt_tokens": 20,
-          "completion_tokens": 3,
-          "total_tokens": 23,
-          "prompt_tokens_details": {
-            "cached_tokens": 0,
-            "audio_tokens": 0
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 0,
-            "audio_tokens": 0,
-            "accepted_prediction_tokens": 0,
-            "rejected_prediction_tokens": 0
-          }
-        },
-        "service_tier": "default",
-        "system_fingerprint": "fp_eede8f0d45"
-      }
-    },
-    {
-      "status_code": 200,
-      "request_id": "fb17b486b4053f56120614c6fbffe571",
-      "body": {
-        "id": "chatcmpl-BXa6aPBtnciow6qc6gjEPMJ7DjgY7",
-        "object": "chat.completion",
-        "created": 1747343312,
-        "model": "gpt-4.1-nano-2025-04-14",
-        "choices": [
-          {
-            "index": 0,
-            "message": {
-              "role": "assistant",
-              "content": "Austin",
               "refusal": {},
               "annotations": []
             },
@@ -185,13 +157,53 @@
           }
         },
         "service_tier": "default",
-        "system_fingerprint": "fp_eede8f0d45"
+        "system_fingerprint": "fp_f12167b370"
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "a905ebc6ccd6c29b1f5ee6d9d2839db4",
+      "body": {
+        "id": "chatcmpl-CTEivElBhxFZjwzSP0QqcnJoZQzGx",
+        "object": "chat.completion",
+        "created": 1761084145,
+        "model": "gpt-4.1-nano-2025-04-14",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Austin",
+              "refusal": {},
+              "annotations": []
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 20,
+          "completion_tokens": 1,
+          "total_tokens": 21,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "audio_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "audio_tokens": 0,
+            "accepted_prediction_tokens": 0,
+            "rejected_prediction_tokens": 0
+          }
+        },
+        "service_tier": "default",
+        "system_fingerprint": "fp_f12167b370"
       }
     }
   ],
-  "started_at": 1747343197,
+  "started_at": 1761084124,
   "hash": {
-    "provider": "de1de607a44b8964f051074a91a3787e",
+    "provider": "959dc7923e4dc3760a7690794dc41c2a",
     "prompts": "b8eafe281e3cc5113058d9722be3e295",
     "user_turns": "8c1302088b9bc30258d1191db0d35705"
   }
