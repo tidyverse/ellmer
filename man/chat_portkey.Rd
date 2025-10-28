@@ -38,7 +38,7 @@ Read more: https://portkey.ai/docs/support/upgrade-to-model-catalog}
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_openai()} to see all options.}
 
-\item{model_provider}{Optional, model provider from Portkey Model Catalog (e.g. "azure-openai", "bedrock").}
+\item{model_provider}{Optional, model provider from Portkey Model Catalog.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 

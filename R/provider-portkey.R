@@ -14,7 +14,7 @@
 #' @param model `r param_model("gpt-4o", "openai")`
 #' @param virtual_key `r lifecycle::badge("deprecated")` No longer supported by Portkey.
 #' Read more: https://portkey.ai/docs/support/upgrade-to-model-catalog
-#' @param model_provider Optional, model provider from Portkey Model Catalog (e.g. "azure-openai", "bedrock").
+#' @param model_provider Optional, model provider from Portkey Model Catalog.
 #' @export
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -45,6 +45,9 @@ chat_portkey <- function(
     )
   } else {
     virtual_key <- NULL
+  }
+  if (model_provider != "") {
+    model_provider <- paste0("@", model_provider)
   }
   params <- params %||% params()
   provider <- ProviderPortkeyAI(
