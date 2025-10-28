@@ -11,17 +11,14 @@ chat_portkey(
   api_key = portkey_key(),
   virtual_key = deprecated(),
   model = NULL,
+  model_provider = "",
   params = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
 )
 
-models_portkey(
-  base_url = "https://api.portkey.ai/v1",
-  api_key = portkey_key(),
-  virtual_key = deprecated()
-)
+models_portkey(base_url = "https://api.portkey.ai/v1", api_key = portkey_key())
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
@@ -40,6 +37,8 @@ Read more: https://portkey.ai/docs/support/upgrade-to-model-catalog}
 \item{model}{The model to use for the chat (defaults to "gpt-4o").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_openai()} to see all options.}
+
+\item{model_provider}{Optional, model provider from Portkey Model Catalog (e.g. "azure-openai", "bedrock").}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
