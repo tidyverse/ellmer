@@ -3,9 +3,9 @@ on_load(
 )
 
 tokens <- function(input = 0, output = 0, cached_input = 0) {
-  check_number_whole(input, allow_null = TRUE)
-  check_number_whole(output, allow_null = TRUE)
-  check_number_whole(cached_input, allow_null = TRUE)
+  check_number_decimal(input, allow_null = TRUE)
+  check_number_decimal(output, allow_null = TRUE)
+  check_number_decimal(cached_input, allow_null = TRUE)
 
   list(
     input = input %||% 0,
@@ -133,6 +133,19 @@ dollars <- function(x) {
 format.ellmer_dollars <- function(x, ...) {
   paste0(ifelse(is.na(x), "", "$"), format(unclass(round(x, 2)), nsmall = 2))
 }
+#' @export
+`[.ellmer_dollars` <- function(x, ...) {
+  dollars(NextMethod())
+}
+#' @export
+`[[.ellmer_dollars` <- function(x, ...) {
+  dollars(NextMethod())
+}
+#' @export
+Summary.ellmer_dollars <- function(x, ...) {
+  dollars(NextMethod())
+}
+
 #' @export
 print.ellmer_dollars <- function(x, ...) {
   print(format(x), quote = FALSE)

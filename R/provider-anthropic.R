@@ -17,6 +17,17 @@ NULL
 #' @inherit chat_openai return
 #' @param model `r param_model("claude-sonnet-4-20250514", "anthropic")`
 #' @param api_key `r api_key_param("ANTHROPIC_API_KEY")`
+#' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
+#'   Set to "none" to disable caching or "1h" to cache for one hour.
+#'
+#'   Caching (for five minutes) is enabled by default because it will save you
+#'   money for multi-turn conversations. Cache writes cost 125%, but cache
+#'   reads cost only 10%. So imagine your conversation has two turns: the first
+#'   turn has input 1000 tokens and and 200 output tokens, and the second
+#'   turn has 500 (new) input tokens and 100 output tokens. If uncached, you
+#'   pay for 1000 + (1000 + 200 + 500) = 2700 input tokens. If cached, you
+#'   pay for 1000 * 1.25 + (1000 * 0.1 + 200 + 500) = 2050 input tokens.
+#'
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
 #'   claude features that are still in beta.
 #' @param api_headers Named character vector of arbitrary extra headers appended
@@ -32,6 +43,7 @@ chat_anthropic <- function(
   system_prompt = NULL,
   params = NULL,
   model = NULL,
+  cache = c("5m", "1h", "none"),
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
   beta_headers = character(),
@@ -42,6 +54,7 @@ chat_anthropic <- function(
   echo <- check_echo(echo)
 
   model <- set_default(model, "claude-sonnet-4-20250514")
+  cache <- arg_match(cache)
 
   provider <- ProviderAnthropic(
     name = "Anthropic",
@@ -51,7 +64,8 @@ chat_anthropic <- function(
     extra_headers = api_headers,
     base_url = base_url,
     beta_headers = beta_headers,
-    api_key = api_key
+    api_key = api_key,
+    cache = cache
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -78,7 +92,8 @@ ProviderAnthropic <- new_class(
   parent = Provider,
   properties = list(
     prop_redacted("api_key"),
-    beta_headers = class_character
+    beta_headers = class_character,
+    cache = prop_string()
   )
 )
 
@@ -130,12 +145,17 @@ method(chat_body, ProviderAnthropic) <- function(
   type = NULL
 ) {
   if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
-    system <- turns[[1]]@text
+    system <- list(list(type = "text", text = turns[[1]]@text))
+    # Always cache system prompt
+    system[[1]]$cache_control <- cache_control(provider)
   } else {
     system <- NULL
   }
 
-  messages <- compact(as_json(provider, turns))
+  is_last <- seq_along(turns) == length(turns)
+  messages <- compact(map2(turns, is_last, function(turn, is_last) {
+    as_json(provider, turn, is_last = is_last)
+  }))
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
@@ -256,7 +276,9 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
 
 method(value_tokens, ProviderAnthropic) <- function(provider, json) {
   tokens(
-    input = json$usage$input_tokens,
+    # Hack in pricing for cache writes
+    input = json$usage$input_tokens +
+      json$usage$cache_creation_input_tokens * 1.25,
     output = json$usage$output_tokens,
     cached_input = json$usage$cache_read_input_tokens
   )
@@ -299,7 +321,12 @@ method(value_turn, ProviderAnthropic) <- function(
 
 # ellmer -> Claude --------------------------------------------------------------
 
-method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
+method(as_json, list(ProviderAnthropic, Turn)) <- function(
+  provider,
+  x,
+  ...,
+  is_last = FALSE
+) {
   if (x@role == "system") {
     # claude passes system prompt as separate arg
     NULL
@@ -309,7 +336,14 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
       # (all messages must have non-empty content)
       return(NULL)
     }
-    list(role = x@role, content = as_json(provider, x@contents, ...))
+
+    # Add caching to the last content block in the last turn
+    # https://docs.claude.com/en/docs/build-with-claude/prompt-caching#how-automatic-prefix-checking-works
+    content <- as_json(provider, x@contents, ...)
+    if (is_last) {
+      content[[length(content)]]$cache_control <- cache_control(provider)
+    }
+    list(role = x@role, content = content)
   } else {
     cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)
   }
@@ -520,7 +554,8 @@ models_anthropic <- function(
     name = "Anthropic",
     model = "",
     base_url = base_url,
-    api_key = api_key
+    api_key = api_key,
+    cache = "none"
   )
 
   req <- base_request(provider)
@@ -547,4 +582,15 @@ models_anthropic <- function(
 # From httr2
 backoff_default <- function(i) {
   round(min(stats::runif(1, min = 1, max = 2^i), 60), 1)
+}
+
+cache_control <- function(provider) {
+  if (provider@cache == "none") {
+    NULL
+  } else {
+    list(
+      type = "ephemeral",
+      ttl = provider@cache
+    )
+  }
 }
