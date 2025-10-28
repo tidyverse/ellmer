@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* Updated pricing data (#790).
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
   * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)
