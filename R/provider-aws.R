@@ -358,7 +358,8 @@ method(value_turn, ProviderAWSBedrock) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  assistant_turn(contents, json = result, tokens = unlist(tokens))
+  cost <- get_token_cost(provider, tokens)
+  assistant_turn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> Bedrock -------------------------------------------------------------

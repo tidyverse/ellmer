@@ -307,7 +307,8 @@ method(value_turn, ProviderGoogleGemini) <- function(
   })
   contents <- compact(contents)
   tokens <- value_tokens(provider, result)
-  assistant_turn(contents, json = result, tokens = unlist(tokens))
+  cost <- get_token_cost(provider, tokens)
+  assistant_turn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> Gemini --------------------------------------------------------------

@@ -201,14 +201,30 @@ test_that("print method shows cumulative tokens & cost", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
   chat$set_turns(list(
     Turn("user", "Input 1"),
-    Turn("assistant", "Output 1", tokens = c(15000, 500, 0)),
+    Turn("assistant", "Output 1", tokens = c(15000, 500, 0), cost = 0.2),
     Turn("user", "Input 2"),
-    Turn("assistant", "Output 1", tokens = c(30000, 1000, 0))
+    Turn("assistant", "Output 1", tokens = c(30000, 1000, 0), cost = 0.1)
   ))
   expect_snapshot(chat)
+})
 
-  expect_equal(chat$get_cost(), dollars(0.1275))
-  expect_equal(chat$get_cost("last"), dollars(0.085))
+test_that("can compute costs", {
+  chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
+  chat$set_turns(list(
+    Turn("user", "Input 1"),
+    Turn("assistant", "Output 1", tokens = c(15000, 500, 0), cost = 0.2),
+    Turn("user", "Input 2"),
+    Turn("assistant", "Output 1", tokens = c(30000, 1000, 0), cost = 0.1)
+  ))
+
+  expect_equal(chat$get_cost(), dollars(0.3))
+  expect_equal(chat$get_cost("last"), dollars(0.1))
+
+  details <- chat$get_cost_details()
+  expect_equal(details$cost, dollars(c(0.2, 0.1)))
+  expect_equal(details$input, c(15000, 30000))
+  expect_equal(details$output, c(500, 1000))
+  expect_equal(details$cached_input, c(0, 0))
 })
 
 test_that("can optionally echo", {

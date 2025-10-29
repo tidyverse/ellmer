@@ -9,7 +9,8 @@ Turn(
   contents = list(),
   json = list(),
   tokens = c(0, 0, 0),
-  duration = NA_real_
+  duration = NA_real_,
+  cost = NA_real_
 )
 }
 \arguments{
@@ -24,11 +25,15 @@ This is useful if there's information returned by the provider that ellmer
 doesn't otherwise expose.}
 
 \item{tokens}{A numeric vector of length 2 representing the number of
-input and output tokens (respectively) used in this turn. Currently
-only recorded for assistant turns.}
+input and output tokens (respectively) used in this turn.
+Only meaningful for assistant turns.}
 
-\item{duration}{The duration of the request in seconds. \code{NA} for user turns,
+\item{duration}{The duration of the request in seconds.
+Only meaning for assistant turns.
 numeric for assistant turns.}
+
+\item{cost}{The cost of the turn in dollars. Only meaningful for assistant
+turns.}
 }
 \value{
 An S7 \code{Turn} object
