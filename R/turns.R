@@ -26,11 +26,11 @@ NULL
 #' @param tokens A numeric vector of length 2 representing the number of
 #'   input and output tokens (respectively) used in this turn.
 #'   Only meaningful for assistant turns.
+#' @param cost The cost of the turn in dollars. Only meaningful for assistant
+#'   turns.
 #' @param duration The duration of the request in seconds.
 #'   Only meaning for assistant turns.
 #'   numeric for assistant turns.
-#' @param cost The cost of the turn in dollars. Only meaningful for assistant
-#'   turns.
 #' @export
 #' @return An S7 `Turn` object
 #' @examples
@@ -50,6 +50,10 @@ Turn <- new_class(
         }
       }
     ),
+    cost = new_property(
+      class = class_numeric,
+      default = NA_real_
+    ),
     duration = new_property(
       class_numeric,
       default = NA_real_
@@ -57,10 +61,6 @@ Turn <- new_class(
     text = new_property(
       class = class_character,
       getter = function(self) contents_text(self)
-    ),
-    cost = new_property(
-      class = class_numeric,
-      default = NA_real_
     )
   ),
   constructor = function(
@@ -68,8 +68,8 @@ Turn <- new_class(
     contents = list(),
     json = list(),
     tokens = c(0, 0, 0),
-    duration = NA_real_,
-    cost = NA_real_
+    cost = NA_real_,
+    duration = NA_real_
   ) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))

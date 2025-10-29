@@ -9,8 +9,8 @@ Turn(
   contents = list(),
   json = list(),
   tokens = c(0, 0, 0),
-  duration = NA_real_,
-  cost = NA_real_
+  cost = NA_real_,
+  duration = NA_real_
 )
 }
 \arguments{
@@ -28,12 +28,12 @@ doesn't otherwise expose.}
 input and output tokens (respectively) used in this turn.
 Only meaningful for assistant turns.}
 
+\item{cost}{The cost of the turn in dollars. Only meaningful for assistant
+turns.}
+
 \item{duration}{The duration of the request in seconds.
 Only meaning for assistant turns.
 numeric for assistant turns.}
-
-\item{cost}{The cost of the turn in dollars. Only meaningful for assistant
-turns.}
 }
 \value{
 An S7 \code{Turn} object
