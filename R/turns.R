@@ -50,14 +50,8 @@ Turn <- new_class(
         }
       }
     ),
-    cost = new_property(
-      class = class_numeric,
-      default = NA_real_
-    ),
-    duration = new_property(
-      class_numeric,
-      default = NA_real_
-    ),
+    cost = prop_number_decimal(NA_real_, allow_na = TRUE),
+    duration = prop_number_decimal(NA_real_, allow_na = TRUE),
     text = new_property(
       class = class_character,
       getter = function(self) contents_text(self)
