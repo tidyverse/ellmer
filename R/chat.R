@@ -190,8 +190,7 @@ Chat <- R6::R6Class(
       if (include == "last") {
         cost <- assistant_turns[[length(assistant_turns)]]@cost
       } else {
-        cost <- map_dbl(assistant_turns, \(turn) turn@cost)
-        cost <- sum(cost, na.rm = TRUE)
+        cost <- sum(map_dbl(assistant_turns, \(turn) turn@cost))
       }
 
       dollars(cost)

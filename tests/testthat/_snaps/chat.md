@@ -19,7 +19,7 @@
     Code
       chat
     Output
-      <Chat OpenAI/gpt-4.1-nano turns=3 tokens=15/5 $0.00>
+      <Chat OpenAI/gpt-4.1-nano turns=3 tokens=15/5>
       -- system [0] ------------------------------------------------------------------
       Be terse.
       -- user [15] -------------------------------------------------------------------
