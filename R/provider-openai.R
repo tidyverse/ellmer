@@ -267,13 +267,13 @@ method(value_turn, ProviderOpenAI) <- function(
 
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  assistant_turn(content, json = result, tokens = unlist(tokens), cost = cost)
+  AssistantTurn(content, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------
 
 method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x, ...) {
-  if (x@role == "system") {
+  if (is_system_turn(x)) {
     list(
       list(role = "system", content = x@contents[[1]]@text)
     )
@@ -296,7 +296,7 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x, ...) {
     })
 
     c(user, tools)
-  } else if (x@role == "assistant") {
+  } else if (is_assistant_turn(x)) {
     # Tool requests come out of content and go into own argument
     is_tool <- map_lgl(x@contents, is_tool_request)
     content <- as_json(provider, x@contents[!is_tool], ...)

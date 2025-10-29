@@ -2,10 +2,12 @@
 % Please edit documentation in R/turns.R
 \name{Turn}
 \alias{Turn}
+\alias{AssistantTurn}
 \title{A user or assistant turn}
 \usage{
-Turn(
-  role,
+Turn(role, contents = list())
+
+AssistantTurn(
   contents = list(),
   json = list(),
   tokens = c(0, 0, 0),
@@ -19,24 +21,21 @@ Turn(
 \item{contents}{A list of \link{Content} objects.}
 
 \item{json}{The serialized JSON corresponding to the underlying data of
-the turns. Currently only provided for assistant.
+the turns. This is useful if there's information returned by the provider
+that ellmer doesn't otherwise expose.}
 
-This is useful if there's information returned by the provider that ellmer
-doesn't otherwise expose.}
+\item{tokens}{A numeric vector of length 3 representing the number of
+input tokens (uncached), output tokens, and input tokens (cached)
+used in this turn.}
 
-\item{tokens}{A numeric vector of length 2 representing the number of
-input and output tokens (respectively) used in this turn.
-Only meaningful for assistant turns.}
+\item{cost}{The cost of the turn in dollars.}
 
-\item{cost}{The cost of the turn in dollars. Only meaningful for assistant
-turns.}
-
-\item{duration}{The duration of the request in seconds.
-Only meaning for assistant turns.
-numeric for assistant turns.}
+\item{duration}{The duration of the request in seconds.}
 }
 \value{
 An S7 \code{Turn} object
+
+An S7 \code{AssistantTurn} object
 }
 \description{
 Every conversation with a chatbot consists of pairs of user and assistant
@@ -44,6 +43,9 @@ turns, corresponding to an HTTP request and response. These turns are
 represented by the \code{Turn} object, which contains a list of \link{Content}s representing
 the individual messages within the turn. These might be text, images, tool
 requests (assistant only), or tool responses (user only).
+
+An \code{AssistantTurn} is a specialized \code{Turn} for assistant responses that
+includes additional metadata about the API response.
 
 Note that a call to \verb{$chat()} and related functions may result in multiple
 user-assistant turn cycles. For example, if you have registered tools,

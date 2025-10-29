@@ -261,7 +261,7 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
   })
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  assistant_turn(contents, json = result, tokens = unlist(tokens), cost = cost)
+  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> Snowflake --------------------------------------------------------

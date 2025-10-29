@@ -10,6 +10,9 @@ NULL
 #' the individual messages within the turn. These might be text, images, tool
 #' requests (assistant only), or tool responses (user only).
 #'
+#' An `AssistantTurn` is a specialized `Turn` for assistant responses that
+#' includes additional metadata about the API response.
+#'
 #' Note that a call to `$chat()` and related functions may result in multiple
 #' user-assistant turn cycles. For example, if you have registered tools,
 #' ellmer will automatically handle the tool calling loop, which may result in
@@ -18,19 +21,6 @@ NULL
 #'
 #' @param role Either "user", "assistant", or "system".
 #' @param contents A list of [Content] objects.
-#' @param json The serialized JSON corresponding to the underlying data of
-#'   the turns. Currently only provided for assistant.
-#'
-#'   This is useful if there's information returned by the provider that ellmer
-#'   doesn't otherwise expose.
-#' @param tokens A numeric vector of length 2 representing the number of
-#'   input and output tokens (respectively) used in this turn.
-#'   Only meaningful for assistant turns.
-#' @param cost The cost of the turn in dollars. Only meaningful for assistant
-#'   turns.
-#' @param duration The duration of the request in seconds.
-#'   Only meaning for assistant turns.
-#'   numeric for assistant turns.
 #' @export
 #' @return An S7 `Turn` object
 #' @examples
@@ -40,6 +30,42 @@ Turn <- new_class(
   properties = list(
     role = prop_string(),
     contents = prop_list_of(Content),
+    text = new_property(
+      class = class_character,
+      getter = function(self) contents_text(self)
+    )
+  ),
+  constructor = function(
+    role,
+    contents = list()
+  ) {
+    if (is.character(contents)) {
+      contents <- list(ContentText(paste0(contents, collapse = "\n")))
+    }
+    new_object(
+      S7_object(),
+      role = role,
+      contents = contents
+    )
+  }
+)
+
+#' @param contents A list of [Content] objects.
+#' @param json The serialized JSON corresponding to the underlying data of
+#'   the turns. This is useful if there's information returned by the provider
+#'   that ellmer doesn't otherwise expose.
+#' @param tokens A numeric vector of length 3 representing the number of
+#'   input tokens (uncached), output tokens, and input tokens (cached)
+#'   used in this turn.
+#' @param cost The cost of the turn in dollars.
+#' @param duration The duration of the request in seconds.
+#' @export
+#' @rdname Turn
+#' @return An S7 `AssistantTurn` object
+AssistantTurn <- new_class(
+  "AssistantTurn",
+  parent = Turn,
+  properties = list(
     json = class_list,
     tokens = new_property(
       class_numeric,
@@ -51,14 +77,9 @@ Turn <- new_class(
       }
     ),
     cost = prop_number_decimal(NA_real_, allow_na = TRUE),
-    duration = prop_number_decimal(NA_real_, allow_na = TRUE),
-    text = new_property(
-      class = class_character,
-      getter = function(self) contents_text(self)
-    )
+    duration = prop_number_decimal(NA_real_, allow_na = TRUE)
   ),
   constructor = function(
-    role,
     contents = list(),
     json = list(),
     tokens = c(0, 0, 0),
@@ -70,7 +91,7 @@ Turn <- new_class(
     }
     new_object(
       S7_object(),
-      role = role,
+      role = "assistant",
       contents = contents,
       json = json,
       tokens = tokens,
@@ -97,10 +118,6 @@ method(print, Turn) <- function(x, ...) {
   cat(paste_c("<Turn: ", color_role(x@role), ">\n"))
   cat(format(x))
   invisible(x)
-}
-
-assistant_turn <- function(...) {
-  Turn(role = "assistant", ...)
 }
 
 user_turn <- function(..., .call = caller_env(), .check_empty = TRUE) {
@@ -148,8 +165,12 @@ as_user_turns <- function(
   turns
 }
 
-is_system_prompt <- function(x) {
+is_system_turn <- function(x) {
   x@role == "system"
+}
+
+is_assistant_turn <- function(x) {
+  S7_inherits(x, AssistantTurn)
 }
 
 check_turn <- function(x, call = caller_env(), arg = caller_arg(x)) {

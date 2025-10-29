@@ -156,7 +156,7 @@ method(base_request_error, ProviderDatabricks) <- function(provider, req) {
 }
 
 method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x, ...) {
-  if (x@role == "system") {
+  if (is_system_turn(x)) {
     list(list(role = "system", content = x@contents[[1]]@text))
   } else if (x@role == "user") {
     # Each tool result needs to go in its own message with role "tool".
@@ -175,7 +175,7 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x, ...) {
     }
     content <- as_json(provider, x@contents[[1]], ...)
     list(list(role = "user", content = content))
-  } else if (x@role == "assistant") {
+  } else if (is_assistant_turn(x)) {
     is_tool <- map_lgl(x@contents, is_tool_request)
     if (any(is_tool)) {
       list(list(

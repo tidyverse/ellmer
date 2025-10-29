@@ -191,7 +191,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
   tools = list(),
   type = NULL
 ) {
-  if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
+  if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
     system <- list(parts = list(text = turns[[1]]@text))
   } else {
     system <- list(parts = list(text = ""))
@@ -308,7 +308,7 @@ method(value_turn, ProviderGoogleGemini) <- function(
   contents <- compact(contents)
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  assistant_turn(contents, json = result, tokens = unlist(tokens), cost = cost)
+  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> Gemini --------------------------------------------------------------
@@ -319,11 +319,11 @@ method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
   x,
   ...
 ) {
-  if (x@role == "system") {
+  if (is_system_turn(x)) {
     # System messages go in the top-level API parameter
   } else if (x@role == "user") {
     list(role = x@role, parts = as_json(provider, x@contents, ...))
-  } else if (x@role == "assistant") {
+  } else if (is_assistant_turn(x)) {
     list(role = "model", parts = as_json(provider, x@contents, ...))
   } else {
     cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)

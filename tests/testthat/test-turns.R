@@ -54,8 +54,7 @@ test_that("as_user_turns gives useful errors", {
 })
 
 test_that("can extract text easily", {
-  turn <- Turn(
-    "assistant",
+  turn <- AssistantTurn(
     list(
       ContentText("ABC"),
       ContentImage(),

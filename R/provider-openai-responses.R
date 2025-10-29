@@ -226,7 +226,7 @@ method(value_turn, ProviderOpenAIResponses) <- function(
 
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  assistant_turn(
+  AssistantTurn(
     contents = contents,
     json = result,
     tokens = unlist(tokens),
