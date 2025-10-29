@@ -21,6 +21,12 @@ test_that("can retrieve and log tokens", {
   expect_equal(the$tokens, tokens_row("testprovider", "test", 1, 1, 1, 0))
 
   expect_snapshot(token_usage())
+
+  tokens_log(provider, tokens(), dollars(NA_real_))
+  expect_equal(
+    the$tokens,
+    tokens_row("testprovider", "test", 1, 1, 1, NA_real_)
+  )
 })
 
 test_that("can compute price of tokens", {
@@ -32,20 +38,28 @@ test_that("can compute price of tokens", {
     get_token_cost(provider, tokens(cached_input = 1e6)),
     dollars(1.25)
   )
+})
 
-  # including variant
+test_that("can compute price of tokens with a variant", {
+  provider <- test_provider("OpenAI", "gpt-4o")
+
   expect_equal(
     get_token_cost(provider, tokens(input = 1e6), variant = "priority"),
     dollars(4.25)
   )
-  # falling back to base line if no match
+
+  # fals back to baseline if no match
   expect_equal(
-    get_token_cost(
-      provider,
-      tokens(input = 1e6),
-      variant = "tuesday-afternoon"
-    ),
-    dollars(2.50)
+    get_token_cost(provider, tokens(input = 1e6), variant = "tuesday-pm"),
+    get_token_cost(provider, tokens(input = 1e6))
+  )
+})
+
+test_that("price is NA if we don't have the data for it", {
+  provider <- test_provider("ClosedAI", "gpt-4o")
+  expect_equal(
+    get_token_cost(provider, tokens(1, 1, 1)),
+    dollars(NA_real_)
   )
 })
 
