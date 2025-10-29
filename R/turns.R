@@ -1,7 +1,7 @@
 #' @include utils-S7.R
 NULL
 
-#' A user or assistant turn
+#' A user, assistant, or system turn
 #'
 #' @description
 #' Every conversation with a chatbot consists of pairs of user and assistant
@@ -10,8 +10,9 @@ NULL
 #' the individual messages within the turn. These might be text, images, tool
 #' requests (assistant only), or tool responses (user only).
 #'
-#' An `AssistantTurn` is a specialized `Turn` for assistant responses that
-#' includes additional metadata about the API response.
+#' `UserTurn`, `AssistantTurn`, and `SystemTurn` are specialized subclasses
+#' of `Turn` for different types of conversation turns. `AssistantTurn` includes
+#' additional metadata about the API response.
 #'
 #' Note that a call to `$chat()` and related functions may result in multiple
 #' user-assistant turn cycles. For example, if you have registered tools,
@@ -19,38 +20,63 @@ NULL
 #' any number of additional cycles. Learn more about tool calling in
 #' `vignette("tool-calling")`.
 #'
-#' @param role Either "user", "assistant", or "system".
 #' @param contents A list of [Content] objects.
 #' @export
 #' @return An S7 `Turn` object
 #' @examples
-#' Turn(role = "user", contents = list(ContentText("Hello, world!")))
+#' UserTurn(list(ContentText("Hello, world!")))
 Turn <- new_class(
   "Turn",
   properties = list(
-    role = prop_string(),
     contents = prop_list_of(Content),
     text = new_property(
       class = class_character,
       getter = function(self) contents_text(self)
     )
   ),
-  constructor = function(
-    role,
-    contents = list()
-  ) {
+  constructor = function(contents = list()) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
     }
     new_object(
       S7_object(),
-      role = role,
       contents = contents
     )
   }
 )
 
-#' @param contents A list of [Content] objects.
+#' @rdname Turn
+#' @export
+UserTurn <- new_class(
+  "UserTurn",
+  parent = Turn,
+  constructor = function(contents = list()) {
+    if (is.character(contents)) {
+      contents <- list(ContentText(paste0(contents, collapse = "\n")))
+    }
+    new_object(
+      S7_object(),
+      contents = contents
+    )
+  }
+)
+
+#' @rdname Turn
+#' @export
+SystemTurn <- new_class(
+  "SystemTurn",
+  parent = Turn,
+  constructor = function(contents = list()) {
+    if (is.character(contents)) {
+      contents <- list(ContentText(paste0(contents, collapse = "\n")))
+    }
+    new_object(
+      S7_object(),
+      contents = contents
+    )
+  }
+)
+
 #' @param json The serialized JSON corresponding to the underlying data of
 #'   the turns. This is useful if there's information returned by the provider
 #'   that ellmer doesn't otherwise expose.
@@ -91,7 +117,6 @@ AssistantTurn <- new_class(
     }
     new_object(
       S7_object(),
-      role = "assistant",
       contents = contents,
       json = json,
       tokens = tokens,
@@ -114,8 +139,20 @@ method(contents_markdown, Turn) <- function(content) {
   paste0(unlist(lapply(content@contents, contents_markdown)), collapse = "\n\n")
 }
 
+turn_role <- function(x) {
+  if (is_user_turn(x)) {
+    "user"
+  } else if (is_assistant_turn(x)) {
+    "assistant"
+  } else if (is_system_turn(x)) {
+    "system"
+  } else {
+    "unknown"
+  }
+}
+
 method(print, Turn) <- function(x, ...) {
-  cat(paste_c("<Turn: ", color_role(x@role), ">\n"))
+  cat(paste_c("<Turn: ", color_role(turn_role(x)), ">\n"))
   cat(format(x))
   invisible(x)
 }
@@ -142,11 +179,11 @@ as_user_turn <- function(
     cli::cli_abort("{.arg {arg}} must be unnamed.", call = call)
   }
   if (S7_inherits(contents, Content)) {
-    return(Turn("user", list(contents)))
+    return(UserTurn(list(contents)))
   }
 
   contents <- lapply(contents, as_content, error_call = call, error_arg = arg)
-  Turn("user", contents)
+  UserTurn(contents)
 }
 
 as_user_turns <- function(
@@ -166,11 +203,11 @@ as_user_turns <- function(
 }
 
 is_system_turn <- function(x) {
-  x@role == "system"
+  S7_inherits(x, SystemTurn)
 }
 
 is_user_turn <- function(x) {
-  x@role == "user"
+  S7_inherits(x, UserTurn)
 }
 
 is_assistant_turn <- function(x) {
@@ -209,7 +246,7 @@ normalize_turns <- function(
   }
 
   if (!is.null(system_prompt)) {
-    system_turn <- Turn("system", system_prompt)
+    system_turn <- SystemTurn(system_prompt)
 
     # No turns; start with just the system prompt
     if (length(turns) == 0) {

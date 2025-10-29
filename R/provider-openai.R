@@ -310,7 +310,7 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x, ...) {
       ))
     )
   } else {
-    cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
+    cli::cli_abort("Unknown role {turn_role(x)}", .internal = TRUE)
   }
 }
 

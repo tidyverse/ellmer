@@ -2,10 +2,16 @@
 % Please edit documentation in R/turns.R
 \name{Turn}
 \alias{Turn}
+\alias{UserTurn}
+\alias{SystemTurn}
 \alias{AssistantTurn}
-\title{A user or assistant turn}
+\title{A user, assistant, or system turn}
 \usage{
-Turn(role, contents = list())
+Turn(contents = list())
+
+UserTurn(contents = list())
+
+SystemTurn(contents = list())
 
 AssistantTurn(
   contents = list(),
@@ -16,8 +22,6 @@ AssistantTurn(
 )
 }
 \arguments{
-\item{role}{Either "user", "assistant", or "system".}
-
 \item{contents}{A list of \link{Content} objects.}
 
 \item{json}{The serialized JSON corresponding to the underlying data of
@@ -44,8 +48,9 @@ represented by the \code{Turn} object, which contains a list of \link{Content}s 
 the individual messages within the turn. These might be text, images, tool
 requests (assistant only), or tool responses (user only).
 
-An \code{AssistantTurn} is a specialized \code{Turn} for assistant responses that
-includes additional metadata about the API response.
+\code{UserTurn}, \code{AssistantTurn}, and \code{SystemTurn} are specialized subclasses
+of \code{Turn} for different types of conversation turns. \code{AssistantTurn} includes
+additional metadata about the API response.
 
 Note that a call to \verb{$chat()} and related functions may result in multiple
 user-assistant turn cycles. For example, if you have registered tools,
@@ -54,5 +59,5 @@ any number of additional cycles. Learn more about tool calling in
 \code{vignette("tool-calling")}.
 }
 \examples{
-Turn(role = "user", contents = list(ContentText("Hello, world!")))
+UserTurn(list(ContentText("Hello, world!")))
 }

@@ -55,7 +55,7 @@
 # turns have a reasonable print method
 
     Code
-      Turn("user", "hello")
+      UserTurn("hello")
     Output
       <Turn: user>
       hello

@@ -142,7 +142,7 @@ test_that("handles errors and NULLs in parallel functions", {
   )
   prompts <- list("prompt1", "prompt2", "prompt3")
   responses <- list(
-    Turn("assistant", "Success"),
+    AssistantTurn("Success"),
     simpleError("Request failed"),
     NULL
   )
@@ -175,11 +175,11 @@ test_that("errors in conversion become warnings", {
   type <- type_object(x = type_integer())
 
   turns <- list(
-    Turn("assistant", list(ContentJson(data = list(x = 1)))),
+    AssistantTurn(list(ContentJson(data = list(x = 1)))),
     # no json
-    Turn("assistant", list(ContentText("Hello"))),
+    AssistantTurn(list(ContentText("Hello"))),
     # invalid json
-    Turn("assistant", list(ContentJson(string = "{")))
+    AssistantTurn(list(ContentJson(string = "{")))
   )
 
   expect_snapshot(out <- multi_convert(provider, turns, type = type))
