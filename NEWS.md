@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New `Chat$get_cost_details()` to get turn-by-token token usage + costs (#812).
 * Updated pricing data (#790).
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
