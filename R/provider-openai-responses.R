@@ -122,6 +122,8 @@ method(chat_body, ProviderOpenAIResponses) <- function(
       summary = "auto"
     )
     params$reasoning_effort <- NULL
+  } else {
+    reasoning <- NULL
   }
 
   include <- c(
