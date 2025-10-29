@@ -303,7 +303,7 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
   if (is_system_turn(x)) {
     # claude passes system prompt as separate arg
     NULL
-  } else if (x@role %in% c("user", "assistant")) {
+  } else if (is_user_turn(x) || is_assistant_turn(x)) {
     if (is_assistant_turn(x) && identical(x@contents, list())) {
       # Drop empty assistant turns to avoid an API error
       # (all messages must have non-empty content)
