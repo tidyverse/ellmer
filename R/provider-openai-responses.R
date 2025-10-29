@@ -92,7 +92,6 @@ ProviderOpenAIResponses <- new_class(
 )
 
 
-
 # Chat endpoint ----------------------------------------------------------------
 
 method(chat_path, ProviderOpenAIResponses) <- function(provider) {
@@ -174,9 +173,17 @@ method(stream_merge_chunks, ProviderOpenAIResponses) <- function(
   result,
   chunk
 ) {
-  # https://platform.openai.com/docs/api-reference/responses-streaming/response/completed
   if (chunk$type == "response.completed") {
+    # https://platform.openai.com/docs/api-reference/responses-streaming/response/completed
     chunk$response
+  } else if (chunk$type == "response.failed") {
+    # https://platform.openai.com/docs/api-reference/responses-streaming/response/failed
+    error <- chunk$response$error
+    cli::cli_abort(c("Request failed ({error$code})", "{error$message}"))
+  } else if (chunk$type == "error") {
+    # https://platform.openai.com/docs/api-reference/responses-streaming/error
+    error <- chunk$error
+    cli::cli_abort(c("Request errored ({error$type})", "{error$message}"))
   }
 }
 
@@ -237,7 +244,7 @@ method(value_turn, ProviderOpenAIResponses) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  tokens_log(provider, tokens)
+  tokens_log(provider, tokens, variant = result$service_tier)
   assistant_turn(contents = contents, json = result, tokens = unlist(tokens))
 }
 
