@@ -12,6 +12,7 @@ chat_openai_responses(
   params = NULL,
   api_args = list(),
   api_headers = character(),
+  service_tier = c("auto", "default", "flex", "priority"),
   echo = c("none", "output", "all")
 )
 }
@@ -38,6 +39,14 @@ with \code{\link[=modifyList]{modifyList()}}.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
+
+\item{service_tier}{Request a specific service tier. There are four options:
+\itemize{
+\item \code{"auto"} (default): uses the service tier configured in Project settings.
+\item \code{"default"}: standard pricing and performance.
+\item \code{"flex"}: slower and cheaper.
+\item \code{"priority"}: faster and more expensive.
+}}
 
 \item{echo}{One of the following options:
 \itemize{
