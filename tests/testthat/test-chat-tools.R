@@ -771,8 +771,7 @@ test_that("tool error warnings", {
 })
 
 test_that("match_tools() matches tools in a turn to a list of tools", {
-  turn_single <- Turn(
-    "assistant",
+  turn_single <- AssistantTurn(
     list(ContentToolRequest("y1", "unknown", list()))
   )
   expect_null(turn_single@contents[[1]]@tool)

@@ -261,7 +261,7 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
   })
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  assistant_turn(contents, json = result, tokens = unlist(tokens), cost = cost)
+  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> Snowflake --------------------------------------------------------
@@ -294,7 +294,7 @@ method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(
     cli::cli_abort("Unsupported content type: {.cls {class(x@contents[[1]])}}.")
   }
   list(
-    role = x@role,
+    role = turn_role(x),
     content_list = as_json(provider, x@contents, ...)
   )
 }

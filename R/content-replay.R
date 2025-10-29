@@ -77,7 +77,7 @@ contents_replay <- function(x, tools = list(), .envir = parent.frame()) {
   # This is a bit of overkill, but gives nicer tracebacks
   out <- exec(class$name, !!!obj_props, .env = env)
 
-  if (class$name == "Turn") {
+  if (S7_inherits(out, Turn)) {
     out <- match_tools(out, tools)
   }
   out

@@ -15,8 +15,7 @@ test_that("can create content from a vector", {
 })
 
 test_that("turn contents can be converted to text, markdown and HTML", {
-  turn <- Turn(
-    "user",
+  turn <- UserTurn(
     contents = list(
       ContentText("User input."),
       ContentImageInline("image/png", "abcd123"),
@@ -30,7 +29,7 @@ test_that("turn contents can be converted to text, markdown and HTML", {
 
   turns <- list(
     turn,
-    Turn("assistant", list(ContentText("Here's your answer.")))
+    AssistantTurn(list(ContentText("Here's your answer.")))
   )
   chat <- Chat$new(test_provider())
   chat$set_turns(turns)

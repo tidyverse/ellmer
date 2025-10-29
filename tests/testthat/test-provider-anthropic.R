@@ -95,8 +95,8 @@ test_that("removes empty final chat messages", {
   chat <- chat_anthropic_test()
   chat$set_turns(
     list(
-      Turn("user", "Don't say anything"),
-      Turn("assistant")
+      UserTurn("Don't say anything"),
+      AssistantTurn()
     )
   )
 

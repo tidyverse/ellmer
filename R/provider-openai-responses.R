@@ -226,7 +226,7 @@ method(value_turn, ProviderOpenAIResponses) <- function(
 
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  assistant_turn(
+  AssistantTurn(
     contents = contents,
     json = result,
     tokens = unlist(tokens),
@@ -243,7 +243,7 @@ method(as_json, list(ProviderOpenAIResponses, Turn)) <- function(
 ) {
   # While the user turn can contain multiple contents, the assistant turn
   # can't. Fortunately, we can send multiple user turns with out issue.
-  as_json(provider, x@contents, ..., role = x@role)
+  as_json(provider, x@contents, ..., role = turn_role(x))
 }
 
 method(as_json, list(ProviderOpenAIResponses, ContentText)) <- function(

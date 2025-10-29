@@ -67,8 +67,7 @@ fixture_turn_with_tool_requests <- function(with_tool = TRUE) {
     tool = if (with_tool) tools$tool_abort
   )
 
-  Turn(
-    "assistant",
+  AssistantTurn(
     list(req_success, req_fail, req_list, req_chr, req_abort)
   )
 }

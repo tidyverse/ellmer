@@ -50,7 +50,7 @@ Chat <- R6::R6Class(
         return(private$.turns)
       }
 
-      if (!include_system_prompt && is_system_prompt(private$.turns[[1]])) {
+      if (!include_system_prompt && is_system_turn(private$.turns[[1]])) {
         private$.turns[-1]
       } else {
         private$.turns
@@ -115,7 +115,7 @@ Chat <- R6::R6Class(
       }
       # Add prompt, if new
       if (is.character(value)) {
-        system_turn <- Turn("system", value)
+        system_turn <- SystemTurn(value)
         private$.turns <- c(list(system_turn), private$.turns)
       }
       invisible(self)
@@ -128,7 +128,7 @@ Chat <- R6::R6Class(
     #'   the turns (if any exists).
     get_tokens = function(include_system_prompt = FALSE) {
       turns <- self$get_turns()
-      assistant_turns <- keep(turns, function(x) x@role == "assistant")
+      assistant_turns <- keep(turns, is_assistant_turn)
 
       n <- length(assistant_turns)
       tokens_acc <- map_tokens(assistant_turns, \(turn) turn@tokens)
@@ -181,7 +181,7 @@ Chat <- R6::R6Class(
       include <- arg_match(include)
 
       turns <- self$get_turns()
-      assistant_turns <- keep(turns, function(x) x@role == "assistant")
+      assistant_turns <- keep(turns, is_assistant_turn)
 
       if (length(assistant_turns) == 0) {
         return(dollars(0))
@@ -199,7 +199,7 @@ Chat <- R6::R6Class(
     #' @description The tokens for each user-assistant turn of this chat.
     get_cost_details = function() {
       turns <- self$get_turns(include_system_prompt = FALSE)
-      assistant_turns <- keep(turns, function(x) x@role == "assistant")
+      assistant_turns <- keep(turns, is_assistant_turn)
       tokens <- as.data.frame(map_tokens(assistant_turns, \(turn) turn@tokens))
       tokens$cost <- dollars(map_dbl(assistant_turns, \(turn) turn@cost))
       tokens
@@ -771,7 +771,7 @@ Chat <- R6::R6Class(
     }),
 
     has_system_prompt = function() {
-      length(private$.turns) > 0 && private$.turns[[1]]@role == "system"
+      length(private$.turns) > 0 && is_system_turn(private$.turns[[1]])
     }
   )
 )
@@ -805,7 +805,7 @@ print.Chat <- function(x, ...) {
     turn <- turns[[i]]
 
     cli::cat_rule(cli::format_inline(
-      "{color_role(turn@role)} [{tokens$tokens[[i]]}]"
+      "{color_role(turn_role(turn))} [{tokens$tokens[[i]]}]"
     ))
     cat(format(turns[[i]]))
   }
@@ -826,7 +826,7 @@ method(contents_markdown, new_S3_class("Chat")) <- function(
 
   res <- vector("character", length(turns))
   for (i in seq_along(res)) {
-    role <- turns[[i]]@role
+    role <- turn_role(turns[[i]])
     substr(role, 0, 1) <- toupper(substr(role, 0, 1))
     res[i] <- glue::glue("{hh} {role}\n\n{contents_markdown(turns[[i]])}")
   }

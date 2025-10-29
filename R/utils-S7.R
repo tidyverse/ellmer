@@ -107,8 +107,42 @@ prop_number_whole <- function(
 
       if (length(value) != 1) {
         paste0("must be a whole number, not ", obj_type_friendly(value), ".")
+      } else if (!allow_na && is.na(value)) {
+        "must not be missing."
       } else if (value != trunc(value)) {
         paste0("must be a whole number, not ", obj_type_friendly(value), ".")
+      } else if (!is.null(min) && value < min) {
+        paste0("must be at least ", min, ", not ", value, ".")
+      } else if (!is.null(max) && value > max) {
+        paste0("must be at most ", max, ", not ", value, ".")
+      }
+    }
+  )
+}
+
+prop_number_decimal <- function(
+  default = NULL,
+  min = NULL,
+  max = NULL,
+  allow_null = FALSE,
+  allow_na = FALSE,
+  allow_infinite = FALSE
+) {
+  force(allow_null)
+  force(allow_na)
+
+  new_property(
+    class = if (allow_null) NULL | class_double else class_double,
+    default = default,
+    validator = function(value) {
+      if (allow_null && is.null(value)) {
+        return()
+      }
+
+      if (length(value) != 1) {
+        paste0("must be a whole number, not ", obj_type_friendly(value), ".")
+      } else if (!allow_infinite && is.infinite(value)) {
+        paste0("must be finite, not ", value, ".")
       } else if (!is.null(min) && value < min) {
         paste0("must be at least ", min, ", not ", value, ".")
       } else if (!is.null(max) && value > max) {

@@ -1,7 +1,7 @@
 test_that("system prompt is applied correctly", {
   sys_prompt <- "foo"
-  sys_msg <- Turn("system", sys_prompt)
-  user_msg <- Turn("user", "bar")
+  sys_msg <- SystemTurn(sys_prompt)
+  user_msg <- UserTurn("bar")
 
   expect_equal(normalize_turns(), list())
   expect_equal(normalize_turns(list(user_msg)), list(user_msg))
@@ -20,8 +20,8 @@ test_that("system prompt is applied correctly", {
 
 test_that("normalize_turns throws useful errors", {
   sys_prompt <- "foo"
-  sys_msg <- Turn("system", "foo")
-  user_msg <- Turn("user", "bar")
+  sys_msg <- SystemTurn("foo")
+  user_msg <- UserTurn("bar")
 
   expect_snapshot(error = TRUE, {
     normalize_turns(1)
@@ -42,7 +42,7 @@ test_that("as_user_turn gives useful errors", {
 
 test_that("can opt-out of empty check", {
   out <- as_user_turn(list(), check_empty = FALSE)
-  expect_equal(out, Turn("user"))
+  expect_equal(out, UserTurn())
 })
 
 test_that("as_user_turns gives useful errors", {
@@ -54,8 +54,7 @@ test_that("as_user_turns gives useful errors", {
 })
 
 test_that("can extract text easily", {
-  turn <- Turn(
-    "assistant",
+  turn <- AssistantTurn(
     list(
       ContentText("ABC"),
       ContentImage(),
@@ -66,7 +65,7 @@ test_that("can extract text easily", {
 })
 
 test_that("turns have a reasonable print method", {
-  expect_snapshot(Turn("user", "hello"))
+  expect_snapshot(UserTurn("hello"))
 })
 
 test_that("as_user_turns can create lists of turns from lists of Content objects", {
@@ -86,20 +85,18 @@ test_that("as_user_turns can create lists of turns from lists of Content objects
 
 test_that("ContentText shows first (truncated) text", {
   expect_equal(
-    turn_contents_preview(Turn("user", "This is short")),
+    turn_contents_preview(UserTurn("This is short")),
     "Text[This is short]"
   )
   expect_equal(
-    turn_contents_preview(Turn(
-      "user",
+    turn_contents_preview(UserTurn(
       "This is a very long message that should be truncated"
     )),
     "Text[This is a very long message that shou...]"
   )
 
   expect_equal(
-    turn_contents_preview(Turn(
-      "user",
+    turn_contents_preview(UserTurn(
       list(ContentText("This is short"), ContentText("Second"))
     )),
     "Text[This is short], Text"
@@ -108,13 +105,12 @@ test_that("ContentText shows first (truncated) text", {
 
 test_that("non-text types just show type", {
   expect_equal(
-    turn_contents_preview(Turn("user", list(ContentImageInline("")))),
+    turn_contents_preview(UserTurn(list(ContentImageInline("")))),
     "ImageInline"
   )
 
   expect_equal(
-    turn_contents_preview(Turn(
-      "user",
+    turn_contents_preview(UserTurn(
       list(ContentImageInline(""), ContentImageRemote(""))
     )),
     "ImageInline, ImageRemote"
