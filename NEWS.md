@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_openai_responses()` gains a `service_tier` argument (#712).
 * Updated pricing data (#790).
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
