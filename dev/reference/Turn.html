@@ -87,6 +87,7 @@ any number of additional cycles. Learn more about tool calling in
 <span>  contents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  json <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  tokens <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  cost <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
 <span>  duration <span class="op">=</span> <span class="cn">NA_real_</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -112,12 +113,18 @@ doesn't otherwise expose.</p></dd>
 
 <dt id="arg-tokens">tokens<a class="anchor" aria-label="anchor" href="#arg-tokens"></a></dt>
 <dd><p>A numeric vector of length 2 representing the number of
-input and output tokens (respectively) used in this turn. Currently
-only recorded for assistant turns.</p></dd>
+input and output tokens (respectively) used in this turn.
+Only meaningful for assistant turns.</p></dd>
+
+
+<dt id="arg-cost">cost<a class="anchor" aria-label="anchor" href="#arg-cost"></a></dt>
+<dd><p>The cost of the turn in dollars. Only meaningful for assistant
+turns.</p></dd>
 
 
 <dt id="arg-duration">duration<a class="anchor" aria-label="anchor" href="#arg-duration"></a></dt>
-<dd><p>The duration of the request in seconds. <code>NA</code> for user turns,
+<dd><p>The duration of the request in seconds.
+Only meaning for assistant turns.
 numeric for assistant turns.</p></dd>
 
 </dl></div>
