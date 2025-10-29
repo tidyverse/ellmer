@@ -158,7 +158,7 @@ method(base_request_error, ProviderDatabricks) <- function(provider, req) {
 method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x, ...) {
   if (is_system_turn(x)) {
     list(list(role = "system", content = x@contents[[1]]@text))
-  } else if (x@role == "user") {
+  } else if (is_user_turn(x)) {
     # Each tool result needs to go in its own message with role "tool".
     is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
     if (any(is_tool)) {

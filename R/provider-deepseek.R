@@ -78,7 +78,7 @@ method(as_json, list(ProviderDeepSeek, ContentText)) <- function(
 }
 
 method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
-  if (x@role == "user") {
+  if (is_user_turn(x)) {
     # Text and tool results go in separate messages
     texts <- keep(x@contents, S7_inherits, ContentText)
     texts_out <- lapply(texts, function(text) {

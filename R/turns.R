@@ -169,6 +169,10 @@ is_system_turn <- function(x) {
   x@role == "system"
 }
 
+is_user_turn <- function(x) {
+  x@role == "user"
+}
+
 is_assistant_turn <- function(x) {
   S7_inherits(x, AssistantTurn)
 }
@@ -210,7 +214,7 @@ normalize_turns <- function(
     # No turns; start with just the system prompt
     if (length(turns) == 0) {
       turns <- list(system_turn)
-    } else if (turns[[1]]@role != "system") {
+    } else if (!is_system_turn(turns[[1]])) {
       turns <- c(list(system_turn), turns)
     } else if (overwrite || identical(turns[[1]], system_turn)) {
       # Duplicate system prompt; don't need to do anything
