@@ -33,7 +33,7 @@
 * `models_ollama()` was fixed to correctly query model capabilities from remote Ollama servers (#746).
 
 * `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758).
-* The `virtual_key` argument in `chat_portkey()` was deprecated as it is no longer supported by PortkeyAI (#786).
+* The `virtual_key` argument in `chat_portkey()` has been deprecated as it is no longer supported by PortkeyAI. A new optional argument, `model_provider`, has been introduced, allowing users to specify a model provider from the Model Catalog displayed in their Portkey application (#786).
 
 # ellmer 0.3.2
 
