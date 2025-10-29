@@ -124,7 +124,7 @@ Replace existing turns with a new list.
 \subsection{Method \code{add_turn()}}{
 Add a pair of turns to the chat.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$add_turn(user, system)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$add_turn(user, assistant)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -132,7 +132,7 @@ Add a pair of turns to the chat.
 \describe{
 \item{\code{user}}{The user \link{Turn}.}
 
-\item{\code{system}}{The system \link{Turn}.}
+\item{\code{assistant}}{The system \link{Turn}.}
 }
 \if{html}{\out{</div>}}
 }

@@ -70,20 +70,20 @@ Chat <- R6::R6Class(
 
     #' @description Add a pair of turns to the chat.
     #' @param user The user [Turn].
-    #' @param system The system [Turn].
-    add_turn = function(user, system) {
+    #' @param assistant The system [Turn].
+    add_turn = function(user, assistant) {
       check_turn(user)
-      check_turn(system)
+      check_turn(assistant)
 
       tokens_log(
         private$provider,
         # TODO: store better representation in Turn object
-        exec(tokens, !!!as.list(system@tokens)),
-        system@cost
+        exec(tokens, !!!as.list(assistant@tokens)),
+        assistant@cost
       )
 
       private$.turns[[length(private$.turns) + 1]] <- user
-      private$.turns[[length(private$.turns) + 1]] <- system
+      private$.turns[[length(private$.turns) + 1]] <- assistant
       invisible(self)
     },
 
