@@ -153,6 +153,15 @@ method(chat_body, ProviderAnthropic) <- function(
   tools <- as_json(provider, unname(tools))
 
   params <- chat_params(provider, provider@params)
+  if (has_name(params, "budget_tokens")) {
+    thinking <- list(
+      type = "enabled",
+      budget_tokens = params$budget_tokens
+    )
+    params$budget_tokens <- NULL
+  } else {
+    thinking <- NULL
+  }
 
   compact(list2(
     model = provider@model,
@@ -161,6 +170,7 @@ method(chat_body, ProviderAnthropic) <- function(
     stream = stream,
     tools = tools,
     tool_choice = tool_choice,
+    thinking = thinking,
     !!!params
   ))
 }
@@ -173,7 +183,8 @@ method(chat_params, ProviderAnthropic) <- function(provider, params) {
       top_p = "top_p",
       top_k = "top_k",
       max_tokens = "max_tokens",
-      stop_sequences = "stop_sequences"
+      stop_sequences = "stop_sequences",
+      budget_tokens = "reasoning_tokens"
     )
   )
 
@@ -201,7 +212,7 @@ method(stream_parse, ProviderAnthropic) <- function(provider, event) {
 }
 method(stream_text, ProviderAnthropic) <- function(provider, event) {
   if (event$type == "content_block_delta") {
-    event$delta$text
+    event$delta$text %||% event$delta$thinking
   }
 }
 method(stream_merge_chunks, ProviderAnthropic) <- function(

@@ -18,6 +18,10 @@
 #' @param max_tokens Maximum number of tokens to generate.
 #' @param log_probs Include the log probabilities in the output?
 #' @param stop_sequences A character vector of tokens to stop generation on.
+#' @param reasoning_effort,reasoning_tokens How much effort to spend thinking?
+#'   `ressoning_effort` is a string, like "low", "medium", "high".
+#'   `reasoning_tokens` is an integer, giving a maximum token budget.
+#'   Each provider only takes one of these two parameters.
 #' @param ... Additional named parameters to send to the provider.
 #' @export
 params <- function(
@@ -30,6 +34,8 @@ params <- function(
   max_tokens = NULL,
   log_probs = NULL,
   stop_sequences = NULL,
+  reasoning_effort = NULL,
+  reasoning_tokens = NULL,
   ...
 ) {
   check_number_decimal(temperature, allow_null = TRUE, min = 0)
@@ -41,6 +47,8 @@ params <- function(
   check_number_whole(max_tokens, allow_null = TRUE, min = 1)
   check_bool(log_probs, allow_null = TRUE)
   check_character(stop_sequences, allow_null = TRUE)
+  check_string(reasoning_effort, allow_null = TRUE)
+  check_number_whole(reasoning_tokens, min = 0, allow_null = TRUE)
 
   compact(list2(
     temperature = temperature,
@@ -52,6 +60,8 @@ params <- function(
     max_tokens = max_tokens,
     log_probs = log_probs,
     stop_sequences = stop_sequences,
+    reasoning_effort = reasoning_effort,
+    reasoning_tokens = reasoning_tokens,
     extra_args = list2(...)
   ))
 }
