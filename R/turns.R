@@ -24,9 +24,12 @@ NULL
 #'   This is useful if there's information returned by the provider that ellmer
 #'   doesn't otherwise expose.
 #' @param tokens A numeric vector of length 2 representing the number of
-#'   input and output tokens (respectively) used in this turn. Currently
-#'   only recorded for assistant turns.
-#' @param duration The duration of the request in seconds. `NA` for user turns,
+#'   input and output tokens (respectively) used in this turn.
+#'   Only meaningful for assistant turns.
+#' @param cost The cost of the turn in dollars. Only meaningful for assistant
+#'   turns.
+#' @param duration The duration of the request in seconds.
+#'   Only meaning for assistant turns.
 #'   numeric for assistant turns.
 #' @export
 #' @return An S7 `Turn` object
@@ -47,6 +50,10 @@ Turn <- new_class(
         }
       }
     ),
+    cost = new_property(
+      class = class_numeric,
+      default = NA_real_
+    ),
     duration = new_property(
       class_numeric,
       default = NA_real_
@@ -61,6 +68,7 @@ Turn <- new_class(
     contents = list(),
     json = list(),
     tokens = c(0, 0, 0),
+    cost = NA_real_,
     duration = NA_real_
   ) {
     if (is.character(contents)) {
@@ -72,7 +80,8 @@ Turn <- new_class(
       contents = contents,
       json = json,
       tokens = tokens,
-      duration = duration
+      duration = duration,
+      cost = cost
     )
   }
 )

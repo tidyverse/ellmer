@@ -225,8 +225,13 @@ method(value_turn, ProviderOpenAIResponses) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  tokens_log(provider, tokens)
-  assistant_turn(contents = contents, json = result, tokens = unlist(tokens))
+  cost <- get_token_cost(provider, tokens)
+  assistant_turn(
+    contents = contents,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost
+  )
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------

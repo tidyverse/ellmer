@@ -70,13 +70,20 @@ Chat <- R6::R6Class(
 
     #' @description Add a pair of turns to the chat.
     #' @param user The user [Turn].
-    #' @param system The system [Turn].
-    add_turn = function(user, system) {
+    #' @param assistant The system [Turn].
+    add_turn = function(user, assistant) {
       check_turn(user)
-      check_turn(system)
+      check_turn(assistant)
+
+      tokens_log(
+        private$provider,
+        # TODO: store better representation in Turn object
+        exec(tokens, !!!as.list(assistant@tokens)),
+        assistant@cost
+      )
 
       private$.turns[[length(private$.turns) + 1]] <- user
-      private$.turns[[length(private$.turns) + 1]] <- system
+      private$.turns[[length(private$.turns) + 1]] <- assistant
       invisible(self)
     },
 
@@ -120,15 +127,11 @@ Chat <- R6::R6Class(
     #' @param include_system_prompt Whether to include the system prompt in
     #'   the turns (if any exists).
     get_tokens = function(include_system_prompt = FALSE) {
-      turns <- self$get_turns(include_system_prompt = FALSE)
+      turns <- self$get_turns()
       assistant_turns <- keep(turns, function(x) x@role == "assistant")
 
       n <- length(assistant_turns)
-      tokens_acc <- t(vapply(
-        assistant_turns,
-        function(turn) turn@tokens,
-        double(3)
-      ))
+      tokens_acc <- map_tokens(assistant_turns, \(turn) turn@tokens)
       # Combine counts for input tokens (cached and uncached)
       tokens_acc[, 1] <- tokens_acc[, 1] + tokens_acc[, 3]
       # Then drop cached tokens counts
@@ -177,24 +180,29 @@ Chat <- R6::R6Class(
     get_cost = function(include = c("all", "last")) {
       include <- arg_match(include)
 
-      turns <- self$get_turns(include_system_prompt = FALSE)
+      turns <- self$get_turns()
       assistant_turns <- keep(turns, function(x) x@role == "assistant")
-      n <- length(assistant_turns)
-      tokens <- t(vapply(
-        assistant_turns,
-        function(turn) turn@tokens,
-        double(3)
-      ))
 
-      if (include == "last") {
-        tokens <- tokens[nrow(tokens), , drop = FALSE]
+      if (length(assistant_turns) == 0) {
+        return(dollars(0))
       }
 
-      private$compute_cost(
-        input = sum(tokens[, 1]),
-        output = sum(tokens[, 2]),
-        cached_input = sum(tokens[, 3])
-      )
+      if (include == "last") {
+        cost <- assistant_turns[[length(assistant_turns)]]@cost
+      } else {
+        cost <- sum(map_dbl(assistant_turns, \(turn) turn@cost))
+      }
+
+      dollars(cost)
+    },
+
+    #' @description The tokens for each user-assistant turn of this chat.
+    get_cost_details = function() {
+      turns <- self$get_turns(include_system_prompt = FALSE)
+      assistant_turns <- keep(turns, function(x) x@role == "assistant")
+      tokens <- as.data.frame(map_tokens(assistant_turns, \(turn) turn@tokens))
+      tokens$cost <- dollars(map_dbl(assistant_turns, \(turn) turn@cost))
+      tokens
     },
 
     #' @description The last turn returned by the assistant.
@@ -764,17 +772,6 @@ Chat <- R6::R6Class(
 
     has_system_prompt = function() {
       length(private$.turns) > 0 && private$.turns[[1]]@role == "system"
-    },
-
-    compute_cost = function(input, output, cached_input) {
-      get_token_cost(
-        private$provider@name,
-        private$provider@model,
-        variant = "",
-        input = input,
-        output = output,
-        cached_input = cached_input
-      )
     }
   )
 )
