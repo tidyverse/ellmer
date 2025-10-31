@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_databricks()` lifts many of its restrictions now that the DataBrick's API is more OpenAI compatible (#757).
 * Updated pricing data (#790).
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)

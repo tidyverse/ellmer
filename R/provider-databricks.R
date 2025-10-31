@@ -20,11 +20,6 @@
 #' - Viewer-based credentials on Posit Connect. Requires the \pkg{connectcreds}
 #'   package.
 #'
-#' ## Known limitations
-#'
-#' Databricks models do not support images, but they do support structured
-#' outputs and tool calls for most models.
-#'
 #' @family chatbots
 #' @param workspace The URL of a Databricks workspace, e.g.
 #'   `"https://example.cloud.databricks.com"`. Will use the value of the
