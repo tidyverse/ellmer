@@ -16,7 +16,7 @@ SystemTurn(contents = list())
 AssistantTurn(
   contents = list(),
   json = list(),
-  tokens = c(0, 0, 0),
+  tokens = c(NA_real_, NA_real_, NA_real_),
   cost = NA_real_,
   duration = NA_real_
 )
