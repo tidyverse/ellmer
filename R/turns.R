@@ -59,16 +59,7 @@ UserTurn <- new_class(
       class = class_character,
       getter = function(self) "user"
     )
-  ),
-  constructor = function(contents = list()) {
-    if (is.character(contents)) {
-      contents <- list(ContentText(paste0(contents, collapse = "\n")))
-    }
-    new_object(
-      S7_object(),
-      contents = contents
-    )
-  }
+  )
 )
 
 #' @rdname Turn
@@ -81,16 +72,7 @@ SystemTurn <- new_class(
       class = class_character,
       getter = function(self) "system"
     )
-  ),
-  constructor = function(contents = list()) {
-    if (is.character(contents)) {
-      contents <- list(ContentText(paste0(contents, collapse = "\n")))
-    }
-    new_object(
-      S7_object(),
-      contents = contents
-    )
-  }
+  )
 )
 
 #' @param json The serialized JSON corresponding to the underlying data of
@@ -124,26 +106,7 @@ AssistantTurn <- new_class(
       class = class_character,
       getter = function(self) "assistant"
     )
-  ),
-  constructor = function(
-    contents = list(),
-    json = list(),
-    tokens = c(0, 0, 0),
-    cost = NA_real_,
-    duration = NA_real_
-  ) {
-    if (is.character(contents)) {
-      contents <- list(ContentText(paste0(contents, collapse = "\n")))
-    }
-    new_object(
-      S7_object(),
-      contents = contents,
-      json = json,
-      tokens = tokens,
-      duration = duration,
-      cost = cost
-    )
-  }
+  )
 )
 method(format, Turn) <- function(x, ...) {
   contents <- map_chr(x@contents, format, ...)
