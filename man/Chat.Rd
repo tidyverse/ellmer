@@ -179,8 +179,8 @@ Update the system prompt
 \subsection{Method \code{get_tokens()}}{
 A data frame with token usage and cost data. There are four
 columns: \code{input}, \code{output}, \code{cached_input}, and \code{cost}. There is one
-row for each pair of user and assistant turns, because token counts
-and costs are only available after the assistant computes the output.
+row for each assistant turn, because token counts and costs are only
+available when the API returns the assistant's response.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Chat$get_tokens(include_system_prompt = deprecated())}\if{html}{\out{</div>}}
 }
