@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `chat_*()` functions now use a credentials functions instead of an `api_key` (#613). This means that the `api_key` is never stored in the provider object (which might be saved to disk), but is instead retrieved on demand as needed. You generally shouldn't need to use the `credentials` argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).
+* `chat_*()` functions now use a `credentials` function instead of an `api_key` (#613). This means that API keys are never stored in the chat object (which might be saved to disk), but is instead retrieved on demand as needed. You generally shouldn't need to use the `credentials` argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
   * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)
