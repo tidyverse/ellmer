@@ -35,7 +35,6 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
 \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
 \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
-\item \href{#method-Chat-get_cost_details}{\code{Chat$get_cost_details()}}
 \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
 \item \href{#method-Chat-chat}{\code{Chat$chat()}}
 \item \href{#method-Chat-chat_structured}{\code{Chat$chat_structured()}}
@@ -124,7 +123,7 @@ Replace existing turns with a new list.
 \subsection{Method \code{add_turn()}}{
 Add a pair of turns to the chat.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$add_turn(user, system)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$add_turn(user, assistant)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -132,7 +131,7 @@ Add a pair of turns to the chat.
 \describe{
 \item{\code{user}}{The user \link{Turn}.}
 
-\item{\code{system}}{The system \link{Turn}.}
+\item{\code{assistant}}{The system \link{Turn}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -178,18 +177,18 @@ Update the system prompt
 \if{html}{\out{<a id="method-Chat-get_tokens"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-get_tokens}{}}}
 \subsection{Method \code{get_tokens()}}{
-A data frame with a \code{tokens} column that provides the
-number of input tokens used by user turns and the number of
-output tokens used by assistant turns.
+A data frame with token usage and cost data. There are four
+columns: \code{input}, \code{output}, \code{cached_input}, and \code{cost}. There is one
+row for each assistant turn, because token counts and costs are only
+available when the API returns the assistant's response.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$get_tokens(include_system_prompt = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_tokens(include_system_prompt = deprecated())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{include_system_prompt}}{Whether to include the system prompt in
-the turns (if any exists).}
+\item{\code{include_system_prompt}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \if{html}{\out{</div>}}
 }
@@ -212,16 +211,6 @@ most recent turn.}
 }
 \if{html}{\out{</div>}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-get_cost_details"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-get_cost_details}{}}}
-\subsection{Method \code{get_cost_details()}}{
-The tokens and for each user-assistant turn of this chat.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$get_cost_details()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Chat-last_turn"></a>}}

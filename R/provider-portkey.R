@@ -10,7 +10,8 @@
 #' stored inside Portkey application.
 #'
 #' @family chatbots
-#' @param api_key `r api_key_param("PORTKEY_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("PORTKEY_API_KEY")`
 #' @param model `r param_model("gpt-4o", "openai")`
 #' @param virtual_key A virtual identifier storing LLM provider's API key. See
 #'   [documentation](https://portkey.ai/docs/product/ai-gateway/virtual-keys).
@@ -26,7 +27,8 @@
 chat_portkey <- function(
   system_prompt = NULL,
   base_url = "https://api.portkey.ai/v1",
-  api_key = portkey_key(),
+  api_key = NULL,
+  credentials = NULL,
   virtual_key = portkey_virtual_key(),
   model = NULL,
   params = NULL,
@@ -37,6 +39,13 @@ chat_portkey <- function(
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
+  credentials <- as_credentials(
+    "chat_portkey",
+    function() portkey_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   params <- params %||% params()
   provider <- ProviderPortkeyAI(
     name = "PortkeyAI",
@@ -44,7 +53,7 @@ chat_portkey <- function(
     model = model,
     params = params,
     extra_args = api_args,
-    api_key = api_key,
+    credentials = credentials,
     virtual_key = virtual_key,
     extra_headers = api_headers
   )
@@ -90,11 +99,13 @@ portkey_virtual_key <- function() {
 
 method(base_request, ProviderPortkeyAI) <- function(provider) {
   req <- request(provider@base_url)
-  req <- httr2::req_headers(
+
+  req <- ellmer_req_credentials(
     req,
-    `x-portkey-api-key` = provider@api_key,
-    `x-portkey-virtual-key` = provider@virtual_key
+    provider@credentials(),
+    "x-portkey-api-key"
   )
+  req <- httr2::req_headers(req, `x-portkey-virtual-key` = provider@virtual_key)
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- base_request_error(provider, req)
@@ -113,7 +124,7 @@ models_portkey <- function(
     name = "PortkeyAI",
     model = "",
     base_url = base_url,
-    api_key = api_key,
+    credentials = function() api_key,
     virtual_key = virtual_key
   )
 
