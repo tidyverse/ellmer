@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_databricks()` lifts many of its restrictions now that the DataBrick's API is more OpenAI compatible (#757).
 * New `Chat$get_cost_details()` to get turn-by-token token usage + costs (#812).
 * Updated pricing data (#790).
 * The following deprecated functions/arguments/methods have now been removed:

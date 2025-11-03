@@ -20,11 +20,6 @@
 #' - Viewer-based credentials on Posit Connect. Requires the \pkg{connectcreds}
 #'   package.
 #'
-#' ## Known limitations
-#'
-#' Databricks models do not support images, but they do support structured
-#' outputs and tool calls for most models.
-#'
 #' @family chatbots
 #' @param workspace The URL of a Databricks workspace, e.g.
 #'   `"https://example.cloud.databricks.com"`. Will use the value of the
@@ -153,52 +148,6 @@ method(base_request_error, ProviderDatabricks) <- function(provider, req) {
       resp_body_json(resp)$message
     }
   })
-}
-
-method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x, ...) {
-  if (is_system_turn(x)) {
-    list(list(role = "system", content = x@contents[[1]]@text))
-  } else if (is_user_turn(x)) {
-    # Each tool result needs to go in its own message with role "tool".
-    is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
-    if (any(is_tool)) {
-      return(lapply(x@contents[is_tool], function(tool) {
-        list(
-          role = "tool",
-          content = tool_string(tool),
-          tool_call_id = tool@request@id
-        )
-      }))
-    }
-    if (length(x@contents) > 1) {
-      cli::cli_abort("Databricks models only accept a single text input.")
-    }
-    content <- as_json(provider, x@contents[[1]], ...)
-    list(list(role = "user", content = content))
-  } else if (is_assistant_turn(x)) {
-    is_tool <- map_lgl(x@contents, is_tool_request)
-    if (any(is_tool)) {
-      list(list(
-        role = "assistant",
-        tool_calls = as_json(provider, x@contents[is_tool], ...)
-      ))
-    } else {
-      # We should be able to assume that there is only one content item here.
-      content <- as_json(provider, x@contents[[1]], ...)
-      list(list(role = "assistant", content = content))
-    }
-  } else {
-    cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
-  }
-}
-
-method(as_json, list(ProviderDatabricks, ContentText)) <- function(
-  provider,
-  x,
-  ...
-) {
-  # Databricks only seems to support textual content.
-  x@text
 }
 
 # See: https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#functionobject
