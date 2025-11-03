@@ -45,7 +45,7 @@ test_that("errors if chat/provider/prompts don't match previous run", {
 
 test_that("can override hash check", {
   chat <- chat_openai_test(system_prompt = "Be cool")
-  prompts <- list()
+  prompts <- list("x")
   path <- test_path("batch/state-capitals.json")
   expect_snapshot(. <- batch_chat(chat, prompts, path, ignore_hash = TRUE))
 })
