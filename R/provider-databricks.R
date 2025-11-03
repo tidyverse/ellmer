@@ -72,9 +72,6 @@ chat_databricks <- function(
     params = params,
     extra_args = api_args,
     credentials = credentials,
-    # Databricks APIs use bearer tokens, not API keys, but we need to pass an
-    # empty string here anyway to make S7::validate() happy.
-    api_key = "",
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -82,13 +79,12 @@ chat_databricks <- function(
 
 ProviderDatabricks <- new_class(
   "ProviderDatabricks",
-  parent = ProviderOpenAI,
-  properties = list(credentials = class_function)
+  parent = ProviderOpenAI
 )
 
 method(base_request, ProviderDatabricks) <- function(provider) {
   req <- request(provider@base_url)
-  req <- ellmer_req_credentials(req, provider@credentials)
+  req <- ellmer_req_credentials(req, provider@credentials())
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req, databricks_user_agent())
   req <- base_request_error(provider, req)

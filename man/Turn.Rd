@@ -2,41 +2,44 @@
 % Please edit documentation in R/turns.R
 \name{Turn}
 \alias{Turn}
-\title{A user or assistant turn}
+\alias{UserTurn}
+\alias{SystemTurn}
+\alias{AssistantTurn}
+\title{A user, assistant, or system turn}
 \usage{
-Turn(
-  role,
+Turn(contents = list())
+
+UserTurn(contents = list())
+
+SystemTurn(contents = list())
+
+AssistantTurn(
   contents = list(),
   json = list(),
-  tokens = c(0, 0, 0),
+  tokens = c(NA_real_, NA_real_, NA_real_),
   cost = NA_real_,
   duration = NA_real_
 )
 }
 \arguments{
-\item{role}{Either "user", "assistant", or "system".}
-
 \item{contents}{A list of \link{Content} objects.}
 
 \item{json}{The serialized JSON corresponding to the underlying data of
-the turns. Currently only provided for assistant.
+the turns. This is useful if there's information returned by the provider
+that ellmer doesn't otherwise expose.}
 
-This is useful if there's information returned by the provider that ellmer
-doesn't otherwise expose.}
+\item{tokens}{A numeric vector of length 3 representing the number of
+input tokens (uncached), output tokens, and input tokens (cached)
+used in this turn.}
 
-\item{tokens}{A numeric vector of length 2 representing the number of
-input and output tokens (respectively) used in this turn.
-Only meaningful for assistant turns.}
+\item{cost}{The cost of the turn in dollars.}
 
-\item{cost}{The cost of the turn in dollars. Only meaningful for assistant
-turns.}
-
-\item{duration}{The duration of the request in seconds.
-Only meaning for assistant turns.
-numeric for assistant turns.}
+\item{duration}{The duration of the request in seconds.}
 }
 \value{
 An S7 \code{Turn} object
+
+An S7 \code{AssistantTurn} object
 }
 \description{
 Every conversation with a chatbot consists of pairs of user and assistant
@@ -45,6 +48,10 @@ represented by the \code{Turn} object, which contains a list of \link{Content}s 
 the individual messages within the turn. These might be text, images, tool
 requests (assistant only), or tool responses (user only).
 
+\code{UserTurn}, \code{AssistantTurn}, and \code{SystemTurn} are specialized subclasses
+of \code{Turn} for different types of conversation turns. \code{AssistantTurn} includes
+additional metadata about the API response.
+
 Note that a call to \verb{$chat()} and related functions may result in multiple
 user-assistant turn cycles. For example, if you have registered tools,
 ellmer will automatically handle the tool calling loop, which may result in
@@ -52,5 +59,5 @@ any number of additional cycles. Learn more about tool calling in
 \code{vignette("tool-calling")}.
 }
 \examples{
-Turn(role = "user", contents = list(ContentText("Hello, world!")))
+UserTurn(list(ContentText("Hello, world!")))
 }

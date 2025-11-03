@@ -15,14 +15,17 @@ NULL
 #'
 #' ## Authentication
 #' By default, `chat_google_gemini()` will use Google's default application
-#' credentials if there is no API key provided. This requires the \pkg{gargle}
-#' package.
+#' credentials. This requires the \pkg{gargle} package.
 #'
-#' It can also pick up on viewer-based credentials on Posit Connect. This in
-#' turn requires the \pkg{connectcreds} package.
+#' Alternatively, you can use an API key by setting env var `GOOGLE_API_KEY` or,
+#' for `chat_google_gemini()` only, `GEMINI_API_KEY`.
 #'
-#' @param api_key `r api_key_param("GOOGLE_API_KEY")`
-#'   For Gemini, you can alternatively set `GEMINI_API_KEY`.
+#' Finally these functions will also pick up on viewer-based credentials on
+#' Posit Connect. This requires the \pkg{connectcreds} package.
+#'
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials A function that returns a list of authentication headers
+#'   or `NULL`, the default, to use ambient credentials. See above for details.
 #' @param model `r param_model("gemini-2.5-flash", "google_gemini")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -37,6 +40,7 @@ chat_google_gemini <- function(
   system_prompt = NULL,
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
   api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -45,7 +49,13 @@ chat_google_gemini <- function(
 ) {
   model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
-  credentials <- default_google_credentials(api_key, variant = "gemini")
+
+  credentials <- as_credentials(
+    "chat_google_gemini",
+    default_google_credentials(variant = "gemini"),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
@@ -54,7 +64,6 @@ chat_google_gemini <- function(
     params = params %||% params(),
     extra_args = api_args,
     extra_headers = api_headers,
-    api_key = api_key,
     credentials = credentials
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -122,8 +131,6 @@ ProviderGoogleGemini <- new_class(
   "ProviderGoogleGemini",
   parent = Provider,
   properties = list(
-    api_key = prop_string(allow_null = TRUE),
-    credentials = class_function | NULL,
     model = prop_string()
   )
 )
@@ -132,7 +139,7 @@ ProviderGoogleGemini <- new_class(
 
 method(base_request, ProviderGoogleGemini) <- function(provider) {
   req <- request(provider@base_url)
-  req <- ellmer_req_credentials(req, provider@credentials)
+  req <- ellmer_req_credentials(req, provider@credentials(), "x-goog-api-key")
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- req_error(req, body = function(resp) {
@@ -191,7 +198,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
   tools = list(),
   type = NULL
 ) {
-  if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
+  if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
     system <- list(parts = list(text = turns[[1]]@text))
   } else {
     system <- list(parts = list(text = ""))
@@ -308,7 +315,7 @@ method(value_turn, ProviderGoogleGemini) <- function(
   contents <- compact(contents)
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  assistant_turn(contents, json = result, tokens = unlist(tokens), cost = cost)
+  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> Gemini --------------------------------------------------------------
@@ -319,14 +326,14 @@ method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
   x,
   ...
 ) {
-  if (x@role == "system") {
+  if (is_system_turn(x)) {
     # System messages go in the top-level API parameter
-  } else if (x@role == "user") {
+  } else if (is_user_turn(x)) {
     list(role = x@role, parts = as_json(provider, x@contents, ...))
-  } else if (x@role == "assistant") {
+  } else if (is_assistant_turn(x)) {
     list(role = "model", parts = as_json(provider, x@contents, ...))
   } else {
-    cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)
+    cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
 }
 
@@ -611,11 +618,18 @@ merge_gemini_chunks <- merge_objects(
 )
 
 default_google_credentials <- function(
-  api_key = NULL,
   error_call = caller_env(),
   variant = c("gemini", "vertex")
 ) {
   variant <- arg_match(variant)
+
+  api_key <- Sys.getenv("GOOGLE_API_KEY")
+  if (variant == "gemini" && api_key == "") {
+    api_key <- Sys.getenv("GEMINI_API_KEY")
+  }
+  if (nzchar(api_key)) {
+    return(\() api_key)
+  }
 
   gemini_scope <- switch(
     variant,
@@ -623,18 +637,6 @@ default_google_credentials <- function(
     # https://github.com/googleapis/python-genai/blob/cc9e470326e0c1b84ec3ce9891c9f96f6c74688e/google/genai/_api_client.py#L184
     vertex = "https://www.googleapis.com/auth/cloud-platform"
   )
-
-  check_string(api_key, allow_null = TRUE, call = error_call)
-  api_key <- api_key %||% Sys.getenv("GOOGLE_API_KEY")
-  if (variant == "gemini" && api_key == "") {
-    api_key <- Sys.getenv("GEMINI_API_KEY")
-  }
-
-  if (nzchar(api_key)) {
-    return(function() {
-      list("x-goog-api-key" = api_key)
-    })
-  }
 
   # Detect viewer-based credentials from Posit Connect.
   if (has_connect_viewer_token(scope = gemini_scope)) {
@@ -705,19 +707,29 @@ default_google_credentials <- function(
 #' @rdname chat_google_gemini
 models_google_gemini <- function(
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  api_key = NULL
+  api_key = NULL,
+  credentials = NULL
 ) {
   check_string(base_url)
-  check_string(api_key, allow_null = TRUE)
 
-  models_google(base_url, api_key, variant = "gemini")
+  credentials <- as_credentials(
+    "models_google_gemini",
+    default_google_credentials(variant = "gemini"),
+    credentials = credentials,
+    api_key = api_key
+  )
+
+  models_google(base_url, credentials = credentials, variant = "gemini")
 }
 
 #' @rdname chat_google_gemini
 #' @export
-models_google_vertex <- function(location, project_id) {
+models_google_vertex <- function(location, project_id, credentials = NULL) {
   check_string(location)
   check_string(project_id)
+
+  credentials <- credentials %||% default_google_credentials(variant = "vertex")
+  check_credentials(credentials)
 
   base_url <- paste_c(
     c("https://", google_location(location), "aiplatform.googleapis.com"),
@@ -730,16 +742,11 @@ models_google_vertex <- function(location, project_id) {
 
 models_google <- function(
   base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  api_key = NULL,
+  credentials,
   project_id = NULL,
   variant = c("gemini", "vertex")
 ) {
   variant <- arg_match(variant)
-  credentials <- switch(
-    variant,
-    vertex = default_google_credentials(variant = "vertex"),
-    gemini = default_google_credentials(api_key, variant = "gemini")
-  )
 
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",

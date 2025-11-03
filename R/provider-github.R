@@ -13,7 +13,8 @@
 #' used in \pkg{ellmer} v0.3.0 and earlier.
 #'
 #' @family chatbots
-#' @param api_key `r api_key_param("GITHUB_PAT")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("GITHUB_PAT")`
 #' @param model `r param_model("gpt-4o")`
 #' @param params Common model parameters, usually created by [params()].
 #' @export
@@ -27,7 +28,8 @@
 chat_github <- function(
   system_prompt = NULL,
   base_url = "https://models.github.ai/inference/",
-  api_key = github_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -39,13 +41,20 @@ chat_github <- function(
   model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
 
+  credentials <- as_credentials(
+    "chat_github",
+    function() github_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   # https://docs.github.com/en/rest/models/inference?apiVersion=2022-11-28
   params <- params %||% params()
 
   chat_openai(
     system_prompt = system_prompt,
     base_url = base_url,
-    api_key = api_key,
+    credentials = credentials,
     model = model,
     params = params,
     api_args = api_args,
@@ -70,13 +79,20 @@ github_key <- function() {
 #' @export
 models_github <- function(
   base_url = "https://models.github.ai/",
-  api_key = github_key()
+  api_key = NULL,
+  credentials = NULL
 ) {
+  credentials <- as_credentials(
+    "models_github",
+    function() github_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   provider <- ProviderOpenAI(
     name = "github",
     model = "",
-    base_url = base_url,
-    api_key = api_key
+    credentials = credentials
   )
 
   req <- base_request(provider)

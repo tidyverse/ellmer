@@ -15,7 +15,8 @@ NULL
 #'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
 #' @param base_url The base URL to the endpoint; the default uses OpenAI.
-#' @param api_key `r api_key_param("OPENAI_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("OPENAI_API_KEY")`
 #' @param model `r param_model("gpt-4.1", "openai")`
 #' @param params Common model parameters, usually created by [params()].
 #' @param api_args Named list of arbitrary extra arguments appended to the body
@@ -46,7 +47,8 @@ NULL
 chat_openai <- function(
   system_prompt = NULL,
   base_url = Sys.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
-  api_key = openai_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -56,6 +58,14 @@ chat_openai <- function(
   model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
 
+  credentials <- as_credentials(
+    "chat_openai",
+    function() paste0("Bearer ", openai_key()),
+    credentials = credentials,
+    api_key = api_key,
+    token = TRUE
+  )
+
   provider <- ProviderOpenAI(
     name = "OpenAI",
     base_url = base_url,
@@ -63,7 +73,7 @@ chat_openai <- function(
     params = params %||% params(),
     extra_args = api_args,
     extra_headers = api_headers,
-    api_key = api_key
+    credentials = credentials
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
@@ -89,10 +99,7 @@ chat_openai_test <- function(
 
 ProviderOpenAI <- new_class(
   "ProviderOpenAI",
-  parent = Provider,
-  properties = list(
-    prop_redacted("api_key")
-  )
+  parent = Provider
 )
 
 openai_key_exists <- function() {
@@ -107,7 +114,7 @@ openai_key <- function() {
 
 method(base_request, ProviderOpenAI) <- function(provider) {
   req <- request(provider@base_url)
-  req <- req_auth_bearer_token(req, provider@api_key)
+  req <- ellmer_req_credentials(req, provider@credentials(), "Authorization")
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- base_request_error(provider, req)
@@ -267,17 +274,17 @@ method(value_turn, ProviderOpenAI) <- function(
 
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  assistant_turn(content, json = result, tokens = unlist(tokens), cost = cost)
+  AssistantTurn(content, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------
 
 method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x, ...) {
-  if (x@role == "system") {
+  if (is_system_turn(x)) {
     list(
       list(role = "system", content = x@contents[[1]]@text)
     )
-  } else if (x@role == "user") {
+  } else if (is_user_turn(x)) {
     # Each tool result needs to go in its own message with role "tool"
     is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
     content <- as_json(provider, x@contents[!is_tool], ...)
@@ -296,7 +303,7 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(provider, x, ...) {
     })
 
     c(user, tools)
-  } else if (x@role == "assistant") {
+  } else if (is_assistant_turn(x)) {
     # Tool requests come out of content and go into own argument
     is_tool <- map_lgl(x@contents, is_tool_request)
     content <- as_json(provider, x@contents[!is_tool], ...)
@@ -534,13 +541,21 @@ method(batch_result_turn, ProviderOpenAI) <- function(
 #' @export
 models_openai <- function(
   base_url = "https://api.openai.com/v1",
-  api_key = openai_key()
+  api_key = NULL,
+  credentials = NULL
 ) {
+  credentials <- as_credentials(
+    "models_openai",
+    function() paste0("Bearer ", openai_key()),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   provider <- ProviderOpenAI(
     name = "OpenAI",
     model = "",
     base_url = base_url,
-    api_key = api_key
+    credentials = credentials
   )
 
   req <- base_request(provider)
