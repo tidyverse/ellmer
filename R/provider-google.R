@@ -15,14 +15,13 @@ NULL
 #'
 #' ## Authentication
 #' By default, `chat_google_gemini()` will use Google's default application
-#' credentials. This requires the \pkg{gargle}
-#' package.
+#' credentials. This requires the \pkg{gargle} package.
 #'
-#' You can use an API key by setting env var `GOOGLE_API_KEY` or, for
-#' `chat_google_gemini()` only, `GEMINI_API_KEY`.
+#' Alternatively, you can use an API key by setting env var `GOOGLE_API_KEY` or,
+#' for `chat_google_gemini()` only, `GEMINI_API_KEY`.
 #'
-#' It can also pick up on viewer-based credentials on Posit Connect. This in
-#' turn requires the \pkg{connectcreds} package.
+#' Finally these functions will also pick up on viewer-based credentials on
+#' Posit Connect. This requires the \pkg{connectcreds} package.
 #'
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials A function that returns a list of authentication headers
