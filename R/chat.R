@@ -123,8 +123,8 @@ Chat <- R6::R6Class(
 
     #' @description A data frame with token usage and cost data. There are four
     #'   columns: `input`, `output`, `cached_input`, and `cost`. There is one
-    #'   row for each pair of user and assistant turns, because token counts
-    #'   and costs are only available after the assistant computes the output.
+    #'   row for each assistant turn, because token counts and costs are only
+    #'   available when the API returns the assistant's response.
     #' @param include_system_prompt `r lifecycle::badge("deprecated")`
     get_tokens = function(include_system_prompt = deprecated()) {
       if (lifecycle::is_present(include_system_prompt)) {

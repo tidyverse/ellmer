@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `Chat$get_tokens()` now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from the LLM. Similarly, the `print()` method now reports costs on each assistant turn, rather than trying to parse out individual costs.
+* `Chat$get_tokens()` now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the `print()` method now reports costs on each assistant turn, rather than trying to parse out individual costs.
 * `chat_databricks()` lifts many of its restrictions now that the DataBrick's API is more OpenAI compatible (#757).
 * Updated pricing data (#790).
 * The following deprecated functions/arguments/methods have now been removed:
