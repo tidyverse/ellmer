@@ -27,7 +27,7 @@ Provider(
 
 \item{extra_headers}{Arbitrary extra headers to be added to the request.}
 
-\item{credentials}{A zero-argument function that returns credential to use
+\item{credentials}{A zero-argument function that returns the credentials to use
 for authentication. Can either return a string, representing an API key,
 or a named list of headers.}
 }
