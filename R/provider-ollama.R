@@ -103,16 +103,6 @@ ProviderOllama <- new_class(
   )
 )
 
-ollama_key <- function() {
-  key <-
-    if (nzchar(key)) {
-      key
-    } else {
-      # ollama doesn't require an API key for local usage
-      NULL
-    }
-}
-
 method(chat_params, ProviderOllama) <- function(provider, params) {
   # https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-chat-completion
   standardise_params(
