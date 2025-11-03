@@ -13,6 +13,46 @@ NULL
 #' API; instead, you will need to sign up (and pay for) a
 #' [developer account](https://platform.claude.com/).
 #'
+#' # Caching
+#'
+#' Caching with claude is a bit more complicated than other providers but we
+#' believe that on average it will save you both money and time, so we have
+#' enabled it by default. With other providers, like OpenAI and Google,
+#' you only pay for cache reads, which cost 10% of the normal price. With
+#' Claude, you also pay for cache writes, which cost 125% of the normal price
+#' for 5 minute caching and 200% of the normal price for 1 hour caching.
+#'
+#' How does this affect the total cost of a conversation? Imagine the first
+#' turn sends 1000 input tokens and receives 200 output tokens. The second
+#' turn must first send both the input and output from the previous turn
+#' (1200 tokens). It then sends a further 1000 tokens and receives 200 tokens
+#' back.
+#'
+#' To compare the prices of these two approaches we can ignore the cost of
+#' output tokens, because they are the same for both. How much will the input
+#' tokens cost? If we don't use caching, we send 1000 tokens in the first turn
+#' and 2200 (1000 + 200 + 1000) tokens in the second turn for a total of 3200
+#' tokens. If we use caching, we'll send (the equivalent of) 1000 * 1.25 = 1250
+#' tokens in the first turn. In the second turn, 1000 of the input tokens will
+#' be cached so the total cost is 1000 * 0.1 + (200 + 1000) * 1.25 = 1600
+#' tokens. That makes a total of 2850 tokens, i.e. 11% fewer tokens,
+#' decreasing the overall cost.
+#'
+#' Obviously, the details will vary from conversation to conversation, but
+#' if you have a large system prompt that you re-use many times you should
+#' expect to see larger savings. You can see exactly how many input and
+#' cache input tokens each turn uses, along with the total cost,
+#' with `chat$get_tokens()`. If you don't see savings for your use case, you can
+#' suppress caching with `cache = "none"`.
+#'
+#' I know this is already quite complicated, but there's one final wrinkle:
+#' claude will only cache longer prompts, with caching requiring at least
+#' 1024-4096 tokens, depending on the model. So don't be surprised it if you
+#' don't see any differences with caching if you have a short prompt.
+#'
+#' See all the details at
+#' <https://docs.claude.com/en/docs/build-with-claude/prompt-caching>.
+#'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @param model `r param_model("claude-sonnet-4-20250514", "anthropic")`
@@ -21,14 +61,7 @@ NULL
 #' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
 #'   Set to "none" to disable caching or "1h" to cache for one hour.
 #'
-#'   Caching (for five minutes) is enabled by default because it will save you
-#'   money for multi-turn conversations. Cache writes cost 125%, but cache
-#'   reads cost only 10%. So imagine your conversation has two turns: the first
-#'   turn has input 1000 tokens and and 200 output tokens, and the second
-#'   turn has 500 (new) input tokens and 100 output tokens. If uncached, you
-#'   pay for 1000 + (1000 + 200 + 500) = 2700 input tokens. If cached, you
-#'   pay for 1000 * 1.25 + (1000 * 0.1 + 200 + 500) = 2050 input tokens.
-#'
+#'   See details below.
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
 #'   claude features that are still in beta.
 #' @param api_headers Named character vector of arbitrary extra headers appended
