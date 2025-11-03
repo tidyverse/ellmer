@@ -42,10 +42,7 @@ Turn <- new_class(
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
     }
-    new_object(
-      S7_object(),
-      contents = contents
-    )
+    new_object(S7_object(), contents = contents)
   }
 )
 
