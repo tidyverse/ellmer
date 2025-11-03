@@ -79,7 +79,8 @@ used in <span class="pkg">ellmer</span> v0.3.0 and earlier.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">chat_github</span><span class="op">(</span></span>
 <span>  system_prompt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  base_url <span class="op">=</span> <span class="st">"https://models.github.ai/inference/"</span>,</span>
-<span>  api_key <span class="op">=</span> <span class="fu">github_key</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -87,7 +88,11 @@ used in <span class="pkg">ellmer</span> v0.3.0 and earlier.</p>
 <span>  api_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">models_github</span><span class="op">(</span>base_url <span class="op">=</span> <span class="st">"https://models.github.ai/"</span>, api_key <span class="op">=</span> <span class="fu">github_key</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">models_github</span><span class="op">(</span></span>
+<span>  base_url <span class="op">=</span> <span class="st">"https://models.github.ai/"</span>,</span>
+<span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  credentials <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -103,8 +108,12 @@ used in <span class="pkg">ellmer</span> v0.3.0 and earlier.</p>
 
 
 <dt id="arg-api-key">api_key<a class="anchor" aria-label="anchor" href="#arg-api-key"></a></dt>
-<dd><p>API key to use for authentication.</p>
-<p>You generally should not supply this directly, but instead set the <code>GITHUB_PAT</code> environment variable.
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>credentials</code> instead.</p></dd>
+
+
+<dt id="arg-credentials">credentials<a class="anchor" aria-label="anchor" href="#arg-credentials"></a></dt>
+<dd><p>A function that returns the API key to use for authentication.</p>
+<p>You generally should not need this argument; instead set the <code>GITHUB_PAT</code> environment variable.
 The best place to set this is in <code>.Renviron</code>,
 which you can easily edit by calling <code>usethis::edit_r_environ()</code>.</p></dd>
 

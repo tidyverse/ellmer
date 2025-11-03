@@ -7,10 +7,11 @@ Authentication
 
 
 By default, chat_google_gemini() will use Google's default application
-credentials if there is no API key provided. This requires the gargle
-package.
-It can also pick up on viewer-based credentials on Posit Connect. This in
-turn requires the connectcreds package.
+credentials. This requires the gargle package.
+Alternatively, you can use an API key by setting env var GOOGLE_API_KEY or,
+for chat_google_gemini() only, GEMINI_API_KEY.
+Finally these functions will also pick up on viewer-based credentials on
+Posit Connect. This requires the connectcreds package.
 
 "><meta property="og:description" content="Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 Most enterprises are likely to use Vertex AI, and individuals are likely
@@ -20,10 +21,11 @@ Authentication
 
 
 By default, chat_google_gemini() will use Google's default application
-credentials if there is no API key provided. This requires the gargle
-package.
-It can also pick up on viewer-based credentials on Posit Connect. This in
-turn requires the connectcreds package.
+credentials. This requires the gargle package.
+Alternatively, you can use an API key by setting env var GOOGLE_API_KEY or,
+for chat_google_gemini() only, GEMINI_API_KEY.
+Finally these functions will also pick up on viewer-based credentials on
+Posit Connect. This requires the connectcreds package.
 
 "><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><meta name="robots" content="noindex"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
@@ -84,10 +86,11 @@ to use Gemini.</p>
 
 
 <p>By default, <code>chat_google_gemini()</code> will use Google's default application
-credentials if there is no API key provided. This requires the <span class="pkg">gargle</span>
-package.</p>
-<p>It can also pick up on viewer-based credentials on Posit Connect. This in
-turn requires the <span class="pkg">connectcreds</span> package.</p>
+credentials. This requires the <span class="pkg">gargle</span> package.</p>
+<p>Alternatively, you can use an API key by setting env var <code>GOOGLE_API_KEY</code> or,
+for <code>chat_google_gemini()</code> only, <code>GEMINI_API_KEY</code>.</p>
+<p>Finally these functions will also pick up on viewer-based credentials on
+Posit Connect. This requires the <span class="pkg">connectcreds</span> package.</p>
 </div>
 
     </div>
@@ -98,6 +101,7 @@ turn requires the <span class="pkg">connectcreds</span> package.</p>
 <span>  system_prompt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  base_url <span class="op">=</span> <span class="st">"https://generativelanguage.googleapis.com/v1beta/"</span>,</span>
 <span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -118,10 +122,11 @@ turn requires the <span class="pkg">connectcreds</span> package.</p>
 <span></span>
 <span><span class="fu">models_google_gemini</span><span class="op">(</span></span>
 <span>  base_url <span class="op">=</span> <span class="st">"https://generativelanguage.googleapis.com/v1beta/"</span>,</span>
-<span>  api_key <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  credentials <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">models_google_vertex</span><span class="op">(</span><span class="va">location</span>, <span class="va">project_id</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">models_google_vertex</span><span class="op">(</span><span class="va">location</span>, <span class="va">project_id</span>, credentials <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -137,11 +142,12 @@ turn requires the <span class="pkg">connectcreds</span> package.</p>
 
 
 <dt id="arg-api-key">api_key<a class="anchor" aria-label="anchor" href="#arg-api-key"></a></dt>
-<dd><p>API key to use for authentication.</p>
-<p>You generally should not supply this directly, but instead set the <code>GOOGLE_API_KEY</code> environment variable.
-The best place to set this is in <code>.Renviron</code>,
-which you can easily edit by calling <code>usethis::edit_r_environ()</code>.
-For Gemini, you can alternatively set <code>GEMINI_API_KEY</code>.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>credentials</code> instead.</p></dd>
+
+
+<dt id="arg-credentials">credentials<a class="anchor" aria-label="anchor" href="#arg-credentials"></a></dt>
+<dd><p>A function that returns a list of authentication headers
+or <code>NULL</code>, the default, to use ambient credentials. See above for details.</p></dd>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>

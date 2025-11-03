@@ -70,7 +70,8 @@ different API.</p>
 <span>  base_url <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>,</span>
 <span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  extra_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span>  extra_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  credentials <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -101,6 +102,12 @@ different API.</p>
 <dt id="arg-extra-headers">extra_headers<a class="anchor" aria-label="anchor" href="#arg-extra-headers"></a></dt>
 <dd><p>Arbitrary extra headers to be added to the request.</p></dd>
 
+
+<dt id="arg-credentials">credentials<a class="anchor" aria-label="anchor" href="#arg-credentials"></a></dt>
+<dd><p>A zero-argument function that returns the credentials to use
+for authentication. Can either return a string, representing an API key,
+or a named list of headers.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -127,6 +134,7 @@ the various generics that control the behavior of each provider.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ params       : list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ extra_args   : list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ extra_headers: chr(0) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  @ credentials  : function ()  </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
