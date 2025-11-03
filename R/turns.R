@@ -32,6 +32,10 @@ Turn <- new_class(
     text = new_property(
       class = class_character,
       getter = function(self) contents_text(self)
+    ),
+    role = new_property(
+      class = class_character,
+      getter = function(self) "unknown"
     )
   ),
   constructor = function(contents = list()) {
@@ -50,6 +54,12 @@ Turn <- new_class(
 UserTurn <- new_class(
   "UserTurn",
   parent = Turn,
+  properties = list(
+    role = new_property(
+      class = class_character,
+      getter = function(self) "user"
+    )
+  ),
   constructor = function(contents = list()) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
@@ -66,6 +76,12 @@ UserTurn <- new_class(
 SystemTurn <- new_class(
   "SystemTurn",
   parent = Turn,
+  properties = list(
+    role = new_property(
+      class = class_character,
+      getter = function(self) "system"
+    )
+  ),
   constructor = function(contents = list()) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
@@ -103,7 +119,11 @@ AssistantTurn <- new_class(
       }
     ),
     cost = prop_number_decimal(NA_real_, allow_na = TRUE),
-    duration = prop_number_decimal(NA_real_, allow_na = TRUE)
+    duration = prop_number_decimal(NA_real_, allow_na = TRUE),
+    role = new_property(
+      class = class_character,
+      getter = function(self) "assistant"
+    )
   ),
   constructor = function(
     contents = list(),
@@ -139,20 +159,8 @@ method(contents_markdown, Turn) <- function(content) {
   paste0(unlist(lapply(content@contents, contents_markdown)), collapse = "\n\n")
 }
 
-turn_role <- function(x) {
-  if (is_user_turn(x)) {
-    "user"
-  } else if (is_assistant_turn(x)) {
-    "assistant"
-  } else if (is_system_turn(x)) {
-    "system"
-  } else {
-    "unknown"
-  }
-}
-
 method(print, Turn) <- function(x, ...) {
-  cat(paste_c("<Turn: ", color_role(turn_role(x)), ">\n"))
+  cat(paste_c("<Turn: ", color_role(x@role), ">\n"))
   cat(format(x))
   invisible(x)
 }

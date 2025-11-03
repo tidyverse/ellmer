@@ -309,9 +309,9 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
       # (all messages must have non-empty content)
       return(NULL)
     }
-    list(role = turn_role(x), content = as_json(provider, x@contents, ...))
+    list(role = x@role, content = as_json(provider, x@contents, ...))
   } else {
-    cli::cli_abort("Unknown role {turn_role(turn)}", .internal = TRUE)
+    cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
 }
 

@@ -805,7 +805,7 @@ print.Chat <- function(x, ...) {
     turn <- turns[[i]]
 
     cli::cat_rule(cli::format_inline(
-      "{color_role(turn_role(turn))} [{tokens$tokens[[i]]}]"
+      "{color_role(turn@role)} [{tokens$tokens[[i]]}]"
     ))
     cat(format(turns[[i]]))
   }
@@ -826,7 +826,7 @@ method(contents_markdown, new_S3_class("Chat")) <- function(
 
   res <- vector("character", length(turns))
   for (i in seq_along(res)) {
-    role <- turn_role(turns[[i]])
+    role <- turns[[i]]@role
     substr(role, 0, 1) <- toupper(substr(role, 0, 1))
     res[i] <- glue::glue("{hh} {role}\n\n{contents_markdown(turns[[i]])}")
   }

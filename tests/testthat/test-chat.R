@@ -243,8 +243,8 @@ test_that("can retrieve last_turn for user and assistant", {
   expect_equal(chat$last_turn("assistant"), NULL)
 
   chat$chat("Hi")
-  expect_equal(turn_role(chat$last_turn("user")), "user")
-  expect_equal(turn_role(chat$last_turn("assistant")), "assistant")
+  expect_equal(chat$last_turn("user")@role, "user")
+  expect_equal(chat$last_turn("assistant")@role, "assistant")
 })
 
 test_that("api_headers parameter works correctly", {

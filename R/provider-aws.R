@@ -370,9 +370,9 @@ method(as_json, list(ProviderAWSBedrock, Turn)) <- function(provider, x, ...) {
     # bedrock passes system prompt as separate arg
     NULL
   } else if (is_user_turn(x) || is_assistant_turn(x)) {
-    list(role = turn_role(x), content = as_json(provider, x@contents, ...))
+    list(role = x@role, content = as_json(provider, x@contents, ...))
   } else {
-    cli::cli_abort("Unknown role {turn_role(turn)}", .internal = TRUE)
+    cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
 }
 

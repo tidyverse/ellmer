@@ -188,7 +188,7 @@ method(as_json, list(ProviderDatabricks, Turn)) <- function(provider, x, ...) {
       list(list(role = "assistant", content = content))
     }
   } else {
-    cli::cli_abort("Unknown role {turn_role(turn)}", .internal = TRUE)
+    cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
 }
 

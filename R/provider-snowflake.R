@@ -294,7 +294,7 @@ method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(
     cli::cli_abort("Unsupported content type: {.cls {class(x@contents[[1]])}}.")
   }
   list(
-    role = turn_role(x),
+    role = x@role,
     content_list = as_json(provider, x@contents, ...)
   )
 }
