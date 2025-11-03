@@ -178,16 +178,6 @@ test_that("chat_structured() doesn't require a prompt", {
   expect_equal(out, list(city = "Tokyo", county = "Japan"))
 })
 
-test_that("can retrieve tokens with or without system prompt", {
-  chat <- chat_openai_test("abc")
-  expect_equal(nrow(chat$get_tokens(FALSE)), 0)
-  expect_equal(nrow(chat$get_tokens(TRUE)), 1)
-
-  chat <- chat_openai_test(NULL)
-  expect_equal(nrow(chat$get_tokens(FALSE)), 0)
-  expect_equal(nrow(chat$get_tokens(TRUE)), 0)
-})
-
 test_that("has a basic print method", {
   chat <- chat_openai_test()
   chat$set_turns(list(
@@ -220,7 +210,7 @@ test_that("can compute costs", {
   expect_equal(chat$get_cost(), dollars(0.3))
   expect_equal(chat$get_cost("last"), dollars(0.1))
 
-  details <- chat$get_cost_details()
+  details <- chat$get_tokens()
   expect_equal(details$cost, dollars(c(0.2, 0.1)))
   expect_equal(details$input, c(15000, 30000))
   expect_equal(details$output, c(500, 1000))

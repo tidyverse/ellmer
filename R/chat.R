@@ -121,56 +121,25 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
-    #' @description A data frame with a `tokens` column that provides the
-    #'   number of input tokens used by user turns and the number of
-    #'   output tokens used by assistant turns.
-    #' @param include_system_prompt Whether to include the system prompt in
-    #'   the turns (if any exists).
-    get_tokens = function(include_system_prompt = FALSE) {
-      turns <- self$get_turns()
-      assistant_turns <- keep(turns, function(x) x@role == "assistant")
-
-      n <- length(assistant_turns)
-      tokens_acc <- map_tokens(assistant_turns, \(turn) turn@tokens)
-      # Combine counts for input tokens (cached and uncached)
-      tokens_acc[, 1] <- tokens_acc[, 1] + tokens_acc[, 3]
-      # Then drop cached tokens counts
-      tokens_acc <- tokens_acc[, 1:2]
-
-      tokens <- tokens_acc
-      if (n > 1) {
-        # Compute just the new tokens
-        tokens[-1, 1] <- tokens[seq(2, n), 1] -
-          (tokens[seq(1, n - 1), 1] + tokens[seq(1, n - 1), 2])
-      }
-
-      # collapse into a single vector
-      tokens_v <- c(t(tokens))
-      tokens_acc_v <- c(t(tokens_acc))
-
-      tokens_df <- data.frame(
-        role = rep(c("user", "assistant"), times = n),
-        tokens = tokens_v,
-        tokens_total = tokens_acc_v,
-        contents = map_chr(turns, turn_contents_preview)
-      )
-
-      if (include_system_prompt && private$has_system_prompt()) {
-        system_turn <- private$.turns[[1]]
-
-        # How do we compute this?
-        tokens_df <- rbind(
-          data.frame(
-            role = "system",
-            tokens = 0,
-            tokens_total = 0,
-            contents = turn_contents_preview(system_turn)
-          ),
-          tokens_df
+    #' @description A data frame with token usage and cost data. There are four
+    #'   columns: `input`, `output`, `cached_input`, and `cost`. There is one
+    #'   row for each pair of user and assistant turns, because token counts
+    #'   and costs are only available after the assistant computes the output.
+    #' @param include_system_prompt `r lifecycle::badge("deprecated")`
+    get_tokens = function(include_system_prompt = deprecated()) {
+      if (lifecycle::is_present(include_system_prompt)) {
+        lifecycle::deprecate_warn(
+          "0.4.0",
+          "get_tokens(include_system_prompt)",
+          "get_tokens()"
         )
       }
 
-      tokens_df
+      turns <- self$get_turns()
+      assistant_turns <- keep(turns, function(x) x@role == "assistant")
+      tokens <- as.data.frame(map_tokens(assistant_turns, \(turn) turn@tokens))
+      tokens$cost <- dollars(map_dbl(assistant_turns, \(turn) turn@cost))
+      tokens
     },
 
     #' @description The cost of this chat
@@ -194,15 +163,6 @@ Chat <- R6::R6Class(
       }
 
       dollars(cost)
-    },
-
-    #' @description The tokens for each user-assistant turn of this chat.
-    get_cost_details = function() {
-      turns <- self$get_turns(include_system_prompt = FALSE)
-      assistant_turns <- keep(turns, function(x) x@role == "assistant")
-      tokens <- as.data.frame(map_tokens(assistant_turns, \(turn) turn@tokens))
-      tokens$cost <- dollars(map_dbl(assistant_turns, \(turn) turn@cost))
-      tokens
     },
 
     #' @description The last turn returned by the assistant.
@@ -781,36 +741,40 @@ print.Chat <- function(x, ...) {
   provider <- x$get_provider()
   turns <- x$get_turns(include_system_prompt = TRUE)
 
-  tokens <- x$get_tokens(include_system_prompt = TRUE)
-
-  tokens_user <- sum(tokens$tokens_total[tokens$role == "user"])
-  tokens_assistant <- sum(tokens$tokens_total[tokens$role == "assistant"])
-  cost <- x$get_cost()
+  assistant_turns <- keep(turns, \(x) x@role == "assistant")
+  total_tokens <- colSums(map_tokens(assistant_turns, \(x) x@tokens))
+  total_cost <- sum(map_dbl(assistant_turns, \(x) x@cost))
 
   cat(paste_c(
     "<Chat",
     c(" ", provider@name, "/", provider@model),
     c(" turns=", length(turns)),
-    c(
-      " tokens=",
-      tokens_user,
-      "/",
-      tokens_assistant
-    ),
-    if (!is.na(cost)) c(" ", format(cost)),
+    turn_cost(total_tokens, total_cost),
     ">\n"
   ))
 
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
+    if (turn@role == "assistant") {
+      cost <- turn_cost(turn@tokens, turn@cost)
+    } else {
+      cost <- ""
+    }
 
-    cli::cat_rule(cli::format_inline(
-      "{color_role(turn@role)} [{tokens$tokens[[i]]}]"
-    ))
+    cli::cat_rule(cli::format_inline("{color_role(turn@role)}{cost}"))
     cat(format(turns[[i]]))
   }
 
   invisible(x)
+}
+
+turn_cost <- function(tokens, cost) {
+  out <- " tokens="
+  out <- paste0(out, paste0(tokens, collapse = "/"))
+  if (!is.na(cost)) {
+    out <- paste0(out, " cost=", format(dollars(cost)))
+  }
+  out
 }
 
 method(contents_markdown, new_S3_class("Chat")) <- function(
