@@ -17,7 +17,7 @@ NULL
 #' @param model Name of the model.
 #' @param base_url The base URL for the API.
 #' @param params A list of standard parameters created by [params()].
-#' @param credentials A zero-argument function that returns credential to use
+#' @param credentials A zero-argument function that returns the credentials to use
 #'   for authentication. Can either return a string, representing an API key,
 #'   or a named list of headers.
 #' @param extra_args Arbitrary extra arguments to be included in the request body.
