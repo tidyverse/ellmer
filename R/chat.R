@@ -749,14 +749,14 @@ print.Chat <- function(x, ...) {
     "<Chat",
     c(" ", provider@name, "/", provider@model),
     c(" turns=", length(turns)),
-    turn_cost(total_tokens, total_cost),
+    turn_cost(total_tokens, total_cost, prefix = " "),
     ">\n"
   ))
 
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
     if (turn@role == "assistant") {
-      cost <- turn_cost(turn@tokens, turn@cost)
+      cost <- turn_cost(turn@tokens, turn@cost, prefix = " [", suffix = "]")
     } else {
       cost <- ""
     }
@@ -768,12 +768,20 @@ print.Chat <- function(x, ...) {
   invisible(x)
 }
 
-turn_cost <- function(tokens, cost) {
-  out <- " tokens="
-  out <- paste0(out, paste0(tokens, collapse = "/"))
+turn_cost <- function(tokens, cost, prefix, suffix = "") {
+  out <- paste0(prefix, "input=")
+
+  if (tokens[[3]] > 0) {
+    out <- paste0(out, tokens[[1]], "+", tokens[[3]])
+  } else {
+    out <- paste0(out, tokens[[1]])
+  }
+  out <- paste0(out, " output=", tokens[[2]])
+
   if (!is.na(cost)) {
     out <- paste0(out, " cost=", format(dollars(cost)))
   }
+  out <- paste0(out, suffix)
   out
 }
 
