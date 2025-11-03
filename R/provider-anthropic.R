@@ -137,7 +137,7 @@ method(chat_body, ProviderAnthropic) <- function(
   tools = list(),
   type = NULL
 ) {
-  if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
+  if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
     system <- turns[[1]]@text
   } else {
     system <- NULL
@@ -302,24 +302,24 @@ method(value_turn, ProviderAnthropic) <- function(
 
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  assistant_turn(contents, json = result, tokens = unlist(tokens), cost = cost)
+  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> Claude --------------------------------------------------------------
 
 method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
-  if (x@role == "system") {
+  if (is_system_turn(x)) {
     # claude passes system prompt as separate arg
     NULL
-  } else if (x@role %in% c("user", "assistant")) {
-    if (x@role == "assistant" && identical(x@contents, list())) {
+  } else if (is_user_turn(x) || is_assistant_turn(x)) {
+    if (is_assistant_turn(x) && identical(x@contents, list())) {
       # Drop empty assistant turns to avoid an API error
       # (all messages must have non-empty content)
       return(NULL)
     }
     list(role = x@role, content = as_json(provider, x@contents, ...))
   } else {
-    cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)
+    cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
 }
 

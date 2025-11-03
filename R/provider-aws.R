@@ -199,7 +199,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
     if (stream) "converse-stream" else "converse"
   )
 
-  if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
+  if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
     system <- list(list(text = turns[[1]]@text))
   } else {
     system <- NULL
@@ -359,20 +359,20 @@ method(value_turn, ProviderAWSBedrock) <- function(
 
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  assistant_turn(contents, json = result, tokens = unlist(tokens), cost = cost)
+  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> Bedrock -------------------------------------------------------------
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ContentBlock.html
 method(as_json, list(ProviderAWSBedrock, Turn)) <- function(provider, x, ...) {
-  if (x@role == "system") {
+  if (is_system_turn(x)) {
     # bedrock passes system prompt as separate arg
     NULL
-  } else if (x@role %in% c("user", "assistant")) {
+  } else if (is_user_turn(x) || is_assistant_turn(x)) {
     list(role = x@role, content = as_json(provider, x@contents, ...))
   } else {
-    cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)
+    cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
 }
 

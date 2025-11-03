@@ -49,8 +49,7 @@ test_that("can use images", {
 # Authentication --------------------------------------------------------------
 
 test_that("Azure request headers are generated correctly", {
-  turn <- Turn(
-    role = "user",
+  turn <- UserTurn(
     contents = list(ContentText("What is 1 + 1?"))
   )
   deployment_id <- "gpt-4o-mini"

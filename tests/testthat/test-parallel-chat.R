@@ -142,7 +142,7 @@ test_that("handles errors and NULLs in parallel functions", {
   )
   prompts <- list("prompt1", "prompt2", "prompt3")
   responses <- list(
-    Turn("assistant", "Success"),
+    AssistantTurn("Success"),
     simpleError("Request failed"),
     NULL
   )
@@ -157,7 +157,7 @@ test_that("handles errors and NULLs in parallel functions", {
   expect_equal(parallel_chat_text(chat, prompts), c("Success", NA, NA))
 
   responses <- list(
-    Turn("assistant", list(ContentJson(list(x = 1))), tokens = c(10, 20, 0)),
+    AssistantTurn(list(ContentJson(list(x = 1))), tokens = c(10, 20, 0)),
     simpleError("Request failed"),
     NULL
   )
@@ -175,11 +175,11 @@ test_that("errors in conversion become warnings", {
   type <- type_object(x = type_integer())
 
   turns <- list(
-    Turn("assistant", list(ContentJson(data = list(x = 1)))),
+    AssistantTurn(list(ContentJson(data = list(x = 1)))),
     # no json
-    Turn("assistant", list(ContentText("Hello"))),
+    AssistantTurn(list(ContentText("Hello"))),
     # invalid json
-    Turn("assistant", list(ContentJson(string = "{")))
+    AssistantTurn(list(ContentJson(string = "{")))
   )
 
   expect_snapshot(out <- multi_convert(provider, turns, type = type))
@@ -192,14 +192,8 @@ test_that("assistant turns track duration in parallel", {
   chat <- chat_openai_test()
   chats <- parallel_chat(chat, list("What's 1 + 1?", "What's 2 + 2?"))
 
-  user_duration_1 <- chats[[1]]$get_turns()[[1]]@duration
   assistant_duration_1 <- chats[[1]]$last_turn()@duration
-
-  user_duration_2 <- chats[[2]]$get_turns()[[1]]@duration
   assistant_duration_2 <- chats[[2]]$last_turn()@duration
-
-  expect_true(is.na(user_duration_1))
-  expect_true(is.na(user_duration_2))
 
   # These assistant durations are usually not NA, but are during replay (#479)
   expect_true(is.na(assistant_duration_1) || assistant_duration_1 > 0)

@@ -13,32 +13,31 @@ test_that("structured data is round-tripped", {
 # Object from ContentJSON -----------------------------------------------------
 
 test_that("useful error if no ContentJson", {
-  turn <- Turn("assistant", list(ContentText("Hello")))
+  turn <- AssistantTurn(list(ContentText("Hello")))
   expect_snapshot(extract_data(turn), error = TRUE)
 })
 
 test_that("can extract data from ContentJson", {
-  turn <- Turn("assistant", list(ContentJson(list(x = 1))))
+  turn <- AssistantTurn(list(ContentJson(list(x = 1))))
   type <- type_object(x = type_integer())
   expect_equal(extract_data(turn, type), list(x = 1))
 })
 
 test_that("can opt-out of conversion data from ContentJson", {
-  turn <- Turn("assistant", list(ContentJson(list(x = list(1, 2)))))
+  turn <- AssistantTurn(list(ContentJson(list(x = list(1, 2)))))
   type <- type_object(x = type_array(type_integer()))
   expect_equal(extract_data(turn, type, convert = TRUE), list(x = c(1L, 2L)))
   expect_equal(extract_data(turn, type, convert = FALSE), list(x = list(1, 2)))
 })
 
 test_that("can extract data when wrapper is used", {
-  turn <- Turn("assistant", list(ContentJson(list(wrapper = list(x = 1)))))
+  turn <- AssistantTurn(list(ContentJson(list(wrapper = list(x = 1)))))
   type <- wrap_type_if_needed(type_object(x = type_integer()), TRUE)
   expect_equal(extract_data(turn, type, needs_wrapper = TRUE), list(x = 1))
 })
 
 test_that("warns if multiple ContentJson (and uses first)", {
-  turn <- Turn(
-    "assistant",
+  turn <- AssistantTurn(
     list(
       ContentJson(list(x = 1)),
       ContentJson(list(x = 2)),
