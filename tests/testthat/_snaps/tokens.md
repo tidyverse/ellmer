@@ -10,14 +10,14 @@
     Code
       token_usage()
     Output
-            provider model variant input output cached_input price
-      1 testprovider  test             1      1            1    NA
+            provider model input output cached_input price
+      1 testprovider  test     1      1            1 $0.00
 
 # token_usage() shows price if available
 
     Code
       token_usage()
     Output
-        provider  model variant   input output cached_input price
-      1   OpenAI gpt-4o         1500000  2e+05            0 $5.75
+        provider  model   input output cached_input price
+      1   OpenAI gpt-4o 1500000  2e+05            0 $5.75
 

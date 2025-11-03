@@ -1,3 +1,10 @@
+# defaults are reported
+
+    Code
+      . <- chat_databricks()
+    Message
+      Using model = "databricks-claude-3-7-sonnet".
+
 # M2M authentication requests look correct
 
     Code

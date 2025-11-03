@@ -13,6 +13,7 @@ chat_ollama(
   api_args = list(),
   echo = NULL,
   api_key = NULL,
+  credentials = NULL,
   api_headers = character()
 )
 
@@ -42,12 +43,15 @@ when running at the console).
 
 Note this only affects the \code{chat()} method.}
 
-\item{api_key}{Ollama doesn't require an API key for local usage and in most
-cases you do not need to provide an \code{api_key}.
+\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
+
+\item{credentials}{Ollama doesn't require credentials for local usage and in most
+cases you do not need to provide \code{credentials}.
 
 However, if you're accessing an Ollama instance hosted behind a reverse
 proxy or secured endpoint that enforces bearer‐token authentication, you
-can set \code{api_key} (or the \code{OLLAMA_API_KEY} environment variable).}
+can set the \code{OLLAMA_API_KEY} environment variable or provide a callback
+function to \code{credentials}.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}

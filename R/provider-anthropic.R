@@ -16,7 +16,8 @@ NULL
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @param model `r param_model("claude-sonnet-4-20250514", "anthropic")`
-#' @param api_key `r api_key_param("ANTHROPIC_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
 #'   claude features that are still in beta.
 #' @param api_headers Named character vector of arbitrary extra headers appended
@@ -35,13 +36,21 @@ chat_anthropic <- function(
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
   beta_headers = character(),
-  api_key = anthropic_key(),
+  api_key = NULL,
+  credentials = NULL,
   api_headers = character(),
   echo = NULL
 ) {
   echo <- check_echo(echo)
 
   model <- set_default(model, "claude-sonnet-4-20250514")
+
+  credentials <- as_credentials(
+    "chat_anthropic",
+    function() anthropic_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   provider <- ProviderAnthropic(
     name = "Anthropic",
@@ -51,7 +60,7 @@ chat_anthropic <- function(
     extra_headers = api_headers,
     base_url = base_url,
     beta_headers = beta_headers,
-    api_key = api_key
+    credentials = credentials
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -77,7 +86,6 @@ ProviderAnthropic <- new_class(
   "ProviderAnthropic",
   parent = Provider,
   properties = list(
-    prop_redacted("api_key"),
     beta_headers = class_character
   )
 )
@@ -94,7 +102,7 @@ method(base_request, ProviderAnthropic) <- function(provider) {
   # <https://docs.anthropic.com/en/api/versioning>
   req <- req_headers(req, `anthropic-version` = "2023-06-01")
   # <https://docs.anthropic.com/en/api/getting-started#authentication>
-  req <- req_headers_redacted(req, `x-api-key` = provider@api_key)
+  req <- ellmer_req_credentials(req, provider@credentials(), "x-api-key")
 
   # <https://docs.anthropic.com/en/api/rate-limits>
   # <https://docs.anthropic.com/en/api/errors#http-errors>
@@ -129,7 +137,7 @@ method(chat_body, ProviderAnthropic) <- function(
   tools = list(),
   type = NULL
 ) {
-  if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
+  if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
     system <- turns[[1]]@text
   } else {
     system <- NULL
@@ -293,25 +301,25 @@ method(value_turn, ProviderAnthropic) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  tokens_log(provider, tokens)
-  assistant_turn(contents, json = result, tokens = unlist(tokens))
+  cost <- get_token_cost(provider, tokens)
+  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> Claude --------------------------------------------------------------
 
 method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
-  if (x@role == "system") {
+  if (is_system_turn(x)) {
     # claude passes system prompt as separate arg
     NULL
-  } else if (x@role %in% c("user", "assistant")) {
-    if (x@role == "assistant" && identical(x@contents, list())) {
+  } else if (is_user_turn(x) || is_assistant_turn(x)) {
+    if (is_assistant_turn(x) && identical(x@contents, list())) {
       # Drop empty assistant turns to avoid an API error
       # (all messages must have non-empty content)
       return(NULL)
     }
     list(role = x@role, content = as_json(provider, x@contents, ...))
   } else {
-    cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)
+    cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
 }
 
@@ -520,7 +528,7 @@ models_anthropic <- function(
     name = "Anthropic",
     model = "",
     base_url = base_url,
-    api_key = api_key
+    credentials = function() api_key
   )
 
   req <- base_request(provider)
