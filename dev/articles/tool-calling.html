@@ -202,18 +202,18 @@ formulating its response.</p>
 tool:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4o turns=6 tokens=373/86 $0.00&gt;</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [19] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4o turns=6 input=373 output=86 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; How long ago did Neil Armstrong touch down on the moon?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [31] ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=19 output=31 cost=$0.00] ──────────────────────────</span></span>
 <span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that event occurred 54 years ago.</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [108] ─────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; How long ago did Neil Armstrong touch down on the moon?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [15] ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=158 output=15 cost=$0.00] ─────────────────────────</span></span>
 <span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_olBG8OUjyIj914iwNBjw35dv)]: get_current_time(tz = "UTC")</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [23] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_olBG8OUjyIj914iwNBjw35dv)]: 2025-06-25 16:53:23 UTC</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [40] ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=196 output=40 cost=$0.00] ─────────────────────────</span></span>
 <span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of June 25, 2025, that event occurred 55 years and approximately 11 months ago.</span></span></code></pre></div>
 <p>(Full disclosure: I originally tried this example with the default
 model of <code>gpt-4o-mini</code> and it got the tool calling right but
@@ -290,14 +290,14 @@ experiments suggest is good for LLMs.</p>
 single tool call:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=4 tokens=213/65 $0.00&gt;</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [74] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=4 input=213 output=65 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Give me a weather udpate for London and Chicago</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [17] ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=74 output=17 cost=$0.00] ──────────────────────────</span></span>
 <span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_0epVfhsX7e8pEy0M1NaY9Vca)]: get_weather(cities = c("London", "Chicago"))</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [48] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_0epVfhsX7e8pEy0M1NaY9Vca)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [48] ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=139 output=48 cost=$0.00] ─────────────────────────</span></span>
 <span><span class="co">#&gt; Here's the latest weather update:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; - London: Heavy rain, cool temperatures, and strong winds.</span></span>
