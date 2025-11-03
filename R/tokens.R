@@ -134,18 +134,6 @@ dollars <- function(x) {
 format.ellmer_dollars <- function(x, ...) {
   paste0(ifelse(is.na(x), "", "$"), format(unclass(round(x, 2)), nsmall = 2))
 }
-#' @export
-`[.ellmer_dollars` <- function(x, ...) {
-  dollars(NextMethod())
-}
-#' @export
-`[[.ellmer_dollars` <- function(x, ...) {
-  dollars(NextMethod())
-}
-#' @export
-Summary.ellmer_dollars <- function(x, ...) {
-  dollars(NextMethod())
-}
 
 #' @export
 print.ellmer_dollars <- function(x, ...) {
