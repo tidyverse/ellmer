@@ -123,7 +123,7 @@ Replace existing turns with a new list.
 \subsection{Method \code{add_turn()}}{
 Add a pair of turns to the chat.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$add_turn(user, assistant)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$add_turn(user, assistant, log_tokens = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -132,6 +132,9 @@ Add a pair of turns to the chat.
 \item{\code{user}}{The user \link{Turn}.}
 
 \item{\code{assistant}}{The system \link{Turn}.}
+
+\item{\code{log_tokens}}{Should tokens used in the turn be logged to the
+session counter?}
 }
 \if{html}{\out{</div>}}
 }

@@ -31,6 +31,18 @@ test_that("can get chats/data from completed request", {
   expect_equal(nrow(data), 4)
 })
 
+test_that("tokens only logged on first retrieval", {
+  local_tokens()
+
+  suppressWarnings(batch_chat(
+    chat_openai_test(),
+    list(),
+    path = test_path("batch/state-capitals.json"),
+    ignore_hash = TRUE
+  ))
+  expect_equal(nrow(the$tokens), 0)
+})
+
 test_that("errors if chat/provider/prompts don't match previous run", {
   chat <- chat_anthropic_test(system_prompt = "Be cool")
   prompts <- list("What's the capital of Iowa?")
@@ -57,7 +69,8 @@ test_that("steps through in logical order, writing to disk at end step", {
     batch_submit = function(...) list(id = "123"),
     batch_poll = function(...) list(id = "123", results = TRUE),
     batch_status = function(...) list(working = FALSE),
-    batch_retrieve = function(...) list(x = 1, y = 2)
+    batch_retrieve = function(...) list(x = 1, y = 2),
+    batch_result_turn = function(...) list()
   )
 
   path <- withr::local_tempfile()
@@ -93,7 +106,8 @@ test_that("can run all steps at once", {
     batch_submit = function(...) list(id = "123"),
     batch_poll = function(...) list(id = "123", results = TRUE),
     batch_status = function(...) list(working = FALSE),
-    batch_retrieve = function(...) list(x = 1, y = 2)
+    batch_retrieve = function(...) list(x = 1, y = 2),
+    batch_result_turn = function(...) list()
   )
 
   path <- withr::local_tempfile()

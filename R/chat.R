@@ -71,16 +71,15 @@ Chat <- R6::R6Class(
     #' @description Add a pair of turns to the chat.
     #' @param user The user [Turn].
     #' @param assistant The system [Turn].
-    add_turn = function(user, assistant) {
+    #' @param log_tokens Should tokens used in the turn be logged to the
+    #'   session counter?
+    add_turn = function(user, assistant, log_tokens = TRUE) {
       check_turn(user)
       check_turn(assistant)
 
-      tokens_log(
-        private$provider,
-        # TODO: store better representation in Turn object
-        exec(tokens, !!!as.list(assistant@tokens)),
-        assistant@cost
-      )
+      if (log_tokens) {
+        log_turn(private$provider, assistant)
+      }
 
       private$.turns[[length(private$.turns) + 1]] <- user
       private$.turns[[length(private$.turns) + 1]] <- assistant
