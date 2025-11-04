@@ -94,7 +94,7 @@ API; instead, you will need to sign up (and pay for) a
 \href{https://platform.claude.com/}{developer account}.
 }
 \section{Caching}{
-Caching with claude is a bit more complicated than other providers but we
+Caching with Claude is a bit more complicated than other providers but we
 believe that on average it will save you both money and time, so we have
 enabled it by default. With other providers, like OpenAI and Google,
 you only pay for cache reads, which cost 10\% of the normal price. With
@@ -125,7 +125,7 @@ with \code{chat$get_tokens()}. If you don't see savings for your use case, you c
 suppress caching with \code{cache = "none"}.
 
 I know this is already quite complicated, but there's one final wrinkle:
-claude will only cache longer prompts, with caching requiring at least
+Claude will only cache longer prompts, with caching requiring at least
 1024-4096 tokens, depending on the model. So don't be surprised it if you
 don't see any differences with caching if you have a short prompt.
 
