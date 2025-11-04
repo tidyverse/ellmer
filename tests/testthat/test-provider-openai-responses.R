@@ -100,7 +100,7 @@ test_that("service tier affects pricing", {
   last_turn <- chat$last_turn()
   tokens <- as.list(last_turn@tokens)
   priority_cost <- get_token_cost(chat$get_provider(), tokens, "priority")
-  expect_equal(last_turn@cost, cost)
+  expect_equal(last_turn@cost, priority_cost)
 
   # Confirm we have pricing for the priority tier
   default_cost <- get_token_cost(chat$get_provider(), tokens)
