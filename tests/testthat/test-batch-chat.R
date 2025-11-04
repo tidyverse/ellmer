@@ -34,9 +34,15 @@ test_that("can get chats/data from completed request", {
 test_that("tokens only logged on first retrieval", {
   local_tokens()
 
+  prompts <- list(
+    "What's the capital of Iowa?",
+    "What's the capital of New York?",
+    "What's the capital of California?",
+    "What's the capital of Texas?"
+  )
   suppressWarnings(batch_chat(
     chat_openai_test(),
-    list(),
+    prompts,
     path = test_path("batch/state-capitals.json"),
     ignore_hash = TRUE
   ))
