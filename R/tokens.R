@@ -3,9 +3,9 @@ on_load(
 )
 
 tokens <- function(input = 0, output = 0, cached_input = 0) {
-  check_number_whole(input, allow_null = TRUE)
-  check_number_whole(output, allow_null = TRUE)
-  check_number_whole(cached_input, allow_null = TRUE)
+  check_number_decimal(input, allow_null = TRUE)
+  check_number_decimal(output, allow_null = TRUE)
+  check_number_decimal(cached_input, allow_null = TRUE)
 
   list(
     input = input %||% 0,
