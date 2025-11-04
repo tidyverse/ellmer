@@ -1,5 +1,11 @@
 # ellmer (development version)
 
+* New web search and fetch tools (#578):
+  - `tool_claude_web_search()` and `tool_claude_web_fetch()` for Claude.
+  - `tool_google_web_search()` and `tool_google_url_fetch()` for Gemini.
+  - `tool_openai_web_search()` for OpenAI.
+
+  If you want to do web fetch for other providers, you could use `btw::btw_tool_web_read_url()`.
 * `chat_openai_responses()` gains a `service_tier` argument (#712).
 * `Chat$get_tokens()` now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the `print()` method now reports costs on each assistant turn, rather than trying to parse out individual costs.
 * `chat_*()` functions now use a `credentials` function instead of an `api_key` (#613). This means that API keys are never stored in the chat object (which might be saved to disk), but is instead retrieved on demand as needed. You generally shouldn't need to use the `credentials` argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).

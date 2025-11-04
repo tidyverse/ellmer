@@ -214,8 +214,13 @@ method(chat_body, ProviderGoogleGemini) <- function(
 
   # https://ai.google.dev/api/caching#Tool
   if (length(tools) > 0) {
+    is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
     funs <- as_json(provider, unname(tools))
-    tools <- list(functionDeclarations = funs)
+
+    tools <- c(
+      compact(list(functionDeclarations = funs[!is_builtin])),
+      unlist(funs[is_builtin], recursive = FALSE)
+    )
   } else {
     tools <- NULL
   }
