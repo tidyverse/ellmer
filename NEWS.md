@@ -1,6 +1,5 @@
 # ellmer (development version)
 
-* `Chat$get_cost_details()` provides the number of tokens and cost of each user-assistant turn.
 * `chat_anthropic()` gains new `cache` parameter to control caching. By default it is set to "5m". This should (on average) reduce the cost of your chats.(#584)
 * `chat_openai_responses()` gains a `service_tier` argument (#712).
 * `Chat$get_tokens()` now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the `print()` method now reports costs on each assistant turn, rather than trying to parse out individual costs.
