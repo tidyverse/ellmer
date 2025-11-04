@@ -16,6 +16,11 @@ NULL
 #' [developer platform](https://platform.openai.com).
 #'
 #' @inheritParams chat_openai
+#' @param service_tier Request a specific service tier. There are four options:
+#'   * `"auto"` (default): uses the service tier configured in Project settings.
+#'   * `"default"`: standard pricing and performance.
+#'   * `"flex"`: slower and cheaper.
+#'   * `"priority"`: faster and more expensive.
 #' @family chatbots
 #' @export
 #' @returns A [Chat] object.
@@ -37,10 +42,12 @@ chat_openai_responses <- function(
   params = NULL,
   api_args = list(),
   api_headers = character(),
+  service_tier = c("auto", "default", "flex", "priority"),
   echo = c("none", "output", "all")
 ) {
   model <- set_default(model, "gpt-4.1")
   echo <- check_echo(echo)
+  service_tier <- arg_match(service_tier)
 
   credentials <- credentials %||% \() paste0("Bearer ", openai_key())
   check_credentials(credentials)
@@ -52,7 +59,8 @@ chat_openai_responses <- function(
     params = params %||% params(),
     extra_args = api_args,
     extra_headers = api_headers,
-    credentials = credentials
+    credentials = credentials,
+    service_tier = service_tier
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
@@ -78,8 +86,11 @@ chat_openai_responses_test <- function(
 ProviderOpenAIResponses <- new_class(
   "ProviderOpenAIResponses",
   parent = ProviderOpenAI,
-  properties = list()
+  properties = list(
+    service_tier = class_character
+  )
 )
+
 
 # Chat endpoint ----------------------------------------------------------------
 
@@ -129,7 +140,8 @@ method(chat_body, ProviderOpenAIResponses) <- function(
     stream = stream,
     tools = tools,
     text = text,
-    store = FALSE
+    store = FALSE,
+    service_tier = provider@service_tier
   ))
 }
 
@@ -161,9 +173,17 @@ method(stream_merge_chunks, ProviderOpenAIResponses) <- function(
   result,
   chunk
 ) {
-  # https://platform.openai.com/docs/api-reference/responses-streaming/response/completed
   if (chunk$type == "response.completed") {
+    # https://platform.openai.com/docs/api-reference/responses-streaming/response/completed
     chunk$response
+  } else if (chunk$type == "response.failed") {
+    # https://platform.openai.com/docs/api-reference/responses-streaming/response/failed
+    error <- chunk$response$error
+    cli::cli_abort(c("Request failed ({error$code})", "{error$message}"))
+  } else if (chunk$type == "error") {
+    # https://platform.openai.com/docs/api-reference/responses-streaming/error
+    error <- chunk$error
+    cli::cli_abort(c("Request errored ({error$type})", "{error$message}"))
   }
 }
 
@@ -224,7 +244,7 @@ method(value_turn, ProviderOpenAIResponses) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
+  cost <- get_token_cost(provider, tokens, variant = result$service_tier)
   AssistantTurn(
     contents = contents,
     json = result,
