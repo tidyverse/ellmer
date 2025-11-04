@@ -14,24 +14,29 @@ tokens <- function(input = 0, output = 0, cached_input = 0) {
   )
 }
 
-tokens_log <- function(provider, tokens, variant = "") {
+map_tokens <- function(x, f, ...) {
+  out <- t(vapply(x, f, double(3)))
+  colnames(out) <- c("input", "output", "cached_input")
+  out
+}
+
+tokens_log <- function(provider, tokens, cost) {
   i <- vctrs::vec_match(
     data.frame(
       provider = provider@name,
-      model = provider@model,
-      variant = variant
+      model = provider@model
     ),
-    the$tokens[c("provider", "model", "variant")]
+    the$tokens[c("provider", "model")]
   )
 
   if (is.na(i)) {
     new_row <- tokens_row(
       provider@name,
       provider@model,
-      variant,
       tokens$input,
       tokens$output,
-      tokens$cached_input
+      tokens$cached_input,
+      cost
     )
     the$tokens <- rbind(the$tokens, new_row)
   } else {
@@ -39,6 +44,7 @@ tokens_log <- function(provider, tokens, variant = "") {
     the$tokens$output[i] <- the$tokens$output[i] + tokens$output
     the$tokens$cached_input[i] <- the$tokens$cached_input[i] +
       tokens$cached_input
+    the$tokens$price[i] <- the$tokens$price[i] + cost
   }
 
   invisible()
@@ -47,18 +53,18 @@ tokens_log <- function(provider, tokens, variant = "") {
 tokens_row <- function(
   provider = character(0),
   model = character(0),
-  variant = character(0),
   input = numeric(0),
   output = numeric(0),
-  cached_input = numeric(0)
+  cached_input = numeric(0),
+  price = numeric(0)
 ) {
   data.frame(
     provider = provider,
     model = model,
-    variant = variant,
     input = input,
     output = output,
-    cached_input = cached_input
+    cached_input = cached_input,
+    price = price
   )
 }
 
@@ -85,16 +91,7 @@ token_usage <- function() {
     return(invisible(the$tokens))
   }
 
-  out <- the$tokens
-  out$price <- get_token_cost(
-    out$provider,
-    out$model,
-    out$variant,
-    out$input,
-    out$output,
-    out$cached_input
-  )
-  out
+  the$tokens
 }
 
 # Cost ----------------------------------------------------------------------
@@ -104,15 +101,12 @@ has_cost <- function(provider, model) {
   vctrs::vec_in(needle, prices[c("provider", "model")])
 }
 
-get_token_cost <- function(
-  provider,
-  model,
-  variant,
-  input = 0,
-  output = 0,
-  cached_input = 0
-) {
-  needle <- data.frame(provider = provider, model = model, variant = variant)
+get_token_cost <- function(provider, tokens, variant = "") {
+  needle <- data.frame(
+    provider = provider@name,
+    model = provider@model,
+    variant = variant
+  )
   idx <- vctrs::vec_match(needle, prices[c("provider", "model", "variant")])
 
   if (any(is.na(idx))) {
@@ -126,9 +120,9 @@ get_token_cost <- function(
     )
   }
 
-  input_price <- input * prices$input[idx] / 1e6
-  output_price <- output * prices$output[idx] / 1e6
-  cached_input_price <- cached_input * prices$cached_input[idx] / 1e6
+  input_price <- tokens$input * prices$input[idx] / 1e6
+  output_price <- tokens$output * prices$output[idx] / 1e6
+  cached_input_price <- tokens$cached_input * prices$cached_input[idx] / 1e6
 
   dollars(input_price + output_price + cached_input_price)
 }

@@ -7,7 +7,7 @@
 chat_openai_responses(
   system_prompt = NULL,
   base_url = Sys.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
-  api_key = openai_key(),
+  credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -20,9 +20,9 @@ chat_openai_responses(
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
-\item{api_key}{API key to use for authentication.
+\item{credentials}{A function that returns the API key to use for authentication.
 
-You generally should not supply this directly, but instead set the \code{OPENAI_API_KEY} environment variable.
+You generally should not need this argument; instead set the \code{OPENAI_API_KEY} environment variable.
 The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
