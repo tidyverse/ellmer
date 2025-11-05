@@ -1,0 +1,53 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/files
+    body:
+      fields:
+        file:
+          path: /Users/hadleywickham/Documents/llms/elmer/tests/testthat/apples.pdf
+          type: application/pdf
+          name: ~
+  response:
+    status: 200
+    headers:
+      date: Wed, 05 Nov 2025 22:58:10 GMT
+      content-type: application/json
+      content-encoding: gzip
+      request-id: req_011CUqa3PmzgWUmbVwJADLjX
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      x-envoy-upstream-service-time: '466'
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 999ff44c8acb4858-DFW
+    body:
+      string: '{"type":"file","id":"file_011CUqa3QVuZh9URbCFvvowr","size_bytes":14560,"created_at":"2025-11-05T22:58:10.234000Z","filename":"apples.pdf","mime_type":"application/pdf","downloadable":false}'
+  recorded_at: 2025-11-05 22:58:10
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-3-5-sonnet-latest","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the title of this document?"},{"type":"document","source":{"type":"file","file_id":"file_011CUqa3QVuZh9URbCFvvowr"},"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+  response:
+    status: 404
+    headers:
+      date: Wed, 05 Nov 2025 22:58:10 GMT
+      content-type: application/json
+      content-encoding: gzip
+      x-should-retry: 'false'
+      request-id: req_011CUqa3SCqjUHMQhxtiwXYo
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      x-envoy-upstream-service-time: '54'
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 999ff4503fe44858-DFW
+    body:
+      string: '{"type":"error","error":{"type":"not_found_error","message":"model:
+        claude-3-5-sonnet-latest"},"request_id":"req_011CUqa3SCqjUHMQhxtiwXYo"}'
+  recorded_at: 2025-11-05 22:58:10
+recorded_with: VCR-vcr/2.0.0

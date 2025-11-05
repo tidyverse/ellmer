@@ -10,7 +10,6 @@
 \alias{ContentToolResult}
 \alias{ContentThinking}
 \alias{ContentPDF}
-\alias{ContentAnthropicFile}
 \title{Content types received from and sent to a chatbot}
 \usage{
 Content()
@@ -39,8 +38,6 @@ ContentPDF(
   data = stop("Required"),
   filename = stop("Required")
 )
-
-ContentAnthropicFile(block_type = stop("Required"), file_id = stop("Required"))
 }
 \arguments{
 \item{text}{A single string.}
@@ -77,12 +74,6 @@ automatically added by \pkg{ellmer} when evaluating the tool call.}
 \item{thinking}{The text of the thinking output.}
 
 \item{filename}{File name, used to identify the PDF.}
-
-\item{block_type}{Content Block Type, document/image/container_upload.
-See \link{Anthropic Files API documentation}
-(https://docs.claude.com/en/docs/build-with-claude/files#document-blocks).}
-
-\item{file_id}{File ID assigned by Anthropic Files API.}
 }
 \value{
 S7 objects that all inherit from \code{Content}
