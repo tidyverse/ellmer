@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_portkey()` now requires you to supply a model (#786).
+* `chat_portkey(virtual_key)` no longer needs to be supplied; instead Portkey recommends including the virtual key/povider in the `model`.(#786).
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
   * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)
@@ -33,7 +35,6 @@
 * `models_ollama()` was fixed to correctly query model capabilities from remote Ollama servers (#746).
 
 * `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758).
-* The `virtual_key` argument in `chat_portkey()` has been deprecated as it is no longer supported by PortkeyAI. A new optional argument, `model_provider`, has been introduced, allowing users to specify a model provider from the Model Catalog displayed in their Portkey application (#786).
 
 # ellmer 0.3.2
 

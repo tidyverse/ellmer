@@ -6,12 +6,11 @@
 \title{Chat with a model hosted on PortkeyAI}
 \usage{
 chat_portkey(
+  model,
   system_prompt = NULL,
   base_url = "https://api.portkey.ai/v1",
   api_key = portkey_key(),
   virtual_key = deprecated(),
-  model = NULL,
-  model_provider = "",
   params = NULL,
   api_args = list(),
   echo = NULL,
@@ -21,6 +20,8 @@ chat_portkey(
 models_portkey(base_url = "https://api.portkey.ai/v1", api_key = portkey_key())
 }
 \arguments{
+\item{model}{The model name, e.g. \verb{@my-provider/my-model}.}
+
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
@@ -31,14 +32,15 @@ You generally should not supply this directly, but instead set the \code{PORTKEY
 The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
-\item{virtual_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} No longer supported by Portkey.
-Read more: https://portkey.ai/docs/support/upgrade-to-model-catalog}
+\item{virtual_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}.
+Portkey now recommend supplying the model provider
+(formerly known as the \code{virtual_key}), in the model name, e.g.
+\verb{@my-provider/my-model}. See
+\url{https://portkey.ai/docs/support/upgrade-to-model-catalog} for details.
 
-\item{model}{The model to use for the chat (defaults to "gpt-4o").
-We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
-Use \code{models_openai()} to see all options.}
-
-\item{model_provider}{Optional, model provider from Portkey Model Catalog.}
+For backward compatibility, the \code{PORTKEY_VIRTUAL_KEY} env var is still used
+if the model
+you can specify the virtual key here.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
@@ -65,12 +67,7 @@ A \link{Chat} object.
 \description{
 \href{https://portkey.ai/docs/product/ai-gateway/universal-api}{PortkeyAI}
 provides an interface (AI Gateway) to connect through its Universal API to a
-variety of LLMs providers with a single endpoint.
-\subsection{Authentication}{
-
-API keys together with configurations of LLM providers are
-stored inside Portkey application.
-}
+variety of LLMs providers via a single endpoint.
 }
 \examples{
 \dontrun{
