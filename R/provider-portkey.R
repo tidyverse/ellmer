@@ -53,7 +53,7 @@ chat_portkey <- function(
   }
 
   # For backward compatibility
-  if (!grepl("&@", model)) {
+  if (!grepl("^@", model)) {
     virtual_key <- virtual_key %||% key_get("PORTKEY_VIRTUAL_KEY")
     model <- paste0("@", virtual_key, "/", model)
   }
