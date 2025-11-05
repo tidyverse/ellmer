@@ -55,7 +55,7 @@ test_that("supports tool calling", {
 # Custom -----------------------------------------------------------------
 
 test_that("as_json specialised for Ollama", {
-  stub <- ProviderOllama(name = "", base_url = "", api_key = "", model = "")
+  stub <- ProviderOllama(name = "", base_url = "", model = "")
 
   expect_snapshot(
     as_json(stub, type_object(.additional_properties = TRUE)),

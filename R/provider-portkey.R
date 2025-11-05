@@ -7,7 +7,8 @@
 #'
 #' @family chatbots
 #' @param model The model name, e.g. `@my-provider/my-model`.
-#' @param api_key `r api_key_param("PORTKEY_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("PORTKEY_API_KEY")`
 #' @param virtual_key `r lifecycle::badge("deprecated")`.
 #'   Portkey now recommend supplying the model provider
 #'   (formerly known as the `virtual_key`), in the model name, e.g.
@@ -29,7 +30,8 @@ chat_portkey <- function(
   model,
   system_prompt = NULL,
   base_url = "https://api.portkey.ai/v1",
-  api_key = portkey_key(),
+  api_key = NULL,
+  credentials = NULL,
   virtual_key = deprecated(),
   params = NULL,
   api_args = list(),
@@ -56,6 +58,13 @@ chat_portkey <- function(
     model <- paste0("@", virtual_key, "/", model)
   }
 
+  credentials <- as_credentials(
+    "chat_portkey",
+    function() portkey_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   params <- params %||% params()
   provider <- ProviderPortkeyAI(
     name = "PortkeyAI",
@@ -63,7 +72,7 @@ chat_portkey <- function(
     model = model,
     params = params,
     extra_args = api_args,
-    api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -92,7 +101,12 @@ portkey_key <- function() {
 
 method(base_request, ProviderPortkeyAI) <- function(provider) {
   req <- request(provider@base_url)
-  req <- httr2::req_headers(req, `x-portkey-api-key` = provider@api_key)
+
+  req <- ellmer_req_credentials(
+    req,
+    provider@credentials(),
+    "x-portkey-api-key"
+  )
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- base_request_error(provider, req)
@@ -110,7 +124,7 @@ models_portkey <- function(
     name = "PortkeyAI",
     model = "",
     base_url = base_url,
-    api_key = api_key
+    credentials = function() api_key
   )
 
   req <- base_request(provider)

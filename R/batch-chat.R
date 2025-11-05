@@ -96,7 +96,8 @@ batch_chat <- function(chat, prompts, path, wait = TRUE, ignore_hash = FALSE) {
   assistant_turns <- job$result_turns()
   map2(job$user_turns, assistant_turns, function(user, assistant) {
     if (!is.null(assistant)) {
-      chat$clone()$add_turn(user, assistant)
+      # Logged on retrieval
+      chat$clone()$add_turn(user, assistant, log_tokens = FALSE)
     } else {
       NULL
     }
@@ -325,6 +326,8 @@ BatchJob <- R6::R6Class(
 
     retrieve = function() {
       self$results <- batch_retrieve(self$provider, self$batch)
+      log_turns(self$provider, self$result_turns())
+
       self$stage <- "done"
       self$save_state()
       TRUE

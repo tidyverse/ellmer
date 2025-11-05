@@ -2,6 +2,14 @@
 
 * `chat_portkey()` now requires you to supply a model (#786).
 * `chat_portkey(virtual_key)` no longer needs to be supplied; instead Portkey recommends including the virtual key/povider in the `model`.(#786).
+* `batch_chat()` logs tokens once, on retrieval (#743).
+* `params()` gains new `reasoning_effort` and `reasoning_tokens` so you can control the amount of effort a model spends on thinking. Initial support is provided for `chat_claude()`, `chat_google_gemini()`, and `chat_openai()` (#720).
+* `chat_anthropic()` gains new `cache` parameter to control caching. By default it is set to "5m". This should (on average) reduce the cost of your chats.(#584)
+* `chat_openai_responses()` gains a `service_tier` argument (#712).
+* `Chat$get_tokens()` now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the `print()` method now reports costs on each assistant turn, rather than trying to parse out individual costs.
+* `chat_*()` functions now use a `credentials` function instead of an `api_key` (#613). This means that API keys are never stored in the chat object (which might be saved to disk), but is instead retrieved on demand as needed. You generally shouldn't need to use the `credentials` argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).
+* `chat_databricks()` lifts many of its restrictions now that the DataBrick's API is more OpenAI compatible (#757).
+* Updated pricing data (#790).
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
   * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)

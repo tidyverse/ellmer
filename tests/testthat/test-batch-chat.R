@@ -31,6 +31,24 @@ test_that("can get chats/data from completed request", {
   expect_equal(nrow(data), 4)
 })
 
+test_that("tokens only logged on first retrieval", {
+  local_tokens()
+
+  prompts <- list(
+    "What's the capital of Iowa?",
+    "What's the capital of New York?",
+    "What's the capital of California?",
+    "What's the capital of Texas?"
+  )
+  suppressWarnings(batch_chat(
+    chat_openai_test(),
+    prompts,
+    path = test_path("batch/state-capitals.json"),
+    ignore_hash = TRUE
+  ))
+  expect_equal(nrow(the$tokens), 0)
+})
+
 test_that("errors if chat/provider/prompts don't match previous run", {
   chat <- chat_anthropic_test(system_prompt = "Be cool")
   prompts <- list("What's the capital of Iowa?")
@@ -45,7 +63,7 @@ test_that("errors if chat/provider/prompts don't match previous run", {
 
 test_that("can override hash check", {
   chat <- chat_openai_test(system_prompt = "Be cool")
-  prompts <- list()
+  prompts <- list("x")
   path <- test_path("batch/state-capitals.json")
   expect_snapshot(. <- batch_chat(chat, prompts, path, ignore_hash = TRUE))
 })
@@ -57,7 +75,8 @@ test_that("steps through in logical order, writing to disk at end step", {
     batch_submit = function(...) list(id = "123"),
     batch_poll = function(...) list(id = "123", results = TRUE),
     batch_status = function(...) list(working = FALSE),
-    batch_retrieve = function(...) list(x = 1, y = 2)
+    batch_retrieve = function(...) list(x = 1, y = 2),
+    batch_result_turn = function(...) list()
   )
 
   path <- withr::local_tempfile()
@@ -93,7 +112,8 @@ test_that("can run all steps at once", {
     batch_submit = function(...) list(id = "123"),
     batch_poll = function(...) list(id = "123", results = TRUE),
     batch_status = function(...) list(working = FALSE),
-    batch_retrieve = function(...) list(x = 1, y = 2)
+    batch_retrieve = function(...) list(x = 1, y = 2),
+    batch_result_turn = function(...) list()
   )
 
   path <- withr::local_tempfile()
@@ -130,8 +150,7 @@ test_that("informative error for bad inputs", {
   chat_ollama$.__enclos_env__$private$provider <- ProviderOllama(
     "ollama",
     "model",
-    "base_url",
-    api_key = "api_key"
+    "base_url"
   )
 
   expect_snapshot(error = TRUE, {

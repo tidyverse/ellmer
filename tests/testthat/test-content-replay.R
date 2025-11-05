@@ -11,10 +11,9 @@ test_that("can serialize simple objects", {
 })
 
 test_that("can round trip of Turn record/replay", {
-  test_record_replay(Turn("user"))
+  test_record_replay(UserTurn())
 
-  test_record_replay(Turn(
-    "user",
+  test_record_replay(UserTurn(
     list(
       ContentText("hello world"),
       ContentText("hello world2")
@@ -48,7 +47,7 @@ test_that("can round trip of ContentToolRequest/ContentToolResult", {
 })
 
 test_that("can re-match tools if present", {
-  turn <- Turn("user", list(ContentToolRequest("123", "mytool")))
+  turn <- UserTurn(list(ContentToolRequest("123", "mytool")))
   recorded <- contents_record(turn)
 
   mytool <- tool(function() {}, "mytool")
@@ -66,8 +65,8 @@ test_that("can re-match tools if present", {
   request <- ContentToolRequest("123", "mytool", tool = mytool)
   result <- ContentToolResult("value", request = request)
 
-  turn_request <- Turn("user", list(request))
-  turn_result <- Turn("user", list(result))
+  turn_request <- UserTurn(list(request))
+  turn_result <- UserTurn(list(result))
 
   test_record_replay(turn_request, tools = list(mytool = mytool))
   test_record_replay(turn_result, tools = list(mytool = mytool))
@@ -127,7 +126,7 @@ test_that("packaged classes that extend ellmer classes can be replayed", {
 
   test_record_replay(LocalContentText("hello world"))
   test_record_replay(
-    Turn("user", list(LocalContentText(text = "hello world")))
+    UserTurn(list(LocalContentText(text = "hello world")))
   )
 })
 
@@ -140,7 +139,7 @@ test_that("local classes that extend ellmer classes can be replayed", {
 
   test_record_replay(LocalContentText("hello world"))
   test_record_replay(
-    Turn("user", list(LocalContentText(text = "hello world")))
+    UserTurn(list(LocalContentText(text = "hello world")))
   )
 })
 

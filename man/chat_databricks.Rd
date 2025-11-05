@@ -76,12 +76,6 @@ model. Specifically, it supports:
 package.
 }
 }
-
-\subsection{Known limitations}{
-
-Databricks models do not support images, but they do support structured
-outputs and tool calls for most models.
-}
 }
 \examples{
 \dontrun{
