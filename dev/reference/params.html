@@ -80,6 +80,8 @@ across multiple providers.</p>
 <span>  max_tokens <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  log_probs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  stop_sequences <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  reasoning_effort <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  reasoning_tokens <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -122,6 +124,13 @@ across multiple providers.</p>
 
 <dt id="arg-stop-sequences">stop_sequences<a class="anchor" aria-label="anchor" href="#arg-stop-sequences"></a></dt>
 <dd><p>A character vector of tokens to stop generation on.</p></dd>
+
+
+<dt id="arg-reasoning-effort-reasoning-tokens">reasoning_effort, reasoning_tokens<a class="anchor" aria-label="anchor" href="#arg-reasoning-effort-reasoning-tokens"></a></dt>
+<dd><p>How much effort to spend thinking?
+<code>ressoning_effort</code> is a string, like "low", "medium", "high".
+<code>reasoning_tokens</code> is an integer, giving a maximum token budget.
+Each provider only takes one of these two parameters.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
