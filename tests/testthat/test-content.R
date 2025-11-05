@@ -15,21 +15,12 @@ test_that("can create content from a vector", {
 })
 
 test_that("turn contents can be converted to text, markdown and HTML", {
-  turn <- Turn(
-    "user",
+  turn <- UserTurn(
     contents = list(
       ContentText("User input."),
       ContentImageInline("image/png", "abcd123"),
       ContentImageRemote("https://example.com/image.jpg", detail = ""),
-      ContentJson(list(a = 1:2, b = "apple")),
-      ContentSql("SELECT * FROM mtcars"),
-      ContentSuggestions(
-        c(
-          "What is the total quantity sold for each product last quarter?",
-          "What is the average discount percentage for orders from the United States?",
-          "What is the average price of products in the 'electronics' category?"
-        )
-      )
+      ContentJson(list(a = 1:2, b = "apple"))
     )
   )
 
@@ -38,7 +29,7 @@ test_that("turn contents can be converted to text, markdown and HTML", {
 
   turns <- list(
     turn,
-    Turn("assistant", list(ContentText("Here's your answer.")))
+    AssistantTurn(list(ContentText("Here's your answer.")))
   )
   chat <- Chat$new(test_provider())
   chat$set_turns(turns)

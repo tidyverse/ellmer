@@ -4,13 +4,7 @@
 \alias{create_tool_def}
 \title{Create metadata for a tool}
 \usage{
-create_tool_def(
-  topic,
-  chat = NULL,
-  model = deprecated(),
-  echo = interactive(),
-  verbose = FALSE
-)
+create_tool_def(topic, chat = NULL, echo = interactive(), verbose = FALSE)
 }
 \arguments{
 \item{topic}{A symbol or string literal naming the function to create
@@ -18,9 +12,6 @@ metadata for. Can also be an expression of the form \code{pkg::fun}.}
 
 \item{chat}{A \code{Chat} object used to generate the output. If \code{NULL}
 (the default) uses \code{\link[=chat_openai]{chat_openai()}}.}
-
-\item{model}{\code{lifecycle::badge("deprecated")} Formally used for defining
-the model used by the chat. Now supply \code{chat} instead.}
 
 \item{echo}{Emit the registration code to the console. Defaults to \code{TRUE} in
 interactive sessions.}

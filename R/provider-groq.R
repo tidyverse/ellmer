@@ -15,7 +15,8 @@ NULL
 #'
 #' @export
 #' @family chatbots
-#' @param api_key `r api_key_param("GROQ_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("GROQ_API_KEY")`
 #' @param model `r param_model("llama3-8b-8192")`
 #' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
@@ -28,16 +29,23 @@ NULL
 chat_groq <- function(
   system_prompt = NULL,
   base_url = "https://api.groq.com/openai/v1",
-  api_key = groq_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
-  seed = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
 ) {
   model <- set_default(model, "llama3-8b-8192")
   echo <- check_echo(echo)
+
+  credentials <- as_credentials(
+    "chat_groq",
+    function() groq_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   # https://console.groq.com/docs/api-reference#chat-create (same as OpenAI)
   params <- params %||% params()
@@ -47,9 +55,8 @@ chat_groq <- function(
     base_url = base_url,
     model = model,
     params = params,
-    seed = seed,
     extra_args = api_args,
-    api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -58,7 +65,7 @@ chat_groq <- function(
 ProviderGroq <- new_class("ProviderGroq", parent = ProviderOpenAI)
 
 method(as_json, list(ProviderGroq, Turn)) <- function(provider, x, ...) {
-  if (x@role == "assistant") {
+  if (is_assistant_turn(x)) {
     # Tool requests come out of content and go into own argument
     is_tool <- map_lgl(x@contents, is_tool_request)
     tool_calls <- as_json(provider, x@contents[is_tool], ...)

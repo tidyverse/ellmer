@@ -6,9 +6,21 @@
 \alias{parallel_chat_structured}
 \title{Submit multiple chats in parallel}
 \usage{
-parallel_chat(chat, prompts, max_active = 10, rpm = 500)
+parallel_chat(
+  chat,
+  prompts,
+  max_active = 10,
+  rpm = 500,
+  on_error = c("return", "continue", "stop")
+)
 
-parallel_chat_text(chat, prompts, max_active = 10, rpm = 500)
+parallel_chat_text(
+  chat,
+  prompts,
+  max_active = 10,
+  rpm = 500,
+  on_error = c("return", "continue", "stop")
+)
 
 parallel_chat_structured(
   chat,
@@ -18,7 +30,8 @@ parallel_chat_structured(
   include_tokens = FALSE,
   include_cost = FALSE,
   max_active = 10,
-  rpm = 500
+  rpm = 500,
+  on_error = c("return", "continue", "stop")
 )
 }
 \arguments{
@@ -40,6 +53,14 @@ connections or use \code{\link[=params]{params()}} in \code{chat_anthropic()} to
 
 \item{rpm}{Maximum number of requests per minute.}
 
+\item{on_error}{What to do when a request fails. One of:
+\itemize{
+\item \code{"return"} (the default): stop processing new requests, wait for
+in flight requests to finish, then return.
+\item \code{"continue"}: keep going, performing every request.
+\item \code{"stop"}: stop processing and throw an error.
+}}
+
 \item{type}{A type specification for the extracted data. Should be
 created with a \code{\link[=type_boolean]{type_()}} function.}
 
@@ -56,12 +77,18 @@ and output tokens for each prompt.}
 add \code{cost} column giving the cost of each prompt.}
 }
 \value{
-For \code{parallel_chat()}, a list of \link{Chat} objects, one for each prompt.
-For \code{parallel_chat_text()}, a character vector of text responses.
+For \code{parallel_chat()}, a list with one element for each prompt. Each element
+is either a \link{Chat} object (if successful), a \code{NULL} (if the request wasn't
+performed) or an error object (if it failed).
+
+For \code{parallel_chat_text()}, a character vector with one element for each
+prompt. Requests that weren't succesful get an \code{NA}.
+
 For \code{parallel_chat_structured()}, a single structured data object with one
 element for each prompt. Typically, when \code{type} is an object, this will
-will be a data frame with one row for each prompt, and one column for each
-property.
+be a tibble with one row for each prompt, and one column for each
+property. If the output is a data frame, and some requests error,
+an \code{.error} column will be added with the error objects.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

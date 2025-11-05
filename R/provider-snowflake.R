@@ -25,11 +25,13 @@ NULL
 #' ## Known limitations
 #' Note that Snowflake-hosted models do not support images.
 #'
-#' See [chat_cortex_analyst()] to chat with the Snowflake Cortex Analyst rather
-#' than a general-purpose model.
-#'
 #' @inheritParams chat_openai
-#' @inheritParams chat_cortex_analyst
+#' @param account A Snowflake [account identifier](https://docs.snowflake.com/en/user-guide/admin-account-identifier),
+#'   e.g. `"testorg-test_account"`. Defaults to the value of the
+#'   `SNOWFLAKE_ACCOUNT` environment variable.
+#' @param credentials A list of authentication headers to pass into
+#'   [`httr2::req_headers()`], a function that returns them when called, or
+#'   `NULL`, the default, to use ambient credentials.
 #' @param model `r param_model("claude-3-7-sonnet")`
 #' @inherit chat_openai return
 #' @examplesIf has_credentials("snowflake")
@@ -51,12 +53,8 @@ chat_snowflake <- function(
   params <- params %||% params()
   echo <- check_echo(echo)
 
-  if (is_list(credentials)) {
-    static_credentials <- force(credentials)
-    credentials <- function(account) static_credentials
-  }
-  check_function(credentials, allow_null = TRUE)
   credentials <- credentials %||% default_snowflake_credentials(account)
+  check_credentials(credentials)
 
   provider <- ProviderSnowflakeCortex(
     name = "Snowflake/Cortex",
@@ -66,8 +64,6 @@ chat_snowflake <- function(
     model = model,
     params = params,
     extra_args = api_args,
-    # We need an empty api_key for S7 validation.
-    api_key = "",
     extra_headers = api_headers
   )
 
@@ -78,14 +74,13 @@ ProviderSnowflakeCortex <- new_class(
   "ProviderSnowflakeCortex",
   parent = ProviderOpenAI,
   properties = list(
-    account = prop_string(),
-    credentials = class_function
+    account = prop_string()
   )
 )
 
 method(base_request, ProviderSnowflakeCortex) <- function(provider) {
   req <- request(provider@base_url)
-  req <- ellmer_req_credentials(req, provider@credentials)
+  req <- ellmer_req_credentials(req, provider@credentials())
   req <- ellmer_req_robustify(req)
   # Snowflake uses the User Agent header to identify "parter applications", so
   # identify requests as coming from "r_ellmer" (unless an explicit partner
@@ -258,8 +253,8 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
     }
   })
   tokens <- value_tokens(provider, result)
-  tokens_log(provider, tokens)
-  assistant_turn(contents, json = result, tokens = unlist(tokens))
+  cost <- get_token_cost(provider, tokens)
+  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> Snowflake --------------------------------------------------------
@@ -464,4 +459,38 @@ snowflake_keypair_token <- function(
 
 snowflake_keypair_cache <- function(account, key) {
   credentials_cache(key = hash(c("sf", account, openssl::fingerprint(key))))
+}
+
+# Credential handling ----------------------------------------------------------
+
+snowflake_credentials_exist <- function(...) {
+  tryCatch(
+    is_list(default_snowflake_credentials(...)),
+    error = function(e) FALSE
+  )
+}
+
+# Reads Posit Workbench-managed Snowflake credentials from a
+# $SNOWFLAKE_HOME/connections.toml file, as used by the Snowflake Connector for
+# Python implementation. The file will look as follows:
+#
+# [workbench]
+# account = "account-id"
+# token = "token"
+# authenticator = "oauth"
+workbench_snowflake_token <- function(account, sf_home) {
+  cfg <- readLines(file.path(sf_home, "connections.toml"))
+  # We don't attempt a full parse of the TOML syntax, instead relying on the
+  # fact that this file will always contain only one section.
+  if (!any(grepl(account, cfg, fixed = TRUE))) {
+    # The configuration doesn't actually apply to this account.
+    return(NULL)
+  }
+  line <- grepl("token = ", cfg, fixed = TRUE)
+  token <- gsub("token = ", "", cfg[line])
+  if (nchar(token) == 0) {
+    return(NULL)
+  }
+  # Drop enclosing quotes.
+  gsub("\"", "", token)
 }

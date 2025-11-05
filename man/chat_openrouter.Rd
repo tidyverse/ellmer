@@ -6,9 +6,9 @@
 \usage{
 chat_openrouter(
   system_prompt = NULL,
-  api_key = openrouter_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
-  seed = NULL,
   params = NULL,
   api_args = list(),
   echo = c("none", "output", "all"),
@@ -18,17 +18,16 @@ chat_openrouter(
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{api_key}{API key to use for authentication.
+\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
-You generally should not supply this directly, but instead set the \code{OPENROUTER_API_KEY} environment variable.
+\item{credentials}{A function that returns the API key to use for authentication.
+
+You generally should not need this argument; instead set the \code{OPENROUTER_API_KEY} environment variable.
 The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{model}{The model to use for the chat (defaults to "gpt-4o").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
-
-\item{seed}{Optional integer seed that ChatGPT uses to try and make output
-more reproducible.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
@@ -79,6 +78,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openai_responses}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}
 }

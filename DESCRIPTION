@@ -34,6 +34,7 @@ Imports:
     R6,
     rlang (>= 1.1.0),
     S7 (>= 0.2.0),
+    tibble,
     vctrs
 Suggests:
     connectcreds,
@@ -45,6 +46,7 @@ Suggests:
     magick,
     openssl,
     paws.common,
+    png,
     rmarkdown,
     shiny,
     shinychat (>= 0.2.0),
@@ -78,7 +80,6 @@ Collate:
     'content-image.R'
     'content-pdf.R'
     'content-replay.R'
-    'deprecated.R'
     'httr2.R'
     'import-standalone-obj-type.R'
     'import-standalone-purrr.R'
@@ -103,14 +104,17 @@ Collate:
     'provider-huggingface.R'
     'provider-mistral.R'
     'provider-ollama.R'
+    'provider-openai-responses.R'
     'provider-openrouter.R'
     'provider-perplexity.R'
     'provider-portkey.R'
-    'provider-snowflake-cortex.R'
     'provider-snowflake.R'
     'provider-vllm.R'
+    'schema.R'
     'tokens.R'
+    'tools-built-in.R'
     'tools-def-auto.R'
+    'utils-auth.R'
     'utils-callbacks.R'
     'utils-cat.R'
     'utils-merge.R'

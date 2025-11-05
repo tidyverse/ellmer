@@ -8,7 +8,10 @@ test_that("can make simple batch request", {
 })
 
 test_that("can make simple streaming request", {
-  chat <- chat_anthropic_test("Be as terse as possible; no punctuation")
+  chat <- chat_anthropic_test(
+    "Be as terse as possible; no punctuation",
+    model = "claude-3-7-sonnet-20250219"
+  )
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })
@@ -27,8 +30,9 @@ test_that("defaults are reported", {
 
 test_that("supports standard parameters", {
   vcr::local_cassette("anthropic-standard-params")
-  chat_fun <- chat_anthropic_test
-
+  chat_fun <- \(...) {
+    chat_anthropic_test(..., model = "claude-sonnet-4-5-20250929")
+  }
   test_params_stop(chat_fun)
 })
 
@@ -81,11 +85,6 @@ test_that("continues to work after whitespace only outputs (#376)", {
   )
 })
 
-test_that("max_tokens is deprecated", {
-  expect_snapshot(chat <- chat_anthropic_test(max_tokens = 10))
-  expect_equal(chat$get_provider()@params$max_tokens, 10)
-})
-
 test_that("can match prices for some common models", {
   provider <- chat_anthropic_test()$get_provider()
 
@@ -97,8 +96,8 @@ test_that("removes empty final chat messages", {
   chat <- chat_anthropic_test()
   chat$set_turns(
     list(
-      Turn("user", "Don't say anything"),
-      Turn("assistant")
+      UserTurn("Don't say anything"),
+      AssistantTurn()
     )
   )
 

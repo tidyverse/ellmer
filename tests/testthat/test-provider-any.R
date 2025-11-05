@@ -36,9 +36,3 @@ test_that("works for chat functions that don't include `params`", {
   expect_equal(chat$get_provider()@name, "Ollama")
   expect_equal(chat$get_provider()@model, "qwen3:4b")
 })
-
-test_that("requires `model` and `system_prompt` arguments", {
-  expect_snapshot(error = TRUE, {
-    chat("cortex_analyst")
-  })
-})

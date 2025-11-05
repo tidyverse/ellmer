@@ -13,32 +13,31 @@ test_that("structured data is round-tripped", {
 # Object from ContentJSON -----------------------------------------------------
 
 test_that("useful error if no ContentJson", {
-  turn <- Turn("assistant", list(ContentText("Hello")))
+  turn <- AssistantTurn(list(ContentText("Hello")))
   expect_snapshot(extract_data(turn), error = TRUE)
 })
 
 test_that("can extract data from ContentJson", {
-  turn <- Turn("assistant", list(ContentJson(list(x = 1))))
+  turn <- AssistantTurn(list(ContentJson(list(x = 1))))
   type <- type_object(x = type_integer())
   expect_equal(extract_data(turn, type), list(x = 1))
 })
 
 test_that("can opt-out of conversion data from ContentJson", {
-  turn <- Turn("assistant", list(ContentJson(list(x = list(1, 2)))))
+  turn <- AssistantTurn(list(ContentJson(list(x = list(1, 2)))))
   type <- type_object(x = type_array(type_integer()))
   expect_equal(extract_data(turn, type, convert = TRUE), list(x = c(1L, 2L)))
   expect_equal(extract_data(turn, type, convert = FALSE), list(x = list(1, 2)))
 })
 
 test_that("can extract data when wrapper is used", {
-  turn <- Turn("assistant", list(ContentJson(list(wrapper = list(x = 1)))))
+  turn <- AssistantTurn(list(ContentJson(list(wrapper = list(x = 1)))))
   type <- wrap_type_if_needed(type_object(x = type_integer()), TRUE)
   expect_equal(extract_data(turn, type, needs_wrapper = TRUE), list(x = 1))
 })
 
 test_that("warns if multiple ContentJson (and uses first)", {
-  turn <- Turn(
-    "assistant",
+  turn <- AssistantTurn(
     list(
       ContentJson(list(x = 1)),
       ContentJson(list(x = 2)),
@@ -187,7 +186,7 @@ test_that("can handle missing optional values in objects (#384)", {
   )
   expect_equal(
     convert_from_type(data, type),
-    data.frame(
+    tibble::tibble(
       fruit = c("Apples", "Oranges"),
       year = c(NA_integer_, NA_integer_)
     )
@@ -222,7 +221,7 @@ test_that("can convert arrays of objects to data frames", {
   type <- type_array(type_object(x = type_integer(), y = type_string()))
   expect_equal(
     convert_from_type(x, type),
-    data.frame(x = c(1L, 3L), y = c("x", "y"))
+    tibble::tibble(x = c(1L, 3L), y = c("x", "y"))
   )
 
   # unless they have additional properties
@@ -256,11 +255,13 @@ test_that("array of object with nested objects becomes packed data frame", {
     list(x = list(a = 5), y = list(a = 7))
   )
 
-  out <- convert_from_type(data, type)
-  expect_equal(nrow(out), 2)
-  expect_named(out, c("x", "y"))
-  expect_equal(out$x, data.frame(a = c(1, 5)))
-  expect_equal(out$y, data.frame(a = c(3, 7)))
+  expect_equal(
+    convert_from_type(data, type),
+    tibble::tibble(
+      x = tibble::tibble(a = c(1, 5)),
+      y = tibble::tibble(a = c(3, 7))
+    )
+  )
 })
 
 test_that("can handle mix of present and absent rows", {
@@ -275,7 +276,7 @@ test_that("can handle mix of present and absent rows", {
   )
   expect_equal(
     convert_from_type(data, type),
-    data.frame(x = c(1L, NA_integer_, 3L), y = c("x", NA_character_, "y"))
+    tibble::tibble(x = c(1L, NA_integer_, 3L), y = c("x", NA_character_, "y"))
   )
 })
 

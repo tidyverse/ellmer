@@ -97,7 +97,7 @@ test_that("structured data work with and without wrapper", {
 # Custom -----------------------------------------------------------------
 
 test_that("as_json specialised for OpenAI", {
-  stub <- ProviderOpenAI(name = "", base_url = "", api_key = "", model = "")
+  stub <- ProviderOpenAI(name = "", base_url = "", model = "")
 
   expect_snapshot(
     as_json(stub, type_object(.additional_properties = TRUE)),
@@ -115,12 +115,4 @@ test_that("as_json specialised for OpenAI", {
       additionalProperties = FALSE
     )
   )
-})
-
-test_that("seed is deprecated, but still honored", {
-  expect_snapshot(chat <- chat_openai_test(seed = 1))
-  expect_equal(chat$get_provider()@params$seed, 1)
-
-  # NULL is also ignored since that's what subclasses use
-  expect_no_warning(chat_openai_test(seed = NULL))
 })

@@ -25,43 +25,45 @@ http_interactions:
       access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9564fbdaebce4863-DFW
+      cf-ray: 995bbb787df72cb6-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 27 Jun 2025 12:35:24 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '2258'
+      date: Tue, 28 Oct 2025 16:15:33 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '2149'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=u5KndivZDk1OHRsvc39Fu47DGuMto.bsqtwPtyt7elY-1751027724-1.0.1.1-8hd8ujYVu2O1ceAUT11z24ejb2kUEZwV8Gu3r.0LQ215zEaFff1J_t3nJF_Ggyi1hTvY3eR54xUxXJnU57TNpynVR8rz3dBJLreyZqX5kPY;
-        path=/; expires=Fri, 27-Jun-25 13:05:24 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=A3AIzL05o818yxIUPBTF4OoDGxnM_HRxwvvEyT2ibms-1761668133-1.0.1.1-OHC3J8cbf0AeGvabmvjtQKfIcU2IngcCvXtIXxxsuEBkzeQCXnvy2ePC4ScQdsyqYn8vJB12XRqtDbaBAlvIhqQUk4Doc7oiXsBJldQHUkA;
+        path=/; expires=Tue, 28-Oct-25 16:45:33 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=0BnkHsT0PCnJqJcgzoAUim9a62zFpUJl.GJ.X7jw_LY-1751027724034-0.0.1.1-604800000;
+      - _cfuvid=ymoiMQyp6XEFVZdtFwewTUgOVrB2Xrcmrwy_apAhUr4-1761668133767-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '2261'
+      x-envoy-upstream-service-time: '2457'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999776'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_d9e7c12c618d4022fd87af03011d08a4
+      x-request-id: req_ec4e24927c7841b2b1743e27a29039bc
     body:
       string: |
         {
-          "id": "chatcmpl-Bn2aXTZTFJT0syrV26o5UoHpRStYm",
+          "id": "chatcmpl-CVge3VbIpMPb6l43XNRRG25qXSdr7",
           "object": "chat.completion",
-          "created": 1751027721,
+          "created": 1761668131,
           "model": "gpt-4.1-2025-04-14",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "{\"wrapper\":[{\"name\":\"dark brown sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"eggs\",\"quantity\":2,\"unit\":\"large\"},{\"name\":\"sour cream\",\"quantity\":165,\"unit\":\"g\"},{\"name\":\"unsalted butter, melted\",\"quantity\":113,\"unit\":\"g\"},{\"name\":\"vanilla extract\",\"quantity\":1,\"unit\":\"teaspoon\"},{\"name\":\"kosher salt\",\"quantity\":0.75,\"unit\":\"teaspoon\"},{\"name\":\"neutral oil\",\"quantity\":80,\"unit\":\"ml\"},{\"name\":\"all-purpose flour\",\"quantity\":190,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":1.5,\"unit\":\"teaspoon\"}]}",
+                "content": "{\"wrapper\":[{\"name\":\"dark brown sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"large eggs\",\"quantity\":2,\"unit\":\"piece\"},{\"name\":\"sour cream\",\"quantity\":165,\"unit\":\"g\"},{\"name\":\"unsalted butter, melted\",\"quantity\":113,\"unit\":\"g\"},{\"name\":\"vanilla extract\",\"quantity\":1,\"unit\":\"teaspoon\"},{\"name\":\"kosher salt\",\"quantity\":0.75,\"unit\":\"teaspoon\"},{\"name\":\"neutral oil\",\"quantity\":80,\"unit\":\"ml\"},{\"name\":\"all-purpose flour\",\"quantity\":190,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":1.5,\"unit\":\"teaspoon\"}]}",
                 "refusal": null,
                 "annotations": []
               },
@@ -85,7 +87,7 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_51e1070cf2"
+          "system_fingerprint": "fp_144ea3b974"
         }
-  recorded_at: 2025-06-27 12:35:24
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-10-28 16:15:33
+recorded_with: VCR-vcr/2.0.0

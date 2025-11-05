@@ -3,43 +3,44 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","system":"\n  You are an expert
-        R programmer.\n  Just give me the code; no explanation in text.\n  Use the
-        `.by` argument rather than `group_by()`.\n  dplyr 1.1.0 introduced per-operation
+      string: '{"model":"claude-sonnet-4-20250514","system":[{"type":"text","text":"\n  You
+        are an expert R programmer.\n  Just give me the code; no explanation in text.\n  Use
+        the `.by` argument rather than `group_by()`.\n  dplyr 1.1.0 introduced per-operation
         grouping with the `.by` argument.\n  e.g., instead of:\n\n  transactions |>\n    group_by(company,
         year) |>\n    mutate(total = sum(revenue))\n\n  write this:\n  transactions
-        |>\n    mutate(\n      total = sum(revenue),\n      .by = c(company, year)\n    )\n","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
+        |>\n    mutate(\n      total = sum(revenue),\n      .by = c(company, year)\n    )\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
-        the way up to z, grouped by age and sex.\n"}]}],"stream":false,"max_tokens":4096}'
+        the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Fri, 27 Jun 2025 12:35:03 GMT
+      date: Tue, 28 Oct 2025 16:15:19 GMT
       content-type: application/json
-      anthropic-ratelimit-input-tokens-limit: '40000'
-      anthropic-ratelimit-input-tokens-remaining: '40000'
-      anthropic-ratelimit-input-tokens-reset: '2025-06-27T12:35:02Z'
-      anthropic-ratelimit-output-tokens-limit: '16000'
-      anthropic-ratelimit-output-tokens-remaining: '16000'
-      anthropic-ratelimit-output-tokens-reset: '2025-06-27T12:35:03Z'
-      anthropic-ratelimit-requests-limit: '1000'
-      anthropic-ratelimit-requests-remaining: '999'
-      anthropic-ratelimit-requests-reset: '2025-06-27T12:35:01Z'
-      anthropic-ratelimit-tokens-limit: '56000'
-      anthropic-ratelimit-tokens-remaining: '56000'
-      anthropic-ratelimit-tokens-reset: '2025-06-27T12:35:02Z'
-      request-id: req_011CQYjZLo6affubYGxrTmkR
+      content-encoding: gzip
+      anthropic-ratelimit-input-tokens-limit: '2000000'
+      anthropic-ratelimit-input-tokens-remaining: '2000000'
+      anthropic-ratelimit-input-tokens-reset: '2025-10-28T16:15:18Z'
+      anthropic-ratelimit-output-tokens-limit: '400000'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-10-28T16:15:19Z'
+      anthropic-ratelimit-requests-limit: '4000'
+      anthropic-ratelimit-requests-remaining: '3999'
+      anthropic-ratelimit-requests-reset: '2025-10-28T16:15:17Z'
+      anthropic-ratelimit-tokens-limit: '2400000'
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-10-28T16:15:18Z'
+      request-id: req_011CUZtrAXcQgEmAD3x1kZzU
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
+      x-envoy-upstream-service-time: '2428'
       via: 1.1 google
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 9564fb5be9cf2e27-DFW
-      content-encoding: gzip
+      cf-ray: 995bbb22cd1223b8-DFW
     body:
-      string: '{"id":"msg_015Mt15UatdGzG6Kbh6AiiAn","type":"message","role":"assistant","model":"claude-sonnet-4-20250514","content":[{"type":"text","text":"```r\ndata
-        |>\n  summarise(\n    across(a:z, list(mean = mean, median = median), .names
-        = \"{.col}_{.fn}\"),\n    .by = c(age, sex)\n  )\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":182,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":60,"service_tier":"standard"}}'
-  recorded_at: 2025-06-27 12:35:03
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+      string: '{"model":"claude-sonnet-4-20250514","id":"msg_01JsvCAKHnFtnevq1WMsoUnF","type":"message","role":"assistant","content":[{"type":"text","text":"```r\ndata
+        |>\n  summarise(\n    across(a:z, list(mean = mean, median = median), na.rm
+        = TRUE),\n    .by = c(age, sex)\n  )\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":182,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":54,"service_tier":"standard"}}'
+  recorded_at: 2025-10-28 16:15:19
+recorded_with: VCR-vcr/2.0.0
