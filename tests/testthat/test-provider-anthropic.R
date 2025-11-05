@@ -30,8 +30,9 @@ test_that("defaults are reported", {
 
 test_that("supports standard parameters", {
   vcr::local_cassette("anthropic-standard-params")
-  chat_fun <- chat_anthropic_test
-
+  chat_fun <- \(...) {
+    chat_anthropic_test(..., model = "claude-sonnet-4-5-20250929")
+  }
   test_params_stop(chat_fun)
 })
 

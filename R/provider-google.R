@@ -210,6 +210,14 @@ method(chat_body, ProviderGoogleGemini) <- function(
     generation_config$response_schema <- as_json(provider, type)
   }
 
+  if (has_name(generation_config, "thinkingBudget")) {
+    generation_config$thinkingConfig <- list(
+      thinkingBudget = generation_config$thinkingBudget,
+      includeThoughts = TRUE
+    )
+    generation_config$thinkingBudget <- NULL
+  }
+
   contents <- as_json(provider, turns)
 
   # https://ai.google.dev/api/caching#Tool
@@ -240,7 +248,8 @@ method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
       seed = "seed",
       maxOutputTokens = "max_tokens",
       responseLogprobs = "log_probs",
-      stopSequences = "stop_sequences"
+      stopSequences = "stop_sequences",
+      thinkingBudget = "reasoning_tokens"
     )
   )
 }
@@ -274,8 +283,8 @@ method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
   cached <- usage$cachedContentTokenCount %||% 0
 
   tokens(
-    input = (usage$promptTokenCount %||% 0) - cached,
-    output = usage$candidatesTokenCount,
+    input = (usage$promptTokenCount %||% 0) + -cached,
+    output = usage$candidatesTokenCount + (usage$thoughtsTokenCount %||% 0),
     cached_input = cached
   )
 }

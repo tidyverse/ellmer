@@ -91,3 +91,18 @@ test_that("structured data work with and without wrapper", {
   )
   expect_equal(out, list(number = 11))
 })
+
+test_that("service tier affects pricing", {
+  vcr::local_cassette("openai-v2-service-tier")
+  chat <- chat_openai_responses_test(service_tier = "priority")
+  chat$chat("Tell me a joke")
+
+  last_turn <- chat$last_turn()
+  tokens <- as.list(last_turn@tokens)
+  priority_cost <- get_token_cost(chat$get_provider(), tokens, "priority")
+  expect_equal(last_turn@cost, priority_cost)
+
+  # Confirm we have pricing for the priority tier
+  default_cost <- get_token_cost(chat$get_provider(), tokens)
+  expect_gt(last_turn@cost, default_cost)
+})
