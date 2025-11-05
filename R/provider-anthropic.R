@@ -58,6 +58,8 @@ NULL
 #' @param model `r param_model("claude-sonnet-4-20250514", "anthropic")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
+#' @param base_url The base URL to the endpoint; the default is Claude's
+#'   public API.
 #' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
 #'   Set to "none" to disable caching or "1h" to cache for one hour.
 #'

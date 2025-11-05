@@ -56,6 +56,8 @@ A \link{Chat} object.
 }
 \description{
 Sign up at \url{https://platform.deepseek.com}.
+
+Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 \subsection{Known limitations}{
 \itemize{
 \item Structured data extraction is not supported.
@@ -83,7 +85,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

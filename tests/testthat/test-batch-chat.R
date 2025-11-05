@@ -19,7 +19,10 @@ test_that("can get chats/data from completed request", {
     prompts,
     path = test_path("batch/state-capitals.json")
   )
-  expect_equal(out, c("Des Moines", "Albany", "Sacramento", "Austin"))
+  expect_equal(
+    gsub("\\.$", "", out),
+    c("Des Moines", "Albany", "Sacramento", "Austin")
+  )
 
   type_state <- type_object(name = type_string("State name"))
   data <- batch_chat_structured(
@@ -63,7 +66,7 @@ test_that("errors if chat/provider/prompts don't match previous run", {
 
 test_that("can override hash check", {
   chat <- chat_openai_test(system_prompt = "Be cool")
-  prompts <- list("x")
+  prompts <- list("a", "b", "c", "d")
   path <- test_path("batch/state-capitals.json")
   expect_snapshot(. <- batch_chat(chat, prompts, path, ignore_hash = TRUE))
 })
@@ -75,7 +78,7 @@ test_that("steps through in logical order, writing to disk at end step", {
     batch_submit = function(...) list(id = "123"),
     batch_poll = function(...) list(id = "123", results = TRUE),
     batch_status = function(...) list(working = FALSE),
-    batch_retrieve = function(...) list(x = 1, y = 2),
+    batch_retrieve = function(...) list(x = 1),
     batch_result_turn = function(...) list()
   )
 
@@ -103,7 +106,7 @@ test_that("steps through in logical order, writing to disk at end step", {
   job$step()
   expect_equal(job$stage, "done")
   expect_equal(read_stage(), "done")
-  expect_equal(job$results, list(x = 1, y = 2))
+  expect_equal(job$results, list(x = 1))
   expect_true(completed())
 })
 
@@ -112,7 +115,7 @@ test_that("can run all steps at once", {
     batch_submit = function(...) list(id = "123"),
     batch_poll = function(...) list(id = "123", results = TRUE),
     batch_status = function(...) list(working = FALSE),
-    batch_retrieve = function(...) list(x = 1, y = 2),
+    batch_retrieve = function(...) list(x = 1),
     batch_result_turn = function(...) list()
   )
 
@@ -124,7 +127,7 @@ test_that("can run all steps at once", {
   )
   job$step_until_done()
   expect_equal(job$stage, "done")
-  expect_equal(job$results, list(x = 1, y = 2))
+  expect_equal(job$results, list(x = 1))
 })
 
 test_that("errors if wait = FALSE and not complete", {

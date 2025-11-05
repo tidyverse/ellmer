@@ -1,4 +1,4 @@
-#' @include provider-openai.R
+#' @include provider-openai-compatible.R
 NULL
 
 #' Chat with one of the many models hosted on OpenRouter
@@ -62,7 +62,7 @@ chat_openrouter_test <- function(..., echo = "none") {
 
 ProviderOpenRouter <- new_class(
   "ProviderOpenRouter",
-  parent = ProviderOpenAI,
+  parent = ProviderOpenAICompatible,
 )
 
 method(chat_params, ProviderOpenRouter) <- function(provider, params) {
@@ -88,7 +88,7 @@ openrouter_key <- function() {
 }
 
 method(base_request, ProviderOpenRouter) <- function(provider) {
-  req <- base_request(super(provider, ProviderOpenAI))
+  req <- base_request(super(provider, ProviderOpenAICompatible))
   # https://openrouter.ai/docs/api-keys
   req <- req_headers(
     req,
@@ -108,7 +108,7 @@ method(value_turn, ProviderOpenRouter) <- function(
   check_openrouter_error(result$error)
 
   value_turn(
-    super(provider, ProviderOpenAI),
+    super(provider, ProviderOpenAICompatible),
     result = result,
     has_type = has_type
   )

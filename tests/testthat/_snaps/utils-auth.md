@@ -1,18 +1,18 @@
 # api_key is deprecated
 
     Code
-      chat <- chat_openai_test(api_key = "abc")
+      chat <- chat_openai_compatible_test(api_key = "abc")
     Condition
       Warning:
-      The `api_key` argument of `chat_openai()` is deprecated as of ellmer 0.4.0.
+      The `api_key` argument of `chat_openai_compatible()` is deprecated as of ellmer 0.4.0.
       i Please use the `credentials` argument instead.
 
 # errors if both credentials and api_key are provided
 
     Code
-      chat_openai_test(credentials = "abc", api_key = "def")
+      chat_openai_compatible_test(credentials = "abc", api_key = "def")
     Condition
-      Error in `chat_openai()`:
+      Error in `chat_openai_compatible()`:
       ! Must supply one of `api_key` or `credentials`.
 
 # verifies all properties of credentials

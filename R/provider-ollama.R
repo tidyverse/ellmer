@@ -7,8 +7,7 @@
 #' {[ollamar](https://hauselin.github.io/ollama-r/)} (e.g.
 #' `ollamar::pull("llama3.1")`).
 #'
-#' This function is a lightweight wrapper around [chat_openai()] with
-#' the defaults tweaked for ollama.
+#' Built on top of [chat_openai_compatible()].
 #'
 #' ## Known limitations
 #'
@@ -97,7 +96,7 @@ chat_ollama <- function(
 
 ProviderOllama <- new_class(
   "ProviderOllama",
-  parent = ProviderOpenAI,
+  parent = ProviderOpenAICompatible,
   properties = list(
     model = prop_string()
   )

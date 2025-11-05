@@ -65,6 +65,8 @@ A \link{Chat} object.
 The \href{https://azure.microsoft.com/en-us/products/ai-services/openai-service}{Azure OpenAI server}
 hosts a number of open source models as well as proprietary models
 from OpenAI.
+
+Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 \subsection{Authentication}{
 
 \code{chat_azure_openai()} supports API keys and the \code{credentials} parameter, but
@@ -98,7 +100,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}
