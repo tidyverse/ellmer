@@ -14,7 +14,9 @@
 #'   you can use in chat.
 #' * `anthropic_file_list()` lists all uploaded files.
 #' * `anthropic_file_get()` returns an object for an previously uploaded file.
-#' * `anthropic_file_download()` downloads the file with the given ID.
+#' * `anthropic_file_download()` downloads the file with the given ID. Note
+#'   that you can only download files created by skills or the code execution
+#'   tool.
 #' * `anthropic_file_delete()` deletes the file with the given ID.
 #'
 #' @inheritParams chat_anthropic
@@ -90,17 +92,21 @@ anthropic_file_get <- function(
 
 #' @export
 #' @rdname anthropic_file_upload
+#' @param path Path to download the file to.
 anthropic_file_download <- function(
   file_id,
+  path,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
   beta_headers = "files-api-2025-04-14"
 ) {
-  req <- request_anthropic_file(base_url, beta_headers, credentials)
-  req <- req_url_path_append(req, "files", file_id)
-  resp <- req_perform(req)
+  check_string(path)
 
-  resp_body_string(resp)
+  req <- request_anthropic_file(base_url, beta_headers, credentials)
+  req <- req_url_path_append(req, "files", file_id, "content")
+  req_perform(req, path = path)
+
+  invisible(path)
 }
 
 #' @export
@@ -111,8 +117,8 @@ anthropic_file_delete <- function(
   credentials = NULL,
   beta_headers = "files-api-2025-04-14"
 ) {
-  req <- request_anthropic_file(url, beta_headers, credentials)
-  req <- req_url_path_append("files", file_id)
+  req <- request_anthropic_file(base_url, beta_headers, credentials)
+  req <- req_url_path_append(req, "files", file_id)
   req <- req_method(req, "DELETE")
   resp <- req_perform(req)
 

@@ -30,6 +30,7 @@ anthropic_file_get(
 
 anthropic_file_download(
   file_id,
+  path,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
   beta_headers = "files-api-2025-04-14"
@@ -43,9 +44,10 @@ anthropic_file_delete(
 )
 }
 \arguments{
-\item{path}{Path to a file to upload.}
+\item{path}{Path to download the file to.}
 
-\item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
+\item{base_url}{The base URL to the endpoint; the default is Claude's
+public API.}
 
 \item{beta_headers}{Beta headers to use for the request. Defaults to
 \code{files-api-2025-04-14}.}
@@ -72,7 +74,9 @@ having a maximum size of 500MB. For more details see
 you can use in chat.
 \item \code{anthropic_file_list()} lists all uploaded files.
 \item \code{anthropic_file_get()} returns an object for an previously uploaded file.
-\item \code{anthropic_file_download()} downloads the file with the given ID.
+\item \code{anthropic_file_download()} downloads the file with the given ID. Note
+that you can only download files created by skills or the code execution
+tool.
 \item \code{anthropic_file_delete()} deletes the file with the given ID.
 }
 }
