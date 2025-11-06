@@ -18,44 +18,48 @@ ellmer_otel_tracer <- local({
   }
 })
 
-
-# Only activate the span if it is non-NULL. If activated, ensure it is
-# automatically ended when the activation scope exits. If
-# ospan_promise_domain is TRUE, also ensure that the active span is reactivated upon promise domain restoration.
-setup_otel_span <- function(
-  ospan,
-  activation_scope = parent.frame(),
-  ospan_promise_domain = TRUE
-) {
-  if (!is.null(ospan)) {
-    if (ospan_promise_domain) {
-      promises::local_ospan_promise_domain(activation_scope)
-    }
-    otel::local_active_span(
-      ospan,
-      end_on_exit = FALSE,
-      activation_scope = activation_scope
-    )
-    # TODO: Set status?
-    defer(promises::end_ospan(ospan), envir = activation_scope)
-  }
-
-  invisible(ospan)
+otel_is_enabled <- function(tracer = ellmer_otel_tracer()) {
+  .subset2(tracer, "is_enabled")()
 }
 
 
-local_chat_ospan <- function(
+# Only activate the span if it is non-NULL. If
+# otel_promise_domain is TRUE, also ensure that the active span is reactivated upon promise domain restoration.
+#' Activate and use handoff promise domain for Open Telemetry span
+#'
+#' @param otel_span An Open Telemetry span object.
+#' @param activation_scope The scope in which to activate the span.
+#' @noRd
+setup_active_promise_otel_span <- function(
+  otel_span,
+  activation_scope = parent.frame()
+) {
+  if (is.null(otel_span) || !otel_is_enabled()) {
+    return()
+  }
+
+  promises::local_otel_promise_domain(activation_scope)
+  otel::local_active_span(
+    otel_span,
+    activation_scope = activation_scope
+  )
+
+  invisible()
+}
+
+
+local_chat_otel_span <- function(
   provider,
-  parent_ospan = NULL,
+  parent_otel_span = NULL,
   local_envir = parent.frame(),
   tracer = ellmer_otel_tracer()
 ) {
-  chat_ospan <-
-    promises::create_ospan(
+  chat_span <-
+    otel::start_span(
       sprintf("chat %s", provider@model),
       tracer = tracer,
       options = list(
-        parent = parent_ospan,
+        parent = parent_otel_span,
         kind = "CLIENT"
       ),
       attributes = list(
@@ -65,12 +69,12 @@ local_chat_ospan <- function(
       )
     )
 
-  defer(promises::end_ospan(chat_ospan), envir = local_envir)
+  defer(otel::end_span(chat_span), envir = local_envir)
 
-  chat_ospan
+  chat_span
 }
 
-record_chat_ospan_status <- function(span, result) {
+record_chat_otel_span_status <- function(span, result) {
   if (is.null(span) || !span$is_recording()) {
     return(invisible(span))
   }
@@ -99,18 +103,18 @@ record_chat_ospan_status <- function(span, result) {
 # Must be activated for the calling scope.
 #
 # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/#execute-tool-span
-start_local_active_tool_ospan <- function(
+local_tool_otel_span <- function(
   request,
-  parent_ospan = NULL,
+  parent_otel_span = NULL,
   local_envir = parent.frame(),
   tracer = ellmer_otel_tracer()
 ) {
-  tool_ospan <-
-    promises::create_ospan(
+  tool_span <-
+    otel::start_span(
       sprintf("execute_tool %s", request@tool@name),
       tracer = tracer,
       options = list(
-        parent = parent_ospan,
+        parent = parent_otel_span,
         kind = "INTERNAL"
       ),
       attributes = compact(list(
@@ -121,18 +125,20 @@ start_local_active_tool_ospan <- function(
       ))
     )
 
-  setup_otel_span(tool_ospan, local_envir)
+  setup_active_promise_otel_span(tool_span, local_envir)
 
-  tool_ospan
+  defer(otel::end_span(tool_span), envir = local_envir)
+
+  tool_span
 }
 
-record_tool_ospan_error <- function(ospan, error) {
-  if (is.null(ospan) || !ospan$is_recording()) {
+record_tool_otel_span_error <- function(otel_span, error) {
+  if (is.null(otel_span) || !otel_span$is_recording()) {
     return()
   }
-  ospan$record_exception(error)
-  ospan$set_status("error")
-  ospan$set_attribute("error.type", class(error)[1])
+  otel_span$record_exception(error)
+  otel_span$set_status("error")
+  otel_span$set_attribute("error.type", class(error)[1])
 }
 
 
@@ -140,13 +146,14 @@ record_tool_ospan_error <- function(ospan, error) {
 # Generative AI "agents".
 #
 # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/#inference
-local_agent_ospan <- function(
+# local_otel_span_agent
+local_agent_otel_span <- function(
   provider,
   tracer = ellmer_otel_tracer(),
   local_envir = parent.frame()
 ) {
-  agent_ospan <-
-    promises::create_ospan(
+  agent_span <-
+    otel::start_span(
       "invoke_agent",
       tracer = tracer,
       options = list(kind = "CLIENT"),
@@ -156,7 +163,9 @@ local_agent_ospan <- function(
       )
     )
 
-  defer(promises::end_ospan(agent_ospan), envir = local_envir)
+  setup_active_promise_otel_span(agent_span, local_envir)
 
-  agent_ospan
+  defer(otel::end_span(agent_span), envir = local_envir)
+
+  agent_span
 }

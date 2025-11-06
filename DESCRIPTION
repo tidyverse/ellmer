@@ -56,8 +56,6 @@ Suggests:
     withr
 VignetteBuilder:
     knitr
-Remotes:
-    rstudio/promises
 Config/Needs/check: r-lib/otelsdk
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3

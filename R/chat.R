@@ -442,7 +442,7 @@ Chat <- R6::R6Class(
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
-      agent_ospan <- local_agent_ospan(private$provider)
+      agent_span <- local_agent_otel_span(private$provider)
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns(
@@ -450,7 +450,7 @@ Chat <- R6::R6Class(
           stream = stream,
           echo = echo,
           yield_as_content = yield_as_content,
-          parent_ospan = agent_ospan
+          parent_otel_span = agent_span
         )
         for (chunk in assistant_chunks) {
           yield(chunk)
@@ -466,7 +466,7 @@ Chat <- R6::R6Class(
             on_tool_request = private$callback_on_tool_request$invoke,
             on_tool_result = private$callback_on_tool_result$invoke,
             yield_request = yield_as_content,
-            parent_ospan = agent_ospan
+            parent_otel_span = agent_span
           )
 
           tool_results <- list()
@@ -505,7 +505,7 @@ Chat <- R6::R6Class(
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
-      agent_ospan <- local_agent_ospan(private$provider)
+      agent_span <- local_agent_otel_span(private$provider)
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns_async(
@@ -513,7 +513,7 @@ Chat <- R6::R6Class(
           stream = stream,
           echo = echo,
           yield_as_content = yield_as_content,
-          parent_ospan = agent_ospan
+          parent_otel_span = agent_span
         )
         for (chunk in await_each(assistant_chunks)) {
           yield(chunk)
@@ -529,7 +529,7 @@ Chat <- R6::R6Class(
             on_tool_request = private$callback_on_tool_request$invoke_async,
             on_tool_result = private$callback_on_tool_result$invoke_async,
             yield_request = yield_as_content,
-            parent_ospan = agent_ospan
+            parent_otel_span = agent_span
           )
           if (tool_mode == "sequential") {
             tool_results <- list()
@@ -542,9 +542,7 @@ Chat <- R6::R6Class(
               }
             }
           } else {
-            # otel::with_active_span(agent_ospan, {
             tool_results <- coro::collect(tool_calls)
-            # })
             if (yield_as_content) {
               # Filter out and yield tool requests before awaiting tool results
               is_request <- map_lgl(tool_results, is_tool_request)
@@ -582,29 +580,25 @@ Chat <- R6::R6Class(
       echo,
       type = NULL,
       yield_as_content = FALSE,
-      parent_ospan = NULL
+      parent_otel_span = NULL
     ) {
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
       }
 
-      chat_ospan <- local_chat_ospan(
+      chat_span <- local_chat_otel_span(
         private$provider,
-        parent_ospan = parent_ospan
+        parent_otel_span = parent_otel_span
       )
 
-      promises::with_ospan_promise_domain({
-        otel::with_active_span(chat_ospan, {
-          response <- chat_perform(
-            provider = private$provider,
-            mode = if (stream) "stream" else "value",
-            turns = c(private$.turns, list(user_turn)),
-            tools = if (is.null(type)) private$tools,
-            type = type,
-            parent_ospan = chat_ospan
-          )
-        })
-      })
+      response <- chat_perform(
+        provider = private$provider,
+        mode = if (stream) "stream" else "value",
+        turns = c(private$.turns, list(user_turn)),
+        tools = if (is.null(type)) private$tools,
+        type = type,
+        parent_otel_span = chat_span
+      )
 
       emit <- emitter(echo)
       any_text <- FALSE
@@ -625,7 +619,7 @@ Chat <- R6::R6Class(
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
-        record_chat_ospan_status(chat_ospan, result)
+        record_chat_otel_span_status(chat_span, result)
         turn <- value_turn(
           private$provider,
           result,
@@ -633,7 +627,7 @@ Chat <- R6::R6Class(
         )
         turn <- match_tools(turn, private$tools)
       } else {
-        record_chat_ospan_status(chat_ospan, response)
+        record_chat_otel_span_status(chat_span, response)
         turn <- value_turn(
           private$provider,
           resp_body_json(response),
@@ -686,25 +680,22 @@ Chat <- R6::R6Class(
       echo,
       type = NULL,
       yield_as_content = FALSE,
-      parent_ospan = NULL
+      parent_otel_span = NULL
     ) {
-      chat_ospan <- local_chat_ospan(
+      chat_span <- local_chat_otel_span(
         private$provider,
-        parent_ospan = parent_ospan
+        parent_otel_span = parent_otel_span
       )
 
-      promises::with_ospan_promise_domain({
-        otel::with_active_span(chat_ospan, {
-          response <- chat_perform(
-            provider = private$provider,
-            mode = if (stream) "async-stream" else "async-value",
-            turns = c(private$.turns, list(user_turn)),
-            tools = if (is.null(type)) private$tools,
-            type = type,
-            parent_ospan = chat_ospan
-          )
-        })
-      })
+      response <- chat_perform(
+        provider = private$provider,
+        mode = if (stream) "async-stream" else "async-value",
+        turns = c(private$.turns, list(user_turn)),
+        tools = if (is.null(type)) private$tools,
+        type = type,
+        parent_otel_span = chat_span
+      )
+
       emit <- emitter(echo)
       any_text <- FALSE
 
@@ -724,7 +715,7 @@ Chat <- R6::R6Class(
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
-        record_chat_ospan_status(chat_ospan, result)
+        record_chat_otel_span_status(chat_span, result)
         turn <- value_turn(
           private$provider,
           result,
@@ -733,7 +724,7 @@ Chat <- R6::R6Class(
       } else {
         result <- await(response)
 
-        record_chat_ospan_status(chat_ospan, result)
+        record_chat_otel_span_status(chat_span, result)
         turn <- value_turn(
           private$provider,
           resp_body_json(result),

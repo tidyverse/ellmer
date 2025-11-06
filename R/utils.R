@@ -30,11 +30,6 @@ key_exists <- function(name) {
   !identical(Sys.getenv(name), "")
 }
 
-defer <- function(expr, env = caller_env(), after = FALSE) {
-  thunk <- as.call(list(function() expr))
-  do.call(on.exit, list(thunk, TRUE, after), envir = env)
-}
-
 set_default <- function(value, default, arg = caller_arg(value)) {
   if (is.null(value)) {
     if (!is_testing() || is_snapshot()) {

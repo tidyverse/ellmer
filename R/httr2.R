@@ -7,11 +7,13 @@ chat_perform <- function(
   turns,
   tools = NULL,
   type = NULL,
-  parent_ospan = NULL
+  parent_otel_span = NULL
 ) {
   mode <- arg_match(mode)
   stream <- mode %in% c("stream", "async-stream")
   tools <- tools %||% list()
+
+  setup_active_promise_otel_span(parent_otel_span)
 
   req <- chat_request(
     provider = provider,
@@ -23,21 +25,17 @@ chat_perform <- function(
 
   switch(
     mode,
-    "value" = chat_perform_value(provider, req),
-    "stream" = chat_perform_stream(provider, req, parent_ospan = parent_ospan),
-    "async-value" = chat_perform_async_value(provider, req),
-    "async-stream" = chat_perform_async_stream(
+    "value" = req_perform(req),
+    "stream" = chat_perform_stream(
       provider,
       req,
-      parent_ospan = parent_ospan
+      parent_otel_span = parent_otel_span
     ),
-    "value" = req_perform(req),
-    "stream" = chat_perform_stream(provider, req, parent_ospan = parent_ospan),
     "async-value" = req_perform_promise(req),
     "async-stream" = chat_perform_async_stream(
       provider,
       req,
-      parent_ospan = parent_ospan
+      parent_otel_span = parent_otel_span
     )
   )
 }
@@ -46,15 +44,17 @@ on_load(
   chat_perform_stream <- coro::generator(function(
     provider,
     req,
-    parent_ospan = NULL
+    parent_otel_span = NULL
   ) {
-    if (!is.null(parent_ospan)) {
-      otel::local_active_span(parent_ospan)
-    }
+    setup_active_promise_otel_span(parent_otel_span)
+
     resp <- req_perform_connection(req)
     on.exit(close(resp))
 
     repeat {
+      # Ensure the span is active for each await/yield point
+      setup_active_promise_otel_span(parent_otel_span)
+
       event <- chat_resp_stream(provider, resp)
       data <- stream_parse(provider, event)
       if (is.null(data)) {
@@ -70,16 +70,17 @@ on_load(
   chat_perform_async_stream <- coro::async_generator(function(
     provider,
     req,
-    parent_ospan = NULL
+    parent_otel_span = NULL
   ) {
-    if (!is.null(parent_ospan)) {
-      promises::local_ospan_promise_domain()
-      otel::local_active_span(parent_ospan)
-    }
+    setup_active_promise_otel_span(parent_otel_span)
+
     resp <- req_perform_connection(req, blocking = FALSE)
     on.exit(close(resp))
 
     repeat {
+      # Ensure the span is active for each await/yield point
+      setup_active_promise_otel_span(parent_otel_span)
+
       event <- chat_resp_stream(provider, resp)
       if (is.null(event) && !resp_stream_is_complete(resp)) {
         fds <- resp$body$get_fdset()
