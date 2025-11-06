@@ -8,7 +8,7 @@ default_tracer <- local({
     if (!is.null(tracer)) {
       return(tracer)
     }
-    if (testthat::is_testing()) {
+    if (is_testing()) {
       # Don't cache the tracer in unit tests. It interferes with tracer provider
       # injection in otelsdk::with_otel_record().
       return(otel::get_tracer())
