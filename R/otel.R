@@ -59,7 +59,7 @@ local_chat_ospan <- function(
       ),
       attributes = list(
         "gen_ai.operation.name" = "chat",
-        "gen_ai.system" = tolower(provider@name),
+        "gen_ai.provider.name" = tolower(provider@name),
         "gen_ai.request.model" = provider@model
       )
     )
@@ -151,7 +151,7 @@ local_agent_ospan <- function(
       options = list(kind = "CLIENT"),
       attributes = list(
         "gen_ai.operation.name" = "chat",
-        "gen_ai.system" = tolower(provider@name)
+        "gen_ai.provider.name" = tolower(provider@name)
       )
     )
   withr::defer(promises::end_ospan(agent_ospan), envir = local_envir)
