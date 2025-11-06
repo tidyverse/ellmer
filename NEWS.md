@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `chat_openai()` has been renamed to `chat_openai_compatible()` to clarify it's for OpenAI-compatible APIs, not the official OpenAI API. The `base_url` parameter is now required (#801).
+* `chat_openai_compatible()` replaces `chat_openai()` as the interface to use for OpenAI-compatible APIs, and `chat_openai()` is reserved for the official OpenAI API. Unlike previous versions of `chat_openai()`, the `base_url` parameter is now required (#801).
 * `chat_openai()` now uses OpenAI's responses endpoint (#365, #801). This is their recommended endpoint and gives more access to built-in tools.
 * `batch_chat()` logs tokens once, on retrieval (#743).
 * `batch_chat_*()` now works correctly when `chat_openai()` fails to process some conversations (#830).
