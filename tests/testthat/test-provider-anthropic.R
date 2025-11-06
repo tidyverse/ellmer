@@ -107,3 +107,21 @@ test_that("removes empty final chat messages", {
     list(list(type = "text", text = "Don't say anything"))
   )
 })
+
+test_that("batch chat works", {
+  chat <- chat_anthropic_test(system_prompt = "Answer with just the city name")
+
+  prompts <- list(
+    "What's the capital of Iowa?",
+    "What's the capital of New York?",
+    "What's the capital of California?",
+    "What's the capital of Texas?"
+  )
+
+  out <- batch_chat_text(
+    chat,
+    prompts,
+    path = test_path("batch/state-capitals-anthropic.json")
+  )
+  expect_equal(out, c("Des Moines", "Albany", "Sacramento", "Austin"))
+})

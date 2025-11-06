@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "stage": "done",
+  "batch": {
+    "id": "msgbatch_011R1x8g28xYbJecnEni5jca",
+    "type": "message_batch",
+    "processing_status": "ended",
+    "request_counts": {
+      "processing": 0,
+      "succeeded": 4,
+      "errored": 0,
+      "canceled": 0,
+      "expired": 0
+    },
+    "ended_at": "2025-11-06T17:33:34.132774+00:00",
+    "created_at": "2025-11-06T17:32:06.247922+00:00",
+    "expires_at": "2025-11-07T17:32:06.247922+00:00",
+    "archived_at": {},
+    "cancel_initiated_at": {},
+    "results_url": "https://api.anthropic.com/v1/messages/batches/msgbatch_011R1x8g28xYbJecnEni5jca/results"
+  },
+  "results": [
+    {
+      "type": "succeeded",
+      "message": {
+        "model": "claude-sonnet-4-5-20250929",
+        "id": "msg_01S87A4kGeJVA3C3XpEK4geZ",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Des Moines"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": {},
+        "usage": {
+          "input_tokens": 20,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 7,
+          "service_tier": "batch"
+        }
+      }
+    },
+    {
+      "type": "succeeded",
+      "message": {
+        "model": "claude-sonnet-4-5-20250929",
+        "id": "msg_0115gJzPHU1a86gRT3Uep7yZ",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Albany"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": {},
+        "usage": {
+          "input_tokens": 21,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 4,
+          "service_tier": "batch"
+        }
+      }
+    },
+    {
+      "type": "succeeded",
+      "message": {
+        "model": "claude-sonnet-4-5-20250929",
+        "id": "msg_01X4K2kR1y8GJmHzHMorDqhA",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Sacramento"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": {},
+        "usage": {
+          "input_tokens": 20,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 4,
+          "service_tier": "batch"
+        }
+      }
+    },
+    {
+      "type": "succeeded",
+      "message": {
+        "model": "claude-sonnet-4-5-20250929",
+        "id": "msg_01Tchgvb4GZzd8xkZgKftGkg",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Austin"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": {},
+        "usage": {
+          "input_tokens": 20,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 4,
+          "service_tier": "batch"
+        }
+      }
+    }
+  ],
+  "started_at": 1762450325,
+  "hash": {
+    "provider": "c8c6afb977a232100fb38d54f306208f",
+    "prompts": "b8eafe281e3cc5113058d9722be3e295",
+    "user_turns": "d6990a1b8a9f5db0e97de86c2669de44"
+  }
+}
