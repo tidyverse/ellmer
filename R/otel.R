@@ -2,7 +2,7 @@ otel_tracer_name <- "co.posit.r-package.ellmer"
 
 # Inspired by httr2:::get_tracer() / shiny:::get_tracer()
 # Using local scope avoids an environment object lookup on each call.
-default_tracer <- local({
+ellmer_otel_tracer <- local({
   tracer <- NULL
   function() {
     if (!is.null(tracer)) {
@@ -47,7 +47,7 @@ local_chat_ospan <- function(
   provider,
   parent_ospan = NULL,
   local_envir = parent.frame(),
-  tracer = default_tracer()
+  tracer = ellmer_otel_tracer()
 ) {
   chat_ospan <-
     promises::create_ospan(
@@ -102,7 +102,7 @@ start_local_active_tool_ospan <- function(
   request,
   parent_ospan = NULL,
   local_envir = parent.frame(),
-  tracer = default_tracer()
+  tracer = ellmer_otel_tracer()
 ) {
   tool_ospan <-
     promises::create_ospan(
@@ -141,7 +141,7 @@ record_tool_ospan_error <- function(ospan, error) {
 # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/#inference
 local_agent_ospan <- function(
   provider,
-  tracer = default_tracer(),
+  tracer = ellmer_otel_tracer(),
   local_envir = parent.frame()
 ) {
   agent_ospan <-
