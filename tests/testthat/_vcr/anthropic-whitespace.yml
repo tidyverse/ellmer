@@ -3,74 +3,74 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-3-5-sonnet-latest","messages":[{"role":"user","content":[{"type":"text","text":"Respond
+      string: '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":[{"type":"text","text":"Respond
         with only two blank lines","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 13:14:59 GMT
+      date: Thu, 06 Nov 2025 14:57:06 GMT
       content-type: application/json
       content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '400000'
-      anthropic-ratelimit-input-tokens-remaining: '400000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T13:14:58Z'
-      anthropic-ratelimit-output-tokens-limit: '80000'
-      anthropic-ratelimit-output-tokens-remaining: '80000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T13:14:59Z'
+      anthropic-ratelimit-input-tokens-limit: '2000000'
+      anthropic-ratelimit-input-tokens-remaining: '2000000'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:57:02Z'
+      anthropic-ratelimit-output-tokens-limit: '400000'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:57:06Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T13:14:58Z'
-      anthropic-ratelimit-tokens-limit: '480000'
-      anthropic-ratelimit-tokens-remaining: '480000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T13:14:58Z'
-      request-id: req_011CUZf6hMGhAQwQLmigkzSE
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:57:02Z'
+      retry-after: '60'
+      anthropic-ratelimit-tokens-limit: '2400000'
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:57:02Z'
+      request-id: req_011CUrqAJC5cCR4pfopvcU6V
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '650'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '5098'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995ab3041993acd3-DFW
+      cf-ray: 99a570e11e0669d0-DFW
     body:
-      string: '{"model":"claude-3-5-sonnet-20241022","id":"msg_01P2FWFJn8fG5hX5Z56HZ9Ta","type":"message","role":"assistant","content":[{"type":"text","text":"\n"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":4,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 13:14:59
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_017Dpdv4AQomtpiY5uMnEXvV","type":"message","role":"assistant","content":[{"type":"text","text":"\n"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":4,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:57:06
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-3-5-sonnet-latest","messages":[{"role":"user","content":[{"type":"text","text":"Respond
+      string: '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":[{"type":"text","text":"Respond
         with only two blank lines"}]},{"role":"assistant","content":[{"type":"text","text":"[empty
         string]"}]},{"role":"user","content":[{"type":"text","text":"What''s 1+1?
         Just give me the number","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 13:15:00 GMT
+      date: Thu, 06 Nov 2025 14:57:09 GMT
       content-type: application/json
       content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '400000'
-      anthropic-ratelimit-input-tokens-remaining: '400000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T13:14:59Z'
-      anthropic-ratelimit-output-tokens-limit: '80000'
-      anthropic-ratelimit-output-tokens-remaining: '80000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T13:15:00Z'
+      anthropic-ratelimit-input-tokens-limit: '2000000'
+      anthropic-ratelimit-input-tokens-remaining: '2000000'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:57:09Z'
+      anthropic-ratelimit-output-tokens-limit: '400000'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:57:09Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T13:14:59Z'
-      anthropic-ratelimit-tokens-limit: '480000'
-      anthropic-ratelimit-tokens-remaining: '480000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T13:14:59Z'
-      request-id: req_011CUZf6ks7TgotLysffXRaw
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:57:07Z'
+      retry-after: '53'
+      anthropic-ratelimit-tokens-limit: '2400000'
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:57:09Z'
+      request-id: req_011CUrqAgjuRSXodw5bJcACA
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '863'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '2711'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995ab30928bdacd3-DFW
+      cf-ray: 99a571022a9569d0-DFW
     body:
-      string: '{"model":"claude-3-5-sonnet-20241022","id":"msg_01LiC1n4w6ijc7oiFh4ToZNZ","type":"message","role":"assistant","content":[{"type":"text","text":"2"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":36,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":5,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 13:15:00
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01Bfkqg7SGAEWLW6MxmHd3aQ","type":"message","role":"assistant","content":[{"type":"text","text":"2"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":36,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":5,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:57:09
 recorded_with: VCR-vcr/2.0.0
