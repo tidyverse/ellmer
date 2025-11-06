@@ -3,49 +3,48 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","messages":[{"role":"user","content":[{"type":"text","text":"Tell
+      string: '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":[{"type":"text","text":"Tell
         me three jokes about statisticians","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 16:20:36 GMT
+      date: Thu, 06 Nov 2025 14:54:31 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T16:20:31Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:54:26Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
       anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T16:20:36Z'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:54:31Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T16:20:29Z'
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:54:24Z'
+      retry-after: '36'
       anthropic-ratelimit-tokens-limit: '2400000'
       anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T16:20:31Z'
-      request-id: req_011CUZuFDzcSRf6uzR6FtpjQ
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:54:26Z'
+      request-id: req_011CUrpxfxwHSD9zSt7BSpUh
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '6548'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '7268'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995bc2c5ef7f69df-DFW
+      cf-ray: 99a56d079ab86c37-DFW
     body:
-      string: '{"model":"claude-sonnet-4-20250514","id":"msg_01WhQqnZVVZxRJjpvLmyW4dY","type":"message","role":"assistant","content":[{"type":"text","text":"Here
-        are three jokes about statisticians:\n\n1. **The Drowning Statistician**\nA
-        statistician is drowning in a lake that''s on average only 3 feet deep. When
-        asked how this could happen, he gasps: \"Well, it was 2 feet deep for most
-        of the way across, but then there was this 50-foot section...\"\n\n2. **The
-        Confident Statistician**\nA statistician''s wife is having a baby. After the
-        delivery, he asks the doctor, \"Is it a boy or a girl?\" The doctor replies,
-        \"Well, I can tell you with 95% confidence that it''s one of the two.\"\n\n3.
-        **The Literal Statistician**\nThree statisticians go hunting. They spot a
-        deer 100 yards away. The first statistician shoots and misses 5 feet to the
-        left. The second shoots and misses 5 feet to the right. The third statistician
-        jumps up and yells, \"We got him!\"\n\nThese jokes play on common statistical
-        concepts like averages being misleading, confidence intervals, and the difference
-        between theoretical accuracy and practical results!"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":249,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 16:20:36
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_0153CJZKrRHvN37PxyGgKdMY","type":"message","role":"assistant","content":[{"type":"text","text":"#
+        Three Jokes About Statisticians\n\n**1. The Drowning Statistician**\nA statistician
+        is someone who could drown crossing a river that''s an average of three feet
+        deep.\n\n**2. The Uncertain Response**\nThree statisticians go hunting. They
+        spot a deer. The first statistician shoots and misses—two feet to the left.
+        The second shoots and misses—two feet to the right. The third statistician
+        jumps up and down shouting, \"We got it! We got it!\"\n\n**3. The Kidnapped
+        Statistician**\nA kidnapper grabs a statistician and threatens, \"Give me
+        all your money or you''re average!\" The statistician replies, \"I think you
+        mean ''or you''re history.''\" The kidnapper responds, \"Don''t tell me my
+        job—you tell me the mean!\"\n\n---\n\n*These jokes play on statistical concepts
+        like averages, means, and the classic distinction between theoretical data
+        and practical reality!*"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":215,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:54:31
 recorded_with: VCR-vcr/2.0.0

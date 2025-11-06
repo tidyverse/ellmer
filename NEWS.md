@@ -2,6 +2,9 @@
 
 * `chat_openai_compatible()` replaces `chat_openai()` as the interface to use for OpenAI-compatible APIs, and `chat_openai()` is reserved for the official OpenAI API. Unlike previous versions of `chat_openai()`, the `base_url` parameter is now required (#801).
 * `chat_openai()` now uses OpenAI's responses endpoint (#365, #801). This is their recommended endpoint and gives more access to built-in tools.
+* `batch_chat()` now retrieves failed results for `chat_openai()` (#830)
+* `batch_chat()` now works correctly for `chat_anthropic()` (#835).
+* `chat_anthropic()` and `chat_aws_bedrock()` now default to Claude Sonnet 4.5 (#800).
 * `batch_chat()` logs tokens once, on retrieval (#743).
 * `batch_chat_*()` now works correctly when `chat_openai()` fails to process some conversations (#830).
 * `params()` gains new `reasoning_effort` and `reasoning_tokens` so you can control the amount of effort a model spends on thinking. Initial support is provided for `chat_claude()`, `chat_google_gemini()`, and `chat_openai()` (#720).

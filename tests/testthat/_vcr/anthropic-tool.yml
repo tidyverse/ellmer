@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-3-5-sonnet-latest","system":[{"type":"text","text":"Always
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"Always
         use a tool to answer. Reply with ''It is ____.''.","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"What''s
         the current date in Y-M-D format?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
         the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
@@ -11,83 +11,80 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 13:14:40 GMT
+      date: Thu, 06 Nov 2025 14:56:20 GMT
       content-type: application/json
       content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '400000'
-      anthropic-ratelimit-input-tokens-remaining: '400000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T13:14:39Z'
-      anthropic-ratelimit-output-tokens-limit: '80000'
-      anthropic-ratelimit-output-tokens-remaining: '80000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T13:14:40Z'
+      anthropic-ratelimit-input-tokens-limit: '2000000'
+      anthropic-ratelimit-input-tokens-remaining: '2000000'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:56:18Z'
+      anthropic-ratelimit-output-tokens-limit: '400000'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:56:19Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T13:14:38Z'
-      anthropic-ratelimit-tokens-limit: '480000'
-      anthropic-ratelimit-tokens-remaining: '480000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T13:14:39Z'
-      request-id: req_011CUZf5Cb82H3XMhVgttUaF
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:56:16Z'
+      retry-after: '43'
+      anthropic-ratelimit-tokens-limit: '2400000'
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:56:18Z'
+      request-id: req_011CUrq6wxanbejkFnEBBbWx
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '1833'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '3827'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995ab284fa3dacd3-DFW
+      cf-ray: 99a56fc559c869d0-DFW
     body:
-      string: '{"model":"claude-3-5-sonnet-20241022","id":"msg_01Ah7J6VxZupZnD2DyVM3aFx","type":"message","role":"assistant","content":[{"type":"text","text":"Let
-        me check the current date for you."},{"type":"tool_use","id":"toolu_01BniCZMKwNTgP1sgBtGL3qe","name":"current_date","input":{}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":442,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":46,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 13:14:40
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01SWGUnf5eELhCBkewhkncmM","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_015SByTn6ntsdv38FUFQcp5S","name":"current_date","input":{}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":625,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":36,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:56:20
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-3-5-sonnet-latest","system":[{"type":"text","text":"Always
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"Always
         use a tool to answer. Reply with ''It is ____.''.","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the current date in Y-M-D format?"}]},{"role":"assistant","content":[{"type":"text","text":"Let
-        me check the current date for you."},{"type":"tool_use","id":"toolu_01BniCZMKwNTgP1sgBtGL3qe","name":"current_date","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01BniCZMKwNTgP1sgBtGL3qe","content":"2024-01-01","is_error":false,"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
+        the current date in Y-M-D format?"}]},{"role":"assistant","content":[{"type":"tool_use","id":"toolu_015SByTn6ntsdv38FUFQcp5S","name":"current_date","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_015SByTn6ntsdv38FUFQcp5S","content":"2024-01-01","is_error":false,"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
         the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
         the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 13:14:41 GMT
+      date: Thu, 06 Nov 2025 14:56:23 GMT
       content-type: application/json
       content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '400000'
-      anthropic-ratelimit-input-tokens-remaining: '400000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T13:14:41Z'
-      anthropic-ratelimit-output-tokens-limit: '80000'
-      anthropic-ratelimit-output-tokens-remaining: '80000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T13:14:41Z'
+      anthropic-ratelimit-input-tokens-limit: '2000000'
+      anthropic-ratelimit-input-tokens-remaining: '2000000'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:56:22Z'
+      anthropic-ratelimit-output-tokens-limit: '400000'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:56:23Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T13:14:40Z'
-      anthropic-ratelimit-tokens-limit: '480000'
-      anthropic-ratelimit-tokens-remaining: '480000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T13:14:41Z'
-      request-id: req_011CUZf5ME2XSCWVSZSmL4sQ
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:56:20Z'
+      retry-after: '39'
+      anthropic-ratelimit-tokens-limit: '2400000'
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:56:22Z'
+      request-id: req_011CUrq7FAgeabQzyd99KkfP
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '1667'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '2941'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995ab291be4bacd3-DFW
+      cf-ray: 99a56fde7d9a69d0-DFW
     body:
-      string: '{"model":"claude-3-5-sonnet-20241022","id":"msg_01GXjdJ9PUqpQXuXeCD2mkQX","type":"message","role":"assistant","content":[{"type":"text","text":"It
-        is 2024-01-01."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":505,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":14,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 13:14:41
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_019TJGKknKKH8wLMKGBahFtC","type":"message","role":"assistant","content":[{"type":"text","text":"It
+        is 2024-01-01."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":680,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":13,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:56:23
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-3-5-sonnet-latest","system":[{"type":"text","text":"Always
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"Always
         use a tool to answer. Reply with ''It is ____.''.","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the current date in Y-M-D format?"}]},{"role":"assistant","content":[{"type":"text","text":"Let
-        me check the current date for you."},{"type":"tool_use","id":"toolu_01BniCZMKwNTgP1sgBtGL3qe","name":"current_date","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01BniCZMKwNTgP1sgBtGL3qe","content":"2024-01-01","is_error":false}]},{"role":"assistant","content":[{"type":"text","text":"It
+        the current date in Y-M-D format?"}]},{"role":"assistant","content":[{"type":"tool_use","id":"toolu_015SByTn6ntsdv38FUFQcp5S","name":"current_date","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_015SByTn6ntsdv38FUFQcp5S","content":"2024-01-01","is_error":false}]},{"role":"assistant","content":[{"type":"text","text":"It
         is 2024-01-01."}]},{"role":"user","content":[{"type":"text","text":"What month
         is it? Provide the full name","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
         the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
@@ -95,76 +92,73 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 13:14:43 GMT
+      date: Thu, 06 Nov 2025 14:56:26 GMT
       content-type: application/json
       content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '400000'
-      anthropic-ratelimit-input-tokens-remaining: '400000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T13:14:42Z'
-      anthropic-ratelimit-output-tokens-limit: '80000'
-      anthropic-ratelimit-output-tokens-remaining: '80000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T13:14:43Z'
+      anthropic-ratelimit-input-tokens-limit: '2000000'
+      anthropic-ratelimit-input-tokens-remaining: '2000000'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:56:25Z'
+      anthropic-ratelimit-output-tokens-limit: '400000'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:56:26Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T13:14:42Z'
-      anthropic-ratelimit-tokens-limit: '480000'
-      anthropic-ratelimit-tokens-remaining: '480000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T13:14:42Z'
-      request-id: req_011CUZf5V6JGvALqtr4N7ajC
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:56:23Z'
+      retry-after: '35'
+      anthropic-ratelimit-tokens-limit: '2400000'
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:56:25Z'
+      request-id: req_011CUrq7Uba6YN4iTU8N6S8f
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '952'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '3526'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995ab29d5f25acd3-DFW
+      cf-ray: 99a56ff21e0469d0-DFW
     body:
-      string: '{"model":"claude-3-5-sonnet-20241022","id":"msg_01UZsFCi7moX8rhfkLZ31H4J","type":"message","role":"assistant","content":[{"type":"text","text":"Let
-        me check the current month."},{"type":"tool_use","id":"toolu_01QE8aNvpx4q9a3dbGiSDWU7","name":"current_month","input":{}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":532,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":44,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 13:14:43
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01VVw8rF3D88UxJYvXquTbQT","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01WkoeCwVv3QcmGJ4xuAydDp","name":"current_month","input":{}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":706,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":36,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:56:26
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-3-5-sonnet-latest","system":[{"type":"text","text":"Always
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"Always
         use a tool to answer. Reply with ''It is ____.''.","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the current date in Y-M-D format?"}]},{"role":"assistant","content":[{"type":"text","text":"Let
-        me check the current date for you."},{"type":"tool_use","id":"toolu_01BniCZMKwNTgP1sgBtGL3qe","name":"current_date","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01BniCZMKwNTgP1sgBtGL3qe","content":"2024-01-01","is_error":false}]},{"role":"assistant","content":[{"type":"text","text":"It
+        the current date in Y-M-D format?"}]},{"role":"assistant","content":[{"type":"tool_use","id":"toolu_015SByTn6ntsdv38FUFQcp5S","name":"current_date","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_015SByTn6ntsdv38FUFQcp5S","content":"2024-01-01","is_error":false}]},{"role":"assistant","content":[{"type":"text","text":"It
         is 2024-01-01."}]},{"role":"user","content":[{"type":"text","text":"What month
-        is it? Provide the full name"}]},{"role":"assistant","content":[{"type":"text","text":"Let
-        me check the current month."},{"type":"tool_use","id":"toolu_01QE8aNvpx4q9a3dbGiSDWU7","name":"current_month","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01QE8aNvpx4q9a3dbGiSDWU7","content":"February","is_error":false,"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
+        is it? Provide the full name"}]},{"role":"assistant","content":[{"type":"tool_use","id":"toolu_01WkoeCwVv3QcmGJ4xuAydDp","name":"current_month","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01WkoeCwVv3QcmGJ4xuAydDp","content":"February","is_error":false,"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
         the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
         the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 13:14:44 GMT
+      date: Thu, 06 Nov 2025 14:56:29 GMT
       content-type: application/json
       content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '400000'
-      anthropic-ratelimit-input-tokens-remaining: '400000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T13:14:43Z'
-      anthropic-ratelimit-output-tokens-limit: '80000'
-      anthropic-ratelimit-output-tokens-remaining: '80000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T13:14:44Z'
+      anthropic-ratelimit-input-tokens-limit: '2000000'
+      anthropic-ratelimit-input-tokens-remaining: '2000000'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:56:29Z'
+      anthropic-ratelimit-output-tokens-limit: '400000'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:56:29Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T13:14:43Z'
-      anthropic-ratelimit-tokens-limit: '480000'
-      anthropic-ratelimit-tokens-remaining: '480000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T13:14:43Z'
-      request-id: req_011CUZf5a6SHCEAAVEycPznD
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:56:27Z'
+      retry-after: '32'
+      anthropic-ratelimit-tokens-limit: '2400000'
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:56:29Z'
+      request-id: req_011CUrq7kdUTsZZocgkZnym8
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '918'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '2388'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995ab2a49ce8acd3-DFW
+      cf-ray: 99a570099d9669d0-DFW
     body:
-      string: '{"model":"claude-3-5-sonnet-20241022","id":"msg_01EuFo9MpApMhsMV7v6xSabW","type":"message","role":"assistant","content":[{"type":"text","text":"It
-        is February."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":588,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":8,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 13:14:44
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_012wcHRZSXxWsAPfN9rZjcfe","type":"message","role":"assistant","content":[{"type":"text","text":"It
+        is February."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":756,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":7,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:56:29
 recorded_with: VCR-vcr/2.0.0

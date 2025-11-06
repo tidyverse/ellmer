@@ -8,32 +8,31 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 13:14:38 GMT
+      date: Thu, 06 Nov 2025 14:59:13 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T13:14:34Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:59:11Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
       anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T13:14:38Z'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:59:13Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T13:14:34Z'
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:59:11Z'
+      retry-after: '51'
       anthropic-ratelimit-tokens-limit: '2400000'
       anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T13:14:34Z'
-      request-id: req_011CUZf4vs4mPVCc1YfYxtDx
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:59:11Z'
+      request-id: req_011CUrqKrjftVXLCpDVamvJP
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '3442'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '2405'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995ab26e3ef4acd3-DFW
+      cf-ray: 99a5740bb8df6c43-DFW
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01Edan1ARLFZPAF76k7jhvJA","type":"message","role":"assistant","content":[{"type":"text","text":"Dogs
-        are "}],"stop_reason":"stop_sequence","stop_sequence":"cool","usage":{"input_tokens":16,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":3,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 13:14:38
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01X3FvYeVwcpHkKJFN1aPN1R","type":"message","role":"assistant","content":[{"type":"text","text":"Dogs"}],"stop_reason":"stop_sequence","stop_sequence":"cool","usage":{"input_tokens":16,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":3,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:59:13
 recorded_with: VCR-vcr/2.0.0

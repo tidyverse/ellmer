@@ -492,7 +492,7 @@ method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
   req <- req_url_path_append(req, "/files/", batch$output_file_id, "/content")
   req <- req_progress(req, "down")
   resp <- req_perform(req, path = path_output)
-  json <- read_json_nl(path_output)
+  json <- read_ndjson(path_output)
 
   # error file
   if (length(batch$error_file_id) == 1) {
@@ -502,7 +502,7 @@ method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
     req <- req_progress(req, "down")
     resp <- req_perform(req, path = path_error)
 
-    json <- c(json, read_json_nl(path_error))
+    json <- c(json, read_ndjson(path_error))
   }
 
   ids <- as.numeric(gsub("chat-", "", map_chr(json, "[[", "custom_id")))

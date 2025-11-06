@@ -3,37 +3,37 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-3-5-sonnet-latest","system":[{"type":"text","text":"Be
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"Be
         as terse as possible; no punctuation","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"What
         is 1 + 1?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 13:14:33 GMT
+      date: Thu, 06 Nov 2025 14:56:11 GMT
       content-type: application/json
       content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '400000'
-      anthropic-ratelimit-input-tokens-remaining: '400000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T13:14:33Z'
-      anthropic-ratelimit-output-tokens-limit: '80000'
-      anthropic-ratelimit-output-tokens-remaining: '80000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T13:14:33Z'
+      anthropic-ratelimit-input-tokens-limit: '2000000'
+      anthropic-ratelimit-input-tokens-remaining: '2000000'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:56:11Z'
+      anthropic-ratelimit-output-tokens-limit: '400000'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:56:11Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T13:14:33Z'
-      anthropic-ratelimit-tokens-limit: '480000'
-      anthropic-ratelimit-tokens-remaining: '480000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T13:14:33Z'
-      request-id: req_011CUZf4qPezT1oWo2GddDHc
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:56:09Z'
+      retry-after: '51'
+      anthropic-ratelimit-tokens-limit: '2400000'
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:56:11Z'
+      request-id: req_011CUrq6RYzJe2ZC7DvYjUqd
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '387'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '2341'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995ab2663f00acd3-DFW
+      cf-ray: 99a56f98dd9f69d0-DFW
     body:
-      string: '{"model":"claude-3-5-sonnet-20241022","id":"msg_01Lt5HSqa7Kruy6EKwGvreec","type":"message","role":"assistant","content":[{"type":"text","text":"2"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":26,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":5,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 13:14:33
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01PWQp9QwXZAUTJBEZ9JXoZG","type":"message","role":"assistant","content":[{"type":"text","text":"2"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":26,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":5,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:56:11
 recorded_with: VCR-vcr/2.0.0

@@ -44,7 +44,7 @@ models_anthropic(
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
-\item{model}{The model to use for the chat (defaults to "claude-sonnet-4-20250514").
+\item{model}{The model to use for the chat (defaults to "claude-sonnet-4-5-20250929").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_anthropic()} to see all options.}
 

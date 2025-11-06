@@ -3,61 +3,52 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"\n  You
         are an expert R programmer who prefers the tidyverse.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
         the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 16:14:52 GMT
+      date: Thu, 06 Nov 2025 14:55:07 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T16:14:44Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:55:01Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
-      anthropic-ratelimit-output-tokens-remaining: '399000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T16:14:52Z'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:55:07Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T16:14:42Z'
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:54:59Z'
+      retry-after: '62'
       anthropic-ratelimit-tokens-limit: '2400000'
-      anthropic-ratelimit-tokens-remaining: '2399000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T16:14:44Z'
-      request-id: req_011CUZtoeigE4ukyeM1BaJxT
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:55:01Z'
+      request-id: req_011CUrq1JDKV666ywA6JTMtV
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '9149'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '7802'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995bba4dab8a23b8-DFW
+      cf-ray: 99a56de63d2bc0c0-DFW
     body:
-      string: '{"model":"claude-sonnet-4-20250514","id":"msg_01F727B6YWWTS6dJAzdHcRsg","type":"message","role":"assistant","content":[{"type":"text","text":"Here
-        are a few ways to compute the mean and median of variables a through z, grouped
-        by age and sex using tidyverse:\n\n## Method 1: Using `across()` with `c_across()`
-        (most flexible)\n\n```r\nlibrary(dplyr)\n\nresult <- df %>%\n  group_by(age,
-        sex) %>%\n  summarise(\n    across(a:z, list(mean = mean, median = median),
-        .names = \"{.col}_{.fn}\"),\n    .groups = \"drop\"\n  )\n```\n\n## Method
-        2: If you want summary statistics in long format\n\n```r\nlibrary(dplyr)\nlibrary(tidyr)\n\nresult
-        <- df %>%\n  group_by(age, sex) %>%\n  summarise(across(a:z, list(mean = mean,
-        median = median)), .groups = \"drop\") %>%\n  pivot_longer(\n    cols = -c(age,
-        sex),\n    names_to = c(\"variable\", \"statistic\"),\n    names_sep = \"_\",\n    values_to
-        = \"value\"\n  )\n```\n\n## Method 3: Using `summarise()` with `across()`
-        and custom function\n\n```r\nlibrary(dplyr)\n\n# Custom function to compute
-        both statistics\ncompute_stats <- function(x) {\n  list(\n    mean = mean(x,
-        na.rm = TRUE),\n    median = median(x, na.rm = TRUE)\n  )\n}\n\nresult <-
-        df %>%\n  group_by(age, sex) %>%\n  summarise(\n    across(a:z, compute_stats,
-        .unpack = TRUE),\n    .groups = \"drop\"\n  )\n```\n\n## Method 4: If you
-        need to handle missing values consistently\n\n```r\nlibrary(dplyr)\n\nresult
-        <- df %>%\n  group_by(age, sex) %>%\n  summarise(\n    across(a:z, \n           list(mean
-        = ~ mean(.x, na.rm = TRUE), \n                median = ~ median(.x, na.rm
-        = TRUE)),\n           .names = \"{.col}_{.fn}\"),\n    .groups = \"drop\"\n  )\n```\n\nThe
-        first method is usually the most straightforward and gives you a wide format
-        with columns like `a_mean`, `a_median`, `b_mean`, `b_median`, etc. The second
-        method gives you a long format that might be easier for plotting or further
-        analysis.\n\nChoose the method that best fits your desired output format!"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":61,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":584,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 16:14:52
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_013nmFcSyuTKjqCKhGVuRbMg","type":"message","role":"assistant","content":[{"type":"text","text":"Here''s
+        how to compute the mean and median of variables `a` through `z`, grouped by
+        `age` and `sex`:\n\n```r\nlibrary(tidyverse)\n\n# Assuming your data frame
+        is called ''df''\ndf %>%\n  group_by(age, sex) %>%\n  summarise(\n    across(\n      a:z,\n      list(mean
+        = mean, median = median),\n      .names = \"{.col}_{.fn}\"\n    ),\n    .groups
+        = \"drop\"\n  )\n```\n\nThis will create columns like `a_mean`, `a_median`,
+        `b_mean`, `b_median`, etc.\n\n**Alternative approach** if you want the results
+        in long format:\n\n```r\ndf %>%\n  group_by(age, sex) %>%\n  summarise(\n    across(\n      a:z,\n      list(mean
+        = mean, median = median)\n    ),\n    .groups = \"drop\"\n  ) %>%\n  pivot_longer(\n    cols
+        = -c(age, sex),\n    names_to = c(\"variable\", \"statistic\"),\n    names_sep
+        = \"_\",\n    values_to = \"value\"\n  )\n```\n\n**Notes:**\n- If you have
+        missing values, add `na.rm = TRUE`: `list(mean = ~mean(., na.rm = TRUE), median
+        = ~median(., na.rm = TRUE))`\n- The `a:z` syntax selects all columns from
+        `a` to `z` in order\n- `.groups = \"drop\"` removes the grouping structure
+        from the result"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":61,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":370,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:55:07
 recorded_with: VCR-vcr/2.0.0

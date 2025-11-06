@@ -60,7 +60,7 @@ pretty_json <- function(x) {
   jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
 }
 
-read_json_nl <- function(path) {
+read_ndjson <- function(path) {
   lines <- readLines(path, warn = FALSE)
   lapply(lines, jsonlite::fromJSON, simplifyVector = FALSE)
 }

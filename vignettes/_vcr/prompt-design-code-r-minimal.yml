@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"\n  You
         are an expert R programmer who prefers the tidyverse.\n  Just give me the
         code. I don''t want any explanation or sample data.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
@@ -11,33 +11,33 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 16:14:55 GMT
+      date: Thu, 06 Nov 2025 14:55:10 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T16:14:54Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:55:09Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
       anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T16:14:55Z'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:55:10Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T16:14:52Z'
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:55:07Z'
+      retry-after: '52'
       anthropic-ratelimit-tokens-limit: '2400000'
       anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T16:14:54Z'
-      request-id: req_011CUZtpMNRYmMJYdWBwMqzT
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:55:09Z'
+      request-id: req_011CUrq1tjDqv4hT7vD1R9od
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '3116'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '3151'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995bba88ebcd23b8-DFW
+      cf-ray: 99a56e188cacc0c0-DFW
     body:
-      string: '{"model":"claude-sonnet-4-20250514","id":"msg_01Xhf5BtrsJC9C2WFPLzZRaK","type":"message","role":"assistant","content":[{"type":"text","text":"```r\nlibrary(dplyr)\n\ndf
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01URFB62R67ThiVF8bMTLLVF","type":"message","role":"assistant","content":[{"type":"text","text":"```r\nlibrary(tidyverse)\n\ndf
         %>%\n  group_by(age, sex) %>%\n  summarise(across(a:z, list(mean = mean, median
-        = median), na.rm = TRUE),\n            .groups = \"drop\")\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":79,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":65,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 16:14:55
+        = median), .names = \"{.col}_{.fn}\"))\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":79,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":63,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:55:10
 recorded_with: VCR-vcr/2.0.0
