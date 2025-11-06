@@ -56,13 +56,20 @@ chat_huggingface <- function(
   provider <- ProviderHuggingFace(
     name = "HuggingFace",
     base_url = base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params,
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderHuggingFace <- new_class("ProviderHuggingFace", parent = ProviderOpenAI)

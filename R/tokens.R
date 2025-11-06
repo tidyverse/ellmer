@@ -20,11 +20,11 @@ map_tokens <- function(x, f, ...) {
   out
 }
 
-log_tokens <- function(provider, tokens, cost) {
+log_tokens <- function(provider, model, tokens, cost) {
   i <- vctrs::vec_match(
     data.frame(
       provider = provider@name,
-      model = provider@model
+      model = model@name
     ),
     the$tokens[c("provider", "model")]
   )
@@ -32,7 +32,7 @@ log_tokens <- function(provider, tokens, cost) {
   if (is.na(i)) {
     new_row <- tokens_row(
       provider@name,
-      provider@model,
+      model@name,
       tokens$input,
       tokens$output,
       tokens$cached_input,
@@ -50,14 +50,14 @@ log_tokens <- function(provider, tokens, cost) {
   invisible()
 }
 
-log_turn <- function(provider, turn) {
-  log_tokens(provider, exec(tokens, !!!as.list(turn@tokens)), turn@cost)
+log_turn <- function(provider, model, turn) {
+  log_tokens(provider, model, exec(tokens, !!!as.list(turn@tokens)), turn@cost)
 }
 
-log_turns <- function(provider, turns) {
+log_turns <- function(provider, model, turns) {
   for (turn in turns) {
     if (S7_inherits(turn, AssistantTurn)) {
-      log_turn(provider, turn)
+      log_turn(provider, model, turn)
     }
   }
 }
@@ -110,14 +110,14 @@ token_usage <- function() {
 # Cost ----------------------------------------------------------------------
 
 has_cost <- function(provider, model) {
-  needle <- data.frame(provider = provider@name, model = model)
+  needle <- data.frame(provider = provider@name, model = model@name)
   vctrs::vec_in(needle, prices[c("provider", "model")])
 }
 
-get_token_cost <- function(provider, tokens, variant = "") {
+get_token_cost <- function(provider, model, tokens, variant = "") {
   needle <- data.frame(
     provider = provider@name,
-    model = provider@model,
+    model = model@name,
     variant = variant
   )
   idx <- vctrs::vec_match(needle, prices[c("provider", "model", "variant")])

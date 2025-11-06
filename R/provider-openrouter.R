@@ -47,13 +47,20 @@ chat_openrouter <- function(
   provider <- ProviderOpenRouter(
     name = "OpenRouter",
     base_url = "https://openrouter.ai/api/v1",
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params,
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 chat_openrouter_test <- function(..., echo = "none") {
@@ -65,10 +72,10 @@ ProviderOpenRouter <- new_class(
   parent = ProviderOpenAI,
 )
 
-method(chat_params, ProviderOpenRouter) <- function(provider, params) {
+method(chat_params, ProviderOpenRouter) <- function(provider, model) {
   # https://openrouter.ai/docs/api-reference/parameters
   standardise_params(
-    params,
+    model@params,
     c(
       temperature = "temperature",
       top_p = "top_p",

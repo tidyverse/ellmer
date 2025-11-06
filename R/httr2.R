@@ -3,6 +3,7 @@
 # We will recconsider this in the future if necessary.
 chat_perform <- function(
   provider,
+  model,
   mode = c("value", "stream", "async-stream", "async-value"),
   turns,
   tools = NULL,
@@ -14,6 +15,7 @@ chat_perform <- function(
 
   req <- chat_request(
     provider = provider,
+    model = model,
     turns = turns,
     tools = tools,
     stream = stream,

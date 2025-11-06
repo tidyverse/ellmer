@@ -14,36 +14,29 @@ NULL
 #'
 #' @export
 #' @param name Name of the provider.
-#' @param model Name of the model.
 #' @param base_url The base URL for the API.
-#' @param params A list of standard parameters created by [params()].
 #' @param credentials A zero-argument function that returns the credentials to use
 #'   for authentication. Can either return a string, representing an API key,
 #'   or a named list of headers.
-#' @param extra_args Arbitrary extra arguments to be included in the request body.
 #' @param extra_headers Arbitrary extra headers to be added to the request.
 #' @return An S7 Provider object.
 #' @examples
 #' Provider(
 #'   name = "CoolModels",
-#'   model = "my_model",
 #'   base_url = "https://cool-models.com"
 #' )
 Provider <- new_class(
   "Provider",
   properties = list(
     name = prop_string(),
-    model = prop_string(),
     base_url = prop_string(),
-    params = class_list,
-    extra_args = class_list,
     extra_headers = class_character,
     credentials = class_function | NULL
   )
 )
 
-test_provider <- function(name = "", model = "", base_url = "", ...) {
-  Provider(name = name, model = model, base_url = base_url, ...)
+test_provider <- function(name = "", base_url = "", ...) {
+  Provider(name = name, base_url = base_url, ...)
 }
 
 # Create a request------------------------------------
@@ -65,6 +58,7 @@ chat_request <- new_generic(
   "provider",
   function(
     provider,
+    model,
     stream = TRUE,
     turns = list(),
     tools = list(),
@@ -76,6 +70,7 @@ chat_request <- new_generic(
 
 method(chat_request, Provider) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -86,12 +81,13 @@ method(chat_request, Provider) <- function(
 
   body <- chat_body(
     provider = provider,
+    model = model,
     stream = stream,
     turns = turns,
     tools = tools,
     type = type
   )
-  body <- modify_list(body, provider@extra_args)
+  body <- modify_list(body, model@extra_args)
   req <- req_body_json(req, body)
   req <- req_headers(req, !!!provider@extra_headers)
 
@@ -103,6 +99,7 @@ chat_body <- new_generic(
   "provider",
   function(
     provider,
+    model,
     stream = TRUE,
     turns = list(),
     tools = list(),
@@ -130,7 +127,7 @@ method(chat_resp_stream, Provider) <- function(provider, resp) {
 chat_params <- new_generic(
   "chat_params",
   "provider",
-  function(provider, params) {
+  function(provider, model) {
     S7_dispatch()
   }
 )
@@ -161,18 +158,24 @@ stream_merge_chunks <- new_generic(
 
 # Extract data from non-streaming results --------------------------------------
 
-value_turn <- new_generic("value_turn", "provider")
+value_turn <- new_generic(
+  "value_turn",
+  "provider",
+  function(provider, model, json, ...) {
+    S7_dispatch()
+  }
+)
 
 # Extract token counts from API response
 # Returns a named list produced by token_usage()
 value_tokens <- new_generic(
   "value_tokens",
   "provider",
-  function(provider, json) {
+  function(provider, model, json) {
     S7_dispatch()
   }
 )
-method(value_tokens, Provider) <- function(provider, json) {
+method(value_tokens, Provider) <- function(provider, model, json) {
   tokens()
 }
 
@@ -258,7 +261,7 @@ batch_retrieve <- new_generic(
 batch_result_turn <- new_generic(
   "batch_result_turn",
   "provider",
-  function(provider, result, has_type = FALSE) {
+  function(provider, model, result, has_type = FALSE) {
     S7_dispatch()
   }
 )

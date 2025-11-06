@@ -6,10 +6,7 @@
 \usage{
 Provider(
   name = stop("Required"),
-  model = stop("Required"),
   base_url = stop("Required"),
-  params = list(),
-  extra_args = list(),
   extra_headers = character(0),
   credentials = function() NULL
 )
@@ -17,13 +14,7 @@ Provider(
 \arguments{
 \item{name}{Name of the provider.}
 
-\item{model}{Name of the model.}
-
 \item{base_url}{The base URL for the API.}
-
-\item{params}{A list of standard parameters created by \code{\link[=params]{params()}}.}
-
-\item{extra_args}{Arbitrary extra arguments to be included in the request body.}
 
 \item{extra_headers}{Arbitrary extra headers to be added to the request.}
 
@@ -48,7 +39,6 @@ the various generics that control the behavior of each provider.
 \examples{
 Provider(
   name = "CoolModels",
-  model = "my_model",
   base_url = "https://cool-models.com"
 )
 }

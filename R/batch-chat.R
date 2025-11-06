@@ -193,6 +193,7 @@ BatchJob <- R6::R6Class(
 
     # Internal state
     provider = NULL,
+    model = NULL,
     started_at = NULL,
     stage = NULL,
     batch = NULL,
@@ -208,6 +209,7 @@ BatchJob <- R6::R6Class(
       call = caller_env(2)
     ) {
       self$provider <- chat$get_provider()
+      self$model <- chat$get_model_obj()
       check_has_batch_support(self$provider, call = call)
 
       user_turns <- as_user_turns(prompts, call = call)
@@ -326,7 +328,7 @@ BatchJob <- R6::R6Class(
 
     retrieve = function() {
       self$results <- batch_retrieve(self$provider, self$batch)
-      log_turns(self$provider, self$result_turns())
+      log_turns(self$provider, self$model, self$result_turns())
 
       self$stage <- "done"
       self$save_state()
@@ -335,7 +337,12 @@ BatchJob <- R6::R6Class(
 
     result_turns = function() {
       map2(self$results, self$user_turns, function(result, user_turn) {
-        batch_result_turn(self$provider, result, has_type = !is.null(self$type))
+        batch_result_turn(
+          self$provider,
+          self$model,
+          result,
+          has_type = !is.null(self$type)
+        )
       })
     },
 
@@ -379,7 +386,6 @@ BatchJob <- R6::R6Class(
 provider_hash <- function(x) {
   list(
     name = x@name,
-    model = x@model,
     base_url = x@base_url
   )
 }

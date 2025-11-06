@@ -69,13 +69,20 @@ chat_openai <- function(
   provider <- ProviderOpenAI(
     name = "OpenAI",
     base_url = base_url,
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
     credentials = credentials
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 chat_openai_test <- function(
   system_prompt = "Be terse.",
@@ -147,6 +154,7 @@ method(chat_path, ProviderOpenAI) <- function(provider) {
 # https://platform.openai.com/docs/api-reference/chat/create
 method(chat_body, ProviderOpenAI) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -168,11 +176,11 @@ method(chat_body, ProviderOpenAI) <- function(
     response_format <- NULL
   }
 
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model)
 
   compact(list2(
     messages = messages,
-    model = provider@model,
+    model = model@name,
     !!!params,
     stream = stream,
     stream_options = if (stream) list(include_usage = TRUE),
@@ -182,9 +190,9 @@ method(chat_body, ProviderOpenAI) <- function(
 }
 
 
-method(chat_params, ProviderOpenAI) <- function(provider, params) {
+method(chat_params, ProviderOpenAI) <- function(provider, model) {
   standardise_params(
-    params,
+    model@params,
     c(
       temperature = "temperature",
       top_p = "top_p",
@@ -227,7 +235,7 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
   }
 }
 
-method(value_tokens, ProviderOpenAI) <- function(provider, json) {
+method(value_tokens, ProviderOpenAI) <- function(provider, model, json) {
   usage <- json$usage
   cached_tokens <- usage$prompt_tokens_details$cached_tokens %||% 0
 
@@ -240,6 +248,7 @@ method(value_tokens, ProviderOpenAI) <- function(provider, json) {
 
 method(value_turn, ProviderOpenAI) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
@@ -272,8 +281,8 @@ method(value_turn, ProviderOpenAI) <- function(
     content <- c(content, calls)
   }
 
-  tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
+  tokens <- value_tokens(provider, model, result)
+  cost <- get_token_cost(provider, model, tokens)
   AssistantTurn(content, json = result, tokens = unlist(tokens), cost = cost)
 }
 
@@ -525,11 +534,12 @@ method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
 
 method(batch_result_turn, ProviderOpenAI) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
   if (result$status_code == 200) {
-    value_turn(provider, result$body, has_type = has_type)
+    value_turn(provider, model, result$body, has_type = has_type)
   } else {
     NULL
   }
@@ -553,7 +563,6 @@ models_openai <- function(
 
   provider <- ProviderOpenAI(
     name = "OpenAI",
-    model = "",
     base_url = base_url,
     credentials = credentials
   )

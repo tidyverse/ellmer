@@ -91,7 +91,7 @@ models_github <- function(
 
   provider <- ProviderOpenAI(
     name = "github",
-    model = "",
+    base_url = base_url,
     credentials = credentials
   )
 
