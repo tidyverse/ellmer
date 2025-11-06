@@ -22,7 +22,7 @@ ellmer_otel_tracer <- local({
 # Only activate the span if it is non-NULL. If activated, ensure it is
 # automatically ended when the activation scope exits. If
 # ospan_promise_domain is TRUE, also ensure that the active span is reactivated upon promise domain restoration.
-activate_and_cleanup_ospan <- function(
+setup_otel_span <- function(
   ospan,
   activation_scope = parent.frame(),
   ospan_promise_domain = TRUE
@@ -36,10 +36,11 @@ activate_and_cleanup_ospan <- function(
       end_on_exit = FALSE,
       activation_scope = activation_scope
     )
-    # For some reason, when using `end_on_exit = TRUE` above, an error would occur during `spn$end(status = "auto")`. When using `withr::defer()` here, it works fine.
     # TODO: Set status?
     defer(promises::end_ospan(ospan), envir = activation_scope)
   }
+
+  invisible(ospan)
 }
 
 
@@ -120,7 +121,7 @@ start_local_active_tool_ospan <- function(
       ))
     )
 
-  activate_and_cleanup_ospan(tool_ospan, local_envir)
+  setup_otel_span(tool_ospan, local_envir)
 
   tool_ospan
 }

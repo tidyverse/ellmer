@@ -192,7 +192,7 @@ on_load(
     )
     # Must activate the span in a promise domain so that it propagates to
     # async calls made by the tool function.
-    activate_and_cleanup_ospan(tool_ospan, ospan_promise_domain = TRUE)
+    setup_otel_span(tool_ospan, ospan_promise_domain = TRUE)
 
     tryCatch(
       {
