@@ -13,11 +13,55 @@ NULL
 #' API; instead, you will need to sign up (and pay for) a
 #' [developer account](https://platform.claude.com/).
 #'
+#' # Caching
+#'
+#' Caching with Claude is a bit more complicated than other providers but we
+#' believe that on average it will save you both money and time, so we have
+#' enabled it by default. With other providers, like OpenAI and Google,
+#' you only pay for cache reads, which cost 10% of the normal price. With
+#' Claude, you also pay for cache writes, which cost 125% of the normal price
+#' for 5 minute caching and 200% of the normal price for 1 hour caching.
+#'
+#' How does this affect the total cost of a conversation? Imagine the first
+#' turn sends 1000 input tokens and receives 200 output tokens. The second
+#' turn must first send both the input and output from the previous turn
+#' (1200 tokens). It then sends a further 1000 tokens and receives 200 tokens
+#' back.
+#'
+#' To compare the prices of these two approaches we can ignore the cost of
+#' output tokens, because they are the same for both. How much will the input
+#' tokens cost? If we don't use caching, we send 1000 tokens in the first turn
+#' and 2200 (1000 + 200 + 1000) tokens in the second turn for a total of 3200
+#' tokens. If we use caching, we'll send (the equivalent of) 1000 * 1.25 = 1250
+#' tokens in the first turn. In the second turn, 1000 of the input tokens will
+#' be cached so the total cost is 1000 * 0.1 + (200 + 1000) * 1.25 = 1600
+#' tokens. That makes a total of 2850 tokens, i.e. 11% fewer tokens,
+#' decreasing the overall cost.
+#'
+#' Obviously, the details will vary from conversation to conversation, but
+#' if you have a large system prompt that you re-use many times you should
+#' expect to see larger savings. You can see exactly how many input and
+#' cache input tokens each turn uses, along with the total cost,
+#' with `chat$get_tokens()`. If you don't see savings for your use case, you can
+#' suppress caching with `cache = "none"`.
+#'
+#' I know this is already quite complicated, but there's one final wrinkle:
+#' Claude will only cache longer prompts, with caching requiring at least
+#' 1024-4096 tokens, depending on the model. So don't be surprised it if you
+#' don't see any differences with caching if you have a short prompt.
+#'
+#' See all the details at
+#' <https://docs.claude.com/en/docs/build-with-claude/prompt-caching>.
+#'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
-#' @param model `r param_model("claude-sonnet-4-20250514", "anthropic")`
+#' @param model `r param_model("claude-sonnet-4-5-20250929", "anthropic")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
+#' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
+#'   Set to "none" to disable caching or "1h" to cache for one hour.
+#'
+#'   See details below.
 #' @param beta_headers Optionally, a character vector of beta headers to opt-in
 #'   claude features that are still in beta.
 #' @param api_headers Named character vector of arbitrary extra headers appended
@@ -33,6 +77,7 @@ chat_anthropic <- function(
   system_prompt = NULL,
   params = NULL,
   model = NULL,
+  cache = c("5m", "1h", "none"),
   api_args = list(),
   base_url = "https://api.anthropic.com/v1",
   beta_headers = character(),
@@ -43,7 +88,8 @@ chat_anthropic <- function(
 ) {
   echo <- check_echo(echo)
 
-  model <- set_default(model, "claude-sonnet-4-20250514")
+  model <- set_default(model, "claude-sonnet-4-5-20250929")
+  cache <- arg_match(cache)
 
   credentials <- as_credentials(
     "chat_anthropic",
@@ -60,7 +106,8 @@ chat_anthropic <- function(
     extra_headers = api_headers,
     base_url = base_url,
     beta_headers = beta_headers,
-    credentials = credentials
+    credentials = credentials,
+    cache = cache
   )
 
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -72,7 +119,7 @@ chat_claude <- chat_anthropic
 
 chat_anthropic_test <- function(
   ...,
-  model = "claude-3-5-sonnet-latest",
+  model = "claude-sonnet-4-5-20250929",
   params = NULL,
   echo = "none"
 ) {
@@ -86,7 +133,8 @@ ProviderAnthropic <- new_class(
   "ProviderAnthropic",
   parent = Provider,
   properties = list(
-    beta_headers = class_character
+    beta_headers = class_character,
+    cache = prop_string()
   )
 )
 
@@ -138,12 +186,17 @@ method(chat_body, ProviderAnthropic) <- function(
   type = NULL
 ) {
   if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
-    system <- turns[[1]]@text
+    system <- list(list(type = "text", text = turns[[1]]@text))
+    # Always cache system prompt
+    system[[1]]$cache_control <- cache_control(provider)
   } else {
     system <- NULL
   }
 
-  messages <- compact(as_json(provider, turns))
+  is_last <- seq_along(turns) == length(turns)
+  messages <- compact(map2(turns, is_last, function(turn, is_last) {
+    as_json(provider, turn, is_last = is_last)
+  }))
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
@@ -161,6 +214,15 @@ method(chat_body, ProviderAnthropic) <- function(
   tools <- as_json(provider, unname(tools))
 
   params <- chat_params(provider, provider@params)
+  if (has_name(params, "budget_tokens")) {
+    thinking <- list(
+      type = "enabled",
+      budget_tokens = params$budget_tokens
+    )
+    params$budget_tokens <- NULL
+  } else {
+    thinking <- NULL
+  }
 
   compact(list2(
     model = provider@model,
@@ -169,6 +231,7 @@ method(chat_body, ProviderAnthropic) <- function(
     stream = stream,
     tools = tools,
     tool_choice = tool_choice,
+    thinking = thinking,
     !!!params
   ))
 }
@@ -181,7 +244,8 @@ method(chat_params, ProviderAnthropic) <- function(provider, params) {
       top_p = "top_p",
       top_k = "top_k",
       max_tokens = "max_tokens",
-      stop_sequences = "stop_sequences"
+      stop_sequences = "stop_sequences",
+      budget_tokens = "reasoning_tokens"
     )
   )
 
@@ -209,7 +273,7 @@ method(stream_parse, ProviderAnthropic) <- function(provider, event) {
 }
 method(stream_text, ProviderAnthropic) <- function(provider, event) {
   if (event$type == "content_block_delta") {
-    event$delta$text
+    event$delta$text %||% event$delta$thinking
   }
 }
 method(stream_merge_chunks, ProviderAnthropic) <- function(
@@ -264,7 +328,9 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
 
 method(value_tokens, ProviderAnthropic) <- function(provider, json) {
   tokens(
-    input = json$usage$input_tokens,
+    # Hack in pricing for cache writes
+    input = json$usage$input_tokens +
+      json$usage$cache_creation_input_tokens * 1.25,
     output = json$usage$output_tokens,
     cached_input = json$usage$cache_read_input_tokens
   )
@@ -307,7 +373,12 @@ method(value_turn, ProviderAnthropic) <- function(
 
 # ellmer -> Claude --------------------------------------------------------------
 
-method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
+method(as_json, list(ProviderAnthropic, Turn)) <- function(
+  provider,
+  x,
+  ...,
+  is_last = FALSE
+) {
   if (is_system_turn(x)) {
     # claude passes system prompt as separate arg
     NULL
@@ -317,7 +388,14 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
       # (all messages must have non-empty content)
       return(NULL)
     }
-    list(role = x@role, content = as_json(provider, x@contents, ...))
+
+    # Add caching to the last content block in the last turn
+    # https://docs.claude.com/en/docs/build-with-claude/prompt-caching#how-automatic-prefix-checking-works
+    content <- as_json(provider, x@contents, ...)
+    if (is_last) {
+      content[[length(content)]]$cache_control <- cache_control(provider)
+    }
+    list(role = x@role, content = content)
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
@@ -471,7 +549,7 @@ method(batch_submit, ProviderAnthropic) <- function(
 # https://docs.anthropic.com/en/api/retrieving-message-batches
 method(batch_poll, ProviderAnthropic) <- function(provider, batch) {
   req <- base_request(provider)
-  req <- req_url_path_append(req, "/messages/batches/", batch$id)
+  req <- req_url_path_append(req, "/messages/batches", batch$id)
   resp <- req_perform(req)
 
   resp_body_json(resp)
@@ -528,7 +606,8 @@ models_anthropic <- function(
     name = "Anthropic",
     model = "",
     base_url = base_url,
-    credentials = function() api_key
+    credentials = function() api_key,
+    cache = "none"
   )
 
   req <- base_request(provider)
@@ -555,4 +634,15 @@ models_anthropic <- function(
 # From httr2
 backoff_default <- function(i) {
   round(min(stats::runif(1, min = 1, max = 2^i), 60), 1)
+}
+
+cache_control <- function(provider) {
+  if (provider@cache == "none") {
+    NULL
+  } else {
+    list(
+      type = "ephemeral",
+      ttl = provider@cache
+    )
+  }
 }

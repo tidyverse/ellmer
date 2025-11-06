@@ -96,7 +96,8 @@ batch_chat <- function(chat, prompts, path, wait = TRUE, ignore_hash = FALSE) {
   assistant_turns <- job$result_turns()
   map2(job$user_turns, assistant_turns, function(user, assistant) {
     if (!is.null(assistant)) {
-      chat$clone()$add_turn(user, assistant)
+      # Logged on retrieval
+      chat$clone()$add_turn(user, assistant, log_tokens = FALSE)
     } else {
       NULL
     }
@@ -120,7 +121,9 @@ batch_chat_text <- function(
     wait = wait,
     ignore_hash = ignore_hash
   )
-  map_chr(chats, \(chat) if (is.null(chat)) NA else chat$last_turn()@text)
+  map_chr(chats, \(chat) {
+    if (is.null(chat)) NA_character_ else chat$last_turn()@text
+  })
 }
 
 #' @export
@@ -325,12 +328,20 @@ BatchJob <- R6::R6Class(
 
     retrieve = function() {
       self$results <- batch_retrieve(self$provider, self$batch)
+      log_turns(self$provider, self$result_turns())
+
       self$stage <- "done"
       self$save_state()
       TRUE
     },
 
     result_turns = function() {
+      if (length(self$results) != length(self$user_turns)) {
+        cli::cli_abort(c(
+          "Provider returned unexpected number of responses.",
+          x = "Expected {length(self$user_turns)}, got {length(self$results)}."
+        ))
+      }
       map2(self$results, self$user_turns, function(result, user_turn) {
         batch_result_turn(self$provider, result, has_type = !is.null(self$type))
       })

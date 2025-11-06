@@ -132,6 +132,37 @@ test_that("can get tokens & cost", {
   expect_contains(names(data), c("input_tokens", "output_tokens", "cost"))
 })
 
+test_that("parallel_chat logs tokens", {
+  local_tokens()
+  vcr::local_cassette("parallel-logging")
+
+  chat <- chat_openai_test()
+  prompts <- list("Say 1", "Say 2", "Say 3")
+  results <- parallel_chat(chat, prompts)
+
+  input_tokens <- map_dbl(results, \(x) x$get_tokens()$input)
+  expect_equal(the$tokens$input, sum(input_tokens))
+})
+
+test_that("parallel_chat_structured logs tokens", {
+  local_tokens()
+  vcr::local_cassette("parallel-structured-logging")
+
+  chat <- chat_openai_test()
+  type <- type_object(msg = type_string("A greeting message"))
+  prompts <- list("Say hi", "Say bye")
+  results <- parallel_chat_structured(
+    chat,
+    prompts,
+    type = type,
+    include_tokens = TRUE,
+    include_cost = TRUE
+  )
+
+  expect_equal(the$tokens$input, sum(results$input_tokens))
+  expect_equal(the$tokens$output, sum(results$output_tokens))
+})
+
 # error handling ---------------------------------------------------------------
 
 test_that("handles errors and NULLs in parallel functions", {
@@ -142,7 +173,7 @@ test_that("handles errors and NULLs in parallel functions", {
   )
   prompts <- list("prompt1", "prompt2", "prompt3")
   responses <- list(
-    AssistantTurn("Success"),
+    AssistantTurn("Success", tokens = c(10, 20, 0)),
     simpleError("Request failed"),
     NULL
   )

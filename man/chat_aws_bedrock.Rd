@@ -23,7 +23,7 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
 
 \item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
 
-\item{model}{The model to use for the chat (defaults to "anthropic.claude-3-5-sonnet-20240620-v1:0").
+\item{model}{The model to use for the chat (defaults to "anthropic.claude-sonnet-4-5-20250929-v1:0").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_models_aws_bedrock()} to see all options.
 .
@@ -32,7 +32,7 @@ While ellmer provides a default model, there's no guarantee that you'll
 have access to it, so you'll need to specify a model that you can.
 If you're using \href{https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/}{cross-region inference},
 you'll need to use the inference profile ID, e.g.
-\code{model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"}.}
+\code{model="us.anthropic.claude-sonnet-4-5-20250929-v1:0"}.}
 
 \item{profile}{AWS profile to use.}
 

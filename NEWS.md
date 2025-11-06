@@ -6,6 +6,12 @@
   - `tool_openai_web_search()` for OpenAI.
 
   If you want to do web fetch for other providers, you could use `btw::btw_tool_web_read_url()`.
+* `batch_chat()` now retrieves failed results for `chat_openai()` (#830)
+* `batch_chat()` now works correctly for `chat_anthropic()` (#835).
+* `chat_anthropic()` and `chat_aws_bedrock()` now default to Claude Sonnet 4.5 (#800).
+* `batch_chat()` logs tokens once, on retrieval (#743).
+* `params()` gains new `reasoning_effort` and `reasoning_tokens` so you can control the amount of effort a model spends on thinking. Initial support is provided for `chat_claude()`, `chat_google_gemini()`, and `chat_openai()` (#720).
+* `chat_anthropic()` gains new `cache` parameter to control caching. By default it is set to "5m". This should (on average) reduce the cost of your chats.(#584)
 * `chat_openai_responses()` gains a `service_tier` argument (#712).
 * `Chat$get_tokens()` now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the `print()` method now reports costs on each assistant turn, rather than trying to parse out individual costs.
 * `chat_*()` functions now use a `credentials` function instead of an `api_key` (#613). This means that API keys are never stored in the chat object (which might be saved to disk), but is instead retrieved on demand as needed. You generally shouldn't need to use the `credentials` argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).

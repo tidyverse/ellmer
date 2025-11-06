@@ -126,6 +126,16 @@ method(chat_body, ProviderOpenAIResponses) <- function(
   # https://platform.openai.com/docs/api-reference/responses/create#responses-create-include
   params <- chat_params(provider, provider@params)
 
+  if (has_name(params, "reasoning_effort")) {
+    reasoning <- list(
+      effort = params$reasoning_effort,
+      summary = "auto"
+    )
+    params$reasoning_effort <- NULL
+  } else {
+    reasoning <- NULL
+  }
+
   include <- c(
     if (isTRUE(params$log_probs)) "message.output_text.logprobs",
     if (is_openai_reasoning(provider@model)) "reasoning.encrypted_content"
@@ -140,6 +150,7 @@ method(chat_body, ProviderOpenAIResponses) <- function(
     stream = stream,
     tools = tools,
     text = text,
+    reasoning = reasoning,
     store = FALSE,
     service_tier = provider@service_tier
   ))
@@ -155,7 +166,8 @@ method(chat_params, ProviderOpenAIResponses) <- function(provider, params) {
       frequency_penalty = "frequency_penalty",
       max_tokens = "max_output_tokens",
       log_probs = "log_probs",
-      top_logprobs = "top_k"
+      top_logprobs = "top_k",
+      reasoning_effort = "reasoning_effort"
     )
   )
 }
@@ -163,9 +175,15 @@ method(chat_params, ProviderOpenAIResponses) <- function(provider, params) {
 # OpenAI -> ellmer --------------------------------------------------------------
 
 method(stream_text, ProviderOpenAIResponses) <- function(provider, event) {
-  # https://platform.openai.com/docs/api-reference/responses-streaming/response/output_text/delta
   if (event$type == "response.output_text.delta") {
+    # https://platform.openai.com/docs/api-reference/responses-streaming/response/output_text/delta
     event$delta
+  } else if (event$type == "response.reasoning_summary_text.delta") {
+    # https://platform.openai.com/docs/api-reference/responses-streaming/response/reasoning_summary_text/delta
+    event$delta
+  } else if (event$type == "response.reasoning_summary_text.done") {
+    # https://platform.openai.com/docs/api-reference/responses-streaming/response/reasoning_summary_text/done
+    "\n\n"
   }
 }
 method(stream_merge_chunks, ProviderOpenAIResponses) <- function(
@@ -214,17 +232,7 @@ method(value_turn, ProviderOpenAIResponses) <- function(
       arguments <- jsonlite::parse_json(output$arguments)
       ContentToolRequest(output$id, output$name, arguments)
     } else if (output$type == "reasoning") {
-      # {
-      #   id: str,
-      #   summary: str,
-      #   type: "reasoning",
-      #   content: [
-      #     { text: str, type: "reasoning_text" }
-      #   ],
-      #   encrypted_content: str,
-      #   status: "in_progress" | "completed" | "incomplete"
-      # }
-      thinking <- paste0(map_chr(output$content, "[[", "text"), collapse = "")
+      thinking <- paste0(map_chr(output$summary, "[[", "text"), collapse = "")
       ContentThinking(thinking = thinking, extra = output)
     } else if (output$type == "image_generation_call") {
       mime_type <- switch(

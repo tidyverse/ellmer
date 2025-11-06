@@ -8,21 +8,21 @@ test_that("can retrieve and log tokens", {
   local_tokens()
   provider <- test_provider("testprovider", "test")
 
-  tokens_log(provider, tokens(input = 1), dollars(0))
+  log_tokens(provider, tokens(input = 1), dollars(0))
   expect_equal(the$tokens, tokens_row("testprovider", "test", 1, 0, 0, 0))
 
-  tokens_log(provider, tokens(output = 1), dollars(0))
+  log_tokens(provider, tokens(output = 1), dollars(0))
   expect_equal(the$tokens, tokens_row("testprovider", "test", 1, 1, 0, 0))
 
-  tokens_log(provider, tokens(cached_input = 1), dollars(0))
+  log_tokens(provider, tokens(cached_input = 1), dollars(0))
   expect_equal(the$tokens, tokens_row("testprovider", "test", 1, 1, 1, 0))
 
-  tokens_log(provider, tokens(), dollars(0))
+  log_tokens(provider, tokens(), dollars(0))
   expect_equal(the$tokens, tokens_row("testprovider", "test", 1, 1, 1, 0))
 
   expect_snapshot(token_usage())
 
-  tokens_log(provider, tokens(), dollars(NA_real_))
+  log_tokens(provider, tokens(), dollars(NA_real_))
   expect_equal(
     the$tokens,
     tokens_row("testprovider", "test", 1, 1, 1, NA_real_)
@@ -69,7 +69,7 @@ test_that("token_usage() shows price if available", {
 
   toks <- tokens(input = 1.5e6, output = 2e5, cached_input = 0)
   cost <- get_token_cost(provider, toks)
-  tokens_log(provider, toks, cost)
+  log_tokens(provider, toks, cost)
   expect_snapshot(token_usage())
 })
 
@@ -77,4 +77,35 @@ test_that("price is formatted nicely", {
   expect_equal(format(dollars(NA)), "NA")
   expect_equal(format(dollars(0.0001)), "$0.00")
   expect_equal(format(dollars(c(10, 1))), c("$10.00", "$ 1.00"))
+})
+
+
+# Helpers ---------------------------------------------------------------------
+
+test_that("log_turns ignores non-assistant turns", {
+  local_tokens()
+  provider <- test_provider("testprovider", "test")
+
+  turn1 <- UserTurn(contents = "text")
+  turn2 <- AssistantTurn(
+    contents = "Hello",
+    tokens = c(8, 3, 2),
+    cost = dollars(1)
+  )
+
+  log_turns(provider, list(turn1, turn2, NULL))
+  expect_equal(the$tokens, tokens_row("testprovider", "test", 8, 3, 2, 1))
+})
+
+test_that("log_turns aggregates multiple turns", {
+  local_tokens()
+  provider <- test_provider("testprovider", "test")
+
+  turn1 <- AssistantTurn(contents = "Hello", tokens = c(8, 3, 2))
+  turn2 <- AssistantTurn(contents = "World", tokens = c(1, 1, 1))
+  log_turns(provider, list(turn1, turn2))
+  expect_equal(
+    the$tokens,
+    tokens_row("testprovider", "test", 9, 4, 3, NA_real_)
+  )
 })

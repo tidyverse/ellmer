@@ -60,6 +60,11 @@ pretty_json <- function(x) {
   jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
 }
 
+read_ndjson <- function(path) {
+  lines <- readLines(path, warn = FALSE)
+  lapply(lines, jsonlite::fromJSON, simplifyVector = FALSE)
+}
+
 prettify <- function(x) {
   tryCatch(
     jsonlite::prettify(x),

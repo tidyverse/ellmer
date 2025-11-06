@@ -127,6 +127,7 @@ parallel_chat <- function(
   map(seq_along(conversations), function(i) {
     if (is_ok[[i]]) {
       turns <- conversations[[i]]
+      log_turns(chat$get_provider(), turns)
       chat$clone()$set_turns(turns)
     } else {
       assistant_turns[[i]]
@@ -206,6 +207,7 @@ parallel_chat_structured <- function(
     rpm = rpm,
     on_error = on_error
   )
+  log_turns(provider, turns)
 
   multi_convert(
     provider,

@@ -3,9 +3,9 @@ on_load(
 )
 
 tokens <- function(input = 0, output = 0, cached_input = 0) {
-  check_number_whole(input, allow_null = TRUE)
-  check_number_whole(output, allow_null = TRUE)
-  check_number_whole(cached_input, allow_null = TRUE)
+  check_number_decimal(input, allow_null = TRUE)
+  check_number_decimal(output, allow_null = TRUE)
+  check_number_decimal(cached_input, allow_null = TRUE)
 
   list(
     input = input %||% 0,
@@ -20,7 +20,7 @@ map_tokens <- function(x, f, ...) {
   out
 }
 
-tokens_log <- function(provider, tokens, cost) {
+log_tokens <- function(provider, tokens, cost) {
   i <- vctrs::vec_match(
     data.frame(
       provider = provider@name,
@@ -49,6 +49,19 @@ tokens_log <- function(provider, tokens, cost) {
 
   invisible()
 }
+
+log_turn <- function(provider, turn) {
+  log_tokens(provider, exec(tokens, !!!as.list(turn@tokens)), turn@cost)
+}
+
+log_turns <- function(provider, turns) {
+  for (turn in turns) {
+    if (S7_inherits(turn, AssistantTurn)) {
+      log_turn(provider, turn)
+    }
+  }
+}
+
 
 tokens_row <- function(
   provider = character(0),
