@@ -549,7 +549,7 @@ method(batch_submit, ProviderAnthropic) <- function(
 # https://docs.anthropic.com/en/api/retrieving-message-batches
 method(batch_poll, ProviderAnthropic) <- function(provider, batch) {
   req <- base_request(provider)
-  req <- req_url_path_append(req, "/messages/batches/", batch$id)
+  req <- req_url_path_append(req, "/messages/batches", batch$id)
   resp <- req_perform(req)
 
   resp_body_json(resp)
