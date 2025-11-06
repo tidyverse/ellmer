@@ -170,15 +170,15 @@ printing it, and you can see total usage for a session with
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4.1"</span><span class="op">)</span></span>
 <span><span class="va">.</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Who created R?"</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=2 input=11 output=77 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=2 input=11 output=110 cost=$0.00&gt;</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Who created R?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=11 output=77 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; R was originally created by **Ross Ihaka** and **Robert Gentleman** at the University of Auckland, New Zealand, in the early 1990s. They began developing R as a free, open-source implementation of the S programming language for statistical computing and graphics. The project quickly grew, and today it is maintained by the R Core Team and the contributions of many users worldwide.</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=11 output=110 cost=$0.00] ─────────────────────────</span></span>
+<span><span class="co">#&gt; **R** is a programming language and software environment for statistical computing and graphics. It was created by **Ross Ihaka and Robert Gentleman** at the University of Auckland, New Zealand, in the early 1990s. The name "R" is partly derived from the first letters of their first names (Ross and Robert), and it is also a play on the name of the S programming language, which R was designed to improve upon and be compatible with. Today, R is maintained by the **R Core Team** and the community.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/token_usage.html">token_usage</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   provider   model input output cached_input price</span></span>
-<span><span class="co">#&gt; 1   OpenAI gpt-4.1    11     77            0 $0.00</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   OpenAI gpt-4.1    11    110            0 $0.00</span></span></code></pre></div>
 <p>If you want to learn more about tokens and tokenizers, I’d recommend
 watching the first 20-30 minutes of <a href="https://www.youtube.com/watch?v=zduSFxRajkE" class="external-link">Let’s build the GPT
 Tokenizer</a> by Andrej Karpathy. You certainly don’t need to learn how

@@ -186,32 +186,32 @@ an <code>.error</code> column will be added with the error objects.</p>
 <span class="r-in"><span><span class="va">prompts</span> <span class="op">&lt;-</span> <span class="fu"><a href="interpolate.html">interpolate</a></span><span class="op">(</span><span class="st">"What's the capital of {{country}}?"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">parallel_chat</span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 input=13 output=10 cost=$0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 input=13 output=11 cost=$0.00&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> What's the capital of Canada?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=13 output=10 cost=$0.00] ──────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=13 output=11 cost=$0.00] ──────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The capital of Canada is **Ottawa**.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 input=14 output=11 cost=$0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 input=14 output=12 cost=$0.00&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> What's the capital of New Zealand?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=14 output=11 cost=$0.00] ──────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=14 output=12 cost=$0.00] ──────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The capital of New Zealand is **Wellington**.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 input=13 output=10 cost=$0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 input=13 output=15 cost=$0.00&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> What's the capital of Jamaica?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=13 output=10 cost=$0.00] ──────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of Jamaica is **Kingston**.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=13 output=15 cost=$0.00] ──────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of **Jamaica** is **Kingston**.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 input=14 output=12 cost=$0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=2 input=14 output=15 cost=$0.00&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> What's the capital of United States?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=14 output=12 cost=$0.00] ──────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of the United States is Washington, D.C.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=14 output=15 cost=$0.00] ──────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The capital of the United States is **Washington, D.C.**</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Structured data -----------------------------------------------------------</span></span></span>

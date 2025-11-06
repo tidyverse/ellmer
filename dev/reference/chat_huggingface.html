@@ -5,8 +5,7 @@ To use the Hugging Face API, you must have an Access Token, which you can obtain
 from your Hugging Face account
 (ensure that at least "Make calls to Inference Providers" and
 "Make calls to your Inference Endpoints" is checked).
-This function is a lightweight wrapper around chat_openai(), with
-the defaults adjusted for Hugging Face.
+Built on top of chat_openai_compatible().
 Known limitations
 
 
@@ -22,8 +21,7 @@ To use the Hugging Face API, you must have an Access Token, which you can obtain
 from your Hugging Face account
 (ensure that at least "Make calls to Inference Providers" and
 "Make calls to your Inference Endpoints" is checked).
-This function is a lightweight wrapper around chat_openai(), with
-the defaults adjusted for Hugging Face.
+Built on top of chat_openai_compatible().
 Known limitations
 
 
@@ -90,8 +88,7 @@ To use the Hugging Face API, you must have an Access Token, which you can obtain
 from your <a href="https://huggingface.co/settings/tokens" class="external-link">Hugging Face account</a>
 (ensure that at least "Make calls to Inference Providers" and
 "Make calls to your Inference Endpoints" is checked).</p>
-<p>This function is a lightweight wrapper around <code><a href="chat_openai.html">chat_openai()</a></code>, with
-the defaults adjusted for Hugging Face.</p><div class="section">
+<p>Built on top of <code><a href="chat_openai_compatible.html">chat_openai_compatible()</a></code>.</p><div class="section">
 <h3 id="known-limitations">Known limitations<a class="anchor" aria-label="anchor" href="#known-limitations"></a></h3>
 
 <ul><li><p>Some models do not support the chat interface or parts of it, for example
@@ -181,7 +178,7 @@ to every chat API call.</p></dd>
 <code><a href="chat_mistral.html">chat_mistral</a>()</code>,
 <code><a href="chat_ollama.html">chat_ollama</a>()</code>,
 <code><a href="chat_openai.html">chat_openai</a>()</code>,
-<code><a href="chat_openai_responses.html">chat_openai_responses</a>()</code>,
+<code><a href="chat_openai_compatible.html">chat_openai_compatible</a>()</code>,
 <code><a href="chat_openrouter.html">chat_openrouter</a>()</code>,
 <code><a href="chat_perplexity.html">chat_perplexity</a>()</code>,
 <code><a href="chat_portkey.html">chat_portkey</a>()</code></p></div>

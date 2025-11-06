@@ -553,14 +553,15 @@ page.</p>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="va">instruct_json</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
-<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">ingredients</span><span class="op">)</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">ingredients</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; ```json</span></span>
 <span><span class="co">#&gt; [</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "name": "dark brown sugar",</span></span>
 <span><span class="co">#&gt;     "quantity": 0.75,</span></span>
 <span><span class="co">#&gt;     "unit": "cup",</span></span>
-<span><span class="co">#&gt;     "weight": 150,</span></span>
-<span><span class="co">#&gt;     "weight_unit": "g"</span></span>
+<span><span class="co">#&gt;     "metric_quantity": 150,</span></span>
+<span><span class="co">#&gt;     "metric_unit": "g"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "name": "eggs",</span></span>
@@ -571,15 +572,15 @@ page.</p>
 <span><span class="co">#&gt;     "name": "sour cream",</span></span>
 <span><span class="co">#&gt;     "quantity": 0.75,</span></span>
 <span><span class="co">#&gt;     "unit": "cup",</span></span>
-<span><span class="co">#&gt;     "weight": 165,</span></span>
-<span><span class="co">#&gt;     "weight_unit": "g"</span></span>
+<span><span class="co">#&gt;     "metric_quantity": 165,</span></span>
+<span><span class="co">#&gt;     "metric_unit": "g"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "name": "unsalted butter",</span></span>
 <span><span class="co">#&gt;     "quantity": 0.5,</span></span>
 <span><span class="co">#&gt;     "unit": "cup",</span></span>
-<span><span class="co">#&gt;     "weight": 113,</span></span>
-<span><span class="co">#&gt;     "weight_unit": "g",</span></span>
+<span><span class="co">#&gt;     "metric_quantity": 113,</span></span>
+<span><span class="co">#&gt;     "metric_unit": "g",</span></span>
 <span><span class="co">#&gt;     "note": "melted"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
@@ -594,17 +595,17 @@ page.</p>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "name": "neutral oil",</span></span>
-<span><span class="co">#&gt;     "quantity": 0.33,</span></span>
+<span><span class="co">#&gt;     "quantity": 0.333,</span></span>
 <span><span class="co">#&gt;     "unit": "cup",</span></span>
-<span><span class="co">#&gt;     "volume": 80,</span></span>
-<span><span class="co">#&gt;     "volume_unit": "ml"</span></span>
+<span><span class="co">#&gt;     "metric_quantity": 80,</span></span>
+<span><span class="co">#&gt;     "metric_unit": "ml"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "name": "all-purpose flour",</span></span>
 <span><span class="co">#&gt;     "quantity": 1.5,</span></span>
 <span><span class="co">#&gt;     "unit": "cup",</span></span>
-<span><span class="co">#&gt;     "weight": 190,</span></span>
-<span><span class="co">#&gt;     "weight_unit": "g"</span></span>
+<span><span class="co">#&gt;     "metric_quantity": 190,</span></span>
+<span><span class="co">#&gt;     "metric_unit": "g"</span></span>
 <span><span class="co">#&gt;   },</span></span>
 <span><span class="co">#&gt;   {</span></span>
 <span><span class="co">#&gt;     "name": "sugar",</span></span>
@@ -616,7 +617,8 @@ page.</p>
 <span><span class="co">#&gt;     "quantity": 1.5,</span></span>
 <span><span class="co">#&gt;     "unit": "teaspoon"</span></span>
 <span><span class="co">#&gt;   }</span></span>
-<span><span class="co">#&gt; ]</span></span></code></pre></div>
+<span><span class="co">#&gt; ]</span></span>
+<span><span class="co">#&gt; ```</span></span></code></pre>
 <p>(I don’t know if the additional colour, “You’re an expert baker who
 also loves JSON”, does anything, but I like to think this helps the LLM
 get into the right mindset of a very nerdy baker.)</p>
@@ -628,7 +630,7 @@ get into the right mindset of a very nerdy baker.)</p>
 want to see volumes if weight isn’t available so I provide a couple of
 examples of what I’m looking for. I was pleasantly suprised that I can
 provide the input and output examples in such a loose format.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">instruct_weight</span> <span class="op">&lt;-</span> <span class="st">r"(</span></span>
 <span><span class="st">  Here are some examples of the sort of output I'm looking for:</span></span>
 <span><span class="st"></span></span>
@@ -649,8 +651,7 @@ provide the input and output examples in such a loose format.</p>
 <span><span class="co">#&gt;   {"name": "dark brown sugar", "quantity": 150, "unit": "g"},</span></span>
 <span><span class="co">#&gt;   {"name": "large eggs", "quantity": 2, "unit": "count"},</span></span>
 <span><span class="co">#&gt;   {"name": "sour cream", "quantity": 165, "unit": "g"},</span></span>
-<span><span class="co">#&gt;   {"name": "unsalted butter", "quantity": 113, "unit": "g", "note": </span></span>
-<span><span class="co">#&gt; "melted"},</span></span>
+<span><span class="co">#&gt;   {"name": "unsalted butter", "quantity": 113, "unit": "g"},</span></span>
 <span><span class="co">#&gt;   {"name": "vanilla extract", "quantity": 1, "unit": "teaspoon"},</span></span>
 <span><span class="co">#&gt;   {"name": "kosher salt", "quantity": 0.75, "unit": "teaspoon"},</span></span>
 <span><span class="co">#&gt;   {"name": "neutral oil", "quantity": 80, "unit": "ml"},</span></span>
@@ -664,7 +665,7 @@ trying to accomplish. I’m not sure if this helps the LLM or not, but it
 certainly makes it easier for me to understand the organisation of the
 whole prompt and check that I’ve covered the key pieces I’m interested
 in.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">instruct_weight</span> <span class="op">&lt;-</span> <span class="st">r"(</span></span>
 <span><span class="st">  * If an ingredient has both weight and volume, extract only the weight:</span></span>
 <span><span class="st"></span></span>
@@ -693,7 +694,7 @@ ingredients are specified. For later analysis, I always want quantities
 to be number, even if they were originally fractions, or the if the
 units aren’t precise (like a pinch). It made me realise that some
 ingredients are unitless.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">instruct_unit</span> <span class="op">&lt;-</span> <span class="st">r"(</span></span>
 <span><span class="st">* If the unit uses a fraction, convert it to a decimal.</span></span>
 <span><span class="st"></span></span>
@@ -732,7 +733,7 @@ useful to formalise it and tell the LLM exactly what I’m looking for
 when dealing with structured data. This guarantees that the LLM will
 only return JSON, that the JSON will have the fields that you expect,
 and that ellmer will convert it into an R data structure.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">type_ingredient</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Ingredient name"</span><span class="op">)</span>,</span>
 <span>  quantity <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -745,18 +746,18 @@ and that ellmer will convert it into an R data structure.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">ingredients</span>, type <span class="op">=</span> <span class="va">type_ingredients</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 3</span></span></span>
-<span><span class="co">#&gt;    name                    quantity unit    </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> dark brown sugar          150    g       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> large eggs                  2    piece   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> sour cream                165    g       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> unsalted butter, melted   113    g       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> vanilla extract             1    teaspoon</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> kosher salt                 0.75 teaspoon</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> neutral oil                80    ml      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> all-purpose flour         190    g       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> sugar                     150    g       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> sugar                       1.5  teaspoon</span></span></code></pre></div>
+<span><span class="co">#&gt;    name              quantity unit    </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> dark brown sugar    150    g       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> large eggs            2    piece   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> sour cream          165    g       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> unsalted butter     113    g       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> vanilla extract       1    teaspoon</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> kosher salt           0.75 teaspoon</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> neutral oil          80    ml      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> all-purpose flour   190    g       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> sugar               150    g       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> sugar                 1.5  teaspoon</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="capturing-raw-input">Capturing raw input<a class="anchor" aria-label="anchor" href="#capturing-raw-input"></a>
@@ -766,7 +767,7 @@ ingredient names in the output. This doesn’t make much difference in
 this simple example but it makes it much easier to align the input with
 the output and to start developing automated measures of how well my
 prompt is doing.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">instruct_weight_input</span> <span class="op">&lt;-</span> <span class="st">r"(</span></span>
 <span><span class="st">  * If an ingredient has both weight and volume, extract only the weight:</span></span>
 <span><span class="st"></span></span>
@@ -786,7 +787,7 @@ prompt is doing.</p>
 <span><span class="st">)"</span></span></code></pre></div>
 <p>I think this is particularly important if you’re working with even
 less structured text. For example, imagine you had this text:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">recipe</span> <span class="op">&lt;-</span> <span class="st">r"(</span></span>
 <span><span class="st">  In a large bowl, cream together one cup of softened unsalted butter and a</span></span>
 <span><span class="st">  quarter cup of white sugar until smooth. Beat in an egg and 1 teaspoon of</span></span>
@@ -799,7 +800,7 @@ less structured text. For example, imagine you had this text:</p>
 <span><span class="st">)"</span></span></code></pre></div>
 <p>Including the input text in the output makes it easier to see if it’s
 doing a good job:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">instruct_json</span>, <span class="va">instruct_weight_input</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">recipe</span><span class="op">)</span></span>
@@ -808,7 +809,7 @@ doing a good job:</p>
 <span><span class="co">#&gt; "one cup of softened unsalted butter"},</span></span>
 <span><span class="co">#&gt;   {"name": "white sugar", "quantity": 0.25, "unit": "cup", "input": "a</span></span>
 <span><span class="co">#&gt; quarter cup of white sugar"},</span></span>
-<span><span class="co">#&gt;   {"name": "egg", "quantity": 1, "unit": "piece", "input": "an egg"},</span></span>
+<span><span class="co">#&gt;   {"name": "egg", "quantity": 1, "unit": "unit", "input": "an egg"},</span></span>
 <span><span class="co">#&gt;   {"name": "vanilla extract", "quantity": 1, "unit": "teaspoon", </span></span>
 <span><span class="co">#&gt; "input": "1 teaspoon of vanilla extract"},</span></span>
 <span><span class="co">#&gt;   {"name": "all-purpose flour", "quantity": 2, "unit": "cup", "input":</span></span>
@@ -854,8 +855,8 @@ my examples.</p>
 <tr class="even">
 <td align="left">OpenAI</td>
 <td align="left">gpt-4.1</td>
-<td align="right">1128</td>
-<td align="right">946</td>
+<td align="right">1124</td>
+<td align="right">1023</td>
 <td align="right">0</td>
 <td align="right">$0.01</td>
 </tr>

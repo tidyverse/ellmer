@@ -134,8 +134,8 @@ questions like these impossible.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4o"</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"How long ago did Neil Armstrong touch down on the moon?"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of </span></span>
-<span><span class="co">#&gt; October 2023, that event occurred 54 years ago.</span></span></code></pre></div>
+<span><span class="co">#&gt; Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, </span></span>
+<span><span class="co">#&gt; that was 54 years ago.</span></span></code></pre></div>
 <p>Since the model doesn’t know what day it is, the result is
 incorrect.</p>
 </div>
@@ -192,9 +192,8 @@ with <code>$register_tool()</code>:</p>
 <p>That’s all we need to do! Let’s retry our query:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"How long ago did Neil Armstrong touch down on the moon?"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of June </span></span>
-<span><span class="co">#&gt; 25, 2025, that event occurred 55 years and approximately 11 months </span></span>
-<span><span class="co">#&gt; ago.</span></span></code></pre></div>
+<span><span class="co">#&gt; Neil Armstrong touched down on the moon on July 20, 1969. As of June </span></span>
+<span><span class="co">#&gt; 2025, that was almost 56 years ago.</span></span></code></pre></div>
 <p>That’s correct! Without any further guidance, the chat model decided
 to call our tool function and successfully used its result in
 formulating its response.</p>
@@ -202,19 +201,19 @@ formulating its response.</p>
 tool:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4o turns=6 input=373 output=86 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4o turns=6 input=355 output=79 cost=$0.00&gt;</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; How long ago did Neil Armstrong touch down on the moon?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=19 output=31 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that event occurred 54 years ago.</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=19 output=30 cost=$0.00] ──────────────────────────</span></span>
+<span><span class="co">#&gt; Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, that was 54 years ago.</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; How long ago did Neil Armstrong touch down on the moon?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=158 output=15 cost=$0.00] ─────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_olBG8OUjyIj914iwNBjw35dv)]: get_current_time(tz = "UTC")</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=150 output=16 cost=$0.00] ─────────────────────────</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_03a8c37ecdd381e601690baca5278c81909e74f03d120da606)]: get_current_time(tz = "UTC")</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_olBG8OUjyIj914iwNBjw35dv)]: 2025-06-25 16:53:23 UTC</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=196 output=40 cost=$0.00] ─────────────────────────</span></span>
-<span><span class="co">#&gt; Neil Armstrong touched down on the Moon on July 20, 1969. As of June 25, 2025, that event occurred 55 years and approximately 11 months ago.</span></span></code></pre></div>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_03a8c37ecdd381e601690baca5278c81909e74f03d120da606)]: 2025-06-25 16:53:23 UTC</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=186 output=33 cost=$0.00] ─────────────────────────</span></span>
+<span><span class="co">#&gt; Neil Armstrong touched down on the moon on July 20, 1969. As of June 2025, that was almost 56 years ago.</span></span></code></pre></div>
 <p>(Full disclosure: I originally tried this example with the default
 model of <code>gpt-4o-mini</code> and it got the tool calling right but
 the date math wrong, hence the explicit
@@ -280,30 +279,30 @@ experiments suggest is good for LLMs.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">get_weather</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Give me a weather udpate for London and Chicago"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Here's the latest weather update:</span></span>
+<span><span class="co">#&gt; Here is the current weather update:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; - London: Heavy rain, cool temperatures, and strong winds.</span></span>
 <span><span class="co">#&gt; - Chicago: Overcast skies, warm temperatures, and strong winds.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Let me know if you need a forecast for more cities or details!</span></span></code></pre></div>
+<span><span class="co">#&gt; Let me know if you need more details or forecasts!</span></span></code></pre></div>
 <p>We can print the chat to confirm that the model only performed a
 single tool call:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=4 input=213 output=65 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=4 input=199 output=65 cost=$0.00&gt;</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Give me a weather udpate for London and Chicago</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=74 output=17 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_0epVfhsX7e8pEy0M1NaY9Vca)]: get_weather(cities = c("London", "Chicago"))</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=68 output=18 cost=$0.00] ──────────────────────────</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_01d3f0036008b43801690baca8c5cc8197b3d7c34497588d11)]: get_weather(cities = c("London", "Chicago"))</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_0epVfhsX7e8pEy0M1NaY9Vca)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=139 output=48 cost=$0.00] ─────────────────────────</span></span>
-<span><span class="co">#&gt; Here's the latest weather update:</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_01d3f0036008b43801690baca8c5cc8197b3d7c34497588d11)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=131 output=47 cost=$0.00] ─────────────────────────</span></span>
+<span><span class="co">#&gt; Here is the current weather update:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; - London: Heavy rain, cool temperatures, and strong winds.</span></span>
 <span><span class="co">#&gt; - Chicago: Overcast skies, warm temperatures, and strong winds.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Let me know if you need a forecast for more cities or details!</span></span></code></pre></div>
+<span><span class="co">#&gt; Let me know if you need more details or forecasts!</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
