@@ -189,6 +189,8 @@ Chat <- R6::R6Class(
     #'   `NULL`, then the value of `echo` set when the chat object was created
     #'   will be used.
     chat = function(..., echo = NULL) {
+      private$complete_dangling_tool_requests()
+
       turn <- user_turn(...)
       echo <- check_echo(echo %||% private$echo)
 
@@ -217,6 +219,8 @@ Chat <- R6::R6Class(
     #'   using the schema. For example, this will turn arrays of objects into
     #'   data frames and arrays of strings into a character vector.
     chat_structured = function(..., type, echo = "none", convert = TRUE) {
+      private$complete_dangling_tool_requests()
+
       turn <- user_turn(..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
@@ -248,6 +252,8 @@ Chat <- R6::R6Class(
     #'   using the schema. For example, this will turn arrays of objects into
     #'   data frames and arrays of strings into a character vector.
     chat_structured_async = function(..., type, echo = "none", convert = TRUE) {
+      private$complete_dangling_tool_requests()
+
       turn <- user_turn(..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
@@ -283,6 +289,8 @@ Chat <- R6::R6Class(
     #'   an interactive user interface. Concurrent mode is the default and is
     #'   best suited for automated scripts or non-interactive applications.
     chat_async = function(..., tool_mode = c("concurrent", "sequential")) {
+      private$complete_dangling_tool_requests()
+
       turn <- user_turn(...)
       tool_mode <- arg_match(tool_mode)
 
@@ -311,6 +319,8 @@ Chat <- R6::R6Class(
     #'   rich content types. When `stream = "content"`, `stream()` yields
     #'   [Content] objects.
     stream = function(..., stream = c("text", "content")) {
+      private$complete_dangling_tool_requests()
+
       turn <- user_turn(...)
       stream <- arg_match(stream)
       private$chat_impl(
@@ -339,6 +349,8 @@ Chat <- R6::R6Class(
       tool_mode = c("concurrent", "sequential"),
       stream = c("text", "content")
     ) {
+      private$complete_dangling_tool_requests()
+
       turn <- user_turn(...)
       tool_mode <- arg_match(tool_mode)
       stream <- arg_match(stream)
@@ -731,6 +743,33 @@ Chat <- R6::R6Class(
 
     has_system_prompt = function() {
       length(private$.turns) > 0 && is_system_turn(private$.turns[[1]])
+    },
+
+    complete_dangling_tool_requests = function() {
+      if (length(private$.turns) == 0) {
+        return(invisible())
+      }
+
+      last_turn <- private$.turns[[length(private$.turns)]]
+      if (last_turn@role != "assistant") {
+        return(invisible())
+      }
+
+      tool_requests <- keep(last_turn@contents, is_tool_request)
+      if (length(tool_requests) == 0) {
+        return(invisible())
+      }
+
+      tool_results <- lapply(tool_requests, function(req) {
+        ContentToolResult(
+          error = "Chat ended before the tool could be invoked.",
+          request = req
+        )
+      })
+      tool_turn <- tool_results_as_turn(tool_results)
+      private$.turns[[length(private$.turns) + 1]] <- tool_turn
+
+      invisible(tool_results)
     }
   )
 )
