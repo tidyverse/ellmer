@@ -49,8 +49,6 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
 \item \href{#method-Chat-on_tool_request}{\code{Chat$on_tool_request()}}
 \item \href{#method-Chat-on_tool_result}{\code{Chat$on_tool_result()}}
-\item \href{#method-Chat-extract_data}{\code{Chat$extract_data()}}
-\item \href{#method-Chat-extract_data_async}{\code{Chat$extract_data_async()}}
 \item \href{#method-Chat-clone}{\code{Chat$clone()}}
 }
 }
@@ -125,7 +123,7 @@ Replace existing turns with a new list.
 \subsection{Method \code{add_turn()}}{
 Add a pair of turns to the chat.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$add_turn(user, system)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$add_turn(user, assistant, log_tokens = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -133,7 +131,10 @@ Add a pair of turns to the chat.
 \describe{
 \item{\code{user}}{The user \link{Turn}.}
 
-\item{\code{system}}{The system \link{Turn}.}
+\item{\code{assistant}}{The system \link{Turn}.}
+
+\item{\code{log_tokens}}{Should tokens used in the turn be logged to the
+session counter?}
 }
 \if{html}{\out{</div>}}
 }
@@ -179,18 +180,18 @@ Update the system prompt
 \if{html}{\out{<a id="method-Chat-get_tokens"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-get_tokens}{}}}
 \subsection{Method \code{get_tokens()}}{
-A data frame with a \code{tokens} column that provides the
-number of input tokens used by user turns and the number of
-output tokens used by assistant turns.
+A data frame with token usage and cost data. There are four
+columns: \code{input}, \code{output}, \code{cached_input}, and \code{cost}. There is one
+row for each assistant turn, because token counts and costs are only
+available when the API returns the assistant's response.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$get_tokens(include_system_prompt = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_tokens(include_system_prompt = deprecated())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{include_system_prompt}}{Whether to include the system prompt in
-the turns (if any exists).}
+\item{\code{include_system_prompt}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \if{html}{\out{</div>}}
 }
@@ -515,41 +516,6 @@ which must have \code{result} as its only argument.}
 }
 \subsection{Returns}{
 A function that can be called to remove the callback.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-extract_data"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-extract_data}{}}}
-\subsection{Method \code{extract_data()}}{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-Deprecated in favour of \verb{$chat_structured()}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data(...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{See \verb{$chat_structured()}}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-extract_data_async"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-extract_data_async}{}}}
-\subsection{Method \code{extract_data_async()}}{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$extract_data_async(...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{See \verb{$chat_structured_async()}}
-}
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

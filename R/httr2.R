@@ -31,11 +31,11 @@ chat_perform <- function(
       req,
       parent_ospan = parent_ospan
     )
+    "value" = req_perform(req),
+    "stream" = chat_perform_stream(provider, req, parent_ospan = parent_ospan),
+    "async-value" = req_perform_promise(req),
+    "async-stream" = chat_perform_async_stream(provider, req, parent_ospan = parent_ospan)
   )
-}
-
-chat_perform_value <- function(provider, req) {
-  resp_body_json(req_perform(req))
 }
 
 on_load(
@@ -61,10 +61,6 @@ on_load(
     }
   })
 )
-
-chat_perform_async_value <- function(provider, req) {
-  promises::then(req_perform_promise(req), resp_body_json)
-}
 
 on_load(
   chat_perform_async_stream <- coro::async_generator(function(
@@ -119,12 +115,6 @@ ellmer_req_robustify <- function(req, is_transient = NULL, after = NULL) {
   )
 
   req
-}
-
-ellmer_req_credentials <- function(req, credentials_fun) {
-  # TODO: simplify once req_headers_redacted() supports !!!
-  credentials <- credentials_fun()
-  req_headers(req, !!!credentials, .redact = names(credentials))
 }
 
 ellmer_req_user_agent <- function(req, override = "") {

@@ -20,13 +20,13 @@ NULL
 #' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 #'
 #' @param profile AWS profile to use.
-#' @param model `r param_model("anthropic.claude-3-5-sonnet-20240620-v1:0", "models_aws_bedrock")`.
+#' @param model `r param_model("anthropic.claude-sonnet-4-5-20250929-v1:0", "models_aws_bedrock")`.
 #'
 #'   While ellmer provides a default model, there's no guarantee that you'll
 #'   have access to it, so you'll need to specify a model that you can.
 #'   If you're using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
 #'   you'll need to use the inference profile ID, e.g.
-#'   `model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"`.
+#'   `model="us.anthropic.claude-sonnet-4-5-20250929-v1:0"`.
 #' @param params Common model parameters, usually created by [params()].
 #' @param api_args Named list of arbitrary extra arguments appended to the body
 #'   of every chat API call. Some useful arguments include:
@@ -123,7 +123,7 @@ provider_aws_bedrock <- function(
     base_url <- base_url(credentials$region)
   }
 
-  model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
+  model <- set_default(model, "anthropic.claude-sonnet-4-5-20250929-v1:0")
 
   ProviderAWSBedrock(
     name = "AWS/Bedrock",
@@ -199,7 +199,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
     if (stream) "converse-stream" else "converse"
   )
 
-  if (length(turns) >= 1 && is_system_prompt(turns[[1]])) {
+  if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
     system <- list(list(text = turns[[1]]@text))
   } else {
     system <- NULL
@@ -324,6 +324,13 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
   result
 }
 
+method(value_tokens, ProviderAWSBedrock) <- function(provider, json) {
+  tokens(
+    input = json$usage$inputTokens,
+    output = json$usage$outputTokens,
+  )
+}
+
 method(value_turn, ProviderAWSBedrock) <- function(
   provider,
   result,
@@ -334,7 +341,7 @@ method(value_turn, ProviderAWSBedrock) <- function(
       ContentText(content$text)
     } else if (has_name(content, "toolUse")) {
       if (has_type) {
-        ContentJson(content$toolUse$input$data)
+        ContentJson(data = content$toolUse$input$data)
       } else {
         ContentToolRequest(
           name = content$toolUse$name,
@@ -350,32 +357,29 @@ method(value_turn, ProviderAWSBedrock) <- function(
     }
   })
 
-  tokens <- tokens_log(
-    provider,
-    input = result$usage$inputTokens,
-    output = result$usage$outputTokens
-  )
-
-  assistant_turn(contents, json = result, tokens = tokens)
+  tokens <- value_tokens(provider, result)
+  cost <- get_token_cost(provider, tokens)
+  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
 # ellmer -> Bedrock -------------------------------------------------------------
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ContentBlock.html
-method(as_json, list(ProviderAWSBedrock, Turn)) <- function(provider, x) {
-  if (x@role == "system") {
+method(as_json, list(ProviderAWSBedrock, Turn)) <- function(provider, x, ...) {
+  if (is_system_turn(x)) {
     # bedrock passes system prompt as separate arg
     NULL
-  } else if (x@role %in% c("user", "assistant")) {
-    list(role = x@role, content = as_json(provider, x@contents))
+  } else if (is_user_turn(x) || is_assistant_turn(x)) {
+    list(role = x@role, content = as_json(provider, x@contents, ...))
   } else {
-    cli::cli_abort("Unknown role {turn@role}", .internal = TRUE)
+    cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
 }
 
 method(as_json, list(ProviderAWSBedrock, ContentText)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   if (is_whitespace(x@text)) {
     list(text = "[empty string]")
@@ -386,7 +390,8 @@ method(as_json, list(ProviderAWSBedrock, ContentText)) <- function(
 
 method(as_json, list(ProviderAWSBedrock, ContentImageRemote)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   cli::cli_abort("Bedrock doesn't support remote images")
 }
@@ -394,7 +399,8 @@ method(as_json, list(ProviderAWSBedrock, ContentImageRemote)) <- function(
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ImageBlock.html
 method(as_json, list(ProviderAWSBedrock, ContentImageInline)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   type <- switch(
     x@type,
@@ -414,7 +420,11 @@ method(as_json, list(ProviderAWSBedrock, ContentImageInline)) <- function(
 }
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_DocumentBlock.html
-method(as_json, list(ProviderAWSBedrock, ContentPDF)) <- function(provider, x) {
+method(as_json, list(ProviderAWSBedrock, ContentPDF)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     document = list(
       #> This field is vulnerable to prompt injections, because the model
@@ -430,7 +440,8 @@ method(as_json, list(ProviderAWSBedrock, ContentPDF)) <- function(provider, x) {
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ToolUseBlock.html
 method(as_json, list(ProviderAWSBedrock, ContentToolRequest)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     toolUse = list(
@@ -444,7 +455,8 @@ method(as_json, list(ProviderAWSBedrock, ContentToolRequest)) <- function(
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ToolResultBlock.html
 method(as_json, list(ProviderAWSBedrock, ContentToolResult)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   list(
     toolResult = list(
@@ -455,12 +467,16 @@ method(as_json, list(ProviderAWSBedrock, ContentToolResult)) <- function(
   )
 }
 
-method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(provider, x) {
+method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
   list(
     toolSpec = list(
       name = x@name,
       description = x@description,
-      inputSchema = list(json = compact(as_json(provider, x@arguments)))
+      inputSchema = list(json = compact(as_json(provider, x@arguments, ...)))
     )
   )
 }

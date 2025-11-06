@@ -1,12 +1,16 @@
 extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
   is_json <- map_lgl(turn@contents, S7_inherits, ContentJson)
   n <- sum(is_json)
-  if (n != 1) {
-    cli::cli_abort("Data extraction failed: {n} data results recieved.")
+  if (n == 0) {
+    cli::cli_abort("Data extraction failed: no JSON responses found.")
   }
 
-  json <- turn@contents[[which(is_json)]]
-  out <- json@value
+  if (n > 1) {
+    cli::cli_warn("Found {n} JSON response{?s}, using the first.")
+  }
+
+  json <- turn@contents[[which(is_json)[1]]]
+  out <- json@parsed # might error
 
   if (needs_wrapper) {
     out <- out$wrapper
@@ -51,7 +55,7 @@ convert_from_type <- function(x, type) {
           convert_from_type(vals, type_array(type@items@properties[[name]]))
         })
         names(cols) <- names(type@items@properties)
-        list2DF(cols)
+        tibble::as_tibble(vctrs::new_data_frame(cols))
       }
     } else {
       x
@@ -81,7 +85,11 @@ convert_from_type <- function(x, type) {
       x
     }
   } else if (S7_inherits(type, TypeEnum)) {
-    as.character(x)
+    if (is.null(x)) {
+      NA_character_
+    } else {
+      as.character(x)
+    }
   } else {
     x
   }

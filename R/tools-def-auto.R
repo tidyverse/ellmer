@@ -24,8 +24,6 @@
 #'   metadata for. Can also be an expression of the form `pkg::fun`.
 #' @param chat A `Chat` object used to generate the output. If `NULL`
 #'   (the default) uses [chat_openai()].
-#' @param model `lifecycle::badge("deprecated")` Formally used for defining
-#'   the model used by the chat. Now supply `chat` instead.
 #' @param echo Emit the registration code to the console. Defaults to `TRUE` in
 #'   interactive sessions.
 #' @param verbose If `TRUE`, print the input we send to the LLM, which may be
@@ -47,21 +45,11 @@
 create_tool_def <- function(
   topic,
   chat = NULL,
-  model = deprecated(),
   echo = interactive(),
   verbose = FALSE
 ) {
   expr <- enexpr(topic)
 
-  check_exclusive(model, chat, .require = FALSE)
-  if (lifecycle::is_present(model)) {
-    lifecycle::deprecate_warn(
-      when = "1.0.0",
-      what = "create_tool_def(model)",
-      with = "create_tool_def(chat)"
-    )
-    chat <- chat_openai(model = model)
-  }
   if (is.null(chat)) {
     chat <- chat_openai()
   } else if (is_chat(chat)) {

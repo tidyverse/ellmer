@@ -4,7 +4,7 @@ test_that("can make simple batch request", {
   )
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
+  expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -33,9 +33,8 @@ test_that("can extract data", {
 })
 
 test_that("can use images", {
-  # Databricks models don't support images.
-  #
-  # test_images_inline(chat_databricks)
+  test_images_inline(chat_databricks)
+  # remote images don't appear to work
   # test_images_remote(chat_databricks)
 })
 

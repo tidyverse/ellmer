@@ -11,7 +11,8 @@
 #' @export
 #' @family chatbots
 #' @param model `r param_model("mistral-large-latest")`
-#' @param api_key `r api_key_param("MISTRAL_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("MISTRAL_API_KEY")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
@@ -22,9 +23,9 @@
 chat_mistral <- function(
   system_prompt = NULL,
   params = NULL,
-  api_key = mistral_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
-  seed = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
@@ -33,19 +34,26 @@ chat_mistral <- function(
   model <- set_default(model, "mistral-large-latest")
   echo <- check_echo(echo)
 
+  credentials <- as_credentials(
+    "chat_mistral",
+    function() mistral_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   provider <- ProviderMistral(
     name = "Mistral",
-    base_url = "https://api.mistral.ai/v1/",
+    base_url = mistral_base_url,
     model = model,
     params = params,
-    seed = seed,
     extra_args = api_args,
-    api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
+mistral_base_url <- "https://api.mistral.ai/v1/"
 ProviderMistral <- new_class("ProviderMistral", parent = ProviderOpenAI)
 
 chat_mistral_test <- function(
@@ -118,7 +126,37 @@ method(chat_params, ProviderMistral) <- function(provider, params) {
   )
 }
 
-
 mistral_key <- function() {
   key_get("MISTRAL_API_KEY")
+}
+
+# Models -----------------------------------------------------------------------
+
+#' @export
+#' @rdname chat_mistral
+models_mistral <- function(api_key = mistral_key()) {
+  provider <- ProviderMistral(
+    name = "Mistral",
+    model = "",
+    base_url = mistral_base_url,
+    credentials = function() api_key
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, `[[`, "id")
+  display_name <- map_chr(json$data, `[[`, "name")
+  created_at <- as.POSIXct(map_int(json$data, `[[`, "created"))
+
+  df <- data.frame(
+    id = id,
+    name = display_name,
+    created_at = created_at
+  )
+  df <- cbind(df, match_prices("Mistral", df$id))
+  df
 }

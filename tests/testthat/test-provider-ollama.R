@@ -4,7 +4,7 @@ test_that("can make simple request", {
   chat <- chat_ollama_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
+  expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -55,7 +55,7 @@ test_that("supports tool calling", {
 # Custom -----------------------------------------------------------------
 
 test_that("as_json specialised for Ollama", {
-  stub <- ProviderOllama(name = "", base_url = "", api_key = "", model = "")
+  stub <- ProviderOllama(name = "", base_url = "", model = "")
 
   expect_snapshot(
     as_json(stub, type_object(.additional_properties = TRUE)),

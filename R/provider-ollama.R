@@ -22,12 +22,14 @@
 #'
 #' @inheritParams chat_openai
 #' @param model `r param_model(NULL, "ollama")`
-#' @param api_key Ollama doesn't require an API key for local usage and in most
-#'   cases you do not need to provide an `api_key`.
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials Ollama doesn't require credentials for local usage and in most
+#'   cases you do not need to provide `credentials`.
 #'
 #'   However, if you're accessing an Ollama instance hosted behind a reverse
 #'   proxy or secured endpoint that enforces bearer‐token authentication, you
-#'   can set `api_key` (or the `OLLAMA_API_KEY` environment variable).
+#'   can set the `OLLAMA_API_KEY` environment variable or provide a callback
+#'   function to `credentials`.
 #' @param params Common model parameters, usually created by [params()].
 #' @inherit chat_openai return
 #' @family chatbots
@@ -41,11 +43,11 @@ chat_ollama <- function(
   system_prompt = NULL,
   base_url = Sys.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
   model,
-  seed = NULL,
   params = NULL,
   api_args = list(),
   echo = NULL,
   api_key = NULL,
+  credentials = NULL,
   api_headers = character()
 ) {
   if (!has_ollama(base_url)) {
@@ -71,18 +73,22 @@ chat_ollama <- function(
 
   echo <- check_echo(echo)
 
-  params <- params %||% params()
+  # ollama doesn't require an API key for local usage, but one might be needed
+  # if ollama is served behind a proxy (see #501)
+  credentials <- as_credentials(
+    "chat_ollama",
+    function() Sys.getenv("OLLAMA_API_KEY", ""),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   provider <- ProviderOllama(
     name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
     model = model,
-    seed = seed,
-    params = params,
+    params = params %||% params(),
     extra_args = api_args,
-    # ollama doesn't require an API key for local usage, but one might be needed
-    # if ollama is served behind a proxy (see #501)
-    api_key = api_key %||% Sys.getenv("OLLAMA_API_KEY", "ollama"),
+    credentials = credentials,
     extra_headers = api_headers
   )
 
@@ -93,9 +99,7 @@ ProviderOllama <- new_class(
   "ProviderOllama",
   parent = ProviderOpenAI,
   properties = list(
-    prop_redacted("api_key"),
-    model = prop_string(),
-    seed = prop_number_whole(allow_null = TRUE)
+    model = prop_string()
   )
 )
 
@@ -151,22 +155,21 @@ models_ollama <- function(base_url = "http://localhost:11434") {
     id = names,
     created_at = modified_at,
     size = size,
-    capabilities = ollama_model_capabilities(names)
+    capabilities = ollama_model_capabilities(base_url, names)
   )
   df[order(-xtfrm(df$created_at)), ]
 }
 
 the$ollama_cache <- new_environment()
 
-ollama_model_details <- function(model) {
+ollama_model_details <- function(base_url, model) {
   # https://github.com/ollama/ollama/blob/main/docs/api.md#show-model-information
-  url <- "http://localhost:11434/api/show"
-
   if (env_has(the$ollama_cache, model)) {
     return(the$ollama_cache[[model]])
   }
 
-  req <- request(url)
+  req <- request(base_url)
+  req <- req_url_path_append(req, "api/show")
   req <- req_body_json(req, list(model = model, verbose = FALSE))
 
   resp <- req_perform(req)
@@ -178,9 +181,9 @@ ollama_model_details <- function(model) {
   details
 }
 
-ollama_model_capabilities <- function(models) {
+ollama_model_capabilities <- function(base_url, models) {
   res <- map(models, function(m) {
-    tryCatch(ollama_model_details(m), error = function(e) NULL)
+    tryCatch(ollama_model_details(base_url, m), error = function(e) NULL)
   })
   map_chr(res, \(x) paste(x$capabilities, collapse = ","))
 }
@@ -198,7 +201,11 @@ has_ollama <- function(base_url = "http://localhost:11434") {
   )
 }
 
-method(as_json, list(ProviderOllama, TypeObject)) <- function(provider, x) {
+method(as_json, list(ProviderOllama, TypeObject)) <- function(
+  provider,
+  x,
+  ...
+) {
   if (x@additional_properties) {
     cli::cli_abort("{.arg .additional_properties} not supported for Ollama.")
   }
@@ -209,7 +216,7 @@ method(as_json, list(ProviderOllama, TypeObject)) <- function(provider, x) {
   compact(list(
     type = "object",
     description = x@description %||% "",
-    properties = as_json(provider, x@properties),
+    properties = as_json(provider, x@properties, ...),
     required = as.list(names2(x@properties)[required]),
     additionalProperties = FALSE
   ))

@@ -8,7 +8,8 @@ chat_cloudflare(
   account = cloudflare_account(),
   system_prompt = NULL,
   params = NULL,
-  api_key = cloudflare_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   api_args = list(),
   echo = NULL,
@@ -23,9 +24,13 @@ chat_cloudflare(
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
-\item{api_key}{The API key to use for authentication. You generally should
-not supply this directly, but instead set the \code{HUGGINGFACE_API_KEY} environment
-variable.}
+\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
+
+\item{credentials}{A function that returns the API key to use for authentication.
+
+You generally should not need this argument; instead set the \code{CLOUDFLARE_API_KEY} environment variable.
+The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.}
 
 \item{model}{The model to use for the chat (defaults to "meta-llama/Llama-3.3-70b-instruct-fp8-fast").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
@@ -52,7 +57,7 @@ A \link{Chat} object.
 }
 \description{
 \href{https://www.cloudflare.com/developer-platform/products/workers-ai/}{Cloudflare}
-works AI hosts a variety of open-source AI models. To use the Cloudflare
+Workers AI hosts a variety of open-source AI models. To use the Cloudflare
 API, you must have an Account ID and an Access Token, which you can obtain
 \href{https://developers.cloudflare.com/workers-ai/get-started/rest-api/}{by following these instructions}.
 \subsection{Known limitations}{
@@ -82,6 +87,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
+\code{\link{chat_openai_responses}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

@@ -6,6 +6,7 @@
 \alias{TypeEnum}
 \alias{TypeArray}
 \alias{TypeJsonSchema}
+\alias{TypeIgnore}
 \alias{TypeObject}
 \title{Type definitions for function calling and structured data extraction.}
 \usage{
@@ -16,6 +17,8 @@ TypeEnum(description = NULL, required = TRUE, values = character(0))
 TypeArray(description = NULL, required = TRUE, items = Type())
 
 TypeJsonSchema(description = NULL, required = TRUE, json = list())
+
+TypeIgnore(description = NULL, required = TRUE)
 
 TypeObject(
   description = NULL,

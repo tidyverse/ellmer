@@ -11,7 +11,8 @@ NULL
 #'
 #' @export
 #' @family chatbots
-#' @param api_key `r api_key_param("OPENROUTER_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("OPENROUTER_API_KEY")`
 #' @param model `r param_model("gpt-4o")`
 #' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
@@ -23,9 +24,9 @@ NULL
 #' }
 chat_openrouter <- function(
   system_prompt = NULL,
-  api_key = openrouter_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
-  seed = NULL,
   params = NULL,
   api_args = list(),
   echo = c("none", "output", "all"),
@@ -34,16 +35,22 @@ chat_openrouter <- function(
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
+  credentials <- as_credentials(
+    "chat_openrouter",
+    function() openrouter_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   params <- params %||% params()
 
   provider <- ProviderOpenRouter(
     name = "OpenRouter",
     base_url = "https://openrouter.ai/api/v1",
     model = model,
-    seed = seed,
     params = params,
     extra_args = api_args,
-    api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -155,7 +162,8 @@ method(chat_resp_stream, ProviderOpenRouter) <- function(provider, resp) {
 
 method(as_json, list(ProviderOpenRouter, ContentText)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
   if (identical(x@text, "")) {
     # Tool call requests can include a Content with empty text,

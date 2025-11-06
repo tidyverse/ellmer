@@ -168,10 +168,10 @@ cli_escape <- function(x) {
 
 api_key_param <- function(key) {
   paste_c(
-    "API key to use for authentication.\n",
+    "A function that returns the API key to use for authentication.\n",
     "\n",
     c(
-      "You generally should not supply this directly, but instead set the ",
+      "You generally should not need this argument; instead set the ",
       c("`", key, "`"),
       " environment variable.\n"
     ),
@@ -289,4 +289,8 @@ request_summary <- function(req) {
     headers = req_get_headers(req, "reveal"),
     body = req_get_body(req)
   )
+}
+
+str_trunc <- function(x, n) {
+  ifelse(nchar(x) > n, paste0(substr(x, 1, n - 3), "..."), x)
 }

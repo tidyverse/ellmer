@@ -43,11 +43,11 @@ support more providers and as providers add more content types.
 }
 \examples{
 turns <- list(
-  Turn("user", contents = list(
+  UserTurn(list(
     ContentText("What's this image?"),
     content_image_url("https://placehold.co/200x200")
   )),
-  Turn("assistant", "It's a placeholder image.")
+  AssistantTurn("It's a placeholder image.")
 )
 
 lapply(turns, contents_text)
