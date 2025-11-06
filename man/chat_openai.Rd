@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-openai.R
 \name{chat_openai}
 \alias{chat_openai}
+\alias{models_openai}
 \title{Chat with an OpenAI model}
 \usage{
 chat_openai(
@@ -14,6 +15,12 @@ chat_openai(
   api_headers = character(),
   service_tier = c("auto", "default", "flex", "priority"),
   echo = c("none", "output", "all")
+)
+
+models_openai(
+  base_url = "https://api.openai.com/v1",
+  api_key = NULL,
+  credentials = NULL
 )
 }
 \arguments{
@@ -58,21 +65,22 @@ when running at the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 }
 \value{
 A \link{Chat} object.
 }
 \description{
 This is the main interface to \href{https://openai.com/}{OpenAI}'s models,
-using the responses API. You can use this to access OpenAI's latest
-models and features like image generation and web search.
+using the \strong{responses API}. You can use this to access OpenAI's latest
+models and features like image generation and web search. If you need to use
+an OpenAI-compatible API from another provider, or the \strong{chat completions}
+API with OpenAI,use \code{\link[=chat_openai_compatible]{chat_openai_compatible()}} instead.
 
 Note that a ChatGPT Plus membership does not grant access to the API.
 You will need to sign up for a developer account (and pay for it) at the
 \href{https://platform.openai.com}{developer platform}.
-
-If you need to use an OpenAI-compatible API from another provider,
-use \code{\link[=chat_openai_compatible]{chat_openai_compatible()}} instead.
 }
 \examples{
 \dontshow{ellmer:::vcr_example_start("chat_openai")}

@@ -9,19 +9,19 @@ NULL
 #'
 #' @description
 #' This is the main interface to [OpenAI](https://openai.com/)'s models,
-#' using the responses API. You can use this to access OpenAI's latest
-#' models and features like image generation and web search.
+#' using the **responses API**. You can use this to access OpenAI's latest
+#' models and features like image generation and web search. If you need to use
+#' an OpenAI-compatible API from another provider, or the **chat completions**
+#' API with OpenAI,use [chat_openai_compatible()] instead.
 #'
 #' Note that a ChatGPT Plus membership does not grant access to the API.
 #' You will need to sign up for a developer account (and pay for it) at the
 #' [developer platform](https://platform.openai.com).
 #'
-#' If you need to use an OpenAI-compatible API from another provider,
-#' use [chat_openai_compatible()] instead.
-#'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
 #' @param base_url The base URL to the endpoint; the default is OpenAI's
 #'   public API.
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("OPENAI_API_KEY")`
 #' @param model `r param_model("gpt-4.1", "openai")`
 #' @param params Common model parameters, usually created by [params()].
@@ -85,6 +85,47 @@ chat_openai <- function(
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
+
+#' @rdname chat_openai
+#' @export
+models_openai <- function(
+  base_url = "https://api.openai.com/v1",
+  api_key = NULL,
+  credentials = NULL
+) {
+  credentials <- as_credentials(
+    "models_openai",
+    function() paste0("Bearer ", openai_key()),
+    credentials = credentials,
+    api_key = api_key
+  )
+
+  provider <- ProviderOpenAICompatible(
+    name = "OpenAI",
+    model = "",
+    base_url = base_url,
+    credentials = credentials
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, "[[", "id")
+  created <- as.Date(.POSIXct(map_int(json$data, "[[", "created")))
+  owned_by <- map_chr(json$data, "[[", "owned_by")
+
+  df <- data.frame(
+    id = id,
+    created_at = created,
+    owned_by = owned_by
+  )
+  df <- cbind(df, match_prices(provider@name, df$id))
+  df[order(-xtfrm(df$created_at)), ]
+}
+
 chat_openai_test <- function(
   system_prompt = "Be terse.",
   ...,

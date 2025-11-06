@@ -2,7 +2,6 @@
 % Please edit documentation in R/provider-openai-compatible.R
 \name{chat_openai_compatible}
 \alias{chat_openai_compatible}
-\alias{models_openai}
 \title{Chat with an OpenAI-compatible model}
 \usage{
 chat_openai_compatible(
@@ -16,12 +15,6 @@ chat_openai_compatible(
   api_args = list(),
   api_headers = character(),
   echo = c("none", "output", "all")
-)
-
-models_openai(
-  base_url = "https://api.openai.com/v1",
-  api_key = NULL,
-  credentials = NULL
 )
 }
 \arguments{
@@ -63,9 +56,9 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
-This function is for OpenAI-compatible APIs, \strong{not} the official
-\href{https://openai.com/}{OpenAI} API. If you want to use OpenAI's models,
-use \code{\link[=chat_openai]{chat_openai()}} instead.
+This function is for use with OpenAI-compatible APIs, also known as the
+\strong{chat completions} API. If you want to use OpenAI itself, we recommend
+\code{\link[=chat_openai]{chat_openai()}}, which uses the newer \strong{responses} API.
 
 Many providers offer OpenAI-compatible APIs, including:
 \itemize{

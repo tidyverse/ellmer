@@ -7,9 +7,9 @@ NULL
 #' Chat with an OpenAI-compatible model
 #'
 #' @description
-#' This function is for OpenAI-compatible APIs, **not** the official
-#' [OpenAI](https://openai.com/) API. If you want to use OpenAI's models,
-#' use [chat_openai()] instead.
+#' This function is for use with OpenAI-compatible APIs, also known as the
+#' **chat completions** API. If you want to use OpenAI itself, we recommend
+#' [chat_openai()], which uses the newer **responses** API.
 #'
 #' Many providers offer OpenAI-compatible APIs, including:
 #' * [Ollama](https://ollama.com/) for local models
@@ -99,6 +99,7 @@ chat_openai_compatible <- function(
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
+
 chat_openai_compatible_test <- function(
   system_prompt = "Be terse.",
   ...,
@@ -461,46 +462,4 @@ method(as_json, list(ProviderOpenAICompatible, TypeObject)) <- function(
 
 method(has_batch_support, ProviderOpenAICompatible) <- function(provider) {
   FALSE
-}
-
-# Models -----------------------------------------------------------------------
-
-#' @rdname chat_openai_compatible
-#' @export
-models_openai <- function(
-  base_url = "https://api.openai.com/v1",
-  api_key = NULL,
-  credentials = NULL
-) {
-  credentials <- as_credentials(
-    "models_openai",
-    function() paste0("Bearer ", openai_key()),
-    credentials = credentials,
-    api_key = api_key
-  )
-
-  provider <- ProviderOpenAICompatible(
-    name = "OpenAI",
-    model = "",
-    base_url = base_url,
-    credentials = credentials
-  )
-
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/models")
-  resp <- req_perform(req)
-
-  json <- resp_body_json(resp)
-
-  id <- map_chr(json$data, "[[", "id")
-  created <- as.Date(.POSIXct(map_int(json$data, "[[", "created")))
-  owned_by <- map_chr(json$data, "[[", "owned_by")
-
-  df <- data.frame(
-    id = id,
-    created_at = created,
-    owned_by = owned_by
-  )
-  df <- cbind(df, match_prices(provider@name, df$id))
-  df[order(-xtfrm(df$created_at)), ]
 }
