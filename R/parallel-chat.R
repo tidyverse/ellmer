@@ -78,6 +78,7 @@ parallel_chat <- function(
   my_parallel_turns <- function(conversations) {
     parallel_turns(
       provider = chat$get_provider(),
+      model = chat$get_model_obj(),
       conversations = conversations,
       tools = chat$get_tools(),
       max_active = max_active,
@@ -127,7 +128,7 @@ parallel_chat <- function(
   map(seq_along(conversations), function(i) {
     if (is_ok[[i]]) {
       turns <- conversations[[i]]
-      log_turns(chat$get_provider(), turns)
+      log_turns(chat$get_provider(), chat$get_model_obj(), turns)
       chat$clone()$set_turns(turns)
     } else {
       assistant_turns[[i]]
@@ -191,6 +192,7 @@ parallel_chat_structured <- function(
   on_error <- arg_match(on_error)
 
   provider <- chat$get_provider()
+  model <- chat$get_model_obj()
   needs_wrapper <- type_needs_wrapper(type, provider)
 
   # First build up list of cumulative conversations
@@ -200,6 +202,7 @@ parallel_chat_structured <- function(
 
   turns <- parallel_turns(
     provider = provider,
+    model = model,
     conversations = conversations,
     tools = chat$get_tools(),
     type = wrap_type_if_needed(type, needs_wrapper),
@@ -207,7 +210,7 @@ parallel_chat_structured <- function(
     rpm = rpm,
     on_error = on_error
   )
-  log_turns(provider, turns)
+  log_turns(provider, model, turns)
 
   multi_convert(
     provider,
@@ -227,7 +230,7 @@ multi_convert <- function(
   include_tokens = FALSE,
   include_cost = FALSE
 ) {
-  needs_wrapper <- type_needs_wrapper(type, provider)
+  needs_wrapper <- type_needs_wrapper(type, provider, NULL)
 
   rows <- map(turns, \(turn) {
     if (turn_failed(turn)) {
@@ -306,6 +309,7 @@ turn_failed <- function(turn) {
 
 parallel_turns <- function(
   provider,
+  model,
   conversations,
   tools,
   type = NULL,
@@ -316,6 +320,7 @@ parallel_turns <- function(
   reqs <- map(conversations, function(turns) {
     chat_request(
       provider = provider,
+      model = model,
       turns = turns,
       type = type,
       tools = tools,
@@ -352,7 +357,7 @@ parallel_turns <- function(
       resp
     } else {
       json <- resp_body_json(resp)
-      turn <- value_turn(provider, json, has_type = !is.null(type))
+      turn <- value_turn(provider, model, json, has_type = !is.null(type))
       turn@duration <- resp_timing(resp)[["total"]] %||% NA_real_
       turn
     }

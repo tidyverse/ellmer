@@ -45,6 +45,7 @@ chat$chat("Tell me a funny joke")
 \item \href{#method-Chat-register_tool}{\code{Chat$register_tool()}}
 \item \href{#method-Chat-register_tools}{\code{Chat$register_tools()}}
 \item \href{#method-Chat-get_provider}{\code{Chat$get_provider()}}
+\item \href{#method-Chat-get_model_obj}{\code{Chat$get_model_obj()}}
 \item \href{#method-Chat-get_tools}{\code{Chat$get_tools()}}
 \item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
 \item \href{#method-Chat-on_tool_request}{\code{Chat$on_tool_request()}}
@@ -57,13 +58,15 @@ chat$chat("Tell me a funny joke")
 \if{latex}{\out{\hypertarget{method-Chat-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$new(provider, system_prompt = NULL, echo = "none")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$new(provider, model, system_prompt = NULL, echo = "none")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{provider}}{A provider object.}
+
+\item{\code{model}}{A model object.}
 
 \item{\code{system_prompt}}{System prompt to start the conversation with.}
 
@@ -445,6 +448,16 @@ Learn more in \code{vignette("tool-calling")}.
 Get the underlying provider object. For expert use only.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Chat$get_provider()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_model_obj"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_model_obj}{}}}
+\subsection{Method \code{get_model_obj()}}{
+Get the underlying model object. For expert use only.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Chat$get_model_obj()}\if{html}{\out{</div>}}
 }
 
 }

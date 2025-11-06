@@ -24,6 +24,7 @@ Chat <- R6::R6Class(
   "Chat",
   public = list(
     #' @param provider A provider object.
+    #' @param model A model object.
     #' @param system_prompt System prompt to start the conversation with.
     #' @param echo One of the following options:
     #'   * `none`: don't emit any output (default when running in a function).
@@ -33,8 +34,14 @@ Chat <- R6::R6Class(
     #'
     #'  Note this only affects the `chat()` method. You can override the default
     #'  by setting the `ellmer_echo` option.
-    initialize = function(provider, system_prompt = NULL, echo = "none") {
+    initialize = function(
+      provider,
+      model,
+      system_prompt = NULL,
+      echo = "none"
+    ) {
       private$provider <- provider
+      private$model <- model
       private$echo <- echo
       private$callback_on_tool_request <- CallbackManager$new(args = "request")
       private$callback_on_tool_result <- CallbackManager$new(args = "result")
@@ -78,7 +85,7 @@ Chat <- R6::R6Class(
       check_turn(assistant)
 
       if (log_tokens) {
-        log_turn(private$provider, assistant)
+        log_turn(private$provider, private$model, assistant)
       }
 
       private$.turns[[length(private$.turns) + 1]] <- user
@@ -97,7 +104,7 @@ Chat <- R6::R6Class(
 
     #' @description Retrieve the model name
     get_model = function() {
-      private$provider@model
+      private$model@name
     },
 
     #' @description Update the system prompt
@@ -381,6 +388,11 @@ Chat <- R6::R6Class(
       private$provider
     },
 
+    #' @description Get the underlying model object. For expert use only.
+    get_model_obj = function() {
+      private$model
+    },
+
     #' @description Retrieve the list of registered tools.
     get_tools = function() {
       private$tools
@@ -422,6 +434,7 @@ Chat <- R6::R6Class(
   ),
   private = list(
     provider = NULL,
+    model = NULL,
 
     .turns = list(),
     echo = NULL,
@@ -579,6 +592,7 @@ Chat <- R6::R6Class(
 
       response <- chat_perform(
         provider = private$provider,
+        model = private$model,
         mode = if (stream) "stream" else "value",
         turns = c(private$.turns, list(user_turn)),
         tools = if (is.null(type)) private$tools,
@@ -603,11 +617,17 @@ Chat <- R6::R6Class(
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
-        turn <- value_turn(private$provider, result, has_type = !is.null(type))
+        turn <- value_turn(
+          private$provider,
+          private$model,
+          result,
+          has_type = !is.null(type)
+        )
         turn <- match_tools(turn, private$tools)
       } else {
         turn <- value_turn(
           private$provider,
+          private$model,
           resp_body_json(response),
           has_type = !is.null(type)
         )
@@ -661,6 +681,7 @@ Chat <- R6::R6Class(
     ) {
       response <- chat_perform(
         provider = private$provider,
+        model = private$model,
         mode = if (stream) "async-stream" else "async-value",
         turns = c(private$.turns, list(user_turn)),
         tools = if (is.null(type)) private$tools,
@@ -685,12 +706,18 @@ Chat <- R6::R6Class(
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
-        turn <- value_turn(private$provider, result, has_type = !is.null(type))
+        turn <- value_turn(
+          private$provider,
+          private$model,
+          result,
+          has_type = !is.null(type)
+        )
       } else {
         result <- await(response)
 
         turn <- value_turn(
           private$provider,
+          private$model,
           resp_body_json(result),
           has_type = !is.null(type)
         )
@@ -738,6 +765,7 @@ Chat <- R6::R6Class(
 #' @export
 print.Chat <- function(x, ...) {
   provider <- x$get_provider()
+  model <- x$get_model()
   turns <- x$get_turns(include_system_prompt = TRUE)
 
   assistant_turns <- keep(turns, \(x) x@role == "assistant")
@@ -746,7 +774,7 @@ print.Chat <- function(x, ...) {
 
   cat(paste_c(
     "<Chat",
-    c(" ", provider@name, "/", provider@model),
+    c(" ", provider@name, "/", model),
     c(" turns=", length(turns)),
     turn_cost(total_tokens, total_cost, prefix = " "),
     ">\n"

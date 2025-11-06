@@ -58,14 +58,21 @@ chat_cloudflare <- function(
   provider <- ProviderCloudflare(
     name = "Cloudflare",
     base_url = base_url,
-    model = model,
-    params = params,
     credentials = credentials,
-    extra_args = api_args,
     extra_headers = api_headers
   )
+  model_obj <- Model(
+    name = model,
+    params = params,
+    extra_args = api_args
+  )
 
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderCloudflare <- new_class("ProviderCloudflare", parent = ProviderOpenAI)

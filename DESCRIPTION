@@ -86,6 +86,7 @@ Collate:
     'import-standalone-types-check.R'
     'interpolate.R'
     'live.R'
+    'model.R'
     'parallel-chat.R'
     'params.R'
     'provider-anthropic.R'

@@ -100,17 +100,24 @@ chat_anthropic <- function(
 
   provider <- ProviderAnthropic(
     name = "Anthropic",
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
     base_url = base_url,
     beta_headers = beta_headers,
     credentials = credentials,
     cache = cache
   )
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
 
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 #' @rdname chat_anthropic
@@ -180,6 +187,7 @@ method(chat_path, ProviderAnthropic) <- function(provider) {
 }
 method(chat_body, ProviderAnthropic) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -213,7 +221,7 @@ method(chat_body, ProviderAnthropic) <- function(
   }
   tools <- as_json(provider, unname(tools))
 
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model)
   if (has_name(params, "budget_tokens")) {
     thinking <- list(
       type = "enabled",
@@ -225,7 +233,7 @@ method(chat_body, ProviderAnthropic) <- function(
   }
 
   compact(list2(
-    model = provider@model,
+    model = model@name,
     system = system,
     messages = messages,
     stream = stream,
@@ -236,9 +244,9 @@ method(chat_body, ProviderAnthropic) <- function(
   ))
 }
 
-method(chat_params, ProviderAnthropic) <- function(provider, params) {
+method(chat_params, ProviderAnthropic) <- function(provider, model) {
   params <- standardise_params(
-    params,
+    model@params,
     c(
       temperature = "temperature",
       top_p = "top_p",
@@ -326,7 +334,7 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
   result
 }
 
-method(value_tokens, ProviderAnthropic) <- function(provider, json) {
+method(value_tokens, ProviderAnthropic) <- function(provider, model, json) {
   tokens(
     # Hack in pricing for cache writes
     input = json$usage$input_tokens +
@@ -338,6 +346,7 @@ method(value_tokens, ProviderAnthropic) <- function(provider, json) {
 
 method(value_turn, ProviderAnthropic) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
@@ -366,8 +375,8 @@ method(value_turn, ProviderAnthropic) <- function(
     }
   })
 
-  tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
+  tokens <- value_tokens(provider, model, result)
+  cost <- get_token_cost(provider, model, tokens)
   AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
@@ -584,11 +593,12 @@ method(batch_retrieve, ProviderAnthropic) <- function(provider, batch) {
 
 method(batch_result_turn, ProviderAnthropic) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
   if (result$type == "succeeded") {
-    value_turn(provider, result$message, has_type = has_type)
+    value_turn(provider, model, result$message, has_type = has_type)
   } else {
     NULL
   }
@@ -604,7 +614,6 @@ models_anthropic <- function(
 ) {
   provider <- ProviderAnthropic(
     name = "Anthropic",
-    model = "",
     base_url = base_url,
     credentials = function() api_key,
     cache = "none"

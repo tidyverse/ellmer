@@ -55,14 +55,21 @@ chat_openai_responses <- function(
   provider <- ProviderOpenAIResponses(
     name = "OpenAI",
     base_url = base_url,
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
     credentials = credentials,
     service_tier = service_tier
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 chat_openai_responses_test <- function(
   system_prompt = "Be terse.",
@@ -101,6 +108,7 @@ method(chat_path, ProviderOpenAIResponses) <- function(provider) {
 # https://platform.openai.com/docs/api-reference/responses
 method(chat_body, ProviderOpenAIResponses) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -124,7 +132,7 @@ method(chat_body, ProviderOpenAIResponses) <- function(
   }
 
   # https://platform.openai.com/docs/api-reference/responses/create#responses-create-include
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model)
 
   if (has_name(params, "reasoning_effort")) {
     reasoning <- list(
@@ -157,9 +165,9 @@ method(chat_body, ProviderOpenAIResponses) <- function(
 }
 
 
-method(chat_params, ProviderOpenAIResponses) <- function(provider, params) {
+method(chat_params, ProviderOpenAIResponses) <- function(provider, model) {
   standardise_params(
-    params,
+    model@params,
     c(
       temperature = "temperature",
       top_p = "top_p",
@@ -205,7 +213,11 @@ method(stream_merge_chunks, ProviderOpenAIResponses) <- function(
   }
 }
 
-method(value_tokens, ProviderOpenAIResponses) <- function(provider, json) {
+method(value_tokens, ProviderOpenAIResponses) <- function(
+  provider,
+  model,
+  json
+) {
   usage <- json$usage
   cached_tokens <- usage$input_tokens_details$cached_tokens %||% 0
 
