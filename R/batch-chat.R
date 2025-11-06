@@ -1,8 +1,6 @@
 #' Submit multiple chats in one batch
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
-#'
 #' `batch_chat()` and `batch_chat_structured()` currently only work with
 #' [chat_openai()] and [chat_anthropic()]. They use the
 #' [OpenAI](https://platform.openai.com/docs/guides/batch) and

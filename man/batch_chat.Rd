@@ -74,8 +74,6 @@ For any of the aboves, will return \code{NULL} if \code{wait = FALSE} and the jo
 is not complete.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
 \code{batch_chat()} and \code{batch_chat_structured()} currently only work with
 \code{\link[=chat_openai]{chat_openai()}} and \code{\link[=chat_anthropic]{chat_anthropic()}}. They use the
 \href{https://platform.openai.com/docs/guides/batch}{OpenAI} and
