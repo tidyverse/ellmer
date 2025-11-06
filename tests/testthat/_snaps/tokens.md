@@ -21,7 +21,7 @@
         provider  model   input output cached_input price
       1   OpenAI gpt-4o 1500000  2e+05            0 $5.75
 
-# dollars looks good including in data.frame
+# dollars looks good, including in data.frames
 
     Code
       price
