@@ -24,6 +24,11 @@ reference:
   - Chat
   - token_usage
 
+- subtitle: Provider-specific helpers
+  contents:
+  - google_upload
+  - starts_with("anthropic_file")
+
 - title: Chat helpers
   contents:
   - create_tool_def
@@ -31,7 +36,6 @@ reference:
   - content_pdf_url
   - starts_with("live_")
   - interpolate
-  - google_upload
 
 - title: Parallel and batch chat
   contents:
