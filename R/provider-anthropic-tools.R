@@ -19,9 +19,10 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' chat <- chat_claude(model = "claude-sonnet-4-5-20250929")
+#' chat <- chat_claude()
 #' chat$register_tool(tool_claude_web_search())
 #' chat$chat("What was in the news today?")
+#' chat$chat("What's the biggest news in the economy?")
 #' }
 tool_claude_web_search <- function(
   max_uses = NULL,
@@ -69,18 +70,15 @@ tool_claude_web_search <- function(
 #' @export
 #' @examples
 #' \dontrun{
-#' chat <- chat_claude(
-#'   model = "claude-sonnet-4-5-20250929",
-#'   beta_headers = "web-fetch-2025-09-10"
-#' )
+#' chat <- chat_claude(beta_headers = "web-fetch-2025-09-10")
 #' chat$register_tool(tool_claude_web_fetch())
-#' chat$chat("Fetch and summarize https://tidyverse.org/blog")
+#' chat$chat("What are the latest package releases on https://tidyverse.org/blog")
 #' }
 tool_claude_web_fetch <- function(
   max_uses = NULL,
   allowed_domains = NULL,
   blocked_domains = NULL,
-  citations = TRUE,
+  citations = FALSE,
   max_content_tokens = NULL
 ) {
   check_exclusive(allowed_domains, blocked_domains, .require = FALSE)

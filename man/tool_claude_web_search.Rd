@@ -32,9 +32,10 @@ Learn more in \url{https://docs.claude.com/en/docs/agents-and-tools/tool-use/web
 }
 \examples{
 \dontrun{
-chat <- chat_claude(model = "claude-sonnet-4-5-20250929")
+chat <- chat_claude()
 chat$register_tool(tool_claude_web_search())
 chat$chat("What was in the news today?")
+chat$chat("What's the biggest news in the economy?")
 }
 }
 \seealso{

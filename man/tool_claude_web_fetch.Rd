@@ -8,7 +8,7 @@ tool_claude_web_fetch(
   max_uses = NULL,
   allowed_domains = NULL,
   blocked_domains = NULL,
-  citations = TRUE,
+  citations = FALSE,
   max_content_tokens = NULL
 )
 }
@@ -36,12 +36,9 @@ Learn more in \url{https://docs.claude.com/en/docs/agents-and-tools/tool-use/web
 }
 \examples{
 \dontrun{
-chat <- chat_claude(
-  model = "claude-sonnet-4-5-20250929",
-  beta_headers = "web-fetch-2025-09-10"
-)
+chat <- chat_claude(beta_headers = "web-fetch-2025-09-10")
 chat$register_tool(tool_claude_web_fetch())
-chat$chat("Fetch and summarize https://tidyverse.org/blog")
+chat$chat("What are the latest package releases on https://tidyverse.org/blog")
 }
 }
 \seealso{

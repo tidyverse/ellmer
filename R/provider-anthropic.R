@@ -302,6 +302,12 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
       paste(result$content[[i]]$thinking) <- chunk$delta$thinking
     } else if (chunk$delta$type == "signature_delta") {
       paste(result$content[[i]]$signature) <- chunk$delta$signature
+    } else if (chunk$delta$type == "citations_delta") {
+      # https://docs.claude.com/en/docs/build-with-claude/citations#streaming-support
+      result$content[[i]]$citations <- c(
+        result$content[[i]]$citations,
+        list(chunk$delta$citation)
+      )
     } else {
       cli::cli_inform(c("!" = "Unknown delta type {.str {chunk$delta$type}}."))
     }
@@ -353,6 +359,32 @@ method(value_turn, ProviderAnthropic) <- function(
         }
         ContentToolRequest(content$id, content$name, content$input)
       }
+    } else if (content$type == "server_tool_use") {
+      # Sends a string, but expects parsed json to be sent back
+      content$input <- parse_json(content$input)
+
+      # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-search-tool#response
+      if (content$name == "web_search") {
+        ContentToolRequestSearch(
+          query = content$input$query,
+          json = content
+        )
+      } else if (content$name == "web_fetch") {
+        ContentToolRequestFetch(
+          url = content$input$url,
+          json = content
+        )
+      } else {
+        cli::cli_abort("Unknown server tool {.str {content$name}}.")
+      }
+    } else if (content$type == "web_search_tool_result") {
+      urls <- map_chr(content$content, \(x) x$url)
+      ContentToolResponseSearch(
+        url = urls,
+        json = content
+      )
+    } else if (content$type == "web_fetch_tool_result") {
+      ContentToolResponseFetch(url = content$url %||% "failed", json = content)
     } else if (content$type == "thinking") {
       ContentThinking(
         content$thinking,
