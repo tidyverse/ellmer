@@ -1,93 +1,164 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"system","content":"\n  You''re an expert baker
-        who also loves JSON. I am going to give you a list of\n  ingredients and your
-        job is to return nicely structured JSON. Just return the\n  JSON and no other
-        commentary.\n\n\n\n  * If an ingredient has both weight and volume, extract
-        only the weight:\n\n  ¾ cup (150g) dark brown sugar\n  [\n    {\"name\": \"dark
-        brown sugar\", \"quantity\": 150, \"unit\": \"g\"}\n  ]\n\n* If an ingredient
-        only lists a volume, extract that.\n\n  2 t ground cinnamon\n  ⅓ cup (80ml)
-        neutral oil\n  [\n    {\"name\": \"ground cinnamon\", \"quantity\": 2, \"unit\":
-        \"teaspoon\"},\n    {\"name\": \"neutral oil\", \"quantity\": 80, \"unit\":
-        \"ml\"}\n  ]\n"},{"role":"user","content":[{"type":"text","text":"\n  ¾ cup
-        (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½ cup
-        (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"\n  You''re
+        an expert baker who also loves JSON. I am going to give you a list of\n  ingredients
+        and your job is to return nicely structured JSON. Just return the\n  JSON
+        and no other commentary.\n\n\n\n  * If an ingredient has both weight and volume,
+        extract only the weight:\n\n  ¾ cup (150g) dark brown sugar\n  [\n    {\"name\":
+        \"dark brown sugar\", \"quantity\": 150, \"unit\": \"g\"}\n  ]\n\n* If an
+        ingredient only lists a volume, extract that.\n\n  2 t ground cinnamon\n  ⅓
+        cup (80ml) neutral oil\n  [\n    {\"name\": \"ground cinnamon\", \"quantity\":
+        2, \"unit\": \"teaspoon\"},\n    {\"name\": \"neutral oil\", \"quantity\":
+        80, \"unit\": \"ml\"}\n  ]\n"}]},{"role":"user","content":[{"type":"input_text","text":"\n  ¾
+        cup (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½
+        cup (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
         kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
-        plus 1½ teaspoons sugar\n"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"Ingredient
+        plus 1½ teaspoons sugar\n"}]}],"model":"gpt-4.1","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"Ingredient
         name"},"quantity":{"type":"number","description":""},"unit":{"type":"string","description":"Unit
-        of measurement"}},"required":["name","quantity","unit"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+        of measurement"}},"required":["name","quantity","unit"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 995bbb787df72cb6-DFW
+      cf-ray: 999eec9378aa8784-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Tue, 28 Oct 2025 16:15:33 GMT
+      date: Wed, 05 Nov 2025 19:58:11 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '2149'
+      openai-processing-ms: '3239'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=A3AIzL05o818yxIUPBTF4OoDGxnM_HRxwvvEyT2ibms-1761668133-1.0.1.1-OHC3J8cbf0AeGvabmvjtQKfIcU2IngcCvXtIXxxsuEBkzeQCXnvy2ePC4ScQdsyqYn8vJB12XRqtDbaBAlvIhqQUk4Doc7oiXsBJldQHUkA;
-        path=/; expires=Tue, 28-Oct-25 16:45:33 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=D545.HBG_6Bomcr9o0xE29vaX4SHKw8FKRk.WBhTAjY-1762372691-1.0.1.1-4jQfbuklSccKA_c5EWglxoxV7JqBeqpeNteF5Vqn49fOhvv7EzRAd6BdRdHk0352JsyEStqUmW8WjGZFEcpCbA6wruABFnsdOPHNSDfRhao;
+        path=/; expires=Wed, 05-Nov-25 20:28:11 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=ymoiMQyp6XEFVZdtFwewTUgOVrB2Xrcmrwy_apAhUr4-1761668133767-0.0.1.1-604800000;
+      - _cfuvid=cnBDGYd48xwElMVP1vvxEhhevf7hWNS1_lUbCp4uwW0-1762372691206-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '2457'
-      x-openai-proxy-wasm: v0.1
+      x-envoy-upstream-service-time: '3249'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999776'
+      x-ratelimit-remaining-tokens: '29999630'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_ec4e24927c7841b2b1743e27a29039bc
+      x-request-id: req_b34cdc15d7dd452c9562c4b286848e17
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-CVge3VbIpMPb6l43XNRRG25qXSdr7",
-          "object": "chat.completion",
-          "created": 1761668131,
+          "id": "resp_00e8f8dae831772d01690bac4ffc588190a530a0d199959987",
+          "object": "response",
+          "created_at": 1762372688,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":[{\"name\":\"dark brown sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"large eggs\",\"quantity\":2,\"unit\":\"piece\"},{\"name\":\"sour cream\",\"quantity\":165,\"unit\":\"g\"},{\"name\":\"unsalted butter, melted\",\"quantity\":113,\"unit\":\"g\"},{\"name\":\"vanilla extract\",\"quantity\":1,\"unit\":\"teaspoon\"},{\"name\":\"kosher salt\",\"quantity\":0.75,\"unit\":\"teaspoon\"},{\"name\":\"neutral oil\",\"quantity\":80,\"unit\":\"ml\"},{\"name\":\"all-purpose flour\",\"quantity\":190,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":1.5,\"unit\":\"teaspoon\"}]}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_00e8f8dae831772d01690bac50a5b08190ace17097d698cf26",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\n  \"wrapper\": [\n    {\"name\": \"dark brown sugar\", \"quantity\": 150, \"unit\": \"g\"},\n    {\"name\": \"large eggs\", \"quantity\": 2, \"unit\": \"piece\"},\n    {\"name\": \"sour cream\", \"quantity\": 165, \"unit\": \"g\"},\n    {\"name\": \"unsalted butter\", \"quantity\": 113, \"unit\": \"g\"},\n    {\"name\": \"vanilla extract\", \"quantity\": 1, \"unit\": \"teaspoon\"},\n    {\"name\": \"kosher salt\", \"quantity\": 0.75, \"unit\": \"teaspoon\"},\n    {\"name\": \"neutral oil\", \"quantity\": 80, \"unit\": \"ml\"},\n    {\"name\": \"all-purpose flour\", \"quantity\": 190, \"unit\": \"g\"},\n    {\"name\": \"sugar\", \"quantity\": 150, \"unit\": \"g\"},\n    {\"name\": \"sugar\", \"quantity\": 1.5, \"unit\": \"teaspoon\"}\n  ]\n}"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 355,
-            "completion_tokens": 153,
-            "total_tokens": 508,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_144ea3b974"
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "description": null,
+              "name": "structured_data",
+              "schema": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "wrapper": {
+                    "type": "array",
+                    "description": "",
+                    "items": {
+                      "type": "object",
+                      "description": "",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Ingredient name"
+                        },
+                        "quantity": {
+                          "type": "number",
+                          "description": ""
+                        },
+                        "unit": {
+                          "type": "string",
+                          "description": "Unit of measurement"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "quantity",
+                        "unit"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "wrapper"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 351,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 226,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 577
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-10-28 16:15:33
+  recorded_at: 2025-11-05 19:58:11
 recorded_with: VCR-vcr/2.0.0

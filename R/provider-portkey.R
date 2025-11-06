@@ -74,7 +74,7 @@ chat_portkey_test <- function(
 
 ProviderPortkeyAI <- new_class(
   "ProviderPortkeyAI",
-  parent = ProviderOpenAI,
+  parent = ProviderOpenAICompatible,
   properties = list(
     virtual_key = prop_string(allow_null = TRUE)
   )

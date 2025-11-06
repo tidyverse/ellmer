@@ -1,83 +1,141 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"\n  The
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  The
         product was okay, but the customer service was terrible. I probably\n  won''t
-        buy from them again.\n"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"Extract
+        buy from them again.\n"}]}],"model":"gpt-4.1","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"Extract
         the sentiment scores of a given text. Sentiment scores should sum to 1.","properties":{"positive_score":{"type":"number","description":"Positive
         sentiment score, ranging from 0.0 to 1.0."},"negative_score":{"type":"number","description":"Negative
         sentiment score, ranging from 0.0 to 1.0."},"neutral_score":{"type":"number","description":"Neutral
-        sentiment score, ranging from 0.0 to 1.0."}},"required":["positive_score","negative_score","neutral_score"],"additionalProperties":false},"strict":true}}}'
+        sentiment score, ranging from 0.0 to 1.0."}},"required":["positive_score","negative_score","neutral_score"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 96125b569ff3511a-MSP
+      cf-ray: 999eee330bff3458-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 18 Jul 2025 13:34:29 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '487'
+      date: Wed, 05 Nov 2025 19:59:17 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '2712'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=j1qlNNFkxaKxylhRJatSYhSxxn8ZzO0gy28TQb_pVsA-1752845669-1.0.1.1-J5kKt0UCygpKqH7m6eWlGtyqITGosSDqM892eP01807wa_Px3kCM0IIp28cvK5urSrTpc9exatF_ABxw7rfZlcM33ztnORINDr_N3MqMMOg;
-        path=/; expires=Fri, 18-Jul-25 14:04:29 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=JUmum.udXIKIgM4pjTOv1XFz4knTTUSm8_gacXT2TDM-1762372757-1.0.1.1-4B1zDiLQ7f2N.8319mW8cxKZFmqyRVMGhPhaJH.QnAn0kFL.ZvfaVSBByXVgX_iCUgXRJZk1NMcJUbXYXErSG0HwCPEeUtwKLIn_o.qJV4k;
+        path=/; expires=Wed, 05-Nov-25 20:29:17 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=fi2fGthhdkOyGTzGYYygXrJg5j0HrUALpVFV8rJk2L4-1752845669495-0.0.1.1-604800000;
+      - _cfuvid=zjrH0BO9Pegevgqap0fBDHErxpL.94djw1lUgswL2Vo-1762372757178-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '490'
+      x-envoy-upstream-service-time: '2717'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999972'
+      x-ratelimit-remaining-tokens: '29999835'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6571e3617cd71c668a78a8f440eb7a33
+      x-request-id: req_0aa3ad4528f743bb9530bdee75576e88
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-BufWHhlGgnngwYY6qKOfAXOc9zqlV",
-          "object": "chat.completion",
-          "created": 1752845669,
+          "id": "resp_0b514c955b22bc4001690bac9279388193acfe3ccc3127ec77",
+          "object": "response",
+          "created_at": 1762372754,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"positive_score\":0.05,\"negative_score\":0.7,\"neutral_score\":0.25}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_0b514c955b22bc4001690bac94c7a48193b0b0bac496eb356f",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\n  \"positive_score\": 0.1,\n  \"negative_score\": 0.7,\n  \"neutral_score\": 0.2\n}"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 153,
-            "completion_tokens": 22,
-            "total_tokens": 175,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": null
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "description": null,
+              "name": "structured_data",
+              "schema": {
+                "type": "object",
+                "description": "Extract the sentiment scores of a given text. Sentiment scores should sum to 1.",
+                "properties": {
+                  "positive_score": {
+                    "type": "number",
+                    "description": "Positive sentiment score, ranging from 0.0 to 1.0."
+                  },
+                  "negative_score": {
+                    "type": "number",
+                    "description": "Negative sentiment score, ranging from 0.0 to 1.0."
+                  },
+                  "neutral_score": {
+                    "type": "number",
+                    "description": "Neutral sentiment score, ranging from 0.0 to 1.0."
+                  }
+                },
+                "required": [
+                  "positive_score",
+                  "negative_score",
+                  "neutral_score"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 146,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 33,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 179
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-18 13:34:29
-recorded_with: VCR-vcr/1.7.1.93
+  recorded_at: 2025-11-05 19:59:17
+recorded_with: VCR-vcr/2.0.0

@@ -59,8 +59,7 @@ from your \href{https://huggingface.co/settings/tokens}{Hugging Face account}
 (ensure that at least "Make calls to Inference Providers" and
 "Make calls to your Inference Endpoints" is checked).
 
-This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}}, with
-the defaults adjusted for Hugging Face.
+Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 \subsection{Known limitations}{
 \itemize{
 \item Some models do not support the chat interface or parts of it, for example
@@ -89,7 +88,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

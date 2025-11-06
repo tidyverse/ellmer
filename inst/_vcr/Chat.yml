@@ -1,52 +1,109 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"Tell
-        me a funny joke"}]}],"model":"gpt-4.1","stream":false}'
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Tell
+        me a funny joke"}]}],"model":"gpt-4.1","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 957e057da976465a-DFW
+      cf-ray: 999ef5619be8671d-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 30 Jun 2025 13:31:00 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '573'
+      date: Wed, 05 Nov 2025 20:04:11 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '2529'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=e6gPMVgbrpavLPk_.XGTnd7ElQ8kqD1E05h9p_y2TBQ-1751290260-1.0.1.1-t7ipbvU9cJp4hOx.tF6k9vR2Jepd8aCgL6oIS13NQvkADB4l.qCX2s6YBeRxr8ZOaICb.N03o6QTFZ7YdQcGO5OXBhuwlk9hcNUlUeLpn60;
-        path=/; expires=Mon, 30-Jun-25 14:01:00 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=DP3H2XnrxhCDCiJkxjotUe9siLRoQDVhO7Qcx9ojdPU-1762373051-1.0.1.1-njO4sSTQEUq7uyAk5MQsN_8x2FADdpjbTQmtzBZA3MlnHfXoHZNNKUrsmimiqhljvwlwnw7ugroZwo4NKvx0iCOSCD1aamJYrURP.7a4P5s;
+        path=/; expires=Wed, 05-Nov-25 20:34:11 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=KVovGQ_hPREc2.b8pIgl2_ljuKKH6_BtUYVNTlcU6Y8-1751290260775-0.0.1.1-604800000;
+      - _cfuvid=3O9YcvhFD82LqQ6X7vnNFC8K4ZEytLKiZuLxykdTPFo-1762373051161-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '598'
+      x-envoy-upstream-service-time: '2536'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999993'
+      x-ratelimit-remaining-tokens: '29999969'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_38460279f1c66c165964bf1e1d81bd0b
+      x-request-id: req_6ca6b10158484ea6867d905a225ed0c2
     body:
-      string: "{\n  \"id\": \"chatcmpl-Bo8t24UnWlODRFRkAtA0Ftj8NXidq\",\n  \"object\":
-        \"chat.completion\",\n  \"created\": 1751290260,\n  \"model\": \"gpt-4.1-2025-04-14\",\n
-        \ \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\":
-        \"assistant\",\n        \"content\": \"Why did the scarecrow win an award?
-        \ \\nBecause he was outstanding in his field! \U0001F33E\U0001F604\",\n        \"refusal\":
-        null,\n        \"annotations\": []\n      },\n      \"logprobs\": null,\n
-        \     \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\":
-        12,\n    \"completion_tokens\": 22,\n    \"total_tokens\": 34,\n    \"prompt_tokens_details\":
-        {\n      \"cached_tokens\": 0,\n      \"audio_tokens\": 0\n    },\n    \"completion_tokens_details\":
-        {\n      \"reasoning_tokens\": 0,\n      \"audio_tokens\": 0,\n      \"accepted_prediction_tokens\":
-        0,\n      \"rejected_prediction_tokens\": 0\n    }\n  },\n  \"service_tier\":
-        \"default\",\n  \"system_fingerprint\": \"fp_51e1070cf2\"\n}\n"
-  recorded_at: 2025-06-30 13:31:00
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+      string: |-
+        {
+          "id": "resp_00710645a83b32bd01690badb8a6648195bc0e3de9489a6d1e",
+          "object": "response",
+          "created_at": 1762373048,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-2025-04-14",
+          "output": [
+            {
+              "id": "msg_00710645a83b32bd01690badba7ca88195bf3dea5de2c03c6f",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Sure! Here you go:\n\nWhy did the scarecrow win an award?\n\nBecause he was outstanding in his field! \ud83c\udf3e\ud83d\ude04"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 12,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 28,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 40
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2025-11-05 20:04:11
+recorded_with: VCR-vcr/2.0.0

@@ -7,13 +7,13 @@
 \usage{
 chat_openai(
   system_prompt = NULL,
-  base_url = Sys.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
-  api_key = NULL,
+  base_url = "https://api.openai.com/v1",
   credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
   api_headers = character(),
+  service_tier = c("auto", "default", "flex", "priority"),
   echo = c("none", "output", "all")
 )
 
@@ -26,9 +26,8 @@ models_openai(
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
-
-\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
+\item{base_url}{The base URL to the endpoint; the default is OpenAI's
+public API.}
 
 \item{credentials}{A function that returns the API key to use for authentication.
 
@@ -49,6 +48,14 @@ with \code{\link[=modifyList]{modifyList()}}.}
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
 
+\item{service_tier}{Request a specific service tier. There are four options:
+\itemize{
+\item \code{"auto"} (default): uses the service tier configured in Project settings.
+\item \code{"default"}: standard pricing and performance.
+\item \code{"flex"}: slower and cheaper.
+\item \code{"priority"}: faster and more expensive.
+}}
+
 \item{echo}{One of the following options:
 \itemize{
 \item \code{none}: don't emit any output (default when running in a function).
@@ -58,13 +65,19 @@ when running at the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 }
 \value{
 A \link{Chat} object.
 }
 \description{
-\href{https://openai.com/}{OpenAI} provides a number of chat-based models,
-mostly under the \href{https://chat.openai.com/}{ChatGPT} brand.
+This is the main interface to \href{https://openai.com/}{OpenAI}'s models,
+using the \strong{responses API}. You can use this to access OpenAI's latest
+models and features like image generation and web search. If you need to use
+an OpenAI-compatible API from another provider, or the \strong{chat completions}
+API with OpenAI,use \code{\link[=chat_openai_compatible]{chat_openai_compatible()}} instead.
+
 Note that a ChatGPT Plus membership does not grant access to the API.
 You will need to sign up for a developer account (and pay for it) at the
 \href{https://platform.openai.com}{developer platform}.
@@ -94,7 +107,7 @@ Other chatbots:
 \code{\link{chat_huggingface}()},
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

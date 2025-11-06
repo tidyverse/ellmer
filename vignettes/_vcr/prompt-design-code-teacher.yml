@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"\n  You
         are an expert R teacher.\n  I am a new R user who wants to improve my programming
         skills.\n  Help me understand the code you produce by explaining each function
         call with\n  a brief comment. For more complicated calls, add documentation
@@ -14,52 +14,42 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 16:15:16 GMT
+      date: Thu, 06 Nov 2025 14:55:34 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T16:15:09Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:55:29Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
       anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T16:15:16Z'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:55:34Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T16:15:07Z'
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:55:27Z'
+      retry-after: '32'
       anthropic-ratelimit-tokens-limit: '2400000'
       anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T16:15:09Z'
-      request-id: req_011CUZtqTKPKNmXQcJieci94
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:55:29Z'
+      request-id: req_011CUrq3LDBcSgSWEYpBeiqT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '9387'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '6879'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995bbae68bba23b8-DFW
+      cf-ray: 99a56e92be90c0c0-DFW
     body:
-      string: '{"model":"claude-sonnet-4-20250514","id":"msg_01XmB1syzHDFi4khN1HXN8y3","type":"message","role":"assistant","content":[{"type":"text","text":"```r\n#
-        Load required library for data manipulation\nlibrary(dplyr)\n\n# Method 1:
-        Using dplyr with across() for multiple summary statistics\nresult <- data
-        %>%\n  group_by(age, sex) %>%  # Group data by age and sex categories\n  summarise(\n    across(a:z,  #
-        Apply functions to variables from ''a'' to ''z''\n           list(mean = ~
-        mean(.x, na.rm = TRUE),  # Calculate mean, removing NAs\n                median
-        = ~ median(.x, na.rm = TRUE)),  # Calculate median, removing NAs\n           .names
-        = \"{.col}_{.fn}\"),  # Name format: variable_function\n    .groups = \"drop\"  #
-        Remove grouping after summarise\n  )\n\n# Method 2: Alternative using summarise_at()
-        (older syntax but still works)\nresult2 <- data %>%\n  group_by(age, sex)
-        %>%  # Group data by age and sex\n  summarise_at(vars(a:z),  # Select variables
-        from ''a'' to ''z''\n               list(mean = ~ mean(., na.rm = TRUE),  #
-        Calculate mean\n                    median = ~ median(., na.rm = TRUE)))  #
-        Calculate median\n\n# Method 3: Using pivot operations for long format output\nresult_long
-        <- data %>%\n  group_by(age, sex) %>%  # Group by demographic variables\n  summarise(\n    across(a:z,  #
-        Apply to all variables a through z\n           list(mean = ~ mean(.x, na.rm
-        = TRUE),\n                median = ~ median(.x, na.rm = TRUE)),\n           .names
-        = \"{.col}_{.fn}\"),\n    .groups = \"drop\"\n  ) %>%\n  pivot_longer(cols
-        = -c(age, sex),  # Reshape all columns except grouping vars\n               names_to
-        = c(\"variable\", \"statistic\"),  # Split column names\n               names_sep
-        = \"_\",  # Separator between variable and statistic\n               values_to
-        = \"value\")  # Name for the values column\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":120,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":495,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 16:15:16
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01Xq5j1e2eZSD85yzEQyiFf5","type":"message","role":"assistant","content":[{"type":"text","text":"```r\n#
+        Load the dplyr package for data manipulation\nlibrary(dplyr)\n\n# Compute
+        mean and median for variables a through z, grouped by age and sex\nresult
+        <- your_data %>%\n  # Group the data by age and sex\n  group_by(age, sex)
+        %>%\n  # Calculate mean and median for each variable from a to z\n  summarise(\n    #
+        across() applies functions to multiple columns\n    across(\n      # Select
+        columns a through z\n      a:z,\n      # List of functions to apply: mean
+        and median\n      list(\n        mean = ~mean(.x, na.rm = TRUE),  # Calculate
+        mean, removing NA values\n        median = ~median(.x, na.rm = TRUE)  # Calculate
+        median, removing NA values\n      ),\n      # Name the output columns as \"variable_function\"
+        (e.g., \"a_mean\", \"a_median\")\n      .names = \"{.col}_{.fn}\"\n    ),\n    #
+        Remove grouping message\n    .groups = \"drop\"\n  )\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":120,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":247,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:55:34
 recorded_with: VCR-vcr/2.0.0

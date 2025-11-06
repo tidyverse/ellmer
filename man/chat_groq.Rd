@@ -19,7 +19,8 @@ chat_groq(
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
+\item{base_url}{The base URL to the endpoint; the default is OpenAI's
+public API.}
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
@@ -57,8 +58,7 @@ A \link{Chat} object.
 \description{
 Sign up at \url{https://groq.com}.
 
-This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}} with
-the defaults tweaked for groq.
+Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 \subsection{Known limitations}{
 
 groq does not currently support structured data extraction.
@@ -84,7 +84,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

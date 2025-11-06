@@ -20,7 +20,8 @@ chat_vllm(
 models_vllm(base_url, api_key = NULL, credentials = NULL)
 }
 \arguments{
-\item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
+\item{base_url}{The base URL to the endpoint; the default is OpenAI's
+public API.}
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
@@ -61,6 +62,8 @@ A \link{Chat} object.
 \href{https://docs.vllm.ai/en/latest/}{vLLM} is an open source library that
 provides an efficient and convenient LLMs model server. You can use
 \code{chat_vllm()} to connect to endpoints powered by vLLM.
+
+Uses OpenAI compatible API via \code{chat_openai_compatible()}.
 }
 \examples{
 \dontrun{

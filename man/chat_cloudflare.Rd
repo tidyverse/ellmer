@@ -60,6 +60,8 @@ A \link{Chat} object.
 Workers AI hosts a variety of open-source AI models. To use the Cloudflare
 API, you must have an Account ID and an Access Token, which you can obtain
 \href{https://developers.cloudflare.com/workers-ai/get-started/rest-api/}{by following these instructions}.
+
+Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 \subsection{Known limitations}{
 \itemize{
 \item Tool calling does not appear to work.
@@ -87,7 +89,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

@@ -1,174 +1,266 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What
-        are Joe and Hadley''s favorite colors?"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
+        terse."}]},{"role":"user","content":[{"type":"input_text","text":"What are
+        Joe and Hadley''s favorite colors?"}]}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
-        name"}},"required":["user"],"additionalProperties":false}}}]}'
+        name"}},"required":["user"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95b79ee4eef22e18-DFW
+      cf-ray: 999d6dbddb37f061-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 07 Jul 2025 13:17:12 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '560'
+      date: Wed, 05 Nov 2025 15:36:48 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1169'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=NTumqhrZVaGtiw5T6HG_NeLxYgbu_4yV3NbP30SUfns-1751894232-1.0.1.1-Tm1VICTk6F4rs7f3..vWS7uBbKY.Z7u12uGR2ZR0QCVMGSfTGoaUyHMwrsmtK.pe4ixhQ59uIC_PBmsbc14WSVKFdoRhHzp0RzF26s39dis;
-        path=/; expires=Mon, 07-Jul-25 13:47:12 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=n4P9Qn3P0kFpmm5kXPzyVsYyJfuKf0SuA5IuuNGadmM-1762357008-1.0.1.1-0OoHo_wxlP3fAgWQkB3a.40Pn1frvY41f7ltQuUeJSTUZRCU7YN_4YopWVoxDEnntwKnwgdheSZeOFTZrXXz.gd4HOhZ6VSTKPdXReF54iY;
+        path=/; expires=Wed, 05-Nov-25 16:06:48 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=e5wdTWTz.E9Xh3PS4PLfjfANK.bumTBlTk7ohkTrB4c-1751894232433-0.0.1.1-604800000;
+      - _cfuvid=1SmlKkUZr_n2w.jKPnTDG1PW73nPi7IohDhCznDaWPI-1762357008223-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '564'
+      x-envoy-upstream-service-time: '1176'
       x-ratelimit-limit-requests: '30000'
       x-ratelimit-limit-tokens: '150000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999984'
+      x-ratelimit-remaining-tokens: '149999722'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_d3642c763e2aede6ab58f48a77c18de5
+      x-request-id: req_b552886ac7014d35a34260f73849b177
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-Bqg0Vh4RQit4GLSBlPUwpZ3yvl2Fb",
-          "object": "chat.completion",
-          "created": 1751894231,
+          "id": "resp_044052860738403e01690b6f0f10108195a622cf3e0ea1066d",
+          "object": "response",
+          "created_at": 1762357007,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-nano-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": null,
-                "tool_calls": [
-                  {
-                    "id": "call_bEj83efeM32lV6czfoYOCbiL",
-                    "type": "function",
-                    "function": {
-                      "name": "user_favorite_color",
-                      "arguments": "{\"user\": \"Joe\"}"
-                    }
-                  },
-                  {
-                    "id": "call_q5IcmtmRdgyYt4MWOHB2Dy3x",
-                    "type": "function",
-                    "function": {
-                      "name": "user_favorite_color",
-                      "arguments": "{\"user\": \"Hadley\"}"
-                    }
-                  }
-                ],
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "tool_calls"
+              "id": "fc_044052860738403e01690b6f0fe4f88195bff3af8a01aa6f6b",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{\"user\":\"Joe\"}",
+              "call_id": "call_cZL5cEcq6VSzmf5S8E3SGcYO",
+              "name": "user_favorite_color"
+            },
+            {
+              "id": "fc_044052860738403e01690b6f10055c8195be1b7f8d1fb16196",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{\"user\":\"Hadley\"}",
+              "call_id": "call_LfnjYKJT74CigyAyRdbVas1N",
+              "name": "user_favorite_color"
             }
           ],
-          "usage": {
-            "prompt_tokens": 63,
-            "completion_tokens": 49,
-            "total_tokens": 112,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "store": false,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Find out a user's favorite color",
+              "name": "user_favorite_color",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "user": {
+                    "type": "string",
+                    "description": "User's name"
+                  }
+                },
+                "required": [
+                  "user"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 30,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 50,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 80
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-07 13:17:12
+  recorded_at: 2025-11-05 15:36:48
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What
-        are Joe and Hadley''s favorite colors?"}]},{"role":"assistant","tool_calls":[{"id":"call_bEj83efeM32lV6czfoYOCbiL","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Joe\"]}"},"type":"function"},{"id":"call_q5IcmtmRdgyYt4MWOHB2Dy3x","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Hadley\"]}"},"type":"function"}]},{"role":"tool","content":"blue","tool_call_id":"call_bEj83efeM32lV6czfoYOCbiL"},{"role":"tool","content":"red","tool_call_id":"call_q5IcmtmRdgyYt4MWOHB2Dy3x"}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
+        terse."}]},{"role":"user","content":[{"type":"input_text","text":"What are
+        Joe and Hadley''s favorite colors?"}]},{"type":"function_call","call_id":"fc_044052860738403e01690b6f0fe4f88195bff3af8a01aa6f6b","name":"user_favorite_color","arguments":"{\"user\":[\"Joe\"]}"},{"type":"function_call","call_id":"fc_044052860738403e01690b6f10055c8195be1b7f8d1fb16196","name":"user_favorite_color","arguments":"{\"user\":[\"Hadley\"]}"},{"type":"function_call_output","call_id":"fc_044052860738403e01690b6f0fe4f88195bff3af8a01aa6f6b","output":"blue"},{"type":"function_call_output","call_id":"fc_044052860738403e01690b6f10055c8195be1b7f8d1fb16196","output":"red"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
-        name"}},"required":["user"],"additionalProperties":false}}}]}'
+        name"}},"required":["user"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95b79ee9cbc12e18-DFW
+      cf-ray: 999d6dc6edddf061-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 07 Jul 2025 13:17:12 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '308'
+      date: Wed, 05 Nov 2025 15:36:50 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1608'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=W.ZUZCrscHEwJ68v3afhSCs3kXK7t8l0CHeAdnI9LLI-1751894232-1.0.1.1-c3esJYBJkEElQ0es3aKzbib_IC9wqPXadVQxq53Gk2I094n0EAxwlSZ8_ftwG3HAfZ.Se8zRkvsLKtdOuT_00UgxPj7UftBJdniHMXXCUOU;
-        path=/; expires=Mon, 07-Jul-25 13:47:12 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=JEqUhiWvNpWGNCFYxrctCf2Kd5VpwVinW5zu5zp95HY-1762357010-1.0.1.1-XuJfXOJcyBQv46Da9PDL6FY4RUD2IFp0sdr3G2deHqXGtZNS6vV6_8TIPlrbQRp2qRc4_rVBA_OgHzJaYAmEK_W91z652J5GvxzwKTLHn_8;
+        path=/; expires=Wed, 05-Nov-25 16:06:50 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=nCC395Ah1Phf6Wj4mOjtqolQRIZTAlMKW_yDMAbK23I-1751894232974-0.0.1.1-604800000;
+      - _cfuvid=6m3_tIPHT7RhZv.yCZAvSteDOkpdeZJG6SsZGV1Pu.E-1762357010163-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '312'
+      x-envoy-upstream-service-time: '1655'
       x-ratelimit-limit-requests: '30000'
       x-ratelimit-limit-tokens: '150000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999978'
+      x-ratelimit-remaining-tokens: '149999670'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_8ff238b3e226044c1492a39f5fb37e14
+      x-request-id: req_e87b167c40334b68a602c5bb3bc800f4
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-Bqg0WeFnpsXOpAlQ0tA97OPJYWQxA",
-          "object": "chat.completion",
-          "created": 1751894232,
+          "id": "resp_02f9d6f2b1b2f81401690b6f10cc408194804442ad3412771d",
+          "object": "response",
+          "created_at": 1762357008,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-nano-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "Joe's favorite color is blue, and Hadley's favorite color is red.",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_02f9d6f2b1b2f81401690b6f11dee881948e316c48bde21cfa",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Joe's favorite color is blue, and Hadley's favorite color is red."
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 130,
-            "completion_tokens": 16,
-            "total_tokens": 146,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "store": false,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Find out a user's favorite color",
+              "name": "user_favorite_color",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "user": {
+                    "type": "string",
+                    "description": "User's name"
+                  }
+                },
+                "required": [
+                  "user"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 114,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 17,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 131
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-07 13:17:12
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-11-05 15:36:50
+recorded_with: VCR-vcr/2.0.0

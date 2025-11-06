@@ -8,8 +8,7 @@
 #' (ensure that at least "Make calls to Inference Providers" and
 #' "Make calls to your Inference Endpoints" is checked).
 #'
-#' This function is a lightweight wrapper around [chat_openai()], with
-#' the defaults adjusted for Hugging Face.
+#' Built on top of [chat_openai_compatible()].
 #'
 #' ## Known limitations
 #'
@@ -65,7 +64,10 @@ chat_huggingface <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-ProviderHuggingFace <- new_class("ProviderHuggingFace", parent = ProviderOpenAI)
+ProviderHuggingFace <- new_class(
+  "ProviderHuggingFace",
+  parent = ProviderOpenAICompatible
+)
 
 chat_huggingface_test <- function(
   system_prompt = "Be terse",

@@ -1,4 +1,4 @@
-#' @include provider-openai.R
+#' @include provider-openai-compatible.R
 NULL
 
 #' Chat with a model hosted on Groq
@@ -6,8 +6,7 @@ NULL
 #' @description
 #' Sign up at <https://groq.com>.
 #'
-#' This function is a lightweight wrapper around [chat_openai()] with
-#' the defaults tweaked for groq.
+#' Built on top of [chat_openai_compatible()].
 #'
 #' ## Known limitations
 #'
@@ -62,7 +61,7 @@ chat_groq <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-ProviderGroq <- new_class("ProviderGroq", parent = ProviderOpenAI)
+ProviderGroq <- new_class("ProviderGroq", parent = ProviderOpenAICompatible)
 
 method(as_json, list(ProviderGroq, Turn)) <- function(provider, x, ...) {
   if (is_assistant_turn(x)) {
@@ -86,7 +85,7 @@ method(as_json, list(ProviderGroq, Turn)) <- function(provider, x, ...) {
       ))
     )
   } else {
-    as_json(super(provider, ProviderOpenAI), x, ...)
+    as_json(super(provider, ProviderOpenAICompatible), x, ...)
   }
 }
 
