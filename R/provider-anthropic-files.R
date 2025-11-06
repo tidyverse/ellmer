@@ -47,7 +47,8 @@ anthropic_file_upload <- function(
   req <- req_body_multipart(req, file = file)
   resp <- req_perform(req)
   json <- resp_body_json(resp)
-  anthropic_file_create_content(json)
+
+  ContentUploaded(uri = json$id, mime_type = json$mime_type)
 }
 
 #' @export
@@ -84,7 +85,7 @@ anthropic_file_get <- function(
   resp <- req_perform(req)
   json <- resp_body_json(resp)
 
-  anthropic_file_create_content(json)
+  ContentUploaded(uri = json$id, mime_type = json$mime_type)
 }
 
 #' @export
@@ -116,39 +117,6 @@ anthropic_file_delete <- function(
   resp <- req_perform(req)
 
   invisible()
-}
-
-anthropic_file_create_content <- function(response) {
-  block_type <- switch(
-    response$mime_type,
-    "application/pdf" = "document",
-    "text/plain" = "document",
-    "image/jpeg" = "image",
-    "image/png" = "image",
-    "image/gif" = "image",
-    "image/webp" = "image",
-    "text/csv" = "container_upload",
-    "application/json" = "container_upload",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "container_upload",
-    "application/vnd.ms-excel" = "container_upload",
-    "text/xml" = "container_upload",
-    "application/xml" = "container_upload"
-  )
-
-  ContentAnthropicFile(file_id = response$id, block_type = block_type)
-}
-
-ContentAnthropicFile <- new_class(
-  "ContentAnthropicFile",
-  parent = Content,
-  properties = list(
-    block_type = prop_string(),
-    file_id = prop_string()
-  )
-)
-
-method(format, ContentAnthropicFile) <- function(x, ...) {
-  "<Anthropic File>"
 }
 
 request_anthropic_file <- function(url, beta_headers, credentials) {

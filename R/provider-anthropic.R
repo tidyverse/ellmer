@@ -428,15 +428,32 @@ method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(
   )
 }
 
-method(as_json, list(ProviderAnthropic, ContentAnthropicFile)) <- function(
+method(as_json, list(ProviderAnthropic, ContentUploaded)) <- function(
   provider,
   x
 ) {
+  # https://docs.claude.com/en/docs/build-with-claude/files#using-a-file-in-messages
+  block_type <- switch(
+    x@mime_type,
+    "application/pdf" = "document",
+    "text/plain" = "document",
+    "image/jpeg" = "image",
+    "image/png" = "image",
+    "image/gif" = "image",
+    "image/webp" = "image",
+    "text/csv" = "container_upload",
+    "application/json" = "container_upload",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "container_upload",
+    "application/vnd.ms-excel" = "container_upload",
+    "text/xml" = "container_upload",
+    "application/xml" = "container_upload"
+  )
+
   list(
-    type = x@block_type,
+    type = block_type,
     source = list(
       type = "file",
-      file_id = x@file_id
+      file_id = x@uri
     )
   )
 }
