@@ -114,7 +114,7 @@ API; instead, you will need to sign up (and pay for) a
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
-<dd><p>The model to use for the chat (defaults to "claude-sonnet-4-20250514").
+<dd><p>The model to use for the chat (defaults to "claude-sonnet-4-5-20250929").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use <code>models_anthropic()</code> to see all options.</p></dd>
 
@@ -227,30 +227,31 @@ don't see any differences with caching if you have a short prompt.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">chat_anthropic</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-5-20250929"</span>.</span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Tell me three jokes about statisticians"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Here are three jokes about statisticians:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # Three Jokes About Statisticians</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1. **The Drowning Statistician**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A statistician is drowning in a lake that's on average only 3 feet </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> deep. When asked how this could happen, he gasps: "Well, it was 2 feet</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> deep for most of the way across, but then there was this 50-foot </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> section..."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **1. The Drowning Statistician**</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A statistician is someone who could drown crossing a river that's an </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> average of three feet deep.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2. **The Confident Statistician**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A statistician's wife is having a baby. After the delivery, he asks </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> the doctor, "Is it a boy or a girl?" The doctor replies, "Well, I can </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tell you with 95% confidence that it's one of the two."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **2. The Uncertain Response**</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Three statisticians go hunting. They spot a deer. The first </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> statistician shoots and misses—two feet to the left. The second shoots</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> and misses—two feet to the right. The third statistician jumps up and </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> down shouting, "We got it! We got it!"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3. **The Literal Statistician**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Three statisticians go hunting. They spot a deer 100 yards away. The </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> first statistician shoots and misses 5 feet to the left. The second </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> shoots and misses 5 feet to the right. The third statistician jumps up</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> and yells, "We got him!"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **3. The Kidnapped Statistician**</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A kidnapper grabs a statistician and threatens, "Give me all your </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> money or you're average!" The statistician replies, "I think you mean </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 'or you're history.'" The kidnapper responds, "Don't tell me my </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> job—you tell me the mean!"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> These jokes play on common statistical concepts like averages being </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> misleading, confidence intervals, and the difference between </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theoretical accuracy and practical results!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> *These jokes play on statistical concepts like averages, means, and </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the classic distinction between theoretical data and practical </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> reality!*</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

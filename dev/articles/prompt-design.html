@@ -176,92 +176,64 @@ our experience it does the best job of generating code.</p>
 different languages or different styles of R code:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_anthropic.html">chat_anthropic</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-5-20250929"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Here are several ways to compute the mean and median of variables a </span></span>
-<span><span class="co">#&gt; through z, grouped by age and sex, depending on the tool you're using:</span></span>
+<pre><code><span><span class="co">#&gt; # Computing Mean and Median by Groups</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## Python (pandas)</span></span>
+<span><span class="co">#&gt; Here are several approaches depending on your tool:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ```python</span></span>
-<span><span class="co">#&gt; import pandas as pd</span></span>
-<span><span class="co">#&gt; import numpy as np</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Assuming your data is in a DataFrame called 'df'</span></span>
-<span><span class="co">#&gt; # Variables a-z plus age and sex columns</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 1: Select variables a-z explicitly</span></span>
-<span><span class="co">#&gt; vars_a_to_z = [chr(i) for i in range(ord('a'), ord('z') + 1)]</span></span>
-<span><span class="co">#&gt; result = df.groupby(['age', 'sex'])[vars_a_to_z].agg(['mean', </span></span>
-<span><span class="co">#&gt; 'median'])</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 2: If a-z are the only non-grouping variables</span></span>
-<span><span class="co">#&gt; result = df.groupby(['age', 'sex']).agg(['mean', 'median'])</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; print(result)</span></span>
-<span><span class="co">#&gt; ```</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## R</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ## **R (tidyverse)**</span></span>
 <span><span class="co">#&gt; ```r</span></span>
 <span><span class="co">#&gt; library(dplyr)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 1: Using dplyr</span></span>
-<span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
+<span><span class="co">#&gt; df %&gt;%</span></span>
 <span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
-<span><span class="co">#&gt;   summarise(across(a:z, list(mean = mean, median = median), .names = </span></span>
-<span><span class="co">#&gt; "{.col}_{.fn}"))</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 2: Using base R aggregate</span></span>
-<span><span class="co">#&gt; # For mean</span></span>
-<span><span class="co">#&gt; means &lt;- aggregate(df[, letters], by = list(age = df$age, sex = </span></span>
-<span><span class="co">#&gt; df$sex), FUN = mean)</span></span>
-<span><span class="co">#&gt; # For median  </span></span>
-<span><span class="co">#&gt; medians &lt;- aggregate(df[, letters], by = list(age = df$age, sex = </span></span>
-<span><span class="co">#&gt; df$sex), FUN = median)</span></span>
+<span><span class="co">#&gt;   summarise(across(a:z, </span></span>
+<span><span class="co">#&gt;                    list(mean = ~mean(., na.rm = TRUE),</span></span>
+<span><span class="co">#&gt;                         median = ~median(., na.rm = TRUE)),</span></span>
+<span><span class="co">#&gt;                    .names = "{.col}_{.fn}"))</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## SQL</span></span>
+<span><span class="co">#&gt; ## **Python (pandas)**</span></span>
+<span><span class="co">#&gt; ```python</span></span>
+<span><span class="co">#&gt; import pandas as pd</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; df.groupby(['age', 'sex']).agg(</span></span>
+<span><span class="co">#&gt;     {col: ['mean', 'median'] for col in df.columns if col not in </span></span>
+<span><span class="co">#&gt; ['age', 'sex']}</span></span>
+<span><span class="co">#&gt; )</span></span>
+<span><span class="co">#&gt; ```</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Or more explicitly for columns a-z:</span></span>
+<span><span class="co">#&gt; ```python</span></span>
+<span><span class="co">#&gt; cols = [chr(i) for i in range(ord('a'), ord('z')+1)]</span></span>
+<span><span class="co">#&gt; df.groupby(['age', 'sex'])[cols].agg(['mean', 'median'])</span></span>
+<span><span class="co">#&gt; ```</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ## **SQL**</span></span>
 <span><span class="co">#&gt; ```sql</span></span>
 <span><span class="co">#&gt; SELECT </span></span>
-<span><span class="co">#&gt;   age,</span></span>
+<span><span class="co">#&gt;   age, </span></span>
 <span><span class="co">#&gt;   sex,</span></span>
-<span><span class="co">#&gt;   AVG(a) as mean_a, AVG(b) as mean_b, ..., AVG(z) as mean_z,</span></span>
-<span><span class="co">#&gt;   PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY a) as median_a,</span></span>
-<span><span class="co">#&gt;   PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY b) as median_b,</span></span>
-<span><span class="co">#&gt;   ...</span></span>
-<span><span class="co">#&gt;   PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY z) as median_z</span></span>
-<span><span class="co">#&gt; FROM your_table</span></span>
-<span><span class="co">#&gt; GROUP BY age, sex;</span></span>
+<span><span class="co">#&gt;   AVG(a) as a_mean, PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY a) as </span></span>
+<span><span class="co">#&gt; a_median,</span></span>
+<span><span class="co">#&gt;   AVG(b) as b_mean, PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY b) as </span></span>
+<span><span class="co">#&gt; b_median,</span></span>
+<span><span class="co">#&gt;   -- ... repeat for c through z</span></span>
+<span><span class="co">#&gt; FROM table</span></span>
+<span><span class="co">#&gt; GROUP BY age, sex</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## Excel/Google Sheets</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 1. Create a pivot table with age and sex as row labels</span></span>
-<span><span class="co">#&gt; 2. Add variables a-z as values</span></span>
-<span><span class="co">#&gt; 3. Change value field settings to show both average and median for </span></span>
-<span><span class="co">#&gt; each variable</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## SAS</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ```sas</span></span>
-<span><span class="co">#&gt; proc means data=your_dataset mean median;</span></span>
-<span><span class="co">#&gt;     class age sex;</span></span>
-<span><span class="co">#&gt;     var a--z;  /* Variables from a to z */</span></span>
-<span><span class="co">#&gt; run;</span></span>
+<span><span class="co">#&gt; ## **Base R**</span></span>
+<span><span class="co">#&gt; ```r</span></span>
+<span><span class="co">#&gt; aggregate(. ~ age + sex, </span></span>
+<span><span class="co">#&gt;           data = df, </span></span>
+<span><span class="co">#&gt;           FUN = function(x) c(mean = mean(x, na.rm = TRUE), </span></span>
+<span><span class="co">#&gt;                               median = median(x, na.rm = TRUE)))</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## SPSS</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ```spss</span></span>
-<span><span class="co">#&gt; MEANS TABLES=a TO z BY age BY sex</span></span>
-<span><span class="co">#&gt;   /CELLS=MEAN MEDIAN.</span></span>
-<span><span class="co">#&gt; ```</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The pandas solution is probably the most flexible if you're working </span></span>
-<span><span class="co">#&gt; with Python, as it handles the variable selection automatically and </span></span>
-<span><span class="co">#&gt; produces a clean, multi-level indexed result.</span></span></code></pre>
+<span><span class="co">#&gt; Which approach works best for you depends on your data format and </span></span>
+<span><span class="co">#&gt; preferred language!</span></span></code></pre>
 <p>I can ensure that I always get R code in a specific style by
 providing a system prompt:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -270,35 +242,42 @@ providing a system prompt:</p>
 <span><span class="st">  You are an expert R programmer who prefers the tidyverse.</span></span>
 <span><span class="st">"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-5-20250929"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Here are a few ways to compute the mean and median of variables a </span></span>
-<span><span class="co">#&gt; through z, grouped by age and sex using tidyverse:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## Method 1: Using `across()` with `c_across()` (most flexible)</span></span>
+<pre><code><span><span class="co">#&gt; Here's how to compute the mean and median of variables `a` through </span></span>
+<span><span class="co">#&gt; `z`, grouped by `age` and `sex`:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; library(dplyr)</span></span>
+<span><span class="co">#&gt; library(tidyverse)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
+<span><span class="co">#&gt; # Assuming your data frame is called 'df'</span></span>
+<span><span class="co">#&gt; df %&gt;%</span></span>
 <span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
 <span><span class="co">#&gt;   summarise(</span></span>
-<span><span class="co">#&gt;     across(a:z, list(mean = mean, median = median), .names = </span></span>
-<span><span class="co">#&gt; "{.col}_{.fn}"),</span></span>
+<span><span class="co">#&gt;     across(</span></span>
+<span><span class="co">#&gt;       a:z,</span></span>
+<span><span class="co">#&gt;       list(mean = mean, median = median),</span></span>
+<span><span class="co">#&gt;       .names = "{.col}_{.fn}"</span></span>
+<span><span class="co">#&gt;     ),</span></span>
 <span><span class="co">#&gt;     .groups = "drop"</span></span>
 <span><span class="co">#&gt;   )</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## Method 2: If you want summary statistics in long format</span></span>
+<span><span class="co">#&gt; This will create columns like `a_mean`, `a_median`, `b_mean`, </span></span>
+<span><span class="co">#&gt; `b_median`, etc.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; **Alternative approach** if you want the results in long format:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; library(dplyr)</span></span>
-<span><span class="co">#&gt; library(tidyr)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
+<span><span class="co">#&gt; df %&gt;%</span></span>
 <span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
-<span><span class="co">#&gt;   summarise(across(a:z, list(mean = mean, median = median)), .groups =</span></span>
-<span><span class="co">#&gt; "drop") %&gt;%</span></span>
+<span><span class="co">#&gt;   summarise(</span></span>
+<span><span class="co">#&gt;     across(</span></span>
+<span><span class="co">#&gt;       a:z,</span></span>
+<span><span class="co">#&gt;       list(mean = mean, median = median)</span></span>
+<span><span class="co">#&gt;     ),</span></span>
+<span><span class="co">#&gt;     .groups = "drop"</span></span>
+<span><span class="co">#&gt;   ) %&gt;%</span></span>
 <span><span class="co">#&gt;   pivot_longer(</span></span>
 <span><span class="co">#&gt;     cols = -c(age, sex),</span></span>
 <span><span class="co">#&gt;     names_to = c("variable", "statistic"),</span></span>
@@ -307,49 +286,11 @@ providing a system prompt:</p>
 <span><span class="co">#&gt;   )</span></span>
 <span><span class="co">#&gt; ```</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## Method 3: Using `summarise()` with `across()` and custom function</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; library(dplyr)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Custom function to compute both statistics</span></span>
-<span><span class="co">#&gt; compute_stats &lt;- function(x) {</span></span>
-<span><span class="co">#&gt;   list(</span></span>
-<span><span class="co">#&gt;     mean = mean(x, na.rm = TRUE),</span></span>
-<span><span class="co">#&gt;     median = median(x, na.rm = TRUE)</span></span>
-<span><span class="co">#&gt;   )</span></span>
-<span><span class="co">#&gt; }</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
-<span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
-<span><span class="co">#&gt;   summarise(</span></span>
-<span><span class="co">#&gt;     across(a:z, compute_stats, .unpack = TRUE),</span></span>
-<span><span class="co">#&gt;     .groups = "drop"</span></span>
-<span><span class="co">#&gt;   )</span></span>
-<span><span class="co">#&gt; ```</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## Method 4: If you need to handle missing values consistently</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; library(dplyr)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; result &lt;- df %&gt;%</span></span>
-<span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
-<span><span class="co">#&gt;   summarise(</span></span>
-<span><span class="co">#&gt;     across(a:z, </span></span>
-<span><span class="co">#&gt;            list(mean = ~ mean(.x, na.rm = TRUE), </span></span>
-<span><span class="co">#&gt;                 median = ~ median(.x, na.rm = TRUE)),</span></span>
-<span><span class="co">#&gt;            .names = "{.col}_{.fn}"),</span></span>
-<span><span class="co">#&gt;     .groups = "drop"</span></span>
-<span><span class="co">#&gt;   )</span></span>
-<span><span class="co">#&gt; ```</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The first method is usually the most straightforward and gives you a </span></span>
-<span><span class="co">#&gt; wide format with columns like `a_mean`, `a_median`, `b_mean`, </span></span>
-<span><span class="co">#&gt; `b_median`, etc. The second method gives you a long format that might </span></span>
-<span><span class="co">#&gt; be easier for plotting or further analysis.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Choose the method that best fits your desired output format!</span></span></code></pre>
+<span><span class="co">#&gt; **Notes:**</span></span>
+<span><span class="co">#&gt; - If you have missing values, add `na.rm = TRUE`: `list(mean = </span></span>
+<span><span class="co">#&gt; ~mean(., na.rm = TRUE), median = ~median(., na.rm = TRUE))`</span></span>
+<span><span class="co">#&gt; - The `a:z` syntax selects all columns from `a` to `z` in order</span></span>
+<span><span class="co">#&gt; - `.groups = "drop"` removes the grouping structure from the result</span></span></code></pre>
 <p>Note that I’m using both a system prompt (which defines the general
 behaviour) and a user prompt (which asks the specific question). You
 could put all this content in the user prompt and get similar results,
@@ -364,16 +305,15 @@ explanation and sample data:</p>
 <span><span class="st">  Just give me the code. I don't want any explanation or sample data.</span></span>
 <span><span class="st">"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-5-20250929"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; library(dplyr)</span></span>
+<span><span class="co">#&gt; library(tidyverse)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; df %&gt;%</span></span>
 <span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
-<span><span class="co">#&gt;   summarise(across(a:z, list(mean = mean, median = median), na.rm = </span></span>
-<span><span class="co">#&gt; TRUE),</span></span>
-<span><span class="co">#&gt;             .groups = "drop")</span></span>
+<span><span class="co">#&gt;   summarise(across(a:z, list(mean = mean, median = median), .names = </span></span>
+<span><span class="co">#&gt; "{.col}_{.fn}"))</span></span>
 <span><span class="co">#&gt; ```</span></span></code></pre>
 <p>And of course, if you want a different style of R code, just ask for
 it:</p>
@@ -384,15 +324,39 @@ it:</p>
 <span><span class="st">  Just give me the code. I don't want any explanation or sample data.</span></span>
 <span><span class="st">"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-5-20250929"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; ```r</span></span>
 <span><span class="co">#&gt; library(data.table)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; dt[, lapply(.SD, function(x) list(mean = mean(x, na.rm = TRUE), </span></span>
-<span><span class="co">#&gt;                                   median = median(x, na.rm = TRUE))), </span></span>
+<span><span class="co">#&gt;                                    median = median(x, na.rm = TRUE))),</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    by = .(age, sex), </span></span>
 <span><span class="co">#&gt;    .SDcols = letters]</span></span>
+<span><span class="co">#&gt; ```</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; If you want mean and median in separate columns:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ```r</span></span>
+<span><span class="co">#&gt; library(data.table)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; dt[, c(lapply(.SD, mean, na.rm = TRUE), </span></span>
+<span><span class="co">#&gt;        lapply(.SD, median, na.rm = TRUE)), </span></span>
+<span><span class="co">#&gt;    by = .(age, sex), </span></span>
+<span><span class="co">#&gt;    .SDcols = letters]</span></span>
+<span><span class="co">#&gt; ```</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Or with prefixes:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ```r</span></span>
+<span><span class="co">#&gt; library(data.table)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; result &lt;- dt[, c(</span></span>
+<span><span class="co">#&gt;   setNames(lapply(.SD, mean, na.rm = TRUE), paste0("mean_", letters)),</span></span>
+<span><span class="co">#&gt;   setNames(lapply(.SD, median, na.rm = TRUE), paste0("median_", </span></span>
+<span><span class="co">#&gt; letters))</span></span>
+<span><span class="co">#&gt; ), by = .(age, sex), .SDcols = letters]</span></span>
 <span><span class="co">#&gt; ```</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -402,14 +366,22 @@ it:</p>
 <span><span class="st">  Just give me the code. I don't want any explanation or sample data.</span></span>
 <span><span class="st">"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-5-20250929"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; result &lt;- aggregate(. ~ age + sex, data = your_data[c("age", "sex", </span></span>
-<span><span class="co">#&gt; letters)], </span></span>
-<span><span class="co">#&gt;                    FUN = function(x) c(mean = mean(x, na.rm = TRUE), </span></span>
-<span><span class="co">#&gt;                                       median = median(x, na.rm = </span></span>
-<span><span class="co">#&gt; TRUE)))</span></span>
+<pre><code><span><span class="co">#&gt; ```R</span></span>
+<span><span class="co">#&gt; aggregate(. ~ age + sex, data = your_data, FUN = function(x) c(mean = </span></span>
+<span><span class="co">#&gt; mean(x), median = median(x)))</span></span>
+<span><span class="co">#&gt; ```</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Or if you want separate columns for means and medians:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ```R</span></span>
+<span><span class="co">#&gt; means &lt;- aggregate(. ~ age + sex, data = your_data, FUN = mean)</span></span>
+<span><span class="co">#&gt; medians &lt;- aggregate(. ~ age + sex, data = your_data, FUN = median)</span></span>
+<span><span class="co">#&gt; colnames(means)[-(1:2)] &lt;- paste0(colnames(means)[-(1:2)], "_mean")</span></span>
+<span><span class="co">#&gt; colnames(medians)[-(1:2)] &lt;- paste0(colnames(medians)[-(1:2)], </span></span>
+<span><span class="co">#&gt; "_median")</span></span>
+<span><span class="co">#&gt; merge(means, medians, by = c("age", "sex"))</span></span>
 <span><span class="co">#&gt; ```</span></span></code></pre>
 </div>
 <div class="section level3">
@@ -432,19 +404,19 @@ so I provide more details about what I do want:</p>
 <span><span class="st">  * Use the base pipe, `|&gt;`, not the magrittr pipe `%&gt;%`.</span></span>
 <span><span class="st">"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-5-20250929"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; ```r</span></span>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ```R</span></span>
+<span><span class="co">#&gt; library(dplyr)</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; data |&gt;</span></span>
 <span><span class="co">#&gt;   group_by(age, sex) |&gt;</span></span>
-<span><span class="co">#&gt;   summarise(</span></span>
-<span><span class="co">#&gt;     across(</span></span>
-<span><span class="co">#&gt;       a:z,</span></span>
-<span><span class="co">#&gt;       list(mean = mean, median = median),</span></span>
-<span><span class="co">#&gt;       na.rm = TRUE</span></span>
-<span><span class="co">#&gt;     ),</span></span>
-<span><span class="co">#&gt;     .groups = "drop"</span></span>
-<span><span class="co">#&gt;   )</span></span>
+<span><span class="co">#&gt;   summarise(across(</span></span>
+<span><span class="co">#&gt;     a:z,</span></span>
+<span><span class="co">#&gt;     list(mean = mean, median = median),</span></span>
+<span><span class="co">#&gt;     .names = "{.col}_{.fn}"</span></span>
+<span><span class="co">#&gt;   ))</span></span>
 <span><span class="co">#&gt; ```</span></span></code></pre>
 <p>This still doesn’t yield exactly the code that I’d write, but it’s
 pretty close.</p>
@@ -460,51 +432,37 @@ explanation of the code:</p>
 <span><span class="st">  argument. Just give me the code. I don't want any explanation or sample data.</span></span>
 <span><span class="st">"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-5-20250929"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; ```r</span></span>
-<span><span class="co">#&gt; # Load required library for data manipulation</span></span>
+<span><span class="co">#&gt; # Load the dplyr package for data manipulation</span></span>
 <span><span class="co">#&gt; library(dplyr)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 1: Using dplyr with across() for multiple summary statistics</span></span>
-<span><span class="co">#&gt; result &lt;- data %&gt;%</span></span>
-<span><span class="co">#&gt;   group_by(age, sex) %&gt;%  # Group data by age and sex categories</span></span>
+<span><span class="co">#&gt; # Compute mean and median for variables a through z, grouped by age </span></span>
+<span><span class="co">#&gt; and sex</span></span>
+<span><span class="co">#&gt; result &lt;- your_data %&gt;%</span></span>
+<span><span class="co">#&gt;   # Group the data by age and sex</span></span>
+<span><span class="co">#&gt;   group_by(age, sex) %&gt;%</span></span>
+<span><span class="co">#&gt;   # Calculate mean and median for each variable from a to z</span></span>
 <span><span class="co">#&gt;   summarise(</span></span>
-<span><span class="co">#&gt;     across(a:z,  # Apply functions to variables from 'a' to 'z'</span></span>
-<span><span class="co">#&gt;            list(mean = ~ mean(.x, na.rm = TRUE),  # Calculate mean, </span></span>
-<span><span class="co">#&gt; removing NAs</span></span>
-<span><span class="co">#&gt;                 median = ~ median(.x, na.rm = TRUE)),  # Calculate </span></span>
-<span><span class="co">#&gt; median, removing NAs</span></span>
-<span><span class="co">#&gt;            .names = "{.col}_{.fn}"),  # Name format: variable_function</span></span>
-<span><span class="co">#&gt;     .groups = "drop"  # Remove grouping after summarise</span></span>
-<span><span class="co">#&gt;   )</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 2: Alternative using summarise_at() (older syntax but still </span></span>
-<span><span class="co">#&gt; works)</span></span>
-<span><span class="co">#&gt; result2 &lt;- data %&gt;%</span></span>
-<span><span class="co">#&gt;   group_by(age, sex) %&gt;%  # Group data by age and sex</span></span>
-<span><span class="co">#&gt;   summarise_at(vars(a:z),  # Select variables from 'a' to 'z'</span></span>
-<span><span class="co">#&gt;                list(mean = ~ mean(., na.rm = TRUE),  # Calculate mean</span></span>
-<span><span class="co">#&gt;                     median = ~ median(., na.rm = TRUE)))  # Calculate </span></span>
-<span><span class="co">#&gt; median</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Method 3: Using pivot operations for long format output</span></span>
-<span><span class="co">#&gt; result_long &lt;- data %&gt;%</span></span>
-<span><span class="co">#&gt;   group_by(age, sex) %&gt;%  # Group by demographic variables</span></span>
-<span><span class="co">#&gt;   summarise(</span></span>
-<span><span class="co">#&gt;     across(a:z,  # Apply to all variables a through z</span></span>
-<span><span class="co">#&gt;            list(mean = ~ mean(.x, na.rm = TRUE),</span></span>
-<span><span class="co">#&gt;                 median = ~ median(.x, na.rm = TRUE)),</span></span>
-<span><span class="co">#&gt;            .names = "{.col}_{.fn}"),</span></span>
+<span><span class="co">#&gt;     # across() applies functions to multiple columns</span></span>
+<span><span class="co">#&gt;     across(</span></span>
+<span><span class="co">#&gt;       # Select columns a through z</span></span>
+<span><span class="co">#&gt;       a:z,</span></span>
+<span><span class="co">#&gt;       # List of functions to apply: mean and median</span></span>
+<span><span class="co">#&gt;       list(</span></span>
+<span><span class="co">#&gt;         mean = ~mean(.x, na.rm = TRUE),  # Calculate mean, removing NA</span></span>
+<span><span class="co">#&gt; values</span></span>
+<span><span class="co">#&gt;         median = ~median(.x, na.rm = TRUE)  # Calculate median, </span></span>
+<span><span class="co">#&gt; removing NA values</span></span>
+<span><span class="co">#&gt;       ),</span></span>
+<span><span class="co">#&gt;       # Name the output columns as "variable_function" (e.g., </span></span>
+<span><span class="co">#&gt; "a_mean", "a_median")</span></span>
+<span><span class="co">#&gt;       .names = "{.col}_{.fn}"</span></span>
+<span><span class="co">#&gt;     ),</span></span>
+<span><span class="co">#&gt;     # Remove grouping message</span></span>
 <span><span class="co">#&gt;     .groups = "drop"</span></span>
-<span><span class="co">#&gt;   ) %&gt;%</span></span>
-<span><span class="co">#&gt;   pivot_longer(cols = -c(age, sex),  # Reshape all columns except </span></span>
-<span><span class="co">#&gt; grouping vars</span></span>
-<span><span class="co">#&gt;                names_to = c("variable", "statistic"),  # Split column </span></span>
-<span><span class="co">#&gt; names</span></span>
-<span><span class="co">#&gt;                names_sep = "_",  # Separator between variable and </span></span>
-<span><span class="co">#&gt; statistic</span></span>
-<span><span class="co">#&gt;                values_to = "value")  # Name for the values column</span></span>
+<span><span class="co">#&gt;   )</span></span>
 <span><span class="co">#&gt; ```</span></span></code></pre>
 </div>
 <div class="section level3">
@@ -537,12 +495,14 @@ features, you might need to provide the examples yourself:</p>
 <span><span class="st">    )</span></span>
 <span><span class="st">"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-20250514"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-5-20250929"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">question</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; ```r</span></span>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ```r</span></span>
 <span><span class="co">#&gt; data |&gt;</span></span>
-<span><span class="co">#&gt;   summarise(</span></span>
-<span><span class="co">#&gt;     across(a:z, list(mean = mean, median = median), na.rm = TRUE),</span></span>
+<span><span class="co">#&gt;   summarize(</span></span>
+<span><span class="co">#&gt;     across(a:z, list(mean = mean, median = median), .names = </span></span>
+<span><span class="co">#&gt; "{.col}_{.fn}"),</span></span>
 <span><span class="co">#&gt;     .by = c(age, sex)</span></span>
 <span><span class="co">#&gt;   )</span></span>
 <span><span class="co">#&gt; ```</span></span></code></pre>
@@ -868,10 +828,10 @@ my examples.</p>
 <table class="table">
 <colgroup>
 <col width="14%">
-<col width="37%">
+<col width="39%">
 <col width="8%">
 <col width="10%">
-<col width="19%">
+<col width="18%">
 <col width="8%">
 </colgroup>
 <thead><tr class="header">
@@ -885,9 +845,9 @@ my examples.</p>
 <tbody>
 <tr class="odd">
 <td align="left">Anthropic</td>
-<td align="left">claude-sonnet-4-20250514</td>
+<td align="left">claude-sonnet-4-5-20250929</td>
 <td align="right">802</td>
-<td align="right">2091</td>
+<td align="right">1692</td>
 <td align="right">0</td>
 <td align="right">$0.03</td>
 </tr>
