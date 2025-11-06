@@ -440,7 +440,7 @@ Chat <- R6::R6Class(
       yield_as_content = FALSE
     ) {
       tool_errors <- list()
-      withr::defer(warn_tool_errors(tool_errors))
+      defer(warn_tool_errors(tool_errors))
 
       agent_ospan <- local_agent_ospan(private$provider)
 
@@ -503,7 +503,7 @@ Chat <- R6::R6Class(
       yield_as_content = FALSE
     ) {
       tool_errors <- list()
-      withr::defer(warn_tool_errors(tool_errors))
+      defer(warn_tool_errors(tool_errors))
 
       agent_ospan <- local_agent_ospan(private$provider)
 

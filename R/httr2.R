@@ -30,11 +30,15 @@ chat_perform <- function(
       provider,
       req,
       parent_ospan = parent_ospan
-    )
+    ),
     "value" = req_perform(req),
     "stream" = chat_perform_stream(provider, req, parent_ospan = parent_ospan),
     "async-value" = req_perform_promise(req),
-    "async-stream" = chat_perform_async_stream(provider, req, parent_ospan = parent_ospan)
+    "async-stream" = chat_perform_async_stream(
+      provider,
+      req,
+      parent_ospan = parent_ospan
+    )
   )
 }
 

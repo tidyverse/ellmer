@@ -38,7 +38,7 @@ activate_and_cleanup_ospan <- function(
     )
     # For some reason, when using `end_on_exit = TRUE` above, an error would occur during `spn$end(status = "auto")`. When using `withr::defer()` here, it works fine.
     # TODO: Set status?
-    withr::defer(promises::end_ospan(ospan), envir = activation_scope)
+    defer(promises::end_ospan(ospan), envir = activation_scope)
   }
 }
 
@@ -64,7 +64,7 @@ local_chat_ospan <- function(
       )
     )
 
-  withr::defer(promises::end_ospan(chat_ospan), envir = local_envir)
+  defer(promises::end_ospan(chat_ospan), envir = local_envir)
 
   chat_ospan
 }
@@ -154,6 +154,8 @@ local_agent_ospan <- function(
         "gen_ai.provider.name" = tolower(provider@name)
       )
     )
-  withr::defer(promises::end_ospan(agent_ospan), envir = local_envir)
+
+  defer(promises::end_ospan(agent_ospan), envir = local_envir)
+
   agent_ospan
 }

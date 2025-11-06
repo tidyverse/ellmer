@@ -85,6 +85,7 @@ Collate:
     'content-pdf.R'
     'content-replay.R'
     'httr2.R'
+    'import-standalone-defer.R'
     'import-standalone-obj-type.R'
     'import-standalone-purrr.R'
     'import-standalone-types-check.R'
