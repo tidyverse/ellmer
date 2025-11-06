@@ -433,7 +433,7 @@ method(batch_submit, ProviderOpenAI) <- function(
   conversations,
   type = NULL
 ) {
-  path <- withr::local_tempfile()
+  path <- local_tempfile()
 
   # First put the requests in a file
   # https://platform.openai.com/docs/api-reference/batch/request-input
@@ -508,7 +508,7 @@ method(batch_status, ProviderOpenAI) <- function(provider, batch) {
 
 # https://docs.anthropic.com/en/api/retrieving-message-batch-results
 method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
-  path <- withr::local_tempfile()
+  path <- local_tempfile()
 
   req <- base_request(provider)
   req <- req_url_path_append(req, "/files/", batch$output_file_id, "/content")

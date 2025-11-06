@@ -294,3 +294,26 @@ request_summary <- function(req) {
 str_trunc <- function(x, n) {
   ifelse(nchar(x) > n, paste0(substr(x, 1, n - 3), "..."), x)
 }
+
+
+# Trimmed version of withr::local_tempfile
+# https://github.com/r-lib/withr/blob/1497d45f30c98eff80085d3c1dd45403511be878/R/tempfile.R#L49C1-L81C2
+local_tempfile <- function(
+  lines = NULL,
+  .local_envir = parent.frame(),
+  pattern = "file",
+  tmpdir = tempdir(),
+  fileext = ""
+) {
+  path <- tempfile(pattern = pattern, tmpdir = tmpdir, fileext = fileext)
+  if (!is.null(lines)) {
+    con <- file(path, open = "wb", encoding = "native.enc")
+    defer(close(con))
+
+    writeLines(enc2utf8(lines), con, useBytes = TRUE)
+  }
+
+  defer(unlink(path, recursive = TRUE), envir = .local_envir)
+
+  path
+}

@@ -571,7 +571,7 @@ method(batch_retrieve, ProviderAnthropic) <- function(provider, batch) {
   req <- req_url(req, batch$results_url)
   req <- req_progress(req, "down")
 
-  path <- withr::local_tempfile()
+  path <- local_tempfile()
   req <- req_perform(req, path = path)
 
   lines <- readLines(path, warn = FALSE)
