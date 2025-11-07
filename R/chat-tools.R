@@ -52,7 +52,7 @@ on_load({
         next
       }
 
-      result <- invoke_tool(request, parent = otel_span)
+      result <- invoke_tool(request, otel_span = otel_span)
 
       if (promises::is.promise(result@value)) {
         cli::cli_abort(
