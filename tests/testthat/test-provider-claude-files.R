@@ -1,5 +1,14 @@
 test_that("end-to-end test of all functions", {
-  vcr::local_cassette("anthropic-upload-file", record = "all")
+  vcr::local_cassette("anthropic-upload-file")
+  # Avoid using an absolute path in form_file
+  local_mocked_bindings(
+    form_file = function(path, type) {
+      structure(
+        list(path = path, type = type, name = NULL),
+        class = "form_file"
+      )
+    }
+  )
 
   upload <- claude_file_upload(test_path("apples.pdf"))
   defer(claude_file_delete(upload@uri))
