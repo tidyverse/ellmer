@@ -1,9 +1,9 @@
 # ellmer (development version)
 
 * New web search and fetch tools (#578):
-  - `tool_claude_web_search()` and `tool_claude_web_fetch()` for Claude.
-  - `tool_google_web_search()` and `tool_google_url_fetch()` for Gemini.
-  - `tool_openai_web_search()` for OpenAI.
+  - `claude_tool_web_search()` and `claude_tool_web_fetch()` for Claude.
+  - `google_tool_web_search()` and `google_tool_url_fetch()` for Gemini.
+  - `openai_tool_web_search()` for OpenAI.
 
   If you want to do web fetch for other providers, you could use `btw::btw_tool_web_read_url()`.
 * `parallel_chat()` and `batch_chat()` are no longer experimental.

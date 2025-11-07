@@ -20,11 +20,11 @@
 #' @examples
 #' \dontrun{
 #' chat <- chat_openai()
-#' chat$register_tool(tool_openai_web_search())
+#' chat$register_tool(openai_tool_web_search())
 #' chat$chat("Very briefly summarise the top 3 news stories of the day")
 #' chat$chat("Of those stories, which one do you think was the most interesting?")
 #' }
-tool_openai_web_search <- function(
+openai_tool_web_search <- function(
   allowed_domains = NULL,
   user_location = NULL,
   external_web_access = TRUE

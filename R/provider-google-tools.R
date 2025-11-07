@@ -14,11 +14,11 @@
 #' @examples
 #' \dontrun{
 #' chat <- chat_google_gemini()
-#' chat$register_tool(tool_google_web_search())
+#' chat$register_tool(google_tool_web_search())
 #' chat$chat("What was in the news today?")
 #' chat$chat("What's the biggest news in the economy?")
 #' }
-tool_google_web_search <- function() {
+google_tool_web_search <- function() {
   ToolBuiltIn("google_web_search", list(google_search = set_names(list())))
 }
 
@@ -35,10 +35,10 @@ tool_google_web_search <- function() {
 #' @examples
 #' \dontrun{
 #' chat <- chat_google_gemini()
-#' chat$register_tool(tool_google_url_fetch())
+#' chat$register_tool(google_tool_url_fetch())
 #' chat$chat("What are the latest package releases on https://tidyverse.org/blog?")
 #' }
-tool_google_url_fetch <- function() {
+google_tool_url_fetch <- function() {
   ToolBuiltIn(
     name = "google_url_context",
     json = list(url_context = set_names(list()))

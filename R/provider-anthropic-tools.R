@@ -20,11 +20,11 @@
 #' @examples
 #' \dontrun{
 #' chat <- chat_claude()
-#' chat$register_tool(tool_claude_web_search())
+#' chat$register_tool(claude_tool_web_search())
 #' chat$chat("What was in the news today?")
 #' chat$chat("What's the biggest news in the economy?")
 #' }
-tool_claude_web_search <- function(
+claude_tool_web_search <- function(
   max_uses = NULL,
   allowed_domains = NULL,
   blocked_domains = NULL,
@@ -71,10 +71,10 @@ tool_claude_web_search <- function(
 #' @examples
 #' \dontrun{
 #' chat <- chat_claude(beta_headers = "web-fetch-2025-09-10")
-#' chat$register_tool(tool_claude_web_fetch())
+#' chat$register_tool(claude_tool_web_fetch())
 #' chat$chat("What are the latest package releases on https://tidyverse.org/blog")
 #' }
-tool_claude_web_fetch <- function(
+claude_tool_web_fetch <- function(
   max_uses = NULL,
   allowed_domains = NULL,
   blocked_domains = NULL,
