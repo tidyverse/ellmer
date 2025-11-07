@@ -35,9 +35,9 @@ google_tool_web_search <- function() {
 #' @examples
 #' \dontrun{
 #' chat <- chat_google_gemini()
-#' chat$register_tool(google_tool_url_fetch())
+#' chat$register_tool(google_tool_web_fetch())
 #' chat$chat("What are the latest package releases on https://tidyverse.org/blog?")
 #' }
-google_tool_url_fetch <- function() {
+google_tool_web_fetch <- function() {
   ToolBuiltIn(name = "web_fetch", json = list(url_context = set_names(list())))
 }

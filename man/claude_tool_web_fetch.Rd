@@ -44,7 +44,7 @@ chat$chat("What are the latest package releases on https://tidyverse.org/blog")
 \seealso{
 Other built-in tools: 
 \code{\link{claude_tool_web_search}()},
-\code{\link{google_tool_url_fetch}()},
+\code{\link{google_tool_web_fetch}()},
 \code{\link{google_tool_web_search}()},
 \code{\link{openai_tool_web_search}()}
 }

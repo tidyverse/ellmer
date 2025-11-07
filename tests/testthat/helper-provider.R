@@ -81,6 +81,17 @@ test_data_extraction <- function(chat_fun) {
   )
 }
 
+# Built-in tools ---------------------------------------------------------
+
+test_tool_web_fetch <- function(chat_fun, search_tool) {
+  chat <- chat_fun()
+  chat$register_tool(search_tool)
+  result <- chat$chat(
+    "What's the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"
+  )
+  expect_match(result, "The Phantom Menace")
+}
+
 # Images -----------------------------------------------------------------
 
 test_images_inline <- function(chat_fun, test_shape = TRUE) {

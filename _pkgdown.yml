@@ -31,7 +31,7 @@ reference:
   - claude_tool_web_search
   - claude_tool_web_fetch
   - google_tool_web_search
-  - google_tool_url_fetch
+  - google_tool_web_fetch
   - openai_tool_web_search
 
 - title: Chat helpers

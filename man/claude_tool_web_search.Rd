@@ -41,7 +41,7 @@ chat$chat("What's the biggest news in the economy?")
 \seealso{
 Other built-in tools: 
 \code{\link{claude_tool_web_fetch}()},
-\code{\link{google_tool_url_fetch}()},
+\code{\link{google_tool_web_fetch}()},
 \code{\link{google_tool_web_search}()},
 \code{\link{openai_tool_web_search}()}
 }

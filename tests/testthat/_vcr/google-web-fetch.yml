@@ -1,0 +1,101 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the first movie
+        listed on https://rvest.tidyverse.org/articles/starwars.html?"}]}],"tools":{"url_context":{}},"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '608'
+      content-type: application/json; charset=UTF-8
+      date: Fri, 07 Nov 2025 15:04:58 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=1279
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "The first movie listed on https://rvest.tidyverse.org/articles/starwars.html is \"The Phantom Menace\"."
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "index": 0,
+              "groundingMetadata": {
+                "groundingChunks": [
+                  {
+                    "web": {
+                      "uri": "https://rvest.tidyverse.org/articles/starwars.html",
+                      "title": "Star Wars films (static HTML) • rvest"
+                    }
+                  }
+                ],
+                "groundingSupports": [
+                  {
+                    "segment": {
+                      "endIndex": 100,
+                      "text": "The first movie listed on https://rvest.tidyverse.org/articles/starwars.html is \"The Phantom Menace\""
+                    },
+                    "groundingChunkIndices": [
+                      0
+                    ]
+                  }
+                ]
+              },
+              "urlContextMetadata": {
+                "urlMetadata": [
+                  {
+                    "retrievedUrl": "https://rvest.tidyverse.org/articles/starwars.html",
+                    "urlRetrievalStatus": "URL_RETRIEVAL_STATUS_SUCCESS"
+                  }
+                ]
+              }
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 25,
+            "candidatesTokenCount": 49,
+            "totalTokenCount": 1250,
+            "cachedContentTokenCount": 13,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 25
+              }
+            ],
+            "cacheTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 13
+              }
+            ],
+            "toolUsePromptTokenCount": 1133,
+            "toolUsePromptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 1133
+              }
+            ],
+            "thoughtsTokenCount": 43
+          },
+          "modelVersion": "gemini-2.5-flash",
+          "responseId": "mgoOaemwMMCdqtsPuKTr8Ac"
+        }
+  recorded_at: 2025-11-07 15:04:58
+recorded_with: VCR-vcr/2.0.0

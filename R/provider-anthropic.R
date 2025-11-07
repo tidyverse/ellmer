@@ -362,16 +362,17 @@ method(value_turn, ProviderAnthropic) <- function(
         ContentToolRequest(content$id, content$name, content$input)
       }
     } else if (content$type == "server_tool_use") {
-      # Sends a string, but expects parsed json to be sent back
-      content$input <- parse_json(content$input)
-
-      # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-search-tool#response
       if (content$name == "web_search") {
+        # Sends a string, but expects parsed json to be sent back
+        content$input <- parse_json(content$input)
+
+        # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-search-tool#response
         ContentToolRequestSearch(
           query = content$input$query,
           json = content
         )
       } else if (content$name == "web_fetch") {
+        # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-fetch-tool#response
         ContentToolRequestFetch(
           url = content$input$url,
           json = content
