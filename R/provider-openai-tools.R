@@ -45,5 +45,5 @@ openai_tool_web_search <- function(
     user_location = user_location,
     external_web_access = external_web_access
   ))
-  ToolBuiltIn("openai_web_search", json)
+  ToolBuiltIn("web_search", json)
 }

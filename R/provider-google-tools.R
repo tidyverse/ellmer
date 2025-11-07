@@ -19,7 +19,7 @@
 #' chat$chat("What's the biggest news in the economy?")
 #' }
 google_tool_web_search <- function() {
-  ToolBuiltIn("google_web_search", list(google_search = set_names(list())))
+  ToolBuiltIn("web_search", list(google_search = set_names(list())))
 }
 
 #' Google URL fetch tool
@@ -39,8 +39,5 @@ google_tool_web_search <- function() {
 #' chat$chat("What are the latest package releases on https://tidyverse.org/blog?")
 #' }
 google_tool_url_fetch <- function() {
-  ToolBuiltIn(
-    name = "google_url_context",
-    json = list(url_context = set_names(list()))
-  )
+  ToolBuiltIn(name = "web_fetch", json = list(url_context = set_names(list())))
 }

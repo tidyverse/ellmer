@@ -44,7 +44,7 @@ claude_tool_web_search <- function(
     blocked_domains = blocked_domains,
     user_location = user_location
   ))
-  ToolBuiltIn("claude_web_search", json = json)
+  ToolBuiltIn("web_search", json = json)
 }
 
 #' Claude web fetch tool
@@ -96,5 +96,5 @@ claude_tool_web_fetch <- function(
     citations = list(enabled = citations),
     max_content_tokens = max_content_tokens
   ))
-  ToolBuiltIn("claude_web_fetch", json)
+  ToolBuiltIn("web_fetch", json)
 }
