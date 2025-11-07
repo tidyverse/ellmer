@@ -42,7 +42,7 @@ anthropic_file_upload <- function(
   if (!file.exists(path)) {
     cli::cli_abort("{.arg path} must be an existing file.")
   }
-  file <- curl::form_file(path, type = guess_mime_type(path))
+  file <- form_file(path, type = guess_mime_type(path))
 
   req <- request_anthropic_file(base_url, beta_headers, credentials)
   req <- req_url_path_append(req, "/files")
@@ -144,4 +144,8 @@ request_anthropic_file <- function(url, beta_headers, credentials) {
   )
 
   base_request(provider)
+}
+
+form_file <- function(path, type = type) {
+  curl::form_file(path, type = type)
 }
