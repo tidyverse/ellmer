@@ -533,7 +533,7 @@ method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
   req <- req_url_path_append(req, "/files/", batch$output_file_id, "/content")
   req <- req_progress(req, "down")
   resp <- req_perform(req, path = path_output)
-  json <- read_ndjson(path_output)
+  json <- read_ndjson(path_output, fallback = openai_json_fallback)
 
   # error file
   if (length(batch$error_file_id) == 1) {
@@ -550,6 +550,24 @@ method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
   results <- lapply(json, "[[", "response")
   results[order(ids)]
 }
+
+openai_json_fallback <- function(line) {
+  list(
+    custom_id = extract_custom_id(line),
+    response = list(status_code = 500)
+  )
+}
+extract_custom_id <- function(json_string) {
+  pattern <- '"custom_id"\\s*:\\s*"([^"]*)"'
+  match <- regexec(pattern, json_string)
+
+  result <- regmatches(json_string, match)[[1]]
+  if (length(result) < 2) {
+    return(NA_character_)
+  }
+  result[2] # Second element is the captured group
+}
+
 
 method(batch_result_turn, ProviderOpenAI) <- function(
   provider,

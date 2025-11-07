@@ -106,3 +106,10 @@ test_that("service tier affects pricing", {
   default_cost <- get_token_cost(chat$get_provider(), tokens)
   expect_gt(last_turn@cost, default_cost)
 })
+
+test_that("can extract dummy response from malformed JSON", {
+  expect_equal(
+    openai_json_fallback('{"custom_id": "123", '),
+    list(custom_id = "123", response = list(status_code = 500))
+  )
+})

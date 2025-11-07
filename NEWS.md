@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `batch_chat()` now better handles invalid JSON from `chat_openai()` (#845).
 * `parallel_chat()` and `batch_chat()` are no longer experimental.
 * New set of `anthropic_file_()` functions for managing file uploads with Anthropic (@dcomputing, #761).
 * `chat_openai_compatible()` replaces `chat_openai()` as the interface to use for OpenAI-compatible APIs, and `chat_openai()` is reserved for the official OpenAI API. Unlike previous versions of `chat_openai()`, the `base_url` parameter is now required (#801).
