@@ -701,7 +701,7 @@ Chat <- R6::R6Class(
 
       if (stream) {
         result <- NULL
-        for (chunk in coro::await_each(response)) {
+        for (chunk in await_each(response)) {
           text <- stream_text(private$provider, chunk)
           if (!is.null(text)) {
             emit(text)
