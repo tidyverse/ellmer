@@ -30,10 +30,10 @@ Learn more at \url{https://platform.openai.com/docs/guides/tools-web-search}
 }
 \examples{
 \dontrun{
-# Basic web search
-chat <- chat_openai_responses(model = "gpt-5")
+chat <- chat_openai()
 chat$register_tool(tool_openai_web_search())
-chat$chat("What happened in the news today?")
+chat$chat("Very briefly summarise the top 3 news stories of the day")
+chat$chat("Of those stories, which one do you think was the most interesting?")
 }
 }
 \seealso{
