@@ -28,6 +28,11 @@ reference:
   contents:
   - google_upload
   - starts_with("anthropic_file")
+  - tool_claude_web_search
+  - tool_claude_web_fetch
+  - tool_google_web_search
+  - tool_google_url_fetch
+  - tool_openai_web_search
 
 - title: Chat helpers
   contents:
@@ -48,16 +53,6 @@ reference:
   - tool_annotations
   - tool_reject
   - type_boolean
-
-- subtitle: Built-in tools
-  desc: >
-    Access built-in supplied by individual LLM providers.
-  contents:
-  - tool_claude_web_search
-  - tool_claude_web_fetch
-  - tool_google_web_search
-  - tool_google_url_fetch
-  - tool_openai_web_search
 
 - title: Objects
   desc: >
