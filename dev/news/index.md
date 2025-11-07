@@ -7,8 +7,8 @@
   [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
   are no longer experimental.
 
-- New set of `anthropic_file_()` functions for managing file uploads
-  with Anthropic ([@dcomputing](https://github.com/dcomputing),
+- New set of `claude_file_()` functions for managing file uploads with
+  Claude ([@dcomputing](https://github.com/dcomputing),
   [\#761](https://github.com/tidyverse/ellmer/issues/761)).
 
 - [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
@@ -210,6 +210,9 @@
   [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md),
   reflecting Anthropic’s recent rebranding of developer tools under the
   Claude name ([\#758](https://github.com/tidyverse/ellmer/issues/758)).
+  [`models_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  is now an alias for
+  [`models_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md).
 
 ## ellmer 0.3.2
 

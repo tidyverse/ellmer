@@ -258,6 +258,7 @@ data.
   Chat with any provider
 - [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   [`chat_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  [`models_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   [`models_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   : Chat with an Anthropic Claude model
 - [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
@@ -315,11 +316,11 @@ data.
 
 - [`google_upload()`](https://ellmer.tidyverse.org/dev/reference/google_upload.md)
   **\[experimental\]** : Upload a file to gemini
-- [`anthropic_file_upload()`](https://ellmer.tidyverse.org/dev/reference/anthropic_file_upload.md)
-  [`anthropic_file_list()`](https://ellmer.tidyverse.org/dev/reference/anthropic_file_upload.md)
-  [`anthropic_file_get()`](https://ellmer.tidyverse.org/dev/reference/anthropic_file_upload.md)
-  [`anthropic_file_download()`](https://ellmer.tidyverse.org/dev/reference/anthropic_file_upload.md)
-  [`anthropic_file_delete()`](https://ellmer.tidyverse.org/dev/reference/anthropic_file_upload.md)
+- [`claude_file_upload()`](https://ellmer.tidyverse.org/dev/reference/claude_file_upload.md)
+  [`claude_file_list()`](https://ellmer.tidyverse.org/dev/reference/claude_file_upload.md)
+  [`claude_file_get()`](https://ellmer.tidyverse.org/dev/reference/claude_file_upload.md)
+  [`claude_file_download()`](https://ellmer.tidyverse.org/dev/reference/claude_file_upload.md)
+  [`claude_file_delete()`](https://ellmer.tidyverse.org/dev/reference/claude_file_upload.md)
   **\[experimental\]** : Upload, downloand, and manage files for Claude
 
 ## Chat helpers

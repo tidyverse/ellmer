@@ -37,6 +37,11 @@ chat_claude(
   echo = NULL
 )
 
+models_claude(
+  base_url = "https://api.anthropic.com/v1",
+  api_key = anthropic_key()
+)
+
 models_anthropic(
   base_url = "https://api.anthropic.com/v1",
   api_key = anthropic_key()
