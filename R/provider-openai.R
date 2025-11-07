@@ -452,7 +452,7 @@ method(batch_submit, ProviderOpenAI) <- function(
   conversations,
   type = NULL
 ) {
-  path <- withr::local_tempfile()
+  path <- local_tempfile()
 
   # First put the requests in a file
   # https://platform.openai.com/docs/api-reference/batch/request-input
@@ -528,7 +528,7 @@ method(batch_status, ProviderOpenAI) <- function(provider, batch) {
 # https://platform.openai.com/docs/api-reference/batch/retrieve
 method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
   # output file
-  path_output <- withr::local_tempfile()
+  path_output <- local_tempfile()
   req <- base_request(provider)
   req <- req_url_path_append(req, "/files/", batch$output_file_id, "/content")
   req <- req_progress(req, "down")
@@ -537,7 +537,7 @@ method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
 
   # error file
   if (length(batch$error_file_id) == 1) {
-    path_error <- withr::local_tempfile()
+    path_error <- local_tempfile()
     req <- base_request(provider)
     req <- req_url_path_append(req, "/files/", batch$error_file_id, "/content")
     req <- req_progress(req, "down")
