@@ -152,3 +152,15 @@ print.ellmer_dollars <- function(x, ...) {
   print(format(x), quote = FALSE)
   invisible(x)
 }
+#' @export
+`[.ellmer_dollars` <- function(x, ...) {
+  dollars(NextMethod())
+}
+#' @export
+`[[.ellmer_dollars` <- function(x, ...) {
+  dollars(NextMethod())
+}
+#' @export
+Summary.ellmer_dollars <- function(x, ...) {
+  dollars(NextMethod())
+}

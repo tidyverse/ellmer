@@ -1,231 +1,330 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"system","content":"Be terse"},{"role":"user","content":[{"type":"text","text":"My
-        name is Hadley and I''m a data scientist"}]}],"model":"gpt-4.1-nano","stream":false}'
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"role":"user","content":[{"type":"input_text","text":"My name is
+        Hadley and I''m a data scientist"}]}],"model":"gpt-4.1-nano","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9564fa08eec87103-DFW
+      cf-ray: 999eebdfdb31ceb7-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 27 Jun 2025 12:34:07 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '251'
+      date: Wed, 05 Nov 2025 19:57:41 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '2276'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=7D7CA4Wt21IfNvOiZcrO8iFKTWJvWAAnknQtk.Qv4iE-1751027647-1.0.1.1-r..63Ptfx.QVp_KZ2gX.Nm0u.FPjbHO_lIF56SyJLa9_DCGYM9vfbsLmRoFfWRPzvYGr2juUSgAViCf14qYpD7mctcc6NdnGtFajvMcEMzE;
-        path=/; expires=Fri, 27-Jun-25 13:04:07 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=zJqHxWE_RUTJgY8wdD4W98BWIdQJGZdvL_flWGabBGA-1762372661-1.0.1.1-fT9_2W2y9kHEOhG.YbTOdzsZZwZShN60ATKC9lPzdXZL_PdP7eAiGJn6pUEE6LKjJr7IiOUPfZgt0qOYpF319EecRh9baB61MJWYBt6DNFE;
+        path=/; expires=Wed, 05-Nov-25 20:27:41 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=KUNzx.SQVt0Rutw5KjDNLdIncXXF_.2PtQqpVhi1QDI-1751027647815-0.0.1.1-604800000;
+      - _cfuvid=vZwQW5kZkAioO9MIBoLP0WQk87Dz_klD_9ObbEJA.Gk-1762372661529-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '256'
+      x-envoy-upstream-service-time: '2288'
       x-ratelimit-limit-requests: '30000'
       x-ratelimit-limit-tokens: '150000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999984'
+      x-ratelimit-remaining-tokens: '149999957'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_3ed41617ad2d83b1f5f86730475f84c8
+      x-request-id: req_70af023f55d04a90a0ceac9e46d42ae5
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-Bn2ZLtVihsd4isiuZPwxka5h80ukz",
-          "object": "chat.completion",
-          "created": 1751027647,
+          "id": "resp_0a039a530fcc66a201690bac333ec08193a035691391695403",
+          "object": "response",
+          "created_at": 1762372659,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-nano-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "Hello, Hadley. Nice to meet you.",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_0a039a530fcc66a201690bac351fc481938a6a95e6d38e7ceb",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Hello, Hadley! How can I assist you today?"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 23,
-            "completion_tokens": 10,
-            "total_tokens": 33,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 23,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 13,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 36
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-06-27 12:34:07
+  recorded_at: 2025-11-05 19:57:41
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"system","content":"Be terse"},{"role":"user","content":[{"type":"text","text":"My
-        name is Hadley and I''m a data scientist"}]},{"role":"assistant","content":[{"type":"text","text":"Hello,
-        Hadley. Nice to meet you."}]},{"role":"user","content":[{"type":"text","text":"what''s
-        my name?"}]}],"model":"gpt-4.1-nano","stream":false}'
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"role":"user","content":[{"type":"input_text","text":"My name is
+        Hadley and I''m a data scientist"}]},{"role":"assistant","content":[{"type":"output_text","text":"Hello,
+        Hadley! How can I assist you today?"}]},{"role":"user","content":[{"type":"input_text","text":"what''s
+        my name?"}]}],"model":"gpt-4.1-nano","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9564fa0fee7d7103-DFW
+      cf-ray: 999eebef9c61ceb7-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 27 Jun 2025 12:34:08 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '260'
+      date: Wed, 05 Nov 2025 19:57:44 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1560'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=rdJAq8E3lF2prE0wumAf.hspc02caf_.NxXEdvCe.6I-1751027648-1.0.1.1-Cq32hk8eKfomkRx0IRK36Cpz2XytbfbMzOLZBOqZhndcncMubIkACXtgkwOEOJbQN4ZASgWndbIc_p73aQnlIwTRDO5WLWRw8_U6i.P3W30;
-        path=/; expires=Fri, 27-Jun-25 13:04:08 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=n_rcTYUTqWTj7F0gK2FG5MAJmQI0vy_gUumgdxL1ug4-1762372664-1.0.1.1-jiOspn1IUa_25wpZCrPfdhqRlbcnQFhxihUh0JFsM66j8K5OnXk2vyvYXfev7VMCdwgkpPXV8UCpPpskn0DLHXA6MSWuhRBguN7GYOCZzUw;
+        path=/; expires=Wed, 05-Nov-25 20:27:44 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=blhp0Y0T2dPqOo347FvNzxiLd6GXN3r2MW7lrCnWDhk-1751027648291-0.0.1.1-604800000;
+      - _cfuvid=w_lC9.wr7QVBPIhU6TG.KUNR8dePaYEziml_w5Q86z8-1762372664293-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '267'
+      x-envoy-upstream-service-time: '2546'
       x-ratelimit-limit-requests: '30000'
       x-ratelimit-limit-tokens: '150000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999970'
+      x-ratelimit-remaining-tokens: '149999932'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_ad9d7241c86225805fe1119a2f68bc1b
+      x-request-id: req_76ef5daa94cf47f0af1480ab2149ae55
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-Bn2ZMZRw4uLnWYByNUUdztp28hc0H",
-          "object": "chat.completion",
-          "created": 1751027648,
+          "id": "resp_01e41452c069e1e401690bac36da2c8190aec72760c0bd019e",
+          "object": "response",
+          "created_at": 1762372663,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-nano-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "Hadley.",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_01e41452c069e1e401690bac382458819097b221c52e02a472",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Your name is Hadley."
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 46,
-            "completion_tokens": 3,
-            "total_tokens": 49,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 48,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 7,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 55
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-06-27 12:34:08
+  recorded_at: 2025-11-05 19:57:44
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"system","content":"Be terse"},{"role":"user","content":[{"type":"text","text":"My
-        name is Hadley and I''m a data scientist"}]},{"role":"assistant","content":[{"type":"text","text":"Hello,
-        Hadley. Nice to meet you."}]},{"role":"user","content":[{"type":"text","text":"what''s
-        my job?"}]}],"model":"gpt-4.1-nano","stream":false}'
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"role":"user","content":[{"type":"input_text","text":"My name is
+        Hadley and I''m a data scientist"}]},{"role":"assistant","content":[{"type":"output_text","text":"Hello,
+        Hadley! How can I assist you today?"}]},{"role":"user","content":[{"type":"input_text","text":"what''s
+        my job?"}]}],"model":"gpt-4.1-nano","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9564fa12cd427103-DFW
+      cf-ray: 999eec01394eceb7-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 27 Jun 2025 12:34:08 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '164'
+      date: Wed, 05 Nov 2025 19:57:45 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '933'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=5e.gKPcFA5mM7HOsyAqGr17JbcEJ.6FOL_dNHs78k0A-1751027648-1.0.1.1-Z4kaBQWyLiLb3BQdtQcderMapLEkasRJl1APUMlWh1lmkEpPzhX7XdBkR6g2P.K.AufVBo8qLqv.MY.cgvWiUvOQEQfZbq3J67zfShivQNg;
-        path=/; expires=Fri, 27-Jun-25 13:04:08 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=ajcI4O4EmnxpzusjGIRDVf25eEtHhaIegAxJsKwKBYg-1762372665-1.0.1.1-6KG5ynxNGhcgb1cMnedh7QIYZG67XQtEgwxWMuT7RrMog4dalaZeiSjGN4EG4BnmDtpOysP2L5Pyz8WeYNiV6awnreDIwoySX7WX9DkyCyA;
+        path=/; expires=Wed, 05-Nov-25 20:27:45 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=g9nHixKem7xsV_lsWetciLlF6xcXHiSpj17aXPtO.E8-1751027648673-0.0.1.1-604800000;
+      - _cfuvid=WIWE2Q7lJaS0ivnpOvdxMLR7E.zAyJ5OeIEwR5ivke4-1762372665516-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '167'
+      x-envoy-upstream-service-time: '945'
       x-ratelimit-limit-requests: '30000'
       x-ratelimit-limit-tokens: '150000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999971'
+      x-ratelimit-remaining-tokens: '149999932'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_3b695dd79d539d1b43b0c8512ea3bb06
+      x-request-id: req_7f4cd665367247ce8e2fb1ced5184694
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-Bn2ZMihoWwjRwws85PtqzYfAQadin",
-          "object": "chat.completion",
-          "created": 1751027648,
+          "id": "resp_01a9a5f8777538bb01690bac389798819585db7dc7cada9b7d",
+          "object": "response",
+          "created_at": 1762372664,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-nano-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "Data scientist.",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_01a9a5f8777538bb01690bac393bf081958d4ec4c6bbaaad9d",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "You're a data scientist."
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 46,
-            "completion_tokens": 3,
-            "total_tokens": 49,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 48,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 6,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 54
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-06-27 12:34:08
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-11-05 19:57:45
+recorded_with: VCR-vcr/2.0.0

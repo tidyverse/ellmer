@@ -1,82 +1,159 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"\n  John
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  John
         works at Google in New York. He met with Sarah, the CEO of\n  Acme Inc., last
-        week in San Francisco.\n"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
+        week in San Francisco.\n"}]}],"model":"gpt-4.1","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
         extracted entity name."},"type":{"type":"string","description":"The entity
         type","enum":["person","location","organization"]},"context":{"type":"string","description":"The
-        context in which the entity appears in the text."}},"required":["name","type","context"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+        context in which the entity appears in the text."}},"required":["name","type","context"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 96125b4d1879511a-MSP
+      cf-ray: 999eee083a563458-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 18 Jul 2025 13:34:28 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1248'
+      date: Wed, 05 Nov 2025 19:59:14 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '6640'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=GiorKZ9KW3D4hzBS6vbwFEa99iAjtejhdFAzm2hzvzQ-1752845668-1.0.1.1-cghV7LQqCwh6ZN8xW3e_gBHd4tSExNLhial0W05AQGNg14tI98QniWA_dT_JSJOnuuuHkwTwvY6mfmLAOOFpfMxKsoyFsnIO_wvAbfB03_E;
-        path=/; expires=Fri, 18-Jul-25 14:04:28 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=D1DhLcZqZ3mdsjKYHsoP09Zndd93ElGOxyFZ9.4faOc-1762372754-1.0.1.1-PmJiILrdIVIS0S2kK2QYnpLxIJ8iyBTmHicGUAGWwJCkAkKHby4pS5s.JXnLs.FSMsMP5E8NxbHSnC1yo3RbCjNHOk5VFgftJ7u3yFj7DE4;
+        path=/; expires=Wed, 05-Nov-25 20:29:14 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=mz9Wd4tFQGhQ6CkmKdadi.q3GBbZXzbEpBrzvtSuZaA-1752845668745-0.0.1.1-604800000;
+      - _cfuvid=tz.EkO.WbBe8q1poEz__JxQ2kV0fPXi4B9PdD9Ihcuk-1762372754267-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1261'
+      x-envoy-upstream-service-time: '6655'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999971'
+      x-ratelimit-remaining-tokens: '29999851'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_d5a63f1f93d97b0b717fe950a41881ba
+      x-request-id: req_84beb24f19764df280188a11e0c1ebb0
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-BufWFLXulio4TIbZSZdNAsW4KuEID",
-          "object": "chat.completion",
-          "created": 1752845667,
+          "id": "resp_094b5dd23a90f81d01690bac8baa308190a50775518d086d8c",
+          "object": "response",
+          "created_at": 1762372747,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John works at Google in New York.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"He met with Sarah, the CEO of Acme Inc.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"Sarah, the CEO of Acme Inc.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"He met with Sarah... last week in San Francisco.\"}]}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_094b5dd23a90f81d01690bac8d1fec81909dd50aac75ff4492",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John works at Google in New York.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"He met with Sarah, the CEO of Acme Inc.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"Sarah, the CEO of Acme Inc.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"He met with Sarah... last week in San Francisco.\"}]}"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 137,
-            "completion_tokens": 131,
-            "total_tokens": 268,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": null
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "description": null,
+              "name": "structured_data",
+              "schema": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "wrapper": {
+                    "type": "array",
+                    "description": "",
+                    "items": {
+                      "type": "object",
+                      "description": "",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "The extracted entity name."
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The entity type",
+                          "enum": [
+                            "person",
+                            "location",
+                            "organization"
+                          ]
+                        },
+                        "context": {
+                          "type": "string",
+                          "description": "The context in which the entity appears in the text."
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "type",
+                        "context"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "wrapper"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 130,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 132,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 262
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-18 13:34:28
-recorded_with: VCR-vcr/1.7.1.93
+  recorded_at: 2025-11-05 19:59:14
+recorded_with: VCR-vcr/2.0.0

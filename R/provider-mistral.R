@@ -3,6 +3,8 @@
 #' @description
 #' Get your API key from <https://console.mistral.ai/api-keys>.
 #'
+#' Built on top of [chat_openai_compatible()].
+#'
 #' ## Known limitations
 #'
 #' * Tool calling is unstable.
@@ -54,7 +56,10 @@ chat_mistral <- function(
 }
 
 mistral_base_url <- "https://api.mistral.ai/v1/"
-ProviderMistral <- new_class("ProviderMistral", parent = ProviderOpenAI)
+ProviderMistral <- new_class(
+  "ProviderMistral",
+  parent = ProviderOpenAICompatible
+)
 
 chat_mistral_test <- function(
   system_prompt = NULL,
@@ -76,7 +81,7 @@ chat_mistral_test <- function(
 }
 
 method(base_request, ProviderMistral) <- function(provider) {
-  req <- base_request(super(provider, ProviderOpenAI))
+  req <- base_request(super(provider, ProviderOpenAICompatible))
   req <- ellmer_req_robustify(req, after = function(resp) {
     as.numeric(resp_header(resp, "ratelimitbysize-reset", NA))
   })
@@ -97,7 +102,7 @@ method(chat_body, ProviderMistral) <- function(
   type = NULL
 ) {
   body <- chat_body(
-    super(provider, ProviderOpenAI),
+    super(provider, ProviderOpenAICompatible),
     stream = stream,
     turns = turns,
     tools = tools,

@@ -5,6 +5,9 @@ test_that("can make simple request", {
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
   expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
+
+  resp <- chat$chat("Double that", echo = FALSE)
+  expect_match(resp, "4")
 })
 
 test_that("can make simple streaming request", {
@@ -17,21 +20,21 @@ test_that("can list models", {
   test_models(models_openai)
 })
 
-
 # Common provider interface -----------------------------------------------
 
 test_that("defaults are reported", {
   expect_snapshot(. <- chat_openai())
 })
 
-test_that("supports standard parameters", {
-  chat_fun <- chat_openai_test
+# No longer supports stop parameter
+# test_that("supports standard parameters", {
+#   chat_fun <- chat_openai_test
 
-  test_params_stop(chat_fun)
-})
+#   test_params_stop(chat_fun)
+# })
 
 test_that("supports tool calling", {
-  vcr::local_cassette("openai-tool")
+  vcr::local_cassette("openai-v2-tool")
   chat_fun <- chat_openai_test
 
   test_tools_simple(chat_fun)
@@ -44,7 +47,7 @@ test_that("can extract data", {
 })
 
 test_that("can use images", {
-  vcr::local_cassette("openai-image")
+  vcr::local_cassette("openai-v2-image")
   # Needs mini to get shape correct
   chat_fun <- \(...) chat_openai_test(model = "gpt-4.1-mini", ...)
 
@@ -53,7 +56,7 @@ test_that("can use images", {
 })
 
 test_that("can use pdfs", {
-  vcr::local_cassette("openai-pdf")
+  vcr::local_cassette("openai-v2-pdf")
   chat_fun <- chat_openai_test
 
   test_pdf_local(chat_fun)
@@ -70,13 +73,8 @@ test_that("can match prices for some common models", {
 
 test_that("can retrieve log_probs (#115)", {
   chat <- chat_openai_test(params = params(log_probs = TRUE))
-  pieces <- coro::collect(chat$stream("Hi"))
-
-  logprobs <- chat$last_turn()@json$choices[[1]]$logprobs$content
-  expect_equal(
-    length(logprobs),
-    length(pieces) - 2 # leading "" + trailing \n
-  )
+  chat$chat("Hi")
+  expect_length(chat$last_turn()@json$output[[1]]$content[[1]]$logprobs, 2)
 })
 
 test_that("structured data work with and without wrapper", {
@@ -94,25 +92,17 @@ test_that("structured data work with and without wrapper", {
   expect_equal(out, list(number = 11))
 })
 
-# Custom -----------------------------------------------------------------
+test_that("service tier affects pricing", {
+  vcr::local_cassette("openai-v2-service-tier")
+  chat <- chat_openai_test(service_tier = "priority")
+  chat$chat("Tell me a joke")
 
-test_that("as_json specialised for OpenAI", {
-  stub <- ProviderOpenAI(name = "", base_url = "", model = "")
+  last_turn <- chat$last_turn()
+  tokens <- as.list(last_turn@tokens)
+  priority_cost <- get_token_cost(chat$get_provider(), tokens, "priority")
+  expect_equal(last_turn@cost, priority_cost)
 
-  expect_snapshot(
-    as_json(stub, type_object(.additional_properties = TRUE)),
-    error = TRUE
-  )
-
-  obj <- type_object(x = type_number(required = FALSE))
-  expect_equal(
-    as_json(stub, obj),
-    list(
-      type = "object",
-      description = "",
-      properties = list(x = list(type = c("number", "null"), description = "")),
-      required = list("x"),
-      additionalProperties = FALSE
-    )
-  )
+  # Confirm we have pricing for the priority tier
+  default_cost <- get_token_cost(chat$get_provider(), tokens)
+  expect_gt(last_turn@cost, default_cost)
 })
