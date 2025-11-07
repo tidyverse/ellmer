@@ -128,7 +128,7 @@ test_that("chat warns on tool failures", {
 
 test_that("tool calls can be rejected via `tool_request` callbacks", {
   vcr::local_cassette("chat-tools-reject-callback")
-  chat <- chat_openai_test()
+  chat <- chat_openai_test(model = "gpt-4.1-mini")
 
   chat$register_tool(tool(
     function(user) "red",
@@ -155,7 +155,7 @@ test_that("tool calls can be rejected via `tool_request` callbacks", {
 
 test_that("tool calls can be rejected via the tool function", {
   vcr::local_cassette("chat-tools-reject-tool-function")
-  chat <- chat_openai_test()
+  chat <- chat_openai_test(model = "gpt-4.1")
 
   chat$register_tool(tool(
     function(user) if (user == "Joe") tool_reject() else "red",

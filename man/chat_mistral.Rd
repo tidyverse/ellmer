@@ -56,6 +56,8 @@ A \link{Chat} object.
 }
 \description{
 Get your API key from \url{https://console.mistral.ai/api-keys}.
+
+Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 \subsection{Known limitations}{
 \itemize{
 \item Tool calling is unstable.
@@ -83,7 +85,7 @@ Other chatbots:
 \code{\link{chat_huggingface}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

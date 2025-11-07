@@ -1,8 +1,6 @@
 #' Submit multiple chats in parallel
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
-#'
 #' If you have multiple prompts, you can submit them in parallel. This is
 #' typically considerably faster than submitting them in sequence, especially
 #' with Gemini and OpenAI.

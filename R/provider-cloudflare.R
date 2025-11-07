@@ -9,6 +9,8 @@ NULL
 #' API, you must have an Account ID and an Access Token, which you can obtain
 #' [by following these instructions](https://developers.cloudflare.com/workers-ai/get-started/rest-api/).
 #'
+#' Built on top of [chat_openai_compatible()].
+#'
 #' ## Known limitations
 #' * Tool calling does not appear to work.
 #' * Images don't appear to work.
@@ -68,7 +70,10 @@ chat_cloudflare <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-ProviderCloudflare <- new_class("ProviderCloudflare", parent = ProviderOpenAI)
+ProviderCloudflare <- new_class(
+  "ProviderCloudflare",
+  parent = ProviderOpenAICompatible
+)
 
 method(base_request_error, ProviderCloudflare) <- function(provider, req) {
   req_error(req, body = function(resp) {

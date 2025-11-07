@@ -1,82 +1,161 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"\n* John
-        Smith. Age: 30. Height: 180 cm. Weight: 80 kg.\n* Jane Doe. Age: 25. Height:
-        5''5\". Weight: 110 lb.\n* Jose Rodriguez. Age: 40. Height: 190 cm. Weight:
-        90 kg.\n* June Lee | Age: 35 | Height 175 cm | Weight: 70 kg\n"}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"array","description":"","items":{"type":"string","description":""}},"age":{"type":"array","description":"","items":{"type":"integer","description":""}},"height":{"type":"array","description":"","items":{"type":"number","description":"in
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n*
+        John Smith. Age: 30. Height: 180 cm. Weight: 80 kg.\n* Jane Doe. Age: 25.
+        Height: 5''5\". Weight: 110 lb.\n* Jose Rodriguez. Age: 40. Height: 190 cm.
+        Weight: 90 kg.\n* June Lee | Age: 35 | Height 175 cm | Weight: 70 kg\n"}]}],"model":"gpt-4.1","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"array","description":"","items":{"type":"string","description":""}},"age":{"type":"array","description":"","items":{"type":"integer","description":""}},"height":{"type":"array","description":"","items":{"type":"number","description":"in
         m"}},"weight":{"type":"array","description":"","items":{"type":"number","description":"in
-        kg"}}},"required":["name","age","height","weight"],"additionalProperties":false},"strict":true}}}'
+        kg"}}},"required":["name","age","height","weight"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 96125b149df6511a-MSP
+      cf-ray: 999eed9f1b723458-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 18 Jul 2025 13:34:19 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '950'
+      date: Wed, 05 Nov 2025 19:58:53 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '2475'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=CYYmwGbXrbFLQ4l.44mGo5zjMk0Iu.06O47cFoRMp4M-1752845659-1.0.1.1-DcPnKc3NnNdpapfGhb152pvWPzoc1DNyQ2JHDeovXqJs7_NwomntU3c57R3dtPRdqZcxQMnSIkXvu44Yli0pbJOKbinx8UeRVarlnydzDbA;
-        path=/; expires=Fri, 18-Jul-25 14:04:19 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=tWJQiHsMJ6_TqqVyn.P0r0AEbEF5.zDLi6RVZ9mDa9s-1762372733-1.0.1.1-ymQoncVDjYIVhjz8llbSWbipvWVcbe1x9qDpsz6M7hbR4GkdciTFDCgYv17yoUiSSbDTxg7jgCA0LSGTKqN8nzmt6U0L4tGAQYyCu9Ha.Cs;
+        path=/; expires=Wed, 05-Nov-25 20:28:53 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=6ajFHQfxQgnFHyGrqJZ0rG5BnBjqi8ckVOvVzhLMUVQ-1752845659413-0.0.1.1-604800000;
+      - _cfuvid=Btw4rAdKHuFUx9t1xaV14tlViCCIWWN1SyZy3R.P8jg-1762372733263-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '996'
+      x-envoy-upstream-service-time: '2481'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999942'
+      x-ratelimit-remaining-tokens: '29999793'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_9fa556fecb96fb5ee38299869c251cf3
+      x-request-id: req_9fc84d46a719498a9da60bbaf4e5a5bf
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-BufW6391R1exMD79UPfDGEDFCNHsu",
-          "object": "chat.completion",
-          "created": 1752845658,
+          "id": "resp_021caef45825e91001690bac7ace648195b797401a2ceee4f7",
+          "object": "response",
+          "created_at": 1762372730,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"name\":[\"John Smith\",\"Jane Doe\",\"Jose Rodriguez\",\"June Lee\"],\"age\":[30,25,40,35],\"height\":[1.8,1.651,1.9,1.75],\"weight\":[80,49.9,90,70]}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_021caef45825e91001690bac7c21808195b310e685235be05f",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\n  \"name\": [\"John Smith\", \"Jane Doe\", \"Jose Rodriguez\", \"June Lee\"],\n  \"age\": [30, 25, 40, 35],\n  \"height\": [1.8, 1.651, 1.9, 1.75],\n  \"weight\": [80, 49.9, 90, 70]\n}"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 195,
-            "completion_tokens": 56,
-            "total_tokens": 251,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": null
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "description": null,
+              "name": "structured_data",
+              "schema": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "name": {
+                    "type": "array",
+                    "description": "",
+                    "items": {
+                      "type": "string",
+                      "description": ""
+                    }
+                  },
+                  "age": {
+                    "type": "array",
+                    "description": "",
+                    "items": {
+                      "type": "integer",
+                      "description": ""
+                    }
+                  },
+                  "height": {
+                    "type": "array",
+                    "description": "",
+                    "items": {
+                      "type": "number",
+                      "description": "in m"
+                    }
+                  },
+                  "weight": {
+                    "type": "array",
+                    "description": "",
+                    "items": {
+                      "type": "number",
+                      "description": "in kg"
+                    }
+                  }
+                },
+                "required": [
+                  "name",
+                  "age",
+                  "height",
+                  "weight"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 188,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 81,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 269
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-18 13:34:19
-recorded_with: VCR-vcr/1.7.1.93
+  recorded_at: 2025-11-05 19:58:53
+recorded_with: VCR-vcr/2.0.0

@@ -58,6 +58,8 @@ NULL
 #' @param model `r param_model("claude-sonnet-4-5-20250929", "anthropic")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
+#' @param base_url The base URL to the endpoint; the default is Claude's
+#'   public API.
 #' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
 #'   Set to "none" to disable caching or "1h" to cache for one hour.
 #'
@@ -456,6 +458,36 @@ method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(
       type = "base64",
       media_type = x@type,
       data = x@data
+    )
+  )
+}
+
+method(as_json, list(ProviderAnthropic, ContentUploaded)) <- function(
+  provider,
+  x
+) {
+  # https://docs.claude.com/en/docs/build-with-claude/files#using-a-file-in-messages
+  block_type <- switch(
+    x@mime_type,
+    "application/pdf" = "document",
+    "text/plain" = "document",
+    "image/jpeg" = "image",
+    "image/png" = "image",
+    "image/gif" = "image",
+    "image/webp" = "image",
+    "text/csv" = "container_upload",
+    "application/json" = "container_upload",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "container_upload",
+    "application/vnd.ms-excel" = "container_upload",
+    "text/xml" = "container_upload",
+    "application/xml" = "container_upload"
+  )
+
+  list(
+    type = block_type,
+    source = list(
+      type = "file",
+      file_id = x@uri
     )
   )
 }
