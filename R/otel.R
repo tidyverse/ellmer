@@ -50,7 +50,7 @@ setup_active_promise_otel_span <- function(
 
 local_chat_otel_span <- function(
   provider,
-  parent_otel_span = NULL,
+  parent = NULL,
   local_envir = parent.frame(),
   tracer = ellmer_otel_tracer()
 ) {
@@ -59,7 +59,7 @@ local_chat_otel_span <- function(
       sprintf("chat %s", provider@model),
       tracer = tracer,
       options = list(
-        parent = parent_otel_span,
+        parent = parent,
         kind = "CLIENT"
       ),
       attributes = list(
@@ -105,7 +105,7 @@ record_chat_otel_span_status <- function(span, result) {
 # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/#execute-tool-span
 local_tool_otel_span <- function(
   request,
-  parent_otel_span = NULL,
+  parent = NULL,
   local_envir = parent.frame(),
   tracer = ellmer_otel_tracer()
 ) {
@@ -114,7 +114,7 @@ local_tool_otel_span <- function(
       sprintf("execute_tool %s", request@tool@name),
       tracer = tracer,
       options = list(
-        parent = parent_otel_span,
+        parent = parent,
         kind = "INTERNAL"
       ),
       attributes = compact(list(

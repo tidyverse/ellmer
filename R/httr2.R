@@ -7,13 +7,13 @@ chat_perform <- function(
   turns,
   tools = NULL,
   type = NULL,
-  parent_otel_span = NULL
+  otel_span = NULL
 ) {
   mode <- arg_match(mode)
   stream <- mode %in% c("stream", "async-stream")
   tools <- tools %||% list()
 
-  setup_active_promise_otel_span(parent_otel_span)
+  setup_active_promise_otel_span(otel_span)
 
   req <- chat_request(
     provider = provider,
@@ -29,13 +29,13 @@ chat_perform <- function(
     "stream" = chat_perform_stream(
       provider,
       req,
-      parent_otel_span = parent_otel_span
+      otel_span = otel_span
     ),
     "async-value" = req_perform_promise(req),
     "async-stream" = chat_perform_async_stream(
       provider,
       req,
-      parent_otel_span = parent_otel_span
+      otel_span = otel_span
     )
   )
 }
@@ -44,16 +44,16 @@ on_load(
   chat_perform_stream <- coro::generator(function(
     provider,
     req,
-    parent_otel_span = NULL
+    otel_span = NULL
   ) {
-    setup_active_promise_otel_span(parent_otel_span)
+    setup_active_promise_otel_span(otel_span)
 
     resp <- req_perform_connection(req)
     on.exit(close(resp))
 
     repeat {
       # Ensure the span is active for each await/yield point
-      setup_active_promise_otel_span(parent_otel_span)
+      setup_active_promise_otel_span(otel_span)
 
       event <- chat_resp_stream(provider, resp)
       data <- stream_parse(provider, event)
@@ -70,16 +70,16 @@ on_load(
   chat_perform_async_stream <- coro::async_generator(function(
     provider,
     req,
-    parent_otel_span = NULL
+    otel_span = NULL
   ) {
-    setup_active_promise_otel_span(parent_otel_span)
+    setup_active_promise_otel_span(otel_span)
 
     resp <- req_perform_connection(req, blocking = FALSE)
     on.exit(close(resp))
 
     repeat {
       # Ensure the span is active for each await/yield point
-      setup_active_promise_otel_span(parent_otel_span)
+      setup_active_promise_otel_span(otel_span)
 
       event <- chat_resp_stream(provider, resp)
       if (is.null(event) && !resp_stream_is_complete(resp)) {
