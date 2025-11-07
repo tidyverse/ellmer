@@ -284,12 +284,26 @@ method(stream_merge_chunks, ProviderGoogleGemini) <- function(
 }
 
 method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
+  # https://ai.google.dev/api/generate-content#UsageMetadata
   usage <- json$usageMetadata
+
+  # Total token count for the generation request (prompt + response candidates).
+  # Not documented, but appears to include thinking and tool use, i.e.
+  # usage$promptTokenCount + usage$candidatesTokenCount +
+  #  usage$toolUsePromptTokenCount + usage$thoughtsTokenCount ==
+  #  usage$totalTokenCount
+  total <- usage$totalTokenCount %||% 0
+
+  # Number of tokens in the prompt. When cachedContent is set, this is
+  # still the total effective prompt size meaning this includes the number
+  # of tokens in the cached content.
+  input <- usage$promptTokenCount %||% 0
+
   cached <- usage$cachedContentTokenCount %||% 0
 
   tokens(
-    input = (usage$promptTokenCount %||% 0) + -cached,
-    output = usage$candidatesTokenCount + (usage$thoughtsTokenCount %||% 0),
+    input = input - cached,
+    output = total - input,
     cached_input = cached
   )
 }
