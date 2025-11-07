@@ -4,15 +4,26 @@ otel_tracer_name <- "co.posit.r-package.ellmer"
 # Using local scope avoids an environment object lookup on each call.
 ellmer_otel_tracer <- local({
   tracer <- NULL
+
+  reset_tracer <- function() {
+    tracer <<- NULL
+    invisible()
+  }
+
   function() {
     if (!is.null(tracer)) {
       return(tracer)
     }
-    if (is_testing()) {
-      # Don't cache the tracer in unit tests. It interferes with tracer provider
-      # injection in otelsdk::with_otel_record().
-      return(otel::get_tracer())
-    }
+
+    ## For now, we always cache the tracer
+    ## Use `with_ellmer_otel_record()` in tests to use a fresh tracer
+    #
+    # if (is_testing()) {
+    #   # Don't cache the tracer in unit tests. It interferes with tracer provider
+    #   # injection in otelsdk::with_otel_record().
+    #   return(otel::get_tracer())
+    # }
+
     tracer <<- otel::get_tracer()
     tracer
   }
