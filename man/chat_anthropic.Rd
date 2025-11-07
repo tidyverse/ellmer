@@ -3,6 +3,7 @@
 \name{chat_anthropic}
 \alias{chat_anthropic}
 \alias{chat_claude}
+\alias{models_claude}
 \alias{models_anthropic}
 \title{Chat with an Anthropic Claude model}
 \usage{
@@ -32,6 +33,11 @@ chat_claude(
   credentials = NULL,
   api_headers = character(),
   echo = NULL
+)
+
+models_claude(
+  base_url = "https://api.anthropic.com/v1",
+  api_key = anthropic_key()
 )
 
 models_anthropic(
