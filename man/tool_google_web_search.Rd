@@ -17,9 +17,10 @@ Learn more in \url{https://ai.google.dev/gemini-api/docs/google-search}.
 }
 \examples{
 \dontrun{
-chat <- chat_google_gemini(model = "gemini-2.5-flash")
+chat <- chat_google_gemini()
 chat$register_tool(tool_google_web_search())
-chat$chat("What's in the news today?")
+chat$chat("What was in the news today?")
+chat$chat("What's the biggest news in the economy?")
 }
 }
 \seealso{

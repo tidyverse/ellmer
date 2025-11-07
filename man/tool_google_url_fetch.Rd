@@ -14,9 +14,9 @@ Learn more in \url{https://ai.google.dev/gemini-api/docs/url-context}.
 }
 \examples{
 \dontrun{
-chat <- chat_google_gemini(model = "gemini-2.5-flash")
+chat <- chat_google_gemini()
 chat$register_tool(tool_google_url_fetch())
-chat$chat("Fetch and summarize https://tidyverse.org/blog")
+chat$chat("What are the latest package releases on https://tidyverse.org/blog?")
 }
 }
 \seealso{
