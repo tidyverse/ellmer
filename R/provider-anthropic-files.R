@@ -147,5 +147,5 @@ request_anthropic_file <- function(url, beta_headers, credentials) {
 }
 
 form_file <- function(path, type = type) {
-  curl::form_file(path)
+  curl::form_file(path, type = type)
 }
