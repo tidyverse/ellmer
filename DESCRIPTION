@@ -31,7 +31,7 @@ Imports:
     later (>= 1.4.0),
     lifecycle,
     otel (>= 0.2.0),
-    promises (>= 1.3.3.9004),
+    promises (>= 1.5.0),
     R6,
     rlang (>= 1.1.0),
     S7 (>= 0.2.0),
