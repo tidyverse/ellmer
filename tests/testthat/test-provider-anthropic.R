@@ -49,9 +49,18 @@ test_that("can extract data", {
 
 test_that("can fetch web pages", {
   vcr::local_cassette("anthropic-web-fetch")
-  chat_fun <- \(...)chat_anthropic_test(..., beta_headers = "web-fetch-2025-09-10")
+  chat_fun <- \(...) {
+    chat_anthropic_test(..., beta_headers = "web-fetch-2025-09-10")
+  }
   test_tool_web_fetch(chat_fun, claude_tool_web_fetch())
 })
+
+test_that("can search web pages", {
+  vcr::local_cassette("anthropic-web-search")
+  chat_fun <- \(...) chat_anthropic_test(...)
+  test_tool_web_search(chat_fun, claude_tool_web_search())
+})
+
 
 test_that("can use images", {
   vcr::local_cassette("anthropic-images")

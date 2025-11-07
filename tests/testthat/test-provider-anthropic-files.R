@@ -1,5 +1,5 @@
 test_that("end-to-end test of all functions", {
-  vcr::local_cassette("anthropic-upload-file", record = "all")
+  vcr::local_cassette("anthropic-upload-file")
 
   upload <- anthropic_file_upload(test_path("apples.pdf"))
   defer(anthropic_file_delete(upload@uri))

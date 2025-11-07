@@ -363,9 +363,6 @@ method(value_turn, ProviderAnthropic) <- function(
       }
     } else if (content$type == "server_tool_use") {
       if (content$name == "web_search") {
-        # Sends a string, but expects parsed json to be sent back
-        content$input <- parse_json(content$input)
-
         # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-search-tool#response
         ContentToolRequestSearch(
           query = content$input$query,

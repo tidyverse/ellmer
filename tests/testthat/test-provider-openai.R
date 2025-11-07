@@ -46,6 +46,16 @@ test_that("can extract data", {
   test_data_extraction(chat_fun)
 })
 
+test_that("can search web pages", {
+  vcr::local_cassette("openai-v2-web-search")
+  chat_fun <- \(...) chat_openai_test(model = "gpt-4.1", ...)
+  test_tool_web_search(
+    chat_fun,
+    openai_tool_web_search(),
+    hint = "The CRAN archive page has this info."
+  )
+})
+
 test_that("can use images", {
   vcr::local_cassette("openai-v2-image")
   # Needs mini to get shape correct

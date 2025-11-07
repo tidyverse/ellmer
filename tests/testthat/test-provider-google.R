@@ -53,6 +53,12 @@ test_that("can fetch web pages", {
   test_tool_web_fetch(chat_fun, google_tool_web_fetch())
 })
 
+test_that("can search web pages", {
+  vcr::local_cassette("google-web-search")
+  chat_fun <- chat_google_gemini_test
+  test_tool_web_search(chat_fun, google_tool_web_search())
+})
+
 test_that("can use images", {
   vcr::local_cassette("google-image")
   chat_fun <- chat_google_gemini_test
