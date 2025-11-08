@@ -630,7 +630,7 @@ method(batch_result_turn, ProviderAnthropic) <- function(
 
 #' @export
 #' @rdname chat_anthropic
-models_anthropic <- function(
+models_claude <- function(
   base_url = "https://api.anthropic.com/v1",
   api_key = anthropic_key()
 ) {
@@ -660,6 +660,10 @@ models_anthropic <- function(
   df <- cbind(df, match_prices("Anthropic", df$id))
   df[order(-xtfrm(df$created_at)), ]
 }
+
+#' @export
+#' @rdname chat_anthropic
+models_anthropic <- models_claude
 
 # Helpers ----------------------------------------------------------------
 

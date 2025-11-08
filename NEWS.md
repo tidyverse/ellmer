@@ -1,7 +1,7 @@
 # ellmer (development version)
 
 * `parallel_chat()` and `batch_chat()` are no longer experimental.
-* New set of `anthropic_file_()` functions for managing file uploads with Anthropic (@dcomputing, #761).
+* New set of `claude_file_()` functions for managing file uploads with Claude (@dcomputing, #761).
 * `chat_openai_compatible()` replaces `chat_openai()` as the interface to use for OpenAI-compatible APIs, and `chat_openai()` is reserved for the official OpenAI API. Unlike previous versions of `chat_openai()`, the `base_url` parameter is now required (#801).
 * `chat_openai()` now uses OpenAI's responses endpoint (#365, #801). This is their recommended endpoint and gives more access to built-in tools.
 * `batch_chat()` now retrieves failed results for `chat_openai()` (#830)
@@ -47,6 +47,7 @@
 * `models_ollama()` was fixed to correctly query model capabilities from remote Ollama servers (#746).
 
 * `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758).
+  `models_claude()` is now an alias for `models_anthropic()`.
 
 # ellmer 0.3.2
 
