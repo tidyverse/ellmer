@@ -148,9 +148,9 @@ record_tool_otel_span_error <- function(span, error) {
   if (is.null(span) || !span$is_recording()) {
     return()
   }
-  otel_span$record_exception(error)
-  otel_span$set_status("error")
-  otel_span$set_attribute("error.type", class(error)[1])
+  span$record_exception(error)
+  span$set_status("error")
+  span$set_attribute("error.type", class(error)[1L])
 }
 
 # Only activate the span if it is non-NULL. If
