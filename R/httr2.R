@@ -52,9 +52,6 @@ on_load(
     on.exit(close(resp))
 
     repeat {
-      # Ensure the span is active for each await/yield point
-      setup_active_promise_otel_span(otel_span)
-
       event <- chat_resp_stream(provider, resp)
       data <- stream_parse(provider, event)
       if (is.null(data)) {
@@ -78,9 +75,6 @@ on_load(
     on.exit(close(resp))
 
     repeat {
-      # Ensure the span is active for each await/yield point
-      setup_active_promise_otel_span(otel_span)
-
       event <- chat_resp_stream(provider, resp)
       if (is.null(event) && !resp_stream_is_complete(resp)) {
         fds <- resp$body$get_fdset()
