@@ -2,7 +2,7 @@ test_that("tracing works as expected for synchronous chats", {
   skip_if_not_installed("otelsdk")
 
   # Capture spans from a typical synchronous chat with tool calls.
-  spans <- otelsdk::with_otel_record({
+  spans <- with_otel_record({
     test_tools_simple(chat_openai_test)
   })[["traces"]]
 
@@ -57,7 +57,7 @@ test_that("tracing works as expected for synchronous streams", {
   skip_if_not_installed("otelsdk")
 
   # Capture spans when a stream is suspended.
-  spans <- otelsdk::with_otel_record({
+  spans <- with_otel_record({
     chat <- chat_openai_test(system_prompt = "Be terse.")
     stream <- chat$stream("What's your favourite Apache Spark feature?")
     local(otel::start_local_active_span("simultaneous"))
@@ -105,7 +105,7 @@ test_that("tracing works as expected for asynchronous chats", {
 
   # Capture spans for an async chat with async tool calls interleaved with
   # other synchronous and asynchronous spans.
-  spans <- otelsdk::with_otel_record({
+  spans <- with_otel_record({
     p1 <- chat$chat_async("What's the current date in Y-M-D format?") |>
       promises::then(function(result) {
         chat$chat_async("What date will it be 47 days from now?")
@@ -180,7 +180,7 @@ test_that("tracing works as expected for asynchronous streams", {
 
   # Capture spans when an async stream is used in concert with other
   # synchronous and asynchronous spans.
-  spans <- otelsdk::with_otel_record({
+  spans <- with_otel_record({
     chat <- chat_openai_test(system_prompt = "Be terse.")
     stream <- chat$stream_async("What's your favourite Apache Spark feature?")
     p <- promises::promise(function(resolve, reject) {

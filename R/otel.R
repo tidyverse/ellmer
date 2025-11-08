@@ -1,82 +1,130 @@
 otel_tracer_name <- "co.posit.r-package.ellmer"
 
-# Inspired by httr2:::get_tracer() / shiny:::get_tracer()
-# Using local scope avoids an environment object lookup on each call.
-ellmer_otel_tracer <- local({
-  tracer <- NULL
-  function() {
-    if (!is.null(tracer)) {
-      return(tracer)
+otel_cache_tracer <- NULL
+local_chat_otel_span <- NULL
+local_tool_otel_span <- NULL
+local_agent_otel_span <- NULL
+
+local({
+  otel_is_tracing <- FALSE
+  otel_tracer <- NULL
+
+  otel_cache_tracer <<- function() {
+    otel_tracer <<- otel::get_tracer(otel_tracer_name)
+    otel_is_tracing <<- tracer_enabled(otel_tracer)
+  }
+
+  local_chat_otel_span <<- function(
+    provider,
+    parent = NULL,
+    local_envir = parent.frame()
+  ) {
+    if (!otel_is_tracing) {
+      return()
     }
-    if (is_testing()) {
-      # Don't cache the tracer in unit tests. It interferes with tracer provider
-      # injection in otelsdk::with_otel_record().
-      return(otel::get_tracer())
+    chat_span <-
+      otel::start_span(
+        sprintf("chat %s", provider@model),
+        options = list(
+          parent = parent,
+          kind = "CLIENT"
+        ),
+        attributes = list(
+          "gen_ai.operation.name" = "chat",
+          "gen_ai.provider.name" = tolower(provider@name),
+          "gen_ai.request.model" = provider@model
+        ),
+        tracer = otel_tracer
+      )
+
+    defer(otel::end_span(chat_span), envir = local_envir)
+
+    chat_span
+  }
+
+  # Starts an Open Telemetry span that abides by the semantic conventions for
+  # Generative AI tool calls.
+  #
+  # Must be activated for the calling scope.
+  #
+  # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/#execute-tool-span
+  local_tool_otel_span <<- function(
+    request,
+    parent = NULL,
+    local_envir = parent.frame()
+  ) {
+    if (!otel_is_tracing) {
+      return()
     }
-    tracer <<- otel::get_tracer()
-    tracer
+    tool_span <-
+      otel::start_span(
+        sprintf("execute_tool %s", request@tool@name),
+        options = list(
+          parent = parent,
+          kind = "INTERNAL"
+        ),
+        attributes = compact(list(
+          "gen_ai.operation.name" = "execute_tool",
+          "gen_ai.tool.name" = request@tool@name,
+          "gen_ai.tool.description" = request@tool@description,
+          "gen_ai.tool.call.id" = request@id
+        )),
+        tracer = otel_tracer
+      )
+
+    setup_active_promise_otel_span(tool_span, local_envir)
+
+    defer(otel::end_span(tool_span), envir = local_envir)
+
+    tool_span
+  }
+
+  # Starts an Open Telemetry span that abides by the semantic conventions for
+  # Generative AI "agents".
+  #
+  # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/#inference
+  # local_otel_span_agent
+  local_agent_otel_span <<- function(
+    provider,
+    local_envir = parent.frame()
+  ) {
+    if (!otel_is_tracing) {
+      return()
+    }
+    agent_span <-
+      otel::start_span(
+        "invoke_agent",
+        options = list(kind = "CLIENT"),
+        attributes = list(
+          "gen_ai.operation.name" = "chat",
+          "gen_ai.provider.name" = tolower(provider@name)
+        ),
+        tracer = otel_tracer
+      )
+
+    setup_active_promise_otel_span(agent_span, local_envir)
+
+    defer(otel::end_span(agent_span), envir = local_envir)
+
+    agent_span
   }
 })
 
-otel_is_enabled <- function(tracer = ellmer_otel_tracer()) {
+tracer_enabled <- function(tracer) {
   .subset2(tracer, "is_enabled")()
 }
 
-
-# Only activate the span if it is non-NULL. If
-# otel_promise_domain is TRUE, also ensure that the active span is reactivated upon promise domain restoration.
-#' Activate and use handoff promise domain for Open Telemetry span
-#'
-#' @param otel_span An Open Telemetry span object.
-#' @param activation_scope The scope in which to activate the span.
-#' @noRd
-setup_active_promise_otel_span <- function(
-  otel_span,
-  activation_scope = parent.frame()
-) {
-  if (is.null(otel_span) || !otel_is_enabled()) {
-    return()
-  }
-
-  promises::local_otel_promise_domain(activation_scope)
-  otel::local_active_span(
-    otel_span,
-    activation_scope = activation_scope
-  )
-
-  invisible()
-}
-
-
-local_chat_otel_span <- function(
-  provider,
-  parent = NULL,
-  local_envir = parent.frame(),
-  tracer = ellmer_otel_tracer()
-) {
-  chat_span <-
-    otel::start_span(
-      sprintf("chat %s", provider@model),
-      tracer = tracer,
-      options = list(
-        parent = parent,
-        kind = "CLIENT"
-      ),
-      attributes = list(
-        "gen_ai.operation.name" = "chat",
-        "gen_ai.provider.name" = tolower(provider@name),
-        "gen_ai.request.model" = provider@model
-      )
-    )
-
-  defer(otel::end_span(chat_span), envir = local_envir)
-
-  chat_span
+with_otel_record <- function(expr) {
+  on.exit(otel_cache_tracer())
+  otelsdk::with_otel_record({
+    otel_cache_tracer()
+    expr
+  })
 }
 
 record_chat_otel_span_status <- function(span, result) {
   if (is.null(span) || !span$is_recording()) {
-    return(invisible(span))
+    return()
   }
   if (!is.null(result$model)) {
     span$set_attribute("gen_ai.response.model", result$model)
@@ -96,44 +144,8 @@ record_chat_otel_span_status <- function(span, result) {
   span$set_status("ok")
 }
 
-
-# Starts an Open Telemetry span that abides by the semantic conventions for
-# Generative AI tool calls.
-#
-# Must be activated for the calling scope.
-#
-# See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/#execute-tool-span
-local_tool_otel_span <- function(
-  request,
-  parent = NULL,
-  local_envir = parent.frame(),
-  tracer = ellmer_otel_tracer()
-) {
-  tool_span <-
-    otel::start_span(
-      sprintf("execute_tool %s", request@tool@name),
-      tracer = tracer,
-      options = list(
-        parent = parent,
-        kind = "INTERNAL"
-      ),
-      attributes = compact(list(
-        "gen_ai.operation.name" = "execute_tool",
-        "gen_ai.tool.name" = request@tool@name,
-        "gen_ai.tool.description" = request@tool@description,
-        "gen_ai.tool.call.id" = request@id
-      ))
-    )
-
-  setup_active_promise_otel_span(tool_span, local_envir)
-
-  defer(otel::end_span(tool_span), envir = local_envir)
-
-  tool_span
-}
-
-record_tool_otel_span_error <- function(otel_span, error) {
-  if (is.null(otel_span) || !otel_span$is_recording()) {
+record_tool_otel_span_error <- function(span, error) {
+  if (is.null(span) || !span$is_recording()) {
     return()
   }
   otel_span$record_exception(error)
@@ -141,31 +153,23 @@ record_tool_otel_span_error <- function(otel_span, error) {
   otel_span$set_attribute("error.type", class(error)[1])
 }
 
-
-# Starts an Open Telemetry span that abides by the semantic conventions for
-# Generative AI "agents".
-#
-# See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/#inference
-# local_otel_span_agent
-local_agent_otel_span <- function(
-  provider,
-  tracer = ellmer_otel_tracer(),
-  local_envir = parent.frame()
+# Only activate the span if it is non-NULL. If
+# otel_promise_domain is TRUE, also ensure that the active span is reactivated upon promise domain restoration.
+#' Activate and use handoff promise domain for Open Telemetry span
+#'
+#' @param otel_span An Open Telemetry span object.
+#' @param activation_scope The scope in which to activate the span.
+#' @noRd
+setup_active_promise_otel_span <- function(
+  span,
+  activation_scope = parent.frame()
 ) {
-  agent_span <-
-    otel::start_span(
-      "invoke_agent",
-      tracer = tracer,
-      options = list(kind = "CLIENT"),
-      attributes = list(
-        "gen_ai.operation.name" = "chat",
-        "gen_ai.provider.name" = tolower(provider@name)
-      )
-    )
+  if (is.null(span) || !span$is_recording()) {
+    return()
+  }
 
-  setup_active_promise_otel_span(agent_span, local_envir)
+  promises::local_otel_promise_domain(activation_scope)
+  otel::local_active_span(span, activation_scope = activation_scope)
 
-  defer(otel::end_span(agent_span), envir = local_envir)
-
-  agent_span
+  invisible()
 }
