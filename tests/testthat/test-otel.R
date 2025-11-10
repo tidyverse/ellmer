@@ -11,6 +11,7 @@ test_that("tracing works as expected for synchronous chats", {
   agent_spans <- Filter(function(x) x$name == "invoke_agent", spans)
   expect_length(agent_spans, 2L)
   expect_equal(agent_spans[[1L]]$parent, agent_spans[[2L]]$parent)
+  expect_equal(agent_spans[[1L]]$kind, "client")
   agent_span_ids <- sapply(agent_spans, function(x) x$span_id)
 
   # We should have (at least) two "execute_tool" spans
@@ -25,6 +26,7 @@ test_that("tracing works as expected for synchronous chats", {
     function(x) x$parent %in% agent_span_ids,
     logical(1)
   )))
+  expect_equal(tool_spans[[1L]]$kind, "internal")
 
   # And "chat" spans that correspond to model calls before and after each
   # tool call -- these are also children of the agent spans and siblings of one
@@ -37,6 +39,7 @@ test_that("tracing works as expected for synchronous chats", {
     function(x) x$parent %in% agent_span_ids,
     logical(1)
   )))
+  expect_equal(chat_spans[[1L]]$kind, "client")
 
   # Ensure we record the result (and therefore set the status) of chat spans.
   expect_true(all(vapply(chat_spans, function(x) x$status == "ok", logical(1))))

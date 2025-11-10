@@ -27,7 +27,7 @@ local({
         sprintf("chat %s", provider@model),
         options = list(
           parent = parent,
-          kind = "CLIENT"
+          kind = "client"
         ),
         attributes = list(
           "gen_ai.operation.name" = "chat",
@@ -59,10 +59,7 @@ local({
     tool_span <-
       otel::start_span(
         sprintf("execute_tool %s", request@tool@name),
-        options = list(
-          parent = parent,
-          kind = "INTERNAL"
-        ),
+        options = list(parent = parent),
         attributes = compact(list(
           "gen_ai.operation.name" = "execute_tool",
           "gen_ai.tool.name" = request@tool@name,
@@ -103,7 +100,7 @@ local({
     agent_span <-
       otel::start_span(
         "invoke_agent",
-        options = list(kind = "CLIENT"),
+        options = list(kind = "client"),
         attributes = list(
           "gen_ai.operation.name" = "chat",
           "gen_ai.provider.name" = tolower(provider@name)
