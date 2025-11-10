@@ -78,12 +78,14 @@ claude_file_delete(
 
 - credentials:
 
-  A function that returns the API key to use for authentication.
+  Override the default credentials. You generally should not need this
+  argument; instead set the `ANTHROPIC_API_KEY` environment variable.
+  The best place to set this is in `.Renviron`, which you can easily
+  edit by calling `usethis::edit_r_environ()`.
 
-  You generally should not need this argument; instead set the
-  `ANTHROPIC_API_KEY` environment variable. The best place to set this
-  is in `.Renviron`, which you can easily edit by calling
-  `usethis::edit_r_environ()`.
+  If you do need additional control, this argument takes a zero-argument
+  function that returns either a string (the API key), or a named list
+  (added as additional headers to every request).
 
 - file_id:
 
