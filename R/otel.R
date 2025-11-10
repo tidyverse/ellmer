@@ -10,6 +10,9 @@ local({
   otel_tracer <- NULL
 
   otel_cache_tracer <<- function() {
+    if (!requireNamespace("otel", quietly = TRUE)) {
+      return()
+    }
     otel_tracer <<- otel::get_tracer(otel_tracer_name)
     otel_is_tracing <<- tracer_enabled(otel_tracer)
   }
