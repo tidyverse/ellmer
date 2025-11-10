@@ -17,10 +17,13 @@ test_that("tracing works as expected for synchronous chats", {
   )))
   agent_span_ids <- sapply(agent_spans, function(x) x$span_id)
 
-  # We should have two "execute_tool" spans (one for each tool invocation)
-  # that are children of the agent spans.
+  # We should have (at least) two "execute_tool" spans
+  # (one for each tool invocation) that are children of the agent spans.
+  # Note 2025/11: Some models may call tools early and cache the results, so we can not check for existance of multiple parent ids (newer openai models)
+  # Note 2025/11: Some models call more tools than necessary
+  # Ex: anthropic calls the date tool twice. So we check for at least 2.
   tool_spans <- Filter(function(x) startsWith(x$name, "execute_tool"), spans)
-  expect_length(tool_spans, 2L)
+  expect_gte(length(tool_spans), 2L)
   expect_true(all(vapply(
     tool_spans,
     function(x) x$parent %in% agent_span_ids,
@@ -172,7 +175,7 @@ test_that("tracing works as expected for asynchronous chats", {
   # tool call -- these are also children of the agent spans and siblings of one
   # another.
   chat_spans <- Filter(function(x) startsWith(x$name, "chat"), spans)
-  expect_equal(length(chat_spans), 2 * length(tool_spans))
+  expect_gte(length(chat_spans), 2 * length(tool_spans))
   expect_true(all(vapply(
     chat_spans,
     function(x) x$parent %in% agent_span_ids,
