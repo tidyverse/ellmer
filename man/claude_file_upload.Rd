@@ -52,11 +52,10 @@ public API.}
 \item{beta_headers}{Beta headers to use for the request. Defaults to
 \code{files-api-2025-04-14}.}
 
-\item{credentials}{A function that returns the API key to use for authentication.
+\item{credentials}{Override the default credentials. You generally should not need this argument; instead set the \code{ANTHROPIC_API_KEY} environment variable. The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.
 
-You generally should not need this argument; instead set the \code{ANTHROPIC_API_KEY} environment variable.
-The best place to set this is in \code{.Renviron},
-which you can easily edit by calling \code{usethis::edit_r_environ()}.}
+If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).}
 
 \item{file_id}{ID of the file to get information about, download, or delete.}
 }

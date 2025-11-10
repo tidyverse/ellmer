@@ -173,16 +173,21 @@ cli_escape <- function(x) {
 
 api_key_param <- function(key) {
   paste_c(
-    "A function that returns the API key to use for authentication.\n",
-    "\n",
+    "Override the default credentials. ",
     c(
       "You generally should not need this argument; instead set the ",
       c("`", key, "`"),
-      " environment variable.\n"
+      " environment variable. "
     ),
     c(
       "The best place to set this is in `.Renviron`,
       which you can easily edit by calling `usethis::edit_r_environ()`."
+    ),
+    "\n\n",
+    c(
+      "If you do need additional control, this argument takes a ",
+      "zero-argument function that returns either a string (the API key), ",
+      "or a named list (added as additional headers to every request)."
     )
   )
 }
