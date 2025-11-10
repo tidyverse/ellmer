@@ -112,32 +112,50 @@ test_that("tracing works as expected for asynchronous chats", {
       })
     p2 <- promises::promise(function(resolve, reject) {
       span <- otel::start_span("concurrent")
-      otel::local_active_span(span)
+      otel::local_active_span(span) # just to try to mess with things
       later::later(
         function() {
-          on.exit(span$end())
-          otel::with_active_span(span, {
-            resolve(NULL)
-          })
+          otel::local_active_span(span) # just to try to mess with things
+          resolve(NULL)
+          span$end()
         },
         0.1
       )
     })
-    local(otel::start_local_active_span("simultaneous"))
+
+    local({
+      # Typical external usage
+      local(otel::start_local_active_span("simultaneous"))
+    })
+
     sync(p2)
     sync(p1)
   })[["traces"]]
+
+  ## Debug span output; name, id, parent
+  # ignore <- Map(
+  #   spans,
+  #   format(names(spans), justify = "right"),
+  #   f = function(span, name) {
+  #     message(name, " - ", span$span_id, " - ", span$parent)
+  #   }
+  # )
+
+  # Check we have two top-level extra spans
+  expect_top_level_span <- function(span) {
+    expect_true(!is.null(span))
+    expect_equal(span$parent, "0000000000000000")
+  }
+  expect_top_level_span(spans[["concurrent"]])
+  expect_top_level_span(spans[["simultaneous"]])
 
   # Check we have two top-level "invoke_agent" spans (one for each chat()
   # invocation) that start their respective traces.
   agent_spans <- Filter(function(x) x$name == "invoke_agent", spans)
   expect_length(agent_spans, 2L)
+  expect_top_level_span(agent_spans[[1]])
+  expect_top_level_span(agent_spans[[2]])
 
-  expect_true(all(vapply(
-    agent_spans,
-    function(x) identical(x$parent, "0000000000000000"),
-    logical(1)
-  )))
   agent_span_ids <- sapply(agent_spans, function(x) x$span_id)
 
   # We should have two "execute_tool" spans (one for each tool invocation)
@@ -154,7 +172,7 @@ test_that("tracing works as expected for asynchronous chats", {
   # tool call -- these are also children of the agent spans and siblings of one
   # another.
   chat_spans <- Filter(function(x) startsWith(x$name, "chat"), spans)
-  expect_gte(length(chat_spans), 2L)
+  expect_equal(length(chat_spans), 2 * length(tool_spans))
   expect_true(all(vapply(
     chat_spans,
     function(x) x$parent %in% agent_span_ids,

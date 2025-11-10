@@ -442,7 +442,7 @@ Chat <- R6::R6Class(
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
-      agent_span <- local_agent_otel_span(private$provider)
+      agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns(
@@ -505,7 +505,7 @@ Chat <- R6::R6Class(
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
-      agent_span <- local_agent_otel_span(private$provider)
+      agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns_async(

@@ -86,10 +86,19 @@ local({
   # local_otel_span_agent
   local_agent_otel_span <<- function(
     provider,
+    activate = TRUE,
     local_envir = parent.frame()
   ) {
     if (!otel_is_tracing) {
       return()
+    }
+    if (activate) {
+      abort(c(
+        "Activating the agent span is not supported at this time.",
+        "*" = "Activating the span here would set it as the active span globally (via otel::local_active_span() until the calling function ends (a long time).",
+        "*" = "`coro::setup()` would address this and be appropriate",
+        "i" = "Work around: Activate only where necessary or over a single yield in the calling scope."
+      ))
     }
     agent_span <-
       otel::start_span(
@@ -102,7 +111,12 @@ local({
         tracer = otel_tracer
       )
 
-    setup_active_promise_otel_span(agent_span, local_envir)
+    ## Do not activate!
+    ## The current usage of `local_agent_otel_span()` is in a multi-step coroutine.
+    ## This would require deactivating only after the coroutine is done,
+    ## but not between yields, that is too long and unpredictable.
+    ## The span should only be activated in the specific steps where it is needed.
+    # setup_active_promise_otel_span(agent_span, local_envir)
 
     defer(otel::end_span(agent_span), envir = local_envir)
 
