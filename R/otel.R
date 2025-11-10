@@ -128,6 +128,10 @@ tracer_enabled <- function(tracer) {
   .subset2(tracer, "is_enabled")()
 }
 
+span_recording <- function(span) {
+  .subset2(span, "is_recording")()
+}
+
 with_otel_record <- function(expr) {
   on.exit(otel_cache_tracer())
   otelsdk::with_otel_record({
@@ -137,7 +141,7 @@ with_otel_record <- function(expr) {
 }
 
 record_chat_otel_span_status <- function(span, result) {
-  if (is.null(span) || !span$is_recording()) {
+  if (is.null(span) || !span_recording(span)) {
     return()
   }
   if (!is.null(result$model)) {
@@ -159,7 +163,7 @@ record_chat_otel_span_status <- function(span, result) {
 }
 
 record_tool_otel_span_error <- function(span, error) {
-  if (is.null(span) || !span$is_recording()) {
+  if (is.null(span) || !span_recording(span)) {
     return()
   }
   span$record_exception(error)
@@ -178,7 +182,7 @@ setup_active_promise_otel_span <- function(
   span,
   activation_scope = parent.frame()
 ) {
-  if (is.null(span) || !span$is_recording()) {
+  if (is.null(span) || !span_recording(span)) {
     return()
   }
 
