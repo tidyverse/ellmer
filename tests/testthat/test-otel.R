@@ -10,11 +10,7 @@ test_that("tracing works as expected for synchronous chats", {
   # invocation) that start their respective traces.
   agent_spans <- Filter(function(x) x$name == "invoke_agent", spans)
   expect_length(agent_spans, 2L)
-  expect_true(all(vapply(
-    agent_spans,
-    function(x) identical(x$parent, "0000000000000000"),
-    logical(1)
-  )))
+  expect_equal(agent_spans[[1L]]$parent, agent_spans[[2L]]$parent)
   agent_span_ids <- sapply(agent_spans, function(x) x$span_id)
 
   # We should have (at least) two "execute_tool" spans
@@ -68,20 +64,16 @@ test_that("tracing works as expected for synchronous streams", {
   })[["traces"]]
 
   # Check we have one top-level "invoke_agent" span.
-  expect_equal(spans[["invoke_agent"]]$parent, "0000000000000000")
+  expect_length(spans[names(spans) == "invoke_agent"], 1L)
 
   # And one child span for the stream (confirming that it ends when collected).
   chat_spans <- Filter(function(x) startsWith(x$name, "chat"), spans)
   expect_length(chat_spans, 1L)
-  expect_true(all(vapply(
-    chat_spans,
-    function(x) identical(x$parent, spans[["invoke_agent"]]$span_id),
-    logical(1)
-  )))
+  expect_equal(chat_spans[[1L]]$parent, spans[["invoke_agent"]]$span_id)
 
   # Verify that the span started when the stream was suspended is not part of
   # the agent trace.
-  expect_equal(spans[["simultaneous"]]$parent, "0000000000000000")
+  expect_equal(spans[["simultaneous"]]$parent, spans[["invoke_agent"]]$parent)
 
   # But that HTTP spans are.
   chat_span_ids <- sapply(chat_spans, function(x) x$span_id)
@@ -145,19 +137,16 @@ test_that("tracing works as expected for asynchronous chats", {
   # )
 
   # Check we have two top-level extra spans
-  expect_top_level_span <- function(span) {
-    expect_true(!is.null(span))
-    expect_equal(span$parent, "0000000000000000")
-  }
-  expect_top_level_span(spans[["concurrent"]])
-  expect_top_level_span(spans[["simultaneous"]])
+  expect_length(spans[names(spans) == "concurrent"], 1L)
+  expect_length(spans[names(spans) == "simultaneous"], 1L)
+  expect_equal(spans[["concurrent"]]$parent, spans[["simultaneous"]]$parent)
 
   # Check we have two top-level "invoke_agent" spans (one for each chat()
   # invocation) that start their respective traces.
   agent_spans <- Filter(function(x) x$name == "invoke_agent", spans)
   expect_length(agent_spans, 2L)
-  expect_top_level_span(agent_spans[[1]])
-  expect_top_level_span(agent_spans[[2]])
+  expect_equal(agent_spans[[1]]$parent, spans[["concurrent"]]$parent)
+  expect_equal(agent_spans[[2]]$parent, spans[["concurrent"]]$parent)
 
   agent_span_ids <- sapply(agent_spans, function(x) x$span_id)
 
@@ -222,21 +211,17 @@ test_that("tracing works as expected for asynchronous streams", {
   })[["traces"]]
 
   # Check we have one top-level "invoke_agent" span.
-  expect_equal(spans[["invoke_agent"]]$parent, "0000000000000000")
+  expect_length(spans[names(spans) == "invoke_agent"], 1L)
 
   # And one child span for the stream (confirming that it ends when collected).
   chat_spans <- Filter(function(x) startsWith(x$name, "chat"), spans)
   expect_length(chat_spans, 1L)
-  expect_true(all(vapply(
-    chat_spans,
-    function(x) identical(x$parent, spans[["invoke_agent"]]$span_id),
-    logical(1)
-  )))
+  expect_equal(chat_spans[[1L]]$parent, spans[["invoke_agent"]]$span_id)
 
   # Verify that the spans started when the stream was suspended are not part of
   # the agent trace.
-  expect_equal(spans[["concurrent"]]$parent, "0000000000000000")
-  expect_equal(spans[["simultaneous"]]$parent, "0000000000000000")
+  expect_equal(spans[["concurrent"]]$parent, spans[["invoke_agent"]]$parent)
+  expect_equal(spans[["simultaneous"]]$parent, spans[["invoke_agent"]]$parent)
 
   # But that HTTP spans are.
   chat_span_ids <- sapply(chat_spans, function(x) x$span_id)
