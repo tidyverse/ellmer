@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_google_gemini()` will now fall back to an interactive OAuth flow, if you're in an interactive session and no other authentication options can be found (#680)
 * `parallel_chat()` and `batch_chat()` are no longer experimental.
 * New set of `claude_file_()` functions for managing file uploads with Claude (@dcomputing, #761).
 * `chat_openai_compatible()` replaces `chat_openai()` as the interface to use for OpenAI-compatible APIs, and `chat_openai()` is reserved for the official OpenAI API. Unlike previous versions of `chat_openai()`, the `base_url` parameter is now required (#801).

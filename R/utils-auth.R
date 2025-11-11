@@ -45,7 +45,15 @@ check_credentials <- function(credentials, error_call = caller_env()) {
   }
 
   creds <- credentials()
-  if (!is_string(creds) && !(is_named(creds) && is.list(creds))) {
+
+  if (is.function(creds)) {
+    # Carve out for special internal cases, e.g. OAuth for gemini
+    check_function2(creds, arg = "credentials()", args = "req")
+  } else if (is_string(creds)) {
+    # api key
+  } else if (is_named(creds) && is.list(creds)) {
+    # headers
+  } else {
     stop_input_type(
       creds,
       c("a string", "a named list"),
@@ -58,6 +66,10 @@ check_credentials <- function(credentials, error_call = caller_env()) {
 }
 
 ellmer_req_credentials <- function(req, credentials, key_name = NULL) {
+  if (is.function(credentials)) {
+    return(credentials(req))
+  }
+
   if (is_string(credentials)) {
     if (is.null(key_name)) {
       cli::cli_abort(

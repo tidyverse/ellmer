@@ -14,14 +14,15 @@ NULL
 #' Use [google_upload()] to upload files (PDFs, images, video, audio, etc.)
 #'
 #' ## Authentication
-#' By default, `chat_google_gemini()` will use Google's default application
-#' credentials. This requires the \pkg{gargle} package.
+#' These functions try a number of authentication strategies, in this order:
 #'
-#' Alternatively, you can use an API key by setting env var `GOOGLE_API_KEY` or,
-#' for `chat_google_gemini()` only, `GEMINI_API_KEY`.
-#'
-#' Finally these functions will also pick up on viewer-based credentials on
-#' Posit Connect. This requires the \pkg{connectcreds} package.
+#' * An API key set in the `GOOGLE_API_KEY` env var, or,
+#'   for `chat_google_gemini()` only, `GEMINI_API_KEY`.
+#' * Google's default application credentials, if the \pkg{gargle} package
+#'   is installed.
+#' * Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
+#'   package.
+#' * An interactive OAuth flow, if you're in an interactive session.
 #'
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials A function that returns a list of authentication headers
@@ -675,6 +676,20 @@ default_google_credentials <- function(
 
   if (is.null(token) && is_testing()) {
     testthat::skip("no Google credentials available")
+  }
+
+  if (is_interactive()) {
+    return(function() {
+      function(req) {
+        req_oauth_auth_code(
+          req,
+          client = gemini_client(),
+          auth_url = "https://accounts.google.com/o/oauth2/auth",
+          scope = "https://www.googleapis.com/auth/generative-language.retriever",
+          cache_disk = TRUE
+        )
+      }
+    })
   }
 
   if (is.null(token)) {
