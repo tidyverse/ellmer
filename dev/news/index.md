@@ -2,15 +2,70 @@
 
 ## ellmer (development version)
 
-- [`parallel_chat()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
+- `AssistantTurn`s now have a `@duration` slot, containing the total
+  time to complete the request
+  ([@simonpcouch](https://github.com/simonpcouch),
+  [\#798](https://github.com/tidyverse/ellmer/issues/798)).
+- [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
+  logs tokens once, on retrieval
+  ([\#743](https://github.com/tidyverse/ellmer/issues/743)).
+- [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
+  now retrieves failed results for
+  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  ([\#830](https://github.com/tidyverse/ellmer/issues/830)).
+- [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
+  now works correctly for
+  [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  ([\#835](https://github.com/tidyverse/ellmer/issues/835)).
+- `batch_chat_*()` and `parallel_chat_*()` now accept a string as the
+  chat object, following the same rules as
+  [`chat()`](https://ellmer.tidyverse.org/dev/reference/chat-any.md)
+  ([\#677](https://github.com/tidyverse/ellmer/issues/677)).
+- `batch_chat_*()` now works correctly when
+  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  fails to process some conversations
+  ([\#830](https://github.com/tidyverse/ellmer/issues/830)).
+- `batch_*()` have a new `ignore_hash` argument that allows you to opt
+  out of the check if you’re confident the difference only arises
+  because ellmer itself has changed.
+- `batch_*()` no longer hashes properties of the provider besides the
+  `name`, `model`, and `base_url`. This should provide some protection
+  from accidentally reusing the same `.json` file with different
+  providers, while still allowing you to use the same batch file across
+  ellmer versions.
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   and
-  [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
-  are no longer experimental.
-
-- New set of `claude_file_()` functions for managing file uploads with
-  Claude ([@dcomputing](https://github.com/dcomputing),
-  [\#761](https://github.com/tidyverse/ellmer/issues/761)).
-
+  [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
+  now default to Claude Sonnet 4.5
+  ([\#800](https://github.com/tidyverse/ellmer/issues/800)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  gains new `cache` parameter to control caching. By default it is set
+  to “5m”. This should (on average) reduce the cost of your chats
+  ([\#584](https://github.com/tidyverse/ellmer/issues/584)).
+- [`chat_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  is no longer deprecated and is an alias for
+  [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md),
+  reflecting Anthropic’s recent rebranding of developer tools under the
+  Claude name ([\#758](https://github.com/tidyverse/ellmer/issues/758)).
+  [`models_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  is now an alias for
+  [`models_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md).
+- [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md)
+  lifts many of its restrictions now that Databricks’ API is more OpenAI
+  compatible ([\#757](https://github.com/tidyverse/ellmer/issues/757)).
+- [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  and
+  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  support image generation
+  ([\#368](https://github.com/tidyverse/ellmer/issues/368)).
+- [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  gains a `service_tier` argument
+  ([\#712](https://github.com/tidyverse/ellmer/issues/712)).
+- [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  now uses OpenAI’s responses endpoint
+  ([\#365](https://github.com/tidyverse/ellmer/issues/365),
+  [\#801](https://github.com/tidyverse/ellmer/issues/801)). This is
+  their recommended endpoint and gives more access to built-in tools.
 - [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
   replaces
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
@@ -20,38 +75,72 @@
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md),
   the `base_url` parameter is now required
   ([\#801](https://github.com/tidyverse/ellmer/issues/801)).
-
-- [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  now uses OpenAI’s responses endpoint
-  ([\#365](https://github.com/tidyverse/ellmer/issues/365),
-  [\#801](https://github.com/tidyverse/ellmer/issues/801)). This is
-  their recommended endpoint and gives more access to built-in tools.
-
-- [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
-  now retrieves failed results for
-  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  ([\#830](https://github.com/tidyverse/ellmer/issues/830))
-
-- [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
-  now works correctly for
-  [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
-  ([\#835](https://github.com/tidyverse/ellmer/issues/835)).
-
-- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+- `Chat$get_tokens()` gives a brief description of the turn contents to
+  make it easier to see which turn tokens are spent on
+  ([\#618](https://github.com/tidyverse/ellmer/issues/618)).
+- `Chat$get_tokens()` now also returns the cost, and returns one row for
+  each assistant turn, better representing the underlying data received
+  from LLM APIs. Similarly, the
+  [`print()`](https://rdrr.io/r/base/print.html) method now reports
+  costs on each assistant turn, rather than trying to parse out
+  individual costs.
+- `Chat$chat_structured()` and friends now only warn if multiple JSON
+  payloads found (instead of erroring)
+  ([@kbenoit](https://github.com/kbenoit),
+  [\#732](https://github.com/tidyverse/ellmer/issues/732)).
+- `chat_*()` functions now use a `credentials` function instead of an
+  `api_key` ([\#613](https://github.com/tidyverse/ellmer/issues/613)).
+  This means that API keys are never stored in the chat object (which
+  might be saved to disk), but are instead retrieved on demand as
+  needed. You generally shouldn’t need to use the `credentials`
+  argument, but when you do, you should use it to dynamically retrieve
+  the API key from some other source (i.e. never inline a secret
+  directly into a function call).
+- [`interpolate_package()`](https://ellmer.tidyverse.org/dev/reference/interpolate.md)
+  now provides an informative error if the requested prompt file is not
+  found in the package’s `prompts/` directory
+  ([\#763](https://github.com/tidyverse/ellmer/issues/763)).
+- [`interpolate_package()`](https://ellmer.tidyverse.org/dev/reference/interpolate.md)
+  now works with in-development packages loaded with devtools
+  ([\#766](https://github.com/tidyverse/ellmer/issues/766)).
+- [`models_mistral()`](https://ellmer.tidyverse.org/dev/reference/chat_mistral.md)
+  lists available models ([@rplsmn](https://github.com/rplsmn),
+  [\#750](https://github.com/tidyverse/ellmer/issues/750)).
+- [`models_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
+  was fixed to correctly query model capabilities from remote Ollama
+  servers ([\#746](https://github.com/tidyverse/ellmer/issues/746)).
+- New set of `claude_file_()` functions for managing file uploads with
+  Claude ([@dcomputing](https://github.com/dcomputing),
+  [\#761](https://github.com/tidyverse/ellmer/issues/761)).
+- New `schema_df()` to describe the schema of a data frame to an LLM
+  ([\#744](https://github.com/tidyverse/ellmer/issues/744)).
+- New
+  [`type_ignore()`](https://ellmer.tidyverse.org/dev/reference/type_boolean.md)
+  allows you to specify that a tool argument should not be provided by
+  the LLM when the R function has a suitable default value
+  ([\#764](https://github.com/tidyverse/ellmer/issues/764)).
+- [`parallel_chat()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
   and
-  [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
-  now default to Claude Sonnet 4.5
-  ([\#800](https://github.com/tidyverse/ellmer/issues/800)).
-
-- [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
-  logs tokens once, on retrieval
-  ([\#743](https://github.com/tidyverse/ellmer/issues/743)).
-
-- `batch_chat_*()` now works correctly when
-  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  fails to process some conversations
-  ([\#830](https://github.com/tidyverse/ellmer/issues/830)).
-
+  [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
+  are no longer experimental.
+- [`parallel_chat()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
+  and friends now have a more permissive attitude to errors. By default,
+  they will now return when hitting the first error (rather than
+  erroring), and you can control this behaviour with the `on_error`
+  argument. Or if you interrupt the job, it will finish up current
+  requests and then return all the work done so far. The main downside
+  of this work is that the output of
+  [`parallel_chat()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
+  is more complex: it is now a mix of `Chat` objects, error objects, and
+  `NULL` ([\#628](https://github.com/tidyverse/ellmer/issues/628)).
+- [`parallel_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
+  no longer errors if some results fail to parse. Instead it warns, and
+  the corresponding rows will be filled in with the appropriate missing
+  values ([\#628](https://github.com/tidyverse/ellmer/issues/628)).
+- [`parallel_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
+  now returns a tibble, since this does a better job of printing more
+  complex data frames
+  ([\#787](https://github.com/tidyverse/ellmer/issues/787)).
 - [`params()`](https://ellmer.tidyverse.org/dev/reference/params.md)
   gains new `reasoning_effort` and `reasoning_tokens` so you can control
   the amount of effort a model spends on thinking. Initial support is
@@ -61,43 +150,8 @@
   and
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   ([\#720](https://github.com/tidyverse/ellmer/issues/720)).
-
-- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
-  gains new `cache` parameter to control caching. By default it is set
-  to “5m”. This should (on average) reduce the cost of your
-  chats.([\#584](https://github.com/tidyverse/ellmer/issues/584))
-
-- [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  gains a `service_tier` argument
-  ([\#712](https://github.com/tidyverse/ellmer/issues/712)).
-
-- `Chat$get_tokens()` now also returns the cost, and returns one row for
-  each assistant turn, better representing the underlying data received
-  from LLM APIs. Similarly, the
-  [`print()`](https://rdrr.io/r/base/print.html) method now reports
-  costs on each assistant turn, rather than trying to parse out
-  individual costs.
-
-- `chat_*()` functions now use a `credentials` function instead of an
-  `api_key` ([\#613](https://github.com/tidyverse/ellmer/issues/613)).
-  This means that API keys are never stored in the chat object (which
-  might be saved to disk), but is instead retrieved on demand as needed.
-  You generally shouldn’t need to use the `credentials` argument, but
-  when you do, you should use it to dynamically retrieve the API key
-  from some other source (i.e. never inline a secret directly into a
-  function call).
-
-- [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md)
-  lifts many of its restrictions now that the DataBrick’s API is more
-  OpenAI compatible
-  ([\#757](https://github.com/tidyverse/ellmer/issues/757)).
-
-- Updated pricing data
-  ([\#790](https://github.com/tidyverse/ellmer/issues/790)).
-
 - The following deprecated functions/arguments/methods have now been
   removed:
-
   - `Chat$extract_data()` -\> `chat$chat_structured()` (0.2.0)
   - `Chat$extract_data_async()` -\> `chat$chat_structured_async()`
     (0.2.0)
@@ -121,98 +175,8 @@
     (0.2.0)
   - `chat_openai(seed)` -\> `chat_openai(params)` (0.2.0)
   - `create_tool_def(model)` -\> `create_tool_def(chat)` (0.2.0)
-
-- New `schema_df()` to describe the schema of a data frame to an LLM
-  ([\#744](https://github.com/tidyverse/ellmer/issues/744)).
-
-- [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
-  and
-  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  support image generation
-  ([\#368](https://github.com/tidyverse/ellmer/issues/368)).
-
-- `batch_*()` no longer hashes properties of the provider besides the
-  `name`, `model`, and `base_url`. This should provide some protection
-  from accidentally reusing the same `.json` file with different
-  providers, while still allowing you to use the same batch file across
-  ellmer versions.
-
-- `batch_*()` have a new `ignore_hash` argument that allows you to opt
-  out of the check if you’re confident the difference only arises
-  because ellmer itself has changed.
-
-- Turns now have a `@duration` slot. The slot is `NA` for user turns and
-  a numeric giving the total time to complete the request for assistant
-  turns ([@simonpcouch](https://github.com/simonpcouch),
-  [\#798](https://github.com/tidyverse/ellmer/issues/798)).
-
-- [`parallel_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
-  now returns a tibble, since this does a better job of printing more
-  complex data frames
-  ([\#787](https://github.com/tidyverse/ellmer/issues/787)).
-
-- [`parallel_chat()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
-  and friends now have a more permissive attitude to errors. By default,
-  they will now return when hitting the first error (rather than
-  erroring), and you can control this behaviour with the `on_error`
-  argument. Or if you interrupt the job, it will finish up current
-  requests and then return all the work done so far. The main downside
-  of this work is that the output of
-  [`parallel_chat()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
-  is more complex: it is now a mix of `Chat` objects, error objects, and
-  `NULL` ([\#628](https://github.com/tidyverse/ellmer/issues/628)).
-
-- [`parallel_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
-  no longer errors if some results fail to parse. Instead it warns, and
-  the corresponding rows will be filled in with the appropriate missing
-  values ([\#628](https://github.com/tidyverse/ellmer/issues/628)).
-
-- `$chat_structured()` and friends now only warn if multiple json
-  payloads found (instead of erroring)
-  ([@kbenoit](https://github.com/kbenoit),
-  [\#732](https://github.com/tidyverse/ellmer/issues/732)).
-
-- [`interpolate_package()`](https://ellmer.tidyverse.org/dev/reference/interpolate.md)
-  now works with in-development packages loaded with devtools
-  ([\#766](https://github.com/tidyverse/ellmer/issues/766)).
-
-- `Chat$get_tokens()` gives a brief description of the turn contents to
-  make it easier to see which turn tokens are spent on
-  ([\#618](https://github.com/tidyverse/ellmer/issues/618)).
-
-- New
-  [`type_ignore()`](https://ellmer.tidyverse.org/dev/reference/type_boolean.md)
-  allows you to specify that a tool argument should not be provided by
-  the LLM when the R function has a suitable default value
-  ([\#764](https://github.com/tidyverse/ellmer/issues/764)).
-
-- New
-  [`models_mistral()`](https://ellmer.tidyverse.org/dev/reference/chat_mistral.md)
-  to list available models ([@rplsmn](https://github.com/rplsmn),
-  [\#750](https://github.com/tidyverse/ellmer/issues/750)).
-
-- `batch_chat_*()` and `parallel_chat_*()` now accept a string as the
-  chat object, following the same rules as
-  [`chat()`](https://ellmer.tidyverse.org/dev/reference/chat-any.md)
-  ([\#677](https://github.com/tidyverse/ellmer/issues/677)).
-
-- [`interpolate_package()`](https://ellmer.tidyverse.org/dev/reference/interpolate.md)
-  now provides an informative error if the requested prompt file is not
-  found in the package’s `prompts/` directory
-  ([\#763](https://github.com/tidyverse/ellmer/issues/763)).
-
-- [`models_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
-  was fixed to correctly query model capabilities from remote Ollama
-  servers ([\#746](https://github.com/tidyverse/ellmer/issues/746)).
-
-- [`chat_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
-  is no longer deprecated and is an alias for
-  [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md),
-  reflecting Anthropic’s recent rebranding of developer tools under the
-  Claude name ([\#758](https://github.com/tidyverse/ellmer/issues/758)).
-  [`models_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
-  is now an alias for
-  [`models_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md).
+- Updated pricing data
+  ([\#790](https://github.com/tidyverse/ellmer/issues/790)).
 
 ## ellmer 0.3.2
 
