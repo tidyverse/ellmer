@@ -1,6 +1,5 @@
 # ellmer (development version)
 
-* `chat$chat()`, `chat$stream()` and similar methods now add empty tool results when a the chat is interrupted during a tool call loop, allowing the conversation to be resumed without causing an API error (#840).
 * `AssistantTurn`s now have a `@duration` slot, containing the total time to complete the request (@simonpcouch, #798).
 * `batch_chat()` logs tokens once, on retrieval (#743).
 * `batch_chat()` now retrieves failed results for `chat_openai()` (#830).
@@ -19,6 +18,7 @@
 * `chat_openai_compatible()` replaces `chat_openai()` as the interface to use for OpenAI-compatible APIs, and `chat_openai()` is reserved for the official OpenAI API. Unlike previous versions of `chat_openai()`, the `base_url` parameter is now required (#801).
 * `chat_portkey()` now requires you to supply a model (#786).
 * `chat_portkey(virtual_key)` no longer needs to be supplied; instead Portkey recommends including the virtual key/povider in the `model`.(#786).
+* `Chat$chat()`, `Chat$stream()`, and similar methods now add empty tool results when a the chat is interrupted during a tool call loop, allowing the conversation to be resumed without causing an API error (#840).
 * `Chat$get_tokens()` gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (#618).
 * `Chat$get_tokens()` now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the `print()` method now reports costs on each assistant turn, rather than trying to parse out individual costs (#824).
 * `Chat$chat_structured()` and friends now only warn if multiple JSON payloads found (instead of erroring) (@kbenoit, #732).
