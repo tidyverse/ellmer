@@ -27,7 +27,7 @@ reference:
 - subtitle: Provider-specific helpers
   contents:
   - google_upload
-  - starts_with("anthropic_file")
+  - starts_with("claude_file")
   - claude_tool_web_search
   - claude_tool_web_fetch
   - google_tool_web_search

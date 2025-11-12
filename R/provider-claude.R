@@ -304,12 +304,6 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
       paste(result$content[[i]]$thinking) <- chunk$delta$thinking
     } else if (chunk$delta$type == "signature_delta") {
       paste(result$content[[i]]$signature) <- chunk$delta$signature
-    } else if (chunk$delta$type == "citations_delta") {
-      # https://docs.claude.com/en/docs/build-with-claude/citations#streaming-support
-      result$content[[i]]$citations <- c(
-        result$content[[i]]$citations,
-        list(chunk$delta$citation)
-      )
     } else {
       cli::cli_inform(c("!" = "Unknown delta type {.str {chunk$delta$type}}."))
     }
@@ -319,6 +313,12 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
     result$stop_reason <- chunk$delta$stop_reason
     result$stop_sequence <- chunk$delta$stop_sequence
     result$usage$output_tokens <- chunk$usage$output_tokens
+  } else if (chunk$delta$type == "citations_delta") {
+    # https://docs.claude.com/en/docs/build-with-claude/citations#streaming-support
+    result$content[[i]]$citations <- c(
+      result$content[[i]]$citations,
+      list(chunk$delta$citation)
+    )
   } else if (chunk$type == "error") {
     if (chunk$error$type == "overloaded_error") {
       # https://docs.anthropic.com/en/api/messages-streaming#error-events
@@ -660,7 +660,7 @@ method(batch_result_turn, ProviderAnthropic) <- function(
 
 #' @export
 #' @rdname chat_anthropic
-models_anthropic <- function(
+models_claude <- function(
   base_url = "https://api.anthropic.com/v1",
   api_key = anthropic_key()
 ) {
@@ -690,6 +690,10 @@ models_anthropic <- function(
   df <- cbind(df, match_prices("Anthropic", df$id))
   df[order(-xtfrm(df$created_at)), ]
 }
+
+#' @export
+#' @rdname chat_anthropic
+models_anthropic <- models_claude
 
 # Helpers ----------------------------------------------------------------
 
