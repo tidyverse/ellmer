@@ -14,6 +14,10 @@
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   ([\#830](https://github.com/tidyverse/ellmer/issues/830)).
 - [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
+  now gracefully handles invalid JSON from
+  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  ([\#845](https://github.com/tidyverse/ellmer/issues/845)).
+- [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
   now works correctly for
   [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   ([\#835](https://github.com/tidyverse/ellmer/issues/835)).
