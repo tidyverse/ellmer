@@ -3,7 +3,7 @@
 * `AssistantTurn`s now have a `@duration` slot, containing the total time to complete the request (@simonpcouch, #798).
 * `batch_chat()` logs tokens once, on retrieval (#743).
 * `batch_chat()` now retrieves failed results for `chat_openai()` (#830).
-* `batch_chat()` now better handles invalid JSON from `chat_openai()` (#845).
+* `batch_chat()` now gracefully handles invalid JSON from `chat_openai()` (#845).
 * `batch_chat()` now works correctly for `chat_anthropic()` (#835).
 * `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).
 * `batch_chat_*()` now works correctly when `chat_openai()` fails to process some conversations (#830).
