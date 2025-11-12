@@ -8,7 +8,8 @@
 chat_mistral(
   system_prompt = NULL,
   params = NULL,
-  api_key = mistral_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   api_args = list(),
   echo = NULL,
@@ -22,11 +23,12 @@ models_mistral(api_key = mistral_key())
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
-\item{api_key}{API key to use for authentication.
+\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
-You generally should not supply this directly, but instead set the \code{MISTRAL_API_KEY} environment variable.
-The best place to set this is in \code{.Renviron},
-which you can easily edit by calling \code{usethis::edit_r_environ()}.}
+\item{credentials}{Override the default credentials. You generally should not need this argument; instead set the \code{MISTRAL_API_KEY} environment variable. The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.
+
+If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).}
 
 \item{model}{The model to use for the chat (defaults to "mistral-large-latest").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
@@ -53,6 +55,8 @@ A \link{Chat} object.
 }
 \description{
 Get your API key from \url{https://console.mistral.ai/api-keys}.
+
+Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 \subsection{Known limitations}{
 \itemize{
 \item Tool calling is unstable.
@@ -80,7 +84,7 @@ Other chatbots:
 \code{\link{chat_huggingface}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

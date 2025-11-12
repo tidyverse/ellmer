@@ -8,7 +8,10 @@ test_that("can make simple batch request", {
 })
 
 test_that("can make simple streaming request", {
-  chat <- chat_anthropic_test("Be as terse as possible; no punctuation")
+  chat <- chat_anthropic_test(
+    "Be as terse as possible; no punctuation",
+    model = "claude-3-7-sonnet-20250219"
+  )
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })
@@ -27,9 +30,7 @@ test_that("defaults are reported", {
 
 test_that("supports standard parameters", {
   vcr::local_cassette("anthropic-standard-params")
-  chat_fun <- chat_anthropic_test
-
-  test_params_stop(chat_fun)
+  test_params_stop(chat_anthropic_test)
 })
 
 test_that("supports tool calling", {
@@ -92,8 +93,8 @@ test_that("removes empty final chat messages", {
   chat <- chat_anthropic_test()
   chat$set_turns(
     list(
-      Turn("user", "Don't say anything"),
-      Turn("assistant")
+      UserTurn("Don't say anything"),
+      AssistantTurn()
     )
   )
 
@@ -105,4 +106,22 @@ test_that("removes empty final chat messages", {
     turns_json[[1]]$content,
     list(list(type = "text", text = "Don't say anything"))
   )
+})
+
+test_that("batch chat works", {
+  chat <- chat_anthropic_test(system_prompt = "Answer with just the city name")
+
+  prompts <- list(
+    "What's the capital of Iowa?",
+    "What's the capital of New York?",
+    "What's the capital of California?",
+    "What's the capital of Texas?"
+  )
+
+  out <- batch_chat_text(
+    chat,
+    prompts,
+    path = test_path("batch/state-capitals-anthropic.json")
+  )
+  expect_equal(out, c("Des Moines", "Albany", "Sacramento", "Austin"))
 })

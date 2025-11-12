@@ -1,4 +1,4 @@
-#' @include provider-openai.R
+#' @include provider-openai-compatible.R
 NULL
 
 #' Chat with one of the many models hosted on OpenRouter
@@ -11,7 +11,8 @@ NULL
 #'
 #' @export
 #' @family chatbots
-#' @param api_key `r api_key_param("OPENROUTER_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("OPENROUTER_API_KEY")`
 #' @param model `r param_model("gpt-4o")`
 #' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
@@ -23,7 +24,8 @@ NULL
 #' }
 chat_openrouter <- function(
   system_prompt = NULL,
-  api_key = openrouter_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -33,6 +35,13 @@ chat_openrouter <- function(
   model <- set_default(model, "gpt-4o")
   echo <- check_echo(echo)
 
+  credentials <- as_credentials(
+    "chat_openrouter",
+    function() openrouter_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   params <- params %||% params()
 
   provider <- ProviderOpenRouter(
@@ -41,7 +50,7 @@ chat_openrouter <- function(
     model = model,
     params = params,
     extra_args = api_args,
-    api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -53,7 +62,7 @@ chat_openrouter_test <- function(..., echo = "none") {
 
 ProviderOpenRouter <- new_class(
   "ProviderOpenRouter",
-  parent = ProviderOpenAI,
+  parent = ProviderOpenAICompatible,
 )
 
 method(chat_params, ProviderOpenRouter) <- function(provider, params) {
@@ -79,7 +88,7 @@ openrouter_key <- function() {
 }
 
 method(base_request, ProviderOpenRouter) <- function(provider) {
-  req <- base_request(super(provider, ProviderOpenAI))
+  req <- base_request(super(provider, ProviderOpenAICompatible))
   # https://openrouter.ai/docs/api-keys
   req <- req_headers(
     req,
@@ -99,7 +108,7 @@ method(value_turn, ProviderOpenRouter) <- function(
   check_openrouter_error(result$error)
 
   value_turn(
-    super(provider, ProviderOpenAI),
+    super(provider, ProviderOpenAICompatible),
     result = result,
     has_type = has_type
   )

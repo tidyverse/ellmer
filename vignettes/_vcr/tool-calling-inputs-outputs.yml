@@ -1,168 +1,266 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"Give
-        me a weather udpate for London and Chicago"}]}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","function":{"name":"get_weather","description":"\n    Report
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Give
+        me a weather udpate for London and Chicago"}]}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","name":"get_weather","description":"\n    Report
         on weather conditions in multiple cities. For efficiency, request \n    all
         weather updates using a single tool call\n  ","strict":true,"parameters":{"type":"object","description":"","properties":{"cities":{"type":"array","description":"City
-        names","items":{"type":"string","description":""}}},"required":["cities"],"additionalProperties":false}}}]}'
+        names","items":{"type":"string","description":""}}},"required":["cities"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 958e67ad6b7f478d-DFW
+      cf-ray: 999eeeb6bced2fe8-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 02 Jul 2025 13:14:15 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '692'
+      date: Wed, 05 Nov 2025 19:59:37 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1968'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=KqmmM1rTFagKpbmMZjsi.f.GbiBKcHExEbU.ywgDrGk-1751462055-1.0.1.1-hH3iVjj5goW7InWaxuhT1s7uZhW5P6zJxchPWg3Tgp5nJUYY7CXQXUJbxhgvIwQsFQLWP8UhYgFvtTTiRf7wKIxNVJVa8rpAn1S62wH.bEU;
-        path=/; expires=Wed, 02-Jul-25 13:44:15 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=Y6k7ZF6OPzH0BEik5ueuiIZy.qOe.Gxu7D1QaCepdQA-1762372777-1.0.1.1-Iq2BNzOlqz7DRn6.HMP03NzjxxYlfnNcCwS1Sd4tjtM.7m_AxuGh3h2su_584jNTUJ4xvtvr6RnkQY0i90sR5aLlFbe1VGFrfZWnh0DtjDI;
+        path=/; expires=Wed, 05-Nov-25 20:29:37 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=buvHomNFCBGje3dsLh6l60DqPcou3y5A_ZqBI0E7JGc-1751462055065-0.0.1.1-604800000;
+      - _cfuvid=OlCotxvLcthDVwKBaRzgBU2vlLR.2p3XaOip_.VkB4w-1762372777487-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1017'
+      x-envoy-upstream-service-time: '1972'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999985'
+      x-ratelimit-remaining-tokens: '29999715'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_cb11cb2e75b6c56e756e1e14f7cff701
+      x-request-id: req_42aecaf3dcb54b99955e930183e56dd3
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-BorZuEWNNGa6bJLBteIWbJ1QYSyFw",
-          "object": "chat.completion",
-          "created": 1751462054,
+          "id": "resp_01d3f0036008b43801690baca786808197bd94c2ebb60591f8",
+          "object": "response",
+          "created_at": 1762372775,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": null,
-                "tool_calls": [
-                  {
-                    "id": "call_0epVfhsX7e8pEy0M1NaY9Vca",
-                    "type": "function",
-                    "function": {
-                      "name": "get_weather",
-                      "arguments": "{\"cities\":[\"London\",\"Chicago\"]}"
+              "id": "fc_01d3f0036008b43801690baca8c5cc8197b3d7c34497588d11",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{\"cities\":[\"London\",\"Chicago\"]}",
+              "call_id": "call_4WSpckokjSkjP3GRS7Fodf7o",
+              "name": "get_weather"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "\n    Report on weather conditions in multiple cities. For efficiency, request \n    all weather updates using a single tool call\n  ",
+              "name": "get_weather",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "cities": {
+                    "type": "array",
+                    "description": "City names",
+                    "items": {
+                      "type": "string",
+                      "description": ""
                     }
                   }
+                },
+                "required": [
+                  "cities"
                 ],
-                "refusal": null,
-                "annotations": []
+                "additionalProperties": false
               },
-              "logprobs": null,
-              "finish_reason": "tool_calls"
+              "strict": true
             }
           ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
           "usage": {
-            "prompt_tokens": 74,
-            "completion_tokens": 17,
-            "total_tokens": 91,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
+            "input_tokens": 68,
+            "input_tokens_details": {
+              "cached_tokens": 0
             },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 86
           },
-          "service_tier": "default",
-          "system_fingerprint": "fp_51e1070cf2"
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-02 13:14:15
+  recorded_at: 2025-11-05 19:59:37
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"Give
-        me a weather udpate for London and Chicago"}]},{"role":"assistant","tool_calls":[{"id":"call_0epVfhsX7e8pEy0M1NaY9Vca","function":{"name":"get_weather","arguments":"{\"cities\":[[\"London\"],[\"Chicago\"]]}"},"type":"function"}]},{"role":"tool","content":"[{\"city\":\"London\",\"raining\":\"heavy\",\"temperature\":\"cool\",\"wind\":\"strong\"},{\"city\":\"Chicago\",\"raining\":\"overcast\",\"temperature\":\"warm\",\"wind\":\"strong\"}]","tool_call_id":"call_0epVfhsX7e8pEy0M1NaY9Vca"}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","function":{"name":"get_weather","description":"\n    Report
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Give
+        me a weather udpate for London and Chicago"}]},{"type":"function_call","call_id":"fc_01d3f0036008b43801690baca8c5cc8197b3d7c34497588d11","name":"get_weather","arguments":"{\"cities\":[[\"London\"],[\"Chicago\"]]}"},{"type":"function_call_output","call_id":"fc_01d3f0036008b43801690baca8c5cc8197b3d7c34497588d11","output":"[{\"city\":\"London\",\"raining\":\"heavy\",\"temperature\":\"cool\",\"wind\":\"strong\"},{\"city\":\"Chicago\",\"raining\":\"overcast\",\"temperature\":\"warm\",\"wind\":\"strong\"}]"}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","name":"get_weather","description":"\n    Report
         on weather conditions in multiple cities. For efficiency, request \n    all
         weather updates using a single tool call\n  ","strict":true,"parameters":{"type":"object","description":"","properties":{"cities":{"type":"array","description":"City
-        names","items":{"type":"string","description":""}}},"required":["cities"],"additionalProperties":false}}}]}'
+        names","items":{"type":"string","description":""}}},"required":["cities"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 958e67b51c21478d-DFW
+      cf-ray: 999eeec43da22fe8-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 02 Jul 2025 13:14:16 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '722'
+      date: Wed, 05 Nov 2025 19:59:39 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1970'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=.0Ld71xdTVeghPQ_oEHuH_PpjLcfSINiJo50CpMsK7E-1751462056-1.0.1.1-3Rp5V_yTvgp8fTFT8RbGoqDx90zscKVsEoKuVmrkj3rlP2raRvQ0yDIfWjw1.5ejZW.VPORb7iItKUXaddsGhkemNC0c0m6pwOqVPP1oXPk;
-        path=/; expires=Wed, 02-Jul-25 13:44:16 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=2gQ0p6hBs6BIz6Qxj85qeou.0tqv8xPPGHdLUk.31cw-1762372779-1.0.1.1-0.GpnlMnavpZYASlHusWWAIEBPJNtqkKRSv89oA014VlbhsSNb_kfH9F9hLkl6MdnGw.iWyloIveeN.r4Oa_muapdsekKWw2dlsWpAnOr_0;
+        path=/; expires=Wed, 05-Nov-25 20:29:39 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=_sUsQ_4DHg1Gk8J5eHbyPonSYyssrJko5Pr9LHqKV2I-1751462056004-0.0.1.1-604800000;
+      - _cfuvid=YQqwQ3tV67kxQkjmm5PZU.zKEkFXoMtw7ZiKj49xGxs-1762372779644-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '726'
+      x-envoy-upstream-service-time: '1975'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999946'
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_e034705bd78833d6ccef7940e5aacea1
+      x-ratelimit-remaining-tokens: '29999652'
+      x-ratelimit-reset-requests: 1m0s
+      x-ratelimit-reset-tokens: 1m0s
+      x-request-id: req_e282151974fe453482b0ec3c4193ebc2
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-BorZvYnPYXm1NTGbRDqDr2JxYjOB7",
-          "object": "chat.completion",
-          "created": 1751462055,
+          "id": "resp_0f4eb778a78b02ec01690baca9ad2881939c5528d550c492cc",
+          "object": "response",
+          "created_at": 1762372777,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "Here's the latest weather update:\n\n- London: Heavy rain, cool temperatures, and strong winds.\n- Chicago: Overcast skies, warm temperatures, and strong winds.\n\nLet me know if you need a forecast for more cities or details!",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_0f4eb778a78b02ec01690bacaa2cb48193bc5a3c261af2b2dd",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Here is the current weather update:\n\n- London: Heavy rain, cool temperatures, and strong winds.\n- Chicago: Overcast skies, warm temperatures, and strong winds.\n\nLet me know if you need more details or forecasts!"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 139,
-            "completion_tokens": 48,
-            "total_tokens": 187,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_51e1070cf2"
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "\n    Report on weather conditions in multiple cities. For efficiency, request \n    all weather updates using a single tool call\n  ",
+              "name": "get_weather",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "cities": {
+                    "type": "array",
+                    "description": "City names",
+                    "items": {
+                      "type": "string",
+                      "description": ""
+                    }
+                  }
+                },
+                "required": [
+                  "cities"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 131,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 47,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 178
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-02 13:14:15
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-11-05 19:59:39
+recorded_with: VCR-vcr/2.0.0

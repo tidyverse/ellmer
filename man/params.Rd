@@ -14,6 +14,8 @@ params(
   max_tokens = NULL,
   log_probs = NULL,
   stop_sequences = NULL,
+  reasoning_effort = NULL,
+  reasoning_tokens = NULL,
   ...
 )
 }
@@ -35,6 +37,11 @@ params(
 \item{log_probs}{Include the log probabilities in the output?}
 
 \item{stop_sequences}{A character vector of tokens to stop generation on.}
+
+\item{reasoning_effort, reasoning_tokens}{How much effort to spend thinking?
+\code{ressoning_effort} is a string, like "low", "medium", "high".
+\code{reasoning_tokens} is an integer, giving a maximum token budget.
+Each provider only takes one of these two parameters.}
 
 \item{...}{Additional named parameters to send to the provider.}
 }

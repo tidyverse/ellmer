@@ -1,0 +1,252 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
+        terse."}]},{"role":"user","content":[{"type":"input_text","text":"Say hi"}]}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"msg":{"type":"string","description":"A
+        greeting message"}},"required":["msg"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 999efaea1a75f0b9-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 05 Nov 2025 20:07:56 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1635'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=JIcJTA9Zn.2bGV0yYcZ71IrWNxvkyazDQBSTl5UEjXg-1762373276-1.0.1.1-DaXW5Pmp6OIU9Y3taia4LaDPe4o1ZnOFCDakqqc7Lrsnj6r8QHWagK9uM2e1_0A5Gx8wTvpOl636ll0AWVbSIIyLBYLlZt63hDHTN6m1Fxs;
+        path=/; expires=Wed, 05-Nov-25 20:37:56 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=bNhKeeWJCpWjRMgrT1STcfECRV8zwIT7WAQIReNBOPM-1762373276938-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '1639'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999935'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_eaddd047ac9148ecbc4ec210a768c8df
+    body:
+      string: |-
+        {
+          "id": "resp_0743854be4002f8901690bae9b496c8197afedf41145a55b9d",
+          "object": "response",
+          "created_at": 1762373275,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "output": [
+            {
+              "id": "msg_0743854be4002f8901690bae9cbb6c8197b836282820f17cd2",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\"msg\":\"Hi\"}"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": false,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "description": null,
+              "name": "structured_data",
+              "schema": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "msg": {
+                    "type": "string",
+                    "description": "A greeting message"
+                  }
+                },
+                "required": [
+                  "msg"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 47,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 6,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 53
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2025-11-05 20:07:56
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
+        terse."}]},{"role":"user","content":[{"type":"input_text","text":"Say bye"}]}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"msg":{"type":"string","description":"A
+        greeting message"}},"required":["msg"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 999efaf51d4bf0b9-DFW
+      content-encoding: gzip
+      content-type: application/json
+      date: Wed, 05 Nov 2025 20:07:57 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '740'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie:
+      - __cf_bm=m6DTHUxRtmfduXLhc.ppXbmugVWN2ZCmjvcul0qgJHs-1762373277-1.0.1.1-q1YuXUIUH6YkYj9TIqSm02YZqc5JJzQM9s7UZ1_bcwOzMNBGZOz4FvtyLwq4sKJkEutWRj_KzMBIwEjAO9GbKMFNyuEEZseFullJse6Q_h0;
+        path=/; expires=Wed, 05-Nov-25 20:37:57 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=XM2YaBs90G3WyMmah2EhpFNgA95sv6dq7._ImWWvfsM-1762373277795-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-envoy-upstream-service-time: '746'
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999932'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_15bd3ce54b7842b0b4cf2708a0b145ef
+    body:
+      string: |-
+        {
+          "id": "resp_09e040665704c4cf01690bae9d0d648197b824dc99ff141116",
+          "object": "response",
+          "created_at": 1762373277,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "output": [
+            {
+              "id": "msg_09e040665704c4cf01690bae9da8808197950ff400ec22b78a",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\"msg\":\"Bye\"}"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": false,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "description": null,
+              "name": "structured_data",
+              "schema": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "msg": {
+                    "type": "string",
+                    "description": "A greeting message"
+                  }
+                },
+                "required": [
+                  "msg"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 47,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 6,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 53
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2025-11-05 20:07:57
+recorded_with: VCR-vcr/2.0.0

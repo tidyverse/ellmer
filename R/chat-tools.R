@@ -247,7 +247,7 @@ tool_results_as_turn <- function(results) {
   if (!any(is_tool_result)) {
     return(NULL)
   }
-  Turn("user", contents = results[is_tool_result])
+  UserTurn(contents = results[is_tool_result])
 }
 
 is_extra_content <- function(x) {

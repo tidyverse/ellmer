@@ -13,6 +13,7 @@ chat_ollama(
   api_args = list(),
   echo = NULL,
   api_key = NULL,
+  credentials = NULL,
   api_headers = character()
 )
 
@@ -21,7 +22,8 @@ models_ollama(base_url = "http://localhost:11434")
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
+\item{base_url}{The base URL to the endpoint; the default is OpenAI's
+public API.}
 
 \item{model}{The model to use for the chat.
 Use \code{models_ollama()} to see all options.}
@@ -42,12 +44,15 @@ when running at the console).
 
 Note this only affects the \code{chat()} method.}
 
-\item{api_key}{Ollama doesn't require an API key for local usage and in most
-cases you do not need to provide an \code{api_key}.
+\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
+
+\item{credentials}{Ollama doesn't require credentials for local usage and in most
+cases you do not need to provide \code{credentials}.
 
 However, if you're accessing an Ollama instance hosted behind a reverse
 proxy or secured endpoint that enforces bearer‐token authentication, you
-can set \code{api_key} (or the \code{OLLAMA_API_KEY} environment variable).}
+can set the \code{OLLAMA_API_KEY} environment variable or provide a callback
+function to \code{credentials}.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
@@ -62,8 +67,7 @@ command line (e.g. with \verb{ollama pull llama3.1}) or within R using
 {\href{https://hauselin.github.io/ollama-r/}{ollamar}} (e.g.
 \code{ollamar::pull("llama3.1")}).
 
-This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}} with
-the defaults tweaked for ollama.
+Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 \subsection{Known limitations}{
 \itemize{
 \item Tool calling is not supported with streaming (i.e. when \code{echo} is
@@ -96,7 +100,7 @@ Other chatbots:
 \code{\link{chat_huggingface}()},
 \code{\link{chat_mistral}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

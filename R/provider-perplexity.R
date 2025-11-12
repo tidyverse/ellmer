@@ -1,4 +1,4 @@
-#' @include provider-openai.R
+#' @include provider-openai-compatible.R
 NULL
 
 #' Chat with a model hosted on perplexity.ai
@@ -11,12 +11,13 @@ NULL
 #' information that may not have been available when the model was
 #' trained.
 #'
-#' This function is a lightweight wrapper around [chat_openai()] with
+#' This function is a Uses OpenAI compatible API via `chat_openai_compatible()` with
 #' the defaults tweaked for Perplexity AI.
 #'
 #' @export
 #' @family chatbots
-#' @param api_key `r api_key_param("PERPLEXITY_API_KEY")`
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("PERPLEXITY_API_KEY")`
 #' @param model `r param_model("llama-3.1-sonar-small-128k-online")`
 #' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
@@ -29,7 +30,8 @@ NULL
 chat_perplexity <- function(
   system_prompt = NULL,
   base_url = "https://api.perplexity.ai/",
-  api_key = perplexity_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   params = NULL,
   api_args = list(),
@@ -39,6 +41,13 @@ chat_perplexity <- function(
   model <- set_default(model, "llama-3.1-sonar-small-128k-online")
   echo <- check_echo(echo)
 
+  credentials <- as_credentials(
+    "chat_perplexity",
+    function() perplexity_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   params <- params %||% params()
 
   provider <- ProviderPerplexity(
@@ -47,7 +56,7 @@ chat_perplexity <- function(
     model = model,
     params = params,
     extra_args = api_args,
-    api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -55,7 +64,7 @@ chat_perplexity <- function(
 
 ProviderPerplexity <- new_class(
   "ProviderPerplexity",
-  parent = ProviderOpenAI,
+  parent = ProviderOpenAICompatible,
 )
 
 method(chat_params, ProviderPerplexity) <- function(provider, params) {

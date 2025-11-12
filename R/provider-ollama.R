@@ -7,8 +7,7 @@
 #' {[ollamar](https://hauselin.github.io/ollama-r/)} (e.g.
 #' `ollamar::pull("llama3.1")`).
 #'
-#' This function is a lightweight wrapper around [chat_openai()] with
-#' the defaults tweaked for ollama.
+#' Built on top of [chat_openai_compatible()].
 #'
 #' ## Known limitations
 #'
@@ -22,12 +21,14 @@
 #'
 #' @inheritParams chat_openai
 #' @param model `r param_model(NULL, "ollama")`
-#' @param api_key Ollama doesn't require an API key for local usage and in most
-#'   cases you do not need to provide an `api_key`.
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials Ollama doesn't require credentials for local usage and in most
+#'   cases you do not need to provide `credentials`.
 #'
 #'   However, if you're accessing an Ollama instance hosted behind a reverse
 #'   proxy or secured endpoint that enforces bearer‐token authentication, you
-#'   can set `api_key` (or the `OLLAMA_API_KEY` environment variable).
+#'   can set the `OLLAMA_API_KEY` environment variable or provide a callback
+#'   function to `credentials`.
 #' @param params Common model parameters, usually created by [params()].
 #' @inherit chat_openai return
 #' @family chatbots
@@ -45,6 +46,7 @@ chat_ollama <- function(
   api_args = list(),
   echo = NULL,
   api_key = NULL,
+  credentials = NULL,
   api_headers = character()
 ) {
   if (!has_ollama(base_url)) {
@@ -70,15 +72,22 @@ chat_ollama <- function(
 
   echo <- check_echo(echo)
 
+  # ollama doesn't require an API key for local usage, but one might be needed
+  # if ollama is served behind a proxy (see #501)
+  credentials <- as_credentials(
+    "chat_ollama",
+    function() Sys.getenv("OLLAMA_API_KEY", ""),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   provider <- ProviderOllama(
     name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
     model = model,
     params = params %||% params(),
     extra_args = api_args,
-    # ollama doesn't require an API key for local usage, but one might be needed
-    # if ollama is served behind a proxy (see #501)
-    api_key = api_key %||% Sys.getenv("OLLAMA_API_KEY", "ollama"),
+    credentials = credentials,
     extra_headers = api_headers
   )
 
@@ -87,9 +96,8 @@ chat_ollama <- function(
 
 ProviderOllama <- new_class(
   "ProviderOllama",
-  parent = ProviderOpenAI,
+  parent = ProviderOpenAICompatible,
   properties = list(
-    prop_redacted("api_key"),
     model = prop_string()
   )
 )

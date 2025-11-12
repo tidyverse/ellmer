@@ -60,6 +60,11 @@ pretty_json <- function(x) {
   jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
 }
 
+read_ndjson <- function(path) {
+  lines <- readLines(path, warn = FALSE)
+  lapply(lines, jsonlite::fromJSON, simplifyVector = FALSE)
+}
+
 prettify <- function(x) {
   tryCatch(
     jsonlite::prettify(x),
@@ -168,16 +173,21 @@ cli_escape <- function(x) {
 
 api_key_param <- function(key) {
   paste_c(
-    "API key to use for authentication.\n",
-    "\n",
+    "Override the default credentials. ",
     c(
-      "You generally should not supply this directly, but instead set the ",
+      "You generally should not need this argument; instead set the ",
       c("`", key, "`"),
-      " environment variable.\n"
+      " environment variable. "
     ),
     c(
       "The best place to set this is in `.Renviron`,
       which you can easily edit by calling `usethis::edit_r_environ()`."
+    ),
+    "\n\n",
+    c(
+      "If you do need additional control, this argument takes a ",
+      "zero-argument function that returns either a string (the API key), ",
+      "or a named list (added as additional headers to every request)."
     )
   )
 }

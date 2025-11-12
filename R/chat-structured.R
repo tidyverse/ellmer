@@ -24,7 +24,7 @@ extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
 
 # OpenAI only works with objects, so we wrap and unwrap as needed
 type_needs_wrapper <- function(type, provider) {
-  S7_inherits(provider, ProviderOpenAI) &&
+  S7_inherits(provider, ProviderOpenAICompatible) &&
     !(S7_inherits(type, TypeObject) || S7_inherits(type, TypeJsonSchema))
 }
 wrap_type_if_needed <- function(type, needs_wrapper = FALSE) {

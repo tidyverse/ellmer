@@ -1,8 +1,6 @@
 #' Submit multiple chats in parallel
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
-#'
 #' If you have multiple prompts, you can submit them in parallel. This is
 #' typically considerably faster than submitting them in sequence, especially
 #' with Gemini and OpenAI.
@@ -127,6 +125,7 @@ parallel_chat <- function(
   map(seq_along(conversations), function(i) {
     if (is_ok[[i]]) {
       turns <- conversations[[i]]
+      log_turns(chat$get_provider(), turns)
       chat$clone()$set_turns(turns)
     } else {
       assistant_turns[[i]]
@@ -206,6 +205,7 @@ parallel_chat_structured <- function(
     rpm = rpm,
     on_error = on_error
   )
+  log_turns(provider, turns)
 
   multi_convert(
     provider,
@@ -270,28 +270,19 @@ multi_convert <- function(
       out$.error <- errors
     }
 
-    if (include_tokens || include_cost) {
-      tokens <- t(vapply(
-        turns,
-        \(turn) if (turn_failed(turn)) c(0L, 0L, 0L) else turn@tokens,
-        integer(3)
-      ))
+    if (include_tokens) {
+      tokens <- map_tokens(turns, \(turn) {
+        if (turn_failed(turn)) c(0L, 0L, 0L) else turn@tokens
+      })
+      out$input_tokens <- tokens[, 1]
+      out$output_tokens <- tokens[, 2]
+      out$cached_input_tokens <- tokens[, 3]
+    }
 
-      if (include_tokens) {
-        out$input_tokens <- tokens[, 1]
-        out$output_tokens <- tokens[, 2]
-        out$cached_input_tokens <- tokens[, 3]
-      }
-
-      if (include_cost) {
-        out$cost <- get_token_cost(
-          provider@name,
-          provider@model,
-          input = tokens[, 1],
-          output = tokens[, 2],
-          cached_input = tokens[, 3]
-        )
-      }
+    if (include_cost) {
+      out$cost <- map_dbl(turns, \(turn) {
+        if (turn_failed(turn)) 0 else turn@cost
+      })
     }
   }
   out

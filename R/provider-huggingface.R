@@ -8,8 +8,7 @@
 #' (ensure that at least "Make calls to Inference Providers" and
 #' "Make calls to your Inference Endpoints" is checked).
 #'
-#' This function is a lightweight wrapper around [chat_openai()], with
-#' the defaults adjusted for Hugging Face.
+#' Built on top of [chat_openai_compatible()].
 #'
 #' ## Known limitations
 #'
@@ -19,9 +18,8 @@
 #'
 #' @family chatbots
 #' @param model `r param_model("meta-llama/Llama-3.1-8B-Instruct")`
-#' @param api_key The API key to use for authentication. You generally should
-#'   not supply this directly, but instead set the `HUGGINGFACE_API_KEY` environment
-#'   variable.
+#' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
+#' @param credentials `r api_key_param("HUGGINGFACE_API_KEY")`
 #' @export
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -33,7 +31,8 @@
 chat_huggingface <- function(
   system_prompt = NULL,
   params = NULL,
-  api_key = hf_key(),
+  api_key = NULL,
+  credentials = NULL,
   model = NULL,
   api_args = list(),
   echo = NULL,
@@ -42,6 +41,13 @@ chat_huggingface <- function(
   model <- set_default(model, "meta-llama/Llama-3.1-8B-Instruct")
   echo <- check_echo(echo)
   params <- params %||% params()
+
+  credentials <- as_credentials(
+    "chat_huggingface",
+    function() hf_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   # https://huggingface.co/docs/inference-providers/en/index?python-clients=requests#http--curl
   base_url <- "https://router.huggingface.co/v1/"
@@ -52,13 +58,16 @@ chat_huggingface <- function(
     model = model,
     params = params,
     extra_args = api_args,
-    api_key = api_key,
+    credentials = credentials,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-ProviderHuggingFace <- new_class("ProviderHuggingFace", parent = ProviderOpenAI)
+ProviderHuggingFace <- new_class(
+  "ProviderHuggingFace",
+  parent = ProviderOpenAICompatible
+)
 
 chat_huggingface_test <- function(
   system_prompt = "Be terse",

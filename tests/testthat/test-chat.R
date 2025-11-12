@@ -3,8 +3,8 @@
 test_that("can get and set the system prompt", {
   chat <- chat_openai_test()
   chat$set_turns(list(
-    Turn("user", "Hi"),
-    Turn("assistant", "Hello")
+    UserTurn("Hi"),
+    AssistantTurn("Hello")
   ))
 
   # NULL -> NULL
@@ -42,7 +42,7 @@ test_that("can retrieve system prompt with last_turn()", {
   chat2 <- chat_openai_test(system_prompt = "You are from New Zealand")
   expect_equal(
     chat2$last_turn("system"),
-    Turn("system", "You are from New Zealand")
+    SystemTurn("You are from New Zealand")
   )
 })
 
@@ -50,9 +50,9 @@ test_that("can get and set turns", {
   chat <- chat_openai_test()
   expect_equal(chat$get_turns(), list())
 
-  turns <- list(Turn("user"), Turn("assistant"))
+  turns <- list(UserTurn(), AssistantTurn())
   chat$set_turns(turns)
-  expect_equal(chat$get_turns(), list(Turn("user"), Turn("assistant")))
+  expect_equal(chat$get_turns(), list(UserTurn(), AssistantTurn()))
 })
 
 test_that("can get model", {
@@ -65,7 +65,7 @@ test_that("setting turns usually preserves, but can set system prompt", {
   chat$set_turns(list())
   expect_equal(chat$get_system_prompt(), "You're a funny guy")
 
-  chat$set_turns(list(Turn("system", list(ContentText("You're a cool guy")))))
+  chat$set_turns(list(SystemTurn(list(ContentText("You're a cool guy")))))
   expect_equal(chat$get_system_prompt(), "You're a cool guy")
 })
 
@@ -178,21 +178,11 @@ test_that("chat_structured() doesn't require a prompt", {
   expect_equal(out, list(city = "Tokyo", county = "Japan"))
 })
 
-test_that("can retrieve tokens with or without system prompt", {
-  chat <- chat_openai_test("abc")
-  expect_equal(nrow(chat$get_tokens(FALSE)), 0)
-  expect_equal(nrow(chat$get_tokens(TRUE)), 1)
-
-  chat <- chat_openai_test(NULL)
-  expect_equal(nrow(chat$get_tokens(FALSE)), 0)
-  expect_equal(nrow(chat$get_tokens(TRUE)), 0)
-})
-
 test_that("has a basic print method", {
   chat <- chat_openai_test()
   chat$set_turns(list(
-    Turn("user", "What's 1 + 1?\nWhat's 1 + 2?"),
-    Turn("assistant", "2\n\n3", tokens = c(10, 5, 5))
+    UserTurn("What's 1 + 1?\nWhat's 1 + 2?"),
+    AssistantTurn("2\n\n3", tokens = c(10, 5, 5))
   ))
   expect_snapshot(chat)
 })
@@ -200,15 +190,33 @@ test_that("has a basic print method", {
 test_that("print method shows cumulative tokens & cost", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
   chat$set_turns(list(
-    Turn("user", "Input 1"),
-    Turn("assistant", "Output 1", tokens = c(15000, 500, 0)),
-    Turn("user", "Input 2"),
-    Turn("assistant", "Output 1", tokens = c(30000, 1000, 0))
+    UserTurn("Input 1"),
+    AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
+    UserTurn("Input 2"),
+    AssistantTurn("Output 1", tokens = c(30000, 1000, 0), cost = 0.1)
   ))
   expect_snapshot(chat)
+})
 
-  expect_equal(chat$get_cost(), dollars(0.1275))
-  expect_equal(chat$get_cost("last"), dollars(0.085))
+test_that("can compute costs", {
+  chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
+  chat$set_turns(list(
+    UserTurn("Input 1"),
+    AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
+    UserTurn("Input 2"),
+    AssistantTurn("Output 1", tokens = c(30000, 1000, 0), cost = 0.1)
+  ))
+
+  expect_equal(chat$get_cost(), dollars(0.3))
+  expect_equal(chat$get_cost("last"), dollars(0.1))
+
+  details <- chat$get_tokens()
+  expect_equal(details$cost, dollars(c(0.2, 0.1)))
+  expect_equal(details$input, c(15000, 30000))
+  expect_equal(details$output, c(500, 1000))
+  expect_equal(details$cached_input, c(0, 0))
+
+  expect_snapshot(details)
 })
 
 test_that("can optionally echo", {
@@ -245,10 +253,7 @@ test_that("assistant turns track duration", {
   chat <- chat_openai_test()
   chat$chat("What's 1 + 1?")
 
-  user_turn <- chat$get_turns()[[1]]
   assistant_turn <- chat$last_turn()
-
-  expect_true(is.na(user_turn@duration))
 
   # These assistant durations are usually not NA, but are during replay (#479)
   expect_true(is.na(assistant_turn@duration) || assistant_turn@duration > 0)
