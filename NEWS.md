@@ -13,6 +13,7 @@
 * `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758). `models_claude()` is now an alias for `models_anthropic()`.
 * `chat_databricks()` lifts many of its restrictions now that Databricks' API is more OpenAI compatible (#757).
 * `chat_google_gemini()` and `chat_openai()` support image generation (#368).
+* `chat_groq()` now defaults to llama-3.1-8b-instant.
 * `chat_openai()` gains a `service_tier` argument (#712).
 * `chat_openai()` now uses OpenAI's responses endpoint (#365, #801). This is their recommended endpoint and gives more access to built-in tools.
 * `chat_openai_compatible()` replaces `chat_openai()` as the interface to use for OpenAI-compatible APIs, and `chat_openai()` is reserved for the official OpenAI API. Unlike previous versions of `chat_openai()`, the `base_url` parameter is now required (#801).

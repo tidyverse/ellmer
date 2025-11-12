@@ -82,7 +82,7 @@ chat_openai_compatible <- function(
 
   credentials <- as_credentials(
     "chat_openai_compatible",
-    function() paste0("Bearer ", openai_key()),
+    function() openai_key(),
     credentials = credentials,
     api_key = api_key,
     token = TRUE

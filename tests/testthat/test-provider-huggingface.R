@@ -2,7 +2,7 @@ test_that("can make simple request", {
   chat <- chat_huggingface_test()
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
-  expect_equal(chat$last_turn()@tokens[1:2] > 0, c(TRUE, TRUE))
+  expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
@@ -18,9 +18,7 @@ test_that("defaults are reported", {
 })
 
 test_that("supports standard parameters", {
-  chat_fun <- function(...) {
-    chat_huggingface_test(model = "meta-llama/Llama-3.1-8B-Instruct", ...)
-  }
+  chat_fun <- chat_huggingface_test
   test_params_stop(chat_fun)
 })
 

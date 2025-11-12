@@ -3,5 +3,5 @@
     Code
       . <- chat_groq()
     Message
-      Using model = "llama3-8b-8192".
+      Using model = "llama-3.1-8b-instant".
 
