@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `AssistantTurn`s now have a `@duration` slot, containing the total time to complete the request (@simonpcouch, #798).
 * `batch_chat()` logs tokens once, on retrieval (#743).
 * `batch_chat()` now retrieves failed results for `chat_openai()` (#830).
 * `batch_chat()` now works correctly for `chat_anthropic()` (#835).
