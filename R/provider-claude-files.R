@@ -10,14 +10,14 @@
 #' having a maximum size of 500MB. For more details see
 #' <https://docs.claude.com/en/docs/build-with-claude/files>
 #'
-#' * `anthropic_file_upload()` uploads a file and returns an object that
+#' * `claude_file_upload()` uploads a file and returns an object that
 #'   you can use in chat.
-#' * `anthropic_file_list()` lists all uploaded files.
-#' * `anthropic_file_get()` returns an object for an previously uploaded file.
-#' * `anthropic_file_download()` downloads the file with the given ID. Note
+#' * `claude_file_list()` lists all uploaded files.
+#' * `claude_file_get()` returns an object for an previously uploaded file.
+#' * `claude_file_download()` downloads the file with the given ID. Note
 #'   that you can only download files created by skills or the code execution
 #'   tool.
-#' * `anthropic_file_delete()` deletes the file with the given ID.
+#' * `claude_file_delete()` deletes the file with the given ID.
 #'
 #' @inheritParams chat_anthropic
 #' @param path Path to a file to upload.
@@ -27,12 +27,12 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' file <- anthropic_file_upload("path/to/file.pdf")
+#' file <- claude_file_upload("path/to/file.pdf")
 #' chat <- chat_anthropic(beta_headers = "files-api-2025-04-14")
 #' chat$chat("Please summarize the document.", file)
 #' }
 
-anthropic_file_upload <- function(
+claude_file_upload <- function(
   path,
   base_url = "https://api.anthropic.com/v1/",
   beta_headers = "files-api-2025-04-14",
@@ -54,8 +54,8 @@ anthropic_file_upload <- function(
 }
 
 #' @export
-#' @rdname anthropic_file_upload
-anthropic_file_list <- function(
+#' @rdname claude_file_upload
+claude_file_list <- function(
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
   beta_headers = "files-api-2025-04-14"
@@ -75,8 +75,8 @@ anthropic_file_list <- function(
 }
 
 #' @export
-#' @rdname anthropic_file_upload
-anthropic_file_get <- function(
+#' @rdname claude_file_upload
+claude_file_get <- function(
   file_id,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
@@ -91,9 +91,9 @@ anthropic_file_get <- function(
 }
 
 #' @export
-#' @rdname anthropic_file_upload
+#' @rdname claude_file_upload
 #' @param path Path to download the file to.
-anthropic_file_download <- function(
+claude_file_download <- function(
   file_id,
   path,
   base_url = "https://api.anthropic.com/v1/",
@@ -110,8 +110,8 @@ anthropic_file_download <- function(
 }
 
 #' @export
-#' @rdname anthropic_file_upload
-anthropic_file_delete <- function(
+#' @rdname claude_file_upload
+claude_file_delete <- function(
   file_id,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,

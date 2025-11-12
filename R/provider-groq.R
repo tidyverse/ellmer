@@ -16,7 +16,7 @@ NULL
 #' @family chatbots
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("GROQ_API_KEY")`
-#' @param model `r param_model("llama3-8b-8192")`
+#' @param model `r param_model("llama-3.1-8b-instant")`
 #' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -36,7 +36,7 @@ chat_groq <- function(
   echo = NULL,
   api_headers = character()
 ) {
-  model <- set_default(model, "llama3-8b-8192")
+  model <- set_default(model, "llama-3.1-8b-instant")
   echo <- check_echo(echo)
 
   credentials <- as_credentials(

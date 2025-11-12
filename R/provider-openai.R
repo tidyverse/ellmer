@@ -70,7 +70,7 @@ chat_openai <- function(
   echo <- check_echo(echo)
   service_tier <- arg_match(service_tier)
 
-  credentials <- credentials %||% \() paste0("Bearer ", openai_key())
+  credentials <- credentials %||% \() openai_key()
   check_credentials(credentials)
 
   provider <- ProviderOpenAI(
@@ -95,7 +95,7 @@ models_openai <- function(
 ) {
   credentials <- as_credentials(
     "models_openai",
-    function() paste0("Bearer ", openai_key()),
+    \() openai_key(),
     credentials = credentials,
     api_key = api_key
   )

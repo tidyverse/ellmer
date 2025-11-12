@@ -1,6 +1,5 @@
 test_that("end-to-end test of all functions", {
   vcr::local_cassette("anthropic-upload-file")
-
   # Avoid using an absolute path in form_file
   local_mocked_bindings(
     form_file = function(path, type) {
@@ -11,8 +10,8 @@ test_that("end-to-end test of all functions", {
     }
   )
 
-  upload <- anthropic_file_upload(test_path("apples.pdf"))
-  defer(anthropic_file_delete(upload@uri))
+  upload <- claude_file_upload(test_path("apples.pdf"))
+  defer(claude_file_delete(upload@uri))
 
   chat <- chat_anthropic_test(beta_headers = "files-api-2025-04-14")
   response <- chat$chat("What's the title of this document?", upload)
@@ -25,8 +24,8 @@ test_that("end-to-end test of all functions", {
 
   # Can't download uploaded files, but at least tests that request succeeds
   path <- withr::local_tempfile()
-  expect_error(anthropic_file_download(upload@uri, path), "not downloadable")
+  expect_error(claude_file_download(upload@uri, path), "not downloadable")
 
-  files <- anthropic_file_list()
+  files <- claude_file_list()
   expect_true("apples.pdf" %in% files$filename)
 })

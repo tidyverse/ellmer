@@ -27,7 +27,7 @@ reference:
 - subtitle: Provider-specific helpers
   contents:
   - google_upload
-  - starts_with("anthropic_file")
+  - starts_with("claude_file")
 
 - title: Chat helpers
   contents:
