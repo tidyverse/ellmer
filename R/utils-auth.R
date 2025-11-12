@@ -65,6 +65,11 @@ ellmer_req_credentials <- function(req, credentials, key_name = NULL) {
         call = NULL
       )
     }
+
+    if (key_name == "Authorization") {
+      credentials <- paste0("Bearer ", credentials)
+    }
+
     credentials <- set_names(list(credentials), key_name)
   }
   req_headers_redacted(req, !!!credentials)
