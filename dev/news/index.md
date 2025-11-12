@@ -89,7 +89,8 @@
   from LLM APIs. Similarly, the
   [`print()`](https://rdrr.io/r/base/print.html) method now reports
   costs on each assistant turn, rather than trying to parse out
-  individual costs.
+  individual costs
+  ([\#824](https://github.com/tidyverse/ellmer/issues/824)).
 - `Chat$chat_structured()` and friends now only warn if multiple JSON
   payloads found (instead of erroring)
   ([@kbenoit](https://github.com/kbenoit),
