@@ -33,3 +33,10 @@ test_that("can use images", {
   test_images_inline(chat_fun)
   test_images_remote(chat_fun)
 })
+
+# Provider specifics ------------------------------------------------------
+
+test_that("virtual_key is deprecated", {
+  expect_snapshot(chat <- chat_portkey(model = "def", virtual_key = "abc"))
+  expect_equal(chat$get_provider()@model, "@abc/def")
+})
