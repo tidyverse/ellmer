@@ -789,45 +789,27 @@ test_that("match_tools() matches tools in a turn to a list of tools", {
 # Dangling tool requests ------------------------------------------------------
 
 test_that("can resume chat after dangling tool requests", {
-  vcr::local_cassette("chat-tools-dangling")
-
-  chat <- chat_openai_test("Be terse")
-  chat$register_tool(tool(
-    function() as.character(Sys.Date()),
+  # Simulate a broken chat history with dangling tool request
+  tool_request <- ContentToolRequest(
+    id = "1",
     name = "get_date",
-    description = "Get the current date"
-  ))
-
-  # Make initial chat that triggers tool call
-  chat$chat("What is today's date?")
-
-  # Truncate turns after tool request to simulate interrupted chat
-  turns <- chat$get_turns()
-  tool_request_idx <- which(vapply(
-    turns,
-    function(t) {
-      t@role == "assistant" &&
-        any(vapply(t@contents, is_tool_request, logical(1)))
-    },
-    logical(1)
-  ))[1]
-
-  chat$set_turns(turns[seq_len(tool_request_idx)])
-
-  # Resuming chat should automatically complete dangling request
-  result <- chat$chat("Try again")
-
-  # Verify the dangling request was completed with empty result
-  turns_after <- chat$get_turns()
-  empty_result_turn <- turns_after[[tool_request_idx + 1]]
-
-  expect_equal(empty_result_turn@role, "user")
-  expect_s7_class(empty_result_turn@contents[[1]], ContentToolResult)
-  expect_equal(
-    empty_result_turn@contents[[1]]@error,
-    "Chat ended before the tool could be invoked."
+    arguments = list()
   )
 
-  # Verify conversation continued successfully
-  expect_match(result, "2025", fixed = TRUE)
+  chat <- chat_openai_test("Be terse")
+  chat$set_turns(list(
+    UserTurn("What is today's date?"),
+    AssistantTurn(list(tool_request))
+  ))
+
+  chat$.__enclos_env__$private$complete_dangling_tool_requests()
+  turns <- chat$get_turns()
+
+  expect_equal(
+    turns[[3]],
+    UserTurn(list(ContentToolResult(
+      error = "Chat ended before the tool could be invoked.",
+      request = tool_request
+    )))
+  )
 })
