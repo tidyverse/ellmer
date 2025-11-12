@@ -788,7 +788,7 @@ test_that("match_tools() matches tools in a turn to a list of tools", {
 
 # Dangling tool requests ------------------------------------------------------
 
-test_that("can resume chat after dangling tool requests", {
+test_that("dangling tool requests automatically completed", {
   # Simulate a broken chat history with dangling tool request
   tool_request <- ContentToolRequest(
     id = "1",
@@ -801,10 +801,14 @@ test_that("can resume chat after dangling tool requests", {
     UserTurn("What is today's date?"),
     AssistantTurn(list(tool_request))
   ))
-
   chat$.__enclos_env__$private$complete_dangling_tool_requests()
   turns <- chat$get_turns()
 
+  # Must have pair of user and assitant turns
+  expect_s3_class(turns[[3]], "ellmer::UserTurn")
+  expect_s3_class(turns[[4]], "ellmer::AssistantTurn")
+
+  # And UserTurn must contain a result that matches the request
   expect_equal(
     turns[[3]],
     UserTurn(list(ContentToolResult(
@@ -812,4 +816,24 @@ test_that("can resume chat after dangling tool requests", {
       request = tool_request
     )))
   )
+})
+
+test_that("can resume chat after dangling tool requests", {
+  vcr::local_cassette("chat-tools-dangling")
+
+  chat <- chat_openai_test("Be terse")
+  chat$register_tool(tool(
+    \() "2001-02-09",
+    name = "get_date",
+    description = "Get todays date"
+  ))
+  chat$set_turns(list(
+    UserTurn("What year is it today?"),
+    AssistantTurn(list(ContentToolRequest(
+      id = "1",
+      name = "get_date",
+      arguments = list()
+    )))
+  ))
+  expect_match(chat$chat("try again"), "2001")
 })

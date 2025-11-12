@@ -770,8 +770,10 @@ Chat <- R6::R6Class(
           request = req
         )
       })
-      tool_turn <- tool_results_as_turn(tool_results)
-      private$.turns[[length(private$.turns) + 1]] <- tool_turn
+      self$add_turn(
+        tool_results_as_turn(tool_results),
+        AssistantTurn("Acknowledged", tokens = c(0, 0, 0))
+      )
 
       invisible()
     }
@@ -813,7 +815,7 @@ print.Chat <- function(x, ...) {
 turn_cost <- function(tokens, cost, prefix, suffix = "") {
   out <- paste0(prefix, "input=")
 
-  if (tokens[[3]] > 0) {
+  if (!is.na(tokens[[3]]) && tokens[[3]] > 0) {
     out <- paste0(out, tokens[[1]], "+", tokens[[3]])
   } else {
     out <- paste0(out, tokens[[1]])
