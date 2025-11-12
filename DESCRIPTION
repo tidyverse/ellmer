@@ -72,6 +72,7 @@ Collate:
     'as-json.R'
     'batch-chat.R'
     'chat-structured.R'
+    'chat-tools-content.R'
     'turns.R'
     'chat-tools.R'
     'chat-utils.R'

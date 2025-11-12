@@ -40,6 +40,12 @@ test_that("supports tool calling", {
   test_tools_simple(chat_fun)
 })
 
+test_that("tools can return images", {
+  vcr::local_cassette("anthropic-tool-image")
+  chat_fun <- chat_claude
+  test_tool_image(chat_fun)
+})
+
 test_that("can extract data", {
   vcr::local_cassette("anthropic-structured-data")
   chat_fun <- chat_anthropic_test

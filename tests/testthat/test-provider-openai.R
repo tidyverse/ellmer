@@ -40,6 +40,12 @@ test_that("supports tool calling", {
   test_tools_simple(chat_fun)
 })
 
+test_that("tools can return images", {
+  vcr::local_cassette("openai-v2-tool-image")
+  chat_fun <- chat_openai_test
+  test_tool_image(chat_fun)
+})
+
 test_that("can extract data", {
   chat_fun <- chat_openai_test
 

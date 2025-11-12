@@ -390,8 +390,8 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(
       # (all messages must have non-empty content)
       return(NULL)
     }
-    data <- tool_results_separate_content(x)
-    content <- as_json(provider, c(data$tool_results, data$contents), ...)
+    x <- turn_contents_expand(x)
+    content <- as_json(provider, x@contents, ...)
 
     # Add caching to the last content block in the last turn
     # https://docs.claude.com/en/docs/build-with-claude/prompt-caching#how-automatic-prefix-checking-works

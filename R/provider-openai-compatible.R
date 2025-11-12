@@ -319,11 +319,12 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
       list(role = "system", content = x@contents[[1]]@text)
     )
   } else if (is_user_turn(x)) {
-    # Each tool result needs to go in its own message with role "tool"
-    is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
-    data <- tool_results_separate_content(x)
-    content <- as_json(provider, data$contents, ...)
-    if (length(content) > 0) {
+    # Tool results come out of content and go into own element
+    x <- turn_contents_expand(x)
+    data <- turn_split_tool_results(x)
+
+    if (length(data$contents) > 0) {
+      content <- as_json(provider, data$contents, ...)
       user <- list(list(role = "user", content = content))
     } else {
       user <- list()
