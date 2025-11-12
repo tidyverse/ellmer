@@ -58,6 +58,8 @@
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   support image generation
   ([\#368](https://github.com/tidyverse/ellmer/issues/368)).
+- [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
+  now defaults to llama-3.1-8b-instant.
 - [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   gains a `service_tier` argument
   ([\#712](https://github.com/tidyverse/ellmer/issues/712)).

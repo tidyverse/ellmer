@@ -52,7 +52,7 @@ chat_groq(
 
 - model:
 
-  The model to use for the chat (defaults to "llama3-8b-8192"). We
+  The model to use for the chat (defaults to "llama-3.1-8b-instant"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use.
 
