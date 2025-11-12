@@ -79,7 +79,7 @@ chat_portkey <- function(
 
 chat_portkey_test <- function(
   ...,
-  model = "@open-ai-virtual-7f0dcd/gpt-4o-mini",
+  model = "@open-ai-virtual-7f0dcd/gpt-4.1-nano",
   params = NULL,
   echo = "none"
 ) {
