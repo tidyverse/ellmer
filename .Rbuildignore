@@ -17,5 +17,4 @@ _cache/
 ^_dev$
 ^revdep$
 ^\.claude$
-^CLAUDE\.md$
 ^plans$
