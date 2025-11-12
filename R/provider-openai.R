@@ -330,9 +330,12 @@ method(as_json, list(ProviderOpenAI, Turn)) <- function(
   x,
   ...
 ) {
+  turn_contents <- tool_results_separate_content(x)
+  contents <- c(turn_contents$tool_results, turn_contents$contents)
+
   # While the user turn can contain multiple contents, the assistant turn
   # can't. Fortunately, we can send multiple user turns with out issue.
-  as_json(provider, x@contents, ..., role = x@role)
+  as_json(provider, contents, ..., role = x@role)
 }
 
 method(as_json, list(ProviderOpenAI, ContentText)) <- function(
