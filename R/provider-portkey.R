@@ -16,8 +16,7 @@
 #'   <https://portkey.ai/docs/support/upgrade-to-model-catalog> for details.
 #'
 #'   For backward compatibility, the `PORTKEY_VIRTUAL_KEY` env var is still used
-#'   if the model
-#'  you can specify the virtual key here.
+#'   if the model doesn't include a provider.
 #' @export
 #' @inheritParams chat_openai
 #' @inherit chat_openai return

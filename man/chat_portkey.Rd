@@ -42,8 +42,7 @@ Portkey now recommend supplying the model provider
 \url{https://portkey.ai/docs/support/upgrade-to-model-catalog} for details.
 
 For backward compatibility, the \code{PORTKEY_VIRTUAL_KEY} env var is still used
-if the model
-you can specify the virtual key here.}
+if the model doesn't include a provider.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
