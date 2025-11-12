@@ -2,37 +2,32 @@
 
 [PortkeyAI](https://portkey.ai/docs/product/ai-gateway/universal-api)
 provides an interface (AI Gateway) to connect through its Universal API
-to a variety of LLMs providers with a single endpoint.
-
-### Authentication
-
-API keys together with configurations of LLM providers are stored inside
-Portkey application.
+to a variety of LLMs providers via a single endpoint.
 
 ## Usage
 
 ``` r
 chat_portkey(
+  model,
   system_prompt = NULL,
   base_url = "https://api.portkey.ai/v1",
   api_key = NULL,
   credentials = NULL,
-  virtual_key = portkey_virtual_key(),
-  model = NULL,
+  virtual_key = deprecated(),
   params = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
 )
 
-models_portkey(
-  base_url = "https://api.portkey.ai/v1",
-  api_key = portkey_key(),
-  virtual_key = NULL
-)
+models_portkey(base_url = "https://api.portkey.ai/v1", api_key = portkey_key())
 ```
 
 ## Arguments
+
+- model:
+
+  The model name, e.g. `@my-provider/my-model`.
 
 - system_prompt:
 
@@ -59,17 +54,14 @@ models_portkey(
 
 - virtual_key:
 
-  A virtual identifier storing LLM provider's API key. See
-  [documentation](https://portkey.ai/docs/product/ai-gateway/virtual-keys).
-  Can be read from the `PORTKEY_VIRTUAL_KEY` environment variable.
+  **\[deprecated\]**. Portkey now recommend supplying the model provider
+  (formerly known as the `virtual_key`), in the model name, e.g.
+  `@my-provider/my-model`. See
+  <https://portkey.ai/docs/support/upgrade-to-model-catalog> for
+  details.
 
-- model:
-
-  The model to use for the chat (defaults to "gpt-4o"). We regularly
-  update the default, so we strongly recommend explicitly specifying a
-  model for anything other than casual use. Use
-  [`models_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  to see all options.
+  For backward compatibility, the `PORTKEY_VIRTUAL_KEY` env var is still
+  used if the model doesn't include a provider.
 
 - params:
 
@@ -130,7 +122,7 @@ Other chatbots:
 
 ``` r
 if (FALSE) { # \dontrun{
-chat <- chat_portkey(virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"))
+chat <- chat_portkey()
 chat$chat("Tell me three jokes about statisticians")
 } # }
 ```

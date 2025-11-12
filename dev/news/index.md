@@ -75,6 +75,12 @@
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md),
   the `base_url` parameter is now required
   ([\#801](https://github.com/tidyverse/ellmer/issues/801)).
+- [`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
+  now requires you to supply a model
+  ([\#786](https://github.com/tidyverse/ellmer/issues/786)).
+- `chat_portkey(virtual_key)` no longer needs to be supplied; instead
+  Portkey recommends including the virtual key/povider in the
+  `model`.([\#786](https://github.com/tidyverse/ellmer/issues/786)).
 - `Chat$get_tokens()` gives a brief description of the turn contents to
   make it easier to see which turn tokens are spent on
   ([\#618](https://github.com/tidyverse/ellmer/issues/618)).

@@ -83,6 +83,10 @@
 <li>
 <code><a href="../reference/chat_openai_compatible.html">chat_openai_compatible()</a></code> replaces <code><a href="../reference/chat_openai.html">chat_openai()</a></code> as the interface to use for OpenAI-compatible APIs, and <code><a href="../reference/chat_openai.html">chat_openai()</a></code> is reserved for the official OpenAI API. Unlike previous versions of <code><a href="../reference/chat_openai.html">chat_openai()</a></code>, the <code>base_url</code> parameter is now required (<a href="https://github.com/tidyverse/ellmer/issues/801" class="external-link">#801</a>).</li>
 <li>
+<code><a href="../reference/chat_portkey.html">chat_portkey()</a></code> now requires you to supply a model (<a href="https://github.com/tidyverse/ellmer/issues/786" class="external-link">#786</a>).</li>
+<li>
+<code>chat_portkey(virtual_key)</code> no longer needs to be supplied; instead Portkey recommends including the virtual key/povider in the <code>model</code>.(<a href="https://github.com/tidyverse/ellmer/issues/786" class="external-link">#786</a>).</li>
+<li>
 <code>Chat$get_tokens()</code> gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (<a href="https://github.com/tidyverse/ellmer/issues/618" class="external-link">#618</a>).</li>
 <li>
 <code>Chat$get_tokens()</code> now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method now reports costs on each assistant turn, rather than trying to parse out individual costs.</li>
