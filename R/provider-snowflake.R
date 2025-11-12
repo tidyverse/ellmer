@@ -1,4 +1,4 @@
-#' @include provider-openai.R
+#' @include provider-openai-compatible.R
 #' @include content.R
 NULL
 
@@ -72,7 +72,7 @@ chat_snowflake <- function(
 
 ProviderSnowflakeCortex <- new_class(
   "ProviderSnowflakeCortex",
-  parent = ProviderOpenAI,
+  parent = ProviderOpenAICompatible,
   properties = list(
     account = prop_string()
   )

@@ -22,11 +22,10 @@ chat_huggingface(
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
-\item{credentials}{A function that returns the API key to use for authentication.
+\item{credentials}{Override the default credentials. You generally should not need this argument; instead set the \code{HUGGINGFACE_API_KEY} environment variable. The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.
 
-You generally should not need this argument; instead set the \code{HUGGINGFACE_API_KEY} environment variable.
-The best place to set this is in \code{.Renviron},
-which you can easily edit by calling \code{usethis::edit_r_environ()}.}
+If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).}
 
 \item{model}{The model to use for the chat (defaults to "meta-llama/Llama-3.1-8B-Instruct").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
@@ -59,8 +58,7 @@ from your \href{https://huggingface.co/settings/tokens}{Hugging Face account}
 (ensure that at least "Make calls to Inference Providers" and
 "Make calls to your Inference Endpoints" is checked).
 
-This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}}, with
-the defaults adjusted for Hugging Face.
+Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 \subsection{Known limitations}{
 \itemize{
 \item Some models do not support the chat interface or parts of it, for example
@@ -89,7 +87,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

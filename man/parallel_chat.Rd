@@ -91,8 +91,6 @@ property. If the output is a data frame, and some requests error,
 an \code{.error} column will be added with the error objects.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
 If you have multiple prompts, you can submit them in parallel. This is
 typically considerably faster than submitting them in sequence, especially
 with Gemini and OpenAI.

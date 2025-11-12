@@ -1,4 +1,4 @@
-#' @include provider-openai.R
+#' @include provider-openai-compatible.R
 #' @include content.R
 NULL
 
@@ -10,6 +10,8 @@ NULL
 #' The [Azure OpenAI server](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
 #' hosts a number of open source models as well as proprietary models
 #' from OpenAI.
+#'
+#' Built on top of [chat_openai_compatible()].
 #'
 #' ## Authentication
 #'
@@ -110,7 +112,7 @@ chat_azure_openai_test <- function(
 
 ProviderAzureOpenAI <- new_class(
   "ProviderAzureOpenAI",
-  parent = ProviderOpenAI,
+  parent = ProviderOpenAICompatible,
   properties = list(
     api_version = prop_string()
   )

@@ -1,8 +1,6 @@
 #' Submit multiple chats in one batch
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
-#'
 #' `batch_chat()` and `batch_chat_structured()` currently only work with
 #' [chat_openai()] and [chat_anthropic()]. They use the
 #' [OpenAI](https://platform.openai.com/docs/guides/batch) and
@@ -121,7 +119,9 @@ batch_chat_text <- function(
     wait = wait,
     ignore_hash = ignore_hash
   )
-  map_chr(chats, \(chat) if (is.null(chat)) NA else chat$last_turn()@text)
+  map_chr(chats, \(chat) {
+    if (is.null(chat)) NA_character_ else chat$last_turn()@text
+  })
 }
 
 #' @export
@@ -334,6 +334,12 @@ BatchJob <- R6::R6Class(
     },
 
     result_turns = function() {
+      if (length(self$results) != length(self$user_turns)) {
+        cli::cli_abort(c(
+          "Provider returned unexpected number of responses.",
+          x = "Expected {length(self$user_turns)}, got {length(self$results)}."
+        ))
+      }
       map2(self$results, self$user_turns, function(result, user_turn) {
         batch_result_turn(self$provider, result, has_type = !is.null(self$type))
       })

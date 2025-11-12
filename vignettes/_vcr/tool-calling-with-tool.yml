@@ -1,173 +1,269 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"How long
-        ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"text","text":"Neil
-        Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that
-        event occurred 54 years ago."}]},{"role":"user","content":[{"type":"text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Returns
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"output_text","text":"Neil
+        Armstrong touched down on the moon on July 20, 1969. As of 2023, that was
+        54 years ago."}]},{"role":"user","content":[{"type":"input_text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
-        zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}}]}'
+        zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 959041a83b297399-DFW
+      cf-ray: 999eee9dfb5b2fe8-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 02 Jul 2025 18:37:50 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '675'
+      date: Wed, 05 Nov 2025 19:59:33 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1789'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=lWHLj.HmEpBh9KwyDQ2vwYfFl.5gOiNQ3FLDydYQrIY-1751481470-1.0.1.1-Zvhvn0WbnC4VyL79kH2VEQYuaQ6Ohnf8JJuJ4i.FiK0Ftfc3eBjprbIoueE.t_GDnJjZ6N0UjX.qwoP2dg7v3pZ2W084V8o7iqu.dm6XvOs;
-        path=/; expires=Wed, 02-Jul-25 19:07:50 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=BuAJGCH.0Y62bqiYMpEYctYXOKMb.DxyYq80gHLZ0Ts-1762372773-1.0.1.1-F9NDV3wMbn15E8PCbbeq3odzqPii13EGINIsOVcePevaI956fbroKK5AhzVubGYdcwuQh0NcisCGgYsEP_iF0E_hCe0_AkIvWeNCJmiXZPk;
+        path=/; expires=Wed, 05-Nov-25 20:29:33 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=e6.2cAniIhJ90DyLfma1pVTOvWytBhI6VtdUWPfVnM4-1751481470826-0.0.1.1-604800000;
+      - _cfuvid=HC6Ra.fQnS_NCm1Aw1Oau_9oKQ3gliPkf4b1KAPaEYQ-1762372773395-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '693'
+      x-envoy-upstream-service-time: '1799'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999940'
+      x-ratelimit-remaining-tokens: '29999633'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6edf2c880c686d62ecec79b8e7499ca2
+      x-request-id: req_9fb52a35f5a54c7b868f94295a37d0c8
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-Bowd4S0M9PRLjvxmks46h36Xzj8ck",
-          "object": "chat.completion",
-          "created": 1751481470,
+          "id": "resp_03a8c37ecdd381e601690baca3a20c8190a4d1809fe46b7440",
+          "object": "response",
+          "created_at": 1762372771,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4o-2024-08-06",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": null,
-                "tool_calls": [
-                  {
-                    "id": "call_olBG8OUjyIj914iwNBjw35dv",
-                    "type": "function",
-                    "function": {
-                      "name": "get_current_time",
-                      "arguments": "{\"tz\":\"UTC\"}"
-                    }
-                  }
-                ],
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "tool_calls"
+              "id": "fc_03a8c37ecdd381e601690baca5278c81909e74f03d120da606",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{\"tz\":\"UTC\"}",
+              "call_id": "call_offOEwPWWwMQizBG8wdJzPkh",
+              "name": "get_current_time"
             }
           ],
-          "usage": {
-            "prompt_tokens": 158,
-            "completion_tokens": 15,
-            "total_tokens": 173,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_07871e2ad8"
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Returns the current time.",
+              "name": "get_current_time",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "tz": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Time zone to display the current time in. Defaults to `\"UTC\"`."
+                  }
+                },
+                "required": [
+                  "tz"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 150,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 16,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 166
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-02 18:37:50
+  recorded_at: 2025-11-05 19:59:33
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"How long
-        ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"text","text":"Neil
-        Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that
-        event occurred 54 years ago."}]},{"role":"user","content":[{"type":"text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","tool_calls":[{"id":"call_olBG8OUjyIj914iwNBjw35dv","function":{"name":"get_current_time","arguments":"{\"tz\":[\"UTC\"]}"},"type":"function"}]},{"role":"tool","content":"2025-06-25
-        16:53:23 UTC","tool_call_id":"call_olBG8OUjyIj914iwNBjw35dv"}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","function":{"name":"get_current_time","description":"Returns
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"output_text","text":"Neil
+        Armstrong touched down on the moon on July 20, 1969. As of 2023, that was
+        54 years ago."}]},{"role":"user","content":[{"type":"input_text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"function_call","call_id":"fc_03a8c37ecdd381e601690baca5278c81909e74f03d120da606","name":"get_current_time","arguments":"{\"tz\":[\"UTC\"]}"},{"type":"function_call_output","call_id":"fc_03a8c37ecdd381e601690baca5278c81909e74f03d120da606","output":"2025-06-25
+        16:53:23 UTC"}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
-        zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}}]}'
+        zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 959041b9bf0a7399-DFW
+      cf-ray: 999eeeaaecdd2fe8-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 02 Jul 2025 18:37:55 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1830'
+      date: Wed, 05 Nov 2025 19:59:35 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1576'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=OpHdoCCBXdBttFZJn0m1tCv3NWXWhutkI.NN8hKflGE-1751481475-1.0.1.1-wbVKcosbkpEoHxnnSHLEndNk7GVZbhlSPl80_qmvoYeAkK4i0sOAnVYsBhmeIKhXKdl57y8el5der6R2maB3XEI34PndtY1DuLq.RTG0t8Q;
-        path=/; expires=Wed, 02-Jul-25 19:07:55 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=nsO8xocUij81xRIgOrOLvsYrx.53.RRdClrY96sOAJQ-1762372775-1.0.1.1-3Iw6c6gXzY4R9roJc1DgjBy1H7ivO3YFfWTOBlvXVy6IsDXvl2v90RRBoEpFr6X.FpDa4A.PEy1iUorLKBvchrvRQNO9lMkfgoowCjaeaMM;
+        path=/; expires=Wed, 05-Nov-25 20:29:35 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=qcfXSe6HzsGCy2Mp4uCjljoonphmzIGJjE6EywbHbjk-1751481475251-0.0.1.1-604800000;
+      - _cfuvid=aCx4DYeiGnXIc2i1FJ.nJ_1E6IqKWDeeh54ze3xZmDk-1762372775237-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '3760'
+      x-envoy-upstream-service-time: '1582'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999932'
+      x-ratelimit-remaining-tokens: '29999597'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_fec02247ab3b7f22ebb7e011f4789721
+      x-request-id: req_2f42a135fa50452eb404b34054e30ec6
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-Bowd7XWEJ72sgWDTvpEEQvQ9JdqwI",
-          "object": "chat.completion",
-          "created": 1751481473,
+          "id": "resp_0d43fef7b272552901690baca5ab9c81948acefe774c3465e2",
+          "object": "response",
+          "created_at": 1762372773,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4o-2024-08-06",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "Neil Armstrong touched down on the Moon on July 20, 1969. As of June 25, 2025, that event occurred 55 years and approximately 11 months ago.",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_0d43fef7b272552901690baca6a2e88194a73753c4a1fe7d58",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Neil Armstrong touched down on the moon on July 20, 1969. As of June 2025, that was almost 56 years ago."
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 196,
-            "completion_tokens": 40,
-            "total_tokens": 236,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_07871e2ad8"
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Returns the current time.",
+              "name": "get_current_time",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "tz": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Time zone to display the current time in. Defaults to `\"UTC\"`."
+                  }
+                },
+                "required": [
+                  "tz"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 186,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 33,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 219
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-02 18:37:55
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-11-05 19:59:35
+recorded_with: VCR-vcr/2.0.0

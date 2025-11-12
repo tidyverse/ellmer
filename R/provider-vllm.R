@@ -1,4 +1,4 @@
-#' @include provider-openai.R
+#' @include provider-openai-compatible.R
 #' @include content.R
 NULL
 
@@ -8,6 +8,8 @@ NULL
 #' [vLLM](https://docs.vllm.ai/en/latest/) is an open source library that
 #' provides an efficient and convenient LLMs model server. You can use
 #' `chat_vllm()` to connect to endpoints powered by vLLM.
+#'
+#' Uses OpenAI compatible API via `chat_openai_compatible()`.
 #'
 #' @inheritParams chat_openai
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
@@ -77,7 +79,7 @@ chat_vllm_test <- function(..., echo = "none") {
 
 ProviderVllm <- new_class(
   "ProviderVllm",
-  parent = ProviderOpenAI,
+  parent = ProviderOpenAICompatible,
   package = "ellmer",
 )
 

@@ -1,4 +1,4 @@
-#' @include provider-openai.R
+#' @include provider-openai-compatible.R
 NULL
 
 #' Chat with a model hosted on perplexity.ai
@@ -11,7 +11,7 @@ NULL
 #' information that may not have been available when the model was
 #' trained.
 #'
-#' This function is a lightweight wrapper around [chat_openai()] with
+#' This function is a Uses OpenAI compatible API via `chat_openai_compatible()` with
 #' the defaults tweaked for Perplexity AI.
 #'
 #' @export
@@ -64,7 +64,7 @@ chat_perplexity <- function(
 
 ProviderPerplexity <- new_class(
   "ProviderPerplexity",
-  parent = ProviderOpenAI,
+  parent = ProviderOpenAICompatible,
 )
 
 method(chat_params, ProviderPerplexity) <- function(provider, params) {
