@@ -769,7 +769,7 @@ Chat <- R6::R6Class(
       tool_turn <- tool_results_as_turn(tool_results)
       private$.turns[[length(private$.turns) + 1]] <- tool_turn
 
-      invisible(tool_results)
+      invisible()
     }
   )
 )
