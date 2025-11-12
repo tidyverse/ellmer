@@ -19,15 +19,15 @@ chat_perplexity(
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
+\item{base_url}{The base URL to the endpoint; the default is OpenAI's
+public API.}
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
-\item{credentials}{A function that returns the API key to use for authentication.
+\item{credentials}{Override the default credentials. You generally should not need this argument; instead set the \code{PERPLEXITY_API_KEY} environment variable. The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.
 
-You generally should not need this argument; instead set the \code{PERPLEXITY_API_KEY} environment variable.
-The best place to set this is in \code{.Renviron},
-which you can easily edit by calling \code{usethis::edit_r_environ()}.}
+If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).}
 
 \item{model}{The model to use for the chat (defaults to "llama-3.1-sonar-small-128k-online").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
@@ -62,7 +62,7 @@ searching the web in real-time to help them answer questions with
 information that may not have been available when the model was
 trained.
 
-This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}} with
+This function is a Uses OpenAI compatible API via \code{chat_openai_compatible()} with
 the defaults tweaked for Perplexity AI.
 }
 \examples{
@@ -86,7 +86,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_portkey}()}
 }

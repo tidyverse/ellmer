@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","system":[{"type":"text","text":"Extract
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"Extract
         all characteristics of supplied character","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  The
         man is tall, with a beard and a scar on his left cheek. He has a deep voice
         and wears a black leather jacket.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"_structured_tool_call","description":"Extract
@@ -12,32 +12,32 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 16:14:03 GMT
+      date: Thu, 06 Nov 2025 14:55:47 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T16:14:02Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:55:46Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
       anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T16:14:03Z'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:55:47Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T16:14:00Z'
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:55:44Z'
+      retry-after: '14'
       anthropic-ratelimit-tokens-limit: '2400000'
       anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T16:14:02Z'
-      request-id: req_011CUZtkWrKHfjic6AdU1aDC
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:55:46Z'
+      request-id: req_011CUrq4Z678zLN83jRAzk7T
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '3357'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '3842'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995bb943ce5228e8-DFW
+      cf-ray: 99a56efa492f6326-DFW
     body:
-      string: '{"model":"claude-sonnet-4-20250514","id":"msg_01E8M4GuebcR5pNgQJBzgw6j","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01Kvda95WQTY2A5MkhRa3M5V","name":"_structured_tool_call","input":{"data":{"gender":"male","height":"tall","facial_hair":"beard","distinguishing_marks":"scar
-        on left cheek","voice":"deep voice","clothing":"black leather jacket"}}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":457,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":95,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 16:14:03
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01KnUUXvFUg8NP5rwcArQ52i","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01MAEkjaVxetJe3a8zJR9wP4","name":"_structured_tool_call","input":{"data":{"gender":"male","height":"tall","facial_hair":"beard","distinguishing_marks":"scar
+        on left cheek","voice":"deep voice","clothing":"black leather jacket"}}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":730,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":95,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:55:47
 recorded_with: VCR-vcr/2.0.0

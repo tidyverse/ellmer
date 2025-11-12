@@ -1,178 +1,270 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What
-        are Joe and Hadley''s favorite colors?"},{"type":"text","text":"Write ''Joe
-        ____ Hadley ____''. Use ''unknown'' if you don''t know."}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
+        terse."}]},{"role":"user","content":[{"type":"input_text","text":"What are
+        Joe and Hadley''s favorite colors?"}]},{"role":"user","content":[{"type":"input_text","text":"Write
+        ''Joe ____ Hadley ____''. Use ''unknown'' if you don''t know."}]}],"model":"gpt-4.1","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
-        name"}},"required":["user"],"additionalProperties":false}}}]}'
+        name"}},"required":["user"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95b7a86e39242e18-DFW
+      cf-ray: 999e005a5c6c6d84-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 07 Jul 2025 13:23:42 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '477'
+      date: Wed, 05 Nov 2025 17:16:53 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '772'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=tnHf1EJjUnGxL06twfPBnIEiONDSOMFaPdPtoTDxjmA-1751894622-1.0.1.1-Zp3K9jfatrws8aOco6okBhX1JRSqI.j3yoWC2iSzn0OSj3CMYkLpnkWeEdF8YivBcUqlu_ipgxC0xD1Pky5x7P8c2rFtf7J8AGoG99sXLSc;
-        path=/; expires=Mon, 07-Jul-25 13:53:42 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=cczb_gAa1vp.lTAFHbhbcgjZOP2S9Ekl34ACVHe6MOM-1762363013-1.0.1.1-BG0jsH6bGfrTCt1KfC5s5Kax0o2csqRGXbTp069klO8cao0tyPg96NO1y010Keyn9T4Lm34zDfGMzvYeM2uP0OwpP5bGoJvynLNvq9gJFuY;
+        path=/; expires=Wed, 05-Nov-25 17:46:53 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=uI5wNkD690ptSvZ_PCD421tHHSqNQaDLIIQGpPB8aTI-1751894622954-0.0.1.1-604800000;
+      - _cfuvid=BsK3pc_8T_7v.jfmdUUHMhNMfJ1s1demprDkBZ9Rvxs-1762363013036-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '481'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999968'
-      x-ratelimit-reset-requests: 2ms
+      x-envoy-upstream-service-time: '777'
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '30000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '29999701'
+      x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_08e6d7e8d9bc1907609dfa4afafd7b5d
+      x-request-id: req_bff701c211da4369a13b55cb536676b3
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-Bqg6otUgnu2uamBcDjI5s80Iz0iKV",
-          "object": "chat.completion",
-          "created": 1751894622,
-          "model": "gpt-4.1-nano-2025-04-14",
-          "choices": [
+          "id": "resp_05358dc6826d623701690b868442c0819085ec4f99fd459ba4",
+          "object": "response",
+          "created_at": 1762363012,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-2025-04-14",
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": null,
-                "tool_calls": [
-                  {
-                    "id": "call_N6oKGEAH8w2dFE0aTMnHXGCr",
-                    "type": "function",
-                    "function": {
-                      "name": "user_favorite_color",
-                      "arguments": "{\"user\": \"Joe\"}"
-                    }
-                  },
-                  {
-                    "id": "call_PDBfG6XJWry22ll9rNKkFqmI",
-                    "type": "function",
-                    "function": {
-                      "name": "user_favorite_color",
-                      "arguments": "{\"user\": \"Hadley\"}"
-                    }
-                  }
-                ],
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "tool_calls"
+              "id": "fc_05358dc6826d623701690b8684e3f08190860b5f195841efb6",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{\"user\":\"Joe\"}",
+              "call_id": "call_mtp4AhVVnw7JzEcGhGea7ALh",
+              "name": "user_favorite_color"
+            },
+            {
+              "id": "fc_05358dc6826d623701690b8684f250819086ef39db483662c8",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{\"user\":\"Hadley\"}",
+              "call_id": "call_hXTseOZQqcy5RyX0SZdUFqZQ",
+              "name": "user_favorite_color"
             }
           ],
-          "usage": {
-            "prompt_tokens": 80,
-            "completion_tokens": 49,
-            "total_tokens": 129,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "store": false,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Find out a user's favorite color",
+              "name": "user_favorite_color",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "user": {
+                    "type": "string",
+                    "description": "User's name"
+                  }
+                },
+                "required": [
+                  "user"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 41,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 50,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 91
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-07 13:23:42
+  recorded_at: 2025-11-05 17:16:53
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"system","content":"Be terse."},{"role":"user","content":[{"type":"text","text":"What
-        are Joe and Hadley''s favorite colors?"},{"type":"text","text":"Write ''Joe
-        ____ Hadley ____''. Use ''unknown'' if you don''t know."}]},{"role":"assistant","tool_calls":[{"id":"call_N6oKGEAH8w2dFE0aTMnHXGCr","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Joe\"]}"},"type":"function"},{"id":"call_PDBfG6XJWry22ll9rNKkFqmI","function":{"name":"user_favorite_color","arguments":"{\"user\":[\"Hadley\"]}"},"type":"function"}]},{"role":"tool","content":"Tool
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
+        terse."}]},{"role":"user","content":[{"type":"input_text","text":"What are
+        Joe and Hadley''s favorite colors?"}]},{"role":"user","content":[{"type":"input_text","text":"Write
+        ''Joe ____ Hadley ____''. Use ''unknown'' if you don''t know."}]},{"type":"function_call","call_id":"fc_05358dc6826d623701690b8684e3f08190860b5f195841efb6","name":"user_favorite_color","arguments":"{\"user\":[\"Joe\"]}"},{"type":"function_call","call_id":"fc_05358dc6826d623701690b8684f250819086ef39db483662c8","name":"user_favorite_color","arguments":"{\"user\":[\"Hadley\"]}"},{"type":"function_call_output","call_id":"fc_05358dc6826d623701690b8684e3f08190860b5f195841efb6","output":"Tool
         calling failed with error Tool call rejected. The user has chosen to disallow
-        the tool call.","tool_call_id":"call_N6oKGEAH8w2dFE0aTMnHXGCr"},{"role":"tool","content":"red","tool_call_id":"call_PDBfG6XJWry22ll9rNKkFqmI"}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"user_favorite_color","description":"Find
+        the tool call."},{"type":"function_call_output","call_id":"fc_05358dc6826d623701690b8684f250819086ef39db483662c8","output":"red"}],"model":"gpt-4.1","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
-        name"}},"required":["user"],"additionalProperties":false}}}]}'
+        name"}},"required":["user"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 95b7a8726d812e18-DFW
+      cf-ray: 999e006069e86d84-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Mon, 07 Jul 2025 13:23:43 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '213'
+      date: Wed, 05 Nov 2025 17:16:55 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1986'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=GBwCSWgZ4aklOr3QeyBnvh.EhxF4X8nXuzfdgyDJk6g-1751894623-1.0.1.1-4BhoCdHMqBwg30ioEGqsedLo2fwor4jJ6EofC7PAX62hGELbuDw1Yn6X26CRVkHskhtOaINiIBe2UvWZmcx3kpRIw8Oiifvvs0NQK8OBTh0;
-        path=/; expires=Mon, 07-Jul-25 13:53:43 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=Bu6yJZRaJZKWazt66Rl55el1nm.JjFWI_teI7YVO5dI-1762363015-1.0.1.1-1ijppaNW6HRELTmhHHiwKsSoJiswsN7oYar1tCtUMLZM69YzXkKH5APJb9MU0.G_V.Y8oCIFWS58X7bRq8fRiyGjtHJRORL3EJHufn_HmGE;
+        path=/; expires=Wed, 05-Nov-25 17:46:55 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=eJwwBnOzxi9or6VqbL1lQBehiDMlcyizpuVsjUHrLaE-1751894623381-0.0.1.1-604800000;
+      - _cfuvid=shXZLNh4p66jANYlU.eadUBUgit9SHscnkYBwemvrgQ-1762363015274-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '217'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999940'
-      x-ratelimit-reset-requests: 2ms
+      x-envoy-upstream-service-time: '1993'
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '30000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '29999629'
+      x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_c9a9dc29fc7601693dde838b074defc6
+      x-request-id: req_3986889eabf84b20a2b926a4493ce950
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-Bqg6pbXjHiDQ54yj1XBTyQMM6IU8c",
-          "object": "chat.completion",
-          "created": 1751894623,
-          "model": "gpt-4.1-nano-2025-04-14",
-          "choices": [
+          "id": "resp_029b610e06c988fb01690b868540488196bc779f4c637bf4ff",
+          "object": "response",
+          "created_at": 1762363013,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-2025-04-14",
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "Joe unknown Hadley red",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_029b610e06c988fb01690b86871cd08196ae0f4330b9a3dc53",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Joe unknown Hadley red"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 165,
-            "completion_tokens": 6,
-            "total_tokens": 171,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_38343a2f8f"
+          "store": false,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Find out a user's favorite color",
+              "name": "user_favorite_color",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "user": {
+                    "type": "string",
+                    "description": "User's name"
+                  }
+                },
+                "required": [
+                  "user"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 154,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 7,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 161
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-07 13:23:43
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-11-05 17:16:55
+recorded_with: VCR-vcr/2.0.0

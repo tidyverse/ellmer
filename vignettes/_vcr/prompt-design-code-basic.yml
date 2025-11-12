@@ -3,63 +3,54 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
+      string: '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
         the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 16:14:42 GMT
+      date: Thu, 06 Nov 2025 14:54:59 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T16:14:31Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:54:52Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
-      anthropic-ratelimit-output-tokens-remaining: '399000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T16:14:42Z'
+      anthropic-ratelimit-output-tokens-remaining: '400000'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:54:59Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T16:14:30Z'
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:54:50Z'
+      retry-after: '8'
       anthropic-ratelimit-tokens-limit: '2400000'
-      anthropic-ratelimit-tokens-remaining: '2399000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T16:14:31Z'
-      request-id: req_011CUZtnhyMdnCJnbAAxRwmX
+      anthropic-ratelimit-tokens-remaining: '2400000'
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:54:52Z'
+      request-id: req_011CUrpzetVwdfDV6e7A456d
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '12442'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '8374'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995bb9fd99c323b8-DFW
+      cf-ray: 99a56dafbfe3c0c0-DFW
     body:
-      string: '{"model":"claude-sonnet-4-20250514","id":"msg_012219UxCkWPFd7qqSe6JC9k","type":"message","role":"assistant","content":[{"type":"text","text":"Here
-        are several ways to compute the mean and median of variables a through z,
-        grouped by age and sex, depending on the tool you''re using:\n\n## Python
-        (pandas)\n\n```python\nimport pandas as pd\nimport numpy as np\n\n# Assuming
-        your data is in a DataFrame called ''df''\n# Variables a-z plus age and sex
-        columns\n\n# Method 1: Select variables a-z explicitly\nvars_a_to_z = [chr(i)
-        for i in range(ord(''a''), ord(''z'') + 1)]\nresult = df.groupby([''age'',
-        ''sex''])[vars_a_to_z].agg([''mean'', ''median''])\n\n# Method 2: If a-z are
-        the only non-grouping variables\nresult = df.groupby([''age'', ''sex'']).agg([''mean'',
-        ''median''])\n\nprint(result)\n```\n\n## R\n\n```r\nlibrary(dplyr)\n\n# Method
-        1: Using dplyr\nresult <- df %>%\n  group_by(age, sex) %>%\n  summarise(across(a:z,
-        list(mean = mean, median = median), .names = \"{.col}_{.fn}\"))\n\n# Method
-        2: Using base R aggregate\n# For mean\nmeans <- aggregate(df[, letters], by
-        = list(age = df$age, sex = df$sex), FUN = mean)\n# For median  \nmedians <-
-        aggregate(df[, letters], by = list(age = df$age, sex = df$sex), FUN = median)\n```\n\n##
-        SQL\n\n```sql\nSELECT \n  age,\n  sex,\n  AVG(a) as mean_a, AVG(b) as mean_b,
-        ..., AVG(z) as mean_z,\n  PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY a) as
-        median_a,\n  PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY b) as median_b,\n  ...\n  PERCENTILE_CONT(0.5)
-        WITHIN GROUP (ORDER BY z) as median_z\nFROM your_table\nGROUP BY age, sex;\n```\n\n##
-        Excel/Google Sheets\n\n1. Create a pivot table with age and sex as row labels\n2.
-        Add variables a-z as values\n3. Change value field settings to show both average
-        and median for each variable\n\n## SAS\n\n```sas\nproc means data=your_dataset
-        mean median;\n    class age sex;\n    var a--z;  /* Variables from a to z
-        */\nrun;\n```\n\n## SPSS\n\n```spss\nMEANS TABLES=a TO z BY age BY sex\n  /CELLS=MEAN
-        MEDIAN.\n```\n\nThe pandas solution is probably the most flexible if you''re
-        working with Python, as it handles the variable selection automatically and
-        produces a clean, multi-level indexed result."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":45,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":666,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 16:14:42
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01QXJgFPo2Zgm2Mmbdqw7Bmk","type":"message","role":"assistant","content":[{"type":"text","text":"#
+        Computing Mean and Median by Groups\n\nHere are several approaches depending
+        on your tool:\n\n## **R (tidyverse)**\n```r\nlibrary(dplyr)\n\ndf %>%\n  group_by(age,
+        sex) %>%\n  summarise(across(a:z, \n                   list(mean = ~mean(.,
+        na.rm = TRUE),\n                        median = ~median(., na.rm = TRUE)),\n                   .names
+        = \"{.col}_{.fn}\"))\n```\n\n## **Python (pandas)**\n```python\nimport pandas
+        as pd\n\ndf.groupby([''age'', ''sex'']).agg(\n    {col: [''mean'', ''median'']
+        for col in df.columns if col not in [''age'', ''sex'']}\n)\n```\n\nOr more
+        explicitly for columns a-z:\n```python\ncols = [chr(i) for i in range(ord(''a''),
+        ord(''z'')+1)]\ndf.groupby([''age'', ''sex''])[cols].agg([''mean'', ''median''])\n```\n\n##
+        **SQL**\n```sql\nSELECT \n  age, \n  sex,\n  AVG(a) as a_mean, PERCENTILE_CONT(0.5)
+        WITHIN GROUP (ORDER BY a) as a_median,\n  AVG(b) as b_mean, PERCENTILE_CONT(0.5)
+        WITHIN GROUP (ORDER BY b) as b_median,\n  -- ... repeat for c through z\nFROM
+        table\nGROUP BY age, sex\n```\n\n## **Base R**\n```r\naggregate(. ~ age +
+        sex, \n          data = df, \n          FUN = function(x) c(mean = mean(x,
+        na.rm = TRUE), \n                              median = median(x, na.rm =
+        TRUE)))\n```\n\nWhich approach works best for you depends on your data format
+        and preferred language!"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":45,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":440,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:54:59
 recorded_with: VCR-vcr/2.0.0

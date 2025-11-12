@@ -1,81 +1,156 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"The new
-        quantum computing breakthrough could revolutionize the tech industry."}]}],"model":"gpt-4.1","stream":false,"response_format":{"type":"json_schema","json_schema":{"name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"Array
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"The
+        new quantum computing breakthrough could revolutionize the tech industry."}]}],"model":"gpt-4.1","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"Array
         of classification results. The scores should sum to 1.","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
         category name","enum":["Politics","Sports","Technology","Entertainment","Business","Other"]},"score":{"type":"number","description":"The
-        classification score for the category, ranging from 0.0 to 1.0."}},"required":["name","score"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}}}'
+        classification score for the category, ranging from 0.0 to 1.0."}},"required":["name","score"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 96125b5b1ed1511a-MSP
+      cf-ray: 999eee4569d43458-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 18 Jul 2025 13:34:30 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '876'
+      date: Wed, 05 Nov 2025 19:59:20 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '3124'
       openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=d7fJLIF_EXeaebC8oCGT4m.KFHLxEejPyB5NYqsyq3g-1752845670-1.0.1.1-G0nHajr3j4xjWHXLvPEAFdeN2sgHf6XtZM8QUlaDjSamRfBqiiJ2DiyFI3o5ldp51eoSwwL5DRSy3Efe3jmhTYL1mRr0h_GJ2na2OYacLio;
-        path=/; expires=Fri, 18-Jul-25 14:04:30 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=z2TjS1lprBktFJrlA9RRupafexCBENYQV.wwp6AfYe4-1762372760-1.0.1.1-XQ9ItxK496ad8KIbAVMIZhMjaqnHs35D7iCBCXmXSaHpPi9sX9IZhgLTWDeljJDWT7xYB6oUruxwDqycelXsz0fzNqDB7XrJqdohuPjQ8FU;
+        path=/; expires=Wed, 05-Nov-25 20:29:20 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=2.mwGuvDOuSVQV3QKkB4rX3LRF_ITrxXzbVYK.p2elY-1752845670579-0.0.1.1-604800000;
+      - _cfuvid=3QxH1ruBisQK7KZqeWoRGF8RY6vuiT8B2vdr.s84SJU-1762372760550-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '884'
+      x-envoy-upstream-service-time: '3132'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999978'
+      x-ratelimit-remaining-tokens: '29999856'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_da4d36d9d05f64ce6ad176450780c1be
+      x-request-id: req_599c8052c8854b46a28327b812dc682d
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-BufWH4n9FCNGs1i5MqQxxxhJGci3I",
-          "object": "chat.completion",
-          "created": 1752845669,
+          "id": "resp_0ff312bb3aa56c7101690bac956e9081949dcb16975a3c6a1b",
+          "object": "response",
+          "created_at": 1762372757,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "{\"wrapper\":[{\"name\":\"Technology\",\"score\":0.95},{\"name\":\"Business\",\"score\":0.03},{\"name\":\"Other\",\"score\":0.02}]}",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_0ff312bb3aa56c7101690bac96cb388194ad77ccf3ab26b2ea",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\n  \"wrapper\": [\n    {\n      \"name\": \"Technology\",\n      \"score\": 0.95\n    },\n    {\n      \"name\": \"Business\",\n      \"score\": 0.04\n    },\n    {\n      \"name\": \"Other\",\n      \"score\": 0.01\n    }\n  ]\n}"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 132,
-            "completion_tokens": 35,
-            "total_tokens": 167,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": null
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "description": null,
+              "name": "structured_data",
+              "schema": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "wrapper": {
+                    "type": "array",
+                    "description": "Array of classification results. The scores should sum to 1.",
+                    "items": {
+                      "type": "object",
+                      "description": "",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "The category name",
+                          "enum": [
+                            "Politics",
+                            "Sports",
+                            "Technology",
+                            "Entertainment",
+                            "Business",
+                            "Other"
+                          ]
+                        },
+                        "score": {
+                          "type": "number",
+                          "description": "The classification score for the category, ranging from 0.0 to 1.0."
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "score"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "wrapper"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 125,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 70,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 195
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-07-18 13:34:30
-recorded_with: VCR-vcr/1.7.1.93
+  recorded_at: 2025-11-05 19:59:20
+recorded_with: VCR-vcr/2.0.0

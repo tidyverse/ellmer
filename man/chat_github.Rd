@@ -26,15 +26,15 @@ models_github(
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
+\item{base_url}{The base URL to the endpoint; the default is OpenAI's
+public API.}
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
-\item{credentials}{A function that returns the API key to use for authentication.
+\item{credentials}{Override the default credentials. You generally should not need this argument; instead set the \code{GITHUB_PAT} environment variable. The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.
 
-You generally should not need this argument; instead set the \code{GITHUB_PAT} environment variable.
-The best place to set this is in \code{.Renviron},
-which you can easily edit by calling \code{usethis::edit_r_environ()}.}
+If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).}
 
 \item{model}{The model to use for the chat (defaults to "gpt-4o").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
@@ -93,7 +93,7 @@ Other chatbots:
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

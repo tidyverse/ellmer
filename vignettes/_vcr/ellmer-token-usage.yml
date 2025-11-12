@@ -1,77 +1,109 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"Who created
-        R?"}]}],"model":"gpt-4.1","stream":false}'
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Who
+        created R?"}]}],"model":"gpt-4.1","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9564f962f9d54684-DFW
+      cf-ray: 999eeb9ecacff0a6-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 27 Jun 2025 12:33:42 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1367'
+      date: Wed, 05 Nov 2025 19:57:32 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '2893'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=k3RuZRiPn5JiHB8ZPj63obB3K5ZfoHKb.ztqilT3ppk-1751027622-1.0.1.1-SrPqO33HBlKyrYFOuDw7ASawo8_rcltqXHYoDzNt3TCG.vXv3mX_UmSrXL5dmD9tu6wNnC9kmR01K.kbS.yXgLvJreSXRr091aLNSToHDvs;
-        path=/; expires=Fri, 27-Jun-25 13:03:42 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=VgRaA2wQ3Sbb2AsGh4Oc0UUxoQKUfKug1DUgXT4FBiQ-1762372652-1.0.1.1-sUAOpTJnz8KvsbvJLAtMwYTpM0IZY97k2g_UZm8OVzhaHxNdav_kUM06.rE0lDcyWXkzPeNhqRNNJ6VnpivGgehi2o_MlTCakDI.1IuzIGs;
+        path=/; expires=Wed, 05-Nov-25 20:27:32 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=LkRvBz7b9ZStMVNZK6EEVl29rc9DJcLjuXTlGLApe3E-1751027622476-0.0.1.1-604800000;
+      - _cfuvid=uAoEoHoC0Now4fD_SGYrIf_2QYoOX4gfq7p7QGDKvno-1762372652002-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1372'
+      x-envoy-upstream-service-time: '3179'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999994'
+      x-ratelimit-remaining-tokens: '29999970'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_f58f7a8b0facaf969d74382274440bee
+      x-request-id: req_d11f7e17c1154088a3276ab957525cae
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-Bn2YvNlEOwxRZpo6x3iY1xD5HZxmh",
-          "object": "chat.completion",
-          "created": 1751027621,
+          "id": "resp_004384686d57128c01690bac291e5c8195aebc35bf453f14dc",
+          "object": "response",
+          "created_at": 1762372649,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4.1-2025-04-14",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "R was originally created by **Ross Ihaka** and **Robert Gentleman** at the University of Auckland, New Zealand, in the early 1990s. They began developing R as a free, open-source implementation of the S programming language for statistical computing and graphics. The project quickly grew, and today it is maintained by the R Core Team and the contributions of many users worldwide.",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_004384686d57128c01690bac2a1df88195b44b771976acfd96",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "**R** is a programming language and software environment for statistical computing and graphics. It was created by **Ross Ihaka and Robert Gentleman** at the University of Auckland, New Zealand, in the early 1990s. The name \"R\" is partly derived from the first letters of their first names (Ross and Robert), and it is also a play on the name of the S programming language, which R was designed to improve upon and be compatible with. Today, R is maintained by the **R Core Team** and the community."
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 11,
-            "completion_tokens": 77,
-            "total_tokens": 88,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_51e1070cf2"
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 11,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 110,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 121
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-06-27 12:33:42
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-11-05 19:57:32
+recorded_with: VCR-vcr/2.0.0

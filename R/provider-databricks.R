@@ -5,6 +5,8 @@
 #' models](https://docs.databricks.com/en/machine-learning/model-serving/score-foundation-models.html)
 #' and can also serve as a gateway for external models hosted by a third party.
 #'
+#' Built on top of [chat_openai_compatible()].
+#'
 #' ## Authentication
 #'
 #' `chat_databricks()` picks up on ambient Databricks credentials for a subset
@@ -79,7 +81,7 @@ chat_databricks <- function(
 
 ProviderDatabricks <- new_class(
   "ProviderDatabricks",
-  parent = ProviderOpenAI
+  parent = ProviderOpenAICompatible
 )
 
 method(base_request, ProviderDatabricks) <- function(provider) {
@@ -99,7 +101,7 @@ method(chat_body, ProviderDatabricks) <- function(
   type = NULL
 ) {
   body <- chat_body(
-    super(provider, ProviderOpenAI),
+    super(provider, ProviderOpenAICompatible),
     stream = stream,
     turns = turns,
     tools = tools,

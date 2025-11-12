@@ -18,3 +18,4 @@ _cache/
 ^revdep$
 ^\.claude$
 ^CLAUDE\.md$
+^plans$

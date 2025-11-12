@@ -1,10 +1,12 @@
-#' @include provider-openai.R
+#' @include provider-openai-compatible.R
 NULL
 
 #' Chat with a model hosted on DeepSeek
 #'
 #' @description
 #' Sign up at <https://platform.deepseek.com>.
+#'
+#' Built on top of [chat_openai_compatible()].
 #'
 #' ## Known limitations
 #'
@@ -59,7 +61,10 @@ chat_deepseek <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-ProviderDeepSeek <- new_class("ProviderDeepSeek", parent = ProviderOpenAI)
+ProviderDeepSeek <- new_class(
+  "ProviderDeepSeek",
+  parent = ProviderOpenAICompatible
+)
 
 method(chat_params, ProviderDeepSeek) <- function(provider, params) {
   # https://platform.deepseek.com/api-docs/api/create-chat-completion
@@ -115,7 +120,7 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
       tool_calls = as_json(provider, tools, ...)
     )))
   } else {
-    as_json(super(provider, ProviderOpenAI), x, ...)
+    as_json(super(provider, ProviderOpenAICompatible), x, ...)
   }
 }
 

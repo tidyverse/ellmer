@@ -92,7 +92,7 @@ chat_portkey_test <- function(
 
 ProviderPortkeyAI <- new_class(
   "ProviderPortkeyAI",
-  parent = ProviderOpenAI
+  parent = ProviderOpenAICompatible
 )
 
 portkey_key <- function() {

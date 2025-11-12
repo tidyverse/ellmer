@@ -1,77 +1,109 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://api.openai.com/v1/chat/completions
+    uri: https://api.openai.com/v1/responses
     body:
-      string: '{"messages":[{"role":"user","content":[{"type":"text","text":"How long
-        ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false}'
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9564fcab1f266bf2-DFW
+      cf-ray: 999eee8fe94a2fe8-DFW
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 27 Jun 2025 12:35:55 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1207'
+      date: Wed, 05 Nov 2025 19:59:31 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '1691'
+      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=J.67ci5o5vXqr9AnZ4Yj2q24Ruv9bK.j6XET24UDL3k-1751027755-1.0.1.1-W5DJVTRwhKS5v8720bWev93b0cJ6IaOICUslnKcQmGkdxrRN4Jnu_ZGzUt.36Gf47ecgIicJFY3LsEEsB5SY1gR9EeQzKuDN60F5yN8m3sM;
-        path=/; expires=Fri, 27-Jun-25 13:05:55 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=v0.9Wx5upb10ep0PnQ79rJuT3COC2mbESSKp9m8H2iM-1762372771-1.0.1.1-hkrGyAaMLD1ih9J1w3zUgL_vRO6.ZkJ09Jm1wZ.F_YBXm5l6cn9c.T4iXxennBh2pO2k7pTuQMReKyX3GL0wwJmkCYhQ4wZ_3k06i9mDFc8;
+        path=/; expires=Wed, 05-Nov-25 20:29:31 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=GWM9CpmZqMXPOZEB6QMdObM8POPy68KVL2d_d59vDig-1751027755994-0.0.1.1-604800000;
+      - _cfuvid=G7dEh0ST_iYm9iq3K6LaP7z6oMYmmLnKEf.5kQ2Yn8w-1762372771028-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1211'
+      x-envoy-upstream-service-time: '1704'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999984'
+      x-ratelimit-remaining-tokens: '29999962'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_e01c994ace4114de2728f24fa3e1b3e3
+      x-request-id: req_0446cae931f247988e16963f2e9653f4
     body:
-      string: |
+      string: |-
         {
-          "id": "chatcmpl-Bn2b4dSmLrsTcXNOCbnKM0a039Mqu",
-          "object": "chat.completion",
-          "created": 1751027754,
+          "id": "resp_0bfc118da9a1fe1b01690baca15b34819597ab8f622f999719",
+          "object": "response",
+          "created_at": 1762372769,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "error": null,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
           "model": "gpt-4o-2024-08-06",
-          "choices": [
+          "output": [
             {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "Neil Armstrong touched down on the Moon on July 20, 1969. As of October 2023, that event occurred 54 years ago.",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
+              "id": "msg_0bfc118da9a1fe1b01690baca271dc8195abda4a828cc7fd09",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, that was 54 years ago."
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "usage": {
-            "prompt_tokens": 19,
-            "completion_tokens": 31,
-            "total_tokens": 50,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
           },
+          "safety_identifier": null,
           "service_tier": "default",
-          "system_fingerprint": "fp_07871e2ad8"
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 19,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 30,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 49
+          },
+          "user": null,
+          "metadata": {}
         }
-  recorded_at: 2025-06-27 12:35:55
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2025-11-05 19:59:31
+recorded_with: VCR-vcr/2.0.0

@@ -73,12 +73,29 @@ test_that("token_usage() shows price if available", {
   expect_snapshot(token_usage())
 })
 
+# ellmer_dollars --------------------------------------------------------------
+
 test_that("price is formatted nicely", {
   expect_equal(format(dollars(NA)), "NA")
   expect_equal(format(dollars(0.0001)), "$0.00")
   expect_equal(format(dollars(c(10, 1))), c("$10.00", "$ 1.00"))
 })
 
+test_that("dollars looks good, including in data.frames", {
+  price <- dollars(1.234567)
+  expect_snapshot({
+    price
+    data.frame(price)
+  })
+})
+
+test_that("dollars class survives basic transforms", {
+  expect_equal(sum(dollars(c(1, 2))), dollars(3))
+
+  d <- dollars(c(1, 2, 3))
+  expect_equal(d[1:2], dollars(c(1, 2)))
+  expect_equal(d[[1]], dollars(1))
+})
 
 # Helpers ---------------------------------------------------------------------
 

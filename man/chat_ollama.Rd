@@ -22,7 +22,8 @@ models_ollama(base_url = "http://localhost:11434")
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the endpoint; the default uses OpenAI.}
+\item{base_url}{The base URL to the endpoint; the default is OpenAI's
+public API.}
 
 \item{model}{The model to use for the chat.
 Use \code{models_ollama()} to see all options.}
@@ -66,8 +67,7 @@ command line (e.g. with \verb{ollama pull llama3.1}) or within R using
 {\href{https://hauselin.github.io/ollama-r/}{ollamar}} (e.g.
 \code{ollamar::pull("llama3.1")}).
 
-This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}} with
-the defaults tweaked for ollama.
+Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 \subsection{Known limitations}{
 \itemize{
 \item Tool calling is not supported with streaming (i.e. when \code{echo} is
@@ -100,7 +100,7 @@ Other chatbots:
 \code{\link{chat_huggingface}()},
 \code{\link{chat_mistral}()},
 \code{\link{chat_openai}()},
-\code{\link{chat_openai_responses}()},
+\code{\link{chat_openai_compatible}()},
 \code{\link{chat_openrouter}()},
 \code{\link{chat_perplexity}()},
 \code{\link{chat_portkey}()}

@@ -1,13 +1,13 @@
 # tests use `chat_openai()` to verify environments flow through correctly
 
 test_that("api_key is deprecated", {
-  expect_snapshot(chat <- chat_openai_test(api_key = "abc"))
+  expect_snapshot(chat <- chat_openai_compatible_test(api_key = "abc"))
   expect_equal(chat$get_provider()@credentials(), "Bearer abc")
 })
 
 test_that("errors if both credentials and api_key are provided", {
   expect_snapshot(
-    chat_openai_test(credentials = "abc", api_key = "def"),
+    chat_openai_compatible_test(credentials = "abc", api_key = "def"),
     error = TRUE
   )
 })

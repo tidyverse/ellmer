@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"\n  You
         are an expert R programmer who prefers data.table.\n  Just give me the code.
         I don''t want any explanation or sample data.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
@@ -11,40 +11,46 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 16:15:00 GMT
+      date: Thu, 06 Nov 2025 14:55:16 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T16:14:58Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:55:13Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
       anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T16:15:00Z'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:55:16Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T16:14:55Z'
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:55:11Z'
+      retry-after: '47'
       anthropic-ratelimit-tokens-limit: '2400000'
       anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T16:14:58Z'
-      request-id: req_011CUZtpbiNt28xfsmT16DxK
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:55:13Z'
+      request-id: req_011CUrq296uywZ44Rgfizu6b
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '5018'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '5228'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995bba9decd923b8-DFW
+      cf-ray: 99a56e2dca76c0c0-DFW
     body:
-      string: '{"model":"claude-sonnet-4-20250514","id":"msg_0154dNwx22s7K2MwrtYX7deJ","type":"message","role":"assistant","content":[{"type":"text","text":"```r\nlibrary(data.table)\n\ndt[,
-        lapply(.SD, function(x) list(mean = mean(x, na.rm = TRUE), \n                                  median
-        = median(x, na.rm = TRUE))), \n   by = .(age, sex), \n   .SDcols = letters]\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":78,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":80,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 16:15:00
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01XpA5QjEzcuEEQXz5PLnYRw","type":"message","role":"assistant","content":[{"type":"text","text":"```r\nlibrary(data.table)\n\ndt[,
+        lapply(.SD, function(x) list(mean = mean(x, na.rm = TRUE), \n                                   median
+        = median(x, na.rm = TRUE))), \n   by = .(age, sex), \n   .SDcols = letters]\n```\n\nIf
+        you want mean and median in separate columns:\n\n```r\nlibrary(data.table)\n\ndt[,
+        c(lapply(.SD, mean, na.rm = TRUE), \n       lapply(.SD, median, na.rm = TRUE)),
+        \n   by = .(age, sex), \n   .SDcols = letters]\n```\n\nOr with prefixes:\n\n```r\nlibrary(data.table)\n\nresult
+        <- dt[, c(\n  setNames(lapply(.SD, mean, na.rm = TRUE), paste0(\"mean_\",
+        letters)),\n  setNames(lapply(.SD, median, na.rm = TRUE), paste0(\"median_\",
+        letters))\n), by = .(age, sex), .SDcols = letters]\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":78,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":254,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:55:16
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"\n  You
         are an expert R programmer who prefers base R.\n  Just give me the code. I
         don''t want any explanation or sample data.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
@@ -52,34 +58,37 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 16:15:04 GMT
+      date: Thu, 06 Nov 2025 14:55:20 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T16:15:02Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:55:18Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
       anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T16:15:03Z'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:55:20Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T16:15:01Z'
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:55:16Z'
+      retry-after: '44'
       anthropic-ratelimit-tokens-limit: '2400000'
       anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T16:15:02Z'
-      request-id: req_011CUZtpz24g1BwWLgp5y3xa
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:55:18Z'
+      request-id: req_011CUrq2YRsATgZ5PNhwJAG7
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '3060'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '4421'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995bbabe9cd923b8-DFW
+      cf-ray: 99a56e4fed1fc0c0-DFW
     body:
-      string: '{"model":"claude-sonnet-4-20250514","id":"msg_01EU6pCi1iQeGVKBWsUcaScE","type":"message","role":"assistant","content":[{"type":"text","text":"```r\nresult
-        <- aggregate(. ~ age + sex, data = your_data[c(\"age\", \"sex\", letters)],
-        \n                   FUN = function(x) c(mean = mean(x, na.rm = TRUE), \n                                      median
-        = median(x, na.rm = TRUE)))\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":77,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":76,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 16:15:03
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01Hv8jWLQb3xdscAamwJD8qv","type":"message","role":"assistant","content":[{"type":"text","text":"```R\naggregate(.
+        ~ age + sex, data = your_data, FUN = function(x) c(mean = mean(x), median
+        = median(x)))\n```\n\nOr if you want separate columns for means and medians:\n\n```R\nmeans
+        <- aggregate(. ~ age + sex, data = your_data, FUN = mean)\nmedians <- aggregate(.
+        ~ age + sex, data = your_data, FUN = median)\ncolnames(means)[-(1:2)] <- paste0(colnames(means)[-(1:2)],
+        \"_mean\")\ncolnames(medians)[-(1:2)] <- paste0(colnames(medians)[-(1:2)],
+        \"_median\")\nmerge(means, medians, by = c(\"age\", \"sex\"))\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":77,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":183,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:55:21
 recorded_with: VCR-vcr/2.0.0

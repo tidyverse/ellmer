@@ -20,13 +20,13 @@ NULL
 #' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 #'
 #' @param profile AWS profile to use.
-#' @param model `r param_model("anthropic.claude-3-5-sonnet-20240620-v1:0", "models_aws_bedrock")`.
+#' @param model `r param_model("anthropic.claude-sonnet-4-5-20250929-v1:0", "models_aws_bedrock")`.
 #'
 #'   While ellmer provides a default model, there's no guarantee that you'll
 #'   have access to it, so you'll need to specify a model that you can.
 #'   If you're using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
 #'   you'll need to use the inference profile ID, e.g.
-#'   `model="us.anthropic.claude-3-5-sonnet-20240620-v1:0"`.
+#'   `model="us.anthropic.claude-sonnet-4-5-20250929-v1:0"`.
 #' @param params Common model parameters, usually created by [params()].
 #' @param api_args Named list of arbitrary extra arguments appended to the body
 #'   of every chat API call. Some useful arguments include:
@@ -123,7 +123,7 @@ provider_aws_bedrock <- function(
     base_url <- base_url(credentials$region)
   }
 
-  model <- set_default(model, "anthropic.claude-3-5-sonnet-20240620-v1:0")
+  model <- set_default(model, "anthropic.claude-sonnet-4-5-20250929-v1:0")
 
   ProviderAWSBedrock(
     name = "AWS/Bedrock",

@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-20250514","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"\n  You
         are an expert R programmer.\n  Just give me the code; no explanation in text.\n  Use
         the `.by` argument rather than `group_by()`.\n  dplyr 1.1.0 introduced per-operation
         grouping with the `.by` argument.\n  e.g., instead of:\n\n  transactions |>\n    group_by(company,
@@ -14,33 +14,33 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Tue, 28 Oct 2025 16:15:19 GMT
+      date: Thu, 06 Nov 2025 14:55:37 GMT
       content-type: application/json
       content-encoding: gzip
       anthropic-ratelimit-input-tokens-limit: '2000000'
       anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-10-28T16:15:18Z'
+      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:55:36Z'
       anthropic-ratelimit-output-tokens-limit: '400000'
       anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-10-28T16:15:19Z'
+      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:55:37Z'
       anthropic-ratelimit-requests-limit: '4000'
       anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-10-28T16:15:17Z'
+      anthropic-ratelimit-requests-reset: '2025-11-06T14:55:34Z'
+      retry-after: '26'
       anthropic-ratelimit-tokens-limit: '2400000'
       anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-10-28T16:15:18Z'
-      request-id: req_011CUZtrAXcQgEmAD3x1kZzU
+      anthropic-ratelimit-tokens-reset: '2025-11-06T14:55:36Z'
+      request-id: req_011CUrq3rc2v4CstKQYYRY6p
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '2428'
-      via: 1.1 google
+      x-envoy-upstream-service-time: '3083'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 995bbb22cd1223b8-DFW
+      cf-ray: 99a56ebf391bc0c0-DFW
     body:
-      string: '{"model":"claude-sonnet-4-20250514","id":"msg_01JsvCAKHnFtnevq1WMsoUnF","type":"message","role":"assistant","content":[{"type":"text","text":"```r\ndata
-        |>\n  summarise(\n    across(a:z, list(mean = mean, median = median), na.rm
-        = TRUE),\n    .by = c(age, sex)\n  )\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":182,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":54,"service_tier":"standard"}}'
-  recorded_at: 2025-10-28 16:15:19
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01JKy3BgjDAfZN7yuAjgdLkT","type":"message","role":"assistant","content":[{"type":"text","text":"\n```r\ndata
+        |>\n  summarize(\n    across(a:z, list(mean = mean, median = median), .names
+        = \"{.col}_{.fn}\"),\n    .by = c(age, sex)\n  )\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":182,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":62,"service_tier":"standard"}}'
+  recorded_at: 2025-11-06 14:55:37
 recorded_with: VCR-vcr/2.0.0

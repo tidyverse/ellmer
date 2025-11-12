@@ -55,9 +55,11 @@ NULL
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
-#' @param model `r param_model("claude-sonnet-4-20250514", "anthropic")`
+#' @param model `r param_model("claude-sonnet-4-5-20250929", "anthropic")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
+#' @param base_url The base URL to the endpoint; the default is Claude's
+#'   public API.
 #' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
 #'   Set to "none" to disable caching or "1h" to cache for one hour.
 #'
@@ -88,7 +90,7 @@ chat_anthropic <- function(
 ) {
   echo <- check_echo(echo)
 
-  model <- set_default(model, "claude-sonnet-4-20250514")
+  model <- set_default(model, "claude-sonnet-4-5-20250929")
   cache <- arg_match(cache)
 
   credentials <- as_credentials(
@@ -119,7 +121,7 @@ chat_claude <- chat_anthropic
 
 chat_anthropic_test <- function(
   ...,
-  model = "claude-3-5-sonnet-latest",
+  model = "claude-sonnet-4-5-20250929",
   params = NULL,
   echo = "none"
 ) {
@@ -428,6 +430,36 @@ method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(
   )
 }
 
+method(as_json, list(ProviderAnthropic, ContentUploaded)) <- function(
+  provider,
+  x
+) {
+  # https://docs.claude.com/en/docs/build-with-claude/files#using-a-file-in-messages
+  block_type <- switch(
+    x@mime_type,
+    "application/pdf" = "document",
+    "text/plain" = "document",
+    "image/jpeg" = "image",
+    "image/png" = "image",
+    "image/gif" = "image",
+    "image/webp" = "image",
+    "text/csv" = "container_upload",
+    "application/json" = "container_upload",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "container_upload",
+    "application/vnd.ms-excel" = "container_upload",
+    "text/xml" = "container_upload",
+    "application/xml" = "container_upload"
+  )
+
+  list(
+    type = block_type,
+    source = list(
+      type = "file",
+      file_id = x@uri
+    )
+  )
+}
+
 method(as_json, list(ProviderAnthropic, ContentImageRemote)) <- function(
   provider,
   x,
@@ -549,7 +581,7 @@ method(batch_submit, ProviderAnthropic) <- function(
 # https://docs.anthropic.com/en/api/retrieving-message-batches
 method(batch_poll, ProviderAnthropic) <- function(provider, batch) {
   req <- base_request(provider)
-  req <- req_url_path_append(req, "/messages/batches/", batch$id)
+  req <- req_url_path_append(req, "/messages/batches", batch$id)
   resp <- req_perform(req)
 
   resp_body_json(resp)
@@ -598,7 +630,7 @@ method(batch_result_turn, ProviderAnthropic) <- function(
 
 #' @export
 #' @rdname chat_anthropic
-models_anthropic <- function(
+models_claude <- function(
   base_url = "https://api.anthropic.com/v1",
   api_key = anthropic_key()
 ) {
@@ -628,6 +660,10 @@ models_anthropic <- function(
   df <- cbind(df, match_prices("Anthropic", df$id))
   df[order(-xtfrm(df$created_at)), ]
 }
+
+#' @export
+#' @rdname chat_anthropic
+models_anthropic <- models_claude
 
 # Helpers ----------------------------------------------------------------
 
