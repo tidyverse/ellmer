@@ -789,45 +789,26 @@ test_that("match_tools() matches tools in a turn to a list of tools", {
 # Dangling tool requests ------------------------------------------------------
 test_that("dangling tool requests are inserted into user message", {
   skip_if_not_installed("testthat", "3.3.0")
-
   local_mocked_r6_class(
     Chat,
     private = list(
-      chat_impl = generator_method(function(
-        self,
-        private,
-        user_turn,
-        stream = "none",
-        echo = "none"
-      ) {
-        self$add_turn(user_turn, AssistantTurn("Assistant response"))
+      chat_impl = generator_method(function(self, private, user_turn, ...) {
+        self$add_turn(
+          user_turn,
+          AssistantTurn("Assistant response", tokens = c(0, 0, 0))
+        )
       })
     )
   )
-  local_mocked_bindings(
-    log_turn = function(...) invisible()
-  )
-  withr::local_envvar(OPENAI_API_KEY = "boop")
-
-  chat <- Chat$new(chat_openai_test()$get_provider())
-  chat$register_tool(tool(
-    \() "2001-02-09",
-    name = "get_date",
-    description = "Get todays date"
-  ))
+  provider <- ProviderOpenAI("name", "model", "base_url")
+  chat <- Chat$new(provider)
 
   # Simulate a broken chat history with dangling tool request
-  tool_request <- ContentToolRequest(
-    id = "1",
-    name = "get_date",
-    arguments = list()
-  )
-
+  tool_request <- ContentToolRequest(id = "1", name = "get_date")
   chat$set_turns(list(
     UserTurn("What year is it today?"),
     AssistantTurn(list(tool_request))
   ))
-
   chat$chat("try again")
 
   turns <- chat$get_turns()
@@ -856,29 +837,12 @@ test_that("can resume chat after dangling tool requests", {
   ))
 
   # Simulate a broken chat history with dangling tool request
-  tool_request <- ContentToolRequest(
-    id = "1",
-    name = "get_date",
-    arguments = list()
-  )
-
+  tool_request <- ContentToolRequest(id = "1", name = "get_date")
   chat$set_turns(list(
     UserTurn("What year is it today?"),
     AssistantTurn(list(tool_request))
   ))
-  expect_match(chat$chat("try again"), "2001")
 
-  turns <- chat$get_turns()
-  expect_s3_class(turns[[3]], "ellmer::UserTurn")
-  # And UserTurn must contain a result that matches the request
-  expect_equal(
-    turns[[3]],
-    UserTurn(list(
-      ContentToolResult(
-        error = "Chat ended before the tool could be invoked.",
-        request = tool_request
-      ),
-      ContentText("try again")
-    ))
-  )
+  # resume chat and get answer, not error
+  expect_match(chat$chat("try again"), "2001")
 })
