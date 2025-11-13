@@ -193,9 +193,9 @@ Chat <- R6::R6Class(
     #'   `NULL`, then the value of `echo` set when the chat object was created
     #'   will be used.
     chat = function(..., echo = NULL) {
-      private$complete_dangling_tool_requests()
+      finish_tools <- private$complete_dangling_tool_requests()
 
-      turn <- user_turn(...)
+      turn <- user_turn(!!!finish_tools, ...)
       echo <- check_echo(echo %||% private$echo)
 
       # Returns a single turn (the final response from the assistant), even if
@@ -223,9 +223,9 @@ Chat <- R6::R6Class(
     #'   using the schema. For example, this will turn arrays of objects into
     #'   data frames and arrays of strings into a character vector.
     chat_structured = function(..., type, echo = "none", convert = TRUE) {
-      private$complete_dangling_tool_requests()
+      finish_tools <- private$complete_dangling_tool_requests()
 
-      turn <- user_turn(..., .check_empty = FALSE)
+      turn <- user_turn(!!!finish_tools, ..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
 
@@ -256,9 +256,9 @@ Chat <- R6::R6Class(
     #'   using the schema. For example, this will turn arrays of objects into
     #'   data frames and arrays of strings into a character vector.
     chat_structured_async = function(..., type, echo = "none", convert = TRUE) {
-      private$complete_dangling_tool_requests()
+      finish_tools <- private$complete_dangling_tool_requests()
 
-      turn <- user_turn(..., .check_empty = FALSE)
+      turn <- user_turn(!!!finish_tools, ..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
 
@@ -293,9 +293,9 @@ Chat <- R6::R6Class(
     #'   an interactive user interface. Concurrent mode is the default and is
     #'   best suited for automated scripts or non-interactive applications.
     chat_async = function(..., tool_mode = c("concurrent", "sequential")) {
-      private$complete_dangling_tool_requests()
+      finish_tools <- private$complete_dangling_tool_requests()
 
-      turn <- user_turn(...)
+      turn <- user_turn(!!!finish_tools, ...)
       tool_mode <- arg_match(tool_mode)
 
       # Returns a single turn (the final response from the assistant), even if
@@ -323,9 +323,9 @@ Chat <- R6::R6Class(
     #'   rich content types. When `stream = "content"`, `stream()` yields
     #'   [Content] objects.
     stream = function(..., stream = c("text", "content")) {
-      private$complete_dangling_tool_requests()
+      finish_tools <- private$complete_dangling_tool_requests()
 
-      turn <- user_turn(...)
+      turn <- user_turn(!!!finish_tools, ...)
       stream <- arg_match(stream)
       private$chat_impl(
         turn,
@@ -353,9 +353,9 @@ Chat <- R6::R6Class(
       tool_mode = c("concurrent", "sequential"),
       stream = c("text", "content")
     ) {
-      private$complete_dangling_tool_requests()
+      finish_tools <- private$complete_dangling_tool_requests()
 
-      turn <- user_turn(...)
+      turn <- user_turn(!!!finish_tools, ...)
       tool_mode <- arg_match(tool_mode)
       stream <- arg_match(stream)
       private$chat_impl_async(
@@ -751,31 +751,25 @@ Chat <- R6::R6Class(
 
     complete_dangling_tool_requests = function() {
       if (length(private$.turns) == 0) {
-        return(invisible())
+        return(NULL)
       }
 
       last_turn <- private$.turns[[length(private$.turns)]]
       if (last_turn@role != "assistant") {
-        return(invisible())
+        return(NULL)
       }
 
       tool_requests <- keep(last_turn@contents, is_tool_request)
       if (length(tool_requests) == 0) {
-        return(invisible())
+        return(NULL)
       }
 
-      tool_results <- lapply(tool_requests, function(req) {
+      lapply(tool_requests, function(req) {
         ContentToolResult(
           error = "Chat ended before the tool could be invoked.",
           request = req
         )
       })
-      self$add_turn(
-        tool_results_as_turn(tool_results),
-        AssistantTurn("Acknowledged", tokens = c(0, 0, 0))
-      )
-
-      invisible()
     }
   )
 )

@@ -788,36 +788,6 @@ test_that("match_tools() matches tools in a turn to a list of tools", {
 
 # Dangling tool requests ------------------------------------------------------
 
-test_that("dangling tool requests automatically completed", {
-  # Simulate a broken chat history with dangling tool request
-  tool_request <- ContentToolRequest(
-    id = "1",
-    name = "get_date",
-    arguments = list()
-  )
-
-  chat <- chat_openai_test("Be terse")
-  chat$set_turns(list(
-    UserTurn("What is today's date?"),
-    AssistantTurn(list(tool_request))
-  ))
-  chat$.__enclos_env__$private$complete_dangling_tool_requests()
-  turns <- chat$get_turns()
-
-  # Must have pair of user and assitant turns
-  expect_s3_class(turns[[3]], "ellmer::UserTurn")
-  expect_s3_class(turns[[4]], "ellmer::AssistantTurn")
-
-  # And UserTurn must contain a result that matches the request
-  expect_equal(
-    turns[[3]],
-    UserTurn(list(ContentToolResult(
-      error = "Chat ended before the tool could be invoked.",
-      request = tool_request
-    )))
-  )
-})
-
 test_that("can resume chat after dangling tool requests", {
   vcr::local_cassette("chat-tools-dangling")
 
@@ -827,13 +797,31 @@ test_that("can resume chat after dangling tool requests", {
     name = "get_date",
     description = "Get todays date"
   ))
+
+  # Simulate a broken chat history with dangling tool request
+  tool_request <- ContentToolRequest(
+    id = "1",
+    name = "get_date",
+    arguments = list()
+  )
+
   chat$set_turns(list(
     UserTurn("What year is it today?"),
-    AssistantTurn(list(ContentToolRequest(
-      id = "1",
-      name = "get_date",
-      arguments = list()
-    )))
+    AssistantTurn(list(tool_request))
   ))
   expect_match(chat$chat("try again"), "2001")
+
+  turns <- chat$get_turns()
+  expect_s3_class(turns[[3]], "ellmer::UserTurn")
+  # And UserTurn must contain a result that matches the request
+  expect_equal(
+    turns[[3]],
+    UserTurn(list(
+      ContentToolResult(
+        error = "Chat ended before the tool could be invoked.",
+        request = tool_request
+      ),
+      ContentText("try again")
+    ))
+  )
 })
