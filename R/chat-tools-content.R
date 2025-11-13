@@ -17,6 +17,9 @@ turn_contents_expand <- function(turn) {
 
   contents <- map(turn@contents, expand_content_if_needed)
   turn@contents <- unlist(contents, recursive = FALSE)
+  # Make sure all tool results come first in the expanded turn
+  turn_contents <- turn_split_tool_results(turn)
+  turn@contents <- c(turn_contents$tool_results, turn_contents$contents)
   turn
 }
 
