@@ -76,6 +76,16 @@ data.
   [`claude_file_download()`](https://ellmer.tidyverse.org/dev/reference/claude_file_upload.md)
   [`claude_file_delete()`](https://ellmer.tidyverse.org/dev/reference/claude_file_upload.md)
   **\[experimental\]** : Upload, downloand, and manage files for Claude
+- [`claude_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_search.md)
+  : Claude web search tool
+- [`claude_tool_web_fetch()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_fetch.md)
+  : Claude web fetch tool
+- [`google_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/google_tool_web_search.md)
+  : Google web search (grounding) tool
+- [`google_tool_web_fetch()`](https://ellmer.tidyverse.org/dev/reference/google_tool_web_fetch.md)
+  : Google URL fetch tool
+- [`openai_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/openai_tool_web_search.md)
+  : OpenAI web search tool
 
 ## Chat helpers
 

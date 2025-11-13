@@ -121,6 +121,14 @@
 <code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code> now returns a tibble, since this does a better job of printing more complex data frames (<a href="https://github.com/tidyverse/ellmer/issues/787" class="external-link">#787</a>).</li>
 <li>
 <code><a href="../reference/params.html">params()</a></code> gains new <code>reasoning_effort</code> and <code>reasoning_tokens</code> so you can control the amount of effort a model spends on thinking. Initial support is provided for <code><a href="../reference/chat_anthropic.html">chat_claude()</a></code>, <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code>, and <code><a href="../reference/chat_openai.html">chat_openai()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/720" class="external-link">#720</a>).</li>
+<li>ellmer now supports a variety of built-in web search and fetch tools (<a href="https://github.com/tidyverse/ellmer/issues/578" class="external-link">#578</a>):
+<ul><li>
+<code><a href="../reference/claude_tool_web_search.html">claude_tool_web_search()</a></code> and <code><a href="../reference/claude_tool_web_fetch.html">claude_tool_web_fetch()</a></code> for Claude.</li>
+<li>
+<code><a href="../reference/google_tool_web_search.html">google_tool_web_search()</a></code> and <code><a href="../reference/google_tool_web_fetch.html">google_tool_web_fetch()</a></code> for Gemini.</li>
+<li>
+<code><a href="../reference/openai_tool_web_search.html">openai_tool_web_search()</a></code> for OpenAI. If you want to do web fetch for other providers, you could use <code>btw::btw_tool_web_read_url()</code>.* <code>AssistantTurn</code>s now have a <code>@duration</code> slot, containing the total time to complete the request (<a href="https://github.com/simonpcouch" class="external-link">@simonpcouch</a>, <a href="https://github.com/tidyverse/ellmer/issues/798" class="external-link">#798</a>).</li>
+</ul></li>
 <li>
 <code><a href="../reference/tool.html">tool()</a></code>s can now return image or PDF content types, with <code><a href="../reference/content_image_url.html">content_image_file()</a></code> or <code>content_image_pdf()</code> (<a href="https://github.com/tidyverse/ellmer/issues/735" class="external-link">#735</a>).</li>
 <li>The following deprecated functions/arguments/methods have now been removed:

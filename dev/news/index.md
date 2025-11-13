@@ -167,6 +167,22 @@
   and
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   ([\#720](https://github.com/tidyverse/ellmer/issues/720)).
+- ellmer now supports a variety of built-in web search and fetch tools
+  ([\#578](https://github.com/tidyverse/ellmer/issues/578)):
+  - [`claude_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_search.md)
+    and
+    [`claude_tool_web_fetch()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_fetch.md)
+    for Claude.
+  - [`google_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/google_tool_web_search.md)
+    and
+    [`google_tool_web_fetch()`](https://ellmer.tidyverse.org/dev/reference/google_tool_web_fetch.md)
+    for Gemini.
+  - [`openai_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/openai_tool_web_search.md)
+    for OpenAI. If you want to do web fetch for other providers, you
+    could use `btw::btw_tool_web_read_url()`.\* `AssistantTurn`s now
+    have a `@duration` slot, containing the total time to complete the
+    request ([@simonpcouch](https://github.com/simonpcouch),
+    [\#798](https://github.com/tidyverse/ellmer/issues/798)).
 - [`tool()`](https://ellmer.tidyverse.org/dev/reference/tool.md)s can
   now return image or PDF content types, with
   [`content_image_file()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
