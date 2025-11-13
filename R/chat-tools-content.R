@@ -42,26 +42,31 @@ expand_content_if_needed <- function(content) {
 }
 
 expand_tool_value <- function(request, value) {
+  open <- sprintf('<tool-content call-id="%s">', request@id)
   list(
-    ContentToolResult(value = "See <tool-content> below", request = request),
-    ContentText(sprintf('<tool-content call-id="%s">', request@id)),
+    ContentToolResult(
+      value = sprintf("See %s below.", open),
+      request = request
+    ),
+    ContentText(open),
     value,
     ContentText("</tool-content>")
   )
 }
+
 expand_tool_values <- function(request, values) {
+  open <- sprintf('<tool-contents call-id="%s">', request@id)
   result <- ContentToolResult(
-    value = "See <tool-contents> below",
+    value = sprintf('See %s below.', open),
     request = request
   )
 
   contents <- map(values, function(value) {
     list(ContentText("<tool-content>"), value, ContentText("</tool-content>"))
   })
+  contents <- unlist(contents, recursive = FALSE)
 
-  c(
-    list(result, ContentText("<tool-contents/>")),
-    unlist(contents, recursive = FALSE),
-    list(ContentText("</tool-contents>"))
-  )
+  open <- ContentText(open)
+  close <- ContentText("</tool-contents>")
+  c(list(result, open), contents, list(close))
 }

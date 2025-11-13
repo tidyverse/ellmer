@@ -28,6 +28,18 @@ test_that("can expand all contents in a turn", {
   )
 })
 
+test_that("expanding generates useful JSON", {
+  req <- ContentToolRequest(id = "123", name = "my_tool")
+  image <- ContentImageInline("image/png", "abc")
+  provider <- ProviderOpenAI("name", "model", "base_url")
+
+  expanded_simple <- expand_tool_value(req, image)
+  expect_snapshot(print_json(as_json(provider, UserTurn(expanded_simple))))
+
+  expanded_list <- expand_tool_values(req, list(image, image))
+  expect_snapshot(print_json(as_json(provider, UserTurn(expanded_list))))
+})
+
 test_that("can expand tool with single value", {
   req <- ContentToolRequest(id = "123", name = "my_tool")
   image <- ContentImageInline("image/png", "abc")
