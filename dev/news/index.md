@@ -91,6 +91,10 @@
 - `chat_portkey(virtual_key)` no longer needs to be supplied; instead
   Portkey recommends including the virtual key/provider in the `model`
   ([\#786](https://github.com/tidyverse/ellmer/issues/786)).
+- `Chat$chat()`, `Chat$stream()`, and similar methods now add empty tool
+  results when a the chat is interrupted during a tool call loop,
+  allowing the conversation to be resumed without causing an API error
+  ([\#840](https://github.com/tidyverse/ellmer/issues/840)).
 - `Chat$chat_structured()` and friends now only warn if multiple JSON
   payloads found (instead of erroring)
   ([@kbenoit](https://github.com/kbenoit),
