@@ -163,6 +163,11 @@
   and
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   ([\#720](https://github.com/tidyverse/ellmer/issues/720)).
+- [`tool()`](https://ellmer.tidyverse.org/dev/reference/tool.md)s can
+  now return image or PDF content types, with
+  [`content_image_file()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
+  or `content_image_pdf()`
+  ([\#735](https://github.com/tidyverse/ellmer/issues/735)).
 - The following deprecated functions/arguments/methods have now been
   removed:
   - `Chat$extract_data()` -\> `chat$chat_structured()` (0.2.0)

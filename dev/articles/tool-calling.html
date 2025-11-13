@@ -266,7 +266,7 @@ experiments suggest is good for LLMs.</p>
 <span>  <span class="op">}</span>,</span>
 <span>  name <span class="op">=</span> <span class="st">"get_weather"</span>,</span>
 <span>  description <span class="op">=</span> <span class="st">"</span></span>
-<span><span class="st">    Report on weather conditions in multiple cities. For efficiency, request </span></span>
+<span><span class="st">    Report on weather conditions in multiple cities. For efficiency, request</span></span>
 <span><span class="st">    all weather updates using a single tool call</span></span>
 <span><span class="st">  "</span>,</span>
 <span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -278,31 +278,74 @@ experiments suggest is good for LLMs.</p>
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">get_weather</span><span class="op">)</span></span>
-<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Give me a weather udpate for London and Chicago"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Here is the current weather update:</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Give me a weather update for London and Chicago"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Here is the weather update:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; - London: Heavy rain, cool temperatures, and strong winds.</span></span>
-<span><span class="co">#&gt; - Chicago: Overcast skies, warm temperatures, and strong winds.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Let me know if you need more details or forecasts!</span></span></code></pre></div>
+<span><span class="co">#&gt; - London: Heavy rain, cool temperature, and strong winds.</span></span>
+<span><span class="co">#&gt; - Chicago: Overcast skies, warm temperature, and strong winds.</span></span></code></pre></div>
 <p>We can print the chat to confirm that the model only performed a
 single tool call:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=4 input=199 output=65 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=4 input=197 output=53 cost=$0.00&gt;</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Give me a weather udpate for London and Chicago</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=68 output=18 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_01d3f0036008b43801690baca8c5cc8197b3d7c34497588d11)]: get_weather(cities = c("London", "Chicago"))</span></span>
+<span><span class="co">#&gt; Give me a weather update for London and Chicago</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=67 output=18 cost=$0.00] ──────────────────────────</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0695837b713996880169151e123e0881939637e2fd9d66180e)]: get_weather(cities = c("London", "Chicago"))</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_01d3f0036008b43801690baca8c5cc8197b3d7c34497588d11)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=131 output=47 cost=$0.00] ─────────────────────────</span></span>
-<span><span class="co">#&gt; Here is the current weather update:</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0695837b713996880169151e123e0881939637e2fd9d66180e)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=130 output=35 cost=$0.00] ─────────────────────────</span></span>
+<span><span class="co">#&gt; Here is the weather update:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; - London: Heavy rain, cool temperatures, and strong winds.</span></span>
-<span><span class="co">#&gt; - Chicago: Overcast skies, warm temperatures, and strong winds.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Let me know if you need more details or forecasts!</span></span></code></pre></div>
+<span><span class="co">#&gt; - London: Heavy rain, cool temperature, and strong winds.</span></span>
+<span><span class="co">#&gt; - Chicago: Overcast skies, warm temperature, and strong winds.</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="image-and-pdf-tool-output">Image and PDF tool output<a class="anchor" aria-label="anchor" href="#image-and-pdf-tool-output"></a>
+</h3>
+<p>ellmer allow tools to return image or PDF content that can be
+returned with the tool result, if the LLM or API supports vision
+capabilities.</p>
+<p>Simply return a <code><a href="../reference/content_image_url.html">content_image_file()</a></code>,
+<code><a href="../reference/content_pdf_file.html">content_pdf_file()</a></code>, or similar content type from the tool
+function. For example, here’s a simple tool to screenshot a website:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">screenshot_website</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">tmpf</span> <span class="op">&lt;-</span> <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_tempfile.html" class="external-link">local_tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".png"</span><span class="op">)</span></span>
+<span>    <span class="fu">webshot2</span><span class="fu">::</span><span class="fu">webshot</span><span class="op">(</span><span class="va">url</span>, file <span class="op">=</span> <span class="va">tmpf</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="../reference/content_image_url.html">content_image_file</a></span><span class="op">(</span><span class="va">tmpf</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"screenshot_website"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Take a screenshot of a website."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    url <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"The URL of the website"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>You could use this tool to allow the LLM to “see” websites, like <a href="https://tidyverse.org" class="external-link">the tidyverse website</a>:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Using model = "gpt-4.1".</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">screenshot_website</span><span class="op">)</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Describe the design aesthetic of https://tidyverse.org"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; https://tidyverse.org screenshot completed</span></span>
+<span><span class="co">#&gt; The design aesthetic of the Tidyverse website (https://tidyverse.org) is</span></span>
+<span><span class="co">#&gt; clean, modern, and minimalistic, with several distinct features:</span></span>
+<span><span class="co">#&gt;</span></span>
+<span><span class="co">#&gt; - **Color Palette**: The overall site uses a lot of white space with navy</span></span>
+<span><span class="co">#&gt;   and dark backgrounds for some elements, accentuated by the colorful</span></span>
+<span><span class="co">#&gt;   hexagonal logos for various R packages.</span></span>
+<span><span class="co">#&gt; - **Typography**: Simple, sans-serif fonts contribute to readability and</span></span>
+<span><span class="co">#&gt;   a contemporary look.</span></span>
+<span><span class="co">#&gt; - **Hexagonal Icons**: Prominent display of tidyverse package logos in</span></span>
+<span><span class="co">#&gt;   hexagonal shapes, emphasizing the modular, package-oriented</span></span>
+<span><span class="co">#&gt;   nature of the Tidyverse.</span></span>
+<span><span class="co">#&gt; - **Layout**: A balanced, spacious two-column layout. The left side</span></span>
+<span><span class="co">#&gt;   features graphic elements; the right side provides concise, text-based</span></span>
+<span><span class="co">#&gt;   information.</span></span>
+<span><span class="co">#&gt;</span></span>
+<span><span class="co">#&gt; Overall, the design communicates clarity, ease of use, and a focus on</span></span>
+<span><span class="co">#&gt; modern data science tools.</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

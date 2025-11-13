@@ -219,7 +219,7 @@ get_weather <- tool(
   },
   name = "get_weather",
   description = "
-    Report on weather conditions in multiple cities. For efficiency, request 
+    Report on weather conditions in multiple cities. For efficiency, request
     all weather updates using a single tool call
   ",
   arguments = list(
@@ -234,13 +234,11 @@ Now we register and use it:
 chat <- chat_openai()
 #> Using model = "gpt-4.1".
 chat$register_tool(get_weather)
-chat$chat("Give me a weather udpate for London and Chicago")
-#> Here is the current weather update:
+chat$chat("Give me a weather update for London and Chicago")
+#> Here is the weather update:
 #> 
-#> - London: Heavy rain, cool temperatures, and strong winds.
-#> - Chicago: Overcast skies, warm temperatures, and strong winds.
-#> 
-#> Let me know if you need more details or forecasts!
+#> - London: Heavy rain, cool temperature, and strong winds.
+#> - Chicago: Overcast skies, warm temperature, and strong winds.
 ```
 
 We can print the chat to confirm that the model only performed a single
@@ -248,18 +246,70 @@ tool call:
 
 ``` r
 chat
-#> <Chat OpenAI/gpt-4.1 turns=4 input=199 output=65 cost=$0.00>
+#> <Chat OpenAI/gpt-4.1 turns=4 input=197 output=53 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
-#> Give me a weather udpate for London and Chicago
-#> ── assistant [input=68 output=18 cost=$0.00] ──────────────────────────
-#> [tool request (fc_01d3f0036008b43801690baca8c5cc8197b3d7c34497588d11)]: get_weather(cities = c("London", "Chicago"))
+#> Give me a weather update for London and Chicago
+#> ── assistant [input=67 output=18 cost=$0.00] ──────────────────────────
+#> [tool request (fc_0695837b713996880169151e123e0881939637e2fd9d66180e)]: get_weather(cities = c("London", "Chicago"))
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_01d3f0036008b43801690baca8c5cc8197b3d7c34497588d11)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
-#> ── assistant [input=131 output=47 cost=$0.00] ─────────────────────────
-#> Here is the current weather update:
+#> [tool result  (fc_0695837b713996880169151e123e0881939637e2fd9d66180e)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
+#> ── assistant [input=130 output=35 cost=$0.00] ─────────────────────────
+#> Here is the weather update:
 #> 
-#> - London: Heavy rain, cool temperatures, and strong winds.
-#> - Chicago: Overcast skies, warm temperatures, and strong winds.
-#> 
-#> Let me know if you need more details or forecasts!
+#> - London: Heavy rain, cool temperature, and strong winds.
+#> - Chicago: Overcast skies, warm temperature, and strong winds.
+```
+
+### Image and PDF tool output
+
+ellmer allow tools to return image or PDF content that can be returned
+with the tool result, if the LLM or API supports vision capabilities.
+
+Simply return a
+[`content_image_file()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md),
+[`content_pdf_file()`](https://ellmer.tidyverse.org/dev/reference/content_pdf_file.md),
+or similar content type from the tool function. For example, here’s a
+simple tool to screenshot a website:
+
+``` r
+screenshot_website <- tool(
+  function(url) {
+    tmpf <- withr::local_tempfile(fileext = ".png")
+    webshot2::webshot(url, file = tmpf)
+    content_image_file(tmpf)
+  },
+  name = "screenshot_website",
+  description = "Take a screenshot of a website.",
+  arguments = list(
+    url = type_string("The URL of the website")
+  )
+)
+```
+
+You could use this tool to allow the LLM to “see” websites, like [the
+tidyverse website](https://tidyverse.org):
+
+``` r
+chat <- chat_openai()
+#> Using model = "gpt-4.1".
+chat$register_tool(screenshot_website)
+chat$chat("Describe the design aesthetic of https://tidyverse.org")
+#> https://tidyverse.org screenshot completed
+#> The design aesthetic of the Tidyverse website (https://tidyverse.org) is
+#> clean, modern, and minimalistic, with several distinct features:
+#>
+#> - **Color Palette**: The overall site uses a lot of white space with navy
+#>   and dark backgrounds for some elements, accentuated by the colorful
+#>   hexagonal logos for various R packages.
+#> - **Typography**: Simple, sans-serif fonts contribute to readability and
+#>   a contemporary look.
+#> - **Hexagonal Icons**: Prominent display of tidyverse package logos in
+#>   hexagonal shapes, emphasizing the modular, package-oriented
+#>   nature of the Tidyverse.
+#> - **Layout**: A balanced, spacious two-column layout. The left side
+#>   features graphic elements; the right side provides concise, text-based
+#>   information.
+#>
+#> Overall, the design communicates clarity, ease of use, and a focus on
+#> modern data science tools.
 ```
