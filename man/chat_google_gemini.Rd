@@ -88,14 +88,19 @@ to use Gemini.
 Use \code{\link[=google_upload]{google_upload()}} to upload files (PDFs, images, video, audio, etc.)
 \subsection{Authentication}{
 
-By default, \code{chat_google_gemini()} will use Google's default application
-credentials. This requires the \pkg{gargle} package.
-
-Alternatively, you can use an API key by setting env var \code{GOOGLE_API_KEY} or,
+These functions try a number of authentication strategies, in this order:
+\itemize{
+\item An API key set in the \code{GOOGLE_API_KEY} env var, or,
 for \code{chat_google_gemini()} only, \code{GEMINI_API_KEY}.
-
-Finally these functions will also pick up on viewer-based credentials on
-Posit Connect. This requires the \pkg{connectcreds} package.
+\item Google's default application credentials, if the \pkg{gargle} package
+is installed.
+\item Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
+package.
+\item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}. An browser-based OAuth flow, if
+you're in an interactive session. This currently uses an unverified
+OAuth app (so you will get a scary warning); we plan to verify in the
+near future.
+}
 }
 }
 \examples{

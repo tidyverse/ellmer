@@ -3,6 +3,7 @@
 * `AssistantTurn`s now have a `@duration` slot, containing the total time to complete the request (@simonpcouch, #798).
 * `batch_chat()` logs tokens once, on retrieval (#743).
 * `batch_chat()` now retrieves failed results for `chat_openai()` (#830).
+* `batch_chat()` now gracefully handles invalid JSON from `chat_openai()` (#845).
 * `batch_chat()` now works correctly for `chat_anthropic()` (#835).
 * `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).
 * `batch_chat_*()` now works correctly when `chat_openai()` fails to process some conversations (#830).
@@ -13,11 +14,15 @@
 * `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758). `models_claude()` is now an alias for `models_anthropic()`.
 * `chat_databricks()` lifts many of its restrictions now that Databricks' API is more OpenAI compatible (#757).
 * `chat_google_gemini()` and `chat_openai()` support image generation (#368).
+* `chat_google_gemini()` has an experimental fall back interactive OAuth flow, if you're in an interactive session and no other authentication options can be found (#680)
+* `chat_groq()` now defaults to llama-3.1-8b-instant.
 * `chat_openai()` gains a `service_tier` argument (#712).
 * `chat_openai()` now uses OpenAI's responses endpoint (#365, #801). This is their recommended endpoint and gives more access to built-in tools.
 * `chat_openai_compatible()` replaces `chat_openai()` as the interface to use for OpenAI-compatible APIs, and `chat_openai()` is reserved for the official OpenAI API. Unlike previous versions of `chat_openai()`, the `base_url` parameter is now required (#801).
+* `chat_portkey()` now requires you to supply a model (#786).
+* `chat_portkey(virtual_key)` no longer needs to be supplied; instead Portkey recommends including the virtual key/povider in the `model`.(#786).
 * `Chat$get_tokens()` gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (#618).
-* `Chat$get_tokens()` now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the `print()` method now reports costs on each assistant turn, rather than trying to parse out individual costs.
+* `Chat$get_tokens()` now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the `print()` method now reports costs on each assistant turn, rather than trying to parse out individual costs (#824).
 * `Chat$chat_structured()` and friends now only warn if multiple JSON payloads found (instead of erroring) (@kbenoit, #732).
 * `chat_*()` functions now use a `credentials` function instead of an `api_key` (#613). This means that API keys are never stored in the chat object (which might be saved to disk), but are instead retrieved on demand as needed. You generally shouldn't need to use the `credentials` argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).
 * `interpolate_package()` now provides an informative error if the requested prompt file is not found in the package's `prompts/` directory (#763).
@@ -37,6 +42,7 @@
   - `google_tool_web_search()` and `google_tool_web_fetch()` for Gemini.
   - `openai_tool_web_search()` for OpenAI.
   If you want to do web fetch for other providers, you could use `btw::btw_tool_web_read_url()`.* `AssistantTurn`s now have a `@duration` slot, containing the total time to complete the request (@simonpcouch, #798).
+* `tool()`s can now return image or PDF content types, with `content_image_file()` or `content_image_pdf()` (#735).
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
   * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)

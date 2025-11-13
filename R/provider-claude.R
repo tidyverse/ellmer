@@ -420,10 +420,11 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(
       # (all messages must have non-empty content)
       return(NULL)
     }
+    x <- turn_contents_expand(x)
+    content <- as_json(provider, x@contents, ...)
 
     # Add caching to the last content block in the last turn
     # https://docs.claude.com/en/docs/build-with-claude/prompt-caching#how-automatic-prefix-checking-works
-    content <- as_json(provider, x@contents, ...)
     if (is_last) {
       content[[length(content)]]$cache_control <- cache_control(provider)
     }

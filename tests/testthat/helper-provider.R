@@ -49,6 +49,20 @@ test_tools_simple <- function(chat_fun) {
   expect_match(result, "February")
 }
 
+test_tool_image <- function(chat_fun) {
+  # has a subtle dependency on imagemagick
+  skip_on_cran()
+
+  chat <- chat_fun()
+  chat$register_tool(tool(
+    \() content_image_file(system.file("smol-animal.jpg", package = "ellmer")),
+    name = "draw_animal",
+    description = "Draw a cute animal"
+  ))
+  chat$chat("Draw a picture of a cute animal")
+  expect_match(chat$chat("What sort of animal is that?"), "kitten|cat")
+}
+
 # Data extraction --------------------------------------------------------
 
 test_data_extraction <- function(chat_fun) {

@@ -215,6 +215,8 @@ test_that("can compute costs", {
   expect_equal(details$input, c(15000, 30000))
   expect_equal(details$output, c(500, 1000))
   expect_equal(details$cached_input, c(0, 0))
+
+  expect_snapshot(details)
 })
 
 test_that("can optionally echo", {

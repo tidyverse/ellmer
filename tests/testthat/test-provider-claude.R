@@ -54,6 +54,12 @@ test_that("can search web pages", {
   test_tool_web_search(chat_fun, claude_tool_web_search())
 })
 
+test_that("tools can return images", {
+  vcr::local_cassette("anthropic-tool-image")
+  chat_fun <- chat_anthropic_test
+  test_tool_image(chat_fun)
+})
+
 test_that("can extract data", {
   vcr::local_cassette("anthropic-structured-data")
   chat_fun <- chat_anthropic_test

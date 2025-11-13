@@ -14,14 +14,18 @@ NULL
 #' Use [google_upload()] to upload files (PDFs, images, video, audio, etc.)
 #'
 #' ## Authentication
-#' By default, `chat_google_gemini()` will use Google's default application
-#' credentials. This requires the \pkg{gargle} package.
+#' These functions try a number of authentication strategies, in this order:
 #'
-#' Alternatively, you can use an API key by setting env var `GOOGLE_API_KEY` or,
-#' for `chat_google_gemini()` only, `GEMINI_API_KEY`.
-#'
-#' Finally these functions will also pick up on viewer-based credentials on
-#' Posit Connect. This requires the \pkg{connectcreds} package.
+#' * An API key set in the `GOOGLE_API_KEY` env var, or,
+#'   for `chat_google_gemini()` only, `GEMINI_API_KEY`.
+#' * Google's default application credentials, if the \pkg{gargle} package
+#'   is installed.
+#' * Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
+#'   package.
+#' * `r lifecycle::badge("experimental")`. An browser-based OAuth flow, if
+#'   you're in an interactive session. This currently uses an unverified
+#'   OAuth app (so you will get a scary warning); we plan to verify in the
+#'   near future.
 #'
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials A function that returns a list of authentication headers
@@ -357,7 +361,11 @@ method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
   if (is_system_turn(x)) {
     # System messages go in the top-level API parameter
   } else if (is_user_turn(x)) {
-    list(role = x@role, parts = as_json(provider, x@contents, ...))
+    x <- turn_contents_expand(x)
+    list(
+      role = x@role,
+      parts = as_json(provider, x@contents, ...)
+    )
   } else if (is_assistant_turn(x)) {
     list(role = "model", parts = as_json(provider, x@contents, ...))
   } else {
@@ -696,6 +704,19 @@ default_google_credentials <- function(
     testthat::skip("no Google credentials available")
   }
 
+  if (is_interactive()) {
+    return(function() {
+      function(req) {
+        req_oauth_auth_code(
+          req,
+          client = gemini_client(),
+          auth_url = "https://accounts.google.com/o/oauth2/auth",
+          scope = "https://www.googleapis.com/auth/generative-language.retriever"
+        )
+      }
+    })
+  }
+
   if (is.null(token)) {
     cli::cli_abort(
       c(
@@ -725,6 +746,10 @@ default_google_credentials <- function(
     }
     list(Authorization = paste("Bearer", token$credentials$access_token))
   })
+}
+
+google_oauth_reset <- function() {
+  httr2::oauth_cache_clear(gemini_client())
 }
 
 # Pricing ----------------------------------------------------------------------

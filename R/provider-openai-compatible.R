@@ -82,7 +82,7 @@ chat_openai_compatible <- function(
 
   credentials <- as_credentials(
     "chat_openai_compatible",
-    function() paste0("Bearer ", openai_key()),
+    function() openai_key(),
     credentials = credentials,
     api_key = api_key,
     token = TRUE
@@ -319,16 +319,18 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
       list(role = "system", content = x@contents[[1]]@text)
     )
   } else if (is_user_turn(x)) {
-    # Each tool result needs to go in its own message with role "tool"
-    is_tool <- map_lgl(x@contents, S7_inherits, ContentToolResult)
-    content <- as_json(provider, x@contents[!is_tool], ...)
-    if (length(content) > 0) {
+    # Tool results come out of content and go into own element
+    x <- turn_contents_expand(x)
+    data <- turn_split_tool_results(x)
+
+    if (length(data$contents) > 0) {
+      content <- as_json(provider, data$contents, ...)
       user <- list(list(role = "user", content = content))
     } else {
       user <- list()
     }
 
-    tools <- lapply(x@contents[is_tool], function(tool) {
+    tools <- lapply(data$tool_results, function(tool) {
       list(
         role = "tool",
         content = tool_string(tool),
@@ -336,7 +338,7 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
       )
     })
 
-    c(user, tools)
+    c(tools, user)
   } else if (is_assistant_turn(x)) {
     # Tool requests come out of content and go into own argument
     is_tool <- map_lgl(x@contents, is_tool_request)

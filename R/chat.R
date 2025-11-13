@@ -136,8 +136,12 @@ Chat <- R6::R6Class(
 
       turns <- self$get_turns()
       assistant_turns <- keep(turns, is_assistant_turn)
-      tokens <- as.data.frame(map_tokens(assistant_turns, \(turn) turn@tokens))
+      tokens <- map_tokens(assistant_turns, \(turn) turn@tokens)
+      tokens <- tibble::as_tibble(tokens)
       tokens$cost <- dollars(map_dbl(assistant_turns, \(turn) turn@cost))
+
+      user_turns <- keep(turns, is_user_turn)
+      tokens$input_preview <- map_chr(user_turns, turn_contents_preview)
       tokens
     },
 
