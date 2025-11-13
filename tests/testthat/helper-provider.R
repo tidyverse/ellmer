@@ -50,6 +50,9 @@ test_tools_simple <- function(chat_fun) {
 }
 
 test_tool_image <- function(chat_fun) {
+  # has a subtle dependency on imagemagick
+  skip_on_cran()
+
   chat <- chat_fun()
   chat$register_tool(tool(
     \() content_image_file(system.file("smol-animal.jpg", package = "ellmer")),
