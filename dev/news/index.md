@@ -37,12 +37,12 @@
   from accidentally reusing the same `.json` file with different
   providers, while still allowing you to use the same batch file across
   ellmer versions.
-- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+- [`chat_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   and
   [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
   now default to Claude Sonnet 4.5
   ([\#800](https://github.com/tidyverse/ellmer/issues/800)).
-- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+- [`chat_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   gains new `cache` parameter to control caching. By default it is set
   to “5m”. This should (on average) reduce the cost of your chats
   ([\#584](https://github.com/tidyverse/ellmer/issues/584)).
@@ -63,9 +63,9 @@
   support image generation
   ([\#368](https://github.com/tidyverse/ellmer/issues/368)).
 - [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
-  has an experimental fall back interactive OAuth flow, if you’re in an
+  has an experimental fallback interactive OAuth flow, if you’re in an
   interactive session and no other authentication options can be found
-  ([\#680](https://github.com/tidyverse/ellmer/issues/680))
+  ([\#680](https://github.com/tidyverse/ellmer/issues/680)).
 - [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
   now defaults to llama-3.1-8b-instant.
 - [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
@@ -89,8 +89,12 @@
   now requires you to supply a model
   ([\#786](https://github.com/tidyverse/ellmer/issues/786)).
 - `chat_portkey(virtual_key)` no longer needs to be supplied; instead
-  Portkey recommends including the virtual key/povider in the
-  `model`.([\#786](https://github.com/tidyverse/ellmer/issues/786)).
+  Portkey recommends including the virtual key/provider in the `model`
+  ([\#786](https://github.com/tidyverse/ellmer/issues/786)).
+- `Chat$chat_structured()` and friends now only warn if multiple JSON
+  payloads found (instead of erroring)
+  ([@kbenoit](https://github.com/kbenoit),
+  [\#732](https://github.com/tidyverse/ellmer/issues/732)).
 - `Chat$get_tokens()` gives a brief description of the turn contents to
   make it easier to see which turn tokens are spent on
   ([\#618](https://github.com/tidyverse/ellmer/issues/618)).
@@ -101,10 +105,6 @@
   costs on each assistant turn, rather than trying to parse out
   individual costs
   ([\#824](https://github.com/tidyverse/ellmer/issues/824)).
-- `Chat$chat_structured()` and friends now only warn if multiple JSON
-  payloads found (instead of erroring)
-  ([@kbenoit](https://github.com/kbenoit),
-  [\#732](https://github.com/tidyverse/ellmer/issues/732)).
 - `chat_*()` functions now use a `credentials` function instead of an
   `api_key` ([\#613](https://github.com/tidyverse/ellmer/issues/613)).
   This means that API keys are never stored in the chat object (which
@@ -113,6 +113,22 @@
   argument, but when you do, you should use it to dynamically retrieve
   the API key from some other source (i.e. never inline a secret
   directly into a function call).
+- New set of `claude_file_()` functions for managing file uploads with
+  Claude ([@dcomputing](https://github.com/dcomputing),
+  [\#761](https://github.com/tidyverse/ellmer/issues/761)).
+- ellmer now supports a variety of built-in web search and fetch tools
+  ([\#578](https://github.com/tidyverse/ellmer/issues/578)):
+  - [`claude_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_search.md)
+    and
+    [`claude_tool_web_fetch()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_fetch.md)
+    for Claude.
+  - [`google_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/google_tool_web_search.md)
+    and
+    [`google_tool_web_fetch()`](https://ellmer.tidyverse.org/dev/reference/google_tool_web_fetch.md)
+    for Gemini.
+  - [`openai_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/openai_tool_web_search.md)
+    for OpenAI. If you want to do web fetch for other providers, you
+    could use `btw::btw_tool_web_read_url()`.
 - [`interpolate_package()`](https://ellmer.tidyverse.org/dev/reference/interpolate.md)
   now provides an informative error if the requested prompt file is not
   found in the package’s `prompts/` directory
@@ -126,16 +142,6 @@
 - [`models_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
   was fixed to correctly query model capabilities from remote Ollama
   servers ([\#746](https://github.com/tidyverse/ellmer/issues/746)).
-- New set of `claude_file_()` functions for managing file uploads with
-  Claude ([@dcomputing](https://github.com/dcomputing),
-  [\#761](https://github.com/tidyverse/ellmer/issues/761)).
-- New `schema_df()` to describe the schema of a data frame to an LLM
-  ([\#744](https://github.com/tidyverse/ellmer/issues/744)).
-- New
-  [`type_ignore()`](https://ellmer.tidyverse.org/dev/reference/type_boolean.md)
-  allows you to specify that a tool argument should not be provided by
-  the LLM when the R function has a suitable default value
-  ([\#764](https://github.com/tidyverse/ellmer/issues/764)).
 - [`parallel_chat()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
   and
   [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
@@ -167,27 +173,8 @@
   and
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   ([\#720](https://github.com/tidyverse/ellmer/issues/720)).
-- ellmer now supports a variety of built-in web search and fetch tools
-  ([\#578](https://github.com/tidyverse/ellmer/issues/578)):
-  - [`claude_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_search.md)
-    and
-    [`claude_tool_web_fetch()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_fetch.md)
-    for Claude.
-  - [`google_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/google_tool_web_search.md)
-    and
-    [`google_tool_web_fetch()`](https://ellmer.tidyverse.org/dev/reference/google_tool_web_fetch.md)
-    for Gemini.
-  - [`openai_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/openai_tool_web_search.md)
-    for OpenAI. If you want to do web fetch for other providers, you
-    could use `btw::btw_tool_web_read_url()`.\* `AssistantTurn`s now
-    have a `@duration` slot, containing the total time to complete the
-    request ([@simonpcouch](https://github.com/simonpcouch),
-    [\#798](https://github.com/tidyverse/ellmer/issues/798)).
-- [`tool()`](https://ellmer.tidyverse.org/dev/reference/tool.md)s can
-  now return image or PDF content types, with
-  [`content_image_file()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
-  or `content_image_pdf()`
-  ([\#735](https://github.com/tidyverse/ellmer/issues/735)).
+- New `schema_df()` to describe the schema of a data frame to an LLM
+  ([\#744](https://github.com/tidyverse/ellmer/issues/744)).
 - The following deprecated functions/arguments/methods have now been
   removed:
   - `Chat$extract_data()` -\> `chat$chat_structured()` (0.2.0)
@@ -213,6 +200,16 @@
     (0.2.0)
   - `chat_openai(seed)` -\> `chat_openai(params)` (0.2.0)
   - `create_tool_def(model)` -\> `create_tool_def(chat)` (0.2.0)
+- [`tool()`](https://ellmer.tidyverse.org/dev/reference/tool.md)s can
+  now return image or PDF content types, with
+  [`content_image_file()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
+  or `content_image_pdf()`
+  ([\#735](https://github.com/tidyverse/ellmer/issues/735)).
+- New
+  [`type_ignore()`](https://ellmer.tidyverse.org/dev/reference/type_boolean.md)
+  allows you to specify that a tool argument should not be provided by
+  the LLM when the R function has a suitable default value
+  ([\#764](https://github.com/tidyverse/ellmer/issues/764)).
 - Updated pricing data
   ([\#790](https://github.com/tidyverse/ellmer/issues/790)).
 
@@ -446,11 +443,11 @@ CRAN release: 2025-07-24
 
 CRAN release: 2025-06-03
 
-- When you save a `Chat` object to disk, API keys are automatically
-  redacted. This means that you can no longer easily resume a chat
-  you’ve saved on disk (we’ll figure this out in a future release) but
-  ensures that you never accidentally save your secret key in an RDS
-  file ([\#534](https://github.com/tidyverse/ellmer/issues/534)).
+- When you save a `Chat` object to disk, API keys are This means that
+  you can no longer easily resume a chat you’ve saved on disk (we’ll
+  figure this out in a future release) but ensures that you never
+  accidentally save your secret key in an RDS file
+  ([\#534](https://github.com/tidyverse/ellmer/issues/534)).
 
 - [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   now defaults to Claude Sonnet 4, and I’ve added pricing information
