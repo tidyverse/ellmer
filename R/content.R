@@ -294,7 +294,7 @@ method(format, ContentToolResult) <- function(
   if (tool_errored(x)) {
     value <- paste0(cli::col_red("Error: "), tool_error_string(x))
   } else {
-    value <- tool_string(x, force = TRUE)
+    value <- tool_string(x)
   }
 
   if (!is_string(value) || !grepl("\n", value)) {
@@ -308,7 +308,7 @@ tool_errored <- function(x) !is.null(x@error)
 tool_error_string <- function(x) {
   if (inherits(x@error, "condition")) conditionMessage(x@error) else x@error
 }
-tool_string <- function(x, force = FALSE) {
+tool_string <- function(x) {
   if (tool_errored(x)) {
     paste0("Tool calling failed with error ", tool_error_string(x))
   } else if (inherits(x@value, "AsIs")) {
@@ -318,8 +318,8 @@ tool_string <- function(x, force = FALSE) {
   } else if (is.character(x@value)) {
     paste(x@value, collapse = "\n")
   } else {
-    tryCatch(
-      jsonlite::toJSON(x@value, auto_unbox = TRUE, force = force),
+    withCallingHandlers(
+      jsonlite::toJSON(x@value, auto_unbox = TRUE),
       error = function(err) {
         cli::cli_abort(
           c(

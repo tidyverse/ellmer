@@ -282,7 +282,7 @@ method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(
     # Completely undocumented, but: it seems like the model is expecting the
     # tool result in textual format here, too -- otherwise it gets confused,
     # like it can't see the output.
-    content <- tool_string(x@contents[[1]], force = TRUE)
+    content <- tool_string(x@contents[[1]])
   } else {
     cli::cli_abort("Unsupported content type: {.cls {class(x@contents[[1]])}}.")
   }
