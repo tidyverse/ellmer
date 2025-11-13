@@ -14,14 +14,18 @@ NULL
 #' Use [google_upload()] to upload files (PDFs, images, video, audio, etc.)
 #'
 #' ## Authentication
-#' By default, `chat_google_gemini()` will use Google's default application
-#' credentials. This requires the \pkg{gargle} package.
+#' These functions try a number of authentication strategies, in this order:
 #'
-#' Alternatively, you can use an API key by setting env var `GOOGLE_API_KEY` or,
-#' for `chat_google_gemini()` only, `GEMINI_API_KEY`.
-#'
-#' Finally these functions will also pick up on viewer-based credentials on
-#' Posit Connect. This requires the \pkg{connectcreds} package.
+#' * An API key set in the `GOOGLE_API_KEY` env var, or,
+#'   for `chat_google_gemini()` only, `GEMINI_API_KEY`.
+#' * Google's default application credentials, if the \pkg{gargle} package
+#'   is installed.
+#' * Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
+#'   package.
+#' * `r lifecycle::badge("experimental")`. An browser-based OAuth flow, if
+#'   you're in an interactive session. This currently uses an unverified
+#'   OAuth app (so you will get a scary warning); we plan to verify in the
+#'   near future.
 #'
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials A function that returns a list of authentication headers
@@ -222,8 +226,13 @@ method(chat_body, ProviderGoogleGemini) <- function(
 
   # https://ai.google.dev/api/caching#Tool
   if (length(tools) > 0) {
+    is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
     funs <- as_json(provider, unname(tools))
-    tools <- list(functionDeclarations = funs)
+
+    tools <- c(
+      compact(list(functionDeclarations = funs[!is_builtin])),
+      unlist(funs[is_builtin], recursive = FALSE)
+    )
   } else {
     tools <- NULL
   }
@@ -279,12 +288,26 @@ method(stream_merge_chunks, ProviderGoogleGemini) <- function(
 }
 
 method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
+  # https://ai.google.dev/api/generate-content#UsageMetadata
   usage <- json$usageMetadata
+
+  # Total token count for the generation request (prompt + response candidates).
+  # Not documented, but appears to include thinking and tool use, i.e.
+  # usage$promptTokenCount + usage$candidatesTokenCount +
+  #  usage$toolUsePromptTokenCount + usage$thoughtsTokenCount ==
+  #  usage$totalTokenCount
+  total <- usage$totalTokenCount %||% 0
+
+  # Number of tokens in the prompt. When cachedContent is set, this is
+  # still the total effective prompt size meaning this includes the number
+  # of tokens in the cached content.
+  input <- usage$promptTokenCount %||% 0
+
   cached <- usage$cachedContentTokenCount %||% 0
 
   tokens(
-    input = (usage$promptTokenCount %||% 0) + -cached,
-    output = usage$candidatesTokenCount + (usage$thoughtsTokenCount %||% 0),
+    input = input - cached,
+    output = total - input,
     cached_input = cached
   )
 }
@@ -338,7 +361,11 @@ method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
   if (is_system_turn(x)) {
     # System messages go in the top-level API parameter
   } else if (is_user_turn(x)) {
-    list(role = x@role, parts = as_json(provider, x@contents, ...))
+    x <- turn_contents_expand(x)
+    list(
+      role = x@role,
+      parts = as_json(provider, x@contents, ...)
+    )
   } else if (is_assistant_turn(x)) {
     list(role = "model", parts = as_json(provider, x@contents, ...))
   } else {
@@ -677,6 +704,19 @@ default_google_credentials <- function(
     testthat::skip("no Google credentials available")
   }
 
+  if (is_interactive()) {
+    return(function() {
+      function(req) {
+        req_oauth_auth_code(
+          req,
+          client = gemini_client(),
+          auth_url = "https://accounts.google.com/o/oauth2/auth",
+          scope = "https://www.googleapis.com/auth/generative-language.retriever"
+        )
+      }
+    })
+  }
+
   if (is.null(token)) {
     cli::cli_abort(
       c(
@@ -706,6 +746,10 @@ default_google_credentials <- function(
     }
     list(Authorization = paste("Bearer", token$credentials$access_token))
   })
+}
+
+google_oauth_reset <- function() {
+  httr2::oauth_cache_clear(gemini_client())
 }
 
 # Pricing ----------------------------------------------------------------------

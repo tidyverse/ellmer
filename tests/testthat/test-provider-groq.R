@@ -5,7 +5,6 @@ test_that("defaults are reported", {
 })
 
 test_that("supports tool calling", {
-  chat_fun <- function(...) chat_groq(..., model = "Llama-3.3-70b-Versatile")
-
+  chat_fun <- chat_groq
   test_tools_simple(chat_fun)
 })

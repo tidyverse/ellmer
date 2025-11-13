@@ -313,6 +313,12 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
     result$stop_reason <- chunk$delta$stop_reason
     result$stop_sequence <- chunk$delta$stop_sequence
     result$usage$output_tokens <- chunk$usage$output_tokens
+  } else if (chunk$delta$type == "citations_delta") {
+    # https://docs.claude.com/en/docs/build-with-claude/citations#streaming-support
+    result$content[[i]]$citations <- c(
+      result$content[[i]]$citations,
+      list(chunk$delta$citation)
+    )
   } else if (chunk$type == "error") {
     if (chunk$error$type == "overloaded_error") {
       # https://docs.anthropic.com/en/api/messages-streaming#error-events
@@ -355,6 +361,30 @@ method(value_turn, ProviderAnthropic) <- function(
         }
         ContentToolRequest(content$id, content$name, content$input)
       }
+    } else if (content$type == "server_tool_use") {
+      if (content$name == "web_search") {
+        # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-search-tool#response
+        ContentToolRequestSearch(
+          query = content$input$query,
+          json = content
+        )
+      } else if (content$name == "web_fetch") {
+        # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-fetch-tool#response
+        ContentToolRequestFetch(
+          url = content$input$url,
+          json = content
+        )
+      } else {
+        cli::cli_abort("Unknown server tool {.str {content$name}}.")
+      }
+    } else if (content$type == "web_search_tool_result") {
+      urls <- map_chr(content$content, \(x) x$url)
+      ContentToolResponseSearch(
+        url = urls,
+        json = content
+      )
+    } else if (content$type == "web_fetch_tool_result") {
+      ContentToolResponseFetch(url = content$url %||% "failed", json = content)
     } else if (content$type == "thinking") {
       ContentThinking(
         content$thinking,
@@ -390,10 +420,11 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(
       # (all messages must have non-empty content)
       return(NULL)
     }
+    x <- turn_contents_expand(x)
+    content <- as_json(provider, x@contents, ...)
 
     # Add caching to the last content block in the last turn
     # https://docs.claude.com/en/docs/build-with-claude/prompt-caching#how-automatic-prefix-checking-works
-    content <- as_json(provider, x@contents, ...)
     if (is_last) {
       content[[length(content)]]$cache_control <- cache_control(provider)
     }

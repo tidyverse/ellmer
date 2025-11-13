@@ -40,6 +40,26 @@ test_that("supports tool calling", {
   test_tools_simple(chat_fun)
 })
 
+test_that("can fetch web pages", {
+  vcr::local_cassette("anthropic-web-fetch")
+  chat_fun <- \(...) {
+    chat_anthropic_test(..., beta_headers = "web-fetch-2025-09-10")
+  }
+  test_tool_web_fetch(chat_fun, claude_tool_web_fetch())
+})
+
+test_that("can search web pages", {
+  vcr::local_cassette("anthropic-web-search")
+  chat_fun <- \(...) chat_anthropic_test(...)
+  test_tool_web_search(chat_fun, claude_tool_web_search())
+})
+
+test_that("tools can return images", {
+  vcr::local_cassette("anthropic-tool-image")
+  chat_fun <- chat_anthropic_test
+  test_tool_image(chat_fun)
+})
+
 test_that("can extract data", {
   vcr::local_cassette("anthropic-structured-data")
   chat_fun <- chat_anthropic_test

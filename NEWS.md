@@ -3,6 +3,7 @@
 * `AssistantTurn`s now have a `@duration` slot, containing the total time to complete the request (@simonpcouch, #798).
 * `batch_chat()` logs tokens once, on retrieval (#743).
 * `batch_chat()` now retrieves failed results for `chat_openai()` (#830).
+* `batch_chat()` now gracefully handles invalid JSON from `chat_openai()` (#845).
 * `batch_chat()` now works correctly for `chat_anthropic()` (#835).
 * `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).
 * `batch_chat_*()` now works correctly when `chat_openai()` fails to process some conversations (#830).
@@ -13,6 +14,8 @@
 * `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758). `models_claude()` is now an alias for `models_anthropic()`.
 * `chat_databricks()` lifts many of its restrictions now that Databricks' API is more OpenAI compatible (#757).
 * `chat_google_gemini()` and `chat_openai()` support image generation (#368).
+* `chat_google_gemini()` has an experimental fall back interactive OAuth flow, if you're in an interactive session and no other authentication options can be found (#680)
+* `chat_groq()` now defaults to llama-3.1-8b-instant.
 * `chat_openai()` gains a `service_tier` argument (#712).
 * `chat_openai()` now uses OpenAI's responses endpoint (#365, #801). This is their recommended endpoint and gives more access to built-in tools.
 * `chat_openai_compatible()` replaces `chat_openai()` as the interface to use for OpenAI-compatible APIs, and `chat_openai()` is reserved for the official OpenAI API. Unlike previous versions of `chat_openai()`, the `base_url` parameter is now required (#801).
@@ -35,6 +38,12 @@
 * `parallel_chat_structured()` no longer errors if some results fail to parse. Instead it warns, and the corresponding rows will be filled in with the appropriate missing values (#628).
 * `parallel_chat_structured()` now returns a tibble, since this does a better job of printing more complex data frames (#787).
 * `params()` gains new `reasoning_effort` and `reasoning_tokens` so you can control the amount of effort a model spends on thinking. Initial support is provided for `chat_claude()`, `chat_google_gemini()`, and `chat_openai()` (#720).
+* ellmer now supports a variety of built-in web search and fetch tools (#578):
+  - `claude_tool_web_search()` and `claude_tool_web_fetch()` for Claude.
+  - `google_tool_web_search()` and `google_tool_web_fetch()` for Gemini.
+  - `openai_tool_web_search()` for OpenAI.
+  If you want to do web fetch for other providers, you could use `btw::btw_tool_web_read_url()`.* `AssistantTurn`s now have a `@duration` slot, containing the total time to complete the request (@simonpcouch, #798).
+* `tool()`s can now return image or PDF content types, with `content_image_file()` or `content_image_pdf()` (#735).
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
   * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)

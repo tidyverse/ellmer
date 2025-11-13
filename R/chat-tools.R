@@ -250,6 +250,14 @@ tool_results_as_turn <- function(results) {
   UserTurn(contents = results[is_tool_result])
 }
 
+turn_split_tool_results <- function(turn) {
+  is_result <- map_lgl(turn@contents, is_tool_result)
+  list(
+    tool_results = turn@contents[is_result],
+    contents = turn@contents[!is_result]
+  )
+}
+
 turn_get_tool_errors <- function(turn = NULL) {
   if (is.null(turn)) {
     return(NULL)
