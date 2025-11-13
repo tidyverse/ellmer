@@ -549,9 +549,9 @@ method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
 
 openai_download_file <- function(provider, id, path) {
   req <- base_request(provider)
-  req <- req_url_path_append(req, "/files/", batch$output_file_id, "/content")
+  req <- req_url_path_append(req, "/files/", id, "/content")
   req <- req_progress(req, "down")
-  req_perform(req, path = path_output)
+  req_perform(req, path = path)
 
   invisible(path)
 }
