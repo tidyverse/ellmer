@@ -70,7 +70,7 @@ chat_openai <- function(
   echo <- check_echo(echo)
   service_tier <- arg_match(service_tier)
 
-  credentials <- credentials %||% \() paste0("Bearer ", openai_key())
+  credentials <- credentials %||% \() openai_key()
   check_credentials(credentials)
 
   provider <- ProviderOpenAI(
@@ -95,7 +95,7 @@ models_openai <- function(
 ) {
   credentials <- as_credentials(
     "models_openai",
-    function() paste0("Bearer ", openai_key()),
+    \() openai_key(),
     credentials = credentials,
     api_key = api_key
   )
@@ -529,26 +529,46 @@ method(batch_status, ProviderOpenAI) <- function(provider, batch) {
 method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
   # output file
   path_output <- withr::local_tempfile()
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/files/", batch$output_file_id, "/content")
-  req <- req_progress(req, "down")
-  resp <- req_perform(req, path = path_output)
-  json <- read_ndjson(path_output)
+  openai_download_file(provider, batch$output_file_id, path_output)
+  json <- read_ndjson(path_output, fallback = openai_json_fallback)
 
   # error file
   if (length(batch$error_file_id) == 1) {
     path_error <- withr::local_tempfile()
-    req <- base_request(provider)
-    req <- req_url_path_append(req, "/files/", batch$error_file_id, "/content")
-    req <- req_progress(req, "down")
-    resp <- req_perform(req, path = path_error)
+    openai_download_file(provider, batch$error_file_id, path_error)
 
-    json <- c(json, read_ndjson(path_error))
+    json <- c(json, read_ndjson(path_error, fallback = openai_json_fallback))
   }
 
   ids <- as.numeric(gsub("chat-", "", map_chr(json, "[[", "custom_id")))
   results <- lapply(json, "[[", "response")
   results[order(ids)]
+}
+
+openai_download_file <- function(provider, id, path) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/files/", id, "/content")
+  req <- req_progress(req, "down")
+  req_perform(req, path = path)
+
+  invisible(path)
+}
+openai_json_fallback <- function(line) {
+  list(
+    custom_id = extract_custom_id(line),
+    response = list(status_code = 500)
+  )
+}
+extract_custom_id <- function(json_string) {
+  pattern <- '"custom_id"\\s*:\\s*"([^"]*)"'
+  match <- regexec(pattern, json_string)
+
+  result <- regmatches(json_string, match)[[1]]
+  if (length(result) != 2) {
+    NA_character_
+  } else {
+    result[[2]] # Second element is the captured group
+  }
 }
 
 method(batch_result_turn, ProviderOpenAI) <- function(

@@ -3,41 +3,59 @@
 #' @description
 #' [PortkeyAI](https://portkey.ai/docs/product/ai-gateway/universal-api)
 #' provides an interface (AI Gateway) to connect through its Universal API to a
-#' variety of LLMs providers with a single endpoint.
-#'
-#' ## Authentication
-#' API keys together with configurations of LLM providers are
-#' stored inside Portkey application.
+#' variety of LLMs providers via a single endpoint.
 #'
 #' @family chatbots
+#' @param model The model name, e.g. `@my-provider/my-model`.
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("PORTKEY_API_KEY")`
-#' @param model `r param_model("gpt-4o", "openai")`
-#' @param virtual_key A virtual identifier storing LLM provider's API key. See
-#'   [documentation](https://portkey.ai/docs/product/ai-gateway/virtual-keys).
-#'   Can be read from the `PORTKEY_VIRTUAL_KEY` environment variable.
+#' @param virtual_key `r lifecycle::badge("deprecated")`.
+#'   Portkey now recommend supplying the model provider
+#'   (formerly known as the `virtual_key`), in the model name, e.g.
+#'   `@my-provider/my-model`. See
+#'   <https://portkey.ai/docs/support/upgrade-to-model-catalog> for details.
+#'
+#'   For backward compatibility, the `PORTKEY_VIRTUAL_KEY` env var is still used
+#'   if the model doesn't include a provider.
 #' @export
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
-#' chat <- chat_portkey(virtual_key = Sys.getenv("PORTKEY_VIRTUAL_KEY"))
+#' chat <- chat_portkey()
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
 chat_portkey <- function(
+  model,
   system_prompt = NULL,
   base_url = "https://api.portkey.ai/v1",
   api_key = NULL,
   credentials = NULL,
-  virtual_key = portkey_virtual_key(),
-  model = NULL,
+  virtual_key = deprecated(),
   params = NULL,
   api_args = list(),
   echo = NULL,
   api_headers = character()
 ) {
-  model <- set_default(model, "gpt-4o")
+  check_string(model)
   echo <- check_echo(echo)
+
+  if (lifecycle::is_present(virtual_key)) {
+    lifecycle::deprecate_warn(
+      when = "0.4.0",
+      what = "chat_portkey(virtual_key=)",
+      with = "chat_portkey(model=)",
+    )
+    check_string(virtual_key, allow_null = TRUE)
+  } else {
+    virtual_key <- NULL
+  }
+
+  # For backward compatibility
+  if (!grepl("^@", model)) {
+    virtual_key <- virtual_key %||% key_get("PORTKEY_VIRTUAL_KEY")
+    model <- paste0("@", virtual_key, "/", model)
+  }
 
   credentials <- as_credentials(
     "chat_portkey",
@@ -54,7 +72,6 @@ chat_portkey <- function(
     params = params,
     extra_args = api_args,
     credentials = credentials,
-    virtual_key = virtual_key,
     extra_headers = api_headers
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
@@ -62,7 +79,7 @@ chat_portkey <- function(
 
 chat_portkey_test <- function(
   ...,
-  model = "gpt-4o-mini",
+  model = "@open-ai-virtual-7f0dcd/gpt-4.1-nano",
   params = NULL,
   echo = "none"
 ) {
@@ -74,27 +91,11 @@ chat_portkey_test <- function(
 
 ProviderPortkeyAI <- new_class(
   "ProviderPortkeyAI",
-  parent = ProviderOpenAICompatible,
-  properties = list(
-    virtual_key = prop_string(allow_null = TRUE)
-  )
+  parent = ProviderOpenAICompatible
 )
-
-portkey_key_exists <- function() {
-  key_exists("PORTKEY_API_KEY")
-}
 
 portkey_key <- function() {
   key_get("PORTKEY_API_KEY")
-}
-
-portkey_virtual_key <- function() {
-  val <- Sys.getenv("PORTKEY_VIRTUAL_KEY")
-  if (!identical(val, "")) {
-    val
-  } else {
-    NULL
-  }
 }
 
 method(base_request, ProviderPortkeyAI) <- function(provider) {
@@ -105,7 +106,6 @@ method(base_request, ProviderPortkeyAI) <- function(provider) {
     provider@credentials(),
     "x-portkey-api-key"
   )
-  req <- httr2::req_headers(req, `x-portkey-virtual-key` = provider@virtual_key)
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- base_request_error(provider, req)
@@ -117,15 +117,13 @@ method(base_request, ProviderPortkeyAI) <- function(provider) {
 #' @rdname chat_portkey
 models_portkey <- function(
   base_url = "https://api.portkey.ai/v1",
-  api_key = portkey_key(),
-  virtual_key = NULL
+  api_key = portkey_key()
 ) {
   provider <- ProviderPortkeyAI(
     name = "PortkeyAI",
     model = "",
     base_url = base_url,
-    credentials = function() api_key,
-    virtual_key = virtual_key
+    credentials = function() api_key
   )
 
   req <- base_request(provider)
@@ -135,11 +133,11 @@ models_portkey <- function(
   json <- resp_body_json(resp)
 
   id <- map_chr(json$data, "[[", "id")
-  created_at <- as.POSIXct(map_dbl(json$data, "[[", "created_at"))
+  slug <- map_chr(json$data, "[[", "slug")
 
   df <- data.frame(
     id = id,
-    created_at = created_at
+    slug = slug
   )
-  df[order(-xtfrm(df$created_at)), ]
+  df
 }

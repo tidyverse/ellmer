@@ -106,3 +106,23 @@ test_that("service tier affects pricing", {
   default_cost <- get_token_cost(chat$get_provider(), tokens)
   expect_gt(last_turn@cost, default_cost)
 })
+
+
+test_that("batch retrieve succeeds even if JSON is mangled", {
+  local_mocked_bindings(
+    openai_download_file = function(provider, id, path) {
+      writeLines('{"custom_id": "123", ', path)
+    }
+  )
+  provider <- chat_openai_test()$get_provider()
+  out <- batch_retrieve(provider, list(output_file_id = "123"))
+  expect_equal(out, list(list(status_code = 500)))
+  expect_equal(batch_result_turn(provider, out[[1]]), NULL)
+})
+
+test_that("can extract dummy response from malformed JSON", {
+  expect_equal(
+    openai_json_fallback('{"custom_id": "123", '),
+    list(custom_id = "123", response = list(status_code = 500))
+  )
+})

@@ -60,9 +60,14 @@ pretty_json <- function(x) {
   jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
 }
 
-read_ndjson <- function(path) {
+read_ndjson <- function(path, fallback = \(line) NULL) {
   lines <- readLines(path, warn = FALSE)
-  lapply(lines, jsonlite::fromJSON, simplifyVector = FALSE)
+  lapply(lines, function(line) {
+    tryCatch(
+      jsonlite::fromJSON(line, simplifyVector = FALSE),
+      error = function(cnd) fallback(line)
+    )
+  })
 }
 
 prettify <- function(x) {
@@ -303,4 +308,16 @@ request_summary <- function(req) {
 
 str_trunc <- function(x, n) {
   ifelse(nchar(x) > n, paste0(substr(x, 1, n - 3), "..."), x)
+}
+
+extract_custom_id <- function(json_string) {
+  pattern <- '"custom_id"\\s*:\\s*"([^"]*)"'
+  match <- regexec(pattern, json_string)
+
+  result <- regmatches(json_string, match)[[1]]
+  if (length(result) < 2) {
+    return(NA_character_)
+  }
+
+  result[2] # Second element is the captured group
 }
