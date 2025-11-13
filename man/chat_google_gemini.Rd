@@ -96,7 +96,10 @@ for \code{chat_google_gemini()} only, \code{GEMINI_API_KEY}.
 is installed.
 \item Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
 package.
-\item An interactive OAuth flow, if you're in an interactive session.
+\item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}. An browser-based OAuth flow, if
+you're in an interactive session. This currently uses an unverified
+OAuth app (so you will get a scary warning); we plan to verify in the
+near future.
 }
 }
 }

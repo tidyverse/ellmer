@@ -22,7 +22,10 @@ NULL
 #'   is installed.
 #' * Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
 #'   package.
-#' * An interactive OAuth flow, if you're in an interactive session.
+#' * `r lifecycle::badge("experimental")`. An browser-based OAuth flow, if
+#'   you're in an interactive session. This currently uses an unverified
+#'   OAuth app (so you will get a scary warning); we plan to verify in the
+#'   near future.
 #'
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials A function that returns a list of authentication headers
@@ -685,8 +688,7 @@ default_google_credentials <- function(
           req,
           client = gemini_client(),
           auth_url = "https://accounts.google.com/o/oauth2/auth",
-          scope = "https://www.googleapis.com/auth/generative-language.retriever",
-          cache_disk = TRUE
+          scope = "https://www.googleapis.com/auth/generative-language.retriever"
         )
       }
     })
@@ -721,6 +723,10 @@ default_google_credentials <- function(
     }
     list(Authorization = paste("Bearer", token$credentials$access_token))
   })
+}
+
+google_oauth_reset <- function() {
+  httr2::oauth_cache_clear(gemini_client())
 }
 
 # Pricing ----------------------------------------------------------------------
