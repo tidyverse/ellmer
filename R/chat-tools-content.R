@@ -10,6 +10,11 @@
 # ContentText("</content-tool>")
 
 turn_contents_expand <- function(turn) {
+  if (length(turn@contents) == 0) {
+    # Early return to avoid unlist(list()) yielding NULL
+    return(turn)
+  }
+
   contents <- map(turn@contents, expand_content_if_needed)
   turn@contents <- unlist(contents, recursive = FALSE)
   turn
