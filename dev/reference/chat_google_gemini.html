@@ -6,12 +6,19 @@ Use google_upload() to upload files (PDFs, images, video, audio, etc.)
 Authentication
 
 
-By default, chat_google_gemini() will use Google's default application
-credentials. This requires the gargle package.
-Alternatively, you can use an API key by setting env var GOOGLE_API_KEY or,
+These functions try a number of authentication strategies, in this order:
+An API key set in the GOOGLE_API_KEY env var, or,
 for chat_google_gemini() only, GEMINI_API_KEY.
-Finally these functions will also pick up on viewer-based credentials on
-Posit Connect. This requires the connectcreds package.
+Google's default application credentials, if the gargle package
+is installed.
+Viewer-based credentials on Posit Connect, if the connectcreds
+package.
+. An browser-based OAuth flow, if
+you're in an interactive session. This currently uses an unverified
+OAuth app (so you will get a scary warning); we plan to verify in the
+near future.
+
+
 
 "><meta property="og:description" content="Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 Most enterprises are likely to use Vertex AI, and individuals are likely
@@ -20,12 +27,19 @@ Use google_upload() to upload files (PDFs, images, video, audio, etc.)
 Authentication
 
 
-By default, chat_google_gemini() will use Google's default application
-credentials. This requires the gargle package.
-Alternatively, you can use an API key by setting env var GOOGLE_API_KEY or,
+These functions try a number of authentication strategies, in this order:
+An API key set in the GOOGLE_API_KEY env var, or,
 for chat_google_gemini() only, GEMINI_API_KEY.
-Finally these functions will also pick up on viewer-based credentials on
-Posit Connect. This requires the connectcreds package.
+Google's default application credentials, if the gargle package
+is installed.
+Viewer-based credentials on Posit Connect, if the connectcreds
+package.
+. An browser-based OAuth flow, if
+you're in an interactive session. This currently uses an unverified
+OAuth app (so you will get a scary warning); we plan to verify in the
+near future.
+
+
 
 "><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><meta name="robots" content="noindex"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
@@ -85,13 +99,17 @@ to use Gemini.</p>
 <h3 id="authentication">Authentication<a class="anchor" aria-label="anchor" href="#authentication"></a></h3>
 
 
-<p>By default, <code>chat_google_gemini()</code> will use Google's default application
-credentials. This requires the <span class="pkg">gargle</span> package.</p>
-<p>Alternatively, you can use an API key by setting env var <code>GOOGLE_API_KEY</code> or,
-for <code>chat_google_gemini()</code> only, <code>GEMINI_API_KEY</code>.</p>
-<p>Finally these functions will also pick up on viewer-based credentials on
-Posit Connect. This requires the <span class="pkg">connectcreds</span> package.</p>
-</div>
+<p>These functions try a number of authentication strategies, in this order:</p><ul><li><p>An API key set in the <code>GOOGLE_API_KEY</code> env var, or,
+for <code>chat_google_gemini()</code> only, <code>GEMINI_API_KEY</code>.</p></li>
+<li><p>Google's default application credentials, if the <span class="pkg">gargle</span> package
+is installed.</p></li>
+<li><p>Viewer-based credentials on Posit Connect, if the <span class="pkg">connectcreds</span>
+package.</p></li>
+<li><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a>. An browser-based OAuth flow, if
+you're in an interactive session. This currently uses an unverified
+OAuth app (so you will get a scary warning); we plan to verify in the
+near future.</p></li>
+</ul></div>
 
     </div>
 

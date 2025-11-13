@@ -62,6 +62,10 @@
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   support image generation
   ([\#368](https://github.com/tidyverse/ellmer/issues/368)).
+- [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  has an experimental fall back interactive OAuth flow, if you’re in an
+  interactive session and no other authentication options can be found
+  ([\#680](https://github.com/tidyverse/ellmer/issues/680))
 - [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
   now defaults to llama-3.1-8b-instant.
 - [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)

@@ -279,7 +279,7 @@ data.
   [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   [`models_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   [`models_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
-  : Chat with a Google Gemini or Vertex AI model
+  **\[experimental\]** : Chat with a Google Gemini or Vertex AI model
 - [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
   : Chat with a model hosted on Groq
 - [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md)

@@ -10,14 +10,21 @@ to upload files (PDFs, images, video, audio, etc.)
 
 ### Authentication
 
-By default, `chat_google_gemini()` will use Google's default application
-credentials. This requires the gargle package.
+These functions try a number of authentication strategies, in this
+order:
 
-Alternatively, you can use an API key by setting env var
-`GOOGLE_API_KEY` or, for `chat_google_gemini()` only, `GEMINI_API_KEY`.
+- An API key set in the `GOOGLE_API_KEY` env var, or, for
+  `chat_google_gemini()` only, `GEMINI_API_KEY`.
 
-Finally these functions will also pick up on viewer-based credentials on
-Posit Connect. This requires the connectcreds package.
+- Google's default application credentials, if the gargle package is
+  installed.
+
+- Viewer-based credentials on Posit Connect, if the connectcreds
+  package.
+
+- **\[experimental\]**. An browser-based OAuth flow, if you're in an
+  interactive session. This currently uses an unverified OAuth app (so
+  you will get a scary warning); we plan to verify in the near future.
 
 ## Usage
 
