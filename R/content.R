@@ -294,7 +294,7 @@ method(format, ContentToolResult) <- function(
   if (tool_errored(x)) {
     value <- paste0(cli::col_red("Error: "), tool_error_string(x))
   } else {
-    value <- tool_string(x)
+    value <- tool_string_preview(x)
   }
 
   if (!is_string(value) || !grepl("\n", value)) {
@@ -331,6 +331,15 @@ tool_string <- function(x) {
       }
     )
   }
+}
+
+tool_string_preview <- function(x) {
+  tryCatch(
+    tool_string(x),
+    error = function(err) {
+      cli::col_silver("<tool result preview not available>")
+    }
+  )
 }
 
 ContentJson <- new_class(

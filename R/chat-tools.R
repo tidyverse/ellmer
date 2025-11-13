@@ -336,7 +336,7 @@ maybe_echo_tool <- function(x, echo = "output") {
   } else {
     icon <- cli::col_green(cli::symbol$record)
     header <- ""
-    value <- tool_string(x)
+    value <- tool_string_preview(x)
   }
 
   value <- cli::style_italic(value)
