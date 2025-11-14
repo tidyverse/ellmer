@@ -7,7 +7,7 @@
 \alias{AssistantTurn}
 \title{A user, assistant, or system turn}
 \usage{
-Turn(role = "", contents = list())
+Turn(role = NULL, contents = list(), tokens = NULL)
 
 UserTurn(contents = list())
 
@@ -22,19 +22,19 @@ AssistantTurn(
 )
 }
 \arguments{
-\item{role}{An optional character string specifying the role of the turn. For
-system, user and assistant turns, use \code{SystemTurn()}, \code{UserTurn()}, and
+\item{role}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+For system, user and assistant turns, use \code{SystemTurn()}, \code{UserTurn()}, and
 \code{AssistantTurn()}, respectively.}
 
 \item{contents}{A list of \link{Content} objects.}
 
-\item{json}{The serialized JSON corresponding to the underlying data of
-the turns. This is useful if there's information returned by the provider
-that ellmer doesn't otherwise expose.}
-
 \item{tokens}{A numeric vector of length 3 representing the number of
 input tokens (uncached), output tokens, and input tokens (cached)
 used in this turn.}
+
+\item{json}{The serialized JSON corresponding to the underlying data of
+the turns. This is useful if there's information returned by the provider
+that ellmer doesn't otherwise expose.}
 
 \item{cost}{The cost of the turn in dollars.}
 

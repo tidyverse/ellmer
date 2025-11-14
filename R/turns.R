@@ -21,8 +21,8 @@ NULL
 #' `vignette("tool-calling")`.
 #'
 #' @param contents A list of [Content] objects.
-#' @param role An optional character string specifying the role of the turn. For
-#'   system, user and assistant turns, use `SystemTurn()`, `UserTurn()`, and
+#' @param role `r lifecycle::badge("deprecated")`
+#'   For system, user and assistant turns, use `SystemTurn()`, `UserTurn()`, and
 #'   `AssistantTurn()`, respectively.
 #' @export
 #' @return An S7 `Turn` object
@@ -41,7 +41,7 @@ Turn <- new_class(
       getter = function(self) "unknown"
     )
   ),
-  constructor = function(role = NULL, contents = list()) {
+  constructor = function(role = NULL, contents = list(), tokens = NULL) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
     }
@@ -49,16 +49,14 @@ Turn <- new_class(
     if (!is.null(role)) {
       # Quick fallback to allow 0.4.0 release. Remove in future
       # Can then also remove custom constructors for subclasses.
+      # We should warn here, but this would cause chattr to fail tests.
+      # https://github.com/tidyverse/ellmer/issues/864
       role <- arg_match(role, c("user", "assistant", "system"))
-      cli::cli_warn(c(
-        "`role` is deprecated.",
-        i = "Use `UserTurn()`, `AssistantTurn()`, or `SystemTurn()` instead."
-      ))
 
       return(switch(
         role,
         user = UserTurn(contents = contents),
-        assistant = AssistantTurn(contents = contents),
+        assistant = AssistantTurn(contents = contents, tokens = tokens),
         system = SystemTurn(contents = contents),
         cli::cli_abort("Unsupported role {.str {role}}.")
       ))
