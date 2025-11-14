@@ -1,21 +1,47 @@
 # ellmer (development version)
 
-* `parallel_chat()` and `batch_chat()` are no longer experimental.
-* New set of `claude_file_()` functions for managing file uploads with Claude (@dcomputing, #761).
-* `chat_openai_compatible()` replaces `chat_openai()` as the interface to use for OpenAI-compatible APIs, and `chat_openai()` is reserved for the official OpenAI API. Unlike previous versions of `chat_openai()`, the `base_url` parameter is now required (#801).
-* `chat_openai()` now uses OpenAI's responses endpoint (#365, #801). This is their recommended endpoint and gives more access to built-in tools.
-* `batch_chat()` now retrieves failed results for `chat_openai()` (#830)
-* `batch_chat()` now works correctly for `chat_anthropic()` (#835).
-* `chat_anthropic()` and `chat_aws_bedrock()` now default to Claude Sonnet 4.5 (#800).
+* `AssistantTurn`s now have a `@duration` slot, containing the total time to complete the request (@simonpcouch, #798).
 * `batch_chat()` logs tokens once, on retrieval (#743).
+* `batch_chat()` now retrieves failed results for `chat_openai()` (#830).
+* `batch_chat()` now gracefully handles invalid JSON from `chat_openai()` (#845).
+* `batch_chat()` now works correctly for `chat_anthropic()` (#835).
+* `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).
 * `batch_chat_*()` now works correctly when `chat_openai()` fails to process some conversations (#830).
-* `params()` gains new `reasoning_effort` and `reasoning_tokens` so you can control the amount of effort a model spends on thinking. Initial support is provided for `chat_claude()`, `chat_google_gemini()`, and `chat_openai()` (#720).
-* `chat_anthropic()` gains new `cache` parameter to control caching. By default it is set to "5m". This should (on average) reduce the cost of your chats.(#584)
+* `batch_*()` have a new `ignore_hash` argument that allows you to opt out of the check if you're confident the difference only arises because ellmer itself has changed.
+* `batch_*()` no longer hashes properties of the provider besides the `name`, `model`, and `base_url`. This should provide some protection from accidentally reusing the same `.json` file with different providers, while still allowing you to use the same batch file across ellmer versions.
+* `chat_claude()` and `chat_aws_bedrock()` now default to Claude Sonnet 4.5 (#800).
+* `chat_claude()` gains new `cache` parameter to control caching. By default it is set to "5m". This should (on average) reduce the cost of your chats (#584).
+* `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758). `models_claude()` is now an alias for `models_anthropic()`.
+* `chat_databricks()` lifts many of its restrictions now that Databricks' API is more OpenAI compatible (#757).
+* `chat_google_gemini()` and `chat_openai()` support image generation (#368).
+* `chat_google_gemini()` has an experimental fallback interactive OAuth flow, if you're in an interactive session and no other authentication options can be found (#680).
+* `chat_groq()` now defaults to llama-3.1-8b-instant.
 * `chat_openai()` gains a `service_tier` argument (#712).
-* `Chat$get_tokens()` now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the `print()` method now reports costs on each assistant turn, rather than trying to parse out individual costs.
-* `chat_*()` functions now use a `credentials` function instead of an `api_key` (#613). This means that API keys are never stored in the chat object (which might be saved to disk), but is instead retrieved on demand as needed. You generally shouldn't need to use the `credentials` argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).
-* `chat_databricks()` lifts many of its restrictions now that the DataBrick's API is more OpenAI compatible (#757).
-* Updated pricing data (#790).
+* `chat_openai()` now uses OpenAI's responses endpoint (#365, #801). This is their recommended endpoint and gives more access to built-in tools.
+* `chat_openai_compatible()` replaces `chat_openai()` as the interface to use for OpenAI-compatible APIs, and `chat_openai()` is reserved for the official OpenAI API. Unlike previous versions of `chat_openai()`, the `base_url` parameter is now required (#801).
+* `chat_portkey()` now requires you to supply a model (#786).
+* `chat_portkey(virtual_key)` no longer needs to be supplied; instead Portkey recommends including the virtual key/provider in the `model` (#786).
+* `Chat$chat()`, `Chat$stream()`, and similar methods now add empty tool results when a the chat is interrupted during a tool call loop, allowing the conversation to be resumed without causing an API error (#840).
+* `Chat$chat_structured()` and friends now only warn if multiple JSON payloads found (instead of erroring) (@kbenoit, #732).
+* `Chat$get_tokens()` gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (#618).
+* `Chat$get_tokens()` now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the `print()` method now reports costs on each assistant turn, rather than trying to parse out individual costs (#824).
+* `chat_*()` functions now use a `credentials` function instead of an `api_key` (#613). This means that API keys are never stored in the chat object (which might be saved to disk), but are instead retrieved on demand as needed. You generally shouldn't need to use the `credentials` argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).
+* New set of `claude_file_()` functions for managing file uploads with Claude (@dcomputing, #761).
+* ellmer now supports a variety of built-in web search and fetch tools (#578):
+  - `claude_tool_web_search()` and `claude_tool_web_fetch()` for Claude.
+  - `google_tool_web_search()` and `google_tool_web_fetch()` for Gemini.
+  - `openai_tool_web_search()` for OpenAI.
+  If you want to do web fetch for other providers, you could use `btw::btw_tool_web_read_url()`.
+* `interpolate_package()` now provides an informative error if the requested prompt file is not found in the package's `prompts/` directory (#763).
+* `interpolate_package()` now works with in-development packages loaded with devtools (#766).
+* `models_mistral()` lists available models (@rplsmn, #750).
+* `models_ollama()` was fixed to correctly query model capabilities from remote Ollama servers (#746).
+* `parallel_chat()` and `batch_chat()` are no longer experimental.
+* `parallel_chat()` and friends now have a more permissive attitude to errors. By default, they will now return when hitting the first error (rather than erroring), and you can control this behaviour with the `on_error` argument. Or if you interrupt the job, it will finish up current requests and then return all the work done so far. The main downside of this work is that the output of `parallel_chat()` is more complex: it is now a mix of `Chat` objects, error objects, and `NULL` (#628).
+* `parallel_chat_structured()` no longer errors if some results fail to parse. Instead it warns, and the corresponding rows will be filled in with the appropriate missing values (#628).
+* `parallel_chat_structured()` now returns a tibble, since this does a better job of printing more complex data frames (#787).
+* `params()` gains new `reasoning_effort` and `reasoning_tokens` so you can control the amount of effort a model spends on thinking. Initial support is provided for `chat_claude()`, `chat_google_gemini()`, and `chat_openai()` (#720).
+* New `schema_df()` to describe the schema of a data frame to an LLM (#744).
 * The following deprecated functions/arguments/methods have now been removed:
   * `Chat$extract_data()` -> `chat$chat_structured()` (0.2.0)
   * `Chat$extract_data_async()` -> `chat$chat_structured_async()` (0.2.0)
@@ -28,26 +54,9 @@
   * `chat_gemini()` -> `chat_google_gemini()` (0.2.0)
   * `chat_openai(seed)` -> `chat_openai(params)` (0.2.0)
   * `create_tool_def(model)` -> `create_tool_def(chat)` (0.2.0)
-* New `schema_df()` to describe the schema of a data frame to an LLM (#744).
-* `chat_google_gemini()` and `chat_openai()` support image generation (#368).
-* `batch_*()` no longer hashes properties of the provider besides the `name`, `model`, and `base_url`. This should provide some protection from accidentally reusing the same `.json` file with different providers, while still allowing you to use the same batch file across ellmer versions.
-* `batch_*()` have a new `ignore_hash` argument that allows you to opt out of the check if you're confident the difference only arises because ellmer itself has changed.
-* Turns now have a `@duration` slot. The slot is `NA` for user turns and a numeric giving the total time to complete the request for assistant turns (@simonpcouch, #798).
-* `parallel_chat_structured()` now returns a tibble, since this does a better job of printing more complex data frames (#787).
-* `parallel_chat()` and friends now have a more permissive attitude to errors. By default, they will now return when hitting the first error (rather than erroring), and you can control this behaviour with the `on_error` argument. Or if you interrupt the job, it will finish up current requests and then return all the work done so far. The main downside of this work is that the output of `parallel_chat()` is more complex: it is now a mix of `Chat` objects, error objects, and `NULL` (#628).
-* `parallel_chat_structured()` no longer errors if some results fail to parse. Instead it warns, and the corresponding rows will be filled in with the appropriate missing values (#628).
-* `$chat_structured()` and friends now only warn if multiple json payloads found (instead of erroring) (@kbenoit, #732).
-* `interpolate_package()` now works with in-development packages loaded with devtools (#766).
-* `Chat$get_tokens()` gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (#618).
+* `tool()`s can now return image or PDF content types, with `content_image_file()` or `content_image_pdf()` (#735).
 * New `type_ignore()` allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (#764).
-* New `models_mistral()` to list available models (@rplsmn, #750).
-* `batch_chat_*()` and `parallel_chat_*()` now accept a string as the chat object, following the same rules as `chat()` (#677).
-* `interpolate_package()` now provides an informative error if the requested prompt file is not found in the package's `prompts/` directory (#763).
-
-* `models_ollama()` was fixed to correctly query model capabilities from remote Ollama servers (#746).
-
-* `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758).
-  `models_claude()` is now an alias for `models_anthropic()`.
+* Updated pricing data (#790).
 
 # ellmer 0.3.2
 
@@ -119,7 +128,7 @@
 
 # ellmer 0.2.1
 
-* When you save a `Chat` object to disk, API keys are automatically redacted.
+* When you save a `Chat` object to disk, API keys are
   This means that you can no longer easily resume a chat you've saved on disk
   (we'll figure this out in a future release) but ensures that you never
   accidentally save your secret key in an RDS file (#534).

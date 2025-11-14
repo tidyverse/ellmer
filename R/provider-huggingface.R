@@ -75,7 +75,7 @@ chat_huggingface_test <- function(
   model = NULL,
   echo = "none"
 ) {
-  model <- model %||% "Qwen/Qwen3-4B"
+  model <- model %||% "meta-llama/Llama-3.1-8B-Instruct"
   chat_huggingface(model = model, ..., echo = echo)
 }
 

@@ -71,11 +71,10 @@ claude features that are still in beta.}
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
-\item{credentials}{A function that returns the API key to use for authentication.
+\item{credentials}{Override the default credentials. You generally should not need this argument; instead set the \code{ANTHROPIC_API_KEY} environment variable. The best place to set this is in \code{.Renviron},
+which you can easily edit by calling \code{usethis::edit_r_environ()}.
 
-You generally should not need this argument; instead set the \code{ANTHROPIC_API_KEY} environment variable.
-The best place to set this is in \code{.Renviron},
-which you can easily edit by calling \code{usethis::edit_r_environ()}.}
+If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}

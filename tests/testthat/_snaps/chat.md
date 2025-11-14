@@ -45,3 +45,14 @@
       -- assistant [input=30000 output=1000 cost=$0.10] ------------------------------
       Output 1
 
+# can compute costs
+
+    Code
+      details
+    Output
+      # A tibble: 2 x 5
+        input output cached_input cost       input_preview
+        <dbl>  <dbl>        <dbl> <ellmr_dl> <chr>        
+      1 15000    500            0 $0.20      Text[Input 1]
+      2 30000   1000            0 $0.10      Text[Input 2]
+

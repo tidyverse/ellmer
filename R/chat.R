@@ -136,8 +136,12 @@ Chat <- R6::R6Class(
 
       turns <- self$get_turns()
       assistant_turns <- keep(turns, is_assistant_turn)
-      tokens <- as.data.frame(map_tokens(assistant_turns, \(turn) turn@tokens))
+      tokens <- map_tokens(assistant_turns, \(turn) turn@tokens)
+      tokens <- tibble::as_tibble(tokens)
       tokens$cost <- dollars(map_dbl(assistant_turns, \(turn) turn@cost))
+
+      user_turns <- keep(turns, is_user_turn)
+      tokens$input_preview <- map_chr(user_turns, turn_contents_preview)
       tokens
     },
 
@@ -189,7 +193,9 @@ Chat <- R6::R6Class(
     #'   `NULL`, then the value of `echo` set when the chat object was created
     #'   will be used.
     chat = function(..., echo = NULL) {
-      turn <- user_turn(...)
+      finish_tools <- private$complete_dangling_tool_requests()
+
+      turn <- user_turn(!!!finish_tools, ...)
       echo <- check_echo(echo %||% private$echo)
 
       # Returns a single turn (the final response from the assistant), even if
@@ -217,7 +223,9 @@ Chat <- R6::R6Class(
     #'   using the schema. For example, this will turn arrays of objects into
     #'   data frames and arrays of strings into a character vector.
     chat_structured = function(..., type, echo = "none", convert = TRUE) {
-      turn <- user_turn(..., .check_empty = FALSE)
+      finish_tools <- private$complete_dangling_tool_requests()
+
+      turn <- user_turn(!!!finish_tools, ..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
 
@@ -248,7 +256,9 @@ Chat <- R6::R6Class(
     #'   using the schema. For example, this will turn arrays of objects into
     #'   data frames and arrays of strings into a character vector.
     chat_structured_async = function(..., type, echo = "none", convert = TRUE) {
-      turn <- user_turn(..., .check_empty = FALSE)
+      finish_tools <- private$complete_dangling_tool_requests()
+
+      turn <- user_turn(!!!finish_tools, ..., .check_empty = FALSE)
       echo <- check_echo(echo %||% private$echo)
       check_bool(convert)
 
@@ -283,7 +293,9 @@ Chat <- R6::R6Class(
     #'   an interactive user interface. Concurrent mode is the default and is
     #'   best suited for automated scripts or non-interactive applications.
     chat_async = function(..., tool_mode = c("concurrent", "sequential")) {
-      turn <- user_turn(...)
+      finish_tools <- private$complete_dangling_tool_requests()
+
+      turn <- user_turn(!!!finish_tools, ...)
       tool_mode <- arg_match(tool_mode)
 
       # Returns a single turn (the final response from the assistant), even if
@@ -311,7 +323,9 @@ Chat <- R6::R6Class(
     #'   rich content types. When `stream = "content"`, `stream()` yields
     #'   [Content] objects.
     stream = function(..., stream = c("text", "content")) {
-      turn <- user_turn(...)
+      finish_tools <- private$complete_dangling_tool_requests()
+
+      turn <- user_turn(!!!finish_tools, ...)
       stream <- arg_match(stream)
       private$chat_impl(
         turn,
@@ -339,7 +353,9 @@ Chat <- R6::R6Class(
       tool_mode = c("concurrent", "sequential"),
       stream = c("text", "content")
     ) {
-      turn <- user_turn(...)
+      finish_tools <- private$complete_dangling_tool_requests()
+
+      turn <- user_turn(!!!finish_tools, ...)
       tool_mode <- arg_match(tool_mode)
       stream <- arg_match(stream)
       private$chat_impl_async(
@@ -767,6 +783,29 @@ Chat <- R6::R6Class(
 
     has_system_prompt = function() {
       length(private$.turns) > 0 && is_system_turn(private$.turns[[1]])
+    },
+
+    complete_dangling_tool_requests = function() {
+      if (length(private$.turns) == 0) {
+        return(NULL)
+      }
+
+      last_turn <- private$.turns[[length(private$.turns)]]
+      if (last_turn@role != "assistant") {
+        return(NULL)
+      }
+
+      tool_requests <- keep(last_turn@contents, is_tool_request)
+      if (length(tool_requests) == 0) {
+        return(NULL)
+      }
+
+      lapply(tool_requests, function(req) {
+        ContentToolResult(
+          error = "Chat ended before the tool could be invoked.",
+          request = req
+        )
+      })
     }
   )
 )
@@ -806,7 +845,7 @@ print.Chat <- function(x, ...) {
 turn_cost <- function(tokens, cost, prefix, suffix = "") {
   out <- paste0(prefix, "input=")
 
-  if (tokens[[3]] > 0) {
+  if (!is.na(tokens[[3]]) && tokens[[3]] > 0) {
     out <- paste0(out, tokens[[1]], "+", tokens[[3]])
   } else {
     out <- paste0(out, tokens[[1]])
