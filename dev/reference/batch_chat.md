@@ -5,7 +5,7 @@
 and
 [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md).
 They use the [OpenAI](https://platform.openai.com/docs/guides/batch) and
-[Anthropic](https://docs.anthropic.com/en/docs/build-with-claude/batch-processing)
+[Anthropic](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
 batch APIs which allow you to submit multiple requests simultaneously.
 The results can take up to 24 hours to complete, but in return you pay
 50% less than usual (but note that ellmer doesn't include this discount

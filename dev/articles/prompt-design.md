@@ -23,12 +23,12 @@ to read any specific advice for the model that you’re using. Here are
 some pointers to the prompt design guides of some of the most popular
 models:
 
-- [Claude](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview)
+- [Claude](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview)
 - [OpenAI](https://platform.openai.com/docs/guides/prompt-engineering)
 - [Gemini](https://ai.google.dev/gemini-api/docs/prompting-intro)
 
 If you have a claude account, you can use its
-[prompt-generator](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/prompt-generator).
+[prompt-generator](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/prompt-generator).
 It’s specifically tailored for Claude, but I suspect it will help you
 with many other LLMs, or at least give you some ideas as to what else to
 include in your prompt.

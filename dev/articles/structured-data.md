@@ -323,7 +323,7 @@ you re-consider the type.
 ## Examples
 
 The following examples, which are [closely inspired by the Claude
-documentation](https://github.com/anthropics/anthropic-cookbook/blob/main/tool_use/extracting_structured_json.ipynb),
+documentation](https://github.com/anthropics/claude-cookbooks/blob/main/tool_use/extracting_structured_json.ipynb),
 hint at some of the ways you can use structured data extraction.
 
 ### Example 1: Article summarisation

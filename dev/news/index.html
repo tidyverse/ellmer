@@ -50,86 +50,12 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
+<div class="section level3">
+<h3 id="lifecycle-changes-development-version">Lifecycle changes<a class="anchor" aria-label="anchor" href="#lifecycle-changes-development-version"></a></h3>
 <ul><li>
-<code>AssistantTurn</code>s now have a <code>@duration</code> slot, containing the total time to complete the request (<a href="https://github.com/simonpcouch" class="external-link">@simonpcouch</a>, <a href="https://github.com/tidyverse/ellmer/issues/798" class="external-link">#798</a>).</li>
-<li>
-<code><a href="../reference/batch_chat.html">batch_chat()</a></code> logs tokens once, on retrieval (<a href="https://github.com/tidyverse/ellmer/issues/743" class="external-link">#743</a>).</li>
-<li>
-<code><a href="../reference/batch_chat.html">batch_chat()</a></code> now retrieves failed results for <code><a href="../reference/chat_openai.html">chat_openai()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/830" class="external-link">#830</a>).</li>
-<li>
-<code><a href="../reference/batch_chat.html">batch_chat()</a></code> now gracefully handles invalid JSON from <code><a href="../reference/chat_openai.html">chat_openai()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/845" class="external-link">#845</a>).</li>
-<li>
-<code><a href="../reference/batch_chat.html">batch_chat()</a></code> now works correctly for <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/835" class="external-link">#835</a>).</li>
-<li>
-<code>batch_chat_*()</code> and <code>parallel_chat_*()</code> now accept a string as the chat object, following the same rules as <code><a href="../reference/chat-any.html">chat()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/677" class="external-link">#677</a>).</li>
-<li>
-<code>batch_chat_*()</code> now works correctly when <code><a href="../reference/chat_openai.html">chat_openai()</a></code> fails to process some conversations (<a href="https://github.com/tidyverse/ellmer/issues/830" class="external-link">#830</a>).</li>
-<li>
-<code>batch_*()</code> have a new <code>ignore_hash</code> argument that allows you to opt out of the check if you’re confident the difference only arises because ellmer itself has changed.</li>
-<li>
-<code>batch_*()</code> no longer hashes properties of the provider besides the <code>name</code>, <code>model</code>, and <code>base_url</code>. This should provide some protection from accidentally reusing the same <code>.json</code> file with different providers, while still allowing you to use the same batch file across ellmer versions.</li>
-<li>
-<code><a href="../reference/chat_anthropic.html">chat_claude()</a></code> and <code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> now default to Claude Sonnet 4.5 (<a href="https://github.com/tidyverse/ellmer/issues/800" class="external-link">#800</a>).</li>
-<li>
-<code><a href="../reference/chat_anthropic.html">chat_claude()</a></code> gains new <code>cache</code> parameter to control caching. By default it is set to “5m”. This should (on average) reduce the cost of your chats (<a href="https://github.com/tidyverse/ellmer/issues/584" class="external-link">#584</a>).</li>
-<li>
 <code><a href="../reference/chat_anthropic.html">chat_claude()</a></code> is no longer deprecated and is an alias for <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code>, reflecting Anthropic’s recent rebranding of developer tools under the Claude name (<a href="https://github.com/tidyverse/ellmer/issues/758" class="external-link">#758</a>). <code><a href="../reference/chat_anthropic.html">models_claude()</a></code> is now an alias for <code><a href="../reference/chat_anthropic.html">models_anthropic()</a></code>.</li>
 <li>
-<code><a href="../reference/chat_databricks.html">chat_databricks()</a></code> lifts many of its restrictions now that Databricks’ API is more OpenAI compatible (<a href="https://github.com/tidyverse/ellmer/issues/757" class="external-link">#757</a>).</li>
-<li>
-<code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> and <code><a href="../reference/chat_openai.html">chat_openai()</a></code> support image generation (<a href="https://github.com/tidyverse/ellmer/issues/368" class="external-link">#368</a>).</li>
-<li>
-<code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> has an experimental fallback interactive OAuth flow, if you’re in an interactive session and no other authentication options can be found (<a href="https://github.com/tidyverse/ellmer/issues/680" class="external-link">#680</a>).</li>
-<li>
-<code><a href="../reference/chat_groq.html">chat_groq()</a></code> now defaults to llama-3.1-8b-instant.</li>
-<li>
-<code><a href="../reference/chat_openai.html">chat_openai()</a></code> gains a <code>service_tier</code> argument (<a href="https://github.com/tidyverse/ellmer/issues/712" class="external-link">#712</a>).</li>
-<li>
-<code><a href="../reference/chat_openai.html">chat_openai()</a></code> now uses OpenAI’s responses endpoint (<a href="https://github.com/tidyverse/ellmer/issues/365" class="external-link">#365</a>, <a href="https://github.com/tidyverse/ellmer/issues/801" class="external-link">#801</a>). This is their recommended endpoint and gives more access to built-in tools.</li>
-<li>
-<code><a href="../reference/chat_openai_compatible.html">chat_openai_compatible()</a></code> replaces <code><a href="../reference/chat_openai.html">chat_openai()</a></code> as the interface to use for OpenAI-compatible APIs, and <code><a href="../reference/chat_openai.html">chat_openai()</a></code> is reserved for the official OpenAI API. Unlike previous versions of <code><a href="../reference/chat_openai.html">chat_openai()</a></code>, the <code>base_url</code> parameter is now required (<a href="https://github.com/tidyverse/ellmer/issues/801" class="external-link">#801</a>).</li>
-<li>
-<code><a href="../reference/chat_portkey.html">chat_portkey()</a></code> now requires you to supply a model (<a href="https://github.com/tidyverse/ellmer/issues/786" class="external-link">#786</a>).</li>
-<li>
-<code>chat_portkey(virtual_key)</code> no longer needs to be supplied; instead Portkey recommends including the virtual key/provider in the <code>model</code> (<a href="https://github.com/tidyverse/ellmer/issues/786" class="external-link">#786</a>).</li>
-<li>
-<code>Chat$chat()</code>, <code>Chat$stream()</code>, and similar methods now add empty tool results when a the chat is interrupted during a tool call loop, allowing the conversation to be resumed without causing an API error (<a href="https://github.com/tidyverse/ellmer/issues/840" class="external-link">#840</a>).</li>
-<li>
-<code>Chat$chat_structured()</code> and friends now only warn if multiple JSON payloads found (instead of erroring) (<a href="https://github.com/kbenoit" class="external-link">@kbenoit</a>, <a href="https://github.com/tidyverse/ellmer/issues/732" class="external-link">#732</a>).</li>
-<li>
-<code>Chat$get_tokens()</code> gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (<a href="https://github.com/tidyverse/ellmer/issues/618" class="external-link">#618</a>).</li>
-<li>
-<code>Chat$get_tokens()</code> now also returns the cost, and returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method now reports costs on each assistant turn, rather than trying to parse out individual costs (<a href="https://github.com/tidyverse/ellmer/issues/824" class="external-link">#824</a>).</li>
-<li>
-<code>chat_*()</code> functions now use a <code>credentials</code> function instead of an <code>api_key</code> (<a href="https://github.com/tidyverse/ellmer/issues/613" class="external-link">#613</a>). This means that API keys are never stored in the chat object (which might be saved to disk), but are instead retrieved on demand as needed. You generally shouldn’t need to use the <code>credentials</code> argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).</li>
-<li>New set of <code>claude_file_()</code> functions for managing file uploads with Claude (<a href="https://github.com/dcomputing" class="external-link">@dcomputing</a>, <a href="https://github.com/tidyverse/ellmer/issues/761" class="external-link">#761</a>).</li>
-<li>ellmer now supports a variety of built-in web search and fetch tools (<a href="https://github.com/tidyverse/ellmer/issues/578" class="external-link">#578</a>):
-<ul><li>
-<code><a href="../reference/claude_tool_web_search.html">claude_tool_web_search()</a></code> and <code><a href="../reference/claude_tool_web_fetch.html">claude_tool_web_fetch()</a></code> for Claude.</li>
-<li>
-<code><a href="../reference/google_tool_web_search.html">google_tool_web_search()</a></code> and <code><a href="../reference/google_tool_web_fetch.html">google_tool_web_fetch()</a></code> for Gemini.</li>
-<li>
-<code><a href="../reference/openai_tool_web_search.html">openai_tool_web_search()</a></code> for OpenAI. If you want to do web fetch for other providers, you could use <code>btw::btw_tool_web_read_url()</code>.</li>
-</ul></li>
-<li>
-<code><a href="../reference/interpolate.html">interpolate_package()</a></code> now provides an informative error if the requested prompt file is not found in the package’s <code>prompts/</code> directory (<a href="https://github.com/tidyverse/ellmer/issues/763" class="external-link">#763</a>).</li>
-<li>
-<code><a href="../reference/interpolate.html">interpolate_package()</a></code> now works with in-development packages loaded with devtools (<a href="https://github.com/tidyverse/ellmer/issues/766" class="external-link">#766</a>).</li>
-<li>
-<code><a href="../reference/chat_mistral.html">models_mistral()</a></code> lists available models (<a href="https://github.com/rplsmn" class="external-link">@rplsmn</a>, <a href="https://github.com/tidyverse/ellmer/issues/750" class="external-link">#750</a>).</li>
-<li>
-<code><a href="../reference/chat_ollama.html">models_ollama()</a></code> was fixed to correctly query model capabilities from remote Ollama servers (<a href="https://github.com/tidyverse/ellmer/issues/746" class="external-link">#746</a>).</li>
-<li>
 <code><a href="../reference/parallel_chat.html">parallel_chat()</a></code> and <code><a href="../reference/batch_chat.html">batch_chat()</a></code> are no longer experimental.</li>
-<li>
-<code><a href="../reference/parallel_chat.html">parallel_chat()</a></code> and friends now have a more permissive attitude to errors. By default, they will now return when hitting the first error (rather than erroring), and you can control this behaviour with the <code>on_error</code> argument. Or if you interrupt the job, it will finish up current requests and then return all the work done so far. The main downside of this work is that the output of <code><a href="../reference/parallel_chat.html">parallel_chat()</a></code> is more complex: it is now a mix of <code>Chat</code> objects, error objects, and <code>NULL</code> (<a href="https://github.com/tidyverse/ellmer/issues/628" class="external-link">#628</a>).</li>
-<li>
-<code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code> no longer errors if some results fail to parse. Instead it warns, and the corresponding rows will be filled in with the appropriate missing values (<a href="https://github.com/tidyverse/ellmer/issues/628" class="external-link">#628</a>).</li>
-<li>
-<code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code> now returns a tibble, since this does a better job of printing more complex data frames (<a href="https://github.com/tidyverse/ellmer/issues/787" class="external-link">#787</a>).</li>
-<li>
-<code><a href="../reference/params.html">params()</a></code> gains new <code>reasoning_effort</code> and <code>reasoning_tokens</code> so you can control the amount of effort a model spends on thinking. Initial support is provided for <code><a href="../reference/chat_anthropic.html">chat_claude()</a></code>, <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code>, and <code><a href="../reference/chat_openai.html">chat_openai()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/720" class="external-link">#720</a>).</li>
-<li>New <code>schema_df()</code> to describe the schema of a data frame to an LLM (<a href="https://github.com/tidyverse/ellmer/issues/744" class="external-link">#744</a>).</li>
 <li>The following deprecated functions/arguments/methods have now been removed:
 <ul><li>
 <code>Chat$extract_data()</code> -&gt; <code>chat$chat_structured()</code> (0.2.0)</li>
@@ -154,11 +80,84 @@
 <li>
 <code>create_tool_def(model)</code> -&gt; <code>create_tool_def(chat)</code> (0.2.0)</li>
 </ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>
+<code>batch_*()</code> no longer hashes properties of the provider besides the <code>name</code>, <code>model</code>, and <code>base_url</code>. This should provide some protection from accidentally reusing the same <code>.json</code> file with different providers, while still allowing you to use the same batch file across ellmer versions. It also has a new <code>ignore_hash</code> argument that allows you to opt out of the check if you’re confident the difference only arises because ellmer itself has changed.</li>
+<li>
+<code><a href="../reference/chat_anthropic.html">chat_claude()</a></code> gains new <code>cache</code> parameter to control caching. By default it is set to “5m”. This should (on average) reduce the cost of your chats (<a href="https://github.com/tidyverse/ellmer/issues/584" class="external-link">#584</a>).</li>
+<li>
+<code><a href="../reference/chat_openai.html">chat_openai()</a></code> now uses OpenAI’s responses endpoint (<a href="https://github.com/tidyverse/ellmer/issues/365" class="external-link">#365</a>, <a href="https://github.com/tidyverse/ellmer/issues/801" class="external-link">#801</a>). This is their recommended endpoint and gives more access to built-in tools.</li>
+<li>
+<code><a href="../reference/chat_openai_compatible.html">chat_openai_compatible()</a></code> replaces <code><a href="../reference/chat_openai.html">chat_openai()</a></code> as the interface to use for OpenAI-compatible APIs, and <code><a href="../reference/chat_openai.html">chat_openai()</a></code> is reserved for the official OpenAI API. Unlike previous versions of <code><a href="../reference/chat_openai.html">chat_openai()</a></code>, the <code>base_url</code> parameter is now required (<a href="https://github.com/tidyverse/ellmer/issues/801" class="external-link">#801</a>).</li>
+<li>
+<code>chat_*()</code> functions now use a <code>credentials</code> function instead of an <code>api_key</code> (<a href="https://github.com/tidyverse/ellmer/issues/613" class="external-link">#613</a>). This means that API keys are never stored in the chat object (which might be saved to disk), but are instead retrieved on demand as needed. You generally shouldn’t need to use the <code>credentials</code> argument, but when you do, you should use it to dynamically retrieve the API key from some other source (i.e. never inline a secret directly into a function call).</li>
+<li>New set of <code>claude_file_()</code> functions for managing file uploads with Claude (<a href="https://github.com/dcomputing" class="external-link">@dcomputing</a>, <a href="https://github.com/tidyverse/ellmer/issues/761" class="external-link">#761</a>).</li>
+<li>ellmer now supports a variety of built-in web search and fetch tools (<a href="https://github.com/tidyverse/ellmer/issues/578" class="external-link">#578</a>):
+<ul><li>
+<code><a href="../reference/claude_tool_web_search.html">claude_tool_web_search()</a></code> and <code><a href="../reference/claude_tool_web_fetch.html">claude_tool_web_fetch()</a></code> for Claude.</li>
+<li>
+<code><a href="../reference/google_tool_web_search.html">google_tool_web_search()</a></code> and <code><a href="../reference/google_tool_web_fetch.html">google_tool_web_fetch()</a></code> for Gemini.</li>
+<li>
+<code><a href="../reference/openai_tool_web_search.html">openai_tool_web_search()</a></code> for OpenAI. If you want to do web fetch for other providers, you could use <code>btw::btw_tool_web_read_url()</code>.</li>
+</ul></li>
+<li>
+<code><a href="../reference/parallel_chat.html">parallel_chat()</a></code> and friends now have a more permissive attitude to errors. By default, they will now return when hitting the first error (rather than erroring), and you can control this behaviour with the <code>on_error</code> argument. Or if you interrupt the job, it will finish up current requests and then return all the work done so far. The main downside of this work is that the output of <code><a href="../reference/parallel_chat.html">parallel_chat()</a></code> is more complex: it is now a mix of <code>Chat</code> objects, error objects, and <code>NULL</code> (<a href="https://github.com/tidyverse/ellmer/issues/628" class="external-link">#628</a>).</li>
+<li>
+<code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code> no longer errors if some results fail to parse. Instead it warns, and the corresponding rows will be filled in with the appropriate missing values (<a href="https://github.com/tidyverse/ellmer/issues/628" class="external-link">#628</a>).</li>
+<li>New <code>schema_df()</code> to describe the schema of a data frame to an LLM (<a href="https://github.com/tidyverse/ellmer/issues/744" class="external-link">#744</a>).</li>
 <li>
 <code><a href="../reference/tool.html">tool()</a></code>s can now return image or PDF content types, with <code><a href="../reference/content_image_url.html">content_image_file()</a></code> or <code>content_image_pdf()</code> (<a href="https://github.com/tidyverse/ellmer/issues/735" class="external-link">#735</a>).</li>
+<li>
+<code><a href="../reference/params.html">params()</a></code> gains new <code>reasoning_effort</code> and <code>reasoning_tokens</code> so you can control the amount of effort a model spends on thinking. Initial support is provided for <code><a href="../reference/chat_anthropic.html">chat_claude()</a></code>, <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code>, and <code><a href="../reference/chat_openai.html">chat_openai()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/720" class="external-link">#720</a>).</li>
 <li>New <code><a href="../reference/type_boolean.html">type_ignore()</a></code> allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (<a href="https://github.com/tidyverse/ellmer/issues/764" class="external-link">#764</a>).</li>
-<li>Updated pricing data (<a href="https://github.com/tidyverse/ellmer/issues/790" class="external-link">#790</a>).</li>
 </ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-and-bug-fixes-development-version">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-development-version"></a></h3>
+<ul><li>Updated pricing data (<a href="https://github.com/tidyverse/ellmer/issues/790" class="external-link">#790</a>).</li>
+<li>
+<code>AssistantTurn</code>s now have a <code>@duration</code> slot, containing the total time to complete the request (<a href="https://github.com/simonpcouch" class="external-link">@simonpcouch</a>, <a href="https://github.com/tidyverse/ellmer/issues/798" class="external-link">#798</a>).</li>
+<li>
+<code><a href="../reference/batch_chat.html">batch_chat()</a></code> logs tokens once, on retrieval (<a href="https://github.com/tidyverse/ellmer/issues/743" class="external-link">#743</a>).</li>
+<li>
+<code><a href="../reference/batch_chat.html">batch_chat()</a></code> now retrieves failed results for <code><a href="../reference/chat_openai.html">chat_openai()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/830" class="external-link">#830</a>) and gracefully handles invalid JSON (<a href="https://github.com/tidyverse/ellmer/issues/845" class="external-link">#845</a>).</li>
+<li>
+<code><a href="../reference/batch_chat.html">batch_chat()</a></code> now works once more for <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/835" class="external-link">#835</a>).</li>
+<li>
+<code>batch_chat_*()</code> and <code>parallel_chat_*()</code> now accept a string as the chat object, following the same rules as <code><a href="../reference/chat-any.html">chat()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/677" class="external-link">#677</a>).</li>
+<li>
+<code><a href="../reference/chat_anthropic.html">chat_claude()</a></code> and <code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> now default to Claude Sonnet 4.5 (<a href="https://github.com/tidyverse/ellmer/issues/800" class="external-link">#800</a>).</li>
+<li>
+<code><a href="../reference/chat_databricks.html">chat_databricks()</a></code> lifts many of its restrictions now that Databricks’ API is more OpenAI compatible (<a href="https://github.com/tidyverse/ellmer/issues/757" class="external-link">#757</a>).</li>
+<li>
+<code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> and <code><a href="../reference/chat_openai.html">chat_openai()</a></code> support image generation (<a href="https://github.com/tidyverse/ellmer/issues/368" class="external-link">#368</a>).</li>
+<li>
+<code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> has an experimental fallback interactive OAuth flow, if you’re in an interactive session and no other authentication options can be found (<a href="https://github.com/tidyverse/ellmer/issues/680" class="external-link">#680</a>).</li>
+<li>
+<code><a href="../reference/chat_groq.html">chat_groq()</a></code> now defaults to llama-3.1-8b-instant.</li>
+<li>
+<code><a href="../reference/chat_openai.html">chat_openai()</a></code> gains a <code>service_tier</code> argument (<a href="https://github.com/tidyverse/ellmer/issues/712" class="external-link">#712</a>).</li>
+<li>
+<code><a href="../reference/chat_portkey.html">chat_portkey()</a></code> now requires you to supply a model (<a href="https://github.com/tidyverse/ellmer/issues/786" class="external-link">#786</a>).</li>
+<li>
+<code>chat_portkey(virtual_key)</code> no longer needs to be supplied; instead Portkey recommends including the virtual key/provider in the <code>model</code> (<a href="https://github.com/tidyverse/ellmer/issues/786" class="external-link">#786</a>).</li>
+<li>
+<code>Chat$chat()</code>, <code>Chat$stream()</code>, and similar methods now add empty tool results when a the chat is interrupted during a tool call loop, allowing the conversation to be resumed without causing an API error (<a href="https://github.com/tidyverse/ellmer/issues/840" class="external-link">#840</a>).</li>
+<li>
+<code>Chat$chat_structured()</code> and friends now only warn if multiple JSON payloads found (instead of erroring) (<a href="https://github.com/kbenoit" class="external-link">@kbenoit</a>, <a href="https://github.com/tidyverse/ellmer/issues/732" class="external-link">#732</a>).</li>
+<li>
+<code>Chat$get_tokens()</code> gives a brief description of the turn contents to make it easier to see which turn tokens are spent on (<a href="https://github.com/tidyverse/ellmer/issues/618" class="external-link">#618</a>) and also returns the cost (<a href="https://github.com/tidyverse/ellmer/issues/824" class="external-link">#824</a>). It now returns one row for each assistant turn, better representing the underlying data received from LLM APIs. Similarly, the <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method now reports costs on each assistant turn, rather than trying to parse out individual costs.</li>
+<li>
+<code><a href="../reference/interpolate.html">interpolate_package()</a></code> now provides an informative error if the requested prompt file is not found in the package’s <code>prompts/</code> directory (<a href="https://github.com/tidyverse/ellmer/issues/763" class="external-link">#763</a>) and now works with in-development packages loaded with devtools (<a href="https://github.com/tidyverse/ellmer/issues/766" class="external-link">#766</a>).</li>
+<li>
+<code><a href="../reference/chat_mistral.html">models_mistral()</a></code> lists available models (<a href="https://github.com/rplsmn" class="external-link">@rplsmn</a>, <a href="https://github.com/tidyverse/ellmer/issues/750" class="external-link">#750</a>).</li>
+<li>
+<code><a href="../reference/chat_ollama.html">models_ollama()</a></code> was fixed to correctly query model capabilities from remote Ollama servers (<a href="https://github.com/tidyverse/ellmer/issues/746" class="external-link">#746</a>).</li>
+<li>
+<code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code> now returns a tibble, since this does a better job of printing more complex data frames (<a href="https://github.com/tidyverse/ellmer/issues/787" class="external-link">#787</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2" id="ellmer-032">ellmer 0.3.2<a class="anchor" aria-label="anchor" href="#ellmer-032"></a></h2><p class="text-muted">CRAN release: 2025-09-03</p>
 <ul><li>

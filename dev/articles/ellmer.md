@@ -140,7 +140,7 @@ two other important prompts that underlie the user prompt:
 - The **platform prompt**, which is unchangeable, set by the model
   provider, and affects every conversation. You can see what these look
   like from Anthropic, who [publishes their core system
-  prompts](https://docs.anthropic.com/en/release-notes/system-prompts).
+  prompts](https://docs.claude.com/en/release-notes/system-prompts).
 
 - The **system prompt** (aka developer prompt), which is set when you
   create a new conversation, and affects every response. It’s used to
