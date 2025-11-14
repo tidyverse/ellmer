@@ -18,6 +18,7 @@ You will need to sign up for a developer account (and pay for it) at the
 chat_openai(
   system_prompt = NULL,
   base_url = "https://api.openai.com/v1",
+  api_key = NULL,
   credentials = NULL,
   model = NULL,
   params = NULL,
@@ -43,6 +44,10 @@ models_openai(
 - base_url:
 
   The base URL to the endpoint; the default is OpenAI's public API.
+
+- api_key:
+
+  **\[deprecated\]** Use `credentials` instead.
 
 - credentials:
 
@@ -105,10 +110,6 @@ models_openai(
   Note this only affects the
   [`chat()`](https://ellmer.tidyverse.org/dev/reference/chat-any.md)
   method.
-
-- api_key:
-
-  **\[deprecated\]** Use `credentials` instead.
 
 ## Value
 
