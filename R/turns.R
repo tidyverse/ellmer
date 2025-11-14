@@ -38,7 +38,7 @@ Turn <- new_class(
     ),
     role = new_property(
       class = class_character,
-      getter = function(self) self@role %||% "unknown"
+      getter = function(self) "unknown"
     )
   ),
   constructor = function(role = NULL, contents = list()) {
