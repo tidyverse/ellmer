@@ -17,7 +17,7 @@ chat_ollama(
   api_headers = character()
 )
 
-models_ollama(base_url = "http://localhost:11434")
+models_ollama(base_url = "http://localhost:11434", credentials = NULL)
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
