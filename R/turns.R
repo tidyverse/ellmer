@@ -173,6 +173,8 @@ as_user_turns <- function(
 is_system_turn <- function(x) {
   S7_inherits(x, SystemTurn)
 }
+# needed for vitals
+is_system_prompt <- is_system_turn
 
 is_user_turn <- function(x) {
   S7_inherits(x, UserTurn)
