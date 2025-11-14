@@ -72,7 +72,7 @@ It's important to note that a request includes not only the current user prompt,
 
 The user prompt is the question that you send to the model. There are two other important prompts that underlie the user prompt:
 
-* The **platform prompt**, which is unchangeable, set by the model provider, and affects every conversation. You can see what these look like from Anthropic, who [publishes their core system prompts](https://docs.anthropic.com/en/release-notes/system-prompts).
+* The **platform prompt**, which is unchangeable, set by the model provider, and affects every conversation. You can see what these look like from Anthropic, who [publishes their core system prompts](https://docs.claude.com/en/release-notes/system-prompts).
 
 * The **system prompt** (aka developer prompt), which is set when you create a new conversation, and affects every response. It's used to provide additional instructions to the model, shaping its responses to your needs. For example, you might use the system prompt to ask the model to always respond in Spanish or to write dependency-free base R code. You can also use the system prompt to provide the model with information it wouldn't otherwise know, like the details of your database schema, or your preferred ggplot2 theme and color palette.
 

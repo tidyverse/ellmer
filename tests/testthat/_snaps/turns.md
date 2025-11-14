@@ -1,3 +1,16 @@
+# Turn() with `role`
+
+    Code
+      Turn(role = "invalid")
+    Condition
+      Error in `Turn()`:
+      ! `role` must be one of "user", "assistant", or "system", not "invalid".
+    Code
+      Turn(role = 42)
+    Condition
+      Error in `Turn()`:
+      ! `role` must be a character vector, not the number 42.
+
 # normalize_turns throws useful errors
 
     Code

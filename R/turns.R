@@ -21,6 +21,9 @@ NULL
 #' `vignette("tool-calling")`.
 #'
 #' @param contents A list of [Content] objects.
+#' @param role `r lifecycle::badge("deprecated")`
+#'   For system, user and assistant turns, use `SystemTurn()`, `UserTurn()`, and
+#'   `AssistantTurn()`, respectively.
 #' @export
 #' @return An S7 `Turn` object
 #' @examples
@@ -38,10 +41,30 @@ Turn <- new_class(
       getter = function(self) "unknown"
     )
   ),
-  constructor = function(contents = list()) {
+  constructor = function(role = NULL, contents = list(), tokens = NULL) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
     }
+
+    if (!is.null(role)) {
+      # Quick fallback to allow 0.4.0 release. Remove in future
+      # Can then also remove custom constructors for subclasses.
+      # We should warn here, but this would cause chattr to fail tests.
+      # https://github.com/tidyverse/ellmer/issues/864
+      role <- arg_match(role, c("user", "assistant", "system"))
+
+      return(switch(
+        role,
+        user = UserTurn(contents = contents),
+        assistant = AssistantTurn(
+          contents = contents,
+          tokens = tokens %||% c(NA_real_, NA_real_, NA_real_)
+        ),
+        system = SystemTurn(contents = contents),
+        cli::cli_abort("Unsupported role {.str {role}}.")
+      ))
+    }
+
     new_object(S7_object(), contents = contents)
   }
 )
@@ -56,7 +79,14 @@ UserTurn <- new_class(
       class = class_character,
       getter = function(self) "user"
     )
-  )
+  ),
+  constructor = function(contents = list()) {
+    if (is.character(contents)) {
+      contents <- list(ContentText(paste0(contents, collapse = "\n")))
+    }
+
+    new_object(Turn(), contents = contents)
+  }
 )
 
 #' @rdname Turn
@@ -69,7 +99,14 @@ SystemTurn <- new_class(
       class = class_character,
       getter = function(self) "system"
     )
-  )
+  ),
+  constructor = function(contents = list()) {
+    if (is.character(contents)) {
+      contents <- list(ContentText(paste0(contents, collapse = "\n")))
+    }
+
+    new_object(Turn(), contents = contents)
+  }
 )
 
 #' @param json The serialized JSON corresponding to the underlying data of
@@ -103,7 +140,27 @@ AssistantTurn <- new_class(
       class = class_character,
       getter = function(self) "assistant"
     )
-  )
+  ),
+  constructor = function(
+    contents = list(),
+    json = list(),
+    tokens = c(NA_real_, NA_real_, NA_real_),
+    cost = NA_real_,
+    duration = NA_real_
+  ) {
+    if (is.character(contents)) {
+      contents <- list(ContentText(paste0(contents, collapse = "\n")))
+    }
+
+    new_object(
+      Turn(),
+      contents = contents,
+      json = json,
+      tokens = tokens,
+      cost = cost,
+      duration = duration
+    )
+  }
 )
 method(format, Turn) <- function(x, ...) {
   contents <- map_chr(x@contents, format, ...)
@@ -173,6 +230,8 @@ as_user_turns <- function(
 is_system_turn <- function(x) {
   S7_inherits(x, SystemTurn)
 }
+# needed for vitals
+is_system_prompt <- is_system_turn
 
 is_user_turn <- function(x) {
   S7_inherits(x, UserTurn)

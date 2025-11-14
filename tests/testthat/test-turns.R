@@ -1,3 +1,21 @@
+test_that("Turn() with `role`", {
+  suppressWarnings({
+    # Promotes system, user, assistant to subclasses of Turn
+    expect_s7_class(Turn(role = "system"), SystemTurn)
+    expect_s7_class(Turn(role = "user"), UserTurn)
+    expect_s7_class(Turn(role = "assistant"), AssistantTurn)
+  })
+
+  # No role: unknown
+  expect_equal(Turn()@role, "unknown")
+
+  # Invalid roles are errors
+  expect_snapshot(error = TRUE, {
+    Turn(role = "invalid")
+    Turn(role = 42)
+  })
+})
+
 test_that("system prompt is applied correctly", {
   sys_prompt <- "foo"
   sys_msg <- SystemTurn(sys_prompt)

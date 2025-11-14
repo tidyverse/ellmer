@@ -157,9 +157,16 @@ The second most interactive way to chat is to call the `chat()` method:
 
 ``` r
 chat$chat("What preceding languages most influenced R?")
-#> R was primarily influenced by S, which was developed at Bell Labs. Other 
-#> notable influences include Scheme, for its functional programming concepts, and
-#> various statistical programming languages like Fortran and Lisp.
+#> R was primarily influenced by S, a language developed at Bell Laboratories. 
+#> Other notable influences include:
+#> 
+#> 1. **Scheme** - For functional programming concepts.
+#> 2. **LISP** - For its powerful data manipulation features.
+#> 3. **C** - For performance and system-level access.
+#> 4. **Fortran** - For numerical and statistical computations.
+#> 
+#> These languages contributed to R's syntax, data structures, and functional 
+#> programming capabilities.
 ```
 
 If you initialize the chat object in the global environment, the `chat`
@@ -177,12 +184,12 @@ chat$chat(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   "Can you explain this logo?"
 )
-#> The logo features a stylized letter "R" inside an oval shape, which represents 
-#> the R programming language. The design is modern and clean, emphasizing the 
-#> letter "R" prominently in blue, while the oval shape is often interpreted as a 
-#> symbol of data analysis and statistics, reflecting R's primary use in 
-#> statistical computing and graphics. The overall look conveys professionalism 
-#> and is recognized in the programming and data science communities.
+#> The logo consists of a stylized letter "R" in blue, surrounded by a gray oval 
+#> shape. The design reflects the programming language R, which is widely used for
+#> statistical computing and graphics. The color choice often symbolizes clarity 
+#> and professionalism, aligning with R's use in data analysis and research. The 
+#> logo encapsulates the language's focus on data visualization and statistical 
+#> methods.
 ```
 
 ### Streaming vs capturing
@@ -198,7 +205,7 @@ my_function <- function() {
   chat$chat("What is 6 times 7?")
 }
 str(my_function())
-#>  'ellmer_output' chr "42."
+#>  'ellmer_output' chr "6 times 7 is 42."
 ```
 
 If needed, you can manually control this behaviour with the `echo`
