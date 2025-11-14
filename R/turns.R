@@ -46,19 +46,22 @@ Turn <- new_class(
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
     }
 
-    if (is_string(role) && nzchar(role)) {
+    if (!is.null(role)) {
+      # Quick fallback to allow 0.4.0 release. Remove in future
+      # Can then also remove custom constructors for subclasses.
       role <- arg_match(role, c("user", "assistant", "system"))
+      cli::cli_warn(c(
+        "`role` is deprecated.",
+        i = "Use `UserTurn()`, `AssistantTurn()`, or `SystemTurn()` instead."
+      ))
 
       return(switch(
         role,
         user = UserTurn(contents = contents),
         assistant = AssistantTurn(contents = contents),
-        system = SystemTurn(contents = contents)
+        system = SystemTurn(contents = contents),
+        cli::cli_abort("Unsupported role {.str {role}}.")
       ))
-    }
-
-    if (!is.null(role)) {
-      cli::cli_warn("Ignoring unknown turn role: {.val {role}}")
     }
 
     new_object(S7_object(), contents = contents)

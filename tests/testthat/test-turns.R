@@ -1,8 +1,15 @@
 test_that("Turn() with `role`", {
-  # Promotes system, user, assistant to subclasses of Turn
-  expect_s7_class(Turn(role = "system"), SystemTurn)
-  expect_s7_class(Turn(role = "user"), UserTurn)
-  expect_s7_class(Turn(role = "assistant"), AssistantTurn)
+  suppressWarnings({
+    # Promotes system, user, assistant to subclasses of Turn
+    expect_s7_class(Turn(role = "system"), SystemTurn)
+    expect_s7_class(Turn(role = "user"), UserTurn)
+    expect_s7_class(Turn(role = "assistant"), AssistantTurn)
+  })
+
+  # with a warning
+  expect_snapshot(
+    x <- Turn(role = "system")
+  )
 
   # No role: unknown
   expect_equal(Turn()@role, "unknown")

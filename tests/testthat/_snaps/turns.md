@@ -1,6 +1,15 @@
 # Turn() with `role`
 
     Code
+      x <- Turn(role = "system")
+    Condition
+      Warning:
+      `role` is deprecated.
+      i Use `UserTurn()`, `AssistantTurn()`, or `SystemTurn()` instead.
+
+---
+
+    Code
       Turn(role = "invalid")
     Condition
       Error in `Turn()`:
@@ -8,11 +17,8 @@
     Code
       Turn(role = 42)
     Condition
-      Warning:
-      Ignoring unknown turn role: 42
-    Output
-      <Turn: unknown>
-      
+      Error in `Turn()`:
+      ! `role` must be a character vector, not the number 42.
 
 # normalize_turns throws useful errors
 
