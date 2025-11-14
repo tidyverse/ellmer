@@ -7,7 +7,7 @@
 \alias{AssistantTurn}
 \title{A user, assistant, or system turn}
 \usage{
-Turn(contents = list())
+Turn(role = "", contents = list())
 
 UserTurn(contents = list())
 
@@ -22,6 +22,10 @@ AssistantTurn(
 )
 }
 \arguments{
+\item{role}{An optional character string specifying the role of the turn. For
+system, user and assistant turns, use \code{SystemTurn()}, \code{UserTurn()}, and
+\code{AssistantTurn()}, respectively.}
+
 \item{contents}{A list of \link{Content} objects.}
 
 \item{json}{The serialized JSON corresponding to the underlying data of

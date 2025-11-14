@@ -21,6 +21,9 @@ NULL
 #' `vignette("tool-calling")`.
 #'
 #' @param contents A list of [Content] objects.
+#' @param role An optional character string specifying the role of the turn. For
+#'   system, user and assistant turns, use `SystemTurn()`, `UserTurn()`, and
+#'   `AssistantTurn()`, respectively.
 #' @export
 #' @return An S7 `Turn` object
 #' @examples
@@ -35,13 +38,27 @@ Turn <- new_class(
     ),
     role = new_property(
       class = class_character,
-      getter = function(self) "unknown"
+      getter = function(self) self@role %||% "unknown"
     )
   ),
-  constructor = function(contents = list()) {
+  constructor = function(role = "", contents = list()) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
     }
+
+    if (is_string(role) && nzchar(role)) {
+      if (identical(role, "user")) {
+        return(UserTurn(contents = contents))
+      }
+      if (identical(role, "assistant")) {
+        return(AssistantTurn(contents = contents))
+      }
+      if (identical(role, "system")) {
+        return(SystemTurn(contents = contents))
+      }
+      return(new_object(S7_object(), contents = contents, role = role))
+    }
+
     new_object(S7_object(), contents = contents)
   }
 )
@@ -56,7 +73,14 @@ UserTurn <- new_class(
       class = class_character,
       getter = function(self) "user"
     )
-  )
+  ),
+  constructor = function(contents = list()) {
+    if (is.character(contents)) {
+      contents <- list(ContentText(paste0(contents, collapse = "\n")))
+    }
+
+    new_object(Turn(), contents = contents)
+  }
 )
 
 #' @rdname Turn
@@ -69,7 +93,14 @@ SystemTurn <- new_class(
       class = class_character,
       getter = function(self) "system"
     )
-  )
+  ),
+  constructor = function(contents = list()) {
+    if (is.character(contents)) {
+      contents <- list(ContentText(paste0(contents, collapse = "\n")))
+    }
+
+    new_object(Turn(), contents = contents)
+  }
 )
 
 #' @param json The serialized JSON corresponding to the underlying data of
@@ -103,7 +134,27 @@ AssistantTurn <- new_class(
       class = class_character,
       getter = function(self) "assistant"
     )
-  )
+  ),
+  constructor = function(
+    contents = list(),
+    json = list(),
+    tokens = c(NA_real_, NA_real_, NA_real_),
+    cost = NA_real_,
+    duration = NA_real_
+  ) {
+    if (is.character(contents)) {
+      contents <- list(ContentText(paste0(contents, collapse = "\n")))
+    }
+
+    new_object(
+      Turn(),
+      contents = contents,
+      json = json,
+      tokens = tokens,
+      cost = cost,
+      duration = duration
+    )
+  }
 )
 method(format, Turn) <- function(x, ...) {
   contents <- map_chr(x@contents, format, ...)
