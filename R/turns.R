@@ -41,22 +41,20 @@ Turn <- new_class(
       getter = function(self) self@role %||% "unknown"
     )
   ),
-  constructor = function(role = "", contents = list()) {
+  constructor = function(role = list(), contents = list()) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
     }
 
     if (is_string(role) && nzchar(role)) {
-      if (identical(role, "user")) {
-        return(UserTurn(contents = contents))
-      }
-      if (identical(role, "assistant")) {
-        return(AssistantTurn(contents = contents))
-      }
-      if (identical(role, "system")) {
-        return(SystemTurn(contents = contents))
-      }
-      return(new_object(S7_object(), contents = contents, role = role))
+      role <- arg_match(role, c("user", "assistant", "system"))
+
+      return(switch(
+        role,
+        user = UserTurn(contents = contents),
+        assistant = AssistantTurn(contents = contents),
+        system = SystemTurn(contents = contents)
+      ))
     }
 
     new_object(S7_object(), contents = contents)

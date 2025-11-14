@@ -6,8 +6,11 @@ test_that("Turn() with `role`", {
 
   # No role: unknown
   expect_equal(Turn()@role, "unknown")
-  # Custom role is retained
-  expect_equal(Turn(role = "custom")@role, "custom")
+
+  # Invalid roles are errors
+  expect_snapshot(error = TRUE, {
+    Turn(role = "invalid")
+  })
 })
 
 test_that("system prompt is applied correctly", {

@@ -1,3 +1,11 @@
+# Turn() with `role`
+
+    Code
+      Turn(role = "invalid")
+    Condition
+      Error in `Turn()`:
+      ! `role` must be one of "user", "assistant", or "system", not "invalid".
+
 # normalize_turns throws useful errors
 
     Code
