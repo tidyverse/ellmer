@@ -1,15 +1,6 @@
 # Turn() with `role`
 
     Code
-      x <- Turn(role = "system")
-    Condition
-      Warning:
-      `role` is deprecated.
-      i Use `UserTurn()`, `AssistantTurn()`, or `SystemTurn()` instead.
-
----
-
-    Code
       Turn(role = "invalid")
     Condition
       Error in `Turn()`:

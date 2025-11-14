@@ -56,7 +56,10 @@ Turn <- new_class(
       return(switch(
         role,
         user = UserTurn(contents = contents),
-        assistant = AssistantTurn(contents = contents, tokens = tokens),
+        assistant = AssistantTurn(
+          contents = contents,
+          tokens = tokens %||% c(NA_real_, NA_real_, NA_real_)
+        ),
         system = SystemTurn(contents = contents),
         cli::cli_abort("Unsupported role {.str {role}}.")
       ))
