@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_ollama()` now uses `credentials` when checking if Ollama is available and `models_ollama()` now has a `credentials` argument. This is useful when accessing Ollama servers that require authentication (@AdaemmerP, #863).
 * `AssistantTurn`s now have a `@duration` slot, containing the total time to complete the request (@simonpcouch, #798).
 * `batch_chat()` logs tokens once, on retrieval (#743).
 * `batch_chat()` now retrieves failed results for `chat_openai()` (#830).
