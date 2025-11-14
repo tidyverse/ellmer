@@ -91,7 +91,7 @@ any number of additional cycles. Learn more about tool calling in
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Turn</span><span class="op">(</span>contents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Turn</span><span class="op">(</span>role <span class="op">=</span> <span class="cn">NULL</span>, contents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, tokens <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">UserTurn</span><span class="op">(</span>contents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -110,20 +110,26 @@ any number of additional cycles. Learn more about tool calling in
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-contents">contents<a class="anchor" aria-label="anchor" href="#arg-contents"></a></dt>
+<dl><dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a>
+For system, user and assistant turns, use <code>SystemTurn()</code>, <code>UserTurn()</code>, and
+<code>AssistantTurn()</code>, respectively.</p></dd>
+
+
+<dt id="arg-contents">contents<a class="anchor" aria-label="anchor" href="#arg-contents"></a></dt>
 <dd><p>A list of <a href="Content.html">Content</a> objects.</p></dd>
-
-
-<dt id="arg-json">json<a class="anchor" aria-label="anchor" href="#arg-json"></a></dt>
-<dd><p>The serialized JSON corresponding to the underlying data of
-the turns. This is useful if there's information returned by the provider
-that ellmer doesn't otherwise expose.</p></dd>
 
 
 <dt id="arg-tokens">tokens<a class="anchor" aria-label="anchor" href="#arg-tokens"></a></dt>
 <dd><p>A numeric vector of length 3 representing the number of
 input tokens (uncached), output tokens, and input tokens (cached)
 used in this turn.</p></dd>
+
+
+<dt id="arg-json">json<a class="anchor" aria-label="anchor" href="#arg-json"></a></dt>
+<dd><p>The serialized JSON corresponding to the underlying data of
+the turns. This is useful if there's information returned by the provider
+that ellmer doesn't otherwise expose.</p></dd>
 
 
 <dt id="arg-cost">cost<a class="anchor" aria-label="anchor" href="#arg-cost"></a></dt>

@@ -22,7 +22,7 @@ in
 ## Usage
 
 ``` r
-Turn(contents = list())
+Turn(role = NULL, contents = list(), tokens = NULL)
 
 UserTurn(contents = list())
 
@@ -39,23 +39,28 @@ AssistantTurn(
 
 ## Arguments
 
+- role:
+
+  **\[deprecated\]** For system, user and assistant turns, use
+  `SystemTurn()`, `UserTurn()`, and `AssistantTurn()`, respectively.
+
 - contents:
 
   A list of
   [Content](https://ellmer.tidyverse.org/dev/reference/Content.md)
   objects.
 
-- json:
-
-  The serialized JSON corresponding to the underlying data of the turns.
-  This is useful if there's information returned by the provider that
-  ellmer doesn't otherwise expose.
-
 - tokens:
 
   A numeric vector of length 3 representing the number of input tokens
   (uncached), output tokens, and input tokens (cached) used in this
   turn.
+
+- json:
+
+  The serialized JSON corresponding to the underlying data of the turns.
+  This is useful if there's information returned by the provider that
+  ellmer doesn't otherwise expose.
 
 - cost:
 
