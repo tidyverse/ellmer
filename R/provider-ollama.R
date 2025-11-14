@@ -49,11 +49,11 @@ chat_ollama <- function(
   credentials = NULL,
   api_headers = character()
 ) {
-  if (!has_ollama(base_url)) {
+  if (!has_ollama(base_url, api_key)) {
     cli::cli_abort("Can't find locally running ollama.")
   }
 
-  models <- models_ollama(base_url)$id
+  models <- models_ollama(base_url, api_key)$id
 
   if (missing(model)) {
     cli::cli_abort(c(
@@ -123,7 +123,7 @@ chat_ollama_test <- function(..., model = "qwen3:4b", echo = "none") {
 
   skip_if_no_ollama()
   testthat::skip_if_not(
-    model %in% models_ollama()$id,
+    model %in% models_ollama(base_url, api_key)$id,
     sprintf("Ollama: model '%s' is not installed", model)
   )
 
@@ -138,8 +138,11 @@ skip_if_no_ollama <- function() {
 
 #' @export
 #' @rdname chat_ollama
-models_ollama <- function(base_url = "http://localhost:11434") {
+models_ollama <- function(base_url = "http://localhost:11434", api_key = NULL) {
   req <- request(base_url)
+  if (!is.null(api_key)) {
+    req <- req_headers(req, Authorization = paste("Bearer", api_key))
+  }
   req <- req_url_path_append(req, "api/tags")
   resp <- req_perform(req)
   json <- resp_body_json(resp)
@@ -188,10 +191,13 @@ ollama_model_capabilities <- function(base_url, models) {
 }
 
 
-has_ollama <- function(base_url = "http://localhost:11434") {
+has_ollama <- function(base_url = "http://localhost:11434", api_key = NULL) {
   tryCatch(
     {
       req <- request(base_url)
+      if (!is.null(api_key)) {
+        req <- req_headers(req, Authorization = paste("Bearer", api_key))
+      }
       req <- req_url_path_append(req, "api/tags")
       req_perform(req)
       TRUE
