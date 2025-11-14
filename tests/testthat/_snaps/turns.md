@@ -5,6 +5,14 @@
     Condition
       Error in `Turn()`:
       ! `role` must be one of "user", "assistant", or "system", not "invalid".
+    Code
+      Turn(role = 42)
+    Condition
+      Warning:
+      Ignoring unknown turn role: 42
+    Output
+      <Turn: unknown>
+      
 
 # normalize_turns throws useful errors
 

@@ -41,7 +41,7 @@ Turn <- new_class(
       getter = function(self) self@role %||% "unknown"
     )
   ),
-  constructor = function(role = list(), contents = list()) {
+  constructor = function(role = NULL, contents = list()) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
     }
@@ -55,6 +55,10 @@ Turn <- new_class(
         assistant = AssistantTurn(contents = contents),
         system = SystemTurn(contents = contents)
       ))
+    }
+
+    if (!is.null(role)) {
+      cli::cli_warn("Ignoring unknown turn role: {.val {role}}")
     }
 
     new_object(S7_object(), contents = contents)

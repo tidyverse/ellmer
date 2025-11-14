@@ -10,6 +10,7 @@ test_that("Turn() with `role`", {
   # Invalid roles are errors
   expect_snapshot(error = TRUE, {
     Turn(role = "invalid")
+    Turn(role = 42)
   })
 })
 
