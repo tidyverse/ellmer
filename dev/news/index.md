@@ -212,6 +212,13 @@
 - [`models_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
   was fixed to correctly query model capabilities from remote Ollama
   servers ([\#746](https://github.com/tidyverse/ellmer/issues/746)).
+- [`chat_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
+  now uses `credentials` when checking if Ollama is available and
+  [`models_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
+  now has a `credentials` argument. This is useful when accessing Ollama
+  servers that require authentication
+  ([@AdaemmerP](https://github.com/AdaemmerP),
+  [\#863](https://github.com/tidyverse/ellmer/issues/863)).
 - [`parallel_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
   now returns a tibble, since this does a better job of printing more
   complex data frames

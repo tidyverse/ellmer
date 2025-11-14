@@ -155,6 +155,8 @@
 <li>
 <code><a href="../reference/chat_ollama.html">models_ollama()</a></code> was fixed to correctly query model capabilities from remote Ollama servers (<a href="https://github.com/tidyverse/ellmer/issues/746" class="external-link">#746</a>).</li>
 <li>
+<code><a href="../reference/chat_ollama.html">chat_ollama()</a></code> now uses <code>credentials</code> when checking if Ollama is available and <code><a href="../reference/chat_ollama.html">models_ollama()</a></code> now has a <code>credentials</code> argument. This is useful when accessing Ollama servers that require authentication (<a href="https://github.com/AdaemmerP" class="external-link">@AdaemmerP</a>, <a href="https://github.com/tidyverse/ellmer/issues/863" class="external-link">#863</a>).</li>
+<li>
 <code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code> now returns a tibble, since this does a better job of printing more complex data frames (<a href="https://github.com/tidyverse/ellmer/issues/787" class="external-link">#787</a>).</li>
 </ul></div>
 </div>
