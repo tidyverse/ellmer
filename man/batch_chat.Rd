@@ -77,7 +77,7 @@ is not complete.
 \code{batch_chat()} and \code{batch_chat_structured()} currently only work with
 \code{\link[=chat_openai]{chat_openai()}} and \code{\link[=chat_anthropic]{chat_anthropic()}}. They use the
 \href{https://platform.openai.com/docs/guides/batch}{OpenAI} and
-\href{https://docs.anthropic.com/en/docs/build-with-claude/batch-processing}{Anthropic}
+\href{https://docs.claude.com/en/docs/build-with-claude/batch-processing}{Anthropic}
 batch APIs which allow you to submit multiple requests simultaneously.
 The results can take up to 24 hours to complete, but in return you pay 50\%
 less than usual (but note that ellmer doesn't include this discount in

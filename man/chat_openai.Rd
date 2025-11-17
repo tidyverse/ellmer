@@ -8,6 +8,7 @@
 chat_openai(
   system_prompt = NULL,
   base_url = "https://api.openai.com/v1",
+  api_key = NULL,
   credentials = NULL,
   model = NULL,
   params = NULL,
@@ -28,6 +29,8 @@ models_openai(
 
 \item{base_url}{The base URL to the endpoint; the default is OpenAI's
 public API.}
+
+\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
 \item{credentials}{Override the default credentials. You generally should not need this argument; instead set the \code{OPENAI_API_KEY} environment variable. The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.
@@ -64,8 +67,6 @@ when running at the console).
 }
 
 Note this only affects the \code{chat()} method.}
-
-\item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 }
 \value{
 A \link{Chat} object.

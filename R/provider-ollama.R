@@ -49,11 +49,15 @@ chat_ollama <- function(
   credentials = NULL,
   api_headers = character()
 ) {
-  if (!has_ollama(base_url)) {
+  # ollama doesn't require an API key for local usage, but one might be needed
+  # if ollama is served behind a proxy (see #501)
+  credentials <- ollama_credentials(credentials, api_key)
+
+  if (!has_ollama(base_url, credentials)) {
     cli::cli_abort("Can't find locally running ollama.")
   }
 
-  models <- models_ollama(base_url)$id
+  models <- models_ollama(base_url, credentials)$id
 
   if (missing(model)) {
     cli::cli_abort(c(
@@ -71,15 +75,6 @@ chat_ollama <- function(
   }
 
   echo <- check_echo(echo)
-
-  # ollama doesn't require an API key for local usage, but one might be needed
-  # if ollama is served behind a proxy (see #501)
-  credentials <- as_credentials(
-    "chat_ollama",
-    function() Sys.getenv("OLLAMA_API_KEY", ""),
-    credentials = credentials,
-    api_key = api_key
-  )
 
   provider <- ProviderOllama(
     name = "Ollama",
@@ -101,6 +96,15 @@ ProviderOllama <- new_class(
     model = prop_string()
   )
 )
+
+ollama_credentials <- function(credentials = NULL, api_key = NULL) {
+  as_credentials(
+    "chat_ollama",
+    function() Sys.getenv("OLLAMA_API_KEY", ""),
+    credentials = credentials,
+    api_key = api_key
+  )
+}
 
 method(chat_params, ProviderOllama) <- function(provider, params) {
   # https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-chat-completion
@@ -138,8 +142,18 @@ skip_if_no_ollama <- function() {
 
 #' @export
 #' @rdname chat_ollama
-models_ollama <- function(base_url = "http://localhost:11434") {
+models_ollama <- function(
+  base_url = "http://localhost:11434",
+  credentials = NULL
+) {
+  credentials <- as_credentials(
+    "models_ollama",
+    function() Sys.getenv("OLLAMA_API_KEY", ""),
+    credentials = credentials
+  )
+
   req <- request(base_url)
+  req <- ellmer_req_credentials(req, credentials(), "Authorization")
   req <- req_url_path_append(req, "api/tags")
   resp <- req_perform(req)
   json <- resp_body_json(resp)
@@ -154,20 +168,25 @@ models_ollama <- function(base_url = "http://localhost:11434") {
     id = names,
     created_at = modified_at,
     size = size,
-    capabilities = ollama_model_capabilities(base_url, names)
+    capabilities = ollama_model_capabilities(base_url, names, credentials)
   )
   df[order(-xtfrm(df$created_at)), ]
 }
 
 the$ollama_cache <- new_environment()
 
-ollama_model_details <- function(base_url, model) {
+ollama_model_details <- function(
+  base_url,
+  model,
+  credentials = ollama_credentials()
+) {
   # https://github.com/ollama/ollama/blob/main/docs/api.md#show-model-information
   if (env_has(the$ollama_cache, model)) {
     return(the$ollama_cache[[model]])
   }
 
   req <- request(base_url)
+  req <- ellmer_req_credentials(req, credentials(), "Authorization")
   req <- req_url_path_append(req, "api/show")
   req <- req_body_json(req, list(model = model, verbose = FALSE))
 
@@ -180,18 +199,31 @@ ollama_model_details <- function(base_url, model) {
   details
 }
 
-ollama_model_capabilities <- function(base_url, models) {
+ollama_model_capabilities <- function(
+  base_url,
+  models,
+  credentials = ollama_credentials()
+) {
   res <- map(models, function(m) {
-    tryCatch(ollama_model_details(base_url, m), error = function(e) NULL)
+    tryCatch(
+      ollama_model_details(base_url, m, credentials),
+      error = function(e) NULL
+    )
   })
   map_chr(res, \(x) paste(x$capabilities, collapse = ","))
 }
 
 
-has_ollama <- function(base_url = "http://localhost:11434") {
+has_ollama <- function(
+  base_url = "http://localhost:11434",
+  credentials = ollama_credentials()
+) {
+  check_credentials(credentials)
+
   tryCatch(
     {
       req <- request(base_url)
+      req <- ellmer_req_credentials(req, credentials(), "Authorization")
       req <- req_url_path_append(req, "api/tags")
       req_perform(req)
       TRUE

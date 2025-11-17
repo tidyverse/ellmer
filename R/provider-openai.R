@@ -58,6 +58,7 @@ NULL
 chat_openai <- function(
   system_prompt = NULL,
   base_url = "https://api.openai.com/v1",
+  api_key = NULL,
   credentials = NULL,
   model = NULL,
   params = NULL,
@@ -70,8 +71,12 @@ chat_openai <- function(
   echo <- check_echo(echo)
   service_tier <- arg_match(service_tier)
 
-  credentials <- credentials %||% \() openai_key()
-  check_credentials(credentials)
+  credentials <- as_credentials(
+    "chat_openai",
+    \() openai_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
 
   provider <- ProviderOpenAI(
     name = "OpenAI",
