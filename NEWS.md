@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+# ellmer 0.4.0
+
 ## Lifecycle changes
 
 * `chat_claude()` is no longer deprecated and is an alias for `chat_anthropic()`, reflecting Anthropic's recent rebranding of developer tools under the Claude name (#758). `models_claude()` is now an alias for `models_anthropic()`.

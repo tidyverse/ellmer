@@ -76,6 +76,8 @@ reference:
 
 news:
   releases:
+  - text: "Version 0.4.0"
+    href: https://tidyverse.org/blog/2025/11/ellmer-0-4-0/
   - text: "Version 0.3.0"
     href: https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/
   - text: "Version 0.2.0"
