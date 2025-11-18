@@ -327,10 +327,15 @@ method(value_turn, ProviderGoogleGemini) <- function(
         ContentText(content$text)
       }
     } else if (has_name(content, "functionCall")) {
+      extra <- list()
+      if (has_name(content, "thoughtSignature")) {
+        extra$thoughtSignature <- content$thoughtSignature
+      }
       ContentToolRequest(
         content$functionCall$name,
         content$functionCall$name,
-        content$functionCall$args
+        content$functionCall$args,
+        extra = extra
       )
     } else if (has_name(content, "inlineData")) {
       ContentImageInline(
@@ -456,12 +461,18 @@ method(as_json, list(ProviderGoogleGemini, ContentToolRequest)) <- function(
   x,
   ...
 ) {
-  list(
+  result <- list(
     functionCall = list(
       name = x@id,
       args = x@arguments
     )
   )
+
+  if (has_name(x@extra, "thoughtSignature")) {
+    result$thoughtSignature <- x@extra$thoughtSignature
+  }
+
+  result
 }
 
 # https://ai.google.dev/api/caching#FunctionResponse

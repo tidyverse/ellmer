@@ -209,7 +209,8 @@ ContentToolRequest <- new_class(
     id = prop_string(),
     name = prop_string(),
     arguments = class_list,
-    tool = NULL | ToolDef
+    tool = NULL | ToolDef,
+    extra = class_list
   )
 )
 method(format, ContentToolRequest) <- function(

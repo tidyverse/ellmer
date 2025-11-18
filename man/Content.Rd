@@ -26,7 +26,8 @@ ContentToolRequest(
   id = stop("Required"),
   name = stop("Required"),
   arguments = list(),
-  tool = NULL
+  tool = NULL,
+  extra = list()
 )
 
 ContentToolResult(value = NULL, error = NULL, extra = list(), request = NULL)
@@ -60,13 +61,13 @@ Automatically managed by \pkg{ellmer}.}
 \item{tool}{ellmer automatically matches a tool request to the tools defined
 for the chatbot. If \code{NULL}, the request did not match a defined tool.}
 
+\item{extra}{Additional data.}
+
 \item{value}{The results of calling the tool function, if it succeeded.}
 
 \item{error}{The error message, as a string, or the error condition thrown
 as a result of a failure when calling the tool function. Must be \code{NULL}
 when the tool call is successful.}
-
-\item{extra}{Additional data.}
 
 \item{request}{The \link{ContentToolRequest} associated with the tool result,
 automatically added by \pkg{ellmer} when evaluating the tool call.}
