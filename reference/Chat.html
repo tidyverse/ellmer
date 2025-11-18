@@ -13,7 +13,7 @@ that you send to the server, and the messages that you receive back.
 If you register a tool (i.e. an R function that the assistant can call on
 your behalf), it also takes care of the tool loop.
 You should generally not create this object yourself,
-but instead call chat_openai() or friends instead."><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
+but instead call chat_openai() or friends instead."><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
@@ -21,7 +21,7 @@ but instead call chat_openai() or friends instead."><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,7 @@ but instead call chat_openai() or friends instead."><meta property="og:image" co
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://tidyverse.org/blog/2025/11/ellmer-0-4-0/">Version 0.4.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
@@ -59,7 +60,7 @@ but instead call chat_openai() or friends instead."><meta property="og:image" co
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>The Chat object</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.3.2/R/chat.R" class="external-link"><code>R/chat.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/chat.R" class="external-link"><code>R/chat.R</code></a></small>
       <div class="d-none name"><code>Chat.Rd</code></div>
     </div>
 
@@ -108,8 +109,6 @@ but instead call <code><a href="chat_openai.html">chat_openai()</a></code> or fr
 <li><p><a href="#method-Chat-set_tools"><code>Chat$set_tools()</code></a></p></li>
 <li><p><a href="#method-Chat-on_tool_request"><code>Chat$on_tool_request()</code></a></p></li>
 <li><p><a href="#method-Chat-on_tool_result"><code>Chat$on_tool_result()</code></a></p></li>
-<li><p><a href="#method-Chat-extract_data"><code>Chat$extract_data()</code></a></p></li>
-<li><p><a href="#method-Chat-extract_data_async"><code>Chat$extract_data_async()</code></a></p></li>
 <li><p><a href="#method-Chat-clone"><code>Chat$clone()</code></a></p></li>
 </ul></div><p></p><hr><a id="method-Chat-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
@@ -179,7 +178,7 @@ turns (if any exists).</p></dd>
 <h3 id="method-add-turn-">Method <code>add_turn()</code><a class="anchor" aria-label="anchor" href="#method-add-turn-"></a></h3>
 <p>Add a pair of turns to the chat.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">add_turn</span><span class="op">(</span><span class="va">user</span>, <span class="va">system</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">add_turn</span><span class="op">(</span><span class="va">user</span>, <span class="va">assistant</span>, log_tokens <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -188,8 +187,13 @@ turns (if any exists).</p></dd>
 <dd><p>The user <a href="Turn.html">Turn</a>.</p></dd>
 
 
-<dt><code>system</code></dt>
+<dt><code>assistant</code></dt>
 <dd><p>The system <a href="Turn.html">Turn</a>.</p></dd>
+
+
+<dt><code>log_tokens</code></dt>
+<dd><p>Should tokens used in the turn be logged to the
+session counter?</p></dd>
 
 
 </dl><p></p></div>
@@ -229,18 +233,18 @@ turns (if any exists).</p></dd>
 
 </div><p></p><hr><a id="method-Chat-get_tokens"></a><div class="section">
 <h3 id="method-get-tokens-">Method <code>get_tokens()</code><a class="anchor" aria-label="anchor" href="#method-get-tokens-"></a></h3>
-<p>A data frame with a <code>tokens</code> column that provides the
-number of input tokens used by user turns and the number of
-output tokens used by assistant turns.</p><div class="section">
+<p>A data frame with token usage and cost data. There are four
+columns: <code>input</code>, <code>output</code>, <code>cached_input</code>, and <code>cost</code>. There is one
+row for each assistant turn, because token counts and costs are only
+available when the API returns the assistant's response.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_tokens</span><span class="op">(</span>include_system_prompt <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_tokens</span><span class="op">(</span>include_system_prompt <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>include_system_prompt</code></dt>
-<dd><p>Whether to include the system prompt in
-the turns (if any exists).</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p></dd>
 
 
 </dl><p></p></div>
@@ -576,48 +580,15 @@ which must have <code>result</code> as its only argument.</p></dd>
 <p>A function that can be called to remove the callback.</p>
 </div>
 
-</div><p></p><hr><a id="method-Chat-extract_data"></a><div class="section">
-<h3 id="method-extract-data-">Method <code>extract_data()</code><a class="anchor" aria-label="anchor" href="#method-extract-data-"></a></h3>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a>
-Deprecated in favour of <code>$chat_structured()</code>.</p><div class="section">
-<h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">extract_data</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
-<h4 id="arguments-19">Arguments<a class="anchor" aria-label="anchor" href="#arguments-19"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>...</code></dt>
-<dd><p>See <code>$chat_structured()</code></p></dd>
-
-
-</dl><p></p></div>
-</div>
-
-</div><p></p><hr><a id="method-Chat-extract_data_async"></a><div class="section">
-<h3 id="method-extract-data-async-">Method <code>extract_data_async()</code><a class="anchor" aria-label="anchor" href="#method-extract-data-async-"></a></h3>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p><div class="section">
-<h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">extract_data_async</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
-<h4 id="arguments-20">Arguments<a class="anchor" aria-label="anchor" href="#arguments-20"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>...</code></dt>
-<dd><p>See <code>$chat_structured_async()</code></p></dd>
-
-
-</dl><p></p></div>
-</div>
-
 </div><p></p><hr><a id="method-Chat-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-25">Usage<a class="anchor" aria-label="anchor" href="#usage-25"></a></h4>
+<h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-21">Arguments<a class="anchor" aria-label="anchor" href="#arguments-21"></a></h4>
+<h4 id="arguments-19">Arguments<a class="anchor" aria-label="anchor" href="#arguments-19"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
@@ -634,7 +605,10 @@ Deprecated in favour of <code>$chat_structured()</code>.</p><div class="section"
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Tell me a funny joke"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Why did the scarecrow win an award?  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sure! Here you go:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Why did the scarecrow win an award?</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Because he was outstanding in his field! 🌾😄</span>
 </code></pre></div>
     </div>
@@ -649,7 +623,7 @@ Deprecated in favour of <code>$chat_structured()</code>.</p><div class="section"
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer></body></html>

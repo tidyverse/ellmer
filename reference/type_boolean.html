@@ -21,6 +21,9 @@ must have the specified type. For example,
 type_object(a = type_string(), b = type_array(type_integer())) is
 equivalent to a list with an element called a that is a string and
 an element called b that is an integer vector.
+type_ignore() is used in tool calling to indicate that an argument should
+not be provided by the LLM. This is useful when the R function has a
+default value for the argument and you don't want the LLM to supply it.
 type_from_schema() allows you to specify the full schema that you want to
 get back from the LLM as a JSON schema. This is useful if you have a
 pre-defined schema that you want to use directly without manually creating
@@ -50,6 +53,9 @@ must have the specified type. For example,
 type_object(a = type_string(), b = type_array(type_integer())) is
 equivalent to a list with an element called a that is a string and
 an element called b that is an integer vector.
+type_ignore() is used in tool calling to indicate that an argument should
+not be provided by the LLM. This is useful when the R function has a
+default value for the argument and you don't want the LLM to supply it.
 type_from_schema() allows you to specify the full schema that you want to
 get back from the LLM as a JSON schema. This is useful if you have a
 pre-defined schema that you want to use directly without manually creating
@@ -57,7 +63,7 @@ the type using the type_*() functions. You can point to a file with the
 path argument or provide a JSON string with text. The schema must be a
 valid JSON schema object.
 
-"><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
+"><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
@@ -65,7 +71,7 @@ valid JSON schema object.
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,6 +92,7 @@ valid JSON schema object.
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://tidyverse.org/blog/2025/11/ellmer-0-4-0/">Version 0.4.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
@@ -103,7 +110,7 @@ valid JSON schema object.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Type specifications</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.3.2/R/types.R" class="external-link"><code>R/types.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/types.R" class="external-link"><code>R/types.R</code></a></small>
       <div class="d-none name"><code>type_boolean.Rd</code></div>
     </div>
 
@@ -129,6 +136,9 @@ must have the specified type. For example,
 <code>type_object(a = type_string(), b = type_array(type_integer()))</code> is
 equivalent to a list with an element called <code>a</code> that is a string and
 an element called <code>b</code> that is an integer vector.</p></li>
+<li><p><code>type_ignore()</code> is used in tool calling to indicate that an argument should
+not be provided by the LLM. This is useful when the R function has a
+default value for the argument and you don't want the LLM to supply it.</p></li>
 <li><p><code>type_from_schema()</code> allows you to specify the full schema that you want to
 get back from the LLM as a JSON schema. This is useful if you have a
 pre-defined schema that you want to use directly without manually creating
@@ -158,7 +168,9 @@ valid JSON schema object.</p></li>
 <span>  .additional_properties <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">type_from_schema</span><span class="op">(</span><span class="va">text</span>, <span class="va">path</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">type_from_schema</span><span class="op">(</span><span class="va">text</span>, <span class="va">path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">type_ignore</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -193,8 +205,8 @@ value, the default value will be used.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Name-type pairs defining the components that the object must
-possess.</p></dd>
+<dd><p>&lt;<code><a href="https://rlang.r-lib.org/reference/dyn-dots.html" class="external-link">dynamic-dots</a></code>&gt; Name-type pairs defining
+the components that the object must possess.</p></dd>
 
 
 <dt id="arg--additional-properties">.additional_properties<a class="anchor" aria-label="anchor" href="#arg--additional-properties"></a></dt>
@@ -276,7 +288,7 @@ properties that are not explicitly listed? Only supported by Claude.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer></body></html>

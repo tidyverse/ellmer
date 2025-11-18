@@ -3,7 +3,7 @@
 Support for features depends on the underlying model that you use; see
 https://openrouter.ai/models for details."><meta property="og:description" content="Sign up at https://openrouter.ai.
 Support for features depends on the underlying model that you use; see
-https://openrouter.ai/models for details."><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
+https://openrouter.ai/models for details."><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
@@ -11,7 +11,7 @@ https://openrouter.ai/models for details."><meta property="og:image" content="ht
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,7 @@ https://openrouter.ai/models for details."><meta property="og:image" content="ht
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://tidyverse.org/blog/2025/11/ellmer-0-4-0/">Version 0.4.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
@@ -49,7 +50,7 @@ https://openrouter.ai/models for details."><meta property="og:image" content="ht
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Chat with one of the many models hosted on OpenRouter</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.3.2/R/provider-openrouter.R" class="external-link"><code>R/provider-openrouter.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/provider-openrouter.R" class="external-link"><code>R/provider-openrouter.R</code></a></small>
       <div class="d-none name"><code>chat_openrouter.Rd</code></div>
     </div>
 
@@ -63,9 +64,9 @@ https://openrouter.ai/models for details."><meta property="og:image" content="ht
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">chat_openrouter</span><span class="op">(</span></span>
 <span>  system_prompt <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  api_key <span class="op">=</span> <span class="fu">openrouter_key</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  echo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"output"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
@@ -82,20 +83,18 @@ https://openrouter.ai/models for details."><meta property="og:image" content="ht
 
 
 <dt id="arg-api-key">api_key<a class="anchor" aria-label="anchor" href="#arg-api-key"></a></dt>
-<dd><p>API key to use for authentication.</p>
-<p>You generally should not supply this directly, but instead set the <code>OPENROUTER_API_KEY</code> environment variable.
-The best place to set this is in <code>.Renviron</code>,
-which you can easily edit by calling <code>usethis::edit_r_environ()</code>.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>credentials</code> instead.</p></dd>
+
+
+<dt id="arg-credentials">credentials<a class="anchor" aria-label="anchor" href="#arg-credentials"></a></dt>
+<dd><p>Override the default credentials. You generally should not need this argument; instead set the <code>OPENROUTER_API_KEY</code> environment variable. The best place to set this is in <code>.Renviron</code>,
+which you can easily edit by calling <code>usethis::edit_r_environ()</code>.</p>
+<p>If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).</p></dd>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>The model to use for the chat (defaults to "gpt-4o").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.</p></dd>
-
-
-<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>Optional integer seed that ChatGPT uses to try and make output
-more reproducible.</p></dd>
 
 
 <dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
@@ -128,21 +127,22 @@ to every chat API call.</p></dd>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other chatbots:
-<code><a href="chat_anthropic.html">chat_anthropic</a>()</code>,
-<code><a href="chat_aws_bedrock.html">chat_aws_bedrock</a>()</code>,
-<code><a href="chat_azure_openai.html">chat_azure_openai</a>()</code>,
-<code><a href="chat_cloudflare.html">chat_cloudflare</a>()</code>,
-<code><a href="chat_databricks.html">chat_databricks</a>()</code>,
-<code><a href="chat_deepseek.html">chat_deepseek</a>()</code>,
-<code><a href="chat_github.html">chat_github</a>()</code>,
-<code><a href="chat_google_gemini.html">chat_google_gemini</a>()</code>,
-<code><a href="chat_groq.html">chat_groq</a>()</code>,
-<code><a href="chat_huggingface.html">chat_huggingface</a>()</code>,
-<code><a href="chat_mistral.html">chat_mistral</a>()</code>,
-<code><a href="chat_ollama.html">chat_ollama</a>()</code>,
-<code><a href="chat_openai.html">chat_openai</a>()</code>,
-<code><a href="chat_perplexity.html">chat_perplexity</a>()</code>,
-<code><a href="chat_portkey.html">chat_portkey</a>()</code></p></div>
+<code><a href="chat_anthropic.html">chat_anthropic()</a></code>,
+<code><a href="chat_aws_bedrock.html">chat_aws_bedrock()</a></code>,
+<code><a href="chat_azure_openai.html">chat_azure_openai()</a></code>,
+<code><a href="chat_cloudflare.html">chat_cloudflare()</a></code>,
+<code><a href="chat_databricks.html">chat_databricks()</a></code>,
+<code><a href="chat_deepseek.html">chat_deepseek()</a></code>,
+<code><a href="chat_github.html">chat_github()</a></code>,
+<code><a href="chat_google_gemini.html">chat_google_gemini()</a></code>,
+<code><a href="chat_groq.html">chat_groq()</a></code>,
+<code><a href="chat_huggingface.html">chat_huggingface()</a></code>,
+<code><a href="chat_mistral.html">chat_mistral()</a></code>,
+<code><a href="chat_ollama.html">chat_ollama()</a></code>,
+<code><a href="chat_openai.html">chat_openai()</a></code>,
+<code><a href="chat_openai_compatible.html">chat_openai_compatible()</a></code>,
+<code><a href="chat_perplexity.html">chat_perplexity()</a></code>,
+<code><a href="chat_portkey.html">chat_portkey()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -164,7 +164,7 @@ to every chat API call.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer></body></html>

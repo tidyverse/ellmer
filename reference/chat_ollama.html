@@ -4,8 +4,7 @@ Ollama. Then install some models either from the
 command line (e.g. with ollama pull llama3.1) or within R using
 ollamar (e.g.
 ollamar::pull(&quot;llama3.1&quot;)).
-This function is a lightweight wrapper around chat_openai() with
-the defaults tweaked for ollama.
+Built on top of chat_openai_compatible().
 Known limitations
 
 
@@ -24,8 +23,7 @@ Ollama. Then install some models either from the
 command line (e.g. with ollama pull llama3.1) or within R using
 ollamar (e.g.
 ollamar::pull(&quot;llama3.1&quot;)).
-This function is a lightweight wrapper around chat_openai() with
-the defaults tweaked for ollama.
+Built on top of chat_openai_compatible().
 Known limitations
 
 
@@ -39,7 +37,7 @@ tried it with.
 
 
 
-"><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
+"><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
@@ -47,7 +45,7 @@ tried it with.
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,6 +66,7 @@ tried it with.
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://tidyverse.org/blog/2025/11/ellmer-0-4-0/">Version 0.4.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
@@ -85,7 +84,7 @@ tried it with.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Chat with a local Ollama model</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.3.2/R/provider-ollama.R" class="external-link"><code>R/provider-ollama.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/provider-ollama.R" class="external-link"><code>R/provider-ollama.R</code></a></small>
       <div class="d-none name"><code>chat_ollama.Rd</code></div>
     </div>
 
@@ -95,8 +94,7 @@ tried it with.
 command line (e.g. with <code>ollama pull llama3.1</code>) or within R using
 <a href="https://hauselin.github.io/ollama-r/" class="external-link">ollamar</a> (e.g.
 <code>ollamar::pull("llama3.1")</code>).</p>
-<p>This function is a lightweight wrapper around <code><a href="chat_openai.html">chat_openai()</a></code> with
-the defaults tweaked for ollama.</p><div class="section">
+<p>Built on top of <code><a href="chat_openai_compatible.html">chat_openai_compatible()</a></code>.</p><div class="section">
 <h3 id="known-limitations">Known limitations<a class="anchor" aria-label="anchor" href="#known-limitations"></a></h3>
 
 <ul><li><p>Tool calling is not supported with streaming (i.e. when <code>echo</code> is
@@ -116,15 +114,15 @@ tried it with.</p></li>
 <span>  system_prompt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  base_url <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"OLLAMA_BASE_URL"</span>, <span class="st">"http://localhost:11434"</span><span class="op">)</span>,</span>
 <span>  <span class="va">model</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  echo <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">models_ollama</span><span class="op">(</span>base_url <span class="op">=</span> <span class="st">"http://localhost:11434"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">models_ollama</span><span class="op">(</span>base_url <span class="op">=</span> <span class="st">"http://localhost:11434"</span>, credentials <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -136,17 +134,13 @@ tried it with.</p></li>
 
 
 <dt id="arg-base-url">base_url<a class="anchor" aria-label="anchor" href="#arg-base-url"></a></dt>
-<dd><p>The base URL to the endpoint; the default uses OpenAI.</p></dd>
+<dd><p>The base URL to the endpoint; the default is OpenAI's
+public API.</p></dd>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>The model to use for the chat.
 Use <code>models_ollama()</code> to see all options.</p></dd>
-
-
-<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>Optional integer seed that ChatGPT uses to try and make output
-more reproducible.</p></dd>
 
 
 <dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
@@ -168,11 +162,16 @@ when running at the console).</p></li>
 
 
 <dt id="arg-api-key">api_key<a class="anchor" aria-label="anchor" href="#arg-api-key"></a></dt>
-<dd><p>Ollama doesn't require an API key for local usage and in most
-cases you do not need to provide an <code>api_key</code>.</p>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>credentials</code> instead.</p></dd>
+
+
+<dt id="arg-credentials">credentials<a class="anchor" aria-label="anchor" href="#arg-credentials"></a></dt>
+<dd><p>Ollama doesn't require credentials for local usage and in most
+cases you do not need to provide <code>credentials</code>.</p>
 <p>However, if you're accessing an Ollama instance hosted behind a reverse
 proxy or secured endpoint that enforces bearer‐token authentication, you
-can set <code>api_key</code> (or the <code>OLLAMA_API_KEY</code> environment variable).</p></dd>
+can set the <code>OLLAMA_API_KEY</code> environment variable or provide a callback
+function to <code>credentials</code>.</p></dd>
 
 
 <dt id="arg-api-headers">api_headers<a class="anchor" aria-label="anchor" href="#arg-api-headers"></a></dt>
@@ -187,21 +186,22 @@ to every chat API call.</p></dd>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other chatbots:
-<code><a href="chat_anthropic.html">chat_anthropic</a>()</code>,
-<code><a href="chat_aws_bedrock.html">chat_aws_bedrock</a>()</code>,
-<code><a href="chat_azure_openai.html">chat_azure_openai</a>()</code>,
-<code><a href="chat_cloudflare.html">chat_cloudflare</a>()</code>,
-<code><a href="chat_databricks.html">chat_databricks</a>()</code>,
-<code><a href="chat_deepseek.html">chat_deepseek</a>()</code>,
-<code><a href="chat_github.html">chat_github</a>()</code>,
-<code><a href="chat_google_gemini.html">chat_google_gemini</a>()</code>,
-<code><a href="chat_groq.html">chat_groq</a>()</code>,
-<code><a href="chat_huggingface.html">chat_huggingface</a>()</code>,
-<code><a href="chat_mistral.html">chat_mistral</a>()</code>,
-<code><a href="chat_openai.html">chat_openai</a>()</code>,
-<code><a href="chat_openrouter.html">chat_openrouter</a>()</code>,
-<code><a href="chat_perplexity.html">chat_perplexity</a>()</code>,
-<code><a href="chat_portkey.html">chat_portkey</a>()</code></p></div>
+<code><a href="chat_anthropic.html">chat_anthropic()</a></code>,
+<code><a href="chat_aws_bedrock.html">chat_aws_bedrock()</a></code>,
+<code><a href="chat_azure_openai.html">chat_azure_openai()</a></code>,
+<code><a href="chat_cloudflare.html">chat_cloudflare()</a></code>,
+<code><a href="chat_databricks.html">chat_databricks()</a></code>,
+<code><a href="chat_deepseek.html">chat_deepseek()</a></code>,
+<code><a href="chat_github.html">chat_github()</a></code>,
+<code><a href="chat_google_gemini.html">chat_google_gemini()</a></code>,
+<code><a href="chat_groq.html">chat_groq()</a></code>,
+<code><a href="chat_huggingface.html">chat_huggingface()</a></code>,
+<code><a href="chat_mistral.html">chat_mistral()</a></code>,
+<code><a href="chat_openai.html">chat_openai()</a></code>,
+<code><a href="chat_openai_compatible.html">chat_openai_compatible()</a></code>,
+<code><a href="chat_openrouter.html">chat_openrouter()</a></code>,
+<code><a href="chat_perplexity.html">chat_perplexity()</a></code>,
+<code><a href="chat_portkey.html">chat_portkey()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -223,7 +223,7 @@ to every chat API call.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer></body></html>

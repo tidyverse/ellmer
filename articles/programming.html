@@ -18,7 +18,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Programming with ellmer">
-<script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 </head>
 <body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news">
 <li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://tidyverse.org/blog/2025/11/ellmer-0-4-0/">Version 0.4.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
@@ -81,7 +82,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Programming with ellmer</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.3.2/vignettes/programming.Rmd" class="external-link"><code>vignettes/programming.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/vignettes/programming.Rmd" class="external-link"><code>vignettes/programming.Rmd</code></a></small>
       <div class="d-none name"><code>programming.Rmd</code></div>
     </div>
 
@@ -125,16 +126,16 @@ modifying them:</p>
 <span><span class="co">#&gt; Paris</span></span>
 <span></span>
 <span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 tokens=53/3 $0.00&gt;</span></span>
-<span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> [0] ─────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 input=53 output=5 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> ─────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Be terse</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [19] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; What's the capital of New Zealand</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [2] ──────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=19 output=3 cost=$0.00] ───────────────────────────</span></span>
 <span><span class="co">#&gt; Wellington</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [13] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; What's the capital of France</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [1] ──────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=34 output=2 cost=$0.00] ───────────────────────────</span></span>
 <span><span class="co">#&gt; Paris</span></span></code></pre></div>
 <p>It would be annoying if chat objects were immutable, because then
 you’d need to save the result every time you chatted with the model. But
@@ -153,11 +154,11 @@ the existing chat:</p>
 <span><span class="fu">capital</span><span class="op">(</span><span class="va">chat</span>, <span class="st">"New Zealand"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Wellington</span></span>
 <span><span class="fu">capital</span><span class="op">(</span><span class="va">chat</span>, <span class="st">"France"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Paris</span></span>
+<span><span class="co">#&gt; Paris.</span></span>
 <span></span>
 <span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=1 tokens=0/0 $0.00&gt;</span></span>
-<span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> [0] ─────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=1 input=0 output=0 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> ─────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Be terse</span></span></code></pre></div>
 <p>You can also use <code>clone()</code> when you want to create a
 conversational “tree”, where conversations start from the same place,
@@ -165,38 +166,38 @@ but diverge over time:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="st">"Be terse"</span>, model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span><span class="op">)</span></span>
 <span><span class="va">chat1</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"My name is Hadley and I'm a data scientist"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Hello, Hadley. Nice to meet you.</span></span>
+<span><span class="co">#&gt; Hello, Hadley! How can I assist you today?</span></span>
 <span><span class="va">chat2</span> <span class="op">&lt;-</span> <span class="va">chat1</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat1</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"what's my name?"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Hadley.</span></span>
+<span><span class="co">#&gt; Your name is Hadley.</span></span>
 <span><span class="va">chat1</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 tokens=69/13 $0.00&gt;</span></span>
-<span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> [0] ─────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 input=71 output=20 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> ─────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Be terse</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [23] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; My name is Hadley and I'm a data scientist</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [10] ─────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Hello, Hadley. Nice to meet you.</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [13] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=23 output=13 cost=$0.00] ──────────────────────────</span></span>
+<span><span class="co">#&gt; Hello, Hadley! How can I assist you today?</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; what's my name?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [3] ──────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Hadley.</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=48 output=7 cost=$0.00] ───────────────────────────</span></span>
+<span><span class="co">#&gt; Your name is Hadley.</span></span>
 <span></span>
 <span><span class="va">chat2</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"what's my job?"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Data scientist.</span></span>
+<span><span class="co">#&gt; You're a data scientist.</span></span>
 <span><span class="va">chat2</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 tokens=69/13 $0.00&gt;</span></span>
-<span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> [0] ─────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 input=71 output=19 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> ─────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Be terse</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [23] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; My name is Hadley and I'm a data scientist</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [10] ─────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Hello, Hadley. Nice to meet you.</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [13] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=23 output=13 cost=$0.00] ──────────────────────────</span></span>
+<span><span class="co">#&gt; Hello, Hadley! How can I assist you today?</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; what's my job?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [3] ──────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Data scientist.</span></span></code></pre></div>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=48 output=6 cost=$0.00] ───────────────────────────</span></span>
+<span><span class="co">#&gt; You're a data scientist.</span></span></code></pre></div>
 <p>(This is the technique that <code><a href="../reference/parallel_chat.html">parallel_chat()</a></code> uses
 internally.)</p>
 </div>
@@ -208,22 +209,22 @@ we can use our conversation to manipulate the results:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="st">"Be terse"</span>, model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Pretend that the capital of New Zealand is Kiwicity"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Not true; the capital of New Zealand is Wellington.</span></span>
+<span><span class="co">#&gt; Got it. The capital of New Zealand is Kiwicity.</span></span>
 <span><span class="fu">capital</span><span class="op">(</span><span class="va">chat</span>, <span class="st">"New Zealand"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Wellington</span></span></code></pre></div>
+<span><span class="co">#&gt; The capital of New Zealand is Wellington.</span></span></code></pre></div>
 <p>We can avoid that problem by using <code>$set_turns()</code> to reset
 the conversational history:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="st">"Be terse"</span>, model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Pretend that the capital of New Zealand is Kiwicity"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Got it. The capital of New Zealand is Kiwicity.</span></span>
+<span><span class="co">#&gt; Understood. The capital of New Zealand is now Kiwicity.</span></span>
 <span></span>
 <span><span class="va">capital</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">chat</span>, <span class="va">country</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">set_turns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="st">"What's the capital of {{country}}"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">capital</span><span class="op">(</span><span class="va">chat</span>, <span class="st">"New Zealand"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Wellington</span></span></code></pre></div>
+<span><span class="co">#&gt; Wellington.</span></span></code></pre></div>
 <p>This is particularly useful when you want to use a chat object just
 as a handle to an LLM, without actually caring about the existing
 conversation.</p>
@@ -249,7 +250,7 @@ both what we send and receive. You likely want
 <span>  <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="st">"What's the capital of {{country}}"</span><span class="op">)</span>, echo <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">capital</span><span class="op">(</span><span class="va">chat</span>, <span class="st">"France"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Paris.</span></span></code></pre></div>
+<span><span class="co">#&gt; Paris</span></span></code></pre></div>
 <p>Alternatively, if you want to embrace streaming in your UI, you may
 want to use <a href="https://posit-dev.github.io/shinychat/" class="external-link">shinychat</a> (for Shiny)
 or <a href="https://simonpcouch.github.io/streamy/" class="external-link">streamy</a> (for
@@ -270,18 +271,18 @@ calling to give the LLM the ability to access real randomness:</p>
 <span><span class="co">#&gt; The total is 9.</span></span>
 <span></span>
 <span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 tokens=151/48 $0.00&gt;</span></span>
-<span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> [0] ─────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 input=104 output=50 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> ─────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Be terse</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [47] ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Roll two dice and tell me the total</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [41] ─────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_1OtUWtCCMJ6YE8ZNFQtpoyQJ)]: tool_001()</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_UZw7jatKY7tYN7CfOrlk9j5l)]: tool_001()</span></span>
-<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> [16] ──────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_1OtUWtCCMJ6YE8ZNFQtpoyQJ)]: 5</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_UZw7jatKY7tYN7CfOrlk9j5l)]: 4</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [7] ──────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=22 output=42 cost=$0.00] ──────────────────────────</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f)]: tool_001()</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204)]: tool_001()</span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f)]: 5</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204)]: 4</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=82 output=8 cost=$0.00] ───────────────────────────</span></span>
 <span><span class="co">#&gt; The total is 9.</span></span></code></pre></div>
 <p>You can get access to the underlying conversational turns with
 <code>get_turns()</code>:</p>
@@ -294,13 +295,13 @@ calling to give the LLM the ability to access real randomness:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span>
 <span><span class="co">#&gt; &lt;Turn: <span style="color: #00BB00;">assistant</span>&gt;</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_1OtUWtCCMJ6YE8ZNFQtpoyQJ)]: tool_001()</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (call_UZw7jatKY7tYN7CfOrlk9j5l)]: tool_001()</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f)]: tool_001()</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204)]: tool_001()</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[3]]</span></span>
 <span><span class="co">#&gt; &lt;Turn: <span style="color: #0000BB;">user</span>&gt;</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_1OtUWtCCMJ6YE8ZNFQtpoyQJ)]: 5</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (call_UZw7jatKY7tYN7CfOrlk9j5l)]: 4</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f)]: 5</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204)]: 4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[4]]</span></span>
 <span><span class="co">#&gt; &lt;Turn: <span style="color: #00BB00;">assistant</span>&gt;</span></span>
@@ -310,11 +311,10 @@ it includes ellmer’s representation of content of the message, as well
 as the exact json that the provider returned:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">turns</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;ellmer::Turn&gt;</span></span>
-<span><span class="co">#&gt;  @ role    : chr "assistant"</span></span>
+<span><span class="co">#&gt; &lt;ellmer::AssistantTurn&gt;</span></span>
 <span><span class="co">#&gt;  @ contents:List of 2</span></span>
 <span><span class="co">#&gt;  .. $ : &lt;ellmer::ContentToolRequest&gt;</span></span>
-<span><span class="co">#&gt;  ..  ..@ id       : chr "call_1OtUWtCCMJ6YE8ZNFQtpoyQJ"</span></span>
+<span><span class="co">#&gt;  ..  ..@ id       : chr "fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f"</span></span>
 <span><span class="co">#&gt;  ..  ..@ name     : chr "tool_001"</span></span>
 <span><span class="co">#&gt;  ..  ..@ arguments: Named list()</span></span>
 <span><span class="co">#&gt;  ..  ..@ tool     : &lt;ellmer::ToolDef&gt; function ()  </span></span>
@@ -328,7 +328,7 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt;  .. .. .. @ convert    : logi TRUE</span></span>
 <span><span class="co">#&gt;  .. .. .. @ annotations: list()</span></span>
 <span><span class="co">#&gt;  .. $ : &lt;ellmer::ContentToolRequest&gt;</span></span>
-<span><span class="co">#&gt;  ..  ..@ id       : chr "call_UZw7jatKY7tYN7CfOrlk9j5l"</span></span>
+<span><span class="co">#&gt;  ..  ..@ id       : chr "fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204"</span></span>
 <span><span class="co">#&gt;  ..  ..@ name     : chr "tool_001"</span></span>
 <span><span class="co">#&gt;  ..  ..@ arguments: Named list()</span></span>
 <span><span class="co">#&gt;  ..  ..@ tool     : &lt;ellmer::ToolDef&gt; function ()  </span></span>
@@ -341,50 +341,82 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt;  .. .. .. .. @ additional_properties: logi FALSE</span></span>
 <span><span class="co">#&gt;  .. .. .. @ convert    : logi TRUE</span></span>
 <span><span class="co">#&gt;  .. .. .. @ annotations: list()</span></span>
-<span><span class="co">#&gt;  @ json    :List of 8</span></span>
-<span><span class="co">#&gt;  .. $ id                : chr "chatcmpl-Bn2ZPB85PqyXTCCv6mtej2FNEkQLA"</span></span>
-<span><span class="co">#&gt;  .. $ object            : chr "chat.completion"</span></span>
-<span><span class="co">#&gt;  .. $ created           : int 1751027651</span></span>
-<span><span class="co">#&gt;  .. $ model             : chr "gpt-4.1-nano-2025-04-14"</span></span>
-<span><span class="co">#&gt;  .. $ choices           :List of 1</span></span>
-<span><span class="co">#&gt;  ..  ..$ :List of 4</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ index        : int 0</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ message      :List of 5</span></span>
-<span><span class="co">#&gt;  ..  .. .. ..$ role       : chr "assistant"</span></span>
-<span><span class="co">#&gt;  ..  .. .. ..$ content    : NULL</span></span>
-<span><span class="co">#&gt;  ..  .. .. ..$ tool_calls :List of 2</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. ..$ :List of 3</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. .. ..$ id      : chr "call_1OtUWtCCMJ6YE8ZNFQtpoyQJ"</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. .. ..$ type    : chr "function"</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. .. ..$ function:List of 2</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. .. .. ..$ name     : chr "tool_001"</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. .. .. ..$ arguments: chr "{}"</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. ..$ :List of 3</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. .. ..$ id      : chr "call_UZw7jatKY7tYN7CfOrlk9j5l"</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. .. ..$ type    : chr "function"</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. .. ..$ function:List of 2</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. .. .. ..$ name     : chr "tool_001"</span></span>
-<span><span class="co">#&gt;  ..  .. .. .. .. .. ..$ arguments: chr "{}"</span></span>
-<span><span class="co">#&gt;  ..  .. .. ..$ refusal    : NULL</span></span>
-<span><span class="co">#&gt;  ..  .. .. ..$ annotations: list()</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ logprobs     : NULL</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ finish_reason: chr "tool_calls"</span></span>
-<span><span class="co">#&gt;  .. $ usage             :List of 5</span></span>
-<span><span class="co">#&gt;  ..  ..$ prompt_tokens            : int 47</span></span>
-<span><span class="co">#&gt;  ..  ..$ completion_tokens        : int 41</span></span>
-<span><span class="co">#&gt;  ..  ..$ total_tokens             : int 88</span></span>
-<span><span class="co">#&gt;  ..  ..$ prompt_tokens_details    :List of 2</span></span>
+<span><span class="co">#&gt;  @ text    : chr ""</span></span>
+<span><span class="co">#&gt;  @ role    : chr "assistant"</span></span>
+<span><span class="co">#&gt;  @ json    :List of 31</span></span>
+<span><span class="co">#&gt;  .. $ id                    : chr "resp_0ff06e91ca3701e601690bac43a77881968271a54ebece3246"</span></span>
+<span><span class="co">#&gt;  .. $ object                : chr "response"</span></span>
+<span><span class="co">#&gt;  .. $ created_at            : int 1762372675</span></span>
+<span><span class="co">#&gt;  .. $ status                : chr "completed"</span></span>
+<span><span class="co">#&gt;  .. $ background            : logi FALSE</span></span>
+<span><span class="co">#&gt;  .. $ billing               :List of 1</span></span>
+<span><span class="co">#&gt;  ..  ..$ payer: chr "developer"</span></span>
+<span><span class="co">#&gt;  .. $ error                 : NULL</span></span>
+<span><span class="co">#&gt;  .. $ incomplete_details    : NULL</span></span>
+<span><span class="co">#&gt;  .. $ instructions          : NULL</span></span>
+<span><span class="co">#&gt;  .. $ max_output_tokens     : NULL</span></span>
+<span><span class="co">#&gt;  .. $ max_tool_calls        : NULL</span></span>
+<span><span class="co">#&gt;  .. $ model                 : chr "gpt-4.1-nano-2025-04-14"</span></span>
+<span><span class="co">#&gt;  .. $ output                :List of 2</span></span>
+<span><span class="co">#&gt;  ..  ..$ :List of 6</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ id       : chr "fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ type     : chr "function_call"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ status   : chr "completed"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ arguments: chr "{}"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ call_id  : chr "call_UoyOnszXDnPApY7QF72F9m9W"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ name     : chr "tool_001"</span></span>
+<span><span class="co">#&gt;  ..  ..$ :List of 6</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ id       : chr "fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ type     : chr "function_call"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ status   : chr "completed"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ arguments: chr "{}"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ call_id  : chr "call_6k0VAH5JjUWtIh4cRaz8X1jp"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ name     : chr "tool_001"</span></span>
+<span><span class="co">#&gt;  .. $ parallel_tool_calls   : logi TRUE</span></span>
+<span><span class="co">#&gt;  .. $ previous_response_id  : NULL</span></span>
+<span><span class="co">#&gt;  .. $ prompt_cache_key      : NULL</span></span>
+<span><span class="co">#&gt;  .. $ prompt_cache_retention: NULL</span></span>
+<span><span class="co">#&gt;  .. $ reasoning             :List of 2</span></span>
+<span><span class="co">#&gt;  ..  ..$ effort : NULL</span></span>
+<span><span class="co">#&gt;  ..  ..$ summary: NULL</span></span>
+<span><span class="co">#&gt;  .. $ safety_identifier     : NULL</span></span>
+<span><span class="co">#&gt;  .. $ service_tier          : chr "default"</span></span>
+<span><span class="co">#&gt;  .. $ store                 : logi FALSE</span></span>
+<span><span class="co">#&gt;  .. $ temperature           : num 1</span></span>
+<span><span class="co">#&gt;  .. $ text                  :List of 2</span></span>
+<span><span class="co">#&gt;  ..  ..$ format   :List of 1</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ type: chr "text"</span></span>
+<span><span class="co">#&gt;  ..  ..$ verbosity: chr "medium"</span></span>
+<span><span class="co">#&gt;  .. $ tool_choice           : chr "auto"</span></span>
+<span><span class="co">#&gt;  .. $ tools                 :List of 1</span></span>
+<span><span class="co">#&gt;  ..  ..$ :List of 5</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ type       : chr "function"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ description: chr "Roll a die"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ name       : chr "tool_001"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ parameters :List of 5</span></span>
+<span><span class="co">#&gt;  ..  .. .. ..$ type                : chr "object"</span></span>
+<span><span class="co">#&gt;  ..  .. .. ..$ description         : chr ""</span></span>
+<span><span class="co">#&gt;  ..  .. .. ..$ properties          : Named list()</span></span>
+<span><span class="co">#&gt;  ..  .. .. ..$ required            : list()</span></span>
+<span><span class="co">#&gt;  ..  .. .. ..$ additionalProperties: logi FALSE</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ strict     : logi TRUE</span></span>
+<span><span class="co">#&gt;  .. $ top_logprobs          : int 0</span></span>
+<span><span class="co">#&gt;  .. $ top_p                 : num 1</span></span>
+<span><span class="co">#&gt;  .. $ truncation            : chr "disabled"</span></span>
+<span><span class="co">#&gt;  .. $ usage                 :List of 5</span></span>
+<span><span class="co">#&gt;  ..  ..$ input_tokens         : int 22</span></span>
+<span><span class="co">#&gt;  ..  ..$ input_tokens_details :List of 1</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ cached_tokens: int 0</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ audio_tokens : int 0</span></span>
-<span><span class="co">#&gt;  ..  ..$ completion_tokens_details:List of 4</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ reasoning_tokens          : int 0</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ audio_tokens              : int 0</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ accepted_prediction_tokens: int 0</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ rejected_prediction_tokens: int 0</span></span>
-<span><span class="co">#&gt;  .. $ service_tier      : chr "default"</span></span>
-<span><span class="co">#&gt;  .. $ system_fingerprint: chr "fp_38343a2f8f"</span></span>
-<span><span class="co">#&gt;  @ tokens  : int [1:3] 47 41 0</span></span>
-<span><span class="co">#&gt;  @ text    : chr ""</span></span></code></pre></div>
+<span><span class="co">#&gt;  ..  ..$ output_tokens        : int 42</span></span>
+<span><span class="co">#&gt;  ..  ..$ output_tokens_details:List of 1</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ reasoning_tokens: int 0</span></span>
+<span><span class="co">#&gt;  ..  ..$ total_tokens         : int 64</span></span>
+<span><span class="co">#&gt;  .. $ user                  : NULL</span></span>
+<span><span class="co">#&gt;  .. $ metadata              : Named list()</span></span>
+<span><span class="co">#&gt;  @ tokens  : Named int [1:3] 22 42 0</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "names")= chr [1:3] "input" "output" "cached_input"</span></span>
+<span><span class="co">#&gt;  @ cost    : 'ellmer_dollars' num $0.00</span></span>
+<span><span class="co">#&gt;  @ duration: num NA</span></span></code></pre></div>
 <p>You can use the <code>@json</code> to extract additional information
 that ellmer might not yet provide to you, but be aware that the
 structure varies heavily from provider-to-provider. The content types
@@ -404,7 +436,7 @@ might change between versions.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer>

@@ -6,11 +6,19 @@ Use google_upload() to upload files (PDFs, images, video, audio, etc.)
 Authentication
 
 
-By default, chat_google_gemini() will use Google's default application
-credentials if there is no API key provided. This requires the gargle
+These functions try a number of authentication strategies, in this order:
+An API key set in the GOOGLE_API_KEY env var, or,
+for chat_google_gemini() only, GEMINI_API_KEY.
+Google's default application credentials, if the gargle package
+is installed.
+Viewer-based credentials on Posit Connect, if the connectcreds
 package.
-It can also pick up on viewer-based credentials on Posit Connect. This in
-turn requires the connectcreds package.
+. An browser-based OAuth flow, if
+you're in an interactive session. This currently uses an unverified
+OAuth app (so you will get a scary warning); we plan to verify in the
+near future.
+
+
 
 "><meta property="og:description" content="Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 Most enterprises are likely to use Vertex AI, and individuals are likely
@@ -19,13 +27,21 @@ Use google_upload() to upload files (PDFs, images, video, audio, etc.)
 Authentication
 
 
-By default, chat_google_gemini() will use Google's default application
-credentials if there is no API key provided. This requires the gargle
+These functions try a number of authentication strategies, in this order:
+An API key set in the GOOGLE_API_KEY env var, or,
+for chat_google_gemini() only, GEMINI_API_KEY.
+Google's default application credentials, if the gargle package
+is installed.
+Viewer-based credentials on Posit Connect, if the connectcreds
 package.
-It can also pick up on viewer-based credentials on Posit Connect. This in
-turn requires the connectcreds package.
+. An browser-based OAuth flow, if
+you're in an interactive session. This currently uses an unverified
+OAuth app (so you will get a scary warning); we plan to verify in the
+near future.
 
-"><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
+
+
+"><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
@@ -33,7 +49,7 @@ turn requires the connectcreds package.
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +70,7 @@ turn requires the connectcreds package.
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://tidyverse.org/blog/2025/11/ellmer-0-4-0/">Version 0.4.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
@@ -71,7 +88,7 @@ turn requires the connectcreds package.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Chat with a Google Gemini or Vertex AI model</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.3.2/R/provider-google.R" class="external-link"><code>R/provider-google.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/provider-google.R" class="external-link"><code>R/provider-google.R</code></a></small>
       <div class="d-none name"><code>chat_google_gemini.Rd</code></div>
     </div>
 
@@ -83,12 +100,17 @@ to use Gemini.</p>
 <h3 id="authentication">Authentication<a class="anchor" aria-label="anchor" href="#authentication"></a></h3>
 
 
-<p>By default, <code>chat_google_gemini()</code> will use Google's default application
-credentials if there is no API key provided. This requires the <span class="pkg">gargle</span>
-package.</p>
-<p>It can also pick up on viewer-based credentials on Posit Connect. This in
-turn requires the <span class="pkg">connectcreds</span> package.</p>
-</div>
+<p>These functions try a number of authentication strategies, in this order:</p><ul><li><p>An API key set in the <code>GOOGLE_API_KEY</code> env var, or,
+for <code>chat_google_gemini()</code> only, <code>GEMINI_API_KEY</code>.</p></li>
+<li><p>Google's default application credentials, if the <span class="pkg">gargle</span> package
+is installed.</p></li>
+<li><p>Viewer-based credentials on Posit Connect, if the <span class="pkg">connectcreds</span>
+package.</p></li>
+<li><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a>. An browser-based OAuth flow, if
+you're in an interactive session. This currently uses an unverified
+OAuth app (so you will get a scary warning); we plan to verify in the
+near future.</p></li>
+</ul></div>
 
     </div>
 
@@ -98,6 +120,7 @@ turn requires the <span class="pkg">connectcreds</span> package.</p>
 <span>  system_prompt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  base_url <span class="op">=</span> <span class="st">"https://generativelanguage.googleapis.com/v1beta/"</span>,</span>
 <span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -118,10 +141,11 @@ turn requires the <span class="pkg">connectcreds</span> package.</p>
 <span></span>
 <span><span class="fu">models_google_gemini</span><span class="op">(</span></span>
 <span>  base_url <span class="op">=</span> <span class="st">"https://generativelanguage.googleapis.com/v1beta/"</span>,</span>
-<span>  api_key <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  credentials <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">models_google_vertex</span><span class="op">(</span><span class="va">location</span>, <span class="va">project_id</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">models_google_vertex</span><span class="op">(</span><span class="va">location</span>, <span class="va">project_id</span>, credentials <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -133,15 +157,17 @@ turn requires the <span class="pkg">connectcreds</span> package.</p>
 
 
 <dt id="arg-base-url">base_url<a class="anchor" aria-label="anchor" href="#arg-base-url"></a></dt>
-<dd><p>The base URL to the endpoint; the default uses OpenAI.</p></dd>
+<dd><p>The base URL to the endpoint; the default is OpenAI's
+public API.</p></dd>
 
 
 <dt id="arg-api-key">api_key<a class="anchor" aria-label="anchor" href="#arg-api-key"></a></dt>
-<dd><p>API key to use for authentication.</p>
-<p>You generally should not supply this directly, but instead set the <code>GOOGLE_API_KEY</code> environment variable.
-The best place to set this is in <code>.Renviron</code>,
-which you can easily edit by calling <code>usethis::edit_r_environ()</code>.
-For Gemini, you can alternatively set <code>GEMINI_API_KEY</code>.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>credentials</code> instead.</p></dd>
+
+
+<dt id="arg-credentials">credentials<a class="anchor" aria-label="anchor" href="#arg-credentials"></a></dt>
+<dd><p>A function that returns a list of authentication headers
+or <code>NULL</code>, the default, to use ambient credentials. See above for details.</p></dd>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
@@ -189,21 +215,22 @@ when running at the console).</p></li>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other chatbots:
-<code><a href="chat_anthropic.html">chat_anthropic</a>()</code>,
-<code><a href="chat_aws_bedrock.html">chat_aws_bedrock</a>()</code>,
-<code><a href="chat_azure_openai.html">chat_azure_openai</a>()</code>,
-<code><a href="chat_cloudflare.html">chat_cloudflare</a>()</code>,
-<code><a href="chat_databricks.html">chat_databricks</a>()</code>,
-<code><a href="chat_deepseek.html">chat_deepseek</a>()</code>,
-<code><a href="chat_github.html">chat_github</a>()</code>,
-<code><a href="chat_groq.html">chat_groq</a>()</code>,
-<code><a href="chat_huggingface.html">chat_huggingface</a>()</code>,
-<code><a href="chat_mistral.html">chat_mistral</a>()</code>,
-<code><a href="chat_ollama.html">chat_ollama</a>()</code>,
-<code><a href="chat_openai.html">chat_openai</a>()</code>,
-<code><a href="chat_openrouter.html">chat_openrouter</a>()</code>,
-<code><a href="chat_perplexity.html">chat_perplexity</a>()</code>,
-<code><a href="chat_portkey.html">chat_portkey</a>()</code></p></div>
+<code><a href="chat_anthropic.html">chat_anthropic()</a></code>,
+<code><a href="chat_aws_bedrock.html">chat_aws_bedrock()</a></code>,
+<code><a href="chat_azure_openai.html">chat_azure_openai()</a></code>,
+<code><a href="chat_cloudflare.html">chat_cloudflare()</a></code>,
+<code><a href="chat_databricks.html">chat_databricks()</a></code>,
+<code><a href="chat_deepseek.html">chat_deepseek()</a></code>,
+<code><a href="chat_github.html">chat_github()</a></code>,
+<code><a href="chat_groq.html">chat_groq()</a></code>,
+<code><a href="chat_huggingface.html">chat_huggingface()</a></code>,
+<code><a href="chat_mistral.html">chat_mistral()</a></code>,
+<code><a href="chat_ollama.html">chat_ollama()</a></code>,
+<code><a href="chat_openai.html">chat_openai()</a></code>,
+<code><a href="chat_openai_compatible.html">chat_openai_compatible()</a></code>,
+<code><a href="chat_openrouter.html">chat_openrouter()</a></code>,
+<code><a href="chat_perplexity.html">chat_perplexity()</a></code>,
+<code><a href="chat_portkey.html">chat_portkey()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -225,7 +252,7 @@ when running at the console).</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer></body></html>

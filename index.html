@@ -21,7 +21,7 @@
 <meta name="description" content="Chat with large language models from a range of providers including Claude &lt;https://claude.ai&gt;, OpenAI &lt;https://chatgpt.com&gt;, and more. Supports streaming, asynchronous calls, tool calling, and structured data extraction.">
 <meta property="og:description" content="Chat with large language models from a range of providers including Claude &lt;https://claude.ai&gt;, OpenAI &lt;https://chatgpt.com&gt;, and more. Supports streaming, asynchronous calls, tool calling, and structured data extraction.">
 <meta property="og:image" content="https://ellmer.tidyverse.org/logo.png">
-<script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 </head>
 <body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news">
 <li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://tidyverse.org/blog/2025/11/ellmer-0-4-0/">Version 0.4.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
@@ -120,7 +121,7 @@
 <li>OpenAI: <code><a href="reference/chat_openai.html">chat_openai()</a></code>.</li>
 <li>OpenRouter: <code><a href="reference/chat_openrouter.html">chat_openrouter()</a></code>.</li>
 <li>perplexity.ai: <code><a href="reference/chat_perplexity.html">chat_perplexity()</a></code>.</li>
-<li>Snowflake Cortex: <code><a href="reference/chat_snowflake.html">chat_snowflake()</a></code> and <code><a href="reference/chat_cortex_analyst.html">chat_cortex_analyst()</a></code>.</li>
+<li>Snowflake Cortex: <code><a href="reference/chat_snowflake.html">chat_snowflake()</a></code> and <code>chat_cortex_analyst()</code>.</li>
 <li>VLLM: <code><a href="reference/chat_vllm.html">chat_vllm()</a></code>.</li>
 </ul>
 <div class="section level3">
@@ -176,9 +177,16 @@
 <p>The second most interactive way to chat is to call the <code><a href="reference/chat-any.html">chat()</a></code> method:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"What preceding languages most influenced R?"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R was primarily influenced by S, which was developed at Bell Labs. Other </span></span>
-<span><span class="co">#&gt; notable influences include Scheme, for its functional programming concepts, and</span></span>
-<span><span class="co">#&gt; various statistical programming languages like Fortran and Lisp.</span></span></code></pre></div>
+<span><span class="co">#&gt; R was primarily influenced by S, a language developed at Bell Laboratories. </span></span>
+<span><span class="co">#&gt; Other notable influences include:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; 1. **Scheme** - For functional programming concepts.</span></span>
+<span><span class="co">#&gt; 2. **LISP** - For its powerful data manipulation features.</span></span>
+<span><span class="co">#&gt; 3. **C** - For performance and system-level access.</span></span>
+<span><span class="co">#&gt; 4. **Fortran** - For numerical and statistical computations.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; These languages contributed to R's syntax, data structures, and functional </span></span>
+<span><span class="co">#&gt; programming capabilities.</span></span></code></pre></div>
 <p>If you initialize the chat object in the global environment, the <code>chat</code> method will stream the response to the console. When the entire response is received, it’s also (invisibly) returned as a character vector. This is useful when you want to see the response as it arrives, but you don’t want to enter the chat console.</p>
 <p>If you want to ask a question about an image, you can pass one or more additional input arguments using <code><a href="reference/content_image_url.html">content_image_file()</a></code> and/or <code><a href="reference/content_image_url.html">content_image_url()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -186,12 +194,12 @@
 <span>  <span class="fu"><a href="reference/content_image_url.html">content_image_url</a></span><span class="op">(</span><span class="st">"https://www.r-project.org/Rlogo.png"</span><span class="op">)</span>,</span>
 <span>  <span class="st">"Can you explain this logo?"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; The logo features a stylized letter "R" inside an oval shape, which represents </span></span>
-<span><span class="co">#&gt; the R programming language. The design is modern and clean, emphasizing the </span></span>
-<span><span class="co">#&gt; letter "R" prominently in blue, while the oval shape is often interpreted as a </span></span>
-<span><span class="co">#&gt; symbol of data analysis and statistics, reflecting R's primary use in </span></span>
-<span><span class="co">#&gt; statistical computing and graphics. The overall look conveys professionalism </span></span>
-<span><span class="co">#&gt; and is recognized in the programming and data science communities.</span></span></code></pre></div>
+<span><span class="co">#&gt; The logo consists of a stylized letter "R" in blue, surrounded by a gray oval </span></span>
+<span><span class="co">#&gt; shape. The design reflects the programming language R, which is widely used for</span></span>
+<span><span class="co">#&gt; statistical computing and graphics. The color choice often symbolizes clarity </span></span>
+<span><span class="co">#&gt; and professionalism, aligning with R's use in data analysis and research. The </span></span>
+<span><span class="co">#&gt; logo encapsulates the language's focus on data visualization and statistical </span></span>
+<span><span class="co">#&gt; methods.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="streaming-vs-capturing">Streaming vs capturing<a class="anchor" aria-label="anchor" href="#streaming-vs-capturing"></a>
@@ -203,7 +211,7 @@
 <span>  <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"What is 6 times 7?"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">my_function</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  'ellmer_output' chr "42."</span></span></code></pre></div>
+<span><span class="co">#&gt;  'ellmer_output' chr "6 times 7 is 42."</span></span></code></pre></div>
 <p>If needed, you can manually control this behaviour with the <code>echo</code> argument. This is useful for programming with ellmer when the result is either not intended for human consumption or when you want to process the response before displaying it.</p>
 </div>
 </div>
@@ -274,7 +282,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer>

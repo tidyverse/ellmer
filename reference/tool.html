@@ -3,7 +3,7 @@
 and type definition for the arguments.
 Learn more in vignette("tool-calling").'><meta property="og:description" content='Annotate a function for use in tool calls, by providing a name, description,
 and type definition for the arguments.
-Learn more in vignette("tool-calling").'><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
+Learn more in vignette("tool-calling").'><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
@@ -11,7 +11,7 @@ Learn more in vignette("tool-calling").'><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,7 @@ Learn more in vignette("tool-calling").'><meta property="og:image" content="http
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://tidyverse.org/blog/2025/11/ellmer-0-4-0/">Version 0.4.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
@@ -49,7 +50,7 @@ Learn more in vignette("tool-calling").'><meta property="og:image" content="http
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Define a tool</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.3.2/R/tools-def.R" class="external-link"><code>R/tools-def.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/tools-def.R" class="external-link"><code>R/tools-def.R</code></a></small>
       <div class="d-none name"><code>tool.Rd</code></div>
     </div>
 
@@ -69,10 +70,10 @@ and type definition for the arguments.</p>
 <span>  name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  convert <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  annotations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  .name <span class="op">=</span> <span class="fu"><a href="deprecated.html">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  .description <span class="op">=</span> <span class="fu"><a href="deprecated.html">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  .convert <span class="op">=</span> <span class="fu"><a href="deprecated.html">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  .annotations <span class="op">=</span> <span class="fu"><a href="deprecated.html">deprecated</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  .name <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  .description <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  .convert <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  .annotations <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -99,7 +100,8 @@ Generally, the more information that you can provide here, the better.</p></dd>
 <dt id="arg-arguments">arguments<a class="anchor" aria-label="anchor" href="#arg-arguments"></a></dt>
 <dd><p>A named list that defines the arguments accepted by the
 function. Each element should be created by a <code><a href="type_boolean.html">type_*()</a></code>
-function (or <code>NULL</code> if you don't want the LLM to use that argument).</p></dd>
+function. Use <code><a href="type_boolean.html">type_ignore()</a></code> if you don't want the LLM to provide that
+argument (e.g., because the R function has a suitable default value).</p></dd>
 
 
 <dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
@@ -169,8 +171,8 @@ the following system prompt</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other tool calling helpers:
-<code><a href="tool_annotations.html">tool_annotations</a>()</code>,
-<code><a href="tool_reject.html">tool_reject</a>()</code></p></div>
+<code><a href="tool_annotations.html">tool_annotations()</a></code>,
+<code><a href="tool_reject.html">tool_reject()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -207,14 +209,14 @@ the following system prompt</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Look at the chat history to see how tool calling works:</span></span></span>
 <span class="r-in"><span><span class="va">chat</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=4 tokens=248/83 $0.00&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> [96] ──────────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=4 input=234 output=85 cost=$0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Give me five numbers from a random normal distribution.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [22] ─────────────────────────────────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool request</span> (call_i23r8dfi9bjtZStFRX69Zz40)]: rnorm(n = 5L, mean = 0L, sd = 1L)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> [34] ──────────────────────────────────────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool result</span>  (call_i23r8dfi9bjtZStFRX69Zz40)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [61] ─────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=90 output=23 cost=$0.00] ──────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool request</span> (fc_007e9641944241bb01690badd1f2e88193bddb1a058623c280)]: rnorm(n = 5L, mean = 0L, sd = 1L)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool result</span>  (fc_007e9641944241bb01690badd1f2e88193bddb1a058623c280)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=144 output=62 cost=$0.00] ─────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Here are five numbers from a random normal distribution (mean = 0, standard deviation = 1):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1. 1.1484</span>
@@ -238,7 +240,7 @@ the following system prompt</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer></body></html>
