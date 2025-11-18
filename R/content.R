@@ -202,6 +202,8 @@ show_image <- function(x) {
 #' @param arguments Named list of arguments to call the function with.
 #' @param tool ellmer automatically matches a tool request to the tools defined
 #'   for the chatbot. If `NULL`, the request did not match a defined tool.
+#' @param extra Provider-specific metadata associated with the tool request.
+#'   Automatically managed by \pkg{ellmer}.
 ContentToolRequest <- new_class(
   "ContentToolRequest",
   parent = Content,
