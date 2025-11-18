@@ -2,6 +2,10 @@
 
 ## ellmer (development version)
 
+## ellmer 0.4.0
+
+CRAN release: 2025-11-15
+
 ### Lifecycle changes
 
 - [`chat_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)

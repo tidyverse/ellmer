@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.2.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://tidyverse.org/blog/2025/11/ellmer-0-4-0/">Version 0.4.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/07/ellmer-0-3-0/">Version 0.3.0</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2025/05/ellmer-0-2-0/">Version 0.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://posit.co/blog/announcing-ellmer/">Version 0.1.0</a></li>
@@ -50,8 +51,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.0" id="ellmer-040">ellmer 0.4.0<a class="anchor" aria-label="anchor" href="#ellmer-040"></a></h2><p class="text-muted">CRAN release: 2025-11-15</p>
 <div class="section level3">
-<h3 id="lifecycle-changes-development-version">Lifecycle changes<a class="anchor" aria-label="anchor" href="#lifecycle-changes-development-version"></a></h3>
+<h3 id="lifecycle-changes-0-4-0">Lifecycle changes<a class="anchor" aria-label="anchor" href="#lifecycle-changes-0-4-0"></a></h3>
 <ul><li>
 <code><a href="../reference/chat_anthropic.html">chat_claude()</a></code> is no longer deprecated and is an alias for <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code>, reflecting Anthropic’s recent rebranding of developer tools under the Claude name (<a href="https://github.com/tidyverse/ellmer/issues/758" class="external-link">#758</a>). <code><a href="../reference/chat_anthropic.html">models_claude()</a></code> is now an alias for <code><a href="../reference/chat_anthropic.html">models_anthropic()</a></code>.</li>
 <li>
@@ -82,7 +86,7 @@
 </ul></li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-0-4-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h3>
 <ul><li>
 <code>batch_*()</code> no longer hashes properties of the provider besides the <code>name</code>, <code>model</code>, and <code>base_url</code>. This should provide some protection from accidentally reusing the same <code>.json</code> file with different providers, while still allowing you to use the same batch file across ellmer versions. It also has a new <code>ignore_hash</code> argument that allows you to opt out of the check if you’re confident the difference only arises because ellmer itself has changed.</li>
 <li>
@@ -114,7 +118,7 @@
 <li>New <code><a href="../reference/type_boolean.html">type_ignore()</a></code> allows you to specify that a tool argument should not be provided by the LLM when the R function has a suitable default value (<a href="https://github.com/tidyverse/ellmer/issues/764" class="external-link">#764</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-improvements-and-bug-fixes-development-version">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-development-version"></a></h3>
+<h3 id="minor-improvements-and-bug-fixes-0-4-0">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-0-4-0"></a></h3>
 <ul><li>Updated pricing data (<a href="https://github.com/tidyverse/ellmer/issues/790" class="external-link">#790</a>).</li>
 <li>
 <code>AssistantTurn</code>s now have a <code>@duration</code> slot, containing the total time to complete the request (<a href="https://github.com/simonpcouch" class="external-link">@simonpcouch</a>, <a href="https://github.com/tidyverse/ellmer/issues/798" class="external-link">#798</a>).</li>
