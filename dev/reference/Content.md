@@ -49,7 +49,8 @@ ContentToolRequest(
   id = stop("Required"),
   name = stop("Required"),
   arguments = list(),
-  tool = NULL
+  tool = NULL,
+  extra = list()
 )
 
 ContentToolResult(value = NULL, error = NULL, extra = list(), request = NULL)
@@ -103,6 +104,10 @@ ContentPDF(
   ellmer automatically matches a tool request to the tools defined for
   the chatbot. If `NULL`, the request did not match a defined tool.
 
+- extra:
+
+  Additional data.
+
 - value:
 
   The results of calling the tool function, if it succeeded.
@@ -112,10 +117,6 @@ ContentPDF(
   The error message, as a string, or the error condition thrown as a
   result of a failure when calling the tool function. Must be `NULL`
   when the tool call is successful.
-
-- extra:
-
-  Additional data.
 
 - request:
 
@@ -153,4 +154,5 @@ ContentToolRequest(id = "abc", name = "mean", arguments = list(x = 1:5))
 #>  @ arguments:List of 1
 #>  .. $ x: int [1:5] 1 2 3 4 5
 #>  @ tool     : NULL
+#>  @ extra    : list()
 ```

@@ -265,6 +265,7 @@ str(turns[[2]])
 #>  .. .. .. .. @ additional_properties: logi FALSE
 #>  .. .. .. @ convert    : logi TRUE
 #>  .. .. .. @ annotations: list()
+#>  ..  ..@ extra    : list()
 #>  .. $ : <ellmer::ContentToolRequest>
 #>  ..  ..@ id       : chr "fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204"
 #>  ..  ..@ name     : chr "tool_001"
@@ -279,6 +280,7 @@ str(turns[[2]])
 #>  .. .. .. .. @ additional_properties: logi FALSE
 #>  .. .. .. @ convert    : logi TRUE
 #>  .. .. .. @ annotations: list()
+#>  ..  ..@ extra    : list()
 #>  @ text    : chr ""
 #>  @ role    : chr "assistant"
 #>  @ json    :List of 31
