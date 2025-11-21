@@ -51,7 +51,8 @@ chat_github <- function(
   # https://docs.github.com/en/rest/models/inference?apiVersion=2022-11-28
   params <- params %||% params()
 
-  chat_openai(
+  chat_openai_compatible(
+    name = "GitHub",
     system_prompt = system_prompt,
     base_url = base_url,
     credentials = credentials,
@@ -92,7 +93,8 @@ models_github <- function(
   provider <- ProviderOpenAI(
     name = "github",
     model = "",
-    credentials = credentials
+    credentials = credentials,
+    base_url = base_url
   )
 
   req <- base_request(provider)
