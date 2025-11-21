@@ -5,7 +5,7 @@
 #' GitHub model marketplace, you will need to apply for and be accepted into the
 #' beta access program. See <https://github.com/marketplace/models> for details.
 #'
-#' This function is a lightweight wrapper around [chat_openai()] with
+#' This function is a lightweight wrapper around [chat_openai_compatible()] with
 #' the defaults tweaked for the GitHub Models marketplace.
 #'
 #' GitHub also suports the Azure AI Inference SDK, which you can use by setting
@@ -52,7 +52,7 @@ chat_github <- function(
   params <- params %||% params()
 
   chat_openai_compatible(
-    name = "GitHub",
+    name = "gitHub",
     system_prompt = system_prompt,
     base_url = base_url,
     credentials = credentials,
