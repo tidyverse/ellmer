@@ -747,6 +747,53 @@ test_that("invoke_tools_async() can invoke tools with args with default values",
   expect_equal(out$z, "z")
 })
 
+test_that("tool_request_args decodes json-like strings", {
+  tool <- tool(
+    function(path, type, extra) NULL,
+    description = "decode test",
+    arguments = list(
+      path = type_string(),
+      type = type_enum(c("any", "file", "directory")),
+      extra = type_array(type_string())
+    )
+  )
+
+  req <- ContentToolRequest(
+    id = "decode",
+    name = "decode_tool",
+    arguments = list(
+      path = "[\"R\"]",
+      type = "[\"file\"]",
+      extra = "[\"one\", \"two\"]"
+    ),
+    tool = tool
+  )
+
+  args <- tool_request_args(req)
+  expect_identical(args$path, "R")
+  expect_identical(args$type, "file")
+  expect_identical(args$extra, c("one", "two"))
+})
+
+test_that("tool_request_args decodes json-like strings even when convert is FALSE", {
+  tool <- tool(
+    function(path) NULL,
+    description = "decode test",
+    arguments = list(path = type_string()),
+    convert = FALSE
+  )
+
+  req <- ContentToolRequest(
+    id = "decode",
+    name = "decode_tool",
+    arguments = list(path = "[\"README.md\"]"),
+    tool = tool
+  )
+
+  args <- tool_request_args(req)
+  expect_identical(args$path, "README.md")
+})
+
 test_that("tool error warnings", {
   errors <- list(
     ContentToolResult(

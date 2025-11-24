@@ -193,6 +193,7 @@ on_load(
 tool_request_args <- function(request) {
   tool <- request@tool
   args <- request@arguments
+  args <- decode_tool_arguments(args, tool)
 
   if (is.null(tool) || !isTRUE(tool@convert)) {
     return(args)
@@ -206,6 +207,59 @@ tool_request_args <- function(request) {
 
   args <- convert_from_type(args, tool@arguments)
   args[!map_lgl(args, is.null)]
+}
+
+decode_tool_arguments <- function(args, tool) {
+  if (length(args) == 0) {
+    return(args)
+  }
+
+  properties <- if (is.null(tool)) list() else tool@arguments@properties
+
+  for (name in names(args)) {
+    type <- if (name %in% names(properties)) properties[[name]] else NULL
+    args[[name]] <- decode_tool_argument_value(args[[name]], type)
+  }
+
+  args
+}
+
+decode_tool_argument_value <- function(value, type) {
+  if (!is.character(value) || length(value) != 1) {
+    return(value)
+  }
+
+  trimmed <- trimws(value)
+  if (!nzchar(trimmed)) {
+    return(value)
+  }
+
+  first_char <- substr(trimmed, 1, 1)
+  if (!first_char %in% c("[", "{")) {
+    return(value)
+  }
+
+  if (!isTRUE(jsonlite::validate(trimmed))) {
+    return(value)
+  }
+
+  parsed <- tryCatch(
+    jsonlite::parse_json(trimmed, simplifyVector = TRUE),
+    error = function(e) NULL
+  )
+
+  if (is.null(parsed)) {
+    return(value)
+  }
+
+  if (
+    (S7::S7_inherits(type, TypeBasic) || S7::S7_inherits(type, TypeEnum)) &&
+      length(parsed) == 1
+  ) {
+    parsed <- parsed[[1]]
+  }
+
+  parsed
 }
 
 maybe_on_tool_request <- function(
