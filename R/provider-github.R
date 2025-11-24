@@ -8,7 +8,7 @@
 #' This function is a lightweight wrapper around [chat_openai_compatible()] with
 #' the defaults tweaked for the GitHub Models marketplace.
 #'
-#' GitHub also suports the Azure AI Inference SDK, which you can use by setting
+#' GitHub also supports the Azure AI Inference SDK, which you can use by setting
 #' `base_url` to `"https://models.inference.ai.azure.com/"`. This endpoint was
 #' used in \pkg{ellmer} v0.3.0 and earlier.
 #'
