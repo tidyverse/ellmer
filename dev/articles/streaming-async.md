@@ -81,13 +81,13 @@ The simplest approach is to use shinychat’s Shiny module to add a chat
 UI to your app—similar to the app created by
 [`live_browser()`](https://ellmer.tidyverse.org/dev/reference/live_console.md)—using
 the
-[`shinychat::chat_mod_ui()`](https://rdrr.io/pkg/shinychat/man/chat_app.html)
+[`shinychat::chat_mod_ui()`](https://posit-dev.github.io/shinychat/r/reference/chat_app.html)
 and
-[`shinychat::chat_mod_server()`](https://rdrr.io/pkg/shinychat/man/chat_app.html)
+[`shinychat::chat_mod_server()`](https://posit-dev.github.io/shinychat/r/reference/chat_app.html)
 functions. These module functions connect an
 [`ellmer::Chat`](https://ellmer.tidyverse.org/dev/reference/Chat.md)
 object to
-[`shinychat::chat_ui()`](https://rdrr.io/pkg/shinychat/man/chat_ui.html)
+[`shinychat::chat_ui()`](https://posit-dev.github.io/shinychat/r/reference/chat_ui.html)
 and handle non-blocking asynchronous chat interactions automatically.
 
 ``` r
@@ -112,13 +112,13 @@ shinyApp(ui, server)
 
 For fully custom streaming applications with a custom or no chat
 interface, you can use
-[`shinychat::markdown_stream()`](https://rdrr.io/pkg/shinychat/man/markdown_stream.html)
+[`shinychat::markdown_stream()`](https://posit-dev.github.io/shinychat/r/reference/markdown_stream.html)
 to stream responses into a Shiny app. This is particularly useful for
 creating interactive chat applications where you want to display
 responses as they are generated.
 
 The following Shiny app demonstrates
-[`markdown_stream()`](https://rdrr.io/pkg/shinychat/man/markdown_stream.html)
+[`markdown_stream()`](https://posit-dev.github.io/shinychat/r/reference/markdown_stream.html)
 and uses both `$stream_async()` and `$chat_async()` to stream a story
 from an OpenAI model. In the app, we ask the user for a prompt to
 generate a story and then stream the story into the UI. Then we follow
@@ -128,9 +128,9 @@ update the card title.
 This example also highlights the difference between streaming and
 non-streaming chat. Use `$stream_async()` with Shiny outputs that are
 designed to work with generators, like
-[`shinychat::markdown_stream()`](https://rdrr.io/pkg/shinychat/man/markdown_stream.html)
+[`shinychat::markdown_stream()`](https://posit-dev.github.io/shinychat/r/reference/markdown_stream.html)
 and
-[`shinychat::chat_append()`](https://rdrr.io/pkg/shinychat/man/chat_append.html).
+[`shinychat::chat_append()`](https://posit-dev.github.io/shinychat/r/reference/chat_append.html).
 Use `$chat_async()` when you want the text response from the model, for
 example the title of the story.
 

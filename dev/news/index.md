@@ -2,6 +2,15 @@
 
 ## ellmer (development version)
 
+- [`chat_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
+  now uses
+  [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
+  for improved compatibility, and
+  [`models_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
+  now supports custom `base_url` configuration
+  ([@D-M4rk](https://github.com/D-M4rk),
+  [\#877](https://github.com/tidyverse/ellmer/issues/877)).
+
 ## ellmer 0.4.0
 
 CRAN release: 2025-11-15
@@ -799,7 +808,7 @@ CRAN release: 2025-05-17
   app that powers
   [`live_browser()`](https://ellmer.tidyverse.org/dev/reference/live_console.md)
   via
-  [`shinychat::chat_app()`](https://rdrr.io/pkg/shinychat/man/chat_app.html),
+  [`shinychat::chat_app()`](https://posit-dev.github.io/shinychat/r/reference/chat_app.html),
   as well as a Shiny module for easily including a chat interface for an
   ellmer `Chat` object in your Shiny apps
   ([\#397](https://github.com/tidyverse/ellmer/issues/397),
