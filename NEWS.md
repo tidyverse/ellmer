@@ -1,7 +1,5 @@
 # ellmer (development version)
 
-## Minor improvements and bug fixes
-
 * `chat_github()` now uses `chat_openai_compatible()` for improved compatibility, and `models_github()` now supports custom `base_url` configuration (@D-M4rk, #877).
 
 # ellmer 0.4.0
