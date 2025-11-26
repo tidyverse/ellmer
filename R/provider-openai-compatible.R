@@ -405,7 +405,7 @@ method(as_json, list(ProviderOpenAICompatible, ContentToolRequest)) <- function(
   x,
   ...
 ) {
-  json_args <- jsonlite::toJSON(x@arguments)
+  json_args <- jsonlite::toJSON(x@arguments, auto_unbox = TRUE)
   list(
     id = x@id,
     `function` = list(name = x@name, arguments = json_args),

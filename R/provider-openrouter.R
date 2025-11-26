@@ -173,16 +173,3 @@ method(as_json, list(ProviderOpenRouter, ContentText)) <- function(
     list(type = "text", text = x@text)
   }
 }
-
-method(as_json, list(ProviderOpenRouter, ContentToolRequest)) <- function(
-  provider,
-  x,
-  ...
-) {
-  json_args <- jsonlite::toJSON(x@arguments, auto_unbox = TRUE)
-  list(
-    id = x@id,
-    `function` = list(name = x@name, arguments = json_args),
-    type = "function"
-  )
-}
