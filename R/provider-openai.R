@@ -482,7 +482,7 @@ method(batch_submit, ProviderOpenAI) <- function(
       body = body
     )
   })
-  json <- map_chr(requests, to_json)
+  json <- map_chr(requests, jsonlite::toJSON, auto_unbox = TRUE)
   writeLines(json, path)
   # Then upload it
   uploaded <- openai_upload(provider, path)
