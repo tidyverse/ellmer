@@ -322,7 +322,7 @@ tool_string <- function(x) {
     paste(x@value, collapse = "\n")
   } else {
     withCallingHandlers(
-      jsonlite::toJSON(x@value, auto_unbox = TRUE),
+      to_json(x@value),
       error = function(err) {
         cli::cli_abort(
           c(

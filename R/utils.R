@@ -328,3 +328,7 @@ extract_custom_id <- function(json_string) {
 
   result[2] # Second element is the captured group
 }
+
+to_json <- function(x) {
+  jsonlite::toJSON(x, auto_unbox = TRUE)
+}

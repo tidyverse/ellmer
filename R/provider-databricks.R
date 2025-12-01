@@ -179,7 +179,7 @@ method(as_json, list(ProviderDatabricks, ContentToolRequest)) <- function(
 ) {
   # Databricks seems to require encoding empty arguments as an empty
   # dictionary, rather than an empty array.
-  json_args <- jsonlite::toJSON(set_names(x@arguments))
+  json_args <- to_json(set_names(x@arguments))
   list(
     id = x@id,
     `function` = list(name = x@name, arguments = json_args),

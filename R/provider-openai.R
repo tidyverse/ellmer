@@ -421,7 +421,7 @@ method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(
     type = "function_call",
     call_id = x@id,
     name = x@name,
-    arguments = jsonlite::toJSON(x@arguments)
+    arguments = to_json(x@arguments)
   )
 }
 
@@ -482,7 +482,7 @@ method(batch_submit, ProviderOpenAI) <- function(
       body = body
     )
   })
-  json <- map_chr(requests, jsonlite::toJSON, auto_unbox = TRUE)
+  json <- map_chr(requests, to_json)
   writeLines(json, path)
   # Then upload it
   uploaded <- openai_upload(provider, path)
