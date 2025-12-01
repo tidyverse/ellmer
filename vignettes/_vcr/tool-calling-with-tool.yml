@@ -5,7 +5,7 @@ http_interactions:
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"How
         long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"output_text","text":"Neil
-        Armstrong touched down on the moon on July 20, 1969. As of 2023, that was
+        Armstrong landed on the moon on July 20, 1969. As of now in 2023, that was
         54 years ago."}]},{"role":"user","content":[{"type":"input_text","text":"How
         long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
@@ -15,37 +15,37 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999eee9dfb5b2fe8-DFW
+      cf-ray: 9a73c3cb9e998fc2-ORD
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 05 Nov 2025 19:59:33 GMT
+      date: Mon, 01 Dec 2025 15:54:46 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '1789'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-processing-ms: '2047'
+      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=BuAJGCH.0Y62bqiYMpEYctYXOKMb.DxyYq80gHLZ0Ts-1762372773-1.0.1.1-F9NDV3wMbn15E8PCbbeq3odzqPii13EGINIsOVcePevaI956fbroKK5AhzVubGYdcwuQh0NcisCGgYsEP_iF0E_hCe0_AkIvWeNCJmiXZPk;
-        path=/; expires=Wed, 05-Nov-25 20:29:33 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=vuWIwF_1ytoeYBdfWVwjjN4LXHqvuH1Ba3xJemSF9J8-1764604486-1.0.1.1-yHZpPlHBKpzT6_mHzntXovep76K7XcgJKUKzEtrUdlx.lrxVKE2Z7rewubagov46Bi5MOw9NGZmgwl0OdQW_f0p_fH6c5417KyFHHa_dqxw;
+        path=/; expires=Mon, 01-Dec-25 16:24:46 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=HC6Ra.fQnS_NCm1Aw1Oau_9oKQ3gliPkf4b1KAPaEYQ-1762372773395-0.0.1.1-604800000;
+      - _cfuvid=LivD_F9ST0hb7Kqf8ipLD0l0EYEBAivIdTfJCZ.47y8-1764604486551-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1799'
+      x-envoy-upstream-service-time: '2052'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999633'
+      x-ratelimit-remaining-tokens: '29999632'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_9fb52a35f5a54c7b868f94295a37d0c8
+      x-request-id: req_b72a6c3864634c6f92ffef275b78dbf2
     body:
       string: |-
         {
-          "id": "resp_03a8c37ecdd381e601690baca3a20c8190a4d1809fe46b7440",
+          "id": "resp_07fd060fbaac49e001692dba4479b48197b6ec48dbba692a89",
           "object": "response",
-          "created_at": 1762372771,
+          "created_at": 1764604484,
           "status": "completed",
           "background": false,
           "billing": {
@@ -59,11 +59,11 @@ http_interactions:
           "model": "gpt-4o-2024-08-06",
           "output": [
             {
-              "id": "fc_03a8c37ecdd381e601690baca5278c81909e74f03d120da606",
+              "id": "fc_07fd060fbaac49e001692dba44f2fc8197a1cfd2d677f98e67",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"tz\":\"UTC\"}",
-              "call_id": "call_offOEwPWWwMQizBG8wdJzPkh",
+              "call_id": "call_51LiqXYaIAXf3tWaeHPkrx37",
               "name": "get_current_time"
             }
           ],
@@ -115,7 +115,7 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 150,
+            "input_tokens": 151,
             "input_tokens_details": {
               "cached_tokens": 0
             },
@@ -123,21 +123,21 @@ http_interactions:
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 166
+            "total_tokens": 167
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 19:59:33
+  recorded_at: 2025-12-01 15:54:46
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"How
         long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"output_text","text":"Neil
-        Armstrong touched down on the moon on July 20, 1969. As of 2023, that was
+        Armstrong landed on the moon on July 20, 1969. As of now in 2023, that was
         54 years ago."}]},{"role":"user","content":[{"type":"input_text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"function_call","call_id":"fc_03a8c37ecdd381e601690baca5278c81909e74f03d120da606","name":"get_current_time","arguments":"{\"tz\":[\"UTC\"]}"},{"type":"function_call_output","call_id":"fc_03a8c37ecdd381e601690baca5278c81909e74f03d120da606","output":"2025-06-25
+        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"function_call","call_id":"fc_07fd060fbaac49e001692dba44f2fc8197a1cfd2d677f98e67","name":"get_current_time","arguments":"{\"tz\":\"UTC\"}"},{"type":"function_call_output","call_id":"fc_07fd060fbaac49e001692dba44f2fc8197a1cfd2d677f98e67","output":"2025-06-25
         16:53:23 UTC"}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -146,37 +146,37 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999eeeaaecdd2fe8-DFW
+      cf-ray: 9a73c3da3dbd8fc2-ORD
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 05 Nov 2025 19:59:35 GMT
+      date: Mon, 01 Dec 2025 15:54:48 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '1576'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-processing-ms: '2066'
+      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=nsO8xocUij81xRIgOrOLvsYrx.53.RRdClrY96sOAJQ-1762372775-1.0.1.1-3Iw6c6gXzY4R9roJc1DgjBy1H7ivO3YFfWTOBlvXVy6IsDXvl2v90RRBoEpFr6X.FpDa4A.PEy1iUorLKBvchrvRQNO9lMkfgoowCjaeaMM;
-        path=/; expires=Wed, 05-Nov-25 20:29:35 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=jGvYkUDYykyI2wN6rTT6EM4P8KNsMaW66XlMLxX1oCo-1764604488-1.0.1.1-cZBpqnjzHgFS5_6MzRRzS4dXzX4fn70uAO71QaAVY6Yu22_SsD0.uO3hwq88nUsEJEWSv7xB0pVubypHWf5DW6rE4eSVu3X2xCotp2MCSXo;
+        path=/; expires=Mon, 01-Dec-25 16:24:48 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=aCx4DYeiGnXIc2i1FJ.nJ_1E6IqKWDeeh54ze3xZmDk-1762372775237-0.0.1.1-604800000;
+      - _cfuvid=4DwgndlaXyh5HQ9QpTHS2cyaNc.LojaKh8Ho30tD5Ws-1764604488898-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1582'
+      x-envoy-upstream-service-time: '2069'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
       x-ratelimit-remaining-tokens: '29999597'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_2f42a135fa50452eb404b34054e30ec6
+      x-request-id: req_61885af1d4174151b12945bcf6c560c5
     body:
       string: |-
         {
-          "id": "resp_0d43fef7b272552901690baca5ab9c81948acefe774c3465e2",
+          "id": "resp_0d2275ebb992f36d01692dba46cdf88196b48cd063171b718e",
           "object": "response",
-          "created_at": 1762372773,
+          "created_at": 1764604486,
           "status": "completed",
           "background": false,
           "billing": {
@@ -190,7 +190,7 @@ http_interactions:
           "model": "gpt-4o-2024-08-06",
           "output": [
             {
-              "id": "msg_0d43fef7b272552901690baca6a2e88194a73753c4a1fe7d58",
+              "id": "msg_0d2275ebb992f36d01692dba4803b08196ba5eb11d00a9590f",
               "type": "message",
               "status": "completed",
               "content": [
@@ -198,7 +198,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Neil Armstrong touched down on the moon on July 20, 1969. As of June 2025, that was almost 56 years ago."
+                  "text": "Neil Armstrong landed on the moon on July 20, 1969. As of June 25, 2025, that was 55 years ago."
                 }
               ],
               "role": "assistant"
@@ -256,14 +256,14 @@ http_interactions:
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 33,
+            "output_tokens": 34,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 219
+            "total_tokens": 220
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 19:59:35
+  recorded_at: 2025-12-01 15:54:48
 recorded_with: VCR-vcr/2.0.0
