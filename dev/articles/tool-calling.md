@@ -56,7 +56,7 @@ questions like these impossible.
 ``` r
 chat <- chat_openai(model = "gpt-4o")
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
-#> Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, 
+#> Neil Armstrong landed on the moon on July 20, 1969. As of now in 2023,
 #> that was 54 years ago.
 ```
 
@@ -131,8 +131,8 @@ That’s all we need to do! Let’s retry our query:
 
 ``` r
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
-#> Neil Armstrong touched down on the moon on July 20, 1969. As of June 
-#> 2025, that was almost 56 years ago.
+#> Neil Armstrong landed on the moon on July 20, 1969. As of June 25, 
+#> 2025, that was 55 years ago.
 ```
 
 That’s correct! Without any further guidance, the chat model decided to
@@ -143,19 +143,19 @@ If we print the chat we can see where the model decided to use the tool:
 
 ``` r
 chat
-#> <Chat OpenAI/gpt-4o turns=6 input=355 output=79 cost=$0.00>
+#> <Chat OpenAI/gpt-4o turns=6 input=356 output=81 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> How long ago did Neil Armstrong touch down on the moon?
-#> ── assistant [input=19 output=30 cost=$0.00] ──────────────────────────
-#> Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, that was 54 years ago.
+#> ── assistant [input=19 output=31 cost=$0.00] ──────────────────────────
+#> Neil Armstrong landed on the moon on July 20, 1969. As of now in 2023, that was 54 years ago.
 #> ── user ───────────────────────────────────────────────────────────────
 #> How long ago did Neil Armstrong touch down on the moon?
-#> ── assistant [input=150 output=16 cost=$0.00] ─────────────────────────
-#> [tool request (fc_03a8c37ecdd381e601690baca5278c81909e74f03d120da606)]: get_current_time(tz = "UTC")
+#> ── assistant [input=151 output=16 cost=$0.00] ─────────────────────────
+#> [tool request (fc_07fd060fbaac49e001692dba44f2fc8197a1cfd2d677f98e67)]: get_current_time(tz = "UTC")
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_03a8c37ecdd381e601690baca5278c81909e74f03d120da606)]: 2025-06-25 16:53:23 UTC
-#> ── assistant [input=186 output=33 cost=$0.00] ─────────────────────────
-#> Neil Armstrong touched down on the moon on July 20, 1969. As of June 2025, that was almost 56 years ago.
+#> [tool result  (fc_07fd060fbaac49e001692dba44f2fc8197a1cfd2d677f98e67)]: 2025-06-25 16:53:23 UTC
+#> ── assistant [input=186 output=34 cost=$0.00] ─────────────────────────
+#> Neil Armstrong landed on the moon on July 20, 1969. As of June 25, 2025, that was 55 years ago.
 ```
 
 (Full disclosure: I originally tried this example with the default model
@@ -235,10 +235,12 @@ chat <- chat_openai()
 #> Using model = "gpt-4.1".
 chat$register_tool(get_weather)
 chat$chat("Give me a weather update for London and Chicago")
-#> Here is the weather update:
+#> Here’s a weather update:
 #> 
-#> - London: Heavy rain, cool temperature, and strong winds.
-#> - Chicago: Overcast skies, warm temperature, and strong winds.
+#> - London: It’s heavily raining, cool, and windy with strong winds.
+#> - Chicago: The weather is overcast, warm, and also has strong winds.
+#> 
+#> Dress accordingly and stay safe!
 ```
 
 We can print the chat to confirm that the model only performed a single
@@ -246,18 +248,20 @@ tool call:
 
 ``` r
 chat
-#> <Chat OpenAI/gpt-4.1 turns=4 input=197 output=53 cost=$0.00>
+#> <Chat OpenAI/gpt-4.1 turns=4 input=195 output=65 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> Give me a weather update for London and Chicago
 #> ── assistant [input=67 output=18 cost=$0.00] ──────────────────────────
-#> [tool request (fc_0695837b713996880169151e123e0881939637e2fd9d66180e)]: get_weather(cities = c("London", "Chicago"))
+#> [tool request (fc_0ab4b61a48aa23bb01692dba49b87c8190ae9678691024472c)]: get_weather(cities = c("London", "Chicago"))
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0695837b713996880169151e123e0881939637e2fd9d66180e)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
-#> ── assistant [input=130 output=35 cost=$0.00] ─────────────────────────
-#> Here is the weather update:
+#> [tool result  (fc_0ab4b61a48aa23bb01692dba49b87c8190ae9678691024472c)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
+#> ── assistant [input=128 output=47 cost=$0.00] ─────────────────────────
+#> Here’s a weather update:
 #> 
-#> - London: Heavy rain, cool temperature, and strong winds.
-#> - Chicago: Overcast skies, warm temperature, and strong winds.
+#> - London: It’s heavily raining, cool, and windy with strong winds.
+#> - Chicago: The weather is overcast, warm, and also has strong winds.
+#> 
+#> Dress accordingly and stay safe!
 ```
 
 ### Image and PDF tool output

@@ -198,8 +198,8 @@ the following system prompt</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Then ask a question that needs it.</span></span></span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Give me five numbers from a random normal distribution."</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Here are five numbers from a random normal distribution (mean = 0, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> standard deviation = 1):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Here are five numbers drawn from a random normal distribution (mean = </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0, standard deviation = 1):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1. 1.1484</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2. -1.8218</span>
@@ -209,15 +209,15 @@ the following system prompt</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Look at the chat history to see how tool calling works:</span></span></span>
 <span class="r-in"><span><span class="va">chat</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=4 input=234 output=85 cost=$0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-4.1 turns=4 input=234 output=86 cost=$0.00&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Give me five numbers from a random normal distribution.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=90 output=23 cost=$0.00] ──────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool request</span> (fc_007e9641944241bb01690badd1f2e88193bddb1a058623c280)]: rnorm(n = 5L, mean = 0L, sd = 1L)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool request</span> (fc_0b0635de4f44748f01692dba5a16388193a8de793c57908c2f)]: rnorm(n = 5L, mean = 0L, sd = 1L)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool result</span>  (fc_007e9641944241bb01690badd1f2e88193bddb1a058623c280)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=144 output=62 cost=$0.00] ─────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Here are five numbers from a random normal distribution (mean = 0, standard deviation = 1):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool result</span>  (fc_0b0635de4f44748f01692dba5a16388193a8de793c57908c2f)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=144 output=63 cost=$0.00] ─────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Here are five numbers drawn from a random normal distribution (mean = 0, standard deviation = 1):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1. 1.1484</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2. -1.8218</span>
