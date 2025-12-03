@@ -10,6 +10,9 @@
   now supports custom `base_url` configuration
   ([@D-M4rk](https://github.com/D-M4rk),
   [\#877](https://github.com/tidyverse/ellmer/issues/877)).
+- [`chat_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
+  now contains a slot for `top_k` within the `params` argument
+  ([@frankiethull](https://github.com/frankiethull)).
 
 ## ellmer 0.4.0
 
