@@ -365,11 +365,11 @@ structure “inside out” and create an array of objects:</p>
 <p>If you’re familiar with the terms row-oriented and column-oriented
 data frames, this is the same idea. Since most languages don’t possess
 vectorisation like R, row-oriented data frames are more common.</p>
-<p>Note that you’ll generally wanted to avoid nesting objects in inside
-of objects as this will generate a data frame where each column is
-itself a data frame. You can use <code>tidyr::unpack()</code> to unpack
-these df-columns back into a regular flat data frame, but your life will
-be simpler if you re-consider the type.</p>
+<p>Note that you’ll generally want to avoid nesting objects inside of
+objects as this will generate a data frame where each column is itself a
+data frame. You can use <code>tidyr::unpack()</code> to unpack these
+df-columns back into a regular flat data frame, but your life will be
+simpler if you re-consider the type.</p>
 </div>
 </div>
 <div class="section level2">

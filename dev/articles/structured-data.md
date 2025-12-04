@@ -314,7 +314,7 @@ If you’re familiar with the terms row-oriented and column-oriented data
 frames, this is the same idea. Since most languages don’t possess
 vectorisation like R, row-oriented data frames are more common.
 
-Note that you’ll generally wanted to avoid nesting objects in inside of
+Note that you’ll generally want to avoid nesting objects inside of
 objects as this will generate a data frame where each column is itself a
 data frame. You can use `tidyr::unpack()` to unpack these df-columns
 back into a regular flat data frame, but your life will be simpler if
