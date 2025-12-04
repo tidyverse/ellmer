@@ -85,7 +85,7 @@ local_tokens <- function(frame = parent.frame()) {
   old <- the$tokens
   the$tokens <- tokens_row()
 
-  defer(the$tokens <- old, env = frame)
+  defer(the$tokens <- old, envir = frame)
 }
 
 #' Report on token usage in the current session

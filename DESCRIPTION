@@ -30,7 +30,7 @@ Imports:
     jsonlite,
     later (>= 1.4.0),
     lifecycle,
-    promises (>= 1.3.1),
+    promises (>= 1.5.0),
     R6,
     rlang (>= 1.1.0),
     S7 (>= 0.2.0),
@@ -45,6 +45,8 @@ Suggests:
     knitr,
     magick,
     openssl,
+    otel (>= 0.2.0),
+    otelsdk (>= 0.2.0),
     paws.common,
     png,
     rmarkdown,
@@ -82,11 +84,13 @@ Collate:
     'content-pdf.R'
     'content-replay.R'
     'httr2.R'
+    'import-standalone-defer.R'
     'import-standalone-obj-type.R'
     'import-standalone-purrr.R'
     'import-standalone-types-check.R'
     'interpolate.R'
     'live.R'
+    'otel.R'
     'parallel-chat.R'
     'params.R'
     'provider-any.R'

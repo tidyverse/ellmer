@@ -33,7 +33,8 @@ on_load({
     echo = "none",
     on_tool_request = function(request) invisible(),
     on_tool_result = function(result) invisible(),
-    yield_request = FALSE
+    yield_request = FALSE,
+    otel_span = NULL
   ) {
     tool_requests <- extract_tool_requests(turn)
 
@@ -51,7 +52,7 @@ on_load({
         next
       }
 
-      result <- invoke_tool(request)
+      result <- invoke_tool(request, otel_span = otel_span)
 
       if (promises::is.promise(result@value)) {
         cli::cli_abort(
@@ -78,7 +79,8 @@ on_load({
     echo = "none",
     on_tool_request = function(request) invisible(),
     on_tool_result = function(result) invisible(),
-    yield_request = FALSE
+    yield_request = FALSE,
+    otel_span = NULL
   ) {
     tool_requests <- extract_tool_requests(turn)
 
@@ -94,7 +96,7 @@ on_load({
         return(rejected)
       }
 
-      result <- coro::await(invoke_tool_async(request))
+      result <- coro::await(invoke_tool_async(request, otel_span = otel_span))
 
       maybe_echo_tool(result, echo = echo)
       on_tool_result(result)
@@ -144,7 +146,7 @@ new_tool_result <- function(request, result = NULL, error = NULL) {
 }
 
 # Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases
-invoke_tool <- function(request) {
+invoke_tool <- function(request, otel_span = NULL) {
   if (is.null(request@tool)) {
     return(new_tool_result(request, error = "Unknown tool"))
   }
@@ -155,19 +157,25 @@ invoke_tool <- function(request) {
     return(args)
   }
 
+  tool_span <- local_tool_otel_span(
+    request,
+    parent = otel_span
+  )
+
   tryCatch(
     {
       result <- do.call(request@tool, args)
       new_tool_result(request, result)
     },
     error = function(e) {
+      record_tool_otel_span_error(tool_span, e)
       new_tool_result(request, error = e)
     }
   )
 }
 
 on_load(
-  invoke_tool_async <- coro::async(function(request) {
+  invoke_tool_async <- coro::async(function(request, otel_span = NULL) {
     if (is.null(request@tool)) {
       return(new_tool_result(request, error = "Unknown tool"))
     }
@@ -178,12 +186,18 @@ on_load(
       return(args)
     }
 
+    tool_span <- local_tool_otel_span(
+      request,
+      parent = otel_span
+    )
+
     tryCatch(
       {
         result <- await(do.call(request@tool, args))
         new_tool_result(request, result)
       },
       error = function(e) {
+        record_tool_otel_span_error(tool_span, e)
         new_tool_result(request, error = e)
       }
     )
