@@ -67,6 +67,59 @@ test_that("can extract data", {
   test_data_extraction(chat_fun)
 })
 
+test_that("optional types return NULL when data unavailable", {
+  vcr::local_cassette("anthropic-optional-types")
+
+  prompt <- "
+    # Apples are tasty
+    By Hadley Wickham
+
+    Apples are delicious and tasty and I like to eat them.
+  "
+
+  chat <- chat_anthropic_test()
+  result <- chat$chat_structured(
+    prompt,
+    type = type_string("The publication year", required = FALSE)
+  )
+  expect_null(result)
+
+  chat2 <- chat_anthropic_test()
+  result2 <- chat2$chat_structured(
+    prompt,
+    type = type_integer("Number of citations", required = FALSE)
+  )
+  expect_null(result2)
+})
+
+test_that("optional fields in arrays become NA when missing", {
+  vcr::local_cassette("anthropic-optional-array")
+
+  prompt <- "
+    Apples are tasty.
+    Oranges are delicious.
+    Bananas are yellow and nutritious.
+  "
+
+  chat <- chat_anthropic_test()
+  result <- chat$chat_structured(
+    prompt,
+    type = type_array(
+      type_object(
+        name = type_string("Name of the fruit", required = FALSE),
+        adjective = type_string("Descriptive adjective", required = FALSE),
+        color = type_string("Color of the fruit", required = FALSE)
+      )
+    )
+  )
+
+  expect_s3_class(result, "data.frame")
+  expect_equal(nrow(result), 3)
+  expect_equal(result$name, c("apple", "orange", "banana"))
+  expect_equal(result$adjective, c("tasty", "delicious", "nutritious"))
+  expect_equal(result$color, c(NA_character_, NA_character_, "yellow"))
+})
+
 test_that("can use images", {
   vcr::local_cassette("anthropic-images")
   chat_fun <- chat_anthropic_test
