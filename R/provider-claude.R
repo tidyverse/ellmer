@@ -201,10 +201,17 @@ method(chat_body, ProviderAnthropic) <- function(
   }))
 
   if (!is.null(type)) {
+    # Build description based on whether the type is required
+    if (type@required) {
+      description <- "Extract structured data from the conversation."
+    } else {
+      description <- "Extract structured data from the conversation. The data parameter is optional - if you cannot find the requested information in the conversation, do not include the data parameter in your tool call at all and instead return an empty object {}."
+    }
+
     tool_def <- ToolDef(
       function(...) {},
       name = "_structured_tool_call",
-      description = "Extract structured data",
+      description = description,
       arguments = type_object(data = type)
     )
     tools[[tool_def@name]] <- tool_def
