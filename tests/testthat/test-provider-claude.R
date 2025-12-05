@@ -145,3 +145,56 @@ test_that("batch chat works", {
   )
   expect_equal(out, c("Des Moines", "Albany", "Sacramento", "Austin"))
 })
+
+test_that("optional types return NULL when data unavailable", {
+  vcr::local_cassette("anthropic-optional-types")
+
+  prompt <- "
+    # Apples are tasty
+    By Hadley Wickham
+
+    Apples are delicious and tasty and I like to eat them.
+  "
+
+  chat <- chat_anthropic_test()
+  result <- chat$chat_structured(
+    prompt,
+    type = type_string("The publication year", required = FALSE)
+  )
+  expect_null(result)
+
+  chat2 <- chat_anthropic_test()
+  result2 <- chat2$chat_structured(
+    prompt,
+    type = type_integer("Number of citations", required = FALSE)
+  )
+  expect_null(result2)
+})
+
+test_that("optional fields in arrays become NA when missing", {
+  vcr::local_cassette("anthropic-optional-array")
+
+  prompt <- "
+    Apples are tasty.
+    Oranges are orange in colour.
+    Bananas are nutritious, and their colour is yellow.
+  "
+
+  chat <- chat_anthropic_test()
+  result <- chat$chat_structured(
+    prompt,
+    type = type_array(
+      type_object(
+        name = type_string("Name of the fruit", required = FALSE),
+        adjective = type_string("Descriptive adjective", required = FALSE),
+        colour = type_string("Colour of the fruit", required = FALSE)
+      )
+    )
+  )
+
+  expect_s3_class(result, "data.frame")
+  expect_equal(nrow(result), 3)
+  expect_equal(result$name, c("Apples", "Oranges", "Bananas"))
+  expect_equal(result$adjective, c("tasty", "", "nutritious"))
+  expect_equal(result$colour, c("", "orange", "yellow"))
+})

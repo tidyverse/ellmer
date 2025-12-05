@@ -7,40 +7,40 @@ http_interactions:
         Apples are tasty\n    By Hadley Wickham\n\n    Apples are delicious and tasty
         and I like to eat them.\n    Except for red delicious, that is. They are NOT
         delicious.\n  ","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"_structured_tool_call","description":"Extract
-        structured data","input_schema":{"type":"object","description":"","properties":{"data":{"type":"object","description":"Summary
+        structured data from the conversation.","input_schema":{"type":"object","description":"","properties":{"data":{"type":"object","description":"Summary
         of the article. Preserve existing case.","properties":{"title":{"type":"string","description":"Content
         title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false}},"required":["data"],"additionalProperties":false}}],"tool_choice":{"type":"tool","name":"_structured_tool_call"},"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Thu, 06 Nov 2025 14:56:32 GMT
+      date: Fri, 05 Dec 2025 07:43:54 GMT
       content-type: application/json
       content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '2000000'
-      anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:56:31Z'
-      anthropic-ratelimit-output-tokens-limit: '400000'
-      anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:56:32Z'
-      anthropic-ratelimit-requests-limit: '4000'
-      anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-11-06T14:56:29Z'
-      retry-after: '30'
-      anthropic-ratelimit-tokens-limit: '2400000'
-      anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-11-06T14:56:31Z'
-      request-id: req_011CUrq7wbHdfAWEpWUMRV2b
+      anthropic-ratelimit-input-tokens-limit: '800000'
+      anthropic-ratelimit-input-tokens-remaining: '800000'
+      anthropic-ratelimit-input-tokens-reset: '2025-12-05T07:43:54Z'
+      anthropic-ratelimit-output-tokens-limit: '160000'
+      anthropic-ratelimit-output-tokens-remaining: '160000'
+      anthropic-ratelimit-output-tokens-reset: '2025-12-05T07:43:54Z'
+      anthropic-ratelimit-requests-limit: '2000'
+      anthropic-ratelimit-requests-remaining: '1999'
+      anthropic-ratelimit-requests-reset: '2025-12-05T07:43:51Z'
+      retry-after: '6'
+      anthropic-ratelimit-tokens-limit: '960000'
+      anthropic-ratelimit-tokens-remaining: '960000'
+      anthropic-ratelimit-tokens-reset: '2025-12-05T07:43:54Z'
+      request-id: req_011CVoAayqdyJJYXTPU3ERa4
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '2715'
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      x-envoy-upstream-service-time: '3661'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 99a570198c6569d0-DFW
+      cf-ray: 9a91ea38afbb9425-LHR
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01G8c8rPFym6gBoDELWsWGnz","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01TL6NrFX7XEQzBDcx1Vsvf8","name":"_structured_tool_call","input":{"data":{"title":"Apples
-        are tasty","author":"Hadley Wickham"}}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":792,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":54,"service_tier":"standard"}}'
-  recorded_at: 2025-11-06 14:56:32
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01RTMVVq1U5Uc2pg5AbYgGW1","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01Mw9Xb4RHj828fCu8e2FE77","name":"_structured_tool_call","input":{"data":{"title":"Apples
+        are tasty","author":"Hadley Wickham"}}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":795,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":54,"service_tier":"standard"}}'
+  recorded_at: 2025-12-05 07:43:54
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
@@ -53,38 +53,38 @@ http_interactions:
         Apples are tasty\n    By Hadley Wickham\n\n    Apples are delicious and tasty
         and I like to eat them.\n    Except for red delicious, that is. They are NOT
         delicious.\n  ","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"_structured_tool_call","description":"Extract
-        structured data","input_schema":{"type":"object","description":"","properties":{"data":{"type":"object","description":"Summary
+        structured data from the conversation.","input_schema":{"type":"object","description":"","properties":{"data":{"type":"object","description":"Summary
         of the article. Preserve existing case.","properties":{"title":{"type":"string","description":"Content
         title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false}},"required":["data"],"additionalProperties":false}}],"tool_choice":{"type":"tool","name":"_structured_tool_call"},"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Thu, 06 Nov 2025 14:56:35 GMT
+      date: Fri, 05 Dec 2025 07:43:57 GMT
       content-type: application/json
       content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '2000000'
-      anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:56:35Z'
-      anthropic-ratelimit-output-tokens-limit: '400000'
-      anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:56:35Z'
-      anthropic-ratelimit-requests-limit: '4000'
-      anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-11-06T14:56:32Z'
-      retry-after: '25'
-      anthropic-ratelimit-tokens-limit: '2400000'
-      anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-11-06T14:56:35Z'
-      request-id: req_011CUrq89vwiaG9F6D4Q6WLN
+      anthropic-ratelimit-input-tokens-limit: '800000'
+      anthropic-ratelimit-input-tokens-remaining: '800000'
+      anthropic-ratelimit-input-tokens-reset: '2025-12-05T07:43:57Z'
+      anthropic-ratelimit-output-tokens-limit: '160000'
+      anthropic-ratelimit-output-tokens-remaining: '160000'
+      anthropic-ratelimit-output-tokens-reset: '2025-12-05T07:43:57Z'
+      anthropic-ratelimit-requests-limit: '2000'
+      anthropic-ratelimit-requests-remaining: '1999'
+      anthropic-ratelimit-requests-reset: '2025-12-05T07:43:55Z'
+      retry-after: '3'
+      anthropic-ratelimit-tokens-limit: '960000'
+      anthropic-ratelimit-tokens-remaining: '960000'
+      anthropic-ratelimit-tokens-reset: '2025-12-05T07:43:57Z'
+      request-id: req_011CVoAbGhu9WXeAHDimiYbf
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '3197'
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      x-envoy-upstream-service-time: '2765'
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       server: cloudflare
-      cf-ray: 99a5702baf0d69d0-DFW
+      cf-ray: 9a91ea515f339425-LHR
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01GoxxFUPozvUG66BGrR8Z6b","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01BGXTSbLiVWVFax94GWPaje","name":"_structured_tool_call","input":{"data":{"title":"Apples
-        are tasty","author":"Hadley Wickham"}}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":874,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":54,"service_tier":"standard"}}'
-  recorded_at: 2025-11-06 14:56:35
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01Q8ATv6AGSKM31BRC6FxBSf","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01M18dY77VQWkpExzqhHYp5a","name":"_structured_tool_call","input":{"data":{"title":"Apples
+        are tasty","author":"Hadley Wickham"}}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":877,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":54,"service_tier":"standard"}}'
+  recorded_at: 2025-12-05 07:43:57
 recorded_with: VCR-vcr/2.0.0

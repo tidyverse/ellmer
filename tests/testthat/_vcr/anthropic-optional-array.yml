@@ -1,0 +1,42 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":[{"type":"text","text":"\n    Apples
+        are tasty.\n    Oranges are orange in colour.\n    Bananas are nutritious,
+        and their colour is yellow.\n  ","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"_structured_tool_call","description":"Extract
+        structured data from the conversation.","input_schema":{"type":"object","description":"","properties":{"data":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"Name
+        of the fruit"},"adjective":{"type":"string","description":"Descriptive adjective"},"colour":{"type":"string","description":"Colour
+        of the fruit"}},"required":[],"additionalProperties":false}}},"required":["data"],"additionalProperties":false}}],"tool_choice":{"type":"tool","name":"_structured_tool_call"},"temperature":0,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Fri, 05 Dec 2025 08:12:17 GMT
+      content-type: application/json
+      content-encoding: gzip
+      anthropic-ratelimit-input-tokens-limit: '800000'
+      anthropic-ratelimit-input-tokens-remaining: '800000'
+      anthropic-ratelimit-input-tokens-reset: '2025-12-05T08:12:16Z'
+      anthropic-ratelimit-output-tokens-limit: '160000'
+      anthropic-ratelimit-output-tokens-remaining: '160000'
+      anthropic-ratelimit-output-tokens-reset: '2025-12-05T08:12:17Z'
+      anthropic-ratelimit-requests-limit: '2000'
+      anthropic-ratelimit-requests-remaining: '1999'
+      anthropic-ratelimit-requests-reset: '2025-12-05T08:12:14Z'
+      retry-after: '44'
+      anthropic-ratelimit-tokens-limit: '960000'
+      anthropic-ratelimit-tokens-remaining: '960000'
+      anthropic-ratelimit-tokens-reset: '2025-12-05T08:12:16Z'
+      request-id: req_011CVoCkZTT5FhrTPHNZZGk8
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      x-envoy-upstream-service-time: '2437'
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      server: cloudflare
+      cf-ray: 9a9213d02dc5bed7-LHR
+    body:
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01TuUbEjV1DaYmCNGAnJKvDe","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01DhZa16HfD6kPuTfWGd8L4z","name":"_structured_tool_call","input":{"data":[{"name":"Apples","adjective":"tasty","colour":""},{"name":"Oranges","adjective":"","colour":"orange"},{"name":"Bananas","adjective":"nutritious","colour":"yellow"}]}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":798,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":97,"service_tier":"standard"}}'
+  recorded_at: 2025-12-05 08:12:17
+recorded_with: VCR-vcr/2.0.0
