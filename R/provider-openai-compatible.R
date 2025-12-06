@@ -149,22 +149,36 @@ method(base_request, ProviderOpenAICompatible) <- function(provider) {
 }
 
 method(base_request_error, ProviderOpenAICompatible) <- function(
-  provider,
-  req
+    provider,
+    req
 ) {
   req_error(req, body = function(resp) {
-    if (resp_content_type(resp) == "application/json") {
-      error <- resp_body_json(resp)$error
-      if (is_string(error)) {
-        error
-      } else if (is.list(error)) {
-        error$message
-      } else {
-        prettify(resp_body_string(resp))
+    # Default to treating as text
+    is_json <- FALSE
+    try({
+      if (resp_content_type(resp) == "application/json") {
+        is_json <- TRUE
       }
-    } else if (resp_content_type(resp) == "text/plain") {
-      resp_body_string(resp)
+    }, silent = TRUE)
+
+    if (is_json) {
+      # Try parsing JSON, but fall back to text if it fails (e.g. 429 text body)
+      body <- tryCatch(resp_body_json(resp), error = function(e) NULL)
+
+      if (!is.null(body)) {
+        error <- body$error
+        if (is_string(error)) {
+          return(error)
+        } else if (is.list(error)) {
+          return(error$message)
+        } else {
+          return(prettify(resp_body_string(resp)))
+        }
+      }
     }
+
+    # Fallback for text/plain, other types, or failed JSON parsing
+    resp_body_string(resp)
   })
 }
 
