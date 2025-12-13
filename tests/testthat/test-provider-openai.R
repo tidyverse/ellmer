@@ -142,3 +142,20 @@ test_that("can extract dummy response from malformed JSON", {
     list(custom_id = "123", response = list(status_code = 500))
   )
 })
+
+test_that("value_turn handles NULL service_tier gracefully", {
+  provider <- chat_openai_test()$get_provider()
+
+  result <- list(
+    output = list(
+      list(type = "message", content = list(list(text = "Hello")))
+    ),
+    usage = NULL,
+    service_tier = NULL
+  )
+
+  turn <- value_turn(provider, result)
+  expect_s7_class(turn, AssistantTurn)
+  expect_equal(turn@tokens[["input"]], 0)
+  expect_equal(turn@tokens[["output"]], 0)
+})
