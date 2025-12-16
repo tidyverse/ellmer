@@ -7,9 +7,9 @@ NULL
 #' These generic functions can be use to convert [Turn]/[Content] objects
 #' into easily serializable representations (i.e. lists and atomic vectors).
 #'
-#' * `contents_record()` accepts a [Turn] or [Content] and return a simple list.
+#' * `contents_record()` accepts a [Turn] or [Content] (or a list of them) and returns a simple list.
 #' * `contents_replay()` takes the output of `contents_record()` and returns
-#'   a [Turn] or [Content] object.
+#'   a [Turn] or [Content] object (or a list of them).
 #'
 #' @param x A [Turn] or [Content] object to serialize; or a serialized object
 #'   to replay.
@@ -17,6 +17,12 @@ NULL
 #' @keywords internal
 #' @export
 contents_record <- function(x) {
+  # FIX: Handle list of objects (Issue #895)
+  # If x is a list but NOT an S7 object (like a Turn), map over it
+  if (is.list(x) && !S7_inherits(x)) {
+    return(lapply(x, contents_record))
+  }
+
   class_name <- class(x)[[1]]
 
   check_is_ellmer_object(x)
@@ -56,6 +62,11 @@ contents_record <- function(x) {
 #'   [ellmer::Content] but are not from the \pkg{ellmer} package itself.
 #' @export
 contents_replay <- function(x, tools = list(), .envir = parent.frame()) {
+  # FIX: Handle list of recorded objects (Issue #895)
+  if (is_list_of_recorded_objects(x)) {
+    return(lapply(x, contents_replay, tools = tools, .envir = .envir))
+  }
+
   check_recorded(x)
 
   class <- recorded_class_info(x, .envir = .envir)
