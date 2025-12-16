@@ -2,9 +2,8 @@
 
     Code
       contents_replay(bad_names)
-    Condition
-      Error in `contents_replay()`:
-      ! Expected the recorded object to be a list with at least names 'version', 'class', and 'props'.
+    Output
+      list()
     Code
       contents_replay(bad_version)
     Condition
