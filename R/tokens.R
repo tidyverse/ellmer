@@ -115,6 +115,9 @@ has_cost <- function(provider, model) {
 }
 
 get_token_cost <- function(provider, tokens, variant = "") {
+  # FIX: Ensure variant is not NULL (Fixes #903)
+  variant <- variant %||% ""
+
   needle <- data.frame(
     provider = provider@name,
     model = provider@model,
