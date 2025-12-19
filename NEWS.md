@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `stream_text()` now returns `ContentThinking` objects for thinking/reasoning content from Anthropic, OpenAI, and Google Gemini, allowing downstream packages like shinychat to distinguish thinking from regular text during streaming (@simonpcouch, #909).
 * `chat_github()` now uses `chat_openai_compatible()` for improved compatibility, and `models_github()` now supports custom `base_url` configuration (@D-M4rk, #877).
 * `chat_ollama()` now contains a slot for `top_k` within the `params` argument (@frankiethull).
 
