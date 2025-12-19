@@ -247,10 +247,10 @@ method(stream_text, ProviderOpenAI) <- function(provider, event) {
     event$delta
   } else if (event$type == "response.reasoning_summary_text.delta") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/reasoning_summary_text/delta
-    event$delta
+    ContentThinking(event$delta)
   } else if (event$type == "response.reasoning_summary_text.done") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/reasoning_summary_text/done
-    "\n\n"
+    NULL
   }
 }
 method(stream_merge_chunks, ProviderOpenAI) <- function(

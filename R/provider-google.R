@@ -273,7 +273,17 @@ method(stream_parse, ProviderGoogleGemini) <- function(provider, event) {
   }
 }
 method(stream_text, ProviderGoogleGemini) <- function(provider, event) {
-  event$candidates[[1]]$content$parts[[1]]$text
+  parts <- event$candidates[[1]]$content$parts
+  if (is.null(parts) || length(parts) == 0) {
+    return(NULL)
+  }
+
+  part <- parts[[1]]
+  if (isTRUE(part$thought) && !is.null(part$text)) {
+    ContentThinking(part$text)
+  } else if (!is.null(part$text)) {
+    part$text
+  }
 }
 method(stream_merge_chunks, ProviderGoogleGemini) <- function(
   provider,
@@ -320,7 +330,9 @@ method(value_turn, ProviderGoogleGemini) <- function(
   message <- result$candidates[[1]]$content
 
   contents <- lapply(message$parts, function(content) {
-    if (has_name(content, "text")) {
+    if (isTRUE(content$thought) && has_name(content, "text")) {
+      ContentThinking(content$text)
+    } else if (has_name(content, "text")) {
       if (has_type) {
         ContentJson(string = content$text)
       } else {

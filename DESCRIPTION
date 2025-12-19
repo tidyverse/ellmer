@@ -55,6 +55,7 @@ Suggests:
     withr
 VignetteBuilder:
     knitr
+Remotes: posit-dev/shinychat/pkg-r#167
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true

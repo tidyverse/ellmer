@@ -275,7 +275,10 @@ method(stream_parse, ProviderAnthropic) <- function(provider, event) {
 }
 method(stream_text, ProviderAnthropic) <- function(provider, event) {
   if (event$type == "content_block_delta") {
-    event$delta$text %||% event$delta$thinking
+    if (identical(event$delta$type, "thinking_delta")) {
+      return(ContentThinking(event$delta$thinking))
+    }
+    event$delta$text
   }
 }
 method(stream_merge_chunks, ProviderAnthropic) <- function(
