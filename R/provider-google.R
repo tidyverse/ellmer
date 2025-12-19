@@ -416,6 +416,15 @@ method(as_json, list(ProviderGoogleGemini, ContentText)) <- function(
   }
 }
 
+method(as_json, list(ProviderGoogleGemini, ContentThinking)) <- function(
+  provider,
+  x,
+  ...
+) {
+  # https://ai.google.dev/gemini-api/docs/thinking
+  list(thought = TRUE, text = x@thinking)
+}
+
 method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
   provider,
   x,
