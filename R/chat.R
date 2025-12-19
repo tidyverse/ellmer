@@ -608,14 +608,21 @@ Chat <- R6::R6Class(
         for (chunk in response) {
           content <- stream_text(private$provider, chunk)
           if (!is.null(content)) {
-            text <- switch(class(content)[1],
+            text <- switch(
+              class(content)[1],
               "ellmer::ContentThinking" = content@thinking,
               "ellmer::ContentText" = content@text,
               if (S7_inherits(content, Content)) format(content) else content
             )
             emit(text)
             if (yield_as_content) {
-              yield(if (S7_inherits(content, Content)) content else ContentText(text))
+              yield(
+                if (S7_inherits(content, Content)) {
+                  content
+                } else {
+                  ContentText(text)
+                }
+              )
             } else {
               yield(text)
             }
@@ -695,14 +702,21 @@ Chat <- R6::R6Class(
         for (chunk in await_each(response)) {
           content <- stream_text(private$provider, chunk)
           if (!is.null(content)) {
-            text <- switch(class(content)[1],
+            text <- switch(
+              class(content)[1],
               "ellmer::ContentThinking" = content@thinking,
               "ellmer::ContentText" = content@text,
               if (S7_inherits(content, Content)) format(content) else content
             )
             emit(text)
             if (yield_as_content) {
-              yield(if (S7_inherits(content, Content)) content else ContentText(text))
+              yield(
+                if (S7_inherits(content, Content)) {
+                  content
+                } else {
+                  ContentText(text)
+                }
+              )
             } else {
               yield(text)
             }
