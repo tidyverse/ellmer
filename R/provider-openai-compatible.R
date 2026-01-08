@@ -238,12 +238,15 @@ method(stream_parse, ProviderOpenAICompatible) <- function(provider, event) {
 
   jsonlite::parse_json(event$data)
 }
-method(stream_text, ProviderOpenAICompatible) <- function(provider, event) {
+method(stream_content, ProviderOpenAICompatible) <- function(provider, event) {
   if (length(event$choices) == 0) {
-    NULL
-  } else {
-    event$choices[[1]]$delta[["content"]]
+    return(NULL)
   }
+  text <- event$choices[[1]]$delta[["content"]]
+  if (is.null(text)) {
+    return(NULL)
+  }
+  ContentText(text)
 }
 method(stream_merge_chunks, ProviderOpenAICompatible) <- function(
   provider,

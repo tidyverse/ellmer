@@ -266,9 +266,13 @@ method(stream_parse, ProviderAWSBedrock) <- function(provider, event) {
   body
 }
 
-method(stream_text, ProviderAWSBedrock) <- function(provider, event) {
+method(stream_content, ProviderAWSBedrock) <- function(provider, event) {
   if (event$event_type == "contentBlockDelta") {
-    event$delta$text
+    text <- event$delta$text
+    if (is.null(text)) {
+      return(NULL)
+    }
+    ContentText(text)
   }
 }
 

@@ -768,23 +768,6 @@ Chat <- R6::R6Class(
   )
 )
 
-stream_content <- function(provider, event) {
-  result <- stream_text(provider, event)
-  if (is.null(result)) {
-    return(NULL)
-  }
-  if (S7_inherits(result, Content)) result else ContentText(result)
-}
-
-content_text <- function(content) {
-  switch(
-    class(content)[1],
-    "ellmer::ContentThinking" = content@thinking,
-    "ellmer::ContentText" = content@text,
-    format(content)
-  )
-}
-
 #' @export
 print.Chat <- function(x, ...) {
   provider <- x$get_provider()

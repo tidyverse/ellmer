@@ -272,7 +272,7 @@ method(stream_parse, ProviderGoogleGemini) <- function(provider, event) {
     jsonlite::parse_json(event$data)
   }
 }
-method(stream_text, ProviderGoogleGemini) <- function(provider, event) {
+method(stream_content, ProviderGoogleGemini) <- function(provider, event) {
   parts <- event$candidates[[1]]$content$parts
   if (is.null(parts) || length(parts) == 0) {
     return(NULL)
@@ -282,7 +282,7 @@ method(stream_text, ProviderGoogleGemini) <- function(provider, event) {
   if (isTRUE(part$thought) && !is.null(part$text)) {
     ContentThinking(part$text)
   } else if (!is.null(part$text)) {
-    part$text
+    ContentText(part$text)
   }
 }
 method(stream_merge_chunks, ProviderGoogleGemini) <- function(
