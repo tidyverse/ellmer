@@ -192,18 +192,30 @@ Chat <- R6::R6Class(
     #' @param echo Whether to emit the response to stdout as it is received. If
     #'   `NULL`, then the value of `echo` set when the chat object was created
     #'   will be used.
-    chat = function(..., echo = NULL) {
+    chat = function(..., prefill = NULL, echo = NULL) {
       finish_tools <- private$complete_dangling_tool_requests()
 
-      turn <- user_turn(!!!finish_tools, ...)
+      dots <- list2(...)
       echo <- check_echo(echo %||% private$echo)
+
+      is_prefill_mode <- length(finish_tools) == 0 &&
+        length(dots) == 0 &&
+        length(private$.turns) > 0 &&
+        is_assistant_turn(private$.turns[[length(private$.turns)]])
+
+      if (is_prefill_mode) {
+        turn <- NULL
+      } else {
+        turn <- user_turn(!!!finish_tools, !!!dots)
+      }
 
       # Returns a single turn (the final response from the assistant), even if
       # multiple rounds of back and forth happened.
       coro::collect(private$chat_impl(
         turn,
         stream = echo != "none",
-        echo = echo
+        echo = echo,
+        prefill = prefill
       ))
 
       text <- ellmer_output(self$last_turn()@text)
@@ -453,12 +465,16 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      yield_as_content = FALSE
+      yield_as_content = FALSE,
+      prefill = NULL
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
 
-      while (!is.null(user_turn)) {
+      continue <- TRUE
+      while (continue) {
+        continue <- FALSE
+
         assistant_chunks <- private$submit_turns(
           user_turn,
           stream = stream,
@@ -493,9 +509,25 @@ Chat <- R6::R6Class(
           }
 
           user_turn <- tool_results_as_turn(tool_results)
+          continue <- TRUE
+
+          if (!is.null(prefill)) {
+            if (is.function(prefill)) {
+              prefill_text <- prefill()
+            } else {
+              prefill_text <- prefill
+            }
+            if (!is.null(prefill_text) && nzchar(prefill_text)) {
+              private$.turns[[length(private$.turns) + 1]] <- user_turn
+              prefill_turn <- AssistantTurn(list(ContentText(prefill_text)))
+              private$.turns[[length(private$.turns) + 1]] <- prefill_turn
+              user_turn <- NULL
+            }
+            prefill <- NULL
+          }
         }
 
-        if (echo == "all") {
+        if (echo == "all" && !is.null(user_turn)) {
           cat(format(user_turn))
         } else if (echo == "none") {
           tool_errors <- c(tool_errors, turn_get_tool_errors(user_turn))
@@ -589,14 +621,20 @@ Chat <- R6::R6Class(
       type = NULL,
       yield_as_content = FALSE
     ) {
-      if (echo == "all") {
+      if (echo == "all" && !is.null(user_turn)) {
         cat_line(format(user_turn), prefix = "> ")
+      }
+
+      if (is.null(user_turn)) {
+        turns <- private$.turns
+      } else {
+        turns <- c(private$.turns, list(user_turn))
       }
 
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "stream" else "value",
-        turns = c(private$.turns, list(user_turn)),
+        turns = turns,
         tools = if (is.null(type)) private$tools,
         type = type
       )
@@ -659,7 +697,21 @@ Chat <- R6::R6Class(
       }
       # When `echo="output"`, tool calls are emitted in `invoke_tools()`
 
-      self$add_turn(user_turn, turn)
+      if (is.null(user_turn)) {
+        prefill_turn <- private$.turns[[length(private$.turns)]]
+        combined_contents <- c(prefill_turn@contents, turn@contents)
+        combined_turn <- AssistantTurn(
+          contents = combined_contents,
+          json = turn@json,
+          tokens = turn@tokens,
+          cost = turn@cost,
+          duration = turn@duration
+        )
+        private$.turns[[length(private$.turns)]] <- combined_turn
+        log_turn(private$provider, combined_turn)
+      } else {
+        self$add_turn(user_turn, turn)
+      }
 
       coro::exhausted()
     }),
