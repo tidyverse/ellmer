@@ -518,6 +518,9 @@ Chat <- R6::R6Class(
               prefill_text <- prefill
             }
             if (!is.null(prefill_text) && nzchar(prefill_text)) {
+              if (echo == "none") {
+                tool_errors <- c(tool_errors, turn_get_tool_errors(user_turn))
+              }
               private$.turns[[length(private$.turns) + 1]] <- user_turn
               prefill_turn <- AssistantTurn(list(ContentText(prefill_text)))
               private$.turns[[length(private$.turns) + 1]] <- prefill_turn
