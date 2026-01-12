@@ -2,6 +2,11 @@
 
 ## ellmer (development version)
 
+- ellmer will now distinguish text content from thinking content while
+  streaming, allowing downstream packages like shinychat to provide
+  specific UI for thinking content
+  ([@simonpcouch](https://github.com/simonpcouch),
+  [\#909](https://github.com/tidyverse/ellmer/issues/909)).
 - [`chat_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
   now uses
   [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)

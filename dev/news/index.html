@@ -51,7 +51,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
-<ul><li>
+<ul><li>ellmer will now distinguish text content from thinking content while streaming, allowing downstream packages like shinychat to provide specific UI for thinking content (<a href="https://github.com/simonpcouch" class="external-link">@simonpcouch</a>, <a href="https://github.com/tidyverse/ellmer/issues/909" class="external-link">#909</a>).</li>
+<li>
 <code><a href="../reference/chat_github.html">chat_github()</a></code> now uses <code><a href="../reference/chat_openai_compatible.html">chat_openai_compatible()</a></code> for improved compatibility, and <code><a href="../reference/chat_github.html">models_github()</a></code> now supports custom <code>base_url</code> configuration (<a href="https://github.com/D-M4rk" class="external-link">@D-M4rk</a>, <a href="https://github.com/tidyverse/ellmer/issues/877" class="external-link">#877</a>).</li>
 <li>
 <code><a href="../reference/chat_ollama.html">chat_ollama()</a></code> now contains a slot for <code>top_k</code> within the <code>params</code> argument (<a href="https://github.com/frankiethull" class="external-link">@frankiethull</a>).</li>
