@@ -518,6 +518,7 @@ Chat <- R6::R6Class(
               prefill_text <- prefill
             }
             if (!is.null(prefill_text) && nzchar(prefill_text)) {
+              prefill_text <- trimws(prefill_text, "right")
               if (echo == "none") {
                 tool_errors <- c(tool_errors, turn_get_tool_errors(user_turn))
               }
