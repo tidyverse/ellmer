@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `models_deepseek()` lists available models for `chat_deepseek()` (@jcrodriguez1989, #919).
 * `type_object(.additional_properties)` is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (@thisisnic, #866).
 
 # ellmer 0.4.1
