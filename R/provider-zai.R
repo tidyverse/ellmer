@@ -44,14 +44,14 @@ NULL
 #' @export
 #' @returns A [Chat] object.
 #' @examples
-#' \donttest{
-#' # Use coding API (default - for GLM Coding Lite-Quarterly plan)
-#' chat <- chat_zai()
-#' chat$chat("What is 2 + 2?")
+#' if (nzchar(Sys.getenv("ZAI_API_KEY"))) {
+#'   # Use coding API (default - for GLM Coding Lite-Quarterly plan)
+#'   chat <- chat_zai()
+#'   chat$chat("What is 2 + 2?")
 #'
-#' # Use general API (for usage-based plans)
-#' chat <- chat_zai(base_url = "https://api.z.ai/api/paas/v4")
-#' chat$chat("What is 2 + 2?")
+#'   # Use general API (for usage-based plans)
+#'   chat <- chat_zai(base_url = "https://api.z.ai/api/paas/v4")
+#'   chat$chat("What is 2 + 2?")
 #' }
 chat_zai <- function(
   system_prompt = NULL,
