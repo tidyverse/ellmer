@@ -227,19 +227,38 @@ method(value_turn, ProviderZAI) <- function(
   result,
   has_type = FALSE
 ) {
-  contents <- lapply(result$choices[[1]]$message$content, function(content) {
-    if (content$type == "text") {
-      ContentText(content$text)
-    } else if (content$type == "refusal") {
-      ContentText(content$refusal)
-    }
-  })
+  msg <- result$choices[[1]]$message
+  msg_content <- msg$content
+
+  # Z AI generally follows OpenAI-compatible conventions, but some endpoints
+  # return `message$content` as a plain string instead of a list of objects.
+  if (is.character(msg_content)) {
+    contents <- list(ContentText(msg_content))
+  } else {
+    contents <- lapply(msg_content, function(content) {
+      if (is.character(content)) {
+        return(ContentText(content))
+      }
+      if (
+        is.list(content) && !is.null(content$type) && content$type == "text"
+      ) {
+        return(ContentText(content$text %||% ""))
+      }
+      if (
+        is.list(content) && !is.null(content$type) && content$type == "refusal"
+      ) {
+        return(ContentText(content$refusal %||% ""))
+      }
+      NULL
+    })
+    contents <- Filter(Negate(is.null), contents)
+  }
 
   # Check for reasoning content
-  if (!is.null(result$choices[[1]]$message$reasoning_content)) {
+  if (!is.null(msg$reasoning_content)) {
     contents <- c(
       list(ContentThinking(
-        reasoning = result$choices[[1]]$message$reasoning_content
+        thinking = msg$reasoning_content
       )),
       contents
     )
