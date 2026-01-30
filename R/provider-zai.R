@@ -44,7 +44,7 @@ NULL
 #' @export
 #' @returns A [Chat] object.
 #' @examples
-#' \dontshow{ellmer:::vcr_example_start("chat_zai")}
+#' \donttest{
 #' # Use coding API (default - for GLM Coding Lite-Quarterly plan)
 #' chat <- chat_zai()
 #' chat$chat("What is 2 + 2?")
@@ -52,7 +52,7 @@ NULL
 #' # Use general API (for usage-based plans)
 #' chat <- chat_zai(base_url = "https://api.z.ai/api/paas/v4")
 #' chat$chat("What is 2 + 2?")
-#' \dontshow{ellmer:::vcr_example_end()}
+#' }
 chat_zai <- function(
   system_prompt = NULL,
   base_url = "https://api.z.ai/api/coding/paas/v4",

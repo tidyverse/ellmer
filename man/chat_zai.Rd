@@ -96,7 +96,7 @@ Set it as the \code{ZAI_API_KEY} environment variable in your \code{.Renviron} f
 }
 }
 \examples{
-\dontshow{ellmer:::vcr_example_start("chat_zai")}
+\donttest{
 # Use coding API (default - for GLM Coding Lite-Quarterly plan)
 chat <- chat_zai()
 chat$chat("What is 2 + 2?")
@@ -104,7 +104,7 @@ chat$chat("What is 2 + 2?")
 # Use general API (for usage-based plans)
 chat <- chat_zai(base_url = "https://api.z.ai/api/paas/v4")
 chat$chat("What is 2 + 2?")
-\dontshow{ellmer:::vcr_example_end()}
+}
 }
 \seealso{
 Other chatbots: 
