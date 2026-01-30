@@ -26,8 +26,13 @@ models_zai(
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the endpoint. Defaults to the coding API
-endpoint. To use the regular API, set to \verb{https://api.z.ai/api/paas/v4}.}
+\item{base_url}{The base URL to the endpoint.
+
+Defaults to the international coding endpoint (\verb{https://api.z.ai/api/coding/paas/v4}).
+To use the international regular API, set to \verb{https://api.z.ai/api/paas/v4}.
+
+To use the China/BigModel endpoints, use \verb{https://open.bigmodel.cn/api/paas/v4}
+(regular) or \verb{https://open.bigmodel.cn/api/coding/paas/v4} (coding).}
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
@@ -67,11 +72,23 @@ A \link{Chat} object.
 optimized for agentic coding and multi-step reasoning.
 \subsection{API Endpoints}{
 
-Z AI offers two different API endpoints for different use cases:
+Z AI offers two domains/regions, each with a regular and coding endpoint.
+
+\strong{International (api.z.ai):}
+\itemize{
+\item Regular API: \verb{https://api.z.ai/api/paas/v4}
+\item Coding API (default): \verb{https://api.z.ai/api/coding/paas/v4}
+}
+
+\strong{China / BigModel (open.bigmodel.cn):}
+\itemize{
+\item Regular API: \verb{https://open.bigmodel.cn/api/paas/v4}
+\item Coding API: \verb{https://open.bigmodel.cn/api/coding/paas/v4}
+}
 
 \strong{Coding API (Default):}
 \itemize{
-\item Endpoint: \verb{https://api.z.ai/api/coding/paas/v4}
+\item Endpoint: \verb{https://api.z.ai/api/coding/paas/v4} (or China: \verb{https://open.bigmodel.cn/api/coding/paas/v4})
 \item Plan: GLM Coding Lite-Quarterly (subscription-based)
 \item Best for: Code generation, debugging, technical tasks
 \item Usage: \code{chat_zai()} (uses this endpoint by default)
@@ -79,7 +96,7 @@ Z AI offers two different API endpoints for different use cases:
 
 \strong{Regular API:}
 \itemize{
-\item Endpoint: \verb{https://api.z.ai/api/paas/v4}
+\item Endpoint: \verb{https://api.z.ai/api/paas/v4} (or China: \verb{https://open.bigmodel.cn/api/paas/v4})
 \item Plan: Usage-based with credits
 \item Best for: General questions, conversations, non-coding tasks
 \item Usage: \code{chat_zai(base_url = "https://api.z.ai/api/paas/v4")}

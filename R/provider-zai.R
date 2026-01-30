@@ -13,16 +13,24 @@ NULL
 #'
 #' ## API Endpoints
 #'
-#' Z AI offers two different API endpoints for different use cases:
+#' Z AI offers two domains/regions, each with a regular and coding endpoint.
+#'
+#' **International (api.z.ai):**
+#' - Regular API: `https://api.z.ai/api/paas/v4`
+#' - Coding API (default): `https://api.z.ai/api/coding/paas/v4`
+#'
+#' **China / BigModel (open.bigmodel.cn):**
+#' - Regular API: `https://open.bigmodel.cn/api/paas/v4`
+#' - Coding API: `https://open.bigmodel.cn/api/coding/paas/v4`
 #'
 #' **Coding API (Default):**
-#' - Endpoint: `https://api.z.ai/api/coding/paas/v4`
+#' - Endpoint: `https://api.z.ai/api/coding/paas/v4` (or China: `https://open.bigmodel.cn/api/coding/paas/v4`)
 #' - Plan: GLM Coding Lite-Quarterly (subscription-based)
 #' - Best for: Code generation, debugging, technical tasks
 #' - Usage: `chat_zai()` (uses this endpoint by default)
 #'
 #' **Regular API:**
-#' - Endpoint: `https://api.z.ai/api/paas/v4`
+#' - Endpoint: `https://api.z.ai/api/paas/v4` (or China: `https://open.bigmodel.cn/api/paas/v4`)
 #' - Plan: Usage-based with credits
 #' - Best for: General questions, conversations, non-coding tasks
 #' - Usage: `chat_zai(base_url = "https://api.z.ai/api/paas/v4")`
@@ -38,8 +46,13 @@ NULL
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @param model `r param_model("glm-4.7", "zai")`
-#' @param base_url The base URL to the endpoint. Defaults to the coding API
-#'   endpoint. To use the regular API, set to `https://api.z.ai/api/paas/v4`.
+#' @param base_url The base URL to the endpoint.
+#'
+#'   Defaults to the international coding endpoint (`https://api.z.ai/api/coding/paas/v4`).
+#'   To use the international regular API, set to `https://api.z.ai/api/paas/v4`.
+#'
+#'   To use the China/BigModel endpoints, use `https://open.bigmodel.cn/api/paas/v4`
+#'   (regular) or `https://open.bigmodel.cn/api/coding/paas/v4` (coding).
 #' @family chatbots
 #' @export
 #' @returns A [Chat] object.
@@ -86,23 +99,6 @@ chat_zai <- function(
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
-#' Create a Z AI chat object with deterministic defaults (for testing)
-#'
-#' @description
-#' Convenience wrapper around [chat_zai()] intended for examples and tests.
-#' Defaults to a terse system prompt and sets `temperature = 0` (unless you
-#' explicitly supply a different temperature via `params`).
-#'
-#' @param ... Other arguments forwarded to [chat_zai()], such as `base_url`,
-#'   `api_key`, `credentials`, `api_args`, and `api_headers`.
-#' @param system_prompt System prompt for the assistant.
-#' @param model Model name.
-#' @param params Model parameters. If `params$temperature` is `NULL`, it is set
-#'   to `0` for determinism.
-#' @param echo Echo strategy. See [chat_zai()].
-#' @export
-#' @returns A [Chat] object.
-#' @seealso [chat_zai()]
 chat_zai_test <- function(
   ...,
   system_prompt = "Be terse.",
@@ -117,7 +113,8 @@ chat_zai_test <- function(
     system_prompt = system_prompt,
     model = model,
     params = params,
-    ...
+    ...,
+    echo = echo
   )
 }
 
