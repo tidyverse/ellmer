@@ -138,7 +138,10 @@ add_additional_properties_false <- function(node) {
   if (is.list(node) && !is.null(node$type) && identical(node$type, "object")) {
     node$additionalProperties <- FALSE
     if (!is.null(node$properties) && is.list(node$properties)) {
-      node$properties <- lapply(node$properties, add_additional_properties_false)
+      node$properties <- lapply(
+        node$properties,
+        add_additional_properties_false
+      )
     }
   }
   if (is.list(node) && !is.null(node$items)) {
