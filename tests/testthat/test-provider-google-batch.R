@@ -36,6 +36,14 @@ test_that("gemini_json_fallback parses custom_id from malformed line", {
   expect_equal(result$status$code, 500L)
 })
 
+test_that("gemini_json_fallback parses key field from malformed line", {
+  line <- '{"key": "chat-9", broken...'
+  result <- gemini_json_fallback(line)
+
+  expect_equal(result$metadata$request_index, 9L)
+  expect_equal(result$status$code, 500L)
+})
+
 test_that("gemini_json_fallback returns empty metadata for unparseable line", {
   line <- "completely broken"
   result <- gemini_json_fallback(line)
@@ -153,10 +161,82 @@ test_that("gemini_prepare_batch_body keeps non-empty system instruction", {
 
 # Batch support -----------------------------------------------------------
 
+# Helper to create a dummy provider without needing real credentials
+dummy_gemini_provider <- function(
+  base_url = "https://generativelanguage.googleapis.com/v1beta/"
+) {
+  ProviderGoogleGemini(
+    name = if (grepl("aiplatform", base_url)) "Google/Vertex" else "Google/Gemini",
+    base_url = base_url,
+    model = "gemini-2.5-flash",
+    params = params(),
+    extra_args = list(),
+    extra_headers = character(),
+    credentials = NULL
+  )
+}
+
 test_that("ProviderGoogleGemini has batch support", {
-  chat <- chat_google_gemini_test()
-  provider <- chat$get_provider()
+  provider <- dummy_gemini_provider()
   expect_true(has_batch_support(provider))
+})
+
+test_that("Vertex provider does not have batch support", {
+  provider <- dummy_gemini_provider(
+    base_url = "https://us-central1-aiplatform.googleapis.com/v1/projects/test/locations/us-central1/publishers/google/"
+  )
+  expect_false(has_batch_support(provider))
+})
+
+test_that("batch_status keeps working when succeeded but no responsesFile", {
+  provider <- dummy_gemini_provider()
+  batch <- list(
+    metadata = list(
+      state = "BATCH_STATE_SUCCEEDED",
+      batchStats = list(requestCount = 2L, successfulRequestCount = 2L)
+    )
+  )
+  status <- batch_status(provider, batch)
+  expect_true(status$working)
+})
+
+test_that("batch_status marks done when succeeded with responsesFile", {
+  provider <- dummy_gemini_provider()
+  batch <- list(
+    metadata = list(
+      state = "BATCH_STATE_SUCCEEDED",
+      batchStats = list(requestCount = 2L, successfulRequestCount = 2L),
+      output = list(responsesFile = "files/abc123")
+    )
+  )
+  status <- batch_status(provider, batch)
+  expect_false(status$working)
+})
+
+# Fixture-based tests ----------------------------------------------------
+
+test_that("batch chat works with Gemini fixture", {
+  withr::local_envvar(GEMINI_API_KEY = "dummy-key-for-fixture-test")
+  chat <- chat_google_gemini(
+    system_prompt = "Answer with just the city name",
+    model = "gemini-2.5-flash",
+    params = params(temperature = 0, seed = 1014)
+  )
+
+  prompts <- list(
+    "What's the capital of Iowa?",
+    "What's the capital of New York?",
+    "What's the capital of California?",
+    "What's the capital of Texas?"
+  )
+
+  out <- batch_chat_text(
+    chat,
+    prompts,
+    path = test_path("batch/state-capitals-gemini.json"),
+    ignore_hash = TRUE
+  )
+  expect_equal(out, c("Des Moines", "Albany", "Sacramento", "Austin"))
 })
 
 # Integration tests -------------------------------------------------------
