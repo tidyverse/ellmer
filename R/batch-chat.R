@@ -2,10 +2,11 @@
 #'
 #' @description
 #' `batch_chat()` and `batch_chat_structured()` currently only work with
-#' [chat_openai()] and [chat_anthropic()]. They use the
-#' [OpenAI](https://platform.openai.com/docs/guides/batch) and
-#' [Anthropic](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
-#' batch APIs which allow you to submit multiple requests simultaneously.
+#' [chat_openai()], [chat_anthropic()], and [chat_groq()]. They use the
+#' [OpenAI](https://platform.openai.com/docs/guides/batch),
+#' [Anthropic](https://docs.claude.com/en/docs/build-with-claude/batch-processing),
+#' and [Groq](https://console.groq.com/docs/batch) batch APIs which allow
+#' you to submit multiple requests simultaneously.
 #' The results can take up to 24 hours to complete, but in return you pay 50%
 #' less than usual (but note that ellmer doesn't include this discount in
 #' its pricing metadata). If you want to get results back more quickly, or
