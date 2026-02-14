@@ -872,3 +872,370 @@ models_google <- function(
 google_location <- function(location) {
   if (location == "global") "" else paste0(location, "-")
 }
+
+# Batched requests -------------------------------------------------------------
+
+# https://ai.google.dev/gemini-api/docs/batch
+method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
+  grepl("generativelanguage.googleapis.com", provider@base_url, fixed = TRUE)
+}
+
+method(batch_submit, ProviderGoogleGemini) <- function(
+  provider,
+  conversations,
+  type = NULL
+) {
+  path <- withr::local_tempfile(fileext = ".jsonl")
+
+  requests <- map(seq_along(conversations), function(i) {
+    body <- chat_body(
+      provider,
+      stream = FALSE,
+      turns = conversations[[i]],
+      type = type
+    )
+
+    list(
+      key = paste0("chat-", i),
+      request = gemini_prepare_batch_body(body)
+    )
+  })
+
+  json_lines <- map_chr(requests, to_json)
+  writeLines(json_lines, path)
+
+  uploaded <- gemini_upload_file(provider, path)
+  if (is.null(uploaded$name) || !nzchar(uploaded$name)) {
+    cli::cli_abort("Gemini upload did not return a file resource name.")
+  }
+
+  req <- base_request(provider)
+  req <- req_url_path_append(
+    req,
+    "models",
+    paste0(provider@model, ":batchGenerateContent")
+  )
+  req <- req_body_json(
+    req,
+    list(
+      batch = list(
+        displayName = paste0("ellmer-", as.integer(Sys.time())),
+        model = paste0("models/", provider@model),
+        inputConfig = list(fileName = uploaded$name)
+      )
+    )
+  )
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+method(batch_poll, ProviderGoogleGemini) <- function(provider, batch) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, batch$name)
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+method(batch_status, ProviderGoogleGemini) <- function(provider, batch) {
+  metadata <- batch$metadata %||% list()
+  response <- batch$response %||% list()
+  state <- metadata$state %||% response$state %||% "BATCH_STATE_UNSPECIFIED"
+  stats <- metadata$batchStats %||% response$batchStats %||% list()
+
+  total <- as.integer(stats$requestCount %||% 0L)
+  pending <- as.integer(stats$pendingRequestCount %||% 0L)
+  succeeded <- as.integer(stats$successfulRequestCount %||% 0L)
+  failed <- as.integer(stats$failedRequestCount %||% 0L)
+
+  if (!is.null(batch$error) && total > 0 && failed == 0L) {
+    failed <- total
+  }
+
+  terminal_states <- c(
+    "BATCH_STATE_SUCCEEDED",
+    "BATCH_STATE_FAILED",
+    "BATCH_STATE_CANCELLED",
+    "BATCH_STATE_EXPIRED"
+  )
+
+  is_terminal <- state %in% terminal_states
+
+  # Keep polling if succeeded but output file isn't available yet
+  if (state == "BATCH_STATE_SUCCEEDED") {
+    batch_resource <- batch$response %||% batch$metadata
+    responses_file <- batch_resource$output$responsesFile %||%
+      batch_resource$responsesFile %||%
+      metadata$output$responsesFile %||%
+      NULL
+    if (is.null(responses_file) || !nzchar(responses_file)) {
+      is_terminal <- FALSE
+    }
+  }
+
+  n_processing <- max(pending, total - succeeded - failed, 0L)
+
+  list(
+    working = !is_terminal,
+    n_processing = n_processing,
+    n_succeeded = max(succeeded, 0L),
+    n_failed = max(failed, 0L)
+  )
+}
+
+method(batch_retrieve, ProviderGoogleGemini) <- function(provider, batch) {
+  metadata <- batch$metadata %||% list()
+  response <- batch$response %||% list()
+  stats <- metadata$batchStats %||% response$batchStats %||% list()
+  request_count <- as.integer(stats$requestCount %||% 0L)
+
+  if (!is.null(batch$error)) {
+    code <- as.integer(batch$error$code %||% 500L)
+    if (request_count <= 0L) {
+      return(list(list(status_code = code, body = NULL)))
+    }
+    return(replicate(
+      request_count,
+      list(status_code = code, body = NULL),
+      simplify = FALSE
+    ))
+  }
+
+  batch_resource <- batch$response %||% batch$metadata
+  responses_file <- batch_resource$output$responsesFile %||%
+    batch_resource$responsesFile %||%
+    metadata$output$responsesFile %||%
+    NULL
+
+  if (is.null(responses_file) || !nzchar(responses_file)) {
+    cli::cli_abort("Gemini batch completed but no output file was returned.")
+  }
+
+  path_output <- withr::local_tempfile(fileext = ".jsonl")
+  gemini_download_file(provider, responses_file, path_output)
+
+  parsed <- read_ndjson(path_output, fallback = gemini_json_fallback)
+
+  normalized <- imap(parsed, function(x, i) {
+    gemini_normalize_result(x, index_default = as.integer(i))
+  })
+
+  ids <- vapply(normalized, function(x) x$index, integer(1))
+  results <- lapply(normalized, function(x) x$result)
+  results[order(ids)]
+}
+
+method(batch_result_turn, ProviderGoogleGemini) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
+  if (!is.null(result) && result$status_code == 200L && !is.null(result$body)) {
+    value_turn(provider, result$body, has_type = has_type)
+  } else {
+    NULL
+  }
+}
+
+# Gemini batch helpers ---------------------------------------------------------
+
+#' @noRd
+gemini_to_snake_case <- function(x) {
+  if (is.list(x)) {
+    if (!is.null(names(x))) {
+      names(x) <- gsub("([a-z])([A-Z])", "\\1_\\2", names(x), perl = TRUE) |>
+        tolower()
+    }
+    lapply(x, gemini_to_snake_case)
+  } else {
+    x
+  }
+}
+
+#' @noRd
+gemini_prepare_batch_body <- function(body) {
+  # Remove empty system instructions (batch parser rejects them)
+  si <- body$systemInstruction %||% body$system_instruction
+  if (!is.null(si)) {
+    parts <- si$parts
+    is_empty <- if (is.list(parts) && !is.null(names(parts))) {
+      identical(parts$text, "") || is.null(parts$text)
+    } else if (is.list(parts) && length(parts) > 0) {
+      all(vapply(
+        parts,
+        function(p) identical(p$text, "") || is.null(p$text),
+        logical(1)
+      ))
+    } else {
+      TRUE
+    }
+    if (is_empty) {
+      body$systemInstruction <- NULL
+      body$system_instruction <- NULL
+    }
+  }
+
+  # Save user-defined schema before snake_case conversion so property names
+  # like "firstName" are not mangled to "first_name"
+  gc_pre <- body$generationConfig %||% body$generation_config
+  saved_schema <- if (!is.null(gc_pre)) {
+    gc_pre$responseSchema %||% gc_pre$response_schema
+  }
+
+  body <- gemini_to_snake_case(body)
+
+  # Rename response_schema -> response_json_schema and restore original schema
+  gc <- body$generation_config
+  if (
+    !is.null(gc) && (!is.null(gc$response_schema) || !is.null(saved_schema))
+  ) {
+    gc$response_json_schema <- saved_schema %||% gc$response_schema
+    gc$response_schema <- NULL
+    body$generation_config <- gc
+  }
+
+  body
+}
+
+#' @noRd
+gemini_upload_file <- function(
+  provider,
+  path,
+  mime_type = "application/jsonl"
+) {
+  upload_base_url <- sub("/v[^/]+/?$", "/", provider@base_url)
+
+  upload_url <- google_upload_init(
+    path = path,
+    base_url = upload_base_url,
+    credentials = provider@credentials,
+    mime_type = mime_type
+  )
+
+  status <- google_upload_send(
+    upload_url = upload_url,
+    path = path,
+    credentials = provider@credentials
+  )
+  google_upload_wait(status, provider@credentials)
+  status
+}
+
+#' @noRd
+gemini_download_file <- function(provider, name, path) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, paste0(name, ":download"))
+  req <- req_url_query(req, alt = "media")
+  req_perform(req, path = path)
+  invisible(path)
+}
+
+#' @noRd
+gemini_extract_index <- function(x, default = NA_integer_) {
+  metadata <- x$metadata %||% list()
+  idx <- metadata$request_index %||% metadata$index %||% default
+
+  if (!is.na(idx)) {
+    return(as.integer(idx))
+  }
+
+  key <- x$key %||% x$custom_id %||% metadata$custom_id %||% ""
+  if (grepl("^chat-[0-9]+$", key)) {
+    return(as.integer(sub("^chat-([0-9]+)$", "\\1", key)))
+  }
+
+  as.integer(default)
+}
+
+#' @noRd
+gemini_json_fallback <- function(line) {
+  index <- suppressWarnings(
+    as.integer(sub(
+      '.*"request_index"\\s*:\\s*([0-9]+).*',
+      "\\1",
+      line,
+      perl = TRUE
+    ))
+  )
+
+  if (length(index) == 0L || is.na(index)) {
+    custom_id <- tryCatch(
+      {
+        m <- regmatches(
+          line,
+          regexpr('"custom_id"\\s*:\\s*"chat-[0-9]+"', line, perl = TRUE)
+        )
+        if (length(m) == 0L) {
+          NA_character_
+        } else {
+          sub('.*"chat-([0-9]+)".*', "\\1", m)
+        }
+      },
+      error = function(e) NA_character_
+    )
+    index <- suppressWarnings(as.integer(custom_id))
+  }
+
+  if (length(index) == 0L || is.na(index)) {
+    key_match <- tryCatch(
+      {
+        m <- regmatches(
+          line,
+          regexpr('"key"\\s*:\\s*"chat-[0-9]+"', line, perl = TRUE)
+        )
+        if (length(m) == 0L) {
+          NA_character_
+        } else {
+          sub('.*"chat-([0-9]+)".*', "\\1", m)
+        }
+      },
+      error = function(e) NA_character_
+    )
+    index <- suppressWarnings(as.integer(key_match))
+  }
+
+  list(
+    metadata = if (length(index) == 0L || is.na(index)) {
+      list()
+    } else {
+      list(request_index = index)
+    },
+    status = list(
+      code = 500L,
+      message = "Failed to parse Gemini batch output line"
+    )
+  )
+}
+
+#' @noRd
+gemini_normalize_result <- function(x, index_default) {
+  index <- gemini_extract_index(x, default = index_default)
+
+  # Formats where response and error/status are wrapped in one object
+  if (!is.null(x$response) || !is.null(x$error) || !is.null(x$status)) {
+    if (!is.null(x$response) && is.null(x$error) && is.null(x$status)) {
+      return(list(
+        index = index,
+        result = list(status_code = 200L, body = x$response)
+      ))
+    }
+
+    status <- x$error %||% x$status %||% list()
+    code <- status$code %||% 500L
+    return(list(
+      index = index,
+      result = list(status_code = as.integer(code), body = NULL)
+    ))
+  }
+
+  # Plain GenerateContentResponse lines (current file-mode output)
+  if (
+    !is.null(x$candidates) ||
+      !is.null(x$promptFeedback) ||
+      !is.null(x$usageMetadata)
+  ) {
+    return(list(index = index, result = list(status_code = 200L, body = x)))
+  }
+
+  list(index = index, result = list(status_code = 500L, body = NULL))
+}
