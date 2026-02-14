@@ -65,10 +65,16 @@ method(as_json, list(ProviderGroq, Turn)) <- function(provider, x, ...) {
     is_tool <- map_lgl(x@contents, is_tool_request)
     tool_calls <- as_json(provider, x@contents[is_tool], ...)
 
-    # Grok contents is just a string. Hopefully it never sends back more
-    # than a single text response.
-    if (any(!is_tool)) {
-      content <- x@contents[!is_tool][[1]]@text
+    # Groq assistant content is just a string (not a list of content parts).
+    non_tool <- x@contents[!is_tool]
+    if (length(non_tool) > 0) {
+      first <- non_tool[[1]]
+      if (S7_inherits(first, ContentJson)) {
+        content <- first@string %||%
+          unclass(jsonlite::toJSON(first@data, auto_unbox = TRUE))
+      } else {
+        content <- first@text
+      }
     } else {
       content <- NULL
     }

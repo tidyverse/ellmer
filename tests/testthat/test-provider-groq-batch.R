@@ -27,6 +27,28 @@ test_that("groq_json_fallback returns NA for unparseable line", {
   expect_equal(result$response$status_code, 500)
 })
 
+# Turn serialization -------------------------------------------------------
+
+test_that("as_json(Turn) handles ContentJson in assistant turns", {
+  provider <- dummy_groq_provider()
+
+  # ContentJson with data
+  turn_json <- AssistantTurn(list(ContentJson(data = list(answer = "4"))))
+  result <- as_json(provider, turn_json)
+  expect_equal(result[[1]]$role, "assistant")
+  expect_equal(result[[1]]$content, '{"answer":"4"}')
+
+  # ContentJson with string
+  turn_str <- AssistantTurn(list(ContentJson(data = NULL, string = '{"x":1}')))
+  result2 <- as_json(provider, turn_str)
+  expect_equal(result2[[1]]$content, '{"x":1}')
+
+  # ContentText still works
+  turn_text <- AssistantTurn(list(ContentText("hello")))
+  result3 <- as_json(provider, turn_text)
+  expect_equal(result3[[1]]$content, "hello")
+})
+
 # Schema generation --------------------------------------------------------
 
 test_that("as_json(TypeObject) adds additionalProperties: false", {
