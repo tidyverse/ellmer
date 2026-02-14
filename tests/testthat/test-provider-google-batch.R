@@ -324,7 +324,13 @@ test_that("Gemini batch_chat_structured works", {
       msg <- conditionMessage(e)
       if (grepl("unexpected number of responses", msg, fixed = TRUE)) {
         NULL
-      } else if (grepl("HTTP 40[04]|invalid argument|not found|not supported", msg, ignore.case = TRUE)) {
+      } else if (
+        grepl(
+          "HTTP 40[04]|invalid argument|not found|not supported",
+          msg,
+          ignore.case = TRUE
+        )
+      ) {
         skip(paste0("Gemini batch API rejected request: ", msg))
       } else {
         stop(e)
