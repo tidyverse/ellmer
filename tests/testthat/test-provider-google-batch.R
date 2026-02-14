@@ -166,7 +166,11 @@ dummy_gemini_provider <- function(
   base_url = "https://generativelanguage.googleapis.com/v1beta/"
 ) {
   ProviderGoogleGemini(
-    name = if (grepl("aiplatform", base_url)) "Google/Vertex" else "Google/Gemini",
+    name = if (grepl("aiplatform", base_url)) {
+      "Google/Vertex"
+    } else {
+      "Google/Gemini"
+    },
     base_url = base_url,
     model = "gemini-2.5-flash",
     params = params(),
