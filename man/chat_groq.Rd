@@ -58,10 +58,6 @@ A \link{Chat} object.
 Sign up at \url{https://groq.com}.
 
 Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
-\subsection{Known limitations}{
-
-groq does not currently support structured data extraction.
-}
 }
 \examples{
 \dontrun{

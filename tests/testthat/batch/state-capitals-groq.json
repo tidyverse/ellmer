@@ -1,0 +1,187 @@
+{
+  "version": 1,
+  "stage": "done",
+  "batch": {
+    "id": "batch_01kheqkczbf7cr7mbc8k6x5crb",
+    "object": "batch",
+    "endpoint": "/v1/chat/completions",
+    "input_file_id": "file_01kheqkckset8r4m6gjbk0j4jg",
+    "completion_window": "24h",
+    "status": "completed",
+    "output_file_id": "file_01kheqkfkwf2gber5w7w53xhmn",
+    "error_file_id": {},
+    "created_at": 1771094782,
+    "in_progress_at": 1771094785,
+    "finalizing_at": 1771094785,
+    "completed_at": 1771094785,
+    "failed_at": {},
+    "cancelling_at": {},
+    "cancelled_at": {},
+    "expires_at": 1771181182,
+    "expired_at": {},
+    "request_counts": {
+      "completed": 4,
+      "failed": 0,
+      "total": 4
+    },
+    "metadata": {},
+    "errors": {},
+    "project_id": "project_01jtkfs8evfhctdnt5dc12rh0j"
+  },
+  "results": [
+    {
+      "status_code": 200,
+      "request_id": "req_01kheqkfecf7p9d9vxd906jch0",
+      "body": {
+        "id": "chatcmpl-49373628-eadd-44e5-b8a6-0df55121679e",
+        "object": "chat.completion",
+        "created": 1771094785,
+        "model": "llama-3.1-8b-instant",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Des Moines"
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "queue_time": 0.0624,
+          "prompt_tokens": 48,
+          "prompt_time": 0.0038,
+          "completion_tokens": 3,
+          "completion_time": 0.0044,
+          "total_tokens": 51,
+          "total_time": 0.0082
+        },
+        "usage_breakdown": {},
+        "system_fingerprint": "fp_8f8420ecd7",
+        "x_groq": {
+          "id": "req_01kheqkfecf7p9d9vxd906jch0",
+          "seed": 1014
+        },
+        "service_tier": "batch"
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "req_01kheqkfe9fp1b4mye6a1k3b05",
+      "body": {
+        "id": "chatcmpl-8b7db3eb-f7fa-4138-97b5-2ce05a77e578",
+        "object": "chat.completion",
+        "created": 1771094785,
+        "model": "llama-3.1-8b-instant",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Albany"
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "queue_time": 0.0619,
+          "prompt_tokens": 49,
+          "prompt_time": 0.0039,
+          "completion_tokens": 4,
+          "completion_time": 0.0061,
+          "total_tokens": 53,
+          "total_time": 0.01
+        },
+        "usage_breakdown": {},
+        "system_fingerprint": "fp_8f8420ecd7",
+        "x_groq": {
+          "id": "req_01kheqkfe9fp1b4mye6a1k3b05",
+          "seed": 1014
+        },
+        "service_tier": "batch"
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "req_01kheqkff8f7q99dzdre1mbxtm",
+      "body": {
+        "id": "chatcmpl-e21e4735-0781-4fd1-bc07-1ccc8787ab0d",
+        "object": "chat.completion",
+        "created": 1771094785,
+        "model": "llama-3.1-8b-instant",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Sacramento"
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "queue_time": 0.0599,
+          "prompt_tokens": 48,
+          "prompt_time": 0.0026,
+          "completion_tokens": 3,
+          "completion_time": 0.0044,
+          "total_tokens": 51,
+          "total_time": 0.007
+        },
+        "usage_breakdown": {},
+        "system_fingerprint": "fp_d317489708",
+        "x_groq": {
+          "id": "req_01kheqkff8f7q99dzdre1mbxtm",
+          "seed": 1014
+        },
+        "service_tier": "batch"
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "req_01kheqkff8f7psfwbp0qqwvnj2",
+      "body": {
+        "id": "chatcmpl-4ca7a4d9-5186-4b6a-a277-361a52f0b5da",
+        "object": "chat.completion",
+        "created": 1771094785,
+        "model": "llama-3.1-8b-instant",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Austin"
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "queue_time": 0.0619,
+          "prompt_tokens": 48,
+          "prompt_time": 0.0055,
+          "completion_tokens": 2,
+          "completion_time": 0.0036,
+          "total_tokens": 50,
+          "total_time": 0.0091
+        },
+        "usage_breakdown": {},
+        "system_fingerprint": "fp_d317489708",
+        "x_groq": {
+          "id": "req_01kheqkff8f7psfwbp0qqwvnj2",
+          "seed": 1014
+        },
+        "service_tier": "batch"
+      }
+    }
+  ],
+  "started_at": 1771094782,
+  "hash": {
+    "provider": "15e4e540bae33450eee06e09bf585198",
+    "prompts": "b8eafe281e3cc5113058d9722be3e295",
+    "user_turns": "d6990a1b8a9f5db0e97de86c2669de44"
+  }
+}
