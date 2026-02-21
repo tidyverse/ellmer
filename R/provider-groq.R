@@ -65,10 +65,8 @@ method(as_json, list(ProviderGroq, Turn)) <- function(provider, x, ...) {
     is_tool <- map_lgl(x@contents, is_tool_request)
     tool_calls <- as_json(provider, x@contents[is_tool], ...)
 
-    # Groq contents is just a string. Hopefully it never sends back more
-    # than a single text response.
     if (any(!is_tool)) {
-      content <- as_json(provider, x@contents[!is_tool][1], ...)
+      content <- as_json(provider, x@contents[!is_tool], ...)
     } else {
       content <- NULL
     }
