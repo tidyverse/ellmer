@@ -343,10 +343,21 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
 
     c(tools, user)
   } else if (is_assistant_turn(x)) {
+    # Drop empty ContentText to avoid API errors from providers that reject
+    # empty text content blocks (e.g. Databricks returns content: "" for
+    # tool-only turns, then rejects it on replay)
+    is_empty_text <- map_lgl(x@contents, function(c) {
+      S7_inherits(c, ContentText) && !nzchar(c@text)
+    })
+    contents <- x@contents[!is_empty_text]
+    if (length(contents) == 0) {
+      # Drop empty assistant turns to avoid an API error
+      return(list())
+    }
     # Tool requests come out of content and go into own argument
-    is_tool <- map_lgl(x@contents, is_tool_request)
-    content <- as_json(provider, x@contents[!is_tool], ...)
-    tool_calls <- as_json(provider, x@contents[is_tool], ...)
+    is_tool <- map_lgl(contents, is_tool_request)
+    content <- as_json(provider, contents[!is_tool], ...)
+    tool_calls <- as_json(provider, contents[is_tool], ...)
 
     list(
       compact(list(

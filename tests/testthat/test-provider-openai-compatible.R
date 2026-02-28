@@ -92,6 +92,38 @@ test_that("structured data work with and without wrapper", {
 
 # Custom -----------------------------------------------------------------
 
+test_that("empty ContentText is dropped during serialization (#932)", {
+  stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
+
+  # Assistant turn with only an empty ContentText should be dropped entirely
+  turn <- AssistantTurn(list(ContentText("")))
+  expect_equal(as_json(stub, turn), list())
+
+  # Empty ContentText is stripped but other content is preserved
+  turn <- AssistantTurn(list(
+    ContentText(""),
+    ContentText("Hello")
+  ))
+  result <- as_json(stub, turn)
+  expect_equal(
+    result,
+    list(list(
+      role = "assistant",
+      content = list(list(type = "text", text = "Hello"))
+    ))
+  )
+
+  # Empty ContentText is stripped but tool requests are preserved
+  turn <- AssistantTurn(list(
+    ContentText(""),
+    ContentToolRequest(name = "fn", arguments = list(), id = "call_1")
+  ))
+  result <- as_json(stub, turn)
+  expect_equal(result[[1]]$role, "assistant")
+  expect_equal(length(result[[1]]$tool_calls), 1)
+  expect_null(result[[1]]$content)
+})
+
 test_that("as_json specialised for OpenAI", {
   stub <- ProviderOpenAI(name = "", base_url = "", model = "")
 
