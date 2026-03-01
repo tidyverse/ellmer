@@ -290,7 +290,13 @@ method(value_turn, ProviderOpenAICompatible) <- function(
       content <- list(ContentJson(data = message$content))
     }
   } else {
-    content <- lapply(message$content, as_content)
+    # Some providers (e.g. Databricks) return content: "" instead of
+    # content: null for tool-only turns; treat empty strings as null
+    if (is_string(message$content) && !nzchar(message$content)) {
+      content <- list()
+    } else {
+      content <- lapply(message$content, as_content)
+    }
   }
   if (has_name(message, "tool_calls")) {
     calls <- lapply(message$tool_calls, function(call) {
@@ -351,8 +357,7 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
     })
     contents <- x@contents[!is_empty_text]
     if (length(contents) == 0) {
-      # Drop empty assistant turns to avoid an API error
-      return(list())
+      return(NULL)
     }
     # Tool requests come out of content and go into own argument
     is_tool <- map_lgl(contents, is_tool_request)

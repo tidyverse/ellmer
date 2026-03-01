@@ -92,12 +92,43 @@ test_that("structured data work with and without wrapper", {
 
 # Custom -----------------------------------------------------------------
 
-test_that("empty ContentText is dropped during serialization (#932)", {
+test_that("value_turn() treats empty content string as null", {
+  stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
+
+  result <- list(
+    choices = list(list(
+      message = list(
+        role = "assistant",
+        content = "",
+        tool_calls = list(list(
+          id = "call_1",
+          `function` = list(name = "fn", arguments = "{}")
+        ))
+      )
+    ))
+  )
+
+  turn <- value_turn(stub, result)
+  # Empty content string should not produce ContentText("")
+  expect_false(
+    any(map_lgl(turn@contents, function(c) S7_inherits(c, ContentText)))
+  )
+  # Tool request should still be preserved
+  expect_equal(length(turn@contents), 1)
+  expect_true(S7_inherits(turn@contents[[1]], ContentToolRequest))
+})
+
+test_that("empty ContentText is dropped during serialization", {
   stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
 
   # Assistant turn with only an empty ContentText should be dropped entirely
   turn <- AssistantTurn(list(ContentText("")))
-  expect_equal(as_json(stub, turn), list())
+  expect_null(as_json(stub, turn))
+
+  # Multiple empty ContentText values are all dropped
+
+  turn <- AssistantTurn(list(ContentText(""), ContentText("")))
+  expect_null(as_json(stub, turn))
 
   # Empty ContentText is stripped but other content is preserved
   turn <- AssistantTurn(list(
@@ -112,8 +143,11 @@ test_that("empty ContentText is dropped during serialization (#932)", {
       content = list(list(type = "text", text = "Hello"))
     ))
   )
+})
 
-  # Empty ContentText is stripped but tool requests are preserved
+test_that("empty ContentText is stripped but tool requests are preserved", {
+  stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
+
   turn <- AssistantTurn(list(
     ContentText(""),
     ContentToolRequest(name = "fn", arguments = list(), id = "call_1")
