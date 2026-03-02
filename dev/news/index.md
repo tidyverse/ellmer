@@ -2,6 +2,13 @@
 
 ## ellmer (development version)
 
+- [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md)
+  (and other
+  [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
+  providers) no longer fail with HTTP 400 when the conversation history
+  contains empty `ContentText("")` objects, which can occur during tool
+  calling ([@JamesHWade](https://github.com/JamesHWade),
+  [\#932](https://github.com/tidyverse/ellmer/issues/932)).
 - [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
   now supports structured chat
   ([@CoryMcCartan](https://github.com/CoryMcCartan),

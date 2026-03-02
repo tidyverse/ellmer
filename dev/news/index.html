@@ -52,6 +52,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
 <ul><li>
+<code><a href="../reference/chat_databricks.html">chat_databricks()</a></code> (and other <code><a href="../reference/chat_openai_compatible.html">chat_openai_compatible()</a></code> providers) no longer fail with HTTP 400 when the conversation history contains empty <code>ContentText("")</code> objects, which can occur during tool calling (<a href="https://github.com/JamesHWade" class="external-link">@JamesHWade</a>, <a href="https://github.com/tidyverse/ellmer/issues/932" class="external-link">#932</a>).</li>
+<li>
 <code><a href="../reference/chat_groq.html">chat_groq()</a></code> now supports structured chat (<a href="https://github.com/CoryMcCartan" class="external-link">@CoryMcCartan</a>, <a href="https://github.com/tidyverse/ellmer/issues/930" class="external-link">#930</a>).</li>
 <li>ellmer will now distinguish text content from thinking content while streaming, allowing downstream packages like shinychat to provide specific UI for thinking content (<a href="https://github.com/simonpcouch" class="external-link">@simonpcouch</a>, <a href="https://github.com/tidyverse/ellmer/issues/909" class="external-link">#909</a>).</li>
 <li>
