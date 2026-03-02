@@ -5,10 +5,6 @@ Sign up at <https://groq.com>.
 Built on top of
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md).
 
-### Known limitations
-
-groq does not currently support structured data extraction.
-
 ## Usage
 
 ``` r

@@ -2,6 +2,10 @@
 
 ## ellmer (development version)
 
+- [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
+  now supports structured chat
+  ([@CoryMcCartan](https://github.com/CoryMcCartan),
+  [\#930](https://github.com/tidyverse/ellmer/issues/930)).
 - ellmer will now distinguish text content from thinking content while
   streaming, allowing downstream packages like shinychat to provide
   specific UI for thinking content
