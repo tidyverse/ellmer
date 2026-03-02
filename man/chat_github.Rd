@@ -66,10 +66,10 @@ GitHub Models hosts a number of open source and OpenAI models. To access the
 GitHub model marketplace, you will need to apply for and be accepted into the
 beta access program. See \url{https://github.com/marketplace/models} for details.
 
-This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}} with
+This function is a lightweight wrapper around \code{\link[=chat_openai_compatible]{chat_openai_compatible()}} with
 the defaults tweaked for the GitHub Models marketplace.
 
-GitHub also suports the Azure AI Inference SDK, which you can use by setting
+GitHub also supports the Azure AI Inference SDK, which you can use by setting
 \code{base_url} to \code{"https://models.inference.ai.azure.com/"}. This endpoint was
 used in \pkg{ellmer} v0.3.0 and earlier.
 }
