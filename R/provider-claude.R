@@ -670,13 +670,21 @@ method(batch_result_turn, ProviderAnthropic) <- function(
 #' @rdname chat_anthropic
 models_claude <- function(
   base_url = "https://api.anthropic.com/v1",
-  api_key = anthropic_key()
+  api_key = NULL,
+  credentials = NULL
 ) {
+  credentials <- as_credentials(
+    "models_anthropic",
+    function() anthropic_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
   provider <- ProviderAnthropic(
     name = "Anthropic",
     model = "",
     base_url = base_url,
-    credentials = function() api_key,
+    credentials = credentials,
     cache = "none"
   )
 
