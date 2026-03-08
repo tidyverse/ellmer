@@ -124,6 +124,39 @@ google_upload_wait <- function(status, credentials) {
   invisible()
 }
 
+# Batch file helpers -----------------------------------------------------------
+
+gemini_upload_file <- function(
+  provider,
+  path,
+  mime_type = "application/jsonl"
+) {
+  upload_base_url <- sub("/v[^/]+/?$", "/", provider@base_url)
+
+  upload_url <- google_upload_init(
+    path = path,
+    base_url = upload_base_url,
+    credentials = provider@credentials,
+    mime_type = mime_type
+  )
+
+  status <- google_upload_send(
+    upload_url = upload_url,
+    path = path,
+    credentials = provider@credentials
+  )
+  google_upload_wait(status, provider@credentials)
+  status
+}
+
+gemini_download_file <- function(provider, name, path) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, paste0(name, ":download"))
+  req <- req_url_query(req, alt = "media")
+  req_perform(req, path = path)
+  invisible(path)
+}
+
 # Helpers ----------------------------------------------------------------------
 
 guess_mime_type <- function(file_path, call = caller_env()) {

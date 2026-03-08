@@ -20,38 +20,6 @@ test_that("gemini_extract_index returns default when no index found", {
   expect_equal(gemini_extract_index(x, default = 99L), 99L)
 })
 
-test_that("gemini_json_fallback parses request_index from malformed line", {
-  line <- '{"metadata": {"request_index": 42}, broken json...'
-  result <- gemini_json_fallback(line)
-
-  expect_equal(result$metadata$request_index, 42L)
-  expect_equal(result$status$code, 500L)
-})
-
-test_that("gemini_json_fallback parses custom_id from malformed line", {
-  line <- '{"custom_id": "chat-5", broken...'
-  result <- gemini_json_fallback(line)
-
-  expect_equal(result$metadata$request_index, 5L)
-  expect_equal(result$status$code, 500L)
-})
-
-test_that("gemini_json_fallback parses key field from malformed line", {
-  line <- '{"key": "chat-9", broken...'
-  result <- gemini_json_fallback(line)
-
-  expect_equal(result$metadata$request_index, 9L)
-  expect_equal(result$status$code, 500L)
-})
-
-test_that("gemini_json_fallback returns empty metadata for unparseable line", {
-  line <- "completely broken"
-  result <- gemini_json_fallback(line)
-
-  expect_equal(result$metadata, list())
-  expect_equal(result$status$code, 500L)
-})
-
 test_that("gemini_normalize_result handles plain GenerateContentResponse", {
   x <- list(
     candidates = list(list(content = list(parts = list(list(text = "hello"))))),
@@ -185,11 +153,11 @@ test_that("ProviderGoogleGemini has batch support", {
   expect_true(has_batch_support(provider))
 })
 
-test_that("Vertex provider does not have batch support", {
+test_that("Vertex provider also has batch support", {
   provider <- dummy_gemini_provider(
     base_url = "https://us-central1-aiplatform.googleapis.com/v1/projects/test/locations/us-central1/publishers/google/"
   )
-  expect_false(has_batch_support(provider))
+  expect_true(has_batch_support(provider))
 })
 
 test_that("batch_status keeps working when succeeded but no responsesFile", {
@@ -209,9 +177,9 @@ test_that("batch_status marks done when succeeded with responsesFile", {
   batch <- list(
     metadata = list(
       state = "BATCH_STATE_SUCCEEDED",
-      batchStats = list(requestCount = 2L, successfulRequestCount = 2L),
-      output = list(responsesFile = "files/abc123")
-    )
+      batchStats = list(requestCount = 2L, successfulRequestCount = 2L)
+    ),
+    response = list(responsesFile = "files/abc123")
   )
   status <- batch_status(provider, batch)
   expect_false(status$working)

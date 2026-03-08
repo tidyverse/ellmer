@@ -886,9 +886,9 @@ google_location <- function(location) {
 
 # Batched requests -------------------------------------------------------------
 
-# https://ai.google.dev/gemini-api/docs/batch
+# https://ai.google.dev/gemini-api/docs/batch-api
 method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
-  grepl("generativelanguage.googleapis.com", provider@base_url, fixed = TRUE)
+  TRUE
 }
 
 method(batch_submit, ProviderGoogleGemini) <- function(
@@ -917,7 +917,10 @@ method(batch_submit, ProviderGoogleGemini) <- function(
 
   uploaded <- gemini_upload_file(provider, path)
   if (is.null(uploaded$name) || !nzchar(uploaded$name)) {
-    cli::cli_abort("Gemini upload did not return a file resource name.")
+    cli::cli_abort(
+      "Gemini upload did not return a file resource name.",
+      .internal = TRUE
+    )
   }
 
   req <- base_request(provider)
@@ -970,24 +973,22 @@ method(batch_status, ProviderGoogleGemini) <- function(provider, batch) {
     "BATCH_STATE_EXPIRED"
   )
 
-  is_terminal <- state %in% terminal_states
+  is_done <- state %in% terminal_states
 
-  # Keep polling if succeeded but output file isn't available yet
+  # Keep polling if succeeded but output file isn't available yet.
+  # The API can report BATCH_STATE_SUCCEEDED before the responsesFile
+  # metadata is populated.
   if (state == "BATCH_STATE_SUCCEEDED") {
-    batch_resource <- batch$response %||% batch$metadata
-    responses_file <- batch_resource$output$responsesFile %||%
-      batch_resource$responsesFile %||%
-      metadata$output$responsesFile %||%
-      NULL
-    if (is.null(responses_file) || !nzchar(responses_file)) {
-      is_terminal <- FALSE
+    responses_file <- batch$response$responsesFile %||% ""
+    if (!nzchar(responses_file)) {
+      is_done <- FALSE
     }
   }
 
   n_processing <- max(pending, total - succeeded - failed, 0L)
 
   list(
-    working = !is_terminal,
+    working = !is_done,
     n_processing = n_processing,
     n_succeeded = max(succeeded, 0L),
     n_failed = max(failed, 0L)
@@ -1005,27 +1006,19 @@ method(batch_retrieve, ProviderGoogleGemini) <- function(provider, batch) {
     if (request_count <= 0L) {
       return(list(list(status_code = code, body = NULL)))
     }
-    return(replicate(
-      request_count,
-      list(status_code = code, body = NULL),
-      simplify = FALSE
-    ))
+    return(rep(list(list(status_code = code, body = NULL)), request_count))
   }
 
-  batch_resource <- batch$response %||% batch$metadata
-  responses_file <- batch_resource$output$responsesFile %||%
-    batch_resource$responsesFile %||%
-    metadata$output$responsesFile %||%
-    NULL
+  responses_file <- batch$response$responsesFile %||% ""
 
-  if (is.null(responses_file) || !nzchar(responses_file)) {
+  if (!nzchar(responses_file)) {
     cli::cli_abort("Gemini batch completed but no output file was returned.")
   }
 
   path_output <- withr::local_tempfile(fileext = ".jsonl")
   gemini_download_file(provider, responses_file, path_output)
 
-  parsed <- read_ndjson(path_output, fallback = gemini_json_fallback)
+  parsed <- read_ndjson(path_output)
 
   normalized <- imap(parsed, function(x, i) {
     gemini_normalize_result(x, index_default = as.integer(i))
@@ -1050,7 +1043,9 @@ method(batch_result_turn, ProviderGoogleGemini) <- function(
 
 # Gemini batch helpers ---------------------------------------------------------
 
-#' @noRd
+# The Gemini REST API accepts both camelCase and snake_case, but the batch
+# JSONL file parser requires protobuf field names which are always snake_case.
+# Without this conversion, the batch parser silently ignores camelCase fields.
 gemini_to_snake_case <- function(x) {
   if (is.list(x)) {
     if (!is.null(names(x))) {
@@ -1063,7 +1058,6 @@ gemini_to_snake_case <- function(x) {
   }
 }
 
-#' @noRd
 gemini_prepare_batch_body <- function(body) {
   # Remove empty system instructions (batch parser rejects them)
   si <- body$systemInstruction %||% body$system_instruction
@@ -1108,40 +1102,6 @@ gemini_prepare_batch_body <- function(body) {
   body
 }
 
-#' @noRd
-gemini_upload_file <- function(
-  provider,
-  path,
-  mime_type = "application/jsonl"
-) {
-  upload_base_url <- sub("/v[^/]+/?$", "/", provider@base_url)
-
-  upload_url <- google_upload_init(
-    path = path,
-    base_url = upload_base_url,
-    credentials = provider@credentials,
-    mime_type = mime_type
-  )
-
-  status <- google_upload_send(
-    upload_url = upload_url,
-    path = path,
-    credentials = provider@credentials
-  )
-  google_upload_wait(status, provider@credentials)
-  status
-}
-
-#' @noRd
-gemini_download_file <- function(provider, name, path) {
-  req <- base_request(provider)
-  req <- req_url_path_append(req, paste0(name, ":download"))
-  req <- req_url_query(req, alt = "media")
-  req_perform(req, path = path)
-  invisible(path)
-}
-
-#' @noRd
 gemini_extract_index <- function(x, default = NA_integer_) {
   metadata <- x$metadata %||% list()
   idx <- metadata$request_index %||% metadata$index %||% default
@@ -1158,67 +1118,6 @@ gemini_extract_index <- function(x, default = NA_integer_) {
   as.integer(default)
 }
 
-#' @noRd
-gemini_json_fallback <- function(line) {
-  index <- suppressWarnings(
-    as.integer(sub(
-      '.*"request_index"\\s*:\\s*([0-9]+).*',
-      "\\1",
-      line,
-      perl = TRUE
-    ))
-  )
-
-  if (length(index) == 0L || is.na(index)) {
-    custom_id <- tryCatch(
-      {
-        m <- regmatches(
-          line,
-          regexpr('"custom_id"\\s*:\\s*"chat-[0-9]+"', line, perl = TRUE)
-        )
-        if (length(m) == 0L) {
-          NA_character_
-        } else {
-          sub('.*"chat-([0-9]+)".*', "\\1", m)
-        }
-      },
-      error = function(e) NA_character_
-    )
-    index <- suppressWarnings(as.integer(custom_id))
-  }
-
-  if (length(index) == 0L || is.na(index)) {
-    key_match <- tryCatch(
-      {
-        m <- regmatches(
-          line,
-          regexpr('"key"\\s*:\\s*"chat-[0-9]+"', line, perl = TRUE)
-        )
-        if (length(m) == 0L) {
-          NA_character_
-        } else {
-          sub('.*"chat-([0-9]+)".*', "\\1", m)
-        }
-      },
-      error = function(e) NA_character_
-    )
-    index <- suppressWarnings(as.integer(key_match))
-  }
-
-  list(
-    metadata = if (length(index) == 0L || is.na(index)) {
-      list()
-    } else {
-      list(request_index = index)
-    },
-    status = list(
-      code = 500L,
-      message = "Failed to parse Gemini batch output line"
-    )
-  )
-}
-
-#' @noRd
 gemini_normalize_result <- function(x, index_default) {
   index <- gemini_extract_index(x, default = index_default)
 
