@@ -992,10 +992,10 @@ method(batch_retrieve, ProviderGoogleGemini) <- function(provider, batch) {
 
   if (!is.null(batch$error)) {
     code <- as.integer(batch$error$code %||% 500L)
-    if (request_count <= 0L) {
-      return(list(list(status_code = code, body = NULL)))
-    }
-    return(rep(list(list(status_code = code, body = NULL)), request_count))
+    return(rep(
+      list(list(status_code = code, body = NULL)),
+      max(0L, request_count)
+    ))
   }
 
   responses_file <- batch$response$responsesFile %||% ""
@@ -1034,7 +1034,7 @@ method(batch_result_turn, ProviderGoogleGemini) <- function(
 
 # The Gemini REST API accepts both camelCase and snake_case, but the batch
 # JSONL file parser requires protobuf field names which are always snake_case.
-# Without this conversion, the batch parser silently ignores camelCase fields.
+# Without this conversion, the batch API rejects requests with HTTP 400.
 gemini_to_snake_case <- function(x) {
   if (is.list(x)) {
     if (!is.null(names(x))) {
@@ -1076,6 +1076,8 @@ gemini_prepare_batch_body <- function(body) {
     gc_pre$responseSchema %||% gc_pre$response_schema
   }
 
+  # Batch JSONL requires protobuf-style snake_case field names; camelCase causes
+  # HTTP 400 (unlike the REST API which accepts both)
   body <- gemini_to_snake_case(body)
 
   # Rename response_schema -> response_json_schema and restore original schema

@@ -43,6 +43,17 @@ google_upload <- function(
 
   mime_type <- mime_type %||% guess_mime_type(path)
 
+  status <- google_upload_file(
+    path = path,
+    base_url = base_url,
+    credentials = credentials,
+    mime_type = mime_type
+  )
+
+  ContentUploaded(uri = status$uri, mime_type = status$mimeType)
+}
+
+google_upload_file <- function(path, base_url, credentials, mime_type) {
   upload_url <- google_upload_init(
     path = path,
     base_url = base_url,
@@ -56,8 +67,7 @@ google_upload <- function(
     credentials = credentials
   )
   google_upload_wait(status, credentials)
-
-  ContentUploaded(uri = status$uri, mime_type = status$mimeType)
+  status
 }
 
 # https://ai.google.dev/api/files#method:-media.upload
@@ -133,20 +143,12 @@ gemini_upload_file <- function(
 ) {
   upload_base_url <- sub("/v[^/]+/?$", "/", provider@base_url)
 
-  upload_url <- google_upload_init(
+  google_upload_file(
     path = path,
     base_url = upload_base_url,
     credentials = provider@credentials,
     mime_type = mime_type
   )
-
-  status <- google_upload_send(
-    upload_url = upload_url,
-    path = path,
-    credentials = provider@credentials
-  )
-  google_upload_wait(status, provider@credentials)
-  status
 }
 
 gemini_download_file <- function(provider, name, path) {
