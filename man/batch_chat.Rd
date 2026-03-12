@@ -78,7 +78,7 @@ is not complete.
 \code{\link[=chat_openai]{chat_openai()}}, \code{\link[=chat_anthropic]{chat_anthropic()}}, and \code{\link[=chat_google_gemini]{chat_google_gemini()}}. They use
 the \href{https://platform.openai.com/docs/guides/batch}{OpenAI},
 \href{https://docs.claude.com/en/docs/build-with-claude/batch-processing}{Anthropic},
-and \href{https://ai.google.dev/gemini-api/docs/batch}{Google Gemini} batch APIs
+and \href{https://ai.google.dev/gemini-api/docs/batch-api}{Google Gemini} batch APIs
 which allow you to submit multiple requests simultaneously.
 The results can take up to 24 hours to complete, but in return you pay 50\%
 less than usual (but note that ellmer doesn't include this discount in
