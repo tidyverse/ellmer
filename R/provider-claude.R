@@ -311,6 +311,12 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
       paste(result$content[[i]]$thinking) <- chunk$delta$thinking
     } else if (chunk$delta$type == "signature_delta") {
       paste(result$content[[i]]$signature) <- chunk$delta$signature
+    } else if (chunk$delta$type == "citations_delta") {
+      # https://docs.claude.com/en/docs/build-with-claude/citations#streaming-support
+      result$content[[i]]$citations <- c(
+        result$content[[i]]$citations,
+        list(chunk$delta$citation)
+      )
     } else {
       cli::cli_inform(c("!" = "Unknown delta type {.str {chunk$delta$type}}."))
     }
@@ -320,12 +326,6 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
     result$stop_reason <- chunk$delta$stop_reason
     result$stop_sequence <- chunk$delta$stop_sequence
     result$usage$output_tokens <- chunk$usage$output_tokens
-  } else if (chunk$delta$type == "citations_delta") {
-    # https://docs.claude.com/en/docs/build-with-claude/citations#streaming-support
-    result$content[[i]]$citations <- c(
-      result$content[[i]]$citations,
-      list(chunk$delta$citation)
-    )
   } else if (chunk$type == "error") {
     if (chunk$error$type == "overloaded_error") {
       # https://docs.anthropic.com/en/api/messages-streaming#error-events
@@ -369,6 +369,9 @@ method(value_turn, ProviderAnthropic) <- function(
         ContentToolRequest(content$id, content$name, content$input)
       }
     } else if (content$type == "server_tool_use") {
+      if (is_string(content$input)) {
+        content$input <- jsonlite::parse_json(content$input)
+      }
       if (content$name == "web_search") {
         # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-search-tool#response
         ContentToolRequestSearch(
