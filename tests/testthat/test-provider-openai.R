@@ -200,4 +200,11 @@ test_that("value_turn() handles web_search_call action types", {
   # search action without query
   turn <- value_turn(provider, make_result(list(type = "search")))
   expect_equal(turn@contents[[1]]@query, "web search")
+
+  # find_in_page action with empty queries falls back
+  turn <- value_turn(
+    provider,
+    make_result(list(type = "find_in_page", queries = list()))
+  )
+  expect_equal(turn@contents[[1]]@query, "web search")
 })
