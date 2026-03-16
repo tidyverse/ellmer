@@ -390,7 +390,7 @@ method(value_turn, ProviderAnthropic) <- function(
     } else if (content$type == "web_search_tool_result") {
       urls <- map_chr(content$content, \(x) x$url)
       ContentToolResponseSearch(
-        url = urls,
+        urls = urls,
         json = content
       )
     } else if (content$type == "web_fetch_tool_result") {
