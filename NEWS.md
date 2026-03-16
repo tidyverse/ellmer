@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `default_google_credentials()` no longer skips application default credentials (e.g. `GOOGLE_APPLICATION_CREDENTIALS`) in interactive sessions, instead falling through to the OAuth browser flow only when no gargle token is available (@stefanlinner, #922).
 * `chat_databricks()` (and other `chat_openai_compatible()` providers) no longer fail with HTTP 400 when the conversation history contains empty `ContentText("")` objects, which can occur during tool calling (@JamesHWade, #932).
 * `chat_groq()` now supports structured chat (@CoryMcCartan, #930).
 * ellmer will now distinguish text content from thinking content while streaming, allowing downstream packages like shinychat to provide specific UI for thinking content (@simonpcouch, #909).
