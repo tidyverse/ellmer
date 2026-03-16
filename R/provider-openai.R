@@ -315,7 +315,11 @@ method(value_turn, ProviderOpenAI) <- function(
       ContentImageInline(mime_type, output$result)
     } else if (output$type == "web_search_call") {
       # https://platform.openai.com/docs/guides/tools-web-search#output-and-citations
-      ContentToolRequestSearch(query = output$action$query, json = output)
+      query <- output$action$query %||%
+        output$action$queries[[1]] %||%
+        output$action$url %||%
+        "web search"
+      ContentToolRequestSearch(query = query, json = output)
     } else {
       browser()
       cli::cli_abort(
