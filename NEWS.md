@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* Fixed three bugs that caused errors when streaming web search results: Claude's `citations_delta` events were mishandled, `server_tool_use` input wasn't parsed from JSON during streaming, and OpenAI's `web_search_call` failed for non-search action types like `open_page` (#941).
+
 * `chat_databricks()` (and other `chat_openai_compatible()` providers) no longer fail with HTTP 400 when the conversation history contains empty `ContentText("")` objects, which can occur during tool calling (@JamesHWade, #932).
 * `chat_groq()` now supports structured chat (@CoryMcCartan, #930).
 * ellmer will now distinguish text content from thinking content while streaming, allowing downstream packages like shinychat to provide specific UI for thinking content (@simonpcouch, #909).
