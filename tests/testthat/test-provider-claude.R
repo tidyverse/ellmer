@@ -9,8 +9,7 @@ test_that("can make simple batch request", {
 
 test_that("can make simple streaming request", {
   chat <- chat_anthropic_test(
-    "Be as terse as possible; no punctuation",
-    model = "claude-3-7-sonnet-20250219"
+    "Be as terse as possible; no punctuation"
   )
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
