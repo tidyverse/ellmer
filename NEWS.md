@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* Built-in tools (e.g., `openai_tool_web_search()`, `claude_tool_web_search()`) now include `description` and `annotations` properties, making their metadata consistent with user-defined tools created by `tool()` (#942).
 * `chat_databricks()` (and other `chat_openai_compatible()` providers) no longer fail with HTTP 400 when the conversation history contains empty `ContentText("")` objects, which can occur during tool calling (@JamesHWade, #932).
 * `chat_groq()` now supports structured chat (@CoryMcCartan, #930).
 * ellmer will now distinguish text content from thinking content while streaming, allowing downstream packages like shinychat to provide specific UI for thinking content (@simonpcouch, #909).

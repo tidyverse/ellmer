@@ -44,7 +44,16 @@ claude_tool_web_search <- function(
     blocked_domains = blocked_domains,
     user_location = user_location
   ))
-  ToolBuiltIn("web_search", json = json)
+  ToolBuiltIn(
+    name = "web_search",
+    description = "Search the web for up-to-date information.",
+    annotations = tool_annotations(
+      title = "Web search",
+      read_only_hint = TRUE,
+      open_world_hint = TRUE
+    ),
+    json = json
+  )
 }
 
 #' Claude web fetch tool
@@ -96,5 +105,14 @@ claude_tool_web_fetch <- function(
     citations = list(enabled = citations),
     max_content_tokens = max_content_tokens
   ))
-  ToolBuiltIn("web_fetch", json)
+  ToolBuiltIn(
+    name = "web_fetch",
+    description = "Fetch and analyze content from a web URL.",
+    annotations = tool_annotations(
+      title = "Web fetch",
+      read_only_hint = TRUE,
+      open_world_hint = TRUE
+    ),
+    json = json
+  )
 }
