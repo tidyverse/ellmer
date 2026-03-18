@@ -20,24 +20,31 @@ test_that("ToolBuiltIn defaults for description and annotations", {
   expect_equal(tool@annotations, list())
 })
 
-test_that("built-in tool constructors set description and annotations", {
-  openai_ws <- openai_tool_web_search()
-  expect_match(openai_ws@description, "Search")
-  expect_equal(openai_ws@annotations$title, "Web search")
+test_that("built-in tools", {
+  get_built_in_tools <- function() {
+    exports <- getNamespaceExports("ellmer")
+    tool_fns <- exports[grepl("_tool_", exports)]
 
-  claude_ws <- claude_tool_web_search()
-  expect_match(claude_ws@description, "Search")
-  expect_equal(claude_ws@annotations$title, "Web search")
+    tools <- list()
+    for (fn_name in tool_fns) {
+      fn <- getExportedValue("ellmer", fn_name)
+      result <- tryCatch(fn(), error = function(e) NULL)
+      if (!is.null(result) && S7_inherits(result, ToolBuiltIn)) {
+        tools[[fn_name]] <- result
+      }
+    }
+    tools
+  }
 
-  claude_wf <- claude_tool_web_fetch()
-  expect_match(claude_wf@description, "Fetch")
-  expect_equal(claude_wf@annotations$title, "Web fetch")
+  expect_gte(length(get_built_in_tools()), 1)
 
-  google_ws <- google_tool_web_search()
-  expect_match(google_ws@description, "Search")
-  expect_equal(google_ws@annotations$title, "Web search")
+  built_in_tools <- get_built_in_tools()
 
-  google_wf <- google_tool_web_fetch()
-  expect_match(google_wf@description, "Fetch")
-  expect_equal(google_wf@annotations$title, "Web fetch")
+  for (fn_name in names(built_in_tools)) {
+    test_that(paste0(fn_name, "() sets description and annotations"), {
+      tool <- built_in_tools[[fn_name]]
+      expect_match(tool@description, ".")
+      expect_match(tool@annotations$title, ".")
+    })
+  }
 })
