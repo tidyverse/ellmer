@@ -15,6 +15,11 @@ test_that("gemini_extract_index extracts from key field", {
   expect_equal(gemini_extract_index(x), 7L)
 })
 
+test_that("gemini_extract_index extracts from metadata key field", {
+  x <- list(metadata = list(key = "chat-8"))
+  expect_equal(gemini_extract_index(x), 8L)
+})
+
 test_that("gemini_extract_index returns default when no index found", {
   x <- list(foo = "bar")
   expect_equal(gemini_extract_index(x, default = 99L), 99L)
@@ -183,6 +188,73 @@ test_that("batch_status marks done when succeeded with responsesFile", {
   )
   status <- batch_status(provider, batch)
   expect_false(status$working)
+})
+
+test_that("batch_retrieve reorders out-of-order Gemini results by key", {
+  provider <- dummy_gemini_provider()
+  batch <- list(
+    metadata = list(batchStats = list(requestCount = 3L)),
+    response = list(responsesFile = "files/abc123")
+  )
+
+  local_mocked_bindings(
+    gemini_download_file = function(provider, name, path) {
+      lines <- c(
+        jsonlite::toJSON(
+          list(
+            key = "chat-3",
+            response = list(
+              responseId = "third",
+              candidates = list(list(
+                content = list(parts = list(list(text = "{}")))
+              )),
+              usageMetadata = list(totalTokenCount = 3L)
+            )
+          ),
+          auto_unbox = TRUE
+        ),
+        jsonlite::toJSON(
+          list(
+            key = "chat-1",
+            response = list(
+              responseId = "first",
+              candidates = list(list(
+                content = list(parts = list(list(text = "{}")))
+              )),
+              usageMetadata = list(totalTokenCount = 1L)
+            )
+          ),
+          auto_unbox = TRUE
+        ),
+        jsonlite::toJSON(
+          list(
+            key = "chat-2",
+            response = list(
+              responseId = "second",
+              candidates = list(list(
+                content = list(parts = list(list(text = "{}")))
+              )),
+              usageMetadata = list(totalTokenCount = 2L)
+            )
+          ),
+          auto_unbox = TRUE
+        )
+      )
+      writeLines(lines, path)
+      invisible(path)
+    }
+  )
+
+  results <- batch_retrieve(provider, batch)
+
+  expect_equal(
+    vapply(results, \(x) x$body$responseId, character(1)),
+    c(
+      "first",
+      "second",
+      "third"
+    )
+  )
 })
 
 # Fixture-based tests ----------------------------------------------------
