@@ -1095,13 +1095,17 @@ gemini_prepare_batch_body <- function(body) {
 
 gemini_extract_index <- function(x, default = NA_integer_) {
   metadata <- x$metadata %||% list()
-  idx <- metadata$request_index %||% metadata$index %||% default
+  idx <- metadata$request_index %||% metadata$index
 
-  if (!is.na(idx)) {
+  if (!is.null(idx) && !is.na(idx)) {
     return(as.integer(idx))
   }
 
-  key <- x$key %||% x$custom_id %||% metadata$custom_id %||% ""
+  key <- x$key %||%
+    x$custom_id %||%
+    metadata$key %||%
+    metadata$custom_id %||%
+    ""
   if (grepl("^chat-[0-9]+$", key)) {
     return(as.integer(sub("^chat-([0-9]+)$", "\\1", key)))
   }

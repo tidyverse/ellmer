@@ -91,6 +91,9 @@ batch_chat <- function(chat, prompts, path, wait = TRUE, ignore_hash = FALSE) {
     ignore_hash = ignore_hash
   )
   job$step_until_done()
+  if (job$stage != "done") {
+    return(NULL)
+  }
 
   assistant_turns <- job$result_turns()
   map2(job$user_turns, assistant_turns, function(user, assistant) {
@@ -120,6 +123,9 @@ batch_chat_text <- function(
     wait = wait,
     ignore_hash = ignore_hash
   )
+  if (is.null(chats)) {
+    return(NULL)
+  }
   map_chr(chats, \(chat) {
     if (is.null(chat)) NA_character_ else chat$last_turn()@text
   })
@@ -152,6 +158,9 @@ batch_chat_structured <- function(
     ignore_hash = ignore_hash
   )
   job$step_until_done()
+  if (job$stage != "done") {
+    return(NULL)
+  }
   turns <- job$result_turns()
 
   multi_convert(
