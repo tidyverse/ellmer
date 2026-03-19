@@ -173,6 +173,32 @@ test_that("batch_chat/batch_chat_structured return NULL when wait = FALSE and no
   expect_null(result_structured)
 })
 
+test_that("public batch helpers return NULL if wait = FALSE and not complete", {
+  local_mocked_bindings(
+    batch_submit = function(...) list(id = "123"),
+    batch_poll = function(...) list(id = "123", results = TRUE),
+    batch_status = function(...) list(working = TRUE)
+  )
+
+  chat <- chat_openai_test()
+  prompts <- list("What's your name?")
+
+  expect_null(batch_chat(chat, prompts, withr::local_tempfile(), wait = FALSE))
+  expect_null(batch_chat_text(
+    chat,
+    prompts,
+    withr::local_tempfile(),
+    wait = FALSE
+  ))
+  expect_null(batch_chat_structured(
+    chat,
+    prompts,
+    withr::local_tempfile(),
+    type = type_object(name = type_string()),
+    wait = FALSE
+  ))
+})
+
 test_that("informative error for bad inputs", {
   chat_openai <- chat_openai_test()
   chat_ollama <- chat_openai_test()
