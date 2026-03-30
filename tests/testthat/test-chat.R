@@ -258,3 +258,37 @@ test_that("assistant turns track duration", {
   # These assistant durations are usually not NA, but are during replay (#479)
   expect_true(is.na(assistant_turn@duration) || assistant_turn@duration > 0)
 })
+
+# stream_controller() ----------------------------------------------------------
+
+test_that("stream_controller() creates correct object", {
+  ctrl <- stream_controller()
+  expect_s3_class(ctrl, "ellmer_stream_controller")
+  expect_false(ctrl$cancelled)
+  expect_true(is.function(ctrl$cancel))
+})
+
+test_that("stream_controller()$cancel() sets cancelled to TRUE", {
+  ctrl <- stream_controller()
+  ctrl$cancel()
+  expect_true(ctrl$cancelled)
+})
+
+test_that("stream() rejects non-controller object", {
+  chat <- chat_openai_test()
+  expect_snapshot(error = TRUE, {
+    coro::collect(chat$stream("hi", controller = TRUE))
+  })
+})
+
+test_that("stream_async() rejects non-controller object", {
+  chat <- chat_openai_test()
+  expect_snapshot(error = TRUE, {
+    sync(coro::async_collect(chat$stream_async("hi", controller = list())))
+  })
+})
+
+test_that("check_controller() accepts a valid stream_controller()", {
+  expect_no_error(check_controller(stream_controller()))
+  expect_no_error(check_controller(NULL))
+})

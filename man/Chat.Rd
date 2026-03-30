@@ -354,7 +354,7 @@ Returns A \href{https://coro.r-lib.org/articles/generator.html#iterating}{coro g
 that yields strings. While iterating, the generator will block while
 waiting for more content from the chatbot.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Chat$stream(..., stream = c("text", "content"))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Chat$stream(..., stream = c("text", "content"), controller = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -365,6 +365,9 @@ waiting for more content from the chatbot.
 \item{\code{stream}}{Whether the stream should yield only \code{"text"} or ellmer's
 rich content types. When \code{stream = "content"}, \code{stream()} yields
 \link{Content} objects.}
+
+\item{\code{controller}}{An optional \code{\link[=stream_controller]{stream_controller()}} used to cancel the
+stream from outside the iteration loop.}
 }
 \if{html}{\out{</div>}}
 }
@@ -380,7 +383,8 @@ yields string promises.
 \if{html}{\out{<div class="r">}}\preformatted{Chat$stream_async(
   ...,
   tool_mode = c("concurrent", "sequential"),
-  stream = c("text", "content")
+  stream = c("text", "content"),
+  controller = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -398,6 +402,9 @@ best suited for automated scripts or non-interactive applications.}
 \item{\code{stream}}{Whether the stream should yield only \code{"text"} or ellmer's
 rich content types. When \code{stream = "content"}, \code{stream()} yields
 \link{Content} objects.}
+
+\item{\code{controller}}{An optional \code{\link[=stream_controller]{stream_controller()}} used to cancel the
+stream from outside the iteration loop.}
 }
 \if{html}{\out{</div>}}
 }

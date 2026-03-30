@@ -56,3 +56,19 @@
       1 15000    500            0 $0.20      Text[Input 1]
       2 30000   1000            0 $0.10      Text[Input 2]
 
+# stream() rejects non-controller object
+
+    Code
+      coro::collect(chat$stream("hi", controller = TRUE))
+    Condition
+      Error in `chat$stream()`:
+      ! `controller` must be an <ellmer_stream_controller> object created by `stream_controller()`.
+
+# stream_async() rejects non-controller object
+
+    Code
+      sync(coro::async_collect(chat$stream_async("hi", controller = list())))
+    Condition
+      Error in `chat$stream_async()`:
+      ! `controller` must be an <ellmer_stream_controller> object created by `stream_controller()`.
+

@@ -322,7 +322,10 @@ Chat <- R6::R6Class(
     #' @param stream Whether the stream should yield only `"text"` or ellmer's
     #'   rich content types. When `stream = "content"`, `stream()` yields
     #'   [Content] objects.
-    stream = function(..., stream = c("text", "content")) {
+    #' @param controller An optional [stream_controller()] used to cancel the
+    #'   stream from outside the iteration loop.
+    stream = function(..., stream = c("text", "content"), controller = NULL) {
+      check_controller(controller)
       finish_tools <- private$complete_dangling_tool_requests()
 
       turn <- user_turn(!!!finish_tools, ...)
@@ -331,7 +334,8 @@ Chat <- R6::R6Class(
         turn,
         stream = TRUE,
         echo = "none",
-        yield_as_content = stream == "content"
+        yield_as_content = stream == "content",
+        controller = controller
       )
     },
 
@@ -348,11 +352,15 @@ Chat <- R6::R6Class(
     #' @param stream Whether the stream should yield only `"text"` or ellmer's
     #'   rich content types. When `stream = "content"`, `stream()` yields
     #'   [Content] objects.
+    #' @param controller An optional [stream_controller()] used to cancel the
+    #'   stream from outside the iteration loop.
     stream_async = function(
       ...,
       tool_mode = c("concurrent", "sequential"),
-      stream = c("text", "content")
+      stream = c("text", "content"),
+      controller = NULL
     ) {
+      check_controller(controller)
       finish_tools <- private$complete_dangling_tool_requests()
 
       turn <- user_turn(!!!finish_tools, ...)
@@ -363,7 +371,8 @@ Chat <- R6::R6Class(
         stream = TRUE,
         echo = "none",
         tool_mode = tool_mode,
-        yield_as_content = stream == "content"
+        yield_as_content = stream == "content",
+        controller = controller
       )
     },
 
@@ -453,7 +462,8 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      yield_as_content = FALSE
+      yield_as_content = FALSE,
+      controller = NULL
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
@@ -463,7 +473,8 @@ Chat <- R6::R6Class(
           user_turn,
           stream = stream,
           echo = echo,
-          yield_as_content = yield_as_content
+          yield_as_content = yield_as_content,
+          controller = controller
         )
         for (chunk in assistant_chunks) {
           yield(chunk)
@@ -512,7 +523,8 @@ Chat <- R6::R6Class(
       stream,
       echo,
       tool_mode = "concurrent",
-      yield_as_content = FALSE
+      yield_as_content = FALSE,
+      controller = NULL
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
@@ -522,7 +534,8 @@ Chat <- R6::R6Class(
           user_turn,
           stream = stream,
           echo = echo,
-          yield_as_content = yield_as_content
+          yield_as_content = yield_as_content,
+          controller = controller
         )
         for (chunk in await_each(assistant_chunks)) {
           yield(chunk)
@@ -587,7 +600,8 @@ Chat <- R6::R6Class(
       stream,
       echo,
       type = NULL,
-      yield_as_content = FALSE
+      yield_as_content = FALSE,
+      controller = NULL
     ) {
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
@@ -598,7 +612,8 @@ Chat <- R6::R6Class(
         mode = if (stream) "stream" else "value",
         turns = c(private$.turns, list(user_turn)),
         tools = if (is.null(type)) private$tools,
-        type = type
+        type = type,
+        controller = controller
       )
       emit <- emitter(echo)
       any_text <- FALSE
@@ -670,14 +685,16 @@ Chat <- R6::R6Class(
       stream,
       echo,
       type = NULL,
-      yield_as_content = FALSE
+      yield_as_content = FALSE,
+      controller = NULL
     ) {
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "async-stream" else "async-value",
         turns = c(private$.turns, list(user_turn)),
         tools = if (is.null(type)) private$tools,
-        type = type
+        type = type,
+        controller = controller
       )
       emit <- emitter(echo)
       any_text <- FALSE
@@ -815,6 +832,35 @@ turn_cost <- function(tokens, cost, prefix, suffix = "") {
   }
   out <- paste0(out, suffix)
   out
+}
+
+#' Create a stream controller
+#'
+#' @description
+#' Creates a controller that can cancel an in-progress stream. Pass it to
+#' [Chat]'s `$stream()` or `$stream_async()` via the `controller` argument,
+#' then call `$cancel()` from anywhere (e.g. a Shiny observer) to stop the
+#' stream after the next chunk arrives.
+#'
+#' @return An `ellmer_stream_controller` object with a `$cancel()` method.
+#' @export
+stream_controller <- function() {
+  self <- new.env(parent = emptyenv())
+  self$cancelled <- FALSE
+  self$cancel <- function() self$cancelled <- TRUE
+  class(self) <- "ellmer_stream_controller"
+  self
+}
+
+check_controller <- function(controller, call = caller_env()) {
+  if (is.null(controller) || inherits(controller, "ellmer_stream_controller")) {
+    return(invisible())
+  }
+
+  cli::cli_abort(
+    "{.arg controller} must be an {.cls ellmer_stream_controller} object created by {.fn stream_controller}.",
+    call = call
+  )
 }
 
 method(contents_markdown, new_S3_class("Chat")) <- function(
