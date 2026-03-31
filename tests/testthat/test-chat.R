@@ -293,13 +293,23 @@ test_that("check_controller() accepts a valid stream_controller()", {
   expect_no_error(check_controller(NULL))
 })
 
-test_that("cancelled_turn() builds a partial AssistantTurn from content", {
-  contents <- list(ContentText("Hello "), ContentText("world"))
-  turn <- cancelled_turn(contents)
+test_that("finalize_partial_turn() merges adjacent ContentText", {
+  # Simulate what happens during incremental turn saving
+  private <- new.env(parent = emptyenv())
+  private$.turns <- list(
+    Turn("user", list(ContentText("hi"))),
+    AssistantTurn(
+      contents = list(
+        ContentText("Hello "),
+        ContentText("world")
+      )
+    )
+  )
+
+  finalize_partial_turn(private, 2)
+  turn <- private$.turns[[2]]
 
   expect_s7_class(turn, AssistantTurn)
-  # Adjacent text should be merged
-
   expect_length(turn@contents, 1)
   expect_equal(turn@text, "Hello world")
   # No token data
@@ -307,12 +317,20 @@ test_that("cancelled_turn() builds a partial AssistantTurn from content", {
   expect_true(is.na(turn@cost))
 })
 
-test_that("cancelled_turn() handles empty contents", {
-  turn <- cancelled_turn(list())
+test_that("update_turn_contents() appends content incrementally", {
+  private <- new.env(parent = emptyenv())
+  private$.turns <- list(
+    Turn("user", list(ContentText("hi"))),
+    AssistantTurn()
+  )
 
-  expect_s7_class(turn, AssistantTurn)
-  expect_length(turn@contents, 0)
-  expect_true(all(is.na(turn@tokens)))
+  update_turn_contents(private, 2, ContentText("a"))
+  update_turn_contents(private, 2, ContentText("b"))
+
+  turn <- private$.turns[[2]]
+  expect_length(turn@contents, 2)
+  expect_equal(turn@contents[[1]]@text, "a")
+  expect_equal(turn@contents[[2]]@text, "b")
 })
 
 test_that("merge_content_text() merges adjacent text, preserves non-text", {
