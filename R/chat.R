@@ -483,6 +483,11 @@ Chat <- R6::R6Class(
         assistant_turn <- self$last_turn()
         user_turn <- NULL
 
+        # Don't invoke tools if the stream was cancelled
+        if (!is.null(controller) && controller$cancelled) {
+          break
+        }
+
         if (turn_has_tool_request(assistant_turn)) {
           tool_calls <- invoke_tools(
             assistant_turn,
@@ -543,6 +548,11 @@ Chat <- R6::R6Class(
 
         assistant_turn <- self$last_turn()
         user_turn <- NULL
+
+        # Don't invoke tools if the stream was cancelled
+        if (!is.null(controller) && controller$cancelled) {
+          break
+        }
 
         if (turn_has_tool_request(assistant_turn)) {
           tool_calls <- invoke_tools_async(
@@ -617,22 +627,35 @@ Chat <- R6::R6Class(
       )
       emit <- emitter(echo)
       any_text <- FALSE
+      cancelled <- FALSE
 
       if (stream) {
         result <- NULL
+        partial_contents <- list()
         for (chunk in response) {
           content <- stream_content(private$provider, chunk)
           if (!is.null(content)) {
             text <- content_text(content)
             emit(text)
             yield(if (yield_as_content) content else text)
+            partial_contents <- c(partial_contents, list(content))
             any_text <- TRUE
           }
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
-        turn <- value_turn(private$provider, result, has_type = !is.null(type))
-        turn <- match_tools(turn, private$tools)
+
+        cancelled <- !is.null(controller) && controller$cancelled
+        if (cancelled) {
+          turn <- cancelled_turn(partial_contents)
+        } else {
+          turn <- value_turn(
+            private$provider,
+            result,
+            has_type = !is.null(type)
+          )
+          turn <- match_tools(turn, private$tools)
+        }
       } else {
         turn <- value_turn(
           private$provider,
@@ -671,7 +694,7 @@ Chat <- R6::R6Class(
       }
       # When `echo="output"`, tool calls are emitted in `invoke_tools()`
 
-      self$add_turn(user_turn, turn)
+      self$add_turn(user_turn, turn, log_tokens = !cancelled)
 
       coro::exhausted()
     }),
@@ -698,21 +721,34 @@ Chat <- R6::R6Class(
       )
       emit <- emitter(echo)
       any_text <- FALSE
+      cancelled <- FALSE
 
       if (stream) {
         result <- NULL
+        partial_contents <- list()
         for (chunk in await_each(response)) {
           content <- stream_content(private$provider, chunk)
           if (!is.null(content)) {
             text <- content_text(content)
             emit(text)
             yield(if (yield_as_content) content else text)
+            partial_contents <- c(partial_contents, list(content))
             any_text <- TRUE
           }
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
-        turn <- value_turn(private$provider, result, has_type = !is.null(type))
+
+        cancelled <- !is.null(controller) && controller$cancelled
+        if (cancelled) {
+          turn <- cancelled_turn(partial_contents)
+        } else {
+          turn <- value_turn(
+            private$provider,
+            result,
+            has_type = !is.null(type)
+          )
+        }
       } else {
         result <- await(response)
 
@@ -752,7 +788,7 @@ Chat <- R6::R6Class(
       }
       # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
 
-      self$add_turn(user_turn, turn)
+      self$add_turn(user_turn, turn, log_tokens = !cancelled)
       coro::exhausted()
     }),
 
@@ -832,6 +868,37 @@ turn_cost <- function(tokens, cost, prefix, suffix = "") {
   }
   out <- paste0(out, suffix)
   out
+}
+
+cancelled_turn <- function(partial_contents) {
+  # Merge adjacent ContentText objects into a single ContentText
+  contents <- merge_content_text(partial_contents)
+  AssistantTurn(contents = contents)
+}
+
+merge_content_text <- function(contents) {
+  if (length(contents) == 0) {
+    return(list())
+  }
+
+  merged <- list()
+  i <- 1
+  while (i <= length(contents)) {
+    if (S7_inherits(contents[[i]], ContentText)) {
+      # Collect consecutive ContentText objects
+      texts <- character()
+      while (i <= length(contents) && S7_inherits(contents[[i]], ContentText)) {
+        texts <- c(texts, contents[[i]]@text)
+        i <- i + 1
+      }
+      merged <- c(merged, list(ContentText(paste0(texts, collapse = ""))))
+    } else {
+      merged <- c(merged, list(contents[[i]]))
+      i <- i + 1
+    }
+  }
+
+  merged
 }
 
 #' Create a stream controller

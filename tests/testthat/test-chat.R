@@ -292,3 +292,42 @@ test_that("check_controller() accepts a valid stream_controller()", {
   expect_no_error(check_controller(stream_controller()))
   expect_no_error(check_controller(NULL))
 })
+
+test_that("cancelled_turn() builds a partial AssistantTurn from content", {
+  contents <- list(ContentText("Hello "), ContentText("world"))
+  turn <- cancelled_turn(contents)
+
+  expect_s7_class(turn, AssistantTurn)
+  # Adjacent text should be merged
+
+  expect_length(turn@contents, 1)
+  expect_equal(turn@text, "Hello world")
+  # No token data
+  expect_true(all(is.na(turn@tokens)))
+  expect_true(is.na(turn@cost))
+})
+
+test_that("cancelled_turn() handles empty contents", {
+  turn <- cancelled_turn(list())
+
+  expect_s7_class(turn, AssistantTurn)
+  expect_length(turn@contents, 0)
+  expect_true(all(is.na(turn@tokens)))
+})
+
+test_that("merge_content_text() merges adjacent text, preserves non-text", {
+  contents <- list(
+    ContentText("a"),
+    ContentText("b"),
+    ContentThinking("thought"),
+    ContentText("c")
+  )
+  merged <- merge_content_text(contents)
+
+  expect_length(merged, 3)
+  expect_s7_class(merged[[1]], ContentText)
+  expect_equal(merged[[1]]@text, "ab")
+  expect_s7_class(merged[[2]], ContentThinking)
+  expect_s7_class(merged[[3]], ContentText)
+  expect_equal(merged[[3]]@text, "c")
+})
