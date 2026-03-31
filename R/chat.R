@@ -993,7 +993,7 @@ merge_content_text <- function(contents) {
 #'   * `$reason`: The cancellation reason string, or `NULL` if not
 #'     cancelled.
 #'
-#' @examplesIf is_interactive()
+#' @examplesIf rlang::is_interactive()
 #' chat <- chat_openai(model = "gpt-5.4-nano")
 #'
 #' ctrl <- stream_controller()

@@ -28,8 +28,7 @@ stream after the next chunk arrives.
 
 The same controller can be reused across multiple streams. Call
 \verb{$reset()} to clear the cancelled state, or pass it directly to a new
-\verb{$stream()} call — it will be reset automatically (with a warning if
-it was still in the cancelled state).
+\verb{$stream()} call — it will be reset automatically.
 }
 \section{Async cancellation in Shiny}{
 
@@ -58,7 +57,7 @@ observeEvent(input$cancel, \{
 }
 
 \examples{
-\dontshow{if (is_interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_interactive()) withAutoprint(\{ # examplesIf}
 chat <- chat_openai(model = "gpt-5.4-nano")
 
 ctrl <- stream_controller()
