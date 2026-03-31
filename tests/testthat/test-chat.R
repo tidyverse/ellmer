@@ -314,10 +314,10 @@ test_that("stream_controller()$reset() clears cancelled state and reason", {
   expect_null(ctrl$reason)
 })
 
-test_that("check_controller() warns and resets a pre-cancelled controller", {
+test_that("check_controller() resets a pre-cancelled controller", {
   ctrl <- stream_controller()
   ctrl$cancel()
-  expect_warning(check_controller(ctrl), "already cancelled")
+  expect_silent(check_controller(ctrl, reset = TRUE))
   expect_false(ctrl$cancelled)
 })
 
