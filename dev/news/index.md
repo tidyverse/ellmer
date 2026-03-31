@@ -2,6 +2,12 @@
 
 ## ellmer (development version)
 
+- `default_google_credentials()` no longer skips application default
+  credentials (e.g. `GOOGLE_APPLICATION_CREDENTIALS`) in interactive
+  sessions, instead falling through to the OAuth browser flow only when
+  no gargle token is available
+  ([@stefanlinner](https://github.com/stefanlinner),
+  [\#922](https://github.com/tidyverse/ellmer/issues/922)).
 - [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md)
   (and other
   [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
