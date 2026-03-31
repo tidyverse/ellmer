@@ -45,6 +45,17 @@
       -- assistant [interrupted] -----------------------------------------------------
       Partial output...
 
+# print method shows custom reason for partial turns
+
+    Code
+      chat
+    Output
+      <Chat OpenAI/gpt-4o turns=2 input=0 output=0 cost=$0.00>
+      -- user ------------------------------------------------------------------------
+      Input 1
+      -- assistant [cancelled] -------------------------------------------------------
+      Partial output...
+
 # print method shows cumulative tokens & cost
 
     Code

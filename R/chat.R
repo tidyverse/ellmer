@@ -639,7 +639,10 @@ Chat <- R6::R6Class(
         # Eagerly add partial turn so content survives interrupts/errors
         self$add_turn(user_turn, AssistantPartialTurn(), log_tokens = FALSE)
         turn_idx <- length(private$.turns)
-        on.exit(finalize_partial_turn(private, turn_idx), add = TRUE)
+        on.exit(
+          finalize_partial_turn(private, turn_idx, controller),
+          add = TRUE
+        )
 
         result <- NULL
         for (chunk in response) {
@@ -740,7 +743,10 @@ Chat <- R6::R6Class(
         # Eagerly add partial turn so content survives cancellation/errors
         self$add_turn(user_turn, AssistantPartialTurn(), log_tokens = FALSE)
         turn_idx <- length(private$.turns)
-        on.exit(finalize_partial_turn(private, turn_idx), add = TRUE)
+        on.exit(
+          finalize_partial_turn(private, turn_idx, controller),
+          add = TRUE
+        )
 
         result <- NULL
         for (chunk in await_each(response)) {
@@ -866,7 +872,7 @@ print.Chat <- function(x, ...) {
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
     if (S7_inherits(turn, AssistantPartialTurn)) {
-      label <- " [interrupted]"
+      label <- paste0(" [", turn@reason, "]")
     } else if (turn@role == "assistant") {
       label <- turn_cost(turn@tokens, turn@cost, prefix = " [", suffix = "]")
     } else {
@@ -903,12 +909,13 @@ update_turn_contents <- function(private, turn_idx, content) {
   private$.turns[[turn_idx]] <- turn
 }
 
-finalize_partial_turn <- function(private, turn_idx) {
+finalize_partial_turn <- function(private, turn_idx, controller = NULL) {
   turn <- private$.turns[[turn_idx]]
   if (!S7_inherits(turn, AssistantPartialTurn)) {
     return(invisible())
   }
   turn@contents <- merge_content_text(turn@contents)
+  turn@reason <- controller$reason %||% "interrupted"
   private$.turns[[turn_idx]] <- turn
 }
 
@@ -975,8 +982,17 @@ merge_content_text <- function(contents) {
 #' })
 #' ```
 #'
-#' @return An `ellmer_stream_controller` object with `$cancel()` and
-#'   `$reset()` methods.
+#' @return An `ellmer_stream_controller` object with the following
+#'   elements:
+#'
+#'   * `$cancel(reason = "cancelled")`: Cancel the stream. The `reason`
+#'     string is stored on the controller and used as the
+#'     [AssistantPartialTurn][Turn]'s `reason` property.
+#'   * `$reset()`: Clear the cancelled state and reason.
+#'   * `$cancelled`: A logical flag indicating whether the controller
+#'     has been cancelled.
+#'   * `$reason`: The cancellation reason string, or `NULL` if not
+#'     cancelled.
 #'
 #' @examplesIf is_interactive()
 #' chat <- chat_openai(model = "gpt-5.4-nano")
@@ -997,6 +1013,8 @@ stream_controller <- function() {
   self <- new.env(parent = emptyenv())
 
   cancelled <- FALSE
+  reason <- NULL
+
   makeActiveBinding(
     "cancelled",
     function(value) {
@@ -1013,8 +1031,33 @@ stream_controller <- function() {
     self
   )
 
-  self$cancel <- function() self$cancelled <- TRUE
-  self$reset <- function() self$cancelled <- FALSE
+  makeActiveBinding(
+    "reason",
+    function(value) {
+      if (missing(value)) {
+        return(reason)
+      }
+      if (
+        !is.null(value) &&
+          (!is.character(value) || length(value) != 1 || is.na(value))
+      ) {
+        cli::cli_abort(
+          "{.field reason} must be a single string or {.code NULL}."
+        )
+      }
+      reason <<- value
+    },
+    self
+  )
+
+  self$cancel <- function(reason = "cancelled") {
+    self$reason <- reason
+    self$cancelled <- TRUE
+  }
+  self$reset <- function() {
+    self$cancelled <- FALSE
+    self$reason <- NULL
+  }
   class(self) <- "ellmer_stream_controller"
   lockEnvironment(self)
   self

@@ -198,6 +198,15 @@ test_that("print method shows interrupted for partial turns", {
   expect_snapshot(chat)
 })
 
+test_that("print method shows custom reason for partial turns", {
+  chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
+  chat$set_turns(list(
+    UserTurn("Input 1"),
+    AssistantPartialTurn("Partial output...", reason = "cancelled")
+  ))
+  expect_snapshot(chat)
+})
+
 test_that("print method shows cumulative tokens & cost", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
   chat$set_turns(list(
@@ -276,6 +285,7 @@ test_that("stream_controller() creates correct object", {
   ctrl <- stream_controller()
   expect_s3_class(ctrl, "ellmer_stream_controller")
   expect_false(ctrl$cancelled)
+  expect_null(ctrl$reason)
   expect_true(is.function(ctrl$cancel))
   expect_true(is.function(ctrl$reset))
 })
@@ -284,14 +294,24 @@ test_that("stream_controller()$cancel() sets cancelled to TRUE", {
   ctrl <- stream_controller()
   ctrl$cancel()
   expect_true(ctrl$cancelled)
+  expect_equal(ctrl$reason, "cancelled")
 })
 
-test_that("stream_controller()$reset() clears cancelled state", {
+test_that("stream_controller()$cancel() accepts a custom reason", {
   ctrl <- stream_controller()
-  ctrl$cancel()
+  ctrl$cancel(reason = "timeout")
   expect_true(ctrl$cancelled)
+  expect_equal(ctrl$reason, "timeout")
+})
+
+test_that("stream_controller()$reset() clears cancelled state and reason", {
+  ctrl <- stream_controller()
+  ctrl$cancel(reason = "timeout")
+  expect_true(ctrl$cancelled)
+  expect_equal(ctrl$reason, "timeout")
   ctrl$reset()
   expect_false(ctrl$cancelled)
+  expect_null(ctrl$reason)
 })
 
 test_that("check_controller() warns and resets a pre-cancelled controller", {
@@ -327,6 +347,13 @@ test_that("stream_controller() rejects invalid cancelled values", {
   expect_error(ctrl$cancelled <- c(TRUE, FALSE))
 })
 
+test_that("stream_controller() rejects invalid reason values", {
+  ctrl <- stream_controller()
+  expect_error(ctrl$reason <- 123)
+  expect_error(ctrl$reason <- NA_character_)
+  expect_error(ctrl$reason <- c("a", "b"))
+})
+
 test_that("stream_controller() environment is locked", {
   ctrl <- stream_controller()
   expect_error(ctrl$typo <- TRUE)
@@ -351,9 +378,26 @@ test_that("finalize_partial_turn() merges adjacent ContentText", {
   expect_s7_class(turn, AssistantPartialTurn)
   expect_length(turn@contents, 1)
   expect_equal(turn@text, "Hello world")
+  expect_equal(turn@reason, "interrupted")
   # No token data
   expect_true(all(is.na(turn@tokens)))
   expect_true(is.na(turn@cost))
+})
+
+test_that("finalize_partial_turn() uses controller reason", {
+  private <- new.env(parent = emptyenv())
+  private$.turns <- list(
+    Turn("user", list(ContentText("hi"))),
+    AssistantPartialTurn(contents = list(ContentText("partial")))
+  )
+
+  ctrl <- stream_controller()
+  ctrl$cancel(reason = "timeout")
+  finalize_partial_turn(private, 2, controller = ctrl)
+  turn <- private$.turns[[2]]
+
+  expect_s7_class(turn, AssistantPartialTurn)
+  expect_equal(turn@reason, "timeout")
 })
 
 test_that("finalize_partial_turn() is a no-op for complete turns", {
