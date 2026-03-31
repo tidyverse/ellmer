@@ -30,6 +30,21 @@
       
       3
 
+# print method shows interrupted for partial turns
+
+    Code
+      chat
+    Output
+      <Chat OpenAI/gpt-4o turns=4 input=15000 output=500 cost=$0.20>
+      -- user ------------------------------------------------------------------------
+      Input 1
+      -- assistant [input=15000 output=500 cost=$0.20] -------------------------------
+      Output 1
+      -- user ------------------------------------------------------------------------
+      Input 2
+      -- assistant [interrupted] -----------------------------------------------------
+      Partial output...
+
 # print method shows cumulative tokens & cost
 
     Code

@@ -187,6 +187,17 @@ test_that("has a basic print method", {
   expect_snapshot(chat)
 })
 
+test_that("print method shows interrupted for partial turns", {
+  chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
+  chat$set_turns(list(
+    UserTurn("Input 1"),
+    AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
+    UserTurn("Input 2"),
+    AssistantPartialTurn("Partial output...")
+  ))
+  expect_snapshot(chat)
+})
+
 test_that("print method shows cumulative tokens & cost", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
   chat$set_turns(list(

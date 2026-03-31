@@ -136,9 +136,12 @@ Chat <- R6::R6Class(
 
       turns <- self$get_turns()
       assistant_turns <- keep(turns, is_assistant_turn)
-      tokens <- map_tokens(assistant_turns, \(turn) turn@tokens)
+      complete_turns <- discard(assistant_turns, \(x) {
+        S7_inherits(x, AssistantPartialTurn)
+      })
+      tokens <- map_tokens(complete_turns, \(turn) turn@tokens)
       tokens <- tibble::as_tibble(tokens)
-      tokens$cost <- dollars(map_dbl(assistant_turns, \(turn) turn@cost))
+      tokens$cost <- dollars(map_dbl(complete_turns, \(turn) turn@cost))
 
       user_turns <- keep(turns, is_user_turn)
       tokens$input_preview <- map_chr(user_turns, turn_contents_preview)
@@ -154,15 +157,18 @@ Chat <- R6::R6Class(
 
       turns <- self$get_turns()
       assistant_turns <- keep(turns, is_assistant_turn)
+      complete_turns <- discard(assistant_turns, \(x) {
+        S7_inherits(x, AssistantPartialTurn)
+      })
 
-      if (length(assistant_turns) == 0) {
+      if (length(complete_turns) == 0) {
         return(dollars(0))
       }
 
       if (include == "last") {
-        cost <- assistant_turns[[length(assistant_turns)]]@cost
+        cost <- complete_turns[[length(complete_turns)]]@cost
       } else {
-        cost <- sum(map_dbl(assistant_turns, \(turn) turn@cost))
+        cost <- sum(map_dbl(complete_turns, \(turn) turn@cost))
       }
 
       dollars(cost)
@@ -842,8 +848,11 @@ print.Chat <- function(x, ...) {
   turns <- x$get_turns(include_system_prompt = TRUE)
 
   assistant_turns <- keep(turns, \(x) x@role == "assistant")
-  total_tokens <- colSums(map_tokens(assistant_turns, \(x) x@tokens))
-  total_cost <- sum(map_dbl(assistant_turns, \(x) x@cost))
+  complete_turns <- discard(assistant_turns, \(x) {
+    S7_inherits(x, AssistantPartialTurn)
+  })
+  total_tokens <- colSums(map_tokens(complete_turns, \(x) x@tokens))
+  total_cost <- sum(map_dbl(complete_turns, \(x) x@cost))
 
   cat(paste_c(
     "<Chat",
@@ -855,13 +864,15 @@ print.Chat <- function(x, ...) {
 
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
-    if (turn@role == "assistant") {
-      cost <- turn_cost(turn@tokens, turn@cost, prefix = " [", suffix = "]")
+    if (S7_inherits(turn, AssistantPartialTurn)) {
+      label <- " [interrupted]"
+    } else if (turn@role == "assistant") {
+      label <- turn_cost(turn@tokens, turn@cost, prefix = " [", suffix = "]")
     } else {
-      cost <- ""
+      label <- ""
     }
 
-    cli::cat_rule(cli::format_inline("{color_role(turn@role)}{cost}"))
+    cli::cat_rule(cli::format_inline("{color_role(turn@role)}{label}"))
     cat(format(turns[[i]]))
   }
 
