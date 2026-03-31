@@ -49,16 +49,17 @@ observeEvent(input$cancel, \{
 
 \examples{
 \dontshow{if (is_interactive()) withAutoprint(\{ # examplesIf}
-chat <- chat_openai(model = "gpt-4.1-nano")
+chat <- chat_openai(model = "gpt-5.4-nano")
 
 ctrl <- stream_controller()
-stream <- chat$stream("Write a story.", controller = ctrl)
+stream <- chat$stream("Write a short story.", controller = ctrl)
 
 i <- 0
 coro::loop(for (chunk in stream) {
   i <- i + 1
-  cat(chunk)
   if (i > 10) ctrl$cancel()
 })
+
+chat
 \dontshow{\}) # examplesIf}
 }
