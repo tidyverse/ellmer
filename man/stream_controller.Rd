@@ -21,3 +21,44 @@ The same controller can be reused across multiple streams. Call
 \verb{$stream()} call — it will be reset automatically (with a warning if
 it was still in the cancelled state).
 }
+\section{Async cancellation in Shiny}{
+
+
+In a Shiny app, use an \link[shiny:ExtendedTask]{ExtendedTask} for
+non-blocking chat and a \code{stream_controller()} to wire up a cancel
+button:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{controller <- stream_controller()
+
+chat_task <- ExtendedTask$new(function(user_query, controller = NULL) \{
+  chat <- chat_openai(model = "gpt-4.1-nano")
+  stream <- chat$stream_async(user_query, controller = controller)
+  shinychat::markdown_stream("response", stream)
+\})
+
+observeEvent(input$ask, \{
+  controller <<- stream_controller()
+  chat_task$invoke(input$query, controller = controller)
+\})
+
+observeEvent(input$cancel, \{
+  controller$cancel()
+\})
+}\if{html}{\out{</div>}}
+}
+
+\examples{
+\dontshow{if (is_interactive()) withAutoprint(\{ # examplesIf}
+chat <- chat_openai(model = "gpt-4.1-nano")
+
+ctrl <- stream_controller()
+stream <- chat$stream("Write a story.", controller = ctrl)
+
+i <- 0
+coro::loop(for (chunk in stream) {
+  i <- i + 1
+  cat(chunk)
+  if (i > 10) ctrl$cancel()
+})
+\dontshow{\}) # examplesIf}
+}
