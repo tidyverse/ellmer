@@ -27,7 +27,8 @@ AssistantPartialTurn(
   json = list(),
   tokens = c(NA_real_, NA_real_, NA_real_),
   cost = NA_real_,
-  duration = NA_real_
+  duration = NA_real_,
+  reason = "interrupted"
 )
 }
 \arguments{
@@ -48,6 +49,9 @@ that ellmer doesn't otherwise expose.}
 \item{cost}{The cost of the turn in dollars.}
 
 \item{duration}{The duration of the request in seconds.}
+
+\item{reason}{A character string describing why the turn was interrupted.
+Defaults to \code{"interrupted"}.}
 }
 \value{
 An S7 \code{Turn} object

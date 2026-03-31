@@ -1015,52 +1015,45 @@ stream_controller <- function() {
   cancelled <- FALSE
   reason <- NULL
 
-  makeActiveBinding(
-    "cancelled",
-    function(value) {
-      if (missing(value)) {
-        return(cancelled)
-      }
-      if (!is.logical(value) || length(value) != 1 || is.na(value)) {
-        cli::cli_abort(
-          "{.field cancelled} must be {.code TRUE} or {.code FALSE}."
-        )
-      }
-      cancelled <<- value
-    },
-    self
-  )
+  error_msg <- "Use the {.code $cancel()} method to cancel the stream or {.code $reset()} to reset the stream controller."
 
-  makeActiveBinding(
-    "reason",
-    function(value) {
-      if (missing(value)) {
-        return(reason)
-      }
-      if (
-        !is.null(value) &&
-          (!is.character(value) || length(value) != 1 || is.na(value))
-      ) {
-        cli::cli_abort(
-          "{.field reason} must be a single string or {.code NULL}."
-        )
-      }
-      reason <<- value
-    },
-    self
-  )
+  makeActiveBinding("cancelled", env = self, function(value) {
+    if (missing(value)) {
+      return(cancelled)
+    }
+    cli::cli_abort(error_msg)
+  })
+
+  makeActiveBinding("reason", env = self, function(value) {
+    if (missing(value)) {
+      return(reason)
+    }
+    cli::cli_abort(error_msg)
+  })
 
   self$cancel <- function(reason = "cancelled") {
-    self$reason <- reason
-    self$cancelled <- TRUE
+    check_string(reason)
+    reason <<- reason
+    cancelled <<- TRUE
   }
   self$reset <- function() {
-    self$cancelled <- FALSE
-    self$reason <- NULL
+    cancelled <<- FALSE
+    reason <<- NULL
   }
   class(self) <- "ellmer_stream_controller"
   lockEnvironment(self)
   self
+}
+
+#' @export
+print.ellmer_stream_controller <- function(x, ...) {
+  status <- if (x$cancelled) {
+    sprintf('cancelled="%s"', x$reason)
+  } else {
+    "active"
+  }
+  cat("<ellmer_stream_controller ", status, ">\n", sep = "")
+  invisible(x)
 }
 
 check_controller <- function(controller, call = caller_env()) {

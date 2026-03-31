@@ -7,8 +7,18 @@
 stream_controller()
 }
 \value{
-An \code{ellmer_stream_controller} object with \verb{$cancel()} and
-\verb{$reset()} methods.
+An \code{ellmer_stream_controller} object with the following
+elements:
+\itemize{
+\item \verb{$cancel(reason = "cancelled")}: Cancel the stream. The \code{reason}
+string is stored on the controller and used as the
+\link[=Turn]{AssistantPartialTurn}'s \code{reason} property.
+\item \verb{$reset()}: Clear the cancelled state and reason.
+\item \verb{$cancelled}: A logical flag indicating whether the controller
+has been cancelled.
+\item \verb{$reason}: The cancellation reason string, or \code{NULL} if not
+cancelled.
+}
 }
 \description{
 Creates a controller that can cancel an in-progress stream. Pass it to
