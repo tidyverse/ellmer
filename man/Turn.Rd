@@ -5,6 +5,7 @@
 \alias{UserTurn}
 \alias{SystemTurn}
 \alias{AssistantTurn}
+\alias{AssistantPartialTurn}
 \title{A user, assistant, or system turn}
 \usage{
 Turn(role = NULL, contents = list(), tokens = NULL)
@@ -14,6 +15,14 @@ UserTurn(contents = list())
 SystemTurn(contents = list())
 
 AssistantTurn(
+  contents = list(),
+  json = list(),
+  tokens = c(NA_real_, NA_real_, NA_real_),
+  cost = NA_real_,
+  duration = NA_real_
+)
+
+AssistantPartialTurn(
   contents = list(),
   json = list(),
   tokens = c(NA_real_, NA_real_, NA_real_),
@@ -44,6 +53,8 @@ that ellmer doesn't otherwise expose.}
 An S7 \code{Turn} object
 
 An S7 \code{AssistantTurn} object
+
+An S7 \code{AssistantPartialTurn} object
 }
 \description{
 Every conversation with a chatbot consists of pairs of user and assistant

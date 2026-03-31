@@ -298,7 +298,7 @@ test_that("finalize_partial_turn() merges adjacent ContentText", {
   private <- new.env(parent = emptyenv())
   private$.turns <- list(
     Turn("user", list(ContentText("hi"))),
-    AssistantTurn(
+    AssistantPartialTurn(
       contents = list(
         ContentText("Hello "),
         ContentText("world")
@@ -309,12 +309,26 @@ test_that("finalize_partial_turn() merges adjacent ContentText", {
   finalize_partial_turn(private, 2)
   turn <- private$.turns[[2]]
 
-  expect_s7_class(turn, AssistantTurn)
+  expect_s7_class(turn, AssistantPartialTurn)
   expect_length(turn@contents, 1)
   expect_equal(turn@text, "Hello world")
   # No token data
   expect_true(all(is.na(turn@tokens)))
   expect_true(is.na(turn@cost))
+})
+
+test_that("finalize_partial_turn() is a no-op for complete turns", {
+  private <- new.env(parent = emptyenv())
+  private$.turns <- list(
+    Turn("user", list(ContentText("hi"))),
+    AssistantTurn(contents = list(ContentText("done")))
+  )
+
+  finalize_partial_turn(private, 2)
+  turn <- private$.turns[[2]]
+
+  expect_s7_class(turn, AssistantTurn)
+  expect_false(S7_inherits(turn, AssistantPartialTurn))
 })
 
 test_that("update_turn_contents() appends content incrementally", {

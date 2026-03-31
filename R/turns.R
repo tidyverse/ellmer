@@ -162,6 +162,14 @@ AssistantTurn <- new_class(
     )
   }
 )
+#' @export
+#' @rdname Turn
+#' @return An S7 `AssistantPartialTurn` object
+AssistantPartialTurn <- new_class(
+  "AssistantPartialTurn",
+  parent = AssistantTurn
+)
+
 method(format, Turn) <- function(x, ...) {
   contents <- map_chr(x@contents, format, ...)
   paste0(contents, "\n", collapse = "")

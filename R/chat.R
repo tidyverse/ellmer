@@ -627,11 +627,10 @@ Chat <- R6::R6Class(
       )
       emit <- emitter(echo)
       any_text <- FALSE
-      completed <- FALSE
 
       if (stream) {
-        # Eagerly add turns so partial content survives interrupts
-        self$add_turn(user_turn, AssistantTurn(), log_tokens = FALSE)
+        # Eagerly add partial turn so content survives interrupts/errors
+        self$add_turn(user_turn, AssistantPartialTurn(), log_tokens = FALSE)
         turn_idx <- length(private$.turns)
         on.exit(finalize_partial_turn(private, turn_idx), add = TRUE)
 
@@ -651,7 +650,7 @@ Chat <- R6::R6Class(
 
         cancelled <- !is.null(controller) && controller$cancelled
         if (!cancelled) {
-          # Replace placeholder with full turn (tokens, cost, tool calls)
+          # Replace partial turn with full turn (tokens, cost, tool calls)
           turn <- value_turn(
             private$provider,
             result,
@@ -661,7 +660,6 @@ Chat <- R6::R6Class(
           private$.turns[[turn_idx]] <- turn
           log_turn(private$provider, turn)
         }
-        completed <- !cancelled
       } else {
         turn <- value_turn(
           private$provider,
@@ -683,10 +681,9 @@ Chat <- R6::R6Class(
         }
 
         self$add_turn(user_turn, turn)
-        completed <- TRUE
       }
 
-      if (completed) {
+      if (!S7_inherits(self$last_turn(), AssistantPartialTurn)) {
         # Ensure turns always end in a newline
         if (any_text) {
           emit("\n")
@@ -731,11 +728,10 @@ Chat <- R6::R6Class(
       )
       emit <- emitter(echo)
       any_text <- FALSE
-      completed <- FALSE
 
       if (stream) {
-        # Eagerly add turns so partial content survives cancellation
-        self$add_turn(user_turn, AssistantTurn(), log_tokens = FALSE)
+        # Eagerly add partial turn so content survives cancellation/errors
+        self$add_turn(user_turn, AssistantPartialTurn(), log_tokens = FALSE)
         turn_idx <- length(private$.turns)
         on.exit(finalize_partial_turn(private, turn_idx), add = TRUE)
 
@@ -755,7 +751,7 @@ Chat <- R6::R6Class(
 
         cancelled <- !is.null(controller) && controller$cancelled
         if (!cancelled) {
-          # Replace placeholder with full turn (tokens, cost, tool calls)
+          # Replace partial turn with full turn (tokens, cost, tool calls)
           turn <- value_turn(
             private$provider,
             result,
@@ -765,7 +761,6 @@ Chat <- R6::R6Class(
           private$.turns[[turn_idx]] <- turn
           log_turn(private$provider, turn)
         }
-        completed <- !cancelled
       } else {
         result <- await(response)
 
@@ -788,10 +783,9 @@ Chat <- R6::R6Class(
         }
 
         self$add_turn(user_turn, turn)
-        completed <- TRUE
       }
 
-      if (completed) {
+      if (!S7_inherits(self$last_turn(), AssistantPartialTurn)) {
         # Ensure turns always end in a newline
         if (any_text) {
           emit("\n")
@@ -899,6 +893,9 @@ update_turn_contents <- function(private, turn_idx, content) {
 
 finalize_partial_turn <- function(private, turn_idx) {
   turn <- private$.turns[[turn_idx]]
+  if (!S7_inherits(turn, AssistantPartialTurn)) {
+    return(invisible())
+  }
   turn@contents <- merge_content_text(turn@contents)
   private$.turns[[turn_idx]] <- turn
 }
