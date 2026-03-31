@@ -627,25 +627,32 @@ Chat <- R6::R6Class(
       )
       emit <- emitter(echo)
       any_text <- FALSE
+      interrupted <- FALSE
       cancelled <- FALSE
 
       if (stream) {
         result <- NULL
         partial_contents <- list()
-        for (chunk in response) {
-          content <- stream_content(private$provider, chunk)
-          if (!is.null(content)) {
-            text <- content_text(content)
-            emit(text)
-            yield(if (yield_as_content) content else text)
-            partial_contents <- c(partial_contents, list(content))
-            any_text <- TRUE
+        tryCatch(
+          for (chunk in response) {
+            content <- stream_content(private$provider, chunk)
+            if (!is.null(content)) {
+              text <- content_text(content)
+              emit(text)
+              yield(if (yield_as_content) content else text)
+              partial_contents <- c(partial_contents, list(content))
+              any_text <- TRUE
+            }
+
+            result <- stream_merge_chunks(private$provider, result, chunk)
+          },
+          interrupt = function(cnd) {
+            interrupted <<- TRUE
           }
+        )
 
-          result <- stream_merge_chunks(private$provider, result, chunk)
-        }
-
-        cancelled <- !is.null(controller) && controller$cancelled
+        cancelled <- interrupted ||
+          (!is.null(controller) && controller$cancelled)
         if (cancelled) {
           turn <- cancelled_turn(partial_contents)
         } else {
@@ -677,24 +684,30 @@ Chat <- R6::R6Class(
         }
       }
 
-      # Ensure turns always end in a newline
-      if (any_text) {
-        emit("\n")
-        if (yield_as_content) {
-          yield(ContentText("\n"))
-        } else {
-          yield("\n")
+      if (!cancelled) {
+        # Ensure turns always end in a newline
+        if (any_text) {
+          emit("\n")
+          if (yield_as_content) {
+            yield(ContentText("\n"))
+          } else {
+            yield("\n")
+          }
         }
-      }
 
-      if (echo == "all") {
-        is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
-        formatted <- map_chr(turn@contents[!is_text], format)
-        cat_line(formatted, prefix = "< ")
+        if (echo == "all") {
+          is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+          formatted <- map_chr(turn@contents[!is_text], format)
+          cat_line(formatted, prefix = "< ")
+        }
+        # When `echo="output"`, tool calls are emitted in `invoke_tools()`
       }
-      # When `echo="output"`, tool calls are emitted in `invoke_tools()`
 
       self$add_turn(user_turn, turn, log_tokens = !cancelled)
+
+      if (interrupted) {
+        rlang::interrupt()
+      }
 
       coro::exhausted()
     }),
@@ -769,24 +782,28 @@ Chat <- R6::R6Class(
           any_text <- TRUE
         }
       }
-      turn <- match_tools(turn, private$tools)
+      if (!cancelled) {
+        turn <- match_tools(turn, private$tools)
+      }
 
-      # Ensure turns always end in a newline
-      if (any_text) {
-        emit("\n")
-        if (yield_as_content) {
-          yield(ContentText("\n"))
-        } else {
-          yield("\n")
+      if (!cancelled) {
+        # Ensure turns always end in a newline
+        if (any_text) {
+          emit("\n")
+          if (yield_as_content) {
+            yield(ContentText("\n"))
+          } else {
+            yield("\n")
+          }
         }
-      }
 
-      if (echo == "all") {
-        is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
-        formatted <- map_chr(turn@contents[!is_text], format)
-        cat_line(formatted, prefix = "< ")
+        if (echo == "all") {
+          is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+          formatted <- map_chr(turn@contents[!is_text], format)
+          cat_line(formatted, prefix = "< ")
+        }
+        # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
       }
-      # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
 
       self$add_turn(user_turn, turn, log_tokens = !cancelled)
       coro::exhausted()
