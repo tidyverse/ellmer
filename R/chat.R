@@ -954,8 +954,7 @@ merge_content_text <- function(contents) {
 #'
 #' The same controller can be reused across multiple streams. Call
 #' `$reset()` to clear the cancelled state, or pass it directly to a new
-#' `$stream()` call — it will be reset automatically (with a warning if
-#' it was still in the cancelled state).
+#' `$stream()` call — it will be reset automatically.
 #'
 #' @section Async cancellation in Shiny:
 #'
@@ -1056,7 +1055,7 @@ print.ellmer_stream_controller <- function(x, ...) {
   invisible(x)
 }
 
-check_controller <- function(controller, call = caller_env()) {
+check_controller <- function(controller, reset = TRUE, call = caller_env()) {
   if (is.null(controller)) {
     return(invisible())
   }
@@ -1068,11 +1067,7 @@ check_controller <- function(controller, call = caller_env()) {
     )
   }
 
-  if (controller$cancelled) {
-    cli::cli_warn(
-      "Resetting {.arg controller} that was already cancelled.",
-      call = call
-    )
+  if (reset && controller$cancelled) {
     controller$reset()
   }
 
