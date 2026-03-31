@@ -277,12 +277,28 @@ test_that("stream_controller() creates correct object", {
   expect_s3_class(ctrl, "ellmer_stream_controller")
   expect_false(ctrl$cancelled)
   expect_true(is.function(ctrl$cancel))
+  expect_true(is.function(ctrl$reset))
 })
 
 test_that("stream_controller()$cancel() sets cancelled to TRUE", {
   ctrl <- stream_controller()
   ctrl$cancel()
   expect_true(ctrl$cancelled)
+})
+
+test_that("stream_controller()$reset() clears cancelled state", {
+  ctrl <- stream_controller()
+  ctrl$cancel()
+  expect_true(ctrl$cancelled)
+  ctrl$reset()
+  expect_false(ctrl$cancelled)
+})
+
+test_that("check_controller() warns and resets a pre-cancelled controller", {
+  ctrl <- stream_controller()
+  ctrl$cancel()
+  expect_warning(check_controller(ctrl), "already cancelled")
+  expect_false(ctrl$cancelled)
 })
 
 test_that("stream() rejects non-controller object", {

@@ -151,7 +151,8 @@ Chat <- R6::R6Class(
     #' @description The cost of this chat
     #' @param include The default, `"all"`, gives the total cumulative cost
     #'   of this chat. Alternatively, use `"last"` to get the cost of just the
-    #'   most recent turn.
+    #'   most recent turn. Incomplete turns (from cancelled or interrupted
+    #'   streams) are excluded because they lack token data.
     get_cost = function(include = c("all", "last")) {
       include <- arg_match(include)
 
@@ -944,25 +945,45 @@ merge_content_text <- function(contents) {
 #' then call `$cancel()` from anywhere (e.g. a Shiny observer) to stop the
 #' stream after the next chunk arrives.
 #'
-#' @return An `ellmer_stream_controller` object with a `$cancel()` method.
+#' The same controller can be reused across multiple streams. Call
+#' `$reset()` to clear the cancelled state, or pass it directly to a new
+#' `$stream()` call — it will be reset automatically (with a warning if
+#' it was still in the cancelled state).
+#'
+#' @return An `ellmer_stream_controller` object with `$cancel()` and
+#'   `$reset()` methods.
 #' @export
 stream_controller <- function() {
   self <- new.env(parent = emptyenv())
   self$cancelled <- FALSE
+
   self$cancel <- function() self$cancelled <- TRUE
+  self$reset <- function() self$cancelled <- FALSE
   class(self) <- "ellmer_stream_controller"
   self
 }
 
 check_controller <- function(controller, call = caller_env()) {
-  if (is.null(controller) || inherits(controller, "ellmer_stream_controller")) {
+  if (is.null(controller)) {
     return(invisible())
   }
 
-  cli::cli_abort(
-    "{.arg controller} must be an {.cls ellmer_stream_controller} object created by {.fn stream_controller}.",
-    call = call
-  )
+  if (!inherits(controller, "ellmer_stream_controller")) {
+    cli::cli_abort(
+      "{.arg controller} must be an {.cls ellmer_stream_controller} object created by {.fn stream_controller}.",
+      call = call
+    )
+  }
+
+  if (controller$cancelled) {
+    cli::cli_warn(
+      "Resetting {.arg controller} that was already cancelled.",
+      call = call
+    )
+    controller$reset()
+  }
+
+  invisible()
 }
 
 method(contents_markdown, new_S3_class("Chat")) <- function(

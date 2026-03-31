@@ -7,11 +7,17 @@
 stream_controller()
 }
 \value{
-An \code{ellmer_stream_controller} object with a \verb{$cancel()} method.
+An \code{ellmer_stream_controller} object with \verb{$cancel()} and
+\verb{$reset()} methods.
 }
 \description{
 Creates a controller that can cancel an in-progress stream. Pass it to
 \link{Chat}'s \verb{$stream()} or \verb{$stream_async()} via the \code{controller} argument,
 then call \verb{$cancel()} from anywhere (e.g. a Shiny observer) to stop the
 stream after the next chunk arrives.
+
+The same controller can be reused across multiple streams. Call
+\verb{$reset()} to clear the cancelled state, or pass it directly to a new
+\verb{$stream()} call — it will be reset automatically (with a warning if
+it was still in the cancelled state).
 }

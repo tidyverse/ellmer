@@ -210,7 +210,8 @@ The cost of this chat
 \describe{
 \item{\code{include}}{The default, \code{"all"}, gives the total cumulative cost
 of this chat. Alternatively, use \code{"last"} to get the cost of just the
-most recent turn.}
+most recent turn. Incomplete turns (from cancelled or interrupted
+streams) are excluded because they lack token data.}
 }
 \if{html}{\out{</div>}}
 }
