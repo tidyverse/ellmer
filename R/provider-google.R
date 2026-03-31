@@ -730,7 +730,7 @@ default_google_credentials <- function(
     testthat::skip("no Google credentials available")
   }
 
-  if (is_interactive()) {
+  if (is.null(token) && is_interactive()) {
     return(function() {
       function(req) {
         req_oauth_auth_code(
