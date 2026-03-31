@@ -627,35 +627,29 @@ Chat <- R6::R6Class(
       )
       emit <- emitter(echo)
       any_text <- FALSE
-      interrupted <- FALSE
-      cancelled <- FALSE
+      completed <- FALSE
 
       if (stream) {
         # Eagerly add turns so partial content survives interrupts
         self$add_turn(user_turn, AssistantTurn(), log_tokens = FALSE)
         turn_idx <- length(private$.turns)
+        on.exit(finalize_partial_turn(private, turn_idx), add = TRUE)
 
         result <- NULL
-        tryCatch(
-          for (chunk in response) {
-            content <- stream_content(private$provider, chunk)
-            if (!is.null(content)) {
-              text <- content_text(content)
-              emit(text)
-              yield(if (yield_as_content) content else text)
-              update_turn_contents(private, turn_idx, content)
-              any_text <- TRUE
-            }
-
-            result <- stream_merge_chunks(private$provider, result, chunk)
-          },
-          interrupt = function(cnd) {
-            interrupted <<- TRUE
+        for (chunk in response) {
+          content <- stream_content(private$provider, chunk)
+          if (!is.null(content)) {
+            text <- content_text(content)
+            emit(text)
+            yield(if (yield_as_content) content else text)
+            update_turn_contents(private, turn_idx, content)
+            any_text <- TRUE
           }
-        )
 
-        cancelled <- interrupted ||
-          (!is.null(controller) && controller$cancelled)
+          result <- stream_merge_chunks(private$provider, result, chunk)
+        }
+
+        cancelled <- !is.null(controller) && controller$cancelled
         if (!cancelled) {
           # Replace placeholder with full turn (tokens, cost, tool calls)
           turn <- value_turn(
@@ -666,10 +660,8 @@ Chat <- R6::R6Class(
           turn <- match_tools(turn, private$tools)
           private$.turns[[turn_idx]] <- turn
           log_turn(private$provider, turn)
-        } else {
-          # Merge adjacent ContentText fragments in the partial turn
-          finalize_partial_turn(private, turn_idx)
         }
+        completed <- !cancelled
       } else {
         turn <- value_turn(
           private$provider,
@@ -691,9 +683,10 @@ Chat <- R6::R6Class(
         }
 
         self$add_turn(user_turn, turn)
+        completed <- TRUE
       }
 
-      if (!cancelled) {
+      if (completed) {
         # Ensure turns always end in a newline
         if (any_text) {
           emit("\n")
@@ -711,10 +704,6 @@ Chat <- R6::R6Class(
           cat_line(formatted, prefix = "< ")
         }
         # When `echo="output"`, tool calls are emitted in `invoke_tools()`
-      }
-
-      if (interrupted) {
-        rlang::interrupt()
       }
 
       coro::exhausted()
@@ -742,12 +731,13 @@ Chat <- R6::R6Class(
       )
       emit <- emitter(echo)
       any_text <- FALSE
-      cancelled <- FALSE
+      completed <- FALSE
 
       if (stream) {
         # Eagerly add turns so partial content survives cancellation
         self$add_turn(user_turn, AssistantTurn(), log_tokens = FALSE)
         turn_idx <- length(private$.turns)
+        on.exit(finalize_partial_turn(private, turn_idx), add = TRUE)
 
         result <- NULL
         for (chunk in await_each(response)) {
@@ -774,10 +764,8 @@ Chat <- R6::R6Class(
           turn <- match_tools(turn, private$tools)
           private$.turns[[turn_idx]] <- turn
           log_turn(private$provider, turn)
-        } else {
-          # Merge adjacent ContentText fragments in the partial turn
-          finalize_partial_turn(private, turn_idx)
         }
+        completed <- !cancelled
       } else {
         result <- await(response)
 
@@ -800,9 +788,10 @@ Chat <- R6::R6Class(
         }
 
         self$add_turn(user_turn, turn)
+        completed <- TRUE
       }
 
-      if (!cancelled) {
+      if (completed) {
         # Ensure turns always end in a newline
         if (any_text) {
           emit("\n")
