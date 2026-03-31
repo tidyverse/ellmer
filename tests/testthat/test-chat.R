@@ -320,6 +320,18 @@ test_that("check_controller() accepts a valid stream_controller()", {
   expect_no_error(check_controller(NULL))
 })
 
+test_that("stream_controller() rejects invalid cancelled values", {
+  ctrl <- stream_controller()
+  expect_error(ctrl$cancelled <- "banana")
+  expect_error(ctrl$cancelled <- NA)
+  expect_error(ctrl$cancelled <- c(TRUE, FALSE))
+})
+
+test_that("stream_controller() environment is locked", {
+  ctrl <- stream_controller()
+  expect_error(ctrl$typo <- TRUE)
+})
+
 test_that("finalize_partial_turn() merges adjacent ContentText", {
   # Simulate what happens during incremental turn saving
   private <- new.env(parent = emptyenv())
