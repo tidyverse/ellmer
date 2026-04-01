@@ -940,28 +940,15 @@ TurnAccumulator <- R6::R6Class(
 )
 
 merge_content_text <- function(contents) {
-  if (length(contents) == 0) {
-    return(list())
-  }
-
-  merged <- list()
-  i <- 1
-  while (i <= length(contents)) {
-    if (S7_inherits(contents[[i]], ContentText)) {
-      # Collect consecutive ContentText objects
-      texts <- character()
-      while (i <= length(contents) && S7_inherits(contents[[i]], ContentText)) {
-        texts <- c(texts, contents[[i]]@text)
-        i <- i + 1
-      }
-      merged <- c(merged, list(ContentText(paste0(texts, collapse = ""))))
+  reduce(contents, .init = list(), function(acc, item) {
+    n <- length(acc)
+    if (n > 0 && every(list(acc[[n]], item), S7_inherits, ContentText)) {
+      acc[[n]] <- ContentText(paste0(acc[[n]]@text, item@text))
     } else {
-      merged <- c(merged, list(contents[[i]]))
-      i <- i + 1
+      acc <- c(acc, list(item))
     }
-  }
-
-  merged
+    acc
+  })
 }
 method(contents_markdown, new_S3_class("Chat")) <- function(
   content,
