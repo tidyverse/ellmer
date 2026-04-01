@@ -328,7 +328,7 @@ Chat <- R6::R6Class(
     #' @param controller An optional [stream_controller()] used to cancel the
     #'   stream from outside the iteration loop.
     stream = function(..., stream = c("text", "content"), controller = NULL) {
-      check_controller(controller)
+      controller <- as_controller(controller)
       finish_tools <- private$complete_dangling_tool_requests()
 
       turn <- user_turn(!!!finish_tools, ...)
@@ -363,7 +363,7 @@ Chat <- R6::R6Class(
       stream = c("text", "content"),
       controller = NULL
     ) {
-      check_controller(controller)
+      controller <- as_controller(controller)
       finish_tools <- private$complete_dangling_tool_requests()
 
       turn <- user_turn(!!!finish_tools, ...)
@@ -487,7 +487,7 @@ Chat <- R6::R6Class(
         user_turn <- NULL
 
         # Don't invoke tools if the stream was cancelled
-        if (!is.null(controller) && controller$cancelled) {
+        if (controller$cancelled) {
           break
         }
 
@@ -553,7 +553,7 @@ Chat <- R6::R6Class(
         user_turn <- NULL
 
         # Don't invoke tools if the stream was cancelled
-        if (!is.null(controller) && controller$cancelled) {
+        if (controller$cancelled) {
           break
         }
 
@@ -654,7 +654,7 @@ Chat <- R6::R6Class(
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
 
-        cancelled <- !is.null(controller) && controller$cancelled
+        cancelled <- controller$cancelled
         if (!cancelled) {
           # Replace partial turn with full turn (tokens, cost, tool calls)
           turn <- value_turn(
@@ -758,7 +758,7 @@ Chat <- R6::R6Class(
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
 
-        cancelled <- !is.null(controller) && controller$cancelled
+        cancelled <- controller$cancelled
         if (!cancelled) {
           # Replace partial turn with full turn (tokens, cost, tool calls)
           turn <- value_turn(
@@ -1049,9 +1049,9 @@ print.ellmer_stream_controller <- function(x, ...) {
   invisible(x)
 }
 
-check_controller <- function(controller, reset = TRUE, call = caller_env()) {
+as_controller <- function(controller, reset = TRUE, call = caller_env()) {
   if (is.null(controller)) {
-    return(invisible())
+    return(stream_controller())
   }
 
   if (!inherits(controller, "ellmer_stream_controller")) {
@@ -1065,7 +1065,7 @@ check_controller <- function(controller, reset = TRUE, call = caller_env()) {
     controller$reset()
   }
 
-  invisible()
+  controller
 }
 
 method(contents_markdown, new_S3_class("Chat")) <- function(

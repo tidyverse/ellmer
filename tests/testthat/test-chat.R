@@ -314,11 +314,12 @@ test_that("stream_controller()$reset() clears cancelled state and reason", {
   expect_null(ctrl$reason)
 })
 
-test_that("check_controller() resets a pre-cancelled controller", {
+test_that("as_controller() resets a pre-cancelled controller", {
   ctrl <- stream_controller()
   ctrl$cancel()
-  expect_silent(check_controller(ctrl, reset = TRUE))
+  result <- expect_silent(as_controller(ctrl, reset = TRUE))
   expect_false(ctrl$cancelled)
+  expect_identical(result, ctrl)
 })
 
 test_that("stream() rejects non-controller object", {
@@ -335,9 +336,13 @@ test_that("stream_async() rejects non-controller object", {
   })
 })
 
-test_that("check_controller() accepts a valid stream_controller()", {
-  expect_no_error(check_controller(stream_controller()))
-  expect_no_error(check_controller(NULL))
+test_that("as_controller() accepts a valid stream_controller() or NULL", {
+  ctrl <- stream_controller()
+  expect_identical(as_controller(ctrl), ctrl)
+
+  noop <- as_controller(NULL)
+  expect_false(noop$cancelled)
+  expect_null(noop$reason)
 })
 
 test_that("stream_controller() rejects invalid cancelled values", {
