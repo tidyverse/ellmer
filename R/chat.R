@@ -867,6 +867,7 @@ TurnAccumulator <- R6::R6Class(
         log_tokens = FALSE
       )
       private$turn_idx <- length(private$chat_private$.turns)
+      private$start_time <- proc.time()[["elapsed"]]
       invisible(self)
     },
 
@@ -883,14 +884,13 @@ TurnAccumulator <- R6::R6Class(
       if (private$controller$cancelled) {
         return(invisible(self))
       }
+      duration <- proc.time()[["elapsed"]] - private$start_time
+      turn <- private$value_turn(result, type, duration = duration)
       chat_private <- private$chat_private
-      turn <- value_turn(
-        chat_private$provider,
-        result,
-        has_type = !is.null(type)
-      )
-      turn <- match_tools(turn, chat_private$tools)
       chat_private$.turns[[private$turn_idx]] <- turn
+      # log_turn() is called manually here because the streaming path
+      # replaces a partial turn in-place rather than using Chat$add_turn(),
+      # which handles logging automatically for the non-streaming path.
       log_turn(chat_private$provider, turn)
       turn
     },
@@ -907,11 +907,15 @@ TurnAccumulator <- R6::R6Class(
       }
       turn@contents <- merge_content_text(turn@contents)
       turn@reason <- private$controller$reason %||% "interrupted"
+      turn@duration <- proc.time()[["elapsed"]] - private$start_time
       chat_private$.turns[[idx]] <- turn
+      log_turn(chat_private$provider, turn)
     },
 
     add_turn = function(user_turn, response, type = NULL) {
-      turn <- private$value_turn(response, type)
+      result <- resp_body_json(response)
+      duration <- resp_timing(response)[["total"]] %||% NA_real_
+      turn <- private$value_turn(result, type, duration = duration)
       private$chat$add_turn(user_turn, turn)
       turn
     }
@@ -921,15 +925,16 @@ TurnAccumulator <- R6::R6Class(
     chat_private = NULL,
     controller = NULL,
     turn_idx = NULL,
+    start_time = NULL,
 
-    value_turn = function(response, type) {
+    value_turn = function(result, type, duration = NA_real_) {
       chat_private <- private$chat_private
       turn <- value_turn(
         chat_private$provider,
-        resp_body_json(response),
+        result,
         has_type = !is.null(type)
       )
-      turn@duration <- resp_timing(response)[["total"]] %||% NA_real_
+      turn@duration <- duration
       match_tools(turn, chat_private$tools)
     }
   )
