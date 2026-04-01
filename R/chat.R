@@ -873,10 +873,9 @@ TurnAccumulator <- R6::R6Class(
 
     update_turn = function(content) {
       idx <- private$turn_idx
-      chat_private <- private$chat_private
-      turn <- chat_private$.turns[[idx]]
+      turn <- private$chat_private$.turns[[idx]]
       turn@contents <- c(turn@contents, list(content))
-      chat_private$.turns[[idx]] <- turn
+      private$chat_private$.turns[[idx]] <- turn
       invisible(self)
     },
 
@@ -886,12 +885,11 @@ TurnAccumulator <- R6::R6Class(
       }
       duration <- proc.time()[["elapsed"]] - private$start_time
       turn <- private$value_turn(result, type, duration = duration)
-      chat_private <- private$chat_private
-      chat_private$.turns[[private$turn_idx]] <- turn
+      private$chat_private$.turns[[private$turn_idx]] <- turn
       # log_turn() is called manually here because the streaming path
       # replaces a partial turn in-place rather than using Chat$add_turn(),
       # which handles logging automatically for the non-streaming path.
-      log_turn(chat_private$provider, turn)
+      log_turn(private$chat_private$provider, turn)
       turn
     },
 
@@ -900,16 +898,15 @@ TurnAccumulator <- R6::R6Class(
       if (is.null(idx)) {
         return(invisible())
       }
-      chat_private <- private$chat_private
-      turn <- chat_private$.turns[[idx]]
+      turn <- private$chat_private$.turns[[idx]]
       if (!is_partial_turn(turn)) {
         return(invisible())
       }
       turn@contents <- merge_content_text(turn@contents)
       turn@reason <- private$controller$reason %||% "interrupted"
       turn@duration <- proc.time()[["elapsed"]] - private$start_time
-      chat_private$.turns[[idx]] <- turn
-      log_turn(chat_private$provider, turn)
+      private$chat_private$.turns[[idx]] <- turn
+      log_turn(private$chat_private$provider, turn)
     },
 
     add_turn = function(user_turn, response, type = NULL) {
