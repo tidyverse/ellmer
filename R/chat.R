@@ -854,85 +854,81 @@ turn_cost <- function(tokens, cost, prefix, suffix = "") {
 TurnAccumulator <- R6::R6Class(
   "TurnAccumulator",
   public = list(
+    chat = NULL,
+    chat_private = NULL,
+    provider = NULL,
+    controller = NULL,
+    turn_idx = NULL,
+    start_time = NULL,
+
     initialize = function(chat, chat_private, controller) {
-      private$chat <- chat
-      private$chat_private <- chat_private
-      private$controller <- controller
+      self$chat <- chat
+      self$chat_private <- chat_private
+      self$provider <- chat$get_provider()
+      self$controller <- controller
     },
 
     begin_turn = function(user_turn) {
-      private$chat$add_turn(
-        user_turn,
-        AssistantPartialTurn(),
-        log_tokens = FALSE
-      )
-      private$turn_idx <- length(private$chat_private$.turns)
-      private$start_time <- proc.time()[["elapsed"]]
+      self$chat$add_turn(user_turn, AssistantPartialTurn(), log_tokens = FALSE)
+      self$turn_idx <- length(self$chat_private$.turns)
+      self$start_time <- proc.time()[["elapsed"]]
       invisible(self)
     },
 
     update_turn = function(content) {
-      idx <- private$turn_idx
-      turn <- private$chat_private$.turns[[idx]]
+      idx <- self$turn_idx
+      turn <- self$chat_private$.turns[[idx]]
       turn@contents <- c(turn@contents, list(content))
-      private$chat_private$.turns[[idx]] <- turn
+      self$chat_private$.turns[[idx]] <- turn
       invisible(self)
     },
 
     complete_turn = function(result, type = NULL) {
-      if (private$controller$cancelled) {
+      if (self$controller$cancelled) {
         return(invisible(self))
       }
-      duration <- proc.time()[["elapsed"]] - private$start_time
-      turn <- private$value_turn(result, type, duration = duration)
-      private$chat_private$.turns[[private$turn_idx]] <- turn
+      duration <- proc.time()[["elapsed"]] - self$start_time
+      turn <- self$value_turn(result, type, duration = duration)
+      self$chat_private$.turns[[self$turn_idx]] <- turn
       # log_turn() is called manually here because the streaming path
       # replaces a partial turn in-place rather than using Chat$add_turn(),
       # which handles logging automatically for the non-streaming path.
-      log_turn(private$chat_private$provider, turn)
+      log_turn(self$provider, turn)
       turn
     },
 
     finalize_turn = function() {
-      idx <- private$turn_idx
+      idx <- self$turn_idx
       if (is.null(idx)) {
         return(invisible())
       }
-      turn <- private$chat_private$.turns[[idx]]
+      turn <- self$chat_private$.turns[[idx]]
       if (!is_partial_turn(turn)) {
         return(invisible())
       }
       turn@contents <- merge_content_text(turn@contents)
-      turn@reason <- private$controller$reason %||% "interrupted"
-      turn@duration <- proc.time()[["elapsed"]] - private$start_time
-      private$chat_private$.turns[[idx]] <- turn
-      log_turn(private$chat_private$provider, turn)
+      turn@reason <- self$controller$reason %||% "interrupted"
+      turn@duration <- proc.time()[["elapsed"]] - self$start_time
+      self$chat_private$.turns[[idx]] <- turn
+      log_turn(self$provider, turn)
     },
 
     add_turn = function(user_turn, response, type = NULL) {
       result <- resp_body_json(response)
       duration <- resp_timing(response)[["total"]] %||% NA_real_
-      turn <- private$value_turn(result, type, duration = duration)
-      private$chat$add_turn(user_turn, turn)
+      turn <- self$value_turn(result, type, duration = duration)
+      self$chat$add_turn(user_turn, turn)
       turn
-    }
-  ),
-  private = list(
-    chat = NULL,
-    chat_private = NULL,
-    controller = NULL,
-    turn_idx = NULL,
-    start_time = NULL,
+    },
 
     value_turn = function(result, type, duration = NA_real_) {
-      chat_private <- private$chat_private
       turn <- value_turn(
-        chat_private$provider,
+        self$provider,
         result,
         has_type = !is.null(type)
       )
       turn@duration <- duration
-      match_tools(turn, chat_private$tools)
+      match_tools(turn, self$chat$get_tools())
     }
   )
 )
