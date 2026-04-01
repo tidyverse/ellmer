@@ -254,6 +254,10 @@ is_assistant_turn <- function(x) {
   S7_inherits(x, AssistantTurn)
 }
 
+is_partial_turn <- function(x) {
+  S7_inherits(x, AssistantPartialTurn)
+}
+
 check_turn <- function(x, call = caller_env(), arg = caller_arg(x)) {
   if (!S7_inherits(x, Turn)) {
     stop_input_type(x, "a <Turn>", call = call, arg = arg)

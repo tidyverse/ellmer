@@ -136,9 +136,7 @@ Chat <- R6::R6Class(
 
       turns <- self$get_turns()
       assistant_turns <- keep(turns, is_assistant_turn)
-      complete_turns <- discard(assistant_turns, \(x) {
-        S7_inherits(x, AssistantPartialTurn)
-      })
+      complete_turns <- discard(assistant_turns, is_partial_turn)
       tokens <- map_tokens(complete_turns, \(turn) turn@tokens)
       tokens <- tibble::as_tibble(tokens)
       tokens$cost <- dollars(map_dbl(complete_turns, \(turn) turn@cost))
@@ -158,9 +156,7 @@ Chat <- R6::R6Class(
 
       turns <- self$get_turns()
       assistant_turns <- keep(turns, is_assistant_turn)
-      complete_turns <- discard(assistant_turns, \(x) {
-        S7_inherits(x, AssistantPartialTurn)
-      })
+      complete_turns <- discard(assistant_turns, is_partial_turn)
 
       if (length(complete_turns) == 0) {
         return(dollars(0))
@@ -693,7 +689,7 @@ Chat <- R6::R6Class(
         self$add_turn(user_turn, turn)
       }
 
-      if (!S7_inherits(self$last_turn(), AssistantPartialTurn)) {
+      if (!is_partial_turn(self$last_turn())) {
         # Ensure turns always end in a newline
         if (any_text) {
           emit("\n")
@@ -798,7 +794,7 @@ Chat <- R6::R6Class(
         self$add_turn(user_turn, turn)
       }
 
-      if (!S7_inherits(self$last_turn(), AssistantPartialTurn)) {
+      if (!is_partial_turn(self$last_turn())) {
         # Ensure turns always end in a newline
         if (any_text) {
           emit("\n")
@@ -855,9 +851,7 @@ print.Chat <- function(x, ...) {
   turns <- x$get_turns(include_system_prompt = TRUE)
 
   assistant_turns <- keep(turns, \(x) x@role == "assistant")
-  complete_turns <- discard(assistant_turns, \(x) {
-    S7_inherits(x, AssistantPartialTurn)
-  })
+  complete_turns <- discard(assistant_turns, is_partial_turn)
   total_tokens <- colSums(map_tokens(complete_turns, \(x) x@tokens))
   total_cost <- sum(map_dbl(complete_turns, \(x) x@cost))
 
@@ -871,7 +865,7 @@ print.Chat <- function(x, ...) {
 
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
-    if (S7_inherits(turn, AssistantPartialTurn)) {
+    if (is_partial_turn(turn)) {
       label <- paste0(" [", turn@reason, "]")
     } else if (turn@role == "assistant") {
       label <- turn_cost(turn@tokens, turn@cost, prefix = " [", suffix = "]")
@@ -911,7 +905,7 @@ update_turn_contents <- function(private, turn_idx, content) {
 
 finalize_partial_turn <- function(private, turn_idx, controller = NULL) {
   turn <- private$.turns[[turn_idx]]
-  if (!S7_inherits(turn, AssistantPartialTurn)) {
+  if (!is_partial_turn(turn)) {
     return(invisible())
   }
   turn@contents <- merge_content_text(turn@contents)
