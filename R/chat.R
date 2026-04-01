@@ -634,15 +634,12 @@ Chat <- R6::R6Class(
       )
       emit <- emitter(echo)
       any_text <- FALSE
+      turn <- NULL
+      acc <- TurnAccumulator$new(self, private, controller)
 
       if (stream) {
-        # Eagerly add partial turn so content survives interrupts/errors
-        self$add_turn(user_turn, AssistantPartialTurn(), log_tokens = FALSE)
-        turn_idx <- length(private$.turns)
-        on.exit(
-          finalize_partial_turn(private, turn_idx, controller),
-          add = TRUE
-        )
+        acc$begin_turn(user_turn)
+        on.exit(acc$finalize_turn(), add = TRUE)
 
         result <- NULL
         for (chunk in response) {
@@ -651,33 +648,16 @@ Chat <- R6::R6Class(
             text <- content_text(content)
             emit(text)
             yield(if (yield_as_content) content else text)
-            update_turn_contents(private, turn_idx, content)
+            acc$update_turn(content)
             any_text <- TRUE
           }
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
 
-        cancelled <- controller$cancelled
-        if (!cancelled) {
-          # Replace partial turn with full turn (tokens, cost, tool calls)
-          turn <- value_turn(
-            private$provider,
-            result,
-            has_type = !is.null(type)
-          )
-          turn <- match_tools(turn, private$tools)
-          private$.turns[[turn_idx]] <- turn
-          log_turn(private$provider, turn)
-        }
+        turn <- acc$complete_turn(result, type = type)
       } else {
-        turn <- value_turn(
-          private$provider,
-          resp_body_json(response),
-          has_type = !is.null(type)
-        )
-        turn@duration <- resp_timing(response)[["total"]] %||% NA_real_
-        turn <- match_tools(turn, private$tools)
+        turn <- acc$add_turn(user_turn, response, type = type)
 
         text <- turn@text
         if (!is.null(text)) {
@@ -689,11 +669,9 @@ Chat <- R6::R6Class(
           }
           any_text <- TRUE
         }
-
-        self$add_turn(user_turn, turn)
       }
 
-      if (!is_partial_turn(self$last_turn())) {
+      if (!is.null(turn) && !is_partial_turn(turn)) {
         # Ensure turns always end in a newline
         if (any_text) {
           emit("\n")
@@ -705,9 +683,8 @@ Chat <- R6::R6Class(
         }
 
         if (echo == "all") {
-          last_turn <- self$last_turn()
-          is_text <- map_lgl(last_turn@contents, S7_inherits, ContentText)
-          formatted <- map_chr(last_turn@contents[!is_text], format)
+          is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+          formatted <- map_chr(turn@contents[!is_text], format)
           cat_line(formatted, prefix = "< ")
         }
         # When `echo="output"`, tool calls are emitted in `invoke_tools()`
@@ -738,15 +715,12 @@ Chat <- R6::R6Class(
       )
       emit <- emitter(echo)
       any_text <- FALSE
+      turn <- NULL
+      acc <- TurnAccumulator$new(self, private, controller)
 
       if (stream) {
-        # Eagerly add partial turn so content survives cancellation/errors
-        self$add_turn(user_turn, AssistantPartialTurn(), log_tokens = FALSE)
-        turn_idx <- length(private$.turns)
-        on.exit(
-          finalize_partial_turn(private, turn_idx, controller),
-          add = TRUE
-        )
+        acc$begin_turn(user_turn)
+        on.exit(acc$finalize_turn(), add = TRUE)
 
         result <- NULL
         for (chunk in await_each(response)) {
@@ -755,35 +729,18 @@ Chat <- R6::R6Class(
             text <- content_text(content)
             emit(text)
             yield(if (yield_as_content) content else text)
-            update_turn_contents(private, turn_idx, content)
+            acc$update_turn(content)
             any_text <- TRUE
           }
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
 
-        cancelled <- controller$cancelled
-        if (!cancelled) {
-          # Replace partial turn with full turn (tokens, cost, tool calls)
-          turn <- value_turn(
-            private$provider,
-            result,
-            has_type = !is.null(type)
-          )
-          turn <- match_tools(turn, private$tools)
-          private$.turns[[turn_idx]] <- turn
-          log_turn(private$provider, turn)
-        }
+        turn <- acc$complete_turn(result, type = type)
       } else {
         result <- await(response)
+        turn <- acc$add_turn(user_turn, result, type = type)
 
-        turn <- value_turn(
-          private$provider,
-          resp_body_json(result),
-          has_type = !is.null(type)
-        )
-        turn@duration <- resp_timing(result)[["total"]] %||% NA_real_
-        turn <- match_tools(turn, private$tools)
         text <- turn@text
         if (!is.null(text)) {
           emit(text)
@@ -794,11 +751,9 @@ Chat <- R6::R6Class(
           }
           any_text <- TRUE
         }
-
-        self$add_turn(user_turn, turn)
       }
 
-      if (!is_partial_turn(self$last_turn())) {
+      if (!is.null(turn) && !is_partial_turn(turn)) {
         # Ensure turns always end in a newline
         if (any_text) {
           emit("\n")
@@ -810,9 +765,8 @@ Chat <- R6::R6Class(
         }
 
         if (echo == "all") {
-          last_turn <- self$last_turn()
-          is_text <- map_lgl(last_turn@contents, S7_inherits, ContentText)
-          formatted <- map_chr(last_turn@contents[!is_text], format)
+          is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+          formatted <- map_chr(turn@contents[!is_text], format)
           cat_line(formatted, prefix = "< ")
         }
         # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
@@ -901,21 +855,89 @@ turn_cost <- function(tokens, cost, prefix, suffix = "") {
   out
 }
 
-update_turn_contents <- function(private, turn_idx, content) {
-  turn <- private$.turns[[turn_idx]]
-  turn@contents <- c(turn@contents, list(content))
-  private$.turns[[turn_idx]] <- turn
-}
+TurnAccumulator <- R6::R6Class(
+  "TurnAccumulator",
+  public = list(
+    initialize = function(chat, chat_private, controller) {
+      private$chat <- chat
+      private$chat_private <- chat_private
+      private$controller <- controller
+    },
 
-finalize_partial_turn <- function(private, turn_idx, controller = NULL) {
-  turn <- private$.turns[[turn_idx]]
-  if (!is_partial_turn(turn)) {
-    return(invisible())
-  }
-  turn@contents <- merge_content_text(turn@contents)
-  turn@reason <- controller$reason %||% "interrupted"
-  private$.turns[[turn_idx]] <- turn
-}
+    begin_turn = function(user_turn) {
+      private$chat$add_turn(
+        user_turn,
+        AssistantPartialTurn(),
+        log_tokens = FALSE
+      )
+      private$turn_idx <- length(private$chat_private$.turns)
+      invisible(self)
+    },
+
+    update_turn = function(content) {
+      idx <- private$turn_idx
+      chat_private <- private$chat_private
+      turn <- chat_private$.turns[[idx]]
+      turn@contents <- c(turn@contents, list(content))
+      chat_private$.turns[[idx]] <- turn
+      invisible(self)
+    },
+
+    complete_turn = function(result, type = NULL) {
+      if (private$controller$cancelled) {
+        return(invisible(self))
+      }
+      chat_private <- private$chat_private
+      turn <- value_turn(
+        chat_private$provider,
+        result,
+        has_type = !is.null(type)
+      )
+      turn <- match_tools(turn, chat_private$tools)
+      chat_private$.turns[[private$turn_idx]] <- turn
+      log_turn(chat_private$provider, turn)
+      turn
+    },
+
+    finalize_turn = function() {
+      idx <- private$turn_idx
+      if (is.null(idx)) {
+        return(invisible())
+      }
+      chat_private <- private$chat_private
+      turn <- chat_private$.turns[[idx]]
+      if (!is_partial_turn(turn)) {
+        return(invisible())
+      }
+      turn@contents <- merge_content_text(turn@contents)
+      turn@reason <- private$controller$reason %||% "interrupted"
+      chat_private$.turns[[idx]] <- turn
+    },
+
+    add_turn = function(user_turn, response, type = NULL) {
+      turn <- private$value_turn(response, type)
+      private$chat$add_turn(user_turn, turn)
+      turn
+    }
+  ),
+  private = list(
+    chat = NULL,
+    chat_private = NULL,
+    controller = NULL,
+    turn_idx = NULL,
+
+    value_turn = function(response, type) {
+      chat_private <- private$chat_private
+      turn <- value_turn(
+        chat_private$provider,
+        resp_body_json(response),
+        has_type = !is.null(type)
+      )
+      turn@duration <- resp_timing(response)[["total"]] %||% NA_real_
+      match_tools(turn, chat_private$tools)
+    }
+  )
+)
 
 merge_content_text <- function(contents) {
   if (length(contents) == 0) {

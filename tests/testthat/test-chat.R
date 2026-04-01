@@ -364,22 +364,21 @@ test_that("stream_controller() environment is locked", {
   expect_error(ctrl$typo <- TRUE)
 })
 
-test_that("finalize_partial_turn() merges adjacent ContentText", {
-  # Simulate what happens during incremental turn saving
-  private <- new.env(parent = emptyenv())
-  private$.turns <- list(
-    Turn("user", list(ContentText("hi"))),
-    AssistantPartialTurn(
-      contents = list(
-        ContentText("Hello "),
-        ContentText("world")
-      )
-    )
+test_that("finalize_turn() merges adjacent ContentText", {
+  chat <- chat_openai_test()
+  acc <- TurnAccumulator$new(
+    chat,
+    chat$.__enclos_env__$private,
+    stream_controller()
   )
 
-  finalize_partial_turn(private, 2)
-  turn <- private$.turns[[2]]
+  user_turn <- Turn("user", list(ContentText("hi")))
+  acc$begin_turn(user_turn)
+  acc$update_turn(ContentText("Hello "))
+  acc$update_turn(ContentText("world"))
+  acc$finalize_turn()
 
+  turn <- chat$last_turn()
   expect_s7_class(turn, AssistantPartialTurn)
   expect_length(turn@contents, 1)
   expect_equal(turn@text, "Hello world")
@@ -389,47 +388,60 @@ test_that("finalize_partial_turn() merges adjacent ContentText", {
   expect_true(is.na(turn@cost))
 })
 
-test_that("finalize_partial_turn() uses controller reason", {
-  private <- new.env(parent = emptyenv())
-  private$.turns <- list(
-    Turn("user", list(ContentText("hi"))),
-    AssistantPartialTurn(contents = list(ContentText("partial")))
-  )
-
+test_that("finalize_turn() uses controller reason", {
+  chat <- chat_openai_test()
   ctrl <- stream_controller()
   ctrl$cancel(reason = "timeout")
-  finalize_partial_turn(private, 2, controller = ctrl)
-  turn <- private$.turns[[2]]
+  acc <- TurnAccumulator$new(chat, chat$.__enclos_env__$private, ctrl)
 
+  user_turn <- Turn("user", list(ContentText("hi")))
+  acc$begin_turn(user_turn)
+  acc$update_turn(ContentText("partial"))
+  acc$finalize_turn()
+
+  turn <- chat$last_turn()
   expect_s7_class(turn, AssistantPartialTurn)
   expect_equal(turn@reason, "timeout")
 })
 
-test_that("finalize_partial_turn() is a no-op for complete turns", {
-  private <- new.env(parent = emptyenv())
-  private$.turns <- list(
-    Turn("user", list(ContentText("hi"))),
-    AssistantTurn(contents = list(ContentText("done")))
+test_that("finalize_turn() is a no-op for complete turns", {
+  chat <- chat_openai_test()
+  acc <- TurnAccumulator$new(
+    chat,
+    chat$.__enclos_env__$private,
+    stream_controller()
   )
 
-  finalize_partial_turn(private, 2)
-  turn <- private$.turns[[2]]
+  user_turn <- Turn("user", list(ContentText("hi")))
+  chat$add_turn(
+    user_turn,
+    AssistantTurn(contents = list(ContentText("done"))),
+    log_tokens = FALSE
+  )
+  # Manually set turn_idx so finalize_turn has something to check
+  acc$.__enclos_env__$private$turn_idx <- 2L
+
+  acc$finalize_turn()
+  turn <- chat$last_turn()
 
   expect_s7_class(turn, AssistantTurn)
   expect_false(S7_inherits(turn, AssistantPartialTurn))
 })
 
-test_that("update_turn_contents() appends content incrementally", {
-  private <- new.env(parent = emptyenv())
-  private$.turns <- list(
-    Turn("user", list(ContentText("hi"))),
-    AssistantTurn()
+test_that("update_turn() appends content incrementally", {
+  chat <- chat_openai_test()
+  acc <- TurnAccumulator$new(
+    chat,
+    chat$.__enclos_env__$private,
+    stream_controller()
   )
 
-  update_turn_contents(private, 2, ContentText("a"))
-  update_turn_contents(private, 2, ContentText("b"))
+  user_turn <- Turn("user", list(ContentText("hi")))
+  acc$begin_turn(user_turn)
+  acc$update_turn(ContentText("a"))
+  acc$update_turn(ContentText("b"))
 
-  turn <- private$.turns[[2]]
+  turn <- chat$last_turn()
   expect_length(turn@contents, 2)
   expect_equal(turn@contents[[1]]@text, "a")
   expect_equal(turn@contents[[2]]@text, "b")
