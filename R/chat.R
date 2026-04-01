@@ -683,9 +683,7 @@ Chat <- R6::R6Class(
         }
 
         if (echo == "all") {
-          is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
-          formatted <- map_chr(turn@contents[!is_text], format)
-          cat_line(formatted, prefix = "< ")
+          echo_non_text_contents(turn)
         }
         # When `echo="output"`, tool calls are emitted in `invoke_tools()`
       }
@@ -765,9 +763,7 @@ Chat <- R6::R6Class(
         }
 
         if (echo == "all") {
-          is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
-          formatted <- map_chr(turn@contents[!is_text], format)
-          cat_line(formatted, prefix = "< ")
+          echo_non_text_contents(turn)
         }
         # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
       }
@@ -938,6 +934,12 @@ TurnAccumulator <- R6::R6Class(
     }
   )
 )
+
+echo_non_text_contents <- function(turn) {
+  is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+  formatted <- map_chr(turn@contents[!is_text], format)
+  cat_line(formatted, prefix = "< ")
+}
 
 merge_content_text <- function(contents) {
   reduce(contents, .init = list(), function(acc, item) {
