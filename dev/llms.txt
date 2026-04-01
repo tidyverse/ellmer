@@ -358,6 +358,8 @@ data.
   [`interpolate_file()`](https://ellmer.tidyverse.org/dev/reference/interpolate.md)
   [`interpolate_package()`](https://ellmer.tidyverse.org/dev/reference/interpolate.md)
   : Helpers for interpolating data into prompts
+- [`stream_controller()`](https://ellmer.tidyverse.org/dev/reference/stream_controller.md)
+  : Create a stream controller
 
 ## Parallel and batch chat
 
@@ -404,6 +406,7 @@ provider.
   [`UserTurn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)
   [`SystemTurn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)
   [`AssistantTurn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)
+  [`AssistantPartialTurn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)
   : A user, assistant, or system turn
 - [`Content()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   [`ContentText()`](https://ellmer.tidyverse.org/dev/reference/Content.md)

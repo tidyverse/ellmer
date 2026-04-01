@@ -262,7 +262,8 @@ available when the API returns the assistant's response.</p><div class="section"
 <p></p><div class="arguments"><dl><dt><code>include</code></dt>
 <dd><p>The default, <code>"all"</code>, gives the total cumulative cost
 of this chat. Alternatively, use <code>"last"</code> to get the cost of just the
-most recent turn.</p></dd>
+most recent turn. Incomplete turns (from cancelled or interrupted
+streams) are excluded because they lack token data.</p></dd>
 
 
 </dl><p></p></div>
@@ -417,7 +418,7 @@ Returns A <a href="https://coro.r-lib.org/articles/generator.html#iterating" cla
 that yields strings. While iterating, the generator will block while
 waiting for more content from the chatbot.</p><div class="section">
 <h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">stream</span><span class="op">(</span><span class="va">...</span>, stream <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="st">"content"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">stream</span><span class="op">(</span><span class="va">...</span>, stream <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="st">"content"</span><span class="op">)</span>, controller <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -432,6 +433,11 @@ rich content types. When <code>stream = "content"</code>, <code>stream()</code> 
 <a href="Content.html">Content</a> objects.</p></dd>
 
 
+<dt><code>controller</code></dt>
+<dd><p>An optional <code><a href="stream_controller.html">stream_controller()</a></code> used to cancel the
+stream from outside the iteration loop.</p></dd>
+
+
 </dl><p></p></div>
 </div>
 
@@ -444,7 +450,8 @@ yields string promises.</p><div class="section">
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span></span>
 <span>  <span class="va">...</span>,</span>
 <span>  tool_mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"concurrent"</span>, <span class="st">"sequential"</span><span class="op">)</span>,</span>
-<span>  stream <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="st">"content"</span><span class="op">)</span></span>
+<span>  stream <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="st">"content"</span><span class="op">)</span>,</span>
+<span>  controller <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -466,6 +473,11 @@ best suited for automated scripts or non-interactive applications.</p></dd>
 <dd><p>Whether the stream should yield only <code>"text"</code> or ellmer's
 rich content types. When <code>stream = "content"</code>, <code>stream()</code> yields
 <a href="Content.html">Content</a> objects.</p></dd>
+
+
+<dt><code>controller</code></dt>
+<dd><p>An optional <code><a href="stream_controller.html">stream_controller()</a></code> used to cancel the
+stream from outside the iteration loop.</p></dd>
 
 
 </dl><p></p></div>

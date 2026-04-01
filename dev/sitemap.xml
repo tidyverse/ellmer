@@ -57,6 +57,7 @@
 <url><loc>https://ellmer.tidyverse.org/dev/reference/openai_tool_web_search.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/parallel_chat.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/params.html</loc></url>
+<url><loc>https://ellmer.tidyverse.org/dev/reference/stream_controller.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/token_usage.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/tool.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/dev/reference/tool_annotations.html</loc></url>

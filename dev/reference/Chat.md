@@ -232,7 +232,8 @@ The cost of this chat
 
   The default, `"all"`, gives the total cumulative cost of this chat.
   Alternatively, use `"last"` to get the cost of just the most recent
-  turn.
+  turn. Incomplete turns (from cancelled or interrupted streams) are
+  excluded because they lack token data.
 
 ------------------------------------------------------------------------
 
@@ -391,7 +392,7 @@ waiting for more content from the chatbot.
 
 #### Usage
 
-    Chat$stream(..., stream = c("text", "content"))
+    Chat$stream(..., stream = c("text", "content"), controller = NULL)
 
 #### Arguments
 
@@ -405,6 +406,12 @@ waiting for more content from the chatbot.
   types. When `stream = "content"`, `stream()` yields
   [Content](https://ellmer.tidyverse.org/dev/reference/Content.md)
   objects.
+
+- `controller`:
+
+  An optional
+  [`stream_controller()`](https://ellmer.tidyverse.org/dev/reference/stream_controller.md)
+  used to cancel the stream from outside the iteration loop.
 
 ------------------------------------------------------------------------
 
@@ -420,7 +427,8 @@ yields string promises.
     Chat$stream_async(
       ...,
       tool_mode = c("concurrent", "sequential"),
-      stream = c("text", "content")
+      stream = c("text", "content"),
+      controller = NULL
     )
 
 #### Arguments
@@ -443,6 +451,12 @@ yields string promises.
   types. When `stream = "content"`, `stream()` yields
   [Content](https://ellmer.tidyverse.org/dev/reference/Content.md)
   objects.
+
+- `controller`:
+
+  An optional
+  [`stream_controller()`](https://ellmer.tidyverse.org/dev/reference/stream_controller.md)
+  used to cancel the stream from outside the iteration loop.
 
 ------------------------------------------------------------------------
 

@@ -2,6 +2,16 @@
 
 ## ellmer (development version)
 
+- New
+  [`stream_controller()`](https://ellmer.tidyverse.org/dev/reference/stream_controller.md)
+  enables programmatic cancellation of streaming chat responses,
+  e.g. from a Shiny “Cancel” button with `chat$stream()` or
+  `chat$stream_async()`. Streaming turns are now saved incrementally so
+  that partial responses survive cancellation, interrupts (Ctrl-C), and
+  errors. Incomplete turns are recorded as `AssistantPartialTurn`
+  objects, display as interrupted in the chat history, and are included
+  in subsequent model context like complete turns
+  ([\#643](https://github.com/tidyverse/ellmer/issues/643)).
 - `default_google_credentials()` no longer skips application default
   credentials (e.g. `GOOGLE_APPLICATION_CREDENTIALS`) in interactive
   sessions, instead falling through to the OAuth browser flow only when

@@ -51,7 +51,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
-<ul><li>
+<ul><li>New <code><a href="../reference/stream_controller.html">stream_controller()</a></code> enables programmatic cancellation of streaming chat responses, e.g. from a Shiny “Cancel” button with <code>chat$stream()</code> or <code>chat$stream_async()</code>. Streaming turns are now saved incrementally so that partial responses survive cancellation, interrupts (Ctrl-C), and errors. Incomplete turns are recorded as <code>AssistantPartialTurn</code> objects, display as interrupted in the chat history, and are included in subsequent model context like complete turns (<a href="https://github.com/tidyverse/ellmer/issues/643" class="external-link">#643</a>).</li>
+<li>
 <code>default_google_credentials()</code> no longer skips application default credentials (e.g. <code>GOOGLE_APPLICATION_CREDENTIALS</code>) in interactive sessions, instead falling through to the OAuth browser flow only when no gargle token is available (<a href="https://github.com/stefanlinner" class="external-link">@stefanlinner</a>, <a href="https://github.com/tidyverse/ellmer/issues/922" class="external-link">#922</a>).</li>
 <li>
 <code><a href="../reference/chat_databricks.html">chat_databricks()</a></code> (and other <code><a href="../reference/chat_openai_compatible.html">chat_openai_compatible()</a></code> providers) no longer fail with HTTP 400 when the conversation history contains empty <code>ContentText("")</code> objects, which can occur during tool calling (<a href="https://github.com/JamesHWade" class="external-link">@JamesHWade</a>, <a href="https://github.com/tidyverse/ellmer/issues/932" class="external-link">#932</a>).</li>

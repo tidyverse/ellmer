@@ -35,6 +35,15 @@ AssistantTurn(
   cost = NA_real_,
   duration = NA_real_
 )
+
+AssistantPartialTurn(
+  contents = list(),
+  json = list(),
+  tokens = c(NA_real_, NA_real_, NA_real_),
+  cost = NA_real_,
+  duration = NA_real_,
+  reason = "interrupted"
+)
 ```
 
 ## Arguments
@@ -70,11 +79,18 @@ AssistantTurn(
 
   The duration of the request in seconds.
 
+- reason:
+
+  A character string describing why the turn was interrupted. Defaults
+  to `"interrupted"`.
+
 ## Value
 
 An S7 `Turn` object
 
 An S7 `AssistantTurn` object
+
+An S7 `AssistantPartialTurn` object
 
 ## Examples
 
