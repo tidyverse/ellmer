@@ -340,9 +340,9 @@ test_that("as_controller() accepts a valid stream_controller() or NULL", {
   ctrl <- stream_controller()
   expect_identical(as_controller(ctrl), ctrl)
 
-  noop <- as_controller(NULL)
-  expect_false(noop$cancelled)
-  expect_null(noop$reason)
+  default <- as_controller(NULL)
+  expect_false(default$cancelled)
+  expect_null(default$reason)
 })
 
 test_that("stream_controller() rejects invalid cancelled values", {

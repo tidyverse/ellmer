@@ -206,7 +206,8 @@ Chat <- R6::R6Class(
       coro::collect(private$chat_impl(
         turn,
         stream = echo != "none",
-        echo = echo
+        echo = echo,
+        controller = stream_controller()
       ))
 
       text <- ellmer_output(self$last_turn()@text)
@@ -239,7 +240,8 @@ Chat <- R6::R6Class(
         turn,
         type = type,
         stream = echo != "none",
-        echo = echo
+        echo = echo,
+        controller = stream_controller()
       ))
 
       turn <- self$last_turn()
@@ -272,7 +274,8 @@ Chat <- R6::R6Class(
         turn,
         type = type,
         stream = echo != "none",
-        echo = echo
+        echo = echo,
+        controller = stream_controller()
       ))
 
       promises::then(done, function(dummy) {
@@ -308,7 +311,8 @@ Chat <- R6::R6Class(
           turn,
           stream = FALSE,
           echo = "none",
-          tool_mode = tool_mode
+          tool_mode = tool_mode,
+          controller = stream_controller()
         )
       )
       promises::then(done, function(dummy) {
@@ -937,137 +941,6 @@ merge_content_text <- function(contents) {
 
   merged
 }
-
-#' Create a stream controller
-#'
-#' @description
-#' Creates a controller that can cancel an in-progress stream. Pass it to
-#' [Chat]'s `$stream()` or `$stream_async()` via the `controller` argument,
-#' then call `$cancel()` from anywhere (e.g. a Shiny observer) to stop the
-#' stream after the next chunk arrives.
-#'
-#' The same controller can be reused across multiple streams. Call
-#' `$reset()` to clear the cancelled state, or pass it directly to a new
-#' `$stream()` call — it will be reset automatically.
-#'
-#' @section Async cancellation in Shiny:
-#'
-#' In a Shiny app, use an [ExtendedTask][shiny::ExtendedTask] for
-#' non-blocking chat and a `stream_controller()` to wire up a cancel
-#' button:
-#'
-#' ```r
-#' controller <- stream_controller()
-#'
-#' chat_task <- ExtendedTask$new(function(user_query, controller = NULL) {
-#'   chat <- chat_openai(model = "gpt-4.1-nano")
-#'   stream <- chat$stream_async(user_query, controller = controller)
-#'   shinychat::markdown_stream("response", stream)
-#' })
-#'
-#' observeEvent(input$ask, {
-#'   controller <<- stream_controller()
-#'   chat_task$invoke(input$query, controller = controller)
-#' })
-#'
-#' observeEvent(input$cancel, {
-#'   controller$cancel()
-#' })
-#' ```
-#'
-#' @return An `ellmer_stream_controller` object with the following
-#'   elements:
-#'
-#'   * `$cancel(reason = "cancelled")`: Cancel the stream. The `reason`
-#'     string is stored on the controller and used as the
-#'     [AssistantPartialTurn][Turn]'s `reason` property.
-#'   * `$reset()`: Clear the cancelled state and reason.
-#'   * `$cancelled`: A logical flag indicating whether the controller
-#'     has been cancelled.
-#'   * `$reason`: The cancellation reason string, or `NULL` if not
-#'     cancelled.
-#'
-#' @examplesIf rlang::is_interactive()
-#' chat <- chat_openai(model = "gpt-5.4-nano")
-#'
-#' ctrl <- stream_controller()
-#' stream <- chat$stream("Write a short story.", controller = ctrl)
-#'
-#' i <- 0
-#' coro::loop(for (chunk in stream) {
-#'   i <- i + 1
-#'   if (i > 10) ctrl$cancel()
-#' })
-#'
-#' chat
-#'
-#' @export
-stream_controller <- function() {
-  self <- new.env(parent = emptyenv())
-
-  cancelled <- FALSE
-  reason <- NULL
-
-  error_msg <- "Use the {.code $cancel()} method to cancel the stream or {.code $reset()} to reset the stream controller."
-
-  makeActiveBinding("cancelled", env = self, function(value) {
-    if (missing(value)) {
-      return(cancelled)
-    }
-    cli::cli_abort(error_msg)
-  })
-
-  makeActiveBinding("reason", env = self, function(value) {
-    if (missing(value)) {
-      return(reason)
-    }
-    cli::cli_abort(error_msg)
-  })
-
-  self$cancel <- function(reason = "cancelled") {
-    check_string(reason)
-    reason <<- reason
-    cancelled <<- TRUE
-  }
-  self$reset <- function() {
-    cancelled <<- FALSE
-    reason <<- NULL
-  }
-  class(self) <- "ellmer_stream_controller"
-  lockEnvironment(self)
-  self
-}
-
-#' @export
-print.ellmer_stream_controller <- function(x, ...) {
-  status <- if (x$cancelled) {
-    sprintf('cancelled="%s"', x$reason)
-  } else {
-    "active"
-  }
-  cat("<ellmer_stream_controller ", status, ">\n", sep = "")
-  invisible(x)
-}
-
-as_controller <- function(controller, reset = TRUE, call = caller_env()) {
-  if (is.null(controller)) {
-    return(stream_controller())
-  }
-
-  if (!inherits(controller, "ellmer_stream_controller")) {
-    cli::cli_abort(
-      "{.arg controller} must be an {.cls ellmer_stream_controller} object created by {.fn stream_controller}.",
-      call = call
-    )
-  }
-
-  if (reset && controller$cancelled) {
-    controller$reset()
-  }
-
-  controller
-}
-
 method(contents_markdown, new_S3_class("Chat")) <- function(
   content,
   heading_level = 2
