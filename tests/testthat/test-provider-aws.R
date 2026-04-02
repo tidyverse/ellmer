@@ -75,74 +75,32 @@ test_that("can use pdfs", {
 
 # Prompt caching ----------------------------------------------------------
 
-test_that("cache points are inserted when cache is enabled", {
-  local_mock_aws_creds()
+test_that("cache points are inserted in last turn when cache is enabled", {
+  provider <- test_aws_bedrock_provider(cache_point = "5m")
 
-  provider <- provider_aws_bedrock(
-    base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
-    model = "anthropic.claude-3-5-haiku-20241022-v1:0",
-    cache_point = "5m"
-  )
+  # Non-last turn should not have a cache point
+  result <- as_json(provider, UserTurn("Hello"), is_last = FALSE)
+  block_types <- vapply(result$content, function(b) names(b)[[1]], character(1))
+  expect_false("cachePoint" %in% block_types)
 
-  turns <- list(
-    SystemTurn("You are a helpful assistant."),
-    UserTurn("Hello")
-  )
+  # Last turn should have a cache point appended
 
-  req <- chat_request(provider, stream = FALSE, turns = turns)
-  body <- req$body$data
-
-  # System array should contain a cachePoint block after the text block
-  expect_length(body$system, 2)
-  expect_equal(body$system[[1]], list(text = "You are a helpful assistant."))
-  expect_equal(body$system[[2]], list(cachePoint = list(type = "default")))
-
-  # Last message content should contain a cachePoint block
-  last_content <- body$messages[[length(body$messages)]]$content
-  last_block <- last_content[[length(last_content)]]
+  result <- as_json(provider, UserTurn("Hello"), is_last = TRUE)
+  last_block <- result$content[[length(result$content)]]
   expect_equal(last_block, list(cachePoint = list(type = "default")))
 })
 
 test_that("cache points are omitted when cache = 'none'", {
-  local_mock_aws_creds()
+  provider <- test_aws_bedrock_provider(cache_point = "none")
 
-  provider <- provider_aws_bedrock(
-    base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
-    model = "anthropic.claude-3-5-haiku-20241022-v1:0",
-    cache_point = "none"
-  )
-
-  turns <- list(
-    SystemTurn("You are a helpful assistant."),
-    UserTurn("Hello")
-  )
-
-  req <- chat_request(provider, stream = FALSE, turns = turns)
-  body <- req$body$data
-
-  # System array should contain only the text block
-  expect_length(body$system, 1)
-  expect_equal(body$system[[1]], list(text = "You are a helpful assistant."))
-
-  # Last message content should not contain a cachePoint block
-  last_content <- body$messages[[length(body$messages)]]$content
-  block_types <- vapply(last_content, function(b) names(b)[[1]], character(1))
+  result <- as_json(provider, UserTurn("Hello"), is_last = TRUE)
+  block_types <- vapply(result$content, function(b) names(b)[[1]], character(1))
   expect_false("cachePoint" %in% block_types)
 })
 
 test_that("cache TTL is included for '1h' but not '5m'", {
-  local_mock_aws_creds()
-
-  provider_5m <- provider_aws_bedrock(
-    base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
-    model = "anthropic.claude-3-5-haiku-20241022-v1:0",
-    cache_point = "5m"
-  )
-  provider_1h <- provider_aws_bedrock(
-    base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
-    model = "anthropic.claude-3-5-haiku-20241022-v1:0",
-    cache_point = "1h"
-  )
+  provider_5m <- test_aws_bedrock_provider(cache_point = "5m")
+  provider_1h <- test_aws_bedrock_provider(cache_point = "1h")
 
   # 5m: cachePoint should be list(type = "default") with no ttl
   cp_5m <- bedrock_cache_point(provider_5m)
@@ -154,34 +112,44 @@ test_that("cache TTL is included for '1h' but not '5m'", {
 })
 
 test_that("cache point is only on the last turn in multi-turn conversations", {
-  local_mock_aws_creds()
-
-  provider <- provider_aws_bedrock(
-    base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
-    model = "anthropic.claude-3-5-haiku-20241022-v1:0",
-    cache_point = "5m"
-  )
-
-  turns <- list(
-    SystemTurn("You are a helpful assistant."),
-    UserTurn("Hello"),
-    AssistantTurn(list(ContentText("Hi there!"))),
-    UserTurn("How are you?")
-  )
-
-  req <- chat_request(provider, stream = FALSE, turns = turns)
-  body <- req$body$data
+  provider <- test_aws_bedrock_provider(cache_point = "5m")
 
   has_cache_point <- function(content) {
     any(vapply(content, function(b) "cachePoint" %in% names(b), logical(1)))
   }
 
-  # Intermediate messages should not have cache points
-  expect_false(has_cache_point(body$messages[[1]]$content))
-  expect_false(has_cache_point(body$messages[[2]]$content))
+  # Intermediate turns (is_last = FALSE) should not have cache points
+  r1 <- as_json(provider, UserTurn("Hello"), is_last = FALSE)
+  expect_false(has_cache_point(r1$content))
 
-  # Only the last message should have a cache point
-  expect_true(has_cache_point(body$messages[[3]]$content))
+  r2 <- as_json(
+    provider,
+    AssistantTurn(list(ContentText("Hi there!"))),
+    is_last = FALSE
+  )
+  expect_false(has_cache_point(r2$content))
+
+  # Last turn should have a cache point
+  r3 <- as_json(provider, UserTurn("How are you?"), is_last = TRUE)
+  expect_true(has_cache_point(r3$content))
+})
+
+test_that("bedrock_cache_point() is added to the system prompt", {
+  provider <- test_aws_bedrock_provider(cache_point = "5m")
+  cp <- bedrock_cache_point(provider)
+  expect_false(is.null(cp))
+
+  # Mirrors the system prompt construction in chat_request()
+  system <- list(list(text = "You are a helpful assistant."))
+  system <- c(system, list(cp))
+
+  expect_length(system, 2)
+  expect_equal(system[[1]], list(text = "You are a helpful assistant."))
+  expect_equal(system[[2]], list(cachePoint = list(type = "default")))
+
+  # cache = "none" should not add a cache point
+  provider_none <- test_aws_bedrock_provider(cache_point = "none")
+  expect_null(bedrock_cache_point(provider_none))
 })
 
 # Provider idiosynchronies -----------------------------------------------

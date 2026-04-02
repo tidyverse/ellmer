@@ -1,14 +1,14 @@
-local_mock_aws_creds <- function(env = caller_env()) {
-  local_mocked_bindings(
-    locate_aws_credentials = function(profile) {
-      list(
-        access_key_id = "test-key",
-        secret_access_key = "test-secret",
-        session_token = "test-token",
-        region = "us-east-1",
-        expiration = Sys.time() + 3600
-      )
-    },
-    .env = env
+test_aws_bedrock_provider <- function(cache_point = "5m") {
+  ProviderAWSBedrock(
+    name = "ProviderAWSBedrock",
+    base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
+    model = "anthropic.claude-3-5-haiku-20241022-v1:0",
+    profile = NULL,
+    region = "us-east-1",
+    cache = list(),
+    cache_point = cache_point,
+    params = list(),
+    extra_args = list(),
+    extra_headers = character()
   )
 }
