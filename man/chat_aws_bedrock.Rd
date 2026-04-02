@@ -10,7 +10,7 @@ chat_aws_bedrock(
   base_url = NULL,
   model = NULL,
   profile = NULL,
-  cache = c("5m", "1h", "none"),
+  cache = c("auto", "5m", "1h", "none"),
   params = NULL,
   api_args = list(),
   api_headers = character(),
@@ -38,8 +38,10 @@ you'll need to use the inference profile ID, e.g.
 
 \item{profile}{AWS profile to use.}
 
-\item{cache}{How long to cache inputs? Defaults to "5m" (five minutes).
-Set to "none" to disable caching or "1h" to cache for one hour.
+\item{cache}{How long to cache inputs? The default, \code{"auto"}, enables
+caching with a 5-minute TTL for models known to support it (Anthropic
+Claude and Amazon Nova) and disables caching for all other models.
+Set to \code{"5m"} or \code{"1h"} to force caching on, or \code{"none"} to disable it.
 
 See details below.}
 
@@ -91,13 +93,15 @@ org uses AWS SSO, you'll need to run \verb{aws sso login} at the terminal.
 
 Bedrock supports
 \href{https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html}{prompt caching}
-via cache checkpoints. By default, ellmer places cache checkpoints on
-the system prompt and the last turn, so that the conversation
-history is cached across turns.
+via cache checkpoints. When caching is enabled, ellmer places cache
+checkpoints on the system prompt and the last turn, so that the
+conversation history is cached across turns.
 
-Cache duration can be set to \code{"5m"} (the default) or \code{"1h"}. Note that
-individual models may have minimum input token thresholds before caching
-takes effect.
+By default (\code{cache = "auto"}), caching is enabled for models known to
+support it (Anthropic Claude and Amazon Nova) and disabled for all other
+models. You can also set \code{cache} to \code{"5m"} or \code{"1h"} to force a specific
+TTL, or \code{"none"} to disable caching entirely. Note that individual models
+may have minimum input token thresholds before caching takes effect.
 
 Note that \code{\link[=token_usage]{token_usage()}} does not currently reflect the cost of writing
 to the cache, which is priced at a premium over regular input tokens.

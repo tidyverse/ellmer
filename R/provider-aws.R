@@ -23,21 +23,25 @@ NULL
 #'
 #' Bedrock supports
 #' [prompt caching](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html)
-#' via cache checkpoints. By default, ellmer places cache checkpoints on
-#' the system prompt and the last turn, so that the conversation
-#' history is cached across turns.
+#' via cache checkpoints. When caching is enabled, ellmer places cache
+#' checkpoints on the system prompt and the last turn, so that the
+#' conversation history is cached across turns.
 #'
-#' Cache duration can be set to `"5m"` (the default) or `"1h"`. Note that
-#' individual models may have minimum input token thresholds before caching
-#' takes effect.
+#' By default (`cache = "auto"`), caching is enabled for models known to
+#' support it (Anthropic Claude and Amazon Nova) and disabled for all other
+#' models. You can also set `cache` to `"5m"` or `"1h"` to force a specific
+#' TTL, or `"none"` to disable caching entirely. Note that individual models
+#' may have minimum input token thresholds before caching takes effect.
 #'
 #' Note that [token_usage()] does not currently reflect the cost of writing
 #' to the cache, which is priced at a premium over regular input tokens.
 #' Cache read savings are reported correctly.
 #'
 #' @param profile AWS profile to use.
-#' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
-#'   Set to "none" to disable caching or "1h" to cache for one hour.
+#' @param cache How long to cache inputs? The default, `"auto"`, enables
+#'   caching with a 5-minute TTL for models known to support it (Anthropic
+#'   Claude and Amazon Nova) and disables caching for all other models.
+#'   Set to `"5m"` or `"1h"` to force caching on, or `"none"` to disable it.
 #'
 #'   See details below.
 #' @param model `r param_model("anthropic.claude-sonnet-4-5-20250929-v1:0", "models_aws_bedrock")`.
@@ -76,7 +80,7 @@ chat_aws_bedrock <- function(
   base_url = NULL,
   model = NULL,
   profile = NULL,
-  cache = c("5m", "1h", "none"),
+  cache = c("auto", "5m", "1h", "none"),
   params = NULL,
   api_args = list(),
   api_headers = character(),
@@ -87,7 +91,6 @@ chat_aws_bedrock <- function(
   base_url <- base_url %||%
     \(x) sprintf("https://bedrock-runtime.%s.amazonaws.com", x)
   echo <- check_echo(echo)
-  cache <- arg_match(cache)
 
   params <- params %||% params()
 
@@ -160,6 +163,8 @@ provider_aws_bedrock <- function(
   }
 
   model <- set_default(model, "anthropic.claude-sonnet-4-5-20250929-v1:0")
+
+  cache_point <- as_bedrock_cache_point(cache_point, model)
 
   ProviderAWSBedrock(
     name = "AWS/Bedrock",
@@ -542,6 +547,19 @@ method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(
 }
 
 # Helpers ----------------------------------------------------------------
+
+as_bedrock_cache_point <- function(cache_point, model) {
+  cache_point <- arg_match(
+    cache_point,
+    values = c("auto", "5m", "1h", "none")
+  )
+  if (cache_point != "auto") {
+    return(cache_point)
+  }
+  supports_caching <-
+    grepl("(^|\\.)anthropic\\.", model) || grepl("(^|\\.)amazon\\.nova", model)
+  if (supports_caching) "5m" else "none"
+}
 
 bedrock_cache_point <- function(provider) {
   if (provider@cache_point == "none") {

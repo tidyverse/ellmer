@@ -83,6 +83,38 @@ block_types <- function(content) {
   vapply(content, function(b) names(b)[[1]], character(1))
 }
 
+test_that("as_bedrock_cache_point() resolves 'auto' for known models", {
+  # Anthropic models (direct and cross-region)
+  expect_equal(
+    as_bedrock_cache_point("auto", "anthropic.claude-3-5-haiku-20241022-v1:0"),
+    "5m"
+  )
+  expect_equal(
+    as_bedrock_cache_point("auto", "us.anthropic.claude-sonnet-4-5-20250929-v1:0"),
+    "5m"
+  )
+
+  # Amazon Nova models (direct and cross-region)
+  expect_equal(as_bedrock_cache_point("auto", "amazon.nova-pro-v1:0"), "5m")
+  expect_equal(as_bedrock_cache_point("auto", "us.amazon.nova-lite-v1:0"), "5m")
+
+  # Unsupported models
+  expect_equal(as_bedrock_cache_point("auto", "zai.glm-5"), "none")
+  expect_equal(
+    as_bedrock_cache_point("auto", "meta.llama3-1-8b-instruct-v1:0"),
+    "none"
+  )
+})
+
+test_that("as_bedrock_cache_point() passes through non-auto values", {
+  expect_equal(as_bedrock_cache_point("5m", "zai.glm-5"), "5m")
+  expect_equal(as_bedrock_cache_point("1h", "zai.glm-5"), "1h")
+  expect_equal(
+    as_bedrock_cache_point("none", "anthropic.claude-3-5-haiku-20241022-v1:0"),
+    "none"
+  )
+})
+
 test_that("cache points are inserted in last turn when cache is enabled", {
   provider <- test_aws_bedrock_provider(cache_point = "5m")
 
