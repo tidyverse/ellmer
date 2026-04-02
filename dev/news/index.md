@@ -2,6 +2,13 @@
 
 ## ellmer (development version)
 
+- Built-in tools (e.g.,
+  [`openai_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/openai_tool_web_search.md),
+  [`claude_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_search.md))
+  now include `description` and `annotations` properties, making their
+  metadata consistent with user-defined tools created by
+  [`tool()`](https://ellmer.tidyverse.org/dev/reference/tool.md)
+  ([\#942](https://github.com/tidyverse/ellmer/issues/942)).
 - New
   [`stream_controller()`](https://ellmer.tidyverse.org/dev/reference/stream_controller.md)
   enables programmatic cancellation of streaming chat responses,
