@@ -6,7 +6,8 @@ chat_perform <- function(
   mode = c("value", "stream", "async-stream", "async-value"),
   turns,
   tools = NULL,
-  type = NULL
+  type = NULL,
+  controller = NULL
 ) {
   mode <- arg_match(mode)
   stream <- mode %in% c("stream", "async-stream")
@@ -23,18 +24,25 @@ chat_perform <- function(
   switch(
     mode,
     "value" = req_perform(req),
-    "stream" = chat_perform_stream(provider, req),
+    "stream" = chat_perform_stream(provider, req, controller),
     "async-value" = req_perform_promise(req),
-    "async-stream" = chat_perform_async_stream(provider, req)
+    "async-stream" = chat_perform_async_stream(provider, req, controller)
   )
 }
 
 on_load(
-  chat_perform_stream <- coro::generator(function(provider, req) {
+  chat_perform_stream <- coro::generator(function(
+    provider,
+    req,
+    controller = NULL
+  ) {
     resp <- req_perform_connection(req)
     on.exit(close(resp))
 
     repeat {
+      if (!is.null(controller) && controller$cancelled) {
+        break
+      }
       event <- chat_resp_stream(provider, resp)
       data <- stream_parse(provider, event)
       if (is.null(data)) {
@@ -47,11 +55,18 @@ on_load(
 )
 
 on_load(
-  chat_perform_async_stream <- coro::async_generator(function(provider, req) {
+  chat_perform_async_stream <- coro::async_generator(function(
+    provider,
+    req,
+    controller = NULL
+  ) {
     resp <- req_perform_connection(req, blocking = FALSE)
     on.exit(close(resp))
 
     repeat {
+      if (!is.null(controller) && controller$cancelled) {
+        break
+      }
       event <- chat_resp_stream(provider, resp)
       if (is.null(event) && !resp_stream_is_complete(resp)) {
         fds <- resp$body$get_fdset()
