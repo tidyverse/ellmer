@@ -1,12 +1,12 @@
 test_that("can make simple batch request", {
-  chat <- chat_aws_bedrock("Be as terse as possible; no punctuation")
+  chat <- chat_aws_bedrock_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
   expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
-  chat <- chat_aws_bedrock("Be as terse as possible; no punctuation")
+  chat <- chat_aws_bedrock_test("Be as terse as possible; no punctuation")
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })
@@ -16,28 +16,25 @@ test_that("can list models", {
 })
 
 test_that("can set api args", {
-  chat <- chat_aws_bedrock(
-    api_args = list(inferenceConfig = list(maxTokens = 1)),
-    echo = FALSE
+  chat <- chat_aws_bedrock_test(
+    api_args = list(inferenceConfig = list(maxTokens = 1))
   )
   result <- chat$chat("Who are the reindeer?")
   expect_true(nchar(result) < 10)
 })
 
 test_that("api args overwrite params", {
-  chat <- chat_aws_bedrock(
+  chat <- chat_aws_bedrock_test(
     api_args = list(inferenceConfig = list(maxTokens = 1)),
-    params = params(max_tokens = 100),
-    echo = FALSE
+    params = params(max_tokens = 100)
   )
   result <- chat$chat("Who are the reindeer?")
   expect_true(nchar(result) < 10)
 })
 
 test_that("handles errors", {
-  chat <- chat_aws_bedrock(
-    api_args = list(inferenceConfig = list(temperature = "hot")),
-    echo = FALSE
+  chat <- chat_aws_bedrock_test(
+    api_args = list(inferenceConfig = list(temperature = "hot"))
   )
   expect_snapshot(error = TRUE, {
     chat$chat("What is 1 + 1?", echo = FALSE)
@@ -52,26 +49,26 @@ test_that("defaults are reported", {
 })
 
 test_that("supports tool calling", {
-  chat_fun <- chat_aws_bedrock
+  chat_fun <- chat_aws_bedrock_test
 
   test_tools_simple(chat_fun)
 })
 
 test_that("can extract data", {
-  chat_fun <- chat_aws_bedrock
+  chat_fun <- chat_aws_bedrock_test
 
   test_data_extraction(chat_fun)
 })
 
 test_that("can use images", {
-  chat_fun <- chat_aws_bedrock
+  chat_fun <- chat_aws_bedrock_test
 
   test_images_inline(chat_fun)
   test_images_remote_error(chat_fun)
 })
 
 test_that("can use pdfs", {
-  chat_fun <- chat_aws_bedrock
+  chat_fun <- chat_aws_bedrock_test
 
   test_pdf_local(chat_fun)
 })
@@ -189,7 +186,7 @@ test_that("cache TTL is included for '1h' but not '5m'", {
 # Provider idiosynchronies -----------------------------------------------
 
 test_that("continues to work after whitespace only outputs (#376)", {
-  chat <- chat_aws_bedrock()
+  chat <- chat_aws_bedrock_test()
   chat$chat("Respond with only two blank lines")
   expect_equal(
     chat$chat("What's 1+1? Just give me the number"),

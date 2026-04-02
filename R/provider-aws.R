@@ -127,6 +127,18 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
   df
 }
 
+chat_aws_bedrock_test <- function(
+  ...,
+  model = "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+  params = NULL,
+  echo = "none"
+) {
+  params <- params %||% params()
+  params$temperature <- params$temperature %||% 0
+
+  chat_aws_bedrock(model = model, params = params, ..., echo = echo)
+}
+
 provider_aws_bedrock <- function(
   base_url,
   model = "",
