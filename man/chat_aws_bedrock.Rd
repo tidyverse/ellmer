@@ -92,7 +92,7 @@ org uses AWS SSO, you'll need to run \verb{aws sso login} at the terminal.
 Bedrock supports
 \href{https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html}{prompt caching}
 via cache checkpoints. By default, ellmer places cache checkpoints on
-the system prompt and the last user turn, so that the conversation
+the system prompt and the last turn, so that the conversation
 history is cached across turns.
 
 Cache duration can be set to \code{"5m"} (the default) or \code{"1h"}. Note that
