@@ -19,7 +19,23 @@ NULL
 #' at <https://www.paws-r-sdk.com/#credentials>. In particular, if your
 #' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 #'
+#' ## Prompt caching
+#'
+#' Bedrock supports
+#' [prompt caching](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html)
+#' via cache checkpoints. By default, ellmer places cache checkpoints on
+#' the system prompt and the last user turn, so that the conversation
+#' history is cached across turns.
+#'
+#' Cache duration can be set to `"5m"` (the default) or `"1h"`. Note that
+#' individual models may have minimum input token thresholds before caching
+#' takes effect.
+#'
 #' @param profile AWS profile to use.
+#' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
+#'   Set to "none" to disable caching or "1h" to cache for one hour.
+#'
+#'   See details below.
 #' @param model `r param_model("anthropic.claude-sonnet-4-5-20250929-v1:0", "models_aws_bedrock")`.
 #'
 #'   While ellmer provides a default model, there's no guarantee that you'll
@@ -56,6 +72,7 @@ chat_aws_bedrock <- function(
   base_url = NULL,
   model = NULL,
   profile = NULL,
+  cache = c("5m", "1h", "none"),
   params = NULL,
   api_args = list(),
   api_headers = character(),
@@ -66,6 +83,7 @@ chat_aws_bedrock <- function(
   base_url <- base_url %||%
     \(x) sprintf("https://bedrock-runtime.%s.amazonaws.com", x)
   echo <- check_echo(echo)
+  cache <- arg_match(cache)
 
   params <- params %||% params()
 
@@ -73,6 +91,7 @@ chat_aws_bedrock <- function(
     base_url = base_url,
     model = model,
     profile = profile,
+    cache_point = cache,
     params = params,
     extra_args = api_args,
     extra_headers = api_headers
@@ -112,6 +131,7 @@ provider_aws_bedrock <- function(
   base_url,
   model = "",
   profile = NULL,
+  cache_point = "none",
   params = list(),
   extra_args = list(),
   extra_headers = character()
@@ -132,6 +152,7 @@ provider_aws_bedrock <- function(
     profile = profile,
     region = credentials$region,
     cache = cache,
+    cache_point = cache_point,
     params = params,
     extra_args = extra_args,
     extra_headers = extra_headers
@@ -144,7 +165,8 @@ ProviderAWSBedrock <- new_class(
   properties = list(
     profile = prop_string(allow_null = TRUE),
     region = prop_string(),
-    cache = class_list
+    cache = class_list,
+    cache_point = prop_string()
   )
 )
 
@@ -201,11 +223,18 @@ method(chat_request, ProviderAWSBedrock) <- function(
 
   if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
     system <- list(list(text = turns[[1]]@text))
+    cache_pt <- bedrock_cache_point(provider)
+    if (!is.null(cache_pt)) {
+      system <- c(system, list(cache_pt))
+    }
   } else {
     system <- NULL
   }
 
-  messages <- compact(as_json(provider, turns))
+  is_last <- seq_along(turns) == length(turns)
+  messages <- compact(map2(turns, is_last, function(turn, is_last) {
+    as_json(provider, turn, is_last = is_last)
+  }))
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
@@ -332,6 +361,7 @@ method(value_tokens, ProviderAWSBedrock) <- function(provider, json) {
   tokens(
     input = json$usage$inputTokens,
     output = json$usage$outputTokens,
+    cached_input = json$usage$cacheReadInputTokens
   )
 }
 
@@ -369,16 +399,26 @@ method(value_turn, ProviderAWSBedrock) <- function(
 # ellmer -> Bedrock -------------------------------------------------------------
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ContentBlock.html
-method(as_json, list(ProviderAWSBedrock, Turn)) <- function(provider, x, ...) {
+method(as_json, list(ProviderAWSBedrock, Turn)) <- function(
+  provider,
+  x,
+  ...,
+  is_last = FALSE
+) {
   if (is_system_turn(x)) {
-    # bedrock passes system prompt as separate arg
     NULL
   } else if (is_user_turn(x) || is_assistant_turn(x)) {
     x <- turn_contents_expand(x)
-    list(
-      role = x@role,
-      content = as_json(provider, x@contents, ...)
-    )
+    content <- as_json(provider, x@contents, ...)
+
+    if (is_last) {
+      cache_pt <- bedrock_cache_point(provider)
+      if (!is.null(cache_pt)) {
+        content <- c(content, list(cache_pt))
+      }
+    }
+
+    list(role = x@role, content = content)
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
@@ -490,6 +530,17 @@ method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(
 }
 
 # Helpers ----------------------------------------------------------------
+
+bedrock_cache_point <- function(provider) {
+  if (provider@cache_point == "none") {
+    return(NULL)
+  }
+  cp <- list(type = "default")
+  if (provider@cache_point != "5m") {
+    cp$ttl <- provider@cache_point
+  }
+  list(cachePoint = cp)
+}
 
 paws_credentials <- function(
   profile,

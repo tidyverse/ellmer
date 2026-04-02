@@ -76,6 +76,116 @@ test_that("can use pdfs", {
   test_pdf_local(chat_fun)
 })
 
+# Prompt caching ----------------------------------------------------------
+
+test_that("cache points are inserted when cache is enabled", {
+  local_mocked_bindings(
+    locate_aws_credentials = function(profile) {
+      list(
+        access_key_id = "test-key",
+        secret_key = "test-secret",
+        session_token = "test-token",
+        region = "us-east-1",
+        expiration = Sys.time() + 3600
+      )
+    }
+  )
+
+  provider <- provider_aws_bedrock(
+    base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
+    model = "anthropic.claude-3-5-haiku-20241022-v1:0",
+    cache_point = "5m"
+  )
+
+  turns <- list(
+    SystemTurn("You are a helpful assistant."),
+    UserTurn("Hello")
+  )
+
+  req <- chat_request(provider, stream = FALSE, turns = turns)
+  body <- req$body$data
+
+  # System array should contain a cachePoint block after the text block
+  expect_length(body$system, 2)
+  expect_equal(body$system[[1]], list(text = "You are a helpful assistant."))
+  expect_equal(body$system[[2]], list(cachePoint = list(type = "default")))
+
+  # Last message content should contain a cachePoint block
+  last_content <- body$messages[[length(body$messages)]]$content
+  last_block <- last_content[[length(last_content)]]
+  expect_equal(last_block, list(cachePoint = list(type = "default")))
+})
+
+test_that("cache points are omitted when cache = 'none'", {
+  local_mocked_bindings(
+    locate_aws_credentials = function(profile) {
+      list(
+        access_key_id = "test-key",
+        secret_key = "test-secret",
+        session_token = "test-token",
+        region = "us-east-1",
+        expiration = Sys.time() + 3600
+      )
+    }
+  )
+
+  provider <- provider_aws_bedrock(
+    base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
+    model = "anthropic.claude-3-5-haiku-20241022-v1:0",
+    cache_point = "none"
+  )
+
+  turns <- list(
+    SystemTurn("You are a helpful assistant."),
+    UserTurn("Hello")
+  )
+
+  req <- chat_request(provider, stream = FALSE, turns = turns)
+  body <- req$body$data
+
+  # System array should contain only the text block
+  expect_length(body$system, 1)
+  expect_equal(body$system[[1]], list(text = "You are a helpful assistant."))
+
+  # Last message content should not contain a cachePoint block
+  last_content <- body$messages[[length(body$messages)]]$content
+  block_types <- vapply(last_content, function(b) names(b)[[1]], character(1))
+  expect_false("cachePoint" %in% block_types)
+})
+
+test_that("cache TTL is included for '1h' but not '5m'", {
+  local_mocked_bindings(
+    locate_aws_credentials = function(profile) {
+      list(
+        access_key_id = "test-key",
+        secret_key = "test-secret",
+        session_token = "test-token",
+        region = "us-east-1",
+        expiration = Sys.time() + 3600
+      )
+    }
+  )
+
+  provider_5m <- provider_aws_bedrock(
+    base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
+    model = "anthropic.claude-3-5-haiku-20241022-v1:0",
+    cache_point = "5m"
+  )
+  provider_1h <- provider_aws_bedrock(
+    base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
+    model = "anthropic.claude-3-5-haiku-20241022-v1:0",
+    cache_point = "1h"
+  )
+
+  # 5m: cachePoint should be list(type = "default") with no ttl
+  cp_5m <- bedrock_cache_point(provider_5m)
+  expect_equal(cp_5m, list(cachePoint = list(type = "default")))
+
+  # 1h: cachePoint should include ttl = "1h"
+  cp_1h <- bedrock_cache_point(provider_1h)
+  expect_equal(cp_1h, list(cachePoint = list(type = "default", ttl = "1h")))
+})
+
 # Provider idiosynchronies -----------------------------------------------
 
 test_that("continues to work after whitespace only outputs (#376)", {
