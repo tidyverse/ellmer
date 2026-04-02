@@ -10,6 +10,7 @@ chat_aws_bedrock(
   base_url = NULL,
   model = NULL,
   profile = NULL,
+  cache = c("5m", "1h", "none"),
   params = NULL,
   api_args = list(),
   api_headers = character(),
@@ -36,6 +37,11 @@ you'll need to use the inference profile ID, e.g.
 \code{model="us.anthropic.claude-sonnet-4-5-20250929-v1:0"}.}
 
 \item{profile}{AWS profile to use.}
+
+\item{cache}{How long to cache inputs? Defaults to "5m" (five minutes).
+Set to "none" to disable caching or "1h" to cache for one hour.
+
+See details below.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
@@ -79,6 +85,19 @@ Authentication is handled through \{paws.common\}, so if authentication
 does not work for you automatically, you'll need to follow the advice
 at \url{https://www.paws-r-sdk.com/#credentials}. In particular, if your
 org uses AWS SSO, you'll need to run \verb{aws sso login} at the terminal.
+}
+
+\subsection{Prompt caching}{
+
+Bedrock supports
+\href{https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html}{prompt caching}
+via cache checkpoints. By default, ellmer places cache checkpoints on
+the system prompt and the last user turn, so that the conversation
+history is cached across turns.
+
+Cache duration can be set to \code{"5m"} (the default) or \code{"1h"}. Note that
+individual models may have minimum input token thresholds before caching
+takes effect.
 }
 }
 \examples{
