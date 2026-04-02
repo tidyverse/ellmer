@@ -90,7 +90,10 @@ test_that("as_bedrock_cache_point() resolves 'auto' for known models", {
     "5m"
   )
   expect_equal(
-    as_bedrock_cache_point("auto", "us.anthropic.claude-sonnet-4-5-20250929-v1:0"),
+    as_bedrock_cache_point(
+      "auto",
+      "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+    ),
     "5m"
   )
 
