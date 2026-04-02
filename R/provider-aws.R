@@ -238,11 +238,10 @@ method(chat_request, ProviderAWSBedrock) <- function(
   )
 
   if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
-    system <- list(list(text = turns[[1]]@text))
-    cache_pt <- bedrock_cache_point(provider)
-    if (!is.null(cache_pt)) {
-      system <- c(system, list(cache_pt))
-    }
+    system <- c(
+      list(list(text = turns[[1]]@text)),
+      bedrock_cache_point(provider)
+    )
   } else {
     system <- NULL
   }
@@ -428,10 +427,7 @@ method(as_json, list(ProviderAWSBedrock, Turn)) <- function(
     content <- as_json(provider, x@contents, ...)
 
     if (is_last) {
-      cache_pt <- bedrock_cache_point(provider)
-      if (!is.null(cache_pt)) {
-        content <- c(content, list(cache_pt))
-      }
+      content <- c(content, bedrock_cache_point(provider))
     }
 
     list(role = x@role, content = content)
@@ -549,13 +545,13 @@ method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(
 
 bedrock_cache_point <- function(provider) {
   if (provider@cache_point == "none") {
-    return(NULL)
+    return(list())
   }
   cp <- list(type = "default")
   if (provider@cache_point != "5m") {
     cp$ttl <- provider@cache_point
   }
-  list(cachePoint = cp)
+  list(list(cachePoint = cp))
 }
 
 paws_credentials <- function(

@@ -75,16 +75,22 @@ test_that("can use pdfs", {
 
 # Prompt caching ----------------------------------------------------------
 
+has_cache_point <- function(content) {
+  any(vapply(content, function(b) "cachePoint" %in% names(b), logical(1)))
+}
+
+block_types <- function(content) {
+  vapply(content, function(b) names(b)[[1]], character(1))
+}
+
 test_that("cache points are inserted in last turn when cache is enabled", {
   provider <- test_aws_bedrock_provider(cache_point = "5m")
 
   # Non-last turn should not have a cache point
   result <- as_json(provider, UserTurn("Hello"), is_last = FALSE)
-  block_types <- vapply(result$content, function(b) names(b)[[1]], character(1))
-  expect_false("cachePoint" %in% block_types)
+  expect_disjoint(block_types(result$content), "cachePoint")
 
   # Last turn should have a cache point appended
-
   result <- as_json(provider, UserTurn("Hello"), is_last = TRUE)
   last_block <- result$content[[length(result$content)]]
   expect_equal(last_block, list(cachePoint = list(type = "default")))
@@ -94,8 +100,7 @@ test_that("cache points are omitted when cache = 'none'", {
   provider <- test_aws_bedrock_provider(cache_point = "none")
 
   result <- as_json(provider, UserTurn("Hello"), is_last = TRUE)
-  block_types <- vapply(result$content, function(b) names(b)[[1]], character(1))
-  expect_false("cachePoint" %in% block_types)
+  expect_disjoint(block_types(result$content), "cachePoint")
 })
 
 test_that("cache TTL is included for '1h' but not '5m'", {
@@ -104,19 +109,18 @@ test_that("cache TTL is included for '1h' but not '5m'", {
 
   # 5m: cachePoint should be list(type = "default") with no ttl
   cp_5m <- bedrock_cache_point(provider_5m)
-  expect_equal(cp_5m, list(cachePoint = list(type = "default")))
+  expect_equal(cp_5m, list(list(cachePoint = list(type = "default"))))
 
   # 1h: cachePoint should include ttl = "1h"
   cp_1h <- bedrock_cache_point(provider_1h)
-  expect_equal(cp_1h, list(cachePoint = list(type = "default", ttl = "1h")))
+  expect_equal(
+    cp_1h,
+    list(list(cachePoint = list(type = "default", ttl = "1h")))
+  )
 })
 
 test_that("cache point is only on the last turn in multi-turn conversations", {
   provider <- test_aws_bedrock_provider(cache_point = "5m")
-
-  has_cache_point <- function(content) {
-    any(vapply(content, function(b) "cachePoint" %in% names(b), logical(1)))
-  }
 
   # Intermediate turns (is_last = FALSE) should not have cache points
   r1 <- as_json(provider, UserTurn("Hello"), is_last = FALSE)
@@ -137,11 +141,12 @@ test_that("cache point is only on the last turn in multi-turn conversations", {
 test_that("bedrock_cache_point() is added to the system prompt", {
   provider <- test_aws_bedrock_provider(cache_point = "5m")
   cp <- bedrock_cache_point(provider)
-  expect_false(is.null(cp))
 
   # Mirrors the system prompt construction in chat_request()
-  system <- list(list(text = "You are a helpful assistant."))
-  system <- c(system, list(cp))
+  system <- c(
+    list(list(text = "You are a helpful assistant.")),
+    cp
+  )
 
   expect_length(system, 2)
   expect_equal(system[[1]], list(text = "You are a helpful assistant."))
@@ -149,7 +154,7 @@ test_that("bedrock_cache_point() is added to the system prompt", {
 
   # cache = "none" should not add a cache point
   provider_none <- test_aws_bedrock_provider(cache_point = "none")
-  expect_null(bedrock_cache_point(provider_none))
+  expect_equal(bedrock_cache_point(provider_none), list())
 })
 
 # Provider idiosynchronies -----------------------------------------------
