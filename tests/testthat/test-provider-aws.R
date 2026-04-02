@@ -76,17 +76,7 @@ test_that("can use pdfs", {
 # Prompt caching ----------------------------------------------------------
 
 test_that("cache points are inserted when cache is enabled", {
-  local_mocked_bindings(
-    locate_aws_credentials = function(profile) {
-      list(
-        access_key_id = "test-key",
-        secret_key = "test-secret",
-        session_token = "test-token",
-        region = "us-east-1",
-        expiration = Sys.time() + 3600
-      )
-    }
-  )
+  local_mock_aws_creds()
 
   provider <- provider_aws_bedrock(
     base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
@@ -114,17 +104,7 @@ test_that("cache points are inserted when cache is enabled", {
 })
 
 test_that("cache points are omitted when cache = 'none'", {
-  local_mocked_bindings(
-    locate_aws_credentials = function(profile) {
-      list(
-        access_key_id = "test-key",
-        secret_key = "test-secret",
-        session_token = "test-token",
-        region = "us-east-1",
-        expiration = Sys.time() + 3600
-      )
-    }
-  )
+  local_mock_aws_creds()
 
   provider <- provider_aws_bedrock(
     base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
@@ -151,17 +131,7 @@ test_that("cache points are omitted when cache = 'none'", {
 })
 
 test_that("cache TTL is included for '1h' but not '5m'", {
-  local_mocked_bindings(
-    locate_aws_credentials = function(profile) {
-      list(
-        access_key_id = "test-key",
-        secret_key = "test-secret",
-        session_token = "test-token",
-        region = "us-east-1",
-        expiration = Sys.time() + 3600
-      )
-    }
-  )
+  local_mock_aws_creds()
 
   provider_5m <- provider_aws_bedrock(
     base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
