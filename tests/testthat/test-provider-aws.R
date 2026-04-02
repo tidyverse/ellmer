@@ -153,6 +153,37 @@ test_that("cache TTL is included for '1h' but not '5m'", {
   expect_equal(cp_1h, list(cachePoint = list(type = "default", ttl = "1h")))
 })
 
+test_that("cache point is only on the last turn in multi-turn conversations", {
+  local_mock_aws_creds()
+
+  provider <- provider_aws_bedrock(
+    base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
+    model = "anthropic.claude-3-5-haiku-20241022-v1:0",
+    cache_point = "5m"
+  )
+
+  turns <- list(
+    SystemTurn("You are a helpful assistant."),
+    UserTurn("Hello"),
+    AssistantTurn(list(ContentText("Hi there!"))),
+    UserTurn("How are you?")
+  )
+
+  req <- chat_request(provider, stream = FALSE, turns = turns)
+  body <- req$body$data
+
+  has_cache_point <- function(content) {
+    any(vapply(content, function(b) "cachePoint" %in% names(b), logical(1)))
+  }
+
+  # Intermediate messages should not have cache points
+  expect_false(has_cache_point(body$messages[[1]]$content))
+  expect_false(has_cache_point(body$messages[[2]]$content))
+
+  # Only the last message should have a cache point
+  expect_true(has_cache_point(body$messages[[3]]$content))
+})
+
 # Provider idiosynchronies -----------------------------------------------
 
 test_that("continues to work after whitespace only outputs (#376)", {
