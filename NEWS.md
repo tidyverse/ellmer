@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `chat_aws_bedrock()` gains a `cache` parameter for prompt caching, matching the interface of `chat_anthropic()` (#954).
+* `chat_aws_bedrock()` gains a `cache` parameter for prompt caching. The default, `"auto"`, enables caching for models known to support it (Anthropic Claude and Amazon Nova) and disables it otherwise (#954).
 * Built-in tools (e.g., `openai_tool_web_search()`, `claude_tool_web_search()`) now include `description` and `annotations` properties, making their metadata consistent with user-defined tools created by `tool()` (#942).
 * New `stream_controller()` enables programmatic cancellation of streaming chat responses, e.g. from a Shiny "Cancel" button with `chat$stream()` or `chat$stream_async()`. Streaming turns are now saved incrementally so that partial responses survive cancellation, interrupts (Ctrl-C), and errors. Incomplete turns are recorded as `AssistantPartialTurn` objects, display as interrupted in the chat history, and are included in subsequent model context like complete turns (#643).
 * `default_google_credentials()` no longer skips application default credentials (e.g. `GOOGLE_APPLICATION_CREDENTIALS`) in interactive sessions, instead falling through to the OAuth browser flow only when no gargle token is available (@stefanlinner, #922).
