@@ -31,6 +31,10 @@ NULL
 #' individual models may have minimum input token thresholds before caching
 #' takes effect.
 #'
+#' Note that [token_usage()] does not currently reflect the cost of writing
+#' to the cache, which is priced at a premium over regular input tokens.
+#' Cache read savings are reported correctly.
+#'
 #' @param profile AWS profile to use.
 #' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
 #'   Set to "none" to disable caching or "1h" to cache for one hour.

@@ -98,6 +98,10 @@ history is cached across turns.
 Cache duration can be set to \code{"5m"} (the default) or \code{"1h"}. Note that
 individual models may have minimum input token thresholds before caching
 takes effect.
+
+Note that \code{\link[=token_usage]{token_usage()}} does not currently reflect the cost of writing
+to the cache, which is priced at a premium over regular input tokens.
+Cache read savings are reported correctly.
 }
 }
 \examples{
