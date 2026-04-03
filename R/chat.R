@@ -136,9 +136,10 @@ Chat <- R6::R6Class(
 
       turns <- self$get_turns()
       assistant_turns <- keep(turns, is_assistant_turn)
-      tokens <- map_tokens(assistant_turns, \(turn) turn@tokens)
+      complete_turns <- discard(assistant_turns, is_partial_turn)
+      tokens <- map_tokens(complete_turns, \(turn) turn@tokens)
       tokens <- tibble::as_tibble(tokens)
-      tokens$cost <- dollars(map_dbl(assistant_turns, \(turn) turn@cost))
+      tokens$cost <- dollars(map_dbl(complete_turns, \(turn) turn@cost))
 
       user_turns <- keep(turns, is_user_turn)
       tokens$input_preview <- map_chr(user_turns, turn_contents_preview)
@@ -148,21 +149,23 @@ Chat <- R6::R6Class(
     #' @description The cost of this chat
     #' @param include The default, `"all"`, gives the total cumulative cost
     #'   of this chat. Alternatively, use `"last"` to get the cost of just the
-    #'   most recent turn.
+    #'   most recent turn. Incomplete turns (from cancelled or interrupted
+    #'   streams) are excluded because they lack token data.
     get_cost = function(include = c("all", "last")) {
       include <- arg_match(include)
 
       turns <- self$get_turns()
       assistant_turns <- keep(turns, is_assistant_turn)
+      complete_turns <- discard(assistant_turns, is_partial_turn)
 
-      if (length(assistant_turns) == 0) {
+      if (length(complete_turns) == 0) {
         return(dollars(0))
       }
 
       if (include == "last") {
-        cost <- assistant_turns[[length(assistant_turns)]]@cost
+        cost <- complete_turns[[length(complete_turns)]]@cost
       } else {
-        cost <- sum(map_dbl(assistant_turns, \(turn) turn@cost))
+        cost <- sum(map_dbl(complete_turns, \(turn) turn@cost))
       }
 
       dollars(cost)
@@ -203,7 +206,8 @@ Chat <- R6::R6Class(
       coro::collect(private$chat_impl(
         turn,
         stream = echo != "none",
-        echo = echo
+        echo = echo,
+        controller = stream_controller()
       ))
 
       text <- ellmer_output(self$last_turn()@text)
@@ -236,7 +240,8 @@ Chat <- R6::R6Class(
         turn,
         type = type,
         stream = echo != "none",
-        echo = echo
+        echo = echo,
+        controller = stream_controller()
       ))
 
       turn <- self$last_turn()
@@ -269,7 +274,8 @@ Chat <- R6::R6Class(
         turn,
         type = type,
         stream = echo != "none",
-        echo = echo
+        echo = echo,
+        controller = stream_controller()
       ))
 
       promises::then(done, function(dummy) {
@@ -305,7 +311,8 @@ Chat <- R6::R6Class(
           turn,
           stream = FALSE,
           echo = "none",
-          tool_mode = tool_mode
+          tool_mode = tool_mode,
+          controller = stream_controller()
         )
       )
       promises::then(done, function(dummy) {
@@ -322,7 +329,10 @@ Chat <- R6::R6Class(
     #' @param stream Whether the stream should yield only `"text"` or ellmer's
     #'   rich content types. When `stream = "content"`, `stream()` yields
     #'   [Content] objects.
-    stream = function(..., stream = c("text", "content")) {
+    #' @param controller An optional [stream_controller()] used to cancel the
+    #'   stream from outside the iteration loop.
+    stream = function(..., stream = c("text", "content"), controller = NULL) {
+      controller <- as_controller(controller)
       finish_tools <- private$complete_dangling_tool_requests()
 
       turn <- user_turn(!!!finish_tools, ...)
@@ -331,7 +341,8 @@ Chat <- R6::R6Class(
         turn,
         stream = TRUE,
         echo = "none",
-        yield_as_content = stream == "content"
+        yield_as_content = stream == "content",
+        controller = controller
       )
     },
 
@@ -348,11 +359,15 @@ Chat <- R6::R6Class(
     #' @param stream Whether the stream should yield only `"text"` or ellmer's
     #'   rich content types. When `stream = "content"`, `stream()` yields
     #'   [Content] objects.
+    #' @param controller An optional [stream_controller()] used to cancel the
+    #'   stream from outside the iteration loop.
     stream_async = function(
       ...,
       tool_mode = c("concurrent", "sequential"),
-      stream = c("text", "content")
+      stream = c("text", "content"),
+      controller = NULL
     ) {
+      controller <- as_controller(controller)
       finish_tools <- private$complete_dangling_tool_requests()
 
       turn <- user_turn(!!!finish_tools, ...)
@@ -363,7 +378,8 @@ Chat <- R6::R6Class(
         stream = TRUE,
         echo = "none",
         tool_mode = tool_mode,
-        yield_as_content = stream == "content"
+        yield_as_content = stream == "content",
+        controller = controller
       )
     },
 
@@ -453,7 +469,8 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
-      yield_as_content = FALSE
+      yield_as_content = FALSE,
+      controller = NULL
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
@@ -463,7 +480,8 @@ Chat <- R6::R6Class(
           user_turn,
           stream = stream,
           echo = echo,
-          yield_as_content = yield_as_content
+          yield_as_content = yield_as_content,
+          controller = controller
         )
         for (chunk in assistant_chunks) {
           yield(chunk)
@@ -471,6 +489,11 @@ Chat <- R6::R6Class(
 
         assistant_turn <- self$last_turn()
         user_turn <- NULL
+
+        # Don't invoke tools if the stream was cancelled
+        if (controller$cancelled) {
+          break
+        }
 
         if (turn_has_tool_request(assistant_turn)) {
           tool_calls <- invoke_tools(
@@ -512,7 +535,8 @@ Chat <- R6::R6Class(
       stream,
       echo,
       tool_mode = "concurrent",
-      yield_as_content = FALSE
+      yield_as_content = FALSE,
+      controller = NULL
     ) {
       tool_errors <- list()
       withr::defer(warn_tool_errors(tool_errors))
@@ -522,7 +546,8 @@ Chat <- R6::R6Class(
           user_turn,
           stream = stream,
           echo = echo,
-          yield_as_content = yield_as_content
+          yield_as_content = yield_as_content,
+          controller = controller
         )
         for (chunk in await_each(assistant_chunks)) {
           yield(chunk)
@@ -530,6 +555,11 @@ Chat <- R6::R6Class(
 
         assistant_turn <- self$last_turn()
         user_turn <- NULL
+
+        # Don't invoke tools if the stream was cancelled
+        if (controller$cancelled) {
+          break
+        }
 
         if (turn_has_tool_request(assistant_turn)) {
           tool_calls <- invoke_tools_async(
@@ -587,7 +617,8 @@ Chat <- R6::R6Class(
       stream,
       echo,
       type = NULL,
-      yield_as_content = FALSE
+      yield_as_content = FALSE,
+      controller = NULL
     ) {
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
@@ -598,12 +629,18 @@ Chat <- R6::R6Class(
         mode = if (stream) "stream" else "value",
         turns = c(private$.turns, list(user_turn)),
         tools = if (is.null(type)) private$tools,
-        type = type
+        type = type,
+        controller = controller
       )
       emit <- emitter(echo)
       any_text <- FALSE
+      turn <- NULL
+      acc <- TurnAccumulator$new(self, private, controller)
 
       if (stream) {
+        acc$begin_turn(user_turn)
+        on.exit(acc$finalize_turn(), add = TRUE)
+
         result <- NULL
         for (chunk in response) {
           content <- stream_content(private$provider, chunk)
@@ -611,21 +648,16 @@ Chat <- R6::R6Class(
             text <- content_text(content)
             emit(text)
             yield(if (yield_as_content) content else text)
+            acc$update_turn(content)
             any_text <- TRUE
           }
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
-        turn <- value_turn(private$provider, result, has_type = !is.null(type))
-        turn <- match_tools(turn, private$tools)
+
+        turn <- acc$complete_turn(result, type = type)
       } else {
-        turn <- value_turn(
-          private$provider,
-          resp_body_json(response),
-          has_type = !is.null(type)
-        )
-        turn@duration <- resp_timing(response)[["total"]] %||% NA_real_
-        turn <- match_tools(turn, private$tools)
+        turn <- acc$add_turn(user_turn, response, type = type)
 
         text <- turn@text
         if (!is.null(text)) {
@@ -639,24 +671,22 @@ Chat <- R6::R6Class(
         }
       }
 
-      # Ensure turns always end in a newline
-      if (any_text) {
-        emit("\n")
-        if (yield_as_content) {
-          yield(ContentText("\n"))
-        } else {
-          yield("\n")
+      if (!is.null(turn) && !is_partial_turn(turn)) {
+        # Ensure turns always end in a newline
+        if (any_text) {
+          emit("\n")
+          if (yield_as_content) {
+            yield(ContentText("\n"))
+          } else {
+            yield("\n")
+          }
         }
-      }
 
-      if (echo == "all") {
-        is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
-        formatted <- map_chr(turn@contents[!is_text], format)
-        cat_line(formatted, prefix = "< ")
+        if (echo == "all") {
+          echo_non_text_contents(turn)
+        }
+        # When `echo="output"`, tool calls are emitted in `invoke_tools()`
       }
-      # When `echo="output"`, tool calls are emitted in `invoke_tools()`
-
-      self$add_turn(user_turn, turn)
 
       coro::exhausted()
     }),
@@ -670,19 +700,26 @@ Chat <- R6::R6Class(
       stream,
       echo,
       type = NULL,
-      yield_as_content = FALSE
+      yield_as_content = FALSE,
+      controller = NULL
     ) {
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "async-stream" else "async-value",
         turns = c(private$.turns, list(user_turn)),
         tools = if (is.null(type)) private$tools,
-        type = type
+        type = type,
+        controller = controller
       )
       emit <- emitter(echo)
       any_text <- FALSE
+      turn <- NULL
+      acc <- TurnAccumulator$new(self, private, controller)
 
       if (stream) {
+        acc$begin_turn(user_turn)
+        on.exit(acc$finalize_turn(), add = TRUE)
+
         result <- NULL
         for (chunk in await_each(response)) {
           content <- stream_content(private$provider, chunk)
@@ -690,21 +727,18 @@ Chat <- R6::R6Class(
             text <- content_text(content)
             emit(text)
             yield(if (yield_as_content) content else text)
+            acc$update_turn(content)
             any_text <- TRUE
           }
 
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
-        turn <- value_turn(private$provider, result, has_type = !is.null(type))
+
+        turn <- acc$complete_turn(result, type = type)
       } else {
         result <- await(response)
+        turn <- acc$add_turn(user_turn, result, type = type)
 
-        turn <- value_turn(
-          private$provider,
-          resp_body_json(result),
-          has_type = !is.null(type)
-        )
-        turn@duration <- resp_timing(result)[["total"]] %||% NA_real_
         text <- turn@text
         if (!is.null(text)) {
           emit(text)
@@ -716,26 +750,23 @@ Chat <- R6::R6Class(
           any_text <- TRUE
         }
       }
-      turn <- match_tools(turn, private$tools)
 
-      # Ensure turns always end in a newline
-      if (any_text) {
-        emit("\n")
-        if (yield_as_content) {
-          yield(ContentText("\n"))
-        } else {
-          yield("\n")
+      if (!is.null(turn) && !is_partial_turn(turn)) {
+        # Ensure turns always end in a newline
+        if (any_text) {
+          emit("\n")
+          if (yield_as_content) {
+            yield(ContentText("\n"))
+          } else {
+            yield("\n")
+          }
         }
-      }
 
-      if (echo == "all") {
-        is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
-        formatted <- map_chr(turn@contents[!is_text], format)
-        cat_line(formatted, prefix = "< ")
+        if (echo == "all") {
+          echo_non_text_contents(turn)
+        }
+        # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
       }
-      # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
-
-      self$add_turn(user_turn, turn)
       coro::exhausted()
     }),
 
@@ -774,8 +805,9 @@ print.Chat <- function(x, ...) {
   turns <- x$get_turns(include_system_prompt = TRUE)
 
   assistant_turns <- keep(turns, \(x) x@role == "assistant")
-  total_tokens <- colSums(map_tokens(assistant_turns, \(x) x@tokens))
-  total_cost <- sum(map_dbl(assistant_turns, \(x) x@cost))
+  complete_turns <- discard(assistant_turns, is_partial_turn)
+  total_tokens <- colSums(map_tokens(complete_turns, \(x) x@tokens))
+  total_cost <- sum(map_dbl(complete_turns, \(x) x@cost))
 
   cat(paste_c(
     "<Chat",
@@ -787,13 +819,15 @@ print.Chat <- function(x, ...) {
 
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
-    if (turn@role == "assistant") {
-      cost <- turn_cost(turn@tokens, turn@cost, prefix = " [", suffix = "]")
+    if (is_partial_turn(turn)) {
+      label <- paste0(" [", turn@reason, "]")
+    } else if (turn@role == "assistant") {
+      label <- turn_cost(turn@tokens, turn@cost, prefix = " [", suffix = "]")
     } else {
-      cost <- ""
+      label <- ""
     }
 
-    cli::cat_rule(cli::format_inline("{color_role(turn@role)}{cost}"))
+    cli::cat_rule(cli::format_inline("{color_role(turn@role)}{label}"))
     cat(format(turns[[i]]))
   }
 
@@ -817,6 +851,105 @@ turn_cost <- function(tokens, cost, prefix, suffix = "") {
   out
 }
 
+TurnAccumulator <- R6::R6Class(
+  "TurnAccumulator",
+  public = list(
+    chat = NULL,
+    chat_private = NULL,
+    provider = NULL,
+    controller = NULL,
+    turn_idx = NULL,
+    start_time = NULL,
+
+    initialize = function(chat, chat_private, controller) {
+      self$chat <- chat
+      self$chat_private <- chat_private
+      self$provider <- chat$get_provider()
+      self$controller <- controller
+    },
+
+    begin_turn = function(user_turn) {
+      self$chat$add_turn(user_turn, AssistantPartialTurn(), log_tokens = FALSE)
+      self$turn_idx <- length(self$chat_private$.turns)
+      self$start_time <- proc.time()[["elapsed"]]
+      invisible(self)
+    },
+
+    update_turn = function(content) {
+      idx <- self$turn_idx
+      turn <- self$chat_private$.turns[[idx]]
+      turn@contents <- c(turn@contents, list(content))
+      self$chat_private$.turns[[idx]] <- turn
+      invisible(self)
+    },
+
+    complete_turn = function(result, type = NULL) {
+      if (self$controller$cancelled) {
+        return(invisible(self))
+      }
+      duration <- proc.time()[["elapsed"]] - self$start_time
+      turn <- self$value_turn(result, type, duration = duration)
+      self$chat_private$.turns[[self$turn_idx]] <- turn
+      # log_turn() is called manually here because the streaming path
+      # replaces a partial turn in-place rather than using Chat$add_turn(),
+      # which handles logging automatically for the non-streaming path.
+      log_turn(self$provider, turn)
+      turn
+    },
+
+    finalize_turn = function() {
+      idx <- self$turn_idx
+      if (is.null(idx)) {
+        return(invisible())
+      }
+      turn <- self$chat_private$.turns[[idx]]
+      if (!is_partial_turn(turn)) {
+        return(invisible())
+      }
+      turn@contents <- merge_content_text(turn@contents)
+      turn@reason <- self$controller$reason %||% "interrupted"
+      turn@duration <- proc.time()[["elapsed"]] - self$start_time
+      self$chat_private$.turns[[idx]] <- turn
+      log_turn(self$provider, turn)
+    },
+
+    add_turn = function(user_turn, response, type = NULL) {
+      result <- resp_body_json(response)
+      duration <- resp_timing(response)[["total"]] %||% NA_real_
+      turn <- self$value_turn(result, type, duration = duration)
+      self$chat$add_turn(user_turn, turn)
+      turn
+    },
+
+    value_turn = function(result, type, duration = NA_real_) {
+      turn <- value_turn(
+        self$provider,
+        result,
+        has_type = !is.null(type)
+      )
+      turn@duration <- duration
+      match_tools(turn, self$chat$get_tools())
+    }
+  )
+)
+
+echo_non_text_contents <- function(turn) {
+  is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
+  formatted <- map_chr(turn@contents[!is_text], format)
+  cat_line(formatted, prefix = "< ")
+}
+
+merge_content_text <- function(contents) {
+  reduce(contents, .init = list(), function(acc, item) {
+    n <- length(acc)
+    if (n > 0 && every(list(acc[[n]], item), S7_inherits, ContentText)) {
+      acc[[n]] <- ContentText(paste0(acc[[n]]@text, item@text))
+    } else {
+      acc <- c(acc, list(item))
+    }
+    acc
+  })
+}
 method(contents_markdown, new_S3_class("Chat")) <- function(
   content,
   heading_level = 2

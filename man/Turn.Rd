@@ -5,6 +5,7 @@
 \alias{UserTurn}
 \alias{SystemTurn}
 \alias{AssistantTurn}
+\alias{AssistantPartialTurn}
 \title{A user, assistant, or system turn}
 \usage{
 Turn(role = NULL, contents = list(), tokens = NULL)
@@ -19,6 +20,15 @@ AssistantTurn(
   tokens = c(NA_real_, NA_real_, NA_real_),
   cost = NA_real_,
   duration = NA_real_
+)
+
+AssistantPartialTurn(
+  contents = list(),
+  json = list(),
+  tokens = c(NA_real_, NA_real_, NA_real_),
+  cost = NA_real_,
+  duration = NA_real_,
+  reason = "interrupted"
 )
 }
 \arguments{
@@ -39,11 +49,16 @@ that ellmer doesn't otherwise expose.}
 \item{cost}{The cost of the turn in dollars.}
 
 \item{duration}{The duration of the request in seconds.}
+
+\item{reason}{A character string describing why the turn was interrupted.
+Defaults to \code{"interrupted"}.}
 }
 \value{
 An S7 \code{Turn} object
 
 An S7 \code{AssistantTurn} object
+
+An S7 \code{AssistantPartialTurn} object
 }
 \description{
 Every conversation with a chatbot consists of pairs of user and assistant

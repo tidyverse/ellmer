@@ -18,7 +18,7 @@
     Code
       . <- chat_aws_bedrock()
     Message
-      Using model = "anthropic.claude-3-5-sonnet-20240620-v1:0".
+      Using model = "anthropic.claude-sonnet-4-5-20250929-v1:0".
 
 # can use images
 

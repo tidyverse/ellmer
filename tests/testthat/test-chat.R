@@ -187,6 +187,26 @@ test_that("has a basic print method", {
   expect_snapshot(chat)
 })
 
+test_that("print method shows interrupted for partial turns", {
+  chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
+  chat$set_turns(list(
+    UserTurn("Input 1"),
+    AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
+    UserTurn("Input 2"),
+    AssistantPartialTurn("Partial output...")
+  ))
+  expect_snapshot(chat)
+})
+
+test_that("print method shows custom reason for partial turns", {
+  chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
+  chat$set_turns(list(
+    UserTurn("Input 1"),
+    AssistantPartialTurn("Partial output...", reason = "cancelled")
+  ))
+  expect_snapshot(chat)
+})
+
 test_that("print method shows cumulative tokens & cost", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
   chat$set_turns(list(
@@ -257,4 +277,189 @@ test_that("assistant turns track duration", {
 
   # These assistant durations are usually not NA, but are during replay (#479)
   expect_true(is.na(assistant_turn@duration) || assistant_turn@duration > 0)
+})
+
+# stream_controller() ----------------------------------------------------------
+
+test_that("stream_controller() creates correct object", {
+  ctrl <- stream_controller()
+  expect_s3_class(ctrl, "ellmer_stream_controller")
+  expect_false(ctrl$cancelled)
+  expect_null(ctrl$reason)
+  expect_true(is.function(ctrl$cancel))
+  expect_true(is.function(ctrl$reset))
+})
+
+test_that("stream_controller()$cancel() sets cancelled to TRUE", {
+  ctrl <- stream_controller()
+  ctrl$cancel()
+  expect_true(ctrl$cancelled)
+  expect_equal(ctrl$reason, "cancelled")
+})
+
+test_that("stream_controller()$cancel() accepts a custom reason", {
+  ctrl <- stream_controller()
+  ctrl$cancel(reason = "timeout")
+  expect_true(ctrl$cancelled)
+  expect_equal(ctrl$reason, "timeout")
+})
+
+test_that("stream_controller()$reset() clears cancelled state and reason", {
+  ctrl <- stream_controller()
+  ctrl$cancel(reason = "timeout")
+  expect_true(ctrl$cancelled)
+  expect_equal(ctrl$reason, "timeout")
+  ctrl$reset()
+  expect_false(ctrl$cancelled)
+  expect_null(ctrl$reason)
+})
+
+test_that("as_controller() resets a pre-cancelled controller", {
+  ctrl <- stream_controller()
+  ctrl$cancel()
+  result <- expect_silent(as_controller(ctrl, reset = TRUE))
+  expect_false(ctrl$cancelled)
+  expect_identical(result, ctrl)
+})
+
+test_that("stream() rejects non-controller object", {
+  chat <- chat_openai_test()
+  expect_snapshot(error = TRUE, {
+    coro::collect(chat$stream("hi", controller = TRUE))
+  })
+})
+
+test_that("stream_async() rejects non-controller object", {
+  chat <- chat_openai_test()
+  expect_snapshot(error = TRUE, {
+    sync(coro::async_collect(chat$stream_async("hi", controller = list())))
+  })
+})
+
+test_that("as_controller() accepts a valid stream_controller() or NULL", {
+  ctrl <- stream_controller()
+  expect_identical(as_controller(ctrl), ctrl)
+
+  default <- as_controller(NULL)
+  expect_false(default$cancelled)
+  expect_null(default$reason)
+})
+
+test_that("stream_controller() rejects invalid cancelled values", {
+  ctrl <- stream_controller()
+  expect_error(ctrl$cancelled <- "banana")
+  expect_error(ctrl$cancelled <- NA)
+  expect_error(ctrl$cancelled <- c(TRUE, FALSE))
+})
+
+test_that("stream_controller() rejects invalid reason values", {
+  ctrl <- stream_controller()
+  expect_error(ctrl$reason <- 123)
+  expect_error(ctrl$reason <- NA_character_)
+  expect_error(ctrl$reason <- c("a", "b"))
+})
+
+test_that("stream_controller() environment is locked", {
+  ctrl <- stream_controller()
+  expect_error(ctrl$typo <- TRUE)
+})
+
+test_that("finalize_turn() merges adjacent ContentText", {
+  chat <- chat_openai_test()
+  acc <- TurnAccumulator$new(
+    chat,
+    chat$.__enclos_env__$private,
+    stream_controller()
+  )
+
+  user_turn <- Turn("user", list(ContentText("hi")))
+  acc$begin_turn(user_turn)
+  acc$update_turn(ContentText("Hello "))
+  acc$update_turn(ContentText("world"))
+  acc$finalize_turn()
+
+  turn <- chat$last_turn()
+  expect_s7_class(turn, AssistantPartialTurn)
+  expect_length(turn@contents, 1)
+  expect_equal(turn@text, "Hello world")
+  expect_equal(turn@reason, "interrupted")
+  # No token data
+  expect_true(all(is.na(turn@tokens)))
+  expect_true(is.na(turn@cost))
+})
+
+test_that("finalize_turn() uses controller reason", {
+  chat <- chat_openai_test()
+  ctrl <- stream_controller()
+  ctrl$cancel(reason = "timeout")
+  acc <- TurnAccumulator$new(chat, chat$.__enclos_env__$private, ctrl)
+
+  user_turn <- Turn("user", list(ContentText("hi")))
+  acc$begin_turn(user_turn)
+  acc$update_turn(ContentText("partial"))
+  acc$finalize_turn()
+
+  turn <- chat$last_turn()
+  expect_s7_class(turn, AssistantPartialTurn)
+  expect_equal(turn@reason, "timeout")
+})
+
+test_that("finalize_turn() is a no-op for complete turns", {
+  chat <- chat_openai_test()
+  acc <- TurnAccumulator$new(
+    chat,
+    chat$.__enclos_env__$private,
+    stream_controller()
+  )
+
+  user_turn <- Turn("user", list(ContentText("hi")))
+  chat$add_turn(
+    user_turn,
+    AssistantTurn(contents = list(ContentText("done"))),
+    log_tokens = FALSE
+  )
+  # Manually set turn_idx so finalize_turn has something to check
+  acc$.__enclos_env__$private$turn_idx <- 2L
+
+  acc$finalize_turn()
+  turn <- chat$last_turn()
+
+  expect_s7_class(turn, AssistantTurn)
+  expect_false(S7_inherits(turn, AssistantPartialTurn))
+})
+
+test_that("update_turn() appends content incrementally", {
+  chat <- chat_openai_test()
+  acc <- TurnAccumulator$new(
+    chat,
+    chat$.__enclos_env__$private,
+    stream_controller()
+  )
+
+  user_turn <- Turn("user", list(ContentText("hi")))
+  acc$begin_turn(user_turn)
+  acc$update_turn(ContentText("a"))
+  acc$update_turn(ContentText("b"))
+
+  turn <- chat$last_turn()
+  expect_length(turn@contents, 2)
+  expect_equal(turn@contents[[1]]@text, "a")
+  expect_equal(turn@contents[[2]]@text, "b")
+})
+
+test_that("merge_content_text() merges adjacent text, preserves non-text", {
+  contents <- list(
+    ContentText("a"),
+    ContentText("b"),
+    ContentThinking("thought"),
+    ContentText("c")
+  )
+  merged <- merge_content_text(contents)
+
+  expect_length(merged, 3)
+  expect_s7_class(merged[[1]], ContentText)
+  expect_equal(merged[[1]]@text, "ab")
+  expect_s7_class(merged[[2]], ContentThinking)
+  expect_s7_class(merged[[3]], ContentText)
+  expect_equal(merged[[3]]@text, "c")
 })

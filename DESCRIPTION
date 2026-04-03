@@ -116,6 +116,7 @@ Collate:
     'provider-snowflake.R'
     'provider-vllm.R'
     'schema.R'
+    'stream-controller.R'
     'tokens.R'
     'tools-built-in.R'
     'tools-def-auto.R'
