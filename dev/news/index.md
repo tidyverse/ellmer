@@ -2,6 +2,11 @@
 
 ## ellmer (development version)
 
+- [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
+  gains a `cache` parameter for prompt caching. The default, `"auto"`,
+  enables caching for models known to support it (Anthropic Claude and
+  Amazon Nova) and disables it otherwise
+  ([\#954](https://github.com/tidyverse/ellmer/issues/954)).
 - Built-in tools (e.g.,
   [`openai_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/openai_tool_web_search.md),
   [`claude_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_search.md))

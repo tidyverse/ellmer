@@ -11,6 +11,25 @@ does not work for you automatically, you'll need to follow the advice
 at https://www.paws-r-sdk.com/#credentials. In particular, if your
 org uses AWS SSO, you'll need to run aws sso login at the terminal.
 
+
+
+Prompt caching
+
+
+Bedrock supports
+prompt caching
+via cache checkpoints. When caching is enabled, ellmer places cache
+checkpoints on the system prompt and the last turn, so that the
+conversation history is cached across turns.
+By default (cache = &quot;auto&quot;), caching is enabled for models known to
+support it (Anthropic Claude and Amazon Nova) and disabled for all other
+models. You can also set cache to &quot;5m&quot; or &quot;1h&quot; to force a specific
+TTL, or &quot;none&quot; to disable caching entirely. Note that individual models
+may have minimum input token thresholds before caching takes effect.
+Note that token_usage() does not currently reflect the cost of writing
+to the cache, which is priced at a premium over regular input tokens.
+Cache read savings are reported correctly.
+
 "><meta property="og:description" content="AWS Bedrock provides a number of
 language models, including those from Anthropic's
 Claude, using the Bedrock
@@ -22,6 +41,25 @@ Authentication is handled through {paws.common}, so if authentication
 does not work for you automatically, you'll need to follow the advice
 at https://www.paws-r-sdk.com/#credentials. In particular, if your
 org uses AWS SSO, you'll need to run aws sso login at the terminal.
+
+
+
+Prompt caching
+
+
+Bedrock supports
+prompt caching
+via cache checkpoints. When caching is enabled, ellmer places cache
+checkpoints on the system prompt and the last turn, so that the
+conversation history is cached across turns.
+By default (cache = &quot;auto&quot;), caching is enabled for models known to
+support it (Anthropic Claude and Amazon Nova) and disabled for all other
+models. You can also set cache to &quot;5m&quot; or &quot;1h&quot; to force a specific
+TTL, or &quot;none&quot; to disable caching entirely. Note that individual models
+may have minimum input token thresholds before caching takes effect.
+Note that token_usage() does not currently reflect the cost of writing
+to the cache, which is priced at a premium over regular input tokens.
+Cache read savings are reported correctly.
 
 "><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><meta name="robots" content="noindex"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
@@ -88,6 +126,25 @@ at <a href="https://www.paws-r-sdk.com/#credentials" class="external-link">https
 org uses AWS SSO, you'll need to run <code>aws sso login</code> at the terminal.</p>
 </div>
 
+<div class="section">
+<h3 id="prompt-caching">Prompt caching<a class="anchor" aria-label="anchor" href="#prompt-caching"></a></h3>
+
+
+<p>Bedrock supports
+<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html" class="external-link">prompt caching</a>
+via cache checkpoints. When caching is enabled, ellmer places cache
+checkpoints on the system prompt and the last turn, so that the
+conversation history is cached across turns.</p>
+<p>By default (<code>cache = "auto"</code>), caching is enabled for models known to
+support it (Anthropic Claude and Amazon Nova) and disabled for all other
+models. You can also set <code>cache</code> to <code>"5m"</code> or <code>"1h"</code> to force a specific
+TTL, or <code>"none"</code> to disable caching entirely. Note that individual models
+may have minimum input token thresholds before caching takes effect.</p>
+<p>Note that <code><a href="token_usage.html">token_usage()</a></code> does not currently reflect the cost of writing
+to the cache, which is priced at a premium over regular input tokens.
+Cache read savings are reported correctly.</p>
+</div>
+
     </div>
 
     <div class="section level2">
@@ -97,6 +154,7 @@ org uses AWS SSO, you'll need to run <code>aws sso login</code> at the terminal.
 <span>  base_url <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  profile <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cache <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"auto"</span>, <span class="st">"5m"</span>, <span class="st">"1h"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  api_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -133,6 +191,14 @@ you'll need to use the inference profile ID, e.g.
 
 <dt id="arg-profile">profile<a class="anchor" aria-label="anchor" href="#arg-profile"></a></dt>
 <dd><p>AWS profile to use.</p></dd>
+
+
+<dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
+<dd><p>How long to cache inputs? The default, <code>"auto"</code>, enables
+caching with a 5-minute TTL for models known to support it (Anthropic
+Claude and Amazon Nova) and disables caching for all other models.
+Set to <code>"5m"</code> or <code>"1h"</code> to force caching on, or <code>"none"</code> to disable it.</p>
+<p>See details below.</p></dd>
 
 
 <dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
