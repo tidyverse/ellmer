@@ -2,6 +2,11 @@
 
 ## ellmer (development version)
 
+- Fixed three bugs that caused errors when streaming web search results:
+  Claude’s `citations_delta` events were mishandled, `server_tool_use`
+  input wasn’t parsed from JSON during streaming, and OpenAI’s
+  `web_search_call` failed for non-search action types like `open_page`
+  ([\#941](https://github.com/tidyverse/ellmer/issues/941)).
 - [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
   gains a `cache` parameter for prompt caching. The default, `"auto"`,
   enables caching for models known to support it (Anthropic Claude and
