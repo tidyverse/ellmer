@@ -81,6 +81,7 @@ chat$chat("What is the difference between a tibble and a data frame?")
 Other chatbots: 
 \code{\link{chat_anthropic}()},
 \code{\link{chat_aws_bedrock}()},
+\code{\link{chat_azure_anthropic}()},
 \code{\link{chat_azure_openai}()},
 \code{\link{chat_cloudflare}()},
 \code{\link{chat_databricks}()},
