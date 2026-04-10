@@ -37,12 +37,14 @@ chat_claude(
 
 models_claude(
   base_url = "https://api.anthropic.com/v1",
-  api_key = anthropic_key()
+  api_key = NULL,
+  credentials = NULL
 )
 
 models_anthropic(
   base_url = "https://api.anthropic.com/v1",
-  api_key = anthropic_key()
+  api_key = NULL,
+  credentials = NULL
 )
 }
 \arguments{
