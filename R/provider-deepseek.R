@@ -127,3 +127,37 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
 }
 
 deepseek_key <- function() key_get("DEEPSEEK_API_KEY")
+
+#' @export
+#' @rdname chat_deepseek
+models_deepseek <- function(
+  base_url = "https://api.deepseek.com",
+  api_key = NULL,
+  credentials = NULL
+) {
+  credentials <- as_credentials(
+    "models_deepseek",
+    \() deepseek_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
+  provider <- ProviderDeepSeek(
+    name = "DeepSeek",
+    model = "",
+    base_url = base_url,
+    credentials = credentials
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, "[[", "id")
+  owned_by <- map_chr(json$data, "[[", "owned_by")
+
+  df <- data.frame(id = id, owned_by = owned_by)
+  cbind(df, match_prices(provider@name, df$id))
+}
