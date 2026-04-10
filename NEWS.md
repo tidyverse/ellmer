@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New `chat_azure_anthropic()` enables chatting with Anthropic Claude models hosted on Azure AI Foundry (`*.services.ai.azure.com/anthropic` endpoints), with the same Azure authentication options as `chat_azure_openai()`.
 * Fixed three bugs that caused errors when streaming web search results: Claude's `citations_delta` events were mishandled, `server_tool_use` input wasn't parsed from JSON during streaming, and OpenAI's `web_search_call` failed for non-search action types like `open_page` (#941).
 * `chat_aws_bedrock()` gains a `cache` parameter for prompt caching. The default, `"auto"`, enables caching for models known to support it (Anthropic Claude and Amazon Nova) and disables it otherwise (#954).
 * Built-in tools (e.g., `openai_tool_web_search()`, `claude_tool_web_search()`) now include `description` and `annotations` properties, making their metadata consistent with user-defined tools created by `tool()` (#942).
