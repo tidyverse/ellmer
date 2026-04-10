@@ -6,7 +6,7 @@
 \usage{
 chat_azure_anthropic(
   endpoint = azure_anthropic_endpoint(),
-  model = NULL,
+  model,
   params = NULL,
   system_prompt = NULL,
   credentials = NULL,
@@ -22,8 +22,7 @@ chat_azure_anthropic(
 i.e. \verb{https://\{your-project\}.services.ai.azure.com/anthropic}. Defaults
 to the value of the \code{AZURE_ANTHROPIC_ENDPOINT} environment variable.}
 
-\item{model}{The model name to use (e.g., \code{"claude-opus-4-5"}).
-Defaults to \code{"claude-sonnet-4-5-20250929"}.}
+\item{model}{The \strong{deployment name} for the model you want to use.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 

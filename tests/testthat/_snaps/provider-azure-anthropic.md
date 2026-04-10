@@ -1,10 +1,3 @@
-# defaults are reported
-
-    Code
-      . <- chat_azure_anthropic("https://example.services.ai.azure.com/anthropic")
-    Message
-      Using model = "claude-sonnet-4-5-20250929".
-
 # service principal authentication requests look correct
 
     Code

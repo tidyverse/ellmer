@@ -1,9 +1,10 @@
 # Defaults ----------------------------------------------------------------
 
-test_that("defaults are reported", {
+test_that("model is required", {
   withr::local_envvar(AZURE_ANTHROPIC_API_KEY = "key")
-  expect_snapshot(
-    . <- chat_azure_anthropic("https://example.services.ai.azure.com/anthropic")
+  expect_error(
+    chat_azure_anthropic("https://example.services.ai.azure.com/anthropic"),
+    "model"
   )
 })
 

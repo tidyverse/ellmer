@@ -30,8 +30,7 @@ NULL
 #' @param endpoint Azure AI Foundry endpoint URL with protocol and hostname,
 #'   i.e. `https://{your-project}.services.ai.azure.com/anthropic`. Defaults
 #'   to the value of the `AZURE_ANTHROPIC_ENDPOINT` environment variable.
-#' @param model The model name to use (e.g., `"claude-opus-4-5"`).
-#'   Defaults to `"claude-sonnet-4-5-20250929"`.
+#' @param model The **deployment name** for the model you want to use.
 #' @param credentials `r api_key_param("AZURE_ANTHROPIC_API_KEY")`
 #' @inheritParams chat_anthropic
 #' @inherit chat_openai return
@@ -47,7 +46,7 @@ NULL
 #' }
 chat_azure_anthropic <- function(
   endpoint = azure_anthropic_endpoint(),
-  model = NULL,
+  model,
   params = NULL,
   system_prompt = NULL,
   credentials = NULL,
@@ -58,8 +57,8 @@ chat_azure_anthropic <- function(
   echo = NULL
 ) {
   check_string(endpoint)
+  check_string(model)
   params <- params %||% params()
-  model <- set_default(model, "claude-sonnet-4-5-20250929")
   cache <- arg_match(cache)
   echo <- check_echo(echo)
 
