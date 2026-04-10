@@ -32,7 +32,6 @@ NULL
 #'   to the value of the `AZURE_ANTHROPIC_ENDPOINT` environment variable.
 #' @param model The model name to use (e.g., `"claude-opus-4-5"`).
 #'   Defaults to `"claude-sonnet-4-5-20250929"`.
-#' @param api_version The API version to use.
 #' @param credentials `r api_key_param("AZURE_ANTHROPIC_API_KEY")`
 #' @inheritParams chat_anthropic
 #' @inherit chat_openai return
@@ -50,7 +49,6 @@ chat_azure_anthropic <- function(
   endpoint = azure_anthropic_endpoint(),
   model = NULL,
   params = NULL,
-  api_version = NULL,
   system_prompt = NULL,
   credentials = NULL,
   cache = c("5m", "1h", "none"),
@@ -61,7 +59,6 @@ chat_azure_anthropic <- function(
 ) {
   check_string(endpoint)
   params <- params %||% params()
-  api_version <- set_default(api_version, "2024-10-22")
   model <- set_default(model, "claude-sonnet-4-5-20250929")
   cache <- arg_match(cache)
   echo <- check_echo(echo)
@@ -77,7 +74,6 @@ chat_azure_anthropic <- function(
     base_url = paste0(endpoint, "/v1"),
     model = model,
     params = params,
-    api_version = api_version,
     credentials = credentials,
     extra_args = api_args,
     extra_headers = api_headers,
@@ -90,39 +86,11 @@ chat_azure_anthropic <- function(
 
 ProviderAzureAnthropic <- new_class(
   "ProviderAzureAnthropic",
-  parent = ProviderAnthropic,
-  properties = list(
-    api_version = prop_string()
-  )
+  parent = ProviderAnthropic
 )
 
 azure_anthropic_endpoint <- function() {
   key_get("AZURE_ANTHROPIC_ENDPOINT")
-}
-
-# https://learn.microsoft.com/en-us/azure/ai-services/openai/reference
-method(base_request, ProviderAzureAnthropic) <- function(provider) {
-  req <- request(provider@base_url)
-  req <- ellmer_req_robustify(req, is_transient = function(resp) {
-    resp_status(resp) %in% c(429, 503, 529)
-  })
-  req <- ellmer_req_user_agent(req)
-  # Azure AI Foundry uses api-key header (not x-api-key like standard Anthropic)
-  req <- ellmer_req_credentials(req, provider@credentials(), "api-key")
-  req <- req_url_query(req, `api-version` = provider@api_version)
-
-  if (length(provider@beta_headers) > 0) {
-    req <- req_headers(req, `anthropic-beta` = provider@beta_headers)
-  }
-
-  req <- req_error(req, body = function(resp) {
-    if (resp_content_type(resp) == "application/json") {
-      json <- resp_body_json(resp)
-      paste0(json$error$message, " [", json$error$type, "]")
-    }
-  })
-
-  req
 }
 
 default_azure_anthropic_credentials <- function() {

@@ -8,7 +8,6 @@ chat_azure_anthropic(
   endpoint = azure_anthropic_endpoint(),
   model = NULL,
   params = NULL,
-  api_version = NULL,
   system_prompt = NULL,
   credentials = NULL,
   cache = c("5m", "1h", "none"),
@@ -27,8 +26,6 @@ to the value of the \code{AZURE_ANTHROPIC_ENDPOINT} environment variable.}
 Defaults to \code{"claude-sonnet-4-5-20250929"}.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
-
-\item{api_version}{The API version to use.}
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 

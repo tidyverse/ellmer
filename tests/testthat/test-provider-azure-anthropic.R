@@ -18,25 +18,23 @@ test_that("Azure Anthropic request headers are generated correctly", {
   p <- ProviderAzureAnthropic(
     name = "Azure/Anthropic",
     base_url = paste0(endpoint, "/v1"),
-    model = "claude-opus-4-5",
+    model = "claude-sonnet-4-6",
     params = list(),
     extra_args = list(),
     extra_headers = character(),
     credentials = \() "key",
     beta_headers = character(),
-    cache = "none",
-    api_version = "2024-10-22"
+    cache = "none"
   )
   req <- chat_request(p, FALSE, list(turn))
   headers <- req_get_headers(req, "reveal")
 
-  # Uses api-key header, not x-api-key like standard Anthropic
-  expect_equal(headers$`api-key`, "key")
-  expect_null(headers$`x-api-key`)
-  # No anthropic-version header; Azure uses api-version query param instead
-  expect_null(headers$`anthropic-version`)
-  # api-version appears as a query parameter
-  expect_match(req$url, "api-version=2024-10-22")
+  # Uses x-api-key and anthropic-version, same as standard Anthropic API
+  expect_equal(headers$`x-api-key`, "key")
+  expect_equal(headers$`anthropic-version`, "2023-06-01")
+  expect_null(headers$`api-key`)
+  # No api-version query parameter
+  expect_no_match(req$url, "api-version")
 })
 
 test_that("beta headers are forwarded correctly", {
@@ -45,14 +43,13 @@ test_that("beta headers are forwarded correctly", {
   p <- ProviderAzureAnthropic(
     name = "Azure/Anthropic",
     base_url = paste0(endpoint, "/v1"),
-    model = "claude-opus-4-5",
+    model = "claude-sonnet-4-6",
     params = list(),
     extra_args = list(),
     extra_headers = character(),
     credentials = \() "key",
     beta_headers = c("feature-a", "feature-b"),
-    cache = "none",
-    api_version = "2024-10-22"
+    cache = "none"
   )
   req <- base_request(p)
   headers <- req_get_headers(req)
