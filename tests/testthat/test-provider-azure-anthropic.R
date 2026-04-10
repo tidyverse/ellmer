@@ -8,6 +8,16 @@ test_that("model is required", {
   )
 })
 
+test_that("trailing slash in endpoint is handled correctly", {
+  withr::local_envvar(AZURE_ANTHROPIC_API_KEY = "key")
+  chat <- chat_azure_anthropic(
+    endpoint = "https://example.services.ai.azure.com/anthropic/",
+    model = "claude-sonnet-4-6"
+  )
+  expect_no_match(chat$get_provider()@base_url, "//v1")
+  expect_match(chat$get_provider()@base_url, "/v1$")
+})
+
 # Authentication ----------------------------------------------------------
 
 test_that("Azure Anthropic request headers are generated correctly", {

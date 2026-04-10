@@ -40,7 +40,7 @@ NULL
 #' \dontrun{
 #' chat <- chat_azure_anthropic(
 #'   endpoint = "https://your-project.services.ai.azure.com/anthropic",
-#'   model = "claude-opus-4-5"
+#'   model = "your-deployment-name"
 #' )
 #' chat$chat("Tell me three jokes about statisticians")
 #' }
@@ -70,7 +70,7 @@ chat_azure_anthropic <- function(
 
   provider <- ProviderAzureAnthropic(
     name = "Azure/Anthropic",
-    base_url = paste0(endpoint, "/v1"),
+    base_url = paste0(gsub("/$", "", endpoint), "/v1"),
     model = model,
     params = params,
     credentials = credentials,

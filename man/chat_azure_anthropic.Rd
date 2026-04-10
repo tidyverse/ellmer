@@ -87,7 +87,7 @@ package.
 \dontrun{
 chat <- chat_azure_anthropic(
   endpoint = "https://your-project.services.ai.azure.com/anthropic",
-  model = "claude-opus-4-5"
+  model = "your-deployment-name"
 )
 chat$chat("Tell me three jokes about statisticians")
 }
