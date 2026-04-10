@@ -66,7 +66,8 @@ A \link{Chat} object.
 hosts Anthropic Claude models accessible via the
 \verb{*.services.ai.azure.com/anthropic} endpoint, using the Anthropic Messages
 API format.
-
+}
+\details{
 Unlike \code{\link[=chat_azure_openai]{chat_azure_openai()}}, which targets \verb{*.openai.azure.com} endpoints
 and uses the OpenAI chat completions format, this function targets Azure AI
 Foundry's Anthropic-compatible endpoint.

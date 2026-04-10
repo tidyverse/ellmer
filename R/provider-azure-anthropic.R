@@ -2,11 +2,10 @@
 #' @include provider-claude.R
 NULL
 
-# https://learn.microsoft.com/en-us/azure/ai-services/models/get-started
+# https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/endpoints
 
 #' Chat with an Anthropic Claude model hosted on Azure AI Foundry
 #'
-#' @description
 #' [Azure AI Foundry](https://azure.microsoft.com/en-us/products/ai-foundry)
 #' hosts Anthropic Claude models accessible via the
 #' `*.services.ai.azure.com/anthropic` endpoint, using the Anthropic Messages
