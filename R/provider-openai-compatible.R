@@ -216,15 +216,15 @@ method(chat_params, ProviderOpenAICompatible) <- function(provider, params) {
   standardise_params(
     params,
     c(
-      temperature = "temperature",
-      top_p = "top_p",
       frequency_penalty = "frequency_penalty",
+      logprobs = "log_probs",
+      max_completion_tokens = "max_tokens",
       presence_penalty = "presence_penalty",
       seed = "seed",
-      max_completion_tokens = "max_tokens",
-      logprobs = "log_probs",
+      stop = "stop_sequences",
+      temperature = "temperature",
       top_logprobs = "top_k",
-      stop = "stop_sequences"
+      top_p = "top_p"
     )
   )
 }
