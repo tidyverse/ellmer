@@ -74,7 +74,15 @@ test_that("service principal authentication requests look correct", {
     AZURE_CLIENT_SECRET = "secret"
   )
   local_mocked_responses(function(req) {
-    expect_snapshot(str(request_summary(req)))
+    summary <- request_summary(req)
+    expect_match(
+      summary$url,
+      "login.microsoftonline.com/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e"
+    )
+    expect_match(summary$body$grant_type, "client_credentials")
+    expect_match(summary$body$scope, "cognitiveservices.azure.com")
+    expect_match(summary$body$client_id, "id")
+    expect_match(summary$body$client_secret, "secret")
     response_json(body = list(access_token = "token"))
   })
   source <- default_azure_anthropic_credentials()
