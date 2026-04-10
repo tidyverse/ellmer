@@ -115,6 +115,7 @@ Collate:
     'provider-portkey.R'
     'provider-snowflake.R'
     'provider-vllm.R'
+    'provider-zai.R'
     'schema.R'
     'stream-controller.R'
     'tokens.R'
