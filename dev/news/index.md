@@ -2,6 +2,13 @@
 
 ## ellmer (development version)
 
+- New
+  [`chat_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md)
+  and
+  [`models_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md)
+  provide support for [LM Studio](https://lmstudio.ai), a local model
+  server with an OpenAI-compatible API
+  ([\#963](https://github.com/tidyverse/ellmer/issues/963)).
 - Fixed three bugs that caused errors when streaming web search results:
   Claude’s `citations_delta` events were mishandled, `server_tool_use`
   input wasn’t parsed from JSON during streaming, and OpenAI’s

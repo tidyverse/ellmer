@@ -38,6 +38,9 @@ data.
   : Chat with a model hosted on Groq
 - [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md)
   : Chat with a model hosted on Hugging Face Serverless Inference API
+- [`chat_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md)
+  [`models_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md)
+  : Chat with a local LM Studio model
 - [`chat_mistral()`](https://ellmer.tidyverse.org/dev/reference/chat_mistral.md)
   [`models_mistral()`](https://ellmer.tidyverse.org/dev/reference/chat_mistral.md)
   : Chat with a model hosted on Mistral's La Platforme

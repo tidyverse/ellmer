@@ -1,33 +1,30 @@
-# Chat with a model hosted on PortkeyAI
+# Chat with a local LM Studio model
 
-[PortkeyAI](https://portkey.ai/docs/product/ai-gateway/universal-api)
-provides an interface (AI Gateway) to connect through its Universal API
-to a variety of LLMs providers via a single endpoint.
+To use `chat_lmstudio()` first download and install [LM
+Studio](https://lmstudio.ai). Then load a model using the LM Studio GUI
+and start the local server.
+
+Built on top of
+[`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md).
 
 ## Usage
 
 ``` r
-chat_portkey(
-  model,
+chat_lmstudio(
   system_prompt = NULL,
-  base_url = "https://api.portkey.ai/v1",
-  api_key = NULL,
-  credentials = NULL,
-  virtual_key = deprecated(),
+  base_url = Sys.getenv("LMSTUDIO_BASE_URL", "http://localhost:1234"),
+  model,
   params = NULL,
   api_args = list(),
   echo = NULL,
+  credentials = NULL,
   api_headers = character()
 )
 
-models_portkey(base_url = "https://api.portkey.ai/v1", api_key = portkey_key())
+models_lmstudio(base_url = "http://localhost:1234", credentials = NULL)
 ```
 
 ## Arguments
-
-- model:
-
-  The model name, e.g. `@my-provider/my-model`.
 
 - system_prompt:
 
@@ -37,31 +34,10 @@ models_portkey(base_url = "https://api.portkey.ai/v1", api_key = portkey_key())
 
   The base URL to the endpoint; the default is OpenAI's public API.
 
-- api_key:
+- model:
 
-  **\[deprecated\]** Use `credentials` instead.
-
-- credentials:
-
-  Override the default credentials. You generally should not need this
-  argument; instead set the `PORTKEY_API_KEY` environment variable. The
-  best place to set this is in `.Renviron`, which you can easily edit by
-  calling `usethis::edit_r_environ()`.
-
-  If you do need additional control, this argument takes a zero-argument
-  function that returns either a string (the API key), or a named list
-  (added as additional headers to every request).
-
-- virtual_key:
-
-  **\[deprecated\]**. Portkey now recommend supplying the model provider
-  (formerly known as the `virtual_key`), in the model name, e.g.
-  `@my-provider/my-model`. See
-  <https://portkey.ai/docs/support/upgrade-to-model-catalog> for
-  details.
-
-  For backward compatibility, the `PORTKEY_VIRTUAL_KEY` env var is still
-  used if the model doesn't include a provider.
+  The model to use for the chat. Use `models_lmstudio()` to see all
+  options.
 
 - params:
 
@@ -89,6 +65,16 @@ models_portkey(base_url = "https://api.portkey.ai/v1", api_key = portkey_key())
   [`chat()`](https://ellmer.tidyverse.org/dev/reference/chat-any.md)
   method.
 
+- credentials:
+
+  LM Studio doesn't require credentials for local usage and in most
+  cases you do not need to provide `credentials`.
+
+  However, if you're accessing an LM Studio instance hosted behind a
+  reverse proxy or secured endpoint that enforces bearer-token
+  authentication, you can set the `LMSTUDIO_API_KEY` environment
+  variable or provide a callback function to `credentials`.
+
 - api_headers:
 
   Named character vector of arbitrary extra headers appended to every
@@ -111,19 +97,19 @@ Other chatbots:
 [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md),
 [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md),
 [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md),
-[`chat_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md),
 [`chat_mistral()`](https://ellmer.tidyverse.org/dev/reference/chat_mistral.md),
 [`chat_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md),
 [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md),
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md),
-[`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md)
+[`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md),
+[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
-chat <- chat_portkey()
+chat <- chat_lmstudio(model = "llama3.2")
 chat$chat("Tell me three jokes about statisticians")
 } # }
 ```

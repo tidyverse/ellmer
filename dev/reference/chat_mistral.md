@@ -103,6 +103,7 @@ Other chatbots:
 [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md),
 [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md),
 [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md),
+[`chat_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md),
 [`chat_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md),
 [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md),
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md),
