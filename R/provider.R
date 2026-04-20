@@ -144,13 +144,30 @@ stream_parse <- new_generic(
     S7_dispatch()
   }
 )
-stream_text <- new_generic(
-  "stream_text",
+stream_content <- new_generic(
+  "stream_content",
   "provider",
   function(provider, event) {
     S7_dispatch()
   }
 )
+
+stream_text <- function(provider, event) {
+  content <- stream_content(provider, event)
+  if (is.null(content)) {
+    return(NULL)
+  }
+  content_text(content)
+}
+
+content_text <- function(content) {
+  switch(
+    class(content)[1],
+    "ellmer::ContentThinking" = content@thinking,
+    "ellmer::ContentText" = content@text,
+    format(content)
+  )
+}
 stream_merge_chunks <- new_generic(
   "stream_merge_chunks",
   "provider",

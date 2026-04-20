@@ -13,37 +13,37 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999d6d6439f1f061-DFW
+      cf-ray: 9a73c879bf4aa2a1-ORD
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 05 Nov 2025 15:36:34 GMT
+      date: Mon, 01 Dec 2025 15:57:58 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '1608'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-processing-ms: '2042'
+      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=z_Kijnc4aXq6iTKpjt9FOMoq3paECF7Tuv9jCSrHCaE-1762356994-1.0.1.1-Y9W7U1dHo9x6SEfMx1QxBlN3faIpP_v_.H2P_Ujh.sGHvxi4zho6TwgAuhDDQMJHNV0VeSu7hx9LdAovrMN0Yozgjqrpg.6_rMfQS_Z6oa0;
-        path=/; expires=Wed, 05-Nov-25 16:06:34 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=RkaGgkfpR8lUl.2ox5swb7TbH1Pvc.M6RPMAj7Zyenk-1764604678-1.0.1.1-Bxt.f4jd.cZnBrO2H9aTT8H6P8fEwKDB5KCuGfsAk2KvJojeea8dQSeHs3eK3RnQnl3rvLgbvkXJ.U6R7nz4_bZZvobJUmlHas1oDiLIf8g;
+        path=/; expires=Mon, 01-Dec-25 16:27:58 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=ZEdIMw53w7rke8DNmURYjhiJJD5srM4neNV1d3a5N3A-1762356994329-0.0.1.1-604800000;
+      - _cfuvid=aGx4SpVT7EDjN9bj2qxlPAlqEBKWaP7oN7e_1nfQudo-1764604678295-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1614'
+      x-envoy-upstream-service-time: '2046'
       x-ratelimit-limit-requests: '30000'
       x-ratelimit-limit-tokens: '150000000'
       x-ratelimit-remaining-requests: '29999'
       x-ratelimit-remaining-tokens: '149999717'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_1c1820410f8f4f989bfd5a8efbdd6447
+      x-request-id: req_6dc8ae2b496049df9aeb8039552504f2
     body:
       string: |-
         {
-          "id": "resp_08df33831712c27f01690b6f00b8c0819097f93e066aaa3759",
+          "id": "resp_06cea93f68dbdba501692dbb042a40819488f031cc2570a597",
           "object": "response",
-          "created_at": 1762356992,
+          "created_at": 1764604676,
           "status": "completed",
           "background": false,
           "billing": {
@@ -57,35 +57,35 @@ http_interactions:
           "model": "gpt-4.1-nano-2025-04-14",
           "output": [
             {
-              "id": "fc_08df33831712c27f01690b6f0186b881909c59a1fda1f5fa70",
+              "id": "fc_06cea93f68dbdba501692dbb04c5208194b49f16fcc23693a8",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"user\":\"Joe\"}",
-              "call_id": "call_XDxyGgpT5XUfxlMiM6UimSbK",
+              "call_id": "call_NPg54AVodz1F4kdDrrFISzyx",
               "name": "user_favorite_color"
             },
             {
-              "id": "fc_08df33831712c27f01690b6f01a81c819097cf33b47decef45",
+              "id": "fc_06cea93f68dbdba501692dbb04eeac81949dbc3ebcb7e10ce7",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"user\":\"Hadley\"}",
-              "call_id": "call_gRFsNnXJ5OWG8yfWakHxbuu4",
+              "call_id": "call_LJjB84PyEvQXalsjTmSJRjbc",
               "name": "user_favorite_color"
             },
             {
-              "id": "fc_08df33831712c27f01690b6f01f2f481908d4ab663937410c8",
+              "id": "fc_06cea93f68dbdba501692dbb051b108194b3509f17eae978ff",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"user\":\"Simon\"}",
-              "call_id": "call_EqWqNWI4bnnN5tOuHOKwntaH",
+              "call_id": "call_nMidtrzYDUr0pEo1M0XfB3QF",
               "name": "user_favorite_color"
             },
             {
-              "id": "fc_08df33831712c27f01690b6f0231248190b5657c305497e427",
+              "id": "fc_06cea93f68dbdba501692dbb053f988194bfe5d61a7de01bf9",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"user\":\"Tom\"}",
-              "call_id": "call_cnaTwsPEDn2fqyuaD0NGcGsB",
+              "call_id": "call_abz7m38rDA08lDo88yL9Gt5W",
               "name": "user_favorite_color"
             }
           ],
@@ -147,17 +147,17 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 15:36:34
+  recorded_at: 2025-12-01 15:57:58
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
         terse."}]},{"role":"user","content":[{"type":"input_text","text":"What are
-        Joe, Hadley, Simon, and Tom''s favorite colors?"}]},{"type":"function_call","call_id":"fc_08df33831712c27f01690b6f0186b881909c59a1fda1f5fa70","name":"user_favorite_color","arguments":"{\"user\":[\"Joe\"]}"},{"type":"function_call","call_id":"fc_08df33831712c27f01690b6f01a81c819097cf33b47decef45","name":"user_favorite_color","arguments":"{\"user\":[\"Hadley\"]}"},{"type":"function_call","call_id":"fc_08df33831712c27f01690b6f01f2f481908d4ab663937410c8","name":"user_favorite_color","arguments":"{\"user\":[\"Simon\"]}"},{"type":"function_call","call_id":"fc_08df33831712c27f01690b6f0231248190b5657c305497e427","name":"user_favorite_color","arguments":"{\"user\":[\"Tom\"]}"},{"type":"function_call_output","call_id":"fc_08df33831712c27f01690b6f0186b881909c59a1fda1f5fa70","output":"Tool
-        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_08df33831712c27f01690b6f01a81c819097cf33b47decef45","output":"Tool
-        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_08df33831712c27f01690b6f01f2f481908d4ab663937410c8","output":"Tool
-        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_08df33831712c27f01690b6f0231248190b5657c305497e427","output":"Tool
+        Joe, Hadley, Simon, and Tom''s favorite colors?"}]},{"type":"function_call","call_id":"fc_06cea93f68dbdba501692dbb04c5208194b49f16fcc23693a8","name":"user_favorite_color","arguments":"{\"user\":\"Joe\"}"},{"type":"function_call","call_id":"fc_06cea93f68dbdba501692dbb04eeac81949dbc3ebcb7e10ce7","name":"user_favorite_color","arguments":"{\"user\":\"Hadley\"}"},{"type":"function_call","call_id":"fc_06cea93f68dbdba501692dbb051b108194b3509f17eae978ff","name":"user_favorite_color","arguments":"{\"user\":\"Simon\"}"},{"type":"function_call","call_id":"fc_06cea93f68dbdba501692dbb053f988194bfe5d61a7de01bf9","name":"user_favorite_color","arguments":"{\"user\":\"Tom\"}"},{"type":"function_call_output","call_id":"fc_06cea93f68dbdba501692dbb04c5208194b49f16fcc23693a8","output":"Tool
+        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_06cea93f68dbdba501692dbb04eeac81949dbc3ebcb7e10ce7","output":"Tool
+        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_06cea93f68dbdba501692dbb051b108194b3509f17eae978ff","output":"Tool
+        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_06cea93f68dbdba501692dbb053f988194bfe5d61a7de01bf9","output":"Tool
         calling failed with error User denied tool request"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
         name"}},"required":["user"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -166,37 +166,37 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999d6d6f9d61f061-DFW
+      cf-ray: 9a73c8884876a2a1-ORD
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 05 Nov 2025 15:36:35 GMT
+      date: Mon, 01 Dec 2025 15:58:00 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '587'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-processing-ms: '2047'
+      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=CVLIIoq5NQANfpW6vJkZxhCaKsgCY0He48NpbQ_Gu7A-1762356995-1.0.1.1-JJLKDEL8StslhP4EeFoTp0ImySEP2YkYjyd4o9TvZy05jdoc_.S09QPmkxZmWobU_sl3DMggg6dVQ9Z39fmYP8z6JtwsWYpOMZRDcjNJw8c;
-        path=/; expires=Wed, 05-Nov-25 16:06:35 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=uJs7JeWXYUq1htH3WqvHeiOlDvVtlLiJTK86jLYXgos-1764604680-1.0.1.1-TJKGjF4iaKL9wgQZr7no6DBa_xSqV0s9H2N0DfJPJhCJb1Aftzx.Ex53AJ1ocEc90TOD8s7nJL04rjKWqeOSCT5ga4p172dCTIC61BBnZ80;
+        path=/; expires=Mon, 01-Dec-25 16:28:00 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=B0rQGwRuQJaMPCh2IQZ8rLxz6cgmlhZd4i4GyEwD8dQ-1762356995134-0.0.1.1-604800000;
+      - _cfuvid=DsA5Ag_6cucdsGUJddupVdg5AJA39jZG0Co4VYjbIAc-1764604680618-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '593'
+      x-envoy-upstream-service-time: '2050'
       x-ratelimit-limit-requests: '30000'
       x-ratelimit-limit-tokens: '150000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999580'
+      x-ratelimit-remaining-tokens: '149999582'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_125f8fc00a6f41cfb29247f536f967a5
+      x-request-id: req_83119f088a5e4ea6a95f47498c1aaf52
     body:
       string: |-
         {
-          "id": "resp_08d10948fa6b7ffa01690b6f028898819094f64c02267906c6",
+          "id": "resp_08052417c590353901692dbb068db88197aa5b077c3ef745cb",
           "object": "response",
-          "created_at": 1762356994,
+          "created_at": 1764604678,
           "status": "completed",
           "background": false,
           "billing": {
@@ -210,7 +210,7 @@ http_interactions:
           "model": "gpt-4.1-nano-2025-04-14",
           "output": [
             {
-              "id": "msg_08d10948fa6b7ffa01690b6f02eebc8190b595906edd5a887a",
+              "id": "msg_08052417c590353901692dbb07041081979cc4c8d17f2642e0",
               "type": "message",
               "status": "completed",
               "content": [
@@ -269,7 +269,7 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 204,
+            "input_tokens": 200,
             "input_tokens_details": {
               "cached_tokens": 0
             },
@@ -277,10 +277,10 @@ http_interactions:
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 213
+            "total_tokens": 209
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 15:36:35
+  recorded_at: 2025-12-01 15:58:00
 recorded_with: VCR-vcr/2.0.0

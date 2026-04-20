@@ -216,15 +216,15 @@ method(chat_params, ProviderOpenAICompatible) <- function(provider, params) {
   standardise_params(
     params,
     c(
-      temperature = "temperature",
-      top_p = "top_p",
       frequency_penalty = "frequency_penalty",
+      logprobs = "log_probs",
+      max_completion_tokens = "max_tokens",
       presence_penalty = "presence_penalty",
       seed = "seed",
-      max_completion_tokens = "max_tokens",
-      logprobs = "log_probs",
+      stop = "stop_sequences",
+      temperature = "temperature",
       top_logprobs = "top_k",
-      stop = "stop_sequences"
+      top_p = "top_p"
     )
   )
 }
@@ -238,12 +238,15 @@ method(stream_parse, ProviderOpenAICompatible) <- function(provider, event) {
 
   jsonlite::parse_json(event$data)
 }
-method(stream_text, ProviderOpenAICompatible) <- function(provider, event) {
+method(stream_content, ProviderOpenAICompatible) <- function(provider, event) {
   if (length(event$choices) == 0) {
-    NULL
-  } else {
-    event$choices[[1]]$delta[["content"]]
+    return(NULL)
   }
+  text <- event$choices[[1]]$delta[["content"]]
+  if (is.null(text)) {
+    return(NULL)
+  }
+  ContentText(text)
 }
 method(stream_merge_chunks, ProviderOpenAICompatible) <- function(
   provider,
@@ -287,7 +290,13 @@ method(value_turn, ProviderOpenAICompatible) <- function(
       content <- list(ContentJson(data = message$content))
     }
   } else {
-    content <- lapply(message$content, as_content)
+    # Some providers (e.g. Databricks) return content: "" instead of
+    # content: null for tool-only turns; treat empty strings as null
+    if (is_string(message$content) && !nzchar(message$content)) {
+      content <- list()
+    } else {
+      content <- lapply(message$content, as_content)
+    }
   }
   if (has_name(message, "tool_calls")) {
     calls <- lapply(message$tool_calls, function(call) {
@@ -340,10 +349,20 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
 
     c(tools, user)
   } else if (is_assistant_turn(x)) {
+    # Drop empty ContentText to avoid API errors from providers that reject
+    # empty text content blocks (e.g. Databricks returns content: "" for
+    # tool-only turns, then rejects it on replay)
+    is_empty_text <- map_lgl(x@contents, function(c) {
+      S7_inherits(c, ContentText) && !nzchar(c@text)
+    })
+    contents <- x@contents[!is_empty_text]
+    if (length(contents) == 0) {
+      return(NULL)
+    }
     # Tool requests come out of content and go into own argument
-    is_tool <- map_lgl(x@contents, is_tool_request)
-    content <- as_json(provider, x@contents[!is_tool], ...)
-    tool_calls <- as_json(provider, x@contents[is_tool], ...)
+    is_tool <- map_lgl(contents, is_tool_request)
+    content <- as_json(provider, contents[!is_tool], ...)
+    tool_calls <- as_json(provider, contents[is_tool], ...)
 
     list(
       compact(list(
@@ -405,7 +424,7 @@ method(as_json, list(ProviderOpenAICompatible, ContentToolRequest)) <- function(
   x,
   ...
 ) {
-  json_args <- jsonlite::toJSON(x@arguments)
+  json_args <- to_json(x@arguments)
   list(
     id = x@id,
     `function` = list(name = x@name, arguments = json_args),

@@ -241,16 +241,19 @@ method(chat_params, ProviderOpenAI) <- function(provider, params) {
 
 # OpenAI -> ellmer --------------------------------------------------------------
 
-method(stream_text, ProviderOpenAI) <- function(provider, event) {
+method(stream_content, ProviderOpenAI) <- function(provider, event) {
   if (event$type == "response.output_text.delta") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/output_text/delta
-    event$delta
+    if (is.null(event$delta)) {
+      return(NULL)
+    }
+    ContentText(event$delta)
   } else if (event$type == "response.reasoning_summary_text.delta") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/reasoning_summary_text/delta
-    event$delta
+    ContentThinking(event$delta)
   } else if (event$type == "response.reasoning_summary_text.done") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/reasoning_summary_text/done
-    "\n\n"
+    NULL
   }
 }
 method(stream_merge_chunks, ProviderOpenAI) <- function(
@@ -312,7 +315,14 @@ method(value_turn, ProviderOpenAI) <- function(
       ContentImageInline(mime_type, output$result)
     } else if (output$type == "web_search_call") {
       # https://platform.openai.com/docs/guides/tools-web-search#output-and-citations
-      ContentToolRequestSearch(query = output$action$query, json = output)
+      first_query <- if (length(output$action$queries)) {
+        output$action$queries[[1]]
+      }
+      query <- output$action$query %||%
+        first_query %||%
+        output$action$url %||%
+        "web search"
+      ContentToolRequestSearch(query = query, json = output)
     } else {
       browser()
       cli::cli_abort(
@@ -421,7 +431,7 @@ method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(
     type = "function_call",
     call_id = x@id,
     name = x@name,
-    arguments = jsonlite::toJSON(x@arguments)
+    arguments = to_json(x@arguments)
   )
 }
 
@@ -482,7 +492,7 @@ method(batch_submit, ProviderOpenAI) <- function(
       body = body
     )
   })
-  json <- map_chr(requests, jsonlite::toJSON, auto_unbox = TRUE)
+  json <- map_chr(requests, to_json)
   writeLines(json, path)
   # Then upload it
   uploaded <- openai_upload(provider, path)

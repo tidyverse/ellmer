@@ -117,6 +117,7 @@ method(chat_params, ProviderOllama) <- function(provider, params) {
       stop = "stop_sequences",
       temperature = "temperature",
       top_p = "top_p",
+      top_k = "top_k",
       max_tokens = "max_tokens"
     )
   )

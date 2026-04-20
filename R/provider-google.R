@@ -272,8 +272,18 @@ method(stream_parse, ProviderGoogleGemini) <- function(provider, event) {
     jsonlite::parse_json(event$data)
   }
 }
-method(stream_text, ProviderGoogleGemini) <- function(provider, event) {
-  event$candidates[[1]]$content$parts[[1]]$text
+method(stream_content, ProviderGoogleGemini) <- function(provider, event) {
+  parts <- event$candidates[[1]]$content$parts
+  if (is.null(parts) || length(parts) == 0) {
+    return(NULL)
+  }
+
+  part <- parts[[1]]
+  if (isTRUE(part$thought) && !is.null(part$text)) {
+    ContentThinking(part$text)
+  } else if (!is.null(part$text)) {
+    ContentText(part$text)
+  }
 }
 method(stream_merge_chunks, ProviderGoogleGemini) <- function(
   provider,
@@ -320,17 +330,23 @@ method(value_turn, ProviderGoogleGemini) <- function(
   message <- result$candidates[[1]]$content
 
   contents <- lapply(message$parts, function(content) {
-    if (has_name(content, "text")) {
+    if (isTRUE(content$thought) && has_name(content, "text")) {
+      ContentThinking(content$text)
+    } else if (has_name(content, "text")) {
       if (has_type) {
         ContentJson(string = content$text)
       } else {
         ContentText(content$text)
       }
     } else if (has_name(content, "functionCall")) {
+      extra <- compact(list(
+        thoughtSignature = content$thoughtSignature
+      ))
       ContentToolRequest(
         content$functionCall$name,
         content$functionCall$name,
-        content$functionCall$args
+        content$functionCall$args,
+        extra = extra
       )
     } else if (has_name(content, "inlineData")) {
       ContentImageInline(
@@ -400,6 +416,15 @@ method(as_json, list(ProviderGoogleGemini, ContentText)) <- function(
   }
 }
 
+method(as_json, list(ProviderGoogleGemini, ContentThinking)) <- function(
+  provider,
+  x,
+  ...
+) {
+  # https://ai.google.dev/gemini-api/docs/thinking
+  list(thought = TRUE, text = x@thinking)
+}
+
 method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
   provider,
   x,
@@ -456,12 +481,13 @@ method(as_json, list(ProviderGoogleGemini, ContentToolRequest)) <- function(
   x,
   ...
 ) {
-  list(
+  compact(list(
     functionCall = list(
       name = x@id,
       args = x@arguments
-    )
-  )
+    ),
+    thoughtSignature = x@extra$thoughtSignature
+  ))
 }
 
 # https://ai.google.dev/api/caching#FunctionResponse
@@ -704,7 +730,7 @@ default_google_credentials <- function(
     testthat::skip("no Google credentials available")
   }
 
-  if (is_interactive()) {
+  if (is.null(token) && is_interactive()) {
     return(function() {
       function(req) {
         req_oauth_auth_code(

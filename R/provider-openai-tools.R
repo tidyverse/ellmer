@@ -45,5 +45,14 @@ openai_tool_web_search <- function(
     user_location = user_location,
     external_web_access = external_web_access
   ))
-  ToolBuiltIn("web_search", json)
+  ToolBuiltIn(
+    name = "web_search",
+    description = "Search the web for up-to-date information.",
+    annotations = tool_annotations(
+      title = "Web search",
+      read_only_hint = TRUE,
+      open_world_hint = TRUE
+    ),
+    json = json
+  )
 }

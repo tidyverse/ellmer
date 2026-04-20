@@ -202,6 +202,8 @@ show_image <- function(x) {
 #' @param arguments Named list of arguments to call the function with.
 #' @param tool ellmer automatically matches a tool request to the tools defined
 #'   for the chatbot. If `NULL`, the request did not match a defined tool.
+#' @param extra Provider-specific metadata associated with the tool request.
+#'   Automatically managed by \pkg{ellmer}.
 ContentToolRequest <- new_class(
   "ContentToolRequest",
   parent = Content,
@@ -209,7 +211,8 @@ ContentToolRequest <- new_class(
     id = prop_string(),
     name = prop_string(),
     arguments = class_list,
-    tool = NULL | ToolDef
+    tool = NULL | ToolDef,
+    extra = class_list
   )
 )
 method(format, ContentToolRequest) <- function(
@@ -319,7 +322,7 @@ tool_string <- function(x) {
     paste(x@value, collapse = "\n")
   } else {
     withCallingHandlers(
-      jsonlite::toJSON(x@value, auto_unbox = TRUE),
+      to_json(x@value),
       error = function(err) {
         cli::cli_abort(
           c(

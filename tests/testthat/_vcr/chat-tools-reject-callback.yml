@@ -14,37 +14,37 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999dfdc0aa6e6d84-DFW
+      cf-ray: 9a73c896787ea2a1-ORD
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 05 Nov 2025 17:15:07 GMT
+      date: Mon, 01 Dec 2025 15:58:02 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '1733'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-processing-ms: '2046'
+      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=i2qpjXWKZ3VxfBewbpZtPPkAhbEq1b97Rj_SeE.WYE8-1762362907-1.0.1.1-xhx3aeBjCnGZKnMswzgx8mqPZ6cS2xPP5rvxgU1iLUsd3016Ugxw2Gp_VHsV6b25cQX.jGxn4BSjecSjorcZ3xoJlbrtpLd_i7QrvoP5Hfo;
-        path=/; expires=Wed, 05-Nov-25 17:45:07 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=BST8m45ZrpvyfuQTq.KPLkGt71zdgHOR0TOXb6YfXcM-1764604682-1.0.1.1-6GRWL3Q9QMP0q5mcY04GZv9KHzyn37jVkb2pGCqRg6.1gjYFq7BTI5B3FshUyOWjFJf3Mgj2smdUVxbY..zYpHu4gecqggQg4lBIaVKXnDY;
+        path=/; expires=Mon, 01-Dec-25 16:28:02 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=.csEk368dIa4.mfB8IY3QixLk4K1nrUMj60i3eA7kyk-1762362907508-0.0.1.1-604800000;
+      - _cfuvid=CM.kknG3yM.R0B68q29nnuTTQ.V_U6H5ys4GolmW43I-1764604682830-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1738'
+      x-envoy-upstream-service-time: '2050'
       x-ratelimit-limit-requests: '30000'
       x-ratelimit-limit-tokens: '150000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999702'
+      x-ratelimit-remaining-tokens: '149999700'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_de1cebb108e549ebaf2a7b87e3a0c594
+      x-request-id: req_1053196a60ba4092858cd3aa881cf745
     body:
       string: |-
         {
-          "id": "resp_08c681976f63fedf01690b8619c710819699e354e1a65e2f43",
+          "id": "resp_0451ccccc46187cb01692dbb08c7288197a019a2de94b976cf",
           "object": "response",
-          "created_at": 1762362905,
+          "created_at": 1764604680,
           "status": "completed",
           "background": false,
           "billing": {
@@ -58,19 +58,19 @@ http_interactions:
           "model": "gpt-4.1-mini-2025-04-14",
           "output": [
             {
-              "id": "fc_08c681976f63fedf01690b861b24248196bf4a122f6d70cf57",
+              "id": "fc_0451ccccc46187cb01692dbb09c2c08197a98dca09ae2f68ec",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"user\":\"Joe\"}",
-              "call_id": "call_DQnB29LnZUsiAjlOZDybJbPS",
+              "call_id": "call_Cf6d0R0EHjJbkgsL0g5QiuHy",
               "name": "user_favorite_color"
             },
             {
-              "id": "fc_08c681976f63fedf01690b861b4fd48196979a412c0dd7f1a7",
+              "id": "fc_0451ccccc46187cb01692dbb09ebc881978179f237ef143bf2",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"user\":\"Hadley\"}",
-              "call_id": "call_A7KsVqRKg1oq4UZ7K1YV6t35",
+              "call_id": "call_UEdrirGGbmdNGpo5wfQc31r9",
               "name": "user_favorite_color"
             }
           ],
@@ -132,7 +132,7 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 17:15:07
+  recorded_at: 2025-12-01 15:58:02
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
@@ -140,8 +140,8 @@ http_interactions:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
         terse."}]},{"role":"user","content":[{"type":"input_text","text":"What are
         Joe and Hadley''s favorite colors?"}]},{"role":"user","content":[{"type":"input_text","text":"Write
-        ''Joe ____ Hadley ____''. Use ''unknown'' if you don''t know."}]},{"type":"function_call","call_id":"fc_08c681976f63fedf01690b861b24248196bf4a122f6d70cf57","name":"user_favorite_color","arguments":"{\"user\":[\"Joe\"]}"},{"type":"function_call","call_id":"fc_08c681976f63fedf01690b861b4fd48196979a412c0dd7f1a7","name":"user_favorite_color","arguments":"{\"user\":[\"Hadley\"]}"},{"type":"function_call_output","call_id":"fc_08c681976f63fedf01690b861b24248196bf4a122f6d70cf57","output":"Tool
-        calling failed with error Tool call rejected. Joe denied the request."},{"type":"function_call_output","call_id":"fc_08c681976f63fedf01690b861b4fd48196979a412c0dd7f1a7","output":"red"}],"model":"gpt-4.1-mini","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
+        ''Joe ____ Hadley ____''. Use ''unknown'' if you don''t know."}]},{"type":"function_call","call_id":"fc_0451ccccc46187cb01692dbb09c2c08197a98dca09ae2f68ec","name":"user_favorite_color","arguments":"{\"user\":\"Joe\"}"},{"type":"function_call","call_id":"fc_0451ccccc46187cb01692dbb09ebc881978179f237ef143bf2","name":"user_favorite_color","arguments":"{\"user\":\"Hadley\"}"},{"type":"function_call_output","call_id":"fc_0451ccccc46187cb01692dbb09c2c08197a98dca09ae2f68ec","output":"Tool
+        calling failed with error Tool call rejected. Joe denied the request."},{"type":"function_call_output","call_id":"fc_0451ccccc46187cb01692dbb09ebc881978179f237ef143bf2","output":"red"}],"model":"gpt-4.1-mini","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
         name"}},"required":["user"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
@@ -149,37 +149,37 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999dfdccec0d6d84-DFW
+      cf-ray: 9a73c8a4981fa2a1-ORD
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 05 Nov 2025 17:15:08 GMT
+      date: Mon, 01 Dec 2025 15:58:05 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '829'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-processing-ms: '2089'
+      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=qUrld6rvsAR.j882ccSq.5AfWywIdQdG_A7rYtMGlBw-1762362908-1.0.1.1-SW.ze1i5UP.vv7Qh8SQS5Nj2bUA_wllrQq8snycdNUqjvUKbyHpEYaJpLd9U42sCVt29gmIYPsKnkZDiCU297NCWaEOBnWTMc68p6qQfbIM;
-        path=/; expires=Wed, 05-Nov-25 17:45:08 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=kV9Fbj82oa0UvL7hpZkQw7m3rI_i.I3131RMreJGouY-1764604685-1.0.1.1-FK66MmdGCGXSNvkIQxy453avQr7taeU.UQREVVgUi3l2vAyw35vDhj18zQ28LRVmyYY2H_07xoNwI_Stn6pRPlRVvHGciuW5G5ByKG6nY9E;
+        path=/; expires=Mon, 01-Dec-25 16:28:05 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=n03TxMb_Kp0c.M4buc94QXx6l5lot9f2LOdfYnjPZrI-1762362908532-0.0.1.1-604800000;
+      - _cfuvid=0XNO2UydTfv9Jrp9xUXYSlhY2Bwhan3hQCGuI9f1cAc-1764604685176-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '836'
+      x-envoy-upstream-service-time: '2093'
       x-ratelimit-limit-requests: '30000'
       x-ratelimit-limit-tokens: '150000000'
       x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999635'
+      x-ratelimit-remaining-tokens: '149999637'
       x-ratelimit-reset-requests: 2ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_c95f6ebe5eef478eaf94a6cb2dccb55c
+      x-request-id: req_a24b5a15892e4098a7055ba7e28ba055
     body:
       string: |-
         {
-          "id": "resp_0bcc3a932a00e20b01690b861bb8e481958284a4dd691a42c4",
+          "id": "resp_0a4b059873a7445f01692dbb0b14188196b544128a115739fd",
           "object": "response",
-          "created_at": 1762362907,
+          "created_at": 1764604683,
           "status": "completed",
           "background": false,
           "billing": {
@@ -193,7 +193,7 @@ http_interactions:
           "model": "gpt-4.1-mini-2025-04-14",
           "output": [
             {
-              "id": "msg_0bcc3a932a00e20b01690b861c5adc8195bd98563879c9ec56",
+              "id": "msg_0a4b059873a7445f01692dbb0bba8481969de780376fb9e845",
               "type": "message",
               "status": "completed",
               "content": [
@@ -252,7 +252,7 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 148,
+            "input_tokens": 146,
             "input_tokens_details": {
               "cached_tokens": 0
             },
@@ -260,10 +260,10 @@ http_interactions:
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 155
+            "total_tokens": 153
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 17:15:08
+  recorded_at: 2025-12-01 15:58:05
 recorded_with: VCR-vcr/2.0.0

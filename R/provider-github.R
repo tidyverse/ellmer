@@ -5,10 +5,10 @@
 #' GitHub model marketplace, you will need to apply for and be accepted into the
 #' beta access program. See <https://github.com/marketplace/models> for details.
 #'
-#' This function is a lightweight wrapper around [chat_openai()] with
+#' This function is a lightweight wrapper around [chat_openai_compatible()] with
 #' the defaults tweaked for the GitHub Models marketplace.
 #'
-#' GitHub also suports the Azure AI Inference SDK, which you can use by setting
+#' GitHub also supports the Azure AI Inference SDK, which you can use by setting
 #' `base_url` to `"https://models.inference.ai.azure.com/"`. This endpoint was
 #' used in \pkg{ellmer} v0.3.0 and earlier.
 #'
@@ -51,7 +51,8 @@ chat_github <- function(
   # https://docs.github.com/en/rest/models/inference?apiVersion=2022-11-28
   params <- params %||% params()
 
-  chat_openai(
+  chat_openai_compatible(
+    name = "gitHub",
     system_prompt = system_prompt,
     base_url = base_url,
     credentials = credentials,
@@ -92,7 +93,8 @@ models_github <- function(
   provider <- ProviderOpenAI(
     name = "github",
     model = "",
-    credentials = credentials
+    credentials = credentials,
+    base_url = base_url
   )
 
   req <- base_request(provider)

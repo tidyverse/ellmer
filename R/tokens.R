@@ -51,6 +51,9 @@ log_tokens <- function(provider, tokens, cost) {
 }
 
 log_turn <- function(provider, turn) {
+  if (is_partial_turn(turn)) {
+    return(invisible())
+  }
   log_tokens(provider, exec(tokens, !!!as.list(turn@tokens)), turn@cost)
 }
 

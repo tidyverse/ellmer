@@ -13,37 +13,37 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 99d9f38bdcc26b24-DFW
+      cf-ray: 9a73c3e8badd8fc2-ORD
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 12 Nov 2025 23:53:54 GMT
+      date: Mon, 01 Dec 2025 15:54:51 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '1490'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-processing-ms: '2047'
+      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=2YKmns9SI9pqFQ8mGyUkjaxGfY8ERpN1iigC_zjWh1o-1762991634-1.0.1.1-h.IPUed.8PaLDgyyJowKLgkjZJOk35lwvA8XDOSi7PaKgZ.lbfW5Lc.4TqPXmnfauWbA4XeNo0KaJBaWW3iJLQoNm3T5CeH7pnJ7uSqHSQQ;
-        path=/; expires=Thu, 13-Nov-25 00:23:54 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=iasqFMKfE877B0CMbrd2ew_OVm4WSnlDN6Va3Sc7euU-1764604491-1.0.1.1-lYbjbX3HYIpuBZo1iXFrFZDl0UUzj44qJmdo9U2ec0BV.CM5QqccKNbnaFGljmDnOToe1mCTSncl.zL.ibdkkIH_mxL5F8L8SQphqN.mSsc;
+        path=/; expires=Mon, 01-Dec-25 16:24:51 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=sEv7kSGqfEtR2xdSzCrtzGlWeaw_Lk27JInepcfLkfA-1762991634818-0.0.1.1-604800000;
+      - _cfuvid=.OWtEwcEX3PM7EnYor32XgplMyG6_7D2h5Jpnij1Ens-1764604491196-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1505'
+      x-envoy-upstream-service-time: '2051'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999715'
+      x-ratelimit-remaining-tokens: '29999716'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_172bef28aa5b45499a409eddd56770e9
+      x-request-id: req_07925e5d96314310bd7c78e437031008
     body:
       string: |-
         {
-          "id": "resp_0695837b713996880169151e1154448193a6dc75424d3b88c1",
+          "id": "resp_0ab4b61a48aa23bb01692dba49209481908a4502d64f2da7f3",
           "object": "response",
-          "created_at": 1762991633,
+          "created_at": 1764604489,
           "status": "completed",
           "background": false,
           "billing": {
@@ -57,11 +57,11 @@ http_interactions:
           "model": "gpt-4.1-2025-04-14",
           "output": [
             {
-              "id": "fc_0695837b713996880169151e123e0881939637e2fd9d66180e",
+              "id": "fc_0ab4b61a48aa23bb01692dba49b87c8190ae9678691024472c",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"cities\":[\"London\",\"Chicago\"]}",
-              "call_id": "call_DKAPM2fw7SGsFG5VsGogeECu",
+              "call_id": "call_TfoUectHrghIxnrpTif0N3WY",
               "name": "get_weather"
             }
           ],
@@ -127,13 +127,13 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-12 23:53:54
+  recorded_at: 2025-12-01 15:54:51
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Give
-        me a weather update for London and Chicago"}]},{"type":"function_call","call_id":"fc_0695837b713996880169151e123e0881939637e2fd9d66180e","name":"get_weather","arguments":"{\"cities\":[[\"London\"],[\"Chicago\"]]}"},{"type":"function_call_output","call_id":"fc_0695837b713996880169151e123e0881939637e2fd9d66180e","output":"[{\"city\":\"London\",\"raining\":\"heavy\",\"temperature\":\"cool\",\"wind\":\"strong\"},{\"city\":\"Chicago\",\"raining\":\"overcast\",\"temperature\":\"warm\",\"wind\":\"strong\"}]"}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","name":"get_weather","description":"\n    Report
+        me a weather update for London and Chicago"}]},{"type":"function_call","call_id":"fc_0ab4b61a48aa23bb01692dba49b87c8190ae9678691024472c","name":"get_weather","arguments":"{\"cities\":[\"London\",\"Chicago\"]}"},{"type":"function_call_output","call_id":"fc_0ab4b61a48aa23bb01692dba49b87c8190ae9678691024472c","output":"[{\"city\":\"London\",\"raining\":\"heavy\",\"temperature\":\"cool\",\"wind\":\"strong\"},{\"city\":\"Chicago\",\"raining\":\"overcast\",\"temperature\":\"warm\",\"wind\":\"strong\"}]"}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","name":"get_weather","description":"\n    Report
         on weather conditions in multiple cities. For efficiency, request\n    all
         weather updates using a single tool call\n  ","strict":true,"parameters":{"type":"object","description":"","properties":{"cities":{"type":"array","description":"City
         names","items":{"type":"string","description":""}}},"required":["cities"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -142,37 +142,37 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 99d9f396ab676b24-DFW
+      cf-ray: 9a73c3f70fb78fc2-ORD
       content-encoding: gzip
       content-type: application/json
-      date: Wed, 12 Nov 2025 23:53:55 GMT
+      date: Mon, 01 Dec 2025 15:54:53 GMT
       openai-organization: posit-esfrkf
-      openai-processing-ms: '944'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      openai-processing-ms: '2046'
+      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
       openai-version: '2020-10-01'
       server: cloudflare
       set-cookie:
-      - __cf_bm=2loLLCjm_hRA_cw7NxDOsviKxA3DS.aUvGLMaoQlqjI-1762991635-1.0.1.1-W5BtXiBzfXIbAORw7OQswBFo4N2PDSvHXmqHrUJkyiTbaSdItu9GUauE961mhI1voRr3Aeuv9k0L5yi1MliTq_zQLbo7AagGgd0KOug1Xq4;
-        path=/; expires=Thu, 13-Nov-25 00:23:55 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=HsFR2qHS7dobQje1YeWBVFZxuWjgB6JSb11ZAY.Q4co-1764604493-1.0.1.1-HidnE5PCYuLsrRuOjhKO.xZ6t8e0G9U5aiyHcx4kzvqKZfUcz9mQT_DdLOISYCRLRctMLXZWAWUVRu_TyoSDjtulWP0dIsileYg7NuBw6kE;
+        path=/; expires=Mon, 01-Dec-25 16:24:53 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=Zpbv_1m3gTP48Qt5hO_nzFO32smzr_Mol3Up_Tndv8Y-1762991635967-0.0.1.1-604800000;
+      - _cfuvid=Qoh0dVR0Anq5aFuOawIXIWCWlbKK6qXhUbiPC.0cDCY-1764604493479-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '947'
+      x-envoy-upstream-service-time: '2048'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999652'
+      x-ratelimit-remaining-tokens: '29999655'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_0914ffb730ee479d8ddff18237e99710
+      x-request-id: req_5e189d68fee545c2acc1783622cceaf8
     body:
       string: |-
         {
-          "id": "resp_06ef3c5a2fde69e40169151e130ca48197a997ef945c7013d4",
+          "id": "resp_0e7a4c6e4ae3a23901692dba4b6aac81909bfc0bbef442b7ef",
           "object": "response",
-          "created_at": 1762991635,
+          "created_at": 1764604491,
           "status": "completed",
           "background": false,
           "billing": {
@@ -186,7 +186,7 @@ http_interactions:
           "model": "gpt-4.1-2025-04-14",
           "output": [
             {
-              "id": "msg_06ef3c5a2fde69e40169151e13af3c819787712a6164ec0536",
+              "id": "msg_0e7a4c6e4ae3a23901692dba4bb9f481908b244e6521b24733",
               "type": "message",
               "status": "completed",
               "content": [
@@ -194,7 +194,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Here is the weather update:\n\n- London: Heavy rain, cool temperature, and strong winds.\n- Chicago: Overcast skies, warm temperature, and strong winds."
+                  "text": "Here\u2019s a weather update:\n\n- London: It\u2019s heavily raining, cool, and windy with strong winds.\n- Chicago: The weather is overcast, warm, and also has strong winds.\n\nDress accordingly and stay safe!"
                 }
               ],
               "role": "assistant"
@@ -249,18 +249,18 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 130,
+            "input_tokens": 128,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 35,
+            "output_tokens": 47,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 165
+            "total_tokens": 175
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-12 23:53:55
+  recorded_at: 2025-12-01 15:54:53
 recorded_with: VCR-vcr/2.0.0

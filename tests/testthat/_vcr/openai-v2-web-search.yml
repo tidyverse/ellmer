@@ -10,39 +10,43 @@ http_interactions:
   response:
     status: 200
     headers:
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 99ae5dff3b0b6bce-DFW
-      content-encoding: gzip
+      date: Mon, 16 Mar 2026 14:44:56 GMT
       content-type: application/json
-      date: Fri, 07 Nov 2025 16:57:06 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '6594'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
-      openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=CNduO6Iw3VBRFpnlkJmmrpZn68suAMm_KxsYupMJcIY-1762534626-1.0.1.1-8tQhIWKcaKzOcOS2q39lPWQ1tY6Mc9Mh9PETwWfWuPwIiH5RcnwTWlWFMMb2gd3cfu0LA8YecxVKEbwXCWr0gOljOj6uFrK9D1drCK7IfvY;
-        path=/; expires=Fri, 07-Nov-25 17:27:06 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=PluTrp5gpRUU9NPjRYvUYfiSW2MAGKH4hwoE9s79tuE-1762534626683-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '30000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '29983188'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 33ms
+      openai-version: '2020-10-01'
+      openai-organization: posit-esfrkf
+      openai-project: proj_OgLNNoeNNrPmtkuM5FLTMdBQ
+      x-request-id: req_f0293e8fb2a547558d2d7cf13cb4a5ea
+      openai-processing-ms: '2604'
+      cf-cache-status: DYNAMIC
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '6599'
-      x-request-id: req_f8dc9c2c07af4397b0979da043bb275d
+      set-cookie: __cf_bm=hLn6B0fsIxtp6W9qogSqL.61U25ts9qdDFnizitl0i0-1773672294.026194-1.0.1.1-4ND_3fr82mmNlEeNect_4kLqG.tjpQvy.rVawDLVpVRWlaIqUn41tnKJNqji5NXTUH_qW9w5.Y_vRCGDOmURrgI9jKpgnEqrBwZns.GNH3mklhcYylXvdXnQoNrRpN_X;
+        HttpOnly; Secure; Path=/; Domain=api.openai.com; Expires=Mon, 16 Mar 2026
+        15:14:56 GMT
+      content-encoding: gzip
+      cf-ray: 9dd489ddab6a90d8-ATL
+      alt-svc: h3=":443"; ma=86400
     body:
       string: |-
         {
-          "id": "resp_0a01833cc558a3bc01690e24dc16d08195942d7d79a7dad164",
+          "id": "resp_0d43c66b2bbbaa3b0169b81766116081979667aacc521a38b7",
           "object": "response",
-          "created_at": 1762534620,
+          "created_at": 1773672294,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1773672296,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
@@ -50,16 +54,19 @@ http_interactions:
           "model": "gpt-4.1-2025-04-14",
           "output": [
             {
-              "id": "ws_0a01833cc558a3bc01690e24dcd9cc819589af57101f84dbcc",
+              "id": "ws_0d43c66b2bbbaa3b0169b81766e5248197aabcb9631f1d0d9b",
               "type": "web_search_call",
               "status": "completed",
               "action": {
                 "type": "search",
-                "query": "ggplot2 1.0.0 CRAN archive release date"
+                "queries": [
+                  "ggplot2 1.0.0 CRAN release date"
+                ],
+                "query": "ggplot2 1.0.0 CRAN release date"
               }
             },
             {
-              "id": "msg_0a01833cc558a3bc01690e24e23d44819589c9016c3a34846e",
+              "id": "msg_0d43c66b2bbbaa3b0169b81768372081978211e6c7086b0e34",
               "type": "message",
               "status": "completed",
               "content": [
@@ -68,20 +75,21 @@ http_interactions:
                   "annotations": [
                     {
                       "type": "url_citation",
-                      "end_index": 147,
+                      "end_index": 135,
                       "start_index": 57,
-                      "title": "Index of /CRAN/src/contrib/Archive/ggplot2",
-                      "url": "https://stat.ethz.ch/CRAN/src/contrib/Archive/ggplot2/?utm_source=openai"
+                      "title": "ggplot2 published releases on CRAN - Libraries.io - security & maintenance data for open source software",
+                      "url": "https://libraries.io/cran/ggplot2/versions?utm_source=openai"
                     }
                   ],
                   "logprobs": [],
-                  "text": "ggplot2 version\u202f1.0.0 was released to CRAN on 2014\u201105\u201121 ([stat.ethz.ch](https://stat.ethz.ch/CRAN/src/contrib/Archive/ggplot2/?utm_source=openai)).\n\nAnswer: 2014\u201105\u201121"
+                  "text": "ggplot2 version\u202f1.0.0 was released to CRAN on 2014\u201105\u201121 ([libraries.io](https://libraries.io/cran/ggplot2/versions?utm_source=openai)).\n\nAnswer: 2014\u201105\u201121"
                 }
               ],
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
           "prompt_cache_retention": null,
@@ -103,7 +111,6 @@ http_interactions:
           "tools": [
             {
               "type": "web_search",
-              "filters": null,
               "search_context_size": "medium",
               "user_location": {
                 "type": "approximate",
@@ -118,20 +125,20 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 17038,
+            "input_tokens": 17079,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 86,
+            "output_tokens": 92,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 17124
+            "total_tokens": 17171
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-07 16:57:06
+  recorded_at: 2026-03-16 14:44:56
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
@@ -139,53 +146,51 @@ http_interactions:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
         terse."}]},{"role":"user","content":[{"type":"input_text","text":"When was
         ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.\n\nThe CRAN
-        archive page has this info."}]},{"id":"ws_0a01833cc558a3bc01690e24dcd9cc819589af57101f84dbcc","type":"web_search_call","status":"completed","action":{"type":"search","query":"ggplot2
-        1.0.0 CRAN archive release date"}},{"role":"assistant","content":[{"type":"output_text","text":"ggplot2
-        version 1.0.0 was released to CRAN on 2014‑05‑21 ([stat.ethz.ch](https://stat.ethz.ch/CRAN/src/contrib/Archive/ggplot2/?utm_source=openai)).\n\nAnswer:
+        archive page has this info."}]},{"id":"ws_0d43c66b2bbbaa3b0169b81766e5248197aabcb9631f1d0d9b","type":"web_search_call","status":"completed","action":{"type":"search","queries":["ggplot2
+        1.0.0 CRAN release date"],"query":"ggplot2 1.0.0 CRAN release date"}},{"role":"assistant","content":[{"type":"output_text","text":"ggplot2
+        version 1.0.0 was released to CRAN on 2014‑05‑21 ([libraries.io](https://libraries.io/cran/ggplot2/versions?utm_source=openai)).\n\nAnswer:
         2014‑05‑21"}]},{"role":"user","content":[{"type":"input_text","text":"What
         month was that?"}]}],"model":"gpt-4.1","temperature":0,"stream":false,"tools":[{"type":"web_search","external_web_access":true}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 99ae5e29bb956bce-DFW
-      content-encoding: gzip
+      date: Mon, 16 Mar 2026 14:44:57 GMT
       content-type: application/json
-      date: Fri, 07 Nov 2025 16:57:07 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '758'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
-      openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=Zhxxv690XQpe5DsLfGWzW9SZDYTvdqErtQfEUV._uxg-1762534627-1.0.1.1-Ii9OUDs0hkEq1w_pkXS5i4L5K22JtucP9kEej.QJO3p3ISzs4Gn75GLGHWttLdvdVcszxHSDZuvjrhexZQYcDXOxOSS3EI9D21WL2uPtApA;
-        path=/; expires=Fri, 07-Nov-25 17:27:07 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=sRoAfBwWbMBg4gWoq4okrzfsKdnBPx.oOQkRm53WhOM-1762534627644-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '763'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999565'
+      x-ratelimit-remaining-tokens: '30000000'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_07255a3f956b478ca10701f7846cf740
+      openai-version: '2020-10-01'
+      openai-organization: posit-esfrkf
+      openai-project: proj_OgLNNoeNNrPmtkuM5FLTMdBQ
+      x-request-id: req_d0b172d56a1c43cd97cbc548583c946a
+      openai-processing-ms: '564'
+      cf-cache-status: DYNAMIC
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      set-cookie: __cf_bm=8ifuUwdDc8Cd9lIlOQUIMsFTuH7uW_14ohBj7e54d8U-1773672296.8048956-1.0.1.1-psaU7XuzWXCOiviA_msWUMY4k3H0gGOdOGINaA9LfZkkWNS0lrpDm0DryOnQ4FdoEg9eciYdI2igy6bhy4kuMJ5va1YPBjfOh8r5d9k9Ffdg7ksukIWxmcfNfjBP50rO;
+        HttpOnly; Secure; Path=/; Domain=api.openai.com; Expires=Mon, 16 Mar 2026
+        15:14:57 GMT
+      content-encoding: gzip
+      cf-ray: 9dd489ef089490d8-ATL
+      alt-svc: h3=":443"; ma=86400
     body:
       string: |-
         {
-          "id": "resp_0a01833cc558a3bc01690e24e2e2508195b1c2cfee7e4cff7e",
+          "id": "resp_0d43c66b2bbbaa3b0169b81768d7a88197b1fbe77725df51be",
           "object": "response",
-          "created_at": 1762534626,
+          "created_at": 1773672297,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1773672297,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
@@ -193,7 +198,7 @@ http_interactions:
           "model": "gpt-4.1-2025-04-14",
           "output": [
             {
-              "id": "msg_0a01833cc558a3bc01690e24e38c0081958d92374c8497d272",
+              "id": "msg_0d43c66b2bbbaa3b0169b817695b848197a8e147e5e4a1cffc",
               "type": "message",
               "status": "completed",
               "content": [
@@ -208,6 +213,7 @@ http_interactions:
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
           "prompt_cache_retention": null,
@@ -229,7 +235,6 @@ http_interactions:
           "tools": [
             {
               "type": "web_search",
-              "filters": null,
               "search_context_size": "medium",
               "user_location": {
                 "type": "approximate",
@@ -244,7 +249,7 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 416,
+            "input_tokens": 408,
             "input_tokens_details": {
               "cached_tokens": 0
             },
@@ -252,12 +257,12 @@ http_interactions:
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 420
+            "total_tokens": 412
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-07 16:57:07
+  recorded_at: 2026-03-16 14:44:57
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
@@ -265,54 +270,52 @@ http_interactions:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
         terse."}]},{"role":"user","content":[{"type":"input_text","text":"When was
         ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.\n\nThe CRAN
-        archive page has this info."}]},{"id":"ws_0a01833cc558a3bc01690e24dcd9cc819589af57101f84dbcc","type":"web_search_call","status":"completed","action":{"type":"search","query":"ggplot2
-        1.0.0 CRAN archive release date"}},{"role":"assistant","content":[{"type":"output_text","text":"ggplot2
-        version 1.0.0 was released to CRAN on 2014‑05‑21 ([stat.ethz.ch](https://stat.ethz.ch/CRAN/src/contrib/Archive/ggplot2/?utm_source=openai)).\n\nAnswer:
+        archive page has this info."}]},{"id":"ws_0d43c66b2bbbaa3b0169b81766e5248197aabcb9631f1d0d9b","type":"web_search_call","status":"completed","action":{"type":"search","queries":["ggplot2
+        1.0.0 CRAN release date"],"query":"ggplot2 1.0.0 CRAN release date"}},{"role":"assistant","content":[{"type":"output_text","text":"ggplot2
+        version 1.0.0 was released to CRAN on 2014‑05‑21 ([libraries.io](https://libraries.io/cran/ggplot2/versions?utm_source=openai)).\n\nAnswer:
         2014‑05‑21"}]},{"role":"user","content":[{"type":"input_text","text":"What
         month was that?"}]},{"role":"assistant","content":[{"type":"output_text","text":"May."}]},{"role":"user","content":[{"type":"input_text","text":"What
         month was that?"}]}],"model":"gpt-4.1","temperature":0,"stream":false,"tools":[{"type":"web_search","external_web_access":true}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: 99ae5e2fab9c6bce-DFW
-      content-encoding: gzip
+      date: Mon, 16 Mar 2026 14:44:58 GMT
       content-type: application/json
-      date: Fri, 07 Nov 2025 16:57:08 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '670'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
-      openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=dXZ6bUxcMwzXcoo2u1SiC3mFV0_cwBgKmPvr_2h1vcI-1762534628-1.0.1.1-oY1M8DNxcyNCdeLdlIOSYNCJJ_NOH1xvhlmuo8cvrt3JvI3SXyxUTE8c3gnUqhjcZcHPkoBpdqutkJh73QFAL_lYXZvmzbQpKyj9MsrXWCE;
-        path=/; expires=Fri, 07-Nov-25 17:27:08 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=32UC1fRT8wPIZxw4pBdO1IOCZu8TtTKPz2UHWZODqFs-1762534628507-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '677'
       x-ratelimit-limit-requests: '10000'
       x-ratelimit-limit-tokens: '30000000'
       x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999549'
+      x-ratelimit-remaining-tokens: '30000000'
       x-ratelimit-reset-requests: 6ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_b2d4259d6be443b8a289a274e7133a68
+      openai-version: '2020-10-01'
+      openai-organization: posit-esfrkf
+      openai-project: proj_OgLNNoeNNrPmtkuM5FLTMdBQ
+      x-request-id: req_55764a85446e472d8956f59150a0a901
+      openai-processing-ms: '715'
+      cf-cache-status: DYNAMIC
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      set-cookie: __cf_bm=SYD4E.gDiGHtYLavXf7h0OuDqHPdeIj15KwhtF27oq4-1773672297.5326638-1.0.1.1-4gHMP14gY09ZS1u2rUBlq_9TBbIiSVD7OUpzdNNKrYNmPZX6EUxqn4Ks_PxssMX91IUwp3hT5RTXwiGz_2EKLU8DBb2XkAo8mq9rFhE2x1jHhx4TWOjvorZ3be15gBVB;
+        HttpOnly; Secure; Path=/; Domain=api.openai.com; Expires=Mon, 16 Mar 2026
+        15:14:58 GMT
+      content-encoding: gzip
+      cf-ray: 9dd489f39b6490d8-ATL
+      alt-svc: h3=":443"; ma=86400
     body:
       string: |-
         {
-          "id": "resp_0a01833cc558a3bc01690e24e3dee48195a6288c1fef751ca7",
+          "id": "resp_0d43c66b2bbbaa3b0169b8176990f081979ba332056d2e493e",
           "object": "response",
-          "created_at": 1762534627,
+          "created_at": 1773672297,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1773672298,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
@@ -320,7 +323,7 @@ http_interactions:
           "model": "gpt-4.1-2025-04-14",
           "output": [
             {
-              "id": "msg_0a01833cc558a3bc01690e24e4720c8195a24aba2de909b0f3",
+              "id": "msg_0d43c66b2bbbaa3b0169b8176a389881979699c1db9731acba",
               "type": "message",
               "status": "completed",
               "content": [
@@ -335,6 +338,7 @@ http_interactions:
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
           "prompt_cache_retention": null,
@@ -356,7 +360,6 @@ http_interactions:
           "tools": [
             {
               "type": "web_search",
-              "filters": null,
               "search_context_size": "medium",
               "user_location": {
                 "type": "approximate",
@@ -371,7 +374,7 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 431,
+            "input_tokens": 423,
             "input_tokens_details": {
               "cached_tokens": 0
             },
@@ -379,10 +382,10 @@ http_interactions:
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 435
+            "total_tokens": 427
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-07 16:57:08
+  recorded_at: 2026-03-16 14:44:58
 recorded_with: VCR-vcr/2.0.0

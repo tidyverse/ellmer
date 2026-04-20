@@ -142,3 +142,69 @@ test_that("can extract dummy response from malformed JSON", {
     list(custom_id = "123", response = list(status_code = 500))
   )
 })
+
+test_that("value_turn() handles web_search_call action types", {
+  provider <- chat_openai_test()$get_provider()
+
+  make_result <- function(action) {
+    list(
+      id = "chatcmpl-1",
+      object = "chat.completion",
+      model = "gpt-4.1-mini",
+      choices = list(list(
+        index = 0L,
+        message = list(
+          role = "assistant",
+          content = NULL
+        ),
+        finish_reason = "stop"
+      )),
+      output = list(
+        list(
+          id = "ws_1",
+          type = "web_search_call",
+          status = "completed",
+          action = action
+        )
+      ),
+      usage = list(
+        prompt_tokens = 10,
+        completion_tokens = 5,
+        total_tokens = 15
+      ),
+      service_tier = "default"
+    )
+  }
+
+  # search action with query
+  turn <- value_turn(
+    provider,
+    make_result(list(type = "search", query = "test query"))
+  )
+  expect_equal(turn@contents[[1]]@query, "test query")
+
+  # open_page action with url
+  turn <- value_turn(
+    provider,
+    make_result(list(type = "open_page", url = "https://example.com"))
+  )
+  expect_equal(turn@contents[[1]]@query, "https://example.com")
+
+  # find_in_page action with queries
+  turn <- value_turn(
+    provider,
+    make_result(list(type = "find_in_page", queries = list("find this")))
+  )
+  expect_equal(turn@contents[[1]]@query, "find this")
+
+  # search action without query
+  turn <- value_turn(provider, make_result(list(type = "search")))
+  expect_equal(turn@contents[[1]]@query, "web search")
+
+  # find_in_page action with empty queries falls back
+  turn <- value_turn(
+    provider,
+    make_result(list(type = "find_in_page", queries = list()))
+  )
+  expect_equal(turn@contents[[1]]@query, "web search")
+})

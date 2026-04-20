@@ -58,10 +58,6 @@ A \link{Chat} object.
 Sign up at \url{https://groq.com}.
 
 Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
-\subsection{Known limitations}{
-
-groq does not currently support structured data extraction.
-}
 }
 \examples{
 \dontrun{
@@ -80,6 +76,7 @@ Other chatbots:
 \code{\link{chat_github}()},
 \code{\link{chat_google_gemini}()},
 \code{\link{chat_huggingface}()},
+\code{\link{chat_lmstudio}()},
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},

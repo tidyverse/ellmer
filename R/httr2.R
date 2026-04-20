@@ -7,7 +7,8 @@ chat_perform <- function(
   turns,
   tools = NULL,
   type = NULL,
-  otel_span = NULL
+  otel_span = NULL,
+  controller = NULL
 ) {
   mode <- arg_match(mode)
   stream <- mode %in% c("stream", "async-stream")
@@ -29,12 +30,14 @@ chat_perform <- function(
     "stream" = chat_perform_stream(
       provider,
       req,
+      controller = controller,
       otel_span = otel_span
     ),
     "async-value" = req_perform_promise(req),
     "async-stream" = chat_perform_async_stream(
       provider,
       req,
+      controller = controller,
       otel_span = otel_span
     )
   )
@@ -44,6 +47,7 @@ on_load(
   chat_perform_stream <- coro::generator(function(
     provider,
     req,
+    controller = NULL,
     otel_span = NULL
   ) {
     setup_active_promise_otel_span(otel_span)
@@ -52,6 +56,9 @@ on_load(
     on.exit(close(resp))
 
     repeat {
+      if (!is.null(controller) && controller$cancelled) {
+        break
+      }
       event <- chat_resp_stream(provider, resp)
       data <- stream_parse(provider, event)
       if (is.null(data)) {
@@ -67,6 +74,7 @@ on_load(
   chat_perform_async_stream <- coro::async_generator(function(
     provider,
     req,
+    controller = NULL,
     otel_span = NULL
   ) {
     setup_active_promise_otel_span(otel_span)
@@ -75,6 +83,9 @@ on_load(
     on.exit(close(resp))
 
     repeat {
+      if (!is.null(controller) && controller$cancelled) {
+        break
+      }
       event <- chat_resp_stream(provider, resp)
       if (is.null(event) && !resp_stream_is_complete(resp)) {
         fds <- resp$body$get_fdset()

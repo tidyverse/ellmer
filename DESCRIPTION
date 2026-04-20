@@ -57,6 +57,7 @@ Suggests:
     withr
 VignetteBuilder:
     knitr
+Remotes: posit-dev/shinychat/pkg-r#167
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true
@@ -109,6 +110,7 @@ Collate:
     'provider-google-upload.R'
     'provider-groq.R'
     'provider-huggingface.R'
+    'provider-lmstudio.R'
     'provider-mistral.R'
     'provider-ollama.R'
     'provider-openai-tools.R'
@@ -119,6 +121,7 @@ Collate:
     'provider-snowflake.R'
     'provider-vllm.R'
     'schema.R'
+    'stream-controller.R'
     'tokens.R'
     'tools-built-in.R'
     'tools-def-auto.R'
