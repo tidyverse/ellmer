@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_aws_bedrock()` now supports reasoning/thinking content. To enable thinking in Anthropic Claude models, see the `api_args` argument in `?chat_aws_bedrock` for an example (#964).
 * New `chat_lmstudio()` and `models_lmstudio()` provide support for [LM Studio](https://lmstudio.ai), a local model server with an OpenAI-compatible API (#963).
 * Fixed three bugs that caused errors when streaming web search results: Claude's `citations_delta` events were mishandled, `server_tool_use` input wasn't parsed from JSON during streaming, and OpenAI's `web_search_call` failed for non-search action types like `open_page` (#941).
 * `chat_aws_bedrock()` gains a `cache` parameter for prompt caching. The default, `"auto"`, enables caching for models known to support it (Anthropic Claude and Amazon Nova) and disables it otherwise (#954).

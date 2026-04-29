@@ -60,15 +60,18 @@ A \link{Chat} object.
 \description{
 To use \code{chat_lmstudio()} first download and install
 \href{https://lmstudio.ai}{LM Studio}. Then load a model using the LM Studio
-GUI and start the local server.
+GUI and start the local server. To learn more about running LM Studio
+locally, see \url{https://lmstudio.ai/docs/developer/core/server}/.
 
 Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 }
 \examples{
 \dontrun{
-chat <- chat_lmstudio(model = "llama3.2")
+# https://lmstudio.ai/models/zai-org/glm-4.7-flash
+chat <- chat_lmstudio(model = "zai-org/glm-4.7-flash")
 chat$chat("Tell me three jokes about statisticians")
 }
+
 }
 \seealso{
 Other chatbots: 
