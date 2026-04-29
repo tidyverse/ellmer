@@ -2,6 +2,12 @@
 
 ## ellmer (development version)
 
+- [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
+  now supports reasoning/thinking content. To enable thinking in
+  Anthropic Claude models, see the `api_args` argument in
+  [`?chat_aws_bedrock`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
+  for an example
+  ([\#964](https://github.com/tidyverse/ellmer/issues/964)).
 - New
   [`chat_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md)
   and

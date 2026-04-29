@@ -2,7 +2,8 @@
 
 To use `chat_lmstudio()` first download and install [LM
 Studio](https://lmstudio.ai). Then load a model using the LM Studio GUI
-and start the local server.
+and start the local server. To learn more about running LM Studio
+locally, see <https://lmstudio.ai/docs/developer/core/server>/.
 
 Built on top of
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md).
@@ -109,7 +110,8 @@ Other chatbots:
 
 ``` r
 if (FALSE) { # \dontrun{
-chat <- chat_lmstudio(model = "llama3.2")
+# https://lmstudio.ai/models/zai-org/glm-4.7-flash
+chat <- chat_lmstudio(model = "zai-org/glm-4.7-flash")
 chat$chat("Tell me three jokes about statisticians")
 } # }
 ```

@@ -98,16 +98,20 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
 - api_args:
 
   Named list of arbitrary extra arguments appended to the body of every
-  chat API call. Some useful arguments include:
+  chat API call. Use `params` for common parameters. Model-specific
+  inference parameters can be provided using the
+  `additionalModelRequestFields` field, for example to enable thinking
+  effort in Anthropic Claude models:
 
       api_args = list(
-        inferenceConfig = list(
-          maxTokens = 100,
-          temperature = 0.7,
-          topP = 0.9,
-          topK = 20
+        additionalModelRequestFields = list(
+          thinking = list(type = "enabled", budget_tokens = 4000)
         )
       )
+
+  See
+  <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html>
+  for more details.
 
 - api_headers:
 

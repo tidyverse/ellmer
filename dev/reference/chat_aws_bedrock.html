@@ -210,15 +210,17 @@ Set to <code>"5m"</code> or <code>"1h"</code> to force caching on, or <code>"non
 
 <dt id="arg-api-args">api_args<a class="anchor" aria-label="anchor" href="#arg-api-args"></a></dt>
 <dd><p>Named list of arbitrary extra arguments appended to the body
-of every chat API call. Some useful arguments include:</p>
+of every chat API call. Use <code>params</code> for common parameters. Model-specific
+inference parameters can be provided using the
+<code>additionalModelRequestFields</code> field, for example to enable thinking effort
+in Anthropic Claude models:</p>
 <p></p><div class="sourceCode R"><pre><code><span><span class="va">api_args</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  inferenceConfig <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    maxTokens <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>    temperature <span class="op">=</span> <span class="fl">0.7</span>,</span>
-<span>    topP <span class="op">=</span> <span class="fl">0.9</span>,</span>
-<span>    topK <span class="op">=</span> <span class="fl">20</span></span>
+<span>  additionalModelRequestFields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    thinking <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"enabled"</span>, budget_tokens <span class="op">=</span> <span class="fl">4000</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre><p></p></div></dd>
+<span><span class="op">)</span></span></code></pre><p></p></div>
+<p>See <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html" class="external-link">https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html</a>
+for more details.</p></dd>
 
 
 <dt id="arg-api-headers">api_headers<a class="anchor" aria-label="anchor" href="#arg-api-headers"></a></dt>
