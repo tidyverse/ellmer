@@ -105,8 +105,9 @@ local({
         "invoke_agent",
         options = list(kind = "client"),
         attributes = list(
-          "gen_ai.operation.name" = "chat",
-          "gen_ai.provider.name" = tolower(provider@name)
+          "gen_ai.operation.name" = "invoke_agent",
+          "gen_ai.provider.name" = tolower(provider@name),
+          "gen_ai.request.model" = provider@model
         ),
         tracer = otel_tracer
       )
