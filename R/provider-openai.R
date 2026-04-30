@@ -281,7 +281,7 @@ method(value_tokens, ProviderOpenAI) <- function(provider, json) {
 
   tokens(
     input = (usage$input_tokens %||% 0) - cached_tokens,
-    output = usage$output_tokens,
+    output = usage$output_tokens %||% 0,
     cached_input = cached_tokens
   )
 }

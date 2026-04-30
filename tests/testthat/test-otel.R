@@ -44,6 +44,22 @@ test_that("tracing works as expected for synchronous chats", {
   # Ensure we record the result (and therefore set the status) of chat spans.
   expect_true(all(vapply(chat_spans, function(x) x$status == "ok", logical(1))))
 
+  # And that token usage attributes are recorded with positive integer counts.
+  expect_true(all(vapply(
+    chat_spans,
+    function(x) {
+      input <- x$attributes[["gen_ai.usage.input_tokens"]]
+      output <- x$attributes[["gen_ai.usage.output_tokens"]]
+      !is.null(input) &&
+        !is.null(output) &&
+        input > 0 &&
+        output > 0 &&
+        input == round(input) &&
+        output == round(output)
+    },
+    logical(1)
+  )))
+
   # We should also get some underlying HTTP spans that correspond to the model
   # calls.
   chat_span_ids <- sapply(chat_spans, function(x) x$span_id)
@@ -73,6 +89,22 @@ test_that("tracing works as expected for synchronous streams", {
   chat_spans <- Filter(function(x) startsWith(x$name, "chat"), spans)
   expect_length(chat_spans, 1L)
   expect_equal(chat_spans[[1L]]$parent, spans[["invoke_agent"]]$span_id)
+
+  # Token usage attributes are recorded on the streamed chat span.
+  expect_true(all(vapply(
+    chat_spans,
+    function(x) {
+      input <- x$attributes[["gen_ai.usage.input_tokens"]]
+      output <- x$attributes[["gen_ai.usage.output_tokens"]]
+      !is.null(input) &&
+        !is.null(output) &&
+        input > 0 &&
+        output > 0 &&
+        input == round(input) &&
+        output == round(output)
+    },
+    logical(1)
+  )))
 
   # Verify that the span started when the stream was suspended is not part of
   # the agent trace.
@@ -176,6 +208,24 @@ test_that("tracing works as expected for asynchronous chats", {
 
   # Ensure we record the result (and therefore set the status) of chat spans.
   expect_true(all(vapply(chat_spans, function(x) x$status == "ok", logical(1))))
+
+  # Token usage attributes are recorded with positive integer counts. This
+  # exercises the Anthropic path that previously folded a 1.25x cache-write
+  # pricing weight into the input count.
+  expect_true(all(vapply(
+    chat_spans,
+    function(x) {
+      input <- x$attributes[["gen_ai.usage.input_tokens"]]
+      output <- x$attributes[["gen_ai.usage.output_tokens"]]
+      !is.null(input) &&
+        !is.null(output) &&
+        input > 0 &&
+        output > 0 &&
+        input == round(input) &&
+        output == round(output)
+    },
+    logical(1)
+  )))
 
   # We should also get some underlying HTTP spans that correspond to the model
   # calls.

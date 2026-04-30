@@ -141,7 +141,7 @@ with_otel_record <- function(expr) {
   })
 }
 
-record_chat_otel_span_status <- function(span, result) {
+record_chat_otel_span_status <- function(span, provider, result) {
   if (is.null(span) || !span_recording(span)) {
     return()
   }
@@ -151,14 +151,13 @@ record_chat_otel_span_status <- function(span, result) {
   if (!is.null(result$id)) {
     span$set_attribute("gen_ai.response.id", result$id)
   }
-  # TODO: Fixme @atheriel!
-  # if (!is.null(result$usage)) {
-  #   span$set_attribute("gen_ai.usage.input_tokens", result$usage$prompt_tokens)
-  #   span$set_attribute(
-  #     "gen_ai.usage.output_tokens",
-  #     result$usage$completion_tokens
-  #   )
-  # }
+  tokens <- value_tokens(provider, result)
+  input <- as.integer(tokens$input + tokens$cached_input)
+  output <- as.integer(tokens$output)
+  if (input > 0L || output > 0L) {
+    span$set_attribute("gen_ai.usage.input_tokens", input)
+    span$set_attribute("gen_ai.usage.output_tokens", output)
+  }
   # TODO: Consider setting gen_ai.response.finish_reasons.
   span$set_status("ok")
 }

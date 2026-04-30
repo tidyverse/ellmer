@@ -671,11 +671,13 @@ Chat <- R6::R6Class(
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
 
-        record_chat_otel_span_status(chat_span, result)
+        record_chat_otel_span_status(chat_span, private$provider, result)
         turn <- acc$complete_turn(result, type = type)
       } else {
-        record_chat_otel_span_status(chat_span, response)
-        turn <- acc$add_turn(user_turn, response, type = type)
+        result <- resp_body_json(response)
+        duration <- resp_timing(response)[["total"]] %||% NA_real_
+        record_chat_otel_span_status(chat_span, private$provider, result)
+        turn <- acc$add_turn(user_turn, result, duration, type = type)
 
         text <- turn@text
         if (!is.null(text)) {
@@ -760,13 +762,14 @@ Chat <- R6::R6Class(
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
 
-        record_chat_otel_span_status(chat_span, result)
+        record_chat_otel_span_status(chat_span, private$provider, result)
         turn <- acc$complete_turn(result, type = type)
       } else {
-        result <- await(response)
-
-        record_chat_otel_span_status(chat_span, result)
-        turn <- acc$add_turn(user_turn, result, type = type)
+        response <- await(response)
+        result <- resp_body_json(response)
+        duration <- resp_timing(response)[["total"]] %||% NA_real_
+        record_chat_otel_span_status(chat_span, private$provider, result)
+        turn <- acc$add_turn(user_turn, result, duration, type = type)
 
         text <- turn@text
         if (!is.null(text)) {
@@ -942,9 +945,7 @@ TurnAccumulator <- R6::R6Class(
       log_turn(self$provider, turn)
     },
 
-    add_turn = function(user_turn, response, type = NULL) {
-      result <- resp_body_json(response)
-      duration <- resp_timing(response)[["total"]] %||% NA_real_
+    add_turn = function(user_turn, result, duration = NA_real_, type = NULL) {
       turn <- self$value_turn(result, type, duration = duration)
       self$chat$add_turn(user_turn, turn)
       turn

@@ -219,6 +219,44 @@ test_that("value_turn() parses server_tool_use web_fetch input from JSON string"
   expect_equal(fetch_content@url, "https://example.com")
 })
 
+test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-sonnet-4-20250514",
+    params = list(),
+    extra_args = list(),
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+
+  result <- list(
+    content = list(list(type = "text", text = "ok")),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 1000,
+      output_tokens = 50,
+      cache_creation_input_tokens = 400,
+      cache_read_input_tokens = 200
+    )
+  )
+
+  turn <- value_turn(provider, result)
+
+  # tokens slot reports raw integer counts (no 1.25x weighting on input).
+  expect_equal(
+    unname(turn@tokens),
+    c(1000 + 400, 50, 200)
+  )
+
+  # Cost matches the 1.25x cache-write weighting:
+  #   (1000 + 400 * 1.25) * $3/1M + 50 * $15/1M + 200 * $0.30/1M
+  expected_cost <- ((1000 + 400 * 1.25) * 3 + 50 * 15 + 200 * 0.30) / 1e6
+  expect_equal(unclass(turn@cost), expected_cost)
+})
+
 test_that("stream_merge_chunks() handles citations_delta", {
   provider <- ProviderAnthropic(
     name = "Anthropic",

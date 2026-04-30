@@ -342,12 +342,12 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
 }
 
 method(value_tokens, ProviderAnthropic) <- function(provider, json) {
+  usage <- json$usage
   tokens(
-    # Hack in pricing for cache writes
-    input = json$usage$input_tokens +
-      json$usage$cache_creation_input_tokens * 1.25,
-    output = json$usage$output_tokens,
-    cached_input = json$usage$cache_read_input_tokens
+    input = (usage$input_tokens %||% 0) +
+      (usage$cache_creation_input_tokens %||% 0),
+    output = usage$output_tokens %||% 0,
+    cached_input = usage$cache_read_input_tokens %||% 0
   )
 }
 
@@ -409,7 +409,12 @@ method(value_turn, ProviderAnthropic) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
+  cache_write <- result$usage$cache_creation_input_tokens %||% 0
+  # Anthropic charges 1.25x the input rate for cache writes; tokens$input
+  # already counts them at 1.0x, so add the 0.25x surcharge for pricing.
+  cost_tokens <- tokens
+  cost_tokens$input <- cost_tokens$input + cache_write * 0.25
+  cost <- get_token_cost(provider, cost_tokens)
   AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
