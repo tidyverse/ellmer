@@ -53,18 +53,21 @@ NULL
 #'   `model="us.anthropic.claude-sonnet-4-5-20250929-v1:0"`.
 #' @param params Common model parameters, usually created by [params()].
 #' @param api_args Named list of arbitrary extra arguments appended to the body
-#'   of every chat API call. Some useful arguments include:
+#'   of every chat API call. Use `params` for common parameters. Model-specific
+#'   inference parameters can be provided using the
+#'   `additionalModelRequestFields` field, for example to enable thinking effort
+#'   in Anthropic Claude models:
 #'
 #'   ```R
 #'   api_args = list(
-#'     inferenceConfig = list(
-#'       maxTokens = 100,
-#'       temperature = 0.7,
-#'       topP = 0.9,
-#'       topK = 20
+#'     additionalModelRequestFields = list(
+#'       thinking = list(type = "enabled", budget_tokens = 4000)
 #'     )
 #'   )
 #'   ```
+#'
+#'   See <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html>
+#'   for more details.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -337,14 +340,26 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
   } else if (chunk$event_type == "contentBlockStart") {
     result$content[[i]] <- list(toolUse = chunk$start$toolUse)
   } else if (chunk$event_type == "contentBlockDelta") {
+    if (i > length(result$content)) {
+      result$content[[i]] <- list()
+    }
     if (has_name(chunk$delta, "text")) {
-      if (i > length(result$content)) {
-        result$content[[i]] <- list(text = chunk$delta$text)
-      } else {
-        paste(result$content[[i]]$text) <- chunk$delta$text
-      }
+      paste(result$content[[i]]$text) <- chunk$delta$text
     } else if (has_name(chunk$delta, "toolUse")) {
       paste(result$content[[i]]$toolUse$input) <- chunk$delta$toolUse$input
+    } else if (has_name(chunk$delta, "reasoningContent")) {
+      if (is.null(result$content[[i]]$reasoningContent)) {
+        result$content[[i]]$reasoningContent <- list(reasoningText = list())
+      }
+      # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ReasoningContentBlockDelta.html
+      delta <- chunk$delta$reasoningContent
+      if (has_name(delta, "text")) {
+        paste(result$content[[i]]$reasoningContent$reasoningText$text) <-
+          delta$text
+      } else if (has_name(delta, "signature")) {
+        result$content[[i]]$reasoningContent$reasoningText$signature <-
+          delta$signature
+      }
     } else {
       cli::cli_abort(
         "Unknown chunk type {names(chunk$delta)}",
@@ -403,6 +418,13 @@ method(value_turn, ProviderAWSBedrock) <- function(
           id = content$toolUse$toolUseId
         )
       }
+    } else if (has_name(content, "reasoningContent")) {
+      ContentThinking(
+        content$reasoningContent$reasoningText$text,
+        extra = list(
+          signature = content$reasoningContent$reasoningText$signature
+        )
+      )
     } else {
       cli::cli_abort(
         "Unknown content type {.str {names(content)}}.",
@@ -542,6 +564,25 @@ method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(
       name = x@name,
       description = x@description,
       inputSchema = list(json = compact(as_json(provider, x@arguments, ...)))
+    )
+  )
+}
+
+method(as_json, list(ProviderAWSBedrock, ContentThinking)) <- function(
+  provider,
+  x,
+  ...
+) {
+  if (identical(x@thinking, "")) {
+    return()
+  }
+
+  list(
+    reasoningContent = list(
+      reasoningText = list(
+        text = x@thinking,
+        signature = x@extra$signature
+      )
     )
   )
 }

@@ -192,6 +192,29 @@ test_that("bedrock_cache_point() is added to the system prompt", {
   expect_equal(bedrock_cache_point(provider_none), list())
 })
 
+# Reasoning / thinking content --------------------------------------------
+
+test_that("can use extended thinking", {
+  vcr::local_cassette("aws-bedrock-thinking")
+
+  chat <- chat_aws_bedrock_test(
+    params = params(temperature = 1),
+    api_args = list(
+      additionalModelRequestFields = list(
+        thinking = list(type = "enabled", budget_tokens = 4000)
+      )
+    ),
+    model = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+  )
+  resp <- chat$chat("Create a riddle for data scientists", echo = FALSE)
+
+  contents <- chat$last_turn()@contents
+  thinking <- Filter(\(x) S7::S7_inherits(x, ContentThinking), contents)
+  expect_length(thinking, 1)
+  expect_gt(nchar(thinking[[1]]@thinking), 0)
+  expect_match(resp, "\\S")
+})
+
 # Provider idiosynchronies -----------------------------------------------
 
 test_that("continues to work after whitespace only outputs (#376)", {

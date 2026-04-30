@@ -48,17 +48,20 @@ See details below.}
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
 \item{api_args}{Named list of arbitrary extra arguments appended to the body
-of every chat API call. Some useful arguments include:
+of every chat API call. Use \code{params} for common parameters. Model-specific
+inference parameters can be provided using the
+\code{additionalModelRequestFields} field, for example to enable thinking effort
+in Anthropic Claude models:
 
 \if{html}{\out{<div class="sourceCode R">}}\preformatted{api_args = list(
-  inferenceConfig = list(
-    maxTokens = 100,
-    temperature = 0.7,
-    topP = 0.9,
-    topK = 20
+  additionalModelRequestFields = list(
+    thinking = list(type = "enabled", budget_tokens = 4000)
   )
 )
-}\if{html}{\out{</div>}}}
+}\if{html}{\out{</div>}}
+
+See \url{https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html}
+for more details.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
