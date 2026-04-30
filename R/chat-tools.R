@@ -157,10 +157,7 @@ invoke_tool <- function(request, otel_span = NULL) {
     return(args)
   }
 
-  tool_span <- local_tool_otel_span(
-    request,
-    parent = otel_span
-  )
+  tool_span <- local_tool_otel_span(request, parent = otel_span)
 
   tryCatch(
     {
@@ -186,10 +183,7 @@ on_load(
       return(args)
     }
 
-    tool_span <- local_tool_otel_span(
-      request,
-      parent = otel_span
-    )
+    tool_span <- local_tool_otel_span(request, parent = otel_span)
 
     tryCatch(
       {
