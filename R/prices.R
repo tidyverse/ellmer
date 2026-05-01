@@ -106,22 +106,23 @@ prices_cache_download <- function() {
 
   url <- "https://raw.githubusercontent.com/tidyverse/ellmer/refs/heads/main/data-raw/prices.json"
 
-  # Quick connectivity probe before the real download: nobody=TRUE fetches only
-  # headers, so we get a cheap TCP+TLS round-trip without transferring the body.
-  probe_handle <- curl::new_handle(
+  # Reuse the same handle for both requests so the keep-alive connection and
+  # TLS session are shared. First request is a cheap HEAD probe (nobody=TRUE,
+  # 1s timeout) to confirm connectivity; second fetches the body (2s timeout).
+  handle <- curl::new_handle(
     nobody = TRUE,
     connecttimeout_ms = 1000L,
     timeout_ms = 1000L
   )
   probe <- tryCatch(
-    curl::curl_fetch_memory(url, handle = probe_handle),
+    curl::curl_fetch_memory(url, handle = handle),
     error = function(e) NULL
   )
   if (is.null(probe) || probe$status_code != 200L) {
     return()
   }
 
-  handle <- curl::new_handle(timeout_ms = 2000L, connecttimeout_ms = 1000L)
+  curl::handle_setopt(handle, nobody = FALSE, timeout_ms = 2000L)
   resp <- tryCatch(
     curl::curl_fetch_memory(url, handle = handle),
     error = function(e) NULL
