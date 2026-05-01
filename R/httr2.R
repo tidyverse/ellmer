@@ -7,11 +7,14 @@ chat_perform <- function(
   turns,
   tools = NULL,
   type = NULL,
+  otel_span = NULL,
   controller = NULL
 ) {
   mode <- arg_match(mode)
   stream <- mode %in% c("stream", "async-stream")
   tools <- tools %||% list()
+
+  setup_active_promise_otel_span(otel_span)
 
   req <- chat_request(
     provider = provider,
@@ -24,9 +27,19 @@ chat_perform <- function(
   switch(
     mode,
     "value" = req_perform(req),
-    "stream" = chat_perform_stream(provider, req, controller),
+    "stream" = chat_perform_stream(
+      provider,
+      req,
+      controller = controller,
+      otel_span = otel_span
+    ),
     "async-value" = req_perform_promise(req),
-    "async-stream" = chat_perform_async_stream(provider, req, controller)
+    "async-stream" = chat_perform_async_stream(
+      provider,
+      req,
+      controller = controller,
+      otel_span = otel_span
+    )
   )
 }
 
@@ -34,8 +47,11 @@ on_load(
   chat_perform_stream <- coro::generator(function(
     provider,
     req,
-    controller = NULL
+    controller = NULL,
+    otel_span = NULL
   ) {
+    setup_active_promise_otel_span(otel_span)
+
     resp <- req_perform_connection(req)
     on.exit(close(resp))
 
@@ -58,8 +74,11 @@ on_load(
   chat_perform_async_stream <- coro::async_generator(function(
     provider,
     req,
-    controller = NULL
+    controller = NULL,
+    otel_span = NULL
   ) {
+    setup_active_promise_otel_span(otel_span)
+
     resp <- req_perform_connection(req, blocking = FALSE)
     on.exit(close(resp))
 

@@ -281,7 +281,7 @@ method(value_tokens, ProviderOpenAI) <- function(provider, json) {
 
   tokens(
     input = (usage$input_tokens %||% 0) - cached_tokens,
-    output = usage$output_tokens,
+    output = usage$output_tokens %||% 0,
     cached_input = cached_tokens
   )
 }
@@ -473,7 +473,7 @@ method(batch_submit, ProviderOpenAI) <- function(
   conversations,
   type = NULL
 ) {
-  path <- withr::local_tempfile()
+  path <- local_tempfile()
 
   # First put the requests in a file
   # https://platform.openai.com/docs/api-reference/batch/request-input

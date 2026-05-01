@@ -473,7 +473,9 @@ Chat <- R6::R6Class(
       controller = NULL
     ) {
       tool_errors <- list()
-      withr::defer(warn_tool_errors(tool_errors))
+      defer(warn_tool_errors(tool_errors))
+
+      agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns(
@@ -481,7 +483,8 @@ Chat <- R6::R6Class(
           stream = stream,
           echo = echo,
           yield_as_content = yield_as_content,
-          controller = controller
+          controller = controller,
+          otel_span = agent_span
         )
         for (chunk in assistant_chunks) {
           yield(chunk)
@@ -501,7 +504,8 @@ Chat <- R6::R6Class(
             echo = echo,
             on_tool_request = private$callback_on_tool_request$invoke,
             on_tool_result = private$callback_on_tool_result$invoke,
-            yield_request = yield_as_content
+            yield_request = yield_as_content,
+            otel_span = agent_span
           )
 
           tool_results <- list()
@@ -539,7 +543,9 @@ Chat <- R6::R6Class(
       controller = NULL
     ) {
       tool_errors <- list()
-      withr::defer(warn_tool_errors(tool_errors))
+      defer(warn_tool_errors(tool_errors))
+
+      agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns_async(
@@ -547,7 +553,8 @@ Chat <- R6::R6Class(
           stream = stream,
           echo = echo,
           yield_as_content = yield_as_content,
-          controller = controller
+          controller = controller,
+          otel_span = agent_span
         )
         for (chunk in await_each(assistant_chunks)) {
           yield(chunk)
@@ -567,11 +574,12 @@ Chat <- R6::R6Class(
             echo = echo,
             on_tool_request = private$callback_on_tool_request$invoke_async,
             on_tool_result = private$callback_on_tool_result$invoke_async,
-            yield_request = yield_as_content
+            yield_request = yield_as_content,
+            otel_span = agent_span
           )
           if (tool_mode == "sequential") {
             tool_results <- list()
-            for (tool_step in coro::await_each(tool_calls)) {
+            for (tool_step in await_each(tool_calls)) {
               if (yield_as_content) {
                 yield(tool_step)
               }
@@ -618,11 +626,20 @@ Chat <- R6::R6Class(
       echo,
       type = NULL,
       yield_as_content = FALSE,
-      controller = NULL
+      controller = NULL,
+      otel_span = NULL
     ) {
       if (echo == "all") {
         cat_line(format(user_turn), prefix = "> ")
       }
+
+      otel_input <- otel_chat_input(private, user_turn)
+      chat_span <- local_chat_otel_span(
+        private$provider,
+        turns = otel_input$turns,
+        system_prompt = otel_input$system_prompt,
+        parent = otel_span
+      )
 
       response <- chat_perform(
         provider = private$provider,
@@ -630,8 +647,10 @@ Chat <- R6::R6Class(
         turns = c(private$.turns, list(user_turn)),
         tools = if (is.null(type)) private$tools,
         type = type,
-        controller = controller
+        controller = controller,
+        otel_span = chat_span
       )
+
       emit <- emitter(echo)
       any_text <- FALSE
       turn <- NULL
@@ -655,9 +674,15 @@ Chat <- R6::R6Class(
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
 
+        record_chat_otel_span_status(chat_span, private$provider, result)
         turn <- acc$complete_turn(result, type = type)
+        record_chat_otel_span_output(chat_span, turn)
       } else {
-        turn <- acc$add_turn(user_turn, response, type = type)
+        result <- resp_body_json(response)
+        duration <- resp_timing(response)[["total"]] %||% NA_real_
+        record_chat_otel_span_status(chat_span, private$provider, result)
+        turn <- acc$add_turn(user_turn, result, duration, type = type)
+        record_chat_otel_span_output(chat_span, turn)
 
         text <- turn@text
         if (!is.null(text)) {
@@ -701,16 +726,27 @@ Chat <- R6::R6Class(
       echo,
       type = NULL,
       yield_as_content = FALSE,
-      controller = NULL
+      controller = NULL,
+      otel_span = NULL
     ) {
+      otel_input <- otel_chat_input(private, user_turn)
+      chat_span <- local_chat_otel_span(
+        private$provider,
+        turns = otel_input$turns,
+        system_prompt = otel_input$system_prompt,
+        parent = otel_span
+      )
+
       response <- chat_perform(
         provider = private$provider,
         mode = if (stream) "async-stream" else "async-value",
         turns = c(private$.turns, list(user_turn)),
         tools = if (is.null(type)) private$tools,
         type = type,
-        controller = controller
+        controller = controller,
+        otel_span = chat_span
       )
+
       emit <- emitter(echo)
       any_text <- FALSE
       turn <- NULL
@@ -734,10 +770,16 @@ Chat <- R6::R6Class(
           result <- stream_merge_chunks(private$provider, result, chunk)
         }
 
+        record_chat_otel_span_status(chat_span, private$provider, result)
         turn <- acc$complete_turn(result, type = type)
+        record_chat_otel_span_output(chat_span, turn)
       } else {
-        result <- await(response)
-        turn <- acc$add_turn(user_turn, result, type = type)
+        response <- await(response)
+        result <- resp_body_json(response)
+        duration <- resp_timing(response)[["total"]] %||% NA_real_
+        record_chat_otel_span_status(chat_span, private$provider, result)
+        turn <- acc$add_turn(user_turn, result, duration, type = type)
+        record_chat_otel_span_output(chat_span, turn)
 
         text <- turn@text
         if (!is.null(text)) {
@@ -913,9 +955,7 @@ TurnAccumulator <- R6::R6Class(
       log_turn(self$provider, turn)
     },
 
-    add_turn = function(user_turn, response, type = NULL) {
-      result <- resp_body_json(response)
-      duration <- resp_timing(response)[["total"]] %||% NA_real_
+    add_turn = function(user_turn, result, duration = NA_real_, type = NULL) {
       turn <- self$value_turn(result, type, duration = duration)
       self$chat$add_turn(user_turn, turn)
       turn

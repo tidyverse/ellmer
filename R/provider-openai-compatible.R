@@ -266,7 +266,7 @@ method(value_tokens, ProviderOpenAICompatible) <- function(provider, json) {
 
   tokens(
     input = (usage$prompt_tokens %||% 0) - cached_tokens,
-    output = usage$completion_tokens,
+    output = usage$completion_tokens %||% 0,
     cached_input = cached_tokens
   )
 }
