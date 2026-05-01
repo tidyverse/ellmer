@@ -1,28 +1,23 @@
 prices <- function() {
   if (is.null(the$prices)) {
-    prices_merge()
+    bundled <- prices_data
+    cached <- prices_cache_read()
+
+    if (is.null(cached)) {
+      the$prices <- bundled
+      return(invisible())
+    }
+
+    key_cols <- c("provider", "model", "variant")
+    bundled_key <- do.call(paste, c(bundled[key_cols], sep = "\r"))
+    cached_key <- do.call(paste, c(cached[key_cols], sep = "\r"))
+
+    bundled_only <- bundled[!bundled_key %in% cached_key, ]
+    merged <- rbind(cached, bundled_only)
+    the$prices <- merged[, names(bundled)]
   }
+
   the$prices
-}
-
-prices_merge <- function() {
-  bundled <- prices_data
-  cached <- prices_cache_read()
-
-  if (is.null(cached)) {
-    the$prices <- bundled
-    return(invisible())
-  }
-
-  key_cols <- c("provider", "model", "variant")
-  bundled_key <- do.call(paste, c(bundled[key_cols], sep = "\r"))
-  cached_key <- do.call(paste, c(cached[key_cols], sep = "\r"))
-
-  bundled_only <- bundled[!bundled_key %in% cached_key, ]
-  merged <- rbind(cached, bundled_only)
-  the$prices <- merged[, names(bundled)]
-
-  invisible()
 }
 
 prices_cache_read <- function() {
@@ -42,34 +37,48 @@ prices_cache_stale <- function() {
   as.numeric(age) > 7
 }
 
+prices_should_update <- function() {
+  opt <- getOption("ellmer.update_prices", NULL)
+  if (!is.null(opt)) {
+    if (!is.na(as.logical(opt))) {
+      return(as.logical(opt))
+    } else {
+      cli::cli_warn(
+        "Option {.code ellmer.update_prices} should be set to a logical value (TRUE or FALSE).",
+        call = NULL
+      )
+    }
+  }
+
+  env <- Sys.getenv("ELLMER_UPDATE_PRICES", "")
+  if (!nzchar(env)) {
+    if (tolower(env) %in% c("true", "1")) {
+      return(TRUE)
+    } else if (tolower(env) %in% c("false", "0")) {
+      return(FALSE)
+    }
+  } else {
+    cli::cli_warn(
+      "Environment variable {.code ELLMER_UPDATE_PRICES} should be set to a logical value (true, false, 1, or 0).",
+      call = NULL
+    )
+  }
+
+  NULL
+}
+
 prices_update <- function() {
+  should_update <- prices_should_update()
+  if (isFALSE(should_update)) {
+    return(invisible())
+  }
+  if (!prices_cache_stale() && !isTRUE(should_update)) {
+    return(invisible())
+  }
+
   tryCatch(
     {
-      if (isFALSE(getOption("ellmer.update_prices"))) {
-        return(invisible())
-      }
-      if (identical(Sys.getenv("ELLMER_UPDATE_PRICES"), "false")) {
-        return(invisible())
-      }
-      if (!prices_cache_stale()) {
-        return(invisible())
-      }
-
-      url <- "https://raw.githubusercontent.com/tidyverse/ellmer/refs/heads/main/data-raw/prices.json"
-      resp <- curl::curl_fetch_memory(url)
-      df <- jsonlite::fromJSON(rawToChar(resp$content))
-
-      if (
-        !is.data.frame(df) ||
-          !all(c("provider", "model", "variant") %in% names(df)) ||
-          nrow(df) < 500
-      ) {
-        return(invisible())
-      }
-
-      path <- prices_cache_path()
-      dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
-      saveRDS(df, path)
+      prices_cache_download()
       the$prices <- NULL
     },
     error = function(cnd) invisible()
@@ -78,8 +87,38 @@ prices_update <- function() {
   invisible()
 }
 
+prices_cache_download <- function() {
+  url <- "https://raw.githubusercontent.com/tidyverse/ellmer/refs/heads/main/data-raw/prices.json"
+  df <-
+    if (requireNamespace("curl", quietly = TRUE)) {
+      resp <- curl::curl_fetch_memory(url)
+      jsonlite::fromJSON(rawToChar(resp$content))
+    } else {
+      jsonlite::fromJSON(url)
+    }
+
+  if (!is.data.frame(df)) {
+    return()
+  }
+
+  if (!all(c("provider", "model", "variant") %in% names(df))) {
+    return()
+  }
+
+  path <- prices_cache_path()
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+  saveRDS(df, path)
+}
+
 prices_cache_path <- function() {
-  cache_dir <- the$prices_cache_dir %||% tools::R_user_dir("ellmer", "cache")
+  cache_dir <- the$prices_cache_dir
+  if (is.null(cache_dir)) {
+    cache_dir <- normalizePath(
+      tools::R_user_dir("ellmer", which = "cache"),
+      mustWork = FALSE,
+      winslash = "/"
+    )
+  }
   file.path(cache_dir, "prices.rds")
 }
 
