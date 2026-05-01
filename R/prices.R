@@ -8,6 +8,10 @@ prices <- function() {
       return(invisible(the$prices))
     }
 
+    if (is.null(cached$variant)) {
+      cached$variant <- ""
+    }
+
     key_cols <- c("provider", "model", "variant")
     bundled_key <- do.call(paste, c(bundled[key_cols], sep = "\r"))
     cached_key <- do.call(paste, c(cached[key_cols], sep = "\r"))
