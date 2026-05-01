@@ -94,6 +94,7 @@ Collate:
     'otel.R'
     'parallel-chat.R'
     'params.R'
+    'prices.R'
     'provider-any.R'
     'provider-aws.R'
     'provider-openai-compatible.R'
