@@ -22,14 +22,38 @@ jobs:
       - name: Update prices.json
         run: bash data-raw/prices.sh
 
-      - name: Commit updated prices.json
+      - name: Check if prices.json changed
+        id: check
+        run: |
+          if git diff --quiet data-raw/prices.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: r-lib/actions/setup-r@v2
+        if: steps.check.outputs.changed == 'true'
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - name: Install R dependencies
+        if: steps.check.outputs.changed == 'true'
+        run: Rscript --quiet --vanilla -e 'install.packages(c("jsonlite", "usethis"))'
+
+      - name: Rebuild sysdata.rda
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          Rscript --quiet --vanilla -e '
+            prices_data <- jsonlite::fromJSON("data-raw/prices.json")
+            usethis::use_data(prices_data, overwrite = TRUE, internal = TRUE)
+          '
+
+      - name: Commit updated files
+        if: steps.check.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet data-raw/prices.json; then
-            git add data-raw/prices.json
-            git commit -m "chore: update prices.json [skip ci]"
-            git push
-          else
-            echo "prices.json unchanged, nothing to commit"
-          fi
+          git add data-raw/prices.json R/sysdata.rda
+          git commit -m "chore: update prices.json and sysdata.rda [skip ci]"
+          git push
