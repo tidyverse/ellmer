@@ -12,6 +12,7 @@ specification that defines the object structure you want and the LLM
 ensures that’s what you’ll get back.
 
 ``` r
+
 library(ellmer)
 ```
 
@@ -24,6 +25,7 @@ shortly). Here’s a simple example that extracts two specific values from
 a string:
 
 ``` r
+
 chat <- chat_openai()
 #> Using model = "gpt-4.1".
 chat$chat_structured(
@@ -43,6 +45,7 @@ chat$chat_structured(
 The same basic idea works with images too:
 
 ``` r
+
 chat <- chat_openai()
 #> Using model = "gpt-4.1".
 chat$chat_structured(
@@ -66,6 +69,7 @@ it needs a `chat` object since it’s a standalone function, not a method,
 and it can take a vector of prompts.
 
 ``` r
+
 prompts <- list(
   "I go by Alex. 42 years on this planet and counting.",
   "Pleased to meet you! I'm Jamal, age 27.",
@@ -127,6 +131,7 @@ divided into three main groups:
   element. Arrays of scalars are very similar to R’s atomic vectors:
 
   ``` r
+
   type_logical_vector <- type_array(type_boolean())
   type_integer_vector <- type_array(type_integer())
   type_double_vector <- type_array(type_number())
@@ -137,6 +142,7 @@ divided into three main groups:
   structures:
 
   ``` r
+
   list_of_integers <- type_array(type_integer_vector)
   ```
 
@@ -149,6 +155,7 @@ divided into three main groups:
   They are similar to named lists in R.
 
   ``` r
+
   type_person2 <- type_object(
   name = type_string(),
   age = type_integer(),
@@ -178,6 +185,7 @@ like the value to have (e.g. minimum or maximum values, date formats,
 LLM will try.
 
 ``` r
+
 type_person3 <- type_object(
   "A person",
   name = type_string("Name"),
@@ -198,6 +206,7 @@ names and ages, and give it some inputs that don’t have names and/or
 ages.
 
 ``` r
+
 no_match <- list(
   "I like apples",
   "What time is it?",
@@ -217,6 +226,7 @@ parallel_chat_structured(chat, no_match, type = type_person)
 You can often avoid this problem by setting `required = FALSE`:
 
 ``` r
+
 type_person <- type_object(
   name = type_string(required = FALSE),
   age = type_number(required = FALSE)
@@ -246,6 +256,7 @@ single prompt. For example, imagine that you want to extract some data
 about people from a table:
 
 ``` r
+
 prompt <- r"(
 * John Smith. Age: 30. Height: 180 cm. Weight: 80 kg.
 * Jane Doe. Age: 25. Height: 5'5". Weight: 110 lb.
@@ -258,6 +269,7 @@ You might be tempted to use a definition similar to R: an object (i.e.,
 a named list) containing multiple arrays (i.e., vectors):
 
 ``` r
+
 type_people <- type_object(
   name = type_array(type_string()),
   age = type_array(type_integer()),
@@ -287,6 +299,7 @@ really wanted a data frame. Instead, you’ll need to turn the data
 structure “inside out” and create an array of objects:
 
 ``` r
+
 type_people <- type_array(
   type_object(
     name = type_string(),
@@ -329,6 +342,7 @@ hint at some of the ways you can use structured data extraction.
 ### Example 1: Article summarisation
 
 ``` r
+
 text <- readLines(system.file(
   "examples/third-party-testing.txt",
   package = "ellmer"
@@ -371,6 +385,7 @@ str(data)
 ### Example 2: Named entity recognition
 
 ``` r
+
 text <- "
   John works at Google in New York. He met with Sarah, the CEO of
   Acme Inc., last week in San Francisco.
@@ -400,6 +415,7 @@ chat$chat_structured(text, type = type_named_entities)
 ### Example 3: Sentiment analysis
 
 ``` r
+
 text <- "
   The product was okay, but the customer service was terrible. I probably
   won't buy from them again.
@@ -434,6 +450,7 @@ guaranteed.
 ### Example 4: Text classification
 
 ``` r
+
 text <- "The new quantum computing breakthrough could revolutionize the tech industry."
 
 type_score <- type_object(
@@ -472,6 +489,7 @@ data
 ### Example 5: Working with unknown keys
 
 ``` r
+
 type_characteristics <- type_object(
   "All characteristics",
   .additional_properties = TRUE
@@ -511,6 +529,7 @@ Screenshot of schedule A: a table showing assets and “unearned” income
 Even without any descriptions, ChatGPT does pretty well:
 
 ``` r
+
 type_asset <- type_object(
   assert_name = type_string(),
   owner = type_string(),

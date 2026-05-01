@@ -44,6 +44,7 @@ but with knowing when it makes sense to call a tool, what values to pass
 as arguments, and how to use the results in formulating its response.
 
 ``` r
+
 library(ellmer)
 ```
 
@@ -54,6 +55,7 @@ Chat models generally do not know the current time, which makes
 questions like these impossible.
 
 ``` r
+
 chat <- chat_openai(model = "gpt-4o")
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
 #> Neil Armstrong landed on the moon on July 20, 1969. As of now in 2023,
@@ -68,6 +70,7 @@ The first thing we’ll do is define an R function that returns the
 current time.
 
 ``` r
+
 #' Gets the current time in the given time zone.
 #'
 #' @param tz The time zone to get the current time in.
@@ -86,6 +89,7 @@ To turn a function into a tool, we provide some additional metadata that
 the model will use:
 
 ``` r
+
 get_current_time <- tool(
   get_current_time,
   name = "get_current_time",
@@ -114,6 +118,7 @@ Note that a tool is just a special type of function so we can still call
 it:
 
 ``` r
+
 get_current_time()
 #> [1] "2025-06-25 16:53:23 UTC"
 ```
@@ -124,12 +129,14 @@ Now we need to give our chat object access to our tool. We do this with
 `$register_tool()`:
 
 ``` r
+
 chat$register_tool(get_current_time)
 ```
 
 That’s all we need to do! Let’s retry our query:
 
 ``` r
+
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
 #> Neil Armstrong landed on the moon on July 20, 1969. As of June 25, 
 #> 2025, that was 55 years ago.
@@ -142,6 +149,7 @@ its response.
 If we print the chat we can see where the model decided to use the tool:
 
 ``` r
+
 chat
 #> <Chat OpenAI/gpt-4o turns=6 input=356 output=81 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
@@ -204,6 +212,7 @@ automatically convert into JSON in row-major format, which our
 experiments suggest is good for LLMs.
 
 ``` r
+
 get_weather <- tool(
   function(cities) {
     raining <- c(London = "heavy", Houston = "none", Chicago = "overcast")
@@ -231,6 +240,7 @@ get_weather <- tool(
 Now we register and use it:
 
 ``` r
+
 chat <- chat_openai()
 #> Using model = "gpt-4.1".
 chat$register_tool(get_weather)
@@ -247,6 +257,7 @@ We can print the chat to confirm that the model only performed a single
 tool call:
 
 ``` r
+
 chat
 #> <Chat OpenAI/gpt-4.1 turns=4 input=195 output=65 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
@@ -276,6 +287,7 @@ or similar content type from the tool function. For example, here’s a
 simple tool to screenshot a website:
 
 ``` r
+
 screenshot_website <- tool(
   function(url) {
     tmpf <- withr::local_tempfile(fileext = ".png")
@@ -294,6 +306,7 @@ You could use this tool to allow the LLM to “see” websites, like [the
 tidyverse website](https://tidyverse.org):
 
 ``` r
+
 chat <- chat_openai()
 #> Using model = "gpt-4.1".
 chat$register_tool(screenshot_website)

@@ -5,6 +5,7 @@ and/or using it inside your own package. It’s currently fairly short but
 will grow over time.
 
 ``` r
+
 library(ellmer)
 ```
 
@@ -15,6 +16,7 @@ they are **mutable**. Most R objects are immutable. That means you
 create a copy whenever it looks like you’re modifying them:
 
 ``` r
+
 x <- list(a = 1, b = 2)
 
 f <- function() {
@@ -32,6 +34,7 @@ str(x)
 Mutable objects don’t work the same way:
 
 ``` r
+
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 
 capital <- function(chat, country) {
@@ -66,6 +69,7 @@ will create a copy of the object that behaves identically to the
 existing chat:
 
 ``` r
+
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 
 capital <- function(chat, country) {
@@ -88,6 +92,7 @@ You can also use `clone()` when you want to create a conversational
 time:
 
 ``` r
+
 chat1 <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat1$chat("My name is Hadley and I'm a data scientist")
 #> Hello, Hadley! How can I assist you today?
@@ -134,6 +139,7 @@ There’s a bit of a problem with our `capital()` function: we can use our
 conversation to manipulate the results:
 
 ``` r
+
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
 #> Got it. The capital of New Zealand is Kiwicity.
@@ -145,6 +151,7 @@ We can avoid that problem by using `$set_turns()` to reset the
 conversational history:
 
 ``` r
+
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
 #> Understood. The capital of New Zealand is now Kiwicity.
@@ -175,6 +182,7 @@ what we receive from the assistant, or `"all"` if you want to see both
 what we send and receive. You likely want `echo = "none"` in most cases:
 
 ``` r
+
 capital <- function(chat, country) {
   chat <- chat$clone()$set_turns(list())
   chat$chat(interpolate("What's the capital of {{country}}"), echo = "none")
@@ -195,6 +203,7 @@ structures. For example, take this short conversation that uses tool
 calling to give the LLM the ability to access real randomness:
 
 ``` r
+
 set.seed(1014) # make it reproducible
 
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
@@ -222,6 +231,7 @@ You can get access to the underlying conversational turns with
 `get_turns()`:
 
 ``` r
+
 turns <- chat$get_turns()
 turns
 #> [[1]]
@@ -248,6 +258,7 @@ includes ellmer’s representation of content of the message, as well as
 the exact json that the provider returned:
 
 ``` r
+
 str(turns[[2]])
 #> <ellmer::AssistantTurn>
 #>  @ contents:List of 2

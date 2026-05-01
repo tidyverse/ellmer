@@ -1,6 +1,7 @@
 # Getting started with ellmer
 
 ``` r
+
 library(ellmer)
 ```
 
@@ -86,6 +87,7 @@ printing it, and you can see total usage for a session with
 [`token_usage()`](https://ellmer.tidyverse.org/dev/reference/token_usage.md).
 
 ``` r
+
 chat <- chat_openai(model = "gpt-4.1")
 . <- chat$chat("Who created R?", echo = FALSE)
 chat

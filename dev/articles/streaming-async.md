@@ -20,6 +20,7 @@ With the `stream()` method, which returns a
 process the response by looping over it as it arrives.
 
 ``` r
+
 stream <- chat$stream("What are some common uses of R?")
 coro::loop(for (chunk in stream) {
   cat(toupper(chunk))
@@ -65,6 +66,7 @@ method as before, but handle the result as a promise instead of a
 string.
 
 ``` r
+
 library(promises)
 
 chat$chat_async("How's your day going?") %...>% print()
@@ -91,6 +93,7 @@ object to
 and handle non-blocking asynchronous chat interactions automatically.
 
 ``` r
+
 library(shiny)
 library(shinychat)
 
@@ -217,6 +220,7 @@ except that instead of giving you strings, it gives you promises that
 resolve to strings.
 
 ``` r
+
 stream <- chat$stream_async("What are some common uses of R?")
 coro::async(function() {
   for (chunk in await_each(stream)) {
