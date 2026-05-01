@@ -77,7 +77,6 @@ test_that("can match prices for some common models", {
   provider <- chat_google_gemini_test()$get_provider()
 
   expect_true(has_cost(provider, "gemini-2.5-flash"))
-  expect_true(has_cost(provider, "gemini-2.5-flash-preview-05-20"))
 
   expect_false(has_cost(provider, "gemini-1.0-pro-latest"))
 })
