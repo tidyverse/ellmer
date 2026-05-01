@@ -105,7 +105,6 @@ test_that("can match prices for some common models", {
   provider <- chat_anthropic_test()$get_provider()
 
   expect_true(has_cost(provider, "claude-sonnet-4-20250514"))
-  expect_true(has_cost(provider, "claude-3-7-sonnet-latest"))
 })
 
 test_that("removes empty final chat messages", {

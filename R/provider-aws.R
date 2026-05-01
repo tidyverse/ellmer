@@ -121,6 +121,7 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
     model = "",
     profile = profile,
   )
+
   req <- base_request(provider)
   req <- req_url_path_append(req, "foundation-models")
 

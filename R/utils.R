@@ -242,9 +242,13 @@ counter <- function() {
 }
 
 match_prices <- function(provider, id) {
-  prices <- prices[prices$provider == provider, ]
-  idx <- match(id, prices$model)
-  prices[idx, c("cached_input", "input", "output")]
+  prices_update()
+  p <- prices()
+  p <- p[p$provider == provider, ]
+  idx <- match(id, p$model)
+  p <- p[idx, c("cached_input", "input", "output")]
+  rownames(p) <- NULL
+  p
 }
 
 base64_enc <- function(path, raw) {
