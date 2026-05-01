@@ -27,7 +27,7 @@ test_that("prices_cache_stale() returns TRUE for a file older than 7 days", {
 
 # prices_merge() --------------------------------------------------------------
 
-test_that("prices_merge() prefers cached rows over bundled rows on key conflict", {
+test_that("prices() prefers cached rows over bundled rows on key conflict", {
   local_prices()
   cache_path <- local_prices_cache()
 
@@ -36,28 +36,34 @@ test_that("prices_merge() prefers cached rows over bundled rows on key conflict"
   first_row$input <- 9999
 
   saveRDS(first_row, cache_path)
-  prices_merge()
+  result <- prices()
 
-  result_row <- the$prices[
-    the$prices$provider == first_row$provider &
-      the$prices$model == first_row$model &
-      the$prices$variant == first_row$variant,
+  result_row <- result[
+    result$provider == first_row$provider &
+      result$model == first_row$model &
+      result$variant == first_row$variant,
   ]
 
   expect_equal(result_row$input, 9999)
 })
 
-test_that("prices_merge() uses bundled prices when no cache exists", {
+test_that("prices() uses bundled prices when no cache exists", {
   local_prices()
   local_prices_cache()
 
-  bundled <- prices_data
-  prices_merge()
-
-  expect_equal(the$prices, bundled)
+  prices()
+  expect_equal(the$prices, prices_data)
 })
 
 # prices_update() -------------------------------------------------------------
+
+test_that("prices_update() does nothing during testing (CRAN-safe)", {
+  cache_path <- local_prices_cache()
+
+  prices_update()
+
+  expect_false(file.exists(cache_path))
+})
 
 test_that("prices_update() does nothing when opt-out option is set", {
   local_prices_cache()

@@ -5,7 +5,7 @@ prices <- function() {
 
     if (is.null(cached)) {
       the$prices <- bundled
-      return(invisible())
+      return(invisible(the$prices))
     }
 
     key_cols <- c("provider", "model", "variant")
@@ -38,6 +38,10 @@ prices_cache_stale <- function() {
 }
 
 prices_should_update <- function() {
+  if (is_testing()) {
+    return(FALSE)
+  }
+
   opt <- getOption("ellmer.update_prices", NULL)
   if (!is.null(opt)) {
     if (!is.na(as.logical(opt))) {
@@ -51,17 +55,17 @@ prices_should_update <- function() {
   }
 
   env <- Sys.getenv("ELLMER_UPDATE_PRICES", "")
-  if (!nzchar(env)) {
+  if (nzchar(env)) {
     if (tolower(env) %in% c("true", "1")) {
       return(TRUE)
     } else if (tolower(env) %in% c("false", "0")) {
       return(FALSE)
+    } else {
+      cli::cli_warn(
+        "Environment variable {.code ELLMER_UPDATE_PRICES} should be set to a logical value (true, false, 1, or 0).",
+        call = NULL
+      )
     }
-  } else {
-    cli::cli_warn(
-      "Environment variable {.code ELLMER_UPDATE_PRICES} should be set to a logical value (true, false, 1, or 0).",
-      call = NULL
-    )
   }
 
   NULL
@@ -92,6 +96,9 @@ prices_cache_download <- function() {
   df <-
     if (requireNamespace("curl", quietly = TRUE)) {
       resp <- curl::curl_fetch_memory(url)
+      if (resp$status_code != 200L) {
+        return()
+      }
       jsonlite::fromJSON(rawToChar(resp$content))
     } else {
       jsonlite::fromJSON(url)
