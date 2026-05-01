@@ -103,17 +103,39 @@ prices_update <- function() {
 }
 
 prices_cache_download <- function() {
+  if (!requireNamespace("curl", quietly = TRUE)) {
+    return()
+  }
+
   url <- "https://raw.githubusercontent.com/tidyverse/ellmer/refs/heads/main/data-raw/prices.json"
-  df <-
-    if (requireNamespace("curl", quietly = TRUE)) {
-      resp <- curl::curl_fetch_memory(url)
-      if (resp$status_code != 200L) {
-        return()
-      }
-      jsonlite::fromJSON(rawToChar(resp$content))
-    } else {
-      jsonlite::fromJSON(url)
-    }
+
+  # Quick connectivity probe before the real download: nobody=TRUE fetches only
+  # headers, so we get a cheap TCP+TLS round-trip without transferring the body.
+  probe_handle <- curl::new_handle(
+    nobody = TRUE,
+    connecttimeout_ms = 1000L,
+    timeout_ms = 1000L
+  )
+  probe <- tryCatch(
+    curl::curl_fetch_memory(url, handle = probe_handle),
+    error = function(e) NULL
+  )
+  if (is.null(probe) || probe$status_code != 200L) {
+    return()
+  }
+
+  handle <- curl::new_handle(timeout_ms = 2000L, connecttimeout_ms = 1000L)
+  resp <- tryCatch(
+    curl::curl_fetch_memory(url, handle = handle),
+    error = function(e) NULL
+  )
+  if (is.null(resp) || resp$status_code != 200L) {
+    return()
+  }
+  df <- tryCatch(
+    jsonlite::fromJSON(rawToChar(resp$content)),
+    error = function(e) NULL
+  )
 
   if (!is.data.frame(df)) {
     return()
