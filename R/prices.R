@@ -101,7 +101,7 @@ prices_update <- function() {
 
 prices_cache_download <- function() {
   if (!requireNamespace("curl", quietly = TRUE)) {
-    return()
+    return(FALSE)
   }
 
   url <- "https://raw.githubusercontent.com/tidyverse/ellmer/refs/heads/main/data-raw/prices.json"
@@ -119,7 +119,7 @@ prices_cache_download <- function() {
     error = function(e) NULL
   )
   if (is.null(probe) || probe$status_code != 200L) {
-    return()
+    return(FALSE)
   }
 
   curl::handle_setopt(handle, nobody = FALSE, timeout_ms = 2000L)
@@ -128,7 +128,7 @@ prices_cache_download <- function() {
     error = function(e) NULL
   )
   if (is.null(resp) || resp$status_code != 200L) {
-    return()
+    return(FALSE)
   }
   df <- tryCatch(
     jsonlite::fromJSON(rawToChar(resp$content)),
@@ -136,11 +136,11 @@ prices_cache_download <- function() {
   )
 
   if (!is.data.frame(df)) {
-    return()
+    return(FALSE)
   }
 
   if (!all(c("provider", "model", "variant") %in% names(df))) {
-    return()
+    return(FALSE)
   }
 
   path <- prices_cache_path()
