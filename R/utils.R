@@ -243,7 +243,8 @@ counter <- function() {
 
 match_prices <- function(provider, id) {
   prices_update()
-  p <- prices()[prices()$provider == provider, ]
+  p <- prices()
+  p <- p[p$provider == provider, ]
   idx <- match(id, p$model)
   p <- p[idx, c("cached_input", "input", "output")]
   rownames(p) <- NULL
