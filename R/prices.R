@@ -91,13 +91,10 @@ prices_update <- function() {
     return(invisible())
   }
 
-  tryCatch(
-    {
-      prices_cache_download()
-      the$prices <- NULL
-    },
-    error = function(cnd) invisible()
-  )
+  downloaded <- tryCatch(prices_cache_download(), error = function(cnd) FALSE)
+  if (isTRUE(downloaded)) {
+    the$prices <- NULL
+  }
 
   invisible()
 }
@@ -148,6 +145,7 @@ prices_cache_download <- function() {
   path <- prices_cache_path()
   dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
   saveRDS(df, path)
+  TRUE
 }
 
 prices_cache_path <- function() {
