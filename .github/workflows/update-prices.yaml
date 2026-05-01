@@ -1,4 +1,7 @@
 on:
+  push:
+    paths:
+      - .github/workflows/update-prices.yaml
   schedule:
     - cron: "0 6 * * 1"
   workflow_dispatch:
