@@ -1,6 +1,9 @@
 # ellmer (development version)
 
 * ellmer is now instrumented with OpenTelemetry, so that traces are emitted whenever the (suggested) `otel` package is installed and a tracer is active. Each call to `$chat()`, `$chat_async()`, `$stream()`, or `$stream_async()` produces a top-level `invoke_agent` span that wraps one or more child `chat <model>` spans (one per request to the provider) and `execute_tool <tool>` spans (one per tool invocation). Chat spans record the provider name, request model, response model, and response id, plus input and output token usage; tool spans record the tool name, description, call id, and any error raised during execution. HTTP spans from httr2 are automatically nested under the chat spans (#526).
+    * Chat spans can additionally record conversation content as `gen_ai.input.messages`,
+      `gen_ai.output.messages`, and `gen_ai.system_instructions`. This is opt-in via the
+      `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` environment variable (set to `"true"`), since these payloads may contain user data.
 * The `input` column of `token_usage()` and `parallel_chat()` no longer includes a hidden 1.25x pricing weight for Anthropic cache-creation tokens; the column now reports raw integer token counts. Cost calculations are unchanged.
 * `chat_aws_bedrock()` now supports reasoning/thinking content. To enable thinking in Anthropic Claude models, see the `api_args` argument in `?chat_aws_bedrock` for an example (#964).
 * New `chat_lmstudio()` and `models_lmstudio()` provide support for [LM Studio](https://lmstudio.ai), a local model server with an OpenAI-compatible API (#963).

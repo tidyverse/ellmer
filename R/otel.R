@@ -1,6 +1,7 @@
 otel_tracer_name <- "co.posit.r-package.ellmer"
 
 otel_cache_tracer <- NULL
+otel_capture_content_enabled <- NULL
 local_chat_otel_span <- NULL
 local_tool_otel_span <- NULL
 local_agent_otel_span <- NULL
@@ -8,6 +9,7 @@ local_agent_otel_span <- NULL
 local({
   otel_is_tracing <- FALSE
   otel_tracer <- NULL
+  otel_capture_content <- FALSE
 
   otel_cache_tracer <<- function() {
     if (!requireNamespace("otel", quietly = TRUE)) {
@@ -15,10 +17,18 @@ local({
     }
     otel_tracer <<- otel::get_tracer(otel_tracer_name)
     otel_is_tracing <<- tracer_enabled(otel_tracer)
+    otel_capture_content <<- {
+      val <- Sys.getenv("OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT")
+      tolower(val) %in% c("true", "1")
+    }
   }
+
+  otel_capture_content_enabled <<- function() otel_capture_content
 
   local_chat_otel_span <<- function(
     provider,
+    turns = NULL,
+    system_prompt = NULL,
     parent = NULL,
     local_envir = parent.frame()
   ) {
@@ -41,6 +51,32 @@ local({
       )
 
     defer(otel::end_span(chat_span), envir = local_envir)
+
+    if (otel_capture_content) {
+      if (!is.null(system_prompt)) {
+        parts <- lapply(system_prompt@contents, as_otel_part)
+        chat_span$set_attribute(
+          "gen_ai.system_instructions",
+          jsonlite::toJSON(parts, auto_unbox = TRUE, null = "null")
+        )
+      }
+      if (length(turns)) {
+        # Tool result values are typed `class_any`, so tools can return objects
+        # (environments, R6, external pointers) that `jsonlite::toJSON` rejects.
+        # Skip emission rather than break the chat — the provider's tool_string
+        # path will surface a descriptive error.
+        tryCatch(
+          {
+            msgs <- lapply(turns, as_otel_message)
+            chat_span$set_attribute(
+              "gen_ai.input.messages",
+              jsonlite::toJSON(msgs, auto_unbox = TRUE, null = "null")
+            )
+          },
+          error = function(e) NULL
+        )
+      }
+    }
 
     chat_span
   }
@@ -160,6 +196,97 @@ record_chat_otel_span_status <- function(span, provider, result) {
   }
   # TODO: Consider setting gen_ai.response.finish_reasons.
   span$set_status("ok")
+}
+
+# Convert a single Content into a GenAI semconv "part" — a named list emitted
+# as one entry of a ChatMessage's `parts` array. New content classes fall
+# through to the default method, which emits a schema-valid `generic` part.
+as_otel_part <- new_generic("as_otel_part", "content")
+
+method(as_otel_part, Content) <- function(content) {
+  list(type = "generic", class = S7_class(content)@name)
+}
+
+method(as_otel_part, ContentText) <- function(content) {
+  list(type = "text", content = content@text)
+}
+
+method(as_otel_part, ContentToolRequest) <- function(content) {
+  list(
+    type = "tool_call",
+    id = content@id,
+    name = content@name,
+    arguments = content@arguments
+  )
+}
+
+method(as_otel_part, ContentToolResult) <- function(content) {
+  part <- list(type = "tool_call_response")
+  if (!is.null(content@request)) {
+    part$id <- content@request@id
+  }
+  part$response <- tool_otel_response(content)
+  part
+}
+
+tool_otel_response <- function(content) {
+  if (tool_errored(content)) {
+    return(tool_error_string(content))
+  }
+  value <- content@value
+  if (inherits(value, "json")) {
+    # Parse so jsonlite re-emits the structured value rather than encoding the
+    # JSON string itself as a quoted string under `auto_unbox = TRUE`.
+    return(jsonlite::fromJSON(value, simplifyVector = FALSE))
+  }
+  value
+}
+
+# Produce a GenAI semconv ChatMessage from a Turn. Tool-result UserTurns get
+# role "tool" so consumers can filter them out of normal user input — matching
+# Python's GenAI instrumentations.
+as_otel_message <- function(turn) {
+  list(
+    role = if (is_tool_result_turn(turn)) "tool" else turn@role,
+    parts = lapply(turn@contents, as_otel_part)
+  )
+}
+
+is_tool_result_turn <- function(turn) {
+  S7_inherits(turn, UserTurn) &&
+    length(turn@contents) > 0 &&
+    all(map_lgl(turn@contents, S7_inherits, ContentToolResult))
+}
+
+otel_chat_input <- function(private, user_turn) {
+  if (private$has_system_prompt()) {
+    sys_turn <- private$.turns[[1]]
+    history <- private$.turns[-1]
+  } else {
+    sys_turn <- NULL
+    history <- private$.turns
+  }
+  list(
+    turns = c(history, list(user_turn)),
+    system_prompt = sys_turn
+  )
+}
+
+record_chat_otel_span_output <- function(span, turn) {
+  if (is.null(span) || !span_recording(span)) {
+    return()
+  }
+  if (!otel_capture_content_enabled()) {
+    return()
+  }
+  if (!S7_inherits(turn, AssistantTurn)) {
+    return()
+  }
+  msg <- as_otel_message(turn)
+  span$set_attribute(
+    "gen_ai.output.messages",
+    jsonlite::toJSON(list(msg), auto_unbox = TRUE, null = "null")
+  )
 }
 
 record_tool_otel_span_error <- function(span, error) {

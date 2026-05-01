@@ -1,5 +1,6 @@
 test_that("tracing works as expected for synchronous chats", {
   skip_if_not_installed("otelsdk")
+  withr::local_envvar(OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = NA)
 
   # Capture spans from a typical synchronous chat with tool calls.
   spans <- with_otel_record({
@@ -69,6 +70,11 @@ test_that("tracing works as expected for synchronous chats", {
     function(x) x$parent %in% chat_span_ids,
     logical(1)
   )))
+
+  # Content-capture attributes are off by default.
+  expect_null(chat_spans[[1]]$attributes[["gen_ai.system_instructions"]])
+  expect_null(chat_spans[[1]]$attributes[["gen_ai.input.messages"]])
+  expect_null(chat_spans[[1]]$attributes[["gen_ai.output.messages"]])
 })
 
 test_that("tracing works as expected for synchronous streams", {
@@ -284,4 +290,64 @@ test_that("tracing works as expected for asynchronous streams", {
     function(x) x$parent %in% chat_span_ids,
     logical(1)
   )))
+})
+
+test_that("captures content when OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT is set", {
+  skip_if_not_installed("otelsdk")
+  withr::local_envvar(
+    OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = "true"
+  )
+
+  spans <- with_otel_record({
+    chat <- chat_openai_test(system_prompt = "Be terse.")
+    chat$chat("Say hi.")
+  })[["traces"]]
+
+  chat_span <- Filter(function(x) startsWith(x$name, "chat"), spans)[[1]]
+
+  # System instructions: JSON parts array, first part is text.
+  sys <- jsonlite::fromJSON(
+    chat_span$attributes[["gen_ai.system_instructions"]],
+    simplifyVector = FALSE
+  )
+  expect_equal(sys[[1]]$type, "text")
+
+  # Input messages: last is the user turn with a text part.
+  msgs <- jsonlite::fromJSON(
+    chat_span$attributes[["gen_ai.input.messages"]],
+    simplifyVector = FALSE
+  )
+  last <- msgs[[length(msgs)]]
+  expect_equal(last$role, "user")
+
+  # Output: assistant message with at least one part.
+  out <- jsonlite::fromJSON(
+    chat_span$attributes[["gen_ai.output.messages"]],
+    simplifyVector = FALSE
+  )
+  expect_equal(out[[1]]$role, "assistant")
+  expect_gt(length(out[[1]]$parts), 0)
+})
+
+test_that("tool_call_response part omits id when request is unknown", {
+  part <- as_otel_part(ContentToolResult(value = "ok"))
+  expect_false("id" %in% names(part))
+  expect_equal(part$type, "tool_call_response")
+  expect_equal(part$response, "ok")
+
+  request <- ContentToolRequest(id = "abc", name = "f", arguments = list())
+  part <- as_otel_part(ContentToolResult(value = "ok", request = request))
+  expect_equal(part$id, "abc")
+})
+
+test_that("tool_call_response part decodes json-class values", {
+  value <- structure('{"foo":1,"bar":[2,3]}', class = "json")
+  part <- as_otel_part(ContentToolResult(value = value))
+  expect_equal(part$response, list(foo = 1, bar = list(2, 3)))
+
+  encoded <- jsonlite::toJSON(part, auto_unbox = TRUE, null = "null")
+  expect_equal(
+    jsonlite::fromJSON(encoded, simplifyVector = FALSE)$response,
+    list(foo = 1, bar = list(2, 3))
+  )
 })

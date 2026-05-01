@@ -633,8 +633,11 @@ Chat <- R6::R6Class(
         cat_line(format(user_turn), prefix = "> ")
       }
 
+      otel_input <- otel_chat_input(private, user_turn)
       chat_span <- local_chat_otel_span(
         private$provider,
+        turns = otel_input$turns,
+        system_prompt = otel_input$system_prompt,
         parent = otel_span
       )
 
@@ -673,11 +676,13 @@ Chat <- R6::R6Class(
 
         record_chat_otel_span_status(chat_span, private$provider, result)
         turn <- acc$complete_turn(result, type = type)
+        record_chat_otel_span_output(chat_span, turn)
       } else {
         result <- resp_body_json(response)
         duration <- resp_timing(response)[["total"]] %||% NA_real_
         record_chat_otel_span_status(chat_span, private$provider, result)
         turn <- acc$add_turn(user_turn, result, duration, type = type)
+        record_chat_otel_span_output(chat_span, turn)
 
         text <- turn@text
         if (!is.null(text)) {
@@ -724,8 +729,11 @@ Chat <- R6::R6Class(
       controller = NULL,
       otel_span = NULL
     ) {
+      otel_input <- otel_chat_input(private, user_turn)
       chat_span <- local_chat_otel_span(
         private$provider,
+        turns = otel_input$turns,
+        system_prompt = otel_input$system_prompt,
         parent = otel_span
       )
 
@@ -764,12 +772,14 @@ Chat <- R6::R6Class(
 
         record_chat_otel_span_status(chat_span, private$provider, result)
         turn <- acc$complete_turn(result, type = type)
+        record_chat_otel_span_output(chat_span, turn)
       } else {
         response <- await(response)
         result <- resp_body_json(response)
         duration <- resp_timing(response)[["total"]] %||% NA_real_
         record_chat_otel_span_status(chat_span, private$provider, result)
         turn <- acc$add_turn(user_turn, result, duration, type = type)
+        record_chat_otel_span_output(chat_span, turn)
 
         text <- turn@text
         if (!is.null(text)) {
