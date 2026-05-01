@@ -12,6 +12,7 @@ permissions: read-all
 
 jobs:
   update-prices:
+    if: github.repository == 'tidyverse/ellmer'
     runs-on: ubuntu-latest
 
     permissions:
