@@ -39,15 +39,12 @@ jobs:
 
       - name: Install R dependencies
         if: steps.check.outputs.changed == 'true'
-        run: Rscript --quiet --vanilla -e 'install.packages(c("jsonlite", "usethis"))'
+        shell: Rscript {0}
+        run: install.packages(c("jsonlite", "usethis"))
 
       - name: Rebuild sysdata.rda
         if: steps.check.outputs.changed == 'true'
-        run: |
-          Rscript --quiet --vanilla -e '
-            prices_data <- jsonlite::fromJSON("data-raw/prices.json")
-            usethis::use_data(prices_data, overwrite = TRUE, internal = TRUE)
-          '
+        run: Rscript --quiet data-raw/prices.R
 
       - name: Commit updated files
         if: steps.check.outputs.changed == 'true'
@@ -55,5 +52,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data-raw/prices.json R/sysdata.rda
-          git commit -m "chore: update prices.json and sysdata.rda [skip ci]"
+          git commit -m "chore: update pricing data [skip ci]"
           git push
