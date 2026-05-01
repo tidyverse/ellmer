@@ -16,8 +16,8 @@ def provider_map:
     "mistral":                       "Mistral"
   };
 
-# Scale per-token cost to per-million-token cost
-def scale: . * 1e6;
+# Scale per-token cost to per-million-token cost, rounded to 6 decimal places
+def scale: (. * 1e6 * 1e6 | round) / 1e6;
 
 # Conditionally add a field; no-op if value is null
 def maybe($k; $v): if $v != null then {($k): ($v | scale)} else {} end;
