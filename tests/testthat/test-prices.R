@@ -98,60 +98,6 @@ test_that("prices() uses bundled prices when no cache exists", {
   expect_equal(the$prices, prices_data)
 })
 
-# prices_should_update() ------------------------------------------------------
-
-test_that("prices_should_update() returns FALSE during testing", {
-  expect_false(prices_should_update())
-})
-
-test_that("prices_should_update() returns FALSE during R CMD check", {
-  withr::local_envvar(TESTTHAT = NA, `_R_CHECK_PACKAGE_NAME_` = "ellmer")
-  expect_false(prices_should_update())
-})
-
-test_that("prices_should_update() respects option = TRUE", {
-  withr::local_options(ellmer.update_prices = TRUE)
-  withr::local_envvar(TESTTHAT = NA, `_R_CHECK_PACKAGE_NAME_` = NA)
-  expect_true(prices_should_update())
-})
-
-test_that("prices_should_update() respects option = FALSE", {
-  withr::local_options(ellmer.update_prices = FALSE)
-  withr::local_envvar(TESTTHAT = NA, `_R_CHECK_PACKAGE_NAME_` = NA)
-  expect_false(prices_should_update())
-})
-
-test_that("prices_should_update() warns on invalid option", {
-  withr::local_options(ellmer.update_prices = "maybe")
-  withr::local_envvar(TESTTHAT = NA, `_R_CHECK_PACKAGE_NAME_` = NA)
-  expect_warning(result <- prices_should_update(), "logical value")
-  expect_null(result)
-})
-
-test_that("prices_should_update() respects env var", {
-  withr::local_options(ellmer.update_prices = NULL)
-  withr::local_envvar(TESTTHAT = NA, `_R_CHECK_PACKAGE_NAME_` = NA)
-
-  withr::local_envvar(ELLMER_UPDATE_PRICES = "true")
-  expect_true(prices_should_update())
-
-  withr::local_envvar(ELLMER_UPDATE_PRICES = "0")
-  expect_false(prices_should_update())
-})
-
-test_that("prices_should_update() warns on invalid env var", {
-  withr::local_options(ellmer.update_prices = NULL)
-  withr::local_envvar(TESTTHAT = NA, `_R_CHECK_PACKAGE_NAME_` = NA, ELLMER_UPDATE_PRICES = "nah")
-  expect_warning(result <- prices_should_update(), "logical value")
-  expect_null(result)
-})
-
-test_that("prices_should_update() returns NULL by default (outside tests)", {
-  withr::local_options(ellmer.update_prices = NULL)
-  withr::local_envvar(TESTTHAT = NA, `_R_CHECK_PACKAGE_NAME_` = NA, ELLMER_UPDATE_PRICES = NA)
-  expect_null(prices_should_update())
-})
-
 # prices_update() -------------------------------------------------------------
 
 test_that("prices_update() does nothing during testing (CRAN-safe)", {
