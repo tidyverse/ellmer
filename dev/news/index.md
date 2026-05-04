@@ -27,6 +27,11 @@
   no longer includes a hidden 1.25x pricing weight for Anthropic
   cache-creation tokens; the column now reports raw integer token
   counts. Cost calculations are unchanged.
+- [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  now uses the appropriate prices when a non-default service tier
+  (e.g. `"priority"`) is used
+  ([@trangdata](https://github.com/trangdata),
+  [\#903](https://github.com/tidyverse/ellmer/issues/903)).
 - [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
   now supports reasoning/thinking content. To enable thinking in
   Anthropic Claude models, see the `api_args` argument in
