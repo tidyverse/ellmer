@@ -19,8 +19,7 @@ NULL
 #' [developer platform](https://platform.openai.com).
 #'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
-#' @param base_url The base URL to the endpoint; the default is OpenAI's
-#'   public API.
+#' @param base_url The base URL to the API endpoint.
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("OPENAI_API_KEY")`
 #' @param model `r param_model("gpt-4.1", "openai")`

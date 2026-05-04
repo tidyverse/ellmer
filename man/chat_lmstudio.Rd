@@ -21,8 +21,7 @@ models_lmstudio(base_url = "http://localhost:1234", credentials = NULL)
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the endpoint; the default is OpenAI's
-public API.}
+\item{base_url}{The base URL to the API endpoint.}
 
 \item{model}{The model to use for the chat.
 Use \code{models_lmstudio()} to see all options.}
