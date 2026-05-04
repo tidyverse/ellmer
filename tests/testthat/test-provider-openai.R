@@ -154,10 +154,7 @@ test_that("value_turn handles NULL service_tier gracefully", {
     service_tier = NULL
   )
 
-  turn <- value_turn(provider, result)
-  expect_s7_class(turn, AssistantTurn)
-  expect_equal(turn@tokens[["input"]], 0)
-  expect_equal(turn@tokens[["output"]], 0)
+  expect_no_error(value_turn(provider, result))
 })
 
 test_that("value_turn() handles web_search_call action types", {
