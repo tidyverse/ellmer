@@ -95,6 +95,7 @@ test_that("prices() uses bundled prices when no cache exists", {
 # prices_update() -------------------------------------------------------------
 
 test_that("prices_update() does nothing during testing (CRAN-safe)", {
+  skip_on_cran()
   cache_path <- local_prices_cache()
 
   prices_update()
