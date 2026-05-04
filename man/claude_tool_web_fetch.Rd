@@ -42,10 +42,10 @@ chat$chat("What are the latest package releases on https://tidyverse.org/blog")
 }
 }
 \seealso{
-Other built-in tools: 
-\code{\link{claude_tool_web_search}()},
-\code{\link{google_tool_web_fetch}()},
-\code{\link{google_tool_web_search}()},
-\code{\link{openai_tool_web_search}()}
+Other built-in tools:
+\code{\link[=claude_tool_web_search]{claude_tool_web_search()}},
+\code{\link[=google_tool_web_fetch]{google_tool_web_fetch()}},
+\code{\link[=google_tool_web_search]{google_tool_web_search()}},
+\code{\link[=openai_tool_web_search]{openai_tool_web_search()}}
 }
 \concept{built-in tools}

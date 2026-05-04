@@ -130,8 +130,8 @@ chat
 \dontshow{ellmer:::vcr_example_end()}
 }
 \seealso{
-Other tool calling helpers: 
-\code{\link{tool_annotations}()},
-\code{\link{tool_reject}()}
+Other tool calling helpers:
+\code{\link[=tool_annotations]{tool_annotations()}},
+\code{\link[=tool_reject]{tool_reject()}}
 }
 \concept{tool calling helpers}

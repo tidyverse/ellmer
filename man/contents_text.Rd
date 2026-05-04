@@ -34,7 +34,7 @@ objects in the output.
 markdown and does not convert it) plus markdown representations of images
 and other content types.
 \item \code{contents_html()} returns the text content, converted from markdown to
-HTML with \code{\link[commonmark:commonmark]{commonmark::markdown_html()}}, plus HTML representations of
+HTML with \code{\link[commonmark:markdown_html]{commonmark::markdown_html()}}, plus HTML representations of
 images and other content types.
 }
 
