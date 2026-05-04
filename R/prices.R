@@ -189,4 +189,3 @@ prices_cache_path <- function() {
   }
   file.path(cache_dir, "prices.rds")
 }
-
