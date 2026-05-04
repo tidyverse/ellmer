@@ -35,7 +35,9 @@ prices_cache_read <- function() {
   if (!file.exists(path)) {
     return(NULL)
   }
-  tryCatch(readRDS(path), error = function(cnd) NULL)
+  cached <- tryCatch(readRDS(path), error = function(cnd) NULL)
+  attr(cached, "etag") <- NULL
+  cached
 }
 
 prices_cache_stale <- function() {
@@ -98,8 +100,8 @@ prices_update <- function() {
   }
   the$prices_download_attempted <- TRUE
 
-  downloaded <- tryCatch(prices_cache_download(), error = function(cnd) FALSE)
-  if (isTRUE(downloaded)) {
+  result <- tryCatch(prices_cache_download(), error = function(cnd) FALSE)
+  if (isTRUE(result)) {
     the$prices <- NULL
     cli::cli_inform(
       "Updated cached pricing data {.href [from GitHub](https://github.com/tidyverse/ellmer/blob/main/data-raw/prices.json)}."
@@ -120,13 +122,26 @@ prices_cache_download <- function() {
     connecttimeout_ms = 1000L,
     timeout_ms = 3000L
   )
+
+  etag <- prices_cache_etag()
+  if (!is.null(etag)) {
+    curl::handle_setheaders(handle, `If-None-Match` = etag)
+  }
+
   resp <- tryCatch(
     curl::curl_fetch_memory(url, handle = handle),
     error = function(e) NULL
   )
-  if (is.null(resp) || resp$status_code != 200L) {
+  if (is.null(resp)) {
     return(FALSE)
   }
+  if (resp$status_code == 304L) {
+    return("not_modified")
+  }
+  if (resp$status_code != 200L) {
+    return(FALSE)
+  }
+
   df <- tryCatch(
     jsonlite::fromJSON(rawToChar(resp$content)),
     error = function(e) NULL
@@ -145,10 +160,22 @@ prices_cache_download <- function() {
     return(FALSE)
   }
 
+  resp_etag <- curl::parse_headers_list(resp$headers)[["etag"]]
+  attr(df, "etag") <- resp_etag
+
   path <- prices_cache_path()
   dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
   saveRDS(df, path)
   TRUE
+}
+
+prices_cache_etag <- function() {
+  path <- prices_cache_path()
+  if (!file.exists(path)) {
+    return(NULL)
+  }
+  cached <- tryCatch(readRDS(path), error = function(cnd) NULL)
+  attr(cached, "etag")
 }
 
 prices_cache_path <- function() {
