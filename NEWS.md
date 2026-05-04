@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* Price data is now refreshed automatically. `prices.json` is updated weekly via a GitHub Action, and a user-local cache (`tools::R_user_dir("ellmer", "cache")/prices.rds`) is refreshed at most once every 7 days the first time cost data is needed. The update is skipped during tests, on CRAN, and can be disabled via `options(ellmer.update_prices = FALSE)` or `ELLMER_UPDATE_PRICES=false` (#967).
+* Pricing data is now automatically refreshed from GitHub. A local cache is checked when `models_*()` functions are called and refreshed if older than 7 days. The update is skipped during tests and `R CMD check`, and can be disabled with `options(ellmer.update_prices = FALSE)` or `ELLMER_UPDATE_PRICES=false` (#968).
 
 * ellmer is now instrumented with OpenTelemetry, so that traces are emitted whenever the (suggested) `otel` package is installed and a tracer is active. Each call to `$chat()`, `$chat_async()`, `$stream()`, or `$stream_async()` produces a top-level `invoke_agent` span that wraps one or more child `chat <model>` spans (one per request to the provider) and `execute_tool <tool>` spans (one per tool invocation). Chat spans record the provider name, request model, response model, and response id, plus input and output token usage; tool spans record the tool name, description, call id, and any error raised during execution. HTTP spans from httr2 are automatically nested under the chat spans (#526).
     * Chat spans can additionally record conversation content as `gen_ai.input.messages`,
