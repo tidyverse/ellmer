@@ -99,8 +99,8 @@ chat$chat("And again now?")
 }\if{html}{\out{</div>}}
 }
 \seealso{
-Other tool calling helpers: 
-\code{\link{tool}()},
-\code{\link{tool_annotations}()}
+Other tool calling helpers:
+\code{\link[=tool]{tool()}},
+\code{\link[=tool_annotations]{tool_annotations()}}
 }
 \concept{tool calling helpers}

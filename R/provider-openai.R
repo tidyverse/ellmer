@@ -19,8 +19,7 @@ NULL
 #' [developer platform](https://platform.openai.com).
 #'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
-#' @param base_url The base URL to the endpoint; the default is OpenAI's
-#'   public API.
+#' @param base_url The base URL to the API endpoint.
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("OPENAI_API_KEY")`
 #' @param model `r param_model("gpt-4.1", "openai")`
@@ -333,7 +332,8 @@ method(value_turn, ProviderOpenAI) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens, variant = result$service_tier)
+  variant <- result$service_tier %||% "default"
+  cost <- get_token_cost(provider, tokens, variant = variant)
   AssistantTurn(
     contents = contents,
     json = result,
@@ -473,7 +473,7 @@ method(batch_submit, ProviderOpenAI) <- function(
   conversations,
   type = NULL
 ) {
-  path <- local_tempfile()
+  path <- withr::local_tempfile()
 
   # First put the requests in a file
   # https://platform.openai.com/docs/api-reference/batch/request-input

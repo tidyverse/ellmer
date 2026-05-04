@@ -778,6 +778,17 @@ google_oauth_reset <- function() {
   httr2::oauth_cache_clear(gemini_client())
 }
 
+gemini_client <- function() {
+  httr2::oauth_client(
+    id = "148439353047-kit3pok9u920mhmqbc3c0pdr50bvb7pt.apps.googleusercontent.com",
+    secret = httr2::obfuscated(
+      "o2yDPr_4BNgZvhLT9kIZS6jAYp43sAzAjMrmW60FUC-N4btRmTwOQ1650vS2pDRSvbKK"
+    ),
+    token_url = "https://oauth2.googleapis.com/token",
+    name = "gemini-r-client"
+  )
+}
+
 # Pricing ----------------------------------------------------------------------
 
 # Models -----------------------------------------------------------------------

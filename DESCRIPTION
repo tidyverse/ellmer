@@ -1,6 +1,6 @@
 Package: ellmer
 Title: Chat with Large Language Models
-Version: 0.4.0.9000
+Version: 0.4.1.9000
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4757-117X")),
@@ -51,13 +51,12 @@ Suggests:
     png,
     rmarkdown,
     shiny,
-    shinychat (>= 0.2.0),
+    shinychat (>= 0.3.0),
     testthat (>= 3.0.0),
     vcr (>= 2.0.0),
     withr
 VignetteBuilder:
     knitr
-Remotes: posit-dev/shinychat/pkg-r#167
 Config/Needs/prices: cli, dplyr, jsonlite, jsonvalidate, stringr, tidyr, usethis
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
@@ -65,7 +64,6 @@ Config/testthat/parallel: true
 Config/testthat/start-first: chat, provider*
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Collate:
     'utils-S7.R'
     'types.R'
@@ -133,3 +131,4 @@ Collate:
     'utils-prettytime.R'
     'utils.R'
     'zzz.R'
+Config/roxygen2/version: 8.0.0

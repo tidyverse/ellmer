@@ -14,3 +14,11 @@
       Warning:
       Found 3 JSON responses, using the first.
 
+# type_object(.additional_properties) is deprecated
+
+    Code
+      . <- type_object(.additional_properties = TRUE)
+    Condition
+      Warning:
+      The `.additional_properties` argument of `type_object()` is deprecated as of ellmer 0.5.0.
+

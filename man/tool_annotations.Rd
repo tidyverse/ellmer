@@ -68,8 +68,8 @@ tool_rnorm <- tool(
 
 }
 \seealso{
-Other tool calling helpers: 
-\code{\link{tool}()},
-\code{\link{tool_reject}()}
+Other tool calling helpers:
+\code{\link[=tool]{tool()}},
+\code{\link[=tool_reject]{tool_reject()}}
 }
 \concept{tool calling helpers}

@@ -116,14 +116,16 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
   }
 
   params <- chat_params(provider, provider@params)
-  compact(list2(
-    messages = messages,
-    model = provider@model,
-    !!!params,
-    stream = stream,
-    tools = tools,
-    response_format = response_format
-  ))
+  compact(
+    list2(
+      messages = messages,
+      model = provider@model,
+      !!!params,
+      stream = stream,
+      tools = tools,
+      response_format = response_format
+    )
+  )
 }
 
 method(as_json, list(ProviderSnowflakeCortex, TypeObject)) <- function(
@@ -158,51 +160,85 @@ method(chat_params, ProviderSnowflakeCortex) <- function(provider, params) {
 
 # Snowflake -> ellmer --------------------------------------------------------
 
+method(stream_content, ProviderSnowflakeCortex) <- function(provider, event) {
+  if (length(event$choices) == 0) {
+    return(NULL)
+  }
+  delta <- event$choices[[1]]$delta
+  if (is.null(delta) || !identical(delta$type, "text")) {
+    return(NULL)
+  }
+  text <- delta[["content"]] %||% delta[["text"]]
+  if (is.null(text) || !nzchar(text)) {
+    return(NULL)
+  }
+  ContentText(text)
+}
+
 method(stream_merge_chunks, ProviderSnowflakeCortex) <- function(
   provider,
   result,
   chunk
 ) {
-  # We're aiming to make Snowflake's chunk format look the same as their non-
-  # chunked format here so downstream processing logic can be uniform. We are
-  # *not* trying to make it more sane.
-  if (is.null(result)) {
-    # Avoid multiple encodings for text content.
-    if (chunk$choices[[1]]$delta$type == "text") {
-      chunk$choices[[1]]$delta$type <- NULL
-      chunk$choices[[1]]$delta$text <- NULL
-    }
-    # Non-streaming responses use "message" instead of "delta".
-    chunk$choices[[1]]$message <- chunk$choices[[1]]$delta
-    chunk$choices[[1]]$delta <- NULL
-    return(chunk)
-  }
-  # Note: most fields are immutable between chunks and we can ignored updates.
-  # We only care about changes to `choices[[1]]$delta` and `usage`.
-  #
-  # Note also: there is no index support in Snowflake's chunk format, so we're
-  # always assuming we can operate on the first one, except in the special
-  # case of tool calls.
-  current <- result$choices[[1]]$message
   delta <- chunk$choices[[1]]$delta
-  if (delta$type == "text") {
-    paste(current$content_list[[1]]$text) <- delta$text
-    current[["content"]] <- current$content_list[[1]]$text
-  } else if (delta$type == "tool_use") {
-    # When we get a tool call, we need to append a second entry to the content
-    # list (again, since there is no index tracking).
-    if (length(current$content_list) == 1) {
-      current$content_list[[2]] <- list(
-        type = "tool_use",
-        tool_use = list(
+
+  if (is.null(result)) {
+    if (delta$type == "tool_use") {
+      content_list <- list(
+        list(
+          type = "tool_use",
           tool_use_id = delta$tool_use_id,
           name = delta$name,
-          input = delta$input
+          input = delta$input %||% ""
         )
       )
     } else {
-      # Otherwise we're appending to existing input.
-      paste(current$content_list[[2]]$tool_use$input) <- delta$input
+      content_list <- list(
+        list(
+          type = "text",
+          text = delta$text %||% ""
+        )
+      )
+    }
+    # Non-streaming responses use "message" instead of "delta".
+    chunk$choices[[1]]$message <- list(content_list = content_list)
+    chunk$choices[[1]]$delta <- NULL
+    return(chunk)
+  }
+
+  content_list <- result$choices[[1]]$message$content_list
+
+  if (delta$type == "text") {
+    text_idx <- NULL
+    for (i in rev(seq_along(content_list))) {
+      if (identical(content_list[[i]]$type, "text")) {
+        text_idx <- i
+        break
+      }
+    }
+    if (is.null(text_idx)) {
+      content_list[[length(content_list) + 1L]] <- list(
+        type = "text",
+        text = delta$text %||% ""
+      )
+    } else {
+      paste(content_list[[text_idx]]$text) <- delta$text %||% ""
+    }
+  } else if (delta$type == "tool_use") {
+    if (!is.null(delta$tool_use_id)) {
+      content_list[[length(content_list) + 1L]] <- list(
+        type = "tool_use",
+        tool_use_id = delta$tool_use_id,
+        name = delta$name,
+        input = delta$input %||% ""
+      )
+    } else if (!is.null(delta$input)) {
+      for (i in rev(seq_along(content_list))) {
+        if (identical(content_list[[i]]$type, "tool_use")) {
+          paste(content_list[[i]]$input) <- delta$input
+          break
+        }
+      }
     }
   } else {
     cli::cli_abort(
@@ -210,7 +246,8 @@ method(stream_merge_chunks, ProviderSnowflakeCortex) <- function(
       .internal = TRUE
     )
   }
-  result$choices[[1]]$message <- current
+
+  result$choices[[1]]$message$content_list <- content_list
   result$usage <- chunk$usage
   result
 }
@@ -229,30 +266,37 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
   has_type = FALSE
 ) {
   raw_content <- result$choices[[1]]$message$content_list
-  contents <- lapply(raw_content, function(content) {
-    if (content$type == "text") {
-      if (has_type) {
-        ContentJson(string = content$text)
+  contents <- compact(
+    lapply(raw_content, function(content) {
+      if (identical(content$type, "text")) {
+        if (!nzchar(content$text %||% "")) {
+          return(NULL)
+        }
+        if (has_type) {
+          ContentJson(string = content$text)
+        } else {
+          ContentText(content$text)
+        }
+      } else if (identical(content$type, "tool_use")) {
+        # Streaming produces flat format; non-streaming has nested tool_use
+        if (!is.null(content[["tool_use"]])) {
+          content <- content[["tool_use"]]
+        }
+        input <- content[["input"]] %||% ""
+        id <- content[["tool_use_id"]]
+        name <- content[["name"]]
+        if (is_string(input)) {
+          input <- jsonlite::parse_json(input)
+        }
+        ContentToolRequest(id, name, input %||% list())
       } else {
-        ContentText(content$text)
+        cli::cli_abort(
+          "Unknown content type {.str {content$type}}.",
+          .internal = TRUE
+        )
       }
-    } else if (content$type == "tool_use") {
-      content <- content$tool_use
-      if (is_string(content$input)) {
-        content$input <- jsonlite::parse_json(content$input)
-      }
-      ContentToolRequest(
-        content$tool_use_id,
-        content$name,
-        content$input %||% list()
-      )
-    } else {
-      cli::cli_abort(
-        "Unknown content type {.str {content$type}}.",
-        .internal = TRUE
-      )
-    }
-  })
+    })
+  )
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
   AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
@@ -284,6 +328,9 @@ method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(
     # tool result in textual format here, too -- otherwise it gets confused,
     # like it can't see the output.
     content <- tool_string(x@contents[[1]])
+  } else if (S7_inherits(x@contents[[1]], ContentToolRequest)) {
+    # Tool-only response (no preceding text).
+    content <- "<empty>"
   } else {
     cli::cli_abort("Unsupported content type: {.cls {class(x@contents[[1]])}}.")
   }
@@ -301,12 +348,14 @@ method(as_json, list(ProviderSnowflakeCortex, ToolDef)) <- function(
   ...
 ) {
   list(
-    tool_spec = compact(list(
-      type = "generic",
-      name = x@name,
-      description = x@description,
-      input_schema = as_json(provider, x@arguments, ...)
-    ))
+    tool_spec = compact(
+      list(
+        type = "generic",
+        name = x@name,
+        description = x@description,
+        input_schema = as_json(provider, x@arguments, ...)
+      )
+    )
   )
 }
 
@@ -339,15 +388,17 @@ method(as_json, list(ProviderSnowflakeCortex, ContentToolResult)) <- function(
 ) {
   list(
     type = "tool_results",
-    tool_results = compact(list(
-      tool_use_id = x@request@id,
-      name = x@request@name,
-      content = list(
-        list(type = "text", text = tool_string(x))
-      ),
-      # TODO: Is this the correct format?
-      status = if (tool_errored(x)) "error"
-    ))
+    tool_results = compact(
+      list(
+        tool_use_id = x@request@id,
+        name = x@request@name,
+        content = list(
+          list(type = "text", text = tool_string(x))
+        ),
+        # TODO: Is this the correct format?
+        status = if (tool_errored(x)) "error"
+      )
+    )
   )
 }
 
