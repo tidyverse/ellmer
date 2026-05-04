@@ -66,10 +66,10 @@ GitHub Models hosts a number of open source and OpenAI models. To access the
 GitHub model marketplace, you will need to apply for and be accepted into the
 beta access program. See \url{https://github.com/marketplace/models} for details.
 
-This function is a lightweight wrapper around \code{\link[=chat_openai]{chat_openai()}} with
+This function is a lightweight wrapper around \code{\link[=chat_openai_compatible]{chat_openai_compatible()}} with
 the defaults tweaked for the GitHub Models marketplace.
 
-GitHub also suports the Azure AI Inference SDK, which you can use by setting
+GitHub also supports the Azure AI Inference SDK, which you can use by setting
 \code{base_url} to \code{"https://models.inference.ai.azure.com/"}. This endpoint was
 used in \pkg{ellmer} v0.3.0 and earlier.
 }
@@ -80,22 +80,23 @@ chat$chat("Tell me three jokes about statisticians")
 }
 }
 \seealso{
-Other chatbots: 
-\code{\link{chat_anthropic}()},
-\code{\link{chat_aws_bedrock}()},
-\code{\link{chat_azure_openai}()},
-\code{\link{chat_cloudflare}()},
-\code{\link{chat_databricks}()},
-\code{\link{chat_deepseek}()},
-\code{\link{chat_google_gemini}()},
-\code{\link{chat_groq}()},
-\code{\link{chat_huggingface}()},
-\code{\link{chat_mistral}()},
-\code{\link{chat_ollama}()},
-\code{\link{chat_openai}()},
-\code{\link{chat_openai_compatible}()},
-\code{\link{chat_openrouter}()},
-\code{\link{chat_perplexity}()},
-\code{\link{chat_portkey}()}
+Other chatbots:
+\code{\link[=chat_anthropic]{chat_anthropic()}},
+\code{\link[=chat_aws_bedrock]{chat_aws_bedrock()}},
+\code{\link[=chat_azure_openai]{chat_azure_openai()}},
+\code{\link[=chat_cloudflare]{chat_cloudflare()}},
+\code{\link[=chat_databricks]{chat_databricks()}},
+\code{\link[=chat_deepseek]{chat_deepseek()}},
+\code{\link[=chat_google_gemini]{chat_google_gemini()}},
+\code{\link[=chat_groq]{chat_groq()}},
+\code{\link[=chat_huggingface]{chat_huggingface()}},
+\code{\link[=chat_lmstudio]{chat_lmstudio()}},
+\code{\link[=chat_mistral]{chat_mistral()}},
+\code{\link[=chat_ollama]{chat_ollama()}},
+\code{\link[=chat_openai]{chat_openai()}},
+\code{\link[=chat_openai_compatible]{chat_openai_compatible()}},
+\code{\link[=chat_openrouter]{chat_openrouter()}},
+\code{\link[=chat_perplexity]{chat_perplexity()}},
+\code{\link[=chat_portkey]{chat_portkey()}}
 }
 \concept{chatbots}

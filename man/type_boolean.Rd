@@ -114,7 +114,7 @@ type_array(type_object(
 ))
 
 # There's no specific type for dates, but you use a string with the
-# requested format in the description (it's not gauranteed that you'll
+# requested format in the description (it's not guaranteed that you'll
 # get this format back, but you should most of the time)
 type_string("The creation date, in YYYY-MM-DD format.")
 type_string("The update date, in dd/mm/yyyy format.")

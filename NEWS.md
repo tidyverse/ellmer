@@ -1,5 +1,20 @@
 # ellmer (development version)
 
+* ellmer is now instrumented with OpenTelemetry, so that traces are emitted whenever the (suggested) `otel` package is installed and a tracer is active. Each call to `$chat()`, `$chat_async()`, `$stream()`, or `$stream_async()` produces a top-level `invoke_agent` span that wraps one or more child `chat <model>` spans (one per request to the provider) and `execute_tool <tool>` spans (one per tool invocation). Chat spans record the provider name, request model, response model, and response id, plus input and output token usage; tool spans record the tool name, description, call id, and any error raised during execution. HTTP spans from httr2 are automatically nested under the chat spans (#526).
+    * Chat spans can additionally record conversation content as `gen_ai.input.messages`,
+      `gen_ai.output.messages`, and `gen_ai.system_instructions`. This is opt-in via the
+      `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` environment variable (set to `"true"`), since these payloads may contain user data.
+* The `input` column of `token_usage()` and `parallel_chat()` no longer includes a hidden 1.25x pricing weight for Anthropic cache-creation tokens; the column now reports raw integer token counts. Cost calculations are unchanged.
+* `chat_openai()` now uses the appropriate prices when a non-default service tier (e.g. `"priority"`) is used (@trangdata, #903).
+* `chat_aws_bedrock()` now supports reasoning/thinking content. To enable thinking in Anthropic Claude models, see the `api_args` argument in `?chat_aws_bedrock` for an example (#964).
+* New `chat_lmstudio()` and `models_lmstudio()` provide support for [LM Studio](https://lmstudio.ai), a local model server with an OpenAI-compatible API (#963).
+* Fixed three bugs that caused errors when streaming web search results: Claude's `citations_delta` events were mishandled, `server_tool_use` input wasn't parsed from JSON during streaming, and OpenAI's `web_search_call` failed for non-search action types like `open_page` (#941).
+* `chat_aws_bedrock()` gains a `cache` parameter for prompt caching. The default, `"auto"`, enables caching for models known to support it (Anthropic Claude and Amazon Nova) and disables it otherwise (#954).
+* Built-in tools (e.g., `openai_tool_web_search()`, `claude_tool_web_search()`) now include `description` and `annotations` properties, making their metadata consistent with user-defined tools created by `tool()` (#942).
+* New `stream_controller()` enables programmatic cancellation of streaming chat responses, e.g. from a Shiny "Cancel" button with `chat$stream()` or `chat$stream_async()`. Streaming turns are now saved incrementally so that partial responses survive cancellation, interrupts (Ctrl-C), and errors. Incomplete turns are recorded as `AssistantPartialTurn` objects, display as interrupted in the chat history, and are included in subsequent model context like complete turns (#643).
+* `default_google_credentials()` no longer skips application default credentials (e.g. `GOOGLE_APPLICATION_CREDENTIALS`) in interactive sessions, instead falling through to the OAuth browser flow only when no gargle token is available (@stefanlinner, #922).
+* `chat_databricks()` (and other `chat_openai_compatible()` providers) no longer fail with HTTP 400 when the conversation history contains empty `ContentText("")` objects, which can occur during tool calling (@JamesHWade, #932).
+* `chat_groq()` now supports structured chat (@CoryMcCartan, #930).
 * ellmer will now distinguish text content from thinking content while streaming, allowing downstream packages like shinychat to provide specific UI for thinking content (@simonpcouch, #909).
 * `chat_github()` now uses `chat_openai_compatible()` for improved compatibility, and `models_github()` now supports custom `base_url` configuration (@D-M4rk, #877).
 * `chat_ollama()` now contains a slot for `top_k` within the `params` argument (@frankiethull).

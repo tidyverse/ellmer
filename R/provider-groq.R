@@ -8,10 +8,6 @@ NULL
 #'
 #' Built on top of [chat_openai_compatible()].
 #'
-#' ## Known limitations
-#'
-#' groq does not currently support structured data extraction.
-#'
 #' @export
 #' @family chatbots
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
@@ -63,45 +59,6 @@ chat_groq <- function(
 
 ProviderGroq <- new_class("ProviderGroq", parent = ProviderOpenAICompatible)
 
-method(as_json, list(ProviderGroq, Turn)) <- function(provider, x, ...) {
-  if (is_assistant_turn(x)) {
-    # Tool requests come out of content and go into own argument
-    is_tool <- map_lgl(x@contents, is_tool_request)
-    tool_calls <- as_json(provider, x@contents[is_tool], ...)
-
-    # Grok contents is just a string. Hopefully it never sends back more
-    # than a single text response.
-    if (any(!is_tool)) {
-      content <- x@contents[!is_tool][[1]]@text
-    } else {
-      content <- NULL
-    }
-
-    list(
-      compact(list(
-        role = "assistant",
-        content = content,
-        tool_calls = tool_calls
-      ))
-    )
-  } else {
-    as_json(super(provider, ProviderOpenAICompatible), x, ...)
-  }
-}
-
-method(as_json, list(ProviderGroq, TypeObject)) <- function(provider, x, ...) {
-  if (x@additional_properties) {
-    cli::cli_abort("{.arg .additional_properties} not supported for Groq.")
-  }
-  required <- map_lgl(x@properties, function(prop) prop@required)
-
-  compact(list(
-    type = "object",
-    description = x@description,
-    properties = as_json(provider, x@properties, ...),
-    required = as.list(names2(x@properties)[required])
-  ))
-}
 
 method(as_json, list(ProviderGroq, ToolDef)) <- function(provider, x, ...) {
   list(

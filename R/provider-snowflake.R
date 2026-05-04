@@ -216,9 +216,10 @@ method(stream_merge_chunks, ProviderSnowflakeCortex) <- function(
 }
 
 method(value_tokens, ProviderSnowflakeCortex) <- function(provider, json) {
+  usage <- json$usage
   tokens(
-    input = json$usage$prompt_tokens,
-    output = json$usage$completion_tokens
+    input = usage$prompt_tokens %||% 0,
+    output = usage$completion_tokens %||% 0
   )
 }
 

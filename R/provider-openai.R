@@ -281,7 +281,7 @@ method(value_tokens, ProviderOpenAI) <- function(provider, json) {
 
   tokens(
     input = (usage$input_tokens %||% 0) - cached_tokens,
-    output = usage$output_tokens,
+    output = usage$output_tokens %||% 0,
     cached_input = cached_tokens
   )
 }
@@ -315,7 +315,14 @@ method(value_turn, ProviderOpenAI) <- function(
       ContentImageInline(mime_type, output$result)
     } else if (output$type == "web_search_call") {
       # https://platform.openai.com/docs/guides/tools-web-search#output-and-citations
-      ContentToolRequestSearch(query = output$action$query, json = output)
+      first_query <- if (length(output$action$queries)) {
+        output$action$queries[[1]]
+      }
+      query <- output$action$query %||%
+        first_query %||%
+        output$action$url %||%
+        "web search"
+      ContentToolRequestSearch(query = query, json = output)
     } else {
       browser()
       cli::cli_abort(
@@ -326,7 +333,8 @@ method(value_turn, ProviderOpenAI) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens, variant = result$service_tier)
+  variant <- result$service_tier %||% "default"
+  cost <- get_token_cost(provider, tokens, variant = variant)
   AssistantTurn(
     contents = contents,
     json = result,
@@ -466,7 +474,7 @@ method(batch_submit, ProviderOpenAI) <- function(
   conversations,
   type = NULL
 ) {
-  path <- withr::local_tempfile()
+  path <- local_tempfile()
 
   # First put the requests in a file
   # https://platform.openai.com/docs/api-reference/batch/request-input

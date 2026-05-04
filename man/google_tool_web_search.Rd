@@ -24,10 +24,10 @@ chat$chat("What's the biggest news in the economy?")
 }
 }
 \seealso{
-Other built-in tools: 
-\code{\link{claude_tool_web_fetch}()},
-\code{\link{claude_tool_web_search}()},
-\code{\link{google_tool_web_fetch}()},
-\code{\link{openai_tool_web_search}()}
+Other built-in tools:
+\code{\link[=claude_tool_web_fetch]{claude_tool_web_fetch()}},
+\code{\link[=claude_tool_web_search]{claude_tool_web_search()}},
+\code{\link[=google_tool_web_fetch]{google_tool_web_fetch()}},
+\code{\link[=openai_tool_web_search]{openai_tool_web_search()}}
 }
 \concept{built-in tools}

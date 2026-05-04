@@ -28,6 +28,20 @@ test_that("supports tool calling", {
   test_tools_simple(chat_databricks)
 })
 
+test_that("can continue chat after empty assistant content", {
+  # Databricks returns content: "" for tool-only turns (#932). Replaying that
+  # empty text back used to cause HTTP 400. Verify that a conversation can
+
+  # continue after an assistant turn with only empty content.
+  chat <- chat_databricks(system_prompt = "Be as terse as possible")
+  chat$set_turns(list(
+    UserTurn(list(ContentText("Hello"))),
+    AssistantTurn(list(ContentText("")))
+  ))
+  result <- chat$chat("What is 1 + 1?", echo = FALSE)
+  expect_match(result, "2")
+})
+
 test_that("can extract data", {
   test_data_extraction(chat_databricks)
 })
