@@ -333,7 +333,8 @@ method(value_turn, ProviderOpenAI) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens, variant = result$service_tier)
+  variant <- result$service_tier %||% "default"
+  cost <- get_token_cost(provider, tokens, variant = variant)
   AssistantTurn(
     contents = contents,
     json = result,

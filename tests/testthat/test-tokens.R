@@ -55,6 +55,15 @@ test_that("can compute price of tokens with a variant", {
   )
 })
 
+test_that("informative internal error if variant is missing", {
+  provider <- test_provider("OpenAI", "gpt-4o")
+  expect_snapshot(
+    get_token_cost(provider, tokens(), variant = NULL),
+    error = TRUE
+  )
+})
+
+
 test_that("price is NA if we don't have the data for it", {
   provider <- test_provider("ClosedAI", "gpt-4o")
   expect_equal(

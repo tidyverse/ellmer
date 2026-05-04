@@ -118,6 +118,8 @@ has_cost <- function(provider, model) {
 }
 
 get_token_cost <- function(provider, tokens, variant = "") {
+  check_string(variant, .internal = TRUE)
+
   needle <- data.frame(
     provider = provider@name,
     model = provider@model,
