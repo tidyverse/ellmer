@@ -101,7 +101,9 @@ prices_update <- function() {
   downloaded <- tryCatch(prices_cache_download(), error = function(cnd) FALSE)
   if (isTRUE(downloaded)) {
     the$prices <- NULL
-
+    cli::cli_inform(
+      "Updated cached pricing data {.href [from GitHub](https://github.com/tidyverse/ellmer/blob/main/data-raw/prices.json)}."
+    )
   }
 
   invisible()
