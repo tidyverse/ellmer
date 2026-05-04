@@ -50,7 +50,7 @@ prices_cache_stale <- function() {
 }
 
 prices_should_update <- function() {
-  if (is_testing()) {
+  if (is_testing() || nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_"))) {
     return(FALSE)
   }
 

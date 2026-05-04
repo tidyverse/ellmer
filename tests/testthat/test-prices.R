@@ -104,6 +104,11 @@ test_that("prices_should_update() returns FALSE during testing", {
   expect_false(prices_should_update())
 })
 
+test_that("prices_should_update() returns FALSE during R CMD check", {
+  withr::local_envvar(TESTTHAT = NA, `_R_CHECK_PACKAGE_NAME_` = "ellmer")
+  expect_false(prices_should_update())
+})
+
 test_that("prices_should_update() respects option = TRUE", {
   withr::local_options(ellmer.update_prices = TRUE)
   withr::local_envvar(TESTTHAT = NA)
