@@ -13,10 +13,11 @@ prices <- function() {
     }
 
     key_cols <- c("provider", "model", "variant")
-    bundled_key <- do.call(paste, c(bundled[key_cols], sep = "\r"))
-    cached_key <- do.call(paste, c(cached[key_cols], sep = "\r"))
-
-    bundled_only <- bundled[!bundled_key %in% cached_key, ]
+    bundled_in_cache <- !is.na(vctrs::vec_match(
+      bundled[key_cols],
+      cached[key_cols]
+    ))
+    bundled_only <- bundled[!bundled_in_cache, ]
     # Align columns before rbind in case cached RDS is from an older schema
     cached <- cached[, intersect(names(bundled), names(cached)), drop = FALSE]
     for (col in setdiff(names(bundled), names(cached))) {
@@ -91,9 +92,16 @@ prices_update <- function() {
     return(invisible())
   }
 
+  # Only attempt one download per session to avoid repeated pauses when offline
+  if (isTRUE(the$prices_download_attempted) && !isTRUE(should_update)) {
+    return(invisible())
+  }
+  the$prices_download_attempted <- TRUE
+
   downloaded <- tryCatch(prices_cache_download(), error = function(cnd) FALSE)
   if (isTRUE(downloaded)) {
     the$prices <- NULL
+
   }
 
   invisible()
@@ -106,23 +114,10 @@ prices_cache_download <- function() {
 
   url <- "https://raw.githubusercontent.com/tidyverse/ellmer/refs/heads/main/data-raw/prices.json"
 
-  # Reuse the same handle for both requests so the keep-alive connection and
-  # TLS session are shared. First request is a cheap HEAD probe (nobody=TRUE,
-  # 1s timeout) to confirm connectivity; second fetches the body (2s timeout).
   handle <- curl::new_handle(
-    nobody = TRUE,
     connecttimeout_ms = 1000L,
-    timeout_ms = 1000L
+    timeout_ms = 3000L
   )
-  probe <- tryCatch(
-    curl::curl_fetch_memory(url, handle = handle),
-    error = function(e) NULL
-  )
-  if (is.null(probe) || probe$status_code != 200L) {
-    return(FALSE)
-  }
-
-  curl::handle_setopt(handle, nobody = FALSE, timeout_ms = 2000L)
   resp <- tryCatch(
     curl::curl_fetch_memory(url, handle = handle),
     error = function(e) NULL
@@ -139,7 +134,12 @@ prices_cache_download <- function() {
     return(FALSE)
   }
 
-  if (!all(c("provider", "model", "variant") %in% names(df))) {
+  required <- c("provider", "model", "variant", "input", "output")
+  if (!all(required %in% names(df))) {
+    return(FALSE)
+  }
+
+  if (!is.numeric(df$input) || !is.numeric(df$output)) {
     return(FALSE)
   }
 
@@ -165,12 +165,15 @@ local_prices_cache <- function(frame = parent.frame()) {
   cache_dir <- withr::local_tempdir(.local_envir = frame)
   old_dir <- the$prices_cache_dir
   old_prices <- the$prices
+  old_attempted <- the$prices_download_attempted
   the$prices_cache_dir <- cache_dir
   the$prices <- NULL
+  the$prices_download_attempted <- FALSE
   defer(
     {
       the$prices_cache_dir <- old_dir
       the$prices <- old_prices
+      the$prices_download_attempted <- old_attempted
     },
     envir = frame
   )

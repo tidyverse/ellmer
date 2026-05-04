@@ -25,7 +25,7 @@ test_that("prices_cache_stale() returns TRUE for a file older than 7 days", {
   expect_true(prices_cache_stale())
 })
 
-# prices_merge() --------------------------------------------------------------
+# prices() --------------------------------------------------------------------
 
 test_that("prices() prefers cached rows over bundled rows on key conflict", {
   local_prices()
@@ -47,12 +47,104 @@ test_that("prices() prefers cached rows over bundled rows on key conflict", {
   expect_equal(result_row$input, 9999)
 })
 
+test_that("prices() handles cached data with missing columns", {
+  local_prices()
+  cache_path <- local_prices_cache()
+
+  bundled <- prices_data
+  cached_row <- bundled[1, ]
+  cached_row$input <- 9999
+  cached_row$cached_input <- NULL
+
+  saveRDS(cached_row, cache_path)
+  result <- prices()
+
+  result_row <- result[
+    result$provider == bundled[1, "provider"] &
+      result$model == bundled[1, "model"] &
+      result$variant == bundled[1, "variant"],
+  ]
+
+  expect_equal(result_row$input, 9999)
+  expect_true(is.na(result_row$cached_input))
+})
+
+test_that("prices() handles cached data with extra columns", {
+  local_prices()
+  cache_path <- local_prices_cache()
+
+  bundled <- prices_data
+  cached_row <- bundled[1, ]
+  cached_row$input <- 9999
+  cached_row$extra_col <- "surprise"
+
+  saveRDS(cached_row, cache_path)
+  result <- prices()
+
+  expect_false("extra_col" %in% names(result))
+  result_row <- result[
+    result$provider == bundled[1, "provider"] &
+      result$model == bundled[1, "model"] &
+      result$variant == bundled[1, "variant"],
+  ]
+  expect_equal(result_row$input, 9999)
+})
+
 test_that("prices() uses bundled prices when no cache exists", {
   local_prices()
   local_prices_cache()
 
   prices()
   expect_equal(the$prices, prices_data)
+})
+
+# prices_should_update() ------------------------------------------------------
+
+test_that("prices_should_update() returns FALSE during testing", {
+  expect_false(prices_should_update())
+})
+
+test_that("prices_should_update() respects option = TRUE", {
+  withr::local_options(ellmer.update_prices = TRUE)
+  withr::local_envvar(TESTTHAT = NA)
+  expect_true(prices_should_update())
+})
+
+test_that("prices_should_update() respects option = FALSE", {
+  withr::local_options(ellmer.update_prices = FALSE)
+  withr::local_envvar(TESTTHAT = NA)
+  expect_false(prices_should_update())
+})
+
+test_that("prices_should_update() warns on invalid option", {
+  withr::local_options(ellmer.update_prices = "maybe")
+  withr::local_envvar(TESTTHAT = NA)
+  expect_warning(result <- prices_should_update(), "logical value")
+  expect_null(result)
+})
+
+test_that("prices_should_update() respects env var", {
+  withr::local_options(ellmer.update_prices = NULL)
+  withr::local_envvar(TESTTHAT = NA)
+
+  withr::local_envvar(ELLMER_UPDATE_PRICES = "true")
+  expect_true(prices_should_update())
+
+  withr::local_envvar(ELLMER_UPDATE_PRICES = "0")
+  expect_false(prices_should_update())
+})
+
+test_that("prices_should_update() warns on invalid env var", {
+  withr::local_options(ellmer.update_prices = NULL)
+  withr::local_envvar(TESTTHAT = NA, ELLMER_UPDATE_PRICES = "nah")
+  expect_warning(result <- prices_should_update(), "logical value")
+  expect_null(result)
+})
+
+test_that("prices_should_update() returns NULL by default (outside tests)", {
+  withr::local_options(ellmer.update_prices = NULL)
+  withr::local_envvar(TESTTHAT = NA, ELLMER_UPDATE_PRICES = NA)
+  expect_null(prices_should_update())
 })
 
 # prices_update() -------------------------------------------------------------
