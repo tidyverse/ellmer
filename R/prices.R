@@ -13,8 +13,13 @@ prices <- function() {
     cached_key <- do.call(paste, c(cached[key_cols], sep = "\r"))
 
     bundled_only <- bundled[!bundled_key %in% cached_key, ]
-    merged <- rbind(cached, bundled_only)
-    the$prices <- merged[, names(bundled)]
+    # Align columns before rbind in case cached RDS is from an older schema
+    cached <- cached[, intersect(names(bundled), names(cached)), drop = FALSE]
+    for (col in setdiff(names(bundled), names(cached))) {
+      cached[[col]] <- NA_real_
+    }
+    merged <- rbind(cached[names(bundled)], bundled_only)
+    the$prices <- merged
   }
 
   the$prices
@@ -72,6 +77,8 @@ prices_should_update <- function() {
 }
 
 prices_update <- function() {
+  # prices_should_update() returns TRUE (forced on), FALSE (opted out), or NULL
+  # (default). NULL means "update only if stale"; TRUE forces even if fresh.
   should_update <- prices_should_update()
   if (isFALSE(should_update)) {
     return(invisible())
@@ -131,8 +138,16 @@ prices_cache_path <- function() {
 
 local_prices_cache <- function(frame = parent.frame()) {
   cache_dir <- withr::local_tempdir(.local_envir = frame)
-  old <- the$prices_cache_dir
+  old_dir <- the$prices_cache_dir
+  old_prices <- the$prices
   the$prices_cache_dir <- cache_dir
-  defer(the$prices_cache_dir <- old, envir = frame)
+  the$prices <- NULL
+  defer(
+    {
+      the$prices_cache_dir <- old_dir
+      the$prices <- old_prices
+    },
+    envir = frame
+  )
   invisible(file.path(cache_dir, "prices.rds"))
 }
