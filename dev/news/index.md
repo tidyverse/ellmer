@@ -105,6 +105,14 @@
 - [`chat_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
   now contains a slot for `top_k` within the `params` argument
   ([@frankiethull](https://github.com/frankiethull)).
+- [`models_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  (and
+  [`models_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md))
+  gains a `credentials` argument for consistency with
+  [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  and other `models_*()` functions
+  ([@jcrodriguez1989](https://github.com/jcrodriguez1989),
+  [\#917](https://github.com/tidyverse/ellmer/issues/917)).
 
 ## ellmer 0.4.0
 
