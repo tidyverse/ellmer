@@ -33,7 +33,7 @@ google_upload(
 
 - base_url:
 
-  The base URL to the endpoint; the default is OpenAI's public API.
+  The base URL to the API endpoint.
 
 - api_key:
 

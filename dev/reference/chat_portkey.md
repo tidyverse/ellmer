@@ -35,7 +35,7 @@ models_portkey(base_url = "https://api.portkey.ai/v1", api_key = portkey_key())
 
 - base_url:
 
-  The base URL to the endpoint; the default is OpenAI's public API.
+  The base URL to the API endpoint.
 
 - api_key:
 

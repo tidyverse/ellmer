@@ -33,7 +33,7 @@ models_lmstudio(base_url = "http://localhost:1234", credentials = NULL)
 
 - base_url:
 
-  The base URL to the endpoint; the default is OpenAI's public API.
+  The base URL to the API endpoint.
 
 - model:
 

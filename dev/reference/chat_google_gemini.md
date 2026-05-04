@@ -69,7 +69,7 @@ models_google_vertex(location, project_id, credentials = NULL)
 
 - base_url:
 
-  The base URL to the endpoint; the default is OpenAI's public API.
+  The base URL to the API endpoint.
 
 - api_key:
 
