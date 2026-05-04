@@ -22,7 +22,7 @@ A Chat object
 
 ### Public methods
 
-- [`Chat$new()`](#method-Chat-new)
+- [`Chat$new()`](#method-Chat-initialize)
 
 - [`Chat$get_turns()`](#method-Chat-get_turns)
 
@@ -72,7 +72,7 @@ A Chat object
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `Chat$new()`
 
 #### Usage
 
@@ -106,7 +106,7 @@ A Chat object
 
 ------------------------------------------------------------------------
 
-### Method `get_turns()`
+### `Chat$get_turns()`
 
 Retrieve the turns that have been sent and received so far (optionally
 starting with the system prompt, if any).
@@ -123,7 +123,7 @@ starting with the system prompt, if any).
 
 ------------------------------------------------------------------------
 
-### Method `set_turns()`
+### `Chat$set_turns()`
 
 Replace existing turns with a new list.
 
@@ -139,7 +139,7 @@ Replace existing turns with a new list.
 
 ------------------------------------------------------------------------
 
-### Method `add_turn()`
+### `Chat$add_turn()`
 
 Add a pair of turns to the chat.
 
@@ -163,7 +163,7 @@ Add a pair of turns to the chat.
 
 ------------------------------------------------------------------------
 
-### Method `get_system_prompt()`
+### `Chat$get_system_prompt()`
 
 If set, the system prompt, it not, `NULL`.
 
@@ -173,7 +173,7 @@ If set, the system prompt, it not, `NULL`.
 
 ------------------------------------------------------------------------
 
-### Method `get_model()`
+### `Chat$get_model()`
 
 Retrieve the model name
 
@@ -183,7 +183,7 @@ Retrieve the model name
 
 ------------------------------------------------------------------------
 
-### Method `set_system_prompt()`
+### `Chat$set_system_prompt()`
 
 Update the system prompt
 
@@ -199,7 +199,7 @@ Update the system prompt
 
 ------------------------------------------------------------------------
 
-### Method `get_tokens()`
+### `Chat$get_tokens()`
 
 A data frame with token usage and cost data. There are four columns:
 `input`, `output`, `cached_input`, and `cost`. There is one row for each
@@ -218,7 +218,7 @@ the API returns the assistant's response.
 
 ------------------------------------------------------------------------
 
-### Method `get_cost()`
+### `Chat$get_cost()`
 
 The cost of this chat
 
@@ -237,7 +237,7 @@ The cost of this chat
 
 ------------------------------------------------------------------------
 
-### Method `last_turn()`
+### `Chat$last_turn()`
 
 The last turn returned by the assistant.
 
@@ -258,7 +258,7 @@ occurred.
 
 ------------------------------------------------------------------------
 
-### Method [`chat()`](https://ellmer.tidyverse.org/dev/reference/chat-any.md)
+### `Chat$chat()`
 
 Submit input to the chatbot, and return the response as a simple string
 (probably Markdown).
@@ -284,7 +284,7 @@ Submit input to the chatbot, and return the response as a simple string
 
 ------------------------------------------------------------------------
 
-### Method `chat_structured()`
+### `Chat$chat_structured()`
 
 Extract structured data
 
@@ -320,7 +320,7 @@ Extract structured data
 
 ------------------------------------------------------------------------
 
-### Method `chat_structured_async()`
+### `Chat$chat_structured_async()`
 
 Extract structured data, asynchronously. Returns a promise that resolves
 to an object matching the type specification.
@@ -356,7 +356,7 @@ to an object matching the type specification.
 
 ------------------------------------------------------------------------
 
-### Method `chat_async()`
+### `Chat$chat_async()`
 
 Submit input to the chatbot, and receive a promise that resolves with
 the response all at once. Returns a promise that resolves to a string
@@ -382,7 +382,7 @@ the response all at once. Returns a promise that resolves to a string
 
 ------------------------------------------------------------------------
 
-### Method `stream()`
+### `Chat$stream()`
 
 Submit input to the chatbot, returning streaming results. Returns A
 [coro
@@ -415,7 +415,7 @@ waiting for more content from the chatbot.
 
 ------------------------------------------------------------------------
 
-### Method `stream_async()`
+### `Chat$stream_async()`
 
 Submit input to the chatbot, returning asynchronously streaming results.
 Returns a [coro async
@@ -460,7 +460,7 @@ yields string promises.
 
 ------------------------------------------------------------------------
 
-### Method `register_tool()`
+### `Chat$register_tool()`
 
 Register a tool (an R function) that the chatbot can use. Learn more in
 [`vignette("tool-calling")`](https://ellmer.tidyverse.org/dev/articles/tool-calling.md).
@@ -478,7 +478,7 @@ Register a tool (an R function) that the chatbot can use. Learn more in
 
 ------------------------------------------------------------------------
 
-### Method `register_tools()`
+### `Chat$register_tools()`
 
 Register a list of tools. Learn more in
 [`vignette("tool-calling")`](https://ellmer.tidyverse.org/dev/articles/tool-calling.md).
@@ -496,7 +496,7 @@ Register a list of tools. Learn more in
 
 ------------------------------------------------------------------------
 
-### Method `get_provider()`
+### `Chat$get_provider()`
 
 Get the underlying provider object. For expert use only.
 
@@ -506,7 +506,7 @@ Get the underlying provider object. For expert use only.
 
 ------------------------------------------------------------------------
 
-### Method `get_tools()`
+### `Chat$get_tools()`
 
 Retrieve the list of registered tools.
 
@@ -516,7 +516,7 @@ Retrieve the list of registered tools.
 
 ------------------------------------------------------------------------
 
-### Method `set_tools()`
+### `Chat$set_tools()`
 
 Sets the available tools. For expert use only; most users should use
 `register_tool()`.
@@ -534,7 +534,7 @@ Sets the available tools. For expert use only; most users should use
 
 ------------------------------------------------------------------------
 
-### Method `on_tool_request()`
+### `Chat$on_tool_request()`
 
 Register a callback for a tool request event.
 
@@ -555,7 +555,7 @@ A function that can be called to remove the callback.
 
 ------------------------------------------------------------------------
 
-### Method `on_tool_result()`
+### `Chat$on_tool_result()`
 
 Register a callback for a tool result event.
 
@@ -576,7 +576,7 @@ A function that can be called to remove the callback.
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `Chat$clone()`
 
 The objects of this class are cloneable with this method.
 
