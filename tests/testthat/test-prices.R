@@ -1,9 +1,3 @@
-local_prices <- function(frame = parent.frame()) {
-  old <- the$prices
-  the$prices <- NULL
-  defer(the$prices <- old, envir = frame)
-}
-
 # prices_cache_stale() --------------------------------------------------------
 
 test_that("prices_cache_stale() returns TRUE when file is missing", {
