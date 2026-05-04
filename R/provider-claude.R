@@ -273,9 +273,16 @@ method(stream_parse, ProviderAnthropic) <- function(provider, event) {
 
   data
 }
-method(stream_text, ProviderAnthropic) <- function(provider, event) {
+method(stream_content, ProviderAnthropic) <- function(provider, event) {
   if (event$type == "content_block_delta") {
-    event$delta$text %||% event$delta$thinking
+    if (identical(event$delta$type, "thinking_delta")) {
+      return(ContentThinking(event$delta$thinking))
+    }
+    text <- event$delta$text
+    if (is.null(text)) {
+      return(NULL)
+    }
+    ContentText(text)
   }
 }
 method(stream_merge_chunks, ProviderAnthropic) <- function(
@@ -304,6 +311,12 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
       paste(result$content[[i]]$thinking) <- chunk$delta$thinking
     } else if (chunk$delta$type == "signature_delta") {
       paste(result$content[[i]]$signature) <- chunk$delta$signature
+    } else if (chunk$delta$type == "citations_delta") {
+      # https://docs.claude.com/en/docs/build-with-claude/citations#streaming-support
+      result$content[[i]]$citations <- c(
+        result$content[[i]]$citations,
+        list(chunk$delta$citation)
+      )
     } else {
       cli::cli_inform(c("!" = "Unknown delta type {.str {chunk$delta$type}}."))
     }
@@ -313,12 +326,6 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
     result$stop_reason <- chunk$delta$stop_reason
     result$stop_sequence <- chunk$delta$stop_sequence
     result$usage$output_tokens <- chunk$usage$output_tokens
-  } else if (chunk$delta$type == "citations_delta") {
-    # https://docs.claude.com/en/docs/build-with-claude/citations#streaming-support
-    result$content[[i]]$citations <- c(
-      result$content[[i]]$citations,
-      list(chunk$delta$citation)
-    )
   } else if (chunk$type == "error") {
     if (chunk$error$type == "overloaded_error") {
       # https://docs.anthropic.com/en/api/messages-streaming#error-events
@@ -335,12 +342,12 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
 }
 
 method(value_tokens, ProviderAnthropic) <- function(provider, json) {
+  usage <- json$usage
   tokens(
-    # Hack in pricing for cache writes
-    input = json$usage$input_tokens +
-      json$usage$cache_creation_input_tokens * 1.25,
-    output = json$usage$output_tokens,
-    cached_input = json$usage$cache_read_input_tokens
+    input = (usage$input_tokens %||% 0) +
+      (usage$cache_creation_input_tokens %||% 0),
+    output = usage$output_tokens %||% 0,
+    cached_input = usage$cache_read_input_tokens %||% 0
   )
 }
 
@@ -362,6 +369,9 @@ method(value_turn, ProviderAnthropic) <- function(
         ContentToolRequest(content$id, content$name, content$input)
       }
     } else if (content$type == "server_tool_use") {
+      if (is_string(content$input)) {
+        content$input <- jsonlite::parse_json(content$input)
+      }
       if (content$name == "web_search") {
         # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-search-tool#response
         ContentToolRequestSearch(
@@ -380,7 +390,7 @@ method(value_turn, ProviderAnthropic) <- function(
     } else if (content$type == "web_search_tool_result") {
       urls <- map_chr(content$content, \(x) x$url)
       ContentToolResponseSearch(
-        url = urls,
+        urls = urls,
         json = content
       )
     } else if (content$type == "web_fetch_tool_result") {
@@ -399,7 +409,12 @@ method(value_turn, ProviderAnthropic) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
+  cache_write <- result$usage$cache_creation_input_tokens %||% 0
+  # Anthropic charges 1.25x the input rate for cache writes; tokens$input
+  # already counts them at 1.0x, so add the 0.25x surcharge for pricing.
+  cost_tokens <- tokens
+  cost_tokens$input <- cost_tokens$input + cache_write * 0.25
+  cost <- get_token_cost(provider, cost_tokens)
   AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 
@@ -634,7 +649,7 @@ method(batch_retrieve, ProviderAnthropic) <- function(provider, batch) {
   req <- req_url(req, batch$results_url)
   req <- req_progress(req, "down")
 
-  path <- withr::local_tempfile()
+  path <- local_tempfile()
   req <- req_perform(req, path = path)
 
   lines <- readLines(path, warn = FALSE)

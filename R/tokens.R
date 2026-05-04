@@ -51,6 +51,9 @@ log_tokens <- function(provider, tokens, cost) {
 }
 
 log_turn <- function(provider, turn) {
+  if (is_partial_turn(turn)) {
+    return(invisible())
+  }
   log_tokens(provider, exec(tokens, !!!as.list(turn@tokens)), turn@cost)
 }
 
@@ -85,7 +88,7 @@ local_tokens <- function(frame = parent.frame()) {
   old <- the$tokens
   the$tokens <- tokens_row()
 
-  defer(the$tokens <- old, env = frame)
+  defer(the$tokens <- old, envir = frame)
 }
 
 #' Report on token usage in the current session

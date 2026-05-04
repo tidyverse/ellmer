@@ -10,6 +10,7 @@ chat_aws_bedrock(
   base_url = NULL,
   model = NULL,
   profile = NULL,
+  cache = c("auto", "5m", "1h", "none"),
   params = NULL,
   api_args = list(),
   api_headers = character(),
@@ -37,20 +38,30 @@ you'll need to use the inference profile ID, e.g.
 
 \item{profile}{AWS profile to use.}
 
+\item{cache}{How long to cache inputs? The default, \code{"auto"}, enables
+caching with a 5-minute TTL for models known to support it (Anthropic
+Claude and Amazon Nova) and disables caching for all other models.
+Set to \code{"5m"} or \code{"1h"} to force caching on, or \code{"none"} to disable it.
+
+See details below.}
+
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
 \item{api_args}{Named list of arbitrary extra arguments appended to the body
-of every chat API call. Some useful arguments include:
+of every chat API call. Use \code{params} for common parameters. Model-specific
+inference parameters can be provided using the
+\code{additionalModelRequestFields} field, for example to enable thinking effort
+in Anthropic Claude models:
 
 \if{html}{\out{<div class="sourceCode R">}}\preformatted{api_args = list(
-  inferenceConfig = list(
-    maxTokens = 100,
-    temperature = 0.7,
-    topP = 0.9,
-    topK = 20
+  additionalModelRequestFields = list(
+    thinking = list(type = "enabled", budget_tokens = 4000)
   )
 )
-}\if{html}{\out{</div>}}}
+}\if{html}{\out{</div>}}
+
+See \url{https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html}
+for more details.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
@@ -80,6 +91,25 @@ does not work for you automatically, you'll need to follow the advice
 at \url{https://www.paws-r-sdk.com/#credentials}. In particular, if your
 org uses AWS SSO, you'll need to run \verb{aws sso login} at the terminal.
 }
+
+\subsection{Prompt caching}{
+
+Bedrock supports
+\href{https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html}{prompt caching}
+via cache checkpoints. When caching is enabled, ellmer places cache
+checkpoints on the system prompt and the last turn, so that the
+conversation history is cached across turns.
+
+By default (\code{cache = "auto"}), caching is enabled for models known to
+support it (Anthropic Claude and Amazon Nova) and disabled for all other
+models. You can also set \code{cache} to \code{"5m"} or \code{"1h"} to force a specific
+TTL, or \code{"none"} to disable caching entirely. Note that individual models
+may have minimum input token thresholds before caching takes effect.
+
+Note that \code{\link[=token_usage]{token_usage()}} does not currently reflect the cost of writing
+to the cache, which is priced at a premium over regular input tokens.
+Cache read savings are reported correctly.
+}
 }
 \examples{
 \dontrun{
@@ -99,6 +129,7 @@ Other chatbots:
 \code{\link{chat_google_gemini}()},
 \code{\link{chat_groq}()},
 \code{\link{chat_huggingface}()},
+\code{\link{chat_lmstudio}()},
 \code{\link{chat_mistral}()},
 \code{\link{chat_ollama}()},
 \code{\link{chat_openai}()},

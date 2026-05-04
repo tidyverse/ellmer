@@ -30,7 +30,7 @@ Imports:
     jsonlite,
     later (>= 1.4.0),
     lifecycle,
-    promises (>= 1.3.1),
+    promises (>= 1.5.0),
     R6,
     rlang (>= 1.1.0),
     S7 (>= 0.2.0),
@@ -45,6 +45,8 @@ Suggests:
     knitr,
     magick,
     openssl,
+    otel (>= 0.2.0),
+    otelsdk (>= 0.2.0),
     paws.common,
     png,
     rmarkdown,
@@ -55,6 +57,7 @@ Suggests:
     withr
 VignetteBuilder:
     knitr
+Remotes: posit-dev/shinychat/pkg-r#167
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true
@@ -82,11 +85,13 @@ Collate:
     'content-pdf.R'
     'content-replay.R'
     'httr2.R'
+    'import-standalone-defer.R'
     'import-standalone-obj-type.R'
     'import-standalone-purrr.R'
     'import-standalone-types-check.R'
     'interpolate.R'
     'live.R'
+    'otel.R'
     'parallel-chat.R'
     'params.R'
     'provider-any.R'
@@ -105,6 +110,7 @@ Collate:
     'provider-google-upload.R'
     'provider-groq.R'
     'provider-huggingface.R'
+    'provider-lmstudio.R'
     'provider-mistral.R'
     'provider-ollama.R'
     'provider-openai-tools.R'
@@ -115,6 +121,7 @@ Collate:
     'provider-snowflake.R'
     'provider-vllm.R'
     'schema.R'
+    'stream-controller.R'
     'tokens.R'
     'tools-built-in.R'
     'tools-def-auto.R'

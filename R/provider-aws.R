@@ -19,7 +19,31 @@ NULL
 #' at <https://www.paws-r-sdk.com/#credentials>. In particular, if your
 #' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 #'
+#' ## Prompt caching
+#'
+#' Bedrock supports
+#' [prompt caching](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html)
+#' via cache checkpoints. When caching is enabled, ellmer places cache
+#' checkpoints on the system prompt and the last turn, so that the
+#' conversation history is cached across turns.
+#'
+#' By default (`cache = "auto"`), caching is enabled for models known to
+#' support it (Anthropic Claude and Amazon Nova) and disabled for all other
+#' models. You can also set `cache` to `"5m"` or `"1h"` to force a specific
+#' TTL, or `"none"` to disable caching entirely. Note that individual models
+#' may have minimum input token thresholds before caching takes effect.
+#'
+#' Note that [token_usage()] does not currently reflect the cost of writing
+#' to the cache, which is priced at a premium over regular input tokens.
+#' Cache read savings are reported correctly.
+#'
 #' @param profile AWS profile to use.
+#' @param cache How long to cache inputs? The default, `"auto"`, enables
+#'   caching with a 5-minute TTL for models known to support it (Anthropic
+#'   Claude and Amazon Nova) and disables caching for all other models.
+#'   Set to `"5m"` or `"1h"` to force caching on, or `"none"` to disable it.
+#'
+#'   See details below.
 #' @param model `r param_model("anthropic.claude-sonnet-4-5-20250929-v1:0", "models_aws_bedrock")`.
 #'
 #'   While ellmer provides a default model, there's no guarantee that you'll
@@ -29,18 +53,21 @@ NULL
 #'   `model="us.anthropic.claude-sonnet-4-5-20250929-v1:0"`.
 #' @param params Common model parameters, usually created by [params()].
 #' @param api_args Named list of arbitrary extra arguments appended to the body
-#'   of every chat API call. Some useful arguments include:
+#'   of every chat API call. Use `params` for common parameters. Model-specific
+#'   inference parameters can be provided using the
+#'   `additionalModelRequestFields` field, for example to enable thinking effort
+#'   in Anthropic Claude models:
 #'
 #'   ```R
 #'   api_args = list(
-#'     inferenceConfig = list(
-#'       maxTokens = 100,
-#'       temperature = 0.7,
-#'       topP = 0.9,
-#'       topK = 20
+#'     additionalModelRequestFields = list(
+#'       thinking = list(type = "enabled", budget_tokens = 4000)
 #'     )
 #'   )
 #'   ```
+#'
+#'   See <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html>
+#'   for more details.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -56,6 +83,7 @@ chat_aws_bedrock <- function(
   base_url = NULL,
   model = NULL,
   profile = NULL,
+  cache = c("auto", "5m", "1h", "none"),
   params = NULL,
   api_args = list(),
   api_headers = character(),
@@ -73,6 +101,7 @@ chat_aws_bedrock <- function(
     base_url = base_url,
     model = model,
     profile = profile,
+    cache_point = cache,
     params = params,
     extra_args = api_args,
     extra_headers = api_headers
@@ -108,10 +137,23 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
   df
 }
 
+chat_aws_bedrock_test <- function(
+  ...,
+  model = "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+  params = NULL,
+  echo = "none"
+) {
+  params <- params %||% params()
+  params$temperature <- params$temperature %||% 0
+
+  chat_aws_bedrock(model = model, params = params, ..., echo = echo)
+}
+
 provider_aws_bedrock <- function(
   base_url,
   model = "",
   profile = NULL,
+  cache_point = "none",
   params = list(),
   extra_args = list(),
   extra_headers = character()
@@ -125,6 +167,8 @@ provider_aws_bedrock <- function(
 
   model <- set_default(model, "anthropic.claude-sonnet-4-5-20250929-v1:0")
 
+  cache_point <- as_bedrock_cache_point(cache_point, model)
+
   ProviderAWSBedrock(
     name = "AWS/Bedrock",
     base_url = base_url,
@@ -132,6 +176,7 @@ provider_aws_bedrock <- function(
     profile = profile,
     region = credentials$region,
     cache = cache,
+    cache_point = cache_point,
     params = params,
     extra_args = extra_args,
     extra_headers = extra_headers
@@ -144,7 +189,8 @@ ProviderAWSBedrock <- new_class(
   properties = list(
     profile = prop_string(allow_null = TRUE),
     region = prop_string(),
-    cache = class_list
+    cache = class_list,
+    cache_point = prop_string()
   )
 )
 
@@ -200,12 +246,18 @@ method(chat_request, ProviderAWSBedrock) <- function(
   )
 
   if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
-    system <- list(list(text = turns[[1]]@text))
+    system <- c(
+      list(list(text = turns[[1]]@text)),
+      bedrock_cache_point(provider)
+    )
   } else {
     system <- NULL
   }
 
-  messages <- compact(as_json(provider, turns))
+  is_last <- seq_along(turns) == length(turns)
+  messages <- compact(map2(turns, is_last, function(turn, is_last) {
+    as_json(provider, turn, is_last = is_last)
+  }))
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
@@ -266,9 +318,13 @@ method(stream_parse, ProviderAWSBedrock) <- function(provider, event) {
   body
 }
 
-method(stream_text, ProviderAWSBedrock) <- function(provider, event) {
+method(stream_content, ProviderAWSBedrock) <- function(provider, event) {
   if (event$event_type == "contentBlockDelta") {
-    event$delta$text
+    text <- event$delta$text
+    if (is.null(text)) {
+      return(NULL)
+    }
+    ContentText(text)
   }
 }
 
@@ -284,14 +340,26 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
   } else if (chunk$event_type == "contentBlockStart") {
     result$content[[i]] <- list(toolUse = chunk$start$toolUse)
   } else if (chunk$event_type == "contentBlockDelta") {
+    if (i > length(result$content)) {
+      result$content[[i]] <- list()
+    }
     if (has_name(chunk$delta, "text")) {
-      if (i > length(result$content)) {
-        result$content[[i]] <- list(text = chunk$delta$text)
-      } else {
-        paste(result$content[[i]]$text) <- chunk$delta$text
-      }
+      paste(result$content[[i]]$text) <- chunk$delta$text
     } else if (has_name(chunk$delta, "toolUse")) {
       paste(result$content[[i]]$toolUse$input) <- chunk$delta$toolUse$input
+    } else if (has_name(chunk$delta, "reasoningContent")) {
+      if (is.null(result$content[[i]]$reasoningContent)) {
+        result$content[[i]]$reasoningContent <- list(reasoningText = list())
+      }
+      # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ReasoningContentBlockDelta.html
+      delta <- chunk$delta$reasoningContent
+      if (has_name(delta, "text")) {
+        paste(result$content[[i]]$reasoningContent$reasoningText$text) <-
+          delta$text
+      } else if (has_name(delta, "signature")) {
+        result$content[[i]]$reasoningContent$reasoningText$signature <-
+          delta$signature
+      }
     } else {
       cli::cli_abort(
         "Unknown chunk type {names(chunk$delta)}",
@@ -325,9 +393,11 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
 }
 
 method(value_tokens, ProviderAWSBedrock) <- function(provider, json) {
+  usage <- json$usage
   tokens(
-    input = json$usage$inputTokens,
-    output = json$usage$outputTokens,
+    input = usage$inputTokens %||% 0,
+    output = usage$outputTokens %||% 0,
+    cached_input = usage$cacheReadInputTokens %||% 0
   )
 }
 
@@ -349,6 +419,13 @@ method(value_turn, ProviderAWSBedrock) <- function(
           id = content$toolUse$toolUseId
         )
       }
+    } else if (has_name(content, "reasoningContent")) {
+      ContentThinking(
+        content$reasoningContent$reasoningText$text,
+        extra = list(
+          signature = content$reasoningContent$reasoningText$signature
+        )
+      )
     } else {
       cli::cli_abort(
         "Unknown content type {.str {names(content)}}.",
@@ -365,16 +442,23 @@ method(value_turn, ProviderAWSBedrock) <- function(
 # ellmer -> Bedrock -------------------------------------------------------------
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ContentBlock.html
-method(as_json, list(ProviderAWSBedrock, Turn)) <- function(provider, x, ...) {
+method(as_json, list(ProviderAWSBedrock, Turn)) <- function(
+  provider,
+  x,
+  ...,
+  is_last = FALSE
+) {
   if (is_system_turn(x)) {
-    # bedrock passes system prompt as separate arg
     NULL
   } else if (is_user_turn(x) || is_assistant_turn(x)) {
     x <- turn_contents_expand(x)
-    list(
-      role = x@role,
-      content = as_json(provider, x@contents, ...)
-    )
+    content <- as_json(provider, x@contents, ...)
+
+    if (is_last) {
+      content <- c(content, bedrock_cache_point(provider))
+    }
+
+    list(role = x@role, content = content)
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
@@ -485,7 +569,50 @@ method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(
   )
 }
 
+method(as_json, list(ProviderAWSBedrock, ContentThinking)) <- function(
+  provider,
+  x,
+  ...
+) {
+  if (identical(x@thinking, "")) {
+    return()
+  }
+
+  list(
+    reasoningContent = list(
+      reasoningText = list(
+        text = x@thinking,
+        signature = x@extra$signature
+      )
+    )
+  )
+}
+
 # Helpers ----------------------------------------------------------------
+
+as_bedrock_cache_point <- function(cache_point, model) {
+  cache_point <- arg_match(
+    cache_point,
+    values = c("auto", "5m", "1h", "none")
+  )
+  if (cache_point != "auto") {
+    return(cache_point)
+  }
+  supports_caching <-
+    grepl("(^|\\.)anthropic\\.", model) || grepl("(^|\\.)amazon\\.nova", model)
+  if (supports_caching) "5m" else "none"
+}
+
+bedrock_cache_point <- function(provider) {
+  if (provider@cache_point == "none") {
+    return(list())
+  }
+  cp <- list(type = "default")
+  if (provider@cache_point != "5m") {
+    cp$ttl <- provider@cache_point
+  }
+  list(list(cachePoint = cp))
+}
 
 paws_credentials <- function(
   profile,

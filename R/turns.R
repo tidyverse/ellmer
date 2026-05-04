@@ -162,6 +162,19 @@ AssistantTurn <- new_class(
     )
   }
 )
+#' @param reason A character string describing why the turn was interrupted.
+#'   Defaults to `"interrupted"`.
+#' @export
+#' @rdname Turn
+#' @return An S7 `AssistantPartialTurn` object
+AssistantPartialTurn <- new_class(
+  "AssistantPartialTurn",
+  parent = AssistantTurn,
+  properties = list(
+    reason = prop_string("interrupted")
+  )
+)
+
 method(format, Turn) <- function(x, ...) {
   contents <- map_chr(x@contents, format, ...)
   paste0(contents, "\n", collapse = "")
@@ -239,6 +252,10 @@ is_user_turn <- function(x) {
 
 is_assistant_turn <- function(x) {
   S7_inherits(x, AssistantTurn)
+}
+
+is_partial_turn <- function(x) {
+  S7_inherits(x, AssistantPartialTurn)
 }
 
 check_turn <- function(x, call = caller_env(), arg = caller_arg(x)) {

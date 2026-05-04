@@ -3,7 +3,12 @@
 
 ToolBuiltIn <- new_class(
   "ToolBuiltIn",
-  properties = list(name = prop_string(), json = class_any)
+  properties = list(
+    name = prop_string(),
+    description = prop_string(default = ""),
+    annotations = class_list,
+    json = class_any
+  )
 )
 
 method(as_json, list(Provider, ToolBuiltIn)) <- function(provider, x, ...) {
