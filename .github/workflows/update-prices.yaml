@@ -26,9 +26,12 @@ jobs:
           r-version: release
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          dependencies: "'config/needs/prices'"
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          deps <- read.dcf("DESCRIPTION")[, "Config/Needs/prices"]
+          pkgs <- trimws(strsplit(deps, ",")[[1]])
+          install.packages(pkgs)
 
       - name: Update prices
         run: Rscript --quiet --vanilla data-raw/prices.R
