@@ -26,6 +26,9 @@ jobs:
           r-version: release
           use-public-rspm: true
 
+      - name: Install system dependencies
+        run: sudo apt-get install -y libnode-dev
+
       - name: Install dependencies
         shell: Rscript {0}
         run: |
