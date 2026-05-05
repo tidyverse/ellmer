@@ -4,27 +4,31 @@
 
 - ellmer is now instrumented with OpenTelemetry, so that traces are
   emitted whenever the (suggested) `otel` package is installed and a
-  tracer is active. Each call to `$chat()`, `$chat_async()`,
-  `$stream()`, or `$stream_async()` produces a top-level `invoke_agent`
-  span that wraps one or more child `chat <model>` spans (one per
-  request to the provider) and `execute_tool <tool>` spans (one per tool
-  invocation). Chat spans record the provider name, request model,
-  response model, and response id, plus input and output token usage;
-  tool spans record the tool name, description, call id, and any error
-  raised during execution. HTTP spans from httr2 are automatically
-  nested under the chat spans
-  ([\#526](https://github.com/tidyverse/ellmer/issues/526)).
-  - Chat spans can additionally record conversation content as
-    `gen_ai.input.messages`, `gen_ai.output.messages`, and
-    `gen_ai.system_instructions`. This is opt-in via the
-    `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` environment
-    variable (set to `"true"`), since these payloads may contain user
-    data.
+  tracer is active.
+
+  Each call to `$chat()`, `$chat_async()`, `$stream()`, or
+  `$stream_async()` produces a top-level `invoke_agent` span that wraps
+  one or more child `chat <model>` spans (one per request to the
+  provider) and `execute_tool <tool>` spans (one per tool invocation).
+  Chat spans record the provider name, request model, response model,
+  and response id, plus input and output token usage; tool spans record
+  the tool name, description, call id, and any error raised during
+  execution. HTTP spans from httr2 are automatically nested under the
+  chat spans ([\#526](https://github.com/tidyverse/ellmer/issues/526)).
+
+  Chat spans can additionally record conversation content as
+  `gen_ai.input.messages`, `gen_ai.output.messages`, and
+  `gen_ai.system_instructions`. This is opt-in via the
+  `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` environment
+  variable (set to `"true"`), since these payloads may contain user
+  data.
+
 - ellmer now distinguishes text content from thinking content while
   streaming, allowing downstream packages like shinychat to provide
   specific UI for thinking content
   ([@simonpcouch](https://github.com/simonpcouch),
   [\#909](https://github.com/tidyverse/ellmer/issues/909)).
+
 - [`claude_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_search.md),
   [`openai_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/openai_tool_web_search.md),
   and other built-in tools now include `description` and `annotations`
@@ -32,11 +36,13 @@
   created by
   [`tool()`](https://ellmer.tidyverse.org/dev/reference/tool.md)
   ([\#942](https://github.com/tidyverse/ellmer/issues/942)).
+
 - [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   no longer fails when streaming web search results: `citations_delta`
-  events are now handled correctly, and `server_tool_use` input is
-  parsed from JSON during streaming
+  events are now handled correctly and `server_tool_use` input is parsed
+  from JSON during streaming
   ([\#941](https://github.com/tidyverse/ellmer/issues/941)).
+
 - [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   no longer applies a hidden 1.25x pricing weight to cache-creation
   tokens; the input token counts reported by
@@ -44,17 +50,20 @@
   and
   [`parallel_chat()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
   are now raw counts. Cost calculations are unchanged.
+
 - [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
   now supports reasoning/thinking content. To enable thinking in
   Anthropic Claude models, see the `api_args` argument in
   [`?chat_aws_bedrock`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
   for an example
   ([\#964](https://github.com/tidyverse/ellmer/issues/964)).
+
 - [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
   gains a `cache` parameter for prompt caching. The default, `"auto"`,
   enables caching for models known to support it (Anthropic Claude and
   Amazon Nova) and disables it otherwise
   ([\#954](https://github.com/tidyverse/ellmer/issues/954)).
+
 - [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md)
   (and other
   [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
@@ -62,18 +71,21 @@
   contains empty `ContentText("")` objects, which can occur during tool
   calling ([@JamesHWade](https://github.com/JamesHWade),
   [\#932](https://github.com/tidyverse/ellmer/issues/932)).
+
 - [`chat_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
   now uses
   [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
-  for improved compatibility, and
+  for improved compatibility and
   [`models_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
   now supports custom `base_url` configuration
   ([@D-M4rk](https://github.com/D-M4rk),
   [\#877](https://github.com/tidyverse/ellmer/issues/877)).
+
 - [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
   now supports structured chat
   ([@CoryMcCartan](https://github.com/CoryMcCartan),
   [\#930](https://github.com/tidyverse/ellmer/issues/930)).
+
 - New
   [`chat_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md)
   and
@@ -81,24 +93,30 @@
   provide support for [LM Studio](https://lmstudio.ai), a local model
   server with an OpenAI-compatible API
   ([\#963](https://github.com/tidyverse/ellmer/issues/963)).
+
 - [`chat_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
-  now contains a slot for `top_k` within the `params` argument
-  ([@frankiethull](https://github.com/frankiethull)).
+  now supports `params(top_k = )`
+  ([@frankiethull](https://github.com/frankiethull),
+  [\#896](https://github.com/tidyverse/ellmer/issues/896)).
+
 - [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   no longer fails when streaming web search results for
   `web_search_call` action types other than `search` (e.g. `open_page`,
   `find_in_page`)
   ([\#941](https://github.com/tidyverse/ellmer/issues/941)).
+
 - [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  now uses the appropriate prices if the service tier is missing
+  now uses the default prices if the service tier is missing
   ([@trangdata](https://github.com/trangdata),
   [\#903](https://github.com/tidyverse/ellmer/issues/903)).
+
 - `default_google_credentials()` no longer skips application default
   credentials (e.g. `GOOGLE_APPLICATION_CREDENTIALS`) in interactive
   sessions, instead falling through to the OAuth browser flow only when
   no gargle token is available
   ([@stefanlinner](https://github.com/stefanlinner),
   [\#922](https://github.com/tidyverse/ellmer/issues/922)).
+
 - [`models_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   (and
   [`models_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md))
@@ -107,6 +125,7 @@
   and other `models_*()` functions
   ([@jcrodriguez1989](https://github.com/jcrodriguez1989),
   [\#917](https://github.com/tidyverse/ellmer/issues/917)).
+
 - New
   [`stream_controller()`](https://ellmer.tidyverse.org/dev/reference/stream_controller.md)
   enables programmatic cancellation of streaming chat responses,
