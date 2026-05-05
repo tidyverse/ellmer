@@ -57,7 +57,8 @@ provider_lookup <- tribble(
 
 prices <- all_prices |>
   inner_join(provider_lookup, join_by(provider == litellm_provider)) |>
-  mutate(provider = provider.y, provider.y = NULL)
+  mutate(provider = provider.y, provider.y = NULL) |>
+  arrange(provider, model, variant)
 
 cli::cli_progress_done()
 
