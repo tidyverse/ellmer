@@ -52,13 +52,13 @@ provider_lookup <- tribble(
   "mistral", "Mistral",
 )
 
-prices <- all_prices |>
+prices_data <- all_prices |>
   inner_join(provider_lookup, join_by(provider == litellm_provider)) |>
   mutate(provider = provider.y, provider.y = NULL)
 
-# prices |> View()
+# prices_data |> View()
 
-usethis::use_data(prices, overwrite = TRUE, internal = TRUE)
+usethis::use_data(prices_data, overwrite = TRUE, internal = TRUE)
 
 # Output JSON for ingestion into `chatlas`
-jsonlite::write_json(prices, "data-raw/prices.json", pretty = TRUE)
+jsonlite::write_json(prices_data, "data-raw/prices.json", pretty = TRUE)

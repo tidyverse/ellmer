@@ -54,9 +54,9 @@ test_that("prices() handles cached data with missing columns", {
   result <- prices()
 
   result_row <- result[
-    result$provider == bundled[1, "provider"] &
-      result$model == bundled[1, "model"] &
-      result$variant == bundled[1, "variant"],
+    result$provider == cached_row$provider &
+      result$model == cached_row$model &
+      result$variant == cached_row$variant,
   ]
 
   expect_equal(result_row$input, 9999)
@@ -77,9 +77,9 @@ test_that("prices() handles cached data with extra columns", {
 
   expect_false("extra_col" %in% names(result))
   result_row <- result[
-    result$provider == bundled[1, "provider"] &
-      result$model == bundled[1, "model"] &
-      result$variant == bundled[1, "variant"],
+    result$provider == cached_row$provider &
+      result$model == cached_row$model &
+      result$variant == cached_row$variant,
   ]
   expect_equal(result_row$input, 9999)
 })
