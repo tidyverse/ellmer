@@ -51,13 +51,12 @@ Suggests:
     png,
     rmarkdown,
     shiny,
-    shinychat (>= 0.2.0),
+    shinychat (>= 0.3.0),
     testthat (>= 3.0.0),
     vcr (>= 2.0.0),
     withr
 VignetteBuilder:
     knitr
-Remotes: posit-dev/shinychat/pkg-r#167
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true
