@@ -21,40 +21,33 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: astral-sh/setup-uv@v8.1.0
-
-      - name: Update prices.json
-        run: bash data-raw/prices.sh
-
-      - name: Check if prices.json changed
-        id: check
-        run: |
-          if git diff --quiet data-raw/prices.json; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - uses: r-lib/actions/setup-r@v2
-        if: steps.check.outputs.changed == 'true'
         with:
           r-version: release
           use-public-rspm: true
 
-      - name: Install R dependencies
-        if: steps.check.outputs.changed == 'true'
-        shell: Rscript {0}
-        run: install.packages(c("jsonlite", "usethis"))
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: "FALSE"
+          needs: prices
 
-      - name: Rebuild sysdata.rda
-        if: steps.check.outputs.changed == 'true'
-        run: Rscript --quiet data-raw/prices.R
+      - name: Update prices
+        run: Rscript --quiet --vanilla data-raw/prices.R
+
+      - name: Check if prices changed
+        id: check
+        run: |
+          if git diff --quiet data-raw/prices.json data-raw/prices.csv R/sysdata.rda; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Commit updated files
         if: steps.check.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data-raw/prices.json R/sysdata.rda
+          git add data-raw/prices.json data-raw/prices.csv R/sysdata.rda
           git commit -m "chore: update pricing data [skip ci]"
           git push
