@@ -37,10 +37,10 @@ chat$chat("Of those stories, which one do you think was the most interesting?")
 }
 }
 \seealso{
-Other built-in tools: 
-\code{\link{claude_tool_web_fetch}()},
-\code{\link{claude_tool_web_search}()},
-\code{\link{google_tool_web_fetch}()},
-\code{\link{google_tool_web_search}()}
+Other built-in tools:
+\code{\link[=claude_tool_web_fetch]{claude_tool_web_fetch()}},
+\code{\link[=claude_tool_web_search]{claude_tool_web_search()}},
+\code{\link[=google_tool_web_fetch]{google_tool_web_fetch()}},
+\code{\link[=google_tool_web_search]{google_tool_web_search()}}
 }
 \concept{built-in tools}

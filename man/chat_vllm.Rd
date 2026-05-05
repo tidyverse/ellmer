@@ -20,8 +20,7 @@ chat_vllm(
 models_vllm(base_url, api_key = NULL, credentials = NULL)
 }
 \arguments{
-\item{base_url}{The base URL to the endpoint; the default is OpenAI's
-public API.}
+\item{base_url}{The base URL to the API endpoint.}
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 

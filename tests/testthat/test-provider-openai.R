@@ -143,6 +143,20 @@ test_that("can extract dummy response from malformed JSON", {
   )
 })
 
+test_that("value_turn handles NULL service_tier gracefully", {
+  provider <- chat_openai_test()$get_provider()
+
+  result <- list(
+    output = list(
+      list(type = "message", content = list(list(text = "Hello")))
+    ),
+    usage = NULL,
+    service_tier = NULL
+  )
+
+  expect_no_error(value_turn(provider, result))
+})
+
 test_that("value_turn() handles web_search_call action types", {
   provider <- chat_openai_test()$get_provider()
 
