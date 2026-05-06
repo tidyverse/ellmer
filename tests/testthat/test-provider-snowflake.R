@@ -190,30 +190,36 @@ test_that("we can merge Snowflake's chunk format", {
   chunk1 <- list(
     id = "id",
     model = "claude-3-5-sonnet",
-    choices = list(list(
-      delta = list(
-        type = "text",
-        content = "I",
-        content_list = list(list(type = "text", text = "I")),
-        text = "I"
+    choices = list(
+      list(
+        delta = list(
+          type = "text",
+          content = "I",
+          content_list = list(list(type = "text", text = "I")),
+          text = "I"
+        )
       )
-    )),
+    ),
     usage = structure(list(), names = character(0))
   )
   chunk2 <- list(
     id = "id",
     model = "claude-3-5-sonnet",
-    choices = list(list(
-      delta = list(
-        type = "text",
-        content = " aim to be direct and honest: I don't actually",
-        content_list = list(list(
+    choices = list(
+      list(
+        delta = list(
           type = "text",
+          content = " aim to be direct and honest: I don't actually",
+          content_list = list(
+            list(
+              type = "text",
+              text = " aim to be direct and honest: I don't actually"
+            )
+          ),
           text = " aim to be direct and honest: I don't actually"
-        )),
-        text = " aim to be direct and honest: I don't actually"
+        )
       )
-    )),
+    ),
     usage = structure(list(), names = character(0))
   )
   expect_equal(
@@ -225,20 +231,113 @@ test_that("we can merge Snowflake's chunk format", {
     list(
       id = "id",
       model = "claude-3-5-sonnet",
-      choices = list(list(
-        message = list(
-          content = "I aim to be direct and honest: I don't actually",
-          content_list = list(
-            list(
-              type = "text",
-              text = "I aim to be direct and honest: I don't actually"
+      choices = list(
+        list(
+          message = list(
+            content_list = list(
+              list(
+                type = "text",
+                text = "I aim to be direct and honest: I don't actually"
+              )
             )
           )
         )
-      )),
+      ),
       usage = structure(list(), names = character(0))
     )
   )
+})
+
+test_that("we can merge Snowflake's tool_use chunk format", {
+  withr::local_envvar(
+    SNOWFLAKE_ACCOUNT = "testorg-test_account",
+    SNOWFLAKE_TOKEN = "token"
+  )
+  chat <- chat_snowflake()
+  provider <- chat$get_provider()
+
+  # Simulate a response that starts with a tool call (no preceding text).
+  # This is the scenario that triggers the bug in #938.
+  chunk1 <- list(
+    choices = list(
+      list(
+        delta = list(
+          type = "tool_use",
+          tool_use_id = "toolu_123",
+          name = "my_tool",
+          content_list = list(
+            list(tool_use_id = "toolu_123", name = "my_tool")
+          ),
+          text = ""
+        )
+      )
+    ),
+    usage = structure(list(), names = character(0))
+  )
+  chunk2 <- list(
+    choices = list(
+      list(
+        delta = list(
+          type = "tool_use",
+          input = "{\"x\":",
+          content_list = list(list(input = "{\"x\":")),
+          text = ""
+        )
+      )
+    ),
+    usage = structure(list(), names = character(0))
+  )
+  chunk3 <- list(
+    choices = list(
+      list(
+        delta = list(
+          type = "tool_use",
+          input = " 5}",
+          content_list = list(list(input = " 5}")),
+          text = ""
+        )
+      )
+    ),
+    usage = structure(list(), names = character(0))
+  )
+  chunk4 <- list(
+    choices = list(
+      list(
+        delta = list(
+          type = "text",
+          content_list = list(list(type = "text", text = "")),
+          text = ""
+        )
+      )
+    ),
+    usage = list(prompt_tokens = 10, completion_tokens = 5)
+  )
+
+  result <- stream_merge_chunks(provider, NULL, chunk1)
+  result <- stream_merge_chunks(provider, result, chunk2)
+  result <- stream_merge_chunks(provider, result, chunk3)
+  result <- stream_merge_chunks(provider, result, chunk4)
+
+  expect_equal(
+    result$choices[[1]]$message$content_list,
+    list(
+      list(
+        type = "tool_use",
+        tool_use_id = "toolu_123",
+        name = "my_tool",
+        input = "{\"x\": 5}"
+      ),
+      list(type = "text", text = "")
+    )
+  )
+
+  # value_turn produces the tool request from the merged result
+  turn <- value_turn(provider, result)
+  expect_length(turn@contents, 2)
+  expect_s3_class(turn@contents[[1]], "ellmer::ContentToolRequest")
+  expect_equal(turn@contents[[1]]@id, "toolu_123")
+  expect_equal(turn@contents[[1]]@name, "my_tool")
+  expect_equal(turn@contents[[1]]@arguments, list(x = 5))
 })
 
 test_that("chat_snowflake() supports parameters", {
