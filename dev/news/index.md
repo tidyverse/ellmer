@@ -64,6 +64,15 @@
   Amazon Nova) and disables it otherwise
   ([\#954](https://github.com/tidyverse/ellmer/issues/954)).
 
+- [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
+  now extracts `reasoning_content` from model responses (both streaming
+  and non-streaming) as `ContentThinking` objects. A new
+  `preserve_thinking` parameter controls whether reasoning content is
+  sent back to the API in multi-turn conversations; it defaults to
+  `FALSE` (matching DeepSeek’s requirement) but is set to `TRUE` for
+  [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
+  ([\#972](https://github.com/tidyverse/ellmer/issues/972)).
+
 - [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md)
   (and other
   [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)

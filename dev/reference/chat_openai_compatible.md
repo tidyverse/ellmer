@@ -26,6 +26,7 @@ chat_openai_compatible(
   params = NULL,
   api_args = list(),
   api_headers = character(),
+  preserve_thinking = FALSE,
   echo = c("none", "output", "all")
 )
 ```
@@ -75,6 +76,14 @@ chat_openai_compatible(
 
   Named character vector of arbitrary extra headers appended to every
   chat API call.
+
+- preserve_thinking:
+
+  If `TRUE`, reasoning content returned by the model is included when
+  sending conversation history back to the API. If `FALSE` (the
+  default), reasoning content is still captured in the turn but dropped
+  from subsequent requests. Set to `TRUE` if your provider requires or
+  benefits from seeing prior reasoning in multi-turn conversations.
 
 - echo:
 
