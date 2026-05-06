@@ -119,6 +119,13 @@
   ([@trangdata](https://github.com/trangdata),
   [\#903](https://github.com/tidyverse/ellmer/issues/903)).
 
+- [`chat_snowflake()`](https://ellmer.tidyverse.org/dev/reference/chat_snowflake.md)
+  now correctly handles tool calling. Previously, when Snowflake’s
+  streaming API sent a tool-use chunk as the very first response (with
+  no preceding text), the chunk merging logic produced malformed
+  content, causing “argument is of length zero” errors
+  ([\#938](https://github.com/tidyverse/ellmer/issues/938)).
+
 - `default_google_credentials()` no longer skips application default
   credentials (e.g. `GOOGLE_APPLICATION_CREDENTIALS`) in interactive
   sessions, instead falling through to the OAuth browser flow only when
