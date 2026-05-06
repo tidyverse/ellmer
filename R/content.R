@@ -403,6 +403,7 @@ method(contents_markdown, ContentUploaded) <- function(content) {
 #' @rdname Content
 #' @param thinking The text of the thinking output.
 #' @param extra Additional data.
+#' @param .complete Whether the thinking block is complete.
 #' @export
 ContentThinking <- new_class(
   "ContentThinking",

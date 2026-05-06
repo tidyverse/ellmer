@@ -32,7 +32,7 @@ ContentToolRequest(
 
 ContentToolResult(value = NULL, error = NULL, extra = list(), request = NULL)
 
-ContentThinking(thinking = stop("Required"), extra = list())
+ContentThinking(thinking = stop("Required"), extra = list(), .complete = TRUE)
 
 ContentPDF(
   type = stop("Required"),
@@ -73,6 +73,8 @@ when the tool call is successful.}
 automatically added by \pkg{ellmer} when evaluating the tool call.}
 
 \item{thinking}{The text of the thinking output.}
+
+\item{.complete}{Whether the thinking block is complete.}
 
 \item{filename}{File name, used to identify the PDF.}
 }
