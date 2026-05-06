@@ -38,6 +38,9 @@ data.
   Chat with a model hosted on Groq
 - [`chat_huggingface()`](https://ellmer.tidyverse.org/reference/chat_huggingface.md)
   : Chat with a model hosted on Hugging Face Serverless Inference API
+- [`chat_lmstudio()`](https://ellmer.tidyverse.org/reference/chat_lmstudio.md)
+  [`models_lmstudio()`](https://ellmer.tidyverse.org/reference/chat_lmstudio.md)
+  : Chat with a local LM Studio model
 - [`chat_mistral()`](https://ellmer.tidyverse.org/reference/chat_mistral.md)
   [`models_mistral()`](https://ellmer.tidyverse.org/reference/chat_mistral.md)
   : Chat with a model hosted on Mistral's La Platforme
@@ -105,6 +108,8 @@ data.
   [`interpolate_file()`](https://ellmer.tidyverse.org/reference/interpolate.md)
   [`interpolate_package()`](https://ellmer.tidyverse.org/reference/interpolate.md)
   : Helpers for interpolating data into prompts
+- [`stream_controller()`](https://ellmer.tidyverse.org/reference/stream_controller.md)
+  : Create a stream controller
 
 ## Parallel and batch chat
 
@@ -150,8 +155,9 @@ provider.
 - [`Turn()`](https://ellmer.tidyverse.org/reference/Turn.md)
   [`UserTurn()`](https://ellmer.tidyverse.org/reference/Turn.md)
   [`SystemTurn()`](https://ellmer.tidyverse.org/reference/Turn.md)
-  [`AssistantTurn()`](https://ellmer.tidyverse.org/reference/Turn.md) :
-  A user, assistant, or system turn
+  [`AssistantTurn()`](https://ellmer.tidyverse.org/reference/Turn.md)
+  [`AssistantPartialTurn()`](https://ellmer.tidyverse.org/reference/Turn.md)
+  : A user, assistant, or system turn
 - [`Content()`](https://ellmer.tidyverse.org/reference/Content.md)
   [`ContentText()`](https://ellmer.tidyverse.org/reference/Content.md)
   [`ContentImage()`](https://ellmer.tidyverse.org/reference/Content.md)

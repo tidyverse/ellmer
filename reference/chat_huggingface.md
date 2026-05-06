@@ -105,6 +105,7 @@ Other chatbots:
 [`chat_github()`](https://ellmer.tidyverse.org/reference/chat_github.md),
 [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md),
 [`chat_groq()`](https://ellmer.tidyverse.org/reference/chat_groq.md),
+[`chat_lmstudio()`](https://ellmer.tidyverse.org/reference/chat_lmstudio.md),
 [`chat_mistral()`](https://ellmer.tidyverse.org/reference/chat_mistral.md),
 [`chat_ollama()`](https://ellmer.tidyverse.org/reference/chat_ollama.md),
 [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md),

@@ -29,6 +29,7 @@
 <url><loc>https://ellmer.tidyverse.org/reference/chat_google_gemini.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/chat_groq.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/chat_huggingface.html</loc></url>
+<url><loc>https://ellmer.tidyverse.org/reference/chat_lmstudio.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/chat_mistral.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/chat_ollama.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/chat_openai.html</loc></url>
@@ -58,6 +59,7 @@
 <url><loc>https://ellmer.tidyverse.org/reference/openai_tool_web_search.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/parallel_chat.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/params.html</loc></url>
+<url><loc>https://ellmer.tidyverse.org/reference/stream_controller.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/token_usage.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/tool.html</loc></url>
 <url><loc>https://ellmer.tidyverse.org/reference/tool_annotations.html</loc></url>

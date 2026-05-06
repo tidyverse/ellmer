@@ -1,4 +1,4 @@
-pandoc: 3.1.11
+pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
@@ -8,7 +8,7 @@ articles:
   streaming-async: streaming-async.html
   structured-data: structured-data.html
   tool-calling: tool-calling.html
-last_built: 2025-11-18T06:36Z
+last_built: 2026-05-06T12:24Z
 urls:
   reference: https://ellmer.tidyverse.org/reference
   article: https://ellmer.tidyverse.org/articles

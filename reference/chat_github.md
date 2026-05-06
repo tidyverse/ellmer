@@ -6,10 +6,10 @@ into the beta access program. See
 <https://github.com/marketplace/models> for details.
 
 This function is a lightweight wrapper around
-[`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md)
+[`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md)
 with the defaults tweaked for the GitHub Models marketplace.
 
-GitHub also suports the Azure AI Inference SDK, which you can use by
+GitHub also supports the Azure AI Inference SDK, which you can use by
 setting `base_url` to `"https://models.inference.ai.azure.com/"`. This
 endpoint was used in ellmer v0.3.0 and earlier.
 
@@ -43,7 +43,7 @@ models_github(
 
 - base_url:
 
-  The base URL to the endpoint; the default is OpenAI's public API.
+  The base URL to the API endpoint.
 
 - api_key:
 
@@ -112,6 +112,7 @@ Other chatbots:
 [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md),
 [`chat_groq()`](https://ellmer.tidyverse.org/reference/chat_groq.md),
 [`chat_huggingface()`](https://ellmer.tidyverse.org/reference/chat_huggingface.md),
+[`chat_lmstudio()`](https://ellmer.tidyverse.org/reference/chat_lmstudio.md),
 [`chat_mistral()`](https://ellmer.tidyverse.org/reference/chat_mistral.md),
 [`chat_ollama()`](https://ellmer.tidyverse.org/reference/chat_ollama.md),
 [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md),

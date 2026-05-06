@@ -22,6 +22,7 @@ ellmer is one of a number of LLM-related packages created by Posit:
 You can install ellmer from CRAN with:
 
 ``` r
+
 install.packages("ellmer")
 ```
 
@@ -134,6 +135,7 @@ you are working interactively or programmatically. They all start with
 creating a new chat object:
 
 ``` r
+
 library(ellmer)
 
 chat <- chat_openai("Be terse", model = "gpt-4o-mini")
@@ -150,6 +152,7 @@ chat directly in your R console or browser with `live_console(chat)` or
 [`live_browser()`](https://ellmer.tidyverse.org/reference/live_console.md):
 
 ``` r
+
 live_console(chat)
 #> ╔════════════════════════════════════════════════════════╗
 #> ║  Entering chat console. Use """ for multi-line input.  ║
@@ -176,6 +179,7 @@ The second most interactive way to chat is to call the
 [`chat()`](https://ellmer.tidyverse.org/reference/chat-any.md) method:
 
 ``` r
+
 chat$chat("What preceding languages most influenced R?")
 #> R was primarily influenced by S, a language developed at Bell Laboratories. 
 #> Other notable influences include:
@@ -202,6 +206,7 @@ and/or
 [`content_image_url()`](https://ellmer.tidyverse.org/reference/content_image_url.md):
 
 ``` r
+
 chat$chat(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   "Can you explain this logo?"
@@ -222,6 +227,7 @@ creating the chat object or when calling `$chat()`. Set `echo = "none"`
 to return a string instead:
 
 ``` r
+
 my_function <- function() {
   chat <- chat_openai("Be terse", model = "gpt-4o-mini", echo = "none")
   chat$chat("What is 6 times 7?")

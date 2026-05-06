@@ -11,6 +11,25 @@ does not work for you automatically, you'll need to follow the advice
 at https://www.paws-r-sdk.com/#credentials. In particular, if your
 org uses AWS SSO, you'll need to run aws sso login at the terminal.
 
+
+
+Prompt caching
+
+
+Bedrock supports
+prompt caching
+via cache checkpoints. When caching is enabled, ellmer places cache
+checkpoints on the system prompt and the last turn, so that the
+conversation history is cached across turns.
+By default (cache = &quot;auto&quot;), caching is enabled for models known to
+support it (Anthropic Claude and Amazon Nova) and disabled for all other
+models. You can also set cache to &quot;5m&quot; or &quot;1h&quot; to force a specific
+TTL, or &quot;none&quot; to disable caching entirely. Note that individual models
+may have minimum input token thresholds before caching takes effect.
+Note that token_usage() does not currently reflect the cost of writing
+to the cache, which is priced at a premium over regular input tokens.
+Cache read savings are reported correctly.
+
 "><meta property="og:description" content="AWS Bedrock provides a number of
 language models, including those from Anthropic's
 Claude, using the Bedrock
@@ -23,7 +42,29 @@ does not work for you automatically, you'll need to follow the advice
 at https://www.paws-r-sdk.com/#credentials. In particular, if your
 org uses AWS SSO, you'll need to run aws sso login at the terminal.
 
-"><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="ellmer.tidyverse.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script></head><body>
+
+
+Prompt caching
+
+
+Bedrock supports
+prompt caching
+via cache checkpoints. When caching is enabled, ellmer places cache
+checkpoints on the system prompt and the last turn, so that the
+conversation history is cached across turns.
+By default (cache = &quot;auto&quot;), caching is enabled for models known to
+support it (Anthropic Claude and Amazon Nova) and disabled for all other
+models. You can also set cache to &quot;5m&quot; or &quot;1h&quot; to force a specific
+TTL, or &quot;none&quot; to disable caching entirely. Note that individual models
+may have minimum input token thresholds before caching takes effect.
+Note that token_usage() does not currently reflect the cost of writing
+to the cache, which is priced at a premium over regular input tokens.
+Cache read savings are reported correctly.
+
+"><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><!-- Privacy-friendly analytics by Plausible --><script async src="https://plausible.io/js/pa-lmXWrcHEOlmbr6pnO-yL-.js"></script><script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
@@ -31,7 +72,7 @@ org uses AWS SSO, you'll need to run aws sso login at the terminal.
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,6 +129,25 @@ at <a href="https://www.paws-r-sdk.com/#credentials" class="external-link">https
 org uses AWS SSO, you'll need to run <code>aws sso login</code> at the terminal.</p>
 </div>
 
+<div class="section">
+<h3 id="prompt-caching">Prompt caching<a class="anchor" aria-label="anchor" href="#prompt-caching"></a></h3>
+
+
+<p>Bedrock supports
+<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html" class="external-link">prompt caching</a>
+via cache checkpoints. When caching is enabled, ellmer places cache
+checkpoints on the system prompt and the last turn, so that the
+conversation history is cached across turns.</p>
+<p>By default (<code>cache = "auto"</code>), caching is enabled for models known to
+support it (Anthropic Claude and Amazon Nova) and disabled for all other
+models. You can also set <code>cache</code> to <code>"5m"</code> or <code>"1h"</code> to force a specific
+TTL, or <code>"none"</code> to disable caching entirely. Note that individual models
+may have minimum input token thresholds before caching takes effect.</p>
+<p>Note that <code><a href="token_usage.html">token_usage()</a></code> does not currently reflect the cost of writing
+to the cache, which is priced at a premium over regular input tokens.
+Cache read savings are reported correctly.</p>
+</div>
+
     </div>
 
     <div class="section level2">
@@ -97,6 +157,7 @@ org uses AWS SSO, you'll need to run <code>aws sso login</code> at the terminal.
 <span>  base_url <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  profile <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cache <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"auto"</span>, <span class="st">"5m"</span>, <span class="st">"1h"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  api_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -115,8 +176,7 @@ org uses AWS SSO, you'll need to run <code>aws sso login</code> at the terminal.
 
 
 <dt id="arg-base-url">base_url<a class="anchor" aria-label="anchor" href="#arg-base-url"></a></dt>
-<dd><p>The base URL to the endpoint; the default is OpenAI's
-public API.</p></dd>
+<dd><p>The base URL to the API endpoint.</p></dd>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
@@ -135,21 +195,31 @@ you'll need to use the inference profile ID, e.g.
 <dd><p>AWS profile to use.</p></dd>
 
 
+<dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
+<dd><p>How long to cache inputs? The default, <code>"auto"</code>, enables
+caching with a 5-minute TTL for models known to support it (Anthropic
+Claude and Amazon Nova) and disables caching for all other models.
+Set to <code>"5m"</code> or <code>"1h"</code> to force caching on, or <code>"none"</code> to disable it.</p>
+<p>See details below.</p></dd>
+
+
 <dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
 <dd><p>Common model parameters, usually created by <code><a href="params.html">params()</a></code>.</p></dd>
 
 
 <dt id="arg-api-args">api_args<a class="anchor" aria-label="anchor" href="#arg-api-args"></a></dt>
 <dd><p>Named list of arbitrary extra arguments appended to the body
-of every chat API call. Some useful arguments include:</p>
+of every chat API call. Use <code>params</code> for common parameters. Model-specific
+inference parameters can be provided using the
+<code>additionalModelRequestFields</code> field, for example to enable thinking effort
+in Anthropic Claude models:</p>
 <p></p><div class="sourceCode R"><pre><code><span><span class="va">api_args</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  inferenceConfig <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    maxTokens <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>    temperature <span class="op">=</span> <span class="fl">0.7</span>,</span>
-<span>    topP <span class="op">=</span> <span class="fl">0.9</span>,</span>
-<span>    topK <span class="op">=</span> <span class="fl">20</span></span>
+<span>  additionalModelRequestFields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    thinking <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"enabled"</span>, budget_tokens <span class="op">=</span> <span class="fl">4000</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre><p></p></div></dd>
+<span><span class="op">)</span></span></code></pre><p></p></div>
+<p>See <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html" class="external-link">https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html</a>
+for more details.</p></dd>
 
 
 <dt id="arg-api-headers">api_headers<a class="anchor" aria-label="anchor" href="#arg-api-headers"></a></dt>
@@ -181,6 +251,7 @@ when running at the console).</p></li>
 <code><a href="chat_google_gemini.html">chat_google_gemini()</a></code>,
 <code><a href="chat_groq.html">chat_groq()</a></code>,
 <code><a href="chat_huggingface.html">chat_huggingface()</a></code>,
+<code><a href="chat_lmstudio.html">chat_lmstudio()</a></code>,
 <code><a href="chat_mistral.html">chat_mistral()</a></code>,
 <code><a href="chat_ollama.html">chat_ollama()</a></code>,
 <code><a href="chat_openai.html">chat_openai()</a></code>,

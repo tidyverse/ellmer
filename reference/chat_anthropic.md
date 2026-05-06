@@ -39,12 +39,14 @@ chat_claude(
 
 models_claude(
   base_url = "https://api.anthropic.com/v1",
-  api_key = anthropic_key()
+  api_key = NULL,
+  credentials = NULL
 )
 
 models_anthropic(
   base_url = "https://api.anthropic.com/v1",
-  api_key = anthropic_key()
+  api_key = NULL,
+  credentials = NULL
 )
 ```
 
@@ -179,6 +181,7 @@ Other chatbots:
 [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md),
 [`chat_groq()`](https://ellmer.tidyverse.org/reference/chat_groq.md),
 [`chat_huggingface()`](https://ellmer.tidyverse.org/reference/chat_huggingface.md),
+[`chat_lmstudio()`](https://ellmer.tidyverse.org/reference/chat_lmstudio.md),
 [`chat_mistral()`](https://ellmer.tidyverse.org/reference/chat_mistral.md),
 [`chat_ollama()`](https://ellmer.tidyverse.org/reference/chat_ollama.md),
 [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md),

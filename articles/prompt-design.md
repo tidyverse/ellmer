@@ -34,6 +34,7 @@ with many other LLMs, or at least give you some ideas as to what else to
 include in your prompt.
 
 ``` r
+
 library(ellmer)
 ```
 
@@ -87,6 +88,7 @@ easier for you to grok what’s going on.
 Let’s explore prompt design for a simple code generation task:
 
 ``` r
+
 question <- "
   How can I compute the mean and median of variables a, b, c, and so on,
   all the way up to z, grouped by age and sex.
@@ -104,6 +106,7 @@ When I don’t provide a system prompt, I sometimes get answers in
 different languages or different styles of R code:
 
 ``` r
+
 chat <- chat_anthropic()
 #> Using model = "claude-sonnet-4-5-20250929".
 chat$chat(question)
@@ -170,6 +173,7 @@ I can ensure that I always get R code in a specific style by providing a
 system prompt:
 
 ``` r
+
 chat <- chat_anthropic(
   system_prompt = "
   You are an expert R programmer who prefers the tidyverse.
@@ -237,6 +241,7 @@ Since I’m mostly interested in the code, I ask it to drop the
 explanation and sample data:
 
 ``` r
+
 chat <- chat_anthropic(
   system_prompt = "
   You are an expert R programmer who prefers the tidyverse.
@@ -259,6 +264,7 @@ chat$chat(question)
 And of course, if you want a different style of R code, just ask for it:
 
 ``` r
+
 chat <- chat_anthropic(
   system_prompt = "
   You are an expert R programmer who prefers data.table.
@@ -304,6 +310,7 @@ chat$chat(question)
 
 ``` r
 
+
 chat <- chat_anthropic(
   system_prompt = "
   You are an expert R programmer who prefers base R.
@@ -337,6 +344,7 @@ more explicit. For example, the code isn’t styled quite how I’d like it,
 so I provide more details about what I do want:
 
 ``` r
+
 chat <- chat_anthropic(
   system_prompt = "
   You are an expert R programmer who prefers the tidyverse.
@@ -374,6 +382,7 @@ You could provide a different prompt if you were looking for more
 explanation of the code:
 
 ``` r
+
 chat <- chat_anthropic(
   system_prompt = "
   You are an expert R teacher.
@@ -428,6 +437,7 @@ popular). So if you want your code to use specific newer language
 features, you might need to provide the examples yourself:
 
 ``` r
+
 chat <- chat_anthropic(
   system_prompt = "
   You are an expert R programmer.
@@ -478,6 +488,7 @@ the total weight, scale the recipe up or down, or convert the units from
 volumes to weights).
 
 ``` r
+
 ingredients <- "
   ¾ cup (150g) dark brown sugar
   2 large eggs
@@ -502,6 +513,7 @@ solve. Seeing the LLM’s attempt to create a data structure gives me
 something to react to, rather than having to start from a blank page.
 
 ``` r
+
 instruct_json <- "
   You're an expert baker who also loves JSON. I am going to give you a list of
   ingredients and your job is to return nicely structured JSON. Just return the
@@ -591,6 +603,7 @@ examples of what I’m looking for. I was pleasantly suprised that I can
 provide the input and output examples in such a loose format.
 
 ``` r
+
 instruct_weight <- r"(
   Here are some examples of the sort of output I'm looking for:
 
@@ -629,6 +642,7 @@ whole prompt and check that I’ve covered the key pieces I’m interested
 in.
 
 ``` r
+
 instruct_weight <- r"(
   * If an ingredient has both weight and volume, extract only the weight:
 
@@ -662,6 +676,7 @@ units aren’t precise (like a pinch). It made me realise that some
 ingredients are unitless.
 
 ``` r
+
 instruct_unit <- r"(
 * If the unit uses a fraction, convert it to a decimal.
 
@@ -704,6 +719,7 @@ return JSON, that the JSON will have the fields that you expect, and
 that ellmer will convert it into an R data structure.
 
 ``` r
+
 type_ingredient <- type_object(
   name = type_string("Ingredient name"),
   quantity = type_number(),
@@ -739,6 +755,7 @@ the output and to start developing automated measures of how well my
 prompt is doing.
 
 ``` r
+
 instruct_weight_input <- r"(
   * If an ingredient has both weight and volume, extract only the weight:
 
@@ -762,6 +779,7 @@ I think this is particularly important if you’re working with even less
 structured text. For example, imagine you had this text:
 
 ``` r
+
 recipe <- r"(
   In a large bowl, cream together one cup of softened unsalted butter and a
   quarter cup of white sugar until smooth. Beat in an egg and 1 teaspoon of
@@ -778,6 +796,7 @@ Including the input text in the output makes it easier to see if it’s
 doing a good job:
 
 ``` r
+
 chat <- chat_openai(c(instruct_json, instruct_weight_input))
 #> Using model = "gpt-4.1".
 chat$chat(recipe)

@@ -13,6 +13,27 @@ does not work for you automatically, you'll need to follow the advice at
 <https://www.paws-r-sdk.com/#credentials>. In particular, if your org
 uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 
+### Prompt caching
+
+Bedrock supports [prompt
+caching](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html)
+via cache checkpoints. When caching is enabled, ellmer places cache
+checkpoints on the system prompt and the last turn, so that the
+conversation history is cached across turns.
+
+By default (`cache = "auto"`), caching is enabled for models known to
+support it (Anthropic Claude and Amazon Nova) and disabled for all other
+models. You can also set `cache` to `"5m"` or `"1h"` to force a specific
+TTL, or `"none"` to disable caching entirely. Note that individual
+models may have minimum input token thresholds before caching takes
+effect.
+
+Note that
+[`token_usage()`](https://ellmer.tidyverse.org/reference/token_usage.md)
+does not currently reflect the cost of writing to the cache, which is
+priced at a premium over regular input tokens. Cache read savings are
+reported correctly.
+
 ## Usage
 
 ``` r
@@ -21,6 +42,7 @@ chat_aws_bedrock(
   base_url = NULL,
   model = NULL,
   profile = NULL,
+  cache = c("auto", "5m", "1h", "none"),
   params = NULL,
   api_args = list(),
   api_headers = character(),
@@ -38,7 +60,7 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
 
 - base_url:
 
-  The base URL to the endpoint; the default is OpenAI's public API.
+  The base URL to the API endpoint.
 
 - model:
 
@@ -59,6 +81,15 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
 
   AWS profile to use.
 
+- cache:
+
+  How long to cache inputs? The default, `"auto"`, enables caching with
+  a 5-minute TTL for models known to support it (Anthropic Claude and
+  Amazon Nova) and disables caching for all other models. Set to `"5m"`
+  or `"1h"` to force caching on, or `"none"` to disable it.
+
+  See details below.
+
 - params:
 
   Common model parameters, usually created by
@@ -67,16 +98,20 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
 - api_args:
 
   Named list of arbitrary extra arguments appended to the body of every
-  chat API call. Some useful arguments include:
+  chat API call. Use `params` for common parameters. Model-specific
+  inference parameters can be provided using the
+  `additionalModelRequestFields` field, for example to enable thinking
+  effort in Anthropic Claude models:
 
       api_args = list(
-        inferenceConfig = list(
-          maxTokens = 100,
-          temperature = 0.7,
-          topP = 0.9,
-          topK = 20
+        additionalModelRequestFields = list(
+          thinking = list(type = "enabled", budget_tokens = 4000)
         )
       )
+
+  See
+  <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html>
+  for more details.
 
 - api_headers:
 
@@ -113,6 +148,7 @@ Other chatbots:
 [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md),
 [`chat_groq()`](https://ellmer.tidyverse.org/reference/chat_groq.md),
 [`chat_huggingface()`](https://ellmer.tidyverse.org/reference/chat_huggingface.md),
+[`chat_lmstudio()`](https://ellmer.tidyverse.org/reference/chat_lmstudio.md),
 [`chat_mistral()`](https://ellmer.tidyverse.org/reference/chat_mistral.md),
 [`chat_ollama()`](https://ellmer.tidyverse.org/reference/chat_ollama.md),
 [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md),

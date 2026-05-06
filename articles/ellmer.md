@@ -1,6 +1,7 @@
 # Getting started with ellmer
 
 ``` r
+
 library(ellmer)
 ```
 
@@ -86,6 +87,7 @@ printing it, and you can see total usage for a session with
 [`token_usage()`](https://ellmer.tidyverse.org/reference/token_usage.md).
 
 ``` r
+
 chat <- chat_openai(model = "gpt-4.1")
 . <- chat$chat("Who created R?", echo = FALSE)
 chat
@@ -140,7 +142,7 @@ two other important prompts that underlie the user prompt:
 - The **platform prompt**, which is unchangeable, set by the model
   provider, and affects every conversation. You can see what these look
   like from Anthropic, who [publishes their core system
-  prompts](https://docs.claude.com/en/release-notes/system-prompts).
+  prompts](https://platform.claude.com/docs/en/release-notes/system-prompts).
 
 - The **system prompt** (aka developer prompt), which is set when you
   create a new conversation, and affects every response. It’s used to
