@@ -331,9 +331,9 @@ test_that("we can merge Snowflake's tool_use chunk format", {
     )
   )
 
-  # value_turn produces the tool request from the merged result
+  # value_turn filters empty text and produces only the tool request
   turn <- value_turn(provider, result)
-  expect_length(turn@contents, 2)
+  expect_length(turn@contents, 1)
   expect_s3_class(turn@contents[[1]], "ellmer::ContentToolRequest")
   expect_equal(turn@contents[[1]]@id, "toolu_123")
   expect_equal(turn@contents[[1]]@name, "my_tool")

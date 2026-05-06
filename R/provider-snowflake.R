@@ -266,32 +266,37 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
   has_type = FALSE
 ) {
   raw_content <- result$choices[[1]]$message$content_list
-  contents <- lapply(raw_content, function(content) {
-    if (identical(content$type, "text")) {
-      if (has_type) {
-        ContentJson(string = content$text)
+  contents <- compact(
+    lapply(raw_content, function(content) {
+      if (identical(content$type, "text")) {
+        if (!nzchar(content$text %||% "")) {
+          return(NULL)
+        }
+        if (has_type) {
+          ContentJson(string = content$text)
+        } else {
+          ContentText(content$text)
+        }
+      } else if (identical(content$type, "tool_use")) {
+        # Streaming produces flat format; non-streaming has nested tool_use
+        if (!is.null(content[["tool_use"]])) {
+          content <- content[["tool_use"]]
+        }
+        input <- content[["input"]] %||% ""
+        id <- content[["tool_use_id"]]
+        name <- content[["name"]]
+        if (is_string(input)) {
+          input <- jsonlite::parse_json(input)
+        }
+        ContentToolRequest(id, name, input %||% list())
       } else {
-        ContentText(content$text)
+        cli::cli_abort(
+          "Unknown content type {.str {content$type}}.",
+          .internal = TRUE
+        )
       }
-    } else if (identical(content$type, "tool_use")) {
-      # Streaming produces flat format; non-streaming has nested tool_use
-      if (!is.null(content[["tool_use"]])) {
-        content <- content[["tool_use"]]
-      }
-      input <- content[["input"]] %||% ""
-      id <- content[["tool_use_id"]]
-      name <- content[["name"]]
-      if (is_string(input)) {
-        input <- jsonlite::parse_json(input)
-      }
-      ContentToolRequest(id, name, input %||% list())
-    } else {
-      cli::cli_abort(
-        "Unknown content type {.str {content$type}}.",
-        .internal = TRUE
-      )
-    }
-  })
+    })
+  )
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
   AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
