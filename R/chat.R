@@ -669,11 +669,15 @@ Chat <- R6::R6Class(
             is_thinking <- inherits(content, "ellmer::ContentThinking")
             if (is_thinking && !inside_thinking) {
               emit("<thinking>\n")
-              if (!yield_as_content) yield("<thinking>\n")
+              if (!yield_as_content) {
+                yield("<thinking>\n")
+              }
               inside_thinking <- TRUE
             } else if (!is_thinking && inside_thinking) {
               emit("\n</thinking>\n\n")
-              if (!yield_as_content) yield("\n</thinking>\n\n")
+              if (!yield_as_content) {
+                yield("\n</thinking>\n\n")
+              }
               inside_thinking <- FALSE
             }
 
@@ -689,7 +693,9 @@ Chat <- R6::R6Class(
 
         if (inside_thinking) {
           emit("\n</thinking>\n\n")
-          if (!yield_as_content) yield("\n</thinking>\n\n")
+          if (!yield_as_content) {
+            yield("\n</thinking>\n\n")
+          }
           inside_thinking <- FALSE
         }
 
@@ -784,11 +790,15 @@ Chat <- R6::R6Class(
             is_thinking <- inherits(content, "ellmer::ContentThinking")
             if (is_thinking && !inside_thinking) {
               emit("<thinking>\n")
-              if (!yield_as_content) yield("<thinking>\n")
+              if (!yield_as_content) {
+                yield("<thinking>\n")
+              }
               inside_thinking <- TRUE
             } else if (!is_thinking && inside_thinking) {
               emit("\n</thinking>\n\n")
-              if (!yield_as_content) yield("\n</thinking>\n\n")
+              if (!yield_as_content) {
+                yield("\n</thinking>\n\n")
+              }
               inside_thinking <- FALSE
             }
 
@@ -804,7 +814,9 @@ Chat <- R6::R6Class(
 
         if (inside_thinking) {
           emit("\n</thinking>\n\n")
-          if (!yield_as_content) yield("\n</thinking>\n\n")
+          if (!yield_as_content) {
+            yield("\n</thinking>\n\n")
+          }
           inside_thinking <- FALSE
         }
 
