@@ -340,6 +340,59 @@ test_that("we can merge Snowflake's tool_use chunk format", {
   expect_equal(turn@contents[[1]]@arguments, list(x = 5))
 })
 
+test_that("stream_content extracts text from Snowflake's delta format", {
+  withr::local_envvar(
+    SNOWFLAKE_ACCOUNT = "testorg-test_account",
+    SNOWFLAKE_TOKEN = "token"
+  )
+  chat <- chat_snowflake()
+  provider <- chat$get_provider()
+
+  # Text chunk with content yields ContentText
+  text_event <- list(
+    choices = list(
+      list(
+        delta = list(type = "text", content = "hello", text = "hello")
+      )
+    )
+  )
+  result <- stream_content(provider, text_event)
+  expect_s3_class(result, "ellmer::ContentText")
+  expect_equal(result@text, "hello")
+
+  # Text chunk using delta$text (no delta$content)
+  text_event2 <- list(
+    choices = list(
+      list(
+        delta = list(type = "text", text = "world")
+      )
+    )
+  )
+  result2 <- stream_content(provider, text_event2)
+  expect_s3_class(result2, "ellmer::ContentText")
+  expect_equal(result2@text, "world")
+
+  # Tool_use chunk returns NULL (not text)
+  tool_event <- list(
+    choices = list(
+      list(
+        delta = list(type = "tool_use", tool_use_id = "id", name = "fn")
+      )
+    )
+  )
+  expect_null(stream_content(provider, tool_event))
+
+  # Empty text chunk returns NULL
+  empty_event <- list(
+    choices = list(
+      list(
+        delta = list(type = "text", text = "")
+      )
+    )
+  )
+  expect_null(stream_content(provider, empty_event))
+})
+
 test_that("chat_snowflake() supports parameters", {
   # Setting a dummy account ensures we don't skip this test, even if there are
   # no Snowflake credentials available.
