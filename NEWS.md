@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_openai_compatible()` now extracts `reasoning_content` from model responses (both streaming and non-streaming) as `ContentThinking` objects. A new `preserve_thinking` parameter controls whether reasoning content is sent back to the API in multi-turn conversations; it defaults to `FALSE` (matching DeepSeek's requirement) but is set to `TRUE` for `chat_openrouter()` (#972).
 * ellmer is now instrumented with OpenTelemetry, so that traces are emitted whenever the (suggested) `otel` package is installed and a tracer is active.
 
   Each call to `$chat()`, `$chat_async()`, `$stream()`, or `$stream_async()` produces a top-level `invoke_agent` span that wraps one or more child `chat <model>` spans (one per request to the provider) and `execute_tool <tool>` spans (one per tool invocation). Chat spans record the provider name, request model, response model, and response id, plus input and output token usage; tool spans record the tool name, description, call id, and any error raised during execution. HTTP spans from httr2 are automatically nested under the chat spans (#526).
@@ -11,7 +12,6 @@
 * `chat_anthropic()` no longer applies a hidden 1.25x pricing weight to cache-creation tokens; the input token counts reported by `token_usage()` and `parallel_chat()` are now raw counts. Cost calculations are unchanged.
 * `chat_aws_bedrock()` now supports reasoning/thinking content. To enable thinking in Anthropic Claude models, see the `api_args` argument in `?chat_aws_bedrock` for an example (#964).
 * `chat_aws_bedrock()` gains a `cache` parameter for prompt caching. The default, `"auto"`, enables caching for models known to support it (Anthropic Claude and Amazon Nova) and disables it otherwise (#954).
-* `chat_openai_compatible()` now extracts `reasoning_content` from model responses (both streaming and non-streaming) as `ContentThinking` objects. A new `preserve_thinking` parameter controls whether reasoning content is sent back to the API in multi-turn conversations; it defaults to `FALSE` (matching DeepSeek's requirement) but is set to `TRUE` for `chat_openrouter()` (#972).
 * `chat_databricks()` (and other `chat_openai_compatible()` providers) no longer fail with HTTP 400 when the conversation history contains empty `ContentText("")` objects, which can occur during tool calling (@JamesHWade, #932).
 * `chat_github()` now uses `chat_openai_compatible()` for improved compatibility and `models_github()` now supports custom `base_url` configuration (@D-M4rk, #877).
 * `chat_groq()` now supports structured chat (@CoryMcCartan, #930).
