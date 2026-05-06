@@ -51,7 +51,8 @@ chat_openrouter <- function(
     params = params,
     extra_args = api_args,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    preserve_thinking = TRUE
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
