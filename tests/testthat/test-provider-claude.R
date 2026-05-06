@@ -333,3 +333,34 @@ test_that("stream_merge_chunks() handles citations_delta", {
   expect_length(result$content[[1]]$citations, 1)
   expect_equal(result$content[[1]]$citations[[1]]$url, "https://example.com")
 })
+
+# Thinking tag boundaries -------------------------------------------------
+
+test_that("stream='text' wraps thinking in tags", {
+  chat <- chat_anthropic_test(
+    params = params(budget_tokens = 2048, temperature = 1)
+  )
+  chunks <- coro::collect(chat$stream("What is 2+2?", stream = "text"))
+  text <- paste0(chunks, collapse = "")
+
+  expect_match(text, "^<thinking>\n")
+  expect_match(text, "\n</thinking>\n\n")
+  # Response text appears after the closing tag
+  expect_match(text, "</thinking>\n\n.+")
+})
+
+test_that("stream='content' does not yield tag strings", {
+  chat <- chat_anthropic_test(
+    params = params(budget_tokens = 2048, temperature = 1)
+  )
+
+  chunks <- coro::collect(chat$stream("What is 2+2?", stream = "content"))
+  string_chunks <- Filter(is.character, chunks)
+  thinking_chunks <- Filter(\(x) S7::S7_inherits(x, ContentThinking), chunks)
+
+  # ContentThinking objects are yielded
+  expect_gt(length(thinking_chunks), 0)
+  # No tag boundary strings should be yielded
+  expect_false(any(grepl("^<thinking>", string_chunks)))
+  expect_false(any(grepl("</thinking>", string_chunks)))
+})

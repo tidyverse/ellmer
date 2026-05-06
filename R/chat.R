@@ -661,9 +661,22 @@ Chat <- R6::R6Class(
         on.exit(acc$finalize_turn(), add = TRUE)
 
         result <- NULL
+        inside_thinking <- FALSE
+
         for (chunk in response) {
           content <- stream_content(private$provider, chunk)
           if (!is.null(content)) {
+            is_thinking <- inherits(content, "ellmer::ContentThinking")
+            if (is_thinking && !inside_thinking) {
+              emit("<thinking>\n")
+              if (!yield_as_content) yield("<thinking>\n")
+              inside_thinking <- TRUE
+            } else if (!is_thinking && inside_thinking) {
+              emit("\n</thinking>\n\n")
+              if (!yield_as_content) yield("\n</thinking>\n\n")
+              inside_thinking <- FALSE
+            }
+
             text <- content_text(content)
             emit(text)
             yield(if (yield_as_content) content else text)
@@ -672,6 +685,12 @@ Chat <- R6::R6Class(
           }
 
           result <- stream_merge_chunks(private$provider, result, chunk)
+        }
+
+        if (inside_thinking) {
+          emit("\n</thinking>\n\n")
+          if (!yield_as_content) yield("\n</thinking>\n\n")
+          inside_thinking <- FALSE
         }
 
         record_chat_otel_span_status(chat_span, private$provider, result)
@@ -757,9 +776,22 @@ Chat <- R6::R6Class(
         on.exit(acc$finalize_turn(), add = TRUE)
 
         result <- NULL
+        inside_thinking <- FALSE
+
         for (chunk in await_each(response)) {
           content <- stream_content(private$provider, chunk)
           if (!is.null(content)) {
+            is_thinking <- inherits(content, "ellmer::ContentThinking")
+            if (is_thinking && !inside_thinking) {
+              emit("<thinking>\n")
+              if (!yield_as_content) yield("<thinking>\n")
+              inside_thinking <- TRUE
+            } else if (!is_thinking && inside_thinking) {
+              emit("\n</thinking>\n\n")
+              if (!yield_as_content) yield("\n</thinking>\n\n")
+              inside_thinking <- FALSE
+            }
+
             text <- content_text(content)
             emit(text)
             yield(if (yield_as_content) content else text)
@@ -768,6 +800,12 @@ Chat <- R6::R6Class(
           }
 
           result <- stream_merge_chunks(private$provider, result, chunk)
+        }
+
+        if (inside_thinking) {
+          emit("\n</thinking>\n\n")
+          if (!yield_as_content) yield("\n</thinking>\n\n")
+          inside_thinking <- FALSE
         }
 
         record_chat_otel_span_status(chat_span, private$provider, result)
