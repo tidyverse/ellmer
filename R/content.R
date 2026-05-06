@@ -409,12 +409,17 @@ ContentThinking <- new_class(
   parent = Content,
   properties = list(
     thinking = prop_string(),
-    extra = class_list
+    extra = class_list,
+    .complete = new_property(class_logical, default = TRUE)
   )
 )
 
 method(format, ContentThinking) <- function(x, ...) {
-  paste0("<thinking>\n", x@thinking, "\n</thinking>\n")
+  if (x@.complete) {
+    paste0("<thinking>\n", x@thinking, "\n</thinking>\n")
+  } else {
+    x@thinking
+  }
 }
 
 method(contents_html, ContentThinking) <- function(content) {

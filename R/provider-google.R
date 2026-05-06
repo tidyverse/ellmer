@@ -280,7 +280,7 @@ method(stream_content, ProviderGoogleGemini) <- function(provider, event) {
 
   part <- parts[[1]]
   if (isTRUE(part$thought) && !is.null(part$text)) {
-    ContentThinking(part$text)
+    ContentThinking(part$text, .complete = FALSE)
   } else if (!is.null(part$text)) {
     ContentText(part$text)
   }

@@ -276,7 +276,7 @@ method(stream_parse, ProviderAnthropic) <- function(provider, event) {
 method(stream_content, ProviderAnthropic) <- function(provider, event) {
   if (event$type == "content_block_delta") {
     if (identical(event$delta$type, "thinking_delta")) {
-      return(ContentThinking(event$delta$thinking))
+      return(ContentThinking(event$delta$thinking, .complete = FALSE))
     }
     text <- event$delta$text
     if (is.null(text)) {

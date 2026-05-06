@@ -256,7 +256,7 @@ method(stream_content, ProviderOpenAICompatible) <- function(provider, event) {
 
   reasoning <- delta[["reasoning_content"]]
   if (!is.null(reasoning)) {
-    return(ContentThinking(reasoning))
+    return(ContentThinking(reasoning, .complete = FALSE))
   }
 
   text <- delta[["content"]]
