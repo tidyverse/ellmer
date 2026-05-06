@@ -19,6 +19,7 @@
 * `chat_ollama()` now supports `params(top_k = )` (@frankiethull, #896).
 * `chat_openai()` no longer fails when streaming web search results for `web_search_call` action types other than `search` (e.g. `open_page`, `find_in_page`) (#941).
 * `chat_openai()` now uses the default prices if the service tier is missing (@trangdata, #903).
+* `chat_snowflake()` now correctly handles tool calling. Previously, when Snowflake's streaming API sent a tool-use chunk as the very first response (with no preceding text), the chunk merging logic produced malformed content, causing "argument is of length zero" errors (#938).
 * `default_google_credentials()` no longer skips application default credentials (e.g. `GOOGLE_APPLICATION_CREDENTIALS`) in interactive sessions, instead falling through to the OAuth browser flow only when no gargle token is available (@stefanlinner, #922).
 * `models_anthropic()` (and `models_claude()`) gains a `credentials` argument for consistency with `chat_anthropic()` and other `models_*()` functions (@jcrodriguez1989, #917).
 * New `stream_controller()` enables programmatic cancellation of streaming chat responses, e.g. from a Shiny "Cancel" button with `chat$stream()` or `chat$stream_async()`. Streaming turns are now saved incrementally so that partial responses survive cancellation, interrupts (Ctrl-C), and errors. Incomplete turns are recorded as `AssistantPartialTurn` objects, display as interrupted in the chat history, and are included in subsequent model context like complete turns (#643).
