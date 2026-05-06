@@ -393,6 +393,27 @@ test_that("stream_content extracts text from Snowflake's delta format", {
   expect_null(stream_content(provider, empty_event))
 })
 
+test_that("as_json handles tool-only assistant turns", {
+  withr::local_envvar(
+    SNOWFLAKE_ACCOUNT = "testorg-test_account",
+    SNOWFLAKE_TOKEN = "token"
+  )
+  chat <- chat_snowflake()
+  provider <- chat$get_provider()
+
+  # An assistant turn with only a tool request (no preceding text)
+  turn <- Turn(
+    "assistant",
+    contents = list(
+      ContentToolRequest("toolu_123", "my_tool", list(x = 5))
+    )
+  )
+  result <- as_json(provider, turn)
+  expect_equal(result$role, "assistant")
+  expect_equal(result$content_list[[1]]$type, "tool_use")
+  expect_equal(result$content_list[[1]]$tool_use$tool_use_id, "toolu_123")
+})
+
 test_that("chat_snowflake() supports parameters", {
   # Setting a dummy account ensures we don't skip this test, even if there are
   # no Snowflake credentials available.

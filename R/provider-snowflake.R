@@ -323,6 +323,9 @@ method(as_json, list(ProviderSnowflakeCortex, Turn)) <- function(
     # tool result in textual format here, too -- otherwise it gets confused,
     # like it can't see the output.
     content <- tool_string(x@contents[[1]])
+  } else if (S7_inherits(x@contents[[1]], ContentToolRequest)) {
+    # Tool-only response (no preceding text).
+    content <- "<empty>"
   } else {
     cli::cli_abort("Unsupported content type: {.cls {class(x@contents[[1]])}}.")
   }
