@@ -31,6 +31,11 @@ NULL
 #'   with [modifyList()].
 #' @param api_headers Named character vector of arbitrary extra headers appended
 #'   to every chat API call.
+#' @param preserve_thinking If `TRUE`, reasoning content returned by the model
+#'   is included when sending conversation history back to the API. If `FALSE`
+#'   (the default), reasoning content is still captured in the turn but dropped
+#'   from subsequent requests. Set to `TRUE` if your provider requires or
+#'   benefits from seeing prior reasoning in multi-turn conversations.
 #' @param echo One of the following options:
 #'   * `none`: don't emit any output (default when running in a function).
 #'   * `output`: echo text and tool-calling output as it streams in (default
@@ -60,6 +65,7 @@ chat_openai_compatible <- function(
   params = NULL,
   api_args = list(),
   api_headers = character(),
+  preserve_thinking = FALSE,
   echo = c("none", "output", "all")
 ) {
   if (missing(base_url)) {
@@ -95,7 +101,8 @@ chat_openai_compatible <- function(
     params = params %||% params(),
     extra_args = api_args,
     extra_headers = api_headers,
-    credentials = credentials
+    credentials = credentials,
+    preserve_thinking = preserve_thinking
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
@@ -126,7 +133,10 @@ chat_openai_compatible_test <- function(
 
 ProviderOpenAICompatible <- new_class(
   "ProviderOpenAICompatible",
-  parent = Provider
+  parent = Provider,
+  properties = list(
+    preserve_thinking = new_property(class_logical, default = FALSE)
+  )
 )
 
 openai_key_exists <- function() {
@@ -382,9 +392,11 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
     tool_calls <- as_json(provider, contents[is_tool], ...)
 
     reasoning_content <- NULL
-    thinking_texts <- map_chr(contents[is_thinking], function(c) c@thinking)
-    if (length(thinking_texts) > 0) {
-      reasoning_content <- paste0(thinking_texts, collapse = "")
+    if (provider@preserve_thinking) {
+      thinking_texts <- map_chr(contents[is_thinking], function(c) c@thinking)
+      if (length(thinking_texts) > 0) {
+        reasoning_content <- paste0(thinking_texts, collapse = "")
+      }
     }
 
     list(

@@ -194,8 +194,28 @@ test_that("value_turn extracts reasoning_content", {
   expect_equal(turn@contents[[2]]@text, "The answer is 42.")
 })
 
-test_that("as_json includes reasoning_content from ContentThinking", {
+test_that("as_json drops reasoning_content by default", {
   stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
+
+  turn <- AssistantTurn(list(
+    ContentThinking("Let me think..."),
+    ContentText("The answer is 42.")
+  ))
+  result <- as_json(stub, turn)
+  expect_null(result[[1]]$reasoning_content)
+  expect_equal(
+    result[[1]]$content,
+    list(list(type = "text", text = "The answer is 42."))
+  )
+})
+
+test_that("as_json preserves reasoning_content when preserve_thinking = TRUE", {
+  stub <- ProviderOpenAICompatible(
+    name = "",
+    base_url = "",
+    model = "",
+    preserve_thinking = TRUE
+  )
 
   turn <- AssistantTurn(list(
     ContentThinking("Let me think..."),

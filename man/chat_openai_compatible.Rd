@@ -14,6 +14,7 @@ chat_openai_compatible(
   params = NULL,
   api_args = list(),
   api_headers = character(),
+  preserve_thinking = FALSE,
   echo = c("none", "output", "all")
 )
 }
@@ -41,6 +42,12 @@ with \code{\link[=modifyList]{modifyList()}}.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
+
+\item{preserve_thinking}{If \code{TRUE}, reasoning content returned by the model
+is included when sending conversation history back to the API. If \code{FALSE}
+(the default), reasoning content is still captured in the turn but dropped
+from subsequent requests. Set to \code{TRUE} if your provider requires or
+benefits from seeing prior reasoning in multi-turn conversations.}
 
 \item{echo}{One of the following options:
 \itemize{
