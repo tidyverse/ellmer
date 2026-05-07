@@ -84,6 +84,24 @@
       <p>A <strong>thought</strong>.</p>
       </details>
 
+# ContentThinkingDelta rejects invalid phase
+
+    Code
+      ContentThinkingDelta("x", phase = "middle")
+    Condition
+      Error:
+      ! <ellmer::ContentThinkingDelta> object properties are invalid:
+      - @phase must be one of "start", "body", or "end", not "middle".
+
+---
+
+    Code
+      ContentThinkingDelta("x", phase = c("start", "end"))
+    Condition
+      Error:
+      ! <ellmer::ContentThinkingDelta> object properties are invalid:
+      - @phase must be one of "start", "body", or "end", not a character vector.
+
 # ContentToolRequest shows converted arguments
 
     Code

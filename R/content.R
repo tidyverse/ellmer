@@ -438,7 +438,25 @@ ContentThinkingDelta <- new_class(
   parent = Content,
   properties = list(
     thinking = prop_string(),
-    phase = new_property(class_character, default = "body")
+    phase = new_property(
+      class_character,
+      default = "body",
+      validator = function(value) {
+        if (length(value) != 1 || is.na(value)) {
+          paste0(
+            "must be one of \"start\", \"body\", or \"end\", not ",
+            obj_type_friendly(value),
+            "."
+          )
+        } else if (!value %in% c("start", "body", "end")) {
+          paste0(
+            "must be one of \"start\", \"body\", or \"end\", not \"",
+            value,
+            "\"."
+          )
+        }
+      }
+    )
   )
 )
 

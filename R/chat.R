@@ -327,8 +327,11 @@ Chat <- R6::R6Class(
     #'   waiting for more content from the chatbot.
     #' @param ... The input to send to the chatbot. Can be strings or images.
     #' @param stream Whether the stream should yield only `"text"` or ellmer's
-    #'   rich content types. When `stream = "content"`, `stream()` yields
-    #'   [Content] objects.
+    #'   rich content types. When `stream = "text"`, thinking is suppressed
+    #'   and only response text is yielded. When `stream = "content"`,
+    #'   `stream()` yields [Content] objects, including
+    #'   [`ContentThinkingDelta`][Content] for streamed thinking fragments
+    #'   (with a `phase` property indicating block boundaries).
     #' @param controller An optional [stream_controller()] used to cancel the
     #'   stream from outside the iteration loop.
     stream = function(..., stream = c("text", "content"), controller = NULL) {
@@ -357,8 +360,11 @@ Chat <- R6::R6Class(
     #'   an interactive user interface. Concurrent mode is the default and is
     #'   best suited for automated scripts or non-interactive applications.
     #' @param stream Whether the stream should yield only `"text"` or ellmer's
-    #'   rich content types. When `stream = "content"`, `stream()` yields
-    #'   [Content] objects.
+    #'   rich content types. When `stream = "text"`, thinking is suppressed
+    #'   and only response text is yielded. When `stream = "content"`,
+    #'   `stream_async()` yields [Content] objects, including
+    #'   [`ContentThinkingDelta`][Content] for streamed thinking fragments
+    #'   (with a `phase` property indicating block boundaries).
     #' @param controller An optional [stream_controller()] used to cancel the
     #'   stream from outside the iteration loop.
     stream_async = function(
@@ -666,7 +672,7 @@ Chat <- R6::R6Class(
         for (chunk in response) {
           content <- stream_content(private$provider, chunk)
           if (!is.null(content)) {
-            is_thinking <- inherits(content, "ellmer::ContentThinkingDelta")
+            is_thinking <- S7_inherits(content, ContentThinkingDelta)
 
             if (is_thinking && !inside_thinking) {
               content@phase <- "start"
@@ -792,7 +798,7 @@ Chat <- R6::R6Class(
         for (chunk in await_each(response)) {
           content <- stream_content(private$provider, chunk)
           if (!is.null(content)) {
-            is_thinking <- inherits(content, "ellmer::ContentThinkingDelta")
+            is_thinking <- S7_inherits(content, ContentThinkingDelta)
 
             if (is_thinking && !inside_thinking) {
               content@phase <- "start"

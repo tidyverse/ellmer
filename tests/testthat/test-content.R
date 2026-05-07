@@ -67,6 +67,14 @@ test_that("ContentThinkingDelta formats as bare text", {
   expect_equal(end@phase, "end")
 })
 
+test_that("ContentThinkingDelta rejects invalid phase", {
+  expect_snapshot(error = TRUE, ContentThinkingDelta("x", phase = "middle"))
+  expect_snapshot(
+    error = TRUE,
+    ContentThinkingDelta("x", phase = c("start", "end"))
+  )
+})
+
 test_that("ContentToolRequest shows converted arguments", {
   my_tool <- tool(
     function(x, y, z) {},
