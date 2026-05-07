@@ -349,7 +349,7 @@ test_that("stream='text' wraps thinking in tags", {
   expect_match(text, "</thinking>\n\n.+")
 })
 
-test_that("stream='content' does not yield tag strings", {
+test_that("stream='content' yields tag boundary strings alongside ContentThinking", {
   chat <- chat_anthropic_test(
     params = params(budget_tokens = 2048, temperature = 1)
   )
@@ -360,7 +360,14 @@ test_that("stream='content' does not yield tag strings", {
 
   # ContentThinking objects are yielded
   expect_gt(length(thinking_chunks), 0)
-  # No tag boundary strings should be yielded
-  expect_false(any(grepl("^<thinking>", string_chunks)))
-  expect_false(any(grepl("</thinking>", string_chunks)))
+  # Tag boundary strings are also yielded
+  expect_true(any(grepl("^<thinking>", string_chunks)))
+  expect_true(any(grepl("</thinking>", string_chunks)))
+
+  # Verify ordering: opening tag, then ContentThinking objects, then closing tag
+  first_tag_idx <- which(vapply(chunks, \(x) identical(x, "<thinking>\n"), logical(1)))[1]
+  first_thinking_idx <- which(vapply(chunks, \(x) S7::S7_inherits(x, ContentThinking), logical(1)))[1]
+  close_tag_idx <- which(vapply(chunks, \(x) identical(x, "\n</thinking>\n\n"), logical(1)))[1]
+  expect_lt(first_tag_idx, first_thinking_idx)
+  expect_lt(first_thinking_idx, close_tag_idx)
 })
