@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+# ellmer 0.4.1
+
 * ellmer is now instrumented with OpenTelemetry, so that traces are emitted whenever the (suggested) `otel` package is installed and a tracer is active.
 
   Each call to `$chat()`, `$chat_async()`, `$stream()`, or `$stream_async()` produces a top-level `invoke_agent` span that wraps one or more child `chat <model>` spans (one per request to the provider) and `execute_tool <tool>` spans (one per tool invocation). Chat spans record the provider name, request model, response model, and response id, plus input and output token usage; tool spans record the tool name, description, call id, and any error raised during execution. HTTP spans from httr2 are automatically nested under the chat spans (#526).
