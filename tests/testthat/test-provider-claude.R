@@ -336,6 +336,41 @@ test_that("stream_merge_chunks() handles citations_delta", {
 
 # Thinking stream behavior -------------------------------------------------
 
+# Anthropic emits a single reasoning block before the response text, so we
+# expect exactly one start...body...end run with all thinking chunks
+# preceding all text chunks. Providers that interleave reasoning and output
+# (e.g. OpenAI Responses) would need a different expectation.
+expect_thinking_delta_phases <- function(chunks) {
+  thinking_chunks <- Filter(
+    \(x) S7::S7_inherits(x, ContentThinkingDelta),
+    chunks
+  )
+  text_chunks <- Filter(\(x) S7::S7_inherits(x, ContentText), chunks)
+
+  expect_gt(length(thinking_chunks), 0)
+  expect_gt(length(text_chunks), 0)
+
+  expect_equal(thinking_chunks[[1]]@phase, "start")
+  expect_equal(thinking_chunks[[length(thinking_chunks)]]@phase, "end")
+  expect_equal(thinking_chunks[[length(thinking_chunks)]]@thinking, "")
+  if (length(thinking_chunks) > 2) {
+    middle_phases <- vapply(
+      thinking_chunks[2:(length(thinking_chunks) - 1)],
+      \(x) x@phase,
+      character(1)
+    )
+    expect_all_true(middle_phases == "body")
+  }
+
+  is_thinking <- vapply(
+    chunks,
+    \(x) S7::S7_inherits(x, ContentThinkingDelta),
+    logical(1)
+  )
+  is_text <- vapply(chunks, \(x) S7::S7_inherits(x, ContentText), logical(1))
+  expect_lt(max(which(is_thinking)), which(is_text)[1])
+}
+
 test_that("stream='text' suppresses thinking", {
   chat <- chat_anthropic_test(
     params = params(budget_tokens = 2048, temperature = 1)
@@ -354,50 +389,25 @@ test_that("stream='content' yields ContentThinkingDelta with phases", {
   )
 
   chunks <- coro::collect(chat$stream("What is 2+2?", stream = "content"))
-  thinking_chunks <- Filter(
-    \(x) S7::S7_inherits(x, ContentThinkingDelta),
-    chunks
-  )
-  text_chunks <- Filter(\(x) S7::S7_inherits(x, ContentText), chunks)
-
-  expect_gt(length(thinking_chunks), 0)
-  expect_gt(length(text_chunks), 0)
-
-  # First thinking chunk has phase "start"
-  expect_equal(thinking_chunks[[1]]@phase, "start")
-  # Last thinking chunk is the "end" sentinel (empty text)
-  expect_equal(thinking_chunks[[length(thinking_chunks)]]@phase, "end")
-  expect_equal(thinking_chunks[[length(thinking_chunks)]]@thinking, "")
-  # Middle chunks (if any) have phase "body"
-  if (length(thinking_chunks) > 2) {
-    middle_phases <- vapply(
-      thinking_chunks[2:(length(thinking_chunks) - 1)],
-      \(x) x@phase,
-      character(1)
-    )
-    expect_all_true(middle_phases == "body")
-  }
-
-  # Thinking chunks come before text chunks
-  last_thinking_idx <- max(
-    which(
-      vapply(
-        chunks,
-        \(x) S7::S7_inherits(x, ContentThinkingDelta),
-        logical(1)
-      )
-    )
-  )
-  first_text_idx <- which(
-    vapply(
-      chunks,
-      \(x) S7::S7_inherits(x, ContentText),
-      logical(1)
-    )
-  )[1]
-  expect_lt(last_thinking_idx, first_text_idx)
+  expect_thinking_delta_phases(chunks)
 
   # Final turn stores ContentThinking (not deltas)
+  turn_contents <- chat$last_turn()@contents
+  thinking <- Filter(\(x) S7::S7_inherits(x, ContentThinking), turn_contents)
+  expect_length(thinking, 1)
+  expect_gt(nchar(thinking[[1]]@thinking), 0)
+})
+
+test_that("stream_async='content' yields ContentThinkingDelta with phases", {
+  chat <- chat_anthropic_test(
+    params = params(budget_tokens = 2048, temperature = 1)
+  )
+
+  chunks <- sync(coro::async_collect(
+    chat$stream_async("What is 2+2?", stream = "content")
+  ))
+  expect_thinking_delta_phases(chunks)
+
   turn_contents <- chat$last_turn()@contents
   thinking <- Filter(\(x) S7::S7_inherits(x, ContentThinking), turn_contents)
   expect_length(thinking, 1)
