@@ -53,7 +53,6 @@ contents_html <- new_generic("contents_html", "content")
 #' @export
 contents_markdown <- new_generic("contents_markdown", "content")
 
-
 #' Content types received from and sent to a chatbot
 #'
 #' @description
@@ -403,24 +402,18 @@ method(contents_markdown, ContentUploaded) <- function(content) {
 #' @rdname Content
 #' @param thinking The text of the thinking output.
 #' @param extra Additional data.
-#' @param .complete Whether the thinking block is complete.
 #' @export
 ContentThinking <- new_class(
   "ContentThinking",
   parent = Content,
   properties = list(
     thinking = prop_string(),
-    extra = class_list,
-    .complete = new_property(class_logical, default = TRUE)
+    extra = class_list
   )
 )
 
 method(format, ContentThinking) <- function(x, ...) {
-  if (x@.complete) {
-    paste0("<thinking>\n", x@thinking, "\n</thinking>\n")
-  } else {
-    x@thinking
-  }
+  paste0("<thinking>\n", x@thinking, "\n</thinking>\n")
 }
 
 method(contents_html, ContentThinking) <- function(content) {
@@ -434,6 +427,31 @@ method(contents_html, ContentThinking) <- function(content) {
 
 method(contents_markdown, ContentThinking) <- function(content) {
   format(content)
+}
+
+#' @rdname Content
+#' @param phase The phase of the thinking delta: `"start"`, `"body"`, or
+#'   `"end"`.
+#' @export
+ContentThinkingDelta <- new_class(
+  "ContentThinkingDelta",
+  parent = Content,
+  properties = list(
+    thinking = prop_string(),
+    phase = new_property(class_character, default = "body")
+  )
+)
+
+method(format, ContentThinkingDelta) <- function(x, ...) {
+  x@thinking
+}
+
+method(contents_html, ContentThinkingDelta) <- function(content) {
+  content@thinking
+}
+
+method(contents_markdown, ContentThinkingDelta) <- function(content) {
+  content@thinking
 }
 
 # Helpers ----------------------------------------------------------------------

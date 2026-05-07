@@ -9,6 +9,7 @@
 \alias{ContentToolRequest}
 \alias{ContentToolResult}
 \alias{ContentThinking}
+\alias{ContentThinkingDelta}
 \alias{ContentPDF}
 \title{Content types received from and sent to a chatbot}
 \usage{
@@ -32,7 +33,9 @@ ContentToolRequest(
 
 ContentToolResult(value = NULL, error = NULL, extra = list(), request = NULL)
 
-ContentThinking(thinking = stop("Required"), extra = list(), .complete = TRUE)
+ContentThinking(thinking = stop("Required"), extra = list())
+
+ContentThinkingDelta(thinking = stop("Required"), phase = "body")
 
 ContentPDF(
   type = stop("Required"),
@@ -74,7 +77,8 @@ automatically added by \pkg{ellmer} when evaluating the tool call.}
 
 \item{thinking}{The text of the thinking output.}
 
-\item{.complete}{Whether the thinking block is complete.}
+\item{phase}{The phase of the thinking delta: \code{"start"}, \code{"body"}, or
+\code{"end"}.}
 
 \item{filename}{File name, used to identify the PDF.}
 }

@@ -163,7 +163,7 @@ test_that("stream_content extracts reasoning_content", {
 
   event <- list(choices = list(list(delta = list(reasoning_content = "think"))))
   result <- stream_content(stub, event)
-  expect_s3_class(result, "ellmer::ContentThinking")
+  expect_s3_class(result, "ellmer::ContentThinkingDelta")
   expect_equal(result@thinking, "think")
 
   event <- list(choices = list(list(delta = list(content = "hello"))))

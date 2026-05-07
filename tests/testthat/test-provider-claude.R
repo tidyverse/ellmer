@@ -334,55 +334,72 @@ test_that("stream_merge_chunks() handles citations_delta", {
   expect_equal(result$content[[1]]$citations[[1]]$url, "https://example.com")
 })
 
-# Thinking tag boundaries -------------------------------------------------
+# Thinking stream behavior -------------------------------------------------
 
-test_that("stream='text' wraps thinking in tags", {
+test_that("stream='text' suppresses thinking", {
   chat <- chat_anthropic_test(
     params = params(budget_tokens = 2048, temperature = 1)
   )
   chunks <- coro::collect(chat$stream("What is 2+2?", stream = "text"))
   text <- paste0(chunks, collapse = "")
 
-  expect_match(text, "^<thinking>\n")
-  expect_match(text, "\n</thinking>\n\n")
-  # Response text appears after the closing tag
-  expect_match(text, "</thinking>\n\n.+")
+  expect_no_match(text, "<thinking>")
+  expect_no_match(text, "</thinking>")
+  expect_match(text, "4")
 })
 
-test_that("stream='content' yields ContentText tag boundaries alongside ContentThinking", {
+test_that("stream='content' yields ContentThinkingDelta with phases", {
   chat <- chat_anthropic_test(
     params = params(budget_tokens = 2048, temperature = 1)
   )
 
   chunks <- coro::collect(chat$stream("What is 2+2?", stream = "content"))
-  thinking_chunks <- Filter(\(x) S7::S7_inherits(x, ContentThinking), chunks)
+  thinking_chunks <- Filter(
+    \(x) S7::S7_inherits(x, ContentThinkingDelta),
+    chunks
+  )
   text_chunks <- Filter(\(x) S7::S7_inherits(x, ContentText), chunks)
-  text_values <- vapply(text_chunks, \(x) x@text, character(1))
 
-  # All chunks are Content objects (no raw strings)
-  expect_true(all(vapply(chunks, \(x) S7::S7_inherits(x, Content), logical(1))))
-  # ContentThinking objects are yielded
   expect_gt(length(thinking_chunks), 0)
-  # Tag boundary ContentText objects are yielded
-  expect_true(any(grepl("^<thinking>", text_values)))
-  expect_true(any(grepl("</thinking>", text_values)))
+  expect_gt(length(text_chunks), 0)
 
-  # Verify ordering: opening tag, then ContentThinking objects, then closing tag
-  first_tag_idx <- which(vapply(
-    chunks,
-    \(x) S7::S7_inherits(x, ContentText) && identical(x@text, thinking_open_tag),
-    logical(1)
-  ))[1]
-  first_thinking_idx <- which(vapply(
-    chunks,
-    \(x) S7::S7_inherits(x, ContentThinking),
-    logical(1)
-  ))[1]
-  close_tag_idx <- which(vapply(
-    chunks,
-    \(x) S7::S7_inherits(x, ContentText) && identical(x@text, thinking_close_tag),
-    logical(1)
-  ))[1]
-  expect_lt(first_tag_idx, first_thinking_idx)
-  expect_lt(first_thinking_idx, close_tag_idx)
+  # First thinking chunk has phase "start"
+  expect_equal(thinking_chunks[[1]]@phase, "start")
+  # Last thinking chunk is the "end" sentinel (empty text)
+  expect_equal(thinking_chunks[[length(thinking_chunks)]]@phase, "end")
+  expect_equal(thinking_chunks[[length(thinking_chunks)]]@thinking, "")
+  # Middle chunks (if any) have phase "body"
+  if (length(thinking_chunks) > 2) {
+    middle_phases <- vapply(
+      thinking_chunks[2:(length(thinking_chunks) - 1)],
+      \(x) x@phase,
+      character(1)
+    )
+    expect_all_true(middle_phases == "body")
+  }
+
+  # Thinking chunks come before text chunks
+  last_thinking_idx <- max(
+    which(
+      vapply(
+        chunks,
+        \(x) S7::S7_inherits(x, ContentThinkingDelta),
+        logical(1)
+      )
+    )
+  )
+  first_text_idx <- which(
+    vapply(
+      chunks,
+      \(x) S7::S7_inherits(x, ContentText),
+      logical(1)
+    )
+  )[1]
+  expect_lt(last_thinking_idx, first_text_idx)
+
+  # Final turn stores ContentThinking (not deltas)
+  turn_contents <- chat$last_turn()@contents
+  thinking <- Filter(\(x) S7::S7_inherits(x, ContentThinking), turn_contents)
+  expect_length(thinking, 1)
+  expect_gt(nchar(thinking[[1]]@thinking), 0)
 })

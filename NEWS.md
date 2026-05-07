@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `$stream()` and `$stream_async()` now handle thinking content differently by mode. With `stream = "text"`, thinking is suppressed entirely. With `stream = "content"`, thinking fragments are yielded as `ContentThinkingDelta` objects with a `phase` property (`"start"`, `"body"`, or `"end"`) that communicates block boundaries to downstream consumers without injecting synthetic strings into the stream (#974).
+
 # ellmer 0.4.1
 
 * ellmer is now instrumented with OpenTelemetry, so that traces are emitted whenever the (suggested) `otel` package is installed and a tracer is active.
@@ -8,7 +10,6 @@
 
   Chat spans can additionally record conversation content as `gen_ai.input.messages`, `gen_ai.output.messages`, and `gen_ai.system_instructions`. This is opt-in via the `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` environment variable (set to `"true"`), since these payloads may contain user data.
 * ellmer now distinguishes text content from thinking content while streaming, allowing downstream packages like shinychat to provide specific UI for thinking content (@simonpcouch, #909).
-* `$stream()` and `$stream_async()` now emit `<thinking>` / `</thinking>` tag boundaries around thinking content in all stream modes. With `stream = "text"`, concatenating all chunks produces well-formed output with thinking delimited by a single tag pair. With `stream = "content"`, tag boundaries are yielded as `ContentText` objects alongside typed `ContentThinking` objects, keeping the stream homogeneously typed while allowing downstream consumers to detect thinking boundaries without type inspection (#974).
 * `claude_tool_web_search()`, `openai_tool_web_search()`, and other built-in tools now include `description` and `annotations` properties, making their metadata consistent with user-defined tools created by `tool()` (#942).
 * `chat_anthropic()` no longer fails when streaming web search results: `citations_delta` events are now handled correctly and `server_tool_use` input is parsed from JSON during streaming (#941).
 * `chat_anthropic()` no longer applies a hidden 1.25x pricing weight to cache-creation tokens; the input token counts reported by `token_usage()` and `parallel_chat()` are now raw counts. Cost calculations are unchanged.

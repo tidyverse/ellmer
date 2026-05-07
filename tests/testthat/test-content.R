@@ -53,6 +53,20 @@ test_that("thinking has useful representations", {
   expect_snapshot(cat(contents_html(ct)))
 })
 
+test_that("ContentThinkingDelta formats as bare text", {
+  delta <- ContentThinkingDelta("some reasoning")
+  expect_equal(format(delta), "some reasoning")
+  expect_equal(delta@phase, "body")
+
+  start <- ContentThinkingDelta("first", phase = "start")
+  expect_equal(format(start), "first")
+  expect_equal(start@phase, "start")
+
+  end <- ContentThinkingDelta("", phase = "end")
+  expect_equal(format(end), "")
+  expect_equal(end@phase, "end")
+})
+
 test_that("ContentToolRequest shows converted arguments", {
   my_tool <- tool(
     function(x, y, z) {},

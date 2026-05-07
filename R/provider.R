@@ -164,6 +164,7 @@ content_text <- function(content) {
   switch(
     class(content)[1],
     "ellmer::ContentThinking" = content@thinking,
+    "ellmer::ContentThinkingDelta" = content@thinking,
     "ellmer::ContentText" = content@text,
     format(content)
   )

@@ -1,9 +1,6 @@
 #' @include utils-coro.R
 NULL
 
-thinking_open_tag <- "<thinking>\n"
-thinking_close_tag <- "\n</thinking>\n\n"
-
 #' The Chat object
 #'
 #' @description
@@ -669,20 +666,30 @@ Chat <- R6::R6Class(
         for (chunk in response) {
           content <- stream_content(private$provider, chunk)
           if (!is.null(content)) {
-            is_thinking <- inherits(content, "ellmer::ContentThinking")
+            is_thinking <- inherits(content, "ellmer::ContentThinkingDelta")
+
             if (is_thinking && !inside_thinking) {
-              emit(thinking_open_tag)
-              yield(if (yield_as_content) ContentText(thinking_open_tag) else thinking_open_tag)
+              content@phase <- "start"
+              emit("<thinking>\n")
               inside_thinking <- TRUE
             } else if (!is_thinking && inside_thinking) {
-              emit(thinking_close_tag)
-              yield(if (yield_as_content) ContentText(thinking_close_tag) else thinking_close_tag)
+              emit("\n</thinking>\n\n")
+              if (yield_as_content) {
+                yield(ContentThinkingDelta("", phase = "end"))
+              }
               inside_thinking <- FALSE
             }
 
-            text <- content_text(content)
-            emit(text)
-            yield(if (yield_as_content) content else text)
+            if (is_thinking) {
+              emit(content@thinking)
+              if (yield_as_content) {
+                yield(content)
+              }
+            } else {
+              text <- content_text(content)
+              emit(text)
+              yield(if (yield_as_content) content else text)
+            }
             acc$update_turn(content)
             any_text <- TRUE
           }
@@ -691,9 +698,10 @@ Chat <- R6::R6Class(
         }
 
         if (inside_thinking) {
-          emit(thinking_close_tag)
-          yield(if (yield_as_content) ContentText(thinking_close_tag) else thinking_close_tag)
-          inside_thinking <- FALSE
+          emit("\n</thinking>\n\n")
+          if (yield_as_content) {
+            yield(ContentThinkingDelta("", phase = "end"))
+          }
         }
 
         record_chat_otel_span_status(chat_span, private$provider, result)
@@ -784,20 +792,30 @@ Chat <- R6::R6Class(
         for (chunk in await_each(response)) {
           content <- stream_content(private$provider, chunk)
           if (!is.null(content)) {
-            is_thinking <- inherits(content, "ellmer::ContentThinking")
+            is_thinking <- inherits(content, "ellmer::ContentThinkingDelta")
+
             if (is_thinking && !inside_thinking) {
-              emit(thinking_open_tag)
-              yield(if (yield_as_content) ContentText(thinking_open_tag) else thinking_open_tag)
+              content@phase <- "start"
+              emit("<thinking>\n")
               inside_thinking <- TRUE
             } else if (!is_thinking && inside_thinking) {
-              emit(thinking_close_tag)
-              yield(if (yield_as_content) ContentText(thinking_close_tag) else thinking_close_tag)
+              emit("\n</thinking>\n\n")
+              if (yield_as_content) {
+                yield(ContentThinkingDelta("", phase = "end"))
+              }
               inside_thinking <- FALSE
             }
 
-            text <- content_text(content)
-            emit(text)
-            yield(if (yield_as_content) content else text)
+            if (is_thinking) {
+              emit(content@thinking)
+              if (yield_as_content) {
+                yield(content)
+              }
+            } else {
+              text <- content_text(content)
+              emit(text)
+              yield(if (yield_as_content) content else text)
+            }
             acc$update_turn(content)
             any_text <- TRUE
           }
@@ -806,9 +824,10 @@ Chat <- R6::R6Class(
         }
 
         if (inside_thinking) {
-          emit(thinking_close_tag)
-          yield(if (yield_as_content) ContentText(thinking_close_tag) else thinking_close_tag)
-          inside_thinking <- FALSE
+          emit("\n</thinking>\n\n")
+          if (yield_as_content) {
+            yield(ContentThinkingDelta("", phase = "end"))
+          }
         }
 
         record_chat_otel_span_status(chat_span, private$provider, result)

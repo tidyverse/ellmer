@@ -249,7 +249,7 @@ method(stream_content, ProviderOpenAI) <- function(provider, event) {
     ContentText(event$delta)
   } else if (event$type == "response.reasoning_summary_text.delta") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/reasoning_summary_text/delta
-    ContentThinking(event$delta, .complete = FALSE)
+    ContentThinkingDelta(event$delta)
   } else if (event$type == "response.reasoning_summary_text.done") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/reasoning_summary_text/done
     NULL
