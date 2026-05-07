@@ -1,6 +1,9 @@
 #' @include utils-coro.R
 NULL
 
+thinking_open_tag <- "<thinking>\n"
+thinking_close_tag <- "\n</thinking>\n\n"
+
 #' The Chat object
 #'
 #' @description
@@ -668,12 +671,12 @@ Chat <- R6::R6Class(
           if (!is.null(content)) {
             is_thinking <- inherits(content, "ellmer::ContentThinking")
             if (is_thinking && !inside_thinking) {
-              emit("<thinking>\n")
-              yield("<thinking>\n")
+              emit(thinking_open_tag)
+              yield(if (yield_as_content) ContentText(thinking_open_tag) else thinking_open_tag)
               inside_thinking <- TRUE
             } else if (!is_thinking && inside_thinking) {
-              emit("\n</thinking>\n\n")
-              yield("\n</thinking>\n\n")
+              emit(thinking_close_tag)
+              yield(if (yield_as_content) ContentText(thinking_close_tag) else thinking_close_tag)
               inside_thinking <- FALSE
             }
 
@@ -688,8 +691,8 @@ Chat <- R6::R6Class(
         }
 
         if (inside_thinking) {
-          emit("\n</thinking>\n\n")
-          yield("\n</thinking>\n\n")
+          emit(thinking_close_tag)
+          yield(if (yield_as_content) ContentText(thinking_close_tag) else thinking_close_tag)
           inside_thinking <- FALSE
         }
 
@@ -783,12 +786,12 @@ Chat <- R6::R6Class(
           if (!is.null(content)) {
             is_thinking <- inherits(content, "ellmer::ContentThinking")
             if (is_thinking && !inside_thinking) {
-              emit("<thinking>\n")
-              yield("<thinking>\n")
+              emit(thinking_open_tag)
+              yield(if (yield_as_content) ContentText(thinking_open_tag) else thinking_open_tag)
               inside_thinking <- TRUE
             } else if (!is_thinking && inside_thinking) {
-              emit("\n</thinking>\n\n")
-              yield("\n</thinking>\n\n")
+              emit(thinking_close_tag)
+              yield(if (yield_as_content) ContentText(thinking_close_tag) else thinking_close_tag)
               inside_thinking <- FALSE
             }
 
@@ -803,8 +806,8 @@ Chat <- R6::R6Class(
         }
 
         if (inside_thinking) {
-          emit("\n</thinking>\n\n")
-          yield("\n</thinking>\n\n")
+          emit(thinking_close_tag)
+          yield(if (yield_as_content) ContentText(thinking_close_tag) else thinking_close_tag)
           inside_thinking <- FALSE
         }
 

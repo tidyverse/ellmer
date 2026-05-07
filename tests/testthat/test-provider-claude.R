@@ -349,25 +349,28 @@ test_that("stream='text' wraps thinking in tags", {
   expect_match(text, "</thinking>\n\n.+")
 })
 
-test_that("stream='content' yields tag boundary strings alongside ContentThinking", {
+test_that("stream='content' yields ContentText tag boundaries alongside ContentThinking", {
   chat <- chat_anthropic_test(
     params = params(budget_tokens = 2048, temperature = 1)
   )
 
   chunks <- coro::collect(chat$stream("What is 2+2?", stream = "content"))
-  string_chunks <- Filter(is.character, chunks)
   thinking_chunks <- Filter(\(x) S7::S7_inherits(x, ContentThinking), chunks)
+  text_chunks <- Filter(\(x) S7::S7_inherits(x, ContentText), chunks)
+  text_values <- vapply(text_chunks, \(x) x@text, character(1))
 
+  # All chunks are Content objects (no raw strings)
+  expect_true(all(vapply(chunks, \(x) S7::S7_inherits(x, Content), logical(1))))
   # ContentThinking objects are yielded
   expect_gt(length(thinking_chunks), 0)
-  # Tag boundary strings are also yielded
-  expect_true(any(grepl("^<thinking>", string_chunks)))
-  expect_true(any(grepl("</thinking>", string_chunks)))
+  # Tag boundary ContentText objects are yielded
+  expect_true(any(grepl("^<thinking>", text_values)))
+  expect_true(any(grepl("</thinking>", text_values)))
 
   # Verify ordering: opening tag, then ContentThinking objects, then closing tag
   first_tag_idx <- which(vapply(
     chunks,
-    \(x) identical(x, "<thinking>\n"),
+    \(x) S7::S7_inherits(x, ContentText) && identical(x@text, thinking_open_tag),
     logical(1)
   ))[1]
   first_thinking_idx <- which(vapply(
@@ -377,7 +380,7 @@ test_that("stream='content' yields tag boundary strings alongside ContentThinkin
   ))[1]
   close_tag_idx <- which(vapply(
     chunks,
-    \(x) identical(x, "\n</thinking>\n\n"),
+    \(x) S7::S7_inherits(x, ContentText) && identical(x@text, thinking_close_tag),
     logical(1)
   ))[1]
   expect_lt(first_tag_idx, first_thinking_idx)
