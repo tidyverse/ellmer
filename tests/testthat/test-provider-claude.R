@@ -365,9 +365,21 @@ test_that("stream='content' yields tag boundary strings alongside ContentThinkin
   expect_true(any(grepl("</thinking>", string_chunks)))
 
   # Verify ordering: opening tag, then ContentThinking objects, then closing tag
-  first_tag_idx <- which(vapply(chunks, \(x) identical(x, "<thinking>\n"), logical(1)))[1]
-  first_thinking_idx <- which(vapply(chunks, \(x) S7::S7_inherits(x, ContentThinking), logical(1)))[1]
-  close_tag_idx <- which(vapply(chunks, \(x) identical(x, "\n</thinking>\n\n"), logical(1)))[1]
+  first_tag_idx <- which(vapply(
+    chunks,
+    \(x) identical(x, "<thinking>\n"),
+    logical(1)
+  ))[1]
+  first_thinking_idx <- which(vapply(
+    chunks,
+    \(x) S7::S7_inherits(x, ContentThinking),
+    logical(1)
+  ))[1]
+  close_tag_idx <- which(vapply(
+    chunks,
+    \(x) identical(x, "\n</thinking>\n\n"),
+    logical(1)
+  ))[1]
   expect_lt(first_tag_idx, first_thinking_idx)
   expect_lt(first_thinking_idx, close_tag_idx)
 })
