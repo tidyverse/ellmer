@@ -2,6 +2,10 @@
 
 ## ellmer (development version)
 
+## ellmer 0.4.1
+
+CRAN release: 2026-05-07
+
 - ellmer is now instrumented with OpenTelemetry, so that traces are
   emitted whenever the (suggested) `otel` package is installed and a
   tracer is active.
