@@ -422,12 +422,14 @@ test_that("partial turn from interrupted thinking stream can be replayed", {
   # Break out as soon as the first thinking chunk arrives; the partial turn
   # is left in chat$.turns and must serialize cleanly on follow-up.
   saw_thinking <- FALSE
-  coro::loop(for (chunk in chat$stream("What is 2+2?", stream = "content")) {
-    if (S7::S7_inherits(chunk, ContentThinkingDelta)) {
-      saw_thinking <- TRUE
-      break
+  coro::loop(
+    for (chunk in chat$stream("What is 2+2?", stream = "content")) {
+      if (S7::S7_inherits(chunk, ContentThinkingDelta)) {
+        saw_thinking <- TRUE
+        break
+      }
     }
-  })
+  )
   expect_true(saw_thinking)
 
   partial <- chat$last_turn()
