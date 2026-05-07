@@ -696,7 +696,13 @@ Chat <- R6::R6Class(
               emit(text)
               yield(if (yield_as_content) content else text)
             }
-            acc$update_turn(content)
+            # Skip thinking deltas: the signature lives in the merged result,
+            # not the deltas, so unsigned thinking in a partial turn would
+            # fail to replay anyway. value_turn() will rebuild thinking with
+            # its signature when complete_turn() replaces the partial.
+            if (!is_thinking) {
+              acc$update_turn(content)
+            }
             any_text <- TRUE
           }
 
@@ -822,7 +828,13 @@ Chat <- R6::R6Class(
               emit(text)
               yield(if (yield_as_content) content else text)
             }
-            acc$update_turn(content)
+            # Skip thinking deltas: the signature lives in the merged result,
+            # not the deltas, so unsigned thinking in a partial turn would
+            # fail to replay anyway. value_turn() will rebuild thinking with
+            # its signature when complete_turn() replaces the partial.
+            if (!is_thinking) {
+              acc$update_turn(content)
+            }
             any_text <- TRUE
           }
 

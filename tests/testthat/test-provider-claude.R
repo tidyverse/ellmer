@@ -413,3 +413,31 @@ test_that("stream_async='content' yields ContentThinkingDelta with phases", {
   expect_length(thinking, 1)
   expect_gt(nchar(thinking[[1]]@thinking), 0)
 })
+
+test_that("partial turn from interrupted thinking stream can be replayed", {
+  chat <- chat_anthropic_test(
+    params = params(budget_tokens = 2048, temperature = 1)
+  )
+
+  # Break out as soon as the first thinking chunk arrives; the partial turn
+  # is left in chat$.turns and must serialize cleanly on follow-up.
+  saw_thinking <- FALSE
+  coro::loop(for (chunk in chat$stream("What is 2+2?", stream = "content")) {
+    if (S7::S7_inherits(chunk, ContentThinkingDelta)) {
+      saw_thinking <- TRUE
+      break
+    }
+  })
+  expect_true(saw_thinking)
+
+  partial <- chat$last_turn()
+  delta_count <- sum(vapply(
+    partial@contents,
+    \(x) S7::S7_inherits(x, ContentThinkingDelta),
+    logical(1)
+  ))
+  expect_equal(delta_count, 0)
+
+  # Follow-up call must not error on as_json dispatch over the partial turn.
+  expect_no_error(chat$chat("What about 3+3?", echo = "none"))
+})
