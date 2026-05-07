@@ -90,6 +90,7 @@ Various cloud providers with OpenAI-compatible endpoints
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  api_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  preserve_thinking <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  echo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"output"</span>, <span class="st">"all"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -138,6 +139,14 @@ with <code><a href="https://rdrr.io/r/utils/modifyList.html" class="external-lin
 <dt id="arg-api-headers">api_headers<a class="anchor" aria-label="anchor" href="#arg-api-headers"></a></dt>
 <dd><p>Named character vector of arbitrary extra headers appended
 to every chat API call.</p></dd>
+
+
+<dt id="arg-preserve-thinking">preserve_thinking<a class="anchor" aria-label="anchor" href="#arg-preserve-thinking"></a></dt>
+<dd><p>If <code>TRUE</code>, reasoning content returned by the model
+is included when sending conversation history back to the API. If <code>FALSE</code>
+(the default), reasoning content is still captured in the turn but dropped
+from subsequent requests. Set to <code>TRUE</code> if your provider requires or
+benefits from seeing prior reasoning in multi-turn conversations.</p></dd>
 
 
 <dt id="arg-echo">echo<a class="anchor" aria-label="anchor" href="#arg-echo"></a></dt>

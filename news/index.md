@@ -2,6 +2,8 @@
 
 ## ellmer 0.4.1
 
+CRAN release: 2026-05-07
+
 - ellmer is now instrumented with OpenTelemetry, so that traces are
   emitted whenever the (suggested) `otel` package is installed and a
   tracer is active.
@@ -63,6 +65,15 @@
   Amazon Nova) and disables it otherwise
   ([\#954](https://github.com/tidyverse/ellmer/issues/954)).
 
+- [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md)
+  now extracts `reasoning_content` from model responses (both streaming
+  and non-streaming) as `ContentThinking` objects. A new
+  `preserve_thinking` parameter controls whether reasoning content is
+  sent back to the API in multi-turn conversations; it defaults to
+  `FALSE` (matching DeepSeek’s requirement) but is set to `TRUE` for
+  [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md)
+  ([\#972](https://github.com/tidyverse/ellmer/issues/972)).
+
 - [`chat_databricks()`](https://ellmer.tidyverse.org/reference/chat_databricks.md)
   (and other
   [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md)
@@ -108,6 +119,13 @@
   now uses the default prices if the service tier is missing
   ([@trangdata](https://github.com/trangdata),
   [\#903](https://github.com/tidyverse/ellmer/issues/903)).
+
+- [`chat_snowflake()`](https://ellmer.tidyverse.org/reference/chat_snowflake.md)
+  now correctly handles tool calling. Previously, when Snowflake’s
+  streaming API sent a tool-use chunk as the very first response (with
+  no preceding text), the chunk merging logic produced malformed
+  content, causing “argument is of length zero” errors
+  ([\#938](https://github.com/tidyverse/ellmer/issues/938)).
 
 - `default_google_credentials()` no longer skips application default
   credentials (e.g. `GOOGLE_APPLICATION_CREDENTIALS`) in interactive
