@@ -201,17 +201,29 @@ method(chat_body, ProviderAnthropic) <- function(
   }))
 
   if (!is.null(type)) {
-    tool_def <- ToolDef(
-      function(...) {},
-      name = "_structured_tool_call",
-      description = "Extract structured data",
-      arguments = type_object(data = type)
-    )
-    tools[[tool_def@name]] <- tool_def
-    tool_choice <- list(type = "tool", name = tool_def@name)
-    stream <- FALSE
+    if (has_claude_structured_output(provider@model)) {
+      output_config <- list(
+        format = list(
+          type = "json_schema",
+          schema = as_json(provider, type)
+        )
+      )
+      tool_choice <- NULL
+    } else {
+      tool_def <- ToolDef(
+        function(...) {},
+        name = "_structured_tool_call",
+        description = "Extract structured data",
+        arguments = type_object(data = type)
+      )
+      tools[[tool_def@name]] <- tool_def
+      tool_choice <- list(type = "tool", name = tool_def@name)
+      stream <- FALSE
+      output_config <- NULL
+    }
   } else {
     tool_choice <- NULL
+    output_config <- NULL
   }
   tools <- as_json(provider, unname(tools))
 
@@ -234,6 +246,7 @@ method(chat_body, ProviderAnthropic) <- function(
     tools = tools,
     tool_choice = tool_choice,
     thinking = thinking,
+    output_config = output_config,
     !!!params
   ))
 }
@@ -358,7 +371,11 @@ method(value_turn, ProviderAnthropic) <- function(
 ) {
   contents <- lapply(result$content, function(content) {
     if (content$type == "text") {
-      ContentText(content$text)
+      if (has_type && has_claude_structured_output(provider@model)) {
+        ContentJson(string = content$text)
+      } else {
+        ContentText(content$text)
+      }
     } else if (content$type == "tool_use") {
       if (has_type) {
         ContentJson(data = content$input$data)
@@ -735,4 +752,11 @@ cache_control <- function(provider) {
       ttl = provider@cache
     )
   }
+}
+
+has_claude_structured_output <- function(model) {
+  # https://platform.claude.com/docs/en/build-with-claude/structured-outputs
+  grepl("^claude-opus-4-[567]", model) ||
+    grepl("^claude-sonnet-4-[56]", model) ||
+    grepl("^claude-haiku-4-5", model)
 }
