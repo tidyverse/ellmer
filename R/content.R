@@ -53,7 +53,6 @@ contents_html <- new_generic("contents_html", "content")
 #' @export
 contents_markdown <- new_generic("contents_markdown", "content")
 
-
 #' Content types received from and sent to a chatbot
 #'
 #' @description
@@ -428,6 +427,49 @@ method(contents_html, ContentThinking) <- function(content) {
 
 method(contents_markdown, ContentThinking) <- function(content) {
   format(content)
+}
+
+#' @rdname Content
+#' @param phase The phase of the thinking delta: `"start"`, `"body"`, or
+#'   `"end"`.
+#' @export
+ContentThinkingDelta <- new_class(
+  "ContentThinkingDelta",
+  parent = Content,
+  properties = list(
+    thinking = prop_string(),
+    phase = new_property(
+      class_character,
+      default = "body",
+      validator = function(value) {
+        if (length(value) != 1 || is.na(value)) {
+          paste0(
+            "must be one of \"start\", \"body\", or \"end\", not ",
+            obj_type_friendly(value),
+            "."
+          )
+        } else if (!value %in% c("start", "body", "end")) {
+          paste0(
+            "must be one of \"start\", \"body\", or \"end\", not \"",
+            value,
+            "\"."
+          )
+        }
+      }
+    )
+  )
+)
+
+method(format, ContentThinkingDelta) <- function(x, ...) {
+  x@thinking
+}
+
+method(contents_html, ContentThinkingDelta) <- function(content) {
+  content@thinking
+}
+
+method(contents_markdown, ContentThinkingDelta) <- function(content) {
+  content@thinking
 }
 
 # Helpers ----------------------------------------------------------------------

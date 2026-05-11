@@ -327,8 +327,11 @@ Chat <- R6::R6Class(
     #'   waiting for more content from the chatbot.
     #' @param ... The input to send to the chatbot. Can be strings or images.
     #' @param stream Whether the stream should yield only `"text"` or ellmer's
-    #'   rich content types. When `stream = "content"`, `stream()` yields
-    #'   [Content] objects.
+    #'   rich content types. When `stream = "text"`, thinking is suppressed
+    #'   and only response text is yielded. When `stream = "content"`,
+    #'   `stream()` yields [Content] objects, including
+    #'   [`ContentThinkingDelta`][Content] for streamed thinking fragments
+    #'   (with a `phase` property indicating block boundaries).
     #' @param controller An optional [stream_controller()] used to cancel the
     #'   stream from outside the iteration loop.
     stream = function(..., stream = c("text", "content"), controller = NULL) {
@@ -357,8 +360,11 @@ Chat <- R6::R6Class(
     #'   an interactive user interface. Concurrent mode is the default and is
     #'   best suited for automated scripts or non-interactive applications.
     #' @param stream Whether the stream should yield only `"text"` or ellmer's
-    #'   rich content types. When `stream = "content"`, `stream()` yields
-    #'   [Content] objects.
+    #'   rich content types. When `stream = "text"`, thinking is suppressed
+    #'   and only response text is yielded. When `stream = "content"`,
+    #'   `stream_async()` yields [Content] objects, including
+    #'   [`ContentThinkingDelta`][Content] for streamed thinking fragments
+    #'   (with a `phase` property indicating block boundaries).
     #' @param controller An optional [stream_controller()] used to cancel the
     #'   stream from outside the iteration loop.
     stream_async = function(
@@ -661,17 +667,53 @@ Chat <- R6::R6Class(
         on.exit(acc$finalize_turn(), add = TRUE)
 
         result <- NULL
+        inside_thinking <- FALSE
+
         for (chunk in response) {
           content <- stream_content(private$provider, chunk)
           if (!is.null(content)) {
-            text <- content_text(content)
-            emit(text)
-            yield(if (yield_as_content) content else text)
-            acc$update_turn(content)
+            is_thinking <- S7_inherits(content, ContentThinkingDelta)
+
+            if (is_thinking && !inside_thinking) {
+              content@phase <- "start"
+              emit("<thinking>\n")
+              inside_thinking <- TRUE
+            } else if (!is_thinking && inside_thinking) {
+              emit("\n</thinking>\n\n")
+              if (yield_as_content) {
+                yield(ContentThinkingDelta("", phase = "end"))
+              }
+              inside_thinking <- FALSE
+            }
+
+            if (is_thinking) {
+              emit(content@thinking)
+              if (yield_as_content) {
+                yield(content)
+              }
+            } else {
+              text <- content_text(content)
+              emit(text)
+              yield(if (yield_as_content) content else text)
+            }
+            # Skip thinking deltas: the signature lives in the merged result,
+            # not the deltas, so unsigned thinking in a partial turn would
+            # fail to replay anyway. value_turn() will rebuild thinking with
+            # its signature when complete_turn() replaces the partial.
+            if (!is_thinking) {
+              acc$update_turn(content)
+            }
             any_text <- TRUE
           }
 
           result <- stream_merge_chunks(private$provider, result, chunk)
+        }
+
+        if (inside_thinking) {
+          emit("\n</thinking>\n\n")
+          if (yield_as_content) {
+            yield(ContentThinkingDelta("", phase = "end"))
+          }
         }
 
         record_chat_otel_span_status(chat_span, private$provider, result)
@@ -757,17 +799,53 @@ Chat <- R6::R6Class(
         on.exit(acc$finalize_turn(), add = TRUE)
 
         result <- NULL
+        inside_thinking <- FALSE
+
         for (chunk in await_each(response)) {
           content <- stream_content(private$provider, chunk)
           if (!is.null(content)) {
-            text <- content_text(content)
-            emit(text)
-            yield(if (yield_as_content) content else text)
-            acc$update_turn(content)
+            is_thinking <- S7_inherits(content, ContentThinkingDelta)
+
+            if (is_thinking && !inside_thinking) {
+              content@phase <- "start"
+              emit("<thinking>\n")
+              inside_thinking <- TRUE
+            } else if (!is_thinking && inside_thinking) {
+              emit("\n</thinking>\n\n")
+              if (yield_as_content) {
+                yield(ContentThinkingDelta("", phase = "end"))
+              }
+              inside_thinking <- FALSE
+            }
+
+            if (is_thinking) {
+              emit(content@thinking)
+              if (yield_as_content) {
+                yield(content)
+              }
+            } else {
+              text <- content_text(content)
+              emit(text)
+              yield(if (yield_as_content) content else text)
+            }
+            # Skip thinking deltas: the signature lives in the merged result,
+            # not the deltas, so unsigned thinking in a partial turn would
+            # fail to replay anyway. value_turn() will rebuild thinking with
+            # its signature when complete_turn() replaces the partial.
+            if (!is_thinking) {
+              acc$update_turn(content)
+            }
             any_text <- TRUE
           }
 
           result <- stream_merge_chunks(private$provider, result, chunk)
+        }
+
+        if (inside_thinking) {
+          emit("\n</thinking>\n\n")
+          if (yield_as_content) {
+            yield(ContentThinkingDelta("", phase = "end"))
+          }
         }
 
         record_chat_otel_span_status(chat_span, private$provider, result)

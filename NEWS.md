@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `$stream()` and `$stream_async()` now handle thinking content differently by mode. With `stream = "text"`, thinking is suppressed entirely. With `stream = "content"`, thinking fragments are yielded as `ContentThinkingDelta` objects with a `phase` property (`"start"`, `"body"`, or `"end"`) that communicates block boundaries to downstream consumers without injecting synthetic strings into the stream (#974).
+
 # ellmer 0.4.1
 
 * ellmer is now instrumented with OpenTelemetry, so that traces are emitted whenever the (suggested) `otel` package is installed and a tracer is active.
