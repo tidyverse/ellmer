@@ -230,6 +230,7 @@ test_that("as_json preserves reasoning_content when preserve_thinking = TRUE", {
 })
 
 test_that("as_json specialised for OpenAI", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   stub <- ProviderOpenAI(name = "", base_url = "", model = "")
 
   expect_snapshot(

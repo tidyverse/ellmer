@@ -191,16 +191,22 @@ type_array <- function(items, description = NULL, required = TRUE) {
 
 #' @param ... <[`dynamic-dots`][rlang::dyn-dots]> Name-type pairs defining
 #'   the components that the object must possess.
-#' @param .additional_properties Can the object have arbitrary additional
-#'   properties that are not explicitly listed? Only supported by Claude.
+#' @param .additional_properties `r lifecycle::badge("deprecated")` Can the
+#'   object have arbitrary additional properties that are not explicitly listed?
+#'   Only supported by Claude.
 #' @export
 #' @rdname type_boolean
 type_object <- function(
   .description = NULL,
   ...,
   .required = TRUE,
-  .additional_properties = FALSE
+  .additional_properties = deprecated()
 ) {
+  if (lifecycle::is_present(.additional_properties)) {
+    lifecycle::deprecate_warn("0.5.0", "type_object(.additional_properties)")
+  } else {
+    .additional_properties <- FALSE
+  }
   TypeObject(
     properties = list2(...),
     description = .description,

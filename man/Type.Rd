@@ -57,8 +57,9 @@ value, the default value will be used.}
 \item{properties}{Named list of properties stored inside the object.
 Each element should be an S7 \code{Type} object.`}
 
-\item{additional_properties}{Can the object have arbitrary additional
-properties that are not explicitly listed? Only supported by Claude.}
+\item{additional_properties}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Can the
+object have arbitrary additional properties that are not explicitly listed?
+Only supported by Claude.}
 }
 \value{
 S7 objects inheriting from \code{Type}
