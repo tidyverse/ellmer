@@ -12,32 +12,36 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Thu, 06 Nov 2025 14:55:47 GMT
+      date: Mon, 11 May 2026 07:31:30 GMT
       content-type: application/json
-      content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '2000000'
-      anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:55:46Z'
-      anthropic-ratelimit-output-tokens-limit: '400000'
-      anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:55:47Z'
-      anthropic-ratelimit-requests-limit: '4000'
-      anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-11-06T14:55:44Z'
-      retry-after: '14'
-      anthropic-ratelimit-tokens-limit: '2400000'
-      anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-11-06T14:55:46Z'
-      request-id: req_011CUrq4Z678zLN83jRAzk7T
+      anthropic-ratelimit-input-tokens-limit: '800000'
+      anthropic-ratelimit-input-tokens-remaining: '800000'
+      anthropic-ratelimit-input-tokens-reset: '2026-05-11T07:31:29Z'
+      anthropic-ratelimit-output-tokens-limit: '160000'
+      anthropic-ratelimit-output-tokens-remaining: '160000'
+      anthropic-ratelimit-output-tokens-reset: '2026-05-11T07:31:30Z'
+      anthropic-ratelimit-requests-limit: '2000'
+      anthropic-ratelimit-requests-remaining: '1999'
+      anthropic-ratelimit-requests-reset: '2026-05-11T07:31:29Z'
+      anthropic-ratelimit-tokens-limit: '960000'
+      anthropic-ratelimit-tokens-remaining: '960000'
+      anthropic-ratelimit-tokens-reset: '2026-05-11T07:31:29Z'
+      request-id: req_011CavPe2sRgZyRHny1QHGaH
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '3842'
-      cf-cache-status: DYNAMIC
-      x-robots-tag: none
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      traceresponse: 00-e03b5d86c6af61d9a258672596e3b1f9-b21c05ccd11c24d0-01
       server: cloudflare
-      cf-ray: 99a56efa492f6326-DFW
+      x-envoy-upstream-service-time: '1716'
+      content-encoding: gzip
+      vary: Accept-Encoding
+      set-cookie: _cfuvid=7Vqh3eRirgYFjvE1MfNsFwQuP4D.tB_xEbThRmz6oTg-1778484688.9917305-1.0.1.1-BLJyAFb8c7_RnyCCN_G4MDGs7sepX5izYFpodv52Ae8;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
+      x-robots-tag: none
+      cf-cache-status: DYNAMIC
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: 9f9f7bfa3fbfe80f-EWR
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01KnUUXvFUg8NP5rwcArQ52i","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01MAEkjaVxetJe3a8zJR9wP4","name":"_structured_tool_call","input":{"data":{"gender":"male","height":"tall","facial_hair":"beard","distinguishing_marks":"scar
-        on left cheek","voice":"deep voice","clothing":"black leather jacket"}}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":730,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":95,"service_tier":"standard"}}'
-  recorded_at: 2025-11-06 14:55:47
-recorded_with: VCR-vcr/2.0.0
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01AWP4hwjqNHe8kNQHFm4wfB","type":"message","role":"assistant","content":[{"type":"tool_use","id":"toolu_01LrWPYcU8p3VmxehvvFJFzs","name":"_structured_tool_call","input":{"data":{"gender":"man","height":"tall","facial_hair":"beard","distinguishing_marks":"scar
+        on left cheek","voice":"deep voice","clothing":"black leather jacket"}},"caller":{"type":"direct"}}],"stop_reason":"tool_use","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":730,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":95,"service_tier":"standard","inference_geo":"not_available"}}'
+  recorded_at: 2026-05-11 07:31:30
+recorded_with: VCR-vcr/2.1.0

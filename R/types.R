@@ -228,3 +228,14 @@ type_from_schema <- function(text, path) {
 type_ignore <- function() {
   TypeIgnore()
 }
+
+type_has_additional_properties <- function(type) {
+  if (S7_inherits(type, TypeObject)) {
+    type@additional_properties ||
+      any(map_lgl(type@properties, type_has_additional_properties))
+  } else if (S7_inherits(type, TypeArray)) {
+    type_has_additional_properties(type@items)
+  } else {
+    FALSE
+  }
+}

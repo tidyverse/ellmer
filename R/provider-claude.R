@@ -201,7 +201,8 @@ method(chat_body, ProviderAnthropic) <- function(
   }))
 
   if (!is.null(type)) {
-    if (has_claude_structured_output(provider@model)) {
+    if (has_claude_structured_output(provider@model) &&
+        !type_has_additional_properties(type)) {
       output_config <- list(
         format = list(
           type = "json_schema",
