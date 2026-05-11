@@ -758,8 +758,7 @@ cache_control <- function(provider) {
 }
 
 has_claude_structured_output <- function(model) {
+  # Matches Claude 4.5+ models
   # https://platform.claude.com/docs/en/build-with-claude/structured-outputs
-  grepl("^claude-opus-4-[567]", model) ||
-    grepl("^claude-sonnet-4-[56]", model) ||
-    grepl("^claude-haiku-4-5", model)
+  grepl("^claude-\\w+-4-[5-9](-|$)", model)
 }
