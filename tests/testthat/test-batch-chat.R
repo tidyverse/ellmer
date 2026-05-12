@@ -130,7 +130,7 @@ test_that("can run all steps at once", {
   expect_equal(job$results, list(x = 1))
 })
 
-test_that("errors if wait = FALSE and not complete", {
+test_that("step_until_done returns NULL when wait = FALSE and not complete", {
   local_mocked_bindings(
     batch_submit = function(...) list(id = "123"),
     batch_poll = function(...) list(id = "123", results = TRUE),
@@ -144,7 +144,42 @@ test_that("errors if wait = FALSE and not complete", {
     path = path,
     wait = FALSE
   )
-  expect_equal(job$step_until_done(), NULL)
+  expect_null(job$step_until_done())
+})
+
+test_that("batch_chat returns NULL when wait = FALSE and not complete", {
+  local_mocked_bindings(
+    batch_submit = function(...) list(id = "123"),
+    batch_poll = function(...) list(id = "123", results = TRUE),
+    batch_status = function(...) list(working = TRUE)
+  )
+
+  path <- withr::local_tempfile()
+  result <- batch_chat(
+    chat_openai_test(),
+    list("What's your name"),
+    path = path,
+    wait = FALSE
+  )
+  expect_null(result)
+})
+
+test_that("batch_chat_structured returns NULL when wait = FALSE and not complete", {
+  local_mocked_bindings(
+    batch_submit = function(...) list(id = "123"),
+    batch_poll = function(...) list(id = "123", results = TRUE),
+    batch_status = function(...) list(working = TRUE)
+  )
+
+  path <- withr::local_tempfile()
+  result <- batch_chat_structured(
+    chat_openai_test(),
+    list("What's your name"),
+    path = path,
+    type = type_string(),
+    wait = FALSE
+  )
+  expect_null(result)
 })
 
 test_that("informative error for bad inputs", {

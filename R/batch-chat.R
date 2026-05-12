@@ -89,7 +89,10 @@ batch_chat <- function(chat, prompts, path, wait = TRUE, ignore_hash = FALSE) {
     wait = wait,
     ignore_hash = ignore_hash
   )
-  job$step_until_done()
+  result <- job$step_until_done()
+  if (is.null(result)) {
+    return(NULL)
+  }
 
   assistant_turns <- job$result_turns()
   map2(job$user_turns, assistant_turns, function(user, assistant) {
@@ -150,7 +153,10 @@ batch_chat_structured <- function(
     wait = wait,
     ignore_hash = ignore_hash
   )
-  job$step_until_done()
+  result <- job$step_until_done()
+  if (is.null(result)) {
+    return(NULL)
+  }
   turns <- job$result_turns()
 
   multi_convert(
