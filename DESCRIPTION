@@ -57,8 +57,10 @@ Suggests:
     withr
 VignetteBuilder:
     knitr
-Config/Needs/prices: cli, dplyr, jsonlite, jsonvalidate, stringr, tidyr, usethis
+Config/Needs/prices: cli, dplyr, jsonlite, jsonvalidate, stringr, tidyr,
+    usethis
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
+Config/roxygen2/version: 8.0.0
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/testthat/start-first: chat, provider*
@@ -131,4 +133,3 @@ Collate:
     'utils-prettytime.R'
     'utils.R'
     'zzz.R'
-Config/roxygen2/version: 8.0.0
