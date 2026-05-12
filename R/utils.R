@@ -242,7 +242,6 @@ counter <- function() {
 }
 
 match_prices <- function(provider, id) {
-  prices_update()
   p <- prices()
   p <- p[p$provider == provider, ]
   idx <- match(id, p$model)

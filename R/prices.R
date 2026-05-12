@@ -30,6 +30,37 @@ prices <- function() {
   the$prices
 }
 
+#' Update cached model pricing data
+#'
+#' Downloads the latest model pricing data from GitHub and saves it to the
+#' local cache. Call this to refresh the prices used by [token_usage()] and
+#' related functions with the latest values.
+#'
+#' @return Invisibly returns `TRUE` if the cache was updated, or `FALSE` if
+#'   the cached data was already up to date. Throws an error if the download
+#'   fails or if the \pkg{curl} package is not installed.
+#' @export
+model_update_prices <- function() {
+  if (!requireNamespace("curl", quietly = TRUE)) {
+    cli::cli_abort(
+      "The {.pkg curl} package is required to update pricing data."
+    )
+  }
+  result <- prices_cache_download()
+  if (isTRUE(result)) {
+    the$prices <- NULL
+    cli::cli_inform(
+      "Updated cached pricing data {.href [from GitHub](https://github.com/tidyverse/ellmer/blob/main/data-raw/prices.json)}."
+    )
+    return(invisible(TRUE))
+  }
+  if (identical(result, "not_modified")) {
+    cli::cli_inform("Pricing data is already up to date.")
+    return(invisible(FALSE))
+  }
+  cli::cli_abort("Failed to download pricing data from GitHub.")
+}
+
 prices_cache_read <- function() {
   path <- prices_cache_path()
   if (!file.exists(path)) {
@@ -40,82 +71,7 @@ prices_cache_read <- function() {
   cached
 }
 
-prices_cache_stale <- function() {
-  path <- prices_cache_path()
-  if (!file.exists(path)) {
-    return(TRUE)
-  }
-  age <- difftime(Sys.time(), file.mtime(path), units = "days")
-  as.numeric(age) > 7
-}
-
-prices_should_update <- function() {
-  if (is_testing() || nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_"))) {
-    return(FALSE)
-  }
-
-  opt <- getOption("ellmer.update_prices", NULL)
-  if (!is.null(opt)) {
-    if (!is.na(as.logical(opt))) {
-      return(as.logical(opt))
-    } else {
-      cli::cli_warn(
-        "Option {.code ellmer.update_prices} should be set to a logical value (TRUE or FALSE).",
-        call = NULL
-      )
-    }
-  }
-
-  env <- Sys.getenv("ELLMER_UPDATE_PRICES", "")
-  if (nzchar(env)) {
-    if (tolower(env) %in% c("true", "1")) {
-      return(TRUE)
-    } else if (tolower(env) %in% c("false", "0")) {
-      return(FALSE)
-    } else {
-      cli::cli_warn(
-        "Environment variable {.code ELLMER_UPDATE_PRICES} should be set to a logical value (true, false, 1, or 0).",
-        call = NULL
-      )
-    }
-  }
-
-  NULL
-}
-
-prices_update <- function() {
-  # prices_should_update() returns TRUE (forced on), FALSE (opted out), or NULL
-  # (default). NULL means "update only if stale"; TRUE forces even if fresh.
-  should_update <- prices_should_update()
-  if (isFALSE(should_update)) {
-    return(invisible())
-  }
-  if (!prices_cache_stale() && !isTRUE(should_update)) {
-    return(invisible())
-  }
-
-  # Only attempt one download per session to avoid repeated pauses when offline
-  if (isTRUE(the$prices_download_attempted) && !isTRUE(should_update)) {
-    return(invisible())
-  }
-  the$prices_download_attempted <- TRUE
-
-  result <- tryCatch(prices_cache_download(), error = function(cnd) FALSE)
-  if (isTRUE(result)) {
-    the$prices <- NULL
-    cli::cli_inform(
-      "Updated cached pricing data {.href [from GitHub](https://github.com/tidyverse/ellmer/blob/main/data-raw/prices.json)}."
-    )
-  }
-
-  invisible()
-}
-
 prices_cache_download <- function() {
-  if (!requireNamespace("curl", quietly = TRUE)) {
-    return(FALSE)
-  }
-
   url <- "https://raw.githubusercontent.com/tidyverse/ellmer/refs/heads/main/data-raw/prices.json"
 
   handle <- curl::new_handle(

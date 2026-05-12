@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* Pricing data is now automatically refreshed from GitHub. A local cache is checked when `models_*()` functions are called and refreshed if older than 7 days. The update is skipped during tests and `R CMD check`, and can be disabled with `options(ellmer.update_prices = FALSE)` or `ELLMER_UPDATE_PRICES=false` (#968).
+* New `model_update_prices()` downloads the latest model pricing data from GitHub and saves it to a local cache. Subsequent calls to `token_usage()` and related functions will use the updated prices (#968).
 
 * `type_object(.additional_properties)` is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (@thisisnic, #866).
 

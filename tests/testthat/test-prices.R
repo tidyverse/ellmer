@@ -1,24 +1,3 @@
-# prices_cache_stale() --------------------------------------------------------
-
-test_that("prices_cache_stale() returns TRUE when file is missing", {
-  local_prices_cache()
-  expect_true(prices_cache_stale())
-})
-
-test_that("prices_cache_stale() returns FALSE for a recently written file", {
-  cache_path <- local_prices_cache()
-  saveRDS(data.frame(), cache_path)
-  expect_false(prices_cache_stale())
-})
-
-test_that("prices_cache_stale() returns TRUE for a file older than 7 days", {
-  cache_path <- local_prices_cache()
-  saveRDS(data.frame(), cache_path)
-  old_time <- Sys.time() - as.difftime(8, units = "days")
-  Sys.setFileTime(cache_path, old_time)
-  expect_true(prices_cache_stale())
-})
-
 # prices() --------------------------------------------------------------------
 
 test_that("prices() prefers cached rows over bundled rows on key conflict", {
@@ -92,51 +71,29 @@ test_that("prices() uses bundled prices when no cache exists", {
   expect_equal(the$prices, prices_data)
 })
 
-# prices_update() -------------------------------------------------------------
+# model_update_prices() -------------------------------------------------------
 
-test_that("prices_update() does nothing during testing (CRAN-safe)", {
-  skip_on_cran()
-  cache_path <- local_prices_cache()
-
-  prices_update()
-
-  expect_false(file.exists(cache_path))
-})
-
-test_that("prices_update() does nothing when opt-out option is set", {
+test_that("model_update_prices() informs and returns TRUE when download succeeds", {
   local_prices_cache()
-  withr::local_options(ellmer.update_prices = FALSE)
+  the$prices <- prices_data
+  local_mocked_bindings(prices_cache_download = function() TRUE)
 
-  prices_update()
-
-  expect_false(file.exists(prices_cache_path()))
+  expect_snapshot(result <- model_update_prices())
+  expect_true(result)
+  expect_null(the$prices)
 })
 
-test_that("prices_update() does nothing when opt-out env var is set", {
+test_that("model_update_prices() informs and returns FALSE when already up to date", {
   local_prices_cache()
-  withr::local_envvar(ELLMER_UPDATE_PRICES = "false")
+  local_mocked_bindings(prices_cache_download = function() "not_modified")
 
-  prices_update()
-
-  expect_false(file.exists(prices_cache_path()))
+  expect_snapshot(result <- model_update_prices())
+  expect_false(result)
 })
 
-test_that("prices_update() does nothing when cache is fresh", {
-  cache_path <- local_prices_cache()
-  local_prices()
+test_that("model_update_prices() aborts when download fails", {
+  local_prices_cache()
+  local_mocked_bindings(prices_cache_download = function() FALSE)
 
-  dummy <- data.frame(
-    provider = "Test",
-    model = "test-model",
-    variant = "",
-    input = 1,
-    output = 2,
-    cached_input = 0.5
-  )
-  saveRDS(dummy, cache_path)
-
-  old_mtime <- file.mtime(cache_path)
-  prices_update()
-
-  expect_equal(file.mtime(cache_path), old_mtime)
+  expect_snapshot(model_update_prices(), error = TRUE)
 })
