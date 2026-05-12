@@ -87,5 +87,4 @@ cli::cli_progress_done()
 # --- write outputs -----------------------------------------------------------
 
 jsonlite::write_json(prices, "data-raw/prices.json", pretty = TRUE)
-write.csv(prices, "data-raw/prices.csv", row.names = FALSE)
 usethis::use_data(prices, overwrite = TRUE, internal = TRUE)
