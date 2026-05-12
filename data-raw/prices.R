@@ -72,24 +72,7 @@ stopifnot(
   "Expected 8 providers" = n_distinct(prices_data$provider) >= 8
 )
 
-# --- schema validation -------------------------------------------------------
-
-cli::cli_progress_step("Validating schema")
-prices_envelope <- list(
-  schema_version = schema_version,
-  min_ellmer_version = min_ellmer_version,
-  data = prices_data
-)
-prices_json <- jsonlite::toJSON(prices_envelope, pretty = TRUE, auto_unbox = TRUE)
-valid <- jsonvalidate::json_validate(
-  prices_json,
-  "data-raw/prices.schema.json",
-  engine = "ajv",
-  error = TRUE
-)
-cli::cli_progress_done()
-
-# --- write outputs -----------------------------------------------------------
+# --- schema version ----------------------------------------------------------
 
 # Bump schema_version for ANY change to the column structure: adding, removing,
 # renaming, or changing the type of a column. Updating row values (new models,
@@ -100,12 +83,32 @@ schema_version <- 1L
 min_ellmer_version <- "0.4.1.9000"
 attr(prices_data, "schema_version") <- schema_version
 
+prices_envelope <- list(
+  schema_version = schema_version,
+  min_ellmer_version = min_ellmer_version,
+  data = prices_data
+)
+
+# --- schema validation -------------------------------------------------------
+
+cli::cli_progress_step("Validating schema")
+prices_json <- jsonlite::toJSON(
+  prices_envelope,
+  pretty = TRUE,
+  auto_unbox = TRUE
+)
+valid <- jsonvalidate::json_validate(
+  prices_json,
+  "data-raw/prices.schema.json",
+  engine = "ajv",
+  error = TRUE
+)
+cli::cli_progress_done()
+
+# --- write outputs -----------------------------------------------------------
+
 jsonlite::write_json(
-  list(
-    schema_version = schema_version,
-    min_ellmer_version = min_ellmer_version,
-    data = prices_data
-  ),
+  prices_envelope,
   "data-raw/prices.json",
   pretty = TRUE,
   auto_unbox = TRUE
