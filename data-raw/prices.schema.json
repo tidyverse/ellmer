@@ -2,43 +2,58 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "ellmer prices",
   "description": "Per-million-token pricing for LLM providers supported by ellmer",
-  "type": "array",
-  "items": {
-    "type": "object",
-    "required": ["provider", "model", "variant"],
-    "additionalProperties": false,
-    "properties": {
-      "provider": {
-        "type": "string",
-        "enum": [
-          "Anthropic",
-          "AWS/Bedrock",
-          "Azure/OpenAI",
-          "Google/Gemini",
-          "Google/Vertex",
-          "Mistral",
-          "OpenAI",
-          "OpenRouter"
-        ]
-      },
-      "model": {
-        "type": "string",
-        "minLength": 1
-      },
-      "variant": {
-        "type": "string"
-      },
-      "input": {
-        "type": "number",
-        "minimum": 0
-      },
-      "output": {
-        "type": "number",
-        "minimum": 0
-      },
-      "cached_input": {
-        "type": "number",
-        "minimum": 0
+  "type": "object",
+  "required": ["schema_version", "min_ellmer_version", "data"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "min_ellmer_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["provider", "model", "variant"],
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "Anthropic",
+              "AWS/Bedrock",
+              "Azure/OpenAI",
+              "Google/Gemini",
+              "Google/Vertex",
+              "Mistral",
+              "OpenAI",
+              "OpenRouter"
+            ]
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1
+          },
+          "variant": {
+            "type": "string"
+          },
+          "input": {
+            "type": "number",
+            "minimum": 0
+          },
+          "output": {
+            "type": "number",
+            "minimum": 0
+          },
+          "cached_input": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
       }
     }
   }

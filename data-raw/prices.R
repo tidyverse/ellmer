@@ -75,7 +75,12 @@ stopifnot(
 # --- schema validation -------------------------------------------------------
 
 cli::cli_progress_step("Validating schema")
-prices_json <- jsonlite::toJSON(prices_data, pretty = TRUE)
+prices_envelope <- list(
+  schema_version = schema_version,
+  min_ellmer_version = min_ellmer_version,
+  data = prices_data
+)
+prices_json <- jsonlite::toJSON(prices_envelope, pretty = TRUE, auto_unbox = TRUE)
 valid <- jsonvalidate::json_validate(
   prices_json,
   "data-raw/prices.schema.json",
