@@ -8,30 +8,37 @@ prices <- function() {
     compatible <- !is.null(cached) && identical(cached_version, bundled_version)
 
     if (!compatible) {
-      if (!is.null(cached_version) && cached_version < bundled_version) {
-        cli::cli_inform(
-          c(
-            "Cached pricing data uses an outdated schema.",
-            i = "Run {.run ellmer::models_update_prices()} to refresh."
-          ),
-          .frequency = "once",
-          .frequency_id = "prices_schema_mismatch"
-        )
-      } else if (!is.null(cached_version) && cached_version > bundled_version) {
-        cli::cli_warn(
-          c(
-            "Cached pricing data uses a newer schema than this version of ellmer.",
-            i = "Update ellmer to use the latest pricing data."
-          ),
-          .frequency = "once",
-          .frequency_id = "prices_schema_mismatch"
-        )
+      if (is.integer(cached_version) && length(cached_version) == 1L) {
+        if (cached_version < bundled_version) {
+          cli::cli_inform(
+            c(
+              "Cached pricing data uses an outdated schema.",
+              i = "Run {.run ellmer::models_update_prices()} to refresh."
+            ),
+            .frequency = "once",
+            .frequency_id = "prices_schema_mismatch"
+          )
+        } else if (cached_version > bundled_version) {
+          cli::cli_warn(
+            c(
+              "Cached pricing data uses a newer schema than this version of ellmer.",
+              i = "Update ellmer to use the latest pricing data."
+            ),
+            .frequency = "once",
+            .frequency_id = "prices_schema_mismatch"
+          )
+        }
       }
       the$prices <- bundled
       return(invisible(the$prices))
     }
 
     key_cols <- c("provider", "model", "variant")
+    stopifnot(
+      "cached pricing data is missing columns from bundled data" = all(
+        names(bundled) %in% names(cached)
+      )
+    )
     bundled_in_cache <- !is.na(vctrs::vec_match(
       bundled[key_cols],
       cached[key_cols]
@@ -80,13 +87,14 @@ prices_cache_read <- function() {
   cached
 }
 
+curl_fetch_memory <- function(url, handle) {
+  curl::curl_fetch_memory(url, handle = handle)
+}
+
 prices_cache_download <- function() {
   url <- "https://raw.githubusercontent.com/tidyverse/ellmer/refs/heads/main/data-raw/prices.json"
 
-  handle <- curl::new_handle(
-    connecttimeout_ms = 1000L,
-    timeout_ms = 3000L
-  )
+  handle <- curl::new_handle()
 
   etag <- prices_cache_etag()
   if (!is.null(etag)) {
@@ -96,12 +104,15 @@ prices_cache_download <- function() {
   call <- rlang::caller_env()
 
   resp <- tryCatch(
-    curl::curl_fetch_memory(url, handle = handle),
-    error = function(e) NULL
+    curl_fetch_memory(url, handle = handle),
+    error = function(e) {
+      cli::cli_abort(
+        "Failed to download pricing data from GitHub.",
+        parent = e,
+        call = call
+      )
+    }
   )
-  if (is.null(resp)) {
-    cli::cli_abort("Failed to download pricing data from GitHub.", call = call)
-  }
   if (resp$status_code == 304L) {
     return(FALSE)
   }
@@ -114,19 +125,36 @@ prices_cache_download <- function() {
 
   parsed <- tryCatch(
     jsonlite::fromJSON(rawToChar(resp$content)),
-    error = function(e) NULL
+    error = function(e) {
+      cli::cli_abort(
+        "Failed to parse pricing data from GitHub.",
+        parent = e,
+        call = call
+      )
+    }
   )
 
   if (!is.list(parsed) || !is.data.frame(parsed$data)) {
     cli::cli_abort("Failed to parse pricing data from GitHub.", call = call)
   }
 
-  schema_version <- as.integer(parsed$schema_version)
-  if (!isTRUE(schema_version == attr(prices_data, "schema_version"))) {
-    cli::cli_abort(
-      "Pricing data on GitHub requires ellmer {parsed$min_ellmer_version} or later. Please update the package.",
-      call = call
-    )
+  remote_version <- as.integer(parsed$schema_version)
+  bundled_version <- attr(prices_data, "schema_version")
+  if (!isTRUE(remote_version == bundled_version)) {
+    if (isTRUE(remote_version > bundled_version)) {
+      cli::cli_abort(
+        "Pricing data on GitHub requires ellmer {parsed$min_ellmer_version} or later. Please update the package.",
+        call = call
+      )
+    } else {
+      cli::cli_abort(
+        c(
+          "Pricing data on GitHub uses an older schema (version {remote_version}) than this version of ellmer (version {bundled_version}).",
+          i = "This usually means {.code main} hasn't caught up with a recent schema change."
+        ),
+        call = call
+      )
+    }
   }
 
   df <- parsed$data
@@ -146,7 +174,7 @@ prices_cache_download <- function() {
     )
   }
 
-  attr(df, "schema_version") <- schema_version
+  attr(df, "schema_version") <- remote_version
   attr(df, "etag") <- curl::parse_headers_list(resp$headers)[["etag"]]
 
   path <- prices_cache_path()
