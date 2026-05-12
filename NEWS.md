@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `type_object(.additional_properties)` is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (@thisisnic, #866).
+
 # ellmer 0.4.1
 
 * ellmer is now instrumented with OpenTelemetry, so that traces are emitted whenever the (suggested) `otel` package is installed and a tracer is active.
