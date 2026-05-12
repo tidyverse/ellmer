@@ -85,7 +85,7 @@ test_that("model_update_prices() informs and returns TRUE when download succeeds
 
 test_that("model_update_prices() informs and returns FALSE when already up to date", {
   local_prices_cache()
-  local_mocked_bindings(prices_cache_download = function() "not_modified")
+  local_mocked_bindings(prices_cache_download = function() FALSE)
 
   expect_snapshot(result <- model_update_prices())
   expect_false(result)
@@ -93,7 +93,7 @@ test_that("model_update_prices() informs and returns FALSE when already up to da
 
 test_that("model_update_prices() aborts when download fails", {
   local_prices_cache()
-  local_mocked_bindings(prices_cache_download = function() FALSE)
+  local_mocked_bindings(prices_cache_download = function() NA)
 
   expect_snapshot(model_update_prices(), error = TRUE)
 })

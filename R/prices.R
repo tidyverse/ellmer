@@ -8,10 +8,6 @@ prices <- function() {
       return(invisible(the$prices))
     }
 
-    if (is.null(cached$variant)) {
-      cached$variant <- ""
-    }
-
     key_cols <- c("provider", "model", "variant")
     bundled_in_cache <- !is.na(vctrs::vec_match(
       bundled[key_cols],
@@ -54,7 +50,7 @@ model_update_prices <- function() {
     )
     return(invisible(TRUE))
   }
-  if (identical(result, "not_modified")) {
+  if (isFALSE(result)) {
     cli::cli_inform("Pricing data is already up to date.")
     return(invisible(FALSE))
   }
@@ -89,13 +85,13 @@ prices_cache_download <- function() {
     error = function(e) NULL
   )
   if (is.null(resp)) {
-    return(FALSE)
+    return(NA)
   }
   if (resp$status_code == 304L) {
-    return("not_modified")
+    return(FALSE)
   }
   if (resp$status_code != 200L) {
-    return(FALSE)
+    return(NA)
   }
 
   df <- tryCatch(
@@ -104,16 +100,16 @@ prices_cache_download <- function() {
   )
 
   if (!is.data.frame(df)) {
-    return(FALSE)
+    return(NA)
   }
 
   required <- c("provider", "model", "variant", "input", "output")
   if (!all(required %in% names(df))) {
-    return(FALSE)
+    return(NA)
   }
 
   if (!is.numeric(df$input) || !is.numeric(df$output)) {
-    return(FALSE)
+    return(NA)
   }
 
   resp_etag <- curl::parse_headers_list(resp$headers)[["etag"]]
