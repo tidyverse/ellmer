@@ -6989,6 +6989,13 @@
   },
   {
     "provider": "OpenRouter",
+    "model": "qwen/qwen3.6-plus",
+    "variant": "",
+    "input": 0.325,
+    "output": 1.95
+  },
+  {
+    "provider": "OpenRouter",
     "model": "switchpoint/router",
     "variant": "",
     "input": 0.85,
