@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* New `model_update_prices()` downloads the latest model pricing data from GitHub and saves it to a local cache. Subsequent calls to `token_usage()` and related functions will use the updated prices (#968).
+* New `models_update_prices()` downloads the latest model pricing data from GitHub and saves it to a local cache. Subsequent calls to `token_usage()` and related functions will use the updated prices (#968).
 
 * `type_object(.additional_properties)` is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (@thisisnic, #866).
 

@@ -52,27 +52,27 @@ test_that("prices() uses bundled prices when no cache exists", {
   expect_equal(the$prices, prices_data)
 })
 
-# model_update_prices() -------------------------------------------------------
+# models_update_prices() -------------------------------------------------------
 
-test_that("model_update_prices() informs and returns TRUE when download succeeds", {
+test_that("models_update_prices() informs and returns TRUE when download succeeds", {
   local_prices_cache()
   the$prices <- prices_data
   local_mocked_bindings(prices_cache_download = function() TRUE)
 
-  expect_snapshot(result <- model_update_prices())
+  expect_snapshot(result <- models_update_prices())
   expect_true(result)
   expect_null(the$prices)
 })
 
-test_that("model_update_prices() informs and returns FALSE when already up to date", {
+test_that("models_update_prices() informs and returns FALSE when already up to date", {
   local_prices_cache()
   local_mocked_bindings(prices_cache_download = function() FALSE)
 
-  expect_snapshot(result <- model_update_prices())
+  expect_snapshot(result <- models_update_prices())
   expect_false(result)
 })
 
-test_that("model_update_prices() aborts with version mismatch advice", {
+test_that("models_update_prices() aborts with version mismatch advice", {
   local_prices_cache()
   local_mocked_bindings(
     prices_cache_download = function() {
@@ -80,12 +80,12 @@ test_that("model_update_prices() aborts with version mismatch advice", {
     }
   )
 
-  expect_snapshot(model_update_prices(), error = TRUE)
+  expect_snapshot(models_update_prices(), error = TRUE)
 })
 
-test_that("model_update_prices() aborts when download fails", {
+test_that("models_update_prices() aborts when download fails", {
   local_prices_cache()
   local_mocked_bindings(prices_cache_download = function() NA)
 
-  expect_snapshot(model_update_prices(), error = TRUE)
+  expect_snapshot(models_update_prices(), error = TRUE)
 })

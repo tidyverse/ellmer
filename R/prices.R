@@ -12,7 +12,7 @@ prices <- function() {
         cli::cli_inform(
           c(
             "Cached pricing data uses an outdated schema.",
-            i = "Run {.run ellmer::model_update_prices()} to refresh."
+            i = "Run {.run ellmer::models_update_prices()} to refresh."
           ),
           .frequency = "once",
           .frequency_id = "prices_schema_mismatch"
@@ -47,13 +47,13 @@ prices <- function() {
 #'
 #' Downloads the latest model pricing data from GitHub and saves it to the
 #' local cache. Call this to refresh the prices used by [token_usage()] and
-#' related functions with the latest values.
+#' related functions with the latest pricing data.
 #'
 #' @return Invisibly returns `TRUE` if the cache was updated, or `FALSE` if
 #'   the cached data was already up to date. Throws an error if the download
 #'   fails or if the \pkg{curl} package is not installed.
 #' @export
-model_update_prices <- function() {
+models_update_prices <- function() {
   if (!requireNamespace("curl", quietly = TRUE)) {
     cli::cli_abort(
       "The {.pkg curl} package is required to update pricing data."
