@@ -32,6 +32,7 @@ jobs:
           packages: "deps::."
           dependencies: "'hard'"
           needs: prices
+
       - name: Update prices
         run: Rscript --quiet --vanilla data-raw/prices.R
 
