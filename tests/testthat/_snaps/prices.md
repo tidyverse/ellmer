@@ -31,19 +31,74 @@
     Message
       Pricing data is already up to date.
 
-# models_update_prices() aborts with version mismatch advice
+# prices_cache_download() aborts on HTTP error
 
     Code
-      models_update_prices()
+      prices_cache_download()
     Condition
-      Error in `models_update_prices()`:
-      ! Pricing data on GitHub requires ellmer 0.5.0 or later. Please update the package.
+      Error:
+      ! Failed to download pricing data from GitHub (HTTP 500).
 
-# models_update_prices() aborts when download fails
+# prices_cache_download() aborts on curl error
 
     Code
-      models_update_prices()
+      prices_cache_download()
     Condition
-      Error in `models_update_prices()`:
+      Error:
       ! Failed to download pricing data from GitHub.
+      Caused by error in `curl_fetch_memory()`:
+      ! simulated network failure
+
+# prices_cache_download() aborts on malformed JSON
+
+    Code
+      prices_cache_download()
+    Condition
+      Error:
+      ! Failed to parse pricing data from GitHub.
+      Caused by error:
+      ! lexical error: invalid string in json text.
+                                             not json {
+                           (right here) ------^
+
+# prices_cache_download() aborts when envelope is missing data
+
+    Code
+      prices_cache_download()
+    Condition
+      Error:
+      ! Failed to parse pricing data from GitHub.
+
+# prices_cache_download() aborts when remote schema is newer
+
+    Code
+      prices_cache_download()
+    Condition
+      Error:
+      ! Pricing data on GitHub requires ellmer 0.4.1.9000 or later. Please update the package.
+
+# prices_cache_download() aborts when remote schema is older
+
+    Code
+      prices_cache_download()
+    Condition
+      Error:
+      ! Pricing data on GitHub uses an older schema (version 0) than this version of ellmer (version 1).
+      i This usually means `main` hasn't caught up with a recent schema change.
+
+# prices_cache_download() aborts when data is missing required columns
+
+    Code
+      prices_cache_download()
+    Condition
+      Error:
+      ! Pricing data from GitHub is missing required columns.
+
+# prices_cache_download() aborts when input/output columns are non-numeric
+
+    Code
+      prices_cache_download()
+    Condition
+      Error:
+      ! Pricing data from GitHub has unexpected column types.
 
