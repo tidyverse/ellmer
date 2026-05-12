@@ -59,24 +59,15 @@ models_update_prices <- function() {
       "The {.pkg curl} package is required to update pricing data."
     )
   }
-  result <- prices_cache_download()
-  if (isTRUE(result)) {
+  if (isTRUE(prices_cache_download())) {
     the$prices <- NULL
     cli::cli_inform(
       "Updated cached pricing data {.href [from GitHub](https://github.com/tidyverse/ellmer/blob/main/data-raw/prices.json)}."
     )
     return(invisible(TRUE))
   }
-  if (isFALSE(result)) {
-    cli::cli_inform("Pricing data is already up to date.")
-    return(invisible(FALSE))
-  }
-  if (is.list(result)) {
-    cli::cli_abort(
-      "Pricing data on GitHub requires ellmer {result$min_ellmer_version} or later. Please update the package."
-    )
-  }
-  cli::cli_abort("Failed to download pricing data from GitHub.")
+  cli::cli_inform("Pricing data is already up to date.")
+  invisible(FALSE)
 }
 
 prices_cache_read <- function() {
@@ -102,18 +93,23 @@ prices_cache_download <- function() {
     curl::handle_setheaders(handle, `If-None-Match` = etag)
   }
 
+  call <- rlang::caller_env()
+
   resp <- tryCatch(
     curl::curl_fetch_memory(url, handle = handle),
     error = function(e) NULL
   )
   if (is.null(resp)) {
-    return(NA)
+    cli::cli_abort("Failed to download pricing data from GitHub.", call = call)
   }
   if (resp$status_code == 304L) {
     return(FALSE)
   }
   if (resp$status_code != 200L) {
-    return(NA)
+    cli::cli_abort(
+      "Failed to download pricing data from GitHub (HTTP {resp$status_code}).",
+      call = call
+    )
   }
 
   parsed <- tryCatch(
@@ -122,26 +118,32 @@ prices_cache_download <- function() {
   )
 
   if (!is.list(parsed) || !is.data.frame(parsed$data)) {
-    return(NA)
+    cli::cli_abort("Failed to parse pricing data from GitHub.", call = call)
   }
 
   schema_version <- as.integer(parsed$schema_version)
   if (!isTRUE(schema_version == attr(prices_data, "schema_version"))) {
-    return(list(
-      status = "version_mismatch",
-      min_ellmer_version = parsed$min_ellmer_version
-    ))
+    cli::cli_abort(
+      "Pricing data on GitHub requires ellmer {parsed$min_ellmer_version} or later. Please update the package.",
+      call = call
+    )
   }
 
   df <- parsed$data
 
   required <- c("provider", "model", "variant", "input", "output")
   if (!all(required %in% names(df))) {
-    return(NA)
+    cli::cli_abort(
+      "Pricing data from GitHub is missing required columns.",
+      call = call
+    )
   }
 
   if (!is.numeric(df$input) || !is.numeric(df$output)) {
-    return(NA)
+    cli::cli_abort(
+      "Pricing data from GitHub has unexpected column types.",
+      call = call
+    )
   }
 
   attr(df, "schema_version") <- schema_version

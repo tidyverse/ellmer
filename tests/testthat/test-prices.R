@@ -76,7 +76,10 @@ test_that("models_update_prices() aborts with version mismatch advice", {
   local_prices_cache()
   local_mocked_bindings(
     prices_cache_download = function() {
-      list(status = "version_mismatch", min_ellmer_version = "0.5.0")
+      cli::cli_abort(
+        "Pricing data on GitHub requires ellmer 0.5.0 or later. Please update the package.",
+        call = rlang::caller_env()
+      )
     }
   )
 
@@ -85,7 +88,14 @@ test_that("models_update_prices() aborts with version mismatch advice", {
 
 test_that("models_update_prices() aborts when download fails", {
   local_prices_cache()
-  local_mocked_bindings(prices_cache_download = function() NA)
+  local_mocked_bindings(
+    prices_cache_download = function() {
+      cli::cli_abort(
+        "Failed to download pricing data from GitHub.",
+        call = rlang::caller_env()
+      )
+    }
+  )
 
   expect_snapshot(models_update_prices(), error = TRUE)
 })
