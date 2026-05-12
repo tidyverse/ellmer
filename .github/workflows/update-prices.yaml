@@ -3,7 +3,7 @@ on:
     paths:
       - .github/workflows/update-prices.yaml
   schedule:
-    - cron: "0 6 * * 1"
+    - cron: "0 6 * * 1" # Monday at 6am UTC
   workflow_dispatch:
 
 name: update-prices.yaml
