@@ -49,6 +49,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data-raw/prices.json data-raw/prices.csv R/sysdata.rda
+          git add data-raw/prices.json R/sysdata.rda
           git commit -m "chore: update pricing data [skip ci]"
           git push
