@@ -68,6 +68,7 @@ models_update_prices <- function() {
   }
   if (isTRUE(prices_cache_download())) {
     the$prices <- NULL
+    prices()
     cli::cli_inform(
       "Updated cached pricing data {.href [from GitHub](https://github.com/tidyverse/ellmer/blob/main/data-raw/prices.json)}."
     )

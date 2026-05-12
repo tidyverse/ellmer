@@ -56,12 +56,11 @@ test_that("prices() uses bundled prices when no cache exists", {
 
 test_that("models_update_prices() informs and returns TRUE when download succeeds", {
   local_prices_cache()
-  the$prices <- prices_data
   local_mocked_bindings(prices_cache_download = function() TRUE)
 
   expect_snapshot(result <- models_update_prices())
   expect_true(result)
-  expect_null(the$prices)
+  expect_equal(the$prices, prices_data)
 })
 
 test_that("models_update_prices() informs and returns FALSE when already up to date", {
