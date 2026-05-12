@@ -376,6 +376,8 @@ chat <- chat_anthropic("Extract all characteristics of supplied character")
 chat$chat_structured(text, type = type_characteristics)
 ```
 
+This approach works with all providers, replacing the now-deprecated `.additional_properties` argument.
+
 ### Example 6: Extracting data from an image
 
 The final example comes from [Dan Nguyen](https://gist.github.com/dannguyen/faaa56cebf30ad51108a9fe4f8db36d8) (you can see other interesting applications at that link). The goal is to extract structured data from this screenshot:
