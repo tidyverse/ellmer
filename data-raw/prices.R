@@ -1,10 +1,13 @@
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(tidyr)
 library(stringr)
 
 litellm_url <- "https://raw.githubusercontent.com/BerriAI/litellm/refs/heads/main/model_prices_and_context_window.json"
+
+cli::cli_progress_step("Fetching litellm prices")
 litellm_prices <- jsonlite::read_json(litellm_url)
 
+cli::cli_progress_step("Transforming prices")
 df <- tibble::enframe(litellm_prices, "model", "data")
 
 all_prices <- df |>
@@ -31,34 +34,57 @@ all_prices <- df |>
   ) |>
   arrange(provider, model, variant) |>
   mutate(
-    input = input * 1e6,
-    output = output * 1e6,
-    cached_input = cached_input * 1e6,
+    input = round(input * 1e6, digits = 6),
+    output = round(output * 1e6, digits = 6),
+    cached_input = round(cached_input * 1e6, digits = 6),
     model = stringr::str_remove(model, paste0(provider, "/"))
   ) |>
   filter(input > 0 | output > 0)
-all_prices |> count(provider, sort = TRUE)
 
 # fmt: skip
 provider_lookup <- tribble(
   ~litellm_provider, ~provider,
-  "openai", "OpenAI",
-  "anthropic", "Anthropic",
-  "gemini", "Google/Gemini",
+  "openai",                    "OpenAI",
+  "anthropic",                 "Anthropic",
+
+  "gemini",                    "Google/Gemini",
   "vertex_ai-language-models", "Google/Vertex",
-  "openrouter", "OpenRouter",
-  "azure", "Azure/OpenAI",
-  "bedrock", "AWS/Bedrock",
-  "mistral", "Mistral",
+  "openrouter",                "OpenRouter",
+  "azure",                     "Azure/OpenAI",
+  "bedrock",                   "AWS/Bedrock",
+  "mistral",                   "Mistral",
 )
 
 prices <- all_prices |>
   inner_join(provider_lookup, join_by(provider == litellm_provider)) |>
-  mutate(provider = provider.y, provider.y = NULL)
+  mutate(provider = provider.y, provider.y = NULL) |>
+  arrange(provider, model, variant)
 
-# prices |> View()
+cli::cli_progress_done()
 
-usethis::use_data(prices, overwrite = TRUE, internal = TRUE)
+# --- sanity checks -----------------------------------------------------------
 
-# Output JSON for ingestion into `chatlas`
+cli::cli_alert_info("Rows: {nrow(prices)}")
+cli::cli_alert_info("Providers: {n_distinct(prices$provider)}")
+
+stopifnot(
+  "Expected at least 500 rows" = nrow(prices) >= 500,
+  "Expected 8 providers" = n_distinct(prices$provider) >= 8
+)
+
+# --- schema validation -------------------------------------------------------
+
+cli::cli_progress_step("Validating schema")
+prices_json <- jsonlite::toJSON(prices, pretty = TRUE)
+valid <- jsonvalidate::json_validate(
+  prices_json,
+  "data-raw/prices.schema.json",
+  engine = "ajv",
+  error = TRUE
+)
+cli::cli_progress_done()
+
+# --- write outputs -----------------------------------------------------------
+
 jsonlite::write_json(prices, "data-raw/prices.json", pretty = TRUE)
+usethis::use_data(prices, overwrite = TRUE, internal = TRUE)
