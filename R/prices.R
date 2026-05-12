@@ -62,10 +62,9 @@ prices <- function() {
         names(bundled) %in% names(cached)
       )
     )
-    bundled_in_cache <- !is.na(vctrs::vec_match(
-      bundled[key_cols],
-      cached[key_cols]
-    ))
+    bundled_in_cache <- !is.na(
+      vctrs::vec_match(bundled[key_cols], cached[key_cols])
+    )
     bundled_only <- bundled[!bundled_in_cache, ]
     the$prices <- rbind(cached[names(bundled)], bundled_only)
   }
