@@ -1,3 +1,26 @@
+# Model pricing data lifecycle:
+#
+# 1. Source of truth: `prices.json` on `main`. The
+#    `.github/workflows/update-prices.yaml` workflow runs `data-raw/prices.R`
+#    on a weekly schedule (and can also be run manually), which fetches from
+#    litellm, validates against `data-raw/prices.schema.json`, and commits
+#    `prices.json` plus the snapshot baked into `prices_data` (internal
+#    package data).
+#
+# 2. Update: `models_update_prices()` calls `prices_cache_download()` to
+#    fetch `prices.json` from GitHub and save it as an RDS at
+#    `prices_cache_path()` (under `tools::R_user_dir("ellmer", "cache")`
+#    by default; overridable via `the$prices_cache_dir` in tests). An
+#    ETag is stored on the cached object so subsequent updates can
+#    short-circuit on 304.
+#
+# 3. Read: `prices()` merges cached + bundled rows, with cached winning
+#    on (provider, model, variant) conflicts. The result is memoized in
+#    `the$prices`; `models_update_prices()` clears it after a refresh.
+#
+# Both reads and writes are gated by an integer `schema_version`; see
+# `data-raw/prices.R` for the contract and when to bump it.
+
 prices <- function() {
   if (is.null(the$prices)) {
     bundled <- prices_data
