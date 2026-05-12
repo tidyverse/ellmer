@@ -39,7 +39,7 @@ jobs:
       - name: Check if prices changed
         id: check
         run: |
-          if git diff --quiet data-raw/prices.json data-raw/prices.csv R/sysdata.rda; then
+          if git diff --quiet data-raw/prices.json R/sysdata.rda; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
