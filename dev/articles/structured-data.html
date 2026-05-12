@@ -526,10 +526,16 @@ guaranteed.</p>
 <div class="section level3">
 <h3 id="example-5-working-with-unknown-keys">Example 5: Working with unknown keys<a class="anchor" aria-label="anchor" href="#example-5-working-with-unknown-keys"></a>
 </h3>
+<p>If you don’t know the keys in advance, you can use an array of
+name-value pairs. This approach works with all providers, replacing the
+now-deprecated <code>.additional_properties</code> argument.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">type_characteristics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
-<span>  <span class="st">"All characteristics"</span>,</span>
-<span>  .additional_properties <span class="op">=</span> <span class="cn">TRUE</span></span>
+<code class="sourceCode R"><span><span class="va">type_characteristics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    value <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"All characteristics"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
@@ -538,16 +544,15 @@ guaranteed.</p>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_anthropic.html">chat_anthropic</a></span><span class="op">(</span><span class="st">"Extract all characteristics of supplied character"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-5-20250929"</span>.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_characteristics</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 6</span></span>
-<span><span class="co">#&gt;  $ gender              : chr "male"</span></span>
-<span><span class="co">#&gt;  $ height              : chr "tall"</span></span>
-<span><span class="co">#&gt;  $ facial_hair         : chr "beard"</span></span>
-<span><span class="co">#&gt;  $ distinguishing_marks: chr "scar on left cheek"</span></span>
-<span><span class="co">#&gt;  $ voice               : chr "deep voice"</span></span>
-<span><span class="co">#&gt;  $ clothing            : chr "black leather jacket"</span></span></code></pre></div>
-<p>This example only works with Claude, not GPT or Gemini, because only
-Claude supports adding additional, arbitrary properties.</p>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_characteristics</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 2</span></span></span>
+<span><span class="co">#&gt;   name                 value               </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> height               tall                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> facial_hair          beard               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> distinguishing_marks scar on left cheek  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> voice                deep                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> clothing             black leather jacket</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-6-extracting-data-from-an-image">Example 6: Extracting data from an image<a class="anchor" aria-label="anchor" href="#example-6-extracting-data-from-an-image"></a>
@@ -612,8 +617,8 @@ and “unearned” income</div>
 <tr class="even">
 <td align="left">Anthropic</td>
 <td align="left">claude-sonnet-4-5-20250929</td>
-<td align="right">730</td>
-<td align="right">95</td>
+<td align="right">254</td>
+<td align="right">65</td>
 <td align="right">0</td>
 <td align="right">$0.00</td>
 </tr>

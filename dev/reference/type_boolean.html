@@ -168,7 +168,7 @@ valid JSON schema object.</p></li>
 <span>  .description <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  .required <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  .additional_properties <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  .additional_properties <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">type_from_schema</span><span class="op">(</span><span class="va">text</span>, <span class="va">path</span><span class="op">)</span></span>
@@ -213,8 +213,9 @@ the components that the object must possess.</p></dd>
 
 
 <dt id="arg--additional-properties">.additional_properties<a class="anchor" aria-label="anchor" href="#arg--additional-properties"></a></dt>
-<dd><p>Can the object have arbitrary additional
-properties that are not explicitly listed? Only supported by Claude.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Can the
+object have arbitrary additional properties that are not explicitly listed?
+Only supported by Claude.</p></dd>
 
 
 <dt id="arg-text">text<a class="anchor" aria-label="anchor" href="#arg-text"></a></dt>

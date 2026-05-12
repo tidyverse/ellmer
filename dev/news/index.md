@@ -2,6 +2,12 @@
 
 ## ellmer (development version)
 
+- `type_object(.additional_properties)` is deprecated. No supported
+  provider can return additional properties when using structured
+  output. Instead, use an array of name-value pairs
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#866](https://github.com/tidyverse/ellmer/issues/866)).
+
 ## ellmer 0.4.1
 
 CRAN release: 2026-05-07
