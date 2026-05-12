@@ -89,9 +89,8 @@ batch_chat <- function(chat, prompts, path, wait = TRUE, ignore_hash = FALSE) {
     wait = wait,
     ignore_hash = ignore_hash
   )
-  result <- job$step_until_done()
-  if (is.null(result)) {
-    return(NULL)
+  if (is.null(job$step_until_done())) {
+    return()
   }
 
   assistant_turns <- job$result_turns()
@@ -153,9 +152,8 @@ batch_chat_structured <- function(
     wait = wait,
     ignore_hash = ignore_hash
   )
-  result <- job$step_until_done()
-  if (is.null(result)) {
-    return(NULL)
+  if (is.null(job$step_until_done())) {
+    return()
   }
   turns <- job$result_turns()
 
