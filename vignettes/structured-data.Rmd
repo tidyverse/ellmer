@@ -356,13 +356,18 @@ data
 
 ### Example 5: Working with unknown keys
 
+If you don't know the keys in advance, you can use an array of name-value pairs. This approach works with all providers, replacing the now-deprecated `.additional_properties` argument.
+
 ```{r}
 #| label: examples-unknown-keys
 #| cassette: true
 
-type_characteristics <- type_object(
-  "All characteristics",
-  .additional_properties = TRUE
+type_characteristics <- type_array(
+  type_object(
+    name = type_string(),
+    value = type_string()
+  ),
+  description = "All characteristics"
 )
 
 text <- "
@@ -370,10 +375,8 @@ text <- "
 "
 
 chat <- chat_anthropic("Extract all characteristics of supplied character")
-str(chat$chat_structured(text, type = type_characteristics))
+chat$chat_structured(text, type = type_characteristics)
 ```
-
-This example only works with Claude, not GPT or Gemini, because only Claude supports adding additional, arbitrary properties.
 
 ### Example 6: Extracting data from an image
 

@@ -158,7 +158,79 @@ test_that("empty ContentText is stripped but tool requests are preserved", {
   expect_null(result[[1]]$content)
 })
 
+test_that("stream_content extracts reasoning_content", {
+  stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
+
+  event <- list(choices = list(list(delta = list(reasoning_content = "think"))))
+  result <- stream_content(stub, event)
+  expect_s3_class(result, "ellmer::ContentThinking")
+  expect_equal(result@thinking, "think")
+
+  event <- list(choices = list(list(delta = list(content = "hello"))))
+  result <- stream_content(stub, event)
+
+  expect_s3_class(result, "ellmer::ContentText")
+  expect_equal(result@text, "hello")
+})
+
+test_that("value_turn extracts reasoning_content", {
+  stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
+
+  result <- list(
+    choices = list(list(
+      message = list(
+        role = "assistant",
+        reasoning_content = "Let me think...",
+        content = "The answer is 42."
+      )
+    ))
+  )
+
+  turn <- value_turn(stub, result)
+  expect_equal(length(turn@contents), 2)
+  expect_s3_class(turn@contents[[1]], "ellmer::ContentThinking")
+  expect_equal(turn@contents[[1]]@thinking, "Let me think...")
+  expect_s3_class(turn@contents[[2]], "ellmer::ContentText")
+  expect_equal(turn@contents[[2]]@text, "The answer is 42.")
+})
+
+test_that("as_json drops reasoning_content by default", {
+  stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
+
+  turn <- AssistantTurn(list(
+    ContentThinking("Let me think..."),
+    ContentText("The answer is 42.")
+  ))
+  result <- as_json(stub, turn)
+  expect_null(result[[1]]$reasoning_content)
+  expect_equal(
+    result[[1]]$content,
+    list(list(type = "text", text = "The answer is 42."))
+  )
+})
+
+test_that("as_json preserves reasoning_content when preserve_thinking = TRUE", {
+  stub <- ProviderOpenAICompatible(
+    name = "",
+    base_url = "",
+    model = "",
+    preserve_thinking = TRUE
+  )
+
+  turn <- AssistantTurn(list(
+    ContentThinking("Let me think..."),
+    ContentText("The answer is 42.")
+  ))
+  result <- as_json(stub, turn)
+  expect_equal(result[[1]]$reasoning_content, "Let me think...")
+  expect_equal(
+    result[[1]]$content,
+    list(list(type = "text", text = "The answer is 42."))
+  )
+})
+
 test_that("as_json specialised for OpenAI", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   stub <- ProviderOpenAI(name = "", base_url = "", model = "")
 
   expect_snapshot(
