@@ -3,7 +3,30 @@ prices <- function() {
     bundled <- prices_data
     cached <- prices_cache_read()
 
-    if (is.null(cached)) {
+    cached_version <- attr(cached, "schema_version")
+    bundled_version <- attr(bundled, "schema_version")
+    compatible <- !is.null(cached) && identical(cached_version, bundled_version)
+
+    if (!compatible) {
+      if (!is.null(cached_version) && cached_version < bundled_version) {
+        cli::cli_inform(
+          c(
+            "Cached pricing data uses an outdated schema.",
+            i = "Run {.run ellmer::model_update_prices()} to refresh."
+          ),
+          .frequency = "once",
+          .frequency_id = "prices_schema_mismatch"
+        )
+      } else if (!is.null(cached_version) && cached_version > bundled_version) {
+        cli::cli_warn(
+          c(
+            "Cached pricing data uses a newer schema than this version of ellmer.",
+            i = "Update ellmer to use the latest pricing data."
+          ),
+          .frequency = "once",
+          .frequency_id = "prices_schema_mismatch"
+        )
+      }
       the$prices <- bundled
       return(invisible(the$prices))
     }
@@ -14,13 +37,7 @@ prices <- function() {
       cached[key_cols]
     ))
     bundled_only <- bundled[!bundled_in_cache, ]
-    # Align columns before rbind in case cached RDS is from an older schema
-    cached <- cached[, intersect(names(bundled), names(cached)), drop = FALSE]
-    for (col in setdiff(names(bundled), names(cached))) {
-      cached[[col]] <- NA_real_
-    }
-    merged <- rbind(cached[names(bundled)], bundled_only)
-    the$prices <- merged
+    the$prices <- rbind(cached[names(bundled)], bundled_only)
   }
 
   the$prices
@@ -53,6 +70,11 @@ model_update_prices <- function() {
   if (isFALSE(result)) {
     cli::cli_inform("Pricing data is already up to date.")
     return(invisible(FALSE))
+  }
+  if (is.list(result)) {
+    cli::cli_abort(
+      "Pricing data on GitHub requires ellmer {result$min_ellmer_version} or later. Please update the package."
+    )
   }
   cli::cli_abort("Failed to download pricing data from GitHub.")
 }
@@ -94,14 +116,24 @@ prices_cache_download <- function() {
     return(NA)
   }
 
-  df <- tryCatch(
+  parsed <- tryCatch(
     jsonlite::fromJSON(rawToChar(resp$content)),
     error = function(e) NULL
   )
 
-  if (!is.data.frame(df)) {
+  if (!is.list(parsed) || !is.data.frame(parsed$data)) {
     return(NA)
   }
+
+  schema_version <- as.integer(parsed$schema_version)
+  if (!isTRUE(schema_version == attr(prices_data, "schema_version"))) {
+    return(list(
+      status = "version_mismatch",
+      min_ellmer_version = parsed$min_ellmer_version
+    ))
+  }
+
+  df <- parsed$data
 
   required <- c("provider", "model", "variant", "input", "output")
   if (!all(required %in% names(df))) {
@@ -112,8 +144,8 @@ prices_cache_download <- function() {
     return(NA)
   }
 
-  resp_etag <- curl::parse_headers_list(resp$headers)[["etag"]]
-  attr(df, "etag") <- resp_etag
+  attr(df, "schema_version") <- schema_version
+  attr(df, "etag") <- curl::parse_headers_list(resp$headers)[["etag"]]
 
   path <- prices_cache_path()
   dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)

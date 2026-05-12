@@ -86,5 +86,23 @@ cli::cli_progress_done()
 
 # --- write outputs -----------------------------------------------------------
 
-jsonlite::write_json(prices_data, "data-raw/prices.json", pretty = TRUE)
+# Bump schema_version for ANY change to the column structure: adding, removing,
+# renaming, or changing the type of a column. Updating row values (new models,
+# new prices) does not require a bump. When bumped, set min_ellmer_version to
+# the release that introduces the new schema so users know which version to
+# install. Update both values together whenever the schema changes.
+schema_version <- 1L
+min_ellmer_version <- "0.4.1.9000"
+attr(prices_data, "schema_version") <- schema_version
+
+jsonlite::write_json(
+  list(
+    schema_version = schema_version,
+    min_ellmer_version = min_ellmer_version,
+    data = prices_data
+  ),
+  "data-raw/prices.json",
+  pretty = TRUE,
+  auto_unbox = TRUE
+)
 usethis::use_data(prices_data, overwrite = TRUE, internal = TRUE)
