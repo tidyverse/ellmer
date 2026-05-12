@@ -29,7 +29,8 @@ jobs:
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          packages: ""
+          packages: "deps::."
+          dependencies: "'hard'"
           needs: prices
       - name: Update prices
         run: Rscript --quiet --vanilla data-raw/prices.R
