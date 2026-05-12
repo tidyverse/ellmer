@@ -356,6 +356,8 @@ data
 
 ### Example 5: Working with unknown keys
 
+If you don't know the keys in advance, you can use an array of name-value pairs. This approach works with all providers, replacing the now-deprecated `.additional_properties` argument.
+
 ```{r}
 #| label: examples-unknown-keys
 #| cassette: true
@@ -375,8 +377,6 @@ text <- "
 chat <- chat_anthropic("Extract all characteristics of supplied character")
 chat$chat_structured(text, type = type_characteristics)
 ```
-
-This approach works with all providers, replacing the now-deprecated `.additional_properties` argument.
 
 ### Example 6: Extracting data from an image
 
