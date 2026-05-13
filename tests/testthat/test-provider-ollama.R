@@ -54,6 +54,19 @@ test_that("supports tool calling", {
 
 # Custom -----------------------------------------------------------------
 
+test_that("chat_params maps reasoning_effort", {
+  stub <- ProviderOllama(name = "", base_url = "", model = "")
+
+  result_none <- chat_params(stub, params(reasoning_effort = "none"))
+  expect_equal(result_none$reasoning_effort, "none")
+
+  result_medium <- chat_params(stub, params(reasoning_effort = "medium"))
+  expect_equal(result_medium$reasoning_effort, "medium")
+
+  result_default <- chat_params(stub, params(temperature = 0.5))
+  expect_null(result_default$reasoning_effort)
+})
+
 test_that("as_json specialised for Ollama", {
   withr::local_options(lifecycle_verbosity = "quiet")
   stub <- ProviderOllama(name = "", base_url = "", model = "")
