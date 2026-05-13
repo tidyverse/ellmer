@@ -161,12 +161,16 @@ test_that("empty ContentText is stripped but tool requests are preserved", {
 test_that("stream_content extracts reasoning_content and reasoning", {
   stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
 
-  event_content <- list(choices = list(list(delta = list(reasoning_content = "think"))))
+  event_content <- list(
+    choices = list(list(delta = list(reasoning_content = "think")))
+  )
   result <- stream_content(stub, event_content)
   expect_s3_class(result, "ellmer::ContentThinking")
   expect_equal(result@thinking, "think")
 
-  event_reasoning <- list(choices = list(list(delta = list(reasoning = "think"))))
+  event_reasoning <- list(
+    choices = list(list(delta = list(reasoning = "think")))
+  )
   result <- stream_content(stub, event_reasoning)
   expect_s3_class(result, "ellmer::ContentThinking")
   expect_equal(result@thinking, "think")
