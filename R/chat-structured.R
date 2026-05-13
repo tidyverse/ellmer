@@ -81,6 +81,8 @@ convert_from_type <- function(x, type) {
         string = NA_character_,
         cli::cli_abort("Unknown type {type@type}", .internal = TRUE)
       )
+    } else if (is.list(x) && length(x) == 1) {
+      x[[1]]
     } else {
       x
     }
