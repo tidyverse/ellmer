@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `chat_ollama()` now supports `params(reasoning_effort = "none")` to disable thinking for reasoning models like qwen3, and thinking content is now captured as `ContentThinking` in turns (#940).
+* `chat_ollama()` now supports `params(reasoning_effort = "none")` to disable thinking for reasoning models like qwen3, and thinking content is now captured as `ContentThinking` in turns (@thisisnic, #940).
 
 * `type_object(.additional_properties)` is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (@thisisnic, #866).
 
