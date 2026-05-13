@@ -254,7 +254,7 @@ method(stream_content, ProviderOpenAICompatible) <- function(provider, event) {
   }
   delta <- event$choices[[1]]$delta
 
-  reasoning <- delta[["reasoning_content"]]
+  reasoning <- delta[["reasoning_content"]] %||% delta[["reasoning"]]
   if (!is.null(reasoning)) {
     return(ContentThinking(reasoning))
   }
@@ -301,7 +301,7 @@ method(value_turn, ProviderOpenAICompatible) <- function(
   }
 
   thinking <- list()
-  reasoning <- message$reasoning_content
+  reasoning <- message$reasoning_content %||% message$reasoning
   if (is_string(reasoning) && nzchar(reasoning)) {
     thinking <- list(ContentThinking(reasoning))
   }
