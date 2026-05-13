@@ -82,6 +82,7 @@ convert_from_type <- function(x, type) {
         cli::cli_abort("Unknown type {type@type}", .internal = TRUE)
       )
     } else if (is.list(x) && length(x) == 1) {
+      # Some models intermittently wrap scalars in a JSON array (#931)
       x[[1]]
     } else {
       x
