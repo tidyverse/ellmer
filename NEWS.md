@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_ollama()` now supports `params(reasoning_effort = "none")` to disable thinking for reasoning models like qwen3, and thinking content is now captured as `ContentThinking` in turns (@thisisnic, #940).
 * `chat_perplexity()` now defaults to `model = "sonar"` since the previous default (`"llama-3.1-sonar-small-128k-online"`) has been removed by Perplexity (@thisisnic, #538).
 * `models_deepseek()` lists available models for `chat_deepseek()` (@jcrodriguez1989, #919).
 * `type_object(.additional_properties)` is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (@thisisnic, #866).
