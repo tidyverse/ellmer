@@ -55,7 +55,7 @@ provider_lookup <- tribble(
   "mistral",                   "Mistral",
 )
 
-prices <- all_prices |>
+prices_data <- all_prices |>
   inner_join(provider_lookup, join_by(provider == litellm_provider)) |>
   mutate(provider = provider.y, provider.y = NULL) |>
   arrange(provider, model, variant)
@@ -64,18 +64,39 @@ cli::cli_progress_done()
 
 # --- sanity checks -----------------------------------------------------------
 
-cli::cli_alert_info("Rows: {nrow(prices)}")
-cli::cli_alert_info("Providers: {n_distinct(prices$provider)}")
+cli::cli_alert_info("Rows: {nrow(prices_data)}")
+cli::cli_alert_info("Providers: {n_distinct(prices_data$provider)}")
 
 stopifnot(
-  "Expected at least 500 rows" = nrow(prices) >= 500,
-  "Expected 8 providers" = n_distinct(prices$provider) >= 8
+  "Expected at least 500 rows" = nrow(prices_data) >= 500,
+  "Expected 8 providers" = n_distinct(prices_data$provider) >= 8
+)
+
+# --- schema version ----------------------------------------------------------
+
+# Bump schema_version for ANY change to the column structure: adding, removing,
+# renaming, or changing the type of a column. Updating row values (new models,
+# new prices) does not require a bump. When bumped, set min_ellmer_version to
+# the release that introduces the new schema so users know which version to
+# install. Update both values together whenever the schema changes.
+schema_version <- 1L
+min_ellmer_version <- "0.4.1.9000"
+attr(prices_data, "schema_version") <- schema_version
+
+prices_envelope <- list(
+  schema_version = schema_version,
+  min_ellmer_version = min_ellmer_version,
+  data = prices_data
 )
 
 # --- schema validation -------------------------------------------------------
 
 cli::cli_progress_step("Validating schema")
-prices_json <- jsonlite::toJSON(prices, pretty = TRUE)
+prices_json <- jsonlite::toJSON(
+  prices_envelope,
+  pretty = TRUE,
+  auto_unbox = TRUE
+)
 valid <- jsonvalidate::json_validate(
   prices_json,
   "data-raw/prices.schema.json",
@@ -86,5 +107,10 @@ cli::cli_progress_done()
 
 # --- write outputs -----------------------------------------------------------
 
-jsonlite::write_json(prices, "data-raw/prices.json", pretty = TRUE)
-usethis::use_data(prices, overwrite = TRUE, internal = TRUE)
+jsonlite::write_json(
+  prices_envelope,
+  "data-raw/prices.json",
+  pretty = TRUE,
+  auto_unbox = TRUE
+)
+usethis::use_data(prices_data, overwrite = TRUE, internal = TRUE)

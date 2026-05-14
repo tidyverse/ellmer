@@ -28,6 +28,7 @@ reference:
   - starts_with("chat_")
   - Chat
   - token_usage
+  - models_update_prices
 
 - subtitle: Provider-specific helpers
   contents:

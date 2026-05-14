@@ -323,7 +323,6 @@ method(value_turn, ProviderOpenAI) <- function(
         "web search"
       ContentToolRequestSearch(query = query, json = output)
     } else {
-      browser()
       cli::cli_abort(
         "Unknown content type {.str {output$type}}.",
         .internal = TRUE

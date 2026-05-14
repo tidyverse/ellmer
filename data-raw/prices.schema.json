@@ -2,43 +2,67 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "ellmer prices",
   "description": "Per-million-token pricing for LLM providers supported by ellmer",
-  "type": "array",
-  "items": {
-    "type": "object",
-    "required": ["provider", "model", "variant"],
-    "additionalProperties": false,
-    "properties": {
-      "provider": {
-        "type": "string",
-        "enum": [
-          "Anthropic",
-          "AWS/Bedrock",
-          "Azure/OpenAI",
-          "Google/Gemini",
-          "Google/Vertex",
-          "Mistral",
-          "OpenAI",
-          "OpenRouter"
-        ]
-      },
-      "model": {
-        "type": "string",
-        "minLength": 1
-      },
-      "variant": {
-        "type": "string"
-      },
-      "input": {
-        "type": "number",
-        "minimum": 0
-      },
-      "output": {
-        "type": "number",
-        "minimum": 0
-      },
-      "cached_input": {
-        "type": "number",
-        "minimum": 0
+  "type": "object",
+  "required": ["schema_version", "min_ellmer_version", "data"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "description": "Integer version of the data schema. Bump only for breaking changes (added, removed, renamed, or retyped columns). Updating row values does not require a bump. ellmer rejects cached data whose schema_version differs from the bundled data.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "min_ellmer_version": {
+      "description": "The minimum version of ellmer required to use this schema. Used in the error message when a user's installed ellmer is too old to read the downloaded data.",
+      "type": "string",
+      "minLength": 1
+    },
+    "data": {
+      "description": "Per-million-token pricing rows. Each row is one (provider, model, variant) combination.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["provider", "model", "variant"],
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
+            "description": "LLM provider name.",
+            "type": "string",
+            "enum": [
+              "Anthropic",
+              "AWS/Bedrock",
+              "Azure/OpenAI",
+              "Google/Gemini",
+              "Google/Vertex",
+              "Mistral",
+              "OpenAI",
+              "OpenRouter"
+            ]
+          },
+          "model": {
+            "description": "Model identifier as used by the provider's API.",
+            "type": "string",
+            "minLength": 1
+          },
+          "variant": {
+            "description": "Pricing variant, e.g. empty string for standard, 'batch' for batch API pricing.",
+            "type": "string"
+          },
+          "input": {
+            "description": "Input token cost in USD per million tokens.",
+            "type": "number",
+            "minimum": 0
+          },
+          "output": {
+            "description": "Output token cost in USD per million tokens.",
+            "type": "number",
+            "minimum": 0
+          },
+          "cached_input": {
+            "description": "Cache-read input token cost in USD per million tokens.",
+            "type": "number",
+            "minimum": 0
+          }
+        }
       }
     }
   }

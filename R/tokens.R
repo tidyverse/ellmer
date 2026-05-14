@@ -114,18 +114,20 @@ token_usage <- function() {
 
 has_cost <- function(provider, model) {
   needle <- data.frame(provider = provider@name, model = model)
-  vctrs::vec_in(needle, prices[c("provider", "model")])
+  vctrs::vec_in(needle, prices()[c("provider", "model")])
 }
 
 get_token_cost <- function(provider, tokens, variant = "") {
   check_string(variant, .internal = TRUE)
+
+  p <- prices()
 
   needle <- data.frame(
     provider = provider@name,
     model = provider@model,
     variant = variant
   )
-  idx <- vctrs::vec_match(needle, prices[c("provider", "model", "variant")])
+  idx <- vctrs::vec_match(needle, p[c("provider", "model", "variant")])
 
   if (any(is.na(idx))) {
     # Match baseline if we can't match specific variant
@@ -134,13 +136,13 @@ get_token_cost <- function(provider, tokens, variant = "") {
 
     idx[no_match] <- vctrs::vec_match(
       needle[no_match],
-      prices[c("provider", "model", "variant")]
+      p[c("provider", "model", "variant")]
     )
   }
 
-  input_price <- tokens$input * prices$input[idx] / 1e6
-  output_price <- tokens$output * prices$output[idx] / 1e6
-  cached_input_price <- tokens$cached_input * prices$cached_input[idx] / 1e6
+  input_price <- tokens$input * p$input[idx] / 1e6
+  output_price <- tokens$output * p$output[idx] / 1e6
+  cached_input_price <- tokens$cached_input * p$cached_input[idx] / 1e6
 
   dollars(input_price + output_price + cached_input_price)
 }
