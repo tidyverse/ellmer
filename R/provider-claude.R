@@ -213,7 +213,12 @@ method(chat_body, ProviderAnthropic) <- function(
       )
       tool_choice <- NULL
     } else {
-      tool_def <- structured_tool_def("_structured_tool_call", type)
+      tool_def <- ToolDef(
+        function(...) {},
+        name = "_structured_tool_call",
+        description = "Extract structured data. Return a valid JSON object conforming exactly to the provided schema with all required fields.",
+        arguments = type_object(data = type)
+      )
       tools[[tool_def@name]] <- tool_def
       tool_choice <- list(type = "tool", name = tool_def@name)
       stream <- FALSE

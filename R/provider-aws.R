@@ -260,7 +260,12 @@ method(chat_request, ProviderAWSBedrock) <- function(
   }))
 
   if (!is.null(type)) {
-    tool_def <- structured_tool_def("structured_tool_call__", type)
+    tool_def <- ToolDef(
+      function(...) {},
+      name = "structured_tool_call__",
+      description = "Extract structured data",
+      arguments = type_object(data = type)
+    )
     tools[[tool_def@name]] <- tool_def
     tool_choice <- list(tool = list(name = tool_def@name))
     stream <- FALSE
