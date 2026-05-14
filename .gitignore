@@ -10,3 +10,15 @@ inst/doc
 /.quarto/
 _dev/
 plans/
+
+# Local secrets
+.Renviron
+
+# Local scratch scripts / notes (do not commit)
+ellmer_test_zai.R
+official-glm-doc.txt
+test-zai-api.R
+test-zai-simple.R
+test_zai_tutor.R
+test_zai_all_endpoints.R
+zai_chat_example.R
