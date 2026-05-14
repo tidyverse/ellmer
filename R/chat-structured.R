@@ -35,6 +35,15 @@ wrap_type_if_needed <- function(type, needs_wrapper = FALSE) {
   }
 }
 
+structured_tool_def <- function(name, type) {
+  ToolDef(
+    function(...) {},
+    name = name,
+    description = "Extract structured data. Return a valid JSON object conforming exactly to the provided schema with all required fields.",
+    arguments = type_object(data = type)
+  )
+}
+
 convert_from_type <- function(x, type) {
   if (is.null(x) && !type@required) {
     x
