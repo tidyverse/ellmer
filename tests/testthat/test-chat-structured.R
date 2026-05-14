@@ -65,6 +65,13 @@ test_that("optional base types (scalars) stay as NULL", {
   expect_equal(convert_from_type(NULL, type_string(required = FALSE)), NULL)
 })
 
+test_that("single-element arrays are unwrapped for scalar types (#931)", {
+  expect_equal(convert_from_type(list("hello"), type_string()), "hello")
+  expect_equal(convert_from_type(list(42L), type_integer()), 42L)
+  expect_equal(convert_from_type(list(3.14), type_number()), 3.14)
+  expect_equal(convert_from_type(list(TRUE), type_boolean()), TRUE)
+})
+
 test_that("can convert arrays of basic types to simple vectors", {
   expect_equal(
     convert_from_type(list(FALSE, TRUE), type_array(type_boolean())),
