@@ -883,3 +883,233 @@ models_google <- function(
 google_location <- function(location) {
   if (location == "global") "" else paste0(location, "-")
 }
+
+# Batched requests -------------------------------------------------------------
+
+# https://ai.google.dev/gemini-api/docs/batch-api
+# Only the Gemini Developer API is supported; Vertex AI's batch API has a
+# different request shape (GCS bucket URIs instead of file uploads).
+method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
+  identical(provider@name, "Google/Gemini")
+}
+
+method(batch_submit, ProviderGoogleGemini) <- function(
+  provider,
+  conversations,
+  type = NULL
+) {
+  path <- withr::local_tempfile(fileext = ".jsonl")
+
+  requests <- map(seq_along(conversations), function(i) {
+    body <- chat_body(
+      provider,
+      stream = FALSE,
+      turns = conversations[[i]],
+      type = type
+    )
+
+    list(
+      key = paste0("chat-", i),
+      request = gemini_prepare_batch_body(body)
+    )
+  })
+
+  json_lines <- map_chr(requests, to_json)
+  writeLines(json_lines, path)
+
+  uploaded <- gemini_upload_file(provider, path)
+  if (is.null(uploaded$name) || !nzchar(uploaded$name)) {
+    cli::cli_abort(
+      "Gemini upload did not return a file resource name.",
+      .internal = TRUE
+    )
+  }
+
+  req <- base_request(provider)
+  req <- req_url_path_append(
+    req,
+    "models",
+    paste0(provider@model, ":batchGenerateContent")
+  )
+  req <- req_body_json(
+    req,
+    list(
+      batch = list(
+        displayName = paste0("ellmer-", as.integer(Sys.time())),
+        model = paste0("models/", provider@model),
+        inputConfig = list(fileName = uploaded$name)
+      )
+    )
+  )
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+method(batch_poll, ProviderGoogleGemini) <- function(provider, batch) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, batch$name)
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+method(batch_status, ProviderGoogleGemini) <- function(provider, batch) {
+  metadata <- batch$metadata %||% list()
+  stats <- metadata$batchStats %||% list()
+  state <- metadata$state %||% "BATCH_STATE_UNSPECIFIED"
+
+  total <- as.integer(stats$requestCount %||% 0L)
+  pending <- as.integer(stats$pendingRequestCount %||% 0L)
+  succeeded <- as.integer(stats$successfulRequestCount %||% 0L)
+  failed <- as.integer(stats$failedRequestCount %||% 0L)
+
+  if (!is.null(batch$error) && total > 0 && failed == 0L) {
+    failed <- total
+  }
+
+  terminal_states <- c(
+    "BATCH_STATE_SUCCEEDED",
+    "BATCH_STATE_FAILED",
+    "BATCH_STATE_CANCELLED",
+    "BATCH_STATE_EXPIRED"
+  )
+
+  is_done <- state %in% terminal_states
+
+  # The API can report BATCH_STATE_SUCCEEDED before responsesFile is populated.
+  if (state == "BATCH_STATE_SUCCEEDED") {
+    responses_file <- batch$response$responsesFile %||% ""
+    if (!nzchar(responses_file)) {
+      is_done <- FALSE
+    }
+  }
+
+  n_processing <- max(pending, total - succeeded - failed, 0L)
+
+  list(
+    working = !is_done,
+    n_processing = n_processing,
+    n_succeeded = max(succeeded, 0L),
+    n_failed = max(failed, 0L)
+  )
+}
+
+method(batch_retrieve, ProviderGoogleGemini) <- function(provider, batch) {
+  metadata <- batch$metadata %||% list()
+  stats <- metadata$batchStats %||% list()
+  request_count <- as.integer(stats$requestCount %||% 0L)
+
+  if (!is.null(batch$error)) {
+    code <- as.integer(batch$error$code %||% 500L)
+    return(rep(
+      list(list(status_code = code, body = NULL)),
+      max(0L, request_count)
+    ))
+  }
+
+  responses_file <- batch$response$responsesFile %||% ""
+
+  if (!nzchar(responses_file)) {
+    cli::cli_abort("Gemini batch completed but no output file was returned.")
+  }
+
+  path_output <- withr::local_tempfile(fileext = ".jsonl")
+  gemini_download_file(provider, responses_file, path_output)
+
+  parsed <- read_ndjson(path_output)
+
+  normalized <- imap(parsed, function(x, i) {
+    gemini_normalize_result(x, index_default = as.integer(i))
+  })
+
+  ids <- vapply(normalized, function(x) x$index, integer(1))
+  results <- lapply(normalized, function(x) x$result)
+  results[order(ids)]
+}
+
+method(batch_result_turn, ProviderGoogleGemini) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
+  if (!is.null(result) && result$status_code == 200L && !is.null(result$body)) {
+    value_turn(provider, result$body, has_type = has_type)
+  } else {
+    NULL
+  }
+}
+
+# Gemini batch helpers ---------------------------------------------------------
+
+# The Gemini REST API accepts both camelCase and snake_case, but the batch
+# JSONL file parser requires protobuf field names which are always snake_case.
+# Without this conversion, the batch API rejects requests with HTTP 400.
+gemini_to_snake_case <- function(x) {
+  if (is.list(x)) {
+    if (!is.null(names(x))) {
+      names(x) <- gsub("([a-z])([A-Z])", "\\1_\\2", names(x), perl = TRUE) |>
+        tolower()
+    }
+    lapply(x, gemini_to_snake_case)
+  } else {
+    x
+  }
+}
+
+gemini_prepare_batch_body <- function(body) {
+  # chat_body always produces systemInstruction = list(parts = list(text = "..."))
+  # The batch JSONL parser rejects empty text, so drop the field when it's blank.
+  text <- body$systemInstruction$parts$text
+  if (!is.null(text) && identical(text, "")) {
+    body$systemInstruction <- NULL
+  }
+
+  # chat_body mixes cases inside generationConfig: chat_params yields camelCase
+  # keys (topP, topK, ...) while the structured-output branch adds snake_case
+  # ones (response_mime_type, response_schema). Look up both spellings so we
+  # don't silently lose the schema for real structured requests.
+  gc <- body$generationConfig
+  saved_schema <- gc$response_schema %||% gc$responseSchema
+
+  # Batch JSONL requires protobuf-style snake_case field names; camelCase causes
+  # HTTP 400 (unlike the REST API which accepts both). Save the schema first
+  # so user property names like "firstName" survive the conversion.
+  body <- gemini_to_snake_case(body)
+
+  # The batch JSONL parser uses the newer response_json_schema field name.
+  if (!is.null(saved_schema)) {
+    body$generation_config$response_json_schema <- saved_schema
+    body$generation_config$response_schema <- NULL
+  }
+
+  body
+}
+
+gemini_extract_index <- function(x, default = NA_integer_) {
+  key <- x$key %||% ""
+  if (grepl("^chat-[0-9]+$", key)) {
+    return(as.integer(sub("^chat-([0-9]+)$", "\\1", key)))
+  }
+  as.integer(default)
+}
+
+gemini_normalize_result <- function(x, index_default) {
+  index <- gemini_extract_index(x, default = index_default)
+
+  if (!is.null(x$response) && is.null(x$error) && is.null(x$status)) {
+    return(list(
+      index = index,
+      result = list(status_code = 200L, body = x$response)
+    ))
+  }
+
+  if (!is.null(x$error) || !is.null(x$status)) {
+    code <- (x$error %||% x$status %||% list())$code %||% 500L
+    return(list(
+      index = index,
+      result = list(status_code = as.integer(code), body = NULL)
+    ))
+  }
+
+  list(index = index, result = list(status_code = 500L, body = NULL))
+}
