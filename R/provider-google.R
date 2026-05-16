@@ -887,8 +887,10 @@ google_location <- function(location) {
 # Batched requests -------------------------------------------------------------
 
 # https://ai.google.dev/gemini-api/docs/batch-api
+# Only the Gemini Developer API is supported; Vertex AI's batch API has a
+# different request shape (GCS bucket URIs instead of file uploads).
 method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
-  TRUE
+  identical(provider@name, "Google/Gemini")
 }
 
 method(batch_submit, ProviderGoogleGemini) <- function(
@@ -953,9 +955,8 @@ method(batch_poll, ProviderGoogleGemini) <- function(provider, batch) {
 
 method(batch_status, ProviderGoogleGemini) <- function(provider, batch) {
   metadata <- batch$metadata %||% list()
-  response <- batch$response %||% list()
-  state <- metadata$state %||% response$state %||% "BATCH_STATE_UNSPECIFIED"
-  stats <- metadata$batchStats %||% response$batchStats %||% list()
+  stats <- metadata$batchStats %||% list()
+  state <- metadata$state %||% "BATCH_STATE_UNSPECIFIED"
 
   total <- as.integer(stats$requestCount %||% 0L)
   pending <- as.integer(stats$pendingRequestCount %||% 0L)
@@ -975,9 +976,7 @@ method(batch_status, ProviderGoogleGemini) <- function(provider, batch) {
 
   is_done <- state %in% terminal_states
 
-  # Keep polling if succeeded but output file isn't available yet.
-  # The API can report BATCH_STATE_SUCCEEDED before the responsesFile
-  # metadata is populated.
+  # The API can report BATCH_STATE_SUCCEEDED before responsesFile is populated.
   if (state == "BATCH_STATE_SUCCEEDED") {
     responses_file <- batch$response$responsesFile %||% ""
     if (!nzchar(responses_file)) {
@@ -997,8 +996,7 @@ method(batch_status, ProviderGoogleGemini) <- function(provider, batch) {
 
 method(batch_retrieve, ProviderGoogleGemini) <- function(provider, batch) {
   metadata <- batch$metadata %||% list()
-  response <- batch$response %||% list()
-  stats <- metadata$batchStats %||% response$batchStats %||% list()
+  stats <- metadata$batchStats %||% list()
   request_count <- as.integer(stats$requestCount %||% 0L)
 
   if (!is.null(batch$error)) {
@@ -1059,98 +1057,58 @@ gemini_to_snake_case <- function(x) {
 }
 
 gemini_prepare_batch_body <- function(body) {
-  # Remove empty system instructions (batch parser rejects them)
-  si <- body$systemInstruction %||% body$system_instruction
-  if (!is.null(si)) {
-    parts <- si$parts
-    is_empty <- if (is.list(parts) && !is.null(names(parts))) {
-      identical(parts$text, "") || is.null(parts$text)
-    } else if (is.list(parts) && length(parts) > 0) {
-      all(vapply(
-        parts,
-        function(p) identical(p$text, "") || is.null(p$text),
-        logical(1)
-      ))
-    } else {
-      TRUE
-    }
-    if (is_empty) {
-      body$systemInstruction <- NULL
-      body$system_instruction <- NULL
-    }
+  # chat_body always produces systemInstruction = list(parts = list(text = "..."))
+  # The batch JSONL parser rejects empty text, so drop the field when it's blank.
+  text <- body$systemInstruction$parts$text
+  if (!is.null(text) && identical(text, "")) {
+    body$systemInstruction <- NULL
   }
 
-  # Save user-defined schema before snake_case conversion so property names
-  # like "firstName" are not mangled to "first_name"
-  gc_pre <- body$generationConfig %||% body$generation_config
-  saved_schema <- if (!is.null(gc_pre)) {
-    gc_pre$responseSchema %||% gc_pre$response_schema
-  }
+  # chat_body mixes cases inside generationConfig: chat_params yields camelCase
+  # keys (topP, topK, ...) while the structured-output branch adds snake_case
+  # ones (response_mime_type, response_schema). Look up both spellings so we
+  # don't silently lose the schema for real structured requests.
+  gc <- body$generationConfig
+  saved_schema <- gc$response_schema %||% gc$responseSchema
 
   # Batch JSONL requires protobuf-style snake_case field names; camelCase causes
-  # HTTP 400 (unlike the REST API which accepts both)
+  # HTTP 400 (unlike the REST API which accepts both). Save the schema first
+  # so user property names like "firstName" survive the conversion.
   body <- gemini_to_snake_case(body)
 
-  # Rename response_schema -> response_json_schema and restore original schema
-  gc <- body$generation_config
-  if (
-    !is.null(gc) && (!is.null(gc$response_schema) || !is.null(saved_schema))
-  ) {
-    gc$response_json_schema <- saved_schema %||% gc$response_schema
-    gc$response_schema <- NULL
-    body$generation_config <- gc
+  # The batch JSONL parser uses the newer response_json_schema field name.
+  if (!is.null(saved_schema)) {
+    body$generation_config$response_json_schema <- saved_schema
+    body$generation_config$response_schema <- NULL
   }
 
   body
 }
 
 gemini_extract_index <- function(x, default = NA_integer_) {
-  metadata <- x$metadata %||% list()
-  idx <- metadata$request_index %||% metadata$index
-
-  if (!is.null(idx) && !is.na(idx)) {
-    return(as.integer(idx))
-  }
-
-  key <- x$key %||%
-    x$custom_id %||%
-    metadata$key %||%
-    metadata$custom_id %||%
-    ""
+  key <- x$key %||% ""
   if (grepl("^chat-[0-9]+$", key)) {
     return(as.integer(sub("^chat-([0-9]+)$", "\\1", key)))
   }
-
   as.integer(default)
 }
 
 gemini_normalize_result <- function(x, index_default) {
   index <- gemini_extract_index(x, default = index_default)
 
-  # Formats where response and error/status are wrapped in one object
-  if (!is.null(x$response) || !is.null(x$error) || !is.null(x$status)) {
-    if (!is.null(x$response) && is.null(x$error) && is.null(x$status)) {
-      return(list(
-        index = index,
-        result = list(status_code = 200L, body = x$response)
-      ))
-    }
+  if (!is.null(x$response) && is.null(x$error) && is.null(x$status)) {
+    return(list(
+      index = index,
+      result = list(status_code = 200L, body = x$response)
+    ))
+  }
 
-    status <- x$error %||% x$status %||% list()
-    code <- status$code %||% 500L
+  if (!is.null(x$error) || !is.null(x$status)) {
+    code <- (x$error %||% x$status %||% list())$code %||% 500L
     return(list(
       index = index,
       result = list(status_code = as.integer(code), body = NULL)
     ))
-  }
-
-  # Plain GenerateContentResponse lines (current file-mode output)
-  if (
-    !is.null(x$candidates) ||
-      !is.null(x$promptFeedback) ||
-      !is.null(x$usageMetadata)
-  ) {
-    return(list(index = index, result = list(status_code = 200L, body = x)))
   }
 
   list(index = index, result = list(status_code = 500L, body = NULL))

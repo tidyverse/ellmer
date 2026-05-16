@@ -1,45 +1,18 @@
 # Gemini batch helper functions -------------------------------------------
 
-test_that("gemini_extract_index extracts from metadata.request_index", {
-  x <- list(metadata = list(request_index = 5L))
-  expect_equal(gemini_extract_index(x), 5L)
-})
-
-test_that("gemini_extract_index extracts from custom_id key", {
-  x <- list(custom_id = "chat-3")
-  expect_equal(gemini_extract_index(x), 3L)
-})
-
 test_that("gemini_extract_index extracts from key field", {
   x <- list(key = "chat-7")
   expect_equal(gemini_extract_index(x), 7L)
 })
 
-test_that("gemini_extract_index extracts from metadata key field", {
-  x <- list(metadata = list(key = "chat-8"))
-  expect_equal(gemini_extract_index(x), 8L)
-})
-
-test_that("gemini_extract_index returns default when no index found", {
+test_that("gemini_extract_index returns default when no key found", {
   x <- list(foo = "bar")
   expect_equal(gemini_extract_index(x, default = 99L), 99L)
 })
 
-test_that("gemini_normalize_result handles plain GenerateContentResponse", {
-  x <- list(
-    candidates = list(list(content = list(parts = list(list(text = "hello"))))),
-    usageMetadata = list(totalTokenCount = 10L)
-  )
-  result <- gemini_normalize_result(x, index_default = 1L)
-
-  expect_equal(result$index, 1L)
-  expect_equal(result$result$status_code, 200L)
-  expect_equal(result$result$body, x)
-})
-
 test_that("gemini_normalize_result handles wrapped response", {
   x <- list(
-    metadata = list(request_index = 2L),
+    key = "chat-2",
     response = list(candidates = list())
   )
   result <- gemini_normalize_result(x, index_default = 99L)
@@ -51,7 +24,7 @@ test_that("gemini_normalize_result handles wrapped response", {
 
 test_that("gemini_normalize_result handles error response", {
   x <- list(
-    metadata = list(request_index = 3L),
+    key = "chat-3",
     error = list(code = 400L, message = "bad request")
   )
   result <- gemini_normalize_result(x, index_default = 99L)
@@ -153,16 +126,39 @@ dummy_gemini_provider <- function(
   )
 }
 
-test_that("ProviderGoogleGemini has batch support", {
+test_that("Gemini Developer API has batch support", {
   provider <- dummy_gemini_provider()
   expect_true(has_batch_support(provider))
 })
 
-test_that("Vertex provider also has batch support", {
+test_that("Vertex AI does not advertise batch support", {
   provider <- dummy_gemini_provider(
     base_url = "https://us-central1-aiplatform.googleapis.com/v1/projects/test/locations/us-central1/publishers/google/"
   )
-  expect_true(has_batch_support(provider))
+  expect_false(has_batch_support(provider))
+})
+
+test_that("gemini_prepare_batch_body renames schema from real chat_body output", {
+  # chat_body() writes response_schema (snake_case) inside generationConfig
+  # (camelCase) -- a mixed shape the helper must handle correctly.
+  provider <- dummy_gemini_provider()
+  body <- chat_body(
+    provider,
+    stream = FALSE,
+    turns = list(Turn("user", "hi")),
+    type = type_object(name = type_string())
+  )
+
+  expect_true("response_schema" %in% names(body$generationConfig))
+
+  result <- gemini_prepare_batch_body(body)
+
+  expect_true(
+    "response_json_schema" %in% names(result$generation_config)
+  )
+  expect_false(
+    "response_schema" %in% names(result$generation_config)
+  )
 })
 
 test_that("batch_status keeps working when succeeded but no responsesFile", {
