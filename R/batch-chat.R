@@ -122,6 +122,9 @@ batch_chat_text <- function(
     wait = wait,
     ignore_hash = ignore_hash
   )
+  if (is.null(chats)) {
+    return()
+  }
   map_chr(chats, \(chat) {
     if (is.null(chat)) NA_character_ else chat$last_turn()@text
   })
