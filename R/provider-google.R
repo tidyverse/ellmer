@@ -1010,7 +1010,10 @@ method(batch_retrieve, ProviderGoogleGemini) <- function(provider, batch) {
   responses_file <- batch$response$responsesFile %||% ""
 
   if (!nzchar(responses_file)) {
-    cli::cli_abort("Gemini batch completed but no output file was returned.")
+    cli::cli_abort(
+      "Gemini batch completed but no output file was returned.",
+      .internal = TRUE
+    )
   }
 
   path_output <- withr::local_tempfile(fileext = ".jsonl")
@@ -1057,26 +1060,20 @@ gemini_to_snake_case <- function(x) {
 }
 
 gemini_prepare_batch_body <- function(body) {
-  # chat_body always produces systemInstruction = list(parts = list(text = "..."))
-  # The batch JSONL parser rejects empty text, so drop the field when it's blank.
+  # Drop empty system instructions ; the batch JSONL parser rejects empty text.
   text <- body$systemInstruction$parts$text
   if (!is.null(text) && identical(text, "")) {
     body$systemInstruction <- NULL
   }
 
-  # chat_body mixes cases inside generationConfig: chat_params yields camelCase
-  # keys (topP, topK, ...) while the structured-output branch adds snake_case
-  # ones (response_mime_type, response_schema). Look up both spellings so we
-  # don't silently lose the schema for real structured requests.
+  # Save schema before snake_case conversion so user property names like
+  # "firstName" survive. Look up both spellings since chat_body mixes cases.
   gc <- body$generationConfig
   saved_schema <- gc$response_schema %||% gc$responseSchema
 
-  # Batch JSONL requires protobuf-style snake_case field names; camelCase causes
-  # HTTP 400 (unlike the REST API which accepts both). Save the schema first
-  # so user property names like "firstName" survive the conversion.
   body <- gemini_to_snake_case(body)
 
-  # The batch JSONL parser uses the newer response_json_schema field name.
+  # The batch JSONL parser uses response_json_schema, not response_schema.
   if (!is.null(saved_schema)) {
     body$generation_config$response_json_schema <- saved_schema
     body$generation_config$response_schema <- NULL
@@ -1104,7 +1101,7 @@ gemini_normalize_result <- function(x, index_default) {
   }
 
   if (!is.null(x$error) || !is.null(x$status)) {
-    code <- (x$error %||% x$status %||% list())$code %||% 500L
+    code <- x$error$code %||% 500L
     return(list(
       index = index,
       result = list(status_code = as.integer(code), body = NULL)
