@@ -340,6 +340,40 @@ test_that("value_turn() parses mcp_call with error", {
   )
 })
 
+test_that("value_turn() parses mcp_call with structured error", {
+  provider <- chat_openai_test()$get_provider()
+
+  error_content <- list(
+    list(
+      type = "text",
+      text = "validation error",
+      annotations = NULL,
+      meta = NULL
+    )
+  )
+  result <- list(
+    output = list(
+      list(
+        type = "mcp_call",
+        id = "mcp_call_3",
+        name = "read_wiki_contents",
+        server_label = "deepwiki",
+        arguments = '{"repoName":"tidyverse/ellmer"}',
+        output = NULL,
+        error = list(type = "mcp_tool_execution_error", content = error_content)
+      )
+    ),
+    usage = list(input_tokens = 10, output_tokens = 5),
+    service_tier = "default"
+  )
+
+  turn <- value_turn(provider, result)
+  resp <- turn@contents[[2]]
+  expect_s7_class(resp, ContentMcpToolResult)
+  expect_equal(resp@error, "validation error")
+  expect_equal(resp@content, error_content)
+})
+
 test_that("value_turn() parses mcp_list_tools output", {
   provider <- chat_openai_test()$get_provider()
 

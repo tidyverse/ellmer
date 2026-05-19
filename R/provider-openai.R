@@ -376,12 +376,24 @@ method(value_turn, ProviderOpenAI) <- function(
         server_name = server_name,
         json = json
       )
-      is_error <- !is.null(output$error) && nzchar(output$error)
-      text <- if (is_error) output$error else (output$output %||% "")
-      content_blocks <- list(list(type = "text", text = text))
+      is_error <- !is.null(output$error)
+      if (is_error && is.list(output$error)) {
+        error_text <- mcp_error_text(output$error)
+        content_blocks <- output$error$content %||%
+          list(list(type = "text", text = error_text))
+      } else if (is_error) {
+        error_text <- output$error
+        content_blocks <- list(list(type = "text", text = error_text))
+      } else {
+        error_text <- NULL
+        content_blocks <- list(list(
+          type = "text",
+          text = output$output %||% ""
+        ))
+      }
       response <- ContentMcpToolResult(
-        value = if (!is_error) text else NULL,
-        error = if (is_error) text else NULL,
+        value = if (!is_error) (output$output %||% "") else NULL,
+        error = error_text,
         request = ContentToolRequest(
           id = output$id,
           name = "",
@@ -719,6 +731,12 @@ method(batch_result_turn, ProviderOpenAI) <- function(
 }
 
 # Helpers ------------------------------------------------------------------
+
+mcp_error_text <- function(error) {
+  blocks <- error$content %||% list()
+  texts <- vapply(blocks, function(b) b$text %||% "", character(1))
+  paste(texts[nzchar(texts)], collapse = "\n")
+}
 
 is_openai_reasoning <- function(model) {
   # https://platform.openai.com/docs/models/compare
