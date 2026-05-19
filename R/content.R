@@ -306,17 +306,11 @@ method(format, ContentToolResult) <- function(
 
   value <- truncate_lines(value, max_lines)
 
+  header <- cli::format_inline("[{.strong {label}}  ({id})]:")
   if (!is_string(value) || !grepl("\n", value)) {
-    cli::format_inline("[{.strong {label}}  ({id})]: {value}")
+    paste(header, value)
   } else {
-    header <- cli::cli_format_method(
-      cli::cli_rule(
-        left = cli::col_blue(label),
-        right = cli::col_silver(id)
-      )
-    )
-    footer <- cli::cli_format_method(cli::cli_rule())
-    paste(c(header, value, footer, ""), collapse = "\n")
+    paste0(header, "\n", value, "\n")
   }
 }
 
