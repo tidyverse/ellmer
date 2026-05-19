@@ -259,9 +259,9 @@ method(chat_body, ProviderAnthropic) <- function(
     tool_choice <- NULL
     output_config <- NULL
   }
-  mcp_connectors <- Filter(\(t) S7_inherits(t, McpConnector), tools)
+  mcp_connectors <- keep(unname(tools), \(t) S7_inherits(t, McpConnector))
   if (length(mcp_connectors) > 0) {
-    mcp_servers <- unname(lapply(mcp_connectors, function(conn) {
+    mcp_servers <- map(mcp_connectors, function(conn) {
       server <- compact(list(
         type = "url",
         url = conn@url,
@@ -269,7 +269,7 @@ method(chat_body, ProviderAnthropic) <- function(
         authorization_token = if (!is.null(conn@credentials)) conn@credentials()
       ))
       modify_list(server, conn@extra)
-    }))
+    })
   } else {
     mcp_servers <- NULL
   }
@@ -698,7 +698,7 @@ method(chat_request, ProviderAnthropic) <- function(
   tools = list(),
   type = NULL
 ) {
-  has_mcp <- any(vapply(tools, \(t) S7_inherits(t, McpConnector), logical(1)))
+  has_mcp <- any(map_lgl(tools, \(t) S7_inherits(t, McpConnector)))
 
   req <- base_request(provider)
   req <- req_url_path_append(req, chat_path(provider))
