@@ -67,6 +67,46 @@ test_that("can search web pages", {
   test_tool_web_search(chat_fun, claude_tool_web_search())
 })
 
+test_that("can use MCP connector tools", {
+  vcr::local_cassette("anthropic-mcp-tool")
+
+  chat <- chat_anthropic_test(
+    system_prompt = "Use the read_wiki_structure tool to answer the question. Be brief.",
+    beta_headers = "mcp-client-2025-11-20",
+    api_args = list(
+      mcp_servers = list(
+        list(
+          type = "url",
+          url = "https://mcp.deepwiki.com/mcp",
+          name = "deepwiki"
+        )
+      ),
+      tools = list(
+        list(type = "mcp_toolset", mcp_server_name = "deepwiki")
+      )
+    )
+  )
+
+  result <- chat$chat(
+    "What are the top-level sections in the tidyverse/ellmer documentation?"
+  )
+  expect_match(result, "Core Architecture")
+
+  turns <- chat$get_turns()
+  assistant_turn <- turns[[length(turns)]]
+  contents <- assistant_turn@contents
+
+  mcp_requests <- keep(contents, S7_inherits, ContentToolRequestMcp)
+  mcp_results <- keep(contents, S7_inherits, ContentToolResponseMcp)
+
+  expect_length(mcp_requests, 1)
+  expect_length(mcp_results, 1)
+  expect_equal(mcp_requests[[1]]@server_name, "deepwiki")
+  expect_equal(mcp_requests[[1]]@name, "read_wiki_structure")
+  expect_equal(mcp_results[[1]]@is_error, FALSE)
+  expect_true(length(mcp_results[[1]]@content) > 0)
+})
+
 test_that("tools can return images", {
   vcr::local_cassette("anthropic-tool-image")
   chat_fun <- chat_anthropic_test

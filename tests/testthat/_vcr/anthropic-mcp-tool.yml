@@ -1,0 +1,58 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"Use
+        the read_wiki_structure tool to answer the question. Be brief.","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"What
+        are the top-level sections in the tidyverse/ellmer documentation?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"temperature":0,"max_tokens":4096,"mcp_servers":[{"type":"url","url":"https://mcp.deepwiki.com/mcp","name":"deepwiki"}],"tools":[{"type":"mcp_toolset","mcp_server_name":"deepwiki"}]}'
+  response:
+    status: 200
+    headers:
+      date: Tue, 19 May 2026 16:51:14 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '8000000'
+      anthropic-ratelimit-input-tokens-remaining: '7999000'
+      anthropic-ratelimit-input-tokens-reset: '2026-05-19T16:51:14Z'
+      anthropic-ratelimit-output-tokens-limit: '2000000'
+      anthropic-ratelimit-output-tokens-remaining: '2000000'
+      anthropic-ratelimit-output-tokens-reset: '2026-05-19T16:51:14Z'
+      anthropic-ratelimit-requests-limit: '20000'
+      anthropic-ratelimit-requests-remaining: '19999'
+      anthropic-ratelimit-requests-reset: '2026-05-19T16:51:08Z'
+      anthropic-ratelimit-tokens-limit: '10000000'
+      anthropic-ratelimit-tokens-remaining: '9999000'
+      anthropic-ratelimit-tokens-reset: '2026-05-19T16:51:14Z'
+      request-id: req_011CbCGnZwgUC8XqDMCrt8r1
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 5367cc48-7960-496e-992a-dba1e4d05b42
+      traceresponse: 00-ea1f5d8a4448ceea12f8e6b4160f37bf-19107062e72c64ed-01
+      server: cloudflare
+      x-envoy-upstream-service-time: '7398'
+      content-encoding: gzip
+      vary: Accept-Encoding
+      cf-cache-status: DYNAMIC
+      set-cookie: _cfuvid=UMxdfH6ZDR0GrBKMawQWTPWBhuIubpdvulJdTYAuMqI-1779209467.421619-1.0.1.1-VxCCznmjOsZERKuSm7WLriskbdCCg_2U17zZQjp2k5Q;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      x-robots-tag: none
+      cf-ray: 9fe49ac36fbd4c19-ATL
+    body:
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01Te15CNb1cGUMjTGgHNUr4F","type":"message","role":"assistant","content":[{"type":"mcp_tool_use","id":"mcptoolu_017CWzTKoywCFqXai8JKd7NW","name":"read_wiki_structure","input":{"repoName":"tidyverse/ellmer"},"server_name":"deepwiki"},{"type":"mcp_tool_result","tool_use_id":"mcptoolu_017CWzTKoywCFqXai8JKd7NW","is_error":false,"content":[{"type":"text","text":"Available
+        pages for tidyverse/ellmer:\n\n- 1 Overview\n- 2 Core Architecture\n  - 2.1
+        Chat Object and Lifecycle\n  - 2.2 Turn and Content System\n  - 2.3 Provider
+        Abstraction\n  - 2.4 Tool Definition and Execution\n  - 2.5 HTTP Communication
+        Layer\n- 3 Provider Reference\n  - 3.1 OpenAI (Responses API)\n  - 3.2 OpenAI-Compatible
+        Providers\n  - 3.3 Anthropic (Claude)\n  - 3.4 Google (Gemini and Vertex AI)\n  -
+        3.5 AWS Bedrock\n  - 3.6 Azure OpenAI\n  - 3.7 Databricks\n  - 3.8 Snowflake
+        Cortex\n  - 3.9 Ollama and Local Models\n- 4 Usage Guide\n  - 4.1 Getting
+        Started\n  - 4.2 Basic Chat Interactions\n  - 4.3 Tool Calling\n  - 4.4 Structured
+        Data Extraction\n  - 4.5 Multimodal Content\n  - 4.6 Streaming Responses\n-
+        5 Advanced Topics\n  - 5.1 Authentication and Credentials\n  - 5.2 Async Operations\n  -
+        5.3 Parallel and Batch Processing\n  - 5.4 Cost Tracking and Token Usage\n  -
+        5.5 Testing with ellmer\n  - 5.6 Extending ellmer"}]},{"type":"text","text":"The
+        top-level sections in the tidyverse/ellmer documentation are:\n\n1. **Overview**\n2.
+        **Core Architecture**\n3. **Provider Reference**\n4. **Usage Guide**\n5. **Advanced
+        Topics**"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":884,"cache_creation_input_tokens":1329,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":119,"service_tier":"standard","inference_geo":"not_available","server_tool_use":{"web_search_requests":0,"web_fetch_requests":0}}}'
+  recorded_at: 2026-05-19 16:51:14
+recorded_with: VCR-vcr/2.1.0
