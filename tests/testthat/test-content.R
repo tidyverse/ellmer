@@ -148,7 +148,12 @@ test_that("format(ContentToolResult, style = 'reprex') uses #> prefix", {
     value = paste0("line", 1:10, collapse = "\n"),
     request = request
   )
-  formatted <- format(long, show = "value", tool_style = "reprex", tool_max_lines = 3)
+  formatted <- format(
+    long,
+    show = "value",
+    tool_style = "reprex",
+    tool_max_lines = 3
+  )
   lines <- strsplit(formatted, "\n")[[1]]
   expect_length(lines, 4)
   expect_match(cli::ansi_strip(lines[4]), "7 more lines")
