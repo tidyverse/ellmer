@@ -306,6 +306,81 @@ test_that("value_turn() parses mcp_tool_result with is_error = TRUE", {
   )
 })
 
+test_that("format(ContentToolRequestMcp) shows ID, server/name, and arguments", {
+  req <- ContentToolRequestMcp(
+    id = "mcptoolu_1",
+    name = "execute_query",
+    server_name = "snowflake",
+    json = list(input = list(query = "SHOW DATABASES"))
+  )
+  out <- format(req)
+  expect_match(out, "mcp tool request")
+  expect_match(out, "mcptoolu_1", fixed = TRUE)
+  expect_match(out, "snowflake/execute_query", fixed = TRUE)
+  expect_match(out, "SHOW DATABASES", fixed = TRUE)
+})
+
+test_that("format(ContentToolRequestMcp) handles non-list input", {
+  req <- ContentToolRequestMcp(
+    id = "mcptoolu_2",
+    name = "echo",
+    server_name = "test",
+    json = list(input = "hello world")
+  )
+  out <- format(req)
+  expect_match(out, "mcp tool request")
+  expect_match(out, "mcptoolu_2", fixed = TRUE)
+  expect_match(out, "hello world", fixed = TRUE)
+})
+
+test_that("format(ContentToolRequestMcp) handles missing input", {
+  req <- ContentToolRequestMcp(
+    id = "mcptoolu_3",
+    name = "list_tools",
+    server_name = "test",
+    json = list()
+  )
+  out <- format(req)
+  expect_match(out, "mcp tool request")
+  expect_match(out, "test/list_tools", fixed = TRUE)
+})
+
+test_that("format(ContentToolResponseMcp) shows ID and result text", {
+  res <- ContentToolResponseMcp(
+    tool_use_id = "mcptoolu_1",
+    is_error = FALSE,
+    content = list(list(type = "text", text = "DB1\nDB2")),
+    json = list()
+  )
+  out <- format(res)
+  expect_match(out, "mcp tool result")
+  expect_match(out, "mcptoolu_1", fixed = TRUE)
+  expect_match(out, "DB1", fixed = TRUE)
+})
+
+test_that("format(ContentToolResponseMcp) shows error in red", {
+  res <- ContentToolResponseMcp(
+    tool_use_id = "mcptoolu_2",
+    is_error = TRUE,
+    content = list(list(type = "text", text = "Connection refused")),
+    json = list()
+  )
+  out <- format(res)
+  expect_match(out, "mcp tool result")
+  expect_match(out, "mcptoolu_2", fixed = TRUE)
+  expect_match(out, "Connection refused", fixed = TRUE)
+})
+
+test_that("format(ContentToolResponseMcp) handles empty content", {
+  res <- ContentToolResponseMcp(
+    tool_use_id = "mcptoolu_3",
+    is_error = FALSE,
+    content = list(),
+    json = list()
+  )
+  expect_no_error(format(res))
+})
+
 test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens", {
   provider <- test_anthropic_provider()
 

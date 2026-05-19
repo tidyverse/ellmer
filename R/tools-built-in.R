@@ -112,10 +112,11 @@ ContentToolRequestMcp <- new_class(
   )
 )
 method(format, ContentToolRequestMcp) <- function(x, ...) {
+  input <- x@json$input %||% list()
   tmp <- ContentToolRequest(
     id = x@id,
     name = paste0(x@server_name, "/", x@name),
-    arguments = x@json$input %||% list()
+    arguments = if (is.list(input)) input else list(input)
   )
   format(tmp, ..., label = "mcp tool request")
 }
