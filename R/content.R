@@ -286,11 +286,13 @@ ContentToolResult <- new_class(
 method(format, ContentToolResult) <- function(
   x,
   ...,
-  show = c("all", "header"),
+  show = c("all", "header", "value"),
+  tool_style = c("plain", "reprex"),
   label = "tool result",
-  max_lines = NULL
+  tool_max_lines = NULL
 ) {
   show <- arg_match(show)
+  tool_style <- arg_match(tool_style)
 
   id <- truncate_id(x@request@id)
 
@@ -304,7 +306,16 @@ method(format, ContentToolResult) <- function(
     value <- tool_string_preview(x)
   }
 
-  value <- truncate_lines(value, max_lines)
+  value <- truncate_lines(value, tool_max_lines)
+
+  if (tool_style == "reprex") {
+    lines <- strsplit(value, "\n")[[1]]
+    value <- paste(cli::style_italic(paste0("#> ", lines)), collapse = "\n")
+  }
+
+  if (show == "value") {
+    return(value)
+  }
 
   header <- cli::format_inline("[{.strong {label}}  ({id})]:")
   if (!is_string(value) || !grepl("\n", value)) {
@@ -356,7 +367,11 @@ truncate_id <- function(id, max_width = 12) {
   if (nchar(id) <= max_width) {
     return(id)
   }
-  paste0(substring(id, 1, 8), cli::symbol$ellipsis, substring(id, nchar(id) - 3))
+  paste0(
+    substring(id, 1, 8),
+    cli::symbol$ellipsis,
+    substring(id, nchar(id) - 3)
+  )
 }
 
 truncate_lines <- function(value, max_lines = NULL) {

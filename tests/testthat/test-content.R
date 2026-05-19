@@ -106,16 +106,52 @@ test_that("format(ContentToolResult) truncates with max_lines", {
   # No truncation by default
   expect_match(format(long_result), "line10")
 
-  # max_lines = 5 truncates long output
-  formatted <- format(long_result, max_lines = 5)
+  # tool_max_lines = 5 truncates long output
+  formatted <- format(long_result, tool_max_lines = 5)
   expect_match(formatted, "line5")
   expect_no_match(formatted, "line6")
 
   # Short output unaffected by max_lines
   expect_equal(
-    format(short_result, max_lines = 5),
+    format(short_result, tool_max_lines = 5),
     format(short_result)
   )
+})
+
+test_that("format(ContentToolResult, style = 'reprex') uses #> prefix", {
+  request <- ContentToolRequest(id = "id1", name = "my_tool")
+  result <- ContentToolResult(value = "hello", request = request)
+
+  # Single-line: header + reprex value
+  formatted <- format(result, tool_style = "reprex")
+  expect_match(cli::ansi_strip(formatted), "#> hello")
+  expect_match(cli::ansi_strip(formatted), "tool result")
+
+  # Multi-line: header line then #> prefixed lines
+  multi <- ContentToolResult(
+    value = "line1\nline2\nline3",
+    request = request
+  )
+  formatted <- format(multi, tool_style = "reprex")
+  lines <- strsplit(formatted, "\n")[[1]]
+  reprex_lines <- lines[grepl("^#> ", cli::ansi_strip(lines))]
+  expect_length(reprex_lines, 3)
+
+  # show = "value" returns just the reprex lines without header
+  formatted <- format(multi, show = "value", tool_style = "reprex")
+  lines <- strsplit(formatted, "\n")[[1]]
+  expect_length(lines, 3)
+  expect_true(all(grepl("^#> ", cli::ansi_strip(lines))))
+
+  # reprex + max_lines truncates
+  long <- ContentToolResult(
+    value = paste0("line", 1:10, collapse = "\n"),
+    request = request
+  )
+  formatted <- format(long, show = "value", tool_style = "reprex", tool_max_lines = 3)
+  lines <- strsplit(formatted, "\n")[[1]]
+  expect_length(lines, 4)
+  expect_match(cli::ansi_strip(lines[4]), "7 more lines")
 })
 
 test_that("truncate_id() shortens long IDs", {

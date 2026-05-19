@@ -176,7 +176,7 @@ ContentMcpToolResult <- new_class(
 method(format, ContentMcpToolResult) <- function(
   x,
   ...,
-  show = c("all", "header"),
+  show = c("all", "header", "value"),
   label = "mcp tool result"
 ) {
   tmp <- ContentToolResult(

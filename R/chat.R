@@ -891,7 +891,7 @@ print.Chat <- function(x, ...) {
     }
 
     cli::cat_rule(cli::format_inline("{color_role(turn@role)}{label}"))
-    cat(format(turns[[i]], max_lines = 5))
+    cat(format(turns[[i]], tool_style = "reprex", tool_max_lines = 5))
   }
 
   invisible(x)
