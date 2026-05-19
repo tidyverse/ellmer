@@ -300,6 +300,8 @@ test_that("value_turn() parses mcp_call output", {
   expect_s7_class(resp, ContentMcpToolResult)
   expect_s7_class(resp, ContentToolResult)
   expect_equal(resp@request@id, "mcp_call_1")
+  expect_equal(resp@request@name, "read_wiki_structure")
+  expect_equal(resp@request@arguments, list(repo_name = "tidyverse/ellmer"))
   expect_null(resp@error)
   expect_equal(resp@value, "# Page: Overview\nThe ellmer R package...")
   expect_equal(

@@ -508,6 +508,20 @@ method(value_turn, ProviderAnthropic) <- function(
     }
   })
 
+  # Link MCP results to their requests so @request has the tool name
+  mcp_requests <- keep(contents, S7_inherits, ContentMcpToolRequest)
+  request_map <- set_names(mcp_requests, map_chr(mcp_requests, \(r) r@id))
+  for (i in seq_along(contents)) {
+    if (S7_inherits(contents[[i]], ContentMcpToolResult)) {
+      req_id <- contents[[i]]@request@id
+      if (has_name(request_map, req_id)) {
+        matched <- request_map[[req_id]]
+        contents[[i]]@request@name <- matched@name
+        contents[[i]]@request@arguments <- matched@arguments
+      }
+    }
+  }
+
   tokens <- value_tokens(provider, result)
   cache_write <- result$usage$cache_creation_input_tokens %||% 0
   # Anthropic charges 1.25x the input rate for cache writes; tokens$input

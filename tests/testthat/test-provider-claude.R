@@ -317,6 +317,42 @@ test_that("value_turn() parses mcp_tool_result content", {
   )
 })
 
+test_that("value_turn() links mcp_tool_result to its mcp_tool_use request", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_use",
+        id = "mcptoolu_1",
+        name = "execute_query",
+        server_name = "snowflake",
+        input = list(query = "SHOW DATABASES")
+      ),
+      list(
+        type = "mcp_tool_result",
+        tool_use_id = "mcptoolu_1",
+        content = list(list(type = "text", text = "DB1\nDB2")),
+        is_error = FALSE
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  mcp_result <- turn@contents[[2]]
+  expect_s7_class(mcp_result, ContentMcpToolResult)
+  expect_equal(mcp_result@request@id, "mcptoolu_1")
+  expect_equal(mcp_result@request@name, "execute_query")
+  expect_equal(mcp_result@request@arguments, list(query = "SHOW DATABASES"))
+})
+
 test_that("value_turn() parses mcp_tool_result with is_error = TRUE", {
   provider <- test_anthropic_provider()
 

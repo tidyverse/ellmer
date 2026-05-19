@@ -397,8 +397,8 @@ method(value_turn, ProviderOpenAI) <- function(
         error = error_text,
         request = ContentToolRequest(
           id = output$id,
-          name = "",
-          arguments = list()
+          name = output$name %||% "",
+          arguments = input
         ),
         content = content_blocks,
         json = output
