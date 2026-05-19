@@ -279,3 +279,25 @@ batch_result_turn <- new_generic(
     S7_dispatch()
   }
 )
+
+# MCP connector support ---------------------------------------------------
+
+check_mcp_connector_tool <- new_generic(
+  "check_mcp_connector_tool",
+  "provider",
+  function(provider, tool, ..., error_call = caller_env()) {
+    S7_dispatch()
+  }
+)
+
+method(check_mcp_connector_tool, Provider) <- function(
+  provider,
+  tool,
+  ...,
+  error_call = caller_env()
+) {
+  cli::cli_abort(
+    "MCP connectors are not supported by {.cls {class(provider)[[1]]}}.",
+    call = error_call
+  )
+}

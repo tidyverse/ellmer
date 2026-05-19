@@ -388,6 +388,9 @@ Chat <- R6::R6Class(
     #' @param tool A tool definition created by [tool()].
     register_tool = function(tool) {
       check_tool(tool)
+      if (S7_inherits(tool, McpConnector)) {
+        check_mcp_connector_tool(private$provider, tool)
+      }
       if (has_name(private$tools, tool@name)) {
         cli::cli_inform("Replacing existing {tool@name} tool.")
       }

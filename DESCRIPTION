@@ -69,6 +69,7 @@ Roxygen: list(markdown = TRUE)
 Collate:
     'utils-S7.R'
     'types.R'
+    'mcp-connector.R'
     'ellmer-package.R'
     'tools-def.R'
     'content.R'
