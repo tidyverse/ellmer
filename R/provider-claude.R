@@ -53,6 +53,43 @@ NULL
 #' See all the details at
 #' <https://docs.claude.com/en/docs/build-with-claude/prompt-caching>.
 #'
+#' # Server-side MCP tools
+#'
+#' Claude's [MCP connector](https://docs.anthropic.com/en/docs/agents-and-tools/mcp-connector)
+#' (beta) lets Claude connect to remote MCP servers directly. Unlike local tool
+#' use, the API handles tool execution server-side: both the `mcp_tool_use`
+#' request and the `mcp_tool_result` response appear in the same assistant turn.
+#'
+#' To use the MCP connector, opt in with the `"mcp-client-2025-11-20"` beta
+#' header and declare your MCP servers and toolsets in `api_args`:
+#'
+#' ```r
+#' chat <- chat_anthropic(
+#'   system_prompt = "Use your MCP tools to answer questions.",
+#'   model = "claude-sonnet-4-5-20250929",
+#'   beta_headers = "mcp-client-2025-11-20",
+#'   api_args = list(
+#'     mcp_servers = list(
+#'       list(
+#'         type = "url",
+#'         url = "https://mcp.deepwiki.com/mcp",
+#'         name = "deepwiki"
+#'         # authorization_token = "YOUR_TOKEN"
+#'       )
+#'     ),
+#'     tools = list(
+#'       list(type = "mcp_toolset", mcp_server_name = "deepwiki")
+#'     )
+#'   )
+#' )
+#'
+#' chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
+#' ```
+#'
+#' Note that `api_args$tools` replaces the tools built from
+#' [Chat]`$register_tool()`, so MCP connector tools and locally registered
+#' tools cannot currently be combined.
+#'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @param model `r param_model("claude-sonnet-4-5-20250929", "anthropic")`

@@ -141,6 +141,42 @@ See all the details at
 \url{https://docs.claude.com/en/docs/build-with-claude/prompt-caching}.
 }
 
+\section{Server-side MCP tools}{
+Claude's \href{https://docs.anthropic.com/en/docs/agents-and-tools/mcp-connector}{MCP connector}
+(beta) lets Claude connect to remote MCP servers directly. Unlike local tool
+use, the API handles tool execution server-side: both the \code{mcp_tool_use}
+request and the \code{mcp_tool_result} response appear in the same assistant turn.
+
+To use the MCP connector, opt in with the \code{"mcp-client-2025-11-20"} beta
+header and declare your MCP servers and toolsets in \code{api_args}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{chat <- chat_anthropic(
+  system_prompt = "Use your MCP tools to answer questions.",
+  model = "claude-sonnet-4-5-20250929",
+  beta_headers = "mcp-client-2025-11-20",
+  api_args = list(
+    mcp_servers = list(
+      list(
+        type = "url",
+        url = "https://mcp.deepwiki.com/mcp",
+        name = "deepwiki"
+        # authorization_token = "YOUR_TOKEN"
+      )
+    ),
+    tools = list(
+      list(type = "mcp_toolset", mcp_server_name = "deepwiki")
+    )
+  )
+)
+
+chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
+}\if{html}{\out{</div>}}
+
+Note that \code{api_args$tools} replaces the tools built from
+\link{Chat}\verb{$register_tool()}, so MCP connector tools and locally registered
+tools cannot currently be combined.
+}
+
 \examples{
 \dontshow{ellmer:::vcr_example_start("chat_anthropic")}
 chat <- chat_anthropic()
