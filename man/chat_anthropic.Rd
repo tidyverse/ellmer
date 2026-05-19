@@ -160,7 +160,8 @@ chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
 }\if{html}{\out{</div>}}
 
 If the MCP server requires authentication, pass a credential
-function:
+function. The return value is sent as the \code{authorization_token}
+field on the MCP server configuration.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{chat$register_tool(mcp_connector(
   url = "https://private-mcp-server.example.com/mcp",

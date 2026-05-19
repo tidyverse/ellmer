@@ -23,8 +23,8 @@ McpConnector <- new_class(
 #' @param name A label for the MCP server connection.
 #' @param credentials A zero-argument function that returns an auth token
 #'   for the MCP server, or `NULL` (the default) for no authentication.
-#'   Follows the same pattern as the `credentials` argument of
-#'   [chat_anthropic()] and [chat_openai()].
+#'   The return value is sent as `authorization_token` (Anthropic) or
+#'   `authorization` (OpenAI) in the MCP server configuration.
 #' @param ... Additional provider-specific arguments passed to the MCP
 #'   server configuration.
 #'

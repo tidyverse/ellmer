@@ -13,8 +13,8 @@ mcp_connector(url, name, credentials = NULL, ...)
 
 \item{credentials}{A zero-argument function that returns an auth token
 for the MCP server, or \code{NULL} (the default) for no authentication.
-Follows the same pattern as the \code{credentials} argument of
-\code{\link[=chat_anthropic]{chat_anthropic()}} and \code{\link[=chat_openai]{chat_openai()}}.}
+The return value is sent as \code{authorization_token} (Anthropic) or
+\code{authorization} (OpenAI) in the MCP server configuration.}
 
 \item{...}{Additional provider-specific arguments passed to the MCP
 server configuration.}

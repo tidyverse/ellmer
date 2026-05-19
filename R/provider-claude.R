@@ -75,7 +75,8 @@ NULL
 #' ```
 #'
 #' If the MCP server requires authentication, pass a credential
-#' function:
+#' function. The return value is sent as the `authorization_token`
+#' field on the MCP server configuration.
 #'
 #' ```r
 #' chat$register_tool(mcp_connector(

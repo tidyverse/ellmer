@@ -40,13 +40,15 @@ NULL
 #' chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
 #' ```
 #'
-#' If the MCP server requires authentication, pass a credential function:
+#' If the MCP server requires authentication, pass a credential function.
+#' The return value is sent as the `authorization` field on the MCP tool
+#' entry.
 #'
 #' ```r
 #' chat$register_tool(mcp_connector(
 #'   url = "https://private-mcp-server.example.com/mcp",
 #'   name = "private",
-#'   credentials = function() paste0("Bearer ", Sys.getenv("MCP_TOKEN"))
+#'   credentials = function() Sys.getenv("MCP_TOKEN")
 #' ))
 #' ```
 #'
