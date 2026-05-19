@@ -243,7 +243,7 @@ method(format, ContentToolRequest) <- function(
   }
 
   id <- truncate_id(x@id)
-  cli::format_inline("[{.strong {label}} ({id})]: {call_str}")
+  cli::format_inline("[{.strong {label}}\u00a0({id})]: {call_str}")
 }
 
 #' @rdname Content
@@ -297,7 +297,7 @@ method(format, ContentToolResult) <- function(
   id <- truncate_id(x@request@id)
 
   if (show == "header") {
-    return(cli::format_inline("[{.strong {label}}  ({id})]:"))
+    return(cli::format_inline("[{.strong {label}}\u00a0\u00a0({id})]:"))
   }
 
   if (tool_errored(x)) {
