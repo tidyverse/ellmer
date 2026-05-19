@@ -110,11 +110,11 @@ test_that("as_json(ProviderOpenAI, McpConnector) passes extra args", {
   conn <- mcp_connector(
     "https://example.com/mcp",
     name = "test",
-    require_approval = "never",
+    require_approval = "always",
     allowed_tools = list("tool1", "tool2")
   )
   json <- as_json(provider, conn)
-  expect_equal(json$require_approval, "never")
+  expect_equal(json$require_approval, "always")
   expect_equal(json$allowed_tools, list("tool1", "tool2"))
 })
 
