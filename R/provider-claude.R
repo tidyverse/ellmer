@@ -59,18 +59,20 @@ NULL
 #' Claude's
 #' [MCP connector](https://platform.claude.com/docs/en/docs/agents-and-tools/mcp-connector)
 #' (beta) lets Claude connect to remote MCP servers directly. Unlike
-#' local tool use, the API handles tool execution server-side: both the
-#' `mcp_tool_use` request and the `mcp_tool_result` response appear in
-#' the same assistant turn.
+#' local tool use, Claude discovers the tools available on the server
+#' and handles tool execution on your behalf — no client-side MCP
+#' handling is needed.
 #'
-#' Use [mcp_connector()] to register an MCP server with a chat:
+#' Use [mcp_connector()] to register tools from an MCP server with a
+#' chat:
 #'
 #' ```r
 #' chat <- chat_anthropic()
-#' chat$register_tool(mcp_connector(
+#' connector <- mcp_connector(
 #'   url = "https://mcp.deepwiki.com/mcp",
 #'   name = "deepwiki"
-#' ))
+#' )
+#' chat$register_tool(connector)
 #' chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
 #' ```
 #'
@@ -79,11 +81,12 @@ NULL
 #' field on the MCP server configuration.
 #'
 #' ```r
-#' chat$register_tool(mcp_connector(
+#' connector <- mcp_connector(
 #'   url = "https://private-mcp-server.example.com/mcp",
 #'   name = "private",
 #'   credentials = function() Sys.getenv("MCP_SERVER_TOKEN")
-#' ))
+#' )
+#' chat$register_tool(connector)
 #' ```
 #'
 #' @inheritParams chat_openai

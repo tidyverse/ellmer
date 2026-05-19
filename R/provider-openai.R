@@ -24,19 +24,19 @@ NULL
 #' OpenAI's
 #' [MCP connector](https://developers.openai.com/api/docs/guides/tools-connectors-mcp)
 #' lets models connect to remote MCP servers directly. Unlike local tool
-#' use, the API handles tool execution server-side: `mcp_list_tools` (tool
-#' discovery), `mcp_call` (invocation and result), and
-#' `mcp_approval_request` (approval flow) output types all appear in the
-#' same assistant turn.
+#' use, OpenAI discovers the tools available on the server and handles
+#' tool execution on your behalf — no client-side MCP handling is needed.
 #'
-#' Use [mcp_connector()] to register an MCP server with a chat:
+#' Use [mcp_connector()] to register tools from an MCP server with a
+#' chat:
 #'
 #' ```r
 #' chat <- chat_openai()
-#' chat$register_tool(mcp_connector(
+#' connector <- mcp_connector(
 #'   url = "https://mcp.deepwiki.com/mcp",
 #'   name = "deepwiki"
-#' ))
+#' )
+#' chat$register_tool(connector)
 #' chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
 #' ```
 #'
@@ -45,11 +45,12 @@ NULL
 #' entry.
 #'
 #' ```r
-#' chat$register_tool(mcp_connector(
+#' connector <- mcp_connector(
 #'   url = "https://private-mcp-server.example.com/mcp",
 #'   name = "private",
 #'   credentials = function() Sys.getenv("MCP_TOKEN")
-#' ))
+#' )
+#' chat$register_tool(connector)
 #' ```
 #'
 #' @param system_prompt A system prompt to set the behavior of the assistant.

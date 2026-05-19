@@ -85,18 +85,18 @@ You will need to sign up for a developer account (and pay for it) at the
 OpenAI's
 \href{https://developers.openai.com/api/docs/guides/tools-connectors-mcp}{MCP connector}
 lets models connect to remote MCP servers directly. Unlike local tool
-use, the API handles tool execution server-side: \code{mcp_list_tools} (tool
-discovery), \code{mcp_call} (invocation and result), and
-\code{mcp_approval_request} (approval flow) output types all appear in the
-same assistant turn.
+use, OpenAI discovers the tools available on the server and handles
+tool execution on your behalf — no client-side MCP handling is needed.
 
-Use \code{\link[=mcp_connector]{mcp_connector()}} to register an MCP server with a chat:
+Use \code{\link[=mcp_connector]{mcp_connector()}} to register tools from an MCP server with a
+chat:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{chat <- chat_openai()
-chat$register_tool(mcp_connector(
+connector <- mcp_connector(
   url = "https://mcp.deepwiki.com/mcp",
   name = "deepwiki"
-))
+)
+chat$register_tool(connector)
 chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
 }\if{html}{\out{</div>}}
 
@@ -104,11 +104,12 @@ If the MCP server requires authentication, pass a credential function.
 The return value is sent as the \code{authorization} field on the MCP tool
 entry.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{chat$register_tool(mcp_connector(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{connector <- mcp_connector(
   url = "https://private-mcp-server.example.com/mcp",
   name = "private",
   credentials = function() Sys.getenv("MCP_TOKEN")
-))
+)
+chat$register_tool(connector)
 }\if{html}{\out{</div>}}
 }
 

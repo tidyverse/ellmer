@@ -145,17 +145,19 @@ See all the details at
 Claude's
 \href{https://platform.claude.com/docs/en/docs/agents-and-tools/mcp-connector}{MCP connector}
 (beta) lets Claude connect to remote MCP servers directly. Unlike
-local tool use, the API handles tool execution server-side: both the
-\code{mcp_tool_use} request and the \code{mcp_tool_result} response appear in
-the same assistant turn.
+local tool use, Claude discovers the tools available on the server
+and handles tool execution on your behalf — no client-side MCP
+handling is needed.
 
-Use \code{\link[=mcp_connector]{mcp_connector()}} to register an MCP server with a chat:
+Use \code{\link[=mcp_connector]{mcp_connector()}} to register tools from an MCP server with a
+chat:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{chat <- chat_anthropic()
-chat$register_tool(mcp_connector(
+connector <- mcp_connector(
   url = "https://mcp.deepwiki.com/mcp",
   name = "deepwiki"
-))
+)
+chat$register_tool(connector)
 chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
 }\if{html}{\out{</div>}}
 
@@ -163,11 +165,12 @@ If the MCP server requires authentication, pass a credential
 function. The return value is sent as the \code{authorization_token}
 field on the MCP server configuration.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{chat$register_tool(mcp_connector(
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{connector <- mcp_connector(
   url = "https://private-mcp-server.example.com/mcp",
   name = "private",
   credentials = function() Sys.getenv("MCP_SERVER_TOKEN")
-))
+)
+chat$register_tool(connector)
 }\if{html}{\out{</div>}}
 }
 
