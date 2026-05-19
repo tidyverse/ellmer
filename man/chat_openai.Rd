@@ -83,40 +83,33 @@ You will need to sign up for a developer account (and pay for it) at the
 }
 \section{Server-side MCP tools}{
 OpenAI's
-\href{https://developers.openai.com/api/docs/guides/tools-connectors-mcp}{MCP connector}
-lets models connect to remote MCP servers directly. Unlike local tool use,
-the API handles tool execution server-side: \code{mcp_list_tools} (tool
-discovery), \code{mcp_call} (invocation and result), and \code{mcp_approval_request}
-(approval flow) output types all appear in the same assistant turn.
+\href{https://developers.openai.com/api/docs/guides/tools-connectors-mcp}{MCP connector }
+lets models connect to remote MCP servers directly. Unlike local tool
+use, the API handles tool execution server-side: \code{mcp_list_tools} (tool
+discovery), \code{mcp_call} (invocation and result), and
+\code{mcp_approval_request} (approval flow) output types all appear in the
+same assistant turn.
 
-To use the MCP connector, declare your MCP servers in \code{api_args$tools}
-with \code{type = "mcp"}:
+Use \code{\link[=mcp_connector]{mcp_connector()}} to register an MCP server with a chat:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{chat <- chat_openai(
-  system_prompt = "Use your MCP tools to answer questions.",
-  api_args = list(
-    tools = list(
-      list(
-        type = "mcp",
-        server_label = "deepwiki",
-        server_url = "https://mcp.deepwiki.com/mcp",
-        require_approval = "never"
-        # headers = list(Authorization = "Bearer YOUR_TOKEN")
-      )
-    )
-  )
-)
-
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{chat <- chat_openai()
+chat$register_tool(mcp_connector(
+  url = "https://mcp.deepwiki.com/mcp",
+  name = "deepwiki",
+  require_approval = "never"
+))
 chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
 }\if{html}{\out{</div>}}
 
-If the MCP server requires authentication, pass an OAuth token or API key
-via the \code{headers} field. The token is sent with every request and is not
-stored by OpenAI.
+If the MCP server requires authentication, pass a credential function:
 
-Note that \code{api_args$tools} replaces the tools built from
-\link{Chat}\verb{$register_tool()}, so MCP connector tools and locally registered
-tools cannot currently be combined.
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{chat$register_tool(mcp_connector(
+  url = "https://private-mcp-server.example.com/mcp",
+  name = "private",
+  credentials = function() paste0("Bearer ", Sys.getenv("MCP_TOKEN")),
+  require_approval = "never"
+))
+}\if{html}{\out{</div>}}
 }
 
 \examples{

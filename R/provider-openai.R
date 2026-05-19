@@ -22,41 +22,36 @@ NULL
 #' # Server-side MCP tools
 #'
 #' OpenAI's
-#' [MCP connector](https://developers.openai.com/api/docs/guides/tools-connectors-mcp)
-#' lets models connect to remote MCP servers directly. Unlike local tool use,
-#' the API handles tool execution server-side: `mcp_list_tools` (tool
-#' discovery), `mcp_call` (invocation and result), and `mcp_approval_request`
-#' (approval flow) output types all appear in the same assistant turn.
+#' [MCP connector
+#' ](https://developers.openai.com/api/docs/guides/tools-connectors-mcp)
+#' lets models connect to remote MCP servers directly. Unlike local tool
+#' use, the API handles tool execution server-side: `mcp_list_tools` (tool
+#' discovery), `mcp_call` (invocation and result), and
+#' `mcp_approval_request` (approval flow) output types all appear in the
+#' same assistant turn.
 #'
-#' To use the MCP connector, declare your MCP servers in `api_args$tools`
-#' with `type = "mcp"`:
+#' Use [mcp_connector()] to register an MCP server with a chat:
 #'
 #' ```r
-#' chat <- chat_openai(
-#'   system_prompt = "Use your MCP tools to answer questions.",
-#'   api_args = list(
-#'     tools = list(
-#'       list(
-#'         type = "mcp",
-#'         server_label = "deepwiki",
-#'         server_url = "https://mcp.deepwiki.com/mcp",
-#'         require_approval = "never"
-#'         # headers = list(Authorization = "Bearer YOUR_TOKEN")
-#'       )
-#'     )
-#'   )
-#' )
-#'
+#' chat <- chat_openai()
+#' chat$register_tool(mcp_connector(
+#'   url = "https://mcp.deepwiki.com/mcp",
+#'   name = "deepwiki",
+#'   require_approval = "never"
+#' ))
 #' chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
 #' ```
 #'
-#' If the MCP server requires authentication, pass an OAuth token or API key
-#' via the `headers` field. The token is sent with every request and is not
-#' stored by OpenAI.
+#' If the MCP server requires authentication, pass a credential function:
 #'
-#' Note that `api_args$tools` replaces the tools built from
-#' [Chat]`$register_tool()`, so MCP connector tools and locally registered
-#' tools cannot currently be combined.
+#' ```r
+#' chat$register_tool(mcp_connector(
+#'   url = "https://private-mcp-server.example.com/mcp",
+#'   name = "private",
+#'   credentials = function() paste0("Bearer ", Sys.getenv("MCP_TOKEN")),
+#'   require_approval = "never"
+#' ))
+#' ```
 #'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
 #' @param base_url The base URL to the API endpoint.
@@ -541,6 +536,29 @@ method(as_json, list(ProviderOpenAI, ToolDef)) <- function(
     strict = TRUE,
     parameters = as_json(provider, x@arguments, ...)
   )
+}
+
+method(check_mcp_connector_tool, ProviderOpenAI) <- function(
+  provider,
+  tool,
+  ...,
+  error_call = caller_env()
+) {
+  invisible()
+}
+
+method(as_json, list(ProviderOpenAI, McpConnector)) <- function(
+  provider,
+  x,
+  ...
+) {
+  server <- compact(list(
+    type = "mcp",
+    server_label = x@name,
+    server_url = x@url,
+    authorization = if (!is.null(x@credentials)) x@credentials()
+  ))
+  modify_list(server, x@extra)
 }
 
 # Batched requests -------------------------------------------------------------
