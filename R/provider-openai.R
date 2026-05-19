@@ -372,16 +372,23 @@ method(value_turn, ProviderOpenAI) <- function(
       request <- ContentMcpToolRequest(
         id = output$id,
         name = output$name,
+        arguments = input,
+        tool = mcp_tool_def(output$name, server_name),
         server_name = server_name,
         json = json
       )
       is_error <- !is.null(output$error) && nzchar(output$error)
       text <- if (is_error) output$error else (output$output %||% "")
-      content <- list(list(type = "text", text = text))
+      content_blocks <- list(list(type = "text", text = text))
       response <- ContentMcpToolResult(
-        tool_use_id = output$id,
-        is_error = is_error,
-        content = content,
+        value = if (!is_error) text else NULL,
+        error = if (is_error) text else NULL,
+        request = ContentToolRequest(
+          id = output$id,
+          name = "",
+          arguments = list()
+        ),
+        content = content_blocks,
         json = output
       )
       list(request, response)
@@ -514,6 +521,14 @@ method(as_json, list(ProviderOpenAI, ContentToolResult)) <- function(
     call_id = x@request@id,
     output = tool_string(x)
   )
+}
+
+method(as_json, list(ProviderOpenAI, ContentMcpToolRequest)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
 }
 
 method(as_json, list(ProviderOpenAI, ContentMcpToolResult)) <- function(

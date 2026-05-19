@@ -2,6 +2,7 @@
 #' @include content.R
 #' @include turns.R
 #' @include tools-def.R
+#' @include tools-built-in.R
 NULL
 
 #' Chat with an Anthropic Claude model
@@ -463,17 +464,31 @@ method(value_turn, ProviderAnthropic) <- function(
     } else if (content$type == "web_fetch_tool_result") {
       ContentToolResponseFetch(url = content$url %||% "failed", json = content)
     } else if (content$type == "mcp_tool_use") {
+      input <- content$input %||% list()
       ContentMcpToolRequest(
         id = content$id,
         name = content$name,
+        arguments = if (is.list(input)) input else list(input),
+        tool = mcp_tool_def(content$name, content$server_name),
         server_name = content$server_name,
         json = content
       )
     } else if (content$type == "mcp_tool_result") {
+      content_blocks <- content$content %||% list()
+      text <- paste(
+        vapply(content_blocks, function(b) b$text %||% "", character(1)),
+        collapse = "\n"
+      )
+      is_error <- content$is_error %||% FALSE
       ContentMcpToolResult(
-        tool_use_id = content$tool_use_id,
-        is_error = content$is_error %||% FALSE,
-        content = content$content %||% list(),
+        value = if (!is_error) text else NULL,
+        error = if (is_error) text else NULL,
+        request = ContentToolRequest(
+          id = content$tool_use_id,
+          name = "",
+          arguments = list()
+        ),
+        content = content_blocks,
         json = content
       )
     } else if (content$type == "thinking") {
@@ -642,6 +657,22 @@ method(as_json, list(ProviderAnthropic, ContentToolResult)) <- function(
     content = tool_string(x),
     is_error = tool_errored(x)
   )
+}
+
+method(as_json, list(ProviderAnthropic, ContentMcpToolRequest)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
+}
+
+method(as_json, list(ProviderAnthropic, ContentMcpToolResult)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
 }
 
 method(as_json, list(ProviderAnthropic, ToolDef)) <- function(

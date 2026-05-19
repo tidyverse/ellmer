@@ -712,8 +712,17 @@ Chat <- R6::R6Class(
 
         if (echo == "all") {
           echo_non_text_contents(turn)
+        } else if (echo == "output") {
+          echo_server_tool_contents(turn, echo)
         }
-        # When `echo="output"`, tool calls are emitted in `invoke_tools()`
+
+        if (yield_as_content) {
+          for (content in turn@contents) {
+            if (is_mcp_content(content)) {
+              yield(content)
+            }
+          }
+        }
       }
 
       coro::exhausted()
@@ -809,8 +818,17 @@ Chat <- R6::R6Class(
 
         if (echo == "all") {
           echo_non_text_contents(turn)
+        } else if (echo == "output") {
+          echo_server_tool_contents(turn, echo)
         }
-        # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
+
+        if (yield_as_content) {
+          for (content in turn@contents) {
+            if (is_mcp_content(content)) {
+              yield(content)
+            }
+          }
+        }
       }
       coro::exhausted()
     }),

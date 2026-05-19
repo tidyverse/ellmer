@@ -103,7 +103,7 @@ test_that("can use MCP connector tools", {
   expect_length(mcp_results, 1)
   expect_equal(mcp_requests[[1]]@server_name, "deepwiki")
   expect_equal(mcp_requests[[1]]@name, "read_wiki_structure")
-  expect_equal(mcp_results[[1]]@is_error, FALSE)
+  expect_null(mcp_results[[1]]@error)
   expect_true(length(mcp_results[[1]]@content) > 0)
 })
 
@@ -307,8 +307,10 @@ test_that("value_turn() parses mcp_tool_result content", {
   turn <- value_turn(provider, result)
   mcp_content <- turn@contents[[1]]
   expect_s7_class(mcp_content, ContentMcpToolResult)
-  expect_equal(mcp_content@tool_use_id, "mcptoolu_1")
-  expect_equal(mcp_content@is_error, FALSE)
+  expect_s7_class(mcp_content, ContentToolResult)
+  expect_equal(mcp_content@request@id, "mcptoolu_1")
+  expect_null(mcp_content@error)
+  expect_equal(mcp_content@value, "DB1\nDB2")
   expect_equal(
     mcp_content@content,
     list(list(type = "text", text = "DB1\nDB2"))
@@ -339,7 +341,7 @@ test_that("value_turn() parses mcp_tool_result with is_error = TRUE", {
   turn <- value_turn(provider, result)
   mcp_content <- turn@contents[[1]]
   expect_s7_class(mcp_content, ContentMcpToolResult)
-  expect_equal(mcp_content@is_error, TRUE)
+  expect_equal(mcp_content@error, "Connection refused")
   expect_equal(
     mcp_content@content,
     list(list(type = "text", text = "Connection refused"))
@@ -350,13 +352,15 @@ test_that("format(ContentMcpToolRequest) shows ID, server/name, and arguments", 
   req <- ContentMcpToolRequest(
     id = "mcptoolu_1",
     name = "execute_query",
+    arguments = list(query = "SHOW DATABASES"),
+    tool = mcp_tool_def("execute_query", "snowflake"),
     server_name = "snowflake",
     json = list(input = list(query = "SHOW DATABASES"))
   )
   out <- format(req)
   expect_match(out, "mcp tool request")
   expect_match(out, "mcptoolu_1", fixed = TRUE)
-  expect_match(out, "snowflake/execute_query", fixed = TRUE)
+  expect_match(out, "snowflake__execute_query", fixed = TRUE)
   expect_match(out, "SHOW DATABASES", fixed = TRUE)
 })
 
@@ -364,6 +368,8 @@ test_that("format(ContentMcpToolRequest) handles non-list input", {
   req <- ContentMcpToolRequest(
     id = "mcptoolu_2",
     name = "echo",
+    arguments = list("hello world"),
+    tool = mcp_tool_def("echo", "test"),
     server_name = "test",
     json = list(input = "hello world")
   )
@@ -377,18 +383,24 @@ test_that("format(ContentMcpToolRequest) handles missing input", {
   req <- ContentMcpToolRequest(
     id = "mcptoolu_3",
     name = "list_tools",
+    arguments = list(),
+    tool = mcp_tool_def("list_tools", "test"),
     server_name = "test",
     json = list()
   )
   out <- format(req)
   expect_match(out, "mcp tool request")
-  expect_match(out, "test/list_tools", fixed = TRUE)
+  expect_match(out, "test__list_tools", fixed = TRUE)
 })
 
 test_that("format(ContentMcpToolResult) shows ID and result text", {
   res <- ContentMcpToolResult(
-    tool_use_id = "mcptoolu_1",
-    is_error = FALSE,
+    value = "DB1\nDB2",
+    request = ContentToolRequest(
+      id = "mcptoolu_1",
+      name = "",
+      arguments = list()
+    ),
     content = list(list(type = "text", text = "DB1\nDB2")),
     json = list()
   )
@@ -400,8 +412,12 @@ test_that("format(ContentMcpToolResult) shows ID and result text", {
 
 test_that("format(ContentMcpToolResult) shows error in red", {
   res <- ContentMcpToolResult(
-    tool_use_id = "mcptoolu_2",
-    is_error = TRUE,
+    error = "Connection refused",
+    request = ContentToolRequest(
+      id = "mcptoolu_2",
+      name = "",
+      arguments = list()
+    ),
     content = list(list(type = "text", text = "Connection refused")),
     json = list()
   )
@@ -413,8 +429,12 @@ test_that("format(ContentMcpToolResult) shows error in red", {
 
 test_that("format(ContentMcpToolResult) handles empty content", {
   res <- ContentMcpToolResult(
-    tool_use_id = "mcptoolu_3",
-    is_error = FALSE,
+    value = "",
+    request = ContentToolRequest(
+      id = "mcptoolu_3",
+      name = "",
+      arguments = list()
+    ),
     content = list(),
     json = list()
   )

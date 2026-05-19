@@ -101,6 +101,16 @@ method(as_json, list(Provider, ContentToolResponseFetch)) <- function(
 
 # MCP tool use ----------------------------------------------------------------
 
+mcp_tool_def <- function(name, server_name) {
+  ToolDef(
+    function() invisible(),
+    name = paste0(server_name, "__", name),
+    description = "",
+    arguments = TypeObject(properties = list()),
+    convert = FALSE
+  )
+}
+
 ContentMcpListTools <- new_class(
   "ContentMcpListTools",
   parent = Content,
@@ -128,22 +138,24 @@ method(as_json, list(Provider, ContentMcpListTools)) <- function(
 
 ContentMcpToolRequest <- new_class(
   "ContentMcpToolRequest",
-  parent = Content,
+  parent = ContentToolRequest,
   properties = list(
-    id = prop_string(),
-    name = prop_string(),
     server_name = prop_string(),
     json = class_list
   )
 )
-method(format, ContentMcpToolRequest) <- function(x, ...) {
-  input <- x@json$input %||% list()
+method(format, ContentMcpToolRequest) <- function(
+  x,
+  ...,
+  show = c("all", "call", "call_short"),
+  label = "mcp tool request"
+) {
   tmp <- ContentToolRequest(
     id = x@id,
-    name = paste0(x@server_name, "/", x@name),
-    arguments = if (is.list(input)) input else list(input)
+    name = paste0(x@server_name, "__", x@name),
+    arguments = x@arguments
   )
-  format(tmp, ..., label = "mcp tool request")
+  format(tmp, ..., show = show, label = label)
 }
 method(as_json, list(Provider, ContentMcpToolRequest)) <- function(
   provider,
@@ -155,30 +167,24 @@ method(as_json, list(Provider, ContentMcpToolRequest)) <- function(
 
 ContentMcpToolResult <- new_class(
   "ContentMcpToolResult",
-  parent = Content,
+  parent = ContentToolResult,
   properties = list(
-    tool_use_id = prop_string(),
-    is_error = prop_bool(FALSE),
     content = class_list,
     json = class_list
   )
 )
-method(format, ContentMcpToolResult) <- function(x, ...) {
-  text <- paste(
-    vapply(x@content, function(block) block$text %||% "", character(1)),
-    collapse = "\n"
+method(format, ContentMcpToolResult) <- function(
+  x,
+  ...,
+  show = c("all", "header"),
+  label = "mcp tool result"
+) {
+  tmp <- ContentToolResult(
+    value = x@value,
+    error = x@error,
+    request = x@request
   )
-  request <- ContentToolRequest(
-    id = x@tool_use_id,
-    name = "",
-    arguments = list()
-  )
-  if (x@is_error) {
-    tmp <- ContentToolResult(error = text, request = request)
-  } else {
-    tmp <- ContentToolResult(value = text, request = request)
-  }
-  format(tmp, ..., label = "mcp tool result")
+  format(tmp, ..., show = show, label = label)
 }
 method(as_json, list(Provider, ContentMcpToolResult)) <- function(
   provider,

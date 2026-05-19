@@ -264,7 +264,7 @@ test_that("can use MCP connector tools", {
   expect_length(mcp_results, 1)
   expect_equal(mcp_requests[[1]]@server_name, "deepwiki")
   expect_equal(mcp_requests[[1]]@name, "read_wiki_structure")
-  expect_equal(mcp_results[[1]]@is_error, FALSE)
+  expect_null(mcp_results[[1]]@error)
 })
 
 test_that("value_turn() parses mcp_call output", {
@@ -298,8 +298,10 @@ test_that("value_turn() parses mcp_call output", {
 
   resp <- turn@contents[[2]]
   expect_s7_class(resp, ContentMcpToolResult)
-  expect_equal(resp@tool_use_id, "mcp_call_1")
-  expect_equal(resp@is_error, FALSE)
+  expect_s7_class(resp, ContentToolResult)
+  expect_equal(resp@request@id, "mcp_call_1")
+  expect_null(resp@error)
+  expect_equal(resp@value, "# Page: Overview\nThe ellmer R package...")
   expect_equal(
     resp@content,
     list(list(
@@ -331,7 +333,7 @@ test_that("value_turn() parses mcp_call with error", {
   turn <- value_turn(provider, result)
   resp <- turn@contents[[2]]
   expect_s7_class(resp, ContentMcpToolResult)
-  expect_equal(resp@is_error, TRUE)
+  expect_equal(resp@error, "Connection refused")
   expect_equal(
     resp@content,
     list(list(type = "text", text = "Connection refused"))

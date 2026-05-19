@@ -1,8 +1,24 @@
 #' @include turns.R
 NULL
 
-is_tool_request <- function(x) S7_inherits(x, ContentToolRequest)
-is_tool_result <- function(x) S7_inherits(x, ContentToolResult)
+is_tool_request <- function(x, local_only = TRUE) {
+  if (!S7_inherits(x, ContentToolRequest)) {
+    return(FALSE)
+  }
+  if (local_only && S7_inherits(x, ContentMcpToolRequest)) {
+    return(FALSE)
+  }
+  TRUE
+}
+is_tool_result <- function(x, local_only = TRUE) {
+  if (!S7_inherits(x, ContentToolResult)) {
+    return(FALSE)
+  }
+  if (local_only && S7_inherits(x, ContentMcpToolResult)) {
+    return(FALSE)
+  }
+  TRUE
+}
 
 match_tools <- function(turn, tools) {
   if (is.null(turn)) {
@@ -322,7 +338,16 @@ maybe_echo_tool <- function(x, echo = "output") {
     return(invisible(x))
   }
 
-  if (is_tool_request(x)) {
+  if (S7_inherits(x, ContentMcpListTools)) {
+    cli::cli_text(
+      cli::col_blue(cli::symbol$circle),
+      " ",
+      cli_escape(format(x))
+    )
+    return(invisible(x))
+  }
+
+  if (is_tool_request(x, local_only = FALSE)) {
     cli::cli_text(
       cli::col_blue(cli::symbol$circle),
       " [{cli::col_blue('tool call')}] ",
@@ -331,8 +356,7 @@ maybe_echo_tool <- function(x, echo = "output") {
     return(invisible(x))
   }
 
-  if (!is_tool_result(x)) {
-    # neither tool result or request
+  if (!is_tool_result(x, local_only = FALSE)) {
     return(invisible(x))
   }
 
@@ -371,4 +395,18 @@ maybe_echo_tool <- function(x, echo = "output") {
   }
 
   invisible(x)
+}
+
+is_mcp_content <- function(x) {
+  S7_inherits(x, ContentMcpToolRequest) ||
+    S7_inherits(x, ContentMcpToolResult) ||
+    S7_inherits(x, ContentMcpListTools)
+}
+
+echo_server_tool_contents <- function(turn, echo) {
+  for (content in turn@contents) {
+    if (is_mcp_content(content)) {
+      maybe_echo_tool(content, echo = echo)
+    }
+  }
 }

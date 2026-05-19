@@ -244,3 +244,101 @@ test_that("chat_request(ProviderAnthropic) merges MCP beta with existing", {
   expect_match(headers$`anthropic-beta`, "existing-beta")
   expect_match(headers$`anthropic-beta`, "mcp-client-2025-11-20")
 })
+
+# MCP content inheritance -------------------------------------------------------
+
+test_that("ContentMcpToolRequest inherits from ContentToolRequest", {
+  req <- ContentMcpToolRequest(
+    id = "mcp_1",
+    name = "search",
+    arguments = list(query = "test"),
+    tool = mcp_tool_def("search", "server"),
+    server_name = "server",
+    json = list()
+  )
+  expect_s7_class(req, ContentMcpToolRequest)
+  expect_s7_class(req, ContentToolRequest)
+  expect_equal(req@id, "mcp_1")
+  expect_equal(req@name, "search")
+  expect_equal(req@arguments, list(query = "test"))
+  expect_equal(req@server_name, "server")
+})
+
+test_that("ContentMcpToolResult inherits from ContentToolResult", {
+  res <- ContentMcpToolResult(
+    value = "result text",
+    request = ContentToolRequest(id = "mcp_1", name = "", arguments = list()),
+    content = list(list(type = "text", text = "result text")),
+    json = list()
+  )
+  expect_s7_class(res, ContentMcpToolResult)
+  expect_s7_class(res, ContentToolResult)
+  expect_equal(res@value, "result text")
+  expect_null(res@error)
+  expect_equal(res@request@id, "mcp_1")
+})
+
+test_that("is_tool_request() excludes MCP by default", {
+  local_req <- ContentToolRequest(
+    id = "local_1",
+    name = "fn",
+    arguments = list()
+  )
+  mcp_req <- ContentMcpToolRequest(
+    id = "mcp_1",
+    name = "search",
+    arguments = list(),
+    tool = mcp_tool_def("search", "server"),
+    server_name = "server",
+    json = list()
+  )
+  expect_true(is_tool_request(local_req))
+  expect_false(is_tool_request(mcp_req))
+  expect_true(is_tool_request(mcp_req, local_only = FALSE))
+})
+
+test_that("is_tool_result() excludes MCP by default", {
+  local_res <- ContentToolResult(
+    value = "ok",
+    request = ContentToolRequest(id = "1", name = "fn", arguments = list())
+  )
+
+  mcp_res <- ContentMcpToolResult(
+    value = "ok",
+    request = ContentToolRequest(id = "1", name = "", arguments = list()),
+    content = list(list(type = "text", text = "ok")),
+    json = list()
+  )
+  expect_true(is_tool_result(local_res))
+  expect_false(is_tool_result(mcp_res))
+  expect_true(is_tool_result(mcp_res, local_only = FALSE))
+})
+
+test_that("mcp_tool_def() creates a ToolDef with no-op function", {
+  td <- mcp_tool_def("query", "myserver")
+  expect_s7_class(td, ToolDef)
+  expect_equal(td@name, "myserver__query")
+  expect_invisible(td())
+})
+
+test_that("maybe_echo_tool() echoes MCP content", {
+  req <- ContentMcpToolRequest(
+    id = "mcp_1",
+    name = "search",
+    arguments = list(query = "test"),
+    tool = mcp_tool_def("search", "server"),
+    server_name = "server",
+    json = list()
+  )
+  out <- capture.output(maybe_echo_tool(req, echo = "output"), type = "message")
+  expect_match(paste(out, collapse = ""), "server__search")
+
+  res <- ContentMcpToolResult(
+    value = "found it",
+    request = ContentToolRequest(id = "mcp_1", name = "", arguments = list()),
+    content = list(list(type = "text", text = "found it")),
+    json = list()
+  )
+  out <- capture.output(maybe_echo_tool(res, echo = "output"), type = "message")
+  expect_match(paste(out, collapse = ""), "found it")
+})
