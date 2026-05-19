@@ -1,3 +1,17 @@
+test_anthropic_provider <- function() {
+  ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-sonnet-4-20250514",
+    params = list(),
+    extra_args = list(),
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+}
+
 test_that("can make simple batch request", {
   vcr::local_cassette("anthropic-batch")
 
@@ -145,17 +159,7 @@ test_that("batch chat works", {
 })
 
 test_that("value_turn() parses server_tool_use input from JSON string", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
 
   result <- list(
     content = list(
@@ -182,17 +186,7 @@ test_that("value_turn() parses server_tool_use input from JSON string", {
 })
 
 test_that("value_turn() parses server_tool_use web_fetch input from JSON string", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
 
   result <- list(
     content = list(
@@ -219,17 +213,7 @@ test_that("value_turn() parses server_tool_use web_fetch input from JSON string"
 })
 
 test_that("value_turn() parses mcp_tool_use content", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
 
   result <- list(
     content = list(
@@ -258,17 +242,7 @@ test_that("value_turn() parses mcp_tool_use content", {
 })
 
 test_that("value_turn() parses mcp_tool_result content", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
 
   result <- list(
     content = list(
@@ -295,17 +269,7 @@ test_that("value_turn() parses mcp_tool_result content", {
 })
 
 test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
 
   result <- list(
     content = list(list(type = "text", text = "ok")),
@@ -333,17 +297,7 @@ test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens"
 })
 
 test_that("stream_merge_chunks() handles citations_delta", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
 
   chunks <- list(
     list(
