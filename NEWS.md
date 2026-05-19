@@ -1,6 +1,8 @@
 # ellmer (development version)
 
-* `chat_anthropic()` and `chat_openai()` now handle server-side MCP tool content blocks, allowing models to connect to remote MCP servers directly via the provider's API. See `?chat_anthropic` and `?chat_openai` for complete examples (thanks @klin333, #991).
+* `mcp_connector()` creates a provider-hosted MCP server connection that can be registered with `$register_tool()`. Both `chat_anthropic()` and `chat_openai()` are supported. The provider connects to the MCP server on your behalf, handling tool discovery and execution server-side (#991).
+
+* `chat_anthropic()` and `chat_openai()` now handle server-side MCP tool content blocks (`mcp_tool_use`/`mcp_tool_result` for Anthropic; `mcp_list_tools`/`mcp_call` for OpenAI), allowing models to connect to remote MCP servers directly via the provider's API (thanks @klin333, #991).
 * `chat_perplexity()` now defaults to `model = "sonar"` since the previous default (`"llama-3.1-sonar-small-128k-online"`) has been removed by Perplexity (@thisisnic, #538).
 * `models_deepseek()` lists available models for `chat_deepseek()` (@jcrodriguez1989, #919).
 * `type_object(.additional_properties)` is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (@thisisnic, #866).
