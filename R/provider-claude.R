@@ -55,40 +55,34 @@ NULL
 #'
 #' # Server-side MCP tools
 #'
-#' Claude's [MCP connector](https://platform.claude.com/docs/en/docs/agents-and-tools/mcp-connector)
-#' (beta) lets Claude connect to remote MCP servers directly. Unlike local tool
-#' use, the API handles tool execution server-side: both the `mcp_tool_use`
-#' request and the `mcp_tool_result` response appear in the same assistant turn.
+#' Claude's
+#' [MCP connector](https://platform.claude.com/docs/en/docs/agents-and-tools/mcp-connector)
+#' (beta) lets Claude connect to remote MCP servers directly. Unlike
+#' local tool use, the API handles tool execution server-side: both the
+#' `mcp_tool_use` request and the `mcp_tool_result` response appear in
+#' the same assistant turn.
 #'
-#' To use the MCP connector, opt in with the `"mcp-client-2025-11-20"` beta
-#' header and declare your MCP servers and toolsets in `api_args`:
+#' Use [mcp_connector()] to register an MCP server with a chat:
 #'
 #' ```r
-#' chat <- chat_anthropic(
-#'   system_prompt = "Use your MCP tools to answer questions.",
-#'   model = "claude-sonnet-4-5-20250929",
-#'   beta_headers = "mcp-client-2025-11-20",
-#'   api_args = list(
-#'     mcp_servers = list(
-#'       list(
-#'         type = "url",
-#'         url = "https://mcp.deepwiki.com/mcp",
-#'         name = "deepwiki"
-#'         # authorization_token = "YOUR_TOKEN"
-#'       )
-#'     ),
-#'     tools = list(
-#'       list(type = "mcp_toolset", mcp_server_name = "deepwiki")
-#'     )
-#'   )
-#' )
-#'
+#' chat <- chat_anthropic()
+#' chat$register_tool(mcp_connector(
+#'   url = "https://mcp.deepwiki.com/mcp",
+#'   name = "deepwiki"
+#' ))
 #' chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
 #' ```
 #'
-#' Note that `api_args$tools` replaces the tools built from
-#' [Chat]`$register_tool()`, so MCP connector tools and locally registered
-#' tools cannot currently be combined.
+#' If the MCP server requires authentication, pass a credential
+#' function:
+#'
+#' ```r
+#' chat$register_tool(mcp_connector(
+#'   url = "https://private-mcp-server.example.com/mcp",
+#'   name = "private",
+#'   credentials = function() Sys.getenv("MCP_SERVER_TOKEN")
+#' ))
+#' ```
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -265,6 +259,21 @@ method(chat_body, ProviderAnthropic) <- function(
     tool_choice <- NULL
     output_config <- NULL
   }
+  mcp_connectors <- Filter(\(t) S7_inherits(t, McpConnector), tools)
+  if (length(mcp_connectors) > 0) {
+    mcp_servers <- lapply(mcp_connectors, function(conn) {
+      server <- compact(list(
+        type = "url",
+        url = conn@url,
+        name = conn@name,
+        authorization_token = if (!is.null(conn@credentials)) conn@credentials()
+      ))
+      modify_list(server, conn@extra)
+    })
+  } else {
+    mcp_servers <- NULL
+  }
+
   tools <- as_json(provider, unname(tools))
 
   params <- chat_params(provider, provider@params)
@@ -284,6 +293,7 @@ method(chat_body, ProviderAnthropic) <- function(
     messages = messages,
     stream = stream,
     tools = tools,
+    mcp_servers = mcp_servers,
     tool_choice = tool_choice,
     thinking = thinking,
     output_config = output_config,
@@ -660,6 +670,56 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
     thinking = x@thinking,
     signature = x@extra$signature
   )
+}
+
+# MCP connector support --------------------------------------------------------
+
+method(check_mcp_connector_tool, ProviderAnthropic) <- function(
+  provider,
+  tool,
+  ...,
+  error_call = caller_env()
+) {
+  invisible()
+}
+
+method(as_json, list(ProviderAnthropic, McpConnector)) <- function(
+  provider,
+  x,
+  ...
+) {
+  list(type = "mcp_toolset", mcp_server_name = x@name)
+}
+
+method(chat_request, ProviderAnthropic) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  has_mcp <- any(vapply(tools, \(t) S7_inherits(t, McpConnector), logical(1)))
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, chat_path(provider))
+
+  body <- chat_body(
+    provider = provider,
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+  body <- modify_list(body, provider@extra_args)
+  req <- req_body_json(req, body)
+  req <- req_headers(req, !!!provider@extra_headers)
+
+  if (has_mcp) {
+    beta <- unique(c(provider@beta_headers, "mcp-client-2025-11-20"))
+    req <- req_headers(req, `anthropic-beta` = paste(beta, collapse = ","))
+  }
+
+  req
 }
 
 # Batch chat -------------------------------------------------------------------
