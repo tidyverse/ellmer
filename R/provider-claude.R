@@ -261,7 +261,7 @@ method(chat_body, ProviderAnthropic) <- function(
   }
   mcp_connectors <- Filter(\(t) S7_inherits(t, McpConnector), tools)
   if (length(mcp_connectors) > 0) {
-    mcp_servers <- lapply(mcp_connectors, function(conn) {
+    mcp_servers <- unname(lapply(mcp_connectors, function(conn) {
       server <- compact(list(
         type = "url",
         url = conn@url,
@@ -269,7 +269,7 @@ method(chat_body, ProviderAnthropic) <- function(
         authorization_token = if (!is.null(conn@credentials)) conn@credentials()
       ))
       modify_list(server, conn@extra)
-    })
+    }))
   } else {
     mcp_servers <- NULL
   }
