@@ -95,8 +95,7 @@ Use \code{\link[=mcp_connector]{mcp_connector()}} to register an MCP server with
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{chat <- chat_openai()
 chat$register_tool(mcp_connector(
   url = "https://mcp.deepwiki.com/mcp",
-  name = "deepwiki",
-  require_approval = "never"
+  name = "deepwiki"
 ))
 chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
 }\if{html}{\out{</div>}}
@@ -106,8 +105,7 @@ If the MCP server requires authentication, pass a credential function:
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{chat$register_tool(mcp_connector(
   url = "https://private-mcp-server.example.com/mcp",
   name = "private",
-  credentials = function() paste0("Bearer ", Sys.getenv("MCP_TOKEN")),
-  require_approval = "never"
+  credentials = function() paste0("Bearer ", Sys.getenv("MCP_TOKEN"))
 ))
 }\if{html}{\out{</div>}}
 }

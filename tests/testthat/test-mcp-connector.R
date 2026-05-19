@@ -72,6 +72,7 @@ test_that("as_json(ProviderOpenAI, McpConnector) returns MCP tool entry", {
   expect_equal(json$type, "mcp")
   expect_equal(json$server_label, "test")
   expect_equal(json$server_url, "https://example.com/mcp")
+  expect_equal(json$require_approval, "never")
   expect_null(json$authorization)
 })
 
