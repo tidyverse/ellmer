@@ -237,8 +237,10 @@ test_that("value_turn() parses mcp_tool_use content", {
   turn <- value_turn(provider, result)
   mcp_content <- turn@contents[[1]]
   expect_s7_class(mcp_content, ContentToolRequestMcp)
+  expect_equal(mcp_content@id, "mcptoolu_1")
   expect_equal(mcp_content@name, "execute_query")
   expect_equal(mcp_content@server_name, "snowflake")
+  expect_equal(mcp_content@json$input, list(query = "SHOW DATABASES"))
 })
 
 test_that("value_turn() parses mcp_tool_result content", {
@@ -266,6 +268,42 @@ test_that("value_turn() parses mcp_tool_result content", {
   mcp_content <- turn@contents[[1]]
   expect_s7_class(mcp_content, ContentToolResponseMcp)
   expect_equal(mcp_content@tool_use_id, "mcptoolu_1")
+  expect_equal(mcp_content@is_error, FALSE)
+  expect_equal(
+    mcp_content@content,
+    list(list(type = "text", text = "DB1\nDB2"))
+  )
+})
+
+test_that("value_turn() parses mcp_tool_result with is_error = TRUE", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_result",
+        tool_use_id = "mcptoolu_2",
+        content = list(list(type = "text", text = "Connection refused")),
+        is_error = TRUE
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  mcp_content <- turn@contents[[1]]
+  expect_s7_class(mcp_content, ContentToolResponseMcp)
+  expect_equal(mcp_content@is_error, TRUE)
+  expect_equal(
+    mcp_content@content,
+    list(list(type = "text", text = "Connection refused"))
+  )
 })
 
 test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens", {
