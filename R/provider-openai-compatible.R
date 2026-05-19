@@ -254,7 +254,7 @@ method(stream_content, ProviderOpenAICompatible) <- function(provider, event) {
   }
   delta <- event$choices[[1]]$delta
 
-  reasoning <- delta[["reasoning_content"]] %||% delta[["reasoning"]]
+  reasoning <- delta[["reasoning"]] %||% delta[["reasoning_content"]]
   if (!is.null(reasoning)) {
     return(ContentThinking(reasoning))
   }
