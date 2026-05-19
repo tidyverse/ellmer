@@ -19,6 +19,45 @@ NULL
 #' You will need to sign up for a developer account (and pay for it) at the
 #' [developer platform](https://platform.openai.com).
 #'
+#' # Server-side MCP tools
+#'
+#' OpenAI's
+#' [MCP connector](https://developers.openai.com/api/docs/guides/tools-connectors-mcp)
+#' lets models connect to remote MCP servers directly. Unlike local tool use,
+#' the API handles tool execution server-side: `mcp_list_tools` (tool
+#' discovery), `mcp_call` (invocation and result), and `mcp_approval_request`
+#' (approval flow) output types all appear in the same assistant turn.
+#'
+#' To use the MCP connector, declare your MCP servers in `api_args$tools`
+#' with `type = "mcp"`:
+#'
+#' ```r
+#' chat <- chat_openai(
+#'   system_prompt = "Use your MCP tools to answer questions.",
+#'   api_args = list(
+#'     tools = list(
+#'       list(
+#'         type = "mcp",
+#'         server_label = "deepwiki",
+#'         server_url = "https://mcp.deepwiki.com/mcp",
+#'         require_approval = "never"
+#'         # headers = list(Authorization = "Bearer YOUR_TOKEN")
+#'       )
+#'     )
+#'   )
+#' )
+#'
+#' chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
+#' ```
+#'
+#' If the MCP server requires authentication, pass an OAuth token or API key
+#' via the `headers` field. The token is sent with every request and is not
+#' stored by OpenAI.
+#'
+#' Note that `api_args$tools` replaces the tools built from
+#' [Chat]`$register_tool()`, so MCP connector tools and locally registered
+#' tools cannot currently be combined.
+#'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
 #' @param base_url The base URL to the API endpoint.
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.

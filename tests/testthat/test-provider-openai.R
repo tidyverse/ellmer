@@ -225,6 +225,48 @@ test_that("value_turn() handles web_search_call action types", {
 
 # MCP tool handling -----------------------------------------------------------
 
+test_that("can use MCP connector tools", {
+  vcr::local_cassette("openai-mcp-tool")
+
+  chat <- chat_openai_test(
+    system_prompt = "Use the read_wiki_structure tool to answer the question. Be brief.",
+    model = "gpt-4.1-nano",
+    api_args = list(
+      tools = list(
+        list(
+          type = "mcp",
+          server_label = "deepwiki",
+          server_url = "https://mcp.deepwiki.com/mcp",
+          require_approval = "never"
+        )
+      )
+    )
+  )
+
+  result <- chat$chat(
+    "What are the top-level sections in the tidyverse/ellmer documentation?"
+  )
+  expect_match(result, "Core Architecture")
+
+  turns <- chat$get_turns()
+  assistant_turn <- turns[[length(turns)]]
+  contents <- assistant_turn@contents
+
+  mcp_list <- keep(contents, S7_inherits, ContentMcpListTools)
+  mcp_requests <- keep(contents, S7_inherits, ContentMcpToolRequest)
+  mcp_results <- keep(contents, S7_inherits, ContentMcpToolResult)
+
+  expect_length(mcp_list, 1)
+  expect_equal(mcp_list[[1]]@server_name, "deepwiki")
+  expect_true(length(mcp_list[[1]]@tools) > 0)
+
+  expect_length(mcp_requests, 1)
+  expect_length(mcp_results, 1)
+  expect_equal(mcp_requests[[1]]@server_name, "deepwiki")
+  expect_equal(mcp_requests[[1]]@name, "read_wiki_structure")
+  expect_equal(mcp_results[[1]]@is_error, FALSE)
+})
+
 test_that("value_turn() parses mcp_call output", {
   provider <- chat_openai_test()$get_provider()
 
