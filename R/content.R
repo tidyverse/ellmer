@@ -290,10 +290,10 @@ method(format, ContentToolResult) <- function(
 ) {
   show <- arg_match(show)
 
-  header <- cli::format_inline("[{.strong {label}}  ({x@request@id})]:")
+  id <- x@request@id
 
   if (show == "header") {
-    return(header)
+    return(cli::format_inline("[{.strong {label}}  ({id})]:"))
   }
 
   if (tool_errored(x)) {
@@ -303,9 +303,16 @@ method(format, ContentToolResult) <- function(
   }
 
   if (!is_string(value) || !grepl("\n", value)) {
-    paste0(header, " ", value)
+    cli::format_inline("[{.strong {label}}  ({id})]: {value}")
   } else {
-    paste(c(header, value), collapse = "\n")
+    header <- cli::cli_format_method(
+      cli::cli_rule(
+        left = cli::col_blue(label),
+        right = cli::col_silver(id)
+      )
+    )
+    footer <- cli::cli_format_method(cli::cli_rule())
+    paste(c(header, value, footer, ""), collapse = "\n")
   }
 }
 
