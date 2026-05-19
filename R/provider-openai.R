@@ -407,10 +407,10 @@ method(value_turn, ProviderOpenAI) <- function(
     } else if (output$type == "mcp_approval_request") {
       cli::cli_abort(c(
         "MCP approval requests are not supported.",
-        i = "Set {.code require_approval = \"never\"} on your MCP tool configuration."
+        i = "MCP approval requests are not yet supported by ellmer.",
+        i = "If you set {.code require_approval = \"always\"}, change it to {.code \"never\"}."
       ))
     } else {
-      browser()
       cli::cli_abort(
         "Unknown content type {.str {output$type}}.",
         .internal = TRUE

@@ -3,7 +3,7 @@ McpConnector <- new_class(
   properties = list(
     name = prop_string(),
     url = prop_string(),
-    credentials = class_any,
+    credentials = class_function | NULL,
     extra = class_list
   )
 )
