@@ -301,7 +301,7 @@ method(value_turn, ProviderOpenAICompatible) <- function(
   }
 
   thinking <- list()
-  reasoning <- message$reasoning_content %||% message$reasoning
+  reasoning <- message$reasoning %||% message$reasoning_content
   if (is_string(reasoning) && nzchar(reasoning)) {
     thinking <- list(ContentThinking(reasoning))
   }
