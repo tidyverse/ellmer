@@ -479,12 +479,13 @@ method(value_turn, ProviderAnthropic) <- function(
       )
     } else if (content$type == "mcp_tool_result") {
       content_blocks <- content$content %||% list()
+      text_blocks <- keep(content_blocks, \(b) identical(b$type, "text"))
       text <- paste(
-        vapply(content_blocks, function(b) b$text %||% "", character(1)),
+        vapply(text_blocks, function(b) b$text %||% "", character(1)),
         collapse = "\n"
       )
       is_error <- content$is_error %||% FALSE
-      ContentMcpToolResult(
+      result <- ContentMcpToolResult(
         value = if (!is_error) text else NULL,
         error = if (is_error) text else NULL,
         request = ContentToolRequest(
@@ -495,6 +496,16 @@ method(value_turn, ProviderAnthropic) <- function(
         content = content_blocks,
         json = content
       )
+      images <- lapply(
+        keep(content_blocks, \(b) identical(b$type, "image")),
+        \(b) {
+          ContentImageInline(
+            type = b$source$media_type %||% "image/png",
+            data = b$source$data
+          )
+        }
+      )
+      c(list(result), images)
     } else if (content$type == "thinking") {
       ContentThinking(
         content$thinking,
@@ -507,6 +518,8 @@ method(value_turn, ProviderAnthropic) <- function(
       )
     }
   })
+  # Flatten: mcp_tool_result may return a list of Content objects (result + images)
+  contents <- unlist(contents, recursive = FALSE)
 
   # Link MCP results to their requests so @request has the tool name
   mcp_requests <- keep(contents, S7_inherits, ContentMcpToolRequest)
