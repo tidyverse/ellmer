@@ -3,6 +3,7 @@
 #' @include content.R
 #' @include turns.R
 #' @include tools-def.R
+#' @include tools-built-in.R
 NULL
 
 #' Chat with an OpenAI model
@@ -322,6 +323,39 @@ method(value_turn, ProviderOpenAI) <- function(
         output$action$url %||%
         "web search"
       ContentToolRequestSearch(query = query, json = output)
+    } else if (output$type == "mcp_list_tools") {
+      ContentMcpListTools(
+        server_name = output$server_label %||% "",
+        tools = output$tools %||% list(),
+        json = output
+      )
+    } else if (output$type == "mcp_call") {
+      server_name <- output$server_label %||% ""
+      arguments <- jsonlite::parse_json(output$arguments %||% "{}")
+      input <- if (is.list(arguments)) arguments else list(arguments)
+      json <- output
+      json$input <- input
+      request <- ContentMcpToolRequest(
+        id = output$id,
+        name = output$name,
+        server_name = server_name,
+        json = json
+      )
+      is_error <- !is.null(output$error) && nzchar(output$error)
+      text <- if (is_error) output$error else (output$output %||% "")
+      content <- list(list(type = "text", text = text))
+      response <- ContentMcpToolResult(
+        tool_use_id = output$id,
+        is_error = is_error,
+        content = content,
+        json = output
+      )
+      list(request, response)
+    } else if (output$type == "mcp_approval_request") {
+      cli::cli_abort(c(
+        "MCP approval requests are not supported.",
+        i = "Set {.code require_approval = \"never\"} on your MCP tool configuration."
+      ))
     } else {
       browser()
       cli::cli_abort(
@@ -330,6 +364,7 @@ method(value_turn, ProviderOpenAI) <- function(
       )
     }
   })
+  contents <- unlist(contents, recursive = FALSE)
 
   tokens <- value_tokens(provider, result)
   variant <- result$service_tier %||% "default"
@@ -445,6 +480,14 @@ method(as_json, list(ProviderOpenAI, ContentToolResult)) <- function(
     call_id = x@request@id,
     output = tool_string(x)
   )
+}
+
+method(as_json, list(ProviderOpenAI, ContentMcpToolResult)) <- function(
+  provider,
+  x,
+  ...
+) {
+  NULL
 }
 
 method(as_json, list(ProviderOpenAI, ToolDef)) <- function(
