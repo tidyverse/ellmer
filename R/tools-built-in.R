@@ -127,11 +127,19 @@ ContentToolResponseMcp <- new_class(
   parent = Content,
   properties = list(
     tool_use_id = prop_string(),
+    is_error = prop_bool(FALSE),
+    content = class_list,
     json = class_list
   )
 )
 method(format, ContentToolResponseMcp) <- function(x, ...) {
-  cli::format_inline("[{.strong mcp tool result}]: {x@tool_use_id}")
+  status <- if (x@is_error) "error" else "result"
+  text <- paste(
+    vapply(x@content, function(block) block$text %||% "", character(1)),
+    collapse = "\n"
+  )
+  text <- substr(text, 1, 200)
+  cli::format_inline("[{.strong mcp tool {status}}]: {text}")
 }
 method(as_json, list(Provider, ContentToolResponseMcp)) <- function(
   provider,

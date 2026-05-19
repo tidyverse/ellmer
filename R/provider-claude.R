@@ -417,14 +417,16 @@ method(value_turn, ProviderAnthropic) <- function(
       ContentToolResponseFetch(url = content$url %||% "failed", json = content)
     } else if (content$type == "mcp_tool_use") {
       ContentToolRequestMcp(
-        id = content$id %||% "",
-        name = content$name %||% "",
-        server_name = content$server_name %||% "",
+        id = content$id,
+        name = content$name,
+        server_name = content$server_name,
         json = content
       )
     } else if (content$type == "mcp_tool_result") {
       ContentToolResponseMcp(
-        tool_use_id = content$tool_use_id %||% "",
+        tool_use_id = content$tool_use_id,
+        is_error = content$is_error %||% FALSE,
+        content = content$content %||% list(),
         json = content
       )
     } else if (content$type == "thinking") {
