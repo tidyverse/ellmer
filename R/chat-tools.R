@@ -348,9 +348,14 @@ maybe_echo_tool <- function(x, echo = "output") {
   }
 
   if (is_tool_request(x, local_only = FALSE)) {
+    label <- if (S7_inherits(x, ContentMcpToolRequest)) {
+      "mcp tool call"
+    } else {
+      "tool call"
+    }
     cli::cli_text(
       cli::col_blue(cli::symbol$circle),
-      " [{cli::col_blue('tool call')}] ",
+      " [{cli::col_blue(label)}] ",
       cli_escape(format(x, show = "call_short"))
     )
     return(invisible(x))
@@ -367,7 +372,12 @@ maybe_echo_tool <- function(x, echo = "output") {
     cli::col_green(cli::symbol$record)
   }
 
-  formatted <- format(x, show = "value", tool_style = "reprex", tool_max_lines = 5)
+  formatted <- format(
+    x,
+    show = "value",
+    tool_style = "reprex",
+    tool_max_lines = 5
+  )
   lines <- strsplit(formatted, "\n")[[1]]
   cli::cli_text("{icon} {lines[1]}")
   for (line in lines[-1]) {
