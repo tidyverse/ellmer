@@ -83,7 +83,7 @@ You will need to sign up for a developer account (and pay for it) at the
 }
 \section{Server-side MCP tools}{
 OpenAI's
-\href{https://developers.openai.com/api/docs/guides/tools-connectors-mcp}{MCP connector }
+\href{https://developers.openai.com/api/docs/guides/tools-connectors-mcp}{MCP connector}
 lets models connect to remote MCP servers directly. Unlike local tool
 use, the API handles tool execution server-side: \code{mcp_list_tools} (tool
 discovery), \code{mcp_call} (invocation and result), and
