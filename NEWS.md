@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `chat_anthropic()` now handles `mcp_tool_use` and `mcp_tool_result` content blocks returned by Claude's [MCP connector](https://docs.anthropic.com/en/docs/agents-and-tools/mcp-connector) beta feature, which lets Claude connect to remote MCP servers directly. See `?chat_anthropic` for a complete example (thanks @klin333, #991).
+* `chat_anthropic()` and `chat_openai()` now handle server-side MCP tool content blocks, allowing models to connect to remote MCP servers directly via the provider's API. See `?chat_anthropic` and `?chat_openai` for complete examples (thanks @klin333, #991).
 * `chat_perplexity()` now defaults to `model = "sonar"` since the previous default (`"llama-3.1-sonar-small-128k-online"`) has been removed by Perplexity (@thisisnic, #538).
 * `models_deepseek()` lists available models for `chat_deepseek()` (@jcrodriguez1989, #919).
 * `type_object(.additional_properties)` is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (@thisisnic, #866).
