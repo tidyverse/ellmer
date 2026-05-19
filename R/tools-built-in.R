@@ -101,8 +101,33 @@ method(as_json, list(Provider, ContentToolResponseFetch)) <- function(
 
 # MCP tool use ----------------------------------------------------------------
 
-ContentToolRequestMcp <- new_class(
-  "ContentToolRequestMcp",
+ContentMcpListTools <- new_class(
+  "ContentMcpListTools",
+  parent = Content,
+  properties = list(
+    server_name = prop_string(),
+    tools = class_list,
+    json = class_list
+  )
+)
+method(format, ContentMcpListTools) <- function(x, ...) {
+  n <- length(x@tools)
+  tool_names <- vapply(x@tools, function(t) t$name %||% "?", character(1))
+  label <- paste0(tool_names, collapse = ", ")
+  cli::format_inline(
+    "[{.strong mcp tools}] ({x@server_name}): {n} tool{?s} ({label})"
+  )
+}
+method(as_json, list(Provider, ContentMcpListTools)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
+}
+
+ContentMcpToolRequest <- new_class(
+  "ContentMcpToolRequest",
   parent = Content,
   properties = list(
     id = prop_string(),
@@ -111,7 +136,7 @@ ContentToolRequestMcp <- new_class(
     json = class_list
   )
 )
-method(format, ContentToolRequestMcp) <- function(x, ...) {
+method(format, ContentMcpToolRequest) <- function(x, ...) {
   input <- x@json$input %||% list()
   tmp <- ContentToolRequest(
     id = x@id,
@@ -120,7 +145,7 @@ method(format, ContentToolRequestMcp) <- function(x, ...) {
   )
   format(tmp, ..., label = "mcp tool request")
 }
-method(as_json, list(Provider, ContentToolRequestMcp)) <- function(
+method(as_json, list(Provider, ContentMcpToolRequest)) <- function(
   provider,
   x,
   ...
@@ -128,8 +153,8 @@ method(as_json, list(Provider, ContentToolRequestMcp)) <- function(
   x@json
 }
 
-ContentToolResponseMcp <- new_class(
-  "ContentToolResponseMcp",
+ContentMcpToolResult <- new_class(
+  "ContentMcpToolResult",
   parent = Content,
   properties = list(
     tool_use_id = prop_string(),
@@ -138,7 +163,7 @@ ContentToolResponseMcp <- new_class(
     json = class_list
   )
 )
-method(format, ContentToolResponseMcp) <- function(x, ...) {
+method(format, ContentMcpToolResult) <- function(x, ...) {
   text <- paste(
     vapply(x@content, function(block) block$text %||% "", character(1)),
     collapse = "\n"
@@ -155,7 +180,7 @@ method(format, ContentToolResponseMcp) <- function(x, ...) {
   }
   format(tmp, ..., label = "mcp tool result")
 }
-method(as_json, list(Provider, ContentToolResponseMcp)) <- function(
+method(as_json, list(Provider, ContentMcpToolResult)) <- function(
   provider,
   x,
   ...

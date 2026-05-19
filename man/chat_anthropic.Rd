@@ -142,7 +142,7 @@ See all the details at
 }
 
 \section{Server-side MCP tools}{
-Claude's \href{https://docs.anthropic.com/en/docs/agents-and-tools/mcp-connector}{MCP connector}
+Claude's \href{https://platform.claude.com/docs/en/docs/agents-and-tools/mcp-connector}{MCP connector}
 (beta) lets Claude connect to remote MCP servers directly. Unlike local tool
 use, the API handles tool execution server-side: both the \code{mcp_tool_use}
 request and the \code{mcp_tool_result} response appear in the same assistant turn.

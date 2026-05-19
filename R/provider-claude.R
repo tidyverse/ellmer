@@ -55,7 +55,7 @@ NULL
 #'
 #' # Server-side MCP tools
 #'
-#' Claude's [MCP connector](https://docs.anthropic.com/en/docs/agents-and-tools/mcp-connector)
+#' Claude's [MCP connector](https://platform.claude.com/docs/en/docs/agents-and-tools/mcp-connector)
 #' (beta) lets Claude connect to remote MCP servers directly. Unlike local tool
 #' use, the API handles tool execution server-side: both the `mcp_tool_use`
 #' request and the `mcp_tool_result` response appear in the same assistant turn.
@@ -453,14 +453,14 @@ method(value_turn, ProviderAnthropic) <- function(
     } else if (content$type == "web_fetch_tool_result") {
       ContentToolResponseFetch(url = content$url %||% "failed", json = content)
     } else if (content$type == "mcp_tool_use") {
-      ContentToolRequestMcp(
+      ContentMcpToolRequest(
         id = content$id,
         name = content$name,
         server_name = content$server_name,
         json = content
       )
     } else if (content$type == "mcp_tool_result") {
-      ContentToolResponseMcp(
+      ContentMcpToolResult(
         tool_use_id = content$tool_use_id,
         is_error = content$is_error %||% FALSE,
         content = content$content %||% list(),

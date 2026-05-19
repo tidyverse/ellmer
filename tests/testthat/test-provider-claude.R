@@ -96,8 +96,8 @@ test_that("can use MCP connector tools", {
   assistant_turn <- turns[[length(turns)]]
   contents <- assistant_turn@contents
 
-  mcp_requests <- keep(contents, S7_inherits, ContentToolRequestMcp)
-  mcp_results <- keep(contents, S7_inherits, ContentToolResponseMcp)
+  mcp_requests <- keep(contents, S7_inherits, ContentMcpToolRequest)
+  mcp_results <- keep(contents, S7_inherits, ContentMcpToolResult)
 
   expect_length(mcp_requests, 1)
   expect_length(mcp_results, 1)
@@ -276,7 +276,7 @@ test_that("value_turn() parses mcp_tool_use content", {
 
   turn <- value_turn(provider, result)
   mcp_content <- turn@contents[[1]]
-  expect_s7_class(mcp_content, ContentToolRequestMcp)
+  expect_s7_class(mcp_content, ContentMcpToolRequest)
   expect_equal(mcp_content@id, "mcptoolu_1")
   expect_equal(mcp_content@name, "execute_query")
   expect_equal(mcp_content@server_name, "snowflake")
@@ -306,7 +306,7 @@ test_that("value_turn() parses mcp_tool_result content", {
 
   turn <- value_turn(provider, result)
   mcp_content <- turn@contents[[1]]
-  expect_s7_class(mcp_content, ContentToolResponseMcp)
+  expect_s7_class(mcp_content, ContentMcpToolResult)
   expect_equal(mcp_content@tool_use_id, "mcptoolu_1")
   expect_equal(mcp_content@is_error, FALSE)
   expect_equal(
@@ -338,7 +338,7 @@ test_that("value_turn() parses mcp_tool_result with is_error = TRUE", {
 
   turn <- value_turn(provider, result)
   mcp_content <- turn@contents[[1]]
-  expect_s7_class(mcp_content, ContentToolResponseMcp)
+  expect_s7_class(mcp_content, ContentMcpToolResult)
   expect_equal(mcp_content@is_error, TRUE)
   expect_equal(
     mcp_content@content,
@@ -346,8 +346,8 @@ test_that("value_turn() parses mcp_tool_result with is_error = TRUE", {
   )
 })
 
-test_that("format(ContentToolRequestMcp) shows ID, server/name, and arguments", {
-  req <- ContentToolRequestMcp(
+test_that("format(ContentMcpToolRequest) shows ID, server/name, and arguments", {
+  req <- ContentMcpToolRequest(
     id = "mcptoolu_1",
     name = "execute_query",
     server_name = "snowflake",
@@ -360,8 +360,8 @@ test_that("format(ContentToolRequestMcp) shows ID, server/name, and arguments", 
   expect_match(out, "SHOW DATABASES", fixed = TRUE)
 })
 
-test_that("format(ContentToolRequestMcp) handles non-list input", {
-  req <- ContentToolRequestMcp(
+test_that("format(ContentMcpToolRequest) handles non-list input", {
+  req <- ContentMcpToolRequest(
     id = "mcptoolu_2",
     name = "echo",
     server_name = "test",
@@ -373,8 +373,8 @@ test_that("format(ContentToolRequestMcp) handles non-list input", {
   expect_match(out, "hello world", fixed = TRUE)
 })
 
-test_that("format(ContentToolRequestMcp) handles missing input", {
-  req <- ContentToolRequestMcp(
+test_that("format(ContentMcpToolRequest) handles missing input", {
+  req <- ContentMcpToolRequest(
     id = "mcptoolu_3",
     name = "list_tools",
     server_name = "test",
@@ -385,8 +385,8 @@ test_that("format(ContentToolRequestMcp) handles missing input", {
   expect_match(out, "test/list_tools", fixed = TRUE)
 })
 
-test_that("format(ContentToolResponseMcp) shows ID and result text", {
-  res <- ContentToolResponseMcp(
+test_that("format(ContentMcpToolResult) shows ID and result text", {
+  res <- ContentMcpToolResult(
     tool_use_id = "mcptoolu_1",
     is_error = FALSE,
     content = list(list(type = "text", text = "DB1\nDB2")),
@@ -398,8 +398,8 @@ test_that("format(ContentToolResponseMcp) shows ID and result text", {
   expect_match(out, "DB1", fixed = TRUE)
 })
 
-test_that("format(ContentToolResponseMcp) shows error in red", {
-  res <- ContentToolResponseMcp(
+test_that("format(ContentMcpToolResult) shows error in red", {
+  res <- ContentMcpToolResult(
     tool_use_id = "mcptoolu_2",
     is_error = TRUE,
     content = list(list(type = "text", text = "Connection refused")),
@@ -411,8 +411,8 @@ test_that("format(ContentToolResponseMcp) shows error in red", {
   expect_match(out, "Connection refused", fixed = TRUE)
 })
 
-test_that("format(ContentToolResponseMcp) handles empty content", {
-  res <- ContentToolResponseMcp(
+test_that("format(ContentMcpToolResult) handles empty content", {
+  res <- ContentMcpToolResult(
     tool_use_id = "mcptoolu_3",
     is_error = FALSE,
     content = list(),
