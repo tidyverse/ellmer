@@ -371,15 +371,10 @@ maybe_echo_tool <- function(x, echo = "output") {
     value <- tool_string_preview(x)
   }
 
-  value <- cli::style_italic(value)
+  value <- truncate_lines(value, max_lines = 5)
 
   if (grepl("\n", value)) {
-    lines <- strsplit(value, "\n")[[1]]
-    lines <- c(
-      lines[seq_len(min(5, length(lines)))],
-      if (length(lines) > 5) cli::symbol$ellipsis
-    )
-    lines <- cli::style_italic(lines)
+    lines <- cli::style_italic(strsplit(value, "\n")[[1]])
     cli::cli_text("{icon} #> {header}{lines[1]}")
     for (line in lines[-1]) {
       cli::cli_text("\u00a0\u00a0#> {line}")

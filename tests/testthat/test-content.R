@@ -88,3 +88,69 @@ test_that("ContentToolResult@error requires a string or an error condition", {
     ContentToolResult("id", error = c("one", "two"))
   })
 })
+
+test_that("format(ContentToolResult) truncates with max_lines", {
+  request <- ContentToolRequest(id = "id1", name = "my_tool")
+  short_value <- "line1\nline2\nline3"
+  long_value <- paste0("line", 1:10, collapse = "\n")
+
+  short_result <- ContentToolResult(
+    value = short_value,
+    request = request
+  )
+  long_result <- ContentToolResult(
+    value = long_value,
+    request = request
+  )
+
+  # No truncation by default
+  expect_match(format(long_result), "line10")
+
+  # max_lines = 5 truncates long output
+  formatted <- format(long_result, max_lines = 5)
+  expect_match(formatted, "line5")
+  expect_no_match(formatted, "line6")
+
+  # Short output unaffected by max_lines
+  expect_equal(
+    format(short_result, max_lines = 5),
+    format(short_result)
+  )
+})
+
+test_that("truncate_id() shortens long IDs", {
+  expect_equal(truncate_id("short"), "short")
+  expect_equal(truncate_id("exactly12chr"), "exactly12chr")
+  # 8 prefix + ellipsis + 4 suffix
+  expect_equal(
+    truncate_id("call_abc123xyz99"),
+    paste0("call_abc", cli::symbol$ellipsis, "yz99")
+  )
+  expect_match(truncate_id("a_very_long_tool_id"), "^a_very_l.*l_id$")
+})
+
+test_that("truncate_lines() truncates multi-line strings", {
+  value <- paste0("line", 1:10, collapse = "\n")
+
+  # NULL max_lines returns unchanged
+
+  expect_equal(truncate_lines(value, NULL), value)
+
+  # Truncates to max_lines + remaining count
+  result <- truncate_lines(value, 3)
+  lines <- strsplit(result, "\n")[[1]]
+  expect_length(lines, 4)
+  expect_equal(lines[1:3], paste0("line", 1:3))
+  expect_match(lines[4], "7 more lines")
+
+  # Singular "line" when only 1 remains
+  result2 <- truncate_lines(paste0("line", 1:4, collapse = "\n"), 3)
+  expect_match(strsplit(result2, "\n")[[1]][4], "1 more line")
+
+  # Single-line strings are never truncated
+  expect_equal(truncate_lines("one line", 3), "one line")
+
+  # No truncation when under the limit
+  short <- "a\nb\nc"
+  expect_equal(truncate_lines(short, 5), short)
+})

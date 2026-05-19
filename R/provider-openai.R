@@ -22,8 +22,7 @@ NULL
 #' # Server-side MCP tools
 #'
 #' OpenAI's
-#' [MCP connector
-#' ](https://developers.openai.com/api/docs/guides/tools-connectors-mcp)
+#' [MCP connector](https://developers.openai.com/api/docs/guides/tools-connectors-mcp)
 #' lets models connect to remote MCP servers directly. Unlike local tool
 #' use, the API handles tool execution server-side: `mcp_list_tools` (tool
 #' discovery), `mcp_call` (invocation and result), and
