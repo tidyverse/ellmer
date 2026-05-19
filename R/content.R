@@ -218,7 +218,8 @@ ContentToolRequest <- new_class(
 method(format, ContentToolRequest) <- function(
   x,
   ...,
-  show = c("all", "call", "call_short")
+  show = c("all", "call", "call_short"),
+  label = "tool request"
 ) {
   show <- arg_match(show)
 
@@ -241,7 +242,7 @@ method(format, ContentToolRequest) <- function(
     return(call_str)
   }
 
-  cli::format_inline("[{.strong tool request} ({x@id})]: {call_str}")
+  cli::format_inline("[{.strong {label}} ({x@id})]: {call_str}")
 }
 
 #' @rdname Content
@@ -284,11 +285,12 @@ ContentToolResult <- new_class(
 method(format, ContentToolResult) <- function(
   x,
   ...,
-  show = c("all", "header")
+  show = c("all", "header"),
+  label = "tool result"
 ) {
   show <- arg_match(show)
 
-  header <- cli::format_inline("[{.strong tool result}  ({x@request@id})]:")
+  header <- cli::format_inline("[{.strong {label}}  ({x@request@id})]:")
 
   if (show == "header") {
     return(header)

@@ -112,7 +112,12 @@ ContentToolRequestMcp <- new_class(
   )
 )
 method(format, ContentToolRequestMcp) <- function(x, ...) {
-  cli::format_inline("[{.strong mcp tool request}]: {x@server_name}/{x@name}")
+  tmp <- ContentToolRequest(
+    id = x@id,
+    name = paste0(x@server_name, "/", x@name),
+    arguments = x@json$input %||% list()
+  )
+  format(tmp, ..., label = "mcp tool request")
 }
 method(as_json, list(Provider, ContentToolRequestMcp)) <- function(
   provider,
@@ -133,13 +138,21 @@ ContentToolResponseMcp <- new_class(
   )
 )
 method(format, ContentToolResponseMcp) <- function(x, ...) {
-  status <- if (x@is_error) "error" else "result"
   text <- paste(
     vapply(x@content, function(block) block$text %||% "", character(1)),
     collapse = "\n"
   )
-  text <- substr(text, 1, 200)
-  cli::format_inline("[{.strong mcp tool {status}}]: {text}")
+  request <- ContentToolRequest(
+    id = x@tool_use_id,
+    name = "",
+    arguments = list()
+  )
+  if (x@is_error) {
+    tmp <- ContentToolResult(error = text, request = request)
+  } else {
+    tmp <- ContentToolResult(value = text, request = request)
+  }
+  format(tmp, ..., label = "mcp tool result")
 }
 method(as_json, list(Provider, ContentToolResponseMcp)) <- function(
   provider,
