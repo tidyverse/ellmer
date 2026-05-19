@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -370,7 +370,7 @@ data frames, this is the same idea. Since most languages don’t possess
 vectorisation like R, row-oriented data frames are more common.</p>
 <p>Note that you’ll generally want to avoid nesting objects inside of
 objects as this will generate a data frame where each column is itself a
-data frame. You can use <code>tidyr::unpack()</code> to unpack these
+data frame. You can use <code><a href="https://tidyr.tidyverse.org/reference/pack.html" class="external-link">tidyr::unpack()</a></code> to unpack these
 df-columns back into a regular flat data frame, but your life will be
 simpler if you re-consider the type.</p>
 </div>

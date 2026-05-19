@@ -25,6 +25,12 @@ chat_deepseek(
   echo = NULL,
   api_headers = character()
 )
+
+models_deepseek(
+  base_url = "https://api.deepseek.com",
+  api_key = NULL,
+  credentials = NULL
+)
 ```
 
 ## Arguments
@@ -46,7 +52,8 @@ chat_deepseek(
   Override the default credentials. You generally should not need this
   argument; instead set the `DEEPSEEK_API_KEY` environment variable. The
   best place to set this is in `.Renviron`, which you can easily edit by
-  calling `usethis::edit_r_environ()`.
+  calling
+  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list

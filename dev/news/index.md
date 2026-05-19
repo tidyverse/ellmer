@@ -2,6 +2,11 @@
 
 ## ellmer (development version)
 
+- [`models_deepseek()`](https://ellmer.tidyverse.org/dev/reference/chat_deepseek.md)
+  lists available models for
+  [`chat_deepseek()`](https://ellmer.tidyverse.org/dev/reference/chat_deepseek.md)
+  ([@jcrodriguez1989](https://github.com/jcrodriguez1989),
+  [\#919](https://github.com/tidyverse/ellmer/issues/919)).
 - `type_object(.additional_properties)` is deprecated. No supported
   provider can return additional properties when using structured
   output. Instead, use an array of name-value pairs
