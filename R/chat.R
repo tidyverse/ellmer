@@ -100,6 +100,16 @@ Chat <- R6::R6Class(
       private$provider@model
     },
 
+    #' @description Update the model name. Note that unlike some of the
+    #'   `chat_*()` functions, the model name is not validated against available
+    #'   models for the provider.
+    #' @param model A single string giving the new model name.
+    set_model = function(model) {
+      check_string(model)
+      private$provider@model <- model
+      invisible(self)
+    },
+
     #' @description Update the system prompt
     #' @param value A character vector giving the new system prompt
     set_system_prompt = function(value) {
