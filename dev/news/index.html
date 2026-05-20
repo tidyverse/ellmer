@@ -55,6 +55,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
 <ul><li>
+<code>Chat</code> gains a <code>set_model()</code> method for updating the model after chat creation. Unlike some <code>chat_*()</code> functions, the model name is not validated (<a href="https://github.com/tidyverse/ellmer/issues/988" class="external-link">#988</a>).</li>
+<li>
 <code><a href="../reference/chat_perplexity.html">chat_perplexity()</a></code> now defaults to <code>model = "sonar"</code> since the previous default (<code>"llama-3.1-sonar-small-128k-online"</code>) has been removed by Perplexity (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/538" class="external-link">#538</a>).</li>
 <li>
 <code><a href="../reference/chat_deepseek.html">models_deepseek()</a></code> lists available models for <code><a href="../reference/chat_deepseek.html">chat_deepseek()</a></code> (<a href="https://github.com/jcrodriguez1989" class="external-link">@jcrodriguez1989</a>, <a href="https://github.com/tidyverse/ellmer/issues/919" class="external-link">#919</a>).</li>

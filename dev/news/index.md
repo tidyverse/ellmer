@@ -2,6 +2,9 @@
 
 ## ellmer (development version)
 
+- `Chat` gains a `set_model()` method for updating the model after chat
+  creation. Unlike some `chat_*()` functions, the model name is not
+  validated ([\#988](https://github.com/tidyverse/ellmer/issues/988)).
 - [`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md)
   now defaults to `model = "sonar"` since the previous default
   (`"llama-3.1-sonar-small-128k-online"`) has been removed by Perplexity

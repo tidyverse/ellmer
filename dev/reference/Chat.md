@@ -34,6 +34,8 @@ A Chat object
 
 - [`Chat$get_model()`](#method-Chat-get_model)
 
+- [`Chat$set_model()`](#method-Chat-set_model)
+
 - [`Chat$set_system_prompt()`](#method-Chat-set_system_prompt)
 
 - [`Chat$get_tokens()`](#method-Chat-get_tokens)
@@ -180,6 +182,24 @@ Retrieve the model name
 #### Usage
 
     Chat$get_model()
+
+------------------------------------------------------------------------
+
+### `Chat$set_model()`
+
+Update the model name. Note that unlike some of the `chat_*()`
+functions, the model name is not validated against available models for
+the provider.
+
+#### Usage
+
+    Chat$set_model(model)
+
+#### Arguments
+
+- `model`:
+
+  A single string giving the new model name.
 
 ------------------------------------------------------------------------
 
