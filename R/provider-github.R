@@ -5,8 +5,7 @@
 #' GitHub model marketplace, you will need to apply for and be accepted into the
 #' beta access program. See <https://github.com/marketplace/models> for details.
 #'
-#' This function is a lightweight wrapper around [chat_openai_compatible()] with
-#' the defaults tweaked for the GitHub Models marketplace.
+#' The defaults are tweaked for the GitHub Models marketplace.
 #'
 #' GitHub also supports the Azure AI Inference SDK, which you can use by setting
 #' `base_url` to `"https://models.inference.ai.azure.com/"`. This endpoint was
@@ -51,17 +50,16 @@ chat_github <- function(
   # https://docs.github.com/en/rest/models/inference?apiVersion=2022-11-28
   params <- params %||% params()
 
-  chat_openai_compatible(
+  provider <- ProviderGitHub(
     name = "gitHub",
-    system_prompt = system_prompt,
     base_url = base_url,
-    credentials = credentials,
     model = model,
     params = params,
-    api_args = api_args,
-    echo = echo,
-    api_headers = api_headers
+    extra_args = api_args,
+    extra_headers = api_headers,
+    credentials = credentials
   )
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
 
 github_key <- function() {
@@ -76,47 +74,30 @@ github_key <- function() {
   )
 }
 
-#' @rdname chat_github
-#' @export
-models_github <- function(
-  base_url = "https://models.github.ai/",
-  api_key = NULL,
-  credentials = NULL
-) {
-  credentials <- as_credentials(
-    "models_github",
-    function() github_key(),
-    credentials = credentials,
-    api_key = api_key
-  )
+ProviderGitHub <- new_class(
+  "ProviderGitHub",
+  parent = ProviderOpenAICompatible
+)
 
-  provider <- ProviderOpenAI(
-    name = "github",
-    model = "",
-    credentials = credentials,
-    base_url = base_url
-  )
-
+method(get_models, ProviderGitHub) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/catalog/models")
   resp <- req_perform(req)
 
   json <- resp_body_json(resp)
 
-  if (grepl("models.inference.ai.azure.com", base_url, fixed = TRUE)) {
-    # Support listing models from the older Azure endpoint (ellmer <= 0.3.0)
+  if (grepl("models.inference.ai.azure.com", provider@base_url, fixed = TRUE)) {
     id <- map_chr(json, "[[", "name")
     publisher <- map_chr(json, "[[", "publisher")
     license <- map_chr(json, "[[", "license")
     task <- map_chr(json, "[[", "task")
 
-    res <- data.frame(
+    return(data.frame(
       id = id,
       publisher = publisher,
       license = license,
       task = task
-    )
-    return(res)
+    ))
   }
 
   id <- map_chr(json, "[[", "id")
@@ -138,4 +119,28 @@ models_github <- function(
     version = version,
     capabilities = capabilities
   )
+}
+
+#' @rdname chat_github
+#' @export
+models_github <- function(
+  base_url = "https://models.github.ai/",
+  api_key = NULL,
+  credentials = NULL
+) {
+  credentials <- as_credentials(
+    "models_github",
+    function() github_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
+  provider <- ProviderGitHub(
+    name = "github",
+    model = "",
+    credentials = credentials,
+    base_url = base_url
+  )
+
+  get_models(provider)
 }
