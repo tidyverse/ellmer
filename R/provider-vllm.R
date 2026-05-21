@@ -127,8 +127,5 @@ method(get_models, ProviderVllm) <- function(provider) {
 
   data.frame(
     id = map_chr(json$data, "[[", "id")
-    # Not accurate?
-    # created = .POSIXct(map_dbl(json$data, "[[", "created")),
-    # owned_by = map_chr(json$data, "[[", "owned_by")
   )
 }

@@ -525,7 +525,7 @@ method(get_models, ProviderOpenAICompatible) <- function(provider) {
   json <- resp_body_json(resp)
 
   id <- map_chr(json$data, "[[", "id")
-  created <- as.Date(.POSIXct(map_int(json$data, "[[", "created")))
+  created <- as.Date(.POSIXct(map_dbl(json$data, "[[", "created")))
   owned_by <- map_chr(json$data, "[[", "owned_by")
 
   df <- data.frame(
