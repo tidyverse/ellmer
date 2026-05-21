@@ -2,6 +2,12 @@
 
 ## ellmer (development version)
 
+- [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
+  now supports
+  [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  for batch processing via the Gemini Developer API
+  ([@xmarquez](https://github.com/xmarquez),
+  [\#914](https://github.com/tidyverse/ellmer/issues/914)).
 - `Chat` gains a `set_model()` method for updating the model after chat
   creation. Unlike some `chat_*()` functions, the model name is not
   validated ([\#988](https://github.com/tidyverse/ellmer/issues/988)).

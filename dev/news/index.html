@@ -55,6 +55,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
 <ul><li>
+<code><a href="../reference/batch_chat.html">batch_chat()</a></code> now supports <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> for batch processing via the Gemini Developer API (<a href="https://github.com/xmarquez" class="external-link">@xmarquez</a>, <a href="https://github.com/tidyverse/ellmer/issues/914" class="external-link">#914</a>).</li>
+<li>
 <code>Chat</code> gains a <code>set_model()</code> method for updating the model after chat creation. Unlike some <code>chat_*()</code> functions, the model name is not validated (<a href="https://github.com/tidyverse/ellmer/issues/988" class="external-link">#988</a>).</li>
 <li>
 <code><a href="../reference/chat_perplexity.html">chat_perplexity()</a></code> now defaults to <code>model = "sonar"</code> since the previous default (<code>"llama-3.1-sonar-small-128k-online"</code>) has been removed by Perplexity (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/538" class="external-link">#538</a>).</li>
