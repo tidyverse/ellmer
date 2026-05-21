@@ -74,6 +74,30 @@ github_key <- function() {
   )
 }
 
+#' @rdname chat_github
+#' @export
+models_github <- function(
+  base_url = "https://models.github.ai/",
+  api_key = NULL,
+  credentials = NULL
+) {
+  credentials <- as_credentials(
+    "models_github",
+    function() github_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
+  provider <- ProviderGitHub(
+    name = "github",
+    model = "",
+    credentials = credentials,
+    base_url = base_url
+  )
+
+  get_models(provider)
+}
+
 ProviderGitHub <- new_class(
   "ProviderGitHub",
   parent = ProviderOpenAICompatible
@@ -119,28 +143,4 @@ method(get_models, ProviderGitHub) <- function(provider) {
     version = version,
     capabilities = capabilities
   )
-}
-
-#' @rdname chat_github
-#' @export
-models_github <- function(
-  base_url = "https://models.github.ai/",
-  api_key = NULL,
-  credentials = NULL
-) {
-  credentials <- as_credentials(
-    "models_github",
-    function() github_key(),
-    credentials = credentials,
-    api_key = api_key
-  )
-
-  provider <- ProviderGitHub(
-    name = "github",
-    model = "",
-    credentials = credentials,
-    base_url = base_url
-  )
-
-  get_models(provider)
 }

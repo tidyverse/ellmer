@@ -138,20 +138,6 @@ skip_if_no_lmstudio <- function() {
   }
 }
 
-method(get_models, ProviderLMStudio) <- function(provider) {
-  base_url <- sub("/v1$", "", provider@base_url)
-
-  req <- request(base_url)
-  req <- ellmer_req_credentials(req, provider@credentials(), "Authorization")
-  req <- req_url_path_append(req, "/v1/models")
-  resp <- req_perform(req)
-  json <- resp_body_json(resp)
-
-  data.frame(
-    id = map_chr(json$data, "[[", "id")
-  )
-}
-
 #' @export
 #' @rdname chat_lmstudio
 models_lmstudio <- function(
@@ -172,6 +158,20 @@ models_lmstudio <- function(
   )
 
   get_models(provider)
+}
+
+method(get_models, ProviderLMStudio) <- function(provider) {
+  base_url <- sub("/v1$", "", provider@base_url)
+
+  req <- request(base_url)
+  req <- ellmer_req_credentials(req, provider@credentials(), "Authorization")
+  req <- req_url_path_append(req, "/v1/models")
+  resp <- req_perform(req)
+  json <- resp_body_json(resp)
+
+  data.frame(
+    id = map_chr(json$data, "[[", "id")
+  )
 }
 
 has_lmstudio <- function(

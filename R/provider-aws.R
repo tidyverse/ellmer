@@ -182,6 +182,10 @@ ProviderAWSBedrock <- new_class(
 )
 
 method(get_models, ProviderAWSBedrock) <- function(provider) {
+  # ListFoundationModels uses the control-plane endpoint (bedrock.*) not the
+
+  # data-plane endpoint (bedrock-runtime.*) used for inference.
+  # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_ListFoundationModels.html
   base_url <- sub("bedrock-runtime", "bedrock", provider@base_url, fixed = TRUE)
 
   creds <- paws_credentials(provider@profile, provider@cache)

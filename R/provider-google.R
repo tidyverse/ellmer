@@ -137,7 +137,7 @@ ProviderGoogleGemini <- new_class(
   parent = Provider,
   properties = list(
     model = prop_string(),
-    project_id = class_character | NULL
+    project_id = prop_string(allow_null = TRUE)
   )
 )
 
