@@ -99,18 +99,8 @@ vllm_key <- function() {
   key_get("VLLM_API_KEY")
 }
 
-#' @export
-#' @rdname chat_vllm
-models_vllm <- function(base_url, api_key = NULL, credentials = NULL) {
-  credentials <- as_credentials(
-    "models_vllm",
-    function() vllm_key(),
-    credentials = credentials,
-    api_key = api_key
-  )
-
-  req <- request(base_url)
-  req <- req_auth_bearer_token(req, credentials())
+method(get_models, ProviderVllm) <- function(provider) {
+  req <- base_request(provider)
   req <- req_url_path_append(req, "/v1/models")
   resp <- req_perform(req)
   json <- resp_body_json(resp)
@@ -121,4 +111,24 @@ models_vllm <- function(base_url, api_key = NULL, credentials = NULL) {
     # created = .POSIXct(map_dbl(json$data, "[[", "created")),
     # owned_by = map_chr(json$data, "[[", "owned_by")
   )
+}
+
+#' @export
+#' @rdname chat_vllm
+models_vllm <- function(base_url, api_key = NULL, credentials = NULL) {
+  credentials <- as_credentials(
+    "models_vllm",
+    function() vllm_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
+  provider <- ProviderVllm(
+    name = "VLLM",
+    base_url = base_url,
+    model = "",
+    credentials = credentials
+  )
+
+  get_models(provider)
 }

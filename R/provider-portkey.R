@@ -113,6 +113,22 @@ method(base_request, ProviderPortkeyAI) <- function(provider) {
 }
 
 
+method(get_models, ProviderPortkeyAI) <- function(provider) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, "[[", "id")
+  slug <- map_chr(json$data, "[[", "slug")
+
+  data.frame(
+    id = id,
+    slug = slug
+  )
+}
+
 #' @export
 #' @rdname chat_portkey
 models_portkey <- function(
@@ -126,18 +142,5 @@ models_portkey <- function(
     credentials = function() api_key
   )
 
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/models")
-  resp <- req_perform(req)
-
-  json <- resp_body_json(resp)
-
-  id <- map_chr(json$data, "[[", "id")
-  slug <- map_chr(json$data, "[[", "slug")
-
-  df <- data.frame(
-    id = id,
-    slug = slug
-  )
-  df
+  get_models(provider)
 }

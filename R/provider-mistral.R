@@ -137,16 +137,7 @@ mistral_key <- function() {
 
 # Models -----------------------------------------------------------------------
 
-#' @export
-#' @rdname chat_mistral
-models_mistral <- function(api_key = mistral_key()) {
-  provider <- ProviderMistral(
-    name = "Mistral",
-    model = "",
-    base_url = mistral_base_url,
-    credentials = function() api_key
-  )
-
+method(get_models, ProviderMistral) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)
@@ -164,4 +155,17 @@ models_mistral <- function(api_key = mistral_key()) {
   )
   df <- cbind(df, match_prices("Mistral", df$id))
   df
+}
+
+#' @export
+#' @rdname chat_mistral
+models_mistral <- function(api_key = mistral_key()) {
+  provider <- ProviderMistral(
+    name = "Mistral",
+    model = "",
+    base_url = mistral_base_url,
+    credentials = function() api_key
+  )
+
+  get_models(provider)
 }

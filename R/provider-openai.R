@@ -111,23 +111,7 @@ models_openai <- function(
     credentials = credentials
   )
 
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/models")
-  resp <- req_perform(req)
-
-  json <- resp_body_json(resp)
-
-  id <- map_chr(json$data, "[[", "id")
-  created <- as.Date(.POSIXct(map_int(json$data, "[[", "created")))
-  owned_by <- map_chr(json$data, "[[", "owned_by")
-
-  df <- data.frame(
-    id = id,
-    created_at = created,
-    owned_by = owned_by
-  )
-  df <- cbind(df, match_prices(provider@name, df$id))
-  df[order(-xtfrm(df$created_at)), ]
+  get_models(provider)
 }
 
 chat_openai_test <- function(
