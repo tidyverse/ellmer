@@ -121,20 +121,7 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
     model = "",
     profile = profile,
   )
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "foundation-models")
-
-  resp <- req_perform(req)
-  json <- resp_body_json(resp)
-  models <- json$modelSummaries
-
-  df <- data.frame(
-    id = map_chr(models, "[[", "modelId"),
-    name = map_chr(models, "[[", "modelName"),
-    provider = map_chr(models, "[[", "providerName")
-  )
-  df <- cbind(df, match_prices("AWS/Bedrock", df$id))
-  df
+  get_models(provider)
 }
 
 chat_aws_bedrock_test <- function(
@@ -193,6 +180,34 @@ ProviderAWSBedrock <- new_class(
     cache_point = prop_string()
   )
 )
+
+method(get_models, ProviderAWSBedrock) <- function(provider) {
+  base_url <- sub("bedrock-runtime", "bedrock", provider@base_url, fixed = TRUE)
+
+  creds <- paws_credentials(provider@profile, provider@cache)
+
+  req <- request(base_url)
+  req <- req_auth_aws_v4(
+    req,
+    aws_access_key_id = creds$access_key_id,
+    aws_secret_access_key = creds$secret_access_key,
+    aws_session_token = creds$session_token
+  )
+  req <- ellmer_req_robustify(req)
+  req <- ellmer_req_user_agent(req)
+  req <- base_request_error(provider, req)
+  req <- req_url_path_append(req, "foundation-models")
+  resp <- req_perform(req)
+  json <- resp_body_json(resp)
+  models <- json$modelSummaries
+
+  df <- data.frame(
+    id = map_chr(models, "[[", "modelId"),
+    name = map_chr(models, "[[", "modelName"),
+    provider = map_chr(models, "[[", "providerName")
+  )
+  cbind(df, match_prices("AWS/Bedrock", df$id))
+}
 
 method(base_request, ProviderAWSBedrock) <- function(provider) {
   creds <- paws_credentials(provider@profile, provider@cache)

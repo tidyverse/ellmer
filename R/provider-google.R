@@ -115,7 +115,8 @@ chat_google_vertex <- function(
     params = params %||% params(),
     extra_args = api_args,
     extra_headers = api_headers,
-    credentials = credentials
+    credentials = credentials,
+    project_id = project_id
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
@@ -135,7 +136,8 @@ ProviderGoogleGemini <- new_class(
   "ProviderGoogleGemini",
   parent = Provider,
   properties = list(
-    model = prop_string()
+    model = prop_string(),
+    project_id = class_character | NULL
   )
 )
 
@@ -809,7 +811,13 @@ models_google_gemini <- function(
     api_key = api_key
   )
 
-  models_google(base_url, credentials = credentials, variant = "gemini")
+  provider <- ProviderGoogleGemini(
+    name = "Google/Gemini",
+    model = "",
+    base_url = base_url,
+    credentials = credentials
+  )
+  get_models(provider)
 }
 
 #' @rdname chat_google_gemini
@@ -827,28 +835,26 @@ models_google_vertex <- function(location, project_id, credentials = NULL) {
     "/publishers/google/"
   )
 
-  models_google(base_url, project_id = project_id, variant = "vertex")
-}
-
-models_google <- function(
-  base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  credentials,
-  project_id = NULL,
-  variant = c("gemini", "vertex")
-) {
-  variant <- arg_match(variant)
-
   provider <- ProviderGoogleGemini(
-    name = "Google/Gemini",
+    name = "Google/Vertex",
     model = "",
     base_url = base_url,
-    # https://cloud.google.com/docs/authentication/troubleshoot-adc#user-creds-client-based
-    credentials = credentials
+    credentials = credentials,
+    project_id = project_id
+  )
+  get_models(provider)
+}
+
+method(get_models, ProviderGoogleGemini) <- function(provider) {
+  is_vertex <- grepl(
+    "aiplatform.googleapis.com",
+    provider@base_url,
+    fixed = TRUE
   )
 
   req <- base_request(provider)
-  if (variant == "vertex") {
-    req <- req_headers(req, `x-goog-user-project` = project_id)
+  if (is_vertex) {
+    req <- req_headers(req, `x-goog-user-project` = provider@project_id)
   }
   req <- req_headers(req, !!!provider@extra_headers)
   req <- req_url_path_append(req, "/models")
@@ -856,7 +862,7 @@ models_google <- function(
 
   json <- resp_body_json(resp)
 
-  if (variant == "vertex") {
+  if (is_vertex) {
     name <- map_chr(json$publisherModels, "[[", "name")
     name <- gsub("^publishers/google/models/", "", name)
     # this is the closest to "generateContent" in "supportedGenerationMethods" for Gemini
@@ -866,7 +872,6 @@ models_google <- function(
   } else {
     name <- map_chr(json$models, "[[", "name")
     name <- gsub("^models/", "", name)
-    display_name <- map_chr(json$models, "[[", "displayName")
 
     methods <- map(json$models, \(x) unlist(x$supportedGenerationMethods))
     can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)

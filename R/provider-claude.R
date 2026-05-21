@@ -694,6 +694,26 @@ method(batch_result_turn, ProviderAnthropic) <- function(
 
 # Models -----------------------------------------------------------------------
 
+method(get_models, ProviderAnthropic) <- function(provider) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, "[[", "id")
+  display_name <- map_chr(json$data, "[[", "display_name")
+  created_at <- as.POSIXct(map_chr(json$data, "[[", "created_at"))
+
+  df <- data.frame(
+    id = id,
+    name = display_name,
+    created_at = created_at
+  )
+  df <- cbind(df, match_prices("Anthropic", df$id))
+  df[order(-xtfrm(df$created_at)), ]
+}
+
 #' @export
 #' @rdname chat_anthropic
 models_claude <- function(
@@ -716,23 +736,7 @@ models_claude <- function(
     cache = "none"
   )
 
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/models")
-  resp <- req_perform(req)
-
-  json <- resp_body_json(resp)
-
-  id <- map_chr(json$data, "[[", "id")
-  display_name <- map_chr(json$data, "[[", "display_name")
-  created_at <- as.POSIXct(map_chr(json$data, "[[", "created_at"))
-
-  df <- data.frame(
-    id = id,
-    name = display_name,
-    created_at = created_at
-  )
-  df <- cbind(df, match_prices("Anthropic", df$id))
-  df[order(-xtfrm(df$created_at)), ]
+  get_models(provider)
 }
 
 #' @export
