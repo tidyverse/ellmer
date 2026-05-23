@@ -1,0 +1,203 @@
+{
+  "version": 1,
+  "stage": "done",
+  "batch": {
+    "id": "batch_01ks9jvrenf3x9xf4hn71dkwwp",
+    "object": "batch",
+    "endpoint": "/v1/chat/completions",
+    "input_file_id": "file_01ks9jvqywe9vt44tp2t22yvbm",
+    "completion_window": "24h",
+    "status": "completed",
+    "output_file_id": "file_01ks9jvs3ff6z849brt9xvf4gq",
+    "error_file_id": {},
+    "created_at": 1779511976,
+    "in_progress_at": 1779511976,
+    "finalizing_at": 1779511977,
+    "completed_at": 1779511977,
+    "failed_at": {},
+    "cancelling_at": {},
+    "cancelled_at": {},
+    "expires_at": 1779598376,
+    "expired_at": {},
+    "request_counts": {
+      "completed": 4,
+      "failed": 0,
+      "total": 4
+    },
+    "metadata": {},
+    "errors": {},
+    "project_id": "project_01jtkfs8evfhctdnt5dc12rh0j"
+  },
+  "results": [
+    {
+      "status_code": 200,
+      "request_id": "req_01ks9jvrv1f3zt9sb8s01z7jd7",
+      "body": {
+        "id": "chatcmpl-078e4da7-24f2-4459-8df7-e7837d5d94fd",
+        "object": "chat.completion",
+        "created": 1779511976,
+        "model": "openai/gpt-oss-20b",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\"capital\":\"Des Moines\"}",
+              "reasoning": "We need to output JSON with field capital. Must be valid JSON, compact. The schema: type object, required capital string. So output {\"capital\":\"Des Moines\"}? Wait capital of Iowa is Des Moines. So output {\"capital\":\"Des Moines\"}. Ensure no extra whitespace."
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "queue_time": 0.0716,
+          "prompt_tokens": 177,
+          "prompt_time": 0.009,
+          "completion_tokens": 77,
+          "completion_time": 0.0824,
+          "total_tokens": 254,
+          "total_time": 0.0914,
+          "completion_tokens_details": {
+            "reasoning_tokens": 58
+          }
+        },
+        "usage_breakdown": {},
+        "system_fingerprint": "fp_dd097e8790",
+        "x_groq": {
+          "id": "req_01ks9jvrv1f3zt9sb8s01z7jd7",
+          "seed": 1014
+        },
+        "service_tier": "batch"
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "req_01ks9jvrv1em3tzand9xgtztb8",
+      "body": {
+        "id": "chatcmpl-610c4eed-7741-49cd-a8b5-8ec845cab24f",
+        "object": "chat.completion",
+        "created": 1779511976,
+        "model": "openai/gpt-oss-20b",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\"capital\":\"Albany\"}",
+              "reasoning": "We need to output JSON with field capital. The capital of New York is Albany. Must be compact JSON. Ensure schema: required capital string. Output only JSON."
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "queue_time": 0.0191,
+          "prompt_tokens": 178,
+          "prompt_time": 0.0152,
+          "completion_tokens": 53,
+          "completion_time": 0.0924,
+          "total_tokens": 231,
+          "total_time": 0.1076,
+          "completion_tokens_details": {
+            "reasoning_tokens": 34
+          }
+        },
+        "usage_breakdown": {},
+        "system_fingerprint": "fp_5979a0e1b7",
+        "x_groq": {
+          "id": "req_01ks9jvrv1em3tzand9xgtztb8",
+          "seed": 1014
+        },
+        "service_tier": "batch"
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "req_01ks9jvrv2f40ssdsmph3p175z",
+      "body": {
+        "id": "chatcmpl-f8edf137-41d4-49ce-8dd6-3c33453da595",
+        "object": "chat.completion",
+        "created": 1779511976,
+        "model": "openai/gpt-oss-20b",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\"capital\":\"Sacramento\"}",
+              "reasoning": "We need to output JSON with field capital. The capital of California is Sacramento. Must be compact JSON. Ensure schema: required capital string. Output only JSON."
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "queue_time": 0.058,
+          "prompt_tokens": 177,
+          "prompt_time": 0.0085,
+          "completion_tokens": 52,
+          "completion_time": 0.0531,
+          "total_tokens": 229,
+          "total_time": 0.0616,
+          "completion_tokens_details": {
+            "reasoning_tokens": 33
+          }
+        },
+        "usage_breakdown": {},
+        "system_fingerprint": "fp_1c0f5282a2",
+        "x_groq": {
+          "id": "req_01ks9jvrv2f40ssdsmph3p175z",
+          "seed": 1014
+        },
+        "service_tier": "batch"
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "req_01ks9jvrv1em4tt3gmph371bwm",
+      "body": {
+        "id": "chatcmpl-1c3cce35-405e-467c-9c93-ddb8f27cf777",
+        "object": "chat.completion",
+        "created": 1779511976,
+        "model": "openai/gpt-oss-20b",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\"capital\":\"Austin\"}",
+              "reasoning": "We need to output JSON with field capital. The capital of Texas is Austin. Must be compact JSON. Ensure schema: required capital string. Output only JSON."
+            },
+            "logprobs": {},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "queue_time": 0.0195,
+          "prompt_tokens": 177,
+          "prompt_time": 0.0086,
+          "completion_tokens": 51,
+          "completion_time": 0.0523,
+          "total_tokens": 228,
+          "total_time": 0.0609,
+          "completion_tokens_details": {
+            "reasoning_tokens": 33
+          }
+        },
+        "usage_breakdown": {},
+        "system_fingerprint": "fp_f102a3179c",
+        "x_groq": {
+          "id": "req_01ks9jvrv1em4tt3gmph371bwm",
+          "seed": 1014
+        },
+        "service_tier": "batch"
+      }
+    }
+  ],
+  "started_at": 1779511975,
+  "hash": {
+    "provider": "cb9e7ba7063cd2b349944bda3370e246",
+    "prompts": "b8eafe281e3cc5113058d9722be3e295",
+    "user_turns": "d6990a1b8a9f5db0e97de86c2669de44"
+  }
+}
