@@ -1,6 +1,7 @@
 # ellmer (development version)
 
 * `chat_google_gemini()` and `chat_google_vertex()` now support `params(reasoning_effort =)` (@thisisnic, #873).
+* `chat_anthropic()` now supports `params(reasoning_effort =)` for Claude's adaptive thinking mode (@thisisnic, #987).
 * `batch_chat()` now supports `chat_google_gemini()` for batch processing via the Gemini Developer API (@xmarquez, #914).
 * `Chat` gains a `set_model()` method for updating the model after chat creation. Unlike some `chat_*()` functions, the model name is not validated (#988).
 * `chat_perplexity()` now defaults to `model = "sonar"` since the previous default (`"llama-3.1-sonar-small-128k-online"`) has been removed by Perplexity (@thisisnic, #538).

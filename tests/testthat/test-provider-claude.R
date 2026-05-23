@@ -333,3 +333,46 @@ test_that("stream_merge_chunks() handles citations_delta", {
   expect_length(result$content[[1]]$citations, 1)
   expect_equal(result$content[[1]]$citations[[1]]$url, "https://example.com")
 })
+
+
+test_that("can use adaptive thinking", {
+  vcr::local_cassette("anthropic-adaptive-thinking")
+
+  chat <- chat_anthropic_test(
+    model = "claude-sonnet-4-6",
+    params = params(temperature = 1, reasoning_effort = "high")
+  )
+  resp <- chat$chat("Create a riddle for data scientists", echo = FALSE)
+
+  contents <- chat$last_turn()@contents
+  thinking <- Filter(\(x) S7::S7_inherits(x, ContentThinking), contents)
+  expect_length(thinking, 1)
+  expect_gt(nchar(thinking[[1]]@thinking), 0)
+  expect_match(resp, "\\S")
+})
+
+test_that("can use extended thinking", {
+  vcr::local_cassette("anthropic-extended-thinking")
+
+  chat <- chat_anthropic_test(
+    params = params(temperature = 1, reasoning_tokens = 4000)
+  )
+  resp <- chat$chat("Create a riddle for data scientists", echo = FALSE)
+
+  contents <- chat$last_turn()@contents
+  thinking <- Filter(\(x) S7::S7_inherits(x, ContentThinking), contents)
+  expect_length(thinking, 1)
+  expect_gt(nchar(thinking[[1]]@thinking), 0)
+  expect_match(resp, "\\S")
+})
+
+test_that("reasoning_effort and reasoning_tokens are mutually exclusive", {
+  provider <- chat_anthropic_test(
+    params = params(reasoning_effort = "high", reasoning_tokens = 1000)
+  )$get_provider()
+
+  expect_error(
+    chat_body(provider),
+    regexp = "can't be supplied together."
+  )
+})

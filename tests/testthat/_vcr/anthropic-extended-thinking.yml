@@ -1,0 +1,64 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":[{"type":"text","text":"Create
+        a riddle for data scientists","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"thinking":{"type":"enabled","budget_tokens":4000},"temperature":1,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Sat, 23 May 2026 14:25:47 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '800000'
+      anthropic-ratelimit-input-tokens-remaining: '800000'
+      anthropic-ratelimit-input-tokens-reset: '2026-05-23T14:25:36Z'
+      anthropic-ratelimit-output-tokens-limit: '160000'
+      anthropic-ratelimit-output-tokens-remaining: '160000'
+      anthropic-ratelimit-output-tokens-reset: '2026-05-23T14:25:47Z'
+      anthropic-ratelimit-requests-limit: '2000'
+      anthropic-ratelimit-requests-remaining: '1999'
+      anthropic-ratelimit-requests-reset: '2026-05-23T14:25:34Z'
+      anthropic-ratelimit-tokens-limit: '960000'
+      anthropic-ratelimit-tokens-remaining: '960000'
+      anthropic-ratelimit-tokens-reset: '2026-05-23T14:25:36Z'
+      request-id: req_011CbKevTUJfwULzrgQq2nMd
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      traceresponse: 00-30df76f3ed545e10d9bda53742867f70-b57494e18f33c8d1-01
+      server: cloudflare
+      x-envoy-upstream-service-time: '13821'
+      content-encoding: gzip
+      vary: Accept-Encoding
+      set-cookie: _cfuvid=mga0DJci3uXszi.wROSBM8wzOIb08Qmai4PcuHOm.CY-1779546333.9284694-1.0.1.1-cG5gG5LX7z6yqO4NS05KGhAve.3_1nWPBU4Nn.PImgw;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
+      x-robots-tag: none
+      cf-cache-status: DYNAMIC
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: a004bb0b0d5133f4-MAN
+    body:
+      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01E2zLNGNmSdz5iVgstgkNwj","type":"message","role":"assistant","content":[{"type":"thinking","thinking":"I''ll
+        create a riddle that plays on data science concepts and terminology. Let me
+        think of something clever that would resonate with data scientists specifically.\n\nHere''s
+        a riddle idea:\n\nI could reference things like:\n- Models, training, testing\n-
+        Overfitting/underfitting\n- Data cleaning\n- Algorithms\n- Statistical concepts\n-
+        Programming languages\n- Bias and variance\n\nLet me craft a riddle:\n\n\"I
+        grow more complex with every feature you feed me,\nYet simplicity is what
+        you truly need from me.\nTrain me too well and I''ll fail the real test,\nKeep
+        me too simple and I''ll never be my best.\nWhat am I?\"\n\nAnswer: A machine
+        learning model (or dealing with the bias-variance tradeoff)\n\nActually, let
+        me try another one that might be more fun:\n\n\"I''m 80% of the work but get
+        20% of the glory,\nMessy and chaotic is my usual story.\nI''m full of nulls,
+        duplicates, and types that don''t match,\nTransform and clean me, or your
+        model won''t catch.\nWhat am I?\"\n\nAnswer: Raw data (or data cleaning/preprocessing)\n\nI
+        think the second one is more engaging and relatable for data scientists!","signature":"Ev0JCm4IDhgCKkAgEjobmdNgw8y4AEi1yGq5zEMW/8ptrUtjTJ3I7VDHSovUtW6scFcC9yHJLrOiPgx+9AXwD5aaCr/1XYt0HV9IMhpjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOTgAQgh0aGlua2luZxIMkKQqm9NyQED/fd++GgxVGe3ihc7V0XaH12IiMN+zCBVZXaBcN3CvzMhoEoiuIcAwsBvP2Fwwt5DRYq+1qpbdyGfIFSXpGh0bttjGUyq8CAZl0zzFt32GF6uJvjXuBZizVrR2rpx9LCWeOfa1Exw4KS3lY8EDDkfLiEAqQvLZs0E7xObfffDYHW4CLSqeI0m9SV+ixWytV7dtb7OAPIIklLPZF2HMXleL7ry64LmMNSp4gxtubUsVW1PIUbYPdDeS1H82++AYu0i8TL2MH57qXfdeH8D1UYw3ZNbNkRt14/gzVwXGuNO//VGXmBzYjZWRXUkxLQs7yr9GI01ZevBNkCC9vCLZRWsiZlr5lxJ88MltlFMAuV/7nHHMnnMzQd1an9S9qicq6CHDV4F5N61jfcKjlbsgyhFx0SSTlbgcQZo5S8VCmuRZzOJUfHo+tT9aIQk4WbvaKVVQy3NVxzdyHV27U7v8josl/Rsi/2oyuiq2iwuVteLzzTaXQf8kzZLFpGbi1WoM17A5x3R1P9+TOhyMGg9doeUL3CMvgguxJm9vnjjmtopJBw89bvbeQb9Lqbjs5HFtQ1Pf5Van84bVSzYg0LKpqQXe2s0CiSUDNqtYkTVL5OmMiXLVaEbEv4bpFl8Rz60BIB2rIPw9e9h8nAAfcbpFQHkkGdxPE2S+G/s8NA91M6PRO+lFKycKPm5D9Pc8qEolgubOEgx9/7JKhDGaqGkVHWqO3vkIlvWVXEejQ3iS9O4NA3vXp43Ouf4ln+cQd7ZoPQQeNoSqWUmGc7VNn03Vvm25UD6Jo7u85Pc2gynBJOV5R5x8BYM+cJpBtTWprtJrOlc9wZpRnMevVz8TDz1kzos9a1dgwZqXpJAimcI4Fc+U4vwj+7xGiS/K8Y7irFCb+5g4KkPhcc9HrWCsia0r1PMv6g72GeuOA/BSjJAjKyylpsJL8AgB7I1cPlIwvBNVJ2Qgb9PZ5z+NpXJWQczDBd48EAEPbnghICI36b1eABJnJEWCOp2Fs6goGVSPQ8vpxjrvk1t5GEv2Plxtmw+20vIexGzDu4gxVqolOkibDnV+dI4zxxKi4Gm78/W4dt1TKGQs5XQekQkF6DM1ULRya1kOqFhqdqwxDwuyZtqZtYpbMDTvnVaquj5upfWFSCZzvXfQpr5T1/wqRIKe9X9Pr31VteWsPRSnxkSR9m7r1l4DCuMR4bKrERy7zSGYazTIPWJorapP7+xqqQhVz/JekrhGN6Ap3Mllz+CRl/A/lDql5QLsQrqSisXG6AOU3lDZ0NKHWxgUFHbZWmwlGaQjpMt+OOWF+rAKx6wjkG66VhSnFSwI185oPJxOYFYyKptcmp/5PU4t0pwR2fWWLM9iHzbnY/xL8OuzFXtlu2QxBxIrmSa31rWXZF03odCvXJ1AsCJelMiiIOioVRe3pCULzPXzWNWZvLOBW/wuihyN1FTSWNbL4IBQPs4At8MeSMS61cf+QDmmx+lWQbF4Ylj/Wu7ZzF8fxIc/p66fKLcWkMGegkRYqoZISAvbOMUuaVdDQYMsBjkYAQ=="},{"type":"text","text":"#
+        A Data Scientist''s Riddle\n\n*I consume 80% of your time but get 20% of the
+        fame,*  \n*Messy, inconsistent—that''s my claim to fame.*  \n*I''m riddled
+        with nulls, duplicates galore,*  \n*Wrong types, weird formats, and so much
+        more.*  \n*Wrangle and scrub me, or your model will fail,*  \n*Though I''m
+        not glamorous, I tell the real tale.*  \n\n**What am I?**\n\n<details>\n<summary>Answer</summary>\n\n**Raw
+        data** (or the data cleaning/preprocessing process)\n\nThe riddle plays on
+        the famous saying that data scientists spend 80% of their time cleaning and
+        preparing data, even though model building gets most of the attention!\n\n</details>"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":43,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":470,"service_tier":"standard","inference_geo":"not_available"}}'
+  recorded_at: 2026-05-23 14:25:47
+recorded_with: VCR-vcr/2.1.0
