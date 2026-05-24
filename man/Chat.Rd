@@ -32,6 +32,7 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-add_turn}{\code{Chat$add_turn()}}
     \item \href{#method-Chat-get_system_prompt}{\code{Chat$get_system_prompt()}}
     \item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
+    \item \href{#method-Chat-set_model}{\code{Chat$set_model()}}
     \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
     \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
     \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
@@ -163,6 +164,27 @@ session counter?}
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$get_model()}
+    \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-set_model"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-set_model}{}}}
+\subsection{\code{Chat$set_model()}}{
+  Update the model name. Note that unlike some of the
+\verb{chat_*()} functions, the model name is not validated against available
+models for the provider.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$set_model(model)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{model}}{A single string giving the new model name.}
+    }
     \if{html}{\out{</div>}}
   }
 }
