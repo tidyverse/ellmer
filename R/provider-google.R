@@ -214,12 +214,17 @@ method(chat_body, ProviderGoogleGemini) <- function(
     generation_config$response_schema <- as_json(provider, type)
   }
 
-  if (has_name(generation_config, "thinkingBudget")) {
-    generation_config$thinkingConfig <- list(
+  if (
+    has_name(generation_config, "thinkingBudget") ||
+      has_name(generation_config, "thinkingLevel")
+  ) {
+    generation_config$thinkingConfig <- compact(list(
       thinkingBudget = generation_config$thinkingBudget,
+      thinkingLevel = generation_config$thinkingLevel,
       includeThoughts = TRUE
-    )
+    ))
     generation_config$thinkingBudget <- NULL
+    generation_config$thinkingLevel <- NULL
   }
 
   contents <- as_json(provider, turns)
@@ -258,7 +263,8 @@ method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
       maxOutputTokens = "max_tokens",
       responseLogprobs = "log_probs",
       stopSequences = "stop_sequences",
-      thinkingBudget = "reasoning_tokens"
+      thinkingBudget = "reasoning_tokens",
+      thinkingLevel = "reasoning_effort"
     )
   )
 }

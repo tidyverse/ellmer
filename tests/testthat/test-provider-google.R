@@ -153,3 +153,19 @@ test_that("can generate images", {
   turn <- chat$get_turns()[[2]]
   expect_s7_class(turn@contents[[1]], ContentImageInline)
 })
+
+test_that("can use thinking levels", {
+  vcr::local_cassette("google-thinking-level")
+
+  chat <- chat_google_gemini_test(
+    model = "gemini-3.5-flash",
+    params = params(temperature = 0, reasoning_effort = "low")
+  )
+  resp <- chat$chat("What is 1 + 1?", echo = FALSE)
+
+  contents <- chat$last_turn()@contents
+  thinking <- Filter(\(x) S7::S7_inherits(x, ContentThinking), contents)
+  expect_length(thinking, 1)
+  expect_gt(nchar(thinking[[1]]@thinking), 0)
+  expect_match(resp, "2")
+})
