@@ -334,7 +334,6 @@ test_that("stream_merge_chunks() handles citations_delta", {
   expect_equal(result$content[[1]]$citations[[1]]$url, "https://example.com")
 })
 
-
 test_that("can use adaptive thinking", {
   vcr::local_cassette("anthropic-adaptive-thinking")
 
