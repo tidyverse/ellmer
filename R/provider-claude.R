@@ -231,22 +231,15 @@ method(chat_body, ProviderAnthropic) <- function(
   tools <- as_json(provider, unname(tools))
 
   params <- chat_params(provider, provider@params)
-  has_effort <- has_name(params, "reasoning_effort")
-  has_budget <- has_name(params, "budget_tokens")
-  if (has_effort && has_budget) {
-    cli::cli_abort(
-      "{.arg reasoning_effort} and {.arg reasoning_tokens} can't be supplied together."
-    )
-  }
 
-  if (has_effort) {
+  if (has_name(params, "reasoning_effort")) {
     thinking <- list(type = "adaptive")
     output_config <- modify_list(
       output_config,
       list(effort = params$reasoning_effort)
     )
     params$reasoning_effort <- NULL
-  } else if (has_budget) {
+  } else if (has_name(params, "budget_tokens")) {
     thinking <- list(
       type = "enabled",
       budget_tokens = params$budget_tokens
