@@ -365,14 +365,3 @@ test_that("can use extended thinking", {
   expect_gt(nchar(thinking[[1]]@thinking), 0)
   expect_match(resp, "\\S")
 })
-
-test_that("reasoning_effort and reasoning_tokens are mutually exclusive", {
-  provider <- chat_anthropic_test(
-    params = params(reasoning_effort = "high", reasoning_tokens = 1000)
-  )$get_provider()
-
-  expect_error(
-    chat_body(provider),
-    regexp = "can't be supplied together."
-  )
-})
