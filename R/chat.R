@@ -246,10 +246,12 @@ Chat <- R6::R6Class(
       needs_wrapper <- type_needs_wrapper(type, private$provider)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
+      stream <- echo != "none" && type_can_stream(type, private$provider)
+
       coro::collect(private$submit_turns(
         turn,
         type = type,
-        stream = echo != "none",
+        stream = stream,
         echo = echo,
         controller = stream_controller()
       ))
@@ -280,10 +282,12 @@ Chat <- R6::R6Class(
       needs_wrapper <- type_needs_wrapper(type, private$provider)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
+      stream <- echo != "none" && type_can_stream(type, private$provider)
+
       done <- coro::async_collect(private$submit_turns_async(
         turn,
         type = type,
-        stream = echo != "none",
+        stream = stream,
         echo = echo,
         controller = stream_controller()
       ))

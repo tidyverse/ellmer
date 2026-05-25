@@ -22,6 +22,13 @@ extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
   out
 }
 
+# Tool-based structured output on Anthropic can't stream (#977)
+type_can_stream <- function(type, provider) {
+  is.null(type) ||
+    !S7_inherits(provider, ProviderAnthropic) ||
+    has_claude_structured_output(provider@model)
+}
+
 # OpenAI only works with objects, so we wrap and unwrap as needed
 type_needs_wrapper <- function(type, provider) {
   S7_inherits(provider, ProviderOpenAICompatible) &&
