@@ -106,7 +106,7 @@ method(batch_submit, ProviderGroq) <- function(
   json <- map_chr(requests, to_json)
   writeLines(json, path)
 
-  uploaded <- groq_upload_file(provider, path)
+  uploaded <- openai_upload(provider, path)
 
   req <- base_request(provider)
   req <- req_url_path_append(req, "batches")
@@ -151,14 +151,14 @@ method(batch_retrieve, ProviderGroq) <- function(provider, batch) {
 
   if (length(batch$output_file_id) == 1 && nzchar(batch$output_file_id)) {
     path_output <- withr::local_tempfile()
-    groq_download_file(provider, batch$output_file_id, path_output)
-    json <- read_ndjson(path_output, fallback = groq_json_fallback)
+    openai_download_file(provider, batch$output_file_id, path_output)
+    json <- read_ndjson(path_output, fallback = openai_json_fallback)
   }
 
   if (length(batch$error_file_id) == 1 && nzchar(batch$error_file_id)) {
     path_error <- withr::local_tempfile()
-    groq_download_file(provider, batch$error_file_id, path_error)
-    json <- c(json, read_ndjson(path_error, fallback = groq_json_fallback))
+    openai_download_file(provider, batch$error_file_id, path_error)
+    json <- c(json, read_ndjson(path_error, fallback = openai_json_fallback))
   }
 
   ids <- as.numeric(gsub("chat-", "", map_chr(json, "[[", "custom_id")))
@@ -176,36 +176,4 @@ method(batch_result_turn, ProviderGroq) <- function(
   } else {
     NULL
   }
-}
-
-# Batch helpers ----------------------------------------------------------------
-
-groq_upload_file <- function(provider, path, purpose = "batch") {
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "files")
-  req <- req_body_multipart(
-    req,
-    purpose = purpose,
-    file = curl::form_file(path)
-  )
-  req <- req_progress(req, "up")
-
-  resp <- req_perform(req)
-  resp_body_json(resp)
-}
-
-groq_download_file <- function(provider, id, path) {
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "files", id, "content")
-  req <- req_progress(req, "down")
-  req_perform(req, path = path)
-
-  invisible(path)
-}
-
-groq_json_fallback <- function(line) {
-  list(
-    custom_id = extract_custom_id(line),
-    response = list(status_code = 500)
-  )
 }
