@@ -18,8 +18,8 @@ NULL
 #' ## Authentication
 #' These functions try a number of authentication strategies, in this order:
 #'
-#' * An API key set in the `GOOGLE_API_KEY` env var, or,
-#'   for `chat_google_gemini()` only, `GEMINI_API_KEY`.
+#' * An API key set in the `GOOGLE_API_KEY` or `GEMINI_API_KEY` env var
+#'   (Gemini only).
 #' * Google's default application credentials, if the \pkg{gargle} package
 #'   is installed.
 #' * Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
@@ -94,8 +94,8 @@ chat_google_gemini_test <- function(
 #'   `global`.
 #' @param project_id Project ID.
 chat_google_vertex <- function(
-  location,
-  project_id,
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
   system_prompt = NULL,
   model = NULL,
   params = NULL,
@@ -103,8 +103,8 @@ chat_google_vertex <- function(
   api_headers = character(),
   echo = NULL
 ) {
-  check_string(location)
-  check_string(project_id)
+  check_string(location, allow_empty = FALSE)
+  check_string(project_id, allow_empty = FALSE)
 
   model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
@@ -695,12 +695,14 @@ default_google_credentials <- function(
 ) {
   variant <- arg_match(variant)
 
-  api_key <- Sys.getenv("GOOGLE_API_KEY")
-  if (variant == "gemini" && api_key == "") {
-    api_key <- Sys.getenv("GEMINI_API_KEY")
-  }
-  if (nzchar(api_key)) {
-    return(\() api_key)
+  if (variant == "gemini") {
+    api_key <- Sys.getenv("GOOGLE_API_KEY")
+    if (api_key == "") {
+      api_key <- Sys.getenv("GEMINI_API_KEY")
+    }
+    if (nzchar(api_key)) {
+      return(\() api_key)
+    }
   }
 
   gemini_scope <- switch(
@@ -763,9 +765,18 @@ default_google_credentials <- function(
     )
   }
 
+  if (is.null(token$credentials$access_token)) {
+    cli::cli_abort(
+      c(
+        "Google credentials were found but are not valid.",
+        "i" = "Try refreshing your credentials or configuring new ones."
+      ),
+      call = error_call
+    )
+  }
+
   # gargle emits an httr-style token, which we awkwardly shim into something
   # httr2 can work with.
-
   if (!token$can_refresh()) {
     # TODO: Not really sure what to do in this case when the token expires.
     return(function() {
@@ -830,9 +841,13 @@ models_google_gemini <- function(
 
 #' @rdname chat_google_gemini
 #' @export
-models_google_vertex <- function(location, project_id, credentials = NULL) {
-  check_string(location)
-  check_string(project_id)
+models_google_vertex <- function(
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
+  credentials = NULL
+) {
+  check_string(location, allow_empty = FALSE)
+  check_string(project_id, allow_empty = FALSE)
 
   credentials <- credentials %||% default_google_credentials(variant = "vertex")
   check_credentials(credentials)

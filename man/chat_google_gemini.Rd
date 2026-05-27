@@ -20,8 +20,8 @@ chat_google_gemini(
 )
 
 chat_google_vertex(
-  location,
-  project_id,
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
   system_prompt = NULL,
   model = NULL,
   params = NULL,
@@ -36,7 +36,11 @@ models_google_gemini(
   credentials = NULL
 )
 
-models_google_vertex(location, project_id, credentials = NULL)
+models_google_vertex(
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
+  credentials = NULL
+)
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
@@ -91,8 +95,8 @@ Use \code{\link[=google_upload]{google_upload()}} to upload files (PDFs, images,
 
 These functions try a number of authentication strategies, in this order:
 \itemize{
-\item An API key set in the \code{GOOGLE_API_KEY} env var, or,
-for \code{chat_google_gemini()} only, \code{GEMINI_API_KEY}.
+\item An API key set in the \code{GOOGLE_API_KEY} or \code{GEMINI_API_KEY} env var
+(Gemini only).
 \item Google's default application credentials, if the \pkg{gargle} package
 is installed.
 \item Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
