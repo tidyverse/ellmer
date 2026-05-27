@@ -60,6 +60,12 @@ test_that("can get model", {
   expect_equal(chat$get_model(), "abc")
 })
 
+test_that("can set model", {
+  chat <- chat_openai_test(model = "abc")
+  chat$set_model("def")
+  expect_equal(chat$get_model(), "def")
+})
+
 test_that("setting turns usually preserves, but can set system prompt", {
   chat <- chat_openai_test(system_prompt = "You're a funny guy")
   chat$set_turns(list())

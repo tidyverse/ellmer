@@ -43,6 +43,17 @@ google_upload <- function(
 
   mime_type <- mime_type %||% guess_mime_type(path)
 
+  status <- google_upload_file(
+    path = path,
+    base_url = base_url,
+    credentials = credentials,
+    mime_type = mime_type
+  )
+
+  ContentUploaded(uri = status$uri, mime_type = status$mimeType)
+}
+
+google_upload_file <- function(path, base_url, credentials, mime_type) {
   upload_url <- google_upload_init(
     path = path,
     base_url = base_url,
@@ -56,8 +67,7 @@ google_upload <- function(
     credentials = credentials
   )
   google_upload_wait(status, credentials)
-
-  ContentUploaded(uri = status$uri, mime_type = status$mimeType)
+  status
 }
 
 # https://ai.google.dev/api/files#method:-media.upload
@@ -122,6 +132,31 @@ google_upload_wait <- function(status, credentials) {
   }
 
   invisible()
+}
+
+# Batch file helpers -----------------------------------------------------------
+
+gemini_upload_file <- function(
+  provider,
+  path,
+  mime_type = "application/jsonl"
+) {
+  upload_base_url <- sub("/v[^/]+/?$", "/", provider@base_url)
+
+  google_upload_file(
+    path = path,
+    base_url = upload_base_url,
+    credentials = provider@credentials,
+    mime_type = mime_type
+  )
+}
+
+gemini_download_file <- function(provider, name, path) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, paste0(name, ":download"))
+  req <- req_url_query(req, alt = "media")
+  req_perform(req, path = path)
+  invisible(path)
 }
 
 # Helpers ----------------------------------------------------------------------

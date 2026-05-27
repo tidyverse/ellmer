@@ -1,0 +1,172 @@
+{
+  "version": 1,
+  "stage": "done",
+  "batch": {
+    "name": "batches/rsv6pu5hikanbevp6or89zaoo8bs2uw7vjav",
+    "metadata": {
+      "@type": "type.googleapis.com/google.ai.generativelanguage.v1main.GenerateContentBatch",
+      "model": "models/gemini-2.5-flash",
+      "displayName": "ellmer-1771051113",
+      "inputConfig": {
+        "fileName": "files/1xyylny2fl94"
+      },
+      "output": {
+        "responsesFile": "files/batch-rsv6pu5hikanbevp6or89zaoo8bs2uw7vjav"
+      },
+      "createTime": "2026-02-14T06:38:35.278957778Z",
+      "endTime": "2026-02-14T06:39:34.739884130Z",
+      "updateTime": "2026-02-14T06:39:34.739884083Z",
+      "batchStats": {
+        "requestCount": "4",
+        "successfulRequestCount": "4"
+      },
+      "state": "BATCH_STATE_SUCCEEDED",
+      "name": "batches/rsv6pu5hikanbevp6or89zaoo8bs2uw7vjav"
+    },
+    "done": true,
+    "response": {
+      "@type": "type.googleapis.com/google.ai.generativelanguage.v1main.GenerateContentBatchOutput",
+      "responsesFile": "files/batch-rsv6pu5hikanbevp6or89zaoo8bs2uw7vjav"
+    }
+  },
+  "results": [
+    {
+      "status_code": 200,
+      "body": {
+        "candidates": [
+          {
+            "index": 0,
+            "content": {
+              "role": "model",
+              "parts": [
+                {
+                  "text": "Des Moines"
+                }
+              ]
+            },
+            "finishReason": "STOP"
+          }
+        ],
+        "usageMetadata": {
+          "candidatesTokenCount": 2,
+          "totalTokenCount": 52,
+          "promptTokenCount": 15,
+          "thoughtsTokenCount": 35,
+          "promptTokensDetails": [
+            {
+              "tokenCount": 15,
+              "modality": "TEXT"
+            }
+          ]
+        },
+        "responseId": "phiQadCDIJGsmtkP_6qC0Ac",
+        "modelVersion": "gemini-2.5-flash"
+      }
+    },
+    {
+      "status_code": 200,
+      "body": {
+        "responseId": "phiQac-NJIfP_uMPgebx2Qk",
+        "modelVersion": "gemini-2.5-flash",
+        "candidates": [
+          {
+            "index": 0,
+            "content": {
+              "role": "model",
+              "parts": [
+                {
+                  "text": "Albany"
+                }
+              ]
+            },
+            "finishReason": "STOP"
+          }
+        ],
+        "usageMetadata": {
+          "thoughtsTokenCount": 43,
+          "candidatesTokenCount": 2,
+          "totalTokenCount": 61,
+          "promptTokenCount": 16,
+          "promptTokensDetails": [
+            {
+              "tokenCount": 16,
+              "modality": "TEXT"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status_code": 200,
+      "body": {
+        "candidates": [
+          {
+            "index": 0,
+            "content": {
+              "role": "model",
+              "parts": [
+                {
+                  "text": "Sacramento"
+                }
+              ]
+            },
+            "finishReason": "STOP"
+          }
+        ],
+        "usageMetadata": {
+          "promptTokensDetails": [
+            {
+              "tokenCount": 15,
+              "modality": "TEXT"
+            }
+          ],
+          "promptTokenCount": 15,
+          "candidatesTokenCount": 2,
+          "totalTokenCount": 43,
+          "thoughtsTokenCount": 26
+        },
+        "responseId": "phiQaciRJPDQz7IPi-LjiQk",
+        "modelVersion": "gemini-2.5-flash"
+      }
+    },
+    {
+      "status_code": 200,
+      "body": {
+        "candidates": [
+          {
+            "index": 0,
+            "content": {
+              "role": "model",
+              "parts": [
+                {
+                  "text": "Austin"
+                }
+              ]
+            },
+            "finishReason": "STOP"
+          }
+        ],
+        "usageMetadata": {
+          "candidatesTokenCount": 1,
+          "totalTokenCount": 49,
+          "promptTokenCount": 15,
+          "thoughtsTokenCount": 33,
+          "promptTokensDetails": [
+            {
+              "tokenCount": 15,
+              "modality": "TEXT"
+            }
+          ]
+        },
+        "responseId": "phiQaaa0G_ON_PUPzb73gA0",
+        "modelVersion": "gemini-2.5-flash"
+      }
+    }
+  ],
+  "started_at": 1771051110,
+  "hash": {
+    "provider": "aebac3192349dfc3afe04861751c4aa4",
+    "prompts": "b8eafe281e3cc5113058d9722be3e295",
+    "user_turns": "d6990a1b8a9f5db0e97de86c2669de44"
+  }
+}
