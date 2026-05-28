@@ -91,7 +91,13 @@ method(chat_request, Provider) <- function(
     tools = tools,
     type = type
   )
-  body <- modify_list(body, provider@extra_args)
+  extra_tools <- provider@extra_args[["tools"]]
+  extra_args <- provider@extra_args
+  extra_args[["tools"]] <- NULL
+  body <- modify_list(body, extra_args)
+  if (!is.null(extra_tools)) {
+    body[["tools"]] <- c(body[["tools"]], extra_tools)
+  }
   req <- req_body_json(req, body)
   req <- req_headers(req, !!!provider@extra_headers)
 
@@ -161,8 +167,7 @@ stream_text <- function(provider, event) {
 }
 
 content_text <- function(content) {
-  switch(
-    class(content)[1],
+  switch(class(content)[1],
     "ellmer::ContentThinking" = content@thinking,
     "ellmer::ContentText" = content@text,
     format(content)

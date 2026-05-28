@@ -616,3 +616,53 @@ test_that("stream_merge_chunks() handles citations_delta", {
   expect_length(result$content[[1]]$citations, 1)
   expect_equal(result$content[[1]]$citations[[1]]$url, "https://example.com")
 })
+
+# extra_args$tools merging ---------------------------------------------------
+
+test_that("extra_args$tools are preserved when no function tools registered", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-sonnet-4-5-20250929",
+    params = list(),
+    extra_args = list(tools = list(list(type = "mcp_toolset", mcp_server_name = "test"))),
+    extra_headers = character(),
+    credentials = function() "fake-key",
+    beta_headers = character(),
+    cache = ""
+  )
+
+  req <- chat_request(provider, stream = FALSE, turns = list(), tools = list())
+  body_tools <- req$body$data$tools
+  types <- vapply(body_tools, function(t) t$type %||% "", character(1))
+  expect_true("mcp_toolset" %in% types)
+})
+
+test_that("extra_args$tools are preserved alongside registered function tools", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-sonnet-4-5-20250929",
+    params = list(),
+    extra_args = list(tools = list(list(type = "mcp_toolset", mcp_server_name = "test"))),
+    extra_headers = character(),
+    credentials = function() "fake-key",
+    beta_headers = character(),
+    cache = ""
+  )
+
+  my_tool <- tool(function() 1, "A test tool", name = "my_func")
+  req <- chat_request(
+    provider,
+    stream = FALSE,
+    turns = list(),
+    tools = list(my_func = my_tool)
+  )
+  body_tools <- req$body$data$tools
+
+  types <- vapply(body_tools, function(t) t$type %||% "", character(1))
+  names_vec <- vapply(body_tools, function(t) t$name %||% "", character(1))
+
+  expect_true("mcp_toolset" %in% types)
+  expect_true("my_func" %in% names_vec)
+})
