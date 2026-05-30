@@ -169,3 +169,79 @@ test_that("can use thinking levels", {
   expect_gt(nchar(thinking[[1]]@thinking), 0)
   expect_match(resp, "2")
 })
+
+test_that("batch chat works", {
+  chat <- chat_google_gemini_test(
+    system_prompt = "Answer with just the city name"
+  )
+
+  prompts <- list(
+    "What's the capital of Iowa?",
+    "What's the capital of New York?",
+    "What's the capital of California?",
+    "What's the capital of Texas?"
+  )
+
+  out <- batch_chat_text(
+    chat,
+    prompts,
+    path = test_path("batch/state-capitals-gemini.json")
+  )
+  expect_equal(out, c("Des Moines", "Albany", "Sacramento", "Austin"))
+})
+
+test_that("gemini_prepare_batch_body handles API quirks", {
+  provider <- chat_google_gemini_test()$get_provider()
+
+  body <- chat_body(
+    provider,
+    stream = FALSE,
+    turns = list(Turn("user", "hi")),
+    type = type_object(firstName = type_string())
+  )
+  result <- gemini_prepare_batch_body(body)
+
+  # Batch JSONL parser requires snake_case (HTTP 400 with camelCase)
+  expect_true("generation_config" %in% names(result))
+  expect_null(result$generationConfig)
+
+  # Batch JSONL parser uses response_json_schema, not response_schema;
+  # schema property names like "firstName" must survive snake_case conversion
+  expect_true(
+    "firstName" %in%
+      names(result$generation_config$response_json_schema$properties)
+  )
+  expect_null(result$generation_config$response_schema)
+
+  # Batch JSONL parser rejects empty system instruction text
+  body$systemInstruction <- list(parts = list(text = ""))
+  expect_null(gemini_prepare_batch_body(body)$system_instruction)
+
+  body$systemInstruction <- list(parts = list(text = "Be helpful."))
+  expect_equal(
+    gemini_prepare_batch_body(body)$system_instruction$parts$text,
+    "Be helpful."
+  )
+})
+
+test_that("batch_status waits for responsesFile after SUCCEEDED", {
+  provider <- chat_google_gemini_test()$get_provider()
+
+  returned_batch <- list(
+    metadata = list(
+      state = "BATCH_STATE_SUCCEEDED",
+      batchStats = list(requestCount = 2L, successfulRequestCount = 2L)
+    )
+  )
+
+  no_file <- batch_status(provider, returned_batch)
+  expect_true(no_file$working)
+
+  returned_batch$response = list(responsesFile = "files/abc123")
+
+  with_file <- batch_status(
+    provider,
+    returned_batch
+  )
+  expect_false(with_file$working)
+})
