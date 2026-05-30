@@ -2,6 +2,12 @@
 
 ## ellmer (development version)
 
+- [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  and
+  [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  now support `params(reasoning_effort =)`
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#873](https://github.com/tidyverse/ellmer/issues/873)).
 - [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
   now supports
   [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
