@@ -1,0 +1,64 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What is 1 + 1?"}]}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014,"thinkingConfig":{"thinkingLevel":"low","includeThoughts":true}}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '1097'
+      content-type: application/json; charset=UTF-8
+      date: Sun, 24 May 2026 20:06:20 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=1995
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-gemini-service-tier: standard
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "**My Approach to a Simple Sum**\n\nOkay, so the question is a classic: \"What is 1 + 1?\". Right, right. No need to overthink this. My brain automatically processes this type of query as a base-level arithmetic problem. Step one, and it's a quick one, is to *identify the core question*. It’s a straightforward addition.\n\nStep two, the *answer* is immediately apparent. 1 + 1 equals, without a shadow of a doubt, 2. No complex calculations, no edge cases, just basic addition.\n\nFinally, in *formulating the response*, the goal is clarity and efficiency. The reply needs to be simple, direct, and, above all, accurate. I'd go with \"2\" or, if more context is needed, \"1 + 1 = 2\". It is a closed system.\n\n\n",
+                    "thought": true
+                  },
+                  {
+                    "text": "1 + 1 = 2.",
+                    "thoughtSignature": "EpcCCpQCAQw51sczwVjIHy3S4TSVLWmVdRN0EZtnRquF3oYkQizGRpESoAsP4p97pbueF19u0Es2AgP1W5CHTNFqBfqfIIVV6fmoRYHCsrEwAfprPiN5l4vVBjMnFLt3NRYWG2sQErWv3p5rJSeAuyyinIEaEm7rRBKBYcCEyH1cpJHZUev9gqcu9pdMcVj5nF9JpRl0dSgIA3ilf1DxBeRGDytGuG085CDFfVcbsIUnyhFpUSp4FxPQKZWlOIFr+rZ9oIW7t7+BfFl8Q290tY/9Q0wZSGoSs81CTwrXw0TyRG7lgt3w9abpVShksTDJgehTg6hByt2Rlk9v+wcXhMKLa67VLLKWEmZ7kn23V36THMI5zlvwhZ5C"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "index": 0
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 9,
+            "candidatesTokenCount": 8,
+            "totalTokenCount": 93,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 9
+              }
+            ],
+            "thoughtsTokenCount": 76,
+            "serviceTier": "standard"
+          },
+          "modelVersion": "gemini-3.5-flash",
+          "responseId": "OloTaq-CIJzNkdUP2vKnMQ"
+        }
+  recorded_at: 2026-05-24 20:06:20
+recorded_with: VCR-vcr/2.1.0

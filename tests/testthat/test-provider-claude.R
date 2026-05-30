@@ -1,5 +1,5 @@
-test_that("can make simple batch request", {
-  vcr::local_cassette("anthropic-batch")
+test_that("can make simple request", {
+  vcr::local_cassette("anthropic-basic")
 
   chat <- chat_anthropic_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?")

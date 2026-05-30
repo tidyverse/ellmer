@@ -3561,6 +3561,38 @@
   },
   {
     "provider": "Google/Gemini",
+    "model": "gemini-3.1-flash-lite",
+    "variant": "",
+    "input": 0.25,
+    "output": 1.5,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.1-flash-lite",
+    "variant": "batches",
+    "input": 0.125,
+    "output": 0.75,
+    "cached_input": 0.0125
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.1-flash-lite",
+    "variant": "flex",
+    "input": 0.125,
+    "output": 0.75,
+    "cached_input": 0.0125
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.1-flash-lite",
+    "variant": "priority",
+    "input": 0.45,
+    "output": 2.7,
+    "cached_input": 0.045
+  },
+  {
+    "provider": "Google/Gemini",
     "model": "gemini-3.1-flash-lite-preview",
     "variant": "",
     "input": 0.25,
@@ -3658,6 +3690,22 @@
     "input": 3.6,
     "output": 21.6,
     "cached_input": 0.36
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.5-flash",
+    "variant": "",
+    "input": 1.5,
+    "output": 9,
+    "cached_input": 0.15
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.5-flash",
+    "variant": "priority",
+    "input": 2.7,
+    "output": 16.2,
+    "cached_input": 0.27
   },
   {
     "provider": "Google/Gemini",
@@ -4000,6 +4048,38 @@
   },
   {
     "provider": "Google/Vertex",
+    "model": "gemini-3.1-flash-lite",
+    "variant": "",
+    "input": 0.25,
+    "output": 1.5,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-3.1-flash-lite",
+    "variant": "batches",
+    "input": 0.125,
+    "output": 0.75,
+    "cached_input": 0.0125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-3.1-flash-lite",
+    "variant": "flex",
+    "input": 0.125,
+    "output": 0.75,
+    "cached_input": 0.0125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-3.1-flash-lite",
+    "variant": "priority",
+    "input": 0.45,
+    "output": 2.7,
+    "cached_input": 0.045
+  },
+  {
+    "provider": "Google/Vertex",
     "model": "gemini-3.1-flash-lite-preview",
     "variant": "",
     "input": 0.25,
@@ -4070,6 +4150,22 @@
   },
   {
     "provider": "Google/Vertex",
+    "model": "gemini-3.5-flash",
+    "variant": "",
+    "input": 1.5,
+    "output": 9,
+    "cached_input": 0.15
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-3.5-flash",
+    "variant": "priority",
+    "input": 2.7,
+    "output": 16.2,
+    "cached_input": 0.27
+  },
+  {
+    "provider": "Google/Vertex",
     "model": "gemini-live-2.5-flash-preview-native-audio-09-2025",
     "variant": "",
     "input": 0.3,
@@ -4126,6 +4222,38 @@
     "variant": "",
     "input": 0.5,
     "output": 3
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "vertex_ai/gemini-3.1-flash-lite",
+    "variant": "",
+    "input": 0.25,
+    "output": 1.5,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "vertex_ai/gemini-3.1-flash-lite",
+    "variant": "batches",
+    "input": 0.125,
+    "output": 0.75,
+    "cached_input": 0.0125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "vertex_ai/gemini-3.1-flash-lite",
+    "variant": "flex",
+    "input": 0.125,
+    "output": 0.75,
+    "cached_input": 0.0125
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "vertex_ai/gemini-3.1-flash-lite",
+    "variant": "priority",
+    "input": 0.45,
+    "output": 2.7,
+    "cached_input": 0.045
   },
   {
     "provider": "Google/Vertex",
@@ -4297,6 +4425,13 @@
   {
     "provider": "Mistral",
     "model": "ministral-3-8b-2512",
+    "variant": "",
+    "input": 0.15,
+    "output": 0.15
+  },
+  {
+    "provider": "Mistral",
+    "model": "ministral-8b-2512",
     "variant": "",
     "input": 0.15,
     "output": 0.15
@@ -6586,6 +6721,14 @@
   },
   {
     "provider": "OpenRouter",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant": "",
+    "input": 0.25,
+    "output": 1.5,
+    "cached_input": 0.025
+  },
+  {
+    "provider": "OpenRouter",
     "model": "google/gemini-3.1-flash-lite-preview",
     "variant": "",
     "input": 0.25,
@@ -7027,9 +7170,25 @@
     "provider": "OpenRouter",
     "model": "xiaomi/mimo-v2-flash",
     "variant": "",
-    "input": 0.09,
-    "output": 0.29,
-    "cached_input": 0
+    "input": 0.1,
+    "output": 0.3,
+    "cached_input": 0.01
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "xiaomi/mimo-v2.5",
+    "variant": "",
+    "input": 0.4,
+    "output": 2,
+    "cached_input": 0.08
+  },
+  {
+    "provider": "OpenRouter",
+    "model": "xiaomi/mimo-v2.5-pro",
+    "variant": "",
+    "input": 1,
+    "output": 3,
+    "cached_input": 0.2
   },
   {
     "provider": "OpenRouter",
