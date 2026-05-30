@@ -58,6 +58,19 @@ ellmer supports a wide variety of model providers:
 - Snowflake Cortex: `chat_snowflake()` and `chat_cortex_analyst()`.
 - VLLM: `chat_vllm()`.
 
+You can also use OpenAI-compatible gateways with
+`chat_openai_compatible()`. For example, Tuning Engines can route ellmer
+calls through a governed endpoint with centralized model access, policy
+checks, audit logs, traces, and usage/cost reporting:
+
+``` r
+chat <- chat_openai_compatible(
+  base_url = "https://api.tuningengines.com/v1",
+  api_key = Sys.getenv("TUNING_ENGINES_API_KEY"),
+  model = "gpt-4o"
+)
+```
+
 ### Provider/model choice
 
 If you’re using ellmer inside an organisation, you may have internal
