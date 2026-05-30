@@ -5,6 +5,25 @@ command line (e.g. with ollama pull llama3.1) or within R using
 ollamar (e.g.
 ollamar::pull(&quot;llama3.1&quot;)).
 Built on top of chat_openai_compatible().
+Thinking models
+
+
+Some Ollama models (e.g. qwen3) support extended reasoning or &quot;thinking&quot;.
+When using these models, thinking content is automatically captured in
+the turn. You can control thinking with
+reasoning_effort:
+chat &amp;lt;- chat_ollama(
+  model = &quot;qwen3:4b&quot;,
+  params = params(reasoning_effort = &quot;none&quot;)
+)
+
+Which values are supported depends on the model. For example, qwen3 only
+supports &quot;none&quot; (off) vs the default (on), while gpt-oss supports
+&quot;low&quot;, &quot;medium&quot;, and &quot;high&quot; but ignores &quot;none&quot;. See
+https://docs.ollama.com/capabilities/thinking for details.
+
+
+
 Known limitations
 
 
@@ -24,6 +43,25 @@ command line (e.g. with ollama pull llama3.1) or within R using
 ollamar (e.g.
 ollamar::pull(&quot;llama3.1&quot;)).
 Built on top of chat_openai_compatible().
+Thinking models
+
+
+Some Ollama models (e.g. qwen3) support extended reasoning or &quot;thinking&quot;.
+When using these models, thinking content is automatically captured in
+the turn. You can control thinking with
+reasoning_effort:
+chat &amp;lt;- chat_ollama(
+  model = &quot;qwen3:4b&quot;,
+  params = params(reasoning_effort = &quot;none&quot;)
+)
+
+Which values are supported depends on the model. For example, qwen3 only
+supports &quot;none&quot; (off) vs the default (on), while gpt-oss supports
+&quot;low&quot;, &quot;medium&quot;, and &quot;high&quot; but ignores &quot;none&quot;. See
+https://docs.ollama.com/capabilities/thinking for details.
+
+
+
 Known limitations
 
 
@@ -98,6 +136,24 @@ command line (e.g. with <code>ollama pull llama3.1</code>) or within R using
 <a href="https://hauselin.github.io/ollama-r/" class="external-link">ollamar</a> (e.g.
 <code>ollamar::pull("llama3.1")</code>).</p>
 <p>Built on top of <code><a href="chat_openai_compatible.html">chat_openai_compatible()</a></code>.</p><div class="section">
+<h3 id="thinking-models">Thinking models<a class="anchor" aria-label="anchor" href="#thinking-models"></a></h3>
+
+
+<p>Some Ollama models (e.g. qwen3) support extended reasoning or "thinking".
+When using these models, thinking content is automatically captured in
+the turn. You can control thinking with
+<code>reasoning_effort</code>:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_ollama.html">chat_ollama</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="st">"qwen3:4b"</span>,</span>
+<span>  params <span class="op">=</span> <span class="fu"><a href="../reference/params.html">params</a></span><span class="op">(</span>reasoning_effort <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre><p></p></div>
+<p>Which values are supported depends on the model. For example, qwen3 only
+supports <code>"none"</code> (off) vs the default (on), while gpt-oss supports
+<code>"low"</code>, <code>"medium"</code>, and <code>"high"</code> but ignores <code>"none"</code>. See
+<a href="https://docs.ollama.com/capabilities/thinking" class="external-link">https://docs.ollama.com/capabilities/thinking</a> for details.</p>
+</div>
+
+<div class="section">
 <h3 id="known-limitations">Known limitations<a class="anchor" aria-label="anchor" href="#known-limitations"></a></h3>
 
 <ul><li><p>Tool calling is not supported with streaming (i.e. when <code>echo</code> is

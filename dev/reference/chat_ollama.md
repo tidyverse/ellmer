@@ -9,6 +9,22 @@ command line (e.g. with `ollama pull llama3.1`) or within R using
 Built on top of
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md).
 
+### Thinking models
+
+Some Ollama models (e.g. qwen3) support extended reasoning or
+"thinking". When using these models, thinking content is automatically
+captured in the turn. You can control thinking with `reasoning_effort`:
+
+    chat <- chat_ollama(
+      model = "qwen3:4b",
+      params = params(reasoning_effort = "none")
+    )
+
+Which values are supported depends on the model. For example, qwen3 only
+supports `"none"` (off) vs the default (on), while gpt-oss supports
+`"low"`, `"medium"`, and `"high"` but ignores `"none"`. See
+<https://docs.ollama.com/capabilities/thinking> for details.
+
 ### Known limitations
 
 - Tool calling is not supported with streaming (i.e. when `echo` is

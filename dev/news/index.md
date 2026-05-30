@@ -2,6 +2,11 @@
 
 ## ellmer (development version)
 
+- [`chat_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
+  now supports `params(reasoning_effort = ...)` to set thinking for
+  reasoning models, and thinking content is now captured in turns
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#940](https://github.com/tidyverse/ellmer/issues/940)).
 - [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   and
   [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
