@@ -164,7 +164,7 @@ skip_if_no_ollama <- function() {
 #' @export
 #' @rdname chat_ollama
 models_ollama <- function(
-  base_url = "http://localhost:11434",
+  base_url = Sys.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
   credentials = NULL
 ) {
   credentials <- as_credentials(
@@ -236,7 +236,7 @@ ollama_model_capabilities <- function(
 
 
 has_ollama <- function(
-  base_url = "http://localhost:11434",
+  base_url = Sys.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
   credentials = ollama_credentials()
 ) {
   check_credentials(credentials)
