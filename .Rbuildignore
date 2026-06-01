@@ -17,4 +17,5 @@ _cache/
 ^_dev$
 ^revdep$
 ^\.claude$
+^\.superpowers$
 ^plans$
