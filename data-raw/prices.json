@@ -4272,6 +4272,87 @@
     "cached_input": 0.025
   },
   {
+    "provider": "Groq",
+    "model": "gemma-7b-it",
+    "variant": "",
+    "input": 0.05,
+    "output": 0.08
+  },
+  {
+    "provider": "Groq",
+    "model": "llama-3.1-8b-instant",
+    "variant": "",
+    "input": 0.05,
+    "output": 0.08
+  },
+  {
+    "provider": "Groq",
+    "model": "llama-3.3-70b-versatile",
+    "variant": "",
+    "input": 0.59,
+    "output": 0.79
+  },
+  {
+    "provider": "Groq",
+    "model": "meta-llama/llama-4-maverick-17b-128e-instruct",
+    "variant": "",
+    "input": 0.2,
+    "output": 0.6
+  },
+  {
+    "provider": "Groq",
+    "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+    "variant": "",
+    "input": 0.11,
+    "output": 0.34
+  },
+  {
+    "provider": "Groq",
+    "model": "meta-llama/llama-guard-4-12b",
+    "variant": "",
+    "input": 0.2,
+    "output": 0.2
+  },
+  {
+    "provider": "Groq",
+    "model": "moonshotai/kimi-k2-instruct-0905",
+    "variant": "",
+    "input": 1,
+    "output": 3,
+    "cached_input": 0.5
+  },
+  {
+    "provider": "Groq",
+    "model": "openai/gpt-oss-120b",
+    "variant": "",
+    "input": 0.15,
+    "output": 0.6,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "Groq",
+    "model": "openai/gpt-oss-20b",
+    "variant": "",
+    "input": 0.075,
+    "output": 0.3,
+    "cached_input": 0.0375
+  },
+  {
+    "provider": "Groq",
+    "model": "openai/gpt-oss-safeguard-20b",
+    "variant": "",
+    "input": 0.075,
+    "output": 0.3,
+    "cached_input": 0.037
+  },
+  {
+    "provider": "Groq",
+    "model": "qwen/qwen3-32b",
+    "variant": "",
+    "input": 0.29,
+    "output": 0.59
+  },
+  {
     "provider": "Mistral",
     "model": "codestral-2405",
     "variant": "",

@@ -53,6 +53,7 @@ provider_lookup <- tribble(
   "azure",                     "Azure/OpenAI",
   "bedrock",                   "AWS/Bedrock",
   "mistral",                   "Mistral",
+  "groq",                      "Groq",
 )
 
 prices <- all_prices |>
@@ -69,7 +70,7 @@ cli::cli_alert_info("Providers: {n_distinct(prices$provider)}")
 
 stopifnot(
   "Expected at least 500 rows" = nrow(prices) >= 500,
-  "Expected 8 providers" = n_distinct(prices$provider) >= 8
+  "Expected 9 providers" = n_distinct(prices$provider) >= 9
 )
 
 # --- schema validation -------------------------------------------------------

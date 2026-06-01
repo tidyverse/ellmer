@@ -1,3 +1,7 @@
+test_that("can list models", {
+  test_models(models_groq)
+})
+
 # Common provider interface -----------------------------------------------
 
 test_that("defaults are reported", {

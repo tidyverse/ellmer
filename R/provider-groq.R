@@ -73,6 +73,42 @@ method(as_json, list(ProviderGroq, ToolDef)) <- function(provider, x, ...) {
   )
 }
 
+#' @export
+#' @rdname chat_groq
+models_groq <- function(
+  base_url = "https://api.groq.com/openai/v1",
+  api_key = NULL,
+  credentials = NULL
+) {
+  credentials <- as_credentials(
+    "models_groq",
+    \() groq_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
+  provider <- ProviderGroq(
+    name = "Groq",
+    model = "",
+    base_url = base_url,
+    credentials = credentials
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, "[[", "id")
+  owned_by <- map_chr(json$data, "[[", "owned_by")
+  created <- as.Date(.POSIXct(map_int(json$data, "[[", "created")))
+
+  df <- data.frame(id = id, created_at = created, owned_by = owned_by)
+  df <- cbind(df, match_prices(provider@name, df$id))
+  unrowname(df[order(df$owned_by, df$id), ])
+}
+
 groq_key <- function() {
   key_get("GROQ_API_KEY")
 }
