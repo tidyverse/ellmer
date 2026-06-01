@@ -697,7 +697,7 @@ default_google_credentials <- function(
 
   if (variant == "gemini") {
     api_key <- Sys.getenv("GOOGLE_API_KEY")
-    if (api_key == "") {
+    if (!nzchar(api_key)) {
       api_key <- Sys.getenv("GEMINI_API_KEY")
     }
     if (nzchar(api_key)) {
@@ -765,6 +765,7 @@ default_google_credentials <- function(
     )
   }
 
+  # A token can exist but have a NULL access_token if it has expired.
   if (is.null(token$credentials$access_token)) {
     cli::cli_abort(
       c(
