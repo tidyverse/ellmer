@@ -94,19 +94,7 @@ models_groq <- function(
     credentials = credentials
   )
 
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/models")
-  resp <- req_perform(req)
-
-  json <- resp_body_json(resp)
-
-  id <- map_chr(json$data, "[[", "id")
-  owned_by <- map_chr(json$data, "[[", "owned_by")
-  created <- as.Date(.POSIXct(map_int(json$data, "[[", "created")))
-
-  df <- data.frame(id = id, created_at = created, owned_by = owned_by)
-  df <- cbind(df, match_prices(provider@name, df$id))
-  unrowname(df[order(df$owned_by, df$id), ])
+  models_list(provider)
 }
 
 groq_key <- function() {
