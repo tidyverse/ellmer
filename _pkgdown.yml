@@ -35,6 +35,7 @@ reference:
   - starts_with("claude_file")
   - claude_tool_web_search
   - claude_tool_web_fetch
+  - claude_tool_code_execution
   - google_tool_web_search
   - google_tool_web_fetch
   - openai_tool_web_search

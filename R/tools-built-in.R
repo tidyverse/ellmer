@@ -99,6 +99,76 @@ method(as_json, list(Provider, ContentToolResponseFetch)) <- function(
   x@json
 }
 
+# Code execution --------------------------------------------------------------
+
+ContentToolRequestCode <- new_class(
+  "ContentToolRequestCode",
+  parent = Content,
+  properties = list(
+    name = prop_string(),
+    json = class_list
+  )
+)
+method(format, ContentToolRequestCode) <- function(x, ...) {
+  input <- x@json$input %||% list()
+  if (x@name == "bash_code_execution") {
+    cli::format_inline("[{.strong bash code execution}]: {.code {input$command}}")
+  } else if (x@name == "text_editor_code_execution") {
+    cli::format_inline("[{.strong file {input$command}}]: {.file {input$path}}")
+  } else {
+    paste0(
+      cli::format_inline("[{.strong code execution}]:\n"),
+      input$code %||% ""
+    )
+  }
+}
+method(as_json, list(Provider, ContentToolRequestCode)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
+}
+
+ContentToolResponseCode <- new_class(
+  "ContentToolResponseCode",
+  parent = Content,
+  properties = list(
+    json = class_list
+  )
+)
+method(format, ContentToolResponseCode) <- function(x, ...) {
+  content <- x@json$content %||% list()
+  type <- content$type %||% ""
+
+  if (grepl("_error$", type)) {
+    return(cli::format_inline(
+      "[{.strong code execution error}]: {.str {content$error_code %||% 'unknown'}}"
+    ))
+  }
+
+  header <- if (!is.null(content$return_code)) {
+    cli::format_inline(
+      "[{.strong code execution result}] (exit {content$return_code})"
+    )
+  } else {
+    cli::format_inline("[{.strong code execution result}]")
+  }
+  body <- c(
+    if (is_string(content$stdout) && nzchar(content$stdout)) content$stdout,
+    if (is_string(content$stderr) && nzchar(content$stderr)) content$stderr,
+    if (is_string(content$content) && nzchar(content$content)) content$content
+  )
+  paste(c(header, body), collapse = "\n")
+}
+method(as_json, list(Provider, ContentToolResponseCode)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
+}
+
 # MCP tool use ----------------------------------------------------------------
 
 mcp_tool_def <- function(name, server_name) {

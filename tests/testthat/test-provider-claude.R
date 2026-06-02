@@ -252,6 +252,82 @@ test_that("value_turn() parses server_tool_use web_fetch input from JSON string"
   expect_equal(fetch_content@url, "https://example.com")
 })
 
+test_that("value_turn() parses code execution requests", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "server_tool_use",
+        id = "srvtoolu_1",
+        name = "bash_code_execution",
+        input = '{"command":"ls -la"}'
+      ),
+      list(
+        type = "server_tool_use",
+        id = "srvtoolu_2",
+        name = "text_editor_code_execution",
+        input = '{"command":"create","path":"a.txt","file_text":"hi"}'
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  expect_s7_class(turn@contents[[1]], ContentToolRequestCode)
+  expect_equal(turn@contents[[1]]@name, "bash_code_execution")
+  expect_match(format(turn@contents[[1]]), "ls -la")
+  expect_s7_class(turn@contents[[2]], ContentToolRequestCode)
+  expect_equal(turn@contents[[2]]@name, "text_editor_code_execution")
+  expect_match(format(turn@contents[[2]]), "a.txt")
+})
+
+test_that("value_turn() parses code execution results", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "bash_code_execution_tool_result",
+        tool_use_id = "srvtoolu_1",
+        content = list(
+          type = "bash_code_execution_result",
+          stdout = "hello world",
+          stderr = "",
+          return_code = 0
+        )
+      ),
+      list(
+        type = "bash_code_execution_tool_result",
+        tool_use_id = "srvtoolu_2",
+        content = list(
+          type = "bash_code_execution_tool_result_error",
+          error_code = "unavailable"
+        )
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  expect_s7_class(turn@contents[[1]], ContentToolResponseCode)
+  expect_match(format(turn@contents[[1]]), "hello world")
+  expect_s7_class(turn@contents[[2]], ContentToolResponseCode)
+  expect_match(format(turn@contents[[2]]), "unavailable")
+})
+
 test_that("value_turn() parses mcp_tool_use content", {
   provider <- test_anthropic_provider()
 

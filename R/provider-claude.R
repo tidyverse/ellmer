@@ -456,6 +456,16 @@ method(value_turn, ProviderAnthropic) <- function(
           url = content$input$url,
           json = content
         )
+      } else if (
+        content$name %in%
+          c(
+            "code_execution",
+            "bash_code_execution",
+            "text_editor_code_execution"
+          )
+      ) {
+        # https://docs.claude.com/en/docs/agents-and-tools/tool-use/code-execution-tool#response-format
+        ContentToolRequestCode(name = content$name, json = content)
       } else {
         cli::cli_abort("Unknown server tool {.str {content$name}}.")
       }
@@ -467,6 +477,15 @@ method(value_turn, ProviderAnthropic) <- function(
       )
     } else if (content$type == "web_fetch_tool_result") {
       ContentToolResponseFetch(url = content$url %||% "failed", json = content)
+    } else if (
+      content$type %in%
+        c(
+          "code_execution_tool_result",
+          "bash_code_execution_tool_result",
+          "text_editor_code_execution_tool_result"
+        )
+    ) {
+      ContentToolResponseCode(json = content)
     } else if (content$type == "mcp_tool_use") {
       if (is_string(content$input)) {
         content$input <- jsonlite::parse_json(content$input)

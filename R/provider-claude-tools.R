@@ -116,3 +116,52 @@ claude_tool_web_fetch <- function(
     json = json
   )
 }
+
+#' Claude code execution tool
+#'
+#' @description
+#' Enables Claude to run Python and Bash code and manipulate files in a secure,
+#' sandboxed container on Anthropic's servers. The container has no internet
+#' access and is isolated from your machine; ellmer sends the tool spec and
+#' displays the requests and results, but does not run any code locally.
+#'
+#' Some tool versions require a beta header. Anthropic changes these
+#' frequently, so ellmer does not track them; pass any required header to
+#' `chat_anthropic(beta_headers = ...)` yourself, e.g.
+#' `beta_headers = "code-execution-2025-08-25"`.
+#'
+#' Learn more in <https://docs.claude.com/en/docs/agents-and-tools/tool-use/code-execution-tool>.
+#'
+#' @param type The code execution tool `type` to send to the API. Defaults to
+#'   `"code_execution_20250825"` (Python, Bash, and file operations, supported
+#'   on all current models). Set this to use a different version, such as
+#'   `"code_execution_20250522"` (legacy, Python only) or a newer release;
+#'   see the Anthropic documentation for the available versions and the models
+#'   they support.
+#'
+#' @family built-in tools
+#' @export
+#' @examples
+#' \dontrun{
+#' chat <- chat_anthropic()
+#' chat$register_tool(claude_tool_code_execution())
+#' chat$chat("Calculate the mean and standard deviation of 1 to 10.")
+#' }
+claude_tool_code_execution <- function(type = "code_execution_20250825") {
+  check_string(type)
+
+  json <- list(
+    type = type,
+    name = "code_execution"
+  )
+  ToolBuiltIn(
+    name = "code_execution",
+    description = "Run Python and bash code in a sandboxed container.",
+    annotations = tool_annotations(
+      title = "Code execution",
+      read_only_hint = FALSE,
+      open_world_hint = FALSE
+    ),
+    json = json
+  )
+}

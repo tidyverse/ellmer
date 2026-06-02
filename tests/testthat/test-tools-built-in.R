@@ -20,6 +20,29 @@ test_that("ToolBuiltIn defaults for description and annotations", {
   expect_equal(tool@annotations, list())
 })
 
+test_that("claude_tool_code_execution() defaults to the latest stable type", {
+  tool <- claude_tool_code_execution()
+  expect_s7_class(tool, ToolBuiltIn)
+  expect_equal(tool@name, "code_execution")
+  expect_equal(tool@json$type, "code_execution_20250825")
+  expect_equal(tool@json$name, "code_execution")
+})
+
+test_that("claude_tool_code_execution() passes through a custom type", {
+  expect_equal(
+    claude_tool_code_execution("code_execution_20250522")@json$type,
+    "code_execution_20250522"
+  )
+  expect_equal(
+    claude_tool_code_execution("code_execution_99999999")@json$type,
+    "code_execution_99999999"
+  )
+})
+
+test_that("claude_tool_code_execution() rejects a non-string type", {
+  expect_snapshot(claude_tool_code_execution(123), error = TRUE)
+})
+
 test_that("built-in tools", {
   get_built_in_tools <- function() {
     exports <- getNamespaceExports("ellmer")
