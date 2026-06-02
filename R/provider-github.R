@@ -95,7 +95,7 @@ models_github <- function(
     base_url = base_url
   )
 
-  get_models(provider)
+  models_list(provider)
 }
 
 ProviderGitHub <- new_class(
@@ -103,7 +103,7 @@ ProviderGitHub <- new_class(
   parent = ProviderOpenAICompatible
 )
 
-method(get_models, ProviderGitHub) <- function(provider) {
+method(models_list, ProviderGitHub) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/catalog/models")
   resp <- req_perform(req)

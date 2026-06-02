@@ -116,10 +116,10 @@ models_vllm <- function(base_url, api_key = NULL, credentials = NULL) {
     credentials = credentials
   )
 
-  get_models(provider)
+  models_list(provider)
 }
 
-method(get_models, ProviderVllm) <- function(provider) {
+method(models_list, ProviderVllm) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/v1/models")
   resp <- req_perform(req)

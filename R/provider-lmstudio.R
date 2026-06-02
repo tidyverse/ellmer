@@ -157,10 +157,10 @@ models_lmstudio <- function(
     credentials = credentials
   )
 
-  get_models(provider)
+  models_list(provider)
 }
 
-method(get_models, ProviderLMStudio) <- function(provider) {
+method(models_list, ProviderLMStudio) <- function(provider) {
   base_url <- sub("/v1$", "", provider@base_url)
 
   req <- request(base_url)

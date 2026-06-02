@@ -517,7 +517,7 @@ method(as_json, list(ProviderOpenAICompatible, TypeObject)) <- function(
 
 # Models -----------------------------------------------------------------------
 
-method(get_models, ProviderOpenAICompatible) <- function(provider) {
+method(models_list, ProviderOpenAICompatible) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)

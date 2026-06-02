@@ -111,7 +111,7 @@ models_openai <- function(
     credentials = credentials
   )
 
-  get_models(provider)
+  models_list(provider)
 }
 
 chat_openai_test <- function(

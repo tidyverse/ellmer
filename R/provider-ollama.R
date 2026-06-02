@@ -160,10 +160,10 @@ models_ollama <- function(
     credentials = credentials
   )
 
-  get_models(provider)
+  models_list(provider)
 }
 
-method(get_models, ProviderOllama) <- function(provider) {
+method(models_list, ProviderOllama) <- function(provider) {
   base_url <- sub("/v1$", "", provider@base_url)
 
   req <- request(base_url)

@@ -716,14 +716,14 @@ models_claude <- function(
     cache = "none"
   )
 
-  get_models(provider)
+  models_list(provider)
 }
 
 #' @export
 #' @rdname chat_anthropic
 models_anthropic <- models_claude
 
-method(get_models, ProviderAnthropic) <- function(provider) {
+method(models_list, ProviderAnthropic) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)

@@ -121,7 +121,7 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
     model = "",
     profile = profile,
   )
-  get_models(provider)
+  models_list(provider)
 }
 
 chat_aws_bedrock_test <- function(
@@ -181,7 +181,7 @@ ProviderAWSBedrock <- new_class(
   )
 )
 
-method(get_models, ProviderAWSBedrock) <- function(provider) {
+method(models_list, ProviderAWSBedrock) <- function(provider) {
   # ListFoundationModels uses the control-plane endpoint (bedrock.*) not the
   # data-plane endpoint (bedrock-runtime.*) used for inference.
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_ListFoundationModels.html

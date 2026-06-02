@@ -126,10 +126,10 @@ models_portkey <- function(
     credentials = function() api_key
   )
 
-  get_models(provider)
+  models_list(provider)
 }
 
-method(get_models, ProviderPortkeyAI) <- function(provider) {
+method(models_list, ProviderPortkeyAI) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)

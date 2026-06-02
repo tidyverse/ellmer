@@ -217,19 +217,19 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
 
 # Models -------------------------------------------------------------------
 
-get_models <- new_generic("get_models", "provider", function(provider) {
+models_list <- new_generic("models_list", "provider", function(provider) {
   S7_dispatch()
 })
 
-method(get_models, Provider) <- function(provider) {
+method(models_list, Provider) <- function(provider) {
   cli::cli_abort(
     "{.arg provider} doesn't support model listing.",
     class = "not_implemented"
   )
 }
 
-method(get_models, new_S3_class("Chat")) <- function(provider) {
-  get_models(provider$get_provider())
+method(models_list, new_S3_class("Chat")) <- function(provider) {
+  models_list(provider$get_provider())
 }
 
 # Batch AI ---------------------------------------------------------------

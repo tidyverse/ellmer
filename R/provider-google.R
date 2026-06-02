@@ -817,7 +817,7 @@ models_google_gemini <- function(
     base_url = base_url,
     credentials = credentials
   )
-  get_models(provider)
+  models_list(provider)
 }
 
 #' @rdname chat_google_gemini
@@ -842,10 +842,10 @@ models_google_vertex <- function(location, project_id, credentials = NULL) {
     credentials = credentials,
     project_id = project_id
   )
-  get_models(provider)
+  models_list(provider)
 }
 
-method(get_models, ProviderGoogleGemini) <- function(provider) {
+method(models_list, ProviderGoogleGemini) <- function(provider) {
   is_vertex <- grepl(
     "aiplatform.googleapis.com",
     provider@base_url,
