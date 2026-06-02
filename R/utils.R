@@ -225,8 +225,16 @@ support_badge <- function(tier = c("official", "community")) {
   img <- paste0("support-", tier, ".svg")
   paste0(
     "\\ifelse{html}{",
-    "\\href{", url, "}{\\figure{", img, "}{options: alt='", alt, "'}}",
-    "}{\\strong{", alt, "}}"
+    "\\href{",
+    url,
+    "}{\\figure{",
+    img,
+    "}{options: alt='",
+    alt,
+    "'}}",
+    "}{\\strong{",
+    alt,
+    "}}"
   )
 }
 
