@@ -4,6 +4,8 @@ NULL
 #' Chat with a model hosted on Groq
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' Sign up at <https://groq.com>.
 #'
 #' Built on top of [chat_openai_compatible()].

@@ -5,6 +5,8 @@ NULL
 #' Chat with a local LM Studio model
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' To use `chat_lmstudio()` first download and install
 #' [LM Studio](https://lmstudio.ai). Then load a model using the LM Studio
 #' GUI and start the local server. To learn more about running LM Studio

@@ -1,6 +1,8 @@
 #' Chat with a model hosted on PortkeyAI
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' [PortkeyAI](https://portkey.ai/docs/product/ai-gateway/universal-api)
 #' provides an interface (AI Gateway) to connect through its Universal API to a
 #' variety of LLMs providers via a single endpoint.

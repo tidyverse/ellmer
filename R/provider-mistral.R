@@ -1,6 +1,8 @@
 #' Chat with a model hosted on Mistral's La Platforme
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' Get your API key from <https://console.mistral.ai/api-keys>.
 #'
 #' Built on top of [chat_openai_compatible()].

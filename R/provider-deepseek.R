@@ -4,6 +4,8 @@ NULL
 #' Chat with a model hosted on DeepSeek
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' Sign up at <https://platform.deepseek.com>.
 #'
 #' Built on top of [chat_openai_compatible()].

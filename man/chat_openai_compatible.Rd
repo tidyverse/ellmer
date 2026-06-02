@@ -63,6 +63,8 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-community.svg}{options: alt='[Community]'}}}{\strong{[Community]}}
+
 This function is for use with OpenAI-compatible APIs, also known as the
 \strong{chat completions} API. If you want to use OpenAI itself, we recommend
 \code{\link[=chat_openai]{chat_openai()}}, which uses the newer \strong{responses} API.

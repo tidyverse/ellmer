@@ -7,6 +7,8 @@ NULL
 #' Chat with an Anthropic Claude model
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' [Anthropic](https://www.anthropic.com) provides a number of chat based models
 #' under the [Claude](https://claude.com/product/overview) moniker. Note that a
 #' Claude Pro membership does not give you the ability to call models via the

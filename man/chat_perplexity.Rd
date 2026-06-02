@@ -54,6 +54,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-community.svg}{options: alt='[Community]'}}}{\strong{[Community]}}
+
 Sign up at \url{https://www.perplexity.ai}.
 
 Perplexity AI is a platform for running LLMs that are capable of

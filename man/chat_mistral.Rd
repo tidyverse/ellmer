@@ -54,6 +54,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-community.svg}{options: alt='[Community]'}}}{\strong{[Community]}}
+
 Get your API key from \url{https://console.mistral.ai/api-keys}.
 
 Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.

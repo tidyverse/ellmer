@@ -61,6 +61,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-official.svg}{options: alt='[Official]'}}}{\strong{[Official]}}
+
 Sign up at \url{https://platform.deepseek.com}.
 
 Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.

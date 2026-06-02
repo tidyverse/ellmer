@@ -59,6 +59,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-official.svg}{options: alt='[Official]'}}}{\strong{[Official]}}
+
 Databricks provides out-of-the-box access to a number of \href{https://docs.databricks.com/en/machine-learning/model-serving/score-foundation-models.html}{foundation models}
 and can also serve as a gateway for external models hosted by a third party.
 

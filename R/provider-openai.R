@@ -8,6 +8,8 @@ NULL
 #' Chat with an OpenAI model
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' This is the main interface to [OpenAI](https://openai.com/)'s models,
 #' using the **responses API**. You can use this to access OpenAI's latest
 #' models and features like image generation and web search. If you need to use

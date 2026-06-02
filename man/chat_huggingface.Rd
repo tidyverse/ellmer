@@ -51,6 +51,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-community.svg}{options: alt='[Community]'}}}{\strong{[Community]}}
+
 \href{https://huggingface.co/}{Hugging Face} hosts a variety of open-source
 and proprietary AI models available via their Inference API.
 To use the Hugging Face API, you must have an Access Token, which you can obtain

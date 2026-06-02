@@ -7,6 +7,8 @@ NULL
 #' Chat with an AWS bedrock model
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' [AWS Bedrock](https://aws.amazon.com/bedrock/) provides a number of
 #' language models, including those from Anthropic's
 #' [Claude](https://aws.amazon.com/bedrock/claude/), using the Bedrock

@@ -61,6 +61,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-official.svg}{options: alt='[Official]'}}}{\strong{[Official]}}
+
 GitHub Models hosts a number of open source and OpenAI models. To access the
 GitHub model marketplace, you will need to apply for and be accepted into the
 beta access program. See \url{https://github.com/marketplace/models} for details.

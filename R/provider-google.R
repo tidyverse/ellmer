@@ -7,6 +7,8 @@ NULL
 #' Chat with a Google Gemini or Vertex AI model
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 #' Most enterprises are likely to use Vertex AI, and individuals are likely
 #' to use Gemini.

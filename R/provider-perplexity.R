@@ -4,6 +4,8 @@ NULL
 #' Chat with a model hosted on perplexity.ai
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' Sign up at <https://www.perplexity.ai>.
 #'
 #' Perplexity AI is a platform for running LLMs that are capable of

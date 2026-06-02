@@ -71,6 +71,8 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-official.svg}{options: alt='[Official]'}}}{\strong{[Official]}}
+
 This is the main interface to \href{https://openai.com/}{OpenAI}'s models,
 using the \strong{responses API}. You can use this to access OpenAI's latest
 models and features like image generation and web search. If you need to use

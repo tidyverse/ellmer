@@ -7,6 +7,8 @@ NULL
 #' Chat with an OpenAI-compatible model
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' This function is for use with OpenAI-compatible APIs, also known as the
 #' **chat completions** API. If you want to use OpenAI itself, we recommend
 #' [chat_openai()], which uses the newer **responses** API.
