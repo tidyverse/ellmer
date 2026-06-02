@@ -281,11 +281,53 @@ test_that("value_turn() parses code execution requests", {
 
   turn <- value_turn(provider, result)
   expect_s7_class(turn@contents[[1]], ContentToolRequestCode)
+  expect_s7_class(turn@contents[[1]], ContentToolRequest)
   expect_equal(turn@contents[[1]]@name, "bash_code_execution")
+  expect_equal(turn@contents[[1]]@arguments, list(command = "ls -la"))
   expect_match(format(turn@contents[[1]]), "ls -la")
   expect_s7_class(turn@contents[[2]], ContentToolRequestCode)
   expect_equal(turn@contents[[2]]@name, "text_editor_code_execution")
   expect_match(format(turn@contents[[2]]), "a.txt")
+})
+
+test_that("value_turn() links code execution results to their requests", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "server_tool_use",
+        id = "srvtoolu_1",
+        name = "bash_code_execution",
+        input = '{"command":"echo hi"}'
+      ),
+      list(
+        type = "bash_code_execution_tool_result",
+        tool_use_id = "srvtoolu_1",
+        content = list(
+          type = "bash_code_execution_result",
+          stdout = "hi",
+          stderr = "",
+          return_code = 0
+        )
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  res <- turn@contents[[2]]
+  expect_s7_class(res, ContentToolResponseCode)
+  expect_s7_class(res, ContentToolResult)
+  expect_equal(res@request@name, "bash_code_execution")
+  expect_equal(res@request@arguments, list(command = "echo hi"))
+  expect_match(res@value, "hi")
 })
 
 test_that("value_turn() parses code execution results", {

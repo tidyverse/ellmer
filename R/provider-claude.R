@@ -465,7 +465,13 @@ method(value_turn, ProviderAnthropic) <- function(
           )
       ) {
         # https://docs.claude.com/en/docs/agents-and-tools/tool-use/code-execution-tool#response-format
-        ContentToolRequestCode(name = content$name, json = content)
+        input <- content$input %||% list()
+        ContentToolRequestCode(
+          id = content$id,
+          name = content$name,
+          arguments = if (is.list(input)) input else list(input),
+          json = content
+        )
       } else {
         cli::cli_abort("Unknown server tool {.str {content$name}}.")
       }
@@ -485,7 +491,18 @@ method(value_turn, ProviderAnthropic) <- function(
           "text_editor_code_execution_tool_result"
         )
     ) {
-      ContentToolResponseCode(json = content)
+      result_block <- content$content %||% list()
+      is_error <- grepl("_error$", result_block$type %||% "")
+      ContentToolResponseCode(
+        value = if (!is_error) code_execution_result_body(result_block) else NULL,
+        error = if (is_error) result_block$error_code %||% "unknown" else NULL,
+        request = ContentToolRequest(
+          id = content$tool_use_id,
+          name = "",
+          arguments = list()
+        ),
+        json = content
+      )
     } else if (content$type == "mcp_tool_use") {
       if (is_string(content$input)) {
         content$input <- jsonlite::parse_json(content$input)
@@ -543,19 +560,18 @@ method(value_turn, ProviderAnthropic) <- function(
   # Flatten: mcp_tool_result may return a list of Content objects (result + images)
   contents <- unlist(contents, recursive = FALSE)
 
-  # Link MCP results to their requests so @request has the tool name
-  mcp_requests <- keep(contents, S7_inherits, ContentMcpToolRequest)
-  request_map <- set_names(mcp_requests, map_chr(mcp_requests, \(r) r@id))
-  for (i in seq_along(contents)) {
-    if (S7_inherits(contents[[i]], ContentMcpToolResult)) {
-      req_id <- contents[[i]]@request@id
-      if (has_name(request_map, req_id)) {
-        matched <- request_map[[req_id]]
-        contents[[i]]@request@name <- matched@name
-        contents[[i]]@request@arguments <- matched@arguments
-      }
-    }
-  }
+  # Link server-side tool results to their requests so @request carries the
+  # tool name and arguments (used by display and shinychat tool cards).
+  contents <- link_server_tool_results(
+    contents,
+    ContentMcpToolRequest,
+    ContentMcpToolResult
+  )
+  contents <- link_server_tool_results(
+    contents,
+    ContentToolRequestCode,
+    ContentToolResponseCode
+  )
 
   tokens <- value_tokens(provider, result)
   cache_write <- result$usage$cache_creation_input_tokens %||% 0
@@ -721,6 +737,26 @@ method(as_json, list(ProviderAnthropic, ContentMcpToolRequest)) <- function(
 }
 
 method(as_json, list(ProviderAnthropic, ContentMcpToolResult)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
+}
+
+# Echo the raw server_tool_use / *_code_execution_tool_result blocks back
+# verbatim. Without these provider-specific methods, S7 dispatches to the
+# generic ContentToolRequest/ContentToolResult methods (which emit "tool_use"/
+# "tool_result") and the API rejects the resent turn.
+method(as_json, list(ProviderAnthropic, ContentToolRequestCode)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
+}
+
+method(as_json, list(ProviderAnthropic, ContentToolResponseCode)) <- function(
   provider,
   x,
   ...

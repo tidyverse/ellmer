@@ -718,7 +718,7 @@ Chat <- R6::R6Class(
 
         if (yield_as_content) {
           for (content in turn@contents) {
-            if (is_mcp_content(content)) {
+            if (is_server_tool_content(content)) {
               yield(content)
             }
           }
@@ -824,7 +824,7 @@ Chat <- R6::R6Class(
 
         if (yield_as_content) {
           for (content in turn@contents) {
-            if (is_mcp_content(content)) {
+            if (is_server_tool_content(content)) {
               yield(content)
             }
           }

@@ -11,6 +11,29 @@ ToolBuiltIn <- new_class(
   )
 )
 
+# Copy the tool name and arguments from each server-side tool request onto the
+# matching result's @request (paired by id). MCP and code execution results
+# arrive with an empty @request, so this populates them for display and for
+# shinychat tool cards.
+link_server_tool_results <- function(contents, request_class, result_class) {
+  requests <- keep(contents, S7_inherits, request_class)
+  if (length(requests) == 0) {
+    return(contents)
+  }
+  request_map <- set_names(requests, map_chr(requests, \(r) r@id))
+  for (i in seq_along(contents)) {
+    if (S7_inherits(contents[[i]], result_class)) {
+      req_id <- contents[[i]]@request@id
+      if (has_name(request_map, req_id)) {
+        matched <- request_map[[req_id]]
+        contents[[i]]@request@name <- matched@name
+        contents[[i]]@request@arguments <- matched@arguments
+      }
+    }
+  }
+  contents
+}
+
 method(as_json, list(Provider, ToolBuiltIn)) <- function(provider, x, ...) {
   x@json
 }
@@ -101,11 +124,14 @@ method(as_json, list(Provider, ContentToolResponseFetch)) <- function(
 
 # Code execution --------------------------------------------------------------
 
+# These inherit from ContentToolRequest/ContentToolResult so that shinychat
+# renders them as tool cards (like MCP content). They are server-side tools, so
+# is_tool_request()/is_tool_result() exclude them from local execution.
+
 ContentToolRequestCode <- new_class(
   "ContentToolRequestCode",
-  parent = Content,
+  parent = ContentToolRequest,
   properties = list(
-    name = prop_string(),
     json = class_list
   )
 )
@@ -130,9 +156,19 @@ method(as_json, list(Provider, ContentToolRequestCode)) <- function(
   x@json
 }
 
+# The combined stdout/stderr/file output of a code execution result block.
+code_execution_result_body <- function(content) {
+  parts <- c(
+    if (is_string(content$stdout) && nzchar(content$stdout)) content$stdout,
+    if (is_string(content$stderr) && nzchar(content$stderr)) content$stderr,
+    if (is_string(content$content) && nzchar(content$content)) content$content
+  )
+  paste(parts, collapse = "\n")
+}
+
 ContentToolResponseCode <- new_class(
   "ContentToolResponseCode",
-  parent = Content,
+  parent = ContentToolResult,
   properties = list(
     json = class_list
   )
@@ -154,12 +190,8 @@ method(format, ContentToolResponseCode) <- function(x, ...) {
   } else {
     cli::format_inline("[{.strong code execution result}]")
   }
-  body <- c(
-    if (is_string(content$stdout) && nzchar(content$stdout)) content$stdout,
-    if (is_string(content$stderr) && nzchar(content$stderr)) content$stderr,
-    if (is_string(content$content) && nzchar(content$content)) content$content
-  )
-  paste(c(header, body), collapse = "\n")
+  body <- code_execution_result_body(content)
+  paste(c(header, if (nzchar(body)) body), collapse = "\n")
 }
 method(as_json, list(Provider, ContentToolResponseCode)) <- function(
   provider,

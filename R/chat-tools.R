@@ -5,7 +5,11 @@ is_tool_request <- function(x, local_only = TRUE) {
   if (!S7_inherits(x, ContentToolRequest)) {
     return(FALSE)
   }
-  if (local_only && S7_inherits(x, ContentMcpToolRequest)) {
+  if (
+    local_only &&
+      (S7_inherits(x, ContentMcpToolRequest) ||
+        S7_inherits(x, ContentToolRequestCode))
+  ) {
     return(FALSE)
   }
   TRUE
@@ -14,7 +18,11 @@ is_tool_result <- function(x, local_only = TRUE) {
   if (!S7_inherits(x, ContentToolResult)) {
     return(FALSE)
   }
-  if (local_only && S7_inherits(x, ContentMcpToolResult)) {
+  if (
+    local_only &&
+      (S7_inherits(x, ContentMcpToolResult) ||
+        S7_inherits(x, ContentToolResponseCode))
+  ) {
     return(FALSE)
   }
   TRUE
@@ -393,9 +401,17 @@ is_mcp_content <- function(x) {
     S7_inherits(x, ContentMcpListTools)
 }
 
+# Server-side tool content that should be yielded as content (e.g. to shinychat
+# for tool-card rendering) even though it is not executed locally.
+is_server_tool_content <- function(x) {
+  is_mcp_content(x) ||
+    S7_inherits(x, ContentToolRequestCode) ||
+    S7_inherits(x, ContentToolResponseCode)
+}
+
 echo_server_tool_contents <- function(turn, echo) {
   for (content in turn@contents) {
-    if (is_mcp_content(content)) {
+    if (is_server_tool_content(content)) {
       maybe_echo_tool(content, echo = echo)
     }
   }

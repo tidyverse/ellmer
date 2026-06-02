@@ -43,6 +43,90 @@ test_that("claude_tool_code_execution() rejects a non-string type", {
   expect_snapshot(claude_tool_code_execution(123), error = TRUE)
 })
 
+test_that("ContentToolRequestCode inherits from ContentToolRequest", {
+  req <- ContentToolRequestCode(
+    id = "srvtoolu_1",
+    name = "bash_code_execution",
+    arguments = list(command = "ls"),
+    json = list()
+  )
+  expect_s7_class(req, ContentToolRequestCode)
+  expect_s7_class(req, ContentToolRequest)
+  expect_equal(req@arguments, list(command = "ls"))
+})
+
+test_that("ContentToolResponseCode inherits from ContentToolResult", {
+  res <- ContentToolResponseCode(
+    value = "ok",
+    request = ContentToolRequest(id = "srvtoolu_1", name = "", arguments = list()),
+    json = list()
+  )
+  expect_s7_class(res, ContentToolResponseCode)
+  expect_s7_class(res, ContentToolResult)
+  expect_equal(res@value, "ok")
+})
+
+test_that("is_tool_request()/is_tool_result() exclude code execution by default", {
+  req <- ContentToolRequestCode(
+    id = "1",
+    name = "bash_code_execution",
+    arguments = list(),
+    json = list()
+  )
+  res <- ContentToolResponseCode(
+    value = "ok",
+    request = ContentToolRequest(id = "1", name = "", arguments = list()),
+    json = list()
+  )
+  expect_false(is_tool_request(req))
+  expect_true(is_tool_request(req, local_only = FALSE))
+  expect_false(is_tool_result(res))
+  expect_true(is_tool_result(res, local_only = FALSE))
+})
+
+test_that("is_server_tool_content() recognizes code execution content", {
+  req <- ContentToolRequestCode(
+    id = "1",
+    name = "bash_code_execution",
+    arguments = list(),
+    json = list()
+  )
+  res <- ContentToolResponseCode(
+    value = "ok",
+    request = ContentToolRequest(id = "1", name = "", arguments = list()),
+    json = list()
+  )
+  expect_true(is_server_tool_content(req))
+  expect_true(is_server_tool_content(res))
+  expect_false(is_server_tool_content(ContentText("hi")))
+})
+
+test_that("echo_server_tool_contents() echoes code execution in output mode", {
+  turn <- AssistantTurn(list(
+    ContentToolRequestCode(
+      id = "1",
+      name = "bash_code_execution",
+      arguments = list(command = "echo hi"),
+      json = list(input = list(command = "echo hi"))
+    ),
+    ContentToolResponseCode(
+      value = "hi",
+      request = ContentToolRequest(id = "1", name = "", arguments = list()),
+      json = list(
+        content = list(type = "bash_code_execution_result", stdout = "hi")
+      )
+    )
+  ))
+
+  out <- capture.output(
+    echo_server_tool_contents(turn, echo = "output"),
+    type = "message"
+  )
+  out <- paste(out, collapse = "\n")
+  expect_match(out, "echo hi")
+  expect_match(out, "code execution result")
+})
+
 test_that("built-in tools", {
   get_built_in_tools <- function() {
     exports <- getNamespaceExports("ellmer")
