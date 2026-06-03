@@ -735,6 +735,44 @@ test_that("stream_merge_chunks() handles citations_delta", {
   expect_equal(result$content[[1]]$citations[[1]]$url, "https://example.com")
 })
 
+test_that("stream_merge_chunks() lifts code execution container id to top level", {
+  provider <- test_anthropic_provider()
+
+  chunks <- list(
+    list(
+      type = "message_start",
+      message = list(
+        id = "msg_1",
+        type = "message",
+        role = "assistant",
+        content = list(),
+        model = "claude-sonnet-4-20250514",
+        stop_reason = NULL,
+        usage = list(input_tokens = 10, output_tokens = 1)
+      )
+    ),
+    list(
+      type = "message_delta",
+      delta = list(
+        stop_reason = "tool_use",
+        stop_sequence = NULL,
+        container = list(
+          id = "container_011CbfsyKzmipatHQpUuhoSK",
+          expires_at = "2026-06-03T06:53:40.305938Z"
+        )
+      ),
+      usage = list(output_tokens = 213)
+    )
+  )
+
+  result <- NULL
+  for (chunk in chunks) {
+    result <- stream_merge_chunks(provider, result, chunk)
+  }
+
+  expect_equal(result$container$id, "container_011CbfsyKzmipatHQpUuhoSK")
+})
+
 # extra_args$tools merging ---------------------------------------------------
 
 test_that("extra_args$tools are preserved when no function tools registered", {
@@ -856,6 +894,30 @@ test_that("tool requests keep an empty input for argument-free tools", {
   req <- ContentToolRequest("toolu_1", "f", list())
   json <- as_json(provider, req)
   expect_equal(json$input, list())
+})
+
+test_that("cache_control is omitted on programmatic tool results", {
+  provider <- test_anthropic_provider()
+  req <- ContentToolRequest(
+    "toolu_1",
+    "f",
+    list(employee = "Emma"),
+    extra = list(caller = list(
+      type = "code_execution_20260120",
+      tool_id = "srvtoolu_1"
+    ))
+  )
+  res <- ContentToolResult(value = "[]", request = req)
+  json <- as_json(provider, UserTurn(contents = list(res)), is_last = TRUE)
+  expect_null(json$content[[1]]$cache_control)
+})
+
+test_that("cache_control is still applied to regular tool results", {
+  provider <- test_anthropic_provider()
+  req <- ContentToolRequest("toolu_1", "f", list(x = 1))
+  res <- ContentToolResult(value = "ok", request = req)
+  json <- as_json(provider, UserTurn(contents = list(res)), is_last = TRUE)
+  expect_equal(json$content[[1]]$cache_control, list(type = "ephemeral", ttl = ""))
 })
 
 test_that("last_container_id() returns the newest container id in history", {

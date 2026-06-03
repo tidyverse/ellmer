@@ -445,6 +445,12 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
     result$stop_reason <- chunk$delta$stop_reason
     result$stop_sequence <- chunk$delta$stop_sequence
     result$usage$output_tokens <- chunk$usage$output_tokens
+    # The code execution sandbox container id arrives nested under `delta` in
+    # the streaming protocol (it's top-level in non-streaming responses). Lift
+    # it to the top level so last_container_id() can reuse it across turns.
+    if (!is.null(chunk$delta$container)) {
+      result$container <- chunk$delta$container
+    }
   } else if (chunk$type == "error") {
     if (chunk$error$type == "overloaded_error") {
       # https://docs.anthropic.com/en/api/messages-streaming#error-events
@@ -641,6 +647,23 @@ method(value_turn, ProviderAnthropic) <- function(
 
 # ellmer -> Claude --------------------------------------------------------------
 
+# TRUE if the last serialized block of `contents` comes from a tool result that
+# was called by code execution (programmatic tool calling). compact() in the
+# list serializer drops NULL-serializing blocks, so we scan from the end for the
+# object behind the last emitted block rather than assuming 1:1 alignment.
+last_block_is_programmatic_result <- function(provider, contents, ...) {
+  for (content in rev(contents)) {
+    if (is.null(as_json(provider, content, ...))) {
+      next
+    }
+    return(
+      S7_inherits(content, ContentToolResult) &&
+        grepl("^code_execution", content@request@extra$caller$type %||% "")
+    )
+  }
+  FALSE
+}
+
 method(as_json, list(ProviderAnthropic, Turn)) <- function(
   provider,
   x,
@@ -661,8 +684,13 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(
 
     # Add caching to the last content block in the last turn
     # https://docs.claude.com/en/docs/build-with-claude/prompt-caching#how-automatic-prefix-checking-works
-    if (is_last) {
-      content[[length(content)]]$cache_control <- cache_control(provider)
+    # Exception: the API rejects cache_control on a tool result that was called
+    # by code execution (programmatic tool calling) because those blocks aren't
+    # rendered in Claude's context. Skip caching when the last block is one.
+    if (is_last && length(content) > 0) {
+      if (!last_block_is_programmatic_result(provider, x@contents, ...)) {
+        content[[length(content)]]$cache_control <- cache_control(provider)
+      }
     }
     list(role = x@role, content = content)
   } else {
