@@ -850,3 +850,10 @@ test_that("direct tool calls serialize without a caller field", {
   json <- as_json(provider, req)
   expect_null(json$caller)
 })
+
+test_that("tool requests keep an empty input for argument-free tools", {
+  provider <- test_anthropic_provider()
+  req <- ContentToolRequest("toolu_1", "f", list())
+  json <- as_json(provider, req)
+  expect_equal(json$input, list())
+})
