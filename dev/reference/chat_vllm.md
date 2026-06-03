@@ -1,5 +1,7 @@
 # Chat with a model hosted by vLLM
 
+[![\[Community\]](figures/support-community.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+
 [vLLM](https://docs.vllm.ai/en/latest/) is an open source library that
 provides an efficient and convenient LLMs model server. You can use
 `chat_vllm()` to connect to endpoints powered by vLLM.

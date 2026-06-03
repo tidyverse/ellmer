@@ -1,5 +1,7 @@
 # Chat with an Anthropic Claude model
 
+[![\[Official\]](figures/support-official.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+
 [Anthropic](https://www.anthropic.com) provides a number of chat based
 models under the [Claude](https://claude.com/product/overview) moniker.
 Note that a Claude Pro membership does not give you the ability to call

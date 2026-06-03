@@ -1,5 +1,7 @@
 # Chat with a model hosted on Databricks
 
+[![\[Official\]](figures/support-official.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+
 Databricks provides out-of-the-box access to a number of [foundation
 models](https://docs.databricks.com/en/machine-learning/model-serving/score-foundation-models.html)
 and can also serve as a gateway for external models hosted by a third

@@ -269,6 +269,16 @@ data.
 
 - [`chat()`](https://ellmer.tidyverse.org/dev/reference/chat-any.md) :
   Chat with any provider
+- [`Chat`](https://ellmer.tidyverse.org/dev/reference/Chat.md) : The
+  Chat object
+- [`token_usage()`](https://ellmer.tidyverse.org/dev/reference/token_usage.md)
+  : Report on token usage in the current session
+
+### Official providers
+
+Actively maintained, with priority support for bug fixes and new
+features.
+
 - [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   [`chat_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   [`models_claude()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
@@ -279,8 +289,6 @@ data.
   : Chat with an AWS bedrock model
 - [`chat_azure_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_azure_openai.md)
   : Chat with a model hosted on Azure OpenAI
-- [`chat_cloudflare()`](https://ellmer.tidyverse.org/dev/reference/chat_cloudflare.md)
-  : Chat with a model hosted on CloudFlare
 - [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md)
   : Chat with a model hosted on Databricks
 - [`chat_deepseek()`](https://ellmer.tidyverse.org/dev/reference/chat_deepseek.md)
@@ -293,7 +301,23 @@ data.
   [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   [`models_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   [`models_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
-  **\[experimental\]** : Chat with a Google Gemini or Vertex AI model
+  : Chat with a Google Gemini or Vertex AI model
+- [`chat_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
+  [`models_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
+  : Chat with a local Ollama model
+- [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  [`models_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  : Chat with an OpenAI model
+- [`chat_snowflake()`](https://ellmer.tidyverse.org/dev/reference/chat_snowflake.md)
+  : Chat with a model hosted on Snowflake
+
+### Community providers
+
+Community contributed and maintained. Contributions to improve these
+providers are especially welcome.
+
+- [`chat_cloudflare()`](https://ellmer.tidyverse.org/dev/reference/chat_cloudflare.md)
+  : Chat with a model hosted on CloudFlare
 - [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
   : Chat with a model hosted on Groq
 - [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md)
@@ -304,12 +328,6 @@ data.
 - [`chat_mistral()`](https://ellmer.tidyverse.org/dev/reference/chat_mistral.md)
   [`models_mistral()`](https://ellmer.tidyverse.org/dev/reference/chat_mistral.md)
   : Chat with a model hosted on Mistral's La Platforme
-- [`chat_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
-  [`models_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
-  : Chat with a local Ollama model
-- [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  [`models_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  : Chat with an OpenAI model
 - [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
   : Chat with an OpenAI-compatible model
 - [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
@@ -319,15 +337,9 @@ data.
 - [`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
   [`models_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
   : Chat with a model hosted on PortkeyAI
-- [`chat_snowflake()`](https://ellmer.tidyverse.org/dev/reference/chat_snowflake.md)
-  : Chat with a model hosted on Snowflake
 - [`chat_vllm()`](https://ellmer.tidyverse.org/dev/reference/chat_vllm.md)
   [`models_vllm()`](https://ellmer.tidyverse.org/dev/reference/chat_vllm.md)
   : Chat with a model hosted by vLLM
-- [`Chat`](https://ellmer.tidyverse.org/dev/reference/Chat.md) : The
-  Chat object
-- [`token_usage()`](https://ellmer.tidyverse.org/dev/reference/token_usage.md)
-  : Report on token usage in the current session
 
 ### Provider-specific helpers
 

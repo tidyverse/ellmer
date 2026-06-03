@@ -1,5 +1,7 @@
 # Chat with a model hosted on DeepSeek
 
+[![\[Official\]](figures/support-official.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+
 Sign up at <https://platform.deepseek.com>.
 
 Built on top of

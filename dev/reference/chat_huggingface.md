@@ -1,5 +1,7 @@
 # Chat with a model hosted on Hugging Face Serverless Inference API
 
+[![\[Community\]](figures/support-community.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+
 [Hugging Face](https://huggingface.co/) hosts a variety of open-source
 and proprietary AI models available via their Inference API. To use the
 Hugging Face API, you must have an Access Token, which you can obtain

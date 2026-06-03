@@ -1,5 +1,7 @@
 # Chat with a model hosted on Groq
 
+[![\[Community\]](figures/support-community.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+
 Sign up at <https://groq.com>.
 
 Built on top of

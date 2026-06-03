@@ -1,5 +1,7 @@
 # Chat with a model hosted on the GitHub model marketplace
 
+[![\[Official\]](figures/support-official.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+
 GitHub Models hosts a number of open source and OpenAI models. To access
 the GitHub model marketplace, you will need to apply for and be accepted
 into the beta access program. See

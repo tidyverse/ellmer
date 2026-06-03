@@ -1,5 +1,7 @@
 # Chat with an OpenAI model
 
+[![\[Official\]](figures/support-official.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+
 This is the main interface to [OpenAI](https://openai.com/)'s models,
 using the **responses API**. You can use this to access OpenAI's latest
 models and features like image generation and web search. If you need to

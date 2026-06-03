@@ -1,5 +1,7 @@
 # Chat with a local Ollama model
 
+[![\[Official\]](figures/support-official.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+
 To use `chat_ollama()` first download and install
 [Ollama](https://ollama.com). Then install some models either from the
 command line (e.g. with `ollama pull llama3.1`) or within R using
