@@ -395,6 +395,17 @@ Chat <- R6::R6Class(
         cli::cli_inform("Replacing existing {tool@name} tool.")
       }
 
+      if (
+        S7_inherits(tool, ToolDef) &&
+          length(tool@allowed_callers) > 0 &&
+          !S7_inherits(private$provider, ProviderAnthropic)
+      ) {
+        cli::cli_warn(c(
+          "{.arg allowed_callers} is only supported by Anthropic and will be ignored.",
+          i = "Tool {.str {tool@name}} will be offered as a normal (direct) tool."
+        ))
+      }
+
       private$tools[[tool@name]] <- tool
       invisible(self)
     },

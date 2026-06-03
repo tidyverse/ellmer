@@ -98,3 +98,12 @@
       Error in `chat$stream_async()`:
       ! `controller` must be an <ellmer_stream_controller> object created by `stream_controller()`.
 
+# register_tool() warns about allowed_callers on non-Anthropic providers
+
+    Code
+      chat$register_tool(programmatic)
+    Condition
+      Warning:
+      `allowed_callers` is only supported by Anthropic and will be ignored.
+      i Tool "f" will be offered as a normal (direct) tool.
+

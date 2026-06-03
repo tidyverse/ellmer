@@ -463,3 +463,25 @@ test_that("merge_content_text() merges adjacent text, preserves non-text", {
   expect_s7_class(merged[[3]], ContentText)
   expect_equal(merged[[3]]@text, "c")
 })
+
+test_that("register_tool() warns about allowed_callers on non-Anthropic providers", {
+  chat <- chat_openai(api_key = "test")
+  programmatic <- tool(
+    function() 1,
+    name = "f",
+    description = "d",
+    allowed_callers = "code_execution_20260120"
+  )
+  expect_snapshot(chat$register_tool(programmatic))
+})
+
+test_that("register_tool() does not warn about allowed_callers on Anthropic", {
+  chat <- chat_anthropic(api_key = "test")
+  programmatic <- tool(
+    function() 1,
+    name = "f",
+    description = "d",
+    allowed_callers = "code_execution_20260120"
+  )
+  expect_no_warning(chat$register_tool(programmatic))
+})
