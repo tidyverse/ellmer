@@ -465,7 +465,7 @@ test_that("merge_content_text() merges adjacent text, preserves non-text", {
 })
 
 test_that("register_tool() warns about allowed_callers on non-Anthropic providers", {
-  chat <- chat_openai(api_key = "test")
+  chat <- chat_openai(credentials = function() "test")
   programmatic <- tool(
     function() 1,
     name = "f",
@@ -476,7 +476,7 @@ test_that("register_tool() warns about allowed_callers on non-Anthropic provider
 })
 
 test_that("register_tool() does not warn about allowed_callers on Anthropic", {
-  chat <- chat_anthropic(api_key = "test")
+  chat <- chat_anthropic(credentials = function() "test")
   programmatic <- tool(
     function() 1,
     name = "f",
