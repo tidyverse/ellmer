@@ -933,3 +933,11 @@ test_that("chat_body() does not warn when the code execution tool is registered"
     )
   )
 })
+
+test_that("chat_body() does not warn for plain tools without allowed_callers", {
+  provider <- test_anthropic_provider()
+  plain <- tool(function() 1, name = "f", description = "d")
+  expect_no_warning(
+    chat_body(provider, turns = list(UserTurn("hi")), tools = list(f = plain))
+  )
+})
