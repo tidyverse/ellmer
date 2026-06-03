@@ -415,6 +415,18 @@ method(value_tokens, ProviderAWSBedrock) <- function(provider, json) {
   )
 }
 
+# https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
+method(value_finish_reason, ProviderAWSBedrock) <- function(provider, json) {
+  switch(
+    json$stopReason,
+    end_turn = "success",
+    max_tokens = "max_tokens",
+    stop_sequence = "stop_sequence",
+    guardrail_intervened = "content_filter",
+    "other"
+  )
+}
+
 method(value_turn, ProviderAWSBedrock) <- function(
   provider,
   result,

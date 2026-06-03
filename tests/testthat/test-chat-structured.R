@@ -306,3 +306,12 @@ test_that("can recursively convert objects contents", {
     list(x = 1, y = c(1, 2, 3))
   )
 })
+
+test_that("extract_data() errors on truncated response", {
+  turn <- AssistantTurn(
+    list(ContentJson(list(x = 1))),
+    finish_reason = "max_tokens"
+  )
+  type <- type_object(x = type_integer())
+  expect_snapshot(extract_data(turn, type), error = TRUE)
+})

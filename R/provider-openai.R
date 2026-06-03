@@ -246,8 +246,7 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
   result,
   chunk
 ) {
-  if (chunk$type == "response.completed") {
-    # https://platform.openai.com/docs/api-reference/responses-streaming/response/completed
+  if (chunk$type %in% c("response.completed", "response.incomplete")) {
     chunk$response
   } else if (chunk$type == "response.failed") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/failed
@@ -269,6 +268,22 @@ method(value_tokens, ProviderOpenAI) <- function(provider, json) {
     output = usage$output_tokens %||% 0,
     cached_input = cached_tokens
   )
+}
+
+# https://platform.openai.com/docs/api-reference/responses/get
+method(value_finish_reason, ProviderOpenAI) <- function(provider, json) {
+  if (identical(json$status, "completed")) {
+    "success"
+  } else if (identical(json$status, "incomplete")) {
+    reason <- json$incomplete_details$reason
+    if (identical(reason, "max_output_tokens")) {
+      "max_tokens"
+    } else {
+      "other"
+    }
+  } else {
+    "other"
+  }
 }
 
 method(value_turn, ProviderOpenAI) <- function(

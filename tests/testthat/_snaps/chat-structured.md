@@ -22,3 +22,13 @@
       Warning:
       The `.additional_properties` argument of `type_object()` is deprecated as of ellmer 0.5.0.
 
+# extract_data() errors on truncated response
+
+    Code
+      extract_data(turn, type)
+    Condition
+      Error in `extract_data()`:
+      ! Structured data extraction failed because the response was truncated.
+      i The response hit the `max_tokens` limit before the JSON output was complete.
+      i Increase `max_tokens` to allow the model to generate the full response.
+

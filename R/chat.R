@@ -707,6 +707,12 @@ Chat <- R6::R6Class(
       }
 
       if (!is.null(turn) && !is_partial_turn(turn)) {
+        if (identical(turn@finish_reason, "max_tokens")) {
+          cli::cli_warn(
+            "Response was truncated because it hit the {.arg max_tokens} limit."
+          )
+        }
+
         # Ensure turns always end in a newline
         if (any_text) {
           emit("\n")
@@ -804,6 +810,12 @@ Chat <- R6::R6Class(
       }
 
       if (!is.null(turn) && !is_partial_turn(turn)) {
+        if (identical(turn@finish_reason, "max_tokens")) {
+          cli::cli_warn(
+            "Response was truncated because it hit the {.arg max_tokens} limit."
+          )
+        }
+
         # Ensure turns always end in a newline
         if (any_text) {
           emit("\n")
@@ -978,6 +990,7 @@ TurnAccumulator <- R6::R6Class(
         has_type = !is.null(type)
       )
       turn@duration <- duration
+      turn@finish_reason <- value_finish_reason(self$provider, result)
       match_tools(turn, self$chat$get_tools())
     }
   )
