@@ -238,3 +238,52 @@ chat$chat("Describe the design aesthetic of https://tidyverse.org")
 #> Overall, the design communicates clarity, ease of use, and a focus on
 #> modern data science tools.
 ```
+
+## Programmatic tool calling (Claude)
+
+Claude can call your tools from inside its code-execution sandbox, writing
+Python that loops over or filters tool results before they reach the model's
+context. This reduces tokens and latency for fan-out workflows (for example,
+looking up many records and returning only those that match a condition).
+
+Opt a tool in with `allowed_callers` and register the code-execution tool:
+
+```r
+get_expenses <- function(employee) {
+  # ... return a data frame / list of expense rows ...
+}
+
+expense_tool <- tool(
+  get_expenses,
+  description = paste(
+    "Look up an employee's expense line items.",
+    "Returns a JSON array of objects with fields:",
+    "employee (string), amount (number), category (string)."
+  ),
+  arguments = list(employee = type_string()),
+  allowed_callers = "code_execution_20260120"
+)
+
+chat <- chat_anthropic(
+  model = "claude-opus-4-8",
+  beta_headers = "code-execution-2025-08-25"
+)
+chat$register_tool(claude_tool_code_execution(type = "code_execution_20260120"))
+chat$register_tool(expense_tool)
+chat$chat("Which of these 20 employees exceeded their $5000 budget?")
+```
+
+ellmer executes the tool locally for each call Claude's code makes, and reuses
+the sandbox container across turns so follow-up questions can build on
+previously created files and state.
+
+Notes and limitations:
+
+* Requires a model that supports `code_execution_20260120` (Opus 4.5+/Sonnet
+  4.5+) and the code-execution tool to be registered.
+* `allowed_callers` is Anthropic-only; other providers ignore it.
+* Programmatic tool calling is not compatible with structured-output (`strict`)
+  tools, `tool_choice`-forced programmatic calls, or `disable_parallel_tool_use`.
+* MCP-connector tools cannot be called programmatically.
+* A reused container that has expired surfaces a `container_expired` error in
+  the tool result; start a new conversation to get a fresh sandbox.

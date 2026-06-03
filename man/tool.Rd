@@ -13,6 +13,7 @@ tool(
   name = NULL,
   convert = TRUE,
   annotations = list(),
+  allowed_callers = NULL,
   .name = deprecated(),
   .description = deprecated(),
   .convert = deprecated(),
@@ -45,6 +46,16 @@ R data type equivalents? Defaults to \code{TRUE}.}
 \item{annotations}{Additional properties that describe the tool and its
 behavior. Usually created by \code{\link[=tool_annotations]{tool_annotations()}}, where you can find a
 description of the annotation properties recommended by the \href{https://modelcontextprotocol.io/introduction}{Model Context Protocol}.}
+
+\item{allowed_callers}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} Character vector
+controlling which contexts may invoke this tool, sent verbatim to the
+Anthropic API. Use \code{"code_execution_20260120"} to let Claude call the tool
+from within its code-execution sandbox (programmatic tool calling),
+\code{"direct"} for normal tool calls, or both. Requires a registered
+\code{\link[=claude_tool_code_execution]{claude_tool_code_execution()}} tool on a compatible model, and is ignored
+by non-Anthropic providers. Because Claude deserializes results in Python,
+document your tool's output format (e.g. the JSON schema) in
+\code{description}. Defaults to \code{NULL} (the API default, \code{"direct"}).}
 
 \item{.name, .description, .convert, .annotations}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please switch to the non-prefixed
 equivalents.}
@@ -130,8 +141,8 @@ chat
 \dontshow{ellmer:::vcr_example_end()}
 }
 \seealso{
-Other tool calling helpers:
-\code{\link[=tool_annotations]{tool_annotations()}},
-\code{\link[=tool_reject]{tool_reject()}}
+Other tool calling helpers: 
+\code{\link{tool_annotations}()},
+\code{\link{tool_reject}()}
 }
 \concept{tool calling helpers}

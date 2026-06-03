@@ -6,6 +6,7 @@
 * `chat_perplexity()` now defaults to `model = "sonar"` since the previous default (`"llama-3.1-sonar-small-128k-online"`) has been removed by Perplexity (@thisisnic, #538).
 * `claude_tool_code_execution()` lets Claude run Python and bash code and manipulate files in a sandboxed container on Anthropic's servers, surfacing each call as a tool request/result that echoes in the console (with `echo = "output"`) and renders as a tool card in shinychat. Some tool versions require a beta header, which you supply yourself via `chat_anthropic(beta_headers = ...)`.
 * `models_deepseek()` lists available models for `chat_deepseek()` (@jcrodriguez1989, #919).
+* `tool()` gains an `allowed_callers` argument that enables Claude's programmatic tool calling, letting Claude invoke the tool from within its code-execution sandbox to loop over or filter results before they reach the model's context.
 * `type_object(.additional_properties)` is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (@thisisnic, #866).
 
 # ellmer 0.4.1
