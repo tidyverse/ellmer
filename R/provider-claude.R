@@ -769,11 +769,14 @@ method(as_json, list(ProviderAnthropic, ToolDef)) <- function(
   x,
   ...
 ) {
-  list(
+  compact(list(
     name = x@name,
     description = x@description,
-    input_schema = compact(as_json(provider, x@arguments, ...))
-  )
+    input_schema = compact(as_json(provider, x@arguments, ...)),
+    allowed_callers = if (length(x@allowed_callers)) {
+      as.list(x@allowed_callers)
+    }
+  ))
 }
 
 method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(

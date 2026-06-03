@@ -756,6 +756,25 @@ test_that("extra_args$tools are preserved when no function tools registered", {
   expect_true("mcp_toolset" %in% types)
 })
 
+test_that("as_json() emits allowed_callers for Anthropic tools", {
+  provider <- test_anthropic_provider()
+  t <- tool(
+    function() 1,
+    name = "f",
+    description = "d",
+    allowed_callers = c("direct", "code_execution_20260120")
+  )
+  json <- as_json(provider, t)
+  expect_equal(json$allowed_callers, list("direct", "code_execution_20260120"))
+})
+
+test_that("as_json() omits allowed_callers when unset", {
+  provider <- test_anthropic_provider()
+  t <- tool(function() 1, name = "f", description = "d")
+  json <- as_json(provider, t)
+  expect_null(json$allowed_callers)
+})
+
 test_that("extra_args$tools are preserved alongside registered function tools", {
   provider <- ProviderAnthropic(
     name = "Anthropic",
