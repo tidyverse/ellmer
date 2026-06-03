@@ -30,8 +30,7 @@ reference:
 
 - subtitle: Official providers
   desc: >
-    Actively maintained, with
-    priority support for bug fixes and new features.
+    Actively maintained, with priority support for bug fixes and new features.
   contents:
   - chat_anthropic
   - chat_aws_bedrock
