@@ -897,3 +897,39 @@ test_that("chat_body() omits container when none has been created", {
   body <- chat_body(provider, turns = list(UserTurn("hi")))
   expect_null(body$container)
 })
+
+test_that("chat_body() warns when allowed_callers is set but no code tool is registered", {
+  withr::local_options(rlib_warning_verbosity = "verbose")
+  provider <- test_anthropic_provider()
+  programmatic <- tool(
+    function() 1,
+    name = "f",
+    description = "d",
+    allowed_callers = "code_execution_20260120"
+  )
+  expect_snapshot(
+    . <- chat_body(
+      provider,
+      turns = list(UserTurn("hi")),
+      tools = list(f = programmatic)
+    )
+  )
+})
+
+test_that("chat_body() does not warn when the code execution tool is registered", {
+  provider <- test_anthropic_provider()
+  programmatic <- tool(
+    function() 1,
+    name = "f",
+    description = "d",
+    allowed_callers = "code_execution_20260120"
+  )
+  code_tool <- claude_tool_code_execution(type = "code_execution_20260120")
+  expect_no_warning(
+    chat_body(
+      provider,
+      turns = list(UserTurn("hi")),
+      tools = list(f = programmatic, code_execution = code_tool)
+    )
+  )
+})

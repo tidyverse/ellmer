@@ -234,6 +234,35 @@ last_container_id <- function(turns) {
   NULL
 }
 
+# Warn if any tool opts into programmatic calling (allowed_callers set) but no
+# code_execution tool is registered, since Claude can then never invoke it from
+# code. Deduped so a multi-turn tool loop does not repeat the warning.
+warn_missing_code_execution_tool <- function(tools) {
+  wants_programmatic <- some(tools, function(t) {
+    S7_inherits(t, ToolDef) && length(t@allowed_callers) > 0
+  })
+  if (!wants_programmatic) {
+    return(invisible())
+  }
+
+  has_code_tool <- some(tools, function(t) {
+    S7_inherits(t, ToolBuiltIn) && identical(t@name, "code_execution")
+  })
+  if (has_code_tool) {
+    return(invisible())
+  }
+
+  cli::cli_warn(
+    c(
+      "A tool sets {.arg allowed_callers} but no code execution tool is registered.",
+      i = "Register {.run claude_tool_code_execution()} to enable programmatic tool calling.",
+      i = "Until then, the tool can only be called directly."
+    ),
+    .frequency = "regularly",
+    .frequency_id = "ellmer_ptc_missing_code_tool"
+  )
+}
+
 method(chat_body, ProviderAnthropic) <- function(
   provider,
   stream = TRUE,
@@ -297,6 +326,7 @@ method(chat_body, ProviderAnthropic) <- function(
     mcp_servers <- NULL
   }
 
+  warn_missing_code_execution_tool(tools)
   tools <- as_json(provider, unname(tools))
 
   params <- chat_params(provider, provider@params)
