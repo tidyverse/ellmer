@@ -216,6 +216,24 @@ method(base_request, ProviderAnthropic) <- function(provider) {
 method(chat_path, ProviderAnthropic) <- function(provider) {
   "messages"
 }
+
+# The id of the most recent code-execution container in the conversation, or
+# NULL if none exists. Scanning newest-first reuses the freshest container so
+# paused programmatic executions resume in place and follow-up turns can build
+# on previously created sandbox files/state. Only AssistantTurn carries @json.
+last_container_id <- function(turns) {
+  for (turn in rev(turns)) {
+    if (!S7_inherits(turn, AssistantTurn)) {
+      next
+    }
+    id <- turn@json$container$id
+    if (!is.null(id)) {
+      return(id)
+    }
+  }
+  NULL
+}
+
 method(chat_body, ProviderAnthropic) <- function(
   provider,
   stream = TRUE,
@@ -292,6 +310,8 @@ method(chat_body, ProviderAnthropic) <- function(
     thinking <- NULL
   }
 
+  container <- last_container_id(turns)
+
   compact(list2(
     model = provider@model,
     system = system,
@@ -302,6 +322,7 @@ method(chat_body, ProviderAnthropic) <- function(
     tool_choice = tool_choice,
     thinking = thinking,
     output_config = output_config,
+    container = container,
     !!!params
   ))
 }

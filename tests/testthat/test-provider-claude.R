@@ -857,3 +857,43 @@ test_that("tool requests keep an empty input for argument-free tools", {
   json <- as_json(provider, req)
   expect_equal(json$input, list())
 })
+
+test_that("last_container_id() returns the newest container id in history", {
+  turns <- list(
+    UserTurn("hi"),
+    AssistantTurn(
+      list(ContentText("a")),
+      json = list(container = list(id = "container_1"))
+    ),
+    UserTurn("more"),
+    AssistantTurn(
+      list(ContentText("b")),
+      json = list(container = list(id = "container_2"))
+    )
+  )
+  expect_equal(last_container_id(turns), "container_2")
+})
+
+test_that("last_container_id() returns NULL when no container is present", {
+  turns <- list(UserTurn("hi"), AssistantTurn(list(ContentText("a"))))
+  expect_null(last_container_id(turns))
+})
+
+test_that("chat_body() reuses the conversation's container id", {
+  provider <- test_anthropic_provider()
+  turns <- list(
+    UserTurn("hi"),
+    AssistantTurn(
+      list(ContentText("a")),
+      json = list(container = list(id = "container_1"))
+    )
+  )
+  body <- chat_body(provider, turns = turns)
+  expect_equal(body$container, "container_1")
+})
+
+test_that("chat_body() omits container when none has been created", {
+  provider <- test_anthropic_provider()
+  body <- chat_body(provider, turns = list(UserTurn("hi")))
+  expect_null(body$container)
+})
