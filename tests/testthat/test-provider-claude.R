@@ -803,3 +803,50 @@ test_that("extra_args$tools are preserved alongside registered function tools", 
   expect_true("mcp_toolset" %in% types)
   expect_true("my_func" %in% names_vec)
 })
+
+test_that("value_turn() round-trips the caller field on programmatic tool calls", {
+  provider <- test_anthropic_provider()
+  result <- list(
+    content = list(
+      list(
+        type = "tool_use",
+        id = "toolu_1",
+        name = "query_database",
+        input = list(sql = "SELECT 1"),
+        caller = list(
+          type = "code_execution_20260120",
+          tool_id = "srvtoolu_9"
+        )
+      )
+    ),
+    stop_reason = "tool_use",
+    usage = list(
+      input_tokens = 1,
+      output_tokens = 1,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  req <- turn@contents[[1]]
+  expect_s7_class(req, ContentToolRequest)
+  expect_equal(
+    req@extra$caller,
+    list(type = "code_execution_20260120", tool_id = "srvtoolu_9")
+  )
+
+  json <- as_json(provider, req)
+  expect_equal(json$type, "tool_use")
+  expect_equal(
+    json$caller,
+    list(type = "code_execution_20260120", tool_id = "srvtoolu_9")
+  )
+})
+
+test_that("direct tool calls serialize without a caller field", {
+  provider <- test_anthropic_provider()
+  req <- ContentToolRequest("toolu_1", "f", list(x = 1))
+  json <- as_json(provider, req)
+  expect_null(json$caller)
+})

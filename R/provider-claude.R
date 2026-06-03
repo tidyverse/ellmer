@@ -438,7 +438,12 @@ method(value_turn, ProviderAnthropic) <- function(
         if (is_string(content$input)) {
           content$input <- jsonlite::parse_json(content$input)
         }
-        ContentToolRequest(content$id, content$name, content$input)
+        ContentToolRequest(
+          content$id,
+          content$name,
+          content$input,
+          extra = compact(list(caller = content$caller))
+        )
       }
     } else if (content$type == "server_tool_use") {
       if (is_string(content$input)) {
@@ -706,12 +711,16 @@ method(as_json, list(ProviderAnthropic, ContentToolRequest)) <- function(
   x,
   ...
 ) {
-  list(
+  out <- list(
     type = "tool_use",
     id = x@id,
     name = x@name,
     input = x@arguments
   )
+  if (!is.null(x@extra$caller)) {
+    out$caller <- x@extra$caller
+  }
+  out
 }
 
 # https://docs.anthropic.com/en/docs/build-with-claude/tool-use#handling-tool-use-and-tool-result-content-blocks
