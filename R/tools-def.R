@@ -118,6 +118,7 @@ tool <- function(
   name = NULL,
   convert = TRUE,
   annotations = list(),
+  allowed_callers = NULL,
   .name = deprecated(),
   .description = deprecated(),
   .convert = deprecated(),
@@ -157,6 +158,7 @@ tool <- function(
   check_string(description)
   check_string(name, allow_null = TRUE)
   check_bool(convert)
+  check_character(allowed_callers, allow_null = TRUE)
 
   if (is.null(name)) {
     if (is.name(fun_expr)) {
@@ -180,7 +182,8 @@ tool <- function(
     description = description,
     arguments = TypeObject(properties = llm_arguments),
     convert = convert,
-    annotations = annotations
+    annotations = annotations,
+    allowed_callers = allowed_callers %||% character(0)
   )
 }
 
@@ -192,7 +195,8 @@ ToolDef <- new_class(
     description = prop_string(),
     arguments = TypeObject,
     convert = prop_bool(TRUE),
-    annotations = class_list
+    annotations = class_list,
+    allowed_callers = class_character
   )
 )
 

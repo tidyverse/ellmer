@@ -151,3 +151,17 @@ test_that("tool() allows annotations", {
   tool_def <- tool(function() {}, description = "", annotations = annotations)
   expect_equal(tool_def@annotations, annotations)
 })
+
+test_that("tool() records allowed_callers", {
+  t <- tool(
+    function() 1,
+    description = "d",
+    allowed_callers = c("direct", "code_execution_20260120")
+  )
+  expect_equal(t@allowed_callers, c("direct", "code_execution_20260120"))
+})
+
+test_that("tool() defaults allowed_callers to an empty character vector", {
+  t <- tool(function() 1, description = "d")
+  expect_equal(t@allowed_callers, character(0))
+})
