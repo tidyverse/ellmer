@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `Chat$chat()` (and `$chat_async()`, `$chat_structured()`, and `$chat_structured_async()`) now restore the previous conversation state if a request fails partway through the tool loop, so a failed call no longer leaves the chat with a dangling tool request that breaks every later call. Set `options(ellmer_preserve_turns_on_error = TRUE)` to keep the partial turns for debugging.
 * `mcp_connector()` creates a provider-hosted MCP server connection that can be registered with `$register_tool()`. Both `chat_anthropic()` and `chat_openai()` are supported. The provider connects to the MCP server on your behalf, handling tool discovery and execution server-side (#991).
 
 * `chat_anthropic()` and `chat_openai()` now handle server-side MCP tool content blocks (`mcp_tool_use`/`mcp_tool_result` for Anthropic; `mcp_list_tools`/`mcp_call` for OpenAI), allowing models to connect to remote MCP servers directly via the provider's API (thanks @klin333, #991).

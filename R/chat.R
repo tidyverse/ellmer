@@ -203,12 +203,12 @@ Chat <- R6::R6Class(
 
       # Returns a single turn (the final response from the assistant), even if
       # multiple rounds of back and forth happened.
-      coro::collect(private$chat_impl(
+      private$with_turn_rollback(coro::collect(private$chat_impl(
         turn,
         stream = echo != "none",
         echo = echo,
         controller = stream_controller()
-      ))
+      )))
 
       text <- ellmer_output(self$last_turn()@text)
       if (echo == "none") text else invisible(text)
@@ -236,13 +236,13 @@ Chat <- R6::R6Class(
       needs_wrapper <- type_needs_wrapper(type, private$provider)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
-      coro::collect(private$submit_turns(
+      private$with_turn_rollback(coro::collect(private$submit_turns(
         turn,
         type = type,
         stream = echo != "none",
         echo = echo,
         controller = stream_controller()
-      ))
+      )))
 
       turn <- self$last_turn()
       extract_data(turn, type, convert = convert, needs_wrapper = needs_wrapper)
@@ -270,12 +270,14 @@ Chat <- R6::R6Class(
       needs_wrapper <- type_needs_wrapper(type, private$provider)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
-      done <- coro::async_collect(private$submit_turns_async(
-        turn,
-        type = type,
-        stream = echo != "none",
-        echo = echo,
-        controller = stream_controller()
+      done <- private$with_turn_rollback_async(coro::async_collect(
+        private$submit_turns_async(
+          turn,
+          type = type,
+          stream = echo != "none",
+          echo = echo,
+          controller = stream_controller()
+        )
       ))
 
       promises::then(done, function(dummy) {
@@ -306,7 +308,7 @@ Chat <- R6::R6Class(
 
       # Returns a single turn (the final response from the assistant), even if
       # multiple rounds of back and forth happened.
-      done <- coro::async_collect(
+      done <- private$with_turn_rollback_async(coro::async_collect(
         private$chat_impl_async(
           turn,
           stream = FALSE,
@@ -314,7 +316,7 @@ Chat <- R6::R6Class(
           tool_mode = tool_mode,
           controller = stream_controller()
         )
-      )
+      ))
       promises::then(done, function(dummy) {
         self$last_turn()@text
       })
@@ -846,6 +848,39 @@ Chat <- R6::R6Class(
 
     has_system_prompt = function() {
       length(private$.turns) > 0 && is_system_turn(private$.turns[[1]])
+    },
+
+    # Run `expr`, restoring the conversation to its state from before the call
+    # if `expr` errors. A request that fails partway through the tool loop (for
+    # example an API error while sending tool results) would otherwise leave a
+    # dangling, unanswered tool request as the final turn, which makes the
+    # invalid conversation poison every later call on this chat. Set the option
+    # `ellmer_preserve_turns_on_error = TRUE` to keep the partial turns for
+    # debugging.
+    with_turn_rollback = function(expr) {
+      snapshot <- private$.turns
+      tryCatch(
+        expr,
+        error = function(cnd) {
+          if (!isTRUE(getOption("ellmer_preserve_turns_on_error", FALSE))) {
+            private$.turns <- snapshot
+          }
+          stop(cnd)
+        }
+      )
+    },
+
+    # Async counterpart of with_turn_rollback(). The snapshot is taken before
+    # `promise` is forced (and thus before any async turn mutation runs), so a
+    # rejected promise restores the pre-call turns.
+    with_turn_rollback_async = function(promise) {
+      snapshot <- private$.turns
+      promises::catch(promise, function(cnd) {
+        if (!isTRUE(getOption("ellmer_preserve_turns_on_error", FALSE))) {
+          private$.turns <- snapshot
+        }
+        stop(cnd)
+      })
     },
 
     complete_dangling_tool_requests = function() {

@@ -485,3 +485,62 @@ test_that("register_tool() does not warn about allowed_callers on Anthropic", {
   )
   expect_no_warning(chat$register_tool(programmatic))
 })
+
+# A response asking for one tool call, used to commit a turn before the next
+# request fails.
+mock_tool_use_response <- function() {
+  httr2::response(
+    status_code = 200,
+    headers = list("content-type" = "application/json"),
+    body = charToRaw(jsonlite::toJSON(
+      list(
+        id = "msg_1",
+        type = "message",
+        role = "assistant",
+        model = "claude-sonnet-4-6",
+        stop_reason = "tool_use",
+        content = list(list(
+          type = "tool_use",
+          id = "toolu_1",
+          name = "my_tool",
+          input = list()
+        )),
+        usage = list(input_tokens = 1, output_tokens = 1)
+      ),
+      auto_unbox = TRUE
+    ))
+  )
+}
+
+test_that("a failed chat() rolls back turns committed during the call", {
+  chat <- chat_anthropic(credentials = function() "test")
+  chat$register_tool(tool(function() "ok", name = "my_tool", description = "d"))
+
+  n <- 0
+  local_mocked_bindings(
+    chat_perform = function(...) {
+      n <<- n + 1
+      if (n == 1) mock_tool_use_response() else cli::cli_abort("boom")
+    }
+  )
+
+  expect_snapshot(chat$chat("hi", echo = "none"), error = TRUE)
+  expect_length(chat$get_turns(), 0)
+})
+
+test_that("ellmer_preserve_turns_on_error keeps partial turns after a failure", {
+  withr::local_options(ellmer_preserve_turns_on_error = TRUE)
+  chat <- chat_anthropic(credentials = function() "test")
+  chat$register_tool(tool(function() "ok", name = "my_tool", description = "d"))
+
+  n <- 0
+  local_mocked_bindings(
+    chat_perform = function(...) {
+      n <<- n + 1
+      if (n == 1) mock_tool_use_response() else cli::cli_abort("boom")
+    }
+  )
+
+  expect_snapshot(chat$chat("hi", echo = "none"), error = TRUE)
+  expect_length(chat$get_turns(), 2)
+})

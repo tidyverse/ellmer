@@ -107,3 +107,19 @@
       `allowed_callers` is only supported by Anthropic and will be ignored.
       i Tool "f" will be offered as a normal (direct) tool.
 
+# a failed chat() rolls back turns committed during the call
+
+    Code
+      chat$chat("hi", echo = "none")
+    Condition
+      Error in `chat_perform()`:
+      ! boom
+
+# ellmer_preserve_turns_on_error keeps partial turns after a failure
+
+    Code
+      chat$chat("hi", echo = "none")
+    Condition
+      Error in `chat_perform()`:
+      ! boom
+
