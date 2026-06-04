@@ -773,6 +773,51 @@ test_that("stream_merge_chunks() lifts code execution container id to top level"
   expect_equal(result$container$id, "container_011CbfsyKzmipatHQpUuhoSK")
 })
 
+test_that("programmatic tool_use is serialized last in an assistant turn", {
+  provider <- test_anthropic_provider()
+
+  # Anthropic can stream a paused programmatic tool_use with a completed
+  # code_execution_tool_result *after* it (parallel calls); the API rejects that
+  # order on resend, so the programmatic request must be moved to the end.
+  contents <- list(
+    ContentToolRequestCode(
+      id = "srvtoolu_1",
+      name = "code_execution",
+      arguments = list(),
+      json = list(type = "server_tool_use", id = "srvtoolu_1", name = "code_execution")
+    ),
+    ContentToolResponseCode(
+      value = "ok",
+      request = ContentToolRequest(id = "srvtoolu_1", name = "", arguments = list()),
+      json = list(type = "code_execution_tool_result", tool_use_id = "srvtoolu_1")
+    ),
+    ContentToolRequest(
+      "toolu_1",
+      "get_expenses",
+      list(employee = "Kai"),
+      extra = list(caller = list(type = "code_execution_20260120", tool_id = "srvtoolu_2"))
+    ),
+    ContentToolResponseCode(
+      value = "ok2",
+      request = ContentToolRequest(id = "srvtoolu_2", name = "", arguments = list()),
+      json = list(type = "code_execution_tool_result", tool_use_id = "srvtoolu_2")
+    )
+  )
+
+  json <- as_json(provider, AssistantTurn(contents = contents))
+  types <- vapply(json$content, function(b) b$type, character(1))
+
+  expect_equal(
+    types,
+    c(
+      "server_tool_use",
+      "code_execution_tool_result",
+      "code_execution_tool_result",
+      "tool_use"
+    )
+  )
+})
+
 # extra_args$tools merging ---------------------------------------------------
 
 test_that("extra_args$tools are preserved when no function tools registered", {
