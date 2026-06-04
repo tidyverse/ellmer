@@ -370,6 +370,37 @@ test_that("value_turn() parses code execution results", {
   expect_match(format(turn@contents[[2]]), "unavailable")
 })
 
+test_that("value_turn() summarises text editor file operations", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "text_editor_code_execution_tool_result",
+        tool_use_id = "srvtoolu_1",
+        content = list(
+          type = "text_editor_code_execution_create_result",
+          is_file_update = FALSE
+        )
+      ),
+      list(
+        type = "text_editor_code_execution_tool_result",
+        tool_use_id = "srvtoolu_2",
+        content = list(
+          type = "text_editor_code_execution_str_replace_result",
+          lines = list("-alpha", "+ALPHA", " beta")
+        )
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 5)
+  )
+
+  turn <- value_turn(provider, result)
+  expect_equal(turn@contents[[1]]@value, "File created.")
+  expect_equal(turn@contents[[2]]@value, "-alpha\n+ALPHA\n beta")
+})
+
 test_that("value_turn() parses mcp_tool_use content", {
   provider <- test_anthropic_provider()
 

@@ -205,14 +205,32 @@ method(as_json, list(Provider, ContentToolRequestCode)) <- function(
   x@json
 }
 
-# The combined stdout/stderr/file output of a code execution result block.
+# The human-readable body of a code execution result block. Bash and Python
+# results carry stdout/stderr; a text-editor `view` carries the file content as
+# a string. File-operation results (create, str_replace) report the edit
+# instead of any stdout, so they are summarised by code_execution_edit_summary()
+# to avoid showing an empty result.
 code_execution_result_body <- function(content) {
   parts <- c(
     if (is_string(content$stdout) && nzchar(content$stdout)) content$stdout,
     if (is_string(content$stderr) && nzchar(content$stderr)) content$stderr,
-    if (is_string(content$content) && nzchar(content$content)) content$content
+    if (is_string(content$content) && nzchar(content$content)) content$content,
+    code_execution_edit_summary(content)
   )
   paste(parts, collapse = "\n")
+}
+
+# Summarise a text-editor file-operation result. `str_replace` returns its
+# change as a unified-diff hunk in `lines`; `create` reports `is_file_update`
+# (FALSE for a new file, TRUE when overwriting an existing one).
+code_execution_edit_summary <- function(content) {
+  if (length(content$lines) > 0) {
+    paste(unlist(content$lines), collapse = "\n")
+  } else if (!is.null(content$is_file_update)) {
+    if (isTRUE(content$is_file_update)) "File updated." else "File created."
+  } else {
+    NULL
+  }
 }
 
 ContentToolResponseCode <- new_class(
