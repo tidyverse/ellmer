@@ -306,3 +306,23 @@ method(check_mcp_connector_tool, Provider) <- function(
     call = error_call
   )
 }
+
+# Programmatic tool calling support ------------------------------------------
+
+# Called from Chat$register_tool() for tools that set `allowed_callers`. The
+# default warns that the provider will ignore the field; providers that support
+# programmatic tool calling override this with a no-op.
+check_programmatic_tool <- new_generic(
+  "check_programmatic_tool",
+  "provider",
+  function(provider, tool) {
+    S7_dispatch()
+  }
+)
+
+method(check_programmatic_tool, Provider) <- function(provider, tool) {
+  cli::cli_warn(c(
+    "{.arg allowed_callers} enables programmatic tool calling, which is only available via {.fn chat_anthropic}.",
+    i = "{.cls {class(provider)[[1]]}} will ignore it and offer {.str {tool@name}} as a normal (direct) tool."
+  ))
+}

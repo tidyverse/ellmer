@@ -104,8 +104,17 @@
       chat$register_tool(programmatic)
     Condition
       Warning:
-      `allowed_callers` is only supported by Anthropic and will be ignored.
-      i Tool "f" will be offered as a normal (direct) tool.
+      `allowed_callers` enables programmatic tool calling, which is only available via `chat_anthropic()`.
+      i <ellmer::ProviderOpenAI> will ignore it and offer "f" as a normal (direct) tool.
+
+# register_tool() warns accurately about allowed_callers on Claude via Bedrock
+
+    Code
+      chat$register_tool(programmatic)
+    Condition
+      Warning:
+      `allowed_callers` enables programmatic tool calling, which is only available via `chat_anthropic()`.
+      i <ellmer::ProviderAWSBedrock> will ignore it and offer "f" as a normal (direct) tool.
 
 # a failed chat() rolls back turns committed during the call
 

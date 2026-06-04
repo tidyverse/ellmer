@@ -532,6 +532,17 @@ test_that("register_tool() does not warn about allowed_callers on Anthropic", {
   expect_no_warning(chat$register_tool(programmatic))
 })
 
+test_that("register_tool() warns accurately about allowed_callers on Claude via Bedrock", {
+  chat <- Chat$new(test_aws_bedrock_provider())
+  programmatic <- tool(
+    function() 1,
+    name = "f",
+    description = "d",
+    allowed_callers = "code_execution_20260120"
+  )
+  expect_snapshot(chat$register_tool(programmatic))
+})
+
 # A response asking for one tool call, used to commit a turn before the next
 # request fails.
 mock_tool_use_response <- function() {

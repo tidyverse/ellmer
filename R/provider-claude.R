@@ -899,6 +899,11 @@ method(check_mcp_connector_tool, ProviderAnthropic) <- function(
   invisible()
 }
 
+# Anthropic supports programmatic tool calling, so allowed_callers is honoured.
+method(check_programmatic_tool, ProviderAnthropic) <- function(provider, tool) {
+  invisible()
+}
+
 method(as_json, list(ProviderAnthropic, McpConnector)) <- function(
   provider,
   x,
