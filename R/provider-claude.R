@@ -647,22 +647,6 @@ method(value_turn, ProviderAnthropic) <- function(
 
 # ellmer -> Claude --------------------------------------------------------------
 
-# Anthropic streams parallel programmatic tool calls with completed
-# `code_execution_tool_result` blocks placed *after* the paused `tool_use` block
-# (the call still awaiting our result). On resend, however, the API requires
-# every `tool_use` awaiting a client result to be the last block in the
-# assistant message, so the immediately-following user message's `tool_result`
-# pairs with it. Move programmatic `tool_use` requests (those with a code
-# execution caller) to the end so the resent turn is accepted; this matches the
-# order Claude already uses for sequential calls.
-move_programmatic_requests_last <- function(contents) {
-  is_programmatic <- map_lgl(contents, function(content) {
-    S7_inherits(content, ContentToolRequest) &&
-      grepl("^code_execution", content@extra$caller$type %||% "")
-  })
-  c(contents[!is_programmatic], contents[is_programmatic])
-}
-
 # TRUE if the last serialized block of `contents` comes from a tool result that
 # was called by code execution (programmatic tool calling). compact() in the
 # list serializer drops NULL-serializing blocks, so we scan from the end for the
@@ -696,9 +680,6 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(
       return(NULL)
     }
     x <- turn_contents_expand(x)
-    if (is_assistant_turn(x)) {
-      x@contents <- move_programmatic_requests_last(x@contents)
-    }
     content <- as_json(provider, x@contents, ...)
 
     # Add caching to the last content block in the last turn
