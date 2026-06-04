@@ -130,6 +130,13 @@ claude_tool_web_fetch <- function(
 #' `chat_anthropic(beta_headers = ...)` yourself, e.g.
 #' `beta_headers = "code-execution-2025-08-25"`.
 #'
+#' When you enable programmatic tool calling (by setting `allowed_callers` on a
+#' [tool()], matching the `type` here), prefer the default
+#' `"code_execution_20250825"`. As of this writing, the newer
+#' `"code_execution_20260120"` can return `"unavailable"` errors when Claude
+#' issues several programmatic tool calls in parallel; `"code_execution_20250825"`
+#' handles them reliably.
+#'
 #' Learn more in <https://docs.claude.com/en/docs/agents-and-tools/tool-use/code-execution-tool>.
 #'
 #' @param type The code execution tool `type` to send to the API. Defaults to
