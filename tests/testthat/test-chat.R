@@ -590,3 +590,30 @@ test_that("ellmer_preserve_turns_on_error keeps partial turns after a failure", 
   expect_snapshot(chat$chat("hi", echo = "none"), error = TRUE)
   expect_length(chat$get_turns(), 2)
 })
+
+test_that("a failed stream() rolls back turns committed during the call", {
+  chat <- chat_anthropic(credentials = function() "test")
+
+  local_mocked_bindings(
+    chat_perform = function(...) coro::gen(cli::cli_abort("boom"))
+  )
+
+  expect_snapshot(coro::collect(chat$stream("hi")), error = TRUE)
+  expect_length(chat$get_turns(), 0)
+})
+
+test_that("a failed stream_async() rolls back turns committed during the call", {
+  chat <- chat_anthropic(credentials = function() "test")
+
+  local_mocked_bindings(
+    chat_perform = function(...) {
+      coro::async_generator(\() cli::cli_abort("boom"))()
+    }
+  )
+
+  expect_snapshot(
+    sync(coro::async_collect(chat$stream_async("hi"))),
+    error = TRUE
+  )
+  expect_length(chat$get_turns(), 0)
+})

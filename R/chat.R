@@ -339,13 +339,13 @@ Chat <- R6::R6Class(
 
       turn <- user_turn(!!!finish_tools, ...)
       stream <- arg_match(stream)
-      private$chat_impl(
+      private$stream_with_rollback(private$chat_impl(
         turn,
         stream = TRUE,
         echo = "none",
         yield_as_content = stream == "content",
         controller = controller
-      )
+      ))
     },
 
     #' @description Submit input to the chatbot, returning asynchronously
@@ -375,14 +375,14 @@ Chat <- R6::R6Class(
       turn <- user_turn(!!!finish_tools, ...)
       tool_mode <- arg_match(tool_mode)
       stream <- arg_match(stream)
-      private$chat_impl_async(
+      private$stream_with_rollback_async(private$chat_impl_async(
         turn,
         stream = TRUE,
         echo = "none",
         tool_mode = tool_mode,
         yield_as_content = stream == "content",
         controller = controller
-      )
+      ))
     },
 
     #' @description Register a tool (an R function) that the chatbot can use.
@@ -850,6 +850,16 @@ Chat <- R6::R6Class(
       length(private$.turns) > 0 && is_system_turn(private$.turns[[1]])
     },
 
+    # Restore the conversation to `snapshot` (unless the user opted to keep the
+    # partial turns for debugging) and re-raise. Shared by the rollback wrappers
+    # below.
+    restore_turns_on_error = function(cnd, snapshot) {
+      if (!isTRUE(getOption("ellmer_preserve_turns_on_error", FALSE))) {
+        private$.turns <- snapshot
+      }
+      stop(cnd)
+    },
+
     # Run `expr`, restoring the conversation to its state from before the call
     # if `expr` errors. A request that fails partway through the tool loop (for
     # example an API error while sending tool results) would otherwise leave a
@@ -859,15 +869,9 @@ Chat <- R6::R6Class(
     # debugging.
     with_turn_rollback = function(expr) {
       snapshot <- private$.turns
-      tryCatch(
-        expr,
-        error = function(cnd) {
-          if (!isTRUE(getOption("ellmer_preserve_turns_on_error", FALSE))) {
-            private$.turns <- snapshot
-          }
-          stop(cnd)
-        }
-      )
+      tryCatch(expr, error = function(cnd) {
+        private$restore_turns_on_error(cnd, snapshot)
+      })
     },
 
     # Async counterpart of with_turn_rollback(). The snapshot is taken before
@@ -876,12 +880,39 @@ Chat <- R6::R6Class(
     with_turn_rollback_async = function(promise) {
       snapshot <- private$.turns
       promises::catch(promise, function(cnd) {
-        if (!isTRUE(getOption("ellmer_preserve_turns_on_error", FALSE))) {
-          private$.turns <- snapshot
-        }
-        stop(cnd)
+        private$restore_turns_on_error(cnd, snapshot)
       })
     },
+
+    # Generator counterparts of with_turn_rollback(). stream()/stream_async()
+    # hand the generator to the caller, so a mid-loop error surfaces during the
+    # caller's iteration rather than inside a wrapping call. The rollback must
+    # therefore live in the iteration itself: snapshot the turns when iteration
+    # begins (before chat_impl() commits its first partial turn) and restore
+    # them if a chunk errors.
+    stream_with_rollback = generator_method(function(self, private, gen) {
+      snapshot <- private$.turns
+      tryCatch(
+        for (chunk in gen) {
+          yield(chunk)
+        },
+        error = function(cnd) private$restore_turns_on_error(cnd, snapshot)
+      )
+    }),
+
+    stream_with_rollback_async = async_generator_method(function(
+      self,
+      private,
+      gen
+    ) {
+      snapshot <- private$.turns
+      tryCatch(
+        for (chunk in await_each(gen)) {
+          yield(chunk)
+        },
+        error = function(cnd) private$restore_turns_on_error(cnd, snapshot)
+      )
+    }),
 
     complete_dangling_tool_requests = function() {
       if (length(private$.turns) == 0) {

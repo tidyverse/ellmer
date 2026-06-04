@@ -123,3 +123,19 @@
       Error in `chat_perform()`:
       ! boom
 
+# a failed stream() rolls back turns committed during the call
+
+    Code
+      coro::collect(chat$stream("hi"))
+    Condition
+      Error:
+      ! boom
+
+# a failed stream_async() rolls back turns committed during the call
+
+    Code
+      sync(coro::async_collect(chat$stream_async("hi")))
+    Condition
+      Error:
+      ! boom
+
