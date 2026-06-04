@@ -34,6 +34,55 @@ link_server_tool_results <- function(contents, request_class, result_class) {
   contents
 }
 
+# Like link_server_tool_results() but sources requests from the whole
+# conversation. Programmatic tool calling pauses a turn after a server-side tool
+# request and returns the matching result in a LATER turn (once the local tool
+# has run), so the request and result land in different turns. The per-response
+# link can't see the earlier request, leaving the result's @request empty. This
+# fills any still-empty result by searching `turns` (the full conversation) for
+# the request with the same id, so the tool name/arguments are available for
+# display (e.g. shinychat tool cards).
+relink_server_tool_results <- function(turn, turns) {
+  pairs <- list(
+    list(ContentMcpToolRequest, ContentMcpToolResult),
+    list(ContentToolRequestCode, ContentToolResponseCode)
+  )
+  for (pair in pairs) {
+    request_class <- pair[[1]]
+    result_class <- pair[[2]]
+
+    needs_link <- some(turn@contents, function(x) {
+      S7_inherits(x, result_class) && !nzchar(x@request@name)
+    })
+    if (!needs_link) {
+      next
+    }
+
+    requests <- unlist(
+      map(turns, \(t) keep(t@contents, S7_inherits, request_class)),
+      recursive = FALSE
+    )
+    if (length(requests) == 0) {
+      next
+    }
+    request_map <- set_names(requests, map_chr(requests, \(r) r@id))
+
+    turn@contents <- map(turn@contents, function(content) {
+      if (!S7_inherits(content, result_class) || nzchar(content@request@name)) {
+        return(content)
+      }
+      req_id <- content@request@id
+      if (has_name(request_map, req_id)) {
+        matched <- request_map[[req_id]]
+        content@request@name <- matched@name
+        content@request@arguments <- matched@arguments
+      }
+      content
+    })
+  }
+  turn
+}
+
 method(as_json, list(Provider, ToolBuiltIn)) <- function(provider, x, ...) {
   x@json
 }

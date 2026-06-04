@@ -447,6 +447,52 @@ test_that("update_turn() appends content incrementally", {
   expect_equal(turn@contents[[2]]@text, "b")
 })
 
+test_that("value_turn() links code execution results to requests in earlier turns", {
+  # Programmatic tool calling pauses after the request (turn 1) and returns the
+  # result in a later turn (turn 2); the accumulator must relink across turns.
+  chat <- chat_anthropic_test()
+  chat$add_turn(
+    UserTurn("run some code"),
+    AssistantTurn(list(
+      ContentToolRequestCode(
+        id = "srvtoolu_1",
+        name = "code_execution",
+        arguments = list(code = "1 + 1"),
+        json = list()
+      )
+    )),
+    log_tokens = FALSE
+  )
+
+  acc <- TurnAccumulator$new(
+    chat,
+    chat$.__enclos_env__$private,
+    stream_controller()
+  )
+
+  result <- list(
+    content = list(
+      list(
+        type = "code_execution_tool_result",
+        tool_use_id = "srvtoolu_1",
+        content = list(
+          type = "code_execution_result",
+          stdout = "2",
+          return_code = 0
+        )
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 1, output_tokens = 1)
+  )
+
+  turn <- acc$value_turn(result, type = NULL)
+  res <- turn@contents[[1]]
+  expect_s7_class(res, ContentToolResponseCode)
+  expect_equal(res@request@name, "code_execution")
+  expect_equal(res@request@arguments, list(code = "1 + 1"))
+})
+
 test_that("merge_content_text() merges adjacent text, preserves non-text", {
   contents <- list(
     ContentText("a"),

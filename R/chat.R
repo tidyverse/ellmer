@@ -1035,7 +1035,11 @@ TurnAccumulator <- R6::R6Class(
         has_type = !is.null(type)
       )
       turn@duration <- duration
-      match_tools(turn, self$chat$get_tools())
+      turn <- match_tools(turn, self$chat$get_tools())
+      # Programmatic tool calling splits a server-side tool request and its
+      # result across turns; link results back to requests in earlier turns so
+      # they carry the tool name/arguments before being yielded for display.
+      relink_server_tool_results(turn, self$chat_private$.turns)
     }
   )
 )

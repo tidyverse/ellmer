@@ -127,6 +127,76 @@ test_that("echo_server_tool_contents() echoes code execution in output mode", {
   expect_match(out, "code execution result")
 })
 
+test_that("relink_server_tool_results() links a result to a request in an earlier turn", {
+  # Programmatic tool calling pauses after the code execution request (turn 1)
+  # and returns the result in a later turn (turn 2), so the result arrives with
+  # an empty @request that the per-response link can't fill.
+  turn1 <- AssistantTurn(list(
+    ContentToolRequestCode(
+      id = "srvtoolu_1",
+      name = "code_execution",
+      arguments = list(code = "1 + 1"),
+      json = list()
+    )
+  ))
+  turn2 <- AssistantTurn(list(
+    ContentToolResponseCode(
+      value = "2",
+      request = ContentToolRequest(id = "srvtoolu_1", name = "", arguments = list()),
+      json = list()
+    )
+  ))
+
+  linked <- relink_server_tool_results(turn2, list(turn1, turn2))
+  res <- linked@contents[[1]]
+  expect_equal(res@request@name, "code_execution")
+  expect_equal(res@request@arguments, list(code = "1 + 1"))
+})
+
+test_that("relink_server_tool_results() links MCP results across turns", {
+  turn1 <- AssistantTurn(list(
+    ContentMcpToolRequest(
+      id = "mcptoolu_1",
+      name = "execute_query",
+      arguments = list(query = "SHOW DATABASES"),
+      server_name = "snowflake",
+      json = list()
+    )
+  ))
+  turn2 <- AssistantTurn(list(
+    ContentMcpToolResult(
+      value = "ok",
+      request = ContentToolRequest(id = "mcptoolu_1", name = "", arguments = list()),
+      content = list(),
+      json = list()
+    )
+  ))
+
+  linked <- relink_server_tool_results(turn2, list(turn1, turn2))
+  res <- linked@contents[[1]]
+  expect_equal(res@request@name, "execute_query")
+  expect_equal(res@request@arguments, list(query = "SHOW DATABASES"))
+})
+
+test_that("relink_server_tool_results() leaves already-linked results untouched", {
+  turn <- AssistantTurn(list(
+    ContentToolResponseCode(
+      value = "2",
+      request = ContentToolRequest(
+        id = "srvtoolu_1",
+        name = "code_execution",
+        arguments = list(code = "1 + 1")
+      ),
+      json = list()
+    )
+  ))
+
+  linked <- relink_server_tool_results(turn, list(turn))
+  res <- linked@contents[[1]]
+  expect_equal(res@request@name, "code_execution")
+  expect_equal(res@request@arguments, list(code = "1 + 1"))
+})
+
 test_that("built-in tools", {
   get_built_in_tools <- function() {
     exports <- getNamespaceExports("ellmer")
