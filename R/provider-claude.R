@@ -810,15 +810,21 @@ method(as_json, list(ProviderAnthropic, ContentToolRequest)) <- function(
   ...
 ) {
   # Build the list directly (do NOT wrap in compact()): compact() drops
-  # zero-length elements, which would strip `input = list()` for argument-free
-  # tools and produce a request the API rejects. `caller` is only present on
-  # programmatic tool calls (captured into @extra in value_turn), so append it
-  # conditionally to keep direct calls unchanged.
+  # zero-length elements, which would strip `input` for argument-free tools and
+  # produce a request the API rejects. A bare empty list() also serializes to a
+  # JSON array (`[]`); the API requires an object, so coerce it to an empty
+  # named list (`{}`). `caller` is only present on programmatic tool calls
+  # (captured into @extra in value_turn), so append it conditionally to keep
+  # direct calls unchanged.
+  input <- x@arguments
+  if (length(input) == 0) {
+    input <- set_names(list())
+  }
   out <- list(
     type = "tool_use",
     id = x@id,
     name = x@name,
-    input = x@arguments
+    input = input
   )
   if (!is.null(x@extra$caller)) {
     out$caller <- x@extra$caller

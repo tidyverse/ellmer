@@ -850,6 +850,14 @@ test_that("as_json() errors clearly for a tool result with no request", {
   expect_snapshot(as_json(provider, res), error = TRUE)
 })
 
+test_that("as_json() serializes empty tool arguments as a JSON object", {
+  provider <- test_anthropic_provider()
+  req <- ContentToolRequest("toolu_1", "f", arguments = list())
+  json <- as_json(provider, req)
+  serialized <- as.character(jsonlite::toJSON(json$input, auto_unbox = TRUE))
+  expect_equal(serialized, "{}")
+})
+
 test_that("extra_args$tools are preserved alongside registered function tools", {
   provider <- ProviderAnthropic(
     name = "Anthropic",
@@ -926,11 +934,11 @@ test_that("direct tool calls serialize without a caller field", {
   expect_null(json$caller)
 })
 
-test_that("tool requests keep an empty input for argument-free tools", {
+test_that("tool requests keep an empty input object for argument-free tools", {
   provider <- test_anthropic_provider()
   req <- ContentToolRequest("toolu_1", "f", list())
   json <- as_json(provider, req)
-  expect_equal(json$input, list())
+  expect_equal(json$input, set_names(list()))
 })
 
 test_that("cache_control is omitted on programmatic tool results", {
