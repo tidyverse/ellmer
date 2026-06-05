@@ -5,6 +5,14 @@
     Message
       Using model = "claude-sonnet-4-5-20250929".
 
+# as_json() errors clearly for a tool result with no request
+
+    Code
+      as_json(provider, res)
+    Condition
+      Error in `method(as_json, list(ellmer::ProviderAnthropic, ellmer::ContentToolResult))`:
+      ! Can't serialize a tool result that has no associated tool request.
+
 # chat_body() warns when allowed_callers is set but no code tool is registered
 
     Code

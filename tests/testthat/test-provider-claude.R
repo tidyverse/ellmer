@@ -844,6 +844,12 @@ test_that("as_json() omits allowed_callers when unset", {
   expect_null(json$allowed_callers)
 })
 
+test_that("as_json() errors clearly for a tool result with no request", {
+  provider <- test_anthropic_provider()
+  res <- ContentToolResult(value = "x")
+  expect_snapshot(as_json(provider, res), error = TRUE)
+})
+
 test_that("extra_args$tools are preserved alongside registered function tools", {
   provider <- ProviderAnthropic(
     name = "Anthropic",

@@ -832,6 +832,11 @@ method(as_json, list(ProviderAnthropic, ContentToolResult)) <- function(
   x,
   ...
 ) {
+  if (is.null(x@request)) {
+    cli::cli_abort(
+      "Can't serialize a tool result that has no associated tool request."
+    )
+  }
   list(
     type = "tool_result",
     tool_use_id = x@request@id,
