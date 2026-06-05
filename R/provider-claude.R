@@ -221,17 +221,36 @@ method(chat_path, ProviderAnthropic) <- function(provider) {
 # NULL if none exists. Scanning newest-first reuses the freshest container so
 # paused programmatic executions resume in place and follow-up turns can build
 # on previously created sandbox files/state. Only AssistantTurn carries @json.
-last_container_id <- function(turns) {
+last_container_id <- function(turns, now = Sys.time()) {
   for (turn in rev(turns)) {
     if (!S7_inherits(turn, AssistantTurn)) {
       next
     }
-    id <- turn@json$container$id
-    if (!is.null(id)) {
-      return(id)
+    container <- turn@json$container
+    if (is.null(container$id)) {
+      next
     }
+    # The newest container is the freshest; if it has already expired, older
+    # ones have too, so reuse nothing and let the API create a new container.
+    # Sending an expired id does not error but makes code execution silently
+    # fail (the sandbox is gone).
+    if (container_is_expired(container, now)) {
+      return(NULL)
+    }
+    return(container$id)
   }
   NULL
+}
+
+# A container is expired when it carries an `expires_at` timestamp in the past.
+# Without a (parseable) timestamp we assume it is still usable.
+container_is_expired <- function(container, now = Sys.time()) {
+  expires_at <- container$expires_at
+  if (!is_string(expires_at)) {
+    return(FALSE)
+  }
+  expiry <- as.POSIXct(expires_at, format = "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
+  !is.na(expiry) && expiry <= now
 }
 
 # Warn if any tool opts into programmatic calling (allowed_callers set) but no

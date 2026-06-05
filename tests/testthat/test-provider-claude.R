@@ -972,6 +972,40 @@ test_that("last_container_id() returns NULL when no container is present", {
   expect_null(last_container_id(turns))
 })
 
+test_that("last_container_id() ignores a container that has expired", {
+  now <- as.POSIXct("2026-06-05", tz = "UTC")
+  turns <- list(
+    UserTurn("hi"),
+    AssistantTurn(
+      list(ContentText("a")),
+      json = list(
+        container = list(
+          id = "container_1",
+          expires_at = "2026-06-03T06:53:40Z"
+        )
+      )
+    )
+  )
+  expect_null(last_container_id(turns, now = now))
+})
+
+test_that("last_container_id() reuses a container that has not expired", {
+  now <- as.POSIXct("2026-06-05", tz = "UTC")
+  turns <- list(
+    UserTurn("hi"),
+    AssistantTurn(
+      list(ContentText("a")),
+      json = list(
+        container = list(
+          id = "container_1",
+          expires_at = "2099-01-01T00:00:00Z"
+        )
+      )
+    )
+  )
+  expect_equal(last_container_id(turns, now = now), "container_1")
+})
+
 test_that("chat_body() reuses the conversation's container id", {
   provider <- test_anthropic_provider()
   turns <- list(
