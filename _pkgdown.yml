@@ -53,6 +53,7 @@ reference:
   - chat_huggingface
   - chat_lmstudio
   - chat_mistral
+  - chat_openai_codex_responses
   - chat_openai_compatible
   - chat_openrouter
   - chat_perplexity
@@ -68,6 +69,7 @@ reference:
   - google_tool_web_search
   - google_tool_web_fetch
   - openai_tool_web_search
+  - openai_codex_credentials
 
 - title: Chat helpers
   contents:

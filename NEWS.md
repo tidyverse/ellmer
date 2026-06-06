@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New experimental `chat_openai_codex_responses()` provider supports ChatGPT Codex subscription authentication via `openai_codex_credentials()`, `openai_codex_login()`, and `openai_codex_refresh()`.
 * `chat_ollama()` now supports `params(reasoning_effort = ...)` to set thinking for reasoning models, and thinking content is now captured in turns (@thisisnic, #940).
 * `chat_google_gemini()` and `chat_google_vertex()` now support `params(reasoning_effort =)` (@thisisnic, #873).
 * `chat_anthropic()` now supports `params(reasoning_effort =)` for Claude's adaptive thinking mode (@thisisnic, #987).

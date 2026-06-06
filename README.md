@@ -95,6 +95,11 @@ than using it directly in your code, and if you deploy an app or report
 that uses ellmer to another system, you’ll need to ensure that this
 environment variable is available there, too.
 
+If you have a ChatGPT Plus/Pro subscription, the experimental
+`chat_openai_codex_responses()` provider can use ChatGPT Codex
+subscription authentication instead of an OpenAI API key. This is
+separate from `chat_openai()`, which uses the OpenAI developer API.
+
 ellmer also automatically detects many of the OAuth or IAM-based
 credentials used by the big cloud providers (currently
 `chat_azure_openai()`, `chat_aws_bedrock()`, `chat_databricks()`,
@@ -157,7 +162,7 @@ The second most interactive way to chat is to call the `chat()` method:
 
 ``` r
 chat$chat("What preceding languages most influenced R?")
-#> R was primarily influenced by S, a language developed at Bell Laboratories. 
+#> R was primarily influenced by S, a language developed at Bell Laboratories.
 #> Other notable influences include:
 #> 
 #> 1. **Scheme** - For functional programming concepts.
@@ -165,7 +170,7 @@ chat$chat("What preceding languages most influenced R?")
 #> 3. **C** - For performance and system-level access.
 #> 4. **Fortran** - For numerical and statistical computations.
 #> 
-#> These languages contributed to R's syntax, data structures, and functional 
+#> These languages contributed to R's syntax, data structures, and functional
 #> programming capabilities.
 ```
 
@@ -184,11 +189,11 @@ chat$chat(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   "Can you explain this logo?"
 )
-#> The logo consists of a stylized letter "R" in blue, surrounded by a gray oval 
+#> The logo consists of a stylized letter "R" in blue, surrounded by a gray oval
 #> shape. The design reflects the programming language R, which is widely used for
-#> statistical computing and graphics. The color choice often symbolizes clarity 
-#> and professionalism, aligning with R's use in data analysis and research. The 
-#> logo encapsulates the language's focus on data visualization and statistical 
+#> statistical computing and graphics. The color choice often symbolizes clarity
+#> and professionalism, aligning with R's use in data analysis and research. The
+#> logo encapsulates the language's focus on data visualization and statistical
 #> methods.
 ```
 

@@ -114,8 +114,9 @@ Collate:
     'provider-lmstudio.R'
     'provider-mistral.R'
     'provider-ollama.R'
-    'provider-openai-tools.R'
     'provider-openai.R'
+    'provider-openai-codex-responses.R'
+    'provider-openai-tools.R'
     'provider-openrouter.R'
     'provider-perplexity.R'
     'provider-portkey.R'
@@ -133,3 +134,4 @@ Collate:
     'utils-prettytime.R'
     'utils.R'
     'zzz.R'
+RoxygenNote: 7.3.3
