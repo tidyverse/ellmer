@@ -2,6 +2,11 @@
 
 ## ellmer (development version)
 
+- [`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
+  no longer errors when when using a custom Portkey gateway without the
+  `PORTKEY_VIRTUAL_KEY` env var being set
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#872](https://github.com/tidyverse/ellmer/issues/872)).
 - [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   and
   [`models_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
