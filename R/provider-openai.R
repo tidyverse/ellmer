@@ -278,6 +278,8 @@ method(value_finish_reason, ProviderOpenAI) <- function(provider, json) {
     reason <- json$incomplete_details$reason
     if (identical(reason, "max_output_tokens")) {
       "max_tokens"
+    } else if (identical(reason, "content_filter")) {
+      "content_filter"
     } else {
       "other"
     }
