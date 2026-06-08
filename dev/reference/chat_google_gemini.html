@@ -8,8 +8,8 @@ Authentication
 
 
 These functions try a number of authentication strategies, in this order:
-An API key set in the GOOGLE_API_KEY env var, or,
-for chat_google_gemini() only, GEMINI_API_KEY.
+An API key set in the GOOGLE_API_KEY or GEMINI_API_KEY env var
+(Gemini only).
 Google's default application credentials, if the gargle package
 is installed.
 Viewer-based credentials on Posit Connect, if the connectcreds
@@ -30,8 +30,8 @@ Authentication
 
 
 These functions try a number of authentication strategies, in this order:
-An API key set in the GOOGLE_API_KEY env var, or,
-for chat_google_gemini() only, GEMINI_API_KEY.
+An API key set in the GOOGLE_API_KEY or GEMINI_API_KEY env var
+(Gemini only).
 Google's default application credentials, if the gargle package
 is installed.
 Viewer-based credentials on Posit Connect, if the connectcreds
@@ -106,8 +106,8 @@ to use Gemini.</p>
 <h3 id="authentication">Authentication<a class="anchor" aria-label="anchor" href="#authentication"></a></h3>
 
 
-<p>These functions try a number of authentication strategies, in this order:</p><ul><li><p>An API key set in the <code>GOOGLE_API_KEY</code> env var, or,
-for <code>chat_google_gemini()</code> only, <code>GEMINI_API_KEY</code>.</p></li>
+<p>These functions try a number of authentication strategies, in this order:</p><ul><li><p>An API key set in the <code>GOOGLE_API_KEY</code> or <code>GEMINI_API_KEY</code> env var
+(Gemini only).</p></li>
 <li><p>Google's default application credentials, if the <span class="pkg">gargle</span> package
 is installed.</p></li>
 <li><p>Viewer-based credentials on Posit Connect, if the <span class="pkg">connectcreds</span>
@@ -135,8 +135,8 @@ near future.</p></li>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">chat_google_vertex</span><span class="op">(</span></span>
-<span>  <span class="va">location</span>,</span>
-<span>  <span class="va">project_id</span>,</span>
+<span>  location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_CLOUD_LOCATION"</span><span class="op">)</span>,</span>
+<span>  project_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_CLOUD_PROJECT"</span><span class="op">)</span>,</span>
 <span>  system_prompt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -151,7 +151,11 @@ near future.</p></li>
 <span>  credentials <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">models_google_vertex</span><span class="op">(</span><span class="va">location</span>, <span class="va">project_id</span>, credentials <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">models_google_vertex</span><span class="op">(</span></span>
+<span>  location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_CLOUD_LOCATION"</span><span class="op">)</span>,</span>
+<span>  project_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_CLOUD_PROJECT"</span><span class="op">)</span>,</span>
+<span>  credentials <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">

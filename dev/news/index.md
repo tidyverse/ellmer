@@ -2,6 +2,15 @@
 
 ## ellmer (development version)
 
+- [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  and
+  [`models_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  now default `location` and `project_id` to the `GOOGLE_CLOUD_LOCATION`
+  and `GOOGLE_CLOUD_PROJECT` environment variables, no longer
+  incorrectly use `GOOGLE_API_KEY` for authentication, and give a
+  clearer error when cached credentials are invalid
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#994](https://github.com/tidyverse/ellmer/issues/994)).
 - [`models_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
   lists available models for
   [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
