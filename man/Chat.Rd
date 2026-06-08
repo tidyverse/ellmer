@@ -306,7 +306,7 @@ will be used.}
 \subsection{\code{Chat$chat_structured()}}{
   Extract structured data.
 
-Note: tool calling is automatically disabled. See
+Note: tool calling is disabled during structured data extraction. See
 \code{vignette("structured-data")} for details and workarounds.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
