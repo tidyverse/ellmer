@@ -80,7 +80,7 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
-\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-official.svg}{options: alt='[Official]'}}}{\strong{[Official]}}
+\ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
 
 Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 Most enterprises are likely to use Vertex AI, and individuals are likely

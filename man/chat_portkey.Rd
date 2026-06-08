@@ -66,7 +66,7 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
-\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-community.svg}{options: alt='[Community]'}}}{\strong{[Community]}}
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
 
 \href{https://portkey.ai/docs/product/ai-gateway/universal-api}{PortkeyAI}
 provides an interface (AI Gateway) to connect through its Universal API to a
