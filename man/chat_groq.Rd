@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-groq.R
 \name{chat_groq}
 \alias{chat_groq}
+\alias{models_groq}
 \title{Chat with a model hosted on Groq}
 \usage{
 chat_groq(
@@ -14,6 +15,12 @@ chat_groq(
   api_args = list(),
   echo = NULL,
   api_headers = character()
+)
+
+models_groq(
+  base_url = "https://api.groq.com/openai/v1",
+  api_key = NULL,
+  credentials = NULL
 )
 }
 \arguments{
@@ -54,7 +61,7 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
-\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-community.svg}{options: alt='[Community]'}}}{\strong{[Community]}}
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
 
 Sign up at \url{https://groq.com}.
 

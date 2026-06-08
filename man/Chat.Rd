@@ -304,7 +304,10 @@ will be used.}
 \if{html}{\out{<a id="method-Chat-chat_structured"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-chat_structured}{}}}
 \subsection{\code{Chat$chat_structured()}}{
-  Extract structured data
+  Extract structured data.
+
+Note: tool calling is disabled during structured data extraction. See
+\code{vignette("structured-data")} for details and workarounds.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$chat_structured(..., type, echo = "none", convert = TRUE)}

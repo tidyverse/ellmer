@@ -73,6 +73,30 @@ method(as_json, list(ProviderGroq, ToolDef)) <- function(provider, x, ...) {
   )
 }
 
+#' @export
+#' @rdname chat_groq
+models_groq <- function(
+  base_url = "https://api.groq.com/openai/v1",
+  api_key = NULL,
+  credentials = NULL
+) {
+  credentials <- as_credentials(
+    "models_groq",
+    \() groq_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
+  provider <- ProviderGroq(
+    name = "Groq",
+    model = "",
+    base_url = base_url,
+    credentials = credentials
+  )
+
+  models_list(provider)
+}
+
 groq_key <- function() {
   key_get("GROQ_API_KEY")
 }

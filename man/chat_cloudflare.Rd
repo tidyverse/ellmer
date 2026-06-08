@@ -55,7 +55,7 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
-\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-community.svg}{options: alt='[Community]'}}}{\strong{[Community]}}
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
 
 \href{https://www.cloudflare.com/developer-platform/products/workers-ai/}{Cloudflare}
 Workers AI hosts a variety of open-source AI models. To use the Cloudflare

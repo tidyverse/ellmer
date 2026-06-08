@@ -51,7 +51,7 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
-\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-community.svg}{options: alt='[Community]'}}}{\strong{[Community]}}
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
 
 \href{https://huggingface.co/}{Hugging Face} hosts a variety of open-source
 and proprietary AI models available via their Inference API.

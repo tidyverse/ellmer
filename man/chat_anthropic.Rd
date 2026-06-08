@@ -95,7 +95,7 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
-\ifelse{html}{\href{https://ellmer.tidyverse.org/articles/providers.html}{\figure{support-official.svg}{options: alt='[Official]'}}}{\strong{[Official]}}
+\ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
 
 \href{https://www.anthropic.com}{Anthropic} provides a number of chat based models
 under the \href{https://claude.com/product/overview}{Claude} moniker. Note that a
