@@ -4,6 +4,8 @@ NULL
 #' Chat with one of the many models hosted on OpenRouter
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' Sign up at <https://openrouter.ai>.
 #'
 #' Support for features depends on the underlying model that you use; see

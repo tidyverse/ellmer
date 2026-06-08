@@ -25,9 +25,39 @@ reference:
     data.
   contents:
   - chat
-  - starts_with("chat_")
   - Chat
   - token_usage
+
+- subtitle: Official providers
+  desc: >
+    Actively maintained, with priority support for bug fixes and new features.
+  contents:
+  - chat_anthropic
+  - chat_aws_bedrock
+  - chat_azure_openai
+  - chat_databricks
+  - chat_deepseek
+  - chat_github
+  - chat_google_gemini
+  - chat_ollama
+  - chat_openai
+  - chat_snowflake
+
+- subtitle: Community providers
+  desc: >
+    Community contributed and maintained. Contributions to improve these
+    providers are especially welcome.
+  contents:
+  - chat_cloudflare
+  - chat_groq
+  - chat_huggingface
+  - chat_lmstudio
+  - chat_mistral
+  - chat_openai_compatible
+  - chat_openrouter
+  - chat_perplexity
+  - chat_portkey
+  - chat_vllm
 
 - subtitle: Provider-specific helpers
   contents:

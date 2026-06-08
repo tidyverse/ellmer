@@ -57,6 +57,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
+
 \href{https://docs.vllm.ai/en/latest/}{vLLM} is an open source library that
 provides an efficient and convenient LLMs model server. You can use
 \code{chat_vllm()} to connect to endpoints powered by vLLM.

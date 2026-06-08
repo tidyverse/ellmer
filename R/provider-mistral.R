@@ -1,6 +1,8 @@
 #' Chat with a model hosted on Mistral's La Platforme
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' Get your API key from <https://console.mistral.ai/api-keys>.
 #'
 #' Built on top of [chat_openai_compatible()].
@@ -147,6 +149,10 @@ models_mistral <- function(api_key = mistral_key()) {
     credentials = function() api_key
   )
 
+  models_list(provider)
+}
+
+method(models_list, ProviderMistral) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)

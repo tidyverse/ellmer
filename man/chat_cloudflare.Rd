@@ -55,6 +55,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
+
 \href{https://www.cloudflare.com/developer-platform/products/workers-ai/}{Cloudflare}
 Workers AI hosts a variety of open-source AI models. To use the Cloudflare
 API, you must have an Account ID and an Access Token, which you can obtain

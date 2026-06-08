@@ -16,6 +16,7 @@
           "Azure/OpenAI",
           "Google/Gemini",
           "Google/Vertex",
+          "Groq",
           "Mistral",
           "OpenAI",
           "OpenRouter"

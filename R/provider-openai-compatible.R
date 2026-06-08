@@ -254,7 +254,7 @@ method(stream_content, ProviderOpenAICompatible) <- function(provider, event) {
   }
   delta <- event$choices[[1]]$delta
 
-  reasoning <- delta[["reasoning_content"]]
+  reasoning <- delta[["reasoning"]] %||% delta[["reasoning_content"]]
   if (!is.null(reasoning)) {
     return(ContentThinking(reasoning))
   }
@@ -301,7 +301,7 @@ method(value_turn, ProviderOpenAICompatible) <- function(
   }
 
   thinking <- list()
-  reasoning <- message$reasoning_content
+  reasoning <- message$reasoning %||% message$reasoning_content
   if (is_string(reasoning) && nzchar(reasoning)) {
     thinking <- list(ContentThinking(reasoning))
   }
@@ -514,6 +514,28 @@ method(as_json, list(ProviderOpenAICompatible, TypeObject)) <- function(
   )
 }
 
+
+# Models -----------------------------------------------------------------------
+
+method(models_list, ProviderOpenAICompatible) <- function(provider) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, "[[", "id")
+  created <- as.Date(.POSIXct(map_dbl(json$data, "[[", "created")))
+  owned_by <- map_chr(json$data, "[[", "owned_by")
+
+  df <- data.frame(
+    id = id,
+    created_at = created,
+    owned_by = owned_by
+  )
+  df <- cbind(df, match_prices(provider@name, df$id))
+  df[order(-xtfrm(df$created_at)), ]
+}
 
 # Batched requests -------------------------------------------------------------
 

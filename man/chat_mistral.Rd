@@ -54,6 +54,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
+
 Get your API key from \url{https://console.mistral.ai/api-keys}.
 
 Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.

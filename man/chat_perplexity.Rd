@@ -54,6 +54,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
+
 Sign up at \url{https://www.perplexity.ai}.
 
 Perplexity AI is a platform for running LLMs that are capable of

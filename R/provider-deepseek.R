@@ -4,6 +4,8 @@ NULL
 #' Chat with a model hosted on DeepSeek
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' Sign up at <https://platform.deepseek.com>.
 #'
 #' Built on top of [chat_openai_compatible()].
@@ -149,6 +151,10 @@ models_deepseek <- function(
     credentials = credentials
   )
 
+  models_list(provider)
+}
+
+method(models_list, ProviderDeepSeek) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)

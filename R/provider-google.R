@@ -7,6 +7,8 @@ NULL
 #' Chat with a Google Gemini or Vertex AI model
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 #' Most enterprises are likely to use Vertex AI, and individuals are likely
 #' to use Gemini.
@@ -16,8 +18,8 @@ NULL
 #' ## Authentication
 #' These functions try a number of authentication strategies, in this order:
 #'
-#' * An API key set in the `GOOGLE_API_KEY` env var, or,
-#'   for `chat_google_gemini()` only, `GEMINI_API_KEY`.
+#' * An API key set in the `GOOGLE_API_KEY` or `GEMINI_API_KEY` env var
+#'   (Gemini only).
 #' * Google's default application credentials, if the \pkg{gargle} package
 #'   is installed.
 #' * Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
@@ -92,8 +94,8 @@ chat_google_gemini_test <- function(
 #'   `global`.
 #' @param project_id Project ID.
 chat_google_vertex <- function(
-  location,
-  project_id,
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
   system_prompt = NULL,
   model = NULL,
   params = NULL,
@@ -101,8 +103,8 @@ chat_google_vertex <- function(
   api_headers = character(),
   echo = NULL
 ) {
-  check_string(location)
-  check_string(project_id)
+  check_string(location, allow_empty = FALSE)
+  check_string(project_id, allow_empty = FALSE)
 
   model <- set_default(model, "gemini-2.5-flash")
   echo <- check_echo(echo)
@@ -115,7 +117,8 @@ chat_google_vertex <- function(
     params = params %||% params(),
     extra_args = api_args,
     extra_headers = api_headers,
-    credentials = credentials
+    credentials = credentials,
+    project_id = project_id
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
@@ -135,7 +138,8 @@ ProviderGoogleGemini <- new_class(
   "ProviderGoogleGemini",
   parent = Provider,
   properties = list(
-    model = prop_string()
+    model = prop_string(),
+    project_id = prop_string(allow_null = TRUE)
   )
 )
 
@@ -214,12 +218,17 @@ method(chat_body, ProviderGoogleGemini) <- function(
     generation_config$response_schema <- as_json(provider, type)
   }
 
-  if (has_name(generation_config, "thinkingBudget")) {
-    generation_config$thinkingConfig <- list(
+  if (
+    has_name(generation_config, "thinkingBudget") ||
+      has_name(generation_config, "thinkingLevel")
+  ) {
+    generation_config$thinkingConfig <- compact(list(
       thinkingBudget = generation_config$thinkingBudget,
+      thinkingLevel = generation_config$thinkingLevel,
       includeThoughts = TRUE
-    )
+    ))
     generation_config$thinkingBudget <- NULL
+    generation_config$thinkingLevel <- NULL
   }
 
   contents <- as_json(provider, turns)
@@ -258,7 +267,8 @@ method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
       maxOutputTokens = "max_tokens",
       responseLogprobs = "log_probs",
       stopSequences = "stop_sequences",
-      thinkingBudget = "reasoning_tokens"
+      thinkingBudget = "reasoning_tokens",
+      thinkingLevel = "reasoning_effort"
     )
   )
 }
@@ -685,12 +695,14 @@ default_google_credentials <- function(
 ) {
   variant <- arg_match(variant)
 
-  api_key <- Sys.getenv("GOOGLE_API_KEY")
-  if (variant == "gemini" && api_key == "") {
-    api_key <- Sys.getenv("GEMINI_API_KEY")
-  }
-  if (nzchar(api_key)) {
-    return(\() api_key)
+  if (variant == "gemini") {
+    api_key <- Sys.getenv("GOOGLE_API_KEY")
+    if (!nzchar(api_key)) {
+      api_key <- Sys.getenv("GEMINI_API_KEY")
+    }
+    if (nzchar(api_key)) {
+      return(\() api_key)
+    }
   }
 
   gemini_scope <- switch(
@@ -753,9 +765,19 @@ default_google_credentials <- function(
     )
   }
 
+  # A token can exist but have a NULL access_token if it has expired.
+  if (is.null(token$credentials$access_token)) {
+    cli::cli_abort(
+      c(
+        "Google credentials were found but are not valid.",
+        "i" = "Try refreshing your credentials or configuring new ones."
+      ),
+      call = error_call
+    )
+  }
+
   # gargle emits an httr-style token, which we awkwardly shim into something
   # httr2 can work with.
-
   if (!token$can_refresh()) {
     # TODO: Not really sure what to do in this case when the token expires.
     return(function() {
@@ -809,14 +831,24 @@ models_google_gemini <- function(
     api_key = api_key
   )
 
-  models_google(base_url, credentials = credentials, variant = "gemini")
+  provider <- ProviderGoogleGemini(
+    name = "Google/Gemini",
+    model = "",
+    base_url = base_url,
+    credentials = credentials
+  )
+  models_list(provider)
 }
 
 #' @rdname chat_google_gemini
 #' @export
-models_google_vertex <- function(location, project_id, credentials = NULL) {
-  check_string(location)
-  check_string(project_id)
+models_google_vertex <- function(
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
+  credentials = NULL
+) {
+  check_string(location, allow_empty = FALSE)
+  check_string(project_id, allow_empty = FALSE)
 
   credentials <- credentials %||% default_google_credentials(variant = "vertex")
   check_credentials(credentials)
@@ -827,28 +859,26 @@ models_google_vertex <- function(location, project_id, credentials = NULL) {
     "/publishers/google/"
   )
 
-  models_google(base_url, project_id = project_id, variant = "vertex")
-}
-
-models_google <- function(
-  base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  credentials,
-  project_id = NULL,
-  variant = c("gemini", "vertex")
-) {
-  variant <- arg_match(variant)
-
   provider <- ProviderGoogleGemini(
-    name = "Google/Gemini",
+    name = "Google/Vertex",
     model = "",
     base_url = base_url,
-    # https://cloud.google.com/docs/authentication/troubleshoot-adc#user-creds-client-based
-    credentials = credentials
+    credentials = credentials,
+    project_id = project_id
+  )
+  models_list(provider)
+}
+
+method(models_list, ProviderGoogleGemini) <- function(provider) {
+  is_vertex <- grepl(
+    "aiplatform.googleapis.com",
+    provider@base_url,
+    fixed = TRUE
   )
 
   req <- base_request(provider)
-  if (variant == "vertex") {
-    req <- req_headers(req, `x-goog-user-project` = project_id)
+  if (is_vertex) {
+    req <- req_headers(req, `x-goog-user-project` = provider@project_id)
   }
   req <- req_headers(req, !!!provider@extra_headers)
   req <- req_url_path_append(req, "/models")
@@ -856,7 +886,7 @@ models_google <- function(
 
   json <- resp_body_json(resp)
 
-  if (variant == "vertex") {
+  if (is_vertex) {
     name <- map_chr(json$publisherModels, "[[", "name")
     name <- gsub("^publishers/google/models/", "", name)
     # this is the closest to "generateContent" in "supportedGenerationMethods" for Gemini
@@ -866,7 +896,6 @@ models_google <- function(
   } else {
     name <- map_chr(json$models, "[[", "name")
     name <- gsub("^models/", "", name)
-    display_name <- map_chr(json$models, "[[", "displayName")
 
     methods <- map(json$models, \(x) unlist(x$supportedGenerationMethods))
     can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)
