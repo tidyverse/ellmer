@@ -2,6 +2,11 @@
 
 ## ellmer (development version)
 
+- [`models_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
+  lists available models for
+  [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#921](https://github.com/tidyverse/ellmer/issues/921)).
 - [`chat_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md)
   now supports `params(reasoning_effort = ...)` to set thinking for
   reasoning models, and thinking content is now captured in turns

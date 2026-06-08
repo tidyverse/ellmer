@@ -21,6 +21,12 @@ chat_groq(
   echo = NULL,
   api_headers = character()
 )
+
+models_groq(
+  base_url = "https://api.groq.com/openai/v1",
+  api_key = NULL,
+  credentials = NULL
+)
 ```
 
 ## Arguments

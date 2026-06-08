@@ -319,6 +319,7 @@ providers are especially welcome.
 - [`chat_cloudflare()`](https://ellmer.tidyverse.org/dev/reference/chat_cloudflare.md)
   : Chat with a model hosted on CloudFlare
 - [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
+  [`models_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
   : Chat with a model hosted on Groq
 - [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md)
   : Chat with a model hosted on Hugging Face Serverless Inference API
