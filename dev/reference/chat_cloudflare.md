@@ -1,6 +1,6 @@
 # Chat with a model hosted on CloudFlare
 
-[![\[Community\]](figures/support-community.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+![\[Community supported provider\]](figures/support-community.svg)
 
 [Cloudflare](https://www.cloudflare.com/developer-platform/products/workers-ai/)
 Workers AI hosts a variety of open-source AI models. To use the

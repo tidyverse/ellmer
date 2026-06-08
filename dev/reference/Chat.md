@@ -306,7 +306,11 @@ Submit input to the chatbot, and return the response as a simple string
 
 ### `Chat$chat_structured()`
 
-Extract structured data
+Extract structured data.
+
+Note: tool calling is disabled during structured data extraction. See
+[`vignette("structured-data")`](https://ellmer.tidyverse.org/dev/articles/structured-data.md)
+for details and workarounds.
 
 #### Usage
 

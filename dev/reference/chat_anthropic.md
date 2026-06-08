@@ -1,6 +1,6 @@
 # Chat with an Anthropic Claude model
 
-[![\[Official\]](figures/support-official.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+![\[Official supported provider\]](figures/support-official.svg)
 
 [Anthropic](https://www.anthropic.com) provides a number of chat based
 models under the [Claude](https://claude.com/product/overview) moniker.

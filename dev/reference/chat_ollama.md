@@ -1,6 +1,6 @@
 # Chat with a local Ollama model
 
-[![\[Official\]](figures/support-official.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+![\[Official supported provider\]](figures/support-official.svg)
 
 To use `chat_ollama()` first download and install
 [Ollama](https://ollama.com). Then install some models either from the

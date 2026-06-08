@@ -1,6 +1,6 @@
 # Chat with a Google Gemini or Vertex AI model
 
-[![\[Official\]](figures/support-official.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+![\[Official supported provider\]](figures/support-official.svg)
 
 Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 Most enterprises are likely to use Vertex AI, and individuals are likely

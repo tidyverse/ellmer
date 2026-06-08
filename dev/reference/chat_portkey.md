@@ -1,6 +1,6 @@
 # Chat with a model hosted on PortkeyAI
 
-[![\[Community\]](figures/support-community.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+![\[Community supported provider\]](figures/support-community.svg)
 
 [PortkeyAI](https://portkey.ai/docs/product/ai-gateway/universal-api)
 provides an interface (AI Gateway) to connect through its Universal API

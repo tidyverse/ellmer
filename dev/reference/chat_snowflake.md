@@ -1,6 +1,6 @@
 # Chat with a model hosted on Snowflake
 
-[![\[Official\]](figures/support-official.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+![\[Official supported provider\]](figures/support-official.svg)
 
 The Snowflake provider allows you to interact with LLM models available
 through the [Cortex LLM REST

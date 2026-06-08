@@ -97,8 +97,8 @@ parallel_chat_structured(chat, prompts, type = type_person)
 ```
 
 (Note that structured data extraction automatically disables tool
-calling. You can work around this limitation by doing a regular
-`$chat()` and then using `$chat_structured()`.)
+calling, see [below](#tools-and-structured-data) for details and
+workarounds.)
 
 ## Data types
 
@@ -554,6 +554,16 @@ image <- content_image_file("congressional-assets.png")
 data <- chat$chat_structured(image, type = type_assets)
 data
 ```
+
+## Tools and structured data
+
+`$chat_structured()` automatically disables any registered tools. This
+is because when tools are involved, the model may need multiple round
+trips to gather information, and it has no way to know which response is
+the “last” one that should use the structured output schema. If you need
+both, call `$chat()` first to get the information you need via tools,
+then call `$chat_structured()` to extract structured data from the
+conversation.
 
 ## Token usage
 

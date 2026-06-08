@@ -1,6 +1,6 @@
 # Chat with a model hosted on Mistral's La Platforme
 
-[![\[Community\]](figures/support-community.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+![\[Community supported provider\]](figures/support-community.svg)
 
 Get your API key from <https://console.mistral.ai/api-keys>.
 

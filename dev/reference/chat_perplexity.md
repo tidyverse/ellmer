@@ -1,6 +1,6 @@
 # Chat with a model hosted on perplexity.ai
 
-[![\[Community\]](figures/support-community.svg)](https://ellmer.tidyverse.org/articles/providers.html)
+![\[Community supported provider\]](figures/support-community.svg)
 
 Sign up at <https://www.perplexity.ai>.
 

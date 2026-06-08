@@ -174,9 +174,8 @@ and it can take a vector of prompts.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Robert    51</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Kwame     50</span></span></code></pre></div>
 <p>(Note that structured data extraction automatically disables tool
-calling. You can work around this limitation by doing a regular
-<code>$chat()</code> and then using
-<code>$chat_structured()</code>.)</p>
+calling, see <a href="#tools-and-structured-data">below</a> for details
+and workarounds.)</p>
 </div>
 <div class="section level2">
 <h2 id="data-types">Data types<a class="anchor" aria-label="anchor" href="#data-types"></a>
@@ -584,6 +583,18 @@ and “unearned” income</div>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">image</span>, type <span class="op">=</span> <span class="va">type_assets</span><span class="op">)</span></span>
 <span><span class="va">data</span></span></code></pre></div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="tools-and-structured-data">Tools and structured data<a class="anchor" aria-label="anchor" href="#tools-and-structured-data"></a>
+</h2>
+<p><code>$chat_structured()</code> automatically disables any registered
+tools. This is because when tools are involved, the model may need
+multiple round trips to gather information, and it has no way to know
+which response is the “last” one that should use the structured output
+schema. If you need both, call <code>$chat()</code> first to get the
+information you need via tools, then call
+<code>$chat_structured()</code> to extract structured data from the
+conversation.</p>
 </div>
 <div class="section level2">
 <h2 id="token-usage">Token usage<a class="anchor" aria-label="anchor" href="#token-usage"></a>
