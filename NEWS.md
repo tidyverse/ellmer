@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `AssistantTurn` gains a `finish_reason` property that reports why the model stopped generating. `chat()` now warns when a response is truncated due to the `max_tokens` limit, and `chat_structured()` raises an error because truncated responses produce incomplete JSON (@thisisnic, #3).
+* `chat()` now warns when a response is truncated due to hitting the `max_tokens` limit, and `chat_structured()` raises an informative error. `AssistantTurn` gains a `finish_reason` property that you can inspect programmatically (@thisisnic, #3).
 * `chat_ollama()` now supports `params(reasoning_effort = ...)` to set thinking for reasoning models, and thinking content is now captured in turns (@thisisnic, #940).
 * `chat_google_gemini()` and `chat_google_vertex()` now support `params(reasoning_effort =)` (@thisisnic, #873).
 * `chat_anthropic()` now supports `params(reasoning_effort =)` for Claude's adaptive thinking mode (@thisisnic, #987).
