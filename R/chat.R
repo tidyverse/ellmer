@@ -226,7 +226,7 @@ Chat <- R6::R6Class(
 
     #' @description Extract structured data.
     #'
-    #' Note: tool calling is automatically disabled. See
+    #' Note: tool calling is disabled during structured data extraction. See
     #' `vignette("structured-data")` for details and workarounds.
     #' @param ... The input to send to the chatbot. This is typically the text
     #'   you want to extract data from, but it can be omitted if the data is
