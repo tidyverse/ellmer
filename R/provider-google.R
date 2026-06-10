@@ -332,6 +332,22 @@ method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
   )
 }
 
+# https://ai.google.dev/api/generate-content
+method(value_finish_reason, ProviderGoogleGemini) <- function(provider, json) {
+  reason <- json$candidates[[1]]$finishReason
+  switch(
+    reason,
+    STOP = "success",
+    MAX_TOKENS = "max_tokens",
+    SAFETY = ,
+    RECITATION = ,
+    BLOCKLIST = ,
+    PROHIBITED_CONTENT = ,
+    SPII = "content_filter",
+    "other"
+  )
+}
+
 method(value_turn, ProviderGoogleGemini) <- function(
   provider,
   result,

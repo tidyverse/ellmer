@@ -377,6 +377,19 @@ method(value_tokens, ProviderAnthropic) <- function(provider, json) {
   )
 }
 
+# https://docs.anthropic.com/en/api/handling-stop-reasons
+method(value_finish_reason, ProviderAnthropic) <- function(provider, json) {
+  switch(
+    json$stop_reason,
+    end_turn = "success",
+    max_tokens = ,
+    model_context_window_exceeded = "max_tokens",
+    stop_sequence = "stop_sequence",
+    refusal = "content_filter",
+    "other"
+  )
+}
+
 method(value_turn, ProviderAnthropic) <- function(
   provider,
   result,
