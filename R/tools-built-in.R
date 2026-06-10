@@ -15,21 +15,10 @@ ToolBuiltIn <- new_class(
 # matching result's @request (paired by id). MCP and code execution results
 # arrive with an empty @request, so this populates them for display and for
 # shinychat tool cards.
-link_server_tool_results <- function(contents, request_class, result_class) {
-  requests <- keep(contents, S7_inherits, request_class)
-  if (length(requests) == 0) {
-    return(contents)
-  }
-  request_map <- set_names(requests, map_chr(requests, \(r) r@id))
-  for (i in seq_along(contents)) {
-    if (S7_inherits(contents[[i]], result_class)) {
-      req_id <- contents[[i]]@request@id
-      if (has_name(request_map, req_id)) {
-        matched <- request_map[[req_id]]
-        contents[[i]]@request@name <- matched@name
-        contents[[i]]@request@arguments <- matched@arguments
-      }
-    }
+link_server_tool_results <- function(contents) {
+  for (pair in server_tool_pairs) {
+    requests <- keep(contents, S7_inherits, pair$request)
+    contents <- fill_result_requests(contents, requests, pair$result)
   }
   contents
 }
@@ -43,44 +32,42 @@ link_server_tool_results <- function(contents, request_class, result_class) {
 # the request with the same id, so the tool name/arguments are available for
 # display (e.g. shinychat tool cards).
 relink_server_tool_results <- function(turn, turns) {
-  pairs <- list(
-    list(ContentMcpToolRequest, ContentMcpToolResult),
-    list(ContentToolRequestCode, ContentToolResponseCode)
-  )
-  for (pair in pairs) {
-    request_class <- pair[[1]]
-    result_class <- pair[[2]]
-
+  for (pair in server_tool_pairs) {
     needs_link <- some(turn@contents, function(x) {
-      S7_inherits(x, result_class) && !nzchar(x@request@name)
+      S7_inherits(x, pair$result) && !nzchar(x@request@name)
     })
     if (!needs_link) {
       next
     }
 
     requests <- unlist(
-      map(turns, \(t) keep(t@contents, S7_inherits, request_class)),
+      map(turns, \(t) keep(t@contents, S7_inherits, pair$request)),
       recursive = FALSE
     )
-    if (length(requests) == 0) {
-      next
-    }
-    request_map <- set_names(requests, map_chr(requests, \(r) r@id))
-
-    turn@contents <- map(turn@contents, function(content) {
-      if (!S7_inherits(content, result_class) || nzchar(content@request@name)) {
-        return(content)
-      }
-      req_id <- content@request@id
-      if (has_name(request_map, req_id)) {
-        matched <- request_map[[req_id]]
-        content@request@name <- matched@name
-        content@request@arguments <- matched@arguments
-      }
-      content
-    })
+    turn@contents <- fill_result_requests(turn@contents, requests, pair$result)
   }
   turn
+}
+
+# Copy the tool name and arguments from `requests` onto the matching results
+# (paired by id) that don't carry them yet.
+fill_result_requests <- function(contents, requests, result_class) {
+  if (length(requests) == 0) {
+    return(contents)
+  }
+  request_map <- set_names(requests, map_chr(requests, \(r) r@id))
+  map(contents, function(content) {
+    if (!S7_inherits(content, result_class) || nzchar(content@request@name)) {
+      return(content)
+    }
+    req_id <- content@request@id
+    if (has_name(request_map, req_id)) {
+      matched <- request_map[[req_id]]
+      content@request@name <- matched@name
+      content@request@arguments <- matched@arguments
+    }
+    content
+  })
 }
 
 method(as_json, list(Provider, ToolBuiltIn)) <- function(provider, x, ...) {
@@ -348,4 +335,24 @@ method(as_json, list(Provider, ContentMcpToolResult)) <- function(
   ...
 ) {
   x@json
+}
+
+# Registry ---------------------------------------------------------------------
+
+# The server-side tool request/result content classes, paired. This is the
+# single source of truth for code that treats server-executed tools specially:
+# is_tool_request()/is_tool_result() exclude them from local execution, and
+# link/relink_server_tool_results() use the pairs to copy request metadata
+# onto results. Add new server-side tool content types here.
+server_tool_pairs <- list(
+  list(request = ContentMcpToolRequest, result = ContentMcpToolResult),
+  list(request = ContentToolRequestCode, result = ContentToolResponseCode)
+)
+
+is_server_tool_request <- function(x) {
+  some(server_tool_pairs, \(pair) S7_inherits(x, pair$request))
+}
+
+is_server_tool_result <- function(x) {
+  some(server_tool_pairs, \(pair) S7_inherits(x, pair$result))
 }

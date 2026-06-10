@@ -648,16 +648,7 @@ method(value_turn, ProviderAnthropic) <- function(
 
   # Link server-side tool results to their requests so @request carries the
   # tool name and arguments (used by display and shinychat tool cards).
-  contents <- link_server_tool_results(
-    contents,
-    ContentMcpToolRequest,
-    ContentMcpToolResult
-  )
-  contents <- link_server_tool_results(
-    contents,
-    ContentToolRequestCode,
-    ContentToolResponseCode
-  )
+  contents <- link_server_tool_results(contents)
 
   tokens <- value_tokens(provider, result)
   cache_write <- result$usage$cache_creation_input_tokens %||% 0
