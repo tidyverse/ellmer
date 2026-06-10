@@ -492,6 +492,37 @@ test_that("invoke_tool returns a ContentToolResult", {
   expect_equal(res@request@arguments, list())
 })
 
+test_that("invoke_tool() turns rich content from a programmatic call into an error", {
+  tool_rich <- tool(
+    function() ContentImageInline("image/png", "abc"),
+    name = "my_tool",
+    description = "A tool"
+  )
+
+  programmatic <- ContentToolRequest(
+    id = "x",
+    name = "my_tool",
+    arguments = list(),
+    tool = tool_rich,
+    extra = list(
+      caller = list(type = "code_execution_20250825", tool_id = "srvtoolu_1")
+    )
+  )
+  res <- invoke_tool(programmatic)
+  expect_match(res@error, "called programmatically")
+  expect_null(res@value)
+
+  direct <- ContentToolRequest(
+    id = "y",
+    name = "my_tool",
+    arguments = list(),
+    tool = tool_rich
+  )
+  res <- invoke_tool(direct)
+  expect_null(res@error)
+  expect_s7_class(res@value, ContentImageInline)
+})
+
 test_that("invoke_tool_async returns a ContentToolResult", {
   tool_f <- tool(function() 1, name = "my_tool", description = "A tool")
 

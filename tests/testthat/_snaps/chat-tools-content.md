@@ -123,21 +123,3 @@
         }
       ]
 
-# programmatic tool results can't expand rich content
-
-    Code
-      turn_contents_expand(turn)
-    Condition
-      Error:
-      ! Tool `my_tool` must return a string or JSON-convertible value when called programmatically.
-      i Results of programmatic tool calls are delivered to code running in Claude's sandbox, which can't see other content blocks.
-
----
-
-    Code
-      turn_contents_expand(turn)
-    Condition
-      Error:
-      ! Tool `my_tool` must return a string or JSON-convertible value when called programmatically.
-      i Results of programmatic tool calls are delivered to code running in Claude's sandbox, which can't see other content blocks.
-

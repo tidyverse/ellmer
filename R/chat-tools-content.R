@@ -23,6 +23,15 @@ turn_contents_expand <- function(turn) {
   turn
 }
 
+# Rich values can't be sent as the text of a tool result and need the
+# unrolling treatment above. new_tool_result() rejects them for programmatic
+# calls, where unrolling can't work (the sandboxed code only sees the pointer
+# text, not the sibling blocks).
+is_rich_tool_value <- function(value) {
+  S7_inherits(value, Content) ||
+    (is.list(value) && all(map_lgl(value, \(x) S7_inherits(x, Content))))
+}
+
 expand_content_if_needed <- function(content) {
   if (!is_tool_result(content)) {
     return(list(content))
@@ -31,25 +40,8 @@ expand_content_if_needed <- function(content) {
   request <- content@request
   value <- content@value
 
-  is_rich <- S7_inherits(value, Content) ||
-    (is.list(value) && all(map_lgl(value, \(x) S7_inherits(x, Content))))
-  if (!is_rich) {
+  if (!is_rich_tool_value(value)) {
     return(list(content))
-  }
-
-  # Unrolling doesn't work for programmatic tool calls: the result is delivered
-  # to code running in Claude's sandbox, which would only see the pointer text,
-  # not the sibling content blocks.
-  if (is_programmatic_tool_result(content)) {
-    cli::cli_abort(
-      c(
-        "Tool {.code {request@name}} must return a string or JSON-convertible
-         value when called programmatically.",
-        i = "Results of programmatic tool calls are delivered to code running
-             in Claude's sandbox, which can't see other content blocks."
-      ),
-      call = NULL
-    )
   }
 
   if (S7_inherits(value, Content)) {

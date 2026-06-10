@@ -162,12 +162,33 @@ new_tool_result <- function(request, result = NULL, error = NULL) {
   check_exclusive(result, error)
 
   if (!is.null(error)) {
-    ContentToolResult(error = error, request = request)
-  } else if (is_tool_result(result)) {
-    set_props(result, request = request)
-  } else {
-    ContentToolResult(value = result, request = request)
+    return(ContentToolResult(error = error, request = request))
   }
+
+  if (is_tool_result(result)) {
+    result <- set_props(result, request = request)
+  } else {
+    result <- ContentToolResult(value = result, request = request)
+  }
+
+  # The result of a programmatic call is delivered to code running in Claude's
+  # sandbox, which can only read text, so rich content can't be unrolled like
+  # it is for direct calls. Send an error so the model can react.
+  if (
+    is.null(result@error) &&
+      is_programmatic_tool_result(result) &&
+      is_rich_tool_value(result@value)
+  ) {
+    return(ContentToolResult(
+      error = paste0(
+        "Tool must return a string or JSON-convertible value when called ",
+        "programmatically, since the result is deserialized in code."
+      ),
+      request = request
+    ))
+  }
+
+  result
 }
 
 # Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases

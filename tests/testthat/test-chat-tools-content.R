@@ -52,7 +52,10 @@ test_that("can expand tool with single value", {
   expect_s7_class(expanded[[4]], ContentText) # </tool-content>
 })
 
-test_that("programmatic tool results can't expand rich content", {
+test_that("rich programmatic results from replayed turns still expand", {
+  # invoke_tool() turns rich programmatic results into errors, so this only
+  # arises for conversations recorded before that check existed; expanding is
+  # better than refusing to serialize them.
   req <- ContentToolRequest(
     id = "123",
     name = "my_tool",
@@ -63,10 +66,7 @@ test_that("programmatic tool results can't expand rich content", {
   image <- ContentImageInline("image/png", "abc")
 
   turn <- UserTurn(list(ContentToolResult(value = image, request = req)))
-  expect_snapshot(turn_contents_expand(turn), error = TRUE)
-
-  turn <- UserTurn(list(ContentToolResult(value = list(image), request = req)))
-  expect_snapshot(turn_contents_expand(turn), error = TRUE)
+  expect_length(turn_contents_expand(turn)@contents, 4)
 })
 
 test_that("can expand tool with multiple values", {
