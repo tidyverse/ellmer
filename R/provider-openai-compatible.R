@@ -364,13 +364,7 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
       user <- list()
     }
 
-    tools <- lapply(data$tool_results, function(tool) {
-      list(
-        role = "tool",
-        content = tool_string(tool),
-        tool_call_id = tool@request@id
-      )
-    })
+    tools <- lapply(data$tool_results, tool_result_message)
 
     c(tools, user)
   } else if (is_assistant_turn(x)) {
@@ -395,13 +389,7 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
     content <- as_json(provider, other, ...)
     tool_calls <- as_json(provider, contents[is_tool], ...)
 
-    tool_results <- lapply(contents[is_result], function(tool) {
-      list(
-        role = "tool",
-        content = tool_string(tool),
-        tool_call_id = tool@request@id
-      )
-    })
+    tool_results <- lapply(contents[is_result], tool_result_message)
 
     reasoning_content <- NULL
     if (provider@preserve_thinking) {
@@ -423,6 +411,15 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
+}
+
+# A chat-completions message carrying a tool result.
+tool_result_message <- function(result) {
+  list(
+    role = "tool",
+    content = tool_string(result),
+    tool_call_id = result@request@id
+  )
 }
 
 method(as_json, list(ProviderOpenAICompatible, ContentText)) <- function(

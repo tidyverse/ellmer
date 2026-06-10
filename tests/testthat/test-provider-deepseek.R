@@ -43,3 +43,37 @@ test_that("supports tool calling", {
 #   test_images_inline(chat_fun)
 #   test_images_remote(chat_fun)
 # })
+
+test_that("code execution content serializes as ordinary tool calls", {
+  stub <- ProviderDeepSeek(name = "", base_url = "", model = "")
+
+  req <- ContentToolRequestCode(
+    id = "srvtoolu_1",
+    name = "bash_code_execution",
+    arguments = list(command = "ls"),
+    json = list(type = "server_tool_use", id = "srvtoolu_1")
+  )
+  res <- ContentToolResponseCode(
+    value = "file.txt",
+    request = req,
+    json = list(
+      type = "bash_code_execution_tool_result",
+      tool_use_id = "srvtoolu_1"
+    )
+  )
+
+  # A paused programmatic turn: server-side request, no text
+  result <- as_json(stub, AssistantTurn(list(req)))
+  expect_equal(result[[1]]$role, "assistant")
+  expect_equal(
+    result[[1]]$tool_calls[[1]]$`function`$name,
+    "bash_code_execution"
+  )
+
+  # Request and result in the same turn
+  result <- as_json(stub, AssistantTurn(list(req, res)))
+  expect_equal(
+    result[[2]],
+    list(role = "tool", content = "file.txt", tool_call_id = "srvtoolu_1")
+  )
+})

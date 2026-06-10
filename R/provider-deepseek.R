@@ -102,25 +102,27 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
       list(role = "user", content = as_json(provider, text, ...))
     })
 
-    tools_out <- lapply(data$tool_results, function(tool) {
-      list(
-        role = "tool",
-        content = tool_string(tool),
-        tool_call_id = tool@request@id
-      )
-    })
+    tools_out <- lapply(data$tool_results, tool_result_message)
 
     c(tools_out, texts_out)
   } else if (is_assistant_turn(x)) {
-    # Tool requests come out of content and go into own argument
+    # Tool requests come out of content and go into own argument. Server-side
+    # tool requests/results (e.g. Claude code execution) replay as an ordinary
+    # tool call plus a tool message.
     text <- detect(x@contents, S7_inherits, ContentText)
-    tools <- keep(x@contents, is_tool_request)
+    tools <- keep(x@contents, \(c) is_tool_request(c, local_only = FALSE))
+    results <- keep(x@contents, \(c) is_tool_result(c, local_only = FALSE))
 
-    list(compact(list(
+    message <- compact(list(
       role = "assistant",
-      content = as_json(provider, text, ...),
+      content = if (!is.null(text)) as_json(provider, text, ...),
       tool_calls = as_json(provider, tools, ...)
-    )))
+    ))
+
+    c(
+      if (length(message) > 1) list(message),
+      lapply(results, tool_result_message)
+    )
   } else {
     as_json(super(provider, ProviderOpenAICompatible), x, ...)
   }
