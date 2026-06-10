@@ -399,13 +399,16 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
       }
     }
 
+    message <- compact(list(
+      role = "assistant",
+      reasoning_content = reasoning_content,
+      content = content,
+      tool_calls = tool_calls
+    ))
+
     c(
-      list(compact(list(
-        role = "assistant",
-        reasoning_content = reasoning_content,
-        content = content,
-        tool_calls = tool_calls
-      ))),
+      # An assistant message with neither content nor tool_calls is invalid
+      if (length(message) > 1) list(message),
       tool_results
     )
   } else {

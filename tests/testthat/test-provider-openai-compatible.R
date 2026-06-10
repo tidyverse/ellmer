@@ -190,6 +190,29 @@ test_that("code execution content serializes as ordinary tool calls", {
   )
 })
 
+test_that("a server-tool-only assistant turn emits no empty assistant message", {
+  stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
+  req <- ContentToolRequestCode(
+    id = "srvtoolu_1",
+    name = "bash_code_execution",
+    arguments = list(command = "ls"),
+    json = list(type = "server_tool_use", id = "srvtoolu_1")
+  )
+  res <- ContentToolResponseCode(
+    value = "file.txt",
+    request = req,
+    json = list(
+      type = "bash_code_execution_tool_result",
+      tool_use_id = "srvtoolu_1"
+    )
+  )
+  result <- as_json(stub, AssistantTurn(list(res)))
+  expect_equal(
+    result,
+    list(list(role = "tool", content = "file.txt", tool_call_id = "srvtoolu_1"))
+  )
+})
+
 test_that("mcp_list_tools content is dropped during serialization", {
   stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
   listing <- ContentMcpListTools(
