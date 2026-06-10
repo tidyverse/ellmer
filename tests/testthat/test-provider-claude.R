@@ -959,19 +959,69 @@ test_that("cache_control is omitted on programmatic tool results", {
     )
   )
   res <- ContentToolResult(value = "[]", request = req)
-  json <- as_json(provider, UserTurn(contents = list(res)), is_last = TRUE)
-  expect_null(json$content[[1]]$cache_control)
+  body <- chat_body(provider, turns = list(UserTurn(contents = list(res))))
+  expect_null(body$messages[[1]]$content[[1]]$cache_control)
 })
 
 test_that("cache_control is still applied to regular tool results", {
   provider <- test_anthropic_provider()
   req <- ContentToolRequest("toolu_1", "f", list(x = 1))
   res <- ContentToolResult(value = "ok", request = req)
-  json <- as_json(provider, UserTurn(contents = list(res)), is_last = TRUE)
+  body <- chat_body(provider, turns = list(UserTurn(contents = list(res))))
   expect_equal(
-    json$content[[1]]$cache_control,
+    body$messages[[1]]$content[[1]]$cache_control,
     list(type = "ephemeral", ttl = "")
   )
+})
+
+test_that("cache breakpoint falls back past programmatic tool results", {
+  provider <- test_anthropic_provider()
+  req <- ContentToolRequest(
+    "toolu_1",
+    "f",
+    list(x = 1),
+    extra = list(
+      caller = list(
+        type = "code_execution_20250825",
+        tool_id = "srvtoolu_1"
+      )
+    )
+  )
+  turns <- list(
+    UserTurn("hi"),
+    AssistantTurn(list(ContentText("checking"), req)),
+    UserTurn(contents = list(ContentToolResult(value = "ok", request = req)))
+  )
+  body <- chat_body(provider, turns = turns)
+
+  # Not on the programmatic result or its tool_use, but on the newest
+  # cacheable block before them
+  expect_null(body$messages[[3]]$content[[1]]$cache_control)
+  expect_null(body$messages[[2]]$content[[2]]$cache_control)
+  expect_equal(
+    body$messages[[2]]$content[[1]]$cache_control,
+    list(type = "ephemeral", ttl = "")
+  )
+})
+
+test_that("cache breakpoint is dropped when no block can carry it", {
+  provider <- test_anthropic_provider()
+  req <- ContentToolRequest(
+    "toolu_1",
+    "f",
+    list(x = 1),
+    extra = list(
+      caller = list(
+        type = "code_execution_20250825",
+        tool_id = "srvtoolu_1"
+      )
+    )
+  )
+  turns <- list(
+    UserTurn(contents = list(ContentToolResult(value = "ok", request = req)))
+  )
+  body <- chat_body(provider, turns = turns)
+  expect_null(body$messages[[1]]$content[[1]]$cache_control)
 })
 
 test_that("last_container_id() returns the newest container id in history", {

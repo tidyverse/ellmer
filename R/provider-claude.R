@@ -298,10 +298,8 @@ method(chat_body, ProviderAnthropic) <- function(
     system <- NULL
   }
 
-  is_last <- seq_along(turns) == length(turns)
-  messages <- compact(map2(turns, is_last, function(turn, is_last) {
-    as_json(provider, turn, is_last = is_last)
-  }))
+  messages <- compact(map(turns, function(turn) as_json(provider, turn)))
+  messages <- add_cache_breakpoint(turns, messages, cache_control(provider))
 
   if (!is.null(type)) {
     if (
@@ -673,12 +671,7 @@ method(value_turn, ProviderAnthropic) <- function(
 
 # ellmer -> Claude --------------------------------------------------------------
 
-method(as_json, list(ProviderAnthropic, Turn)) <- function(
-  provider,
-  x,
-  ...,
-  is_last = FALSE
-) {
+method(as_json, list(ProviderAnthropic, Turn)) <- function(provider, x, ...) {
   if (is_system_turn(x)) {
     # claude passes system prompt as separate arg
     NULL
@@ -689,27 +682,7 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(
       return(NULL)
     }
     x <- turn_contents_expand(x)
-    # Serialize each block individually (rather than via the list method) so
-    # we know which content object produced the last emitted block; blocks
-    # that serialize to NULL are dropped, mirroring compact().
-    json <- lapply(x@contents, function(content) {
-      as_json(provider, content, ...)
-    })
-    emitted <- lengths(json) > 0
-    content <- json[emitted]
-
-    # Add caching to the last content block in the last turn
-    # https://docs.claude.com/en/docs/build-with-claude/prompt-caching#how-automatic-prefix-checking-works
-    # Exception: the API rejects cache_control on a tool result that was called
-    # by code execution (programmatic tool calling) because those blocks aren't
-    # rendered in Claude's context. Skip caching when the last block is one.
-    if (is_last && any(emitted)) {
-      last_content <- x@contents[emitted][[sum(emitted)]]
-      if (!is_programmatic_tool_result(last_content)) {
-        content[[length(content)]]$cache_control <- cache_control(provider)
-      }
-    }
-    list(role = x@role, content = content)
+    list(role = x@role, content = as_json(provider, x@contents, ...))
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
@@ -1121,6 +1094,56 @@ cache_control <- function(provider) {
       ttl = provider@cache
     )
   }
+}
+
+# Add a cache breakpoint to the newest message block that can carry one.
+# https://docs.claude.com/en/docs/build-with-claude/prompt-caching#how-automatic-prefix-checking-works
+# The API rejects cache_control on some blocks — notably the requests and
+# results of programmatic tool calls, which aren't rendered in Claude's
+# context — so walk backwards past those to the newest cacheable block instead
+# of giving up on caching the conversation.
+add_cache_breakpoint <- function(turns, messages, cache) {
+  if (is.null(cache)) {
+    return(messages)
+  }
+
+  # A tool_result block doesn't record its caller, so identify programmatic
+  # results by the caller on their request content.
+  programmatic_ids <- unlist(map(turns, function(turn) {
+    ids <- map(turn@contents, function(content) {
+      if (is_programmatic_tool_result(content)) {
+        content@request@id
+      }
+    })
+    compact(ids)
+  }))
+
+  for (i in rev(seq_along(messages))) {
+    blocks <- messages[[i]]$content
+    for (j in rev(seq_along(blocks))) {
+      if (block_is_cacheable(blocks[[j]], programmatic_ids)) {
+        messages[[i]]$content[[j]]$cache_control <- cache
+        return(messages)
+      }
+    }
+  }
+  messages
+}
+
+# Blocks documented to accept cache_control. Thinking and raw server-tool
+# blocks are excluded, as are programmatic tool requests and their results.
+block_is_cacheable <- function(block, programmatic_ids) {
+  type <- block$type %||% ""
+  if (type %in% c("text", "image", "document", "container_upload")) {
+    return(TRUE)
+  }
+  if (type == "tool_use") {
+    return(is.null(block$caller))
+  }
+  if (type == "tool_result") {
+    return(!(block$tool_use_id %||% "") %in% programmatic_ids)
+  }
+  FALSE
 }
 
 has_claude_structured_output <- function(model) {
