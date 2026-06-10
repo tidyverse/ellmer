@@ -347,7 +347,9 @@ method(chat_body, ProviderAnthropic) <- function(
   warn_missing_code_execution_tool(tools)
   # The API only accepts `container` when the code execution tool is enabled,
   # so requests that drop the tool (e.g. structured extraction, batches) must
-  # not reuse the conversation's container.
+  # not reuse the conversation's container. The history's server_tool_use /
+  # *_code_execution_tool_result blocks and caller fields are fine to replay
+  # without the tool (verified against the live API).
   container <- if (has_code_execution_tool(tools)) last_container_id(turns)
   tools <- as_json(provider, unname(tools))
 
