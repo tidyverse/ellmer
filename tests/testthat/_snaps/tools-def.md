@@ -128,3 +128,11 @@
       Error in `tool_annotations()`:
       ! `destructive_hint` must be `TRUE`, `FALSE`, or `NULL`, not the string "no".
 
+# tool() rejects NA in allowed_callers
+
+    Code
+      tool(function() 1, description = "d", allowed_callers = NA_character_)
+    Condition
+      Error in `tool()`:
+      ! `allowed_callers` can't contain NA values.
+

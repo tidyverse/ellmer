@@ -168,7 +168,7 @@ tool <- function(
   check_string(description)
   check_string(name, allow_null = TRUE)
   check_bool(convert)
-  check_character(allowed_callers, allow_null = TRUE)
+  check_character(allowed_callers, allow_na = FALSE, allow_null = TRUE)
 
   if (is.null(name)) {
     if (is.name(fun_expr)) {
@@ -211,9 +211,10 @@ ToolDef <- new_class(
 )
 
 # A tool opts into programmatic tool calling when allowed_callers names a
-# caller other than "direct" (which is the API default).
+# caller other than "direct" (which is the API default). isTRUE() guards
+# against NA callers on a hand-constructed ToolDef.
 is_programmatic_tool <- function(tool) {
-  S7_inherits(tool, ToolDef) && any(tool@allowed_callers != "direct")
+  S7_inherits(tool, ToolDef) && isTRUE(any(tool@allowed_callers != "direct"))
 }
 
 method(print, ToolDef) <- function(x, ...) {

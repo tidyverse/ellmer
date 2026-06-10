@@ -165,3 +165,16 @@ test_that("tool() defaults allowed_callers to an empty character vector", {
   t <- tool(function() 1, description = "d")
   expect_equal(t@allowed_callers, character(0))
 })
+
+test_that("tool() rejects NA in allowed_callers", {
+  expect_snapshot(
+    tool(function() 1, description = "d", allowed_callers = NA_character_),
+    error = TRUE
+  )
+})
+
+test_that("is_programmatic_tool() tolerates NA callers", {
+  t <- tool(function() 1, description = "d")
+  t@allowed_callers <- NA_character_
+  expect_identical(is_programmatic_tool(t), FALSE)
+})
