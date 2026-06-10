@@ -210,6 +210,12 @@ ToolDef <- new_class(
   )
 )
 
+# A tool opts into programmatic tool calling when allowed_callers names a
+# caller other than "direct" (which is the API default).
+is_programmatic_tool <- function(tool) {
+  S7_inherits(tool, ToolDef) && any(tool@allowed_callers != "direct")
+}
+
 method(print, ToolDef) <- function(x, ...) {
   fake_call <- call2(x@name, !!!syms(names(x@arguments@properties)))
 

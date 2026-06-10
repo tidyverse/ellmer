@@ -397,7 +397,7 @@ Chat <- R6::R6Class(
         cli::cli_inform("Replacing existing {tool@name} tool.")
       }
 
-      if (S7_inherits(tool, ToolDef) && length(tool@allowed_callers) > 0) {
+      if (is_programmatic_tool(tool)) {
         check_programmatic_tool(private$provider, tool)
       }
 

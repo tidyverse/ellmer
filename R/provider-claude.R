@@ -263,9 +263,7 @@ has_code_execution_tool <- function(tools) {
 # code_execution tool is registered, since Claude can then never invoke it from
 # code. Deduped so a multi-turn tool loop does not repeat the warning.
 warn_missing_code_execution_tool <- function(tools) {
-  wants_programmatic <- some(tools, function(t) {
-    S7_inherits(t, ToolDef) && length(t@allowed_callers) > 0
-  })
+  wants_programmatic <- some(tools, is_programmatic_tool)
   if (!wants_programmatic) {
     return(invisible())
   }

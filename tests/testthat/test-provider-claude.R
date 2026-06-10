@@ -1108,3 +1108,17 @@ test_that("chat_body() does not warn for plain tools without allowed_callers", {
     chat_body(provider, turns = list(UserTurn("hi")), tools = list(f = plain))
   )
 })
+
+test_that("chat_body() does not warn when allowed_callers is only direct", {
+  withr::local_options(rlib_warning_verbosity = "verbose")
+  provider <- test_anthropic_provider()
+  direct <- tool(
+    function() 1,
+    name = "f",
+    description = "d",
+    allowed_callers = "direct"
+  )
+  expect_no_warning(
+    chat_body(provider, turns = list(UserTurn("hi")), tools = list(f = direct))
+  )
+})

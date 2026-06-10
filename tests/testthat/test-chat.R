@@ -543,6 +543,17 @@ test_that("register_tool() warns accurately about allowed_callers on Claude via 
   expect_snapshot(chat$register_tool(programmatic))
 })
 
+test_that("register_tool() does not warn when allowed_callers is only direct", {
+  chat <- chat_openai(credentials = function() "test")
+  direct <- tool(
+    function() 1,
+    name = "f",
+    description = "d",
+    allowed_callers = "direct"
+  )
+  expect_no_warning(chat$register_tool(direct))
+})
+
 # A response asking for one tool call, used to commit a turn before the next
 # request fails.
 mock_tool_use_response <- function() {
