@@ -812,7 +812,9 @@ test_that("extra_args$tools are preserved when no function tools registered", {
     base_url = "https://api.anthropic.com/v1",
     model = "claude-sonnet-4-5-20250929",
     params = list(),
-    extra_args = list(tools = list(list(type = "mcp_toolset", mcp_server_name = "test"))),
+    extra_args = list(
+      tools = list(list(type = "mcp_toolset", mcp_server_name = "test"))
+    ),
     extra_headers = character(),
     credentials = function() "fake-key",
     beta_headers = character(),
@@ -864,7 +866,9 @@ test_that("extra_args$tools are preserved alongside registered function tools", 
     base_url = "https://api.anthropic.com/v1",
     model = "claude-sonnet-4-5-20250929",
     params = list(),
-    extra_args = list(tools = list(list(type = "mcp_toolset", mcp_server_name = "test"))),
+    extra_args = list(
+      tools = list(list(type = "mcp_toolset", mcp_server_name = "test"))
+    ),
     extra_headers = character(),
     credentials = function() "fake-key",
     beta_headers = character(),
@@ -947,10 +951,12 @@ test_that("cache_control is omitted on programmatic tool results", {
     "toolu_1",
     "f",
     list(employee = "Emma"),
-    extra = list(caller = list(
-      type = "code_execution_20260120",
-      tool_id = "srvtoolu_1"
-    ))
+    extra = list(
+      caller = list(
+        type = "code_execution_20260120",
+        tool_id = "srvtoolu_1"
+      )
+    )
   )
   res <- ContentToolResult(value = "[]", request = req)
   json <- as_json(provider, UserTurn(contents = list(res)), is_last = TRUE)
@@ -962,7 +968,10 @@ test_that("cache_control is still applied to regular tool results", {
   req <- ContentToolRequest("toolu_1", "f", list(x = 1))
   res <- ContentToolResult(value = "ok", request = req)
   json <- as_json(provider, UserTurn(contents = list(res)), is_last = TRUE)
-  expect_equal(json$content[[1]]$cache_control, list(type = "ephemeral", ttl = ""))
+  expect_equal(
+    json$content[[1]]$cache_control,
+    list(type = "ephemeral", ttl = "")
+  )
 })
 
 test_that("last_container_id() returns the newest container id in history", {
@@ -1029,13 +1038,30 @@ test_that("chat_body() reuses the conversation's container id", {
       json = list(container = list(id = "container_1"))
     )
   )
-  body <- chat_body(provider, turns = turns)
+  tools <- list(claude_tool_code_execution())
+  body <- chat_body(provider, turns = turns, tools = tools)
   expect_equal(body$container, "container_1")
 })
 
 test_that("chat_body() omits container when none has been created", {
   provider <- test_anthropic_provider()
   body <- chat_body(provider, turns = list(UserTurn("hi")))
+  expect_null(body$container)
+})
+
+test_that("chat_body() omits the container when no code execution tool is present", {
+  provider <- test_anthropic_provider()
+  turns <- list(
+    UserTurn("hi"),
+    AssistantTurn(
+      list(ContentText("a")),
+      json = list(container = list(id = "container_1"))
+    )
+  )
+  body <- chat_body(provider, turns = turns)
+  expect_null(body$container)
+
+  body <- chat_body(provider, turns = turns, type = type_string())
   expect_null(body$container)
 })
 

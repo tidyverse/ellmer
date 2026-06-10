@@ -253,6 +253,12 @@ container_is_expired <- function(container, now = Sys.time()) {
   !is.na(expiry) && expiry <= now
 }
 
+has_code_execution_tool <- function(tools) {
+  some(tools, function(t) {
+    S7_inherits(t, ToolBuiltIn) && identical(t@name, "code_execution")
+  })
+}
+
 # Warn if any tool opts into programmatic calling (allowed_callers set) but no
 # code_execution tool is registered, since Claude can then never invoke it from
 # code. Deduped so a multi-turn tool loop does not repeat the warning.
@@ -264,10 +270,7 @@ warn_missing_code_execution_tool <- function(tools) {
     return(invisible())
   }
 
-  has_code_tool <- some(tools, function(t) {
-    S7_inherits(t, ToolBuiltIn) && identical(t@name, "code_execution")
-  })
-  if (has_code_tool) {
+  if (has_code_execution_tool(tools)) {
     return(invisible())
   }
 
@@ -346,6 +349,10 @@ method(chat_body, ProviderAnthropic) <- function(
   }
 
   warn_missing_code_execution_tool(tools)
+  # The API only accepts `container` when the code execution tool is enabled,
+  # so requests that drop the tool (e.g. structured extraction, batches) must
+  # not reuse the conversation's container.
+  container <- if (has_code_execution_tool(tools)) last_container_id(turns)
   tools <- as_json(provider, unname(tools))
 
   params <- chat_params(provider, provider@params)
@@ -358,8 +365,6 @@ method(chat_body, ProviderAnthropic) <- function(
   } else {
     thinking <- NULL
   }
-
-  container <- last_container_id(turns)
 
   compact(list2(
     model = provider@model,
@@ -575,7 +580,11 @@ method(value_turn, ProviderAnthropic) <- function(
       result_block <- content$content %||% list()
       is_error <- grepl("_error$", result_block$type %||% "")
       ContentToolResponseCode(
-        value = if (!is_error) code_execution_result_body(result_block) else NULL,
+        value = if (!is_error) {
+          code_execution_result_body(result_block)
+        } else {
+          NULL
+        },
         error = if (is_error) result_block$error_code %||% "unknown" else NULL,
         request = ContentToolRequest(
           id = content$tool_use_id,
@@ -675,10 +684,7 @@ last_block_is_programmatic_result <- function(provider, contents, ...) {
     if (is.null(as_json(provider, content, ...))) {
       next
     }
-    return(
-      S7_inherits(content, ContentToolResult) &&
-        grepl("^code_execution", content@request@extra$caller$type %||% "")
-    )
+    return(is_programmatic_tool_result(content))
   }
   FALSE
 }
