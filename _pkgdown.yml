@@ -41,6 +41,7 @@ reference:
   - chat_google_gemini
   - chat_ollama
   - chat_openai
+  - chat_posit
   - chat_snowflake
 
 - subtitle: Community providers

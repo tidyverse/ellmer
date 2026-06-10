@@ -119,6 +119,7 @@ Collate:
     'provider-openrouter.R'
     'provider-perplexity.R'
     'provider-portkey.R'
+    'provider-posit.R'
     'provider-snowflake.R'
     'provider-vllm.R'
     'schema.R'

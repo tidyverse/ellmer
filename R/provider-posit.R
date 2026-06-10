@@ -1,0 +1,263 @@
+#' @include provider-claude.R
+#' @include provider-openai-compatible.R
+NULL
+
+#' Chat with a model hosted by Posit AI
+#'
+#' @description
+#' `r support_badge("official")`
+#'
+#' [Posit AI](https://posit.ai) provides access to a curated set of models
+#' for Posit subscribers.
+#'
+#' The gateway exposes two API flavors: Claude models
+#' are served via the Anthropic Messages API and all other models are served
+#' via an OpenAI-compatible API. `chat_posit()` automatically picks the
+#' appropriate flavor based on the model name.
+#'
+#' ## Authentication
+#'
+#' By default, `chat_posit()` authenticates with an OAuth device flow against
+#' `login.posit.cloud`: the first time you use it, you'll be prompted to
+#' visit a URL and enter a code. The resulting tokens are cached on disk
+#' (see [httr2::req_oauth_device()]) and refreshed automatically, so you
+#' should only need to do this once per machine.
+#'
+#' @param base_url The base URL of the Posit AI gateway.
+#' @param credentials A zero-argument function that returns either a string
+#'   (an access token, sent as a bearer token) or a named list of headers.
+#'   Defaults to the OAuth device flow described above.
+#' @param model `r param_model("claude-sonnet-4-6", "posit")`
+#' @inheritParams chat_openai
+#' @inheritParams chat_anthropic
+#' @inherit chat_openai return
+#' @family chatbots
+#' @export
+#' @examples
+#' \dontrun{
+#' chat <- chat_posit()
+#' chat$chat("Tell me three jokes about statisticians")
+#' }
+chat_posit <- function(
+  system_prompt = NULL,
+  base_url = "https://gateway.posit.ai",
+  credentials = NULL,
+  model = NULL,
+  params = NULL,
+  cache = c("5m", "1h", "none"),
+  api_args = list(),
+  api_headers = character(),
+  echo = NULL
+) {
+  check_string(base_url)
+  model <- set_default(model, "claude-sonnet-4-6")
+  cache <- arg_match(cache)
+  echo <- check_echo(echo)
+
+  credentials <- as_credentials(
+    "chat_posit",
+    default_posit_credentials(),
+    credentials = credentials
+  )
+  credentials <- posit_bearer_credentials(credentials)
+
+  if (is_claude_model(model)) {
+    provider <- ProviderPositAnthropic(
+      name = "Posit",
+      base_url = paste0(base_url, "/anthropic/v1"),
+      model = model,
+      params = params %||% params(),
+      extra_args = api_args,
+      extra_headers = api_headers,
+      credentials = credentials,
+      cache = cache
+    )
+  } else {
+    provider <- ProviderPositOpenAI(
+      name = "Posit",
+      base_url = paste0(base_url, "/openai/v1"),
+      model = model,
+      params = params %||% params(),
+      extra_args = api_args,
+      extra_headers = api_headers,
+      credentials = credentials
+    )
+  }
+
+  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+}
+
+#' @export
+#' @rdname chat_posit
+models_posit <- function(
+  base_url = "https://gateway.posit.ai",
+  credentials = NULL
+) {
+  check_string(base_url)
+
+  credentials <- as_credentials(
+    "models_posit",
+    default_posit_credentials(),
+    credentials = credentials
+  )
+  credentials <- posit_bearer_credentials(credentials)
+
+  req <- request(base_url)
+  req <- req_url_path_append(req, "/models")
+  req <- ellmer_req_credentials(req, credentials(), "Authorization")
+  req <- ellmer_req_user_agent(req)
+  req <- req_error(req, body = posit_error_body)
+  resp <- req_perform(req)
+  json <- resp_body_json(resp)
+
+  data.frame(
+    id = map_chr(json$chat, "[[", "id"),
+    name = map_chr(json$chat, "[[", "display_name"),
+    protocol = map_chr(json$chat, function(model) {
+      model$endpoints[[1]]$protocol %||% NA_character_
+    }),
+    max_context_length = map_dbl(json$chat, function(model) {
+      model$max_context_length %||% NA_real_
+    })
+  )
+}
+
+ProviderPositAnthropic <- new_class(
+  "ProviderPositAnthropic",
+  parent = ProviderAnthropic
+)
+
+ProviderPositOpenAI <- new_class(
+  "ProviderPositOpenAI",
+  parent = ProviderOpenAICompatible
+)
+
+method(base_request, ProviderPositAnthropic) <- function(provider) {
+  req <- base_request(super(provider, ProviderAnthropic))
+  req_error(req, body = posit_error_body)
+}
+
+method(base_request, ProviderPositOpenAI) <- function(provider) {
+  req <- base_request(super(provider, ProviderOpenAICompatible))
+  req_error(req, body = posit_error_body)
+}
+
+method(models_list, ProviderPositAnthropic) <- function(provider) {
+  models_posit(
+    base_url = posit_gateway_url(provider@base_url),
+    credentials = provider@credentials
+  )
+}
+
+method(models_list, ProviderPositOpenAI) <- function(provider) {
+  models_posit(
+    base_url = posit_gateway_url(provider@base_url),
+    credentials = provider@credentials
+  )
+}
+
+is_claude_model <- function(model) {
+  grepl("^claude", model)
+}
+
+posit_gateway_url <- function(base_url) {
+  sub("/(anthropic|openai)/v1/?$", "", base_url)
+}
+
+# The Anthropic flavor injects string credentials as `x-api-key`, but the
+# gateway only accepts bearer tokens, so normalize strings to a header here.
+posit_bearer_credentials <- function(credentials) {
+  force(credentials)
+  function() {
+    creds <- credentials()
+    if (is_string(creds)) {
+      list(Authorization = paste("Bearer", creds))
+    } else {
+      creds
+    }
+  }
+}
+
+default_posit_credentials <- function() {
+  client <- posit_oauth_client()
+  cache <- quiet_token_cache(client)
+  function() {
+    function(req) {
+      # `req_oauth_device()` builds its own (noisy) cache, so drop to
+      # `req_oauth()` to inject the quiet one.
+      req_oauth(
+        req,
+        "oauth_flow_device",
+        flow_params = list(
+          client = client,
+          auth_url = "https://login.posit.cloud/oauth/device/authorize",
+          scope = "prism",
+          # posit.cloud only mints a gateway-authorized token when `scope` is
+          # also sent on the token exchange, not just the authorize request.
+          token_params = list(scope = "prism")
+        ),
+        cache = cache
+      )
+    }
+  }
+}
+
+posit_oauth_client <- function() {
+  oauth_client(
+    id = "rstudio-ide",
+    token_url = "https://login.posit.cloud/oauth/token",
+    name = "ellmer-posit"
+  )
+}
+
+posit_oauth_reset <- function() {
+  httr2::oauth_cache_clear(posit_oauth_client(), cache_disk = TRUE)
+}
+
+# httr2's disk cache announces every token write with an informational
+# message; wrap its setter to muffle just that one message. The base cache is
+# reused (rather than reimplemented) so the on-disk location, format, and
+# encryption stay identical to httr2's own.
+quiet_token_cache <- function(client) {
+  cache_disk <- utils::getFromNamespace("cache_disk", "httr2")
+  cache <- cache_disk(client)
+  set <- cache$set
+  cache$set <- function(token) {
+    withCallingHandlers(
+      set(token),
+      message = function(cnd) {
+        if (grepl("Caching httr2 token", conditionMessage(cnd), fixed = TRUE)) {
+          invokeRestart("muffleMessage")
+        }
+      }
+    )
+  }
+  cache
+}
+
+posit_error_body <- function(resp) {
+  json <- tryCatch(
+    resp_body_json(resp, check_type = FALSE),
+    error = function(cnd) NULL
+  )
+
+  error <- json$error
+  error_type <- json$error_type %||% (if (is.list(error)) error$error_type)
+  if (identical(error_type, "prism_account_not_found")) {
+    return(c(
+      "You must finish setting up your Posit AI account before using the API.",
+      i = "Visit <https://posit.ai/> to accept the service agreement."
+    ))
+  }
+  if (resp_status(resp) == 402) {
+    return("Your Posit AI credits are depleted.")
+  }
+
+  if (is_string(error)) {
+    error
+  } else if (is.list(error)) {
+    error$message
+  } else {
+    json$message %||% prettify(resp_body_string(resp))
+  }
+}
