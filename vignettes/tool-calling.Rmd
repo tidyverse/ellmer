@@ -261,14 +261,14 @@ expense_tool <- tool(
     "employee (string), amount (number), category (string)."
   ),
   arguments = list(employee = type_string()),
-  allowed_callers = "code_execution_20260120"
+  allowed_callers = "code_execution_20250825"
 )
 
 chat <- chat_anthropic(
   model = "claude-opus-4-8",
   beta_headers = "code-execution-2025-08-25"
 )
-chat$register_tool(claude_tool_code_execution(type = "code_execution_20260120"))
+chat$register_tool(claude_tool_code_execution())
 chat$register_tool(expense_tool)
 chat$chat("Which of these 20 employees exceeded their $5000 budget?")
 ```
@@ -279,8 +279,9 @@ previously created files and state.
 
 Notes and limitations:
 
-* Requires a model that supports `code_execution_20260120` (Opus 4.5+/Sonnet
-  4.5+) and the code-execution tool to be registered.
+* `allowed_callers` must match the `type` of the registered
+  `claude_tool_code_execution()` tool (`"code_execution_20250825"` by default;
+  see `?claude_tool_code_execution` for choosing a version).
 * `allowed_callers` is Anthropic-only; other providers ignore it.
 * Programmatic tool calling is not compatible with structured-output (`strict`)
   tools, `tool_choice`-forced programmatic calls, or `disable_parallel_tool_use`.

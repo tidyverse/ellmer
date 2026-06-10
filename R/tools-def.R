@@ -75,11 +75,12 @@ NULL
 #'   R data type equivalents? Defaults to `TRUE`.
 #' @param allowed_callers `r lifecycle::badge("experimental")` Character vector
 #'   controlling which contexts may invoke this tool, sent verbatim to the
-#'   Anthropic API. Use `"code_execution_20260120"` to let Claude call the tool
+#'   Anthropic API. Use `"code_execution_20250825"` to let Claude call the tool
 #'   from within its code-execution sandbox (programmatic tool calling),
-#'   `"direct"` for normal tool calls, or both. Requires a registered
-#'   [claude_tool_code_execution()] tool on a compatible model, and is ignored
-#'   by non-Anthropic providers. Because Claude deserializes results in Python,
+#'   `"direct"` for normal tool calls, or both. The code-execution value must
+#'   match the `type` of the [claude_tool_code_execution()] tool registered on
+#'   the chat (see its docs for choosing a version), and is ignored by
+#'   non-Anthropic providers. Because Claude deserializes results in Python,
 #'   document your tool's output format (e.g. the JSON schema) in
 #'   `description`. Defaults to `NULL` (the API default, `"direct"`).
 #' @param ... `r lifecycle::badge("deprecated")` Use `arguments` instead.
