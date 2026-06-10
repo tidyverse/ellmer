@@ -14,6 +14,18 @@ NULL
 #' You should generally not create this object yourself,
 #' but instead call [chat_openai()] or friends instead.
 #'
+#' # Error handling
+#'
+#' If a request fails partway through a `$chat()` call (e.g. in the middle of
+#' a tool-calling loop), the conversation is rolled back to its state before
+#' the call, so the chat never retains a half-finished exchange. Two
+#' consequences are worth knowing about: any tools that already ran in the
+#' failed exchange will run again if you retry, so be careful with tools that
+#' have side effects (like sending an email); and the tokens billed for the
+#' discarded turns are not reflected in `$get_tokens()` or `$get_cost()`. Set
+#' `options(ellmer_preserve_turns_on_error = TRUE)` to keep the partial turns
+#' instead, e.g. for debugging.
+#'
 #' @return A Chat object
 #' @examples
 #' \dontshow{ellmer:::vcr_example_start("Chat")}
