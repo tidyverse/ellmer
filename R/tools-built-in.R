@@ -187,7 +187,9 @@ ContentToolRequestCode <- new_class(
 method(format, ContentToolRequestCode) <- function(x, ...) {
   input <- x@json$input %||% list()
   if (x@name == "bash_code_execution") {
-    cli::format_inline("[{.strong bash code execution}]: {.code {input$command}}")
+    cli::format_inline(
+      "[{.strong bash code execution}]: {.code {input$command}}"
+    )
   } else if (x@name == "text_editor_code_execution") {
     cli::format_inline("[{.strong file {input$command}}]: {.file {input$path}}")
   } else {
@@ -197,14 +199,6 @@ method(format, ContentToolRequestCode) <- function(x, ...) {
     )
   }
 }
-method(as_json, list(Provider, ContentToolRequestCode)) <- function(
-  provider,
-  x,
-  ...
-) {
-  x@json
-}
-
 # The human-readable body of a code execution result block. Bash and Python
 # results carry stdout/stderr; a text-editor `view` carries the file content as
 # a string. File-operation results (create, str_replace) report the edit
@@ -259,13 +253,6 @@ method(format, ContentToolResponseCode) <- function(x, ...) {
   }
   body <- code_execution_result_body(content)
   paste(c(header, if (nzchar(body)) body), collapse = "\n")
-}
-method(as_json, list(Provider, ContentToolResponseCode)) <- function(
-  provider,
-  x,
-  ...
-) {
-  x@json
 }
 
 # MCP tool use ----------------------------------------------------------------

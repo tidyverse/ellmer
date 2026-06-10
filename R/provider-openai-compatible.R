@@ -384,12 +384,24 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
     if (length(contents) == 0) {
       return(NULL)
     }
-    # Thinking and tool requests come out of content
+    # Thinking and tool requests come out of content. Server-side tool
+    # requests/results (e.g. Claude code execution) land in the same assistant
+    # turn; replay them as an ordinary tool call plus a tool message, since
+    # their raw JSON belongs to another provider's API.
     is_thinking <- map_lgl(contents, S7_inherits, ContentThinking)
-    is_tool <- map_lgl(contents, is_tool_request)
-    other <- contents[!is_thinking & !is_tool]
+    is_tool <- map_lgl(contents, is_tool_request, local_only = FALSE)
+    is_result <- map_lgl(contents, is_tool_result, local_only = FALSE)
+    other <- contents[!is_thinking & !is_tool & !is_result]
     content <- as_json(provider, other, ...)
     tool_calls <- as_json(provider, contents[is_tool], ...)
+
+    tool_results <- lapply(contents[is_result], function(tool) {
+      list(
+        role = "tool",
+        content = tool_string(tool),
+        tool_call_id = tool@request@id
+      )
+    })
 
     reasoning_content <- NULL
     if (provider@preserve_thinking) {
@@ -399,13 +411,14 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
       }
     }
 
-    list(
-      compact(list(
+    c(
+      list(compact(list(
         role = "assistant",
         reasoning_content = reasoning_content,
         content = content,
         tool_calls = tool_calls
-      ))
+      ))),
+      tool_results
     )
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)

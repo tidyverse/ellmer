@@ -158,6 +158,38 @@ test_that("empty ContentText is stripped but tool requests are preserved", {
   expect_null(result[[1]]$content)
 })
 
+test_that("code execution content serializes as ordinary tool calls", {
+  stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
+
+  req <- ContentToolRequestCode(
+    id = "srvtoolu_1",
+    name = "bash_code_execution",
+    arguments = list(command = "ls"),
+    json = list(type = "server_tool_use", id = "srvtoolu_1")
+  )
+  res <- ContentToolResponseCode(
+    value = "file.txt",
+    request = req,
+    json = list(
+      type = "bash_code_execution_tool_result",
+      tool_use_id = "srvtoolu_1"
+    )
+  )
+  turn <- AssistantTurn(list(req, res))
+
+  result <- as_json(stub, turn)
+  expect_equal(result[[1]]$role, "assistant")
+  expect_equal(
+    result[[1]]$tool_calls[[1]]$`function`$name,
+    "bash_code_execution"
+  )
+  expect_null(result[[1]]$content)
+  expect_equal(
+    result[[2]],
+    list(role = "tool", content = "file.txt", tool_call_id = "srvtoolu_1")
+  )
+})
+
 test_that("stream_content extracts reasoning_content", {
   stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
 
