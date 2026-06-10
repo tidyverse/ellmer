@@ -29,7 +29,9 @@ turn_contents_expand <- function(turn) {
 # text, not the sibling blocks).
 is_rich_tool_value <- function(value) {
   S7_inherits(value, Content) ||
-    (is.list(value) && all(map_lgl(value, \(x) S7_inherits(x, Content))))
+    (is.list(value) &&
+      length(value) > 0 &&
+      all(map_lgl(value, \(x) S7_inherits(x, Content))))
 }
 
 expand_content_if_needed <- function(content) {
