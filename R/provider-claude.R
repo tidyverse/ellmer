@@ -673,20 +673,6 @@ method(value_turn, ProviderAnthropic) <- function(
 
 # ellmer -> Claude --------------------------------------------------------------
 
-# TRUE if the last serialized block of `contents` comes from a tool result that
-# was called by code execution (programmatic tool calling). compact() in the
-# list serializer drops NULL-serializing blocks, so we scan from the end for the
-# object behind the last emitted block rather than assuming 1:1 alignment.
-last_block_is_programmatic_result <- function(provider, contents, ...) {
-  for (content in rev(contents)) {
-    if (is.null(as_json(provider, content, ...))) {
-      next
-    }
-    return(is_programmatic_tool_result(content))
-  }
-  FALSE
-}
-
 method(as_json, list(ProviderAnthropic, Turn)) <- function(
   provider,
   x,
@@ -703,15 +689,23 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(
       return(NULL)
     }
     x <- turn_contents_expand(x)
-    content <- as_json(provider, x@contents, ...)
+    # Serialize each block individually (rather than via the list method) so
+    # we know which content object produced the last emitted block; blocks
+    # that serialize to NULL are dropped, mirroring compact().
+    json <- lapply(x@contents, function(content) {
+      as_json(provider, content, ...)
+    })
+    emitted <- lengths(json) > 0
+    content <- json[emitted]
 
     # Add caching to the last content block in the last turn
     # https://docs.claude.com/en/docs/build-with-claude/prompt-caching#how-automatic-prefix-checking-works
     # Exception: the API rejects cache_control on a tool result that was called
     # by code execution (programmatic tool calling) because those blocks aren't
     # rendered in Claude's context. Skip caching when the last block is one.
-    if (is_last && length(content) > 0) {
-      if (!last_block_is_programmatic_result(provider, x@contents, ...)) {
+    if (is_last && any(emitted)) {
+      last_content <- x@contents[emitted][[sum(emitted)]]
+      if (!is_programmatic_tool_result(last_content)) {
         content[[length(content)]]$cache_control <- cache_control(provider)
       }
     }
