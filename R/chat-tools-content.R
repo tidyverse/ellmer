@@ -31,16 +31,31 @@ expand_content_if_needed <- function(content) {
   request <- content@request
   value <- content@value
 
+  is_rich <- S7_inherits(value, Content) ||
+    (is.list(value) && all(map_lgl(value, \(x) S7_inherits(x, Content))))
+  if (!is_rich) {
+    return(list(content))
+  }
+
+  # Unrolling doesn't work for programmatic tool calls: the result is delivered
+  # to code running in Claude's sandbox, which would only see the pointer text,
+  # not the sibling content blocks.
+  if (is_programmatic_tool_result(content)) {
+    cli::cli_abort(
+      c(
+        "Tool {.code {request@name}} must return a string or JSON-convertible
+         value when called programmatically.",
+        i = "Results of programmatic tool calls are delivered to code running
+             in Claude's sandbox, which can't see other content blocks."
+      ),
+      call = NULL
+    )
+  }
+
   if (S7_inherits(value, Content)) {
     expand_tool_value(request, value)
-  } else if (is.list(value)) {
-    if (all(map_lgl(value, \(x) S7_inherits(x, Content)))) {
-      expand_tool_values(request, value)
-    } else {
-      list(content)
-    }
   } else {
-    list(content)
+    expand_tool_values(request, value)
   }
 }
 

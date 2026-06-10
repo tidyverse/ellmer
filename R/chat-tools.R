@@ -28,6 +28,15 @@ is_tool_result <- function(x, local_only = TRUE) {
   TRUE
 }
 
+# A tool result whose request came from Claude's code-execution sandbox
+# (programmatic tool calling). Its serialized form is delivered to the
+# sandboxed code rather than rendered in the model's context.
+is_programmatic_tool_result <- function(x) {
+  S7_inherits(x, ContentToolResult) &&
+    !is.null(x@request) &&
+    grepl("^code_execution", x@request@extra$caller$type %||% "")
+}
+
 match_tools <- function(turn, tools) {
   if (is.null(turn)) {
     return(NULL)

@@ -52,6 +52,23 @@ test_that("can expand tool with single value", {
   expect_s7_class(expanded[[4]], ContentText) # </tool-content>
 })
 
+test_that("programmatic tool results can't expand rich content", {
+  req <- ContentToolRequest(
+    id = "123",
+    name = "my_tool",
+    extra = list(
+      caller = list(type = "code_execution_20250825", tool_id = "srvtoolu_1")
+    )
+  )
+  image <- ContentImageInline("image/png", "abc")
+
+  turn <- UserTurn(list(ContentToolResult(value = image, request = req)))
+  expect_snapshot(turn_contents_expand(turn), error = TRUE)
+
+  turn <- UserTurn(list(ContentToolResult(value = list(image), request = req)))
+  expect_snapshot(turn_contents_expand(turn), error = TRUE)
+})
+
 test_that("can expand tool with multiple values", {
   req <- ContentToolRequest(id = "123", name = "my_tool")
   image1 <- ContentImageInline("image/png", "abc")
