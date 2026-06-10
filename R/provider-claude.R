@@ -931,6 +931,14 @@ method(chat_request, ProviderAnthropic) <- function(
   body <- modify_list(body, extra_args)
   if (!is.null(extra_tools)) {
     body[["tools"]] <- c(body[["tools"]], extra_tools)
+    # The container gate in chat_body() only sees registered tools, so a code
+    # execution tool supplied via api_args re-checks container reuse here.
+    has_extra_code_tool <- some(extra_tools, function(t) {
+      identical(t$name, "code_execution")
+    })
+    if (is.null(body$container) && has_extra_code_tool) {
+      body$container <- last_container_id(turns)
+    }
   }
   req <- req_body_json(req, body)
   req <- req_headers(req, !!!provider@extra_headers)

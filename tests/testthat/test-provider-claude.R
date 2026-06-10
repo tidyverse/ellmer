@@ -1115,6 +1115,34 @@ test_that("chat_body() omits the container when no code execution tool is presen
   expect_null(body$container)
 })
 
+test_that("container reuse works for a code execution tool supplied via api_args", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-sonnet-4-20250514",
+    params = list(),
+    extra_args = list(
+      tools = list(list(
+        type = "code_execution_20250825",
+        name = "code_execution"
+      ))
+    ),
+    extra_headers = character(),
+    credentials = function() "key",
+    beta_headers = character(),
+    cache = ""
+  )
+  turns <- list(
+    UserTurn("hi"),
+    AssistantTurn(
+      list(ContentText("a")),
+      json = list(container = list(id = "container_1"))
+    )
+  )
+  req <- chat_request(provider, turns = turns)
+  expect_equal(req$body$data$container, "container_1")
+})
+
 test_that("chat_body() warns when allowed_callers is set but no code tool is registered", {
   withr::local_options(rlib_warning_verbosity = "verbose")
   provider <- test_anthropic_provider()
