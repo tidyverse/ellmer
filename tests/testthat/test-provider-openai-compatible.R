@@ -190,6 +190,21 @@ test_that("code execution content serializes as ordinary tool calls", {
   )
 })
 
+test_that("mcp_list_tools content is dropped during serialization", {
+  stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
+  listing <- ContentMcpListTools(
+    server_name = "srv",
+    tools = list(),
+    json = list(type = "mcp_list_tools", server_label = "srv")
+  )
+  turn <- AssistantTurn(list(ContentText("hi"), listing))
+  result <- as_json(stub, turn)
+  expect_equal(
+    result[[1]]$content,
+    list(list(type = "text", text = "hi"))
+  )
+})
+
 test_that("stream_content extracts reasoning_content", {
   stub <- ProviderOpenAICompatible(name = "", base_url = "", model = "")
 

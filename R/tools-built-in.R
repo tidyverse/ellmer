@@ -279,6 +279,15 @@ method(as_json, list(Provider, ContentMcpListTools)) <- function(
   x@json
 }
 
+# An MCP tool listing has no chat-completions equivalent; drop it rather than
+# echoing the raw provider-specific block into the content array. (Registered
+# here, not in provider-openai-compatible.R, which is collated before this
+# file defines ContentMcpListTools.)
+method(as_json, list(ProviderOpenAICompatible, ContentMcpListTools)) <-
+  function(provider, x, ...) {
+    NULL
+  }
+
 ContentMcpToolRequest <- new_class(
   "ContentMcpToolRequest",
   parent = ContentToolRequest,
