@@ -117,7 +117,7 @@ SystemTurn <- new_class(
 #'   used in this turn.
 #' @param cost The cost of the turn in dollars.
 #' @param duration The duration of the request in seconds.
-#' @param finish_reason A string describing why the model stopped generating.
+#' @param finish_reason Why the model stopped generating.
 #' @export
 #' @rdname Turn
 #' @return An S7 `AssistantTurn` object

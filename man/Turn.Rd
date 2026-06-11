@@ -52,7 +52,7 @@ that ellmer doesn't otherwise expose.}
 
 \item{duration}{The duration of the request in seconds.}
 
-\item{finish_reason}{A string describing why the model stopped generating.}
+\item{finish_reason}{Why the model stopped generating.}
 
 \item{reason}{A character string describing why the turn was interrupted.
 Defaults to \code{"interrupted"}.}
