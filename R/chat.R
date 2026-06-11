@@ -981,15 +981,12 @@ TurnAccumulator <- R6::R6Class(
     },
 
     value_turn = function(result, type, duration = NA_real_) {
-      finish_reason <- value_finish_reason(self$provider, result)
-
       turn <- value_turn(
         self$provider,
         result,
         has_type = !is.null(type)
       )
       turn@duration <- duration
-      turn@finish_reason <- finish_reason
       match_tools(turn, self$chat$get_tools())
     }
   )

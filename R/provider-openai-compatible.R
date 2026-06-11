@@ -288,21 +288,6 @@ method(value_tokens, ProviderOpenAICompatible) <- function(provider, json) {
   )
 }
 
-# https://platform.openai.com/docs/api-reference/chat/create
-method(value_finish_reason, ProviderOpenAICompatible) <- function(
-  provider,
-  json
-) {
-  reason <- json$choices[[1]]$finish_reason
-  switch(
-    reason,
-    stop = "success",
-    length = "max_tokens",
-    content_filter = "content_filter",
-    "other"
-  )
-}
-
 method(value_turn, ProviderOpenAICompatible) <- function(
   provider,
   result,
@@ -357,7 +342,24 @@ method(value_turn, ProviderOpenAICompatible) <- function(
 
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  AssistantTurn(content, json = result, tokens = unlist(tokens), cost = cost)
+
+  # https://platform.openai.com/docs/api-reference/chat/create
+  reason <- result$choices[[1]]$finish_reason
+  finish_reason <- switch(
+    reason,
+    stop = "success",
+    length = "max_tokens",
+    content_filter = "content_filter",
+    reason
+  )
+
+  AssistantTurn(
+    content,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = finish_reason
+  )
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------

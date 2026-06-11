@@ -332,22 +332,6 @@ method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
   )
 }
 
-# https://ai.google.dev/api/generate-content
-method(value_finish_reason, ProviderGoogleGemini) <- function(provider, json) {
-  reason <- json$candidates[[1]]$finishReason
-  switch(
-    reason,
-    STOP = "success",
-    MAX_TOKENS = "max_tokens",
-    SAFETY = ,
-    RECITATION = ,
-    BLOCKLIST = ,
-    PROHIBITED_CONTENT = ,
-    SPII = "content_filter",
-    "other"
-  )
-}
-
 method(value_turn, ProviderGoogleGemini) <- function(
   provider,
   result,
@@ -389,7 +373,28 @@ method(value_turn, ProviderGoogleGemini) <- function(
   contents <- compact(contents)
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
+
+  # https://ai.google.dev/api/generate-content
+  reason <- result$candidates[[1]]$finishReason
+  finish_reason <- switch(
+    reason,
+    STOP = "success",
+    MAX_TOKENS = "max_tokens",
+    SAFETY = ,
+    RECITATION = ,
+    BLOCKLIST = ,
+    PROHIBITED_CONTENT = ,
+    SPII = "content_filter",
+    reason
+  )
+
+  AssistantTurn(
+    contents,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = finish_reason
+  )
 }
 
 # ellmer -> Gemini --------------------------------------------------------------

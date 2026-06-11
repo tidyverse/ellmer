@@ -413,20 +413,6 @@ method(value_tokens, ProviderAWSBedrock) <- function(provider, json) {
   )
 }
 
-# https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
-method(value_finish_reason, ProviderAWSBedrock) <- function(provider, json) {
-  switch(
-    json$stopReason,
-    end_turn = "success",
-    max_tokens = "max_tokens",
-    model_context_window_exceeded = "context_window",
-    stop_sequence = "stop_sequence",
-    guardrail_intervened = ,
-    content_filtered = "content_filter",
-    "other"
-  )
-}
-
 method(value_turn, ProviderAWSBedrock) <- function(
   provider,
   result,
@@ -462,7 +448,26 @@ method(value_turn, ProviderAWSBedrock) <- function(
 
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
+
+  # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
+  finish_reason <- switch(
+    result$stopReason,
+    end_turn = "success",
+    max_tokens = "max_tokens",
+    model_context_window_exceeded = "context_window",
+    stop_sequence = "stop_sequence",
+    guardrail_intervened = ,
+    content_filtered = "content_filter",
+    result$stopReason
+  )
+
+  AssistantTurn(
+    contents,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = finish_reason
+  )
 }
 
 # ellmer -> Bedrock -------------------------------------------------------------
