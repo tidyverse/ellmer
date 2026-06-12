@@ -392,7 +392,8 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
     result <- list(
       output = list(
         message = result
-      )
+      ),
+      stopReason = chunk$stopReason
     )
   } else if (chunk$event_type == "metadata") {
     result$usage <- chunk$usage
