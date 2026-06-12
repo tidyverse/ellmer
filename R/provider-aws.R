@@ -252,11 +252,10 @@ method(chat_request, ProviderAWSBedrock) <- function(
   type = NULL
 ) {
   req <- base_request(provider)
+  suffix <- if (stream) "converse-stream" else "converse"
   req <- req_url_path_append(
     req,
-    "model",
-    provider@model,
-    if (stream) "converse-stream" else "converse"
+    paste0("model/", curl::curl_escape(provider@model), "/", suffix)
   )
 
   if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
