@@ -468,6 +468,9 @@ method(value_turn, ProviderAnthropic) <- function(
     } else if (content$type == "web_fetch_tool_result") {
       ContentToolResponseFetch(url = content$url %||% "failed", json = content)
     } else if (content$type == "mcp_tool_use") {
+      if (is_string(content$input)) {
+        content$input <- jsonlite::parse_json(content$input)
+      }
       input <- content$input %||% list()
       ContentMcpToolRequest(
         id = content$id,

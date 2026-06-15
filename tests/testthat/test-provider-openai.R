@@ -294,7 +294,7 @@ test_that("value_turn() parses mcp_call output", {
   expect_equal(req@id, "mcp_call_1")
   expect_equal(req@name, "read_wiki_structure")
   expect_equal(req@server_name, "deepwiki")
-  expect_equal(req@json$input, list(repo_name = "tidyverse/ellmer"))
+  expect_equal(req@arguments, list(repo_name = "tidyverse/ellmer"))
 
   resp <- turn@contents[[2]]
   expect_s7_class(resp, ContentMcpToolResult)
@@ -464,4 +464,5 @@ test_that("as_json round-trips mcp_call without duplication", {
   non_null <- compact(json_items)
   expect_length(non_null, 1)
   expect_equal(non_null[[1]]$type, "mcp_call")
+  expect_false("input" %in% names(non_null[[1]]))
 })

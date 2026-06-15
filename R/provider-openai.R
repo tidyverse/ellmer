@@ -367,15 +367,13 @@ method(value_turn, ProviderOpenAI) <- function(
       server_name <- output$server_label %||% ""
       arguments <- jsonlite::parse_json(output$arguments %||% "{}")
       input <- if (is.list(arguments)) arguments else list(arguments)
-      json <- output
-      json$input <- input
       request <- ContentMcpToolRequest(
         id = output$id,
         name = output$name,
         arguments = input,
         tool = mcp_tool_def(output$name, server_name),
         server_name = server_name,
-        json = json
+        json = output
       )
       is_error <- !is.null(output$error)
       if (is_error && is.list(output$error)) {

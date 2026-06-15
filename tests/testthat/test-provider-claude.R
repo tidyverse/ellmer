@@ -283,6 +283,63 @@ test_that("value_turn() parses mcp_tool_use content", {
   expect_equal(mcp_content@json$input, list(query = "SHOW DATABASES"))
 })
 
+test_that("value_turn() parses mcp_tool_use with string input from streaming", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_use",
+        id = "mcptoolu_2",
+        name = "execute_query",
+        server_name = "snowflake",
+        input = '{"query": "SHOW DATABASES"}'
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  mcp_content <- turn@contents[[1]]
+  expect_s7_class(mcp_content, ContentMcpToolRequest)
+  expect_equal(mcp_content@arguments, list(query = "SHOW DATABASES"))
+  expect_equal(mcp_content@json$input, list(query = "SHOW DATABASES"))
+})
+
+test_that("value_turn() parses mcp_tool_use with empty string input from streaming", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_use",
+        id = "mcptoolu_3",
+        name = "list_tools",
+        server_name = "snowflake",
+        input = "{}"
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  mcp_content <- turn@contents[[1]]
+  expect_s7_class(mcp_content, ContentMcpToolRequest)
+  expect_type(mcp_content@json$input, "list")
+})
+
 test_that("value_turn() parses mcp_tool_result content", {
   provider <- test_anthropic_provider()
 
