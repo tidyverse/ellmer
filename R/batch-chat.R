@@ -4,7 +4,7 @@
 #' `batch_chat()` and `batch_chat_structured()` currently only work with
 #' [chat_openai()], [chat_anthropic()], [chat_google_gemini()], and
 #' [chat_groq()]. They use the
-#' [OpenAI](https://platform.openai.com/docs/guides/batch),
+#' [OpenAI](https://developers.openai.com/api/docs/guides/batch),
 #' [Anthropic](https://docs.claude.com/en/docs/build-with-claude/batch-processing),
 #' [Google Gemini](https://ai.google.dev/gemini-api/docs/batch-api), and
 #' [Groq](https://console.groq.com/docs/batch) batch APIs which allow you

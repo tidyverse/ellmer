@@ -77,7 +77,7 @@ is not complete.
 \code{batch_chat()} and \code{batch_chat_structured()} currently only work with
 \code{\link[=chat_openai]{chat_openai()}}, \code{\link[=chat_anthropic]{chat_anthropic()}}, \code{\link[=chat_google_gemini]{chat_google_gemini()}}, and
 \code{\link[=chat_groq]{chat_groq()}}. They use the
-\href{https://platform.openai.com/docs/guides/batch}{OpenAI},
+\href{https://developers.openai.com/api/docs/guides/batch}{OpenAI},
 \href{https://docs.claude.com/en/docs/build-with-claude/batch-processing}{Anthropic},
 \href{https://ai.google.dev/gemini-api/docs/batch-api}{Google Gemini}, and
 \href{https://console.groq.com/docs/batch}{Groq} batch APIs which allow you

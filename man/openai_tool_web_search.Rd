@@ -26,7 +26,7 @@ Enables OpenAI models to search the web for up-to-date information. The search
 behavior varies by model: non-reasoning models perform simple searches, while
 reasoning models can perform agentic, iterative searches.
 
-Learn more at \url{https://platform.openai.com/docs/guides/tools-web-search}
+Learn more at \url{https://developers.openai.com/api/docs/guides/tools-web-search}
 }
 \examples{
 \dontrun{
