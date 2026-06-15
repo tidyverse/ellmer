@@ -81,7 +81,7 @@ prettify <- function(x) {
 
 check_echo <- function(echo = NULL) {
   if (identical(echo, "text")) {
-    lifecycle::deprecate_soft(
+    lifecycle::deprecate_warn(
       when = "0.2.0",
       what = I('`echo = "text"`'),
       with = I('`echo = "output"`')
