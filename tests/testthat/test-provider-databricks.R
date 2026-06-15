@@ -1,4 +1,4 @@
-test_that("can make simple batch request", {
+test_that("can make simple request", {
   chat <- chat_databricks(
     system_prompt = "Be as terse as possible; no punctuation"
   )

@@ -7,6 +7,8 @@ NULL
 #' Chat with an AWS bedrock model
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' [AWS Bedrock](https://aws.amazon.com/bedrock/) provides a number of
 #' language models, including those from Anthropic's
 #' [Claude](https://aws.amazon.com/bedrock/claude/), using the Bedrock
@@ -121,20 +123,7 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
     model = "",
     profile = profile,
   )
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "foundation-models")
-
-  resp <- req_perform(req)
-  json <- resp_body_json(resp)
-  models <- json$modelSummaries
-
-  df <- data.frame(
-    id = map_chr(models, "[[", "modelId"),
-    name = map_chr(models, "[[", "modelName"),
-    provider = map_chr(models, "[[", "providerName")
-  )
-  df <- cbind(df, match_prices("AWS/Bedrock", df$id))
-  df
+  models_list(provider)
 }
 
 chat_aws_bedrock_test <- function(
@@ -193,6 +182,31 @@ ProviderAWSBedrock <- new_class(
     cache_point = prop_string()
   )
 )
+
+method(models_list, ProviderAWSBedrock) <- function(provider) {
+  # ListFoundationModels uses the control-plane endpoint (bedrock.*) not the
+  # data-plane endpoint (bedrock-runtime.*) used for inference.
+  # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_ListFoundationModels.html
+  provider@base_url <- sub(
+    "bedrock-runtime",
+    "bedrock",
+    provider@base_url,
+    fixed = TRUE
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "foundation-models")
+  resp <- req_perform(req)
+  json <- resp_body_json(resp)
+  models <- json$modelSummaries
+
+  df <- data.frame(
+    id = map_chr(models, "[[", "modelId"),
+    name = map_chr(models, "[[", "modelName"),
+    provider = map_chr(models, "[[", "providerName")
+  )
+  cbind(df, match_prices("AWS/Bedrock", df$id))
+}
 
 method(base_request, ProviderAWSBedrock) <- function(provider) {
   creds <- paws_credentials(provider@profile, provider@cache)
@@ -268,7 +282,6 @@ method(chat_request, ProviderAWSBedrock) <- function(
     )
     tools[[tool_def@name]] <- tool_def
     tool_choice <- list(tool = list(name = tool_def@name))
-    stream <- FALSE
   } else {
     tool_choice <- NULL
   }

@@ -1,6 +1,8 @@
 #' Chat with a local Ollama model
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' To use `chat_ollama()` first download and install
 #' [Ollama](https://ollama.com). Then install some models either from the
 #' command line (e.g. with `ollama pull llama3.1`) or within R using
@@ -8,6 +10,25 @@
 #' `ollamar::pull("llama3.1")`).
 #'
 #' Built on top of [chat_openai_compatible()].
+#'
+#' ## Thinking models
+#'
+#' Some Ollama models (e.g. qwen3) support extended reasoning or "thinking".
+#' When using these models, thinking content is automatically captured in
+#' the turn. You can control thinking with
+#' `reasoning_effort`:
+#'
+#' ```r
+#' chat <- chat_ollama(
+#'   model = "qwen3:4b",
+#'   params = params(reasoning_effort = "none")
+#' )
+#' ```
+#'
+#' Which values are supported depends on the model. For example, qwen3 only
+#' supports `"none"` (off) vs the default (on), while gpt-oss supports
+#' `"low"`, `"medium"`, and `"high"` but ignores `"none"`. See
+#' <https://docs.ollama.com/capabilities/thinking> for details.
 #'
 #' ## Known limitations
 #'
@@ -118,7 +139,8 @@ method(chat_params, ProviderOllama) <- function(provider, params) {
       temperature = "temperature",
       top_p = "top_p",
       top_k = "top_k",
-      max_tokens = "max_tokens"
+      max_tokens = "max_tokens",
+      reasoning_effort = "reasoning_effort"
     )
   )
 }
@@ -153,8 +175,21 @@ models_ollama <- function(
     credentials = credentials
   )
 
+  provider <- ProviderOllama(
+    name = "Ollama",
+    model = "",
+    base_url = file.path(base_url, "v1"),
+    credentials = credentials
+  )
+
+  models_list(provider)
+}
+
+method(models_list, ProviderOllama) <- function(provider) {
+  base_url <- sub("/v1$", "", provider@base_url)
+
   req <- request(base_url)
-  req <- ellmer_req_credentials(req, credentials(), "Authorization")
+  req <- ellmer_req_credentials(req, provider@credentials(), "Authorization")
   req <- req_url_path_append(req, "api/tags")
   resp <- req_perform(req)
   json <- resp_body_json(resp)
@@ -169,7 +204,11 @@ models_ollama <- function(
     id = names,
     created_at = modified_at,
     size = size,
-    capabilities = ollama_model_capabilities(base_url, names, credentials)
+    capabilities = ollama_model_capabilities(
+      base_url,
+      names,
+      provider@credentials
+    )
   )
   df[order(-xtfrm(df$created_at)), ]
 }

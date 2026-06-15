@@ -100,6 +100,16 @@ Chat <- R6::R6Class(
       private$provider@model
     },
 
+    #' @description Update the model name. Note that unlike some of the
+    #'   `chat_*()` functions, the model name is not validated against available
+    #'   models for the provider.
+    #' @param model A single string giving the new model name.
+    set_model = function(model) {
+      check_string(model)
+      private$provider@model <- model
+      invisible(self)
+    },
+
     #' @description Update the system prompt
     #' @param value A character vector giving the new system prompt
     set_system_prompt = function(value) {
@@ -214,7 +224,10 @@ Chat <- R6::R6Class(
       if (echo == "none") text else invisible(text)
     },
 
-    #' @description Extract structured data
+    #' @description Extract structured data.
+    #'
+    #' Note: tool calling is disabled during structured data extraction. See
+    #' `vignette("structured-data")` for details and workarounds.
     #' @param ... The input to send to the chatbot. This is typically the text
     #'   you want to extract data from, but it can be omitted if the data is
     #'   obvious from the existing conversation.
@@ -236,10 +249,13 @@ Chat <- R6::R6Class(
       needs_wrapper <- type_needs_wrapper(type, private$provider)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
+      stream <- echo != "none" &&
+        !uses_tool_structured_output(private$provider, type)
+
       coro::collect(private$submit_turns(
         turn,
         type = type,
-        stream = echo != "none",
+        stream = stream,
         echo = echo,
         controller = stream_controller()
       ))
@@ -270,10 +286,13 @@ Chat <- R6::R6Class(
       needs_wrapper <- type_needs_wrapper(type, private$provider)
       type <- wrap_type_if_needed(type, needs_wrapper)
 
+      stream <- echo != "none" &&
+        !uses_tool_structured_output(private$provider, type)
+
       done <- coro::async_collect(private$submit_turns_async(
         turn,
         type = type,
-        stream = echo != "none",
+        stream = stream,
         echo = echo,
         controller = stream_controller()
       ))

@@ -215,6 +215,23 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
   as_json(provider, ContentText(string), ...)
 }
 
+# Models -------------------------------------------------------------------
+
+models_list <- new_generic("models_list", "provider", function(provider) {
+  S7_dispatch()
+})
+
+method(models_list, Provider) <- function(provider) {
+  cli::cli_abort(
+    "{.arg provider} doesn't support model listing.",
+    class = "not_implemented"
+  )
+}
+
+method(models_list, new_S3_class("Chat")) <- function(provider) {
+  models_list(provider$get_provider())
+}
+
 # Batch AI ---------------------------------------------------------------
 
 # Does the provider support batch uploads?

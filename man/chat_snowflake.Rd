@@ -52,6 +52,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
+
 The Snowflake provider allows you to interact with LLM models available
 through the \href{https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api}{Cortex LLM REST API}.
 \subsection{Authentication}{

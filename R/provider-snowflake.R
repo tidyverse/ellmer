@@ -5,6 +5,8 @@ NULL
 #' Chat with a model hosted on Snowflake
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' The Snowflake provider allows you to interact with LLM models available
 #' through the [Cortex LLM REST API](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api).
 #'

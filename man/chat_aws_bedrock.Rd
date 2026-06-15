@@ -79,6 +79,8 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
+
 \href{https://aws.amazon.com/bedrock/}{AWS Bedrock} provides a number of
 language models, including those from Anthropic's
 \href{https://aws.amazon.com/bedrock/claude/}{Claude}, using the Bedrock

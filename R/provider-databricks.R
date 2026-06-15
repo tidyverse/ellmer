@@ -1,6 +1,8 @@
 #' Chat with a model hosted on Databricks
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' Databricks provides out-of-the-box access to a number of [foundation
 #' models](https://docs.databricks.com/en/machine-learning/model-serving/score-foundation-models.html)
 #' and can also serve as a gateway for external models hosted by a third party.
@@ -123,10 +125,10 @@ method(chat_params, ProviderDatabricks) <- function(provider, params) {
     params,
     c(
       temperature = "temperature",
-      top_p = "topP",
-      top_k = "topK",
-      max_tokens = "maxTokens",
-      stop_sequences = "stopSequences"
+      topP = "top_p",
+      topK = "top_k",
+      maxTokens = "max_tokens",
+      stopSequences = "stop_sequences"
     )
   )
 }

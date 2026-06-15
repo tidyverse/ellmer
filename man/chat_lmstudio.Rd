@@ -57,6 +57,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
+
 To use \code{chat_lmstudio()} first download and install
 \href{https://lmstudio.ai}{LM Studio}. Then load a model using the LM Studio
 GUI and start the local server. To learn more about running LM Studio

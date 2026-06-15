@@ -5,6 +5,8 @@ NULL
 #' Chat with a local LM Studio model
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' To use `chat_lmstudio()` first download and install
 #' [LM Studio](https://lmstudio.ai). Then load a model using the LM Studio
 #' GUI and start the local server. To learn more about running LM Studio
@@ -150,8 +152,21 @@ models_lmstudio <- function(
     credentials = credentials
   )
 
+  provider <- ProviderLMStudio(
+    name = "LM Studio",
+    base_url = file.path(base_url, "v1"),
+    model = "",
+    credentials = credentials
+  )
+
+  models_list(provider)
+}
+
+method(models_list, ProviderLMStudio) <- function(provider) {
+  base_url <- sub("/v1$", "", provider@base_url)
+
   req <- request(base_url)
-  req <- ellmer_req_credentials(req, credentials(), "Authorization")
+  req <- ellmer_req_credentials(req, provider@credentials(), "Authorization")
   req <- req_url_path_append(req, "/v1/models")
   resp <- req_perform(req)
   json <- resp_body_json(resp)

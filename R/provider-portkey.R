@@ -1,6 +1,8 @@
 #' Chat with a model hosted on PortkeyAI
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' [PortkeyAI](https://portkey.ai/docs/product/ai-gateway/universal-api)
 #' provides an interface (AI Gateway) to connect through its Universal API to a
 #' variety of LLMs providers via a single endpoint.
@@ -53,8 +55,12 @@ chat_portkey <- function(
 
   # For backward compatibility
   if (!grepl("^@", model)) {
-    virtual_key <- virtual_key %||% key_get("PORTKEY_VIRTUAL_KEY")
-    model <- paste0("@", virtual_key, "/", model)
+    if (is.null(virtual_key) && key_exists("PORTKEY_VIRTUAL_KEY")) {
+      virtual_key <- key_get("PORTKEY_VIRTUAL_KEY")
+    }
+    if (!is.null(virtual_key)) {
+      model <- paste0("@", virtual_key, "/", model)
+    }
   }
 
   credentials <- as_credentials(
@@ -126,6 +132,10 @@ models_portkey <- function(
     credentials = function() api_key
   )
 
+  models_list(provider)
+}
+
+method(models_list, ProviderPortkeyAI) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)
@@ -135,9 +145,8 @@ models_portkey <- function(
   id <- map_chr(json$data, "[[", "id")
   slug <- map_chr(json$data, "[[", "slug")
 
-  df <- data.frame(
+  data.frame(
     id = id,
     slug = slug
   )
-  df
 }

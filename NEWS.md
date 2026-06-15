@@ -3,6 +3,14 @@
 * `mcp_connector()` creates a provider-hosted MCP server connection that can be registered with `$register_tool()`. Both `chat_anthropic()` and `chat_openai()` are supported. The provider connects to the MCP server on your behalf, handling tool discovery and execution server-side (#991).
 
 * `chat_anthropic()` and `chat_openai()` now handle server-side MCP tool content blocks (`mcp_tool_use`/`mcp_tool_result` for Anthropic; `mcp_list_tools`/`mcp_call` for OpenAI), allowing models to connect to remote MCP servers directly via the provider's API (thanks @klin333, #991).
+* `chat_portkey()` no longer errors when when using a custom Portkey gateway without the `PORTKEY_VIRTUAL_KEY` env var being set (@thisisnic, #872).
+* `chat_google_vertex()` and `models_google_vertex()` now default `location` and `project_id` to the `GOOGLE_CLOUD_LOCATION` and `GOOGLE_CLOUD_PROJECT` environment variables, no longer incorrectly use `GOOGLE_API_KEY` for authentication, and give a clearer error when cached credentials are invalid (@thisisnic, #994).
+* `models_groq()` lists available models for `chat_groq()` (@thisisnic, #921).
+* `chat_ollama()` now supports `params(reasoning_effort = ...)` to set thinking for reasoning models, and thinking content is now captured in turns (@thisisnic, #940).
+* `chat_google_gemini()` and `chat_google_vertex()` now support `params(reasoning_effort =)` (@thisisnic, #873).
+* `chat_anthropic()` now supports `params(reasoning_effort =)` for Claude's adaptive thinking mode (@thisisnic, #987).
+* `batch_chat()` now supports `chat_google_gemini()` for batch processing via the Gemini Developer API (@xmarquez, #914).
+* `Chat` gains a `set_model()` method for updating the model after chat creation. Unlike some `chat_*()` functions, the model name is not validated (#988).
 * `chat_perplexity()` now defaults to `model = "sonar"` since the previous default (`"llama-3.1-sonar-small-128k-online"`) has been removed by Perplexity (@thisisnic, #538).
 * `models_deepseek()` lists available models for `chat_deepseek()` (@jcrodriguez1989, #919).
 * `type_object(.additional_properties)` is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (@thisisnic, #866).

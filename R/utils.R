@@ -218,6 +218,23 @@ param_model <- function(default, provider = NULL) {
   )
 }
 
+support_badge <- function(tier = c("official", "community")) {
+  tier <- arg_match(tier)
+  alt <- paste0("[", tools::toTitleCase(tier), " supported provider]")
+  img <- paste0("support-", tier, ".svg")
+  paste0(
+    "\\ifelse{html}{",
+    "\\figure{",
+    img,
+    "}{options: alt='",
+    alt,
+    "'}",
+    "}{\\strong{",
+    alt,
+    "}}"
+  )
+}
+
 unrowname <- function(df) {
   rownames(df) <- NULL
   df

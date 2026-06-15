@@ -4,6 +4,8 @@ NULL
 #' Chat with a model hosted on CloudFlare
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' [Cloudflare](https://www.cloudflare.com/developer-platform/products/workers-ai/)
 #' Workers AI hosts a variety of open-source AI models. To use the Cloudflare
 #' API, you must have an Account ID and an Access Token, which you can obtain
