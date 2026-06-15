@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-deepseek.R
 \name{chat_deepseek}
 \alias{chat_deepseek}
+\alias{models_deepseek}
 \title{Chat with a model hosted on DeepSeek}
 \usage{
 chat_deepseek(
@@ -14,6 +15,12 @@ chat_deepseek(
   api_args = list(),
   echo = NULL,
   api_headers = character()
+)
+
+models_deepseek(
+  base_url = "https://api.deepseek.com",
+  api_key = NULL,
+  credentials = NULL
 )
 }
 \arguments{
@@ -54,6 +61,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
+
 Sign up at \url{https://platform.deepseek.com}.
 
 Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.

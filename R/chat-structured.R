@@ -22,6 +22,17 @@ extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
   out
 }
 
+# Tool-based structured output can't stream (#977)
+uses_tool_structured_output <- function(provider, type) {
+  if (S7_inherits(provider, ProviderAWSBedrock)) {
+    TRUE
+  } else if (S7_inherits(provider, ProviderAnthropic)) {
+    !has_claude_structured_output(provider@model)
+  } else {
+    FALSE
+  }
+}
+
 # OpenAI only works with objects, so we wrap and unwrap as needed
 type_needs_wrapper <- function(type, provider) {
   S7_inherits(provider, ProviderOpenAICompatible) &&
@@ -81,6 +92,9 @@ convert_from_type <- function(x, type) {
         string = NA_character_,
         cli::cli_abort("Unknown type {type@type}", .internal = TRUE)
       )
+    } else if (is.list(x) && length(x) == 1) {
+      # Some models intermittently wrap scalars in a JSON array (#931)
+      x[[1]]
     } else {
       x
     }

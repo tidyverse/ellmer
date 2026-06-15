@@ -8,6 +8,8 @@ NULL
 #' Chat with an OpenAI model
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' This is the main interface to [OpenAI](https://openai.com/)'s models,
 #' using the **responses API**. You can use this to access OpenAI's latest
 #' models and features like image generation and web search. If you need to use
@@ -111,23 +113,7 @@ models_openai <- function(
     credentials = credentials
   )
 
-  req <- base_request(provider)
-  req <- req_url_path_append(req, "/models")
-  resp <- req_perform(req)
-
-  json <- resp_body_json(resp)
-
-  id <- map_chr(json$data, "[[", "id")
-  created <- as.Date(.POSIXct(map_int(json$data, "[[", "created")))
-  owned_by <- map_chr(json$data, "[[", "owned_by")
-
-  df <- data.frame(
-    id = id,
-    created_at = created,
-    owned_by = owned_by
-  )
-  df <- cbind(df, match_prices(provider@name, df$id))
-  df[order(-xtfrm(df$created_at)), ]
+  models_list(provider)
 }
 
 chat_openai_test <- function(
@@ -230,7 +216,7 @@ method(chat_params, ProviderOpenAI) <- function(provider, params) {
       temperature = "temperature",
       top_p = "top_p",
       frequency_penalty = "frequency_penalty",
-      max_tokens = "max_output_tokens",
+      max_output_tokens = "max_tokens",
       log_probs = "log_probs",
       top_logprobs = "top_k",
       reasoning_effort = "reasoning_effort"

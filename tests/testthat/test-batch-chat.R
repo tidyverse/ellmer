@@ -147,7 +147,7 @@ test_that("step_until_done returns NULL when wait = FALSE and not complete", {
   expect_null(job$step_until_done())
 })
 
-test_that("batch_chat/batch_chat_structured return NULL when wait = FALSE and not complete", {
+test_that("batch_chat_* return NULL when wait = FALSE and not complete", {
   local_mocked_bindings(
     batch_submit = function(...) list(id = "123"),
     batch_poll = function(...) list(id = "123", results = TRUE),
@@ -162,6 +162,14 @@ test_that("batch_chat/batch_chat_structured return NULL when wait = FALSE and no
     wait = FALSE
   )
   expect_null(result_chat)
+
+  result_text <- batch_chat_text(
+    chat_openai_test(),
+    list("What's your name"),
+    path = path,
+    wait = FALSE
+  )
+  expect_null(result_text)
 
   result_structured <- batch_chat_structured(
     chat_openai_test(),

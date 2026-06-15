@@ -4,6 +4,8 @@ NULL
 #' Chat with a model hosted on perplexity.ai
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' Sign up at <https://www.perplexity.ai>.
 #'
 #' Perplexity AI is a platform for running LLMs that are capable of
@@ -18,7 +20,7 @@ NULL
 #' @family chatbots
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("PERPLEXITY_API_KEY")`
-#' @param model `r param_model("llama-3.1-sonar-small-128k-online")`
+#' @param model `r param_model("sonar")`
 #' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -38,7 +40,7 @@ chat_perplexity <- function(
   echo = NULL,
   api_headers = character()
 ) {
-  model <- set_default(model, "llama-3.1-sonar-small-128k-online")
+  model <- set_default(model, "sonar")
   echo <- check_echo(echo)
 
   credentials <- as_credentials(

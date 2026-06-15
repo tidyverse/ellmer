@@ -51,6 +51,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
+
 Sign up at \url{https://openrouter.ai}.
 
 Support for features depends on the underlying model that you use; see
