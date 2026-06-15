@@ -322,8 +322,8 @@ obvious from the existing conversation.}
       \item{\code{type}}{A type specification for the extracted data. Should be
 created with a \code{\link[=type_boolean]{type_()}} function.}
       \item{\code{echo}}{Whether to emit the response to stdout as it is received.
-Set to "text" to stream JSON data as it's generated (not supported by
-all providers).}
+Set to "output" to stream JSON data as it's generated (not
+supported by all providers).}
       \item{\code{convert}}{Automatically convert from JSON lists to R data types
 using the schema. For example, this will turn arrays of objects into
 data frames and arrays of strings into a character vector.}
@@ -351,8 +351,8 @@ the phrase "extract structured data".}
       \item{\code{type}}{A type specification for the extracted data. Should be
 created with a \code{\link[=type_boolean]{type_()}} function.}
       \item{\code{echo}}{Whether to emit the response to stdout as it is received.
-Set to "text" to stream JSON data as it's generated (not supported by
-all providers).}
+Set to "output" to stream JSON data as it's generated (not
+supported by all providers).}
       \item{\code{convert}}{Automatically convert from JSON lists to R data types
 using the schema. For example, this will turn arrays of objects into
 data frames and arrays of strings into a character vector.}

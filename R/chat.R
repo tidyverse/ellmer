@@ -234,8 +234,8 @@ Chat <- R6::R6Class(
     #' @param type A type specification for the extracted data. Should be
     #'   created with a [`type_()`][type_boolean] function.
     #' @param echo Whether to emit the response to stdout as it is received.
-    #'   Set to "text" to stream JSON data as it's generated (not supported by
-    #'   all providers).
+    #'   Set to "output" to stream JSON data as it's generated (not
+    #'   supported by all providers).
     #' @param convert Automatically convert from JSON lists to R data types
     #'   using the schema. For example, this will turn arrays of objects into
     #'   data frames and arrays of strings into a character vector.
@@ -271,8 +271,8 @@ Chat <- R6::R6Class(
     #' @param type A type specification for the extracted data. Should be
     #'   created with a [`type_()`][type_boolean] function.
     #' @param echo Whether to emit the response to stdout as it is received.
-    #'   Set to "text" to stream JSON data as it's generated (not supported by
-    #'   all providers).
+    #'   Set to "output" to stream JSON data as it's generated (not
+    #'   supported by all providers).
     #' @param convert Automatically convert from JSON lists to R data types
     #'   using the schema. For example, this will turn arrays of objects into
     #'   data frames and arrays of strings into a character vector.
