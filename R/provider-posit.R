@@ -10,11 +10,6 @@ NULL
 #' [Posit AI](https://posit.ai) provides access to a curated set of models
 #' for Posit subscribers.
 #'
-#' The gateway exposes two API flavors: Claude models
-#' are served via the Anthropic Messages API and all other models are served
-#' via an OpenAI-compatible API. `chat_posit()` automatically picks the
-#' appropriate flavor based on the model name.
-#'
 #' ## Authentication
 #'
 #' By default, `chat_posit()` authenticates with an OAuth device flow against
@@ -30,8 +25,7 @@ NULL
 #' @param model `r param_model("claude-sonnet-4-6", "posit")`
 #' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
 #'   Set to "none" to disable caching or "1h" to cache for one hour. This is
-#'   only supported for Claude models, which are served via the Anthropic
-#'   Messages API, and is ignored for other models.
+#'   only supported for Claude models and is ignored for other models.
 #' @inheritParams chat_openai
 #' @inheritParams chat_anthropic
 #' @inherit chat_openai return
