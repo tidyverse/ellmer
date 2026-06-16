@@ -13,8 +13,8 @@ with_tool_context(context, code)
 local_tool_context(context, .frame = parent.frame())
 }
 \arguments{
-\item{context}{An \code{ellmer_tool_context} object. Fabricate one in tests as
-\code{structure(list(request = ..., store = ..., turns = ...), class = "ellmer_tool_context")}.}
+\item{context}{An \code{ellmer_tool_context} object, or a list with fields
+\code{request}, \code{store}, and \code{turns} (which will be promoted automatically).}
 
 \item{code}{An expression to evaluate with \code{context} on top of the stack.}
 
@@ -102,11 +102,7 @@ counter_tool <- tool(
 # Test a tool that uses tool_context() without a live chat
 test_store <- new.env(parent = emptyenv())
 test_store$n <- 0L
-fake_ctx <- structure(
-  list(request = NULL, store = test_store, turns = list()),
-  class = "ellmer_tool_context"
-)
-local_tool_context(fake_ctx)
-# now tool_context() returns fake_ctx inside this frame
+local_tool_context(list(request = NULL, store = test_store, turns = list()))
+# now tool_context() returns the context inside this frame
 
 }

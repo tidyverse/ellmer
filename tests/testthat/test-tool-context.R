@@ -88,6 +88,44 @@ test_that("nested with_tool_context(): inner top wins; depth restored", {
   expect_equal(length(the$tool_context_stack), 0L)
 })
 
+test_that("with_tool_context() auto-promotes a plain list", {
+  store <- new.env(parent = emptyenv())
+  store$x <- 1L
+  ctx_list <- list(request = NULL, store = store, turns = list("a"))
+
+  result <- with_tool_context(ctx_list, tool_context())
+
+  expect_s3_class(result, "ellmer_tool_context")
+  expect_identical(result$store, store)
+  expect_equal(result$turns, list("a"))
+})
+
+test_that("local_tool_context() auto-promotes a plain list", {
+  store <- new.env(parent = emptyenv())
+  ctx_list <- list(request = NULL, store = store, turns = list())
+
+  helper <- function() {
+    local_tool_context(ctx_list)
+    tool_context()
+  }
+  result <- helper()
+
+  expect_s3_class(result, "ellmer_tool_context")
+  expect_identical(result$store, store)
+})
+
+test_that("as_tool_context() errors on non-list, non-context input", {
+  expect_snapshot(with_tool_context("not a list", NULL), error = TRUE)
+})
+
+test_that("as_tool_context() fills in defaults for omitted fields", {
+  result <- with_tool_context(list(), tool_context())
+  expect_s3_class(result, "ellmer_tool_context")
+  expect_null(result$request)
+  expect_type(result$store, "environment")
+  expect_equal(result$turns, list())
+})
+
 test_that("new_tool_context() builds correct structure", {
   store <- new.env(parent = emptyenv())
   ctx <- new_tool_context(request = "req", store = store, turns = list())
