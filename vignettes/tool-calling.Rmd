@@ -246,11 +246,19 @@ Tools can access private, per-conversation state and per-call metadata without e
 Here is a simple counter that tracks how many times it has been called:
 
 ```{r}
-#| eval: false
+#| label: tool-context
+#| cassette: true
 
 counter_tool <- tool(
   function() {
     ctx <- tool_context()
+
+    # Read the tool request
+    id <- ctx$request@id
+    id <- substr(id, nchar(id) - 8, nchar(id))
+    cli::cli_alert_info("Counter called (id: ...{id})")
+
+    # Update the chat store
     ctx$store$n <- (ctx$store$n %||% 0L) + 1L
     ctx$store$n
   },

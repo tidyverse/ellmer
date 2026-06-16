@@ -1,0 +1,266 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Call
+        the counter three times."}]}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","name":"tool_001","description":"Increment
+        and return the call counter.","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: a0cc398e9fb46a46-ATL
+      content-encoding: gzip
+      content-type: application/json
+      date: Tue, 16 Jun 2026 19:29:42 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '618'
+      openai-project: proj_OgLNNoeNNrPmtkuM5FLTMdBQ
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=XurqJZXsDY17BPOXy_ft9SGpI1GVYfEHeNqgEqYrwy0-1781638182.180999-1.0.1.1-rNJIEuOPAeZ5jO0kDKvYGHuWgKb6BuRbNK5VB0SttLF_jmPUF5Vt09OmcVOnHb9WdGUjfOO4rP5pw0rpIHkgSD.ZmzTdoIoN9OCZSw3WJyhpCK7H6T4UmVrnBFcv5PFa;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        16 Jun 2026 19:59:42 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '30000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '30000000'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_af2676c095c74a7fb583e93a017780c4
+    body:
+      string: |-
+        {
+          "id": "resp_0819778b797c6b49016a31a4264da4819fbd98e36a0b5fd199",
+          "object": "response",
+          "created_at": 1781638182,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "completed_at": 1781638182,
+          "error": null,
+          "frequency_penalty": 0.0,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-2025-04-14",
+          "moderation": null,
+          "output": [
+            {
+              "id": "fc_0819778b797c6b49016a31a426df20819f9ca5a35c8df7c1e3",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{}",
+              "call_id": "call_X0Tkd1wIJ5w6Qiot3153NsTp",
+              "name": "tool_001"
+            },
+            {
+              "id": "fc_0819778b797c6b49016a31a426df30819fb873b05718fe81f1",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{}",
+              "call_id": "call_8j3qQUyA1ccCrguivIRtsLrB",
+              "name": "tool_001"
+            },
+            {
+              "id": "fc_0819778b797c6b49016a31a426df34819f93d213fe6e84358d",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{}",
+              "call_id": "call_LqYyfxnILlmVgEGg8AifFTya",
+              "name": "tool_001"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": "in_memory",
+          "reasoning": {
+            "context": null,
+            "effort": null,
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Increment and return the call counter.",
+              "name": "tool_001",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 39,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 54,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 93
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2026-06-16 19:29:42
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Call
+        the counter three times."}]},{"type":"function_call","call_id":"fc_0819778b797c6b49016a31a426df20819f9ca5a35c8df7c1e3","name":"tool_001","arguments":"{}"},{"type":"function_call","call_id":"fc_0819778b797c6b49016a31a426df30819fb873b05718fe81f1","name":"tool_001","arguments":"{}"},{"type":"function_call","call_id":"fc_0819778b797c6b49016a31a426df34819f93d213fe6e84358d","name":"tool_001","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0819778b797c6b49016a31a426df20819f9ca5a35c8df7c1e3","output":"1"},{"type":"function_call_output","call_id":"fc_0819778b797c6b49016a31a426df30819fb873b05718fe81f1","output":"2"},{"type":"function_call_output","call_id":"fc_0819778b797c6b49016a31a426df34819f93d213fe6e84358d","output":"3"}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","name":"tool_001","description":"Increment
+        and return the call counter.","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: a0cc39946a4b6a46-ATL
+      content-encoding: gzip
+      content-type: application/json
+      date: Tue, 16 Jun 2026 19:29:45 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '2419'
+      openai-project: proj_OgLNNoeNNrPmtkuM5FLTMdBQ
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=058Fhng132kgddd4ka8j5uQ59S2OSN6DqjqnsEaOFwo-1781638183.1088817-1.0.1.1-owDwrujp3ffjjaHsbkkMm5buHSFXwCXg.m23ZL_jQLrJBResteCdaXSV6DY5laT75STFbl481G5m7dW9pf1XIcBkCNgmlmBmxJ6aBCiVtnQMuXQDefkl66wALKQAZO2D;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        16 Jun 2026 19:59:45 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '10000'
+      x-ratelimit-limit-tokens: '30000000'
+      x-ratelimit-remaining-requests: '9999'
+      x-ratelimit-remaining-tokens: '30000000'
+      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_0a0c8053b9b4479387454e772a374da2
+    body:
+      string: |-
+        {
+          "id": "resp_08a867db2f11c46b016a31a4272d4881a0956e98c53cac292e",
+          "object": "response",
+          "created_at": 1781638183,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "completed_at": 1781638185,
+          "error": null,
+          "frequency_penalty": 0.0,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-2025-04-14",
+          "moderation": null,
+          "output": [
+            {
+              "id": "msg_08a867db2f11c46b016a31a427ab4481a0a2b187a49b5c27e1",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "The counter has been called three times. The results for each call are:\n\n1st call: 1\n2nd call: 2\n3rd call: 3"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": "in_memory",
+          "reasoning": {
+            "context": null,
+            "effort": null,
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Increment and return the call counter.",
+              "name": "tool_001",
+              "parameters": {
+                "type": "object",
+                "description": "",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 96,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 37,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 133
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2026-06-16 19:29:45
+recorded_with: VCR-vcr/2.1.0
