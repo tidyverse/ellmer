@@ -479,6 +479,7 @@ Chat <- R6::R6Class(
     tools = list(),
     callback_on_tool_request = NULL,
     callback_on_tool_result = NULL,
+    store_env = NULL,
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
@@ -856,9 +857,60 @@ Chat <- R6::R6Class(
           request = req
         )
       })
+    },
+
+    deep_clone = function(name, value) {
+      if (name == "store_env") {
+        return(clone_store_env(value))
+      }
+      value
+    }
+  ),
+  active = list(
+    #' @field store A per-conversation environment for storing arbitrary
+    #'   runtime state. Tools can read and mutate this environment by reference
+    #'   via `tool_context()$store`, and the same environment is accessible
+    #'   directly on the chat object. The store persists across multiple
+    #'   `$chat()` calls for the lifetime of the `Chat` object.
+    #'
+    #'   Assign to `chat$store` to replace the entire store with a new
+    #'   environment. Reading `chat$store` lazily creates an empty environment
+    #'   (with `emptyenv()` as parent) on the first access.
+    #'
+    #'   Use `chat$clone(deep = TRUE)` to obtain a chat with an independent
+    #'   copy of the store. A shallow `chat$clone()` shares the store by
+    #'   reference across clones, which is intentional for use cases where
+    #'   clones should observe the same state.
+    #'
+    #'   Note that the store holds runtime state. Non-serializable objects
+    #'   (database connections, loggers, file handles) stored here will not
+    #'   survive `saveRDS()` / `readRDS()`.
+    store = function(value) {
+      if (missing(value)) {
+        if (is.null(private$store_env)) {
+          private$store_env <- new.env(parent = emptyenv())
+        }
+        return(private$store_env)
+      }
+      if (!is.environment(value)) {
+        cli::cli_abort("{.code chat$store} must be an environment.")
+      }
+      private$store_env <- value
+      invisible(self)
     }
   )
 )
+
+clone_store_env <- function(env) {
+  if (is.null(env)) {
+    return(NULL)
+  }
+  new <- new.env(parent = emptyenv())
+  for (k in ls(env, all.names = TRUE)) {
+    assign(k, get(k, env), new)
+  }
+  new
+}
 
 #' @export
 print.Chat <- function(x, ...) {

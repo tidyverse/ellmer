@@ -98,3 +98,11 @@
       Error in `chat$stream_async()`:
       ! `controller` must be an <ellmer_stream_controller> object created by `stream_controller()`.
 
+# chat$store setter rejects non-environment
+
+    Code
+      chat$store <- list(x = 1)
+    Condition
+      Error:
+      ! `chat$store` must be an environment.
+
