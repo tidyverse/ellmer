@@ -28,6 +28,10 @@ NULL
 #'   (an access token, sent as a bearer token) or a named list of headers.
 #'   Defaults to the OAuth device flow described above.
 #' @param model `r param_model("claude-sonnet-4-6", "posit")`
+#' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
+#'   Set to "none" to disable caching or "1h" to cache for one hour. This is
+#'   only supported for Claude models, which are served via the Anthropic
+#'   Messages API, and is ignored for other models.
 #' @inheritParams chat_openai
 #' @inheritParams chat_anthropic
 #' @inherit chat_openai return
@@ -180,23 +184,17 @@ posit_bearer_credentials <- function(credentials) {
 
 default_posit_credentials <- function() {
   client <- posit_oauth_client()
-  cache <- quiet_token_cache(client)
   function() {
     function(req) {
-      # `req_oauth_device()` builds its own (noisy) cache, so drop to
-      # `req_oauth()` to inject the quiet one.
-      req_oauth(
+      req_oauth_device(
         req,
-        "oauth_flow_device",
-        flow_params = list(
-          client = client,
-          auth_url = "https://login.posit.cloud/oauth/device/authorize",
-          scope = "prism",
-          # posit.cloud only mints a gateway-authorized token when `scope` is
-          # also sent on the token exchange, not just the authorize request.
-          token_params = list(scope = "prism")
-        ),
-        cache = cache
+        client = client,
+        auth_url = "https://login.posit.cloud/oauth/device/authorize",
+        scope = "prism",
+        # posit.cloud only mints a gateway-authorized token when `scope` is
+        # also sent on the token exchange, not just the authorize request.
+        token_params = list(scope = "prism"),
+        cache_disk = TRUE
       )
     }
   }
@@ -212,27 +210,6 @@ posit_oauth_client <- function() {
 
 posit_oauth_reset <- function() {
   httr2::oauth_cache_clear(posit_oauth_client(), cache_disk = TRUE)
-}
-
-# httr2's disk cache announces every token write with an informational
-# message; wrap its setter to muffle just that one message. The base cache is
-# reused (rather than reimplemented) so the on-disk location, format, and
-# encryption stay identical to httr2's own.
-quiet_token_cache <- function(client) {
-  cache_disk <- utils::getFromNamespace("cache_disk", "httr2")
-  cache <- cache_disk(client)
-  set <- cache$set
-  cache$set <- function(token) {
-    withCallingHandlers(
-      set(token),
-      message = function(cnd) {
-        if (grepl("Caching httr2 token", conditionMessage(cnd), fixed = TRUE)) {
-          invokeRestart("muffleMessage")
-        }
-      }
-    )
-  }
-  cache
 }
 
 posit_error_body <- function(resp) {
