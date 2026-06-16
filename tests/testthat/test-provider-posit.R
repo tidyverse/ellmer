@@ -49,9 +49,6 @@ test_that("gateway-specific errors get useful messages", {
     "service agreement"
   )
 
-  depleted <- response_json(status = 402L, body = list())
-  expect_match(posit_error_body(depleted), "credits are depleted")
-
   other <- response_json(
     status = 400L,
     body = list(error = list(message = "bad request"))

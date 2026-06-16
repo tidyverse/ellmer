@@ -218,23 +218,23 @@ posit_error_body <- function(resp) {
     error = function(cnd) NULL
   )
 
-  error <- json$error
-  error_type <- json$error_type %||% (if (is.list(error)) error$error_type)
-  if (identical(error_type, "prism_account_not_found")) {
+  # The gateway's own message here leaks an internal user ID and gives no
+  # actionable next step, so substitute a clearer one.
+  if (identical(json$error_type, "prism_account_not_found")) {
     return(c(
       "You must finish setting up your Posit AI account before using the API.",
       i = "Visit <https://posit.ai/> to accept the service agreement."
     ))
   }
-  if (resp_status(resp) == 402) {
-    return("Your Posit AI credits are depleted.")
-  }
 
+  # The gateway reports its own errors with a string `error`, but passes
+  # upstream Anthropic/OpenAI errors through verbatim, where it's an object.
+  error <- json$error
   if (is_string(error)) {
     error
   } else if (is.list(error)) {
     error$message
   } else {
-    json$message %||% prettify(resp_body_string(resp))
+    prettify(resp_body_string(resp))
   }
 }
