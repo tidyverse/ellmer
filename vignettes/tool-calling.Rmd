@@ -264,15 +264,40 @@ chat$chat("Call the counter three times.")
 chat$store$n   # 3; persists across $chat() calls
 ```
 
-You can also pre-seed the store before chatting, or inspect it afterwards, via `chat$store`:
+You can also pre-seed the store before chatting, or inspect it afterwards, via `chat$store`. This is a good place to keep credentials and per-user details that tools need but the model should never see, such as the user's email and an auth token:
 
 ```{r}
 #| eval: false
 
-chat$store$db <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+chat$store$user_email <- "hadley@posit.co"
+chat$store$auth_token <- "tok_simulated_4f3b2a1c"   # e.g. from your auth flow
 ```
 
-Note that the store is runtime state: non-serializable handles such as database connections will not survive `saveRDS()`. Use `clone(deep = TRUE)` if you need a chat copy with its own independent store.
+A tool can then read these from `tool_context()$store` to act on the user's behalf without the token ever appearing in the conversation:
+
+```{r}
+#| eval: false
+
+send_email_tool <- tool(
+  function(subject, body) {
+    ctx <- tool_context()
+    send_email(
+      to = ctx$store$user_email,
+      token = ctx$store$auth_token,
+      subject = subject,
+      body = body
+    )
+    "Email sent."
+  },
+  description = "Send an email to the current user.",
+  arguments = list(
+    subject = type_string("The email subject."),
+    body = type_string("The email body.")
+  )
+)
+```
+
+Note that the store is runtime state: non-serializable handles such as auth tokens or database connections will not survive `saveRDS()`. Use `clone(deep = TRUE)` if you need a chat copy with its own independent store.
 
 **Async tools:** in an async tool, `tool_context()` is only valid during the synchronous prefix of the function — before the first `await()`. Capture it at the top of your tool body:
 
