@@ -103,7 +103,7 @@ tool_context <- function() {
 #' @export
 with_tool_context <- function(context, code) {
   push_tool_context(context)
-  on.exit(pop_tool_context(), add = TRUE)
+  withr::defer(pop_tool_context())
   force(code)
 }
 
