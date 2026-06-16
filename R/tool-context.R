@@ -54,9 +54,6 @@ NULL
 #'   provider side and never reach `invoke_tool()`, so `tool_context()` is
 #'   not applicable to them.
 #' - MCP `ToolDef` tools run through `invoke_tool()` and are fully supported.
-#' - `$store` is runtime state. Non-serializable handles (database
-#'   connections, logger objects) stored in `$store` will not survive
-#'   `saveRDS()`.
 #'
 #' @return `tool_context()` returns the current `ellmer_tool_context` object
 #'   (a classed list with fields `$request`, `$store`, `$turns`).

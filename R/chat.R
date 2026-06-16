@@ -885,17 +885,10 @@ Chat <- R6::R6Class(
     #'   environment. Reading `chat$store` lazily creates an empty environment
     #'   (with `emptyenv()` as parent) on the first access.
     #'
-    #'   Use `chat$clone(deep = TRUE)` to obtain a chat whose store is a fresh
-    #'   environment with the same top-level bindings. The bindings themselves
-    #'   are copied shallowly: nested mutable objects (environments, R6
-    #'   objects, connections) remain shared by reference with the original
-    #'   store. A shallow `chat$clone()` shares the whole store by reference
-    #'   across clones, which is intentional for use cases where clones should
-    #'   observe the same state.
-    #'
-    #'   Note that the store holds runtime state. Non-serializable objects
-    #'   (database connections, loggers, file handles) stored here will not
-    #'   survive `saveRDS()` / `readRDS()`.
+    #'   `chat$clone()` gives the clone an independent copy of the store.
+    #'   Top-level bindings are copied shallowly: nested mutable objects
+    #'   (environments, R6 objects, connections) remain shared by reference
+    #'   with the original store.
     store = function(value) {
       if (missing(value)) {
         if (is.null(private$store_env)) {
@@ -911,6 +904,32 @@ Chat <- R6::R6Class(
     }
   )
 )
+
+# Clone override: make clone() always deep-clone.
+#
+# R6's shallow clone() shares environments by reference, which means
+# chat$store would be shared across clones. Cloning is a common workflow
+# (e.g. forking a chat to try different prompts), and the person cloning
+# may not be the person who wrote the tools — so a shared store is a
+# silent cross-contamination bug. We need clone() to eagerly fork the
+# store so each clone gets independent state.
+#
+# R6 doesn't let you define "clone" in the class (reserved name), but you
+# can replace it after creation via $set(overwrite = TRUE). We save R6's
+# real clone implementation, then install a wrapper that always calls it
+# with deep = TRUE. Our private deep_clone() method handles the actual
+# store forking; all other fields pass through unchanged.
+#
+# The env rebinding (self$.__enclos_env__) is needed because R6's clone
+# uses the calling environment to find `self` and `private`.
+#
+# See: https://github.com/r-lib/R6/issues/178
+chat_real_clone <- Chat$public_methods$clone
+Chat$set("public", "clone", overwrite = TRUE, function() {
+  bound <- chat_real_clone
+  environment(bound) <- self$.__enclos_env__
+  bound(deep = TRUE)
+})
 
 clone_store_env <- function(env) {
   if (is.null(env)) {

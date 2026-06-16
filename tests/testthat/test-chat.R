@@ -507,34 +507,24 @@ test_that("chat$store setter accepts a replacement environment", {
   expect_equal(chat$store$x, 42L)
 })
 
-test_that("clone(deep = TRUE) gives an independent store", {
-  chat <- chat_openai_test()
-  chat$store$n <- 1L
-
-  cloned <- chat$clone(deep = TRUE)
-  cloned$store$n <- 99L
-
-  expect_equal(chat$store$n, 1L)
-  expect_equal(cloned$store$n, 99L)
-})
-
-test_that("shallow clone() shares the store by reference", {
+test_that("clone() forks the store on first access", {
   chat <- chat_openai_test()
   chat$store$n <- 1L
 
   cloned <- chat$clone()
   cloned$store$n <- 99L
 
-  expect_equal(chat$store$n, 99L)
+  expect_equal(chat$store$n, 1L)
+  expect_equal(cloned$store$n, 99L)
 })
 
-test_that("clone(deep = TRUE) preserves the store's parent environment", {
+test_that("clone() preserves the store's parent environment", {
   chat <- chat_openai_test()
   parent <- new.env()
   parent$shared <- 1L
   chat$store <- new.env(parent = parent)
 
-  cloned <- chat$clone(deep = TRUE)
+  cloned <- chat$clone()
 
   expect_identical(parent.env(cloned$store), parent)
   expect_equal(get("shared", cloned$store), 1L)

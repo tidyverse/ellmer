@@ -98,7 +98,7 @@ batch_chat <- function(chat, prompts, path, wait = TRUE, ignore_hash = FALSE) {
   map2(job$user_turns, assistant_turns, function(user, assistant) {
     if (!is.null(assistant)) {
       # Logged on retrieval
-      chat$clone(deep = TRUE)$add_turn(user, assistant, log_tokens = FALSE)
+      chat$clone()$add_turn(user, assistant, log_tokens = FALSE)
     } else {
       NULL
     }

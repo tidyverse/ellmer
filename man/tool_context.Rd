@@ -85,9 +85,6 @@ at the top of the tool body before any \code{await()} call:
 provider side and never reach \code{invoke_tool()}, so \code{tool_context()} is
 not applicable to them.
 \item MCP \code{ToolDef} tools run through \code{invoke_tool()} and are fully supported.
-\item \verb{$store} is runtime state. Non-serializable handles (database
-connections, logger objects) stored in \verb{$store} will not survive
-\code{saveRDS()}.
 }
 }
 
