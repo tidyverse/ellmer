@@ -238,3 +238,57 @@ chat$chat("Describe the design aesthetic of https://tidyverse.org")
 #> Overall, the design communicates clarity, ease of use, and a focus on
 #> modern data science tools.
 ```
+
+### Tool context
+
+Tools can access private, per-conversation state and per-call metadata without exposing them to the model. Inside a tool body, `tool_context()` returns a context object with three fields: `$request` (the `ContentToolRequest` for this call), `$store` (the chat's shared store), and `$turns` (a snapshot of the conversation history up to this point). The store is an ordinary R environment, so mutations are by reference and persist across `$chat()` calls for the lifetime of the chat object. `ctx$store` and `chat$store` are the same object.
+
+Here is a simple counter that tracks how many times it has been called:
+
+```{r}
+#| eval: false
+
+counter_tool <- tool(
+  function() {
+    ctx <- tool_context()
+    ctx$store$n <- (ctx$store$n %||% 0L) + 1L
+    ctx$store$n
+  },
+  description = "Increment and return the call counter.",
+  arguments = list()
+)
+
+chat <- chat_openai()
+chat$register_tool(counter_tool)
+chat$chat("Call the counter three times.")
+chat$store$n   # 3; persists across $chat() calls
+```
+
+You can also pre-seed the store before chatting, or inspect it afterwards, via `chat$store`:
+
+```{r}
+#| eval: false
+
+chat$store$db <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+```
+
+Note that the store is runtime state: non-serializable handles such as database connections will not survive `saveRDS()`. Use `clone(deep = TRUE)` if you need a chat copy with its own independent store.
+
+**Async tools:** in an async tool, `tool_context()` is only valid during the synchronous prefix of the function — before the first `await()`. Capture it at the top of your tool body:
+
+```{r}
+#| eval: false
+
+my_async_tool <- tool(
+  coro::async(function() {
+    ctx <- tool_context()   # capture before any await()
+    result <- await(some_async_call())
+    ctx$store$log <- c(ctx$store$log, result)  # safe: ctx$store is an env
+    result
+  }),
+  description = "An async tool that logs its result.",
+  arguments = list()
+)
+```
+
+`tool_context()` will error with a clear message if called after an `await()` or outside a tool invocation. Built-in provider tools (such as `claude_tool_web_search()`) run provider-side and do not support `tool_context()`; MCP tools do.
