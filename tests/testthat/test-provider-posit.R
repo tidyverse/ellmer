@@ -61,3 +61,29 @@ test_that("gateway-specific errors get useful messages", {
   )
   expect_equal(posit_error_body(string_error), "bad request")
 })
+
+# Checking the cache before calling models_posit() keeps an unauthenticated
+# machine from triggering (and hanging on) the interactive device flow.
+available_posit_models <- function() {
+  skip_if_offline()
+  cache_dir <- file.path(httr2::oauth_cache_path(), posit_oauth_client()$name)
+  if (length(dir(cache_dir, pattern = "token")) == 0) {
+    skip("not authenticated with Posit AI")
+  }
+  tryCatch(
+    models_posit()$id,
+    error = function(cnd) skip("could not list Posit AI models")
+  )
+}
+
+test_that("supports tool calling with Claude models", {
+  model <- "claude-sonnet-4-6"
+  skip_if_not(model %in% available_posit_models())
+  test_tools_simple(\(...) chat_posit(model = model, ...))
+})
+
+test_that("supports tool calling with Gemma models", {
+  model <- "google/gemma-4-26B-A4B-it"
+  skip_if_not(model %in% available_posit_models())
+  test_tools_simple(\(...) chat_posit(model = model, ...))
+})
