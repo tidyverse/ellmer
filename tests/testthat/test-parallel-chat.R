@@ -69,6 +69,99 @@ test_that("can have uneven number of turns", {
   expect_equal(text, c("You rolled 1", "boop", "You rolled 2", "beep"))
 })
 
+# tool context / store isolation -----------------------------------------------
+
+test_that("parallel conversations get independent stores via invoke_tools", {
+  counting_tool <- tool(
+    function() {
+      ctx <- tool_context()
+      ctx$store$n <- (ctx$store$n %||% 0L) + 1L
+      ctx$store$n
+    },
+    name = "count",
+    description = "Increments a per-conversation counter."
+  )
+
+  make_turn <- function() {
+    req <- ContentToolRequest(
+      id = "r1",
+      name = "count",
+      arguments = list(),
+      tool = counting_tool
+    )
+    AssistantTurn(list(req))
+  }
+
+  store1 <- new.env(parent = emptyenv())
+  store2 <- new.env(parent = emptyenv())
+  conv <- list()
+
+  coro::collect(invoke_tools(
+    make_turn(),
+    tool_context = tool_context_factory(store1, conv)
+  ))
+  coro::collect(invoke_tools(
+    make_turn(),
+    tool_context = tool_context_factory(store1, conv)
+  ))
+  coro::collect(invoke_tools(
+    make_turn(),
+    tool_context = tool_context_factory(store2, conv)
+  ))
+
+  expect_equal(store1$n, 2L)
+  expect_equal(store2$n, 1L)
+})
+
+test_that("parallel_chat gives each conversation an independent store", {
+  counting_tool <- tool(
+    function() {
+      ctx <- tool_context()
+      ctx$store$n <- (ctx$store$n %||% 0L) + 1L
+      ctx$store$n
+    },
+    name = "count",
+    description = "Increments a per-conversation counter."
+  )
+
+  chat <- chat_openai(
+    credentials = \() "test-key",
+    base_url = "http://localhost:1234",
+    model = "mock"
+  )
+  chat$register_tool(counting_tool)
+
+  make_req <- function(id) {
+    ContentToolRequest(
+      id = id,
+      name = "count",
+      arguments = list(),
+      tool = counting_tool
+    )
+  }
+
+  call_count <- 0L
+  local_mocked_bindings(parallel_turns = function(...) {
+    call_count <<- call_count + 1L
+    if (call_count == 1L) {
+      list(
+        AssistantTurn(list(make_req("r1")), tokens = c(1, 1, 0)),
+        AssistantTurn(list(make_req("r2")), tokens = c(1, 1, 0))
+      )
+    } else {
+      list(
+        AssistantTurn("done1", tokens = c(1, 1, 0)),
+        AssistantTurn("done2", tokens = c(1, 1, 0))
+      )
+    }
+  })
+
+  chats <- parallel_chat(chat, list("p1", "p2"))
+
+  expect_equal(chats[[1]]$store$n, 1L)
+  expect_equal(chats[[2]]$store$n, 1L)
+})
+
 # structured data --------------------------------------------------------------
 
 test_that("can extract data in parallel", {

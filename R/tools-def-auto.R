@@ -53,7 +53,7 @@ create_tool_def <- function(
   if (is.null(chat)) {
     chat <- chat_openai()
   } else if (is_chat(chat)) {
-    chat <- chat$clone()
+    chat <- chat$clone(deep = TRUE)
   } else {
     stop_input_type(chat, "a <Chat> object", allow_null = TRUE)
   }
