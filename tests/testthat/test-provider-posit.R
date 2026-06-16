@@ -10,7 +10,7 @@ test_that("uses the Anthropic API for Claude models", {
 
 test_that("uses the OpenAI-compatible API for other models", {
   chat <- chat_posit(
-    model = "qwen3-8b",
+    model = "google/gemma-4-26B-A4B-it",
     credentials = function() "token"
   )
   provider <- chat$get_provider()
@@ -19,7 +19,7 @@ test_that("uses the OpenAI-compatible API for other models", {
 })
 
 test_that("string credentials become a bearer token for both flavors", {
-  for (model in c("claude-sonnet-4-6", "qwen3-8b")) {
+  for (model in c("claude-sonnet-4-6", "google/gemma-4-26B-A4B-it")) {
     chat <- chat_posit(model = model, credentials = function() "token")
     req <- chat_request(chat$get_provider())
     headers <- req_get_headers(req, "reveal")
