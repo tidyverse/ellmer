@@ -19,9 +19,10 @@ NULL
 #' should only need to do this once per machine.
 #'
 #' @param base_url The base URL of the Posit AI gateway.
-#' @param credentials A zero-argument function that returns either a string
-#'   (an access token, sent as a bearer token) or a named list of headers.
-#'   Defaults to the OAuth device flow described above.
+#' @param credentials A zero-argument function that returns the
+#'   credentials to use in place of the default OAuth device flow, either as a
+#'   named list of headers or as a function that modifies the request. You
+#'   should not usually need to set this.
 #' @param model `r param_model("claude-sonnet-4-6", "posit")`
 #' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
 #'   Set to "none" to disable caching or "1h" to cache for one hour. This is
@@ -57,7 +58,6 @@ chat_posit <- function(
     default_posit_credentials(),
     credentials = credentials
   )
-  credentials <- posit_bearer_credentials(credentials)
 
   if (is_claude_model(model)) {
     provider <- ProviderPositAnthropic(
@@ -98,7 +98,6 @@ models_posit <- function(
     default_posit_credentials(),
     credentials = credentials
   )
-  credentials <- posit_bearer_credentials(credentials)
 
   req <- request(base_url)
   req <- req_url_path_append(req, "/models")
@@ -160,20 +159,6 @@ is_claude_model <- function(model) {
 
 posit_gateway_url <- function(base_url) {
   sub("/(anthropic|openai)/v1/?$", "", base_url)
-}
-
-# The Anthropic flavor injects string credentials as `x-api-key`, but the
-# gateway only accepts bearer tokens, so normalize strings to a header here.
-posit_bearer_credentials <- function(credentials) {
-  force(credentials)
-  function() {
-    creds <- credentials()
-    if (is_string(creds)) {
-      list(Authorization = paste("Bearer", creds))
-    } else {
-      creds
-    }
-  }
 }
 
 default_posit_credentials <- function() {

@@ -1,31 +1,15 @@
 test_that("uses the Anthropic API for Claude models", {
-  chat <- chat_posit(
-    model = "claude-sonnet-4-6",
-    credentials = function() "token"
-  )
+  chat <- chat_posit(model = "claude-sonnet-4-6")
   provider <- chat$get_provider()
   expect_true(S7_inherits(provider, ProviderPositAnthropic))
   expect_equal(provider@base_url, "https://gateway.posit.ai/anthropic/v1")
 })
 
 test_that("uses the OpenAI-compatible API for other models", {
-  chat <- chat_posit(
-    model = "google/gemma-4-26B-A4B-it",
-    credentials = function() "token"
-  )
+  chat <- chat_posit(model = "google/gemma-4-26B-A4B-it")
   provider <- chat$get_provider()
   expect_true(S7_inherits(provider, ProviderPositOpenAI))
   expect_equal(provider@base_url, "https://gateway.posit.ai/openai/v1")
-})
-
-test_that("string credentials become a bearer token for both flavors", {
-  for (model in c("claude-sonnet-4-6", "google/gemma-4-26B-A4B-it")) {
-    chat <- chat_posit(model = model, credentials = function() "token")
-    req <- chat_request(chat$get_provider())
-    headers <- req_get_headers(req, "reveal")
-    expect_equal(headers$Authorization, "Bearer token")
-    expect_null(headers$`x-api-key`)
-  }
 })
 
 test_that("can derive the gateway url from a flavored base url", {
