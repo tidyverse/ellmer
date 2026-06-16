@@ -87,6 +87,7 @@ reference:
   contents:
   - tool
   - tool_annotations
+  - tool_context
   - tool_reject
   - type_boolean
 

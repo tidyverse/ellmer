@@ -469,3 +469,91 @@ test_that("merge_content_text() merges adjacent text, preserves non-text", {
   expect_s7_class(merged[[3]], ContentText)
   expect_equal(merged[[3]]@text, "c")
 })
+
+# chat$store active binding ----------------------------------------------------
+
+test_that("chat$store lazily creates an environment on first access", {
+  chat <- chat_openai_test()
+  store <- chat$store
+  expect_true(is.environment(store))
+  expect_identical(environmentName(parent.env(store)), "R_EmptyEnv")
+})
+
+test_that("chat$store identity is stable across reads", {
+  chat <- chat_openai_test()
+  expect_identical(chat$store, chat$store)
+})
+
+test_that("chat$store persists across turn additions", {
+  chat <- chat_openai_test()
+  chat$store$n <- 1L
+  chat$set_turns(list(UserTurn("Hi"), AssistantTurn("Hello")))
+  expect_equal(chat$store$n, 1L)
+})
+
+test_that("chat$store setter rejects non-environment", {
+  chat <- chat_openai_test()
+  expect_snapshot(error = TRUE, {
+    chat$store <- list(x = 1)
+  })
+})
+
+test_that("chat$store setter accepts a replacement environment", {
+  chat <- chat_openai_test()
+  new_store <- new.env(parent = emptyenv())
+  new_store$x <- 42L
+  chat$store <- new_store
+  expect_identical(chat$store, new_store)
+  expect_equal(chat$store$x, 42L)
+})
+
+test_that("clone() forks the store on first access", {
+  chat <- chat_openai_test()
+  chat$store$n <- 1L
+
+  cloned <- chat$clone()
+  cloned$store$n <- 99L
+
+  expect_equal(chat$store$n, 1L)
+  expect_equal(cloned$store$n, 99L)
+})
+
+test_that("clone() preserves the store's parent environment", {
+  chat <- chat_openai_test()
+  parent <- new.env()
+  parent$shared <- 1L
+  chat$store <- new.env(parent = parent)
+
+  cloned <- chat$clone()
+
+  expect_identical(parent.env(cloned$store), parent)
+  expect_equal(get("shared", cloned$store), 1L)
+})
+
+test_that("tool_context()$turns includes the system prompt", {
+  chat <- chat_openai_test(system_prompt = "Be terse.")
+
+  capture <- tool(
+    function() {
+      chat$store$turns <- tool_context()$turns
+      "ok"
+    },
+    name = "capture",
+    description = "Capture the tool context turns"
+  )
+  chat$register_tool(capture)
+
+  turn <- Turn(
+    "assistant",
+    list(ContentToolRequest(id = "1", name = "capture", tool = capture))
+  )
+  coro::collect(invoke_tools(
+    turn,
+    tool_context = tool_context_factory(
+      chat$store,
+      chat$get_turns(include_system_prompt = TRUE)
+    )
+  ))
+
+  expect_equal(chat$store$turns[[1]]@role, "system")
+})

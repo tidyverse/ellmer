@@ -479,6 +479,7 @@ Chat <- R6::R6Class(
     tools = list(),
     callback_on_tool_request = NULL,
     callback_on_tool_result = NULL,
+    store_env = NULL,
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
@@ -524,7 +525,11 @@ Chat <- R6::R6Class(
             on_tool_request = private$callback_on_tool_request$invoke,
             on_tool_result = private$callback_on_tool_result$invoke,
             yield_request = yield_as_content,
-            otel_span = agent_span
+            otel_span = agent_span,
+            tool_context = tool_context_factory(
+              self$store,
+              self$get_turns(include_system_prompt = TRUE)
+            )
           )
 
           tool_results <- list()
@@ -594,7 +599,11 @@ Chat <- R6::R6Class(
             on_tool_request = private$callback_on_tool_request$invoke_async,
             on_tool_result = private$callback_on_tool_result$invoke_async,
             yield_request = yield_as_content,
-            otel_span = agent_span
+            otel_span = agent_span,
+            tool_context = tool_context_factory(
+              self$store,
+              self$get_turns(include_system_prompt = TRUE)
+            )
           )
           if (tool_mode == "sequential") {
             tool_results <- list()
@@ -856,9 +865,82 @@ Chat <- R6::R6Class(
           request = req
         )
       })
+    },
+
+    deep_clone = function(name, value) {
+      if (name == "store_env") {
+        return(clone_store_env(value))
+      }
+      value
+    }
+  ),
+  active = list(
+    #' @field store A per-conversation environment for storing arbitrary
+    #'   runtime state. Tools can read and mutate this environment by reference
+    #'   via `tool_context()$store`, and the same environment is accessible
+    #'   directly on the chat object. The store persists across multiple
+    #'   `$chat()` calls for the lifetime of the `Chat` object.
+    #'
+    #'   Assign to `chat$store` to replace the entire store with a new
+    #'   environment. Reading `chat$store` lazily creates an empty environment
+    #'   (with `emptyenv()` as parent) on the first access.
+    #'
+    #'   `chat$clone()` gives the clone an independent copy of the store.
+    #'   Top-level bindings are copied shallowly: nested mutable objects
+    #'   (environments, R6 objects, connections) remain shared by reference
+    #'   with the original store.
+    store = function(value) {
+      if (missing(value)) {
+        if (is.null(private$store_env)) {
+          private$store_env <- new.env(parent = emptyenv())
+        }
+        return(private$store_env)
+      }
+      if (!is.environment(value)) {
+        cli::cli_abort("{.code chat$store} must be an environment.")
+      }
+      private$store_env <- value
+      invisible(self)
     }
   )
 )
+
+# Clone override: make clone() always deep-clone.
+#
+# R6's shallow clone() shares environments by reference, which means
+# chat$store would be shared across clones. Cloning is a common workflow
+# (e.g. forking a chat to try different prompts), and the person cloning
+# may not be the person who wrote the tools — so a shared store is a
+# silent cross-contamination bug. We need clone() to eagerly fork the
+# store so each clone gets independent state.
+#
+# R6 doesn't let you define "clone" in the class (reserved name), but you
+# can replace it after creation via $set(overwrite = TRUE). We save R6's
+# real clone implementation, then install a wrapper that always calls it
+# with deep = TRUE. Our private deep_clone() method handles the actual
+# store forking; all other fields pass through unchanged.
+#
+# The env rebinding (self$.__enclos_env__) is needed because R6's clone
+# uses the calling environment to find `self` and `private`.
+#
+# See: https://github.com/r-lib/R6/issues/178
+chat_real_clone <- Chat$public_methods$clone
+Chat$set("public", "clone", overwrite = TRUE, function() {
+  bound <- chat_real_clone
+  environment(bound) <- self$.__enclos_env__
+  bound(deep = TRUE)
+})
+
+clone_store_env <- function(env) {
+  if (is.null(env)) {
+    return(NULL)
+  }
+  new <- new.env(parent = parent.env(env))
+  for (k in ls(env, all.names = TRUE)) {
+    assign(k, get(k, env), new)
+  }
+  new
+}
 
 #' @export
 print.Chat <- function(x, ...) {

@@ -23,6 +23,26 @@ chat <- chat_openai()
 chat$chat("Tell me a funny joke")
 \dontshow{ellmer:::vcr_example_end()}
 }
+\section{Active bindings}{
+  \if{html}{\out{<div class="r6-active-bindings">}}
+  \describe{
+    \item{\code{store}}{A per-conversation environment for storing arbitrary
+runtime state. Tools can read and mutate this environment by reference
+via \code{tool_context()$store}, and the same environment is accessible
+directly on the chat object. The store persists across multiple
+\verb{$chat()} calls for the lifetime of the \code{Chat} object.
+
+Assign to \code{chat$store} to replace the entire store with a new
+environment. Reading \code{chat$store} lazily creates an empty environment
+(with \code{emptyenv()} as parent) on the first access.
+
+\code{chat$clone()} gives the clone an independent copy of the store.
+Top-level bindings are copied shallowly: nested mutable objects
+(environments, R6 objects, connections) remain shared by reference
+with the original store.}
+  }
+  \if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
   \itemize{
@@ -587,14 +607,7 @@ which must have \code{result} as its only argument.}
   The objects of this class are cloneable with this method.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$clone(deep = FALSE)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{deep}}{Whether to make a deep clone.}
-    }
+    \preformatted{Chat$clone()}
     \if{html}{\out{</div>}}
   }
 }

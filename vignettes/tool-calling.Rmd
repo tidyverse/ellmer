@@ -238,3 +238,95 @@ chat$chat("Describe the design aesthetic of https://tidyverse.org")
 #> Overall, the design communicates clarity, ease of use, and a focus on
 #> modern data science tools.
 ```
+
+### Tool context
+
+Tools can access private, per-conversation state and per-call metadata without exposing them to the model. Inside a tool body, `tool_context()` returns a context object with three fields: `$request` (the `ContentToolRequest` for this call), `$store` (the chat's shared store), and `$turns` (a snapshot of the conversation history up to this point). The store is an ordinary R environment, so mutations are by reference and persist across `$chat()` calls for the lifetime of the chat object. `ctx$store` and `chat$store` are the same object.
+
+Here is a simple counter that tracks how many times it has been called:
+
+```{r}
+#| eval: false
+
+counter_tool <- tool(
+  function() {
+    ctx <- tool_context()
+
+    # Read the tool request
+    id <- ctx$request@id
+    id <- substr(id, nchar(id) - 8, nchar(id))
+    cli::cli_alert_info("Counter called (id: ...{id})")
+
+    # Update the chat store
+    ctx$store$n <- (ctx$store$n %||% 0L) + 1L
+    ctx$store$n
+  },
+  description = "Increment and return the call counter.",
+  arguments = list()
+)
+
+chat <- chat_openai()
+chat$register_tool(counter_tool)
+chat$chat("Call the counter three times.")
+#> i Counter called (id: ...4bdcda369)
+#> i Counter called (id: ...1a32963fb)
+#> i Counter called (id: ...9b6c71f6e)
+#> I've called the counter three times.
+
+chat$store$n
+#> [1] 3
+```
+
+You can also pre-seed the store before chatting, or inspect it afterwards, via `chat$store`. This is a good place to keep credentials and per-user details that tools need but the model should never see, such as the user's email and an auth token:
+
+```{r}
+#| eval: false
+
+chat$store$user_email <- "hadley@posit.co"
+chat$store$auth_token <- "tok_simulated_4f3b2a1c"   # e.g. from your auth flow
+```
+
+A tool can then read these from `tool_context()$store` to act on the user's behalf without the token ever appearing in the conversation:
+
+```{r}
+#| eval: false
+
+send_email_tool <- tool(
+  function(subject, body) {
+    ctx <- tool_context()
+    send_email(
+      to = ctx$store$user_email,
+      token = ctx$store$auth_token,
+      subject = subject,
+      body = body
+    )
+    "Email sent."
+  },
+  description = "Send an email to the current user.",
+  arguments = list(
+    subject = type_string("The email subject."),
+    body = type_string("The email body.")
+  )
+)
+```
+
+`chat$clone()` gives the clone its own independent copy of the store, so cloned chats don't interfere with each other.
+
+**Async tools:** in an async tool, `tool_context()` is only valid during the synchronous prefix of the function — before the first `await()`. Capture it at the top of your tool body:
+
+```{r}
+#| eval: false
+
+my_async_tool <- tool(
+  coro::async(function() {
+    ctx <- tool_context()   # capture before any await()
+    result <- await(some_async_call())
+    ctx$store$log <- c(ctx$store$log, result)  # safe: ctx$store is an env
+    result
+  }),
+  description = "An async tool that logs its result.",
+  arguments = list()
+)
+```
+
+`tool_context()` will error with a clear message if called after an `await()` or outside a tool invocation. Built-in provider tools (such as `claude_tool_web_search()`) run provider-side and do not support `tool_context()`; MCP tools do.
