@@ -78,16 +78,6 @@ at the top of the tool body before any \code{await()} call:
 }\if{html}{\out{</div>}}
 }
 
-\section{Notes}{
-
-\itemize{
-\item \code{ToolBuiltIn} tools (e.g. \code{claude_tool_web_search()}) run on the
-provider side and never reach \code{invoke_tool()}, so \code{tool_context()} is
-not applicable to them.
-\item MCP \code{ToolDef} tools run through \code{invoke_tool()} and are fully supported.
-}
-}
-
 \examples{
 # Increment a counter stored in chat$store
 counter_tool <- tool(

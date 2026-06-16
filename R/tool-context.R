@@ -49,12 +49,6 @@ NULL
 #' )
 #' ```
 #'
-#' @section Notes:
-#' - `ToolBuiltIn` tools (e.g. `claude_tool_web_search()`) run on the
-#'   provider side and never reach `invoke_tool()`, so `tool_context()` is
-#'   not applicable to them.
-#' - MCP `ToolDef` tools run through `invoke_tool()` and are fully supported.
-#'
 #' @return `tool_context()` returns the current `ellmer_tool_context` object
 #'   (a classed list with fields `$request`, `$store`, `$turns`).
 #'
