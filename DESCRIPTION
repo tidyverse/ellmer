@@ -124,6 +124,7 @@ Collate:
     'schema.R'
     'stream-controller.R'
     'tokens.R'
+    'tool-context.R'
     'tools-built-in.R'
     'tools-def-auto.R'
     'utils-auth.R'

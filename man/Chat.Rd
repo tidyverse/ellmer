@@ -23,6 +23,30 @@ chat <- chat_openai()
 chat$chat("Tell me a funny joke")
 \dontshow{ellmer:::vcr_example_end()}
 }
+\section{Active bindings}{
+  \if{html}{\out{<div class="r6-active-bindings">}}
+  \describe{
+    \item{\code{store}}{A per-conversation environment for storing arbitrary
+runtime state. Tools can read and mutate this environment by reference
+via \code{tool_context()$store}, and the same environment is accessible
+directly on the chat object. The store persists across multiple
+\verb{$chat()} calls for the lifetime of the \code{Chat} object.
+
+Assign to \code{chat$store} to replace the entire store with a new
+environment. Reading \code{chat$store} lazily creates an empty environment
+(with \code{emptyenv()} as parent) on the first access.
+
+Use \code{chat$clone(deep = TRUE)} to obtain a chat with an independent
+copy of the store. A shallow \code{chat$clone()} shares the store by
+reference across clones, which is intentional for use cases where
+clones should observe the same state.
+
+Note that the store holds runtime state. Non-serializable objects
+(database connections, loggers, file handles) stored here will not
+survive \code{saveRDS()} / \code{readRDS()}.}
+  }
+  \if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
   \itemize{

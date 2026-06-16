@@ -4,6 +4,7 @@
 
 the <- new_environment()
 the$credentials_cache <- new_environment()
+the$tool_context_stack <- list()
 
 silence_r_cmd_check_note <- function() {
   later::later()
