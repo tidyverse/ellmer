@@ -528,6 +528,18 @@ test_that("shallow clone() shares the store by reference", {
   expect_equal(chat$store$n, 99L)
 })
 
+test_that("clone(deep = TRUE) preserves the store's parent environment", {
+  chat <- chat_openai_test()
+  parent <- new.env()
+  parent$shared <- 1L
+  chat$store <- new.env(parent = parent)
+
+  cloned <- chat$clone(deep = TRUE)
+
+  expect_identical(parent.env(cloned$store), parent)
+  expect_equal(get("shared", cloned$store), 1L)
+})
+
 test_that("tool_context()$turns includes the system prompt", {
   chat <- chat_openai_test(system_prompt = "Be terse.")
 

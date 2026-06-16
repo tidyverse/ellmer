@@ -916,7 +916,7 @@ clone_store_env <- function(env) {
   if (is.null(env)) {
     return(NULL)
   }
-  new <- new.env(parent = emptyenv())
+  new <- new.env(parent = parent.env(env))
   for (k in ls(env, all.names = TRUE)) {
     assign(k, get(k, env), new)
   }
