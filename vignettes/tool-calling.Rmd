@@ -297,7 +297,7 @@ send_email_tool <- tool(
 )
 ```
 
-Note that the store is runtime state: non-serializable handles such as auth tokens or database connections will not survive `saveRDS()`. Use `clone(deep = TRUE)` if you need a chat copy with its own independent store.
+Note that the store is runtime state: non-serializable handles such as auth tokens or database connections will not survive `saveRDS()`. Use `clone(deep = TRUE)` if you need a chat copy with its own store: this gives the copy a fresh environment with the same top-level bindings, though any nested mutable objects (such as a connection handle) are still shared with the original.
 
 **Async tools:** in an async tool, `tool_context()` is only valid during the synchronous prefix of the function — before the first `await()`. Capture it at the top of your tool body:
 

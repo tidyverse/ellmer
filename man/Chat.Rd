@@ -36,10 +36,13 @@ Assign to \code{chat$store} to replace the entire store with a new
 environment. Reading \code{chat$store} lazily creates an empty environment
 (with \code{emptyenv()} as parent) on the first access.
 
-Use \code{chat$clone(deep = TRUE)} to obtain a chat with an independent
-copy of the store. A shallow \code{chat$clone()} shares the store by
-reference across clones, which is intentional for use cases where
-clones should observe the same state.
+Use \code{chat$clone(deep = TRUE)} to obtain a chat whose store is a fresh
+environment with the same top-level bindings. The bindings themselves
+are copied shallowly: nested mutable objects (environments, R6
+objects, connections) remain shared by reference with the original
+store. A shallow \code{chat$clone()} shares the whole store by reference
+across clones, which is intentional for use cases where clones should
+observe the same state.
 
 Note that the store holds runtime state. Non-serializable objects
 (database connections, loggers, file handles) stored here will not

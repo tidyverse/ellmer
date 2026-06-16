@@ -526,7 +526,10 @@ Chat <- R6::R6Class(
             on_tool_result = private$callback_on_tool_result$invoke,
             yield_request = yield_as_content,
             otel_span = agent_span,
-            tool_context = tool_context_factory(self$store, self$get_turns())
+            tool_context = tool_context_factory(
+              self$store,
+              self$get_turns(include_system_prompt = TRUE)
+            )
           )
 
           tool_results <- list()
@@ -597,7 +600,10 @@ Chat <- R6::R6Class(
             on_tool_result = private$callback_on_tool_result$invoke_async,
             yield_request = yield_as_content,
             otel_span = agent_span,
-            tool_context = tool_context_factory(self$store, self$get_turns())
+            tool_context = tool_context_factory(
+              self$store,
+              self$get_turns(include_system_prompt = TRUE)
+            )
           )
           if (tool_mode == "sequential") {
             tool_results <- list()
@@ -879,10 +885,13 @@ Chat <- R6::R6Class(
     #'   environment. Reading `chat$store` lazily creates an empty environment
     #'   (with `emptyenv()` as parent) on the first access.
     #'
-    #'   Use `chat$clone(deep = TRUE)` to obtain a chat with an independent
-    #'   copy of the store. A shallow `chat$clone()` shares the store by
-    #'   reference across clones, which is intentional for use cases where
-    #'   clones should observe the same state.
+    #'   Use `chat$clone(deep = TRUE)` to obtain a chat whose store is a fresh
+    #'   environment with the same top-level bindings. The bindings themselves
+    #'   are copied shallowly: nested mutable objects (environments, R6
+    #'   objects, connections) remain shared by reference with the original
+    #'   store. A shallow `chat$clone()` shares the whole store by reference
+    #'   across clones, which is intentional for use cases where clones should
+    #'   observe the same state.
     #'
     #'   Note that the store holds runtime state. Non-serializable objects
     #'   (database connections, loggers, file handles) stored here will not

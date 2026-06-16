@@ -527,3 +527,31 @@ test_that("shallow clone() shares the store by reference", {
 
   expect_equal(chat$store$n, 99L)
 })
+
+test_that("tool_context()$turns includes the system prompt", {
+  chat <- chat_openai_test(system_prompt = "Be terse.")
+
+  capture <- tool(
+    function() {
+      chat$store$turns <- tool_context()$turns
+      "ok"
+    },
+    name = "capture",
+    description = "Capture the tool context turns"
+  )
+  chat$register_tool(capture)
+
+  turn <- Turn(
+    "assistant",
+    list(ContentToolRequest(id = "1", name = "capture", tool = capture))
+  )
+  coro::collect(invoke_tools(
+    turn,
+    tool_context = tool_context_factory(
+      chat$store,
+      chat$get_turns(include_system_prompt = TRUE)
+    )
+  ))
+
+  expect_equal(chat$store$turns[[1]]@role, "system")
+})

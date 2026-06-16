@@ -42,9 +42,10 @@ to the \code{Chat} object. Use it for counters, database connections, loggers,
 and any other per-conversation state you don't want to expose to the
 model.
 \item \verb{$turns} — an eager snapshot of the conversation history (list of \link{Turn}
-objects) up to and including the assistant turn that issued this tool
-request. Sibling tool results from the same turn are not included (they
-are appended after the current tool loop finishes).
+objects), including the system prompt (if any) as the first turn, up to
+and including the assistant turn that issued this tool request. Sibling
+tool results from the same turn are not included (they are appended after
+the current tool loop finishes).
 }
 
 \code{tool_context()} aborts with class
