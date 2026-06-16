@@ -109,13 +109,7 @@ models_posit <- function(
 
   data.frame(
     id = map_chr(json$chat, "[[", "id"),
-    name = map_chr(json$chat, "[[", "display_name"),
-    protocol = map_chr(json$chat, function(model) {
-      model$endpoints[[1]]$protocol %||% NA_character_
-    }),
-    max_context_length = map_dbl(json$chat, function(model) {
-      model$max_context_length %||% NA_real_
-    })
+    name = map_chr(json$chat, "[[", "display_name")
   )
 }
 
