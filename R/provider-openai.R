@@ -3,6 +3,7 @@
 #' @include content.R
 #' @include turns.R
 #' @include tools-def.R
+#' @include tools-built-in.R
 NULL
 
 #' Chat with an OpenAI model
@@ -19,6 +20,40 @@ NULL
 #' Note that a ChatGPT Plus membership does not grant access to the API.
 #' You will need to sign up for a developer account (and pay for it) at the
 #' [developer platform](https://platform.openai.com).
+#'
+#' # Server-side MCP tools
+#'
+#' OpenAI's
+#' [MCP connector](https://developers.openai.com/api/docs/guides/tools-connectors-mcp)
+#' lets models connect to remote MCP servers directly. Unlike local tool
+#' use, OpenAI discovers the tools available on the server and handles
+#' tool execution on your behalf — no client-side MCP handling is needed.
+#'
+#' Use [mcp_connector()] to register tools from an MCP server with a
+#' chat:
+#'
+#' ```r
+#' chat <- chat_openai()
+#' connector <- mcp_connector(
+#'   url = "https://mcp.deepwiki.com/mcp",
+#'   name = "deepwiki"
+#' )
+#' chat$register_tool(connector)
+#' chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
+#' ```
+#'
+#' If the MCP server requires authentication, pass a credential function.
+#' The return value is sent as the `authorization` field on the MCP tool
+#' entry.
+#'
+#' ```r
+#' connector <- mcp_connector(
+#'   url = "https://private-mcp-server.example.com/mcp",
+#'   name = "private",
+#'   credentials = function() Sys.getenv("MCP_TOKEN")
+#' )
+#' chat$register_tool(connector)
+#' ```
 #'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
 #' @param base_url The base URL to the API endpoint.
@@ -308,14 +343,65 @@ method(value_turn, ProviderOpenAI) <- function(
         output$action$url %||%
         "web search"
       ContentToolRequestSearch(query = query, json = output)
+    } else if (output$type == "mcp_list_tools") {
+      ContentMcpListTools(
+        server_name = output$server_label %||% "",
+        tools = output$tools %||% list(),
+        json = output
+      )
+    } else if (output$type == "mcp_call") {
+      server_name <- output$server_label %||% ""
+      arguments <- jsonlite::parse_json(output$arguments %||% "{}")
+      input <- if (is.list(arguments)) arguments else list(arguments)
+      request <- ContentMcpToolRequest(
+        id = output$id,
+        name = output$name,
+        arguments = input,
+        tool = mcp_tool_def(output$name, server_name),
+        server_name = server_name,
+        json = output
+      )
+      is_error <- !is.null(output$error)
+      if (is_error && is.list(output$error)) {
+        error_text <- mcp_error_text(output$error)
+        content_blocks <- output$error$content %||%
+          list(list(type = "text", text = error_text))
+      } else if (is_error) {
+        error_text <- output$error
+        content_blocks <- list(list(type = "text", text = error_text))
+      } else {
+        error_text <- NULL
+        content_blocks <- list(list(
+          type = "text",
+          text = output$output %||% ""
+        ))
+      }
+      response <- ContentMcpToolResult(
+        value = if (!is_error) (output$output %||% "") else NULL,
+        error = error_text,
+        request = ContentToolRequest(
+          id = output$id,
+          name = output$name %||% "",
+          arguments = input
+        ),
+        content = content_blocks,
+        json = output
+      )
+      list(request, response)
+    } else if (output$type == "mcp_approval_request") {
+      cli::cli_abort(c(
+        "MCP approval requests are not supported.",
+        i = "MCP approval requests are not yet supported by ellmer.",
+        i = "If you set {.code require_approval = \"always\"}, change it to {.code \"never\"}."
+      ))
     } else {
-      browser()
       cli::cli_abort(
         "Unknown content type {.str {output$type}}.",
         .internal = TRUE
       )
     }
   })
+  contents <- unlist(contents, recursive = FALSE)
 
   tokens <- value_tokens(provider, result)
   variant <- result$service_tier %||% "default"
@@ -433,6 +519,22 @@ method(as_json, list(ProviderOpenAI, ContentToolResult)) <- function(
   )
 }
 
+method(as_json, list(ProviderOpenAI, ContentMcpToolRequest)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
+}
+
+method(as_json, list(ProviderOpenAI, ContentMcpToolResult)) <- function(
+  provider,
+  x,
+  ...
+) {
+  NULL
+}
+
 method(as_json, list(ProviderOpenAI, ToolDef)) <- function(
   provider,
   x,
@@ -445,6 +547,30 @@ method(as_json, list(ProviderOpenAI, ToolDef)) <- function(
     strict = TRUE,
     parameters = as_json(provider, x@arguments, ...)
   )
+}
+
+method(check_mcp_connector_tool, ProviderOpenAI) <- function(
+  provider,
+  tool,
+  ...,
+  error_call = caller_env()
+) {
+  invisible()
+}
+
+method(as_json, list(ProviderOpenAI, McpConnector)) <- function(
+  provider,
+  x,
+  ...
+) {
+  server <- compact(list(
+    type = "mcp",
+    server_label = x@name,
+    server_url = x@url,
+    require_approval = "never",
+    authorization = if (!is.null(x@credentials)) x@credentials()
+  ))
+  modify_list(server, x@extra)
 }
 
 # Batched requests -------------------------------------------------------------
@@ -591,6 +717,12 @@ method(batch_result_turn, ProviderOpenAI) <- function(
 }
 
 # Helpers ------------------------------------------------------------------
+
+mcp_error_text <- function(error) {
+  blocks <- error$content %||% list()
+  texts <- vapply(blocks, function(b) b$text %||% "", character(1))
+  paste(texts[nzchar(texts)], collapse = "\n")
+}
 
 is_openai_reasoning <- function(model) {
   # https://platform.openai.com/docs/models/compare

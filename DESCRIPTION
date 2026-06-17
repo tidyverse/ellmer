@@ -69,6 +69,7 @@ Roxygen: list(markdown = TRUE)
 Collate:
     'utils-S7.R'
     'types.R'
+    'mcp-connector.R'
     'ellmer-package.R'
     'tools-def.R'
     'content.R'
@@ -101,6 +102,7 @@ Collate:
     'provider-azure.R'
     'provider-claude-files.R'
     'provider-claude-tools.R'
+    'tools-built-in.R'
     'provider-claude.R'
     'provider-google.R'
     'provider-cloudflare.R'
@@ -124,7 +126,6 @@ Collate:
     'schema.R'
     'stream-controller.R'
     'tokens.R'
-    'tools-built-in.R'
     'tools-def-auto.R'
     'utils-auth.R'
     'utils-callbacks.R'

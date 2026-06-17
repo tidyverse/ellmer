@@ -1,6 +1,7 @@
 #' @include utils-S7.R
 #' @include types.R
 #' @include ellmer-package.R
+#' @include mcp-connector.R
 NULL
 
 #' Define a tool
@@ -246,7 +247,11 @@ check_arguments <- function(arguments, formals, call = caller_env()) {
 }
 
 check_tool <- function(x, arg = caller_arg(x), call = caller_env()) {
-  if (!S7_inherits(x, ToolDef) && !S7_inherits(x, ToolBuiltIn)) {
+  if (
+    !S7_inherits(x, ToolDef) &&
+      !S7_inherits(x, ToolBuiltIn) &&
+      !S7_inherits(x, McpConnector)
+  ) {
     stop_input_type(x, "a <ToolDef>", arg = arg, call = call)
   }
 }

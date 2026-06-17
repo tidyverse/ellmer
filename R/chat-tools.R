@@ -1,8 +1,24 @@
 #' @include turns.R
 NULL
 
-is_tool_request <- function(x) S7_inherits(x, ContentToolRequest)
-is_tool_result <- function(x) S7_inherits(x, ContentToolResult)
+is_tool_request <- function(x, local_only = TRUE) {
+  if (!S7_inherits(x, ContentToolRequest)) {
+    return(FALSE)
+  }
+  if (local_only && S7_inherits(x, ContentMcpToolRequest)) {
+    return(FALSE)
+  }
+  TRUE
+}
+is_tool_result <- function(x, local_only = TRUE) {
+  if (!S7_inherits(x, ContentToolResult)) {
+    return(FALSE)
+  }
+  if (local_only && S7_inherits(x, ContentMcpToolResult)) {
+    return(FALSE)
+  }
+  TRUE
+}
 
 match_tools <- function(turn, tools) {
   if (is.null(turn)) {
@@ -322,53 +338,65 @@ maybe_echo_tool <- function(x, echo = "output") {
     return(invisible(x))
   }
 
-  if (is_tool_request(x)) {
+  if (S7_inherits(x, ContentMcpListTools)) {
     cli::cli_text(
       cli::col_blue(cli::symbol$circle),
-      " [{cli::col_blue('tool call')}] ",
+      " ",
+      cli_escape(format(x))
+    )
+    return(invisible(x))
+  }
+
+  if (is_tool_request(x, local_only = FALSE)) {
+    label <- if (S7_inherits(x, ContentMcpToolRequest)) {
+      "mcp tool call"
+    } else {
+      "tool call"
+    }
+    cli::cli_text(
+      cli::col_blue(cli::symbol$circle),
+      " [{cli::col_blue(label)}] ",
       cli_escape(format(x, show = "call_short"))
     )
     return(invisible(x))
   }
 
-  if (!is_tool_result(x)) {
-    # neither tool result or request
+  if (!is_tool_result(x, local_only = FALSE)) {
     return(invisible(x))
   }
 
   # ContentToolResult ----
-  if (tool_errored(x)) {
-    icon <- cli::col_red(cli::symbol$stop)
-    header <- cli::col_red("Error: ")
-    value <- tool_error_string(x)
+  icon <- if (tool_errored(x)) {
+    cli::col_red(cli::symbol$stop)
   } else {
-    icon <- cli::col_green(cli::symbol$record)
-    header <- ""
-    value <- tool_string_preview(x)
+    cli::col_green(cli::symbol$record)
   }
 
-  value <- cli::style_italic(value)
-
-  if (grepl("\n", value)) {
-    lines <- strsplit(value, "\n")[[1]]
-    lines <- c(
-      lines[seq_len(min(5, length(lines)))],
-      if (length(lines) > 5) cli::symbol$ellipsis
-    )
-    lines <- cli::style_italic(lines)
-    cli::cli_text("{icon} #> {header}{lines[1]}")
-    for (line in lines[-1]) {
-      cli::cli_text("\u00a0\u00a0#> {line}")
-    }
-  } else {
-    max_width <- cli::console_width() - 7
-    if (nchar(value) > max_width) {
-      value <- substring(value, 1, max_width)
-      value <- paste0(value, cli::symbol$ellipsis)
-    }
-    value <- cli::style_italic(value)
-    cli::cli_text("{icon} #> {header}{value}")
+  formatted <- format(
+    x,
+    show = "value",
+    tool_style = "reprex",
+    tool_max_lines = 5
+  )
+  lines <- strsplit(formatted, "\n")[[1]]
+  cli::cli_text("{icon} {lines[1]}")
+  for (line in lines[-1]) {
+    cli::cli_text("\u00a0\u00a0{line}")
   }
 
   invisible(x)
+}
+
+is_mcp_content <- function(x) {
+  S7_inherits(x, ContentMcpToolRequest) ||
+    S7_inherits(x, ContentMcpToolResult) ||
+    S7_inherits(x, ContentMcpListTools)
+}
+
+echo_server_tool_contents <- function(turn, echo) {
+  for (content in turn@contents) {
+    if (is_mcp_content(content)) {
+      maybe_echo_tool(content, echo = echo)
+    }
+  }
 }

@@ -68,6 +68,7 @@ reference:
   - google_tool_web_search
   - google_tool_web_fetch
   - openai_tool_web_search
+  - mcp_connector
 
 - title: Chat helpers
   contents:

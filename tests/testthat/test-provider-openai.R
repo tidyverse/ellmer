@@ -222,3 +222,247 @@ test_that("value_turn() handles web_search_call action types", {
   )
   expect_equal(turn@contents[[1]]@query, "web search")
 })
+
+# MCP tool handling -----------------------------------------------------------
+
+test_that("can use MCP connector tools", {
+  vcr::local_cassette("openai-mcp-tool")
+
+  chat <- chat_openai_test(
+    system_prompt = "Use the read_wiki_structure tool to answer the question. Be brief.",
+    model = "gpt-4.1-nano",
+    api_args = list(
+      tools = list(
+        list(
+          type = "mcp",
+          server_label = "deepwiki",
+          server_url = "https://mcp.deepwiki.com/mcp",
+          require_approval = "never"
+        )
+      )
+    )
+  )
+
+  result <- chat$chat(
+    "What are the top-level sections in the tidyverse/ellmer documentation?"
+  )
+  expect_match(result, "Core Architecture")
+
+  turns <- chat$get_turns()
+  assistant_turn <- turns[[length(turns)]]
+  contents <- assistant_turn@contents
+
+  mcp_list <- keep(contents, S7_inherits, ContentMcpListTools)
+  mcp_requests <- keep(contents, S7_inherits, ContentMcpToolRequest)
+  mcp_results <- keep(contents, S7_inherits, ContentMcpToolResult)
+
+  expect_length(mcp_list, 1)
+  expect_equal(mcp_list[[1]]@server_name, "deepwiki")
+  expect_true(length(mcp_list[[1]]@tools) > 0)
+
+  expect_length(mcp_requests, 1)
+  expect_length(mcp_results, 1)
+  expect_equal(mcp_requests[[1]]@server_name, "deepwiki")
+  expect_equal(mcp_requests[[1]]@name, "read_wiki_structure")
+  expect_null(mcp_results[[1]]@error)
+})
+
+test_that("value_turn() parses mcp_call output", {
+  provider <- chat_openai_test()$get_provider()
+
+  result <- list(
+    output = list(
+      list(
+        type = "mcp_call",
+        id = "mcp_call_1",
+        name = "read_wiki_structure",
+        server_label = "deepwiki",
+        arguments = '{"repo_name":"tidyverse/ellmer"}',
+        output = "# Page: Overview\nThe ellmer R package...",
+        error = NULL
+      )
+    ),
+    usage = list(input_tokens = 10, output_tokens = 5),
+    service_tier = "default"
+  )
+
+  turn <- value_turn(provider, result)
+  expect_length(turn@contents, 2)
+
+  req <- turn@contents[[1]]
+  expect_s7_class(req, ContentMcpToolRequest)
+  expect_equal(req@id, "mcp_call_1")
+  expect_equal(req@name, "read_wiki_structure")
+  expect_equal(req@server_name, "deepwiki")
+  expect_equal(req@arguments, list(repo_name = "tidyverse/ellmer"))
+
+  resp <- turn@contents[[2]]
+  expect_s7_class(resp, ContentMcpToolResult)
+  expect_s7_class(resp, ContentToolResult)
+  expect_equal(resp@request@id, "mcp_call_1")
+  expect_equal(resp@request@name, "read_wiki_structure")
+  expect_equal(resp@request@arguments, list(repo_name = "tidyverse/ellmer"))
+  expect_null(resp@error)
+  expect_equal(resp@value, "# Page: Overview\nThe ellmer R package...")
+  expect_equal(
+    resp@content,
+    list(list(
+      type = "text",
+      text = "# Page: Overview\nThe ellmer R package..."
+    ))
+  )
+})
+
+test_that("value_turn() parses mcp_call with error", {
+  provider <- chat_openai_test()$get_provider()
+
+  result <- list(
+    output = list(
+      list(
+        type = "mcp_call",
+        id = "mcp_call_2",
+        name = "execute_query",
+        server_label = "db_server",
+        arguments = '{"query":"SELECT 1"}',
+        output = NULL,
+        error = "Connection refused"
+      )
+    ),
+    usage = list(input_tokens = 10, output_tokens = 5),
+    service_tier = "default"
+  )
+
+  turn <- value_turn(provider, result)
+  resp <- turn@contents[[2]]
+  expect_s7_class(resp, ContentMcpToolResult)
+  expect_equal(resp@error, "Connection refused")
+  expect_equal(
+    resp@content,
+    list(list(type = "text", text = "Connection refused"))
+  )
+})
+
+test_that("value_turn() parses mcp_call with structured error", {
+  provider <- chat_openai_test()$get_provider()
+
+  error_content <- list(
+    list(
+      type = "text",
+      text = "validation error",
+      annotations = NULL,
+      meta = NULL
+    )
+  )
+  result <- list(
+    output = list(
+      list(
+        type = "mcp_call",
+        id = "mcp_call_3",
+        name = "read_wiki_contents",
+        server_label = "deepwiki",
+        arguments = '{"repoName":"tidyverse/ellmer"}',
+        output = NULL,
+        error = list(type = "mcp_tool_execution_error", content = error_content)
+      )
+    ),
+    usage = list(input_tokens = 10, output_tokens = 5),
+    service_tier = "default"
+  )
+
+  turn <- value_turn(provider, result)
+  resp <- turn@contents[[2]]
+  expect_s7_class(resp, ContentMcpToolResult)
+  expect_equal(resp@error, "validation error")
+  expect_equal(resp@content, error_content)
+})
+
+test_that("value_turn() parses mcp_list_tools output", {
+  provider <- chat_openai_test()$get_provider()
+
+  result <- list(
+    output = list(
+      list(
+        type = "mcp_list_tools",
+        server_label = "deepwiki",
+        tools = list(
+          list(
+            name = "read_wiki_structure",
+            description = "Get docs structure",
+            input_schema = list(type = "object")
+          ),
+          list(
+            name = "read_wiki_contents",
+            description = "Get docs contents",
+            input_schema = list(type = "object")
+          )
+        )
+      ),
+      list(
+        type = "message",
+        content = list(list(text = "I found some tools."))
+      )
+    ),
+    usage = list(input_tokens = 10, output_tokens = 5),
+    service_tier = "default"
+  )
+
+  turn <- value_turn(provider, result)
+  expect_length(turn@contents, 2)
+
+  mcp_list <- turn@contents[[1]]
+  expect_s7_class(mcp_list, ContentMcpListTools)
+  expect_equal(mcp_list@server_name, "deepwiki")
+  expect_length(mcp_list@tools, 2)
+  expect_equal(mcp_list@tools[[1]]$name, "read_wiki_structure")
+
+  expect_s7_class(turn@contents[[2]], ContentText)
+})
+
+test_that("value_turn() errors on mcp_approval_request", {
+  provider <- chat_openai_test()$get_provider()
+
+  result <- list(
+    output = list(
+      list(
+        type = "mcp_approval_request",
+        id = "mcpar_1",
+        name = "execute_query",
+        server_label = "db_server",
+        arguments = '{"query":"DROP TABLE users"}'
+      )
+    ),
+    usage = list(input_tokens = 10, output_tokens = 5),
+    service_tier = "default"
+  )
+
+  expect_error(
+    value_turn(provider, result),
+    "require_approval"
+  )
+})
+
+test_that("as_json round-trips mcp_call without duplication", {
+  provider <- chat_openai_test()$get_provider()
+
+  mcp_output <- list(
+    type = "mcp_call",
+    id = "mcp_call_1",
+    name = "read_wiki_structure",
+    server_label = "deepwiki",
+    arguments = '{"repo_name":"tidyverse/ellmer"}',
+    output = "Result text",
+    error = NULL
+  )
+  result <- list(
+    output = list(mcp_output),
+    usage = list(input_tokens = 10, output_tokens = 5),
+    service_tier = "default"
+  )
+
+  turn <- value_turn(provider, result)
+  json_items <- as_json(provider, turn@contents, role = "assistant")
+  non_null <- compact(json_items)
+  expect_length(non_null, 1)
+  expect_equal(non_null[[1]]$type, "mcp_call")
+  expect_false("input" %in% names(non_null[[1]]))
+})

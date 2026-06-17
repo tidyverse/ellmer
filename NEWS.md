@@ -1,5 +1,8 @@
 # ellmer (development version)
 
+* `mcp_connector()` creates a provider-hosted MCP server connection that can be registered with `$register_tool()`. Both `chat_anthropic()` and `chat_openai()` are supported. The provider connects to the MCP server on your behalf, handling tool discovery and execution server-side (#991).
+
+* `chat_anthropic()` and `chat_openai()` now handle server-side MCP tool content blocks (`mcp_tool_use`/`mcp_tool_result` for Anthropic; `mcp_list_tools`/`mcp_call` for OpenAI), allowing models to connect to remote MCP servers directly via the provider's API (thanks @klin333, #991).
 * `chat_portkey()` no longer errors when when using a custom Portkey gateway without the `PORTKEY_VIRTUAL_KEY` env var being set (@thisisnic, #872).
 * `chat_google_vertex()` and `models_google_vertex()` now default `location` and `project_id` to the `GOOGLE_CLOUD_LOCATION` and `GOOGLE_CLOUD_PROJECT` environment variables, no longer incorrectly use `GOOGLE_API_KEY` for authentication, and give a clearer error when cached credentials are invalid (@thisisnic, #994).
 * `models_groq()` lists available models for `chat_groq()` (@thisisnic, #921).

@@ -407,6 +407,9 @@ Chat <- R6::R6Class(
     #' @param tool A tool definition created by [tool()].
     register_tool = function(tool) {
       check_tool(tool)
+      if (S7_inherits(tool, McpConnector)) {
+        check_mcp_connector_tool(private$provider, tool)
+      }
       if (has_name(private$tools, tool@name)) {
         cli::cli_inform("Replacing existing {tool@name} tool.")
       }
@@ -728,8 +731,17 @@ Chat <- R6::R6Class(
 
         if (echo == "all") {
           echo_non_text_contents(turn)
+        } else if (echo == "output") {
+          echo_server_tool_contents(turn, echo)
         }
-        # When `echo="output"`, tool calls are emitted in `invoke_tools()`
+
+        if (yield_as_content) {
+          for (content in turn@contents) {
+            if (is_mcp_content(content)) {
+              yield(content)
+            }
+          }
+        }
       }
 
       coro::exhausted()
@@ -825,8 +837,17 @@ Chat <- R6::R6Class(
 
         if (echo == "all") {
           echo_non_text_contents(turn)
+        } else if (echo == "output") {
+          echo_server_tool_contents(turn, echo)
         }
-        # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
+
+        if (yield_as_content) {
+          for (content in turn@contents) {
+            if (is_mcp_content(content)) {
+              yield(content)
+            }
+          }
+        }
       }
       coro::exhausted()
     }),
@@ -889,7 +910,7 @@ print.Chat <- function(x, ...) {
     }
 
     cli::cat_rule(cli::format_inline("{color_role(turn@role)}{label}"))
-    cat(format(turns[[i]]))
+    cat(format(turns[[i]], tool_style = "reprex", tool_max_lines = 5))
   }
 
   invisible(x)

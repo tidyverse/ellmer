@@ -1,3 +1,17 @@
+test_anthropic_provider <- function() {
+  ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-sonnet-4-20250514",
+    params = list(),
+    extra_args = list(),
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+}
+
 test_that("can make simple request", {
   vcr::local_cassette("anthropic-basic")
 
@@ -51,6 +65,46 @@ test_that("can search web pages", {
   vcr::local_cassette("anthropic-web-search")
   chat_fun <- \(...) chat_anthropic_test(...)
   test_tool_web_search(chat_fun, claude_tool_web_search())
+})
+
+test_that("can use MCP connector tools", {
+  vcr::local_cassette("anthropic-mcp-tool")
+
+  chat <- chat_anthropic_test(
+    system_prompt = "Use the read_wiki_structure tool to answer the question. Be brief.",
+    beta_headers = "mcp-client-2025-11-20",
+    api_args = list(
+      mcp_servers = list(
+        list(
+          type = "url",
+          url = "https://mcp.deepwiki.com/mcp",
+          name = "deepwiki"
+        )
+      ),
+      tools = list(
+        list(type = "mcp_toolset", mcp_server_name = "deepwiki")
+      )
+    )
+  )
+
+  result <- chat$chat(
+    "What are the top-level sections in the tidyverse/ellmer documentation?"
+  )
+  expect_match(result, "Core Architecture")
+
+  turns <- chat$get_turns()
+  assistant_turn <- turns[[length(turns)]]
+  contents <- assistant_turn@contents
+
+  mcp_requests <- keep(contents, S7_inherits, ContentMcpToolRequest)
+  mcp_results <- keep(contents, S7_inherits, ContentMcpToolResult)
+
+  expect_length(mcp_requests, 1)
+  expect_length(mcp_results, 1)
+  expect_equal(mcp_requests[[1]]@server_name, "deepwiki")
+  expect_equal(mcp_requests[[1]]@name, "read_wiki_structure")
+  expect_null(mcp_results[[1]]@error)
+  expect_true(length(mcp_results[[1]]@content) > 0)
 })
 
 test_that("tools can return images", {
@@ -145,17 +199,7 @@ test_that("batch chat works", {
 })
 
 test_that("value_turn() parses server_tool_use input from JSON string", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
 
   result <- list(
     content = list(
@@ -182,17 +226,7 @@ test_that("value_turn() parses server_tool_use input from JSON string", {
 })
 
 test_that("value_turn() parses server_tool_use web_fetch input from JSON string", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
 
   result <- list(
     content = list(
@@ -218,18 +252,334 @@ test_that("value_turn() parses server_tool_use web_fetch input from JSON string"
   expect_equal(fetch_content@url, "https://example.com")
 })
 
-test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
+test_that("value_turn() parses mcp_tool_use content", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_use",
+        id = "mcptoolu_1",
+        name = "execute_query",
+        server_name = "snowflake",
+        input = list(query = "SHOW DATABASES")
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
   )
+
+  turn <- value_turn(provider, result)
+  mcp_content <- turn@contents[[1]]
+  expect_s7_class(mcp_content, ContentMcpToolRequest)
+  expect_equal(mcp_content@id, "mcptoolu_1")
+  expect_equal(mcp_content@name, "execute_query")
+  expect_equal(mcp_content@server_name, "snowflake")
+  expect_equal(mcp_content@json$input, list(query = "SHOW DATABASES"))
+})
+
+test_that("value_turn() parses mcp_tool_use with string input from streaming", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_use",
+        id = "mcptoolu_2",
+        name = "execute_query",
+        server_name = "snowflake",
+        input = '{"query": "SHOW DATABASES"}'
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  mcp_content <- turn@contents[[1]]
+  expect_s7_class(mcp_content, ContentMcpToolRequest)
+  expect_equal(mcp_content@arguments, list(query = "SHOW DATABASES"))
+  expect_equal(mcp_content@json$input, list(query = "SHOW DATABASES"))
+})
+
+test_that("value_turn() parses mcp_tool_use with empty string input from streaming", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_use",
+        id = "mcptoolu_3",
+        name = "list_tools",
+        server_name = "snowflake",
+        input = "{}"
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  mcp_content <- turn@contents[[1]]
+  expect_s7_class(mcp_content, ContentMcpToolRequest)
+  expect_type(mcp_content@json$input, "list")
+})
+
+test_that("value_turn() parses mcp_tool_result content", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_result",
+        tool_use_id = "mcptoolu_1",
+        content = list(list(type = "text", text = "DB1\nDB2")),
+        is_error = FALSE
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  mcp_content <- turn@contents[[1]]
+  expect_s7_class(mcp_content, ContentMcpToolResult)
+  expect_s7_class(mcp_content, ContentToolResult)
+  expect_equal(mcp_content@request@id, "mcptoolu_1")
+  expect_null(mcp_content@error)
+  expect_equal(mcp_content@value, "DB1\nDB2")
+  expect_equal(
+    mcp_content@content,
+    list(list(type = "text", text = "DB1\nDB2"))
+  )
+})
+
+test_that("value_turn() links mcp_tool_result to its mcp_tool_use request", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_use",
+        id = "mcptoolu_1",
+        name = "execute_query",
+        server_name = "snowflake",
+        input = list(query = "SHOW DATABASES")
+      ),
+      list(
+        type = "mcp_tool_result",
+        tool_use_id = "mcptoolu_1",
+        content = list(list(type = "text", text = "DB1\nDB2")),
+        is_error = FALSE
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  mcp_result <- turn@contents[[2]]
+  expect_s7_class(mcp_result, ContentMcpToolResult)
+  expect_equal(mcp_result@request@id, "mcptoolu_1")
+  expect_equal(mcp_result@request@name, "execute_query")
+  expect_equal(mcp_result@request@arguments, list(query = "SHOW DATABASES"))
+})
+
+test_that("value_turn() extracts images from mcp_tool_result content", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_result",
+        tool_use_id = "mcptoolu_1",
+        content = list(
+          list(type = "text", text = "Here is the chart:"),
+          list(
+            type = "image",
+            source = list(
+              type = "base64",
+              media_type = "image/png",
+              data = "iVBORw0KGgo="
+            )
+          )
+        ),
+        is_error = FALSE
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  expect_length(turn@contents, 2)
+
+  mcp_result <- turn@contents[[1]]
+  expect_s7_class(mcp_result, ContentMcpToolResult)
+  expect_equal(mcp_result@value, "Here is the chart:")
+
+  img <- turn@contents[[2]]
+  expect_s7_class(img, ContentImageInline)
+  expect_equal(img@type, "image/png")
+  expect_equal(img@data, "iVBORw0KGgo=")
+})
+
+test_that("value_turn() parses mcp_tool_result with is_error = TRUE", {
+  provider <- test_anthropic_provider()
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_result",
+        tool_use_id = "mcptoolu_2",
+        content = list(list(type = "text", text = "Connection refused")),
+        is_error = TRUE
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  mcp_content <- turn@contents[[1]]
+  expect_s7_class(mcp_content, ContentMcpToolResult)
+  expect_equal(mcp_content@error, "Connection refused")
+  expect_equal(
+    mcp_content@content,
+    list(list(type = "text", text = "Connection refused"))
+  )
+})
+
+test_that("format(ContentMcpToolRequest) shows ID, server/name, and arguments", {
+  req <- ContentMcpToolRequest(
+    id = "mcptoolu_1",
+    name = "execute_query",
+    arguments = list(query = "SHOW DATABASES"),
+    tool = mcp_tool_def("execute_query", "snowflake"),
+    server_name = "snowflake",
+    json = list(input = list(query = "SHOW DATABASES"))
+  )
+  out <- format(req)
+  expect_match(out, "mcp tool request")
+  expect_match(out, "mcptoolu_1", fixed = TRUE)
+  expect_match(out, "snowflake__execute_query", fixed = TRUE)
+  expect_match(out, "SHOW DATABASES", fixed = TRUE)
+})
+
+test_that("format(ContentMcpToolRequest) handles non-list input", {
+  req <- ContentMcpToolRequest(
+    id = "mcptoolu_2",
+    name = "echo",
+    arguments = list("hello world"),
+    tool = mcp_tool_def("echo", "test"),
+    server_name = "test",
+    json = list(input = "hello world")
+  )
+  out <- format(req)
+  expect_match(out, "mcp tool request")
+  expect_match(out, "mcptoolu_2", fixed = TRUE)
+  expect_match(out, "hello world", fixed = TRUE)
+})
+
+test_that("format(ContentMcpToolRequest) handles missing input", {
+  req <- ContentMcpToolRequest(
+    id = "mcptoolu_3",
+    name = "list_tools",
+    arguments = list(),
+    tool = mcp_tool_def("list_tools", "test"),
+    server_name = "test",
+    json = list()
+  )
+  out <- format(req)
+  expect_match(out, "mcp tool request")
+  expect_match(out, "test__list_tools", fixed = TRUE)
+})
+
+test_that("format(ContentMcpToolResult) shows ID and result text", {
+  res <- ContentMcpToolResult(
+    value = "DB1\nDB2",
+    request = ContentToolRequest(
+      id = "mcptoolu_1",
+      name = "",
+      arguments = list()
+    ),
+    content = list(list(type = "text", text = "DB1\nDB2")),
+    json = list()
+  )
+  out <- format(res)
+  expect_match(out, "mcp tool result")
+  expect_match(out, "mcptoolu_1", fixed = TRUE)
+  expect_match(out, "DB1", fixed = TRUE)
+})
+
+test_that("format(ContentMcpToolResult) shows error in red", {
+  res <- ContentMcpToolResult(
+    error = "Connection refused",
+    request = ContentToolRequest(
+      id = "mcptoolu_2",
+      name = "",
+      arguments = list()
+    ),
+    content = list(list(type = "text", text = "Connection refused")),
+    json = list()
+  )
+  out <- format(res)
+  expect_match(out, "mcp tool result")
+  expect_match(out, "mcptoolu_2", fixed = TRUE)
+  expect_match(out, "Connection refused", fixed = TRUE)
+})
+
+test_that("format(ContentMcpToolResult) handles empty content", {
+  res <- ContentMcpToolResult(
+    value = "",
+    request = ContentToolRequest(
+      id = "mcptoolu_3",
+      name = "",
+      arguments = list()
+    ),
+    content = list(),
+    json = list()
+  )
+  expect_no_error(format(res))
+})
+
+test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens", {
+  provider <- test_anthropic_provider()
 
   result <- list(
     content = list(list(type = "text", text = "ok")),
@@ -257,17 +607,7 @@ test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens"
 })
 
 test_that("stream_merge_chunks() handles citations_delta", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
 
   chunks <- list(
     list(

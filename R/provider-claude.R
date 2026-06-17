@@ -2,6 +2,7 @@
 #' @include content.R
 #' @include turns.R
 #' @include tools-def.R
+#' @include tools-built-in.R
 NULL
 
 #' Chat with an Anthropic Claude model
@@ -54,6 +55,41 @@ NULL
 #'
 #' See all the details at
 #' <https://docs.claude.com/en/docs/build-with-claude/prompt-caching>.
+#'
+#' # Server-side MCP tools
+#'
+#' Claude's
+#' [MCP connector](https://platform.claude.com/docs/en/docs/agents-and-tools/mcp-connector)
+#' (beta) lets Claude connect to remote MCP servers directly. Unlike
+#' local tool use, Claude discovers the tools available on the server
+#' and handles tool execution on your behalf — no client-side MCP
+#' handling is needed.
+#'
+#' Use [mcp_connector()] to register tools from an MCP server with a
+#' chat:
+#'
+#' ```r
+#' chat <- chat_anthropic()
+#' connector <- mcp_connector(
+#'   url = "https://mcp.deepwiki.com/mcp",
+#'   name = "deepwiki"
+#' )
+#' chat$register_tool(connector)
+#' chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
+#' ```
+#'
+#' If the MCP server requires authentication, pass a credential
+#' function. The return value is sent as the `authorization_token`
+#' field on the MCP server configuration.
+#'
+#' ```r
+#' connector <- mcp_connector(
+#'   url = "https://private-mcp-server.example.com/mcp",
+#'   name = "private",
+#'   credentials = function() Sys.getenv("MCP_SERVER_TOKEN")
+#' )
+#' chat$register_tool(connector)
+#' ```
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -229,6 +265,21 @@ method(chat_body, ProviderAnthropic) <- function(
     tool_choice <- NULL
     output_config <- NULL
   }
+  mcp_connectors <- keep(unname(tools), \(t) S7_inherits(t, McpConnector))
+  if (length(mcp_connectors) > 0) {
+    mcp_servers <- map(mcp_connectors, function(conn) {
+      server <- compact(list(
+        type = "url",
+        url = conn@url,
+        name = conn@name,
+        authorization_token = if (!is.null(conn@credentials)) conn@credentials()
+      ))
+      modify_list(server, conn@extra)
+    })
+  } else {
+    mcp_servers <- NULL
+  }
+
   tools <- as_json(provider, unname(tools))
 
   params <- chat_params(provider, provider@params)
@@ -256,6 +307,7 @@ method(chat_body, ProviderAnthropic) <- function(
     messages = messages,
     stream = stream,
     tools = tools,
+    mcp_servers = mcp_servers,
     tool_choice = tool_choice,
     thinking = thinking,
     output_config = output_config,
@@ -425,6 +477,48 @@ method(value_turn, ProviderAnthropic) <- function(
       )
     } else if (content$type == "web_fetch_tool_result") {
       ContentToolResponseFetch(url = content$url %||% "failed", json = content)
+    } else if (content$type == "mcp_tool_use") {
+      if (is_string(content$input)) {
+        content$input <- jsonlite::parse_json(content$input)
+      }
+      input <- content$input %||% list()
+      ContentMcpToolRequest(
+        id = content$id,
+        name = content$name,
+        arguments = if (is.list(input)) input else list(input),
+        tool = mcp_tool_def(content$name, content$server_name),
+        server_name = content$server_name,
+        json = content
+      )
+    } else if (content$type == "mcp_tool_result") {
+      content_blocks <- content$content %||% list()
+      text_blocks <- keep(content_blocks, \(b) identical(b$type, "text"))
+      text <- paste(
+        vapply(text_blocks, function(b) b$text %||% "", character(1)),
+        collapse = "\n"
+      )
+      is_error <- content$is_error %||% FALSE
+      result <- ContentMcpToolResult(
+        value = if (!is_error) text else NULL,
+        error = if (is_error) text else NULL,
+        request = ContentToolRequest(
+          id = content$tool_use_id,
+          name = "",
+          arguments = list()
+        ),
+        content = content_blocks,
+        json = content
+      )
+      images <- lapply(
+        keep(content_blocks, \(b) identical(b$type, "image")),
+        \(b) {
+          ContentImageInline(
+            type = b$source$media_type %||% "image/png",
+            data = b$source$data
+          )
+        }
+      )
+      c(list(result), images)
     } else if (content$type == "thinking") {
       ContentThinking(
         content$thinking,
@@ -437,6 +531,22 @@ method(value_turn, ProviderAnthropic) <- function(
       )
     }
   })
+  # Flatten: mcp_tool_result may return a list of Content objects (result + images)
+  contents <- unlist(contents, recursive = FALSE)
+
+  # Link MCP results to their requests so @request has the tool name
+  mcp_requests <- keep(contents, S7_inherits, ContentMcpToolRequest)
+  request_map <- set_names(mcp_requests, map_chr(mcp_requests, \(r) r@id))
+  for (i in seq_along(contents)) {
+    if (S7_inherits(contents[[i]], ContentMcpToolResult)) {
+      req_id <- contents[[i]]@request@id
+      if (has_name(request_map, req_id)) {
+        matched <- request_map[[req_id]]
+        contents[[i]]@request@name <- matched@name
+        contents[[i]]@request@arguments <- matched@arguments
+      }
+    }
+  }
 
   tokens <- value_tokens(provider, result)
   cache_write <- result$usage$cache_creation_input_tokens %||% 0
@@ -593,6 +703,22 @@ method(as_json, list(ProviderAnthropic, ContentToolResult)) <- function(
   )
 }
 
+method(as_json, list(ProviderAnthropic, ContentMcpToolRequest)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
+}
+
+method(as_json, list(ProviderAnthropic, ContentMcpToolResult)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
+}
+
 method(as_json, list(ProviderAnthropic, ToolDef)) <- function(
   provider,
   x,
@@ -619,6 +745,56 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
     thinking = x@thinking,
     signature = x@extra$signature
   )
+}
+
+# MCP connector support --------------------------------------------------------
+
+method(check_mcp_connector_tool, ProviderAnthropic) <- function(
+  provider,
+  tool,
+  ...,
+  error_call = caller_env()
+) {
+  invisible()
+}
+
+method(as_json, list(ProviderAnthropic, McpConnector)) <- function(
+  provider,
+  x,
+  ...
+) {
+  list(type = "mcp_toolset", mcp_server_name = x@name)
+}
+
+method(chat_request, ProviderAnthropic) <- function(
+  provider,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  has_mcp <- any(map_lgl(tools, \(t) S7_inherits(t, McpConnector)))
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, chat_path(provider))
+
+  body <- chat_body(
+    provider = provider,
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+  body <- modify_list(body, provider@extra_args)
+  req <- req_body_json(req, body)
+  req <- req_headers(req, !!!provider@extra_headers)
+
+  if (has_mcp) {
+    beta <- unique(c(provider@beta_headers, "mcp-client-2025-11-20"))
+    req <- req_headers(req, `anthropic-beta` = paste(beta, collapse = ","))
+  }
+
+  req
 }
 
 # Batch chat -------------------------------------------------------------------
