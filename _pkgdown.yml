@@ -27,6 +27,7 @@ reference:
   - chat
   - Chat
   - token_usage
+  - models_update_prices
 
 - subtitle: Official providers
   desc: >
