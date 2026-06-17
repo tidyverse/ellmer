@@ -1550,6 +1550,14 @@
   },
   {
     "provider": "Anthropic",
+    "model": "claude-fable-5",
+    "variant": "",
+    "input": 10,
+    "output": 50,
+    "cached_input": 1
+  },
+  {
+    "provider": "Anthropic",
     "model": "claude-haiku-4-5",
     "variant": "",
     "input": 1,
@@ -7322,5 +7330,85 @@
     "variant": "",
     "input": 0.8,
     "output": 2.56
+  },
+  {
+    "provider": "Posit",
+    "model": "claude-fable-5",
+    "variant": "",
+    "input": 11,
+    "output": 55,
+    "cached_input": 1.1
+  },
+  {
+    "provider": "Posit",
+    "model": "claude-haiku-4-5",
+    "variant": "",
+    "input": 1.1,
+    "output": 5.5,
+    "cached_input": 0.11
+  },
+  {
+    "provider": "Posit",
+    "model": "claude-opus-4-5",
+    "variant": "",
+    "input": 5.5,
+    "output": 27.5,
+    "cached_input": 0.55
+  },
+  {
+    "provider": "Posit",
+    "model": "claude-opus-4-6",
+    "variant": "",
+    "input": 5.5,
+    "output": 27.5,
+    "cached_input": 0.55
+  },
+  {
+    "provider": "Posit",
+    "model": "claude-opus-4-7",
+    "variant": "",
+    "input": 5.5,
+    "output": 27.5,
+    "cached_input": 0.55
+  },
+  {
+    "provider": "Posit",
+    "model": "claude-opus-4-8",
+    "variant": "",
+    "input": 5.5,
+    "output": 27.5,
+    "cached_input": 0.55
+  },
+  {
+    "provider": "Posit",
+    "model": "claude-sonnet-4-5",
+    "variant": "",
+    "input": 3.3,
+    "output": 16.5,
+    "cached_input": 0.33
+  },
+  {
+    "provider": "Posit",
+    "model": "claude-sonnet-4-5",
+    "variant": "above_200k_tokens",
+    "input": 6.6,
+    "output": 24.75,
+    "cached_input": 0.66
+  },
+  {
+    "provider": "Posit",
+    "model": "claude-sonnet-4-6",
+    "variant": "",
+    "input": 3.3,
+    "output": 16.5,
+    "cached_input": 0.33
+  },
+  {
+    "provider": "Posit",
+    "model": "google/gemma-4-26B-A4B-it",
+    "variant": "",
+    "input": 0.3,
+    "output": 1.5,
+    "cached_input": 0.03
   }
 ]
