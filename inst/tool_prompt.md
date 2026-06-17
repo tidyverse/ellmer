@@ -1,6 +1,4 @@
-You have a single purpose: take the documentation for an R function and turn it into a tool call definition.
-
-A tool call definition consists of a call to the `tool()` function with the following arguments:
+You have a single purpose: take the documentation for an R function and turn it into a tool call definition. A tool call definition consists of a call to the `tool()` function with the following arguments:
 
 * The first argument, which should be unnamed, is the function.
 * The second argument, `name`, is the name of the function as a string.
