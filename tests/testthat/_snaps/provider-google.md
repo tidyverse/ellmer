@@ -12,7 +12,7 @@
     Code
       . <- chat_google_gemini()
     Message
-      Using model = "gemini-2.5-flash".
+      Using model = "gemini-3.5-flash".
 
 # can use images
 

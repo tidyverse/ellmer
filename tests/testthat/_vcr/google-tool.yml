@@ -1,7 +1,7 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
         in Y-M-D format?"}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
@@ -13,17 +13,18 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '319'
+      content-length: '1048'
       content-type: application/json; charset=UTF-8
-      date: Mon, 07 Jul 2025 12:49:14 GMT
+      date: Wed, 17 Jun 2026 14:14:56 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=668
+      server-timing: gfet4t7; dur=1469
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
+      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
       string: |
@@ -35,38 +36,42 @@ http_interactions:
                   {
                     "functionCall": {
                       "name": "current_date",
-                      "args": {}
-                    }
+                      "args": {},
+                      "id": "ua9hy3ic"
+                    },
+                    "thoughtSignature": "EtEECs4EAQw51sfH1EkhPHx+dYL/PIkFTUAUxzUUGyrmnUoN6XP7quIeXRFY33Yf+encbY699IEM7VFIeBLin0KyjvR7HXxvHfLMzRImU+b/4d3D8D7701pOfRT5cZHi8nyxb0raxigIBCfjMwtwUbX8rFtuKc0sQsI5zKIGtPbv3zbVbgogbsoSDYyp9s2E7nxeqhwNjhd8l+1jsQH/Aytm2cbh315ZmM7AfE6mKjIRMlJB0UybokVP3Of/BZ+XcTZfnIAtAB0/cGt2ggrjcYM6rUo9JxO3dXAmiCmKkUdQQo6OGhV8kUaCxUgUgbc4nPX2aEDz5rFIzNsDkEFrh7um6FJNdC8knIY3jNOByepBFH7qn2K3N8kGlwvijedCeNiBsU8/n5oZyuxCwCXvISfJifQMkwHwNFW47aRkOMgdVITT4KbXWEE3dO8hngtlTuoxoHRQqzcSCaJmjHvCXYdhN0u5KEXpT8Stk8r7sWjZ8bCy5r/Ql834eqvKXSY4Df4P7lmz6qFb7vNIKzhRkhqVwuylIq2z9EgsrPdOtsT/HMpSIuI1XPOjZjnd/L44Iyy/RKZuKcvGCCpcgU8lSiHoTBHP0qJvagHqRaFkZ5dpgfbomt53huJda8ucMDa89elUwEkV0Uh2OT6eDMYFJJbEF7Qv3N7AO8xnPfDW6ThY5OkeN1cVyqXaHnBb3PL0l8VzNCPkF6Bf2o2rR0BgkwIknPwSyCY01QX0uy0AqihiMLDJCYJGD5CyvtDI9zjGsRqb52QoeLMk2H9oATttkHt3Ldk="
                   }
                 ],
                 "role": "model"
               },
               "finishReason": "STOP",
-              "index": 0
+              "index": 0,
+              "finishMessage": "Model generated function call(s)."
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 83,
+            "promptTokenCount": 67,
             "candidatesTokenCount": 10,
-            "totalTokenCount": 140,
+            "totalTokenCount": 241,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 83
+                "tokenCount": 67
               }
             ],
-            "thoughtsTokenCount": 47
+            "thoughtsTokenCount": 164,
+            "serviceTier": "standard"
           },
-          "modelVersion": "gemini-2.5-flash",
-          "responseId": "SsJraLefIo-kmtkPvpSSyA8"
+          "modelVersion": "gemini-3.5-flash",
+          "responseId": "36syaqPbEfrxnsEPtt2s-As"
         }
-  recorded_at: 2025-07-07 12:49:14
+  recorded_at: 2026-06-17 14:14:56
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
-        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}}}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"EtEECs4EAQw51sfH1EkhPHx+dYL/PIkFTUAUxzUUGyrmnUoN6XP7quIeXRFY33Yf+encbY699IEM7VFIeBLin0KyjvR7HXxvHfLMzRImU+b/4d3D8D7701pOfRT5cZHi8nyxb0raxigIBCfjMwtwUbX8rFtuKc0sQsI5zKIGtPbv3zbVbgogbsoSDYyp9s2E7nxeqhwNjhd8l+1jsQH/Aytm2cbh315ZmM7AfE6mKjIRMlJB0UybokVP3Of/BZ+XcTZfnIAtAB0/cGt2ggrjcYM6rUo9JxO3dXAmiCmKkUdQQo6OGhV8kUaCxUgUgbc4nPX2aEDz5rFIzNsDkEFrh7um6FJNdC8knIY3jNOByepBFH7qn2K3N8kGlwvijedCeNiBsU8/n5oZyuxCwCXvISfJifQMkwHwNFW47aRkOMgdVITT4KbXWEE3dO8hngtlTuoxoHRQqzcSCaJmjHvCXYdhN0u5KEXpT8Stk8r7sWjZ8bCy5r/Ql834eqvKXSY4Df4P7lmz6qFb7vNIKzhRkhqVwuylIq2z9EgsrPdOtsT/HMpSIuI1XPOjZjnd/L44Iyy/RKZuKcvGCCpcgU8lSiHoTBHP0qJvagHqRaFkZ5dpgfbomt53huJda8ucMDa89elUwEkV0Uh2OT6eDMYFJJbEF7Qv3N7AO8xnPfDW6ThY5OkeN1cVyqXaHnBb3PL0l8VzNCPkF6Bf2o2rR0BgkwIknPwSyCY01QX0uy0AqihiMLDJCYJGD5CyvtDI9zjGsRqb52QoeLMk2H9oATttkHt3Ldk="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
         the current date"},{"name":"current_month","description":"Return the full
         name of the current month"}]},"systemInstruction":{"parts":{"text":"Always
         use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
@@ -75,17 +80,18 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '303'
+      content-length: '559'
       content-type: application/json; charset=UTF-8
-      date: Mon, 07 Jul 2025 12:49:15 GMT
+      date: Wed, 17 Jun 2026 14:14:59 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=870
+      server-timing: gfet4t7; dur=2318
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
+      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
       string: |
@@ -95,7 +101,8 @@ http_interactions:
               "content": {
                 "parts": [
                   {
-                    "text": "It is 2024-01-01."
+                    "text": "It is 2024-01-01.",
+                    "thoughtSignature": "EsEBCr4BAQw51sever3YfbKbV75SAdi+yAwgdBjZF64Dxdd3ds6IUBvfO8SmWyHOKVfUzvA9Lmks9wGvCqj2xy4G+j+03CY04Vrm7I9QoMTkba/YSjyBiumjq4afPR9LqZeaeAf+SMxlTiIQE245VtIZ6t0a0sAJSVeSgLRARHoh7LxvFE4I5YL61v5IhpyTjt3ISuiANkH9CdF1qtX6w8T0Vvn9t11asIaBkrRO6DoEker+sT2+2faIJ/sF1010cMobKQ=="
                   }
                 ],
                 "role": "model"
@@ -105,27 +112,28 @@ http_interactions:
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 117,
+            "promptTokenCount": 264,
             "candidatesTokenCount": 14,
-            "totalTokenCount": 213,
+            "totalTokenCount": 330,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 117
+                "tokenCount": 264
               }
             ],
-            "thoughtsTokenCount": 82
+            "thoughtsTokenCount": 52,
+            "serviceTier": "standard"
           },
-          "modelVersion": "gemini-2.5-flash",
-          "responseId": "S8JraNzNJNnEqtsPtYexqQU"
+          "modelVersion": "gemini-3.5-flash",
+          "responseId": "4asyaro6m_uR1Q-yuZ65Dg"
         }
-  recorded_at: 2025-07-07 12:49:15
+  recorded_at: 2026-06-17 14:14:59
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
-        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}}}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
+        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"EtEECs4EAQw51sfH1EkhPHx+dYL/PIkFTUAUxzUUGyrmnUoN6XP7quIeXRFY33Yf+encbY699IEM7VFIeBLin0KyjvR7HXxvHfLMzRImU+b/4d3D8D7701pOfRT5cZHi8nyxb0raxigIBCfjMwtwUbX8rFtuKc0sQsI5zKIGtPbv3zbVbgogbsoSDYyp9s2E7nxeqhwNjhd8l+1jsQH/Aytm2cbh315ZmM7AfE6mKjIRMlJB0UybokVP3Of/BZ+XcTZfnIAtAB0/cGt2ggrjcYM6rUo9JxO3dXAmiCmKkUdQQo6OGhV8kUaCxUgUgbc4nPX2aEDz5rFIzNsDkEFrh7um6FJNdC8knIY3jNOByepBFH7qn2K3N8kGlwvijedCeNiBsU8/n5oZyuxCwCXvISfJifQMkwHwNFW47aRkOMgdVITT4KbXWEE3dO8hngtlTuoxoHRQqzcSCaJmjHvCXYdhN0u5KEXpT8Stk8r7sWjZ8bCy5r/Ql834eqvKXSY4Df4P7lmz6qFb7vNIKzhRkhqVwuylIq2z9EgsrPdOtsT/HMpSIuI1XPOjZjnd/L44Iyy/RKZuKcvGCCpcgU8lSiHoTBHP0qJvagHqRaFkZ5dpgfbomt53huJda8ucMDa89elUwEkV0Uh2OT6eDMYFJJbEF7Qv3N7AO8xnPfDW6ThY5OkeN1cVyqXaHnBb3PL0l8VzNCPkF6Bf2o2rR0BgkwIknPwSyCY01QX0uy0AqihiMLDJCYJGD5CyvtDI9zjGsRqb52QoeLMk2H9oATttkHt3Ldk="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
         is 2024-01-01."}]},{"role":"user","parts":[{"text":"What month is it? Provide
         the full name"}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
         the current date"},{"name":"current_month","description":"Return the full
@@ -136,17 +144,18 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '320'
+      content-length: '947'
       content-type: application/json; charset=UTF-8
-      date: Mon, 07 Jul 2025 12:49:17 GMT
+      date: Wed, 17 Jun 2026 14:15:00 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1330
+      server-timing: gfet4t7; dur=1236
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
+      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
       string: |
@@ -158,40 +167,44 @@ http_interactions:
                   {
                     "functionCall": {
                       "name": "current_month",
-                      "args": {}
-                    }
+                      "args": {},
+                      "id": "bnzjhx1x"
+                    },
+                    "thoughtSignature": "Eu4DCusDAQw51sfyHOBYoFPG/wbRAJlqEipavbdpEvjLDAh+JdJdh0hmYMJqKIT6WcrbZaK2n0F16rQKdCSm3EvN0pVcV4ZPvcbkV1geVyyjkUjsTA6zgyp6Ch85QZB0DiR/yIaH8bj5+LN5JC2HjfIu6vWCMFJ2R0TkrfVB2OjTosxr4vxbEVGBQNWu2yXO9awCqfeD0G8Jk/prVfpbt+qCOTJzDrrRrd4egxyJeoG7qXnNxXNq5s9T7O1wP3GdmNmHdVtQmmVwwEwKm1fbnag1AIkYtW19tzxeba2qUtKzPDTWLZfvuk4fvA26Et1d6Lka4l/JPyf/kwJMAJmfKphfwj2TtHugp4Tkq9cfcnvoisMsluFQtZAEaV22W1aaiDUHbosr5YDhHrN4x3WNUZDA1mzZ8aHiznxBEcJVjHkUvPOdT7qEkcBpDUzBikm5MN50PvAwbtiFC7q04bcUTNo5RPbfYRH87yV5Lq3FcTH71f7gBzQfliHNe6yiNgYUvurSdnEM0XDYiX4VEnXEm9Zxk6+TiLSfd5y44SZ0Wz65jU4lqOXTe/Hy2VWjirHSpCz0zo2p9OkQXwxnNF3oY/lC6FnXbh84vV7ZFryRj5GJXkZmRgHQ68+wNLQEasXD+jjcouqkRGMEYWYLoOEbAbQ="
                   }
                 ],
                 "role": "model"
               },
               "finishReason": "STOP",
-              "index": 0
+              "index": 0,
+              "finishMessage": "Model generated function call(s)."
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 142,
+            "promptTokenCount": 289,
             "candidatesTokenCount": 10,
-            "totalTokenCount": 192,
+            "totalTokenCount": 420,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 142
+                "tokenCount": 289
               }
             ],
-            "thoughtsTokenCount": 40
+            "thoughtsTokenCount": 121,
+            "serviceTier": "standard"
           },
-          "modelVersion": "gemini-2.5-flash",
-          "responseId": "TcJraIawA-eVmtkPk6vesQU"
+          "modelVersion": "gemini-3.5-flash",
+          "responseId": "46syavSrH534nsEP75feqAY"
         }
-  recorded_at: 2025-07-07 12:49:17
+  recorded_at: 2026-06-17 14:15:00
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
-        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}}}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
+        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"EtEECs4EAQw51sfH1EkhPHx+dYL/PIkFTUAUxzUUGyrmnUoN6XP7quIeXRFY33Yf+encbY699IEM7VFIeBLin0KyjvR7HXxvHfLMzRImU+b/4d3D8D7701pOfRT5cZHi8nyxb0raxigIBCfjMwtwUbX8rFtuKc0sQsI5zKIGtPbv3zbVbgogbsoSDYyp9s2E7nxeqhwNjhd8l+1jsQH/Aytm2cbh315ZmM7AfE6mKjIRMlJB0UybokVP3Of/BZ+XcTZfnIAtAB0/cGt2ggrjcYM6rUo9JxO3dXAmiCmKkUdQQo6OGhV8kUaCxUgUgbc4nPX2aEDz5rFIzNsDkEFrh7um6FJNdC8knIY3jNOByepBFH7qn2K3N8kGlwvijedCeNiBsU8/n5oZyuxCwCXvISfJifQMkwHwNFW47aRkOMgdVITT4KbXWEE3dO8hngtlTuoxoHRQqzcSCaJmjHvCXYdhN0u5KEXpT8Stk8r7sWjZ8bCy5r/Ql834eqvKXSY4Df4P7lmz6qFb7vNIKzhRkhqVwuylIq2z9EgsrPdOtsT/HMpSIuI1XPOjZjnd/L44Iyy/RKZuKcvGCCpcgU8lSiHoTBHP0qJvagHqRaFkZ5dpgfbomt53huJda8ucMDa89elUwEkV0Uh2OT6eDMYFJJbEF7Qv3N7AO8xnPfDW6ThY5OkeN1cVyqXaHnBb3PL0l8VzNCPkF6Bf2o2rR0BgkwIknPwSyCY01QX0uy0AqihiMLDJCYJGD5CyvtDI9zjGsRqb52QoeLMk2H9oATttkHt3Ldk="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
         is 2024-01-01."}]},{"role":"user","parts":[{"text":"What month is it? Provide
-        the full name"}]},{"role":"model","parts":[{"functionCall":{"name":"current_month","args":{}}}]},{"role":"user","parts":[{"functionResponse":{"name":"current_month","response":{"value":"February"}}}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        the full name"}]},{"role":"model","parts":[{"functionCall":{"name":"current_month","args":{}},"thoughtSignature":"Eu4DCusDAQw51sfyHOBYoFPG/wbRAJlqEipavbdpEvjLDAh+JdJdh0hmYMJqKIT6WcrbZaK2n0F16rQKdCSm3EvN0pVcV4ZPvcbkV1geVyyjkUjsTA6zgyp6Ch85QZB0DiR/yIaH8bj5+LN5JC2HjfIu6vWCMFJ2R0TkrfVB2OjTosxr4vxbEVGBQNWu2yXO9awCqfeD0G8Jk/prVfpbt+qCOTJzDrrRrd4egxyJeoG7qXnNxXNq5s9T7O1wP3GdmNmHdVtQmmVwwEwKm1fbnag1AIkYtW19tzxeba2qUtKzPDTWLZfvuk4fvA26Et1d6Lka4l/JPyf/kwJMAJmfKphfwj2TtHugp4Tkq9cfcnvoisMsluFQtZAEaV22W1aaiDUHbosr5YDhHrN4x3WNUZDA1mzZ8aHiznxBEcJVjHkUvPOdT7qEkcBpDUzBikm5MN50PvAwbtiFC7q04bcUTNo5RPbfYRH87yV5Lq3FcTH71f7gBzQfliHNe6yiNgYUvurSdnEM0XDYiX4VEnXEm9Zxk6+TiLSfd5y44SZ0Wz65jU4lqOXTe/Hy2VWjirHSpCz0zo2p9OkQXwxnNF3oY/lC6FnXbh84vV7ZFryRj5GJXkZmRgHQ68+wNLQEasXD+jjcouqkRGMEYWYLoOEbAbQ="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_month","response":{"value":"February"}}}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
         the current date"},{"name":"current_month","description":"Return the full
         name of the current month"}]},"systemInstruction":{"parts":{"text":"Always
         use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
@@ -200,17 +213,18 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '545'
+      content-length: '495'
       content-type: application/json; charset=UTF-8
-      date: Mon, 07 Jul 2025 12:49:18 GMT
+      date: Wed, 17 Jun 2026 14:15:01 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=880
+      server-timing: gfet4t7; dur=875
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
+      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
       string: |
@@ -221,7 +235,7 @@ http_interactions:
                 "parts": [
                   {
                     "text": "It is February.",
-                    "thoughtSignature": "CsYBAVSoXO7+Lqbiai3NrKuEMRjSOYxhTuS3RUn8F+Z5m+vaXfsJnUL8B67IA1O1saPNCF55lDptZOijnBXFfcI492a1RdE9mCI54SmjA9upvfQc1tF2JI+dU8Xrfp9B/xiQ5yW/P0p/keIHGLq+XE0fsu3iV9noZNkj4veck6D+H2arO0QEi3kTr8nZFyr6cgYXQLWFpBQbQjFJODLEpR6vRk3dtuveeA4oOzX9IJEPWHye7Il4xetPgNFUAcy0O4em0cCxGYOk"
+                    "thoughtSignature": "EokBCoYBAQw51sf1LVI7JiALYFizhkbJjHfoMSgdDIHiWxkMIC+fyktN5dd+xlk+TRjiM+zBLVkIyTqEUaC+lLUwF6BnfT3fdptm1h61JIZdIgf4HbVSz7wQQAncELMfZnVUdaqfjxQBhmSkyJucOMPX/BtbuK1KwuH+eNe/rrc8SVdB+fIRrhe2Pwg="
                   }
                 ],
                 "role": "model"
@@ -231,406 +245,20 @@ http_interactions:
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 167,
+            "promptTokenCount": 434,
             "candidatesTokenCount": 4,
-            "totalTokenCount": 212,
+            "totalTokenCount": 462,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 167
+                "tokenCount": 434
               }
             ],
-            "thoughtsTokenCount": 41
+            "thoughtsTokenCount": 24,
+            "serviceTier": "standard"
           },
-          "modelVersion": "gemini-2.5-flash",
-          "responseId": "TsJraO_mCuOKqtsP_urayQ8"
+          "modelVersion": "gemini-3.5-flash",
+          "responseId": "5asyar2XBKK1nsEPt9WaqAs"
         }
-  recorded_at: 2025-07-07 12:49:18
-- request:
-    method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
-    body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"\n    What are Joe and
-        Hadley''s favourite colours?\n    Answer like name1: colour1, name2: colour2\n  "}]}],"tools":{"functionDeclarations":[{"name":"favourite_color","description":"Returns
-        a person''s favourite colour","parameters":{"type":"object","properties":{"person":{"type":"string","description":"Name
-        of a person"}},"required":["person"]}}]},"systemInstruction":{"parts":{"text":"Be
-        very terse, not even punctuation."}},"generationConfig":{"temperature":0,"seed":1014}}'
-  response:
-    status: 200
-    headers:
-      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      content-encoding: gzip
-      content-length: '334'
-      content-type: application/json; charset=UTF-8
-      date: Mon, 07 Jul 2025 12:49:19 GMT
-      server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=868
-      vary:
-      - Origin
-      - X-Origin
-      - Referer
-      x-content-type-options: nosniff
-      x-frame-options: SAMEORIGIN
-      x-xss-protection: '0'
-    body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "functionCall": {
-                      "name": "favourite_color",
-                      "args": {
-                        "person": "Joe"
-                      }
-                    }
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 80,
-            "candidatesTokenCount": 16,
-            "totalTokenCount": 158,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 80
-              }
-            ],
-            "thoughtsTokenCount": 62
-          },
-          "modelVersion": "gemini-2.5-flash",
-          "responseId": "T8JraLbICaSuqtsPqJjB0A8"
-        }
-  recorded_at: 2025-07-07 12:49:19
-- request:
-    method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
-    body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"\n    What are Joe and
-        Hadley''s favourite colours?\n    Answer like name1: colour1, name2: colour2\n  "}]},{"role":"model","parts":[{"functionCall":{"name":"favourite_color","args":{"person":"Joe"}}}]},{"role":"user","parts":[{"functionResponse":{"name":"favourite_color","response":{"value":"sage
-        green"}}}]}],"tools":{"functionDeclarations":[{"name":"favourite_color","description":"Returns
-        a person''s favourite colour","parameters":{"type":"object","properties":{"person":{"type":"string","description":"Name
-        of a person"}},"required":["person"]}}]},"systemInstruction":{"parts":{"text":"Be
-        very terse, not even punctuation."}},"generationConfig":{"temperature":0,"seed":1014}}'
-  response:
-    status: 200
-    headers:
-      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      content-encoding: gzip
-      content-length: '338'
-      content-type: application/json; charset=UTF-8
-      date: Mon, 07 Jul 2025 12:49:20 GMT
-      server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=709
-      vary:
-      - Origin
-      - X-Origin
-      - Referer
-      x-content-type-options: nosniff
-      x-frame-options: SAMEORIGIN
-      x-xss-protection: '0'
-    body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "functionCall": {
-                      "name": "favourite_color",
-                      "args": {
-                        "person": "Hadley"
-                      }
-                    }
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 113,
-            "candidatesTokenCount": 17,
-            "totalTokenCount": 199,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 113
-              }
-            ],
-            "thoughtsTokenCount": 69
-          },
-          "modelVersion": "gemini-2.5-flash",
-          "responseId": "UMJraPuZB8KUmtkPjsTfwQ8"
-        }
-  recorded_at: 2025-07-07 12:49:20
-- request:
-    method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
-    body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"\n    What are Joe and
-        Hadley''s favourite colours?\n    Answer like name1: colour1, name2: colour2\n  "}]},{"role":"model","parts":[{"functionCall":{"name":"favourite_color","args":{"person":"Joe"}}}]},{"role":"user","parts":[{"functionResponse":{"name":"favourite_color","response":{"value":"sage
-        green"}}}]},{"role":"model","parts":[{"functionCall":{"name":"favourite_color","args":{"person":"Hadley"}}}]},{"role":"user","parts":[{"functionResponse":{"name":"favourite_color","response":{"value":"red"}}}]}],"tools":{"functionDeclarations":[{"name":"favourite_color","description":"Returns
-        a person''s favourite colour","parameters":{"type":"object","properties":{"person":{"type":"string","description":"Name
-        of a person"}},"required":["person"]}}]},"systemInstruction":{"parts":{"text":"Be
-        very terse, not even punctuation."}},"generationConfig":{"temperature":0,"seed":1014}}'
-  response:
-    status: 200
-    headers:
-      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      content-encoding: gzip
-      content-length: '302'
-      content-type: application/json; charset=UTF-8
-      date: Mon, 07 Jul 2025 12:49:20 GMT
-      server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=496
-      vary:
-      - Origin
-      - X-Origin
-      - Referer
-      x-content-type-options: nosniff
-      x-frame-options: SAMEORIGIN
-      x-xss-protection: '0'
-    body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "Joe: sage green, Hadley: red"
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 146,
-            "candidatesTokenCount": 8,
-            "totalTokenCount": 154,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 146
-              }
-            ]
-          },
-          "modelVersion": "gemini-2.5-flash",
-          "responseId": "UMJraNPgMM-8qtsPvOG7yA8"
-        }
-  recorded_at: 2025-07-07 12:49:20
-- request:
-    method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
-    body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What should I pack for
-        New York this weekend?"}]}],"tools":{"functionDeclarations":[{"name":"forecast","description":"Gets
-        the weather forecast for a city","parameters":{"type":"object","properties":{"city":{"type":"string","description":"City
-        name"}},"required":["city"]}},{"name":"equipment","description":"Gets the
-        equipment needed for a weather condition","parameters":{"type":"object","properties":{"weather":{"type":"string","description":"Weather
-        condition"}},"required":["weather"]}}]},"systemInstruction":{"parts":{"text":"\n    Use
-        provided tool calls to find the weather forecast and suitable\n    equipment
-        for a variety of weather conditions.\n\n    In your response, be very terse
-        and omit punctuation.\n  "}},"generationConfig":{"temperature":0,"seed":1014}}'
-  response:
-    status: 200
-    headers:
-      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      content-encoding: gzip
-      content-length: '333'
-      content-type: application/json; charset=UTF-8
-      date: Mon, 07 Jul 2025 12:49:21 GMT
-      server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=865
-      vary:
-      - Origin
-      - X-Origin
-      - Referer
-      x-content-type-options: nosniff
-      x-frame-options: SAMEORIGIN
-      x-xss-protection: '0'
-    body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "functionCall": {
-                      "name": "forecast",
-                      "args": {
-                        "city": "New York"
-                      }
-                    }
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 126,
-            "candidatesTokenCount": 14,
-            "totalTokenCount": 217,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 126
-              }
-            ],
-            "thoughtsTokenCount": 77
-          },
-          "modelVersion": "gemini-2.5-flash",
-          "responseId": "UcJraMCPNOa8qtsP2-yXqQU"
-        }
-  recorded_at: 2025-07-07 12:49:21
-- request:
-    method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
-    body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What should I pack for
-        New York this weekend?"}]},{"role":"model","parts":[{"functionCall":{"name":"forecast","args":{"city":"New
-        York"}}}]},{"role":"user","parts":[{"functionResponse":{"name":"forecast","response":{"value":"rainy"}}}]}],"tools":{"functionDeclarations":[{"name":"forecast","description":"Gets
-        the weather forecast for a city","parameters":{"type":"object","properties":{"city":{"type":"string","description":"City
-        name"}},"required":["city"]}},{"name":"equipment","description":"Gets the
-        equipment needed for a weather condition","parameters":{"type":"object","properties":{"weather":{"type":"string","description":"Weather
-        condition"}},"required":["weather"]}}]},"systemInstruction":{"parts":{"text":"\n    Use
-        provided tool calls to find the weather forecast and suitable\n    equipment
-        for a variety of weather conditions.\n\n    In your response, be very terse
-        and omit punctuation.\n  "}},"generationConfig":{"temperature":0,"seed":1014}}'
-  response:
-    status: 200
-    headers:
-      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      content-encoding: gzip
-      content-length: '323'
-      content-type: application/json; charset=UTF-8
-      date: Mon, 07 Jul 2025 12:49:22 GMT
-      server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=386
-      vary:
-      - Origin
-      - X-Origin
-      - Referer
-      x-content-type-options: nosniff
-      x-frame-options: SAMEORIGIN
-      x-xss-protection: '0'
-    body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "functionCall": {
-                      "name": "equipment",
-                      "args": {
-                        "weather": "rainy"
-                      }
-                    }
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 154,
-            "candidatesTokenCount": 14,
-            "totalTokenCount": 168,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 154
-              }
-            ]
-          },
-          "modelVersion": "gemini-2.5-flash",
-          "responseId": "UsJraK-rHJ2xqtsP37iywQ8"
-        }
-  recorded_at: 2025-07-07 12:49:22
-- request:
-    method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
-    body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What should I pack for
-        New York this weekend?"}]},{"role":"model","parts":[{"functionCall":{"name":"forecast","args":{"city":"New
-        York"}}}]},{"role":"user","parts":[{"functionResponse":{"name":"forecast","response":{"value":"rainy"}}}]},{"role":"model","parts":[{"functionCall":{"name":"equipment","args":{"weather":"rainy"}}}]},{"role":"user","parts":[{"functionResponse":{"name":"equipment","response":{"value":"umbrella"}}}]}],"tools":{"functionDeclarations":[{"name":"forecast","description":"Gets
-        the weather forecast for a city","parameters":{"type":"object","properties":{"city":{"type":"string","description":"City
-        name"}},"required":["city"]}},{"name":"equipment","description":"Gets the
-        equipment needed for a weather condition","parameters":{"type":"object","properties":{"weather":{"type":"string","description":"Weather
-        condition"}},"required":["weather"]}}]},"systemInstruction":{"parts":{"text":"\n    Use
-        provided tool calls to find the weather forecast and suitable\n    equipment
-        for a variety of weather conditions.\n\n    In your response, be very terse
-        and omit punctuation.\n  "}},"generationConfig":{"temperature":0,"seed":1014}}'
-  response:
-    status: 200
-    headers:
-      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      content-encoding: gzip
-      content-length: '284'
-      content-type: application/json; charset=UTF-8
-      date: Mon, 07 Jul 2025 12:49:22 GMT
-      server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=361
-      vary:
-      - Origin
-      - X-Origin
-      - Referer
-      x-content-type-options: nosniff
-      x-frame-options: SAMEORIGIN
-      x-xss-protection: '0'
-    body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "umbrella"
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 181,
-            "candidatesTokenCount": 1,
-            "totalTokenCount": 182,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 181
-              }
-            ]
-          },
-          "modelVersion": "gemini-2.5-flash",
-          "responseId": "UsJraOjHOseDmtkPh8e9AQ"
-        }
-  recorded_at: 2025-07-07 12:49:23
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2026-06-17 14:15:01
+recorded_with: VCR-vcr/2.1.0
