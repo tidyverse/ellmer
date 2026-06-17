@@ -282,7 +282,6 @@ method(chat_request, ProviderAWSBedrock) <- function(
     )
     tools[[tool_def@name]] <- tool_def
     tool_choice <- list(tool = list(name = tool_def@name))
-    stream <- FALSE
   } else {
     tool_choice <- NULL
   }

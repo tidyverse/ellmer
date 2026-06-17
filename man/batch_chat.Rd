@@ -75,11 +75,13 @@ is not complete.
 }
 \description{
 \code{batch_chat()} and \code{batch_chat_structured()} currently only work with
-\code{\link[=chat_openai]{chat_openai()}}, \code{\link[=chat_anthropic]{chat_anthropic()}}, and \code{\link[=chat_google_gemini]{chat_google_gemini()}}. They use
-the \href{https://platform.openai.com/docs/guides/batch}{OpenAI},
+\code{\link[=chat_openai]{chat_openai()}}, \code{\link[=chat_anthropic]{chat_anthropic()}}, \code{\link[=chat_google_gemini]{chat_google_gemini()}}, and
+\code{\link[=chat_groq]{chat_groq()}}. They use the
+\href{https://platform.openai.com/docs/guides/batch}{OpenAI},
 \href{https://docs.claude.com/en/docs/build-with-claude/batch-processing}{Anthropic},
-and \href{https://ai.google.dev/gemini-api/docs/batch-api}{Google Gemini} batch APIs
-which allow you to submit multiple requests simultaneously.
+\href{https://ai.google.dev/gemini-api/docs/batch-api}{Google Gemini}, and
+\href{https://console.groq.com/docs/batch}{Groq} batch APIs which allow you
+to submit multiple requests simultaneously.
 The results can take up to 24 hours to complete, but in return you pay 50\%
 less than usual (but note that ellmer doesn't include this discount in
 its pricing metadata). If you want to get results back more quickly, or

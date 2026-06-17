@@ -223,7 +223,6 @@ method(chat_body, ProviderAnthropic) <- function(
       )
       tools[[tool_def@name]] <- tool_def
       tool_choice <- list(type = "tool", name = tool_def@name)
-      stream <- FALSE
       output_config <- NULL
     }
   } else {

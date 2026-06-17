@@ -125,10 +125,10 @@ method(chat_params, ProviderDatabricks) <- function(provider, params) {
     params,
     c(
       temperature = "temperature",
-      top_p = "topP",
-      top_k = "topK",
-      max_tokens = "maxTokens",
-      stop_sequences = "stopSequences"
+      topP = "top_p",
+      topK = "top_k",
+      maxTokens = "max_tokens",
+      stopSequences = "stop_sequences"
     )
   )
 }

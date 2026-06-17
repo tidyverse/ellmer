@@ -329,7 +329,11 @@ method(value_turn, ProviderOpenAICompatible) <- function(
         jsonlite::parse_json(call$`function`$arguments),
         error = function(cnd) list()
       )
-      ContentToolRequest(name = name, arguments = args, id = call$id)
+      ContentToolRequest(
+        name = name,
+        arguments = args %||% list(),
+        id = call$id
+      )
     })
     content <- c(content, calls)
   }

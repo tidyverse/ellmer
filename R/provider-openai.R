@@ -216,7 +216,7 @@ method(chat_params, ProviderOpenAI) <- function(provider, params) {
       temperature = "temperature",
       top_p = "top_p",
       frequency_penalty = "frequency_penalty",
-      max_tokens = "max_output_tokens",
+      max_output_tokens = "max_tokens",
       log_probs = "log_probs",
       top_logprobs = "top_k",
       reasoning_effort = "reasoning_effort"
