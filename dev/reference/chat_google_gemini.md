@@ -88,7 +88,7 @@ models_google_vertex(
 
 - model:
 
-  The model to use for the chat (defaults to "gemini-2.5-flash"). We
+  The model to use for the chat (defaults to "gemini-3.5-flash"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use. Use
   `models_google_gemini()` to see all options.

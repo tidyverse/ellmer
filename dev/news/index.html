@@ -55,6 +55,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
 <ul><li>
+<code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> now defaults to the <code>gemini-2.5-flash</code> model (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/885" class="external-link">#885</a>).</li>
+<li>
 <code><a href="../reference/chat_portkey.html">chat_portkey()</a></code> no longer errors when when using a custom Portkey gateway without the <code>PORTKEY_VIRTUAL_KEY</code> env var being set (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/872" class="external-link">#872</a>).</li>
 <li>
 <code><a href="../reference/chat_google_gemini.html">chat_google_vertex()</a></code> and <code><a href="../reference/chat_google_gemini.html">models_google_vertex()</a></code> now default <code>location</code> and <code>project_id</code> to the <code>GOOGLE_CLOUD_LOCATION</code> and <code>GOOGLE_CLOUD_PROJECT</code> environment variables, no longer incorrectly use <code>GOOGLE_API_KEY</code> for authentication, and give a clearer error when cached credentials are invalid (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/994" class="external-link">#994</a>).</li>

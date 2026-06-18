@@ -2,6 +2,10 @@
 
 ## ellmer (development version)
 
+- [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  now defaults to the `gemini-2.5-flash` model
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#885](https://github.com/tidyverse/ellmer/issues/885)).
 - [`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
   no longer errors when when using a custom Portkey gateway without the
   `PORTKEY_VIRTUAL_KEY` env var being set
