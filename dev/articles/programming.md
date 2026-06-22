@@ -261,7 +261,7 @@ the exact json that the provider returned:
 
 str(turns[[2]])
 #> <ellmer::AssistantTurn>
-#>  @ contents:List of 2
+#>  @ contents     :List of 2
 #>  .. $ : <ellmer::ContentToolRequest>
 #>  ..  ..@ id       : chr "fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f"
 #>  ..  ..@ name     : chr "tool_001"
@@ -292,9 +292,9 @@ str(turns[[2]])
 #>  .. .. .. @ convert    : logi TRUE
 #>  .. .. .. @ annotations: list()
 #>  ..  ..@ extra    : list()
-#>  @ text    : chr ""
-#>  @ role    : chr "assistant"
-#>  @ json    :List of 31
+#>  @ text         : chr ""
+#>  @ role         : chr "assistant"
+#>  @ json         :List of 31
 #>  .. $ id                    : chr "resp_0ff06e91ca3701e601690bac43a77881968271a54ebece3246"
 #>  .. $ object                : chr "response"
 #>  .. $ created_at            : int 1762372675
@@ -364,10 +364,11 @@ str(turns[[2]])
 #>  ..  ..$ total_tokens         : int 64
 #>  .. $ user                  : NULL
 #>  .. $ metadata              : Named list()
-#>  @ tokens  : Named int [1:3] 22 42 0
+#>  @ tokens       : Named int [1:3] 22 42 0
 #>  .. - attr(*, "names")= chr [1:3] "input" "output" "cached_input"
-#>  @ cost    : 'ellmer_dollars' num $0.00
-#>  @ duration: num NA
+#>  @ cost         : 'ellmer_dollars' num $0.00
+#>  @ duration     : num NA
+#>  @ finish_reason: chr "success"
 ```
 
 You can use the `@json` to extract additional information that ellmer

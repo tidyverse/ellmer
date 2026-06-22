@@ -33,7 +33,8 @@ AssistantTurn(
   json = list(),
   tokens = c(NA_real_, NA_real_, NA_real_),
   cost = NA_real_,
-  duration = NA_real_
+  duration = NA_real_,
+  finish_reason = NA_character_
 )
 
 AssistantPartialTurn(
@@ -42,6 +43,7 @@ AssistantPartialTurn(
   tokens = c(NA_real_, NA_real_, NA_real_),
   cost = NA_real_,
   duration = NA_real_,
+  finish_reason = NA_character_,
   reason = "interrupted"
 )
 ```
@@ -78,6 +80,14 @@ AssistantPartialTurn(
 - duration:
 
   The duration of the request in seconds.
+
+- finish_reason:
+
+  Why the model stopped generating. Standardized across providers to one
+  of: `"success"`, `"max_tokens"`, `"stop_sequence"`,
+  `"content_filter"`, or `"context_window"`. Unrecognized
+  provider-specific reasons are passed through as-is. `NA` when not
+  available.
 
 - reason:
 

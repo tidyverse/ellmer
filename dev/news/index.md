@@ -2,6 +2,9 @@
 
 ## ellmer (development version)
 
+- `AssistantTurn` gains a `finish_reason` property that reports why the
+  model stopped generating ([@thisisnic](https://github.com/thisisnic),
+  [\#3](https://github.com/tidyverse/ellmer/issues/3)).
 - [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   now defaults to the `gemini-2.5-flash` model
   ([@thisisnic](https://github.com/thisisnic),
