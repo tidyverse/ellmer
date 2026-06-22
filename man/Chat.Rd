@@ -36,6 +36,7 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
     \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
     \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
+    \item \href{#method-Chat-token_count}{\code{Chat$token_count()}}
     \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
     \item \href{#method-Chat-chat}{\code{Chat$chat()}}
     \item \href{#method-Chat-chat_structured}{\code{Chat$chat_structured()}}
@@ -249,6 +250,39 @@ most recent turn. Incomplete turns (from cancelled or interrupted
 streams) are excluded because they lack token data.}
     }
     \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-token_count"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-token_count}{}}}
+\subsection{\code{Chat$token_count()}}{
+  Estimate the token count for the next chat request by
+calling the provider's token counting endpoint. This includes the
+system prompt, conversation history, registered tools, and any new
+input supplied via \code{...}.
+
+Currently supported for Anthropic and Google providers. The token
+count is an estimate; the actual number of tokens used when
+creating a message may differ by a small amount.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$token_count(..., type = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{Optional input to include in the token count, as if
+you were sending it with \verb{$chat()}. Can be strings or images
+(see \code{\link[=content_image_file]{content_image_file()}} and \code{\link[=content_image_url]{content_image_url()}}).}
+      \item{\code{type}}{An optional type specification for structured data
+extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    An integer giving the estimated number of input tokens.
   }
 }
 

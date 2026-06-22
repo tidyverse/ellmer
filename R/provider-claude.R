@@ -472,6 +472,36 @@ method(value_turn, ProviderAnthropic) <- function(
   )
 }
 
+# Token counting ----------------------------------------------------------
+
+# https://docs.anthropic.com/en/docs/build-with-claude/token-counting
+method(count_tokens, ProviderAnthropic) <- function(
+  provider,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "messages/count_tokens")
+
+  body <- chat_body(
+    provider,
+    stream = FALSE,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+
+  keep <- c("model", "system", "messages", "tools", "tool_choice", "thinking")
+  body <- body[intersect(names(body), keep)]
+
+  req <- req_body_json(req, body)
+  req <- req_headers(req, !!!provider@extra_headers)
+
+  resp <- req_perform(req)
+  resp_body_json(resp)$input_tokens
+}
+
 # ellmer -> Claude --------------------------------------------------------------
 
 method(as_json, list(ProviderAnthropic, Turn)) <- function(
