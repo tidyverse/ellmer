@@ -288,6 +288,24 @@ method(value_tokens, ProviderOpenAICompatible) <- function(provider, json) {
   )
 }
 
+# https://platform.openai.com/docs/api-reference/chat/create
+method(value_finish_reason, ProviderOpenAICompatible) <- function(
+  provider,
+  result
+) {
+  reason <- result$choices[[1]]$finish_reason
+  if (is.null(reason)) {
+    return(NA_character_)
+  }
+  switch(
+    reason,
+    stop = "success",
+    length = "max_tokens",
+    content_filter = "content_filter",
+    I(reason)
+  )
+}
+
 method(value_turn, ProviderOpenAICompatible) <- function(
   provider,
   result,
@@ -343,22 +361,12 @@ method(value_turn, ProviderOpenAICompatible) <- function(
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
 
-  # https://platform.openai.com/docs/api-reference/chat/create
-  reason <- result$choices[[1]]$finish_reason
-  finish_reason <- switch(
-    reason,
-    stop = "success",
-    length = "max_tokens",
-    content_filter = "content_filter",
-    reason
-  )
-
   AssistantTurn(
     content,
     json = result,
     tokens = unlist(tokens),
     cost = cost,
-    finish_reason = finish_reason
+    finish_reason = value_finish_reason(provider, result)
   )
 }
 

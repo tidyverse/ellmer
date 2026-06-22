@@ -193,6 +193,17 @@ method(value_tokens, Provider) <- function(provider, json) {
   tokens()
 }
 
+value_finish_reason <- new_generic(
+  "value_finish_reason",
+  "provider",
+  function(provider, result) {
+    S7_dispatch()
+  }
+)
+method(value_finish_reason, Provider) <- function(provider, result) {
+  NA_character_
+}
+
 # Convert to JSON
 as_json <- new_generic(
   "as_json",

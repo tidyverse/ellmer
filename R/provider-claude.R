@@ -377,6 +377,23 @@ method(value_tokens, ProviderAnthropic) <- function(provider, json) {
   )
 }
 
+# https://docs.anthropic.com/en/api/handling-stop-reasons
+method(value_finish_reason, ProviderAnthropic) <- function(provider, result) {
+  reason <- result$stop_reason
+  if (is.null(reason)) {
+    return(NA_character_)
+  }
+  switch(
+    reason,
+    end_turn = "success",
+    max_tokens = "max_tokens",
+    model_context_window_exceeded = "context_window",
+    stop_sequence = "stop_sequence",
+    refusal = "content_filter",
+    I(reason)
+  )
+}
+
 method(value_turn, ProviderAnthropic) <- function(
   provider,
   result,
@@ -445,23 +462,12 @@ method(value_turn, ProviderAnthropic) <- function(
   cost_tokens <- tokens
   cost_tokens$input <- cost_tokens$input + cache_write * 0.25
   cost <- get_token_cost(provider, cost_tokens)
-  # https://docs.anthropic.com/en/api/handling-stop-reasons
-  finish_reason <- switch(
-    result$stop_reason,
-    end_turn = "success",
-    max_tokens = "max_tokens",
-    model_context_window_exceeded = "context_window",
-    stop_sequence = "stop_sequence",
-    refusal = "content_filter",
-    result$stop_reason
-  )
-
   AssistantTurn(
     contents,
     json = result,
     tokens = unlist(tokens),
     cost = cost,
-    finish_reason = finish_reason
+    finish_reason = value_finish_reason(provider, result)
   )
 }
 

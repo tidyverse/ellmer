@@ -270,6 +270,28 @@ method(value_tokens, ProviderOpenAI) <- function(provider, json) {
   )
 }
 
+# https://platform.openai.com/docs/api-reference/responses/get
+method(value_finish_reason, ProviderOpenAI) <- function(provider, result) {
+  status <- result$status
+  if (is.null(status)) {
+    return(NA_character_)
+  }
+  if (identical(status, "completed")) {
+    return("success")
+  }
+  if (!identical(status, "incomplete")) {
+    return(I(status))
+  }
+
+  reason <- result$incomplete_details$reason %||% status
+  switch(
+    reason,
+    max_output_tokens = "max_tokens",
+    content_filter = "content_filter",
+    I(reason)
+  )
+}
+
 method(value_turn, ProviderOpenAI) <- function(
   provider,
   result,
@@ -319,28 +341,12 @@ method(value_turn, ProviderOpenAI) <- function(
   tokens <- value_tokens(provider, result)
   variant <- result$service_tier %||% "default"
   cost <- get_token_cost(provider, tokens, variant = variant)
-  # https://platform.openai.com/docs/api-reference/responses/get
-  if (identical(result$status, "completed")) {
-    finish_reason <- "success"
-  } else if (identical(result$status, "incomplete")) {
-    reason <- result$incomplete_details$reason
-    if (identical(reason, "max_output_tokens")) {
-      finish_reason <- "max_tokens"
-    } else if (identical(reason, "content_filter")) {
-      finish_reason <- "content_filter"
-    } else {
-      finish_reason <- reason %||% result$status
-    }
-  } else {
-    finish_reason <- result$status %||% NA_character_
-  }
-
   AssistantTurn(
     contents = contents,
     json = result,
     tokens = unlist(tokens),
     cost = cost,
-    finish_reason = finish_reason
+    finish_reason = value_finish_reason(provider, result)
   )
 }
 
