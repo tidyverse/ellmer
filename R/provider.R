@@ -226,6 +226,28 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
   as_json(provider, ContentText(string), ...)
 }
 
+# Token counting -------------------------------------------------------------
+
+count_tokens <- new_generic(
+  "count_tokens",
+  "provider",
+  function(provider, turns = list(), tools = list(), type = NULL) {
+    S7_dispatch()
+  }
+)
+
+method(count_tokens, Provider) <- function(
+  provider,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  cli::cli_abort(
+    "{.arg provider} doesn't support token counting.",
+    class = "not_implemented"
+  )
+}
+
 # Models -------------------------------------------------------------------
 
 models_list <- new_generic("models_list", "provider", function(provider) {
