@@ -983,9 +983,11 @@ TurnAccumulator <- R6::R6Class(
     value_turn = function(result, type, duration = NA_real_) {
       finish_reason <- value_finish_reason(self$provider, result)
 
-      # Error early for structured extraction so we don't try to parse
-      # truncated JSON in value_turn()
-      if (!is.null(type)) {
+      # Check before value_turn() so structured extraction errors before
+      # trying to parse truncated JSON
+      if (is.null(type)) {
+        check_finish_reason(finish_reason, "warn")
+      } else {
         check_finish_reason(finish_reason, "error")
       }
 
@@ -995,9 +997,6 @@ TurnAccumulator <- R6::R6Class(
         has_type = !is.null(type)
       )
       turn@duration <- duration
-
-      check_finish_reason(finish_reason, "warn")
-
       match_tools(turn, self$chat$get_tools())
     }
   )
