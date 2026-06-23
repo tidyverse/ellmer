@@ -71,7 +71,7 @@ test_that("can make simple request", {
 
 ### Provider `_test()` functions
 
-When adding a new provider, create a `chat_{provider}_test()` function that sets `echo = "none"`, `temperature = 0`, and defaults to a cheap model. See `chat_anthropic_test()` in `R/provider-claude.R` for an example of the pattern.
+When adding a new provider, create a `chat_{provider}_test()` function that sets `echo = "none"`, `temperature = 0`, and defaults to a low-cost model. See `chat_anthropic_test()` in `R/provider-claude.R` for an example of the pattern.
 
 ### Shared test helpers
 
@@ -125,11 +125,8 @@ Helper functions in `tests/testthat/helpers-vcr.R`:
 - `vcr_clean(url_prefix)` -- deletes all cassettes whose first request URL matches a prefix. Useful when a provider changes its API URL.
 - `vcr_rebuild()` -- re-records all cassettes by installing the package, rebuilding vignettes, and running all tests.
 
-## Checklist: adding tests for a new provider
+## Adding tests for a new provider
 
-- [ ] Create a `chat_{provider}_test()` function (echo = "none", temperature = 0, cheap model).
-- [ ] Reuse shared helpers from `helper-provider.R` where possible.
-- [ ] Only add cassettes for tests that make real HTTP requests.
-- [ ] Use `vcr::local_cassette("{provider}-{feature}")` in tests that need recording.
-- [ ] Record cassettes with a valid API key.
-- [ ] Commit the YAML cassette files in `tests/testthat/_vcr/`.
+1. Create a `chat_{provider}_test()` function (echo = "none", temperature = 0, low-cost model).
+2. Write tests using `vcr::local_cassette()` and the shared helpers from `helper-provider.R`.
+3. Record cassettes with a valid API key and commit the YAML files in `tests/testthat/_vcr/`.
