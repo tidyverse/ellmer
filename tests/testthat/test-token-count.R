@@ -80,3 +80,28 @@ test_that("can count tokens with Google Gemini tools", {
   expect_type(result, "integer")
   expect_gt(result, 0)
 })
+
+# OpenAI ------------------------------------------------------------------
+
+test_that("can count tokens with OpenAI", {
+  vcr::local_cassette("openai-count-tokens")
+
+  chat <- chat_openai_test("You are a scientist")
+  result <- chat$token_count("Hello, GPT")
+  expect_type(result, "integer")
+  expect_gt(result, 0)
+})
+
+test_that("can count tokens with OpenAI tools", {
+  vcr::local_cassette("openai-count-tokens-tools")
+
+  chat <- chat_openai_test()
+  chat$register_tool(tool(
+    function() "2024-01-01",
+    name = "current_date",
+    description = "Return the current date"
+  ))
+  result <- chat$token_count("What's the current date?")
+  expect_type(result, "integer")
+  expect_gt(result, 0)
+})

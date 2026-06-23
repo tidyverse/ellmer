@@ -262,7 +262,7 @@ calling the provider's token counting endpoint. This includes the
 system prompt, conversation history, registered tools, and any new
 input supplied via \code{...}.
 
-Currently supported for Anthropic and Google providers. The token
+Currently supported for Anthropic, Google, and OpenAI providers. The token
 count is an estimate; the actual number of tokens used when
 creating a message may differ by a small amount.
   \subsection{Usage}{
