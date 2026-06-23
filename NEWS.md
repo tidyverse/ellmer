@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `Chat` gains a `token_count()` method that estimates the number of input tokens for the next chat request without sending it. Currently supported for Anthropic and Google Gemini providers (#814).
+* `Chat` gains a `token_count()` method that estimates the number of input tokens for the next chat request without sending it. Currently supported for Anthropic, Google Gemini, and OpenAI providers (#814).
 * `AssistantTurn` gains a `finish_reason` property that reports why the model stopped generating (@thisisnic, #3).
 * `batch_chat()` now supports `chat_google_gemini()` for batch processing via the Gemini Developer API (@xmarquez, #914).
 * `batch_chat()` now supports `chat_groq()` for batch processing via the Groq batch API (@xmarquez, #927).

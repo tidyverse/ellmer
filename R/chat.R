@@ -186,7 +186,7 @@ Chat <- R6::R6Class(
     #'   system prompt, conversation history, registered tools, and any new
     #'   input supplied via `...`.
     #'
-    #'   Currently supported for Anthropic and Google providers. The token
+    #'   Currently supported for Anthropic, Google, and OpenAI providers. The token
     #'   count is an estimate; the actual number of tokens used when
     #'   creating a message may differ by a small amount.
     #'
@@ -197,7 +197,10 @@ Chat <- R6::R6Class(
     #'   extraction, created with a [`type_()`][type_boolean] function.
     #' @return An integer giving the estimated number of input tokens.
     token_count = function(..., type = NULL) {
-      turn <- if (dots_n(...) > 0) user_turn(...) else NULL
+      finish_tools <- private$complete_dangling_tool_requests()
+      turn <- if (dots_n(...) > 0 || length(finish_tools) > 0) {
+        user_turn(!!!finish_tools, ...)
+      }
       turns <- c(private$.turns, if (!is.null(turn)) list(turn))
       count_tokens(
         private$provider,
