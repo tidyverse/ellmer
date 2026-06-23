@@ -109,7 +109,7 @@ One `test_tools_simple()` call covers tool calling for a provider. Don't write c
 - Replaying (`VCR_IS_REPLAYING=TRUE`): returns `""` so the test doesn't error on a missing key.
 - Testing without key: skips the test via `testthat::skip()`.
 
-## Reference
+## Managing cassettes
 
 ### Cassette naming and storage
 
