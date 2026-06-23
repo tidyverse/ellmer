@@ -24,53 +24,34 @@ For chat-like behavior without HTTP, use `MockedChat` from `helper-chat.R`:
 chat <- mocked_chat(c("response 1", "response 2"))
 ```
 
+When you don't need a full HTTP round-trip, construct provider and response objects directly:
+
+```r
+test_that("value_turn() prices cache writes at 1.25x", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-sonnet-4-20250514",
+    params = list(), extra_args = list(),
+    extra_headers = character(), credentials = NULL,
+    beta_headers = character(), cache = ""
+  )
+  result <- list(
+    content = list(list(type = "text", text = "ok")),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 1000, output_tokens = 50,
+      cache_creation_input_tokens = 400,
+      cache_read_input_tokens = 200
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  expect_equal(unname(turn@tokens), c(1000 + 400, 50, 200))
+})
+```
+
 In practice, use one cassette to prove a feature works end-to-end with the real API (e.g. "can Anthropic do tool calling"), then test the details like edge cases, parsing logic, and error handling with constructed data.
-
-## Keeping cassettes minimal
-
-Minimize the number of cassettes:
-
-1. Reuse shared test helpers. `tests/testthat/helper-provider.R` defines standardized tests for common provider capabilities:
-
-   - `test_tools_simple(chat_fun)` -- tool calling
-   - `test_tool_image(chat_fun)` -- tools returning images
-   - `test_tool_web_fetch(chat_fun, tool)` -- web fetch
-   - `test_tool_web_search(chat_fun, tool)` -- web search
-   - `test_data_extraction(chat_fun)` -- structured data extraction
-   - `test_images_inline(chat_fun)` -- inline image input
-   - `test_images_remote(chat_fun)` -- remote image input
-   - `test_pdf_local(chat_fun)` -- PDF input
-   - `test_params_stop(chat_fun)` -- stop sequences
-   - `test_models(models_fun)` -- model listing
-
-   One `test_tools_simple()` call covers tool calling for a provider. Don't write custom tool tests that need their own cassettes.
-
-2. When you don't need a full HTTP round-trip, construct provider and response objects directly:
-
-   ```r
-   test_that("value_turn() prices cache writes at 1.25x", {
-     provider <- ProviderAnthropic(
-       name = "Anthropic",
-       base_url = "https://api.anthropic.com/v1",
-       model = "claude-sonnet-4-20250514",
-       params = list(), extra_args = list(),
-       extra_headers = character(), credentials = NULL,
-       beta_headers = character(), cache = ""
-     )
-     result <- list(
-       content = list(list(type = "text", text = "ok")),
-       stop_reason = "end_turn",
-       usage = list(
-         input_tokens = 1000, output_tokens = 50,
-         cache_creation_input_tokens = 400,
-         cache_read_input_tokens = 200
-       )
-     )
-
-     turn <- value_turn(provider, result)
-     expect_equal(unname(turn@tokens), c(1000 + 400, 50, 200))
-   })
-   ```
 
 ## Using vcr
 
@@ -92,6 +73,33 @@ test_that("can make simple request", {
 
 When adding a new provider, create a `chat_{provider}_test()` function that sets `echo = "none"`, `temperature = 0`, and defaults to a cheap model. See `chat_anthropic_test()` in `R/provider-claude.R` for an example of the pattern.
 
+### Shared test helpers
+
+`tests/testthat/helper-provider.R` defines standardized tests for common provider capabilities:
+
+- `test_tools_simple(chat_fun)` -- tool calling
+- `test_tool_image(chat_fun)` -- tools returning images
+- `test_tool_web_fetch(chat_fun, tool)` -- web fetch
+- `test_tool_web_search(chat_fun, tool)` -- web search
+- `test_data_extraction(chat_fun)` -- structured data extraction
+- `test_images_inline(chat_fun)` -- inline image input
+- `test_images_remote(chat_fun)` -- remote image input
+- `test_pdf_local(chat_fun)` -- PDF input
+- `test_params_stop(chat_fun)` -- stop sequences
+- `test_models(models_fun)` -- model listing
+
+The `helper-provider.R` functions make HTTP requests internally, so they still need a cassette. Pass the `_test()` function (not a chat instance) so the helper can create its own chats:
+
+```r
+test_that("supports tool calling", {
+  vcr::local_cassette("anthropic-tool")
+  chat_fun <- chat_anthropic_test
+
+  test_tools_simple(chat_fun)
+})
+```
+
+One `test_tools_simple()` call covers tool calling for a provider. Don't write custom tool tests that need their own cassettes.
 
 ### Credential handling
 
@@ -100,6 +108,8 @@ When adding a new provider, create a `chat_{provider}_test()` function that sets
 - API key set: runs the real request (and records a cassette if one is active).
 - Replaying (`VCR_IS_REPLAYING=TRUE`): returns `""` so the test doesn't error on a missing key.
 - Testing without key: skips the test via `testthat::skip()`.
+
+## Reference
 
 ### Cassette naming and storage
 
