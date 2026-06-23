@@ -88,7 +88,6 @@ test_that("supports tool calling", {
 })
 ```
 
-One `test_tools_simple()` call covers tool calling for a provider. Don't write custom tool tests that need their own cassettes.
 
 ### Credential handling
 
