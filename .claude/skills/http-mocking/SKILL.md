@@ -75,18 +75,7 @@ When adding a new provider, create a `chat_{provider}_test()` function that sets
 
 ### Shared test helpers
 
-`tests/testthat/helper-provider.R` defines standardized tests for common provider capabilities:
-
-- `test_tools_simple(chat_fun)` -- tool calling
-- `test_tool_image(chat_fun)` -- tools returning images
-- `test_tool_web_fetch(chat_fun, tool)` -- web fetch
-- `test_tool_web_search(chat_fun, tool)` -- web search
-- `test_data_extraction(chat_fun)` -- structured data extraction
-- `test_images_inline(chat_fun)` -- inline image input
-- `test_images_remote(chat_fun)` -- remote image input
-- `test_pdf_local(chat_fun)` -- PDF input
-- `test_params_stop(chat_fun)` -- stop sequences
-- `test_models(models_fun)` -- model listing
+`tests/testthat/helper-provider.R` defines standardized `test_*()` functions for common provider capabilities (tool calling, image input, data extraction, etc.). Check the file for the current list.
 
 The `helper-provider.R` functions make HTTP requests internally, so they still need a cassette. Pass the `_test()` function (not a chat instance) so the helper can create its own chats:
 
