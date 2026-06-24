@@ -28,7 +28,12 @@ install.packages("ellmer")
 
 ## Providers
 
-ellmer supports a wide variety of model providers:
+ellmer supports a wide variety of model providers. Official providers
+are actively maintained, with priority support for bug fixes and new
+features. Community providers are contributed and maintained by the
+community; contributions to improve them are especially welcome.
+
+### Official providers
 
 - Anthropic’s Claude:
   [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md).
@@ -36,8 +41,6 @@ ellmer supports a wide variety of model providers:
   [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md).
 - Azure OpenAI:
   [`chat_azure_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_azure_openai.md).
-- Cloudflare:
-  [`chat_cloudflare()`](https://ellmer.tidyverse.org/dev/reference/chat_cloudflare.md).
 - Databricks:
   [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md).
 - DeepSeek:
@@ -47,23 +50,32 @@ ellmer supports a wide variety of model providers:
 - Google Gemini/Vertex AI:
   [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md),
   [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md).
-- Groq:
-  [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md).
-- Hugging Face:
-  [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md).
-- Mistral:
-  [`chat_mistral()`](https://ellmer.tidyverse.org/dev/reference/chat_mistral.md).
 - Ollama:
   [`chat_ollama()`](https://ellmer.tidyverse.org/dev/reference/chat_ollama.md).
 - OpenAI:
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md).
+- Snowflake Cortex:
+  [`chat_snowflake()`](https://ellmer.tidyverse.org/dev/reference/chat_snowflake.md)
+  and `chat_cortex_analyst()`.
+
+### Community providers
+
+- Cloudflare:
+  [`chat_cloudflare()`](https://ellmer.tidyverse.org/dev/reference/chat_cloudflare.md).
+- Groq:
+  [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md).
+- Hugging Face:
+  [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md).
+- LM Studio:
+  [`chat_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md).
+- Mistral:
+  [`chat_mistral()`](https://ellmer.tidyverse.org/dev/reference/chat_mistral.md).
 - OpenRouter:
   [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md).
 - perplexity.ai:
   [`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md).
-- Snowflake Cortex:
-  [`chat_snowflake()`](https://ellmer.tidyverse.org/dev/reference/chat_snowflake.md)
-  and `chat_cortex_analyst()`.
+- Portkey:
+  [`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md).
 - VLLM:
   [`chat_vllm()`](https://ellmer.tidyverse.org/dev/reference/chat_vllm.md).
 
