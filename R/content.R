@@ -102,13 +102,60 @@ method(contents_html, Content) <- function(content) {
   NULL
 }
 
+# Citations -----------------------------------------------------------------
+
+#' A citation to an external source
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' A `Citation` represents a reference to an external source that the model
+#' used to generate text. Citations are typically produced by built-in web
+#' search tools like [claude_tool_web_search()],
+#' [openai_tool_web_search()], and [google_tool_web_search()].
+#'
+#' Access citations via the `citations` property of [ContentText] or the
+#' `citations` property of a [Turn].
+#'
+#' @param url The URL of the cited source.
+#' @param title The title of the cited source.
+#' @return An S7 `Citation` object.
+#' @export
+#' @examples
+#' Citation(url = "https://example.com", title = "Example")
+Citation <- new_class(
+  "Citation",
+  properties = list(
+    url = prop_string(),
+    title = prop_string(default = "")
+  )
+)
+
+method(format, Citation) <- function(x, ...) {
+  if (nzchar(x@title)) {
+    cli::format_inline("{x@title} ({.url {x@url}})")
+  } else {
+    cli::format_inline("{.url {x@url}}")
+  }
+}
+
+method(print, Citation) <- function(x, ...) {
+  cat(format(x), "\n")
+  invisible(x)
+}
+
 #' @rdname Content
 #' @export
 #' @param text A single string.
+#' @param citations A list of [Citation] objects providing source attributions
+#'   for the text.
 ContentText <- new_class(
   "ContentText",
   parent = Content,
-  properties = list(text = prop_string()),
+  properties = list(
+    text = prop_string(),
+    citations = prop_list_of(Citation)
+  ),
 )
 method(format, ContentText) <- function(x, ...) {
   x@text

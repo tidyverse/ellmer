@@ -14,7 +14,7 @@
 \usage{
 Content()
 
-ContentText(text = stop("Required"))
+ContentText(text = stop("Required"), citations = list())
 
 ContentImage()
 
@@ -42,6 +42,9 @@ ContentPDF(
 }
 \arguments{
 \item{text}{A single string.}
+
+\item{citations}{A list of \link{Citation} objects providing source attributions
+for the text.}
 
 \item{url}{URL to a remote image.}
 
