@@ -299,10 +299,11 @@ method(value_turn, ProviderOpenAI) <- function(
 ) {
   contents <- lapply(result$output, function(output) {
     if (output$type == "message") {
+      content <- output$content[[1]]
       if (has_type) {
-        ContentJson(jsonlite::parse_json(output$content[[1]]$text))
+        ContentJson(jsonlite::parse_json(content$text))
       } else {
-        ContentText(output$content[[1]]$text)
+        ContentText(content$text, citations = extract_openai_citations(content))
       }
     } else if (output$type == "function_call") {
       arguments <- jsonlite::parse_json(output$arguments)
@@ -613,6 +614,16 @@ method(batch_result_turn, ProviderOpenAI) <- function(
 }
 
 # Helpers ------------------------------------------------------------------
+
+extract_openai_citations <- function(content) {
+  annotations <- content$annotations %||% list()
+  is_citation <- map_lgl(annotations, function(x) {
+    identical(x$type, "url_citation")
+  })
+  lapply(annotations[is_citation], function(x) {
+    Citation(url = x$url %||% "", title = x$title %||% "")
+  })
+}
 
 is_openai_reasoning <- function(model) {
   # https://platform.openai.com/docs/models/compare

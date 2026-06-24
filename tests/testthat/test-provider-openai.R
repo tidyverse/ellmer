@@ -222,3 +222,46 @@ test_that("value_turn() handles web_search_call action types", {
   )
   expect_equal(turn@contents[[1]]@query, "web search")
 })
+
+test_that("value_turn() extracts citations from annotations", {
+  provider <- chat_openai_test()$get_provider()
+
+  result <- list(
+    id = "resp_1",
+    object = "response",
+    model = "gpt-4.1",
+    output = list(
+      list(
+        id = "msg_1",
+        type = "message",
+        status = "completed",
+        content = list(
+          list(
+            type = "output_text",
+            text = "The answer is 42.",
+            annotations = list(
+              list(
+                type = "url_citation",
+                start_index = 0,
+                end_index = 17,
+                title = "Example Page",
+                url = "https://example.com"
+              )
+            )
+          )
+        ),
+        role = "assistant"
+      )
+    ),
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      input_tokens_details = list(cached_tokens = 0)
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  expect_length(turn@citations, 1)
+  expect_equal(turn@citations[[1]]@url, "https://example.com")
+  expect_equal(turn@citations[[1]]@title, "Example Page")
+})
