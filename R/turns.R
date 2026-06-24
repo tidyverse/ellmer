@@ -14,6 +14,9 @@ NULL
 #' of `Turn` for different types of conversation turns. `AssistantTurn` includes
 #' additional metadata about the API response.
 #'
+#' Use `turn@text` to access the text content of a turn, and `turn@citations`
+#' to access any [Citation]s from built-in web search tools.
+#'
 #' Note that a call to `$chat()` and related functions may result in multiple
 #' user-assistant turn cycles. For example, if you have registered tools,
 #' ellmer will automatically handle the tool calling loop, which may result in
@@ -35,6 +38,13 @@ Turn <- new_class(
     text = new_property(
       class = class_character,
       getter = function(self) contents_text(self)
+    ),
+    citations = new_property(
+      class = class_list,
+      getter = function(self) {
+        texts <- keep(self@contents, S7_inherits, ContentText)
+        list_c(map(texts, function(x) x@citations)) %||% list()
+      }
     ),
     role = new_property(
       class = class_character,

@@ -82,6 +82,21 @@ test_that("can extract text easily", {
   expect_equal(turn@text, "ABCDEF")
 })
 
+test_that("Turn@citations collects from ContentText objects", {
+  cit1 <- Citation(url = "https://a.com", title = "A")
+  cit2 <- Citation(url = "https://b.com", title = "B")
+  turn <- AssistantTurn(list(
+    ContentText("First", citations = list(cit1)),
+    ContentImage(),
+    ContentText("Second", citations = list(cit2))
+  ))
+  expect_length(turn@citations, 2)
+  expect_equal(turn@citations[[1]]@url, "https://a.com")
+  expect_equal(turn@citations[[2]]@url, "https://b.com")
+
+  expect_length(AssistantTurn("No citations")@citations, 0)
+})
+
 test_that("turns have a reasonable print method", {
   expect_snapshot(UserTurn("hello"))
 })
