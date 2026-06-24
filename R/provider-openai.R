@@ -303,7 +303,7 @@ method(value_turn, ProviderOpenAI) <- function(
       if (has_type) {
         ContentJson(jsonlite::parse_json(content$text))
       } else {
-        ContentText(content$text, citations = extract_openai_citations(content))
+        ContentText(content$text, citations = openai_extract_citations(content))
       }
     } else if (output$type == "function_call") {
       arguments <- jsonlite::parse_json(output$arguments)
@@ -615,7 +615,7 @@ method(batch_result_turn, ProviderOpenAI) <- function(
 
 # Helpers ------------------------------------------------------------------
 
-extract_openai_citations <- function(content) {
+openai_extract_citations <- function(content) {
   annotations <- content$annotations %||% list()
   is_citation <- map_lgl(annotations, function(x) {
     identical(x$type, "url_citation")

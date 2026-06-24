@@ -394,7 +394,7 @@ method(value_turn, ProviderGoogleGemini) <- function(
   })
   contents <- compact(contents)
 
-  citations <- extract_gemini_citations(
+  citations <- gemini_extract_citations(
     result$candidates[[1]]$groundingMetadata
   )
   if (length(citations) > 0) {
@@ -579,7 +579,7 @@ method(as_json, list(ProviderGoogleGemini, TypeObject)) <- function(
 
 # Gemini-specific merge logic --------------------------------------------------
 
-extract_gemini_citations <- function(grounding) {
+gemini_extract_citations <- function(grounding) {
   if (is.null(grounding)) {
     return(list())
   }
