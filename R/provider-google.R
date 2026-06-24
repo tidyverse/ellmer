@@ -393,6 +393,17 @@ method(value_turn, ProviderGoogleGemini) <- function(
     }
   })
   contents <- compact(contents)
+
+  citations <- extract_gemini_citations(
+    result$candidates[[1]]$groundingMetadata
+  )
+  if (length(citations) > 0) {
+    idx <- match(TRUE, map_lgl(contents, S7_inherits, ContentText))
+    if (!is.na(idx)) {
+      contents[[idx]]@citations <- citations
+    }
+  }
+
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
 
@@ -568,6 +579,16 @@ method(as_json, list(ProviderGoogleGemini, TypeObject)) <- function(
 
 # Gemini-specific merge logic --------------------------------------------------
 
+extract_gemini_citations <- function(grounding) {
+  if (is.null(grounding)) {
+    return(list())
+  }
+  lapply(grounding$groundingChunks %||% list(), function(chunk) {
+    web <- chunk$web %||% list()
+    Citation(url = web$uri %||% "", title = web$title %||% "")
+  })
+}
+
 merge_last <- function() {
   function(left, right, path = NULL) {
     right
@@ -712,6 +733,7 @@ merge_gemini_chunks <- merge_objects(
     citationMetadata = merge_optional(
       merge_objects(citationSources = merge_append())
     ),
+    groundingMetadata = merge_last(),
     tokenCount = merge_last()
   ),
   promptFeedback = merge_last(),

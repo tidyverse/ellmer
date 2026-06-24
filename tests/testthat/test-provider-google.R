@@ -144,6 +144,37 @@ test_that("can handle citations", {
   expect_equal(source$license, "")
 })
 
+test_that("value_turn() extracts grounding citations", {
+  provider <- chat_google_gemini_test()$get_provider()
+
+  result <- list(
+    candidates = list(list(
+      content = list(
+        parts = list(list(text = "The answer is 42.")),
+        role = "model"
+      ),
+      finishReason = "STOP",
+      groundingMetadata = list(
+        groundingChunks = list(
+          list(web = list(uri = "https://example.com", title = "Example Page")),
+          list(web = list(uri = "https://other.com", title = "Other Page"))
+        )
+      )
+    )),
+    usageMetadata = list(
+      promptTokenCount = 10,
+      candidatesTokenCount = 5,
+      totalTokenCount = 15
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  expect_length(turn@citations, 2)
+  expect_equal(turn@citations[[1]]@url, "https://example.com")
+  expect_equal(turn@citations[[1]]@title, "Example Page")
+  expect_equal(turn@citations[[2]]@url, "https://other.com")
+})
+
 test_that("can generate images", {
   vcr::local_cassette("google-image-gen")
 
