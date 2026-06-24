@@ -333,3 +333,41 @@ test_that("stream_merge_chunks() handles citations_delta", {
   expect_length(result$content[[1]]$citations, 1)
   expect_equal(result$content[[1]]$citations[[1]]$url, "https://example.com")
 })
+
+test_that("value_turn() extracts citations from text blocks", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-sonnet-4-20250514",
+    params = list(),
+    extra_args = list(),
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+
+  result <- list(
+    content = list(
+      list(
+        type = "text",
+        text = "The answer is 42.",
+        citations = list(
+          list(
+            type = "web_search_result_location",
+            cited_text = "the answer is 42",
+            url = "https://example.com",
+            title = "Example Page"
+          )
+        )
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 5)
+  )
+
+  turn <- value_turn(provider, result)
+  expect_length(turn@citations, 1)
+  expect_equal(turn@citations[[1]]@url, "https://example.com")
+  expect_equal(turn@citations[[1]]@title, "Example Page")
+})
