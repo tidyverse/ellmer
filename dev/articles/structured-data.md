@@ -329,10 +329,9 @@ vectorisation like R, row-oriented data frames are more common.
 
 Note that you’ll generally want to avoid nesting objects inside of
 objects as this will generate a data frame where each column is itself a
-data frame. You can use
-[`tidyr::unpack()`](https://tidyr.tidyverse.org/reference/pack.html) to
-unpack these df-columns back into a regular flat data frame, but your
-life will be simpler if you re-consider the type.
+data frame. You can use `tidyr::unpack()` to unpack these df-columns
+back into a regular flat data frame, but your life will be simpler if
+you re-consider the type.
 
 ## Examples
 
