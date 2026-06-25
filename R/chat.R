@@ -984,7 +984,7 @@ TurnAccumulator <- R6::R6Class(
       # Check before value_turn() so structured extraction errors before
       # trying to parse truncated JSON
       finish_reason <- value_finish_reason(self$provider, result)
-     check_finish_reason(finish_reason, if (is.null(type) "warn" else "error")
+      check_finish_reason(finish_reason, if (is.null(type)) "warn" else "error")
 
       turn <- value_turn(
         self$provider,
