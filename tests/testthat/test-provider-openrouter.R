@@ -35,6 +35,46 @@ test_that("can extract data", {
   test_data_extraction(chat_fun)
 })
 
+test_that("value_turn() extracts citations from annotations", {
+  provider <- ProviderOpenRouter(
+    name = "OpenRouter",
+    base_url = "https://openrouter.ai/api/v1",
+    model = "perplexity/sonar",
+    params = list(),
+    extra_args = list(),
+    credentials = NULL,
+    extra_headers = character(),
+    preserve_thinking = TRUE
+  )
+
+  result <- list(
+    choices = list(list(
+      message = list(
+        role = "assistant",
+        content = "The answer is 42.",
+        annotations = list(
+          list(
+            type = "url_citation",
+            url_citation = list(
+              url = "https://example.com",
+              title = "Example Page",
+              start_index = 0,
+              end_index = 0
+            )
+          )
+        )
+      ),
+      finish_reason = "stop"
+    )),
+    usage = list(prompt_tokens = 10, completion_tokens = 5, total_tokens = 15)
+  )
+
+  turn <- value_turn(provider, result)
+  expect_length(turn@citations, 1)
+  expect_equal(turn@citations[[1]]@url, "https://example.com")
+  expect_equal(turn@citations[[1]]@title, "Example Page")
+})
+
 test_that("can use images", {
   chat_fun <- chat_openrouter_test
 
