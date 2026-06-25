@@ -117,18 +117,13 @@ method(value_turn, ProviderOpenRouter) <- function(
   )
 
   message <- result$choices[[1]]$message %||% result$choices[[1]]$delta
-  citations <- openrouter_extract_citations(message)
-  attach_turn_citations(turn, citations)
-}
-
-openrouter_extract_citations <- function(message) {
-  citations <- keep(message$annotations, function(x) {
+  url_citations <- keep(message$annotations, function(x) {
     identical(x$type, "url_citation")
   })
-  map(citations, function(x) {
-    cit <- x$url_citation %||% list()
-    as_citation(cit$url, cit$title)
+  citations <- map(url_citations, function(x) {
+    as_citation(x$url_citation$url, x$url_citation$title)
   })
+  attach_turn_citations(turn, citations)
 }
 
 method(stream_parse, ProviderOpenRouter) <- function(provider, event) {

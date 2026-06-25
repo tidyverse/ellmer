@@ -394,13 +394,14 @@ method(value_turn, ProviderGoogleGemini) <- function(
   })
   contents <- compact(contents)
 
-  citations <- gemini_extract_citations(
-    result$candidates[[1]]$groundingMetadata
-  )
+  grounding_chunks <- result$candidates[[1]]$groundingMetadata$groundingChunks
+  citations <- map(grounding_chunks, function(chunk) {
+    as_citation(chunk$web$uri, chunk$web$title)
+  })
   if (length(citations) > 0) {
-    idx <- match(TRUE, map_lgl(contents, S7_inherits, ContentText))
-    if (!is.na(idx)) {
-      contents[[idx]]@citations <- citations
+    first_text <- match(TRUE, map_lgl(contents, S7_inherits, ContentText))
+    if (!is.na(first_text)) {
+      contents[[first_text]]@citations <- citations
     }
   }
 
@@ -578,13 +579,6 @@ method(as_json, list(ProviderGoogleGemini, TypeObject)) <- function(
 }
 
 # Gemini-specific merge logic --------------------------------------------------
-
-gemini_extract_citations <- function(grounding) {
-  map(grounding$groundingChunks, function(chunk) {
-    web <- chunk$web %||% list()
-    as_citation(web$uri, web$title)
-  })
-}
 
 merge_last <- function() {
   function(left, right, path = NULL) {

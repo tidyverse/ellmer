@@ -195,9 +195,9 @@ attach_turn_citations <- function(turn, citations) {
     return(turn)
   }
   contents <- turn@contents
-  text_pos <- match(TRUE, map_lgl(contents, S7_inherits, ContentText))
-  if (!is.na(text_pos)) {
-    contents[[text_pos]]@citations <- citations
+  first_text <- match(TRUE, map_lgl(contents, S7_inherits, ContentText))
+  if (!is.na(first_text)) {
+    contents[[first_text]]@citations <- citations
     turn@contents <- contents
   }
   turn
