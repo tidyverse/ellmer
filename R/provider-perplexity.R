@@ -80,23 +80,7 @@ method(value_turn, ProviderPerplexity) <- function(
     has_type = has_type
   )
 
-  citations <- perplexity_extract_citations(result)
-  if (length(citations) > 0) {
-    contents <- turn@contents
-    text_pos <- match(TRUE, map_lgl(contents, S7_inherits, ContentText))
-    if (!is.na(text_pos)) {
-      contents[[text_pos]]@citations <- citations
-      turn@contents <- contents
-    }
-  }
-
-  turn
-}
-
-perplexity_extract_citations <- function(result) {
-  map(result$search_results %||% list(), function(x) {
-    Citation(url = x$url %||% "", title = x$title %||% "")
-  })
+  attach_turn_citations(turn, extract_citations(result$search_results))
 }
 
 method(chat_params, ProviderPerplexity) <- function(provider, params) {

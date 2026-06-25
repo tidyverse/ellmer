@@ -180,6 +180,29 @@ stream_merge_chunks <- new_generic(
 
 value_turn <- new_generic("value_turn", "provider")
 
+# Citation helpers ---------------------------------------------------------
+
+as_citation <- function(url, title = "") {
+  Citation(url = url %||% "", title = title %||% "")
+}
+
+extract_citations <- function(citations) {
+  map(citations, function(x) as_citation(x$url, x$title))
+}
+
+attach_turn_citations <- function(turn, citations) {
+  if (length(citations) == 0) {
+    return(turn)
+  }
+  contents <- turn@contents
+  text_pos <- match(TRUE, map_lgl(contents, S7_inherits, ContentText))
+  if (!is.na(text_pos)) {
+    contents[[text_pos]]@citations <- citations
+    turn@contents <- contents
+  }
+  turn
+}
+
 # Extract token counts from API response
 # Returns a named list produced by token_usage()
 value_tokens <- new_generic(

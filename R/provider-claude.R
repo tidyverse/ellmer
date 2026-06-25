@@ -404,7 +404,10 @@ method(value_turn, ProviderAnthropic) <- function(
       if (has_type && has_claude_structured_output(provider@model)) {
         ContentJson(string = content$text)
       } else {
-        ContentText(content$text, citations = claude_extract_citations(content))
+        ContentText(
+          content$text,
+          citations = extract_citations(content$citations)
+        )
       }
     } else if (content$type == "tool_use") {
       if (has_type) {
@@ -792,12 +795,6 @@ cache_control <- function(provider) {
       ttl = provider@cache
     )
   }
-}
-
-claude_extract_citations <- function(content) {
-  lapply(content$citations %||% list(), function(x) {
-    Citation(url = x$url %||% "", title = x$title %||% "")
-  })
 }
 
 has_claude_structured_output <- function(model) {

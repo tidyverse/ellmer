@@ -118,24 +118,16 @@ method(value_turn, ProviderOpenRouter) <- function(
 
   message <- result$choices[[1]]$message %||% result$choices[[1]]$delta
   citations <- openrouter_extract_citations(message)
-  if (length(citations) > 0) {
-    contents <- turn@contents
-    text_pos <- match(TRUE, map_lgl(contents, S7_inherits, ContentText))
-    if (!is.na(text_pos)) {
-      contents[[text_pos]]@citations <- citations
-      turn@contents <- contents
-    }
-  }
-
-  turn
+  attach_turn_citations(turn, citations)
 }
 
 openrouter_extract_citations <- function(message) {
-  annotations <- message$annotations %||% list()
-  citations <- keep(annotations, function(x) identical(x$type, "url_citation"))
+  citations <- keep(message$annotations, function(x) {
+    identical(x$type, "url_citation")
+  })
   map(citations, function(x) {
     cit <- x$url_citation %||% list()
-    Citation(url = cit$url %||% "", title = cit$title %||% "")
+    as_citation(cit$url, cit$title)
   })
 }
 

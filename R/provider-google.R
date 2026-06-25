@@ -580,12 +580,9 @@ method(as_json, list(ProviderGoogleGemini, TypeObject)) <- function(
 # Gemini-specific merge logic --------------------------------------------------
 
 gemini_extract_citations <- function(grounding) {
-  if (is.null(grounding)) {
-    return(list())
-  }
-  lapply(grounding$groundingChunks %||% list(), function(chunk) {
+  map(grounding$groundingChunks, function(chunk) {
     web <- chunk$web %||% list()
-    Citation(url = web$uri %||% "", title = web$title %||% "")
+    as_citation(web$uri, web$title)
   })
 }
 
