@@ -41,24 +41,34 @@ install.packages("ellmer")
 
 ## Providers
 
-ellmer supports a wide variety of model providers:
+ellmer supports a wide variety of model providers. Official providers are
+actively maintained, with priority support for bug fixes and new features.
+Community providers are contributed and maintained by the community;
+contributions to improve them are especially welcome.
+
+### Official providers
 
 * Anthropic's Claude: `chat_anthropic()`.
 * AWS Bedrock: `chat_aws_bedrock()`.
 * Azure OpenAI: `chat_azure_openai()`.
-* Cloudflare: `chat_cloudflare()`.
 * Databricks: `chat_databricks()`.
 * DeepSeek: `chat_deepseek()`.
 * GitHub model marketplace: `chat_github()`.
 * Google Gemini/Vertex AI: `chat_google_gemini()`, `chat_google_vertex()`.
-* Groq: `chat_groq()`.
-* Hugging Face: `chat_huggingface()`.
-* Mistral: `chat_mistral()`.
 * Ollama: `chat_ollama()`.
 * OpenAI: `chat_openai()`.
+* Snowflake Cortex: `chat_snowflake()` and `chat_cortex_analyst()`.
+
+### Community providers
+
+* Cloudflare: `chat_cloudflare()`.
+* Groq: `chat_groq()`.
+* Hugging Face: `chat_huggingface()`.
+* LM Studio: `chat_lmstudio()`.
+* Mistral: `chat_mistral()`.
 * OpenRouter: `chat_openrouter()`.
 * perplexity.ai: `chat_perplexity()`.
-* Snowflake Cortex: `chat_snowflake()` and `chat_cortex_analyst()`.
+* Portkey: `chat_portkey()`.
 * VLLM: `chat_vllm()`.
 
 ### Provider/model choice

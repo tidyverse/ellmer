@@ -73,3 +73,69 @@
       <Turn: user>
       hello
 
+# check_finish_reason() errors on non-success finish reasons
+
+    Code
+      check_finish_reason("max_tokens", "error")
+    Condition
+      Error:
+      ! Response was truncated because it hit the `max_tokens` limit.
+      i Increase `max_tokens` to allow the model to generate the full response.
+
+---
+
+    Code
+      check_finish_reason("context_window", "error")
+    Condition
+      Error:
+      ! Response was truncated because it exceeded the model's context window.
+
+---
+
+    Code
+      check_finish_reason("content_filter", "error")
+    Condition
+      Error:
+      ! Response was filtered by the provider's content moderation policy.
+
+---
+
+    Code
+      check_finish_reason(I("some_weird_reason"), "error")
+    Condition
+      Error:
+      ! Response may be incomplete, unexpected finish reason: some_weird_reason.
+
+# check_finish_reason() warns on non-success finish reasons
+
+    Code
+      check_finish_reason("max_tokens", "warn")
+    Condition
+      Warning:
+      Response was truncated because it hit the `max_tokens` limit.
+      i Increase `max_tokens` to allow the model to generate the full response.
+
+---
+
+    Code
+      check_finish_reason("context_window", "warn")
+    Condition
+      Warning:
+      Response was truncated because it exceeded the model's context window.
+
+---
+
+    Code
+      check_finish_reason("content_filter", "warn")
+    Condition
+      Warning:
+      Response was filtered by the provider's content moderation policy.
+
+---
+
+    Code
+      check_finish_reason(I("some_weird_reason"), "warn")
+    Condition
+      Warning:
+      Response may be incomplete, unexpected finish reason: some_weird_reason.
+

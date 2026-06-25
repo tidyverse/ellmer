@@ -252,11 +252,10 @@ method(chat_request, ProviderAWSBedrock) <- function(
   type = NULL
 ) {
   req <- base_request(provider)
+  suffix <- if (stream) "converse-stream" else "converse"
   req <- req_url_path_append(
     req,
-    "model",
-    provider@model,
-    if (stream) "converse-stream" else "converse"
+    paste0("model/", curl::curl_escape(provider@model), "/", suffix)
   )
 
   if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
@@ -393,7 +392,8 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
     result <- list(
       output = list(
         message = result
-      )
+      ),
+      stopReason = chunk$stopReason
     )
   } else if (chunk$event_type == "metadata") {
     result$usage <- chunk$usage
@@ -411,6 +411,24 @@ method(value_tokens, ProviderAWSBedrock) <- function(provider, json) {
     input = usage$inputTokens %||% 0,
     output = usage$outputTokens %||% 0,
     cached_input = usage$cacheReadInputTokens %||% 0
+  )
+}
+
+# https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
+method(value_finish_reason, ProviderAWSBedrock) <- function(provider, result) {
+  reason <- result$stopReason
+  if (is.null(reason)) {
+    return(NA_character_)
+  }
+  switch(
+    reason,
+    end_turn = "success",
+    max_tokens = "max_tokens",
+    model_context_window_exceeded = "context_window",
+    stop_sequence = "stop_sequence",
+    guardrail_intervened = ,
+    content_filtered = "content_filter",
+    I(reason)
   )
 }
 
@@ -449,7 +467,14 @@ method(value_turn, ProviderAWSBedrock) <- function(
 
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
+
+  AssistantTurn(
+    contents,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = value_finish_reason(provider, result)
+  )
 }
 
 # ellmer -> Bedrock -------------------------------------------------------------

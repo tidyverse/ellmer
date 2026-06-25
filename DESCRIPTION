@@ -26,7 +26,7 @@ Imports:
     cli,
     coro (>= 1.1.0),
     glue,
-    httr2 (>= 1.2.1),
+    httr2 (>= 1.2.3),
     jsonlite,
     later (>= 1.4.0),
     lifecycle,

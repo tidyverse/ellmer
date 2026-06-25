@@ -32,7 +32,7 @@ NULL
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials A function that returns a list of authentication headers
 #'   or `NULL`, the default, to use ambient credentials. See above for details.
-#' @param model `r param_model("gemini-2.5-flash", "google_gemini")`
+#' @param model `r param_model("gemini-3.5-flash", "google_gemini")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -53,7 +53,7 @@ chat_google_gemini <- function(
   api_headers = character(),
   echo = NULL
 ) {
-  model <- set_default(model, "gemini-2.5-flash")
+  model <- set_default(model, "gemini-3.5-flash")
   echo <- check_echo(echo)
 
   credentials <- as_credentials(
@@ -77,7 +77,7 @@ chat_google_gemini <- function(
 
 chat_google_gemini_test <- function(
   ...,
-  model = "gemini-2.5-flash",
+  model = "gemini-3.5-flash",
   params = NULL,
   echo = "none"
 ) {
@@ -106,7 +106,7 @@ chat_google_vertex <- function(
   check_string(location, allow_empty = FALSE)
   check_string(project_id, allow_empty = FALSE)
 
-  model <- set_default(model, "gemini-2.5-flash")
+  model <- set_default(model, "gemini-3.5-flash")
   echo <- check_echo(echo)
   credentials <- default_google_credentials(variant = "vertex")
 
@@ -332,6 +332,28 @@ method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
   )
 }
 
+# https://ai.google.dev/api/generate-content
+method(value_finish_reason, ProviderGoogleGemini) <- function(
+  provider,
+  result
+) {
+  reason <- result$candidates[[1]]$finishReason
+  if (is.null(reason)) {
+    return(NA_character_)
+  }
+  switch(
+    reason,
+    STOP = "success",
+    MAX_TOKENS = "max_tokens",
+    SAFETY = ,
+    RECITATION = ,
+    BLOCKLIST = ,
+    PROHIBITED_CONTENT = ,
+    SPII = "content_filter",
+    I(reason)
+  )
+}
+
 method(value_turn, ProviderGoogleGemini) <- function(
   provider,
   result,
@@ -373,7 +395,14 @@ method(value_turn, ProviderGoogleGemini) <- function(
   contents <- compact(contents)
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
+
+  AssistantTurn(
+    contents,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = value_finish_reason(provider, result)
+  )
 }
 
 # ellmer -> Gemini --------------------------------------------------------------

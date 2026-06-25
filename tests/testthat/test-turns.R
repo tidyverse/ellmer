@@ -134,3 +134,22 @@ test_that("non-text types just show type", {
     "ImageInline, ImageRemote"
   )
 })
+
+# check_finish_reason()
+
+test_that("check_finish_reason() errors on non-success finish reasons", {
+  expect_snapshot(check_finish_reason("max_tokens", "error"), error = TRUE)
+  expect_snapshot(check_finish_reason("context_window", "error"), error = TRUE)
+  expect_snapshot(check_finish_reason("content_filter", "error"), error = TRUE)
+  expect_snapshot(
+    check_finish_reason(I("some_weird_reason"), "error"),
+    error = TRUE
+  )
+})
+
+test_that("check_finish_reason() warns on non-success finish reasons", {
+  expect_snapshot(check_finish_reason("max_tokens", "warn"))
+  expect_snapshot(check_finish_reason("context_window", "warn"))
+  expect_snapshot(check_finish_reason("content_filter", "warn"))
+  expect_snapshot(check_finish_reason(I("some_weird_reason"), "warn"))
+})

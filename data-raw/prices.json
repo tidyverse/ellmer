@@ -4618,6 +4618,13 @@
   },
   {
     "provider": "Mistral",
+    "model": "mistral-medium-3-5",
+    "variant": "",
+    "input": 1.5,
+    "output": 7.5
+  },
+  {
+    "provider": "Mistral",
     "model": "mistral-medium-latest",
     "variant": "",
     "input": 0.4,

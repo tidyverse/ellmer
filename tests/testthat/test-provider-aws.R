@@ -270,3 +270,15 @@ test_that("AWS credential caching works as expected", {
   expect_false(identical(creds1, paws_credentials(profile = "test")))
   expect_false(identical(creds2, paws_credentials(profile = "test")))
 })
+
+test_that("inference profile ARN slash is encoded in URL (#792)", {
+  arn <- "arn:aws:bedrock:us-east-1:123456789:application-inference-profile/abc123"
+  provider <- test_aws_bedrock_provider(model = arn)
+  local_mocked_bindings(
+    paws_credentials = function(...) {
+      list(access_key_id = "x", secret_access_key = "x", session_token = "x")
+    }
+  )
+  req <- chat_request(provider, stream = FALSE, turns = list())
+  expect_match(req$url, "inference-profile%2Fabc123", fixed = TRUE)
+})

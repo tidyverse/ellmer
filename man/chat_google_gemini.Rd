@@ -52,7 +52,7 @@ models_google_vertex(
 \item{credentials}{A function that returns a list of authentication headers
 or \code{NULL}, the default, to use ambient credentials. See above for details.}
 
-\item{model}{The model to use for the chat (defaults to "gemini-2.5-flash").
+\item{model}{The model to use for the chat (defaults to "gemini-3.5-flash").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_google_gemini()} to see all options.}
 

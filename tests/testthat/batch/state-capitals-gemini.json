@@ -2,31 +2,31 @@
   "version": 1,
   "stage": "done",
   "batch": {
-    "name": "batches/5j36i6buywmx2lpjw85jtz3h6nsl55yqxd3a",
+    "name": "batches/hp3tanggzvthhnlw3gnj909kf56nq1ntpzyk",
     "metadata": {
       "@type": "type.googleapis.com/google.ai.generativelanguage.v1main.GenerateContentBatch",
-      "model": "models/gemini-2.5-flash",
-      "displayName": "ellmer-1779540554",
+      "model": "models/gemini-3.5-flash",
+      "displayName": "ellmer-1781707740",
       "inputConfig": {
-        "fileName": "files/q044jyg7vego"
+        "fileName": "files/rx17ax0iv3zb"
       },
       "output": {
-        "responsesFile": "files/batch-5j36i6buywmx2lpjw85jtz3h6nsl55yqxd3a"
+        "responsesFile": "files/batch-hp3tanggzvthhnlw3gnj909kf56nq1ntpzyk"
       },
-      "createTime": "2026-05-23T12:49:14.981318174Z",
-      "endTime": "2026-05-23T12:50:31.836848793Z",
-      "updateTime": "2026-05-23T12:50:31.836848723Z",
+      "createTime": "2026-06-17T14:49:01.429015220Z",
+      "endTime": "2026-06-17T14:49:50.441801900Z",
+      "updateTime": "2026-06-17T14:49:50.441801860Z",
       "batchStats": {
         "requestCount": "4",
         "successfulRequestCount": "4"
       },
       "state": "BATCH_STATE_SUCCEEDED",
-      "name": "batches/5j36i6buywmx2lpjw85jtz3h6nsl55yqxd3a"
+      "name": "batches/hp3tanggzvthhnlw3gnj909kf56nq1ntpzyk"
     },
     "done": true,
     "response": {
       "@type": "type.googleapis.com/google.ai.generativelanguage.v1main.GenerateContentBatchOutput",
-      "responsesFile": "files/batch-5j36i6buywmx2lpjw85jtz3h6nsl55yqxd3a"
+      "responsesFile": "files/batch-hp3tanggzvthhnlw3gnj909kf56nq1ntpzyk"
     }
   },
   "results": [
@@ -36,140 +36,144 @@
         "candidates": [
           {
             "content": {
-              "role": "model",
               "parts": [
                 {
-                  "text": "Des Moines"
+                  "text": "Des Moines",
+                  "thoughtSignature": "EpgCCpUCAQw51sejSJTf1RN5bk517/YZmWqe1gy6CEDii6/N6o9wuBFNldc6xeYs4PAfIDe2J7SzVSe9/9+zlIq3En87KIXKplDK3NkPdxnuJubuLiU+XwVoiK9c15DLkrJdquLEwf4sOiB+n8jTW68WzN2Q9zcmY2Z7319uKvCYI3HKyjpXE04M74289CQDna3l0cVnRd9TGKbsvJCIu6r5uCRyaMmAJzKu379q0KHL1ZPkbS8ZkVjUzD2yDjImf6f1TogzyWcCS7jmQbaUrnGDNp9ayGsl+1KuZzowEuIj3qNvov2s0klq31f8VNFn+PfS7G98jB9O8ZJOuBZU5rt1t8k+OKGKN+iRnnaup35Fk/s8pQCEA9iNLg=="
                 }
-              ]
+              ],
+              "role": "model"
             },
-            "index": 0,
-            "finishReason": "STOP"
+            "finishReason": "STOP",
+            "index": 0
           }
         ],
         "usageMetadata": {
-          "serviceTier": "SERVICE_TIER_STANDARD",
+          "promptTokenCount": 15,
+          "candidatesTokenCount": 2,
+          "totalTokenCount": 79,
           "promptTokensDetails": [
             {
-              "tokenCount": 15,
-              "modality": "TEXT"
+              "modality": "TEXT",
+              "tokenCount": 15
             }
           ],
-          "totalTokenCount": 52,
-          "candidatesTokenCount": 2,
-          "promptTokenCount": 15,
-          "thoughtsTokenCount": 35
+          "thoughtsTokenCount": 62,
+          "serviceTier": "SERVICE_TIER_STANDARD"
         },
-        "responseId": "l6IRat62BeWrqtsP0KDB8As",
-        "modelVersion": "gemini-2.5-flash"
+        "modelVersion": "gemini-3.5-flash",
+        "responseId": "CbQyaua_KNnRz7IP2KW1eA"
       }
     },
     {
       "status_code": 200,
       "body": {
-        "responseId": "l6IRaoK2A-aBqtsP0ITi2A4",
-        "modelVersion": "gemini-2.5-flash",
         "candidates": [
           {
-            "index": 0,
-            "finishReason": "STOP",
             "content": {
-              "role": "model",
               "parts": [
                 {
-                  "text": "Albany"
+                  "text": "Albany",
+                  "thoughtSignature": "EpsCCpgCAQw51scB4EdutC16DjlzsZF0wDuJhCwridUwZ8p23akJW2E3BqlXqk++bIARLC3fCzKDOxw9vc5ZcpAHoxEkC7ymeHU8EMpAFSWCcBwX+wMlv9vHbuAqFNMnCkcAKWlMOrXnxJupblfUvhVMkNKYB9/gkS6jVFTWO5Hokdsrq6y3n+BS5krGJXuh3eXXgxZAvo2ygv6qCMPNE/wN6QH+Bd1MEjOIIB1XSuRzy8VXDwITSEHQDrSmefyb6AF2LiFnwVyqE4XLBfiiGb+mdq56nkRp6hYtarwWgs5eYRP0yMHBWFvkjypHxfI3nP1lo4H8G9vBgeKIn1lC3tCweJt2WAdRLA3jwmKHoeBlIx1/8tkR3QNQ7+kcVA=="
                 }
-              ]
-            }
+              ],
+              "role": "model"
+            },
+            "finishReason": "STOP",
+            "index": 0
           }
         ],
         "usageMetadata": {
-          "totalTokenCount": 63,
-          "serviceTier": "SERVICE_TIER_STANDARD",
-          "promptTokensDetails": [
-            {
-              "tokenCount": 16,
-              "modality": "TEXT"
-            }
-          ],
-          "thoughtsTokenCount": 45,
           "promptTokenCount": 16,
-          "candidatesTokenCount": 2
-        }
-      }
-    },
-    {
-      "status_code": 200,
-      "body": {
-        "usageMetadata": {
-          "thoughtsTokenCount": 26,
-          "promptTokenCount": 15,
           "candidatesTokenCount": 2,
-          "totalTokenCount": 43,
-          "serviceTier": "SERVICE_TIER_STANDARD",
+          "totalTokenCount": 81,
           "promptTokensDetails": [
             {
-              "tokenCount": 15,
-              "modality": "TEXT"
-            }
-          ]
-        },
-        "candidates": [
-          {
-            "content": {
-              "role": "model",
-              "parts": [
-                {
-                  "text": "Sacramento"
-                }
-              ]
-            },
-            "index": 0,
-            "finishReason": "STOP"
-          }
-        ],
-        "modelVersion": "gemini-2.5-flash",
-        "responseId": "l6IRas65B6ymmtkPgKyq0A4"
-      }
-    },
-    {
-      "status_code": 200,
-      "body": {
-        "responseId": "l6IRap_-CbCLqtsPjKGsoAY",
-        "modelVersion": "gemini-2.5-flash",
-        "candidates": [
-          {
-            "index": 0,
-            "finishReason": "STOP",
-            "content": {
-              "role": "model",
-              "parts": [
-                {
-                  "text": "Austin"
-                }
-              ]
-            }
-          }
-        ],
-        "usageMetadata": {
-          "totalTokenCount": 49,
-          "serviceTier": "SERVICE_TIER_STANDARD",
-          "promptTokensDetails": [
-            {
-              "tokenCount": 15,
-              "modality": "TEXT"
+              "modality": "TEXT",
+              "tokenCount": 16
             }
           ],
-          "thoughtsTokenCount": 33,
+          "thoughtsTokenCount": 63,
+          "serviceTier": "SERVICE_TIER_STANDARD"
+        },
+        "modelVersion": "gemini-3.5-flash",
+        "responseId": "CrQyauSiGvPsz7IPiK7UgQY"
+      }
+    },
+    {
+      "status_code": 200,
+      "body": {
+        "candidates": [
+          {
+            "content": {
+              "parts": [
+                {
+                  "text": "Sacramento",
+                  "thoughtSignature": "EqECCp4CAQw51scMuavyuYlzbizuD2Eam2bgc1G1ttOuL6RM0wbfp0gzYDPuqkELXMCKREi1AbQ8cCM+EhMSgonIomeMlJVhN6CTduFqxyYaGWHJt8OxxgeunBzxq9YMsCdwyGnRjYXcaGS0BoV7nul6dXBdv1aDcjKqTeo2ql5gMpsJgHkXlqFGJ+ze7QVakagJ+c4vDGRi3bFiv/VlIHZp1x14hXHle4Q3xT07LvYJEWVcVtehaommpAat4eSsAKXl37vYCCYp31vP73CVKFn3yeSVJ2ZKaPOjkV2BA322w2uIS5mgzfBAEH0HAaf/WNlgWTQ8IUsu0W/M2MiUYhry8WS64DXmCyMO8sirFOQWMvqN0OxO7hTLXmAMjV9BqJNaQw=="
+                }
+              ],
+              "role": "model"
+            },
+            "finishReason": "STOP",
+            "index": 0
+          }
+        ],
+        "usageMetadata": {
           "promptTokenCount": 15,
-          "candidatesTokenCount": 1
-        }
+          "candidatesTokenCount": 2,
+          "totalTokenCount": 77,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 15
+            }
+          ],
+          "thoughtsTokenCount": 60,
+          "serviceTier": "SERVICE_TIER_STANDARD"
+        },
+        "modelVersion": "gemini-3.5-flash",
+        "responseId": "CbQyas3GENnRz7IP2KW1eA"
+      }
+    },
+    {
+      "status_code": 200,
+      "body": {
+        "candidates": [
+          {
+            "content": {
+              "parts": [
+                {
+                  "text": "Austin",
+                  "thoughtSignature": "EpICCo8CAQw51sdFQ85UKP2dYj+mmZBC+lf5Gbebv6elSkdV+gQXYlT27ryvyxoPmJh4J04U5rV/wh2Q8YJGMpdRFRkfWGCDtyfiC4KxULWnT4CqvqnyH8fNwjVc7G/M1/rkNN3FTEIjXGxCtgVVJGp8Z0NmV7cHUd/7SdShK9jx3rOlr/FlVVL79Vi/QSa9hsFL++WnUl41+HPOtZBapVTpMY9ZgByiqoPHHKqyslyFZAmEh+zg4y2dEABoaSyU37tehj7q2PGdMRkBshW1GhtmiTN0Q0rDbbCuaMaVLvBjOdsJgT5uBTEl07FKri+ctpx4gsZtFDUTOWUgr93LqCXn+uYXbMnlkAg2E/WI9ihGPaQYAQ=="
+                }
+              ],
+              "role": "model"
+            },
+            "finishReason": "STOP",
+            "index": 0
+          }
+        ],
+        "usageMetadata": {
+          "promptTokenCount": 15,
+          "candidatesTokenCount": 1,
+          "totalTokenCount": 76,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 15
+            }
+          ],
+          "thoughtsTokenCount": 60,
+          "serviceTier": "SERVICE_TIER_STANDARD"
+        },
+        "modelVersion": "gemini-3.5-flash",
+        "responseId": "CrQyaunPA5PYz7IPgIndiAg"
       }
     }
   ],
-  "started_at": 1779540551,
+  "started_at": 1781707738,
   "hash": {
-    "provider": "aebac3192349dfc3afe04861751c4aa4",
+    "provider": "90a40229e1ce3371a541e36b95fb2239",
     "prompts": "b8eafe281e3cc5113058d9722be3e295",
     "user_turns": "d6990a1b8a9f5db0e97de86c2669de44"
   }

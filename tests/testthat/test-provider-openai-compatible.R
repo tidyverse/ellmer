@@ -97,6 +97,7 @@ test_that("value_turn() treats empty content string as null", {
 
   result <- list(
     choices = list(list(
+      finish_reason = "stop",
       message = list(
         role = "assistant",
         content = "",
@@ -186,6 +187,7 @@ test_that("value_turn extracts reasoning_content and reasoning", {
 
   result_content <- list(
     choices = list(list(
+      finish_reason = "stop",
       message = list(
         role = "assistant",
         reasoning_content = "Let me think...",
@@ -202,6 +204,7 @@ test_that("value_turn extracts reasoning_content and reasoning", {
 
   result_reasoning <- list(
     choices = list(list(
+      finish_reason = "stop",
       message = list(
         role = "assistant",
         reasoning = "Let me think...",

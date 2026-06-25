@@ -117,6 +117,11 @@ SystemTurn <- new_class(
 #'   used in this turn.
 #' @param cost The cost of the turn in dollars.
 #' @param duration The duration of the request in seconds.
+#' @param finish_reason Why the model stopped generating. Standardized
+#'   across providers to one of: `"success"`, `"max_tokens"`,
+#'   `"stop_sequence"`, `"content_filter"`, or `"context_window"`.
+#'   Unrecognized provider-specific reasons are passed through as-is.
+#'   `NA` when not available.
 #' @export
 #' @rdname Turn
 #' @return An S7 `AssistantTurn` object
@@ -139,14 +144,16 @@ AssistantTurn <- new_class(
     role = new_property(
       class = class_character,
       getter = function(self) "assistant"
-    )
+    ),
+    finish_reason = prop_string(allow_na = TRUE)
   ),
   constructor = function(
     contents = list(),
     json = list(),
     tokens = c(NA_real_, NA_real_, NA_real_),
     cost = NA_real_,
-    duration = NA_real_
+    duration = NA_real_,
+    finish_reason = NA_character_
   ) {
     if (is.character(contents)) {
       contents <- list(ContentText(paste0(contents, collapse = "\n")))
@@ -158,7 +165,8 @@ AssistantTurn <- new_class(
       json = json,
       tokens = tokens,
       cost = cost,
-      duration = duration
+      duration = duration,
+      finish_reason = finish_reason
     )
   }
 )
@@ -322,4 +330,28 @@ turn_contents_preview <- function(turn) {
     }
   })
   paste(contents, collapse = ", ")
+}
+
+check_finish_reason <- function(finish_reason, signal = c("error", "warn")) {
+  signal <- arg_match(signal)
+  signal_fn <- switch(signal, error = cli::cli_abort, warn = cli::cli_warn)
+
+  msg <- if (inherits(finish_reason, "AsIs")) {
+    "Response may be incomplete, unexpected finish reason: {.val {finish_reason}}."
+  } else {
+    switch(
+      finish_reason,
+      max_tokens = c(
+        "Response was truncated because it hit the {.arg max_tokens} limit.",
+        "i" = "Increase {.arg max_tokens} to allow the model to generate the full response."
+      ),
+      context_window = "Response was truncated because it exceeded the model's context window.",
+      content_filter = "Response was filtered by the provider's content moderation policy.",
+      NULL
+    )
+  }
+
+  if (!is.null(msg)) {
+    signal_fn(msg, call = NULL)
+  }
 }
