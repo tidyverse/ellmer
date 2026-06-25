@@ -49,6 +49,9 @@ features.
 - [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   [`models_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   : Chat with an OpenAI model
+- [`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
+  [`models_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
+  : Chat with a model hosted by Posit AI
 - [`chat_snowflake()`](https://ellmer.tidyverse.org/dev/reference/chat_snowflake.md)
   : Chat with a model hosted on Snowflake
 

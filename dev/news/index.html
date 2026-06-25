@@ -58,6 +58,7 @@
 <code><a href="../reference/chat-any.html">chat()</a></code> now raises a warning and <code>chat_structured()</code> raises an informative error when a response is truncated, filtered, or otherwise incomplete (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/867" class="external-link">#867</a>).</li>
 <li>
 <code>AssistantTurn</code> gains a <code>finish_reason</code> property that reports why the model stopped generating (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/3" class="external-link">#3</a>).</li>
+<li>New <code><a href="../reference/chat_posit.html">chat_posit()</a></code> and <code><a href="../reference/chat_posit.html">models_posit()</a></code> provide access to models hosted by Posit AI, authenticating via an OAuth device flow (<a href="https://github.com/simonpcouch" class="external-link">@simonpcouch</a>, <a href="https://github.com/tidyverse/ellmer/issues/1024" class="external-link">#1024</a>).</li>
 <li>
 <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> now defaults to the <code>gemini-2.5-flash</code> model (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/885" class="external-link">#885</a>).</li>
 <li>

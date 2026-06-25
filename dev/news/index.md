@@ -10,6 +10,13 @@
 - `AssistantTurn` gains a `finish_reason` property that reports why the
   model stopped generating ([@thisisnic](https://github.com/thisisnic),
   [\#3](https://github.com/tidyverse/ellmer/issues/3)).
+- New
+  [`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
+  and
+  [`models_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
+  provide access to models hosted by Posit AI, authenticating via an
+  OAuth device flow ([@simonpcouch](https://github.com/simonpcouch),
+  [\#1024](https://github.com/tidyverse/ellmer/issues/1024)).
 - [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   now defaults to the `gemini-2.5-flash` model
   ([@thisisnic](https://github.com/thisisnic),
