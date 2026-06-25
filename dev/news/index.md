@@ -2,6 +2,11 @@
 
 ## ellmer (development version)
 
+- [`chat()`](https://ellmer.tidyverse.org/dev/reference/chat-any.md) now
+  raises a warning and `chat_structured()` raises an informative error
+  when a response is truncated, filtered, or otherwise incomplete
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#867](https://github.com/tidyverse/ellmer/issues/867)).
 - `AssistantTurn` gains a `finish_reason` property that reports why the
   model stopped generating ([@thisisnic](https://github.com/thisisnic),
   [\#3](https://github.com/tidyverse/ellmer/issues/3)).
