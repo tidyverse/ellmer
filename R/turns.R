@@ -15,7 +15,7 @@ NULL
 #' additional metadata about the API response.
 #'
 #' Use `turn@text` to access the text content of a turn, and `turn@citations`
-#' to access any [Citation]s from built-in web search tools.
+#' to access any [ContentCitation]s from built-in web search tools.
 #'
 #' Note that a call to `$chat()` and related functions may result in multiple
 #' user-assistant turn cycles. For example, if you have registered tools,
@@ -42,8 +42,7 @@ Turn <- new_class(
     citations = new_property(
       class = class_list,
       getter = function(self) {
-        texts <- keep(self@contents, S7_inherits, ContentText)
-        list_c(map(texts, function(x) x@citations)) %||% list()
+        keep(self@contents, S7_inherits, ContentCitation)
       }
     ),
     role = new_property(

@@ -80,7 +80,7 @@ of \code{Turn} for different types of conversation turns. \code{AssistantTurn} i
 additional metadata about the API response.
 
 Use \code{turn@text} to access the text content of a turn, and \code{turn@citations}
-to access any \link{Citation}s from built-in web search tools.
+to access any \link{ContentCitation}s from built-in web search tools.
 
 Note that a call to \verb{$chat()} and related functions may result in multiple
 user-assistant turn cycles. For example, if you have registered tools,

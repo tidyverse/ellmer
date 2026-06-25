@@ -100,7 +100,7 @@ reference:
   - Provider
   - Turn
   - Content
-  - Citation
+  - ContentCitation
   - Type
 
 - title: Utilities
