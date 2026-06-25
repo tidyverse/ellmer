@@ -394,14 +394,19 @@ method(value_turn, ProviderGoogleGemini) <- function(
   })
   contents <- compact(contents)
 
-  grounding_chunks <- result$candidates[[1]]$groundingMetadata$groundingChunks
+  grounding_chunks <- keep(
+    result$candidates[[1]]$groundingMetadata$groundingChunks,
+    function(chunk) !is.null(chunk$web$uri) && nzchar(chunk$web$uri)
+  )
   citations <- map(grounding_chunks, function(chunk) {
     as_citation(chunk$web$uri, chunk$web$title)
   })
   if (length(citations) > 0) {
     first_text <- match(TRUE, map_lgl(contents, S7_inherits, ContentText))
     if (!is.na(first_text)) {
-      contents[[first_text]]@citations <- citations
+      before <- contents[seq_len(first_text)]
+      after <- contents[seq_along(contents) > first_text]
+      contents <- c(before, citations, after)
     }
   }
 

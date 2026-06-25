@@ -297,23 +297,23 @@ method(value_turn, ProviderOpenAI) <- function(
   result,
   has_type = FALSE
 ) {
-  contents <- lapply(result$output, function(output) {
+  contents <- list_c(lapply(result$output, function(output) {
     if (output$type == "message") {
       content <- output$content[[1]]
       if (has_type) {
-        ContentJson(jsonlite::parse_json(content$text))
+        list(ContentJson(jsonlite::parse_json(content$text)))
       } else {
-        citations <- keep(content$annotations, function(x) {
+        url_citations <- keep(content$annotations, function(x) {
           identical(x$type, "url_citation")
         })
-        ContentText(content$text, citations = extract_citations(citations))
+        c(list(ContentText(content$text)), extract_citations(url_citations))
       }
     } else if (output$type == "function_call") {
       arguments <- jsonlite::parse_json(output$arguments)
-      ContentToolRequest(output$id, output$name, arguments)
+      list(ContentToolRequest(output$id, output$name, arguments))
     } else if (output$type == "reasoning") {
       thinking <- paste0(map_chr(output$summary, "[[", "text"), collapse = "")
-      ContentThinking(thinking = thinking, extra = output)
+      list(ContentThinking(thinking = thinking, extra = output))
     } else if (output$type == "image_generation_call") {
       mime_type <- switch(
         output$output_format,
@@ -322,7 +322,7 @@ method(value_turn, ProviderOpenAI) <- function(
         webp = "image/webp",
         "unknown"
       )
-      ContentImageInline(mime_type, output$result)
+      list(ContentImageInline(mime_type, output$result))
     } else if (output$type == "web_search_call") {
       # https://platform.openai.com/docs/guides/tools-web-search#output-and-citations
       first_query <- if (length(output$action$queries)) {
@@ -332,7 +332,7 @@ method(value_turn, ProviderOpenAI) <- function(
         first_query %||%
         output$action$url %||%
         "web search"
-      ContentToolRequestSearch(query = query, json = output)
+      list(ContentToolRequestSearch(query = query, json = output))
     } else {
       browser()
       cli::cli_abort(
@@ -340,7 +340,7 @@ method(value_turn, ProviderOpenAI) <- function(
         .internal = TRUE
       )
     }
-  })
+  }))
 
   tokens <- value_tokens(provider, result)
   variant <- result$service_tier %||% "default"

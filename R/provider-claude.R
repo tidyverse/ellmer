@@ -399,24 +399,21 @@ method(value_turn, ProviderAnthropic) <- function(
   result,
   has_type = FALSE
 ) {
-  contents <- lapply(result$content, function(content) {
+  contents <- list_c(lapply(result$content, function(content) {
     if (content$type == "text") {
       if (has_type && has_claude_structured_output(provider@model)) {
-        ContentJson(string = content$text)
+        list(ContentJson(string = content$text))
       } else {
-        ContentText(
-          content$text,
-          citations = extract_citations(content$citations)
-        )
+        c(list(ContentText(content$text)), extract_citations(content$citations))
       }
     } else if (content$type == "tool_use") {
       if (has_type) {
-        ContentJson(data = content$input$data)
+        list(ContentJson(data = content$input$data))
       } else {
         if (is_string(content$input)) {
           content$input <- jsonlite::parse_json(content$input)
         }
-        ContentToolRequest(content$id, content$name, content$input)
+        list(ContentToolRequest(content$id, content$name, content$input))
       }
     } else if (content$type == "server_tool_use") {
       if (is_string(content$input)) {
@@ -424,39 +421,42 @@ method(value_turn, ProviderAnthropic) <- function(
       }
       if (content$name == "web_search") {
         # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-search-tool#response
-        ContentToolRequestSearch(
+        list(ContentToolRequestSearch(
           query = content$input$query,
           json = content
-        )
+        ))
       } else if (content$name == "web_fetch") {
         # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-fetch-tool#response
-        ContentToolRequestFetch(
+        list(ContentToolRequestFetch(
           url = content$input$url,
           json = content
-        )
+        ))
       } else {
         cli::cli_abort("Unknown server tool {.str {content$name}}.")
       }
     } else if (content$type == "web_search_tool_result") {
       urls <- map_chr(content$content, \(x) x$url)
-      ContentToolResponseSearch(
+      list(ContentToolResponseSearch(
         urls = urls,
         json = content
-      )
+      ))
     } else if (content$type == "web_fetch_tool_result") {
-      ContentToolResponseFetch(url = content$url %||% "failed", json = content)
+      list(ContentToolResponseFetch(
+        url = content$url %||% "failed",
+        json = content
+      ))
     } else if (content$type == "thinking") {
-      ContentThinking(
+      list(ContentThinking(
         content$thinking,
         extra = list(signature = content$signature)
-      )
+      ))
     } else {
       cli::cli_abort(
         "Unknown content type {.str {content$type}}.",
         .internal = TRUE
       )
     }
-  })
+  }))
 
   tokens <- value_tokens(provider, result)
   cache_write <- result$usage$cache_creation_input_tokens %||% 0

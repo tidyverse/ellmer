@@ -3,7 +3,6 @@
 \name{Content}
 \alias{Content}
 \alias{ContentText}
-\alias{ContentCitation}
 \alias{ContentImage}
 \alias{ContentImageRemote}
 \alias{ContentImageInline}
@@ -16,8 +15,6 @@
 Content()
 
 ContentText(text = stop("Required"))
-
-ContentCitation(url = stop("Required"), title = "")
 
 ContentImage()
 
@@ -47,8 +44,6 @@ ContentPDF(
 \item{text}{A single string.}
 
 \item{url}{URL to a remote image.}
-
-\item{title}{The title of the cited source.}
 
 \item{detail}{Not currently used.}
 
@@ -108,15 +103,6 @@ This object is automatically created from the value returned by calling the
 \code{ContentToolResult} from a \code{\link[=tool]{tool()}} function to include additional data or
 to customize the display of the result.
 }
-
-\code{ContentCitation} represents a reference to an external source that the
-model used to generate text. Citations are typically produced by built-in
-web search tools like \code{\link[=claude_tool_web_search]{claude_tool_web_search()}},
-\code{\link[=openai_tool_web_search]{openai_tool_web_search()}}, and \code{\link[=google_tool_web_search]{google_tool_web_search()}}.
-
-Citations appear in a turn's contents list interleaved with \link{ContentText}
-objects. Their position indicates which text they annotate. Use
-\code{turn@citations} to retrieve all citations from a turn.
 }
 \examples{
 Content()

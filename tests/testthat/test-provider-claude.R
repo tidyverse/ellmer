@@ -367,7 +367,8 @@ test_that("value_turn() extracts citations from text blocks", {
   )
 
   turn <- value_turn(provider, result)
-  expect_length(turn@citations, 1)
+  expect_s7_class(turn@contents[[1]], ContentText)
+  expect_s7_class(turn@contents[[2]], ContentCitation)
   expect_equal(turn@citations[[1]]@url, "https://example.com")
   expect_equal(turn@citations[[1]]@title, "Example Page")
 })

@@ -118,7 +118,9 @@ method(value_turn, ProviderOpenRouter) <- function(
 
   message <- result$choices[[1]]$message %||% result$choices[[1]]$delta
   url_citations <- keep(message$annotations, function(x) {
-    identical(x$type, "url_citation")
+    identical(x$type, "url_citation") &&
+      !is.null(x$url_citation$url) &&
+      nzchar(x$url_citation$url)
   })
   citations <- map(url_citations, function(x) {
     as_citation(x$url_citation$url, x$url_citation$title)

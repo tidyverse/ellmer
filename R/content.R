@@ -130,8 +130,11 @@ method(contents_markdown, ContentText) <- function(content) {
 
 # Citations -----------------------------------------------------------------
 
-#' @rdname Content
+#' A citation to an external source
+#'
 #' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' `ContentCitation` represents a reference to an external source that the
 #' model used to generate text. Citations are typically produced by built-in
 #' web search tools like [claude_tool_web_search()],
@@ -143,7 +146,10 @@ method(contents_markdown, ContentText) <- function(content) {
 #'
 #' @param url The URL of the cited source.
 #' @param title The title of the cited source.
+#' @return An S7 `ContentCitation` object.
 #' @export
+#' @examples
+#' ContentCitation(url = "https://example.com", title = "Example")
 ContentCitation <- new_class(
   "ContentCitation",
   parent = Content,

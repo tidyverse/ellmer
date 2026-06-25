@@ -23,7 +23,7 @@
     Condition
       Error in `contents_record()`:
       ! Cannot record or replay a <foo::LocalClass> object.
-      i Only `ellmer::Content`, `ellmer::Turn`, or `ellmer::Citation` classes or subclasses are currently supported.
+      i Only `ellmer::Content` or `ellmer::Turn` classes or subclasses are currently supported.
     Code
       contents_replay(recorded)
     Condition

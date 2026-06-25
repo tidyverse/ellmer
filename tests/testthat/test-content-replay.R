@@ -6,10 +6,7 @@ test_that("can serialize simple objects", {
 
   expect_equal(
     contents_record(ContentText("hello world")),
-    recorded_object(
-      "ellmer::ContentText",
-      list(text = "hello world", citations = list())
-    )
+    recorded_object("ellmer::ContentText", list(text = "hello world"))
   )
 })
 
@@ -24,10 +21,11 @@ test_that("can round trip of Turn record/replay", {
   ))
 })
 
-test_that("can round trip ContentText with citations", {
-  cit <- Citation(url = "https://example.com", title = "Example")
-  ct <- ContentText("cited text", citations = list(cit))
-  test_record_replay(ct)
+test_that("can round trip ContentCitation", {
+  test_record_replay(ContentCitation(
+    url = "https://example.com",
+    title = "Example"
+  ))
 })
 
 test_that("can round trip simple content types", {

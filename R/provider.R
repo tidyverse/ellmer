@@ -183,10 +183,11 @@ value_turn <- new_generic("value_turn", "provider")
 # Citation helpers ---------------------------------------------------------
 
 as_citation <- function(url, title = "") {
-  Citation(url = url %||% "", title = title %||% "")
+  ContentCitation(url = url %||% "", title = title %||% "")
 }
 
 extract_citations <- function(citations) {
+  citations <- keep(citations, function(x) !is.null(x$url) && nzchar(x$url))
   map(citations, function(x) as_citation(x$url, x$title))
 }
 
@@ -197,8 +198,9 @@ attach_turn_citations <- function(turn, citations) {
   contents <- turn@contents
   first_text <- match(TRUE, map_lgl(contents, S7_inherits, ContentText))
   if (!is.na(first_text)) {
-    contents[[first_text]]@citations <- citations
-    turn@contents <- contents
+    before <- contents[seq_len(first_text)]
+    after <- contents[seq_along(contents) > first_text]
+    turn@contents <- c(before, citations, after)
   }
   turn
 }
@@ -238,6 +240,10 @@ as_json <- new_generic(
 
 method(as_json, list(Provider, class_list)) <- function(provider, x, ...) {
   compact(lapply(x, as_json, provider = provider, ...))
+}
+
+method(as_json, list(Provider, ContentCitation)) <- function(provider, x, ...) {
+  NULL
 }
 
 method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
