@@ -69,6 +69,36 @@ ProviderPerplexity <- new_class(
   parent = ProviderOpenAICompatible,
 )
 
+method(value_turn, ProviderPerplexity) <- function(
+  provider,
+  result,
+  has_type = FALSE
+) {
+  turn <- value_turn(
+    super(provider, ProviderOpenAICompatible),
+    result = result,
+    has_type = has_type
+  )
+
+  citations <- perplexity_extract_citations(result)
+  if (length(citations) > 0) {
+    contents <- turn@contents
+    text_pos <- match(TRUE, map_lgl(contents, S7_inherits, ContentText))
+    if (!is.na(text_pos)) {
+      contents[[text_pos]]@citations <- citations
+      turn@contents <- contents
+    }
+  }
+
+  turn
+}
+
+perplexity_extract_citations <- function(result) {
+  map(result$search_results %||% list(), function(x) {
+    Citation(url = x$url %||% "", title = x$title %||% "")
+  })
+}
+
 method(chat_params, ProviderPerplexity) <- function(provider, params) {
   # https://docs.perplexity.ai/api-reference/chat-completions-post
   standardise_params(
