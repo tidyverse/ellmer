@@ -6,7 +6,8 @@
 [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md),
 and
 [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md).
-They use the [OpenAI](https://platform.openai.com/docs/guides/batch),
+They use the
+[OpenAI](https://developers.openai.com/api/docs/guides/batch),
 [Anthropic](https://docs.claude.com/en/docs/build-with-claude/batch-processing),
 [Google Gemini](https://ai.google.dev/gemini-api/docs/batch-api), and
 [Groq](https://console.groq.com/docs/batch) batch APIs which allow you

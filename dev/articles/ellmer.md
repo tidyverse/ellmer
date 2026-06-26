@@ -202,8 +202,8 @@ has a prompt stuffed with useful knowledge. For example:
   assistant](https://github.com/jcheng5/ellmer-assistant) works.
 
 - Build language specific prompts for R and/or Python. [Shiny
-  Assistant](https://shiny.posit.co/blog/posts/shiny-assistant/) helps
-  you build shiny apps (either in R or Python) by combining a
+  Assistant](https://opensource.posit.co/blog/2024-10-09_shiny-assistant/)
+  helps you build shiny apps (either in R or Python) by combining a
   [prompt](https://github.com/posit-dev/shiny-assistant/blob/main/shinyapp/app_prompt.md)
   that gives general advice on building apps with a prompt for
   [R](https://github.com/posit-dev/shiny-assistant/blob/main/shinyapp/app_prompt_r.md)

@@ -24,7 +24,7 @@ some pointers to the prompt design guides of some of the most popular
 models:
 
 - [Claude](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview)
-- [OpenAI](https://platform.openai.com/docs/guides/prompt-engineering)
+- [OpenAI](https://developers.openai.com/api/docs/guides/prompt-engineering)
 - [Gemini](https://ai.google.dev/gemini-api/docs/prompting-intro)
 
 If you have a claude account, you can use its
