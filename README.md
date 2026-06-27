@@ -79,11 +79,17 @@ or `chat_snowflake()`.
 If you’re using ellmer for your own exploration, you’ll have a lot more
 freedom, so we have a few recommendations to help you get started:
 
-- `chat_openai()`, `chat_anthropic()`, or `chat_google_gemini()` are
-  good places to start. `chat_openai()` defaults to **GPT-5.4**, but you
-  can use `model = "gpt-5.4-nano"` for a cheaper, faster model.
+- `chat_openai()` or `chat_anthropic()` are good places to start.
+  `chat_openai()` defaults to **GPT-5.4**, but you can use
+  `model = "gpt-5.4-nano"` for a cheaper, faster model.
   `chat_anthropic()` defaults to **Claude Sonnet 4.6**, which we have
   found to be particularly good at writing R code.
+
+- `chat_google_gemini()` is a strong model with a free tier (with the
+  downside that [your data is
+  used](https://ai.google.dev/gemini-api/terms#unpaid-services) to
+  improve the model), making it a good place to start if you don’t want
+  to spend any money.
 
 - `chat_ollama()`, which uses [Ollama](https://ollama.com), allows you
   to run models on your own computer. While the biggest models you can
@@ -163,14 +169,14 @@ The second most interactive way to chat is to call the `chat()` method:
 chat$chat("What preceding languages most influenced R?")
 #> R was primarily influenced by:
 #> 
-#> 1. **S** - A language developed at Bell Laboratories for statistical computing.
-#> 2. **Scheme** - A dialect of Lisp, influencing R's functional programming 
+#> 1. **S** - The predecessor to R, which introduced many foundational concepts.
+#> 2. **Scheme** - A dialect of Lisp that influenced R's functional programming 
 #> aspects.
-#> 3. **Fortran** - Contributed to numerical computing capabilities.
-#> 4. **C** - Influenced performance and low-level programming features.
+#> 3. **Fortran** - Influenced R's efficiency and mathematical capabilities.
+#> 4. **C** - Impacted R's performance and low-level programming features.
 #> 
-#> These languages shaped R's syntax, data structures, and capabilities in 
-#> statistical analysis.
+#> These languages contributed to R's design and functionality in statistics and 
+#> data analysis.
 ```
 
 If you initialize the chat object in the global environment, the `chat`
@@ -188,11 +194,12 @@ chat$chat(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   "Can you explain this logo?"
 )
-#> The logo features a stylized "R" enclosed in an oval shape. The design 
-#> symbolizes the programming language R, emphasizing its focus on statistics and 
-#> data analysis. The colors typically used are blue and gray, giving it a 
-#> professional look. The oval can represent a continuous cycle or process, 
-#> reinforcing R's capabilities in data manipulation and analysis.
+#> The logo features a stylized letter "R" within a circular shape. The design 
+#> reflects the programming language R, which is widely used for statistical 
+#> analysis and data visualization. The circular element suggests continuity and 
+#> completeness, while the bold "R" emphasizes its identity. Overall, the logo 
+#> conveys modernity and practicality, aligning with R's functionality in data 
+#> science.
 ```
 
 ### Streaming vs capturing
