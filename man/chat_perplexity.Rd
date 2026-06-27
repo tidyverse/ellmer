@@ -90,6 +90,7 @@ Other chatbots:
 \code{\link[=chat_openai]{chat_openai()}},
 \code{\link[=chat_openai_compatible]{chat_openai_compatible()}},
 \code{\link[=chat_openrouter]{chat_openrouter()}},
-\code{\link[=chat_portkey]{chat_portkey()}}
+\code{\link[=chat_portkey]{chat_portkey()}},
+\code{\link[=chat_posit]{chat_posit()}}
 }
 \concept{chatbots}

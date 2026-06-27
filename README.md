@@ -54,6 +54,7 @@ community; contributions to improve them are especially welcome.
   `chat_google_vertex()`.
 - Ollama: `chat_ollama()`.
 - OpenAI: `chat_openai()`.
+- Posit AI: `chat_posit()`.
 - Snowflake Cortex: `chat_snowflake()` and `chat_cortex_analyst()`.
 
 ### Community providers
@@ -78,18 +79,11 @@ or `chat_snowflake()`.
 If you’re using ellmer for your own exploration, you’ll have a lot more
 freedom, so we have a few recommendations to help you get started:
 
-- `chat_openai()` or `chat_anthropic()` are good places to start.
-  `chat_openai()` defaults to **GPT-4.1**, but you can use
-  `model = "gpt-4-1-nano"` for a cheaper, faster model, or
-  `model = "o3"` for more complex reasoning. `chat_anthropic()` is also
-  good; it defaults to **Claude 4.0 Sonnet**, which we have found to be
-  particularly good at writing R code.
-
-- `chat_google_gemini()` is a strong model with generous free tier (with
-  the downside that [your data is
-  used](https://ai.google.dev/gemini-api/terms#unpaid-services) to
-  improve the model), making it a great place to start if you don’t want
-  to spend any money.
+- `chat_openai()`, `chat_anthropic()`, or `chat_google_gemini()` are
+  good places to start. `chat_openai()` defaults to **GPT-5.4**, but you
+  can use `model = "gpt-5.4-nano"` for a cheaper, faster model.
+  `chat_anthropic()` defaults to **Claude Sonnet 4.6**, which we have
+  found to be particularly good at writing R code.
 
 - `chat_ollama()`, which uses [Ollama](https://ollama.com), allows you
   to run models on your own computer. While the biggest models you can
@@ -167,16 +161,16 @@ The second most interactive way to chat is to call the `chat()` method:
 
 ``` r
 chat$chat("What preceding languages most influenced R?")
-#> R was primarily influenced by S, a language developed at Bell Laboratories. 
-#> Other notable influences include:
+#> R was primarily influenced by:
 #> 
-#> 1. **Scheme** - For functional programming concepts.
-#> 2. **LISP** - For its powerful data manipulation features.
-#> 3. **C** - For performance and system-level access.
-#> 4. **Fortran** - For numerical and statistical computations.
+#> 1. **S** - A language developed at Bell Laboratories for statistical computing.
+#> 2. **Scheme** - A dialect of Lisp, influencing R's functional programming 
+#> aspects.
+#> 3. **Fortran** - Contributed to numerical computing capabilities.
+#> 4. **C** - Influenced performance and low-level programming features.
 #> 
-#> These languages contributed to R's syntax, data structures, and functional 
-#> programming capabilities.
+#> These languages shaped R's syntax, data structures, and capabilities in 
+#> statistical analysis.
 ```
 
 If you initialize the chat object in the global environment, the `chat`
@@ -194,12 +188,11 @@ chat$chat(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   "Can you explain this logo?"
 )
-#> The logo consists of a stylized letter "R" in blue, surrounded by a gray oval 
-#> shape. The design reflects the programming language R, which is widely used for
-#> statistical computing and graphics. The color choice often symbolizes clarity 
-#> and professionalism, aligning with R's use in data analysis and research. The 
-#> logo encapsulates the language's focus on data visualization and statistical 
-#> methods.
+#> The logo features a stylized "R" enclosed in an oval shape. The design 
+#> symbolizes the programming language R, emphasizing its focus on statistics and 
+#> data analysis. The colors typically used are blue and gray, giving it a 
+#> professional look. The oval can represent a continuous cycle or process, 
+#> reinforcing R's capabilities in data manipulation and analysis.
 ```
 
 ### Streaming vs capturing

@@ -52,7 +52,7 @@ models_anthropic(
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
 
-\item{model}{The model to use for the chat (defaults to "claude-sonnet-4-5-20250929").
+\item{model}{The model to use for the chat (defaults to "claude-sonnet-4-6").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_anthropic()} to see all options.}
 
@@ -167,6 +167,7 @@ Other chatbots:
 \code{\link[=chat_openai_compatible]{chat_openai_compatible()}},
 \code{\link[=chat_openrouter]{chat_openrouter()}},
 \code{\link[=chat_perplexity]{chat_perplexity()}},
-\code{\link[=chat_portkey]{chat_portkey()}}
+\code{\link[=chat_portkey]{chat_portkey()}},
+\code{\link[=chat_posit]{chat_posit()}}
 }
 \concept{chatbots}

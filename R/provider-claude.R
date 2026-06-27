@@ -57,7 +57,7 @@ NULL
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
-#' @param model `r param_model("claude-sonnet-4-5-20250929", "anthropic")`
+#' @param model `r param_model("claude-sonnet-4-6", "anthropic")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
 #' @param base_url The base URL to the endpoint; the default is Claude's
@@ -92,7 +92,7 @@ chat_anthropic <- function(
 ) {
   echo <- check_echo(echo)
 
-  model <- set_default(model, "claude-sonnet-4-5-20250929")
+  model <- set_default(model, "claude-sonnet-4-6")
   cache <- arg_match(cache)
 
   credentials <- as_credentials(
@@ -123,7 +123,7 @@ chat_claude <- chat_anthropic
 
 chat_anthropic_test <- function(
   ...,
-  model = "claude-sonnet-4-5-20250929",
+  model = "claude-sonnet-4-6",
   params = NULL,
   echo = "none"
 ) {

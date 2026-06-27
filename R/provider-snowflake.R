@@ -34,7 +34,7 @@ NULL
 #' @param credentials A list of authentication headers to pass into
 #'   [`httr2::req_headers()`], a function that returns them when called, or
 #'   `NULL`, the default, to use ambient credentials.
-#' @param model `r param_model("claude-3-7-sonnet")`
+#' @param model `r param_model("claude-sonnet-4-6")`
 #' @inherit chat_openai return
 #' @examplesIf has_credentials("snowflake")
 #' chat <- chat_snowflake()
@@ -51,7 +51,7 @@ chat_snowflake <- function(
   api_headers = character()
 ) {
   check_string(account, allow_empty = FALSE)
-  model <- set_default(model, "claude-3-7-sonnet")
+  model <- set_default(model, "claude-sonnet-4-6")
   params <- params %||% params()
   echo <- check_echo(echo)
 
