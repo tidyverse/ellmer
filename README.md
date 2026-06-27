@@ -88,7 +88,7 @@ freedom, so we have a few recommendations to help you get started:
 - `chat_google_gemini()` is a strong model with a free tier (with the
   downside that [your data is
   used](https://ai.google.dev/gemini-api/terms#unpaid-services) to
-  improve the model), making it a good place to start if you don’t want
+  improve the model), making it a great place to start if you don’t want
   to spend any money.
 
 - `chat_ollama()`, which uses [Ollama](https://ollama.com), allows you
