@@ -3,383 +3,458 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+      string: '{"model":"claude-sonnet-4-6","messages":[{"role":"user","content":[{"type":"text","text":"What''s
         the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Fri, 07 Nov 2025 15:47:27 GMT
+      date: Sun, 28 Jun 2026 11:17:22 GMT
       content-type: application/json
-      content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '2000000'
-      anthropic-ratelimit-input-tokens-remaining: '1999000'
-      anthropic-ratelimit-input-tokens-reset: '2025-11-07T15:47:27Z'
-      anthropic-ratelimit-output-tokens-limit: '400000'
-      anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-11-07T15:47:27Z'
-      anthropic-ratelimit-requests-limit: '4000'
-      anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-11-07T15:47:21Z'
-      retry-after: '34'
-      anthropic-ratelimit-tokens-limit: '2400000'
-      anthropic-ratelimit-tokens-remaining: '2399000'
-      anthropic-ratelimit-tokens-reset: '2025-11-07T15:47:27Z'
-      request-id: req_011CUtnoqauZ5V5PjEKFqCfg
+      anthropic-ratelimit-input-tokens-limit: '10000000'
+      anthropic-ratelimit-input-tokens-remaining: '9998000'
+      anthropic-ratelimit-input-tokens-reset: '2026-06-28T11:17:21Z'
+      anthropic-ratelimit-output-tokens-limit: '2000000'
+      anthropic-ratelimit-output-tokens-remaining: '2000000'
+      anthropic-ratelimit-output-tokens-reset: '2026-06-28T11:17:21Z'
+      anthropic-ratelimit-requests-limit: '10000'
+      anthropic-ratelimit-requests-remaining: '9999'
+      anthropic-ratelimit-requests-reset: '2026-06-28T11:17:18Z'
+      anthropic-ratelimit-tokens-limit: '12000000'
+      anthropic-ratelimit-tokens-remaining: '11998000'
+      anthropic-ratelimit-tokens-reset: '2026-06-28T11:17:21Z'
+      request-id: req_011CcVZgnYZNXvz8qiJ6UUD7
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '6055'
-      cf-cache-status: DYNAMIC
-      x-robots-tag: none
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      traceresponse: 00-f1957c6ed81ed632ab4187ef0dfe9c46-ebd823b3667d1c69-01
       server: cloudflare
-      cf-ray: 99adf7fd1ff57a97-DFW
+      content-encoding: gzip
+      vary: Accept-Encoding
+      cf-cache-status: DYNAMIC
+      set-cookie: _cfuvid=CN1KODLNBKTht3r8NFti9aQ4aRzkuJJZbpCC6KMpfhk-1782645438.568278-1.0.1.1-QcQSsYYYPUZvAWWAbIitbEqhGgYRdwRbdt_1k0APRcU;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      x-robots-tag: none
+      cf-ray: a12c48c70d2d2214-MAN
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01WSdQZERVjDmn7tPQiTKjH8","type":"message","role":"assistant","content":[{"type":"text","text":"I''ll
-        fetch that URL to see what the first movie listed is."},{"type":"server_tool_use","id":"srvtoolu_011B8NpmmZj6QqwjjDwxgUU3","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_011B8NpmmZj6QqwjjDwxgUU3","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2025-11-07T15:00:10.015000+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"![](../logo.png)\nStar
-        Wars films (static HTML)\nSource:\nvignettes/starwars.Rmd\nstarwars.Rmd\nThis
-        vignette contains some data about the Star Wars films for use in rvest examples
-        and vignettes.\nThe Phantom Menace\nReleased: 1999-05-19\nDirector: George
-        Lucas\nTurmoil has engulfed the Galactic Republic. The taxation of trade routes
-        to outlying star systems is in dispute.\nHoping to resolve the matter with
-        a blockade of deadly battleships, the greedy Trade Federation has stopped
-        all shipping to the small planet of Naboo.\nWhile the Congress of the Republic
-        endlessly debates this alarming chain of events, the Supreme Chancellor has
-        secretly dispatched two Jedi Knights, the guardians of peace and justice in
-        the galaxy, to settle the conflict….\nAttack of the Clones\nReleased: 2002-05-16\nDirector:
-        George Lucas\nThere is unrest in the Galactic Senate. Several thousand solar
-        systems have declared their intentions to leave the Republic.\nThis separatist
-        movement, under the leadership of the mysterious Count Dooku, has made it
-        difficult for the limited number of Jedi Knights to maintain peace and order
-        in the galaxy.\nSenator Amidala, the former Queen of Naboo, is returning to
-        the Galactic Senate to vote on the critical issue of creating an ARMY OF THE
-        REPUBLIC to assist the overwhelmed Jedi….\nRevenge of the Sith\nReleased:
-        2005-05-19\nDirector: George Lucas\nWar! The Republic is crumbling under attacks
-        by the ruthless Sith Lord, Count Dooku. There are heroes on both sides. Evil
-        is everywhere.\nIn a stunning move, the fiendish droid leader, General Grievous,
-        has swept into the Republic capital and kidnapped Chancellor Palpatine, leader
-        of the Galactic Senate.\nAs the Separatist Droid Army attempts to flee the
-        besieged capital with their valuable hostage, two Jedi Knights lead a desperate
-        mission to rescue the captive Chancellor….\nA New Hope\nReleased: 1977-05-25\nDirector:
-        George Lucas\nIt is a period of civil war. Rebel spaceships, striking from
-        a hidden base, have won their first victory against the evil Galactic Empire.\nDuring
-        the battle, Rebel spies managed to steal secret plans to the Empire’s ultimate
-        weapon, the DEATH STAR, an armored space station with enough power to destroy
-        an entire planet.\nPursued by the Empire’s sinister agents, Princess Leia
-        races home aboard her starship, custodian of the stolen plans that can save
-        her people and restore freedom to the galaxy….\nThe Empire Strikes Back\nReleased:
-        1980-05-17\nDirector: Irvin Kershner\nIt is a dark time for the Rebellion.
-        Although the Death Star has been destroyed, Imperial troops have driven the
-        Rebel forces from their hidden base and pursued them across the galaxy.\nEvading
-        the dreaded Imperial Starfleet, a group of freedom fighters led by Luke Skywalker
-        has established a new secret base on the remote ice world of Hoth.\nThe evil
-        lord Darth Vader, obsessed with finding young Skywalker, has dispatched thousands
-        of remote probes into the far reaches of space….\nReturn of the Jedi\nReleased:
-        1983-05-25\nDirector: Richard Marquand\nLuke Skywalker has returned to his
-        home planet of Tatooine in an attempt to rescue his friend Han Solo from the
-        clutches of the vile gangster Jabba the Hutt.\nLittle does Luke know that
-        the GALACTIC EMPIRE has secretly begun construction on a new armored space
-        station even more powerful than the first dreaded Death Star.\nWhen completed,
-        this ultimate weapon will spell certain doom for the small band of rebels
-        struggling to restore freedom to the galaxy…\nThe Force Awakens\nReleased:
-        2015-12-11\nDirector: J. J. Abrams\nLuke Skywalker has vanished. In his absence,
-        the sinister FIRST ORDER has risen from the ashes of the Empire and will not
-        rest until Skywalker, the last Jedi, has been destroyed. With the support
-        of the REPUBLIC, General Leia Organa leads a brave RESISTANCE. She is desperate
-        to find her brother Luke and gain his help in restoring peace and justice
-        to the galaxy. Leia has sent her most daring pilot on a secret mission to
-        Jakku, where an old ally has discovered a clue to Luke’s whereabouts…."},"title":"Star
-        Wars films (static HTML)","citations":{"enabled":false}}}},{"type":"text","text":"The
-        first movie listed on that page is **The Phantom Menace**, which was released
-        on 1999-05-19 and directed by George Lucas."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":10,"cache_creation_input_tokens":2227,"cache_read_input_tokens":1052,"cache_creation":{"ephemeral_5m_input_tokens":1052,"ephemeral_1h_input_tokens":0},"output_tokens":123,"service_tier":"standard","server_tool_use":{"web_search_requests":0,"web_fetch_requests":1}}}'
-  recorded_at: 2025-11-07 15:47:27
+      string: '{"model":"claude-sonnet-4-6","id":"msg_01L78cwhuRuBnXd7yaUoSHzK","type":"message","role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01LWf3bewF1QLnuGgTpFYh76","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01LWf3bewF1QLnuGgTpFYh76","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-06-28T11:17:20.779054","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
+        Star Wars films (static HTML)\nmeta-viewport: width=device-width, initial-scale=1,
+        shrink-to-fit=no\ntitle: Star Wars films (static HTML) • rvest\n---\n[Skip
+        to content](#container)\n\n[rvest](https://rvest.tidyverse.org/index.html)
+        1.0.5\n\n- [Get started](https://rvest.tidyverse.org/articles/rvest.html)\n-
+        [Reference](https://rvest.tidyverse.org/reference/index.html)\n- Articles\n\n  *
+        [SelectorGadget](https://rvest.tidyverse.org/articles/selectorgadget.html)\n  *
+        [Star Wars films (dynamic HTML)](https://rvest.tidyverse.org/articles/starwars-dynamic.html)\n  *
+        [Star Wars films (static HTML)](https://rvest.tidyverse.org/articles/starwars.html)\n-
+        News\n\n  * ###### Releases\n  * [Version 1.0.0](https://www.tidyverse.org/blog/2021/03/rvest-1-0-0/)\n  *
+        [Version 0.3.0](https://blog.rstudio.com/2015/09/24/rvest-0-3-0/)\n  * [Version
+        0.1.0](https://blog.rstudio.com/2014/11/24/rvest-easy-web-scraping-with-r/)\n  *\n\n---\n\n  *
+        [Changelog](https://rvest.tidyverse.org/news/index.html)\n\n\n-\n- [https://github.com/tidyverse/rvest/](https://github.com/tidyverse/rvest/)\n\n![](https://rvest.tidyverse.org/logo.png)\n\n#
+        Star Wars films (static HTML)\n\nSource: [`vignettes/starwars.Rmd`](https://github.com/tidyverse/rvest/blob/main/vignettes/starwars.Rmd)\n\n`starwars.Rmd`\n\nThis
+        vignette contains some data about the Star Wars films for use in\nrvest examples
+        and vignettes.\n\n## The Phantom Menace\n\nReleased: 1999-05-19\n\nDirector:
+        George Lucas\n\nTurmoil has engulfed the Galactic Republic. The taxation of
+        trade routes\nto outlying star systems is in dispute.\n\nHoping to resolve
+        the matter with a blockade of deadly battleships, the\ngreedy Trade Federation
+        has stopped all shipping to the small planet of\nNaboo.\n\nWhile the Congress
+        of the Republic endlessly debates this alarming chain\nof events, the Supreme
+        Chancellor has secretly dispatched two Jedi\nKnights, the guardians of peace
+        and justice in the galaxy, to settle the\nconflict….\n\n## Attack of the Clones\n\nReleased:
+        2002-05-16\n\nDirector: George Lucas\n\nThere is unrest in the Galactic Senate.
+        Several thousand solar systems\nhave declared their intentions to leave the
+        Republic.\n\nThis separatist movement, under the leadership of the mysterious
+        Count\nDooku, has made it difficult for the limited number of Jedi Knights
+        to\nmaintain peace and order in the galaxy.\n\nSenator Amidala, the former
+        Queen of Naboo, is returning to the Galactic\nSenate to vote on the critical
+        issue of creating an ARMY OF THE REPUBLIC\nto assist the overwhelmed Jedi….\n\n##
+        Revenge of the Sith\n\nReleased: 2005-05-19\n\nDirector: George Lucas\n\nWar!
+        The Republic is crumbling under attacks by the ruthless Sith Lord,\nCount
+        Dooku. There are heroes on both sides. Evil is everywhere.\n\nIn a stunning
+        move, the fiendish droid leader, General Grievous, has\nswept into the Republic
+        capital and kidnapped Chancellor Palpatine,\nleader of the Galactic Senate.\n\nAs
+        the Separatist Droid Army attempts to flee the besieged capital with\ntheir
+        valuable hostage, two Jedi Knights lead a desperate mission to\nrescue the
+        captive Chancellor….\n\n## A New Hope\n\nReleased: 1977-05-25\n\nDirector:
+        George Lucas\n\nIt is a period of civil war. Rebel spaceships, striking from
+        a hidden\nbase, have won their first victory against the evil Galactic Empire.\n\nDuring
+        the battle, Rebel spies managed to steal secret plans to the\nEmpire’s ultimate
+        weapon, the DEATH STAR, an armored space station with\nenough power to destroy
+        an entire planet.\n\nPursued by the Empire’s sinister agents, Princess Leia
+        races home aboard\nher starship, custodian of the stolen plans that can save
+        her people and\nrestore freedom to the galaxy….\n\n## The Empire Strikes Back\n\nReleased:
+        1980-05-17\n\nDirector: Irvin Kershner\n\nIt is a dark time for the Rebellion.
+        Although the Death Star has been\ndestroyed, Imperial troops have driven the
+        Rebel forces from their\nhidden base and pursued them across the galaxy.\n\nEvading
+        the dreaded Imperial Starfleet, a group of freedom fighters led\nby Luke Skywalker
+        has established a new secret base on the remote ice\nworld of Hoth.\n\nThe
+        evil lord Darth Vader, obsessed with finding young Skywalker, has\ndispatched
+        thousands of remote probes into the far reaches of space….\n\n## Return of
+        the Jedi\n\nReleased: 1983-05-25\n\nDirector: Richard Marquand\n\nLuke Skywalker
+        has returned to his home planet of Tatooine in an attempt\nto rescue his friend
+        Han Solo from the clutches of the vile gangster\nJabba the Hutt.\n\nLittle
+        does Luke know that the GALACTIC EMPIRE has secretly begun\nconstruction on
+        a new armored space station even more powerful than the\nfirst dreaded Death
+        Star.\n\nWhen completed, this ultimate weapon will spell certain doom for
+        the\nsmall band of rebels struggling to restore freedom to the galaxy…\n\n##
+        The Force Awakens\n\nReleased: 2015-12-11\n\nDirector: J. J. Abrams\n\nLuke
+        Skywalker has vanished. In his absence, the sinister FIRST ORDER\nhas risen
+        from the ashes of the Empire and will not rest until\nSkywalker, the last
+        Jedi, has been destroyed. With the support of the\nREPUBLIC, General Leia
+        Organa leads a brave RESISTANCE. She is desperate\nto find her brother Luke
+        and gain his help in restoring peace and\njustice to the galaxy. Leia has
+        sent her most daring pilot on a secret\nmission to Jakku, where an old ally
+        has discovered a clue to Luke’s\nwhereabouts….\n\n## On this page\n\nDeveloped
+        by [Hadley Wickham](https://hadley.nz), [![Posit](https://www.tidyverse.org/posit-logo.svg)](https://www.posit.co).\n\nSite
+        built with [pkgdown](https://pkgdown.r-lib.org/) 2.1.3."},"title":"Star Wars
+        films (static HTML)","citations":{"enabled":false}}},"caller":{"type":"direct"}},{"type":"text","text":"The
+        first movie listed on the page is **The Phantom Menace**, released on 1999-05-19
+        and directed by George Lucas."}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":4,"cache_creation_input_tokens":2832,"cache_read_input_tokens":1053,"cache_creation":{"ephemeral_5m_input_tokens":2832,"ephemeral_1h_input_tokens":0},"output_tokens":107,"service_tier":"standard","inference_geo":"global","server_tool_use":{"web_search_requests":0,"web_fetch_requests":1}}}'
+  recorded_at: 2026-06-28 11:17:22
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"I''ll
-        fetch that URL to see what the first movie listed is."},{"type":"server_tool_use","id":"srvtoolu_011B8NpmmZj6QqwjjDwxgUU3","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_011B8NpmmZj6QqwjjDwxgUU3","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2025-11-07T15:00:10.015000+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"![](../logo.png)\nStar
-        Wars films (static HTML)\nSource:\nvignettes/starwars.Rmd\nstarwars.Rmd\nThis
-        vignette contains some data about the Star Wars films for use in rvest examples
-        and vignettes.\nThe Phantom Menace\nReleased: 1999-05-19\nDirector: George
-        Lucas\nTurmoil has engulfed the Galactic Republic. The taxation of trade routes
-        to outlying star systems is in dispute.\nHoping to resolve the matter with
-        a blockade of deadly battleships, the greedy Trade Federation has stopped
-        all shipping to the small planet of Naboo.\nWhile the Congress of the Republic
-        endlessly debates this alarming chain of events, the Supreme Chancellor has
-        secretly dispatched two Jedi Knights, the guardians of peace and justice in
-        the galaxy, to settle the conflict….\nAttack of the Clones\nReleased: 2002-05-16\nDirector:
-        George Lucas\nThere is unrest in the Galactic Senate. Several thousand solar
-        systems have declared their intentions to leave the Republic.\nThis separatist
-        movement, under the leadership of the mysterious Count Dooku, has made it
-        difficult for the limited number of Jedi Knights to maintain peace and order
-        in the galaxy.\nSenator Amidala, the former Queen of Naboo, is returning to
-        the Galactic Senate to vote on the critical issue of creating an ARMY OF THE
-        REPUBLIC to assist the overwhelmed Jedi….\nRevenge of the Sith\nReleased:
-        2005-05-19\nDirector: George Lucas\nWar! The Republic is crumbling under attacks
-        by the ruthless Sith Lord, Count Dooku. There are heroes on both sides. Evil
-        is everywhere.\nIn a stunning move, the fiendish droid leader, General Grievous,
-        has swept into the Republic capital and kidnapped Chancellor Palpatine, leader
-        of the Galactic Senate.\nAs the Separatist Droid Army attempts to flee the
-        besieged capital with their valuable hostage, two Jedi Knights lead a desperate
-        mission to rescue the captive Chancellor….\nA New Hope\nReleased: 1977-05-25\nDirector:
-        George Lucas\nIt is a period of civil war. Rebel spaceships, striking from
-        a hidden base, have won their first victory against the evil Galactic Empire.\nDuring
-        the battle, Rebel spies managed to steal secret plans to the Empire’s ultimate
-        weapon, the DEATH STAR, an armored space station with enough power to destroy
-        an entire planet.\nPursued by the Empire’s sinister agents, Princess Leia
-        races home aboard her starship, custodian of the stolen plans that can save
-        her people and restore freedom to the galaxy….\nThe Empire Strikes Back\nReleased:
-        1980-05-17\nDirector: Irvin Kershner\nIt is a dark time for the Rebellion.
-        Although the Death Star has been destroyed, Imperial troops have driven the
-        Rebel forces from their hidden base and pursued them across the galaxy.\nEvading
-        the dreaded Imperial Starfleet, a group of freedom fighters led by Luke Skywalker
-        has established a new secret base on the remote ice world of Hoth.\nThe evil
-        lord Darth Vader, obsessed with finding young Skywalker, has dispatched thousands
-        of remote probes into the far reaches of space….\nReturn of the Jedi\nReleased:
-        1983-05-25\nDirector: Richard Marquand\nLuke Skywalker has returned to his
-        home planet of Tatooine in an attempt to rescue his friend Han Solo from the
-        clutches of the vile gangster Jabba the Hutt.\nLittle does Luke know that
-        the GALACTIC EMPIRE has secretly begun construction on a new armored space
-        station even more powerful than the first dreaded Death Star.\nWhen completed,
-        this ultimate weapon will spell certain doom for the small band of rebels
-        struggling to restore freedom to the galaxy…\nThe Force Awakens\nReleased:
-        2015-12-11\nDirector: J. J. Abrams\nLuke Skywalker has vanished. In his absence,
-        the sinister FIRST ORDER has risen from the ashes of the Empire and will not
-        rest until Skywalker, the last Jedi, has been destroyed. With the support
-        of the REPUBLIC, General Leia Organa leads a brave RESISTANCE. She is desperate
-        to find her brother Luke and gain his help in restoring peace and justice
-        to the galaxy. Leia has sent her most daring pilot on a secret mission to
-        Jakku, where an old ally has discovered a clue to Luke’s whereabouts…."},"title":"Star
-        Wars films (static HTML)","citations":{"enabled":false}}}},{"type":"text","text":"The
-        first movie listed on that page is **The Phantom Menace**, which was released
-        on 1999-05-19 and directed by George Lucas."}]},{"role":"user","content":[{"type":"text","text":"What''s
+      string: '{"model":"claude-sonnet-4-6","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01LWf3bewF1QLnuGgTpFYh76","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01LWf3bewF1QLnuGgTpFYh76","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-06-28T11:17:20.779054","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
+        Star Wars films (static HTML)\nmeta-viewport: width=device-width, initial-scale=1,
+        shrink-to-fit=no\ntitle: Star Wars films (static HTML) • rvest\n---\n[Skip
+        to content](#container)\n\n[rvest](https://rvest.tidyverse.org/index.html)
+        1.0.5\n\n- [Get started](https://rvest.tidyverse.org/articles/rvest.html)\n-
+        [Reference](https://rvest.tidyverse.org/reference/index.html)\n- Articles\n\n  *
+        [SelectorGadget](https://rvest.tidyverse.org/articles/selectorgadget.html)\n  *
+        [Star Wars films (dynamic HTML)](https://rvest.tidyverse.org/articles/starwars-dynamic.html)\n  *
+        [Star Wars films (static HTML)](https://rvest.tidyverse.org/articles/starwars.html)\n-
+        News\n\n  * ###### Releases\n  * [Version 1.0.0](https://www.tidyverse.org/blog/2021/03/rvest-1-0-0/)\n  *
+        [Version 0.3.0](https://blog.rstudio.com/2015/09/24/rvest-0-3-0/)\n  * [Version
+        0.1.0](https://blog.rstudio.com/2014/11/24/rvest-easy-web-scraping-with-r/)\n  *\n\n---\n\n  *
+        [Changelog](https://rvest.tidyverse.org/news/index.html)\n\n\n-\n- [https://github.com/tidyverse/rvest/](https://github.com/tidyverse/rvest/)\n\n![](https://rvest.tidyverse.org/logo.png)\n\n#
+        Star Wars films (static HTML)\n\nSource: [`vignettes/starwars.Rmd`](https://github.com/tidyverse/rvest/blob/main/vignettes/starwars.Rmd)\n\n`starwars.Rmd`\n\nThis
+        vignette contains some data about the Star Wars films for use in\nrvest examples
+        and vignettes.\n\n## The Phantom Menace\n\nReleased: 1999-05-19\n\nDirector:
+        George Lucas\n\nTurmoil has engulfed the Galactic Republic. The taxation of
+        trade routes\nto outlying star systems is in dispute.\n\nHoping to resolve
+        the matter with a blockade of deadly battleships, the\ngreedy Trade Federation
+        has stopped all shipping to the small planet of\nNaboo.\n\nWhile the Congress
+        of the Republic endlessly debates this alarming chain\nof events, the Supreme
+        Chancellor has secretly dispatched two Jedi\nKnights, the guardians of peace
+        and justice in the galaxy, to settle the\nconflict….\n\n## Attack of the Clones\n\nReleased:
+        2002-05-16\n\nDirector: George Lucas\n\nThere is unrest in the Galactic Senate.
+        Several thousand solar systems\nhave declared their intentions to leave the
+        Republic.\n\nThis separatist movement, under the leadership of the mysterious
+        Count\nDooku, has made it difficult for the limited number of Jedi Knights
+        to\nmaintain peace and order in the galaxy.\n\nSenator Amidala, the former
+        Queen of Naboo, is returning to the Galactic\nSenate to vote on the critical
+        issue of creating an ARMY OF THE REPUBLIC\nto assist the overwhelmed Jedi….\n\n##
+        Revenge of the Sith\n\nReleased: 2005-05-19\n\nDirector: George Lucas\n\nWar!
+        The Republic is crumbling under attacks by the ruthless Sith Lord,\nCount
+        Dooku. There are heroes on both sides. Evil is everywhere.\n\nIn a stunning
+        move, the fiendish droid leader, General Grievous, has\nswept into the Republic
+        capital and kidnapped Chancellor Palpatine,\nleader of the Galactic Senate.\n\nAs
+        the Separatist Droid Army attempts to flee the besieged capital with\ntheir
+        valuable hostage, two Jedi Knights lead a desperate mission to\nrescue the
+        captive Chancellor….\n\n## A New Hope\n\nReleased: 1977-05-25\n\nDirector:
+        George Lucas\n\nIt is a period of civil war. Rebel spaceships, striking from
+        a hidden\nbase, have won their first victory against the evil Galactic Empire.\n\nDuring
+        the battle, Rebel spies managed to steal secret plans to the\nEmpire’s ultimate
+        weapon, the DEATH STAR, an armored space station with\nenough power to destroy
+        an entire planet.\n\nPursued by the Empire’s sinister agents, Princess Leia
+        races home aboard\nher starship, custodian of the stolen plans that can save
+        her people and\nrestore freedom to the galaxy….\n\n## The Empire Strikes Back\n\nReleased:
+        1980-05-17\n\nDirector: Irvin Kershner\n\nIt is a dark time for the Rebellion.
+        Although the Death Star has been\ndestroyed, Imperial troops have driven the
+        Rebel forces from their\nhidden base and pursued them across the galaxy.\n\nEvading
+        the dreaded Imperial Starfleet, a group of freedom fighters led\nby Luke Skywalker
+        has established a new secret base on the remote ice\nworld of Hoth.\n\nThe
+        evil lord Darth Vader, obsessed with finding young Skywalker, has\ndispatched
+        thousands of remote probes into the far reaches of space….\n\n## Return of
+        the Jedi\n\nReleased: 1983-05-25\n\nDirector: Richard Marquand\n\nLuke Skywalker
+        has returned to his home planet of Tatooine in an attempt\nto rescue his friend
+        Han Solo from the clutches of the vile gangster\nJabba the Hutt.\n\nLittle
+        does Luke know that the GALACTIC EMPIRE has secretly begun\nconstruction on
+        a new armored space station even more powerful than the\nfirst dreaded Death
+        Star.\n\nWhen completed, this ultimate weapon will spell certain doom for
+        the\nsmall band of rebels struggling to restore freedom to the galaxy…\n\n##
+        The Force Awakens\n\nReleased: 2015-12-11\n\nDirector: J. J. Abrams\n\nLuke
+        Skywalker has vanished. In his absence, the sinister FIRST ORDER\nhas risen
+        from the ashes of the Empire and will not rest until\nSkywalker, the last
+        Jedi, has been destroyed. With the support of the\nREPUBLIC, General Leia
+        Organa leads a brave RESISTANCE. She is desperate\nto find her brother Luke
+        and gain his help in restoring peace and\njustice to the galaxy. Leia has
+        sent her most daring pilot on a secret\nmission to Jakku, where an old ally
+        has discovered a clue to Luke’s\nwhereabouts….\n\n## On this page\n\nDeveloped
+        by [Hadley Wickham](https://hadley.nz), [![Posit](https://www.tidyverse.org/posit-logo.svg)](https://www.posit.co).\n\nSite
+        built with [pkgdown](https://pkgdown.r-lib.org/) 2.1.3."},"title":"Star Wars
+        films (static HTML)","citations":{"enabled":false}}},"caller":{"type":"direct"}},{"type":"text","text":"The
+        first movie listed on the page is **The Phantom Menace**, released on 1999-05-19
+        and directed by George Lucas."}]},{"role":"user","content":[{"type":"text","text":"What''s
         the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Fri, 07 Nov 2025 15:47:31 GMT
+      date: Sun, 28 Jun 2026 11:17:24 GMT
       content-type: application/json
-      content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '2000000'
-      anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-11-07T15:47:30Z'
-      anthropic-ratelimit-output-tokens-limit: '400000'
-      anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-11-07T15:47:30Z'
-      anthropic-ratelimit-requests-limit: '4000'
-      anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-11-07T15:47:28Z'
-      retry-after: '32'
-      anthropic-ratelimit-tokens-limit: '2400000'
-      anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-11-07T15:47:30Z'
-      request-id: req_011CUtnpJDnmXb2VT6jYUDJK
+      anthropic-ratelimit-input-tokens-limit: '10000000'
+      anthropic-ratelimit-input-tokens-remaining: '10000000'
+      anthropic-ratelimit-input-tokens-reset: '2026-06-28T11:17:23Z'
+      anthropic-ratelimit-output-tokens-limit: '2000000'
+      anthropic-ratelimit-output-tokens-remaining: '2000000'
+      anthropic-ratelimit-output-tokens-reset: '2026-06-28T11:17:24Z'
+      anthropic-ratelimit-requests-limit: '10000'
+      anthropic-ratelimit-requests-remaining: '9999'
+      anthropic-ratelimit-requests-reset: '2026-06-28T11:17:22Z'
+      anthropic-ratelimit-tokens-limit: '12000000'
+      anthropic-ratelimit-tokens-remaining: '12000000'
+      anthropic-ratelimit-tokens-reset: '2026-06-28T11:17:23Z'
+      request-id: req_011CcVZh5NLTa2dVuhYgcuEj
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '2967'
-      cf-cache-status: DYNAMIC
-      x-robots-tag: none
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      traceresponse: 00-be3e35ca99cc8f3b961357bccafa9866-7a72c4a33a3dd561-01
       server: cloudflare
-      cf-ray: 99adf82408a27a97-DFW
+      content-encoding: gzip
+      vary: Accept-Encoding
+      cf-cache-status: DYNAMIC
+      set-cookie: _cfuvid=OGwIUK3uiQC9mVCyE8fbbMMO9h8lXW5iYJggS.zbHn8-1782645442.5102067-1.0.1.1-pGaFQ2OMdi55AW26tA3GEJXqtOLIu8Rwn7FjRmiREBI;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      x-robots-tag: none
+      cf-ray: a12c48dfae892214-MAN
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_015hm92puGV4WPvLmaRqmPD5","type":"message","role":"assistant","content":[{"type":"text","text":"Based
-        on the page I just fetched, the first movie listed on https://rvest.tidyverse.org/articles/starwars.html
-        is **The Phantom Menace** (released 1999-05-19, directed by George Lucas)."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":3,"cache_creation_input_tokens":71,"cache_read_input_tokens":2227,"cache_creation":{"ephemeral_5m_input_tokens":71,"ephemeral_1h_input_tokens":0},"output_tokens":60,"service_tier":"standard"}}'
-  recorded_at: 2025-11-07 15:47:31
+      string: '{"model":"claude-sonnet-4-6","id":"msg_01EvZKmXAhYbDYbo5XkoSTjt","type":"message","role":"assistant","content":[{"type":"text","text":"The
+        first movie listed on the page is still **The Phantom Menace**! I just fetched
+        that page moments ago, and it hasn''t changed. It was released on **1999-05-19**
+        and directed by **George Lucas**."}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":3,"cache_creation_input_tokens":63,"cache_read_input_tokens":2832,"cache_creation":{"ephemeral_5m_input_tokens":63,"ephemeral_1h_input_tokens":0},"output_tokens":55,"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-06-28 11:17:24
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"I''ll
-        fetch that URL to see what the first movie listed is."},{"type":"server_tool_use","id":"srvtoolu_011B8NpmmZj6QqwjjDwxgUU3","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_011B8NpmmZj6QqwjjDwxgUU3","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2025-11-07T15:00:10.015000+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"![](../logo.png)\nStar
-        Wars films (static HTML)\nSource:\nvignettes/starwars.Rmd\nstarwars.Rmd\nThis
-        vignette contains some data about the Star Wars films for use in rvest examples
-        and vignettes.\nThe Phantom Menace\nReleased: 1999-05-19\nDirector: George
-        Lucas\nTurmoil has engulfed the Galactic Republic. The taxation of trade routes
-        to outlying star systems is in dispute.\nHoping to resolve the matter with
-        a blockade of deadly battleships, the greedy Trade Federation has stopped
-        all shipping to the small planet of Naboo.\nWhile the Congress of the Republic
-        endlessly debates this alarming chain of events, the Supreme Chancellor has
-        secretly dispatched two Jedi Knights, the guardians of peace and justice in
-        the galaxy, to settle the conflict….\nAttack of the Clones\nReleased: 2002-05-16\nDirector:
-        George Lucas\nThere is unrest in the Galactic Senate. Several thousand solar
-        systems have declared their intentions to leave the Republic.\nThis separatist
-        movement, under the leadership of the mysterious Count Dooku, has made it
-        difficult for the limited number of Jedi Knights to maintain peace and order
-        in the galaxy.\nSenator Amidala, the former Queen of Naboo, is returning to
-        the Galactic Senate to vote on the critical issue of creating an ARMY OF THE
-        REPUBLIC to assist the overwhelmed Jedi….\nRevenge of the Sith\nReleased:
-        2005-05-19\nDirector: George Lucas\nWar! The Republic is crumbling under attacks
-        by the ruthless Sith Lord, Count Dooku. There are heroes on both sides. Evil
-        is everywhere.\nIn a stunning move, the fiendish droid leader, General Grievous,
-        has swept into the Republic capital and kidnapped Chancellor Palpatine, leader
-        of the Galactic Senate.\nAs the Separatist Droid Army attempts to flee the
-        besieged capital with their valuable hostage, two Jedi Knights lead a desperate
-        mission to rescue the captive Chancellor….\nA New Hope\nReleased: 1977-05-25\nDirector:
-        George Lucas\nIt is a period of civil war. Rebel spaceships, striking from
-        a hidden base, have won their first victory against the evil Galactic Empire.\nDuring
-        the battle, Rebel spies managed to steal secret plans to the Empire’s ultimate
-        weapon, the DEATH STAR, an armored space station with enough power to destroy
-        an entire planet.\nPursued by the Empire’s sinister agents, Princess Leia
-        races home aboard her starship, custodian of the stolen plans that can save
-        her people and restore freedom to the galaxy….\nThe Empire Strikes Back\nReleased:
-        1980-05-17\nDirector: Irvin Kershner\nIt is a dark time for the Rebellion.
-        Although the Death Star has been destroyed, Imperial troops have driven the
-        Rebel forces from their hidden base and pursued them across the galaxy.\nEvading
-        the dreaded Imperial Starfleet, a group of freedom fighters led by Luke Skywalker
-        has established a new secret base on the remote ice world of Hoth.\nThe evil
-        lord Darth Vader, obsessed with finding young Skywalker, has dispatched thousands
-        of remote probes into the far reaches of space….\nReturn of the Jedi\nReleased:
-        1983-05-25\nDirector: Richard Marquand\nLuke Skywalker has returned to his
-        home planet of Tatooine in an attempt to rescue his friend Han Solo from the
-        clutches of the vile gangster Jabba the Hutt.\nLittle does Luke know that
-        the GALACTIC EMPIRE has secretly begun construction on a new armored space
-        station even more powerful than the first dreaded Death Star.\nWhen completed,
-        this ultimate weapon will spell certain doom for the small band of rebels
-        struggling to restore freedom to the galaxy…\nThe Force Awakens\nReleased:
-        2015-12-11\nDirector: J. J. Abrams\nLuke Skywalker has vanished. In his absence,
-        the sinister FIRST ORDER has risen from the ashes of the Empire and will not
-        rest until Skywalker, the last Jedi, has been destroyed. With the support
-        of the REPUBLIC, General Leia Organa leads a brave RESISTANCE. She is desperate
-        to find her brother Luke and gain his help in restoring peace and justice
-        to the galaxy. Leia has sent her most daring pilot on a secret mission to
-        Jakku, where an old ally has discovered a clue to Luke’s whereabouts…."},"title":"Star
-        Wars films (static HTML)","citations":{"enabled":false}}}},{"type":"text","text":"The
-        first movie listed on that page is **The Phantom Menace**, which was released
-        on 1999-05-19 and directed by George Lucas."}]},{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"Based
-        on the page I just fetched, the first movie listed on https://rvest.tidyverse.org/articles/starwars.html
-        is **The Phantom Menace** (released 1999-05-19, directed by George Lucas)."}]},{"role":"user","content":[{"type":"text","text":"Who
+      string: '{"model":"claude-sonnet-4-6","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01LWf3bewF1QLnuGgTpFYh76","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01LWf3bewF1QLnuGgTpFYh76","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-06-28T11:17:20.779054","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
+        Star Wars films (static HTML)\nmeta-viewport: width=device-width, initial-scale=1,
+        shrink-to-fit=no\ntitle: Star Wars films (static HTML) • rvest\n---\n[Skip
+        to content](#container)\n\n[rvest](https://rvest.tidyverse.org/index.html)
+        1.0.5\n\n- [Get started](https://rvest.tidyverse.org/articles/rvest.html)\n-
+        [Reference](https://rvest.tidyverse.org/reference/index.html)\n- Articles\n\n  *
+        [SelectorGadget](https://rvest.tidyverse.org/articles/selectorgadget.html)\n  *
+        [Star Wars films (dynamic HTML)](https://rvest.tidyverse.org/articles/starwars-dynamic.html)\n  *
+        [Star Wars films (static HTML)](https://rvest.tidyverse.org/articles/starwars.html)\n-
+        News\n\n  * ###### Releases\n  * [Version 1.0.0](https://www.tidyverse.org/blog/2021/03/rvest-1-0-0/)\n  *
+        [Version 0.3.0](https://blog.rstudio.com/2015/09/24/rvest-0-3-0/)\n  * [Version
+        0.1.0](https://blog.rstudio.com/2014/11/24/rvest-easy-web-scraping-with-r/)\n  *\n\n---\n\n  *
+        [Changelog](https://rvest.tidyverse.org/news/index.html)\n\n\n-\n- [https://github.com/tidyverse/rvest/](https://github.com/tidyverse/rvest/)\n\n![](https://rvest.tidyverse.org/logo.png)\n\n#
+        Star Wars films (static HTML)\n\nSource: [`vignettes/starwars.Rmd`](https://github.com/tidyverse/rvest/blob/main/vignettes/starwars.Rmd)\n\n`starwars.Rmd`\n\nThis
+        vignette contains some data about the Star Wars films for use in\nrvest examples
+        and vignettes.\n\n## The Phantom Menace\n\nReleased: 1999-05-19\n\nDirector:
+        George Lucas\n\nTurmoil has engulfed the Galactic Republic. The taxation of
+        trade routes\nto outlying star systems is in dispute.\n\nHoping to resolve
+        the matter with a blockade of deadly battleships, the\ngreedy Trade Federation
+        has stopped all shipping to the small planet of\nNaboo.\n\nWhile the Congress
+        of the Republic endlessly debates this alarming chain\nof events, the Supreme
+        Chancellor has secretly dispatched two Jedi\nKnights, the guardians of peace
+        and justice in the galaxy, to settle the\nconflict….\n\n## Attack of the Clones\n\nReleased:
+        2002-05-16\n\nDirector: George Lucas\n\nThere is unrest in the Galactic Senate.
+        Several thousand solar systems\nhave declared their intentions to leave the
+        Republic.\n\nThis separatist movement, under the leadership of the mysterious
+        Count\nDooku, has made it difficult for the limited number of Jedi Knights
+        to\nmaintain peace and order in the galaxy.\n\nSenator Amidala, the former
+        Queen of Naboo, is returning to the Galactic\nSenate to vote on the critical
+        issue of creating an ARMY OF THE REPUBLIC\nto assist the overwhelmed Jedi….\n\n##
+        Revenge of the Sith\n\nReleased: 2005-05-19\n\nDirector: George Lucas\n\nWar!
+        The Republic is crumbling under attacks by the ruthless Sith Lord,\nCount
+        Dooku. There are heroes on both sides. Evil is everywhere.\n\nIn a stunning
+        move, the fiendish droid leader, General Grievous, has\nswept into the Republic
+        capital and kidnapped Chancellor Palpatine,\nleader of the Galactic Senate.\n\nAs
+        the Separatist Droid Army attempts to flee the besieged capital with\ntheir
+        valuable hostage, two Jedi Knights lead a desperate mission to\nrescue the
+        captive Chancellor….\n\n## A New Hope\n\nReleased: 1977-05-25\n\nDirector:
+        George Lucas\n\nIt is a period of civil war. Rebel spaceships, striking from
+        a hidden\nbase, have won their first victory against the evil Galactic Empire.\n\nDuring
+        the battle, Rebel spies managed to steal secret plans to the\nEmpire’s ultimate
+        weapon, the DEATH STAR, an armored space station with\nenough power to destroy
+        an entire planet.\n\nPursued by the Empire’s sinister agents, Princess Leia
+        races home aboard\nher starship, custodian of the stolen plans that can save
+        her people and\nrestore freedom to the galaxy….\n\n## The Empire Strikes Back\n\nReleased:
+        1980-05-17\n\nDirector: Irvin Kershner\n\nIt is a dark time for the Rebellion.
+        Although the Death Star has been\ndestroyed, Imperial troops have driven the
+        Rebel forces from their\nhidden base and pursued them across the galaxy.\n\nEvading
+        the dreaded Imperial Starfleet, a group of freedom fighters led\nby Luke Skywalker
+        has established a new secret base on the remote ice\nworld of Hoth.\n\nThe
+        evil lord Darth Vader, obsessed with finding young Skywalker, has\ndispatched
+        thousands of remote probes into the far reaches of space….\n\n## Return of
+        the Jedi\n\nReleased: 1983-05-25\n\nDirector: Richard Marquand\n\nLuke Skywalker
+        has returned to his home planet of Tatooine in an attempt\nto rescue his friend
+        Han Solo from the clutches of the vile gangster\nJabba the Hutt.\n\nLittle
+        does Luke know that the GALACTIC EMPIRE has secretly begun\nconstruction on
+        a new armored space station even more powerful than the\nfirst dreaded Death
+        Star.\n\nWhen completed, this ultimate weapon will spell certain doom for
+        the\nsmall band of rebels struggling to restore freedom to the galaxy…\n\n##
+        The Force Awakens\n\nReleased: 2015-12-11\n\nDirector: J. J. Abrams\n\nLuke
+        Skywalker has vanished. In his absence, the sinister FIRST ORDER\nhas risen
+        from the ashes of the Empire and will not rest until\nSkywalker, the last
+        Jedi, has been destroyed. With the support of the\nREPUBLIC, General Leia
+        Organa leads a brave RESISTANCE. She is desperate\nto find her brother Luke
+        and gain his help in restoring peace and\njustice to the galaxy. Leia has
+        sent her most daring pilot on a secret\nmission to Jakku, where an old ally
+        has discovered a clue to Luke’s\nwhereabouts….\n\n## On this page\n\nDeveloped
+        by [Hadley Wickham](https://hadley.nz), [![Posit](https://www.tidyverse.org/posit-logo.svg)](https://www.posit.co).\n\nSite
+        built with [pkgdown](https://pkgdown.r-lib.org/) 2.1.3."},"title":"Star Wars
+        films (static HTML)","citations":{"enabled":false}}},"caller":{"type":"direct"}},{"type":"text","text":"The
+        first movie listed on the page is **The Phantom Menace**, released on 1999-05-19
+        and directed by George Lucas."}]},{"role":"user","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"The
+        first movie listed on the page is still **The Phantom Menace**! I just fetched
+        that page moments ago, and it hasn''t changed. It was released on **1999-05-19**
+        and directed by **George Lucas**."}]},{"role":"user","content":[{"type":"text","text":"Who
         directed it?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Fri, 07 Nov 2025 15:47:33 GMT
+      date: Sun, 28 Jun 2026 11:17:26 GMT
       content-type: application/json
-      content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '2000000'
-      anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-11-07T15:47:33Z'
-      anthropic-ratelimit-output-tokens-limit: '400000'
-      anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-11-07T15:47:33Z'
-      anthropic-ratelimit-requests-limit: '4000'
-      anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-11-07T15:47:31Z'
-      retry-after: '29'
-      anthropic-ratelimit-tokens-limit: '2400000'
-      anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-11-07T15:47:33Z'
-      request-id: req_011CUtnpXn7cjqA6CoRgWThb
+      anthropic-ratelimit-input-tokens-limit: '10000000'
+      anthropic-ratelimit-input-tokens-remaining: '10000000'
+      anthropic-ratelimit-input-tokens-reset: '2026-06-28T11:17:25Z'
+      anthropic-ratelimit-output-tokens-limit: '2000000'
+      anthropic-ratelimit-output-tokens-remaining: '2000000'
+      anthropic-ratelimit-output-tokens-reset: '2026-06-28T11:17:25Z'
+      anthropic-ratelimit-requests-limit: '10000'
+      anthropic-ratelimit-requests-remaining: '9999'
+      anthropic-ratelimit-requests-reset: '2026-06-28T11:17:24Z'
+      anthropic-ratelimit-tokens-limit: '12000000'
+      anthropic-ratelimit-tokens-remaining: '12000000'
+      anthropic-ratelimit-tokens-reset: '2026-06-28T11:17:25Z'
+      request-id: req_011CcVZhFGQQmVb7JhiMMZSM
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '2357'
-      cf-cache-status: DYNAMIC
-      x-robots-tag: none
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      traceresponse: 00-965b6790f19c0b465fa78b3670b8c517-d1e71005f1648902-01
       server: cloudflare
-      cf-ray: 99adf837cd627a97-DFW
+      content-encoding: gzip
+      vary: Accept-Encoding
+      cf-cache-status: DYNAMIC
+      set-cookie: _cfuvid=7demD4ubgOTqPD4_JXl15XCNqtuffdHnlcEIupyNBnA-1782645444.823492-1.0.1.1-rRa6hO1jjtMJTIVaZ9a7a2wg39ljP.eImUddSWuqY1s;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      x-robots-tag: none
+      cf-ray: a12c48ee293c2214-MAN
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01SBmnpbAgvNWX9pQ9YhUZsX","type":"message","role":"assistant","content":[{"type":"text","text":"George
-        Lucas directed The Phantom Menace."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":3,"cache_creation_input_tokens":67,"cache_read_input_tokens":2298,"cache_creation":{"ephemeral_5m_input_tokens":67,"ephemeral_1h_input_tokens":0},"output_tokens":13,"service_tier":"standard"}}'
-  recorded_at: 2025-11-07 15:47:33
+      string: '{"model":"claude-sonnet-4-6","id":"msg_01JnyzypK8GV86nAT1LRHN2b","type":"message","role":"assistant","content":[{"type":"text","text":"The
+        Phantom Menace was directed by **George Lucas**."}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":3,"cache_creation_input_tokens":62,"cache_read_input_tokens":2895,"cache_creation":{"ephemeral_5m_input_tokens":62,"ephemeral_1h_input_tokens":0},"output_tokens":16,"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-06-28 11:17:26
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"I''ll
-        fetch that URL to see what the first movie listed is."},{"type":"server_tool_use","id":"srvtoolu_011B8NpmmZj6QqwjjDwxgUU3","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_011B8NpmmZj6QqwjjDwxgUU3","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2025-11-07T15:00:10.015000+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"![](../logo.png)\nStar
-        Wars films (static HTML)\nSource:\nvignettes/starwars.Rmd\nstarwars.Rmd\nThis
-        vignette contains some data about the Star Wars films for use in rvest examples
-        and vignettes.\nThe Phantom Menace\nReleased: 1999-05-19\nDirector: George
-        Lucas\nTurmoil has engulfed the Galactic Republic. The taxation of trade routes
-        to outlying star systems is in dispute.\nHoping to resolve the matter with
-        a blockade of deadly battleships, the greedy Trade Federation has stopped
-        all shipping to the small planet of Naboo.\nWhile the Congress of the Republic
-        endlessly debates this alarming chain of events, the Supreme Chancellor has
-        secretly dispatched two Jedi Knights, the guardians of peace and justice in
-        the galaxy, to settle the conflict….\nAttack of the Clones\nReleased: 2002-05-16\nDirector:
-        George Lucas\nThere is unrest in the Galactic Senate. Several thousand solar
-        systems have declared their intentions to leave the Republic.\nThis separatist
-        movement, under the leadership of the mysterious Count Dooku, has made it
-        difficult for the limited number of Jedi Knights to maintain peace and order
-        in the galaxy.\nSenator Amidala, the former Queen of Naboo, is returning to
-        the Galactic Senate to vote on the critical issue of creating an ARMY OF THE
-        REPUBLIC to assist the overwhelmed Jedi….\nRevenge of the Sith\nReleased:
-        2005-05-19\nDirector: George Lucas\nWar! The Republic is crumbling under attacks
-        by the ruthless Sith Lord, Count Dooku. There are heroes on both sides. Evil
-        is everywhere.\nIn a stunning move, the fiendish droid leader, General Grievous,
-        has swept into the Republic capital and kidnapped Chancellor Palpatine, leader
-        of the Galactic Senate.\nAs the Separatist Droid Army attempts to flee the
-        besieged capital with their valuable hostage, two Jedi Knights lead a desperate
-        mission to rescue the captive Chancellor….\nA New Hope\nReleased: 1977-05-25\nDirector:
-        George Lucas\nIt is a period of civil war. Rebel spaceships, striking from
-        a hidden base, have won their first victory against the evil Galactic Empire.\nDuring
-        the battle, Rebel spies managed to steal secret plans to the Empire’s ultimate
-        weapon, the DEATH STAR, an armored space station with enough power to destroy
-        an entire planet.\nPursued by the Empire’s sinister agents, Princess Leia
-        races home aboard her starship, custodian of the stolen plans that can save
-        her people and restore freedom to the galaxy….\nThe Empire Strikes Back\nReleased:
-        1980-05-17\nDirector: Irvin Kershner\nIt is a dark time for the Rebellion.
-        Although the Death Star has been destroyed, Imperial troops have driven the
-        Rebel forces from their hidden base and pursued them across the galaxy.\nEvading
-        the dreaded Imperial Starfleet, a group of freedom fighters led by Luke Skywalker
-        has established a new secret base on the remote ice world of Hoth.\nThe evil
-        lord Darth Vader, obsessed with finding young Skywalker, has dispatched thousands
-        of remote probes into the far reaches of space….\nReturn of the Jedi\nReleased:
-        1983-05-25\nDirector: Richard Marquand\nLuke Skywalker has returned to his
-        home planet of Tatooine in an attempt to rescue his friend Han Solo from the
-        clutches of the vile gangster Jabba the Hutt.\nLittle does Luke know that
-        the GALACTIC EMPIRE has secretly begun construction on a new armored space
-        station even more powerful than the first dreaded Death Star.\nWhen completed,
-        this ultimate weapon will spell certain doom for the small band of rebels
-        struggling to restore freedom to the galaxy…\nThe Force Awakens\nReleased:
-        2015-12-11\nDirector: J. J. Abrams\nLuke Skywalker has vanished. In his absence,
-        the sinister FIRST ORDER has risen from the ashes of the Empire and will not
-        rest until Skywalker, the last Jedi, has been destroyed. With the support
-        of the REPUBLIC, General Leia Organa leads a brave RESISTANCE. She is desperate
-        to find her brother Luke and gain his help in restoring peace and justice
-        to the galaxy. Leia has sent her most daring pilot on a secret mission to
-        Jakku, where an old ally has discovered a clue to Luke’s whereabouts…."},"title":"Star
-        Wars films (static HTML)","citations":{"enabled":false}}}},{"type":"text","text":"The
-        first movie listed on that page is **The Phantom Menace**, which was released
-        on 1999-05-19 and directed by George Lucas."}]},{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"Based
-        on the page I just fetched, the first movie listed on https://rvest.tidyverse.org/articles/starwars.html
-        is **The Phantom Menace** (released 1999-05-19, directed by George Lucas)."}]},{"role":"user","content":[{"type":"text","text":"Who
-        directed it?"}]},{"role":"assistant","content":[{"type":"text","text":"George
-        Lucas directed The Phantom Menace."}]},{"role":"user","content":[{"type":"text","text":"Who
+      string: '{"model":"claude-sonnet-4-6","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01LWf3bewF1QLnuGgTpFYh76","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01LWf3bewF1QLnuGgTpFYh76","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-06-28T11:17:20.779054","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
+        Star Wars films (static HTML)\nmeta-viewport: width=device-width, initial-scale=1,
+        shrink-to-fit=no\ntitle: Star Wars films (static HTML) • rvest\n---\n[Skip
+        to content](#container)\n\n[rvest](https://rvest.tidyverse.org/index.html)
+        1.0.5\n\n- [Get started](https://rvest.tidyverse.org/articles/rvest.html)\n-
+        [Reference](https://rvest.tidyverse.org/reference/index.html)\n- Articles\n\n  *
+        [SelectorGadget](https://rvest.tidyverse.org/articles/selectorgadget.html)\n  *
+        [Star Wars films (dynamic HTML)](https://rvest.tidyverse.org/articles/starwars-dynamic.html)\n  *
+        [Star Wars films (static HTML)](https://rvest.tidyverse.org/articles/starwars.html)\n-
+        News\n\n  * ###### Releases\n  * [Version 1.0.0](https://www.tidyverse.org/blog/2021/03/rvest-1-0-0/)\n  *
+        [Version 0.3.0](https://blog.rstudio.com/2015/09/24/rvest-0-3-0/)\n  * [Version
+        0.1.0](https://blog.rstudio.com/2014/11/24/rvest-easy-web-scraping-with-r/)\n  *\n\n---\n\n  *
+        [Changelog](https://rvest.tidyverse.org/news/index.html)\n\n\n-\n- [https://github.com/tidyverse/rvest/](https://github.com/tidyverse/rvest/)\n\n![](https://rvest.tidyverse.org/logo.png)\n\n#
+        Star Wars films (static HTML)\n\nSource: [`vignettes/starwars.Rmd`](https://github.com/tidyverse/rvest/blob/main/vignettes/starwars.Rmd)\n\n`starwars.Rmd`\n\nThis
+        vignette contains some data about the Star Wars films for use in\nrvest examples
+        and vignettes.\n\n## The Phantom Menace\n\nReleased: 1999-05-19\n\nDirector:
+        George Lucas\n\nTurmoil has engulfed the Galactic Republic. The taxation of
+        trade routes\nto outlying star systems is in dispute.\n\nHoping to resolve
+        the matter with a blockade of deadly battleships, the\ngreedy Trade Federation
+        has stopped all shipping to the small planet of\nNaboo.\n\nWhile the Congress
+        of the Republic endlessly debates this alarming chain\nof events, the Supreme
+        Chancellor has secretly dispatched two Jedi\nKnights, the guardians of peace
+        and justice in the galaxy, to settle the\nconflict….\n\n## Attack of the Clones\n\nReleased:
+        2002-05-16\n\nDirector: George Lucas\n\nThere is unrest in the Galactic Senate.
+        Several thousand solar systems\nhave declared their intentions to leave the
+        Republic.\n\nThis separatist movement, under the leadership of the mysterious
+        Count\nDooku, has made it difficult for the limited number of Jedi Knights
+        to\nmaintain peace and order in the galaxy.\n\nSenator Amidala, the former
+        Queen of Naboo, is returning to the Galactic\nSenate to vote on the critical
+        issue of creating an ARMY OF THE REPUBLIC\nto assist the overwhelmed Jedi….\n\n##
+        Revenge of the Sith\n\nReleased: 2005-05-19\n\nDirector: George Lucas\n\nWar!
+        The Republic is crumbling under attacks by the ruthless Sith Lord,\nCount
+        Dooku. There are heroes on both sides. Evil is everywhere.\n\nIn a stunning
+        move, the fiendish droid leader, General Grievous, has\nswept into the Republic
+        capital and kidnapped Chancellor Palpatine,\nleader of the Galactic Senate.\n\nAs
+        the Separatist Droid Army attempts to flee the besieged capital with\ntheir
+        valuable hostage, two Jedi Knights lead a desperate mission to\nrescue the
+        captive Chancellor….\n\n## A New Hope\n\nReleased: 1977-05-25\n\nDirector:
+        George Lucas\n\nIt is a period of civil war. Rebel spaceships, striking from
+        a hidden\nbase, have won their first victory against the evil Galactic Empire.\n\nDuring
+        the battle, Rebel spies managed to steal secret plans to the\nEmpire’s ultimate
+        weapon, the DEATH STAR, an armored space station with\nenough power to destroy
+        an entire planet.\n\nPursued by the Empire’s sinister agents, Princess Leia
+        races home aboard\nher starship, custodian of the stolen plans that can save
+        her people and\nrestore freedom to the galaxy….\n\n## The Empire Strikes Back\n\nReleased:
+        1980-05-17\n\nDirector: Irvin Kershner\n\nIt is a dark time for the Rebellion.
+        Although the Death Star has been\ndestroyed, Imperial troops have driven the
+        Rebel forces from their\nhidden base and pursued them across the galaxy.\n\nEvading
+        the dreaded Imperial Starfleet, a group of freedom fighters led\nby Luke Skywalker
+        has established a new secret base on the remote ice\nworld of Hoth.\n\nThe
+        evil lord Darth Vader, obsessed with finding young Skywalker, has\ndispatched
+        thousands of remote probes into the far reaches of space….\n\n## Return of
+        the Jedi\n\nReleased: 1983-05-25\n\nDirector: Richard Marquand\n\nLuke Skywalker
+        has returned to his home planet of Tatooine in an attempt\nto rescue his friend
+        Han Solo from the clutches of the vile gangster\nJabba the Hutt.\n\nLittle
+        does Luke know that the GALACTIC EMPIRE has secretly begun\nconstruction on
+        a new armored space station even more powerful than the\nfirst dreaded Death
+        Star.\n\nWhen completed, this ultimate weapon will spell certain doom for
+        the\nsmall band of rebels struggling to restore freedom to the galaxy…\n\n##
+        The Force Awakens\n\nReleased: 2015-12-11\n\nDirector: J. J. Abrams\n\nLuke
+        Skywalker has vanished. In his absence, the sinister FIRST ORDER\nhas risen
+        from the ashes of the Empire and will not rest until\nSkywalker, the last
+        Jedi, has been destroyed. With the support of the\nREPUBLIC, General Leia
+        Organa leads a brave RESISTANCE. She is desperate\nto find her brother Luke
+        and gain his help in restoring peace and\njustice to the galaxy. Leia has
+        sent her most daring pilot on a secret\nmission to Jakku, where an old ally
+        has discovered a clue to Luke’s\nwhereabouts….\n\n## On this page\n\nDeveloped
+        by [Hadley Wickham](https://hadley.nz), [![Posit](https://www.tidyverse.org/posit-logo.svg)](https://www.posit.co).\n\nSite
+        built with [pkgdown](https://pkgdown.r-lib.org/) 2.1.3."},"title":"Star Wars
+        films (static HTML)","citations":{"enabled":false}}},"caller":{"type":"direct"}},{"type":"text","text":"The
+        first movie listed on the page is **The Phantom Menace**, released on 1999-05-19
+        and directed by George Lucas."}]},{"role":"user","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"The
+        first movie listed on the page is still **The Phantom Menace**! I just fetched
+        that page moments ago, and it hasn''t changed. It was released on **1999-05-19**
+        and directed by **George Lucas**."}]},{"role":"user","content":[{"type":"text","text":"Who
+        directed it?"}]},{"role":"assistant","content":[{"type":"text","text":"The
+        Phantom Menace was directed by **George Lucas**."}]},{"role":"user","content":[{"type":"text","text":"Who
         directed it?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"temperature":0,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Fri, 07 Nov 2025 15:47:35 GMT
+      date: Sun, 28 Jun 2026 11:17:27 GMT
       content-type: application/json
-      content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '2000000'
-      anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-11-07T15:47:35Z'
-      anthropic-ratelimit-output-tokens-limit: '400000'
-      anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-11-07T15:47:35Z'
-      anthropic-ratelimit-requests-limit: '4000'
-      anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-11-07T15:47:33Z'
-      retry-after: '26'
-      anthropic-ratelimit-tokens-limit: '2400000'
-      anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-11-07T15:47:35Z'
-      request-id: req_011CUtnpiexg2aqhETRdgr5o
+      anthropic-ratelimit-input-tokens-limit: '10000000'
+      anthropic-ratelimit-input-tokens-remaining: '10000000'
+      anthropic-ratelimit-input-tokens-reset: '2026-06-28T11:17:27Z'
+      anthropic-ratelimit-output-tokens-limit: '2000000'
+      anthropic-ratelimit-output-tokens-remaining: '2000000'
+      anthropic-ratelimit-output-tokens-reset: '2026-06-28T11:17:27Z'
+      anthropic-ratelimit-requests-limit: '10000'
+      anthropic-ratelimit-requests-remaining: '9999'
+      anthropic-ratelimit-requests-reset: '2026-06-28T11:17:26Z'
+      anthropic-ratelimit-tokens-limit: '12000000'
+      anthropic-ratelimit-tokens-remaining: '12000000'
+      anthropic-ratelimit-tokens-reset: '2026-06-28T11:17:27Z'
+      request-id: req_011CcVZhNLo9tYYVxH5B2mNQ
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '2185'
-      cf-cache-status: DYNAMIC
-      x-robots-tag: none
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      traceresponse: 00-5f45448608cf4ee9090ffc9157a36def-a31f5094caf8025a-01
       server: cloudflare
-      cf-ray: 99adf847ccd17a97-DFW
+      content-encoding: gzip
+      vary: Accept-Encoding
+      cf-cache-status: DYNAMIC
+      set-cookie: _cfuvid=jeZ2xeefRBCBh5L_EQC5Dkg51VupU7DHS2c_6vNsOOg-1782645446.4796114-1.0.1.1-kbfo4prPOhO38.ahL5tE4fq.Zbf6myfbLgCcTnaDmQs;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      x-robots-tag: none
+      cf-ray: a12c48f879322214-MAN
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01Qe3QBCM1CwPitm3cMsjmTt","type":"message","role":"assistant","content":[{"type":"text","text":"George
-        Lucas directed The Phantom Menace."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":3,"cache_creation_input_tokens":20,"cache_read_input_tokens":2365,"cache_creation":{"ephemeral_5m_input_tokens":20,"ephemeral_1h_input_tokens":0},"output_tokens":13,"service_tier":"standard"}}'
-  recorded_at: 2025-11-07 15:47:35
-recorded_with: VCR-vcr/2.0.0
+      string: '{"model":"claude-sonnet-4-6","id":"msg_01CZWbgD3FDKco1uZZS3SEus","type":"message","role":"assistant","content":[{"type":"text","text":"The
+        Phantom Menace was directed by **George Lucas**."}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":3,"cache_creation_input_tokens":23,"cache_read_input_tokens":2957,"cache_creation":{"ephemeral_5m_input_tokens":23,"ephemeral_1h_input_tokens":0},"output_tokens":16,"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-06-28 11:17:27
+recorded_with: VCR-vcr/2.1.0

@@ -2,7 +2,7 @@
   "version": 1,
   "stage": "done",
   "batch": {
-    "id": "msgbatch_011R1x8g28xYbJecnEni5jca",
+    "id": "msgbatch_01WMP13Kun2n9SFxsUW7oUi4",
     "type": "message_batch",
     "processing_status": "ended",
     "request_counts": {
@@ -12,19 +12,19 @@
       "canceled": 0,
       "expired": 0
     },
-    "ended_at": "2025-11-06T17:33:34.132774+00:00",
-    "created_at": "2025-11-06T17:32:06.247922+00:00",
-    "expires_at": "2025-11-07T17:32:06.247922+00:00",
+    "ended_at": "2026-06-28T11:20:22.405723+00:00",
+    "created_at": "2026-06-28T11:19:42.434607+00:00",
+    "expires_at": "2026-06-29T11:19:42.434607+00:00",
     "archived_at": {},
     "cancel_initiated_at": {},
-    "results_url": "https://api.anthropic.com/v1/messages/batches/msgbatch_011R1x8g28xYbJecnEni5jca/results"
+    "results_url": "https://api.anthropic.com/v1/messages/batches/msgbatch_01WMP13Kun2n9SFxsUW7oUi4/results"
   },
   "results": [
     {
       "type": "succeeded",
       "message": {
-        "model": "claude-sonnet-4-5-20250929",
-        "id": "msg_01S87A4kGeJVA3C3XpEK4geZ",
+        "model": "claude-sonnet-4-6",
+        "id": "msg_01VuNaVHmbjTYqhByGgSzkHY",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -35,8 +35,9 @@
         ],
         "stop_reason": "end_turn",
         "stop_sequence": {},
+        "stop_details": {},
         "usage": {
-          "input_tokens": 20,
+          "input_tokens": 21,
           "cache_creation_input_tokens": 0,
           "cache_read_input_tokens": 0,
           "cache_creation": {
@@ -44,15 +45,16 @@
             "ephemeral_1h_input_tokens": 0
           },
           "output_tokens": 7,
-          "service_tier": "batch"
+          "service_tier": "batch",
+          "inference_geo": "global"
         }
       }
     },
     {
       "type": "succeeded",
       "message": {
-        "model": "claude-sonnet-4-5-20250929",
-        "id": "msg_0115gJzPHU1a86gRT3Uep7yZ",
+        "model": "claude-sonnet-4-6",
+        "id": "msg_01GDF2sq4g4XRFbQNgVrqvTn",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -63,8 +65,9 @@
         ],
         "stop_reason": "end_turn",
         "stop_sequence": {},
+        "stop_details": {},
         "usage": {
-          "input_tokens": 21,
+          "input_tokens": 22,
           "cache_creation_input_tokens": 0,
           "cache_read_input_tokens": 0,
           "cache_creation": {
@@ -72,15 +75,16 @@
             "ephemeral_1h_input_tokens": 0
           },
           "output_tokens": 4,
-          "service_tier": "batch"
+          "service_tier": "batch",
+          "inference_geo": "global"
         }
       }
     },
     {
       "type": "succeeded",
       "message": {
-        "model": "claude-sonnet-4-5-20250929",
-        "id": "msg_01X4K2kR1y8GJmHzHMorDqhA",
+        "model": "claude-sonnet-4-6",
+        "id": "msg_01S4EU8bYr3ZBRXMEJVPaE8v",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -91,8 +95,9 @@
         ],
         "stop_reason": "end_turn",
         "stop_sequence": {},
+        "stop_details": {},
         "usage": {
-          "input_tokens": 20,
+          "input_tokens": 21,
           "cache_creation_input_tokens": 0,
           "cache_read_input_tokens": 0,
           "cache_creation": {
@@ -100,15 +105,16 @@
             "ephemeral_1h_input_tokens": 0
           },
           "output_tokens": 4,
-          "service_tier": "batch"
+          "service_tier": "batch",
+          "inference_geo": "global"
         }
       }
     },
     {
       "type": "succeeded",
       "message": {
-        "model": "claude-sonnet-4-5-20250929",
-        "id": "msg_01Tchgvb4GZzd8xkZgKftGkg",
+        "model": "claude-sonnet-4-6",
+        "id": "msg_01Hyn4sYKqRTq5CTERvwMPA7",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -119,8 +125,9 @@
         ],
         "stop_reason": "end_turn",
         "stop_sequence": {},
+        "stop_details": {},
         "usage": {
-          "input_tokens": 20,
+          "input_tokens": 21,
           "cache_creation_input_tokens": 0,
           "cache_read_input_tokens": 0,
           "cache_creation": {
@@ -128,14 +135,15 @@
             "ephemeral_1h_input_tokens": 0
           },
           "output_tokens": 4,
-          "service_tier": "batch"
+          "service_tier": "batch",
+          "inference_geo": "global"
         }
       }
     }
   ],
-  "started_at": 1762450325,
+  "started_at": 1782645582,
   "hash": {
-    "provider": "c8c6afb977a232100fb38d54f306208f",
+    "provider": "38239488168f12c81fc7df785c065329",
     "prompts": "b8eafe281e3cc5113058d9722be3e295",
     "user_turns": "d6990a1b8a9f5db0e97de86c2669de44"
   }
