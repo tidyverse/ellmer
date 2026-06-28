@@ -110,7 +110,7 @@ chat_openai_compatible <- function(
 chat_openai_compatible_test <- function(
   system_prompt = "Be terse.",
   ...,
-  model = "gpt-4.1-nano",
+  model = "gpt-5-nano",
   params = NULL,
   echo = "none"
 ) {

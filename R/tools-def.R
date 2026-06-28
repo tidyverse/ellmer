@@ -352,7 +352,7 @@ tool_annotations <- function(
 #' definition and know exactly how it will be called.
 #'
 #' ```r
-#' chat <- chat_openai(model = "gpt-4.1-nano")
+#' chat <- chat_openai(model = "gpt-5-nano")
 #'
 #' list_files <- function() {
 #'   allow_read <- utils::askYesNo(
@@ -397,7 +397,7 @@ tool_annotations <- function(
 #'   "List files in the user's current directory"
 #' )
 #'
-#' chat <- chat_openai(model = "gpt-4.1-nano")
+#' chat <- chat_openai(model = "gpt-5-nano")
 #' chat$register_tool(packaged_list_files_tool)
 #'
 #' always_allowed <- c()
