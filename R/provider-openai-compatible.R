@@ -300,6 +300,7 @@ method(value_finish_reason, ProviderOpenAICompatible) <- function(
   switch(
     reason,
     stop = "success",
+    tool_calls = "tool_use",
     length = "max_tokens",
     content_filter = "content_filter",
     I(reason)

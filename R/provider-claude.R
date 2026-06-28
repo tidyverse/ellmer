@@ -386,6 +386,7 @@ method(value_finish_reason, ProviderAnthropic) <- function(provider, result) {
   switch(
     reason,
     end_turn = "success",
+    tool_use = "tool_use",
     max_tokens = "max_tokens",
     model_context_window_exceeded = "context_window",
     stop_sequence = "stop_sequence",

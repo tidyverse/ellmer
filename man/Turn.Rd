@@ -53,8 +53,9 @@ that ellmer doesn't otherwise expose.}
 \item{duration}{The duration of the request in seconds.}
 
 \item{finish_reason}{Why the model stopped generating. Standardized
-across providers to one of: \code{"success"}, \code{"max_tokens"},
-\code{"stop_sequence"}, \code{"content_filter"}, or \code{"context_window"}.
+across providers to one of: \code{"success"}, \code{"tool_use"},
+\code{"max_tokens"}, \code{"stop_sequence"}, \code{"content_filter"}, or
+\code{"context_window"}.
 Unrecognized provider-specific reasons are passed through as-is.
 \code{NA} when not available.}
 

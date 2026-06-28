@@ -118,8 +118,9 @@ SystemTurn <- new_class(
 #' @param cost The cost of the turn in dollars.
 #' @param duration The duration of the request in seconds.
 #' @param finish_reason Why the model stopped generating. Standardized
-#'   across providers to one of: `"success"`, `"max_tokens"`,
-#'   `"stop_sequence"`, `"content_filter"`, or `"context_window"`.
+#'   across providers to one of: `"success"`, `"tool_use"`,
+#'   `"max_tokens"`, `"stop_sequence"`, `"content_filter"`, or
+#'   `"context_window"`.
 #'   Unrecognized provider-specific reasons are passed through as-is.
 #'   `NA` when not available.
 #' @export
