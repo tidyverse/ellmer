@@ -119,7 +119,7 @@ models_openai <- function(
 chat_openai_test <- function(
   system_prompt = "Be terse.",
   ...,
-  model = "gpt-5-nano",
+  model = "gpt-4.1-nano",
   params = NULL,
   echo = "none"
 ) {
