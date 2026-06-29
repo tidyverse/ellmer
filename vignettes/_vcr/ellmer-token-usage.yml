@@ -8,53 +8,56 @@ http_interactions:
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999eeb9ecacff0a6-DFW
-      content-encoding: gzip
+      cf-ray: a13387aae817a5ba-IAD
+      content-encoding: br
       content-type: application/json
-      date: Wed, 05 Nov 2025 19:57:32 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '2893'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Mon, 29 Jun 2026 08:23:36 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '1443'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=VgRaA2wQ3Sbb2AsGh4Oc0UUxoQKUfKug1DUgXT4FBiQ-1762372652-1.0.1.1-sUAOpTJnz8KvsbvJLAtMwYTpM0IZY97k2g_UZm8OVzhaHxNdav_kUM06.rE0lDcyWXkzPeNhqRNNJ6VnpivGgehi2o_MlTCakDI.1IuzIGs;
-        path=/; expires=Wed, 05-Nov-25 20:27:32 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=uAoEoHoC0Now4fD_SGYrIf_2QYoOX4gfq7p7QGDKvno-1762372652002-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=jkfnCjZPanqLqnLHODW7rNlpVmg2H1M9CZUjfY0JZwM-1782721414.869698-1.0.1.1-z9EKDDL2h5I0.aZQ9noOPhrvm5EgAMEoA.jR7lm3tXLEnnj4uWRgSW8PevUnA1kpKGMQC0fIMHS6AowP72arp9j5ZDEKlSuOIhwEG8rzzz8h_DhUjzsEk7K2dsptmTb3;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        29 Jun 2026 08:53:36 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '3179'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999970'
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_d11f7e17c1154088a3276ab957525cae
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '30000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '29914'
+      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-tokens: 172ms
+      x-request-id: 87531ea4-9125-4ddc-adbe-b6f6acdc3b6d
     body:
       string: |-
         {
-          "id": "resp_004384686d57128c01690bac291e5c8195aebc35bf453f14dc",
+          "id": "resp_0c01dd4c1cc7b199016a422b86e694819180599c459d8167b0",
           "object": "response",
-          "created_at": 1762372649,
+          "created_at": 1782721414,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1782721416,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
           "model": "gpt-4.1-2025-04-14",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_004384686d57128c01690bac2a1df88195b44b771976acfd96",
+              "id": "msg_0c01dd4c1cc7b199016a422b8728048191953f9fe753c38534",
               "type": "message",
               "status": "completed",
               "content": [
@@ -62,17 +65,19 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "**R** is a programming language and software environment for statistical computing and graphics. It was created by **Ross Ihaka and Robert Gentleman** at the University of Auckland, New Zealand, in the early 1990s. The name \"R\" is partly derived from the first letters of their first names (Ross and Robert), and it is also a play on the name of the S programming language, which R was designed to improve upon and be compatible with. Today, R is maintained by the **R Core Team** and the community."
+                  "text": "**R** was created by **Ross Ihaka** and **Robert Gentleman** at the University of Auckland, New Zealand, in the mid-1990s. The project began in 1992, with an initial release to the public in 1995. R is a programming language and environment specifically designed for statistical computing and graphics, and its name is partially derived from the first names of its two creators (Ross and Robert), as well as being a reference to the S language, on which R is based."
                 }
               ],
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "in_memory",
           "reasoning": {
+            "context": null,
             "effort": null,
             "summary": null
           },
@@ -87,6 +92,24 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [],
           "top_logprobs": 0,
           "top_p": 1.0,
@@ -96,14 +119,14 @@ http_interactions:
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 110,
+            "output_tokens": 105,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 121
+            "total_tokens": 116
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 19:57:32
-recorded_with: VCR-vcr/2.0.0
+  recorded_at: 2026-06-29 08:23:36
+recorded_with: VCR-vcr/2.1.0

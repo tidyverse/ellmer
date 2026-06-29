@@ -300,7 +300,7 @@ http_interactions:
         If you were able to develop technology that made it very hard to fine-tune
         an AI model away from its original capability distribution, then it’d be easier
         to confidently release models without potentially compromising on downstream
-        safety."}]}],"model":"gpt-4.1","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"Summary
+        safety."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"Summary
         of the article.","properties":{"author":{"type":"string","description":"Name
         of the article author"},"topics":{"type":"array","description":"Array of topics,
         e.g. [\"tech\", \"politics\"]. Should be as specific as possible, and can
@@ -311,53 +311,56 @@ http_interactions:
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999eeddb1c243458-DFW
-      content-encoding: gzip
+      cf-ray: a133869ac872a5ba-IAD
+      content-encoding: br
       content-type: application/json
-      date: Wed, 05 Nov 2025 19:59:07 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '6975'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Mon, 29 Jun 2026 08:23:00 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '9244'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=Ja8_fJq2KgdeS_2yI3JMkmo2.6WVWKVFx_w0F9SqfRE-1762372747-1.0.1.1-xdMA.8jpv46jAvPsX4I_5tgxbcuvQcxrVMNuSHHKKAAtINy9dcjDtMlfd8lrQhhPCJnc2LpvuD4iO_b7SBHPW2RcEAwE6JmQz_Js7zwKsmk;
-        path=/; expires=Wed, 05-Nov-25 20:29:07 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=SSFsqvlfBE50oaju0l7ik9Mdzeupir6xBk7OmUEGRek-1762372747434-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=H7nyJip9jeavI4CpOeSa3lvEP6aCT0GzTkQTqb149JQ-1782721371.3283043-1.0.1.1-6tf02uB3ei9z5x67i98zb4HakzAhxDFuxc1uhasy7mJqCX5wytYxOzM79F1Zagd1.3CnVl80ob5wMiaEoLv.VdiIv.LP.gV1dCBEJwHdqOxZ14wgETaIkLm9fCWOixrI;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        29 Jun 2026 08:53:00 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '6985'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29995645'
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 8ms
-      x-request-id: req_7dd5de3797984fefbe90ab10fd46188e
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '500000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '499876'
+      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-tokens: 14ms
+      x-request-id: 3ea0b30a-b8e6-4976-b98d-5c53f1a9d71c
     body:
       string: |-
         {
-          "id": "resp_02c50cd5f5328e4501690bac8476148195b9265c304ca01e15",
+          "id": "resp_000eec1bc5541acc016a422b5b62c4819c9480e98cd31130cd",
           "object": "response",
-          "created_at": 1762372740,
+          "created_at": 1782721371,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1782721380,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-2025-04-14",
+          "model": "gpt-5.4-2026-03-05",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_02c50cd5f5328e4501690bac86fda481958215eb1a6417ccef",
+              "id": "msg_000eec1bc5541acc016a422b5d2dc0819c9400381bcf87614d",
               "type": "message",
               "status": "completed",
               "content": [
@@ -365,18 +368,22 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\n  \"author\": \"Anthropic Policy Team (implied, no explicit author)\",\n  \"topics\": [\n    \"AI safety\",\n    \"AI policy\",\n    \"third-party testing\",\n    \"regulation\",\n    \"AI governance\",\n    \"open-source AI\",\n    \"regulatory capture\",\n    \"AI oversight\",\n    \"national security\",\n    \"responsible AI scaling\",\n    \"risk management\"\n  ],\n  \"summary\": \"This article by Anthropic argues that the development and deployment of large-scale generative AI systems, such as their own Claude, require robust third-party testing regimes to ensure safety and build public trust. The authors assert that self-governance and internal testing\u2014while important\u2014are insufficient for the sector as a whole, and draw parallels to product safety standards in industries like food, medicine, and aerospace. They argue for a regime involving effective, broadly-trusted safety tests administered by legitimate third-parties, such as independent companies, academic institutions, and government agencies.\\n\\nKey elements of this vision include requiring only the most powerful and potentially risky models to undergo such tests, coordinating international standards, and focusing resources on national security and other high-stakes domains. The article stresses the need to balance robust safety assurance with not overburdening small companies, avoiding regulatory capture, and maintaining innovation. It discusses the tensions around open-source AI and advocates for a 'minimal viable policy approach' that is both practical and enables feedback. Anthropic highlights ongoing activities to support effective third-party testing and sees this approach as central to advancing societal oversight and preventing both deliberate and accidental harm from AI.\",\n  \"coherence\": 93,\n  \"persuasion\": 0.88\n}"
+                  "text": "{\"author\":\"Anthropic\",\"topics\":[\"AI policy\",\"third-party testing\",\"frontier AI systems\",\"AI safety\",\"AI evaluations\",\"model oversight\",\"national security misuse\",\"regulatory capture\",\"open-source AI models\",\"Responsible Scaling Policy\"],\"summary\":\"Anthropic argues that frontier AI systems should be subject to effective third-party testing to validate safety, especially for risks such as national security misuse, election integrity harms, discrimination, and dangerous autonomous behaviors. The company says self-governance by labs is not enough; instead, governments, academia, and industry should build a broader testing ecosystem with trusted external evaluators, shared standards, and a narrowly scoped regime focused only on the most compute-intensive general-purpose models. Anthropic envisions a two-stage process with broad automated screening followed by deeper expert review when risks are flagged.\\n\\nThe article also connects testing to broader policy issues. Anthropic supports more public funding for AI evaluation infrastructure, government capacity through institutions like NIST and national research clouds, and development of tests for security-relevant capabilities. It argues that third-party testing can help address concerns around open-weight models and reduce regulatory capture by creating independent oversight rather than burdensome compliance structures that favor large firms. Overall, the piece presents third-party testing as the 'minimal viable policy' for managing current and future AI risks while preserving innovation.\",\"coherence\":90,\"persuasion\":0.84}"
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -431,23 +438,41 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 4336,
+            "input_tokens": 4334,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 346,
+            "output_tokens": 287,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 4682
+            "total_tokens": 4621
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 19:59:07
-recorded_with: VCR-vcr/2.0.0
+  recorded_at: 2026-06-29 08:23:00
+recorded_with: VCR-vcr/2.1.0

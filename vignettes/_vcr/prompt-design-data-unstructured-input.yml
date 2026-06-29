@@ -21,57 +21,60 @@ http_interactions:
         of dough onto an ungreased baking sheet and bake at 350°F (175°C)\n  for 10-12
         minutes, or until the edges are lightly browned. Let the cookies\n  cool on
         the baking sheet for a few minutes before transferring to a wire\n  rack to
-        cool completely. Enjoy!\n"}]}],"model":"gpt-4.1","stream":false,"store":false,"service_tier":"auto"}'
+        cool completely. Enjoy!\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999eeca9d9f98784-DFW
-      content-encoding: gzip
+      cf-ray: a13384c0bac5a5ba-IAD
+      content-encoding: br
       content-type: application/json
-      date: Wed, 05 Nov 2025 19:58:19 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '7646'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Mon, 29 Jun 2026 08:21:36 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '1157'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=EJpi3.anaM8jHhKvTRVQQUr0VB16GTb9DheJop3Hm7k-1762372699-1.0.1.1-EG5b9kEtUoXDKf6bLhyHILvmNHbWW0eThhgcs8tKQDwnTRb341Y9Ns2hStiApVNOG4Zr6.XVl9upWsclf2mAqJ5pHR8uUbe_GngQISYOozg;
-        path=/; expires=Wed, 05-Nov-25 20:28:19 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=9Zh.d.Nqn1h2mAsmt9I8W7T3KQdijasVFJJef5x24HA-1762372699259-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=FRIIoxa0Any3PDzZFs8vqUWP977z5svIZlGgxjSxYcw-1782721295.4793923-1.0.1.1-ivk2Cm384qb_pV4layRw6Cqa.B4WZWjbDGRksngX48oAJdZ6zQ8..eINNMr8.eBOAvjrF1wMcYgrsnN3Qr2AUgZq9IP3AE451KR6kvm.cx3Ug0MCUkhlT5z6VZ49Blze;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        29 Jun 2026 08:51:36 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '7708'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999615'
-      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '500000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '500000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6affd0c3f1639f1899ce1cdb6504d4a7
+      x-request-id: fafbd1c7-6ce7-480a-b26e-0e4f77be083e
     body:
       string: |-
         {
-          "id": "resp_0fc3da1e7bc7fb6801690bac53a9b08196a2496b7c0cf92b64",
+          "id": "resp_0ac956ab1c7ac65a016a422b0f865081a0a34459e878f023fe",
           "object": "response",
-          "created_at": 1762372691,
+          "created_at": 1782721295,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1782721296,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-2025-04-14",
+          "model": "gpt-5.4-2026-03-05",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_0fc3da1e7bc7fb6801690bac54eda881968bc6750d0274fbc9",
+              "id": "msg_0ac956ab1c7ac65a016a422b0fcfb881a09d8aa6bc6daf3ac5",
               "type": "message",
               "status": "completed",
               "content": [
@@ -79,18 +82,22 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "[\n  {\"name\": \"unsalted butter\", \"quantity\": 1, \"unit\": \"cup\", \"input\": \"one cup of softened unsalted butter\"},\n  {\"name\": \"white sugar\", \"quantity\": 0.25, \"unit\": \"cup\", \"input\": \"a quarter cup of white sugar\"},\n  {\"name\": \"egg\", \"quantity\": 1, \"unit\": \"unit\", \"input\": \"an egg\"},\n  {\"name\": \"vanilla extract\", \"quantity\": 1, \"unit\": \"teaspoon\", \"input\": \"1 teaspoon of vanilla extract\"},\n  {\"name\": \"all-purpose flour\", \"quantity\": 2, \"unit\": \"cup\", \"input\": \"2 cups of all-purpose flour\"},\n  {\"name\": \"semisweet chocolate chips\", \"quantity\": 1, \"unit\": \"cup\", \"input\": \"1 cup of semisweet chocolate chips\"}\n]"
+                  "text": "[{\"name\":\"unsalted butter\",\"quantity\":1,\"unit\":\"cup\",\"input\":\"one cup of softened unsalted butter\"},{\"name\":\"white sugar\",\"quantity\":0.25,\"unit\":\"cup\",\"input\":\"a quarter cup of white sugar\"},{\"name\":\"egg\",\"quantity\":1,\"unit\":null,\"input\":\"an egg\"},{\"name\":\"vanilla extract\",\"quantity\":1,\"unit\":\"teaspoon\",\"input\":\"1 teaspoon of vanilla extract\"},{\"name\":\"all-purpose flour\",\"quantity\":2,\"unit\":\"cup\",\"input\":\"2 cups of all-purpose flour\"},{\"name\":\"semisweet chocolate chips\",\"quantity\":1,\"unit\":\"cup\",\"input\":\"1 cup of semisweet chocolate chips\"}]"
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -104,23 +111,41 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 366,
+            "input_tokens": 365,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 196,
+            "output_tokens": 146,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 562
+            "total_tokens": 511
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 19:58:19
-recorded_with: VCR-vcr/2.0.0
+  recorded_at: 2026-06-29 08:21:36
+recorded_with: VCR-vcr/2.1.0

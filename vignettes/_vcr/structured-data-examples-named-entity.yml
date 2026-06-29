@@ -5,60 +5,63 @@ http_interactions:
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  John
         works at Google in New York. He met with Sarah, the CEO of\n  Acme Inc., last
-        week in San Francisco.\n"}]}],"model":"gpt-4.1","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
+        week in San Francisco.\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
         extracted entity name."},"type":{"type":"string","description":"The entity
         type","enum":["person","location","organization"]},"context":{"type":"string","description":"The
         context in which the entity appears in the text."}},"required":["name","type","context"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999eee083a563458-DFW
-      content-encoding: gzip
+      cf-ray: a13386d77dd9a5ba-IAD
+      content-encoding: br
       content-type: application/json
-      date: Wed, 05 Nov 2025 19:59:14 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '6640'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Mon, 29 Jun 2026 08:23:02 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '1388'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=D1DhLcZqZ3mdsjKYHsoP09Zndd93ElGOxyFZ9.4faOc-1762372754-1.0.1.1-PmJiILrdIVIS0S2kK2QYnpLxIJ8iyBTmHicGUAGWwJCkAkKHby4pS5s.JXnLs.FSMsMP5E8NxbHSnC1yo3RbCjNHOk5VFgftJ7u3yFj7DE4;
-        path=/; expires=Wed, 05-Nov-25 20:29:14 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=tz.EkO.WbBe8q1poEz__JxQ2kV0fPXi4B9PdD9Ihcuk-1762372754267-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=vIXT.EWmXct01YMs3pwuPesm.9F5Hpvzu.BFSrY5liA-1782721381.0375032-1.0.1.1-Qet_ZojF5f2AYG.cErBKMXj0lCxY6rF5XxEDLXkWAyNxw580BQkKnz2JJcRtJGpC0A962W3ge2uCIKfYOJHWuVeyALDUCG5Ti_OFIB945EROmNP_rc3B94Tm0GX4vbO8;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        29 Jun 2026 08:53:02 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '6655'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999851'
-      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '500000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '500000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_84beb24f19764df280188a11e0c1ebb0
+      x-request-id: 88e460ab-e76d-4f8b-afd7-f1d1f98edaed
     body:
       string: |-
         {
-          "id": "resp_094b5dd23a90f81d01690bac8baa308190a50775518d086d8c",
+          "id": "resp_0af2b536a7f3b5ea016a422b6514a081a38ecce38ce31f6a9e",
           "object": "response",
-          "created_at": 1762372747,
+          "created_at": 1782721381,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1782721382,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-2025-04-14",
+          "model": "gpt-5.4-2026-03-05",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_094b5dd23a90f81d01690bac8d1fec81909dd50aac75ff4492",
+              "id": "msg_0af2b536a7f3b5ea016a422b658c4881a3aff94aceab812ea0",
               "type": "message",
               "status": "completed",
               "content": [
@@ -66,18 +69,22 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John works at Google in New York.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"He met with Sarah, the CEO of Acme Inc.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"Sarah, the CEO of Acme Inc.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"He met with Sarah... last week in San Francisco.\"}]}"
+                  "text": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John works at Google in New York.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"}]}"
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -137,23 +144,41 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 130,
+            "input_tokens": 128,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 132,
+            "output_tokens": 161,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 262
+            "total_tokens": 289
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 19:59:14
-recorded_with: VCR-vcr/2.0.0
+  recorded_at: 2026-06-29 08:23:02
+recorded_with: VCR-vcr/2.1.0

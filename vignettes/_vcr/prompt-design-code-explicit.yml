@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-4-6","system":[{"type":"text","text":"\n  You
         are an expert R programmer who prefers the tidyverse.\n  Just give me the
         code. I don''t want any explanation or sample data.\n\n  Follow the tidyverse
         style guide:\n  * Spread long function calls across multiple lines.\n  * Where
@@ -15,33 +15,36 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Thu, 06 Nov 2025 14:55:26 GMT
+      date: Mon, 29 Jun 2026 08:21:19 GMT
       content-type: application/json
-      content-encoding: gzip
-      anthropic-ratelimit-input-tokens-limit: '2000000'
-      anthropic-ratelimit-input-tokens-remaining: '2000000'
-      anthropic-ratelimit-input-tokens-reset: '2025-11-06T14:55:24Z'
-      anthropic-ratelimit-output-tokens-limit: '400000'
-      anthropic-ratelimit-output-tokens-remaining: '400000'
-      anthropic-ratelimit-output-tokens-reset: '2025-11-06T14:55:26Z'
-      anthropic-ratelimit-requests-limit: '4000'
-      anthropic-ratelimit-requests-remaining: '3999'
-      anthropic-ratelimit-requests-reset: '2025-11-06T14:55:21Z'
-      retry-after: '37'
-      anthropic-ratelimit-tokens-limit: '2400000'
-      anthropic-ratelimit-tokens-remaining: '2400000'
-      anthropic-ratelimit-tokens-reset: '2025-11-06T14:55:24Z'
-      request-id: req_011CUrq2ttBHaCzcvej2eemj
+      anthropic-ratelimit-input-tokens-limit: '10000000'
+      anthropic-ratelimit-input-tokens-remaining: '10000000'
+      anthropic-ratelimit-input-tokens-reset: '2026-06-29T08:21:18Z'
+      anthropic-ratelimit-output-tokens-limit: '2000000'
+      anthropic-ratelimit-output-tokens-remaining: '2000000'
+      anthropic-ratelimit-output-tokens-reset: '2026-06-29T08:21:19Z'
+      anthropic-ratelimit-requests-limit: '10000'
+      anthropic-ratelimit-requests-remaining: '9999'
+      anthropic-ratelimit-requests-reset: '2026-06-29T08:21:17Z'
+      anthropic-ratelimit-tokens-limit: '12000000'
+      anthropic-ratelimit-tokens-remaining: '12000000'
+      anthropic-ratelimit-tokens-reset: '2026-06-29T08:21:18Z'
+      request-id: req_011CcXE5AuG2qrkuiSQwtR8D
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      anthropic-organization-id: bf3687d8-1b59-41eb-9761-a1fd70b24e7e
-      x-envoy-upstream-service-time: '5630'
-      cf-cache-status: DYNAMIC
-      x-robots-tag: none
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      traceresponse: 00-996faf4b1f1951f74fbd157d9d520921-5f7f880b288fd864-01
       server: cloudflare
-      cf-ray: 99a56e6d9c04c0c0-DFW
+      content-encoding: gzip
+      vary: Accept-Encoding
+      cf-cache-status: DYNAMIC
+      set-cookie: _cfuvid=KLBXf4yjZ.DDYY7E1e1yt3palZBxmUkYEbMUYrAy..4-1782721277.1519191-1.0.1.1-PboHYb7dSbB5hhFx9MgUxmjrOIlCf74sSRV8GdhNnNw;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      x-robots-tag: none
+      cf-ray: a133844e3af081b7-IAD
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","id":"msg_01NbWMgxVD3RmYw3ExZRJeBf","type":"message","role":"assistant","content":[{"type":"text","text":"\n```R\nlibrary(dplyr)\n\ndata
-        |>\n  group_by(age, sex) |>\n  summarise(across(\n    a:z,\n    list(mean
-        = mean, median = median),\n    .names = \"{.col}_{.fn}\"\n  ))\n```"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":160,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":73,"service_tier":"standard"}}'
-  recorded_at: 2025-11-06 14:55:26
-recorded_with: VCR-vcr/2.0.0
+      string: '{"model":"claude-sonnet-4-6","id":"msg_012dAeckoUkkcTPEXgSHzVt6","type":"message","role":"assistant","content":[{"type":"text","text":"```r\ndata
+        |>\n  group_by(age, sex) |>\n  summarise(\n    across(a:z, list(mean = mean,
+        median = median)),\n    .groups = \"drop\"\n  )\n```"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":160,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":57,"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-06-29 08:21:19
+recorded_with: VCR-vcr/2.1.0
