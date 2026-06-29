@@ -84,7 +84,7 @@ AssistantPartialTurn(
 - finish_reason:
 
   Why the model stopped generating. Standardized across providers to one
-  of: `"success"`, `"max_tokens"`, `"stop_sequence"`,
+  of: `"success"`, `"tool_use"`, `"max_tokens"`, `"stop_sequence"`,
   `"content_filter"`, or `"context_window"`. Unrecognized
   provider-specific reasons are passed through as-is. `NA` when not
   available.

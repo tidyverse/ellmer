@@ -157,8 +157,9 @@ that ellmer doesn't otherwise expose.</p></dd>
 
 <dt id="arg-finish-reason">finish_reason<a class="anchor" aria-label="anchor" href="#arg-finish-reason"></a></dt>
 <dd><p>Why the model stopped generating. Standardized
-across providers to one of: <code>"success"</code>, <code>"max_tokens"</code>,
-<code>"stop_sequence"</code>, <code>"content_filter"</code>, or <code>"context_window"</code>.
+across providers to one of: <code>"success"</code>, <code>"tool_use"</code>,
+<code>"max_tokens"</code>, <code>"stop_sequence"</code>, <code>"content_filter"</code>, or
+<code>"context_window"</code>.
 Unrecognized provider-specific reasons are passed through as-is.
 <code>NA</code> when not available.</p></dd>
 
