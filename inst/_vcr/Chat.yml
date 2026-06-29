@@ -4,57 +4,60 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Tell
-        me a funny joke"}]}],"model":"gpt-4.1","stream":false,"store":false,"service_tier":"auto"}'
+        me a funny joke"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999ef5619be8671d-DFW
-      content-encoding: gzip
+      cf-ray: a133b875df63d4ce-MAN
+      content-encoding: br
       content-type: application/json
-      date: Wed, 05 Nov 2025 20:04:11 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '2529'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Mon, 29 Jun 2026 08:56:55 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '1098'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=DP3H2XnrxhCDCiJkxjotUe9siLRoQDVhO7Qcx9ojdPU-1762373051-1.0.1.1-njO4sSTQEUq7uyAk5MQsN_8x2FADdpjbTQmtzBZA3MlnHfXoHZNNKUrsmimiqhljvwlwnw7ugroZwo4NKvx0iCOSCD1aamJYrURP.7a4P5s;
-        path=/; expires=Wed, 05-Nov-25 20:34:11 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=3O9YcvhFD82LqQ6X7vnNFC8K4ZEytLKiZuLxykdTPFo-1762373051161-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=LMCS2Lwat1_zhBLzUjhHfAMcti.RsQfatBJ9Vi.40Yg-1782723413.4168863-1.0.1.1-3SukfZ0I8rbh3FTI2.9M_xgQqkBwCHcrFcEnuY4G3dYe0dzpxRkpfhzSXVP75.aYGtAtB960yKaXUlnXtgrMPpiJ3lG0m4WQSsivkLRD3tl3QBH5MokR_AN7Xrz1mOfY;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        29 Jun 2026 09:26:55 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '2536'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999969'
-      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '500000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '500000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6ca6b10158484ea6867d905a225ed0c2
+      x-request-id: 766fd524-ab2c-485b-b38c-7d04e826e0a1
     body:
       string: |-
         {
-          "id": "resp_00710645a83b32bd01690badb8a6648195bc0e3de9489a6d1e",
+          "id": "resp_08d351be2238687d016a4233563d1c8192a5d6e9373d6c3a73",
           "object": "response",
-          "created_at": 1762373048,
+          "created_at": 1782723414,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1782723415,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-2025-04-14",
+          "model": "gpt-5.4-2026-03-05",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_00710645a83b32bd01690badba7ca88195bf3dea5de2c03c6f",
+              "id": "msg_08d351be2238687d016a423357171c8192bb5e7026b0682997",
               "type": "message",
               "status": "completed",
               "content": [
@@ -62,18 +65,22 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Sure! Here you go:\n\nWhy did the scarecrow win an award?\n\nBecause he was outstanding in his field! \ud83c\udf3e\ud83d\ude04"
+                  "text": "Why don\u2019t skeletons fight each other?\n\nThey don\u2019t have the guts."
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -87,23 +94,41 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 12,
+            "input_tokens": 11,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 28,
+            "output_tokens": 20,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 40
+            "total_tokens": 31
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 20:04:11
-recorded_with: VCR-vcr/2.0.0
+  recorded_at: 2026-06-29 08:56:55
+recorded_with: VCR-vcr/2.1.0

@@ -4,7 +4,7 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Give
-        me five numbers from a random normal distribution."}]}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","name":"rnorm","description":"Draw
+        me five numbers from a random normal distribution."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"tools":[{"type":"function","name":"rnorm","description":"Draw
         numbers from a random normal distribution","strict":true,"parameters":{"type":"object","description":"","properties":{"n":{"type":"integer","description":"The
         number of observations. Must be a positive integer."},"mean":{"type":"number","description":"The
         mean value of the distribution."},"sd":{"type":"number","description":"The
@@ -12,66 +12,72 @@ http_interactions:
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9a73c450a89d8fc2-ORD
-      content-encoding: gzip
+      cf-ray: a133b97a3da0d4ce-MAN
+      content-encoding: br
       content-type: application/json
-      date: Mon, 01 Dec 2025 15:55:07 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '2044'
-      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
+      date: Mon, 29 Jun 2026 08:57:35 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '764'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=wEAOsMa52A6Gq_JT0GezDgkG2M99Kqx.nwzrYG1qur0-1764604507-1.0.1.1-zBx4L72L3C4xs6yz5lp9rdTsvcpMrCM_agdJlUSXbkWZceviXViyhcxosgaVAmIiijx9nElYaD85I9Bs5KgQ1mCgaMNS6C5PzdyfWa4_yWg;
-        path=/; expires=Mon, 01-Dec-25 16:25:07 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=xc9cjuv7tp5O1gkfJhihJ5dveuhyoT4lPwiBNVtmX2E-1764604507812-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=2H8YRJLk0H2izaH4UoJLtnwX5tWxoD8vJyCYUWl4D9I-1782723455.0778246-1.0.1.1-SabkgRkN_Vh84simRW_EVY4t3Yow0zkHI5ZHHJn6W72LQ2vAJP32guyvflgdGMMLnUwEMCBx.jDQr679Zy2QH1yEQYgdmH3VtJVEdiqBz6IJplxC6o7BQTLFkPWjC9CB;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        29 Jun 2026 09:27:35 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '2046'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999693'
-      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '500000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '500000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_f2d70c67dd7e4b76a645352b5a549ab7
+      x-request-id: 56ee06a0-d9ef-46c1-ad0a-27351b5af684
     body:
       string: |-
         {
-          "id": "resp_0b0635de4f44748f01692dba59c0448193820cbea8de450891",
+          "id": "resp_08472d61bd24b5b4016a42337f276c81919e7b2ba01a013188",
           "object": "response",
-          "created_at": 1764604505,
+          "created_at": 1782723455,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1782723455,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-2025-04-14",
+          "model": "gpt-5.4-2026-03-05",
+          "moderation": null,
           "output": [
             {
-              "id": "fc_0b0635de4f44748f01692dba5a16388193a8de793c57908c2f",
+              "id": "fc_08472d61bd24b5b4016a42337f9cdc8191a7f7974c4135746d",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"n\":5,\"mean\":0,\"sd\":1}",
-              "call_id": "call_0EkQTuCjMgioZoG2sZ3eC6zk",
+              "call_id": "call_sqvSJva60Wyd2dap8cNRJ3EG",
               "name": "rnorm"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -85,6 +91,24 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [
             {
               "type": "function",
@@ -118,29 +142,29 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 90,
+            "input_tokens": 95,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 23,
+            "output_tokens": 26,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 113
+            "total_tokens": 121
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-12-01 15:55:07
+  recorded_at: 2026-06-29 08:57:36
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Give
-        me five numbers from a random normal distribution."}]},{"type":"function_call","call_id":"fc_0b0635de4f44748f01692dba5a16388193a8de793c57908c2f","name":"rnorm","arguments":"{\"n\":5,\"mean\":0,\"sd\":1}"},{"type":"function_call_output","call_id":"fc_0b0635de4f44748f01692dba5a16388193a8de793c57908c2f","output":"[1.1484,-1.8218,-0.2473,-0.2442,-0.2827]"}],"model":"gpt-4.1","stream":false,"tools":[{"type":"function","name":"rnorm","description":"Draw
+        me five numbers from a random normal distribution."}]},{"type":"function_call","call_id":"fc_08472d61bd24b5b4016a42337f9cdc8191a7f7974c4135746d","name":"rnorm","arguments":"{\"n\":5,\"mean\":0,\"sd\":1}"},{"type":"function_call_output","call_id":"fc_08472d61bd24b5b4016a42337f9cdc8191a7f7974c4135746d","output":"[1.1484,-1.8218,-0.2473,-0.2442,-0.2827]"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"tools":[{"type":"function","name":"rnorm","description":"Draw
         numbers from a random normal distribution","strict":true,"parameters":{"type":"object","description":"","properties":{"n":{"type":"integer","description":"The
         number of observations. Must be a positive integer."},"mean":{"type":"number","description":"The
         mean value of the distribution."},"sd":{"type":"number","description":"The
@@ -148,53 +172,56 @@ http_interactions:
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9a73c45eabd28fc2-ORD
-      content-encoding: gzip
+      cf-ray: a133b981aaded4ce-MAN
+      content-encoding: br
       content-type: application/json
-      date: Mon, 01 Dec 2025 15:55:10 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '2044'
-      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
+      date: Mon, 29 Jun 2026 08:57:37 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '1405'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=H4fK98SpzyEGrV33diYXQBTzLZeTz_KdZ_brO4HG1tA-1764604510-1.0.1.1-m7TFSqpn48C4SB0NN4bCT2jiE3pXMdYDQMzN7OH03n5nIpHyedLUTMQtCp9aaqB98Hv0UPkEFB0tw4Ps4aYBwAS9qZSDXECi7FQLWTbwSFU;
-        path=/; expires=Mon, 01-Dec-25 16:25:10 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=NblRU7ZqqCWt4MClIuOqskzSr4MffwJpOF4DqkaPTnU-1764604510058-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=dTQY2BjgbUkpwgLKNOinl659W5LekzxbE0M2f5_7gtM-1782723456.2702334-1.0.1.1-cUhQVQ91FmQYR.KOtGtL1jfEpNJGW7JVLbUgZyXBmz66hhqIx8C4Ld1na4tVMMbDcYTqMUFqTsxDsYy8iBA2qzyuS2b9HSQevEPY7Qab_Dn2ug2fIVuinbmFvd2LRN1V;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        29 Jun 2026 09:27:37 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '2047'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999639'
-      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '500000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '500000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_130bf5bc7ffa43b1a5a49dc3f6f221d9
+      x-request-id: 702cc0ac-c10d-45d8-ad69-52414fa0b6db
     body:
       string: |-
         {
-          "id": "resp_0999af4e3caeb87a01692dba5bfef48195b7354737c83182bc",
+          "id": "resp_0d52c2c72d16d040016a4233809a8c819f898fc2a20ecda18a",
           "object": "response",
-          "created_at": 1764604508,
+          "created_at": 1782723456,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1782723457,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-2025-04-14",
+          "model": "gpt-5.4-2026-03-05",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_0999af4e3caeb87a01692dba5c3e648195a3a44e6549e771f4",
+              "id": "msg_0d52c2c72d16d040016a4233812048819f875ff4cbb1fda6f7",
               "type": "message",
               "status": "completed",
               "content": [
@@ -202,18 +229,22 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Here are five numbers drawn from a random normal distribution (mean = 0, standard deviation = 1):\n\n1. 1.1484\n2. -1.8218\n3. -0.2473\n4. -0.2442\n5. -0.2827"
+                  "text": "Here are five numbers from a random normal distribution:\n\n1.1484, -1.8218, -0.2473, -0.2442, -0.2827"
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -227,6 +258,24 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [
             {
               "type": "function",
@@ -260,21 +309,21 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 144,
+            "input_tokens": 158,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 63,
+            "output_tokens": 42,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 207
+            "total_tokens": 200
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-12-01 15:55:10
-recorded_with: VCR-vcr/2.0.0
+  recorded_at: 2026-06-29 08:57:37
+recorded_with: VCR-vcr/2.1.0
