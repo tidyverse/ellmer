@@ -64,7 +64,7 @@ models_openai(
 
 - model:
 
-  The model to use for the chat (defaults to "gpt-4.1"). We regularly
+  The model to use for the chat (defaults to "gpt-5.4"). We regularly
   update the default, so we strongly recommend explicitly specifying a
   model for anything other than casual use. Use `models_openai()` to see
   all options.
@@ -136,78 +136,66 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
 
 ## Examples
 
 ``` r
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 chat$chat("
   What is the difference between a tibble and a data frame?
   Answer with a bulleted list
 ")
-#> - **Origin:**
-#>   - **Data Frame:** Base R object for storing tabular data.
-#>   - **Tibble:** Modern reimagining of data frames, part of the 
-#> tidyverse (tibble package).
+#> - **Both store tabular data in R**, but a **tibble** is a modern 
+#> version of a **data frame**, provided by the **tibble** package and 
+#> commonly used in the **tidyverse**.
 #> 
-#> - **Printing:**
-#>   - **Data Frame:** Prints the entire object, possibly flooding the 
-#> console.
-#>   - **Tibble:** Prints a preview (first 10 rows and fits columns to 
-#> screen), making output more readable.
+#> - **Printing behavior**
+#>   - **Data frame:** prints the whole object by default.
+#>   - **Tibble:** prints only the first 10 rows and columns that fit on 
+#> screen, making large datasets easier to inspect.
 #> 
-#> - **Subsetting:**
-#>   - **Data Frame:** May simplify to a vector when selecting a single 
-#> column.
-#>   - **Tibble:** Always returns a tibble when subsetting columns with 
-#> `[`.
+#> - **Subsetting behavior**
+#>   - **Data frame:** may simplify results, for example returning a 
+#> vector instead of a one-column data frame.
+#>   - **Tibble:** is more strict and usually preserves the data 
+#> structure.
 #> 
-#> - **Column Names:**
-#>   - **Data Frame:** Allows non-syntactic names (with some issues).
-#>   - **Tibble:** Accepts any name but displays them as is, including 
-#> those with spaces or special characters (backticks needed to 
-#> reference).
+#> - **Column names**
+#>   - **Data frame:** may change column names to make them syntactically
+#> valid unless told not to.
+#>   - **Tibble:** keeps column names more faithfully.
 #> 
-#> - **Data Types:**
-#>   - **Data Frame:** Converts strings to factors by default (unless 
-#> specified otherwise).
-#>   - **Tibble:** Does **not** convert strings to factors by default.
+#> - **Type handling**
+#>   - **Data frame:** older versions of R sometimes converted character 
+#> columns to factors automatically.
+#>   - **Tibble:** does not do automatic character-to-factor conversion.
 #> 
-#> - **Partial Matching:**
-#>   - **Data Frame:** Allows partial matching of column names.
-#>   - **Tibble:** Does **not** allow partial matching; requires exact 
-#> names.
+#> - **Partial matching**
+#>   - **Data frame:** can allow partial matching in some cases.
+#>   - **Tibble:** does not allow partial matching, which helps avoid 
+#> mistakes.
 #> 
-#> - **Performance:**
-#>   - **Data Frame:** Slightly faster for basic operations due to 
-#> simpler structure.
-#>   - **Tibble:** Slightly slower but offers better usability, 
-#> especially for big data analysis.
+#> - **Input flexibility**
+#>   - **Data frame:** works well with base R functions.
+#>   - **Tibble:** is designed to work smoothly with tidyverse tools like
+#> `dplyr` and `ggplot2`.
 #> 
-#> - **Use in Tidyverse:**
-#>   - **Data Frame:** Used in base R workflows.
-#>   - **Tibble:** Default in tidyverse packages (ggplot2, dplyr, etc.).
-#> 
-#> - **Row Names:**
-#>   - **Data Frame:** Supports row names.
-#>   - **Tibble:** Does not support row names; stores them as a column if
-#> needed.
-#> 
-#> In summary, tibbles are a modern and tidyverse-friendly version of 
-#> data frames with improved usability and printing features.
+#> - **Summary**
+#>   - Use a **data frame** for base R compatibility.
+#>   - Use a **tibble** when you want cleaner printing, stricter 
+#> behavior, and tidyverse-friendly workflows.
 
 chat$chat("Tell me three funny jokes about statisticians")
-#> Absolutely! Here are three funny jokes about statisticians:
+#> - Why did the statistician bring a ladder to work?  
+#>   - Because the data had too many high points.
 #> 
-#> 1. **Why did the statistician bring a ladder to the bar?**  
-#>    Because they heard the drinks were on the house!
+#> - A statistician drowned crossing a river that was, on average, 3 feet
+#> deep.  
+#>   - Moral: always check the distribution.
 #> 
-#> 2. **How does a statistician catch a lion?**  
-#>    They build a cage, label it as “population,” and wait for the lion 
-#> to walk right in—it's all about sampling!
-#> 
-#> 3. **Why don’t statisticians ever get sunburned?**  
-#>    Because they know how to avoid the "mean rays."
+#> - Statisticians do it with significance.  
+#>   - But only if `p < 0.05`.
 ```

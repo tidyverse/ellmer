@@ -56,7 +56,7 @@ models_groq(
 
 - model:
 
-  The model to use for the chat (defaults to "llama-3.1-8b-instant"). We
+  The model to use for the chat (defaults to "openai/gpt-oss-20b"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use.
 
@@ -114,7 +114,8 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
 
 ## Examples
 

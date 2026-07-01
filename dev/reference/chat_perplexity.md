@@ -113,7 +113,8 @@ Other chatbots:
 [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md),
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
 
 ## Examples
 

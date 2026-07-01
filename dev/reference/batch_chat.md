@@ -130,7 +130,7 @@ is not complete.
 
 ``` r
 if (FALSE) { # has_credentials("openai")
-chat <- chat_openai(model = "gpt-4.1-nano")
+chat <- chat_openai(model = "gpt-5-nano")
 
 # Chat ----------------------------------------------------------------------
 

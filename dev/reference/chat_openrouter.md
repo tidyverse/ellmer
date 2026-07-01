@@ -45,7 +45,7 @@ chat_openrouter(
 
 - model:
 
-  The model to use for the chat (defaults to "gpt-4o"). We regularly
+  The model to use for the chat (defaults to "gpt-5.4"). We regularly
   update the default, so we strongly recommend explicitly specifying a
   model for anything other than casual use.
 
@@ -103,7 +103,8 @@ Other chatbots:
 [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md),
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
 
 ## Examples
 

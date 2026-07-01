@@ -183,7 +183,7 @@ Cache read savings are reported correctly.</p>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
-<dd><p>The model to use for the chat (defaults to "anthropic.claude-sonnet-4-5-20250929-v1:0").
+<dd><p>The model to use for the chat (defaults to "us.anthropic.claude-sonnet-4-6").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use <code>models_models_aws_bedrock()</code> to see all options.
 .</p>
@@ -191,7 +191,7 @@ Use <code>models_models_aws_bedrock()</code> to see all options.
 have access to it, so you'll need to specify a model that you can.
 If you're using <a href="https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/" class="external-link">cross-region inference</a>,
 you'll need to use the inference profile ID, e.g.
-<code>model="us.anthropic.claude-sonnet-4-5-20250929-v1:0"</code>.</p></dd>
+<code>model="us.anthropic.claude-sonnet-4-6"</code>.</p></dd>
 
 
 <dt id="arg-profile">profile<a class="anchor" aria-label="anchor" href="#arg-profile"></a></dt>
@@ -261,7 +261,8 @@ when running at the console).</p></li>
 <code><a href="chat_openai_compatible.html">chat_openai_compatible()</a></code>,
 <code><a href="chat_openrouter.html">chat_openrouter()</a></code>,
 <code><a href="chat_perplexity.html">chat_perplexity()</a></code>,
-<code><a href="chat_portkey.html">chat_portkey()</a></code></p></div>
+<code><a href="chat_portkey.html">chat_portkey()</a></code>,
+<code><a href="chat_posit.html">chat_posit()</a></code></p></div>
     </div>
 
     <div class="section level2">

@@ -95,7 +95,7 @@ time:
 
 chat1 <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat1$chat("My name is Hadley and I'm a data scientist")
-#> Hello, Hadley! How can I assist you today?
+#> Hello, Hadley. How can I assist you today?
 chat2 <- chat1$clone()
 
 chat1$chat("what's my name?")
@@ -107,7 +107,7 @@ chat1
 #> ── user ───────────────────────────────────────────────────────────────
 #> My name is Hadley and I'm a data scientist
 #> ── assistant [input=23 output=13 cost=$0.00] ──────────────────────────
-#> Hello, Hadley! How can I assist you today?
+#> Hello, Hadley. How can I assist you today?
 #> ── user ───────────────────────────────────────────────────────────────
 #> what's my name?
 #> ── assistant [input=48 output=7 cost=$0.00] ───────────────────────────
@@ -122,7 +122,7 @@ chat2
 #> ── user ───────────────────────────────────────────────────────────────
 #> My name is Hadley and I'm a data scientist
 #> ── assistant [input=23 output=13 cost=$0.00] ──────────────────────────
-#> Hello, Hadley! How can I assist you today?
+#> Hello, Hadley. How can I assist you today?
 #> ── user ───────────────────────────────────────────────────────────────
 #> what's my job?
 #> ── assistant [input=48 output=6 cost=$0.00] ───────────────────────────
@@ -154,14 +154,14 @@ conversational history:
 
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
-#> Understood. The capital of New Zealand is now Kiwicity.
+#> Got it. The capital of New Zealand is Kiwicity.
 
 capital <- function(chat, country) {
   chat <- chat$clone()$set_turns(list())
   chat$chat(interpolate("What's the capital of {{country}}"))
 }
 capital(chat, "New Zealand")
-#> Wellington.
+#> Wellington
 ```
 
 This is particularly useful when you want to use a chat object just as a
@@ -212,17 +212,17 @@ chat$chat("Roll two dice and tell me the total")
 #> The total is 9.
 
 chat
-#> <Chat OpenAI/gpt-4.1-nano turns=5 input=104 output=50 cost=$0.00>
+#> <Chat OpenAI/gpt-4.1-nano turns=5 input=126 output=50 cost=$0.00>
 #> ── system ─────────────────────────────────────────────────────────────
 #> Be terse
 #> ── user ───────────────────────────────────────────────────────────────
 #> Roll two dice and tell me the total
-#> ── assistant [input=22 output=42 cost=$0.00] ──────────────────────────
-#> [tool request (fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f)]: tool_001()
-#> [tool request (fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204)]: tool_001()
+#> ── assistant [input=44 output=42 cost=$0.00] ──────────────────────────
+#> [tool request (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: tool_001()
+#> [tool request (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: tool_001()
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f)]: 5
-#> [tool result  (fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204)]: 4
+#> [tool result  (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: 5
+#> [tool result  (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: 4
 #> ── assistant [input=82 output=8 cost=$0.00] ───────────────────────────
 #> The total is 9.
 ```
@@ -240,13 +240,13 @@ turns
 #> 
 #> [[2]]
 #> <Turn: assistant>
-#> [tool request (fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f)]: tool_001()
-#> [tool request (fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204)]: tool_001()
+#> [tool request (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: tool_001()
+#> [tool request (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: tool_001()
 #> 
 #> [[3]]
 #> <Turn: user>
-#> [tool result  (fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f)]: 5
-#> [tool result  (fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204)]: 4
+#> [tool result  (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: 5
+#> [tool result  (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: 4
 #> 
 #> [[4]]
 #> <Turn: assistant>
@@ -263,7 +263,7 @@ str(turns[[2]])
 #> <ellmer::AssistantTurn>
 #>  @ contents     :List of 2
 #>  .. $ : <ellmer::ContentToolRequest>
-#>  ..  ..@ id       : chr "fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f"
+#>  ..  ..@ id       : chr "fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c"
 #>  ..  ..@ name     : chr "tool_001"
 #>  ..  ..@ arguments: Named list()
 #>  ..  ..@ tool     : <ellmer::ToolDef> function ()  
@@ -278,7 +278,7 @@ str(turns[[2]])
 #>  .. .. .. @ annotations: list()
 #>  ..  ..@ extra    : list()
 #>  .. $ : <ellmer::ContentToolRequest>
-#>  ..  ..@ id       : chr "fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204"
+#>  ..  ..@ id       : chr "fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9"
 #>  ..  ..@ name     : chr "tool_001"
 #>  ..  ..@ arguments: Named list()
 #>  ..  ..@ tool     : <ellmer::ToolDef> function ()  
@@ -294,40 +294,45 @@ str(turns[[2]])
 #>  ..  ..@ extra    : list()
 #>  @ text         : chr ""
 #>  @ role         : chr "assistant"
-#>  @ json         :List of 31
-#>  .. $ id                    : chr "resp_0ff06e91ca3701e601690bac43a77881968271a54ebece3246"
+#>  @ json         :List of 36
+#>  .. $ id                    : chr "resp_0b7e98be9a085160016a422b84b57881a183da6d9d7a242ab8"
 #>  .. $ object                : chr "response"
-#>  .. $ created_at            : int 1762372675
+#>  .. $ created_at            : int 1782721412
 #>  .. $ status                : chr "completed"
 #>  .. $ background            : logi FALSE
 #>  .. $ billing               :List of 1
 #>  ..  ..$ payer: chr "developer"
+#>  .. $ completed_at          : int 1782721413
 #>  .. $ error                 : NULL
+#>  .. $ frequency_penalty     : num 0
 #>  .. $ incomplete_details    : NULL
 #>  .. $ instructions          : NULL
 #>  .. $ max_output_tokens     : NULL
 #>  .. $ max_tool_calls        : NULL
 #>  .. $ model                 : chr "gpt-4.1-nano-2025-04-14"
+#>  .. $ moderation            : NULL
 #>  .. $ output                :List of 2
 #>  ..  ..$ :List of 6
-#>  ..  .. ..$ id       : chr "fc_0ff06e91ca3701e601690bac44710c8196a7bd72315aa4b53f"
+#>  ..  .. ..$ id       : chr "fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c"
 #>  ..  .. ..$ type     : chr "function_call"
 #>  ..  .. ..$ status   : chr "completed"
 #>  ..  .. ..$ arguments: chr "{}"
-#>  ..  .. ..$ call_id  : chr "call_UoyOnszXDnPApY7QF72F9m9W"
+#>  ..  .. ..$ call_id  : chr "call_WYxSlE3oJGaphda2Fd0ue0T3"
 #>  ..  .. ..$ name     : chr "tool_001"
 #>  ..  ..$ :List of 6
-#>  ..  .. ..$ id       : chr "fc_0ff06e91ca3701e601690bac4495848196bb79c9f94edcb204"
+#>  ..  .. ..$ id       : chr "fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9"
 #>  ..  .. ..$ type     : chr "function_call"
 #>  ..  .. ..$ status   : chr "completed"
 #>  ..  .. ..$ arguments: chr "{}"
-#>  ..  .. ..$ call_id  : chr "call_6k0VAH5JjUWtIh4cRaz8X1jp"
+#>  ..  .. ..$ call_id  : chr "call_TCXYc7SBI0v40cqm7Do3VndD"
 #>  ..  .. ..$ name     : chr "tool_001"
 #>  .. $ parallel_tool_calls   : logi TRUE
+#>  .. $ presence_penalty      : num 0
 #>  .. $ previous_response_id  : NULL
 #>  .. $ prompt_cache_key      : NULL
-#>  .. $ prompt_cache_retention: NULL
-#>  .. $ reasoning             :List of 2
+#>  .. $ prompt_cache_retention: chr "in_memory"
+#>  .. $ reasoning             :List of 3
+#>  ..  ..$ context: NULL
 #>  ..  ..$ effort : NULL
 #>  ..  ..$ summary: NULL
 #>  .. $ safety_identifier     : NULL
@@ -339,6 +344,19 @@ str(turns[[2]])
 #>  ..  .. ..$ type: chr "text"
 #>  ..  ..$ verbosity: chr "medium"
 #>  .. $ tool_choice           : chr "auto"
+#>  .. $ tool_usage            :List of 2
+#>  ..  ..$ image_gen :List of 5
+#>  ..  .. ..$ input_tokens         : int 0
+#>  ..  .. ..$ input_tokens_details :List of 2
+#>  ..  .. .. ..$ image_tokens: int 0
+#>  ..  .. .. ..$ text_tokens : int 0
+#>  ..  .. ..$ output_tokens        : int 0
+#>  ..  .. ..$ output_tokens_details:List of 2
+#>  ..  .. .. ..$ image_tokens: int 0
+#>  ..  .. .. ..$ text_tokens : int 0
+#>  ..  .. ..$ total_tokens         : int 0
+#>  ..  ..$ web_search:List of 1
+#>  ..  .. ..$ num_requests: int 0
 #>  .. $ tools                 :List of 1
 #>  ..  ..$ :List of 5
 #>  ..  .. ..$ type       : chr "function"
@@ -355,16 +373,16 @@ str(turns[[2]])
 #>  .. $ top_p                 : num 1
 #>  .. $ truncation            : chr "disabled"
 #>  .. $ usage                 :List of 5
-#>  ..  ..$ input_tokens         : int 22
+#>  ..  ..$ input_tokens         : int 44
 #>  ..  ..$ input_tokens_details :List of 1
 #>  ..  .. ..$ cached_tokens: int 0
 #>  ..  ..$ output_tokens        : int 42
 #>  ..  ..$ output_tokens_details:List of 1
 #>  ..  .. ..$ reasoning_tokens: int 0
-#>  ..  ..$ total_tokens         : int 64
+#>  ..  ..$ total_tokens         : int 86
 #>  .. $ user                  : NULL
 #>  .. $ metadata              : Named list()
-#>  @ tokens       : Named int [1:3] 22 42 0
+#>  @ tokens       : Named int [1:3] 44 42 0
 #>  .. - attr(*, "names")= chr [1:3] "input" "output" "cached_input"
 #>  @ cost         : 'ellmer_dollars' num $0.00
 #>  @ duration     : num NA

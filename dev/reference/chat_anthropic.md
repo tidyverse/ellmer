@@ -65,10 +65,10 @@ models_anthropic(
 
 - model:
 
-  The model to use for the chat (defaults to
-  "claude-sonnet-4-5-20250929"). We regularly update the default, so we
-  strongly recommend explicitly specifying a model for anything other
-  than casual use. Use `models_anthropic()` to see all options.
+  The model to use for the chat (defaults to "claude-sonnet-4-6"). We
+  regularly update the default, so we strongly recommend explicitly
+  specifying a model for anything other than casual use. Use
+  `models_anthropic()` to see all options.
 
 - cache:
 
@@ -191,35 +191,27 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
 
 ## Examples
 
 ``` r
 chat <- chat_anthropic()
-#> Using model = "claude-sonnet-4-5-20250929".
+#> Using model = "claude-sonnet-4-6".
 chat$chat("Tell me three jokes about statisticians")
-#> # Three Jokes About Statisticians
+#> Here are three jokes about statisticians:
 #> 
-#> **1. The Drowning Statistician**
-#> A statistician is someone who could drown crossing a river that's an 
-#> average of three feet deep.
+#> 1. **A statistician drowned crossing a river that was, on average, 3 
+#> feet deep.**
 #> 
-#> **2. The Uncertain Response**
-#> Three statisticians go hunting. They spot a deer. The first 
-#> statistician shoots and misses—two feet to the left. The second shoots
-#> and misses—two feet to the right. The third statistician jumps up and 
-#> down shouting, "We got it! We got it!"
+#> 2. **A statistician's wife had twins. He called his friend excitedly 
+#> to share the news. His friend said, "That's great! What did you name 
+#> them?" The statistician replied, "Well, I named one of them. I'll name
+#> the other one when we have another child."**
 #> 
-#> **3. The Kidnapped Statistician**
-#> A kidnapper grabs a statistician and threatens, "Give me all your 
-#> money or you're average!" The statistician replies, "I think you mean 
-#> 'or you're history.'" The kidnapper responds, "Don't tell me my 
-#> job—you tell me the mean!"
+#> 3. **How many statisticians does it take to change a light bulb?**
+#> *One — plus or minus three.*
 #> 
-#> ---
-#> 
-#> *These jokes play on statistical concepts like averages, means, and 
-#> the classic distinction between theoretical data and practical 
-#> reality!*
+#> Hope those gave you at least an average number of laughs! 😄
 ```

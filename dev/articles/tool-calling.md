@@ -242,15 +242,11 @@ Now we register and use it:
 ``` r
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 chat$register_tool(get_weather)
 chat$chat("Give me a weather update for London and Chicago")
-#> Here’s a weather update:
-#> 
-#> - London: It’s heavily raining, cool, and windy with strong winds.
-#> - Chicago: The weather is overcast, warm, and also has strong winds.
-#> 
-#> Dress accordingly and stay safe!
+#> London: Heavy rain, cool temperatures, and strong wind.  
+#> Chicago: Overcast, warm temperatures, and strong wind.
 ```
 
 We can print the chat to confirm that the model only performed a single
@@ -259,20 +255,16 @@ tool call:
 ``` r
 
 chat
-#> <Chat OpenAI/gpt-4.1 turns=4 input=195 output=65 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4 turns=4 input=214 output=50 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> Give me a weather update for London and Chicago
-#> ── assistant [input=67 output=18 cost=$0.00] ──────────────────────────
-#> [tool request (fc_0ab4b61a48aa23bb01692dba49b87c8190ae9678691024472c)]: get_weather(cities = c("London", "Chicago"))
+#> ── assistant [input=72 output=21 cost=$0.00] ──────────────────────────
+#> [tool request (fc_0ef6f7b602ab2d3f016a422b6ffd0c8191a412508c4191a4f2)]: get_weather(cities = c("London", "Chicago"))
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0ab4b61a48aa23bb01692dba49b87c8190ae9678691024472c)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
-#> ── assistant [input=128 output=47 cost=$0.00] ─────────────────────────
-#> Here’s a weather update:
-#> 
-#> - London: It’s heavily raining, cool, and windy with strong winds.
-#> - Chicago: The weather is overcast, warm, and also has strong winds.
-#> 
-#> Dress accordingly and stay safe!
+#> [tool result  (fc_0ef6f7b602ab2d3f016a422b6ffd0c8191a412508c4191a4f2)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
+#> ── assistant [input=142 output=29 cost=$0.00] ─────────────────────────
+#> London: Heavy rain, cool temperatures, and strong wind.  
+#> Chicago: Overcast, warm temperatures, and strong wind.
 ```
 
 ### Image and PDF tool output

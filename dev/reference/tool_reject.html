@@ -8,7 +8,7 @@ Here's an example where utils::askYesNo() is used to ask the user for
 permission before accessing their current working directory. This happens
 directly in the tool function and is appropriate when you write the tool
 definition and know exactly how it will be called.
-chat &amp;lt;- chat_openai(model = &quot;gpt-4.1-nano&quot;)
+chat &amp;lt;- chat_openai(model = &quot;gpt-5-nano&quot;)
 
 list_files &amp;lt;- function() {
   allow_read &amp;lt;- utils::askYesNo(
@@ -50,7 +50,7 @@ packaged_list_files_tool &amp;lt;- tool(
   &quot;List files in the user's current directory&quot;
 )
 
-chat &amp;lt;- chat_openai(model = &quot;gpt-4.1-nano&quot;)
+chat &amp;lt;- chat_openai(model = &quot;gpt-5-nano&quot;)
 chat$register_tool(packaged_list_files_tool)
 
 always_allowed &amp;lt;- c()
@@ -85,7 +85,7 @@ Here's an example where utils::askYesNo() is used to ask the user for
 permission before accessing their current working directory. This happens
 directly in the tool function and is appropriate when you write the tool
 definition and know exactly how it will be called.
-chat &amp;lt;- chat_openai(model = &quot;gpt-4.1-nano&quot;)
+chat &amp;lt;- chat_openai(model = &quot;gpt-5-nano&quot;)
 
 list_files &amp;lt;- function() {
   allow_read &amp;lt;- utils::askYesNo(
@@ -127,7 +127,7 @@ packaged_list_files_tool &amp;lt;- tool(
   &quot;List files in the user's current directory&quot;
 )
 
-chat &amp;lt;- chat_openai(model = &quot;gpt-4.1-nano&quot;)
+chat &amp;lt;- chat_openai(model = &quot;gpt-5-nano&quot;)
 chat$register_tool(packaged_list_files_tool)
 
 always_allowed &amp;lt;- c()
@@ -217,7 +217,7 @@ function is invoked.</p>
 permission before accessing their current working directory. This happens
 directly in the tool function and is appropriate when you write the tool
 definition and know exactly how it will be called.</p>
-<p></p><div class="sourceCode r"><pre><code><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span><span class="op">)</span></span>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-5-nano"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">list_files</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">allow_read</span> <span class="op">&lt;-</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/askYesNo.html" class="external-link">askYesNo</a></span><span class="op">(</span></span>
@@ -258,7 +258,7 @@ for consent before running <em>any</em>  tool.</p>
 <span>  <span class="st">"List files in the user's current directory"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span><span class="op">)</span></span>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-5-nano"</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">packaged_list_files_tool</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">always_allowed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span></span>

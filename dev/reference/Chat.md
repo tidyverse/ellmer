@@ -618,11 +618,9 @@ The objects of this class are cloneable with this method.
 
 ``` r
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 chat$chat("Tell me a funny joke")
-#> Sure! Here you go:
+#> Why don’t skeletons fight each other?
 #> 
-#> Why did the scarecrow win an award?
-#> 
-#> Because he was outstanding in his field! 🌾😄
+#> They don’t have the guts.
 ```

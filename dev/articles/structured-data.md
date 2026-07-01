@@ -27,7 +27,7 @@ a string:
 ``` r
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 chat$chat_structured(
   "My name is Susan and I'm 13 years old",
   type = type_object(
@@ -47,7 +47,7 @@ The same basic idea works with images too:
 ``` r
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 chat$chat_structured(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   type = type_object(
@@ -56,10 +56,10 @@ chat$chat_structured(
   )
 )
 #> $primary_shape
-#> [1] "ellipse and letter"
+#> [1] "stylized letter R with an oval ring"
 #> 
 #> $primary_colour
-#> [1] "grey and blue"
+#> [1] "blue"
 ```
 
 If you need to extract data from multiple prompts, you can use
@@ -83,7 +83,7 @@ type_person <- type_object(
   age = type_number()
 )
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 parallel_chat_structured(chat, prompts, type = type_person)
 #> # A tibble: 6 × 2
 #>   name     age
@@ -215,12 +215,12 @@ no_match <- list(
 )
 parallel_chat_structured(chat, no_match, type = type_person)
 #> # A tibble: 4 × 2
-#>   name                   age
-#>   <chr>                <dbl>
-#> 1 apples                   0
-#> 2 Current Time Request     0
-#> 3 cheese                   3
-#> 4 Hadley                   0
+#>   name                                       age
+#>   <chr>                                    <dbl>
+#> 1 Apples                                       0
+#> 2 I can’t tell the current time from here.     0
+#> 3 This cheese                                  3
+#> 4 Hadley                                       0
 ```
 
 You can often avoid this problem by setting `required = FALSE`:
@@ -237,7 +237,7 @@ parallel_chat_structured(chat, no_match, type = type_person)
 #>   <chr>  <dbl>
 #> 1 NA        NA
 #> 2 NA        NA
-#> 3 cheese     3
+#> 3 NA         3
 #> 4 Hadley    NA
 ```
 
@@ -278,7 +278,7 @@ type_people <- type_object(
 )
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 chat$chat_structured(prompt, type = type_people)
 #> $name
 #> [1] "John Smith"     "Jane Doe"       "Jose Rodriguez" "June Lee"      
@@ -287,7 +287,7 @@ chat$chat_structured(prompt, type = type_people)
 #> [1] 30 25 40 35
 #> 
 #> $height
-#> [1] 1.800 1.651 1.900 1.750
+#> [1] 1.80 1.65 1.90 1.75
 #> 
 #> $weight
 #> [1] 80.0 49.9 90.0 70.0
@@ -310,7 +310,7 @@ type_people <- type_array(
 )
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 chat$chat_structured(prompt, type = type_people)
 #> # A tibble: 4 × 4
 #>   name             age height weight
@@ -366,20 +366,20 @@ type_summary <- type_object(
 )
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 data <- chat$chat_structured(text, type = type_summary)
 cat(data$summary)
-#> This article by Anthropic argues that the development and deployment of large-scale generative AI systems, such as their own Claude, require robust third-party testing regimes to ensure safety and build public trust. The authors assert that self-governance and internal testing—while important—are insufficient for the sector as a whole, and draw parallels to product safety standards in industries like food, medicine, and aerospace. They argue for a regime involving effective, broadly-trusted safety tests administered by legitimate third-parties, such as independent companies, academic institutions, and government agencies.
+#> Anthropic argues that frontier AI systems should be subject to effective third-party testing to validate safety, especially for risks such as national security misuse, election integrity harms, discrimination, and dangerous autonomous behaviors. The company says self-governance by labs is not enough; instead, governments, academia, and industry should build a broader testing ecosystem with trusted external evaluators, shared standards, and a narrowly scoped regime focused only on the most compute-intensive general-purpose models. Anthropic envisions a two-stage process with broad automated screening followed by deeper expert review when risks are flagged.
 #> 
-#> Key elements of this vision include requiring only the most powerful and potentially risky models to undergo such tests, coordinating international standards, and focusing resources on national security and other high-stakes domains. The article stresses the need to balance robust safety assurance with not overburdening small companies, avoiding regulatory capture, and maintaining innovation. It discusses the tensions around open-source AI and advocates for a 'minimal viable policy approach' that is both practical and enables feedback. Anthropic highlights ongoing activities to support effective third-party testing and sees this approach as central to advancing societal oversight and preventing both deliberate and accidental harm from AI.
+#> The article also connects testing to broader policy issues. Anthropic supports more public funding for AI evaluation infrastructure, government capacity through institutions like NIST and national research clouds, and development of tests for security-relevant capabilities. It argues that third-party testing can help address concerns around open-weight models and reduce regulatory capture by creating independent oversight rather than burdensome compliance structures that favor large firms. Overall, the piece presents third-party testing as the 'minimal viable policy' for managing current and future AI risks while preserving innovation.
 
 str(data)
 #> List of 5
-#>  $ author    : chr "Anthropic Policy Team (implied, no explicit author)"
-#>  $ topics    : chr [1:11] "AI safety" "AI policy" "third-party testing" "regulation" ...
-#>  $ summary   : chr "This article by Anthropic argues that the development and deployment of large-scale generative AI systems, such"| __truncated__
-#>  $ coherence : int 93
-#>  $ persuasion: num 0.88
+#>  $ author    : chr "Anthropic"
+#>  $ topics    : chr [1:10] "AI policy" "third-party testing" "frontier AI systems" "AI safety" ...
+#>  $ summary   : chr "Anthropic argues that frontier AI systems should be subject to effective third-party testing to validate safety"| __truncated__
+#>  $ coherence : int 90
+#>  $ persuasion: num 0.84
 ```
 
 ### Example 2: Named entity recognition
@@ -399,7 +399,7 @@ type_named_entity <- type_object(
 type_named_entities <- type_array(type_named_entity)
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 chat$chat_structured(text, type = type_named_entities)
 #> # A tibble: 6 × 3
 #>   name          type         context                                   
@@ -407,9 +407,9 @@ chat$chat_structured(text, type = type_named_entities)
 #> 1 John          person       John works at Google in New York.         
 #> 2 Google        organization John works at Google in New York.         
 #> 3 New York      location     John works at Google in New York.         
-#> 4 Sarah         person       He met with Sarah, the CEO of Acme Inc.   
-#> 5 Acme Inc.     organization Sarah, the CEO of Acme Inc.               
-#> 6 San Francisco location     He met with Sarah... last week in San Fra…
+#> 4 Sarah         person       He met with Sarah, the CEO of Acme Inc., …
+#> 5 Acme Inc.     organization He met with Sarah, the CEO of Acme Inc., …
+#> 6 San Francisco location     He met with Sarah, the CEO of Acme Inc., …
 ```
 
 ### Example 3: Sentiment analysis
@@ -435,12 +435,12 @@ type_sentiment <- type_object(
 )
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 str(chat$chat_structured(text, type = type_sentiment))
 #> List of 3
-#>  $ positive_score: num 0.1
-#>  $ negative_score: num 0.7
-#>  $ neutral_score : num 0.2
+#>  $ positive_score: num 0.12
+#>  $ negative_score: num 0.74
+#>  $ neutral_score : num 0.14
 ```
 
 Note that while we’ve asked nicely for the scores to sum 1, which they
@@ -475,14 +475,14 @@ type_classification <- type_array(
 )
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 data <- chat$chat_structured(text, type = type_classification)
 data
 #> # A tibble: 3 × 2
 #>   name       score
 #>   <fct>      <dbl>
-#> 1 Technology  0.95
-#> 2 Business    0.04
+#> 1 Technology  0.98
+#> 2 Business    0.01
 #> 3 Other       0.01
 ```
 
@@ -507,16 +507,16 @@ text <- "
 "
 
 chat <- chat_anthropic("Extract all characteristics of supplied character")
-#> Using model = "claude-sonnet-4-5-20250929".
+#> Using model = "claude-sonnet-4-6".
 chat$chat_structured(text, type = type_characteristics)
 #> # A tibble: 5 × 2
-#>   name                 value               
-#>   <chr>                <chr>               
-#> 1 height               tall                
-#> 2 facial_hair          beard               
-#> 3 distinguishing_marks scar on left cheek  
-#> 4 voice                deep                
-#> 5 clothing             black leather jacket
+#>   name          value               
+#>   <chr>         <chr>               
+#> 1 height        tall                
+#> 2 facial hair   beard               
+#> 3 scar location left cheek          
+#> 4 voice         deep                
+#> 5 clothing      black leather jacket
 ```
 
 ### Example 6: Extracting data from an image
@@ -566,7 +566,7 @@ conversation.
 
 ## Token usage
 
-| provider  | model                      | input | output | cached_input |  price |
-|:----------|:---------------------------|------:|-------:|-------------:|-------:|
-| OpenAI    | gpt-4.1                    |  6250 |    991 |            0 | \$0.02 |
-| Anthropic | claude-sonnet-4-5-20250929 |   254 |     65 |            0 | \$0.00 |
+| provider  | model             | input | output | cached_input |  price |
+|:----------|:------------------|------:|-------:|-------------:|-------:|
+| OpenAI    | gpt-5.4           |  5995 |    973 |            0 | \$0.03 |
+| Anthropic | claude-sonnet-4-6 |   255 |     57 |            0 | \$0.00 |

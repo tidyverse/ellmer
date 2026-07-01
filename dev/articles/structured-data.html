@@ -114,7 +114,7 @@ specification that describes the structure of the data that you want
 specific values from a string:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.4"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span></span>
 <span>  <span class="st">"My name is Susan and I'm 13 years old"</span>,</span>
 <span>  type <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
@@ -130,7 +130,7 @@ specific values from a string:</p>
 <p>The same basic idea works with images too:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.4"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/content_image_url.html">content_image_url</a></span><span class="op">(</span><span class="st">"https://www.r-project.org/Rlogo.png"</span><span class="op">)</span>,</span>
 <span>  type <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
@@ -139,10 +139,10 @@ specific values from a string:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; $primary_shape</span></span>
-<span><span class="co">#&gt; [1] "ellipse and letter"</span></span>
+<span><span class="co">#&gt; [1] "stylized letter R with an oval ring"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $primary_colour</span></span>
-<span><span class="co">#&gt; [1] "grey and blue"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "blue"</span></span></code></pre></div>
 <p>If you need to extract data from multiple prompts, you can use
 <code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code>. It takes the same arguments as
 <code>$chat_structured()</code> with two exceptions: it needs a
@@ -162,7 +162,7 @@ and it can take a vector of prompts.</p>
 <span>  age <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.4"</span>.</span></span>
 <span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">prompts</span>, type <span class="op">=</span> <span class="va">type_person</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
 <span><span class="co">#&gt;   name     age</span></span>
@@ -274,12 +274,12 @@ have names and/or ages.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/parallel_chat.html">parallel_chat_structured</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">no_match</span>, type <span class="op">=</span> <span class="va">type_person</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 2</span></span></span>
-<span><span class="co">#&gt;   name                   age</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> apples                   0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Current Time Request     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> cheese                   3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Hadley                   0</span></span></code></pre></div>
+<span><span class="co">#&gt;   name                                       age</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Apples                                       0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> I can’t tell the current time from here.     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> This cheese                                  3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Hadley                                       0</span></span></code></pre></div>
 <p>You can often avoid this problem by setting
 <code>required = FALSE</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -293,7 +293,7 @@ have names and/or ages.</p>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> cheese     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="color: #BB0000;">NA</span>         3</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Hadley    <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
 <p>In other cases, you may need to adjust your prompt as well. Either
 way, we strongly recommend that you include both positive and negative
@@ -326,7 +326,7 @@ table:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.4"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">prompt</span>, type <span class="op">=</span> <span class="va">type_people</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $name</span></span>
 <span><span class="co">#&gt; [1] "John Smith"     "Jane Doe"       "Jose Rodriguez" "June Lee"      </span></span>
@@ -335,7 +335,7 @@ table:</p>
 <span><span class="co">#&gt; [1] 30 25 40 35</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $height</span></span>
-<span><span class="co">#&gt; [1] 1.800 1.651 1.900 1.750</span></span>
+<span><span class="co">#&gt; [1] 1.80 1.65 1.90 1.75</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $weight</span></span>
 <span><span class="co">#&gt; [1] 80.0 49.9 90.0 70.0</span></span></code></pre></div>
@@ -354,7 +354,7 @@ structure “inside out” and create an array of objects:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.4"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">prompt</span>, type <span class="op">=</span> <span class="va">type_people</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 4</span></span></span>
 <span><span class="co">#&gt;   name             age height weight</span></span>
@@ -407,20 +407,20 @@ can use structured data extraction.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.4"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_summary</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span>
-<span><span class="co">#&gt; This article by Anthropic argues that the development and deployment of large-scale generative AI systems, such as their own Claude, require robust third-party testing regimes to ensure safety and build public trust. The authors assert that self-governance and internal testing—while important—are insufficient for the sector as a whole, and draw parallels to product safety standards in industries like food, medicine, and aerospace. They argue for a regime involving effective, broadly-trusted safety tests administered by legitimate third-parties, such as independent companies, academic institutions, and government agencies.</span></span>
+<span><span class="co">#&gt; Anthropic argues that frontier AI systems should be subject to effective third-party testing to validate safety, especially for risks such as national security misuse, election integrity harms, discrimination, and dangerous autonomous behaviors. The company says self-governance by labs is not enough; instead, governments, academia, and industry should build a broader testing ecosystem with trusted external evaluators, shared standards, and a narrowly scoped regime focused only on the most compute-intensive general-purpose models. Anthropic envisions a two-stage process with broad automated screening followed by deeper expert review when risks are flagged.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Key elements of this vision include requiring only the most powerful and potentially risky models to undergo such tests, coordinating international standards, and focusing resources on national security and other high-stakes domains. The article stresses the need to balance robust safety assurance with not overburdening small companies, avoiding regulatory capture, and maintaining innovation. It discusses the tensions around open-source AI and advocates for a 'minimal viable policy approach' that is both practical and enables feedback. Anthropic highlights ongoing activities to support effective third-party testing and sees this approach as central to advancing societal oversight and preventing both deliberate and accidental harm from AI.</span></span>
+<span><span class="co">#&gt; The article also connects testing to broader policy issues. Anthropic supports more public funding for AI evaluation infrastructure, government capacity through institutions like NIST and national research clouds, and development of tests for security-relevant capabilities. It argues that third-party testing can help address concerns around open-weight models and reduce regulatory capture by creating independent oversight rather than burdensome compliance structures that favor large firms. Overall, the piece presents third-party testing as the 'minimal viable policy' for managing current and future AI risks while preserving innovation.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 5</span></span>
-<span><span class="co">#&gt;  $ author    : chr "Anthropic Policy Team (implied, no explicit author)"</span></span>
-<span><span class="co">#&gt;  $ topics    : chr [1:11] "AI safety" "AI policy" "third-party testing" "regulation" ...</span></span>
-<span><span class="co">#&gt;  $ summary   : chr "This article by Anthropic argues that the development and deployment of large-scale generative AI systems, such"| __truncated__</span></span>
-<span><span class="co">#&gt;  $ coherence : int 93</span></span>
-<span><span class="co">#&gt;  $ persuasion: num 0.88</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ author    : chr "Anthropic"</span></span>
+<span><span class="co">#&gt;  $ topics    : chr [1:10] "AI policy" "third-party testing" "frontier AI systems" "AI safety" ...</span></span>
+<span><span class="co">#&gt;  $ summary   : chr "Anthropic argues that frontier AI systems should be subject to effective third-party testing to validate safety"| __truncated__</span></span>
+<span><span class="co">#&gt;  $ coherence : int 90</span></span>
+<span><span class="co">#&gt;  $ persuasion: num 0.84</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-2-named-entity-recognition">Example 2: Named entity recognition<a class="anchor" aria-label="anchor" href="#example-2-named-entity-recognition"></a>
@@ -439,7 +439,7 @@ can use structured data extraction.</p>
 <span><span class="va">type_named_entities</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="va">type_named_entity</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.4"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_named_entities</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
 <span><span class="co">#&gt;   name          type         context                                   </span></span>
@@ -447,9 +447,9 @@ can use structured data extraction.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> John          person       John works at Google in New York.         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Google        organization John works at Google in New York.         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> New York      location     John works at Google in New York.         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Sarah         person       He met with Sarah, the CEO of Acme Inc.   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Acme Inc.     organization Sarah, the CEO of Acme Inc.               </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> San Francisco location     He met with Sarah... last week in San Fra…</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Sarah         person       He met with Sarah, the CEO of Acme Inc., …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Acme Inc.     organization He met with Sarah, the CEO of Acme Inc., …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> San Francisco location     He met with Sarah, the CEO of Acme Inc., …</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-3-sentiment-analysis">Example 3: Sentiment analysis<a class="anchor" aria-label="anchor" href="#example-3-sentiment-analysis"></a>
@@ -474,12 +474,12 @@ can use structured data extraction.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.4"</span>.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_sentiment</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 3</span></span>
-<span><span class="co">#&gt;  $ positive_score: num 0.1</span></span>
-<span><span class="co">#&gt;  $ negative_score: num 0.7</span></span>
-<span><span class="co">#&gt;  $ neutral_score : num 0.2</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ positive_score: num 0.12</span></span>
+<span><span class="co">#&gt;  $ negative_score: num 0.74</span></span>
+<span><span class="co">#&gt;  $ neutral_score : num 0.14</span></span></code></pre></div>
 <p>Note that while we’ve asked nicely for the scores to sum 1, which
 they do in this example (at least when I ran the code), this is not
 guaranteed.</p>
@@ -512,14 +512,14 @@ guaranteed.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.4"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_classification</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
 <span><span class="co">#&gt;   name       score</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Technology  0.95</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Business    0.04</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Technology  0.98</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Business    0.01</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Other       0.01</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -542,16 +542,16 @@ now-deprecated <code>.additional_properties</code> argument.</p>
 <span><span class="st">"</span></span>
 <span></span>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_anthropic.html">chat_anthropic</a></span><span class="op">(</span><span class="st">"Extract all characteristics of supplied character"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-5-20250929"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-6"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_characteristics</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 2</span></span></span>
-<span><span class="co">#&gt;   name                 value               </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> height               tall                </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> facial_hair          beard               </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> distinguishing_marks scar on left cheek  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> voice                deep                </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> clothing             black leather jacket</span></span></code></pre></div>
+<span><span class="co">#&gt;   name          value               </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> height        tall                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> facial hair   beard               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> scar location left cheek          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> voice         deep                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> clothing      black leather jacket</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-6-extracting-data-from-an-image">Example 6: Extracting data from an image<a class="anchor" aria-label="anchor" href="#example-6-extracting-data-from-an-image"></a>
@@ -600,14 +600,6 @@ conversation.</p>
 <h2 id="token-usage">Token usage<a class="anchor" aria-label="anchor" href="#token-usage"></a>
 </h2>
 <table class="table">
-<colgroup>
-<col width="14%">
-<col width="39%">
-<col width="8%">
-<col width="10%">
-<col width="18%">
-<col width="8%">
-</colgroup>
 <thead><tr class="header">
 <th align="left">provider</th>
 <th align="left">model</th>
@@ -619,17 +611,17 @@ conversation.</p>
 <tbody>
 <tr class="odd">
 <td align="left">OpenAI</td>
-<td align="left">gpt-4.1</td>
-<td align="right">6250</td>
-<td align="right">991</td>
+<td align="left">gpt-5.4</td>
+<td align="right">5995</td>
+<td align="right">973</td>
 <td align="right">0</td>
-<td align="right">$0.02</td>
+<td align="right">$0.03</td>
 </tr>
 <tr class="even">
 <td align="left">Anthropic</td>
-<td align="left">claude-sonnet-4-5-20250929</td>
-<td align="right">254</td>
-<td align="right">65</td>
+<td align="left">claude-sonnet-4-6</td>
+<td align="right">255</td>
+<td align="right">57</td>
 <td align="right">0</td>
 <td align="right">$0.00</td>
 </tr>

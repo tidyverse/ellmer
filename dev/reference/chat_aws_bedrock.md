@@ -67,17 +67,17 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
 - model:
 
   The model to use for the chat (defaults to
-  "anthropic.claude-sonnet-4-5-20250929-v1:0"). We regularly update the
-  default, so we strongly recommend explicitly specifying a model for
-  anything other than casual use. Use `models_models_aws_bedrock()` to
-  see all options. .
+  "us.anthropic.claude-sonnet-4-6"). We regularly update the default, so
+  we strongly recommend explicitly specifying a model for anything other
+  than casual use. Use `models_models_aws_bedrock()` to see all options.
+  .
 
   While ellmer provides a default model, there's no guarantee that
   you'll have access to it, so you'll need to specify a model that you
   can. If you're using [cross-region
   inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
   you'll need to use the inference profile ID, e.g.
-  `model="us.anthropic.claude-sonnet-4-5-20250929-v1:0"`.
+  `model="us.anthropic.claude-sonnet-4-6"`.
 
 - profile:
 
@@ -158,7 +158,8 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
 
 ## Examples
 

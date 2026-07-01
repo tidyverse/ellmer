@@ -135,39 +135,39 @@ property. If the output is a data frame, and some requests error, an
 
 ``` r
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 
 # Chat ----------------------------------------------------------------------
 country <- c("Canada", "New Zealand", "Jamaica", "United States")
 prompts <- interpolate("What's the capital of {{country}}?")
 parallel_chat(chat, prompts)
 #> [[1]]
-#> <Chat OpenAI/gpt-4.1 turns=2 input=13 output=11 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4 turns=2 input=12 output=7 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of Canada?
-#> ── assistant [input=13 output=11 cost=$0.00] ──────────────────────────
-#> The capital of Canada is **Ottawa**.
+#> ── assistant [input=12 output=7 cost=$0.00] ───────────────────────────
+#> Ottawa.
 #> 
 #> [[2]]
-#> <Chat OpenAI/gpt-4.1 turns=2 input=14 output=12 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4 turns=2 input=13 output=7 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of New Zealand?
-#> ── assistant [input=14 output=12 cost=$0.00] ──────────────────────────
-#> The capital of New Zealand is **Wellington**.
+#> ── assistant [input=13 output=7 cost=$0.00] ───────────────────────────
+#> Wellington.
 #> 
 #> [[3]]
-#> <Chat OpenAI/gpt-4.1 turns=2 input=13 output=15 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4 turns=2 input=12 output=7 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of Jamaica?
-#> ── assistant [input=13 output=15 cost=$0.00] ──────────────────────────
-#> The capital of **Jamaica** is **Kingston**.
+#> ── assistant [input=12 output=7 cost=$0.00] ───────────────────────────
+#> Kingston.
 #> 
 #> [[4]]
-#> <Chat OpenAI/gpt-4.1 turns=2 input=14 output=15 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4 turns=2 input=13 output=9 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of United States?
-#> ── assistant [input=14 output=15 cost=$0.00] ──────────────────────────
-#> The capital of the United States is **Washington, D.C.**
+#> ── assistant [input=13 output=9 cost=$0.00] ───────────────────────────
+#> Washington, D.C.
 #> 
 
 # Structured data -----------------------------------------------------------
