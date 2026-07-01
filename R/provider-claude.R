@@ -443,6 +443,18 @@ method(value_turn, ProviderAnthropic) <- function(
       )
     } else if (content$type == "web_fetch_tool_result") {
       ContentToolResponseFetch(url = content$url %||% "failed", json = content)
+    } else if (content$type == "mcp_tool_use") {
+      ContentToolRequestMcp(
+        id = content$id %||% "",
+        name = content$name %||% "",
+        server_name = content$server_name %||% "",
+        json = content
+      )
+    } else if (content$type == "mcp_tool_result") {
+      ContentToolResponseMcp(
+        tool_use_id = content$tool_use_id %||% "",
+        json = content
+      )
     } else if (content$type == "thinking") {
       ContentThinking(
         content$thinking,
