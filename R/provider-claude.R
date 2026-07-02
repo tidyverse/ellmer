@@ -485,11 +485,10 @@ method(count_tokens, ProviderAnthropic) <- function(
   req <- base_request(provider)
   req <- req_url_path_append(req, "messages/count_tokens")
 
-  turns <- count_tokens_turns(..., system_prompt = system_prompt)
-  body <- chat_body(
+  body <- count_tokens_body(
     provider,
-    stream = FALSE,
-    turns = turns,
+    ...,
+    system_prompt = system_prompt,
     tools = tools,
     type = type
   )
