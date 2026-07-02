@@ -98,3 +98,19 @@
       Error in `chat$stream_async()`:
       ! `controller` must be an <ellmer_stream_controller> object created by `stream_controller()`.
 
+# token_count() errors for unsupported providers
+
+    Code
+      count_tokens(provider, "Hi")
+    Condition
+      Error in `method(count_tokens, ellmer::Provider)`:
+      ! `provider` doesn't support token counting.
+
+---
+
+    Code
+      chat$token_count("Hi")
+    Condition
+      Error in `method(count_tokens, ellmer::Provider)`:
+      ! `provider` doesn't support token counting.
+

@@ -4,8 +4,7 @@ http_interactions:
     uri: https://api.openai.com/v1/responses/input_tokens
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"You
-        are a scientist"}]},{"role":"user","content":[{"type":"input_text","text":"Hello,
-        GPT"}]}],"model":"gpt-4.1-nano"}'
+        are a scientist"}]},{"role":"user","content":[{"type":"input_text","text":"Hello"}]}],"model":"gpt-4.1-nano"}'
   response:
     status: 200
     headers:
@@ -15,26 +14,26 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a14d03d66ff8ef45-LHR
+      cf-ray: a14d764f3ccf9424-LHR
       content-encoding: br
       content-type: application/json
-      date: Thu, 02 Jul 2026 10:37:25 GMT
+      date: Thu, 02 Jul 2026 11:55:33 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '55'
+      openai-processing-ms: '62'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=oeR5k_KuZXDXOwwTlcTsMElKhIkvOd7TZ2HSTx6R8AQ-1782988644.8629284-1.0.1.1-YloW_km8TjU_DUJr0hqn8teiW2P0.UR9gDjdgOcZxNE3mAzkcJk8FUJP1jUEI_xcdLFEcmmk00zf0xhKZrxOyUhApT8FzY12LLBsma.SifV.zuccjGXBPAfQz9c9h8Au;
+      set-cookie: __cf_bm=qQJhtnUhahiJEK8Q8MQx1GV18QNUbsIotL5R_suVK5M-1782993333.6310954-1.0.1.1-Mw2Wz.gx7m2WvYa3jbtwJr0T17aOAVJ1e0N6JF1Drs.RNyg35jqdlamxBEAx0gLS8dQFP76zjjmRtt0qBagyyf7fAverfUrYfV4Udwr9O8aikHD8uvb_UeDq1XDzMQ_p;
         HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Thu,
-        02 Jul 2026 11:07:25 GMT
+        02 Jul 2026 12:25:33 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-request-id: c785e9a7-92bd-4832-8f25-7f8d15cb6732
+      x-request-id: 57ff6962-ffde-4ff2-87b3-0fe09213f38e
     body:
       string: |-
         {
           "object": "response.input_tokens",
-          "input_tokens": 18
+          "input_tokens": 16
         }
-  recorded_at: 2026-07-02 10:37:25
+  recorded_at: 2026-07-02 11:55:33
 recorded_with: VCR-vcr/2.1.0

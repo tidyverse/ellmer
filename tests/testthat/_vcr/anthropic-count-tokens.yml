@@ -4,24 +4,23 @@ http_interactions:
     uri: https://api.anthropic.com/v1/messages/count_tokens
     body:
       string: '{"model":"claude-sonnet-4-6","system":[{"type":"text","text":"You are
-        a scientist","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"Hello,
-        Claude","cache_control":{"type":"ephemeral","ttl":"5m"}}]}]}'
+        a scientist","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"Hello","cache_control":{"type":"ephemeral","ttl":"5m"}}]}]}'
   response:
     status: 200
     headers:
-      date: Thu, 02 Jul 2026 10:37:24 GMT
+      date: Thu, 02 Jul 2026 11:54:50 GMT
       content-type: application/json
       content-length: '19'
-      request-id: req_011Ccd5svQQoAS5rtPAQM7WF
+      request-id: req_011CcdBnRYPXidw2otNfi9FJ
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       server: cloudflare
-      server-timing: x-originResponse;dur=89
+      server-timing: x-originResponse;dur=121
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
-      cf-ray: a14d03d01e9b63c7-LHR
+      cf-ray: a14d753f9fb3c4f1-LHR
     body:
-      string: '{"input_tokens":15}'
-  recorded_at: 2026-07-02 10:37:24
+      string: '{"input_tokens":13}'
+  recorded_at: 2026-07-02 11:54:50
 recorded_with: VCR-vcr/2.1.0

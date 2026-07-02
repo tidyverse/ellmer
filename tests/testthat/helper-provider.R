@@ -188,3 +188,24 @@ test_models <- function(models_fun) {
   expect_s3_class(models, "data.frame")
   expect_contains(names(models), "id")
 }
+
+# Token counting -----------------------------------------------------------
+
+test_token_count <- function(chat_fun) {
+  chat <- chat_fun("You are a scientist")
+  result <- chat$token_count("Hello")
+  expect_type(result, "integer")
+  expect_gt(result, 0)
+}
+
+test_token_count_tools <- function(chat_fun) {
+  chat <- chat_fun()
+  chat$register_tool(tool(
+    function() "2024-01-01",
+    name = "current_date",
+    description = "Return the current date"
+  ))
+  result <- chat$token_count("What's the current date?")
+  expect_type(result, "integer")
+  expect_gt(result, 0)
+}

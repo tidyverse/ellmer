@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:countTokens
     body:
-      string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"Hello,
-        Gemini"}]}],"systemInstruction":{"parts":{"text":"You are a scientist"}},"generationConfig":{"temperature":0,"seed":1014},"model":"models/gemini-3.5-flash"}}'
+      string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"Hello"}]}],"systemInstruction":{"parts":{"text":"You
+        are a scientist"}},"generationConfig":{"temperature":0,"seed":1014},"model":"models/gemini-3.5-flash"}}'
   response:
     status: 200
     headers:
@@ -12,9 +12,9 @@ http_interactions:
       content-encoding: gzip
       content-length: '105'
       content-type: application/json; charset=UTF-8
-      date: Thu, 02 Jul 2026 10:37:24 GMT
+      date: Thu, 02 Jul 2026 11:55:17 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=63
+      server-timing: gfet4t7; dur=53
       vary:
       - Origin
       - X-Origin
@@ -25,13 +25,13 @@ http_interactions:
     body:
       string: |
         {
-          "totalTokens": 8,
+          "totalTokens": 6,
           "promptTokensDetails": [
             {
               "modality": "TEXT",
-              "tokenCount": 8
+              "tokenCount": 6
             }
           ]
         }
-  recorded_at: 2026-07-02 10:37:24
+  recorded_at: 2026-07-02 11:55:17
 recorded_with: VCR-vcr/2.1.0
