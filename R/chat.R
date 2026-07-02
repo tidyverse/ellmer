@@ -181,15 +181,10 @@ Chat <- R6::R6Class(
       dollars(cost)
     },
 
-    #' @description Estimate the token count for new input by calling
-    #'   the provider's token counting endpoint. This counts only the
-    #'   tokens in `...`, not the conversation history or system prompt.
-    #'   Use `$get_tokens()` to see token usage for past turns.
-    #'
-    #'   Currently supported for Anthropic, Google, and OpenAI providers.
-    #'   The token count is an estimate; the actual number of tokens
-    #'   used when creating a message may differ by a small amount.
-    #'
+    #' @description Estimate the token count for `...`, the system
+    #'   prompt, and any registered tools using the provider's token
+    #'   counting endpoint. Does not include conversation history.
+    #'   Currently supported for Claude, Google, and OpenAI providers.
     #' @param ... Input to count tokens for. Can be strings or images
     #'   (see [content_image_file()] and [content_image_url()]).
     #' @param type An optional type specification for structured data

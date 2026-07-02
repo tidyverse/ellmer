@@ -257,14 +257,10 @@ streams) are excluded because they lack token data.}
 \if{html}{\out{<a id="method-Chat-token_count"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-token_count}{}}}
 \subsection{\code{Chat$token_count()}}{
-  Estimate the token count for new input by calling
-the provider's token counting endpoint. This counts only the
-tokens in \code{...}, not the conversation history or system prompt.
-Use \verb{$get_tokens()} to see token usage for past turns.
-
-Currently supported for Anthropic, Google, and OpenAI providers.
-The token count is an estimate; the actual number of tokens
-used when creating a message may differ by a small amount.
+  Estimate the token count for \code{...}, the system
+prompt, and any registered tools using the provider's token
+counting endpoint. Does not include conversation history.
+Currently supported for Claude, Google, and OpenAI providers.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$token_count(..., type = NULL)}

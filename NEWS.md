@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `Chat` gains a `token_count()` method that estimates the number of input tokens for the next chat request without sending it. Currently supported for Anthropic, Google Gemini, and OpenAI providers (#814).
+* `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint. Currently supported for Claude, Google Gemini, and OpenAI providers (@thisisnic, #814).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
 
 
