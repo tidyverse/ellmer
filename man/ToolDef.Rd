@@ -13,6 +13,20 @@ ToolDef(
   annotations = list()
 )
 }
+\arguments{
+\item{.data}{A function to wrap.}
+
+\item{name}{The name of the tool.}
+
+\item{description}{A description of what the tool does.}
+
+\item{arguments}{A \link{TypeObject} describing the tool's arguments.}
+
+\item{convert}{Whether to automatically convert JSON inputs to R
+equivalents.}
+
+\item{annotations}{A list of additional tool annotations.}
+}
 \description{
 An S7 class representing a tool that can be called by a chat model.
 Typically created by \code{\link[=tool]{tool()}}, not by calling this constructor directly.
