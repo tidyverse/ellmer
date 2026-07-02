@@ -877,7 +877,7 @@ method(count_tokens, ProviderGoogleGemini) <- function(
   req <- req_headers(req, !!!provider@extra_headers)
 
   resp <- req_perform(req)
-  resp_body_json(resp)$totalTokens %||% 0L
+  resp_body_json(resp)$totalTokens
 }
 
 # Pricing ----------------------------------------------------------------------
