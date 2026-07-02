@@ -231,14 +231,15 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
 count_tokens <- new_generic(
   "count_tokens",
   "provider",
-  function(provider, turns = list(), tools = list(), type = NULL) {
+  function(provider, ..., system_prompt = NULL, tools = list(), type = NULL) {
     S7_dispatch()
   }
 )
 
 method(count_tokens, Provider) <- function(
   provider,
-  turns = list(),
+  ...,
+  system_prompt = NULL,
   tools = list(),
   type = NULL
 ) {
@@ -246,6 +247,15 @@ method(count_tokens, Provider) <- function(
     "{.arg provider} doesn't support token counting.",
     class = "not_implemented"
   )
+}
+
+count_tokens_turns <- function(..., system_prompt = NULL) {
+  turn <- user_turn(...)
+  turns <- list(turn)
+  if (!is.null(system_prompt)) {
+    turns <- c(list(SystemTurn(system_prompt)), turns)
+  }
+  turns
 }
 
 # Models -------------------------------------------------------------------

@@ -16,26 +16,26 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a102237e9b806550-LHR
+      cf-ray: a14d03dc7f92ef45-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 23 Jun 2026 08:31:49 GMT
+      date: Thu, 02 Jul 2026 10:37:26 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '60'
+      openai-processing-ms: '85'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=d0am.0vWKsgdvoQBwyOTGtQk.aPhII9czVx2g5d.o4o-1782203509.5319803-1.0.1.1-z5pmS6KziW5HtkA.C2S5igmlHa93jMI6S_z5NzI2KZODMs2awipGd51zHx76jnuW6Jk5T6EuT6Cyivsu8KGV4CKXAezOnPMgmvHQGF_LJ9M8rfLz6NwC_kzQlbE2uDUH;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        23 Jun 2026 09:01:49 GMT
+      set-cookie: __cf_bm=wZPTt3fJHkURUIgwi8eDaAo3iwU8YbpEUw7AnR1NvZo-1782988645.8327563-1.0.1.1-qxD9w9dbGn8F3ekL_oTLVOPfT2qxw4RF_hoqeUdzDej2KX916OOPAN6ONoIxBzW8N03D7qiCl.EqwqpslqQFv2Phzb5uWH4vfzIpj1KfFGtUSyX9PpWqRQqXZQYMNirt;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Thu,
+        02 Jul 2026 11:07:26 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-request-id: req_065702b19e99422fa53373fbb51a5087
+      x-request-id: db0c8089-d952-456f-9511-ffa2fd4a3a4a
     body:
       string: |-
         {
           "object": "response.input_tokens",
           "input_tokens": 42
         }
-  recorded_at: 2026-06-23 08:31:49
+  recorded_at: 2026-07-02 10:37:26
 recorded_with: VCR-vcr/2.1.0

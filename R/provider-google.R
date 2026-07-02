@@ -845,7 +845,8 @@ gemini_client <- function() {
 # https://ai.google.dev/api/tokens
 method(count_tokens, ProviderGoogleGemini) <- function(
   provider,
-  turns = list(),
+  ...,
+  system_prompt = NULL,
   tools = list(),
   type = NULL
 ) {
@@ -856,6 +857,7 @@ method(count_tokens, ProviderGoogleGemini) <- function(
     paste0(provider@model, ":", "countTokens")
   )
 
+  turns <- count_tokens_turns(..., system_prompt = system_prompt)
   body <- chat_body(
     provider,
     stream = FALSE,
