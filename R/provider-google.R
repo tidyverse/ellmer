@@ -840,6 +840,47 @@ gemini_client <- function() {
   )
 }
 
+# Token counting ----------------------------------------------------------
+
+# https://ai.google.dev/api/tokens
+method(count_tokens, ProviderGoogleGemini) <- function(
+  provider,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  req <- base_request(provider)
+  req <- req_url_path_append(
+    req,
+    "models",
+    paste0(provider@model, ":", "countTokens")
+  )
+
+  body <- count_tokens_body(
+    provider,
+    ...,
+    system_prompt = system_prompt,
+    tools = tools,
+    type = type
+  )
+
+  keep <- c("contents", "tools", "systemInstruction", "generationConfig")
+  generate_content_request <- body[intersect(names(body), keep)]
+  generate_content_request$model <- paste0("models/", provider@model)
+
+  req <- req_body_json(
+    req,
+    list(
+      generateContentRequest = generate_content_request
+    )
+  )
+  req <- req_headers(req, !!!provider@extra_headers)
+
+  resp <- req_perform(req)
+  resp_body_json(resp)$totalTokens
+}
+
 # Pricing ----------------------------------------------------------------------
 
 # Models -----------------------------------------------------------------------

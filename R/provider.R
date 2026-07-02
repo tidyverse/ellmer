@@ -226,6 +226,43 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
   as_json(provider, ContentText(string), ...)
 }
 
+# Token counting -------------------------------------------------------------
+
+count_tokens <- new_generic(
+  "count_tokens",
+  "provider",
+  function(provider, ..., system_prompt = NULL, tools = list(), type = NULL) {
+    S7_dispatch()
+  }
+)
+
+method(count_tokens, Provider) <- function(
+  provider,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  cli::cli_abort(
+    "{.arg provider} doesn't support token counting.",
+    class = "not_implemented"
+  )
+}
+
+count_tokens_body <- function(
+  provider,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  turns <- compact(list(
+    if (!is.null(system_prompt)) SystemTurn(system_prompt),
+    user_turn(...)
+  ))
+  chat_body(provider, stream = FALSE, turns = turns, tools = tools, type = type)
+}
+
 # Models -------------------------------------------------------------------
 
 models_list <- new_generic("models_list", "provider", function(provider) {

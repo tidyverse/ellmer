@@ -350,6 +350,37 @@ method(value_turn, ProviderOpenAI) <- function(
   )
 }
 
+# Token counting ----------------------------------------------------------
+
+# https://developers.openai.com/api/docs/guides/token-counting
+method(count_tokens, ProviderOpenAI) <- function(
+  provider,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "responses/input_tokens")
+
+  body <- count_tokens_body(
+    provider,
+    ...,
+    system_prompt = system_prompt,
+    tools = tools,
+    type = type
+  )
+
+  keep <- c("input", "model", "tools", "text", "reasoning")
+  body <- body[intersect(names(body), keep)]
+
+  req <- req_body_json(req, body)
+  req <- req_headers(req, !!!provider@extra_headers)
+
+  resp <- req_perform(req)
+  resp_body_json(resp)$input_tokens
+}
+
 # ellmer -> OpenAI --------------------------------------------------------------
 
 method(as_json, list(ProviderOpenAI, Turn)) <- function(

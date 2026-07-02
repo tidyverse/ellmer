@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint. Currently supported for Claude, Google Gemini, and OpenAI providers (@thisisnic, #814).
 * `AssistantTurn` gains a `finish_reason` property that reports why the model stopped generating (@thisisnic, #3).
 * `batch_chat()` now supports `chat_google_gemini()` for batch processing via the Gemini Developer API (@xmarquez, #914).
 * `batch_chat()` now supports `chat_groq()` for batch processing via the Groq batch API (@xmarquez, #927).
