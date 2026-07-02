@@ -857,11 +857,10 @@ method(count_tokens, ProviderGoogleGemini) <- function(
     paste0(provider@model, ":", "countTokens")
   )
 
-  turns <- count_tokens_turns(..., system_prompt = system_prompt)
-  body <- chat_body(
+  body <- count_tokens_body(
     provider,
-    stream = FALSE,
-    turns = turns,
+    ...,
+    system_prompt = system_prompt,
     tools = tools,
     type = type
   )

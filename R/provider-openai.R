@@ -363,11 +363,10 @@ method(count_tokens, ProviderOpenAI) <- function(
   req <- base_request(provider)
   req <- req_url_path_append(req, "responses/input_tokens")
 
-  turns <- count_tokens_turns(..., system_prompt = system_prompt)
-  body <- chat_body(
+  body <- count_tokens_body(
     provider,
-    stream = FALSE,
-    turns = turns,
+    ...,
+    system_prompt = system_prompt,
     tools = tools,
     type = type
   )

@@ -249,11 +249,18 @@ method(count_tokens, Provider) <- function(
   )
 }
 
-count_tokens_turns <- function(..., system_prompt = NULL) {
-  compact(list(
+count_tokens_body <- function(
+  provider,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  turns <- compact(list(
     if (!is.null(system_prompt)) SystemTurn(system_prompt),
     user_turn(...)
   ))
+  chat_body(provider, stream = FALSE, turns = turns, tools = tools, type = type)
 }
 
 # Models -------------------------------------------------------------------
