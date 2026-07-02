@@ -373,6 +373,18 @@ method(value_turn, ProviderOpenAICompatible) <- function(
 
 # ellmer -> OpenAI --------------------------------------------------------------
 
+# Most providers use "reasoning" but a subset use "reasoning_content" (#1004)
+reasoning_content_field <- function(provider) {
+  if (
+    S7_inherits(provider, ProviderLMStudio) ||
+      S7_inherits(provider, ProviderDeepSeek)
+  ) {
+    "reasoning_content"
+  } else {
+    "reasoning"
+  }
+}
+
 method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
   provider,
   x,
@@ -429,14 +441,15 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
       }
     }
 
-    list(
-      compact(list(
-        role = "assistant",
-        reasoning_content = reasoning_content,
-        content = content,
-        tool_calls = tool_calls
-      ))
-    )
+    result <- compact(list(
+      role = "assistant",
+      content = content,
+      tool_calls = tool_calls
+    ))
+    if (!is.null(reasoning_content)) {
+      result[[reasoning_content_field(provider)]] <- reasoning_content
+    }
+    list(result)
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
