@@ -2,7 +2,7 @@
   "version": 1,
   "stage": "done",
   "batch": {
-    "id": "msgbatch_01WMP13Kun2n9SFxsUW7oUi4",
+    "id": "msgbatch_01NnXPbgjVXggkeJR2aeANYQ",
     "type": "message_batch",
     "processing_status": "ended",
     "request_counts": {
@@ -12,19 +12,19 @@
       "canceled": 0,
       "expired": 0
     },
-    "ended_at": "2026-06-28T11:20:22.405723+00:00",
-    "created_at": "2026-06-28T11:19:42.434607+00:00",
-    "expires_at": "2026-06-29T11:19:42.434607+00:00",
+    "ended_at": "2026-07-02T14:38:31.308336+00:00",
+    "created_at": "2026-07-02T14:37:36.471728+00:00",
+    "expires_at": "2026-07-03T14:37:36.471728+00:00",
     "archived_at": {},
     "cancel_initiated_at": {},
-    "results_url": "https://api.anthropic.com/v1/messages/batches/msgbatch_01WMP13Kun2n9SFxsUW7oUi4/results"
+    "results_url": "https://api.anthropic.com/v1/messages/batches/msgbatch_01NnXPbgjVXggkeJR2aeANYQ/results"
   },
   "results": [
     {
       "type": "succeeded",
       "message": {
         "model": "claude-sonnet-4-6",
-        "id": "msg_01VuNaVHmbjTYqhByGgSzkHY",
+        "id": "msg_0135vLESKjqLqkkze25gdKB3",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -54,7 +54,7 @@
       "type": "succeeded",
       "message": {
         "model": "claude-sonnet-4-6",
-        "id": "msg_01GDF2sq4g4XRFbQNgVrqvTn",
+        "id": "msg_0187ThapvsVdASZppjZdcGo7",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -84,7 +84,7 @@
       "type": "succeeded",
       "message": {
         "model": "claude-sonnet-4-6",
-        "id": "msg_01S4EU8bYr3ZBRXMEJVPaE8v",
+        "id": "msg_01BbzyjBrNd9s1QRwS1vijKT",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -114,7 +114,7 @@
       "type": "succeeded",
       "message": {
         "model": "claude-sonnet-4-6",
-        "id": "msg_01Hyn4sYKqRTq5CTERvwMPA7",
+        "id": "msg_01Ew3va3ys7tdWUt29cbeH7t",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -141,10 +141,10 @@
       }
     }
   ],
-  "started_at": 1782645582,
+  "started_at": 1783003056,
   "hash": {
-    "provider": "38239488168f12c81fc7df785c065329",
-    "prompts": "b8eafe281e3cc5113058d9722be3e295",
-    "user_turns": "d6990a1b8a9f5db0e97de86c2669de44"
+    "provider": "f9746ebbfa2cfc855eaf56dc7aefcf28",
+    "prompts": "ec58117fcf69ea639e59250f914cca8f",
+    "user_turns": "5c3ea26a1e046a3d3f5a574bf143ebd2"
   }
 }
