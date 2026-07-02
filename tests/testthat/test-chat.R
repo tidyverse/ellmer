@@ -469,4 +469,3 @@ test_that("merge_content_text() merges adjacent text, preserves non-text", {
   expect_s7_class(merged[[3]], ContentText)
   expect_equal(merged[[3]]@text, "c")
 })
-
