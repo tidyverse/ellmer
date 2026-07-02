@@ -13,9 +13,9 @@ http_interactions:
       content-encoding: gzip
       content-length: '106'
       content-type: application/json; charset=UTF-8
-      date: Thu, 02 Jul 2026 10:37:24 GMT
+      date: Thu, 02 Jul 2026 11:55:17 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=56
+      server-timing: gfet4t7; dur=40
       vary:
       - Origin
       - X-Origin
@@ -34,5 +34,5 @@ http_interactions:
             }
           ]
         }
-  recorded_at: 2026-07-02 10:37:24
+  recorded_at: 2026-07-02 11:55:17
 recorded_with: VCR-vcr/2.1.0

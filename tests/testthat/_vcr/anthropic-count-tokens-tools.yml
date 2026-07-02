@@ -9,19 +9,19 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Thu, 02 Jul 2026 10:37:24 GMT
+      date: Thu, 02 Jul 2026 11:54:50 GMT
       content-type: application/json
       content-length: '20'
-      request-id: req_011Ccd5sxC4prCjww7SupDoT
+      request-id: req_011CcdBnSZADK7cC2gCP7ucy
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       server: cloudflare
-      server-timing: x-originResponse;dur=101
+      server-timing: x-originResponse;dur=91
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
-      cf-ray: a14d03d2a84663c7-LHR
+      cf-ray: a14d75413cd0c4f1-LHR
     body:
       string: '{"input_tokens":554}'
-  recorded_at: 2026-07-02 10:37:24
+  recorded_at: 2026-07-02 11:54:50
 recorded_with: VCR-vcr/2.1.0
