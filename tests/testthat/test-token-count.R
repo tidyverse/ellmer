@@ -3,7 +3,7 @@
 test_that("default provider errors informatively", {
   provider <- test_provider("Test", "test-model")
   expect_error(
-    count_tokens(provider),
+    count_tokens(provider, "Hi"),
     "doesn't support token counting"
   )
 })
@@ -44,16 +44,6 @@ test_that("can count tokens with Anthropic tools", {
   expect_gt(result, 0)
 })
 
-test_that("can count tokens for existing conversation with Anthropic", {
-  vcr::local_cassette("anthropic-count-tokens-conversation")
-
-  chat <- chat_anthropic_test("Be terse")
-  chat$chat("What is 1+1?")
-
-  result <- chat$token_count("What about 2+2?")
-  expect_type(result, "integer")
-  expect_gt(result, 0)
-})
 
 # Google Gemini ------------------------------------------------------------
 

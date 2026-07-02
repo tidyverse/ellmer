@@ -181,30 +181,25 @@ Chat <- R6::R6Class(
       dollars(cost)
     },
 
-    #' @description Estimate the token count for the next chat request by
-    #'   calling the provider's token counting endpoint. This includes the
-    #'   system prompt, conversation history, registered tools, and any new
-    #'   input supplied via `...`.
+    #' @description Estimate the token count for new input by calling
+    #'   the provider's token counting endpoint. This counts only the
+    #'   tokens in `...`, not the conversation history or system prompt.
+    #'   Use `$get_tokens()` to see token usage for past turns.
     #'
-    #'   Currently supported for Anthropic, Google, and OpenAI providers. The token
-    #'   count is an estimate; the actual number of tokens used when
-    #'   creating a message may differ by a small amount.
+    #'   Currently supported for Anthropic, Google, and OpenAI providers.
+    #'   The token count is an estimate; the actual number of tokens
+    #'   used when creating a message may differ by a small amount.
     #'
-    #' @param ... Optional input to include in the token count, as if
-    #'   you were sending it with `$chat()`. Can be strings or images
+    #' @param ... Input to count tokens for. Can be strings or images
     #'   (see [content_image_file()] and [content_image_url()]).
     #' @param type An optional type specification for structured data
     #'   extraction, created with a [`type_()`][type_boolean] function.
     #' @return An integer giving the estimated number of input tokens.
     token_count = function(..., type = NULL) {
-      finish_tools <- private$complete_dangling_tool_requests()
-      turn <- if (dots_n(...) > 0 || length(finish_tools) > 0) {
-        user_turn(!!!finish_tools, ...)
-      }
-      turns <- c(private$.turns, if (!is.null(turn)) list(turn))
       count_tokens(
         private$provider,
-        turns = turns,
+        ...,
+        system_prompt = self$get_system_prompt(),
         tools = private$tools,
         type = type
       )
