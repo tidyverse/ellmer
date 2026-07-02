@@ -183,6 +183,16 @@ tool <- function(
   )
 }
 
+#' A tool definition
+#'
+#' @description
+#' An S7 class representing a tool that can be called by a chat model.
+#' Typically created by [tool()], not by calling this constructor directly.
+#'
+#' This class is exported so that package developers implementing custom
+#' providers can define `as_json` methods that dispatch on `ToolDef`.
+#'
+#' @export
 ToolDef <- new_class(
   "ToolDef",
   parent = class_function,

@@ -48,10 +48,44 @@ test_provider <- function(name = "", model = "", base_url = "", ...) {
 
 # Create a request------------------------------------
 
+#' Provider generics
+#'
+#' @description
+#' These generics define the interface that provider subclasses can implement.
+#' They are exported so that package developers creating custom providers
+#' can register methods for their own provider classes.
+#'
+#' * `base_request()`: Build the base [httr2::request()] for the provider,
+#'   including authentication and error handling.
+#' * `base_request_error()`: Customize error handling for the provider's
+#'   API responses.
+#' * `chat_body()`: Build the JSON body for a chat API call.
+#' * `chat_path()`: Return the URL path for the chat endpoint
+#'   (e.g., `"/chat/completions"`).
+#' * `chat_params()`: Map standardized [params()] to provider-specific
+#'   API parameter names.
+#' * `as_json()`: Convert ellmer objects ([Turn]s, [Content], [ToolDef]s,
+#'   [Type]s) to the JSON structure expected by the provider's API.
+#' * `models_list()`: List available models from the provider.
+#'
+#' @param provider A [Provider] object.
+#' @param req An [httr2::request()] object.
+#' @param stream Whether to stream the response.
+#' @param turns A list of [Turn] objects.
+#' @param tools A list of [ToolDef] objects.
+#' @param type A [Type] object for structured output, or `NULL`.
+#' @param params A list of parameters, usually from [params()].
+#' @param x An object to convert to JSON.
+#' @param ... Additional arguments passed to methods.
+#' @name provider-generics
+#' @return Varies by generic.
+#' @export
 base_request <- new_generic("base_request", "provider", function(provider) {
   S7_dispatch()
 })
 
+#' @rdname provider-generics
+#' @export
 base_request_error <- new_generic(
   "base_request_error",
   "provider",
@@ -98,6 +132,8 @@ method(chat_request, Provider) <- function(
   req
 }
 
+#' @rdname provider-generics
+#' @export
 chat_body <- new_generic(
   "chat_body",
   "provider",
@@ -112,6 +148,8 @@ chat_body <- new_generic(
   }
 )
 
+#' @rdname provider-generics
+#' @export
 chat_path <- new_generic("chat_path", "provider", function(provider) {
   S7_dispatch()
 })
@@ -127,6 +165,8 @@ method(chat_resp_stream, Provider) <- function(provider, resp) {
   resp_stream_sse(resp)
 }
 
+#' @rdname provider-generics
+#' @export
 chat_params <- new_generic(
   "chat_params",
   "provider",
@@ -204,7 +244,8 @@ method(value_finish_reason, Provider) <- function(provider, result) {
   NA_character_
 }
 
-# Convert to JSON
+#' @rdname provider-generics
+#' @export
 as_json <- new_generic(
   "as_json",
   c("provider", "x"),
@@ -228,6 +269,8 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
 
 # Models -------------------------------------------------------------------
 
+#' @rdname provider-generics
+#' @export
 models_list <- new_generic("models_list", "provider", function(provider) {
   S7_dispatch()
 })
