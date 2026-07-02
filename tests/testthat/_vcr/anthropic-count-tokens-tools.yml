@@ -3,27 +3,25 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages/count_tokens
     body:
-      string: '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+      string: '{"model":"claude-sonnet-4-6","messages":[{"role":"user","content":[{"type":"text","text":"What''s
         the current date?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"tools":[{"name":"current_date","description":"Return
         the current date","input_schema":{"type":"object","description":"","additionalProperties":false}}]}'
   response:
     status: 200
     headers:
-      date: Mon, 22 Jun 2026 16:53:37 GMT
+      date: Thu, 02 Jul 2026 10:37:24 GMT
       content-type: application/json
       content-length: '20'
-      request-id: req_011CcJeUkAdu8ynztmnNvTRP
+      request-id: req_011Ccd5sxC4prCjww7SupDoT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       server: cloudflare
-      server-timing: x-originResponse;dur=110
+      server-timing: x-originResponse;dur=101
       cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=rwigmbtjAhaYvdn0GAiZGosyPQb3ZjSldFe0rm62Mko-1782147217.206643-1.0.1.1-ivEiOyMLIij1.0SBotrJRwIzEbiYQr4s.50UvTB5WTA;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
       x-robots-tag: none
-      cf-ray: a0fcc52b8efafe8d-MAN
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: a14d03d2a84663c7-LHR
     body:
-      string: '{"input_tokens":553}'
-  recorded_at: 2026-06-22 16:53:37
+      string: '{"input_tokens":554}'
+  recorded_at: 2026-07-02 10:37:24
 recorded_with: VCR-vcr/2.1.0
