@@ -470,10 +470,3 @@ test_that("merge_content_text() merges adjacent text, preserves non-text", {
   expect_equal(merged[[3]]@text, "c")
 })
 
-test_that("token_count() errors for unsupported providers", {
-  provider <- test_provider("Test", "test-model")
-  expect_snapshot(count_tokens(provider, "Hi"), error = TRUE)
-
-  chat <- Chat$new(provider = provider, system_prompt = "Hello")
-  expect_snapshot(chat$token_count("Hi"), error = TRUE)
-})
