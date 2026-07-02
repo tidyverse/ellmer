@@ -212,12 +212,16 @@ method(base_request, ProviderAWSBedrock) <- function(provider) {
   creds <- paws_credentials(provider@profile, provider@cache)
 
   req <- request(provider@base_url)
-  req <- req_auth_aws_v4(
-    req,
-    aws_access_key_id = creds$access_key_id,
-    aws_secret_access_key = creds$secret_access_key,
-    aws_session_token = creds$session_token
-  )
+  if (nzchar(creds$access_token)) {
+    req <- req_auth_bearer_token(req, creds$access_token)
+  } else {
+    req <- req_auth_aws_v4(
+      req,
+      aws_access_key_id = creds$access_key_id,
+      aws_secret_access_key = creds$secret_access_key,
+      aws_session_token = creds$session_token
+    )
+  }
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- base_request_error(provider, req)
