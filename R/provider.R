@@ -250,12 +250,10 @@ method(count_tokens, Provider) <- function(
 }
 
 count_tokens_turns <- function(..., system_prompt = NULL) {
-  turn <- user_turn(...)
-  turns <- list(turn)
-  if (!is.null(system_prompt)) {
-    turns <- c(list(SystemTurn(system_prompt)), turns)
-  }
-  turns
+  compact(list(
+    if (!is.null(system_prompt)) SystemTurn(system_prompt),
+    user_turn(...)
+  ))
 }
 
 # Models -------------------------------------------------------------------
