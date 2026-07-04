@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `Chat` gains `$on_turn_start()`, a callback that fires before each model request in the tool loop, so you can inspect or rewrite the conversation (e.g. compact turns) between tool rounds within a single `$chat()` call (#1051).
+
 * `AssistantTurn` gains a `finish_reason` property that reports why the model stopped generating (@thisisnic, #3).
 * `batch_chat()` now supports `chat_google_gemini()` for batch processing via the Gemini Developer API (@xmarquez, #914).
 * `batch_chat()` now supports `chat_groq()` for batch processing via the Groq batch API (@xmarquez, #927).

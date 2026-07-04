@@ -207,6 +207,13 @@ test_that("chat callbacks for tool requests/results", {
   last_request <- NULL
   cb_count_request <- 0
   cb_count_result <- 0
+  cb_count_turn_start <- 0
+
+  # Fires before each model request in the tool loop (does not emit, so the
+  # snapshot below is unaffected).
+  chat$on_turn_start(function() {
+    cb_count_turn_start <<- cb_count_turn_start + 1
+  })
 
   chat$on_tool_request(function(request) {
     cb_count_request <<- cb_count_request + 1
@@ -231,6 +238,9 @@ test_that("chat callbacks for tool requests/results", {
   )
   expect_equal(cb_count_request, 2L)
   expect_equal(cb_count_result, 2L)
+  # One turn-start per model request: initial request + the follow-up after the
+  # tool results are fed back.
+  expect_equal(cb_count_turn_start, 2L)
 
   expect_snapshot(error = TRUE, {
     chat$on_tool_request(function(data) NULL)
