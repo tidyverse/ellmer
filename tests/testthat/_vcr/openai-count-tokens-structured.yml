@@ -1,0 +1,41 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses/input_tokens
+    body:
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
+        terse."}]},{"role":"user","content":[{"type":"input_text","text":"Apples are
+        tasty. By Hadley Wickham."}]}],"model":"gpt-4.1-nano","text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"title":{"type":"string","description":"Content
+        title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false},"strict":true}}}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: a15eb5ebcfa4b0e0-MAN
+      content-encoding: br
+      content-type: application/json
+      date: Sat, 04 Jul 2026 14:09:57 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '78'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=nZfzWmW7OEJFvKhspwvUOawrzBrcFFyTcbpv4s3n9pI-1783174197.0905929-1.0.1.1-6RNZEXbXrXxVOlTtOPkR6zaEGTuvN75uTHdnfiHaFd0SE_.Dt8n8xKSKE3vAp8eS79Wt3it2cXNeP910NLscxrpKCbiL.w.vTugCJ3ULUbveELOkNpAUCRkJ3jZknIqG;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat,
+        04 Jul 2026 14:39:57 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-request-id: abc86aac-aef4-4b32-9591-82a098d9d136
+    body:
+      string: |-
+        {
+          "object": "response.input_tokens",
+          "input_tokens": 69
+        }
+  recorded_at: 2026-07-04 14:09:57
+recorded_with: VCR-vcr/2.1.0

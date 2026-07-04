@@ -209,3 +209,16 @@ test_token_count_tools <- function(chat_fun) {
   expect_type(result, "integer")
   expect_gt(result, 0)
 }
+
+test_token_count_structured <- function(chat_fun) {
+  chat <- chat_fun()
+  result <- chat$token_count(
+    "Apples are tasty. By Hadley Wickham.",
+    type = type_object(
+      title = type_string("Content title"),
+      author = type_string("Name of the author")
+    )
+  )
+  expect_type(result, "integer")
+  expect_gt(result, 0)
+}

@@ -234,3 +234,8 @@ test_that("can count tokens with tools", {
   vcr::local_cassette("openai-count-tokens-tools")
   test_token_count_tools(chat_openai_test)
 })
+
+test_that("can count tokens with structured output", {
+  vcr::local_cassette("openai-count-tokens-structured")
+  test_token_count_structured(chat_openai_test)
+})
