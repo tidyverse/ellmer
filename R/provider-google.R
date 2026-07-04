@@ -869,7 +869,6 @@ method(count_tokens, ProviderGoogleGemini) <- function(
   token_body <- body[intersect(names(body), keep)]
 
   if (identical(provider@name, "Google/Gemini")) {
-    # Gemini Developer API uses a generateContentRequest wrapper
     token_body$model <- paste0("models/", provider@model)
     token_body <- list(generateContentRequest = token_body)
   }
