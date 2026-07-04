@@ -244,7 +244,7 @@ method(count_tokens, Provider) <- function(
   type = NULL
 ) {
   cli::cli_abort(
-    "{.arg provider} doesn't support token counting.",
+    "{provider@name} doesn't support token counting.",
     class = "not_implemented"
   )
 }
