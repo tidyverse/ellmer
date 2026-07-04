@@ -493,7 +493,15 @@ method(count_tokens, ProviderAnthropic) <- function(
     type = type
   )
 
-  keep <- c("model", "system", "messages", "tools", "tool_choice", "thinking")
+  keep <- c(
+    "model",
+    "system",
+    "messages",
+    "tools",
+    "tool_choice",
+    "thinking",
+    "output_config"
+  )
   body <- body[intersect(names(body), keep)]
 
   req <- req_body_json(req, body)
