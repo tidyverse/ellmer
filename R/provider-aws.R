@@ -39,13 +39,6 @@ NULL
 #' to the cache, which is priced at a premium over regular input tokens.
 #' Cache read savings are reported correctly.
 #'
-#'
-#' ## Token counting
-#'
-#' Note that `chat$token_count()` includes internal Converse API
-#' overhead and will report higher counts than the input tokens shown
-#' in [token_usage()].
-#'
 #' @param profile AWS profile to use.
 #' @param cache How long to cache inputs? The default, `"auto"`, enables
 #'   caching with a 5-minute TTL for models known to support it (Anthropic
@@ -265,36 +258,6 @@ method(chat_request, ProviderAWSBedrock) <- function(
     paste0("model/", curl::curl_escape(provider@model), "/", suffix)
   )
 
-  body <- chat_body(
-    provider,
-    stream = stream,
-    turns = turns,
-    tools = tools,
-    type = type
-  )
-
-  # Merge params into inferenceConfig, giving precedence to manual api_args
-  params <- chat_params(provider, provider@params)
-
-  extra_args <- provider@extra_args
-  extra_args$inferenceConfig <- modify_list(params, extra_args$inferenceConfig)
-
-  # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
-  body <- compact(list2(!!!body, !!!extra_args))
-
-  req <- req_body_json(req, body)
-  req <- req_headers(req, !!!provider@extra_headers)
-
-  req
-}
-
-method(chat_body, ProviderAWSBedrock) <- function(
-  provider,
-  stream = TRUE,
-  turns = list(),
-  tools = list(),
-  type = NULL
-) {
   if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
     system <- c(
       list(list(text = turns[[1]]@text)),
@@ -329,7 +292,24 @@ method(chat_body, ProviderAWSBedrock) <- function(
     toolConfig <- NULL
   }
 
-  compact(list(messages = messages, system = system, toolConfig = toolConfig))
+  # Merge params into inferenceConfig, giving precedence to manual api_args
+  params <- chat_params(provider, provider@params)
+
+  extra_args <- provider@extra_args
+  extra_args$inferenceConfig <- modify_list(params, extra_args$inferenceConfig)
+
+  # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
+  body <- compact(list2(
+    messages = messages,
+    system = system,
+    toolConfig = toolConfig,
+    !!!extra_args
+  ))
+
+  req <- req_body_json(req, body)
+  req <- req_headers(req, !!!provider@extra_headers)
+
+  req
 }
 
 method(chat_resp_stream, ProviderAWSBedrock) <- function(provider, resp) {
@@ -496,45 +476,6 @@ method(value_turn, ProviderAWSBedrock) <- function(
     cost = cost,
     finish_reason = value_finish_reason(provider, result)
   )
-}
-
-# Token counting ---------------------------------------------------------------
-
-# https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_CountTokens.html
-method(count_tokens, ProviderAWSBedrock) <- function(
-  provider,
-  ...,
-  system_prompt = NULL,
-  tools = list(),
-  type = NULL
-) {
-  req <- base_request(provider)
-  req <- req_url_path_append(
-    req,
-    paste0(
-      "model/",
-      curl::curl_escape(bedrock_base_model_id(provider@model)),
-      "/count-tokens"
-    )
-  )
-
-  provider@cache_point <- "none"
-  body <- count_tokens_body(
-    provider,
-    ...,
-    system_prompt = system_prompt,
-    tools = tools,
-    type = type
-  )
-
-  keep <- c("messages", "system", "toolConfig")
-  body <- list(input = list(converse = body[intersect(names(body), keep)]))
-
-  req <- req_body_json(req, body)
-  req <- req_headers(req, !!!provider@extra_headers)
-
-  resp <- req_perform(req)
-  resp_body_json(resp)$inputTokens
 }
 
 # ellmer -> Bedrock -------------------------------------------------------------
@@ -750,15 +691,3 @@ bedrock_document_name <- local({
     paste0("document-", i)
   }
 })
-
-bedrock_base_model_id <- function(model) {
-  # Inference profiles have 2+ dots (us.anthropic.claude-sonnet-4-6),
-  # bare model IDs have 1 (anthropic.claude-sonnet-4-6)
-  n_dots <- nchar(model) - nchar(gsub(".", "", model, fixed = TRUE))
-  # ARNs contain / or : so pass through unchanged
-  if (n_dots >= 2 && !grepl("[/:]", model)) {
-    sub("^[^.]+\\.", "", model)
-  } else {
-    model
-  }
-}
