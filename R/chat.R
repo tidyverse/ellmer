@@ -56,6 +56,7 @@ Chat <- R6::R6Class(
       private$echo <- echo
       private$callback_on_tool_request <- CallbackManager$new(args = "request")
       private$callback_on_tool_result <- CallbackManager$new(args = "result")
+      private$callback_on_turn_start <- CallbackManager$new()
       self$set_system_prompt(system_prompt)
     },
 
@@ -565,6 +566,24 @@ Chat <- R6::R6Class(
     #' @return A function that can be called to remove the callback.
     on_tool_result = function(callback) {
       private$callback_on_tool_result$add(callback)
+    },
+
+    #' @description Register a callback that fires at the start of each
+    #'   iteration of the tool loop, i.e. immediately before each request is
+    #'   sent to the model (including the first). Use it to inspect or rewrite
+    #'   the conversation *between* tool rounds within a single `$chat()` /
+    #'   `$chat_async()` call -- for example, to compact or trim the turns
+    #'   (`$get_turns()` / `$set_turns()`) as the conversation approaches the
+    #'   model's context window.
+    #'
+    #' @param callback A function called with no arguments. To modify the
+    #'   conversation, capture the `Chat` object and call its methods (e.g.
+    #'   `chat$set_turns(...)`). With `$chat_async()` / `$stream_async()` the
+    #'   callback may return a promise.
+    #'
+    #' @return A function that can be called to remove the callback.
+    on_turn_start = function(callback) {
+      private$callback_on_turn_start$add(callback)
     }
   ),
   private = list(
@@ -577,6 +596,7 @@ Chat <- R6::R6Class(
     tools = list(),
     callback_on_tool_request = NULL,
     callback_on_tool_result = NULL,
+    callback_on_turn_start = NULL,
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
@@ -600,6 +620,7 @@ Chat <- R6::R6Class(
       )
 
       while (!is.null(user_turn)) {
+        private$callback_on_turn_start$invoke()
         assistant_chunks <- private$submit_turns(
           user_turn,
           stream = stream,
@@ -675,6 +696,7 @@ Chat <- R6::R6Class(
       )
 
       while (!is.null(user_turn)) {
+        await(private$callback_on_turn_start$invoke_async())
         assistant_chunks <- private$submit_turns_async(
           user_turn,
           stream = stream,
