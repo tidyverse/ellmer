@@ -446,9 +446,7 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
       content = content,
       tool_calls = tool_calls
     ))
-    if (!is.null(reasoning_content)) {
-      result[[reasoning_content_field(provider)]] <- reasoning_content
-    }
+    result[[reasoning_content_field(provider)]] <- reasoning_content
     list(result)
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
