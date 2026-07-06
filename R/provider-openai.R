@@ -82,14 +82,21 @@ chat_openai <- function(
   provider <- ProviderOpenAI(
     name = "OpenAI",
     base_url = base_url,
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
     credentials = credentials,
     service_tier = service_tier
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 #' @rdname chat_openai
@@ -108,7 +115,6 @@ models_openai <- function(
 
   provider <- ProviderOpenAICompatible(
     name = "OpenAI",
-    model = "",
     base_url = base_url,
     credentials = credentials
   )
@@ -153,6 +159,7 @@ method(chat_path, ProviderOpenAI) <- function(provider) {
 # https://platform.openai.com/docs/api-reference/responses
 method(chat_body, ProviderOpenAI) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -176,7 +183,7 @@ method(chat_body, ProviderOpenAI) <- function(
   }
 
   # https://platform.openai.com/docs/api-reference/responses/create#responses-create-include
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model)
 
   if (has_name(params, "reasoning_effort")) {
     reasoning <- list(
@@ -190,14 +197,14 @@ method(chat_body, ProviderOpenAI) <- function(
 
   include <- c(
     if (isTRUE(params$log_probs)) "message.output_text.logprobs",
-    if (is_openai_reasoning(provider@model)) "reasoning.encrypted_content"
+    if (is_openai_reasoning(model@name)) "reasoning.encrypted_content"
   )
   params$log_probs <- NULL
 
   compact(list2(
     input = input,
     include = as.list(include),
-    model = provider@model,
+    model = model@name,
     !!!params,
     stream = stream,
     tools = tools,
@@ -209,9 +216,9 @@ method(chat_body, ProviderOpenAI) <- function(
 }
 
 
-method(chat_params, ProviderOpenAI) <- function(provider, params) {
+method(chat_params, ProviderOpenAI) <- function(provider, model) {
   standardise_params(
-    params,
+    model@params,
     c(
       temperature = "temperature",
       top_p = "top_p",
@@ -294,6 +301,7 @@ method(value_finish_reason, ProviderOpenAI) <- function(provider, result) {
 
 method(value_turn, ProviderOpenAI) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
@@ -340,7 +348,7 @@ method(value_turn, ProviderOpenAI) <- function(
 
   tokens <- value_tokens(provider, result)
   variant <- result$service_tier %||% "default"
-  cost <- get_token_cost(provider, tokens, variant = variant)
+  cost <- get_token_cost(provider, model, tokens, variant = variant)
   AssistantTurn(
     contents = contents,
     json = result,
@@ -478,6 +486,7 @@ method(has_batch_support, ProviderOpenAI) <- function(provider) {
 # https://platform.openai.com/docs/api-reference/batch
 method(batch_submit, ProviderOpenAI) <- function(
   provider,
+  model,
   conversations,
   type = NULL
 ) {
@@ -488,6 +497,7 @@ method(batch_submit, ProviderOpenAI) <- function(
   requests <- map(seq_along(conversations), function(i) {
     body <- chat_body(
       provider,
+      model,
       stream = FALSE,
       turns = conversations[[i]],
       type = type
@@ -602,11 +612,12 @@ extract_custom_id <- function(json_string) {
 
 method(batch_result_turn, ProviderOpenAI) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
   if (result$status_code == 200) {
-    value_turn(provider, result$body, has_type = has_type)
+    value_turn(provider, model, result$body, has_type = has_type)
   } else {
     NULL
   }

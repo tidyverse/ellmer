@@ -97,17 +97,23 @@ chat_ollama <- function(
 
   echo <- check_echo(echo)
 
+  params <- params %||% params()
+
   provider <- ProviderOllama(
     name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
     model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
+  model <- Model(name = model, params = params, extra_args = api_args)
 
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderOllama <- new_class(
@@ -127,10 +133,10 @@ ollama_credentials <- function(credentials = NULL, api_key = NULL) {
   )
 }
 
-method(chat_params, ProviderOllama) <- function(provider, params) {
+method(chat_params, ProviderOllama) <- function(provider, model) {
   # https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-chat-completion
   standardise_params(
-    params,
+    model@params,
     c(
       frequency_penalty = "frequency_penalty",
       presence_penalty = "presence_penalty",
