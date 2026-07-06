@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* New `Model` class separates model configuration (name, parameters, extra arguments) from the `Provider` class, which now only captures API endpoint details. This is a breaking change for anyone who directly accesses `provider@model`, `provider@params`, or `provider@extra_args`; use the `Model` object instead (@thisisnic, #499).
+
 * `AssistantTurn` gains a `finish_reason` property that reports why the model stopped generating (@thisisnic, #3).
 * `batch_chat()` now supports `chat_google_gemini()` for batch processing via the Gemini Developer API (@xmarquez, #914).
 * `batch_chat()` now supports `chat_groq()` for batch processing via the Groq batch API (@xmarquez, #927).

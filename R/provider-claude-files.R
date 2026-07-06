@@ -134,10 +134,7 @@ request_anthropic_file <- function(url, beta_headers, credentials) {
 
   provider <- ProviderAnthropic(
     name = "Anthropic",
-    model = "",
     base_url = url,
-    params = list(),
-    extra_args = list(),
     credentials = credentials,
     beta_headers = beta_headers,
     cache = "none"

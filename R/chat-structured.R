@@ -23,11 +23,11 @@ extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
 }
 
 # Tool-based structured output can't stream (#977)
-uses_tool_structured_output <- function(provider, type) {
+uses_tool_structured_output <- function(provider, model, type) {
   if (S7_inherits(provider, ProviderAWSBedrock)) {
     TRUE
   } else if (S7_inherits(provider, ProviderAnthropic)) {
-    !has_claude_structured_output(provider@model)
+    !has_claude_structured_output(model@name)
   } else {
     FALSE
   }

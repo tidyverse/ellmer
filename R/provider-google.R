@@ -67,12 +67,20 @@ chat_google_gemini <- function(
     name = "Google/Gemini",
     base_url = base_url,
     model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
     credentials = credentials
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 chat_google_gemini_test <- function(
@@ -114,13 +122,21 @@ chat_google_vertex <- function(
     name = "Google/Vertex",
     base_url = vertex_url(location, project_id),
     model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
     credentials = credentials,
     project_id = project_id
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 # https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
@@ -161,6 +177,7 @@ method(base_request, ProviderGoogleGemini) <- function(provider) {
 
 method(chat_request, ProviderGoogleGemini) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -187,12 +204,13 @@ method(chat_request, ProviderGoogleGemini) <- function(
 
   body <- chat_body(
     provider = provider,
+    model = model,
     stream = stream,
     turns = turns,
     tools = tools,
     type = type
   )
-  body <- modify_list(body, provider@extra_args)
+  body <- modify_list(body, model@extra_args)
 
   req <- req_body_json(req, body)
   req <- req_headers(req, !!!provider@extra_headers)
@@ -201,6 +219,7 @@ method(chat_request, ProviderGoogleGemini) <- function(
 
 method(chat_body, ProviderGoogleGemini) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -212,7 +231,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
     system <- list(parts = list(text = ""))
   }
 
-  generation_config <- chat_params(provider, provider@params)
+  generation_config <- chat_params(provider, model)
   if (!is.null(type)) {
     generation_config$response_mime_type <- "application/json"
     generation_config$response_schema <- as_json(provider, type)
@@ -254,9 +273,9 @@ method(chat_body, ProviderGoogleGemini) <- function(
   ))
 }
 
-method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
+method(chat_params, ProviderGoogleGemini) <- function(provider, model) {
   standardise_params(
-    params,
+    model@params,
     c(
       temperature = "temperature",
       topP = "top_p",
@@ -356,6 +375,7 @@ method(value_finish_reason, ProviderGoogleGemini) <- function(
 
 method(value_turn, ProviderGoogleGemini) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
@@ -394,7 +414,7 @@ method(value_turn, ProviderGoogleGemini) <- function(
   })
   contents <- compact(contents)
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
+  cost <- get_token_cost(provider, model, tokens)
 
   AssistantTurn(
     contents,
@@ -953,6 +973,7 @@ method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
 
 method(batch_submit, ProviderGoogleGemini) <- function(
   provider,
+  model,
   conversations,
   type = NULL
 ) {
@@ -961,6 +982,7 @@ method(batch_submit, ProviderGoogleGemini) <- function(
   requests <- map(seq_along(conversations), function(i) {
     body <- chat_body(
       provider,
+      model,
       stream = FALSE,
       turns = conversations[[i]],
       type = type
@@ -1090,11 +1112,12 @@ method(batch_retrieve, ProviderGoogleGemini) <- function(provider, batch) {
 
 method(batch_result_turn, ProviderGoogleGemini) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
   if (!is.null(result) && result$status_code == 200L && !is.null(result$body)) {
-    value_turn(provider, result$body, has_type = has_type)
+    value_turn(provider, model, result$body, has_type = has_type)
   } else {
     NULL
   }

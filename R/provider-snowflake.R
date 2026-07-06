@@ -63,13 +63,16 @@ chat_snowflake <- function(
     base_url = snowflake_url(account),
     account = account,
     credentials = credentials,
-    model = model,
-    params = params,
-    extra_args = api_args,
     extra_headers = api_headers
   )
+  model <- Model(name = model, params = params, extra_args = api_args)
 
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderSnowflakeCortex <- new_class(
@@ -102,6 +105,7 @@ method(chat_path, ProviderSnowflakeCortex) <- function(provider) {
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#api-reference
 method(chat_body, ProviderSnowflakeCortex) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -117,11 +121,11 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
     response_format <- NULL
   }
 
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model)
   compact(
     list2(
       messages = messages,
-      model = provider@model,
+      model = model@name,
       !!!params,
       stream = stream,
       tools = tools,
@@ -149,9 +153,9 @@ method(as_json, list(ProviderSnowflakeCortex, TypeObject)) <- function(
 }
 
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#optional-json-arguments
-method(chat_params, ProviderSnowflakeCortex) <- function(provider, params) {
+method(chat_params, ProviderSnowflakeCortex) <- function(provider, model) {
   standardise_params(
-    params,
+    model@params,
     c(
       temperature = "temperature",
       top_p = "top_p",
@@ -264,6 +268,7 @@ method(value_tokens, ProviderSnowflakeCortex) <- function(provider, json) {
 
 method(value_turn, ProviderSnowflakeCortex) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
@@ -300,7 +305,7 @@ method(value_turn, ProviderSnowflakeCortex) <- function(
     })
   )
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
+  cost <- get_token_cost(provider, model, tokens)
   AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
 }
 

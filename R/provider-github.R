@@ -55,13 +55,16 @@ chat_github <- function(
   provider <- ProviderGitHub(
     name = "gitHub",
     base_url = base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     extra_headers = api_headers,
     credentials = credentials
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 github_key <- function() {
@@ -92,7 +95,6 @@ models_github <- function(
 
   provider <- ProviderGitHub(
     name = "github",
-    model = "",
     credentials = credentials,
     base_url = base_url
   )

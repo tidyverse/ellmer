@@ -98,17 +98,22 @@ chat_aws_bedrock <- function(
   echo <- check_echo(echo)
 
   params <- params %||% params()
+  model <- set_default(model, "us.anthropic.claude-sonnet-4-6")
 
   provider <- provider_aws_bedrock(
     base_url = base_url,
     model = model,
     profile = profile,
     cache_point = cache,
-    params = params,
-    extra_args = api_args,
     extra_headers = api_headers
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 
@@ -121,7 +126,7 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
   provider <- provider_aws_bedrock(
     base_url = base_url,
     model = "",
-    profile = profile,
+    profile = profile
   )
   models_list(provider)
 }
@@ -143,8 +148,6 @@ provider_aws_bedrock <- function(
   model = "",
   profile = NULL,
   cache_point = "none",
-  params = list(),
-  extra_args = list(),
   extra_headers = character()
 ) {
   cache <- aws_creds_cache(profile)
@@ -153,8 +156,6 @@ provider_aws_bedrock <- function(
   if (is.function(base_url)) {
     base_url <- base_url(credentials$region)
   }
-
-  model <- set_default(model, "us.anthropic.claude-sonnet-4-6")
 
   cache_point <- as_bedrock_cache_point(cache_point, model)
 
@@ -166,8 +167,6 @@ provider_aws_bedrock <- function(
     region = credentials$region,
     cache = cache,
     cache_point = cache_point,
-    params = params,
-    extra_args = extra_args,
     extra_headers = extra_headers
   )
 }
@@ -176,6 +175,7 @@ ProviderAWSBedrock <- new_class(
   "ProviderAWSBedrock",
   parent = Provider,
   properties = list(
+    model = prop_string(),
     profile = prop_string(allow_null = TRUE),
     region = prop_string(),
     cache = class_list,
@@ -231,10 +231,10 @@ method(base_request_error, ProviderAWSBedrock) <- function(provider, req) {
   })
 }
 
-method(chat_params, ProviderAWSBedrock) <- function(provider, params) {
+method(chat_params, ProviderAWSBedrock) <- function(provider, model) {
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InferenceConfiguration.html
   standardise_params(
-    params,
+    model@params,
     c(
       temperature = "temperature",
       topP = "top_p",
@@ -246,6 +246,7 @@ method(chat_params, ProviderAWSBedrock) <- function(provider, params) {
 
 method(chat_request, ProviderAWSBedrock) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -293,9 +294,9 @@ method(chat_request, ProviderAWSBedrock) <- function(
   }
 
   # Merge params into inferenceConfig, giving precedence to manual api_args
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model)
 
-  extra_args <- provider@extra_args
+  extra_args <- model@extra_args
   extra_args$inferenceConfig <- modify_list(params, extra_args$inferenceConfig)
 
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
@@ -435,6 +436,7 @@ method(value_finish_reason, ProviderAWSBedrock) <- function(provider, result) {
 
 method(value_turn, ProviderAWSBedrock) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
@@ -467,7 +469,7 @@ method(value_turn, ProviderAWSBedrock) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
+  cost <- get_token_cost(provider, model, tokens)
 
   AssistantTurn(
     contents,

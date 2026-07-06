@@ -48,13 +48,16 @@ chat_mistral <- function(
   provider <- ProviderMistral(
     name = "Mistral",
     base_url = mistral_base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 mistral_base_url <- "https://api.mistral.ai/v1/"
@@ -98,6 +101,7 @@ method(base_request, ProviderMistral) <- function(provider) {
 
 method(chat_body, ProviderMistral) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -105,6 +109,7 @@ method(chat_body, ProviderMistral) <- function(
 ) {
   body <- chat_body(
     super(provider, ProviderOpenAICompatible),
+    model = model,
     stream = stream,
     turns = turns,
     tools = tools,
@@ -117,9 +122,9 @@ method(chat_body, ProviderMistral) <- function(
   body
 }
 
-method(chat_params, ProviderMistral) <- function(provider, params) {
+method(chat_params, ProviderMistral) <- function(provider, model) {
   standardise_params(
-    params,
+    model@params,
     c(
       temperature = "temperature",
       top_p = "top_p",
@@ -144,7 +149,6 @@ mistral_key <- function() {
 models_mistral <- function(api_key = mistral_key()) {
   provider <- ProviderMistral(
     name = "Mistral",
-    model = "",
     base_url = mistral_base_url,
     credentials = function() api_key
   )

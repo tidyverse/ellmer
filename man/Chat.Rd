@@ -32,6 +32,7 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-add_turn}{\code{Chat$add_turn()}}
     \item \href{#method-Chat-get_system_prompt}{\code{Chat$get_system_prompt()}}
     \item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
+    \item \href{#method-Chat-get_model_obj}{\code{Chat$get_model_obj()}}
     \item \href{#method-Chat-set_model}{\code{Chat$set_model()}}
     \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
     \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
@@ -59,13 +60,14 @@ chat$chat("Tell me a funny joke")
 \subsection{\code{Chat$new()}}{
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$new(provider, system_prompt = NULL, echo = "none")}
+    \preformatted{Chat$new(provider, model, system_prompt = NULL, echo = "none")}
     \if{html}{\out{</div>}}
   }
   \subsection{Arguments}{
     \if{html}{\out{<div class="arguments">}}
     \describe{
       \item{\code{provider}}{A provider object.}
+      \item{\code{model}}{A \link{Model} object.}
       \item{\code{system_prompt}}{System prompt to start the conversation with.}
       \item{\code{echo}}{One of the following options:
 \itemize{
@@ -164,6 +166,18 @@ session counter?}
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$get_model()}
+    \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_model_obj"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_model_obj}{}}}
+\subsection{\code{Chat$get_model_obj()}}{
+  Retrieve the Model object. For expert use only.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$get_model_obj()}
     \if{html}{\out{</div>}}
   }
 }
