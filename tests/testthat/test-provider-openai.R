@@ -81,8 +81,8 @@ test_that("can use pdfs", {
 test_that("can match prices for some common models", {
   provider <- chat_openai_test()$get_provider()
 
-  expect_true(has_cost(provider, "gpt-4.1"))
-  expect_true(has_cost(provider, "gpt-4.1-2025-04-14"))
+  expect_true(has_cost(provider@name, "gpt-4.1"))
+  expect_true(has_cost(provider@name, "gpt-4.1-2025-04-14"))
 })
 
 # Custom tests -----------------------------------------------------------------
@@ -115,11 +115,11 @@ test_that("service tier affects pricing", {
 
   last_turn <- chat$last_turn()
   tokens <- as.list(last_turn@tokens)
-  priority_cost <- get_token_cost(chat$get_provider(), tokens, "priority")
+  priority_cost <- get_token_cost(chat$get_provider(), chat$get_model_obj(), tokens, "priority")
   expect_equal(last_turn@cost, priority_cost)
 
   # Confirm we have pricing for the priority tier
-  default_cost <- get_token_cost(chat$get_provider(), tokens)
+  default_cost <- get_token_cost(chat$get_provider(), chat$get_model_obj(), tokens)
   expect_gt(last_turn@cost, default_cost)
 })
 
@@ -130,10 +130,12 @@ test_that("batch retrieve succeeds even if JSON is mangled", {
       writeLines('{"custom_id": "123", ', path)
     }
   )
-  provider <- chat_openai_test()$get_provider()
+  chat <- chat_openai_test()
+  provider <- chat$get_provider()
+  model <- chat$get_model_obj()
   out <- batch_retrieve(provider, list(output_file_id = "123"))
   expect_equal(out, list(list(status_code = 500)))
-  expect_equal(batch_result_turn(provider, out[[1]]), NULL)
+  expect_equal(batch_result_turn(provider, model, out[[1]]), NULL)
 })
 
 test_that("can extract dummy response from malformed JSON", {
@@ -154,7 +156,7 @@ test_that("value_turn handles NULL service_tier gracefully", {
     service_tier = NULL
   )
 
-  expect_no_error(value_turn(provider, result))
+  expect_no_error(value_turn(provider, test_model(), result))
 })
 
 test_that("value_turn() handles web_search_call action types", {
@@ -193,6 +195,7 @@ test_that("value_turn() handles web_search_call action types", {
   # search action with query
   turn <- value_turn(
     provider,
+    test_model(),
     make_result(list(type = "search", query = "test query"))
   )
   expect_equal(turn@contents[[1]]@query, "test query")
@@ -200,6 +203,7 @@ test_that("value_turn() handles web_search_call action types", {
   # open_page action with url
   turn <- value_turn(
     provider,
+    test_model(),
     make_result(list(type = "open_page", url = "https://example.com"))
   )
   expect_equal(turn@contents[[1]]@query, "https://example.com")
@@ -207,17 +211,19 @@ test_that("value_turn() handles web_search_call action types", {
   # find_in_page action with queries
   turn <- value_turn(
     provider,
+    test_model(),
     make_result(list(type = "find_in_page", queries = list("find this")))
   )
   expect_equal(turn@contents[[1]]@query, "find this")
 
   # search action without query
-  turn <- value_turn(provider, make_result(list(type = "search")))
+  turn <- value_turn(provider, test_model(), make_result(list(type = "search")))
   expect_equal(turn@contents[[1]]@query, "web search")
 
   # find_in_page action with empty queries falls back
   turn <- value_turn(
     provider,
+    test_model(),
     make_result(list(type = "find_in_page", queries = list()))
   )
   expect_equal(turn@contents[[1]]@query, "web search")

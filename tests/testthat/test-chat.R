@@ -269,7 +269,7 @@ test_that("api_headers parameter works correctly", {
   chat <- chat_openai_test(api_headers = c("X-Test" = "value"))
   expect_equal(chat$get_provider()@extra_headers, c("X-Test" = "value"))
 
-  req <- chat_request(chat$get_provider())
+  req <- chat_request(chat$get_provider(), chat$get_model_obj())
   expect_equal(req_get_headers(req), list("X-Test" = "value"))
 })
 

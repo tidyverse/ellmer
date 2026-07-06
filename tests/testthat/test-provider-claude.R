@@ -85,7 +85,7 @@ test_that("can use pdfs", {
 
 test_that("can set beta headers", {
   chat <- chat_anthropic_test(beta_headers = c("a", "b"))
-  req <- chat_request(chat$get_provider())
+  req <- chat_request(chat$get_provider(), chat$get_model_obj())
   headers <- req_get_headers(req)
   expect_equal(headers$`anthropic-beta`, "a,b")
 })
@@ -104,7 +104,7 @@ test_that("continues to work after whitespace only outputs (#376)", {
 test_that("can match prices for some common models", {
   provider <- chat_anthropic_test()$get_provider()
 
-  expect_true(has_cost(provider, "claude-sonnet-4-20250514"))
+  expect_true(has_cost(provider@name, "claude-sonnet-4-20250514"))
 })
 
 test_that("removes empty final chat messages", {
@@ -148,9 +148,6 @@ test_that("value_turn() parses server_tool_use input from JSON string", {
   provider <- ProviderAnthropic(
     name = "Anthropic",
     base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
     extra_headers = character(),
     credentials = NULL,
     beta_headers = character(),
@@ -175,7 +172,7 @@ test_that("value_turn() parses server_tool_use input from JSON string", {
     )
   )
 
-  turn <- value_turn(provider, result)
+  turn <- value_turn(provider, test_model("claude-sonnet-4-20250514"), result)
   search_content <- turn@contents[[1]]
   expect_s7_class(search_content, ContentToolRequestSearch)
   expect_equal(search_content@query, "test search")
@@ -185,9 +182,6 @@ test_that("value_turn() parses server_tool_use web_fetch input from JSON string"
   provider <- ProviderAnthropic(
     name = "Anthropic",
     base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
     extra_headers = character(),
     credentials = NULL,
     beta_headers = character(),
@@ -212,7 +206,7 @@ test_that("value_turn() parses server_tool_use web_fetch input from JSON string"
     )
   )
 
-  turn <- value_turn(provider, result)
+  turn <- value_turn(provider, test_model("claude-sonnet-4-20250514"), result)
   fetch_content <- turn@contents[[1]]
   expect_s7_class(fetch_content, ContentToolRequestFetch)
   expect_equal(fetch_content@url, "https://example.com")
@@ -222,9 +216,6 @@ test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens"
   provider <- ProviderAnthropic(
     name = "Anthropic",
     base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
     extra_headers = character(),
     credentials = NULL,
     beta_headers = character(),
@@ -242,7 +233,7 @@ test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens"
     )
   )
 
-  turn <- value_turn(provider, result)
+  turn <- value_turn(provider, test_model("claude-sonnet-4-20250514"), result)
 
   # tokens slot reports raw integer counts (no 1.25x weighting on input).
   expect_equal(
@@ -260,9 +251,6 @@ test_that("stream_merge_chunks() handles citations_delta", {
   provider <- ProviderAnthropic(
     name = "Anthropic",
     base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-20250514",
-    params = list(),
-    extra_args = list(),
     extra_headers = character(),
     credentials = NULL,
     beta_headers = character(),
