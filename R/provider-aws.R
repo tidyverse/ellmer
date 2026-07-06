@@ -157,7 +157,8 @@ provider_aws_bedrock <- function(
     base_url <- base_url(credentials$region)
   }
 
-  cache_point <- as_bedrock_cache_point(cache_point, model)
+  cache_policy <- cache_point
+  cache_point <- as_bedrock_cache_point(cache_policy, model)
 
   ProviderAWSBedrock(
     name = "AWS/Bedrock",
@@ -166,6 +167,7 @@ provider_aws_bedrock <- function(
     profile = profile,
     region = credentials$region,
     cache = cache,
+    cache_policy = cache_policy,
     cache_point = cache_point,
     extra_headers = extra_headers
   )
@@ -179,6 +181,7 @@ ProviderAWSBedrock <- new_class(
     profile = prop_string(allow_null = TRUE),
     region = prop_string(),
     cache = class_list,
+    cache_policy = prop_string(),
     cache_point = prop_string()
   )
 )
