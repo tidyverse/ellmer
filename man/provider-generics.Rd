@@ -6,9 +6,22 @@
 \alias{base_request_error}
 \alias{chat_body}
 \alias{chat_path}
+\alias{chat_resp_stream}
 \alias{chat_params}
+\alias{stream_parse}
+\alias{stream_content}
+\alias{stream_merge_chunks}
+\alias{value_turn}
+\alias{value_tokens}
+\alias{value_finish_reason}
 \alias{as_json}
 \alias{models_list}
+\alias{has_batch_support}
+\alias{batch_submit}
+\alias{batch_poll}
+\alias{batch_status}
+\alias{batch_retrieve}
+\alias{batch_result_turn}
 \title{Provider generics}
 \usage{
 base_request(provider)
@@ -19,11 +32,37 @@ chat_body(provider, stream = TRUE, turns = list(), tools = list(), type = NULL)
 
 chat_path(provider)
 
+chat_resp_stream(provider, resp)
+
 chat_params(provider, params)
+
+stream_parse(provider, event)
+
+stream_content(provider, event)
+
+stream_merge_chunks(provider, result, chunk)
+
+value_turn(provider, ...)
+
+value_tokens(provider, json)
+
+value_finish_reason(provider, result)
 
 as_json(provider, x, ...)
 
 models_list(provider)
+
+has_batch_support(provider)
+
+batch_submit(provider, conversations, type = NULL)
+
+batch_poll(provider, batch)
+
+batch_status(provider, batch)
+
+batch_retrieve(provider, batch)
+
+batch_result_turn(provider, result, has_type = FALSE)
 }
 \arguments{
 \item{provider}{A \link{Provider} object.}
@@ -38,11 +77,29 @@ models_list(provider)
 
 \item{type}{A \link{Type} object for structured output, or \code{NULL}.}
 
+\item{resp}{An \code{\link[httr2:response]{httr2::response()}} object.}
+
 \item{params}{A list of parameters, usually from \code{\link[=params]{params()}}.}
+
+\item{event}{A server-sent event to parse or extract content from.}
+
+\item{result}{The accumulated result from merged streaming chunks,
+or a single batch result.}
+
+\item{chunk}{A new streaming chunk to merge.}
+
+\item{...}{Additional arguments passed to methods.}
+
+\item{json}{The parsed JSON response body.}
 
 \item{x}{An object to convert to JSON.}
 
-\item{...}{Additional arguments passed to methods.}
+\item{conversations}{A list of conversations to submit as a batch.}
+
+\item{batch}{An opaque batch object returned by \code{batch_submit()} or
+\code{batch_poll()}.}
+
+\item{has_type}{Whether structured output was requested.}
 }
 \value{
 Varies by generic.
@@ -64,5 +121,39 @@ API parameter names.
 \item \code{as_json()}: Convert ellmer objects (\link{Turn}s, \link{Content}, \link{ToolDef}s,
 \link{Type}s) to the JSON structure expected by the provider's API.
 \item \code{models_list()}: List available models from the provider.
+}
+\subsection{Streaming}{
+\itemize{
+\item \code{chat_resp_stream()}: Set up a streaming response connection from
+an \code{\link[httr2:response]{httr2::response()}}. The default uses \code{\link[httr2:resp_stream_sse]{httr2::resp_stream_sse()}}.
+\item \code{stream_parse()}: Parse a single server-sent event into an R list.
+\item \code{stream_content()}: Extract a \link{Content} object from a parsed
+streaming event.
+\item \code{stream_merge_chunks()}: Merge a new streaming chunk into the
+accumulated result.
+}
+}
+
+\subsection{Response processing}{
+\itemize{
+\item \code{value_turn()}: Convert a complete (non-streaming) API response
+into an \link{AssistantTurn}.
+\item \code{value_tokens()}: Extract token usage counts from an API response.
+\item \code{value_finish_reason()}: Extract and standardize the finish reason
+from an API response.
+}
+}
+
+\subsection{Batch}{
+\itemize{
+\item \code{has_batch_support()}: Return \code{TRUE} if the provider supports batch
+requests.
+\item \code{batch_submit()}: Submit a batch of conversations.
+\item \code{batch_poll()}: Poll for batch status.
+\item \code{batch_status()}: Extract standardized status from a batch poll
+result.
+\item \code{batch_retrieve()}: Download batch results.
+\item \code{batch_result_turn()}: Process a single batch result into a turn.
+}
 }
 }

@@ -68,8 +68,38 @@ test_provider <- function(name = "", model = "", base_url = "", ...) {
 #'   [Type]s) to the JSON structure expected by the provider's API.
 #' * `models_list()`: List available models from the provider.
 #'
+#' ## Streaming
+#'
+#' * `chat_resp_stream()`: Set up a streaming response connection from
+#'   an [httr2::response()]. The default uses [httr2::resp_stream_sse()].
+#' * `stream_parse()`: Parse a single server-sent event into an R list.
+#' * `stream_content()`: Extract a [Content] object from a parsed
+#'   streaming event.
+#' * `stream_merge_chunks()`: Merge a new streaming chunk into the
+#'   accumulated result.
+#'
+#' ## Response processing
+#'
+#' * `value_turn()`: Convert a complete (non-streaming) API response
+#'   into an [AssistantTurn].
+#' * `value_tokens()`: Extract token usage counts from an API response.
+#' * `value_finish_reason()`: Extract and standardize the finish reason
+#'   from an API response.
+#'
+#' ## Batch
+#'
+#' * `has_batch_support()`: Return `TRUE` if the provider supports batch
+#'   requests.
+#' * `batch_submit()`: Submit a batch of conversations.
+#' * `batch_poll()`: Poll for batch status.
+#' * `batch_status()`: Extract standardized status from a batch poll
+#'   result.
+#' * `batch_retrieve()`: Download batch results.
+#' * `batch_result_turn()`: Process a single batch result into a turn.
+#'
 #' @param provider A [Provider] object.
 #' @param req An [httr2::request()] object.
+#' @param resp An [httr2::response()] object.
 #' @param stream Whether to stream the response.
 #' @param turns A list of [Turn] objects.
 #' @param tools A list of [ToolDef] objects.
@@ -77,6 +107,15 @@ test_provider <- function(name = "", model = "", base_url = "", ...) {
 #' @param params A list of parameters, usually from [params()].
 #' @param x An object to convert to JSON.
 #' @param ... Additional arguments passed to methods.
+#' @param event A server-sent event to parse or extract content from.
+#' @param result The accumulated result from merged streaming chunks,
+#'   or a single batch result.
+#' @param chunk A new streaming chunk to merge.
+#' @param json The parsed JSON response body.
+#' @param has_type Whether structured output was requested.
+#' @param conversations A list of conversations to submit as a batch.
+#' @param batch An opaque batch object returned by `batch_submit()` or
+#'   `batch_poll()`.
 #' @name provider-generics
 #' @return Varies by generic.
 #' @export
@@ -154,6 +193,8 @@ chat_path <- new_generic("chat_path", "provider", function(provider) {
   S7_dispatch()
 })
 
+#' @rdname provider-generics
+#' @export
 chat_resp_stream <- new_generic(
   "chat_resp_stream",
   "provider",
@@ -177,6 +218,8 @@ chat_params <- new_generic(
 
 # Extract data from streaming results ------------------------------------
 
+#' @rdname provider-generics
+#' @export
 stream_parse <- new_generic(
   "stream_parse",
   "provider",
@@ -184,6 +227,8 @@ stream_parse <- new_generic(
     S7_dispatch()
   }
 )
+#' @rdname provider-generics
+#' @export
 stream_content <- new_generic(
   "stream_content",
   "provider",
@@ -208,6 +253,8 @@ content_text <- function(content) {
     format(content)
   )
 }
+#' @rdname provider-generics
+#' @export
 stream_merge_chunks <- new_generic(
   "stream_merge_chunks",
   "provider",
@@ -218,10 +265,12 @@ stream_merge_chunks <- new_generic(
 
 # Extract data from non-streaming results --------------------------------------
 
+#' @rdname provider-generics
+#' @export
 value_turn <- new_generic("value_turn", "provider")
 
-# Extract token counts from API response
-# Returns a named list produced by token_usage()
+#' @rdname provider-generics
+#' @export
 value_tokens <- new_generic(
   "value_tokens",
   "provider",
@@ -233,6 +282,8 @@ method(value_tokens, Provider) <- function(provider, json) {
   tokens()
 }
 
+#' @rdname provider-generics
+#' @export
 value_finish_reason <- new_generic(
   "value_finish_reason",
   "provider",
@@ -288,7 +339,8 @@ method(models_list, new_S3_class("Chat")) <- function(provider) {
 
 # Batch AI ---------------------------------------------------------------
 
-# Does the provider support batch uploads?
+#' @rdname provider-generics
+#' @export
 has_batch_support <- new_generic(
   "has_batch_support",
   "provider",
@@ -300,8 +352,8 @@ method(has_batch_support, Provider) <- function(provider) {
   FALSE
 }
 
-# Submit a batch, return an object "batch" object that will be passed to
-# batch_poll() and batch_retrieve()
+#' @rdname provider-generics
+#' @export
 batch_submit <- new_generic(
   "batch_submit",
   "provider",
@@ -310,7 +362,8 @@ batch_submit <- new_generic(
   }
 )
 
-# Get batch status. Returns an opaque list.
+#' @rdname provider-generics
+#' @export
 batch_poll <- new_generic(
   "batch_poll",
   "provider",
@@ -319,11 +372,8 @@ batch_poll <- new_generic(
   }
 )
 
-# Given batch status, return a standardised list:
-# * working - TRUE/FALSE
-# * n_processing = number of requests still processing
-# * n_succeeded = number of requests that succeeded
-# * n_failed = number of requests that failed
+#' @rdname provider-generics
+#' @export
 batch_status <- new_generic(
   "batch_status",
   "provider",
@@ -332,7 +382,8 @@ batch_status <- new_generic(
   }
 )
 
-# Download batched results
+#' @rdname provider-generics
+#' @export
 batch_retrieve <- new_generic(
   "batch_retrieve",
   "provider",
@@ -341,8 +392,8 @@ batch_retrieve <- new_generic(
   }
 )
 
-# Process a single result. Returns either a turn or NULL, if the turn
-# did not succeed
+#' @rdname provider-generics
+#' @export
 batch_result_turn <- new_generic(
   "batch_result_turn",
   "provider",
