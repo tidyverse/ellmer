@@ -55,20 +55,39 @@ test_provider <- function(name = "", model = "", base_url = "", ...) {
 #' They are exported so that package developers creating custom providers
 #' can register methods for their own provider classes.
 #'
+#' ## Request generics
+#'
 #' * `base_request()`: Build the base [httr2::request()] for the provider,
 #'   including authentication and error handling.
 #' * `base_request_error()`: Customize error handling for the provider's
 #'   API responses.
-#' * `chat_body()`: Build the JSON body for a chat API call.
 #' * `chat_path()`: Return the URL path for the chat endpoint
 #'   (e.g., `"/chat/completions"`).
+#' * `chat_body()`: Build the JSON body for a chat API call.
 #' * `chat_params()`: Map standardized [params()] to provider-specific
 #'   API parameter names.
 #' * `as_json()`: Convert ellmer objects ([Turn]s, [Content], [ToolDef]s,
 #'   [Type]s) to the JSON structure expected by the provider's API.
-#' * `models_list()`: List available models from the provider.
 #'
-#' ## Streaming
+#' ## Response generics (non-streaming)
+#'
+#' For non-streaming responses, `value_turn()` parses the complete
+#' JSON response into an [AssistantTurn], calling `value_tokens()`
+#' and `value_finish_reason()` along the way.
+#'
+#' * `value_turn()`: Convert a complete API response into an
+#'   [AssistantTurn].
+#' * `value_tokens()`: Extract token usage counts from an API response.
+#' * `value_finish_reason()`: Extract and standardize the finish reason
+#'   from an API response.
+#'
+#' ## Response generics (streaming)
+#'
+#' These generics process the response as it streams in.
+#' `chat_resp_stream()` sets up the connection, then each event
+#' flows through `stream_parse()` and `stream_content()`.
+#' `stream_merge_chunks()` accumulates the chunks into a complete
+#' result.
 #'
 #' * `chat_resp_stream()`: Set up a streaming response connection from
 #'   an [httr2::response()]. The default uses [httr2::resp_stream_sse()].
@@ -78,13 +97,9 @@ test_provider <- function(name = "", model = "", base_url = "", ...) {
 #' * `stream_merge_chunks()`: Merge a new streaming chunk into the
 #'   accumulated result.
 #'
-#' ## Response processing
+#' ## Models
 #'
-#' * `value_turn()`: Convert a complete (non-streaming) API response
-#'   into an [AssistantTurn].
-#' * `value_tokens()`: Extract token usage counts from an API response.
-#' * `value_finish_reason()`: Extract and standardize the finish reason
-#'   from an API response.
+#' * `models_list()`: List available models from the provider.
 #'
 #' ## Batch
 #'

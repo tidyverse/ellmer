@@ -108,21 +108,43 @@ Varies by generic.
 These generics define the interface that provider subclasses can implement.
 They are exported so that package developers creating custom providers
 can register methods for their own provider classes.
+\subsection{Request generics}{
 \itemize{
 \item \code{base_request()}: Build the base \code{\link[httr2:request]{httr2::request()}} for the provider,
 including authentication and error handling.
 \item \code{base_request_error()}: Customize error handling for the provider's
 API responses.
-\item \code{chat_body()}: Build the JSON body for a chat API call.
 \item \code{chat_path()}: Return the URL path for the chat endpoint
 (e.g., \code{"/chat/completions"}).
+\item \code{chat_body()}: Build the JSON body for a chat API call.
 \item \code{chat_params()}: Map standardized \code{\link[=params]{params()}} to provider-specific
 API parameter names.
 \item \code{as_json()}: Convert ellmer objects (\link{Turn}s, \link{Content}, \link{ToolDef}s,
 \link{Type}s) to the JSON structure expected by the provider's API.
-\item \code{models_list()}: List available models from the provider.
 }
-\subsection{Streaming}{
+}
+
+\subsection{Response generics (non-streaming)}{
+
+For non-streaming responses, \code{value_turn()} parses the complete
+JSON response into an \link{AssistantTurn}, calling \code{value_tokens()}
+and \code{value_finish_reason()} along the way.
+\itemize{
+\item \code{value_turn()}: Convert a complete API response into an
+\link{AssistantTurn}.
+\item \code{value_tokens()}: Extract token usage counts from an API response.
+\item \code{value_finish_reason()}: Extract and standardize the finish reason
+from an API response.
+}
+}
+
+\subsection{Response generics (streaming)}{
+
+These generics process the response as it streams in.
+\code{chat_resp_stream()} sets up the connection, then each event
+flows through \code{stream_parse()} and \code{stream_content()}.
+\code{stream_merge_chunks()} accumulates the chunks into a complete
+result.
 \itemize{
 \item \code{chat_resp_stream()}: Set up a streaming response connection from
 an \code{\link[httr2:response]{httr2::response()}}. The default uses \code{\link[httr2:resp_stream_sse]{httr2::resp_stream_sse()}}.
@@ -134,13 +156,9 @@ accumulated result.
 }
 }
 
-\subsection{Response processing}{
+\subsection{Models}{
 \itemize{
-\item \code{value_turn()}: Convert a complete (non-streaming) API response
-into an \link{AssistantTurn}.
-\item \code{value_tokens()}: Extract token usage counts from an API response.
-\item \code{value_finish_reason()}: Extract and standardize the finish reason
-from an API response.
+\item \code{models_list()}: List available models from the provider.
 }
 }
 
