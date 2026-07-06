@@ -124,6 +124,13 @@ Chat <- R6::R6Class(
       if ("model" %in% prop_names(private$provider)) {
         private$provider@model <- model
       }
+      # AWS Bedrock derives cache_point from the model name; recompute it.
+      if ("cache_policy" %in% prop_names(private$provider)) {
+        private$provider@cache_point <- as_bedrock_cache_point(
+          private$provider@cache_policy,
+          model
+        )
+      }
       invisible(self)
     },
 
