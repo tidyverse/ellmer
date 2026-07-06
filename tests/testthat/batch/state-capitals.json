@@ -2,21 +2,21 @@
   "version": 1,
   "stage": "done",
   "batch": {
-    "id": "batch_690b96afe3c48190a331b74ab7ef7bf7",
+    "id": "batch_6a467790ff508190a1c2715898c1f8c8",
     "object": "batch",
     "endpoint": "/v1/responses",
     "model": "gpt-4.1-nano-2025-04-14",
     "errors": {},
-    "input_file_id": "file-VbvL6fz34Dyo7xxnqAPumD",
+    "input_file_id": "file-889ua152iPnLrfG378UDX2",
     "completion_window": "24h",
     "status": "completed",
-    "output_file_id": "file-BTv8VmKehjwHEdCgGyiGHn",
+    "output_file_id": "file-4wgQGqz38N5o8JwsXeStv4",
     "error_file_id": {},
-    "created_at": 1762367151,
-    "in_progress_at": 1762367153,
-    "expires_at": 1762453551,
-    "finalizing_at": 1762367247,
-    "completed_at": 1762367250,
+    "created_at": 1783003024,
+    "in_progress_at": 1783003087,
+    "expires_at": 1783089424,
+    "finalizing_at": 1783003155,
+    "completed_at": 1783003156,
     "failed_at": {},
     "expired_at": {},
     "cancelling_at": {},
@@ -42,25 +42,28 @@
   "results": [
     {
       "status_code": 200,
-      "request_id": "dbf67650f1d00963188e976a89869604",
+      "request_id": "7b0516d8-ec19-49a9-97d6-7f1bd7beba0f",
       "body": {
-        "id": "resp_0e4e58eb13a6a57d01690b96fb133081959fc08f97760c6426",
+        "id": "resp_06a2cfda6c2d52ab016a4677d4b41081959ec43701696a26ae",
         "object": "response",
-        "created_at": 1762367227,
+        "created_at": 1783003092,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
+        "completed_at": 1783003093,
         "error": {},
+        "frequency_penalty": 0,
         "incomplete_details": {},
         "instructions": {},
         "max_output_tokens": {},
         "max_tool_calls": {},
         "model": "gpt-4.1-nano-2025-04-14",
+        "moderation": {},
         "output": [
           {
-            "id": "msg_0e4e58eb13a6a57d01690b96fbd5c08195bd6c312d128f2a17",
+            "id": "msg_06a2cfda6c2d52ab016a4677d5f4148195bfceaf47b57c2398",
             "type": "message",
             "status": "completed",
             "content": [
@@ -75,10 +78,12 @@
           }
         ],
         "parallel_tool_calls": true,
+        "presence_penalty": 0,
         "previous_response_id": {},
         "prompt_cache_key": {},
-        "prompt_cache_retention": {},
+        "prompt_cache_retention": "in_memory",
         "reasoning": {
+          "context": {},
           "effort": {},
           "summary": {}
         },
@@ -93,6 +98,24 @@
           "verbosity": "medium"
         },
         "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
         "tools": [],
         "top_logprobs": 0,
         "top_p": 1,
@@ -114,25 +137,28 @@
     },
     {
       "status_code": 200,
-      "request_id": "699268332d00c3d5324fdd2def7965c0",
+      "request_id": "4f53c74d-28c6-494b-bc9c-510aec5bc7e6",
       "body": {
-        "id": "resp_02c903048608daa501690b970c0454819589ac81e690a0472c",
+        "id": "resp_023f302bf080bc18016a4677e2ae0481979b20b8968cbea410",
         "object": "response",
-        "created_at": 1762367244,
+        "created_at": 1783003106,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
+        "completed_at": 1783003107,
         "error": {},
+        "frequency_penalty": 0,
         "incomplete_details": {},
         "instructions": {},
         "max_output_tokens": {},
         "max_tool_calls": {},
         "model": "gpt-4.1-nano-2025-04-14",
+        "moderation": {},
         "output": [
           {
-            "id": "msg_02c903048608daa501690b970c4f008195982f945a6d18ee70",
+            "id": "msg_023f302bf080bc18016a4677e3bef88197a51fc486ba859a00",
             "type": "message",
             "status": "completed",
             "content": [
@@ -147,10 +173,12 @@
           }
         ],
         "parallel_tool_calls": true,
+        "presence_penalty": 0,
         "previous_response_id": {},
         "prompt_cache_key": {},
-        "prompt_cache_retention": {},
+        "prompt_cache_retention": "in_memory",
         "reasoning": {
+          "context": {},
           "effort": {},
           "summary": {}
         },
@@ -165,6 +193,24 @@
           "verbosity": "medium"
         },
         "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
         "tools": [],
         "top_logprobs": 0,
         "top_p": 1,
@@ -186,25 +232,28 @@
     },
     {
       "status_code": 200,
-      "request_id": "0ff64d6fddac213354b040b8cb91e713",
+      "request_id": "746f3c3d-19c2-4431-9553-581b58d81029",
       "body": {
-        "id": "resp_071b120dc863e77a01690b9708002881908bae32a9a7ed5915",
+        "id": "resp_0823f9670f8d4667016a4677dd926081948f67085853e06cef",
         "object": "response",
-        "created_at": 1762367240,
+        "created_at": 1783003101,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
+        "completed_at": 1783003102,
         "error": {},
+        "frequency_penalty": 0,
         "incomplete_details": {},
         "instructions": {},
         "max_output_tokens": {},
         "max_tool_calls": {},
         "model": "gpt-4.1-nano-2025-04-14",
+        "moderation": {},
         "output": [
           {
-            "id": "msg_071b120dc863e77a01690b97087518819096966c25f97e89c2",
+            "id": "msg_0823f9670f8d4667016a4677de03408194aec59d6746059c8f",
             "type": "message",
             "status": "completed",
             "content": [
@@ -219,10 +268,12 @@
           }
         ],
         "parallel_tool_calls": true,
+        "presence_penalty": 0,
         "previous_response_id": {},
         "prompt_cache_key": {},
-        "prompt_cache_retention": {},
+        "prompt_cache_retention": "in_memory",
         "reasoning": {
+          "context": {},
           "effort": {},
           "summary": {}
         },
@@ -237,6 +288,24 @@
           "verbosity": "medium"
         },
         "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
         "tools": [],
         "top_logprobs": 0,
         "top_p": 1,
@@ -258,25 +327,28 @@
     },
     {
       "status_code": 200,
-      "request_id": "db47911aba3315792ca9c4720bb37886",
+      "request_id": "1d6c2d9a-70da-4a63-89e6-cdd91b56183b",
       "body": {
-        "id": "resp_05602933a7026bad01690b96cd6ad081969d582c4bd0d22bc3",
+        "id": "resp_04682c07073c71c2016a467810876c81958d4cceaf2c0a2697",
         "object": "response",
-        "created_at": 1762367181,
+        "created_at": 1783003152,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
+        "completed_at": 1783003153,
         "error": {},
+        "frequency_penalty": 0,
         "incomplete_details": {},
         "instructions": {},
         "max_output_tokens": {},
         "max_tool_calls": {},
         "model": "gpt-4.1-nano-2025-04-14",
+        "moderation": {},
         "output": [
           {
-            "id": "msg_05602933a7026bad01690b96cf006c81969f8edb2c8481164c",
+            "id": "msg_04682c07073c71c2016a4678118c2c8195b5083e394f73806f",
             "type": "message",
             "status": "completed",
             "content": [
@@ -291,10 +363,12 @@
           }
         ],
         "parallel_tool_calls": true,
+        "presence_penalty": 0,
         "previous_response_id": {},
         "prompt_cache_key": {},
-        "prompt_cache_retention": {},
+        "prompt_cache_retention": "in_memory",
         "reasoning": {
+          "context": {},
           "effort": {},
           "summary": {}
         },
@@ -309,6 +383,24 @@
           "verbosity": "medium"
         },
         "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
         "tools": [],
         "top_logprobs": 0,
         "top_p": 1,
@@ -329,10 +421,10 @@
       }
     }
   ],
-  "started_at": 1762367151,
+  "started_at": 1783003022,
   "hash": {
-    "provider": "959dc7923e4dc3760a7690794dc41c2a",
-    "prompts": "b8eafe281e3cc5113058d9722be3e295",
-    "user_turns": "8c1302088b9bc30258d1191db0d35705"
+    "provider": "52a5237ecd4785eb9feb1e0088b4f83a",
+    "prompts": "ec58117fcf69ea639e59250f914cca8f",
+    "user_turns": "448e40d415a6931aa70d7fdaef3a1d8d"
   }
 }

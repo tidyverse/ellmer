@@ -332,7 +332,7 @@ test_that("we can merge Snowflake's tool_use chunk format", {
   )
 
   # value_turn filters empty text and produces only the tool request
-  turn <- value_turn(provider, result)
+  turn <- value_turn(provider, test_model(), result)
   expect_length(turn@contents, 1)
   expect_s3_class(turn@contents[[1]], "ellmer::ContentToolRequest")
   expect_equal(turn@contents[[1]]@id, "toolu_123")
@@ -434,8 +434,9 @@ test_that("chat_snowflake() supports parameters", {
     )
   )
   provider <- chat$get_provider()
+  model <- chat$get_model_obj()
   expect_equal(
-    chat_body(provider),
+    chat_body(provider, model),
     list(
       model = "claude-3-5-sonnet",
       temperature = 0.7,
@@ -446,9 +447,9 @@ test_that("chat_snowflake() supports parameters", {
     )
   )
   # Warn/ignore unsupported parameters.
-  provider@params <- params(seed = 1L)
+  model_bad <- Model(name = "claude-3-5-sonnet", params = params(seed = 1L))
   expect_warning(
-    out <- chat_body(provider),
+    out <- chat_body(provider, model_bad),
     regexp = "unsupported parameters"
   )
   expect_equal(out, list(model = "claude-3-5-sonnet", stream = TRUE))

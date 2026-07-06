@@ -285,6 +285,6 @@ test_that("inference profile ARN slash is encoded in URL (#792)", {
       list(access_key_id = "x", secret_access_key = "x", session_token = "x")
     }
   )
-  req <- chat_request(provider, stream = FALSE, turns = list())
+  req <- chat_request(provider, test_model(arn), stream = FALSE, turns = list())
   expect_match(req$url, "inference-profile%2Fabc123", fixed = TRUE)
 })

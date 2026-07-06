@@ -157,7 +157,10 @@ provider_aws_bedrock <- function(
     base_url <- base_url(credentials$region)
   }
 
-  cache_policy <- cache_point
+  cache_policy <- arg_match(
+    cache_point,
+    values = c("auto", "5m", "1h", "none")
+  )
   cache_point <- as_bedrock_cache_point(cache_policy, model)
 
   ProviderAWSBedrock(

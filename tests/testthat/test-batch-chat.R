@@ -185,9 +185,9 @@ test_that("informative error for bad inputs", {
   chat_openai <- chat_openai_test()
   chat_ollama <- chat_openai_test()
   chat_ollama$.__enclos_env__$private$provider <- ProviderOllama(
-    "ollama",
-    "model",
-    "base_url"
+    name = "ollama",
+    base_url = "base_url",
+    model = "model"
   )
 
   expect_snapshot(error = TRUE, {
