@@ -119,6 +119,11 @@ Chat <- R6::R6Class(
     set_model = function(model) {
       check_string(model)
       private$model@name <- model
+      # Some providers (e.g. Google, AWS) keep their own model property
+      # for URL construction; keep it in sync.
+      if ("model" %in% prop_names(private$provider)) {
+        private$provider@model <- model
+      }
       invisible(self)
     },
 
