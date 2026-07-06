@@ -2,6 +2,7 @@
 
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
+* New `Model` class separates model configuration (name, parameters, extra arguments) from the `Provider` class, which now only captures API endpoint details. This is a breaking change for anyone who directly accesses `provider@model`, `provider@params`, or `provider@extra_args`; use the `Model` object instead (@thisisnic, #499).
 
 
 # ellmer 0.4.2

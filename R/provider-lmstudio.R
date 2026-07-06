@@ -71,17 +71,23 @@ chat_lmstudio <- function(
 
   echo <- check_echo(echo)
 
+  params <- params %||% params()
+
   provider <- ProviderLMStudio(
     name = "LM Studio",
     base_url = file.path(base_url, "v1"),
     model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
+  model <- Model(name = model, params = params, extra_args = api_args)
 
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderLMStudio <- new_class(
@@ -100,10 +106,10 @@ lmstudio_credentials <- function(credentials = NULL) {
   )
 }
 
-method(chat_params, ProviderLMStudio) <- function(provider, params) {
+method(chat_params, ProviderLMStudio) <- function(provider, model) {
   # https://lmstudio.ai/docs/developer/openai-compat/chat-completions#supported-payload-parameters
   standardise_params(
-    params,
+    model@params,
     c(
       frequency_penalty = "frequency_penalty",
       max_tokens = "max_tokens",

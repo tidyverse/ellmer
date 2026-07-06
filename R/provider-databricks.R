@@ -72,13 +72,16 @@ chat_databricks <- function(
   provider <- ProviderDatabricks(
     name = "Databricks",
     base_url = workspace,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderDatabricks <- new_class(
@@ -97,6 +100,7 @@ method(base_request, ProviderDatabricks) <- function(provider) {
 
 method(chat_body, ProviderDatabricks) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -104,13 +108,14 @@ method(chat_body, ProviderDatabricks) <- function(
 ) {
   body <- chat_body(
     super(provider, ProviderOpenAICompatible),
+    model = model,
     stream = stream,
     turns = turns,
     tools = tools,
     type = type
   )
 
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model)
   body <- modify_list(body, params)
 
   # Databricks doesn't support stream options
@@ -119,10 +124,10 @@ method(chat_body, ProviderDatabricks) <- function(
   body
 }
 
-method(chat_params, ProviderDatabricks) <- function(provider, params) {
+method(chat_params, ProviderDatabricks) <- function(provider, model) {
   # https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#chat-request
   standardise_params(
-    params,
+    model@params,
     c(
       temperature = "temperature",
       topP = "top_p",

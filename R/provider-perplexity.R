@@ -55,13 +55,16 @@ chat_perplexity <- function(
   provider <- ProviderPerplexity(
     name = "Perplexity",
     base_url = base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderPerplexity <- new_class(
@@ -69,10 +72,10 @@ ProviderPerplexity <- new_class(
   parent = ProviderOpenAICompatible,
 )
 
-method(chat_params, ProviderPerplexity) <- function(provider, params) {
+method(chat_params, ProviderPerplexity) <- function(provider, model) {
   # https://docs.perplexity.ai/api-reference/chat-completions-post
   standardise_params(
-    params,
+    model@params,
     c(
       max_tokens = "max_tokens",
       temperature = "temperature",

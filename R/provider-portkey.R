@@ -74,13 +74,16 @@ chat_portkey <- function(
   provider <- ProviderPortkeyAI(
     name = "PortkeyAI",
     base_url = base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 chat_portkey_test <- function(
@@ -127,7 +130,6 @@ models_portkey <- function(
 ) {
   provider <- ProviderPortkeyAI(
     name = "PortkeyAI",
-    model = "",
     base_url = base_url,
     credentials = function() api_key
   )
