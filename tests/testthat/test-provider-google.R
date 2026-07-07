@@ -252,13 +252,3 @@ test_that("can count tokens", {
   vcr::local_cassette("google-count-tokens")
   test_token_count(chat_google_gemini_test)
 })
-
-test_that("can count tokens with tools", {
-  vcr::local_cassette("google-count-tokens-tools")
-  test_token_count_tools(chat_google_gemini_test)
-})
-
-test_that("can count tokens with structured output", {
-  vcr::local_cassette("google-count-tokens-structured")
-  test_token_count_structured(chat_google_gemini_test)
-})

@@ -3,24 +3,53 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages/count_tokens
     body:
-      string: '{"model":"claude-sonnet-4-6","system":[{"type":"text","text":"You are
-        a scientist","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"Hello","cache_control":{"type":"ephemeral","ttl":"5m"}}]}]}'
+      string: '{"model":"claude-sonnet-4-6","system":[{"type":"text","text":"Answer
+        succinctly","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the current date?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"tools":[{"name":"current_date","description":"Return
+        the current date","input_schema":{"type":"object","description":"","additionalProperties":false}}]}'
   response:
     status: 200
     headers:
-      date: Thu, 02 Jul 2026 11:54:50 GMT
+      date: Tue, 07 Jul 2026 13:38:09 GMT
       content-type: application/json
-      content-length: '19'
-      request-id: req_011CcdBnRYPXidw2otNfi9FJ
+      content-length: '20'
+      request-id: req_011CcnnhynLiAAxwJoZMsujq
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       server: cloudflare
-      server-timing: x-originResponse;dur=121
+      server-timing: x-originResponse;dur=99
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
-      cf-ray: a14d753f9fb3c4f1-LHR
+      cf-ray: a1773f79af9e8583-IAD
     body:
-      string: '{"input_tokens":13}'
-  recorded_at: 2026-07-02 11:54:50
+      string: '{"input_tokens":560}'
+  recorded_at: 2026-07-07 13:38:09
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages/count_tokens
+    body:
+      string: '{"model":"claude-sonnet-4-6","system":[{"type":"text","text":"Answer
+        succinctly","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"Apples
+        are tasty. By Hadley Wickham.","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"tools":[{"name":"current_date","description":"Return
+        the current date","input_schema":{"type":"object","description":"","additionalProperties":false}}],"output_config":{"format":{"type":"json_schema","schema":{"type":"object","description":"","properties":{"title":{"type":"string","description":"Content
+        title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false}}}}'
+  response:
+    status: 200
+    headers:
+      date: Tue, 07 Jul 2026 13:38:10 GMT
+      content-type: application/json
+      content-length: '20'
+      request-id: req_011Ccnni1uqEjx8amXqVDwnT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      server: cloudflare
+      server-timing: x-originResponse;dur=251
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: a1773f7b4ce78583-IAD
+    body:
+      string: '{"input_tokens":758}'
+  recorded_at: 2026-07-07 13:38:10
 recorded_with: VCR-vcr/2.1.0

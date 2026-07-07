@@ -3,18 +3,19 @@ http_interactions:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:countTokens
     body:
-      string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"Hello"}]}],"systemInstruction":{"parts":{"text":"You
-        are a scientist"}},"generationConfig":{"temperature":0,"seed":1014},"model":"models/gemini-3.5-flash"}}'
+      string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"What''s
+        the current date?"}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        the current date"}]},"systemInstruction":{"parts":{"text":"Answer succinctly"}},"model":"models/gemini-3.5-flash"}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '105'
+      content-length: '106'
       content-type: application/json; charset=UTF-8
-      date: Thu, 02 Jul 2026 11:55:17 GMT
+      date: Tue, 07 Jul 2026 13:38:24 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=53
+      server-timing: gfet4t7; dur=71
       vary:
       - Origin
       - X-Origin
@@ -25,13 +26,50 @@ http_interactions:
     body:
       string: |
         {
-          "totalTokens": 6,
+          "totalTokens": 27,
           "promptTokensDetails": [
             {
               "modality": "TEXT",
-              "tokenCount": 6
+              "tokenCount": 27
             }
           ]
         }
-  recorded_at: 2026-07-02 11:55:17
+  recorded_at: 2026-07-07 13:38:24
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:countTokens
+    body:
+      string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"Apples
+        are tasty. By Hadley Wickham."}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        the current date"}]},"systemInstruction":{"parts":{"text":"Answer succinctly"}},"generationConfig":{"response_mime_type":"application/json","response_schema":{"type":"object","properties":{"title":{"type":"string","description":"Content
+        title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"]}},"model":"models/gemini-3.5-flash"}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '106'
+      content-type: application/json; charset=UTF-8
+      date: Tue, 07 Jul 2026 13:38:24 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=88
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "totalTokens": 30,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 30
+            }
+          ]
+        }
+  recorded_at: 2026-07-07 13:38:24
 recorded_with: VCR-vcr/2.1.0

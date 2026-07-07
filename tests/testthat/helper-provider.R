@@ -192,33 +192,24 @@ test_models <- function(models_fun) {
 # Token counting -----------------------------------------------------------
 
 test_token_count <- function(chat_fun) {
-  chat <- chat_fun("You are a scientist")
-  result <- chat$token_count("Hello")
-  expect_type(result, "integer")
-  expect_gt(result, 0)
-}
-
-test_token_count_tools <- function(chat_fun) {
-  chat <- chat_fun()
+  chat <- chat_fun("Answer succinctly")
   chat$register_tool(tool(
     function() "2024-01-01",
     name = "current_date",
     description = "Return the current date"
   ))
+
   result <- chat$token_count("What's the current date?")
   expect_type(result, "integer")
   expect_gt(result, 0)
-}
 
-test_token_count_structured <- function(chat_fun) {
-  chat <- chat_fun()
-  result <- chat$token_count(
+  result_structured <- chat$token_count(
     "Apples are tasty. By Hadley Wickham.",
     type = type_object(
       title = type_string("Content title"),
       author = type_string("Name of the author")
     )
   )
-  expect_type(result, "integer")
-  expect_gt(result, 0)
+  expect_type(result_structured, "integer")
+  expect_gt(result_structured, 0)
 }
