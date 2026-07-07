@@ -356,6 +356,7 @@ method(value_turn, ProviderOpenAI) <- function(
 method(count_tokens, ProviderOpenAI) <- function(
   provider,
   ...,
+  turns = list(),
   system_prompt = NULL,
   tools = list(),
   type = NULL
@@ -363,16 +364,33 @@ method(count_tokens, ProviderOpenAI) <- function(
   req <- base_request(provider)
   req <- req_url_path_append(req, "responses/input_tokens")
 
-  body <- count_tokens_body(
-    provider,
-    ...,
-    system_prompt = system_prompt,
-    tools = tools,
-    type = type
+  all_turns <- c(
+    if (!is.null(system_prompt)) list(SystemTurn(system_prompt)),
+    turns,
+    list(user_turn(...))
   )
+  input <- compact(unlist(as_json(provider, all_turns), recursive = FALSE))
+  tools <- as_json(provider, unname(tools))
 
-  keep <- c("input", "model", "tools", "text", "reasoning")
-  body <- body[intersect(names(body), keep)]
+  if (!is.null(type)) {
+    text <- list(
+      format = list(
+        type = "json_schema",
+        name = "structured_data",
+        schema = as_json(provider, type),
+        strict = TRUE
+      )
+    )
+  } else {
+    text <- NULL
+  }
+
+  body <- compact(list(
+    input = input,
+    model = provider@model,
+    tools = tools,
+    text = text
+  ))
 
   req <- req_body_json(req, body)
   req <- req_headers(req, !!!provider@extra_headers)

@@ -257,20 +257,20 @@ streams) are excluded because they lack token data.}
 \if{html}{\out{<a id="method-Chat-token_count"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-token_count}{}}}
 \subsection{\code{Chat$token_count()}}{
-  Estimate the token count for \code{...}, the system
-prompt, and any registered tools using the provider's token
-counting endpoint. Does not include conversation history.
-Currently supported for Claude, Google, and OpenAI providers.
+  Estimate the token count for \code{...} using the
+provider's token counting endpoint.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$token_count(..., type = NULL)}
+    \preformatted{Chat$token_count(..., include_history = FALSE, type = NULL)}
     \if{html}{\out{</div>}}
   }
   \subsection{Arguments}{
     \if{html}{\out{<div class="arguments">}}
     \describe{
-      \item{\code{...}}{Input to count tokens for. Can be strings or images
-(see \code{\link[=content_image_file]{content_image_file()}} and \code{\link[=content_image_url]{content_image_url()}}).}
+      \item{\code{...}}{Input to count tokens for.}
+      \item{\code{include_history}}{If \code{FALSE} (the default), count tokens
+only for \code{...}, the system prompt, and any registered tools.
+If \code{TRUE}, also include all existing conversation history.}
       \item{\code{type}}{An optional type specification for structured data
 extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
     }

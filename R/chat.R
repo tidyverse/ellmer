@@ -181,17 +181,26 @@ Chat <- R6::R6Class(
       dollars(cost)
     },
 
-    #' @description Estimate the token count for `...`, the system
-    #'   prompt, and any registered tools using the provider's token
-    #'   counting endpoint. Does not include conversation history.
+    #' @description Estimate the token count for `...` using the
+    #'   provider's token counting endpoint.
     #' @param ... Input to count tokens for.
+    #' @param include_history If `FALSE` (the default), count tokens
+    #'   only for `...`, the system prompt, and any registered tools.
+    #'   If `TRUE`, also include all existing conversation history.
     #' @param type An optional type specification for structured data
     #'   extraction, created with a [`type_()`][type_boolean] function.
     #' @return An integer giving the estimated number of input tokens.
-    token_count = function(..., type = NULL) {
+    token_count = function(..., include_history = FALSE, type = NULL) {
+      if (include_history) {
+        turns <- self$get_turns(include_system_prompt = FALSE)
+      } else {
+        turns <- list()
+      }
+
       count_tokens(
         private$provider,
         ...,
+        turns = turns,
         system_prompt = self$get_system_prompt(),
         tools = private$tools,
         type = type

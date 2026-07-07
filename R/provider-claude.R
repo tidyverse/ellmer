@@ -478,6 +478,7 @@ method(value_turn, ProviderAnthropic) <- function(
 method(count_tokens, ProviderAnthropic) <- function(
   provider,
   ...,
+  turns = list(),
   system_prompt = NULL,
   tools = list(),
   type = NULL
@@ -485,24 +486,59 @@ method(count_tokens, ProviderAnthropic) <- function(
   req <- base_request(provider)
   req <- req_url_path_append(req, "messages/count_tokens")
 
-  body <- count_tokens_body(
-    provider,
-    ...,
-    system_prompt = system_prompt,
-    tools = tools,
-    type = type
-  )
+  if (!is.null(system_prompt)) {
+    system <- list(list(
+      type = "text",
+      text = system_prompt,
+      cache_control = cache_control(provider)
+    ))
+  } else {
+    system <- NULL
+  }
 
-  keep <- c(
-    "model",
-    "system",
-    "messages",
-    "tools",
-    "tool_choice",
-    "thinking",
-    "output_config"
-  )
-  body <- body[intersect(names(body), keep)]
+  all_turns <- c(turns, list(user_turn(...)))
+  is_last <- seq_along(all_turns) == length(all_turns)
+  messages <- compact(map2(all_turns, is_last, function(turn, is_last) {
+    as_json(provider, turn, is_last = is_last)
+  }))
+
+  if (!is.null(type)) {
+    if (
+      has_claude_structured_output(provider@model) &&
+        !type_has_additional_properties(type)
+    ) {
+      output_config <- list(
+        format = list(
+          type = "json_schema",
+          schema = as_json(provider, type)
+        )
+      )
+      tool_choice <- NULL
+    } else {
+      tool_def <- ToolDef(
+        function(...) {},
+        name = "_structured_tool_call",
+        description = "Extract structured data",
+        arguments = type_object(data = type)
+      )
+      tools[[tool_def@name]] <- tool_def
+      tool_choice <- list(type = "tool", name = tool_def@name)
+      output_config <- NULL
+    }
+  } else {
+    tool_choice <- NULL
+    output_config <- NULL
+  }
+  tools <- as_json(provider, unname(tools))
+
+  body <- compact(list(
+    model = provider@model,
+    system = system,
+    messages = messages,
+    tools = tools,
+    tool_choice = tool_choice,
+    output_config = output_config
+  ))
 
   req <- req_body_json(req, body)
   req <- req_headers(req, !!!provider@extra_headers)

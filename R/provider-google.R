@@ -846,6 +846,7 @@ gemini_client <- function() {
 method(count_tokens, ProviderGoogleGemini) <- function(
   provider,
   ...,
+  turns = list(),
   system_prompt = NULL,
   tools = list(),
   type = NULL
@@ -857,16 +858,41 @@ method(count_tokens, ProviderGoogleGemini) <- function(
     paste0(provider@model, ":", "countTokens")
   )
 
-  body <- count_tokens_body(
-    provider,
-    ...,
-    system_prompt = system_prompt,
-    tools = tools,
-    type = type
-  )
+  if (!is.null(system_prompt)) {
+    system <- list(parts = list(text = system_prompt))
+  } else {
+    system <- list(parts = list(text = ""))
+  }
 
-  keep <- c("contents", "tools", "systemInstruction", "generationConfig")
-  token_body <- body[intersect(names(body), keep)]
+  all_turns <- c(turns, list(user_turn(...)))
+  contents <- as_json(provider, all_turns)
+
+  if (length(tools) > 0) {
+    is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
+    funs <- as_json(provider, unname(tools))
+    tools <- c(
+      compact(list(functionDeclarations = funs[!is_builtin])),
+      unlist(funs[is_builtin], recursive = FALSE)
+    )
+  } else {
+    tools <- NULL
+  }
+
+  if (!is.null(type)) {
+    generation_config <- list(
+      response_mime_type = "application/json",
+      response_schema = as_json(provider, type)
+    )
+  } else {
+    generation_config <- NULL
+  }
+
+  token_body <- compact(list(
+    contents = contents,
+    tools = tools,
+    systemInstruction = system,
+    generationConfig = generation_config
+  ))
 
   if (identical(provider@name, "Google/Gemini")) {
     token_body$model <- paste0("models/", provider@model)
