@@ -207,12 +207,27 @@ test_that("chat callbacks for tool requests/results", {
   last_request <- NULL
   cb_count_request <- 0
   cb_count_result <- 0
-  cb_count_turn_start <- 0
+  cb_count_req_start <- 0
+  cb_count_req_end <- 0
+  last_start_turns <- NULL
+  last_end_turn <- NULL
 
   # Fires before each model request in the tool loop (does not emit, so the
-  # snapshot below is unaffected).
-  chat$on_turn_start(function() {
-    cb_count_turn_start <<- cb_count_turn_start + 1
+  # snapshot below is unaffected). Receives the pending turns.
+  chat$on_request_start(function(turns) {
+    cb_count_req_start <<- cb_count_req_start + 1
+    last_start_turns <<- turns
+    expect_type(turns, "list")
+    expect_s7_class(turns[[length(turns)]], Turn)
+  })
+
+  # Fires after each model response, before its tool calls run. Receives the
+  # assistant turn.
+  chat$on_request_end(function(turn) {
+    cb_count_req_end <<- cb_count_req_end + 1
+    last_end_turn <<- turn
+    expect_s7_class(turn, Turn)
+    expect_equal(turn@role, "assistant")
   })
 
   chat$on_tool_request(function(request) {
@@ -238,9 +253,14 @@ test_that("chat callbacks for tool requests/results", {
   )
   expect_equal(cb_count_request, 2L)
   expect_equal(cb_count_result, 2L)
-  # One turn-start per model request: initial request + the follow-up after the
-  # tool results are fed back.
-  expect_equal(cb_count_turn_start, 2L)
+  # One request-start + one request-end per model request: initial request + the
+  # follow-up after the tool results are fed back.
+  expect_equal(cb_count_req_start, 2L)
+  expect_equal(cb_count_req_end, 2L)
+  # on_request_start sees the pending turns ending in the (tool-result) user turn
+  # of the 2nd request; on_request_end sees the final assistant turn.
+  expect_equal(last_start_turns[[length(last_start_turns)]]@role, "user")
+  expect_equal(last_end_turn@role, "assistant")
 
   expect_snapshot(error = TRUE, {
     chat$on_tool_request(function(data) NULL)

@@ -38,7 +38,8 @@ Chat <- R6::R6Class(
       private$echo <- echo
       private$callback_on_tool_request <- CallbackManager$new(args = "request")
       private$callback_on_tool_result <- CallbackManager$new(args = "result")
-      private$callback_on_turn_start <- CallbackManager$new()
+      private$callback_on_request_start <- CallbackManager$new(args = "turns")
+      private$callback_on_request_end <- CallbackManager$new(args = "turn")
       self$set_system_prompt(system_prompt)
     },
 
@@ -472,22 +473,41 @@ Chat <- R6::R6Class(
       private$callback_on_tool_result$add(callback)
     },
 
-    #' @description Register a callback that fires at the start of each
-    #'   iteration of the tool loop, i.e. immediately before each request is
-    #'   sent to the model (including the first). Use it to inspect or rewrite
-    #'   the conversation *between* tool rounds within a single `$chat()` /
-    #'   `$chat_async()` call -- for example, to compact or trim the turns
-    #'   (`$get_turns()` / `$set_turns()`) as the conversation approaches the
-    #'   model's context window.
+    #' @description Register a callback that fires at the **start of each model
+    #'   request** in the tool loop, i.e. immediately before the pending turns
+    #'   are sent to the model. It fires once per request (including the first),
+    #'   whether or not the request involves tools. Use it to inspect or rewrite
+    #'   the conversation before it is sent -- for example, to compact or trim
+    #'   the turns as the conversation approaches the model's context window.
+    #'   Rewriting history is done with `$set_turns()`, which is a supported,
+    #'   documented operation; calling it from this callback is explicitly
+    #'   allowed.
     #'
-    #' @param callback A function called with no arguments. To modify the
-    #'   conversation, capture the `Chat` object and call its methods (e.g.
-    #'   `chat$set_turns(...)`). With `$chat_async()` / `$stream_async()` the
-    #'   callback may return a promise.
+    #' @param callback A function called with a single argument `turns`: the
+    #'   list of turns about to be sent, ending in the user turn (first request)
+    #'   or the synthesized tool-result turn (subsequent requests). Called for
+    #'   its side effects; the return value is ignored. With `$chat_async()` /
+    #'   `$stream_async()` the callback may return a promise.
     #'
     #' @return A function that can be called to remove the callback.
-    on_turn_start = function(callback) {
-      private$callback_on_turn_start$add(callback)
+    on_request_start = function(callback) {
+      private$callback_on_request_start$add(callback)
+    },
+
+    #' @description Register a callback that fires at the **end of each model
+    #'   request** in the tool loop, i.e. after the model's response turn is
+    #'   received and before any tool calls it contains are executed. Paired with
+    #'   `$on_request_start()`; useful for per-request latency / cost tracking and
+    #'   for observing tool-call requests before they run.
+    #'
+    #' @param callback A function called with a single argument `turn`: the
+    #'   assistant turn just returned by the model. Called for its side effects;
+    #'   the return value is ignored. With `$chat_async()` / `$stream_async()`
+    #'   the callback may return a promise.
+    #'
+    #' @return A function that can be called to remove the callback.
+    on_request_end = function(callback) {
+      private$callback_on_request_end$add(callback)
     }
   ),
   private = list(
@@ -498,7 +518,8 @@ Chat <- R6::R6Class(
     tools = list(),
     callback_on_tool_request = NULL,
     callback_on_tool_result = NULL,
-    callback_on_turn_start = NULL,
+    callback_on_request_start = NULL,
+    callback_on_request_end = NULL,
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
@@ -517,7 +538,7 @@ Chat <- R6::R6Class(
       agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
 
       while (!is.null(user_turn)) {
-        private$callback_on_turn_start$invoke()
+        private$callback_on_request_start$invoke(c(private$.turns, list(user_turn)))
         assistant_chunks <- private$submit_turns(
           user_turn,
           stream = stream,
@@ -531,6 +552,7 @@ Chat <- R6::R6Class(
         }
 
         assistant_turn <- self$last_turn()
+        private$callback_on_request_end$invoke(assistant_turn)
         user_turn <- NULL
 
         # Don't invoke tools if the stream was cancelled
@@ -588,7 +610,7 @@ Chat <- R6::R6Class(
       agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
 
       while (!is.null(user_turn)) {
-        await(private$callback_on_turn_start$invoke_async())
+        await(private$callback_on_request_start$invoke_async(c(private$.turns, list(user_turn))))
         assistant_chunks <- private$submit_turns_async(
           user_turn,
           stream = stream,
@@ -602,6 +624,7 @@ Chat <- R6::R6Class(
         }
 
         assistant_turn <- self$last_turn()
+        await(private$callback_on_request_end$invoke_async(assistant_turn))
         user_turn <- NULL
 
         # Don't invoke tools if the stream was cancelled

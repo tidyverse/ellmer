@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `Chat` gains `$on_turn_start()`, a callback that fires before each model request in the tool loop, so you can inspect or rewrite the conversation (e.g. compact turns) between tool rounds within a single `$chat()` call (#1051).
+* `Chat` gains `$on_request_start(turns)` and `$on_request_end(turn)`, paired callbacks that fire before and after each model request in the tool loop (once per request, whether or not it involves tools). `$on_request_start()` receives the turns about to be sent, so you can inspect or rewrite the conversation before each request (e.g. compact turns via `$set_turns()` to stay within the context window); `$on_request_end()` receives the assistant turn just returned, useful for per-request latency/cost tracking and observing tool-call requests before they run (#1051).
 
 * `AssistantTurn` gains a `finish_reason` property that reports why the model stopped generating (@thisisnic, #3).
 * `batch_chat()` now supports `chat_google_gemini()` for batch processing via the Gemini Developer API (@xmarquez, #914).
