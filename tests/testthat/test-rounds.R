@@ -115,6 +115,24 @@ test_that("an interleaved system turn starts a new round", {
   )
 })
 
+test_that("Round prints input and response turns with role headers", {
+  round <- Round(
+    input = list(SystemTurn("Be nice"), UserTurn("Hi")),
+    response = list(AssistantTurn("Hello"))
+  )
+  expect_snapshot(print(round))
+})
+
+test_that("contents_*() label each turn by role", {
+  round <- Round(
+    input = list(SystemTurn("Be nice"), UserTurn("Hi")),
+    response = list(AssistantTurn("Hello"))
+  )
+  expect_snapshot(cat(contents_text(round)))
+  expect_snapshot(cat(contents_markdown(round)))
+  expect_snapshot(cat(contents_html(round)))
+})
+
 test_that("get_rounds() aborts on a leading tool-result turn", {
   turns <- list(fixture_tool_result_turn())
   expect_snapshot(error = TRUE, get_rounds(turns))

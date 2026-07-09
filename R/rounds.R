@@ -86,6 +86,41 @@ method(format, Round) <- function(x, ...) {
 
 method(print, Round) <- function(x, ...) {
   cat("<Round>\n")
-  cat(format(x))
+  for (turn in c(x@input, x@response)) {
+    print(turn, ...)
+  }
   invisible(x)
+}
+
+round_role <- function(turn) {
+  role <- turn@role
+  substr(role, 0, 1) <- toupper(substr(role, 0, 1))
+  role
+}
+
+method(contents_text, Round) <- function(content) {
+  turns <- c(content@input, content@response)
+  res <- map_chr(turns, function(turn) {
+    paste0("<", turn@role, ">\n", contents_text(turn), "\n</", turn@role, ">")
+  })
+  paste(res, collapse = "\n\n")
+}
+
+method(contents_html, Round) <- function(content) {
+  turns <- c(content@input, content@response)
+  res <- map_chr(turns, function(turn) {
+    paste0("<h2>", round_role(turn), "</h2>\n", contents_html(turn))
+  })
+  paste(res, collapse = "\n")
+}
+
+method(contents_markdown, Round) <- function(content, heading_level = 2) {
+  turns <- c(content@input, content@response)
+  hh <- strrep("#", heading_level)
+  res <- map_chr(turns, function(turn) {
+    as.character(glue::glue(
+      "{hh} {round_role(turn)}\n\n{contents_markdown(turn)}"
+    ))
+  })
+  paste(res, collapse = "\n\n")
 }
