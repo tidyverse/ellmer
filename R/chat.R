@@ -538,7 +538,10 @@ Chat <- R6::R6Class(
       agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
 
       while (!is.null(user_turn)) {
-        private$callback_on_request_start$invoke(c(private$.turns, list(user_turn)))
+        private$callback_on_request_start$invoke(c(
+          private$.turns,
+          list(user_turn)
+        ))
         assistant_chunks <- private$submit_turns(
           user_turn,
           stream = stream,
@@ -610,7 +613,10 @@ Chat <- R6::R6Class(
       agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
 
       while (!is.null(user_turn)) {
-        await(private$callback_on_request_start$invoke_async(c(private$.turns, list(user_turn))))
+        await(private$callback_on_request_start$invoke_async(c(
+          private$.turns,
+          list(user_turn)
+        )))
         assistant_chunks <- private$submit_turns_async(
           user_turn,
           stream = stream,
