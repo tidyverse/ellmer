@@ -67,14 +67,16 @@ test_that("can get rounds, with and without system prompt", {
   rounds <- chat$get_rounds()
   expect_length(rounds, 2)
   expect_s7_class(rounds[[1]], Round)
-  expect_equal(rounds[[1]]@input, UserTurn("Hi"))
-  expect_equal(rounds[[2]]@input, UserTurn("Bye"))
+  expect_equal(rounds[[1]]@input, list(UserTurn("Hi")))
+  expect_equal(rounds[[2]]@input, list(UserTurn("Bye")))
 
   rounds <- chat$get_rounds(include_system_prompt = TRUE)
-  expect_length(rounds, 3)
-  expect_equal(rounds[[1]], SystemTurn("Be terse."))
-  expect_s7_class(rounds[[2]], Round)
-  expect_s7_class(rounds[[3]], Round)
+  expect_length(rounds, 2)
+  expect_equal(
+    rounds[[1]]@input,
+    list(SystemTurn("Be terse."), UserTurn("Hi"))
+  )
+  expect_equal(rounds[[2]]@input, list(UserTurn("Bye")))
 })
 
 test_that("can retrieve last_round()", {
@@ -89,7 +91,7 @@ test_that("can retrieve last_round()", {
   ))
   round <- chat$last_round()
   expect_s7_class(round, Round)
-  expect_equal(round@input, UserTurn("Bye"))
+  expect_equal(round@input, list(UserTurn("Bye")))
   expect_equal(round@response, list(AssistantTurn("Goodbye")))
 })
 

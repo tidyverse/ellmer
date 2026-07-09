@@ -4,25 +4,28 @@
 \alias{Round}
 \title{A round of conversation}
 \usage{
-Round(input = UserTurn(), response = list())
+Round(input = list(), response = list())
 }
 \arguments{
-\item{input}{The \link{UserTurn} that started the round.}
+\item{input}{A list of \link{Turn}s that begin the round: the real user turn,
+optionally preceded by one or more system turns. The user turn is the last
+element (a round consisting solely of system turns is possible, e.g. a
+chat that only has a system prompt so far).}
 
 \item{response}{A list of \link{Turn}s (assistant and tool-result) that
 followed \code{input}.}
 
-\item{complete}{Whether the round is complete, i.e. \code{response} is
-non-empty and its last element is an assistant turn with no pending
-tool request.}
+\item{complete}{Whether the round is complete, i.e. \code{response} is non-empty
+and its last element is a finished (non-partial) assistant turn with no
+pending tool request.}
 }
 \value{
 An S7 \code{Round} object
 }
 \description{
-A \code{Round} groups a single real user \link{Turn} with the assistant and
-tool-result \link{Turn}s that follow it, i.e. everything that happens in
-response to one user message, including any tool-calling loop. \code{Round}s
-are derived from a \code{Chat}'s flat turn history on read (e.g. via
-\code{chat$get_rounds()}); they aren't stored separately.
+A \code{Round} groups one real user \link{Turn} with the assistant and tool-result
+\link{Turn}s that follow it, i.e. everything that happens in response to one user
+message, including any tool-calling loop. \code{Round}s are derived from a
+\code{Chat}'s flat turn history on read (e.g. via \code{chat$get_rounds()}); they
+aren't stored separately.
 }

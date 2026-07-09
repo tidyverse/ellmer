@@ -68,12 +68,19 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
-    #' @description Retrieve the conversation grouped into [Round]s
-    #'   (optionally starting with the system prompt, if any).
-    #' @param include_system_prompt Whether to include the system prompt in
-    #'   the rounds (if any exists).
+    #' @description Retrieve the conversation grouped into [Round]s. Each
+    #'   `Round` pairs a user turn with the assistant and tool-result turns it
+    #'   produced.
+    #' @param include_system_prompt Whether to include system turns in the
+    #'   rounds. When `FALSE` (the default), all system turns are dropped. When
+    #'   `TRUE`, each system turn is folded into the `input` of the round it
+    #'   precedes.
     get_rounds = function(include_system_prompt = FALSE) {
-      get_rounds(self$get_turns(include_system_prompt))
+      turns <- self$get_turns(include_system_prompt = TRUE)
+      if (!include_system_prompt) {
+        turns <- discard(turns, is_system_turn)
+      }
+      get_rounds(turns)
     },
 
     #' @description The last round of conversation.

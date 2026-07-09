@@ -14,7 +14,7 @@ test_that("get_rounds() groups a simple round", {
 
   expect_length(rounds, 1)
   expect_s7_class(rounds[[1]], Round)
-  expect_equal(rounds[[1]]@input, UserTurn("Hi"))
+  expect_equal(rounds[[1]]@input, list(UserTurn("Hi")))
   expect_equal(rounds[[1]]@response, list(AssistantTurn("Hello")))
   expect_equal(rounds[[1]]@complete, TRUE)
 })
@@ -29,7 +29,7 @@ test_that("get_rounds() groups a tool-calling loop into one round", {
   rounds <- get_rounds(turns)
 
   expect_length(rounds, 1)
-  expect_equal(rounds[[1]]@input, UserTurn("Hi"))
+  expect_equal(rounds[[1]]@input, list(UserTurn("Hi")))
   expect_length(rounds[[1]]@response, 3)
   expect_equal(rounds[[1]]@complete, TRUE)
 })
@@ -46,6 +46,14 @@ test_that("a round ending on a tool-result turn is incomplete", {
   expect_equal(rounds[[1]]@complete, FALSE)
 })
 
+test_that("a round ending on a partial assistant turn is incomplete", {
+  turns <- list(UserTurn("Hi"), AssistantPartialTurn("Par"))
+  rounds <- get_rounds(turns)
+
+  expect_length(rounds, 1)
+  expect_equal(rounds[[1]]@complete, FALSE)
+})
+
 test_that("get_rounds() groups multiple rounds correctly", {
   turns <- list(
     UserTurn("Hi"),
@@ -56,8 +64,8 @@ test_that("get_rounds() groups multiple rounds correctly", {
   rounds <- get_rounds(turns)
 
   expect_length(rounds, 2)
-  expect_equal(rounds[[1]]@input, UserTurn("Hi"))
-  expect_equal(rounds[[2]]@input, UserTurn("Bye"))
+  expect_equal(rounds[[1]]@input, list(UserTurn("Hi")))
+  expect_equal(rounds[[2]]@input, list(UserTurn("Bye")))
   expect_equal(rounds[[1]]@complete, TRUE)
   expect_equal(rounds[[2]]@complete, TRUE)
 })
@@ -66,14 +74,17 @@ test_that("get_rounds(list()) returns list()", {
   expect_equal(get_rounds(list()), list())
 })
 
-test_that("a lone system turn is passed through with no Round", {
-  turns <- list(SystemTurn("Be nice"))
-  rounds <- get_rounds(turns)
+test_that("a lone system turn becomes a round with no user turn", {
+  rounds <- get_rounds(list(SystemTurn("Be nice")))
 
-  expect_equal(rounds, list(SystemTurn("Be nice")))
+  expect_length(rounds, 1)
+  expect_s7_class(rounds[[1]], Round)
+  expect_equal(rounds[[1]]@input, list(SystemTurn("Be nice")))
+  expect_equal(rounds[[1]]@response, list())
+  expect_equal(rounds[[1]]@complete, FALSE)
 })
 
-test_that("a system turn followed by rounds is grouped correctly", {
+test_that("a leading system turn is folded into the first round's input", {
   turns <- list(
     SystemTurn("Be nice"),
     UserTurn("Hi"),
@@ -81,10 +92,27 @@ test_that("a system turn followed by rounds is grouped correctly", {
   )
   rounds <- get_rounds(turns)
 
+  expect_length(rounds, 1)
+  expect_equal(rounds[[1]]@input, list(SystemTurn("Be nice"), UserTurn("Hi")))
+  expect_equal(rounds[[1]]@response, list(AssistantTurn("Hello")))
+})
+
+test_that("an interleaved system turn starts a new round", {
+  turns <- list(
+    UserTurn("Hi"),
+    AssistantTurn("Hello"),
+    SystemTurn("Be terse"),
+    UserTurn("Bye"),
+    AssistantTurn("Goodbye")
+  )
+  rounds <- get_rounds(turns)
+
   expect_length(rounds, 2)
-  expect_equal(rounds[[1]], SystemTurn("Be nice"))
-  expect_s7_class(rounds[[2]], Round)
-  expect_equal(rounds[[2]]@input, UserTurn("Hi"))
+  expect_equal(rounds[[1]]@input, list(UserTurn("Hi")))
+  expect_equal(
+    rounds[[2]]@input,
+    list(SystemTurn("Be terse"), UserTurn("Bye"))
+  )
 })
 
 test_that("get_rounds() aborts on a leading tool-result turn", {
@@ -95,6 +123,6 @@ test_that("get_rounds() aborts on a leading tool-result turn", {
 test_that("Round validator rejects a tool-result turn as input", {
   expect_snapshot(
     error = TRUE,
-    Round(input = fixture_tool_result_turn(), response = list())
+    Round(input = list(fixture_tool_result_turn()), response = list())
   )
 })

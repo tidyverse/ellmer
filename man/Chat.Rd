@@ -128,8 +128,9 @@ turns (if any exists).}
 \if{html}{\out{<a id="method-Chat-get_rounds"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-get_rounds}{}}}
 \subsection{\code{Chat$get_rounds()}}{
-  Retrieve the conversation grouped into \link{Round}s
-(optionally starting with the system prompt, if any).
+  Retrieve the conversation grouped into \link{Round}s. Each
+\code{Round} pairs a user turn with the assistant and tool-result turns it
+produced.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$get_rounds(include_system_prompt = FALSE)}
@@ -138,8 +139,10 @@ turns (if any exists).}
   \subsection{Arguments}{
     \if{html}{\out{<div class="arguments">}}
     \describe{
-      \item{\code{include_system_prompt}}{Whether to include the system prompt in
-the rounds (if any exists).}
+      \item{\code{include_system_prompt}}{Whether to include system turns in the
+rounds. When \code{FALSE} (the default), all system turns are dropped. When
+\code{TRUE}, each system turn is folded into the \code{input} of the round it
+precedes.}
     }
     \if{html}{\out{</div>}}
   }
