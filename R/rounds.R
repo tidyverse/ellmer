@@ -9,6 +9,10 @@ NULL
 #' including any tool-calling loop. `Round`s are an alternative view of a
 #' [Chat]'s flat turn history.
 #'
+#' `Round`s also expose a read-only `@complete` property: `TRUE` if `response`
+#' is non-empty and its last element is a finished (non-partial) assistant
+#' turn with no pending tool request, `FALSE` otherwise.
+#'
 #' @param input A list of the input-side [Turn]s that begin the round: the
 #'   turns between the end of the previous round and the user turn that
 #'   triggered this one. In the common case this is a length-1 list holding just
@@ -20,9 +24,6 @@ NULL
 #'   a chat that so far only has a system prompt).
 #' @param response A list of [Turn]s (assistant and tool-result) that
 #'   followed `input`.
-#' @param complete Whether the round is complete, i.e. `response` is non-empty
-#'   and its last element is a finished (non-partial) assistant turn with no
-#'   pending tool request.
 #' @export
 #' @return An S7 `Round` object
 Round <- new_class(

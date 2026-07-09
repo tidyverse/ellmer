@@ -19,10 +19,6 @@ a chat that so far only has a system prompt).}
 
 \item{response}{A list of \link{Turn}s (assistant and tool-result) that
 followed \code{input}.}
-
-\item{complete}{Whether the round is complete, i.e. \code{response} is non-empty
-and its last element is a finished (non-partial) assistant turn with no
-pending tool request.}
 }
 \value{
 An S7 \code{Round} object
@@ -32,4 +28,8 @@ A \code{Round} groups a user \link{Turn} with the assistant and tool-result \lin
 that follow it, i.e. everything that happens in response to one user message,
 including any tool-calling loop. \code{Round}s are an alternative view of a
 \link{Chat}'s flat turn history.
+
+\code{Round}s also expose a read-only \verb{@complete} property: \code{TRUE} if \code{response}
+is non-empty and its last element is a finished (non-partial) assistant
+turn with no pending tool request, \code{FALSE} otherwise.
 }
