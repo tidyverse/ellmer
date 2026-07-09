@@ -247,11 +247,9 @@ method(chat_body, ProviderGoogleGemini) <- function(
       tool_config <- list(includeServerSideToolInvocations = TRUE)
     }
 
-    user_tools <- funs[!is_builtin]
-
     tools <- c(
-      if (length(user_tools) > 0) list(list(functionDeclarations = user_tools)),
-      funs[is_builtin]
+      compact(list(functionDeclarations = funs[!is_builtin])),
+      unlist(funs[is_builtin], recursive = FALSE)
     )
   } else {
     tools <- NULL
