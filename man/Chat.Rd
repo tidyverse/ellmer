@@ -29,6 +29,8 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-initialize}{\code{Chat$new()}}
     \item \href{#method-Chat-get_turns}{\code{Chat$get_turns()}}
     \item \href{#method-Chat-set_turns}{\code{Chat$set_turns()}}
+    \item \href{#method-Chat-get_rounds}{\code{Chat$get_rounds()}}
+    \item \href{#method-Chat-last_round}{\code{Chat$last_round()}}
     \item \href{#method-Chat-add_turn}{\code{Chat$add_turn()}}
     \item \href{#method-Chat-get_system_prompt}{\code{Chat$get_system_prompt()}}
     \item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
@@ -119,6 +121,42 @@ turns (if any exists).}
       \item{\code{value}}{A list of \link{Turn}s.}
     }
     \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_rounds"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_rounds}{}}}
+\subsection{\code{Chat$get_rounds()}}{
+  Retrieve the conversation grouped into \link{Round}s
+(optionally starting with the system prompt, if any).
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$get_rounds(include_system_prompt = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{include_system_prompt}}{Whether to include the system prompt in
+the rounds (if any exists).}
+    }
+    \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-last_round"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-last_round}{}}}
+\subsection{\code{Chat$last_round()}}{
+  The last round of conversation.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$last_round()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Either a \code{Round} or \code{NULL}, if no rounds have occurred.
   }
 }
 

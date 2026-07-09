@@ -267,6 +267,12 @@ is_partial_turn <- function(x) {
   S7_inherits(x, AssistantPartialTurn)
 }
 
+is_tool_result_turn <- function(turn) {
+  is_user_turn(turn) &&
+    length(turn@contents) > 0 &&
+    all(map_lgl(turn@contents, S7_inherits, ContentToolResult))
+}
+
 check_turn <- function(x, call = caller_env(), arg = caller_arg(x)) {
   if (!S7_inherits(x, Turn)) {
     stop_input_type(x, "a <Turn>", call = call, arg = arg)

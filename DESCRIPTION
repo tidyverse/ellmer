@@ -122,6 +122,7 @@ Collate:
     'provider-posit.R'
     'provider-snowflake.R'
     'provider-vllm.R'
+    'rounds.R'
     'schema.R'
     'stream-controller.R'
     'tokens.R'

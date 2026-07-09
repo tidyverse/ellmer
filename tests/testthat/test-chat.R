@@ -55,6 +55,44 @@ test_that("can get and set turns", {
   expect_equal(chat$get_turns(), list(UserTurn(), AssistantTurn()))
 })
 
+test_that("can get rounds, with and without system prompt", {
+  chat <- chat_openai_test(system_prompt = "Be terse.")
+  chat$set_turns(list(
+    UserTurn("Hi"),
+    AssistantTurn("Hello"),
+    UserTurn("Bye"),
+    AssistantTurn("Goodbye")
+  ))
+
+  rounds <- chat$get_rounds()
+  expect_length(rounds, 2)
+  expect_s7_class(rounds[[1]], Round)
+  expect_equal(rounds[[1]]@input, UserTurn("Hi"))
+  expect_equal(rounds[[2]]@input, UserTurn("Bye"))
+
+  rounds <- chat$get_rounds(include_system_prompt = TRUE)
+  expect_length(rounds, 3)
+  expect_equal(rounds[[1]], SystemTurn("Be terse."))
+  expect_s7_class(rounds[[2]], Round)
+  expect_s7_class(rounds[[3]], Round)
+})
+
+test_that("can retrieve last_round()", {
+  chat <- chat_openai_test()
+  expect_equal(chat$last_round(), NULL)
+
+  chat$set_turns(list(
+    UserTurn("Hi"),
+    AssistantTurn("Hello"),
+    UserTurn("Bye"),
+    AssistantTurn("Goodbye")
+  ))
+  round <- chat$last_round()
+  expect_s7_class(round, Round)
+  expect_equal(round@input, UserTurn("Bye"))
+  expect_equal(round@response, list(AssistantTurn("Goodbye")))
+})
+
 test_that("can get model", {
   chat <- chat_openai_test(model = "abc")
   expect_equal(chat$get_model(), "abc")

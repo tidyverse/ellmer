@@ -68,6 +68,21 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
+    #' @description Retrieve the conversation grouped into [Round]s
+    #'   (optionally starting with the system prompt, if any).
+    #' @param include_system_prompt Whether to include the system prompt in
+    #'   the rounds (if any exists).
+    get_rounds = function(include_system_prompt = FALSE) {
+      get_rounds(self$get_turns(include_system_prompt))
+    },
+
+    #' @description The last round of conversation.
+    #' @return Either a `Round` or `NULL`, if no rounds have occurred.
+    last_round = function() {
+      rounds <- get_rounds(self$get_turns())
+      if (length(rounds) == 0) NULL else rounds[[length(rounds)]]
+    },
+
     #' @description Add a pair of turns to the chat.
     #' @param user The user [Turn].
     #' @param assistant The system [Turn].
