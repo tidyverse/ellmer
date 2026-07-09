@@ -133,6 +133,24 @@ test_that("contents_*() label each turn by role", {
   expect_snapshot(cat(contents_html(round)))
 })
 
+test_that("consecutive user turns are merged into one round's input", {
+  turns <- list(UserTurn("A"), UserTurn("B"), AssistantTurn("C"))
+  rounds <- get_rounds(turns)
+
+  expect_length(rounds, 1)
+  expect_equal(rounds[[1]]@input, list(UserTurn("A"), UserTurn("B")))
+  expect_equal(rounds[[1]]@response, list(AssistantTurn("C")))
+})
+
+test_that("a system turn after a user turn stays in the same round's input", {
+  turns <- list(UserTurn("A"), SystemTurn("S"), AssistantTurn("C"))
+  rounds <- get_rounds(turns)
+
+  expect_length(rounds, 1)
+  expect_equal(rounds[[1]]@input, list(UserTurn("A"), SystemTurn("S")))
+  expect_equal(rounds[[1]]@response, list(AssistantTurn("C")))
+})
+
 test_that("get_rounds() aborts on a leading tool-result turn", {
   turns <- list(fixture_tool_result_turn())
   expect_snapshot(error = TRUE, get_rounds(turns))

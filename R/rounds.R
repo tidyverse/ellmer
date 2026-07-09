@@ -4,16 +4,20 @@ NULL
 #' A round of conversation
 #'
 #' @description
-#' A `Round` groups one real user [Turn] with the assistant and tool-result
-#' [Turn]s that follow it, i.e. everything that happens in response to one user
-#' message, including any tool-calling loop. `Round`s are derived from a
-#' `Chat`'s flat turn history on read (e.g. via `chat$get_rounds()`); they
-#' aren't stored separately.
+#' A `Round` groups a user [Turn] with the assistant and tool-result [Turn]s
+#' that follow it, i.e. everything that happens in response to one user message,
+#' including any tool-calling loop. `Round`s are an alternative view of a
+#' [Chat]'s flat turn history.
 #'
-#' @param input A list of [Turn]s that begin the round: the real user turn,
-#'   optionally preceded by one or more system turns. The user turn is the last
-#'   element (a round consisting solely of system turns is possible, e.g. a
-#'   chat that only has a system prompt so far).
+#' @param input A list of the input-side [Turn]s that begin the round: the
+#'   turns between the end of the previous round and the user turn that
+#'   triggered this one. In the common case this is a length-1 list holding just
+#'   that user turn, but it can also be preceded by system turns.
+#'
+#'   Because [Chat]'s `$set_turns()` accepts an arbitrary list of turns, `input`
+#'   may in principle hold multiple user turns or system turns in other
+#'   positions; a round consisting solely of system turns is also possible (e.g.
+#'   a chat that so far only has a system prompt).
 #' @param response A list of [Turn]s (assistant and tool-result) that
 #'   followed `input`.
 #' @param complete Whether the round is complete, i.e. `response` is non-empty

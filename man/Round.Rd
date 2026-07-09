@@ -7,10 +7,15 @@
 Round(input = list(), response = list())
 }
 \arguments{
-\item{input}{A list of \link{Turn}s that begin the round: the real user turn,
-optionally preceded by one or more system turns. The user turn is the last
-element (a round consisting solely of system turns is possible, e.g. a
-chat that only has a system prompt so far).}
+\item{input}{A list of the input-side \link{Turn}s that begin the round: the
+turns between the end of the previous round and the user turn that
+triggered this one. In the common case this is a length-1 list holding just
+that user turn, but it can also be preceded by system turns.
+
+Because \link{Chat}'s \verb{$set_turns()} accepts an arbitrary list of turns, \code{input}
+may in principle hold multiple user turns or system turns in other
+positions; a round consisting solely of system turns is also possible (e.g.
+a chat that so far only has a system prompt).}
 
 \item{response}{A list of \link{Turn}s (assistant and tool-result) that
 followed \code{input}.}
@@ -23,9 +28,8 @@ pending tool request.}
 An S7 \code{Round} object
 }
 \description{
-A \code{Round} groups one real user \link{Turn} with the assistant and tool-result
-\link{Turn}s that follow it, i.e. everything that happens in response to one user
-message, including any tool-calling loop. \code{Round}s are derived from a
-\code{Chat}'s flat turn history on read (e.g. via \code{chat$get_rounds()}); they
-aren't stored separately.
+A \code{Round} groups a user \link{Turn} with the assistant and tool-result \link{Turn}s
+that follow it, i.e. everything that happens in response to one user message,
+including any tool-calling loop. \code{Round}s are an alternative view of a
+\link{Chat}'s flat turn history.
 }

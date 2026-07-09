@@ -79,9 +79,18 @@ test_that("can get rounds, with and without system prompt", {
   expect_equal(rounds[[2]]@input, list(UserTurn("Bye")))
 })
 
+test_that("last_round() is NULL only when there are no turns at all", {
+  chat <- chat_openai_test(system_prompt = NULL)
+  expect_equal(chat$last_round(), NULL)
+})
+
+test_that("last_round() keeps system turns", {
+  chat <- chat_openai_test(system_prompt = "Be terse.")
+  expect_equal(chat$last_round()@input, list(SystemTurn("Be terse.")))
+})
+
 test_that("can retrieve last_round()", {
   chat <- chat_openai_test()
-  expect_equal(chat$last_round(), NULL)
 
   chat$set_turns(list(
     UserTurn("Hi"),
