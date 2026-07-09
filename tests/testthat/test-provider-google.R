@@ -237,7 +237,7 @@ test_that("batch_status waits for responsesFile after SUCCEEDED", {
   no_file <- batch_status(provider, returned_batch)
   expect_true(no_file$working)
 
-  returned_batch$response = list(responsesFile = "files/abc123")
+  returned_batch$response <- list(responsesFile = "files/abc123")
 
   with_file <- batch_status(
     provider,
