@@ -68,6 +68,29 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
+    #' @description Retrieve the conversation grouped into [Round]s. Each
+    #'   `Round` pairs a user turn with the assistant and tool-result turns it
+    #'   produced.
+    #' @param include_system_prompt Whether to include system turns in the
+    #'   rounds. When `FALSE` (the default), all system turns are dropped. When
+    #'   `TRUE`, each system turn is folded into the `input` of the round it
+    #'   precedes.
+    get_rounds = function(include_system_prompt = FALSE) {
+      turns <- self$get_turns(include_system_prompt = TRUE)
+      if (!include_system_prompt) {
+        turns <- discard(turns, is_system_turn)
+      }
+      get_rounds(turns)
+    },
+
+    #' @description The last [Round] of conversation. Note that system prompt
+    #'   turns are included, equivalent to the last item in the list of rounds #'   returned by `$get_rounds(include_system_prompt = TRUE)`.
+    #' @return Either a `Round` or `NULL`, if no rounds have occurred.
+    last_round = function() {
+      rounds <- self$get_rounds(include_system_prompt = TRUE)
+      if (length(rounds) == 0) NULL else rounds[[length(rounds)]]
+    },
+
     #' @description Add a pair of turns to the chat.
     #' @param user The user [Turn].
     #' @param assistant The system [Turn].
@@ -1023,14 +1046,5 @@ method(contents_markdown, new_S3_class("Chat")) <- function(
     return("")
   }
 
-  hh <- strrep("#", heading_level)
-
-  res <- vector("character", length(turns))
-  for (i in seq_along(res)) {
-    role <- turns[[i]]@role
-    substr(role, 0, 1) <- toupper(substr(role, 0, 1))
-    res[i] <- glue::glue("{hh} {role}\n\n{contents_markdown(turns[[i]])}")
-  }
-
-  paste(res, collapse = "\n\n")
+  turns_markdown(turns, heading_level)
 }

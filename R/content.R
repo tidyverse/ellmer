@@ -36,9 +36,9 @@ NULL
 #'   contents_html(turns[[1]])
 #' }
 #'
-#' @param content The [Turn] or [Content] object to be converted into text.
-#'   `contents_markdown()` also accepts [Chat] instances to turn the entire
-#'   conversation history into markdown text.
+#' @param content The [Turn], [Round], or [Content] object to be converted into
+#'   text. `contents_markdown()` also accepts [Chat] instances to turn the
+#'   entire conversation history into markdown text.
 #' @param ... Additional arguments passed to methods.
 #'
 #' @return A string of text, markdown or HTML.
