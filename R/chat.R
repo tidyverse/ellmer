@@ -1045,14 +1045,5 @@ method(contents_markdown, new_S3_class("Chat")) <- function(
     return("")
   }
 
-  hh <- strrep("#", heading_level)
-
-  res <- vector("character", length(turns))
-  for (i in seq_along(res)) {
-    role <- turns[[i]]@role
-    substr(role, 0, 1) <- toupper(substr(role, 0, 1))
-    res[i] <- glue::glue("{hh} {role}\n\n{contents_markdown(turns[[i]])}")
-  }
-
-  paste(res, collapse = "\n\n")
+  turns_markdown(turns, heading_level)
 }

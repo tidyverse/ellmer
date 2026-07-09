@@ -198,6 +198,22 @@ method(contents_markdown, Turn) <- function(content) {
   paste0(unlist(lapply(content@contents, contents_markdown)), collapse = "\n\n")
 }
 
+turn_role_title <- function(turn) {
+  role <- turn@role
+  substr(role, 0, 1) <- toupper(substr(role, 0, 1))
+  role
+}
+
+turns_markdown <- function(turns, heading_level = 2) {
+  hh <- strrep("#", heading_level)
+  res <- map_chr(turns, function(turn) {
+    as.character(glue::glue(
+      "{hh} {turn_role_title(turn)}\n\n{contents_markdown(turn)}"
+    ))
+  })
+  paste(res, collapse = "\n\n")
+}
+
 method(print, Turn) <- function(x, ...) {
   cat(paste_c("<Turn: ", color_role(x@role), ">\n"))
   cat(format(x))
