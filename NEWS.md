@@ -6,6 +6,7 @@
 * `Chat` gains a `set_model()` method for updating the model after chat creation. Unlike some `chat_*()` functions, the model name is not validated (#988).
 * `chat()` now raises a warning and `chat_structured()` raises an informative error when a response is truncated, filtered, or otherwise incomplete (@thisisnic, #867).
 * `chat_anthropic()` now supports `params(reasoning_effort =)` for Claude's adaptive thinking mode (@thisisnic, #987).
+* `chat_anthropic()` now correctly handles the `fallback` content block returned when a model's server-side refusal fallback (`server-side-fallback-2026-06-01`) is triggered (@simonpcouch, #1058).
 * `chat_google_gemini()` now defaults to the `gemini-3.5-flash` model (@thisisnic, #885).
 * `chat_google_gemini()` and `chat_google_vertex()` now support `params(reasoning_effort =)` (@thisisnic, #873).
 * `chat_google_vertex()` and `models_google_vertex()` now default `location` and `project_id` to the `GOOGLE_CLOUD_LOCATION` and `GOOGLE_CLOUD_PROJECT` environment variables, no longer incorrectly use `GOOGLE_API_KEY` for authentication, and give a clearer error when cached credentials are invalid (@thisisnic, #994).

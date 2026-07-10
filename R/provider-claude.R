@@ -448,6 +448,9 @@ method(value_turn, ProviderAnthropic) <- function(
         content$thinking,
         extra = list(signature = content$signature)
       )
+    } else if (content$type == "fallback") {
+      # https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback
+      NULL
     } else {
       cli::cli_abort(
         "Unknown content type {.str {content$type}}.",
@@ -455,6 +458,7 @@ method(value_turn, ProviderAnthropic) <- function(
       )
     }
   })
+  contents <- compact(contents)
 
   tokens <- value_tokens(provider, result)
   cache_write <- result$usage$cache_creation_input_tokens %||% 0
@@ -462,7 +466,11 @@ method(value_turn, ProviderAnthropic) <- function(
   # already counts them at 1.0x, so add the 0.25x surcharge for pricing.
   cost_tokens <- tokens
   cost_tokens$input <- cost_tokens$input + cache_write * 0.25
-  cost <- get_token_cost(provider, cost_tokens)
+  cost <- get_token_cost(
+    provider,
+    cost_tokens,
+    model = serving_model(result) %||% provider@model
+  )
   AssistantTurn(
     contents,
     json = result,
@@ -470,6 +478,20 @@ method(value_turn, ProviderAnthropic) <- function(
     cost = cost,
     finish_reason = value_finish_reason(provider, result)
   )
+}
+
+# The model that produced the returned message. `result$model` is unreliable
+# for a mid-output fallback in a stream (it keeps the requested model named at
+# `message_start`), so prefer the last `fallback` block's `to.model`.
+serving_model <- function(result) {
+  to_models <- compact(lapply(result$content, function(content) {
+    if (identical(content$type, "fallback")) content$to$model
+  }))
+  if (length(to_models) > 0) {
+    to_models[[length(to_models)]]
+  } else {
+    result$model
+  }
 }
 
 # ellmer -> Claude --------------------------------------------------------------
