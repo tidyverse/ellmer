@@ -466,7 +466,11 @@ method(value_turn, ProviderAnthropic) <- function(
   # already counts them at 1.0x, so add the 0.25x surcharge for pricing.
   cost_tokens <- tokens
   cost_tokens$input <- cost_tokens$input + cache_write * 0.25
-  cost <- get_token_cost(provider, cost_tokens)
+  cost <- get_token_cost(
+    provider,
+    cost_tokens,
+    model = serving_model(result) %||% provider@model
+  )
   AssistantTurn(
     contents,
     json = result,
@@ -542,6 +546,20 @@ method(count_tokens, ProviderAnthropic) <- function(
 
   resp <- req_perform(req)
   resp_body_json(resp)$input_tokens
+}
+
+# The model that produced the returned message. `result$model` is unreliable
+# for a mid-output fallback in a stream (it keeps the requested model named at
+# `message_start`), so prefer the last `fallback` block's `to.model`.
+serving_model <- function(result) {
+  to_models <- compact(lapply(result$content, function(content) {
+    if (identical(content$type, "fallback")) content$to$model
+  }))
+  if (length(to_models) > 0) {
+    to_models[[length(to_models)]]
+  } else {
+    result$model
+  }
 }
 
 # ellmer -> Claude --------------------------------------------------------------
