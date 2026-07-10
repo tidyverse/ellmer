@@ -448,6 +448,9 @@ method(value_turn, ProviderAnthropic) <- function(
         content$thinking,
         extra = list(signature = content$signature)
       )
+    } else if (content$type == "fallback") {
+      # https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback
+      NULL
     } else {
       cli::cli_abort(
         "Unknown content type {.str {content$type}}.",
@@ -455,6 +458,7 @@ method(value_turn, ProviderAnthropic) <- function(
       )
     }
   })
+  contents <- compact(contents)
 
   tokens <- value_tokens(provider, result)
   cache_write <- result$usage$cache_creation_input_tokens %||% 0
