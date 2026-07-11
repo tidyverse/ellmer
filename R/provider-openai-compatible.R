@@ -131,22 +131,6 @@ chat_openai_compatible_test <- function(
   chat
 }
 
-#' An OpenAI-compatible provider
-#'
-#' @description
-#' `ProviderOpenAICompatible` is an S7 class that implements the OpenAI
-#' chat completions API. It can be subclassed to create custom providers
-#' for services that offer OpenAI-compatible endpoints.
-#'
-#' In most cases, you should use [chat_openai_compatible()] to
-#' interact with OpenAI-compatible APIs. This class is exported
-#' so that package developers can create custom providers that
-#' inherit its behavior.
-#'
-#' @export
-#' @inheritParams Provider
-#' @param preserve_thinking If `TRUE`, reasoning content returned by the model
-#'   is included when sending conversation history back to the API.
 ProviderOpenAICompatible <- new_class(
   "ProviderOpenAICompatible",
   parent = Provider,
