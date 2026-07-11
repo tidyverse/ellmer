@@ -268,6 +268,69 @@ test_that("chat callbacks for tool requests/results", {
   })
 })
 
+test_that("on_request_start() can rewrite history via set_turns() (compaction contract)", {
+  # Live test: rewriting history changes the request bodies, so a recorded
+  # cassette can't replay it. Skipped unless an API key is configured.
+  chat <- chat_openai_test()
+  chat$register_tool(tool(
+    function(user) c("red", "blue")[nchar(user) %% 2 + 1],
+    name = "user_favorite_color",
+    description = "Find out a user's favorite color",
+    arguments = list(user = type_string("User's name"))
+  ))
+
+  turn_text <- function(t) {
+    tx <- tryCatch(contents_text(t), error = function(e) "")
+    if (length(tx) != 1L || is.na(tx)) "" else tx
+  }
+
+  # Inject a sentinel into history from inside the callback on the first request,
+  # then confirm the *next* request's payload reflects it -- i.e. calling
+  # set_turns() from on_request_start actually changes what gets sent.
+  calls <- 0L
+  seen <- list()
+  chat$on_request_start(function(turns) {
+    calls <<- calls + 1L
+    seen[[calls]] <<- vapply(turns, turn_text, character(1))
+    if (calls == 1L) {
+      chat$set_turns(c(
+        list(Turn("user", "SENTINEL_ROUND_1")),
+        chat$get_turns()
+      ))
+    }
+  })
+
+  . <- chat$chat("What are Joe and Hadley's favorite colors?")
+
+  expect_gte(calls, 2L)
+  # The first request predates the rewrite; the second reflects it.
+  expect_false(any(grepl("SENTINEL_ROUND_1", seen[[1]], fixed = TRUE)))
+  expect_true(any(grepl("SENTINEL_ROUND_1", seen[[2]], fixed = TRUE)))
+})
+
+test_that("on_request_start() / on_request_end() fire on the async tool loop", {
+  vcr::local_cassette("chat-tools-callbacks")
+  chat <- chat_openai_test()
+  chat$register_tool(tool(
+    function(user) c("red", "blue")[nchar(user) %% 2 + 1],
+    name = "user_favorite_color",
+    description = "Find out a user's favorite color",
+    arguments = list(user = type_string("User's name"))
+  ))
+
+  n_start <- 0L
+  n_end <- 0L
+  chat$on_request_start(function(turns) n_start <<- n_start + 1L)
+  chat$on_request_end(function(turn) n_end <<- n_end + 1L)
+
+  sync(chat$chat_async("What are Joe and Hadley's favorite colors?"))
+
+  # Fires once per model request on the async loop too: initial request plus the
+  # follow-up after the tool results are fed back.
+  expect_equal(n_start, 2L)
+  expect_equal(n_end, 2L)
+})
+
 test_that("$chat_async() can run tools concurrently", {
   res <- list()
 
