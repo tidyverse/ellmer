@@ -141,7 +141,7 @@ check_openrouter_error <- function(error, call = caller_env()) {
   }
 
   abort(
-    c("message", i = if (!is.null(details)) details),
+    c(message, i = if (!is.null(details)) details),
     call = call
   )
 }

@@ -13,3 +13,10 @@
       ! HTTP 400 Bad Request.
       i temperature: Invalid input: expected number, received string
 
+# reports response errors
+
+    Code
+      check_openrouter_error(list(message = "Provider unavailable"))
+    Condition
+      Error:
+      ! Provider unavailable
