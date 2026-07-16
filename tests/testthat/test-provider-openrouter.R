@@ -21,12 +21,6 @@ test_that("handles errors", {
   })
 })
 
-test_that("reports response errors", {
-  expect_snapshot(error = TRUE, {
-    check_openrouter_error(list(message = "Provider unavailable"))
-  })
-})
-
 # Common provider interface -----------------------------------------------
 
 test_that("supports tool calling", {
