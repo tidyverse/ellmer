@@ -1,3 +1,7 @@
+# ellmer (development version)
+
+* `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
+
 # ellmer 0.4.2
 
 * `AssistantTurn` gains a `finish_reason` property that reports why the model stopped generating (@thisisnic, #3).
