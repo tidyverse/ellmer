@@ -22,7 +22,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/tidyverse/ellmer/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/tidyverse/ellmer/blob/v0.4.2/DESCRIPTION)
 
 Wickham H, Cheng J, Jacobs A, Aden-Buie G, Schloerke B (2026). *ellmer:
 Chat with Large Language Models*. R package version 0.4.2,
