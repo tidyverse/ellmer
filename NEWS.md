@@ -1,5 +1,7 @@
 # ellmer 0.4.2
 
+* `Chat` gains `$on_request_start(turns)` and `$on_request_end(turn)`, paired callbacks that fire before and after each model request in the tool loop (once per request, whether or not it involves tools). `$on_request_start()` receives the **complete outgoing request** (history plus the pending turn) for inspection -- e.g. to measure its size and decide whether to compact; rewrite the conversation with `$set_turns()`, which operates on history (the canonical idiom being `chat$set_turns(compact(chat$get_turns()))`). `$on_request_end()` receives the assistant turn just returned, useful for per-request latency/cost tracking and for observing tool-call requests before they run (#1051).
+
 * `AssistantTurn` gains a `finish_reason` property that reports why the model stopped generating (@thisisnic, #3).
 * `batch_chat()` now supports `chat_google_gemini()` and `chat_groq()` for batch processing (@xmarquez, #914, #927).
 * `Chat` gains a `set_model()` method for updating the model after chat creation. Unlike some `chat_*()` functions, the model name is not validated (#988).

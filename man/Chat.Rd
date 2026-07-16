@@ -50,6 +50,8 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-set_tools}{\code{Chat$set_tools()}}
     \item \href{#method-Chat-on_tool_request}{\code{Chat$on_tool_request()}}
     \item \href{#method-Chat-on_tool_result}{\code{Chat$on_tool_result()}}
+    \item \href{#method-Chat-on_request_start}{\code{Chat$on_request_start()}}
+    \item \href{#method-Chat-on_request_end}{\code{Chat$on_request_end()}}
     \item \href{#method-Chat-clone}{\code{Chat$clone()}}
   }
 }
@@ -572,6 +574,87 @@ which must have \code{request} as its only argument.}
     \describe{
       \item{\code{callback}}{A function to be called when a tool result event occurs,
 which must have \code{result} as its only argument.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A function that can be called to remove the callback.
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-on_request_start"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-on_request_start}{}}}
+\subsection{\code{Chat$on_request_start()}}{
+  Register a callback that fires at the \strong{start of each model
+request} in the tool loop, i.e. immediately before the request is sent
+to the model. It fires once per request (including the first), whether
+or not the request involves tools.
+
+The callback receives \code{turns}, the \strong{complete outgoing request}: the
+accumulated history \emph{plus} the pending turn about to be sent. It is here
+so you can \emph{inspect} that payload -- for example, to measure its size
+(including a large pending tool result) and decide whether to compact.
+
+To \emph{rewrite} the conversation, use \verb{$set_turns()} / \verb{$get_turns()}, which
+operate on the \strong{history only}: ellmer preserves and re-appends the
+pending turn for you. The canonical idiom for mid-loop compaction is
+\code{chat$set_turns(compact(chat$get_turns()))}, called from inside the
+callback (a supported, documented operation). Do \strong{not} pass \code{turns}
+straight back into \verb{$set_turns()} -- because \code{set_turns()} sets the
+history and ellmer then re-appends the pending turn, that would duplicate
+the pending turn in the outgoing request.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$on_request_start(callback)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{callback}}{A function called with a single argument \code{turns}: the
+complete list of turns about to be sent -- the history plus the pending
+turn (the new user turn on the first request, or the synthesized
+tool-result turn on later ones). Called for its side effects; the return
+value is ignored. With \verb{$chat_async()} / \verb{$stream_async()} the callback
+may return a promise.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A function that can be called to remove the callback.
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-on_request_end"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-on_request_end}{}}}
+\subsection{\code{Chat$on_request_end()}}{
+  Register a callback that fires at the \strong{end of each model
+request} in the tool loop, i.e. after the model's response turn is
+received and before any tool calls it contains are executed. It is paired
+with \verb{$on_request_start()} -- every \code{on_request_start} has a matching
+\code{on_request_end} -- and is useful for per-request latency / cost tracking
+and for observing tool-call requests before they run.
+
+If a request is cancelled or interrupted the callback still fires (to
+keep the start/end pairing), but \code{turn} may be an \link{AssistantPartialTurn}
+whose \verb{@tokens} and \verb{@cost} are \code{NA} (only \verb{@duration} is populated).
+Guard cost/latency accounting with
+\code{S7::S7_inherits(turn, AssistantPartialTurn)} if that matters to you.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$on_request_end(callback)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{callback}}{A function called with a single argument \code{turn}: the
+assistant turn just returned by the model (an \link{AssistantPartialTurn} on a
+cancelled request). Called for its side effects; the return value is
+ignored. With \verb{$chat_async()} / \verb{$stream_async()} the callback may return
+a promise.}
     }
     \if{html}{\out{</div>}}
   }
