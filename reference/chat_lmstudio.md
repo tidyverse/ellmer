@@ -1,5 +1,7 @@
 # Chat with a local LM Studio model
 
+![\[Community supported provider\]](figures/support-community.svg)
+
 To use `chat_lmstudio()` first download and install [LM
 Studio](https://lmstudio.ai). Then load a model using the LM Studio GUI
 and start the local server. To learn more about running LM Studio
@@ -103,7 +105,8 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
 
 ## Examples
 

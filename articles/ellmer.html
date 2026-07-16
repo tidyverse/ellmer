@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -173,15 +173,15 @@ printing it, and you can see total usage for a session with
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4.1"</span><span class="op">)</span></span>
 <span><span class="va">.</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Who created R?"</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=2 input=11 output=110 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1 turns=2 input=11 output=105 cost=$0.00&gt;</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Who created R?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=11 output=110 cost=$0.00] ─────────────────────────</span></span>
-<span><span class="co">#&gt; **R** is a programming language and software environment for statistical computing and graphics. It was created by **Ross Ihaka and Robert Gentleman** at the University of Auckland, New Zealand, in the early 1990s. The name "R" is partly derived from the first letters of their first names (Ross and Robert), and it is also a play on the name of the S programming language, which R was designed to improve upon and be compatible with. Today, R is maintained by the **R Core Team** and the community.</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=11 output=105 cost=$0.00] ─────────────────────────</span></span>
+<span><span class="co">#&gt; **R** was created by **Ross Ihaka** and **Robert Gentleman** at the University of Auckland, New Zealand, in the mid-1990s. The project began in 1992, with an initial release to the public in 1995. R is a programming language and environment specifically designed for statistical computing and graphics, and its name is partially derived from the first names of its two creators (Ross and Robert), as well as being a reference to the S language, on which R is based.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/token_usage.html">token_usage</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   provider   model input output cached_input price</span></span>
-<span><span class="co">#&gt; 1   OpenAI gpt-4.1    11    110            0 $0.00</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   OpenAI gpt-4.1    11    105            0 $0.00</span></span></code></pre></div>
 <p>If you want to learn more about tokens and tokenizers, I’d recommend
 watching the first 20-30 minutes of <a href="https://www.youtube.com/watch?v=zduSFxRajkE" class="external-link">Let’s build the GPT
 Tokenizer</a> by Andrej Karpathy. You certainly don’t need to learn how
@@ -279,7 +279,7 @@ prompt because LLMs were trained on data prior to your package’s
 existence. You can create a surprisingly useful tool just by preloading
 the prompt with your README and vignettes. This is how the <a href="https://github.com/jcheng5/ellmer-assistant" class="external-link">ellmer assistant</a>
 works.</p></li>
-<li><p>Build language specific prompts for R and/or Python. <a href="https://shiny.posit.co/blog/posts/shiny-assistant/" class="external-link">Shiny
+<li><p>Build language specific prompts for R and/or Python. <a href="https://opensource.posit.co/blog/2024-10-09_shiny-assistant/" class="external-link">Shiny
 Assistant</a> helps you build shiny apps (either in R or Python) by
 combining a <a href="https://github.com/posit-dev/shiny-assistant/blob/main/shinyapp/app_prompt.md" class="external-link">prompt</a>
 that gives general advice on building apps with a prompt for <a href="https://github.com/posit-dev/shiny-assistant/blob/main/shinyapp/app_prompt_r.md" class="external-link">R</a>
@@ -401,7 +401,7 @@ plots to match your corporate style guide.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
   </div></footer>

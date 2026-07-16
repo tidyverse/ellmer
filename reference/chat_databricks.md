@@ -1,5 +1,7 @@
 # Chat with a model hosted on Databricks
 
+![\[Official supported provider\]](figures/support-official.svg)
+
 Databricks provides out-of-the-box access to a number of [foundation
 models](https://docs.databricks.com/en/machine-learning/model-serving/score-foundation-models.html)
 and can also serve as a gateway for external models hosted by a third
@@ -58,13 +60,13 @@ chat_databricks(
 - model:
 
   The model to use for the chat (defaults to
-  "databricks-claude-3-7-sonnet"). We regularly update the default, so
+  "databricks-claude-sonnet-4-6"). We regularly update the default, so
   we strongly recommend explicitly specifying a model for anything other
   than casual use.
 
   Available foundational models include:
 
-  - `databricks-claude-3-7-sonnet` (the default)
+  - `databricks-claude-sonnet-4-6` (the default)
 
   - `databricks-mixtral-8x7b-instruct`
 
@@ -130,7 +132,8 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
 
 ## Examples
 

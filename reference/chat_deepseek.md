@@ -1,5 +1,7 @@
 # Chat with a model hosted on DeepSeek
 
+![\[Official supported provider\]](figures/support-official.svg)
+
 Sign up at <https://platform.deepseek.com>.
 
 Built on top of
@@ -25,6 +27,12 @@ chat_deepseek(
   echo = NULL,
   api_headers = character()
 )
+
+models_deepseek(
+  base_url = "https://api.deepseek.com",
+  api_key = NULL,
+  credentials = NULL
+)
 ```
 
 ## Arguments
@@ -46,7 +54,8 @@ chat_deepseek(
   Override the default credentials. You generally should not need this
   argument; instead set the `DEEPSEEK_API_KEY` environment variable. The
   best place to set this is in `.Renviron`, which you can easily edit by
-  calling `usethis::edit_r_environ()`.
+  calling
+  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list
@@ -54,7 +63,7 @@ chat_deepseek(
 
 - model:
 
-  The model to use for the chat (defaults to "deepseek-chat"). We
+  The model to use for the chat (defaults to "deepseek-v4-flash"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use.
 
@@ -111,7 +120,8 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
 
 ## Examples
 

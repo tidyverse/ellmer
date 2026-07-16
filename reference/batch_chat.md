@@ -1,16 +1,21 @@
 # Submit multiple chats in one batch
 
 `batch_chat()` and `batch_chat_structured()` currently only work with
-[`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md)
+[`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md),
+[`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md),
+[`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md),
 and
-[`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md).
-They use the [OpenAI](https://platform.openai.com/docs/guides/batch) and
-[Anthropic](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
-batch APIs which allow you to submit multiple requests simultaneously.
-The results can take up to 24 hours to complete, but in return you pay
-50% less than usual (but note that ellmer doesn't include this discount
-in its pricing metadata). If you want to get results back more quickly,
-or you're working with a different provider, you may want to use
+[`chat_groq()`](https://ellmer.tidyverse.org/reference/chat_groq.md).
+They use the
+[OpenAI](https://developers.openai.com/api/docs/guides/batch),
+[Anthropic](https://docs.claude.com/en/docs/build-with-claude/batch-processing),
+[Google Gemini](https://ai.google.dev/gemini-api/docs/batch-api), and
+[Groq](https://console.groq.com/docs/batch) batch APIs which allow you
+to submit multiple requests simultaneously. The results can take up to
+24 hours to complete, but in return you pay 50% less than usual (but
+note that ellmer doesn't include this discount in its pricing metadata).
+If you want to get results back more quickly, or you're working with a
+different provider, you may want to use
 [`parallel_chat()`](https://ellmer.tidyverse.org/reference/parallel_chat.md)
 instead.
 
@@ -125,7 +130,7 @@ is not complete.
 
 ``` r
 if (FALSE) { # has_credentials("openai")
-chat <- chat_openai(model = "gpt-4.1-nano")
+chat <- chat_openai(model = "gpt-5-nano")
 
 # Chat ----------------------------------------------------------------------
 

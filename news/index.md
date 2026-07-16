@@ -1,5 +1,113 @@
 # Changelog
 
+## ellmer 0.4.2
+
+CRAN release: 2026-07-13
+
+- `AssistantTurn` gains a `finish_reason` property that reports why the
+  model stopped generating ([@thisisnic](https://github.com/thisisnic),
+  [\#3](https://github.com/tidyverse/ellmer/issues/3)).
+- [`batch_chat()`](https://ellmer.tidyverse.org/reference/batch_chat.md)
+  now supports
+  [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+  and
+  [`chat_groq()`](https://ellmer.tidyverse.org/reference/chat_groq.md)
+  for batch processing ([@xmarquez](https://github.com/xmarquez),
+  [\#914](https://github.com/tidyverse/ellmer/issues/914),
+  [\#927](https://github.com/tidyverse/ellmer/issues/927)).
+- `Chat` gains a `set_model()` method for updating the model after chat
+  creation. Unlike some `chat_*()` functions, the model name is not
+  validated ([\#988](https://github.com/tidyverse/ellmer/issues/988)).
+- [`chat()`](https://ellmer.tidyverse.org/reference/chat-any.md) now
+  raises a warning and `chat_structured()` raises an informative error
+  when a response is truncated, filtered, or otherwise incomplete
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#867](https://github.com/tidyverse/ellmer/issues/867)).
+- Default models have been updated for a number of providers
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#885](https://github.com/tidyverse/ellmer/issues/885),
+  [\#1038](https://github.com/tidyverse/ellmer/issues/1038)):
+  - [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md)
+    now uses `claude-sonnet-4-6`.
+  - [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/reference/chat_aws_bedrock.md)
+    now uses `us.anthropic.claude-sonnet-4-6`.
+  - [`chat_databricks()`](https://ellmer.tidyverse.org/reference/chat_databricks.md)
+    now uses `databricks-claude-sonnet-4-6`.
+  - [`chat_deepseek()`](https://ellmer.tidyverse.org/reference/chat_deepseek.md)
+    now uses `deepseek-v4-flash`.
+  - [`chat_github()`](https://ellmer.tidyverse.org/reference/chat_github.md)
+    now uses `gpt-5.4`.
+  - [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+    now uses `gemini-3.5-flash`.
+  - [`chat_groq()`](https://ellmer.tidyverse.org/reference/chat_groq.md)
+    now uses `openai/gpt-oss-20b`.
+  - [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md)
+    now uses `gpt-5`.
+  - [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md)
+    now uses `gpt-5.4`.
+  - [`chat_snowflake()`](https://ellmer.tidyverse.org/reference/chat_snowflake.md)
+    now uses `claude-sonnet-4-6`.
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md)
+  now supports `params(reasoning_effort =)` for Claude’s adaptive
+  thinking mode ([@thisisnic](https://github.com/thisisnic),
+  [\#987](https://github.com/tidyverse/ellmer/issues/987)).
+- [`chat_deepseek()`](https://ellmer.tidyverse.org/reference/chat_deepseek.md)
+  no longer errors during tool calling when the assistant turn has no
+  text content ([@thisisnic](https://github.com/thisisnic),
+  [\#1043](https://github.com/tidyverse/ellmer/issues/1043)).
+- [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+  and
+  [`chat_google_vertex()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+  now support `params(reasoning_effort =)`
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#873](https://github.com/tidyverse/ellmer/issues/873)).
+- [`chat_google_vertex()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+  and
+  [`models_google_vertex()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+  now default `location` and `project_id` to the `GOOGLE_CLOUD_LOCATION`
+  and `GOOGLE_CLOUD_PROJECT` environment variables, no longer
+  incorrectly use `GOOGLE_API_KEY` for authentication, and give a
+  clearer error when cached credentials are invalid
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#994](https://github.com/tidyverse/ellmer/issues/994)).
+- [`chat_ollama()`](https://ellmer.tidyverse.org/reference/chat_ollama.md)
+  now supports `params(reasoning_effort = ...)` to set thinking for
+  reasoning models, and thinking content is now captured in turns
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#940](https://github.com/tidyverse/ellmer/issues/940)).
+- [`chat_perplexity()`](https://ellmer.tidyverse.org/reference/chat_perplexity.md)
+  now defaults to `model = "sonar"` since the previous default
+  (`"llama-3.1-sonar-small-128k-online"`) has been removed by Perplexity
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#538](https://github.com/tidyverse/ellmer/issues/538)).
+- [`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md)
+  no longer errors when when using a custom Portkey gateway without the
+  `PORTKEY_VIRTUAL_KEY` env var being set
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#872](https://github.com/tidyverse/ellmer/issues/872)).
+- New
+  [`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
+  and
+  [`models_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
+  provide access to models hosted by Posit AI, authenticating via an
+  OAuth device flow ([@simonpcouch](https://github.com/simonpcouch),
+  [\#1024](https://github.com/tidyverse/ellmer/issues/1024)).
+- [`models_deepseek()`](https://ellmer.tidyverse.org/reference/chat_deepseek.md)
+  lists available models for
+  [`chat_deepseek()`](https://ellmer.tidyverse.org/reference/chat_deepseek.md)
+  ([@jcrodriguez1989](https://github.com/jcrodriguez1989),
+  [\#919](https://github.com/tidyverse/ellmer/issues/919)).
+- [`models_groq()`](https://ellmer.tidyverse.org/reference/chat_groq.md)
+  lists available models for
+  [`chat_groq()`](https://ellmer.tidyverse.org/reference/chat_groq.md)
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#921](https://github.com/tidyverse/ellmer/issues/921)).
+- `type_object(.additional_properties)` is deprecated. No supported
+  provider can return additional properties when using structured
+  output. Instead, use an array of name-value pairs
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#866](https://github.com/tidyverse/ellmer/issues/866)).
+
 ## ellmer 0.4.1
 
 CRAN release: 2026-05-07

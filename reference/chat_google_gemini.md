@@ -1,5 +1,7 @@
 # Chat with a Google Gemini or Vertex AI model
 
+![\[Official supported provider\]](figures/support-official.svg)
+
 Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 Most enterprises are likely to use Vertex AI, and individuals are likely
 to use Gemini.
@@ -13,8 +15,8 @@ to upload files (PDFs, images, video, audio, etc.)
 These functions try a number of authentication strategies, in this
 order:
 
-- An API key set in the `GOOGLE_API_KEY` env var, or, for
-  `chat_google_gemini()` only, `GEMINI_API_KEY`.
+- An API key set in the `GOOGLE_API_KEY` or `GEMINI_API_KEY` env var
+  (Gemini only).
 
 - Google's default application credentials, if the gargle package is
   installed.
@@ -42,8 +44,8 @@ chat_google_gemini(
 )
 
 chat_google_vertex(
-  location,
-  project_id,
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
   system_prompt = NULL,
   model = NULL,
   params = NULL,
@@ -58,7 +60,11 @@ models_google_gemini(
   credentials = NULL
 )
 
-models_google_vertex(location, project_id, credentials = NULL)
+models_google_vertex(
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
+  credentials = NULL
+)
 ```
 
 ## Arguments
@@ -82,7 +88,7 @@ models_google_vertex(location, project_id, credentials = NULL)
 
 - model:
 
-  The model to use for the chat (defaults to "gemini-2.5-flash"). We
+  The model to use for the chat (defaults to "gemini-3.5-flash"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use. Use
   `models_google_gemini()` to see all options.
@@ -148,7 +154,8 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
 
 ## Examples
 

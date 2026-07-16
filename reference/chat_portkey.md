@@ -1,5 +1,7 @@
 # Chat with a model hosted on PortkeyAI
 
+![\[Community supported provider\]](figures/support-community.svg)
+
 [PortkeyAI](https://portkey.ai/docs/product/ai-gateway/universal-api)
 provides an interface (AI Gateway) to connect through its Universal API
 to a variety of LLMs providers via a single endpoint.
@@ -46,7 +48,8 @@ models_portkey(base_url = "https://api.portkey.ai/v1", api_key = portkey_key())
   Override the default credentials. You generally should not need this
   argument; instead set the `PORTKEY_API_KEY` environment variable. The
   best place to set this is in `.Renviron`, which you can easily edit by
-  calling `usethis::edit_r_environ()`.
+  calling
+  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list
@@ -116,7 +119,8 @@ Other chatbots:
 [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md),
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md),
-[`chat_perplexity()`](https://ellmer.tidyverse.org/reference/chat_perplexity.md)
+[`chat_perplexity()`](https://ellmer.tidyverse.org/reference/chat_perplexity.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
 
 ## Examples
 

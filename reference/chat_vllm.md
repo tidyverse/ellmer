@@ -1,5 +1,7 @@
 # Chat with a model hosted by vLLM
 
+![\[Community supported provider\]](figures/support-community.svg)
+
 [vLLM](https://docs.vllm.ai/en/latest/) is an open source library that
 provides an efficient and convenient LLMs model server. You can use
 `chat_vllm()` to connect to endpoints powered by vLLM.
@@ -59,7 +61,8 @@ models_vllm(base_url, api_key = NULL, credentials = NULL)
   Override the default credentials. You generally should not need this
   argument; instead set the `VLLM_API_KEY` environment variable. The
   best place to set this is in `.Renviron`, which you can easily edit by
-  calling `usethis::edit_r_environ()`.
+  calling
+  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list

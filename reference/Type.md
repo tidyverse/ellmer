@@ -74,8 +74,8 @@ TypeObject(
 
 - additional_properties:
 
-  Can the object have arbitrary additional properties that are not
-  explicitly listed? Only supported by Claude.
+  **\[deprecated\]** Can the object have arbitrary additional properties
+  that are not explicitly listed? Only supported by Claude.
 
 ## Value
 

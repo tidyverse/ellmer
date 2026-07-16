@@ -1,5 +1,7 @@
 # Chat with a model hosted on perplexity.ai
 
+![\[Community supported provider\]](figures/support-community.svg)
+
 Sign up at <https://www.perplexity.ai>.
 
 Perplexity AI is a platform for running LLMs that are capable of
@@ -45,7 +47,8 @@ chat_perplexity(
   Override the default credentials. You generally should not need this
   argument; instead set the `PERPLEXITY_API_KEY` environment variable.
   The best place to set this is in `.Renviron`, which you can easily
-  edit by calling `usethis::edit_r_environ()`.
+  edit by calling
+  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list
@@ -53,10 +56,9 @@ chat_perplexity(
 
 - model:
 
-  The model to use for the chat (defaults to
-  "llama-3.1-sonar-small-128k-online"). We regularly update the default,
-  so we strongly recommend explicitly specifying a model for anything
-  other than casual use.
+  The model to use for the chat (defaults to "sonar"). We regularly
+  update the default, so we strongly recommend explicitly specifying a
+  model for anything other than casual use.
 
 - params:
 
@@ -111,7 +113,8 @@ Other chatbots:
 [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md),
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
 
 ## Examples
 

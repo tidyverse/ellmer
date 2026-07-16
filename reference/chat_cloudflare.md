@@ -1,9 +1,11 @@
 # Chat with a model hosted on CloudFlare
 
-[Cloudflare](https://www.cloudflare.com/developer-platform/products/workers-ai/)
-Workers AI hosts a variety of open-source AI models. To use the
-Cloudflare API, you must have an Account ID and an Access Token, which
-you can obtain [by following these
+![\[Community supported provider\]](figures/support-community.svg)
+
+[Cloudflare](https://www.cloudflare.com/products/workers-ai/) Workers AI
+hosts a variety of open-source AI models. To use the Cloudflare API, you
+must have an Account ID and an Access Token, which you can obtain [by
+following these
 instructions](https://developers.cloudflare.com/workers-ai/get-started/rest-api/).
 
 Built on top of
@@ -56,7 +58,8 @@ chat_cloudflare(
   Override the default credentials. You generally should not need this
   argument; instead set the `CLOUDFLARE_API_KEY` environment variable.
   The best place to set this is in `.Renviron`, which you can easily
-  edit by calling `usethis::edit_r_environ()`.
+  edit by calling
+  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list
@@ -117,7 +120,8 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
 
 ## Examples
 

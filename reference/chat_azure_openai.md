@@ -1,5 +1,7 @@
 # Chat with a model hosted on Azure OpenAI
 
+![\[Official supported provider\]](figures/support-official.svg)
+
 The [Azure OpenAI
 server](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
 hosts a number of open source models as well as proprietary models from
@@ -74,7 +76,8 @@ chat_azure_openai(
   Override the default credentials. You generally should not need this
   argument; instead set the `AZURE_OPENAI_API_KEY` environment variable.
   The best place to set this is in `.Renviron`, which you can easily
-  edit by calling `usethis::edit_r_environ()`.
+  edit by calling
+  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list
@@ -132,7 +135,8 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
 
 ## Examples
 

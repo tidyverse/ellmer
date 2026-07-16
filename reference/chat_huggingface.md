@@ -1,5 +1,7 @@
 # Chat with a model hosted on Hugging Face Serverless Inference API
 
+![\[Community supported provider\]](figures/support-community.svg)
+
 [Hugging Face](https://huggingface.co/) hosts a variety of open-source
 and proprietary AI models available via their Inference API. To use the
 Hugging Face API, you must have an Access Token, which you can obtain
@@ -51,7 +53,8 @@ chat_huggingface(
   Override the default credentials. You generally should not need this
   argument; instead set the `HUGGINGFACE_API_KEY` environment variable.
   The best place to set this is in `.Renviron`, which you can easily
-  edit by calling `usethis::edit_r_environ()`.
+  edit by calling
+  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list
@@ -112,7 +115,8 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
 
 ## Examples
 

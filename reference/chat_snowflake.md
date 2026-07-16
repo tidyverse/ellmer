@@ -1,5 +1,7 @@
 # Chat with a model hosted on Snowflake
 
+![\[Official supported provider\]](figures/support-official.svg)
+
 The Snowflake provider allows you to interact with LLM models available
 through the [Cortex LLM REST
 API](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api).
@@ -62,7 +64,7 @@ chat_snowflake(
 
 - model:
 
-  The model to use for the chat (defaults to "claude-3-7-sonnet"). We
+  The model to use for the chat (defaults to "claude-sonnet-4-6"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use.
 

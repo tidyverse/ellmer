@@ -67,7 +67,7 @@ params(
 
 - reasoning_effort, reasoning_tokens:
 
-  How much effort to spend thinking? `ressoning_effort` is a string,
+  How much effort to spend thinking? `reasoning_effort` is a string,
   like "low", "medium", "high". `reasoning_tokens` is an integer, giving
   a maximum token budget. Each provider only takes one of these two
   parameters.

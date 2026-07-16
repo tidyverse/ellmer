@@ -33,6 +33,8 @@ A Chat object
 
 - [`Chat$get_model()`](#method-Chat-get_model)
 
+- [`Chat$set_model()`](#method-Chat-set_model)
+
 - [`Chat$set_system_prompt()`](#method-Chat-set_system_prompt)
 
 - [`Chat$get_tokens()`](#method-Chat-get_tokens)
@@ -181,6 +183,24 @@ Retrieve the model name
 
 ------------------------------------------------------------------------
 
+### `Chat$set_model()`
+
+Update the model name. Note that unlike some of the `chat_*()`
+functions, the model name is not validated against available models for
+the provider.
+
+#### Usage
+
+    Chat$set_model(model)
+
+#### Arguments
+
+- `model`:
+
+  A single string giving the new model name.
+
+------------------------------------------------------------------------
+
 ### `Chat$set_system_prompt()`
 
 Update the system prompt
@@ -284,7 +304,11 @@ Submit input to the chatbot, and return the response as a simple string
 
 ### `Chat$chat_structured()`
 
-Extract structured data
+Extract structured data.
+
+Note: tool calling is disabled during structured data extraction. See
+[`vignette("structured-data")`](https://ellmer.tidyverse.org/articles/structured-data.md)
+for details and workarounds.
 
 #### Usage
 
@@ -590,11 +614,9 @@ The objects of this class are cloneable with this method.
 
 ``` r
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 chat$chat("Tell me a funny joke")
-#> Sure! Here you go:
+#> Why don’t skeletons fight each other?
 #> 
-#> Why did the scarecrow win an award?
-#> 
-#> Because he was outstanding in his field! 🌾😄
+#> They don’t have the guts.
 ```

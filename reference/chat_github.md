@@ -1,13 +1,13 @@
 # Chat with a model hosted on the GitHub model marketplace
 
+![\[Official supported provider\]](figures/support-official.svg)
+
 GitHub Models hosts a number of open source and OpenAI models. To access
 the GitHub model marketplace, you will need to apply for and be accepted
 into the beta access program. See
 <https://github.com/marketplace/models> for details.
 
-This function is a lightweight wrapper around
-[`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md)
-with the defaults tweaked for the GitHub Models marketplace.
+The defaults are tweaked for the GitHub Models marketplace.
 
 GitHub also supports the Azure AI Inference SDK, which you can use by
 setting `base_url` to `"https://models.inference.ai.azure.com/"`. This
@@ -54,7 +54,8 @@ models_github(
   Override the default credentials. You generally should not need this
   argument; instead set the `GITHUB_PAT` environment variable. The best
   place to set this is in `.Renviron`, which you can easily edit by
-  calling `usethis::edit_r_environ()`.
+  calling
+  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list
@@ -62,7 +63,7 @@ models_github(
 
 - model:
 
-  The model to use for the chat (defaults to "gpt-4o"). We regularly
+  The model to use for the chat (defaults to "gpt-5"). We regularly
   update the default, so we strongly recommend explicitly specifying a
   model for anything other than casual use.
 
@@ -119,7 +120,8 @@ Other chatbots:
 [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md),
 [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md),
 [`chat_perplexity()`](https://ellmer.tidyverse.org/reference/chat_perplexity.md),
-[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md)
+[`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md),
+[`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
 
 ## Examples
 

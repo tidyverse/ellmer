@@ -26,7 +26,7 @@ content_image_plot(width = 768, height = 768)
 - detail:
 
   The [detail
-  setting](https://platform.openai.com/docs/guides/images/image-input-requirements)
+  setting](https://developers.openai.com/api/docs/guides/images-vision#image-input-requirements)
   for this image. Can be `"auto"`, `"low"`, or `"high"`.
 
 - path:
@@ -44,7 +44,7 @@ content_image_plot(width = 768, height = 768)
 
   If `"low"`, resize images to fit within 512x512. If `"high"`, resize
   to fit within 2000x768 or 768x2000. (See the [OpenAI
-  docs](https://platform.openai.com/docs/guides/images/image-input-requirements)
+  docs](https://developers.openai.com/api/docs/guides/images-vision#image-input-requirements)
   for more on why these specific sizes are used.) If `"none"`, do not
   resize.
 

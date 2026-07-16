@@ -145,38 +145,29 @@ tool_rnorm(n = 5, mean = 0, sd = 1)
 #> [1] -1.400043517  0.255317055 -2.437263611 -0.005571287  0.621552721
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.4".
 # Then register it
 chat$register_tool(tool_rnorm)
 
 # Then ask a question that needs it.
 chat$chat("Give me five numbers from a random normal distribution.")
-#> Here are five numbers drawn from a random normal distribution (mean = 
-#> 0, standard deviation = 1):
+#> Here are five numbers from a random normal distribution:
 #> 
-#> 1. 1.1484
-#> 2. -1.8218
-#> 3. -0.2473
-#> 4. -0.2442
-#> 5. -0.2827
+#> 1.1484, -1.8218, -0.2473, -0.2442, -0.2827
 
 # Look at the chat history to see how tool calling works:
 chat
-#> <Chat OpenAI/gpt-4.1 turns=4 input=234 output=86 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4 turns=4 input=253 output=68 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> Give me five numbers from a random normal distribution.
-#> ── assistant [input=90 output=23 cost=$0.00] ──────────────────────────
-#> [tool request (fc_0b0635de4f44748f01692dba5a16388193a8de793c57908c2f)]: rnorm(n = 5L, mean = 0L, sd = 1L)
+#> ── assistant [input=95 output=26 cost=$0.00] ──────────────────────────
+#> [tool request (fc_08472d61bd24b5b4016a42337f9cdc8191a7f7974c4135746d)]: rnorm(n = 5L, mean = 0L, sd = 1L)
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0b0635de4f44748f01692dba5a16388193a8de793c57908c2f)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]
-#> ── assistant [input=144 output=63 cost=$0.00] ─────────────────────────
-#> Here are five numbers drawn from a random normal distribution (mean = 0, standard deviation = 1):
+#> [tool result  (fc_08472d61bd24b5b4016a42337f9cdc8191a7f7974c4135746d)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]
+#> ── assistant [input=158 output=42 cost=$0.00] ─────────────────────────
+#> Here are five numbers from a random normal distribution:
 #> 
-#> 1. 1.1484
-#> 2. -1.8218
-#> 3. -0.2473
-#> 4. -0.2442
-#> 5. -0.2827
+#> 1.1484, -1.8218, -0.2473, -0.2442, -0.2827
 # Assistant sends a tool request which is evaluated locally and
 # results are sent back in a tool result.
 ```
