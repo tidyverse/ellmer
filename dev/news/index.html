@@ -10,7 +10,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.2.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,19 +55,44 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
 <ul><li>
+<code><a href="../reference/chat_openrouter.html">chat_openrouter()</a></code> now correctly preserves provider error messages (<a href="https://github.com/xmarquez" class="external-link">@xmarquez</a>, <a href="https://github.com/tidyverse/ellmer/issues/1059" class="external-link">#1059</a>).</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.2" id="ellmer-042">ellmer 0.4.2<a class="anchor" aria-label="anchor" href="#ellmer-042"></a></h2><p class="text-muted">CRAN release: 2026-07-13</p>
+<ul><li>
 <code>AssistantTurn</code> gains a <code>finish_reason</code> property that reports why the model stopped generating (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/3" class="external-link">#3</a>).</li>
 <li>
-<code><a href="../reference/batch_chat.html">batch_chat()</a></code> now supports <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> for batch processing via the Gemini Developer API (<a href="https://github.com/xmarquez" class="external-link">@xmarquez</a>, <a href="https://github.com/tidyverse/ellmer/issues/914" class="external-link">#914</a>).</li>
-<li>
-<code><a href="../reference/batch_chat.html">batch_chat()</a></code> now supports <code><a href="../reference/chat_groq.html">chat_groq()</a></code> for batch processing via the Groq batch API (<a href="https://github.com/xmarquez" class="external-link">@xmarquez</a>, <a href="https://github.com/tidyverse/ellmer/issues/927" class="external-link">#927</a>).</li>
+<code><a href="../reference/batch_chat.html">batch_chat()</a></code> now supports <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> and <code><a href="../reference/chat_groq.html">chat_groq()</a></code> for batch processing (<a href="https://github.com/xmarquez" class="external-link">@xmarquez</a>, <a href="https://github.com/tidyverse/ellmer/issues/914" class="external-link">#914</a>, <a href="https://github.com/tidyverse/ellmer/issues/927" class="external-link">#927</a>).</li>
 <li>
 <code>Chat</code> gains a <code>set_model()</code> method for updating the model after chat creation. Unlike some <code>chat_*()</code> functions, the model name is not validated (<a href="https://github.com/tidyverse/ellmer/issues/988" class="external-link">#988</a>).</li>
 <li>
 <code><a href="../reference/chat-any.html">chat()</a></code> now raises a warning and <code>chat_structured()</code> raises an informative error when a response is truncated, filtered, or otherwise incomplete (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/867" class="external-link">#867</a>).</li>
+<li>Default models have been updated for a number of providers (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/885" class="external-link">#885</a>, <a href="https://github.com/tidyverse/ellmer/issues/1038" class="external-link">#1038</a>):
+<ul><li>
+<code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> now uses <code>claude-sonnet-4-6</code>.</li>
+<li>
+<code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> now uses <code>us.anthropic.claude-sonnet-4-6</code>.</li>
+<li>
+<code><a href="../reference/chat_databricks.html">chat_databricks()</a></code> now uses <code>databricks-claude-sonnet-4-6</code>.</li>
+<li>
+<code><a href="../reference/chat_deepseek.html">chat_deepseek()</a></code> now uses <code>deepseek-v4-flash</code>.</li>
+<li>
+<code><a href="../reference/chat_github.html">chat_github()</a></code> now uses <code>gpt-5.4</code>.</li>
+<li>
+<code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> now uses <code>gemini-3.5-flash</code>.</li>
+<li>
+<code><a href="../reference/chat_groq.html">chat_groq()</a></code> now uses <code>openai/gpt-oss-20b</code>.</li>
+<li>
+<code><a href="../reference/chat_openai.html">chat_openai()</a></code> now uses <code>gpt-5</code>.</li>
+<li>
+<code><a href="../reference/chat_openrouter.html">chat_openrouter()</a></code> now uses <code>gpt-5.4</code>.</li>
+<li>
+<code><a href="../reference/chat_snowflake.html">chat_snowflake()</a></code> now uses <code>claude-sonnet-4-6</code>.</li>
+</ul></li>
 <li>
 <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> now supports <code>params(reasoning_effort =)</code> for Claude’s adaptive thinking mode (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/987" class="external-link">#987</a>).</li>
 <li>
-<code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> now defaults to the <code>gemini-3.5-flash</code> model (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/885" class="external-link">#885</a>).</li>
+<code><a href="../reference/chat_deepseek.html">chat_deepseek()</a></code> no longer errors during tool calling when the assistant turn has no text content (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1043" class="external-link">#1043</a>).</li>
 <li>
 <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> and <code><a href="../reference/chat_google_gemini.html">chat_google_vertex()</a></code> now support <code>params(reasoning_effort =)</code> (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/873" class="external-link">#873</a>).</li>
 <li>
