@@ -846,7 +846,6 @@ gemini_client <- function() {
 method(count_tokens, ProviderGoogleGemini) <- function(
   provider,
   ...,
-  turns = list(),
   system_prompt = NULL,
   tools = list(),
   type = NULL
@@ -864,8 +863,7 @@ method(count_tokens, ProviderGoogleGemini) <- function(
     system <- list(parts = list(text = ""))
   }
 
-  all_turns <- c(turns, list(user_turn(...)))
-  contents <- as_json(provider, all_turns)
+  contents <- as_json(provider, list(user_turn(...)))
 
   if (length(tools) > 0) {
     is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
