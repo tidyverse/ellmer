@@ -270,8 +270,8 @@ provider's token counting endpoint.
       \item{\code{...}}{Input to count tokens for.}
       \item{\code{include}}{What to include in the count. \code{"new"} counts
 tokens only for the contents of \code{...}. \code{"all"} estimates the
-total input tokens for the next request by adding the input
-token count from the last turn.}
+total input tokens for the next request by adding the token
+counts from the last turn.}
       \item{\code{type}}{An optional type specification for structured data
 extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
     }

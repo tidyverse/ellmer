@@ -186,8 +186,8 @@ Chat <- R6::R6Class(
     #' @param ... Input to count tokens for.
     #' @param include What to include in the count. `"new"` counts
     #'   tokens only for the contents of `...`. `"all"` estimates the
-    #'   total input tokens for the next request by adding the input
-    #'   token count from the last turn.
+    #'   total input tokens for the next request by adding the token
+    #'   counts from the last turn.
     #' @param type An optional type specification for structured data
     #'   extraction, created with a [`type_()`][type_boolean] function.
     #' @return The estimated number of input tokens.
