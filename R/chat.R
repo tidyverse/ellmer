@@ -190,7 +190,7 @@ Chat <- R6::R6Class(
     #'   token count from the last turn.
     #' @param type An optional type specification for structured data
     #'   extraction, created with a [`type_()`][type_boolean] function.
-    #' @return An integer giving the estimated number of input tokens.
+    #' @return The estimated number of input tokens.
     token_count = function(..., include = c("new", "all"), type = NULL) {
       include <- arg_match(include)
 

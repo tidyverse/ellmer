@@ -278,7 +278,7 @@ extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
     \if{html}{\out{</div>}}
   }
   \subsection{Returns}{
-    An integer giving the estimated number of input tokens.
+    The estimated number of input tokens.
   }
 }
 
