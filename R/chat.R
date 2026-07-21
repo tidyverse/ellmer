@@ -186,8 +186,8 @@ Chat <- R6::R6Class(
     #' @param ... Input to count tokens for.
     #' @param include What to include in the count. `"new"` counts
     #'   tokens only for the contents of `...`. `"all"` estimates the
-    #'   total input tokens for the next request by adding the token
-    #'   counts from the last turn.
+    #'   total input tokens for the next request, including system
+    #'   prompt, tools, and conversation history.
     #' @param type An optional type specification for structured data
     #'   extraction, created with a [`type_()`][type_boolean] function.
     #' @return The estimated number of input tokens.
@@ -198,6 +198,8 @@ Chat <- R6::R6Class(
         return(count_tokens(private$provider, ..., type = type))
       }
 
+      # With no history, we need to explicitly include system prompt and
+      # tools. Otherwise, the last turn's token counts already cover them.
       tokens <- self$get_tokens()
       if (nrow(tokens) == 0) {
         all_tokens <- count_tokens(
