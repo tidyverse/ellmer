@@ -194,9 +194,20 @@ test_models <- function(models_fun) {
 test_token_count <- function(chat_fun) {
   chat <- chat_fun("Answer succinctly")
 
-  result <- chat$token_count("What's the current date?")
-  expect_type(result, "integer")
-  expect_gt(result, 0)
+  result_new <- chat$token_count("What's the current date?")
+  expect_type(result_new, "integer")
+  expect_gt(result_new, 0)
+
+  result_all <- chat$token_count("What's the current date?", include = "all")
+  expect_gt(result_all, result_new)
+
+  chat$chat("What's the current date?")
+
+  result_all_with_history <- chat$token_count(
+    "And tomorrow?",
+    include = "all"
+  )
+  expect_gt(result_all_with_history, chat$token_count("And tomorrow?"))
 
   result_structured <- chat$token_count(
     "Apples are tasty. By Hadley Wickham.",

@@ -363,11 +363,11 @@ method(count_tokens, ProviderOpenAI) <- function(
   req <- base_request(provider)
   req <- req_url_path_append(req, "responses/input_tokens")
 
-  all_turns <- c(
+  turns <- c(
     if (!is.null(system_prompt)) list(SystemTurn(system_prompt)),
     list(user_turn(...))
   )
-  input <- compact(unlist(as_json(provider, all_turns), recursive = FALSE))
+  input <- compact(unlist(as_json(provider, turns), recursive = FALSE))
   tools <- as_json(provider, unname(tools))
 
   if (!is.null(type)) {

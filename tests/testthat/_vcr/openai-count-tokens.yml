@@ -14,28 +14,272 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a1eafedfdbde4f3a-EWR
+      cf-ray: a1eb4a669b2ded71-EWR
       content-encoding: br
       content-type: application/json
-      date: Tue, 21 Jul 2026 14:46:31 GMT
+      date: Tue, 21 Jul 2026 15:38:05 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '70'
+      openai-processing-ms: '227'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=cVW9S4rwk.0DQN1KMTVbHF0AUmvqL97ErulVcwm7kCI-1784645191.651201-1.0.1.1-jWtBMIJqsKfecAt3AtZZ0OG9aloVfhreH1HJQcQMFqvBftXlCCbS8QvHZxDQ2c1evc5OHBSfXk8jtjjXzjceOpX8AGxhjHeB7E9XGKKDJxVjd_3wRVucIJBRl8rCCLRo;
+      set-cookie: __cf_bm=iGPkRLP2VAG6kiMPB_Zaqfug3pcZRnalc0kDATgg6nU-1784648285.2195852-1.0.1.1-uH9nvdmV3n2lkp2yPuVE739OXN9HB10pw4PpxFATotMHxwlae57mj08IPkdxpnNcVxDg9xy03vAnEcTW30i_Agz2VXsct0RC6dk.SP7g_Mfrv87L8fjOfWg4RwHh8qre;
         HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        21 Jul 2026 15:16:31 GMT
+        21 Jul 2026 16:08:05 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-request-id: req_876ef2a6a6d4420d86b15289e6cd6880
+      x-request-id: req_46f6955c52a04a63b0b214a38330ed45
     body:
       string: |-
         {
           "object": "response.input_tokens",
           "input_tokens": 12
         }
-  recorded_at: 2026-07-21 14:46:31
+  recorded_at: 2026-07-21 15:38:05
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses/input_tokens
+    body:
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Answer
+        succinctly"}]},{"role":"user","content":[{"type":"input_text","text":"What''s
+        the current date?"}]}],"model":"gpt-4.1-nano"}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: a1eb4a68b959ed71-EWR
+      content-encoding: br
+      content-type: application/json
+      date: Tue, 21 Jul 2026 15:38:05 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '181'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=ouBwXHx4EKF4C9jt9fS3THAWpwNJKaooxd1e1.H.vMI-1784648285.5522137-1.0.1.1-MEG0MfZ3lFi4v3Phh7IILz0mLN3VQNWpLNyWlgDSYC9bHMij.nfwn7ulUGwCeVl6sZLBuwyI0zEa5oSkvon9yGn5V7n90K2ucu_tVXH8D692Sm0OWXR6AP6.TV2n00uE;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        21 Jul 2026 16:08:05 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-request-id: req_87a1f4818181451da904c5980ebf69d9
+    body:
+      string: |-
+        {
+          "object": "response.input_tokens",
+          "input_tokens": 19
+        }
+  recorded_at: 2026-07-21 15:38:05
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Answer
+        succinctly"}]},{"role":"user","content":[{"type":"input_text","text":"What''s
+        the current date?"}]}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"store":false,"service_tier":"auto"}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: a1eb4a6a6e2fed71-EWR
+      content-encoding: br
+      content-type: application/json
+      date: Tue, 21 Jul 2026 15:38:06 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '559'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=vSM5AL_xCZTd4s9sL1EZOfttfkMmeZuXLLIH4vj07.M-1784648285.8304276-1.0.1.1-DBKM4YQK_QBsGAdPDwD.xrXwehXIgle5blaedk5fkr0aux.RD7sFjX2sYgoMmpRi3_23TBUBZ_j69rWKenOuREIsxT0F4TT.lYIDAIDI767qyxL.T0wPyBpxOBR4Lm95;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        21 Jul 2026 16:08:06 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '199962'
+      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-tokens: 11ms
+      x-request-id: req_b5922144ceb8486bb42e257c2da7f0ba
+    body:
+      string: |-
+        {
+          "id": "resp_09640c90c2e9e77f016a5f925de16c819e91f9eebbe084457c",
+          "object": "response",
+          "created_at": 1784648285,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "completed_at": 1784648286,
+          "error": null,
+          "frequency_penalty": 0.0,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "moderation": null,
+          "output": [
+            {
+              "id": "msg_09640c90c2e9e77f016a5f925e4644819eaea5f7ffa8250fee",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Today is October 4, 2023."
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": "in_memory",
+          "reasoning": {
+            "context": null,
+            "effort": null,
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": false,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 19,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 11,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 30
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2026-07-21 15:38:06
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses/input_tokens
+    body:
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"And
+        tomorrow?"}]}],"model":"gpt-4.1-nano"}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: a1eb4a700fa0ed71-EWR
+      content-encoding: br
+      content-type: application/json
+      date: Tue, 21 Jul 2026 15:38:06 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '220'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=6OluEJy7Qi3KUyyP.pwWUFfwIiHOgnNqI2iSr1slfk4-1784648286.727156-1.0.1.1-VTKaR3Yh2ugkWP9Wxy_fElVm6JB1BAOAT6T546IIDgC1PN6KVznYVQ_NVrZ.4wMncvCyp96Z7TJSpqwsPvamKVBas8NCxb.0L1jqNZyFvJ.iK3FI_SN.a1rDJXc.HyWB;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        21 Jul 2026 16:08:06 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-request-id: req_00c21e2978394551aaab3e74397dc3ce
+    body:
+      string: |-
+        {
+          "object": "response.input_tokens",
+          "input_tokens": 10
+        }
+  recorded_at: 2026-07-21 15:38:07
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses/input_tokens
+    body:
+      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"And
+        tomorrow?"}]}],"model":"gpt-4.1-nano"}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: a1eb4a71fdd5ed71-EWR
+      content-encoding: br
+      content-type: application/json
+      date: Tue, 21 Jul 2026 15:38:07 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '67'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=TBvPWiKfVfmRsrsgD3OP2k3R8W7QI4XOLmwBpixxfeo-1784648287.034082-1.0.1.1-bGqn1ZrZAoGesZZOg5Ue3XGqCjcDa6Pl9vPZ0AkoIkVbXyQYyb6D019A3Cbg6e5blUTwsFBPZYFa.2Gcag8VoGPe4_XryOjtunSU7yyVdC.JOA2elI7GsLwbJIabzxjG;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        21 Jul 2026 16:08:07 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-request-id: req_583ac6714c6c45b5aabd2d81bb95ac64
+    body:
+      string: |-
+        {
+          "object": "response.input_tokens",
+          "input_tokens": 10
+        }
+  recorded_at: 2026-07-21 15:38:07
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses/input_tokens
@@ -52,26 +296,26 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a1eafee13faf4f3a-EWR
+      cf-ray: a1eb4a73199bed71-EWR
       content-encoding: br
       content-type: application/json
-      date: Tue, 21 Jul 2026 14:46:32 GMT
+      date: Tue, 21 Jul 2026 15:38:07 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '671'
+      openai-processing-ms: '84'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=zxLRS7A55UcBabnGbHKgOSPFtPQTaM7lssxv0onB3KE-1784645191.8770359-1.0.1.1-GydoLCgVcKuqlp6xeX3MoYqYzUSCTuRqpvvvX9xofV1mINSGhJ5N0JCq0mNG_6ThUDHdvQwRro5cnCK_JSuh43JQTsYwYAIzr.5FbIzU6ReV3Y20AWUQ.8Di_JcivBKN;
+      set-cookie: __cf_bm=RmFyeGsaSnjxLayd6EygZyuaSB7c6Ua6wGX9GlwSNuE-1784648287.2205417-1.0.1.1-d56umgpAIlqYR8qTXGBX1z9jTh1ETg2VoBlzWayVUQu9p4MaYgur8seAmi3VfUJ47jHG0CKl7HkIl6F2nZfx6IcG3d67AU18kj4JAUlyzkpuDCYiI3DJ8lGdaqgofmR.;
         HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        21 Jul 2026 15:16:32 GMT
+        21 Jul 2026 16:08:07 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-request-id: req_58de8a2b142c419bab2661fad8b7542e
+      x-request-id: req_a8ef93257a944a01b608ce3b886e84b9
     body:
       string: |-
         {
           "object": "response.input_tokens",
           "input_tokens": 62
         }
-  recorded_at: 2026-07-21 14:46:32
+  recorded_at: 2026-07-21 15:38:07
 recorded_with: VCR-vcr/2.1.0
