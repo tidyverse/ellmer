@@ -193,11 +193,6 @@ test_models <- function(models_fun) {
 
 test_token_count <- function(chat_fun) {
   chat <- chat_fun("Answer succinctly")
-  chat$register_tool(tool(
-    function() "2024-01-01",
-    name = "current_date",
-    description = "Return the current date"
-  ))
 
   result <- chat$token_count("What's the current date?")
   expect_type(result, "integer")

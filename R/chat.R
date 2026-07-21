@@ -184,27 +184,35 @@ Chat <- R6::R6Class(
     #' @description Estimate the token count for `...` using the
     #'   provider's token counting endpoint.
     #' @param ... Input to count tokens for.
-    #' @param include_history If `FALSE` (the default), count tokens
-    #'   only for `...`, the system prompt, and any registered tools.
-    #'   If `TRUE`, also include all existing conversation history.
+    #' @param include What to include in the count. `"new"` counts
+    #'   tokens only for the contents of `...`. `"all"` estimates the
+    #'   total input tokens for the next request by adding the input
+    #'   token count from the last turn.
     #' @param type An optional type specification for structured data
     #'   extraction, created with a [`type_()`][type_boolean] function.
     #' @return An integer giving the estimated number of input tokens.
-    token_count = function(..., include_history = FALSE, type = NULL) {
-      if (include_history) {
-        turns <- self$get_turns(include_system_prompt = FALSE)
-      } else {
-        turns <- list()
+    token_count = function(..., include = c("new", "all"), type = NULL) {
+      include <- arg_match(include)
+
+      if (include == "new") {
+        return(count_tokens(private$provider, ..., type = type))
       }
 
-      count_tokens(
-        private$provider,
-        ...,
-        turns = turns,
-        system_prompt = self$get_system_prompt(),
-        tools = private$tools,
-        type = type
-      )
+      tokens <- self$get_tokens()
+      if (nrow(tokens) == 0) {
+        all_tokens <- count_tokens(
+          private$provider,
+          ...,
+          system_prompt = self$get_system_prompt(),
+          tools = private$tools,
+          type = type
+        )
+        return(all_tokens)
+      }
+
+      new_tokens <- count_tokens(private$provider, ..., type = type)
+      last <- tokens[nrow(tokens), ]
+      new_tokens + last$input + last$output + last$cached_input
     },
 
     #' @description The last turn returned by the assistant.

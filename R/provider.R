@@ -231,14 +231,7 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
 count_tokens <- new_generic(
   "count_tokens",
   "provider",
-  function(
-    provider,
-    ...,
-    turns = list(),
-    system_prompt = NULL,
-    tools = list(),
-    type = NULL
-  ) {
+  function(provider, ..., system_prompt = NULL, tools = list(), type = NULL) {
     S7_dispatch()
   }
 )
@@ -246,7 +239,6 @@ count_tokens <- new_generic(
 method(count_tokens, Provider) <- function(
   provider,
   ...,
-  turns = list(),
   system_prompt = NULL,
   tools = list(),
   type = NULL

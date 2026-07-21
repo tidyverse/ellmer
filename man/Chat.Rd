@@ -261,16 +261,17 @@ streams) are excluded because they lack token data.}
 provider's token counting endpoint.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$token_count(..., include_history = FALSE, type = NULL)}
+    \preformatted{Chat$token_count(..., include = c("new", "all"), type = NULL)}
     \if{html}{\out{</div>}}
   }
   \subsection{Arguments}{
     \if{html}{\out{<div class="arguments">}}
     \describe{
       \item{\code{...}}{Input to count tokens for.}
-      \item{\code{include_history}}{If \code{FALSE} (the default), count tokens
-only for \code{...}, the system prompt, and any registered tools.
-If \code{TRUE}, also include all existing conversation history.}
+      \item{\code{include}}{What to include in the count. \code{"new"} counts
+tokens only for the contents of \code{...}. \code{"all"} estimates the
+total input tokens for the next request by adding the input
+token count from the last turn.}
       \item{\code{type}}{An optional type specification for structured data
 extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
     }

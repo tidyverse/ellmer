@@ -4,18 +4,17 @@ http_interactions:
     uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:countTokens
     body:
       string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"What''s
-        the current date?"}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
-        the current date"}]},"systemInstruction":{"parts":{"text":"Answer succinctly"}},"model":"models/gemini-3.5-flash"}}'
+        the current date?"}]}],"model":"models/gemini-3.5-flash"}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '106'
+      content-length: '105'
       content-type: application/json; charset=UTF-8
-      date: Tue, 07 Jul 2026 13:38:24 GMT
+      date: Tue, 21 Jul 2026 14:47:44 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=71
+      server-timing: gfet4t7; dur=69
       vary:
       - Origin
       - X-Origin
@@ -26,22 +25,21 @@ http_interactions:
     body:
       string: |
         {
-          "totalTokens": 27,
+          "totalTokens": 8,
           "promptTokensDetails": [
             {
               "modality": "TEXT",
-              "tokenCount": 27
+              "tokenCount": 8
             }
           ]
         }
-  recorded_at: 2026-07-07 13:38:24
+  recorded_at: 2026-07-21 14:47:44
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:countTokens
     body:
       string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"Apples
-        are tasty. By Hadley Wickham."}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
-        the current date"}]},"systemInstruction":{"parts":{"text":"Answer succinctly"}},"generationConfig":{"response_mime_type":"application/json","response_schema":{"type":"object","properties":{"title":{"type":"string","description":"Content
+        are tasty. By Hadley Wickham."}]}],"generationConfig":{"response_mime_type":"application/json","response_schema":{"type":"object","properties":{"title":{"type":"string","description":"Content
         title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"]}},"model":"models/gemini-3.5-flash"}}'
   response:
     status: 200
@@ -50,9 +48,9 @@ http_interactions:
       content-encoding: gzip
       content-length: '106'
       content-type: application/json; charset=UTF-8
-      date: Tue, 07 Jul 2026 13:38:24 GMT
+      date: Tue, 21 Jul 2026 14:47:44 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=88
+      server-timing: gfet4t7; dur=82
       vary:
       - Origin
       - X-Origin
@@ -63,13 +61,13 @@ http_interactions:
     body:
       string: |
         {
-          "totalTokens": 30,
+          "totalTokens": 11,
           "promptTokensDetails": [
             {
               "modality": "TEXT",
-              "tokenCount": 30
+              "tokenCount": 11
             }
           ]
         }
-  recorded_at: 2026-07-07 13:38:24
+  recorded_at: 2026-07-21 14:47:44
 recorded_with: VCR-vcr/2.1.0

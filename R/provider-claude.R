@@ -478,7 +478,6 @@ method(value_turn, ProviderAnthropic) <- function(
 method(count_tokens, ProviderAnthropic) <- function(
   provider,
   ...,
-  turns = list(),
   system_prompt = NULL,
   tools = list(),
   type = NULL
@@ -495,12 +494,6 @@ method(count_tokens, ProviderAnthropic) <- function(
   } else {
     system <- NULL
   }
-
-  all_turns <- c(turns, list(user_turn(...)))
-  is_last <- seq_along(all_turns) == length(all_turns)
-  messages <- compact(map2(all_turns, is_last, function(turn, is_last) {
-    as_json(provider, turn, is_last = is_last)
-  }))
 
   if (!is.null(type)) {
     if (
@@ -534,7 +527,7 @@ method(count_tokens, ProviderAnthropic) <- function(
   body <- compact(list(
     model = provider@model,
     system = system,
-    messages = messages,
+    messages = list(as_json(provider, user_turn(...), is_last = TRUE)),
     tools = tools,
     tool_choice = tool_choice,
     output_config = output_config
