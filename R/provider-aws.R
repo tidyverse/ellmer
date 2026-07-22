@@ -194,47 +194,30 @@ provider_aws_bedrock <- function(
 
   base_url <- base_url %||% aws_bedrock_base_url(api, region)
 
-  switch(
+  # Each API expresses caching differently, or not at all
+  cache_args <- switch(
     api,
-    converse = ProviderAWSBedrock(
-      name = "AWS/Bedrock",
-      base_url = base_url,
-      model = model,
-      profile = profile,
-      region = region,
-      creds_cache = creds_cache,
-      cache_point = as_bedrock_cache_point(cache, model),
-      params = params,
-      extra_args = extra_args,
-      extra_headers = extra_headers
-    ),
-    messages = ProviderAWSBedrockMessages(
-      name = "AWS/Bedrock",
-      base_url = base_url,
-      model = model,
-      profile = profile,
-      region = region,
-      creds_cache = creds_cache,
-      cache = as_bedrock_message_cache(cache),
-      params = params,
-      extra_args = extra_args,
-      extra_headers = extra_headers
-    ),
+    converse = list(cache_point = as_bedrock_cache_point(cache, model)),
+    messages = list(cache = as_bedrock_message_cache(cache)),
     responses = {
       check_bedrock_no_cache(cache, error_call = error_call)
-      ProviderAWSBedrockResponses(
-        name = "AWS/Bedrock",
-        base_url = base_url,
-        model = model,
-        profile = profile,
-        region = region,
-        creds_cache = creds_cache,
-        params = params,
-        extra_args = extra_args,
-        extra_headers = extra_headers
-      )
+      list()
     }
   )
+
+  provider <- get(aws_bedrock_class(api))
+  inject(provider(
+    name = "AWS/Bedrock",
+    base_url = base_url,
+    model = model,
+    profile = profile,
+    region = region,
+    creds_cache = creds_cache,
+    params = params,
+    extra_args = extra_args,
+    extra_headers = extra_headers,
+    !!!cache_args
+  ))
 }
 
 aws_bedrock_props <- list(
@@ -815,6 +798,15 @@ aws_bedrock_api <- function(model) {
 
 aws_bedrock_apis <- function() {
   c("converse", "messages", "responses")
+}
+
+aws_bedrock_class <- function(api) {
+  switch(
+    api,
+    converse = "ProviderAWSBedrock",
+    messages = "ProviderAWSBedrockMessages",
+    responses = "ProviderAWSBedrockResponses"
+  )
 }
 
 aws_bedrock_base_url <- function(api, region) {
