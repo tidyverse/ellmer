@@ -150,15 +150,6 @@ chat_aws_bedrock <- function(
 #' @rdname chat_aws_bedrock
 models_aws_bedrock <- function(profile = NULL, base_url = NULL, api = NULL) {
   check_string(base_url, allow_null = TRUE)
-  api <- api %||% "converse"
-  api <- arg_match(api, aws_bedrock_apis_supported())
-
-  if (is.null(base_url) && api == "converse") {
-    # ListFoundationModels uses the control-plane endpoint (bedrock.*) not the
-    # data-plane endpoint (bedrock-runtime.*) used for inference.
-    # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_ListFoundationModels.html
-    base_url <- \(region) sprintf("https://bedrock.%s.amazonaws.com", region)
-  }
 
   provider <- provider_aws_bedrock(
     base_url = base_url,
@@ -192,22 +183,16 @@ provider_aws_bedrock <- function(
   extra_headers = character(),
   error_call = caller_env()
 ) {
-  if (is.null(api)) {
-    api <- aws_bedrock_api(model)
-  } else {
-    api <- arg_match(api, aws_bedrock_apis_supported(), error_call = error_call)
-  }
+  # The model determines the API, not the other way around
+  model <- set_default(model, "us.anthropic.claude-sonnet-4-6")
+  api <- api %||% aws_bedrock_api(model)
+  api <- arg_match(api, aws_bedrock_apis(), error_call = error_call)
 
   creds_cache <- aws_creds_cache(profile)
   credentials <- paws_credentials(profile, cache = creds_cache)
   region <- credentials$region
 
-  model <- set_default(model, aws_bedrock_default_model(api))
-
-  base_url <- base_url %||% aws_bedrock_base_url(api)
-  if (is.function(base_url)) {
-    base_url <- base_url(region)
-  }
+  base_url <- base_url %||% aws_bedrock_base_url(api, region)
 
   switch(
     api,
@@ -353,11 +338,7 @@ method(base_request, ProviderAWSBedrockResponses) <- function(provider) {
   aws_base_request(provider, request(provider@base_url))
 }
 
-# Both mantle APIs share a single OpenAI-shaped listing at /v1/models, and AWS
-# warns that only the id is reliable.
-# https://docs.aws.amazon.com/bedrock/latest/userguide/models-get-info.html
 method(models_list, ProviderAWSBedrockMessages) <- function(provider) {
-  provider@base_url <- sub("/anthropic/v1$", "/v1", provider@base_url)
   aws_mantle_models(provider)
 }
 
@@ -791,7 +772,15 @@ aws_base_request <- function(provider, req) {
   base_request_error(provider, req)
 }
 
+# Whichever API you chat with, mantle lists every model it serves at one
+# OpenAI-shaped /v1/models, and AWS warns that only the id is reliable.
+# https://docs.aws.amazon.com/bedrock/latest/userguide/models-get-info.html
 aws_mantle_models <- function(provider) {
+  provider@base_url <- sprintf(
+    "https://bedrock-mantle.%s.api.aws/v1",
+    provider@region
+  )
+
   req <- base_request(provider)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)
@@ -802,15 +791,12 @@ aws_mantle_models <- function(provider) {
 }
 
 aws_error_body <- function(resp) {
-  if (resp_content_type(resp) != "application/json") {
+  # resp_content_type() is NA when the response has no content type at all
+  if (!identical(resp_content_type(resp), "application/json")) {
     return(NULL)
   }
   body <- resp_body_json(resp)
   body$Message %||% body$message
-}
-
-aws_bedrock_apis_supported <- function() {
-  c("converse", "messages", "responses")
 }
 
 # Most models are only available via Converse, so it's the fallback for
@@ -823,35 +809,27 @@ aws_bedrock_api <- function(model) {
   }
   model <- sub("^(us|eu|apac|au|jp|ca|global)\\.", "", model)
 
-  api <- unname(aws_bedrock_apis[model])
+  api <- unname(aws_bedrock_model_apis[model])
   if (is.na(api)) "converse" else api
 }
 
-aws_bedrock_default_model <- function(api) {
-  switch(
-    api,
-    converse = "us.anthropic.claude-sonnet-4-6",
-    messages = "anthropic.claude-sonnet-5",
-    responses = "openai.gpt-5.4"
-  )
+aws_bedrock_apis <- function() {
+  c("converse", "messages", "responses")
 }
 
-aws_bedrock_base_url <- function(api) {
+aws_bedrock_base_url <- function(api, region) {
   switch(
     api,
-    converse = \(region) {
-      sprintf("https://bedrock-runtime.%s.amazonaws.com", region)
-    },
-    messages = \(region) {
-      sprintf("https://bedrock-mantle.%s.api.aws/anthropic/v1", region)
-    },
+    converse = sprintf("https://bedrock-runtime.%s.amazonaws.com", region),
+    messages = sprintf(
+      "https://bedrock-mantle.%s.api.aws/anthropic/v1",
+      region
+    ),
     # Mantle has two OpenAI-compatible paths: newer models are served from
     # /openai/v1 and older open-weight models (like gpt-oss) from /v1. They are
     # disjoint, not aliases. Everything we route here is on /openai/v1, since
     # the /v1 models are all reachable through converse anyway.
-    responses = \(region) {
-      sprintf("https://bedrock-mantle.%s.api.aws/openai/v1", region)
-    }
+    responses = sprintf("https://bedrock-mantle.%s.api.aws/openai/v1", region)
   )
 }
 

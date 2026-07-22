@@ -38,6 +38,8 @@
       i The Responses API caches prompts automatically.
     Code
       chat_aws_bedrock(api = "mantle")
+    Message
+      Using model = "us.anthropic.claude-sonnet-4-6".
     Condition
       Error in `chat_aws_bedrock()`:
       ! `api` must be one of "converse", "messages", or "responses", not "mantle".

@@ -255,7 +255,7 @@ test_that("aws_bedrock_api() falls back to converse for unknown models", {
   )
 })
 
-test_that("each api has its own endpoint and default model", {
+test_that("each api has its own endpoint", {
   local_mocked_aws_credentials()
 
   converse <- provider_aws_bedrock(api = "converse")
@@ -264,7 +264,6 @@ test_that("each api has its own endpoint and default model", {
     converse@base_url,
     "https://bedrock-runtime.us-east-1.amazonaws.com"
   )
-  expect_equal(converse@model, "us.anthropic.claude-sonnet-4-6")
 
   messages <- provider_aws_bedrock(api = "messages")
   expect_s7_class(messages, ProviderAWSBedrockMessages)
@@ -272,7 +271,6 @@ test_that("each api has its own endpoint and default model", {
     messages@base_url,
     "https://bedrock-mantle.us-east-1.api.aws/anthropic/v1"
   )
-  expect_equal(messages@model, "anthropic.claude-sonnet-5")
 
   responses <- provider_aws_bedrock(api = "responses")
   expect_s7_class(responses, ProviderAWSBedrockResponses)
@@ -280,7 +278,17 @@ test_that("each api has its own endpoint and default model", {
     responses@base_url,
     "https://bedrock-mantle.us-east-1.api.aws/openai/v1"
   )
-  expect_equal(responses@model, "openai.gpt-5.4")
+})
+
+test_that("the default model is the same whatever the api", {
+  local_mocked_aws_credentials()
+
+  models <- vapply(
+    c("converse", "messages", "responses"),
+    \(api) provider_aws_bedrock(api = api)@model,
+    character(1)
+  )
+  expect_all_equal(models, "us.anthropic.claude-sonnet-4-6")
 })
 
 test_that("explicit api overrides the guess", {
@@ -309,6 +317,14 @@ test_that("mantle requests are signed as bedrock in the right region", {
   params <- req$policies$auth_sign$params
   expect_equal(params$aws_service, "bedrock")
   expect_equal(params$aws_region, "eu-west-1")
+})
+
+test_that("aws_error_body() handles responses without a content type", {
+  expect_null(aws_error_body(response(404, headers = list())))
+  expect_equal(
+    aws_error_body(response_json(400, body = list(message = "Nope."))),
+    "Nope."
+  )
 })
 
 test_that("converse suggests mantle when it doesn't recognise the model", {
@@ -350,7 +366,7 @@ test_that("invalid api and cache combinations are rejected", {
 
   expect_snapshot(error = TRUE, {
     chat_aws_bedrock(model = "openai.gpt-5.4", cache = "5m")
-    chat_aws_bedrock(api = "mantle")
+    chat_aws_bedrock(model = "openai.gpt-5.4", api = "converse")
   })
 })
 

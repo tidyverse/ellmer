@@ -2,7 +2,7 @@
 
 # Bedrock models that the Converse API can't serve, and the API to use
 # instead. Anything not listed here is assumed to work with Converse.
-aws_bedrock_apis <- c(
+aws_bedrock_model_apis <- c(
   "anthropic.claude-mythos-5" = "messages",
   "anthropic.claude-mythos-preview" = "messages",
   "google.gemma-4-26b-a4b" = "responses",

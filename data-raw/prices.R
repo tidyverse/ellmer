@@ -190,7 +190,7 @@ writeLines(
     "",
     "# Bedrock models that the Converse API can't serve, and the API to use",
     "# instead. Anything not listed here is assumed to work with Converse.",
-    "aws_bedrock_apis <- c(",
+    "aws_bedrock_model_apis <- c(",
     entries,
     ")"
   ),
