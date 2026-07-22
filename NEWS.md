@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_aws_bedrock()` gains an `api` argument to select between the Converse API on the `bedrock-runtime` endpoint and the Anthropic Messages or OpenAI Responses APIs on the `bedrock-mantle` endpoint. This makes models that Converse can't serve, like Claude Mythos and the GPT-5 family, available on Bedrock. The API is picked from `model` by default, so you only need to set `api` for models ellmer doesn't recognise.
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
 
 # ellmer 0.4.2
