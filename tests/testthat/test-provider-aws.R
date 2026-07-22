@@ -278,7 +278,7 @@ test_that("each api has its own endpoint and default model", {
   expect_s7_class(responses, ProviderAWSBedrockResponses)
   expect_equal(
     responses@base_url,
-    "https://bedrock-mantle.us-east-1.api.aws/v1"
+    "https://bedrock-mantle.us-east-1.api.aws/openai/v1"
   )
   expect_equal(responses@model, "openai.gpt-5.4")
 })
@@ -309,6 +309,34 @@ test_that("mantle requests are signed as bedrock in the right region", {
   params <- req$policies$auth_sign$params
   expect_equal(params$aws_service, "bedrock")
   expect_equal(params$aws_region, "eu-west-1")
+})
+
+test_that("converse suggests mantle when it doesn't recognise the model", {
+  local_mocked_aws_credentials()
+
+  resp <- response_json(
+    status_code = 400,
+    body = list(message = "The provided model identifier is invalid.")
+  )
+  body <- function(provider) {
+    req <- base_request_error(provider, request("http://example.com"))
+    req$policies$error_body(resp)
+  }
+
+  hint <- body(provider_aws_bedrock(model = "anthropic.claude-mythos-9"))
+  expect_length(hint, 2)
+  expect_match(hint[[2]], 'set `api` to "messages" or "responses"')
+
+  # No hint when the user has already chosen converse for a mantle model
+  forced <- provider_aws_bedrock(model = "openai.gpt-5.4", api = "converse")
+  expect_length(body(forced), 1)
+
+  other <- response_json(status_code = 400, body = list(message = "Nope."))
+  req <- base_request_error(
+    provider_aws_bedrock(model = "anthropic.claude-mythos-9"),
+    request("http://example.com")
+  )
+  expect_length(req$policies$error_body(other), 1)
 })
 
 test_that("as_bedrock_message_cache() resolves 'auto'", {

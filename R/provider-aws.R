@@ -29,7 +29,10 @@ NULL
 #'   Claude Mythos) that Converse does not serve at all.
 #' * `"responses"` uses the OpenAI Responses API on the `bedrock-mantle`
 #'   endpoint. This is the only way to reach the GPT-5 family and Grok on
-#'   Bedrock.
+#'   Bedrock. Note that mantle serves newer models from `/openai/v1` and older
+#'   open-weight models like gpt-oss from `/v1`; ellmer uses the former, so
+#'   reaching the latter needs an explicit `base_url`. They're all available
+#'   through `"converse"` anyway.
 #'
 #' By default ellmer picks the API from `model`, falling back to `"converse"`
 #' for models it doesn't recognise. Set `api` explicitly to override this.
@@ -303,7 +306,25 @@ method(base_request, ProviderAWSBedrock) <- function(provider) {
 }
 
 method(base_request_error, ProviderAWSBedrock) <- function(provider, req) {
-  req_error(req, body = aws_error_body)
+  req_error(req, body = function(resp) {
+    msg <- aws_error_body(resp)
+
+    # Models we don't know about are sent to converse, so a model that only
+    # exists on mantle fails here with a misleading error.
+    unknown_model <- grepl("model identifier is invalid", msg %||% "")
+    if (unknown_model && aws_bedrock_api(provider@model) == "converse") {
+      msg <- c(
+        msg,
+        i = paste0(
+          "If '",
+          provider@model,
+          "' is only available on the bedrock-mantle endpoint, set ",
+          "`api` to \"messages\" or \"responses\"."
+        )
+      )
+    }
+    msg
+  })
 }
 
 # The mantle endpoint speaks the Anthropic and OpenAI request formats, but
@@ -824,8 +845,12 @@ aws_bedrock_base_url <- function(api) {
     messages = \(region) {
       sprintf("https://bedrock-mantle.%s.api.aws/anthropic/v1", region)
     },
+    # Mantle has two OpenAI-compatible paths: newer models are served from
+    # /openai/v1 and older open-weight models (like gpt-oss) from /v1. They are
+    # disjoint, not aliases. Everything we route here is on /openai/v1, since
+    # the /v1 models are all reachable through converse anyway.
     responses = \(region) {
-      sprintf("https://bedrock-mantle.%s.api.aws/v1", region)
+      sprintf("https://bedrock-mantle.%s.api.aws/openai/v1", region)
     }
   )
 }

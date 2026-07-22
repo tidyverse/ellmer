@@ -107,7 +107,10 @@ endpoint. Only Claude models are available here, but it includes some (like
 Claude Mythos) that Converse does not serve at all.
 \item \code{"responses"} uses the OpenAI Responses API on the \code{bedrock-mantle}
 endpoint. This is the only way to reach the GPT-5 family and Grok on
-Bedrock.
+Bedrock. Note that mantle serves newer models from \verb{/openai/v1} and older
+open-weight models like gpt-oss from \verb{/v1}; ellmer uses the former, so
+reaching the latter needs an explicit \code{base_url}. They're all available
+through \code{"converse"} anyway.
 }
 
 By default ellmer picks the API from \code{model}, falling back to \code{"converse"}
