@@ -366,7 +366,7 @@ test_that("invalid api and cache combinations are rejected", {
 
   expect_snapshot(error = TRUE, {
     chat_aws_bedrock(model = "openai.gpt-5.4", cache = "5m")
-    chat_aws_bedrock(model = "openai.gpt-5.4", api = "converse")
+    chat_aws_bedrock(model = "openai.gpt-5.4", api = "mantle")
   })
 })
 
