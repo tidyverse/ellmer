@@ -107,7 +107,6 @@ NULL
 #'
 #' \dontshow{ellmer:::vcr_example_end()}
 #' @family tool calling helpers
-#' @aliases ToolDef
 #' @export
 tool <- function(
   fun,
@@ -183,6 +182,23 @@ tool <- function(
   )
 }
 
+#' A tool definition
+#'
+#' @description
+#' An S7 class representing a tool that can be called by a chat model.
+#' Typically created by [tool()], not by calling this constructor directly.
+#'
+#' This class is exported so that package developers implementing custom
+#' providers can define `as_json` methods that dispatch on `ToolDef`.
+#'
+#' @param .data A function to wrap.
+#' @param name The name of the tool.
+#' @param description A description of what the tool does.
+#' @param arguments A [TypeObject] describing the tool's arguments.
+#' @param convert Whether to automatically convert JSON inputs to R
+#'   equivalents.
+#' @param annotations A list of additional tool annotations.
+#' @export
 ToolDef <- new_class(
   "ToolDef",
   parent = class_function,

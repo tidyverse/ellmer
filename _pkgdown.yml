@@ -99,6 +99,7 @@ reference:
     supported by one provider, or if you're implementing a new provider.
   contents:
   - Provider
+  - ToolDef
   - Turn
   - Content
   - Type
