@@ -28,3 +28,17 @@
       Error in `method(as_json, list(ellmer::ProviderAWSBedrock, ellmer::ContentImageRemote))`:
       ! Bedrock doesn't support remote images
 
+# invalid api and cache combinations are rejected
+
+    Code
+      chat_aws_bedrock(model = "openai.gpt-5.4", cache = "5m")
+    Condition
+      Error in `chat_aws_bedrock()`:
+      ! `cache` is not supported when `api = "responses"`.
+      i The Responses API caches prompts automatically.
+    Code
+      chat_aws_bedrock(model = "openai.gpt-5.4", api = "mantle")
+    Condition
+      Error in `chat_aws_bedrock()`:
+      ! `api` must be one of "converse", "messages", or "responses", not "mantle".
+

@@ -36,10 +36,10 @@ jobs:
       - name: Update prices
         run: Rscript --quiet --vanilla data-raw/prices.R
 
-      - name: Check if prices changed
+      - name: Check if data changed
         id: check
         run: |
-          if git diff --quiet data-raw/prices.json; then
+          if git diff --quiet data-raw/prices.json R/provider-aws-api.R; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -50,6 +50,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data-raw/prices.json R/sysdata.rda
-          git commit -m "chore: update pricing data [skip ci]"
+          git add data-raw/prices.json R/sysdata.rda R/provider-aws-api.R
+          git commit -m "chore: update model data [skip ci]"
           git push

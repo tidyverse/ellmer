@@ -4233,6 +4233,68 @@
   },
   {
     "provider": "Google/Gemini",
+    "model": "gemini-3.5-flash-lite",
+    "variant": "",
+    "input": 0.3,
+    "output": 2.5,
+    "cached_input": 0.03
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.5-flash-lite",
+    "variant": "batches",
+    "input": 0.15,
+    "output": 1.25
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.5-flash-lite",
+    "variant": "flex",
+    "input": 0.15,
+    "output": 1.25,
+    "cached_input": 0.02
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.5-flash-lite",
+    "variant": "priority",
+    "input": 0.54,
+    "output": 4.5,
+    "cached_input": 0.05
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.6-flash",
+    "variant": "",
+    "input": 1.5,
+    "output": 7.5,
+    "cached_input": 0.15
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.6-flash",
+    "variant": "batches",
+    "input": 0.75,
+    "output": 3.75
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.6-flash",
+    "variant": "flex",
+    "input": 0.75,
+    "output": 3.75,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "Google/Gemini",
+    "model": "gemini-3.6-flash",
+    "variant": "priority",
+    "input": 2.7,
+    "output": 13.5,
+    "cached_input": 0.27
+  },
+  {
+    "provider": "Google/Gemini",
     "model": "gemini-embedding-001",
     "variant": "",
     "input": 0.15,
@@ -4717,6 +4779,68 @@
   },
   {
     "provider": "Google/Vertex",
+    "model": "gemini-3.5-flash-lite",
+    "variant": "",
+    "input": 0.3,
+    "output": 2.5,
+    "cached_input": 0.03
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-3.5-flash-lite",
+    "variant": "batches",
+    "input": 0.15,
+    "output": 1.25
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-3.5-flash-lite",
+    "variant": "flex",
+    "input": 0.15,
+    "output": 1.25,
+    "cached_input": 0.02
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-3.5-flash-lite",
+    "variant": "priority",
+    "input": 0.54,
+    "output": 4.5,
+    "cached_input": 0.05
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-3.6-flash",
+    "variant": "",
+    "input": 1.5,
+    "output": 7.5,
+    "cached_input": 0.15
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-3.6-flash",
+    "variant": "batches",
+    "input": 0.75,
+    "output": 3.75
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-3.6-flash",
+    "variant": "flex",
+    "input": 0.75,
+    "output": 3.75,
+    "cached_input": 0.075
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "gemini-3.6-flash",
+    "variant": "priority",
+    "input": 2.7,
+    "output": 13.5,
+    "cached_input": 0.27
+  },
+  {
+    "provider": "Google/Vertex",
     "model": "gemini-live-2.5-flash-preview-native-audio-09-2025",
     "variant": "",
     "input": 0.3,
@@ -4840,6 +4964,37 @@
     "input": 0.25,
     "output": 1.5,
     "cached_input": 0.025
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "vertex_ai/gemini-3.5-flash-lite",
+    "variant": "",
+    "input": 0.3,
+    "output": 2.5,
+    "cached_input": 0.03
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "vertex_ai/gemini-3.5-flash-lite",
+    "variant": "batches",
+    "input": 0.15,
+    "output": 1.25
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "vertex_ai/gemini-3.5-flash-lite",
+    "variant": "flex",
+    "input": 0.15,
+    "output": 1.25,
+    "cached_input": 0.02
+  },
+  {
+    "provider": "Google/Vertex",
+    "model": "vertex_ai/gemini-3.5-flash-lite",
+    "variant": "priority",
+    "input": 0.54,
+    "output": 4.5,
+    "cached_input": 0.05
   },
   {
     "provider": "Groq",
