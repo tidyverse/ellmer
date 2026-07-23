@@ -159,7 +159,7 @@ method(chat_body, ProviderOpenAI) <- function(
   type = NULL
 ) {
   input <- compact(unlist(as_json(provider, turns), recursive = FALSE))
-  tools <- as_json(provider, unname(tools))
+  tools <- chat_body_tools(provider, tools)
 
   if (!is.null(type)) {
     # https://platform.openai.com/docs/api-reference/responses/create#responses-create-text
@@ -348,6 +348,53 @@ method(value_turn, ProviderOpenAI) <- function(
     cost = cost,
     finish_reason = value_finish_reason(provider, result)
   )
+}
+
+# Token counting ----------------------------------------------------------
+
+# https://developers.openai.com/api/docs/guides/token-counting
+method(count_tokens, ProviderOpenAI) <- function(
+  provider,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "responses/input_tokens")
+
+  turns <- c(
+    if (!is.null(system_prompt)) list(SystemTurn(system_prompt)),
+    list(user_turn(...))
+  )
+  input <- compact(unlist(as_json(provider, turns), recursive = FALSE))
+  tools <- chat_body_tools(provider, tools)
+
+  if (!is.null(type)) {
+    text <- list(
+      format = list(
+        type = "json_schema",
+        name = "structured_data",
+        schema = as_json(provider, type),
+        strict = TRUE
+      )
+    )
+  } else {
+    text <- NULL
+  }
+
+  body <- compact(list(
+    input = input,
+    model = provider@model,
+    tools = tools,
+    text = text
+  ))
+
+  req <- req_body_json(req, body)
+  req <- req_headers(req, !!!provider@extra_headers)
+
+  resp <- req_perform(req)
+  resp_body_json(resp)$input_tokens
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------

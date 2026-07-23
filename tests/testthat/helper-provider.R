@@ -188,3 +188,37 @@ test_models <- function(models_fun) {
   expect_s3_class(models, "data.frame")
   expect_contains(names(models), "id")
 }
+
+# Token counting -----------------------------------------------------------
+
+test_token_count <- function(chat_fun) {
+  chat <- chat_fun("Answer succinctly")
+
+  result_new <- chat$token_count("What's the current date?")
+  expect_type(result_new, "integer")
+  expect_gt(result_new, 0)
+
+  result_all <- chat$token_count(
+    "What's the current date?",
+    include = "complete"
+  )
+  expect_gt(result_all, result_new)
+
+  chat$chat("What's the current date?")
+
+  result_all_with_history <- chat$token_count(
+    "And tomorrow?",
+    include = "complete"
+  )
+  expect_gt(result_all_with_history, chat$token_count("And tomorrow?"))
+
+  result_structured <- chat$token_count(
+    "Apples are tasty. By Hadley Wickham.",
+    type = type_object(
+      title = type_string("Content title"),
+      author = type_string("Name of the author")
+    )
+  )
+  expect_type(result_structured, "integer")
+  expect_gt(result_structured, 0)
+}

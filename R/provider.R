@@ -98,6 +98,16 @@ method(chat_request, Provider) <- function(
   req
 }
 
+chat_body_tools <- new_generic(
+  "chat_body_tools",
+  "provider",
+  function(provider, tools) S7_dispatch()
+)
+
+method(chat_body_tools, Provider) <- function(provider, tools) {
+  as_json(provider, unname(tools))
+}
+
 chat_body <- new_generic(
   "chat_body",
   "provider",
@@ -224,6 +234,29 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
     string <- unclass(jsonlite::toJSON(x@data, auto_unbox = TRUE))
   }
   as_json(provider, ContentText(string), ...)
+}
+
+# Token counting -------------------------------------------------------------
+
+count_tokens <- new_generic(
+  "count_tokens",
+  "provider",
+  function(provider, ..., system_prompt = NULL, tools = list(), type = NULL) {
+    S7_dispatch()
+  }
+)
+
+method(count_tokens, Provider) <- function(
+  provider,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  cli::cli_abort(
+    "{provider@name} doesn't support token counting.",
+    class = "not_implemented"
+  )
 }
 
 # Models -------------------------------------------------------------------

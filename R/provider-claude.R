@@ -229,7 +229,7 @@ method(chat_body, ProviderAnthropic) <- function(
     tool_choice <- NULL
     output_config <- NULL
   }
-  tools <- as_json(provider, unname(tools))
+  tools <- chat_body_tools(provider, tools)
 
   params <- chat_params(provider, provider@params)
 
@@ -470,6 +470,74 @@ method(value_turn, ProviderAnthropic) <- function(
     cost = cost,
     finish_reason = value_finish_reason(provider, result)
   )
+}
+
+# Token counting ----------------------------------------------------------
+
+# https://docs.anthropic.com/en/docs/build-with-claude/token-counting
+method(count_tokens, ProviderAnthropic) <- function(
+  provider,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "messages/count_tokens")
+
+  if (!is.null(system_prompt)) {
+    system <- list(list(
+      type = "text",
+      text = system_prompt,
+      cache_control = cache_control(provider)
+    ))
+  } else {
+    system <- NULL
+  }
+
+  if (!is.null(type)) {
+    if (
+      has_claude_structured_output(provider@model) &&
+        !type_has_additional_properties(type)
+    ) {
+      output_config <- list(
+        format = list(
+          type = "json_schema",
+          schema = as_json(provider, type)
+        )
+      )
+      tool_choice <- NULL
+    } else {
+      tool_def <- ToolDef(
+        function(...) {},
+        name = "_structured_tool_call",
+        description = "Extract structured data",
+        arguments = type_object(data = type)
+      )
+      tools[[tool_def@name]] <- tool_def
+      tool_choice <- list(type = "tool", name = tool_def@name)
+      output_config <- NULL
+    }
+  } else {
+    tool_choice <- NULL
+    output_config <- NULL
+  }
+  tools <- chat_body_tools(provider, tools)
+
+  body <- compact(list(
+    model = provider@model,
+    system = system,
+    messages = list(as_json(provider, user_turn(...), is_last = TRUE)),
+    tools = tools,
+    tool_choice = tool_choice,
+    output_config = output_config
+  ))
+
+  req <- req_body_json(req, body)
+  req <- req_headers(req, !!!provider@extra_headers)
+
+  resp <- req_perform(req)
+  resp_body_json(resp)$input_tokens
 }
 
 # ellmer -> Claude --------------------------------------------------------------

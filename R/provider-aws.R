@@ -286,7 +286,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
   }
 
   if (length(tools) > 0) {
-    tools <- as_json(provider, unname(tools))
+    tools <- chat_body_tools(provider, tools)
     toolConfig <- compact(list(tools = tools, tool_choice = tool_choice))
   } else {
     toolConfig <- NULL

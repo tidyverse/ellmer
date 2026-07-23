@@ -36,6 +36,7 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
     \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
     \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
+    \item \href{#method-Chat-token_count}{\code{Chat$token_count()}}
     \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
     \item \href{#method-Chat-chat}{\code{Chat$chat()}}
     \item \href{#method-Chat-chat_structured}{\code{Chat$chat_structured()}}
@@ -249,6 +250,35 @@ most recent turn. Incomplete turns (from cancelled or interrupted
 streams) are excluded because they lack token data.}
     }
     \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-token_count"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-token_count}{}}}
+\subsection{\code{Chat$token_count()}}{
+  Estimate the token count for \code{...} using the
+provider's token counting endpoint.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$token_count(..., include = c("new", "complete"), type = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{Input to count tokens for.}
+      \item{\code{include}}{What to include in the count. \code{"new"} counts
+tokens only for the contents of \code{...}. \code{"complete"} estimates
+the total input tokens for the next request, including system
+prompt, tools, and conversation history.}
+      \item{\code{type}}{An optional type specification for structured data
+extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The estimated number of input tokens.
   }
 }
 

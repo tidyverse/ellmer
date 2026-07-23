@@ -245,3 +245,10 @@ test_that("batch_status waits for responsesFile after SUCCEEDED", {
   )
   expect_false(with_file$working)
 })
+
+# Token counting -----------------------------------------------------------
+
+test_that("can count tokens", {
+  vcr::local_cassette("google-count-tokens")
+  test_token_count(chat_google_gemini_test)
+})
