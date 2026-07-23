@@ -98,3 +98,45 @@ method(as_json, list(Provider, ContentToolResponseFetch)) <- function(
 ) {
   x@json
 }
+
+# MCP tool use ----------------------------------------------------------------
+
+ContentToolRequestMcp <- new_class(
+  "ContentToolRequestMcp",
+  parent = Content,
+  properties = list(
+    id = prop_string(),
+    name = prop_string(),
+    server_name = prop_string(),
+    json = class_list
+  )
+)
+method(format, ContentToolRequestMcp) <- function(x, ...) {
+  cli::format_inline("[{.strong mcp tool request}]: {x@server_name}/{x@name}")
+}
+method(as_json, list(Provider, ContentToolRequestMcp)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
+}
+
+ContentToolResponseMcp <- new_class(
+  "ContentToolResponseMcp",
+  parent = Content,
+  properties = list(
+    tool_use_id = prop_string(),
+    json = class_list
+  )
+)
+method(format, ContentToolResponseMcp) <- function(x, ...) {
+  cli::format_inline("[{.strong mcp tool result}]: {x@tool_use_id}")
+}
+method(as_json, list(Provider, ContentToolResponseMcp)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@json
+}

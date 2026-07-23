@@ -218,6 +218,82 @@ test_that("value_turn() parses server_tool_use web_fetch input from JSON string"
   expect_equal(fetch_content@url, "https://example.com")
 })
 
+test_that("value_turn() parses mcp_tool_use content", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-sonnet-4-20250514",
+    params = list(),
+    extra_args = list(),
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_use",
+        id = "mcptoolu_1",
+        name = "execute_query",
+        server_name = "snowflake",
+        input = list(query = "SHOW DATABASES")
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  mcp_content <- turn@contents[[1]]
+  expect_s7_class(mcp_content, ContentToolRequestMcp)
+  expect_equal(mcp_content@name, "execute_query")
+  expect_equal(mcp_content@server_name, "snowflake")
+})
+
+test_that("value_turn() parses mcp_tool_result content", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-sonnet-4-20250514",
+    params = list(),
+    extra_args = list(),
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+
+  result <- list(
+    content = list(
+      list(
+        type = "mcp_tool_result",
+        tool_use_id = "mcptoolu_1",
+        content = list(list(type = "text", text = "DB1\nDB2")),
+        is_error = FALSE
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, result)
+  mcp_content <- turn@contents[[1]]
+  expect_s7_class(mcp_content, ContentToolResponseMcp)
+  expect_equal(mcp_content@tool_use_id, "mcptoolu_1")
+})
+
 test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens", {
   provider <- ProviderAnthropic(
     name = "Anthropic",
