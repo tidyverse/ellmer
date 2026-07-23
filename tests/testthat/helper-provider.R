@@ -198,14 +198,17 @@ test_token_count <- function(chat_fun) {
   expect_type(result_new, "integer")
   expect_gt(result_new, 0)
 
-  result_all <- chat$token_count("What's the current date?", include = "all")
+  result_all <- chat$token_count(
+    "What's the current date?",
+    include = "complete"
+  )
   expect_gt(result_all, result_new)
 
   chat$chat("What's the current date?")
 
   result_all_with_history <- chat$token_count(
     "And tomorrow?",
-    include = "all"
+    include = "complete"
   )
   expect_gt(result_all_with_history, chat$token_count("And tomorrow?"))
 

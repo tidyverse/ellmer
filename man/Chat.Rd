@@ -261,7 +261,7 @@ streams) are excluded because they lack token data.}
 provider's token counting endpoint.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$token_count(..., include = c("new", "all"), type = NULL)}
+    \preformatted{Chat$token_count(..., include = c("new", "complete"), type = NULL)}
     \if{html}{\out{</div>}}
   }
   \subsection{Arguments}{
@@ -269,8 +269,8 @@ provider's token counting endpoint.
     \describe{
       \item{\code{...}}{Input to count tokens for.}
       \item{\code{include}}{What to include in the count. \code{"new"} counts
-tokens only for the contents of \code{...}. \code{"all"} estimates the
-total input tokens for the next request, including system
+tokens only for the contents of \code{...}. \code{"complete"} estimates
+the total input tokens for the next request, including system
 prompt, tools, and conversation history.}
       \item{\code{type}}{An optional type specification for structured data
 extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
