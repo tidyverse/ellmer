@@ -98,6 +98,16 @@ method(chat_request, Provider) <- function(
   req
 }
 
+chat_body_tools <- new_generic(
+  "chat_body_tools",
+  "provider",
+  function(provider, tools) S7_dispatch()
+)
+
+method(chat_body_tools, Provider) <- function(provider, tools) {
+  as_json(provider, unname(tools))
+}
+
 chat_body <- new_generic(
   "chat_body",
   "provider",

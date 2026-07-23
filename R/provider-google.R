@@ -232,19 +232,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
   }
 
   contents <- as_json(provider, turns)
-
-  # https://ai.google.dev/api/caching#Tool
-  if (length(tools) > 0) {
-    is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
-    funs <- as_json(provider, unname(tools))
-
-    tools <- c(
-      compact(list(functionDeclarations = funs[!is_builtin])),
-      unlist(funs[is_builtin], recursive = FALSE)
-    )
-  } else {
-    tools <- NULL
-  }
+  tools <- chat_body_tools(provider, tools)
 
   compact(list(
     contents = contents,
@@ -840,6 +828,18 @@ gemini_client <- function() {
   )
 }
 
+method(chat_body_tools, ProviderGoogleGemini) <- function(provider, tools) {
+  if (length(tools) == 0) {
+    return(NULL)
+  }
+  is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
+  funs <- as_json(provider, unname(tools))
+  c(
+    compact(list(functionDeclarations = funs[!is_builtin])),
+    unlist(funs[is_builtin], recursive = FALSE)
+  )
+}
+
 # Token counting ----------------------------------------------------------
 
 # https://ai.google.dev/api/tokens
@@ -864,17 +864,7 @@ method(count_tokens, ProviderGoogleGemini) <- function(
   }
 
   contents <- as_json(provider, list(user_turn(...)))
-
-  if (length(tools) > 0) {
-    is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
-    funs <- as_json(provider, unname(tools))
-    tools <- c(
-      compact(list(functionDeclarations = funs[!is_builtin])),
-      unlist(funs[is_builtin], recursive = FALSE)
-    )
-  } else {
-    tools <- NULL
-  }
+  tools <- chat_body_tools(provider, tools)
 
   if (!is.null(type)) {
     generation_config <- list(

@@ -229,7 +229,7 @@ method(chat_body, ProviderAnthropic) <- function(
     tool_choice <- NULL
     output_config <- NULL
   }
-  tools <- as_json(provider, unname(tools))
+  tools <- chat_body_tools(provider, tools)
 
   params <- chat_params(provider, provider@params)
 
@@ -522,7 +522,7 @@ method(count_tokens, ProviderAnthropic) <- function(
     tool_choice <- NULL
     output_config <- NULL
   }
-  tools <- as_json(provider, unname(tools))
+  tools <- chat_body_tools(provider, tools)
 
   body <- compact(list(
     model = provider@model,

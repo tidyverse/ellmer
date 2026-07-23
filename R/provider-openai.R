@@ -159,7 +159,7 @@ method(chat_body, ProviderOpenAI) <- function(
   type = NULL
 ) {
   input <- compact(unlist(as_json(provider, turns), recursive = FALSE))
-  tools <- as_json(provider, unname(tools))
+  tools <- chat_body_tools(provider, tools)
 
   if (!is.null(type)) {
     # https://platform.openai.com/docs/api-reference/responses/create#responses-create-text
@@ -368,7 +368,7 @@ method(count_tokens, ProviderOpenAI) <- function(
     list(user_turn(...))
   )
   input <- compact(unlist(as_json(provider, turns), recursive = FALSE))
-  tools <- as_json(provider, unname(tools))
+  tools <- chat_body_tools(provider, tools)
 
   if (!is.null(type)) {
     text <- list(
