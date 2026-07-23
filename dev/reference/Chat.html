@@ -98,6 +98,7 @@ but instead call <code><a href="chat_openai.html">chat_openai()</a></code> or fr
 <li><p><a href="#method-Chat-set_system_prompt"><code>Chat$set_system_prompt()</code></a></p></li>
 <li><p><a href="#method-Chat-get_tokens"><code>Chat$get_tokens()</code></a></p></li>
 <li><p><a href="#method-Chat-get_cost"><code>Chat$get_cost()</code></a></p></li>
+<li><p><a href="#method-Chat-token_count"><code>Chat$token_count()</code></a></p></li>
 <li><p><a href="#method-Chat-last_turn"><code>Chat$last_turn()</code></a></p></li>
 <li><p><a href="#method-Chat-chat"><code>Chat$chat()</code></a></p></li>
 <li><p><a href="#method-Chat-chat_structured"><code>Chat$chat_structured()</code></a></p></li>
@@ -287,13 +288,43 @@ streams) are excluded because they lack token data.</p></dd>
 
 </div>
 
+<p></p><hr><a id="method-Chat-token_count"></a><div class="section">
+<h3 id="chat-token-count-"><code>Chat$token_count()</code><a class="anchor" aria-label="anchor" href="#chat-token-count-"></a></h3>
+<p>Estimate the token count for <code>...</code> using the
+provider's token counting endpoint.</p><div class="section">
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">token_count</span><span class="op">(</span><span class="va">...</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"new"</span>, <span class="st">"complete"</span><span class="op">)</span>, type <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>...</code></dt>
+<dd><p>Input to count tokens for.</p></dd>
+
+      <dt><code>include</code></dt>
+<dd><p>What to include in the count. <code>"new"</code> counts
+tokens only for the contents of <code>...</code>. <code>"complete"</code> estimates
+the total input tokens for the next request, including system
+prompt, tools, and conversation history.</p></dd>
+
+      <dt><code>type</code></dt>
+<dd><p>An optional type specification for structured data
+extraction, created with a <code><a href="type_boolean.html">type_()</a></code> function.</p></dd>
+
+
+</dl><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
+<p>The estimated number of input tokens.</p>
+</div>
+
+</div>
+
 <p></p><hr><a id="method-Chat-last_turn"></a><div class="section">
 <h3 id="chat-last-turn-"><code>Chat$last_turn()</code><a class="anchor" aria-label="anchor" href="#chat-last-turn-"></a></h3>
 <p>The last turn returned by the assistant.</p><div class="section">
-<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">last_turn</span><span class="op">(</span>role <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"assistant"</span>, <span class="st">"user"</span>, <span class="st">"system"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
+<h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>role</code></dt>
 <dd><p>Optionally, specify a role to find the last turn with
 for the role.</p></dd>
@@ -301,7 +332,7 @@ for the role.</p></dd>
 
 </dl><p></p></div>
 </div><p></p><div class="section">
-<h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
+<h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
 <p>Either a <code>Turn</code> or <code>NULL</code>, if no turns with the specified
 role have occurred.</p>
 </div>
@@ -312,10 +343,10 @@ role have occurred.</p>
 <h3 id="chat-chat-"><code>Chat$chat()</code><a class="anchor" aria-label="anchor" href="#chat-chat-"></a></h3>
 <p>Submit input to the chatbot, and return the response as a
 simple string (probably Markdown).</p><div class="section">
-<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
+<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">...</span>, echo <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
+<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. Can be strings or images
 (see <code><a href="content_image_url.html">content_image_file()</a></code> and <code><a href="content_image_url.html">content_image_url()</a></code>.</p></dd>
@@ -336,10 +367,10 @@ will be used.</p></dd>
 <p>Extract structured data.</p>
 <p>Note: tool calling is disabled during structured data extraction. See
 <code><a href="../articles/structured-data.html">vignette("structured-data")</a></code> for details and workarounds.</p><div class="section">
-<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
+<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">...</span>, <span class="va">type</span>, echo <span class="op">=</span> <span class="st">"none"</span>, convert <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
+<h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. This is typically the text
 you want to extract data from, but it can be omitted if the data is
@@ -369,10 +400,10 @@ data frames and arrays of strings into a character vector.</p></dd>
 <h3 id="chat-chat-structured-async-"><code>Chat$chat_structured_async()</code><a class="anchor" aria-label="anchor" href="#chat-chat-structured-async-"></a></h3>
 <p>Extract structured data, asynchronously. Returns a promise
 that resolves to an object matching the type specification.</p><div class="section">
-<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
+<h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">chat_structured_async</span><span class="op">(</span><span class="va">...</span>, <span class="va">type</span>, echo <span class="op">=</span> <span class="st">"none"</span>, convert <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
+<h4 id="arguments-12">Arguments<a class="anchor" aria-label="anchor" href="#arguments-12"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. Will typically include
 the phrase "extract structured data".</p></dd>
@@ -402,10 +433,10 @@ data frames and arrays of strings into a character vector.</p></dd>
 <p>Submit input to the chatbot, and receive a promise that
 resolves with the response all at once. Returns a promise that resolves
 to a string (probably Markdown).</p><div class="section">
-<h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
+<h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">chat_async</span><span class="op">(</span><span class="va">...</span>, tool_mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"concurrent"</span>, <span class="st">"sequential"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-12">Arguments<a class="anchor" aria-label="anchor" href="#arguments-12"></a></h4>
+<h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. Can be strings or images.</p></dd>
 
@@ -428,10 +459,10 @@ best suited for automated scripts or non-interactive applications.</p></dd>
 Returns A <a href="https://coro.r-lib.org/articles/generator.html#iterating" class="external-link">coro generator</a>
 that yields strings. While iterating, the generator will block while
 waiting for more content from the chatbot.</p><div class="section">
-<h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
+<h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">stream</span><span class="op">(</span><span class="va">...</span>, stream <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="st">"content"</span><span class="op">)</span>, controller <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
+<h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. Can be strings or images.</p></dd>
 
@@ -455,7 +486,7 @@ stream from outside the iteration loop.</p></dd>
 <p>Submit input to the chatbot, returning asynchronously
 streaming results. Returns a <a href="https://coro.r-lib.org/reference/async_generator.html" class="external-link">coro async generator</a> that
 yields string promises.</p><div class="section">
-<h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
+<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span></span>
 <span>  <span class="va">...</span>,</span>
 <span>  tool_mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"concurrent"</span>, <span class="st">"sequential"</span><span class="op">)</span>,</span>
@@ -463,7 +494,7 @@ yields string promises.</p><div class="section">
 <span>  controller <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
+<h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. Can be strings or images.</p></dd>
 
@@ -493,10 +524,10 @@ stream from outside the iteration loop.</p></dd>
 <h3 id="chat-register-tool-"><code>Chat$register_tool()</code><a class="anchor" aria-label="anchor" href="#chat-register-tool-"></a></h3>
 <p>Register a tool (an R function) that the chatbot can use.
 Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calling")</a></code>.</p><div class="section">
-<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
+<h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">tool</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
+<h4 id="arguments-16">Arguments<a class="anchor" aria-label="anchor" href="#arguments-16"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>tool</code></dt>
 <dd><p>A tool definition created by <code><a href="tool.html">tool()</a></code>.</p></dd>
 
@@ -510,10 +541,10 @@ Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calli
 <h3 id="chat-register-tools-"><code>Chat$register_tools()</code><a class="anchor" aria-label="anchor" href="#chat-register-tools-"></a></h3>
 <p>Register a list of tools.
 Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calling")</a></code>.</p><div class="section">
-<h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
+<h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">register_tools</span><span class="op">(</span><span class="va">tools</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-16">Arguments<a class="anchor" aria-label="anchor" href="#arguments-16"></a></h4>
+<h4 id="arguments-17">Arguments<a class="anchor" aria-label="anchor" href="#arguments-17"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>tools</code></dt>
 <dd><p>A list of tool definitions created by <code><a href="tool.html">tool()</a></code>.</p></dd>
 
@@ -526,7 +557,7 @@ Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calli
 <p></p><hr><a id="method-Chat-get_provider"></a><div class="section">
 <h3 id="chat-get-provider-"><code>Chat$get_provider()</code><a class="anchor" aria-label="anchor" href="#chat-get-provider-"></a></h3>
 <p>Get the underlying provider object. For expert use only.</p><div class="section">
-<h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
+<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_provider</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -535,7 +566,7 @@ Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calli
 <p></p><hr><a id="method-Chat-get_tools"></a><div class="section">
 <h3 id="chat-get-tools-"><code>Chat$get_tools()</code><a class="anchor" aria-label="anchor" href="#chat-get-tools-"></a></h3>
 <p>Retrieve the list of registered tools.</p><div class="section">
-<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
+<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_tools</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -545,10 +576,10 @@ Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calli
 <h3 id="chat-set-tools-"><code>Chat$set_tools()</code><a class="anchor" aria-label="anchor" href="#chat-set-tools-"></a></h3>
 <p>Sets the available tools. For expert use only; most users
 should use <code>register_tool()</code>.</p><div class="section">
-<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
+<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">set_tools</span><span class="op">(</span><span class="va">tools</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-17">Arguments<a class="anchor" aria-label="anchor" href="#arguments-17"></a></h4>
+<h4 id="arguments-18">Arguments<a class="anchor" aria-label="anchor" href="#arguments-18"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>tools</code></dt>
 <dd><p>A list of tool definitions created with <code><a href="tool.html">tool()</a></code>.</p></dd>
 
@@ -561,33 +592,13 @@ should use <code>register_tool()</code>.</p><div class="section">
 <p></p><hr><a id="method-Chat-on_tool_request"></a><div class="section">
 <h3 id="chat-on-tool-request-"><code>Chat$on_tool_request()</code><a class="anchor" aria-label="anchor" href="#chat-on-tool-request-"></a></h3>
 <p>Register a callback for a tool request event.</p><div class="section">
-<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_tool_request</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div><p></p><div class="section">
-<h4 id="arguments-18">Arguments<a class="anchor" aria-label="anchor" href="#arguments-18"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>callback</code></dt>
-<dd><p>A function to be called when a tool request event occurs,
-which must have <code>request</code> as its only argument.</p></dd>
-
-
-</dl><p></p></div>
-</div><p></p><div class="section">
-<h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
-<p>A function that can be called to remove the callback.</p>
-</div>
-
-</div>
-
-<p></p><hr><a id="method-Chat-on_tool_result"></a><div class="section">
-<h3 id="chat-on-tool-result-"><code>Chat$on_tool_result()</code><a class="anchor" aria-label="anchor" href="#chat-on-tool-result-"></a></h3>
-<p>Register a callback for a tool result event.</p><div class="section">
 <h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_tool_result</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_tool_request</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
 <h4 id="arguments-19">Arguments<a class="anchor" aria-label="anchor" href="#arguments-19"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>callback</code></dt>
-<dd><p>A function to be called when a tool result event occurs,
-which must have <code>result</code> as its only argument.</p></dd>
+<dd><p>A function to be called when a tool request event occurs,
+which must have <code>request</code> as its only argument.</p></dd>
 
 
 </dl><p></p></div>
@@ -598,13 +609,33 @@ which must have <code>result</code> as its only argument.</p></dd>
 
 </div>
 
+<p></p><hr><a id="method-Chat-on_tool_result"></a><div class="section">
+<h3 id="chat-on-tool-result-"><code>Chat$on_tool_result()</code><a class="anchor" aria-label="anchor" href="#chat-on-tool-result-"></a></h3>
+<p>Register a callback for a tool result event.</p><div class="section">
+<h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_tool_result</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-20">Arguments<a class="anchor" aria-label="anchor" href="#arguments-20"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>callback</code></dt>
+<dd><p>A function to be called when a tool result event occurs,
+which must have <code>result</code> as its only argument.</p></dd>
+
+
+</dl><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns-3">Returns<a class="anchor" aria-label="anchor" href="#returns-3"></a></h4>
+<p>A function that can be called to remove the callback.</p>
+</div>
+
+</div>
+
 <p></p><hr><a id="method-Chat-clone"></a><div class="section">
 <h3 id="chat-clone-"><code>Chat$clone()</code><a class="anchor" aria-label="anchor" href="#chat-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
+<h4 id="usage-25">Usage<a class="anchor" aria-label="anchor" href="#usage-25"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-20">Arguments<a class="anchor" aria-label="anchor" href="#arguments-20"></a></h4>
+<h4 id="arguments-21">Arguments<a class="anchor" aria-label="anchor" href="#arguments-21"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 

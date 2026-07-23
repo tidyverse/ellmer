@@ -42,6 +42,8 @@ A Chat object
 
 - [`Chat$get_cost()`](#method-Chat-get_cost)
 
+- [`Chat$token_count()`](#method-Chat-token_count)
+
 - [`Chat$last_turn()`](#method-Chat-last_turn)
 
 - [`Chat$chat()`](#method-Chat-chat)
@@ -254,6 +256,41 @@ The cost of this chat
   Alternatively, use `"last"` to get the cost of just the most recent
   turn. Incomplete turns (from cancelled or interrupted streams) are
   excluded because they lack token data.
+
+------------------------------------------------------------------------
+
+### `Chat$token_count()`
+
+Estimate the token count for `...` using the provider's token counting
+endpoint.
+
+#### Usage
+
+    Chat$token_count(..., include = c("new", "complete"), type = NULL)
+
+#### Arguments
+
+- `...`:
+
+  Input to count tokens for.
+
+- `include`:
+
+  What to include in the count. `"new"` counts tokens only for the
+  contents of `...`. `"complete"` estimates the total input tokens for
+  the next request, including system prompt, tools, and conversation
+  history.
+
+- `type`:
+
+  An optional type specification for structured data extraction, created
+  with a
+  [`type_()`](https://ellmer.tidyverse.org/dev/reference/type_boolean.md)
+  function.
+
+#### Returns
+
+The estimated number of input tokens.
 
 ------------------------------------------------------------------------
 

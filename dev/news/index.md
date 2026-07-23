@@ -2,6 +2,10 @@
 
 ## ellmer (development version)
 
+- `Chat` gains a `$token_count()` method that estimates the number of
+  tokens in new input using the provider’s token counting endpoint
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#814](https://github.com/tidyverse/ellmer/issues/814)).
 - [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
   now correctly preserves provider error messages
   ([@xmarquez](https://github.com/xmarquez),
