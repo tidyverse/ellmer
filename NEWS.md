@@ -2,6 +2,7 @@
 
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
+* `contents_trajectory()` converts a `Chat`, `Turn`, or `Content` object into a letta-ai `trajectory-v1` compatible list.
 
 
 # ellmer 0.4.2
