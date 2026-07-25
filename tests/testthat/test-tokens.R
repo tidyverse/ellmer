@@ -34,8 +34,14 @@ test_that("can compute price of tokens", {
   provider <- test_provider("OpenAI")
   model <- test_model("gpt-4o")
 
-  expect_equal(get_token_cost(provider, model, tokens(input = 1e6)), dollars(2.5))
-  expect_equal(get_token_cost(provider, model, tokens(output = 1e6)), dollars(10))
+  expect_equal(
+    get_token_cost(provider, model, tokens(input = 1e6)),
+    dollars(2.5)
+  )
+  expect_equal(
+    get_token_cost(provider, model, tokens(output = 1e6)),
+    dollars(10)
+  )
   expect_equal(
     get_token_cost(provider, model, tokens(cached_input = 1e6)),
     dollars(1.25)
@@ -53,7 +59,12 @@ test_that("can compute price of tokens with a variant", {
 
   # fals back to baseline if no match
   expect_equal(
-    get_token_cost(provider, model, tokens(input = 1e6), variant = "tuesday-pm"),
+    get_token_cost(
+      provider,
+      model,
+      tokens(input = 1e6),
+      variant = "tuesday-pm"
+    ),
     get_token_cost(provider, model, tokens(input = 1e6))
   )
 })
