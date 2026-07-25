@@ -146,6 +146,31 @@ test_that("built-in web search ids match between call and result", {
   expect_equal(records[[2]]$content, "https://a.com\nhttps://b.com")
 })
 
+test_that("multiple built-in searches link each result to its own request", {
+  turn <- AssistantTurn(list(
+    ContentToolRequestSearch(query = "first", json = list()),
+    ContentToolRequestSearch(query = "second", json = list()),
+    ContentToolResponseSearch(urls = "https://first.com", json = list()),
+    ContentToolResponseSearch(urls = "https://second.com", json = list())
+  ))
+
+  records <- contents_trajectory(turn, turn_index = 2)
+
+  expect_length(records, 3)
+  tool_calls <- records[[1]]$tool_calls
+  expect_equal(
+    vapply(tool_calls, \(x) x$id, character(1)),
+    c(
+      "websearch_2_1",
+      "websearch_2_2"
+    )
+  )
+  expect_equal(records[[2]]$tool_call_id, "websearch_2_1")
+  expect_equal(records[[2]]$content, "https://first.com")
+  expect_equal(records[[3]]$tool_call_id, "websearch_2_2")
+  expect_equal(records[[3]]$content, "https://second.com")
+})
+
 test_that("built-in web fetch ids match between call and result", {
   turn <- AssistantTurn(list(
     ContentToolRequestFetch(url = "https://example.com", json = list()),
@@ -221,6 +246,10 @@ test_that("system prompt is omitted from chat trajectories", {
 
   texts <- c(records[[2]]$content, records[[3]]$content)
   expect_no_match(paste(texts, collapse = " "), "Be terse", fixed = TRUE)
+})
+
+test_that("a SystemTurn produces no records", {
+  expect_equal(contents_trajectory(SystemTurn("Be terse.")), list())
 })
 
 test_that("tool result without a request falls back to a synthesized id", {

@@ -13,8 +13,11 @@ NULL
 #' `reasoning`, and `tool` events in a conversation, preceded by a `meta`
 #' record.
 #'
-#' Call `jsonlite::toJSON(x, auto_unbox = TRUE)` on the result to obtain the
-#' JSON text for the trajectory.
+#' Call `jsonlite::toJSON(x, auto_unbox = TRUE, null = "null")` on the result
+#' to obtain the JSON text for the trajectory. `null = "null"` is required so
+#' that assistant tool-call records (which carry `content = NULL`) serialize
+#' their `content` field as JSON `null`, matching the schema, rather than
+#' having it dropped.
 #'
 #' The `trajectory-v1` schema allows each record to carry a `timestamp`.
 #' ellmer does not track per-turn timestamps, except when the provider itself
@@ -123,6 +126,10 @@ method(contents_trajectory, Turn) <- function(content, turn_index = 1L) {
   fold_trajectory_contents(content, turn_index = turn_index)
 }
 
+method(contents_trajectory, SystemTurn) <- function(content, turn_index = 1L) {
+  list()
+}
+
 method(contents_trajectory, new_S3_class("Chat")) <- function(content) {
   meta <- list(role = "meta", source = "ellmer", model = content$get_model())
 
@@ -179,8 +186,8 @@ fold_trajectory_contents <- function(turn, turn_index) {
   records <- list()
   text_buffer <- character()
   tool_calls <- list()
-  search_id <- NULL
-  fetch_id <- NULL
+  search_ids <- character()
+  fetch_ids <- character()
   counter <- 0L
 
   flush_text <- function() {
@@ -251,6 +258,7 @@ fold_trajectory_contents <- function(turn, turn_index) {
       flush_text()
       counter <- counter + 1L
       search_id <- sprintf("websearch_%d_%d", turn_index, counter)
+      search_ids[[length(search_ids) + 1]] <- search_id
       tool_calls[[length(tool_calls) + 1]] <- list(
         id = search_id,
         name = fragment$name,
@@ -259,9 +267,11 @@ fold_trajectory_contents <- function(turn, turn_index) {
     } else if (type == "tool_result_search") {
       flush_text()
       flush_tool_calls()
+      id <- search_ids[[1]]
+      search_ids <- search_ids[-1]
       record <- list(
         role = "tool",
-        tool_call_id = search_id,
+        tool_call_id = id,
         content = fragment$content
       )
       records[[length(records) + 1]] <- with_timestamp(record, timestamp)
@@ -269,6 +279,7 @@ fold_trajectory_contents <- function(turn, turn_index) {
       flush_text()
       counter <- counter + 1L
       fetch_id <- sprintf("webfetch_%d_%d", turn_index, counter)
+      fetch_ids[[length(fetch_ids) + 1]] <- fetch_id
       tool_calls[[length(tool_calls) + 1]] <- list(
         id = fetch_id,
         name = fragment$name,
@@ -277,9 +288,11 @@ fold_trajectory_contents <- function(turn, turn_index) {
     } else if (type == "tool_result_fetch") {
       flush_text()
       flush_tool_calls()
+      id <- fetch_ids[[1]]
+      fetch_ids <- fetch_ids[-1]
       record <- list(
         role = "tool",
-        tool_call_id = fetch_id,
+        tool_call_id = id,
         content = fragment$content
       )
       records[[length(records) + 1]] <- with_timestamp(record, timestamp)

@@ -25,8 +25,11 @@ schema: an ordered list of records describing the \code{user}, \code{assistant},
 \code{reasoning}, and \code{tool} events in a conversation, preceded by a \code{meta}
 record.
 
-Call \code{jsonlite::toJSON(x, auto_unbox = TRUE)} on the result to obtain the
-JSON text for the trajectory.
+Call \code{jsonlite::toJSON(x, auto_unbox = TRUE, null = "null")} on the result
+to obtain the JSON text for the trajectory. \code{null = "null"} is required so
+that assistant tool-call records (which carry \code{content = NULL}) serialize
+their \code{content} field as JSON \code{null}, matching the schema, rather than
+having it dropped.
 
 The \code{trajectory-v1} schema allows each record to carry a \code{timestamp}.
 ellmer does not track per-turn timestamps, except when the provider itself
