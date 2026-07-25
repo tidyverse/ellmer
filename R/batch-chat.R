@@ -370,7 +370,8 @@ BatchJob <- R6::R6Class(
     compute_hash = function() {
       # TODO: replace with JSON serialization when available
       list(
-        provider = hash(provider_hash(self$provider, self$model)),
+        provider = hash(provider_hash(self$provider)),
+        model = hash(model_hash(self$model)),
         prompts = hash(lapply(self$user_turns, format)),
         user_turns = hash(lapply(self$chat$get_turns(TRUE), format))
       )
@@ -404,11 +405,16 @@ BatchJob <- R6::R6Class(
   )
 )
 
-provider_hash <- function(provider, model) {
+provider_hash <- function(provider) {
   list(
     name = provider@name,
-    model = model@name,
     base_url = provider@base_url
+  )
+}
+
+model_hash <- function(model) {
+  list(
+    name = model@name
   )
 }
 
