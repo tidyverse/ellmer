@@ -182,6 +182,14 @@ fold_trajectory_contents <- function(turn, turn_index) {
   role <- if (is_user_turn(turn)) "user" else "assistant"
   timestamp <- turn_timestamp(turn)
 
+  # Drop empty ContentText so a provider that emits an empty text chunk
+  # alongside tool calls (e.g. Databricks) does not produce a bogus record
+  # with content = "", matching the replay/provider handling.
+  is_empty_text <- map_lgl(turn@contents, function(x) {
+    S7_inherits(x, ContentText) && !nzchar(x@text)
+  })
+  contents <- turn@contents[!is_empty_text]
+
   records <- list()
   text_buffer <- character()
   tool_calls <- list()
@@ -216,7 +224,7 @@ fold_trajectory_contents <- function(turn, turn_index) {
     records[[length(records) + 1]] <<- with_timestamp(record, timestamp)
   }
 
-  for (item in turn@contents) {
+  for (item in contents) {
     fragment <- contents_trajectory(item)
     if (is.null(fragment)) {
       next

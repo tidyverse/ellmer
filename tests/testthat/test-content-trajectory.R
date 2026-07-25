@@ -200,6 +200,19 @@ test_that("built-in web fetch ids match between call and result", {
   expect_equal(records[[2]]$content, "https://example.com")
 })
 
+test_that("empty text blocks are dropped from a tool-only assistant turn", {
+  turn <- AssistantTurn(list(
+    ContentText(""),
+    ContentToolRequest("call_1", "my_tool", list())
+  ))
+
+  records <- contents_trajectory(turn)
+
+  expect_length(records, 1)
+  expect_null(records[[1]]$content)
+  expect_length(records[[1]]$tool_calls, 1)
+})
+
 test_that("ContentJson renders as real assistant content", {
   turn_string <- AssistantTurn(list(
     ContentJson(data = NULL, string = '{"a":1}')
