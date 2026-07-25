@@ -58,8 +58,8 @@ test_that("can use pdfs", {
 test_that("can match prices for some common models", {
   provider <- chat_openai_compatible_test()$get_provider()
 
-  expect_true(has_cost(provider@name, "gpt-4.1"))
-  expect_true(has_cost(provider@name, "gpt-4.1-2025-04-14"))
+  expect_true(has_cost(provider, Model(name = "gpt-4.1")))
+  expect_true(has_cost(provider, Model(name = "gpt-4.1-2025-04-14")))
 })
 
 # Custom tests -----------------------------------------------------------------

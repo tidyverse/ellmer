@@ -102,9 +102,9 @@ test_that("continues to work after whitespace only outputs (#376)", {
 })
 
 test_that("can match prices for some common models", {
-  provider <- chat_anthropic_test()$get_provider()
+  chat <- chat_anthropic_test()
 
-  expect_true(has_cost(provider@name, "claude-sonnet-4-20250514"))
+  expect_true(has_cost(chat$get_provider(), chat$get_model()))
 })
 
 test_that("removes empty final chat messages", {
