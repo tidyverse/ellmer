@@ -119,11 +119,6 @@ Chat <- R6::R6Class(
     set_model = function(model) {
       check_string(model)
       private$model@name <- model
-      # Some providers (e.g. Google, AWS) keep their own model property
-      # for URL construction; keep it in sync.
-      if ("model" %in% prop_names(private$provider)) {
-        private$provider@model <- model
-      }
       # AWS Bedrock derives cache_point from the model name; recompute it.
       if ("cache_policy" %in% prop_names(private$provider)) {
         private$provider@cache_point <- as_bedrock_cache_point(
@@ -219,7 +214,7 @@ Chat <- R6::R6Class(
       include <- arg_match(include)
 
       if (include == "new") {
-        return(count_tokens(private$provider, ..., type = type))
+        return(count_tokens(private$provider, private$model, ..., type = type))
       }
 
       # With no history, we need to explicitly include system prompt and
@@ -228,6 +223,7 @@ Chat <- R6::R6Class(
       if (nrow(tokens) == 0) {
         all_tokens <- count_tokens(
           private$provider,
+          private$model,
           ...,
           system_prompt = self$get_system_prompt(),
           tools = private$tools,
@@ -236,7 +232,12 @@ Chat <- R6::R6Class(
         return(all_tokens)
       }
 
-      new_tokens <- count_tokens(private$provider, ..., type = type)
+      new_tokens <- count_tokens(
+        private$provider,
+        private$model,
+        ...,
+        type = type
+      )
       last <- tokens[nrow(tokens), ]
       new_tokens + last$input + last$output + last$cached_input
     },
