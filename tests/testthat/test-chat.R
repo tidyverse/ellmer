@@ -57,13 +57,13 @@ test_that("can get and set turns", {
 
 test_that("can get model", {
   chat <- chat_openai_test(model = "abc")
-  expect_equal(chat$get_model(), "abc")
+  expect_equal(chat$get_model()@name, "abc")
 })
 
 test_that("can set model", {
   chat <- chat_openai_test(model = "abc")
   chat$set_model("def")
-  expect_equal(chat$get_model(), "def")
+  expect_equal(chat$get_model()@name, "def")
 })
 
 test_that("setting turns usually preserves, but can set system prompt", {
@@ -269,7 +269,7 @@ test_that("api_headers parameter works correctly", {
   chat <- chat_openai_test(api_headers = c("X-Test" = "value"))
   expect_equal(chat$get_provider()@extra_headers, c("X-Test" = "value"))
 
-  req <- chat_request(chat$get_provider(), chat$get_model_obj())
+  req <- chat_request(chat$get_provider(), chat$get_model())
   expect_equal(req_get_headers(req), list("X-Test" = "value"))
 })
 

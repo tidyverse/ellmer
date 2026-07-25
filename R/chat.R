@@ -102,13 +102,8 @@ Chat <- R6::R6Class(
       }
     },
 
-    #' @description Retrieve the model name
-    get_model = function() {
-      private$model@name
-    },
-
     #' @description Retrieve the Model object. For expert use only.
-    get_model_obj = function() {
+    get_model = function() {
       private$model
     },
 
@@ -937,7 +932,7 @@ Chat <- R6::R6Class(
 #' @export
 print.Chat <- function(x, ...) {
   provider <- x$get_provider()
-  model <- x$get_model_obj()
+  model <- x$get_model()
   turns <- x$get_turns(include_system_prompt = TRUE)
 
   assistant_turns <- keep(turns, \(x) x@role == "assistant")
@@ -1002,7 +997,7 @@ TurnAccumulator <- R6::R6Class(
       self$chat <- chat
       self$chat_private <- chat_private
       self$provider <- chat$get_provider()
-      self$model <- chat$get_model_obj()
+      self$model <- chat$get_model()
       self$controller <- controller
     },
 

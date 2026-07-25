@@ -193,7 +193,7 @@ test_that("batch chat works", {
 test_that("gemini_prepare_batch_body handles API quirks", {
   chat <- chat_google_gemini_test()
   provider <- chat$get_provider()
-  model <- chat$get_model_obj()
+  model <- chat$get_model()
 
   body <- chat_body(
     provider,

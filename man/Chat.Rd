@@ -32,7 +32,6 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-add_turn}{\code{Chat$add_turn()}}
     \item \href{#method-Chat-get_system_prompt}{\code{Chat$get_system_prompt()}}
     \item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
-    \item \href{#method-Chat-get_model_obj}{\code{Chat$get_model_obj()}}
     \item \href{#method-Chat-set_model}{\code{Chat$set_model()}}
     \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
     \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
@@ -163,22 +162,10 @@ session counter?}
 \if{html}{\out{<a id="method-Chat-get_model"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-get_model}{}}}
 \subsection{\code{Chat$get_model()}}{
-  Retrieve the model name
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$get_model()}
-    \if{html}{\out{</div>}}
-  }
-}
-
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Chat-get_model_obj"></a>}}
-\if{latex}{\out{\hypertarget{method-Chat-get_model_obj}{}}}
-\subsection{\code{Chat$get_model_obj()}}{
   Retrieve the Model object. For expert use only.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$get_model_obj()}
+    \preformatted{Chat$get_model()}
     \if{html}{\out{</div>}}
   }
 }
