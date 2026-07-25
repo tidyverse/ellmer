@@ -219,7 +219,7 @@ BatchJob <- R6::R6Class(
       call = caller_env(2)
     ) {
       self$provider <- chat$get_provider()
-      self$model <- chat$get_model()
+      self$model <- chat$get_model_object()
       check_has_batch_support(self$provider, call = call)
 
       user_turns <- as_user_turns(prompts, call = call)

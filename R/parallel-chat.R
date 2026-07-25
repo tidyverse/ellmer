@@ -76,7 +76,7 @@ parallel_chat <- function(
   my_parallel_turns <- function(conversations) {
     parallel_turns(
       provider = chat$get_provider(),
-      model = chat$get_model(),
+      model = chat$get_model_object(),
       conversations = conversations,
       tools = chat$get_tools(),
       max_active = max_active,
@@ -126,7 +126,7 @@ parallel_chat <- function(
   map(seq_along(conversations), function(i) {
     if (is_ok[[i]]) {
       turns <- conversations[[i]]
-      log_turns(chat$get_provider(), chat$get_model(), turns)
+      log_turns(chat$get_provider(), chat$get_model_object(), turns)
       chat$clone()$set_turns(turns)
     } else {
       assistant_turns[[i]]
@@ -199,7 +199,7 @@ parallel_chat_structured <- function(
 
   turns <- parallel_turns(
     provider = provider,
-    model = chat$get_model(),
+    model = chat$get_model_object(),
     conversations = conversations,
     tools = chat$get_tools(),
     type = wrap_type_if_needed(type, needs_wrapper),
@@ -207,7 +207,7 @@ parallel_chat_structured <- function(
     rpm = rpm,
     on_error = on_error
   )
-  log_turns(provider, chat$get_model(), turns)
+  log_turns(provider, chat$get_model_object(), turns)
 
   multi_convert(
     provider,

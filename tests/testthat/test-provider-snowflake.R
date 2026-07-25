@@ -434,7 +434,7 @@ test_that("chat_snowflake() supports parameters", {
     )
   )
   provider <- chat$get_provider()
-  model <- chat$get_model()
+  model <- chat$get_model_object()
   expect_equal(
     chat_body(provider, model),
     list(

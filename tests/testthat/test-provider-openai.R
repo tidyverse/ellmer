@@ -117,7 +117,7 @@ test_that("service tier affects pricing", {
   tokens <- as.list(last_turn@tokens)
   priority_cost <- get_token_cost(
     chat$get_provider(),
-    chat$get_model(),
+    chat$get_model_object(),
     tokens,
     "priority"
   )
@@ -126,7 +126,7 @@ test_that("service tier affects pricing", {
   # Confirm we have pricing for the priority tier
   default_cost <- get_token_cost(
     chat$get_provider(),
-    chat$get_model(),
+    chat$get_model_object(),
     tokens
   )
   expect_gt(last_turn@cost, default_cost)
@@ -141,7 +141,7 @@ test_that("batch retrieve succeeds even if JSON is mangled", {
   )
   chat <- chat_openai_test()
   provider <- chat$get_provider()
-  model <- chat$get_model()
+  model <- chat$get_model_object()
   out <- batch_retrieve(provider, list(output_file_id = "123"))
   expect_equal(out, list(list(status_code = 500)))
   expect_equal(batch_result_turn(provider, model, out[[1]]), NULL)

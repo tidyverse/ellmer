@@ -102,8 +102,13 @@ Chat <- R6::R6Class(
       }
     },
 
-    #' @description Retrieve the Model object. For expert use only.
+    #' @description Retrieve the model name.
     get_model = function() {
+      private$model@name
+    },
+
+    #' @description Retrieve the Model object. For expert use only.
+    get_model_object = function() {
       private$model
     },
 
@@ -114,13 +119,6 @@ Chat <- R6::R6Class(
     set_model = function(model) {
       check_string(model)
       private$model@name <- model
-      # AWS Bedrock derives cache_point from the model name; recompute it.
-      if ("cache_policy" %in% prop_names(private$provider)) {
-        private$provider@cache_point <- as_bedrock_cache_point(
-          private$provider@cache_policy,
-          model
-        )
-      }
       invisible(self)
     },
 
@@ -932,7 +930,7 @@ Chat <- R6::R6Class(
 #' @export
 print.Chat <- function(x, ...) {
   provider <- x$get_provider()
-  model <- x$get_model()
+  model <- x$get_model_object()
   turns <- x$get_turns(include_system_prompt = TRUE)
 
   assistant_turns <- keep(turns, \(x) x@role == "assistant")
@@ -997,7 +995,7 @@ TurnAccumulator <- R6::R6Class(
       self$chat <- chat
       self$chat_private <- chat_private
       self$provider <- chat$get_provider()
-      self$model <- chat$get_model()
+      self$model <- chat$get_model_object()
       self$controller <- controller
     },
 
