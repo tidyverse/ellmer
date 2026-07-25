@@ -92,7 +92,6 @@ Collate:
     'import-standalone-types-check.R'
     'interpolate.R'
     'live.R'
-    'utils.R'
     'model.R'
     'otel.R'
     'parallel-chat.R'
@@ -134,4 +133,5 @@ Collate:
     'utils-cat.R'
     'utils-merge.R'
     'utils-prettytime.R'
+    'utils.R'
     'zzz.R'

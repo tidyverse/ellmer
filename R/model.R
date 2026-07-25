@@ -1,6 +1,3 @@
-#' @include utils.R
-NULL
-
 #' A model configuration
 #'
 #' A `Model` captures the details of a specific model: its name, standard
