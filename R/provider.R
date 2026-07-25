@@ -39,10 +39,6 @@ test_provider <- function(name = "", base_url = "", ...) {
   Provider(name = name, base_url = base_url, ...)
 }
 
-test_model <- function(name = "", params = list(), extra_args = list()) {
-  Model(name = name, params = params, extra_args = extra_args)
-}
-
 # Create a request------------------------------------
 
 base_request <- new_generic("base_request", "provider", function(provider) {
