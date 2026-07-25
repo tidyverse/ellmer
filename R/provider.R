@@ -137,7 +137,7 @@ method(chat_resp_stream, Provider) <- function(provider, resp) {
 chat_params <- new_generic(
   "chat_params",
   "provider",
-  function(provider, model) {
+  function(provider, params) {
     S7_dispatch()
   }
 )

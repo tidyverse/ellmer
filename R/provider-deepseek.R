@@ -71,10 +71,10 @@ ProviderDeepSeek <- new_class(
   parent = ProviderOpenAICompatible
 )
 
-method(chat_params, ProviderDeepSeek) <- function(provider, model) {
+method(chat_params, ProviderDeepSeek) <- function(provider, params) {
   # https://platform.deepseek.com/api-docs/api/create-chat-completion
   standardise_params(
-    model@params,
+    params,
     c(
       frequency_penalty = "frequency_penalty",
       max_tokens = "max_tokens",

@@ -115,7 +115,7 @@ method(chat_body, ProviderDatabricks) <- function(
     type = type
   )
 
-  params <- chat_params(provider, model)
+  params <- chat_params(provider, model@params)
   body <- modify_list(body, params)
 
   # Databricks doesn't support stream options
@@ -124,10 +124,10 @@ method(chat_body, ProviderDatabricks) <- function(
   body
 }
 
-method(chat_params, ProviderDatabricks) <- function(provider, model) {
+method(chat_params, ProviderDatabricks) <- function(provider, params) {
   # https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#chat-request
   standardise_params(
-    model@params,
+    params,
     c(
       temperature = "temperature",
       topP = "top_p",

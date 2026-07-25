@@ -71,10 +71,10 @@ ProviderOpenRouter <- new_class(
   parent = ProviderOpenAICompatible,
 )
 
-method(chat_params, ProviderOpenRouter) <- function(provider, model) {
+method(chat_params, ProviderOpenRouter) <- function(provider, params) {
   # https://openrouter.ai/docs/api-reference/parameters
   standardise_params(
-    model@params,
+    params,
     c(
       temperature = "temperature",
       top_p = "top_p",

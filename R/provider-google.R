@@ -228,7 +228,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
     system <- list(parts = list(text = ""))
   }
 
-  generation_config <- chat_params(provider, model)
+  generation_config <- chat_params(provider, model@params)
   if (!is.null(type)) {
     generation_config$response_mime_type <- "application/json"
     generation_config$response_schema <- as_json(provider, type)
@@ -258,9 +258,9 @@ method(chat_body, ProviderGoogleGemini) <- function(
   ))
 }
 
-method(chat_params, ProviderGoogleGemini) <- function(provider, model) {
+method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
   standardise_params(
-    model@params,
+    params,
     c(
       temperature = "temperature",
       topP = "top_p",

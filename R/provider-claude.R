@@ -238,7 +238,7 @@ method(chat_body, ProviderAnthropic) <- function(
   }
   tools <- chat_body_tools(provider, tools)
 
-  params <- chat_params(provider, model)
+  params <- chat_params(provider, model@params)
 
   if (has_name(params, "reasoning_effort")) {
     thinking <- list(type = "adaptive")
@@ -270,9 +270,9 @@ method(chat_body, ProviderAnthropic) <- function(
   ))
 }
 
-method(chat_params, ProviderAnthropic) <- function(provider, model) {
+method(chat_params, ProviderAnthropic) <- function(provider, params) {
   params <- standardise_params(
-    model@params,
+    params,
     c(
       temperature = "temperature",
       top_p = "top_p",

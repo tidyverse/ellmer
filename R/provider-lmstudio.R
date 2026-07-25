@@ -102,10 +102,10 @@ lmstudio_credentials <- function(credentials = NULL) {
   )
 }
 
-method(chat_params, ProviderLMStudio) <- function(provider, model) {
+method(chat_params, ProviderLMStudio) <- function(provider, params) {
   # https://lmstudio.ai/docs/developer/openai-compat/chat-completions#supported-payload-parameters
   standardise_params(
-    model@params,
+    params,
     c(
       frequency_penalty = "frequency_penalty",
       max_tokens = "max_tokens",

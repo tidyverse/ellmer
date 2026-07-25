@@ -122,9 +122,9 @@ method(chat_body, ProviderMistral) <- function(
   body
 }
 
-method(chat_params, ProviderMistral) <- function(provider, model) {
+method(chat_params, ProviderMistral) <- function(provider, params) {
   standardise_params(
-    model@params,
+    params,
     c(
       temperature = "temperature",
       top_p = "top_p",

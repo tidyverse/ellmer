@@ -216,7 +216,7 @@ method(chat_body, ProviderOpenAICompatible) <- function(
     response_format <- NULL
   }
 
-  params <- chat_params(provider, model)
+  params <- chat_params(provider, model@params)
 
   compact(list2(
     messages = messages,
@@ -230,9 +230,9 @@ method(chat_body, ProviderOpenAICompatible) <- function(
 }
 
 
-method(chat_params, ProviderOpenAICompatible) <- function(provider, model) {
+method(chat_params, ProviderOpenAICompatible) <- function(provider, params) {
   standardise_params(
-    model@params,
+    params,
     c(
       frequency_penalty = "frequency_penalty",
       logprobs = "log_probs",

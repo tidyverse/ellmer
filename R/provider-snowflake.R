@@ -121,7 +121,7 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
     response_format <- NULL
   }
 
-  params <- chat_params(provider, model)
+  params <- chat_params(provider, model@params)
   compact(
     list2(
       messages = messages,
@@ -153,9 +153,9 @@ method(as_json, list(ProviderSnowflakeCortex, TypeObject)) <- function(
 }
 
 # See: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api#optional-json-arguments
-method(chat_params, ProviderSnowflakeCortex) <- function(provider, model) {
+method(chat_params, ProviderSnowflakeCortex) <- function(provider, params) {
   standardise_params(
-    model@params,
+    params,
     c(
       temperature = "temperature",
       top_p = "top_p",

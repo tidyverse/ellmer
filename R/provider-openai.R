@@ -183,7 +183,7 @@ method(chat_body, ProviderOpenAI) <- function(
   }
 
   # https://platform.openai.com/docs/api-reference/responses/create#responses-create-include
-  params <- chat_params(provider, model)
+  params <- chat_params(provider, model@params)
 
   if (has_name(params, "reasoning_effort")) {
     reasoning <- list(
@@ -216,9 +216,9 @@ method(chat_body, ProviderOpenAI) <- function(
 }
 
 
-method(chat_params, ProviderOpenAI) <- function(provider, model) {
+method(chat_params, ProviderOpenAI) <- function(provider, params) {
   standardise_params(
-    model@params,
+    params,
     c(
       temperature = "temperature",
       top_p = "top_p",

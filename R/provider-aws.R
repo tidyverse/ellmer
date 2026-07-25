@@ -235,10 +235,10 @@ method(base_request_error, ProviderAWSBedrock) <- function(provider, req) {
   })
 }
 
-method(chat_params, ProviderAWSBedrock) <- function(provider, model) {
+method(chat_params, ProviderAWSBedrock) <- function(provider, params) {
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InferenceConfiguration.html
   standardise_params(
-    model@params,
+    params,
     c(
       temperature = "temperature",
       topP = "top_p",
@@ -298,7 +298,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
   }
 
   # Merge params into inferenceConfig, giving precedence to manual api_args
-  params <- chat_params(provider, model)
+  params <- chat_params(provider, model@params)
 
   extra_args <- model@extra_args
   extra_args$inferenceConfig <- modify_list(params, extra_args$inferenceConfig)

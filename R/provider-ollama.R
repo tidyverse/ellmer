@@ -129,10 +129,10 @@ ollama_credentials <- function(credentials = NULL, api_key = NULL) {
   )
 }
 
-method(chat_params, ProviderOllama) <- function(provider, model) {
+method(chat_params, ProviderOllama) <- function(provider, params) {
   # https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-chat-completion
   standardise_params(
-    model@params,
+    params,
     c(
       frequency_penalty = "frequency_penalty",
       presence_penalty = "presence_penalty",

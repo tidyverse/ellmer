@@ -72,10 +72,10 @@ ProviderPerplexity <- new_class(
   parent = ProviderOpenAICompatible,
 )
 
-method(chat_params, ProviderPerplexity) <- function(provider, model) {
+method(chat_params, ProviderPerplexity) <- function(provider, params) {
   # https://docs.perplexity.ai/api-reference/chat-completions-post
   standardise_params(
-    model@params,
+    params,
     c(
       max_tokens = "max_tokens",
       temperature = "temperature",
