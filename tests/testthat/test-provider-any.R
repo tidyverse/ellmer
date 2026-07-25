@@ -34,5 +34,5 @@ test_that("works for chat functions that don't include `params`", {
 
   chat <- chat("ollama/qwen3:4b")
   expect_equal(chat$get_provider()@name, "Ollama")
-  expect_equal(chat$get_provider()@model, "qwen3:4b")
+  expect_equal(chat$get_model(), "qwen3:4b")
 })

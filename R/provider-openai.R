@@ -363,6 +363,7 @@ method(value_turn, ProviderOpenAI) <- function(
 # https://developers.openai.com/api/docs/guides/token-counting
 method(count_tokens, ProviderOpenAI) <- function(
   provider,
+  model,
   ...,
   system_prompt = NULL,
   tools = list(),
@@ -393,7 +394,7 @@ method(count_tokens, ProviderOpenAI) <- function(
 
   body <- compact(list(
     input = input,
-    model = provider@model,
+    model = model@name,
     tools = tools,
     text = text
   ))

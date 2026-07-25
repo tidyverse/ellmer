@@ -166,7 +166,6 @@ provider_aws_bedrock <- function(
   ProviderAWSBedrock(
     name = "AWS/Bedrock",
     base_url = base_url,
-    model = model,
     profile = profile,
     region = credentials$region,
     cache = cache,
@@ -180,7 +179,6 @@ ProviderAWSBedrock <- new_class(
   "ProviderAWSBedrock",
   parent = Provider,
   properties = list(
-    model = prop_string(),
     profile = prop_string(allow_null = TRUE),
     region = prop_string(),
     cache = class_list,
@@ -262,7 +260,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
   suffix <- if (stream) "converse-stream" else "converse"
   req <- req_url_path_append(
     req,
-    paste0("model/", curl::curl_escape(provider@model), "/", suffix)
+    paste0("model/", curl::curl_escape(model@name), "/", suffix)
   )
 
   if (length(turns) >= 1 && is_system_turn(turns[[1]])) {

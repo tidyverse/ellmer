@@ -66,7 +66,6 @@ chat_google_gemini <- function(
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
     base_url = base_url,
-    model = model,
     extra_headers = api_headers,
     credentials = credentials
   )
@@ -121,7 +120,6 @@ chat_google_vertex <- function(
   provider <- ProviderGoogleGemini(
     name = "Google/Vertex",
     base_url = vertex_url(location, project_id),
-    model = model,
     extra_headers = api_headers,
     credentials = credentials,
     project_id = project_id
@@ -154,7 +152,6 @@ ProviderGoogleGemini <- new_class(
   "ProviderGoogleGemini",
   parent = Provider,
   properties = list(
-    model = prop_string(),
     project_id = prop_string(allow_null = TRUE)
   )
 )
@@ -191,14 +188,14 @@ method(chat_request, ProviderGoogleGemini) <- function(
     # https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
     req <- req_url_path_append(
       req,
-      paste0(provider@model, ":", "streamGenerateContent")
+      paste0(model@name, ":", "streamGenerateContent")
     )
     req <- req_url_query(req, alt = "sse")
   } else {
     # https://ai.google.dev/api/generate-content#method:-models.generatecontent
     req <- req_url_path_append(
       req,
-      paste0(provider@model, ":", "generateContent")
+      paste0(model@name, ":", "generateContent")
     )
   }
 
@@ -865,6 +862,7 @@ method(chat_body_tools, ProviderGoogleGemini) <- function(provider, tools) {
 # https://ai.google.dev/api/tokens
 method(count_tokens, ProviderGoogleGemini) <- function(
   provider,
+  model,
   ...,
   system_prompt = NULL,
   tools = list(),
@@ -874,7 +872,7 @@ method(count_tokens, ProviderGoogleGemini) <- function(
   req <- req_url_path_append(
     req,
     "models",
-    paste0(provider@model, ":", "countTokens")
+    paste0(model@name, ":", "countTokens")
   )
 
   if (!is.null(system_prompt)) {
@@ -903,7 +901,7 @@ method(count_tokens, ProviderGoogleGemini) <- function(
   ))
 
   if (identical(provider@name, "Google/Gemini")) {
-    token_body$model <- paste0("models/", provider@model)
+    token_body$model <- paste0("models/", model@name)
     token_body <- list(generateContentRequest = token_body)
   }
 
@@ -936,7 +934,6 @@ models_google_gemini <- function(
 
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
-    model = "",
     base_url = base_url,
     credentials = credentials
   )
@@ -964,7 +961,6 @@ models_google_vertex <- function(
 
   provider <- ProviderGoogleGemini(
     name = "Google/Vertex",
-    model = "",
     base_url = base_url,
     credentials = credentials,
     project_id = project_id
@@ -1063,14 +1059,14 @@ method(batch_submit, ProviderGoogleGemini) <- function(
   req <- req_url_path_append(
     req,
     "models",
-    paste0(provider@model, ":batchGenerateContent")
+    paste0(model@name, ":batchGenerateContent")
   )
   req <- req_body_json(
     req,
     list(
       batch = list(
         displayName = paste0("ellmer-", as.integer(Sys.time())),
-        model = paste0("models/", provider@model),
+        model = paste0("models/", model@name),
         inputConfig = list(fileName = uploaded$name)
       )
     )

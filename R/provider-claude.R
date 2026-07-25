@@ -485,6 +485,7 @@ method(value_turn, ProviderAnthropic) <- function(
 # https://docs.anthropic.com/en/docs/build-with-claude/token-counting
 method(count_tokens, ProviderAnthropic) <- function(
   provider,
+  model,
   ...,
   system_prompt = NULL,
   tools = list(),
@@ -505,7 +506,7 @@ method(count_tokens, ProviderAnthropic) <- function(
 
   if (!is.null(type)) {
     if (
-      has_claude_structured_output(provider@model) &&
+      has_claude_structured_output(model@name) &&
         !type_has_additional_properties(type)
     ) {
       output_config <- list(
@@ -533,7 +534,7 @@ method(count_tokens, ProviderAnthropic) <- function(
   tools <- chat_body_tools(provider, tools)
 
   body <- compact(list(
-    model = provider@model,
+    model = model@name,
     system = system,
     messages = list(as_json(provider, user_turn(...), is_last = TRUE)),
     tools = tools,

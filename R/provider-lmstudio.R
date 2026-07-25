@@ -76,7 +76,6 @@ chat_lmstudio <- function(
   provider <- ProviderLMStudio(
     name = "LM Studio",
     base_url = file.path(base_url, "v1"),
-    model = model,
     credentials = credentials,
     extra_headers = api_headers
   )
@@ -92,10 +91,7 @@ chat_lmstudio <- function(
 
 ProviderLMStudio <- new_class(
   "ProviderLMStudio",
-  parent = ProviderOpenAICompatible,
-  properties = list(
-    model = prop_string()
-  )
+  parent = ProviderOpenAICompatible
 )
 
 lmstudio_credentials <- function(credentials = NULL) {
@@ -161,7 +157,6 @@ models_lmstudio <- function(
   provider <- ProviderLMStudio(
     name = "LM Studio",
     base_url = file.path(base_url, "v1"),
-    model = "",
     credentials = credentials
   )
 

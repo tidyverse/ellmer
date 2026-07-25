@@ -102,7 +102,6 @@ chat_ollama <- function(
   provider <- ProviderOllama(
     name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
-    model = model,
     credentials = credentials,
     extra_headers = api_headers
   )
@@ -118,10 +117,7 @@ chat_ollama <- function(
 
 ProviderOllama <- new_class(
   "ProviderOllama",
-  parent = ProviderOpenAICompatible,
-  properties = list(
-    model = prop_string()
-  )
+  parent = ProviderOpenAICompatible
 )
 
 ollama_credentials <- function(credentials = NULL, api_key = NULL) {
@@ -183,7 +179,6 @@ models_ollama <- function(
 
   provider <- ProviderOllama(
     name = "Ollama",
-    model = "",
     base_url = file.path(base_url, "v1"),
     credentials = credentials
   )
