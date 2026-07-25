@@ -171,6 +171,19 @@ test_that("multiple built-in searches link each result to its own request", {
   expect_equal(records[[3]]$content, "https://second.com")
 })
 
+test_that("built-in result without a request falls back to a synthesized id", {
+  turn <- AssistantTurn(list(
+    ContentToolResponseSearch(urls = "https://a.com", json = list()),
+    ContentToolResponseFetch(url = "https://b.com", json = list())
+  ))
+
+  records <- contents_trajectory(turn, turn_index = 4)
+
+  expect_length(records, 2)
+  expect_equal(records[[1]]$tool_call_id, "websearch_4_1")
+  expect_equal(records[[2]]$tool_call_id, "webfetch_4_2")
+})
+
 test_that("built-in web fetch ids match between call and result", {
   turn <- AssistantTurn(list(
     ContentToolRequestFetch(url = "https://example.com", json = list()),
