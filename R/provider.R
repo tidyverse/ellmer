@@ -244,13 +244,21 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
 count_tokens <- new_generic(
   "count_tokens",
   "provider",
-  function(provider, ..., system_prompt = NULL, tools = list(), type = NULL) {
+  function(
+    provider,
+    model,
+    ...,
+    system_prompt = NULL,
+    tools = list(),
+    type = NULL
+  ) {
     S7_dispatch()
   }
 )
 
 method(count_tokens, Provider) <- function(
   provider,
+  model,
   ...,
   system_prompt = NULL,
   tools = list(),
