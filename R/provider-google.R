@@ -240,7 +240,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
     if (
       any(is_builtin) &&
         any(!is_builtin) &&
-        has_google_mixed_tool_support(provider@model)
+        has_google_mixed_tool_support(provider)
     ) {
       tool_config <- list(includeServerSideToolInvocations = TRUE)
     }
@@ -1244,6 +1244,8 @@ gemini_normalize_result <- function(x, index_default) {
   list(index = index, result = list(status_code = 500L, body = NULL))
 }
 
-has_google_mixed_tool_support <- function(model) {
-  grepl("^gemini-([3-9]|[0-9]{2,})", model)
+has_google_mixed_tool_support <- function(provider) {
+  # Only the Gemini Developer API supports this; Vertex AI raises an error
+  identical(provider@name, "Google/Gemini") &&
+    grepl("^gemini-([3-9]|[0-9]{2,})", provider@model)
 }
