@@ -3,6 +3,7 @@
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
 * `chat_aws_bedrock()` now supports bearer token authentication for enterprise API gateways (@thisisnic, #1002).
 * `chat_github()` and `models_github()` are now defunct because GitHub Models has been retired (@thisisnic, #1069).
+* `chat_google_gemini()` no longer errors when mixing regular tools and built-in tools like `google_tool_web_search()` (@thisisnic, #1054).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
 
 
