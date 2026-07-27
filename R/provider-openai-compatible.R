@@ -162,20 +162,22 @@ method(base_request_error, ProviderOpenAICompatible) <- function(
   provider,
   req
 ) {
-  req_error(req, body = function(resp) {
-    if (resp_content_type(resp) == "application/json") {
-      error <- resp_body_json(resp)$error
-      if (is_string(error)) {
-        error
-      } else if (is.list(error)) {
-        error$message
-      } else {
-        prettify(resp_body_string(resp))
-      }
-    } else if (resp_content_type(resp) == "text/plain") {
-      resp_body_string(resp)
+  req_error(req, body = openai_error_body)
+}
+
+openai_error_body <- function(resp) {
+  if (resp_content_type(resp) == "application/json") {
+    error <- resp_body_json(resp)$error
+    if (is_string(error)) {
+      error
+    } else if (is.list(error)) {
+      error$message
+    } else {
+      prettify(resp_body_string(resp))
     }
-  })
+  } else if (resp_content_type(resp) == "text/plain") {
+    resp_body_string(resp)
+  }
 }
 
 # Chat endpoint ----------------------------------------------------------------
