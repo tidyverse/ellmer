@@ -52,6 +52,8 @@ provider_lookup <- tribble(
   "openrouter",                "OpenRouter",
   "azure",                     "Azure/OpenAI",
   "bedrock",                   "AWS/Bedrock",
+  "bedrock_converse",          "AWS/Bedrock",
+  "bedrock_mantle",            "AWS/Bedrock",
   "mistral",                   "Mistral",
   "groq",                      "Groq",
 )
@@ -59,6 +61,7 @@ provider_lookup <- tribble(
 prices <- all_prices |>
   inner_join(provider_lookup, join_by(provider == litellm_provider)) |>
   mutate(provider = provider.y, provider.y = NULL) |>
+  distinct(provider, model, variant, .keep_all = TRUE) |>
   arrange(provider, model, variant)
 
 # Derive Posit AI pricing from lab rates, adjusted by the service's markup.
@@ -100,7 +103,7 @@ cli::cli_alert_info("Rows: {nrow(prices)}")
 cli::cli_alert_info("Providers: {n_distinct(prices$provider)}")
 
 stopifnot(
-  "Expected at least 500 rows" = nrow(prices) >= 500,
+  "Expected at least 1000 rows" = nrow(prices) >= 1000,
   "Expected 10 providers" = n_distinct(prices$provider) >= 10
 )
 

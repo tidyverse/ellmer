@@ -232,19 +232,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
   }
 
   contents <- as_json(provider, turns)
-
-  # https://ai.google.dev/api/caching#Tool
-  if (length(tools) > 0) {
-    is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
-    funs <- as_json(provider, unname(tools))
-
-    tools <- c(
-      compact(list(functionDeclarations = funs[!is_builtin])),
-      unlist(funs[is_builtin], recursive = FALSE)
-    )
-  } else {
-    tools <- NULL
-  }
+  tools <- chat_body_tools(provider, tools)
 
   compact(list(
     contents = contents,
@@ -838,6 +826,72 @@ gemini_client <- function() {
     token_url = "https://oauth2.googleapis.com/token",
     name = "gemini-r-client"
   )
+}
+
+method(chat_body_tools, ProviderGoogleGemini) <- function(provider, tools) {
+  if (length(tools) == 0) {
+    return(NULL)
+  }
+  is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
+  funs <- as_json(provider, unname(tools))
+  c(
+    compact(list(functionDeclarations = funs[!is_builtin])),
+    unlist(funs[is_builtin], recursive = FALSE)
+  )
+}
+
+# Token counting ----------------------------------------------------------
+
+# https://ai.google.dev/api/tokens
+method(count_tokens, ProviderGoogleGemini) <- function(
+  provider,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  req <- base_request(provider)
+  req <- req_url_path_append(
+    req,
+    "models",
+    paste0(provider@model, ":", "countTokens")
+  )
+
+  if (!is.null(system_prompt)) {
+    system <- list(parts = list(text = system_prompt))
+  } else {
+    system <- list(parts = list(text = ""))
+  }
+
+  contents <- as_json(provider, list(user_turn(...)))
+  tools <- chat_body_tools(provider, tools)
+
+  if (!is.null(type)) {
+    generation_config <- list(
+      response_mime_type = "application/json",
+      response_schema = as_json(provider, type)
+    )
+  } else {
+    generation_config <- NULL
+  }
+
+  token_body <- compact(list(
+    contents = contents,
+    tools = tools,
+    systemInstruction = system,
+    generationConfig = generation_config
+  ))
+
+  if (identical(provider@name, "Google/Gemini")) {
+    token_body$model <- paste0("models/", provider@model)
+    token_body <- list(generateContentRequest = token_body)
+  }
+
+  req <- req_body_json(req, token_body)
+  req <- req_headers(req, !!!provider@extra_headers)
+
+  resp <- req_perform(req)
+  resp_body_json(resp)$totalTokens
 }
 
 # Pricing ----------------------------------------------------------------------

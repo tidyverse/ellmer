@@ -222,3 +222,10 @@ test_that("value_turn() handles web_search_call action types", {
   )
   expect_equal(turn@contents[[1]]@query, "web search")
 })
+
+# Token counting -----------------------------------------------------------
+
+test_that("can count tokens", {
+  vcr::local_cassette("openai-count-tokens")
+  test_token_count(chat_openai_test)
+})

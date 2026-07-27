@@ -333,3 +333,10 @@ test_that("stream_merge_chunks() handles citations_delta", {
   expect_length(result$content[[1]]$citations, 1)
   expect_equal(result$content[[1]]$citations[[1]]$url, "https://example.com")
 })
+
+# Token counting -----------------------------------------------------------
+
+test_that("can count tokens", {
+  vcr::local_cassette("anthropic-count-tokens")
+  test_token_count(chat_anthropic_test)
+})
