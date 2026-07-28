@@ -29,7 +29,8 @@ equivalents.}
 }
 \description{
 An S7 class representing a tool that can be called by a chat model.
-Typically created by \code{\link[=tool]{tool()}}, not by calling this constructor directly.
+You should generally not create this object yourself, but instead
+call \code{\link[=tool]{tool()}} instead.
 
 This class is exported so that package developers implementing custom
 providers can define \code{as_json} methods that dispatch on \code{ToolDef}.
