@@ -189,9 +189,6 @@ tool <- function(
 #' You should generally not create this object yourself, but instead
 #' call [tool()] instead.
 #'
-#' This class is exported so that package developers implementing custom
-#' providers can define `as_json` methods that dispatch on `ToolDef`.
-#'
 #' @param .data The underlying function.
 #' @param name The name of the tool.
 #' @param description A description of what the tool does.

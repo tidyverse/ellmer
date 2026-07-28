@@ -31,9 +31,6 @@ equivalents.}
 An S7 class representing a tool that can be called by a chat model.
 You should generally not create this object yourself, but instead
 call \code{\link[=tool]{tool()}} instead.
-
-This class is exported so that package developers implementing custom
-providers can define \code{as_json} methods that dispatch on \code{ToolDef}.
 }
 \examples{
 my_tool <- ToolDef(
