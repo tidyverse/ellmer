@@ -191,13 +191,20 @@ tool <- function(
 #' This class is exported so that package developers implementing custom
 #' providers can define `as_json` methods that dispatch on `ToolDef`.
 #'
-#' @param .data A function to wrap.
+#' @param .data The underlying function.
 #' @param name The name of the tool.
 #' @param description A description of what the tool does.
 #' @param arguments A [TypeObject] describing the tool's arguments.
 #' @param convert Whether to automatically convert JSON inputs to R
 #'   equivalents.
 #' @param annotations A list of additional tool annotations.
+#' @examples
+#' my_tool <- ToolDef(
+#'   function(x) x * 2,
+#'   name = "double",
+#'   description = "Doubles a number",
+#'   arguments = type_object(x = type_number("The number to double"))
+#' )
 #' @export
 ToolDef <- new_class(
   "ToolDef",

@@ -14,7 +14,7 @@ ToolDef(
 )
 }
 \arguments{
-\item{.data}{A function to wrap.}
+\item{.data}{The underlying function.}
 
 \item{name}{The name of the tool.}
 
@@ -33,4 +33,12 @@ Typically created by \code{\link[=tool]{tool()}}, not by calling this constructo
 
 This class is exported so that package developers implementing custom
 providers can define \code{as_json} methods that dispatch on \code{ToolDef}.
+}
+\examples{
+my_tool <- ToolDef(
+  function(x) x * 2,
+  name = "double",
+  description = "Doubles a number",
+  arguments = type_object(x = type_number("The number to double"))
+)
 }
