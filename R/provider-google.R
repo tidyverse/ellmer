@@ -239,7 +239,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
     is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
     if (
       any(is_builtin) &&
-        any(!is_builtin) &&
+        !all(is_builtin) &&
         has_google_mixed_tool_support(provider)
     ) {
       tool_config <- list(includeServerSideToolInvocations = TRUE)
