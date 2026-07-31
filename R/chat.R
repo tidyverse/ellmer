@@ -252,12 +252,14 @@ Chat <- R6::R6Class(
 
       # Returns a single turn (the final response from the assistant), even if
       # multiple rounds of back and forth happened.
-      coro::collect(private$chat_impl(
-        turn,
-        stream = echo != "none",
-        echo = echo,
-        controller = stream_controller()
-      ))
+      coro::collect(
+        private$chat_impl(
+          turn,
+          stream = echo != "none",
+          echo = echo,
+          controller = stream_controller()
+        )
+      )
 
       text <- ellmer_output(self$last_turn()@text)
       if (echo == "none") text else invisible(text)
@@ -291,13 +293,15 @@ Chat <- R6::R6Class(
       stream <- echo != "none" &&
         !uses_tool_structured_output(private$provider, type)
 
-      coro::collect(private$submit_turns(
-        turn,
-        type = type,
-        stream = stream,
-        echo = echo,
-        controller = stream_controller()
-      ))
+      coro::collect(
+        private$submit_turns(
+          turn,
+          type = type,
+          stream = stream,
+          echo = echo,
+          controller = stream_controller()
+        )
+      )
 
       turn <- self$last_turn()
       extract_data(turn, type, convert = convert, needs_wrapper = needs_wrapper)
@@ -328,13 +332,15 @@ Chat <- R6::R6Class(
       stream <- echo != "none" &&
         !uses_tool_structured_output(private$provider, type)
 
-      done <- coro::async_collect(private$submit_turns_async(
-        turn,
-        type = type,
-        stream = stream,
-        echo = echo,
-        controller = stream_controller()
-      ))
+      done <- coro::async_collect(
+        private$submit_turns_async(
+          turn,
+          type = type,
+          stream = stream,
+          echo = echo,
+          controller = stream_controller()
+        )
+      )
 
       promises::then(done, function(dummy) {
         turn <- self$last_turn()
@@ -766,7 +772,10 @@ Chat <- R6::R6Class(
           if (is_partial_turn(turn)) {
             rendered <- turn@text
           } else {
-            rendered <- format_citation_echo(turn, include_activity = echo == "all")
+            rendered <- format_citation_echo(
+              turn,
+              include_activity = echo == "all"
+            )
           }
           emit(rendered)
         }
@@ -783,7 +792,9 @@ Chat <- R6::R6Class(
               yield("\n")
             }
           }
-        } else if (is_partial_turn(turn) && any_text && !endsWith(rendered, "\n")) {
+        } else if (
+          is_partial_turn(turn) && any_text && !endsWith(rendered, "\n")
+        ) {
           emit("\n")
         }
 
@@ -889,7 +900,10 @@ Chat <- R6::R6Class(
           if (is_partial_turn(turn)) {
             rendered <- turn@text
           } else {
-            rendered <- format_citation_echo(turn, include_activity = echo == "all")
+            rendered <- format_citation_echo(
+              turn,
+              include_activity = echo == "all"
+            )
           }
           emit(rendered)
         }
@@ -906,7 +920,9 @@ Chat <- R6::R6Class(
               yield("\n")
             }
           }
-        } else if (is_partial_turn(turn) && any_text && !endsWith(rendered, "\n")) {
+        } else if (
+          is_partial_turn(turn) && any_text && !endsWith(rendered, "\n")
+        ) {
           emit("\n")
         }
 
@@ -957,13 +973,15 @@ print.Chat <- function(x, ...) {
   total_tokens <- colSums(map_tokens(complete_turns, \(x) x@tokens))
   total_cost <- sum(map_dbl(complete_turns, \(x) x@cost))
 
-  cat(paste_c(
-    "<Chat",
-    c(" ", provider@name, "/", provider@model),
-    c(" turns=", length(turns)),
-    turn_cost(total_tokens, total_cost, prefix = " "),
-    ">\n"
-  ))
+  cat(
+    paste_c(
+      "<Chat",
+      c(" ", provider@name, "/", provider@model),
+      c(" turns=", length(turns)),
+      turn_cost(total_tokens, total_cost, prefix = " "),
+      ">\n"
+    )
+  )
 
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
@@ -1194,7 +1212,11 @@ insert_citation_markers <- function(text, citations, sources) {
 
   ends <- sort(as.integer(names(locations)), decreasing = TRUE)
   for (end in ends) {
-    marker <- paste0(" [", paste(locations[[as.character(end)]], collapse = ", "), "]")
+    marker <- paste0(
+      " [",
+      paste(locations[[as.character(end)]], collapse = ", "),
+      "]"
+    )
     text <- paste0(
       substr(text, 1, end),
       marker,
@@ -1217,11 +1239,15 @@ citation_marker_end <- function(text, end) {
   }
 
   punctuation_start <- end
-  while (end < nchar(text) && grepl("[[:punct:]]", substr(text, end + 1, end + 1))) {
+  while (
+    end < nchar(text) && grepl("[[:punct:]]", substr(text, end + 1, end + 1))
+  ) {
     end <- end + 1L
   }
 
-  if (end < nchar(text) && !grepl("[[:space:]]", substr(text, end + 1, end + 1))) {
+  if (
+    end < nchar(text) && !grepl("[[:space:]]", substr(text, end + 1, end + 1))
+  ) {
     punctuation_start
   } else {
     end
