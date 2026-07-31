@@ -1,6 +1,7 @@
 # ellmer (development version)
 
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
+* `chat_aws_bedrock()` now supports bearer token authentication for enterprise API gateways (@thisisnic, #1002).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
 
 
