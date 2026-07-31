@@ -7,6 +7,10 @@ request_reauthenticate <- function(provider, req) {
   ellmer_req_credentials(req, provider@credentials(), "Authorization")
 }
 
+method(requires_stream, ProviderOpenAI) <- function(provider) {
+  provider@auth == "codex"
+}
+
 codex_credentials <- function() {
   \(req) req_headers_redacted(req, !!!codex_auth())
 }

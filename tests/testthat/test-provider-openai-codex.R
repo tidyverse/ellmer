@@ -26,30 +26,76 @@ write_codex_auth <- function(path, access_token) {
   )
 }
 
-openai_test_response <- function() {
-  response_json(
-    body = list(
-      id = "resp_test",
-      object = "response",
+openai_test_body <- function() {
+  list(
+    id = "resp_test",
+    object = "response",
+    status = "completed",
+    output = list(list(
+      id = "msg_test",
+      type = "message",
       status = "completed",
-      output = list(list(
-        id = "msg_test",
-        type = "message",
-        status = "completed",
-        role = "assistant",
-        content = list(list(
-          type = "output_text",
-          text = "ok",
-          annotations = list()
-        ))
-      )),
-      usage = list(
-        input_tokens = 1L,
-        input_tokens_details = list(cached_tokens = 0L),
-        output_tokens = 1L,
-        total_tokens = 2L
-      )
+      role = "assistant",
+      content = list(list(
+        type = "output_text",
+        text = "ok",
+        annotations = list()
+      ))
+    )),
+    usage = list(
+      input_tokens = 1L,
+      input_tokens_details = list(cached_tokens = 0L),
+      output_tokens = 1L,
+      total_tokens = 2L
     )
+  )
+}
+
+openai_test_streaming_response <- function() {
+  body <- openai_test_body()
+  completed <- body
+  completed$output <- list()
+  events <- list(
+    list(
+      type = "response.output_item.done",
+      item = list(
+        id = "reasoning_test",
+        type = "reasoning",
+        content = list(),
+        encrypted_content = "encrypted",
+        summary = list()
+      ),
+      output_index = 0L
+    ),
+    list(
+      type = "response.output_item.added",
+      item = body$output[[1]],
+      output_index = 1L
+    ),
+    list(
+      type = "response.output_item.done",
+      item = body$output[[1]],
+      output_index = 1L
+    ),
+    list(
+      type = "response.completed",
+      response = completed
+    )
+  )
+  events <- vapply(
+    events,
+    jsonlite::toJSON,
+    character(1),
+    auto_unbox = TRUE
+  )
+  connection <- rawConnection(
+    charToRaw(paste0("data: ", events, "\n\n", collapse = "")),
+    "rb"
+  )
+  response(
+    method = "POST",
+    headers = list(`Content-Type` = "text/event-stream"),
+    body = StreamingBody$new(connection)
   )
 }
 
@@ -60,6 +106,8 @@ test_that("can authenticate with Codex", {
 
   local_mocked_responses(function(req) {
     headers <- req_get_headers(req, "reveal")
+    expect_false(has_name(req_get_body(req), "service_tier"))
+    expect_true(req_get_body(req)$stream)
     expect_equal(
       req_get_url(req),
       "https://chatgpt.com/backend-api/codex/responses"
@@ -67,12 +115,20 @@ test_that("can authenticate with Codex", {
     expect_equal(headers$Authorization, "Bearer test-token")
     expect_equal(headers$`ChatGPT-Account-ID`, "test-account")
     expect_equal(headers$originator, "ellmer")
-    openai_test_response()
+    openai_test_streaming_response()
   })
 
-  chat <- chat_openai(auth = "codex", model = "gpt-4.1-nano", echo = "none")
+  chat <- chat_openai(auth = "codex", model = "gpt-5.6-luna", echo = "none")
   expect_equal(as.character(chat$chat("Hi")), "ok")
+  expect_s3_class(chat$last_turn()@contents[[1]], "ellmer::ContentThinking")
   expect_equal(as.numeric(chat$last_turn()@cost), 0)
+})
+
+test_that("Codex authentication rejects service tiers", {
+  expect_error(
+    chat_openai(auth = "codex", service_tier = "priority"),
+    "Can't supply `service_tier`"
+  )
 })
 
 test_that("Codex authentication refreshes once after a 401", {
@@ -94,7 +150,7 @@ test_that("Codex authentication refreshes once after a 401", {
     if (length(tokens) == 1) {
       response_json(401, body = list(error = list(message = "expired")))
     } else {
-      openai_test_response()
+      openai_test_streaming_response()
     }
   })
 

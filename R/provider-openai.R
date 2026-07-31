@@ -71,6 +71,7 @@ chat_openai <- function(
   echo = c("none", "output", "all"),
   auth = c("api-key", "codex")
 ) {
+  service_tier_supplied <- !missing(service_tier)
   model <- set_default(model, "gpt-5.4")
   echo <- check_echo(echo)
   service_tier <- arg_match(service_tier)
@@ -85,6 +86,11 @@ chat_openai <- function(
     if (!missing(base_url)) {
       cli::cli_abort(
         "Can't supply {.arg base_url} when {.code auth = \"codex\"}."
+      )
+    }
+    if (service_tier_supplied) {
+      cli::cli_abort(
+        "Can't supply {.arg service_tier} when {.code auth = \"codex\"}."
       )
     }
     base_url <- "https://chatgpt.com/backend-api/codex"
@@ -225,7 +231,7 @@ method(chat_body, ProviderOpenAI) <- function(
     text = text,
     reasoning = reasoning,
     store = FALSE,
-    service_tier = provider@service_tier
+    service_tier = if (provider@auth == "api-key") provider@service_tier
   ))
 }
 
@@ -267,8 +273,16 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
   result,
   chunk
 ) {
-  if (chunk$type %in% c("response.completed", "response.incomplete")) {
-    chunk$response
+  if (provider@auth == "codex" && chunk$type == "response.output_item.done") {
+    result <- result %||% list()
+    result$output <- c(result$output, list(chunk$item))
+    result
+  } else if (chunk$type %in% c("response.completed", "response.incomplete")) {
+    response <- chunk$response
+    if (provider@auth == "codex") {
+      response$output <- result$output %||% response$output
+    }
+    response
   } else if (chunk$type == "response.failed") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/failed
     error <- chunk$response$error
@@ -277,6 +291,8 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
     # https://platform.openai.com/docs/api-reference/responses-streaming/error
     error <- chunk$error
     cli::cli_abort(c("Request errored ({error$type})", "{error$message}"))
+  } else if (provider@auth == "codex") {
+    result
   }
 }
 

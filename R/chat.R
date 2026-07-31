@@ -688,6 +688,8 @@ Chat <- R6::R6Class(
         cat_line(format(user_turn), prefix = "> ")
       }
 
+      stream <- stream || requires_stream(private$provider)
+
       otel_input <- otel_chat_input(private, user_turn)
       chat_span <- local_chat_otel_span(
         private$provider,
@@ -784,6 +786,8 @@ Chat <- R6::R6Class(
       controller = NULL,
       otel_span = NULL
     ) {
+      stream <- stream || requires_stream(private$provider)
+
       otel_input <- otel_chat_input(private, user_turn)
       chat_span <- local_chat_otel_span(
         private$provider,
