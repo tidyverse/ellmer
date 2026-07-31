@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New exported S7 classes `Source`, `WebSource`, and `ContentCitation` provide a provider-independent citation model. The built-in web activity classes `ContentToolRequestSearch`, `ContentToolResponseSearch`, `ContentToolRequestFetch`, and `ContentToolResponseFetch` are now also exported, with structured search sources and normalized fetch status. Citations and web activity are preserved in turns, streaming, and record/replay without sending provider annotations to incompatible model APIs.
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
 

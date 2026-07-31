@@ -157,6 +157,105 @@ test_that("value_turn handles NULL service_tier gracefully", {
   expect_no_error(value_turn(provider, result))
 })
 
+test_that("value_turn() resolves OpenAI citation spans", {
+  provider <- chat_openai_test()$get_provider()
+  annotation <- list(
+    type = "url_citation",
+    start_index = 4L,
+    end_index = 10L,
+    url = "https://example.com",
+    title = "Example"
+  )
+  result <- list(
+    status = "completed",
+    output = list(
+      list(
+        type = "message",
+        content = list(
+          list(
+            type = "output_text",
+            text = "The answer is grounded.",
+            annotations = list(annotation)
+          )
+        )
+      )
+    ),
+    usage = NULL
+  )
+
+  contents <- value_turn(provider, result)@contents
+  expect_s7_class(contents[[1]], ContentText)
+  expect_s7_class(contents[[2]], ContentCitation)
+  expect_equal(contents[[2]]@source@url, "https://example.com")
+  expect_equal(contents[[2]]@source@title, "Example")
+  expect_equal(contents[[2]]@grounded_span, "answer")
+  expect_equal(contents[[2]]@extra, annotation)
+})
+
+test_that("stream_content() emits OpenAI annotations and web activity", {
+  provider <- chat_openai_test()$get_provider()
+  annotation <- list(
+    type = "url_citation",
+    start_index = 0L,
+    end_index = 6L,
+    url = "https://example.com",
+    title = "Example"
+  )
+  citation <- stream_content(
+    provider,
+    list(
+      type = "response.output_text.annotation.added",
+      annotation = annotation
+    ),
+    completion = NULL
+  )
+  expect_length(citation, 1)
+  expect_s7_class(citation[[1]], ContentCitation)
+  expect_null(citation[[1]]@grounded_span)
+  expect_equal(citation[[1]]@extra, annotation)
+
+  activity <- stream_content(
+    provider,
+    list(
+      type = "response.output_item.done",
+      item = list(
+        type = "web_search_call",
+        action = list(type = "search", query = "ellmer citations")
+      )
+    ),
+    completion = NULL
+  )
+  expect_length(activity, 1)
+  expect_s7_class(activity[[1]], ContentToolRequestSearch)
+  expect_equal(activity[[1]]@query, "ellmer citations")
+})
+
+test_that("stream_text() excludes OpenAI annotations", {
+  provider <- chat_openai_test()$get_provider()
+  annotation <- list(
+    type = "url_citation",
+    url = "https://example.com",
+    title = "Example"
+  )
+
+  expect_null(
+    stream_text(
+      provider,
+      list(
+        type = "response.output_text.annotation.added",
+        annotation = annotation
+      )
+    )
+  )
+  expect_equal(
+    stream_text(
+      provider,
+      list(type = "response.output_text.delta", delta = "answer")
+    ),
+    "answer"
+  )
+})
+
 test_that("value_turn() handles web_search_call action types", {
   provider <- chat_openai_test()$get_provider()
 
@@ -202,23 +301,29 @@ test_that("value_turn() handles web_search_call action types", {
     provider,
     make_result(list(type = "open_page", url = "https://example.com"))
   )
-  expect_equal(turn@contents[[1]]@query, "https://example.com")
+  expect_s7_class(turn@contents[[1]], ContentToolRequestFetch)
+  expect_equal(turn@contents[[1]]@url, "https://example.com")
+  expect_identical(
+    as_json(provider, turn@contents[[1]]),
+    turn@contents[[1]]@extra
+  )
 
-  # find_in_page action with queries
+  # find_in_page action with pattern
   turn <- value_turn(
     provider,
-    make_result(list(type = "find_in_page", queries = list("find this")))
+    make_result(list(type = "find_in_page", pattern = "find this"))
   )
+  expect_s7_class(turn@contents[[1]], ContentToolRequestSearch)
   expect_equal(turn@contents[[1]]@query, "find this")
 
   # search action without query
   turn <- value_turn(provider, make_result(list(type = "search")))
   expect_equal(turn@contents[[1]]@query, "web search")
 
-  # find_in_page action with empty queries falls back
+  # find_in_page action without pattern falls back
   turn <- value_turn(
     provider,
-    make_result(list(type = "find_in_page", queries = list()))
+    make_result(list(type = "find_in_page"))
   )
   expect_equal(turn@contents[[1]]@query, "web search")
 })
