@@ -682,8 +682,11 @@ test_that("echo summarizes web response records without raw output", {
     }
     output <- capture.output(
       invisible(
-        if (async) sync(coro::async_collect(generator)) else
+        if (async) {
+          sync(coro::async_collect(generator))
+        } else {
           coro::collect(generator)
+        }
       )
     )
     output <- gsub("^< ", "", output)
