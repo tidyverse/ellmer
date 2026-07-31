@@ -3,6 +3,7 @@
 \name{Content}
 \alias{Content}
 \alias{ContentText}
+\alias{ContentCitation}
 \alias{ContentImage}
 \alias{ContentImageRemote}
 \alias{ContentImageInline}
@@ -15,6 +16,13 @@
 Content()
 
 ContentText(text = stop("Required"))
+
+ContentCitation(
+  source = NULL,
+  grounded_span = NULL,
+  cited_quote = NULL,
+  extra = NULL
+)
 
 ContentImage()
 
@@ -43,6 +51,16 @@ ContentPDF(
 \arguments{
 \item{text}{A single string.}
 
+\item{source}{A \link{Source} identifying the cited evidence, or \code{NULL} when the
+provider does not supply one.}
+
+\item{grounded_span}{The answer text grounded by the citation, or \code{NULL}.}
+
+\item{cited_quote}{The source-side evidence quoted by the provider, or
+\code{NULL}.}
+
+\item{extra}{Additional data.}
+
 \item{url}{URL to a remote image.}
 
 \item{detail}{Not currently used.}
@@ -60,8 +78,6 @@ Automatically managed by \pkg{ellmer}.}
 
 \item{tool}{ellmer automatically matches a tool request to the tools defined
 for the chatbot. If \code{NULL}, the request did not match a defined tool.}
-
-\item{extra}{Additional data.}
 
 \item{value}{The results of calling the tool function, if it succeeded.}
 
@@ -89,8 +105,12 @@ represent various types of content, allowing you to more easily write
 code that works with any chatbot. This set of classes represents types of
 content that can be either sent to and received from a provider:
 \itemize{
-\item \code{ContentText}: simple text (often in markdown format). This is the only
-type of content that can be streamed live as it's received.
+\item \code{ContentText}: simple text (often in markdown format). Text streams yield
+only text and thinking content, while content streams can also yield
+annotations such as citations and web activity.
+\item \code{ContentCitation}: provider-supplied evidence metadata associated with
+generated text. Citations are preserved in conversation history but are
+not sent back to providers.
 \item \code{ContentImageRemote} and \code{ContentImageInline}: images, either as a pointer
 to a remote URL or included inline in the object. See
 \code{\link[=content_image_file]{content_image_file()}} and friends for convenient ways to construct these

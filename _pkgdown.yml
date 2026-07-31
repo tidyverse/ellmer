@@ -101,6 +101,8 @@ reference:
   - Provider
   - Turn
   - Content
+  - Source
+  - ContentWebActivity
   - Type
 
 - title: Utilities
