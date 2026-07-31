@@ -117,6 +117,7 @@ Collate:
     'provider-ollama.R'
     'provider-openai-tools.R'
     'provider-openai.R'
+    'provider-openai-codex.R'
     'provider-openrouter.R'
     'provider-perplexity.R'
     'provider-portkey.R'
