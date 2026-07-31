@@ -15,7 +15,8 @@ chat_openai(
   api_args = list(),
   api_headers = character(),
   service_tier = c("auto", "default", "flex", "priority"),
-  echo = c("none", "output", "all")
+  echo = c("none", "output", "all"),
+  auth = c("api-key", "codex")
 )
 
 models_openai(
@@ -66,6 +67,9 @@ when running at the console).
 }
 
 Note this only affects the \code{chat()} method.}
+
+\item{auth}{Authentication method. Use \code{"api-key"} for the OpenAI API or
+\code{"codex"} for file-backed ChatGPT authentication managed by Codex CLI.}
 }
 \value{
 A \link{Chat} object.
@@ -79,9 +83,9 @@ models and features like image generation and web search. If you need to use
 an OpenAI-compatible API from another provider, or the \strong{chat completions}
 API with OpenAI,use \code{\link[=chat_openai_compatible]{chat_openai_compatible()}} instead.
 
-Note that a ChatGPT Plus membership does not grant access to the API.
-You will need to sign up for a developer account (and pay for it) at the
-\href{https://platform.openai.com}{developer platform}.
+By default, \code{chat_openai()} uses an API key from the
+\href{https://platform.openai.com}{developer platform}. Set \code{auth = "codex"} to
+instead use a ChatGPT subscription already authenticated by Codex CLI.
 }
 \examples{
 \dontshow{ellmer:::vcr_example_start("chat_openai")}
