@@ -248,22 +248,26 @@ method(stream_parse, ProviderOpenAICompatible) <- function(provider, event) {
 
   jsonlite::parse_json(event$data)
 }
-method(stream_content, ProviderOpenAICompatible) <- function(provider, event) {
+method(stream_content, ProviderOpenAICompatible) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
   if (length(event$choices) == 0) {
-    return(NULL)
+    return(list())
   }
   delta <- event$choices[[1]]$delta
 
   reasoning <- delta[["reasoning"]] %||% delta[["reasoning_content"]]
   if (!is.null(reasoning)) {
-    return(ContentThinking(reasoning))
+    return(list(ContentThinking(reasoning)))
   }
 
   text <- delta[["content"]]
   if (is.null(text)) {
-    return(NULL)
+    return(list())
   }
-  ContentText(text)
+  list(ContentText(text))
 }
 method(stream_merge_chunks, ProviderOpenAICompatible) <- function(
   provider,

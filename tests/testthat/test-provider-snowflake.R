@@ -357,8 +357,9 @@ test_that("stream_content extracts text from Snowflake's delta format", {
     )
   )
   result <- stream_content(provider, text_event)
-  expect_s3_class(result, "ellmer::ContentText")
-  expect_equal(result@text, "hello")
+  expect_length(result, 1)
+  expect_s3_class(result[[1]], "ellmer::ContentText")
+  expect_equal(result[[1]]@text, "hello")
 
   # Text chunk using delta$text (no delta$content)
   text_event2 <- list(
@@ -369,10 +370,11 @@ test_that("stream_content extracts text from Snowflake's delta format", {
     )
   )
   result2 <- stream_content(provider, text_event2)
-  expect_s3_class(result2, "ellmer::ContentText")
-  expect_equal(result2@text, "world")
+  expect_length(result2, 1)
+  expect_s3_class(result2[[1]], "ellmer::ContentText")
+  expect_equal(result2[[1]]@text, "world")
 
-  # Tool_use chunk returns NULL (not text)
+  # Tool_use chunk returns no content
   tool_event <- list(
     choices = list(
       list(
@@ -380,9 +382,9 @@ test_that("stream_content extracts text from Snowflake's delta format", {
       )
     )
   )
-  expect_null(stream_content(provider, tool_event))
+  expect_length(stream_content(provider, tool_event), 0)
 
-  # Empty text chunk returns NULL
+  # Empty text chunk returns no content
   empty_event <- list(
     choices = list(
       list(
@@ -390,7 +392,7 @@ test_that("stream_content extracts text from Snowflake's delta format", {
       )
     )
   )
-  expect_null(stream_content(provider, empty_event))
+  expect_length(stream_content(provider, empty_event), 0)
 })
 
 test_that("as_json handles tool-only assistant turns", {

@@ -717,16 +717,21 @@ Chat <- R6::R6Class(
 
         result <- NULL
         for (chunk in response) {
-          content <- stream_content(private$provider, chunk)
-          if (!is.null(content)) {
-            text <- content_text(content)
-            emit(text)
-            yield(if (yield_as_content) content else text)
-            acc$update_turn(content)
-            any_text <- TRUE
-          }
-
           result <- stream_merge_chunks(private$provider, result, chunk)
+          contents <- stream_content(private$provider, chunk, result)
+          for (content in contents) {
+            text <- content_text(content)
+            if (is_stream_text_content(content)) {
+              emit(text)
+              any_text <- TRUE
+            }
+            if (yield_as_content) {
+              yield(content)
+            } else if (is_stream_text_content(content)) {
+              yield(text)
+            }
+            acc$update_turn(content)
+          }
         }
 
         record_chat_otel_span_status(chat_span, private$provider, result)
@@ -813,16 +818,21 @@ Chat <- R6::R6Class(
 
         result <- NULL
         for (chunk in await_each(response)) {
-          content <- stream_content(private$provider, chunk)
-          if (!is.null(content)) {
-            text <- content_text(content)
-            emit(text)
-            yield(if (yield_as_content) content else text)
-            acc$update_turn(content)
-            any_text <- TRUE
-          }
-
           result <- stream_merge_chunks(private$provider, result, chunk)
+          contents <- stream_content(private$provider, chunk, result)
+          for (content in contents) {
+            text <- content_text(content)
+            if (is_stream_text_content(content)) {
+              emit(text)
+              any_text <- TRUE
+            }
+            if (yield_as_content) {
+              yield(content)
+            } else if (is_stream_text_content(content)) {
+              yield(text)
+            }
+            acc$update_turn(content)
+          }
         }
 
         record_chat_otel_span_status(chat_span, private$provider, result)

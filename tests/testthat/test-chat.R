@@ -130,6 +130,47 @@ test_that("can perform a simple streaming chat", {
   )
 })
 
+test_that("streaming handles multiple contents after merging each chunk", {
+  make_response <- function() {
+    coro::generator(function() {
+      yield(list(type = "chunk"))
+    })()
+  }
+  final_turn <- AssistantTurn(
+    list(
+      ContentText("hello"),
+      ContentCitation(grounded_span = "hello")
+    ),
+    tokens = c(0, 0, 0),
+    cost = 0
+  )
+
+  local_mocked_bindings(
+    chat_perform = function(...) make_response(),
+    stream_merge_chunks = function(provider, result, chunk) {
+      list(merged = TRUE)
+    },
+    stream_content = function(provider, event, completion) {
+      expect_true(completion$merged)
+      list(
+        ContentText("hello"),
+        ContentCitation(grounded_span = "hello")
+      )
+    },
+    value_finish_reason = function(provider, result) "success",
+    value_turn = function(provider, result, has_type = FALSE) final_turn
+  )
+
+  content_chat <- Chat$new(test_provider())
+  content <- coro::collect(content_chat$stream("hi", stream = "content"))
+  expect_s7_class(content[[1]], ContentText)
+  expect_s7_class(content[[2]], ContentCitation)
+
+  text_chat <- Chat$new(test_provider())
+  text <- coro::collect(text_chat$stream("hi", stream = "text"))
+  expect_equal(paste0(unlist(text), collapse = ""), "hello\n")
+})
+
 test_that("can perform a simple async batch chat", {
   chat <- chat_openai_test()
 
