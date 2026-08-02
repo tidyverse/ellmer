@@ -4,7 +4,7 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Tell
-        me a funny joke"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"store":false,"service_tier":"auto"}'
+        me a funny joke"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
@@ -14,18 +14,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a133b875df63d4ce-MAN
+      cf-ray: a250814e6a9dae4c-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:56:55 GMT
+      date: Sun, 02 Aug 2026 22:26:36 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1098'
+      openai-processing-ms: '640'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=LMCS2Lwat1_zhBLzUjhHfAMcti.RsQfatBJ9Vi.40Yg-1782723413.4168863-1.0.1.1-3SukfZ0I8rbh3FTI2.9M_xgQqkBwCHcrFcEnuY4G3dYe0dzpxRkpfhzSXVP75.aYGtAtB960yKaXUlnXtgrMPpiJ3lG0m4WQSsivkLRD3tl3QBH5MokR_AN7Xrz1mOfY;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 09:26:55 GMT
+      set-cookie: __cf_bm=WJa0Kj6ksF6jtoz2Yawppi7LGJKNna1GdzpHS6GT2x0-1785709595.902503-1.0.1.1-Tqj3vzhtgEq535EUrZDs5i8UFYxPxjerBPv0538QqL6HlSVFnDsm3Xg3nqhiiTO5mUGmrQixZjHsD50Y3248MelM_QHarRCMPSYxs9U77MAxe7RYthiqhSfswtogCDqn;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 22:56:36 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -34,30 +34,30 @@ http_interactions:
       x-ratelimit-remaining-tokens: '500000'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: 766fd524-ab2c-485b-b38c-7d04e826e0a1
+      x-request-id: req_fdaf7eaef79f4238aa9c2416dd1774c1
     body:
       string: |-
         {
-          "id": "resp_08d351be2238687d016a4233563d1c8192a5d6e9373d6c3a73",
+          "id": "resp_0b99381fcbdf9585016a6fc41c14088193894cafd47c88512b",
           "object": "response",
-          "created_at": 1782723414,
+          "created_at": 1785709596,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782723415,
+          "completed_at": 1785709596,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.4-2026-03-05",
+          "model": "gpt-5.6-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_08d351be2238687d016a423357171c8192bb5e7026b0682997",
+              "id": "msg_0b99381fcbdf9585016a6fc41c7ac48193863d3044a038c12a",
               "type": "message",
               "status": "completed",
               "content": [
@@ -65,7 +65,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Why don\u2019t skeletons fight each other?\n\nThey don\u2019t have the guts."
+                  "text": "Why don\u2019t skeletons fight each other?\n\nBecause they don\u2019t have the guts."
                 }
               ],
               "phase": "final_answer",
@@ -78,8 +78,8 @@ http_interactions:
           "prompt_cache_key": null,
           "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": "current_turn",
-            "effort": "none",
+            "context": "all_turns",
+            "effort": "medium",
             "mode": "standard",
             "summary": null
           },
@@ -119,16 +119,17 @@ http_interactions:
           "usage": {
             "input_tokens": 11,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 20,
+            "output_tokens": 21,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 31
+            "total_tokens": 32
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:56:55
+  recorded_at: 2026-08-02 22:26:36
 recorded_with: VCR-vcr/2.1.0
