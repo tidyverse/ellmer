@@ -4,9 +4,9 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse."}]},{"role":"user","content":[{"type":"input_text","text":"When was
-        ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.\n\nThe CRAN
-        archive page has this info."}]}],"model":"gpt-4.1","temperature":0,"stream":false,"tools":[{"type":"web_search","external_web_access":true}],"store":false,"service_tier":"auto"}'
+        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"When
+        was ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.\n\nThe
+        CRAN archive page has this info."}]}],"model":"gpt-4.1","temperature":0,"stream":false,"tools":[{"type":"web_search","external_web_access":true}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
@@ -16,39 +16,39 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a24efa59ebbf1914-EWR
+      cf-ray: a250f1c35feec427-EWR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 17:59:44 GMT
+      date: Sun, 02 Aug 2026 23:43:24 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2491'
+      openai-processing-ms: '2443'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=TlF85dCywm_.m8HcImcIba1uc5GhyrV.xUfhpu7MJuU-1785693582.3849294-1.0.1.1-7TUmHMoLKcretv1vUxhjFJP8Vpq5ML5IZbuWRCpbk56q_FpMv76.AvsLAR26xxJ2iLMaeyxZvkYUFy1n9QO_s8kW57EAiSc7gJn_ldDsJJ78oepPV327Z_oUmCCKbn2s;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 18:29:44 GMT
+      set-cookie: __cf_bm=EMFg3pjh5O2nyz0bv2s7OdtUYfWa12MPorSvLApIiiU-1785714202.1333184-1.0.1.1-glcx4zA6hsnFS4sOqJi9lHi_01FZacmkuaEcMs7C3wp_rN4R_vor_q5ZEmhJunNwcC5NnGxMhrryBKOlqnj21yWebGNppcHlaZRz9feud7WnWJiO.x1xnjrQs2bkneWu;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        03 Aug 2026 00:13:24 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '30000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '12965'
+      x-ratelimit-remaining-tokens: '12929'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 34.07s
-      x-request-id: req_2d6978289d2746f18f034f9263c94451
+      x-ratelimit-reset-tokens: 34.142s
+      x-request-id: req_e3188590ea6f48d0a85bc6c3919aedb3
     body:
       string: |-
         {
-          "id": "resp_06bd7f0e8e7574af016a6f858e6bd0819d98d3524729361d20",
+          "id": "resp_0ce57514db34bd10016a6fd61a357881938c46d842df722f53",
           "object": "response",
-          "created_at": 1785693582,
+          "created_at": 1785714202,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785693584,
+          "completed_at": 1785714204,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -59,35 +59,27 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "ws_06bd7f0e8e7574af016a6f858edc8c819db3b5893a1b399afd",
+              "id": "ws_0ce57514db34bd10016a6fd61ac42c8193aa208442a095794c",
               "type": "web_search_call",
               "status": "completed",
               "action": {
                 "type": "search",
                 "queries": [
-                  "ggplot2 1.0.0 CRAN release date"
+                  "ggplot2 1.0.0 CRAN archive release date"
                 ],
-                "query": "ggplot2 1.0.0 CRAN release date"
+                "query": "ggplot2 1.0.0 CRAN archive release date"
               }
             },
             {
-              "id": "msg_06bd7f0e8e7574af016a6f85906c9c819dbd5588c43d4861cb",
+              "id": "msg_0ce57514db34bd10016a6fd61c7bd881938b1c267c81684592",
               "type": "message",
               "status": "completed",
               "content": [
                 {
                   "type": "output_text",
-                  "annotations": [
-                    {
-                      "type": "url_citation",
-                      "end_index": 186,
-                      "start_index": 96,
-                      "title": "Index of /CRAN/src/contrib/Archive/ggplot2",
-                      "url": "https://stat.ethz.ch/CRAN/src/contrib/Archive/ggplot2/?utm_source=openai"
-                    }
-                  ],
+                  "annotations": [],
                   "logprobs": [],
-                  "text": "The CRAN archive shows that the file `ggplot2_1.0.0.tar.gz` was last modified on **2014\u201105\u201121** ([stat.ethz.ch](https://stat.ethz.ch/CRAN/src/contrib/Archive/ggplot2/?utm_source=openai)).\n\nTherefore, ggplot2 version\u202f1.0.0 was released to CRAN on:\n\n2014\u201105\u201121"
+                  "text": "2014\u201105\u201121"
                 }
               ],
               "role": "assistant"
@@ -153,33 +145,31 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 17276,
+            "input_tokens": 17391,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 118,
+            "output_tokens": 45,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 17394
+            "total_tokens": 17436
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 17:59:45
+  recorded_at: 2026-08-02 23:43:24
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse."}]},{"role":"user","content":[{"type":"input_text","text":"When was
-        ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.\n\nThe CRAN
-        archive page has this info."}]},{"id":"ws_06bd7f0e8e7574af016a6f858edc8c819db3b5893a1b399afd","type":"web_search_call","status":"completed","action":{"type":"search","queries":["ggplot2
-        1.0.0 CRAN release date"],"query":"ggplot2 1.0.0 CRAN release date"}},{"role":"assistant","content":[{"type":"output_text","text":"The
-        CRAN archive shows that the file `ggplot2_1.0.0.tar.gz` was last modified
-        on **2014‑05‑21** ([stat.ethz.ch](https://stat.ethz.ch/CRAN/src/contrib/Archive/ggplot2/?utm_source=openai)).\n\nTherefore,
-        ggplot2 version 1.0.0 was released to CRAN on:\n\n2014‑05‑21"}]},{"role":"user","content":[{"type":"input_text","text":"What
+        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"When
+        was ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.\n\nThe
+        CRAN archive page has this info."}]},{"id":"ws_0ce57514db34bd10016a6fd61ac42c8193aa208442a095794c","type":"web_search_call","status":"completed","action":{"type":"search","queries":["ggplot2
+        1.0.0 CRAN archive release date"],"query":"ggplot2 1.0.0 CRAN archive release
+        date"}},{"role":"assistant","content":[{"type":"output_text","text":"2014‑05‑21"}]},{"role":"user","content":[{"type":"input_text","text":"What
         month was that?"}]}],"model":"gpt-4.1","temperature":0,"stream":false,"tools":[{"type":"web_search","external_web_access":true}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -190,39 +180,39 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a24efa6bfb451914-EWR
+      cf-ray: a250f1d4bc3dc427-EWR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 17:59:45 GMT
+      date: Sun, 02 Aug 2026 23:43:25 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '378'
+      openai-processing-ms: '629'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=RXqMskKaQtwy379RiUQhltR8_KXd6bq6eX9BG.Ms4i0-1785693585.2726283-1.0.1.1-V2ISJq6KAXyXuY04VjmcD74Ez7WPyFC1cKbZV93Q2LLghpKLqvnv.4Gnn5j3OMlo8P_TcXu.r5caw4h1veWdzCaZeZqbfZVAphZaDieCSIBnOFC2r5VB2nFb2X5.FKqI;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 18:29:45 GMT
+      set-cookie: __cf_bm=Qh29JUpJjoqub8V7K8VdYuVAf5TcZMySDMu8eDoIGbc-1785714204.9195716-1.0.1.1-H.cqzUT8kJ.0etKkwSvEZtDkOXo07VyInApAf26YKuKfIvd62Xt1NN3fPKipdYJ.68ENWJoGNTws9MzuFb6ksPGMXuK6Cfuk42Uv94jQu7tU_epr8A2S_lzDhipt8gSK;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        03 Aug 2026 00:13:25 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '30000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '13368'
+      x-ratelimit-remaining-tokens: '13440'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 33.263s
-      x-request-id: req_debe79a01cde499eb01442fd9fc1f160
+      x-ratelimit-reset-tokens: 33.119s
+      x-request-id: req_27c919514b5c4b4aae8bac1a3a445195
     body:
       string: |-
         {
-          "id": "resp_06bd7f0e8e7574af016a6f85915008819db7af5624d60f7bb7",
+          "id": "resp_0ce57514db34bd10016a6fd61d0368819397c2e15f458e2d0b",
           "object": "response",
-          "created_at": 1785693585,
+          "created_at": 1785714205,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785693585,
+          "completed_at": 1785714205,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -233,7 +223,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_06bd7f0e8e7574af016a6f85919f28819daa90baae62916b14",
+              "id": "msg_0ce57514db34bd10016a6fd61d8cc8819398ffea0fbd463929",
               "type": "message",
               "status": "completed",
               "content": [
@@ -241,7 +231,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "May."
+                  "text": "May"
                 }
               ],
               "role": "assistant"
@@ -307,34 +297,32 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 469,
+            "input_tokens": 393,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 4,
+            "output_tokens": 3,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 473
+            "total_tokens": 396
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 17:59:45
+  recorded_at: 2026-08-02 23:43:25
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse."}]},{"role":"user","content":[{"type":"input_text","text":"When was
-        ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.\n\nThe CRAN
-        archive page has this info."}]},{"id":"ws_06bd7f0e8e7574af016a6f858edc8c819db3b5893a1b399afd","type":"web_search_call","status":"completed","action":{"type":"search","queries":["ggplot2
-        1.0.0 CRAN release date"],"query":"ggplot2 1.0.0 CRAN release date"}},{"role":"assistant","content":[{"type":"output_text","text":"The
-        CRAN archive shows that the file `ggplot2_1.0.0.tar.gz` was last modified
-        on **2014‑05‑21** ([stat.ethz.ch](https://stat.ethz.ch/CRAN/src/contrib/Archive/ggplot2/?utm_source=openai)).\n\nTherefore,
-        ggplot2 version 1.0.0 was released to CRAN on:\n\n2014‑05‑21"}]},{"role":"user","content":[{"type":"input_text","text":"What
-        month was that?"}]},{"role":"assistant","content":[{"type":"output_text","text":"May."}]},{"role":"user","content":[{"type":"input_text","text":"What
+        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"When
+        was ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.\n\nThe
+        CRAN archive page has this info."}]},{"id":"ws_0ce57514db34bd10016a6fd61ac42c8193aa208442a095794c","type":"web_search_call","status":"completed","action":{"type":"search","queries":["ggplot2
+        1.0.0 CRAN archive release date"],"query":"ggplot2 1.0.0 CRAN archive release
+        date"}},{"role":"assistant","content":[{"type":"output_text","text":"2014‑05‑21"}]},{"role":"user","content":[{"type":"input_text","text":"What
+        month was that?"}]},{"role":"assistant","content":[{"type":"output_text","text":"May"}]},{"role":"user","content":[{"type":"input_text","text":"What
         month was that?"}]}],"model":"gpt-4.1","temperature":0,"stream":false,"tools":[{"type":"web_search","external_web_access":true}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -345,39 +333,39 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a24efa708dbc1914-EWR
+      cf-ray: a250f1dad83bc427-EWR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 17:59:46 GMT
+      date: Sun, 02 Aug 2026 23:43:26 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '382'
+      openai-processing-ms: '706'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=v67ALKaS2HWZ.lBIs.EDYS2kJmUi8GUEPNh6xIOdSdk-1785693586.0092587-1.0.1.1-JqLq119FK8YMEnSOjoNrj.b60vzdlNeDnPXUgC8ThTBhOStTrzuUopIcMpjkPRG305c_zh9vIVMDyk1FU9aLXHzHwNNP8F078XOPgGlyJWDbaB0XQAaHsRZAlCH8UbsT;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 18:29:46 GMT
+      set-cookie: __cf_bm=q8WE030j59e729eZXZEo_Cz_0WFAPb5A17e.MnE0tzY-1785714205.8946514-1.0.1.1-PpIbSFhN3OzdhR4rlRtZ8mkuxzYLjkHhJRyj4wJUT6kBLZEao.mZy_4RW74LLm9XztC73pZQZOh6cJyTvziM0ocBMdvU3KWgilQTCvA5SYFppo5gEdd8NmhGB0P0wSLX;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        03 Aug 2026 00:13:26 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '30000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '13743'
+      x-ratelimit-remaining-tokens: '13983'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 32.513s
-      x-request-id: req_65c09f59adac41ca97130782d83ec950
+      x-ratelimit-reset-tokens: 32.032s
+      x-request-id: req_d8562fb7c38f483981095be9c53ffa8f
     body:
       string: |-
         {
-          "id": "resp_06bd7f0e8e7574af016a6f85920d4c819da7320c7c29ea9c99",
+          "id": "resp_0ce57514db34bd10016a6fd61df9088193b43b7fb931e1eb28",
           "object": "response",
-          "created_at": 1785693586,
+          "created_at": 1785714206,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785693586,
+          "completed_at": 1785714206,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -388,7 +376,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_06bd7f0e8e7574af016a6f85925bd8819d99331abe8cef6f4d",
+              "id": "msg_0ce57514db34bd10016a6fd61e9b508193b3b158576856f29b",
               "type": "message",
               "status": "completed",
               "content": [
@@ -396,7 +384,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "May."
+                  "text": "May"
                 }
               ],
               "role": "assistant"
@@ -462,19 +450,19 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 484,
+            "input_tokens": 407,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 4,
+            "output_tokens": 3,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 488
+            "total_tokens": 410
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 17:59:46
+  recorded_at: 2026-08-02 23:43:26
 recorded_with: VCR-vcr/2.1.0
