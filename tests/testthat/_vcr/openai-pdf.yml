@@ -14,18 +14,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a24efa367a3b18ad-EWR
+      cf-ray: a250922ac83dc598-EWR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 17:59:38 GMT
+      date: Sun, 02 Aug 2026 22:38:08 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1277'
+      openai-processing-ms: '1659'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=DZwPdPrP1Tkges8_AAjhW5nuxcfc791FCm_l5xfP3pQ-1785693576.7118206-1.0.1.1-a9sWY_tUUv19I8P_U21B8afCQQ5uPjsFsJfU0cj5oYHun2AhR8Cc_U1IKHvorMPt4u5jOYBMWXOls1UtpuiqoiGBRiNaxCDn0e0lkpZq.veaf.5GTAxL6RX2YjoRIuSg;
+      set-cookie: __cf_bm=scsYB__6q2XZgd2ECoqvWG0BJhKhMN8zAnRrK2k4uac-1785710286.5308464-1.0.1.1-KWLFR8EBMgwnpT64RLQcwW8fMhJTj0QPth3uYBUuCFzcO48PNoICWJwpVjwOucicXL5vMFPvMNk95DKrqGCdYzzws5_OeEWsm2y1AEDxpIcSe.hbEoukEVoswUHVmCgf;
         HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 18:29:38 GMT
+        02 Aug 2026 23:08:08 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-openai-proxy-wasm: v0.1
@@ -35,13 +35,13 @@ http_interactions:
       x-ratelimit-remaining-tokens: '199221'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 233ms
-      x-request-id: req_6b3d0292e2c34270819fb438e54ba235
+      x-request-id: req_09ed85ef186344a3ab2d593a68c6e0f6
     body:
       string: |
         {
-          "id": "chatcmpl-E8UlFrReBLvQOW2TsQgnRbzfve3PU",
+          "id": "chatcmpl-E8Z6lNYOqVaAaoEyh11T6BJOOHwXN",
           "object": "chat.completion",
-          "created": 1785693577,
+          "created": 1785710287,
           "model": "gpt-4.1-nano-2025-04-14",
           "choices": [
             {
@@ -74,7 +74,7 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": "fp_28f6c54d57"
         }
-  recorded_at: 2026-08-02 17:59:38
+  recorded_at: 2026-08-02 22:38:08
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -92,18 +92,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a24efa422e7418ad-EWR
+      cf-ray: a25092377bfbc598-EWR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 17:59:39 GMT
+      date: Sun, 02 Aug 2026 22:38:09 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1186'
+      openai-processing-ms: '896'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=g277Lfudku675mNLibF5uYWF5ATe4.Qko.O7hPoShsw-1785693578.581588-1.0.1.1-iAfI31CK8lOqmC8h9zfMk9Zlwp88jSsC0RCseaODROpEPS4pD9OugrsaMJ6IDwVRqqS3HkDBXpxL5NrdFZ2NF4Ovi2gpbIKUAzn.m_9_lsWMUK90S4IdDQ30TCTjONgN;
+      set-cookie: __cf_bm=qRzly4xccUucFR4QJ.BCTebAxRb4jJmcBXI7mjNwBpo-1785710288.5586214-1.0.1.1-m9FuBQ8SuQdkis5R_uEYudsGhIi1JmJZchBwwHeI4ChGVat6Ln77xJJ0rapNMjwJx88m111Zt6LXeR90ZPO5aQ_D9rZAIfmIPn5sbjV10z_CD_i6ca8HsKHKhW1LCKyE;
         HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 18:29:39 GMT
+        02 Aug 2026 23:08:09 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-openai-proxy-wasm: v0.1
@@ -113,13 +113,13 @@ http_interactions:
       x-ratelimit-remaining-tokens: '199201'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 239ms
-      x-request-id: req_949131c1b0c34304a1a1a5f72402bf36
+      x-request-id: req_73238d1b109945819545271cdaf39ca0
     body:
       string: |
         {
-          "id": "chatcmpl-E8UlH87vVxxCc26iOrIQiv2HNur0L",
+          "id": "chatcmpl-E8Z6n6Fihw0TC4j20RGDbY8fsJmYL",
           "object": "chat.completion",
-          "created": 1785693579,
+          "created": 1785710289,
           "model": "gpt-4.1-nano-2025-04-14",
           "choices": [
             {
@@ -152,7 +152,7 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": "fp_28f6c54d57"
         }
-  recorded_at: 2026-08-02 17:59:39
+  recorded_at: 2026-08-02 22:38:09
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -172,18 +172,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a24efa4c297b18ad-EWR
+      cf-ray: a250923ef9e0c598-EWR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 17:59:41 GMT
+      date: Sun, 02 Aug 2026 22:38:10 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1144'
+      openai-processing-ms: '519'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=ZnZFn0eHi5g0Plm4kGgzQaT2nUjIhWUUoyFNcAvrAss-1785693580.1833663-1.0.1.1-DrnL8BGmuGWv4XxjkIUAynDJWCGbObIn_BJExKdNjjltSaQlVPGj6E.u83Hw55ffQ7u.T1q1pq_2YlFglWNNPnKeWBmKEYxqFfr7kAZxgSXb8myFEtsHr2Mu5w8_gb2x;
+      set-cookie: __cf_bm=4w.46F1EVHCXfDFbE76rW0tD8VX9HNity_UaVZBRdIs-1785710289.7597797-1.0.1.1-SMOnbqP90NUxOOfmAqwXRJYvL4fvQIQUkqFqhe1md3hB9wmqNvSlKNl9z08knCoh8OOJAbhNDOcz6snYymeZMMK.aBzJAVS39DhyVbgtZCrsrpLUagogowGJzsa.vUx3;
         HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 18:29:41 GMT
+        02 Aug 2026 23:08:10 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-openai-proxy-wasm: v0.1
@@ -193,13 +193,13 @@ http_interactions:
       x-ratelimit-remaining-tokens: '199184'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 244ms
-      x-request-id: req_d834a1c2ab114453966c60f07b30268b
+      x-request-id: req_b0cf1a60a4404dab9121b7d17708099b
     body:
       string: |
         {
-          "id": "chatcmpl-E8UlJtDPro0ahjHYDBxewji231huC",
+          "id": "chatcmpl-E8Z6oQmG9mMkKMV1LRB0HhCwiu87T",
           "object": "chat.completion",
-          "created": 1785693581,
+          "created": 1785710290,
           "model": "gpt-4.1-nano-2025-04-14",
           "choices": [
             {
@@ -232,5 +232,5 @@ http_interactions:
           "service_tier": "default",
           "system_fingerprint": "fp_28f6c54d57"
         }
-  recorded_at: 2026-08-02 17:59:41
+  recorded_at: 2026-08-02 22:38:10
 recorded_with: VCR-vcr/2.1.0

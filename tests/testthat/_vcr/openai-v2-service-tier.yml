@@ -15,18 +15,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a24f00286b2b42b8-EWR
+      cf-ray: a250924b8ebab785-EWR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 18:03:41 GMT
+      date: Sun, 02 Aug 2026 22:38:12 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1472'
+      openai-processing-ms: '568'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=gReAkL8DJrrqEg.U0pQuXWpNGEL_Al1w_ESQ4_5iQXk-1785693820.2231646-1.0.1.1-xJS6U0nGecyVxAPN1VPHuIUP7JNTqhsY1GxOoIsePchsVOakLs2UQqtTb5k7IlZlwrvSxHkUzj7arArXr1ITyHC9e.y_0woGWYB20J1_DX9OfDvojOFfHVbWr.w.tWNY;
+      set-cookie: __cf_bm=TF5qe5S7XlUhJHHTZDaNYCieEVXK76Y01H6uVrEa_TI-1785710291.7682748-1.0.1.1-pUwL6y69rp6dOnBBJanhYbUgt6rFDJUx8aExuPrJkvYZa.aA4.hMagVBaa9530_eiKI.NygXIQYEIENmQWPb8MYfwHU8SJVRV1_50aLvN91.t9Zi66ip80RO_UyZ31yv;
         HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 18:33:41 GMT
+        02 Aug 2026 23:08:12 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -35,19 +35,19 @@ http_interactions:
       x-ratelimit-remaining-tokens: '199963'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 11ms
-      x-request-id: req_944259a645764fbda2d115abf9614501
+      x-request-id: req_b49e5db66aa5429fa0b0df945b4c212c
     body:
       string: |-
         {
-          "id": "resp_06f4624a90d268f8016a6f867d003881a09fa1e98f39d6795f",
+          "id": "resp_0cc4179d06f1c1ad016a6fc6d3d3908195b41b6af4dd890896",
           "object": "response",
-          "created_at": 1785693821,
+          "created_at": 1785710291,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785693821,
+          "completed_at": 1785710292,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -58,7 +58,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_06f4624a90d268f8016a6f867d9d4481a0ae1e231a22be7e78",
+              "id": "msg_0cc4179d06f1c1ad016a6fc6d430008195b23eaf363dbb1803",
               "type": "message",
               "status": "completed",
               "content": [
@@ -130,5 +130,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 18:03:41
+  recorded_at: 2026-08-02 22:38:12
 recorded_with: VCR-vcr/2.1.0

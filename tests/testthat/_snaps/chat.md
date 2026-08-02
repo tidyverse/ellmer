@@ -19,9 +19,9 @@
     Code
       chat
     Output
-      <Chat OpenAI/gpt-4.1-nano turns=3 input=10+5 output=5>
+      <Chat OpenAI/gpt-5.4-nano turns=3 input=10+5 output=5>
       -- system ----------------------------------------------------------------------
-      Be terse.
+      Be terse. Respond with only the answer.
       -- user ------------------------------------------------------------------------
       What's 1 + 1?
       What's 1 + 2?

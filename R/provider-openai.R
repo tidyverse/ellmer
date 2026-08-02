@@ -117,7 +117,7 @@ models_openai <- function(
 }
 
 chat_openai_test <- function(
-  system_prompt = "Be terse.",
+  system_prompt = "Be terse. Respond with only the answer.",
   ...,
   model = "gpt-5.4-nano",
   params = NULL,
