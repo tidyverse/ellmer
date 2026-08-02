@@ -2,21 +2,21 @@
   "version": 1,
   "stage": "done",
   "batch": {
-    "id": "batch_6a6fc9a92d6c8190a8837418b18acce3",
+    "id": "batch_6a6fced3a92c81909bb80bae0ee6658f",
     "object": "batch",
     "endpoint": "/v1/responses",
     "model": "gpt-5.4-nano-2026-03-17",
     "errors": {},
-    "input_file_id": "file-8Xjz6BrZxzbY7ApgvszuAo",
+    "input_file_id": "file-LXDoFMBiTPYpEsqWUUJ89Z",
     "completion_window": "24h",
     "status": "completed",
-    "output_file_id": "file-WS759ugWqfB3LsQRHRwSw3",
+    "output_file_id": "file-JSFUCukRnE3G1h2pEs4uqS",
     "error_file_id": {},
-    "created_at": 1785711017,
-    "in_progress_at": 1785711078,
-    "expires_at": 1785797417,
-    "finalizing_at": 1785711086,
-    "completed_at": 1785711087,
+    "created_at": 1785712339,
+    "in_progress_at": 1785712341,
+    "expires_at": 1785798739,
+    "finalizing_at": 1785712413,
+    "completed_at": 1785712414,
     "failed_at": {},
     "expired_at": {},
     "cancelling_at": {},
@@ -27,9 +27,9 @@
       "failed": 0
     },
     "usage": {
-      "input_tokens": 77,
-      "output_tokens": 34,
-      "total_tokens": 111,
+      "input_tokens": 101,
+      "output_tokens": 27,
+      "total_tokens": 128,
       "input_tokens_details": {
         "cached_tokens": 0
       },
@@ -42,17 +42,17 @@
   "results": [
     {
       "status_code": 200,
-      "request_id": "ff190bb3-1a2f-4329-8e0b-a7d90205462b",
+      "request_id": "ecce8743-f961-46ba-92b4-50d7382c83a7",
       "body": {
-        "id": "resp_02ab9d05d9a60b73016a6fc9e9cd048190bfb6cab92378391c",
+        "id": "resp_00425798da8e4103016a6fced7d140819185bf9487cb551246",
         "object": "response",
-        "created_at": 1785711081,
+        "created_at": 1785712343,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
-        "completed_at": 1785711082,
+        "completed_at": 1785712344,
         "error": {},
         "frequency_penalty": 0,
         "incomplete_details": {},
@@ -63,7 +63,7 @@
         "moderation": {},
         "output": [
           {
-            "id": "msg_02ab9d05d9a60b73016a6fc9ea6a5881909c3be1ae8261ca5d",
+            "id": "msg_00425798da8e4103016a6fced86f8481919b8358aca8561e2b",
             "type": "message",
             "status": "completed",
             "content": [
@@ -71,7 +71,7 @@
                 "type": "output_text",
                 "annotations": [],
                 "logprobs": [],
-                "text": "The capital of Iowa is **Des Moines**."
+                "text": "Des Moines."
               }
             ],
             "phase": "final_answer",
@@ -123,16 +123,16 @@
         "top_p": 0.98,
         "truncation": "disabled",
         "usage": {
-          "input_tokens": 19,
+          "input_tokens": 25,
           "input_tokens_details": {
             "cache_write_tokens": 0,
             "cached_tokens": 0
           },
-          "output_tokens": 14,
+          "output_tokens": 7,
           "output_tokens_details": {
             "reasoning_tokens": 0
           },
-          "total_tokens": 33
+          "total_tokens": 32
         },
         "user": {},
         "metadata": {}
@@ -140,17 +140,17 @@
     },
     {
       "status_code": 200,
-      "request_id": "f0cc3bf2-d0bb-4047-9b55-3499e7b038e0",
+      "request_id": "b5256a89-cc95-4fd8-a16c-b69c4840bd62",
       "body": {
-        "id": "resp_0ebba965d7f4b1f4016a6fc9ebc4f88195b420fc8a4b18787f",
+        "id": "resp_07aa7bf3bcf57bec016a6fced9c4a08192bdc0c2693ec0793a",
         "object": "response",
-        "created_at": 1785711083,
+        "created_at": 1785712345,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
-        "completed_at": 1785711084,
+        "completed_at": 1785712346,
         "error": {},
         "frequency_penalty": 0,
         "incomplete_details": {},
@@ -161,7 +161,7 @@
         "moderation": {},
         "output": [
           {
-            "id": "msg_0ebba965d7f4b1f4016a6fc9ec0b308195ba1a97a493bc9059",
+            "id": "msg_07aa7bf3bcf57bec016a6fceda342c81929bbfd17d0fb16706",
             "type": "message",
             "status": "completed",
             "content": [
@@ -221,7 +221,7 @@
         "top_p": 0.98,
         "truncation": "disabled",
         "usage": {
-          "input_tokens": 20,
+          "input_tokens": 26,
           "input_tokens_details": {
             "cache_write_tokens": 0,
             "cached_tokens": 0
@@ -230,7 +230,7 @@
           "output_tokens_details": {
             "reasoning_tokens": 0
           },
-          "total_tokens": 27
+          "total_tokens": 33
         },
         "user": {},
         "metadata": {}
@@ -238,17 +238,17 @@
     },
     {
       "status_code": 200,
-      "request_id": "9d4749bc-5842-4dfc-81ed-dd45fa2b38c0",
+      "request_id": "94186d65-f2b3-4d7b-a72b-fc7837bfe851",
       "body": {
-        "id": "resp_0eaf0bf234b022e9016a6fc9ebd9e881968d88425876eb1a5c",
+        "id": "resp_04867d64224c8df7016a6fcedb996881918aa807f2e4ffe7e6",
         "object": "response",
-        "created_at": 1785711083,
+        "created_at": 1785712347,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
-        "completed_at": 1785711084,
+        "completed_at": 1785712347,
         "error": {},
         "frequency_penalty": 0,
         "incomplete_details": {},
@@ -259,7 +259,7 @@
         "moderation": {},
         "output": [
           {
-            "id": "msg_0eaf0bf234b022e9016a6fc9ec1ba8819689b738cd213b86cc",
+            "id": "msg_04867d64224c8df7016a6fcedbc8288191b640bdb19d625e00",
             "type": "message",
             "status": "completed",
             "content": [
@@ -319,7 +319,7 @@
         "top_p": 0.98,
         "truncation": "disabled",
         "usage": {
-          "input_tokens": 19,
+          "input_tokens": 25,
           "input_tokens_details": {
             "cache_write_tokens": 0,
             "cached_tokens": 0
@@ -328,7 +328,7 @@
           "output_tokens_details": {
             "reasoning_tokens": 0
           },
-          "total_tokens": 26
+          "total_tokens": 32
         },
         "user": {},
         "metadata": {}
@@ -336,17 +336,17 @@
     },
     {
       "status_code": 200,
-      "request_id": "691dce7b-0484-4ae7-96eb-cd065c82a76b",
+      "request_id": "3577f5ce-dfee-47dc-b33b-94d250250215",
       "body": {
-        "id": "resp_051ad6e8e2c29185016a6fc9ec1ad881948b170182c9ecdb04",
+        "id": "resp_0f40732c49013f5e016a6fcf17f0d0819ea906c2c978d811e6",
         "object": "response",
-        "created_at": 1785711084,
+        "created_at": 1785712407,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
-        "completed_at": 1785711084,
+        "completed_at": 1785712408,
         "error": {},
         "frequency_penalty": 0,
         "incomplete_details": {},
@@ -357,7 +357,7 @@
         "moderation": {},
         "output": [
           {
-            "id": "msg_051ad6e8e2c29185016a6fc9ec6c4c819481f83bbfa24e381b",
+            "id": "msg_0f40732c49013f5e016a6fcf182cfc819e8ef1f67a9019c4c1",
             "type": "message",
             "status": "completed",
             "content": [
@@ -417,7 +417,7 @@
         "top_p": 0.98,
         "truncation": "disabled",
         "usage": {
-          "input_tokens": 19,
+          "input_tokens": 25,
           "input_tokens_details": {
             "cache_write_tokens": 0,
             "cached_tokens": 0
@@ -426,17 +426,17 @@
           "output_tokens_details": {
             "reasoning_tokens": 0
           },
-          "total_tokens": 25
+          "total_tokens": 31
         },
         "user": {},
         "metadata": {}
       }
     }
   ],
-  "started_at": 1785711015,
+  "started_at": 1785712338,
   "hash": {
     "provider": "18c2c9a687b9bfafe2eb3699a5b554cb",
     "prompts": "ec58117fcf69ea639e59250f914cca8f",
-    "user_turns": "448e40d415a6931aa70d7fdaef3a1d8d"
+    "user_turns": "19d0c96402bfe029f0ae46c5dfee4701"
   }
 }
