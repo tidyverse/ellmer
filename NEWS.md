@@ -1,6 +1,7 @@
 # ellmer (development version)
 
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
+* `chat_anthropic()`, `chat_aws_bedrock()`, and `chat_posit()` now default to `claude-sonnet-5`. `chat_openai()` and `chat_openrouter()` now default to `gpt-5.6-terra` (@thisisnic, #1066).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
 
 
