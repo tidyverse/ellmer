@@ -282,12 +282,7 @@ test_that("inference profile ARN slash is encoded in URL (#792)", {
   provider <- test_aws_bedrock_provider(model = arn)
   local_mocked_bindings(
     paws_credentials = function(...) {
-      list(
-        access_key_id = "x",
-        secret_access_key = "x",
-        session_token = "x",
-        access_token = ""
-      )
+      list(access_key_id = "x", secret_access_key = "x", session_token = "x")
     }
   )
   req <- chat_request(provider, stream = FALSE, turns = list())
