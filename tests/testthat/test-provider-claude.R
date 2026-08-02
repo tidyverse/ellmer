@@ -94,7 +94,7 @@ test_that("continues to work after whitespace only outputs (#376)", {
   vcr::local_cassette("anthropic-whitespace")
 
   chat <- chat_anthropic_test()
-  chat$chat("Respond with only two blank lines")
+  chat$chat("Respond to this question with only two blank lines")
   expect_equal(
     chat$chat("What's 1+1? Just give me the number"),
     ellmer_output("2")
