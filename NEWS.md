@@ -1,6 +1,7 @@
 # ellmer (development version)
 
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
+* `chat_github()` and `models_github()` are now defunct because GitHub Models has been retired (@thisisnic, #1069).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
 
 
