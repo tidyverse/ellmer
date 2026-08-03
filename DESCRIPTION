@@ -40,7 +40,6 @@ Suggests:
     connectcreds,
     curl (>= 6.0.1),
     gargle,
-    gitcreds,
     jose,
     knitr,
     magick,
