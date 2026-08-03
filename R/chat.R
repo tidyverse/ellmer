@@ -84,7 +84,8 @@ Chat <- R6::R6Class(
     },
 
     #' @description The last [Round] of conversation. Note that system prompt
-    #'   turns are included, equivalent to the last item in the list of rounds #'   returned by `$get_rounds(include_system_prompt = TRUE)`.
+    #'   turns are included, equivalent to the last item in the list of rounds
+    #'   returned by `$get_rounds(include_system_prompt = TRUE)`.
     #' @return Either a `Round` or `NULL`, if no rounds have occurred.
     last_round = function() {
       rounds <- self$get_rounds(include_system_prompt = TRUE)

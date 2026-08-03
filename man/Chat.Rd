@@ -153,7 +153,8 @@ precedes.}
 \if{latex}{\out{\hypertarget{method-Chat-last_round}{}}}
 \subsection{\code{Chat$last_round()}}{
   The last \link{Round} of conversation. Note that system prompt
-turns are included, equivalent to the last item in the list of rounds #'   returned by \verb{$get_rounds(include_system_prompt = TRUE)}.
+turns are included, equivalent to the last item in the list of rounds
+returned by \verb{$get_rounds(include_system_prompt = TRUE)}.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$last_round()}
