@@ -6,6 +6,12 @@
   tokens in new input using the provider’s token counting endpoint
   ([@thisisnic](https://github.com/thisisnic),
   [\#814](https://github.com/tidyverse/ellmer/issues/814)).
+- [`chat_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
+  and
+  [`models_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
+  are now defunct because GitHub Models has been retired
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1069](https://github.com/tidyverse/ellmer/issues/1069)).
 - [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
   now correctly preserves provider error messages
   ([@xmarquez](https://github.com/xmarquez),

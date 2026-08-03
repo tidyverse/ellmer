@@ -45,8 +45,6 @@ community; contributions to improve them are especially welcome.
   [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md).
 - DeepSeek:
   [`chat_deepseek()`](https://ellmer.tidyverse.org/dev/reference/chat_deepseek.md).
-- GitHub model marketplace:
-  [`chat_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md).
 - Google Gemini/Vertex AI:
   [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md),
   [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md).

@@ -37,7 +37,8 @@ features.
   : Chat with a model hosted on DeepSeek
 - [`chat_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
   [`models_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
-  : Chat with a model hosted on the GitHub model marketplace
+  **\[deprecated\]** : Chat with a model hosted on the GitHub model
+  marketplace
 - [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   [`models_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
