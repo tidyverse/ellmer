@@ -52,36 +52,35 @@ Round <- new_class(
 )
 
 get_rounds <- function(turns) {
-  rounds <- list()
-  current <- NULL
+  if (length(turns) == 0) {
+    return(list())
+  }
 
-  for (turn in turns) {
-    is_input <- is_system_turn(turn) ||
-      (is_user_turn(turn) && !is_tool_result_turn(turn))
+  is_input <- map_lgl(turns, is_input_turn)
+  if (!is_input[[1]]) {
+    cli::cli_abort(
+      "Found a response turn with no preceding input turn to start a round."
+    )
+  }
 
-    if (is_input) {
-      if (!is.null(current) && length(current@response) > 0) {
-        rounds[[length(rounds) + 1]] <- current
-        current <- NULL
-      }
-      if (is.null(current)) {
-        current <- Round(input = list(turn), response = list())
-      } else {
-        current@input[[length(current@input) + 1]] <- turn
-      }
-    } else if (is.null(current)) {
-      cli::cli_abort(
-        "Found a response turn with no preceding input turn to start a round."
-      )
-    } else {
-      current@response[[length(current@response) + 1]] <- turn
+  # A new round starts at the first input turn of each run of input turns, so
+  # consecutive input turns (e.g. a system turn followed by a user turn) are
+  # gathered into the `input` of a single round.
+  prev_is_input <- c(FALSE, is_input[-length(is_input)])
+  round_id <- cumsum(is_input & !prev_is_input)
+
+  rounds <- map2(
+    split(turns, round_id),
+    split(is_input, round_id),
+    function(turns, is_input) {
+      Round(input = turns[is_input], response = turns[!is_input])
     }
-  }
-  if (!is.null(current)) {
-    rounds[[length(rounds) + 1]] <- current
-  }
+  )
+  unname(rounds)
+}
 
-  rounds
+is_input_turn <- function(x) {
+  is_system_turn(x) || (is_user_turn(x) && !is_tool_result_turn(x))
 }
 
 method(format, Round) <- function(x, ...) {
