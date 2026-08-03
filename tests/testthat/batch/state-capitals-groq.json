@@ -180,7 +180,8 @@
   ],
   "started_at": 1779512129,
   "hash": {
-    "provider": "b59b335990331810f2230ac50b959287",
+    "provider": "a85b3a30d3e5bb9eb7e8c0d01a6c6c82",
+    "model": "ca3e3b465b193de6d04e9bec880f1ee0",
     "prompts": "ec58117fcf69ea639e59250f914cca8f",
     "user_turns": "5c3ea26a1e046a3d3f5a574bf143ebd2"
   }

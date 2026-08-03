@@ -143,7 +143,8 @@
   ],
   "started_at": 1783003056,
   "hash": {
-    "provider": "f9746ebbfa2cfc855eaf56dc7aefcf28",
+    "provider": "c3a86702644fdfd4cc90daa0d89a9536",
+    "model": "e19a8260261f101e025fc4fcf0a6523c",
     "prompts": "ec58117fcf69ea639e59250f914cca8f",
     "user_turns": "5c3ea26a1e046a3d3f5a574bf143ebd2"
   }

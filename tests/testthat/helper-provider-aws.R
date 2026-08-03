@@ -7,13 +7,10 @@ test_aws_bedrock_provider <- function(
   ProviderAWSBedrock(
     name = "ProviderAWSBedrock",
     base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
-    model = model,
     profile = NULL,
     region = "us-east-1",
     cache = list(),
     cache_point = cache_point,
-    params = list(),
-    extra_args = list(),
     extra_headers = character()
   )
 }

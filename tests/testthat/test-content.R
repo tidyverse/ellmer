@@ -31,7 +31,7 @@ test_that("turn contents can be converted to text, markdown and HTML", {
     turn,
     AssistantTurn(list(ContentText("Here's your answer.")))
   )
-  chat <- Chat$new(test_provider())
+  chat <- Chat$new(test_provider(), model = test_model())
   chat$set_turns(turns)
   expect_snapshot(cat(contents_markdown(chat)))
 

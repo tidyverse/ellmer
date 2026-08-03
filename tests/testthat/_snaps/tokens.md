@@ -16,7 +16,7 @@
 # informative internal error if variant is missing
 
     Code
-      get_token_cost(provider, tokens(), variant = NULL)
+      get_token_cost(provider, model, tokens(), variant = NULL)
     Condition
       Error in `get_token_cost()`:
       ! `variant` must be a single string, not `NULL`.

@@ -800,8 +800,8 @@ test_that("dangling tool requests are inserted into user message", {
       })
     )
   )
-  provider <- ProviderOpenAI("name", "model", "base_url")
-  chat <- Chat$new(provider)
+  provider <- test_provider()
+  chat <- Chat$new(provider, model = test_model())
 
   # Simulate a broken chat history with dangling tool request
   tool_request <- ContentToolRequest(id = "1", name = "get_date")

@@ -50,13 +50,16 @@ chat_groq <- function(
   provider <- ProviderGroq(
     name = "Groq",
     base_url = base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderGroq <- new_class("ProviderGroq", parent = ProviderOpenAICompatible)
@@ -89,7 +92,6 @@ models_groq <- function(
 
   provider <- ProviderGroq(
     name = "Groq",
-    model = "",
     base_url = base_url,
     credentials = credentials
   )
@@ -110,6 +112,7 @@ method(has_batch_support, ProviderGroq) <- function(provider) {
 
 method(batch_submit, ProviderGroq) <- function(
   provider,
+  model,
   conversations,
   type = NULL
 ) {
@@ -118,6 +121,7 @@ method(batch_submit, ProviderGroq) <- function(
   requests <- map(seq_along(conversations), function(i) {
     body <- chat_body(
       provider,
+      model = model,
       stream = FALSE,
       turns = conversations[[i]],
       type = type
@@ -194,11 +198,12 @@ method(batch_retrieve, ProviderGroq) <- function(provider, batch) {
 
 method(batch_result_turn, ProviderGroq) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
   if (!is.null(result) && result$status_code == 200L && !is.null(result$body)) {
-    value_turn(provider, result$body, has_type = has_type)
+    value_turn(provider, model, result$body, has_type = has_type)
   } else {
     NULL
   }
