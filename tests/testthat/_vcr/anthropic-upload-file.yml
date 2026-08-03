@@ -11,222 +11,208 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Sun, 28 Jun 2026 11:17:03 GMT
+      date: Sun, 02 Aug 2026 17:43:56 GMT
       content-type: application/json
-      request-id: req_011CcVZffRA2pjyAP3qPBwzt
+      request-id: req_011CdeLUovZeHtw3XG7nXKfn
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       server: cloudflare
       content-encoding: gzip
       vary: Accept-Encoding
-      server-timing: x-originResponse;dur=259
+      server-timing: x-originResponse;dur=358
       cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=TsOYcpFPUry3FdiuVNZcthq7qEUg7bPtRgPw6OdcnQM-1782645423.3627918-1.0.1.1-1B1vQK8_YaGyxFu4mj3rH1kaZn2SvHxyJsabd_Uz36M;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
       x-robots-tag: none
-      cf-ray: a12c48680e996974-MAN
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: a24ee33ebb050f75-EWR
     body:
-      string: '{"type":"file","id":"file_011CcVZffnyUCLiK33iSpc25","size_bytes":14560,"created_at":"2026-06-28T11:17:03.511000Z","filename":"apples.pdf","mime_type":"application/pdf","downloadable":false}'
-  recorded_at: 2026-06-28 11:17:03
+      string: '{"type":"file","id":"file_011CdeLUpakHYCG43qGLsdXo","size_bytes":14560,"created_at":"2026-08-02T17:43:56.144000Z","filename":"apples.pdf","mime_type":"application/pdf","downloadable":false}'
+  recorded_at: 2026-08-02 17:43:56
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-6","messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the title of this document?"},{"type":"document","source":{"type":"file","file_id":"file_011CcVZffnyUCLiK33iSpc25"},"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+      string: '{"model":"claude-sonnet-5","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the title of this document?"},{"type":"document","source":{"type":"file","file_id":"file_011CdeLUpakHYCG43qGLsdXo"},"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Sun, 28 Jun 2026 11:17:05 GMT
+      date: Sun, 02 Aug 2026 17:43:58 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '9998000'
-      anthropic-ratelimit-input-tokens-reset: '2026-06-28T11:17:05Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-08-02T17:43:57Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-06-28T11:17:05Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-08-02T17:43:58Z'
       anthropic-ratelimit-requests-limit: '10000'
       anthropic-ratelimit-requests-remaining: '9999'
-      anthropic-ratelimit-requests-reset: '2026-06-28T11:17:04Z'
+      anthropic-ratelimit-requests-reset: '2026-08-02T17:43:56Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '11998000'
-      anthropic-ratelimit-tokens-reset: '2026-06-28T11:17:05Z'
-      request-id: req_011CcVZfi59YGYCqvrXSzRJV
+      anthropic-ratelimit-tokens-reset: '2026-08-02T17:43:57Z'
+      request-id: req_011CdeLUrFi4hicSjYgH8Jmu
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      traceresponse: 00-041f2ba85bdf85148090c662360d62e9-a392fbba442b3d8c-01
+      traceresponse: 00-553d0ed8932750830b4f27e8d9683f14-737a4a616ab3b193-01
       server: cloudflare
       content-encoding: gzip
       vary: Accept-Encoding
-      cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=Fz3ajKJc1RXlXInhrwvvYsSdd_T.xDaOO1Mol3At7Hk-1782645423.9652278-1.0.1.1-JzlDxRgBSxbUvRVuh9OKBMVVHhCOGAsoRd3K998eeTA;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
       x-robots-tag: none
-      cf-ray: a12c486bc8e26974-MAN
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-cache-status: DYNAMIC
+      cf-ray: a24ee3420d5b0f75-EWR
     body:
-      string: '{"model":"claude-sonnet-4-6","id":"msg_01VsuUERnTyo91s8tyE99r1o","type":"message","role":"assistant","content":[{"type":"text","text":"The
-        title of the document is **\"Apples are tasty\"**, written by Hadley Wickham."}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":3,"cache_creation_input_tokens":1637,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":1637,"ephemeral_1h_input_tokens":0},"output_tokens":28,"service_tier":"standard","inference_geo":"global"}}'
-  recorded_at: 2026-06-28 11:17:06
+      string: '{"model":"claude-sonnet-5","id":"msg_011CdeLUtbM6kv9NXcTBXiMr","type":"message","role":"assistant","content":[{"type":"text","text":"The
+        title of this document is **\"Apples are tasty\"** by Hadley Wickham."}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":2,"cache_creation_input_tokens":1650,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":1650,"ephemeral_1h_input_tokens":0},"output_tokens":29,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-08-02 17:43:58
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-6","messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the title of this document?"},{"type":"document","source":{"type":"file","file_id":"file_011CcVZffnyUCLiK33iSpc25"}}]},{"role":"assistant","content":[{"type":"text","text":"The
-        title of the document is **\"Apples are tasty\"**, written by Hadley Wickham."}]},{"role":"user","content":[{"type":"text","text":"What
-        apple is not tasty? State only the name","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+      string: '{"model":"claude-sonnet-5","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the title of this document?"},{"type":"document","source":{"type":"file","file_id":"file_011CdeLUpakHYCG43qGLsdXo"}}]},{"role":"assistant","content":[{"type":"text","text":"The
+        title of this document is **\"Apples are tasty\"** by Hadley Wickham."}]},{"role":"user","content":[{"type":"text","text":"What
+        apple is not tasty? State only the name","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Sun, 28 Jun 2026 11:17:08 GMT
+      date: Sun, 02 Aug 2026 17:44:00 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-06-28T11:17:07Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-08-02T17:44:00Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-06-28T11:17:07Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-08-02T17:44:00Z'
       anthropic-ratelimit-requests-limit: '10000'
       anthropic-ratelimit-requests-remaining: '9999'
-      anthropic-ratelimit-requests-reset: '2026-06-28T11:17:06Z'
+      anthropic-ratelimit-requests-reset: '2026-08-02T17:43:59Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '12000000'
-      anthropic-ratelimit-tokens-reset: '2026-06-28T11:17:07Z'
-      request-id: req_011CcVZftkLv13ajK4e7sYAL
+      anthropic-ratelimit-tokens-reset: '2026-08-02T17:44:00Z'
+      request-id: req_011CdeLV34qd1gq25p8vPnE4
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      traceresponse: 00-516bcae232c1035d188a0d970514d0b8-f049339ad4c8a5f8-01
+      traceresponse: 00-fdddb2af72e04acffafb22d33bdac34d-fa09937cf3399e60-01
       server: cloudflare
       content-encoding: gzip
       vary: Accept-Encoding
-      cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=V63CEF_2yD78Ad6Xp3O5B1JOFB.Z2F9fKg.ozS_5QsY-1782645426.4608324-1.0.1.1-IABMrrVcuNJTMWUh_.h5Xo0P9PagRJ27eBaEQywVs1M;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
       x-robots-tag: none
-      cf-ray: a12c487b5ba76974-MAN
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-cache-status: DYNAMIC
+      cf-ray: a24ee351d8690f75-EWR
     body:
-      string: '{"model":"claude-sonnet-4-6","id":"msg_01C1X6yVFkTbgLisYqkr2SN9","type":"message","role":"assistant","content":[{"type":"text","text":"Red
-        Delicious"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":3,"cache_creation_input_tokens":42,"cache_read_input_tokens":1637,"cache_creation":{"ephemeral_5m_input_tokens":42,"ephemeral_1h_input_tokens":0},"output_tokens":7,"service_tier":"standard","inference_geo":"global"}}'
-  recorded_at: 2026-06-28 11:17:08
+      string: '{"model":"claude-sonnet-5","id":"msg_011CdeLV5mZMACPQ3qznpUoL","type":"message","role":"assistant","content":[{"type":"text","text":"Red
+        delicious"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":2,"cache_creation_input_tokens":44,"cache_read_input_tokens":1650,"cache_creation":{"ephemeral_5m_input_tokens":44,"ephemeral_1h_input_tokens":0},"output_tokens":7,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-08-02 17:44:00
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-6","messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the title of this document?"},{"type":"document","source":{"type":"file","file_id":"file_011CcVZffnyUCLiK33iSpc25"}}]},{"role":"assistant","content":[{"type":"text","text":"The
-        title of the document is **\"Apples are tasty\"**, written by Hadley Wickham."}]},{"role":"user","content":[{"type":"text","text":"What
+      string: '{"model":"claude-sonnet-5","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the title of this document?"},{"type":"document","source":{"type":"file","file_id":"file_011CdeLUpakHYCG43qGLsdXo"}}]},{"role":"assistant","content":[{"type":"text","text":"The
+        title of this document is **\"Apples are tasty\"** by Hadley Wickham."}]},{"role":"user","content":[{"type":"text","text":"What
         apple is not tasty? State only the name"}]},{"role":"assistant","content":[{"type":"text","text":"Red
-        Delicious"}]},{"role":"user","content":[{"type":"text","text":"What apple
-        is not tasty? State only the name","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"temperature":0,"max_tokens":4096}'
+        delicious"}]},{"role":"user","content":[{"type":"text","text":"What apple
+        is not tasty? State only the name","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Sun, 28 Jun 2026 11:17:09 GMT
+      date: Sun, 02 Aug 2026 17:44:02 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-06-28T11:17:09Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-08-02T17:44:02Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-06-28T11:17:09Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-08-02T17:44:02Z'
       anthropic-ratelimit-requests-limit: '10000'
       anthropic-ratelimit-requests-remaining: '9999'
-      anthropic-ratelimit-requests-reset: '2026-06-28T11:17:08Z'
+      anthropic-ratelimit-requests-reset: '2026-08-02T17:44:01Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '12000000'
-      anthropic-ratelimit-tokens-reset: '2026-06-28T11:17:09Z'
-      request-id: req_011CcVZg3PkVYZ1nx13dg79V
+      anthropic-ratelimit-tokens-reset: '2026-08-02T17:44:02Z'
+      request-id: req_011CdeLVCz8pK7NSYGxWQ7Hu
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      traceresponse: 00-7828e982963b3c98c6b5e7ba92d49e6c-2b00ff509b22fdef-01
+      traceresponse: 00-00a20aac591cf16dbe7728d83bdf96f2-97592319a471fd4a-01
       server: cloudflare
       content-encoding: gzip
       vary: Accept-Encoding
-      cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=0UZ_Ikmabnc9Njvjm9ngJYO1wx8bBfPUXJwm7h13T.w-1782645428.4769583-1.0.1.1-yX.W2pY5F6aqtC8cNqTu__mfJ3O3iJQ4I9pGQNCdZeg;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
       x-robots-tag: none
-      cf-ray: a12c4887fe456974-MAN
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-cache-status: DYNAMIC
+      cf-ray: a24ee3605ad60f75-EWR
     body:
-      string: '{"model":"claude-sonnet-4-6","id":"msg_01NwdSQqc4CAnWdvXeggpQLt","type":"message","role":"assistant","content":[{"type":"text","text":"Red
-        Delicious"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":3,"cache_creation_input_tokens":21,"cache_read_input_tokens":1679,"cache_creation":{"ephemeral_5m_input_tokens":21,"ephemeral_1h_input_tokens":0},"output_tokens":7,"service_tier":"standard","inference_geo":"global"}}'
-  recorded_at: 2026-06-28 11:17:10
+      string: '{"model":"claude-sonnet-5","id":"msg_011CdeLVEFHt3CcD6Y5xuALv","type":"message","role":"assistant","content":[{"type":"text","text":"Red
+        delicious"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":2,"cache_creation_input_tokens":22,"cache_read_input_tokens":1694,"cache_creation":{"ephemeral_5m_input_tokens":22,"ephemeral_1h_input_tokens":0},"output_tokens":7,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-08-02 17:44:02
 - request:
     method: GET
-    uri: https://api.anthropic.com/v1/files/file_011CcVZffnyUCLiK33iSpc25/content
+    uri: https://api.anthropic.com/v1/files/file_011CdeLUpakHYCG43qGLsdXo/content
   response:
     status: 400
     headers:
-      date: Sun, 28 Jun 2026 11:17:10 GMT
+      date: Sun, 02 Aug 2026 17:44:03 GMT
       content-type: application/json
       x-should-retry: 'false'
-      request-id: req_011CcVZgAyf19Gsi3oFMajpi
+      request-id: req_011CdeLVLLuJaht3Nnn97PFc
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       server: cloudflare
       content-encoding: gzip
       vary: Accept-Encoding
-      server-timing: x-originResponse;dur=130
+      server-timing: x-originResponse;dur=166
       cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=0JuFbw99auuDc.9E7IxGLa_5OdWXPo12gMrTPN5gY0c-1782645430.2799506-1.0.1.1-YsHkyMPmsIBwKYSvtka4YpfVLmUiYQyLilSbkwuyXik;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
       x-robots-tag: none
-      cf-ray: a12c48933dc96974-MAN
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: a24ee36b3b700f75-EWR
     body:
       string: '{"type":"error","error":{"type":"invalid_request_error","message":"File
-        ''file_011CcVZffnyUCLiK33iSpc25'' is not downloadable"},"request_id":"req_011CcVZgAyf19Gsi3oFMajpi"}'
-  recorded_at: 2026-06-28 11:17:10
+        ''file_011CdeLUpakHYCG43qGLsdXo'' is not downloadable"},"request_id":"req_011CdeLVLLuJaht3Nnn97PFc"}'
+  recorded_at: 2026-08-02 17:44:03
 - request:
     method: GET
     uri: https://api.anthropic.com/v1/files
   response:
     status: 200
     headers:
-      date: Sun, 28 Jun 2026 11:17:11 GMT
+      date: Sun, 02 Aug 2026 17:44:03 GMT
       content-type: application/json
-      request-id: req_011CcVZgCmoYPMR9d4aXY84S
+      request-id: req_011CdeLVMb4fSSgxgJ8b68xx
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       server: cloudflare
       content-encoding: gzip
       vary: Accept-Encoding
-      server-timing: x-originResponse;dur=200
+      server-timing: x-originResponse;dur=214
       cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=ZwZ4LEF1.gtsN8HTPvPg3ySAnJfmJ8P3o0aRg1xnxAU-1782645430.7011454-1.0.1.1-I0xlELuzb9WbwPYfLGt8rqpPo0HsY5HRk16ibwOi54M;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
       x-robots-tag: none
-      cf-ray: a12c4895eda66974-MAN
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: a24ee36d0cae0f75-EWR
     body:
-      string: '{"data":[{"type":"file","id":"file_011CcVZffnyUCLiK33iSpc25","size_bytes":14560,"created_at":"2026-06-28T11:17:03.511000Z","filename":"apples.pdf","mime_type":"application/pdf","downloadable":false}],"has_more":false,"first_id":"file_011CcVZffnyUCLiK33iSpc25","last_id":"file_011CcVZffnyUCLiK33iSpc25"}'
-  recorded_at: 2026-06-28 11:17:11
+      string: '{"data":[{"type":"file","id":"file_011CdeLUpakHYCG43qGLsdXo","size_bytes":14560,"created_at":"2026-08-02T17:43:56.144000Z","filename":"apples.pdf","mime_type":"application/pdf","downloadable":false}],"has_more":false,"first_id":"file_011CdeLUpakHYCG43qGLsdXo","last_id":"file_011CdeLUpakHYCG43qGLsdXo"}'
+  recorded_at: 2026-08-02 17:44:03
 - request:
     method: DELETE
-    uri: https://api.anthropic.com/v1/files/file_011CcVZffnyUCLiK33iSpc25
+    uri: https://api.anthropic.com/v1/files/file_011CdeLUpakHYCG43qGLsdXo
   response:
     status: 200
     headers:
-      date: Sun, 28 Jun 2026 11:17:11 GMT
+      date: Sun, 02 Aug 2026 17:44:04 GMT
       content-type: application/json
-      request-id: req_011CcVZgEdvKNFkfdvNfSVV4
+      request-id: req_011CdeLVNhnTSFThxzN8zyDE
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       server: cloudflare
       content-encoding: gzip
       vary: Accept-Encoding
-      server-timing: x-originResponse;dur=390
+      server-timing: x-originResponse;dur=556
       cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=tKcQa7rM9wMnq1facIP2WrUuuaeOqFpk5iB5ayjyntk-1782645431.1373546-1.0.1.1-rZ.iyEIg5WNxUNFy2XPIZLTu2lqJXY_SpZnGxU6lcMI;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
       x-robots-tag: none
-      cf-ray: a12c48989cfe6974-MAN
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: a24ee36ebe100f75-EWR
     body:
-      string: '{"id":"file_011CcVZffnyUCLiK33iSpc25","type":"file_deleted"}'
-  recorded_at: 2026-06-28 11:17:11
+      string: '{"id":"file_011CdeLUpakHYCG43qGLsdXo","type":"file_deleted"}'
+  recorded_at: 2026-08-02 17:44:04
 recorded_with: VCR-vcr/2.1.0

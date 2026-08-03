@@ -14,39 +14,39 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a13387aae817a5ba-IAD
+      cf-ray: a2508e899f19e351-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:23:36 GMT
+      date: Sun, 02 Aug 2026 22:35:38 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1443'
+      openai-processing-ms: '795'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=jkfnCjZPanqLqnLHODW7rNlpVmg2H1M9CZUjfY0JZwM-1782721414.869698-1.0.1.1-z9EKDDL2h5I0.aZQ9noOPhrvm5EgAMEoA.jR7lm3tXLEnnj4uWRgSW8PevUnA1kpKGMQC0fIMHS6AowP72arp9j5ZDEKlSuOIhwEG8rzzz8h_DhUjzsEk7K2dsptmTb3;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 08:53:36 GMT
+      set-cookie: __cf_bm=L811PUXCtKTwwpZgugn6mpZ4Mt5fZ2FV_bY2AwqPLnM-1785710137.854804-1.0.1.1-lhFbjpBvVbyDHJHOWfeO_uuiKIl22cucr27SA30SxHWADkqLBytT1AUeanCT0Te6JjjqDggyvuHj6LntRG9EwOpha1eBdoQSfMdumC100tLWYrWzd88W.mgtI5TbrG_A;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:05:38 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '30000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '29914'
+      x-ratelimit-remaining-tokens: '29944'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 172ms
-      x-request-id: 87531ea4-9125-4ddc-adbe-b6f6acdc3b6d
+      x-ratelimit-reset-tokens: 112ms
+      x-request-id: req_7d2a13a54ca64955a71c4a2a36746cf2
     body:
       string: |-
         {
-          "id": "resp_0c01dd4c1cc7b199016a422b86e694819180599c459d8167b0",
+          "id": "resp_0d4bfe66fb46046d016a6fc63a07fc81978c5c19c75e1b3b8a",
           "object": "response",
-          "created_at": 1782721414,
+          "created_at": 1785710138,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782721416,
+          "completed_at": 1785710138,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -57,7 +57,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0c01dd4c1cc7b199016a422b8728048191953f9fe753c38534",
+              "id": "msg_0d4bfe66fb46046d016a6fc63a4db081979d1cb3e527cb6e62",
               "type": "message",
               "status": "completed",
               "content": [
@@ -65,7 +65,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "**R** was created by **Ross Ihaka** and **Robert Gentleman** at the University of Auckland, New Zealand, in the mid-1990s. The project began in 1992, with an initial release to the public in 1995. R is a programming language and environment specifically designed for statistical computing and graphics, and its name is partially derived from the first names of its two creators (Ross and Robert), as well as being a reference to the S language, on which R is based."
+                  "text": "**R** was created by **Ross Ihaka** and **Robert Gentleman** at the **University of Auckland, New Zealand**. The project began in **1992**, and the first version was released in **1995**. Today, R is developed and maintained by the **R Core Team**, a group of statisticians and computational scientists from around the world."
                 }
               ],
               "role": "assistant"
@@ -117,16 +117,17 @@ http_interactions:
           "usage": {
             "input_tokens": 11,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 105,
+            "output_tokens": 75,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 116
+            "total_tokens": 86
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:23:36
+  recorded_at: 2026-08-02 22:35:38
 recorded_with: VCR-vcr/2.1.0

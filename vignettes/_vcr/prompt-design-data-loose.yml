@@ -10,7 +10,7 @@ http_interactions:
         cup (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½
         cup (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
         kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
-        plus 1½ teaspoons sugar\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"store":false,"service_tier":"auto"}'
+        plus 1½ teaspoons sugar\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
@@ -20,50 +20,57 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a133848c29e8a5ba-IAD
+      cf-ray: a2508a9959b28574-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:21:30 GMT
+      date: Sun, 02 Aug 2026 22:32:59 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '3280'
+      openai-processing-ms: '2646'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=tHk93OCD76jTd3T.hZDCLVRbA10d0AFEtf3hT3swtok-1782721287.062137-1.0.1.1-pfyhxH0DiJ9z7dLnuUG.S7LbaSZXPoqE63a6LelBCd1ovcv0dWAJKuQje1lnZy4sGAwrgd9D.weEoM2tRpz_RnLsoZ_dcknHOYyGBL8_gaPdzkBfsMR96g2u_a7L03gX;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 08:51:30 GMT
+      set-cookie: __cf_bm=jqCt8Qzn6jMztMEi3ub0O2DqPgvVVhW45vwvsdACCc4-1785709976.536039-1.0.1.1-zpo_2_Y5UqnSbVbuhz2ea3pYxNs_nMoK7cxeq5XnLlWSvGtydxgxqIC9Z4BZxGLaHpKWeOzIgW0VYJTaSkMraSDfazK995g8SytsytXCGu0sV7cNQrKaQnhxUj1I87pe;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:02:59 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499677'
+      x-ratelimit-remaining-tokens: '499784'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 38ms
-      x-request-id: 2d1bfdf4-ba41-43f5-8501-b1754dd62b6d
+      x-ratelimit-reset-tokens: 25ms
+      x-request-id: req_1d39265963d64840b3f337ce190cc44d
     body:
       string: |-
         {
-          "id": "resp_03324cbb55488205016a422b073398819eb44bbf48ad4bad30",
+          "id": "resp_084f933fb51ec5f9016a6fc598b44c81908c177d0135f595af",
           "object": "response",
-          "created_at": 1782721287,
+          "created_at": 1785709976,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782721290,
+          "completed_at": 1785709979,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.4-2026-03-05",
+          "model": "gpt-5.6-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_03324cbb55488205016a422b07a59c819ebaf6647103c18f14",
+              "id": "rs_084f933fb51ec5f9016a6fc59910b481908f8e1f3475e485f1",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "gAAAAABqb8WbhUnNIHK6a46l0PE6oZNmEFxu71fUP87B27ePOB5bPMaGB_3iH6h6OjfwRxc-wYYCy0518EdZv98wuR_QCn7e2_9oTxzcGioAQRKfKv1N-zS3wBLf6Kl43L88a1kigdEZmWe8M4JYGZ7t0q6ZNTLR_U1DBj1hYdT6Se2Ugsnl84kuTueHpDRJAt3zlliPM5xm73YhwcfoiwU7K5O_QDResilHknkPSZ2VEMUiRBUTIQFlepzDin_CavSPmBLIVtcriJe_XOSFEIwRE10bvvHdfKglcoT1W7VneQ_YU5GUllx5F0OGgpS-3tdNGSfi1_6Rzp-nYCd7Vjy839ptGAP9jCsjbXPSE1vJ35tMqLhbzsORPljkoWo2m_-VZNK0av3QrIjsrcSs8yZzL4mC3dZhahpYHcDl6n0B0F3MFq5h4nawdx_VXfH1zi3NL-5XYpXrCeJewuR_d7ZXrVixQMZ_1qiAvfKmpxk0nH4xlYCcJZcyrrxTl4Ke50h1isAQlNCxwNRR_Iojv2Apnsbq6oIwjjwWj9PhCzkwKoF1Bkz_9R6g_Dc5wsmsa0wdJwrBa-seosMJSXAqJQsJLnmELVXItgLnJB6Lbg4P19rnbzqYvdVfk60HZJx6Hv4KIhKJsaUFvIMp3dSrvO2ptga7ztqqn2BvD4evIoGIzaVQPxNuuQWm-GT9_cWA0b66jKmJ1HnTbJeHD3NWba1Mr8mUchZg_vkaqXnY2wBkjkyoM7gMreBUHlD84IYS-Zg4s0-1WU2qd-nlgUISPtdHWy08kLpbsiVmwn6IKnXTgQKnL6R6cWs53rZNzRc8yHl1TOk-QTvB6onXuMoauOcULWOMVVN05saMzsXERBkx0UWjuRi4pKlT3967WniYLqZ36pneCfbOunVxIhU1L6AvSb6WxKifxAQTByPPErWIhQQK1QbQ0xn3e7M5OPcguvGyOZuTLWz7jVHI1APrYAwZU0kkyD_FBAN0iCTI_Du0ZR_888TwIOTLcXPpm6WYU8x9On5SyFT8yZvEWlqdRswc9cRgTUlvRvWwYtw88tz9RhSD9zTQSj3BBz2Ta0iZ8cUo5zoeZj6WE7Z7O-UTtm7PrPeX5gh0SzVmtTHhdoDYHJ_M2b68YzAlEEiU_Bhau9d90eUKMbT8",
+              "summary": []
+            },
+            {
+              "id": "msg_084f933fb51ec5f9016a6fc59964008190a148254a006ffefe",
               "type": "message",
               "status": "completed",
               "content": [
@@ -71,7 +78,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "[\n  {\n    \"quantity\": 0.75,\n    \"unit\": \"cup\",\n    \"metric_quantity\": 150,\n    \"metric_unit\": \"g\",\n    \"ingredient\": \"dark brown sugar\",\n    \"preparation\": null\n  },\n  {\n    \"quantity\": 2,\n    \"unit\": null,\n    \"metric_quantity\": null,\n    \"metric_unit\": null,\n    \"ingredient\": \"large eggs\",\n    \"preparation\": null\n  },\n  {\n    \"quantity\": 0.75,\n    \"unit\": \"cup\",\n    \"metric_quantity\": 165,\n    \"metric_unit\": \"g\",\n    \"ingredient\": \"sour cream\",\n    \"preparation\": null\n  },\n  {\n    \"quantity\": 0.5,\n    \"unit\": \"cup\",\n    \"metric_quantity\": 113,\n    \"metric_unit\": \"g\",\n    \"ingredient\": \"unsalted butter\",\n    \"preparation\": \"melted\"\n  },\n  {\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\",\n    \"metric_quantity\": null,\n    \"metric_unit\": null,\n    \"ingredient\": \"vanilla extract\",\n    \"preparation\": null\n  },\n  {\n    \"quantity\": 0.75,\n    \"unit\": \"teaspoon\",\n    \"metric_quantity\": null,\n    \"metric_unit\": null,\n    \"ingredient\": \"kosher salt\",\n    \"preparation\": null\n  },\n  {\n    \"quantity\": 0.3333333333,\n    \"unit\": \"cup\",\n    \"metric_quantity\": 80,\n    \"metric_unit\": \"ml\",\n    \"ingredient\": \"neutral oil\",\n    \"preparation\": null\n  },\n  {\n    \"quantity\": 1.5,\n    \"unit\": \"cup\",\n    \"metric_quantity\": 190,\n    \"metric_unit\": \"g\",\n    \"ingredient\": \"all-purpose flour\",\n    \"preparation\": null\n  },\n  {\n    \"quantity\": 150,\n    \"unit\": \"g\",\n    \"metric_quantity\": null,\n    \"metric_unit\": null,\n    \"ingredient\": \"sugar\",\n    \"preparation\": null,\n    \"alternate_quantity\": 1.5,\n    \"alternate_unit\": \"teaspoons\"\n  }\n]"
+                  "text": "[\n  {\n    \"ingredient\": \"dark brown sugar\",\n    \"quantity\": {\n      \"cups\": \"3/4\",\n      \"grams\": 150\n    }\n  },\n  {\n    \"ingredient\": \"eggs\",\n    \"quantity\": 2,\n    \"unit\": \"large\"\n  },\n  {\n    \"ingredient\": \"sour cream\",\n    \"quantity\": {\n      \"cups\": \"3/4\",\n      \"grams\": 165\n    }\n  },\n  {\n    \"ingredient\": \"unsalted butter\",\n    \"quantity\": {\n      \"cups\": \"1/2\",\n      \"grams\": 113\n    },\n    \"preparation\": \"melted\"\n  },\n  {\n    \"ingredient\": \"vanilla extract\",\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"ingredient\": \"kosher salt\",\n    \"quantity\": \"3/4\",\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"ingredient\": \"neutral oil\",\n    \"quantity\": {\n      \"cups\": \"1/3\",\n      \"milliliters\": 80\n    }\n  },\n  {\n    \"ingredient\": \"all-purpose flour\",\n    \"quantity\": {\n      \"cups\": \"1 1/2\",\n      \"grams\": 190\n    }\n  },\n  {\n    \"ingredient\": \"sugar\",\n    \"quantity\": {\n      \"grams\": 150,\n      \"teaspoons\": \"1 1/2\"\n    }\n  }\n]"
                 }
               ],
               "phase": "final_answer",
@@ -84,8 +91,8 @@ http_interactions:
           "prompt_cache_key": null,
           "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": "current_turn",
-            "effort": "none",
+            "context": "all_turns",
+            "effort": "medium",
             "mode": "standard",
             "summary": null
           },
@@ -125,16 +132,17 @@ http_interactions:
           "usage": {
             "input_tokens": 148,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 486,
+            "output_tokens": 359,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 33
             },
-            "total_tokens": 634
+            "total_tokens": 507
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:21:30
+  recorded_at: 2026-08-02 22:32:59
 recorded_with: VCR-vcr/2.1.0

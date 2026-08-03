@@ -5,72 +5,78 @@ http_interactions:
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
         terse"}]},{"role":"user","content":[{"type":"input_text","text":"Which clothes
-        should I wear today? Roll a dice to decide."}]}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
+        should I wear today? Roll a dice to decide."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
         a dice","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"clothes","description":"Pick
         clothes to wear based on a dice roll","strict":true,"parameters":{"type":"object","description":"","properties":{"roll":{"type":"number","description":""}},"required":["roll"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9a73c84f9928a2a1-ORD
-      content-encoding: gzip
+      cf-ray: a250ac4299d00f91-EWR
+      content-encoding: br
       content-type: application/json
-      date: Mon, 01 Dec 2025 15:57:51 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '2050'
-      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
+      date: Sun, 02 Aug 2026 22:55:55 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '567'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=nGGVEmlKM_XELU87tkFGcQDLNs4Ftx4CHF4TYnzWTrY-1764604671-1.0.1.1-9qhnnNZefz_e54FAtTvQp7BjybR0WkJ5pK4t1AA5UhaLCNSdDo1xX.VVLsbV0QMwLXzS3Ey7GJSVWN8gh2NZJ.5QSiUlNLHjSOAlblAY9FQ;
-        path=/; expires=Mon, 01-Dec-25 16:27:51 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=w6QjKlt.YpVaMKcMr8BLV_clzmZkb8sFrxLPuYMJmYk-1764604671495-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=ex16mRFVUFgL76TvxdesCFU4L5WMeIYur353VYownOc-1785711355.300835-1.0.1.1-sIntO115WqyYQ79S6i45trVTKOjoQf9NMVdU.OnJjyt8GB9RoRwRGePm4ABKkkzZqPqx4CJXW3hi8oVEgMQU9vOV0u_T1G5zeoqN2zTFo7QUBTd6f3cbTei3AhbM5Nuy;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:25:55 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '2052'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999715'
-      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '200000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_1e8f4022ead149da8f09a0902678a3f5
+      x-request-id: req_733ad0066b534e6aa7af3733f6d79e28
     body:
       string: |-
         {
-          "id": "resp_05e2680dee6988d001692dbafd6c0081978bc25a6c4a357e7e",
+          "id": "resp_0f1b7664f89aaeaf016a6fcafb5d94819386bbe5a2a04932e4",
           "object": "response",
-          "created_at": 1764604669,
+          "created_at": 1785711355,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1785711355,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "moderation": null,
           "output": [
             {
-              "id": "fc_05e2680dee6988d001692dbafddafc819785545827d327f026",
+              "id": "fc_0f1b7664f89aaeaf016a6fcafbd1508193ad125e45828ca9f3",
               "type": "function_call",
               "status": "completed",
               "arguments": "{}",
-              "call_id": "call_Qy6wvdOz4uYXRn1N1vVd7Lct",
+              "call_id": "call_uA5Z4GsbXsmdJMjJkJISVg5Y",
               "name": "dice"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -84,11 +90,30 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [
             {
               "type": "function",
               "description": "Rolls a dice",
               "name": "dice",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -102,6 +127,7 @@ http_interactions:
               "type": "function",
               "description": "Pick clothes to wear based on a dice roll",
               "name": "clothes",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -120,95 +146,102 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 70,
+            "input_tokens": 75,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 11,
+            "output_tokens": 14,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 81
+            "total_tokens": 89
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-12-01 15:57:51
+  recorded_at: 2026-08-02 22:55:56
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
         terse"}]},{"role":"user","content":[{"type":"input_text","text":"Which clothes
-        should I wear today? Roll a dice to decide."}]},{"type":"function_call","call_id":"fc_05e2680dee6988d001692dbafddafc819785545827d327f026","name":"dice","arguments":"{}"},{"type":"function_call_output","call_id":"fc_05e2680dee6988d001692dbafddafc819785545827d327f026","output":"1"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
+        should I wear today? Roll a dice to decide."}]},{"type":"function_call","call_id":"fc_0f1b7664f89aaeaf016a6fcafbd1508193ad125e45828ca9f3","name":"dice","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0f1b7664f89aaeaf016a6fcafbd1508193ad125e45828ca9f3","output":"1"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
         a dice","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"clothes","description":"Pick
         clothes to wear based on a dice roll","strict":true,"parameters":{"type":"object","description":"","properties":{"roll":{"type":"number","description":""}},"required":["roll"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9a73c85ddba5a2a1-ORD
-      content-encoding: gzip
+      cf-ray: a250ac485e250f91-EWR
+      content-encoding: br
       content-type: application/json
-      date: Mon, 01 Dec 2025 15:57:53 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '2040'
-      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
+      date: Sun, 02 Aug 2026 22:55:57 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '764'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=5dJQ1sQZgn7Z3FqVH66_QnOeZTtHNI97Dj4OBdzo1Kg-1764604673-1.0.1.1-iiVbYNtPJ6r6XjH1TfLsarptDnqoWCx9GjW.L2Efnp9VnzJqyNHpfwsb7tvjnF33X9SqTlFVqAVsja1hIiJuibYVYH.2aUPIB12gaCS15WE;
-        path=/; expires=Mon, 01-Dec-25 16:27:53 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=BKzLOidj2hd3uHJHG7G4L3SAA.JZ0BxdrnSOx9phToA-1764604673775-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=YDCWqsmqJ8EnfsTKf1wD151eaNFvEsSDluRNoW89lSc-1785711356.216491-1.0.1.1-Bb9iertaoj8l8c4dRo5sS4HZ9uiJA5k74tPYIJ9Dmf.gG7e00brnFRPAZFR22.DcpuSNa5FPqrRLpGXCUsCxpvj5N6Ky8_E1GK9OjruYHIklv5L7Y5MS2YA2PZbAHsRR;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:25:57 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '2044'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999697'
-      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '200000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_67ce4c26a7374ce38a2f0114be4028dc
+      x-request-id: req_42b914ec42ba4b339d5bcf709717d05d
     body:
       string: |-
         {
-          "id": "resp_0e05455b1d153c1001692dbaffb5e881909c76f8ce8b1756ca",
+          "id": "resp_0d0812f333d80fb8016a6fcafc46d88193a7db5bd4f5f8fa29",
           "object": "response",
-          "created_at": 1764604671,
+          "created_at": 1785711356,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1785711356,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "moderation": null,
           "output": [
             {
-              "id": "fc_0e05455b1d153c1001692dbb002fc481909055a3f53f58b6d3",
+              "id": "fc_0d0812f333d80fb8016a6fcafcbdb481938df0503d63cae62d",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"roll\":1}",
-              "call_id": "call_hu6U9ar8CbsUUwP6UKP4gLQs",
+              "call_id": "call_QNGPQrG6PgZpCMsoN3UYj2Ij",
               "name": "clothes"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -222,11 +255,30 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [
             {
               "type": "function",
               "description": "Rolls a dice",
               "name": "dice",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -240,6 +292,7 @@ http_interactions:
               "type": "function",
               "description": "Pick clothes to wear based on a dice roll",
               "name": "clothes",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -258,82 +311,86 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 87,
+            "input_tokens": 101,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 15,
+            "output_tokens": 18,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 102
+            "total_tokens": 119
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-12-01 15:57:53
+  recorded_at: 2026-08-02 22:55:57
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
         terse"}]},{"role":"user","content":[{"type":"input_text","text":"Which clothes
-        should I wear today? Roll a dice to decide."}]},{"type":"function_call","call_id":"fc_05e2680dee6988d001692dbafddafc819785545827d327f026","name":"dice","arguments":"{}"},{"type":"function_call_output","call_id":"fc_05e2680dee6988d001692dbafddafc819785545827d327f026","output":"1"},{"type":"function_call","call_id":"fc_0e05455b1d153c1001692dbb002fc481909055a3f53f58b6d3","name":"clothes","arguments":"{\"roll\":1}"},{"type":"function_call_output","call_id":"fc_0e05455b1d153c1001692dbb002fc481909055a3f53f58b6d3","output":"Pants"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
+        should I wear today? Roll a dice to decide."}]},{"type":"function_call","call_id":"fc_0f1b7664f89aaeaf016a6fcafbd1508193ad125e45828ca9f3","name":"dice","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0f1b7664f89aaeaf016a6fcafbd1508193ad125e45828ca9f3","output":"1"},{"type":"function_call","call_id":"fc_0d0812f333d80fb8016a6fcafcbdb481938df0503d63cae62d","name":"clothes","arguments":"{\"roll\":1}"},{"type":"function_call_output","call_id":"fc_0d0812f333d80fb8016a6fcafcbdb481938df0503d63cae62d","output":"Pants"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
         a dice","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"clothes","description":"Pick
         clothes to wear based on a dice roll","strict":true,"parameters":{"type":"object","description":"","properties":{"roll":{"type":"number","description":""}},"required":["roll"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9a73c86bba22a2a1-ORD
-      content-encoding: gzip
+      cf-ray: a250ac4f2b9c0f91-EWR
+      content-encoding: br
       content-type: application/json
-      date: Mon, 01 Dec 2025 15:57:56 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '2045'
-      openai-project: proj_KTxPJ5EAugIeuZGL0lAI1H9t
+      date: Sun, 02 Aug 2026 22:55:58 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '874'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=Dp5.Z2iIEEspMXB9exP90pUDNl7oKj3tjmZl86rhjrI-1764604676-1.0.1.1-LkcCOZ9OWMOagEf9e3zIVYPb7wC4U_Qf4nOI8VRQ3hRoS.Eha9ReiYghZDD7La0DuQr3HntW8kh__gdtGDQ3cLKikwWdUoWVflpGRGMQZzY;
-        path=/; expires=Mon, 01-Dec-25 16:27:56 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=vyOmnZ_Zq0hIFE3uTfK_BSOZUXltrMtKw0bBvn3AhKc-1764604676009-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=wx3DAkmcf4lmH2kA8Ca8MIAUE0UfPhChZjmzD.r8H5c-1785711357.3094635-1.0.1.1-YN6oB7bKCGyhuW15Cde0buFw18LYCqKEG5ScW4ey9EiDrm3hqrX.gOV8Z9lP_qOGDPuApVQw2olRxm0nbpda8EumDC7_pAwNS7tNaWuLJbiZf2dXevM8IbMEoywbSAC3;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:25:58 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '2051'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999675'
-      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '200000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_4a701f2258024ff3916ad50c2a561ce9
+      x-request-id: req_8d852ecb295a4fe68c8e6092f11a3178
     body:
       string: |-
         {
-          "id": "resp_08448c136c44c54b01692dbb01ee6c81959e48ae2bcc64adad",
+          "id": "resp_0ffded5a3c44c9b5016a6fcafd61208193a1391b0a7eaac4b4",
           "object": "response",
-          "created_at": 1764604673,
+          "created_at": 1785711357,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1785711358,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_08448c136c44c54b01692dbb029e0481958936c21830378b31",
+              "id": "msg_0ffded5a3c44c9b5016a6fcafde1c48193ba539fc515b8aa81",
               "type": "message",
               "status": "completed",
               "content": [
@@ -341,18 +398,22 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Wear pants today."
+                  "text": "Roll: **1** \u2192 Wear **pants**."
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -366,11 +427,30 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [
             {
               "type": "function",
               "description": "Rolls a dice",
               "name": "dice",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -384,6 +464,7 @@ http_interactions:
               "type": "function",
               "description": "Pick clothes to wear based on a dice roll",
               "name": "clothes",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -402,21 +483,22 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 109,
+            "input_tokens": 132,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 6,
+            "output_tokens": 15,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 115
+            "total_tokens": 147
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-12-01 15:57:56
-recorded_with: VCR-vcr/2.0.0
+  recorded_at: 2026-08-02 22:55:58
+recorded_with: VCR-vcr/2.1.0

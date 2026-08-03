@@ -193,7 +193,7 @@ method(chat_body, ProviderOpenAICompatible) <- function(
   type = NULL
 ) {
   messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
-  tools <- as_json(provider, unname(tools))
+  tools <- chat_body_tools(provider, tools)
 
   if (!is.null(type)) {
     response_format <- list(

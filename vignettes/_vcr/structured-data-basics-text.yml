@@ -4,7 +4,7 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"My
-        name is Susan and I''m 13 years old"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
+        name is Susan and I''m 13 years old"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
@@ -14,18 +14,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a1338615ffb3a5ba-IAD
+      cf-ray: a2508b3bfc0ecdf0-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:22:30 GMT
+      date: Sun, 02 Aug 2026 22:33:23 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '731'
+      openai-processing-ms: '682'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=XsmkhPFfGyQmegOxat.bZiiUQSKQ_ysdJmbhSPkUjFw-1782721350.0802064-1.0.1.1-gwWyN9wv55V1hZNmeCO8ava3TLhuTVdCYowix8EzPFq0K.CRcW45cyW2foOVUY3IzvTYyMA9jMYtRHVUb65la_z4GOXJ3tvnRI0eS7MXB1yxMjpHLPboCqZDVn7jaOBg;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 08:52:30 GMT
+      set-cookie: __cf_bm=.duGop7NRcHr6Y4fVZBc2ZiG6SOGSKLg8aJ2pNyLX0Y-1785710002.5611448-1.0.1.1-XoN4dCIPUlH4YVgfZb3og2sA29abKo1sLIPaswRzdYJYMMP4DIUlRRG3qN2ejD9ujdadwQLvLqVPCDhLTUW3khb1NHEjbR1zkwqEN10X4WTJ.bfcqBwIfwXK6rTi3ZB2;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:03:23 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -34,30 +34,30 @@ http_interactions:
       x-ratelimit-remaining-tokens: '500000'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: 2b81341f-b472-4f8b-ad77-db3bba7192c8
+      x-request-id: req_a6d133f7206745ca94acec24df412ab2
     body:
       string: |-
         {
-          "id": "resp_0a9fb387d7b0c780016a422b461d88819f89147ae866a1ef74",
+          "id": "resp_02ad35a1f31e7b61016a6fc5b2a1308195b05b57d56b09bab0",
           "object": "response",
-          "created_at": 1782721350,
+          "created_at": 1785710002,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782721350,
+          "completed_at": 1785710003,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.4-2026-03-05",
+          "model": "gpt-5.6-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_0a9fb387d7b0c780016a422b46a398819f902819906a39d573",
+              "id": "msg_02ad35a1f31e7b61016a6fc5b326cc8195a5c47761f2e440b9",
               "type": "message",
               "status": "completed",
               "content": [
@@ -78,8 +78,8 @@ http_interactions:
           "prompt_cache_key": null,
           "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": "current_turn",
-            "effort": "none",
+            "context": "all_turns",
+            "effort": "medium",
             "mode": "standard",
             "summary": null
           },
@@ -141,6 +141,7 @@ http_interactions:
           "usage": {
             "input_tokens": 54,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
             "output_tokens": 17,
@@ -152,5 +153,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:22:30
+  recorded_at: 2026-08-02 22:33:23
 recorded_with: VCR-vcr/2.1.0

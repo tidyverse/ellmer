@@ -5,79 +5,78 @@ http_interactions:
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
         use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
-        the current date in Y-M-D format?"}]}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
+        the current date in Y-M-D format?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9962bbacfd7d69d2-DFW
-      content-encoding: gzip
+      cf-ray: a24efa046eb91914-EWR
+      content-encoding: br
       content-type: application/json
-      date: Wed, 29 Oct 2025 12:39:00 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '1020'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Sun, 02 Aug 2026 17:59:29 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '513'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=CjniGBYYqbZGAclX6DoTQOpmQzsCzAQ2tFVV6a_kuu8-1761741540-1.0.1.1-UPqM4drrgYymX9mUfxI6z6pVR0fXdKoz9HsnDpvQKOlxlyHoc4Vm1F9Uh4HPrdAV8LmqbAXgbg3xE6H9ScE89trOn6KTsCyWZQbMBtYmGjU;
-        path=/; expires=Wed, 29-Oct-25 13:09:00 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=9UjYiRTdPWf_axcM_lv9efbk6AcZB9ujpoMpiaQUq5E-1761741540428-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=cc69M7csagV5gAvhu8L9dM.60G62c7OgRLCASg9oI7w-1785693568.7109525-1.0.1.1-j6zF8HWezslTPZ_dnGKbT3I0_NRmxU3CfuXQGErw_BXGuMH1SJcy_46HrigpjSq9CLuou137Eqf2CQCAGkEFB9kHeFu35Ngo8pD1FOQ2GBHquhxXx7wyGF23LZZDb6Zv;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 18:29:29 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1028'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999707'
-      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '200000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_4623b4bcc44d43e08a5c4a4d2784a95f
+      x-request-id: req_6b6c4340064d4fbbb77db848f0be9dea
     body:
       string: |-
         {
-          "id": "resp_0cff3ff9cdc4aa9c0169020ae36c5c8195b08f8932fc5b8331",
+          "id": "resp_07e02ee31bd73194016a6f8580c0cc81a2ae60e2e2cf241a92",
           "object": "response",
-          "created_at": 1761741539,
+          "created_at": 1785693568,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1785693569,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "moderation": null,
           "output": [
             {
-              "id": "fc_0cff3ff9cdc4aa9c0169020ae43a7081958027e09bf535d890",
+              "id": "fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6",
               "type": "function_call",
               "status": "completed",
               "arguments": "{}",
-              "call_id": "call_N7T623B18yfjtgQxUuocfzs1",
+              "call_id": "call_4VLzPVTu1kO7Fskl93LBryYq",
               "name": "current_date"
-            },
-            {
-              "id": "fc_0cff3ff9cdc4aa9c0169020ae456f081959beaf0b0219cfa68",
-              "type": "function_call",
-              "status": "completed",
-              "arguments": "{}",
-              "call_id": "call_lxN7Kwlxhm4erjP2Kb3A3I7K",
-              "name": "current_month"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -91,11 +90,30 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [
             {
               "type": "function",
               "description": "Return the current date",
               "name": "current_date",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -109,6 +127,7 @@ http_interactions:
               "type": "function",
               "description": "Return the full name of the current month",
               "name": "current_month",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -120,82 +139,86 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 38,
+            "input_tokens": 81,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 40,
+            "output_tokens": 14,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 78
+            "total_tokens": 95
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-10-29 12:39:00
+  recorded_at: 2026-08-02 17:59:29
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
         use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
-        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_0cff3ff9cdc4aa9c0169020ae43a7081958027e09bf535d890","name":"current_date","arguments":"{}"},{"type":"function_call","call_id":"fc_0cff3ff9cdc4aa9c0169020ae456f081959beaf0b0219cfa68","name":"current_month","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0cff3ff9cdc4aa9c0169020ae43a7081958027e09bf535d890","output":"2024-01-01"},{"type":"function_call_output","call_id":"fc_0cff3ff9cdc4aa9c0169020ae456f081959beaf0b0219cfa68","output":"February"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
+        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","output":"2024-01-01"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9962bbb4e93e69d2-DFW
-      content-encoding: gzip
+      cf-ray: a24efa09cd221914-EWR
+      content-encoding: br
       content-type: application/json
-      date: Wed, 29 Oct 2025 12:39:02 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '1626'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Sun, 02 Aug 2026 17:59:32 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '2556'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=7TrQiI7JAxVXMI4EB5wGddd._6XmboYlv2oMUUHEupY-1761741542-1.0.1.1-ZodZBcyRV2cqtBsoNkIfSttaGe71P2Ju67zg7Ekivz_1FPvj3naSckDQVRQl0w5_kBGKJ4oanK6OXbnx.EI1OgQUsmacpIqAHfkQvav5c2U;
-        path=/; expires=Wed, 29-Oct-25 13:09:02 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=Tr02aa9umKEC9HdRNSeiWLX5jvq9XJ05CFU8tGtU6rI-1761741542379-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=_3JAj.StXiJMb0nFAModBr72_reGxPkertW97zbxZfw-1785693569.5699189-1.0.1.1-17pQ8dG4HW17mV63p5t7ybGr1GJHuduOe8OFHeguieMm1MQI0rKWSF.bjU5yd6BGy79FuU.tlEZGCytI07zk4aVIl1fM9RX2rFfsrSyKtfMafFp2UlGxPicDfT2Hm0j_;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 18:29:32 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1725'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999667'
-      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '200000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_dbcbb03a08704ba98d6aab6aac696cc3
+      x-request-id: req_30d865435aed4eb8acf40301c34af13a
     body:
       string: |-
         {
-          "id": "resp_0e8a1229805999310169020ae4dbbc81969694163216466114",
+          "id": "resp_05e9e5f4d7f825a0016a6f85819d38819d98942288af18f32f",
           "object": "response",
-          "created_at": 1761741540,
+          "created_at": 1785693569,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1785693572,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_0e8a1229805999310169020ae64a848196a4427210384b5a6c",
+              "id": "msg_05e9e5f4d7f825a0016a6f8581e900819d85321c378b88d8cb",
               "type": "message",
               "status": "completed",
               "content": [
@@ -206,14 +229,19 @@ http_interactions:
                   "text": "It is 2024-01-01."
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -227,11 +255,30 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [
             {
               "type": "function",
               "description": "Return the current date",
               "name": "current_date",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -245,6 +292,7 @@ http_interactions:
               "type": "function",
               "description": "Return the full name of the current month",
               "name": "current_month",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -256,104 +304,104 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 115,
+            "input_tokens": 112,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 12,
+            "output_tokens": 14,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 127
+            "total_tokens": 126
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-10-29 12:39:02
+  recorded_at: 2026-08-02 17:59:32
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
         use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
-        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_0cff3ff9cdc4aa9c0169020ae43a7081958027e09bf535d890","name":"current_date","arguments":"{}"},{"type":"function_call","call_id":"fc_0cff3ff9cdc4aa9c0169020ae456f081959beaf0b0219cfa68","name":"current_month","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0cff3ff9cdc4aa9c0169020ae43a7081958027e09bf535d890","output":"2024-01-01"},{"type":"function_call_output","call_id":"fc_0cff3ff9cdc4aa9c0169020ae456f081959beaf0b0219cfa68","output":"February"},{"role":"assistant","content":[{"type":"output_text","text":"It
+        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","output":"2024-01-01"},{"role":"assistant","content":[{"type":"output_text","text":"It
         is 2024-01-01."}]},{"role":"user","content":[{"type":"input_text","text":"What
-        month is it? Provide the full name"}]}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
+        month is it? Provide the full name"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9962bbc0ae2c69d2-DFW
-      content-encoding: gzip
+      cf-ray: a24efa1ae8b61914-EWR
+      content-encoding: br
       content-type: application/json
-      date: Wed, 29 Oct 2025 12:39:03 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '1125'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Sun, 02 Aug 2026 17:59:33 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '872'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=s2nYiXLag32sdydjoLLmscmogTiVyqGq9qTu03tbybQ-1761741543-1.0.1.1-hlGwBVbRtZs1ks4YsvVBvfR2QlC8mWv_H5uWc2gkPx9vjUTzQT0Oht9eBm9AZoKo76wTXJVQeVYiNmcvuUWOmKD8ZzRbwMYXW91o6tbJyZw;
-        path=/; expires=Wed, 29-Oct-25 13:09:03 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=Fv.Ty26e.W0e23yQsSjaU5h_VqxU3Aa7oaBljaYIgDE-1761741543674-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=DjL9E9RA2id8VOUBZK5mQma5rLsrMcdCSelDPMEqFbo-1785693572.307673-1.0.1.1-5D.RFgj3BniarznaDWmC6io.lPON86UDT9xf_fo6bB9VOqM_eZSqq2MXoZ6ju7OsnWTARqvXFhcCwFRxVjOMotgc4flK4jAQub2t2W7_bBDuDiARp7WjUk30grNvcfrM;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 18:29:33 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1130'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999640'
-      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '200000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_a012e928f44748f9b0e9a4dcda689eb6
+      x-request-id: req_911858ec9b664aa698a34126f8705751
     body:
       string: |-
         {
-          "id": "resp_08a1b7c90fc8883a0169020ae694ec8194a1d1e6d8d54203c5",
+          "id": "resp_03185aed14e5c547016a6f85845f2481a1b5359a175b9bd3f6",
           "object": "response",
-          "created_at": 1761741542,
+          "created_at": 1785693572,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1785693573,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "moderation": null,
           "output": [
             {
-              "id": "fc_08a1b7c90fc8883a0169020ae750ec8194a45e9334f3cd739a",
+              "id": "fc_03185aed14e5c547016a6f85850b2c81a1924c6e37021e6e0f",
               "type": "function_call",
               "status": "completed",
               "arguments": "{}",
-              "call_id": "call_gPrQ5NdtZJFqTg2Jswnf3yGP",
+              "call_id": "call_BCvFVNBw4MMOEJ3ls6KaCx20",
               "name": "current_month"
-            },
-            {
-              "id": "fc_08a1b7c90fc8883a0169020ae793248194a3db5b3f503da72b",
-              "type": "function_call",
-              "status": "completed",
-              "arguments": "{}",
-              "call_id": "call_1AoKQZV2YS83zhEbpKoz8AjL",
-              "name": "current_date"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -367,11 +415,30 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [
             {
               "type": "function",
               "description": "Return the current date",
               "name": "current_date",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -385,6 +452,7 @@ http_interactions:
               "type": "function",
               "description": "Return the full name of the current month",
               "name": "current_month",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -396,84 +464,88 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 71,
+            "input_tokens": 141,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 40,
+            "output_tokens": 14,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 111
+            "total_tokens": 155
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-10-29 12:39:03
+  recorded_at: 2026-08-02 17:59:33
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
         use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
-        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_0cff3ff9cdc4aa9c0169020ae43a7081958027e09bf535d890","name":"current_date","arguments":"{}"},{"type":"function_call","call_id":"fc_0cff3ff9cdc4aa9c0169020ae456f081959beaf0b0219cfa68","name":"current_month","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0cff3ff9cdc4aa9c0169020ae43a7081958027e09bf535d890","output":"2024-01-01"},{"type":"function_call_output","call_id":"fc_0cff3ff9cdc4aa9c0169020ae456f081959beaf0b0219cfa68","output":"February"},{"role":"assistant","content":[{"type":"output_text","text":"It
+        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","output":"2024-01-01"},{"role":"assistant","content":[{"type":"output_text","text":"It
         is 2024-01-01."}]},{"role":"user","content":[{"type":"input_text","text":"What
-        month is it? Provide the full name"}]},{"type":"function_call","call_id":"fc_08a1b7c90fc8883a0169020ae750ec8194a45e9334f3cd739a","name":"current_month","arguments":"{}"},{"type":"function_call","call_id":"fc_08a1b7c90fc8883a0169020ae793248194a3db5b3f503da72b","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_08a1b7c90fc8883a0169020ae750ec8194a45e9334f3cd739a","output":"February"},{"type":"function_call_output","call_id":"fc_08a1b7c90fc8883a0169020ae793248194a3db5b3f503da72b","output":"2024-01-01"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
+        month is it? Provide the full name"}]},{"type":"function_call","call_id":"fc_03185aed14e5c547016a6f85850b2c81a1924c6e37021e6e0f","name":"current_month","arguments":"{}"},{"type":"function_call_output","call_id":"fc_03185aed14e5c547016a6f85850b2c81a1924c6e37021e6e0f","output":"February"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 9962bbc8fc6c69d2-DFW
-      content-encoding: gzip
+      cf-ray: a24efa227bb01914-EWR
+      content-encoding: br
       content-type: application/json
-      date: Wed, 29 Oct 2025 12:39:05 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '803'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Sun, 02 Aug 2026 17:59:36 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '2753'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=eHa8ClJsoSUFKaX.msuoxnMvnFidpQzOOd9RBhrZCjE-1761741545-1.0.1.1-QNiw3p8VYB82a2iW5tjs0qTt11TuQ.SH2rURGT_KIOUJCqeC6kraxNRFvUM9YPORPejTL3owko5LhM0_aRA.h2IOFph3WiWhHKp7VfjIfpc;
-        path=/; expires=Wed, 29-Oct-25 13:09:05 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=OpaZTy8iI_kPDUv62T2tThyHSBAXAuJgLmR6FkLaegQ-1761741545201-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=Z.qG81vYPurqWmgCr7ZGds2afZnHfACNZjwsSNkiPv8-1785693573.51361-1.0.1.1-NgyXFG_hQtAjWQhi69dzIJrVGvqeCJ2W47MhcigZR10vh2CbcyNM.tB38hO3vUJ9lSX5QJQzg16VP3tGRc3Jt4c7z1xHjYA5C8qENlpVux6fDcWmeetK4WGIB4VpwyV2;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 18:29:36 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '807'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999602'
-      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '200000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_87d2a8ff4e9842e1a5d5b6977c41d03a
+      x-request-id: req_982344a500b047abb697f40bc76b0875
     body:
       string: |-
         {
-          "id": "resp_0c0085410ed75b610169020ae867e481949162ddf27e754bb1",
+          "id": "resp_01eaf567e5d3322f016a6f85858ec88191b41f0d50535bf7ce",
           "object": "response",
-          "created_at": 1761741544,
+          "created_at": 1785693573,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1785693576,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_0c0085410ed75b610169020ae913988194b45f22c8547616f1",
+              "id": "msg_01eaf567e5d3322f016a6f8587da188191a571523f060a47b3",
               "type": "message",
               "status": "completed",
               "content": [
@@ -484,14 +556,19 @@ http_interactions:
                   "text": "It is February."
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -505,11 +582,30 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [
             {
               "type": "function",
               "description": "Return the current date",
               "name": "current_date",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -523,6 +619,7 @@ http_interactions:
               "type": "function",
               "description": "Return the full name of the current month",
               "name": "current_month",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -534,21 +631,22 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 181,
+            "input_tokens": 167,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 6,
+            "output_tokens": 8,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 187
+            "total_tokens": 175
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-10-29 12:39:05
-recorded_with: VCR-vcr/2.0.0
+  recorded_at: 2026-08-02 17:59:36
+recorded_with: VCR-vcr/2.1.0
