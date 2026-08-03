@@ -158,7 +158,7 @@ the existing chat:</p>
 <span><span class="fu">capital</span><span class="op">(</span><span class="va">chat</span>, <span class="st">"New Zealand"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Wellington</span></span>
 <span><span class="fu">capital</span><span class="op">(</span><span class="va">chat</span>, <span class="st">"France"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Paris.</span></span>
+<span><span class="co">#&gt; Paris</span></span>
 <span></span>
 <span><span class="va">chat</span></span>
 <span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=1 input=0 output=0 cost=$0.00&gt;</span></span>
@@ -170,7 +170,7 @@ but diverge over time:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="st">"Be terse"</span>, model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span><span class="op">)</span></span>
 <span><span class="va">chat1</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"My name is Hadley and I'm a data scientist"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Hello, Hadley. How can I assist you today?</span></span>
+<span><span class="co">#&gt; Hello, Hadley! How can I assist you today?</span></span>
 <span><span class="va">chat2</span> <span class="op">&lt;-</span> <span class="va">chat1</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat1</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"what's my name?"</span><span class="op">)</span></span>
@@ -182,7 +182,7 @@ but diverge over time:</p>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; My name is Hadley and I'm a data scientist</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=23 output=13 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; Hello, Hadley. How can I assist you today?</span></span>
+<span><span class="co">#&gt; Hello, Hadley! How can I assist you today?</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; what's my name?</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=48 output=7 cost=$0.00] ───────────────────────────</span></span>
@@ -197,7 +197,7 @@ but diverge over time:</p>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; My name is Hadley and I'm a data scientist</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=23 output=13 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; Hello, Hadley. How can I assist you today?</span></span>
+<span><span class="co">#&gt; Hello, Hadley! How can I assist you today?</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; what's my job?</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=48 output=6 cost=$0.00] ───────────────────────────</span></span>
@@ -221,14 +221,14 @@ the conversational history:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="st">"Be terse"</span>, model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Pretend that the capital of New Zealand is Kiwicity"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Got it. The capital of New Zealand is Kiwicity.</span></span>
+<span><span class="co">#&gt; Understood. The capital of New Zealand is Kiwicity.</span></span>
 <span></span>
 <span><span class="va">capital</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">chat</span>, <span class="va">country</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">set_turns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="st">"What's the capital of {{country}}"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">capital</span><span class="op">(</span><span class="va">chat</span>, <span class="st">"New Zealand"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Wellington</span></span></code></pre></div>
+<span><span class="co">#&gt; Wellington.</span></span></code></pre></div>
 <p>This is particularly useful when you want to use a chat object just
 as a handle to an LLM, without actually caring about the existing
 conversation.</p>
@@ -254,7 +254,7 @@ both what we send and receive. You likely want
 <span>  <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="st">"What's the capital of {{country}}"</span><span class="op">)</span>, echo <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">capital</span><span class="op">(</span><span class="va">chat</span>, <span class="st">"France"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Paris</span></span></code></pre></div>
+<span><span class="co">#&gt; Paris.</span></span></code></pre></div>
 <p>Alternatively, if you want to embrace streaming in your UI, you may
 want to use <a href="https://posit-dev.github.io/shinychat/" class="external-link">shinychat</a> (for Shiny)
 or <a href="https://simonpcouch.github.io/streamy/" class="external-link">streamy</a> (for
@@ -281,11 +281,11 @@ calling to give the LLM the ability to access real randomness:</p>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Roll two dice and tell me the total</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=44 output=42 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: tool_001()</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: tool_001()</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: tool_001()</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: tool_001()</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: 5</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: 4</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: 5</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: 4</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=82 output=8 cost=$0.00] ───────────────────────────</span></span>
 <span><span class="co">#&gt; The total is 9.</span></span></code></pre></div>
 <p>You can get access to the underlying conversational turns with
@@ -299,13 +299,13 @@ calling to give the LLM the ability to access real randomness:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span>
 <span><span class="co">#&gt; &lt;Turn: <span style="color: #00BB00;">assistant</span>&gt;</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: tool_001()</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: tool_001()</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: tool_001()</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: tool_001()</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[3]]</span></span>
 <span><span class="co">#&gt; &lt;Turn: <span style="color: #0000BB;">user</span>&gt;</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: 5</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: 4</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: 5</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: 4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[4]]</span></span>
 <span><span class="co">#&gt; &lt;Turn: <span style="color: #00BB00;">assistant</span>&gt;</span></span>
@@ -318,7 +318,7 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt; &lt;ellmer::AssistantTurn&gt;</span></span>
 <span><span class="co">#&gt;  @ contents     :List of 2</span></span>
 <span><span class="co">#&gt;  .. $ : &lt;ellmer::ContentToolRequest&gt;</span></span>
-<span><span class="co">#&gt;  ..  ..@ id       : chr "fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c"</span></span>
+<span><span class="co">#&gt;  ..  ..@ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508"</span></span>
 <span><span class="co">#&gt;  ..  ..@ name     : chr "tool_001"</span></span>
 <span><span class="co">#&gt;  ..  ..@ arguments: Named list()</span></span>
 <span><span class="co">#&gt;  ..  ..@ tool     : &lt;ellmer::ToolDef&gt; function ()  </span></span>
@@ -333,7 +333,7 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt;  .. .. .. @ annotations: list()</span></span>
 <span><span class="co">#&gt;  ..  ..@ extra    : list()</span></span>
 <span><span class="co">#&gt;  .. $ : &lt;ellmer::ContentToolRequest&gt;</span></span>
-<span><span class="co">#&gt;  ..  ..@ id       : chr "fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9"</span></span>
+<span><span class="co">#&gt;  ..  ..@ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca"</span></span>
 <span><span class="co">#&gt;  ..  ..@ name     : chr "tool_001"</span></span>
 <span><span class="co">#&gt;  ..  ..@ arguments: Named list()</span></span>
 <span><span class="co">#&gt;  ..  ..@ tool     : &lt;ellmer::ToolDef&gt; function ()  </span></span>
@@ -350,14 +350,14 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt;  @ text         : chr ""</span></span>
 <span><span class="co">#&gt;  @ role         : chr "assistant"</span></span>
 <span><span class="co">#&gt;  @ json         :List of 36</span></span>
-<span><span class="co">#&gt;  .. $ id                    : chr "resp_0b7e98be9a085160016a422b84b57881a183da6d9d7a242ab8"</span></span>
+<span><span class="co">#&gt;  .. $ id                    : chr "resp_0d88ba63cd1f5915016a6fc5f9d5f08190ada4d225dc2797e7"</span></span>
 <span><span class="co">#&gt;  .. $ object                : chr "response"</span></span>
-<span><span class="co">#&gt;  .. $ created_at            : int 1782721412</span></span>
+<span><span class="co">#&gt;  .. $ created_at            : int 1785710073</span></span>
 <span><span class="co">#&gt;  .. $ status                : chr "completed"</span></span>
 <span><span class="co">#&gt;  .. $ background            : logi FALSE</span></span>
 <span><span class="co">#&gt;  .. $ billing               :List of 1</span></span>
 <span><span class="co">#&gt;  ..  ..$ payer: chr "developer"</span></span>
-<span><span class="co">#&gt;  .. $ completed_at          : int 1782721413</span></span>
+<span><span class="co">#&gt;  .. $ completed_at          : int 1785710074</span></span>
 <span><span class="co">#&gt;  .. $ error                 : NULL</span></span>
 <span><span class="co">#&gt;  .. $ frequency_penalty     : num 0</span></span>
 <span><span class="co">#&gt;  .. $ incomplete_details    : NULL</span></span>
@@ -368,18 +368,18 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt;  .. $ moderation            : NULL</span></span>
 <span><span class="co">#&gt;  .. $ output                :List of 2</span></span>
 <span><span class="co">#&gt;  ..  ..$ :List of 6</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ id       : chr "fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ type     : chr "function_call"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ status   : chr "completed"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ arguments: chr "{}"</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ call_id  : chr "call_WYxSlE3oJGaphda2Fd0ue0T3"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ call_id  : chr "call_kRB7ZaqK7VSV4Tr7QF3Nnk18"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ name     : chr "tool_001"</span></span>
 <span><span class="co">#&gt;  ..  ..$ :List of 6</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ id       : chr "fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ type     : chr "function_call"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ status   : chr "completed"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ arguments: chr "{}"</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ call_id  : chr "call_TCXYc7SBI0v40cqm7Do3VndD"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ call_id  : chr "call_PuVkqi6png5TLdhZotjQblIK"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ name     : chr "tool_001"</span></span>
 <span><span class="co">#&gt;  .. $ parallel_tool_calls   : logi TRUE</span></span>
 <span><span class="co">#&gt;  .. $ presence_penalty      : num 0</span></span>
@@ -413,24 +413,26 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt;  ..  ..$ web_search:List of 1</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ num_requests: int 0</span></span>
 <span><span class="co">#&gt;  .. $ tools                 :List of 1</span></span>
-<span><span class="co">#&gt;  ..  ..$ :List of 5</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ type       : chr "function"</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ description: chr "Roll a die"</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ name       : chr "tool_001"</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ parameters :List of 5</span></span>
+<span><span class="co">#&gt;  ..  ..$ :List of 6</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ type         : chr "function"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ description  : chr "Roll a die"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ name         : chr "tool_001"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ output_schema: NULL</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ parameters   :List of 5</span></span>
 <span><span class="co">#&gt;  ..  .. .. ..$ type                : chr "object"</span></span>
 <span><span class="co">#&gt;  ..  .. .. ..$ description         : chr ""</span></span>
 <span><span class="co">#&gt;  ..  .. .. ..$ properties          : Named list()</span></span>
 <span><span class="co">#&gt;  ..  .. .. ..$ required            : list()</span></span>
 <span><span class="co">#&gt;  ..  .. .. ..$ additionalProperties: logi FALSE</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ strict     : logi TRUE</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ strict       : logi TRUE</span></span>
 <span><span class="co">#&gt;  .. $ top_logprobs          : int 0</span></span>
 <span><span class="co">#&gt;  .. $ top_p                 : num 1</span></span>
 <span><span class="co">#&gt;  .. $ truncation            : chr "disabled"</span></span>
 <span><span class="co">#&gt;  .. $ usage                 :List of 5</span></span>
 <span><span class="co">#&gt;  ..  ..$ input_tokens         : int 44</span></span>
-<span><span class="co">#&gt;  ..  ..$ input_tokens_details :List of 1</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ cached_tokens: int 0</span></span>
+<span><span class="co">#&gt;  ..  ..$ input_tokens_details :List of 2</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ cache_write_tokens: int 0</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ cached_tokens     : int 0</span></span>
 <span><span class="co">#&gt;  ..  ..$ output_tokens        : int 42</span></span>
 <span><span class="co">#&gt;  ..  ..$ output_tokens_details:List of 1</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ reasoning_tokens: int 0</span></span>

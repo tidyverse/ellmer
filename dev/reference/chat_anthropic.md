@@ -65,7 +65,7 @@ models_anthropic(
 
 - model:
 
-  The model to use for the chat (defaults to "claude-sonnet-4-6"). We
+  The model to use for the chat (defaults to "claude-sonnet-5"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use. Use
   `models_anthropic()` to see all options.
@@ -199,20 +199,22 @@ Other chatbots:
 
 ``` r
 chat <- chat_anthropic()
-#> Using model = "claude-sonnet-4-6".
+#> Using model = "claude-sonnet-5".
 chat$chat("Tell me three jokes about statisticians")
-#> Here are three jokes about statisticians:
+#> Here are three statistician jokes for you:
 #> 
-#> 1. **A statistician drowned crossing a river that was, on average, 3 
-#> feet deep.**
+#> 1. A statistician's wife has twins. He is delighted. He tells the 
+#> vicar he'll be baptizing them separately. "Why?" asks the vicar. 
+#> "Because," the statistician replies, "I hate sampling with 
+#> replacement."
 #> 
-#> 2. **A statistician's wife had twins. He called his friend excitedly 
-#> to share the news. His friend said, "That's great! What did you name 
-#> them?" The statistician replied, "Well, I named one of them. I'll name
-#> the other one when we have another child."**
+#> 2. Three statisticians go hunting. They spot a deer. The first one 
+#> shoots and misses by a foot to the left. The second shoots and misses 
+#> by a foot to the right. The third one yells, "We got it!"
 #> 
-#> 3. **How many statisticians does it take to change a light bulb?**
-#> *One — plus or minus three.*
+#> 3. A statistician can have their head in an oven and feet in ice, and 
+#> they'll say on average they feel fine.
 #> 
-#> Hope those gave you at least an average number of laughs! 😄
+#> Want a few more, or maybe some on a specific topic like regression or 
+#> p-values?
 ```

@@ -141,26 +141,20 @@ meaningful when <code>read_only_hint</code> is <code>FALSE</code>.)</p></dd>
 <span class="r-in"><span><span class="va">tool_rnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="tool.html">tool</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">rnorm</span>,</span></span>
 <span class="r-in"><span>  <span class="co"># Describe the tool function to the LLM</span></span></span>
-<span class="r-in"><span>  .description <span class="op">=</span> <span class="st">"Drawn numbers from a random normal distribution"</span>,</span></span>
+<span class="r-in"><span>  description <span class="op">=</span> <span class="st">"Drawn numbers from a random normal distribution"</span>,</span></span>
 <span class="r-in"><span>  <span class="co"># Describe the parameters used by the tool function</span></span></span>
-<span class="r-in"><span>  n <span class="op">=</span> <span class="fu"><a href="type_boolean.html">type_integer</a></span><span class="op">(</span><span class="st">"The number of observations. Must be a positive integer."</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  mean <span class="op">=</span> <span class="fu"><a href="type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"The mean value of the distribution."</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  sd <span class="op">=</span> <span class="fu"><a href="type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"The standard deviation of the distribution. Must be a non-negative number."</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    n <span class="op">=</span> <span class="fu"><a href="type_boolean.html">type_integer</a></span><span class="op">(</span><span class="st">"The number of observations. Must be a positive integer."</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    mean <span class="op">=</span> <span class="fu"><a href="type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"The mean value of the distribution."</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    sd <span class="op">=</span> <span class="fu"><a href="type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"The standard deviation of the distribution. Must be a non-negative number."</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="co"># Tool annotations optionally provide additional context to the LLM</span></span></span>
-<span class="r-in"><span>  .annotations <span class="op">=</span> <span class="fu">tool_annotations</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  annotations <span class="op">=</span> <span class="fu">tool_annotations</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    title <span class="op">=</span> <span class="st">"Draw Random Normal Numbers"</span>,</span></span>
 <span class="r-in"><span>    read_only_hint <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># the tool does not modify any state</span></span></span>
 <span class="r-in"><span>    open_world_hint <span class="op">=</span> <span class="cn">FALSE</span> <span class="co"># the tool does not interact with the outside world</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The `...` argument of `tool()` is deprecated as of ellmer 0.3.0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use the `arguments` argument instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The `.description` argument of `tool()` is deprecated as of ellmer</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> 0.3.0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use the `description` argument instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The `.annotations` argument of `tool()` is deprecated as of ellmer</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> 0.3.0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use the `annotations` argument instead.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -52,7 +52,7 @@ models_posit(base_url = "https://gateway.posit.ai", credentials = NULL)
 
 - model:
 
-  The model to use for the chat (defaults to "claude-sonnet-4-6"). We
+  The model to use for the chat (defaults to "claude-sonnet-5"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use. Use
   `models_posit()` to see all options.

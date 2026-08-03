@@ -6,6 +6,17 @@
   tokens in new input using the provider’s token counting endpoint
   ([@thisisnic](https://github.com/thisisnic),
   [\#814](https://github.com/tidyverse/ellmer/issues/814)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md),
+  [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md),
+  and
+  [`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
+  now default to `claude-sonnet-5`.
+  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  and
+  [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
+  now default to `gpt-5.6-terra`
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1066](https://github.com/tidyverse/ellmer/issues/1066)).
 - [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   now correctly handles the `fallback` content block returned when a
   model’s server-side refusal fallback

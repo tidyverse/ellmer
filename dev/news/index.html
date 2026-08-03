@@ -57,6 +57,8 @@
 <ul><li>
 <code>Chat</code> gains a <code>$token_count()</code> method that estimates the number of tokens in new input using the provider’s token counting endpoint (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/814" class="external-link">#814</a>).</li>
 <li>
+<code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code>, <code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code>, and <code><a href="../reference/chat_posit.html">chat_posit()</a></code> now default to <code>claude-sonnet-5</code>. <code><a href="../reference/chat_openai.html">chat_openai()</a></code> and <code><a href="../reference/chat_openrouter.html">chat_openrouter()</a></code> now default to <code>gpt-5.6-terra</code> (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1066" class="external-link">#1066</a>).</li>
+<li>
 <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> now correctly handles the <code>fallback</code> content block returned when a model’s server-side refusal fallback (<code>server-side-fallback-2026-06-01</code>) is triggered (<a href="https://github.com/simonpcouch" class="external-link">@simonpcouch</a>, <a href="https://github.com/tidyverse/ellmer/issues/1058" class="external-link">#1058</a>).</li>
 <li>
 <code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> now supports bearer token authentication for enterprise API gateways (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1002" class="external-link">#1002</a>).</li>
