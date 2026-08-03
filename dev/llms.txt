@@ -438,8 +438,12 @@ need to learn more about the objects if you’re doing something that’s
 only supported by one provider, or if you’re implementing a new
 provider.
 
+- [`Chat`](https://ellmer.tidyverse.org/dev/reference/Chat.md) : The
+  Chat object
 - [`Provider()`](https://ellmer.tidyverse.org/dev/reference/Provider.md)
   : A chatbot provider
+- [`ToolDef()`](https://ellmer.tidyverse.org/dev/reference/ToolDef.md) :
+  A tool definition
 - [`Turn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)
   [`UserTurn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)
   [`SystemTurn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)

@@ -7,10 +7,19 @@ Converse API.
 Authentication
 
 
-Authentication is handled through {paws.common}, so if authentication
-does not work for you automatically, you'll need to follow the advice
-at https://www.paws-r-sdk.com/#credentials. In particular, if your
-org uses AWS SSO, you'll need to run aws sso login at the terminal.
+chat_aws_bedrock() uses {paws.common} to resolve credentials,
+trying the following strategies in order:
+A bearer token set in the AWS_BEARER_TOKEN_BEDROCK or
+AWS_BEARER_TOKEN environment variable. This is used by enterprise
+API gateways that issue API keys instead of IAM credentials. See the
+AWS documentation
+for details.
+Standard IAM credentials resolved from environment variables, AWS
+config files, SSO, or instance metadata. See
+https://www.paws-r-sdk.com/#credentials for details. If your org
+uses AWS SSO, you'll need to run aws sso login at the terminal.
+
+
 
 
 
@@ -39,10 +48,19 @@ Converse API.
 Authentication
 
 
-Authentication is handled through {paws.common}, so if authentication
-does not work for you automatically, you'll need to follow the advice
-at https://www.paws-r-sdk.com/#credentials. In particular, if your
-org uses AWS SSO, you'll need to run aws sso login at the terminal.
+chat_aws_bedrock() uses {paws.common} to resolve credentials,
+trying the following strategies in order:
+A bearer token set in the AWS_BEARER_TOKEN_BEDROCK or
+AWS_BEARER_TOKEN environment variable. This is used by enterprise
+API gateways that issue API keys instead of IAM credentials. See the
+AWS documentation
+for details.
+Standard IAM credentials resolved from environment variables, AWS
+config files, SSO, or instance metadata. See
+https://www.paws-r-sdk.com/#credentials for details. If your org
+uses AWS SSO, you'll need to run aws sso login at the terminal.
+
+
 
 
 
@@ -126,11 +144,17 @@ language models, including those from Anthropic's
 <h3 id="authentication">Authentication<a class="anchor" aria-label="anchor" href="#authentication"></a></h3>
 
 
-<p>Authentication is handled through {paws.common}, so if authentication
-does not work for you automatically, you'll need to follow the advice
-at <a href="https://www.paws-r-sdk.com/#credentials" class="external-link">https://www.paws-r-sdk.com/#credentials</a>. In particular, if your
-org uses AWS SSO, you'll need to run <code>aws sso login</code> at the terminal.</p>
-</div>
+<p><code>chat_aws_bedrock()</code> uses {paws.common} to resolve credentials,
+trying the following strategies in order:</p><ul><li><p>A bearer token set in the <code>AWS_BEARER_TOKEN_BEDROCK</code> or
+<code>AWS_BEARER_TOKEN</code> environment variable. This is used by enterprise
+API gateways that issue API keys instead of IAM credentials. See the
+<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-use.html" class="external-link">AWS documentation</a>
+for details.</p></li>
+<li><p>Standard IAM credentials resolved from environment variables, AWS
+config files, SSO, or instance metadata. See
+<a href="https://www.paws-r-sdk.com/#credentials" class="external-link">https://www.paws-r-sdk.com/#credentials</a> for details. If your org
+uses AWS SSO, you'll need to run <code>aws sso login</code> at the terminal.</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="prompt-caching">Prompt caching<a class="anchor" aria-label="anchor" href="#prompt-caching"></a></h3>

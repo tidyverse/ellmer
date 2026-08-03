@@ -6,6 +6,10 @@
   tokens in new input using the provider’s token counting endpoint
   ([@thisisnic](https://github.com/thisisnic),
   [\#814](https://github.com/tidyverse/ellmer/issues/814)).
+- [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
+  now supports bearer token authentication for enterprise API gateways
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1002](https://github.com/tidyverse/ellmer/issues/1002)).
 - [`chat_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
   and
   [`models_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
@@ -1234,8 +1238,8 @@ CRAN release: 2025-01-09
 
 - The general `ToolArg()` has been replaced by the more specific
   `type_*()` functions.
-  [`ToolDef()`](https://ellmer.tidyverse.org/dev/reference/tool.md) has
-  been renamed to `tool`.
+  [`ToolDef()`](https://ellmer.tidyverse.org/dev/reference/ToolDef.md)
+  has been renamed to `tool`.
 
 - [`content_image_url()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
   will now create inline images when given a data url
