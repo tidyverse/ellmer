@@ -16,14 +16,16 @@ NULL
 #' an OpenAI-compatible API from another provider, or the **chat completions**
 #' API with OpenAI,use [chat_openai_compatible()] instead.
 #'
-#' Note that a ChatGPT Plus membership does not grant access to the API.
-#' You will need to sign up for a developer account (and pay for it) at the
-#' [developer platform](https://platform.openai.com).
+#' By default, `chat_openai()` uses an API key from the
+#' [developer platform](https://platform.openai.com). Set `auth = "codex"` to
+#' instead use a ChatGPT subscription already authenticated by Codex CLI.
 #'
 #' @param system_prompt A system prompt to set the behavior of the assistant.
 #' @param base_url The base URL to the API endpoint.
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("OPENAI_API_KEY")`
+#' @param auth Authentication method. Use `"api-key"` for the OpenAI API or
+#'   `"codex"` for file-backed ChatGPT authentication managed by Codex CLI.
 #' @param model `r param_model("gpt-5.4", "openai")`
 #' @param params Common model parameters, usually created by [params()].
 #' @param api_args Named list of arbitrary extra arguments appended to the body
@@ -66,18 +68,42 @@ chat_openai <- function(
   api_args = list(),
   api_headers = character(),
   service_tier = c("auto", "default", "flex", "priority"),
-  echo = c("none", "output", "all")
+  echo = c("none", "output", "all"),
+  auth = c("api-key", "codex")
 ) {
+  service_tier_supplied <- !missing(service_tier)
   model <- set_default(model, "gpt-5.4")
   echo <- check_echo(echo)
   service_tier <- arg_match(service_tier)
+  auth <- arg_match(auth)
 
-  credentials <- as_credentials(
-    "chat_openai",
-    \() openai_key(),
-    credentials = credentials,
-    api_key = api_key
-  )
+  if (auth == "codex") {
+    if (!is.null(api_key) || !is.null(credentials)) {
+      cli::cli_abort(
+        "Can't supply {.arg api_key} or {.arg credentials} when {.code auth = \"codex\"}."
+      )
+    }
+    if (!missing(base_url)) {
+      cli::cli_abort(
+        "Can't supply {.arg base_url} when {.code auth = \"codex\"}."
+      )
+    }
+    if (service_tier_supplied) {
+      cli::cli_abort(
+        "Can't supply {.arg service_tier} when {.code auth = \"codex\"}."
+      )
+    }
+    base_url <- "https://chatgpt.com/backend-api/codex"
+    credentials <- codex_credentials
+    api_headers[["originator"]] <- "ellmer"
+  } else {
+    credentials <- as_credentials(
+      "chat_openai",
+      \() openai_key(),
+      credentials = credentials,
+      api_key = api_key
+    )
+  }
 
   provider <- ProviderOpenAI(
     name = "OpenAI",
@@ -87,7 +113,8 @@ chat_openai <- function(
     extra_args = api_args,
     extra_headers = api_headers,
     credentials = credentials,
-    service_tier = service_tier
+    service_tier = service_tier,
+    auth = auth
   )
   Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
 }
@@ -139,10 +166,10 @@ ProviderOpenAI <- new_class(
   "ProviderOpenAI",
   parent = ProviderOpenAICompatible,
   properties = list(
-    service_tier = class_character
+    service_tier = class_character,
+    auth = prop_string("api-key")
   )
 )
-
 
 # Chat endpoint ----------------------------------------------------------------
 
@@ -204,7 +231,7 @@ method(chat_body, ProviderOpenAI) <- function(
     text = text,
     reasoning = reasoning,
     store = FALSE,
-    service_tier = provider@service_tier
+    service_tier = if (provider@auth == "api-key") provider@service_tier
   ))
 }
 
@@ -246,8 +273,16 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
   result,
   chunk
 ) {
-  if (chunk$type %in% c("response.completed", "response.incomplete")) {
-    chunk$response
+  if (provider@auth == "codex" && chunk$type == "response.output_item.done") {
+    result <- result %||% list()
+    result$output <- c(result$output, list(chunk$item))
+    result
+  } else if (chunk$type %in% c("response.completed", "response.incomplete")) {
+    response <- chunk$response
+    if (provider@auth == "codex") {
+      response$output <- result$output %||% response$output
+    }
+    response
   } else if (chunk$type == "response.failed") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/failed
     error <- chunk$response$error
@@ -256,6 +291,8 @@ method(stream_merge_chunks, ProviderOpenAI) <- function(
     # https://platform.openai.com/docs/api-reference/responses-streaming/error
     error <- chunk$error
     cli::cli_abort(c("Request errored ({error$type})", "{error$message}"))
+  } else if (provider@auth == "codex") {
+    result
   }
 }
 
@@ -340,7 +377,11 @@ method(value_turn, ProviderOpenAI) <- function(
 
   tokens <- value_tokens(provider, result)
   variant <- result$service_tier %||% "default"
-  cost <- get_token_cost(provider, tokens, variant = variant)
+  cost <- if (provider@auth == "codex") {
+    dollars(0)
+  } else {
+    get_token_cost(provider, tokens, variant = variant)
+  }
   AssistantTurn(
     contents = contents,
     json = result,
@@ -393,7 +434,7 @@ method(count_tokens, ProviderOpenAI) <- function(
   req <- req_body_json(req, body)
   req <- req_headers(req, !!!provider@extra_headers)
 
-  resp <- req_perform(req)
+  resp <- req_perform_reauthenticate(provider, req, req_perform)
   resp_body_json(resp)$input_tokens
 }
 
@@ -519,7 +560,7 @@ method(as_json, list(ProviderOpenAI, ToolDef)) <- function(
 # Batched requests -------------------------------------------------------------
 
 method(has_batch_support, ProviderOpenAI) <- function(provider) {
-  TRUE
+  provider@auth != "codex"
 }
 
 # https://platform.openai.com/docs/api-reference/batch

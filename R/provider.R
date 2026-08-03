@@ -74,6 +74,15 @@ chat_request <- new_generic(
   }
 )
 
+requires_stream <- new_generic(
+  "requires_stream",
+  "provider",
+  function(provider) S7_dispatch()
+)
+method(requires_stream, Provider) <- function(provider) {
+  FALSE
+}
+
 method(chat_request, Provider) <- function(
   provider,
   stream = TRUE,

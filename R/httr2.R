@@ -26,14 +26,18 @@ chat_perform <- function(
 
   switch(
     mode,
-    "value" = req_perform(req),
+    "value" = req_perform_reauthenticate(provider, req, req_perform),
     "stream" = chat_perform_stream(
       provider,
       req,
       controller = controller,
       otel_span = otel_span
     ),
-    "async-value" = req_perform_promise(req),
+    "async-value" = req_perform_reauthenticate_promise(
+      provider,
+      req,
+      req_perform_promise
+    ),
     "async-stream" = chat_perform_async_stream(
       provider,
       req,
@@ -52,7 +56,11 @@ on_load(
   ) {
     setup_active_promise_otel_span(otel_span)
 
-    resp <- req_perform_connection(req)
+    resp <- req_perform_reauthenticate(
+      provider,
+      req,
+      req_perform_connection
+    )
     on.exit(close(resp))
 
     repeat {
@@ -79,7 +87,11 @@ on_load(
   ) {
     setup_active_promise_otel_span(otel_span)
 
-    resp <- req_perform_connection(req, blocking = FALSE)
+    resp <- req_perform_reauthenticate(
+      provider,
+      req,
+      \(req) req_perform_connection(req, blocking = FALSE)
+    )
     on.exit(close(resp))
 
     repeat {
@@ -110,6 +122,32 @@ on_load(
     }
   })
 )
+
+req_perform_reauthenticate <- function(provider, req, perform) {
+  tryCatch(
+    perform(req),
+    httr2_http_401 = function(cnd) {
+      req <- request_reauthenticate(provider, req)
+      if (is.null(req)) {
+        cnd_signal(cnd)
+      }
+      perform(req)
+    }
+  )
+}
+
+req_perform_reauthenticate_promise <- function(provider, req, perform) {
+  promises::catch(perform(req), function(cnd) {
+    if (!inherits(cnd, "httr2_http_401")) {
+      cnd_signal(cnd)
+    }
+    req <- request_reauthenticate(provider, req)
+    if (is.null(req)) {
+      cnd_signal(cnd)
+    }
+    perform(req)
+  })
+}
 
 # Request helpers --------------------------------------------------------------
 
