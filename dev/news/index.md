@@ -6,6 +6,12 @@
   tokens in new input using the provider’s token counting endpoint
   ([@thisisnic](https://github.com/thisisnic),
   [\#814](https://github.com/tidyverse/ellmer/issues/814)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  now correctly handles the `fallback` content block returned when a
+  model’s server-side refusal fallback
+  (`server-side-fallback-2026-06-01`) is triggered
+  ([@simonpcouch](https://github.com/simonpcouch),
+  [\#1058](https://github.com/tidyverse/ellmer/issues/1058)).
 - [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
   now supports bearer token authentication for enterprise API gateways
   ([@thisisnic](https://github.com/thisisnic),
