@@ -33,6 +33,11 @@
   are now defunct because GitHub Models has been retired
   ([@thisisnic](https://github.com/thisisnic),
   [\#1069](https://github.com/tidyverse/ellmer/issues/1069)).
+- [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  no longer errors when mixing regular tools and built-in tools like
+  [`google_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/google_tool_web_search.md)
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1054](https://github.com/tidyverse/ellmer/issues/1054)).
 - [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
   now correctly preserves provider error messages
   ([@xmarquez](https://github.com/xmarquez),
