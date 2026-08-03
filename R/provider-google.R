@@ -237,6 +237,9 @@ method(chat_body, ProviderGoogleGemini) <- function(
   tool_config <- NULL
   if (length(tools) > 0) {
     is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
+    # Mixing built-in and custom tools on Gemini 3+ requires setting
+    # `includeServerSideToolInvocations`. This is only supported by the
+    # Gemini Developer API; Vertex AI rejects the field.
     if (
       any(is_builtin) &&
         !all(is_builtin) &&
@@ -1245,7 +1248,6 @@ gemini_normalize_result <- function(x, index_default) {
 }
 
 has_google_mixed_tool_support <- function(provider) {
-  # Only the Gemini Developer API supports this; Vertex AI raises an error
   identical(provider@name, "Google/Gemini") &&
     grepl("^gemini-([3-9]|[0-9]{2,})", provider@model)
 }
