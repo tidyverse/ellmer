@@ -83,11 +83,6 @@ prices <- function() {
 #'   fails or if the \pkg{curl} package is not installed.
 #' @export
 models_update_prices <- function() {
-  if (!requireNamespace("curl", quietly = TRUE)) {
-    cli::cli_abort(
-      "The {.pkg curl} package is required to update pricing data."
-    )
-  }
   if (isTRUE(prices_cache_download())) {
     the$prices <- NULL
     prices()
@@ -114,7 +109,8 @@ curl_fetch_memory <- function(url, handle) {
   curl::curl_fetch_memory(url, handle = handle)
 }
 
-prices_cache_download <- function() {
+prices_cache_download <- function(call = caller_env()) {
+  force(call)
   url <- "https://raw.githubusercontent.com/tidyverse/ellmer/refs/heads/main/data-raw/prices.json"
 
   handle <- curl::new_handle()
@@ -123,8 +119,6 @@ prices_cache_download <- function() {
   if (!is.null(etag)) {
     curl::handle_setheaders(handle, `If-None-Match` = etag)
   }
-
-  call <- rlang::caller_env()
 
   resp <- tryCatch(
     curl_fetch_memory(url, handle = handle),
