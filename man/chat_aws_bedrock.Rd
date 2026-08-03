@@ -87,10 +87,19 @@ language models, including those from Anthropic's
 \href{https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html}{Converse API}.
 \subsection{Authentication}{
 
-Authentication is handled through \{paws.common\}, so if authentication
-does not work for you automatically, you'll need to follow the advice
-at \url{https://www.paws-r-sdk.com/#credentials}. In particular, if your
-org uses AWS SSO, you'll need to run \verb{aws sso login} at the terminal.
+\code{chat_aws_bedrock()} uses \{paws.common\} to resolve credentials,
+trying the following strategies in order:
+\itemize{
+\item A bearer token set in the \code{AWS_BEARER_TOKEN_BEDROCK} or
+\code{AWS_BEARER_TOKEN} environment variable. This is used by enterprise
+API gateways that issue API keys instead of IAM credentials. See the
+\href{https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-use.html}{AWS documentation}
+for details.
+\item Standard IAM credentials resolved from environment variables, AWS
+config files, SSO, or instance metadata. See
+\url{https://www.paws-r-sdk.com/#credentials} for details. If your org
+uses AWS SSO, you'll need to run \verb{aws sso login} at the terminal.
+}
 }
 
 \subsection{Prompt caching}{

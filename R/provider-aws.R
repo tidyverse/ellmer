@@ -16,10 +16,18 @@ NULL
 #'
 #' ## Authentication
 #'
-#' Authentication is handled through \{paws.common\}, so if authentication
-#' does not work for you automatically, you'll need to follow the advice
-#' at <https://www.paws-r-sdk.com/#credentials>. In particular, if your
-#' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
+#' `chat_aws_bedrock()` uses \{paws.common\} to resolve credentials,
+#' trying the following strategies in order:
+#'
+#' - A bearer token set in the `AWS_BEARER_TOKEN_BEDROCK` or
+#'   `AWS_BEARER_TOKEN` environment variable. This is used by enterprise
+#'   API gateways that issue API keys instead of IAM credentials. See the
+#'   [AWS documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-use.html)
+#'   for details.
+#' - Standard IAM credentials resolved from environment variables, AWS
+#'   config files, SSO, or instance metadata. See
+#'   <https://www.paws-r-sdk.com/#credentials> for details. If your org
+#'   uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 #'
 #' ## Prompt caching
 #'
@@ -212,12 +220,16 @@ method(base_request, ProviderAWSBedrock) <- function(provider) {
   creds <- paws_credentials(provider@profile, provider@cache)
 
   req <- request(provider@base_url)
-  req <- req_auth_aws_v4(
-    req,
-    aws_access_key_id = creds$access_key_id,
-    aws_secret_access_key = creds$secret_access_key,
-    aws_session_token = creds$session_token
-  )
+  if (nzchar(creds$access_token)) {
+    req <- req_auth_bearer_token(req, creds$access_token)
+  } else {
+    req <- req_auth_aws_v4(
+      req,
+      aws_access_key_id = creds$access_key_id,
+      aws_secret_access_key = creds$secret_access_key,
+      aws_session_token = creds$session_token
+    )
+  }
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- base_request_error(provider, req)
@@ -677,7 +689,7 @@ paws_credentials <- function(
 
 # Wrapper for paws.common::locate_credentials() so we can mock it in tests.
 locate_aws_credentials <- function(profile) {
-  paws.common::locate_credentials(profile)
+  paws.common::locate_credentials(profile, signing_name = "bedrock")
 }
 
 aws_creds_cache <- function(profile) {

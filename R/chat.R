@@ -14,6 +14,7 @@ NULL
 #' You should generally not create this object yourself,
 #' but instead call [chat_openai()] or friends instead.
 #'
+#' @export
 #' @return A Chat object
 #' @examples
 #' \dontshow{ellmer:::vcr_example_start("Chat")}
