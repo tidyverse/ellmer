@@ -110,6 +110,7 @@ reference:
   contents:
   - contents_text
   - contents_record
+  - contents_trajectory
   - df_schema
   - params
 
