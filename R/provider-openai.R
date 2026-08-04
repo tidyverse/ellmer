@@ -410,11 +410,41 @@ method(value_turn, ProviderOpenAI) <- function(
       )
       list(request, response)
     } else if (output$type == "mcp_approval_request") {
-      cli::cli_abort(c(
-        "MCP approval requests are not supported.",
-        i = "MCP approval requests are not yet supported by ellmer.",
-        i = "If you set {.code require_approval = \"always\"}, change it to {.code \"never\"}."
-      ))
+      # ellmer doesn't support interactive MCP approval, so it automatically
+      # rejects the request (an `mcp_approval_response` with `approve =
+      # FALSE`) and reports the rejection to the model as a failed tool
+      # call, the same way a local tool error would be reported.
+      server_name <- output$server_label %||% ""
+      arguments <- jsonlite::parse_json(output$arguments %||% "{}")
+      input <- if (is.list(arguments)) arguments else list(arguments)
+      error_text <- paste(
+        "MCP approval requests are not supported by ellmer.",
+        "Set `require_approval = \"never\"` when creating the MCP connector to avoid this error."
+      )
+      request <- ContentMcpToolRequest(
+        id = output$id,
+        name = output$name,
+        arguments = input,
+        tool = mcp_tool_def(output$name, server_name),
+        server_name = server_name,
+        json = output
+      )
+      response <- ContentMcpToolResult(
+        value = NULL,
+        error = error_text,
+        request = ContentToolRequest(
+          id = output$id,
+          name = output$name %||% "",
+          arguments = input
+        ),
+        content = list(list(type = "text", text = error_text)),
+        json = list(
+          type = "mcp_approval_response",
+          approve = FALSE,
+          approval_request_id = output$id
+        )
+      )
+      list(request, response)
     } else {
       cli::cli_abort(
         "Unknown content type {.str {output$type}}.",
@@ -601,7 +631,15 @@ method(as_json, list(ProviderOpenAI, ContentMcpToolResult)) <- function(
   x,
   ...
 ) {
-  NULL
+  # Real `mcp_call` results are merged with their request into a single
+  # completed item (see `as_json(ProviderOpenAI, ContentMcpToolRequest)`),
+  # so there's nothing further to send. A rejected `mcp_approval_request`,
+  # however, needs its own `mcp_approval_response` item.
+  if (identical(x@json$type, "mcp_approval_response")) {
+    x@json
+  } else {
+    NULL
+  }
 }
 
 method(as_json, list(ProviderOpenAI, ToolDef)) <- function(
@@ -790,7 +828,8 @@ method(batch_result_turn, ProviderOpenAI) <- function(
 mcp_error_text <- function(error) {
   blocks <- error$content %||% list()
   texts <- vapply(blocks, function(b) b$text %||% "", character(1))
-  paste(texts[nzchar(texts)], collapse = "\n")
+  text <- paste(texts[nzchar(texts)], collapse = "\n")
+  if (nzchar(text)) text else "MCP tool call failed."
 }
 
 is_openai_reasoning <- function(model) {

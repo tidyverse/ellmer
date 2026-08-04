@@ -418,7 +418,7 @@ test_that("value_turn() parses mcp_list_tools output", {
   expect_s7_class(turn@contents[[2]], ContentText)
 })
 
-test_that("value_turn() errors on mcp_approval_request", {
+test_that("value_turn() reports mcp_approval_request as a failed tool call", {
   provider <- chat_openai_test()$get_provider()
 
   result <- list(
@@ -435,9 +435,31 @@ test_that("value_turn() errors on mcp_approval_request", {
     service_tier = "default"
   )
 
-  expect_error(
-    value_turn(provider, result),
-    "require_approval"
+  turn <- value_turn(provider, result)
+  expect_length(turn@contents, 2)
+
+  request <- turn@contents[[1]]
+  expect_s7_class(request, ContentMcpToolRequest)
+  expect_equal(request@id, "mcpar_1")
+  expect_equal(request@server_name, "db_server")
+  expect_equal(request@arguments, list(query = "DROP TABLE users"))
+
+  response <- turn@contents[[2]]
+  expect_s7_class(response, ContentMcpToolResult)
+  expect_true(tool_errored(response))
+  expect_match(response@error, "require_approval")
+
+  # request round-trips the original mcp_approval_request item verbatim
+  expect_equal(as_json(provider, request), result$output[[1]])
+
+  # response round-trips as a real mcp_approval_response rejection
+  expect_equal(
+    as_json(provider, response),
+    list(
+      type = "mcp_approval_response",
+      approve = FALSE,
+      approval_request_id = "mcpar_1"
+    )
   )
 })
 
