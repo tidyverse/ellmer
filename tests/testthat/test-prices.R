@@ -4,10 +4,42 @@ test_that("prices_get() uses cached data in place of bundled data", {
   local_prices()
   cache_path <- local_prices_cache()
 
-  cached <- prices[1, ]
-  cached$input <- 9999
-  attr(cached, "schema_version") <- attr(prices, "schema_version")
-  saveRDS(cached, cache_path)
+  df <- prices[1, ]
+  df$input <- 9999
+  cached <- write_prices_cache(cache_path, df)
+
+  expect_equal(prices_get(), cached)
+})
+
+test_that("prices_get() ignores a cache written by an older ellmer", {
+  local_prices()
+  cache_path <- local_prices_cache()
+
+  df <- prices[1, ]
+  df$input <- 9999
+  write_prices_cache(cache_path, df, ellmer_version = "0.0.1")
+
+  expect_equal(prices_get(), prices)
+})
+
+test_that("prices_get() ignores a cache with no ellmer version", {
+  local_prices()
+  cache_path <- local_prices_cache()
+
+  df <- prices[1, ]
+  attr(df, "schema_version") <- attr(prices, "schema_version")
+  saveRDS(df, cache_path)
+
+  expect_equal(prices_get(), prices)
+})
+
+test_that("prices_get() uses a cache written by a newer ellmer", {
+  local_prices()
+  cache_path <- local_prices_cache()
+
+  df <- prices[1, ]
+  df$input <- 9999
+  cached <- write_prices_cache(cache_path, df, ellmer_version = "999.0.0")
 
   expect_equal(prices_get(), cached)
 })
@@ -16,9 +48,8 @@ test_that("prices_get() informs and falls back when cache schema version is olde
   local_prices()
   cache_path <- local_prices_cache()
 
-  stale <- prices
-  attr(stale, "schema_version") <- attr(prices, "schema_version") - 1L
-  saveRDS(stale, cache_path)
+  older <- attr(prices, "schema_version") - 1L
+  write_prices_cache(cache_path, schema_version = older)
 
   expect_snapshot(result <- prices_get())
   expect_equal(the$prices, prices)
@@ -28,9 +59,8 @@ test_that("prices_get() warns and falls back when cache schema version is newer"
   local_prices()
   cache_path <- local_prices_cache()
 
-  newer <- prices
-  attr(newer, "schema_version") <- attr(prices, "schema_version") + 1L
-  saveRDS(newer, cache_path)
+  newer <- attr(prices, "schema_version") + 1L
+  write_prices_cache(cache_path, schema_version = newer)
 
   expect_snapshot(result <- prices_get())
   expect_equal(the$prices, prices)
@@ -48,9 +78,7 @@ test_that("prices_get() errors when cached data is missing bundled columns", {
   local_prices()
   cache_path <- local_prices_cache()
 
-  cached <- prices[c("provider", "model", "variant")]
-  attr(cached, "schema_version") <- attr(prices, "schema_version")
-  saveRDS(cached, cache_path)
+  write_prices_cache(cache_path, prices[c("provider", "model", "variant")])
 
   expect_snapshot(prices_get(), error = TRUE)
 })
@@ -108,6 +136,10 @@ test_that("prices_cache_download() writes cache and returns TRUE on 200", {
   expect_equal(
     attr(cached, "schema_version"),
     attr(prices, "schema_version")
+  )
+  expect_equal(
+    attr(cached, "ellmer_version"),
+    as.character(utils::packageVersion("ellmer"))
   )
 })
 

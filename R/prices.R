@@ -21,7 +21,9 @@
 #    refresh.
 #
 # Both reads and writes are gated by an integer `schema_version`; see
-# `data-raw/prices.R` for the contract and when to bump it.
+# `data-raw/prices.R` for the contract and when to bump it. Releases act as a
+# ratchet: the cache records the ellmer version that wrote it, and a cache
+# from an older version loses to the newer bundled snapshot.
 
 prices_get <- function() {
   if (is.null(the$prices)) {
@@ -46,7 +48,7 @@ prices_cache_compatible <- function(cached, bundled) {
         names(bundled) %in% names(cached)
       )
     )
-    return(TRUE)
+    return(!prices_cache_superseded(cached))
   }
 
   if (is.integer(cached_version) && length(cached_version) == 1L) {
@@ -72,6 +74,18 @@ prices_cache_compatible <- function(cached, bundled) {
   }
 
   FALSE
+}
+
+# Every release regenerates the bundled snapshot, so data cached by an older
+# ellmer has been superseded by the data we now ship and is silently ignored.
+# Development versions don't tick with each snapshot, so they keep using
+# whatever they cached; `models_update_prices()` is the way out.
+prices_cache_superseded <- function(cached) {
+  cached_version <- attr(cached, "ellmer_version")
+  if (is.null(cached_version)) {
+    return(TRUE)
+  }
+  package_version(cached_version) < utils::packageVersion("ellmer")
 }
 
 #' Update cached model pricing data
@@ -192,6 +206,7 @@ prices_check_remote <- function(parsed, call = caller_env()) {
   }
 
   attr(df, "schema_version") <- remote_version
+  attr(df, "ellmer_version") <- as.character(utils::packageVersion("ellmer"))
   df
 }
 

@@ -4,6 +4,18 @@ local_prices <- function(frame = parent.frame()) {
   defer(the$prices <- old, envir = frame)
 }
 
+write_prices_cache <- function(
+  path,
+  df = prices,
+  schema_version = attr(prices, "schema_version"),
+  ellmer_version = utils::packageVersion("ellmer")
+) {
+  attr(df, "schema_version") <- schema_version
+  attr(df, "ellmer_version") <- as.character(ellmer_version)
+  saveRDS(df, path)
+  invisible(df)
+}
+
 local_prices_cache <- function(frame = parent.frame()) {
   cache_dir <- withr::local_tempdir(.local_envir = frame)
   old_dir <- the$prices_cache_dir
