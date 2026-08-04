@@ -57,7 +57,7 @@ NULL
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
-#' @param model `r param_model("claude-sonnet-4-6", "anthropic")`
+#' @param model `r param_model("claude-sonnet-5", "anthropic")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
 #' @param base_url The base URL to the endpoint; the default is Claude's
@@ -92,7 +92,7 @@ chat_anthropic <- function(
 ) {
   echo <- check_echo(echo)
 
-  model <- set_default(model, "claude-sonnet-4-6")
+  model <- set_default(model, "claude-sonnet-5")
   cache <- arg_match(cache)
 
   credentials <- as_credentials(
@@ -123,12 +123,11 @@ chat_claude <- chat_anthropic
 
 chat_anthropic_test <- function(
   ...,
-  model = "claude-sonnet-4-6",
+  model = "claude-sonnet-5",
   params = NULL,
   echo = "none"
 ) {
   params <- params %||% params()
-  params$temperature <- params$temperature %||% 0
 
   chat_anthropic(model = model, params = params, ..., echo = echo)
 }
@@ -448,6 +447,9 @@ method(value_turn, ProviderAnthropic) <- function(
         content$thinking,
         extra = list(signature = content$signature)
       )
+    } else if (content$type == "fallback") {
+      # https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback
+      NULL
     } else {
       cli::cli_abort(
         "Unknown content type {.str {content$type}}.",
@@ -455,6 +457,7 @@ method(value_turn, ProviderAnthropic) <- function(
       )
     }
   })
+  contents <- compact(contents)
 
   tokens <- value_tokens(provider, result)
   cache_write <- result$usage$cache_creation_input_tokens %||% 0
@@ -462,7 +465,11 @@ method(value_turn, ProviderAnthropic) <- function(
   # already counts them at 1.0x, so add the 0.25x surcharge for pricing.
   cost_tokens <- tokens
   cost_tokens$input <- cost_tokens$input + cache_write * 0.25
-  cost <- get_token_cost(provider, cost_tokens)
+  cost <- get_token_cost(
+    provider,
+    cost_tokens,
+    model = serving_model(result) %||% provider@model
+  )
   AssistantTurn(
     contents,
     json = result,
@@ -538,6 +545,20 @@ method(count_tokens, ProviderAnthropic) <- function(
 
   resp <- req_perform(req)
   resp_body_json(resp)$input_tokens
+}
+
+# The model that produced the returned message. `result$model` is unreliable
+# for a mid-output fallback in a stream (it keeps the requested model named at
+# `message_start`), so prefer the last `fallback` block's `to.model`.
+serving_model <- function(result) {
+  to_models <- compact(lapply(result$content, function(content) {
+    if (identical(content$type, "fallback")) content$to$model
+  }))
+  if (length(to_models) > 0) {
+    to_models[[length(to_models)]]
+  } else {
+    result$model
+  }
 }
 
 # ellmer -> Claude --------------------------------------------------------------

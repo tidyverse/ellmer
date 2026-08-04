@@ -94,7 +94,7 @@ test_that("continues to work after whitespace only outputs (#376)", {
   vcr::local_cassette("anthropic-whitespace")
 
   chat <- chat_anthropic_test()
-  chat$chat("Respond with only two blank lines")
+  chat$chat("Respond to this question with only two blank lines")
   expect_equal(
     chat$chat("What's 1+1? Just give me the number"),
     ellmer_output("2")
@@ -254,6 +254,53 @@ test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens"
   #   (1000 + 400 * 1.25) * $3/1M + 50 * $15/1M + 200 * $0.30/1M
   expected_cost <- ((1000 + 400 * 1.25) * 3 + 50 * 15 + 200 * 0.30) / 1e6
   expect_equal(unclass(turn@cost), expected_cost)
+})
+
+test_that("value_turn() prices a refusal fallback at the serving model's rate", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-fable-5",
+    params = list(),
+    extra_args = list(),
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+
+  result <- list(
+    model = "claude-opus-4-8",
+    content = list(
+      list(
+        type = "fallback",
+        from = list(model = "claude-fable-5"),
+        to = list(model = "claude-opus-4-8")
+      ),
+      list(type = "text", text = "ok")
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 1000, output_tokens = 50)
+  )
+
+  turn <- value_turn(provider, result)
+
+  # opus-4-8 rates ($5/$25 per 1M), not fable-5's ($10/$50).
+  expect_equal(unclass(turn@cost), (1000 * 5 + 50 * 25) / 1e6)
+})
+
+test_that("serving_model() prefers the last fallback block's to.model", {
+  expect_equal(serving_model(list(model = "a", content = list())), "a")
+  expect_equal(
+    serving_model(list(
+      model = "requested",
+      content = list(
+        list(type = "fallback", to = list(model = "served")),
+        list(type = "text", text = "hi")
+      )
+    )),
+    "served"
+  )
 })
 
 test_that("stream_merge_chunks() handles citations_delta", {

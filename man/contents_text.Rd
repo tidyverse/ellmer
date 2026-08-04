@@ -13,9 +13,9 @@ contents_html(content, ...)
 contents_markdown(content, ...)
 }
 \arguments{
-\item{content}{The \link{Turn} or \link{Content} object to be converted into text.
-\code{contents_markdown()} also accepts \link{Chat} instances to turn the entire
-conversation history into markdown text.}
+\item{content}{The \link{Turn}, \link{Round}, or \link{Content} object to be converted into
+text. \code{contents_markdown()} also accepts \link{Chat} instances to turn the
+entire conversation history into markdown text.}
 
 \item{...}{Additional arguments passed to methods.}
 }

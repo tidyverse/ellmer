@@ -5,7 +5,7 @@ http_interactions:
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  John
         works at Google in New York. He met with Sarah, the CEO of\n  Acme Inc., last
-        week in San Francisco.\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
+        week in San Francisco.\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
         extracted entity name."},"type":{"type":"string","description":"The entity
         type","enum":["person","location","organization"]},"context":{"type":"string","description":"The
         context in which the entity appears in the text."}},"required":["name","type","context"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
@@ -18,50 +18,57 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a13386d77dd9a5ba-IAD
+      cf-ray: a2508bfacb44cdf0-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:23:02 GMT
+      date: Sun, 02 Aug 2026 22:33:55 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1388'
+      openai-processing-ms: '1978'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=vIXT.EWmXct01YMs3pwuPesm.9F5Hpvzu.BFSrY5liA-1782721381.0375032-1.0.1.1-Qet_ZojF5f2AYG.cErBKMXj0lCxY6rF5XxEDLXkWAyNxw580BQkKnz2JJcRtJGpC0A962W3ge2uCIKfYOJHWuVeyALDUCG5Ti_OFIB945EROmNP_rc3B94Tm0GX4vbO8;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 08:53:02 GMT
+      set-cookie: __cf_bm=rMu9IvXRzV31cw2SrKPPpq_nnCQIE3zQOMVPa7i.j_s-1785710033.0891454-1.0.1.1-yx0BF8kRWwo154pFwgTeAjyi_3nZwEEoAlGl3GiN8gr_F9ucG2ZnmppNens2OsV8RBYdt0V3e9Euii9ivoEWLq6eQvl8UP.UTvgk77nbI_3alCwZTS4SlCAWN3aYNk.j;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:03:55 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '500000'
+      x-ratelimit-remaining-tokens: '499959'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: 88e460ab-e76d-4f8b-afd7-f1d1f98edaed
+      x-ratelimit-reset-tokens: 4ms
+      x-request-id: req_0ed3e0c5f11f4695a3dfecb184c34c10
     body:
       string: |-
         {
-          "id": "resp_0af2b536a7f3b5ea016a422b6514a081a38ecce38ce31f6a9e",
+          "id": "resp_071bdf5cce0f2d37016a6fc5d12be88194852aa9daa330f7e5",
           "object": "response",
-          "created_at": 1782721381,
+          "created_at": 1785710033,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782721382,
+          "completed_at": 1785710035,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.4-2026-03-05",
+          "model": "gpt-5.6-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_0af2b536a7f3b5ea016a422b658c4881a3aff94aceab812ea0",
+              "id": "rs_071bdf5cce0f2d37016a6fc5d1b2dc8194819f13b21f56493c",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "gAAAAABqb8XT46zOUJdAJtAdmp_JoHdDH2rG1O0mLR2J3lxEs4raWi7Teh5vcUfY-qqfSnPtX-Jio_3EOGxEiE4iuxR8g4WUu06gf0pcbAVSDZApsqKx9sv5Dux6in1zoEi0dEpOrmmLHMitD8ZNpdOfz1r2sybnMvU59_kbzQlqV_U42dv130FqbzhZ7jA7lId4h9H1r1rSNEGyo76uox64mFI4yqoQJuh9BrAXBpIvHfi9-WTi_rNqsZVKLlhbqevpLwVdz3cul49oqRvMd9PpnTwwaakF1CVRxveyND-pl1lnS9CnlXKgPx8NDHgcJ2zOCWPElLzsHZQ2MD7dQha-zH3VRr8NXRyKeAuQstuuFUaU7H8JRgycut8AZiMCyRIiy2RhmejdryHlC9yXc-KGZnWtBVAqYgT_3BiBumW2JxwcSksRc9vHoxzaObOlztwmn4pmskMr9GE2FyUTBRTRe1Y337HXELbTpKU6rwzQIENV405Jo_2-IWFXISUXnKREzohsS9x2SdYQXNW1vC7wkSs-wyKhfmTs_lZFbIey4VIRSHEpUcJpUz14Zrk3sWsXUGzUO3OHdNdQiNTTOfbRWLWIenprkyVu8P7-BZhzGDsz0vF2SpZFCRXoPctI98Tz43q1APWKKL6qKQ97SNL5TPpjrd0pAE0fSfnByt-6odjXQH-lS8ywlT1xejwayiMeqOES_c99FPLcybgEy3czeTWIWEAHyiPhBmb5LF5VRCtq6-XLTFjFLvIoKJf_v9TE7Jemn8Le5MVSTLUZ7q8P_zNSwYapSkCExHwun-pzjrxf1BQzWPS1O188MBin-_NAwHXK0V3cUTcWWacZS6H8eFhzICu9VkqdYwHEw0XWQdvK2m2-qDoHmEi0Vd0lfqX_JnA744DGJHWJpISwE2IP9BrAdtJFKKrp2MKAxdlJz286dbWk4e9ml3v_ZcTByjyLvHJk9gSmPoc5Qil5WlJ5KqwhluKhI6hB7EpRGUtaAL3aqrEr0KbUfDsE2-gkZ8WImpvrKaLyD4-79s_cQUzDsHDuz1AYpp7X8-ZWjFi5eSnEh0ezn1InaaHEsaKlx0zdBoWWTTnu",
+              "summary": []
+            },
+            {
+              "id": "msg_071bdf5cce0f2d37016a6fc5d1f02c8194807b084abf8c2844",
               "type": "message",
               "status": "completed",
               "content": [
@@ -69,7 +76,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John works at Google in New York.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"}]}"
+                  "text": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John works at Google in New York.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"Sarah is the CEO of Acme Inc.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"}]}"
                 }
               ],
               "phase": "final_answer",
@@ -82,8 +89,8 @@ http_interactions:
           "prompt_cache_key": null,
           "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": "current_turn",
-            "effort": "none",
+            "context": "all_turns",
+            "effort": "medium",
             "mode": "standard",
             "summary": null
           },
@@ -169,16 +176,17 @@ http_interactions:
           "usage": {
             "input_tokens": 128,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 161,
+            "output_tokens": 184,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 30
             },
-            "total_tokens": 289
+            "total_tokens": 312
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:23:02
+  recorded_at: 2026-08-02 22:33:54
 recorded_with: VCR-vcr/2.1.0

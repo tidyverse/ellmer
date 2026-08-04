@@ -232,11 +232,28 @@ method(chat_body, ProviderGoogleGemini) <- function(
   }
 
   contents <- as_json(provider, turns)
+
+  # https://ai.google.dev/api/caching#Tool
+  tool_config <- NULL
+  if (length(tools) > 0) {
+    is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
+    # Mixing built-in and custom tools on Gemini 3+ requires setting
+    # `includeServerSideToolInvocations`. This is only supported by the
+    # Gemini Developer API; Vertex AI rejects the field.
+    if (
+      any(is_builtin) &&
+        !all(is_builtin) &&
+        has_google_mixed_tool_support(provider)
+    ) {
+      tool_config <- list(includeServerSideToolInvocations = TRUE)
+    }
+  }
   tools <- chat_body_tools(provider, tools)
 
   compact(list(
     contents = contents,
     tools = tools,
+    toolConfig = tool_config,
     systemInstruction = system,
     generationConfig = generation_config
   ))
@@ -373,6 +390,12 @@ method(value_turn, ProviderGoogleGemini) <- function(
         type = content$inlineData$mimeType,
         data = content$inlineData$data
       )
+    } else if (
+      has_name(content, "toolCall") || has_name(content, "toolResponse")
+    ) {
+      # Server-side built-in tool invocations (e.g. google_search) returned
+      # when includeServerSideToolInvocations is TRUE; skip silently.
+      NULL
     } else {
       cli::cli_abort(
         "Unknown content type with names {.str {names(content)}}.",
@@ -834,9 +857,10 @@ method(chat_body_tools, ProviderGoogleGemini) <- function(provider, tools) {
   }
   is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
   funs <- as_json(provider, unname(tools))
+  user_tools <- funs[!is_builtin]
   c(
-    compact(list(functionDeclarations = funs[!is_builtin])),
-    unlist(funs[is_builtin], recursive = FALSE)
+    if (length(user_tools) > 0) list(list(functionDeclarations = user_tools)),
+    funs[is_builtin]
   )
 }
 
@@ -1221,4 +1245,9 @@ gemini_normalize_result <- function(x, index_default) {
   }
 
   list(index = index, result = list(status_code = 500L, body = NULL))
+}
+
+has_google_mixed_tool_support <- function(provider) {
+  identical(provider@name, "Google/Gemini") &&
+    grepl("^gemini-([3-9]|[0-9]{2,})", provider@model)
 }

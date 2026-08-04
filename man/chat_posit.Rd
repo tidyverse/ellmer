@@ -29,7 +29,7 @@ credentials to use in place of the default OAuth device flow, either as a
 named list of headers or as a function that modifies the request. You
 should not usually need to set this.}
 
-\item{model}{The model to use for the chat (defaults to "claude-sonnet-4-6").
+\item{model}{The model to use for the chat (defaults to "claude-sonnet-5").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_posit()} to see all options.}
 

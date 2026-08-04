@@ -61,17 +61,10 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
-\ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-GitHub Models hosts a number of open source and OpenAI models. To access the
-GitHub model marketplace, you will need to apply for and be accepted into the
-beta access program. See \url{https://github.com/marketplace/models} for details.
-
-The defaults are tweaked for the GitHub Models marketplace.
-
-GitHub also supports the Azure AI Inference SDK, which you can use by setting
-\code{base_url} to \code{"https://models.inference.ai.azure.com/"}. This endpoint was
-used in \pkg{ellmer} v0.3.0 and earlier.
+\code{chat_github()} and \code{models_github()} are defunct because GitHub Models
+was retired on 2026-07-30.
 }
 \examples{
 \dontrun{
