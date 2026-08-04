@@ -289,6 +289,43 @@ test_that("tool result without a request falls back to a synthesized id", {
   expect_equal(records[[1]]$content, "ok")
 })
 
+test_that("a Content-valued tool result inlines images/pdfs as base64 data URIs", {
+  request <- ContentToolRequest("call_1", "screenshot", list())
+  turn <- UserTurn(list(
+    ContentToolResult(
+      value = ContentImageInline("image/png", "aGVsbG8="),
+      request = request
+    )
+  ))
+
+  records <- contents_trajectory(turn)
+
+  expect_length(records, 1)
+  expect_equal(records[[1]]$role, "tool")
+  expect_equal(records[[1]]$content, "data:image/png;base64,aGVsbG8=")
+})
+
+test_that("a list of Content tool result values are joined into one string", {
+  request <- ContentToolRequest("call_1", "inspect", list())
+  turn <- UserTurn(list(
+    ContentToolResult(
+      value = list(
+        ContentText("Here's what I found:"),
+        ContentImageInline("image/png", "aGVsbG8=")
+      ),
+      request = request
+    )
+  ))
+
+  records <- contents_trajectory(turn)
+
+  expect_length(records, 1)
+  expect_equal(
+    records[[1]]$content,
+    "Here's what I found:\n\ndata:image/png;base64,aGVsbG8="
+  )
+})
+
 test_that("timestamp is present only for assistant turns with created_at", {
   turn_with_time <- AssistantTurn("Hi!", json = list(created_at = 1700000000))
   turn_without_time <- AssistantTurn("Hi!")

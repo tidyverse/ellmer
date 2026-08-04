@@ -91,7 +91,17 @@ method(contents_trajectory, ContentToolRequest) <- function(content) {
 
 method(contents_trajectory, ContentToolResult) <- function(content) {
   id <- if (is.null(content@request)) NULL else content@request@id
-  trajectory_fragment("tool_result", id = id, content = tool_string(content))
+  value <- content@value
+  text <- if (
+    !tool_errored(content) &&
+      (S7_inherits(value, Content) ||
+        (is.list(value) && all(map_lgl(value, \(x) S7_inherits(x, Content)))))
+  ) {
+    tool_result_content_string(value)
+  } else {
+    tool_string(content)
+  }
+  trajectory_fragment("tool_result", id = id, content = text)
 }
 
 method(contents_trajectory, ContentToolRequestSearch) <- function(content) {
@@ -148,6 +158,26 @@ trajectory_fragment <- function(type, ...) {
 
 as_json_string <- function(x) {
   as.character(jsonlite::toJSON(x, auto_unbox = TRUE))
+}
+
+# A tool result's @value can itself be a Content object (or list of them),
+# e.g. a screenshot tool returning ContentImageInline. trajectory-v1's
+# `tool.content` is a plain string, so images and PDFs are inlined as base64
+# data URIs and text content is unwrapped; anything else falls back to its
+# usual trajectory placeholder.
+tool_result_content_string <- function(value) {
+  if (is.list(value)) {
+    paste(map_chr(value, tool_result_content_string), collapse = "\n\n")
+  } else if (S7_inherits(value, ContentText)) {
+    value@text
+  } else if (S7_inherits(value, ContentImageInline) && !is.null(value@data)) {
+    sprintf("data:%s;base64,%s", value@type, value@data)
+  } else if (S7_inherits(value, ContentPDF)) {
+    sprintf("data:%s;base64,%s", value@type, value@data)
+  } else {
+    fragment <- contents_trajectory(value)
+    if (is.null(fragment) || is.null(fragment$text)) "" else fragment$text
+  }
 }
 
 format_iso8601 <- function(epoch) {
