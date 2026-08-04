@@ -28,6 +28,10 @@ A Chat object
 
 - [`Chat$set_turns()`](#method-Chat-set_turns)
 
+- [`Chat$get_rounds()`](#method-Chat-get_rounds)
+
+- [`Chat$last_round()`](#method-Chat-last_round)
+
 - [`Chat$add_turn()`](#method-Chat-add_turn)
 
 - [`Chat$get_system_prompt()`](#method-Chat-get_system_prompt)
@@ -140,6 +144,44 @@ Replace existing turns with a new list.
 - `value`:
 
   A list of [Turn](https://ellmer.tidyverse.org/dev/reference/Turn.md)s.
+
+------------------------------------------------------------------------
+
+### `Chat$get_rounds()`
+
+Retrieve the conversation grouped into
+[Round](https://ellmer.tidyverse.org/dev/reference/Round.md)s. Each
+`Round` pairs a user turn with the assistant and tool-result turns it
+produced.
+
+#### Usage
+
+    Chat$get_rounds(include_system_prompt = FALSE)
+
+#### Arguments
+
+- `include_system_prompt`:
+
+  Whether to include system turns in the rounds. When `FALSE` (the
+  default), all system turns are dropped. When `TRUE`, each system turn
+  is folded into the `input` of the round it precedes.
+
+------------------------------------------------------------------------
+
+### `Chat$last_round()`
+
+The last [Round](https://ellmer.tidyverse.org/dev/reference/Round.md) of
+conversation. Note that system prompt turns are included, equivalent to
+the last item in the list of rounds returned by
+`$get_rounds(include_system_prompt = TRUE)`.
+
+#### Usage
+
+    Chat$last_round()
+
+#### Returns
+
+Either a `Round` or `NULL`, if no rounds have occurred.
 
 ------------------------------------------------------------------------
 

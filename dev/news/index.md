@@ -58,6 +58,9 @@ CRAN release: 2026-07-13
   for batch processing ([@xmarquez](https://github.com/xmarquez),
   [\#914](https://github.com/tidyverse/ellmer/issues/914),
   [\#927](https://github.com/tidyverse/ellmer/issues/927)).
+- `Chat` gains `get_rounds()` and `last_round()` methods for retrieving
+  the conversation history grouped into `Round`s
+  ([\#507](https://github.com/tidyverse/ellmer/issues/507)).
 - `Chat` gains a `set_model()` method for updating the model after chat
   creation. Unlike some `chat_*()` functions, the model name is not
   validated ([\#988](https://github.com/tidyverse/ellmer/issues/988)).
@@ -145,6 +148,9 @@ CRAN release: 2026-07-13
   [`chat_groq()`](https://ellmer.tidyverse.org/dev/reference/chat_groq.md)
   ([@thisisnic](https://github.com/thisisnic),
   [\#921](https://github.com/tidyverse/ellmer/issues/921)).
+- New `Round` class groups a `Chat`’s flat turn history into rounds,
+  each containing a user turn and the assistant/tool-result turns that
+  follow it ([\#507](https://github.com/tidyverse/ellmer/issues/507)).
 - `type_object(.additional_properties)` is deprecated. No supported
   provider can return additional properties when using structured
   output. Instead, use an array of name-value pairs

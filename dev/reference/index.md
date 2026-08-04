@@ -180,6 +180,8 @@ provider.
   [`AssistantTurn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)
   [`AssistantPartialTurn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)
   : A user, assistant, or system turn
+- [`Round()`](https://ellmer.tidyverse.org/dev/reference/Round.md) : A
+  round of conversation
 - [`Content()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   [`ContentText()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   [`ContentImage()`](https://ellmer.tidyverse.org/dev/reference/Content.md)

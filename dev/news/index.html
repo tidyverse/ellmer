@@ -76,6 +76,8 @@
 <li>
 <code><a href="../reference/batch_chat.html">batch_chat()</a></code> now supports <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> and <code><a href="../reference/chat_groq.html">chat_groq()</a></code> for batch processing (<a href="https://github.com/xmarquez" class="external-link">@xmarquez</a>, <a href="https://github.com/tidyverse/ellmer/issues/914" class="external-link">#914</a>, <a href="https://github.com/tidyverse/ellmer/issues/927" class="external-link">#927</a>).</li>
 <li>
+<code>Chat</code> gains <code>get_rounds()</code> and <code>last_round()</code> methods for retrieving the conversation history grouped into <code>Round</code>s (<a href="https://github.com/tidyverse/ellmer/issues/507" class="external-link">#507</a>).</li>
+<li>
 <code>Chat</code> gains a <code>set_model()</code> method for updating the model after chat creation. Unlike some <code>chat_*()</code> functions, the model name is not validated (<a href="https://github.com/tidyverse/ellmer/issues/988" class="external-link">#988</a>).</li>
 <li>
 <code><a href="../reference/chat-any.html">chat()</a></code> now raises a warning and <code>chat_structured()</code> raises an informative error when a response is truncated, filtered, or otherwise incomplete (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/867" class="external-link">#867</a>).</li>
@@ -120,6 +122,7 @@
 <code><a href="../reference/chat_deepseek.html">models_deepseek()</a></code> lists available models for <code><a href="../reference/chat_deepseek.html">chat_deepseek()</a></code> (<a href="https://github.com/jcrodriguez1989" class="external-link">@jcrodriguez1989</a>, <a href="https://github.com/tidyverse/ellmer/issues/919" class="external-link">#919</a>).</li>
 <li>
 <code><a href="../reference/chat_groq.html">models_groq()</a></code> lists available models for <code><a href="../reference/chat_groq.html">chat_groq()</a></code> (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/921" class="external-link">#921</a>).</li>
+<li>New <code>Round</code> class groups a <code>Chat</code>’s flat turn history into rounds, each containing a user turn and the assistant/tool-result turns that follow it (<a href="https://github.com/tidyverse/ellmer/issues/507" class="external-link">#507</a>).</li>
 <li>
 <code>type_object(.additional_properties)</code> is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/866" class="external-link">#866</a>).</li>
 </ul></div>

@@ -37,7 +37,8 @@ contents_markdown(content, ...)
 
 - content:
 
-  The [Turn](https://ellmer.tidyverse.org/dev/reference/Turn.md) or
+  The [Turn](https://ellmer.tidyverse.org/dev/reference/Turn.md),
+  [Round](https://ellmer.tidyverse.org/dev/reference/Round.md), or
   [Content](https://ellmer.tidyverse.org/dev/reference/Content.md)
   object to be converted into text. `contents_markdown()` also accepts
   [Chat](https://ellmer.tidyverse.org/dev/reference/Chat.md) instances
