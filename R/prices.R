@@ -4,8 +4,8 @@
 #    `.github/workflows/update-prices.yaml` workflow runs `data-raw/prices.R`
 #    on a weekly schedule (and can also be run manually), which fetches from
 #    litellm, validates against `data-raw/prices.schema.json`, and commits
-#    `prices.json` plus the snapshot baked into `prices_data` (internal
-#    package data).
+#    `prices.json` plus the snapshot baked into `prices` (internal package
+#    data).
 #
 # 2. Update: `models_update_prices()` calls `prices_cache_download()` to
 #    fetch `prices.json` from GitHub and save it as an RDS at
@@ -15,40 +15,25 @@
 #    upstream file costs at most a 304; the download is reported as an
 #    update only when the parsed data differs from what's cached.
 #
-# 3. Read: `prices()` merges cached + bundled rows, with cached winning
-#    on (provider, model, variant) conflicts. The result is memoized in
-#    `the$prices`; `models_update_prices()` clears it after a refresh.
+# 3. Read: `prices_get()` uses the cached data when it's compatible with
+#    this version of ellmer, otherwise the bundled snapshot. The result is
+#    memoized in `the$prices`; `models_update_prices()` clears it after a
+#    refresh.
 #
 # Both reads and writes are gated by an integer `schema_version`; see
 # `data-raw/prices.R` for the contract and when to bump it.
 
-prices <- function() {
+prices_get <- function() {
   if (is.null(the$prices)) {
-    the$prices <- prices_merged()
+    cached <- prices_cache_read()
+    the$prices <- if (prices_cache_compatible(cached, prices)) {
+      cached
+    } else {
+      prices
+    }
   }
 
   the$prices
-}
-
-prices_merged <- function() {
-  bundled <- prices_data
-  cached <- prices_cache_read()
-
-  if (!prices_cache_compatible(cached, bundled)) {
-    return(bundled)
-  }
-
-  key_cols <- c("provider", "model", "variant")
-  stopifnot(
-    "cached pricing data is missing columns from bundled data" = all(
-      names(bundled) %in% names(cached)
-    )
-  )
-  bundled_in_cache <- !is.na(
-    vctrs::vec_match(bundled[key_cols], cached[key_cols])
-  )
-  bundled_only <- bundled[!bundled_in_cache, ]
-  rbind(cached[names(bundled)], bundled_only)
 }
 
 prices_cache_compatible <- function(cached, bundled) {
@@ -56,6 +41,11 @@ prices_cache_compatible <- function(cached, bundled) {
   bundled_version <- attr(bundled, "schema_version")
 
   if (!is.null(cached) && identical(cached_version, bundled_version)) {
+    stopifnot(
+      "cached pricing data is missing columns from bundled data" = all(
+        names(bundled) %in% names(cached)
+      )
+    )
     return(TRUE)
   }
 
@@ -97,7 +87,7 @@ prices_cache_compatible <- function(cached, bundled) {
 models_update_prices <- function() {
   if (isTRUE(prices_cache_download())) {
     the$prices <- NULL
-    prices()
+    prices_get()
     cli::cli_inform(
       "Updated cached pricing data {.href [from GitHub](https://github.com/tidyverse/ellmer/blob/main/data-raw/prices.json)}."
     )
@@ -166,7 +156,7 @@ prices_check_remote <- function(parsed, call = caller_env()) {
   }
 
   remote_version <- as.integer(parsed$schema_version)
-  bundled_version <- attr(prices_data, "schema_version")
+  bundled_version <- attr(prices, "schema_version")
   if (!isTRUE(remote_version == bundled_version)) {
     if (isTRUE(remote_version > bundled_version)) {
       cli::cli_abort(

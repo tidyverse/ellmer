@@ -1,21 +1,29 @@
-# prices() informs and falls back when cache schema version is older
+# prices_get() informs and falls back when cache schema version is older
 
     Code
-      result <- prices()
+      result <- prices_get()
     Message
       Cached pricing data uses an outdated schema.
       i Run `ellmer::models_update_prices()` to refresh.
       This message is displayed once per session.
 
-# prices() warns and falls back when cache schema version is newer
+# prices_get() warns and falls back when cache schema version is newer
 
     Code
-      result <- prices()
+      result <- prices_get()
     Condition
       Warning:
       Cached pricing data uses a newer schema than this version of ellmer.
       i Update ellmer to use the latest pricing data.
       This warning is displayed once per session.
+
+# prices_get() errors when cached data is missing bundled columns
+
+    Code
+      prices_get()
+    Condition
+      Error in `prices_cache_compatible()`:
+      ! cached pricing data is missing columns from bundled data
 
 # models_update_prices() informs and returns TRUE when download succeeds
 

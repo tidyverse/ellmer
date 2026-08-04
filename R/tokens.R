@@ -114,7 +114,7 @@ token_usage <- function() {
 
 has_cost <- function(provider, model) {
   needle <- data.frame(provider = provider@name, model = model)
-  vctrs::vec_in(needle, prices()[c("provider", "model")])
+  vctrs::vec_in(needle, prices_get()[c("provider", "model")])
 }
 
 get_token_cost <- function(
@@ -125,7 +125,7 @@ get_token_cost <- function(
 ) {
   check_string(variant, .internal = TRUE)
 
-  p <- prices()
+  p <- prices_get()
 
   needle <- data.frame(
     provider = provider@name,

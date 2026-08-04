@@ -1,60 +1,58 @@
-# prices() --------------------------------------------------------------------
+# prices_get() ----------------------------------------------------------------
 
-test_that("prices() prefers cached rows over bundled rows on key conflict", {
+test_that("prices_get() uses cached data in place of bundled data", {
   local_prices()
   cache_path <- local_prices_cache()
 
-  bundled_row <- prices_data[
-    prices_data$provider == "OpenAI" &
-      prices_data$model == "gpt-4o" &
-      prices_data$variant == "",
-  ]
-  stopifnot("expected bundled OpenAI/gpt-4o row" = nrow(bundled_row) == 1)
-
-  cached <- bundled_row
+  cached <- prices[1, ]
   cached$input <- 9999
-  attr(cached, "schema_version") <- attr(prices_data, "schema_version")
+  attr(cached, "schema_version") <- attr(prices, "schema_version")
   saveRDS(cached, cache_path)
 
-  result <- prices()
-  result_row <- result[
-    result$provider == "OpenAI" &
-      result$model == "gpt-4o" &
-      result$variant == "",
-  ]
-  expect_equal(result_row$input, 9999)
+  expect_equal(prices_get(), cached)
 })
 
-test_that("prices() informs and falls back when cache schema version is older", {
+test_that("prices_get() informs and falls back when cache schema version is older", {
   local_prices()
   cache_path <- local_prices_cache()
 
-  stale <- prices_data
-  attr(stale, "schema_version") <- attr(prices_data, "schema_version") - 1L
+  stale <- prices
+  attr(stale, "schema_version") <- attr(prices, "schema_version") - 1L
   saveRDS(stale, cache_path)
 
-  expect_snapshot(result <- prices())
-  expect_equal(the$prices, prices_data)
+  expect_snapshot(result <- prices_get())
+  expect_equal(the$prices, prices)
 })
 
-test_that("prices() warns and falls back when cache schema version is newer", {
+test_that("prices_get() warns and falls back when cache schema version is newer", {
   local_prices()
   cache_path <- local_prices_cache()
 
-  newer <- prices_data
-  attr(newer, "schema_version") <- attr(prices_data, "schema_version") + 1L
+  newer <- prices
+  attr(newer, "schema_version") <- attr(prices, "schema_version") + 1L
   saveRDS(newer, cache_path)
 
-  expect_snapshot(result <- prices())
-  expect_equal(the$prices, prices_data)
+  expect_snapshot(result <- prices_get())
+  expect_equal(the$prices, prices)
 })
 
-test_that("prices() uses bundled prices when no cache exists", {
+test_that("prices_get() uses bundled prices when no cache exists", {
   local_prices()
   local_prices_cache()
 
-  prices()
-  expect_equal(the$prices, prices_data)
+  prices_get()
+  expect_equal(the$prices, prices)
+})
+
+test_that("prices_get() errors when cached data is missing bundled columns", {
+  local_prices()
+  cache_path <- local_prices_cache()
+
+  cached <- prices[c("provider", "model", "variant")]
+  attr(cached, "schema_version") <- attr(prices, "schema_version")
+  saveRDS(cached, cache_path)
+
+  expect_snapshot(prices_get(), error = TRUE)
 })
 
 # models_update_prices() -------------------------------------------------------
@@ -65,7 +63,7 @@ test_that("models_update_prices() informs and returns TRUE when download succeed
 
   expect_snapshot(result <- models_update_prices())
   expect_true(result)
-  expect_equal(the$prices, prices_data)
+  expect_equal(the$prices, prices)
 })
 
 test_that("models_update_prices() informs and returns FALSE when already up to date", {
@@ -87,8 +85,8 @@ mock_response <- function(status_code = 200L, body = "") {
 }
 
 valid_envelope <- function(
-  schema_version = attr(prices_data, "schema_version"),
-  data = prices_data
+  schema_version = attr(prices, "schema_version"),
+  data = prices
 ) {
   jsonlite::toJSON(
     list(
@@ -109,7 +107,7 @@ test_that("prices_cache_download() writes cache and returns TRUE on 200", {
   cached <- readRDS(cache_path)
   expect_equal(
     attr(cached, "schema_version"),
-    attr(prices_data, "schema_version")
+    attr(prices, "schema_version")
   )
 })
 
@@ -155,7 +153,7 @@ test_that("prices_cache_download() aborts when envelope is missing data", {
 
 test_that("prices_cache_download() aborts when remote schema is newer", {
   local_prices_cache()
-  newer <- attr(prices_data, "schema_version") + 1L
+  newer <- attr(prices, "schema_version") + 1L
   local_mocked_responses(mock_response(
     body = valid_envelope(schema_version = newer)
   ))
@@ -165,7 +163,7 @@ test_that("prices_cache_download() aborts when remote schema is newer", {
 
 test_that("prices_cache_download() aborts when remote schema is older", {
   local_prices_cache()
-  older <- attr(prices_data, "schema_version") - 1L
+  older <- attr(prices, "schema_version") - 1L
   local_mocked_responses(mock_response(
     body = valid_envelope(schema_version = older)
   ))
@@ -175,7 +173,7 @@ test_that("prices_cache_download() aborts when remote schema is older", {
 
 test_that("prices_cache_download() aborts when data is missing required columns", {
   local_prices_cache()
-  bad <- prices_data[, c("provider", "model", "variant")]
+  bad <- prices[, c("provider", "model", "variant")]
   local_mocked_responses(mock_response(body = valid_envelope(data = bad)))
 
   expect_snapshot(prices_cache_download(), error = TRUE)
@@ -183,7 +181,7 @@ test_that("prices_cache_download() aborts when data is missing required columns"
 
 test_that("prices_cache_download() aborts when input/output columns are non-numeric", {
   local_prices_cache()
-  bad <- prices_data
+  bad <- prices
   bad$input <- as.character(bad$input)
   local_mocked_responses(mock_response(body = valid_envelope(data = bad)))
 
