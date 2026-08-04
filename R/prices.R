@@ -23,53 +23,64 @@
 
 prices <- function() {
   if (is.null(the$prices)) {
-    bundled <- prices_data
-    cached <- prices_cache_read()
-
-    cached_version <- attr(cached, "schema_version")
-    bundled_version <- attr(bundled, "schema_version")
-    compatible <- !is.null(cached) && identical(cached_version, bundled_version)
-
-    if (!compatible) {
-      if (is.integer(cached_version) && length(cached_version) == 1L) {
-        if (cached_version < bundled_version) {
-          cli::cli_inform(
-            c(
-              "Cached pricing data uses an outdated schema.",
-              i = "Run {.run ellmer::models_update_prices()} to refresh."
-            ),
-            .frequency = "once",
-            .frequency_id = "prices_schema_mismatch"
-          )
-        } else if (cached_version > bundled_version) {
-          cli::cli_warn(
-            c(
-              "Cached pricing data uses a newer schema than this version of ellmer.",
-              i = "Update ellmer to use the latest pricing data."
-            ),
-            .frequency = "once",
-            .frequency_id = "prices_schema_mismatch"
-          )
-        }
-      }
-      the$prices <- bundled
-      return(invisible(the$prices))
-    }
-
-    key_cols <- c("provider", "model", "variant")
-    stopifnot(
-      "cached pricing data is missing columns from bundled data" = all(
-        names(bundled) %in% names(cached)
-      )
-    )
-    bundled_in_cache <- !is.na(
-      vctrs::vec_match(bundled[key_cols], cached[key_cols])
-    )
-    bundled_only <- bundled[!bundled_in_cache, ]
-    the$prices <- rbind(cached[names(bundled)], bundled_only)
+    the$prices <- prices_merged()
   }
 
   the$prices
+}
+
+prices_merged <- function() {
+  bundled <- prices_data
+  cached <- prices_cache_read()
+
+  if (!prices_cache_compatible(cached, bundled)) {
+    return(bundled)
+  }
+
+  key_cols <- c("provider", "model", "variant")
+  stopifnot(
+    "cached pricing data is missing columns from bundled data" = all(
+      names(bundled) %in% names(cached)
+    )
+  )
+  bundled_in_cache <- !is.na(
+    vctrs::vec_match(bundled[key_cols], cached[key_cols])
+  )
+  bundled_only <- bundled[!bundled_in_cache, ]
+  rbind(cached[names(bundled)], bundled_only)
+}
+
+prices_cache_compatible <- function(cached, bundled) {
+  cached_version <- attr(cached, "schema_version")
+  bundled_version <- attr(bundled, "schema_version")
+
+  if (!is.null(cached) && identical(cached_version, bundled_version)) {
+    return(TRUE)
+  }
+
+  if (is.integer(cached_version) && length(cached_version) == 1L) {
+    if (cached_version < bundled_version) {
+      cli::cli_inform(
+        c(
+          "Cached pricing data uses an outdated schema.",
+          i = "Run {.run ellmer::models_update_prices()} to refresh."
+        ),
+        .frequency = "once",
+        .frequency_id = "prices_schema_mismatch"
+      )
+    } else if (cached_version > bundled_version) {
+      cli::cli_warn(
+        c(
+          "Cached pricing data uses a newer schema than this version of ellmer.",
+          i = "Update ellmer to use the latest pricing data."
+        ),
+        .frequency = "once",
+        .frequency_id = "prices_schema_mismatch"
+      )
+    }
+  }
+
+  FALSE
 }
 
 #' Update cached model pricing data

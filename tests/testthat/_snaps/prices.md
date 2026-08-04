@@ -1,7 +1,7 @@
 # prices() informs and falls back when cache schema version is older
 
     Code
-      prices()
+      result <- prices()
     Message
       Cached pricing data uses an outdated schema.
       i Run `ellmer::models_update_prices()` to refresh.
@@ -10,7 +10,7 @@
 # prices() warns and falls back when cache schema version is newer
 
     Code
-      prices()
+      result <- prices()
     Condition
       Warning:
       Cached pricing data uses a newer schema than this version of ellmer.

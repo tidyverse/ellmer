@@ -33,7 +33,7 @@ test_that("prices() informs and falls back when cache schema version is older", 
   attr(stale, "schema_version") <- attr(prices_data, "schema_version") - 1L
   saveRDS(stale, cache_path)
 
-  expect_snapshot(prices())
+  expect_snapshot(result <- prices())
   expect_equal(the$prices, prices_data)
 })
 
@@ -45,7 +45,7 @@ test_that("prices() warns and falls back when cache schema version is newer", {
   attr(newer, "schema_version") <- attr(prices_data, "schema_version") + 1L
   saveRDS(newer, cache_path)
 
-  expect_snapshot(prices())
+  expect_snapshot(result <- prices())
   expect_equal(the$prices, prices_data)
 })
 
