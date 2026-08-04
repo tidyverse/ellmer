@@ -268,9 +268,8 @@ test_that("chat callbacks for tool requests/results", {
   })
 })
 
-test_that("on_request_start() can rewrite history via set_turns() (compaction contract)", {
-  # Live test: rewriting history changes the request bodies, so a recorded
-  # cassette can't replay it. Skipped unless an API key is configured.
+test_that("on_request_start() can rewrite history with set_turns()", {
+  vcr::local_cassette("chat-tools-on-request")
   chat <- chat_openai_test()
   chat$register_tool(tool(
     function(user) c("red", "blue")[nchar(user) %% 2 + 1],
@@ -284,7 +283,7 @@ test_that("on_request_start() can rewrite history via set_turns() (compaction co
     if (length(tx) != 1L || is.na(tx)) "" else tx
   }
 
-  # Inject a sentinel into history from inside the callback on the first request,
+  # Inject a turn into the history from inside the callback on the first request,
   # then confirm the *next* request's payload reflects it -- i.e. calling
   # set_turns() from on_request_start actually changes what gets sent.
   calls <- 0L
@@ -294,7 +293,7 @@ test_that("on_request_start() can rewrite history via set_turns() (compaction co
     seen[[calls]] <<- vapply(turns, turn_text, character(1))
     if (calls == 1L) {
       chat$set_turns(c(
-        list(Turn("user", "SENTINEL_ROUND_1")),
+        list(Turn("user", "INJECTED_BY_CALLBACK")),
         chat$get_turns()
       ))
     }
@@ -302,10 +301,10 @@ test_that("on_request_start() can rewrite history via set_turns() (compaction co
 
   . <- chat$chat("What are Joe and Hadley's favorite colors?")
 
-  expect_gte(calls, 2L)
+  expect_equal(calls, 2L)
   # The first request predates the rewrite; the second reflects it.
-  expect_false(any(grepl("SENTINEL_ROUND_1", seen[[1]], fixed = TRUE)))
-  expect_true(any(grepl("SENTINEL_ROUND_1", seen[[2]], fixed = TRUE)))
+  expect_false(any(grepl("INJECTED_BY_CALLBACK", seen[[1]], fixed = TRUE)))
+  expect_true(any(grepl("INJECTED_BY_CALLBACK", seen[[2]], fixed = TRUE)))
 })
 
 test_that("on_request_start() / on_request_end() fire on the async tool loop", {
