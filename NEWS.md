@@ -1,12 +1,14 @@
 # ellmer (development version)
 
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
-* `chat_anthropic()`, `chat_aws_bedrock()`, and `chat_posit()` now default to `claude-sonnet-5`. `chat_openai()` and `chat_openrouter()` now default to `gpt-5.6-terra` (@thisisnic, #1066).
 * `chat_anthropic()` now correctly handles the `fallback` content block returned when a model's server-side refusal fallback (`server-side-fallback-2026-06-01`) is triggered (@simonpcouch, #1058).
+* `chat_anthropic()`, `chat_aws_bedrock()`, and `chat_posit()` now default to `claude-sonnet-5`. `chat_openai()` and `chat_openrouter()` now default to `gpt-5.6-terra` (@thisisnic, #1066).
+* `chat_anthropic()` and `chat_openai()` now handle server-side MCP tool content blocks (`mcp_tool_use`/`mcp_tool_result` for Anthropic; `mcp_list_tools`/`mcp_call` for OpenAI), allowing models to connect to remote MCP servers directly via the provider's API (thanks @klin333, #991).
 * `chat_aws_bedrock()` now supports bearer token authentication for enterprise API gateways (@thisisnic, #1002).
 * `chat_github()` and `models_github()` are now defunct because GitHub Models has been retired (@thisisnic, #1069).
 * `chat_google_gemini()` no longer errors when mixing regular tools and built-in tools like `google_tool_web_search()` (@thisisnic, #1054).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
+* `mcp_connector()` creates a provider-hosted MCP server connection that can be registered with `$register_tool()`. Both `chat_anthropic()` and `chat_openai()` are supported. The provider connects to the MCP server on your behalf, handling tool discovery and execution server-side (#991).
 
 
 # ellmer 0.4.2

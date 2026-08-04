@@ -1,0 +1,210 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Use
+        the read_wiki_structure tool to answer the question. Be brief."}]},{"role":"user","content":[{"type":"input_text","text":"What
+        are the top-level sections in the tidyverse/ellmer documentation?"}]}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"store":false,"service_tier":"auto","tools":[{"type":"mcp","server_label":"deepwiki","server_url":"https://mcp.deepwiki.com/mcp","require_approval":"never"}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: 9fe4edf6edf91b61-ATL
+      content-encoding: gzip
+      content-type: application/json
+      date: Tue, 19 May 2026 17:47:58 GMT
+      openai-organization: posit-esfrkf
+      openai-processing-ms: '2742'
+      openai-project: proj_OgLNNoeNNrPmtkuM5FLTMdBQ
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=GWg1ECCiqOzYILwcONcmUqtBU9mT7QqeFa5bAzN_3_0-1779212875.3441987-1.0.1.1-BylSzkMSPHUmO8yjEGWm6Fm0lZBW7f.pPFl.aP9xjVFnyUAAQKTAFua_8oUeBhMnSnC7.pTkSWLmkmyyjoI8SWMeZUFoEGzLyMBoqYZKtEI0Q7Ca_rCCZxzS7NVmG_t7;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        19 May 2026 18:17:58 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '30000'
+      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-remaining-requests: '29999'
+      x-ratelimit-remaining-tokens: '149999390'
+      x-ratelimit-reset-requests: 2ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_e6d56c2dd56540d2a4acf03602693495
+    body:
+      string: |-
+        {
+          "id": "resp_08441f97221b32a2016a0ca24b7874819ca17b6003afc57258",
+          "object": "response",
+          "created_at": 1779212875,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "completed_at": 1779212878,
+          "error": null,
+          "frequency_penalty": 0.0,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-4.1-nano-2025-04-14",
+          "moderation": null,
+          "output": [
+            {
+              "id": "mcpl_08441f97221b32a2016a0ca24b8898819c9279a952e6afad57",
+              "type": "mcp_list_tools",
+              "server_label": "deepwiki",
+              "tools": [
+                {
+                  "annotations": {
+                    "read_only": false
+                  },
+                  "description": "Get a list of documentation topics for a GitHub repository.\n\nArgs:\n    repoName: GitHub repository in owner/repo format (e.g. \"facebook/react\")",
+                  "input_schema": {
+                    "properties": {
+                      "repoName": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "repoName"
+                    ],
+                    "type": "object"
+                  },
+                  "name": "read_wiki_structure"
+                },
+                {
+                  "annotations": {
+                    "read_only": false
+                  },
+                  "description": "View documentation about a GitHub repository.\n\nArgs:\n    repoName: GitHub repository in owner/repo format (e.g. \"facebook/react\")",
+                  "input_schema": {
+                    "properties": {
+                      "repoName": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "repoName"
+                    ],
+                    "type": "object"
+                  },
+                  "name": "read_wiki_contents"
+                },
+                {
+                  "annotations": {
+                    "read_only": false
+                  },
+                  "description": "Ask any question about a GitHub repository and get an AI-powered, context-grounded response.\n\nArgs:\n    repoName: GitHub repository or list of repositories (max 10) in owner/repo format\n    question: The question to ask about the repository",
+                  "input_schema": {
+                    "properties": {
+                      "repoName": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          }
+                        ]
+                      },
+                      "question": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "repoName",
+                      "question"
+                    ],
+                    "type": "object"
+                  },
+                  "name": "ask_question"
+                }
+              ]
+            },
+            {
+              "id": "mcp_08441f97221b32a2016a0ca24d1d70819c9b7309a3d12aaba7",
+              "type": "mcp_call",
+              "status": "completed",
+              "approval_request_id": null,
+              "arguments": "{\"repoName\":\"tidyverse/ellmer\"}",
+              "error": null,
+              "name": "read_wiki_structure",
+              "output": "Available pages for tidyverse/ellmer:\n\n- 1 Overview\n- 2 Core Architecture\n  - 2.1 Chat Object and Lifecycle\n  - 2.2 Turn and Content System\n  - 2.3 Provider Abstraction\n  - 2.4 Tool Definition and Execution\n  - 2.5 HTTP Communication Layer\n- 3 Provider Reference\n  - 3.1 OpenAI (Responses API)\n  - 3.2 OpenAI-Compatible Providers\n  - 3.3 Anthropic (Claude)\n  - 3.4 Google (Gemini and Vertex AI)\n  - 3.5 AWS Bedrock\n  - 3.6 Azure OpenAI\n  - 3.7 Databricks\n  - 3.8 Snowflake Cortex\n  - 3.9 Ollama and Local Models\n- 4 Usage Guide\n  - 4.1 Getting Started\n  - 4.2 Basic Chat Interactions\n  - 4.3 Tool Calling\n  - 4.4 Structured Data Extraction\n  - 4.5 Multimodal Content\n  - 4.6 Streaming Responses\n- 5 Advanced Topics\n  - 5.1 Authentication and Credentials\n  - 5.2 Async Operations\n  - 5.3 Parallel and Batch Processing\n  - 5.4 Cost Tracking and Token Usage\n  - 5.5 Testing with ellmer\n  - 5.6 Extending ellmer",
+              "server_label": "deepwiki"
+            },
+            {
+              "id": "msg_08441f97221b32a2016a0ca24dd304819cad6ed96443bf6f35",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "The top-level sections in the tidyverse/ellmer documentation are:\n\n1. Overview\n2. Core Architecture\n3. Provider Reference\n4. Usage Guide\n5. Advanced Topics"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": "in_memory",
+          "reasoning": {
+            "effort": null,
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": false,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "mcp",
+              "allowed_tools": null,
+              "headers": null,
+              "require_approval": "never",
+              "server_description": null,
+              "server_label": "deepwiki",
+              "server_url": "https://mcp.deepwiki.com/mcp"
+            }
+          ],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 589,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 65,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 654
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2026-05-19 17:47:58
+recorded_with: VCR-vcr/2.1.0

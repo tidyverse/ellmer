@@ -41,6 +41,7 @@ Other built-in tools:
 \code{\link[=claude_tool_web_fetch]{claude_tool_web_fetch()}},
 \code{\link[=claude_tool_web_search]{claude_tool_web_search()}},
 \code{\link[=google_tool_web_fetch]{google_tool_web_fetch()}},
-\code{\link[=google_tool_web_search]{google_tool_web_search()}}
+\code{\link[=google_tool_web_search]{google_tool_web_search()}},
+\code{\link[=mcp_connector]{mcp_connector()}}
 }
 \concept{built-in tools}

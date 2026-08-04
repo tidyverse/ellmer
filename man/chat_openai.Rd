@@ -83,6 +83,38 @@ Note that a ChatGPT Plus membership does not grant access to the API.
 You will need to sign up for a developer account (and pay for it) at the
 \href{https://platform.openai.com}{developer platform}.
 }
+\section{Server-side MCP tools}{
+OpenAI's
+\href{https://developers.openai.com/api/docs/guides/tools-connectors-mcp}{MCP connector}
+lets models connect to remote MCP servers directly. Unlike local tool
+use, OpenAI discovers the tools available on the server and handles
+tool execution on your behalf — no client-side MCP handling is needed.
+
+Use \code{\link[=mcp_connector]{mcp_connector()}} to register tools from an MCP server with a
+chat:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{chat <- chat_openai()
+connector <- mcp_connector(
+  url = "https://mcp.deepwiki.com/mcp",
+  name = "deepwiki"
+)
+chat$register_tool(connector)
+chat$chat("Look up the tidyverse/ellmer repo with your deepwiki tools.")
+}\if{html}{\out{</div>}}
+
+If the MCP server requires authentication, pass a credential function.
+The return value is sent as the \code{authorization} field on the MCP tool
+entry.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{connector <- mcp_connector(
+  url = "https://private-mcp-server.example.com/mcp",
+  name = "private",
+  credentials = function() Sys.getenv("MCP_TOKEN")
+)
+chat$register_tool(connector)
+}\if{html}{\out{</div>}}
+}
+
 \examples{
 \dontshow{ellmer:::vcr_example_start("chat_openai")}
 chat <- chat_openai()

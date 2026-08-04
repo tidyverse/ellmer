@@ -218,7 +218,8 @@ ContentToolRequest <- new_class(
 method(format, ContentToolRequest) <- function(
   x,
   ...,
-  show = c("all", "call", "call_short")
+  show = c("all", "call", "call_short"),
+  label = "tool request"
 ) {
   show <- arg_match(show)
 
@@ -241,7 +242,8 @@ method(format, ContentToolRequest) <- function(
     return(call_str)
   }
 
-  cli::format_inline("[{.strong tool request} ({x@id})]: {call_str}")
+  id <- truncate_id(x@id)
+  cli::format_inline("[{.strong {label}}\u00a0({id})]: {call_str}")
 }
 
 #' @rdname Content
@@ -284,14 +286,18 @@ ContentToolResult <- new_class(
 method(format, ContentToolResult) <- function(
   x,
   ...,
-  show = c("all", "header")
+  show = c("all", "header", "value"),
+  tool_style = c("plain", "reprex"),
+  label = "tool result",
+  tool_max_lines = NULL
 ) {
   show <- arg_match(show)
+  tool_style <- arg_match(tool_style)
 
-  header <- cli::format_inline("[{.strong tool result}  ({x@request@id})]:")
+  id <- truncate_id(x@request@id)
 
   if (show == "header") {
-    return(header)
+    return(cli::format_inline("[{.strong {label}}\u00a0\u00a0({id})]:"))
   }
 
   if (tool_errored(x)) {
@@ -300,10 +306,22 @@ method(format, ContentToolResult) <- function(
     value <- tool_string_preview(x)
   }
 
+  value <- truncate_lines(value, tool_max_lines)
+
+  if (tool_style == "reprex") {
+    lines <- strsplit(value, "\n")[[1]]
+    value <- paste(cli::style_italic(paste0("#> ", lines)), collapse = "\n")
+  }
+
+  if (show == "value") {
+    return(value)
+  }
+
+  header <- cli::format_inline("[{.strong {label}}  ({id})]:")
   if (!is_string(value) || !grepl("\n", value)) {
-    paste0(header, " ", value)
+    paste(header, value)
   } else {
-    paste(c(header, value), collapse = "\n")
+    paste0(header, "\n", value, "\n")
   }
 }
 
@@ -342,6 +360,35 @@ tool_string_preview <- function(x) {
     error = function(err) {
       cli::col_silver("<tool result preview not available>")
     }
+  )
+}
+
+truncate_id <- function(id, max_width = 12) {
+  if (nchar(id) <= max_width) {
+    return(id)
+  }
+  paste0(
+    substring(id, 1, 8),
+    cli::symbol$ellipsis,
+    substring(id, nchar(id) - 3)
+  )
+}
+
+truncate_lines <- function(value, max_lines = NULL) {
+  if (is.null(max_lines) || !is_string(value) || !grepl("\n", value)) {
+    return(value)
+  }
+  lines <- strsplit(value, "\n")[[1]]
+  if (length(lines) <= max_lines) {
+    return(value)
+  }
+  remaining <- length(lines) - max_lines
+  suffix <- cli::format_inline(
+    cli::col_silver("[and {remaining} more line{?s}...]")
+  )
+  paste(
+    c(lines[seq_len(max_lines)], suffix),
+    collapse = "\n"
   )
 }
 
