@@ -7,7 +7,7 @@
 * `chat_github()` and `models_github()` are now defunct because GitHub Models has been retired (@thisisnic, #1069).
 * `chat_google_gemini()` no longer errors when mixing regular tools and built-in tools like `google_tool_web_search()` (@thisisnic, #1054).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
-* `contents_trajectory()` converts a `Chat` or `Turn` object into a letta-ai `trajectory-v1` compatible list.
+* `contents_trajectory()` converts a `Chat`, `Round`, or `Turn` object into a letta-ai `trajectory-v1` compatible list.
 
 
 # ellmer 0.4.2

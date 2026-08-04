@@ -326,6 +326,42 @@ test_that("a list of Content tool result values are joined into one string", {
   )
 })
 
+test_that("contents_trajectory() folds a Round's input and response turns", {
+  request <- ContentToolRequest("call_1", "lookup", list(x = 1))
+  round <- Round(
+    input = list(UserTurn("What's the weather?")),
+    response = list(
+      AssistantTurn(list(request)),
+      UserTurn(list(ContentToolResult(value = "Sunny", request = request))),
+      AssistantTurn("It's sunny.")
+    )
+  )
+
+  records <- contents_trajectory(round)
+
+  roles <- vapply(records, \(record) record$role, character(1))
+  expect_equal(roles, c("user", "assistant", "tool", "assistant"))
+  expect_equal(records[[1]]$content, "What's the weather?")
+  expect_equal(records[[3]]$tool_call_id, "call_1")
+  expect_equal(records[[4]]$content, "It's sunny.")
+
+  expect_valid_trajectory_records(records)
+  expect_valid_against_schema(records)
+})
+
+test_that("contents_trajectory() drops a system turn folded into a Round's input", {
+  round <- Round(
+    input = list(SystemTurn("Be terse."), UserTurn("Hi")),
+    response = list(AssistantTurn("Hello!"))
+  )
+
+  records <- contents_trajectory(round)
+
+  expect_length(records, 2)
+  roles <- vapply(records, \(record) record$role, character(1))
+  expect_equal(roles, c("user", "assistant"))
+})
+
 test_that("timestamp is present only for assistant turns with created_at", {
   turn_with_time <- AssistantTurn("Hi!", json = list(created_at = 1700000000))
   turn_without_time <- AssistantTurn("Hi!")
