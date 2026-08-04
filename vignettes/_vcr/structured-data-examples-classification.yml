@@ -4,60 +4,70 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"The
-        new quantum computing breakthrough could revolutionize the tech industry."}]}],"model":"gpt-4.1","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"Array
+        new quantum computing breakthrough could revolutionize the tech industry."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"Array
         of classification results. The scores should sum to 1.","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
         category name","enum":["Politics","Sports","Technology","Entertainment","Business","Other"]},"score":{"type":"number","description":"The
         classification score for the category, ranging from 0.0 to 1.0."}},"required":["name","score"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999eee4569d43458-DFW
-      content-encoding: gzip
+      cf-ray: a2508c0f4c3acdf0-EWR
+      content-encoding: br
       content-type: application/json
-      date: Wed, 05 Nov 2025 19:59:20 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '3124'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Sun, 02 Aug 2026 22:33:59 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '3082'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=z2TjS1lprBktFJrlA9RRupafexCBENYQV.wwp6AfYe4-1762372760-1.0.1.1-XQ9ItxK496ad8KIbAVMIZhMjaqnHs35D7iCBCXmXSaHpPi9sX9IZhgLTWDeljJDWT7xYB6oUruxwDqycelXsz0fzNqDB7XrJqdohuPjQ8FU;
-        path=/; expires=Wed, 05-Nov-25 20:29:20 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=3QxH1ruBisQK7KZqeWoRGF8RY6vuiT8B2vdr.s84SJU-1762372760550-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=3Xi7mKkphNfaUFy4vcwMoH_3YqqbvFSwQrGdMfvGy.Q-1785710036.3680232-1.0.1.1-DuKxB39L3A7R__qqULb4uKz8fcRtA9TS6ouEZ0GgY3CsRWNZ_0ARmFglT.TwTsqGZPPh3TPMVa48IVvu2biUtPHmF2VXUo.RkM6_g92R3_dYgclA5iAVW6dssW6UR9QB;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:03:59 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '3132'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999856'
-      x-ratelimit-reset-requests: 6ms
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '500000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '500000'
+      x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_599c8052c8854b46a28327b812dc682d
+      x-request-id: req_f29b1acf29984473a5b21a8269e27459
     body:
       string: |-
         {
-          "id": "resp_0ff312bb3aa56c7101690bac956e9081949dcb16975a3c6a1b",
+          "id": "resp_0fe7ccbc60dd3b52016a6fc5d47db88195a6967b3c61a4e707",
           "object": "response",
-          "created_at": 1762372757,
+          "created_at": 1785710036,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1785710039,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-2025-04-14",
+          "model": "gpt-5.6-terra",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_0ff312bb3aa56c7101690bac96cb388194ad77ccf3ab26b2ea",
+              "id": "rs_0fe7ccbc60dd3b52016a6fc5d4fc0c8195806c33cf0b336228",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "gAAAAABqb8XXUx_R1AVTMu8bV51tH1TS83eapwu6haNxEfMKFr7vo_jUftZCxWx2dOyrd67Sw95KhBZwsUCLrVsHcVSMjGD-Moo4CCvdpoGj1kg1Kue5txxtP3LCc9fEh61XYAgjqu5ThGqSCS2rRrf9xlxRDkrmvZCG0mGUfY6KYzCIRw2oMIc7ldBMuAAOtc9vZEuZB6XwtyVaHKxnJOFURPcxnh0ac7-KRFLceHBT6E4BVUALip_OqYvZUVK5tLBcc0-II6YG41tXFbUZlGBm1qxgniotdc0TwDunoW7xmrYEdVayWJ9hKsnGfv2ZVETQZY3DFoL66St1-mHnQmAvAzG1xjquBp2igFcDoZ-Em1WrhXGxsl6MnfSAq23fWtzFkfX2wQpAcqZPNeYp77N7kxaTnbF2Vbnilh9rmd_HrxZd_VNW9ASC2i4bE3_tXWy-hAhq5l2dxjxQ-rzIJHo08OquozMP26HGpaE302B7HDrszq-56SJ1fI83MHZcaKrPmwIjQPHYWxwGnL8Yd7NNXQi0nOfnBsKgZ-TIoqn7Y2zm3HJpNbCj2OqIB3yTtkp27BKdVAFt8nFLPGbR5BI-XfSLVq5LizdRBdEkc9DiPBmXrwPw-hmZRR482smwOcWuaVMkRe8r4Ss0MfJh92ZVM3GDp5MzpDwd5YLMR9O5em_YOmQuYuoIi8AwWg3ydyv7T8DJSY93IE4eeCTnmskBRrnP6RwyQphscJ0OPEK7HotHMP0nXnm1Lc-TSv0AVzG1R4lXh2QnFptQl4t_mwawaPSaw-rXCP9CLY7-my3sdTRJ7Iv2Zq_iPr16pOY7xF8yUn1tktR5cc-09EvXA2TlJT7HDNAPsxisBaj8WtnaFZXc2ExLZnbULf0tonpR_n5yZ_Ju6WLAm1G3kBJIJZxeS7oAr0l-dqoL3DILmBYV_v3D6ZkJPgNTdLAuga6A4oPtgK-yRc-LgliNlGy9NOZ8uVbK4vVQHskAr_SyrqU22EWXHZw2sLJPpgXxJaslLUQ66wsU7Pk_wPps7WQKgN-3PUV3KGKi2g==",
+              "summary": []
+            },
+            {
+              "id": "msg_0fe7ccbc60dd3b52016a6fc5d55f7481959f2ac2bb0b91ee2c",
               "type": "message",
               "status": "completed",
               "content": [
@@ -65,18 +75,22 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\n  \"wrapper\": [\n    {\n      \"name\": \"Technology\",\n      \"score\": 0.95\n    },\n    {\n      \"name\": \"Business\",\n      \"score\": 0.04\n    },\n    {\n      \"name\": \"Other\",\n      \"score\": 0.01\n    }\n  ]\n}"
+                  "text": "{\"wrapper\":[{\"name\":\"Technology\",\"score\":0.98},{\"name\":\"Business\",\"score\":0.01},{\"name\":\"Other\",\"score\":0.01}]}"
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "all_turns",
+            "effort": "medium",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -134,23 +148,42 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 125,
+            "input_tokens": 123,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 70,
+            "output_tokens": 73,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 28
             },
-            "total_tokens": 195
+            "total_tokens": 196
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 19:59:20
-recorded_with: VCR-vcr/2.0.0
+  recorded_at: 2026-08-02 22:33:59
+recorded_with: VCR-vcr/2.1.0

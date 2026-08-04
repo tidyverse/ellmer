@@ -20,7 +20,7 @@
 #' controller <- stream_controller()
 #'
 #' chat_task <- ExtendedTask$new(function(user_query, controller = NULL) {
-#'   chat <- chat_openai(model = "gpt-4.1-nano")
+#'   chat <- chat_openai(model = "gpt-5-nano")
 #'   stream <- chat$stream_async(user_query, controller = controller)
 #'   shinychat::markdown_stream("response", stream)
 #' })

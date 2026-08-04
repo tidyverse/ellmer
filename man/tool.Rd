@@ -2,7 +2,6 @@
 % Please edit documentation in R/tools-def.R
 \name{tool}
 \alias{tool}
-\alias{ToolDef}
 \title{Define a tool}
 \usage{
 tool(

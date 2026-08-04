@@ -117,14 +117,19 @@ has_cost <- function(provider, model) {
   vctrs::vec_in(needle, prices()[c("provider", "model")])
 }
 
-get_token_cost <- function(provider, tokens, variant = "") {
+get_token_cost <- function(
+  provider,
+  tokens,
+  variant = "",
+  model = provider@model
+) {
   check_string(variant, .internal = TRUE)
 
   p <- prices()
 
   needle <- data.frame(
     provider = provider@name,
-    model = provider@model,
+    model = model,
     variant = variant
   )
   idx <- vctrs::vec_match(needle, p[c("provider", "model", "variant")])

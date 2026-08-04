@@ -14,6 +14,7 @@ NULL
 #' You should generally not create this object yourself,
 #' but instead call [chat_openai()] or friends instead.
 #'
+#' @export
 #' @return A Chat object
 #' @examples
 #' \dontshow{ellmer:::vcr_example_start("Chat")}
@@ -179,6 +180,42 @@ Chat <- R6::R6Class(
       }
 
       dollars(cost)
+    },
+
+    #' @description Estimate the token count for `...` using the
+    #'   provider's token counting endpoint.
+    #' @param ... Input to count tokens for.
+    #' @param include What to include in the count. `"new"` counts
+    #'   tokens only for the contents of `...`. `"complete"` estimates
+    #'   the total input tokens for the next request, including system
+    #'   prompt, tools, and conversation history.
+    #' @param type An optional type specification for structured data
+    #'   extraction, created with a [`type_()`][type_boolean] function.
+    #' @return The estimated number of input tokens.
+    token_count = function(..., include = c("new", "complete"), type = NULL) {
+      include <- arg_match(include)
+
+      if (include == "new") {
+        return(count_tokens(private$provider, ..., type = type))
+      }
+
+      # With no history, we need to explicitly include system prompt and
+      # tools. Otherwise, the last turn's token counts already cover them.
+      tokens <- self$get_tokens()
+      if (nrow(tokens) == 0) {
+        all_tokens <- count_tokens(
+          private$provider,
+          ...,
+          system_prompt = self$get_system_prompt(),
+          tools = private$tools,
+          type = type
+        )
+        return(all_tokens)
+      }
+
+      new_tokens <- count_tokens(private$provider, ..., type = type)
+      last <- tokens[nrow(tokens), ]
+      new_tokens + last$input + last$output + last$cached_input
     },
 
     #' @description The last turn returned by the assistant.
@@ -981,6 +1018,11 @@ TurnAccumulator <- R6::R6Class(
     },
 
     value_turn = function(result, type, duration = NA_real_) {
+      # Check before value_turn() so structured extraction errors before
+      # trying to parse truncated JSON
+      finish_reason <- value_finish_reason(self$provider, result)
+      check_finish_reason(finish_reason, if (is.null(type)) "warn" else "error")
+
       turn <- value_turn(
         self$provider,
         result,
