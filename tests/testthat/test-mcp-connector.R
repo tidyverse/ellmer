@@ -41,32 +41,14 @@ test_that("register_tool() rejects McpConnector for unsupported providers", {
 })
 
 test_that("register_tool() accepts McpConnector for OpenAI", {
-  provider <- ProviderOpenAI(
-    name = "OpenAI",
-    base_url = "https://api.openai.com/v1",
-    model = "gpt-4.1",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    service_tier = "auto"
-  )
+  provider <- chat_openai_test()$get_provider()
   chat <- Chat$new(provider = provider)
   chat$register_tool(mcp_connector("https://example.com/mcp", name = "test"))
   expect_length(chat$get_tools(), 1)
 })
 
 test_that("as_json(ProviderOpenAI, McpConnector) returns MCP tool entry", {
-  provider <- ProviderOpenAI(
-    name = "OpenAI",
-    base_url = "https://api.openai.com/v1",
-    model = "gpt-4.1",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    service_tier = "auto"
-  )
+  provider <- chat_openai_test()$get_provider()
   conn <- mcp_connector("https://example.com/mcp", name = "test")
   json <- as_json(provider, conn)
   expect_equal(json$type, "mcp")
@@ -77,16 +59,7 @@ test_that("as_json(ProviderOpenAI, McpConnector) returns MCP tool entry", {
 })
 
 test_that("as_json(ProviderOpenAI, McpConnector) includes credentials", {
-  provider <- ProviderOpenAI(
-    name = "OpenAI",
-    base_url = "https://api.openai.com/v1",
-    model = "gpt-4.1",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    service_tier = "auto"
-  )
+  provider <- chat_openai_test()$get_provider()
   conn <- mcp_connector(
     "https://example.com/mcp",
     name = "test",
@@ -97,16 +70,7 @@ test_that("as_json(ProviderOpenAI, McpConnector) includes credentials", {
 })
 
 test_that("as_json(ProviderOpenAI, McpConnector) passes extra args", {
-  provider <- ProviderOpenAI(
-    name = "OpenAI",
-    base_url = "https://api.openai.com/v1",
-    model = "gpt-4.1",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    service_tier = "auto"
-  )
+  provider <- chat_openai_test()$get_provider()
   conn <- mcp_connector(
     "https://example.com/mcp",
     name = "test",
@@ -121,51 +85,21 @@ test_that("as_json(ProviderOpenAI, McpConnector) passes extra args", {
 # Anthropic provider -----------------------------------------------------------
 
 test_that("register_tool() accepts McpConnector for Anthropic", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-5-20250929",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
   chat <- Chat$new(provider = provider)
   chat$register_tool(mcp_connector("https://example.com/mcp", name = "test"))
   expect_length(chat$get_tools(), 1)
 })
 
 test_that("as_json(ProviderAnthropic, McpConnector) returns mcp_toolset", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-5-20250929",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
   conn <- mcp_connector("https://example.com/mcp", name = "test")
   json <- as_json(provider, conn)
   expect_equal(json, list(type = "mcp_toolset", mcp_server_name = "test"))
 })
 
 test_that("chat_body(ProviderAnthropic) includes mcp_servers", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-5-20250929",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
   conn <- mcp_connector("https://example.com/mcp", name = "test")
   body <- chat_body(provider, stream = TRUE, turns = list(), tools = list(conn))
   expect_equal(
@@ -179,17 +113,7 @@ test_that("chat_body(ProviderAnthropic) includes mcp_servers", {
 })
 
 test_that("chat_body(ProviderAnthropic) includes credentials in mcp_servers", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-5-20250929",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = NULL,
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
   conn <- mcp_connector(
     "https://example.com/mcp",
     name = "test",
@@ -200,17 +124,8 @@ test_that("chat_body(ProviderAnthropic) includes credentials in mcp_servers", {
 })
 
 test_that("chat_request(ProviderAnthropic) adds MCP beta header", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-5-20250929",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = function() "fake-key",
-    beta_headers = character(),
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
+  provider@credentials <- function() "fake-key"
   conn <- mcp_connector("https://example.com/mcp", name = "test")
   req <- chat_request(
     provider,
@@ -223,17 +138,9 @@ test_that("chat_request(ProviderAnthropic) adds MCP beta header", {
 })
 
 test_that("chat_request(ProviderAnthropic) merges MCP beta with existing", {
-  provider <- ProviderAnthropic(
-    name = "Anthropic",
-    base_url = "https://api.anthropic.com/v1",
-    model = "claude-sonnet-4-5-20250929",
-    params = list(),
-    extra_args = list(),
-    extra_headers = character(),
-    credentials = function() "fake-key",
-    beta_headers = "existing-beta",
-    cache = ""
-  )
+  provider <- test_anthropic_provider()
+  provider@credentials <- function() "fake-key"
+  provider@beta_headers <- "existing-beta"
   conn <- mcp_connector("https://example.com/mcp", name = "test")
   req <- chat_request(
     provider,

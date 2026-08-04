@@ -1,3 +1,17 @@
+test_anthropic_provider <- function() {
+  ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-sonnet-4-20250514",
+    params = list(),
+    extra_args = list(),
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+}
+
 retry_test <- function(code, retries = 1) {
   code <- enquo(code)
 
