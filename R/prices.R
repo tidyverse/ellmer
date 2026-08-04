@@ -10,9 +10,10 @@
 # 2. Update: `models_update_prices()` calls `prices_cache_download()` to
 #    fetch `prices.json` from GitHub and save it as an RDS at
 #    `prices_cache_path()` (under `tools::R_user_dir("ellmer", "cache")`
-#    by default; overridable via `the$prices_cache_dir` in tests). An
-#    ETag is stored on the cached object so subsequent updates can
-#    short-circuit on 304.
+#    by default; overridable via `the$prices_cache_dir` in tests).
+#    `httr2::req_cache()` handles conditional requests, so an unchanged
+#    upstream file costs at most a 304; the download is reported as an
+#    update only when the parsed data differs from what's cached.
 #
 # 3. Read: `prices()` merges cached + bundled rows, with cached winning
 #    on (provider, model, variant) conflicts. The result is memoized in
@@ -91,7 +92,7 @@ prices_cache_compatible <- function(cached, bundled) {
 #'
 #' @return Invisibly returns `TRUE` if the cache was updated, or `FALSE` if
 #'   the cached data was already up to date. Throws an error if the download
-#'   fails or if the \pkg{curl} package is not installed.
+#'   fails.
 #' @export
 models_update_prices <- function() {
   if (isTRUE(prices_cache_download())) {
@@ -111,57 +112,55 @@ prices_cache_read <- function() {
   if (!file.exists(path)) {
     return(NULL)
   }
-  cached <- tryCatch(readRDS(path), error = function(cnd) NULL)
-  attr(cached, "etag") <- NULL
-  cached
+  tryCatch(readRDS(path), error = function(cnd) NULL)
 }
 
-curl_fetch_memory <- function(url, handle) {
-  curl::curl_fetch_memory(url, handle = handle)
-}
+prices_url <- "https://raw.githubusercontent.com/tidyverse/ellmer/refs/heads/main/data-raw/prices.json"
 
 prices_cache_download <- function(call = caller_env()) {
   force(call)
-  url <- "https://raw.githubusercontent.com/tidyverse/ellmer/refs/heads/main/data-raw/prices.json"
 
-  handle <- curl::new_handle()
+  req <- request(prices_url)
+  req <- req_cache(req, path = prices_http_cache_path())
 
-  etag <- prices_cache_etag()
-  if (!is.null(etag)) {
-    curl::handle_setheaders(handle, `If-None-Match` = etag)
-  }
-
-  resp <- tryCatch(
-    curl_fetch_memory(url, handle = handle),
-    error = function(e) {
+  resp <- try_fetch(
+    req_perform(req),
+    error = function(cnd) {
       cli::cli_abort(
         "Failed to download pricing data from GitHub.",
-        parent = e,
+        parent = cnd,
         call = call
       )
     }
   )
-  if (resp$status_code == 304L) {
-    return(FALSE)
-  }
-  if (resp$status_code != 200L) {
-    cli::cli_abort(
-      "Failed to download pricing data from GitHub (HTTP {resp$status_code}).",
-      call = call
-    )
-  }
 
-  parsed <- tryCatch(
-    jsonlite::fromJSON(rawToChar(resp$content)),
-    error = function(e) {
+  # raw.githubusercontent.com serves .json as text/plain
+  parsed <- try_fetch(
+    resp_body_json(resp, check_type = FALSE, simplifyVector = TRUE),
+    error = function(cnd) {
       cli::cli_abort(
         "Failed to parse pricing data from GitHub.",
-        parent = e,
+        parent = cnd,
         call = call
       )
     }
   )
 
+  df <- prices_check_remote(parsed, call = call)
+
+  if (identical(df, prices_cache_read())) {
+    return(FALSE)
+  }
+
+  path <- prices_cache_path()
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+  saveRDS(df, path)
+  TRUE
+}
+
+# Deliberately looser than the validation in data-raw/prices.R: this only
+# needs to establish that an already-installed ellmer can read the data.
+prices_check_remote <- function(parsed, call = caller_env()) {
   if (!is.list(parsed) || !is.data.frame(parsed$data)) {
     cli::cli_abort("Failed to parse pricing data from GitHub.", call = call)
   }
@@ -203,31 +202,22 @@ prices_cache_download <- function(call = caller_env()) {
   }
 
   attr(df, "schema_version") <- remote_version
-  attr(df, "etag") <- curl::parse_headers_list(resp$headers)[["etag"]]
-
-  path <- prices_cache_path()
-  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
-  saveRDS(df, path)
-  TRUE
+  df
 }
 
-prices_cache_etag <- function() {
-  path <- prices_cache_path()
-  if (!file.exists(path)) {
-    return(NULL)
-  }
-  cached <- tryCatch(readRDS(path), error = function(cnd) NULL)
-  attr(cached, "etag")
-}
-
-prices_cache_path <- function() {
-  cache_dir <- the$prices_cache_dir
-  if (is.null(cache_dir)) {
-    cache_dir <- normalizePath(
+prices_cache_dir <- function() {
+  the$prices_cache_dir %||%
+    normalizePath(
       tools::R_user_dir("ellmer", which = "cache"),
       mustWork = FALSE,
       winslash = "/"
     )
-  }
-  file.path(cache_dir, "prices.rds")
+}
+
+prices_cache_path <- function() {
+  file.path(prices_cache_dir(), "prices.rds")
+}
+
+prices_http_cache_path <- function() {
+  file.path(prices_cache_dir(), "http")
 }

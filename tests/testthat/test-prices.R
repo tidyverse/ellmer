@@ -78,13 +78,12 @@ test_that("models_update_prices() informs and returns FALSE when already up to d
 
 # prices_cache_download() ------------------------------------------------------
 
-mock_fetch <- function(status_code, content = NULL, headers = raw()) {
-  function(url, handle) {
-    if (is.character(content)) {
-      content <- charToRaw(content)
-    }
-    list(status_code = status_code, content = content, headers = headers)
-  }
+mock_response <- function(status_code = 200L, body = "") {
+  resp <- response(
+    status_code = status_code,
+    body = charToRaw(as.character(body))
+  )
+  function(req) resp
 }
 
 valid_envelope <- function(
@@ -103,13 +102,7 @@ valid_envelope <- function(
 
 test_that("prices_cache_download() writes cache and returns TRUE on 200", {
   cache_path <- local_prices_cache()
-  local_mocked_bindings(
-    curl_fetch_memory = mock_fetch(
-      200L,
-      content = valid_envelope(),
-      headers = charToRaw("etag: \"abc\"\r\n")
-    )
-  )
+  local_mocked_responses(mock_response(body = valid_envelope()))
 
   expect_true(prices_cache_download())
   expect_true(file.exists(cache_path))
@@ -118,51 +111,44 @@ test_that("prices_cache_download() writes cache and returns TRUE on 200", {
     attr(cached, "schema_version"),
     attr(prices_data, "schema_version")
   )
-  expect_equal(attr(cached, "etag"), "\"abc\"")
 })
 
-test_that("prices_cache_download() returns FALSE on 304", {
+test_that("prices_cache_download() returns FALSE when data is unchanged", {
   local_prices_cache()
-  local_mocked_bindings(curl_fetch_memory = mock_fetch(304L))
+  local_mocked_responses(mock_response(body = valid_envelope()))
 
+  expect_true(prices_cache_download())
   expect_false(prices_cache_download())
 })
 
 test_that("prices_cache_download() aborts on HTTP error", {
   local_prices_cache()
-  local_mocked_bindings(curl_fetch_memory = mock_fetch(500L))
+  local_mocked_responses(mock_response(500L))
 
   expect_snapshot(prices_cache_download(), error = TRUE)
 })
 
-test_that("prices_cache_download() aborts on curl error", {
+test_that("prices_cache_download() aborts on network failure", {
   local_prices_cache()
-  local_mocked_bindings(
-    curl_fetch_memory = function(url, handle) {
-      stop("simulated network failure")
-    }
-  )
+  local_mocked_responses(function(req) {
+    abort("simulated network failure", class = "httr2_failure")
+  })
 
   expect_snapshot(prices_cache_download(), error = TRUE)
 })
 
 test_that("prices_cache_download() aborts on malformed JSON", {
   local_prices_cache()
-  local_mocked_bindings(
-    curl_fetch_memory = mock_fetch(200L, content = "not json {")
-  )
+  local_mocked_responses(mock_response(body = "not json {"))
 
   expect_snapshot(prices_cache_download(), error = TRUE)
 })
 
 test_that("prices_cache_download() aborts when envelope is missing data", {
   local_prices_cache()
-  local_mocked_bindings(
-    curl_fetch_memory = mock_fetch(
-      200L,
-      content = jsonlite::toJSON(list(schema_version = 1L), auto_unbox = TRUE)
-    )
-  )
+  local_mocked_responses(mock_response(
+    body = jsonlite::toJSON(list(schema_version = 1L), auto_unbox = TRUE)
+  ))
 
   expect_snapshot(prices_cache_download(), error = TRUE)
 })
@@ -170,12 +156,9 @@ test_that("prices_cache_download() aborts when envelope is missing data", {
 test_that("prices_cache_download() aborts when remote schema is newer", {
   local_prices_cache()
   newer <- attr(prices_data, "schema_version") + 1L
-  local_mocked_bindings(
-    curl_fetch_memory = mock_fetch(
-      200L,
-      content = valid_envelope(schema_version = newer)
-    )
-  )
+  local_mocked_responses(mock_response(
+    body = valid_envelope(schema_version = newer)
+  ))
 
   expect_snapshot(prices_cache_download(), error = TRUE)
 })
@@ -183,12 +166,9 @@ test_that("prices_cache_download() aborts when remote schema is newer", {
 test_that("prices_cache_download() aborts when remote schema is older", {
   local_prices_cache()
   older <- attr(prices_data, "schema_version") - 1L
-  local_mocked_bindings(
-    curl_fetch_memory = mock_fetch(
-      200L,
-      content = valid_envelope(schema_version = older)
-    )
-  )
+  local_mocked_responses(mock_response(
+    body = valid_envelope(schema_version = older)
+  ))
 
   expect_snapshot(prices_cache_download(), error = TRUE)
 })
@@ -196,9 +176,7 @@ test_that("prices_cache_download() aborts when remote schema is older", {
 test_that("prices_cache_download() aborts when data is missing required columns", {
   local_prices_cache()
   bad <- prices_data[, c("provider", "model", "variant")]
-  local_mocked_bindings(
-    curl_fetch_memory = mock_fetch(200L, content = valid_envelope(data = bad))
-  )
+  local_mocked_responses(mock_response(body = valid_envelope(data = bad)))
 
   expect_snapshot(prices_cache_download(), error = TRUE)
 })
@@ -207,9 +185,7 @@ test_that("prices_cache_download() aborts when input/output columns are non-nume
   local_prices_cache()
   bad <- prices_data
   bad$input <- as.character(bad$input)
-  local_mocked_bindings(
-    curl_fetch_memory = mock_fetch(200L, content = valid_envelope(data = bad))
-  )
+  local_mocked_responses(mock_response(body = valid_envelope(data = bad)))
 
   expect_snapshot(prices_cache_download(), error = TRUE)
 })

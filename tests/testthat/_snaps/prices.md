@@ -37,16 +37,18 @@
       prices_cache_download()
     Condition
       Error:
-      ! Failed to download pricing data from GitHub (HTTP 500).
+      ! Failed to download pricing data from GitHub.
+      Caused by error in `req_perform()`:
+      ! HTTP 500 Internal Server Error.
 
-# prices_cache_download() aborts on curl error
+# prices_cache_download() aborts on network failure
 
     Code
       prices_cache_download()
     Condition
       Error:
       ! Failed to download pricing data from GitHub.
-      Caused by error in `curl_fetch_memory()`:
+      Caused by error in `mock()`:
       ! simulated network failure
 
 # prices_cache_download() aborts on malformed JSON

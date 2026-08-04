@@ -9,7 +9,7 @@ models_update_prices()
 \value{
 Invisibly returns \code{TRUE} if the cache was updated, or \code{FALSE} if
 the cached data was already up to date. Throws an error if the download
-fails or if the \pkg{curl} package is not installed.
+fails.
 }
 \description{
 Downloads the latest model pricing data from GitHub and saves it to the
