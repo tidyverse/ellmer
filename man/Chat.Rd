@@ -736,16 +736,19 @@ may return a promise.}
 \subsection{\code{Chat$on_request_end()}}{
   Register a callback that fires at the \strong{end of each model
 request} in the tool loop, i.e. after the model's response turn is
-received and before any tool calls it contains are executed. It is paired
-with \verb{$on_request_start()} -- every \code{on_request_start} has a matching
-\code{on_request_end} -- and is useful for per-request latency / cost tracking
-and for observing tool-call requests before they run.
+received and before any tool calls it contains are executed. It is the
+counterpart to \verb{$on_request_start()} and is useful for per-request
+latency / cost tracking and for observing tool-call requests before they
+run.
 
-If a request is cancelled or interrupted the callback still fires (to
-keep the start/end pairing), but \code{turn} may be an \link{AssistantPartialTurn}
-whose \verb{@tokens} and \verb{@cost} are \code{NA} (only \verb{@duration} is populated).
-Guard cost/latency accounting with
-\code{S7::S7_inherits(turn, AssistantPartialTurn)} if that matters to you.
+It fires after every request that completes or is cancelled. If a request
+is cancelled or interrupted the callback still fires, but \code{turn} may be an
+\link{AssistantPartialTurn} whose \verb{@tokens} and \verb{@cost} are \code{NA} (only
+\verb{@duration} is populated); guard cost / latency accounting with
+\code{S7::S7_inherits(turn, AssistantPartialTurn)} if that matters to you. A
+request that \emph{errors}, however, propagates the error and does \strong{not} fire
+\verb{$on_request_end()}, so it is not a reliable cleanup hook -- wrap your
+\verb{$chat()} call if you need something to run no matter what.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$on_request_end(callback)}

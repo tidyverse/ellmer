@@ -602,16 +602,19 @@ Chat <- R6::R6Class(
 
     #' @description Register a callback that fires at the **end of each model
     #'   request** in the tool loop, i.e. after the model's response turn is
-    #'   received and before any tool calls it contains are executed. It is paired
-    #'   with `$on_request_start()` -- every `on_request_start` has a matching
-    #'   `on_request_end` -- and is useful for per-request latency / cost tracking
-    #'   and for observing tool-call requests before they run.
+    #'   received and before any tool calls it contains are executed. It is the
+    #'   counterpart to `$on_request_start()` and is useful for per-request
+    #'   latency / cost tracking and for observing tool-call requests before they
+    #'   run.
     #'
-    #'   If a request is cancelled or interrupted the callback still fires (to
-    #'   keep the start/end pairing), but `turn` may be an [AssistantPartialTurn]
-    #'   whose `@tokens` and `@cost` are `NA` (only `@duration` is populated).
-    #'   Guard cost/latency accounting with
-    #'   `S7::S7_inherits(turn, AssistantPartialTurn)` if that matters to you.
+    #'   It fires after every request that completes or is cancelled. If a request
+    #'   is cancelled or interrupted the callback still fires, but `turn` may be an
+    #'   [AssistantPartialTurn] whose `@tokens` and `@cost` are `NA` (only
+    #'   `@duration` is populated); guard cost / latency accounting with
+    #'   `S7::S7_inherits(turn, AssistantPartialTurn)` if that matters to you. A
+    #'   request that *errors*, however, propagates the error and does **not** fire
+    #'   `$on_request_end()`, so it is not a reliable cleanup hook -- wrap your
+    #'   `$chat()` call if you need something to run no matter what.
     #'
     #' @param callback A function called with a single argument `turn`: the
     #'   assistant turn just returned by the model (an [AssistantPartialTurn] on a
