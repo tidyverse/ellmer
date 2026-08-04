@@ -58,7 +58,7 @@ provider_lookup <- tribble(
   "groq",                      "Groq",
 )
 
-prices_data <- all_prices |>
+prices <- all_prices |>
   inner_join(provider_lookup, join_by(provider == litellm_provider)) |>
   mutate(provider = provider.y, provider.y = NULL) |>
   distinct(provider, model, variant, .keep_all = TRUE) |>
@@ -77,7 +77,7 @@ posit_claude_models <- c(
   "claude-haiku-4-5"
 )
 
-posit_claude_prices <- prices_data |>
+posit_claude_prices <- prices |>
   filter(provider == "Anthropic", model %in% posit_claude_models) |>
   mutate(
     provider = "Posit",
@@ -92,8 +92,8 @@ posit_other_prices <- tibble::tribble(
   mutate(provider = "Posit", variant = "") |>
   select(provider, model, variant, input, output, cached_input)
 
-prices_data <- bind_rows(
-  prices_data,
+prices <- bind_rows(
+  prices,
   posit_claude_prices,
   posit_other_prices
 ) |>
@@ -103,12 +103,12 @@ cli::cli_progress_done()
 
 # --- sanity checks -----------------------------------------------------------
 
-cli::cli_alert_info("Rows: {nrow(prices_data)}")
-cli::cli_alert_info("Providers: {n_distinct(prices_data$provider)}")
+cli::cli_alert_info("Rows: {nrow(prices)}")
+cli::cli_alert_info("Providers: {n_distinct(prices$provider)}")
 
 stopifnot(
-  "Expected at least 1000 rows" = nrow(prices_data) >= 1000,
-  "Expected 10 providers" = n_distinct(prices_data$provider) >= 10
+  "Expected at least 1000 rows" = nrow(prices) >= 1000,
+  "Expected 10 providers" = n_distinct(prices$provider) >= 10
 )
 
 # --- schema version ----------------------------------------------------------
@@ -120,12 +120,12 @@ stopifnot(
 # install. Update both values together whenever the schema changes.
 schema_version <- 1L
 min_ellmer_version <- "0.4.1.9000"
-attr(prices_data, "schema_version") <- schema_version
+attr(prices, "schema_version") <- schema_version
 
 prices_envelope <- list(
   schema_version = schema_version,
   min_ellmer_version = min_ellmer_version,
-  data = prices_data
+  data = prices
 )
 
 # --- schema validation -------------------------------------------------------
@@ -152,4 +152,4 @@ jsonlite::write_json(
   pretty = TRUE,
   auto_unbox = TRUE
 )
-usethis::use_data(prices_data, overwrite = TRUE, internal = TRUE)
+usethis::use_data(prices, overwrite = TRUE, internal = TRUE)
