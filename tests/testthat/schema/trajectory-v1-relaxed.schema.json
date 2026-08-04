@@ -92,6 +92,7 @@
         "role": { "const": "tool" },
         "tool_call_id": { "type": "string", "minLength": 1 },
         "content": { "type": "string" },
+        "ok": { "type": "boolean" },
         "timestamp": { "$ref": "#/$defs/timestamp" }
       }
     }

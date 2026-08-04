@@ -26,6 +26,11 @@ NULL
 #' When no timestamp is available, the field is omitted rather than
 #' synthesized.
 #'
+#' `tool` records carry an `ok` field reporting whether the tool call
+#' succeeded, taken from the corresponding [ContentToolResult]'s `error`
+#' property. Built-in web search/fetch results have no equivalent
+#' success/failure signal, so `ok` is omitted for those.
+#'
 #' @examples
 #' turns <- list(
 #'   UserTurn(list(
@@ -103,7 +108,12 @@ method(contents_trajectory, ContentToolResult) <- function(content) {
   } else {
     tool_string(content)
   }
-  trajectory_fragment("tool_result", id = id, content = text)
+  trajectory_fragment(
+    "tool_result",
+    id = id,
+    content = text,
+    ok = !tool_errored(content)
+  )
 }
 
 method(contents_trajectory, ContentToolRequestSearch) <- function(content) {
@@ -298,7 +308,8 @@ fold_trajectory_contents <- function(turn, turn_index) {
       record <- list(
         role = "tool",
         tool_call_id = id,
-        content = fragment$content
+        content = fragment$content,
+        ok = fragment$ok
       )
       records[[length(records) + 1]] <- with_timestamp(record, timestamp)
     } else if (type == "tool_call_search") {

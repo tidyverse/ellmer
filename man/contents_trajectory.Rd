@@ -36,6 +36,11 @@ ellmer does not track per-turn timestamps, except when the provider itself
 reports one; currently this is only the case for OpenAI's Responses API.
 When no timestamp is available, the field is omitted rather than
 synthesized.
+
+\code{tool} records carry an \code{ok} field reporting whether the tool call
+succeeded, taken from the corresponding \link{ContentToolResult}'s \code{error}
+property. Built-in web search/fetch results have no equivalent
+success/failure signal, so \code{ok} is omitted for those.
 }
 \examples{
 turns <- list(

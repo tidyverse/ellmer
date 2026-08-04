@@ -26,6 +26,9 @@ expect_valid_trajectory_records <- function(records) {
     } else if (record$role == "tool") {
       expect_type(record$tool_call_id, "character")
       expect_type(record$content, "character")
+      if (!is.null(record$ok)) {
+        expect_type(record$ok, "logical")
+      }
     } else if (record$role %in% c("user", "reasoning")) {
       expect_type(record$content, "character")
     }
@@ -79,9 +82,36 @@ test_that("tool call and result round trip", {
   expect_equal(user_records[[1]]$role, "tool")
   expect_equal(user_records[[1]]$tool_call_id, "call_1")
   expect_equal(user_records[[1]]$content, "42")
+  expect_equal(user_records[[1]]$ok, TRUE)
 
   expect_valid_trajectory_records(c(assistant_records, user_records))
   expect_valid_against_schema(c(assistant_records, user_records))
+})
+
+test_that("an errored tool result has ok = FALSE", {
+  request <- ContentToolRequest("call_1", "my_tool", list())
+  turn <- UserTurn(list(
+    ContentToolResult(value = NULL, error = "boom", request = request)
+  ))
+
+  records <- contents_trajectory(turn)
+
+  expect_length(records, 1)
+  expect_equal(records[[1]]$ok, FALSE)
+
+  expect_valid_trajectory_records(records)
+  expect_valid_against_schema(records)
+})
+
+test_that("built-in search/fetch tool results have no ok field", {
+  turn <- AssistantTurn(list(
+    ContentToolRequestSearch(query = "ellmer package", json = list()),
+    ContentToolResponseSearch(urls = "https://a.com", json = list())
+  ))
+
+  records <- contents_trajectory(turn)
+
+  expect_null(records[[2]]$ok)
 })
 
 test_that("thinking content produces a reasoning record", {
