@@ -108,7 +108,7 @@ method(chat_body, ProviderSnowflakeCortex) <- function(
   type = NULL
 ) {
   messages <- as_json(provider, turns)
-  tools <- as_json(provider, unname(tools))
+  tools <- chat_body_tools(provider, tools)
 
   if (!is.null(type)) {
     # Note: Snowflake uses a slightly different format than OpenAI.

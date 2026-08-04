@@ -2,31 +2,31 @@
   "version": 1,
   "stage": "done",
   "batch": {
-    "name": "batches/hp3tanggzvthhnlw3gnj909kf56nq1ntpzyk",
+    "name": "batches/o6k1fq34vm2ou69wy5w72wqw56qjigbln6yy",
     "metadata": {
       "@type": "type.googleapis.com/google.ai.generativelanguage.v1main.GenerateContentBatch",
       "model": "models/gemini-3.5-flash",
-      "displayName": "ellmer-1781707740",
+      "displayName": "ellmer-1783003258",
       "inputConfig": {
-        "fileName": "files/rx17ax0iv3zb"
+        "fileName": "files/9ipl31k7go00"
       },
       "output": {
-        "responsesFile": "files/batch-hp3tanggzvthhnlw3gnj909kf56nq1ntpzyk"
+        "responsesFile": "files/batch-o6k1fq34vm2ou69wy5w72wqw56qjigbln6yy"
       },
-      "createTime": "2026-06-17T14:49:01.429015220Z",
-      "endTime": "2026-06-17T14:49:50.441801900Z",
-      "updateTime": "2026-06-17T14:49:50.441801860Z",
+      "createTime": "2026-07-02T14:40:59.019821594Z",
+      "endTime": "2026-07-02T14:41:31.577846928Z",
+      "updateTime": "2026-07-02T14:41:31.577846901Z",
       "batchStats": {
         "requestCount": "4",
         "successfulRequestCount": "4"
       },
       "state": "BATCH_STATE_SUCCEEDED",
-      "name": "batches/hp3tanggzvthhnlw3gnj909kf56nq1ntpzyk"
+      "name": "batches/o6k1fq34vm2ou69wy5w72wqw56qjigbln6yy"
     },
     "done": true,
     "response": {
       "@type": "type.googleapis.com/google.ai.generativelanguage.v1main.GenerateContentBatchOutput",
-      "responsesFile": "files/batch-hp3tanggzvthhnlw3gnj909kf56nq1ntpzyk"
+      "responsesFile": "files/batch-o6k1fq34vm2ou69wy5w72wqw56qjigbln6yy"
     }
   },
   "results": [
@@ -39,7 +39,7 @@
               "parts": [
                 {
                   "text": "Des Moines",
-                  "thoughtSignature": "EpgCCpUCAQw51sejSJTf1RN5bk517/YZmWqe1gy6CEDii6/N6o9wuBFNldc6xeYs4PAfIDe2J7SzVSe9/9+zlIq3En87KIXKplDK3NkPdxnuJubuLiU+XwVoiK9c15DLkrJdquLEwf4sOiB+n8jTW68WzN2Q9zcmY2Z7319uKvCYI3HKyjpXE04M74289CQDna3l0cVnRd9TGKbsvJCIu6r5uCRyaMmAJzKu379q0KHL1ZPkbS8ZkVjUzD2yDjImf6f1TogzyWcCS7jmQbaUrnGDNp9ayGsl+1KuZzowEuIj3qNvov2s0klq31f8VNFn+PfS7G98jB9O8ZJOuBZU5rt1t8k+OKGKN+iRnnaup35Fk/s8pQCEA9iNLg=="
+                  "thoughtSignature": "EpgCCpUCAQw51scATKE1eIjMV2yqGfWMipVKz6x9Lp31207TDc5nAP6bDk3mGU22mmIdm//apj+zBMX8pHYreGx76AhfU3YLXLfCzxA23tAiKswpDkJX0zQdq0vI6q+F2PojQpANIsC03l6oapQI1tmbunjX4aZSdC6F7bsTduNhMpz52wH4Xt3WtZlV5pVEBOSGcvcgYqZmRiI2in6eCngY0iowXKLaShyZL1k2Ap7ccBJVvKrfRymfkmtFTYWieFGfbftkbr1ojVmEu8SwLQgowgfzjWHnva4A0JPw+m4YYGR3MTZOVjrbPpo9FtA+qAvmhF49lhlXf6ZVHB6QCU+dhAs+EPJV9arbp/bpCrXWNre644mt4o5xnw=="
                 }
               ],
               "role": "model"
@@ -62,7 +62,7 @@
           "serviceTier": "SERVICE_TIER_STANDARD"
         },
         "modelVersion": "gemini-3.5-flash",
-        "responseId": "CbQyaua_KNnRz7IP2KW1eA"
+        "responseId": "mnhGavTtJvqf_uMP4rue8Qw"
       }
     },
     {
@@ -74,7 +74,7 @@
               "parts": [
                 {
                   "text": "Albany",
-                  "thoughtSignature": "EpsCCpgCAQw51scB4EdutC16DjlzsZF0wDuJhCwridUwZ8p23akJW2E3BqlXqk++bIARLC3fCzKDOxw9vc5ZcpAHoxEkC7ymeHU8EMpAFSWCcBwX+wMlv9vHbuAqFNMnCkcAKWlMOrXnxJupblfUvhVMkNKYB9/gkS6jVFTWO5Hokdsrq6y3n+BS5krGJXuh3eXXgxZAvo2ygv6qCMPNE/wN6QH+Bd1MEjOIIB1XSuRzy8VXDwITSEHQDrSmefyb6AF2LiFnwVyqE4XLBfiiGb+mdq56nkRp6hYtarwWgs5eYRP0yMHBWFvkjypHxfI3nP1lo4H8G9vBgeKIn1lC3tCweJt2WAdRLA3jwmKHoeBlIx1/8tkR3QNQ7+kcVA=="
+                  "thoughtSignature": "EpsCCpgCAQw51sek9uErgy3kFLAoGtj7Qtvg+ZnyeMw5qUMI03Nf8ggV9WYkm4rn4loRf8mDldQ4JqBi/fvbE6F53v28itywFJJe12IGZ4NO2BNq3ftSVpXfjrW3Hb2V9SV7gtxZ3Ep6UiHF059HRswTQooduQXFjifp3Bezx5bzXDZAUNIPSCRSDA2NJYeo5f3NIW3iNSvQliDotePZqj52LU8vv7pvo0H2MnR+13iu9da6g7mc6vwi7hLY4eAS616L5SG/amTfmtWCyiNt4JqFIrk2VIUuk/C9WWpe6FQplORagv3uBYM4+IqWuaU+14rSqQniQGgvydgsNMSfcjkL/NijSrxj5lHklH3/xbSiPN5+wmOs2mcW8nPAxw=="
                 }
               ],
               "role": "model"
@@ -97,7 +97,7 @@
           "serviceTier": "SERVICE_TIER_STANDARD"
         },
         "modelVersion": "gemini-3.5-flash",
-        "responseId": "CrQyauSiGvPsz7IPiK7UgQY"
+        "responseId": "mnhGatqbJcnW_uMPtfKK0Qs"
       }
     },
     {
@@ -109,7 +109,7 @@
               "parts": [
                 {
                   "text": "Sacramento",
-                  "thoughtSignature": "EqECCp4CAQw51scMuavyuYlzbizuD2Eam2bgc1G1ttOuL6RM0wbfp0gzYDPuqkELXMCKREi1AbQ8cCM+EhMSgonIomeMlJVhN6CTduFqxyYaGWHJt8OxxgeunBzxq9YMsCdwyGnRjYXcaGS0BoV7nul6dXBdv1aDcjKqTeo2ql5gMpsJgHkXlqFGJ+ze7QVakagJ+c4vDGRi3bFiv/VlIHZp1x14hXHle4Q3xT07LvYJEWVcVtehaommpAat4eSsAKXl37vYCCYp31vP73CVKFn3yeSVJ2ZKaPOjkV2BA322w2uIS5mgzfBAEH0HAaf/WNlgWTQ8IUsu0W/M2MiUYhry8WS64DXmCyMO8sirFOQWMvqN0OxO7hTLXmAMjV9BqJNaQw=="
+                  "thoughtSignature": "EqECCp4CAQw51sdDF7YRCPI0tqkLEkTVRnNM5eNAdr1C4HLCbmD5Sh3VHljZhIQn0iNZQq+MZF/nbBzfHtUFyjaeNGA9+qFLc2TxYanrlDoKUSsllssqNP1p1QtNyxoPniQyVhJFhcCz3aWsT9yxxtW74RwNYnOYJtX9sZBtZ0qlzNI2azV5Q+WcEf82zMUbNMLMWjtoC5YOxSWSBXlzT+uaqzMBGwT81ao0w3+r14hMskA4l46o4Gxu/3ksF1ndua+ueipkQPUjvcfLvcbLpkdvMoEVocAMvpySvvglPPvyzmjJ0ELpld5P2lMH7Vq95P6GHcxsRQ2He+SD+3rrDYXVWiBUIQj5k7cPI4RPRr9P4rK6/OVG7fdD+CD3xykNC79PYw=="
                 }
               ],
               "role": "model"
@@ -132,7 +132,7 @@
           "serviceTier": "SERVICE_TIER_STANDARD"
         },
         "modelVersion": "gemini-3.5-flash",
-        "responseId": "CbQyas3GENnRz7IP2KW1eA"
+        "responseId": "mnhGaqibJbHf_uMPvOGHmQQ"
       }
     },
     {
@@ -144,7 +144,7 @@
               "parts": [
                 {
                   "text": "Austin",
-                  "thoughtSignature": "EpICCo8CAQw51sdFQ85UKP2dYj+mmZBC+lf5Gbebv6elSkdV+gQXYlT27ryvyxoPmJh4J04U5rV/wh2Q8YJGMpdRFRkfWGCDtyfiC4KxULWnT4CqvqnyH8fNwjVc7G/M1/rkNN3FTEIjXGxCtgVVJGp8Z0NmV7cHUd/7SdShK9jx3rOlr/FlVVL79Vi/QSa9hsFL++WnUl41+HPOtZBapVTpMY9ZgByiqoPHHKqyslyFZAmEh+zg4y2dEABoaSyU37tehj7q2PGdMRkBshW1GhtmiTN0Q0rDbbCuaMaVLvBjOdsJgT5uBTEl07FKri+ctpx4gsZtFDUTOWUgr93LqCXn+uYXbMnlkAg2E/WI9ihGPaQYAQ=="
+                  "thoughtSignature": "EpICCo8CAQw51seWpPdN33ZBmLF5aSau4vDzY6uEcvw+JA5X7lT6XwOhcF1pEwyqB6F6B/E/t7tB8tR0sLo2Rd5w2ICzQ8ShRWdBylb0v2GEA+LHb/DbKb7NAQZ4otcYIkyXTzF9HCarUMQkkIjfX89eFQiDBG7NBHliBrPMv+p5ATXe9sdIC9tDVvAon4iNzL1w6stUQI+0E/dMReoaz4KfqKEJ2Z0ilPppsTBa4/WjMhWiNyBN0M+qBUQqLglzyVgS/BcJGOpkMxun3uKurnWdrcnwsA/FJKn+rg9ZHdBbMF9xX9ssQ0HSBCBAiUy/0e3bbkzwmAx8BSbwJUNGVCo8JJ8x9j8JbqGqqNsIZ1x2QztdUA=="
                 }
               ],
               "role": "model"
@@ -167,14 +167,14 @@
           "serviceTier": "SERVICE_TIER_STANDARD"
         },
         "modelVersion": "gemini-3.5-flash",
-        "responseId": "CrQyaunPA5PYz7IPgIndiAg"
+        "responseId": "mnhGatybJc-a_uMPu6Hd4As"
       }
     }
   ],
-  "started_at": 1781707738,
+  "started_at": 1783003256,
   "hash": {
-    "provider": "90a40229e1ce3371a541e36b95fb2239",
-    "prompts": "b8eafe281e3cc5113058d9722be3e295",
-    "user_turns": "d6990a1b8a9f5db0e97de86c2669de44"
+    "provider": "d38fdcfcdb8f7326fcd973cf4f87f1ba",
+    "prompts": "ec58117fcf69ea639e59250f914cca8f",
+    "user_turns": "5c3ea26a1e046a3d3f5a574bf143ebd2"
   }
 }

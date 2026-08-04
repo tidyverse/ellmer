@@ -118,9 +118,10 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
     text <- detect(x@contents, S7_inherits, ContentText)
     tools <- keep(x@contents, is_tool_request)
 
+    content <- if (!is.null(text)) as_json(provider, text, ...)
     list(compact(list(
       role = "assistant",
-      content = as_json(provider, text, ...),
+      content = content,
       tool_calls = as_json(provider, tools, ...)
     )))
   } else {

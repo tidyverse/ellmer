@@ -49,7 +49,6 @@ community; contributions to improve them are especially welcome.
 - Azure OpenAI: `chat_azure_openai()`.
 - Databricks: `chat_databricks()`.
 - DeepSeek: `chat_deepseek()`.
-- GitHub model marketplace: `chat_github()`.
 - Google Gemini/Vertex AI: `chat_google_gemini()`,
   `chat_google_vertex()`.
 - Ollama: `chat_ollama()`.

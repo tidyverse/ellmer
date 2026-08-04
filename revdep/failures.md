@@ -31,7 +31,7 @@ Writing `src/Makevars`.
 ** libs
 ...
 export CARGO_HOME=/tmp/workdir/llmjson/new/llmjson.Rcheck/00_pkg_src/llmjson/src/.cargo && \
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.cargo/bin" && \
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/tmp/home/.cargo/bin" && \
 RUSTFLAGS=" --print=native-static-libs" cargo build -j 2 --offline --lib --release --manifest-path=./rust/Cargo.toml --target-dir ./rust/target
 error: package `indexmap v2.12.1` cannot be built because it requires rustc 1.82 or newer, while the currently active rustc version is 1.75.0
 Either upgrade to rustc 1.82 or newer, or use
@@ -58,7 +58,7 @@ Writing `src/Makevars`.
 ** libs
 ...
 export CARGO_HOME=/tmp/workdir/llmjson/old/llmjson.Rcheck/00_pkg_src/llmjson/src/.cargo && \
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.cargo/bin" && \
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/tmp/home/.cargo/bin" && \
 RUSTFLAGS=" --print=native-static-libs" cargo build -j 2 --offline --lib --release --manifest-path=./rust/Cargo.toml --target-dir ./rust/target
 error: package `indexmap v2.12.1` cannot be built because it requires rustc 1.82 or newer, while the currently active rustc version is 1.75.0
 Either upgrade to rustc 1.82 or newer, or use

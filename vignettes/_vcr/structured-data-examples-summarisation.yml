@@ -300,7 +300,7 @@ http_interactions:
         If you were able to develop technology that made it very hard to fine-tune
         an AI model away from its original capability distribution, then it’d be easier
         to confidently release models without potentially compromising on downstream
-        safety."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"Summary
+        safety."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"Summary
         of the article.","properties":{"author":{"type":"string","description":"Name
         of the article author"},"topics":{"type":"array","description":"Array of topics,
         e.g. [\"tech\", \"politics\"]. Should be as specific as possible, and can
@@ -317,50 +317,50 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a133869ac872a5ba-IAD
+      cf-ray: a2508be16e67cdf0-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:23:00 GMT
+      date: Sun, 02 Aug 2026 22:33:52 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '9244'
+      openai-processing-ms: '3758'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=H7nyJip9jeavI4CpOeSa3lvEP6aCT0GzTkQTqb149JQ-1782721371.3283043-1.0.1.1-6tf02uB3ei9z5x67i98zb4HakzAhxDFuxc1uhasy7mJqCX5wytYxOzM79F1Zagd1.3CnVl80ob5wMiaEoLv.VdiIv.LP.gV1dCBEJwHdqOxZ14wgETaIkLm9fCWOixrI;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 08:53:00 GMT
+      set-cookie: __cf_bm=5pG7_AV1POkKzazTw7Msw.LDVOnFtNEyKrpRlBa_xw8-1785710029.0227249-1.0.1.1-y0_0VP3J7M8H0iQsuQIUHsgvYGJIAEJi6K_u94qsRDI81VxdFvi1Sm2FwP33Lwm0rV4qNv6ZxMkQ2cdfoAZ8T7ZL.lorIkUbN902KsQ5UhdsQSKvitKDopdcKwEMzWxa;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:03:52 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499876'
+      x-ratelimit-remaining-tokens: '499826'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 14ms
-      x-request-id: 3ea0b30a-b8e6-4976-b98d-5c53f1a9d71c
+      x-ratelimit-reset-tokens: 20ms
+      x-request-id: req_4755977f337a4e5d838d1aca4803f62e
     body:
       string: |-
         {
-          "id": "resp_000eec1bc5541acc016a422b5b62c4819c9480e98cd31130cd",
+          "id": "resp_009635beba94824f016a6fc5cd215c819788686b1da0896a6a",
           "object": "response",
-          "created_at": 1782721371,
+          "created_at": 1785710029,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782721380,
+          "completed_at": 1785710032,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.4-2026-03-05",
+          "model": "gpt-5.6-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_000eec1bc5541acc016a422b5d2dc0819c9400381bcf87614d",
+              "id": "msg_009635beba94824f016a6fc5cdc6ac8197a2d55ead0a9e68e3",
               "type": "message",
               "status": "completed",
               "content": [
@@ -368,7 +368,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"author\":\"Anthropic\",\"topics\":[\"AI policy\",\"third-party testing\",\"frontier AI systems\",\"AI safety\",\"AI evaluations\",\"model oversight\",\"national security misuse\",\"regulatory capture\",\"open-source AI models\",\"Responsible Scaling Policy\"],\"summary\":\"Anthropic argues that frontier AI systems should be subject to effective third-party testing to validate safety, especially for risks such as national security misuse, election integrity harms, discrimination, and dangerous autonomous behaviors. The company says self-governance by labs is not enough; instead, governments, academia, and industry should build a broader testing ecosystem with trusted external evaluators, shared standards, and a narrowly scoped regime focused only on the most compute-intensive general-purpose models. Anthropic envisions a two-stage process with broad automated screening followed by deeper expert review when risks are flagged.\\n\\nThe article also connects testing to broader policy issues. Anthropic supports more public funding for AI evaluation infrastructure, government capacity through institutions like NIST and national research clouds, and development of tests for security-relevant capabilities. It argues that third-party testing can help address concerns around open-weight models and reduce regulatory capture by creating independent oversight rather than burdensome compliance structures that favor large firms. Overall, the piece presents third-party testing as the 'minimal viable policy' for managing current and future AI risks while preserving innovation.\",\"coherence\":90,\"persuasion\":0.84}"
+                  "text": "{\"author\":\"Anthropic\",\"topics\":[\"AI policy\",\"third-party AI testing\",\"frontier AI safety\",\"AI evaluations\",\"Responsible Scaling Policy\",\"national security\",\"AI governance\",\"open-source AI models\",\"regulatory capture\"],\"summary\":\"Anthropic argues that frontier generative AI systems should be subject to a carefully scoped, broadly trusted third-party testing regime. Because general-purpose models can be adapted to many downstream uses, they may create risks involving election integrity, discrimination, cyberattacks, bioweapons, and unintended autonomous behavior that sector-specific regulation alone cannot adequately address. Anthropic proposes a two-stage approach: broad, rapid automated evaluations designed to avoid missed risks, followed by deeper expert-led testing when concerns are identified. Testing should apply only to a narrow class of the most computationally intensive frontier systems, minimizing burdens on smaller developers.\\n\\nThe article calls for an ecosystem of private auditors, universities, and government agencies to develop and administer evaluations, with governments funding capacity at institutions such as NIST and national AI research infrastructure. Anthropic presents its Responsible Scaling Policy as an early prototype but says voluntary company self-governance is insufficient. It also argues that shared evaluation standards could help international coordination and reduce regulatory capture. On open models, it supports openness for most current systems but contends that future models with demonstrable severe misuse potential may require controlled release, hardened safeguards, or limits on fine-tuning\u2014decisions that should rely on legitimate independent testing rather than AI companies alone.\",\"coherence\":91,\"persuasion\":0.78}"
                 }
               ],
               "phase": "final_answer",
@@ -381,8 +381,8 @@ http_interactions:
           "prompt_cache_key": null,
           "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": "current_turn",
-            "effort": "none",
+            "context": "all_turns",
+            "effort": "medium",
             "mode": "standard",
             "summary": null
           },
@@ -463,16 +463,17 @@ http_interactions:
           "usage": {
             "input_tokens": 4334,
             "input_tokens_details": {
-              "cached_tokens": 0
+              "cache_write_tokens": 0,
+              "cached_tokens": 4331
             },
-            "output_tokens": 287,
+            "output_tokens": 317,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 4621
+            "total_tokens": 4651
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:23:00
+  recorded_at: 2026-08-02 22:33:52
 recorded_with: VCR-vcr/2.1.0

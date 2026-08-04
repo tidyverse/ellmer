@@ -16,18 +16,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a133879d3e78a5ba-IAD
+      cf-ray: a2508cf91b650866-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:23:33 GMT
+      date: Sun, 02 Aug 2026 22:34:34 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '441'
+      openai-processing-ms: '566'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=lKtk8tfrxp.Z1t9yG_GiJugFD3yUvX7j_ZDUjLJkpN4-1782721412.6718826-1.0.1.1-fgHIjWz8pxDMW2UtzRsGPwm92nvS.INH1cd9_QFLsPGVhkrGHusRsonBpJVlazcvu6z5Qg9AMa6Ubu9TXYDEWkBhUQnuIzeYwdGaySrGCKFzILKr0XhMCtOcJrdT.Vw0;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 08:53:33 GMT
+      set-cookie: __cf_bm=70mqe5MsaphpcZ79dRIeCgWFl4dWkcUM.rieMEg24Qg-1785710073.7776582-1.0.1.1-NRwDNarb9eDmcY6ILGRrCpZkdurvkM_3JN0oqD8__eaF_qn6yaWQhHyEbWd7SaVgRcwLcetUZd_3FkyBE9txQmqToPDNi_dZhZRCkK70wsiYDDz0YxSYwMhUavbz_Kbz;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:04:34 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -36,19 +36,19 @@ http_interactions:
       x-ratelimit-remaining-tokens: '199739'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 78ms
-      x-request-id: 43ff5b79-d140-487f-a211-4986cb102eb4
+      x-request-id: req_1e7546db00d84145a5b25619f25e23c0
     body:
       string: |-
         {
-          "id": "resp_0b7e98be9a085160016a422b84b57881a183da6d9d7a242ab8",
+          "id": "resp_0d88ba63cd1f5915016a6fc5f9d5f08190ada4d225dc2797e7",
           "object": "response",
-          "created_at": 1782721412,
+          "created_at": 1785710073,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782721413,
+          "completed_at": 1785710074,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -59,19 +59,19 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c",
+              "id": "fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508",
               "type": "function_call",
               "status": "completed",
               "arguments": "{}",
-              "call_id": "call_WYxSlE3oJGaphda2Fd0ue0T3",
+              "call_id": "call_kRB7ZaqK7VSV4Tr7QF3Nnk18",
               "name": "tool_001"
             },
             {
-              "id": "fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9",
+              "id": "fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca",
               "type": "function_call",
               "status": "completed",
               "arguments": "{}",
-              "call_id": "call_TCXYc7SBI0v40cqm7Do3VndD",
+              "call_id": "call_PuVkqi6png5TLdhZotjQblIK",
               "name": "tool_001"
             }
           ],
@@ -119,6 +119,7 @@ http_interactions:
               "type": "function",
               "description": "Roll a die",
               "name": "tool_001",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -135,6 +136,7 @@ http_interactions:
           "usage": {
             "input_tokens": 44,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
             "output_tokens": 42,
@@ -146,14 +148,14 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:23:33
+  recorded_at: 2026-08-02 22:34:34
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
         terse"}]},{"role":"user","content":[{"type":"input_text","text":"Roll two
-        dice and tell me the total"}]},{"type":"function_call","call_id":"fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c","name":"tool_001","arguments":"{}"},{"type":"function_call","call_id":"fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9","name":"tool_001","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c","output":"5"},{"type":"function_call_output","call_id":"fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9","output":"4"}],"model":"gpt-4.1-nano","stream":false,"tools":[{"type":"function","name":"tool_001","description":"Roll
+        dice and tell me the total"}]},{"type":"function_call","call_id":"fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508","name":"tool_001","arguments":"{}"},{"type":"function_call","call_id":"fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca","name":"tool_001","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508","output":"5"},{"type":"function_call_output","call_id":"fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca","output":"4"}],"model":"gpt-4.1-nano","stream":false,"tools":[{"type":"function","name":"tool_001","description":"Roll
         a die","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -164,18 +166,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a13387a2b94da5ba-IAD
+      cf-ray: a2508cfedbbf0866-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:23:34 GMT
+      date: Sun, 02 Aug 2026 22:34:35 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '455'
+      openai-processing-ms: '438'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=cS21lajJ3O4.Cn9giPE8WKO2Cdk37motT_X3EHoRZMw-1782721413.5547886-1.0.1.1-FcK2X8CNM_N9lqxMaCqpXcFKQBAnmV4N4tUH6J8vhBfKJv9u8WZ7pPOAyd4NI7RFFKnRkt.nEuEgRXUUJBC0svFXyRlF0BCAE8Ok1F9E2N06sEAyhbFQgMXlkuy__Pyt;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 08:53:34 GMT
+      set-cookie: __cf_bm=YdhXeVr_u024nFt4XtiqDcGFsKZphKDT9BTbt_3118I-1785710074.6933594-1.0.1.1-GwlYrS9Z9nxIEKRiq.nYOEOgUcqcbzBhFtzPqRxLZNWNaX3fQPHviWTEq22ABibo2brZqPlrIDpLUaTsYnKNaAbFnRH7oRgLA4VLIgDmVn9lQJdgBWrUCtqeSSmbvSO8;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:04:35 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -184,19 +186,19 @@ http_interactions:
       x-ratelimit-remaining-tokens: '199701'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 89ms
-      x-request-id: 724e35dc-51bc-49b9-9c27-f892a75043fd
+      x-request-id: req_2c6aea2903ab40c9945572822e7dacb5
     body:
       string: |-
         {
-          "id": "resp_0373a5ffcc4157fe016a422b85992481a393142b63304f40ae",
+          "id": "resp_06d27e7d19d0169c016a6fc5fac2cc8196a1e33929e66222b1",
           "object": "response",
-          "created_at": 1782721413,
+          "created_at": 1785710074,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782721414,
+          "completed_at": 1785710075,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -207,7 +209,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0373a5ffcc4157fe016a422b85f54c81a39701f59990f67b2d",
+              "id": "msg_06d27e7d19d0169c016a6fc5fb13dc819697f92577e1bb5e21",
               "type": "message",
               "status": "completed",
               "content": [
@@ -265,6 +267,7 @@ http_interactions:
               "type": "function",
               "description": "Roll a die",
               "name": "tool_001",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -281,6 +284,7 @@ http_interactions:
           "usage": {
             "input_tokens": 82,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
             "output_tokens": 8,
@@ -292,5 +296,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:23:34
+  recorded_at: 2026-08-02 22:34:34
 recorded_with: VCR-vcr/2.1.0

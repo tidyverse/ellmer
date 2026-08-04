@@ -98,7 +98,9 @@ reference:
     to learn more about the objects if you're doing something that's only
     supported by one provider, or if you're implementing a new provider.
   contents:
+  - Chat
   - Provider
+  - ToolDef
   - Turn
   - Content
   - Type

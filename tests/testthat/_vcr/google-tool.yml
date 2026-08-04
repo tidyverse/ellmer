@@ -4,20 +4,20 @@ http_interactions:
     uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
-        in Y-M-D format?"}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        in Y-M-D format?"}]}],"tools":[{"functionDeclarations":[{"name":"current_date","description":"Return
         the current date"},{"name":"current_month","description":"Return the full
-        name of the current month"}]},"systemInstruction":{"parts":{"text":"Always
+        name of the current month"}]}],"systemInstruction":{"parts":{"text":"Always
         use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '1048'
+      content-length: '1039'
       content-type: application/json; charset=UTF-8
-      date: Wed, 17 Jun 2026 14:14:56 GMT
+      date: Thu, 09 Jul 2026 10:31:24 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1469
+      server-timing: gfet4t7; dur=1370
       vary:
       - Origin
       - X-Origin
@@ -37,9 +37,9 @@ http_interactions:
                     "functionCall": {
                       "name": "current_date",
                       "args": {},
-                      "id": "ua9hy3ic"
+                      "id": "spt7zdfl"
                     },
-                    "thoughtSignature": "EtEECs4EAQw51sfH1EkhPHx+dYL/PIkFTUAUxzUUGyrmnUoN6XP7quIeXRFY33Yf+encbY699IEM7VFIeBLin0KyjvR7HXxvHfLMzRImU+b/4d3D8D7701pOfRT5cZHi8nyxb0raxigIBCfjMwtwUbX8rFtuKc0sQsI5zKIGtPbv3zbVbgogbsoSDYyp9s2E7nxeqhwNjhd8l+1jsQH/Aytm2cbh315ZmM7AfE6mKjIRMlJB0UybokVP3Of/BZ+XcTZfnIAtAB0/cGt2ggrjcYM6rUo9JxO3dXAmiCmKkUdQQo6OGhV8kUaCxUgUgbc4nPX2aEDz5rFIzNsDkEFrh7um6FJNdC8knIY3jNOByepBFH7qn2K3N8kGlwvijedCeNiBsU8/n5oZyuxCwCXvISfJifQMkwHwNFW47aRkOMgdVITT4KbXWEE3dO8hngtlTuoxoHRQqzcSCaJmjHvCXYdhN0u5KEXpT8Stk8r7sWjZ8bCy5r/Ql834eqvKXSY4Df4P7lmz6qFb7vNIKzhRkhqVwuylIq2z9EgsrPdOtsT/HMpSIuI1XPOjZjnd/L44Iyy/RKZuKcvGCCpcgU8lSiHoTBHP0qJvagHqRaFkZ5dpgfbomt53huJda8ucMDa89elUwEkV0Uh2OT6eDMYFJJbEF7Qv3N7AO8xnPfDW6ThY5OkeN1cVyqXaHnBb3PL0l8VzNCPkF6Bf2o2rR0BgkwIknPwSyCY01QX0uy0AqihiMLDJCYJGD5CyvtDI9zjGsRqb52QoeLMk2H9oATttkHt3Ldk="
+                    "thoughtSignature": "Es4ECssEARFNMg++FPuBEGGhj1M7DXyY+Y5WnZMlClMXDIF5Ws2Pkamoa8m+rRCidh+/9TaC5eTu5iU5QPYl94gOraXAsS5b8ovHRSar/GajtBNGK6Dt91SXaPxz5EVPG8pX17P3dS+XTOS3tby7gwt4bnFXvSs07pSlxh3S2e3Rcgo4RdqZGmEPL5dQjNgZsBWQjySiB0g10IL1zi0HhBOax9JOEErO0rZyc47h9kfMEsCJIiohEdZbb3EQxGFWsGEk5uL+9jGeTnCICUPnwayxnNUFHtu+GDJErcg/jxXVpUh1tdEs6MoEIlQrQn72WPbPvenGmq0lu9XFLsGHW9sx+5lk7NAOdSUbFSgjrOUmvnOYk/f70pLH69U02mXd6XNakumjHWCtUxNEav0nXpQawGoC7j8iVPUwGvr6CFIJ8nO/C/cZWjkws6nRX5RvmMRpM7QSb7GI2wrhghZKlQCduOkidXaCknNVctio40Rt/ABz9yA5ssFiTdQ+U0tHnfn9Hge/o6Ef2hytVeLvezmIUYBvCrJ3QFPd28dPgGidy/c2zXroivCs9nSd6ULlUEMzWLZk0sMJJO61iBmjpfQog5AVquHtddQdHFc/JL3pXQjuSe8GTy+tSED+XJ0TvDCesntF+/YQk4sS22dDEDiwfUJGqONgEjGV6nEZs5Rsk/Bt7cnoqO+i676zdh59tSYDKwH3j67gCTahfqeYiM014iPX1LjGC+4eAtiXX2IAnWknUT9g4ovBjH8wwuOf/2B/A/FHjP2i2akKpXaOUyg="
                   }
                 ],
                 "role": "model"
@@ -52,39 +52,39 @@ http_interactions:
           "usageMetadata": {
             "promptTokenCount": 67,
             "candidatesTokenCount": 10,
-            "totalTokenCount": 241,
+            "totalTokenCount": 232,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
                 "tokenCount": 67
               }
             ],
-            "thoughtsTokenCount": 164,
+            "thoughtsTokenCount": 155,
             "serviceTier": "standard"
           },
           "modelVersion": "gemini-3.5-flash",
-          "responseId": "36syaqPbEfrxnsEPtt2s-As"
+          "responseId": "e3hPauTzCZrjkdUPlraGiQQ"
         }
-  recorded_at: 2026-06-17 14:14:56
+  recorded_at: 2026-07-09 10:31:24
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
-        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"EtEECs4EAQw51sfH1EkhPHx+dYL/PIkFTUAUxzUUGyrmnUoN6XP7quIeXRFY33Yf+encbY699IEM7VFIeBLin0KyjvR7HXxvHfLMzRImU+b/4d3D8D7701pOfRT5cZHi8nyxb0raxigIBCfjMwtwUbX8rFtuKc0sQsI5zKIGtPbv3zbVbgogbsoSDYyp9s2E7nxeqhwNjhd8l+1jsQH/Aytm2cbh315ZmM7AfE6mKjIRMlJB0UybokVP3Of/BZ+XcTZfnIAtAB0/cGt2ggrjcYM6rUo9JxO3dXAmiCmKkUdQQo6OGhV8kUaCxUgUgbc4nPX2aEDz5rFIzNsDkEFrh7um6FJNdC8knIY3jNOByepBFH7qn2K3N8kGlwvijedCeNiBsU8/n5oZyuxCwCXvISfJifQMkwHwNFW47aRkOMgdVITT4KbXWEE3dO8hngtlTuoxoHRQqzcSCaJmjHvCXYdhN0u5KEXpT8Stk8r7sWjZ8bCy5r/Ql834eqvKXSY4Df4P7lmz6qFb7vNIKzhRkhqVwuylIq2z9EgsrPdOtsT/HMpSIuI1XPOjZjnd/L44Iyy/RKZuKcvGCCpcgU8lSiHoTBHP0qJvagHqRaFkZ5dpgfbomt53huJda8ucMDa89elUwEkV0Uh2OT6eDMYFJJbEF7Qv3N7AO8xnPfDW6ThY5OkeN1cVyqXaHnBb3PL0l8VzNCPkF6Bf2o2rR0BgkwIknPwSyCY01QX0uy0AqihiMLDJCYJGD5CyvtDI9zjGsRqb52QoeLMk2H9oATttkHt3Ldk="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"Es4ECssEARFNMg++FPuBEGGhj1M7DXyY+Y5WnZMlClMXDIF5Ws2Pkamoa8m+rRCidh+/9TaC5eTu5iU5QPYl94gOraXAsS5b8ovHRSar/GajtBNGK6Dt91SXaPxz5EVPG8pX17P3dS+XTOS3tby7gwt4bnFXvSs07pSlxh3S2e3Rcgo4RdqZGmEPL5dQjNgZsBWQjySiB0g10IL1zi0HhBOax9JOEErO0rZyc47h9kfMEsCJIiohEdZbb3EQxGFWsGEk5uL+9jGeTnCICUPnwayxnNUFHtu+GDJErcg/jxXVpUh1tdEs6MoEIlQrQn72WPbPvenGmq0lu9XFLsGHW9sx+5lk7NAOdSUbFSgjrOUmvnOYk/f70pLH69U02mXd6XNakumjHWCtUxNEav0nXpQawGoC7j8iVPUwGvr6CFIJ8nO/C/cZWjkws6nRX5RvmMRpM7QSb7GI2wrhghZKlQCduOkidXaCknNVctio40Rt/ABz9yA5ssFiTdQ+U0tHnfn9Hge/o6Ef2hytVeLvezmIUYBvCrJ3QFPd28dPgGidy/c2zXroivCs9nSd6ULlUEMzWLZk0sMJJO61iBmjpfQog5AVquHtddQdHFc/JL3pXQjuSe8GTy+tSED+XJ0TvDCesntF+/YQk4sS22dDEDiwfUJGqONgEjGV6nEZs5Rsk/Bt7cnoqO+i676zdh59tSYDKwH3j67gCTahfqeYiM014iPX1LjGC+4eAtiXX2IAnWknUT9g4ovBjH8wwuOf/2B/A/FHjP2i2akKpXaOUyg="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]}],"tools":[{"functionDeclarations":[{"name":"current_date","description":"Return
         the current date"},{"name":"current_month","description":"Return the full
-        name of the current month"}]},"systemInstruction":{"parts":{"text":"Always
+        name of the current month"}]}],"systemInstruction":{"parts":{"text":"Always
         use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '559'
+      content-length: '616'
       content-type: application/json; charset=UTF-8
-      date: Wed, 17 Jun 2026 14:14:59 GMT
+      date: Thu, 09 Jul 2026 10:31:25 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=2318
+      server-timing: gfet4t7; dur=1011
       vary:
       - Origin
       - X-Origin
@@ -102,7 +102,7 @@ http_interactions:
                 "parts": [
                   {
                     "text": "It is 2024-01-01.",
-                    "thoughtSignature": "EsEBCr4BAQw51sever3YfbKbV75SAdi+yAwgdBjZF64Dxdd3ds6IUBvfO8SmWyHOKVfUzvA9Lmks9wGvCqj2xy4G+j+03CY04Vrm7I9QoMTkba/YSjyBiumjq4afPR9LqZeaeAf+SMxlTiIQE245VtIZ6t0a0sAJSVeSgLRARHoh7LxvFE4I5YL61v5IhpyTjt3ISuiANkH9CdF1qtX6w8T0Vvn9t11asIaBkrRO6DoEker+sT2+2faIJ/sF1010cMobKQ=="
+                    "thoughtSignature": "EvkBCvYBARFNMg+ISAuCI4m3GahV77kCmB+P8nMZ69jRqtGLkPh83Y/k4Lr1kg8WLTJnFvZtwOI334j0Cfyyc/NZk4gjzDcbcj6GxpHF9H6dAukjgGfYrgl8a9Wjs9XhHNBG62o9O2zxYlo8m11IPfKT1ldpugTAtJHOO0wee+eRj9Elw5guacel04NlDAwJeohXA01imR7l0X9ZWk91NSATOKZfWqFiwEor/YwBmpHjPFsw817KQwSGbd6rtj26xPNjbJDkSuxgq0GYxfnPqducjCVPAtzcOkfPnKpTANt3G4bmFdcnyGcSAu5IN5ztGPXEQoOxP3K/YB7T"
                   }
                 ],
                 "role": "model"
@@ -112,43 +112,43 @@ http_interactions:
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 264,
+            "promptTokenCount": 255,
             "candidatesTokenCount": 14,
-            "totalTokenCount": 330,
+            "totalTokenCount": 345,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 264
+                "tokenCount": 255
               }
             ],
-            "thoughtsTokenCount": 52,
+            "thoughtsTokenCount": 76,
             "serviceTier": "standard"
           },
           "modelVersion": "gemini-3.5-flash",
-          "responseId": "4asyaro6m_uR1Q-yuZ65Dg"
+          "responseId": "fHhPasPSOrWVnsEP8oWe8AE"
         }
-  recorded_at: 2026-06-17 14:14:59
+  recorded_at: 2026-07-09 10:31:25
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
-        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"EtEECs4EAQw51sfH1EkhPHx+dYL/PIkFTUAUxzUUGyrmnUoN6XP7quIeXRFY33Yf+encbY699IEM7VFIeBLin0KyjvR7HXxvHfLMzRImU+b/4d3D8D7701pOfRT5cZHi8nyxb0raxigIBCfjMwtwUbX8rFtuKc0sQsI5zKIGtPbv3zbVbgogbsoSDYyp9s2E7nxeqhwNjhd8l+1jsQH/Aytm2cbh315ZmM7AfE6mKjIRMlJB0UybokVP3Of/BZ+XcTZfnIAtAB0/cGt2ggrjcYM6rUo9JxO3dXAmiCmKkUdQQo6OGhV8kUaCxUgUgbc4nPX2aEDz5rFIzNsDkEFrh7um6FJNdC8knIY3jNOByepBFH7qn2K3N8kGlwvijedCeNiBsU8/n5oZyuxCwCXvISfJifQMkwHwNFW47aRkOMgdVITT4KbXWEE3dO8hngtlTuoxoHRQqzcSCaJmjHvCXYdhN0u5KEXpT8Stk8r7sWjZ8bCy5r/Ql834eqvKXSY4Df4P7lmz6qFb7vNIKzhRkhqVwuylIq2z9EgsrPdOtsT/HMpSIuI1XPOjZjnd/L44Iyy/RKZuKcvGCCpcgU8lSiHoTBHP0qJvagHqRaFkZ5dpgfbomt53huJda8ucMDa89elUwEkV0Uh2OT6eDMYFJJbEF7Qv3N7AO8xnPfDW6ThY5OkeN1cVyqXaHnBb3PL0l8VzNCPkF6Bf2o2rR0BgkwIknPwSyCY01QX0uy0AqihiMLDJCYJGD5CyvtDI9zjGsRqb52QoeLMk2H9oATttkHt3Ldk="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
+        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"Es4ECssEARFNMg++FPuBEGGhj1M7DXyY+Y5WnZMlClMXDIF5Ws2Pkamoa8m+rRCidh+/9TaC5eTu5iU5QPYl94gOraXAsS5b8ovHRSar/GajtBNGK6Dt91SXaPxz5EVPG8pX17P3dS+XTOS3tby7gwt4bnFXvSs07pSlxh3S2e3Rcgo4RdqZGmEPL5dQjNgZsBWQjySiB0g10IL1zi0HhBOax9JOEErO0rZyc47h9kfMEsCJIiohEdZbb3EQxGFWsGEk5uL+9jGeTnCICUPnwayxnNUFHtu+GDJErcg/jxXVpUh1tdEs6MoEIlQrQn72WPbPvenGmq0lu9XFLsGHW9sx+5lk7NAOdSUbFSgjrOUmvnOYk/f70pLH69U02mXd6XNakumjHWCtUxNEav0nXpQawGoC7j8iVPUwGvr6CFIJ8nO/C/cZWjkws6nRX5RvmMRpM7QSb7GI2wrhghZKlQCduOkidXaCknNVctio40Rt/ABz9yA5ssFiTdQ+U0tHnfn9Hge/o6Ef2hytVeLvezmIUYBvCrJ3QFPd28dPgGidy/c2zXroivCs9nSd6ULlUEMzWLZk0sMJJO61iBmjpfQog5AVquHtddQdHFc/JL3pXQjuSe8GTy+tSED+XJ0TvDCesntF+/YQk4sS22dDEDiwfUJGqONgEjGV6nEZs5Rsk/Bt7cnoqO+i676zdh59tSYDKwH3j67gCTahfqeYiM014iPX1LjGC+4eAtiXX2IAnWknUT9g4ovBjH8wwuOf/2B/A/FHjP2i2akKpXaOUyg="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
         is 2024-01-01."}]},{"role":"user","parts":[{"text":"What month is it? Provide
-        the full name"}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        the full name"}]}],"tools":[{"functionDeclarations":[{"name":"current_date","description":"Return
         the current date"},{"name":"current_month","description":"Return the full
-        name of the current month"}]},"systemInstruction":{"parts":{"text":"Always
+        name of the current month"}]}],"systemInstruction":{"parts":{"text":"Always
         use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '947'
+      content-length: '972'
       content-type: application/json; charset=UTF-8
-      date: Wed, 17 Jun 2026 14:15:00 GMT
+      date: Thu, 09 Jul 2026 10:31:27 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1236
+      server-timing: gfet4t7; dur=1187
       vary:
       - Origin
       - X-Origin
@@ -168,9 +168,9 @@ http_interactions:
                     "functionCall": {
                       "name": "current_month",
                       "args": {},
-                      "id": "bnzjhx1x"
+                      "id": "7ofxgr5m"
                     },
-                    "thoughtSignature": "Eu4DCusDAQw51sfyHOBYoFPG/wbRAJlqEipavbdpEvjLDAh+JdJdh0hmYMJqKIT6WcrbZaK2n0F16rQKdCSm3EvN0pVcV4ZPvcbkV1geVyyjkUjsTA6zgyp6Ch85QZB0DiR/yIaH8bj5+LN5JC2HjfIu6vWCMFJ2R0TkrfVB2OjTosxr4vxbEVGBQNWu2yXO9awCqfeD0G8Jk/prVfpbt+qCOTJzDrrRrd4egxyJeoG7qXnNxXNq5s9T7O1wP3GdmNmHdVtQmmVwwEwKm1fbnag1AIkYtW19tzxeba2qUtKzPDTWLZfvuk4fvA26Et1d6Lka4l/JPyf/kwJMAJmfKphfwj2TtHugp4Tkq9cfcnvoisMsluFQtZAEaV22W1aaiDUHbosr5YDhHrN4x3WNUZDA1mzZ8aHiznxBEcJVjHkUvPOdT7qEkcBpDUzBikm5MN50PvAwbtiFC7q04bcUTNo5RPbfYRH87yV5Lq3FcTH71f7gBzQfliHNe6yiNgYUvurSdnEM0XDYiX4VEnXEm9Zxk6+TiLSfd5y44SZ0Wz65jU4lqOXTe/Hy2VWjirHSpCz0zo2p9OkQXwxnNF3oY/lC6FnXbh84vV7ZFryRj5GJXkZmRgHQ68+wNLQEasXD+jjcouqkRGMEYWYLoOEbAbQ="
+                    "thoughtSignature": "EogECoUEARFNMg/abWP0Oo0LumVyG6JtBF/fBzNnWozBOSLnEuao/vvR/ccf6OQq8XLapQvG1jWEa9pzeBc9/M+qPhDw5mkWDResapsL/1O41qLKJai+XyLkK9lAZU1YD8i1Cbg4vlGNI/s0Yex1LYyaSedelu42d1BW5ht8zvZavyVModk8LDv07SP+hnh3jDb+52QX33cxCeLpe6DdDZuZJlF6FSo8x2BIIpBeagk5Qvz4U05zC+vHZjB7mRnu+iuRAojGk4LPgXo23KKtn4jom64cV+KAQ39QMu9IaVSjBeN8nidxKyzgeEWxvh9yvzMrSxpl6b/tn9CenHrx+eCCYdFYcC32egTXghcXYZ6kcuM1huhW8nmIK+78pfVKM5Igyu5MN2lRRadSVNuW66H2qVU5nTyURnKA7vmH9n3XPE/shuONI0xXZidqPQ1rAW7ubzY9+ZjuXt4z4XYGg9UiBmsYTeYAYErQyQVgShB537K9bllRtxxcEInudJp1Gx/3fVdEdcVhZOO5FCGBAQHD/nZ0hSVp6xXQhNC7+Bju8pCLCWCbvs1QCIxvMA5tkaFFgdUrn0k5ZK8eauYl1VJuQMSu9Byyeboi6OiXB/djlgVhCVWqZyPWGqf0VmS6I452wBEErIHDva0WHvkN/uQENzuqTXZOS47dFduPCQTGXKz0z1lqBzrMmQ=="
                   }
                 ],
                 "role": "model"
@@ -181,43 +181,43 @@ http_interactions:
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 289,
+            "promptTokenCount": 280,
             "candidatesTokenCount": 10,
-            "totalTokenCount": 420,
+            "totalTokenCount": 424,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 289
+                "tokenCount": 280
               }
             ],
-            "thoughtsTokenCount": 121,
+            "thoughtsTokenCount": 134,
             "serviceTier": "standard"
           },
           "modelVersion": "gemini-3.5-flash",
-          "responseId": "46syavSrH534nsEP75feqAY"
+          "responseId": "fnhPau_mDPy0nsEPyfSC0AI"
         }
-  recorded_at: 2026-06-17 14:15:00
+  recorded_at: 2026-07-09 10:31:27
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
-        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"EtEECs4EAQw51sfH1EkhPHx+dYL/PIkFTUAUxzUUGyrmnUoN6XP7quIeXRFY33Yf+encbY699IEM7VFIeBLin0KyjvR7HXxvHfLMzRImU+b/4d3D8D7701pOfRT5cZHi8nyxb0raxigIBCfjMwtwUbX8rFtuKc0sQsI5zKIGtPbv3zbVbgogbsoSDYyp9s2E7nxeqhwNjhd8l+1jsQH/Aytm2cbh315ZmM7AfE6mKjIRMlJB0UybokVP3Of/BZ+XcTZfnIAtAB0/cGt2ggrjcYM6rUo9JxO3dXAmiCmKkUdQQo6OGhV8kUaCxUgUgbc4nPX2aEDz5rFIzNsDkEFrh7um6FJNdC8knIY3jNOByepBFH7qn2K3N8kGlwvijedCeNiBsU8/n5oZyuxCwCXvISfJifQMkwHwNFW47aRkOMgdVITT4KbXWEE3dO8hngtlTuoxoHRQqzcSCaJmjHvCXYdhN0u5KEXpT8Stk8r7sWjZ8bCy5r/Ql834eqvKXSY4Df4P7lmz6qFb7vNIKzhRkhqVwuylIq2z9EgsrPdOtsT/HMpSIuI1XPOjZjnd/L44Iyy/RKZuKcvGCCpcgU8lSiHoTBHP0qJvagHqRaFkZ5dpgfbomt53huJda8ucMDa89elUwEkV0Uh2OT6eDMYFJJbEF7Qv3N7AO8xnPfDW6ThY5OkeN1cVyqXaHnBb3PL0l8VzNCPkF6Bf2o2rR0BgkwIknPwSyCY01QX0uy0AqihiMLDJCYJGD5CyvtDI9zjGsRqb52QoeLMk2H9oATttkHt3Ldk="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
+        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"Es4ECssEARFNMg++FPuBEGGhj1M7DXyY+Y5WnZMlClMXDIF5Ws2Pkamoa8m+rRCidh+/9TaC5eTu5iU5QPYl94gOraXAsS5b8ovHRSar/GajtBNGK6Dt91SXaPxz5EVPG8pX17P3dS+XTOS3tby7gwt4bnFXvSs07pSlxh3S2e3Rcgo4RdqZGmEPL5dQjNgZsBWQjySiB0g10IL1zi0HhBOax9JOEErO0rZyc47h9kfMEsCJIiohEdZbb3EQxGFWsGEk5uL+9jGeTnCICUPnwayxnNUFHtu+GDJErcg/jxXVpUh1tdEs6MoEIlQrQn72WPbPvenGmq0lu9XFLsGHW9sx+5lk7NAOdSUbFSgjrOUmvnOYk/f70pLH69U02mXd6XNakumjHWCtUxNEav0nXpQawGoC7j8iVPUwGvr6CFIJ8nO/C/cZWjkws6nRX5RvmMRpM7QSb7GI2wrhghZKlQCduOkidXaCknNVctio40Rt/ABz9yA5ssFiTdQ+U0tHnfn9Hge/o6Ef2hytVeLvezmIUYBvCrJ3QFPd28dPgGidy/c2zXroivCs9nSd6ULlUEMzWLZk0sMJJO61iBmjpfQog5AVquHtddQdHFc/JL3pXQjuSe8GTy+tSED+XJ0TvDCesntF+/YQk4sS22dDEDiwfUJGqONgEjGV6nEZs5Rsk/Bt7cnoqO+i676zdh59tSYDKwH3j67gCTahfqeYiM014iPX1LjGC+4eAtiXX2IAnWknUT9g4ovBjH8wwuOf/2B/A/FHjP2i2akKpXaOUyg="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
         is 2024-01-01."}]},{"role":"user","parts":[{"text":"What month is it? Provide
-        the full name"}]},{"role":"model","parts":[{"functionCall":{"name":"current_month","args":{}},"thoughtSignature":"Eu4DCusDAQw51sfyHOBYoFPG/wbRAJlqEipavbdpEvjLDAh+JdJdh0hmYMJqKIT6WcrbZaK2n0F16rQKdCSm3EvN0pVcV4ZPvcbkV1geVyyjkUjsTA6zgyp6Ch85QZB0DiR/yIaH8bj5+LN5JC2HjfIu6vWCMFJ2R0TkrfVB2OjTosxr4vxbEVGBQNWu2yXO9awCqfeD0G8Jk/prVfpbt+qCOTJzDrrRrd4egxyJeoG7qXnNxXNq5s9T7O1wP3GdmNmHdVtQmmVwwEwKm1fbnag1AIkYtW19tzxeba2qUtKzPDTWLZfvuk4fvA26Et1d6Lka4l/JPyf/kwJMAJmfKphfwj2TtHugp4Tkq9cfcnvoisMsluFQtZAEaV22W1aaiDUHbosr5YDhHrN4x3WNUZDA1mzZ8aHiznxBEcJVjHkUvPOdT7qEkcBpDUzBikm5MN50PvAwbtiFC7q04bcUTNo5RPbfYRH87yV5Lq3FcTH71f7gBzQfliHNe6yiNgYUvurSdnEM0XDYiX4VEnXEm9Zxk6+TiLSfd5y44SZ0Wz65jU4lqOXTe/Hy2VWjirHSpCz0zo2p9OkQXwxnNF3oY/lC6FnXbh84vV7ZFryRj5GJXkZmRgHQ68+wNLQEasXD+jjcouqkRGMEYWYLoOEbAbQ="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_month","response":{"value":"February"}}}]}],"tools":{"functionDeclarations":[{"name":"current_date","description":"Return
+        the full name"}]},{"role":"model","parts":[{"functionCall":{"name":"current_month","args":{}},"thoughtSignature":"EogECoUEARFNMg/abWP0Oo0LumVyG6JtBF/fBzNnWozBOSLnEuao/vvR/ccf6OQq8XLapQvG1jWEa9pzeBc9/M+qPhDw5mkWDResapsL/1O41qLKJai+XyLkK9lAZU1YD8i1Cbg4vlGNI/s0Yex1LYyaSedelu42d1BW5ht8zvZavyVModk8LDv07SP+hnh3jDb+52QX33cxCeLpe6DdDZuZJlF6FSo8x2BIIpBeagk5Qvz4U05zC+vHZjB7mRnu+iuRAojGk4LPgXo23KKtn4jom64cV+KAQ39QMu9IaVSjBeN8nidxKyzgeEWxvh9yvzMrSxpl6b/tn9CenHrx+eCCYdFYcC32egTXghcXYZ6kcuM1huhW8nmIK+78pfVKM5Igyu5MN2lRRadSVNuW66H2qVU5nTyURnKA7vmH9n3XPE/shuONI0xXZidqPQ1rAW7ubzY9+ZjuXt4z4XYGg9UiBmsYTeYAYErQyQVgShB537K9bllRtxxcEInudJp1Gx/3fVdEdcVhZOO5FCGBAQHD/nZ0hSVp6xXQhNC7+Bju8pCLCWCbvs1QCIxvMA5tkaFFgdUrn0k5ZK8eauYl1VJuQMSu9Byyeboi6OiXB/djlgVhCVWqZyPWGqf0VmS6I452wBEErIHDva0WHvkN/uQENzuqTXZOS47dFduPCQTGXKz0z1lqBzrMmQ=="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_month","response":{"value":"February"}}}]}],"tools":[{"functionDeclarations":[{"name":"current_date","description":"Return
         the current date"},{"name":"current_month","description":"Return the full
-        name of the current month"}]},"systemInstruction":{"parts":{"text":"Always
+        name of the current month"}]}],"systemInstruction":{"parts":{"text":"Always
         use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '495'
+      content-length: '513'
       content-type: application/json; charset=UTF-8
-      date: Wed, 17 Jun 2026 14:15:01 GMT
+      date: Thu, 09 Jul 2026 10:31:28 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=875
+      server-timing: gfet4t7; dur=984
       vary:
       - Origin
       - X-Origin
@@ -235,7 +235,7 @@ http_interactions:
                 "parts": [
                   {
                     "text": "It is February.",
-                    "thoughtSignature": "EokBCoYBAQw51sf1LVI7JiALYFizhkbJjHfoMSgdDIHiWxkMIC+fyktN5dd+xlk+TRjiM+zBLVkIyTqEUaC+lLUwF6BnfT3fdptm1h61JIZdIgf4HbVSz7wQQAncELMfZnVUdaqfjxQBhmSkyJucOMPX/BtbuK1KwuH+eNe/rrc8SVdB+fIRrhe2Pwg="
+                    "thoughtSignature": "EpcBCpQBARFNMg9YiFrXvtwtNVVzfCTcxNq8COcZshUDuzCLWDozg9lM0BQrM5xBoUyjEi1ofuu2hZOL9IxEYNFYsSz44k2u0YwSulZxGYJoprI9uNUiYsJYQq60BWTVLzXaROarssw1HWhxrI1c8We1owHBe2rMGn7pim3HI8DTVftjp4GF+r7M9SIu1YK09G647mhUEUz4IA=="
                   }
                 ],
                 "role": "model"
@@ -245,20 +245,20 @@ http_interactions:
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 434,
+            "promptTokenCount": 438,
             "candidatesTokenCount": 4,
-            "totalTokenCount": 462,
+            "totalTokenCount": 465,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 434
+                "tokenCount": 438
               }
             ],
-            "thoughtsTokenCount": 24,
+            "thoughtsTokenCount": 23,
             "serviceTier": "standard"
           },
           "modelVersion": "gemini-3.5-flash",
-          "responseId": "5asyar2XBKK1nsEPt9WaqAs"
+          "responseId": "f3hPaoPDNJiukdUPzuiUgAQ"
         }
-  recorded_at: 2026-06-17 14:15:01
+  recorded_at: 2026-07-09 10:31:28
 recorded_with: VCR-vcr/2.1.0

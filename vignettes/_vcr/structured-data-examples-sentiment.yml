@@ -5,7 +5,7 @@ http_interactions:
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  The
         product was okay, but the customer service was terrible. I probably\n  won''t
-        buy from them again.\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"Extract
+        buy from them again.\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"Extract
         the sentiment scores of a given text. Sentiment scores should sum to 1.","properties":{"positive_score":{"type":"number","description":"Positive
         sentiment score, ranging from 0.0 to 1.0."},"negative_score":{"type":"number","description":"Negative
         sentiment score, ranging from 0.0 to 1.0."},"neutral_score":{"type":"number","description":"Neutral
@@ -19,18 +19,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a13386e23d96a5ba-IAD
+      cf-ray: a2508c08ead4cdf0-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:23:03 GMT
+      date: Sun, 02 Aug 2026 22:33:56 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '887'
+      openai-processing-ms: '712'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=VXhoeLx12RsJRP1cXDsXMJc3vDEKrRsLevVu4T6PD1A-1782721382.7550988-1.0.1.1-CmiDdJnXbEeWezyZSLXr8_neOiKPcqocDywRXP1Sq413yYc0DCkvFnTIkYGxIDN5k0jcTjvSWY_NH0iWbJRyUMIFALrZ8mIsCpdZgmpZ1Pzi3xOHxwz_thK5U5.Lioj7;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 08:53:03 GMT
+      set-cookie: __cf_bm=YdjWfzLPsSzYUg8QGTY90rCJ_X6dLglSIHBwNSynocY-1785710035.3439844-1.0.1.1-XYOrSgD1wAqQ.bRr.bK6xKSH6qM_N1lHCunABggNl6lorJcPxsumCgO4WCdneaqg5qSmzv_lacmvlpfLWwLNy2fTjwhTy7fEdQrBxf4cQi9kjAAkXCyAXwMr6wdHVFVK;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:03:56 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -39,30 +39,30 @@ http_interactions:
       x-ratelimit-remaining-tokens: '500000'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: 4ce2df15-8562-4ea7-b40c-816814149818
+      x-request-id: req_9ac8d8d6f4944cfa94975610aacdc004
     body:
       string: |-
         {
-          "id": "resp_07486a481a78cfca016a422b66cb2c819fb50b2fbcdc92f81e",
+          "id": "resp_04e05064f123733d016a6fc5d36730819791fbc39cd5812825",
           "object": "response",
-          "created_at": 1782721382,
+          "created_at": 1785710035,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782721383,
+          "completed_at": 1785710036,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.4-2026-03-05",
+          "model": "gpt-5.6-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_07486a481a78cfca016a422b674bb8819faac1d4992c4363d7",
+              "id": "msg_04e05064f123733d016a6fc5d3de688197afe359cb7af91926",
               "type": "message",
               "status": "completed",
               "content": [
@@ -70,7 +70,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"positive_score\":0.12,\"negative_score\":0.74,\"neutral_score\":0.14}"
+                  "text": "{\"positive_score\":0.1,\"negative_score\":0.8,\"neutral_score\":0.1}"
                 }
               ],
               "phase": "final_answer",
@@ -83,8 +83,8 @@ http_interactions:
           "prompt_cache_key": null,
           "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": "current_turn",
-            "effort": "none",
+            "context": "all_turns",
+            "effort": "medium",
             "mode": "standard",
             "summary": null
           },
@@ -151,6 +151,7 @@ http_interactions:
           "usage": {
             "input_tokens": 144,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
             "output_tokens": 30,
@@ -162,5 +163,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:23:03
+  recorded_at: 2026-08-02 22:33:55
 recorded_with: VCR-vcr/2.1.0
