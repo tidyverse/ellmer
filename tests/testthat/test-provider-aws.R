@@ -19,7 +19,10 @@ test_that("can set api args", {
   chat <- chat_aws_bedrock_test(
     api_args = list(inferenceConfig = list(maxTokens = 1))
   )
-  result <- chat$chat("Who are the reindeer?")
+  expect_warning(
+    result <- chat$chat("Who are the reindeer?"),
+    "max_tokens"
+  )
   expect_true(nchar(result) < 10)
 })
 
@@ -28,7 +31,10 @@ test_that("api args overwrite params", {
     api_args = list(inferenceConfig = list(maxTokens = 1)),
     params = params(max_tokens = 100)
   )
-  result <- chat$chat("Who are the reindeer?")
+  expect_warning(
+    result <- chat$chat("Who are the reindeer?"),
+    "max_tokens"
+  )
   expect_true(nchar(result) < 10)
 })
 
@@ -269,4 +275,21 @@ test_that("AWS credential caching works as expected", {
   expect_false(identical(creds_modified, paws_credentials(profile = "test")))
   expect_false(identical(creds1, paws_credentials(profile = "test")))
   expect_false(identical(creds2, paws_credentials(profile = "test")))
+})
+
+test_that("inference profile ARN slash is encoded in URL (#792)", {
+  arn <- "arn:aws:bedrock:us-east-1:123456789:application-inference-profile/abc123"
+  provider <- test_aws_bedrock_provider(model = arn)
+  local_mocked_bindings(
+    paws_credentials = function(...) {
+      list(
+        access_key_id = "x",
+        secret_access_key = "x",
+        session_token = "x",
+        access_token = ""
+      )
+    }
+  )
+  req <- chat_request(provider, stream = FALSE, turns = list())
+  expect_match(req$url, "inference-profile%2Fabc123", fixed = TRUE)
 })

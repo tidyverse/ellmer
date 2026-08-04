@@ -19,7 +19,8 @@
           "Groq",
           "Mistral",
           "OpenAI",
-          "OpenRouter"
+          "OpenRouter",
+          "Posit"
         ]
       },
       "model": {

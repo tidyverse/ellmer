@@ -57,7 +57,7 @@ A \link{Chat} object.
 \description{
 \ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
 
-\href{https://www.cloudflare.com/developer-platform/products/workers-ai/}{Cloudflare}
+\href{https://www.cloudflare.com/products/workers-ai/}{Cloudflare}
 Workers AI hosts a variety of open-source AI models. To use the Cloudflare
 API, you must have an Account ID and an Access Token, which you can obtain
 \href{https://developers.cloudflare.com/workers-ai/get-started/rest-api/}{by following these instructions}.
@@ -94,6 +94,7 @@ Other chatbots:
 \code{\link[=chat_openai_compatible]{chat_openai_compatible()}},
 \code{\link[=chat_openrouter]{chat_openrouter()}},
 \code{\link[=chat_perplexity]{chat_perplexity()}},
-\code{\link[=chat_portkey]{chat_portkey()}}
+\code{\link[=chat_portkey]{chat_portkey()}},
+\code{\link[=chat_posit]{chat_posit()}}
 }
 \concept{chatbots}

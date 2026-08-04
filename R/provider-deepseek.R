@@ -21,7 +21,7 @@ NULL
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("DEEPSEEK_API_KEY")`
 #' @param base_url The base URL to the endpoint; the default uses DeepSeek.
-#' @param model `r param_model("deepseek-chat")`
+#' @param model `r param_model("deepseek-v4-flash")`
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
@@ -39,7 +39,7 @@ chat_deepseek <- function(
   echo = NULL,
   api_headers = character()
 ) {
-  model <- set_default(model, "deepseek-chat")
+  model <- set_default(model, "deepseek-v4-flash")
   echo <- check_echo(echo)
 
   credentials <- as_credentials(
@@ -118,9 +118,10 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
     text <- detect(x@contents, S7_inherits, ContentText)
     tools <- keep(x@contents, is_tool_request)
 
+    content <- if (!is.null(text)) as_json(provider, text, ...)
     list(compact(list(
       role = "assistant",
-      content = as_json(provider, text, ...),
+      content = content,
       tool_calls = as_json(provider, tools, ...)
     )))
   } else {

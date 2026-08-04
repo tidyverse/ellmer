@@ -35,7 +35,7 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.
 
 If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).}
 
-\item{model}{The model to use for the chat (defaults to "gpt-4o").
+\item{model}{The model to use for the chat (defaults to "gpt-5").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
@@ -61,17 +61,10 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
-\ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-GitHub Models hosts a number of open source and OpenAI models. To access the
-GitHub model marketplace, you will need to apply for and be accepted into the
-beta access program. See \url{https://github.com/marketplace/models} for details.
-
-The defaults are tweaked for the GitHub Models marketplace.
-
-GitHub also supports the Azure AI Inference SDK, which you can use by setting
-\code{base_url} to \code{"https://models.inference.ai.azure.com/"}. This endpoint was
-used in \pkg{ellmer} v0.3.0 and earlier.
+\code{chat_github()} and \code{models_github()} are defunct because GitHub Models
+was retired on 2026-07-30.
 }
 \examples{
 \dontrun{
@@ -97,6 +90,7 @@ Other chatbots:
 \code{\link[=chat_openai_compatible]{chat_openai_compatible()}},
 \code{\link[=chat_openrouter]{chat_openrouter()}},
 \code{\link[=chat_perplexity]{chat_perplexity()}},
-\code{\link[=chat_portkey]{chat_portkey()}}
+\code{\link[=chat_portkey]{chat_portkey()}},
+\code{\link[=chat_posit]{chat_posit()}}
 }
 \concept{chatbots}

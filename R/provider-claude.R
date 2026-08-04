@@ -93,7 +93,7 @@ NULL
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
-#' @param model `r param_model("claude-sonnet-4-5-20250929", "anthropic")`
+#' @param model `r param_model("claude-sonnet-5", "anthropic")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
 #' @param base_url The base URL to the endpoint; the default is Claude's
@@ -128,7 +128,7 @@ chat_anthropic <- function(
 ) {
   echo <- check_echo(echo)
 
-  model <- set_default(model, "claude-sonnet-4-5-20250929")
+  model <- set_default(model, "claude-sonnet-5")
   cache <- arg_match(cache)
 
   credentials <- as_credentials(
@@ -159,12 +159,11 @@ chat_claude <- chat_anthropic
 
 chat_anthropic_test <- function(
   ...,
-  model = "claude-sonnet-4-5-20250929",
+  model = "claude-sonnet-5",
   params = NULL,
   echo = "none"
 ) {
   params <- params %||% params()
-  params$temperature <- params$temperature %||% 0
 
   chat_anthropic(model = model, params = params, ..., echo = echo)
 }
@@ -280,7 +279,7 @@ method(chat_body, ProviderAnthropic) <- function(
     mcp_servers <- NULL
   }
 
-  tools <- as_json(provider, unname(tools))
+  tools <- chat_body_tools(provider, tools)
 
   params <- chat_params(provider, provider@params)
 
@@ -429,6 +428,24 @@ method(value_tokens, ProviderAnthropic) <- function(provider, json) {
   )
 }
 
+# https://docs.anthropic.com/en/api/handling-stop-reasons
+method(value_finish_reason, ProviderAnthropic) <- function(provider, result) {
+  reason <- result$stop_reason
+  if (is.null(reason)) {
+    return(NA_character_)
+  }
+  switch(
+    reason,
+    end_turn = "success",
+    tool_use = "tool_use",
+    max_tokens = "max_tokens",
+    model_context_window_exceeded = "context_window",
+    stop_sequence = "stop_sequence",
+    refusal = "content_filter",
+    I(reason)
+  )
+}
+
 method(value_turn, ProviderAnthropic) <- function(
   provider,
   result,
@@ -524,6 +541,9 @@ method(value_turn, ProviderAnthropic) <- function(
         content$thinking,
         extra = list(signature = content$signature)
       )
+    } else if (content$type == "fallback") {
+      # https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback
+      NULL
     } else {
       cli::cli_abort(
         "Unknown content type {.str {content$type}}.",
@@ -533,6 +553,7 @@ method(value_turn, ProviderAnthropic) <- function(
   })
   # Flatten: mcp_tool_result may return a list of Content objects (result + images)
   contents <- unlist(contents, recursive = FALSE)
+  contents <- compact(contents)
 
   # Link MCP results to their requests so @request has the tool name
   mcp_requests <- keep(contents, S7_inherits, ContentMcpToolRequest)
@@ -554,8 +575,100 @@ method(value_turn, ProviderAnthropic) <- function(
   # already counts them at 1.0x, so add the 0.25x surcharge for pricing.
   cost_tokens <- tokens
   cost_tokens$input <- cost_tokens$input + cache_write * 0.25
-  cost <- get_token_cost(provider, cost_tokens)
-  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
+  cost <- get_token_cost(
+    provider,
+    cost_tokens,
+    model = serving_model(result) %||% provider@model
+  )
+  AssistantTurn(
+    contents,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = value_finish_reason(provider, result)
+  )
+}
+
+# Token counting ----------------------------------------------------------
+
+# https://docs.anthropic.com/en/docs/build-with-claude/token-counting
+method(count_tokens, ProviderAnthropic) <- function(
+  provider,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "messages/count_tokens")
+
+  if (!is.null(system_prompt)) {
+    system <- list(list(
+      type = "text",
+      text = system_prompt,
+      cache_control = cache_control(provider)
+    ))
+  } else {
+    system <- NULL
+  }
+
+  if (!is.null(type)) {
+    if (
+      has_claude_structured_output(provider@model) &&
+        !type_has_additional_properties(type)
+    ) {
+      output_config <- list(
+        format = list(
+          type = "json_schema",
+          schema = as_json(provider, type)
+        )
+      )
+      tool_choice <- NULL
+    } else {
+      tool_def <- ToolDef(
+        function(...) {},
+        name = "_structured_tool_call",
+        description = "Extract structured data",
+        arguments = type_object(data = type)
+      )
+      tools[[tool_def@name]] <- tool_def
+      tool_choice <- list(type = "tool", name = tool_def@name)
+      output_config <- NULL
+    }
+  } else {
+    tool_choice <- NULL
+    output_config <- NULL
+  }
+  tools <- chat_body_tools(provider, tools)
+
+  body <- compact(list(
+    model = provider@model,
+    system = system,
+    messages = list(as_json(provider, user_turn(...), is_last = TRUE)),
+    tools = tools,
+    tool_choice = tool_choice,
+    output_config = output_config
+  ))
+
+  req <- req_body_json(req, body)
+  req <- req_headers(req, !!!provider@extra_headers)
+
+  resp <- req_perform(req)
+  resp_body_json(resp)$input_tokens
+}
+
+# The model that produced the returned message. `result$model` is unreliable
+# for a mid-output fallback in a stream (it keeps the requested model named at
+# `message_start`), so prefer the last `fallback` block's `to.model`.
+serving_model <- function(result) {
+  to_models <- compact(lapply(result$content, function(content) {
+    if (identical(content$type, "fallback")) content$to$model
+  }))
+  if (length(to_models) > 0) {
+    to_models[[length(to_models)]]
+  } else {
+    result$model
+  }
 }
 
 # ellmer -> Claude --------------------------------------------------------------

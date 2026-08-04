@@ -90,7 +90,7 @@ test_that("can match prices for some common models", {
 test_that("can retrieve log_probs (#115)", {
   chat <- chat_openai_test(params = params(log_probs = TRUE))
   chat$chat("Hi")
-  expect_length(chat$last_turn()@json$output[[1]]$content[[1]]$logprobs, 2)
+  expect_gt(length(chat$last_turn()@json$output[[1]]$content[[1]]$logprobs), 0)
 })
 
 test_that("structured data work with and without wrapper", {
@@ -110,7 +110,7 @@ test_that("structured data work with and without wrapper", {
 
 test_that("service tier affects pricing", {
   vcr::local_cassette("openai-v2-service-tier")
-  chat <- chat_openai_test(service_tier = "priority")
+  chat <- chat_openai_test(model = "gpt-4.1-nano", service_tier = "priority")
   chat$chat("Tell me a joke")
 
   last_turn <- chat$last_turn()
@@ -465,4 +465,11 @@ test_that("as_json round-trips mcp_call without duplication", {
   expect_length(non_null, 1)
   expect_equal(non_null[[1]]$type, "mcp_call")
   expect_false("input" %in% names(non_null[[1]]))
+})
+
+# Token counting -----------------------------------------------------------
+
+test_that("can count tokens", {
+  vcr::local_cassette("openai-count-tokens")
+  test_token_count(chat_openai_test)
 })

@@ -10,73 +10,78 @@ http_interactions:
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999d6d3d7f78f061-DFW
-      content-encoding: gzip
+      cf-ray: a250b57978245ed0-EWR
+      content-encoding: br
       content-type: application/json
-      date: Wed, 05 Nov 2025 15:36:27 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '1042'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Sun, 02 Aug 2026 23:02:13 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '760'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=.oNEDev2A1xQZps8idj8tkWelSLRT__jaHLt2A8medY-1762356987-1.0.1.1-tRv249GWUYAQnA.hxJtLCiWL1rfwDTioP4q0AI3a2ApyRR_SUdmIQ.2vXiWLebjokk5ksXG6liIP27LXrHpnZZrZ6UcjmKMDk5GK74a8mvI;
-        path=/; expires=Wed, 05-Nov-25 16:06:27 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=E7knmZN6mIra6gGmnUe.77rUvqvE6baJIvAsnruh5to-1762356987565-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=PxuW.JNlQlwwOyMJOgN80jCtK3Vaywb9D5sMMcYGc1c-1785711732.7199361-1.0.1.1-Erjg_4b98q7XiIzjPgliC35mahpXAcDrB5gWtDPcfBpbdR23F0PNonMTNW3Tix3Yobuk0JcwqvpQ7JEDObxx_ZyfUlb1FuHfyDx8ZS8Y.5OVRxe9EY20116d5LAlMGge;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:32:13 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1047'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999740'
-      x-ratelimit-reset-requests: 2ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_8b8c09545c9345e0a74b681145d19a5d
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '199739'
+      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-tokens: 78ms
+      x-request-id: req_1ab84c7c82684eeb8ba3b649537f8de6
     body:
       string: |-
         {
-          "id": "resp_0811290762c96f2c01690b6efa87dc8195beba531081f8ec75",
+          "id": "resp_0e90a1b8c334f9dd016a6fcc74c8e081938316c8164331153e",
           "object": "response",
-          "created_at": 1762356986,
+          "created_at": 1785711732,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1785711733,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
           "model": "gpt-4.1-nano-2025-04-14",
+          "moderation": null,
           "output": [
             {
-              "id": "fc_0811290762c96f2c01690b6efb49188195aa26b27ca6365210",
+              "id": "fc_0e90a1b8c334f9dd016a6fcc757b3081939c1312fb6592a1df",
               "type": "function_call",
               "status": "completed",
               "arguments": "{}",
-              "call_id": "call_IbGiIycxCbAaqiIx3h8bn9SS",
+              "call_id": "call_xseDNO4uZC4ayRmQEcIj7tX9",
               "name": "dice"
             },
             {
-              "id": "fc_0811290762c96f2c01690b6efb76e4819593ceacf54457b5c3",
+              "id": "fc_0e90a1b8c334f9dd016a6fcc757b408193baaa9c61298c7ab9",
               "type": "function_call",
               "status": "completed",
               "arguments": "{}",
-              "call_id": "call_h2pG5GGmfwZK32vH46JwhS9A",
+              "call_id": "call_2rGZg0Ye80XFPI8l6Law8ouK",
               "name": "dice"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "in_memory",
           "reasoning": {
+            "context": null,
             "effort": null,
             "summary": null
           },
@@ -91,11 +96,30 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [
             {
               "type": "function",
               "description": "Rolls a six-sided die",
               "name": "dice",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -110,78 +134,82 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 22,
+            "input_tokens": 44,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
             "output_tokens": 40,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 62
+            "total_tokens": 84
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 15:36:27
+  recorded_at: 2026-08-02 23:02:13
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
         terse"}]},{"role":"user","content":[{"type":"input_text","text":"Roll two
-        dice and compute the total."}]},{"type":"function_call","call_id":"fc_0811290762c96f2c01690b6efb49188195aa26b27ca6365210","name":"dice","arguments":"{}"},{"type":"function_call","call_id":"fc_0811290762c96f2c01690b6efb76e4819593ceacf54457b5c3","name":"dice","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0811290762c96f2c01690b6efb49188195aa26b27ca6365210","output":"2"},{"type":"function_call_output","call_id":"fc_0811290762c96f2c01690b6efb76e4819593ceacf54457b5c3","output":"5"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
+        dice and compute the total."}]},{"type":"function_call","call_id":"fc_0e90a1b8c334f9dd016a6fcc757b3081939c1312fb6592a1df","name":"dice","arguments":"{}"},{"type":"function_call","call_id":"fc_0e90a1b8c334f9dd016a6fcc757b408193baaa9c61298c7ab9","name":"dice","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0e90a1b8c334f9dd016a6fcc757b3081939c1312fb6592a1df","output":"2"},{"type":"function_call_output","call_id":"fc_0e90a1b8c334f9dd016a6fcc757b408193baaa9c61298c7ab9","output":"5"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
         a six-sided die","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999d6d45faaef061-DFW
-      content-encoding: gzip
+      cf-ray: a250b5819cf25ed0-EWR
+      content-encoding: br
       content-type: application/json
-      date: Wed, 05 Nov 2025 15:36:28 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '746'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Sun, 02 Aug 2026 23:02:14 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '576'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=hUcrVcK8m5ye9QAZy.VzlhUUqOxOrUaihcFfuzUE_pg-1762356988-1.0.1.1-nzdD5x_4HmUoybgtuJlMV9XCmlOlXS_2uGGSMjicIVVRDKDwswm1I1fx0Y6Y.dltOHUk3nNBiC0PgNUqKACGrIy78aAAo5dSANgIgzq6S4w;
-        path=/; expires=Wed, 05-Nov-25 16:06:28 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=GbUU9ddb81ys_G93FDdlksgu.uMntu7t60FezMg.YQQ-1762356988628-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=9dBj9oNHsYBSOZi.QDHkBRBz8vMRjHJkuMDcY.AbfHE-1785711734.019396-1.0.1.1-_8IuwgmHGbDp7yKZmIdX5I750GOjdn_lsPy8KjJ641S94LR2x86i8vNkmKLr7aVWXjxKCfC5a15wKHTDBVGrgSAWvnsAw9DiJjxHboEKnwPFESkI4BwudlKbz3evy_Ma;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:32:14 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '750'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999705'
-      x-ratelimit-reset-requests: 2ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_b88a0a1f7db84a89b6c5c5c58e84d4d0
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '199705'
+      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-tokens: 88ms
+      x-request-id: req_0bad49a85f6744dba1ac507b38cdc826
     body:
       string: |-
         {
-          "id": "resp_0d2179b8755f30cf01690b6efbe1dc8197b44ee64c1595ce53",
+          "id": "resp_0020bdccab616191016a6fcc7614a88196b8a545cdf7639356",
           "object": "response",
-          "created_at": 1762356987,
+          "created_at": 1785711734,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1785711734,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
           "model": "gpt-4.1-nano-2025-04-14",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_0d2179b8755f30cf01690b6efc83308197810a51bba3f8031b",
+              "id": "msg_0020bdccab616191016a6fcc769488819698637c582dd8e9a9",
               "type": "message",
               "status": "completed",
               "content": [
@@ -196,10 +224,12 @@ http_interactions:
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "in_memory",
           "reasoning": {
+            "context": null,
             "effort": null,
             "summary": null
           },
@@ -214,11 +244,30 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [
             {
               "type": "function",
               "description": "Rolls a six-sided die",
               "name": "dice",
+              "output_schema": null,
               "parameters": {
                 "type": "object",
                 "description": "",
@@ -235,6 +284,7 @@ http_interactions:
           "usage": {
             "input_tokens": 78,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
             "output_tokens": 8,
@@ -246,5 +296,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 15:36:28
-recorded_with: VCR-vcr/2.0.0
+  recorded_at: 2026-08-02 23:02:14
+recorded_with: VCR-vcr/2.1.0

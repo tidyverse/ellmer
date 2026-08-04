@@ -52,6 +52,8 @@ provider_lookup <- tribble(
   "openrouter",                "OpenRouter",
   "azure",                     "Azure/OpenAI",
   "bedrock",                   "AWS/Bedrock",
+  "bedrock_converse",          "AWS/Bedrock",
+  "bedrock_mantle",            "AWS/Bedrock",
   "mistral",                   "Mistral",
   "groq",                      "Groq",
 )
@@ -59,6 +61,38 @@ provider_lookup <- tribble(
 prices <- all_prices |>
   inner_join(provider_lookup, join_by(provider == litellm_provider)) |>
   mutate(provider = provider.y, provider.y = NULL) |>
+  distinct(provider, model, variant, .keep_all = TRUE) |>
+  arrange(provider, model, variant)
+
+# Derive Posit AI pricing from lab rates, adjusted by the service's markup.
+# Gemma is served separately and entered manually.
+posit_claude_models <- c(
+  "claude-fable-5",
+  "claude-opus-4-8",
+  "claude-opus-4-7",
+  "claude-opus-4-6",
+  "claude-opus-4-5",
+  "claude-sonnet-4-6",
+  "claude-sonnet-4-5",
+  "claude-haiku-4-5"
+)
+
+posit_claude_prices <- prices |>
+  filter(provider == "Anthropic", model %in% posit_claude_models) |>
+  mutate(
+    provider = "Posit",
+    across(c(input, output, cached_input), \(x) round(x * 1.1, digits = 6))
+  )
+
+# fmt: skip
+posit_other_prices <- tibble::tribble(
+  ~model,                      ~input, ~output, ~cached_input,
+  "google/gemma-4-26B-A4B-it", 0.30,   1.50,    0.03,
+) |>
+  mutate(provider = "Posit", variant = "") |>
+  select(provider, model, variant, input, output, cached_input)
+
+prices <- bind_rows(prices, posit_claude_prices, posit_other_prices) |>
   arrange(provider, model, variant)
 
 cli::cli_progress_done()
@@ -69,8 +103,8 @@ cli::cli_alert_info("Rows: {nrow(prices)}")
 cli::cli_alert_info("Providers: {n_distinct(prices$provider)}")
 
 stopifnot(
-  "Expected at least 500 rows" = nrow(prices) >= 500,
-  "Expected 9 providers" = n_distinct(prices$provider) >= 9
+  "Expected at least 1000 rows" = nrow(prices) >= 1000,
+  "Expected 10 providers" = n_distinct(prices$provider) >= 10
 )
 
 # --- schema validation -------------------------------------------------------

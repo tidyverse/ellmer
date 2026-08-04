@@ -3,5 +3,5 @@
     Code
       . <- chat_deepseek()
     Message
-      Using model = "deepseek-chat".
+      Using model = "deepseek-v4-flash".
 

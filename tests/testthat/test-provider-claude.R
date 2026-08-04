@@ -72,6 +72,8 @@ test_that("can use MCP connector tools", {
 
   chat <- chat_anthropic_test(
     system_prompt = "Use the read_wiki_structure tool to answer the question. Be brief.",
+    model = "claude-sonnet-4-5-20250929",
+    params = params(temperature = 0),
     beta_headers = "mcp-client-2025-11-20",
     api_args = list(
       mcp_servers = list(
@@ -148,7 +150,7 @@ test_that("continues to work after whitespace only outputs (#376)", {
   vcr::local_cassette("anthropic-whitespace")
 
   chat <- chat_anthropic_test()
-  chat$chat("Respond with only two blank lines")
+  chat$chat("Respond to this question with only two blank lines")
   expect_equal(
     chat$chat("What's 1+1? Just give me the number"),
     ellmer_output("2")
@@ -606,6 +608,53 @@ test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens"
   expect_equal(unclass(turn@cost), expected_cost)
 })
 
+test_that("value_turn() prices a refusal fallback at the serving model's rate", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    model = "claude-fable-5",
+    params = list(),
+    extra_args = list(),
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+
+  result <- list(
+    model = "claude-opus-4-8",
+    content = list(
+      list(
+        type = "fallback",
+        from = list(model = "claude-fable-5"),
+        to = list(model = "claude-opus-4-8")
+      ),
+      list(type = "text", text = "ok")
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 1000, output_tokens = 50)
+  )
+
+  turn <- value_turn(provider, result)
+
+  # opus-4-8 rates ($5/$25 per 1M), not fable-5's ($10/$50).
+  expect_equal(unclass(turn@cost), (1000 * 5 + 50 * 25) / 1e6)
+})
+
+test_that("serving_model() prefers the last fallback block's to.model", {
+  expect_equal(serving_model(list(model = "a", content = list())), "a")
+  expect_equal(
+    serving_model(list(
+      model = "requested",
+      content = list(
+        list(type = "fallback", to = list(model = "served")),
+        list(type = "text", text = "hi")
+      )
+    )),
+    "served"
+  )
+})
+
 test_that("stream_merge_chunks() handles citations_delta", {
   provider <- test_anthropic_provider()
 
@@ -672,4 +721,11 @@ test_that("stream_merge_chunks() handles citations_delta", {
   expect_equal(result$content[[1]]$text, "Hello")
   expect_length(result$content[[1]]$citations, 1)
   expect_equal(result$content[[1]]$citations[[1]]$url, "https://example.com")
+})
+
+# Token counting -----------------------------------------------------------
+
+test_that("can count tokens", {
+  vcr::local_cassette("anthropic-count-tokens")
+  test_token_count(chat_anthropic_test)
 })
