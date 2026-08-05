@@ -79,6 +79,14 @@
       Error:
       ! Failed to parse pricing data from GitHub.
 
+# prices_cache_download() aborts when snapshot version is missing
+
+    Code
+      prices_cache_download()
+    Condition
+      Error:
+      ! Pricing data from GitHub is missing its ellmer snapshot version.
+
 # prices_cache_download() aborts when remote schema is newer
 
     Code

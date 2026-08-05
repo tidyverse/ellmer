@@ -11,7 +11,7 @@ test_that("prices_get() uses cached data in place of bundled data", {
   expect_equal(prices_get(), cached)
 })
 
-test_that("prices_get() ignores a cache written by an older ellmer", {
+test_that("prices_get() ignores an older cached snapshot", {
   local_prices()
   cache_path <- local_prices_cache()
 
@@ -28,12 +28,13 @@ test_that("prices_get() ignores a cache with no ellmer version", {
 
   df <- prices[1, ]
   attr(df, "schema_version") <- attr(prices, "schema_version")
+  attr(df, "ellmer_version") <- NULL
   saveRDS(df, cache_path)
 
   expect_equal(prices_get(), prices)
 })
 
-test_that("prices_get() uses a cache written by a newer ellmer", {
+test_that("prices_get() uses a newer cached snapshot", {
   local_prices()
   cache_path <- local_prices_cache()
 
@@ -114,21 +115,35 @@ mock_response <- function(status_code = 200L, body = "") {
 
 valid_envelope <- function(
   schema_version = attr(prices, "schema_version"),
+  ellmer_version = attr(prices, "ellmer_version"),
   data = prices
 ) {
   jsonlite::toJSON(
     list(
       schema_version = schema_version,
       min_ellmer_version = "0.4.1.9000",
+      ellmer_version = ellmer_version,
       data = data
     ),
     auto_unbox = TRUE
   )
 }
 
-test_that("prices_cache_download() writes cache and returns TRUE on 200", {
+test_that("prices_cache_download() skips a snapshot matching bundled data", {
   cache_path <- local_prices_cache()
   local_mocked_responses(mock_response(body = valid_envelope()))
+
+  expect_false(prices_cache_download())
+  expect_false(file.exists(cache_path))
+})
+
+test_that("prices_cache_download() writes a newer snapshot", {
+  cache_path <- local_prices_cache()
+  newer <- prices
+  newer$input[[1]] <- newer$input[[1]] + 1
+  local_mocked_responses(mock_response(
+    body = valid_envelope(ellmer_version = "999.0.0", data = newer)
+  ))
 
   expect_true(prices_cache_download())
   expect_true(file.exists(cache_path))
@@ -139,16 +154,32 @@ test_that("prices_cache_download() writes cache and returns TRUE on 200", {
   )
   expect_equal(
     attr(cached, "ellmer_version"),
-    as.character(utils::packageVersion("ellmer"))
+    "999.0.0"
   )
 })
 
 test_that("prices_cache_download() returns FALSE when data is unchanged", {
   local_prices_cache()
-  local_mocked_responses(mock_response(body = valid_envelope()))
+  newer <- prices
+  newer$input[[1]] <- newer$input[[1]] + 1
+  local_mocked_responses(mock_response(
+    body = valid_envelope(ellmer_version = "999.0.0", data = newer)
+  ))
 
   expect_true(prices_cache_download())
   expect_false(prices_cache_download())
+})
+
+test_that("prices_cache_download() leaves an older cache when bundled is current", {
+  cache_path <- local_prices_cache()
+  old <- prices
+  old$input[[1]] <- old$input[[1]] + 1
+  cached <- write_prices_cache(cache_path, old, ellmer_version = "0.0.1")
+  local_mocked_responses(mock_response(body = valid_envelope()))
+
+  expect_false(prices_cache_download())
+  expect_identical(readRDS(cache_path), cached)
+  expect_identical(prices_get(), prices)
 })
 
 test_that("prices_cache_download() aborts on HTTP error", {
@@ -178,6 +209,20 @@ test_that("prices_cache_download() aborts when envelope is missing data", {
   local_prices_cache()
   local_mocked_responses(mock_response(
     body = jsonlite::toJSON(list(schema_version = 1L), auto_unbox = TRUE)
+  ))
+
+  expect_snapshot(prices_cache_download(), error = TRUE)
+})
+
+test_that("prices_cache_download() aborts when snapshot version is missing", {
+  local_prices_cache()
+  envelope <- list(
+    schema_version = attr(prices, "schema_version"),
+    min_ellmer_version = "0.4.1.9000",
+    data = prices
+  )
+  local_mocked_responses(mock_response(
+    body = jsonlite::toJSON(envelope, auto_unbox = TRUE)
   ))
 
   expect_snapshot(prices_cache_download(), error = TRUE)

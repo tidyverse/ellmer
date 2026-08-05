@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "min_ellmer_version": "0.4.1.9000",
+  "ellmer_version": "0.4.2.9000",
   "data": [
     {
       "provider": "AWS/Bedrock",

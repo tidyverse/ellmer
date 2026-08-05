@@ -21,9 +21,9 @@
 #    refresh.
 #
 # Both reads and writes are gated by an integer `schema_version`; see
-# `data-raw/prices.R` for the contract and when to bump it. Releases act as a
-# ratchet: the cache records the ellmer version that wrote it, and a cache
-# from an older version loses to the newer bundled snapshot.
+# `data-raw/prices.R` for the contract and when to bump it. Each snapshot also
+# records the ellmer version on main that generated it. A cached snapshot from
+# an older version loses to the bundled snapshot.
 
 prices_get <- function() {
   if (is.null(the$prices)) {
@@ -48,7 +48,7 @@ prices_cache_compatible <- function(cached, bundled) {
         names(bundled) %in% names(cached)
       )
     )
-    return(!prices_cache_superseded(cached))
+    return(!prices_cache_superseded(cached, bundled))
   }
 
   if (is.integer(cached_version) && length(cached_version) == 1L) {
@@ -76,16 +76,15 @@ prices_cache_compatible <- function(cached, bundled) {
   FALSE
 }
 
-# Every release regenerates the bundled snapshot, so data cached by an older
-# ellmer has been superseded by the data we now ship and is silently ignored.
-# Development versions don't tick with each snapshot, so they keep using
-# whatever they cached; `models_update_prices()` is the way out.
-prices_cache_superseded <- function(cached) {
+# A snapshot's ellmer version is assigned by `data-raw/prices.R`, not by the
+# ellmer installation that downloaded it.
+prices_cache_superseded <- function(cached, bundled) {
   cached_version <- attr(cached, "ellmer_version")
+  bundled_version <- attr(bundled, "ellmer_version")
   if (is.null(cached_version)) {
     return(TRUE)
   }
-  package_version(cached_version) < utils::packageVersion("ellmer")
+  package_version(cached_version) < package_version(bundled_version)
 }
 
 #' Update cached model pricing data
@@ -152,7 +151,10 @@ prices_cache_download <- function(call = caller_env()) {
 
   df <- prices_check_remote(parsed, call = call)
 
-  if (identical(df, prices_cache_read())) {
+  if (
+    !prices_cache_superseded(prices, df) ||
+      identical(df, prices_cache_read())
+  ) {
     return(FALSE)
   }
 
@@ -188,6 +190,18 @@ prices_check_remote <- function(parsed, call = caller_env()) {
     }
   }
 
+  snapshot_version <- parsed$ellmer_version
+  if (
+    !is.character(snapshot_version) ||
+      length(snapshot_version) != 1L ||
+      is.na(snapshot_version)
+  ) {
+    cli::cli_abort(
+      "Pricing data from GitHub is missing its ellmer snapshot version.",
+      call = call
+    )
+  }
+
   df <- parsed$data
 
   required <- c("provider", "model", "variant", "input", "output")
@@ -206,7 +220,7 @@ prices_check_remote <- function(parsed, call = caller_env()) {
   }
 
   attr(df, "schema_version") <- remote_version
-  attr(df, "ellmer_version") <- as.character(utils::packageVersion("ellmer"))
+  attr(df, "ellmer_version") <- snapshot_version
   df
 }
 

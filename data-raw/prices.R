@@ -120,11 +120,17 @@ stopifnot(
 # install. Update both values together whenever the schema changes.
 schema_version <- 1L
 min_ellmer_version <- "0.4.1.9000"
+ellmer_version <- unname(read.dcf("DESCRIPTION", fields = "Version")[
+  1,
+  "Version"
+])
 attr(prices, "schema_version") <- schema_version
+attr(prices, "ellmer_version") <- ellmer_version
 
 prices_envelope <- list(
   schema_version = schema_version,
   min_ellmer_version = min_ellmer_version,
+  ellmer_version = ellmer_version,
   data = prices
 )
 

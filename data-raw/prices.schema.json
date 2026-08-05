@@ -3,7 +3,7 @@
   "title": "ellmer prices",
   "description": "Per-million-token pricing for LLM providers supported by ellmer",
   "type": "object",
-  "required": ["schema_version", "min_ellmer_version", "data"],
+  "required": ["schema_version", "min_ellmer_version", "ellmer_version", "data"],
   "additionalProperties": false,
   "properties": {
     "schema_version": {
@@ -13,6 +13,11 @@
     },
     "min_ellmer_version": {
       "description": "The minimum version of ellmer required to use this schema. Used in the error message when a user's installed ellmer is too old to read the downloaded data.",
+      "type": "string",
+      "minLength": 1
+    },
+    "ellmer_version": {
+      "description": "The version of ellmer on main that generated this pricing snapshot.",
       "type": "string",
       "minLength": 1
     },

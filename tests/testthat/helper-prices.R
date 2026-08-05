@@ -8,7 +8,7 @@ write_prices_cache <- function(
   path,
   df = prices,
   schema_version = attr(prices, "schema_version"),
-  ellmer_version = utils::packageVersion("ellmer")
+  ellmer_version = attr(prices, "ellmer_version")
 ) {
   attr(df, "schema_version") <- schema_version
   attr(df, "ellmer_version") <- as.character(ellmer_version)
