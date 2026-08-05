@@ -88,9 +88,6 @@ parallel_chat <- function(
   user_turns <- as_user_turns(prompts)
   existing <- chat$get_turns(include_system_prompt = TRUE)
   conversations <- append_turns(list(existing), user_turns)
-  stores <- map(seq_along(conversations), function(i) {
-    clone_store_env(chat$store)
-  })
 
   # Now get the assistant's response
   assistant_turns <- my_parallel_turns(conversations)
@@ -110,7 +107,7 @@ parallel_chat <- function(
       turn <- match_tools(assistant_turns[[i]], tools = chat$get_tools())
       tool_results <- coro::collect(invoke_tools(
         turn,
-        tool_context = tool_context_factory(stores[[i]], conversations[[i]])
+        tool_context = tool_context_factory(conversations[[i]])
       ))
       tool_results_as_turn(tool_results)
     })
@@ -133,9 +130,7 @@ parallel_chat <- function(
     if (is_ok[[i]]) {
       turns <- conversations[[i]]
       log_turns(chat$get_provider(), turns)
-      cloned <- chat$clone()
-      cloned$store <- stores[[i]]
-      cloned$set_turns(turns)
+      chat$clone()$set_turns(turns)
     } else {
       assistant_turns[[i]]
     }

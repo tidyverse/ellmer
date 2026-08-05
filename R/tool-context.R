@@ -9,12 +9,6 @@ NULL
 #'
 #' - `$request` — the [ContentToolRequest] for this call, with sub-fields
 #'   `@name`, `@id`, `@arguments`, and `@tool`.
-#' - `$store` — the chat's shared state environment (`chat$store`). This is
-#'   the **same** environment as `chat$store` (by reference), so mutations
-#'   made inside a tool are immediately visible to subsequent tool calls and
-#'   to the `Chat` object. Use it for counters, database connections, loggers,
-#'   and any other per-conversation state you don't want to expose to the
-#'   model.
 #' - `$turns` — an eager snapshot of the conversation history (list of [Turn]
 #'   objects), including the system prompt (if any) as the first turn, up to
 #'   and including the assistant turn that issued this tool request. Sibling
@@ -42,41 +36,39 @@ NULL
 #'   coro::async(function() {
 #'     ctx <- tool_context()         # capture BEFORE await
 #'     result <- await(some_promise())
-#'     ctx$store$n <- ctx$store$n + 1L  # safe: $store is by reference
+#'     message("Handled request ", ctx$request@id)
 #'     result
 #'   }),
-#'   description = "An async tool that updates the store"
+#'   description = "An async tool that logs the request id"
 #' )
 #' ```
 #'
 #' @return `tool_context()` returns the current `ellmer_tool_context` object
-#'   (a classed list with fields `$request`, `$store`, `$turns`).
+#'   (a classed list with fields `$request`, `$turns`).
 #'
 #'   `with_tool_context()` returns the value of `code`.
 #'
 #'   `local_tool_context()` returns `context` invisibly.
 #'
 #' @param context An `ellmer_tool_context` object, or a list with fields
-#'   `request`, `store`, and `turns` (which will be promoted automatically).
+#'   `request` and `turns` (which will be promoted automatically).
 #' @param code An expression to evaluate with `context` on top of the stack.
 #' @param .frame The environment whose exit triggers the pop. Defaults to
 #'   `parent.frame()` (the calling function's frame).
 #'
 #' @examples
-#' # Increment a counter stored in chat$store
-#' counter_tool <- tool(
+#' # Log the id of the request that triggered this tool call
+#' logging_tool <- tool(
 #'   function() {
 #'     ctx <- tool_context()
-#'     ctx$store$n <- (ctx$store$n %||% 0L) + 1L
-#'     ctx$store$n
+#'     message("Handled request ", ctx$request@id)
+#'     "done"
 #'   },
-#'   description = "Increment and return the call counter"
+#'   description = "Log the current request id and return"
 #' )
 #'
 #' # Test a tool that uses tool_context() without a live chat
-#' test_store <- new.env(parent = emptyenv())
-#' test_store$n <- 0L
-#' local_tool_context(list(request = NULL, store = test_store, turns = list()))
+#' local_tool_context(list(request = NULL, turns = list()))
 #' # now tool_context() returns the context inside this frame
 #'
 #' @rdname tool_context
@@ -115,9 +107,9 @@ local_tool_context <- function(context, .frame = parent.frame()) {
   invisible(context)
 }
 
-new_tool_context <- function(request, store, turns) {
+new_tool_context <- function(request, turns) {
   structure(
-    list(request = request, store = store, turns = turns),
+    list(request = request, turns = turns),
     class = "ellmer_tool_context"
   )
 }
@@ -140,7 +132,6 @@ as_tool_context <- function(context, call = caller_env()) {
   }
   new_tool_context(
     request = context[["request"]],
-    store = context[["store"]] %||% new.env(parent = emptyenv()),
     turns = context[["turns"]] %||% list()
   )
 }
@@ -153,6 +144,6 @@ pop_tool_context <- function() {
   invisible(NULL)
 }
 
-tool_context_factory <- function(store, turns) {
-  function(request) new_tool_context(request, store, turns)
+tool_context_factory <- function(turns) {
+  function(request) new_tool_context(request, turns)
 }
