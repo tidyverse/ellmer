@@ -238,3 +238,134 @@ chat$chat("Describe the design aesthetic of https://tidyverse.org")
 #> Overall, the design communicates clarity, ease of use, and a focus on
 #> modern data science tools.
 ```
+
+### Tool context
+
+A tool sometimes needs to know a little about the call it's part of — the tool
+request that triggered it, or the conversation so far — without that information
+being part of its arguments. Inside a tool body, `tool_context()` returns a
+read-only context object with two fields:
+
+- `$request`: the `ContentToolRequest` for this call, including `@id`, `@name`,
+  and `@arguments`.
+- `$turns`: a snapshot of the conversation history up to and including the
+  assistant turn that issued this request (a list of `Turn` objects).
+
+This is handy for logging or correlating tool calls with the request that
+produced them:
+
+```{r}
+#| eval: false
+
+report_tool <- tool(
+  function(query) {
+    ctx <- tool_context()
+    cli::cli_alert_info("Running report for request {ctx$request@id}")
+    run_report(query)
+  },
+  description = "Run a report for the given query.",
+  arguments = list(query = type_string("The report query."))
+)
+```
+
+**Async tools:** in an async tool, `tool_context()` is only valid during the
+synchronous prefix of the function — before the first `await()`. Capture it at
+the top of your tool body:
+
+```{r}
+#| eval: false
+
+my_async_tool <- tool(
+  coro::async(function(query) {
+    ctx <- tool_context()          # capture before any await()
+    result <- await(run_report_async(query))
+    cli::cli_alert_info("Finished request {ctx$request@id}")
+    result
+  }),
+  description = "Run a report asynchronously.",
+  arguments = list(query = type_string("The report query."))
+)
+```
+
+`tool_context()` errors with a clear message if called after an `await()` or
+outside a tool invocation. Built-in provider tools (such as
+`claude_tool_web_search()`) run provider-side and do not support
+`tool_context()`; MCP tools do.
+
+### Sharing state across tools
+
+Related tools may need to share private state that the model should never
+see — a database connection, an authenticated user, or a running tally. A clean
+way to organise this is to bundle the tools together as methods of an R6 class,
+with the shared state living in the object's fields. Each tool reads and writes
+that state through `self`, and a `$tools()` method returns the ellmer tools.
+
+```{r}
+#| eval: false
+
+Assistant <- R6::R6Class(
+  "Assistant",
+  public = list(
+    initialize = function(user_email) {
+      private$user_email <- user_email
+    },
+
+    # Return the ellmer tools, each wrapping a bound method. `tool()` can't
+    # infer a name from `self$method`, so we pass `name` explicitly.
+    tools = function() {
+      list(
+        tool(
+          self$add_note,
+          name = "add_note",
+          description = "Save a note for the current user.",
+          arguments = list(text = type_string("The note to save."))
+        ),
+        tool(
+          self$list_notes,
+          name = "list_notes",
+          description = "List the current user's saved notes."
+        )
+      )
+    },
+
+    add_note = function(text) {
+      private$notes <- c(private$notes, text)
+      sprintf("Saved. You now have %d note(s).", length(private$notes))
+    },
+
+    list_notes = function() {
+      if (length(private$notes) == 0) {
+        return("No notes yet.")
+      }
+      private$notes
+    }
+  ),
+  private = list(
+    user_email = NULL,
+    notes = character()
+  )
+)
+```
+
+Create the object once, register its tools, and the state accumulates across
+turns and across `$chat()` calls — all without exposing `user_email` or the raw
+notes to the model:
+
+```{r}
+#| eval: false
+
+assistant <- Assistant$new(user_email = "hadley@posit.co")
+
+chat <- chat_openai()
+chat$register_tools(assistant$tools())
+
+chat$chat("Remember that I need to buy milk.")
+chat$chat("What do I need to do?")
+
+# Inspect the state directly — this never passed through the model
+assistant$list_notes()
+#> [1] "buy milk"
+```
+
+Because the state lives in the object rather than in ellmer, you stay in
+control of how it's created, inspected, and persisted.

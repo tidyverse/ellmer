@@ -7,6 +7,7 @@
 * `chat_github()` and `models_github()` are now defunct because GitHub Models has been retired (@thisisnic, #1069).
 * `chat_google_gemini()` no longer errors when mixing regular tools and built-in tools like `google_tool_web_search()` (@thisisnic, #1054).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
+* `tool_context()` lets a tool access its calling context — the `ContentToolRequest` and the conversation history — during a tool call, with `with_tool_context()` and `local_tool_context()` for testing (#871).
 
 
 # ellmer 0.4.2

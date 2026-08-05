@@ -585,7 +585,10 @@ Chat <- R6::R6Class(
             on_tool_request = private$callback_on_tool_request$invoke,
             on_tool_result = private$callback_on_tool_result$invoke,
             yield_request = yield_as_content,
-            otel_span = agent_span
+            otel_span = agent_span,
+            tool_context = tool_context_factory(
+              self$get_turns(include_system_prompt = TRUE)
+            )
           )
 
           tool_results <- list()
@@ -655,7 +658,10 @@ Chat <- R6::R6Class(
             on_tool_request = private$callback_on_tool_request$invoke_async,
             on_tool_result = private$callback_on_tool_result$invoke_async,
             yield_request = yield_as_content,
-            otel_span = agent_span
+            otel_span = agent_span,
+            tool_context = tool_context_factory(
+              self$get_turns(include_system_prompt = TRUE)
+            )
           )
           if (tool_mode == "sequential") {
             tool_results <- list()
