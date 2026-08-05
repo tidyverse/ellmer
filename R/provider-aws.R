@@ -16,10 +16,18 @@ NULL
 #'
 #' ## Authentication
 #'
-#' Authentication is handled through \{paws.common\}, so if authentication
-#' does not work for you automatically, you'll need to follow the advice
-#' at <https://www.paws-r-sdk.com/#credentials>. In particular, if your
-#' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
+#' `chat_aws_bedrock()` uses \{paws.common\} to resolve credentials,
+#' trying the following strategies in order:
+#'
+#' - A bearer token set in the `AWS_BEARER_TOKEN_BEDROCK` or
+#'   `AWS_BEARER_TOKEN` environment variable. This is used by enterprise
+#'   API gateways that issue API keys instead of IAM credentials. See the
+#'   [AWS documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-use.html)
+#'   for details.
+#' - Standard IAM credentials resolved from environment variables, AWS
+#'   config files, SSO, or instance metadata. See
+#'   <https://www.paws-r-sdk.com/#credentials> for details. If your org
+#'   uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 #'
 #' ## Prompt caching
 #'
@@ -46,13 +54,13 @@ NULL
 #'   Set to `"5m"` or `"1h"` to force caching on, or `"none"` to disable it.
 #'
 #'   See details below.
-#' @param model `r param_model("anthropic.claude-sonnet-4-5-20250929-v1:0", "models_aws_bedrock")`.
+#' @param model `r param_model("us.anthropic.claude-sonnet-5", "models_aws_bedrock")`.
 #'
 #'   While ellmer provides a default model, there's no guarantee that you'll
 #'   have access to it, so you'll need to specify a model that you can.
 #'   If you're using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
 #'   you'll need to use the inference profile ID, e.g.
-#'   `model="us.anthropic.claude-sonnet-4-5-20250929-v1:0"`.
+#'   `model="us.anthropic.claude-sonnet-5"`.
 #' @param params Common model parameters, usually created by [params()].
 #' @param api_args Named list of arbitrary extra arguments appended to the body
 #'   of every chat API call. Use `params` for common parameters. Model-specific
@@ -154,7 +162,7 @@ provider_aws_bedrock <- function(
     base_url <- base_url(credentials$region)
   }
 
-  model <- set_default(model, "anthropic.claude-sonnet-4-5-20250929-v1:0")
+  model <- set_default(model, "us.anthropic.claude-sonnet-5")
 
   cache_point <- as_bedrock_cache_point(cache_point, model)
 
@@ -212,12 +220,16 @@ method(base_request, ProviderAWSBedrock) <- function(provider) {
   creds <- paws_credentials(provider@profile, provider@cache)
 
   req <- request(provider@base_url)
-  req <- req_auth_aws_v4(
-    req,
-    aws_access_key_id = creds$access_key_id,
-    aws_secret_access_key = creds$secret_access_key,
-    aws_session_token = creds$session_token
-  )
+  if (nzchar(creds$access_token)) {
+    req <- req_auth_bearer_token(req, creds$access_token)
+  } else {
+    req <- req_auth_aws_v4(
+      req,
+      aws_access_key_id = creds$access_key_id,
+      aws_secret_access_key = creds$secret_access_key,
+      aws_session_token = creds$session_token
+    )
+  }
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   req <- base_request_error(provider, req)
@@ -252,11 +264,10 @@ method(chat_request, ProviderAWSBedrock) <- function(
   type = NULL
 ) {
   req <- base_request(provider)
+  suffix <- if (stream) "converse-stream" else "converse"
   req <- req_url_path_append(
     req,
-    "model",
-    provider@model,
-    if (stream) "converse-stream" else "converse"
+    paste0("model/", curl::curl_escape(provider@model), "/", suffix)
   )
 
   if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
@@ -287,7 +298,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
   }
 
   if (length(tools) > 0) {
-    tools <- as_json(provider, unname(tools))
+    tools <- chat_body_tools(provider, tools)
     toolConfig <- compact(list(tools = tools, tool_choice = tool_choice))
   } else {
     toolConfig <- NULL
@@ -393,7 +404,8 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
     result <- list(
       output = list(
         message = result
-      )
+      ),
+      stopReason = chunk$stopReason
     )
   } else if (chunk$event_type == "metadata") {
     result$usage <- chunk$usage
@@ -411,6 +423,25 @@ method(value_tokens, ProviderAWSBedrock) <- function(provider, json) {
     input = usage$inputTokens %||% 0,
     output = usage$outputTokens %||% 0,
     cached_input = usage$cacheReadInputTokens %||% 0
+  )
+}
+
+# https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
+method(value_finish_reason, ProviderAWSBedrock) <- function(provider, result) {
+  reason <- result$stopReason
+  if (is.null(reason)) {
+    return(NA_character_)
+  }
+  switch(
+    reason,
+    end_turn = "success",
+    tool_use = "tool_use",
+    max_tokens = "max_tokens",
+    model_context_window_exceeded = "context_window",
+    stop_sequence = "stop_sequence",
+    guardrail_intervened = ,
+    content_filtered = "content_filter",
+    I(reason)
   )
 }
 
@@ -449,7 +480,14 @@ method(value_turn, ProviderAWSBedrock) <- function(
 
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
-  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
+
+  AssistantTurn(
+    contents,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = value_finish_reason(provider, result)
+  )
 }
 
 # ellmer -> Bedrock -------------------------------------------------------------
@@ -651,7 +689,7 @@ paws_credentials <- function(
 
 # Wrapper for paws.common::locate_credentials() so we can mock it in tests.
 locate_aws_credentials <- function(profile) {
-  paws.common::locate_credentials(profile)
+  paws.common::locate_credentials(profile, signing_name = "bedrock")
 }
 
 aws_creds_cache <- function(profile) {

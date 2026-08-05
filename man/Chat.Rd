@@ -29,6 +29,8 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-initialize}{\code{Chat$new()}}
     \item \href{#method-Chat-get_turns}{\code{Chat$get_turns()}}
     \item \href{#method-Chat-set_turns}{\code{Chat$set_turns()}}
+    \item \href{#method-Chat-get_rounds}{\code{Chat$get_rounds()}}
+    \item \href{#method-Chat-last_round}{\code{Chat$last_round()}}
     \item \href{#method-Chat-add_turn}{\code{Chat$add_turn()}}
     \item \href{#method-Chat-get_system_prompt}{\code{Chat$get_system_prompt()}}
     \item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
@@ -36,6 +38,7 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
     \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
     \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
+    \item \href{#method-Chat-token_count}{\code{Chat$token_count()}}
     \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
     \item \href{#method-Chat-chat}{\code{Chat$chat()}}
     \item \href{#method-Chat-chat_structured}{\code{Chat$chat_structured()}}
@@ -119,6 +122,47 @@ turns (if any exists).}
       \item{\code{value}}{A list of \link{Turn}s.}
     }
     \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_rounds"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_rounds}{}}}
+\subsection{\code{Chat$get_rounds()}}{
+  Retrieve the conversation grouped into \link{Round}s. Each
+\code{Round} pairs a user turn with the assistant and tool-result turns it
+produced.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$get_rounds(include_system_prompt = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{include_system_prompt}}{Whether to include system turns in the
+rounds. When \code{FALSE} (the default), all system turns are dropped. When
+\code{TRUE}, each system turn is folded into the \code{input} of the round it
+precedes.}
+    }
+    \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-last_round"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-last_round}{}}}
+\subsection{\code{Chat$last_round()}}{
+  The last \link{Round} of conversation. Note that system prompt
+turns are included, equivalent to the last item in the list of rounds
+returned by \verb{$get_rounds(include_system_prompt = TRUE)}.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$last_round()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Either a \code{Round} or \code{NULL}, if no rounds have occurred.
   }
 }
 
@@ -249,6 +293,35 @@ most recent turn. Incomplete turns (from cancelled or interrupted
 streams) are excluded because they lack token data.}
     }
     \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-token_count"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-token_count}{}}}
+\subsection{\code{Chat$token_count()}}{
+  Estimate the token count for \code{...} using the
+provider's token counting endpoint.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$token_count(..., include = c("new", "complete"), type = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{Input to count tokens for.}
+      \item{\code{include}}{What to include in the count. \code{"new"} counts
+tokens only for the contents of \code{...}. \code{"complete"} estimates
+the total input tokens for the next request, including system
+prompt, tools, and conversation history.}
+      \item{\code{type}}{An optional type specification for structured data
+extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The estimated number of input tokens.
   }
 }
 

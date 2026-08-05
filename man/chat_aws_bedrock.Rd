@@ -24,7 +24,7 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
 
 \item{base_url}{The base URL to the API endpoint.}
 
-\item{model}{The model to use for the chat (defaults to "anthropic.claude-sonnet-4-5-20250929-v1:0").
+\item{model}{The model to use for the chat (defaults to "us.anthropic.claude-sonnet-5").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_models_aws_bedrock()} to see all options.
 .
@@ -33,7 +33,7 @@ While ellmer provides a default model, there's no guarantee that you'll
 have access to it, so you'll need to specify a model that you can.
 If you're using \href{https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/}{cross-region inference},
 you'll need to use the inference profile ID, e.g.
-\code{model="us.anthropic.claude-sonnet-4-5-20250929-v1:0"}.}
+\code{model="us.anthropic.claude-sonnet-5"}.}
 
 \item{profile}{AWS profile to use.}
 
@@ -87,10 +87,19 @@ language models, including those from Anthropic's
 \href{https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html}{Converse API}.
 \subsection{Authentication}{
 
-Authentication is handled through \{paws.common\}, so if authentication
-does not work for you automatically, you'll need to follow the advice
-at \url{https://www.paws-r-sdk.com/#credentials}. In particular, if your
-org uses AWS SSO, you'll need to run \verb{aws sso login} at the terminal.
+\code{chat_aws_bedrock()} uses \{paws.common\} to resolve credentials,
+trying the following strategies in order:
+\itemize{
+\item A bearer token set in the \code{AWS_BEARER_TOKEN_BEDROCK} or
+\code{AWS_BEARER_TOKEN} environment variable. This is used by enterprise
+API gateways that issue API keys instead of IAM credentials. See the
+\href{https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-use.html}{AWS documentation}
+for details.
+\item Standard IAM credentials resolved from environment variables, AWS
+config files, SSO, or instance metadata. See
+\url{https://www.paws-r-sdk.com/#credentials} for details. If your org
+uses AWS SSO, you'll need to run \verb{aws sso login} at the terminal.
+}
 }
 
 \subsection{Prompt caching}{
@@ -137,6 +146,7 @@ Other chatbots:
 \code{\link[=chat_openai_compatible]{chat_openai_compatible()}},
 \code{\link[=chat_openrouter]{chat_openrouter()}},
 \code{\link[=chat_perplexity]{chat_perplexity()}},
-\code{\link[=chat_portkey]{chat_portkey()}}
+\code{\link[=chat_portkey]{chat_portkey()}},
+\code{\link[=chat_posit]{chat_posit()}}
 }
 \concept{chatbots}

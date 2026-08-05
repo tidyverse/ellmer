@@ -57,7 +57,7 @@ test_that("chat can get and register a list of tools", {
 test_that("can handle parallel tools", {
   vcr::local_cassette("chat-tools-parallel")
 
-  chat <- chat_openai_test("Be terse")
+  chat <- chat_openai_test("Be terse", model = "gpt-4.1-nano")
   chat$register_tool(tool(
     replay(c(2, 5)),
     name = "dice",
@@ -322,7 +322,7 @@ test_that("$stream(stream='content') yields tool request/result contents", {
 })
 
 test_that("$stream_async(stream='content', tool_mode='concurrent') yields tool request/result contents concurrently", {
-  chat <- chat_openai_test()
+  chat <- chat_openai_test(model = "gpt-4.1-nano")
   tool_current_date <- tool(
     coro::async(function() {
       coro::await(coro::async_sleep(0.1))

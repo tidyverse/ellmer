@@ -14,6 +14,7 @@ NULL
 #' You should generally not create this object yourself,
 #' but instead call [chat_openai()] or friends instead.
 #'
+#' @export
 #' @return A Chat object
 #' @examples
 #' \dontshow{ellmer:::vcr_example_start("Chat")}
@@ -66,6 +67,30 @@ Chat <- R6::R6Class(
         overwrite = TRUE
       )
       invisible(self)
+    },
+
+    #' @description Retrieve the conversation grouped into [Round]s. Each
+    #'   `Round` pairs a user turn with the assistant and tool-result turns it
+    #'   produced.
+    #' @param include_system_prompt Whether to include system turns in the
+    #'   rounds. When `FALSE` (the default), all system turns are dropped. When
+    #'   `TRUE`, each system turn is folded into the `input` of the round it
+    #'   precedes.
+    get_rounds = function(include_system_prompt = FALSE) {
+      turns <- self$get_turns(include_system_prompt = TRUE)
+      if (!include_system_prompt) {
+        turns <- discard(turns, is_system_turn)
+      }
+      get_rounds(turns)
+    },
+
+    #' @description The last [Round] of conversation. Note that system prompt
+    #'   turns are included, equivalent to the last item in the list of rounds
+    #'   returned by `$get_rounds(include_system_prompt = TRUE)`.
+    #' @return Either a `Round` or `NULL`, if no rounds have occurred.
+    last_round = function() {
+      rounds <- self$get_rounds(include_system_prompt = TRUE)
+      if (length(rounds) == 0) NULL else rounds[[length(rounds)]]
     },
 
     #' @description Add a pair of turns to the chat.
@@ -179,6 +204,42 @@ Chat <- R6::R6Class(
       }
 
       dollars(cost)
+    },
+
+    #' @description Estimate the token count for `...` using the
+    #'   provider's token counting endpoint.
+    #' @param ... Input to count tokens for.
+    #' @param include What to include in the count. `"new"` counts
+    #'   tokens only for the contents of `...`. `"complete"` estimates
+    #'   the total input tokens for the next request, including system
+    #'   prompt, tools, and conversation history.
+    #' @param type An optional type specification for structured data
+    #'   extraction, created with a [`type_()`][type_boolean] function.
+    #' @return The estimated number of input tokens.
+    token_count = function(..., include = c("new", "complete"), type = NULL) {
+      include <- arg_match(include)
+
+      if (include == "new") {
+        return(count_tokens(private$provider, ..., type = type))
+      }
+
+      # With no history, we need to explicitly include system prompt and
+      # tools. Otherwise, the last turn's token counts already cover them.
+      tokens <- self$get_tokens()
+      if (nrow(tokens) == 0) {
+        all_tokens <- count_tokens(
+          private$provider,
+          ...,
+          system_prompt = self$get_system_prompt(),
+          tools = private$tools,
+          type = type
+        )
+        return(all_tokens)
+      }
+
+      new_tokens <- count_tokens(private$provider, ..., type = type)
+      last <- tokens[nrow(tokens), ]
+      new_tokens + last$input + last$output + last$cached_input
     },
 
     #' @description The last turn returned by the assistant.
@@ -987,6 +1048,11 @@ TurnAccumulator <- R6::R6Class(
     },
 
     value_turn = function(result, type, duration = NA_real_) {
+      # Check before value_turn() so structured extraction errors before
+      # trying to parse truncated JSON
+      finish_reason <- value_finish_reason(self$provider, result)
+      check_finish_reason(finish_reason, if (is.null(type)) "warn" else "error")
+
       turn <- value_turn(
         self$provider,
         result,
@@ -1024,14 +1090,5 @@ method(contents_markdown, new_S3_class("Chat")) <- function(
     return("")
   }
 
-  hh <- strrep("#", heading_level)
-
-  res <- vector("character", length(turns))
-  for (i in seq_along(res)) {
-    role <- turns[[i]]@role
-    substr(role, 0, 1) <- toupper(substr(role, 0, 1))
-    res[i] <- glue::glue("{hh} {role}\n\n{contents_markdown(turns[[i]])}")
-  }
-
-  paste(res, collapse = "\n\n")
+  turns_markdown(turns, heading_level)
 }

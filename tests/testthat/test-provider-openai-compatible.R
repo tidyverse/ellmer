@@ -97,6 +97,7 @@ test_that("value_turn() treats empty content string as null", {
 
   result <- list(
     choices = list(list(
+      finish_reason = "stop",
       message = list(
         role = "assistant",
         content = "",
@@ -186,6 +187,7 @@ test_that("value_turn extracts reasoning_content and reasoning", {
 
   result_content <- list(
     choices = list(list(
+      finish_reason = "stop",
       message = list(
         role = "assistant",
         reasoning_content = "Let me think...",
@@ -202,6 +204,7 @@ test_that("value_turn extracts reasoning_content and reasoning", {
 
   result_reasoning <- list(
     choices = list(list(
+      finish_reason = "stop",
       message = list(
         role = "assistant",
         reasoning = "Let me think...",
@@ -245,7 +248,7 @@ test_that("as_json preserves reasoning_content when preserve_thinking = TRUE", {
     ContentText("The answer is 42.")
   ))
   result <- as_json(stub, turn)
-  expect_equal(result[[1]]$reasoning_content, "Let me think...")
+  expect_equal(result[[1]]$reasoning, "Let me think...")
   expect_equal(
     result[[1]]$content,
     list(list(type = "text", text = "The answer is 42."))

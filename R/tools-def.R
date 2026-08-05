@@ -107,7 +107,6 @@ NULL
 #'
 #' \dontshow{ellmer:::vcr_example_end()}
 #' @family tool calling helpers
-#' @aliases ToolDef
 #' @export
 tool <- function(
   fun,
@@ -183,6 +182,28 @@ tool <- function(
   )
 }
 
+#' A tool definition
+#'
+#' @description
+#' An S7 class representing a tool that can be called by a chat model.
+#' You should generally not create this object yourself, but instead
+#' call [tool()] instead.
+#'
+#' @param .data The underlying function.
+#' @param name The name of the tool.
+#' @param description A description of what the tool does.
+#' @param arguments A [TypeObject] describing the tool's arguments.
+#' @param convert Whether to automatically convert JSON inputs to R
+#'   equivalents.
+#' @param annotations A list of additional tool annotations.
+#' @examples
+#' my_tool <- ToolDef(
+#'   function(x) x * 2,
+#'   name = "double",
+#'   description = "Doubles a number",
+#'   arguments = type_object(x = type_number("The number to double"))
+#' )
+#' @export
 ToolDef <- new_class(
   "ToolDef",
   parent = class_function,
@@ -280,13 +301,15 @@ check_tools <- function(x, arg = caller_arg(x), call = caller_env()) {
 #' tool_rnorm <- tool(
 #'   rnorm,
 #'   # Describe the tool function to the LLM
-#'   .description = "Drawn numbers from a random normal distribution",
+#'   description = "Drawn numbers from a random normal distribution",
 #'   # Describe the parameters used by the tool function
-#'   n = type_integer("The number of observations. Must be a positive integer."),
-#'   mean = type_number("The mean value of the distribution."),
-#'   sd = type_number("The standard deviation of the distribution. Must be a non-negative number."),
+#'   arguments = list(
+#'     n = type_integer("The number of observations. Must be a positive integer."),
+#'     mean = type_number("The mean value of the distribution."),
+#'     sd = type_number("The standard deviation of the distribution. Must be a non-negative number.")
+#'   ),
 #'   # Tool annotations optionally provide additional context to the LLM
-#'   .annotations = tool_annotations(
+#'   annotations = tool_annotations(
 #'     title = "Draw Random Normal Numbers",
 #'     read_only_hint = TRUE, # the tool does not modify any state
 #'     open_world_hint = FALSE # the tool does not interact with the outside world
@@ -352,7 +375,7 @@ tool_annotations <- function(
 #' definition and know exactly how it will be called.
 #'
 #' ```r
-#' chat <- chat_openai(model = "gpt-4.1-nano")
+#' chat <- chat_openai(model = "gpt-5-nano")
 #'
 #' list_files <- function() {
 #'   allow_read <- utils::askYesNo(
@@ -397,7 +420,7 @@ tool_annotations <- function(
 #'   "List files in the user's current directory"
 #' )
 #'
-#' chat <- chat_openai(model = "gpt-4.1-nano")
+#' chat <- chat_openai(model = "gpt-5-nano")
 #' chat$register_tool(packaged_list_files_tool)
 #'
 #' always_allowed <- c()

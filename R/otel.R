@@ -252,12 +252,6 @@ as_otel_message <- function(turn) {
   )
 }
 
-is_tool_result_turn <- function(turn) {
-  S7_inherits(turn, UserTurn) &&
-    length(turn@contents) > 0 &&
-    all(map_lgl(turn@contents, S7_inherits, ContentToolResult))
-}
-
 otel_chat_input <- function(private, user_turn) {
   if (private$has_system_prompt()) {
     sys_turn <- private$.turns[[1]]

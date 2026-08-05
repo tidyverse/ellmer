@@ -59,6 +59,27 @@ test_that("can search web pages", {
   test_tool_web_search(chat_fun, google_tool_web_search())
 })
 
+test_that("can combine built-in and user tools", {
+  provider <- chat_google_gemini_test()$get_provider()
+
+  regular_tool <- tool(
+    function(x) x,
+    "Return `x`",
+    arguments = list(x = type_number("x"))
+  )
+
+  body <- chat_body(
+    provider,
+    stream = TRUE,
+    turns = list(Turn("user", "hi")),
+    tools = list(regular_tool, google_tool_web_search())
+  )
+
+  expect_length(body$tools, 2)
+  expect_named(body$tools[[1]], "functionDeclarations")
+  expect_named(body$tools[[2]], "google_search")
+})
+
 test_that("can use images", {
   vcr::local_cassette("google-image")
   chat_fun <- chat_google_gemini_test
@@ -76,7 +97,7 @@ test_that("can use pdfs", {
 test_that("can match prices for some common models", {
   provider <- chat_google_gemini_test()$get_provider()
 
-  expect_true(has_cost(provider, "gemini-2.5-flash"))
+  expect_true(has_cost(provider, "gemini-3.5-flash"))
 
   expect_false(has_cost(provider, "gemini-1.0-pro-latest"))
 })
@@ -237,11 +258,18 @@ test_that("batch_status waits for responsesFile after SUCCEEDED", {
   no_file <- batch_status(provider, returned_batch)
   expect_true(no_file$working)
 
-  returned_batch$response = list(responsesFile = "files/abc123")
+  returned_batch$response <- list(responsesFile = "files/abc123")
 
   with_file <- batch_status(
     provider,
     returned_batch
   )
   expect_false(with_file$working)
+})
+
+# Token counting -----------------------------------------------------------
+
+test_that("can count tokens", {
+  vcr::local_cassette("google-count-tokens")
+  test_token_count(chat_google_gemini_test)
 })
