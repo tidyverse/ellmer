@@ -14,7 +14,7 @@ local_tool_context(context, .frame = parent.frame())
 }
 \arguments{
 \item{context}{An \code{ellmer_tool_context} object, or a list with fields
-\code{request}, \code{store}, and \code{turns} (which will be promoted automatically).}
+\code{request} and \code{turns} (which will be promoted automatically).}
 
 \item{code}{An expression to evaluate with \code{context} on top of the stack.}
 
@@ -23,7 +23,7 @@ local_tool_context(context, .frame = parent.frame())
 }
 \value{
 \code{tool_context()} returns the current \code{ellmer_tool_context} object
-(a classed list with fields \verb{$request}, \verb{$store}, \verb{$turns}).
+(a classed list with fields \verb{$request}, \verb{$turns}).
 
 \code{with_tool_context()} returns the value of \code{code}.
 
@@ -35,12 +35,6 @@ context object with three fields:
 \itemize{
 \item \verb{$request} — the \link{ContentToolRequest} for this call, with sub-fields
 \verb{@name}, \verb{@id}, \verb{@arguments}, and \verb{@tool}.
-\item \verb{$store} — the chat's shared state environment (\code{chat$store}). This is
-the \strong{same} environment as \code{chat$store} (by reference), so mutations
-made inside a tool are immediately visible to subsequent tool calls and
-to the \code{Chat} object. Use it for counters, database connections, loggers,
-and any other per-conversation state you don't want to expose to the
-model.
 \item \verb{$turns} — an eager snapshot of the conversation history (list of \link{Turn}
 objects), including the system prompt (if any) as the first turn, up to
 and including the assistant turn that issued this tool request. Sibling
@@ -70,29 +64,27 @@ at the top of the tool body before any \code{await()} call:
   coro::async(function() \{
     ctx <- tool_context()         # capture BEFORE await
     result <- await(some_promise())
-    ctx$store$n <- ctx$store$n + 1L  # safe: $store is by reference
+    message("Handled request ", ctx$request@id)
     result
   \}),
-  description = "An async tool that updates the store"
+  description = "An async tool that logs the request id"
 )
 }\if{html}{\out{</div>}}
 }
 
 \examples{
-# Increment a counter stored in chat$store
-counter_tool <- tool(
+# Log the id of the request that triggered this tool call
+logging_tool <- tool(
   function() {
     ctx <- tool_context()
-    ctx$store$n <- (ctx$store$n \%||\% 0L) + 1L
-    ctx$store$n
+    message("Handled request ", ctx$request@id)
+    "done"
   },
-  description = "Increment and return the call counter"
+  description = "Log the current request id and return"
 )
 
 # Test a tool that uses tool_context() without a live chat
-test_store <- new.env(parent = emptyenv())
-test_store$n <- 0L
-local_tool_context(list(request = NULL, store = test_store, turns = list()))
+local_tool_context(list(request = NULL, turns = list()))
 # now tool_context() returns the context inside this frame
 
 }
