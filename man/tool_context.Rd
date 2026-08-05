@@ -31,7 +31,7 @@ local_tool_context(context, .frame = parent.frame())
 }
 \description{
 When an ellmer tool is called by an LLM, \code{tool_context()} returns a
-context object with three fields:
+context object with two fields:
 \itemize{
 \item \verb{$request} — the \link{ContentToolRequest} for this call, with sub-fields
 \verb{@name}, \verb{@id}, \verb{@arguments}, and \verb{@tool}.

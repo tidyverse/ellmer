@@ -5,7 +5,7 @@ NULL
 #'
 #' @description
 #' When an ellmer tool is called by an LLM, `tool_context()` returns a
-#' context object with three fields:
+#' context object with two fields:
 #'
 #' - `$request` — the [ContentToolRequest] for this call, with sub-fields
 #'   `@name`, `@id`, `@arguments`, and `@tool`.
