@@ -114,8 +114,8 @@ new_tool_context <- function(request, turns) {
   )
 }
 
-push_tool_context <- function(context) {
-  context <- as_tool_context(context)
+push_tool_context <- function(context, call = caller_env()) {
+  context <- as_tool_context(context, call = call)
   the$tool_context_stack <- c(the$tool_context_stack, list(context))
   invisible(NULL)
 }

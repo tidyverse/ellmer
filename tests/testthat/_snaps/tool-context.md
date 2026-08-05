@@ -12,6 +12,6 @@
     Code
       with_tool_context("not a list", NULL)
     Condition
-      Error in `push_tool_context()`:
+      Error in `with_tool_context()`:
       ! `context` must be an <ellmer_tool_context> object or a list.
 
