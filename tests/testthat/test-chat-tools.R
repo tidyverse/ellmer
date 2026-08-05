@@ -850,9 +850,8 @@ test_that("can resume chat after dangling tool requests", {
 # Tool context ----------------------------------------------------------------
 
 test_that("invoke_tool() passes tool_context to the tool (sync)", {
-  store <- new.env(parent = emptyenv())
   turns <- list()
-  factory <- tool_context_factory(store, turns)
+  factory <- tool_context_factory(turns)
 
   captured_name <- NULL
   t <- tool(
@@ -876,8 +875,7 @@ test_that("invoke_tool() passes tool_context to the tool (sync)", {
 })
 
 test_that("invoke_tool() stack depth returns to 0 after a tool error (sync)", {
-  store <- new.env(parent = emptyenv())
-  factory <- tool_context_factory(store, list())
+  factory <- tool_context_factory(list())
 
   t <- tool(
     function() stop("boom"),
@@ -897,8 +895,7 @@ test_that("invoke_tool() stack depth returns to 0 after a tool error (sync)", {
 })
 
 test_that("invoke_tool_async() passes tool_context to the tool (B1 bracketing)", {
-  store <- new.env(parent = emptyenv())
-  factory <- tool_context_factory(store, list())
+  factory <- tool_context_factory(list())
 
   captured <- list()
 
@@ -936,8 +933,7 @@ test_that("invoke_tool_async() passes tool_context to the tool (B1 bracketing)",
 })
 
 test_that("invoke_tool_async() stack depth returns to 0 after a tool error (async)", {
-  store <- new.env(parent = emptyenv())
-  factory <- tool_context_factory(store, list())
+  factory <- tool_context_factory(list())
 
   t <- tool(
     coro::async(function() stop("async boom")),
@@ -956,20 +952,19 @@ test_that("invoke_tool_async() stack depth returns to 0 after a tool error (asyn
   expect_equal(length(the$tool_context_stack), 0L)
 })
 
-test_that("capture-before-await: store mutation after await persists", {
-  store <- new.env(parent = emptyenv())
-  store$x <- 0L
-  factory <- tool_context_factory(store, list())
+test_that("capture-before-await: context captured before await remains usable", {
+  factory <- tool_context_factory(list())
 
+  captured_name <- NULL
   t <- tool(
     coro::async(function() {
       ctx <- tool_context()
       coro::await(promises::promise_resolve(NULL))
-      ctx$store$x <- ctx$store$x + 1L
+      captured_name <<- ctx$request@name
       "done"
     }),
     name = "mutate_tool",
-    description = "async tool that mutates store after await"
+    description = "async tool that reads context captured before await"
   )
   req <- ContentToolRequest(
     id = "m1",
@@ -980,12 +975,11 @@ test_that("capture-before-await: store mutation after await persists", {
   turn <- AssistantTurn(list(req))
 
   sync(gen_async_promise_all(invoke_tools_async(turn, tool_context = factory)))
-  expect_equal(store$x, 1L)
+  expect_equal(captured_name, "mutate_tool")
 })
 
 test_that("tool_context() after await aborts with ellmer_error_tool_context_unavailable", {
-  store <- new.env(parent = emptyenv())
-  factory <- tool_context_factory(store, list())
+  factory <- tool_context_factory(list())
 
   t <- tool(
     coro::async(function() {
