@@ -2,6 +2,11 @@
 
 * New exported S7 classes `Source`, `WebSource`, and `ContentCitation` provide a provider-independent citation model. The built-in web activity classes `ContentToolRequestSearch`, `ContentToolResponseSearch`, `ContentToolRequestFetch`, and `ContentToolResponseFetch` are now also exported, with structured search sources and normalized fetch status. Citations and web activity are preserved in turns, streaming, and record/replay without sending provider annotations to incompatible model APIs.
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
+* `chat_anthropic()`, `chat_aws_bedrock()`, and `chat_posit()` now default to `claude-sonnet-5`. `chat_openai()` and `chat_openrouter()` now default to `gpt-5.6-terra` (@thisisnic, #1066).
+* `chat_anthropic()` now correctly handles the `fallback` content block returned when a model's server-side refusal fallback (`server-side-fallback-2026-06-01`) is triggered (@simonpcouch, #1058).
+* `chat_aws_bedrock()` now supports bearer token authentication for enterprise API gateways (@thisisnic, #1002).
+* `chat_github()` and `models_github()` are now defunct because GitHub Models has been retired (@thisisnic, #1069).
+* `chat_google_gemini()` no longer errors when mixing regular tools and built-in tools like `google_tool_web_search()` (@thisisnic, #1054).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
 
 
@@ -9,6 +14,7 @@
 
 * `AssistantTurn` gains a `finish_reason` property that reports why the model stopped generating (@thisisnic, #3).
 * `batch_chat()` now supports `chat_google_gemini()` and `chat_groq()` for batch processing (@xmarquez, #914, #927).
+* `Chat` gains `get_rounds()` and `last_round()` methods for retrieving the conversation history grouped into `Round`s (#507).
 * `Chat` gains a `set_model()` method for updating the model after chat creation. Unlike some `chat_*()` functions, the model name is not validated (#988).
 * `chat()` now raises a warning and `chat_structured()` raises an informative error when a response is truncated, filtered, or otherwise incomplete (@thisisnic, #867).
 * Default models have been updated for a number of providers (@thisisnic, #885, #1038):
@@ -32,6 +38,7 @@
 * New `chat_posit()` and `models_posit()` provide access to models hosted by Posit AI, authenticating via an OAuth device flow (@simonpcouch, #1024).
 * `models_deepseek()` lists available models for `chat_deepseek()` (@jcrodriguez1989, #919).
 * `models_groq()` lists available models for `chat_groq()` (@thisisnic, #921).
+* New `Round` class groups a `Chat`'s flat turn history into rounds, each containing a user turn and the assistant/tool-result turns that follow it (#507).
 * `type_object(.additional_properties)` is deprecated. No supported provider can return additional properties when using structured output. Instead, use an array of name-value pairs (@thisisnic, #866).
 
 # ellmer 0.4.1

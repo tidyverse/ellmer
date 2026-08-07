@@ -21,7 +21,7 @@ http_interactions:
         of dough onto an ungreased baking sheet and bake at 350°F (175°C)\n  for 10-12
         minutes, or until the edges are lightly browned. Let the cookies\n  cool on
         the baking sheet for a few minutes before transferring to a wire\n  rack to
-        cool completely. Enjoy!\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"store":false,"service_tier":"auto"}'
+        cool completely. Enjoy!\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
@@ -31,50 +31,57 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a13384c0bac5a5ba-IAD
+      cf-ray: a2508acc9d708574-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:21:36 GMT
+      date: Sun, 02 Aug 2026 22:33:07 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1157'
+      openai-processing-ms: '2951'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=FRIIoxa0Any3PDzZFs8vqUWP977z5svIZlGgxjSxYcw-1782721295.4793923-1.0.1.1-ivk2Cm384qb_pV4layRw6Cqa.B4WZWjbDGRksngX48oAJdZ6zQ8..eINNMr8.eBOAvjrF1wMcYgrsnN3Qr2AUgZq9IP3AE451KR6kvm.cx3Ug0MCUkhlT5z6VZ49Blze;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 08:51:36 GMT
+      set-cookie: __cf_bm=y75wntJEbihTl9wyTymfqb01LgLklsKCwqSVhokUuXY-1785709984.737923-1.0.1.1-rk8G5RPozi_cUpH4fZG2MYNTfEPStiE5y39dZpgIT.48VH9XQLZAQDcZZeZNNLFYrG0pt.x8.FSvDPQHrwC486ssEqtlfHrBrOYC0osoug1irE.XEdeXQCG8EWtLh7ir;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:03:07 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '500000'
+      x-ratelimit-remaining-tokens: '499824'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: fafbd1c7-6ce7-480a-b26e-0e4f77be083e
+      x-ratelimit-reset-tokens: 21ms
+      x-request-id: req_63837f857b00400ca0971d05e9ea888c
     body:
       string: |-
         {
-          "id": "resp_0ac956ab1c7ac65a016a422b0f865081a0a34459e878f023fe",
+          "id": "resp_0ff8672dfb8107ba016a6fc5a0cb288195aaf2ef157628285f",
           "object": "response",
-          "created_at": 1782721295,
+          "created_at": 1785709984,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782721296,
+          "completed_at": 1785709987,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.4-2026-03-05",
+          "model": "gpt-5.6-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_0ac956ab1c7ac65a016a422b0fcfb881a09d8aa6bc6daf3ac5",
+              "id": "rs_0ff8672dfb8107ba016a6fc5a131688195a5d365fac40f4bf3",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "gAAAAABqb8WjsDIsRjkRuFZb1SKX2gt8AyS8dD-uBI3UfjjXzfYHEqNBJdsFs7x0y7fa6V3MHjYsYJIdfmcgJ2tgI7Na7eKh1VPc29w1ZEXX4Pe4CKJuz4IQIGv63oLZoLDWp8eP2jyaBWcdrTlM5oaGXXN9a0mrv0kc7tyDB4KsogvpcTiPrlaPNalXgjqITIgYizWnp3rqsmibkGHXYVrsiOgFuc7sCJoyctq8-Goggm-XxpIFstmn48LUXZ8vgrMhMyXvxKYo4CWuPYVnIZ_fnwKn7z7jSS2mhUpTRo3whs3nGR7RZRmofrPowAPzXUGMCsGjCofY9zC1kYpeVjLgdO8xn4-Nf_yUKPuxJCQbnIb40eAHosizW-4CnA-HClk14Qr18JFkIrsA4vN9_B5bEodhyYncYKjw1K4G4P2kExn_juiRkncTC_OurYNJ0OiJz3w-yxg6K5Fwo3n85AEpHq2b6wM1VoZIyriPURBAx2QUlu4mykGMZ-uSl90aVmcQLrZHcot9jExwUvapP6vy51rtneNvp0KWydGfZrQYNBqMGzolfaUcOsMnFkPnkAMOw9pJKY_1x5aQmw6XLVCk-daEJogeHt3se0tht9Rd4xGcCKOlwf6YlGag03Sai_au53GL76oZ4yjoOrKjV7hnktb4rhA5cqw56T41CEprnPPjdwgGYMGgkAd3ceYD_sqBYkoDWpckD-4BLSSxotiN4jS7sYckVm8uKR8Yrx0alhvAVL7lK8C106f06d3_P5irkbMM-saOUy9NNYsSiVjGyg1eR2O-YwGnj7oa8nN6IppmXbwgzfyuIIa-0TpsQmhBU3_WB7fl4KQBRwiL3vc5lSkhUbZvw9wu7Y4Ipx4x3gX4vC-fqmYUVYgtpivYzdjGegJQz6I_oI7WmMGauvfQDD9MpV-MXd10-rX2EJrnR-HAqDldGocZw4A9t-kzPljbcisTJbo8ssPjMWN_9mDb6n2n0TXapItWEZjh_zl3ogpOCFplragQ9XoqcGpX1loqF9r4pI2vpdrv-OcfWGqp0tD8nKSDz6QO22HONfHOBN-uPR-nEA8WAjMMO6AncKAbsddzPuMeV2FGXniroTsQOHz-lzWZYFiCnlMSMvCjMb55llfTyVJVosM7CKIVt70Ao18RZvn3RrSLqR1AlYSNG5vqC8g1kqrVewXc9KziejR9gaWWGSZoR6EDMUIFMy5qMEGt3duYZs8novJ18b7Dz6d5ajyzzH2dDypnEBZYOt7sTgbPYyzFY4Begu3ntDl-baYXnlGydLYdwdj7rUZ4ioxV91I-vLZhUec4iKrZmtv72l1VdMUOtU2QqL6-d6NjRay0B30gDc7Y5HhYMnLT4m4kB9WDsg==",
+              "summary": []
+            },
+            {
+              "id": "msg_0ff8672dfb8107ba016a6fc5a23ea081959c78d96e4f322013",
               "type": "message",
               "status": "completed",
               "content": [
@@ -82,7 +89,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "[{\"name\":\"unsalted butter\",\"quantity\":1,\"unit\":\"cup\",\"input\":\"one cup of softened unsalted butter\"},{\"name\":\"white sugar\",\"quantity\":0.25,\"unit\":\"cup\",\"input\":\"a quarter cup of white sugar\"},{\"name\":\"egg\",\"quantity\":1,\"unit\":null,\"input\":\"an egg\"},{\"name\":\"vanilla extract\",\"quantity\":1,\"unit\":\"teaspoon\",\"input\":\"1 teaspoon of vanilla extract\"},{\"name\":\"all-purpose flour\",\"quantity\":2,\"unit\":\"cup\",\"input\":\"2 cups of all-purpose flour\"},{\"name\":\"semisweet chocolate chips\",\"quantity\":1,\"unit\":\"cup\",\"input\":\"1 cup of semisweet chocolate chips\"}]"
+                  "text": "[\n  {\n    \"name\": \"unsalted butter, softened\",\n    \"quantity\": 1,\n    \"unit\": \"cup\",\n    \"input\": \"one cup of softened unsalted butter\"\n  },\n  {\n    \"name\": \"white sugar\",\n    \"quantity\": 0.25,\n    \"unit\": \"cup\",\n    \"input\": \"a quarter cup of white sugar\"\n  },\n  {\n    \"name\": \"egg\",\n    \"quantity\": 1,\n    \"unit\": \"egg\",\n    \"input\": \"an egg\"\n  },\n  {\n    \"name\": \"vanilla extract\",\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\",\n    \"input\": \"1 teaspoon of vanilla extract\"\n  },\n  {\n    \"name\": \"all-purpose flour\",\n    \"quantity\": 2,\n    \"unit\": \"cup\",\n    \"input\": \"2 cups of all-purpose flour\"\n  },\n  {\n    \"name\": \"semisweet chocolate chips\",\n    \"quantity\": 1,\n    \"unit\": \"cup\",\n    \"input\": \"1 cup of semisweet chocolate chips\"\n  }\n]"
                 }
               ],
               "phase": "final_answer",
@@ -95,8 +102,8 @@ http_interactions:
           "prompt_cache_key": null,
           "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": "current_turn",
-            "effort": "none",
+            "context": "all_turns",
+            "effort": "medium",
             "mode": "standard",
             "summary": null
           },
@@ -136,16 +143,17 @@ http_interactions:
           "usage": {
             "input_tokens": 365,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 146,
+            "output_tokens": 319,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 74
             },
-            "total_tokens": 511
+            "total_tokens": 684
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:21:36
+  recorded_at: 2026-08-02 22:33:07
 recorded_with: VCR-vcr/2.1.0

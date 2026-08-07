@@ -4,17 +4,17 @@ http_interactions:
     uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"When was ggplot2 1.0.0
-        released to CRAN?\n\nAnswer in YYYY-MM-DD format."}]}],"tools":{"google_search":{}},"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
+        released to CRAN?\n\nAnswer in YYYY-MM-DD format."}]}],"tools":[{"google_search":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '529'
+      content-length: '883'
       content-type: application/json; charset=UTF-8
-      date: Wed, 17 Jun 2026 14:15:23 GMT
+      date: Thu, 09 Jul 2026 10:31:53 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=5172
+      server-timing: gfet4t7; dur=5680
       vary:
       - Origin
       - X-Origin
@@ -32,7 +32,7 @@ http_interactions:
                 "parts": [
                   {
                     "text": "2014-05-21",
-                    "thoughtSignature": "EqcBCqQBAQw51sczVF6BtmCS+3Ec8QAQccBQDw04Y1JUAjaJ4o6502ZeGatWaJq/ax6NAcKahvL+p6VqpZ5etfs6SJ+d85VlFj0nLCkhaQVxmZGDq87pJlVRnYhdJKj734g7uU9Dmck4BjGnE+GFGdWeYRSPoVzN9hl6K7Y7u0vTH01aUgOoV6SHE7lDWJyaOnTMC9k08qfX2qqlHxxtgv32xSLoxjPxFRs="
+                    "thoughtSignature": "EtwDCtkDARFNMg/soBOU8xqytFSqbWhZiCbHyQHz3plWnV3Th/Dcc4xVLF4CynvRUO5SBnqxIAvgOhrUTFhypcXO1+tupX6wJ04sF0QjyuF7b+sxsPzW9bvKOzY91yRTQ70XL5Zf1qpLMrxkdRkd0JWgARwKF/XYWNxTo4Scba4k8cq3OO2L3gBSuQjEwCBim390Kt2x2az7iSNEouDoXEktV9IPYvVfGaGJ0INjXTcAmJ+hevsRTWQSIkYze32kJ6v6BqlrsjsMekw6Sclozk4jK+3eNIRKHWymUip/8YzHFu1awioPH55O4hqb8iwEDaDQc88K1zmXpXBzsfHde8GOB8v8NbtW+xflOzStN5hAdXpEgCAKogkGs9OGIqX6rSxz76j0uh2tTlGqNl5qT8rlSXaWgciIHOh9NVB/rLxHsiC4PQ6WyLy1cTUbq4prvEOAp6i58P/DxR6kmqQZMkW9zxC9/ORUl6TEuijn1xdjgp62bR9C7GwLy0uyofGFxh6p8zF16e59A4Kw5Wqd1hKetryX6SikkMv4JfxoeS+Kq+6I2rqYHegaOMkm7mYm5ED5I8QQgqhL5IDd8DuW8vMOYepVv4ItlzmPNyYvvQAYMryA/OOZOLgCJEbLcD4="
                   }
                 ],
                 "role": "model"
@@ -42,39 +42,46 @@ http_interactions:
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 28,
+            "promptTokenCount": 341,
             "candidatesTokenCount": 10,
-            "totalTokenCount": 434,
+            "totalTokenCount": 850,
+            "cachedContentTokenCount": 92,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 28
+                "tokenCount": 341
               }
             ],
-            "thoughtsTokenCount": 396,
+            "cacheTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 92
+              }
+            ],
+            "thoughtsTokenCount": 499,
             "serviceTier": "standard"
           },
           "modelVersion": "gemini-3.5-flash",
-          "responseId": "9qsyarDqJsugnsEP__-D2Aw"
+          "responseId": "k3hPaq3XK5elkdUP59HI2QU"
         }
-  recorded_at: 2026-06-17 14:15:23
+  recorded_at: 2026-07-09 10:31:53
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"When was ggplot2 1.0.0
         released to CRAN?\n\nAnswer in YYYY-MM-DD format."}]},{"role":"model","parts":[{"text":"2014-05-21"}]},{"role":"user","parts":[{"text":"What
-        month was that?"}]}],"tools":{"google_search":{}},"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
+        month was that?"}]}],"tools":[{"google_search":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '771'
+      content-length: '770'
       content-type: application/json; charset=UTF-8
-      date: Wed, 17 Jun 2026 14:15:25 GMT
+      date: Thu, 09 Jul 2026 10:31:54 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1474
+      server-timing: gfet4t7; dur=1298
       vary:
       - Origin
       - X-Origin
@@ -92,7 +99,7 @@ http_interactions:
                 "parts": [
                   {
                     "text": "That was **May**.",
-                    "thoughtSignature": "EoQDCoEDAQw51seYWVwL0CiIcZXfc2ISFeNr0EoSEp4od7mI48KBmuy+hTuuuqZOPgzbmcCyUXIVKlp1kvEXKH8AEJPGVjrf+pe/5F/+jTGWejjA1Yy7vG4ZGYvlt37qh2tCTDEMPZRyZKRKOSquBHGDuHNo/QZTsTfOcKx7veqjyDtbJBM4a3v8Urw+jlekLclXIJHpEg8XULCgMTbI++OdMcKfX+1DZ9Xl2MFHJFp4ZlkfzM6oRQ4iMFDi31e3kJcj5s1YinwzrQ1aCsCF57cpwqvhXtHPQ376hRrmoBczej3mn9SRBGWUQ1CrgaNHHivya8GPNtBisatBDW9Ws6UaDKwL2ZuzLk+PmsHItC+TGIRktJZKNlKuXtiLTw4zCsKwC8M7VCxjGFV5xb46LEABWvggZi/yJ+kogfmJajOOvm98n52RQkOVOleVpB3PHaonlF9qIfYUTJ0bfyd4LPS9RGaoBBzAR7kEy7dkJOZklsanBfjE6rlfXILe0iqDfTRFVSw2YQ=="
+                    "thoughtSignature": "EoQDCoEDARFNMg9REUwwcKp9iUsEH4AA0LSq1S+wn34tjmLx1utgrjX7odf4z8nOdXx0X2WJBRIcMuXf7YURULuPJJLaY2KQSLlI4yeJMVZU5uKFFxKWQL3a/sLwKY3NykK6tswSOApnDIQIyI00oMijOmWG2wK7ofqCK4HXKopTwowe+c7hakiX+Z75gBb9OPXGUH2RDz/WuYR6hlbvJ5uhXLIdgUjuvMXBKYeAr98rpAKD+rp+2ddxQz/wxnDSh1IjEtDvrnLCkp+oKVg0EJxFWKiaBYMMGN3B6zhfvB7h3qErkCgDc6gDs47b4ltmGcvxhYYQb0dfmbgGEMExjnO1+v7MhBrsUgx3pw0PMoAKvvvMnckqrV2XliLJz4pnncCquN9d48xHTzuexgssxRHWyNX1MjOTysDd2N06y+LfMEV49YbiB2m8L7BUuOGraw/svgpi07oruKFmsGh8rJeBrPPUSECeGSzA1ioPlZgIztnSCAzSv1yvnqwcLbqyjHNg6JquDA=="
                   }
                 ],
                 "role": "model"
@@ -115,9 +122,9 @@ http_interactions:
             "serviceTier": "standard"
           },
           "modelVersion": "gemini-3.5-flash",
-          "responseId": "_KsyavPEB9uVkdUPvamQiAs"
+          "responseId": "mXhPavvMNL6LkdUPqPGIMA"
         }
-  recorded_at: 2026-06-17 14:15:25
+  recorded_at: 2026-07-09 10:31:55
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
@@ -125,17 +132,17 @@ http_interactions:
       string: '{"contents":[{"role":"user","parts":[{"text":"When was ggplot2 1.0.0
         released to CRAN?\n\nAnswer in YYYY-MM-DD format."}]},{"role":"model","parts":[{"text":"2014-05-21"}]},{"role":"user","parts":[{"text":"What
         month was that?"}]},{"role":"model","parts":[{"text":"That was **May**."}]},{"role":"user","parts":[{"text":"What
-        month was that?"}]}],"tools":{"google_search":{}},"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
+        month was that?"}]}],"tools":[{"google_search":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '3267'
+      content-length: '2830'
       content-type: application/json; charset=UTF-8
-      date: Wed, 17 Jun 2026 14:15:29 GMT
+      date: Thu, 09 Jul 2026 10:31:58 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=3839
+      server-timing: gfet4t7; dur=3034
       vary:
       - Origin
       - X-Origin
@@ -152,8 +159,8 @@ http_interactions:
               "content": {
                 "parts": [
                   {
-                    "text": "That was **May** (specifically, May 21, 2014).",
-                    "thoughtSignature": "ErgFCrUFAQw51scufTPDNF80PispegvzAiIwxOYvtFaSc0CH9J3j6W1Ul2RAmvQdbl1YaWRbZacPj81asZfHO37uryxI/i4YHsOlVAaV+Xeoz2sVKYSNUi0LMfqmfyh3Eh/Y0rEWsY9DGA/vVyY37UfpYZc4Cav4BNluFcXqxez9hikTBWS/7Rn8pi2AWpbx6Iv7jpTFWjQ6n959PTwWCDeEKmpowsyKJnj7D/y8xgITVzkkMaFHr1yI96yXoh4vmjysjoY93AkwzGjvIZhXX1ZOHSenf9UMoToIlZeHrp5DBegtw0H1eh3OPWo66QJVfJ5zLZFbhO9pnAFITb79ITpxum8RHHKMDYjmnnMSH1RbcFXCRlUcBr03l9eHkuaaTHjXMPCsbIxu1ii3Hi4AliSv9cZ/n3YG/EDMgJlbrRJLjveQaLSlUsdn0SbtxMhENWvtH8W5007E1U8ppdFL/lSepeNy9ICOKDzNa9Az9n6lLZeNoDLTYz3D6ZR+35uf2A6873gfnYmnUSVetz1WtUmabSerE1uqLllIIhePgu7q7I9lHsE0QuPB96WKy8PKDJvq4tWfRmmp8Hd3IsTL1N+x44hly9IVkCkjFPIKzDXPQ2atkqVV5ByEcq/sHjF77ITJR/MWCJI0prJL5zzrLOfIA95WTyc3I1EFINjbT4nziH2//akcThrzaucJ0CiHwcu272BOa0Uwjq92Ww1VXPgT3QoRoePUHGxZIbKinOjP05h8hGUcajuvP4uN4DjKY9p4fE09oH7njpWCCl1iGmHslvQM9OyMuTu+8jvym5k7Ih4q14029BMpbQFeuQT2G3sItdobeCLE7daDRqxW94AQpbsyJatneehyhQ2/RcJPcZWzUSTf+MUg6onKpa81094OvIH8vjyGbgWNhc0FMs2jvzYbm0yJYvkU"
+                    "text": "As mentioned, that was **May** (specifically, May 21, 2014).",
+                    "thoughtSignature": "EqcCCqQCARFNMg/Kj/gKZhrnq4rh/Vwk1a/Xd94kFNkAllXO/aytVy9zPdaxbRwFDq6WZvzLJTwmI8FDLx5zCNSaFSVGvwnswkHwTImtKsCSmYCt7fmmLbtV+yeAO2KiZRFXfugUavBDTTF/G7dHFIOVqShcT29RScwI+ImK2Lv2PsGcaZvOhbSwGB5G3cqnrd5ite/WW1tWAwW/A8mcMfzVqdZapHVs3GNQ5nN4z/CqFxgqfEp5q/UE7Ckm5nkZTfHM2m7WOj2fn02TGggQTmnnXIDUqCT1J+qPhjA3XKXlbw0GmXNMrn+raCzvlL/Eh8MkqPG7etAz8umNoZSjEJtl+RBY5Bl6sJ+ARUtMxgIbXt3qf/l3gHIpeDMqE76TjUyKRDKWr35ocQ=="
                   }
                 ],
                 "role": "model"
@@ -167,7 +174,7 @@ http_interactions:
                 "groundingChunks": [
                   {
                     "web": {
-                      "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEhP_SAinQCX_acfTejXhmcvLCVhA0w_HDEshnV2M03gQWOfWMZL989GVC9J0TilcypE16rrnQGQ1i52b6CuuugLGOH75fxYisQanfrMun7hNv4nfb1EfXSDygVDopdZiI_HsorQtlh0e_bJzJ3H5kg9q7rmw==",
+                      "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHjghfHTjMV54c7zy60wxK8rRRmAyEDz66dxCYv-htneZgdwxcJvTgv4PX6IYn2w3or13LcKHFMdXAtDrVlFVn0EpP6eFG6EuYEQFJEmzBmPbF1x0mJa4W17E8fkgB6V_XHKVWlDfPrvPxnaHiW-4RS1GBo",
                       "title": "rdocumentation.org"
                     }
                   }
@@ -175,8 +182,8 @@ http_interactions:
                 "groundingSupports": [
                   {
                     "segment": {
-                      "endIndex": 45,
-                      "text": "That was **May** (specifically, May 21, 2014)"
+                      "endIndex": 59,
+                      "text": "As mentioned, that was **May** (specifically, May 21, 2014)"
                     },
                     "groundingChunkIndices": [
                       0
@@ -190,20 +197,20 @@ http_interactions:
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 57,
-            "candidatesTokenCount": 26,
-            "totalTokenCount": 494,
+            "promptTokenCount": 274,
+            "candidatesTokenCount": 29,
+            "totalTokenCount": 596,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 57
+                "tokenCount": 274
               }
             ],
-            "thoughtsTokenCount": 411,
+            "thoughtsTokenCount": 293,
             "serviceTier": "standard"
           },
           "modelVersion": "gemini-3.5-flash",
-          "responseId": "_asyasibL8PmnsEP1uDjsQo"
+          "responseId": "m3hPate8F_y0nsEPyvSC0AI"
         }
-  recorded_at: 2026-06-17 14:15:29
+  recorded_at: 2026-07-09 10:31:58
 recorded_with: VCR-vcr/2.1.0

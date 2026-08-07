@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-6","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-5","system":[{"type":"text","text":"\n  You
         are an expert R programmer who prefers the tidyverse.\n  Just give me the
         code. I don''t want any explanation or sample data.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
@@ -11,36 +11,34 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Mon, 29 Jun 2026 08:21:08 GMT
+      date: Sun, 02 Aug 2026 22:32:43 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-06-29T08:21:07Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-08-02T22:32:42Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-06-29T08:21:08Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-08-02T22:32:43Z'
       anthropic-ratelimit-requests-limit: '10000'
       anthropic-ratelimit-requests-remaining: '9999'
-      anthropic-ratelimit-requests-reset: '2026-06-29T08:21:06Z'
+      anthropic-ratelimit-requests-reset: '2026-08-02T22:32:41Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '12000000'
-      anthropic-ratelimit-tokens-reset: '2026-06-29T08:21:07Z'
-      request-id: req_011CcXE4PgBFu9MQxHmajw7v
+      anthropic-ratelimit-tokens-reset: '2026-08-02T22:32:42Z'
+      request-id: req_011CdeiVxN9Z1X1r9tV3Z51F
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      traceresponse: 00-ad99d2029685738cea9cc222a7514b36-f3bdaa5c33c4daf9-01
+      traceresponse: 00-d3a8d65bfd1f13dd4998263c0598c802-f7e3684ec679dbaf-01
       server: cloudflare
       content-encoding: gzip
       vary: Accept-Encoding
       cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=HpFreQPxUFeYQsTc2pZDwW84fkBZFNfq1m1fhBOQE.Q-1782721266.5547047-1.0.1.1-vvFdTjpOe_F7x9rMbSXM7prndRZZmyKykR8gDSm87.8;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
       x-robots-tag: none
-      cf-ray: a133840bff2881b7-IAD
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: a2508a3bbb4af965-EWR
     body:
-      string: '{"model":"claude-sonnet-4-6","id":"msg_01MUNm2CypEiVZoRcCRNBKHX","type":"message","role":"assistant","content":[{"type":"text","text":"```r\nlibrary(tidyverse)\n\ndf
+      string: '{"model":"claude-sonnet-5","id":"msg_011CdeiVxowkQ2SvK7hY7fZp","type":"message","role":"assistant","content":[{"type":"text","text":"```r\ndf
         %>%\n  group_by(age, sex) %>%\n  summarise(across(a:z, list(mean = mean, median
-        = median), na.rm = TRUE))\n```"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":79,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":57,"service_tier":"standard","inference_geo":"global"}}'
-  recorded_at: 2026-06-29 08:21:08
+        = median), na.rm = TRUE, .names = \"{.col}_{.fn}\"))\n```"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":93,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":75,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-08-02 22:32:42
 recorded_with: VCR-vcr/2.1.0
