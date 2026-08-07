@@ -166,20 +166,23 @@ test_that("stream_content extracts reasoning_content and reasoning", {
     choices = list(list(delta = list(reasoning_content = "think")))
   )
   result <- stream_content(stub, event_content)
-  expect_s3_class(result, "ellmer::ContentThinking")
-  expect_equal(result@thinking, "think")
+  expect_length(result, 1)
+  expect_s3_class(result[[1]], "ellmer::ContentThinking")
+  expect_equal(result[[1]]@thinking, "think")
 
   event_reasoning <- list(
     choices = list(list(delta = list(reasoning = "think")))
   )
   result <- stream_content(stub, event_reasoning)
-  expect_s3_class(result, "ellmer::ContentThinking")
-  expect_equal(result@thinking, "think")
+  expect_length(result, 1)
+  expect_s3_class(result[[1]], "ellmer::ContentThinking")
+  expect_equal(result[[1]]@thinking, "think")
 
   event_text <- list(choices = list(list(delta = list(content = "hello"))))
   result <- stream_content(stub, event_text)
-  expect_s3_class(result, "ellmer::ContentText")
-  expect_equal(result@text, "hello")
+  expect_length(result, 1)
+  expect_s3_class(result[[1]], "ellmer::ContentText")
+  expect_equal(result[[1]]@text, "hello")
 })
 
 test_that("value_turn extracts reasoning_content and reasoning", {

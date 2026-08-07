@@ -226,19 +226,44 @@ method(chat_params, ProviderOpenAI) <- function(provider, params) {
 
 # OpenAI -> ellmer --------------------------------------------------------------
 
-method(stream_content, ProviderOpenAI) <- function(provider, event) {
+method(stream_content, ProviderOpenAI) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
   if (event$type == "response.output_text.delta") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/output_text/delta
     if (is.null(event$delta)) {
-      return(NULL)
+      return(list())
     }
-    ContentText(event$delta)
+    list(ContentText(event$delta))
+  } else if (event$type == "response.output_text.annotation.added") {
+    annotation <- event$annotation
+    if (!identical(annotation$type, "url_citation")) {
+      return(list())
+    }
+    list(
+      ContentCitation(
+        source = WebSource(
+          url = annotation$url,
+          title = annotation$title
+        ),
+        extra = annotation
+      )
+    )
+  } else if (
+    event$type == "response.output_item.done" &&
+      identical(event$item$type, "web_search_call")
+  ) {
+    list(openai_web_search_request(event$item))
   } else if (event$type == "response.reasoning_summary_text.delta") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/reasoning_summary_text/delta
-    ContentThinking(event$delta)
+    list(ContentThinking(event$delta))
   } else if (event$type == "response.reasoning_summary_text.done") {
     # https://platform.openai.com/docs/api-reference/responses-streaming/response/reasoning_summary_text/done
-    NULL
+    list()
+  } else {
+    list()
   }
 }
 method(stream_merge_chunks, ProviderOpenAI) <- function(
@@ -297,19 +322,27 @@ method(value_turn, ProviderOpenAI) <- function(
   result,
   has_type = FALSE
 ) {
-  contents <- lapply(result$output, function(output) {
+  contents <- list_c(lapply(result$output, function(output) {
     if (output$type == "message") {
-      if (has_type) {
-        ContentJson(jsonlite::parse_json(output$content[[1]]$text))
-      } else {
-        ContentText(output$content[[1]]$text)
-      }
+      list_c(lapply(output$content, function(content) {
+        if (!identical(content$type, "output_text") && !is.null(content$type)) {
+          return(list())
+        }
+        if (has_type) {
+          list(ContentJson(jsonlite::parse_json(content$text)))
+        } else {
+          c(
+            list(ContentText(content$text)),
+            openai_citations(content)
+          )
+        }
+      }))
     } else if (output$type == "function_call") {
       arguments <- jsonlite::parse_json(output$arguments)
-      ContentToolRequest(output$id, output$name, arguments)
+      list(ContentToolRequest(output$id, output$name, arguments))
     } else if (output$type == "reasoning") {
       thinking <- paste0(map_chr(output$summary, "[[", "text"), collapse = "")
-      ContentThinking(thinking = thinking, extra = output)
+      list(ContentThinking(thinking = thinking, extra = output))
     } else if (output$type == "image_generation_call") {
       mime_type <- switch(
         output$output_format,
@@ -318,25 +351,16 @@ method(value_turn, ProviderOpenAI) <- function(
         webp = "image/webp",
         "unknown"
       )
-      ContentImageInline(mime_type, output$result)
+      list(ContentImageInline(mime_type, output$result))
     } else if (output$type == "web_search_call") {
-      # https://platform.openai.com/docs/guides/tools-web-search#output-and-citations
-      first_query <- if (length(output$action$queries)) {
-        output$action$queries[[1]]
-      }
-      query <- output$action$query %||%
-        first_query %||%
-        output$action$url %||%
-        "web search"
-      ContentToolRequestSearch(query = query, json = output)
+      list(openai_web_search_request(output))
     } else {
-      browser()
       cli::cli_abort(
         "Unknown content type {.str {output$type}}.",
         .internal = TRUE
       )
     }
-  })
+  }))
 
   tokens <- value_tokens(provider, result)
   variant <- result$service_tier %||% "default"
@@ -348,6 +372,59 @@ method(value_turn, ProviderOpenAI) <- function(
     cost = cost,
     finish_reason = value_finish_reason(provider, result)
   )
+}
+
+openai_web_search_request <- function(output) {
+  action <- output$action %||% list()
+  if (identical(action$type, "open_page")) {
+    return(
+      ContentToolRequestFetch(
+        url = action$url %||% "",
+        extra = output
+      )
+    )
+  }
+  if (identical(action$type, "find_in_page")) {
+    return(
+      ContentToolRequestSearch(
+        query = action$pattern %||% "web search",
+        extra = output
+      )
+    )
+  }
+
+  first_query <- if (length(action$queries)) {
+    action$queries[[1]]
+  }
+  query <- action$query %||%
+    first_query %||%
+    "web search"
+  ContentToolRequestSearch(query = query, extra = output)
+}
+
+openai_citations <- function(content) {
+  annotations <- content$annotations %||% list()
+  annotations <- keep(annotations, function(annotation) {
+    identical(annotation$type, "url_citation")
+  })
+  lapply(annotations, function(annotation) {
+    start <- annotation$start_index
+    end <- annotation$end_index
+    grounded_span <- if (is.null(start) || is.null(end)) {
+      NULL
+    } else {
+      span <- substr(content$text, start + 1L, end)
+      if (nzchar(span)) span else NULL
+    }
+    ContentCitation(
+      source = WebSource(
+        url = annotation$url,
+        title = annotation$title
+      ),
+      grounded_span = grounded_span,
+      extra = annotation
+    )
+  })
 }
 
 # Token counting ----------------------------------------------------------

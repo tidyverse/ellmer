@@ -104,6 +104,8 @@ reference:
   - Turn
   - Round
   - Content
+  - Source
+  - ContentWebActivity
   - Type
 
 - title: Utilities

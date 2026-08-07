@@ -4,7 +4,8 @@ NULL
 #' Record and replay content
 #'
 #' @description
-#' These generic functions can be use to convert [Turn]/[Content] objects
+#' These generic functions can be use to convert [Turn], [Content], and
+#' [Source] objects
 #' into easily serializable representations (i.e. lists and atomic vectors).
 #'
 #' * `contents_record()` accepts a [Turn] or [Content] and return a simple list.
@@ -86,14 +87,18 @@ contents_replay <- function(x, tools = list(), .envir = parent.frame()) {
 # Helpers ----------------------------------------------------------------------
 
 check_is_ellmer_object <- function(x) {
-  if (S7_inherits(x, ellmer::Content) || S7_inherits(x, ellmer::Turn)) {
+  if (
+    S7_inherits(x, ellmer::Content) ||
+      S7_inherits(x, ellmer::Turn) ||
+      S7_inherits(x, ellmer::Source)
+  ) {
     return(invisible(x))
   }
 
   cli::cli_abort(
     c(
       "Cannot record or replay {.obj_type_friendly {x}}.",
-      "i" = "Only {.code ellmer::Content} or {.code ellmer::Turn} classes or subclasses are currently supported."
+      "i" = "Only ellmer {.code Content}, {.code Turn}, or {.code Source} classes or subclasses are currently supported."
     ),
     call = caller_env()
   )

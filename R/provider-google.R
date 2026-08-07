@@ -287,18 +287,30 @@ method(stream_parse, ProviderGoogleGemini) <- function(provider, event) {
     jsonlite::parse_json(event$data)
   }
 }
-method(stream_content, ProviderGoogleGemini) <- function(provider, event) {
-  parts <- event$candidates[[1]]$content$parts
-  if (is.null(parts) || length(parts) == 0) {
-    return(NULL)
-  }
+method(stream_content, ProviderGoogleGemini) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
+  candidate <- event$candidates[[1]]
+  parts <- candidate$content$parts %||% list()
+  part_contents <- list_c(lapply(parts, function(part) {
+    if (isTRUE(part$thought) && !is.null(part$text)) {
+      list(ContentThinking(part$text))
+    } else if (!is.null(part$text)) {
+      list(ContentText(part$text))
+    } else {
+      list()
+    }
+  }))
 
-  part <- parts[[1]]
-  if (isTRUE(part$thought) && !is.null(part$text)) {
-    ContentThinking(part$text)
-  } else if (!is.null(part$text)) {
-    ContentText(part$text)
-  }
+  grounding <- candidate$groundingMetadata
+  c(
+    part_contents,
+    google_search_contents(grounding),
+    google_grounding_citations(grounding),
+    google_url_context_contents(candidate$urlContextMetadata)
+  )
 }
 method(stream_merge_chunks, ProviderGoogleGemini) <- function(
   provider,
@@ -364,7 +376,8 @@ method(value_turn, ProviderGoogleGemini) <- function(
   result,
   has_type = FALSE
 ) {
-  message <- result$candidates[[1]]$content
+  candidate <- result$candidates[[1]]
+  message <- candidate$content
 
   contents <- lapply(message$parts, function(content) {
     if (isTRUE(content$thought) && has_name(content, "text")) {
@@ -404,6 +417,13 @@ method(value_turn, ProviderGoogleGemini) <- function(
     }
   })
   contents <- compact(contents)
+
+  grounding <- candidate$groundingMetadata
+  search_contents <- google_search_contents(grounding)
+  citations <- google_grounding_citations(grounding)
+  fetch_contents <- google_url_context_contents(candidate$urlContextMetadata)
+  contents <- c(search_contents, contents, citations, fetch_contents)
+
   tokens <- value_tokens(provider, result)
   cost <- get_token_cost(provider, tokens)
 
@@ -414,6 +434,109 @@ method(value_turn, ProviderGoogleGemini) <- function(
     cost = cost,
     finish_reason = value_finish_reason(provider, result)
   )
+}
+
+google_search_contents <- function(grounding) {
+  if (is.null(grounding)) {
+    return(list())
+  }
+
+  queries <- grounding$webSearchQueries %||% list()
+  requests <- lapply(queries, function(query) {
+    ContentToolRequestSearch(
+      query = query,
+      extra = list(webSearchQueries = queries)
+    )
+  })
+
+  sources <- compact(google_web_sources(grounding))
+  response <- if (length(sources) == 0) {
+    list()
+  } else {
+    list(
+      ContentToolResponseSearch(
+        sources = sources,
+        extra = list(groundingMetadata = grounding)
+      )
+    )
+  }
+  c(requests, response)
+}
+
+google_grounding_citations <- function(grounding) {
+  if (is.null(grounding)) {
+    return(list())
+  }
+
+  sources <- google_web_sources(grounding)
+  citations <- lapply(
+    grounding$groundingSupports %||% list(),
+    function(support) {
+      indices <- unique(
+        unlist(
+          support$groundingChunkIndices %||% list(),
+          use.names = FALSE
+        )
+      )
+      lapply(indices, function(index) {
+        source_index <- index + 1L
+        if (source_index > length(sources)) {
+          return(NULL)
+        }
+        ContentCitation(
+          source = sources[[source_index]],
+          grounded_span = support$segment$text,
+          extra = list(groundingSupport = support)
+        )
+      })
+    }
+  )
+  compact(list_c(citations))
+}
+
+google_web_sources <- function(grounding) {
+  lapply(grounding$groundingChunks %||% list(), function(chunk) {
+    web <- chunk$web
+    if (is.null(web$uri) || !nzchar(web$uri)) {
+      NULL
+    } else {
+      WebSource(url = web$uri, title = web$title)
+    }
+  })
+}
+
+google_url_context_contents <- function(context) {
+  metadata <- context$urlMetadata %||% list()
+  list_c(
+    lapply(metadata, function(meta) {
+      url <- meta$retrievedUrl
+      if (is.null(url) || !nzchar(url)) {
+        return(list())
+      }
+      extra <- list(urlMetadata = meta)
+      list(
+        ContentToolRequestFetch(url = url, extra = extra),
+        ContentToolResponseFetch(
+          url = url,
+          status = google_retrieval_status(meta$urlRetrievalStatus),
+          extra = extra
+        )
+      )
+    })
+  )
+}
+
+google_retrieval_status <- function(status) {
+  if (
+    is.null(status) ||
+      identical(status, "URL_RETRIEVAL_STATUS_UNSPECIFIED")
+  ) {
+    NULL
+  } else if (identical(status, "URL_RETRIEVAL_STATUS_SUCCESS")) {
+    "success"
+  } else {
+    "error"
+  }
 }
 
 # ellmer -> Gemini --------------------------------------------------------------
@@ -433,7 +556,12 @@ method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
       parts = as_json(provider, x@contents, ...)
     )
   } else if (is_assistant_turn(x)) {
-    list(role = "model", parts = as_json(provider, x@contents, ...))
+    parts <- as_json(provider, x@contents, ...)
+    if (length(parts) == 0) {
+      NULL
+    } else {
+      list(role = "model", parts = parts)
+    }
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
@@ -723,6 +851,8 @@ merge_gemini_chunks <- merge_objects(
     citationMetadata = merge_optional(
       merge_objects(citationSources = merge_append())
     ),
+    groundingMetadata = merge_last(),
+    urlContextMetadata = merge_last(),
     tokenCount = merge_last()
   ),
   promptFeedback = merge_last(),

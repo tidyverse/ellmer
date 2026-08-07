@@ -342,14 +342,19 @@ method(stream_parse, ProviderAWSBedrock) <- function(provider, event) {
   body
 }
 
-method(stream_content, ProviderAWSBedrock) <- function(provider, event) {
+method(stream_content, ProviderAWSBedrock) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
   if (event$event_type == "contentBlockDelta") {
     text <- event$delta$text
     if (is.null(text)) {
-      return(NULL)
+      return(list())
     }
-    ContentText(text)
+    return(list(ContentText(text)))
   }
+  list()
 }
 
 method(stream_merge_chunks, ProviderAWSBedrock) <- function(

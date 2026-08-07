@@ -30,6 +30,40 @@ test_that("can round trip simple content types", {
   test_record_replay(ContentThinking("A **thought**."))
   test_record_replay(ContentUploaded("https://example.com/image.jpg"))
   test_record_replay(ContentPDF("TYPE", "DATA", "FILENAME"))
+  test_record_replay(WebSource("https://example.com", "Example"))
+  test_record_replay(
+    ContentCitation(
+      source = WebSource("https://example.com", "Example"),
+      grounded_span = "answer text",
+      cited_quote = "source text",
+      extra = list(id = "citation-1")
+    )
+  )
+  test_record_replay(
+    ContentToolRequestSearch(
+      "ellmer",
+      extra = list(type = "search")
+    )
+  )
+  test_record_replay(
+    ContentToolResponseSearch(
+      list(WebSource("https://example.com", "Example")),
+      extra = list(type = "search_results")
+    )
+  )
+  test_record_replay(
+    ContentToolRequestFetch(
+      "https://example.com",
+      extra = list(type = "fetch")
+    )
+  )
+  test_record_replay(
+    ContentToolResponseFetch(
+      "https://example.com",
+      status = "success",
+      extra = list(type = "fetch_result")
+    )
+  )
 })
 
 test_that("can round trip of ContentToolRequest/ContentToolResult", {
@@ -83,6 +117,91 @@ test_that("can re-match tools if present", {
     tools = list()
   )
   expect_null(replayed_turn_result@contents[[1]]@request@tool)
+})
+
+test_that("provider annotations replay only to their native provider", {
+  providers <- list(
+    anthropic = chat_anthropic_test()$get_provider(),
+    openai = chat_openai_test()$get_provider(),
+    google = chat_google_gemini_test()$get_provider()
+  )
+  annotations <- list(
+    anthropic = ContentToolRequestSearch(
+      "anthropic query",
+      extra = list(
+        type = "server_tool_use",
+        id = "anthropic-marker",
+        name = "web_search",
+        input = list(query = "anthropic query")
+      )
+    ),
+    openai = ContentToolRequestSearch(
+      "openai query",
+      extra = list(
+        type = "web_search_call",
+        id = "openai-marker",
+        action = list(type = "search", query = "openai query")
+      )
+    ),
+    google = ContentToolRequestSearch(
+      "google query",
+      extra = list(
+        webSearchQueries = list("google-marker")
+      )
+    )
+  )
+
+  for (target in names(providers)) {
+    for (source in names(annotations)) {
+      turn <- AssistantTurn(
+        list(
+          ContentText("answer"),
+          annotations[[source]],
+          ContentCitation(
+            grounded_span = "answer",
+            extra = list(id = "citation-marker")
+          )
+        )
+      )
+      json <- jsonlite::toJSON(
+        as_json(providers[[target]], turn),
+        auto_unbox = TRUE
+      )
+
+      expect_false(grepl("citation-marker", json, fixed = TRUE))
+      expect_equal(
+        grepl(paste0(source, "-marker"), json, fixed = TRUE),
+        target == source && target %in% c("anthropic", "openai"),
+        info = paste("target:", target, "source:", source)
+      )
+    }
+  }
+})
+
+test_that("Anthropic replays native search and fetch result blocks", {
+  provider <- chat_anthropic_test()$get_provider()
+  blocks <- list(
+    ContentToolResponseSearch(
+      sources = list(WebSource("https://example.com", "Example")),
+      extra = list(
+        type = "web_search_tool_result",
+        tool_use_id = "search-1",
+        content = list()
+      )
+    ),
+    ContentToolResponseFetch(
+      url = "https://example.com",
+      status = "success",
+      extra = list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-1",
+        content = list(type = "web_fetch_result")
+      )
+    )
+  )
+
+  expect_identical(as_json(provider, blocks[[1]]), blocks[[1]]@extra)
+  expect_identical(as_json(provider, blocks[[2]]), blocks[[2]]@extra)
 })
 
 test_that("checks recorded value types", {

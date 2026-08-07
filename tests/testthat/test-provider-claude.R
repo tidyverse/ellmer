@@ -381,6 +381,110 @@ test_that("stream_merge_chunks() handles citations_delta", {
   expect_equal(result$content[[1]]$citations[[1]]$url, "https://example.com")
 })
 
+test_that("stream_content() emits Anthropic citations after completed text", {
+  provider <- chat_anthropic_test()$get_provider()
+  chunks <- list(
+    list(
+      type = "message_start",
+      message = list(content = list(), usage = list())
+    ),
+    list(
+      type = "content_block_start",
+      index = 0L,
+      content_block = list(type = "text", text = "", citations = list())
+    ),
+    list(
+      type = "content_block_delta",
+      index = 0L,
+      delta = list(type = "text_delta", text = "Grounded answer")
+    ),
+    list(
+      type = "content_block_delta",
+      index = 0L,
+      delta = list(
+        type = "citations_delta",
+        citation = list(
+          type = "web_search_result_location",
+          cited_text = "source evidence",
+          url = "https://example.com",
+          title = "Example"
+        )
+      )
+    ),
+    list(type = "content_block_stop", index = 0L)
+  )
+
+  completion <- NULL
+  streamed <- list()
+  for (chunk in chunks) {
+    completion <- stream_merge_chunks(provider, completion, chunk)
+    streamed <- c(streamed, stream_content(provider, chunk, completion))
+  }
+
+  expect_s7_class(streamed[[1]], ContentText)
+  expect_equal(streamed[[1]]@text, "Grounded answer")
+  expect_s7_class(streamed[[2]], ContentCitation)
+  expect_equal(streamed[[2]]@grounded_span, "Grounded answer")
+  expect_equal(streamed[[2]]@cited_quote, "source evidence")
+})
+
+test_that("value_turn() preserves Anthropic web activity and citations", {
+  provider <- chat_anthropic_test()$get_provider()
+  citation <- list(
+    type = "web_search_result_location",
+    cited_text = "source evidence",
+    url = "https://example.com",
+    title = "Example"
+  )
+  search_result <- list(
+    type = "web_search_result",
+    url = "https://search.example",
+    title = "Search result"
+  )
+  result <- list(
+    content = list(
+      list(type = "text", text = "Grounded answer", citations = list(citation)),
+      list(
+        type = "web_search_tool_result",
+        tool_use_id = "search-1",
+        content = list(search_result)
+      ),
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-1",
+        content = list(
+          type = "web_fetch_result",
+          url = "https://fetch.example"
+        )
+      ),
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-2",
+        content = list(
+          type = "web_fetch_tool_result_error",
+          error_code = "denied"
+        )
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 5)
+  )
+
+  contents <- value_turn(provider, result)@contents
+  expect_s7_class(contents[[1]], ContentText)
+  expect_s7_class(contents[[2]], ContentCitation)
+  expect_equal(contents[[2]]@source@url, "https://example.com")
+  expect_equal(contents[[2]]@grounded_span, "Grounded answer")
+  expect_equal(contents[[2]]@cited_quote, "source evidence")
+
+  expect_s7_class(contents[[3]], ContentToolResponseSearch)
+  expect_equal(contents[[3]]@sources[[1]]@title, "Search result")
+  expect_equal(contents[[4]]@status, "success")
+  expect_equal(contents[[4]]@url, "https://fetch.example")
+  expect_equal(contents[[5]]@status, "error")
+  expect_null(contents[[5]]@url)
+})
+
 # Token counting -----------------------------------------------------------
 
 test_that("can count tokens", {

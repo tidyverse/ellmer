@@ -162,19 +162,23 @@ method(chat_params, ProviderSnowflakeCortex) <- function(provider, params) {
 
 # Snowflake -> ellmer --------------------------------------------------------
 
-method(stream_content, ProviderSnowflakeCortex) <- function(provider, event) {
+method(stream_content, ProviderSnowflakeCortex) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
   if (length(event$choices) == 0) {
-    return(NULL)
+    return(list())
   }
   delta <- event$choices[[1]]$delta
   if (is.null(delta) || !identical(delta$type, "text")) {
-    return(NULL)
+    return(list())
   }
   text <- delta[["content"]] %||% delta[["text"]]
   if (is.null(text) || !nzchar(text)) {
-    return(NULL)
+    return(list())
   }
-  ContentText(text)
+  list(ContentText(text))
 }
 
 method(stream_merge_chunks, ProviderSnowflakeCortex) <- function(

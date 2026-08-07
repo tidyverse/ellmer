@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New exported S7 classes `Source`, `WebSource`, and `ContentCitation` provide a provider-independent citation model. The built-in web activity classes `ContentToolRequestSearch`, `ContentToolResponseSearch`, `ContentToolRequestFetch`, and `ContentToolResponseFetch` are now also exported, with structured search sources and normalized fetch status. Citations and web activity are preserved in turns, streaming, and record/replay without sending provider annotations to incompatible model APIs.
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
 * `chat_anthropic()`, `chat_aws_bedrock()`, and `chat_posit()` now default to `claude-sonnet-5`. `chat_openai()` and `chat_openrouter()` now default to `gpt-5.6-terra` (@thisisnic, #1066).
 * `chat_anthropic()` now correctly handles the `fallback` content block returned when a model's server-side refusal fallback (`server-side-fallback-2026-06-01`) is triggered (@simonpcouch, #1058).

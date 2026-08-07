@@ -157,17 +157,18 @@ stream_parse <- new_generic(
 stream_content <- new_generic(
   "stream_content",
   "provider",
-  function(provider, event) {
+  function(provider, event, completion = NULL) {
     S7_dispatch()
   }
 )
 
 stream_text <- function(provider, event) {
-  content <- stream_content(provider, event)
-  if (is.null(content)) {
+  contents <- stream_content(provider, event)
+  contents <- keep(contents, is_stream_text_content)
+  if (length(contents) == 0) {
     return(NULL)
   }
-  content_text(content)
+  paste0(map_chr(contents, content_text), collapse = "")
 }
 
 content_text <- function(content) {
@@ -177,6 +178,11 @@ content_text <- function(content) {
     "ellmer::ContentText" = content@text,
     format(content)
   )
+}
+
+is_stream_text_content <- function(content) {
+  S7_inherits(content, ContentText) ||
+    S7_inherits(content, ContentThinking)
 }
 stream_merge_chunks <- new_generic(
   "stream_merge_chunks",
@@ -225,6 +231,10 @@ as_json <- new_generic(
 
 method(as_json, list(Provider, class_list)) <- function(provider, x, ...) {
   compact(lapply(x, as_json, provider = provider, ...))
+}
+
+method(as_json, list(Provider, ContentCitation)) <- function(provider, x, ...) {
+  NULL
 }
 
 method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
