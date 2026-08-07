@@ -3,7 +3,7 @@
   "title": "ellmer prices",
   "description": "Per-million-token pricing for LLM providers supported by ellmer",
   "type": "object",
-  "required": ["schema_version", "min_ellmer_version", "ellmer_version", "data"],
+  "required": ["schema_version", "min_ellmer_version", "updated_at", "data"],
   "additionalProperties": false,
   "properties": {
     "schema_version": {
@@ -16,10 +16,11 @@
       "type": "string",
       "minLength": 1
     },
-    "ellmer_version": {
-      "description": "The version of ellmer on main that generated this pricing snapshot.",
+    "updated_at": {
+      "description": "UTC timestamp when the schema or normalized pricing rows last changed.",
       "type": "string",
-      "minLength": 1
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
     },
     "data": {
       "description": "Per-million-token pricing rows. Each row is one (provider, model, variant) combination.",

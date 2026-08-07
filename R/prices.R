@@ -13,7 +13,7 @@
 #    by default; overridable via `the$prices_cache_dir` in tests).
 #    `httr2::req_cache()` handles conditional requests, so an unchanged
 #    upstream file costs at most a 304; the download is reported as an
-#    update only when the parsed data differs from what's cached.
+#    update only when the remote snapshot is newer than local data.
 #
 # 3. Read: `prices_get()` uses the cached data when it's compatible with
 #    this version of ellmer, otherwise the bundled snapshot. The result is
@@ -22,8 +22,8 @@
 #
 # Both reads and writes are gated by an integer `schema_version`; see
 # `data-raw/prices.R` for the contract and when to bump it. Each snapshot also
-# records the ellmer version on main that generated it. A cached snapshot from
-# an older version loses to the bundled snapshot.
+# records when its pricing data was updated. An older cached snapshot loses to
+# the bundled snapshot.
 
 prices_get <- function() {
   if (is.null(the$prices)) {
@@ -48,7 +48,7 @@ prices_cache_compatible <- function(cached, bundled) {
         names(bundled) %in% names(cached)
       )
     )
-    return(!prices_cache_superseded(cached, bundled))
+    return(!prices_snapshot_older(cached, bundled))
   }
 
   if (is.integer(cached_version) && length(cached_version) == 1L) {
@@ -76,15 +76,39 @@ prices_cache_compatible <- function(cached, bundled) {
   FALSE
 }
 
-# A snapshot's ellmer version is assigned by `data-raw/prices.R`, not by the
-# ellmer installation that downloaded it.
-prices_cache_superseded <- function(cached, bundled) {
-  cached_version <- attr(cached, "ellmer_version")
-  bundled_version <- attr(bundled, "ellmer_version")
-  if (is.null(cached_version)) {
+prices_snapshot_older <- function(snapshot, reference) {
+  snapshot_updated_at <- attr(snapshot, "updated_at")
+  reference_updated_at <- attr(reference, "updated_at")
+
+  if (!prices_updated_at_valid(snapshot_updated_at)) {
     return(TRUE)
   }
-  package_version(cached_version) < package_version(bundled_version)
+
+  stopifnot(
+    "bundled pricing data has an invalid updated_at timestamp" = prices_updated_at_valid(
+      reference_updated_at
+    )
+  )
+  snapshot_updated_at < reference_updated_at
+}
+
+prices_updated_at_valid <- function(x) {
+  if (
+    !is.character(x) ||
+      length(x) != 1L ||
+      is.na(x) ||
+      !grepl("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$", x)
+  ) {
+    return(FALSE)
+  }
+
+  parsed <- as.POSIXct(
+    x,
+    format = "%Y-%m-%dT%H:%M:%SZ",
+    tz = "UTC"
+  )
+  !is.na(parsed) &&
+    identical(format(parsed, "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"), x)
 }
 
 #' Update cached model pricing data
@@ -152,8 +176,8 @@ prices_cache_download <- function(call = caller_env()) {
   df <- prices_check_remote(parsed, call = call)
 
   if (
-    !prices_cache_superseded(prices, df) ||
-      identical(df, prices_cache_read())
+    identical(df, prices_cache_read()) ||
+      !prices_snapshot_older(prices_get(), df)
   ) {
     return(FALSE)
   }
@@ -190,14 +214,10 @@ prices_check_remote <- function(parsed, call = caller_env()) {
     }
   }
 
-  snapshot_version <- parsed$ellmer_version
-  if (
-    !is.character(snapshot_version) ||
-      length(snapshot_version) != 1L ||
-      is.na(snapshot_version)
-  ) {
+  updated_at <- parsed$updated_at
+  if (!prices_updated_at_valid(updated_at)) {
     cli::cli_abort(
-      "Pricing data from GitHub is missing its ellmer snapshot version.",
+      "Pricing data from GitHub has an invalid {.field updated_at} timestamp.",
       call = call
     )
   }
@@ -220,7 +240,7 @@ prices_check_remote <- function(parsed, call = caller_env()) {
   }
 
   attr(df, "schema_version") <- remote_version
-  attr(df, "ellmer_version") <- snapshot_version
+  attr(df, "updated_at") <- updated_at
   df
 }
 

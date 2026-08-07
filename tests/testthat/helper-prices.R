@@ -8,10 +8,10 @@ write_prices_cache <- function(
   path,
   df = prices,
   schema_version = attr(prices, "schema_version"),
-  ellmer_version = attr(prices, "ellmer_version")
+  updated_at = attr(prices, "updated_at")
 ) {
   attr(df, "schema_version") <- schema_version
-  attr(df, "ellmer_version") <- as.character(ellmer_version)
+  attr(df, "updated_at") <- updated_at
   saveRDS(df, path)
   invisible(df)
 }

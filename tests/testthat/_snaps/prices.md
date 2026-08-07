@@ -79,13 +79,21 @@
       Error:
       ! Failed to parse pricing data from GitHub.
 
-# prices_cache_download() aborts when snapshot version is missing
+# prices_cache_download() aborts when updated_at is missing
 
     Code
       prices_cache_download()
     Condition
       Error:
-      ! Pricing data from GitHub is missing its ellmer snapshot version.
+      ! Pricing data from GitHub has an invalid updated_at timestamp.
+
+# prices_cache_download() aborts when updated_at is invalid
+
+    Code
+      prices_cache_download()
+    Condition
+      Error:
+      ! Pricing data from GitHub has an invalid updated_at timestamp.
 
 # prices_cache_download() aborts when remote schema is newer
 
@@ -93,7 +101,7 @@
       prices_cache_download()
     Condition
       Error:
-      ! Pricing data on GitHub requires ellmer 0.4.1.9000 or later. Please update the package.
+      ! Pricing data on GitHub requires ellmer x.y.z or later. Please update the package.
 
 # prices_cache_download() aborts when remote schema is older
 
