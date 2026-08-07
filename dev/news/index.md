@@ -42,6 +42,13 @@
   now correctly preserves provider error messages
   ([@xmarquez](https://github.com/xmarquez),
   [\#1059](https://github.com/tidyverse/ellmer/issues/1059)).
+- New
+  [`models_update_prices()`](https://ellmer.tidyverse.org/dev/reference/models_update_prices.md)
+  downloads the latest model pricing data from GitHub and saves it to a
+  local cache. Subsequent calls to
+  [`token_usage()`](https://ellmer.tidyverse.org/dev/reference/token_usage.md)
+  and related functions will use the updated prices
+  ([\#968](https://github.com/tidyverse/ellmer/issues/968)).
 
 ## ellmer 0.4.2
 

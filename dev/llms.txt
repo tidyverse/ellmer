@@ -284,6 +284,8 @@ data.
   Chat object
 - [`token_usage()`](https://ellmer.tidyverse.org/dev/reference/token_usage.md)
   : Report on token usage in the current session
+- [`models_update_prices()`](https://ellmer.tidyverse.org/dev/reference/models_update_prices.md)
+  : Update cached model pricing data
 
 ### Official providers
 

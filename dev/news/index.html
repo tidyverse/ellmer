@@ -68,6 +68,7 @@
 <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> no longer errors when mixing regular tools and built-in tools like <code><a href="../reference/google_tool_web_search.html">google_tool_web_search()</a></code> (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1054" class="external-link">#1054</a>).</li>
 <li>
 <code><a href="../reference/chat_openrouter.html">chat_openrouter()</a></code> now correctly preserves provider error messages (<a href="https://github.com/xmarquez" class="external-link">@xmarquez</a>, <a href="https://github.com/tidyverse/ellmer/issues/1059" class="external-link">#1059</a>).</li>
+<li>New <code><a href="../reference/models_update_prices.html">models_update_prices()</a></code> downloads the latest model pricing data from GitHub and saves it to a local cache. Subsequent calls to <code><a href="../reference/token_usage.html">token_usage()</a></code> and related functions will use the updated prices (<a href="https://github.com/tidyverse/ellmer/issues/968" class="external-link">#968</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.2" id="ellmer-042">ellmer 0.4.2<a class="anchor" aria-label="anchor" href="#ellmer-042"></a></h2><p class="text-muted">CRAN release: 2026-07-13</p>
