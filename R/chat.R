@@ -39,6 +39,8 @@ Chat <- R6::R6Class(
       private$echo <- echo
       private$callback_on_tool_request <- CallbackManager$new(args = "request")
       private$callback_on_tool_result <- CallbackManager$new(args = "result")
+      private$callback_on_request_start <- CallbackManager$new(args = "turns")
+      private$callback_on_request_end <- CallbackManager$new(args = "turn")
       self$set_system_prompt(system_prompt)
     },
 
@@ -530,6 +532,64 @@ Chat <- R6::R6Class(
     #' @return A function that can be called to remove the callback.
     on_tool_result = function(callback) {
       private$callback_on_tool_result$add(callback)
+    },
+
+    #' @description Register a callback that fires at the **start of each model
+    #'   request** in the tool loop, i.e. immediately before the request is sent
+    #'   to the model. It fires once per request (including the first), whether
+    #'   or not the request involves tools.
+    #'
+    #'   The callback receives `turns`, the **complete outgoing request**: the
+    #'   accumulated history *plus* the pending turn about to be sent. It is here
+    #'   so you can *inspect* that payload -- for example, to measure its size
+    #'   (including a large pending tool result) and decide whether to compact.
+    #'
+    #'   To *rewrite* the conversation, use `$set_turns()` / `$get_turns()`, which
+    #'   operate on the **history only**: ellmer preserves and re-appends the
+    #'   pending turn for you. The canonical idiom for mid-loop compaction is
+    #'   `chat$set_turns(compact(chat$get_turns()))`, called from inside the
+    #'   callback (a supported, documented operation). Do **not** pass `turns`
+    #'   straight back into `$set_turns()` -- because `set_turns()` sets the
+    #'   history and ellmer then re-appends the pending turn, that would duplicate
+    #'   the pending turn in the outgoing request.
+    #'
+    #' @param callback A function called with a single argument `turns`: the
+    #'   complete list of turns about to be sent -- the history plus the pending
+    #'   turn (the new user turn on the first request, or the synthesized
+    #'   tool-result turn on later ones). Called for its side effects; the return
+    #'   value is ignored. With `$chat_async()` / `$stream_async()` the callback
+    #'   may return a promise.
+    #'
+    #' @return A function that can be called to remove the callback.
+    on_request_start = function(callback) {
+      private$callback_on_request_start$add(callback)
+    },
+
+    #' @description Register a callback that fires at the **end of each model
+    #'   request** in the tool loop, i.e. after the model's response turn is
+    #'   received and before any tool calls it contains are executed. It is the
+    #'   counterpart to `$on_request_start()` and is useful for per-request
+    #'   latency / cost tracking and for observing tool-call requests before they
+    #'   run.
+    #'
+    #'   It fires after every request that completes or is cancelled. If a request
+    #'   is cancelled or interrupted the callback still fires, but `turn` may be an
+    #'   [AssistantPartialTurn] whose `@tokens` and `@cost` are `NA` (only
+    #'   `@duration` is populated); guard cost / latency accounting with
+    #'   `S7::S7_inherits(turn, AssistantPartialTurn)` if that matters to you. A
+    #'   request that *errors*, however, propagates the error and does **not** fire
+    #'   `$on_request_end()`, so it is not a reliable cleanup hook -- wrap your
+    #'   `$chat()` call if you need something to run no matter what.
+    #'
+    #' @param callback A function called with a single argument `turn`: the
+    #'   assistant turn just returned by the model (an [AssistantPartialTurn] on a
+    #'   cancelled request). Called for its side effects; the return value is
+    #'   ignored. With `$chat_async()` / `$stream_async()` the callback may return
+    #'   a promise.
+    #'
+    #' @return A function that can be called to remove the callback.
+    on_request_end = function(callback) {
+      private$callback_on_request_end$add(callback)
     }
   ),
   private = list(
@@ -540,6 +600,8 @@ Chat <- R6::R6Class(
     tools = list(),
     callback_on_tool_request = NULL,
     callback_on_tool_result = NULL,
+    callback_on_request_start = NULL,
+    callback_on_request_end = NULL,
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
@@ -558,6 +620,10 @@ Chat <- R6::R6Class(
       agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
 
       while (!is.null(user_turn)) {
+        private$callback_on_request_start$invoke(c(
+          private$.turns,
+          list(user_turn)
+        ))
         assistant_chunks <- private$submit_turns(
           user_turn,
           stream = stream,
@@ -571,6 +637,7 @@ Chat <- R6::R6Class(
         }
 
         assistant_turn <- self$last_turn()
+        private$callback_on_request_end$invoke(assistant_turn)
         user_turn <- NULL
 
         # Don't invoke tools if the stream was cancelled
@@ -628,6 +695,10 @@ Chat <- R6::R6Class(
       agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
 
       while (!is.null(user_turn)) {
+        await(private$callback_on_request_start$invoke_async(c(
+          private$.turns,
+          list(user_turn)
+        )))
         assistant_chunks <- private$submit_turns_async(
           user_turn,
           stream = stream,
@@ -641,6 +712,7 @@ Chat <- R6::R6Class(
         }
 
         assistant_turn <- self$last_turn()
+        await(private$callback_on_request_end$invoke_async(assistant_turn))
         user_turn <- NULL
 
         # Don't invoke tools if the stream was cancelled

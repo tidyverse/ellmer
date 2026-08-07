@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `Chat` gains `$on_request_start(turns)` and `$on_request_end(turn)`, paired callbacks that fire before and after each model request in the tool loop (once per request, whether or not it involves tools). `$on_request_start()` receives the **complete outgoing request** (history plus the pending turn) for inspection -- e.g. to measure its size and decide whether to compact; rewrite the conversation with `$set_turns()`, which operates on history (the canonical idiom being `chat$set_turns(compact(chat$get_turns()))`). `$on_request_end()` receives the assistant turn just returned, useful for per-request latency/cost tracking and for observing tool-call requests before they run (#1051).
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
 * `chat_anthropic()`, `chat_aws_bedrock()`, and `chat_posit()` now default to `claude-sonnet-5`. `chat_openai()` and `chat_openrouter()` now default to `gpt-5.6-terra` (@thisisnic, #1066).
 * `chat_anthropic()` now correctly handles the `fallback` content block returned when a model's server-side refusal fallback (`server-side-fallback-2026-06-01`) is triggered (@simonpcouch, #1058).
