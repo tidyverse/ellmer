@@ -14,5 +14,6 @@ fails.
 \description{
 Downloads the latest model pricing data from GitHub and saves it to the
 local cache. Call this to refresh the prices used by \code{\link[=token_usage]{token_usage()}} and
-related functions with the latest pricing data.
+related functions with the latest pricing data. The cache is stored in the
+directory returned by \code{tools::R_user_dir("ellmer", which = "cache")}.
 }
