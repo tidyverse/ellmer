@@ -408,14 +408,13 @@ test_that("echo renders completed citations and web activity", {
   )
 
   expected <- paste(
-    "ggplot2 1.0.0 was released on 2014-05-21. [1]",
+    "ggplot2 1.0.0 was released on 2014-05-21.[1]",
     "",
     "Sources",
-    "[1] CRAN ggplot2 archive",
-    "    https://cran.r-project.org/src/contrib/Archive/ggplot2",
+    "[1] CRAN ggplot2 archive: https://cran.r-project.org/src/contrib/Archive/ggplot2",
     sep = "\n"
   )
-  expected_answer <- "ggplot2 1.0.0 was released on 2014-05-21. [1]"
+  expected_answer <- "ggplot2 1.0.0 was released on 2014-05-21.[1]"
   count_matches <- function(text, pattern) {
     matches <- gregexpr(pattern, text, fixed = TRUE)[[1]]
     if (identical(matches, -1L)) 0 else length(matches)
@@ -501,13 +500,12 @@ test_that("async echo renders completed citations and web activity", {
     tokens = c(0, 0, 0),
     cost = 0
   )
-  expected_answer <- "ggplot2 1.0.0 was released on 2014-05-21. [1]"
+  expected_answer <- "ggplot2 1.0.0 was released on 2014-05-21.[1]"
   expected_output <- paste(
     expected_answer,
     "",
     "Sources",
-    "[1] CRAN ggplot2 archive",
-    "    https://cran.r-project.org/src/contrib/Archive/ggplot2",
+    "[1] CRAN ggplot2 archive: https://cran.r-project.org/src/contrib/Archive/ggplot2",
     sep = "\n"
   )
   count_matches <- function(text, pattern) {
@@ -1023,11 +1021,36 @@ test_that("format_citation_echo links unique spans and deduplicates sources", {
   expect_equal(
     format_citation_echo(turn, include_activity = FALSE),
     paste(
-      "ggplot2 1.0.0 was released on 2014-05-21. [1]",
+      "ggplot2 1.0.0 was released on 2014-05-21.[1]",
       "",
       "Sources",
-      "[1] CRAN ggplot2 archive",
-      "    https://cran.r-project.org/src/contrib/Archive/ggplot2",
+      "[1] CRAN ggplot2 archive: https://cran.r-project.org/src/contrib/Archive/ggplot2",
+      sep = "\n"
+    )
+  )
+})
+
+test_that("format_citation_echo uses compact footnotes", {
+  turn <- AssistantTurn(
+    list(
+      ContentText("The example domain is reserved."),
+      ContentCitation(
+        source = WebSource(
+          url = "https://example.com",
+          title = "Example Domain"
+        ),
+        grounded_span = "reserved"
+      )
+    )
+  )
+
+  expect_equal(
+    format_citation_echo(turn),
+    paste(
+      "The example domain is reserved.[1]",
+      "",
+      "Sources",
+      "[1] Example Domain: https://example.com",
       sep = "\n"
     )
   )
@@ -1050,8 +1073,8 @@ test_that("format_citation_echo keeps citation markers outside word continuation
 
   formatted <- format_citation_echo(turn)
 
-  expect_match(formatted, "1.0.0-beta \\[1\\]")
-  expect_match(formatted, "ellmer's \\[2\\]")
+  expect_match(formatted, "1.0.0-beta\\[1\\]")
+  expect_match(formatted, "ellmer's\\[2\\]")
 })
 
 test_that("format_citation_echo keeps ambiguous citations unlinked", {
@@ -1101,8 +1124,7 @@ test_that("format_citation_echo does not infer a marker for a missing span", {
       "Partial grounded answer.",
       "",
       "Sources",
-      "[1] Example",
-      "    https://example.com",
+      "[1] Example: https://example.com",
       sep = "\n"
     )
   )

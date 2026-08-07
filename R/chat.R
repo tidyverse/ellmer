@@ -1238,7 +1238,7 @@ insert_citation_markers <- function(text, citations, sources) {
   ends <- sort(as.integer(names(locations)), decreasing = TRUE)
   for (end in ends) {
     marker <- paste0(
-      " [",
+      "[",
       paste(locations[[as.character(end)]], collapse = ", "),
       "]"
     )
@@ -1284,11 +1284,12 @@ format_citation_sources <- function(sources) {
   for (i in seq_along(sources)) {
     source <- sources[[i]]
     label <- citation_source_label(source)
-    lines <- c(lines, paste0("[", i, "] ", label))
     url <- citation_source_url(source)
-    if (!is.null(url)) {
-      lines <- c(lines, paste0("    ", url))
+    entry <- paste0("[", i, "] ", label)
+    if (!is.null(url) && !identical(label, url)) {
+      entry <- paste0(entry, ": ", url)
     }
+    lines <- c(lines, entry)
   }
   paste(lines, collapse = "\n")
 }
