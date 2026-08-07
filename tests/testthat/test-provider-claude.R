@@ -485,6 +485,50 @@ test_that("value_turn() preserves Anthropic web activity and citations", {
   expect_null(contents[[5]]@url)
 })
 
+test_that("value_turn() links Anthropic web-fetch citations to fetched URLs", {
+  provider <- chat_anthropic_test()$get_provider()
+  citation <- list(
+    type = "char_location",
+    cited_text = "second source evidence",
+    document_index = 1L,
+    document_title = "Second document",
+    start_char_index = 0L,
+    end_char_index = 22L
+  )
+  result <- list(
+    content = list(
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-1",
+        content = list(
+          type = "web_fetch_result",
+          url = "https://first.example"
+        )
+      ),
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-2",
+        content = list(
+          type = "web_fetch_result",
+          url = "https://second.example"
+        )
+      ),
+      list(
+        type = "text",
+        text = "Grounded answer",
+        citations = list(citation)
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 5)
+  )
+
+  contents <- value_turn(provider, result)@contents
+  expect_s7_class(contents[[4]], ContentCitation)
+  expect_equal(contents[[4]]@source@url, "https://second.example")
+  expect_equal(contents[[4]]@source@title, "Second document")
+})
+
 # Token counting -----------------------------------------------------------
 
 test_that("can count tokens", {

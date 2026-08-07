@@ -325,7 +325,10 @@ method(stream_content, ProviderAnthropic) <- function(
   if (event$type == "content_block_stop" && !is.null(completion)) {
     block <- completion$content[[event$index + 1L]]
     if (identical(block$type, "text")) {
-      return(anthropic_citations(block))
+      return(anthropic_citations(
+        block,
+        fetch_urls = anthropic_fetch_urls(completion$content)
+      ))
     }
     if (identical(block$type, "server_tool_use")) {
       request <- anthropic_server_tool_request(block)
@@ -423,6 +426,7 @@ method(value_turn, ProviderAnthropic) <- function(
   result,
   has_type = FALSE
 ) {
+  fetch_urls <- anthropic_fetch_urls(result$content)
   contents <- list_c(lapply(result$content, function(content) {
     if (content$type == "text") {
       if (has_type && has_claude_structured_output(provider@model)) {
@@ -430,7 +434,7 @@ method(value_turn, ProviderAnthropic) <- function(
       } else {
         c(
           list(ContentText(content$text)),
-          anthropic_citations(content)
+          anthropic_citations(content, fetch_urls = fetch_urls)
         )
       }
     } else if (content$type == "tool_use") {
@@ -485,21 +489,38 @@ method(value_turn, ProviderAnthropic) <- function(
   )
 }
 
-anthropic_citations <- function(block) {
+anthropic_citations <- function(block, fetch_urls = character()) {
   lapply(block$citations %||% list(), function(citation) {
-    url <- citation$url
-    source <- if (is.null(url) || !nzchar(url)) {
-      NULL
-    } else {
-      WebSource(url = url, title = citation$title)
-    }
     ContentCitation(
-      source = source,
+      source = anthropic_citation_source(citation, fetch_urls),
       grounded_span = block$text,
       cited_quote = citation$cited_text,
       extra = citation
     )
   })
+}
+
+anthropic_citation_source <- function(citation, fetch_urls) {
+  url <- citation$url
+  if (!is.null(url) && nzchar(url)) {
+    return(WebSource(url = url, title = citation$title))
+  }
+
+  document_index <- citation$document_index
+  is_valid_index <- is.numeric(document_index) &&
+    length(document_index) == 1 &&
+    !is.na(document_index) &&
+    document_index >= 0 &&
+    document_index == as.integer(document_index) &&
+    document_index < length(fetch_urls)
+  if (!is_valid_index) {
+    return(NULL)
+  }
+
+  WebSource(
+    url = fetch_urls[[document_index + 1L]],
+    title = citation$document_title
+  )
 }
 
 anthropic_server_tool_request <- function(block) {
@@ -535,6 +556,27 @@ anthropic_search_result <- function(block) {
     sources = sources,
     extra = block
   )
+}
+
+anthropic_fetch_urls <- function(contents) {
+  urls <- lapply(contents, function(content) {
+    if (!identical(content$type, "web_fetch_tool_result")) {
+      return(NULL)
+    }
+
+    result <- content$content
+    if (!identical(result$type, "web_fetch_result")) {
+      return(NULL)
+    }
+
+    url <- result$url
+    if (is.null(url) || !nzchar(url)) {
+      return(NULL)
+    }
+    url
+  })
+
+  unlist(compact(urls), use.names = FALSE)
 }
 
 anthropic_fetch_result <- function(block) {
