@@ -15,7 +15,7 @@ test_that("supports tool calling", {
 
 test_that("supports structured data", {
   # current default model does not support structured data
-  chat_fun <- function(model = "openai/gpt-oss-20b", ...) {
+  chat_fun <- function(model = "openai/gpt-oss-120b", ...) {
     chat_groq(model = model, ...)
   }
   test_data_extraction(chat_fun)
@@ -39,8 +39,7 @@ test_that("batch chat works", {
   out <- batch_chat_text(
     chat,
     prompts,
-    path = test_path("batch/state-capitals-groq.json"),
-    ignore_hash = TRUE
+    path = test_path("batch/state-capitals-groq.json")
   )
   expect_equal(out, c("Des Moines", "Albany", "Sacramento", "Austin"))
 })
@@ -64,8 +63,7 @@ test_that("batch_chat_structured works", {
     chat,
     prompts,
     path = test_path("batch/state-capitals-groq-structured.json"),
-    type = type_object(capital = type_string()),
-    ignore_hash = TRUE
+    type = type_object(capital = type_string())
   )
 
   expect_s3_class(out, "data.frame")

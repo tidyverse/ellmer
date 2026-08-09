@@ -101,11 +101,13 @@ reference:
   contents:
   - Chat
   - Provider
-  - ToolDef
+  - Model
   - Turn
   - Round
   - Content
   - Type
+  - ToolDef
+
 
 - title: Utilities
   contents:

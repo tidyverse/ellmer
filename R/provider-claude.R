@@ -104,17 +104,23 @@ chat_anthropic <- function(
 
   provider <- ProviderAnthropic(
     name = "Anthropic",
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
-    extra_headers = api_headers,
     base_url = base_url,
+    extra_headers = api_headers,
     beta_headers = beta_headers,
     credentials = credentials,
     cache = cache
   )
-
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 #' @rdname chat_anthropic
@@ -183,6 +189,7 @@ method(chat_path, ProviderAnthropic) <- function(provider) {
 }
 method(chat_body, ProviderAnthropic) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -203,7 +210,7 @@ method(chat_body, ProviderAnthropic) <- function(
 
   if (!is.null(type)) {
     if (
-      has_claude_structured_output(provider@model) &&
+      has_claude_structured_output(model@name) &&
         !type_has_additional_properties(type)
     ) {
       output_config <- list(
@@ -230,7 +237,7 @@ method(chat_body, ProviderAnthropic) <- function(
   }
   tools <- chat_body_tools(provider, tools)
 
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model@params)
 
   if (has_name(params, "reasoning_effort")) {
     thinking <- list(type = "adaptive")
@@ -250,7 +257,7 @@ method(chat_body, ProviderAnthropic) <- function(
   }
 
   compact(list2(
-    model = provider@model,
+    model = model@name,
     system = system,
     messages = messages,
     stream = stream,
@@ -396,12 +403,13 @@ method(value_finish_reason, ProviderAnthropic) <- function(provider, result) {
 
 method(value_turn, ProviderAnthropic) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
   contents <- lapply(result$content, function(content) {
     if (content$type == "text") {
-      if (has_type && has_claude_structured_output(provider@model)) {
+      if (has_type && has_claude_structured_output(model@name)) {
         ContentJson(string = content$text)
       } else {
         ContentText(content$text)
@@ -466,9 +474,9 @@ method(value_turn, ProviderAnthropic) <- function(
   cost_tokens <- tokens
   cost_tokens$input <- cost_tokens$input + cache_write * 0.25
   cost <- get_token_cost(
-    provider,
-    cost_tokens,
-    model = serving_model(result) %||% provider@model
+    provider@name,
+    serving_model(result) %||% model@name,
+    cost_tokens
   )
   AssistantTurn(
     contents,
@@ -484,6 +492,7 @@ method(value_turn, ProviderAnthropic) <- function(
 # https://docs.anthropic.com/en/docs/build-with-claude/token-counting
 method(count_tokens, ProviderAnthropic) <- function(
   provider,
+  model,
   ...,
   system_prompt = NULL,
   tools = list(),
@@ -504,7 +513,7 @@ method(count_tokens, ProviderAnthropic) <- function(
 
   if (!is.null(type)) {
     if (
-      has_claude_structured_output(provider@model) &&
+      has_claude_structured_output(model@name) &&
         !type_has_additional_properties(type)
     ) {
       output_config <- list(
@@ -532,7 +541,7 @@ method(count_tokens, ProviderAnthropic) <- function(
   tools <- chat_body_tools(provider, tools)
 
   body <- compact(list(
-    model = provider@model,
+    model = model@name,
     system = system,
     messages = list(as_json(provider, user_turn(...), is_last = TRUE)),
     tools = tools,
@@ -743,6 +752,7 @@ method(has_batch_support, ProviderAnthropic) <- function(provider) {
 # https://docs.anthropic.com/en/api/creating-message-batches
 method(batch_submit, ProviderAnthropic) <- function(
   provider,
+  model,
   conversations,
   type = NULL
 ) {
@@ -752,6 +762,7 @@ method(batch_submit, ProviderAnthropic) <- function(
   requests <- map(seq_along(conversations), function(i) {
     params <- chat_body(
       provider,
+      model,
       stream = FALSE,
       turns = conversations[[i]],
       type = type
@@ -805,11 +816,12 @@ method(batch_retrieve, ProviderAnthropic) <- function(provider, batch) {
 
 method(batch_result_turn, ProviderAnthropic) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
   if (result$type == "succeeded") {
-    value_turn(provider, result$message, has_type = has_type)
+    value_turn(provider, model, result$message, has_type = has_type)
   } else {
     NULL
   }
@@ -833,7 +845,6 @@ models_claude <- function(
 
   provider <- ProviderAnthropic(
     name = "Anthropic",
-    model = "",
     base_url = base_url,
     credentials = credentials,
     cache = "none"

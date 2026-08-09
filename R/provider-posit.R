@@ -59,13 +59,12 @@ chat_posit <- function(
     credentials = credentials
   )
 
+  params <- params %||% params()
+
   if (is_claude_model(model)) {
     provider <- ProviderPositAnthropic(
       name = "Posit",
       base_url = paste0(base_url, "/anthropic/v1"),
-      model = model,
-      params = params %||% params(),
-      extra_args = api_args,
       extra_headers = api_headers,
       credentials = credentials,
       cache = cache
@@ -74,15 +73,18 @@ chat_posit <- function(
     provider <- ProviderPositOpenAI(
       name = "Posit",
       base_url = paste0(base_url, "/openai/v1"),
-      model = model,
-      params = params %||% params(),
-      extra_args = api_args,
       extra_headers = api_headers,
       credentials = credentials
     )
   }
+  model <- Model(name = model, params = params, extra_args = api_args)
 
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 #' @export
