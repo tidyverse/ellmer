@@ -38,6 +38,8 @@ A Chat object
 
 - [`Chat$get_model()`](#method-Chat-get_model)
 
+- [`Chat$get_model_object()`](#method-Chat-get_model_object)
+
 - [`Chat$set_model()`](#method-Chat-set_model)
 
 - [`Chat$set_system_prompt()`](#method-Chat-set_system_prompt)
@@ -84,13 +86,17 @@ A Chat object
 
 #### Usage
 
-    Chat$new(provider, system_prompt = NULL, echo = "none")
+    Chat$new(provider, model, system_prompt = NULL, echo = "none")
 
 #### Arguments
 
 - `provider`:
 
   A provider object.
+
+- `model`:
+
+  A [Model](https://ellmer.tidyverse.org/dev/reference/Model.md) object.
 
 - `system_prompt`:
 
@@ -221,11 +227,21 @@ If set, the system prompt, it not, `NULL`.
 
 ### `Chat$get_model()`
 
-Retrieve the model name
+Retrieve the model name.
 
 #### Usage
 
     Chat$get_model()
+
+------------------------------------------------------------------------
+
+### `Chat$get_model_object()`
+
+Retrieve the Model object. For expert use only.
+
+#### Usage
+
+    Chat$get_model_object()
 
 ------------------------------------------------------------------------
 

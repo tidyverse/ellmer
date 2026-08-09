@@ -174,8 +174,8 @@ provider.
   Chat object
 - [`Provider()`](https://ellmer.tidyverse.org/dev/reference/Provider.md)
   : A chatbot provider
-- [`ToolDef()`](https://ellmer.tidyverse.org/dev/reference/ToolDef.md) :
-  A tool definition
+- [`Model()`](https://ellmer.tidyverse.org/dev/reference/Model.md) : A
+  model configuration
 - [`Turn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)
   [`UserTurn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)
   [`SystemTurn()`](https://ellmer.tidyverse.org/dev/reference/Turn.md)
@@ -201,6 +201,8 @@ provider.
   [`TypeIgnore()`](https://ellmer.tidyverse.org/dev/reference/Type.md)
   [`TypeObject()`](https://ellmer.tidyverse.org/dev/reference/Type.md) :
   Type definitions for function calling and structured data extraction.
+- [`ToolDef()`](https://ellmer.tidyverse.org/dev/reference/ToolDef.md) :
+  A tool definition
 
 ## Utilities
 

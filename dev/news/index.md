@@ -49,6 +49,14 @@
   [`token_usage()`](https://ellmer.tidyverse.org/dev/reference/token_usage.md)
   and related functions will use the updated prices
   ([\#968](https://github.com/tidyverse/ellmer/issues/968)).
+- New `Model` class separates model configuration (name, parameters,
+  extra arguments) from the `Provider` class, which now only captures
+  API endpoint details. `Chat` gains a new `$get_model_object()` method
+  to retrieve the `Model` object. This is a breaking change for anyone
+  who directly accesses `provider@model`, `provider@params`, or
+  `provider@extra_args`; use the `Model` object instead
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#499](https://github.com/tidyverse/ellmer/issues/499)).
 
 ## ellmer 0.4.2
 

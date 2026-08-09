@@ -70,10 +70,7 @@ different API.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Provider</span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>,</span>
-<span>  model <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>,</span>
 <span>  base_url <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>,</span>
-<span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  extra_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  credentials <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -87,20 +84,8 @@ different API.</p>
 <dd><p>Name of the provider.</p></dd>
 
 
-<dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
-<dd><p>Name of the model.</p></dd>
-
-
 <dt id="arg-base-url">base_url<a class="anchor" aria-label="anchor" href="#arg-base-url"></a></dt>
 <dd><p>The base URL for the API.</p></dd>
-
-
-<dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
-<dd><p>A list of standard parameters created by <code><a href="params.html">params()</a></code>.</p></dd>
-
-
-<dt id="arg-extra-args">extra_args<a class="anchor" aria-label="anchor" href="#arg-extra-args"></a></dt>
-<dd><p>Arbitrary extra arguments to be included in the request body.</p></dd>
 
 
 <dt id="arg-extra-headers">extra_headers<a class="anchor" aria-label="anchor" href="#arg-extra-headers"></a></dt>
@@ -108,9 +93,9 @@ different API.</p>
 
 
 <dt id="arg-credentials">credentials<a class="anchor" aria-label="anchor" href="#arg-credentials"></a></dt>
-<dd><p>A zero-argument function that returns the credentials to use
-for authentication. Can either return a string, representing an API key,
-or a named list of headers.</p></dd>
+<dd><p>A zero-argument function that returns the credentials
+to use for authentication. Can either return a string, representing an
+API key, or a named list of headers.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -128,15 +113,11 @@ the various generics that control the behavior of each provider.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">Provider</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  name <span class="op">=</span> <span class="st">"CoolModels"</span>,</span></span>
-<span class="r-in"><span>  model <span class="op">=</span> <span class="st">"my_model"</span>,</span></span>
 <span class="r-in"><span>  base_url <span class="op">=</span> <span class="st">"https://cool-models.com"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;ellmer::Provider&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ name         : chr "CoolModels"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ model        : chr "my_model"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ base_url     : chr "https://cool-models.com"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ params       : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ extra_args   : list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ extra_headers: chr(0) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ credentials  : function ()  </span>
 </code></pre></div>
