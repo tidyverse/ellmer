@@ -60,7 +60,9 @@ test_that("can search web pages", {
 })
 
 test_that("can combine built-in and user tools", {
-  provider <- chat_google_gemini_test()$get_provider()
+  chat <- chat_google_gemini_test()
+  provider <- chat$get_provider()
+  model <- chat$get_model_object()
 
   regular_tool <- tool(
     function(x) x,
@@ -70,6 +72,7 @@ test_that("can combine built-in and user tools", {
 
   body <- chat_body(
     provider,
+    model,
     stream = TRUE,
     turns = list(Turn("user", "hi")),
     tools = list(regular_tool, google_tool_web_search())

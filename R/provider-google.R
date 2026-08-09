@@ -259,7 +259,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
     if (
       any(is_builtin) &&
         !all(is_builtin) &&
-        has_google_mixed_tool_support(provider)
+        has_google_mixed_tool_support(provider@name, model@name)
     ) {
       tool_config <- list(includeServerSideToolInvocations = TRUE)
     }
@@ -1266,7 +1266,7 @@ gemini_normalize_result <- function(x, index_default) {
   list(index = index, result = list(status_code = 500L, body = NULL))
 }
 
-has_google_mixed_tool_support <- function(provider) {
-  identical(provider@name, "Google/Gemini") &&
-    grepl("^gemini-([3-9]|[0-9]{2,})", provider@model)
+has_google_mixed_tool_support <- function(provider_name, model_name) {
+  identical(provider_name, "Google/Gemini") &&
+    grepl("^gemini-([3-9]|[0-9]{2,})", model_name)
 }
