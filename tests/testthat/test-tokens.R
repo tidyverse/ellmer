@@ -31,64 +31,44 @@ test_that("can retrieve and log tokens", {
 })
 
 test_that("can compute price of tokens", {
-  provider <- test_provider("OpenAI")
-  model <- test_model("gpt-4o")
-
   expect_equal(
-    get_token_cost(provider@name, model@name, tokens(input = 1e6)),
+    get_token_cost("OpenAI", "gpt-4o", tokens(input = 1e6)),
     dollars(2.5)
   )
   expect_equal(
-    get_token_cost(provider@name, model@name, tokens(output = 1e6)),
+    get_token_cost("OpenAI", "gpt-4o", tokens(output = 1e6)),
     dollars(10)
   )
   expect_equal(
-    get_token_cost(provider@name, model@name, tokens(cached_input = 1e6)),
+    get_token_cost("OpenAI", "gpt-4o", tokens(cached_input = 1e6)),
     dollars(1.25)
   )
 })
 
 test_that("can compute price of tokens with a variant", {
-  provider <- test_provider("OpenAI")
-  model <- test_model("gpt-4o")
-
   expect_equal(
-    get_token_cost(
-      provider@name,
-      model@name,
-      tokens(input = 1e6),
-      variant = "priority"
-    ),
+    get_token_cost("OpenAI", "gpt-4o", tokens(input = 1e6), variant = "priority"),
     dollars(4.25)
   )
 
   # fals back to baseline if no match
   expect_equal(
-    get_token_cost(
-      provider@name,
-      model@name,
-      tokens(input = 1e6),
-      variant = "tuesday-pm"
-    ),
-    get_token_cost(provider@name, model@name, tokens(input = 1e6))
+    get_token_cost("OpenAI", "gpt-4o", tokens(input = 1e6), variant = "tuesday-pm"),
+    get_token_cost("OpenAI", "gpt-4o", tokens(input = 1e6))
   )
 })
 
 test_that("informative internal error if variant is missing", {
-  provider <- test_provider("OpenAI")
-  model <- test_model("gpt-4o")
   expect_snapshot(
-    get_token_cost(provider@name, model@name, tokens(), variant = NULL),
+    get_token_cost("OpenAI", "gpt-4o", tokens(), variant = NULL),
     error = TRUE
   )
 })
 
 
 test_that("price is NA if we don't have the data for it", {
-  provider <- test_provider("ClosedAI")
-  model <- test_model("gpt-4o")
   expect_equal(
-    get_token_cost(provider@name, model@name, tokens(1, 1, 1)),
+    get_token_cost("ClosedAI", "gpt-4o", tokens(1, 1, 1)),
     dollars(NA_real_)
   )
 })
