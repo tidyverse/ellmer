@@ -127,7 +127,9 @@ test_that("removes empty final chat messages", {
 })
 
 test_that("batch chat works", {
-  chat <- chat_anthropic_test(system_prompt = "Answer with just the city name. No formatting.")
+  chat <- chat_anthropic_test(
+    system_prompt = "Answer with just the city name. No formatting."
+  )
 
   prompts <- list(
     "What's the capital of Iowa?",

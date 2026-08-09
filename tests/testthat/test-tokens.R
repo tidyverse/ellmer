@@ -53,15 +53,20 @@ test_that("can compute price of tokens with a variant", {
   model <- test_model("gpt-4o")
 
   expect_equal(
-    get_token_cost(provider@name, model@name, tokens(input = 1e6), variant = "priority"),
+    get_token_cost(
+      provider@name,
+      model@name,
+      tokens(input = 1e6),
+      variant = "priority"
+    ),
     dollars(4.25)
   )
 
   # fals back to baseline if no match
   expect_equal(
     get_token_cost(
-      provider,
-      model,
+      provider@name,
+      model@name,
       tokens(input = 1e6),
       variant = "tuesday-pm"
     ),
