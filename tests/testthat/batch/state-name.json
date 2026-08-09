@@ -1,0 +1,511 @@
+{
+  "version": 1,
+  "stage": "done",
+  "batch": {
+    "id": "batch_6a785e35cffc8190b98a8dea695204bf",
+    "object": "batch",
+    "endpoint": "/v1/responses",
+    "model": "gpt-5.4-nano-2026-03-17",
+    "errors": {},
+    "input_file_id": "file-Ve7Y64t4uAmTpFLSt9Xsy5",
+    "completion_window": "24h",
+    "status": "completed",
+    "output_file_id": "file-4kWJvxGMsS25RAGV6oiUnA",
+    "error_file_id": {},
+    "created_at": 1786273333,
+    "in_progress_at": 1786273334,
+    "expires_at": 1786359733,
+    "finalizing_at": 1786273613,
+    "completed_at": 1786273615,
+    "failed_at": {},
+    "expired_at": {},
+    "cancelling_at": {},
+    "cancelled_at": {},
+    "request_counts": {
+      "total": 4,
+      "completed": 4,
+      "failed": 0
+    },
+    "usage": {
+      "input_tokens": 217,
+      "output_tokens": 55,
+      "total_tokens": 272,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "metadata": {}
+  },
+  "results": [
+    {
+      "status_code": 200,
+      "request_id": "2862fe8e-ce62-4e5d-b18b-5d2665fda914",
+      "body": {
+        "id": "resp_0a5e823d90b7d726016a785f377c4c8194b6121186383d866e",
+        "object": "response",
+        "created_at": 1786273591,
+        "status": "completed",
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1786273592,
+        "error": {},
+        "frequency_penalty": 0,
+        "incomplete_details": {},
+        "instructions": {},
+        "max_output_tokens": {},
+        "max_tool_calls": {},
+        "model": "gpt-5.4-nano-2026-03-17",
+        "moderation": {},
+        "output": [
+          {
+            "id": "msg_0a5e823d90b7d726016a785f384c2c8194bfb9c190ec373027",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "{\"name\":\"Des Moines\"}"
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": {},
+        "prompt_cache_key": {},
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "current_turn",
+          "effort": "none",
+          "mode": "standard",
+          "summary": {}
+        },
+        "safety_identifier": {},
+        "service_tier": "default",
+        "store": false,
+        "temperature": 0,
+        "text": {
+          "format": {
+            "type": "json_schema",
+            "description": {},
+            "name": "structured_data",
+            "schema": {
+              "type": "object",
+              "description": "",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "State name"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 54,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 14,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 68
+        },
+        "user": {},
+        "metadata": {}
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "bebc022c-63ce-40fc-8f28-8d6862b8f9cb",
+      "body": {
+        "id": "resp_0be767b479da6aed016a785f37d39081948cff25c5a9055408",
+        "object": "response",
+        "created_at": 1786273591,
+        "status": "completed",
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1786273592,
+        "error": {},
+        "frequency_penalty": 0,
+        "incomplete_details": {},
+        "instructions": {},
+        "max_output_tokens": {},
+        "max_tool_calls": {},
+        "model": "gpt-5.4-nano-2026-03-17",
+        "moderation": {},
+        "output": [
+          {
+            "id": "msg_0be767b479da6aed016a785f387da481948e98e89f06b845ff",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "{\"name\":\"Albany\"}"
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": {},
+        "prompt_cache_key": {},
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "current_turn",
+          "effort": "none",
+          "mode": "standard",
+          "summary": {}
+        },
+        "safety_identifier": {},
+        "service_tier": "default",
+        "store": false,
+        "temperature": 0,
+        "text": {
+          "format": {
+            "type": "json_schema",
+            "description": {},
+            "name": "structured_data",
+            "schema": {
+              "type": "object",
+              "description": "",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "State name"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 55,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 14,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 69
+        },
+        "user": {},
+        "metadata": {}
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "1f5fde43-bdd4-432b-87e1-358ea0fbe471",
+      "body": {
+        "id": "resp_0dea97210f1f290c016a785f37b0388197aea53342e73349ef",
+        "object": "response",
+        "created_at": 1786273591,
+        "status": "completed",
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1786273594,
+        "error": {},
+        "frequency_penalty": 0,
+        "incomplete_details": {},
+        "instructions": {},
+        "max_output_tokens": {},
+        "max_tool_calls": {},
+        "model": "gpt-5.4-nano-2026-03-17",
+        "moderation": {},
+        "output": [
+          {
+            "id": "msg_0dea97210f1f290c016a785f39e8d88197871e8160d4c2825a",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "{\"name\":\"Sacramento\"}"
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": {},
+        "prompt_cache_key": {},
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "current_turn",
+          "effort": "none",
+          "mode": "standard",
+          "summary": {}
+        },
+        "safety_identifier": {},
+        "service_tier": "default",
+        "store": false,
+        "temperature": 0,
+        "text": {
+          "format": {
+            "type": "json_schema",
+            "description": {},
+            "name": "structured_data",
+            "schema": {
+              "type": "object",
+              "description": "",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "State name"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 54,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 14,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 68
+        },
+        "user": {},
+        "metadata": {}
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "1371dcd1-337a-4d27-938d-24e160dc2f0b",
+      "body": {
+        "id": "resp_063b15ffcc958222016a785f379f648194be7ccff839027748",
+        "object": "response",
+        "created_at": 1786273591,
+        "status": "completed",
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1786273592,
+        "error": {},
+        "frequency_penalty": 0,
+        "incomplete_details": {},
+        "instructions": {},
+        "max_output_tokens": {},
+        "max_tool_calls": {},
+        "model": "gpt-5.4-nano-2026-03-17",
+        "moderation": {},
+        "output": [
+          {
+            "id": "msg_063b15ffcc958222016a785f3857b88194a37df2980b172f36",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "{\"name\":\"Austin\"}"
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": {},
+        "prompt_cache_key": {},
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "current_turn",
+          "effort": "none",
+          "mode": "standard",
+          "summary": {}
+        },
+        "safety_identifier": {},
+        "service_tier": "default",
+        "store": false,
+        "temperature": 0,
+        "text": {
+          "format": {
+            "type": "json_schema",
+            "description": {},
+            "name": "structured_data",
+            "schema": {
+              "type": "object",
+              "description": "",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "State name"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 54,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 13,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 67
+        },
+        "user": {},
+        "metadata": {}
+      }
+    }
+  ],
+  "started_at": 1786273333,
+  "hash": {
+    "provider": "1d2bc960cd8a897857b04f5de08a78e6",
+    "model": "a8df4cb1a24eb085b4928ff3714d4856",
+    "prompts": "ec58117fcf69ea639e59250f914cca8f",
+    "user_turns": "19d0c96402bfe029f0ae46c5dfee4701"
+  }
+}

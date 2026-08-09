@@ -1,0 +1,443 @@
+{
+  "version": 1,
+  "stage": "done",
+  "batch": {
+    "id": "batch_6a785cb9125c8190a1c0760567c14847",
+    "object": "batch",
+    "endpoint": "/v1/responses",
+    "model": "gpt-5.4-nano-2026-03-17",
+    "errors": {},
+    "input_file_id": "file-FVwQxBHDub9hsqr1HsWA6V",
+    "completion_window": "24h",
+    "status": "completed",
+    "output_file_id": "file-98isXNqLUsPsf9yU5QNTs5",
+    "error_file_id": {},
+    "created_at": 1786272953,
+    "in_progress_at": 1786273014,
+    "expires_at": 1786359353,
+    "finalizing_at": 1786273330,
+    "completed_at": 1786273332,
+    "failed_at": {},
+    "expired_at": {},
+    "cancelling_at": {},
+    "cancelled_at": {},
+    "request_counts": {
+      "total": 4,
+      "completed": 4,
+      "failed": 0
+    },
+    "usage": {
+      "input_tokens": 101,
+      "output_tokens": 27,
+      "total_tokens": 128,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "metadata": {}
+  },
+  "results": [
+    {
+      "status_code": 200,
+      "request_id": "70c4a72a-bd77-43b7-bdac-3ef788280ac8",
+      "body": {
+        "id": "resp_025dbc27bc27f7ab016a785cf8e9008195b54aa3676f74cb9f",
+        "object": "response",
+        "created_at": 1786273016,
+        "status": "completed",
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1786273018,
+        "error": {},
+        "frequency_penalty": 0,
+        "incomplete_details": {},
+        "instructions": {},
+        "max_output_tokens": {},
+        "max_tool_calls": {},
+        "model": "gpt-5.4-nano-2026-03-17",
+        "moderation": {},
+        "output": [
+          {
+            "id": "msg_025dbc27bc27f7ab016a785cf9ccd48195ba79b6f28e99be0e",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "Des Moines."
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": {},
+        "prompt_cache_key": {},
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "current_turn",
+          "effort": "none",
+          "mode": "standard",
+          "summary": {}
+        },
+        "safety_identifier": {},
+        "service_tier": "default",
+        "store": false,
+        "temperature": 0,
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 25,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 7,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 32
+        },
+        "user": {},
+        "metadata": {}
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "bf0857f2-e40a-4a71-ab9b-c864e9eecdb3",
+      "body": {
+        "id": "resp_08f8c8096873d434016a785d34d0b081939919ce37fc647e23",
+        "object": "response",
+        "created_at": 1786273076,
+        "status": "completed",
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1786273077,
+        "error": {},
+        "frequency_penalty": 0,
+        "incomplete_details": {},
+        "instructions": {},
+        "max_output_tokens": {},
+        "max_tool_calls": {},
+        "model": "gpt-5.4-nano-2026-03-17",
+        "moderation": {},
+        "output": [
+          {
+            "id": "msg_08f8c8096873d434016a785d354f6081938d8e9752557ba863",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "Albany."
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": {},
+        "prompt_cache_key": {},
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "current_turn",
+          "effort": "none",
+          "mode": "standard",
+          "summary": {}
+        },
+        "safety_identifier": {},
+        "service_tier": "default",
+        "store": false,
+        "temperature": 0,
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 26,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 7,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 33
+        },
+        "user": {},
+        "metadata": {}
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "4e95a5ef-6e41-46c5-865d-26a399f127d6",
+      "body": {
+        "id": "resp_027e9bc23d94540f016a785d82b370819384fbb72aef957416",
+        "object": "response",
+        "created_at": 1786273154,
+        "status": "completed",
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1786273155,
+        "error": {},
+        "frequency_penalty": 0,
+        "incomplete_details": {},
+        "instructions": {},
+        "max_output_tokens": {},
+        "max_tool_calls": {},
+        "model": "gpt-5.4-nano-2026-03-17",
+        "moderation": {},
+        "output": [
+          {
+            "id": "msg_027e9bc23d94540f016a785d83598c8193863e91fc9bc03777",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "Sacramento."
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": {},
+        "prompt_cache_key": {},
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "current_turn",
+          "effort": "none",
+          "mode": "standard",
+          "summary": {}
+        },
+        "safety_identifier": {},
+        "service_tier": "default",
+        "store": false,
+        "temperature": 0,
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 25,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 7,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 32
+        },
+        "user": {},
+        "metadata": {}
+      }
+    },
+    {
+      "status_code": 200,
+      "request_id": "7e52c05e-db73-463d-b321-d1a8306a02e1",
+      "body": {
+        "id": "resp_044ab6cfd89e2c25016a785d453c6c8197a749e57c4fcaa5ff",
+        "object": "response",
+        "created_at": 1786273093,
+        "status": "completed",
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1786273093,
+        "error": {},
+        "frequency_penalty": 0,
+        "incomplete_details": {},
+        "instructions": {},
+        "max_output_tokens": {},
+        "max_tool_calls": {},
+        "model": "gpt-5.4-nano-2026-03-17",
+        "moderation": {},
+        "output": [
+          {
+            "id": "msg_044ab6cfd89e2c25016a785d45b0408197b0f8e4da78589bd8",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "Austin."
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": {},
+        "prompt_cache_key": {},
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "current_turn",
+          "effort": "none",
+          "mode": "standard",
+          "summary": {}
+        },
+        "safety_identifier": {},
+        "service_tier": "default",
+        "store": false,
+        "temperature": 0,
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 25,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 6,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 31
+        },
+        "user": {},
+        "metadata": {}
+      }
+    }
+  ],
+  "started_at": 1786272952,
+  "hash": {
+    "provider": "1d2bc960cd8a897857b04f5de08a78e6",
+    "model": "a8df4cb1a24eb085b4928ff3714d4856",
+    "prompts": "ec58117fcf69ea639e59250f914cca8f",
+    "user_turns": "19d0c96402bfe029f0ae46c5dfee4701"
+  }
+}
