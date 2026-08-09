@@ -47,13 +47,23 @@ test_that("can compute price of tokens", {
 
 test_that("can compute price of tokens with a variant", {
   expect_equal(
-    get_token_cost("OpenAI", "gpt-4o", tokens(input = 1e6), variant = "priority"),
+    get_token_cost(
+      "OpenAI",
+      "gpt-4o",
+      tokens(input = 1e6),
+      variant = "priority"
+    ),
     dollars(4.25)
   )
 
   # fals back to baseline if no match
   expect_equal(
-    get_token_cost("OpenAI", "gpt-4o", tokens(input = 1e6), variant = "tuesday-pm"),
+    get_token_cost(
+      "OpenAI",
+      "gpt-4o",
+      tokens(input = 1e6),
+      variant = "tuesday-pm"
+    ),
     get_token_cost("OpenAI", "gpt-4o", tokens(input = 1e6))
   )
 })
