@@ -267,6 +267,7 @@ test_that("stream_content() handles array content from reasoning models (#1078)"
 
   content <- stream_content(provider, event)
   expect_s7_class(content, ContentThinking)
+  expect_equal(content@thinking, "We need to respond")
 })
 
 test_that("value_turn() handles array content from reasoning models (#1078)", {
@@ -306,6 +307,7 @@ test_that("value_turn() handles array content from reasoning models (#1078)", {
   turn <- value_turn(provider, test_model("databricks-gpt-oss-20b"), result)
   expect_length(turn@contents, 2)
   expect_s7_class(turn@contents[[1]], ContentThinking)
+  expect_equal(turn@contents[[1]]@thinking, "We just need to answer 1+1=2.")
   expect_s7_class(turn@contents[[2]], ContentText)
   expect_equal(turn@contents[[2]]@text, "2")
 })
