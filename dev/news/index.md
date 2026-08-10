@@ -27,6 +27,12 @@
   now supports bearer token authentication for enterprise API gateways
   ([@thisisnic](https://github.com/thisisnic),
   [\#1002](https://github.com/tidyverse/ellmer/issues/1002)).
+- [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md)
+  no longer errors with models that return content as an array of typed
+  objects (e.g. `databricks-gpt-oss-120b`); reasoning parts are now
+  captured as thinking content
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1078](https://github.com/tidyverse/ellmer/issues/1078)).
 - [`chat_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
   and
   [`models_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
