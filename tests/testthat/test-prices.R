@@ -40,10 +40,12 @@ test_that("prices_get() uses a newer cached snapshot", {
 
   df <- prices[1, ]
   df$input <- 9999
+  # Far-future date: must stay newer than the bundled snapshot, which the
+  # update-prices workflow refreshes regularly
   cached <- write_prices_cache(
     cache_path,
     df,
-    updated_at = "2026-08-04T00:00:00Z"
+    updated_at = "2126-01-01T00:00:00Z"
   )
 
   expect_equal(prices_get(), cached)
@@ -148,7 +150,7 @@ test_that("prices_cache_download() writes a newer snapshot", {
   newer$input[[1]] <- newer$input[[1]] + 1
   local_mocked_responses(mock_response(
     body = valid_envelope(
-      updated_at = "2026-08-04T00:00:00Z",
+      updated_at = "2126-01-01T00:00:00Z",
       data = newer
     )
   ))
@@ -162,7 +164,7 @@ test_that("prices_cache_download() writes a newer snapshot", {
   )
   expect_equal(
     attr(cached, "updated_at"),
-    "2026-08-04T00:00:00Z"
+    "2126-01-01T00:00:00Z"
   )
 })
 
@@ -172,7 +174,7 @@ test_that("prices_cache_download() returns FALSE when data is unchanged", {
   newer$input[[1]] <- newer$input[[1]] + 1
   local_mocked_responses(mock_response(
     body = valid_envelope(
-      updated_at = "2026-08-04T00:00:00Z",
+      updated_at = "2126-01-01T00:00:00Z",
       data = newer
     )
   ))
@@ -204,14 +206,14 @@ test_that("prices_cache_download() does not replace a newer cache", {
   cached <- write_prices_cache(
     cache_path,
     newer,
-    updated_at = "2026-08-05T00:00:00Z"
+    updated_at = "2126-01-02T00:00:00Z"
   )
 
   remote <- prices
   remote$input[[1]] <- remote$input[[1]] + 2
   local_mocked_responses(mock_response(
     body = valid_envelope(
-      updated_at = "2026-08-04T00:00:00Z",
+      updated_at = "2126-01-01T00:00:00Z",
       data = remote
     )
   ))
