@@ -148,16 +148,20 @@ databricks_normalise_message <- function(message) {
   }
 
   parts <- message$content
-  types <- vapply(parts, function(p) p$type %||% "", character(1))
+  types <- map_chr(parts, function(p) p$type %||% "")
   message$content <- paste0(
-    vapply(parts[types == "text"], function(p) p$text, character(1)),
+    map_chr(parts[types == "text"], function(p) p$text),
     collapse = ""
   )
-  reasoning <- unlist(lapply(parts[types == "reasoning"], function(p) {
-    vapply(p$summary, function(s) s$text, character(1))
-  }))
-  if (length(reasoning)) {
-    message$reasoning <- paste0(reasoning, collapse = "")
+  summaries <- unlist(
+    lapply(parts[types == "reasoning"], function(p) p$summary),
+    recursive = FALSE
+  )
+  if (length(summaries)) {
+    message$reasoning <- paste0(
+      map_chr(summaries, function(s) s$text),
+      collapse = ""
+    )
   }
   message
 }
