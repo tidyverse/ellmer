@@ -241,3 +241,30 @@ test_that("chat_databricks() serializes tools correctly", {
     )
   )
 })
+
+test_that("stream_content() handles array content from reasoning models (#1078)", {
+  provider <- ProviderDatabricks(
+    name = "Databricks",
+    base_url = "https://example.cloud.databricks.com",
+    credentials = NULL,
+    extra_headers = character()
+  )
+
+  event <- list(
+    choices = list(list(
+      delta = list(
+        content = list(
+          list(
+            type = "reasoning",
+            summary = list(
+              list(type = "summary_text", text = "We need to respond")
+            )
+          )
+        )
+      )
+    ))
+  )
+
+  content <- stream_content(provider, event)
+  expect_s7_class(content, ContentThinking)
+})
