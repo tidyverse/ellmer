@@ -40,8 +40,6 @@ test_that("prices_get() uses a newer cached snapshot", {
 
   df <- prices[1, ]
   df$input <- 9999
-  # Far-future date: must stay newer than the bundled snapshot, which the
-  # update-prices workflow refreshes regularly
   cached <- write_prices_cache(
     cache_path,
     df,
