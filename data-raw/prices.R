@@ -2,7 +2,20 @@ library(dplyr, warn.conflicts = FALSE)
 library(tidyr)
 library(stringr)
 
+# --- constants --------------------------------------------------------------
+
+# Bump SCHEMA_VERSION for ANY change to the column structure: adding, removing,
+# renaming, or changing the type of a column. Updating row values (new models,
+# new prices) does not require a bump. When bumped, set min_ellmer_version to
+# the release that introduces the new schema so users know which version to
+# install. Update both values together whenever the schema changes.
+SCHEMA_VERSION <- 1L
+MIN_ELLMER_VERSION <- "0.5.0"
+
 litellm_url <- "https://raw.githubusercontent.com/BerriAI/litellm/refs/heads/main/model_prices_and_context_window.json"
+
+
+# --- fetch data --------------------------------------------------------------
 
 cli::cli_progress_step("Fetching litellm prices")
 litellm_prices <- jsonlite::read_json(litellm_url)
@@ -92,7 +105,11 @@ posit_other_prices <- tibble::tribble(
   mutate(provider = "Posit", variant = "") |>
   select(provider, model, variant, input, output, cached_input)
 
-prices <- bind_rows(prices, posit_claude_prices, posit_other_prices) |>
+prices <- bind_rows(
+  prices,
+  posit_claude_prices,
+  posit_other_prices
+) |>
   arrange(provider, model, variant)
 
 cli::cli_progress_done()
@@ -107,10 +124,44 @@ stopifnot(
   "Expected 10 providers" = n_distinct(prices$provider) >= 10
 )
 
+# --- snapshot metadata -------------------------------------------------------
+timestamp_now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+
+previous <- tryCatch(
+  jsonlite::read_json("data-raw/prices.json", simplifyVector = TRUE),
+  error = function(cnd) NULL
+)
+
+to_json <- function(x) {
+  jsonlite::toJSON(
+    x,
+    dataframe = "rows",
+    auto_unbox = TRUE,
+    digits = 6,
+    pretty = TRUE
+  )
+}
+
+prices_unchanged <- is.list(previous) &&
+  identical(as.integer(previous$schema_version), SCHEMA_VERSION) &&
+  identical(to_json(prices), to_json(previous$data))
+
+attr(prices, "schema_version") <- SCHEMA_VERSION
+attr(prices, "updated_at") <- timestamp_now
+
+prices_envelope <- list(
+  # schema_version and min_ellmer_version protect old ellmer versions from
+  # using incompatible pricing data when the pricing data structure is updated
+  schema_version = SCHEMA_VERSION,
+  min_ellmer_version = MIN_ELLMER_VERSION,
+  updated_at = timestamp_now,
+  data = prices
+)
+
 # --- schema validation -------------------------------------------------------
 
 cli::cli_progress_step("Validating schema")
-prices_json <- jsonlite::toJSON(prices, pretty = TRUE)
+prices_json <- to_json(prices_envelope)
 valid <- jsonvalidate::json_validate(
   prices_json,
   "data-raw/prices.schema.json",
@@ -121,5 +172,9 @@ cli::cli_progress_done()
 
 # --- write outputs -----------------------------------------------------------
 
-jsonlite::write_json(prices, "data-raw/prices.json", pretty = TRUE)
-usethis::use_data(prices, overwrite = TRUE, internal = TRUE)
+if (prices_unchanged) {
+  cli::cli_alert_success("Pricing data has not changed since the last update")
+} else {
+  writeLines(to_json(prices_envelope), "data-raw/prices.json")
+  usethis::use_data(prices, overwrite = TRUE, internal = TRUE)
+}

@@ -25,6 +25,7 @@ Chat <- R6::R6Class(
   "Chat",
   public = list(
     #' @param provider A provider object.
+    #' @param model A [Model] object.
     #' @param system_prompt System prompt to start the conversation with.
     #' @param echo One of the following options:
     #'   * `none`: don't emit any output (default when running in a function).
@@ -37,8 +38,14 @@ Chat <- R6::R6Class(
     #'
     #'  Note this only affects the `chat()` method. You can override the default
     #'  by setting the `ellmer_echo` option.
-    initialize = function(provider, system_prompt = NULL, echo = "none") {
+    initialize = function(
+      provider,
+      model,
+      system_prompt = NULL,
+      echo = "none"
+    ) {
       private$provider <- provider
+      private$model <- model
       private$echo <- echo
       private$callback_on_tool_request <- CallbackManager$new(args = "request")
       private$callback_on_tool_result <- CallbackManager$new(args = "result")
@@ -106,7 +113,7 @@ Chat <- R6::R6Class(
       check_turn(assistant)
 
       if (log_tokens) {
-        log_turn(private$provider, assistant)
+        log_turn(private$provider, private$model, assistant)
       }
 
       private$.turns[[length(private$.turns) + 1]] <- user
@@ -123,9 +130,14 @@ Chat <- R6::R6Class(
       }
     },
 
-    #' @description Retrieve the model name
+    #' @description Retrieve the model name.
     get_model = function() {
-      private$provider@model
+      private$model@name
+    },
+
+    #' @description Retrieve the Model object. For expert use only.
+    get_model_object = function() {
+      private$model
     },
 
     #' @description Update the model name. Note that unlike some of the
@@ -134,7 +146,7 @@ Chat <- R6::R6Class(
     #' @param model A single string giving the new model name.
     set_model = function(model) {
       check_string(model)
-      private$provider@model <- model
+      private$model@name <- model
       invisible(self)
     },
 
@@ -223,7 +235,7 @@ Chat <- R6::R6Class(
       include <- arg_match(include)
 
       if (include == "new") {
-        return(count_tokens(private$provider, ..., type = type))
+        return(count_tokens(private$provider, private$model, ..., type = type))
       }
 
       # With no history, we need to explicitly include system prompt and
@@ -232,6 +244,7 @@ Chat <- R6::R6Class(
       if (nrow(tokens) == 0) {
         all_tokens <- count_tokens(
           private$provider,
+          private$model,
           ...,
           system_prompt = self$get_system_prompt(),
           tools = private$tools,
@@ -240,7 +253,12 @@ Chat <- R6::R6Class(
         return(all_tokens)
       }
 
-      new_tokens <- count_tokens(private$provider, ..., type = type)
+      new_tokens <- count_tokens(
+        private$provider,
+        private$model,
+        ...,
+        type = type
+      )
       last <- tokens[nrow(tokens), ]
       new_tokens + last$input + last$output + last$cached_input
     },
@@ -316,7 +334,7 @@ Chat <- R6::R6Class(
       type <- wrap_type_if_needed(type, needs_wrapper)
 
       stream <- echo != "none" &&
-        !uses_tool_structured_output(private$provider, type)
+        !uses_tool_structured_output(private$provider, private$model, type)
 
       coro::collect(
         private$submit_turns(
@@ -355,7 +373,7 @@ Chat <- R6::R6Class(
       type <- wrap_type_if_needed(type, needs_wrapper)
 
       stream <- echo != "none" &&
-        !uses_tool_structured_output(private$provider, type)
+        !uses_tool_structured_output(private$provider, private$model, type)
 
       done <- coro::async_collect(
         private$submit_turns_async(
@@ -543,6 +561,7 @@ Chat <- R6::R6Class(
   ),
   private = list(
     provider = NULL,
+    model = NULL,
 
     .turns = list(),
     echo = NULL,
@@ -564,7 +583,11 @@ Chat <- R6::R6Class(
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
-      agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
+      agent_span <- local_agent_otel_span(
+        private$provider,
+        private$model,
+        activate = FALSE
+      )
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns(
@@ -634,7 +657,11 @@ Chat <- R6::R6Class(
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
-      agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
+      agent_span <- local_agent_otel_span(
+        private$provider,
+        private$model,
+        activate = FALSE
+      )
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns_async(
@@ -725,6 +752,7 @@ Chat <- R6::R6Class(
       otel_input <- otel_chat_input(private, user_turn)
       chat_span <- local_chat_otel_span(
         private$provider,
+        private$model,
         turns = otel_input$turns,
         system_prompt = otel_input$system_prompt,
         parent = otel_span
@@ -732,6 +760,7 @@ Chat <- R6::R6Class(
 
       response <- chat_perform(
         provider = private$provider,
+        model = private$model,
         mode = if (stream) "stream" else "value",
         turns = c(private$.turns, list(user_turn)),
         tools = if (is.null(type)) private$tools,
@@ -872,6 +901,7 @@ Chat <- R6::R6Class(
       otel_input <- otel_chat_input(private, user_turn)
       chat_span <- local_chat_otel_span(
         private$provider,
+        private$model,
         turns = otel_input$turns,
         system_prompt = otel_input$system_prompt,
         parent = otel_span
@@ -879,6 +909,7 @@ Chat <- R6::R6Class(
 
       response <- chat_perform(
         provider = private$provider,
+        model = private$model,
         mode = if (stream) "async-stream" else "async-value",
         turns = c(private$.turns, list(user_turn)),
         tools = if (is.null(type)) private$tools,
@@ -1031,6 +1062,7 @@ Chat <- R6::R6Class(
 #' @export
 print.Chat <- function(x, ...) {
   provider <- x$get_provider()
+  model <- x$get_model_object()
   turns <- x$get_turns(include_system_prompt = TRUE)
 
   assistant_turns <- keep(turns, \(x) x@role == "assistant")
@@ -1038,15 +1070,13 @@ print.Chat <- function(x, ...) {
   total_tokens <- colSums(map_tokens(complete_turns, \(x) x@tokens))
   total_cost <- sum(map_dbl(complete_turns, \(x) x@cost))
 
-  cat(
-    paste_c(
-      "<Chat",
-      c(" ", provider@name, "/", provider@model),
-      c(" turns=", length(turns)),
-      turn_cost(total_tokens, total_cost, prefix = " "),
-      ">\n"
-    )
-  )
+  cat(paste_c(
+    "<Chat",
+    c(" ", provider@name, "/", model@name),
+    c(" turns=", length(turns)),
+    turn_cost(total_tokens, total_cost, prefix = " "),
+    ">\n"
+  ))
 
   for (i in seq_along(turns)) {
     turn <- turns[[i]]
@@ -1088,6 +1118,7 @@ TurnAccumulator <- R6::R6Class(
     chat = NULL,
     chat_private = NULL,
     provider = NULL,
+    model = NULL,
     controller = NULL,
     turn_idx = NULL,
     start_time = NULL,
@@ -1096,6 +1127,7 @@ TurnAccumulator <- R6::R6Class(
       self$chat <- chat
       self$chat_private <- chat_private
       self$provider <- chat$get_provider()
+      self$model <- chat$get_model_object()
       self$controller <- controller
     },
 
@@ -1124,7 +1156,7 @@ TurnAccumulator <- R6::R6Class(
       # log_turn() is called manually here because the streaming path
       # replaces a partial turn in-place rather than using Chat$add_turn(),
       # which handles logging automatically for the non-streaming path.
-      log_turn(self$provider, turn)
+      log_turn(self$provider, self$model, turn)
       turn
     },
 
@@ -1141,7 +1173,7 @@ TurnAccumulator <- R6::R6Class(
       turn@reason <- self$controller$reason %||% "interrupted"
       turn@duration <- proc.time()[["elapsed"]] - self$start_time
       self$chat_private$.turns[[idx]] <- turn
-      log_turn(self$provider, turn)
+      log_turn(self$provider, self$model, turn)
     },
 
     add_turn = function(user_turn, result, duration = NA_real_, type = NULL) {
@@ -1158,6 +1190,7 @@ TurnAccumulator <- R6::R6Class(
 
       turn <- value_turn(
         self$provider,
+        self$model,
         result,
         has_type = !is.null(type)
       )

@@ -27,6 +27,7 @@ reference:
   - chat
   - Chat
   - token_usage
+  - models_update_prices
 
 - subtitle: Official providers
   desc: >
@@ -100,13 +101,15 @@ reference:
   contents:
   - Chat
   - Provider
-  - ToolDef
+  - Model
   - Turn
   - Round
   - Content
   - Source
   - ContentWebActivity
   - Type
+  - ToolDef
+
 
 - title: Utilities
   contents:

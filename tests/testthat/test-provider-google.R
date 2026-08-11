@@ -60,7 +60,9 @@ test_that("can search web pages", {
 })
 
 test_that("can combine built-in and user tools", {
-  provider <- chat_google_gemini_test()$get_provider()
+  chat <- chat_google_gemini_test()
+  provider <- chat$get_provider()
+  model <- chat$get_model_object()
 
   regular_tool <- tool(
     function(x) x,
@@ -70,6 +72,7 @@ test_that("can combine built-in and user tools", {
 
   body <- chat_body(
     provider,
+    model,
     stream = TRUE,
     turns = list(Turn("user", "hi")),
     tools = list(regular_tool, google_tool_web_search())
@@ -97,9 +100,9 @@ test_that("can use pdfs", {
 test_that("can match prices for some common models", {
   provider <- chat_google_gemini_test()$get_provider()
 
-  expect_true(has_cost(provider, "gemini-3.5-flash"))
+  expect_true(has_cost(provider@name, "gemini-3.5-flash"))
 
-  expect_false(has_cost(provider, "gemini-1.0-pro-latest"))
+  expect_false(has_cost(provider@name, "gemini-1.0-pro-latest"))
 })
 
 # custom behaviour -------------------------------------------------------------
@@ -243,7 +246,7 @@ test_that("value_turn() preserves Google web metadata", {
     usageMetadata = list()
   )
 
-  contents <- value_turn(provider, result)@contents
+  contents <- value_turn(provider, test_model(), result)@contents
   expect_s7_class(contents[[1]], ContentToolRequestSearch)
   expect_equal(contents[[1]]@query, "ellmer citations")
   expect_s7_class(contents[[2]], ContentToolResponseSearch)
@@ -348,10 +351,13 @@ test_that("batch chat works", {
 })
 
 test_that("gemini_prepare_batch_body handles API quirks", {
-  provider <- chat_google_gemini_test()$get_provider()
+  chat <- chat_google_gemini_test()
+  provider <- chat$get_provider()
+  model <- chat$get_model_object()
 
   body <- chat_body(
     provider,
+    model,
     stream = FALSE,
     turns = list(Turn("user", "hi")),
     type = type_object(firstName = type_string())

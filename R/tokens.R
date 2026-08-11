@@ -20,11 +20,11 @@ map_tokens <- function(x, f, ...) {
   out
 }
 
-log_tokens <- function(provider, tokens, cost) {
+log_tokens <- function(provider, model, tokens, cost) {
   i <- vctrs::vec_match(
     data.frame(
       provider = provider@name,
-      model = provider@model
+      model = model@name
     ),
     the$tokens[c("provider", "model")]
   )
@@ -32,7 +32,7 @@ log_tokens <- function(provider, tokens, cost) {
   if (is.na(i)) {
     new_row <- tokens_row(
       provider@name,
-      provider@model,
+      model@name,
       tokens$input,
       tokens$output,
       tokens$cached_input,
@@ -50,17 +50,17 @@ log_tokens <- function(provider, tokens, cost) {
   invisible()
 }
 
-log_turn <- function(provider, turn) {
+log_turn <- function(provider, model, turn) {
   if (is_partial_turn(turn)) {
     return(invisible())
   }
-  log_tokens(provider, exec(tokens, !!!as.list(turn@tokens)), turn@cost)
+  log_tokens(provider, model, exec(tokens, !!!as.list(turn@tokens)), turn@cost)
 }
 
-log_turns <- function(provider, turns) {
+log_turns <- function(provider, model, turns) {
   for (turn in turns) {
     if (S7_inherits(turn, AssistantTurn)) {
-      log_turn(provider, turn)
+      log_turn(provider, model, turn)
     }
   }
 }
@@ -112,25 +112,22 @@ token_usage <- function() {
 
 # Cost ----------------------------------------------------------------------
 
-has_cost <- function(provider, model) {
-  needle <- data.frame(provider = provider@name, model = model)
-  vctrs::vec_in(needle, prices[c("provider", "model")])
+has_cost <- function(provider_name, model_name) {
+  needle <- data.frame(provider = provider_name, model = model_name)
+  vctrs::vec_in(needle, prices_get()[c("provider", "model")])
 }
 
-get_token_cost <- function(
-  provider,
-  tokens,
-  variant = "",
-  model = provider@model
-) {
+get_token_cost <- function(provider_name, model_name, tokens, variant = "") {
   check_string(variant, .internal = TRUE)
 
+  p <- prices_get()
+
   needle <- data.frame(
-    provider = provider@name,
-    model = model,
+    provider = provider_name,
+    model = model_name,
     variant = variant
   )
-  idx <- vctrs::vec_match(needle, prices[c("provider", "model", "variant")])
+  idx <- vctrs::vec_match(needle, p[c("provider", "model", "variant")])
 
   if (any(is.na(idx))) {
     # Match baseline if we can't match specific variant
@@ -139,13 +136,13 @@ get_token_cost <- function(
 
     idx[no_match] <- vctrs::vec_match(
       needle[no_match],
-      prices[c("provider", "model", "variant")]
+      p[c("provider", "model", "variant")]
     )
   }
 
-  input_price <- tokens$input * prices$input[idx] / 1e6
-  output_price <- tokens$output * prices$output[idx] / 1e6
-  cached_input_price <- tokens$cached_input * prices$cached_input[idx] / 1e6
+  input_price <- tokens$input * p$input[idx] / 1e6
+  output_price <- tokens$output * p$output[idx] / 1e6
+  cached_input_price <- tokens$cached_input * p$cached_input[idx] / 1e6
 
   dollars(input_price + output_price + cached_input_price)
 }

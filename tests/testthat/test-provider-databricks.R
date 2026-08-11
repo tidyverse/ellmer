@@ -241,3 +241,73 @@ test_that("chat_databricks() serializes tools correctly", {
     )
   )
 })
+
+test_that("stream_content() handles array content from reasoning models (#1078)", {
+  provider <- ProviderDatabricks(
+    name = "Databricks",
+    base_url = "https://example.cloud.databricks.com",
+    credentials = NULL,
+    extra_headers = character()
+  )
+
+  event <- list(
+    choices = list(list(
+      delta = list(
+        content = list(
+          list(
+            type = "reasoning",
+            summary = list(
+              list(type = "summary_text", text = "We need to respond")
+            )
+          )
+        )
+      )
+    ))
+  )
+
+  content <- stream_content(provider, event)[[1]]
+  expect_s7_class(content, ContentThinking)
+  expect_equal(content@thinking, "We need to respond")
+})
+
+test_that("value_turn() handles array content from reasoning models (#1078)", {
+  provider <- ProviderDatabricks(
+    name = "Databricks",
+    base_url = "https://example.cloud.databricks.com",
+    credentials = NULL,
+    extra_headers = character()
+  )
+
+  result <- list(
+    choices = list(list(
+      message = list(
+        role = "assistant",
+        content = list(
+          list(
+            type = "reasoning",
+            summary = list(
+              list(
+                type = "summary_text",
+                text = "We just need to answer 1+1=2."
+              )
+            )
+          ),
+          list(type = "text", text = "2")
+        )
+      ),
+      finish_reason = "stop"
+    )),
+    usage = list(
+      prompt_tokens = 108,
+      completion_tokens = 36,
+      total_tokens = 144
+    )
+  )
+
+  turn <- value_turn(provider, test_model("databricks-gpt-oss-20b"), result)
+  expect_length(turn@contents, 2)
+  expect_s7_class(turn@contents[[1]], ContentThinking)
+  expect_equal(turn@contents[[1]]@thinking, "We just need to answer 1+1=2.")
+  expect_s7_class(turn@contents[[2]], ContentText)
+  expect_equal(turn@contents[[2]]@text, "2")
+})

@@ -5,9 +5,12 @@
 * `chat_anthropic()`, `chat_aws_bedrock()`, and `chat_posit()` now default to `claude-sonnet-5`. `chat_openai()` and `chat_openrouter()` now default to `gpt-5.6-terra` (@thisisnic, #1066).
 * `chat_anthropic()` now correctly handles the `fallback` content block returned when a model's server-side refusal fallback (`server-side-fallback-2026-06-01`) is triggered (@simonpcouch, #1058).
 * `chat_aws_bedrock()` now supports bearer token authentication for enterprise API gateways (@thisisnic, #1002).
+* `chat_databricks()` no longer errors with models that return content as an array of typed objects (e.g. `databricks-gpt-oss-120b`); reasoning parts are now captured as thinking content (@thisisnic, #1078).
 * `chat_github()` and `models_github()` are now defunct because GitHub Models has been retired (@thisisnic, #1069).
 * `chat_google_gemini()` no longer errors when mixing regular tools and built-in tools like `google_tool_web_search()` (@thisisnic, #1054).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
+* New `models_update_prices()` downloads the latest model pricing data from GitHub and saves it to a local cache. Subsequent calls to `token_usage()` and related functions will use the updated prices (#968).
+* New `Model` class separates model configuration (name, parameters, extra arguments) from the `Provider` class, which now only captures API endpoint details. `Chat` gains a new `$get_model_object()` method to retrieve the `Model` object. This is a breaking change for anyone who directly accesses `provider@model`, `provider@params`, or `provider@extra_args`; use the `Model` object instead (@thisisnic, #499).
 
 
 # ellmer 0.4.2

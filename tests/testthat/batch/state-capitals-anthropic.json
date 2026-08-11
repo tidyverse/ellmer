@@ -2,7 +2,7 @@
   "version": 1,
   "stage": "done",
   "batch": {
-    "id": "msgbatch_01XPZPiH1ni3dsLAD9cBDeew",
+    "id": "msgbatch_012HFQZx5R8YYpvdgBu9aV4u",
     "type": "message_batch",
     "processing_status": "ended",
     "request_counts": {
@@ -12,19 +12,19 @@
       "canceled": 0,
       "expired": 0
     },
-    "ended_at": "2026-08-02T17:48:04.374913+00:00",
-    "created_at": "2026-08-02T17:47:08.039741+00:00",
-    "expires_at": "2026-08-03T17:47:08.039741+00:00",
+    "ended_at": "2026-08-09T11:18:05.303835+00:00",
+    "created_at": "2026-08-09T11:10:56.254757+00:00",
+    "expires_at": "2026-08-10T11:10:56.254757+00:00",
     "archived_at": {},
     "cancel_initiated_at": {},
-    "results_url": "https://api.anthropic.com/v1/messages/batches/msgbatch_01XPZPiH1ni3dsLAD9cBDeew/results"
+    "results_url": "https://api.anthropic.com/v1/messages/batches/msgbatch_012HFQZx5R8YYpvdgBu9aV4u/results"
   },
   "results": [
     {
       "type": "succeeded",
       "message": {
         "model": "claude-sonnet-5",
-        "id": "msg_011CdeLjZL95sWp8qaApspRS",
+        "id": "msg_011Cds5GwyiQR9d2GnSLLSX1",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -37,7 +37,7 @@
         "stop_sequence": {},
         "stop_details": {},
         "usage": {
-          "input_tokens": 26,
+          "input_tokens": 32,
           "cache_creation_input_tokens": 0,
           "cache_read_input_tokens": 0,
           "cache_creation": {
@@ -57,7 +57,7 @@
       "type": "succeeded",
       "message": {
         "model": "claude-sonnet-5",
-        "id": "msg_011CdeLjYtMRNgN7zHxdmieG",
+        "id": "msg_011Cds5eG8wkvTC4QuTRgnzu",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -70,7 +70,7 @@
         "stop_sequence": {},
         "stop_details": {},
         "usage": {
-          "input_tokens": 24,
+          "input_tokens": 30,
           "cache_creation_input_tokens": 0,
           "cache_read_input_tokens": 0,
           "cache_creation": {
@@ -90,7 +90,7 @@
       "type": "succeeded",
       "message": {
         "model": "claude-sonnet-5",
-        "id": "msg_011CdeLkLDdd9nFaXFFrkjC7",
+        "id": "msg_011Cds5a4WLnLnvnGj8Ao5tE",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -103,7 +103,7 @@
         "stop_sequence": {},
         "stop_details": {},
         "usage": {
-          "input_tokens": 23,
+          "input_tokens": 29,
           "cache_creation_input_tokens": 0,
           "cache_read_input_tokens": 0,
           "cache_creation": {
@@ -123,7 +123,7 @@
       "type": "succeeded",
       "message": {
         "model": "claude-sonnet-5",
-        "id": "msg_011CdeLjZgUJei3fG6cZnACP",
+        "id": "msg_011Cds5bhx8gywV2HRLLYnvH",
         "type": "message",
         "role": "assistant",
         "content": [
@@ -136,7 +136,7 @@
         "stop_sequence": {},
         "stop_details": {},
         "usage": {
-          "input_tokens": 25,
+          "input_tokens": 31,
           "cache_creation_input_tokens": 0,
           "cache_read_input_tokens": 0,
           "cache_creation": {
@@ -153,10 +153,11 @@
       }
     }
   ],
-  "started_at": 1785692827,
+  "started_at": 1786273855,
   "hash": {
-    "provider": "e00fab349d6ee043fadf2476bde0a7c0",
+    "provider": "c3a86702644fdfd4cc90daa0d89a9536",
+    "model": "72df240e882a5b70daa015949e1b6a5c",
     "prompts": "ec58117fcf69ea639e59250f914cca8f",
-    "user_turns": "5c3ea26a1e046a3d3f5a574bf143ebd2"
+    "user_turns": "aa79921aa98b52d347878744c498de74"
   }
 }
