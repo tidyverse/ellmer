@@ -10,6 +10,7 @@ tool(
   ...,
   arguments = list(),
   name = NULL,
+  output_schema = NULL,
   convert = TRUE,
   annotations = list(),
   .name = deprecated(),
@@ -48,6 +49,9 @@ argument (e.g., because the R function has a suitable default value).}
 
 \item{name}{The name of the function. This can be omitted if \code{fun} is an
 existing function (i.e. not defined inline).}
+
+\item{output_schema}{An optional \link{TypeObject} describing the structured
+output returned by the tool.}
 
 \item{convert}{Should JSON inputs be automatically convert to their
 R data type equivalents? Defaults to \code{TRUE}.}

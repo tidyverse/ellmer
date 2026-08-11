@@ -123,6 +123,30 @@ test_that("can check tool/tools", {
   })
 })
 
+test_that("tool() stores an optional output schema", {
+  output_schema <- type_object(
+    auc = type_number(),
+    tss = type_number()
+  )
+  tool_def <- tool(
+    function() list(auc = 0.92, tss = 0.81),
+    description = "Evaluate model performance",
+    output_schema = output_schema
+  )
+
+  expect_identical(tool_def@output_schema, output_schema)
+})
+
+test_that("tool() checks output schema type", {
+  expect_snapshot(error = TRUE, {
+    tool(
+      function() list(auc = 0.92),
+      description = "Evaluate model performance",
+      output_schema = list(type = "object")
+    )
+  })
+})
+
 # tool_annotations() -------------------------------------------------------
 
 test_that("tool_annotations(): NULL values are stripped", {

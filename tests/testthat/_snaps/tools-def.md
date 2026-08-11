@@ -100,6 +100,16 @@
       Error:
       ! `x[[1]]` must be a <ToolDef>, not the number 1.
 
+# tool() checks output schema type
+
+    Code
+      tool(function() list(auc = 0.92), description = "Evaluate model performance",
+      output_schema = list(type = "object"))
+    Condition
+      Error:
+      ! <ellmer::ToolDef> object properties are invalid:
+      - @output_schema must be <NULL> or <ellmer::TypeObject>, not <list>
+
 # tool_annotations(): checks its inputs
 
     Code

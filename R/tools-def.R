@@ -76,6 +76,8 @@ NULL
 #'   function. Each element should be created by a [`type_*()`][type_boolean]
 #'   function. Use [type_ignore()] if you don't want the LLM to provide that
 #'   argument (e.g., because the R function has a suitable default value).
+#' @param output_schema An optional [TypeObject] describing the structured
+#'   output returned by the tool.
 #' @param annotations Additional properties that describe the tool and its
 #'   behavior. Usually created by [tool_annotations()], where you can find a
 #'   description of the annotation properties recommended by the [Model Context
@@ -124,6 +126,7 @@ tool <- function(
   ...,
   arguments = list(),
   name = NULL,
+  output_schema = NULL,
   convert = TRUE,
   annotations = list(),
   .name = deprecated(),
@@ -187,6 +190,7 @@ tool <- function(
     name = name,
     description = description,
     arguments = TypeObject(properties = llm_arguments),
+    output_schema = output_schema,
     convert = convert,
     annotations = annotations
   )
@@ -203,6 +207,8 @@ tool <- function(
 #' @param name The name of the tool.
 #' @param description A description of what the tool does.
 #' @param arguments A [TypeObject] describing the tool's arguments.
+#' @param output_schema An optional [TypeObject] describing the structured
+#'   output returned by the tool.
 #' @param convert Whether to automatically convert JSON inputs to R
 #'   equivalents.
 #' @param annotations A list of additional tool annotations.
@@ -222,7 +228,8 @@ ToolDef <- new_class(
     description = prop_string(),
     arguments = TypeObject,
     convert = prop_bool(TRUE),
-    annotations = class_list
+    annotations = class_list,
+    output_schema = NULL | TypeObject
   )
 )
 

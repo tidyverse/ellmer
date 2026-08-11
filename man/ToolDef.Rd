@@ -10,7 +10,8 @@ ToolDef(
   description = stop("Required"),
   arguments = TypeObject(),
   convert = TRUE,
-  annotations = list()
+  annotations = list(),
+  output_schema = NULL
 )
 }
 \arguments{
@@ -21,6 +22,9 @@ ToolDef(
 \item{description}{A description of what the tool does.}
 
 \item{arguments}{A \link{TypeObject} describing the tool's arguments.}
+
+\item{output_schema}{An optional \link{TypeObject} describing the structured
+output returned by the tool.}
 
 \item{convert}{Whether to automatically convert JSON inputs to R
 equivalents.}
