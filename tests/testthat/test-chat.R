@@ -234,7 +234,7 @@ test_that("provider hooks receive the exact request turns", {
     content_turns <- list()
     value_turns <- list()
     final_turn <- AssistantTurn(
-      ContentText("Follow-up answer"),
+      list(ContentText("Follow-up answer")),
       tokens = c(0, 0, 0),
       cost = 0
     )
@@ -258,7 +258,7 @@ test_that("provider hooks receive the exact request turns", {
         make_response()
       },
       stream_merge_chunks = function(provider, result, chunk) chunk,
-      stream_content = function(
+      stream_content_with_turns = function(
         provider,
         event,
         completion,
@@ -268,7 +268,7 @@ test_that("provider hooks receive the exact request turns", {
         list(ContentText("Follow-up answer"))
       },
       value_finish_reason = function(provider, result) "success",
-      value_turn = function(
+      value_turn_with_turns = function(
         provider,
         model,
         result,

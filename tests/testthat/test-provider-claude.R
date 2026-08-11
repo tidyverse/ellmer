@@ -517,6 +517,182 @@ test_that("value_turn() links Anthropic web-fetch citations to fetched URLs", {
   expect_equal(contents[[4]]@source@title, "Second document")
 })
 
+test_that("value_turn() resolves Anthropic citations across request turns", {
+  provider <- chat_anthropic_test()$get_provider()
+  prior_fetch <- list(
+    type = "web_fetch_tool_result",
+    tool_use_id = "fetch-prior",
+    content = list(
+      type = "web_fetch_result",
+      url = "https://prior.example"
+    )
+  )
+  turns <- list(
+    UserTurn("Read the first page."),
+    AssistantTurn(list(
+      ContentToolResponseFetch(
+        url = "https://prior.example",
+        status = "success",
+        extra = prior_fetch
+      )
+    )),
+    UserTurn("Compare it with the second page.")
+  )
+  result <- list(
+    content = list(
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-current",
+        content = list(
+          type = "web_fetch_result",
+          url = "https://current.example"
+        )
+      ),
+      list(
+        type = "text",
+        text = "Comparison",
+        citations = list(
+          list(
+            type = "char_location",
+            cited_text = "prior evidence",
+            document_index = 0L,
+            document_title = "Prior document",
+            start_char_index = 0L,
+            end_char_index = 14L
+          ),
+          list(
+            type = "char_location",
+            cited_text = "current evidence",
+            document_index = 1L,
+            document_title = "Current document",
+            start_char_index = 15L,
+            end_char_index = 31L
+          )
+        )
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 5)
+  )
+
+  contents <- value_turn_with_turns(
+    provider,
+    test_model(),
+    result,
+    turns = turns
+  )@contents
+  citations <- keep(contents, \(x) S7_inherits(x, ContentCitation))
+
+  expect_equal(citations[[1]]@source@url, "https://prior.example")
+  expect_equal(citations[[2]]@source@url, "https://current.example")
+})
+
+test_that("value_turn() preserves unresolved Anthropic document slots", {
+  provider <- chat_anthropic_test()$get_provider()
+  turns <- list(UserTurn(list(
+    ContentPDF("application/pdf", "ZGF0YQ==", "report.pdf"),
+    ContentUploaded("file-pdf", "application/pdf"),
+    ContentUploaded("file-csv", "text/csv"),
+    ContentText("Compare the documents with the fetched page.")
+  )))
+  result <- list(
+    content = list(
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-current",
+        content = list(
+          type = "web_fetch_result",
+          url = "https://current.example"
+        )
+      ),
+      list(
+        type = "text",
+        text = "Comparison",
+        citations = list(
+          list(
+            type = "char_location",
+            cited_text = "inline PDF evidence",
+            document_index = 0L,
+            document_title = "report.pdf",
+            start_char_index = 0L,
+            end_char_index = 19L
+          ),
+          list(
+            type = "char_location",
+            cited_text = "uploaded PDF evidence",
+            document_index = 1L,
+            document_title = "uploaded.pdf",
+            start_char_index = 20L,
+            end_char_index = 41L
+          ),
+          list(
+            type = "char_location",
+            cited_text = "web evidence",
+            document_index = 2L,
+            document_title = "Current document",
+            start_char_index = 42L,
+            end_char_index = 54L
+          )
+        )
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 5)
+  )
+
+  contents <- value_turn_with_turns(
+    provider,
+    test_model(),
+    result,
+    turns = turns
+  )@contents
+  citations <- keep(contents, \(x) S7_inherits(x, ContentCitation))
+
+  expect_null(citations[[1]]@source)
+  expect_null(citations[[2]]@source)
+  expect_equal(citations[[3]]@source@url, "https://current.example")
+})
+
+test_that("stream_content() resolves Anthropic citations across request turns", {
+  provider <- chat_anthropic_test()$get_provider()
+  prior_fetch <- list(
+    type = "web_fetch_tool_result",
+    tool_use_id = "fetch-prior",
+    content = list(
+      type = "web_fetch_result",
+      url = "https://prior.example"
+    )
+  )
+  turns <- list(AssistantTurn(list(
+    ContentToolResponseFetch(
+      url = "https://prior.example",
+      status = "success",
+      extra = prior_fetch
+    )
+  )))
+  completion <- list(content = list(list(
+    type = "text",
+    text = "Grounded answer",
+    citations = list(list(
+      type = "char_location",
+      cited_text = "prior evidence",
+      document_index = 0L,
+      document_title = "Prior document",
+      start_char_index = 0L,
+      end_char_index = 14L
+    ))
+  )))
+
+  contents <- stream_content_with_turns(
+    provider,
+    list(type = "content_block_stop", index = 0L),
+    completion,
+    turns = turns
+  )
+
+  expect_equal(contents[[1]]@source@url, "https://prior.example")
+})
+
 # Token counting -----------------------------------------------------------
 
 test_that("can count tokens", {

@@ -158,6 +158,21 @@ stream_content <- new_generic(
     S7_dispatch()
   }
 )
+stream_content_with_turns <- new_generic(
+  "stream_content_with_turns",
+  "provider",
+  function(provider, event, completion = NULL, turns = list()) {
+    S7_dispatch()
+  }
+)
+method(stream_content_with_turns, Provider) <- function(
+  provider,
+  event,
+  completion = NULL,
+  turns = list()
+) {
+  stream_content(provider, event, completion)
+}
 
 stream_text <- function(provider, event) {
   contents <- stream_content(provider, event)
@@ -198,6 +213,22 @@ value_turn <- new_generic(
     S7_dispatch()
   }
 )
+value_turn_with_turns <- new_generic(
+  "value_turn_with_turns",
+  "provider",
+  function(provider, model, result, has_type = FALSE, turns = list()) {
+    S7_dispatch()
+  }
+)
+method(value_turn_with_turns, Provider) <- function(
+  provider,
+  model,
+  result,
+  has_type = FALSE,
+  turns = list()
+) {
+  value_turn(provider, model, result, has_type = has_type)
+}
 
 # Extract token counts from API response
 # Returns a named list produced by token_usage()

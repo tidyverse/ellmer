@@ -749,6 +749,7 @@ Chat <- R6::R6Class(
         cat_line(format(user_turn), prefix = "> ")
       }
 
+      request_turns <- c(private$.turns, list(user_turn))
       otel_input <- otel_chat_input(private, user_turn)
       chat_span <- local_chat_otel_span(
         private$provider,
@@ -762,7 +763,7 @@ Chat <- R6::R6Class(
         provider = private$provider,
         model = private$model,
         mode = if (stream) "stream" else "value",
-        turns = c(private$.turns, list(user_turn)),
+        turns = request_turns,
         tools = if (is.null(type)) private$tools,
         type = type,
         controller = controller,
@@ -774,7 +775,12 @@ Chat <- R6::R6Class(
       echo_ends_with_newline <- TRUE
       citation_sources <- list()
       turn <- NULL
-      acc <- TurnAccumulator$new(self, private, controller)
+      acc <- TurnAccumulator$new(
+        self,
+        private,
+        controller,
+        turns = request_turns
+      )
 
       if (stream) {
         acc$begin_turn(user_turn)
@@ -783,7 +789,12 @@ Chat <- R6::R6Class(
         result <- NULL
         for (chunk in response) {
           result <- stream_merge_chunks(private$provider, result, chunk)
-          contents <- stream_content(private$provider, chunk, result)
+          contents <- stream_content_with_turns(
+            private$provider,
+            chunk,
+            result,
+            turns = request_turns
+          )
           for (content in contents) {
             text <- content_text(content)
             if (yield_as_content) {
@@ -898,6 +909,7 @@ Chat <- R6::R6Class(
         cat_line(format(user_turn), prefix = "> ")
       }
 
+      request_turns <- c(private$.turns, list(user_turn))
       otel_input <- otel_chat_input(private, user_turn)
       chat_span <- local_chat_otel_span(
         private$provider,
@@ -911,7 +923,7 @@ Chat <- R6::R6Class(
         provider = private$provider,
         model = private$model,
         mode = if (stream) "async-stream" else "async-value",
-        turns = c(private$.turns, list(user_turn)),
+        turns = request_turns,
         tools = if (is.null(type)) private$tools,
         type = type,
         controller = controller,
@@ -923,7 +935,12 @@ Chat <- R6::R6Class(
       echo_ends_with_newline <- TRUE
       citation_sources <- list()
       turn <- NULL
-      acc <- TurnAccumulator$new(self, private, controller)
+      acc <- TurnAccumulator$new(
+        self,
+        private,
+        controller,
+        turns = request_turns
+      )
 
       if (stream) {
         acc$begin_turn(user_turn)
@@ -932,7 +949,12 @@ Chat <- R6::R6Class(
         result <- NULL
         for (chunk in await_each(response)) {
           result <- stream_merge_chunks(private$provider, result, chunk)
-          contents <- stream_content(private$provider, chunk, result)
+          contents <- stream_content_with_turns(
+            private$provider,
+            chunk,
+            result,
+            turns = request_turns
+          )
           for (content in contents) {
             text <- content_text(content)
             if (yield_as_content) {
@@ -1120,15 +1142,17 @@ TurnAccumulator <- R6::R6Class(
     provider = NULL,
     model = NULL,
     controller = NULL,
+    turns = list(),
     turn_idx = NULL,
     start_time = NULL,
 
-    initialize = function(chat, chat_private, controller) {
+    initialize = function(chat, chat_private, controller, turns = list()) {
       self$chat <- chat
       self$chat_private <- chat_private
       self$provider <- chat$get_provider()
       self$model <- chat$get_model_object()
       self$controller <- controller
+      self$turns <- turns
     },
 
     begin_turn = function(user_turn) {
@@ -1188,11 +1212,12 @@ TurnAccumulator <- R6::R6Class(
       finish_reason <- value_finish_reason(self$provider, result)
       check_finish_reason(finish_reason, if (is.null(type)) "warn" else "error")
 
-      turn <- value_turn(
+      turn <- value_turn_with_turns(
         self$provider,
         self$model,
         result,
-        has_type = !is.null(type)
+        has_type = !is.null(type),
+        turns = self$turns
       )
       turn@duration <- duration
       match_tools(turn, self$chat$get_tools())
