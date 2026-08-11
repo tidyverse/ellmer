@@ -362,168 +362,586 @@ test_that("can optionally echo", {
   expect_output(chat$chat("Echo this.", echo = TRUE), "Echo this.")
 })
 
-test_that("echo renders completed citations and web activity", {
-  withr::local_options(cli.width = 120)
+test_that("echo streams citation markers and a deduplicated footer", {
+  first <- WebSource("https://example.com/first", "First")
+  second <- WebSource("https://example.com/second", "Second")
+  emitted <- ""
 
-  make_response <- function() {
-    coro::generator(function() {
-      yield(list(type = "text"))
-      yield(list(type = "citation"))
-      yield(list(type = "activity"))
-    })()
-  }
+  response <- coro::generator(function() {
+    yield(list(type = "text-one"))
+    expect_equal(emitted, "First claim.")
+    yield(list(type = "citation-one"))
+    expect_equal(emitted, "First claim.[1]")
+    yield(list(type = "text-two"))
+    expect_equal(emitted, "First claim.[1] Second claim.")
+    yield(list(type = "citation-two"))
+    expect_equal(emitted, "First claim.[1] Second claim.[1]")
+    yield(list(type = "citation-three"))
+    expect_equal(emitted, "First claim.[1] Second claim.[1][2]")
+  })()
+
   final_turn <- AssistantTurn(
     list(
-      ContentText("ggplot2 1.0.0 was released on 2014-05-21."),
-      ContentCitation(
-        source = WebSource(
-          url = "https://cran.r-project.org/src/contrib/Archive/ggplot2",
-          title = "CRAN ggplot2 archive"
-        ),
-        grounded_span = "2014-05-21"
-      ),
-      ContentToolRequestSearch("ggplot2 1.0.0 CRAN release date"),
-      ContentToolRequestFetch(
-        "https://cran.r-project.org/src/contrib/Archive/ggplot2"
-      ),
-      ContentThinking("Internal reasoning.")
+      ContentText("First claim."),
+      ContentCitation(source = first),
+      ContentText(" Second claim."),
+      ContentCitation(source = first),
+      ContentCitation(source = second),
+      ContentToolRequestSearch("citation test")
     ),
     tokens = c(0, 0, 0),
     cost = 0
   )
 
   local_mocked_bindings(
-    chat_perform = function(...) make_response(),
+    chat_perform = function(...) response,
     stream_merge_chunks = function(provider, result, chunk) chunk,
     stream_content = function(provider, event, completion) {
       switch(
         event$type,
-        text = list(ContentText("ggplot2 1.0.0 was released on 2014-05-21.")),
-        citation = list(final_turn@contents[[2]]),
-        activity = final_turn@contents[3:4]
+        "text-one" = list(final_turn@contents[[1]]),
+        "citation-one" = list(final_turn@contents[[2]]),
+        "text-two" = list(final_turn@contents[[3]]),
+        "citation-two" = list(final_turn@contents[[4]]),
+        "citation-three" = list(final_turn@contents[[5]])
       )
     },
     value_finish_reason = function(provider, result) "success",
-    value_turn = function(provider, result, has_type = FALSE) final_turn
+    value_turn = function(provider, result, has_type = FALSE) final_turn,
+    emitter = function(echo, prefix = NULL) {
+      function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+    }
   )
 
-  expected <- paste(
-    "ggplot2 1.0.0 was released on 2014-05-21.[1]",
-    "",
-    "Sources",
-    "[1] CRAN ggplot2 archive: https://cran.r-project.org/src/contrib/Archive/ggplot2",
-    sep = "\n"
-  )
-  expected_answer <- "ggplot2 1.0.0 was released on 2014-05-21.[1]"
-  count_matches <- function(text, pattern) {
-    matches <- gregexpr(pattern, text, fixed = TRUE)[[1]]
-    if (identical(matches, -1L)) 0 else length(matches)
-  }
-
-  output_chat <- Chat$new(test_provider())
-  output <- capture.output(
-    output_chat$chat("When was it released?", echo = "output")
-  )
-  output <- paste(output, collapse = "\n")
-  expect_match(output, expected, fixed = TRUE)
-  expect_equal(count_matches(output, expected_answer), 1)
-  expect_equal(count_matches(output, "Sources"), 1)
-  expect_false(grepl("Web activity", output, fixed = TRUE))
-
-  all_chat <- Chat$new(test_provider())
-  all_output <- capture.output(
-    all_chat$chat("When was it released?", echo = "all")
-  )
-  all_output <- gsub("^< ", "", all_output)
-  all_output <- paste(all_output, collapse = "\n")
-  expect_match(
-    all_output,
-    paste0(expected, "\n\nWeb activity: 1 search, 1 fetch"),
-    fixed = TRUE
-  )
-  expect_equal(count_matches(all_output, expected_answer), 1)
-  expect_equal(count_matches(all_output, "Sources"), 1)
-  expect_equal(count_matches(all_output, "Web activity: 1 search, 1 fetch"), 1)
-  expect_false(grepl("[citation]:", all_output, fixed = TRUE))
-  expect_false(grepl("[web search request]:", all_output, fixed = TRUE))
-  expect_false(grepl("[web fetch request]:", all_output, fixed = TRUE))
-  expect_match(
-    all_output,
-    "<thinking>\nInternal reasoning.\n</thinking>",
-    fixed = TRUE
-  )
-
-  stream_chat <- Chat$new(test_provider())
-  stdout <- capture.output(
-    chunks <- coro::collect(
-      stream_chat$stream("When was it released?", stream = "content")
+  chat <- Chat$new(test_provider())
+  chunks <- coro::collect(
+    chat$.__enclos_env__$private$submit_turns(
+      UserTurn("Question"),
+      stream = TRUE,
+      echo = "output",
+      yield_as_content = TRUE,
+      controller = stream_controller()
     )
   )
-  expect_equal(stdout, character())
-  expected_chunks <- list(
-    ContentText("ggplot2 1.0.0 was released on 2014-05-21."),
-    final_turn@contents[[2]],
-    final_turn@contents[[3]],
-    final_turn@contents[[4]],
-    ContentText("\n")
+
+  expect_equal(
+    emitted,
+    paste0(
+      "First claim.[1] Second claim.[1][2]\n\n",
+      "Sources\n",
+      "[1] First: https://example.com/first\n",
+      "[2] Second: https://example.com/second\n"
+    )
   )
-  expect_length(chunks, length(expected_chunks))
-  expect_equal(chunks, expected_chunks)
+  expect_equal(
+    chunks,
+    c(final_turn@contents[1:5], list(ContentText("\n")))
+  )
 })
 
-test_that("async echo renders completed citations and web activity", {
-  withr::local_options(cli.width = 120)
-
-  make_response <- function() {
-    coro::async_generator(function() {
-      yield(list(type = "text"))
-      yield(list(type = "citation"))
-      yield(list(type = "activity"))
-    })()
+test_that("async echo streams citation markers and a deduplicated footer", {
+  first <- WebSource("https://example.com/first", "First")
+  second <- WebSource("https://example.com/second", "Second")
+  emitted <- ""
+  assert_emitted <- function(expected) {
+    if (!identical(emitted, expected)) {
+      stop(
+        "Expected `emitted` to equal ",
+        encodeString(expected, quote = "\""),
+        ", not ",
+        encodeString(emitted, quote = "\""),
+        ".",
+        call. = FALSE
+      )
+    }
   }
+
+  response <- coro::async_generator(function() {
+    yield(list(type = "text-one"))
+    assert_emitted("First claim.")
+    yield(list(type = "citation-one"))
+    assert_emitted("First claim.[1]")
+    yield(list(type = "text-two"))
+    assert_emitted("First claim.[1] Second claim.")
+    yield(list(type = "citation-two"))
+    assert_emitted("First claim.[1] Second claim.[1]")
+    yield(list(type = "citation-three"))
+    assert_emitted("First claim.[1] Second claim.[1][2]")
+    coro::exhausted()
+  })()
+
   final_turn <- AssistantTurn(
     list(
-      ContentText("ggplot2 1.0.0 was released on 2014-05-21."),
-      ContentCitation(
-        source = WebSource(
-          url = "https://cran.r-project.org/src/contrib/Archive/ggplot2",
-          title = "CRAN ggplot2 archive"
-        ),
-        grounded_span = "2014-05-21"
-      ),
-      ContentToolRequestSearch("ggplot2 1.0.0 CRAN release date"),
-      ContentToolRequestFetch(
-        "https://cran.r-project.org/src/contrib/Archive/ggplot2"
-      ),
-      ContentThinking("Internal reasoning.")
+      ContentText("First claim."),
+      ContentCitation(source = first),
+      ContentText(" Second claim."),
+      ContentCitation(source = first),
+      ContentCitation(source = second),
+      ContentToolRequestSearch("citation test")
     ),
     tokens = c(0, 0, 0),
     cost = 0
   )
-  expected_answer <- "ggplot2 1.0.0 was released on 2014-05-21.[1]"
-  expected_output <- paste(
-    expected_answer,
-    "",
-    "Sources",
-    "[1] CRAN ggplot2 archive: https://cran.r-project.org/src/contrib/Archive/ggplot2",
-    sep = "\n"
-  )
-  count_matches <- function(text, pattern) {
-    matches <- gregexpr(pattern, text, fixed = TRUE)[[1]]
-    if (identical(matches, -1L)) 0 else length(matches)
-  }
-  emitted <- ""
 
   local_mocked_bindings(
-    chat_perform = function(...) make_response(),
+    chat_perform = function(...) response,
     stream_merge_chunks = function(provider, result, chunk) chunk,
     stream_content = function(provider, event, completion) {
       switch(
         event$type,
-        text = list(ContentText("ggplot2 1.0.0 was released on 2014-05-21.")),
-        citation = list(final_turn@contents[[2]]),
-        activity = final_turn@contents[3:4]
+        "text-one" = list(final_turn@contents[[1]]),
+        "citation-one" = list(final_turn@contents[[2]]),
+        "text-two" = list(final_turn@contents[[3]]),
+        "citation-two" = list(final_turn@contents[[4]]),
+        "citation-three" = list(final_turn@contents[[5]])
       )
+    },
+    value_finish_reason = function(provider, result) "success",
+    value_turn = function(provider, result, has_type = FALSE) final_turn,
+    emitter = function(echo, prefix = NULL) {
+      function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+    }
+  )
+
+  chat <- Chat$new(test_provider())
+  expect_no_error(
+    sync(
+      coro::async_collect(
+        chat$.__enclos_env__$private$submit_turns_async(
+          UserTurn("Question"),
+          stream = TRUE,
+          echo = "output",
+          controller = stream_controller()
+        )
+      )
+    )
+  )
+
+  expect_equal(
+    emitted,
+    paste0(
+      "First claim.[1] Second claim.[1][2]\n\n",
+      "Sources\n",
+      "[1] First: https://example.com/first\n",
+      "[2] Second: https://example.com/second\n"
+    )
+  )
+})
+
+test_that("streaming echo does not leak thinking content", {
+  run_case <- function(async, echo) {
+    emitted <- ""
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    }
+    final_turn <- AssistantTurn(
+      list(
+        ContentThinking("Internal reasoning."),
+        ContentText("Visible answer.")
+      ),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+
+    local_mocked_bindings(
+      chat_perform = function(...) make_response(),
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content = function(provider, event, completion) {
+        final_turn@contents
+      },
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, result, has_type = FALSE) final_turn,
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = echo,
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = echo,
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    }
+    output <- capture.output(
+      chunks <- if (async) {
+        sync(coro::async_collect(generator))
+      } else {
+        coro::collect(generator)
+      }
+    )
+
+    expect_equal(emitted, "Visible answer.\n")
+    expect_equal(
+      chunks,
+      c(final_turn@contents, list(ContentText("\n")))
+    )
+    thinking_output <- output[startsWith(output, "< ")]
+    if (echo == "all") {
+      expect_equal(
+        thinking_output,
+        c(
+          "< <thinking>",
+          "< Internal reasoning.",
+          "< </thinking>"
+        )
+      )
+    } else {
+      expect_equal(thinking_output, character())
+    }
+  }
+
+  run_case(FALSE, "output")
+  run_case(FALSE, "all")
+  run_case(TRUE, "output")
+  run_case(TRUE, "all")
+})
+
+test_that("streaming citation footer follows emitted marker newline state", {
+  run_case <- function(async) {
+    emitted <- ""
+    source <- WebSource("https://example.com", "Example")
+    final_turn <- AssistantTurn(
+      list(
+        ContentText("Answer.\n"),
+        ContentCitation(source = source)
+      ),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    }
+
+    local_mocked_bindings(
+      chat_perform = function(...) make_response(),
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content = function(provider, event, completion) {
+        final_turn@contents
+      },
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, result, has_type = FALSE) final_turn,
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    }
+    chunks <- if (async) {
+      sync(coro::async_collect(generator))
+    } else {
+      coro::collect(generator)
+    }
+
+    expect_equal(
+      emitted,
+      paste0(
+        "Answer.\n[1]\n\n",
+        "Sources\n",
+        "[1] Example: https://example.com\n"
+      )
+    )
+    expect_equal(chunks, final_turn@contents)
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("citation-only streaming output terminates before footer", {
+  run_case <- function(async) {
+    emitted <- ""
+    citation <- ContentCitation(
+      source = WebSource("https://example.com", "Example")
+    )
+    final_turn <- AssistantTurn(
+      list(citation),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    }
+
+    local_mocked_bindings(
+      chat_perform = function(...) make_response(),
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content = function(provider, event, completion) {
+        final_turn@contents
+      },
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, result, has_type = FALSE) final_turn,
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    }
+    chunks <- if (async) {
+      sync(coro::async_collect(generator))
+    } else {
+      coro::collect(generator)
+    }
+
+    expect_equal(
+      emitted,
+      paste0(
+        "[1]\n\n",
+        "Sources\n",
+        "[1] Example: https://example.com\n"
+      )
+    )
+    expect_equal(chunks, list(citation))
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("empty streaming text preserves emitted newline state", {
+  run_case <- function(async) {
+    emitted <- ""
+    final_turn <- AssistantTurn(
+      list(
+        ContentText("Answer.\n"),
+        ContentText("")
+      ),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    }
+
+    local_mocked_bindings(
+      chat_perform = function(...) make_response(),
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content = function(provider, event, completion) {
+        final_turn@contents
+      },
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, result, has_type = FALSE) final_turn,
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    }
+    chunks <- if (async) {
+      sync(coro::async_collect(generator))
+    } else {
+      coro::collect(generator)
+    }
+
+    expect_equal(
+      emitted,
+      "Answer.\n"
+    )
+    expect_equal(chunks, final_turn@contents)
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("non-streaming echo preserves citation yields", {
+  run_case <- function(async) {
+    emitted <- ""
+    source <- WebSource("https://example.com", "Example")
+    final_turn <- AssistantTurn(
+      list(
+        ContentText("Complete answer."),
+        ContentCitation(source = source),
+        ContentCitation(source = source)
+      ),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+    response <- list()
+
+    local_mocked_bindings(
+      chat_perform = function(provider, mode, ...) {
+        if (mode == "async-value") {
+          promises::promise_resolve(response)
+        } else {
+          response
+        }
+      },
+      resp_body_json = function(response) list(),
+      resp_timing = function(response) c(total = 0),
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, result, has_type = FALSE) final_turn,
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Question"),
+        stream = FALSE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Question"),
+        stream = FALSE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    }
+    chunks <- if (async) {
+      sync(coro::async_collect(generator))
+    } else {
+      coro::collect(generator)
+    }
+
+    expect_equal(
+      emitted,
+      paste0(
+        "Complete answer.[1][1]\n\n",
+        "Sources\n",
+        "[1] Example: https://example.com\n"
+      )
+    )
+    expect_equal(
+      chunks,
+      list(ContentText("Complete answer."), ContentText("\n"))
+    )
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("async echo none stays silent and preserves rich content", {
+  emitted <- ""
+  citation <- ContentCitation(
+    source = WebSource("https://example.com", "Example")
+  )
+  response <- coro::async_generator(function() {
+    yield(list(type = "content"))
+  })()
+  final_turn <- AssistantTurn(
+    list(
+      ContentText("Silent answer."),
+      citation
+    ),
+    tokens = c(0, 0, 0),
+    cost = 0
+  )
+
+  local_mocked_bindings(
+    chat_perform = function(...) response,
+    stream_merge_chunks = function(provider, result, chunk) chunk,
+    stream_content = function(provider, event, completion) {
+      final_turn@contents
     },
     value_finish_reason = function(provider, result) "success",
     value_turn = function(provider, result, has_type = FALSE) final_turn,
@@ -532,69 +950,14 @@ test_that("async echo renders completed citations and web activity", {
         return(function(...) invisible())
       }
       function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
-    },
-    echo_non_text_contents = function(turn, exclude_citation_activity = FALSE) {
-      expect_true(exclude_citation_activity)
-      formatted <- format(turn@contents[[5]])
-      emitted <<- paste0(emitted, formatted)
-      if (!endsWith(formatted, "\n")) {
-        emitted <<- paste0(emitted, "\n")
-      }
     }
   )
 
-  for (echo in c("output", "all")) {
-    emitted <- ""
-    chat <- Chat$new(test_provider())
-    chunks <- sync(
-      coro::async_collect(
-        chat$.__enclos_env__$private$submit_turns_async(
-          UserTurn("When was it released?"),
-          stream = TRUE,
-          echo = echo,
-          yield_as_content = TRUE,
-          controller = stream_controller()
-        )
-      )
-    )
-
-    expected <- expected_output
-    if (echo == "all") {
-      expected <- paste(
-        expected,
-        "",
-        "Web activity: 1 search, 1 fetch",
-        "<thinking>\nInternal reasoning.\n</thinking>",
-        sep = "\n"
-      )
-    }
-
-    expect_equal(emitted, paste0(expected, "\n"))
-    expect_equal(count_matches(emitted, expected_answer), 1)
-    expect_equal(count_matches(emitted, "Sources"), 1)
-    expect_false(grepl("[citation]:", emitted, fixed = TRUE))
-    expect_false(grepl("[web search request]:", emitted, fixed = TRUE))
-    expect_false(grepl("[web fetch request]:", emitted, fixed = TRUE))
-    expect_equal(
-      chunks,
-      c(
-        list(
-          ContentText("ggplot2 1.0.0 was released on 2014-05-21."),
-          final_turn@contents[[2]],
-          final_turn@contents[[3]],
-          final_turn@contents[[4]]
-        ),
-        list(ContentText("\n"))
-      )
-    )
-  }
-
-  emitted <- ""
   chat <- Chat$new(test_provider())
   chunks <- sync(
     coro::async_collect(
       chat$.__enclos_env__$private$submit_turns_async(
-        UserTurn("When was it released?"),
+        UserTurn("Question"),
         stream = TRUE,
         echo = "none",
         yield_as_content = TRUE,
@@ -602,14 +965,23 @@ test_that("async echo renders completed citations and web activity", {
       )
     )
   )
+
   expect_equal(emitted, "")
-  expect_equal(chunks[[1]]@text, "ggplot2 1.0.0 was released on 2014-05-21.")
+  expect_equal(
+    chunks,
+    c(final_turn@contents, list(ContentText("\n")))
+  )
 })
 
-test_that("async cancelled echo renders collected text without citations", {
+test_that("async cancelled echo retains citation markers and sources", {
   controller <- stream_controller()
   log_count <- 0L
   emitted <- ""
+  text <- ContentText("Partial grounded answer.")
+  citation <- ContentCitation(
+    source = WebSource("https://example.com", "Example"),
+    grounded_span = "grounded answer"
+  )
   make_response <- function() {
     coro::async_generator(function() {
       yield(list(type = "partial"))
@@ -622,11 +994,8 @@ test_that("async cancelled echo renders collected text without citations", {
     stream_content = function(provider, event, completion) {
       controller$cancel()
       list(
-        ContentText("Partial grounded answer."),
-        ContentCitation(
-          source = WebSource("https://example.com", "Example"),
-          grounded_span = "grounded answer"
-        )
+        text,
+        citation
       )
     },
     log_turn = function(provider, turn) log_count <<- log_count + 1L,
@@ -648,13 +1017,17 @@ test_that("async cancelled echo renders collected text without citations", {
     )
   )
 
-  expect_equal(emitted, "Partial grounded answer.\n")
-  expect_false(grepl("Sources", emitted, fixed = TRUE))
-  expect_false(grepl("[1]", emitted, fixed = TRUE))
+  expect_equal(
+    emitted,
+    paste0(
+      "Partial grounded answer.[1]\n\n",
+      "Sources\n",
+      "[1] Example: https://example.com\n"
+    )
+  )
   expect_s7_class(chat$last_turn(), AssistantPartialTurn)
   expect_equal(log_count, 1L)
-  expect_equal(chunks[[1]]@text, "Partial grounded answer.")
-  expect_s7_class(chunks[[2]], ContentCitation)
+  expect_equal(chunks, list(text, citation))
 })
 
 test_that("echo summarizes web response records without raw output", {
@@ -768,7 +1141,7 @@ test_that("format_web_activity counts response-only providers", {
   )
 
   expect_match(
-    format_citation_echo(turn, include_activity = TRUE),
+    format_web_activity(turn@contents, TRUE),
     "Web activity: 1 search, 1 fetch",
     fixed = TRUE
   )
@@ -903,10 +1276,15 @@ test_that("echo preserves one trailing newline for partial turns", {
   run_case(TRUE)
 })
 
-test_that("cancelled echo renders collected text without citation markers", {
+test_that("cancelled echo retains citation markers and sources", {
   controller <- stream_controller()
   log_count <- 0L
   emitted <- ""
+  text <- ContentText("Partial grounded answer.")
+  citation <- ContentCitation(
+    source = WebSource("https://example.com", "Example"),
+    grounded_span = "grounded answer"
+  )
   make_response <- function() {
     coro::generator(function() {
       yield(list(type = "partial"))
@@ -919,11 +1297,8 @@ test_that("cancelled echo renders collected text without citation markers", {
     stream_content = function(provider, event, completion) {
       controller$cancel()
       list(
-        ContentText("Partial grounded answer."),
-        ContentCitation(
-          source = WebSource("https://example.com", "Example"),
-          grounded_span = "grounded answer"
-        )
+        text,
+        citation
       )
     },
     log_turn = function(provider, turn) log_count <<- log_count + 1L,
@@ -933,23 +1308,72 @@ test_that("cancelled echo renders collected text without citation markers", {
   )
 
   chat <- Chat$new(test_provider())
+  chunks <- coro::collect(
+    chat$.__enclos_env__$private$submit_turns(
+      UserTurn("Stop after this chunk."),
+      stream = TRUE,
+      echo = "output",
+      yield_as_content = TRUE,
+      controller = controller
+    )
+  )
+
+  expect_equal(
+    emitted,
+    paste0(
+      "Partial grounded answer.[1]\n\n",
+      "Sources\n",
+      "[1] Example: https://example.com\n"
+    )
+  )
+  expect_s7_class(chat$last_turn(), AssistantPartialTurn)
+  expect_length(chat$get_turns(), 2)
+  expect_equal(log_count, 1L)
+  expect_equal(chunks, list(text, citation))
+})
+
+test_that("echo ignores source-less citations", {
+  emitted <- ""
+  response <- coro::generator(function() {
+    yield(list(type = "content"))
+  })()
+  final_turn <- AssistantTurn(
+    list(
+      ContentText("Grounded but source-less."),
+      ContentCitation(grounded_span = "Grounded but source-less.")
+    ),
+    tokens = c(0, 0, 0),
+    cost = 0
+  )
+
+  local_mocked_bindings(
+    chat_perform = function(...) response,
+    stream_merge_chunks = function(provider, result, chunk) chunk,
+    stream_content = function(provider, event, completion) {
+      final_turn@contents
+    },
+    value_finish_reason = function(provider, result) "success",
+    value_turn = function(provider, result, has_type = FALSE) final_turn,
+    emitter = function(echo, prefix = NULL) {
+      function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+    }
+  )
+
+  chat <- Chat$new(test_provider())
   invisible(
     coro::collect(
       chat$.__enclos_env__$private$submit_turns(
-        UserTurn("Stop after this chunk."),
+        UserTurn("Question"),
         stream = TRUE,
         echo = "output",
-        controller = controller
+        controller = stream_controller()
       )
     )
   )
 
-  expect_equal(emitted, "Partial grounded answer.\n")
+  expect_equal(emitted, "Grounded but source-less.\n")
   expect_false(grepl("Sources", emitted, fixed = TRUE))
   expect_false(grepl("[1]", emitted, fixed = TRUE))
-  expect_s7_class(chat$last_turn(), AssistantPartialTurn)
-  expect_length(chat$get_turns(), 2)
-  expect_equal(log_count, 1L)
 })
 
 test_that("complete echo ends with one newline", {
@@ -991,143 +1415,6 @@ test_that("complete echo ends with one newline", {
   )
 
   expect_equal(emitted, "Complete answer.\n")
-})
-
-test_that("format_citation_echo links unique spans and deduplicates sources", {
-  turn <- AssistantTurn(
-    list(
-      ContentText("ggplot2 1.0.0 was released on 2014-05-21."),
-      ContentCitation(
-        source = WebSource(
-          url = "https://cran.r-project.org/src/contrib/Archive/ggplot2",
-          title = "CRAN ggplot2 archive"
-        ),
-        grounded_span = "2014-05-21"
-      ),
-      ContentCitation(
-        source = WebSource(
-          url = "https://cran.r-project.org/src/contrib/Archive/ggplot2",
-          title = "CRAN ggplot2 archive"
-        ),
-        grounded_span = "2014-05-21"
-      ),
-      ContentToolRequestSearch("ggplot2 1.0.0 CRAN release date"),
-      ContentToolRequestFetch(
-        "https://cran.r-project.org/src/contrib/Archive/ggplot2"
-      )
-    )
-  )
-
-  expect_equal(
-    format_citation_echo(turn, include_activity = FALSE),
-    paste(
-      "ggplot2 1.0.0 was released on 2014-05-21.[1]",
-      "",
-      "Sources",
-      "[1] CRAN ggplot2 archive: https://cran.r-project.org/src/contrib/Archive/ggplot2",
-      sep = "\n"
-    )
-  )
-})
-
-test_that("format_citation_echo uses compact footnotes", {
-  turn <- AssistantTurn(
-    list(
-      ContentText("The example domain is reserved."),
-      ContentCitation(
-        source = WebSource(
-          url = "https://example.com",
-          title = "Example Domain"
-        ),
-        grounded_span = "reserved"
-      )
-    )
-  )
-
-  expect_equal(
-    format_citation_echo(turn),
-    paste(
-      "The example domain is reserved.[1]",
-      "",
-      "Sources",
-      "[1] Example Domain: https://example.com",
-      sep = "\n"
-    )
-  )
-})
-
-test_that("format_citation_echo keeps citation markers outside word continuations", {
-  turn <- AssistantTurn(
-    list(
-      ContentText("ggplot2 1.0.0-beta and ellmer's citations."),
-      ContentCitation(
-        source = WebSource(title = "Version"),
-        grounded_span = "1.0.0"
-      ),
-      ContentCitation(
-        source = WebSource(title = "Package"),
-        grounded_span = "ellmer"
-      )
-    )
-  )
-
-  formatted <- format_citation_echo(turn)
-
-  expect_match(formatted, "1.0.0-beta\\[1\\]")
-  expect_match(formatted, "ellmer's\\[2\\]")
-})
-
-test_that("format_citation_echo keeps ambiguous citations unlinked", {
-  turn <- AssistantTurn(
-    list(
-      ContentText("2014-05-21 was announced before 2014-05-21 was released."),
-      ContentCitation(
-        source = WebSource(title = "Release announcement"),
-        grounded_span = "2014-05-21"
-      ),
-      ContentToolRequestSearch("ggplot2 release announcement"),
-      ContentToolRequestSearch("ggplot2 1.0.0 release date"),
-      ContentToolRequestFetch("https://example.com/announcement"),
-      ContentToolRequestFetch("https://example.com/archive"),
-      ContentToolRequestFetch("https://example.com/news")
-    )
-  )
-
-  expect_equal(
-    format_citation_echo(turn, include_activity = TRUE),
-    paste(
-      "2014-05-21 was announced before 2014-05-21 was released.",
-      "",
-      "Sources",
-      "[1] Release announcement",
-      "",
-      "Web activity: 2 searches, 3 fetches",
-      sep = "\n"
-    )
-  )
-})
-
-test_that("format_citation_echo does not infer a marker for a missing span", {
-  turn <- AssistantPartialTurn(
-    list(
-      ContentText("Partial grounded answer."),
-      ContentCitation(
-        source = WebSource("https://example.com", "Example"),
-        grounded_span = NULL
-      )
-    )
-  )
-
-  expect_equal(
-    format_citation_echo(turn, include_activity = FALSE),
-    paste(
-      "Partial grounded answer.",
-      "",
-      "Sources",
-      "[1] Example: https://example.com",
-      sep = "\n"
-    )
-  )
 })
 
 test_that("can retrieve last_turn for user and assistant", {

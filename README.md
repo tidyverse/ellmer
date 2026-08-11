@@ -179,9 +179,11 @@ chat$chat("What preceding languages most influenced R?")
 ```
 
 If you initialize the chat object in the global environment, the `chat`
-method displays the streamed response in the console after the turn
-completes. This allows citations to include source markers and a source
-list. The response is also (invisibly) returned as a character vector.
+method echoes response chunks to the console as ellmer receives them.
+When the provider supplies citations, ellmer prints a compact source
+marker when each citation event is received, followed by a deduplicated
+source list when the turn completes. The response is also (invisibly)
+returned as a character vector.
 
 If you want to ask a question about an image, you can pass one or more
 additional input arguments using `content_image_file()` and/or
@@ -202,11 +204,11 @@ chat$chat(
 
 ### Streaming vs capturing
 
-With echo enabled, ellmer displays the streamed response in the console
-after the turn completes. This allows citations to include source markers
-and a source list. You can take control of this by setting the `echo`
-argument either when creating the chat object or when calling `$chat()`.
-Set `echo = "none"` to return a string instead:
+With echo enabled, ellmer echoes response chunks as they are received and
+appends a source list after a cited turn completes. You can take control
+of this by setting the `echo` argument either when creating the chat
+object or when calling `$chat()`. Set `echo = "none"` to return a string
+instead:
 
 ``` r
 my_function <- function() {

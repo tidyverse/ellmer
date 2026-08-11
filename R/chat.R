@@ -742,6 +742,8 @@ Chat <- R6::R6Class(
 
       emit <- emitter(echo)
       any_text <- FALSE
+      echo_ends_with_newline <- TRUE
+      citation_sources <- list()
       turn <- NULL
       acc <- TurnAccumulator$new(self, private, controller)
 
@@ -755,15 +757,28 @@ Chat <- R6::R6Class(
           contents <- stream_content(private$provider, chunk, result)
           for (content in contents) {
             text <- content_text(content)
-            if (is_stream_text_content(content)) {
-              any_text <- TRUE
-            }
             if (yield_as_content) {
               yield(content)
             } else if (is_stream_text_content(content)) {
               yield(text)
             }
             acc$update_turn(content)
+            if (is_stream_text_content(content)) {
+              any_text <- TRUE
+            }
+            if (S7_inherits(content, ContentText)) {
+              emit(text)
+              if (!identical(text, "")) {
+                echo_ends_with_newline <- endsWith(text, "\n")
+              }
+            } else if (S7_inherits(content, ContentCitation)) {
+              recorded <- record_citation_source(citation_sources, content)
+              citation_sources <- recorded$sources
+              if (!is.null(recorded$number)) {
+                emit(paste0("[", recorded$number, "]"))
+                echo_ends_with_newline <- FALSE
+              }
+            }
           }
         }
 
@@ -782,34 +797,43 @@ Chat <- R6::R6Class(
 
         text <- turn@text
         if (!is.null(text)) {
+          emit(text)
+          any_text <- TRUE
+          if (!identical(text, "")) {
+            echo_ends_with_newline <- endsWith(text, "\n")
+          }
           if (yield_as_content) {
             yield(ContentText(text))
           } else {
             yield(text)
           }
-          any_text <- TRUE
+        }
+        for (content in turn@contents) {
+          if (S7_inherits(content, ContentCitation)) {
+            recorded <- record_citation_source(citation_sources, content)
+            citation_sources <- recorded$sources
+            if (!is.null(recorded$number)) {
+              emit(paste0("[", recorded$number, "]"))
+              echo_ends_with_newline <- FALSE
+            }
+          }
         }
       }
 
       if (!is.null(turn)) {
-        rendered <- NULL
-        if (any_text) {
-          if (is_partial_turn(turn)) {
-            rendered <- turn@text
-          } else {
-            rendered <- format_citation_echo(
-              turn,
-              include_activity = echo == "all"
-            )
-          }
-          emit(rendered)
+        if (!echo_ends_with_newline) {
+          emit("\n")
         }
-
+        if (length(citation_sources) > 0) {
+          echo_citation_footer(emit, citation_sources)
+        }
+        activity <- format_web_activity(turn@contents, echo == "all")
+        if (!is.null(activity)) {
+          emit("\n")
+          emit(activity)
+          emit("\n")
+        }
         if (!is_partial_turn(turn) && any_text) {
-          # Ensure complete turns always end in a newline
-          if (!endsWith(rendered, "\n")) {
-            emit("\n")
-          }
           if (!endsWith(turn@text, "\n")) {
             if (yield_as_content) {
               yield(ContentText("\n"))
@@ -817,10 +841,6 @@ Chat <- R6::R6Class(
               yield("\n")
             }
           }
-        } else if (
-          is_partial_turn(turn) && any_text && !endsWith(rendered, "\n")
-        ) {
-          emit("\n")
         }
 
         if (!is_partial_turn(turn) && echo == "all") {
@@ -869,6 +889,8 @@ Chat <- R6::R6Class(
 
       emit <- emitter(echo)
       any_text <- FALSE
+      echo_ends_with_newline <- TRUE
+      citation_sources <- list()
       turn <- NULL
       acc <- TurnAccumulator$new(self, private, controller)
 
@@ -882,15 +904,28 @@ Chat <- R6::R6Class(
           contents <- stream_content(private$provider, chunk, result)
           for (content in contents) {
             text <- content_text(content)
-            if (is_stream_text_content(content)) {
-              any_text <- TRUE
-            }
             if (yield_as_content) {
               yield(content)
             } else if (is_stream_text_content(content)) {
               yield(text)
             }
             acc$update_turn(content)
+            if (is_stream_text_content(content)) {
+              any_text <- TRUE
+            }
+            if (S7_inherits(content, ContentText)) {
+              emit(text)
+              if (!identical(text, "")) {
+                echo_ends_with_newline <- endsWith(text, "\n")
+              }
+            } else if (S7_inherits(content, ContentCitation)) {
+              recorded <- record_citation_source(citation_sources, content)
+              citation_sources <- recorded$sources
+              if (!is.null(recorded$number)) {
+                emit(paste0("[", recorded$number, "]"))
+                echo_ends_with_newline <- FALSE
+              }
+            }
           }
         }
 
@@ -910,34 +945,43 @@ Chat <- R6::R6Class(
 
         text <- turn@text
         if (!is.null(text)) {
+          emit(text)
+          any_text <- TRUE
+          if (!identical(text, "")) {
+            echo_ends_with_newline <- endsWith(text, "\n")
+          }
           if (yield_as_content) {
             yield(ContentText(text))
           } else {
             yield(text)
           }
-          any_text <- TRUE
+        }
+        for (content in turn@contents) {
+          if (S7_inherits(content, ContentCitation)) {
+            recorded <- record_citation_source(citation_sources, content)
+            citation_sources <- recorded$sources
+            if (!is.null(recorded$number)) {
+              emit(paste0("[", recorded$number, "]"))
+              echo_ends_with_newline <- FALSE
+            }
+          }
         }
       }
 
       if (!is.null(turn)) {
-        rendered <- NULL
-        if (any_text) {
-          if (is_partial_turn(turn)) {
-            rendered <- turn@text
-          } else {
-            rendered <- format_citation_echo(
-              turn,
-              include_activity = echo == "all"
-            )
-          }
-          emit(rendered)
+        if (!echo_ends_with_newline) {
+          emit("\n")
         }
-
+        if (length(citation_sources) > 0) {
+          echo_citation_footer(emit, citation_sources)
+        }
+        activity <- format_web_activity(turn@contents, echo == "all")
+        if (!is.null(activity)) {
+          emit("\n")
+          emit(activity)
+          emit("\n")
+        }
         if (!is_partial_turn(turn) && any_text) {
-          # Ensure complete turns always end in a newline
-          if (!endsWith(rendered, "\n")) {
-            emit("\n")
-          }
           if (!endsWith(turn@text, "\n")) {
             if (yield_as_content) {
               yield(ContentText("\n"))
@@ -945,10 +989,6 @@ Chat <- R6::R6Class(
               yield("\n")
             }
           }
-        } else if (
-          is_partial_turn(turn) && any_text && !endsWith(rendered, "\n")
-        ) {
-          emit("\n")
         }
 
         if (!is_partial_turn(turn) && echo == "all") {
@@ -1148,48 +1188,30 @@ echo_non_text_contents <- function(turn, exclude_citation_activity = FALSE) {
   cat_line(formatted, prefix = "< ")
 }
 
-format_citation_echo <- function(turn, include_activity = FALSE) {
-  contents <- turn@contents
-  text <- paste0(
-    map_chr(
-      Filter(\(x) S7_inherits(x, ContentText), contents),
-      \(x) x@text
-    ),
-    collapse = ""
-  )
-  citations <- Filter(
-    \(x) S7_inherits(x, ContentCitation) && !is.null(x@source),
-    contents
-  )
-  sources <- citation_sources(citations)
-  text <- insert_citation_markers(text, citations, sources)
-
-  sections <- list(text)
-  if (length(sources) > 0) {
-    sections <- append(sections, format_citation_sources(sources))
-  }
-  activity <- format_web_activity(contents, include_activity)
-  if (!is.null(activity)) {
-    sections <- append(sections, activity)
+record_citation_source <- function(sources, citation) {
+  source <- citation@source
+  if (is.null(source)) {
+    return(list(sources = sources, number = NULL))
   }
 
-  paste(sections, collapse = "\n\n")
+  key <- citation_source_key(source)
+  number <- match(key, map_chr(sources, citation_source_key))
+  if (is.na(number)) {
+    sources <- append(sources, list(source))
+    number <- length(sources)
+  }
+
+  list(sources = sources, number = number)
 }
 
-citation_sources <- function(citations) {
-  sources <- list()
-  keys <- character()
-
-  for (citation in citations) {
-    source <- citation@source
-    key <- citation_source_key(source)
-    if (!key %in% keys) {
-      sources <- append(sources, source)
-      keys <- c(keys, key)
-    }
+echo_citation_footer <- function(emit, sources) {
+  if (length(sources) == 0) {
+    return(invisible())
   }
 
-  sources
+  emit("\n")
+  emit(format_citation_sources(sources))
+  emit("\n")
 }
 
 citation_source_key <- function(source) {
@@ -1203,80 +1225,6 @@ citation_source_key <- function(source) {
   }
 
   paste0("source:", format(source))
-}
-
-insert_citation_markers <- function(text, citations, sources) {
-  locations <- list()
-
-  for (citation in citations) {
-    span <- citation@grounded_span
-    if (is.null(span) || identical(span, "")) {
-      next
-    }
-
-    match <- gregexpr(span, text, fixed = TRUE)[[1]]
-    if (identical(match, -1L) || length(match) != 1) {
-      next
-    }
-
-    source_number <- match(
-      citation_source_key(citation@source),
-      map_chr(sources, citation_source_key)
-    )
-    end <- citation_marker_end(
-      text,
-      match + attr(match, "match.length") - 1L
-    )
-    key <- as.character(end)
-    locations[[key]] <- unique(c(locations[[key]], source_number))
-  }
-
-  if (length(locations) == 0) {
-    return(text)
-  }
-
-  ends <- sort(as.integer(names(locations)), decreasing = TRUE)
-  for (end in ends) {
-    marker <- paste0(
-      "[",
-      paste(locations[[as.character(end)]], collapse = ", "),
-      "]"
-    )
-    text <- paste0(
-      substr(text, 1, end),
-      marker,
-      substr(text, end + 1, nchar(text))
-    )
-  }
-
-  text
-}
-
-citation_marker_end <- function(text, end) {
-  next_text <- substr(text, end + 1, nchar(text))
-  if (grepl("^[-'][[:alnum:]]", next_text)) {
-    while (
-      end < nchar(text) &&
-        grepl("[-'[:alnum:]]", substr(text, end + 1, end + 1))
-    ) {
-      end <- end + 1L
-    }
-  }
-
-  punctuation_start <- end
-  while (
-    end < nchar(text) && grepl("[[:punct:]]", substr(text, end + 1, end + 1))
-  ) {
-    end <- end + 1L
-  }
-
-  if (
-    end < nchar(text) && !grepl("[[:space:]]", substr(text, end + 1, end + 1))
-  ) {
-    punctuation_start
-  } else {
-    end
-  }
 }
 
 format_citation_sources <- function(sources) {
