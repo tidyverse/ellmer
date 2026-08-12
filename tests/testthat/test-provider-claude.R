@@ -670,18 +670,20 @@ test_that("stream_content() resolves Anthropic citations across request turns", 
       extra = prior_fetch
     )
   )))
-  completion <- list(content = list(list(
-    type = "text",
-    text = "Grounded answer",
-    citations = list(list(
-      type = "char_location",
-      cited_text = "prior evidence",
-      document_index = 0L,
-      document_title = "Prior document",
-      start_char_index = 0L,
-      end_char_index = 14L
+  completion <- list(
+    content = list(list(
+      type = "text",
+      text = "Grounded answer",
+      citations = list(list(
+        type = "char_location",
+        cited_text = "prior evidence",
+        document_index = 0L,
+        document_title = "Prior document",
+        start_char_index = 0L,
+        end_char_index = 14L
+      ))
     ))
-  )))
+  )
 
   contents <- stream_content_with_turns(
     provider,

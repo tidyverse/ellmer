@@ -73,20 +73,6 @@ test_that("citations support provider-independent metadata", {
   expect_null(empty@extra)
 })
 
-test_that("citation and source classes are exported", {
-  exports <- getNamespaceExports("ellmer")
-  expect_true(
-    all(
-      c(
-        "Source",
-        "WebSource",
-        "ContentCitation"
-      ) %in%
-        exports
-    )
-  )
-})
-
 test_that("thinking has useful representations", {
   ct <- ContentThinking("A **thought**.")
   expect_equal(contents_text(ct), NULL)

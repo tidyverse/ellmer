@@ -648,7 +648,9 @@ test_that("streaming echo does not leak thinking content", {
         final_turn@contents
       },
       value_finish_reason = function(provider, result) "success",
-      value_turn = function(provider, model, result, has_type = FALSE) final_turn,
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
       emitter = function(echo, prefix = NULL) {
         function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
       }
@@ -739,7 +741,9 @@ test_that("streaming citation footer follows emitted marker newline state", {
         final_turn@contents
       },
       value_finish_reason = function(provider, result) "success",
-      value_turn = function(provider, model, result, has_type = FALSE) final_turn,
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
       emitter = function(echo, prefix = NULL) {
         function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
       }
@@ -816,7 +820,9 @@ test_that("citation-only streaming output terminates before footer", {
         final_turn@contents
       },
       value_finish_reason = function(provider, result) "success",
-      value_turn = function(provider, model, result, has_type = FALSE) final_turn,
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
       emitter = function(echo, prefix = NULL) {
         function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
       }
@@ -893,7 +899,9 @@ test_that("empty streaming text preserves emitted newline state", {
         final_turn@contents
       },
       value_finish_reason = function(provider, result) "success",
-      value_turn = function(provider, model, result, has_type = FALSE) final_turn,
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
       emitter = function(echo, prefix = NULL) {
         function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
       }
@@ -960,7 +968,9 @@ test_that("non-streaming echo preserves citation yields", {
       resp_body_json = function(response) list(),
       resp_timing = function(response) c(total = 0),
       value_finish_reason = function(provider, result) "success",
-      value_turn = function(provider, model, result, has_type = FALSE) final_turn,
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
       emitter = function(echo, prefix = NULL) {
         function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
       }
@@ -1169,7 +1179,9 @@ test_that("echo summarizes web response records without raw output", {
         list(ContentText("Web answer."))
       },
       value_finish_reason = function(provider, result) "success",
-      value_turn = function(provider, model, result, has_type = FALSE) final_turn
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      }
     )
 
     chat <- Chat$new(test_provider(), model = test_model())
@@ -1264,7 +1276,9 @@ test_that("echo preserves one trailing newline for complete turns", {
         list(ContentText("Complete answer.\n"))
       },
       value_finish_reason = function(provider, result) "success",
-      value_turn = function(provider, model, result, has_type = FALSE) final_turn,
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
       emitter = function(echo, prefix = NULL) {
         function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
       }
