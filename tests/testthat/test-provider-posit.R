@@ -46,6 +46,26 @@ test_that("gateway-specific errors get useful messages", {
   expect_equal(posit_error_body(string_error), "bad request")
 })
 
+test_that("model listing reports the context window", {
+  local_mocked_responses(function(req) {
+    response_json(
+      body = list(
+        chat = list(
+          list(
+            id = "claude-sonnet-5",
+            display_name = "Claude Sonnet 5",
+            max_context_length = 1000000
+          ),
+          list(id = "unknown", display_name = "Unknown")
+        )
+      )
+    )
+  })
+
+  models <- models_posit(credentials = \() "")
+  expect_equal(models$context_window, c(1000000L, NA_integer_))
+})
+
 # Checking the cache before calling models_posit() keeps an unauthenticated
 # machine from triggering (and hanging on) the interactive device flow.
 available_posit_models <- function() {

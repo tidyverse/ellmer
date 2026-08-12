@@ -1140,21 +1140,26 @@ method(models_list, ProviderGoogleGemini) <- function(provider) {
   json <- resp_body_json(resp)
 
   if (is_vertex) {
-    name <- map_chr(json$publisherModels, "[[", "name")
+    models <- json$publisherModels
+    name <- map_chr(models, "[[", "name")
     name <- gsub("^publishers/google/models/", "", name)
     # this is the closest to "generateContent" in "supportedGenerationMethods" for Gemini
     # https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/publishers.models
-    can_generate <- json$publisherModels |>
+    can_generate <- models |>
       map_lgl(\(x) "openGenerationAiStudio" %in% names(x$supportedActions))
   } else {
-    name <- map_chr(json$models, "[[", "name")
+    models <- json$models
+    name <- map_chr(models, "[[", "name")
     name <- gsub("^models/", "", name)
 
-    methods <- map(json$models, \(x) unlist(x$supportedGenerationMethods))
+    methods <- map(models, \(x) unlist(x$supportedGenerationMethods))
     can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)
   }
 
-  df <- data.frame(id = name)
+  df <- data.frame(
+    id = name,
+    context_window = map_token_limit(models, "inputTokenLimit")
+  )
   df <- cbind(df, match_prices(provider@name, df$id))
   df <- df[can_generate, ]
   unrowname(df[order(df$id), ])

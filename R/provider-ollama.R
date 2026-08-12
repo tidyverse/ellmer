@@ -216,15 +216,19 @@ method(models_list, ProviderOllama) <- function(provider) {
   modified_at <- as.POSIXct(map_chr(json$models, "[[", "modified_at"))
   size <- map_dbl(json$models, "[[", "size")
 
+  details <- map(names, function(model) {
+    tryCatch(
+      ollama_model_details(base_url, model, provider@credentials),
+      error = function(cnd) NULL
+    )
+  })
+
   df <- data.frame(
     id = names,
     created_at = modified_at,
     size = size,
-    capabilities = ollama_model_capabilities(
-      base_url,
-      names,
-      provider@credentials
-    )
+    capabilities = map_chr(details, \(x) paste(x$capabilities, collapse = ",")),
+    context_window = map_int(details, ollama_context_length)
   )
   df[order(-xtfrm(df$created_at)), ]
 }
@@ -255,18 +259,10 @@ ollama_model_details <- function(
   details
 }
 
-ollama_model_capabilities <- function(
-  base_url,
-  models,
-  credentials = ollama_credentials()
-) {
-  res <- map(models, function(m) {
-    tryCatch(
-      ollama_model_details(base_url, m, credentials),
-      error = function(e) NULL
-    )
-  })
-  map_chr(res, \(x) paste(x$capabilities, collapse = ","))
+ollama_context_length <- function(details) {
+  info <- details$model_info
+  arch <- info[["general.architecture"]]
+  as.integer(info[[paste0(arch, ".context_length")]] %||% NA)
 }
 
 is_local_ollama <- function(base_url) {

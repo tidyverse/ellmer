@@ -1057,7 +1057,8 @@ method(models_list, ProviderAnthropic) <- function(provider) {
   df <- data.frame(
     id = id,
     name = display_name,
-    created_at = created_at
+    created_at = created_at,
+    context_window = map_token_limit(json$data, "max_input_tokens")
   )
   df <- cbind(df, match_prices("Anthropic", df$id))
   df[order(-xtfrm(df$created_at)), ]

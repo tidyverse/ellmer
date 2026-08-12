@@ -111,7 +111,8 @@ models_posit <- function(
 
   data.frame(
     id = map_chr(json$chat, "[[", "id"),
-    name = map_chr(json$chat, "[[", "display_name")
+    name = map_chr(json$chat, "[[", "display_name"),
+    context_window = map_token_limit(json$chat, "max_context_length")
   )
 }
 

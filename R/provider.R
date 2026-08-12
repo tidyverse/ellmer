@@ -328,6 +328,24 @@ method(models_list, new_S3_class("Chat")) <- function(provider) {
   models_list(provider$get_provider())
 }
 
+the$context_windows <- new_environment()
+
+model_context_window <- function(provider, model) {
+  key <- paste(provider@name, provider@base_url, model, sep = "|")
+  if (env_has(the$context_windows, key)) {
+    return(the$context_windows[[key]])
+  }
+
+  models <- try_fetch(
+    models_list(provider),
+    not_implemented = function(cnd) NULL
+  )
+  limit <- models$context_window[match(model, models$id)] %||% NA_integer_
+
+  the$context_windows[[key]] <- limit
+  limit
+}
+
 # Batch AI ---------------------------------------------------------------
 
 # Does the provider support batch uploads?

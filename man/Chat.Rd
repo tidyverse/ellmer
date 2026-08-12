@@ -40,6 +40,7 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
     \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
     \item \href{#method-Chat-token_count}{\code{Chat$token_count()}}
+    \item \href{#method-Chat-get_context_window}{\code{Chat$get_context_window()}}
     \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
     \item \href{#method-Chat-chat}{\code{Chat$chat()}}
     \item \href{#method-Chat-chat_structured}{\code{Chat$chat_structured()}}
@@ -339,6 +340,27 @@ extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
   }
   \subsection{Returns}{
     The estimated number of input tokens.
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_context_window"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_context_window}{}}}
+\subsection{\code{Chat$get_context_window()}}{
+  The size of the current model's context window, in tokens,
+as reported by the provider. Compare it to the input tokens in
+\verb{$get_tokens()} to see how much of the window a conversation has used.
+
+This requires a request to the provider's model listing endpoint, so
+the result is cached for the rest of the session.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$get_context_window()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A single integer, or \code{NA} if the provider doesn't list models
+or doesn't report a window for this one.
   }
 }
 

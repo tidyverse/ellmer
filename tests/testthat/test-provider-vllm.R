@@ -14,5 +14,24 @@ test_that("can make simple streaming request", {
 })
 
 test_that("can list models", {
-  test_models(\(...) models_vllm("https://llm.nrp-nautilus.io/"))
+  test_models(
+    \(...) models_vllm("https://llm.nrp-nautilus.io/"),
+    has_context_window = TRUE
+  )
+})
+
+test_that("model listing reports the context window", {
+  local_mocked_responses(function(req) {
+    response_json(
+      body = list(
+        data = list(
+          list(id = "qwen3", max_model_len = 40960),
+          list(id = "unknown")
+        )
+      )
+    )
+  })
+
+  models <- models_vllm("https://example.com", credentials = \() "")
+  expect_equal(models$context_window, c(40960L, NA_integer_))
 })

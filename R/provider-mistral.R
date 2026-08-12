@@ -165,12 +165,13 @@ method(models_list, ProviderMistral) <- function(provider) {
 
   id <- map_chr(json$data, `[[`, "id")
   display_name <- map_chr(json$data, `[[`, "name")
-  created_at <- as.POSIXct(map_int(json$data, `[[`, "created"))
+  created_at <- .POSIXct(map_int(json$data, `[[`, "created"))
 
   df <- data.frame(
     id = id,
     name = display_name,
-    created_at = created_at
+    created_at = created_at,
+    context_window = map_token_limit(json$data, "max_context_length")
   )
   df <- cbind(df, match_prices("Mistral", df$id))
   df
