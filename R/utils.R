@@ -267,6 +267,10 @@ match_prices <- function(provider, id) {
   p
 }
 
+map_token_limit <- function(models, field) {
+  map_int(models, \(model) as.integer(model[[field]] %||% NA))
+}
+
 base64_enc <- function(path, raw) {
   check_exclusive(path, raw)
   if (!missing(path)) {

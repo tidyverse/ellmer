@@ -1,5 +1,26 @@
 test_that("can list models", {
-  test_models(models_groq)
+  test_models(models_groq, has_context_window = TRUE)
+})
+
+test_that("model listing reports the context window when present", {
+  local_mocked_responses(function(req) {
+    response_json(
+      body = list(
+        data = list(
+          list(
+            id = "llama3-8b-8192",
+            created = 1693721698,
+            owned_by = "Meta",
+            context_window = 8192
+          ),
+          list(id = "unknown", created = 1693721698, owned_by = "Groq")
+        )
+      )
+    )
+  })
+
+  models <- models_groq(credentials = \() "")
+  expect_equal(models$context_window, c(8192L, NA_integer_))
 })
 
 # Common provider interface -----------------------------------------------

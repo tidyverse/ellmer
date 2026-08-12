@@ -167,6 +167,10 @@ method(models_list, ProviderDeepSeek) <- function(provider) {
   id <- map_chr(json$data, "[[", "id")
   owned_by <- map_chr(json$data, "[[", "owned_by")
 
-  df <- data.frame(id = id, owned_by = owned_by)
+  df <- data.frame(
+    id = id,
+    owned_by = owned_by,
+    context_window = rep(NA_integer_, length(id))
+  )
   cbind(df, match_prices(provider@name, df$id))
 }

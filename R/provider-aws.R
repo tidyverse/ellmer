@@ -291,7 +291,8 @@ method(models_list, ProviderAWSBedrock) <- function(provider) {
   df <- data.frame(
     id = map_chr(models, "[[", "modelId"),
     name = map_chr(models, "[[", "modelName"),
-    provider = map_chr(models, "[[", "providerName")
+    provider = map_chr(models, "[[", "providerName"),
+    context_window = rep(NA_integer_, length(models))
   )
   cbind(df, match_prices("AWS/Bedrock", df$id))
 }
@@ -928,7 +929,10 @@ aws_mantle_models <- function(provider) {
   resp <- req_perform(req)
   json <- resp_body_json(resp)
 
-  df <- data.frame(id = map_chr(json$data, "[[", "id"))
+  df <- data.frame(
+    id = map_chr(json$data, "[[", "id"),
+    context_window = rep(NA_integer_, length(json$data))
+  )
   cbind(df, match_prices(provider@name, df$id))
 }
 
