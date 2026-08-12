@@ -18,6 +18,64 @@ test_that("can list models", {
   test_models(models_lmstudio)
 })
 
+test_that("model listing joins the context window from the native endpoint", {
+  local_mocked_responses(function(req) {
+    if (grepl("api/v1/models", req$url)) {
+      response_json(
+        body = list(
+          models = list(
+            list(key = "qwen/qwen3-0.6b", max_context_length = 32768),
+            list(key = "nomic-embed-text-v1.5", max_context_length = 2048)
+          )
+        )
+      )
+    } else {
+      response_json(
+        body = list(
+          data = list(
+            list(id = "qwen/qwen3-0.6b"),
+            list(id = "nomic-embed-text-v1.5")
+          )
+        )
+      )
+    }
+  })
+
+  models <- models_lmstudio(credentials = \() "")
+  expect_equal(models$context_window, c(32768L, 2048L))
+})
+
+test_that("model listing survives the native endpoint changing shape", {
+  local_mocked_responses(function(req) {
+    if (grepl("api/v1/models", req$url)) {
+      response_json(body = list(models = list(list(max_context_length = 4096))))
+    } else {
+      response_json(body = list(data = list(list(id = "qwen/qwen3-0.6b"))))
+    }
+  })
+
+  expect_equal(
+    models_lmstudio(credentials = \() "")$context_window,
+    NA_integer_
+  )
+})
+
+test_that("model listing survives a server without the native endpoint", {
+  local_mocked_responses(function(req) {
+    if (grepl("api/v1/models", req$url)) {
+      # LM Studio answers an unknown route with 200 and an error body
+      response_json(body = list(error = "Unexpected endpoint or method."))
+    } else {
+      response_json(body = list(data = list(list(id = "qwen/qwen3-0.6b"))))
+    }
+  })
+
+  expect_equal(
+    models_lmstudio(credentials = \() "")$context_window,
+    NA_integer_
+  )
+})
+
 test_that("includes list of models in error message if `model` is missing", {
   skip_if_no_lmstudio()
 

@@ -19,7 +19,63 @@ test_that("can handle errors", {
 })
 
 test_that("can list models", {
-  test_models(models_google_gemini)
+  test_models(models_google_gemini, has_context_window = TRUE)
+})
+
+test_that("vertex model listing keeps generative models but reports no window", {
+  local_mocked_responses(function(req) {
+    response_json(
+      body = list(
+        publisherModels = list(
+          list(
+            name = "publishers/google/models/gemini-2.5-flash",
+            versionId = "gemini-2.5-flash",
+            launchStage = "GA",
+            supportedActions = list(openGenerationAiStudio = list())
+          ),
+          list(
+            name = "publishers/google/models/codegemma",
+            openSourceCategory = "GOOGLE_OWNED_OSS_WITH_GOOGLE_CHECKPOINT",
+            supportedActions = list(
+              openNotebook = list(),
+              openNotebooks = list()
+            )
+          )
+        )
+      )
+    )
+  })
+
+  models <- models_google_vertex(
+    location = "us-central1",
+    project_id = "test-project",
+    credentials = \() ""
+  )
+  expect_equal(models$id, "gemini-2.5-flash")
+  expect_equal(models$context_window, NA_integer_)
+})
+
+test_that("model listing reports the context window", {
+  local_mocked_responses(function(req) {
+    response_json(
+      body = list(
+        models = list(
+          list(
+            name = "models/gemini-3.5-flash",
+            inputTokenLimit = 1048576,
+            supportedGenerationMethods = list("generateContent")
+          ),
+          list(
+            name = "models/unknown",
+            supportedGenerationMethods = list("generateContent")
+          )
+        )
+      )
+    )
+  })
+
+  models <- models_google_gemini(credentials = \() "")
+  expect_equal(models$context_window, c(1048576L, NA_integer_))
 })
 
 # Common provider interface -----------------------------------------------

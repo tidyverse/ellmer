@@ -117,6 +117,25 @@ test_that("can set model", {
   expect_equal(chat$get_model(), "def")
 })
 
+test_that("can get the model's context window", {
+  local_context_windows()
+  local_mocked_responses(function(req) {
+    response_json(
+      body = list(data = list(list(id = "qwen3", max_model_len = 40960)))
+    )
+  })
+  chat <- Chat$new(
+    provider = ProviderVllm(
+      name = "VLLM",
+      base_url = "https://example.com",
+      credentials = \() ""
+    ),
+    model = test_model("qwen3")
+  )
+
+  expect_equal(chat$get_context_window(), 40960L)
+})
+
 test_that("setting turns usually preserves, but can set system prompt", {
   chat <- chat_openai_test(system_prompt = "You're a funny guy")
   chat$set_turns(list())

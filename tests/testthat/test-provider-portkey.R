@@ -52,3 +52,13 @@ test_that("model without @ prefix works without virtual_key (#872)", {
     "arn:aws:bedrock:us-east-1:123456:model/my-model"
   )
 })
+
+test_that("model listing survives an empty catalogue", {
+  local_mocked_responses(function(req) {
+    response_json(body = list(object = "list", total = 0, data = list()))
+  })
+
+  models <- models_portkey(api_key = "key")
+  expect_equal(nrow(models), 0)
+  expect_type(models$context_window, "integer")
+})
