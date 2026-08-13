@@ -79,7 +79,9 @@ Automatically managed by \pkg{ellmer}.}
 \item{tool}{ellmer automatically matches a tool request to the tools defined
 for the chatbot. If \code{NULL}, the request did not match a defined tool.}
 
-\item{value}{The results of calling the tool function, if it succeeded.}
+\item{value}{The results of calling the tool function, if it succeeded.
+\code{NULL}, a string, an atomic vector, a \code{json}-class object, a \link{Content}
+object, or a list of \link{Content} objects.}
 
 \item{error}{The error message, as a string, or the error condition thrown
 as a result of a failure when calling the tool function. Must be \code{NULL}

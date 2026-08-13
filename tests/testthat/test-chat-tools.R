@@ -425,7 +425,7 @@ test_that("invoke_tool returns a ContentToolResult", {
   expect_s3_class(res, "ellmer::ContentToolResult")
   expect_equal(res@error, NULL)
   expect_false(tool_errored(res))
-  expect_equal(res@value, 1)
+  expect_equal(res@value, to_json(1))
   expect_s3_class(res@request, "ellmer::ContentToolRequest")
   expect_equal(res@request@id, "x")
   expect_equal(res@request@tool, tool_f)
@@ -506,7 +506,7 @@ test_that("invoke_tool_async returns a ContentToolResult", {
   expect_s3_class(res, "ellmer::ContentToolResult")
   expect_equal(res@error, NULL)
   expect_false(tool_errored(res))
-  expect_equal(res@value, 1)
+  expect_equal(res@value, to_json(1))
   expect_s3_class(res@request, "ellmer::ContentToolRequest")
   expect_equal(res@request@id, "x")
   expect_equal(res@request@tool, tool_f)
@@ -635,7 +635,10 @@ test_that("invoke_tools_async() yields tool requests and promises results", {
 test_that("invoke_tools() converts to R data structures", {
   out <- NULL
   tool <- tool(
-    function(x, y) out <<- list(x = x, y = y),
+    function(x, y) {
+      out <<- list(x = x, y = y)
+      return()
+    },
     description = "A tool",
     arguments = list(
       x = type_array(type_number()),
@@ -662,7 +665,10 @@ test_that("invoke_tools() converts to R data structures", {
 test_that("invoke_tools_async() converts to R data structures", {
   out <- NULL
   tool <- tool(
-    function(x, y) out <<- list(x = x, y = y),
+    function(x, y) {
+      out <<- list(x = x, y = y)
+      return()
+    },
     description = "A tool",
     arguments = list(
       x = type_array(type_number()),
@@ -690,7 +696,10 @@ test_that("invoke_tools_async() converts to R data structures", {
 test_that("invoke_tools() can invoke tools with args with default values", {
   out <- NULL
   tool <- tool(
-    function(x, y, z = "z") out <<- list(x = x, y = y, z = z),
+    function(x, y, z = "z") {
+      out <<- list(x = x, y = y, z = z)
+      return()
+    },
     description = "A tool",
     arguments = list(
       x = type_array(type_number()),
@@ -720,7 +729,10 @@ test_that("invoke_tools() can invoke tools with args with default values", {
 test_that("invoke_tools_async() can invoke tools with args with default values", {
   out <- NULL
   tool <- tool(
-    function(x, y, z = "z") out <<- list(x = x, y = y, z = z),
+    function(x, y, z = "z") {
+      out <<- list(x = x, y = y, z = z)
+      return()
+    },
     description = "A tool",
     arguments = list(
       x = type_array(type_number()),
@@ -845,4 +857,28 @@ test_that("can resume chat after dangling tool requests", {
 
   # resume chat and get answer, not error
   expect_match(chat$chat("try again"), "2001")
+})
+
+# normalize_tool_result -------------------------------------------------------
+
+test_that("normalize_tool_result handles different return types", {
+  expect_null(normalize_tool_result(NULL))
+
+  json_val <- jsonlite::toJSON(list(a = 1), auto_unbox = TRUE)
+  expect_identical(normalize_tool_result(json_val), json_val)
+
+  content <- ContentText("hi")
+  expect_identical(normalize_tool_result(content), content)
+
+  content_list <- list(ContentText("a"), ContentText("b"))
+  expect_identical(normalize_tool_result(content_list), content_list)
+
+  expect_equal(normalize_tool_result("hello"), "hello")
+  expect_equal(normalize_tool_result(c("a", "b", "c")), "a\nb\nc")
+
+  expect_equal(normalize_tool_result(1), to_json(1))
+  expect_equal(normalize_tool_result(TRUE), to_json(TRUE))
+
+  expect_snapshot(normalize_tool_result(data.frame(x = 1)))
+  expect_snapshot(normalize_tool_result(list(a = 1, b = 2)))
 })

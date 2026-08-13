@@ -315,6 +315,8 @@ method(format, ContentToolRequest) <- function(
 #' @rdname Content
 #' @export
 #' @param value The results of calling the tool function, if it succeeded.
+#'   `NULL`, a string, an atomic vector, a `json`-class object, a [Content]
+#'   object, or a list of [Content] objects.
 #' @param error The error message, as a string, or the error condition thrown
 #'   as a result of a failure when calling the tool function. Must be `NULL`
 #'   when the tool call is successful.
@@ -382,25 +384,8 @@ tool_error_string <- function(x) {
 tool_string <- function(x) {
   if (tool_errored(x)) {
     paste0("Tool calling failed with error ", tool_error_string(x))
-  } else if (inherits(x@value, "AsIs")) {
-    x@value
-  } else if (inherits(x@value, "json")) {
-    x@value
-  } else if (is.character(x@value)) {
-    paste(x@value, collapse = "\n")
   } else {
-    withCallingHandlers(
-      to_json(x@value),
-      error = function(err) {
-        cli::cli_abort(
-          c(
-            "Could not convert tool result from {.obj_type_friendly {x@value}} to JSON.",
-            "i" = "If you are the tool author, update the tool to convert the result to a string or JSON."
-          ),
-          parent = err
-        )
-      }
-    )
+    x@value
   }
 }
 

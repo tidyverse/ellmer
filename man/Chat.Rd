@@ -75,10 +75,13 @@ chat$chat("Tell me a funny joke")
       \item{\code{echo}}{One of the following options:
 \itemize{
 \item \code{none}: don't emit any output (default when running in a function).
-\item \code{output}: echo text and tool-calling output as it streams in (default
-when running at the console).
+\item \code{output}: echo text and tool-calling output after the turn completes
+(default when running at the console).
 \item \code{all}: echo all input and output.
 }
+
+Console display occurs after a turn completes so ellmer can add citation
+markers and a source list to the response.
 
 Note this only affects the \code{chat()} method. You can override the default
 by setting the \code{ellmer_echo} option.}
