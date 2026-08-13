@@ -1082,7 +1082,9 @@ cache_control <- function(provider) {
 }
 
 has_claude_structured_output <- function(model) {
-  # Matches Claude 4.5+ models
+  # Matches Claude 4.5+ models, including major versions 5 and later.
+  # The name segment is restricted to [a-z] so that version-first names
+  # (claude-3-5-sonnet-*, claude-4-sonnet-*) don't match.
   # https://platform.claude.com/docs/en/build-with-claude/structured-outputs
-  grepl("^claude-\\w+-4-[5-9](-|$)", model)
+  grepl("^claude-[a-z]+-(4-[5-9]|[5-9]|[1-9]\\d)(-|$)", model)
 }

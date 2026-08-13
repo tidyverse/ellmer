@@ -66,6 +66,27 @@ test_that("can extract data", {
   test_data_extraction(chat_fun)
 })
 
+test_that("has_claude_structured_output() matches Claude 4.5+ and 5+ models", {
+  expect_all_true(has_claude_structured_output(c(
+    "claude-sonnet-4-5",
+    "claude-opus-4-6",
+    "claude-sonnet-5",
+    "claude-sonnet-5-20260201",
+    "claude-sonnet-6",
+    "claude-opus-7-1",
+    "claude-haiku-10"
+  )))
+  expect_all_equal(
+    has_claude_structured_output(c(
+      "claude-sonnet-4-0",
+      "claude-3-5-sonnet-20241022",
+      "claude-3-7-sonnet-20250219",
+      "claude-4-sonnet-20250514"
+    )),
+    FALSE
+  )
+})
+
 test_that("can use images", {
   vcr::local_cassette("anthropic-images")
   chat_fun <- chat_anthropic_test
