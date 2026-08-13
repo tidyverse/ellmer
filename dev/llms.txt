@@ -456,6 +456,7 @@ provider.
   round of conversation
 - [`Content()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   [`ContentText()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
+  [`ContentCitation()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   [`ContentImage()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   [`ContentImageRemote()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   [`ContentImageInline()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
@@ -464,6 +465,14 @@ provider.
   [`ContentThinking()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   [`ContentPDF()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   : Content types received from and sent to a chatbot
+- [`Source()`](https://ellmer.tidyverse.org/dev/reference/Source.md)
+  [`WebSource()`](https://ellmer.tidyverse.org/dev/reference/Source.md)
+  **\[experimental\]** : Sources referenced by model content
+- [`ContentToolRequestSearch()`](https://ellmer.tidyverse.org/dev/reference/ContentWebActivity.md)
+  [`ContentToolResponseSearch()`](https://ellmer.tidyverse.org/dev/reference/ContentWebActivity.md)
+  [`ContentToolRequestFetch()`](https://ellmer.tidyverse.org/dev/reference/ContentWebActivity.md)
+  [`ContentToolResponseFetch()`](https://ellmer.tidyverse.org/dev/reference/ContentWebActivity.md)
+  **\[experimental\]** : Built-in web activity content
 - [`TypeBasic()`](https://ellmer.tidyverse.org/dev/reference/Type.md)
   [`TypeEnum()`](https://ellmer.tidyverse.org/dev/reference/Type.md)
   [`TypeArray()`](https://ellmer.tidyverse.org/dev/reference/Type.md)

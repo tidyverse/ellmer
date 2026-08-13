@@ -12,8 +12,13 @@ represent various types of content, allowing you to more easily write
 code that works with any chatbot. This set of classes represents types
 of content that can be either sent to and received from a provider:
 
-- `ContentText`: simple text (often in markdown format). This is the
-  only type of content that can be streamed live as it's received.
+- `ContentText`: simple text (often in markdown format). Text streams
+  yield only text and thinking content, while content streams can also
+  yield annotations such as citations and web activity.
+
+- `ContentCitation`: provider-supplied evidence metadata associated with
+  generated text. Citations are preserved in conversation history but
+  are not sent back to providers.
 
 - `ContentImageRemote` and `ContentImageInline`: images, either as a
   pointer to a remote URL or included inline in the object. See
@@ -38,6 +43,13 @@ of content that can be either sent to and received from a provider:
 Content()
 
 ContentText(text = stop("Required"))
+
+ContentCitation(
+  source = NULL,
+  grounded_span = NULL,
+  cited_quote = NULL,
+  extra = NULL
+)
 
 ContentImage()
 
@@ -69,6 +81,24 @@ ContentPDF(
 - text:
 
   A single string.
+
+- source:
+
+  A [Source](https://ellmer.tidyverse.org/dev/reference/Source.md)
+  identifying the cited evidence, or `NULL` when the provider does not
+  supply one.
+
+- grounded_span:
+
+  The answer text grounded by the citation, or `NULL`.
+
+- cited_quote:
+
+  The source-side evidence quoted by the provider, or `NULL`.
+
+- extra:
+
+  Additional data.
 
 - url:
 
@@ -103,10 +133,6 @@ ContentPDF(
 
   ellmer automatically matches a tool request to the tools defined for
   the chatbot. If `NULL`, the request did not match a defined tool.
-
-- extra:
-
-  Additional data.
 
 - value:
 

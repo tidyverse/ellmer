@@ -2,6 +2,13 @@
 
 ## ellmer (development version)
 
+- ellmer now preserves provider citations in chat history and streamed
+  content, and displays cited sources in console output. Enable cited
+  web results with `chat$register_tool()`, using tools such as
+  [`openai_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/openai_tool_web_search.md),
+  [`claude_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_search.md),
+  or `claude_tool_web_fetch(citations = TRUE)`
+  ([\#1068](https://github.com/tidyverse/ellmer/issues/1068)).
 - `Chat` gains a `$token_count()` method that estimates the number of
   tokens in new input using the provider’s token counting endpoint
   ([@thisisnic](https://github.com/thisisnic),
