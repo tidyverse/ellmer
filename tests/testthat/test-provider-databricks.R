@@ -204,7 +204,14 @@ test_that("chat_databricks() serializes tools correctly", {
       type = "function",
       "function" = list(
         name = "current_date",
-        description = "Returns the current date in ISO 8601 format."
+        description = "Returns the current date in ISO 8601 format.",
+        parameters = list(
+          type = "object",
+          description = "",
+          properties = set_names(list()),
+          required = list(),
+          additionalProperties = FALSE
+        )
       )
     )
   )

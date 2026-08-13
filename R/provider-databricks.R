@@ -249,11 +249,9 @@ method(as_json, list(ProviderDatabricks, ToolDef)) <- function(
     "function" = compact(list(
       name = x@name,
       description = x@description,
-      # Use the same parameter encoding as the OpenAI provider, but only if
-      # there actually are parameters.
-      parameters = if (length(x@arguments@properties) != 0) {
-        as_json(provider, x@arguments, ...)
-      }
+      # Use the same parameter encoding as the OpenAI provider. Databricks
+      # requires `parameters` even when the tool has no arguments (#1084).
+      parameters = as_json(provider, x@arguments, ...)
     ))
   ))
 }
