@@ -136,7 +136,9 @@ ContentPDF(
 
 - value:
 
-  The results of calling the tool function, if it succeeded.
+  The results of calling the tool function, if it succeeded. `NULL`, a
+  string, an atomic vector, a `json`-class object, a Content object, or
+  a list of Content objects.
 
 - error:
 

@@ -108,10 +108,13 @@ A Chat object
 
   - `none`: don't emit any output (default when running in a function).
 
-  - `output`: echo text and tool-calling output as it streams in
+  - `output`: echo text and tool-calling output after the turn completes
     (default when running at the console).
 
   - `all`: echo all input and output.
+
+  Console display occurs after a turn completes so ellmer can add
+  citation markers and a source list to the response.
 
   Note this only affects the
   [`chat()`](https://ellmer.tidyverse.org/dev/reference/chat-any.md)

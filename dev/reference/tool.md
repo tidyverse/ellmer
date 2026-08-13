@@ -29,11 +29,32 @@ tool(
 - fun:
 
   The function to be invoked when the tool is called. The return value
-  of the function is sent back to the chatbot.
+  of the function is sent back to the chatbot. The function should
+  return one of:
 
-  Expert users can customize the tool result by returning a
-  [ContentToolResult](https://ellmer.tidyverse.org/dev/reference/Content.md)
-  object.
+  - A character vector.
+
+  - An atomic vector.
+
+  - A `json`-class object (e.g. from
+    [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)).
+
+  - A [Content](https://ellmer.tidyverse.org/dev/reference/Content.md)
+    object (e.g.
+    [ContentImageInline](https://ellmer.tidyverse.org/dev/reference/Content.md)).
+
+  - A list of
+    [Content](https://ellmer.tidyverse.org/dev/reference/Content.md)
+    objects.
+
+  - A
+    [ContentToolResult](https://ellmer.tidyverse.org/dev/reference/Content.md)
+    object (expert users who want to customize the tool result
+    directly).
+
+  Other return types (e.g. data frames, lists) are **\[deprecated\]**
+  and will error in a future release. Convert them to a string or JSON
+  before returning.
 
 - description:
 

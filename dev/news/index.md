@@ -70,6 +70,16 @@
   `provider@extra_args`; use the `Model` object instead
   ([@thisisnic](https://github.com/thisisnic),
   [\#499](https://github.com/tidyverse/ellmer/issues/499)).
+- [`tool()`](https://ellmer.tidyverse.org/dev/reference/tool.md)
+  functions that return complex objects like data frames or lists now
+  produce a deprecation warning. Tool functions should return a
+  character vector, an atomic vector, a JSON string (from
+  [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)),
+  or a `Content` object. Use
+  [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)
+  to convert complex objects before returning
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#858](https://github.com/tidyverse/ellmer/issues/858)).
 
 ## ellmer 0.4.2
 

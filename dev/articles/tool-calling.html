@@ -242,18 +242,20 @@ possible.</p>
 <code><a href="../reference/type_boolean.html">type_object()</a></code>. We recommend keeping them as simple as
 possible, focusing on basic scalar types as much as you can.</p>
 <p>The output of the tool call will be interpreted by the LLM, just as
-if you had typed that information into the data. That means you’ll
-generally want to produce text or other atomic vectors. For more complex
-data, ellmer will automatically serialize the result to JSON, which LLMs
-generally seem to be good at understanding. If you must have more direct
-control of the structure of the JSON that’s returned, you can return a
-JSON-serializable value wrapped in <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code>, which ellmer will
-leave alone until the entire request is JSON-serialized.</p>
+if you had typed that information into the chat. Tool functions should
+return a string, an atomic vector, a JSON string (e.g. from
+<code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code>), or a <code>Content</code> object.</p>
+<p>For complex data like data frames or lists, use
+<code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code> to convert them explicitly before
+returning. Returning JSON doesn’t let the model do anything extra with
+the data; unlike a program, it can’t parse the JSON and compute with the
+values. If the answer requires exact computation, compute it in the
+tool; the model’s job is only to read the result.</p>
 <p>To show off these ideas, here’s a slightly more complicated example
 simulating a weather API that returns data for multiple cities at once.
-The <code>get_weather()</code> function returns a data frame that ellmer
-will automatically convert into JSON in row-major format, which our
-experiments suggest is good for LLMs.</p>
+The <code>get_weather()</code> function returns a data frame converted
+to JSON in row-major format, which our experiments suggest is good for
+LLMs.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">get_weather</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">cities</span><span class="op">)</span> <span class="op">{</span></span>
@@ -261,12 +263,13 @@ experiments suggest is good for LLMs.</p>
 <span>    <span class="va">temperature</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"cool"</span>, Houston <span class="op">=</span> <span class="st">"hot"</span>, Chicago <span class="op">=</span> <span class="st">"warm"</span><span class="op">)</span></span>
 <span>    <span class="va">wind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>London <span class="op">=</span> <span class="st">"strong"</span>, Houston <span class="op">=</span> <span class="st">"weak"</span>, Chicago <span class="op">=</span> <span class="st">"strong"</span><span class="op">)</span></span>
 <span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>      city <span class="op">=</span> <span class="va">cities</span>,</span>
 <span>      raining <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">raining</span><span class="op">[</span><span class="va">cities</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>      temperature <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">temperature</span><span class="op">[</span><span class="va">cities</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>      wind <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">wind</span><span class="op">[</span><span class="va">cities</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
+<span>    <span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">toJSON</a></span><span class="op">(</span><span class="va">df</span>, auto_unbox <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="op">}</span>,</span>
 <span>  name <span class="op">=</span> <span class="st">"get_weather"</span>,</span>
 <span>  description <span class="op">=</span> <span class="st">"</span></span>

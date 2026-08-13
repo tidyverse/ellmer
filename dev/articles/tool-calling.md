@@ -196,20 +196,23 @@ We recommend keeping them as simple as possible, focusing on basic
 scalar types as much as you can.
 
 The output of the tool call will be interpreted by the LLM, just as if
-you had typed that information into the data. That means you’ll
-generally want to produce text or other atomic vectors. For more complex
-data, ellmer will automatically serialize the result to JSON, which LLMs
-generally seem to be good at understanding. If you must have more direct
-control of the structure of the JSON that’s returned, you can return a
-JSON-serializable value wrapped in
-[`I()`](https://rdrr.io/r/base/AsIs.html), which ellmer will leave alone
-until the entire request is JSON-serialized.
+you had typed that information into the chat. Tool functions should
+return a string, an atomic vector, a JSON string (e.g. from
+[`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)),
+or a `Content` object.
+
+For complex data like data frames or lists, use
+[`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)
+to convert them explicitly before returning. Returning JSON doesn’t let
+the model do anything extra with the data; unlike a program, it can’t
+parse the JSON and compute with the values. If the answer requires exact
+computation, compute it in the tool; the model’s job is only to read the
+result.
 
 To show off these ideas, here’s a slightly more complicated example
 simulating a weather API that returns data for multiple cities at once.
-The `get_weather()` function returns a data frame that ellmer will
-automatically convert into JSON in row-major format, which our
-experiments suggest is good for LLMs.
+The `get_weather()` function returns a data frame converted to JSON in
+row-major format, which our experiments suggest is good for LLMs.
 
 ``` r
 
@@ -219,12 +222,13 @@ get_weather <- tool(
     temperature <- c(London = "cool", Houston = "hot", Chicago = "warm")
     wind <- c(London = "strong", Houston = "weak", Chicago = "strong")
 
-    data.frame(
+    df <- data.frame(
       city = cities,
       raining = unname(raining[cities]),
       temperature = unname(temperature[cities]),
       wind = unname(wind[cities])
     )
+    jsonlite::toJSON(df, auto_unbox = TRUE)
   },
   name = "get_weather",
   description = "
