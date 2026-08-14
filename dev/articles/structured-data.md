@@ -570,4 +570,4 @@ conversation.
 | provider  | model           | input | output | cached_input |  price |
 |:----------|:----------------|------:|-------:|-------------:|-------:|
 | OpenAI    | gpt-5.6-terra   |  1664 |   1423 |         4331 | \$0.02 |
-| Anthropic | claude-sonnet-5 |   720 |    133 |            0 | \$0.00 |
+| Anthropic | claude-sonnet-5 |   317 |     95 |            0 | \$0.00 |
