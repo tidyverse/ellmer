@@ -40,6 +40,10 @@
   captured as thinking content
   ([@thisisnic](https://github.com/thisisnic),
   [\#1078](https://github.com/tidyverse/ellmer/issues/1078)).
+- [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md)
+  no longer errors when a registered tool has no arguments
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1084](https://github.com/tidyverse/ellmer/issues/1084)).
 - [`chat_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
   and
   [`models_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
