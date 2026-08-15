@@ -370,8 +370,24 @@ extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
 Upload a file to the chat's provider, once, so later turns can
 reference it by id instead of re-sending its contents. Prefer this
 over \code{\link[=content_pdf_file]{content_pdf_file()}}/\code{\link[=content_image_file]{content_image_file()}} when a file is large
-or used across many turns. Only supported by \code{\link[=chat_openai]{chat_openai()}},
-\code{\link[=chat_anthropic]{chat_anthropic()}}, and \code{\link[=chat_google_gemini]{chat_google_gemini()}}; other providers error.
+or used across many turns.
+
+File management is supported by \code{\link[=chat_openai]{chat_openai()}}, \code{\link[=chat_anthropic]{chat_anthropic()}},
+and \code{\link[=chat_google_gemini]{chat_google_gemini()}}; other providers error. Provider notes:
+\itemize{
+\item Anthropic's Files API is in beta; ellmer adds the required
+\code{anthropic-beta} header automatically whenever a request references
+an uploaded file.
+\item Gemini files expire after 48 hours, and uploading waits until Gemini
+finishes processing the file (which can take a while for large
+video/audio), so the returned reference is always ready to use. The
+Files API isn't available on Vertex AI; there, upload the file to a
+Cloud Storage bucket and reference it with
+\code{ContentUploaded(uri = "gs://bucket/object", mime_type = ...)}.
+\item An OpenAI upload can also be referenced from a
+\code{\link[=chat_openai_compatible]{chat_openai_compatible()}} chat pointed at OpenAI's Chat Completions
+API, except for images, which that API can't reference by id.
+}
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$file_upload(path, mime_type = NULL)}

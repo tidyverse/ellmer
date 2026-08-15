@@ -269,8 +269,23 @@ Chat <- R6::R6Class(
     #' Upload a file to the chat's provider, once, so later turns can
     #' reference it by id instead of re-sending its contents. Prefer this
     #' over [content_pdf_file()]/[content_image_file()] when a file is large
-    #' or used across many turns. Only supported by [chat_openai()],
-    #' [chat_anthropic()], and [chat_google_gemini()]; other providers error.
+    #' or used across many turns.
+    #'
+    #' File management is supported by [chat_openai()], [chat_anthropic()],
+    #' and [chat_google_gemini()]; other providers error. Provider notes:
+    #'
+    #' * Anthropic's Files API is in beta; ellmer adds the required
+    #'   `anthropic-beta` header automatically whenever a request references
+    #'   an uploaded file.
+    #' * Gemini files expire after 48 hours, and uploading waits until Gemini
+    #'   finishes processing the file (which can take a while for large
+    #'   video/audio), so the returned reference is always ready to use. The
+    #'   Files API isn't available on Vertex AI; there, upload the file to a
+    #'   Cloud Storage bucket and reference it with
+    #'   `ContentUploaded(uri = "gs://bucket/object", mime_type = ...)`.
+    #' * An OpenAI upload can also be referenced from a
+    #'   [chat_openai_compatible()] chat pointed at OpenAI's Chat Completions
+    #'   API, except for images, which that API can't reference by id.
     #' @param path Path to a file to upload.
     #' @param mime_type MIME type of the file. If not supplied, it's guessed
     #'   from the file extension.
