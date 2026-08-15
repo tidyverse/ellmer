@@ -48,7 +48,7 @@ method(file_list, ProviderAnthropic) <- function(provider, ...) {
     filename = map_chr(data, "[[", "filename"),
     mime_type = map_chr(data, "[[", "mime_type"),
     size_bytes = map_dbl(data, "[[", "size_bytes"),
-    created_at = as.POSIXct(map_chr(data, "[[", "created_at")),
+    created_at = parse_rfc3339(map_chr(data, "[[", "created_at")),
     expires_at = rep(NA, length(data)),
     downloadable = map_lgl(data, "[[", "downloadable")
   )
@@ -64,7 +64,7 @@ method(file_get, ProviderAnthropic) <- function(provider, id, ...) {
     filename = json$filename,
     mime_type = json$mime_type,
     size_bytes = json$size_bytes,
-    created_at = as.POSIXct(json$created_at),
+    created_at = parse_rfc3339(json$created_at),
     expires_at = NA,
     downloadable = json$downloadable
   )
@@ -163,7 +163,15 @@ claude_file_get <- function(
 ) {
   lifecycle::deprecate_soft("0.5.0", "claude_file_get()", "Chat$file_get()")
   provider <- anthropic_file_provider(base_url, beta_headers, credentials)
-  file_get(provider, file_id)
+  meta <- file_get(provider, file_id)
+
+  # Unlike Chat$file_get(), this wrapper keeps its released contract of
+  # returning an object that can be passed straight to $chat()
+  ContentUploaded(
+    uri = meta$id,
+    mime_type = meta$mime_type,
+    provider = "anthropic"
+  )
 }
 
 #' @export

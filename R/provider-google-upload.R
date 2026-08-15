@@ -213,8 +213,8 @@ method(file_list, ProviderGoogleGemini) <- function(provider, ...) {
     }),
     mime_type = map_chr(data, function(file) file$mimeType %||% NA_character_),
     size_bytes = as.numeric(map_chr(data, "[[", "sizeBytes")),
-    created_at = as.POSIXct(map_chr(data, "[[", "createTime")),
-    expires_at = as.POSIXct(map_chr(data, "[[", "expirationTime")),
+    created_at = parse_rfc3339(map_chr(data, "[[", "createTime")),
+    expires_at = parse_rfc3339(map_chr(data, "[[", "expirationTime")),
     name = map_chr(data, "[[", "name"),
     state = map_chr(data, "[[", "state")
   )
@@ -232,8 +232,8 @@ method(file_get, ProviderGoogleGemini) <- function(provider, id, ...) {
     filename = json$displayName,
     mime_type = json$mimeType,
     size_bytes = as.numeric(json$sizeBytes),
-    created_at = as.POSIXct(json$createTime),
-    expires_at = as.POSIXct(json$expirationTime),
+    created_at = parse_rfc3339(json$createTime),
+    expires_at = parse_rfc3339(json$expirationTime),
     name = json$name,
     state = json$state
   )

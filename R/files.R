@@ -74,6 +74,12 @@ as_file_id <- function(id, error_call = caller_env()) {
   }
 }
 
+# Parse RFC3339 timestamps like "2026-08-15T11:11:23.914838Z"; bare
+# as.POSIXct() silently drops the time component and uses the local timezone.
+parse_rfc3339 <- function(x) {
+  as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")
+}
+
 has_uploaded_content <- function(turns) {
   some(turns, function(turn) {
     some(turn@contents, function(content) S7_inherits(content, ContentUploaded))

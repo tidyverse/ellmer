@@ -727,11 +727,13 @@ method(file_list, ProviderOpenAI) <- function(provider, ...) {
     size_bytes = map_dbl(data, "[[", "bytes"),
     created_at = as.POSIXct(
       map_dbl(data, "[[", "created_at"),
-      origin = "1970-01-01"
+      origin = "1970-01-01",
+      tz = "UTC"
     ),
     expires_at = as.POSIXct(
       map_dbl(data, function(file) file$expires_at %||% NA_real_),
-      origin = "1970-01-01"
+      origin = "1970-01-01",
+      tz = "UTC"
     ),
     purpose = map_chr(data, "[[", "purpose")
   )
@@ -739,7 +741,7 @@ method(file_list, ProviderOpenAI) <- function(provider, ...) {
 
 method(file_get, ProviderOpenAI) <- function(provider, id, ...) {
   req <- base_request(provider)
-  req <- req_url_path_append(req, "/files/", as_file_id(id))
+  req <- req_url_path_append(req, "files", as_file_id(id))
   json <- resp_body_json(req_perform(req))
 
   list(
@@ -747,10 +749,11 @@ method(file_get, ProviderOpenAI) <- function(provider, id, ...) {
     filename = json$filename,
     mime_type = NA_character_,
     size_bytes = json$bytes,
-    created_at = as.POSIXct(json$created_at, origin = "1970-01-01"),
+    created_at = as.POSIXct(json$created_at, origin = "1970-01-01", tz = "UTC"),
     expires_at = as.POSIXct(
       json$expires_at %||% NA_real_,
-      origin = "1970-01-01"
+      origin = "1970-01-01",
+      tz = "UTC"
     ),
     purpose = json$purpose
   )
@@ -763,7 +766,7 @@ method(file_download, ProviderOpenAI) <- function(provider, id, path, ...) {
 
 method(file_delete, ProviderOpenAI) <- function(provider, id, ...) {
   req <- base_request(provider)
-  req <- req_url_path_append(req, "/files/", as_file_id(id))
+  req <- req_url_path_append(req, "files", as_file_id(id))
   req <- req_method(req, "DELETE")
   req_perform(req)
 
@@ -810,7 +813,7 @@ method(batch_retrieve, ProviderOpenAI) <- function(provider, batch) {
 
 openai_download_file <- function(provider, id, path) {
   req <- base_request(provider)
-  req <- req_url_path_append(req, "/files/", id, "/content")
+  req <- req_url_path_append(req, "files", id, "content")
   req <- req_progress(req, "down")
   req_perform(req, path = path)
 
