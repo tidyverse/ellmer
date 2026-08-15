@@ -263,6 +263,66 @@ Chat <- R6::R6Class(
       new_tokens + last$input + last$output + last$cached_input
     },
 
+    #' @description
+    #' `r lifecycle::badge("experimental")`
+    #'
+    #' Upload a file to the chat's provider, once, so later turns can
+    #' reference it by id instead of re-sending its contents. Prefer this
+    #' over [content_pdf_file()]/[content_image_file()] when a file is large
+    #' or used across many turns. Only supported by [chat_openai()],
+    #' [chat_anthropic()], and [chat_google_gemini()]; other providers error.
+    #' @param path Path to a file to upload.
+    #' @param mime_type MIME type of the file. If not supplied, it's guessed
+    #'   from the file extension.
+    #' @return A [ContentUploaded] that can be passed to `$chat()` and
+    #'   friends in place of the file itself.
+    file_upload = function(path, mime_type = NULL) {
+      file_upload(private$provider, path, mime_type = mime_type)
+    },
+
+    #' @description
+    #' `r lifecycle::badge("experimental")`
+    #'
+    #' List files previously uploaded to the chat's provider.
+    #' @return A data frame with one row per file: normalized columns
+    #'   (`id`, `filename`, `mime_type`, `size_bytes`, `created_at`,
+    #'   `expires_at`) first, then any provider-specific columns.
+    file_list = function() {
+      file_list(private$provider)
+    },
+
+    #' @description
+    #' `r lifecycle::badge("experimental")`
+    #'
+    #' Get metadata for a file previously uploaded to the chat's provider.
+    #' @param id A file id string, or a [ContentUploaded].
+    #' @return A named list of file metadata.
+    file_get = function(id) {
+      file_get(private$provider, id)
+    },
+
+    #' @description
+    #' `r lifecycle::badge("experimental")`
+    #'
+    #' Download a file from the chat's provider, writing it to `path`.
+    #' Note that providers only serve back model-generated files (e.g. batch
+    #' outputs); files you uploaded yourself can't be re-downloaded.
+    #' @param id A file id string, or a [ContentUploaded].
+    #' @param path Path to write the downloaded file to.
+    #' @return `path`, invisibly.
+    file_download = function(id, path) {
+      file_download(private$provider, id, path)
+    },
+
+    #' @description
+    #' `r lifecycle::badge("experimental")`
+    #'
+    #' Delete a file previously uploaded to the chat's provider.
+    #' @param id A file id string, or a [ContentUploaded].
+    file_delete = function(id) {
+      file_delete(private$provider, id)
+    },
+
     #' @description The last turn returned by the assistant.
     #' @param role Optionally, specify a role to find the last turn with
     #'   for the role.

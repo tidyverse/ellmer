@@ -54,6 +54,11 @@ its own.}
     \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
     \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
     \item \href{#method-Chat-token_count}{\code{Chat$token_count()}}
+    \item \href{#method-Chat-file_upload}{\code{Chat$file_upload()}}
+    \item \href{#method-Chat-file_list}{\code{Chat$file_list()}}
+    \item \href{#method-Chat-file_get}{\code{Chat$file_get()}}
+    \item \href{#method-Chat-file_download}{\code{Chat$file_download()}}
+    \item \href{#method-Chat-file_delete}{\code{Chat$file_delete()}}
     \item \href{#method-Chat-last_turn}{\code{Chat$last_turn()}}
     \item \href{#method-Chat-chat}{\code{Chat$chat()}}
     \item \href{#method-Chat-chat_structured}{\code{Chat$chat_structured()}}
@@ -353,6 +358,128 @@ extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
   }
   \subsection{Returns}{
     The estimated number of input tokens.
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-file_upload"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-file_upload}{}}}
+\subsection{\code{Chat$file_upload()}}{
+  \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Upload a file to the chat's provider, once, so later turns can
+reference it by id instead of re-sending its contents. Prefer this
+over \code{\link[=content_pdf_file]{content_pdf_file()}}/\code{\link[=content_image_file]{content_image_file()}} when a file is large
+or used across many turns. Only supported by \code{\link[=chat_openai]{chat_openai()}},
+\code{\link[=chat_anthropic]{chat_anthropic()}}, and \code{\link[=chat_google_gemini]{chat_google_gemini()}}; other providers error.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$file_upload(path, mime_type = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{path}}{Path to a file to upload.}
+      \item{\code{mime_type}}{MIME type of the file. If not supplied, it's guessed
+from the file extension.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A \link{ContentUploaded} that can be passed to \verb{$chat()} and
+friends in place of the file itself.
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-file_list"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-file_list}{}}}
+\subsection{\code{Chat$file_list()}}{
+  \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+List files previously uploaded to the chat's provider.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$file_list()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A data frame with one row per file: normalized columns
+(\code{id}, \code{filename}, \code{mime_type}, \code{size_bytes}, \code{created_at},
+\code{expires_at}) first, then any provider-specific columns.
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-file_get"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-file_get}{}}}
+\subsection{\code{Chat$file_get()}}{
+  \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Get metadata for a file previously uploaded to the chat's provider.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$file_get(id)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{id}}{A file id string, or a \link{ContentUploaded}.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A named list of file metadata.
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-file_download"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-file_download}{}}}
+\subsection{\code{Chat$file_download()}}{
+  \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Download a file from the chat's provider, writing it to \code{path}.
+Note that providers only serve back model-generated files (e.g. batch
+outputs); files you uploaded yourself can't be re-downloaded.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$file_download(id, path)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{id}}{A file id string, or a \link{ContentUploaded}.}
+      \item{\code{path}}{Path to write the downloaded file to.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    \code{path}, invisibly.
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-file_delete"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-file_delete}{}}}
+\subsection{\code{Chat$file_delete()}}{
+  \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Delete a file previously uploaded to the chat's provider.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$file_delete(id)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{id}}{A file id string, or a \link{ContentUploaded}.}
+    }
+    \if{html}{\out{</div>}}
   }
 }
 
