@@ -6,7 +6,7 @@
 \alias{claude_file_get}
 \alias{claude_file_download}
 \alias{claude_file_delete}
-\title{Upload, downloand, and manage files for Claude}
+\title{Upload, download, and manage files for Claude}
 \usage{
 claude_file_upload(
   path,
@@ -60,28 +60,22 @@ If you do need additional control, this argument takes a zero-argument function 
 \item{file_id}{ID of the file to get information about, download, or delete.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-Use the beta Files API to upload files to and manage files in Claude.
-This is currently experimental because the API is in beta and may change.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-Claude offers 100GB of file storage per organization, with each file
-having a maximum size of 500MB. For more details see
-\url{https://docs.claude.com/en/docs/build-with-claude/files}
-\itemize{
-\item \code{claude_file_upload()} uploads a file and returns an object that
-you can use in chat.
-\item \code{claude_file_list()} lists all uploaded files.
-\item \code{claude_file_get()} returns an object for an previously uploaded file.
-\item \code{claude_file_download()} downloads the file with the given ID. Note
-that you can only download files created by skills or the code execution
-tool.
-\item \code{claude_file_delete()} deletes the file with the given ID.
-}
+These functions are deprecated in favour of the provider-neutral \link{Chat}
+methods: \code{chat$file_upload()}, \code{chat$file_list()}, \code{chat$file_get()},
+\code{chat$file_download()}, and \code{chat$file_delete()}.
 }
 \examples{
 \dontrun{
+# Old:
 file <- claude_file_upload("path/to/file.pdf")
 chat <- chat_anthropic()
+chat$chat("Please summarize the document.", file)
+
+# New:
+chat <- chat_anthropic()
+file <- chat$file_upload("path/to/file.pdf")
 chat$chat("Please summarize the document.", file)
 }
 }
