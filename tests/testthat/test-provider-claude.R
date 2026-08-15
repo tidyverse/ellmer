@@ -626,6 +626,23 @@ test_that("value_turn() resolves Anthropic citations across request turns", {
   expect_equal(citations[[2]]@source@url, "https://current.example")
 })
 
+test_that("as_json() serializes uploaded file references", {
+  provider <- chat_anthropic_test()$get_provider()
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "application/pdf")),
+    list(type = "document", source = list(type = "file", file_id = "file-1"))
+  )
+  # unmapped mime types fall back to document, or image for image/*
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "audio/mpeg"))$type,
+    "document"
+  )
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "image/svg+xml"))$type,
+    "image"
+  )
+})
+
 test_that("value_turn() preserves unresolved Anthropic document slots", {
   provider <- chat_anthropic_test()$get_provider()
   turns <- list(UserTurn(list(

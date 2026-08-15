@@ -349,3 +349,23 @@ test_that("can count tokens", {
   vcr::local_cassette("openai-count-tokens")
   test_token_count(chat_openai_test)
 })
+
+test_that("as_json() serializes uploaded file references", {
+  provider <- chat_openai_test()$get_provider()
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "application/pdf")),
+    list(
+      role = "user",
+      content = list(list(type = "input_file", file_id = "file-1"))
+    )
+  )
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "image/png")),
+    list(
+      role = "user",
+      content = list(
+        list(type = "input_image", file_id = "file-1", detail = "auto")
+      )
+    )
+  )
+})

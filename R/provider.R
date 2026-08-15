@@ -271,6 +271,13 @@ method(as_json, list(Provider, ContentCitation)) <- function(provider, x, ...) {
   NULL
 }
 
+method(as_json, list(Provider, ContentUploaded)) <- function(provider, x, ...) {
+  cli::cli_abort(
+    "{provider@name} doesn't support uploaded files.",
+    class = "not_implemented"
+  )
+}
+
 method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
   if (!is.null(x@string)) {
     string <- x@string

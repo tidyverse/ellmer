@@ -278,3 +278,15 @@ test_that("as_json specialised for OpenAI", {
     )
   )
 })
+
+test_that("as_json() references uploaded documents but rejects images", {
+  provider <- ProviderOpenAICompatible("test", "model", "base_url")
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "application/pdf")),
+    list(type = "file", file = list(file_id = "file-1"))
+  )
+  expect_snapshot(
+    error = TRUE,
+    as_json(provider, ContentUploaded("file-1", "image/png"))
+  )
+})

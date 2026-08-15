@@ -554,6 +554,19 @@ method(as_json, list(ProviderOpenAI, ContentPDF)) <- function(
   )
 }
 
+method(as_json, list(ProviderOpenAI, ContentUploaded)) <- function(
+  provider,
+  x,
+  ...
+) {
+  part <- if (grepl("^image/", x@mime_type)) {
+    list(type = "input_image", file_id = x@uri, detail = "auto")
+  } else {
+    list(type = "input_file", file_id = x@uri)
+  }
+  list(role = "user", content = list(part))
+}
+
 method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(
   provider,
   x,
