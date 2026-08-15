@@ -78,6 +78,11 @@ test_that("can use pdfs", {
   test_pdf_local(chat_fun)
 })
 
+test_that("file lifecycle works", {
+  vcr::local_cassette("openai-files")
+  test_file_lifecycle(chat_openai_test)
+})
+
 test_that("can match prices for some common models", {
   provider <- chat_openai_test()$get_provider()
 

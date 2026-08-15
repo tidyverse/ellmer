@@ -3,6 +3,7 @@
 #' @include content.R
 #' @include turns.R
 #' @include tools-def.R
+#' @include files.R
 NULL
 
 #' Chat with an OpenAI model
@@ -661,18 +662,112 @@ method(batch_submit, ProviderOpenAI) <- function(
 }
 
 # https://platform.openai.com/docs/api-reference/files/create
-openai_upload <- function(provider, path, purpose = "batch") {
+openai_upload <- function(provider, path, purpose = "batch", mime_type = NULL) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/files")
   req <- req_body_multipart(
     req,
     purpose = purpose,
-    file = curl::form_file(path)
+    file = form_file(path, type = mime_type)
   )
   req <- req_progress(req, "up")
 
   resp <- req_perform(req)
   resp_body_json(resp)
+}
+
+method(file_upload, ProviderOpenAI) <- function(
+  provider,
+  path,
+  mime_type = NULL,
+  ...
+) {
+  check_string(path, allow_empty = FALSE)
+  if (!file.exists(path)) {
+    cli::cli_abort("{.arg path} must be an existing file.")
+  }
+  mime_type <- mime_type %||% guess_mime_type(path)
+
+  json <- openai_upload(
+    provider,
+    path,
+    purpose = "user_data",
+    mime_type = mime_type
+  )
+
+  ContentUploaded(
+    uri = json$id,
+    mime_type = mime_type,
+    provider = "openai",
+    extra = list(filename = json$filename, size_bytes = json$bytes)
+  )
+}
+
+method(file_list, ProviderOpenAI) <- function(provider, ...) {
+  data <- list()
+  after <- NULL
+  repeat {
+    req <- base_request(provider)
+    req <- req_url_path_append(req, "/files")
+    if (!is.null(after)) {
+      req <- req_url_query(req, after = after)
+    }
+    json <- resp_body_json(req_perform(req))
+    data <- c(data, json$data)
+    if (!isTRUE(json$has_more)) {
+      break
+    }
+    after <- json$data[[length(json$data)]]$id
+  }
+
+  data.frame(
+    id = map_chr(data, "[[", "id"),
+    filename = map_chr(data, "[[", "filename"),
+    mime_type = rep(NA_character_, length(data)),
+    size_bytes = map_dbl(data, "[[", "bytes"),
+    created_at = as.POSIXct(
+      map_dbl(data, "[[", "created_at"),
+      origin = "1970-01-01"
+    ),
+    expires_at = as.POSIXct(
+      map_dbl(data, function(file) file$expires_at %||% NA_real_),
+      origin = "1970-01-01"
+    ),
+    purpose = map_chr(data, "[[", "purpose")
+  )
+}
+
+method(file_get, ProviderOpenAI) <- function(provider, id, ...) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/files/", as_file_id(id))
+  json <- resp_body_json(req_perform(req))
+
+  list(
+    id = json$id,
+    filename = json$filename,
+    mime_type = NA_character_,
+    size_bytes = json$bytes,
+    created_at = as.POSIXct(json$created_at, origin = "1970-01-01"),
+    expires_at = as.POSIXct(
+      json$expires_at %||% NA_real_,
+      origin = "1970-01-01"
+    ),
+    purpose = json$purpose
+  )
+}
+
+method(file_download, ProviderOpenAI) <- function(provider, id, path, ...) {
+  check_string(path)
+  openai_download_file(provider, as_file_id(id), path)
+}
+
+method(file_delete, ProviderOpenAI) <- function(provider, id, ...) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/files/", as_file_id(id))
+  req <- req_method(req, "DELETE")
+  req_perform(req)
+
+  invisible()
 }
 
 # https://platform.openai.com/docs/api-reference/batch/retrieve
