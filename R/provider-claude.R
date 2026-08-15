@@ -207,6 +207,33 @@ anthropic_error_body <- function(resp) {
 }
 
 
+method(chat_request, ProviderAnthropic) <- function(
+  provider,
+  model,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  # Anthropic's Files API is beta: any request whose turns reference an
+  # uploaded file must carry this header.
+  # https://docs.claude.com/en/docs/build-with-claude/files
+  if (has_uploaded_content(turns)) {
+    provider@beta_headers <- union(
+      provider@beta_headers,
+      "files-api-2025-04-14"
+    )
+  }
+  chat_request(
+    super(provider, Provider),
+    model,
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+}
+
 # https://docs.anthropic.com/en/api/messages
 method(chat_path, ProviderAnthropic) <- function(provider) {
   "messages"
@@ -690,6 +717,14 @@ method(count_tokens, ProviderAnthropic) <- function(
   tools = list(),
   type = NULL
 ) {
+  turn <- user_turn(...)
+  if (has_uploaded_content(list(turn))) {
+    provider@beta_headers <- union(
+      provider@beta_headers,
+      "files-api-2025-04-14"
+    )
+  }
+
   req <- base_request(provider)
   req <- req_url_path_append(req, "messages/count_tokens")
 
@@ -735,7 +770,7 @@ method(count_tokens, ProviderAnthropic) <- function(
   body <- compact(list(
     model = model@name,
     system = system,
-    messages = list(as_json(provider, user_turn(...), is_last = TRUE)),
+    messages = list(as_json(provider, turn, is_last = TRUE)),
     tools = tools,
     tool_choice = tool_choice,
     output_config = output_config
@@ -966,6 +1001,13 @@ method(batch_submit, ProviderAnthropic) <- function(
   conversations,
   type = NULL
 ) {
+  if (has_uploaded_content(unlist(conversations, recursive = FALSE))) {
+    provider@beta_headers <- union(
+      provider@beta_headers,
+      "files-api-2025-04-14"
+    )
+  }
+
   req <- base_request(provider)
   req <- req_url_path_append(req, "/messages/batches")
 

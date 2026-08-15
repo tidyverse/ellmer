@@ -4,7 +4,6 @@
 #' `r lifecycle::badge("experimental")`
 #' Use the beta Files API to upload files to and manage files in Claude.
 #' This is currently experimental because the API is in beta and may change.
-#' Note that you need `beta-headers = "files-api-2025-04-14"` to use the API.
 #'
 #' Claude offers 100GB of file storage per organization, with each file
 #' having a maximum size of 500MB. For more details see
@@ -30,7 +29,7 @@
 #' @examples
 #' \dontrun{
 #' file <- claude_file_upload("path/to/file.pdf")
-#' chat <- chat_anthropic(beta_headers = "files-api-2025-04-14")
+#' chat <- chat_anthropic()
 #' chat$chat("Please summarize the document.", file)
 #' }
 
