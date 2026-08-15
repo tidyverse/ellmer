@@ -1,4 +1,20 @@
-test_that("can upload a file an ask questions about it", {
+test_that("file operations error on Vertex", {
+  provider <- ProviderGoogleGemini(
+    name = "Google/Vertex",
+    base_url = "https://us-central1-aiplatform.googleapis.com/v1beta1/",
+    credentials = function() list()
+  )
+  expect_snapshot(error = TRUE, file_upload(provider, "apples.pdf"))
+})
+
+test_that("google_upload() is deprecated", {
+  withr::local_options(lifecycle_verbosity = "warning")
+  local_mocked_bindings(file_upload = function(...) invisible())
+  expect_snapshot(. <- google_upload(test_path("apples.pdf")))
+})
+
+test_that("deprecated google_upload() still works end-to-end", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   vcr::local_cassette("google-upload")
   upload <- google_upload(test_path("apples.pdf"))
 
