@@ -249,6 +249,8 @@ method(stream_content, ProviderOpenAI) <- function(
     if (!identical(annotation$type, "url_citation")) {
       return(list())
     }
+    # No grounded_span: OpenAI's offsets delimit the inline citation marker,
+    # not the answer text supported by the source.
     list(
       ContentCitation(
         source = WebSource(
@@ -415,21 +417,14 @@ openai_citations <- function(content) {
   annotations <- keep(annotations, function(annotation) {
     identical(annotation$type, "url_citation")
   })
+  # No grounded_span: OpenAI's start_index/end_index delimit the inline
+  # citation marker, not the answer text supported by the source.
   lapply(annotations, function(annotation) {
-    start <- annotation$start_index
-    end <- annotation$end_index
-    grounded_span <- if (is.null(start) || is.null(end)) {
-      NULL
-    } else {
-      span <- substr(content$text, start + 1L, end)
-      if (nzchar(span)) span else NULL
-    }
     ContentCitation(
       source = WebSource(
         url = annotation$url,
         title = annotation$title
       ),
-      grounded_span = grounded_span,
       extra = annotation
     )
   })
