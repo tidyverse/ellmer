@@ -320,12 +320,19 @@ method(stream_content, ProviderGoogleGemini) <- function(
     }
   }))
 
-  grounding <- candidate$groundingMetadata
+  # Grounding and URL context metadata can arrive before the answer text
+  # they support, so defer them until the final chunk and rebuild from the
+  # merged completion. Citations come first so they stay adjacent to text.
+  if (is.null(candidate$finishReason) || is.null(completion)) {
+    return(part_contents)
+  }
+  merged <- completion$candidates[[1]]
+  grounding <- merged$groundingMetadata
   c(
     part_contents,
-    google_search_contents(grounding),
     google_grounding_citations(grounding),
-    google_url_context_contents(candidate$urlContextMetadata)
+    google_search_contents(grounding),
+    google_url_context_contents(merged$urlContextMetadata)
   )
 }
 method(stream_merge_chunks, ProviderGoogleGemini) <- function(
@@ -730,6 +737,12 @@ merge_last <- function() {
   }
 }
 
+merge_last_non_null <- function() {
+  function(left, right, path = NULL) {
+    right %||% left
+  }
+}
+
 merge_identical <- function() {
   function(left, right, path = NULL) {
     if (!identical(left, right)) {
@@ -868,8 +881,8 @@ merge_gemini_chunks <- merge_objects(
     citationMetadata = merge_optional(
       merge_objects(citationSources = merge_append())
     ),
-    groundingMetadata = merge_last(),
-    urlContextMetadata = merge_last(),
+    groundingMetadata = merge_last_non_null(),
+    urlContextMetadata = merge_last_non_null(),
     tokenCount = merge_last()
   ),
   promptFeedback = merge_last(),
