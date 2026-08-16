@@ -249,8 +249,6 @@ method(stream_content, ProviderOpenAI) <- function(
     if (!identical(annotation$type, "url_citation")) {
       return(list())
     }
-    # No grounded_span: OpenAI's offsets delimit the inline citation marker,
-    # not the answer text supported by the source.
     list(
       ContentCitation(
         source = WebSource(
