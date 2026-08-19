@@ -612,7 +612,7 @@ method(value_turn, ProviderAWSBedrock) <- function(
       }
     } else if (has_name(content, "reasoningContent")) {
       ContentThinking(
-        content$reasoningContent$reasoningText$text,
+        content$reasoningContent$reasoningText$text %||% "",
         extra = list(
           signature = content$reasoningContent$reasoningText$signature
         )
