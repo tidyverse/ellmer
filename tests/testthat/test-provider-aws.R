@@ -472,3 +472,11 @@ test_that("aws_bedrock_models_url() resolves the model-listing endpoint", {
     "https://bedrock.example.com"
   )
 })
+
+test_that("sends placeholder for empty assistant turns (#1070)", {
+  provider <- test_aws_bedrock_provider()
+  turns_json <- as_json(provider, list(UserTurn("Hi"), AssistantTurn()))
+
+  expect_length(turns_json, 2)
+  expect_equal(turns_json[[2]]$content, list(list(text = "[empty string]")))
+})

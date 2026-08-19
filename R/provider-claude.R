@@ -530,6 +530,7 @@ method(value_turn_with_turns, ProviderAnthropic) <- function(
       )
     }
   }))
+  contents <- contents %||% list()
 
   tokens <- value_tokens(provider, result)
   cache_write <- result$usage$cache_creation_input_tokens %||% 0
@@ -774,15 +775,12 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(
     # claude passes system prompt as separate arg
     NULL
   } else if (is_user_turn(x) || is_assistant_turn(x)) {
-    if (is_assistant_turn(x) && identical(x@contents, list())) {
-      # Drop empty assistant turns to avoid an API error
-      # (all messages must have non-empty content)
-      return(NULL)
-    }
     x <- turn_contents_expand(x)
     content <- as_json(provider, x@contents, ...)
-    if (length(content) == 0) {
-      return(NULL)
+    if (is_assistant_turn(x) && length(content) == 0) {
+      # Dropping empty assistant turns confuses the model, so send a
+      # placeholder instead (#711, #1070)
+      content <- list(list(type = "text", text = "[empty string]"))
     }
 
     # Add caching to the last content block in the last turn

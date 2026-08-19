@@ -146,7 +146,7 @@ test_that("can match prices for some common models", {
   expect_true(has_cost(chat$get_provider()@name, chat$get_model_object()@name))
 })
 
-test_that("removes empty final chat messages", {
+test_that("sends placeholder for empty assistant turns (#711, #1070)", {
   chat <- chat_anthropic_test()
   chat$set_turns(
     list(
@@ -157,11 +157,10 @@ test_that("removes empty final chat messages", {
 
   turns_json <- as_json(chat$get_provider(), chat$get_turns())
 
-  expect_length(turns_json, 1)
-  expect_equal(turns_json[[1]]$role, "user")
+  expect_length(turns_json, 2)
   expect_equal(
-    turns_json[[1]]$content,
-    list(list(type = "text", text = "Don't say anything"))
+    turns_json[[2]]$content,
+    list(list(type = "text", text = "[empty string]"))
   )
 })
 
@@ -739,4 +738,16 @@ test_that("stream_content() resolves Anthropic citations across request turns", 
 test_that("can count tokens", {
   vcr::local_cassette("anthropic-count-tokens")
   test_token_count(chat_anthropic_test)
+})
+
+test_that("value_turn() handles empty content (#1070)", {
+  provider <- chat_anthropic_test()$get_provider()
+  result <- list(
+    content = list(),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 2)
+  )
+
+  turn <- value_turn(provider, test_model("claude-sonnet-5"), result)
+  expect_equal(turn@contents, list())
 })
