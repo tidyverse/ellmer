@@ -487,13 +487,20 @@ that yields strings. While iterating, the generator will block while
 waiting for more content from the chatbot.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$stream(..., stream = c("text", "content"), controller = NULL)}
+    \preformatted{Chat$stream(..., type = NULL, stream = c("text", "content"), controller = NULL)}
     \if{html}{\out{</div>}}
   }
   \subsection{Arguments}{
     \if{html}{\out{<div class="arguments">}}
     \describe{
       \item{\code{...}}{The input to send to the chatbot. Can be strings or images.}
+      \item{\code{type}}{An optional \code{type_()} structured-data specification. When
+supplied, registered tools are suppressed and the completed assistant
+turn stores a \code{ContentJson}. The provider constrains the response to
+JSON. With \code{stream = "text"} (the default), structured stream chunks
+are raw JSON text; with \code{stream = "content"}, they are \link{Content}
+objects. Streaming structured output requires native provider support;
+tool-based fallback is not supported.}
       \item{\code{stream}}{Whether the stream should yield only \code{"text"} or ellmer's
 rich content types. When \code{stream = "content"}, \code{stream()} yields
 \link{Content} objects.}
@@ -515,6 +522,7 @@ yields string promises.
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$stream_async(
   ...,
+  type = NULL,
   tool_mode = c("concurrent", "sequential"),
   stream = c("text", "content"),
   controller = NULL
@@ -525,6 +533,13 @@ yields string promises.
     \if{html}{\out{<div class="arguments">}}
     \describe{
       \item{\code{...}}{The input to send to the chatbot. Can be strings or images.}
+      \item{\code{type}}{An optional \code{type_()} structured-data specification. When
+supplied, registered tools are suppressed and the completed assistant
+turn stores a \code{ContentJson}. The provider constrains the response to
+JSON. With \code{stream = "text"} (the default), structured stream chunks
+are raw JSON text; with \code{stream = "content"}, they are \link{Content}
+objects. Streaming structured output requires native provider support;
+tool-based fallback is not supported.}
       \item{\code{tool_mode}}{Whether tools should be invoked one-at-a-time
 (\code{"sequential"}) or concurrently (\code{"concurrent"}). Sequential mode is
 best for interactive applications, especially when a tool may involve
