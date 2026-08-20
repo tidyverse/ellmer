@@ -111,9 +111,11 @@ document_mime_type <- function(name) {
 }
 
 check_not_pdf <- function(filename, mime_type, error_call = caller_env()) {
+  # Strip any parameters (e.g. "; charset=binary") before comparing
+  mime_type <- tolower(sub(";.*$", "", mime_type))
   if (
     tolower(tools::file_ext(filename)) == "pdf" ||
-      identical(mime_type, "application/pdf")
+      identical(trimws(mime_type), "application/pdf")
   ) {
     cli::cli_abort(
       c(
