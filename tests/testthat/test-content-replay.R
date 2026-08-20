@@ -30,6 +30,12 @@ test_that("can round trip simple content types", {
   test_record_replay(ContentThinking("A **thought**."))
   test_record_replay(ContentUploaded("https://example.com/image.jpg"))
   test_record_replay(ContentPDF("TYPE", "DATA", "FILENAME"))
+  test_record_replay(ContentDocument(
+    "text/csv",
+    "DATA",
+    "FILE.csv",
+    url = "https://example.com/f.csv"
+  ))
   test_record_replay(WebSource("https://example.com", "Example"))
   test_record_replay(
     ContentCitation(

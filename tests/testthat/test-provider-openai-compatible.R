@@ -55,6 +55,25 @@ test_that("can use pdfs", {
   test_pdf_local(chat_fun)
 })
 
+# Can't round-trip test against the real API: OpenAI's Chat Completions
+# endpoint only accepts PDFs in file parts. The MIME type is passed through
+# for the benefit of other OpenAI-compatible backends.
+test_that("documents are serialized as file parts", {
+  stub <- ProviderOpenAICompatible(name = "", base_url = "")
+
+  doc <- ContentDocument("text/csv", "YQ==", "data.csv")
+  expect_equal(
+    as_json(stub, doc),
+    list(
+      type = "file",
+      file = list(
+        filename = "data.csv",
+        file_data = "data:text/csv;base64,YQ=="
+      )
+    )
+  )
+})
+
 test_that("can match prices for some common models", {
   provider <- chat_openai_compatible_test()$get_provider()
 

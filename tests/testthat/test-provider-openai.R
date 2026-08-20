@@ -92,6 +92,53 @@ test_that("file_upload() validates expires_in_h", {
   })
 })
 
+test_that("can use documents", {
+  vcr::local_cassette("openai-v2-document")
+  chat_fun <- chat_openai_test
+
+  test_document_local(chat_fun)
+})
+
+test_that("documents and pdfs with a url are passed through as file_url", {
+  provider <- chat_openai_test()$get_provider()
+
+  # filename must be omitted because the API rejects file_url + filename
+  # together
+  doc_url <- ContentDocument(
+    "text/csv",
+    "YQ==",
+    "data.csv",
+    url = "https://example.com/data.csv"
+  )
+  expect_equal(
+    as_json(provider, doc_url),
+    list(
+      role = "user",
+      content = list(list(
+        type = "input_file",
+        file_url = "https://example.com/data.csv"
+      ))
+    )
+  )
+
+  pdf_url <- ContentPDF(
+    "application/pdf",
+    "YQ==",
+    "x.pdf",
+    url = "https://example.com/x.pdf"
+  )
+  expect_equal(
+    as_json(provider, pdf_url),
+    list(
+      role = "user",
+      content = list(list(
+        type = "input_file",
+        file_url = "https://example.com/x.pdf"
+      ))
+    )
+  )
+})
+
 test_that("can match prices for some common models", {
   provider <- chat_openai_test()$get_provider()
 

@@ -102,6 +102,42 @@ test_that("can use pdfs", {
   test_pdf_local(chat_fun)
 })
 
+test_that("can use documents", {
+  vcr::local_cassette("anthropic-documents")
+  chat_fun <- chat_anthropic_test
+
+  test_document_local(chat_fun)
+})
+
+test_that("binary documents are rejected", {
+  provider <- chat_anthropic_test()$get_provider()
+
+  docx <- ContentDocument(
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "YQ==",
+    "report.docx"
+  )
+  expect_snapshot(as_json(provider, docx), error = TRUE)
+})
+
+test_that("pdfs with a url use the url source", {
+  provider <- chat_anthropic_test()$get_provider()
+
+  pdf <- ContentPDF(
+    "application/pdf",
+    "YQ==",
+    "x.pdf",
+    url = "https://example.com/x.pdf"
+  )
+  expect_equal(
+    as_json(provider, pdf),
+    list(
+      type = "document",
+      source = list(type = "url", url = "https://example.com/x.pdf")
+    )
+  )
+})
+
 # Custom features --------------------------------------------------------
 
 test_that("base_url defaults to ANTHROPIC_BASE_URL when set", {

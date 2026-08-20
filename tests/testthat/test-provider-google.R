@@ -102,6 +102,19 @@ test_that("file lifecycle works", {
   test_file_lifecycle(chat_google_gemini_test)
 })
 
+test_that("can use documents", {
+  chat_fun <- chat_google_gemini_test
+
+  test_document_local(chat_fun)
+})
+
+test_that("binary documents are rejected", {
+  provider <- chat_google_gemini_test()$get_provider()
+
+  xls <- ContentDocument("application/vnd.ms-excel", "YQ==", "old.xls")
+  expect_snapshot(as_json(provider, xls), error = TRUE)
+})
+
 test_that("can match prices for some common models", {
   provider <- chat_google_gemini_test()$get_provider()
 
