@@ -530,10 +530,29 @@ ContentPDF <- new_class(
   properties = list(
     type = prop_string(),
     data = prop_string(),
-    filename = prop_string()
+    filename = prop_string(),
+    url = prop_string(allow_null = TRUE)
   )
 )
 
 method(format, ContentPDF) <- function(x, ...) {
   "<PDF document>"
+}
+
+#' @rdname Content
+#' @param mime_type MIME type of the document.
+#' @export
+ContentDocument <- new_class(
+  "ContentDocument",
+  parent = Content,
+  properties = list(
+    mime_type = prop_string(),
+    data = prop_string(),
+    filename = prop_string(),
+    url = prop_string(allow_null = TRUE)
+  )
+)
+
+method(format, ContentDocument) <- function(x, ...) {
+  sprintf("<document %s (%s)>", x@filename, x@mime_type)
 }
