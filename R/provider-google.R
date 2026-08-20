@@ -640,6 +640,26 @@ method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
   )
 }
 
+method(as_json, list(ProviderGoogleGemini, ContentDocument)) <- function(
+  provider,
+  x,
+  ...
+) {
+  if (x@mime_type %in% binary_document_mime_types) {
+    cli::cli_abort(c(
+      "Gemini doesn't support {.str {x@mime_type}} documents.",
+      i = "Convert the document to plain text or PDF first."
+    ))
+  }
+
+  list(
+    inlineData = list(
+      mimeType = x@mime_type,
+      data = x@data
+    )
+  )
+}
+
 # https://ai.google.dev/api/caching#FileData
 method(as_json, list(ProviderGoogleGemini, ContentUploaded)) <- function(
   provider,

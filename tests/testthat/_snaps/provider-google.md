@@ -22,3 +22,12 @@
       Error in `method(as_json, list(ellmer::ProviderGoogleGemini, ellmer::ContentImageRemote))`:
       ! Gemini doesn't support remote images
 
+# binary documents are rejected
+
+    Code
+      as_json(provider, xls)
+    Condition
+      Error in `method(as_json, list(ellmer::ProviderGoogleGemini, ellmer::ContentDocument))`:
+      ! Gemini doesn't support "application/vnd.ms-excel" documents.
+      i Convert the document to plain text or PDF first.
+

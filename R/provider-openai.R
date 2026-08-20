@@ -546,12 +546,33 @@ method(as_json, list(ProviderOpenAI, ContentPDF)) <- function(
   # https://platform.openai.com/docs/guides/pdf-files?api-mode=responses
   list(
     role = "user",
-    content = list(list(
+    content = list(openai_input_file(x, "application/pdf"))
+  )
+}
+
+method(as_json, list(ProviderOpenAI, ContentDocument)) <- function(
+  provider,
+  x,
+  ...
+) {
+  list(
+    role = "user",
+    content = list(openai_input_file(x, x@mime_type))
+  )
+}
+
+openai_input_file <- function(x, mime_type) {
+  if (!is.null(x@url)) {
+    # filename is deliberately omitted: the API rejects requests that
+    # carry both file_url and filename
+    list(type = "input_file", file_url = x@url)
+  } else {
+    list(
       type = "input_file",
       filename = x@filename,
-      file_data = paste0("data:application/pdf;base64,", x@data)
-    ))
-  )
+      file_data = paste0("data:", mime_type, ";base64,", x@data)
+    )
+  }
 }
 
 method(as_json, list(ProviderOpenAI, ContentUploaded)) <- function(

@@ -661,7 +661,16 @@ method(as_json, list(ProviderAWSBedrock, Turn)) <- function(
     }
 
     if (is_last) {
-      content <- c(content, bedrock_cache_point(provider))
+      cache_point <- bedrock_cache_point(provider)
+      if (length(cache_point) > 0 && length(content) > 0) {
+        # Bedrock 400s when a cachePoint block immediately follows a
+        # document block, so pad with a text block
+        # (https://github.com/aws/aws-sdk-java-v2/issues/6277)
+        if (identical(names(content[[length(content)]]), "document")) {
+          content <- c(content, list(list(text = " ")))
+        }
+      }
+      content <- c(content, cache_point)
     }
 
     list(role = x@role, content = content)
@@ -726,6 +735,37 @@ method(as_json, list(ProviderAWSBedrock, ContentPDF)) <- function(
       #> that you specify a neutral name.
       name = bedrock_document_name(),
       format = "pdf",
+      source = list(bytes = x@data)
+    )
+  )
+}
+
+method(as_json, list(ProviderAWSBedrock, ContentDocument)) <- function(
+  provider,
+  x,
+  ...
+) {
+  # The Converse API takes a format keyword rather than a MIME type
+  format <- switch(
+    x@mime_type,
+    "text/plain" = "txt",
+    "text/csv" = "csv",
+    "text/markdown" = "md",
+    "text/html" = "html",
+    "application/msword" = "doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document" = "docx",
+    "application/vnd.ms-excel" = "xls",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "xlsx",
+    cli::cli_abort(c(
+      "Bedrock doesn't support {.str {x@mime_type}} documents.",
+      i = "Convert the document to plain text or PDF first."
+    ))
+  )
+
+  list(
+    document = list(
+      name = bedrock_document_name(),
+      format = format,
       source = list(bytes = x@data)
     )
   )
