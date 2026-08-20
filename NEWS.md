@@ -8,7 +8,7 @@
 * `chat_anthropic()` and `chat_aws_bedrock()` no longer error after the model returns an empty response (@thisisnic, #1070).
 * `chat_anthropic()` now defaults `base_url` to the `ANTHROPIC_BASE_URL` environment variable, and `chat_aws_bedrock()` to `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` or `AWS_ENDPOINT_URL_BEDROCK_MANTLE` depending on `api`, matching the official SDKs (@karawoo, #1103).
 * `chat_anthropic()` now correctly handles the `fallback` content block returned when a model's server-side refusal fallback (`server-side-fallback-2026-06-01`) is triggered (@simonpcouch, #1058).
-* `chat_aws_bedrock()` no longer errors when the model returns a thinking block with no text (@thisisnic, #1085).
+* `chat_aws_bedrock()` no longer errors when the model returns a thinking block with no text (@thisisnic, #1100).
 * `chat_aws_bedrock()` now supports bearer token authentication for enterprise API gateways (@thisisnic, #1002).
 * `chat_databricks()` no longer errors with models that return content as an array of typed objects (e.g. `databricks-gpt-oss-120b`); reasoning parts are now captured as thinking content (@thisisnic, #1078).
 * `chat_databricks()` no longer errors when a registered tool has no arguments (@thisisnic, #1084).
