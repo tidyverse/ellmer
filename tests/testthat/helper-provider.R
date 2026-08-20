@@ -220,6 +220,17 @@ test_file_lifecycle <- function(chat_fun) {
   expect_error(chat$file_download(upload, path))
 }
 
+# Documents ---------------------------------------------------------------
+
+test_document_local <- function(chat_fun) {
+  chat <- chat_fun()
+  response <- chat$chat(
+    "Which penguin won the race? Answer with just the penguin's name.",
+    content_document_file(test_path("penguin_race.csv"))
+  )
+  expect_match(response, "turbo tuxedo", ignore.case = TRUE)
+}
+
 # Models ------------------------------------------------------------------
 
 test_models <- function(models_fun) {
