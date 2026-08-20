@@ -36,11 +36,21 @@ content_pdf_url <- function(url) {
     parsed <- parse_data_url(url)
     ContentPDF(parsed$content_type, parsed$base64, unique_pdf_name())
   } else {
-    path <- tempfile(pattern = basename(url), fileext = ".pdf")
+    path <- tempfile(fileext = ".pdf")
     on.exit(unlink(path))
+    httr2::req_perform(httr2::request(url), path = path)
 
-    resp <- httr2::req_perform(httr2::request(url), path = path)
-    content_pdf_file(path)
+    filename <- basename(sub("[?#].*$", "", url))
+    if (!grepl("\\.pdf$", filename, ignore.case = TRUE)) {
+      filename <- unique_pdf_name()
+    }
+
+    ContentPDF(
+      type = "application/pdf",
+      data = base64_enc(path = path),
+      filename = filename,
+      url = url
+    )
   }
 }
 

@@ -12,6 +12,7 @@
 \alias{ContentUploaded}
 \alias{ContentThinking}
 \alias{ContentPDF}
+\alias{ContentDocument}
 \title{Content types received from and sent to a chatbot}
 \usage{
 Content()
@@ -53,7 +54,15 @@ ContentThinking(thinking = stop("Required"), extra = list())
 ContentPDF(
   type = stop("Required"),
   data = stop("Required"),
-  filename = stop("Required")
+  filename = stop("Required"),
+  url = NULL
+)
+
+ContentDocument(
+  mime_type = stop("Required"),
+  data = stop("Required"),
+  filename = stop("Required"),
+  url = NULL
 )
 }
 \arguments{
@@ -109,6 +118,8 @@ to detect a file uploaded to one provider being used with another.}
 \item{thinking}{The text of the thinking output.}
 
 \item{filename}{File name, used to identify the PDF.}
+
+\item{mime_type}{MIME type of the document.}
 }
 \value{
 S7 objects that all inherit from \code{Content}

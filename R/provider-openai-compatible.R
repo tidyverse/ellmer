@@ -527,6 +527,20 @@ method(as_json, list(ProviderOpenAICompatible, ContentUploaded)) <- function(
   list(type = "file", file = list(file_id = x@uri))
 }
 
+method(as_json, list(ProviderOpenAICompatible, ContentDocument)) <- function(
+  provider,
+  x,
+  ...
+) {
+  list(
+    type = "file",
+    file = list(
+      filename = x@filename,
+      file_data = paste0("data:", x@mime_type, ";base64,", x@data)
+    )
+  )
+}
+
 method(as_json, list(ProviderOpenAICompatible, ContentToolRequest)) <- function(
   provider,
   x,

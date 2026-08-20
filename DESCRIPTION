@@ -81,6 +81,7 @@ Collate:
     'chat-utils.R'
     'utils-coro.R'
     'chat.R'
+    'content-document.R'
     'content-image.R'
     'content-pdf.R'
     'content-replay.R'
