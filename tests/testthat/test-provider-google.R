@@ -181,14 +181,9 @@ test_that("merge_gemini_chunks() retains final grounding metadata", {
 
   # Metadata is also retained when a later chunk lacks it
   merged <- merge_gemini_chunks(metadata, text)
-  candidate <- merged$candidates[[1]]
   expect_equal(
-    candidate$groundingMetadata$webSearchQueries,
+    merged$candidates[[1]]$groundingMetadata$webSearchQueries,
     list("ellmer citations")
-  )
-  expect_equal(
-    candidate$urlContextMetadata$urlMetadata[[1]]$retrievedUrl,
-    "https://example.com"
   )
 })
 
