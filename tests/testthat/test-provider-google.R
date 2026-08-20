@@ -185,6 +185,10 @@ test_that("merge_gemini_chunks() retains final grounding metadata", {
     merged$candidates[[1]]$groundingMetadata$webSearchQueries,
     list("ellmer citations")
   )
+  expect_equal(
+    merged$candidates[[1]]$urlContextMetadata$urlMetadata[[1]]$retrievedUrl,
+    "https://example.com"
+  )
 })
 
 test_that("can handle citations", {
