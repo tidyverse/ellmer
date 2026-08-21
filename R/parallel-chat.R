@@ -324,6 +324,7 @@ parallel_turns <- function(
       stream = FALSE
     )
   })
+  reqs <- map(reqs, ellmer_req_connect_viewer)
   reqs <- map(reqs, function(req) {
     req_throttle(req, capacity = rpm, fill_time_s = 60)
   })
