@@ -78,6 +78,9 @@ NULL
 #'
 #'   See <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html>
 #'   for more details.
+#' @param base_url The base URL to the endpoint; the default is the
+#'   `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` environment variable if set, and the
+#'   standard `bedrock-runtime` endpoint for your region otherwise.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -101,8 +104,7 @@ chat_aws_bedrock <- function(
 ) {
   check_installed("paws.common", "AWS authentication")
   check_string(base_url, allow_null = TRUE)
-  base_url <- base_url %||%
-    \(x) sprintf("https://bedrock-runtime.%s.amazonaws.com", x)
+  base_url <- base_url %||% aws_bedrock_base_url()
   echo <- check_echo(echo)
 
   params <- params %||% params()
@@ -129,7 +131,7 @@ chat_aws_bedrock <- function(
 #' @rdname chat_aws_bedrock
 models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
   check_string(base_url, allow_null = TRUE)
-  base_url <- base_url %||% \(x) sprintf("https://bedrock.%s.amazonaws.com", x)
+  base_url <- base_url %||% aws_bedrock_base_url()
 
   provider <- provider_aws_bedrock(
     base_url = base_url,
@@ -137,6 +139,17 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
     profile = profile
   )
   models_list(provider)
+}
+
+# Match the official AWS SDKs, which read the service-specific endpoint
+# override AWS_ENDPOINT_URL_BEDROCK_RUNTIME
+aws_bedrock_base_url <- function() {
+  base_url <- Sys.getenv("AWS_ENDPOINT_URL_BEDROCK_RUNTIME")
+  if (identical(base_url, "")) {
+    \(x) sprintf("https://bedrock-runtime.%s.amazonaws.com", x)
+  } else {
+    base_url
+  }
 }
 
 chat_aws_bedrock_test <- function(
@@ -225,7 +238,9 @@ method(base_request, ProviderAWSBedrock) <- function(provider) {
       req,
       aws_access_key_id = creds$access_key_id,
       aws_secret_access_key = creds$secret_access_key,
-      aws_session_token = creds$session_token
+      aws_session_token = creds$session_token,
+      aws_service = "bedrock",
+      aws_region = provider@region
     )
   }
   req <- ellmer_req_robustify(req)

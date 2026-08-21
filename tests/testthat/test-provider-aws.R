@@ -293,3 +293,72 @@ test_that("inference profile ARN slash is encoded in URL (#792)", {
   req <- chat_request(provider, test_model(arn), stream = FALSE, turns = list())
   expect_match(req$url, "inference-profile%2Fabc123", fixed = TRUE)
 })
+
+test_that("base_url defaults to AWS_ENDPOINT_URL_BEDROCK_RUNTIME when set", {
+  # The env var follows the official SDK convention for service-specific
+  # endpoint overrides.
+  withr::local_envvar(
+    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = "https://bedrock.example.com"
+  )
+  expect_equal(
+    aws_bedrock_base_url(),
+    "https://bedrock.example.com"
+  )
+
+  withr::local_envvar(AWS_ENDPOINT_URL_BEDROCK_RUNTIME = NA)
+  base_url <- aws_bedrock_base_url()
+  expect_equal(
+    base_url("us-east-1"),
+    "https://bedrock-runtime.us-east-1.amazonaws.com"
+  )
+})
+
+test_that("models_aws_bedrock shares the base_url default and env var", {
+  # models_list() rewrites the runtime host to the control-plane host, so
+  # here we only check the shared default flows through before that step.
+  local_mocked_bindings(
+    paws_credentials = function(...) {
+      list(
+        access_key_id = "x",
+        secret_access_key = "x",
+        session_token = "x",
+        access_token = "",
+        region = "us-east-1"
+      )
+    },
+    models_list = function(provider) provider@base_url
+  )
+
+  withr::local_envvar(AWS_ENDPOINT_URL_BEDROCK_RUNTIME = NA)
+  expect_equal(
+    models_aws_bedrock(),
+    "https://bedrock-runtime.us-east-1.amazonaws.com"
+  )
+
+  withr::local_envvar(
+    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = "https://bedrock.example.com"
+  )
+  expect_equal(
+    models_aws_bedrock(),
+    "https://bedrock.example.com"
+  )
+})
+
+test_that("base request signs with the bedrock service and region", {
+  # Passed explicitly so signing works when base_url points at a custom
+  # endpoint whose host the service and region can't be inferred from.
+  local_mocked_bindings(
+    paws_credentials = function(...) {
+      list(
+        access_key_id = "x",
+        secret_access_key = "x",
+        session_token = "x",
+        access_token = ""
+      )
+    }
+  )
+  req <- base_request(test_aws_bedrock_provider())
+  params <- req$policies$auth_sign$params
+  expect_equal(params$aws_service, "bedrock")
+  expect_equal(params$aws_region, "us-east-1")
+})

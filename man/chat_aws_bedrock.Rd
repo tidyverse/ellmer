@@ -22,7 +22,9 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the API endpoint.}
+\item{base_url}{The base URL to the endpoint; the default is the
+\code{AWS_ENDPOINT_URL_BEDROCK_RUNTIME} environment variable if set, and the
+standard \code{bedrock-runtime} endpoint for your region otherwise.}
 
 \item{model}{The model to use for the chat (defaults to "us.anthropic.claude-sonnet-5").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
