@@ -79,7 +79,6 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
-
     #' @description Retrieve the conversation grouped into [Round]s. Each
     #'   `Round` pairs a user turn with the assistant and tool-result turns it
     #'   produced.
