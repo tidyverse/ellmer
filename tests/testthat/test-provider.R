@@ -39,6 +39,9 @@ test_that("deprecated Provider properties warn but still work", {
   })
 })
 
-test_that("Provider print omits deprecated properties", {
-  expect_snapshot(print(test_provider()))
+test_that("Provider print and str omit deprecated properties", {
+  expect_snapshot({
+    print(test_provider())
+    str(test_provider())
+  })
 })
