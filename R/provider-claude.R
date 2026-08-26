@@ -182,7 +182,7 @@ method(base_request_error, ProviderAnthropic) <- function(provider, req) {
 
 # <https://docs.anthropic.com/en/api/errors>
 anthropic_error_body <- function(resp) {
-  if (resp_content_type(resp) == "application/json") {
+  if (identical(resp_content_type(resp), "application/json")) {
     json <- resp_body_json(resp)
     if (!is.null(json$error)) {
       paste0(json$error$message, " [", json$error$type, "]")

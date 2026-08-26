@@ -173,7 +173,7 @@ method(base_request_error, ProviderOpenAICompatible) <- function(
 }
 
 openai_error_body <- function(resp) {
-  if (resp_content_type(resp) == "application/json") {
+  if (identical(resp_content_type(resp), "application/json")) {
     error <- resp_body_json(resp)$error
     if (is_string(error)) {
       error
@@ -182,7 +182,7 @@ openai_error_body <- function(resp) {
     } else {
       prettify(resp_body_string(resp))
     }
-  } else if (resp_content_type(resp) == "text/plain") {
+  } else if (identical(resp_content_type(resp), "text/plain")) {
     resp_body_string(resp)
   }
 }
