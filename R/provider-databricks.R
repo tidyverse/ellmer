@@ -235,6 +235,38 @@ method(base_request_error, ProviderDatabricks) <- function(provider, req) {
   })
 }
 
+# See: https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#functionobject
+method(as_json, list(ProviderDatabricks, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
+  # Databricks does not support the "strict" field for tools, despite what their
+  # documentation says. It *is* supported for structured outputs, though. This
+  # method exists only to omit it; everything else matches the OpenAI encoding.
+  #
+  # Do not remove this method to inherit ProviderOpenAICompatible's: that sends
+  # `strict = TRUE` and reintroduces #548. The failure has changed shape since
+  # #548 was filed, which makes it easy to miss. Databricks used to reject the
+  # field outright ("tools.0.custom.strict: Extra inputs are not permitted"), but
+  # now accepts it and compiles the schema into a sampling grammar. Small tool
+  # sets therefore appear to work, while a set large enough to exceed the grammar
+  # budget fails with HTTP 400 "Compiled grammar size (...MB) exceeds maximum
+  # allowed size (300MB)" -- and because compilation happens before generation,
+  # *every* request fails, not only the ones using the offending tool.
+  #
+  # `parameters` is always included, even when the tool takes no arguments,
+  # because omitting it errors on Databricks (#1084).
+  compact(list(
+    type = "function",
+    "function" = compact(list(
+      name = x@name,
+      description = x@description,
+      parameters = as_json(provider, x@arguments, ...)
+    ))
+  ))
+}
+
 # https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#toolcall
 method(as_json, list(ProviderDatabricks, ContentToolRequest)) <- function(
   provider,
