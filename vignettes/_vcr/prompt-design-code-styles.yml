@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-6","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-5","system":[{"type":"text","text":"\n  You
         are an expert R programmer who prefers data.table.\n  Just give me the code.
         I don''t want any explanation or sample data.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
@@ -11,53 +11,45 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Mon, 29 Jun 2026 08:21:14 GMT
+      date: Sun, 02 Aug 2026 22:32:45 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-06-29T08:21:09Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-08-02T22:32:43Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-06-29T08:21:14Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-08-02T22:32:45Z'
       anthropic-ratelimit-requests-limit: '10000'
       anthropic-ratelimit-requests-remaining: '9999'
-      anthropic-ratelimit-requests-reset: '2026-06-29T08:21:08Z'
+      anthropic-ratelimit-requests-reset: '2026-08-02T22:32:43Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '12000000'
-      anthropic-ratelimit-tokens-reset: '2026-06-29T08:21:09Z'
-      request-id: req_011CcXE4YTGes9k3LwgrRBbP
+      anthropic-ratelimit-tokens-reset: '2026-08-02T22:32:43Z'
+      request-id: req_011CdeiW6Dvtp9DBvsfSo1qA
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      traceresponse: 00-9490f558853ef260e9680e3721a67198-5113e569ff5d00dc-01
+      traceresponse: 00-6bbffe1904d09775a061bc826a7041cd-6c93a3d8dc071942-01
       server: cloudflare
       content-encoding: gzip
       vary: Accept-Encoding
-      cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=mZ2DwBfSVSrcjaP8qnW7XYWMl6OXH_n27MTPfSOasjM-1782721268.6260347-1.0.1.1-emFRGX0PSqs31.g8Fe6WuXmt0.5UlWjmrzHJgxk8lA0;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      server-timing: x-originResponse;dur=2190
       x-robots-tag: none
-      cf-ray: a1338418efd081b7-IAD
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-cache-status: DYNAMIC
+      cf-ray: a2508a4768c0f965-EWR
     body:
-      string: '{"model":"claude-sonnet-4-6","id":"msg_011qME7oXDPYyjFz9auyffxP","type":"message","role":"assistant","content":[{"type":"text","text":"```r\nlibrary(data.table)\n\nresult
-        <- dt[, lapply(.SD, function(x) list(mean = mean(x, na.rm = TRUE), median
-        = median(x, na.rm = TRUE))), \n             by = .(age, sex), \n             .SDcols
-        = letters[1:26]]\n```\n\nOr if you want long format with separate mean and
-        median columns:\n\n```r\nlibrary(data.table)\n\nresult <- dt[, c(\n  lapply(.SD,
-        function(x) mean(x, na.rm = TRUE)),\n  lapply(.SD, function(x) median(x, na.rm
-        = TRUE))\n) |> setNames(c(paste0(\"mean_\", letters[1:26]), paste0(\"median_\",
-        letters[1:26]))),\n  by = .(age, sex),\n  .SDcols = letters[1:26]]\n```\n\nOr
-        more cleanly:\n\n```r\nlibrary(data.table)\n\nmean_cols   <- paste0(\"mean_\",
-        letters[1:26])\nmedian_cols <- paste0(\"median_\", letters[1:26])\n\nresult
-        <- dt[, {\n  means   <- lapply(.SD, mean,   na.rm = TRUE)\n  medians <- lapply(.SD,
-        median, na.rm = TRUE)\n  setNames(c(means, medians), c(mean_cols, median_cols))\n},
-        by = .(age, sex), .SDcols = letters[1:26]]\n```"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":78,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":354,"service_tier":"standard","inference_geo":"global"}}'
-  recorded_at: 2026-06-29 08:21:14
+      string: '{"model":"claude-sonnet-5","id":"msg_011CdeiW6iwbKFyisKqWH3wb","type":"message","role":"assistant","content":[{"type":"text","text":"```r\ndt[,
+        lapply(.SD, function(x) list(mean = mean(x), median = median(x))),\n   by
+        = .(age, sex), .SDcols = letters]\n```\n\nIf you want mean and median as separate
+        columns instead of a list column:\n\n```r\ncols <- letters\ndt[, unlist(lapply(.SD,
+        function(x) list(mean = mean(x), median = median(x))), recursive = FALSE),\n   by
+        = .(age, sex), .SDcols = cols]\n```"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":90,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":159,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-08-02 22:32:45
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-6","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-5","system":[{"type":"text","text":"\n  You
         are an expert R programmer who prefers base R.\n  Just give me the code. I
         don''t want any explanation or sample data.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
@@ -65,37 +57,36 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Mon, 29 Jun 2026 08:21:16 GMT
+      date: Sun, 02 Aug 2026 22:32:47 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-06-29T08:21:15Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-08-02T22:32:46Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-06-29T08:21:16Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-08-02T22:32:47Z'
       anthropic-ratelimit-requests-limit: '10000'
       anthropic-ratelimit-requests-remaining: '9999'
-      anthropic-ratelimit-requests-reset: '2026-06-29T08:21:14Z'
+      anthropic-ratelimit-requests-reset: '2026-08-02T22:32:46Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '12000000'
-      anthropic-ratelimit-tokens-reset: '2026-06-29T08:21:15Z'
-      request-id: req_011CcXE4yq1SFyeTouxjnNc8
+      anthropic-ratelimit-tokens-reset: '2026-08-02T22:32:46Z'
+      request-id: req_011CdeiWHFDEL4T4r234kkUR
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      traceresponse: 00-3ce3194dbe40ba2c57eaee6125b0bbb2-b55cac104325f944-01
+      traceresponse: 00-d46d4cead45d4fcbf2f7d39a03fc944b-a70d3b723114b74e-01
       server: cloudflare
       content-encoding: gzip
       vary: Accept-Encoding
-      cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=CQzgZYclxTY6MbPXl_YcCAvHupP_Kyheg9h70MZgwx4-1782721274.4965-1.0.1.1-RnGRpxhvBhElVD5Q5Wl34e0xoVABN6uoL8m7QySPgXg;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      server-timing: x-originResponse;dur=1503
       x-robots-tag: none
-      cf-ray: a133843d989781b7-IAD
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-cache-status: DYNAMIC
+      cf-ray: a2508a577ff8f965-EWR
     body:
-      string: '{"model":"claude-sonnet-4-6","id":"msg_014enQQYCzzpizNsDXKhXqDY","type":"message","role":"assistant","content":[{"type":"text","text":"```r\naggregate(cbind(a,
-        b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z)
-        ~ age + sex, \n          data = df, \n          FUN = function(x) c(mean =
-        mean(x), median = median(x)))\n```"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":77,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":101,"service_tier":"standard","inference_geo":"global"}}'
-  recorded_at: 2026-06-29 08:21:16
+      string: '{"model":"claude-sonnet-5","id":"msg_011CdeiWJ73pV4kx2TXf8oAP","type":"message","role":"assistant","content":[{"type":"text","text":"```r\nvars
+        <- letters\nresult <- aggregate(. ~ age + sex, data = df[c(\"age\", \"sex\",
+        vars)],\n                     FUN = function(x) c(mean = mean(x), median =
+        median(x)))\n```"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":89,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":75,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-08-02 22:32:47
 recorded_with: VCR-vcr/2.1.0

@@ -14,6 +14,7 @@ NULL
 #' You should generally not create this object yourself,
 #' but instead call [chat_openai()] or friends instead.
 #'
+#' @export
 #' @return A Chat object
 #' @examples
 #' \dontshow{ellmer:::vcr_example_start("Chat")}
@@ -24,17 +25,27 @@ Chat <- R6::R6Class(
   "Chat",
   public = list(
     #' @param provider A provider object.
+    #' @param model A [Model] object.
     #' @param system_prompt System prompt to start the conversation with.
     #' @param echo One of the following options:
     #'   * `none`: don't emit any output (default when running in a function).
-    #'   * `output`: echo text and tool-calling output as it streams in (default
-    #'     when running at the console).
+    #'   * `output`: echo text and tool-calling output after the turn completes
+    #'     (default when running at the console).
     #'   * `all`: echo all input and output.
+    #'
+    #' Console display occurs after a turn completes so ellmer can add citation
+    #' markers and a source list to the response.
     #'
     #'  Note this only affects the `chat()` method. You can override the default
     #'  by setting the `ellmer_echo` option.
-    initialize = function(provider, system_prompt = NULL, echo = "none") {
+    initialize = function(
+      provider,
+      model,
+      system_prompt = NULL,
+      echo = "none"
+    ) {
       private$provider <- provider
+      private$model <- model
       private$echo <- echo
       private$callback_on_tool_request <- CallbackManager$new(args = "request")
       private$callback_on_tool_result <- CallbackManager$new(args = "result")
@@ -68,6 +79,30 @@ Chat <- R6::R6Class(
       invisible(self)
     },
 
+    #' @description Retrieve the conversation grouped into [Round]s. Each
+    #'   `Round` pairs a user turn with the assistant and tool-result turns it
+    #'   produced.
+    #' @param include_system_prompt Whether to include system turns in the
+    #'   rounds. When `FALSE` (the default), all system turns are dropped. When
+    #'   `TRUE`, each system turn is folded into the `input` of the round it
+    #'   precedes.
+    get_rounds = function(include_system_prompt = FALSE) {
+      turns <- self$get_turns(include_system_prompt = TRUE)
+      if (!include_system_prompt) {
+        turns <- discard(turns, is_system_turn)
+      }
+      get_rounds(turns)
+    },
+
+    #' @description The last [Round] of conversation. Note that system prompt
+    #'   turns are included, equivalent to the last item in the list of rounds
+    #'   returned by `$get_rounds(include_system_prompt = TRUE)`.
+    #' @return Either a `Round` or `NULL`, if no rounds have occurred.
+    last_round = function() {
+      rounds <- self$get_rounds(include_system_prompt = TRUE)
+      if (length(rounds) == 0) NULL else rounds[[length(rounds)]]
+    },
+
     #' @description Add a pair of turns to the chat.
     #' @param user The user [Turn].
     #' @param assistant The system [Turn].
@@ -78,7 +113,7 @@ Chat <- R6::R6Class(
       check_turn(assistant)
 
       if (log_tokens) {
-        log_turn(private$provider, assistant)
+        log_turn(private$provider, private$model, assistant)
       }
 
       private$.turns[[length(private$.turns) + 1]] <- user
@@ -95,9 +130,14 @@ Chat <- R6::R6Class(
       }
     },
 
-    #' @description Retrieve the model name
+    #' @description Retrieve the model name.
     get_model = function() {
-      private$provider@model
+      private$model@name
+    },
+
+    #' @description Retrieve the Model object. For expert use only.
+    get_model_object = function() {
+      private$model
     },
 
     #' @description Update the model name. Note that unlike some of the
@@ -106,7 +146,7 @@ Chat <- R6::R6Class(
     #' @param model A single string giving the new model name.
     set_model = function(model) {
       check_string(model)
-      private$provider@model <- model
+      private$model@name <- model
       invisible(self)
     },
 
@@ -195,7 +235,7 @@ Chat <- R6::R6Class(
       include <- arg_match(include)
 
       if (include == "new") {
-        return(count_tokens(private$provider, ..., type = type))
+        return(count_tokens(private$provider, private$model, ..., type = type))
       }
 
       # With no history, we need to explicitly include system prompt and
@@ -204,6 +244,7 @@ Chat <- R6::R6Class(
       if (nrow(tokens) == 0) {
         all_tokens <- count_tokens(
           private$provider,
+          private$model,
           ...,
           system_prompt = self$get_system_prompt(),
           tools = private$tools,
@@ -212,7 +253,12 @@ Chat <- R6::R6Class(
         return(all_tokens)
       }
 
-      new_tokens <- count_tokens(private$provider, ..., type = type)
+      new_tokens <- count_tokens(
+        private$provider,
+        private$model,
+        ...,
+        type = type
+      )
       last <- tokens[nrow(tokens), ]
       new_tokens + last$input + last$output + last$cached_input
     },
@@ -249,12 +295,14 @@ Chat <- R6::R6Class(
 
       # Returns a single turn (the final response from the assistant), even if
       # multiple rounds of back and forth happened.
-      coro::collect(private$chat_impl(
-        turn,
-        stream = echo != "none",
-        echo = echo,
-        controller = stream_controller()
-      ))
+      coro::collect(
+        private$chat_impl(
+          turn,
+          stream = echo != "none",
+          echo = echo,
+          controller = stream_controller()
+        )
+      )
 
       text <- ellmer_output(self$last_turn()@text)
       if (echo == "none") text else invisible(text)
@@ -286,15 +334,17 @@ Chat <- R6::R6Class(
       type <- wrap_type_if_needed(type, needs_wrapper)
 
       stream <- echo != "none" &&
-        !uses_tool_structured_output(private$provider, type)
+        !uses_tool_structured_output(private$provider, private$model, type)
 
-      coro::collect(private$submit_turns(
-        turn,
-        type = type,
-        stream = stream,
-        echo = echo,
-        controller = stream_controller()
-      ))
+      coro::collect(
+        private$submit_turns(
+          turn,
+          type = type,
+          stream = stream,
+          echo = echo,
+          controller = stream_controller()
+        )
+      )
 
       turn <- self$last_turn()
       extract_data(turn, type, convert = convert, needs_wrapper = needs_wrapper)
@@ -323,15 +373,17 @@ Chat <- R6::R6Class(
       type <- wrap_type_if_needed(type, needs_wrapper)
 
       stream <- echo != "none" &&
-        !uses_tool_structured_output(private$provider, type)
+        !uses_tool_structured_output(private$provider, private$model, type)
 
-      done <- coro::async_collect(private$submit_turns_async(
-        turn,
-        type = type,
-        stream = stream,
-        echo = echo,
-        controller = stream_controller()
-      ))
+      done <- coro::async_collect(
+        private$submit_turns_async(
+          turn,
+          type = type,
+          stream = stream,
+          echo = echo,
+          controller = stream_controller()
+        )
+      )
 
       promises::then(done, function(dummy) {
         turn <- self$last_turn()
@@ -509,6 +561,7 @@ Chat <- R6::R6Class(
   ),
   private = list(
     provider = NULL,
+    model = NULL,
 
     .turns = list(),
     echo = NULL,
@@ -530,7 +583,11 @@ Chat <- R6::R6Class(
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
-      agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
+      agent_span <- local_agent_otel_span(
+        private$provider,
+        private$model,
+        activate = FALSE
+      )
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns(
@@ -600,7 +657,11 @@ Chat <- R6::R6Class(
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
-      agent_span <- local_agent_otel_span(private$provider, activate = FALSE)
+      agent_span <- local_agent_otel_span(
+        private$provider,
+        private$model,
+        activate = FALSE
+      )
 
       while (!is.null(user_turn)) {
         assistant_chunks <- private$submit_turns_async(
@@ -688,9 +749,11 @@ Chat <- R6::R6Class(
         cat_line(format(user_turn), prefix = "> ")
       }
 
+      request_turns <- c(private$.turns, list(user_turn))
       otel_input <- otel_chat_input(private, user_turn)
       chat_span <- local_chat_otel_span(
         private$provider,
+        private$model,
         turns = otel_input$turns,
         system_prompt = otel_input$system_prompt,
         parent = otel_span
@@ -698,8 +761,9 @@ Chat <- R6::R6Class(
 
       response <- chat_perform(
         provider = private$provider,
+        model = private$model,
         mode = if (stream) "stream" else "value",
-        turns = c(private$.turns, list(user_turn)),
+        turns = request_turns,
         tools = if (is.null(type)) private$tools,
         type = type,
         controller = controller,
@@ -708,8 +772,15 @@ Chat <- R6::R6Class(
 
       emit <- emitter(echo)
       any_text <- FALSE
+      echo_ends_with_newline <- TRUE
+      citation_sources <- list()
       turn <- NULL
-      acc <- TurnAccumulator$new(self, private, controller)
+      acc <- TurnAccumulator$new(
+        self,
+        private,
+        controller,
+        turns = request_turns
+      )
 
       if (stream) {
         acc$begin_turn(user_turn)
@@ -717,20 +788,45 @@ Chat <- R6::R6Class(
 
         result <- NULL
         for (chunk in response) {
-          content <- stream_content(private$provider, chunk)
-          if (!is.null(content)) {
-            text <- content_text(content)
-            emit(text)
-            yield(if (yield_as_content) content else text)
-            acc$update_turn(content)
-            any_text <- TRUE
-          }
-
           result <- stream_merge_chunks(private$provider, result, chunk)
+          contents <- stream_content_with_turns(
+            private$provider,
+            chunk,
+            result,
+            turns = request_turns
+          )
+          for (content in contents) {
+            text <- content_text(content)
+            if (yield_as_content) {
+              yield(content)
+            } else if (is_stream_text_content(content)) {
+              yield(text)
+            }
+            acc$update_turn(content)
+            if (is_stream_text_content(content)) {
+              any_text <- TRUE
+            }
+            if (S7_inherits(content, ContentText)) {
+              emit(text)
+              if (!identical(text, "")) {
+                echo_ends_with_newline <- endsWith(text, "\n")
+              }
+            } else if (S7_inherits(content, ContentCitation)) {
+              recorded <- record_citation_source(citation_sources, content)
+              citation_sources <- recorded$sources
+              if (!is.null(recorded$number)) {
+                emit(paste0("[", recorded$number, "]"))
+                echo_ends_with_newline <- FALSE
+              }
+            }
+          }
         }
 
         record_chat_otel_span_status(chat_span, private$provider, result)
         turn <- acc$complete_turn(result, type = type)
+        if (controller$cancelled) {
+          turn <- self$last_turn()
+        }
         record_chat_otel_span_output(chat_span, turn)
       } else {
         result <- resp_body_json(response)
@@ -742,28 +838,53 @@ Chat <- R6::R6Class(
         text <- turn@text
         if (!is.null(text)) {
           emit(text)
+          any_text <- TRUE
+          if (!identical(text, "")) {
+            echo_ends_with_newline <- endsWith(text, "\n")
+          }
           if (yield_as_content) {
             yield(ContentText(text))
           } else {
             yield(text)
           }
-          any_text <- TRUE
+        }
+        for (content in turn@contents) {
+          if (S7_inherits(content, ContentCitation)) {
+            recorded <- record_citation_source(citation_sources, content)
+            citation_sources <- recorded$sources
+            if (!is.null(recorded$number)) {
+              emit(paste0("[", recorded$number, "]"))
+              echo_ends_with_newline <- FALSE
+            }
+          }
         }
       }
 
-      if (!is.null(turn) && !is_partial_turn(turn)) {
-        # Ensure turns always end in a newline
-        if (any_text) {
+      if (!is.null(turn)) {
+        if (!echo_ends_with_newline) {
           emit("\n")
-          if (yield_as_content) {
-            yield(ContentText("\n"))
-          } else {
-            yield("\n")
+        }
+        if (length(citation_sources) > 0) {
+          echo_citation_footer(emit, citation_sources)
+        }
+        activity <- format_web_activity(turn@contents, echo == "all")
+        if (!is.null(activity)) {
+          emit("\n")
+          emit(activity)
+          emit("\n")
+        }
+        if (!is_partial_turn(turn) && any_text) {
+          if (!endsWith(turn@text, "\n")) {
+            if (yield_as_content) {
+              yield(ContentText("\n"))
+            } else {
+              yield("\n")
+            }
           }
         }
 
-        if (echo == "all") {
-          echo_non_text_contents(turn)
+        if (!is_partial_turn(turn) && echo == "all") {
+          echo_non_text_contents(turn, exclude_citation_activity = TRUE)
         }
         # When `echo="output"`, tool calls are emitted in `invoke_tools()`
       }
@@ -784,9 +905,15 @@ Chat <- R6::R6Class(
       controller = NULL,
       otel_span = NULL
     ) {
+      if (echo == "all") {
+        cat_line(format(user_turn), prefix = "> ")
+      }
+
+      request_turns <- c(private$.turns, list(user_turn))
       otel_input <- otel_chat_input(private, user_turn)
       chat_span <- local_chat_otel_span(
         private$provider,
+        private$model,
         turns = otel_input$turns,
         system_prompt = otel_input$system_prompt,
         parent = otel_span
@@ -794,8 +921,9 @@ Chat <- R6::R6Class(
 
       response <- chat_perform(
         provider = private$provider,
+        model = private$model,
         mode = if (stream) "async-stream" else "async-value",
-        turns = c(private$.turns, list(user_turn)),
+        turns = request_turns,
         tools = if (is.null(type)) private$tools,
         type = type,
         controller = controller,
@@ -804,8 +932,15 @@ Chat <- R6::R6Class(
 
       emit <- emitter(echo)
       any_text <- FALSE
+      echo_ends_with_newline <- TRUE
+      citation_sources <- list()
       turn <- NULL
-      acc <- TurnAccumulator$new(self, private, controller)
+      acc <- TurnAccumulator$new(
+        self,
+        private,
+        controller,
+        turns = request_turns
+      )
 
       if (stream) {
         acc$begin_turn(user_turn)
@@ -813,20 +948,45 @@ Chat <- R6::R6Class(
 
         result <- NULL
         for (chunk in await_each(response)) {
-          content <- stream_content(private$provider, chunk)
-          if (!is.null(content)) {
-            text <- content_text(content)
-            emit(text)
-            yield(if (yield_as_content) content else text)
-            acc$update_turn(content)
-            any_text <- TRUE
-          }
-
           result <- stream_merge_chunks(private$provider, result, chunk)
+          contents <- stream_content_with_turns(
+            private$provider,
+            chunk,
+            result,
+            turns = request_turns
+          )
+          for (content in contents) {
+            text <- content_text(content)
+            if (yield_as_content) {
+              yield(content)
+            } else if (is_stream_text_content(content)) {
+              yield(text)
+            }
+            acc$update_turn(content)
+            if (is_stream_text_content(content)) {
+              any_text <- TRUE
+            }
+            if (S7_inherits(content, ContentText)) {
+              emit(text)
+              if (!identical(text, "")) {
+                echo_ends_with_newline <- endsWith(text, "\n")
+              }
+            } else if (S7_inherits(content, ContentCitation)) {
+              recorded <- record_citation_source(citation_sources, content)
+              citation_sources <- recorded$sources
+              if (!is.null(recorded$number)) {
+                emit(paste0("[", recorded$number, "]"))
+                echo_ends_with_newline <- FALSE
+              }
+            }
+          }
         }
 
         record_chat_otel_span_status(chat_span, private$provider, result)
         turn <- acc$complete_turn(result, type = type)
+        if (controller$cancelled) {
+          turn <- self$last_turn()
+        }
         record_chat_otel_span_output(chat_span, turn)
       } else {
         response <- await(response)
@@ -839,28 +999,53 @@ Chat <- R6::R6Class(
         text <- turn@text
         if (!is.null(text)) {
           emit(text)
+          any_text <- TRUE
+          if (!identical(text, "")) {
+            echo_ends_with_newline <- endsWith(text, "\n")
+          }
           if (yield_as_content) {
             yield(ContentText(text))
           } else {
             yield(text)
           }
-          any_text <- TRUE
+        }
+        for (content in turn@contents) {
+          if (S7_inherits(content, ContentCitation)) {
+            recorded <- record_citation_source(citation_sources, content)
+            citation_sources <- recorded$sources
+            if (!is.null(recorded$number)) {
+              emit(paste0("[", recorded$number, "]"))
+              echo_ends_with_newline <- FALSE
+            }
+          }
         }
       }
 
-      if (!is.null(turn) && !is_partial_turn(turn)) {
-        # Ensure turns always end in a newline
-        if (any_text) {
+      if (!is.null(turn)) {
+        if (!echo_ends_with_newline) {
           emit("\n")
-          if (yield_as_content) {
-            yield(ContentText("\n"))
-          } else {
-            yield("\n")
+        }
+        if (length(citation_sources) > 0) {
+          echo_citation_footer(emit, citation_sources)
+        }
+        activity <- format_web_activity(turn@contents, echo == "all")
+        if (!is.null(activity)) {
+          emit("\n")
+          emit(activity)
+          emit("\n")
+        }
+        if (!is_partial_turn(turn) && any_text) {
+          if (!endsWith(turn@text, "\n")) {
+            if (yield_as_content) {
+              yield(ContentText("\n"))
+            } else {
+              yield("\n")
+            }
           }
         }
 
-        if (echo == "all") {
-          echo_non_text_contents(turn)
+        if (!is_partial_turn(turn) && echo == "all") {
+          echo_non_text_contents(turn, exclude_citation_activity = TRUE)
         }
         # When `echo="output"`, tool calls are echoed via `invoke_tools_async()`
       }
@@ -899,6 +1084,7 @@ Chat <- R6::R6Class(
 #' @export
 print.Chat <- function(x, ...) {
   provider <- x$get_provider()
+  model <- x$get_model_object()
   turns <- x$get_turns(include_system_prompt = TRUE)
 
   assistant_turns <- keep(turns, \(x) x@role == "assistant")
@@ -908,7 +1094,7 @@ print.Chat <- function(x, ...) {
 
   cat(paste_c(
     "<Chat",
-    c(" ", provider@name, "/", provider@model),
+    c(" ", provider@name, "/", model@name),
     c(" turns=", length(turns)),
     turn_cost(total_tokens, total_cost, prefix = " "),
     ">\n"
@@ -954,15 +1140,19 @@ TurnAccumulator <- R6::R6Class(
     chat = NULL,
     chat_private = NULL,
     provider = NULL,
+    model = NULL,
     controller = NULL,
+    turns = list(),
     turn_idx = NULL,
     start_time = NULL,
 
-    initialize = function(chat, chat_private, controller) {
+    initialize = function(chat, chat_private, controller, turns = list()) {
       self$chat <- chat
       self$chat_private <- chat_private
       self$provider <- chat$get_provider()
+      self$model <- chat$get_model_object()
       self$controller <- controller
+      self$turns <- turns
     },
 
     begin_turn = function(user_turn) {
@@ -990,7 +1180,7 @@ TurnAccumulator <- R6::R6Class(
       # log_turn() is called manually here because the streaming path
       # replaces a partial turn in-place rather than using Chat$add_turn(),
       # which handles logging automatically for the non-streaming path.
-      log_turn(self$provider, turn)
+      log_turn(self$provider, self$model, turn)
       turn
     },
 
@@ -1007,7 +1197,7 @@ TurnAccumulator <- R6::R6Class(
       turn@reason <- self$controller$reason %||% "interrupted"
       turn@duration <- proc.time()[["elapsed"]] - self$start_time
       self$chat_private$.turns[[idx]] <- turn
-      log_turn(self$provider, turn)
+      log_turn(self$provider, self$model, turn)
     },
 
     add_turn = function(user_turn, result, duration = NA_real_, type = NULL) {
@@ -1022,10 +1212,12 @@ TurnAccumulator <- R6::R6Class(
       finish_reason <- value_finish_reason(self$provider, result)
       check_finish_reason(finish_reason, if (is.null(type)) "warn" else "error")
 
-      turn <- value_turn(
+      turn <- value_turn_with_turns(
         self$provider,
+        self$model,
         result,
-        has_type = !is.null(type)
+        has_type = !is.null(type),
+        turns = self$turns
       )
       turn@duration <- duration
       match_tools(turn, self$chat$get_tools())
@@ -1033,10 +1225,131 @@ TurnAccumulator <- R6::R6Class(
   )
 )
 
-echo_non_text_contents <- function(turn) {
-  is_text <- map_lgl(turn@contents, S7_inherits, ContentText)
-  formatted <- map_chr(turn@contents[!is_text], format)
+echo_non_text_contents <- function(turn, exclude_citation_activity = FALSE) {
+  contents <- Filter(\(x) !S7_inherits(x, ContentText), turn@contents)
+  if (exclude_citation_activity) {
+    contents <- Filter(
+      \(x) {
+        !S7_inherits(x, ContentCitation) &&
+          !S7_inherits(x, ContentToolRequestSearch) &&
+          !S7_inherits(x, ContentToolRequestFetch) &&
+          !S7_inherits(x, ContentToolResponseSearch) &&
+          !S7_inherits(x, ContentToolResponseFetch)
+      },
+      contents
+    )
+  }
+  if (length(contents) == 0) {
+    return(invisible())
+  }
+  formatted <- map_chr(contents, format)
   cat_line(formatted, prefix = "< ")
+}
+
+record_citation_source <- function(sources, citation) {
+  source <- citation@source
+  if (is.null(source)) {
+    return(list(sources = sources, number = NULL))
+  }
+
+  key <- citation_source_key(source)
+  number <- match(key, map_chr(sources, citation_source_key))
+  if (is.na(number)) {
+    sources <- append(sources, list(source))
+    number <- length(sources)
+  }
+
+  list(sources = sources, number = number)
+}
+
+echo_citation_footer <- function(emit, sources) {
+  if (length(sources) == 0) {
+    return(invisible())
+  }
+
+  emit("\n")
+  emit(format_citation_sources(sources))
+  emit("\n")
+}
+
+citation_source_key <- function(source) {
+  if (S7_inherits(source, WebSource)) {
+    if (!is.null(source@url)) {
+      return(paste0("url:", source@url))
+    }
+    if (!is.null(source@title)) {
+      return(paste0("title:", source@title))
+    }
+  }
+
+  paste0("source:", format(source))
+}
+
+format_citation_sources <- function(sources) {
+  lines <- "Sources"
+  for (i in seq_along(sources)) {
+    source <- sources[[i]]
+    label <- citation_source_label(source)
+    url <- citation_source_url(source)
+    entry <- paste0("[", i, "] ", label)
+    if (!is.null(url) && !identical(label, url)) {
+      entry <- paste0(entry, ": ", url)
+    }
+    lines <- c(lines, entry)
+  }
+  paste(lines, collapse = "\n")
+}
+
+citation_source_label <- function(source) {
+  if (S7_inherits(source, WebSource)) {
+    return(source@title %||% source@url %||% format(source))
+  }
+
+  format(source)
+}
+
+citation_source_url <- function(source) {
+  if (S7_inherits(source, WebSource)) {
+    source@url
+  } else {
+    NULL
+  }
+}
+
+format_web_activity <- function(contents, include_activity) {
+  if (!include_activity) {
+    return(NULL)
+  }
+
+  searches <- web_activity_count(
+    contents,
+    ContentToolRequestSearch,
+    ContentToolResponseSearch
+  )
+  fetches <- web_activity_count(
+    contents,
+    ContentToolRequestFetch,
+    ContentToolResponseFetch
+  )
+  if (searches == 0 && fetches == 0) {
+    return(NULL)
+  }
+
+  paste0(
+    "Web activity: ",
+    searches,
+    if (searches == 1) " search" else " searches",
+    ", ",
+    fetches,
+    if (fetches == 1) " fetch" else " fetches"
+  )
+}
+
+web_activity_count <- function(contents, request_class, response_class) {
+  max(
+    sum(map_lgl(contents, S7_inherits, request_class)),
+    sum(map_lgl(contents, S7_inherits, response_class))
+  )
 }
 
 merge_content_text <- function(contents) {
@@ -1059,14 +1372,5 @@ method(contents_markdown, new_S3_class("Chat")) <- function(
     return("")
   }
 
-  hh <- strrep("#", heading_level)
-
-  res <- vector("character", length(turns))
-  for (i in seq_along(res)) {
-    role <- turns[[i]]@role
-    substr(role, 0, 1) <- toupper(substr(role, 0, 1))
-    res[i] <- glue::glue("{hh} {role}\n\n{contents_markdown(turns[[i]])}")
-  }
-
-  paste(res, collapse = "\n\n")
+  turns_markdown(turns, heading_level)
 }

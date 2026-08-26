@@ -42,10 +42,18 @@ NULL
 #'
 #' ## Authentication
 #'
-#' Authentication is handled through \{paws.common\}, so if authentication
-#' does not work for you automatically, you'll need to follow the advice
-#' at <https://www.paws-r-sdk.com/#credentials>. In particular, if your
-#' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
+#' `chat_aws_bedrock()` uses \{paws.common\} to resolve credentials,
+#' trying the following strategies in order:
+#'
+#' - A bearer token set in the `AWS_BEARER_TOKEN_BEDROCK` or
+#'   `AWS_BEARER_TOKEN` environment variable. This is used by enterprise
+#'   API gateways that issue API keys instead of IAM credentials. See the
+#'   [AWS documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-use.html)
+#'   for details.
+#' - Standard IAM credentials resolved from environment variables, AWS
+#'   config files, SSO, or instance metadata. See
+#'   <https://www.paws-r-sdk.com/#credentials> for details. If your org
+#'   uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 #'
 #' ## Prompt caching
 #'
@@ -79,13 +87,13 @@ NULL
 #'   Not supported when `api = "responses"`, which caches automatically.
 #'
 #'   See details below.
-#' @param model `r param_model("us.anthropic.claude-sonnet-4-6", "models_aws_bedrock")`.
+#' @param model `r param_model("us.anthropic.claude-sonnet-5", "models_aws_bedrock")`.
 #'
 #'   While ellmer provides a default model, there's no guarantee that you'll
 #'   have access to it, so you'll need to specify a model that you can.
 #'   If you're using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
 #'   you'll need to use the inference profile ID, e.g.
-#'   `model="us.anthropic.claude-sonnet-4-6"`.
+#'   `model="us.anthropic.claude-sonnet-5"`.
 #' @param params Common model parameters, usually created by [params()].
 #' @param api_args Named list of arbitrary extra arguments appended to the body
 #'   of every chat API call. Use `params` for common parameters. Model-specific
@@ -131,6 +139,7 @@ chat_aws_bedrock <- function(
   echo <- check_echo(echo)
 
   params <- params %||% params()
+  model <- set_default(model, "us.anthropic.claude-sonnet-5")
 
   provider <- provider_aws_bedrock(
     base_url = base_url,
@@ -138,11 +147,15 @@ chat_aws_bedrock <- function(
     api = api,
     profile = profile,
     cache = cache,
-    params = params,
-    extra_args = api_args,
     extra_headers = api_headers
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 
@@ -178,13 +191,11 @@ provider_aws_bedrock <- function(
   api = NULL,
   profile = NULL,
   cache = "auto",
-  params = list(),
-  extra_args = list(),
   extra_headers = character(),
   error_call = caller_env()
 ) {
   # The model determines the API, not the other way around
-  model <- set_default(model, "us.anthropic.claude-sonnet-4-6")
+  model <- set_default(model, "us.anthropic.claude-sonnet-5")
   api <- api %||% aws_bedrock_api(model)
   api <- arg_match(api, aws_bedrock_apis(), error_call = error_call)
 
@@ -209,12 +220,9 @@ provider_aws_bedrock <- function(
   inject(provider(
     name = "AWS/Bedrock",
     base_url = base_url,
-    model = model,
     profile = profile,
     region = region,
     creds_cache = creds_cache,
-    params = params,
-    extra_args = extra_args,
     extra_headers = extra_headers,
     !!!cache_args
   ))
@@ -353,6 +361,7 @@ method(chat_params, ProviderAWSBedrock) <- function(provider, params) {
 
 method(chat_request, ProviderAWSBedrock) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -362,7 +371,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
   suffix <- if (stream) "converse-stream" else "converse"
   req <- req_url_path_append(
     req,
-    paste0("model/", curl::curl_escape(provider@model), "/", suffix)
+    paste0("model/", curl::curl_escape(model@name), "/", suffix)
   )
 
   if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
@@ -400,9 +409,9 @@ method(chat_request, ProviderAWSBedrock) <- function(
   }
 
   # Merge params into inferenceConfig, giving precedence to manual api_args
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model@params)
 
-  extra_args <- provider@extra_args
+  extra_args <- model@extra_args
   extra_args$inferenceConfig <- modify_list(params, extra_args$inferenceConfig)
 
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
@@ -437,14 +446,19 @@ method(stream_parse, ProviderAWSBedrock) <- function(provider, event) {
   body
 }
 
-method(stream_content, ProviderAWSBedrock) <- function(provider, event) {
+method(stream_content, ProviderAWSBedrock) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
   if (event$event_type == "contentBlockDelta") {
     text <- event$delta$text
     if (is.null(text)) {
-      return(NULL)
+      return(list())
     }
-    ContentText(text)
+    return(list(ContentText(text)))
   }
+  list()
 }
 
 method(stream_merge_chunks, ProviderAWSBedrock) <- function(
@@ -542,6 +556,7 @@ method(value_finish_reason, ProviderAWSBedrock) <- function(provider, result) {
 
 method(value_turn, ProviderAWSBedrock) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
@@ -574,7 +589,7 @@ method(value_turn, ProviderAWSBedrock) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
+  cost <- get_token_cost(provider@name, model@name, tokens)
 
   AssistantTurn(
     contents,
@@ -739,17 +754,21 @@ method(as_json, list(ProviderAWSBedrock, ContentThinking)) <- function(
 aws_base_request <- function(provider, req) {
   creds <- paws_credentials(provider@profile, provider@creds_cache)
 
-  # Both endpoints sign as the "bedrock" service. httr2 can infer the service
-  # and region from the hostname, but only by accident for bedrock-mantle, so
-  # we're explicit.
-  req <- req_auth_aws_v4(
-    req,
-    aws_access_key_id = creds$access_key_id,
-    aws_secret_access_key = creds$secret_access_key,
-    aws_session_token = creds$session_token,
-    aws_service = "bedrock",
-    aws_region = provider@region
-  )
+  if (nzchar(creds$access_token)) {
+    req <- req_auth_bearer_token(req, creds$access_token)
+  } else {
+    # Both endpoints sign as the "bedrock" service. httr2 can infer the service
+    # and region from the hostname, but only by accident for bedrock-mantle, so
+    # we're explicit.
+    req <- req_auth_aws_v4(
+      req,
+      aws_access_key_id = creds$access_key_id,
+      aws_secret_access_key = creds$secret_access_key,
+      aws_session_token = creds$session_token,
+      aws_service = "bedrock",
+      aws_region = provider@region
+    )
+  }
   req <- ellmer_req_robustify(req)
   req <- ellmer_req_user_agent(req)
   base_request_error(provider, req)
@@ -894,7 +913,7 @@ paws_credentials <- function(
 
 # Wrapper for paws.common::locate_credentials() so we can mock it in tests.
 locate_aws_credentials <- function(profile) {
-  paws.common::locate_credentials(profile)
+  paws.common::locate_credentials(profile, signing_name = "bedrock")
 }
 
 aws_creds_cache <- function(profile) {

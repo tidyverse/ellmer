@@ -3,66 +3,58 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-4-6","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-5","system":[{"type":"text","text":"\n  You
         are an expert R programmer who prefers the tidyverse.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
         the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
   response:
     status: 200
     headers:
-      date: Mon, 29 Jun 2026 08:21:06 GMT
+      date: Sun, 02 Aug 2026 22:32:41 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-06-29T08:20:55Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-08-02T22:32:34Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '1999000'
-      anthropic-ratelimit-output-tokens-reset: '2026-06-29T08:21:05Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-08-02T22:32:41Z'
       anthropic-ratelimit-requests-limit: '10000'
       anthropic-ratelimit-requests-remaining: '9999'
-      anthropic-ratelimit-requests-reset: '2026-06-29T08:20:55Z'
+      anthropic-ratelimit-requests-reset: '2026-08-02T22:32:34Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '11999000'
-      anthropic-ratelimit-tokens-reset: '2026-06-29T08:20:55Z'
-      request-id: req_011CcXE3XsmjLLxZTHfbzA75
+      anthropic-ratelimit-tokens-reset: '2026-08-02T22:32:34Z'
+      request-id: req_011CdeiVRoP4gnxNJENdDcsw
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      traceresponse: 00-525a07eb61c63f21e701521c273ac647-16a67b360861614c-01
+      traceresponse: 00-56ab2fee696ce0d9687b7da6cf467d4e-96ae5ddc52513962-01
       server: cloudflare
       content-encoding: gzip
       vary: Accept-Encoding
-      cf-cache-status: DYNAMIC
-      set-cookie: _cfuvid=NFHrJl4erR65D7KdIIf9czs4DO3iQ13t8jIc7ahntx8-1782721254.9355347-1.0.1.1-1G0OuxPP53NdHU3h5tCx5K7Yaw.vCLLCDPktRFHuLWo;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com
-      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      server-timing: x-originResponse;dur=6633
       x-robots-tag: none
-      cf-ray: a13383c35a9b81b7-IAD
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-cache-status: DYNAMIC
+      cf-ray: a2508a0f3f89f965-EWR
     body:
-      string: '{"model":"claude-sonnet-4-6","id":"msg_01FAnUppmCG1Xfr8su1KhWwd","type":"message","role":"assistant","content":[{"type":"text","text":"##
-        Computing Mean and Median for Multiple Variables\n\nHere''s how to efficiently
-        compute grouped summary statistics across many variables using `dplyr`:\n\n```r\nlibrary(dplyr)\n\ndf
-        |>\n  group_by(age, sex) |>\n  summarise(\n    across(\n      a:z,                                    #
-        Select columns a through z\n      list(\n        mean   = \\(x) mean(x, na.rm
-        = TRUE),\n        median = \\(x) median(x, na.rm = TRUE)\n      ),\n      .names
-        = \"{.col}_{.fn}\"                 # Output: a_mean, a_median, b_mean...\n    ),\n    .groups
-        = \"drop\"\n  )\n```\n\n### Output Format\n\nThis produces columns named like:\n\n|
-        age | sex | a_mean | a_median | b_mean | b_median | ... |\n|-----|-----|--------|----------|--------|----------|-----|\n|
-        25  | M   | 3.2    | 3.0      | 1.5    | 1.0      | ... |\n\n### Key Components\n\n|
-        Component | Purpose |\n|-----------|---------|\n| `group_by(age, sex)` | Groups
-        data before summarising |\n| `across(a:z, ...)` | Applies functions to columns
-        a through z |\n| `list(mean = ..., median = ...)` | Defines multiple summary
-        functions |\n| `.names = \"{.col}_{.fn}\"` | Controls output column naming
-        pattern |\n| `na.rm = TRUE` | Handles missing values gracefully |\n\n### Alternative:
-        Long Format (often easier to work with)\n\n```r\nlibrary(dplyr)\nlibrary(tidyr)\n\ndf
-        |>\n  group_by(age, sex) |>\n  summarise(across(a:z, list(mean = \\(x) mean(x,
-        na.rm = TRUE),\n                             median = \\(x) median(x, na.rm
-        = TRUE)),\n                   .names = \"{.col}_{.fn}\"),\n            .groups
-        = \"drop\") |>\n  pivot_longer(\n    cols      = -c(age, sex),\n    names_to  =
-        c(\"variable\", \".value\"),  # Splits \"a_mean\" into variable=\"a\", stat=\"mean\"\n    names_sep
-        = \"_\"\n  )\n```\n\nThis produces a tidy long-format output:\n\n| age | sex
-        | variable | mean | median |\n|-----|-----|----------|------|--------|\n|
-        25  | M   | a        | 3.2  | 3.0    |\n| 25  | M   | b        | 1.5  | 1.0    |\n|
-        ... | ... | ...      | ...  | ...    |\n\nThe **long format** is generally
-        preferable for further analysis or plotting with `ggplot2`."}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":61,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":674,"service_tier":"standard","inference_geo":"global"}}'
-  recorded_at: 2026-06-29 08:21:06
+      string: '{"model":"claude-sonnet-5","id":"msg_011CdeiVS7UtnPCdj1RG2Yww","type":"message","role":"assistant","content":[{"type":"thinking","thinking":"","signature":"EpUECokBCBAYAipABd19GPZxsaVB4p+E+FMPoQGFh0pk7dDp4B3o9rvRJDmjgVZqHWTQemaq+yT9KFLyBXNDZ30NkPRgkIK2EgeZ3TIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ2N2JiOGZlYi03YmNhLTQzNjktOWUwNC0zMzlkNzM2NDZiNDASDMwPgQgXmcfpxpxs1hoM800Yi3IQBwAoqMAcIjA9DfiWY3zwcoHCi+NBNzjNA+utkMr7wNhBEobGtuy3zP8RZygqaFL4o8B9k85Che0quAIGjI+X+VlIVdjVOlOxsCSer/J0paKErrT+3iYuqAwkoZxTBKTy5MU5AxYJ6ddrgtG0/FqtMhRuio94cvWH/TI7qWQiGOo1VZ4JKkLOcRk9dDJLSaZjToZlQBYZmGKpDQVFWlWO2m3IqaFd5s7soXTdahIRFOACoftsJMgwZ/w77DVuYArodRalbFuxeqHr3mQ2WqgMRpmVjC+p9rzu4vJNsQGT0u8ZIK5P/y1Vt27fPp4HRtjMC2v2xJc0tavwpVTmIQvqNGddbTPshvHVI2qR4beFN8DAN+x7e9tp0ts9WuvZ/XlLErNUMGTzHmn65ZKKWfUjcwZX/ozk69DKh/zsAURFTn+wtko9W8nLrDZPShZZ61aJUffwoZAfeKU+n7rrHIgZiufe/QSIMEMw9JiU/fWXfPc3BhUYAQ=="},{"type":"text","text":"Here''s
+        how to compute the mean and median across variables `a` through `z`, grouped
+        by `age` and `sex`:\n\n```r\nlibrary(tidyverse)\n\ndf %>%\n  group_by(age,
+        sex) %>%\n  summarise(\n    across(a:z, list(mean = mean, median = median),
+        na.rm = TRUE),\n    .groups = \"drop\"\n  )\n```\n\n### Notes:\n\n- **`a:z`**
+        uses tidy-select''s column range syntax — it works as long as your columns
+        are actually named `a`, `b`, `c`, ..., `z` and appear in that order in your
+        data frame. This is often more convenient than typing out `all_of(letters)`.\n\n-
+        If your columns aren''t contiguous or ordered alphabetically, use:\n  ```r\n  across(all_of(letters),
+        list(mean = mean, median = median), na.rm = TRUE)\n  ```\n  since `letters`
+        is a built-in R constant containing `\"a\"` through `\"z\"`.\n\n- **`na.rm
+        = TRUE`** ensures missing values don''t cause `NA` results — remove it if
+        you want NAs to propagate.\n\n- The output column names will look like `a_mean`,
+        `a_median`, `b_mean`, `b_median`, etc.\n\n### Customizing names\n\nIf you
+        want a different naming pattern, use the `.names` argument:\n\n```r\ndf %>%\n  group_by(age,
+        sex) %>%\n  summarise(\n    across(\n      all_of(letters),\n      list(mean
+        = mean, median = median),\n      na.rm = TRUE,\n      .names = \"{.fn}_{.col}\"\n    ),\n    .groups
+        = \"drop\"\n  )\n```\n\nThis would produce names like `mean_a`, `median_a`,
+        `mean_b`, `median_b`, etc."}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":71,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":648,"output_tokens_details":{"thinking_tokens":89},"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-08-02 22:32:40
 recorded_with: VCR-vcr/2.1.0

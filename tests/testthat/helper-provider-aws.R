@@ -7,13 +7,10 @@ test_aws_bedrock_provider <- function(
   ProviderAWSBedrock(
     name = "ProviderAWSBedrock",
     base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
-    model = model,
     profile = NULL,
     region = "us-east-1",
     creds_cache = list(),
     cache_point = cache_point,
-    params = list(),
-    extra_args = list(),
     extra_headers = character()
   )
 }
@@ -27,6 +24,7 @@ local_mocked_aws_credentials <- function(
       list(
         access_key_id = "access-key-id",
         secret_access_key = "secret-access-key",
+        access_token = "",
         region = region,
         expiration = Sys.time() + 3600
       )

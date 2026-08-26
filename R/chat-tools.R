@@ -141,8 +141,44 @@ new_tool_result <- function(request, result = NULL, error = NULL) {
   } else if (is_tool_result(result)) {
     set_props(result, request = request)
   } else {
-    ContentToolResult(value = result, request = request)
+    ContentToolResult(value = normalize_tool_result(result), request = request)
   }
+}
+
+is_content_list <- function(x) {
+  is.list(x) && all(map_lgl(x, \(el) S7_inherits(el, Content)))
+}
+
+normalize_tool_result <- function(result) {
+  # NULL check must come before is.atomic(): is.atomic(NULL) is TRUE on R < 4.4
+  if (is.null(result) || inherits(result, "json")) {
+    return(result)
+  }
+  if (is.character(result)) {
+    return(paste(result, collapse = "\n"))
+  }
+  if (is.atomic(result)) {
+    return(to_json(result))
+  }
+
+  if (
+    promises::is.promise(result) ||
+      S7_inherits(result, Content) ||
+      is_content_list(result)
+  ) {
+    return(result)
+  }
+
+  lifecycle::deprecate_warn(
+    "0.5.0",
+    I("Automatic conversion of tool results to JSON"),
+    details = c(
+      paste0("The tool returned ", obj_type_friendly(result), ". "),
+      "Tool functions should return a string, a json object, a Content object, or a list of Content objects. ",
+      "Use `jsonlite::toJSON()` to convert complex objects to JSON before returning."
+    )
+  )
+  to_json(result)
 }
 
 # Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases

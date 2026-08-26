@@ -1,18 +1,31 @@
 ## revdepcheck results
 
-We checked 43 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 48 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
- * We saw 1 new problems
- * We failed to check 1 packages
+ * We saw 6 new problems
+ * We failed to check 0 packages
 
 Issues with CRAN packages are summarised below.
 
 ### New problems
 (This reports the first line of each new failure)
 
-* constructive
+* btw
   checking tests ... ERROR
 
-### Failed to check
+* GitAI
+  checking tests ... ERROR
 
-* llmjson (NA)
+* mini007
+  checking examples ... ERROR
+
+* querychat
+  checking tests ... ERROR
+
+* shidashi
+  checking whether package ‘shidashi’ can be installed ... WARNING
+  checking R code for possible problems ... NOTE
+
+* vitals
+  checking tests ... ERROR
+

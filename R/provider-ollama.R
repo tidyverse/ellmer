@@ -74,8 +74,14 @@ chat_ollama <- function(
   # if ollama is served behind a proxy (see #501)
   credentials <- ollama_credentials(credentials, api_key)
 
+  is_local <- is_local_ollama(base_url)
+
   if (!has_ollama(base_url, credentials)) {
-    cli::cli_abort("Can't find locally running ollama.")
+    if (is_local) {
+      cli::cli_abort("Can't find locally running ollama.")
+    } else {
+      cli::cli_abort("Can't connect to ollama at {.url {base_url}}.")
+    }
   }
 
   models <- models_ollama(base_url, credentials)$id
@@ -83,39 +89,50 @@ chat_ollama <- function(
   if (missing(model)) {
     cli::cli_abort(c(
       "Must specify {.arg model}.",
-      i = "Locally installed models: {.str {models}}."
+      i = "Available models: {.str {models}}."
     ))
   } else if (!model %in% models) {
-    cli::cli_abort(
-      c(
-        "Model {.val {model}} is not installed locally.",
-        i = "Run {.code ollama pull {model}} in your terminal or {.run ollamar::pull(\"{model}\")} in R to install the model.",
-        i = "See locally installed models with {.run ellmer::models_ollama()}."
+    if (is_local) {
+      cli::cli_abort(
+        c(
+          "Model {.val {model}} is not installed locally.",
+          i = "Run {.code ollama pull {model}} in your terminal or {.run ollamar::pull(\"{model}\")} in R to install the model.",
+          i = "See locally installed models with {.run ellmer::models_ollama()}."
+        )
       )
-    )
+    } else {
+      cli::cli_abort(
+        c(
+          "Model {.val {model}} is not available on {.url {base_url}}.",
+          i = "See available models with {.code models_ollama(base_url = \"{base_url}\")}."
+        )
+      )
+    }
   }
 
   echo <- check_echo(echo)
 
+  params <- params %||% params()
+
   provider <- ProviderOllama(
     name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
+  model <- Model(name = model, params = params, extra_args = api_args)
 
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderOllama <- new_class(
   "ProviderOllama",
-  parent = ProviderOpenAICompatible,
-  properties = list(
-    model = prop_string()
-  )
+  parent = ProviderOpenAICompatible
 )
 
 ollama_credentials <- function(credentials = NULL, api_key = NULL) {
@@ -177,7 +194,6 @@ models_ollama <- function(
 
   provider <- ProviderOllama(
     name = "Ollama",
-    model = "",
     base_url = file.path(base_url, "v1"),
     credentials = credentials
   )
@@ -253,6 +269,10 @@ ollama_model_capabilities <- function(
   map_chr(res, \(x) paste(x$capabilities, collapse = ","))
 }
 
+is_local_ollama <- function(base_url) {
+  host <- httr2::url_parse(base_url)$hostname
+  host %in% c("localhost", "127.0.0.1", "::1")
+}
 
 has_ollama <- function(
   base_url = "http://localhost:11434",

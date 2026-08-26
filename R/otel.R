@@ -27,6 +27,7 @@ local({
 
   local_chat_otel_span <<- function(
     provider,
+    model,
     turns = NULL,
     system_prompt = NULL,
     parent = NULL,
@@ -37,7 +38,7 @@ local({
     }
     chat_span <-
       otel::start_span(
-        sprintf("chat %s", provider@model),
+        sprintf("chat %s", model@name),
         options = list(
           parent = parent,
           kind = "client"
@@ -45,7 +46,7 @@ local({
         attributes = list(
           "gen_ai.operation.name" = "chat",
           "gen_ai.provider.name" = tolower(provider@name),
-          "gen_ai.request.model" = provider@model
+          "gen_ai.request.model" = model@name
         ),
         tracer = otel_tracer
       )
@@ -122,6 +123,7 @@ local({
   # local_otel_span_agent
   local_agent_otel_span <<- function(
     provider,
+    model,
     activate = TRUE,
     local_envir = parent.frame()
   ) {
@@ -143,7 +145,7 @@ local({
         attributes = list(
           "gen_ai.operation.name" = "invoke_agent",
           "gen_ai.provider.name" = tolower(provider@name),
-          "gen_ai.request.model" = provider@model
+          "gen_ai.request.model" = model@name
         ),
         tracer = otel_tracer
       )
@@ -250,12 +252,6 @@ as_otel_message <- function(turn) {
     role = if (is_tool_result_turn(turn)) "tool" else turn@role,
     parts = lapply(turn@contents, as_otel_part)
   )
-}
-
-is_tool_result_turn <- function(turn) {
-  S7_inherits(turn, UserTurn) &&
-    length(turn@contents) > 0 &&
-    all(map_lgl(turn@contents, S7_inherits, ContentToolResult))
 }
 
 otel_chat_input <- function(private, user_turn) {

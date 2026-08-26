@@ -29,9 +29,12 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-initialize}{\code{Chat$new()}}
     \item \href{#method-Chat-get_turns}{\code{Chat$get_turns()}}
     \item \href{#method-Chat-set_turns}{\code{Chat$set_turns()}}
+    \item \href{#method-Chat-get_rounds}{\code{Chat$get_rounds()}}
+    \item \href{#method-Chat-last_round}{\code{Chat$last_round()}}
     \item \href{#method-Chat-add_turn}{\code{Chat$add_turn()}}
     \item \href{#method-Chat-get_system_prompt}{\code{Chat$get_system_prompt()}}
     \item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
+    \item \href{#method-Chat-get_model_object}{\code{Chat$get_model_object()}}
     \item \href{#method-Chat-set_model}{\code{Chat$set_model()}}
     \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
     \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
@@ -60,21 +63,25 @@ chat$chat("Tell me a funny joke")
 \subsection{\code{Chat$new()}}{
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$new(provider, system_prompt = NULL, echo = "none")}
+    \preformatted{Chat$new(provider, model, system_prompt = NULL, echo = "none")}
     \if{html}{\out{</div>}}
   }
   \subsection{Arguments}{
     \if{html}{\out{<div class="arguments">}}
     \describe{
       \item{\code{provider}}{A provider object.}
+      \item{\code{model}}{A \link{Model} object.}
       \item{\code{system_prompt}}{System prompt to start the conversation with.}
       \item{\code{echo}}{One of the following options:
 \itemize{
 \item \code{none}: don't emit any output (default when running in a function).
-\item \code{output}: echo text and tool-calling output as it streams in (default
-when running at the console).
+\item \code{output}: echo text and tool-calling output after the turn completes
+(default when running at the console).
 \item \code{all}: echo all input and output.
 }
+
+Console display occurs after a turn completes so ellmer can add citation
+markers and a source list to the response.
 
 Note this only affects the \code{chat()} method. You can override the default
 by setting the \code{ellmer_echo} option.}
@@ -124,6 +131,47 @@ turns (if any exists).}
 }
 
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_rounds"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_rounds}{}}}
+\subsection{\code{Chat$get_rounds()}}{
+  Retrieve the conversation grouped into \link{Round}s. Each
+\code{Round} pairs a user turn with the assistant and tool-result turns it
+produced.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$get_rounds(include_system_prompt = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{include_system_prompt}}{Whether to include system turns in the
+rounds. When \code{FALSE} (the default), all system turns are dropped. When
+\code{TRUE}, each system turn is folded into the \code{input} of the round it
+precedes.}
+    }
+    \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-last_round"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-last_round}{}}}
+\subsection{\code{Chat$last_round()}}{
+  The last \link{Round} of conversation. Note that system prompt
+turns are included, equivalent to the last item in the list of rounds
+returned by \verb{$get_rounds(include_system_prompt = TRUE)}.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$last_round()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Either a \code{Round} or \code{NULL}, if no rounds have occurred.
+  }
+}
+
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Chat-add_turn"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-add_turn}{}}}
 \subsection{\code{Chat$add_turn()}}{
@@ -161,10 +209,22 @@ session counter?}
 \if{html}{\out{<a id="method-Chat-get_model"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-get_model}{}}}
 \subsection{\code{Chat$get_model()}}{
-  Retrieve the model name
+  Retrieve the model name.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$get_model()}
+    \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_model_object"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_model_object}{}}}
+\subsection{\code{Chat$get_model_object()}}{
+  Retrieve the Model object. For expert use only.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$get_model_object()}
     \if{html}{\out{</div>}}
   }
 }

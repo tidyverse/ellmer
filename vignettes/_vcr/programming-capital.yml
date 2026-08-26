@@ -15,18 +15,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a1338794f80ea5ba-IAD
+      cf-ray: a2508cf3ebac0866-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:23:31 GMT
+      date: Sun, 02 Aug 2026 22:34:33 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '317'
+      openai-processing-ms: '411'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=qdrQnOLPrk1c6SCbS62_mzgyq5tPYeaaWZuXuBJ8tnU-1782721411.3531823-1.0.1.1-Oyqr3AP91wm9Rga47O.oFIKIJU49.EXiYge0DpHcukkE2lgrDHveIrvffQfLjX4fA8jbuIyTZyX8ENosNl6ZU9yxzY4rullV8dXYauMMnaJUo1OSBZkxqKg.jqtHu4LF;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 08:53:31 GMT
+      set-cookie: __cf_bm=C4ufllATuv0Vgr6vIaU4qY8NibBNHC06jPdWlLXPtHE-1785710072.9410625-1.0.1.1-GajojQjOFUehsshfZV0KxxgjfNTX3jBXffN8GJL4WSRXQFtzdqhSydH.wlYvkcKVieXJ6ALH7dK0Hne7Pk8z4mNMBZ.P7DCJDj5jaUmRkV6m.AMeEa1IBZBzK4tRyE7k;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 23:04:33 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -35,19 +35,19 @@ http_interactions:
       x-ratelimit-remaining-tokens: '199963'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 11ms
-      x-request-id: 7bae9f70-bf1a-4fc3-9b56-f853fc337c4f
+      x-request-id: req_32b603fadbff443da041f40e84fa225d
     body:
       string: |-
         {
-          "id": "resp_02ede7e02930ee5a016a422b8363348191b07ce08224f9f640",
+          "id": "resp_09920b58e33c2e65016a6fc5f900f08195a8ac39755dba0485",
           "object": "response",
-          "created_at": 1782721411,
+          "created_at": 1785710073,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782721411,
+          "completed_at": 1785710073,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -58,7 +58,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_02ede7e02930ee5a016a422b83a70481918b5d33f0bd624b5d",
+              "id": "msg_09920b58e33c2e65016a6fc5f9579081959cde03dc5498eb64",
               "type": "message",
               "status": "completed",
               "content": [
@@ -66,7 +66,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Paris"
+                  "text": "Paris."
                 }
               ],
               "role": "assistant"
@@ -118,16 +118,17 @@ http_interactions:
           "usage": {
             "input_tokens": 18,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 2,
+            "output_tokens": 3,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 20
+            "total_tokens": 21
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:23:31
+  recorded_at: 2026-08-02 22:34:33
 recorded_with: VCR-vcr/2.1.0

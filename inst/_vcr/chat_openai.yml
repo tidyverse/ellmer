@@ -5,7 +5,7 @@ http_interactions:
     body:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  What
         is the difference between a tibble and a data frame?\n  Answer with a bulleted
-        list\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"store":false,"service_tier":"auto"}'
+        list\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
@@ -15,50 +15,50 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a133b8b73b25d4ce-MAN
+      cf-ray: a25081733932ae4c-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:57:08 GMT
+      date: Sun, 02 Aug 2026 22:26:46 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '4858'
+      openai-processing-ms: '4354'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=DSiZn6onw6yo2OAW9fHbjFbYV7fUhgV.GtmDMrV6Mmw-1782723423.871339-1.0.1.1-0.6xDeaYdlzRdjsC3r53ZTV2Wcqp8MS_.7sSwEop.udj8PAKOmYYvXW4IdeR9UQAPR5LgygL2oAiQDukH7li7zNR91dqm_Dscu1t8.Z8pasexqjeIg8TtgebHu8GUUpm;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 09:27:08 GMT
+      set-cookie: __cf_bm=x40gSjEcLNOkNj5xQbbtwkDl7.BoaLJVD_zg3Jf.o30-1785709601.8007252-1.0.1.1-A9jASyoNCTSJhPpyjHeoli9GoWjEBxMjnZPAkOH5kzAvfQoNMMOMmb23Qr4RstpIT_cRSgHtc1ll8BI9H.y4nkfFpiMAgabmkotqoxkF5OQEGo8C6lgW39r2lNKU2oLl;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 22:56:46 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499825'
+      x-ratelimit-remaining-tokens: '499735'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 21ms
-      x-request-id: d2da803f-c1d0-407b-ac70-91b569123f6e
+      x-ratelimit-reset-tokens: 31ms
+      x-request-id: req_77f21a88a28a4b4abae32d98cdf1e9e8
     body:
       string: |-
         {
-          "id": "resp_009836829ffce795016a42335ff93c81a09b9d4eed7a7baae0",
+          "id": "resp_0591f534cf149c94016a6fc421ddf481968cfabab42f14538c",
           "object": "response",
-          "created_at": 1782723424,
+          "created_at": 1785709601,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782723428,
+          "completed_at": 1785709606,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.4-2026-03-05",
+          "model": "gpt-5.6-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_009836829ffce795016a423360b13c81a09f978e5ba289d9cb",
+              "id": "msg_0591f534cf149c94016a6fc422377481969714454d0fc1dd59",
               "type": "message",
               "status": "completed",
               "content": [
@@ -66,7 +66,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "- **Both store tabular data in R**, but a **tibble** is a modern version of a **data frame**, provided by the **tibble** package and commonly used in the **tidyverse**.\n\n- **Printing behavior**\n  - **Data frame:** prints the whole object by default.\n  - **Tibble:** prints only the first 10 rows and columns that fit on screen, making large datasets easier to inspect.\n\n- **Subsetting behavior**\n  - **Data frame:** may simplify results, for example returning a vector instead of a one-column data frame.\n  - **Tibble:** is more strict and usually preserves the data structure.\n\n- **Column names**\n  - **Data frame:** may change column names to make them syntactically valid unless told not to.\n  - **Tibble:** keeps column names more faithfully.\n\n- **Type handling**\n  - **Data frame:** older versions of R sometimes converted character columns to factors automatically.\n  - **Tibble:** does not do automatic character-to-factor conversion.\n\n- **Partial matching**\n  - **Data frame:** can allow partial matching in some cases.\n  - **Tibble:** does not allow partial matching, which helps avoid mistakes.\n\n- **Input flexibility**\n  - **Data frame:** works well with base R functions.\n  - **Tibble:** is designed to work smoothly with tidyverse tools like `dplyr` and `ggplot2`.\n\n- **Summary**\n  - Use a **data frame** for base R compatibility.\n  - Use a **tibble** when you want cleaner printing, stricter behavior, and tidyverse-friendly workflows."
+                  "text": "- **Origin**\n  - A **data frame** is a base R data structure.\n  - A **tibble** is a modern reimplementation of a data frame from the **tibble** package, commonly used in the tidyverse.\n\n- **Printing**\n  - Data frames often print all rows and columns, which can be overwhelming for large datasets.\n  - Tibbles print a compact preview: only the first few rows and columns, along with column types.\n\n- **Data types**\n  - Data frames may automatically convert character columns to factors in older versions of R (depending on settings).\n  - Tibbles do not automatically convert strings to factors.\n\n- **Column names**\n  - Data frames can modify invalid or duplicate column names by default (for example, adding dots).\n  - Tibbles preserve column names more consistently and can support non-syntactic names.\n\n- **Subsetting**\n  - Extracting a single column from a data frame with `df[, \"x\"]` may simplify the result to a vector.\n  - Extracting from a tibble with `tbl[, \"x\"]` always returns another tibble; use `tbl[[\"x\"]]` or `tbl$x` to get a vector.\n\n- **Partial matching**\n  - Data frames may allow partial matching of column names, such as `df$long` matching a column called `long_name`.\n  - Tibbles do not allow partial matching, helping prevent accidental mistakes.\n\n- **Recycling behavior**\n  - Data frames may silently recycle shorter vectors when creating or modifying columns.\n  - Tibbles are stricter and generally require vectors to have compatible lengths, reducing silent errors.\n\n- **Compatibility**\n  - A tibble is still a type of data frame, so many functions that work with data frames also work with tibbles.\n  - Some base R functions or older code may expect a plain data frame, in which case a tibble can be converted with `as.data.frame()`."
                 }
               ],
               "phase": "final_answer",
@@ -79,8 +79,8 @@ http_interactions:
           "prompt_cache_key": null,
           "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": "current_turn",
-            "effort": "none",
+            "context": "all_turns",
+            "effort": "medium",
             "mode": "standard",
             "summary": null
           },
@@ -120,18 +120,19 @@ http_interactions:
           "usage": {
             "input_tokens": 29,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 338,
+            "output_tokens": 408,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 367
+            "total_tokens": 437
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:57:08
+  recorded_at: 2026-08-02 22:26:45
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
@@ -139,26 +140,30 @@ http_interactions:
       string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  What
         is the difference between a tibble and a data frame?\n  Answer with a bulleted
         list\n"}]},{"role":"assistant","content":[{"type":"output_text","text":"-
-        **Both store tabular data in R**, but a **tibble** is a modern version of
-        a **data frame**, provided by the **tibble** package and commonly used in
-        the **tidyverse**.\n\n- **Printing behavior**\n  - **Data frame:** prints
-        the whole object by default.\n  - **Tibble:** prints only the first 10 rows
-        and columns that fit on screen, making large datasets easier to inspect.\n\n-
-        **Subsetting behavior**\n  - **Data frame:** may simplify results, for example
-        returning a vector instead of a one-column data frame.\n  - **Tibble:** is
-        more strict and usually preserves the data structure.\n\n- **Column names**\n  -
-        **Data frame:** may change column names to make them syntactically valid unless
-        told not to.\n  - **Tibble:** keeps column names more faithfully.\n\n- **Type
-        handling**\n  - **Data frame:** older versions of R sometimes converted character
-        columns to factors automatically.\n  - **Tibble:** does not do automatic character-to-factor
-        conversion.\n\n- **Partial matching**\n  - **Data frame:** can allow partial
-        matching in some cases.\n  - **Tibble:** does not allow partial matching,
-        which helps avoid mistakes.\n\n- **Input flexibility**\n  - **Data frame:**
-        works well with base R functions.\n  - **Tibble:** is designed to work smoothly
-        with tidyverse tools like `dplyr` and `ggplot2`.\n\n- **Summary**\n  - Use
-        a **data frame** for base R compatibility.\n  - Use a **tibble** when you
-        want cleaner printing, stricter behavior, and tidyverse-friendly workflows."}]},{"role":"user","content":[{"type":"input_text","text":"Tell
-        me three funny jokes about statisticians"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4","stream":false,"store":false,"service_tier":"auto"}'
+        **Origin**\n  - A **data frame** is a base R data structure.\n  - A **tibble**
+        is a modern reimplementation of a data frame from the **tibble** package,
+        commonly used in the tidyverse.\n\n- **Printing**\n  - Data frames often print
+        all rows and columns, which can be overwhelming for large datasets.\n  - Tibbles
+        print a compact preview: only the first few rows and columns, along with column
+        types.\n\n- **Data types**\n  - Data frames may automatically convert character
+        columns to factors in older versions of R (depending on settings).\n  - Tibbles
+        do not automatically convert strings to factors.\n\n- **Column names**\n  -
+        Data frames can modify invalid or duplicate column names by default (for example,
+        adding dots).\n  - Tibbles preserve column names more consistently and can
+        support non-syntactic names.\n\n- **Subsetting**\n  - Extracting a single
+        column from a data frame with `df[, \"x\"]` may simplify the result to a vector.\n  -
+        Extracting from a tibble with `tbl[, \"x\"]` always returns another tibble;
+        use `tbl[[\"x\"]]` or `tbl$x` to get a vector.\n\n- **Partial matching**\n  -
+        Data frames may allow partial matching of column names, such as `df$long`
+        matching a column called `long_name`.\n  - Tibbles do not allow partial matching,
+        helping prevent accidental mistakes.\n\n- **Recycling behavior**\n  - Data
+        frames may silently recycle shorter vectors when creating or modifying columns.\n  -
+        Tibbles are stricter and generally require vectors to have compatible lengths,
+        reducing silent errors.\n\n- **Compatibility**\n  - A tibble is still a type
+        of data frame, so many functions that work with data frames also work with
+        tibbles.\n  - Some base R functions or older code may expect a plain data
+        frame, in which case a tibble can be converted with `as.data.frame()`."}]},{"role":"user","content":[{"type":"input_text","text":"Tell
+        me three funny jokes about statisticians"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
@@ -168,18 +173,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a133b8d90982d4ce-MAN
+      cf-ray: a25081912f5bae4c-EWR
       content-encoding: br
       content-type: application/json
-      date: Mon, 29 Jun 2026 08:57:12 GMT
+      date: Sun, 02 Aug 2026 22:26:48 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '3184'
+      openai-processing-ms: '1725'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=mYjPzVcka4kyQJ0ElL7rwME0sso5SOdtjdRRr3F2dtA-1782723429.2889225-1.0.1.1-ZU1L5K7ZcIEaR.WH09Wz3J_UYY2rWDNLFs5bUgpGrCSC0eWtaytK_KHvWnNzAdOiClxKcZ2oHC_UseqNLncVYUeLvSeMthEUnMjBT08zcxYRtOrDC1CQeJ6GTPVbdvjQ;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        29 Jun 2026 09:27:12 GMT
+      set-cookie: __cf_bm=se_28UzS_NpZZlkRgX9yrtxuwQx6kMmVA.z9YlzAS9E-1785709606.585477-1.0.1.1-gZYb8Xrvm_gWDG8JjOpC5S0ReUDf259Op288jIegdwATWNmr5dtgSBA6o6lW.C1FTVMIRx.ZgfUW7e_eI05D.ImeqomTvOKSwTrzVNyRq6GGDB9c_Qt4vJFTVZSN0f2i;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 22:56:48 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -188,30 +193,30 @@ http_interactions:
       x-ratelimit-remaining-tokens: '500000'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: 2181bc7f-d508-463e-9842-496abfc6e2da
+      x-request-id: req_f08b315d047d48d3b7caa2ccef84d266
     body:
       string: |-
         {
-          "id": "resp_00f03fecf45867fc016a4233656be8819f86cb240870a4956b",
+          "id": "resp_0dd5ab2d4bb98e1a016a6fc426a67c819388d323a02b385def",
           "object": "response",
-          "created_at": 1782723429,
+          "created_at": 1785709606,
           "status": "completed",
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1782723432,
+          "completed_at": 1785709608,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.4-2026-03-05",
+          "model": "gpt-5.6-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_00f03fecf45867fc016a4233673278819f9dd41af00817d7bb",
+              "id": "msg_0dd5ab2d4bb98e1a016a6fc42744648193807a04a06d6e02ae",
               "type": "message",
               "status": "completed",
               "content": [
@@ -219,7 +224,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "- Why did the statistician bring a ladder to work?  \n  - Because the data had too many high points.\n\n- A statistician drowned crossing a river that was, on average, 3 feet deep.  \n  - Moral: always check the distribution.\n\n- Statisticians do it with significance.  \n  - But only if `p < 0.05`."
+                  "text": "- Why did the statistician drown crossing a river?  \n  Because it was three feet deep on average.\n\n- A statistician\u2019s favorite type of joke?  \n  One with a significant *p*-unchline.\n\n- There are three kinds of statisticians:  \n  Those who can count, and those who can\u2019t account for sampling error."
                 }
               ],
               "phase": "final_answer",
@@ -232,8 +237,8 @@ http_interactions:
           "prompt_cache_key": null,
           "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": "current_turn",
-            "effort": "none",
+            "context": "all_turns",
+            "effort": "medium",
             "mode": "standard",
             "summary": null
           },
@@ -271,18 +276,19 @@ http_interactions:
           "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 381,
+            "input_tokens": 451,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 80,
+            "output_tokens": 74,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 461
+            "total_tokens": 525
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-06-29 08:57:12
+  recorded_at: 2026-08-02 22:26:48
 recorded_with: VCR-vcr/2.1.0

@@ -59,6 +59,30 @@ test_that("can search web pages", {
   test_tool_web_search(chat_fun, google_tool_web_search())
 })
 
+test_that("can combine built-in and user tools", {
+  chat <- chat_google_gemini_test()
+  provider <- chat$get_provider()
+  model <- chat$get_model_object()
+
+  regular_tool <- tool(
+    function(x) x,
+    "Return `x`",
+    arguments = list(x = type_number("x"))
+  )
+
+  body <- chat_body(
+    provider,
+    model,
+    stream = TRUE,
+    turns = list(Turn("user", "hi")),
+    tools = list(regular_tool, google_tool_web_search())
+  )
+
+  expect_length(body$tools, 2)
+  expect_named(body$tools[[1]], "functionDeclarations")
+  expect_named(body$tools[[2]], "google_search")
+})
+
 test_that("can use images", {
   vcr::local_cassette("google-image")
   chat_fun <- chat_google_gemini_test
@@ -76,9 +100,9 @@ test_that("can use pdfs", {
 test_that("can match prices for some common models", {
   provider <- chat_google_gemini_test()$get_provider()
 
-  expect_true(has_cost(provider, "gemini-3.5-flash"))
+  expect_true(has_cost(provider@name, "gemini-3.5-flash"))
 
-  expect_false(has_cost(provider, "gemini-1.0-pro-latest"))
+  expect_false(has_cost(provider@name, "gemini-1.0-pro-latest"))
 })
 
 # custom behaviour -------------------------------------------------------------
@@ -115,6 +139,47 @@ test_that("can merge text output", {
   expect_equal(out$candidates[[1]]$finishReason, "STOP")
 })
 
+test_that("merge_gemini_chunks() retains final grounding metadata", {
+  text <- list(
+    candidates = list(
+      list(
+        content = list(
+          parts = list(list(text = "Grounded answer")),
+          role = "model"
+        )
+      )
+    )
+  )
+  metadata <- list(
+    candidates = list(
+      list(
+        groundingMetadata = list(
+          webSearchQueries = list("ellmer citations")
+        ),
+        urlContextMetadata = list(
+          urlMetadata = list(
+            list(
+              retrievedUrl = "https://example.com",
+              urlRetrievalStatus = "URL_RETRIEVAL_STATUS_SUCCESS"
+            )
+          )
+        )
+      )
+    )
+  )
+
+  merged <- merge_gemini_chunks(text, metadata)
+  candidate <- merged$candidates[[1]]
+  expect_equal(
+    candidate$groundingMetadata$webSearchQueries,
+    list("ellmer citations")
+  )
+  expect_equal(
+    candidate$urlContextMetadata$urlMetadata[[1]]$retrievedUrl,
+    "https://example.com"
+  )
+})
+
 test_that("can handle citations", {
   # based on "Write me a 5-paragraph essay on the history of the tidyverse."
   messages <- c(
@@ -142,6 +207,101 @@ test_that("can handle citations", {
   expect_equal(source$endIndex, 2)
   expect_equal(source$uri, "https://example.com")
   expect_equal(source$license, "")
+})
+
+test_that("value_turn() preserves Google web metadata", {
+  provider <- chat_google_gemini_test()$get_provider()
+  support_with_source <- list(
+    segment = list(text = "Grounded answer"),
+    groundingChunkIndices = list(0L)
+  )
+  support_without_source <- list(
+    segment = list(text = "Source-less answer"),
+    groundingChunkIndices = list(1L)
+  )
+  grounding <- list(
+    webSearchQueries = list("ellmer citations"),
+    groundingChunks = list(
+      list(web = list(uri = "https://example.com", title = "Example")),
+      list(retrievedContext = list(title = "No web URL"))
+    ),
+    groundingSupports = list(support_with_source, support_without_source)
+  )
+  url_metadata <- list(
+    retrievedUrl = "https://fetch.example",
+    urlRetrievalStatus = "URL_RETRIEVAL_STATUS_SUCCESS"
+  )
+  result <- list(
+    candidates = list(
+      list(
+        content = list(
+          role = "model",
+          parts = list(list(text = "Grounded answer and source-less answer"))
+        ),
+        finishReason = "STOP",
+        groundingMetadata = grounding,
+        urlContextMetadata = list(urlMetadata = list(url_metadata))
+      )
+    ),
+    usageMetadata = list()
+  )
+
+  contents <- value_turn(provider, test_model(), result)@contents
+  expect_s7_class(contents[[1]], ContentToolRequestSearch)
+  expect_equal(contents[[1]]@query, "ellmer citations")
+  expect_s7_class(contents[[2]], ContentToolResponseSearch)
+  expect_equal(contents[[2]]@sources[[1]]@title, "Example")
+  expect_s7_class(contents[[3]], ContentText)
+  expect_s7_class(contents[[4]], ContentCitation)
+  expect_equal(contents[[4]]@grounded_span, "Grounded answer")
+  expect_equal(contents[[4]]@source@url, "https://example.com")
+  expect_s7_class(contents[[5]], ContentCitation)
+  expect_equal(contents[[5]]@grounded_span, "Source-less answer")
+  expect_null(contents[[5]]@source)
+  expect_s7_class(contents[[6]], ContentToolRequestFetch)
+  expect_s7_class(contents[[7]], ContentToolResponseFetch)
+  expect_equal(contents[[7]]@status, "success")
+})
+
+test_that("stream_content() emits every Google content record in a chunk", {
+  provider <- chat_google_gemini_test()$get_provider()
+  grounding <- list(
+    webSearchQueries = list("ellmer citations"),
+    groundingChunks = list(
+      list(web = list(uri = "https://example.com", title = "Example"))
+    ),
+    groundingSupports = list(
+      list(
+        segment = list(text = "Grounded answer"),
+        groundingChunkIndices = list(0L)
+      )
+    )
+  )
+  event <- list(
+    candidates = list(
+      list(
+        content = list(parts = list(list(text = "Grounded answer"))),
+        groundingMetadata = grounding
+      )
+    )
+  )
+
+  streamed <- stream_content(provider, event, completion = event)
+  expect_s7_class(streamed[[1]], ContentText)
+  expect_s7_class(streamed[[2]], ContentToolRequestSearch)
+  expect_s7_class(streamed[[3]], ContentToolResponseSearch)
+  expect_s7_class(streamed[[4]], ContentCitation)
+
+  metadata_only <- list(
+    candidates = list(
+      list(
+        groundingMetadata = grounding
+      )
+    )
+  )
+  streamed <- stream_content(provider, metadata_only, completion = event)
+  expect_length(streamed, 3)
+  expect_s7_class(streamed[[3]], ContentCitation)
 })
 
 test_that("can generate images", {
@@ -191,10 +351,13 @@ test_that("batch chat works", {
 })
 
 test_that("gemini_prepare_batch_body handles API quirks", {
-  provider <- chat_google_gemini_test()$get_provider()
+  chat <- chat_google_gemini_test()
+  provider <- chat$get_provider()
+  model <- chat$get_model_object()
 
   body <- chat_body(
     provider,
+    model,
     stream = FALSE,
     turns = list(Turn("user", "hi")),
     type = type_object(firstName = type_string())
@@ -237,7 +400,7 @@ test_that("batch_status waits for responsesFile after SUCCEEDED", {
   no_file <- batch_status(provider, returned_batch)
   expect_true(no_file$working)
 
-  returned_batch$response = list(responsesFile = "files/abc123")
+  returned_batch$response <- list(responsesFile = "files/abc123")
 
   with_file <- batch_status(
     provider,

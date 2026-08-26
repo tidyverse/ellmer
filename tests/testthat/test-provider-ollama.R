@@ -56,7 +56,7 @@ test_that("supports tool calling", {
 
 test_that("as_json specialised for Ollama", {
   withr::local_options(lifecycle_verbosity = "quiet")
-  stub <- ProviderOllama(name = "", base_url = "", model = "")
+  stub <- ProviderOllama(name = "", base_url = "")
 
   expect_snapshot(
     as_json(stub, type_object(.additional_properties = TRUE)),

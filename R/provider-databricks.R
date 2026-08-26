@@ -72,13 +72,16 @@ chat_databricks <- function(
   provider <- ProviderDatabricks(
     name = "Databricks",
     base_url = workspace,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderDatabricks <- new_class(
@@ -97,6 +100,7 @@ method(base_request, ProviderDatabricks) <- function(provider) {
 
 method(chat_body, ProviderDatabricks) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -104,13 +108,14 @@ method(chat_body, ProviderDatabricks) <- function(
 ) {
   body <- chat_body(
     super(provider, ProviderOpenAICompatible),
+    model = model,
     stream = stream,
     turns = turns,
     tools = tools,
     type = type
   )
 
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model@params)
   body <- modify_list(body, params)
 
   # Databricks doesn't support stream options
@@ -133,6 +138,86 @@ method(chat_params, ProviderDatabricks) <- function(provider, params) {
   )
 }
 
+# Some Databricks models (e.g. GPT-OSS) return message content as an array of
+# typed objects rather than a plain string (#1078). Normalize to the standard
+# OpenAI-compatible shape: text parts pasted into a string `content`, reasoning
+# summaries moved to `reasoning`.
+databricks_normalize_message <- function(message) {
+  if (!is.list(message$content)) {
+    return(message)
+  }
+
+  parts <- message$content
+  types <- map_chr(parts, function(p) p$type %||% "")
+  message$content <- paste0(
+    map_chr(parts[types == "text"], function(p) p$text),
+    collapse = ""
+  )
+  summaries <- unlist(
+    lapply(parts[types == "reasoning"], function(p) p$summary),
+    recursive = FALSE
+  )
+  if (length(summaries)) {
+    message$reasoning <- paste0(
+      map_chr(summaries, function(s) s$text),
+      collapse = ""
+    )
+  }
+  message
+}
+
+method(stream_content, ProviderDatabricks) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
+  if (length(event$choices) > 0) {
+    event$choices[[1]]$delta <- databricks_normalize_message(
+      event$choices[[1]]$delta
+    )
+  }
+  stream_content(
+    super(provider, ProviderOpenAICompatible),
+    event,
+    completion = completion
+  )
+}
+
+method(stream_merge_chunks, ProviderDatabricks) <- function(
+  provider,
+  result,
+  chunk
+) {
+  # Normalize before merging so merge_dicts() only ever concatenates strings;
+  # merging a string `content` with an array `content` mangles the result
+  if (length(chunk$choices) > 0) {
+    chunk$choices[[1]]$delta <- databricks_normalize_message(
+      chunk$choices[[1]]$delta
+    )
+  }
+  stream_merge_chunks(super(provider, ProviderOpenAICompatible), result, chunk)
+}
+
+method(value_turn, ProviderDatabricks) <- function(
+  provider,
+  model,
+  result,
+  has_type = FALSE
+) {
+  choice <- result$choices[[1]]
+  if (has_name(choice, "delta")) {
+    result$choices[[1]]$delta <- databricks_normalize_message(choice$delta)
+  } else {
+    result$choices[[1]]$message <- databricks_normalize_message(choice$message)
+  }
+  value_turn(
+    super(provider, ProviderOpenAICompatible),
+    model,
+    result,
+    has_type = has_type
+  )
+}
+
 method(chat_path, ProviderDatabricks) <- function(provider) {
   # Note: this API endpoint is undocumented and seems to exist primarily for
   # compatibility with the OpenAI Python SDK. The documented endpoint is
@@ -148,29 +233,6 @@ method(base_request_error, ProviderDatabricks) <- function(provider, req) {
       resp_body_json(resp)$message
     }
   })
-}
-
-# See: https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#functionobject
-method(as_json, list(ProviderDatabricks, ToolDef)) <- function(
-  provider,
-  x,
-  ...
-) {
-  # Note: It seems that Databricks doesn't support the "strict" field, despite
-  # what their documentation says. It *is* supported for structured outputs,
-  # though. I suspect a copy & paste error in their docs.
-  compact(list(
-    type = "function",
-    "function" = compact(list(
-      name = x@name,
-      description = x@description,
-      # Use the same parameter encoding as the OpenAI provider, but only if
-      # there actually are parameters.
-      parameters = if (length(x@arguments@properties) != 0) {
-        as_json(provider, x@arguments, ...)
-      }
-    ))
-  ))
 }
 
 # https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#toolcall

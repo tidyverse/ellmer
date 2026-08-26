@@ -54,10 +54,20 @@ NULL
 #' ````
 #'
 #' @param fun The function to be invoked when the tool is called. The return
-#'   value of the function is sent back to the chatbot.
+#'   value of the function is sent back to the chatbot. The function should
+#'   return one of:
 #'
-#'   Expert users can customize the tool result by returning a
-#'   [ContentToolResult] object.
+#'   * A character vector.
+#'   * An atomic vector.
+#'   * A `json`-class object (e.g. from [jsonlite::toJSON()]).
+#'   * A [Content] object (e.g. [ContentImageInline]).
+#'   * A list of [Content] objects.
+#'   * A [ContentToolResult] object (expert users who want to customize
+#'     the tool result directly).
+#'
+#'   Other return types (e.g. data frames, lists) are
+#'   `r lifecycle::badge("deprecated")` and will error in a future release.
+#'   Convert them to a string or JSON before returning.
 #' @param name The name of the function. This can be omitted if `fun` is an
 #'   existing function (i.e. not defined inline).
 #' @param description A detailed description of what the function does.
@@ -107,7 +117,6 @@ NULL
 #'
 #' \dontshow{ellmer:::vcr_example_end()}
 #' @family tool calling helpers
-#' @aliases ToolDef
 #' @export
 tool <- function(
   fun,
@@ -183,6 +192,28 @@ tool <- function(
   )
 }
 
+#' A tool definition
+#'
+#' @description
+#' An S7 class representing a tool that can be called by a chat model.
+#' You should generally not create this object yourself, but instead
+#' call [tool()] instead.
+#'
+#' @param .data The underlying function.
+#' @param name The name of the tool.
+#' @param description A description of what the tool does.
+#' @param arguments A [TypeObject] describing the tool's arguments.
+#' @param convert Whether to automatically convert JSON inputs to R
+#'   equivalents.
+#' @param annotations A list of additional tool annotations.
+#' @examples
+#' my_tool <- ToolDef(
+#'   function(x) x * 2,
+#'   name = "double",
+#'   description = "Doubles a number",
+#'   arguments = type_object(x = type_number("The number to double"))
+#' )
+#' @export
 ToolDef <- new_class(
   "ToolDef",
   parent = class_function,
@@ -280,13 +311,15 @@ check_tools <- function(x, arg = caller_arg(x), call = caller_env()) {
 #' tool_rnorm <- tool(
 #'   rnorm,
 #'   # Describe the tool function to the LLM
-#'   .description = "Drawn numbers from a random normal distribution",
+#'   description = "Drawn numbers from a random normal distribution",
 #'   # Describe the parameters used by the tool function
-#'   n = type_integer("The number of observations. Must be a positive integer."),
-#'   mean = type_number("The mean value of the distribution."),
-#'   sd = type_number("The standard deviation of the distribution. Must be a non-negative number."),
+#'   arguments = list(
+#'     n = type_integer("The number of observations. Must be a positive integer."),
+#'     mean = type_number("The mean value of the distribution."),
+#'     sd = type_number("The standard deviation of the distribution. Must be a non-negative number.")
+#'   ),
 #'   # Tool annotations optionally provide additional context to the LLM
-#'   .annotations = tool_annotations(
+#'   annotations = tool_annotations(
 #'     title = "Draw Random Normal Numbers",
 #'     read_only_hint = TRUE, # the tool does not modify any state
 #'     open_world_hint = FALSE # the tool does not interact with the outside world
