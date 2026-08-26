@@ -22,3 +22,23 @@ test_that("models_list() dispatches through Chat to provider", {
   chat <- Chat$new(provider = provider, model = test_model())
   expect_error(models_list(chat), class = "not_implemented")
 })
+
+test_that("deprecated Provider properties warn but still work", {
+  chat <- Chat$new(provider = test_provider(), model = test_model("m"))
+  provider <- chat$get_provider()
+  expect_snapshot({
+    provider@model
+    provider@params
+    provider@extra_args
+    provider <- Provider(
+      name = "test",
+      base_url = "https://example.com",
+      model = "x"
+    )
+    provider@model
+  })
+})
+
+test_that("Provider print omits deprecated properties", {
+  expect_snapshot(print(test_provider()))
+})

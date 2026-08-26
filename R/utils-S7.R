@@ -23,6 +23,51 @@ prop_string <- function(default = NULL, allow_null = FALSE, allow_na = FALSE) {
   )
 }
 
+# Deprecated Provider properties, backed by a hidden ".model" attribute that
+# Chat sets. Remove once the deprecation cycle is complete (#1098).
+prop_deprecated <- function(name, model_prop) {
+  force(name)
+  force(model_prop)
+
+  new_property(
+    class = NULL | class_any,
+    getter = function(self) {
+      lifecycle::deprecate_warn(
+        "0.5.0",
+        I(paste0("`Provider@", name, "`")),
+        details = "Use the `Model` object instead, e.g. `chat$get_model_object()`.",
+        user_env = global_env()
+      )
+      model <- provider_model(self)
+      if (is.null(model)) NULL else prop(model, model_prop)
+    },
+    setter = function(self, value) {
+      if (is.null(value)) {
+        return(self)
+      }
+      lifecycle::deprecate_warn(
+        "0.5.0",
+        I(paste0("`Provider(", name, ")`")),
+        details = "Use the `Model` object instead.",
+        user_env = global_env()
+      )
+      model <- provider_model(self) %||% Model(name = "")
+      prop(model, model_prop) <- value
+      provider_model(self) <- model
+      self
+    }
+  )
+}
+
+provider_model <- function(provider) {
+  attr(provider, ".model", exact = TRUE)
+}
+
+`provider_model<-` <- function(provider, value) {
+  attr(provider, ".model") <- value
+  provider
+}
+
 prop_bool <- function(default, allow_null = FALSE, allow_na = FALSE) {
   force(allow_null)
   force(allow_na)

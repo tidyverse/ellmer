@@ -46,6 +46,7 @@ Chat <- R6::R6Class(
     ) {
       private$provider <- provider
       private$model <- model
+      provider_model(private$provider) <- model
       private$echo <- echo
       private$callback_on_tool_request <- CallbackManager$new(args = "request")
       private$callback_on_tool_result <- CallbackManager$new(args = "result")
@@ -147,6 +148,7 @@ Chat <- R6::R6Class(
     set_model = function(model) {
       check_string(model)
       private$model@name <- model
+      provider_model(private$provider) <- private$model
       invisible(self)
     },
 
