@@ -13,8 +13,11 @@ NULL
 #'
 #' [AWS Bedrock](https://aws.amazon.com/bedrock/) provides a number of
 #' language models, including those from Anthropic's
-#' [Claude](https://aws.amazon.com/bedrock/claude/), using the Bedrock
-#' [Converse API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html).
+#' [Claude](https://aws.amazon.com/bedrock/claude/). Most are served through
+#' the Bedrock
+#' [Converse API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html),
+#' with some only available through the Anthropic Messages or OpenAI Responses
+#' APIs; see the `api` argument for details.
 #'
 #' ## APIs and endpoints
 #'
@@ -35,7 +38,7 @@ NULL
 #'   through `"converse"` anyway.
 #'
 #' By default ellmer picks the API from `model`, falling back to `"converse"`
-#' for models it doesn't recognise. Set `api` explicitly to override this.
+#' for models it doesn't recognize. Set `api` explicitly to override this.
 #'
 #' Note that the two endpoints have separate token quotas, so moving a model
 #' from one to the other changes which quota it consumes.
@@ -76,7 +79,7 @@ NULL
 #' @param profile AWS profile to use.
 #' @param api Which Bedrock API to use: `"converse"`, `"messages"`, or
 #'   `"responses"`. The default, `NULL`, picks the API from `model`, falling
-#'   back to `"converse"` for unrecognised models.
+#'   back to `"converse"` for unrecognized models.
 #'
 #'   See details below.
 #' @param cache How long to cache inputs? The default, `"auto"`, enables
@@ -333,6 +336,27 @@ method(models_list, ProviderAWSBedrockMessages) <- function(provider) {
 
 method(models_list, ProviderAWSBedrockResponses) <- function(provider) {
   aws_mantle_models(provider)
+}
+
+# Mantle doesn't serve the batch endpoints of either API, or the OpenAI token
+# counting endpoint, so don't inherit them.
+method(has_batch_support, ProviderAWSBedrockMessages) <- function(provider) {
+  FALSE
+}
+
+method(has_batch_support, ProviderAWSBedrockResponses) <- function(provider) {
+  FALSE
+}
+
+method(count_tokens, ProviderAWSBedrockResponses) <- function(
+  provider,
+  model,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  count_tokens(super(provider, Provider), model, ...)
 }
 
 method(base_request_error, ProviderAWSBedrockResponses) <- function(
@@ -800,7 +824,7 @@ aws_error_body <- function(resp) {
 }
 
 # Most models are only available via Converse, so it's the fallback for
-# anything we don't recognise: `aws_bedrock_apis` only lists models that
+# anything we don't recognize: `aws_bedrock_apis` only lists models that
 # Converse can't serve. Model ids can also carry a cross-region inference
 # prefix, which we strip before looking them up.
 aws_bedrock_api <- function(model) {

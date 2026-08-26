@@ -38,7 +38,7 @@ you'll need to use the inference profile ID, e.g.
 
 \item{api}{Which Bedrock API to use: \code{"converse"}, \code{"messages"}, or
 \code{"responses"}. The default, \code{NULL}, picks the API from \code{model}, falling
-back to \code{"converse"} for unrecognised models.
+back to \code{"converse"} for unrecognized models.
 
 See details below.}
 
@@ -92,8 +92,11 @@ A \link{Chat} object.
 
 \href{https://aws.amazon.com/bedrock/}{AWS Bedrock} provides a number of
 language models, including those from Anthropic's
-\href{https://aws.amazon.com/bedrock/claude/}{Claude}, using the Bedrock
-\href{https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html}{Converse API}.
+\href{https://aws.amazon.com/bedrock/claude/}{Claude}. Most are served through
+the Bedrock
+\href{https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html}{Converse API},
+with some only available through the Anthropic Messages or OpenAI Responses
+APIs; see the \code{api} argument for details.
 \subsection{APIs and endpoints}{
 
 Bedrock serves models from two endpoints, and \code{api} selects which one to use
@@ -114,7 +117,7 @@ through \code{"converse"} anyway.
 }
 
 By default ellmer picks the API from \code{model}, falling back to \code{"converse"}
-for models it doesn't recognise. Set \code{api} explicitly to override this.
+for models it doesn't recognize. Set \code{api} explicitly to override this.
 
 Note that the two endpoints have separate token quotas, so moving a model
 from one to the other changes which quota it consumes.
