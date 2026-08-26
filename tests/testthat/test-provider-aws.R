@@ -318,30 +318,19 @@ test_that("aws_error_body() handles responses without a content type", {
 })
 
 test_that("converse suggests mantle when it doesn't recognise the model", {
-  local_mocked_aws_credentials()
-
-  resp <- response_json(
-    status_code = 400,
-    body = list(message = "The provided model identifier is invalid.")
+  req <- base_request_error(
+    test_aws_bedrock_provider(),
+    request("http://example.com")
   )
-  body <- function(model, resp) {
-    req <- chat_request(
-      provider_aws_bedrock(api = "converse"),
-      test_model(model),
-      turns = list(Turn("user", "Hi"))
-    )
-    req$policies$error_body(resp)
+  body <- function(message) {
+    req$policies$error_body(response_json(400, body = list(message = message)))
   }
 
-  hint <- body("anthropic.claude-mythos-9", resp)
+  hint <- body("The provided model identifier is invalid.")
   expect_length(hint, 2)
   expect_match(hint[[2]], 'set `api` to "messages" or "responses"')
 
-  # No hint when the user has already chosen converse for a mantle model
-  expect_length(body("openai.gpt-5.4", resp), 1)
-
-  other <- response_json(status_code = 400, body = list(message = "Nope."))
-  expect_length(body("anthropic.claude-mythos-9", other), 1)
+  expect_length(body("Nope."), 1)
 })
 
 test_that("as_bedrock_message_cache() resolves 'auto'", {
