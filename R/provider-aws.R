@@ -195,7 +195,6 @@ provider_aws_bedrock <- function(
   error_call = caller_env()
 ) {
   # The model determines the API, not the other way around
-  model <- set_default(model, "us.anthropic.claude-sonnet-5")
   api <- api %||% aws_bedrock_api(model)
   api <- arg_match(api, aws_bedrock_apis(), error_call = error_call)
 
@@ -208,7 +207,9 @@ provider_aws_bedrock <- function(
   # Each API expresses caching differently, or not at all
   cache_args <- switch(
     api,
-    converse = list(cache_point = as_bedrock_cache_point(cache, model)),
+    converse = list(
+      cache_point = as_bedrock_cache_point(cache, model %||% "")
+    ),
     messages = list(cache = as_bedrock_message_cache(cache)),
     responses = {
       check_bedrock_no_cache(cache, error_call = error_call)
@@ -287,15 +288,12 @@ method(base_request_error, ProviderAWSBedrock) <- function(provider, req) {
 
     # Models we don't know about are sent to converse, so a model that only
     # exists on mantle fails here with a misleading error.
-    unknown_model <- grepl("model identifier is invalid", msg %||% "")
-    if (unknown_model && aws_bedrock_api(provider@model) == "converse") {
+    if (grepl("model identifier is invalid", msg %||% "")) {
       msg <- c(
         msg,
         i = paste0(
-          "If '",
-          provider@model,
-          "' is only available on the bedrock-mantle endpoint, set ",
-          "`api` to \"messages\" or \"responses\"."
+          "If this model is only available on the bedrock-mantle endpoint, ",
+          "set `api` to \"messages\" or \"responses\"."
         )
       )
     }
