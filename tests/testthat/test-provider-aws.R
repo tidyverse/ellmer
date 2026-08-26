@@ -280,17 +280,6 @@ test_that("each api has its own endpoint", {
   )
 })
 
-test_that("the default model is the same whatever the api", {
-  local_mocked_aws_credentials()
-
-  models <- vapply(
-    c("converse", "messages", "responses"),
-    \(api) provider_aws_bedrock(api = api)@model,
-    character(1)
-  )
-  expect_all_equal(models, "us.anthropic.claude-sonnet-4-6")
-})
-
 test_that("explicit api overrides the guess", {
   local_mocked_aws_credentials()
 
@@ -306,6 +295,7 @@ test_that("mantle requests are signed as bedrock in the right region", {
 
   req <- chat_request(
     provider_aws_bedrock(api = "messages"),
+    test_model("anthropic.claude-sonnet-5"),
     turns = list(Turn("user", "Hi"))
   )
   expect_equal(
@@ -334,25 +324,24 @@ test_that("converse suggests mantle when it doesn't recognise the model", {
     status_code = 400,
     body = list(message = "The provided model identifier is invalid.")
   )
-  body <- function(provider) {
-    req <- base_request_error(provider, request("http://example.com"))
+  body <- function(model, resp) {
+    req <- chat_request(
+      provider_aws_bedrock(api = "converse"),
+      test_model(model),
+      turns = list(Turn("user", "Hi"))
+    )
     req$policies$error_body(resp)
   }
 
-  hint <- body(provider_aws_bedrock(model = "anthropic.claude-mythos-9"))
+  hint <- body("anthropic.claude-mythos-9", resp)
   expect_length(hint, 2)
   expect_match(hint[[2]], 'set `api` to "messages" or "responses"')
 
   # No hint when the user has already chosen converse for a mantle model
-  forced <- provider_aws_bedrock(model = "openai.gpt-5.4", api = "converse")
-  expect_length(body(forced), 1)
+  expect_length(body("openai.gpt-5.4", resp), 1)
 
   other <- response_json(status_code = 400, body = list(message = "Nope."))
-  req <- base_request_error(
-    provider_aws_bedrock(model = "anthropic.claude-mythos-9"),
-    request("http://example.com")
-  )
-  expect_length(req$policies$error_body(other), 1)
+  expect_length(body("anthropic.claude-mythos-9", other), 1)
 })
 
 test_that("as_bedrock_message_cache() resolves 'auto'", {
