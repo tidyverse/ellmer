@@ -25,12 +25,14 @@ prop_string <- function(default = NULL, allow_null = FALSE, allow_na = FALSE) {
 
 # Deprecated Provider properties, backed by a hidden ".model" attribute that
 # Chat sets. Remove once the deprecation cycle is complete (#1098).
+# user_env is fixed to global_env() because the getter/setter are called from
+# S7's `@` dispatch, so lifecycle would otherwise blame S7.
 prop_deprecated <- function(name, model_prop) {
   force(name)
   force(model_prop)
 
   new_property(
-    class = NULL | class_any,
+    class = class_any,
     getter = function(self) {
       lifecycle::deprecate_warn(
         "0.5.0",

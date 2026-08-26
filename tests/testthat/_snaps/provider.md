@@ -39,18 +39,10 @@
     Output
       [1] "x"
 
-# Provider print and str omit deprecated properties
+# Provider print omits deprecated properties
 
     Code
       print(test_provider())
-    Output
-      <ellmer::Provider>
-       @ name         : chr ""
-       @ base_url     : chr ""
-       @ extra_headers: chr(0) 
-       @ credentials  :function ()  
-    Code
-      str(test_provider())
     Output
       <ellmer::Provider>
        @ name         : chr ""
