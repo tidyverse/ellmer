@@ -152,6 +152,9 @@ chat_aws_bedrock <- function(
     cache = cache,
     extra_headers = api_headers
   )
+  if (!S7_inherits(provider, ProviderAWSBedrock)) {
+    model <- aws_strip_region_prefix(model)
+  }
   model <- Model(name = model, params = params, extra_args = api_args)
   Chat$new(
     provider = provider,
@@ -338,14 +341,23 @@ method(models_list, ProviderAWSBedrockResponses) <- function(provider) {
   aws_mantle_models(provider)
 }
 
-# Mantle doesn't serve the batch endpoints of either API, or the OpenAI token
-# counting endpoint, so don't inherit them.
 method(has_batch_support, ProviderAWSBedrockMessages) <- function(provider) {
   FALSE
 }
 
 method(has_batch_support, ProviderAWSBedrockResponses) <- function(provider) {
   FALSE
+}
+
+method(count_tokens, ProviderAWSBedrockMessages) <- function(
+  provider,
+  model,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  count_tokens(super(provider, Provider), model, ...)
 }
 
 method(count_tokens, ProviderAWSBedrockResponses) <- function(
@@ -831,10 +843,14 @@ aws_bedrock_api <- function(model) {
   if (is.null(model) || !nzchar(model)) {
     return("converse")
   }
-  model <- sub("^(us|eu|apac|au|jp|ca|global)\\.", "", model)
-
-  api <- unname(aws_bedrock_model_apis[model])
+  api <- unname(aws_bedrock_model_apis[aws_strip_region_prefix(model)])
   if (is.na(api)) "converse" else api
+}
+
+# Converse needs the cross-region inference prefix on model ids; mantle
+# rejects it.
+aws_strip_region_prefix <- function(model) {
+  sub("^(us|eu|apac|au|jp|ca|global)\\.", "", model)
 }
 
 aws_bedrock_apis <- function() {

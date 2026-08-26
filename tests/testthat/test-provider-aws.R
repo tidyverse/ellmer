@@ -333,6 +333,19 @@ test_that("converse suggests mantle when it doesn't recognise the model", {
   expect_length(body("Nope."), 1)
 })
 
+test_that("cross-region prefix is stripped for mantle but kept for converse", {
+  local_mocked_aws_credentials()
+
+  expect_equal(
+    chat_aws_bedrock(api = "messages")$get_model(),
+    "anthropic.claude-sonnet-5"
+  )
+  expect_equal(
+    chat_aws_bedrock(api = "converse")$get_model(),
+    "us.anthropic.claude-sonnet-5"
+  )
+})
+
 test_that("as_bedrock_message_cache() resolves 'auto'", {
   expect_equal(as_bedrock_message_cache("auto"), "5m")
   expect_equal(as_bedrock_message_cache("1h"), "1h")
