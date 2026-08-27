@@ -2,6 +2,14 @@
 
 ## ellmer (development version)
 
+- [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
+  gains an `api` argument to select between the Converse API on the
+  `bedrock-runtime` endpoint and the Anthropic Messages or OpenAI
+  Responses APIs on the `bedrock-mantle` endpoint. This makes models
+  that Converse can’t serve, like Claude Mythos and the GPT-5 family,
+  available on Bedrock. The API is picked from `model` by default, so
+  you only need to set `api` for models ellmer doesn’t recognize
+  ([\#1064](https://github.com/tidyverse/ellmer/issues/1064)).
 - ellmer now preserves provider citations in chat history and streamed
   content, and displays cited sources in console output. Enable cited
   web results with `chat$register_tool()`, using tools such as

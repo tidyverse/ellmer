@@ -18,6 +18,18 @@ or friends instead.
 
 A Chat object
 
+## Active bindings
+
+- `conversation_id`:
+
+  Identifier for the current conversation. When set, it is recorded as
+  the `gen_ai.conversation.id` attribute on the OpenTelemetry spans
+  emitted for subsequent model calls. Assign `NULL` to clear.
+
+  Developer-facing: intended for frameworks that manage conversation
+  history (e.g., Shiny apps). ellmer never generates an identifier on
+  its own.
+
 ## Methods
 
 ### Public methods
