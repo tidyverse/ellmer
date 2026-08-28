@@ -114,9 +114,14 @@ NULL
 #'
 #'   See <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html>
 #'   for more details.
-#' @param base_url The base URL to the endpoint; the default is the
-#'   `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` environment variable if set, and the
-#'   standard `bedrock-runtime` endpoint for your region otherwise.
+#' @param base_url The base URL to the endpoint; the default is the standard
+#'   endpoint for the selected `api` and your region, matching the official
+#'   SDKs' endpoint override environment variables:
+#'   `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` for `"converse"`, and
+#'   `AWS_ENDPOINT_URL_BEDROCK_MANTLE` for `"messages"` and `"responses"`
+#'   (which append their API-specific path to the override).
+#'   `models_aws_bedrock()` talks to a different AWS service, so it honors
+#'   `AWS_ENDPOINT_URL_BEDROCK` instead.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
