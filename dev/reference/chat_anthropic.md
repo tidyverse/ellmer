@@ -17,7 +17,7 @@ chat_anthropic(
   model = NULL,
   cache = c("5m", "1h", "none"),
   api_args = list(),
-  base_url = "https://api.anthropic.com/v1",
+  base_url = NULL,
   beta_headers = character(),
   api_key = NULL,
   credentials = NULL,
@@ -31,7 +31,7 @@ chat_claude(
   model = NULL,
   cache = c("5m", "1h", "none"),
   api_args = list(),
-  base_url = "https://api.anthropic.com/v1",
+  base_url = NULL,
   beta_headers = character(),
   api_key = NULL,
   credentials = NULL,
@@ -39,17 +39,9 @@ chat_claude(
   echo = NULL
 )
 
-models_claude(
-  base_url = "https://api.anthropic.com/v1",
-  api_key = NULL,
-  credentials = NULL
-)
+models_claude(base_url = NULL, api_key = NULL, credentials = NULL)
 
-models_anthropic(
-  base_url = "https://api.anthropic.com/v1",
-  api_key = NULL,
-  credentials = NULL
-)
+models_anthropic(base_url = NULL, api_key = NULL, credentials = NULL)
 ```
 
 ## Arguments
@@ -85,7 +77,8 @@ models_anthropic(
 
 - base_url:
 
-  The base URL to the endpoint; the default is Claude's public API.
+  The base URL to the endpoint; the default is the `ANTHROPIC_BASE_URL`
+  environment variable if set, and Claude's public API otherwise.
 
 - beta_headers:
 

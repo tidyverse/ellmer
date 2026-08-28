@@ -102,7 +102,14 @@ models_aws_bedrock(profile = NULL, base_url = NULL, api = NULL)
 
 - base_url:
 
-  The base URL to the API endpoint.
+  The base URL to the endpoint; the default is the standard endpoint for
+  the selected `api` and your region, matching the official SDKs'
+  endpoint override environment variables:
+  `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` for `"converse"`, and
+  `AWS_ENDPOINT_URL_BEDROCK_MANTLE` for `"messages"` and `"responses"`
+  (which append their API-specific path to the override).
+  `models_aws_bedrock()` talks to a different AWS service, so it honors
+  `AWS_ENDPOINT_URL_BEDROCK` instead.
 
 - model:
 

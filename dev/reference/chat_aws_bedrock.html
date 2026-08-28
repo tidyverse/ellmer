@@ -288,7 +288,14 @@ Cache read savings are reported correctly.</p>
 
 
 <dt id="arg-base-url">base_url<a class="anchor" aria-label="anchor" href="#arg-base-url"></a></dt>
-<dd><p>The base URL to the API endpoint.</p></dd>
+<dd><p>The base URL to the endpoint; the default is the standard
+endpoint for the selected <code>api</code> and your region, matching the official
+SDKs' endpoint override environment variables:
+<code>AWS_ENDPOINT_URL_BEDROCK_RUNTIME</code> for <code>"converse"</code>, and
+<code>AWS_ENDPOINT_URL_BEDROCK_MANTLE</code> for <code>"messages"</code> and <code>"responses"</code>
+(which append their API-specific path to the override).
+<code>models_aws_bedrock()</code> talks to a different AWS service, so it honors
+<code>AWS_ENDPOINT_URL_BEDROCK</code> instead.</p></dd>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
