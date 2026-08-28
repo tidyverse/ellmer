@@ -34,7 +34,7 @@ Provider <- new_class(
     base_url = prop_string(),
     extra_headers = class_character,
     credentials = class_function | NULL,
-    # Deprecated: model details now live on Model. Remove after 0.5.0 (#1098).
+    # Deprecated in 0.5.0: model details now live on Model. Remove in 0.6.0 (#1098).
     model = prop_deprecated("model", "name"),
     params = prop_deprecated("params", "params"),
     extra_args = prop_deprecated("extra_args", "extra_args")

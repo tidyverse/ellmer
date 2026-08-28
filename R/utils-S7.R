@@ -25,8 +25,6 @@ prop_string <- function(default = NULL, allow_null = FALSE, allow_na = FALSE) {
 
 # Deprecated Provider properties, backed by a hidden ".model" attribute that
 # Chat sets. Remove once the deprecation cycle is complete (#1098).
-# user_env is fixed to global_env() because the getter/setter are called from
-# S7's `@` dispatch, so lifecycle would otherwise blame S7.
 prop_deprecated <- function(name, model_prop) {
   force(name)
   force(model_prop)
@@ -34,11 +32,12 @@ prop_deprecated <- function(name, model_prop) {
   new_property(
     class = class_any,
     getter = function(self) {
+      user_env <- deprecated_prop_user_env()
       lifecycle::deprecate_warn(
         "0.5.0",
         I(paste0("`Provider@", name, "`")),
-        details = "Use the `Model` object instead, e.g. `chat$get_model_object()`.",
-        user_env = global_env()
+        details = "Model details now live on the `Model` object; see `chat$get_model_object()`.",
+        user_env = user_env
       )
       model <- provider_model(self)
       if (is.null(model)) NULL else prop(model, model_prop)
@@ -47,11 +46,12 @@ prop_deprecated <- function(name, model_prop) {
       if (is.null(value)) {
         return(self)
       }
+      user_env <- deprecated_prop_user_env()
       lifecycle::deprecate_warn(
         "0.5.0",
         I(paste0("`Provider(", name, ")`")),
-        details = "Use the `Model` object instead.",
-        user_env = global_env()
+        details = "Model details now live on the `Model` object.",
+        user_env = user_env
       )
       model <- provider_model(self) %||% Model(name = "")
       prop(model, model_prop) <- value
@@ -59,6 +59,19 @@ prop_deprecated <- function(name, model_prop) {
       self
     }
   )
+}
+
+# The getter/setter are called from S7's `@` dispatch, so lifecycle's default
+# would blame S7. Walk up the stack to the first frame outside S7 and ellmer.
+deprecated_prop_user_env <- function() {
+  skip <- list(ns_env("ellmer"), ns_env("S7"))
+  for (i in rev(seq_len(sys.nframe() - 1))) {
+    env <- sys.frame(i)
+    if (!any(vapply(skip, identical, logical(1), topenv(env)))) {
+      return(env)
+    }
+  }
+  global_env()
 }
 
 provider_model <- function(provider) {
