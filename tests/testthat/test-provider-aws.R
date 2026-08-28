@@ -232,6 +232,135 @@ test_that("continues to work after whitespace only outputs (#376)", {
   )
 })
 
+# APIs --------------------------------------------------------------------
+
+test_that("aws_bedrock_api() guesses the api from the model", {
+  expect_equal(aws_bedrock_api("us.anthropic.claude-sonnet-4-6"), "converse")
+  expect_equal(aws_bedrock_api("anthropic.claude-mythos-5"), "messages")
+  expect_equal(aws_bedrock_api("openai.gpt-5.6-sol"), "responses")
+})
+
+test_that("aws_bedrock_api() ignores cross-region inference prefixes", {
+  expect_equal(aws_bedrock_api("us.anthropic.claude-mythos-5"), "messages")
+  expect_equal(aws_bedrock_api("eu.openai.gpt-5.5"), "responses")
+})
+
+test_that("aws_bedrock_api() falls back to converse for unknown models", {
+  expect_equal(aws_bedrock_api(NULL), "converse")
+  expect_equal(aws_bedrock_api(""), "converse")
+  expect_equal(aws_bedrock_api("meta.llama3-1-8b-instruct-v1:0"), "converse")
+  expect_equal(
+    aws_bedrock_api("arn:aws:bedrock:us-east-1:123:custom-model/mine"),
+    "converse"
+  )
+})
+
+test_that("each api has its own endpoint", {
+  local_mocked_aws_credentials()
+
+  converse <- provider_aws_bedrock(api = "converse")
+  expect_s7_class(converse, ProviderAWSBedrock)
+  expect_equal(
+    converse@base_url,
+    "https://bedrock-runtime.us-east-1.amazonaws.com"
+  )
+
+  messages <- provider_aws_bedrock(api = "messages")
+  expect_s7_class(messages, ProviderAWSBedrockMessages)
+  expect_equal(
+    messages@base_url,
+    "https://bedrock-mantle.us-east-1.api.aws/anthropic/v1"
+  )
+
+  responses <- provider_aws_bedrock(api = "responses")
+  expect_s7_class(responses, ProviderAWSBedrockResponses)
+  expect_equal(
+    responses@base_url,
+    "https://bedrock-mantle.us-east-1.api.aws/openai/v1"
+  )
+})
+
+test_that("explicit api overrides the guess", {
+  local_mocked_aws_credentials()
+
+  provider <- provider_aws_bedrock(
+    model = "openai.gpt-5.6-sol",
+    api = "converse"
+  )
+  expect_s7_class(provider, ProviderAWSBedrock)
+})
+
+test_that("mantle requests are signed as bedrock in the right region", {
+  local_mocked_aws_credentials(region = "eu-west-1")
+
+  req <- chat_request(
+    provider_aws_bedrock(api = "messages"),
+    test_model("anthropic.claude-sonnet-5"),
+    turns = list(Turn("user", "Hi"))
+  )
+  expect_equal(
+    req$url,
+    "https://bedrock-mantle.eu-west-1.api.aws/anthropic/v1/messages"
+  )
+  expect_equal(req$headers$`anthropic-version`, "2023-06-01")
+
+  params <- req$policies$auth_sign$params
+  expect_equal(params$aws_service, "bedrock")
+  expect_equal(params$aws_region, "eu-west-1")
+})
+
+test_that("aws_error_body() handles responses without a content type", {
+  expect_null(aws_error_body(response(404, headers = list())))
+  expect_equal(
+    aws_error_body(response_json(400, body = list(message = "Nope."))),
+    "Nope."
+  )
+})
+
+test_that("converse suggests mantle when it doesn't recognise the model", {
+  req <- base_request_error(
+    test_aws_bedrock_provider(),
+    request("http://example.com")
+  )
+  body <- function(message) {
+    req$policies$error_body(response_json(400, body = list(message = message)))
+  }
+
+  hint <- body("The provided model identifier is invalid.")
+  expect_length(hint, 2)
+  expect_match(hint[[2]], 'set `api` to "messages" or "responses"')
+
+  expect_length(body("Nope."), 1)
+})
+
+test_that("cross-region prefix is stripped for mantle but kept for converse", {
+  local_mocked_aws_credentials()
+
+  expect_equal(
+    chat_aws_bedrock(api = "messages")$get_model(),
+    "anthropic.claude-sonnet-5"
+  )
+  expect_equal(
+    chat_aws_bedrock(api = "converse")$get_model(),
+    "us.anthropic.claude-sonnet-5"
+  )
+})
+
+test_that("as_bedrock_message_cache() resolves 'auto'", {
+  expect_equal(as_bedrock_message_cache("auto"), "5m")
+  expect_equal(as_bedrock_message_cache("1h"), "1h")
+  expect_equal(as_bedrock_message_cache("none"), "none")
+})
+
+test_that("invalid api and cache combinations are rejected", {
+  local_mocked_aws_credentials()
+
+  expect_snapshot(error = TRUE, {
+    chat_aws_bedrock(model = "openai.gpt-5.4", cache = "5m")
+    chat_aws_bedrock(model = "openai.gpt-5.4", api = "mantle")
+  })
+})
+
 # Auth --------------------------------------------------------------------
 
 test_that("AWS credential caching works as expected", {

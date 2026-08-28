@@ -565,6 +565,7 @@ Chat <- R6::R6Class(
 
     .turns = list(),
     echo = NULL,
+    .conversation_id = NULL,
     tools = list(),
     callback_on_tool_request = NULL,
     callback_on_tool_result = NULL,
@@ -586,7 +587,8 @@ Chat <- R6::R6Class(
       agent_span <- local_agent_otel_span(
         private$provider,
         private$model,
-        activate = FALSE
+        activate = FALSE,
+        conversation_id = private$.conversation_id
       )
 
       while (!is.null(user_turn)) {
@@ -660,7 +662,8 @@ Chat <- R6::R6Class(
       agent_span <- local_agent_otel_span(
         private$provider,
         private$model,
-        activate = FALSE
+        activate = FALSE,
+        conversation_id = private$.conversation_id
       )
 
       while (!is.null(user_turn)) {
@@ -756,7 +759,8 @@ Chat <- R6::R6Class(
         private$model,
         turns = otel_input$turns,
         system_prompt = otel_input$system_prompt,
-        parent = otel_span
+        parent = otel_span,
+        conversation_id = private$.conversation_id
       )
 
       response <- chat_perform(
@@ -916,7 +920,8 @@ Chat <- R6::R6Class(
         private$model,
         turns = otel_input$turns,
         system_prompt = otel_input$system_prompt,
-        parent = otel_span
+        parent = otel_span,
+        conversation_id = private$.conversation_id
       )
 
       response <- chat_perform(
@@ -1077,6 +1082,24 @@ Chat <- R6::R6Class(
           request = req
         )
       })
+    }
+  ),
+  active = list(
+    #' @field conversation_id Identifier for the current conversation. When
+    #'   set, it is recorded as the `gen_ai.conversation.id` attribute on the
+    #'   OpenTelemetry spans emitted for subsequent model calls. Assign `NULL`
+    #'   to clear.
+    #'
+    #'   Developer-facing: intended for frameworks that manage conversation
+    #'   history (e.g., Shiny apps). ellmer never generates an identifier on
+    #'   its own.
+    conversation_id = function(value) {
+      if (missing(value)) {
+        private$.conversation_id
+      } else {
+        check_string(value, allow_null = TRUE)
+        private$.conversation_id <- value
+      }
     }
   )
 )

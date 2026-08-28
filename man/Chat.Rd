@@ -23,6 +23,20 @@ chat <- chat_openai()
 chat$chat("Tell me a funny joke")
 \dontshow{ellmer:::vcr_example_end()}
 }
+\section{Active bindings}{
+  \if{html}{\out{<div class="r6-active-bindings">}}
+  \describe{
+    \item{\code{conversation_id}}{Identifier for the current conversation. When
+set, it is recorded as the \code{gen_ai.conversation.id} attribute on the
+OpenTelemetry spans emitted for subsequent model calls. Assign \code{NULL}
+to clear.
+
+Developer-facing: intended for frameworks that manage conversation
+history (e.g., Shiny apps). ellmer never generates an identifier on
+its own.}
+  }
+  \if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
   \itemize{
