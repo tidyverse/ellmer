@@ -268,19 +268,9 @@ ProviderAWSBedrockResponses <- new_class(
 )
 
 method(models_list, ProviderAWSBedrock) <- function(provider) {
-  # ListFoundationModels uses the control-plane endpoint (bedrock.*) not the
-  # data-plane endpoint (bedrock-runtime.*) used for inference, so it honors
-  # AWS_ENDPOINT_URL_BEDROCK but, like the official SDKs, deliberately ignores
-  # AWS_ENDPOINT_URL_BEDROCK_RUNTIME.
-  # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_ListFoundationModels.html
-  runtime_override <- aws_endpoint_url("AWS_ENDPOINT_URL_BEDROCK_RUNTIME", "")
-  provider@base_url <- aws_endpoint_url(
-    "AWS_ENDPOINT_URL_BEDROCK",
-    if (identical(provider@base_url, runtime_override)) {
-      sprintf("https://bedrock.%s.amazonaws.com", provider@region)
-    } else {
-      sub("bedrock-runtime", "bedrock", provider@base_url, fixed = TRUE)
-    }
+  provider@base_url <- aws_bedrock_models_url(
+    provider@base_url,
+    provider@region
   )
 
   req <- base_request(provider)
@@ -900,6 +890,23 @@ aws_bedrock_base_url <- function(api, region) {
     # disjoint, not aliases. Everything we route here is on /openai/v1, since
     # the /v1 models are all reachable through converse anyway.
     responses = paste0(mantle, "/openai/v1")
+  )
+}
+
+# ListFoundationModels uses the control-plane endpoint (bedrock.*) not the
+# data-plane endpoint (bedrock-runtime.*) used for inference, so it honors
+# AWS_ENDPOINT_URL_BEDROCK but, like the official SDKs, deliberately ignores
+# AWS_ENDPOINT_URL_BEDROCK_RUNTIME.
+# https://docs.aws.amazon.com/bedrock/latest/APIReference/API_ListFoundationModels.html
+aws_bedrock_models_url <- function(base_url, region) {
+  runtime_override <- aws_endpoint_url("AWS_ENDPOINT_URL_BEDROCK_RUNTIME", "")
+  aws_endpoint_url(
+    "AWS_ENDPOINT_URL_BEDROCK",
+    if (identical(base_url, runtime_override)) {
+      sprintf("https://bedrock.%s.amazonaws.com", region)
+    } else {
+      sub("bedrock-runtime", "bedrock", base_url, fixed = TRUE)
+    }
   )
 }
 

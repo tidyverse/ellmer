@@ -442,17 +442,33 @@ test_that("base_url defaults to the SDK endpoint override env vars", {
     provider_aws_bedrock(api = "responses")@base_url,
     "https://mantle.example.com/openai/v1"
   )
+})
 
+test_that("aws_bedrock_models_url() resolves the model-listing endpoint", {
   withr::local_envvar(
-    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = NA,
-    AWS_ENDPOINT_URL_BEDROCK_MANTLE = NA
+    AWS_ENDPOINT_URL_BEDROCK = NA,
+    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = NA
   )
   expect_equal(
-    provider_aws_bedrock(api = "converse")@base_url,
-    "https://bedrock-runtime.us-east-1.amazonaws.com"
+    aws_bedrock_models_url(
+      "https://bedrock-runtime.us-east-1.amazonaws.com",
+      "us-east-1"
+    ),
+    "https://bedrock.us-east-1.amazonaws.com"
+  )
+
+  # The runtime override doesn't apply to model listing
+  withr::local_envvar(
+    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = "https://gateway.example.com"
   )
   expect_equal(
-    provider_aws_bedrock(api = "messages")@base_url,
-    "https://bedrock-mantle.us-east-1.api.aws/anthropic/v1"
+    aws_bedrock_models_url("https://gateway.example.com", "us-east-1"),
+    "https://bedrock.us-east-1.amazonaws.com"
+  )
+
+  withr::local_envvar(AWS_ENDPOINT_URL_BEDROCK = "https://bedrock.example.com")
+  expect_equal(
+    aws_bedrock_models_url("https://gateway.example.com", "us-east-1"),
+    "https://bedrock.example.com"
   )
 })
