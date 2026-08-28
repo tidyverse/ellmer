@@ -28,6 +28,15 @@
       Error in `method(as_json, list(ellmer::ProviderAWSBedrock, ellmer::ContentImageRemote))`:
       ! Bedrock doesn't support remote images
 
+# document formats are mapped to the converse enum
+
+    Code
+      as_json(provider, json_doc)
+    Condition
+      Error in `method(as_json, list(ellmer::ProviderAWSBedrock, ellmer::ContentDocument))`:
+      ! Bedrock doesn't support "application/json" documents.
+      i Convert the document to plain text or PDF first.
+
 # invalid api and cache combinations are rejected
 
     Code
@@ -42,11 +51,3 @@
       Error in `chat_aws_bedrock()`:
       ! `api` must be one of "converse", "messages", or "responses", not "mantle".
 
-# document formats are mapped to the converse enum
-
-    Code
-      as_json(provider, json_doc)
-    Condition
-      Error in `method(as_json, list(ellmer::ProviderAWSBedrock, ellmer::ContentDocument))`:
-      ! Bedrock doesn't support "application/json" documents.
-      i Convert the document to plain text or PDF first.
