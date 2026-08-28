@@ -415,8 +415,6 @@ openai_citations <- function(content) {
   annotations <- keep(annotations, function(annotation) {
     identical(annotation$type, "url_citation")
   })
-  # No grounded_span: OpenAI's start_index/end_index delimit the inline
-  # citation marker, not the answer text supported by the source.
   lapply(annotations, function(annotation) {
     ContentCitation(
       source = WebSource(
