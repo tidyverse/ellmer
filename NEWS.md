@@ -1,6 +1,5 @@
 # ellmer (development version)
 
-* `chat_databricks()` no longer sends the unsupported `strict` field in tool definitions. This fixes a regression introduced in #1086, where inheriting the OpenAI-compatible encoding made Databricks compile every tool schema into a sampling grammar; once enough tools were registered, all requests failed with `HTTP 400 Compiled grammar size (...MB) exceeds maximum allowed size (300MB)` (#548).
 * `chat_aws_bedrock()` gains an `api` argument to select between the Converse API on the `bedrock-runtime` endpoint and the Anthropic Messages or OpenAI Responses APIs on the `bedrock-mantle` endpoint. This makes models that Converse can't serve, like Claude Mythos and the GPT-5 family, available on Bedrock. The API is picked from `model` by default, so you only need to set `api` for models ellmer doesn't recognize (#1064).
 * ellmer now preserves provider citations in chat history and streamed content, and displays cited sources in console output. Enable cited web results with `chat$register_tool()`, using tools such as `openai_tool_web_search()`, `claude_tool_web_search()`, or `claude_tool_web_fetch(citations = TRUE)` (#1068).
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).

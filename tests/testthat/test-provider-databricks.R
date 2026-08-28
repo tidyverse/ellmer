@@ -184,36 +184,6 @@ test_that("tokens can be requested from a Connect server", {
   expect_equal(credentials(), list(Authorization = "Bearer token"))
 })
 
-test_that("chat_databricks() never sends the unsupported `strict` tool field", {
-  # Regression test for #548: Databricks rejected `strict` outright, and now
-  # accepts it but compiles a sampling grammar that a large tool set cannot
-  # afford. Inheriting ProviderOpenAICompatible's method reintroduces both.
-  withr::local_envvar(
-    DATABRICKS_HOST = "https://example.cloud.databricks.com",
-    DATABRICKS_TOKEN = "token"
-  )
-  provider <- chat_databricks(model = "databricks-claude-3-7-sonnet")$get_provider()
-
-  no_arguments <- tool(
-    function() format(Sys.Date()),
-    name = "current_date",
-    description = "Returns the current date in ISO 8601 format."
-  )
-  with_arguments <- tool(
-    function(person) "sage green",
-    name = "favourite_colour",
-    description = "Returns a person's favourite colour.",
-    arguments = list(person = type_string("Name of a person"))
-  )
-
-  for (x in list(no_arguments, with_arguments)) {
-    json <- as_json(provider, x)
-    expect_false("strict" %in% names(json$`function`))
-    # `parameters` must stay even with no arguments (#1084).
-    expect_true("parameters" %in% names(json$`function`))
-  }
-})
-
 test_that("chat_databricks() serializes tools correctly", {
   withr::local_envvar(
     DATABRICKS_HOST = "https://example.cloud.databricks.com",

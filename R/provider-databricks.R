@@ -241,22 +241,9 @@ method(as_json, list(ProviderDatabricks, ToolDef)) <- function(
   x,
   ...
 ) {
-  # Databricks does not support the "strict" field for tools, despite what their
-  # documentation says. It *is* supported for structured outputs, though. This
-  # method exists only to omit it; everything else matches the OpenAI encoding.
-  #
-  # Do not remove this method to inherit ProviderOpenAICompatible's: that sends
-  # `strict = TRUE` and reintroduces #548. The failure has changed shape since
-  # #548 was filed, which makes it easy to miss. Databricks used to reject the
-  # field outright ("tools.0.custom.strict: Extra inputs are not permitted"), but
-  # now accepts it and compiles the schema into a sampling grammar. Small tool
-  # sets therefore appear to work, while a set large enough to exceed the grammar
-  # budget fails with HTTP 400 "Compiled grammar size (...MB) exceeds maximum
-  # allowed size (300MB)" -- and because compilation happens before generation,
-  # *every* request fails, not only the ones using the offending tool.
-  #
-  # `parameters` is always included, even when the tool takes no arguments,
-  # because omitting it errors on Databricks (#1084).
+  # Same as ProviderOpenAICompatible but without `strict`: Databricks accepts
+  # it, but large tool sets then fail with "Compiled grammar size exceeds
+  # maximum allowed size" (#548). `parameters` must always be sent (#1084).
   compact(list(
     type = "function",
     "function" = compact(list(
