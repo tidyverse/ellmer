@@ -264,13 +264,18 @@ ProviderAWSBedrockResponses <- new_class(
 
 method(models_list, ProviderAWSBedrock) <- function(provider) {
   # ListFoundationModels uses the control-plane endpoint (bedrock.*) not the
-  # data-plane endpoint (bedrock-runtime.*) used for inference.
+  # data-plane endpoint (bedrock-runtime.*) used for inference, so it honors
+  # AWS_ENDPOINT_URL_BEDROCK but, like the official SDKs, deliberately ignores
+  # AWS_ENDPOINT_URL_BEDROCK_RUNTIME.
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_ListFoundationModels.html
-  provider@base_url <- sub(
-    "bedrock-runtime",
-    "bedrock",
-    provider@base_url,
-    fixed = TRUE
+  runtime_override <- aws_endpoint_url("AWS_ENDPOINT_URL_BEDROCK_RUNTIME", "")
+  provider@base_url <- aws_endpoint_url(
+    "AWS_ENDPOINT_URL_BEDROCK",
+    if (identical(provider@base_url, runtime_override)) {
+      sprintf("https://bedrock.%s.amazonaws.com", provider@region)
+    } else {
+      sub("bedrock-runtime", "bedrock", provider@base_url, fixed = TRUE)
+    }
   )
 
   req <- base_request(provider)
