@@ -182,17 +182,6 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL, api = NULL) {
   models_list(provider)
 }
 
-# Match the official AWS SDKs, which read the service-specific endpoint
-# override AWS_ENDPOINT_URL_BEDROCK_RUNTIME
-aws_bedrock_base_url <- function() {
-  base_url <- Sys.getenv("AWS_ENDPOINT_URL_BEDROCK_RUNTIME")
-  if (identical(base_url, "")) {
-    \(x) sprintf("https://bedrock-runtime.%s.amazonaws.com", x)
-  } else {
-    base_url
-  }
-}
-
 chat_aws_bedrock_test <- function(
   ...,
   model = "us.anthropic.claude-haiku-4-5-20251001-v1:0",
@@ -880,20 +869,37 @@ aws_bedrock_class <- function(api) {
   )
 }
 
+
 aws_bedrock_base_url <- function(api, region) {
+  if (api == "converse") {
+    return(aws_endpoint_url(
+      "AWS_ENDPOINT_URL_BEDROCK_RUNTIME",
+      sprintf("https://bedrock-runtime.%s.amazonaws.com", region)
+    ))
+  }
+
+  mantle <- aws_endpoint_url(
+    "AWS_ENDPOINT_URL_BEDROCK_MANTLE",
+    sprintf("https://bedrock-mantle.%s.api.aws", region)
+  )
   switch(
     api,
-    converse = sprintf("https://bedrock-runtime.%s.amazonaws.com", region),
-    messages = sprintf(
-      "https://bedrock-mantle.%s.api.aws/anthropic/v1",
-      region
-    ),
+    messages = paste0(mantle, "/anthropic/v1"),
     # Mantle has two OpenAI-compatible paths: newer models are served from
     # /openai/v1 and older open-weight models (like gpt-oss) from /v1. They are
     # disjoint, not aliases. Everything we route here is on /openai/v1, since
     # the /v1 models are all reachable through converse anyway.
-    responses = sprintf("https://bedrock-mantle.%s.api.aws/openai/v1", region)
+    responses = paste0(mantle, "/openai/v1")
   )
+}
+
+aws_endpoint_url <- function(var, default) {
+  url <- Sys.getenv(var)
+  if (identical(url, "")) {
+    default
+  } else {
+    sub("/+$", "", url)
+  }
 }
 
 # The Responses API caches automatically, so there's nothing for us to control.
