@@ -13,7 +13,7 @@
 * `chat_google_gemini()` no longer errors when mixing regular tools and built-in tools like `google_tool_web_search()` (@thisisnic, #1054).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
 * New `models_update_prices()` downloads the latest model pricing data from GitHub and saves it to a local cache. Subsequent calls to `token_usage()` and related functions will use the updated prices (#968).
-* New `Model` class separates model configuration (name, parameters, extra arguments) from the `Provider` class, which now only captures API endpoint details. `Chat` gains a new `$get_model_object()` method to retrieve the `Model` object. `provider@model`, `provider@params`, and `provider@extra_args` are deprecated and will be removed in a future release; use the `Model` object instead (@thisisnic, #499, #1098).
+* New `Model` class separates model configuration (name, parameters, extra arguments) from the `Provider` class, which now only captures API endpoint details. `Chat` gains a new `$get_model_object()` method to retrieve the `Model` object. `provider@model`, `provider@params`, and `provider@extra_args` are deprecated and will be removed in a future release; use the `Model` object instead (@thisisnic, #1098).
 * `tool()` functions that return complex objects like data frames or lists now produce a deprecation warning. Tool functions should return a character vector, an atomic vector, a JSON string (from `jsonlite::toJSON()`), or a `Content` object. Use `jsonlite::toJSON()` to convert complex objects before returning (@thisisnic, #858).
 
 # ellmer 0.4.2
