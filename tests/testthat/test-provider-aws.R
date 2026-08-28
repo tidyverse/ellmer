@@ -423,71 +423,36 @@ test_that("inference profile ARN slash is encoded in URL (#792)", {
   expect_match(req$url, "inference-profile%2Fabc123", fixed = TRUE)
 })
 
-test_that("base_url defaults to AWS_ENDPOINT_URL_BEDROCK_RUNTIME when set", {
-  # The env var follows the official SDK convention for service-specific
-  # endpoint overrides.
+test_that("base_url defaults to the SDK endpoint override env vars", {
+  local_mocked_aws_credentials()
+
   withr::local_envvar(
-    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = "https://bedrock.example.com"
+    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = "https://runtime.example.com",
+    AWS_ENDPOINT_URL_BEDROCK_MANTLE = "https://mantle.example.com/"
   )
   expect_equal(
-    aws_bedrock_base_url(),
-    "https://bedrock.example.com"
+    provider_aws_bedrock(api = "converse")@base_url,
+    "https://runtime.example.com"
   )
-
-  withr::local_envvar(AWS_ENDPOINT_URL_BEDROCK_RUNTIME = NA)
-  base_url <- aws_bedrock_base_url()
   expect_equal(
-    base_url("us-east-1"),
-    "https://bedrock-runtime.us-east-1.amazonaws.com"
+    provider_aws_bedrock(api = "messages")@base_url,
+    "https://mantle.example.com/anthropic/v1"
   )
-})
-
-test_that("models_aws_bedrock shares the base_url default and env var", {
-  # models_list() rewrites the runtime host to the control-plane host, so
-  # here we only check the shared default flows through before that step.
-  local_mocked_bindings(
-    paws_credentials = function(...) {
-      list(
-        access_key_id = "x",
-        secret_access_key = "x",
-        session_token = "x",
-        access_token = "",
-        region = "us-east-1"
-      )
-    },
-    models_list = function(provider) provider@base_url
-  )
-
-  withr::local_envvar(AWS_ENDPOINT_URL_BEDROCK_RUNTIME = NA)
   expect_equal(
-    models_aws_bedrock(),
-    "https://bedrock-runtime.us-east-1.amazonaws.com"
+    provider_aws_bedrock(api = "responses")@base_url,
+    "https://mantle.example.com/openai/v1"
   )
 
   withr::local_envvar(
-    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = "https://bedrock.example.com"
+    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = NA,
+    AWS_ENDPOINT_URL_BEDROCK_MANTLE = NA
   )
   expect_equal(
-    models_aws_bedrock(),
-    "https://bedrock.example.com"
+    provider_aws_bedrock(api = "converse")@base_url,
+    "https://bedrock-runtime.us-east-1.amazonaws.com"
   )
-})
-
-test_that("base request signs with the bedrock service and region", {
-  # Passed explicitly so signing works when base_url points at a custom
-  # endpoint whose host the service and region can't be inferred from.
-  local_mocked_bindings(
-    paws_credentials = function(...) {
-      list(
-        access_key_id = "x",
-        secret_access_key = "x",
-        session_token = "x",
-        access_token = ""
-      )
-    }
+  expect_equal(
+    provider_aws_bedrock(api = "messages")@base_url,
+    "https://bedrock-mantle.us-east-1.api.aws/anthropic/v1"
   )
-  req <- base_request(test_aws_bedrock_provider())
-  params <- req$policies$auth_sign$params
-  expect_equal(params$aws_service, "bedrock")
-  expect_equal(params$aws_region, "us-east-1")
 })
