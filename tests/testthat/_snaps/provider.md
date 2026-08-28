@@ -5,7 +5,7 @@
     Condition
       Warning:
       `Provider@model` was deprecated in ellmer 0.5.0.
-      i Use the `Model` object instead, e.g. `chat$get_model_object()`.
+      i Model details now live on the `Model` object; see `chat$get_model_object()`.
     Output
       [1] "m"
     Code
@@ -13,7 +13,7 @@
     Condition
       Warning:
       `Provider@params` was deprecated in ellmer 0.5.0.
-      i Use the `Model` object instead, e.g. `chat$get_model_object()`.
+      i Model details now live on the `Model` object; see `chat$get_model_object()`.
     Output
       list()
     Code
@@ -21,7 +21,7 @@
     Condition
       Warning:
       `Provider@extra_args` was deprecated in ellmer 0.5.0.
-      i Use the `Model` object instead, e.g. `chat$get_model_object()`.
+      i Model details now live on the `Model` object; see `chat$get_model_object()`.
     Output
       list()
     Code
@@ -29,13 +29,13 @@
     Condition
       Warning:
       `Provider(model)` was deprecated in ellmer 0.5.0.
-      i Use the `Model` object instead.
+      i Model details now live on the `Model` object.
     Code
       provider@model
     Condition
       Warning:
       `Provider@model` was deprecated in ellmer 0.5.0.
-      i Use the `Model` object instead, e.g. `chat$get_model_object()`.
+      i Model details now live on the `Model` object; see `chat$get_model_object()`.
     Output
       [1] "x"
 
