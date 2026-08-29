@@ -77,7 +77,7 @@ its own.}
 \subsection{\code{Chat$new()}}{
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$new(provider, model, system_prompt = NULL, echo = "none")}
+    \preformatted{Chat$new(provider, model = NULL, system_prompt = NULL, echo = "none")}
     \if{html}{\out{</div>}}
   }
   \subsection{Arguments}{
