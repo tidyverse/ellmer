@@ -15,7 +15,53 @@ test_that("can make simple streaming request", {
 
 test_that("can list models", {
   skip_if_no_ollama()
-  test_models(models_ollama)
+  test_models(models_ollama, has_context_window = TRUE)
+})
+
+test_that("model listing reports capabilities and the context window", {
+  local_ollama_cache()
+  local_mocked_responses(function(req) {
+    if (grepl("api/tags", req$url)) {
+      response_json(
+        body = list(
+          models = list(
+            list(
+              name = "gpt-oss:20b",
+              modified_at = "2026-01-01T00:00:00Z",
+              size = 1
+            )
+          )
+        )
+      )
+    } else {
+      response_json(
+        body = list(
+          capabilities = list("completion", "tools"),
+          model_info = list(
+            "general.architecture" = "gptoss",
+            "gptoss.context_length" = 131072
+          )
+        )
+      )
+    }
+  })
+
+  models <- models_ollama(credentials = \() "")
+  expect_equal(models$id, "gpt-oss:20b")
+  expect_equal(models$capabilities, "completion,tools")
+  expect_equal(models$context_window, 131072L)
+})
+
+test_that("context length is read from the architecture-specific field", {
+  details <- list(
+    model_info = list(
+      "general.architecture" = "gemma3",
+      "gemma3.context_length" = 8192
+    )
+  )
+  expect_equal(ollama_context_length(details), 8192L)
+  expect_equal(ollama_context_length(list(model_info = list())), NA_integer_)
+  expect_equal(ollama_context_length(NULL), NA_integer_)
 })
 
 test_that("includes list of models in error message if `model` is missing", {

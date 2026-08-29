@@ -182,11 +182,30 @@ test_pdf_local <- function(chat_fun) {
 
 # Models ------------------------------------------------------------------
 
-test_models <- function(models_fun) {
+test_models <- function(models_fun, has_context_window = FALSE) {
   models <- models_fun()
   expect_gt(nrow(models), 0)
   expect_s3_class(models, "data.frame")
-  expect_contains(names(models), "id")
+  expect_contains(names(models), c("id", "context_window"))
+  expect_type(models$context_window, "integer")
+
+  if (has_context_window) {
+    expect_gt(sum(!is.na(models$context_window)), 0)
+  }
+
+  invisible(models)
+}
+
+local_context_windows <- function(frame = parent.frame()) {
+  old <- the$context_windows
+  the$context_windows <- new_environment()
+  defer(the$context_windows <- old, envir = frame)
+}
+
+local_ollama_cache <- function(frame = parent.frame()) {
+  old <- the$ollama_cache
+  the$ollama_cache <- new_environment()
+  defer(the$ollama_cache <- old, envir = frame)
 }
 
 # Token counting -----------------------------------------------------------
