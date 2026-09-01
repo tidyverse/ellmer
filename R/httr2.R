@@ -152,10 +152,11 @@ is_connect_gateway_url <- function(url) {
   }
   server <- url_parse(server)
   url <- url_parse(url)
+  prefix <- sub("/+$", "", server$path %||% "")
   identical(tolower(url$scheme), tolower(server$scheme)) &&
     identical(tolower(url$hostname), tolower(server$hostname)) &&
     identical(url$port, server$port) &&
-    startsWith(url$path %||% "", "/__gateway__/")
+    startsWith(url$path %||% "", paste0(prefix, "/__gateway__/"))
 }
 
 connect_session_token <- function() {

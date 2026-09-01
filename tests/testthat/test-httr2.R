@@ -21,6 +21,24 @@ test_that("viewer token is forwarded only to Connect's gateway", {
   expect_equal(req_get_headers(req, "reveal"), list())
 })
 
+test_that("viewer token is forwarded when Connect is on a sub-path", {
+  withr::local_envvar(
+    CONNECT_SERVER = "https://proxy.example.com/positconnect/"
+  )
+  local_mocked_bindings(connect_session_token = \() "token")
+
+  req <- request(
+    "https://proxy.example.com/positconnect/__gateway__/anthropic/guid/v1"
+  )
+  req <- ellmer_req_connect_viewer(req)
+  headers <- req_get_headers(req, "reveal")
+  expect_equal(headers$`Posit-Connect-User-Session-Token`, "token")
+
+  req <- request("https://proxy.example.com/__gateway__/anthropic/guid/v1")
+  req <- ellmer_req_connect_viewer(req)
+  expect_equal(req_get_headers(req, "reveal"), list())
+})
+
 test_that("viewer token is never sent off Connect", {
   withr::local_envvar(CONNECT_SERVER = NA)
   local_mocked_bindings(connect_session_token = \() "token")
