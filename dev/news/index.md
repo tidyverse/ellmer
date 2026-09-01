@@ -39,6 +39,12 @@
   ([@thisisnic](https://github.com/thisisnic),
   [\#1066](https://github.com/tidyverse/ellmer/issues/1066)).
 - [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  and
+  [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
+  no longer error after the model returns an empty response
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1070](https://github.com/tidyverse/ellmer/issues/1070)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   now defaults `base_url` to the `ANTHROPIC_BASE_URL` environment
   variable, and
   [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
