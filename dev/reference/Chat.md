@@ -98,7 +98,7 @@ A Chat object
 
 #### Usage
 
-    Chat$new(provider, model, system_prompt = NULL, echo = "none")
+    Chat$new(provider, model = NULL, system_prompt = NULL, echo = "none")
 
 #### Arguments
 

@@ -95,11 +95,11 @@
 - New `Model` class separates model configuration (name, parameters,
   extra arguments) from the `Provider` class, which now only captures
   API endpoint details. `Chat` gains a new `$get_model_object()` method
-  to retrieve the `Model` object. This is a breaking change for anyone
-  who directly accesses `provider@model`, `provider@params`, or
-  `provider@extra_args`; use the `Model` object instead
+  to retrieve the `Model` object. `provider@model`, `provider@params`,
+  and `provider@extra_args` are deprecated and will be removed in a
+  future release; use the `Model` object instead
   ([@thisisnic](https://github.com/thisisnic),
-  [\#499](https://github.com/tidyverse/ellmer/issues/499)).
+  [\#1098](https://github.com/tidyverse/ellmer/issues/1098)).
 - [`tool()`](https://ellmer.tidyverse.org/dev/reference/tool.md)
   functions that return complex objects like data frames or lists now
   produce a deprecation warning. Tool functions should return a

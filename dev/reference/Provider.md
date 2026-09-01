@@ -12,7 +12,10 @@ Provider(
   name = stop("Required"),
   base_url = stop("Required"),
   extra_headers = character(0),
-  credentials = function() NULL
+  credentials = function() NULL,
+  model = NULL,
+  params = NULL,
+  extra_args = NULL
 )
 ```
 
@@ -36,6 +39,12 @@ Provider(
   authentication. Can either return a string, representing an API key,
   or a named list of headers.
 
+- model, params, extra_args:
+
+  **\[deprecated\]** These now live on the
+  [Model](https://ellmer.tidyverse.org/dev/reference/Model.md) object;
+  use `chat$get_model_object()` instead.
+
 ## Value
 
 An S7 Provider object.
@@ -58,5 +67,5 @@ Provider(
 #>  @ name         : chr "CoolModels"
 #>  @ base_url     : chr "https://cool-models.com"
 #>  @ extra_headers: chr(0) 
-#>  @ credentials  : function ()  
+#>  @ credentials  :function ()  
 ```
