@@ -5,10 +5,11 @@ NULL
 #' Upload a file to gemini
 #'
 #' @description
-#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("superseded")`
 #'
-#' This function is deprecated in favour of the provider-neutral [Chat]
-#' method `chat$file_upload()`.
+#' This function is superseded by the provider-neutral [Chat] method
+#' `chat$file_upload()`, which works across providers. It remains available
+#' for uploading a file without first creating a chat.
 #'
 #' @inheritParams chat_google_gemini
 #' @param path Path to a file to upload.
@@ -35,8 +36,6 @@ google_upload <- function(
   credentials = NULL,
   mime_type = NULL
 ) {
-  lifecycle::deprecate_soft("0.5.0", "google_upload()", "Chat$file_upload()")
-
   credentials <- as_credentials(
     "google_upload",
     default_google_credentials(variant = "gemini"),

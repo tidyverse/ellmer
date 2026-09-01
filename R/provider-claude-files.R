@@ -98,11 +98,13 @@ anthropic_files_request <- function(provider) {
 #' Upload, download, and manage files for Claude
 #'
 #' @description
-#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("superseded")`
 #'
-#' These functions are deprecated in favour of the provider-neutral [Chat]
-#' methods: `chat$file_upload()`, `chat$file_list()`, `chat$file_get()`,
-#' `chat$file_download()`, and `chat$file_delete()`.
+#' These functions are superseded by the provider-neutral [Chat] methods
+#' `chat$file_upload()`, `chat$file_list()`, `chat$file_get()`,
+#' `chat$file_download()`, and `chat$file_delete()`, which work across
+#' providers. They remain available for managing files without first
+#' creating a chat.
 #'
 #' @inheritParams chat_anthropic
 #' @param base_url The base URL to the endpoint; the default is Claude's
@@ -129,11 +131,6 @@ claude_file_upload <- function(
   beta_headers = character(),
   credentials = NULL
 ) {
-  lifecycle::deprecate_soft(
-    "0.5.0",
-    "claude_file_upload()",
-    "Chat$file_upload()"
-  )
   provider <- anthropic_file_provider(base_url, beta_headers, credentials)
   file_upload(provider, path)
 }
@@ -145,7 +142,6 @@ claude_file_list <- function(
   credentials = NULL,
   beta_headers = character()
 ) {
-  lifecycle::deprecate_soft("0.5.0", "claude_file_list()", "Chat$file_list()")
   provider <- anthropic_file_provider(base_url, beta_headers, credentials)
   file_list(provider)
 }
@@ -158,7 +154,6 @@ claude_file_get <- function(
   credentials = NULL,
   beta_headers = character()
 ) {
-  lifecycle::deprecate_soft("0.5.0", "claude_file_get()", "Chat$file_get()")
   provider <- anthropic_file_provider(base_url, beta_headers, credentials)
   meta <- file_get(provider, file_id)
 
@@ -181,11 +176,6 @@ claude_file_download <- function(
   credentials = NULL,
   beta_headers = character()
 ) {
-  lifecycle::deprecate_soft(
-    "0.5.0",
-    "claude_file_download()",
-    "Chat$file_download()"
-  )
   provider <- anthropic_file_provider(base_url, beta_headers, credentials)
   file_download(provider, file_id, path)
 }
@@ -198,11 +188,6 @@ claude_file_delete <- function(
   credentials = NULL,
   beta_headers = character()
 ) {
-  lifecycle::deprecate_soft(
-    "0.5.0",
-    "claude_file_delete()",
-    "Chat$file_delete()"
-  )
   provider <- anthropic_file_provider(base_url, beta_headers, credentials)
   file_delete(provider, file_id)
 }

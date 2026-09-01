@@ -3,14 +3,7 @@ test_that("file lifecycle works", {
   test_file_lifecycle(chat_anthropic_test)
 })
 
-test_that("claude_file_upload() is deprecated", {
-  withr::local_options(lifecycle_verbosity = "warning")
-  local_mocked_bindings(file_upload = function(...) invisible())
-  expect_snapshot(. <- claude_file_upload(test_path("apples.pdf")))
-})
-
-test_that("deprecated claude_file_* wrappers still work end-to-end", {
-  withr::local_options(lifecycle_verbosity = "quiet")
+test_that("claude_file_* wrappers work end-to-end", {
   vcr::local_cassette("anthropic-upload-file")
   # Avoid using an absolute path in form_file
   local_mocked_bindings(
