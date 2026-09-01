@@ -335,7 +335,9 @@ test_that("can perform a simple async batch chat", {
   )
 })
 
-make_structured_stream_response <- function(deltas = c('{"name":"John"', ',"age":15}')) {
+make_structured_stream_response <- function(
+  deltas = c('{"name":"John"', ',"age":15}')
+) {
   text <- paste(deltas, collapse = "")
   c(
     lapply(deltas, function(delta) {
@@ -488,7 +490,12 @@ test_that("streaming structured output rejects unsupported providers and types",
     })
     expect_snapshot(error = TRUE, {
       chat <- chat_anthropic_test(model = "claude-sonnet-5")
-      collect_stream(chat, "Extract John", type = additional_props, async = async)
+      collect_stream(
+        chat,
+        "Extract John",
+        type = additional_props,
+        async = async
+      )
     })
     expect_snapshot(error = TRUE, {
       chat <- chat_anthropic_test(model = "claude-sonnet-5")
@@ -507,7 +514,12 @@ test_that("streaming structured output rejects unsupported providers and types",
     )
     if (!is.null(bedrock_chat)) {
       expect_snapshot(error = TRUE, {
-        collect_stream(bedrock_chat, "Extract John", type = person, async = async)
+        collect_stream(
+          bedrock_chat,
+          "Extract John",
+          type = person,
+          async = async
+        )
       })
     }
   }
