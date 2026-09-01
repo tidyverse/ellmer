@@ -748,7 +748,7 @@ method(file_get, ProviderOpenAI) <- function(provider, id, ...) {
     id = json$id,
     filename = json$filename,
     mime_type = NA_character_,
-    size_bytes = json$bytes,
+    size_bytes = as.numeric(json$bytes),
     created_at = as.POSIXct(json$created_at, origin = "1970-01-01", tz = "UTC"),
     expires_at = as.POSIXct(
       json$expires_at %||% NA_real_,
