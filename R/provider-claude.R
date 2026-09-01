@@ -863,7 +863,7 @@ method(as_json, list(ProviderAnthropic, ContentUploaded)) <- function(
   x,
   ...
 ) {
-  # https://docs.claude.com/en/docs/build-with-claude/files#using-a-file-in-messages
+  # https://platform.claude.com/docs/en/build-with-claude/files#file-types-and-content-blocks
   block_type <- if (grepl("^image/", x@mime_type)) {
     "image"
   } else {
@@ -879,13 +879,13 @@ method(as_json, list(ProviderAnthropic, ContentUploaded)) <- function(
     )
   }
 
-  list(
-    type = block_type,
-    source = list(
-      type = "file",
-      file_id = x@uri
-    )
-  )
+  # Unlike document/image blocks, container_upload (for the code execution
+  # tool) takes file_id directly rather than a source object.
+  if (block_type == "container_upload") {
+    list(type = block_type, file_id = x@uri)
+  } else {
+    list(type = block_type, source = list(type = "file", file_id = x@uri))
+  }
 }
 
 method(as_json, list(ProviderAnthropic, ContentImageRemote)) <- function(

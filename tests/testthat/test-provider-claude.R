@@ -641,6 +641,11 @@ test_that("as_json() serializes uploaded file references", {
     as_json(provider, ContentUploaded("file-1", "image/svg+xml"))$type,
     "image"
   )
+  # container_upload blocks take file_id directly, with no source wrapper
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "text/csv")),
+    list(type = "container_upload", file_id = "file-1")
+  )
 })
 
 test_that("chat_request() adds the files beta header when turns have uploads", {
