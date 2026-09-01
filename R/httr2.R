@@ -137,7 +137,7 @@ ellmer_req_connect_viewer <- function(req) {
   if (!is_connect_gateway_url(req$url)) {
     return(req)
   }
-  token <- connect_viewer_token()
+  token <- connect_session_token()
   if (is.null(token)) {
     return(req)
   }
@@ -158,7 +158,7 @@ is_connect_gateway_url <- function(url) {
     startsWith(url$path %||% "", "/__gateway__/")
 }
 
-connect_viewer_token <- function() {
+connect_session_token <- function() {
   # Only read the session token when actually running on Connect
   if (!running_on_connect() || !is_installed("shiny")) {
     return(NULL)

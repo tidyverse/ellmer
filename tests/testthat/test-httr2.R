@@ -1,6 +1,6 @@
 test_that("viewer token is forwarded only to Connect's gateway", {
   withr::local_envvar(CONNECT_SERVER = "https://connect.example.com/")
-  local_mocked_bindings(connect_viewer_token = \() "token")
+  local_mocked_bindings(connect_session_token = \() "token")
 
   req <- request("https://connect.example.com/__gateway__/anthropic/guid/v1")
   req <- ellmer_req_connect_viewer(req)
@@ -23,7 +23,7 @@ test_that("viewer token is forwarded only to Connect's gateway", {
 
 test_that("viewer token is never sent off Connect", {
   withr::local_envvar(CONNECT_SERVER = NA)
-  local_mocked_bindings(connect_viewer_token = \() "token")
+  local_mocked_bindings(connect_session_token = \() "token")
 
   req <- request("https://connect.example.com/__gateway__/anthropic/guid/v1")
   req <- ellmer_req_connect_viewer(req)
@@ -32,7 +32,7 @@ test_that("viewer token is never sent off Connect", {
 
 test_that("viewer token is redacted from the request", {
   withr::local_envvar(CONNECT_SERVER = "https://connect.example.com")
-  local_mocked_bindings(connect_viewer_token = \() "token")
+  local_mocked_bindings(connect_session_token = \() "token")
 
   req <- request("https://connect.example.com/__gateway__/anthropic/guid/v1")
   req <- ellmer_req_connect_viewer(req)
