@@ -237,7 +237,7 @@ test_that("continues to work after whitespace only outputs (#376)", {
 test_that("aws_bedrock_api() guesses the api from the model", {
   expect_equal(aws_bedrock_api("us.anthropic.claude-sonnet-4-6"), "converse")
   expect_equal(aws_bedrock_api("anthropic.claude-mythos-5"), "messages")
-  expect_equal(aws_bedrock_api("openai.gpt-5.6-sol"), "responses")
+  expect_equal(aws_bedrock_api("openai.gpt-5.4"), "responses")
 })
 
 test_that("aws_bedrock_api() ignores cross-region inference prefixes", {
