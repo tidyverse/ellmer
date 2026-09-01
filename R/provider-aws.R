@@ -651,9 +651,12 @@ method(as_json, list(ProviderAWSBedrock, Turn)) <- function(
   } else if (is_user_turn(x) || is_assistant_turn(x)) {
     x <- turn_contents_expand(x)
     content <- as_json(provider, x@contents, ...)
-    if (is_assistant_turn(x) && length(content) == 0) {
-      # Bedrock rejects empty content arrays, and dropping the turn
-      # confuses the model, so send a placeholder instead
+    if (length(content) == 0) {
+      if (!is_assistant_turn(x)) {
+        return()
+      }
+      # Dropping empty assistant turns confuses the model, so send a
+      # placeholder instead (#711, #1070)
       content <- list(list(text = "[empty string]"))
     }
 

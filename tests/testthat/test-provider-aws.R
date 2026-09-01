@@ -480,3 +480,13 @@ test_that("sends placeholder for empty assistant turns (#1070)", {
   expect_length(turns_json, 2)
   expect_equal(turns_json[[2]]$content, list(list(text = "[empty string]")))
 })
+
+test_that("drops empty user turns (#1070)", {
+  provider <- test_aws_bedrock_provider()
+  turns_json <- as_json(
+    provider,
+    list(UserTurn("Hi"), AssistantTurn("Hello"), UserTurn())
+  )
+
+  expect_length(turns_json, 2)
+})
