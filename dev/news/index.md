@@ -77,6 +77,10 @@
   [`google_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/google_tool_web_search.md)
   ([@thisisnic](https://github.com/thisisnic),
   [\#1054](https://github.com/tidyverse/ellmer/issues/1054)).
+- [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md)
+  now defaults to `Qwen/Qwen3-235B-A22B-Instruct-2507`
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1040](https://github.com/tidyverse/ellmer/issues/1040)).
 - [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
   now correctly preserves provider error messages
   ([@xmarquez](https://github.com/xmarquez),
