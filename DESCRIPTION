@@ -104,7 +104,6 @@ Collate:
     'provider-claude.R'
     'provider-aws.R'
     'provider-azure.R'
-    'provider-claude.R'
     'provider-claude-files.R'
     'provider-claude-tools.R'
     'provider-google.R'
