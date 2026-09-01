@@ -19,7 +19,7 @@
 * `chat_google_gemini()` no longer errors when mixing regular tools and built-in tools like `google_tool_web_search()` (@thisisnic, #1054).
 * `chat_huggingface()` now defaults to `Qwen/Qwen3-235B-A22B-Instruct-2507` (@thisisnic, #1040).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
-* New `content_document_file()` and `content_document_url()` send text-based documents (CSV, markdown, HTML, code, and Word/Excel where supported) to providers that accept them; `content_pdf_url()` now records the source URL, which Anthropic and the OpenAI responses API fetch directly instead of receiving inline data (@thisisnic, #1090).
+* New `content_document_file()` and `content_document_url()` send text-based documents like CSV, markdown, and code files to the model, and `content_pdf_url()` now lets providers that can fetch URLs do so themselves (@thisisnic, #1090).
 * New `models_update_prices()` downloads the latest model pricing data from GitHub and saves it to a local cache. Subsequent calls to `token_usage()` and related functions will use the updated prices (#968).
 * New `Model` class separates model configuration (name, parameters, extra arguments) from the `Provider` class, which now only captures API endpoint details. `Chat` gains a new `$get_model_object()` method to retrieve the `Model` object. `provider@model`, `provider@params`, and `provider@extra_args` are deprecated and will be removed in a future release; use the `Model` object instead (@thisisnic, #1098).
 * `params(top_k = )` is no longer sent as `top_logprobs` for OpenAI-based providers (@thisisnic, #1113).
