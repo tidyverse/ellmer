@@ -69,6 +69,8 @@
 <li>
 <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> now correctly handles the <code>fallback</code> content block returned when a model’s server-side refusal fallback (<code>server-side-fallback-2026-06-01</code>) is triggered (<a href="https://github.com/simonpcouch" class="external-link">@simonpcouch</a>, <a href="https://github.com/tidyverse/ellmer/issues/1058" class="external-link">#1058</a>).</li>
 <li>
+<code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> no longer errors when the model returns a thinking block with no text (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1100" class="external-link">#1100</a>).</li>
+<li>
 <code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> now supports bearer token authentication for enterprise API gateways (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1002" class="external-link">#1002</a>).</li>
 <li>
 <code><a href="../reference/chat_databricks.html">chat_databricks()</a></code> no longer errors with models that return content as an array of typed objects (e.g. <code>databricks-gpt-oss-120b</code>); reasoning parts are now captured as thinking content (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1078" class="external-link">#1078</a>).</li>
