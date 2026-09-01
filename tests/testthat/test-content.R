@@ -31,7 +31,7 @@ test_that("turn contents can be converted to text, markdown and HTML", {
     turn,
     AssistantTurn(list(ContentText("Here's your answer.")))
   )
-  chat <- Chat$new(test_provider())
+  chat <- Chat$new(test_provider(), model = test_model())
   chat$set_turns(turns)
   expect_snapshot(cat(contents_markdown(chat)))
 
@@ -39,8 +39,39 @@ test_that("turn contents can be converted to text, markdown and HTML", {
   expect_snapshot(cat(contents_html(turn)))
 })
 
-
 # Content types ----------------------------------------------------------------
+
+test_that("web sources support partial provider metadata", {
+  source <- WebSource(url = "https://example.com", title = "Example")
+  expect_s7_class(source, Source)
+  expect_equal(source@url, "https://example.com")
+  expect_equal(source@title, "Example")
+
+  expect_equal(WebSource()@url, NULL)
+  expect_equal(WebSource(title = "Untitled result")@title, "Untitled result")
+})
+
+test_that("citations support provider-independent metadata", {
+  source <- WebSource(url = "https://example.com", title = "Example")
+  citation <- ContentCitation(
+    source = source,
+    grounded_span = "grounded answer",
+    cited_quote = "source evidence",
+    extra = list(provider_id = "citation-1")
+  )
+
+  expect_s7_class(citation, Content)
+  expect_identical(citation@source, source)
+  expect_equal(citation@grounded_span, "grounded answer")
+  expect_equal(citation@cited_quote, "source evidence")
+  expect_equal(citation@extra, list(provider_id = "citation-1"))
+
+  empty <- ContentCitation()
+  expect_null(empty@source)
+  expect_null(empty@grounded_span)
+  expect_null(empty@cited_quote)
+  expect_null(empty@extra)
+})
 
 test_that("thinking has useful representations", {
   ct <- ContentThinking("A **thought**.")

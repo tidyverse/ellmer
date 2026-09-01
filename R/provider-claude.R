@@ -60,8 +60,9 @@ NULL
 #' @param model `r param_model("claude-sonnet-5", "anthropic")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
-#' @param base_url The base URL to the endpoint; the default is Claude's
-#'   public API.
+#' @param base_url The base URL to the endpoint; the default is the
+#'   `ANTHROPIC_BASE_URL` environment variable if set, and Claude's public
+#'   API otherwise.
 #' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
 #'   Set to "none" to disable caching or "1h" to cache for one hour.
 #'
@@ -83,7 +84,7 @@ chat_anthropic <- function(
   model = NULL,
   cache = c("5m", "1h", "none"),
   api_args = list(),
-  base_url = "https://api.anthropic.com/v1",
+  base_url = NULL,
   beta_headers = character(),
   api_key = NULL,
   credentials = NULL,
@@ -91,6 +92,7 @@ chat_anthropic <- function(
   echo = NULL
 ) {
   echo <- check_echo(echo)
+  base_url <- base_url %||% anthropic_base_url()
 
   model <- set_default(model, "claude-sonnet-5")
   cache <- arg_match(cache)
@@ -104,17 +106,23 @@ chat_anthropic <- function(
 
   provider <- ProviderAnthropic(
     name = "Anthropic",
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
-    extra_headers = api_headers,
     base_url = base_url,
+    extra_headers = api_headers,
     beta_headers = beta_headers,
     credentials = credentials,
     cache = cache
   )
-
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 #' @rdname chat_anthropic
@@ -141,6 +149,20 @@ ProviderAnthropic <- new_class(
   )
 )
 
+# Match the official Anthropic SDKs, which read ANTHROPIC_BASE_URL
+anthropic_base_url <- function() {
+  base_url <- Sys.getenv("ANTHROPIC_BASE_URL")
+  if (identical(base_url, "")) {
+    return("https://api.anthropic.com/v1")
+  }
+  base_url <- sub("/+$", "", base_url)
+  if (endsWith(base_url, "/v1")) {
+    base_url
+  } else {
+    paste0(base_url, "/v1")
+  }
+}
+
 anthropic_key <- function() {
   key_get("ANTHROPIC_API_KEY")
 }
@@ -165,15 +187,23 @@ method(base_request, ProviderAnthropic) <- function(provider) {
     req <- req_headers(req, `anthropic-beta` = provider@beta_headers)
   }
 
-  # <https://docs.anthropic.com/en/api/errors>
-  req <- req_error(req, body = function(resp) {
-    if (resp_content_type(resp) == "application/json") {
-      json <- resp_body_json(resp)
-      paste0(json$error$message, " [", json$error$type, "]")
-    }
-  })
+  req <- base_request_error(provider, req)
 
   req
+}
+
+method(base_request_error, ProviderAnthropic) <- function(provider, req) {
+  req_error(req, body = anthropic_error_body)
+}
+
+# <https://docs.anthropic.com/en/api/errors>
+anthropic_error_body <- function(resp) {
+  if (identical(resp_content_type(resp), "application/json")) {
+    json <- resp_body_json(resp)
+    if (!is.null(json$error)) {
+      paste0(json$error$message, " [", json$error$type, "]")
+    }
+  }
 }
 
 
@@ -183,6 +213,7 @@ method(chat_path, ProviderAnthropic) <- function(provider) {
 }
 method(chat_body, ProviderAnthropic) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -203,7 +234,7 @@ method(chat_body, ProviderAnthropic) <- function(
 
   if (!is.null(type)) {
     if (
-      has_claude_structured_output(provider@model) &&
+      has_claude_structured_output(model@name) &&
         !type_has_additional_properties(type)
     ) {
       output_config <- list(
@@ -230,7 +261,7 @@ method(chat_body, ProviderAnthropic) <- function(
   }
   tools <- chat_body_tools(provider, tools)
 
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model@params)
 
   if (has_name(params, "reasoning_effort")) {
     thinking <- list(type = "adaptive")
@@ -250,7 +281,7 @@ method(chat_body, ProviderAnthropic) <- function(
   }
 
   compact(list2(
-    model = provider@model,
+    model = model@name,
     system = system,
     messages = messages,
     stream = stream,
@@ -298,17 +329,56 @@ method(stream_parse, ProviderAnthropic) <- function(provider, event) {
 
   data
 }
-method(stream_content, ProviderAnthropic) <- function(provider, event) {
+method(stream_content, ProviderAnthropic) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
+  stream_content_with_turns(provider, event, completion)
+}
+method(stream_content_with_turns, ProviderAnthropic) <- function(
+  provider,
+  event,
+  completion = NULL,
+  turns = list()
+) {
   if (event$type == "content_block_delta") {
     if (identical(event$delta$type, "thinking_delta")) {
-      return(ContentThinking(event$delta$thinking))
+      return(list(ContentThinking(event$delta$thinking)))
     }
     text <- event$delta$text
     if (is.null(text)) {
-      return(NULL)
+      return(list())
     }
-    ContentText(text)
+    return(list(ContentText(text)))
   }
+  if (event$type == "content_block_start") {
+    block <- event$content_block
+    if (identical(block$type, "web_search_tool_result")) {
+      return(list(anthropic_search_result(block)))
+    }
+    if (identical(block$type, "web_fetch_tool_result")) {
+      return(list(anthropic_fetch_result(block)))
+    }
+  }
+  if (event$type == "content_block_stop" && !is.null(completion)) {
+    block <- completion$content[[event$index + 1L]]
+    if (identical(block$type, "text")) {
+      return(anthropic_citations(
+        block,
+        document_sources = anthropic_document_sources(
+          provider,
+          turns,
+          completion$content
+        )
+      ))
+    }
+    if (identical(block$type, "server_tool_use")) {
+      request <- anthropic_server_tool_request(block)
+      return(if (is.null(request)) list() else list(request))
+    }
+  }
+  list()
 }
 method(stream_merge_chunks, ProviderAnthropic) <- function(
   provider,
@@ -396,57 +466,60 @@ method(value_finish_reason, ProviderAnthropic) <- function(provider, result) {
 
 method(value_turn, ProviderAnthropic) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
-  contents <- lapply(result$content, function(content) {
+  value_turn_with_turns(
+    provider,
+    model,
+    result,
+    has_type = has_type
+  )
+}
+method(value_turn_with_turns, ProviderAnthropic) <- function(
+  provider,
+  model,
+  result,
+  has_type = FALSE,
+  turns = list()
+) {
+  document_sources <- anthropic_document_sources(
+    provider,
+    turns,
+    result$content
+  )
+  contents <- list_c(lapply(result$content, function(content) {
     if (content$type == "text") {
-      if (has_type && has_claude_structured_output(provider@model)) {
-        ContentJson(string = content$text)
+      if (has_type && has_claude_structured_output(model@name)) {
+        list(ContentJson(string = content$text))
       } else {
-        ContentText(content$text)
+        c(
+          list(ContentText(content$text)),
+          anthropic_citations(content, document_sources)
+        )
       }
     } else if (content$type == "tool_use") {
       if (has_type) {
-        ContentJson(data = content$input$data)
+        list(ContentJson(data = content$input$data))
       } else {
         if (is_string(content$input)) {
           content$input <- jsonlite::parse_json(content$input)
         }
-        ContentToolRequest(content$id, content$name, content$input)
+        list(ContentToolRequest(content$id, content$name, content$input))
       }
     } else if (content$type == "server_tool_use") {
-      if (is_string(content$input)) {
-        content$input <- jsonlite::parse_json(content$input)
-      }
-      if (content$name == "web_search") {
-        # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-search-tool#response
-        ContentToolRequestSearch(
-          query = content$input$query,
-          json = content
-        )
-      } else if (content$name == "web_fetch") {
-        # https://docs.claude.com/en/docs/agents-and-tools/tool-use/web-fetch-tool#response
-        ContentToolRequestFetch(
-          url = content$input$url,
-          json = content
-        )
-      } else {
-        cli::cli_abort("Unknown server tool {.str {content$name}}.")
-      }
+      request <- anthropic_server_tool_request(content)
+      if (is.null(request)) list() else list(request)
     } else if (content$type == "web_search_tool_result") {
-      urls <- map_chr(content$content, \(x) x$url)
-      ContentToolResponseSearch(
-        urls = urls,
-        json = content
-      )
+      list(anthropic_search_result(content))
     } else if (content$type == "web_fetch_tool_result") {
-      ContentToolResponseFetch(url = content$url %||% "failed", json = content)
+      list(anthropic_fetch_result(content))
     } else if (content$type == "thinking") {
-      ContentThinking(
+      list(ContentThinking(
         content$thinking,
         extra = list(signature = content$signature)
-      )
+      ))
     } else if (content$type == "fallback") {
       # https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback
       NULL
@@ -456,8 +529,7 @@ method(value_turn, ProviderAnthropic) <- function(
         .internal = TRUE
       )
     }
-  })
-  contents <- compact(contents)
+  }))
 
   tokens <- value_tokens(provider, result)
   cache_write <- result$usage$cache_creation_input_tokens %||% 0
@@ -466,9 +538,9 @@ method(value_turn, ProviderAnthropic) <- function(
   cost_tokens <- tokens
   cost_tokens$input <- cost_tokens$input + cache_write * 0.25
   cost <- get_token_cost(
-    provider,
-    cost_tokens,
-    model = serving_model(result) %||% provider@model
+    provider@name,
+    serving_model(result) %||% model@name,
+    cost_tokens
   )
   AssistantTurn(
     contents,
@@ -479,11 +551,140 @@ method(value_turn, ProviderAnthropic) <- function(
   )
 }
 
+anthropic_citations <- function(block, document_sources = list()) {
+  lapply(block$citations %||% list(), function(citation) {
+    ContentCitation(
+      source = anthropic_citation_source(citation, document_sources),
+      grounded_span = block$text,
+      cited_quote = citation$cited_text,
+      extra = citation
+    )
+  })
+}
+
+anthropic_citation_source <- function(citation, document_sources) {
+  url <- citation$url
+  if (!is.null(url) && nzchar(url)) {
+    return(WebSource(url = url, title = citation$title))
+  }
+
+  document_index <- citation$document_index
+  is_valid_index <- is.numeric(document_index) &&
+    length(document_index) == 1 &&
+    !is.na(document_index) &&
+    document_index >= 0 &&
+    document_index == as.integer(document_index) &&
+    document_index < length(document_sources)
+  if (!is_valid_index) {
+    return(NULL)
+  }
+
+  source <- document_sources[[document_index + 1L]]
+  if (is.null(source)) {
+    return(NULL)
+  }
+
+  WebSource(
+    url = source@url,
+    title = citation$document_title %||% source@title
+  )
+}
+
+anthropic_server_tool_request <- function(block) {
+  input <- block$input
+  if (is_string(input)) {
+    input <- jsonlite::parse_json(input)
+  }
+  if (is.null(input)) {
+    return(NULL)
+  }
+
+  block$input <- input
+  if (identical(block$name, "web_search")) {
+    ContentToolRequestSearch(query = input$query %||% "", extra = block)
+  } else if (identical(block$name, "web_fetch")) {
+    ContentToolRequestFetch(url = input$url %||% "", extra = block)
+  }
+}
+
+anthropic_search_result <- function(block) {
+  results <- block$content
+  is_result_list <- is.list(results) &&
+    (length(results) == 0 || is.null(names(results)))
+  sources <- if (is_result_list) {
+    lapply(results, function(result) {
+      WebSource(url = result$url, title = result$title)
+    })
+  } else {
+    list()
+  }
+
+  ContentToolResponseSearch(
+    sources = sources,
+    extra = block
+  )
+}
+
+anthropic_document_sources <- function(provider, turns, contents = list()) {
+  sources <- list()
+
+  for (turn in turns) {
+    message <- as_json(provider, turn)
+    if (is.null(message)) {
+      next
+    }
+    for (block in message$content) {
+      sources <- c(sources, anthropic_document_source(block))
+    }
+  }
+
+  for (block in contents) {
+    sources <- c(sources, anthropic_document_source(block))
+  }
+
+  sources
+}
+
+anthropic_document_source <- function(block) {
+  if (identical(block$type, "document")) {
+    return(list(anthropic_web_source(block$source$url)))
+  }
+
+  if (!identical(block$type, "web_fetch_tool_result")) {
+    return(list())
+  }
+
+  result <- block$content
+  if (!identical(result$type, "web_fetch_result")) {
+    return(list())
+  }
+
+  list(anthropic_web_source(result$url))
+}
+
+anthropic_web_source <- function(url) {
+  if (!is_string(url) || !nzchar(url)) {
+    return(NULL)
+  }
+  WebSource(url = url)
+}
+
+anthropic_fetch_result <- function(block) {
+  result <- block$content
+  success <- identical(result$type, "web_fetch_result")
+  ContentToolResponseFetch(
+    url = if (success) result$url else NULL,
+    status = if (success) "success" else "error",
+    extra = block
+  )
+}
+
 # Token counting ----------------------------------------------------------
 
 # https://docs.anthropic.com/en/docs/build-with-claude/token-counting
 method(count_tokens, ProviderAnthropic) <- function(
   provider,
+  model,
   ...,
   system_prompt = NULL,
   tools = list(),
@@ -504,7 +705,7 @@ method(count_tokens, ProviderAnthropic) <- function(
 
   if (!is.null(type)) {
     if (
-      has_claude_structured_output(provider@model) &&
+      has_claude_structured_output(model@name) &&
         !type_has_additional_properties(type)
     ) {
       output_config <- list(
@@ -532,7 +733,7 @@ method(count_tokens, ProviderAnthropic) <- function(
   tools <- chat_body_tools(provider, tools)
 
   body <- compact(list(
-    model = provider@model,
+    model = model@name,
     system = system,
     messages = list(as_json(provider, user_turn(...), is_last = TRUE)),
     tools = tools,
@@ -580,6 +781,9 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(
     }
     x <- turn_contents_expand(x)
     content <- as_json(provider, x@contents, ...)
+    if (length(content) == 0) {
+      return(NULL)
+    }
 
     # Add caching to the last content block in the last turn
     # https://docs.claude.com/en/docs/build-with-claude/prompt-caching#how-automatic-prefix-checking-works
@@ -734,6 +938,21 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
   )
 }
 
+anthropic_replay_annotation <- function(content) {
+  replayable <- c(
+    "server_tool_use",
+    "web_search_tool_result",
+    "web_fetch_tool_result"
+  )
+  if (
+    !is.null(content@extra) &&
+      !is.null(content@extra$type) &&
+      content@extra$type %in% replayable
+  ) {
+    content@extra
+  }
+}
+
 # Batch chat -------------------------------------------------------------------
 
 method(has_batch_support, ProviderAnthropic) <- function(provider) {
@@ -743,6 +962,7 @@ method(has_batch_support, ProviderAnthropic) <- function(provider) {
 # https://docs.anthropic.com/en/api/creating-message-batches
 method(batch_submit, ProviderAnthropic) <- function(
   provider,
+  model,
   conversations,
   type = NULL
 ) {
@@ -752,6 +972,7 @@ method(batch_submit, ProviderAnthropic) <- function(
   requests <- map(seq_along(conversations), function(i) {
     params <- chat_body(
       provider,
+      model,
       stream = FALSE,
       turns = conversations[[i]],
       type = type
@@ -805,11 +1026,12 @@ method(batch_retrieve, ProviderAnthropic) <- function(provider, batch) {
 
 method(batch_result_turn, ProviderAnthropic) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
   if (result$type == "succeeded") {
-    value_turn(provider, result$message, has_type = has_type)
+    value_turn(provider, model, result$message, has_type = has_type)
   } else {
     NULL
   }
@@ -820,10 +1042,11 @@ method(batch_result_turn, ProviderAnthropic) <- function(
 #' @export
 #' @rdname chat_anthropic
 models_claude <- function(
-  base_url = "https://api.anthropic.com/v1",
+  base_url = NULL,
   api_key = NULL,
   credentials = NULL
 ) {
+  base_url <- base_url %||% anthropic_base_url()
   credentials <- as_credentials(
     "models_anthropic",
     function() anthropic_key(),
@@ -833,7 +1056,6 @@ models_claude <- function(
 
   provider <- ProviderAnthropic(
     name = "Anthropic",
-    model = "",
     base_url = base_url,
     credentials = credentials,
     cache = "none"
@@ -885,7 +1107,9 @@ cache_control <- function(provider) {
 }
 
 has_claude_structured_output <- function(model) {
-  # Matches Claude 4.5+ models
+  # Matches Claude 4.5+ models, including major versions 5 and later.
+  # The name segment is restricted to [a-z] so that version-first names
+  # (claude-3-5-sonnet-*, claude-4-sonnet-*) don't match.
   # https://platform.claude.com/docs/en/build-with-claude/structured-outputs
-  grepl("^claude-\\w+-4-[5-9](-|$)", model)
+  grepl("^claude-[a-z]+-(4-[5-9]|[5-9]|[1-9]\\d)(-|$)", model)
 }

@@ -48,3 +48,51 @@ test_that("built-in tools", {
     })
   }
 })
+
+test_that("web activity content has structured public fields", {
+  search_request <- ContentToolRequestSearch(
+    query = "ellmer citations",
+    extra = list(type = "search")
+  )
+  search_response <- ContentToolResponseSearch(
+    sources = list(
+      WebSource("https://example.com", "Example"),
+      WebSource(title = "Source without URL")
+    ),
+    extra = list(type = "search_results")
+  )
+  fetch_request <- ContentToolRequestFetch(
+    url = "https://example.com",
+    extra = list(type = "fetch")
+  )
+  fetch_response <- ContentToolResponseFetch(
+    url = "https://example.com",
+    status = "success",
+    extra = list(provider_status = "URL_RETRIEVAL_STATUS_SUCCESS")
+  )
+
+  expect_equal(search_request@query, "ellmer citations")
+  expect_s7_class(search_response@sources[[1]], WebSource)
+  expect_null(search_response@sources[[2]]@url)
+  expect_equal(fetch_request@url, "https://example.com")
+  expect_equal(fetch_response@status, "success")
+  expect_error(
+    ContentToolResponseFetch(status = "pending"),
+    "success.*error"
+  )
+})
+
+test_that("web activity content classes are exported", {
+  exports <- getNamespaceExports("ellmer")
+  expect_true(
+    all(
+      c(
+        "ContentToolRequestSearch",
+        "ContentToolResponseSearch",
+        "ContentToolRequestFetch",
+        "ContentToolResponseFetch"
+      ) %in%
+        exports
+    )
+  )
+})

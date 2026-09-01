@@ -66,13 +66,20 @@ chat_google_gemini <- function(
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
     base_url = base_url,
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
     credentials = credentials
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 chat_google_gemini_test <- function(
@@ -113,14 +120,21 @@ chat_google_vertex <- function(
   provider <- ProviderGoogleGemini(
     name = "Google/Vertex",
     base_url = vertex_url(location, project_id),
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
     credentials = credentials,
     project_id = project_id
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 # https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
@@ -138,7 +152,6 @@ ProviderGoogleGemini <- new_class(
   "ProviderGoogleGemini",
   parent = Provider,
   properties = list(
-    model = prop_string(),
     project_id = prop_string(allow_null = TRUE)
   )
 )
@@ -161,6 +174,7 @@ method(base_request, ProviderGoogleGemini) <- function(provider) {
 
 method(chat_request, ProviderGoogleGemini) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -174,25 +188,26 @@ method(chat_request, ProviderGoogleGemini) <- function(
     # https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
     req <- req_url_path_append(
       req,
-      paste0(provider@model, ":", "streamGenerateContent")
+      paste0(model@name, ":", "streamGenerateContent")
     )
     req <- req_url_query(req, alt = "sse")
   } else {
     # https://ai.google.dev/api/generate-content#method:-models.generatecontent
     req <- req_url_path_append(
       req,
-      paste0(provider@model, ":", "generateContent")
+      paste0(model@name, ":", "generateContent")
     )
   }
 
   body <- chat_body(
     provider = provider,
+    model = model,
     stream = stream,
     turns = turns,
     tools = tools,
     type = type
   )
-  body <- modify_list(body, provider@extra_args)
+  body <- modify_list(body, model@extra_args)
 
   req <- req_body_json(req, body)
   req <- req_headers(req, !!!provider@extra_headers)
@@ -201,6 +216,7 @@ method(chat_request, ProviderGoogleGemini) <- function(
 
 method(chat_body, ProviderGoogleGemini) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -212,7 +228,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
     system <- list(parts = list(text = ""))
   }
 
-  generation_config <- chat_params(provider, provider@params)
+  generation_config <- chat_params(provider, model@params)
   if (!is.null(type)) {
     generation_config$response_mime_type <- "application/json"
     generation_config$response_schema <- as_json(provider, type)
@@ -243,7 +259,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
     if (
       any(is_builtin) &&
         !all(is_builtin) &&
-        has_google_mixed_tool_support(provider)
+        has_google_mixed_tool_support(provider@name, model@name)
     ) {
       tool_config <- list(includeServerSideToolInvocations = TRUE)
     }
@@ -287,18 +303,37 @@ method(stream_parse, ProviderGoogleGemini) <- function(provider, event) {
     jsonlite::parse_json(event$data)
   }
 }
-method(stream_content, ProviderGoogleGemini) <- function(provider, event) {
-  parts <- event$candidates[[1]]$content$parts
-  if (is.null(parts) || length(parts) == 0) {
-    return(NULL)
-  }
+method(stream_content, ProviderGoogleGemini) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
+  candidate <- event$candidates[[1]]
+  parts <- candidate$content$parts %||% list()
+  part_contents <- list_c(lapply(parts, function(part) {
+    if (isTRUE(part$thought) && !is.null(part$text)) {
+      list(ContentThinking(part$text))
+    } else if (!is.null(part$text)) {
+      list(ContentText(part$text))
+    } else {
+      list()
+    }
+  }))
 
-  part <- parts[[1]]
-  if (isTRUE(part$thought) && !is.null(part$text)) {
-    ContentThinking(part$text)
-  } else if (!is.null(part$text)) {
-    ContentText(part$text)
+  # Grounding and URL context metadata can arrive before the answer text
+  # they support, so defer them until the final chunk and rebuild from the
+  # merged completion. Citations come first so they stay adjacent to text.
+  if (is.null(candidate$finishReason) || is.null(completion)) {
+    return(part_contents)
   }
+  merged <- completion$candidates[[1]]
+  grounding <- merged$groundingMetadata
+  c(
+    part_contents,
+    google_grounding_citations(grounding),
+    google_search_contents(grounding),
+    google_url_context_contents(merged$urlContextMetadata)
+  )
 }
 method(stream_merge_chunks, ProviderGoogleGemini) <- function(
   provider,
@@ -361,10 +396,12 @@ method(value_finish_reason, ProviderGoogleGemini) <- function(
 
 method(value_turn, ProviderGoogleGemini) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
-  message <- result$candidates[[1]]$content
+  candidate <- result$candidates[[1]]
+  message <- candidate$content
 
   contents <- lapply(message$parts, function(content) {
     if (isTRUE(content$thought) && has_name(content, "text")) {
@@ -404,8 +441,15 @@ method(value_turn, ProviderGoogleGemini) <- function(
     }
   })
   contents <- compact(contents)
+
+  grounding <- candidate$groundingMetadata
+  search_contents <- google_search_contents(grounding)
+  citations <- google_grounding_citations(grounding)
+  fetch_contents <- google_url_context_contents(candidate$urlContextMetadata)
+  contents <- c(search_contents, contents, citations, fetch_contents)
+
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
+  cost <- get_token_cost(provider@name, model@name, tokens)
 
   AssistantTurn(
     contents,
@@ -414,6 +458,109 @@ method(value_turn, ProviderGoogleGemini) <- function(
     cost = cost,
     finish_reason = value_finish_reason(provider, result)
   )
+}
+
+google_search_contents <- function(grounding) {
+  if (is.null(grounding)) {
+    return(list())
+  }
+
+  queries <- grounding$webSearchQueries %||% list()
+  requests <- lapply(queries, function(query) {
+    ContentToolRequestSearch(
+      query = query,
+      extra = list(webSearchQueries = queries)
+    )
+  })
+
+  sources <- compact(google_web_sources(grounding))
+  response <- if (length(sources) == 0) {
+    list()
+  } else {
+    list(
+      ContentToolResponseSearch(
+        sources = sources,
+        extra = list(groundingMetadata = grounding)
+      )
+    )
+  }
+  c(requests, response)
+}
+
+google_grounding_citations <- function(grounding) {
+  if (is.null(grounding)) {
+    return(list())
+  }
+
+  sources <- google_web_sources(grounding)
+  citations <- lapply(
+    grounding$groundingSupports %||% list(),
+    function(support) {
+      indices <- unique(
+        unlist(
+          support$groundingChunkIndices %||% list(),
+          use.names = FALSE
+        )
+      )
+      lapply(indices, function(index) {
+        source_index <- index + 1L
+        if (source_index > length(sources)) {
+          return(NULL)
+        }
+        ContentCitation(
+          source = sources[[source_index]],
+          grounded_span = support$segment$text,
+          extra = list(groundingSupport = support)
+        )
+      })
+    }
+  )
+  compact(list_c(citations))
+}
+
+google_web_sources <- function(grounding) {
+  lapply(grounding$groundingChunks %||% list(), function(chunk) {
+    web <- chunk$web
+    if (is.null(web$uri) || !nzchar(web$uri)) {
+      NULL
+    } else {
+      WebSource(url = web$uri, title = web$title)
+    }
+  })
+}
+
+google_url_context_contents <- function(context) {
+  metadata <- context$urlMetadata %||% list()
+  list_c(
+    lapply(metadata, function(meta) {
+      url <- meta$retrievedUrl
+      if (is.null(url) || !nzchar(url)) {
+        return(list())
+      }
+      extra <- list(urlMetadata = meta)
+      list(
+        ContentToolRequestFetch(url = url, extra = extra),
+        ContentToolResponseFetch(
+          url = url,
+          status = google_retrieval_status(meta$urlRetrievalStatus),
+          extra = extra
+        )
+      )
+    })
+  )
+}
+
+google_retrieval_status <- function(status) {
+  if (
+    is.null(status) ||
+      identical(status, "URL_RETRIEVAL_STATUS_UNSPECIFIED")
+  ) {
+    NULL
+  } else if (identical(status, "URL_RETRIEVAL_STATUS_SUCCESS")) {
+    "success"
+  } else {
+    "error"
+  }
 }
 
 # ellmer -> Gemini --------------------------------------------------------------
@@ -433,7 +580,12 @@ method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
       parts = as_json(provider, x@contents, ...)
     )
   } else if (is_assistant_turn(x)) {
-    list(role = "model", parts = as_json(provider, x@contents, ...))
+    parts <- as_json(provider, x@contents, ...)
+    if (length(parts) == 0) {
+      NULL
+    } else {
+      list(role = "model", parts = parts)
+    }
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
@@ -585,6 +737,12 @@ merge_last <- function() {
   }
 }
 
+merge_last_non_null <- function() {
+  function(left, right, path = NULL) {
+    right %||% left
+  }
+}
+
 merge_identical <- function() {
   function(left, right, path = NULL) {
     if (!identical(left, right)) {
@@ -723,6 +881,8 @@ merge_gemini_chunks <- merge_objects(
     citationMetadata = merge_optional(
       merge_objects(citationSources = merge_append())
     ),
+    groundingMetadata = merge_last_non_null(),
+    urlContextMetadata = merge_last_non_null(),
     tokenCount = merge_last()
   ),
   promptFeedback = merge_last(),
@@ -869,6 +1029,7 @@ method(chat_body_tools, ProviderGoogleGemini) <- function(provider, tools) {
 # https://ai.google.dev/api/tokens
 method(count_tokens, ProviderGoogleGemini) <- function(
   provider,
+  model,
   ...,
   system_prompt = NULL,
   tools = list(),
@@ -878,7 +1039,7 @@ method(count_tokens, ProviderGoogleGemini) <- function(
   req <- req_url_path_append(
     req,
     "models",
-    paste0(provider@model, ":", "countTokens")
+    paste0(model@name, ":", "countTokens")
   )
 
   if (!is.null(system_prompt)) {
@@ -907,7 +1068,7 @@ method(count_tokens, ProviderGoogleGemini) <- function(
   ))
 
   if (identical(provider@name, "Google/Gemini")) {
-    token_body$model <- paste0("models/", provider@model)
+    token_body$model <- paste0("models/", model@name)
     token_body <- list(generateContentRequest = token_body)
   }
 
@@ -940,7 +1101,6 @@ models_google_gemini <- function(
 
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
-    model = "",
     base_url = base_url,
     credentials = credentials
   )
@@ -968,7 +1128,6 @@ models_google_vertex <- function(
 
   provider <- ProviderGoogleGemini(
     name = "Google/Vertex",
-    model = "",
     base_url = base_url,
     credentials = credentials,
     project_id = project_id
@@ -1031,6 +1190,7 @@ method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
 
 method(batch_submit, ProviderGoogleGemini) <- function(
   provider,
+  model,
   conversations,
   type = NULL
 ) {
@@ -1039,6 +1199,7 @@ method(batch_submit, ProviderGoogleGemini) <- function(
   requests <- map(seq_along(conversations), function(i) {
     body <- chat_body(
       provider,
+      model,
       stream = FALSE,
       turns = conversations[[i]],
       type = type
@@ -1065,14 +1226,14 @@ method(batch_submit, ProviderGoogleGemini) <- function(
   req <- req_url_path_append(
     req,
     "models",
-    paste0(provider@model, ":batchGenerateContent")
+    paste0(model@name, ":batchGenerateContent")
   )
   req <- req_body_json(
     req,
     list(
       batch = list(
         displayName = paste0("ellmer-", as.integer(Sys.time())),
-        model = paste0("models/", provider@model),
+        model = paste0("models/", model@name),
         inputConfig = list(fileName = uploaded$name)
       )
     )
@@ -1168,11 +1329,12 @@ method(batch_retrieve, ProviderGoogleGemini) <- function(provider, batch) {
 
 method(batch_result_turn, ProviderGoogleGemini) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
   if (!is.null(result) && result$status_code == 200L && !is.null(result$body)) {
-    value_turn(provider, result$body, has_type = has_type)
+    value_turn(provider, model, result$body, has_type = has_type)
   } else {
     NULL
   }
@@ -1247,7 +1409,7 @@ gemini_normalize_result <- function(x, index_default) {
   list(index = index, result = list(status_code = 500L, body = NULL))
 }
 
-has_google_mixed_tool_support <- function(provider) {
-  identical(provider@name, "Google/Gemini") &&
-    grepl("^gemini-([3-9]|[0-9]{2,})", provider@model)
+has_google_mixed_tool_support <- function(provider_name, model_name) {
+  identical(provider_name, "Google/Gemini") &&
+    grepl("^gemini-([3-9]|[0-9]{2,})", model_name)
 }

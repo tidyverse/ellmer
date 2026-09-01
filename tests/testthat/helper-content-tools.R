@@ -11,7 +11,7 @@ fixture_list_of_tools <- function() {
       description = "Tool"
     ),
     tool_list = tool(
-      function() list(a = 1, b = 2),
+      function() jsonlite::toJSON(list(a = 1, b = 2), auto_unbox = TRUE),
       name = "tool_list",
       description = "Tool"
     ),

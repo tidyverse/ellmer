@@ -97,14 +97,21 @@ chat_openai_compatible <- function(
   provider <- ProviderOpenAICompatible(
     name = name,
     base_url = base_url,
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
     credentials = credentials,
     preserve_thinking = preserve_thinking
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 chat_openai_compatible_test <- function(
@@ -162,20 +169,22 @@ method(base_request_error, ProviderOpenAICompatible) <- function(
   provider,
   req
 ) {
-  req_error(req, body = function(resp) {
-    if (resp_content_type(resp) == "application/json") {
-      error <- resp_body_json(resp)$error
-      if (is_string(error)) {
-        error
-      } else if (is.list(error)) {
-        error$message
-      } else {
-        prettify(resp_body_string(resp))
-      }
-    } else if (resp_content_type(resp) == "text/plain") {
-      resp_body_string(resp)
+  req_error(req, body = openai_error_body)
+}
+
+openai_error_body <- function(resp) {
+  if (identical(resp_content_type(resp), "application/json")) {
+    error <- resp_body_json(resp)$error
+    if (is_string(error)) {
+      error
+    } else if (is.list(error)) {
+      error$message
+    } else {
+      prettify(resp_body_string(resp))
     }
-  })
+  } else if (identical(resp_content_type(resp), "text/plain")) {
+    resp_body_string(resp)
+  }
 }
 
 # Chat endpoint ----------------------------------------------------------------
@@ -187,6 +196,7 @@ method(chat_path, ProviderOpenAICompatible) <- function(provider) {
 # https://platform.openai.com/docs/api-reference/chat/create
 method(chat_body, ProviderOpenAICompatible) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -208,11 +218,11 @@ method(chat_body, ProviderOpenAICompatible) <- function(
     response_format <- NULL
   }
 
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model@params)
 
   compact(list2(
     messages = messages,
-    model = provider@model,
+    model = model@name,
     !!!params,
     stream = stream,
     stream_options = if (stream) list(include_usage = TRUE),
@@ -248,22 +258,26 @@ method(stream_parse, ProviderOpenAICompatible) <- function(provider, event) {
 
   jsonlite::parse_json(event$data)
 }
-method(stream_content, ProviderOpenAICompatible) <- function(provider, event) {
+method(stream_content, ProviderOpenAICompatible) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
   if (length(event$choices) == 0) {
-    return(NULL)
+    return(list())
   }
   delta <- event$choices[[1]]$delta
 
   reasoning <- delta[["reasoning"]] %||% delta[["reasoning_content"]]
   if (!is.null(reasoning)) {
-    return(ContentThinking(reasoning))
+    return(list(ContentThinking(reasoning)))
   }
 
   text <- delta[["content"]]
   if (is.null(text)) {
-    return(NULL)
+    return(list())
   }
-  ContentText(text)
+  list(ContentText(text))
 }
 method(stream_merge_chunks, ProviderOpenAICompatible) <- function(
   provider,
@@ -309,6 +323,7 @@ method(value_finish_reason, ProviderOpenAICompatible) <- function(
 
 method(value_turn, ProviderOpenAICompatible) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
@@ -360,7 +375,7 @@ method(value_turn, ProviderOpenAICompatible) <- function(
   content <- c(thinking, content)
 
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
+  cost <- get_token_cost(provider@name, model@name, tokens)
 
   AssistantTurn(
     content,

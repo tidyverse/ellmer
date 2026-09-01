@@ -81,8 +81,8 @@ test_that("can use pdfs", {
 test_that("can match prices for some common models", {
   provider <- chat_openai_test()$get_provider()
 
-  expect_true(has_cost(provider, "gpt-4.1"))
-  expect_true(has_cost(provider, "gpt-4.1-2025-04-14"))
+  expect_true(has_cost(provider@name, "gpt-4.1"))
+  expect_true(has_cost(provider@name, "gpt-4.1-2025-04-14"))
 })
 
 # Custom tests -----------------------------------------------------------------
@@ -115,11 +115,20 @@ test_that("service tier affects pricing", {
 
   last_turn <- chat$last_turn()
   tokens <- as.list(last_turn@tokens)
-  priority_cost <- get_token_cost(chat$get_provider(), tokens, "priority")
+  priority_cost <- get_token_cost(
+    chat$get_provider()@name,
+    chat$get_model_object()@name,
+    tokens,
+    "priority"
+  )
   expect_equal(last_turn@cost, priority_cost)
 
   # Confirm we have pricing for the priority tier
-  default_cost <- get_token_cost(chat$get_provider(), tokens)
+  default_cost <- get_token_cost(
+    chat$get_provider()@name,
+    chat$get_model_object()@name,
+    tokens
+  )
   expect_gt(last_turn@cost, default_cost)
 })
 
@@ -130,10 +139,12 @@ test_that("batch retrieve succeeds even if JSON is mangled", {
       writeLines('{"custom_id": "123", ', path)
     }
   )
-  provider <- chat_openai_test()$get_provider()
+  chat <- chat_openai_test()
+  provider <- chat$get_provider()
+  model <- chat$get_model_object()
   out <- batch_retrieve(provider, list(output_file_id = "123"))
   expect_equal(out, list(list(status_code = 500)))
-  expect_equal(batch_result_turn(provider, out[[1]]), NULL)
+  expect_equal(batch_result_turn(provider, model, out[[1]]), NULL)
 })
 
 test_that("can extract dummy response from malformed JSON", {
@@ -154,7 +165,106 @@ test_that("value_turn handles NULL service_tier gracefully", {
     service_tier = NULL
   )
 
-  expect_no_error(value_turn(provider, result))
+  expect_no_error(value_turn(provider, test_model(), result))
+})
+
+test_that("value_turn() keeps OpenAI citation metadata without grounded_span", {
+  provider <- chat_openai_test()$get_provider()
+  annotation <- list(
+    type = "url_citation",
+    start_index = 4L,
+    end_index = 10L,
+    url = "https://example.com",
+    title = "Example"
+  )
+  result <- list(
+    status = "completed",
+    output = list(
+      list(
+        type = "message",
+        content = list(
+          list(
+            type = "output_text",
+            text = "The answer is grounded.",
+            annotations = list(annotation)
+          )
+        )
+      )
+    ),
+    usage = NULL
+  )
+
+  contents <- value_turn(provider, test_model(), result)@contents
+  expect_s7_class(contents[[1]], ContentText)
+  expect_s7_class(contents[[2]], ContentCitation)
+  expect_equal(contents[[2]]@source@url, "https://example.com")
+  expect_equal(contents[[2]]@source@title, "Example")
+  expect_null(contents[[2]]@grounded_span)
+  expect_equal(contents[[2]]@extra, annotation)
+})
+
+test_that("stream_content() emits OpenAI annotations and web activity", {
+  provider <- chat_openai_test()$get_provider()
+  annotation <- list(
+    type = "url_citation",
+    start_index = 0L,
+    end_index = 6L,
+    url = "https://example.com",
+    title = "Example"
+  )
+  citation <- stream_content(
+    provider,
+    list(
+      type = "response.output_text.annotation.added",
+      annotation = annotation
+    ),
+    completion = NULL
+  )
+  expect_length(citation, 1)
+  expect_s7_class(citation[[1]], ContentCitation)
+  expect_null(citation[[1]]@grounded_span)
+  expect_equal(citation[[1]]@extra, annotation)
+
+  activity <- stream_content(
+    provider,
+    list(
+      type = "response.output_item.done",
+      item = list(
+        type = "web_search_call",
+        action = list(type = "search", query = "ellmer citations")
+      )
+    ),
+    completion = NULL
+  )
+  expect_length(activity, 1)
+  expect_s7_class(activity[[1]], ContentToolRequestSearch)
+  expect_equal(activity[[1]]@query, "ellmer citations")
+})
+
+test_that("stream_text() excludes OpenAI annotations", {
+  provider <- chat_openai_test()$get_provider()
+  annotation <- list(
+    type = "url_citation",
+    url = "https://example.com",
+    title = "Example"
+  )
+
+  expect_null(
+    stream_text(
+      provider,
+      list(
+        type = "response.output_text.annotation.added",
+        annotation = annotation
+      )
+    )
+  )
+  expect_equal(
+    stream_text(
+      provider,
+      list(type = "response.output_text.delta", delta = "answer")
+    ),
+    "answer"
+  )
 })
 
 test_that("value_turn() handles web_search_call action types", {
@@ -193,6 +303,7 @@ test_that("value_turn() handles web_search_call action types", {
   # search action with query
   turn <- value_turn(
     provider,
+    test_model(),
     make_result(list(type = "search", query = "test query"))
   )
   expect_equal(turn@contents[[1]]@query, "test query")
@@ -200,25 +311,34 @@ test_that("value_turn() handles web_search_call action types", {
   # open_page action with url
   turn <- value_turn(
     provider,
+    test_model(),
     make_result(list(type = "open_page", url = "https://example.com"))
   )
-  expect_equal(turn@contents[[1]]@query, "https://example.com")
+  expect_s7_class(turn@contents[[1]], ContentToolRequestFetch)
+  expect_equal(turn@contents[[1]]@url, "https://example.com")
+  expect_identical(
+    as_json(provider, turn@contents[[1]]),
+    turn@contents[[1]]@extra
+  )
 
-  # find_in_page action with queries
+  # find_in_page action with pattern
   turn <- value_turn(
     provider,
-    make_result(list(type = "find_in_page", queries = list("find this")))
+    test_model(),
+    make_result(list(type = "find_in_page", pattern = "find this"))
   )
+  expect_s7_class(turn@contents[[1]], ContentToolRequestSearch)
   expect_equal(turn@contents[[1]]@query, "find this")
 
   # search action without query
-  turn <- value_turn(provider, make_result(list(type = "search")))
+  turn <- value_turn(provider, test_model(), make_result(list(type = "search")))
   expect_equal(turn@contents[[1]]@query, "web search")
 
-  # find_in_page action with empty queries falls back
+  # find_in_page action without pattern falls back
   turn <- value_turn(
     provider,
-    make_result(list(type = "find_in_page", queries = list()))
+    test_model(),
+    make_result(list(type = "find_in_page"))
   )
   expect_equal(turn@contents[[1]]@query, "web search")
 })

@@ -71,25 +71,27 @@ chat_lmstudio <- function(
 
   echo <- check_echo(echo)
 
+  params <- params %||% params()
+
   provider <- ProviderLMStudio(
     name = "LM Studio",
     base_url = file.path(base_url, "v1"),
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
+  model <- Model(name = model, params = params, extra_args = api_args)
 
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderLMStudio <- new_class(
   "ProviderLMStudio",
-  parent = ProviderOpenAICompatible,
-  properties = list(
-    model = prop_string()
-  )
+  parent = ProviderOpenAICompatible
 )
 
 lmstudio_credentials <- function(credentials = NULL) {
@@ -155,7 +157,6 @@ models_lmstudio <- function(
   provider <- ProviderLMStudio(
     name = "LM Studio",
     base_url = file.path(base_url, "v1"),
-    model = "",
     credentials = credentials
   )
 

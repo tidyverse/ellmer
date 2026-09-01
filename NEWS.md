@@ -1,13 +1,21 @@
 # ellmer (development version)
 
+* When running on Posit Connect, ellmer now forwards the viewer's session token to Connect's LLM gateway so gateway usage can be attributed to the viewer. This happens automatically for Shiny content and only affects requests to the gateway (@karawoo, #1105).
+* `chat_aws_bedrock()` gains an `api` argument to select between the Converse API on the `bedrock-runtime` endpoint and the Anthropic Messages or OpenAI Responses APIs on the `bedrock-mantle` endpoint. This makes models that Converse can't serve, like Claude Mythos and the GPT-5 family, available on Bedrock. The API is picked from `model` by default, so you only need to set `api` for models ellmer doesn't recognize (#1064).
+* ellmer now preserves provider citations in chat history and streamed content, and displays cited sources in console output. Enable cited web results with `chat$register_tool()`, using tools such as `openai_tool_web_search()`, `claude_tool_web_search()`, or `claude_tool_web_fetch(citations = TRUE)` (#1068).
 * `Chat` gains a `$token_count()` method that estimates the number of tokens in new input using the provider's token counting endpoint (@thisisnic, #814).
 * `chat_anthropic()`, `chat_aws_bedrock()`, and `chat_posit()` now default to `claude-sonnet-5`. `chat_openai()` and `chat_openrouter()` now default to `gpt-5.6-terra` (@thisisnic, #1066).
+* `chat_anthropic()` now defaults `base_url` to the `ANTHROPIC_BASE_URL` environment variable, and `chat_aws_bedrock()` to `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` or `AWS_ENDPOINT_URL_BEDROCK_MANTLE` depending on `api`, matching the official SDKs (@karawoo, #1103).
 * `chat_anthropic()` now correctly handles the `fallback` content block returned when a model's server-side refusal fallback (`server-side-fallback-2026-06-01`) is triggered (@simonpcouch, #1058).
 * `chat_aws_bedrock()` now supports bearer token authentication for enterprise API gateways (@thisisnic, #1002).
+* `chat_databricks()` no longer errors with models that return content as an array of typed objects (e.g. `databricks-gpt-oss-120b`); reasoning parts are now captured as thinking content (@thisisnic, #1078).
+* `chat_databricks()` no longer errors when a registered tool has no arguments (@thisisnic, #1084).
 * `chat_github()` and `models_github()` are now defunct because GitHub Models has been retired (@thisisnic, #1069).
 * `chat_google_gemini()` no longer errors when mixing regular tools and built-in tools like `google_tool_web_search()` (@thisisnic, #1054).
 * `chat_openrouter()` now correctly preserves provider error messages (@xmarquez, #1059).
-* `tool_context()` lets a tool access its calling context — the `ContentToolRequest` and the conversation history — during a tool call, with `with_tool_context()` and `local_tool_context()` for testing (#871).
+* New `models_update_prices()` downloads the latest model pricing data from GitHub and saves it to a local cache. Subsequent calls to `token_usage()` and related functions will use the updated prices (#968).
+* New `Model` class separates model configuration (name, parameters, extra arguments) from the `Provider` class, which now only captures API endpoint details. `Chat` gains a new `$get_model_object()` method to retrieve the `Model` object. This is a breaking change for anyone who directly accesses `provider@model`, `provider@params`, or `provider@extra_args`; use the `Model` object instead (@thisisnic, #499).
+* `tool()` functions that return complex objects like data frames or lists now produce a deprecation warning. Tool functions should return a character vector, an atomic vector, a JSON string (from `jsonlite::toJSON()`), or a `Content` object. Use `jsonlite::toJSON()` to convert complex objects before returning (@thisisnic, #858).* `tool_context()` lets a tool access its calling context — the `ContentToolRequest` and the conversation history — during a tool call, with `with_tool_context()` and `local_tool_context()` for testing (#871).
 
 
 # ellmer 0.4.2

@@ -2,10 +2,12 @@
 
 test_that("can get and set the system prompt", {
   chat <- chat_openai_test()
-  chat$set_turns(list(
-    UserTurn("Hi"),
-    AssistantTurn("Hello")
-  ))
+  chat$set_turns(
+    list(
+      UserTurn("Hi"),
+      AssistantTurn("Hello")
+    )
+  )
 
   # NULL -> NULL
   chat$set_system_prompt(NULL)
@@ -124,7 +126,6 @@ test_that("setting turns usually preserves, but can set system prompt", {
   expect_equal(chat$get_system_prompt(), "You're a cool guy")
 })
 
-
 test_that("can perform a simple batch chat", {
   chat <- chat_openai_test()
 
@@ -162,12 +163,14 @@ test_that("can perform a simple async batch chat", {
 test_that("can perform a simple streaming chat", {
   chat <- chat_openai_test()
 
-  chunks <- coro::collect(chat$stream(
-    "
+  chunks <- coro::collect(
+    chat$stream(
+      "
     What are the canonical colors of the ROYGBIV rainbow?
     Put each colour on its own line. Don't use punctuation.
   "
-  ))
+    )
+  )
   expect_gt(length(chunks), 2)
 
   rainbow_re <- "^red *\norange *\nyellow *\ngreen *\nblue *\nindigo *\nviolet *\n?$"
@@ -179,15 +182,146 @@ test_that("can perform a simple streaming chat", {
   )
 })
 
+test_that("streaming handles multiple contents after merging each chunk", {
+  make_response <- function() {
+    coro::generator(function() {
+      yield(list(type = "chunk"))
+    })()
+  }
+  final_turn <- AssistantTurn(
+    list(
+      ContentText("hello"),
+      ContentCitation(grounded_span = "hello")
+    ),
+    tokens = c(0, 0, 0),
+    cost = 0
+  )
+
+  local_mocked_bindings(
+    chat_perform = function(...) make_response(),
+    stream_merge_chunks = function(provider, result, chunk) {
+      list(merged = TRUE)
+    },
+    stream_content = function(provider, event, completion) {
+      expect_true(completion$merged)
+      list(
+        ContentText("hello"),
+        ContentCitation(grounded_span = "hello")
+      )
+    },
+    value_finish_reason = function(provider, result) "success",
+    value_turn = function(provider, model, result, has_type = FALSE) final_turn
+  )
+
+  content_chat <- Chat$new(test_provider(), model = test_model())
+  content <- coro::collect(content_chat$stream("hi", stream = "content"))
+  expect_s7_class(content[[1]], ContentText)
+  expect_s7_class(content[[2]], ContentCitation)
+
+  text_chat <- Chat$new(test_provider(), model = test_model())
+  text <- coro::collect(text_chat$stream("hi", stream = "text"))
+  expect_equal(paste0(unlist(text), collapse = ""), "hello\n")
+})
+
+test_that("provider hooks receive the exact request turns", {
+  run_case <- function(async) {
+    prior_turns <- list(
+      UserTurn("First question"),
+      AssistantTurn("First answer")
+    )
+    user_turn <- UserTurn("Follow-up question")
+    expected_turns <- c(prior_turns, list(user_turn))
+    content_turns <- list()
+    value_turns <- list()
+    final_turn <- AssistantTurn(
+      list(ContentText("Follow-up answer")),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "chunk"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "chunk"))
+        })()
+      }
+    }
+
+    local_mocked_bindings(
+      chat_perform = function(..., turns) {
+        expect_identical(turns, expected_turns)
+        make_response()
+      },
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content_with_turns = function(
+        provider,
+        event,
+        completion,
+        turns = list()
+      ) {
+        content_turns <<- turns
+        list(ContentText("Follow-up answer"))
+      },
+      value_finish_reason = function(provider, result) "success",
+      value_turn_with_turns = function(
+        provider,
+        model,
+        result,
+        has_type = FALSE,
+        turns = list()
+      ) {
+        value_turns <<- turns
+        final_turn
+      }
+    )
+
+    chat <- Chat$new(test_provider(), model = test_model())
+    chat$set_turns(prior_turns)
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        user_turn,
+        stream = TRUE,
+        echo = "none",
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        user_turn,
+        stream = TRUE,
+        echo = "none",
+        controller = stream_controller()
+      )
+    }
+    if (async) {
+      sync(coro::async_collect(generator))
+    } else {
+      coro::collect(generator)
+    }
+
+    expect_identical(content_turns, expected_turns)
+    expect_identical(value_turns, expected_turns)
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
 test_that("can perform a simple async batch chat", {
   chat <- chat_openai_test()
 
-  chunks <- coro::async_collect(chat$stream_async(
-    "
+  chunks <- coro::async_collect(
+    chat$stream_async(
+      "
     What are the canonical colors of the ROYGBIV rainbow?
     Put each colour on its own line. Don't use punctuation.
   "
-  ))
+    )
+  )
   expect_s3_class(chunks, "promise")
 
   chunks <- sync(chunks)
@@ -213,10 +347,12 @@ test_that("can extract structured data (async)", {
   person <- type_object(name = type_string(), age = type_integer())
 
   chat <- chat_openai_test()
-  data <- sync(chat$chat_structured_async(
-    "John, age 15, won first prize",
-    type = person
-  ))
+  data <- sync(
+    chat$chat_structured_async(
+      "John, age 15, won first prize",
+      type = person
+    )
+  )
   expect_equal(data, list(name = "John", age = 15))
 })
 
@@ -235,52 +371,62 @@ test_that("chat_structured() doesn't require a prompt", {
 
 test_that("has a basic print method", {
   chat <- chat_openai_test()
-  chat$set_turns(list(
-    UserTurn("What's 1 + 1?\nWhat's 1 + 2?"),
-    AssistantTurn("2\n\n3", tokens = c(10, 5, 5))
-  ))
+  chat$set_turns(
+    list(
+      UserTurn("What's 1 + 1?\nWhat's 1 + 2?"),
+      AssistantTurn("2\n\n3", tokens = c(10, 5, 5))
+    )
+  )
   expect_snapshot(chat)
 })
 
 test_that("print method shows interrupted for partial turns", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
-  chat$set_turns(list(
-    UserTurn("Input 1"),
-    AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
-    UserTurn("Input 2"),
-    AssistantPartialTurn("Partial output...")
-  ))
+  chat$set_turns(
+    list(
+      UserTurn("Input 1"),
+      AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
+      UserTurn("Input 2"),
+      AssistantPartialTurn("Partial output...")
+    )
+  )
   expect_snapshot(chat)
 })
 
 test_that("print method shows custom reason for partial turns", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
-  chat$set_turns(list(
-    UserTurn("Input 1"),
-    AssistantPartialTurn("Partial output...", reason = "cancelled")
-  ))
+  chat$set_turns(
+    list(
+      UserTurn("Input 1"),
+      AssistantPartialTurn("Partial output...", reason = "cancelled")
+    )
+  )
   expect_snapshot(chat)
 })
 
 test_that("print method shows cumulative tokens & cost", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
-  chat$set_turns(list(
-    UserTurn("Input 1"),
-    AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
-    UserTurn("Input 2"),
-    AssistantTurn("Output 1", tokens = c(30000, 1000, 0), cost = 0.1)
-  ))
+  chat$set_turns(
+    list(
+      UserTurn("Input 1"),
+      AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
+      UserTurn("Input 2"),
+      AssistantTurn("Output 1", tokens = c(30000, 1000, 0), cost = 0.1)
+    )
+  )
   expect_snapshot(chat)
 })
 
 test_that("can compute costs", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
-  chat$set_turns(list(
-    UserTurn("Input 1"),
-    AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
-    UserTurn("Input 2"),
-    AssistantTurn("Output 1", tokens = c(30000, 1000, 0), cost = 0.1)
-  ))
+  chat$set_turns(
+    list(
+      UserTurn("Input 1"),
+      AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
+      UserTurn("Input 2"),
+      AssistantTurn("Output 1", tokens = c(30000, 1000, 0), cost = 0.1)
+    )
+  )
 
   expect_equal(chat$get_cost(), dollars(0.3))
   expect_equal(chat$get_cost("last"), dollars(0.1))
@@ -304,6 +450,1075 @@ test_that("can optionally echo", {
   expect_output(chat$chat("Echo this.", echo = TRUE), "Echo this.")
 })
 
+test_that("echo streams citation markers and a deduplicated footer", {
+  first <- WebSource("https://example.com/first", "First")
+  second <- WebSource("https://example.com/second", "Second")
+  emitted <- ""
+
+  response <- coro::generator(function() {
+    yield(list(type = "text-one"))
+    expect_equal(emitted, "First claim.")
+    yield(list(type = "citation-one"))
+    expect_equal(emitted, "First claim.[1]")
+    yield(list(type = "text-two"))
+    expect_equal(emitted, "First claim.[1] Second claim.")
+    yield(list(type = "citation-two"))
+    expect_equal(emitted, "First claim.[1] Second claim.[1]")
+    yield(list(type = "citation-three"))
+    expect_equal(emitted, "First claim.[1] Second claim.[1][2]")
+  })()
+
+  final_turn <- AssistantTurn(
+    list(
+      ContentText("First claim."),
+      ContentCitation(source = first),
+      ContentText(" Second claim."),
+      ContentCitation(source = first),
+      ContentCitation(source = second),
+      ContentToolRequestSearch("citation test")
+    ),
+    tokens = c(0, 0, 0),
+    cost = 0
+  )
+
+  local_mocked_bindings(
+    chat_perform = function(...) response,
+    stream_merge_chunks = function(provider, result, chunk) chunk,
+    stream_content = function(provider, event, completion) {
+      switch(
+        event$type,
+        "text-one" = list(final_turn@contents[[1]]),
+        "citation-one" = list(final_turn@contents[[2]]),
+        "text-two" = list(final_turn@contents[[3]]),
+        "citation-two" = list(final_turn@contents[[4]]),
+        "citation-three" = list(final_turn@contents[[5]])
+      )
+    },
+    value_finish_reason = function(provider, result) "success",
+    value_turn = function(provider, model, result, has_type = FALSE) final_turn,
+    emitter = function(echo, prefix = NULL) {
+      function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+    }
+  )
+
+  chat <- Chat$new(test_provider(), model = test_model())
+  chunks <- coro::collect(
+    chat$.__enclos_env__$private$submit_turns(
+      UserTurn("Question"),
+      stream = TRUE,
+      echo = "output",
+      yield_as_content = TRUE,
+      controller = stream_controller()
+    )
+  )
+
+  expect_equal(
+    emitted,
+    paste0(
+      "First claim.[1] Second claim.[1][2]\n\n",
+      "Sources\n",
+      "[1] First: https://example.com/first\n",
+      "[2] Second: https://example.com/second\n"
+    )
+  )
+  expect_equal(
+    chunks,
+    c(final_turn@contents[1:5], list(ContentText("\n")))
+  )
+})
+
+test_that("async echo streams citation markers and a deduplicated footer", {
+  first <- WebSource("https://example.com/first", "First")
+  second <- WebSource("https://example.com/second", "Second")
+  emitted <- ""
+  assert_emitted <- function(expected) {
+    if (!identical(emitted, expected)) {
+      stop(
+        "Expected `emitted` to equal ",
+        encodeString(expected, quote = "\""),
+        ", not ",
+        encodeString(emitted, quote = "\""),
+        ".",
+        call. = FALSE
+      )
+    }
+  }
+
+  response <- coro::async_generator(function() {
+    yield(list(type = "text-one"))
+    assert_emitted("First claim.")
+    yield(list(type = "citation-one"))
+    assert_emitted("First claim.[1]")
+    yield(list(type = "text-two"))
+    assert_emitted("First claim.[1] Second claim.")
+    yield(list(type = "citation-two"))
+    assert_emitted("First claim.[1] Second claim.[1]")
+    yield(list(type = "citation-three"))
+    assert_emitted("First claim.[1] Second claim.[1][2]")
+    coro::exhausted()
+  })()
+
+  final_turn <- AssistantTurn(
+    list(
+      ContentText("First claim."),
+      ContentCitation(source = first),
+      ContentText(" Second claim."),
+      ContentCitation(source = first),
+      ContentCitation(source = second),
+      ContentToolRequestSearch("citation test")
+    ),
+    tokens = c(0, 0, 0),
+    cost = 0
+  )
+
+  local_mocked_bindings(
+    chat_perform = function(...) response,
+    stream_merge_chunks = function(provider, result, chunk) chunk,
+    stream_content = function(provider, event, completion) {
+      switch(
+        event$type,
+        "text-one" = list(final_turn@contents[[1]]),
+        "citation-one" = list(final_turn@contents[[2]]),
+        "text-two" = list(final_turn@contents[[3]]),
+        "citation-two" = list(final_turn@contents[[4]]),
+        "citation-three" = list(final_turn@contents[[5]])
+      )
+    },
+    value_finish_reason = function(provider, result) "success",
+    value_turn = function(provider, model, result, has_type = FALSE) final_turn,
+    emitter = function(echo, prefix = NULL) {
+      function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+    }
+  )
+
+  chat <- Chat$new(test_provider(), model = test_model())
+  expect_no_error(
+    sync(
+      coro::async_collect(
+        chat$.__enclos_env__$private$submit_turns_async(
+          UserTurn("Question"),
+          stream = TRUE,
+          echo = "output",
+          controller = stream_controller()
+        )
+      )
+    )
+  )
+
+  expect_equal(
+    emitted,
+    paste0(
+      "First claim.[1] Second claim.[1][2]\n\n",
+      "Sources\n",
+      "[1] First: https://example.com/first\n",
+      "[2] Second: https://example.com/second\n"
+    )
+  )
+})
+
+test_that("streaming echo does not leak thinking content", {
+  run_case <- function(async, echo) {
+    emitted <- ""
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    }
+    final_turn <- AssistantTurn(
+      list(
+        ContentThinking("Internal reasoning."),
+        ContentText("Visible answer.")
+      ),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+
+    local_mocked_bindings(
+      chat_perform = function(...) make_response(),
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content = function(provider, event, completion) {
+        final_turn@contents
+      },
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider(), model = test_model())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = echo,
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = echo,
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    }
+    output <- capture.output(
+      chunks <- if (async) {
+        sync(coro::async_collect(generator))
+      } else {
+        coro::collect(generator)
+      }
+    )
+
+    expect_equal(emitted, "Visible answer.\n")
+    expect_equal(
+      chunks,
+      c(final_turn@contents, list(ContentText("\n")))
+    )
+    thinking_output <- output[startsWith(output, "< ")]
+    if (echo == "all") {
+      expect_equal(
+        thinking_output,
+        c(
+          "< <thinking>",
+          "< Internal reasoning.",
+          "< </thinking>"
+        )
+      )
+    } else {
+      expect_equal(thinking_output, character())
+    }
+  }
+
+  run_case(FALSE, "output")
+  run_case(FALSE, "all")
+  run_case(TRUE, "output")
+  run_case(TRUE, "all")
+})
+
+test_that("streaming citation footer follows emitted marker newline state", {
+  run_case <- function(async) {
+    emitted <- ""
+    source <- WebSource("https://example.com", "Example")
+    final_turn <- AssistantTurn(
+      list(
+        ContentText("Answer.\n"),
+        ContentCitation(source = source)
+      ),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    }
+
+    local_mocked_bindings(
+      chat_perform = function(...) make_response(),
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content = function(provider, event, completion) {
+        final_turn@contents
+      },
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider(), model = test_model())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    }
+    chunks <- if (async) {
+      sync(coro::async_collect(generator))
+    } else {
+      coro::collect(generator)
+    }
+
+    expect_equal(
+      emitted,
+      paste0(
+        "Answer.\n[1]\n\n",
+        "Sources\n",
+        "[1] Example: https://example.com\n"
+      )
+    )
+    expect_equal(chunks, final_turn@contents)
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("citation-only streaming output terminates before footer", {
+  run_case <- function(async) {
+    emitted <- ""
+    citation <- ContentCitation(
+      source = WebSource("https://example.com", "Example")
+    )
+    final_turn <- AssistantTurn(
+      list(citation),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    }
+
+    local_mocked_bindings(
+      chat_perform = function(...) make_response(),
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content = function(provider, event, completion) {
+        final_turn@contents
+      },
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider(), model = test_model())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    }
+    chunks <- if (async) {
+      sync(coro::async_collect(generator))
+    } else {
+      coro::collect(generator)
+    }
+
+    expect_equal(
+      emitted,
+      paste0(
+        "[1]\n\n",
+        "Sources\n",
+        "[1] Example: https://example.com\n"
+      )
+    )
+    expect_equal(chunks, list(citation))
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("empty streaming text preserves emitted newline state", {
+  run_case <- function(async) {
+    emitted <- ""
+    final_turn <- AssistantTurn(
+      list(
+        ContentText("Answer.\n"),
+        ContentText("")
+      ),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "content"))
+        })()
+      }
+    }
+
+    local_mocked_bindings(
+      chat_perform = function(...) make_response(),
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content = function(provider, event, completion) {
+        final_turn@contents
+      },
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider(), model = test_model())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    }
+    chunks <- if (async) {
+      sync(coro::async_collect(generator))
+    } else {
+      coro::collect(generator)
+    }
+
+    expect_equal(
+      emitted,
+      "Answer.\n"
+    )
+    expect_equal(chunks, final_turn@contents)
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("non-streaming echo preserves citation yields", {
+  run_case <- function(async) {
+    emitted <- ""
+    source <- WebSource("https://example.com", "Example")
+    final_turn <- AssistantTurn(
+      list(
+        ContentText("Complete answer."),
+        ContentCitation(source = source),
+        ContentCitation(source = source)
+      ),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+    response <- list()
+
+    local_mocked_bindings(
+      chat_perform = function(provider, mode, ...) {
+        if (mode == "async-value") {
+          promises::promise_resolve(response)
+        } else {
+          response
+        }
+      },
+      resp_body_json = function(response) list(),
+      resp_timing = function(response) c(total = 0),
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider(), model = test_model())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Question"),
+        stream = FALSE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Question"),
+        stream = FALSE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    }
+    chunks <- if (async) {
+      sync(coro::async_collect(generator))
+    } else {
+      coro::collect(generator)
+    }
+
+    expect_equal(
+      emitted,
+      paste0(
+        "Complete answer.[1][1]\n\n",
+        "Sources\n",
+        "[1] Example: https://example.com\n"
+      )
+    )
+    expect_equal(
+      chunks,
+      list(ContentText("Complete answer."), ContentText("\n"))
+    )
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("async echo none stays silent and preserves rich content", {
+  emitted <- ""
+  citation <- ContentCitation(
+    source = WebSource("https://example.com", "Example")
+  )
+  response <- coro::async_generator(function() {
+    yield(list(type = "content"))
+  })()
+  final_turn <- AssistantTurn(
+    list(
+      ContentText("Silent answer."),
+      citation
+    ),
+    tokens = c(0, 0, 0),
+    cost = 0
+  )
+
+  local_mocked_bindings(
+    chat_perform = function(...) response,
+    stream_merge_chunks = function(provider, result, chunk) chunk,
+    stream_content = function(provider, event, completion) {
+      final_turn@contents
+    },
+    value_finish_reason = function(provider, result) "success",
+    value_turn = function(provider, model, result, has_type = FALSE) final_turn,
+    emitter = function(echo, prefix = NULL) {
+      if (echo == "none") {
+        return(function(...) invisible())
+      }
+      function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+    }
+  )
+
+  chat <- Chat$new(test_provider(), model = test_model())
+  chunks <- sync(
+    coro::async_collect(
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "none",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    )
+  )
+
+  expect_equal(emitted, "")
+  expect_equal(
+    chunks,
+    c(final_turn@contents, list(ContentText("\n")))
+  )
+})
+
+test_that("async cancelled echo retains citation markers and sources", {
+  controller <- stream_controller()
+  log_count <- 0L
+  emitted <- ""
+  text <- ContentText("Partial grounded answer.")
+  citation <- ContentCitation(
+    source = WebSource("https://example.com", "Example"),
+    grounded_span = "grounded answer"
+  )
+  make_response <- function() {
+    coro::async_generator(function() {
+      yield(list(type = "partial"))
+    })()
+  }
+
+  local_mocked_bindings(
+    chat_perform = function(...) make_response(),
+    stream_merge_chunks = function(provider, result, chunk) chunk,
+    stream_content = function(provider, event, completion) {
+      controller$cancel()
+      list(
+        text,
+        citation
+      )
+    },
+    log_turn = function(provider, model, turn) log_count <<- log_count + 1L,
+    emitter = function(echo, prefix = NULL) {
+      function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+    }
+  )
+
+  chat <- Chat$new(test_provider(), model = test_model())
+  chunks <- sync(
+    coro::async_collect(
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Stop after this chunk."),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = controller
+      )
+    )
+  )
+
+  expect_equal(
+    emitted,
+    paste0(
+      "Partial grounded answer.[1]\n\n",
+      "Sources\n",
+      "[1] Example: https://example.com\n"
+    )
+  )
+  expect_s7_class(chat$last_turn(), AssistantPartialTurn)
+  expect_equal(log_count, 1L)
+  expect_equal(chunks, list(text, citation))
+})
+
+test_that("echo summarizes web response records without raw output", {
+  run_case <- function(async) {
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "text"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "text"))
+        })()
+      }
+    }
+    final_turn <- AssistantTurn(
+      list(
+        ContentText("Web answer."),
+        ContentToolRequestSearch("ellmer web activity"),
+        ContentToolRequestFetch("https://example.com/request"),
+        ContentToolResponseSearch(
+          sources = list(
+            WebSource("https://example.com/search-1", "Search result 1")
+          )
+        ),
+        ContentToolResponseSearch(
+          sources = list(
+            WebSource("https://example.com/search-2", "Search result 2")
+          )
+        ),
+        ContentToolResponseFetch(
+          url = "https://example.com/fetch-1",
+          status = "success"
+        ),
+        ContentToolResponseFetch(
+          url = "https://example.com/fetch-2",
+          status = "success"
+        ),
+        ContentThinking("Internal reasoning.")
+      ),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+
+    local_mocked_bindings(
+      chat_perform = function(...) make_response(),
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content = function(provider, event, completion) {
+        list(ContentText("Web answer."))
+      },
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      }
+    )
+
+    chat <- Chat$new(test_provider(), model = test_model())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Summarize web activity."),
+        stream = TRUE,
+        echo = "all",
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Summarize web activity."),
+        stream = TRUE,
+        echo = "all",
+        controller = stream_controller()
+      )
+    }
+    output <- capture.output(
+      invisible(
+        if (async) {
+          sync(coro::async_collect(generator))
+        } else {
+          coro::collect(generator)
+        }
+      )
+    )
+    output <- gsub("^< ", "", output)
+    output <- paste(output, collapse = "\n")
+
+    expect_match(output, "Web activity: 2 searches, 2 fetches", fixed = TRUE)
+    expect_false(grepl("[web search results]:", output, fixed = TRUE))
+    expect_false(grepl("[web fetch result]:", output, fixed = TRUE))
+    expect_false(grepl("[web search request]:", output, fixed = TRUE))
+    expect_false(grepl("[web fetch request]:", output, fixed = TRUE))
+    expect_match(
+      output,
+      "<thinking>\nInternal reasoning.\n</thinking>",
+      fixed = TRUE
+    )
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("format_web_activity counts response-only providers", {
+  turn <- AssistantTurn(
+    list(
+      ContentText("Web answer."),
+      ContentToolResponseSearch(sources = list()),
+      ContentToolResponseFetch(
+        url = "https://example.com/fetch",
+        status = "success"
+      )
+    )
+  )
+
+  expect_match(
+    format_web_activity(turn@contents, TRUE),
+    "Web activity: 1 search, 1 fetch",
+    fixed = TRUE
+  )
+})
+
+test_that("echo preserves one trailing newline for complete turns", {
+  run_case <- function(async) {
+    emitted <- ""
+    final_turn <- AssistantTurn(
+      list(ContentText("Complete answer.\n")),
+      tokens = c(0, 0, 0),
+      cost = 0
+    )
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "text"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "text"))
+        })()
+      }
+    }
+
+    local_mocked_bindings(
+      chat_perform = function(...) make_response(),
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content = function(provider, event, completion) {
+        list(ContentText("Complete answer.\n"))
+      },
+      value_finish_reason = function(provider, result) "success",
+      value_turn = function(provider, model, result, has_type = FALSE) {
+        final_turn
+      },
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider(), model = test_model())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Give a complete answer."),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Give a complete answer."),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = stream_controller()
+      )
+    }
+    chunks <- if (async) {
+      sync(coro::async_collect(generator))
+    } else {
+      coro::collect(generator)
+    }
+
+    expect_equal(emitted, "Complete answer.\n")
+    expect_equal(chunks, list(ContentText("Complete answer.\n")))
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("echo preserves one trailing newline for partial turns", {
+  run_case <- function(async) {
+    controller <- stream_controller()
+    emitted <- ""
+    make_response <- if (async) {
+      function() {
+        coro::async_generator(function() {
+          yield(list(type = "text"))
+        })()
+      }
+    } else {
+      function() {
+        coro::generator(function() {
+          yield(list(type = "text"))
+        })()
+      }
+    }
+
+    local_mocked_bindings(
+      chat_perform = function(...) make_response(),
+      stream_merge_chunks = function(provider, result, chunk) chunk,
+      stream_content = function(provider, event, completion) {
+        controller$cancel()
+        list(ContentText("Partial answer.\n"))
+      },
+      emitter = function(echo, prefix = NULL) {
+        function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+      }
+    )
+
+    chat <- Chat$new(test_provider(), model = test_model())
+    generator <- if (async) {
+      chat$.__enclos_env__$private$submit_turns_async(
+        UserTurn("Stop after this chunk."),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = controller
+      )
+    } else {
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Stop after this chunk."),
+        stream = TRUE,
+        echo = "output",
+        yield_as_content = TRUE,
+        controller = controller
+      )
+    }
+    chunks <- if (async) {
+      sync(coro::async_collect(generator))
+    } else {
+      coro::collect(generator)
+    }
+
+    expect_equal(emitted, "Partial answer.\n")
+    expect_equal(chunks, list(ContentText("Partial answer.\n")))
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("cancelled echo retains citation markers and sources", {
+  controller <- stream_controller()
+  log_count <- 0L
+  emitted <- ""
+  text <- ContentText("Partial grounded answer.")
+  citation <- ContentCitation(
+    source = WebSource("https://example.com", "Example"),
+    grounded_span = "grounded answer"
+  )
+  make_response <- function() {
+    coro::generator(function() {
+      yield(list(type = "partial"))
+    })()
+  }
+
+  local_mocked_bindings(
+    chat_perform = function(...) make_response(),
+    stream_merge_chunks = function(provider, result, chunk) chunk,
+    stream_content = function(provider, event, completion) {
+      controller$cancel()
+      list(
+        text,
+        citation
+      )
+    },
+    log_turn = function(provider, model, turn) log_count <<- log_count + 1L,
+    emitter = function(echo, prefix = NULL) {
+      function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+    }
+  )
+
+  chat <- Chat$new(test_provider(), model = test_model())
+  chunks <- coro::collect(
+    chat$.__enclos_env__$private$submit_turns(
+      UserTurn("Stop after this chunk."),
+      stream = TRUE,
+      echo = "output",
+      yield_as_content = TRUE,
+      controller = controller
+    )
+  )
+
+  expect_equal(
+    emitted,
+    paste0(
+      "Partial grounded answer.[1]\n\n",
+      "Sources\n",
+      "[1] Example: https://example.com\n"
+    )
+  )
+  expect_s7_class(chat$last_turn(), AssistantPartialTurn)
+  expect_length(chat$get_turns(), 2)
+  expect_equal(log_count, 1L)
+  expect_equal(chunks, list(text, citation))
+})
+
+test_that("echo ignores source-less citations", {
+  emitted <- ""
+  response <- coro::generator(function() {
+    yield(list(type = "content"))
+  })()
+  final_turn <- AssistantTurn(
+    list(
+      ContentText("Grounded but source-less."),
+      ContentCitation(grounded_span = "Grounded but source-less.")
+    ),
+    tokens = c(0, 0, 0),
+    cost = 0
+  )
+
+  local_mocked_bindings(
+    chat_perform = function(...) response,
+    stream_merge_chunks = function(provider, result, chunk) chunk,
+    stream_content = function(provider, event, completion) {
+      final_turn@contents
+    },
+    value_finish_reason = function(provider, result) "success",
+    value_turn = function(provider, model, result, has_type = FALSE) final_turn,
+    emitter = function(echo, prefix = NULL) {
+      function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+    }
+  )
+
+  chat <- Chat$new(test_provider(), model = test_model())
+  invisible(
+    coro::collect(
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Question"),
+        stream = TRUE,
+        echo = "output",
+        controller = stream_controller()
+      )
+    )
+  )
+
+  expect_equal(emitted, "Grounded but source-less.\n")
+  expect_false(grepl("Sources", emitted, fixed = TRUE))
+  expect_false(grepl("[1]", emitted, fixed = TRUE))
+})
+
+test_that("complete echo ends with one newline", {
+  emitted <- ""
+  final_turn <- AssistantTurn(
+    list(ContentText("Complete answer.")),
+    tokens = c(0, 0, 0),
+    cost = 0
+  )
+  make_response <- function() {
+    coro::generator(function() {
+      yield(list(type = "text"))
+    })()
+  }
+
+  local_mocked_bindings(
+    chat_perform = function(...) make_response(),
+    stream_merge_chunks = function(provider, result, chunk) chunk,
+    stream_content = function(provider, event, completion) {
+      list(ContentText("Complete answer."))
+    },
+    value_finish_reason = function(provider, result) "success",
+    value_turn = function(provider, model, result, has_type = FALSE) final_turn,
+    emitter = function(echo, prefix = NULL) {
+      function(...) emitted <<- paste0(emitted, paste0(..., collapse = ""))
+    }
+  )
+
+  chat <- Chat$new(test_provider(), model = test_model())
+  invisible(
+    coro::collect(
+      chat$.__enclos_env__$private$submit_turns(
+        UserTurn("Give a complete answer."),
+        stream = TRUE,
+        echo = "output",
+        controller = stream_controller()
+      )
+    )
+  )
+
+  expect_equal(emitted, "Complete answer.\n")
+})
+
 test_that("can retrieve last_turn for user and assistant", {
   chat <- chat_openai_test()
   expect_equal(chat$last_turn("user"), NULL)
@@ -318,7 +1533,7 @@ test_that("api_headers parameter works correctly", {
   chat <- chat_openai_test(api_headers = c("X-Test" = "value"))
   expect_equal(chat$get_provider()@extra_headers, c("X-Test" = "value"))
 
-  req <- chat_request(chat$get_provider())
+  req <- chat_request(chat$get_provider(), chat$get_model_object())
   expect_equal(req_get_headers(req), list("X-Test" = "value"))
 })
 

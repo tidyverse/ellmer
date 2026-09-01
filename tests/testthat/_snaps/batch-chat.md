@@ -4,7 +4,7 @@
       batch_chat(chat, prompts, path)
     Condition
       Error in `batch_chat()`:
-      ! provider, prompts, and user_turns don't match stored values.
+      ! provider, model, prompts, and user_turns don't match stored values.
       i Do you need to pick a different `path`?
       i Or set `ignore_hash = TRUE` to ignore this check?
 
@@ -14,7 +14,7 @@
       batch_chat_structured(chat, prompts, path, type = type_string())
     Condition
       Error in `batch_chat_structured()`:
-      ! provider, prompts, and user_turns don't match stored values.
+      ! provider, model, prompts, and user_turns don't match stored values.
       i Do you need to pick a different `path`?
       i Or set `ignore_hash = TRUE` to ignore this check?
 

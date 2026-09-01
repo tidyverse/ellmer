@@ -66,8 +66,12 @@ contents_markdown <- new_generic("contents_markdown", "content")
 #' code that works with any chatbot. This set of classes represents types of
 #' content that can be either sent to and received from a provider:
 #'
-#' * `ContentText`: simple text (often in markdown format). This is the only
-#'   type of content that can be streamed live as it's received.
+#' * `ContentText`: simple text (often in markdown format). Text streams yield
+#'   only text and thinking content, while content streams can also yield
+#'   annotations such as citations and web activity.
+#' * `ContentCitation`: provider-supplied evidence metadata associated with
+#'   generated text. Citations are preserved in conversation history but are
+#'   not sent back to providers.
 #' * `ContentImageRemote` and `ContentImageInline`: images, either as a pointer
 #'   to a remote URL or included inline in the object. See
 #'   [content_image_file()] and friends for convenient ways to construct these
@@ -102,6 +106,40 @@ method(contents_html, Content) <- function(content) {
   NULL
 }
 
+#' Sources referenced by model content
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' `Source` is the base class for evidence referenced by model-generated
+#' content. `WebSource` identifies a web page surfaced by search or citation
+#' metadata. Providers do not always supply both a URL and title, so either
+#' field may be `NULL`.
+#'
+#' @param url The URL of the web page, or `NULL` when unavailable.
+#' @param title The title of the web page, or `NULL` when unavailable.
+#' @return An S7 object that inherits from `Source`.
+#' @export
+#' @examples
+#' WebSource("https://example.com", "Example")
+#' WebSource(title = "Source without a URL")
+Source <- new_class("Source")
+
+#' @rdname Source
+#' @export
+WebSource <- new_class(
+  "WebSource",
+  parent = Source,
+  properties = list(
+    url = prop_string(allow_null = TRUE),
+    title = prop_string(allow_null = TRUE)
+  )
+)
+
+method(format, WebSource) <- function(x, ...) {
+  x@url %||% x@title %||% "[web source]"
+}
+
 #' @rdname Content
 #' @export
 #' @param text A single string.
@@ -125,6 +163,36 @@ method(contents_html, ContentText) <- function(content) {
 
 method(contents_markdown, ContentText) <- function(content) {
   content@text
+}
+
+# Citations ---------------------------------------------------------------
+
+#' @rdname Content
+#' @export
+#' @param source A [Source] identifying the cited evidence, or `NULL` when the
+#'   provider does not supply one.
+#' @param grounded_span The answer text grounded by the citation, or `NULL`.
+#' @param cited_quote The source-side evidence quoted by the provider, or
+#'   `NULL`.
+#' @param extra Raw provider-specific citation metadata, or `NULL`.
+ContentCitation <- new_class(
+  "ContentCitation",
+  parent = Content,
+  properties = list(
+    source = NULL | Source,
+    grounded_span = prop_string(allow_null = TRUE),
+    cited_quote = prop_string(allow_null = TRUE),
+    extra = NULL | class_list
+  )
+)
+
+method(format, ContentCitation) <- function(x, ...) {
+  label <- if (is.null(x@source)) {
+    x@grounded_span %||% ""
+  } else {
+    format(x@source)
+  }
+  cli::format_inline("[{.strong citation}]: {label}")
 }
 
 # Images -----------------------------------------------------------------
@@ -247,6 +315,8 @@ method(format, ContentToolRequest) <- function(
 #' @rdname Content
 #' @export
 #' @param value The results of calling the tool function, if it succeeded.
+#'   `NULL`, a string, an atomic vector, a `json`-class object, a [Content]
+#'   object, or a list of [Content] objects.
 #' @param error The error message, as a string, or the error condition thrown
 #'   as a result of a failure when calling the tool function. Must be `NULL`
 #'   when the tool call is successful.
@@ -314,25 +384,8 @@ tool_error_string <- function(x) {
 tool_string <- function(x) {
   if (tool_errored(x)) {
     paste0("Tool calling failed with error ", tool_error_string(x))
-  } else if (inherits(x@value, "AsIs")) {
-    x@value
-  } else if (inherits(x@value, "json")) {
-    x@value
-  } else if (is.character(x@value)) {
-    paste(x@value, collapse = "\n")
   } else {
-    withCallingHandlers(
-      to_json(x@value),
-      error = function(err) {
-        cli::cli_abort(
-          c(
-            "Could not convert tool result from {.obj_type_friendly {x@value}} to JSON.",
-            "i" = "If you are the tool author, update the tool to convert the result to a string or JSON."
-          ),
-          parent = err
-        )
-      }
-    )
+    x@value
   }
 }
 

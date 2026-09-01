@@ -8,21 +8,22 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Sun, 02 Aug 2026 17:45:05 GMT
+      date: Fri, 14 Aug 2026 13:23:34 GMT
       content-type: application/json
-      request-id: req_011CdeLZvUMYd1CXj9nzwwbU
+      request-id: req_011Ce2iLFzMyoaWTUiZujGpz
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      content-encoding: gzip
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
       vary: Accept-Encoding
+      content-encoding: br
       server: cloudflare
-      server-timing: x-originResponse;dur=35
+      server-timing: x-originResponse;dur=69
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
       cf-cache-status: DYNAMIC
-      cf-ray: a24ee4f05e9facc5-EWR
+      cf-ray: a2b0465b4a08ed0a-LHR
     body:
       string: '{"input_tokens":12}'
-  recorded_at: 2026-08-02 17:45:05
+  recorded_at: 2026-08-14 13:23:34
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages/count_tokens
@@ -33,21 +34,22 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Sun, 02 Aug 2026 17:45:05 GMT
+      date: Fri, 14 Aug 2026 13:23:34 GMT
       content-type: application/json
-      request-id: req_011CdeLZvv9PnbEqFAJH4fMF
+      request-id: req_011Ce2iLHSRxfwaMDiurV1sN
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      content-encoding: gzip
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
       vary: Accept-Encoding
+      content-encoding: br
       server: cloudflare
-      server-timing: x-originResponse;dur=36
+      server-timing: x-originResponse;dur=49
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
       cf-cache-status: DYNAMIC
-      cf-ray: a24ee4f0f87facc5-EWR
+      cf-ray: a2b0465d6f55ed0a-LHR
     body:
       string: '{"input_tokens":20}'
-  recorded_at: 2026-08-02 17:45:05
+  recorded_at: 2026-08-14 13:23:34
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
@@ -58,39 +60,39 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Sun, 02 Aug 2026 17:45:07 GMT
+      date: Fri, 14 Aug 2026 13:23:37 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-08-02T17:45:06Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-08-14T13:23:35Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-08-02T17:45:07Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-08-14T13:23:37Z'
       anthropic-ratelimit-requests-limit: '10000'
       anthropic-ratelimit-requests-remaining: '9999'
-      anthropic-ratelimit-requests-reset: '2026-08-02T17:45:05Z'
+      anthropic-ratelimit-requests-reset: '2026-08-14T13:23:35Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '12000000'
-      anthropic-ratelimit-tokens-reset: '2026-08-02T17:45:06Z'
-      request-id: req_011CdeLZwSe3fnPdKUAVj7Ub
+      anthropic-ratelimit-tokens-reset: '2026-08-14T13:23:35Z'
+      request-id: req_011Ce2iLJrVzTooPKhDzvk6p
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      traceresponse: 00-7d1427e1992cfb2284e798c85b7fbd84-160b1da168ac267a-01
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
+      traceresponse: 00-e81690a1a0c35d8ecd669b59bed3f78e-8bcf0104db1203a4-01
       server: cloudflare
-      content-encoding: gzip
       vary: Accept-Encoding
+      content-encoding: br
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
-      cf-ray: a24ee4f189f0acc5-EWR
+      cf-ray: a2b0465f0b7bed0a-LHR
     body:
-      string: '{"model":"claude-sonnet-5","id":"msg_011CdeLZxWsoa8Jd7cdczjDn","type":"message","role":"assistant","content":[{"type":"text","text":"I
+      string: '{"model":"claude-sonnet-5","id":"msg_011Ce2iLKhMFzyjR9MxgRzGP","type":"message","role":"assistant","content":[{"type":"text","text":"I
         don''t have access to real-time information, so I can''t tell you the current
         date. My knowledge has a training cutoff, but I don''t have a live clock or
-        calendar to reference.\n\nIf you let me know the date, I can help with anything
-        time-related from there! Or check your device''s clock or calendar app for
-        the current date."}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":20,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":93,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global"}}'
-  recorded_at: 2026-08-02 17:45:07
+        calendar to check what today''s actual date is.\n\nIf you let me know the
+        date, I''m happy to help with anything related to it!"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":20,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":83,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-08-14 13:23:37
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages/count_tokens
@@ -100,21 +102,22 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Sun, 02 Aug 2026 17:45:08 GMT
+      date: Fri, 14 Aug 2026 13:23:37 GMT
       content-type: application/json
-      request-id: req_011CdeLa8H1R3DhE32egd7dE
+      request-id: req_011Ce2iLWgANz3TcwPiJ1pKX
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      content-encoding: gzip
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
       vary: Accept-Encoding
+      content-encoding: br
       server: cloudflare
-      server-timing: x-originResponse;dur=57
+      server-timing: x-originResponse;dur=50
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
       cf-cache-status: DYNAMIC
-      cf-ray: a24ee5018a27acc5-EWR
+      cf-ray: a2b04670cac0ed0a-LHR
     body:
       string: '{"input_tokens":13}'
-  recorded_at: 2026-08-02 17:45:08
+  recorded_at: 2026-08-14 13:23:37
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages/count_tokens
@@ -124,45 +127,46 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Sun, 02 Aug 2026 17:45:08 GMT
+      date: Fri, 14 Aug 2026 13:23:38 GMT
       content-type: application/json
-      request-id: req_011CdeLa8pzohDjJ5XFMQ1dx
+      request-id: req_011Ce2iLXTnJBnf2TE4c2Ji1
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      content-encoding: gzip
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
       vary: Accept-Encoding
+      content-encoding: br
       server: cloudflare
-      server-timing: x-originResponse;dur=27
+      server-timing: x-originResponse;dur=55
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
       cf-cache-status: DYNAMIC
-      cf-ray: a24ee5026d4cacc5-EWR
+      cf-ray: a2b04671ed9ced0a-LHR
     body:
       string: '{"input_tokens":13}'
-  recorded_at: 2026-08-02 17:45:08
+  recorded_at: 2026-08-14 13:23:38
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages/count_tokens
     body:
       string: '{"model":"claude-sonnet-5","messages":[{"role":"user","content":[{"type":"text","text":"Apples
-        are tasty. By Hadley Wickham.","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"tools":[{"name":"_structured_tool_call","description":"Extract
-        structured data","input_schema":{"type":"object","description":"","properties":{"data":{"type":"object","description":"","properties":{"title":{"type":"string","description":"Content
-        title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false}},"required":["data"],"additionalProperties":false}}],"tool_choice":{"type":"tool","name":"_structured_tool_call"}}'
+        are tasty. By Hadley Wickham.","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"output_config":{"format":{"type":"json_schema","schema":{"type":"object","description":"","properties":{"title":{"type":"string","description":"Content
+        title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false}}}}'
   response:
     status: 200
     headers:
-      date: Sun, 02 Aug 2026 17:45:08 GMT
+      date: Fri, 14 Aug 2026 13:23:38 GMT
       content-type: application/json
-      request-id: req_011CdeLa9D4aitCGJAbAKWC7
+      request-id: req_011Ce2iLYX2sDpzPfED6HYh6
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      content-encoding: gzip
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
       vary: Accept-Encoding
+      content-encoding: br
       server: cloudflare
-      server-timing: x-originResponse;dur=40
+      server-timing: x-originResponse;dur=48
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
       cf-cache-status: DYNAMIC
-      cf-ray: a24ee502fec2acc5-EWR
+      cf-ray: a2b0467379d0ed0a-LHR
     body:
-      string: '{"input_tokens":669}'
-  recorded_at: 2026-08-02 17:45:08
+      string: '{"input_tokens":259}'
+  recorded_at: 2026-08-14 13:23:38
 recorded_with: VCR-vcr/2.1.0

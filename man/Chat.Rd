@@ -23,6 +23,20 @@ chat <- chat_openai()
 chat$chat("Tell me a funny joke")
 \dontshow{ellmer:::vcr_example_end()}
 }
+\section{Active bindings}{
+  \if{html}{\out{<div class="r6-active-bindings">}}
+  \describe{
+    \item{\code{conversation_id}}{Identifier for the current conversation. When
+set, it is recorded as the \code{gen_ai.conversation.id} attribute on the
+OpenTelemetry spans emitted for subsequent model calls. Assign \code{NULL}
+to clear.
+
+Developer-facing: intended for frameworks that manage conversation
+history (e.g., Shiny apps). ellmer never generates an identifier on
+its own.}
+  }
+  \if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
   \itemize{
@@ -34,6 +48,7 @@ chat$chat("Tell me a funny joke")
     \item \href{#method-Chat-add_turn}{\code{Chat$add_turn()}}
     \item \href{#method-Chat-get_system_prompt}{\code{Chat$get_system_prompt()}}
     \item \href{#method-Chat-get_model}{\code{Chat$get_model()}}
+    \item \href{#method-Chat-get_model_object}{\code{Chat$get_model_object()}}
     \item \href{#method-Chat-set_model}{\code{Chat$set_model()}}
     \item \href{#method-Chat-set_system_prompt}{\code{Chat$set_system_prompt()}}
     \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
@@ -62,21 +77,25 @@ chat$chat("Tell me a funny joke")
 \subsection{\code{Chat$new()}}{
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$new(provider, system_prompt = NULL, echo = "none")}
+    \preformatted{Chat$new(provider, model, system_prompt = NULL, echo = "none")}
     \if{html}{\out{</div>}}
   }
   \subsection{Arguments}{
     \if{html}{\out{<div class="arguments">}}
     \describe{
       \item{\code{provider}}{A provider object.}
+      \item{\code{model}}{A \link{Model} object.}
       \item{\code{system_prompt}}{System prompt to start the conversation with.}
       \item{\code{echo}}{One of the following options:
 \itemize{
 \item \code{none}: don't emit any output (default when running in a function).
-\item \code{output}: echo text and tool-calling output as it streams in (default
-when running at the console).
+\item \code{output}: echo text and tool-calling output after the turn completes
+(default when running at the console).
 \item \code{all}: echo all input and output.
 }
+
+Console display occurs after a turn completes so ellmer can add citation
+markers and a source list to the response.
 
 Note this only affects the \code{chat()} method. You can override the default
 by setting the \code{ellmer_echo} option.}
@@ -204,10 +223,22 @@ session counter?}
 \if{html}{\out{<a id="method-Chat-get_model"></a>}}
 \if{latex}{\out{\hypertarget{method-Chat-get_model}{}}}
 \subsection{\code{Chat$get_model()}}{
-  Retrieve the model name
+  Retrieve the model name.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$get_model()}
+    \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_model_object"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_model_object}{}}}
+\subsection{\code{Chat$get_model_object()}}{
+  Retrieve the Model object. For expert use only.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$get_model_object()}
     \if{html}{\out{</div>}}
   }
 }

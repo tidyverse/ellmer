@@ -54,10 +54,20 @@ NULL
 #' ````
 #'
 #' @param fun The function to be invoked when the tool is called. The return
-#'   value of the function is sent back to the chatbot.
+#'   value of the function is sent back to the chatbot. The function should
+#'   return one of:
 #'
-#'   Expert users can customize the tool result by returning a
-#'   [ContentToolResult] object.
+#'   * A character vector.
+#'   * An atomic vector.
+#'   * A `json`-class object (e.g. from [jsonlite::toJSON()]).
+#'   * A [Content] object (e.g. [ContentImageInline]).
+#'   * A list of [Content] objects.
+#'   * A [ContentToolResult] object (expert users who want to customize
+#'     the tool result directly).
+#'
+#'   Other return types (e.g. data frames, lists) are
+#'   `r lifecycle::badge("deprecated")` and will error in a future release.
+#'   Convert them to a string or JSON before returning.
 #' @param name The name of the function. This can be omitted if `fun` is an
 #'   existing function (i.e. not defined inline).
 #' @param description A detailed description of what the function does.

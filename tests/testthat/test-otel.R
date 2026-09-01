@@ -351,3 +351,70 @@ test_that("tool_call_response part decodes json-class values", {
     list(foo = 1, bar = list(2, 3))
   )
 })
+
+test_that("conversation id is recorded on agent and chat spans when set", {
+  skip_if_not_installed("otelsdk")
+  withr::local_envvar(OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = NA)
+
+  chat <- chat_openai_test()
+  private <- chat$.__enclos_env__$private
+
+  # Binding round-trip, clearing, and input validation
+  expect_null(chat$conversation_id)
+  chat$conversation_id <- "conv_123"
+  expect_equal(chat$conversation_id, "conv_123")
+  chat$conversation_id <- NULL
+  expect_null(chat$conversation_id)
+  expect_error(chat$conversation_id <- 123)
+
+  chat$conversation_id <- "conv_123"
+  spans <- with_otel_record({
+    # Anonymous function so the deferred span ends fire before recording is read
+    (function() {
+      agent_span <- local_agent_otel_span(
+        private$provider,
+        private$model,
+        activate = FALSE,
+        conversation_id = chat$conversation_id
+      )
+      local_chat_otel_span(
+        private$provider,
+        private$model,
+        parent = agent_span,
+        conversation_id = chat$conversation_id
+      )
+    })()
+  })[["traces"]]
+
+  agent_spans <- Filter(function(x) x$name == "invoke_agent", spans)
+  chat_spans <- Filter(function(x) startsWith(x$name, "chat"), spans)
+  expect_length(agent_spans, 1L)
+  expect_length(chat_spans, 1L)
+  expect_equal(
+    agent_spans[[1]]$attributes[["gen_ai.conversation.id"]],
+    "conv_123"
+  )
+  expect_equal(
+    chat_spans[[1]]$attributes[["gen_ai.conversation.id"]],
+    "conv_123"
+  )
+})
+
+test_that("conversation id attribute is absent when unset", {
+  skip_if_not_installed("otelsdk")
+  withr::local_envvar(OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = NA)
+
+  chat <- chat_openai_test()
+  private <- chat$.__enclos_env__$private
+
+  spans <- with_otel_record({
+    (function() {
+      local_chat_otel_span(private$provider, private$model)
+    })()
+  })[["traces"]]
+
+  chat_spans <- Filter(function(x) startsWith(x$name, "chat"), spans)
+  expect_length(chat_spans, 1L)
+  # Per the GenAI semantic conventions, no fallback identifier is invented
+  expect_null(chat_spans[[1]]$attributes[["gen_ai.conversation.id"]])
+})

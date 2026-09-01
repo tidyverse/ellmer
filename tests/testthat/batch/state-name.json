@@ -2,21 +2,21 @@
   "version": 1,
   "stage": "done",
   "batch": {
-    "id": "batch_6a6fcf1fda048190a33075b0eac6fc9b",
+    "id": "batch_6a785e35cffc8190b98a8dea695204bf",
     "object": "batch",
     "endpoint": "/v1/responses",
     "model": "gpt-5.4-nano-2026-03-17",
     "errors": {},
-    "input_file_id": "file-DTd2YGUngHQ2sdMqHKQ2oM",
+    "input_file_id": "file-Ve7Y64t4uAmTpFLSt9Xsy5",
     "completion_window": "24h",
     "status": "completed",
-    "output_file_id": "file-3N62XbzTGuTohnCyykVYo8",
+    "output_file_id": "file-4kWJvxGMsS25RAGV6oiUnA",
     "error_file_id": {},
-    "created_at": 1785712415,
-    "in_progress_at": 1785712417,
-    "expires_at": 1785798815,
-    "finalizing_at": 1785712481,
-    "completed_at": 1785712482,
+    "created_at": 1786273333,
+    "in_progress_at": 1786273334,
+    "expires_at": 1786359733,
+    "finalizing_at": 1786273613,
+    "completed_at": 1786273615,
     "failed_at": {},
     "expired_at": {},
     "cancelling_at": {},
@@ -42,17 +42,17 @@
   "results": [
     {
       "status_code": 200,
-      "request_id": "2d121d63-8ee7-422b-bab5-616fe7ac9616",
+      "request_id": "2862fe8e-ce62-4e5d-b18b-5d2665fda914",
       "body": {
-        "id": "resp_0cc516e349c8a675016a6fcf5f321c81919b21c97922ed9467",
+        "id": "resp_0a5e823d90b7d726016a785f377c4c8194b6121186383d866e",
         "object": "response",
-        "created_at": 1785712479,
+        "created_at": 1786273591,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
-        "completed_at": 1785712479,
+        "completed_at": 1786273592,
         "error": {},
         "frequency_penalty": 0,
         "incomplete_details": {},
@@ -63,7 +63,7 @@
         "moderation": {},
         "output": [
           {
-            "id": "msg_0cc516e349c8a675016a6fcf5f75ec8191b3acf0b8c904091f",
+            "id": "msg_0a5e823d90b7d726016a785f384c2c8194bfb9c190ec373027",
             "type": "message",
             "status": "completed",
             "content": [
@@ -157,17 +157,17 @@
     },
     {
       "status_code": 200,
-      "request_id": "6d8b5d1d-ebc2-40ae-aabf-5f83d18ec700",
+      "request_id": "bebc022c-63ce-40fc-8f28-8d6862b8f9cb",
       "body": {
-        "id": "resp_04eddeb49d137e73016a6fcf5f44c4819296541650c3286107",
+        "id": "resp_0be767b479da6aed016a785f37d39081948cff25c5a9055408",
         "object": "response",
-        "created_at": 1785712479,
+        "created_at": 1786273591,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
-        "completed_at": 1785712480,
+        "completed_at": 1786273592,
         "error": {},
         "frequency_penalty": 0,
         "incomplete_details": {},
@@ -178,7 +178,7 @@
         "moderation": {},
         "output": [
           {
-            "id": "msg_04eddeb49d137e73016a6fcf5fbc148192ad71c92c10967005",
+            "id": "msg_0be767b479da6aed016a785f387da481948e98e89f06b845ff",
             "type": "message",
             "status": "completed",
             "content": [
@@ -272,17 +272,17 @@
     },
     {
       "status_code": 200,
-      "request_id": "d995cab4-fc8f-403d-a3a4-203296ab34d6",
+      "request_id": "1f5fde43-bdd4-432b-87e1-358ea0fbe471",
       "body": {
-        "id": "resp_069b667eb3169469016a6fcf23c9988191b6cbc7d29fb4a411",
+        "id": "resp_0dea97210f1f290c016a785f37b0388197aea53342e73349ef",
         "object": "response",
-        "created_at": 1785712419,
+        "created_at": 1786273591,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
-        "completed_at": 1785712420,
+        "completed_at": 1786273594,
         "error": {},
         "frequency_penalty": 0,
         "incomplete_details": {},
@@ -293,7 +293,7 @@
         "moderation": {},
         "output": [
           {
-            "id": "msg_069b667eb3169469016a6fcf244740819190f6da2e2709f1be",
+            "id": "msg_0dea97210f1f290c016a785f39e8d88197871e8160d4c2825a",
             "type": "message",
             "status": "completed",
             "content": [
@@ -387,17 +387,17 @@
     },
     {
       "status_code": 200,
-      "request_id": "6048bcf9-8247-432f-a903-88009b63221d",
+      "request_id": "1371dcd1-337a-4d27-938d-24e160dc2f0b",
       "body": {
-        "id": "resp_038855220b4a1f1a016a6fcf25c06c819eab1afaf15fc467f1",
+        "id": "resp_063b15ffcc958222016a785f379f648194be7ccff839027748",
         "object": "response",
-        "created_at": 1785712421,
+        "created_at": 1786273591,
         "status": "completed",
         "background": false,
         "billing": {
           "payer": "developer"
         },
-        "completed_at": 1785712422,
+        "completed_at": 1786273592,
         "error": {},
         "frequency_penalty": 0,
         "incomplete_details": {},
@@ -408,7 +408,7 @@
         "moderation": {},
         "output": [
           {
-            "id": "msg_038855220b4a1f1a016a6fcf2610d4819eb77ecbbfe759e50b",
+            "id": "msg_063b15ffcc958222016a785f3857b88194a37df2980b172f36",
             "type": "message",
             "status": "completed",
             "content": [
@@ -501,9 +501,10 @@
       }
     }
   ],
-  "started_at": 1785712415,
+  "started_at": 1786273333,
   "hash": {
-    "provider": "18c2c9a687b9bfafe2eb3699a5b554cb",
+    "provider": "1d2bc960cd8a897857b04f5de08a78e6",
+    "model": "a8df4cb1a24eb085b4928ff3714d4856",
     "prompts": "ec58117fcf69ea639e59250f914cca8f",
     "user_turns": "19d0c96402bfe029f0ae46c5dfee4701"
   }

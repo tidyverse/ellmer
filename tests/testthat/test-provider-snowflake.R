@@ -332,7 +332,7 @@ test_that("we can merge Snowflake's tool_use chunk format", {
   )
 
   # value_turn filters empty text and produces only the tool request
-  turn <- value_turn(provider, result)
+  turn <- value_turn(provider, test_model(), result)
   expect_length(turn@contents, 1)
   expect_s3_class(turn@contents[[1]], "ellmer::ContentToolRequest")
   expect_equal(turn@contents[[1]]@id, "toolu_123")
@@ -357,8 +357,9 @@ test_that("stream_content extracts text from Snowflake's delta format", {
     )
   )
   result <- stream_content(provider, text_event)
-  expect_s3_class(result, "ellmer::ContentText")
-  expect_equal(result@text, "hello")
+  expect_length(result, 1)
+  expect_s3_class(result[[1]], "ellmer::ContentText")
+  expect_equal(result[[1]]@text, "hello")
 
   # Text chunk using delta$text (no delta$content)
   text_event2 <- list(
@@ -369,10 +370,11 @@ test_that("stream_content extracts text from Snowflake's delta format", {
     )
   )
   result2 <- stream_content(provider, text_event2)
-  expect_s3_class(result2, "ellmer::ContentText")
-  expect_equal(result2@text, "world")
+  expect_length(result2, 1)
+  expect_s3_class(result2[[1]], "ellmer::ContentText")
+  expect_equal(result2[[1]]@text, "world")
 
-  # Tool_use chunk returns NULL (not text)
+  # Tool_use chunk returns no content
   tool_event <- list(
     choices = list(
       list(
@@ -380,9 +382,9 @@ test_that("stream_content extracts text from Snowflake's delta format", {
       )
     )
   )
-  expect_null(stream_content(provider, tool_event))
+  expect_length(stream_content(provider, tool_event), 0)
 
-  # Empty text chunk returns NULL
+  # Empty text chunk returns no content
   empty_event <- list(
     choices = list(
       list(
@@ -390,7 +392,7 @@ test_that("stream_content extracts text from Snowflake's delta format", {
       )
     )
   )
-  expect_null(stream_content(provider, empty_event))
+  expect_length(stream_content(provider, empty_event), 0)
 })
 
 test_that("as_json handles tool-only assistant turns", {
@@ -434,8 +436,9 @@ test_that("chat_snowflake() supports parameters", {
     )
   )
   provider <- chat$get_provider()
+  model <- chat$get_model_object()
   expect_equal(
-    chat_body(provider),
+    chat_body(provider, model),
     list(
       model = "claude-3-5-sonnet",
       temperature = 0.7,
@@ -446,9 +449,9 @@ test_that("chat_snowflake() supports parameters", {
     )
   )
   # Warn/ignore unsupported parameters.
-  provider@params <- params(seed = 1L)
+  model_bad <- Model(name = "claude-3-5-sonnet", params = params(seed = 1L))
   expect_warning(
-    out <- chat_body(provider),
+    out <- chat_body(provider, model_bad),
     regexp = "unsupported parameters"
   )
   expect_equal(out, list(model = "claude-3-5-sonnet", stream = TRUE))

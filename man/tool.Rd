@@ -20,10 +20,21 @@ tool(
 }
 \arguments{
 \item{fun}{The function to be invoked when the tool is called. The return
-value of the function is sent back to the chatbot.
+value of the function is sent back to the chatbot. The function should
+return one of:
+\itemize{
+\item A character vector.
+\item An atomic vector.
+\item A \code{json}-class object (e.g. from \code{\link[jsonlite:toJSON]{jsonlite::toJSON()}}).
+\item A \link{Content} object (e.g. \link{ContentImageInline}).
+\item A list of \link{Content} objects.
+\item A \link{ContentToolResult} object (expert users who want to customize
+the tool result directly).
+}
 
-Expert users can customize the tool result by returning a
-\link{ContentToolResult} object.}
+Other return types (e.g. data frames, lists) are
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} and will error in a future release.
+Convert them to a string or JSON before returning.}
 
 \item{description}{A detailed description of what the function does.
 Generally, the more information that you can provide here, the better.}

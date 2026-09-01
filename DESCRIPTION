@@ -59,7 +59,7 @@ VignetteBuilder:
 Config/Needs/prices: cli, dplyr, jsonlite, jsonvalidate, stringr, tidyr,
     usethis
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/testthat/start-first: chat, provider*
@@ -91,16 +91,20 @@ Collate:
     'import-standalone-types-check.R'
     'interpolate.R'
     'live.R'
+    'model.R'
     'otel.R'
     'parallel-chat.R'
     'params.R'
+    'prices.R'
     'provider-any.R'
-    'provider-aws.R'
+    'provider-aws-api.R'
     'provider-openai-compatible.R'
+    'provider-openai.R'
+    'provider-claude.R'
+    'provider-aws.R'
     'provider-azure.R'
     'provider-claude-files.R'
     'provider-claude-tools.R'
-    'provider-claude.R'
     'provider-google.R'
     'provider-cloudflare.R'
     'provider-databricks.R'
@@ -114,7 +118,6 @@ Collate:
     'provider-mistral.R'
     'provider-ollama.R'
     'provider-openai-tools.R'
-    'provider-openai.R'
     'provider-openrouter.R'
     'provider-perplexity.R'
     'provider-portkey.R'

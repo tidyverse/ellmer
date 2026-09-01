@@ -27,9 +27,11 @@ local({
 
   local_chat_otel_span <<- function(
     provider,
+    model,
     turns = NULL,
     system_prompt = NULL,
     parent = NULL,
+    conversation_id = NULL,
     local_envir = parent.frame()
   ) {
     if (!otel_is_tracing) {
@@ -37,16 +39,20 @@ local({
     }
     chat_span <-
       otel::start_span(
-        sprintf("chat %s", provider@model),
+        sprintf("chat %s", model@name),
         options = list(
           parent = parent,
           kind = "client"
         ),
-        attributes = list(
+        # Per the GenAI semantic conventions, gen_ai.conversation.id is only
+        # set when the caller has a conversation identifier readily available;
+        # never invent a fallback value.
+        attributes = compact(list(
           "gen_ai.operation.name" = "chat",
           "gen_ai.provider.name" = tolower(provider@name),
-          "gen_ai.request.model" = provider@model
-        ),
+          "gen_ai.request.model" = model@name,
+          "gen_ai.conversation.id" = conversation_id
+        )),
         tracer = otel_tracer
       )
 
@@ -122,7 +128,9 @@ local({
   # local_otel_span_agent
   local_agent_otel_span <<- function(
     provider,
+    model,
     activate = TRUE,
+    conversation_id = NULL,
     local_envir = parent.frame()
   ) {
     if (!otel_is_tracing) {
@@ -140,11 +148,12 @@ local({
       otel::start_span(
         "invoke_agent",
         options = list(kind = "client"),
-        attributes = list(
+        attributes = compact(list(
           "gen_ai.operation.name" = "invoke_agent",
           "gen_ai.provider.name" = tolower(provider@name),
-          "gen_ai.request.model" = provider@model
-        ),
+          "gen_ai.request.model" = model@name,
+          "gen_ai.conversation.id" = conversation_id
+        )),
         tracer = otel_tracer
       )
 
