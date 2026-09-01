@@ -31,7 +31,7 @@
 # invalid api and cache combinations are rejected
 
     Code
-      chat_aws_bedrock(model = "openai.gpt-5.4", cache = "5m")
+      chat_aws_bedrock(model = "openai.gpt-5.4", api = "responses", cache = "5m")
     Condition
       Error in `chat_aws_bedrock()`:
       ! `cache` is not supported when `api = "responses"`.

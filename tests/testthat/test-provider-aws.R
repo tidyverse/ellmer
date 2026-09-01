@@ -235,14 +235,26 @@ test_that("continues to work after whitespace only outputs (#376)", {
 # APIs --------------------------------------------------------------------
 
 test_that("aws_bedrock_api() guesses the api from the model", {
-  expect_equal(aws_bedrock_api("us.anthropic.claude-sonnet-4-6"), "converse")
-  expect_equal(aws_bedrock_api("anthropic.claude-mythos-5"), "messages")
-  expect_equal(aws_bedrock_api("openai.gpt-5.4"), "responses")
+  local_mocked_bindings(
+    aws_bedrock_model_apis = c(
+      "anthropic.mantle-only" = "messages",
+      "openai.mantle-only" = "responses"
+    )
+  )
+  expect_equal(aws_bedrock_api("us.anthropic.claude-sonnet-5"), "converse")
+  expect_equal(aws_bedrock_api("anthropic.mantle-only"), "messages")
+  expect_equal(aws_bedrock_api("openai.mantle-only"), "responses")
 })
 
 test_that("aws_bedrock_api() ignores cross-region inference prefixes", {
-  expect_equal(aws_bedrock_api("us.anthropic.claude-mythos-5"), "messages")
-  expect_equal(aws_bedrock_api("eu.openai.gpt-5.5"), "responses")
+  local_mocked_bindings(
+    aws_bedrock_model_apis = c(
+      "anthropic.mantle-only" = "messages",
+      "openai.mantle-only" = "responses"
+    )
+  )
+  expect_equal(aws_bedrock_api("us.anthropic.mantle-only"), "messages")
+  expect_equal(aws_bedrock_api("eu.openai.mantle-only"), "responses")
 })
 
 test_that("aws_bedrock_api() falls back to converse for unknown models", {
@@ -333,6 +345,22 @@ test_that("converse suggests mantle when it doesn't recognise the model", {
   expect_length(body("Nope."), 1)
 })
 
+test_that("converse suggests a region prefix when given a bare model ID", {
+  req <- base_request_error(
+    test_aws_bedrock_provider(),
+    request("http://example.com")
+  )
+  body <- function(message) {
+    req$policies$error_body(response_json(400, body = list(message = message)))
+  }
+
+  hint <- body(
+    "Invocation of model ID openai.gpt-5.6-sol with on-demand throughput isn't supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+  )
+  expect_length(hint, 2)
+  expect_match(hint[[2]], "adding a region prefix")
+})
+
 test_that("cross-region prefix is stripped for mantle but kept for converse", {
   local_mocked_aws_credentials()
 
@@ -356,7 +384,7 @@ test_that("invalid api and cache combinations are rejected", {
   local_mocked_aws_credentials()
 
   expect_snapshot(error = TRUE, {
-    chat_aws_bedrock(model = "openai.gpt-5.4", cache = "5m")
+    chat_aws_bedrock(model = "openai.gpt-5.4", api = "responses", cache = "5m")
     chat_aws_bedrock(model = "openai.gpt-5.4", api = "mantle")
   })
 })

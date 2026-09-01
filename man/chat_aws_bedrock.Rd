@@ -116,15 +116,24 @@ used.
 endpoint. Only Claude models are available here, but it includes some (like
 Claude Mythos) that Converse does not serve at all.
 \item \code{"responses"} uses the OpenAI Responses API on the \code{bedrock-mantle}
-endpoint. This is the only way to reach the GPT-5 family and Grok on
-Bedrock. Note that mantle serves newer models from \verb{/openai/v1} and older
-open-weight models like gpt-oss from \verb{/v1}; ellmer uses the former, so
-reaching the latter needs an explicit \code{base_url}. They're all available
-through \code{"converse"} anyway.
+endpoint. This reaches OpenAI and xAI models that Converse can't serve,
+typically newer models that Converse hasn't picked up yet. Note that mantle
+serves newer models from \verb{/openai/v1} and older open-weight models like
+gpt-oss from \verb{/v1}; ellmer uses the former, so reaching the latter needs
+an explicit \code{base_url}. They're all available through \code{"converse"} anyway.
 }
 
-By default ellmer picks the API from \code{model}, falling back to \code{"converse"}
-for models it doesn't recognize. Set \code{api} explicitly to override this.
+By default ellmer picks the API from \code{model}, using \code{"converse"} whenever
+it can serve the model and for any model ellmer doesn't recognize. Set \code{api}
+explicitly to override this.
+
+The set of models that need mantle shrinks over time as AWS adds them to
+Converse, so a model that needs \code{"responses"} today may route to
+\code{"converse"} in a later ellmer release. Note also that Converse usually
+needs an inference profile ID (\code{"us.openai.gpt-5.6-sol"}) while mantle wants
+the bare model ID (\code{"openai.gpt-5.6-sol"}); ellmer strips the prefix for
+mantle, so the inference profile ID works with either and is the safer
+choice.
 
 Note that the two endpoints have separate token quotas, so moving a model
 from one to the other changes which quota it consumes.
