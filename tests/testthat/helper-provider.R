@@ -203,9 +203,12 @@ test_file_lifecycle <- function(chat_fun) {
 
   files <- chat$file_list()
   expect_contains(files$id, upload@uri)
+  expect_s3_class(files$created_at, "POSIXct")
+  expect_s3_class(files$expires_at, "POSIXct")
 
   meta <- chat$file_get(upload)
   expect_equal(meta$id, upload@uri)
+  expect_s3_class(meta$expires_at, "POSIXct")
 
   # Providers only serve back model-generated files, not user uploads
   path <- withr::local_tempfile()

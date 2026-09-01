@@ -29,18 +29,16 @@ method(file_upload, ProviderAnthropic) <- function(
 
 method(file_list, ProviderAnthropic) <- function(provider, ...) {
   data <- list()
-  after_id <- NULL
+  page <- NULL
   repeat {
     req <- anthropic_files_request(provider)
-    if (!is.null(after_id)) {
-      req <- req_url_query(req, after_id = after_id)
-    }
+    req <- req_url_query(req, page = page)
     json <- resp_body_json(req_perform(req))
     data <- c(data, json$data)
-    if (!isTRUE(json$has_more)) {
+    page <- json$next_page
+    if (is.null(page)) {
       break
     }
-    after_id <- json$last_id
   }
 
   data.frame(
@@ -49,7 +47,9 @@ method(file_list, ProviderAnthropic) <- function(provider, ...) {
     mime_type = map_chr(data, "[[", "mime_type"),
     size_bytes = map_dbl(data, "[[", "size_bytes"),
     created_at = parse_rfc3339(map_chr(data, "[[", "created_at")),
-    expires_at = rep(NA, length(data)),
+    expires_at = parse_rfc3339(map_chr(data, function(file) {
+      file$expires_at %||% NA_character_
+    })),
     downloadable = map_lgl(data, "[[", "downloadable")
   )
 }
@@ -63,9 +63,9 @@ method(file_get, ProviderAnthropic) <- function(provider, id, ...) {
     id = json$id,
     filename = json$filename,
     mime_type = json$mime_type,
-    size_bytes = json$size_bytes,
+    size_bytes = as.numeric(json$size_bytes),
     created_at = parse_rfc3339(json$created_at),
-    expires_at = NA,
+    expires_at = parse_rfc3339(json$expires_at %||% NA_character_),
     downloadable = json$downloadable
   )
 }
