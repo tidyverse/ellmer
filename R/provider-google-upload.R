@@ -13,7 +13,7 @@ NULL
 #' @inheritParams chat_google_gemini
 #' @param path Path to a file to upload.
 #' @param mime_type Optionally, specify the mime type of the file.
-#'   If not specified, will be guesses from the file extension.
+#'   If not specified, will be guessed from the file extension.
 #' @returns A `<ContentUploaded>` object that can be passed to `$chat()`.
 #' @export
 #' @examples
