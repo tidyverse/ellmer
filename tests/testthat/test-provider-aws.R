@@ -328,6 +328,47 @@ test_that("explicit api overrides the guess", {
   expect_s7_class(provider, ProviderAWSBedrock)
 })
 
+test_that("mantle sends bytes rather than urls for pdfs and documents", {
+  local_mocked_aws_credentials()
+
+  pdf <- ContentPDF(
+    "application/pdf",
+    "YQ==",
+    "x.pdf",
+    url = "https://example.com/x.pdf"
+  )
+  doc <- ContentDocument(
+    "text/csv",
+    "YQ==",
+    "data.csv",
+    url = "https://example.com/data.csv"
+  )
+
+  messages <- provider_aws_bedrock(api = "messages")
+  expect_equal(
+    as_json(messages, pdf)$source,
+    list(type = "base64", media_type = "application/pdf", data = "YQ==")
+  )
+
+  responses <- provider_aws_bedrock(api = "responses")
+  expect_equal(
+    as_json(responses, pdf)$content[[1]],
+    list(
+      type = "input_file",
+      filename = "x.pdf",
+      file_data = "data:application/pdf;base64,YQ=="
+    )
+  )
+  expect_equal(
+    as_json(responses, doc)$content[[1]],
+    list(
+      type = "input_file",
+      filename = "data.csv",
+      file_data = "data:text/csv;base64,YQ=="
+    )
+  )
+})
+
 test_that("mantle requests are signed as bedrock in the right region", {
   local_mocked_aws_credentials(region = "eu-west-1")
 

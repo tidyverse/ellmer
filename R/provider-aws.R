@@ -383,6 +383,34 @@ method(base_request_error, ProviderAWSBedrockResponses) <- function(
   })
 }
 
+# Mantle can't fetch URLs, so always send the bytes we already downloaded
+method(as_json, list(ProviderAWSBedrockMessages, ContentPDF)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@url <- NULL
+  as_json(super(provider, ProviderAnthropic), x, ...)
+}
+
+method(as_json, list(ProviderAWSBedrockResponses, ContentPDF)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@url <- NULL
+  as_json(super(provider, ProviderOpenAI), x, ...)
+}
+
+method(as_json, list(ProviderAWSBedrockResponses, ContentDocument)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@url <- NULL
+  as_json(super(provider, ProviderOpenAI), x, ...)
+}
+
 method(chat_params, ProviderAWSBedrock) <- function(provider, params) {
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InferenceConfiguration.html
   standardise_params(
