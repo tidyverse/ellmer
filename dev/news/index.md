@@ -2,6 +2,12 @@
 
 ## ellmer (development version)
 
+- When running on Posit Connect, ellmer now forwards the viewer’s
+  session token to Connect’s LLM gateway so gateway usage can be
+  attributed to the viewer. This happens automatically for Shiny content
+  and only affects requests to the gateway
+  ([@karawoo](https://github.com/karawoo),
+  [\#1105](https://github.com/tidyverse/ellmer/issues/1105)).
 - [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
   gains an `api` argument to select between the Converse API on the
   `bedrock-runtime` endpoint and the Anthropic Messages or OpenAI
