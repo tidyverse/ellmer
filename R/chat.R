@@ -617,9 +617,11 @@ Chat <- R6::R6Class(
         !is.null(type) &&
           uses_tool_structured_output(private$provider, private$model, type)
       ) {
-        cli::cli_abort(
-          "Streaming structured output requires native provider support for the supplied model."
-        )
+        cli::cli_abort(c(
+          "Can't stream structured output with {private$provider@name} model {.val {private$model@name}}.",
+          i = "Streaming requires native structured output, but this provider and model fall back to tool calling.",
+          i = "Use `$chat_structured()` instead."
+        ))
       }
 
       tool_errors <- list()
@@ -702,9 +704,11 @@ Chat <- R6::R6Class(
         !is.null(type) &&
           uses_tool_structured_output(private$provider, private$model, type)
       ) {
-        cli::cli_abort(
-          "Streaming structured output requires native provider support for the supplied model."
-        )
+        cli::cli_abort(c(
+          "Can't stream structured output with {private$provider@name} model {.val {private$model@name}}.",
+          i = "Streaming requires native structured output, but this provider and model fall back to tool calling.",
+          i = "Use `$chat_structured()` instead."
+        ))
       }
 
       tool_errors <- list()

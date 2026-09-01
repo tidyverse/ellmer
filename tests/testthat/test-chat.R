@@ -335,11 +335,13 @@ test_that("can perform a simple async batch chat", {
   )
 })
 
-make_structured_stream_response <- function() {
-  list(
-    list(type = "response.output_text.delta", delta = '{"name":"John"'),
-    list(type = "response.output_text.delta", delta = ',"age":15}'),
-    list(
+make_structured_stream_response <- function(deltas = c('{"name":"John"', ',"age":15}')) {
+  text <- paste(deltas, collapse = "")
+  c(
+    lapply(deltas, function(delta) {
+      list(type = "response.output_text.delta", delta = delta)
+    }),
+    list(list(
       type = "response.completed",
       response = list(
         status = "completed",
@@ -347,7 +349,7 @@ make_structured_stream_response <- function() {
           type = "message",
           content = list(list(
             type = "output_text",
-            text = '{"name":"John","age":15}'
+            text = text
           ))
         )),
         usage = list(
@@ -356,32 +358,36 @@ make_structured_stream_response <- function() {
           input_tokens_details = list(cached_tokens = 0)
         )
       )
-    )
+    ))
   )
 }
 
-make_scalar_structured_stream_response <- function() {
-  list(
-    list(type = "response.output_text.delta", delta = '{"wrapper":"John"}'),
-    list(
-      type = "response.completed",
-      response = list(
-        status = "completed",
-        output = list(list(
-          type = "message",
-          content = list(list(
-            type = "output_text",
-            text = '{"wrapper":"John"}'
-          ))
-        )),
-        usage = list(
-          input_tokens = 1,
-          output_tokens = 2,
-          input_tokens_details = list(cached_tokens = 0)
-        )
-      )
-    )
+# Mock chat_perform to stream the given deltas; returns a function that
+# reports the arguments chat_perform was called with
+mock_chat_stream <- function(deltas, async, env = rlang::caller_env()) {
+  response <- make_structured_stream_response(deltas)
+  called_with <- NULL
+  local_mocked_bindings(
+    chat_perform = function(...) {
+      called_with <<- list(...)
+      gen <- if (async) coro::async_generator else coro::generator
+      gen(function() {
+        for (chunk in response) {
+          yield(chunk)
+        }
+      })()
+    },
+    .env = env
   )
+  function() called_with
+}
+
+collect_stream <- function(chat, ..., async) {
+  if (async) {
+    sync(coro::async_collect(chat$stream_async(...)))
+  } else {
+    coro::collect(chat$stream(...))
+  }
 }
 
 make_text_stream_response <- function() {
@@ -410,259 +416,100 @@ make_text_stream_response <- function() {
 
 test_that("stream() supports native structured output", {
   person <- type_object(name = type_string(), age = type_integer())
-  response <- make_structured_stream_response()
-
-  local_mocked_bindings(
-    chat_perform = function(...) {
-      coro::generator(function() {
-        for (chunk in response) {
-          yield(chunk)
-        }
-      })()
-    }
-  )
-
-  chat <- chat_openai_test()
-  chunks <- coro::collect(
-    chat$stream("Extract John, age 15", type = person)
-  )
-
-  expect_identical(chunks, list('{"name":"John"', ',"age":15}'))
-  expect_s7_class(chat$last_turn()@contents[[1]], ContentJson)
-  expect_equal(
-    chat$last_turn()@contents[[1]]@parsed,
-    list(
-      name = "John",
-      age = 15
-    )
-  )
-})
-
-test_that("stream_async() supports native structured output", {
-  person <- type_object(name = type_string(), age = type_integer())
-  response <- make_structured_stream_response()
-
-  local_mocked_bindings(
-    chat_perform = function(...) {
-      coro::async_generator(function() {
-        for (chunk in response) {
-          yield(chunk)
-        }
-      })()
-    }
-  )
-
-  chat <- chat_openai_test()
-  chunks <- sync(coro::async_collect(
-    chat$stream_async("Extract John, age 15", type = person)
-  ))
-
-  expect_identical(chunks, list('{"name":"John"', ',"age":15}'))
-  expect_s7_class(chat$last_turn()@contents[[1]], ContentJson)
-  expect_equal(
-    chat$last_turn()@contents[[1]]@parsed,
-    list(
-      name = "John",
-      age = 15
-    )
-  )
-})
-
-test_that("stream() wraps scalar structured output types", {
-  type <- type_string()
-  requested_type <- NULL
-  response <- make_scalar_structured_stream_response()
-
-  local_mocked_bindings(
-    chat_perform = function(...) {
-      requested_type <<- list(...)$type
-      coro::generator(function() {
-        for (chunk in response) {
-          yield(chunk)
-        }
-      })()
-    }
-  )
-
-  chat <- chat_openai_test()
-  chunks <- coro::collect(chat$stream("Extract John", type = type))
-
-  expect_s7_class(requested_type, TypeObject)
-  expect_identical(requested_type@properties, list(wrapper = type))
-  expect_identical(chunks, list('{"wrapper":"John"}'))
-  expect_s7_class(chat$last_turn()@contents[[1]], ContentJson)
-  expect_equal(chat$last_turn()@contents[[1]]@parsed, list(wrapper = "John"))
-})
-
-test_that("stream_async() wraps scalar structured output types", {
-  type <- type_string()
-  requested_type <- NULL
-  response <- make_scalar_structured_stream_response()
-
-  local_mocked_bindings(
-    chat_perform = function(...) {
-      requested_type <<- list(...)$type
-      coro::async_generator(function() {
-        for (chunk in response) {
-          yield(chunk)
-        }
-      })()
-    }
-  )
-
-  chat <- chat_openai_test()
-  chunks <- sync(coro::async_collect(
-    chat$stream_async("Extract John", type = type)
-  ))
-
-  expect_s7_class(requested_type, TypeObject)
-  expect_identical(requested_type@properties, list(wrapper = type))
-  expect_identical(chunks, list('{"wrapper":"John"}'))
-  expect_s7_class(chat$last_turn()@contents[[1]], ContentJson)
-  expect_equal(chat$last_turn()@contents[[1]]@parsed, list(wrapper = "John"))
-})
-
-test_that("stream() rejects additional properties on native Anthropic models before request", {
-  type <- suppressWarnings(
-    type_object(
-      value = type_string(),
-      .additional_properties = TRUE
-    )
-  )
-  request_started <- FALSE
-
-  local_mocked_bindings(
-    chat_perform = function(...) {
-      request_started <<- TRUE
-      stop("request should not have started")
-    }
-  )
-
-  chat <- chat_anthropic_test(model = "claude-sonnet-5")
-  error <- tryCatch(
-    coro::collect(chat$stream("Extract John", type = type)),
-    error = identity
-  )
-
-  expect_identical(
-    conditionMessage(error),
-    "Streaming structured output requires native provider support for the supplied model."
-  )
-  expect_false(request_started)
-})
-
-test_that("stream_async() rejects additional properties on native Anthropic models before request", {
-  type <- suppressWarnings(
-    type_object(
-      value = type_string(),
-      .additional_properties = TRUE
-    )
-  )
-  request_started <- FALSE
-
-  local_mocked_bindings(
-    chat_perform = function(...) {
-      request_started <<- TRUE
-      stop("request should not have started")
-    }
-  )
-
-  chat <- chat_anthropic_test(model = "claude-sonnet-5")
-  error <- tryCatch(
-    sync(coro::async_collect(
-      chat$stream_async("Extract John", type = type)
-    )),
-    error = identity
-  )
-
-  expect_identical(
-    conditionMessage(error),
-    "Streaming structured output requires native provider support for the supplied model."
-  )
-  expect_false(request_started)
-})
-
-test_that("streaming rejects nested additional properties before request", {
-  withr::local_options(cli.width = 120)
-
-  type <- suppressWarnings(
-    type_object(
-      value = type_object(
-        name = type_string(),
-        .additional_properties = TRUE
-      )
-    )
-  )
 
   run_case <- function(async) {
-    request_started <- FALSE
+    mock_chat_stream(c('{"name":"John"', ',"age":15}'), async)
 
-    local_mocked_bindings(
-      chat_perform = function(...) {
-        request_started <<- TRUE
-        stop("request should not have started")
-      }
+    chat <- chat_openai_test()
+    chunks <- collect_stream(
+      chat,
+      "Extract John, age 15",
+      type = person,
+      async = async
     )
 
-    chat <- chat_anthropic_test(model = "claude-sonnet-5")
-    error <- if (async) {
-      tryCatch(
-        sync(coro::async_collect(
-          chat$stream_async("Extract John", type = type)
-        )),
-        error = identity
-      )
-    } else {
-      tryCatch(
-        coro::collect(chat$stream("Extract John", type = type)),
-        error = identity
-      )
-    }
-
-    expect_identical(
-      conditionMessage(error),
-      "Streaming structured output requires native provider support for the supplied model."
+    expect_identical(chunks, list('{"name":"John"', ',"age":15}'))
+    expect_s7_class(chat$last_turn()@contents[[1]], ContentJson)
+    expect_equal(
+      chat$last_turn()@contents[[1]]@parsed,
+      list(name = "John", age = 15)
     )
-    expect_identical(request_started, FALSE)
   }
 
   run_case(FALSE)
   run_case(TRUE)
 })
 
-test_that("Bedrock streaming structured output rejects types before requests", {
-  type <- type_object(value = type_string())
+test_that("stream() wraps scalar structured output types", {
+  type <- type_string()
 
   run_case <- function(async) {
-    request_started <- FALSE
+    called_with <- mock_chat_stream('{"wrapper":"John"}', async)
 
+    chat <- chat_openai_test()
+    chunks <- collect_stream(chat, "Extract John", type = type, async = async)
+
+    requested_type <- called_with()$type
+    expect_s7_class(requested_type, TypeObject)
+    expect_identical(requested_type@properties, list(wrapper = type))
+    expect_identical(chunks, list('{"wrapper":"John"}'))
+    expect_s7_class(chat$last_turn()@contents[[1]], ContentJson)
+    expect_equal(chat$last_turn()@contents[[1]]@parsed, list(wrapper = "John"))
+  }
+
+  run_case(FALSE)
+  run_case(TRUE)
+})
+
+test_that("streaming structured output rejects unsupported providers and types", {
+  withr::local_options(cli.width = 120)
+
+  person <- type_object(name = type_string(), age = type_integer())
+  additional_props <- suppressWarnings(
+    type_object(value = type_string(), .additional_properties = TRUE)
+  )
+  nested_additional_props <- suppressWarnings(
+    type_object(
+      value = type_object(name = type_string(), .additional_properties = TRUE)
+    )
+  )
+
+  run_case <- function(async) {
+    # Errors should be raised before any request is made
     local_mocked_bindings(
       chat_perform = function(...) {
-        request_started <<- TRUE
         stop("request should not have started")
       }
     )
 
-    chat <- chat_aws_bedrock_test()
-    error <- if (async) {
-      tryCatch(
-        sync(coro::async_collect(
-          chat$stream_async("Extract John", type = type)
-        )),
-        error = identity
+    expect_snapshot(error = TRUE, {
+      chat <- chat_anthropic_test(model = "claude-3-haiku-20240307")
+      collect_stream(chat, "Extract John, age 15", type = person, async = async)
+    })
+    expect_snapshot(error = TRUE, {
+      chat <- chat_anthropic_test(model = "claude-sonnet-5")
+      collect_stream(chat, "Extract John", type = additional_props, async = async)
+    })
+    expect_snapshot(error = TRUE, {
+      chat <- chat_anthropic_test(model = "claude-sonnet-5")
+      collect_stream(
+        chat,
+        "Extract John",
+        type = nested_additional_props,
+        async = async
       )
-    } else {
-      tryCatch(
-        coro::collect(chat$stream("Extract John", type = type)),
-        error = identity
-      )
-    }
-
-    expect_identical(
-      conditionMessage(error),
-      "Streaming structured output requires native provider support for the supplied model."
+    })
+    # chat_aws_bedrock_test() skips when AWS credentials aren't available;
+    # catch that here so the rest of the test still runs
+    bedrock_chat <- tryCatch(
+      chat_aws_bedrock_test(),
+      skip = function(cnd) NULL
     )
-    expect_false(request_started)
+    if (!is.null(bedrock_chat)) {
+      expect_snapshot(error = TRUE, {
+        collect_stream(bedrock_chat, "Extract John", type = person, async = async)
+      })
+    }
   }
 
   run_case(FALSE)
@@ -808,54 +655,6 @@ test_that("structured content streams yield Content objects", {
 
   run_case(FALSE)
   run_case(TRUE)
-})
-
-test_that("streaming structured output rejects non-native providers before request", {
-  person <- type_object(name = type_string(), age = type_integer())
-  request_started <- FALSE
-
-  local_mocked_bindings(
-    chat_perform = function(...) {
-      request_started <<- TRUE
-      stop("request should not have started")
-    }
-  )
-
-  chat <- chat_anthropic_test(model = "claude-3-haiku-20240307")
-  error <- tryCatch(
-    coro::collect(chat$stream("Extract John, age 15", type = person)),
-    error = identity
-  )
-  expect_identical(
-    conditionMessage(error),
-    "Streaming structured output requires native provider support for the supplied model."
-  )
-  expect_false(request_started)
-})
-
-test_that("async streaming structured output rejects non-native providers before request", {
-  person <- type_object(name = type_string(), age = type_integer())
-  request_started <- FALSE
-
-  local_mocked_bindings(
-    chat_perform = function(...) {
-      request_started <<- TRUE
-      stop("request should not have started")
-    }
-  )
-
-  chat <- chat_anthropic_test(model = "claude-3-haiku-20240307")
-  error <- tryCatch(
-    sync(coro::async_collect(
-      chat$stream_async("Extract John, age 15", type = person)
-    )),
-    error = identity
-  )
-  expect_identical(
-    conditionMessage(error),
-    "Streaming structured output requires native provider support for the supplied model."
-  )
-  expect_false(request_started)
 })
 
 test_that("can extract structured data", {
