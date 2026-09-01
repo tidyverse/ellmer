@@ -416,20 +416,11 @@ openai_citations <- function(content) {
     identical(annotation$type, "url_citation")
   })
   lapply(annotations, function(annotation) {
-    start <- annotation$start_index
-    end <- annotation$end_index
-    grounded_span <- if (is.null(start) || is.null(end)) {
-      NULL
-    } else {
-      span <- substr(content$text, start + 1L, end)
-      if (nzchar(span)) span else NULL
-    }
     ContentCitation(
       source = WebSource(
         url = annotation$url,
         title = annotation$title
       ),
-      grounded_span = grounded_span,
       extra = annotation
     )
   })

@@ -31,6 +31,7 @@ local({
     turns = NULL,
     system_prompt = NULL,
     parent = NULL,
+    conversation_id = NULL,
     local_envir = parent.frame()
   ) {
     if (!otel_is_tracing) {
@@ -43,11 +44,15 @@ local({
           parent = parent,
           kind = "client"
         ),
-        attributes = list(
+        # Per the GenAI semantic conventions, gen_ai.conversation.id is only
+        # set when the caller has a conversation identifier readily available;
+        # never invent a fallback value.
+        attributes = compact(list(
           "gen_ai.operation.name" = "chat",
           "gen_ai.provider.name" = tolower(provider@name),
-          "gen_ai.request.model" = model@name
-        ),
+          "gen_ai.request.model" = model@name,
+          "gen_ai.conversation.id" = conversation_id
+        )),
         tracer = otel_tracer
       )
 
@@ -125,6 +130,7 @@ local({
     provider,
     model,
     activate = TRUE,
+    conversation_id = NULL,
     local_envir = parent.frame()
   ) {
     if (!otel_is_tracing) {
@@ -142,11 +148,12 @@ local({
       otel::start_span(
         "invoke_agent",
         options = list(kind = "client"),
-        attributes = list(
+        attributes = compact(list(
           "gen_ai.operation.name" = "invoke_agent",
           "gen_ai.provider.name" = tolower(provider@name),
-          "gen_ai.request.model" = model@name
-        ),
+          "gen_ai.request.model" = model@name,
+          "gen_ai.conversation.id" = conversation_id
+        )),
         tracer = otel_tracer
       )
 

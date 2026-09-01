@@ -168,7 +168,7 @@ test_that("value_turn handles NULL service_tier gracefully", {
   expect_no_error(value_turn(provider, test_model(), result))
 })
 
-test_that("value_turn() resolves OpenAI citation spans", {
+test_that("value_turn() keeps OpenAI citation metadata without grounded_span", {
   provider <- chat_openai_test()$get_provider()
   annotation <- list(
     type = "url_citation",
@@ -199,7 +199,7 @@ test_that("value_turn() resolves OpenAI citation spans", {
   expect_s7_class(contents[[2]], ContentCitation)
   expect_equal(contents[[2]]@source@url, "https://example.com")
   expect_equal(contents[[2]]@source@title, "Example")
-  expect_equal(contents[[2]]@grounded_span, "answer")
+  expect_null(contents[[2]]@grounded_span)
   expect_equal(contents[[2]]@extra, annotation)
 })
 

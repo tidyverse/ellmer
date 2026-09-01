@@ -60,8 +60,9 @@ NULL
 #' @param model `r param_model("claude-sonnet-5", "anthropic")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
-#' @param base_url The base URL to the endpoint; the default is Claude's
-#'   public API.
+#' @param base_url The base URL to the endpoint; the default is the
+#'   `ANTHROPIC_BASE_URL` environment variable if set, and Claude's public
+#'   API otherwise.
 #' @param cache How long to cache inputs? Defaults to "5m" (five minutes).
 #'   Set to "none" to disable caching or "1h" to cache for one hour.
 #'
@@ -83,7 +84,7 @@ chat_anthropic <- function(
   model = NULL,
   cache = c("5m", "1h", "none"),
   api_args = list(),
-  base_url = "https://api.anthropic.com/v1",
+  base_url = NULL,
   beta_headers = character(),
   api_key = NULL,
   credentials = NULL,
@@ -91,6 +92,7 @@ chat_anthropic <- function(
   echo = NULL
 ) {
   echo <- check_echo(echo)
+  base_url <- base_url %||% anthropic_base_url()
 
   model <- set_default(model, "claude-sonnet-5")
   cache <- arg_match(cache)
@@ -147,6 +149,20 @@ ProviderAnthropic <- new_class(
   )
 )
 
+# Match the official Anthropic SDKs, which read ANTHROPIC_BASE_URL
+anthropic_base_url <- function() {
+  base_url <- Sys.getenv("ANTHROPIC_BASE_URL")
+  if (identical(base_url, "")) {
+    return("https://api.anthropic.com/v1")
+  }
+  base_url <- sub("/+$", "", base_url)
+  if (endsWith(base_url, "/v1")) {
+    base_url
+  } else {
+    paste0(base_url, "/v1")
+  }
+}
+
 anthropic_key <- function() {
   key_get("ANTHROPIC_API_KEY")
 }
@@ -171,15 +187,23 @@ method(base_request, ProviderAnthropic) <- function(provider) {
     req <- req_headers(req, `anthropic-beta` = provider@beta_headers)
   }
 
-  # <https://docs.anthropic.com/en/api/errors>
-  req <- req_error(req, body = function(resp) {
-    if (resp_content_type(resp) == "application/json") {
-      json <- resp_body_json(resp)
-      paste0(json$error$message, " [", json$error$type, "]")
-    }
-  })
+  req <- base_request_error(provider, req)
 
   req
+}
+
+method(base_request_error, ProviderAnthropic) <- function(provider, req) {
+  req_error(req, body = anthropic_error_body)
+}
+
+# <https://docs.anthropic.com/en/api/errors>
+anthropic_error_body <- function(resp) {
+  if (identical(resp_content_type(resp), "application/json")) {
+    json <- resp_body_json(resp)
+    if (!is.null(json$error)) {
+      paste0(json$error$message, " [", json$error$type, "]")
+    }
+  }
 }
 
 
@@ -1018,10 +1042,11 @@ method(batch_result_turn, ProviderAnthropic) <- function(
 #' @export
 #' @rdname chat_anthropic
 models_claude <- function(
-  base_url = "https://api.anthropic.com/v1",
+  base_url = NULL,
   api_key = NULL,
   credentials = NULL
 ) {
+  base_url <- base_url %||% anthropic_base_url()
   credentials <- as_credentials(
     "models_anthropic",
     function() anthropic_key(),

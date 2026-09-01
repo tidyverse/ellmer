@@ -178,6 +178,17 @@ test_that("merge_gemini_chunks() retains final grounding metadata", {
     candidate$urlContextMetadata$urlMetadata[[1]]$retrievedUrl,
     "https://example.com"
   )
+
+  # Metadata is also retained when a later chunk lacks it
+  merged <- merge_gemini_chunks(metadata, text)
+  expect_equal(
+    merged$candidates[[1]]$groundingMetadata$webSearchQueries,
+    list("ellmer citations")
+  )
+  expect_equal(
+    merged$candidates[[1]]$urlContextMetadata$urlMetadata[[1]]$retrievedUrl,
+    "https://example.com"
+  )
 })
 
 test_that("can handle citations", {
@@ -263,7 +274,7 @@ test_that("value_turn() preserves Google web metadata", {
   expect_equal(contents[[7]]@status, "success")
 })
 
-test_that("stream_content() emits every Google content record in a chunk", {
+test_that("stream_content() emits Google citations before activity on the final chunk", {
   provider <- chat_google_gemini_test()$get_provider()
   grounding <- list(
     webSearchQueries = list("ellmer citations"),
@@ -281,27 +292,84 @@ test_that("stream_content() emits every Google content record in a chunk", {
     candidates = list(
       list(
         content = list(parts = list(list(text = "Grounded answer"))),
-        groundingMetadata = grounding
+        groundingMetadata = grounding,
+        finishReason = "STOP"
       )
     )
   )
 
   streamed <- stream_content(provider, event, completion = event)
   expect_s7_class(streamed[[1]], ContentText)
-  expect_s7_class(streamed[[2]], ContentToolRequestSearch)
-  expect_s7_class(streamed[[3]], ContentToolResponseSearch)
-  expect_s7_class(streamed[[4]], ContentCitation)
+  expect_s7_class(streamed[[2]], ContentCitation)
+  expect_s7_class(streamed[[3]], ContentToolRequestSearch)
+  expect_s7_class(streamed[[4]], ContentToolResponseSearch)
+  expect_equal(streamed[[2]]@grounded_span, "Grounded answer")
 
   metadata_only <- list(
     candidates = list(
-      list(
-        groundingMetadata = grounding
-      )
+      list(groundingMetadata = grounding, finishReason = "STOP")
     )
   )
   streamed <- stream_content(provider, metadata_only, completion = event)
   expect_length(streamed, 3)
+  expect_s7_class(streamed[[1]], ContentCitation)
+})
+
+test_that("stream_content() defers early Google fetch activity until citations", {
+  provider <- chat_google_gemini_test()$get_provider()
+  chunks <- list(
+    list(
+      candidates = list(
+        list(
+          content = list(parts = list(list(text = "A grounded answer was "))),
+          urlContextMetadata = list(
+            urlMetadata = list(
+              list(
+                retrievedUrl = "https://example.com",
+                urlRetrievalStatus = "URL_RETRIEVAL_STATUS_SUCCESS"
+              )
+            )
+          )
+        )
+      )
+    ),
+    list(
+      candidates = list(
+        list(
+          content = list(parts = list(list(text = "released today."))),
+          groundingMetadata = list(
+            webSearchQueries = list("ellmer citations"),
+            groundingChunks = list(
+              list(web = list(uri = "https://example.com", title = "Example"))
+            ),
+            groundingSupports = list(
+              list(
+                segment = list(text = "released today."),
+                groundingChunkIndices = list(0L)
+              )
+            )
+          ),
+          finishReason = "STOP"
+        )
+      )
+    )
+  )
+
+  completion <- NULL
+  streamed <- list()
+  for (chunk in chunks) {
+    completion <- stream_merge_chunks(provider, completion, chunk)
+    streamed <- c(streamed, stream_content(provider, chunk, completion))
+  }
+
+  expect_length(streamed, 7)
+  expect_s7_class(streamed[[1]], ContentText)
+  expect_s7_class(streamed[[2]], ContentText)
   expect_s7_class(streamed[[3]], ContentCitation)
+  expect_s7_class(streamed[[4]], ContentToolRequestSearch)
+  expect_s7_class(streamed[[5]], ContentToolResponseSearch)
+  expect_s7_class(streamed[[6]], ContentToolRequestFetch)
+  expect_s7_class(streamed[[7]], ContentToolResponseFetch)
 })
 
 test_that("can generate images", {

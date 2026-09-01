@@ -20,6 +20,8 @@
 #' * `claude_file_delete()` deletes the file with the given ID.
 #'
 #' @inheritParams chat_anthropic
+#' @param base_url The base URL to the endpoint; the default is Claude's
+#'   public API.
 #' @param path Path to a file to upload.
 #' @param file_id ID of the file to get information about, download, or delete.
 #' @param beta_headers Beta headers to use for the request. Defaults to

@@ -104,6 +104,24 @@ test_that("can use pdfs", {
 
 # Custom features --------------------------------------------------------
 
+test_that("base_url defaults to ANTHROPIC_BASE_URL when set", {
+  # The env var follows the official SDK convention: no /v1 suffix.
+  withr::local_envvar(ANTHROPIC_BASE_URL = "https://example.com")
+  chat <- chat_anthropic_test(credentials = function() "key")
+  expect_equal(chat$get_provider()@base_url, "https://example.com/v1")
+
+  # A value already ending in /v1 is used as is rather than getting a second
+  # /v1.
+  withr::local_envvar(ANTHROPIC_BASE_URL = "https://example.com/v1")
+  expect_equal(anthropic_base_url(), "https://example.com/v1")
+
+  withr::local_envvar(ANTHROPIC_BASE_URL = "https://example.com/v1/")
+  expect_equal(anthropic_base_url(), "https://example.com/v1")
+
+  withr::local_envvar(ANTHROPIC_BASE_URL = NA)
+  expect_equal(anthropic_base_url(), "https://api.anthropic.com/v1")
+})
+
 test_that("can set beta headers", {
   chat <- chat_anthropic_test(beta_headers = c("a", "b"))
   req <- chat_request(chat$get_provider(), chat$get_model_object())

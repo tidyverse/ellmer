@@ -235,6 +235,25 @@ method(base_request_error, ProviderDatabricks) <- function(provider, req) {
   })
 }
 
+# See: https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#functionobject
+method(as_json, list(ProviderDatabricks, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
+  # Same as ProviderOpenAICompatible but without `strict`: Databricks accepts
+  # it, but large tool sets then fail with "Compiled grammar size exceeds
+  # maximum allowed size" (#548). `parameters` must always be sent (#1084).
+  compact(list(
+    type = "function",
+    "function" = compact(list(
+      name = x@name,
+      description = x@description,
+      parameters = as_json(provider, x@arguments, ...)
+    ))
+  ))
+}
+
 # https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis/api-reference#toolcall
 method(as_json, list(ProviderDatabricks, ContentToolRequest)) <- function(
   provider,
