@@ -11,21 +11,21 @@
 claude_file_upload(
   path,
   base_url = "https://api.anthropic.com/v1/",
-  beta_headers = "files-api-2025-04-14",
+  beta_headers = character(),
   credentials = NULL
 )
 
 claude_file_list(
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 
 claude_file_get(
   file_id,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 
 claude_file_download(
@@ -33,14 +33,14 @@ claude_file_download(
   path,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 
 claude_file_delete(
   file_id,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 }
 \arguments{
@@ -49,8 +49,7 @@ claude_file_delete(
 \item{base_url}{The base URL to the endpoint; the default is Claude's
 public API.}
 
-\item{beta_headers}{Beta headers to use for the request. Defaults to
-\code{files-api-2025-04-14}.}
+\item{beta_headers}{Beta headers to use for the request.}
 
 \item{credentials}{Override the default credentials. You generally should not need this argument; instead set the \code{ANTHROPIC_API_KEY} environment variable. The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.

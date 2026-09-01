@@ -25,7 +25,7 @@ test_that("deprecated claude_file_* wrappers still work end-to-end", {
   upload <- claude_file_upload(test_path("apples.pdf"))
   defer(claude_file_delete(upload@uri))
 
-  chat <- chat_anthropic_test(beta_headers = "files-api-2025-04-14")
+  chat <- chat_anthropic_test()
   response <- chat$chat("What's the title of this document?", upload)
   expect_match(response, "Apples are tasty")
   expect_match(

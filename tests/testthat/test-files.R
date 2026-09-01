@@ -14,13 +14,3 @@ test_that("uploaded files error for providers without support", {
     as_json(provider, ContentUploaded("file_123", "application/pdf"))
   )
 })
-
-test_that("has_uploaded_content() detects uploads in turns", {
-  text_turn <- UserTurn(list(ContentText("hello")))
-  uploaded_turn <- UserTurn(list(ContentUploaded(
-    "file_123",
-    "application/pdf"
-  )))
-  expect_equal(has_uploaded_content(list(text_turn)), FALSE)
-  expect_equal(has_uploaded_content(list(text_turn, uploaded_turn)), TRUE)
-})

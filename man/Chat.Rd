@@ -375,9 +375,6 @@ or used across many turns.
 File management is supported by \code{\link[=chat_openai]{chat_openai()}}, \code{\link[=chat_anthropic]{chat_anthropic()}},
 and \code{\link[=chat_google_gemini]{chat_google_gemini()}}; other providers error. Provider notes:
 \itemize{
-\item Anthropic's Files API is in beta; ellmer adds the required
-\code{anthropic-beta} header automatically whenever a request references
-an uploaded file.
 \item Gemini files expire after 48 hours, and uploading waits until Gemini
 finishes processing the file (which can take a while for large
 video/audio), so the returned reference is always ready to use. The

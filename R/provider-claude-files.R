@@ -89,10 +89,8 @@ method(file_delete, ProviderAnthropic) <- function(provider, id, ...) {
   invisible()
 }
 
-# Anthropic's Files API is beta and always requires this header.
-# https://docs.claude.com/en/docs/build-with-claude/files
+# https://platform.claude.com/docs/en/build-with-claude/files
 anthropic_files_request <- function(provider) {
-  provider@beta_headers <- union(provider@beta_headers, "files-api-2025-04-14")
   req <- base_request(provider)
   req_url_path_append(req, "/files")
 }
@@ -111,8 +109,7 @@ anthropic_files_request <- function(provider) {
 #'   public API.
 #' @param path Path to a file to upload.
 #' @param file_id ID of the file to get information about, download, or delete.
-#' @param beta_headers Beta headers to use for the request. Defaults to
-#'   `files-api-2025-04-14`.
+#' @param beta_headers Beta headers to use for the request.
 #' @export
 #' @examples
 #' \dontrun{
@@ -129,7 +126,7 @@ anthropic_files_request <- function(provider) {
 claude_file_upload <- function(
   path,
   base_url = "https://api.anthropic.com/v1/",
-  beta_headers = "files-api-2025-04-14",
+  beta_headers = character(),
   credentials = NULL
 ) {
   lifecycle::deprecate_soft(
@@ -146,7 +143,7 @@ claude_file_upload <- function(
 claude_file_list <- function(
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 ) {
   lifecycle::deprecate_soft("0.5.0", "claude_file_list()", "Chat$file_list()")
   provider <- anthropic_file_provider(base_url, beta_headers, credentials)
@@ -159,7 +156,7 @@ claude_file_get <- function(
   file_id,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 ) {
   lifecycle::deprecate_soft("0.5.0", "claude_file_get()", "Chat$file_get()")
   provider <- anthropic_file_provider(base_url, beta_headers, credentials)
@@ -182,7 +179,7 @@ claude_file_download <- function(
   path,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 ) {
   lifecycle::deprecate_soft(
     "0.5.0",
@@ -199,7 +196,7 @@ claude_file_delete <- function(
   file_id,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 ) {
   lifecycle::deprecate_soft(
     "0.5.0",

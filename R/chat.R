@@ -274,9 +274,6 @@ Chat <- R6::R6Class(
     #' File management is supported by [chat_openai()], [chat_anthropic()],
     #' and [chat_google_gemini()]; other providers error. Provider notes:
     #'
-    #' * Anthropic's Files API is in beta; ellmer adds the required
-    #'   `anthropic-beta` header automatically whenever a request references
-    #'   an uploaded file.
     #' * Gemini files expire after 48 hours, and uploading waits until Gemini
     #'   finishes processing the file (which can take a while for large
     #'   video/audio), so the returned reference is always ready to use. The

@@ -80,12 +80,6 @@ parse_rfc3339 <- function(x) {
   as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")
 }
 
-has_uploaded_content <- function(turns) {
-  some(turns, function(turn) {
-    some(turn@contents, function(content) S7_inherits(content, ContentUploaded))
-  })
-}
-
 form_file <- function(path, type = type) {
   curl::form_file(path, type = type)
 }

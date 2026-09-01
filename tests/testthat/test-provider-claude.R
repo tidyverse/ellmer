@@ -648,25 +648,6 @@ test_that("as_json() serializes uploaded file references", {
   )
 })
 
-test_that("chat_request() adds the files beta header when turns have uploads", {
-  provider <- chat_anthropic_test()$get_provider()
-  uploaded_turn <- UserTurn(list(ContentUploaded("file-1", "application/pdf")))
-  text_turn <- UserTurn(list(ContentText("hello")))
-
-  req <- chat_request(provider, test_model(), turns = list(uploaded_turn))
-  expect_equal(req$headers[["anthropic-beta"]], "files-api-2025-04-14")
-
-  req <- chat_request(provider, test_model(), turns = list(text_turn))
-  expect_equal(req$headers[["anthropic-beta"]], NULL)
-
-  # user-supplied beta headers aren't duplicated
-  provider2 <- chat_anthropic_test(
-    beta_headers = "files-api-2025-04-14"
-  )$get_provider()
-  req <- chat_request(provider2, test_model(), turns = list(uploaded_turn))
-  expect_equal(req$headers[["anthropic-beta"]], "files-api-2025-04-14")
-})
-
 test_that("value_turn() preserves unresolved Anthropic document slots", {
   provider <- chat_anthropic_test()$get_provider()
   turns <- list(UserTurn(list(
