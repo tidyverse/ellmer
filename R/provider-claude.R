@@ -816,10 +816,10 @@ method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(
   x,
   ...
 ) {
-  source <- if (!is.null(x@url)) {
-    list(type = "url", url = x@url)
+  if (!is.null(x@url)) {
+    source <- list(type = "url", url = x@url)
   } else {
-    list(type = "base64", media_type = x@type, data = x@data)
+    source <- list(type = "base64", media_type = x@type, data = x@data)
   }
   list(type = "document", source = source)
 }
