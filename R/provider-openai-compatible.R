@@ -243,7 +243,7 @@ method(chat_params, ProviderOpenAICompatible) <- function(provider, params) {
       seed = "seed",
       stop = "stop_sequences",
       temperature = "temperature",
-      top_logprobs = "top_k",
+      top_k = "top_k",
       top_p = "top_p"
     )
   )

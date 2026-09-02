@@ -82,8 +82,7 @@ method(chat_params, ProviderDeepSeek) <- function(provider, params) {
       stop = "stop_sequences",
       temperature = "temperature",
       top_p = "top_p",
-      logprobs = "log_probs",
-      top_logprobs = "top_k"
+      logprobs = "log_probs"
     )
   )
 }
