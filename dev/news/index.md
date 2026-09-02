@@ -23,6 +23,22 @@
   [`claude_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_search.md),
   or `claude_tool_web_fetch(citations = TRUE)`
   ([\#1068](https://github.com/tidyverse/ellmer/issues/1068)).
+- `Chat` gains experimental `$file_upload()`, `$file_list()`,
+  `$file_get()`, `$file_download()`, and `$file_delete()` methods for
+  managing provider-hosted files with
+  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md),
+  [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md),
+  and
+  [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md):
+  upload a file once, then pass the returned reference to `$chat()`
+  instead of re-sending the file’s contents every turn. Uploads expire
+  after 48 hours by default; use `expires_in_h` to change this.
+  [`claude_file_upload()`](https://ellmer.tidyverse.org/dev/reference/claude_file_upload.md)
+  and friends and
+  [`google_upload()`](https://ellmer.tidyverse.org/dev/reference/google_upload.md)
+  are deprecated in favor of these
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1091](https://github.com/tidyverse/ellmer/issues/1091)).
 - `Chat` gains `$on_request_start()` and `$on_request_end()` callbacks
   that fire before and after each model request, including each round of
   the tool loop. `$on_request_start()` receives the turns about to be

@@ -62,6 +62,16 @@ A Chat object
 
 - [`Chat$token_count()`](#method-Chat-token_count)
 
+- [`Chat$file_upload()`](#method-Chat-file_upload)
+
+- [`Chat$file_list()`](#method-Chat-file_list)
+
+- [`Chat$file_get()`](#method-Chat-file_get)
+
+- [`Chat$file_download()`](#method-Chat-file_download)
+
+- [`Chat$file_delete()`](#method-Chat-file_delete)
+
 - [`Chat$last_turn()`](#method-Chat-last_turn)
 
 - [`Chat$chat()`](#method-Chat-chat)
@@ -368,6 +378,154 @@ endpoint.
 #### Returns
 
 The estimated number of input tokens.
+
+------------------------------------------------------------------------
+
+### `Chat$file_upload()`
+
+**\[experimental\]**
+
+Upload a file to the chat's provider, once, so later turns can reference
+it by id instead of re-sending its contents. Prefer this over
+[`content_pdf_file()`](https://ellmer.tidyverse.org/dev/reference/content_pdf_file.md)/[`content_image_file()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
+when a file is large or used across many turns.
+
+File management is supported by
+[`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md),
+[`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md),
+and
+[`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md);
+other providers error. Provider notes:
+
+- Gemini files always expire after 48 hours (so `expires_in_h` can't be
+  changed), and uploading waits until Gemini finishes processing the
+  file (which can take a while for large video/audio), so the returned
+  reference is always ready to use. The Files API isn't available on
+  Vertex AI; there, upload the file to a Cloud Storage bucket and
+  reference it with
+  `ContentUploaded(uri = "gs://bucket/object", mime_type = ...)`.
+
+- An OpenAI upload can also be referenced from a
+  [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
+  chat pointed at OpenAI's Chat Completions API, except for images,
+  which that API can't reference by id.
+
+#### Usage
+
+    Chat$file_upload(path, mime_type = NULL, expires_in_h = 48)
+
+#### Arguments
+
+- `path`:
+
+  Path to a file to upload.
+
+- `mime_type`:
+
+  MIME type of the file. If not supplied, it's guessed from the file
+  extension.
+
+- `expires_in_h`:
+
+  Number of hours until the provider deletes the file. Defaults to 48.
+  Anthropic accepts 1 to 2160 (90 days), OpenAI 1 to 720 (30 days), and
+  both accept `Inf` to keep the file until you delete it yourself.
+  Gemini always uses 48 and can't be changed.
+
+#### Returns
+
+A
+[ContentUploaded](https://ellmer.tidyverse.org/dev/reference/Content.md)
+that can be passed to `$chat()` and friends in place of the file itself.
+
+------------------------------------------------------------------------
+
+### `Chat$file_list()`
+
+**\[experimental\]**
+
+List files previously uploaded to the chat's provider.
+
+#### Usage
+
+    Chat$file_list()
+
+#### Returns
+
+A data frame with one row per file: normalized columns (`id`,
+`filename`, `mime_type`, `size_bytes`, `created_at`, `expires_at`)
+first, then any provider-specific columns.
+
+------------------------------------------------------------------------
+
+### `Chat$file_get()`
+
+**\[experimental\]**
+
+Get metadata for a file previously uploaded to the chat's provider.
+
+#### Usage
+
+    Chat$file_get(id)
+
+#### Arguments
+
+- `id`:
+
+  A file id string, or a
+  [ContentUploaded](https://ellmer.tidyverse.org/dev/reference/Content.md).
+
+#### Returns
+
+A named list of file metadata.
+
+------------------------------------------------------------------------
+
+### `Chat$file_download()`
+
+**\[experimental\]**
+
+Download a file from the chat's provider, writing it to `path`. Note
+that providers only serve back model-generated files (e.g. batch
+outputs); files you uploaded yourself can't be re-downloaded.
+
+#### Usage
+
+    Chat$file_download(id, path)
+
+#### Arguments
+
+- `id`:
+
+  A file id string, or a
+  [ContentUploaded](https://ellmer.tidyverse.org/dev/reference/Content.md).
+
+- `path`:
+
+  Path to write the downloaded file to.
+
+#### Returns
+
+`path`, invisibly.
+
+------------------------------------------------------------------------
+
+### `Chat$file_delete()`
+
+**\[experimental\]**
+
+Delete a file previously uploaded to the chat's provider.
+
+#### Usage
+
+    Chat$file_delete(id)
+
+#### Arguments
+
+- `id`:
+
+  A file id string, or a
+  [ContentUploaded](https://ellmer.tidyverse.org/dev/reference/Content.md).
 
 ------------------------------------------------------------------------
 
