@@ -436,7 +436,7 @@ method(contents_markdown, ContentJson) <- function(content) {
 #' @rdname Content
 #' @export
 #' @param uri The URI or provider-assigned id of the uploaded file.
-#' @param mime_type MIME type of the file.
+#' @param mime_type MIME type of the file or document.
 #' @param provider Lowercase name of the provider the file was uploaded to
 #'   (e.g. `"openai"`, `"anthropic"`, `"google"`), or `""` when unknown. Used
 #'   to detect a file uploaded to one provider being used with another.
@@ -540,7 +540,6 @@ method(format, ContentPDF) <- function(x, ...) {
 }
 
 #' @rdname Content
-#' @param mime_type MIME type of the document.
 #' @export
 ContentDocument <- new_class(
   "ContentDocument",

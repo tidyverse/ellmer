@@ -23,7 +23,7 @@ google_upload(
 or \code{NULL}, the default, to use ambient credentials. See above for details.}
 
 \item{mime_type}{Optionally, specify the mime type of the file.
-If not specified, will be guesses from the file extension.}
+If not specified, will be guessed from the file extension.}
 }
 \value{
 A \verb{<ContentUploaded>} object that can be passed to \verb{$chat()}.

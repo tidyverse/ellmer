@@ -371,8 +371,11 @@ extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
 
 Upload a file to the chat's provider, once, so later turns can
 reference it by id instead of re-sending its contents. Prefer this
-over \code{\link[=content_pdf_file]{content_pdf_file()}}/\code{\link[=content_image_file]{content_image_file()}} when a file is large
-or used across many turns.
+over \code{\link[=content_pdf_file]{content_pdf_file()}}, \code{\link[=content_image_file]{content_image_file()}}, or
+\code{\link[=content_document_file]{content_document_file()}} when a file is large or used across many
+turns. Otherwise, sending the file inline is simpler: it works with
+every provider, and there's nothing stored on the provider's side to
+expire or clean up.
 
 File management is supported by \code{\link[=chat_openai]{chat_openai()}}, \code{\link[=chat_anthropic]{chat_anthropic()}},
 and \code{\link[=chat_google_gemini]{chat_google_gemini()}}; other providers error. Provider notes:

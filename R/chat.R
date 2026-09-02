@@ -278,8 +278,11 @@ Chat <- R6::R6Class(
     #'
     #' Upload a file to the chat's provider, once, so later turns can
     #' reference it by id instead of re-sending its contents. Prefer this
-    #' over [content_pdf_file()]/[content_image_file()] when a file is large
-    #' or used across many turns.
+    #' over [content_pdf_file()], [content_image_file()], or
+    #' [content_document_file()] when a file is large or used across many
+    #' turns. Otherwise, sending the file inline is simpler: it works with
+    #' every provider, and there's nothing stored on the provider's side to
+    #' expire or clean up.
     #'
     #' File management is supported by [chat_openai()], [chat_anthropic()],
     #' and [chat_google_gemini()]; other providers error. Provider notes:

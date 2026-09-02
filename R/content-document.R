@@ -11,6 +11,11 @@
 #' for the provider you are using. For PDFs, use [content_pdf_file()] or
 #' [content_pdf_url()] instead.
 #'
+#' Both functions embed the document's contents in every request, so for a
+#' large document, or one you'll refer to across several turns, prefer
+#' `chat$file_upload()`. It uploads the file once and later turns reference
+#' it by id.
+#'
 #' @param path,url Path or URL to a document.
 #' @param mime_type MIME type of the document. The default, `"auto"`,
 #'   infers the type from the file extension; unknown extensions are

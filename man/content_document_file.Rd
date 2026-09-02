@@ -29,4 +29,9 @@ used for local files.
 Not all providers support all document types, so check the documentation
 for the provider you are using. For PDFs, use \code{\link[=content_pdf_file]{content_pdf_file()}} or
 \code{\link[=content_pdf_url]{content_pdf_url()}} instead.
+
+Both functions embed the document's contents in every request, so for a
+large document, or one you'll refer to across several turns, prefer
+\code{chat$file_upload()}. It uploads the file once and later turns reference
+it by id.
 }

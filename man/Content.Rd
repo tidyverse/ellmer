@@ -109,7 +109,7 @@ automatically added by \pkg{ellmer} when evaluating the tool call.}
 
 \item{uri}{The URI or provider-assigned id of the uploaded file.}
 
-\item{mime_type}{MIME type of the file.}
+\item{mime_type}{MIME type of the file or document.}
 
 \item{provider}{Lowercase name of the provider the file was uploaded to
 (e.g. \code{"openai"}, \code{"anthropic"}, \code{"google"}), or \code{""} when unknown. Used
@@ -118,8 +118,6 @@ to detect a file uploaded to one provider being used with another.}
 \item{thinking}{The text of the thinking output.}
 
 \item{filename}{File name, used to identify the PDF.}
-
-\item{mime_type}{MIME type of the document.}
 }
 \value{
 S7 objects that all inherit from \code{Content}
