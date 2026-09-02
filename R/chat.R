@@ -569,58 +569,36 @@ Chat <- R6::R6Class(
       private$callback_on_tool_result$add(callback)
     },
 
-    #' @description Register a callback that fires at the **start of each model
-    #'   request** in the tool loop, i.e. immediately before the request is sent
-    #'   to the model. It fires once per request (including the first), whether
-    #'   or not the request involves tools.
+    #' @description Register a callback that fires before each model request,
+    #'   including each round of the tool loop. Use it to inspect the outgoing
+    #'   request, or to compact the conversation with `$set_turns()`.
     #'
-    #'   The callback receives `turns`, the **complete outgoing request**: the
-    #'   accumulated history *plus* the pending turn about to be sent. It is here
-    #'   so you can *inspect* that payload -- for example, to measure its size
-    #'   (including a large pending tool result) and decide whether to compact.
+    #'   `turns` includes the pending turn about to be sent, which `$set_turns()`
+    #'   re-appends automatically. So compact with
+    #'   `chat$set_turns(compact(chat$get_turns()))` rather than passing `turns`
+    #'   back to `$set_turns()`, which would duplicate the pending turn.
     #'
-    #'   To *rewrite* the conversation, use `$set_turns()` / `$get_turns()`, which
-    #'   operate on the **history only**: ellmer preserves and re-appends the
-    #'   pending turn for you. The canonical idiom for mid-loop compaction is
-    #'   `chat$set_turns(compact(chat$get_turns()))`, called from inside the
-    #'   callback (a supported, documented operation). Do **not** pass `turns`
-    #'   straight back into `$set_turns()` -- because `set_turns()` sets the
-    #'   history and ellmer then re-appends the pending turn, that would duplicate
-    #'   the pending turn in the outgoing request.
-    #'
-    #' @param callback A function called with a single argument `turns`: the
-    #'   complete list of turns about to be sent -- the history plus the pending
-    #'   turn (the new user turn on the first request, or the synthesized
-    #'   tool-result turn on later ones). Called for its side effects; the return
-    #'   value is ignored. With `$chat_async()` / `$stream_async()` the callback
-    #'   may return a promise.
+    #' @param callback A function called with a single argument `turns`, the
+    #'   list of turns about to be sent. The return value is ignored, but may be
+    #'   a promise when used with `$chat_async()` or `$stream_async()`.
     #'
     #' @return A function that can be called to remove the callback.
     on_request_start = function(callback) {
       private$callback_on_request_start$add(callback)
     },
 
-    #' @description Register a callback that fires at the **end of each model
-    #'   request** in the tool loop, i.e. after the model's response turn is
-    #'   received and before any tool calls it contains are executed. It is the
-    #'   counterpart to `$on_request_start()` and is useful for per-request
-    #'   latency / cost tracking and for observing tool-call requests before they
+    #' @description Register a callback that fires after each model request,
+    #'   before any tool calls in the response are executed. Use it to track
+    #'   latency or cost per request, or to observe tool requests before they
     #'   run.
     #'
-    #'   It fires after every request that completes or is cancelled. If a request
-    #'   is cancelled or interrupted the callback still fires, but `turn` may be an
-    #'   [AssistantPartialTurn] whose `@tokens` and `@cost` are `NA` (only
-    #'   `@duration` is populated); guard cost / latency accounting with
-    #'   `S7::S7_inherits(turn, AssistantPartialTurn)` if that matters to you. A
-    #'   request that *errors*, however, propagates the error and does **not** fire
-    #'   `$on_request_end()`, so it is not a reliable cleanup hook -- wrap your
-    #'   `$chat()` call if you need something to run no matter what.
+    #'   If the request is cancelled, `turn` is an [AssistantPartialTurn] with
+    #'   `NA` tokens and cost. If the request errors, the callback does not fire.
     #'
-    #' @param callback A function called with a single argument `turn`: the
-    #'   assistant turn just returned by the model (an [AssistantPartialTurn] on a
-    #'   cancelled request). Called for its side effects; the return value is
-    #'   ignored. With `$chat_async()` / `$stream_async()` the callback may return
-    #'   a promise.
+    #' @param callback A function called with a single argument `turn`, the
+    #'   assistant turn just returned by the model. The return value is ignored,
+    #'   but may be a promise when used with `$chat_async()` or
+    #'   `$stream_async()`.
     #'
     #' @return A function that can be called to remove the callback.
     on_request_end = function(callback) {
