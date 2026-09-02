@@ -22,40 +22,39 @@ local_tool_context(context, .frame = parent.frame())
 \code{parent.frame()} (the calling function's frame).}
 }
 \value{
-\code{tool_context()} returns the current \code{ellmer_tool_context} object
-(a classed list with fields \verb{$request}, \verb{$turns}).
+\code{tool_context()} returns the current \code{ellmer_tool_context} object (a
+classed list with fields \verb{$request}, \verb{$turns}).
 
 \code{with_tool_context()} returns the value of \code{code}.
 
 \code{local_tool_context()} returns \code{context} invisibly.
 }
 \description{
-When an ellmer tool is called by an LLM, \code{tool_context()} returns a
-context object with two fields:
+When an ellmer tool is called by an LLM, \code{tool_context()} returns a context
+object with two fields:
 \itemize{
-\item \verb{$request} — the \link{ContentToolRequest} for this call, with sub-fields
+\item \verb{$request}: the \link{ContentToolRequest} for this call, with sub-fields
 \verb{@name}, \verb{@id}, \verb{@arguments}, and \verb{@tool}.
-\item \verb{$turns} — an eager snapshot of the conversation history (list of \link{Turn}
-objects), including the system prompt (if any) as the first turn, up to
-and including the assistant turn that issued this tool request. Sibling
-tool results from the same turn are not included (they are appended after
-the current tool loop finishes).
+\item \verb{$turns}: an eager snapshot of the conversation history (list of \link{Turn}
+objects), including the system prompt (if any) as the first turn, up to and
+including the assistant turn that issued this tool request. Sibling tool
+results from the same turn are not included (they are appended after the
+current tool loop finishes).
 }
 
-\code{tool_context()} aborts with class
-\code{ellmer_error_tool_context_unavailable} if the stack is empty, which
-happens in two situations:
+\code{tool_context()} aborts with class \code{ellmer_error_tool_context_unavailable} if
+the stack is empty, which happens in two situations:
 \enumerate{
 \item The function was called outside any tool invocation (e.g. in a test or
 top-level script without a live chat).
-\item The function was called after an \code{await()} in an async tool. The
-context frame closes at the first \code{await}, so you must capture the
-context before yielding: \code{ctx <- tool_context()}.
+\item The function was called after an \code{await()} in an async tool. The context
+frame closes at the first \code{await}, so you must capture the context before
+yielding: \code{ctx <- tool_context()}.
 }
 
 The \code{with_tool_context()} and \code{local_tool_context()} helpers are useful for
-testing a tool function that calls \code{tool_context()} outside a live chat.
-They temporarily make a supplied context available while test code runs.
+testing a tool function that calls \code{tool_context()} outside a live chat. They
+temporarily make a supplied context available while test code runs.
 }
 \examples{
 # Log the id of the request that triggered this tool call

@@ -271,9 +271,9 @@ report_tool <- tool(
 )
 ```
 
-**Async tools:** in an async tool, `tool_context()` is only valid during the
-synchronous prefix of the function — before the first `await()`. Capture it at
-the top of your tool body:
+In an async tool, `tool_context()` is only valid during the synchronous prefix
+of the function — in other words, before the first `await()`. Capture it at the
+top of your tool body:
 
 ```{r}
 #| eval: false

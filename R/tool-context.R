@@ -4,33 +4,32 @@ NULL
 #' Access the current tool context
 #'
 #' @description
-#' When an ellmer tool is called by an LLM, `tool_context()` returns a
-#' context object with two fields:
+#' When an ellmer tool is called by an LLM, `tool_context()` returns a context
+#' object with two fields:
 #'
-#' - `$request` — the [ContentToolRequest] for this call, with sub-fields
+#' - `$request`: the [ContentToolRequest] for this call, with sub-fields
 #'   `@name`, `@id`, `@arguments`, and `@tool`.
-#' - `$turns` — an eager snapshot of the conversation history (list of [Turn]
-#'   objects), including the system prompt (if any) as the first turn, up to
-#'   and including the assistant turn that issued this tool request. Sibling
-#'   tool results from the same turn are not included (they are appended after
-#'   the current tool loop finishes).
+#' - `$turns`: an eager snapshot of the conversation history (list of [Turn]
+#'   objects), including the system prompt (if any) as the first turn, up to and
+#'   including the assistant turn that issued this tool request. Sibling tool
+#'   results from the same turn are not included (they are appended after the
+#'   current tool loop finishes).
 #'
-#' `tool_context()` aborts with class
-#' `ellmer_error_tool_context_unavailable` if the stack is empty, which
-#' happens in two situations:
+#' `tool_context()` aborts with class `ellmer_error_tool_context_unavailable` if
+#' the stack is empty, which happens in two situations:
 #'
 #' 1. The function was called outside any tool invocation (e.g. in a test or
 #'    top-level script without a live chat).
-#' 2. The function was called after an `await()` in an async tool. The
-#'    context frame closes at the first `await`, so you must capture the
-#'    context before yielding: `ctx <- tool_context()`.
+#' 2. The function was called after an `await()` in an async tool. The context
+#'    frame closes at the first `await`, so you must capture the context before
+#'    yielding: `ctx <- tool_context()`.
 #'
 #' The `with_tool_context()` and `local_tool_context()` helpers are useful for
-#' testing a tool function that calls `tool_context()` outside a live chat.
-#' They temporarily make a supplied context available while test code runs.
+#' testing a tool function that calls `tool_context()` outside a live chat. They
+#' temporarily make a supplied context available while test code runs.
 #'
-#' @return `tool_context()` returns the current `ellmer_tool_context` object
-#'   (a classed list with fields `$request`, `$turns`).
+#' @return `tool_context()` returns the current `ellmer_tool_context` object (a
+#'   classed list with fields `$request`, `$turns`).
 #'
 #'   `with_tool_context()` returns the value of `code`.
 #'
