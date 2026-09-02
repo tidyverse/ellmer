@@ -443,14 +443,31 @@ Chat <- R6::R6Class(
     #'   that yields strings. While iterating, the generator will block while
     #'   waiting for more content from the chatbot.
     #' @param ... The input to send to the chatbot. Can be strings or images.
+    #' @param type An optional `type_()` structured-data specification. When
+    #'   supplied, registered tools are suppressed and the completed assistant
+    #'   turn stores a `ContentJson`. The provider constrains the response to
+    #'   JSON. With `stream = "text"` (the default), structured stream chunks
+    #'   are raw JSON text; with `stream = "content"`, they are [Content]
+    #'   objects. Streaming structured output requires native provider support;
+    #'   tool-based fallback is not supported.
     #' @param stream Whether the stream should yield only `"text"` or ellmer's
     #'   rich content types. When `stream = "content"`, `stream()` yields
     #'   [Content] objects.
     #' @param controller An optional [stream_controller()] used to cancel the
     #'   stream from outside the iteration loop.
-    stream = function(..., stream = c("text", "content"), controller = NULL) {
+    stream = function(
+      ...,
+      type = NULL,
+      stream = c("text", "content"),
+      controller = NULL
+    ) {
       controller <- as_controller(controller)
       finish_tools <- private$complete_dangling_tool_requests()
+
+      if (!is.null(type)) {
+        needs_wrapper <- type_needs_wrapper(type, private$provider)
+        type <- wrap_type_if_needed(type, needs_wrapper)
+      }
 
       turn <- user_turn(!!!finish_tools, ...)
       stream <- arg_match(stream)
@@ -458,6 +475,7 @@ Chat <- R6::R6Class(
         turn,
         stream = TRUE,
         echo = "none",
+        type = type,
         yield_as_content = stream == "content",
         controller = controller
       )
@@ -468,6 +486,13 @@ Chat <- R6::R6Class(
     #'   generator](https://coro.r-lib.org/reference/async_generator.html) that
     #'   yields string promises.
     #' @param ... The input to send to the chatbot. Can be strings or images.
+    #' @param type An optional `type_()` structured-data specification. When
+    #'   supplied, registered tools are suppressed and the completed assistant
+    #'   turn stores a `ContentJson`. The provider constrains the response to
+    #'   JSON. With `stream = "text"` (the default), structured stream chunks
+    #'   are raw JSON text; with `stream = "content"`, they are [Content]
+    #'   objects. Streaming structured output requires native provider support;
+    #'   tool-based fallback is not supported.
     #' @param tool_mode Whether tools should be invoked one-at-a-time
     #'   (`"sequential"`) or concurrently (`"concurrent"`). Sequential mode is
     #'   best for interactive applications, especially when a tool may involve
@@ -480,12 +505,18 @@ Chat <- R6::R6Class(
     #'   stream from outside the iteration loop.
     stream_async = function(
       ...,
+      type = NULL,
       tool_mode = c("concurrent", "sequential"),
       stream = c("text", "content"),
       controller = NULL
     ) {
       controller <- as_controller(controller)
       finish_tools <- private$complete_dangling_tool_requests()
+
+      if (!is.null(type)) {
+        needs_wrapper <- type_needs_wrapper(type, private$provider)
+        type <- wrap_type_if_needed(type, needs_wrapper)
+      }
 
       turn <- user_turn(!!!finish_tools, ...)
       tool_mode <- arg_match(tool_mode)
@@ -495,6 +526,7 @@ Chat <- R6::R6Class(
         stream = TRUE,
         echo = "none",
         tool_mode = tool_mode,
+        type = type,
         yield_as_content = stream == "content",
         controller = controller
       )
@@ -626,9 +658,21 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
+      type = NULL,
       yield_as_content = FALSE,
       controller = NULL
     ) {
+      if (
+        !is.null(type) &&
+          uses_tool_structured_output(private$provider, private$model, type)
+      ) {
+        cli::cli_abort(c(
+          "Can't stream structured output with {private$provider@name} model {.val {private$model@name}}.",
+          i = "Streaming requires native structured output, but this provider and model fall back to tool calling.",
+          i = "Use `$chat_structured()` instead."
+        ))
+      }
+
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
@@ -648,6 +692,7 @@ Chat <- R6::R6Class(
           user_turn,
           stream = stream,
           echo = echo,
+          type = type,
           yield_as_content = yield_as_content,
           controller = controller,
           otel_span = agent_span
@@ -705,10 +750,22 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
+      type = NULL,
       tool_mode = "concurrent",
       yield_as_content = FALSE,
       controller = NULL
     ) {
+      if (
+        !is.null(type) &&
+          uses_tool_structured_output(private$provider, private$model, type)
+      ) {
+        cli::cli_abort(c(
+          "Can't stream structured output with {private$provider@name} model {.val {private$model@name}}.",
+          i = "Streaming requires native structured output, but this provider and model fall back to tool calling.",
+          i = "Use `$chat_structured()` instead."
+        ))
+      }
+
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
@@ -728,6 +785,7 @@ Chat <- R6::R6Class(
           user_turn,
           stream = stream,
           echo = echo,
+          type = type,
           yield_as_content = yield_as_content,
           controller = controller,
           otel_span = agent_span
@@ -935,7 +993,7 @@ Chat <- R6::R6Class(
           emit(activity)
           emit("\n")
         }
-        if (!is_partial_turn(turn) && any_text) {
+        if (!is_partial_turn(turn) && any_text && is.null(type)) {
           if (!endsWith(turn@text, "\n")) {
             if (yield_as_content) {
               yield(ContentText("\n"))
@@ -1097,7 +1155,7 @@ Chat <- R6::R6Class(
           emit(activity)
           emit("\n")
         }
-        if (!is_partial_turn(turn) && any_text) {
+        if (!is_partial_turn(turn) && any_text && is.null(type)) {
           if (!endsWith(turn@text, "\n")) {
             if (yield_as_content) {
               yield(ContentText("\n"))
