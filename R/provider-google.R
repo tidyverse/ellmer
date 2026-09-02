@@ -645,7 +645,7 @@ method(as_json, list(ProviderGoogleGemini, ContentDocument)) <- function(
   x,
   ...
 ) {
-  if (x@mime_type %in% binary_document_mime_types) {
+  if (!is_text_document(x@mime_type)) {
     cli::cli_abort(c(
       "Gemini doesn't support {.str {x@mime_type}} documents.",
       i = "Convert the document to plain text or PDF first."

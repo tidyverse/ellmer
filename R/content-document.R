@@ -79,10 +79,12 @@ content_document_url <- function(url, mime_type = NULL) {
   }
 }
 
-# Binary formats that only OpenAI can extract text from
-binary_document_mime_types <- unname(
-  mime_types[c("docx", "xlsx", "rtf", "doc", "odt", "xls")]
-)
+# Text-based documents can be sent as text to providers that can't extract
+# text from binary formats like docx or pptx themselves
+is_text_document <- function(mime_type) {
+  grepl("^text/", mime_type) ||
+    mime_type %in% c("application/json", "application/xml")
+}
 
 check_not_pdf <- function(filename, mime_type, error_call = caller_env()) {
   # Strip any parameters (e.g. "; charset=binary") before comparing

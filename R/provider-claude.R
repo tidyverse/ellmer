@@ -832,9 +832,7 @@ method(as_json, list(ProviderAnthropic, ContentDocument)) <- function(
   # Anthropic's document block has a single text source type whose media_type
   # must literally be "text/plain", so any text-based document is coerced to
   # that; the title is then the only hint about what the model is looking at
-  is_text <- grepl("^text/", x@mime_type) ||
-    x@mime_type %in% c("application/json", "application/xml")
-  if (!is_text) {
+  if (!is_text_document(x@mime_type)) {
     cli::cli_abort(c(
       "Anthropic doesn't support {.str {x@mime_type}} documents.",
       i = "Convert the document to plain text or PDF first."
