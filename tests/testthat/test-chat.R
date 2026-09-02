@@ -506,22 +506,21 @@ test_that("streaming structured output rejects unsupported providers and types",
         async = async
       )
     })
-    # chat_aws_bedrock_test() skips when AWS credentials aren't available;
-    # catch that here so the rest of the test still runs
-    bedrock_chat <- tryCatch(
-      chat_aws_bedrock_test(),
-      skip = function(cnd) NULL
+    # Built without credentials so the case runs everywhere; the error is
+    # raised before any request is made
+    bedrock_chat <- Chat$new(
+      provider = ProviderAWSBedrock(
+        name = "AWS/Bedrock",
+        base_url = "https://bedrock-runtime.us-east-1.amazonaws.com",
+        region = "us-east-1",
+        creds_cache = list(),
+        cache_point = "none"
+      ),
+      model = Model(name = "us.anthropic.claude-haiku-4-5-20251001-v1:0")
     )
-    if (!is.null(bedrock_chat)) {
-      expect_snapshot(error = TRUE, {
-        collect_stream(
-          bedrock_chat,
-          "Extract John",
-          type = person,
-          async = async
-        )
-      })
-    }
+    expect_snapshot(error = TRUE, {
+      collect_stream(bedrock_chat, "Extract John", type = person, async = async)
+    })
   }
 
   run_case(FALSE)

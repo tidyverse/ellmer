@@ -50,6 +50,16 @@
 ---
 
     Code
+      collect_stream(bedrock_chat, "Extract John", type = person, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with AWS/Bedrock model "us.anthropic.claude-haiku-4-5-20251001-v1:0".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
       chat <- chat_anthropic_test(model = "claude-3-haiku-20240307")
       collect_stream(chat, "Extract John, age 15", type = person, async = async)
     Condition
@@ -77,6 +87,16 @@
     Condition
       Error:
       ! Can't stream structured output with Anthropic model "claude-sonnet-5".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      collect_stream(bedrock_chat, "Extract John", type = person, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with AWS/Bedrock model "us.anthropic.claude-haiku-4-5-20251001-v1:0".
       i Streaming requires native structured output, but this provider and model fall back to tool calling.
       i Use `$chat_structured()` instead.
 
