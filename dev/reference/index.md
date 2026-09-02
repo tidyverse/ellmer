@@ -152,6 +152,10 @@ providers are especially welcome.
   Define a tool
 - [`tool_annotations()`](https://ellmer.tidyverse.org/dev/reference/tool_annotations.md)
   : Tool annotations
+- [`tool_context()`](https://ellmer.tidyverse.org/dev/reference/tool_context.md)
+  [`with_tool_context()`](https://ellmer.tidyverse.org/dev/reference/tool_context.md)
+  [`local_tool_context()`](https://ellmer.tidyverse.org/dev/reference/tool_context.md)
+  : Access the current tool context
 - [`tool_reject()`](https://ellmer.tidyverse.org/dev/reference/tool_reject.md)
   : Reject a tool call
 - [`type_boolean()`](https://ellmer.tidyverse.org/dev/reference/type_boolean.md)

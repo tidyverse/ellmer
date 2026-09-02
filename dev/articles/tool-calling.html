@@ -352,6 +352,126 @@ function. For example, here’s a simple tool to screenshot a website:</p>
 <span><span class="co">#&gt; Overall, the design communicates clarity, ease of use, and a focus on</span></span>
 <span><span class="co">#&gt; modern data science tools.</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="tool-context">Tool context<a class="anchor" aria-label="anchor" href="#tool-context"></a>
+</h3>
+<p>A tool sometimes needs to know a little about the call it’s part of —
+the tool request that triggered it, or the conversation so far — without
+that information being part of its arguments. Inside a tool body,
+<code><a href="../reference/tool_context.html">tool_context()</a></code> returns a read-only context object with two
+fields:</p>
+<ul>
+<li>
+<code>$request</code>: the <code>ContentToolRequest</code> for this
+call, including <code>@id</code>, <code>@name</code>, and
+<code>@arguments</code>.</li>
+<li>
+<code>$turns</code>: a snapshot of the conversation history up to
+and including the assistant turn that issued this request (a list of
+<code>Turn</code> objects).</li>
+</ul>
+<p>This is handy for logging or correlating tool calls with the request
+that produced them:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">report_tool</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">query</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">ctx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tool_context.html">tool_context</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli_alert_info</a></span><span class="op">(</span><span class="st">"Running report for request {ctx$request@id}"</span><span class="op">)</span></span>
+<span>    <span class="fu">run_report</span><span class="op">(</span><span class="va">query</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Run a report for the given query."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>query <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"The report query."</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>In an async tool, <code><a href="../reference/tool_context.html">tool_context()</a></code> is only valid during
+the synchronous prefix of the function — in other words, before the
+first <code>await()</code>. Capture it at the top of your tool body:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">my_async_tool</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="fu">coro</span><span class="fu">::</span><span class="fu"><a href="https://coro.r-lib.org/reference/async.html" class="external-link">async</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">query</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">ctx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tool_context.html">tool_context</a></span><span class="op">(</span><span class="op">)</span>          <span class="co"># capture before any await()</span></span>
+<span>    <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">await</span><span class="op">(</span><span class="fu">run_report_async</span><span class="op">(</span><span class="va">query</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli_alert_info</a></span><span class="op">(</span><span class="st">"Finished request {ctx$request@id}"</span><span class="op">)</span></span>
+<span>    <span class="va">result</span></span>
+<span>  <span class="op">}</span><span class="op">)</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Run a report asynchronously."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>query <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"The report query."</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="../reference/tool_context.html">tool_context()</a></code> errors with a clear message if called
+after an <code>await()</code> or outside a tool invocation. Built-in
+provider tools (such as <code><a href="../reference/claude_tool_web_search.html">claude_tool_web_search()</a></code>) run
+provider-side and do not support <code><a href="../reference/tool_context.html">tool_context()</a></code>; MCP tools
+do.</p>
+</div>
+<div class="section level3">
+<h3 id="sharing-state-across-tools">Sharing state across tools<a class="anchor" aria-label="anchor" href="#sharing-state-across-tools"></a>
+</h3>
+<p>Related tools may need to share private state that the model should
+never see — a database connection, an authenticated user, or a running
+tally. A clean way to organise this is to bundle the tools together as
+methods of an R6 class, with the shared state living in the object’s
+fields. Each tool reads and writes that state through <code>self</code>,
+and a <code>$tools()</code> method returns the ellmer tools.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Assistant</span> <span class="op">&lt;-</span> <span class="fu">R6</span><span class="fu">::</span><span class="kw"><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Assistant"</span>,</span>
+<span>  public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">user_email</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">private</span><span class="op">$</span><span class="va">user_email</span> <span class="op">&lt;-</span> <span class="va">user_email</span></span>
+<span>    <span class="op">}</span>,</span>
+<span></span>
+<span>    <span class="co"># Return the ellmer tools, each wrapping a bound method. `tool()` can't</span></span>
+<span>    <span class="co"># infer a name from `self$method`, so we pass `name` explicitly.</span></span>
+<span>    tools <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>          <span class="va">self</span><span class="op">$</span><span class="va">add_note</span>,</span>
+<span>          name <span class="op">=</span> <span class="st">"add_note"</span>,</span>
+<span>          description <span class="op">=</span> <span class="st">"Save a note for the current user."</span>,</span>
+<span>          arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"The note to save."</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>          <span class="va">self</span><span class="op">$</span><span class="va">list_notes</span>,</span>
+<span>          name <span class="op">=</span> <span class="st">"list_notes"</span>,</span>
+<span>          description <span class="op">=</span> <span class="st">"List the current user's saved notes."</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span>,</span>
+<span></span>
+<span>    add_note <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">text</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">private</span><span class="op">$</span><span class="va">notes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">private</span><span class="op">$</span><span class="va">notes</span>, <span class="va">text</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Saved. You now have %d note(s)."</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">private</span><span class="op">$</span><span class="va">notes</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">}</span>,</span>
+<span></span>
+<span>    list_notes <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">private</span><span class="op">$</span><span class="va">notes</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="st">"No notes yet."</span><span class="op">)</span></span>
+<span>      <span class="op">}</span></span>
+<span>      <span class="va">private</span><span class="op">$</span><span class="va">notes</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  private <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    user_email <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    notes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Create the object once, register its tools, and the state accumulates
+across turns and across <code>$chat()</code> calls — all without
+exposing <code>user_email</code> or the raw notes to the model:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">assistant</span> <span class="op">&lt;-</span> <span class="va">Assistant</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>user_email <span class="op">=</span> <span class="st">"hadley@posit.co"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tools</span><span class="op">(</span><span class="va">assistant</span><span class="op">$</span><span class="fu">tools</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Remember that I need to buy milk."</span><span class="op">)</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"What do I need to do?"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Inspect the state directly — this never passed through the model</span></span>
+<span><span class="va">assistant</span><span class="op">$</span><span class="fu">list_notes</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "buy milk"</span></span></code></pre></div>
+<p>Because the state lives in the object rather than in ellmer, you stay
+in control of how it’s created, inspected, and persisted.</p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -161,6 +161,13 @@
   to convert complex objects before returning
   ([@thisisnic](https://github.com/thisisnic),
   [\#858](https://github.com/tidyverse/ellmer/issues/858)).
+- [`tool_context()`](https://ellmer.tidyverse.org/dev/reference/tool_context.md)
+  lets a tool access its calling context — the `ContentToolRequest` and
+  the conversation history — during a tool call, with
+  [`with_tool_context()`](https://ellmer.tidyverse.org/dev/reference/tool_context.md)
+  and
+  [`local_tool_context()`](https://ellmer.tidyverse.org/dev/reference/tool_context.md)
+  for testing ([\#871](https://github.com/tidyverse/ellmer/issues/871)).
 
 ## ellmer 0.4.2
 

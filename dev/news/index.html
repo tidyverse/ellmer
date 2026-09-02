@@ -97,6 +97,8 @@
 <code>params(top_k = )</code> is no longer sent as <code>top_logprobs</code> for OpenAI-based providers (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1113" class="external-link">#1113</a>).</li>
 <li>
 <code><a href="../reference/tool.html">tool()</a></code> functions that return complex objects like data frames or lists now produce a deprecation warning. Tool functions should return a character vector, an atomic vector, a JSON string (from <code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code>), or a <code>Content</code> object. Use <code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code> to convert complex objects before returning (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/858" class="external-link">#858</a>).</li>
+<li>
+<code><a href="../reference/tool_context.html">tool_context()</a></code> lets a tool access its calling context — the <code>ContentToolRequest</code> and the conversation history — during a tool call, with <code><a href="../reference/tool_context.html">with_tool_context()</a></code> and <code><a href="../reference/tool_context.html">local_tool_context()</a></code> for testing (<a href="https://github.com/tidyverse/ellmer/issues/871" class="external-link">#871</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.2" id="ellmer-042">ellmer 0.4.2<a class="anchor" aria-label="anchor" href="#ellmer-042"></a></h2><p class="text-muted">CRAN release: 2026-07-13</p>
