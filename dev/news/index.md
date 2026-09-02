@@ -138,6 +138,9 @@
   future release; use the `Model` object instead
   ([@thisisnic](https://github.com/thisisnic),
   [\#1098](https://github.com/tidyverse/ellmer/issues/1098)).
+- `params(top_k = )` is no longer sent as `top_logprobs` for
+  OpenAI-based providers ([@thisisnic](https://github.com/thisisnic),
+  [\#1113](https://github.com/tidyverse/ellmer/issues/1113)).
 - [`tool()`](https://ellmer.tidyverse.org/dev/reference/tool.md)
   functions that return complex objects like data frames or lists now
   produce a deprecation warning. Tool functions should return a
