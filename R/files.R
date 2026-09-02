@@ -108,3 +108,79 @@ parse_rfc3339 <- function(x) {
 form_file <- function(path, type = type) {
   curl::form_file(path, type = type)
 }
+
+# Extension -> MIME type lookup shared by inline content helpers and
+# provider file uploads, so a given file gets the same type either way.
+guess_mime_type <- function(path, default = NULL, call = caller_env()) {
+  ext <- tolower(tools::file_ext(path))
+
+  if (has_name(mime_types, ext)) {
+    mime_types[[ext]]
+  } else if (!is.null(default)) {
+    default
+  } else {
+    cli::cli_abort(
+      c(
+        "x" = "Couldn't determine mime type for {.arg path} because it has an unknown file extension, {ext}.",
+        "i" = "Please supply the {.arg mime_type} manually."
+      ),
+      call = call
+    )
+  }
+}
+
+mime_types <- list(
+  # Images
+  jpg = "image/jpeg",
+  jpeg = "image/jpeg",
+  png = "image/png",
+  gif = "image/gif",
+  bmp = "image/bmp",
+  svg = "image/svg+xml",
+  webp = "image/webp",
+  tiff = "image/tiff",
+  ico = "image/x-icon",
+
+  # Documents
+  pdf = "application/pdf",
+  doc = "application/msword",
+  docx = "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  xls = "application/vnd.ms-excel",
+  xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  ppt = "application/vnd.ms-powerpoint",
+  pptx = "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  txt = "text/plain",
+  md = "text/markdown",
+  markdown = "text/markdown",
+  odt = "application/vnd.oasis.opendocument.text",
+  rtf = "application/rtf",
+
+  # Audio
+  mp3 = "audio/mpeg",
+  wav = "audio/wav",
+  ogg = "audio/ogg",
+  m4a = "audio/mp4",
+  flac = "audio/flac",
+  aac = "audio/aac",
+
+  # Video
+  mp4 = "video/mp4",
+  avi = "video/x-msvideo",
+  mkv = "video/x-matroska",
+  mov = "video/quicktime",
+  wmv = "video/x-ms-wmv",
+  webm = "video/webm",
+
+  # Web
+  html = "text/html",
+  htm = "text/html",
+  css = "text/css",
+  js = "application/javascript",
+  json = "application/json",
+  xml = "application/xml",
+
+  # Data
+  csv = "text/csv",
+  tsv = "text/tab-separated-values",
+  sql = "application/sql"
+)

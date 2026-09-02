@@ -1,3 +1,6 @@
+#' @include files.R
+NULL
+
 #' Encode documents for chat input
 #'
 #' @description
@@ -29,7 +32,7 @@ content_document_file <- function(path, mime_type = NULL) {
     cli::cli_abort("{.arg path} must be an existing file.")
   }
 
-  mime_type <- mime_type %||% document_mime_type(path)
+  mime_type <- mime_type %||% guess_mime_type(path, default = "text/plain")
   check_not_pdf(path, mime_type)
 
   ContentDocument(
@@ -56,7 +59,8 @@ content_document_url <- function(url, mime_type = NULL) {
     )
   } else {
     filename <- basename(sub("[?#].*$", "", url))
-    mime_type <- mime_type %||% document_mime_type(filename)
+    mime_type <- mime_type %||%
+      guess_mime_type(filename, default = "text/plain")
     check_not_pdf(filename, mime_type)
     if (tools::file_ext(filename) == "") {
       filename <- unique_document_name(mime_type)
@@ -75,41 +79,10 @@ content_document_url <- function(url, mime_type = NULL) {
   }
 }
 
-# A small curated set of extensions that the major providers document as
-# first-class document input. Anything else is assumed to be source code or
-# another text format and defaults to "text/plain"; binary formats must be
-# listed explicitly since that default would otherwise mislabel them.
-document_mime_types <- c(
-  txt = "text/plain",
-  md = "text/markdown",
-  markdown = "text/markdown",
-  csv = "text/csv",
-  tsv = "text/tab-separated-values",
-  json = "application/json",
-  html = "text/html",
-  htm = "text/html",
-  xml = "text/xml",
-  docx = "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  rtf = "application/rtf",
-  doc = "application/msword",
-  odt = "application/vnd.oasis.opendocument.text",
-  xls = "application/vnd.ms-excel"
-)
-
 # Binary formats that only OpenAI can extract text from
 binary_document_mime_types <- unname(
-  document_mime_types[c("docx", "xlsx", "rtf", "doc", "odt", "xls")]
+  mime_types[c("docx", "xlsx", "rtf", "doc", "odt", "xls")]
 )
-
-document_mime_type <- function(name) {
-  ext <- tolower(tools::file_ext(name))
-  if (has_name(document_mime_types, ext)) {
-    document_mime_types[[ext]]
-  } else {
-    "text/plain"
-  }
-}
 
 check_not_pdf <- function(filename, mime_type, error_call = caller_env()) {
   # Strip any parameters (e.g. "; charset=binary") before comparing
@@ -130,7 +103,7 @@ check_not_pdf <- function(filename, mime_type, error_call = caller_env()) {
 
 unique_document_name <- function(mime_type) {
   the$cur_document_id <- (the$cur_document_id %||% 0) + 1
-  ext <- names(document_mime_types)[match(mime_type, document_mime_types)]
+  ext <- names(mime_types)[match(mime_type, mime_types)]
   if (is.na(ext)) {
     ext <- "txt"
   }

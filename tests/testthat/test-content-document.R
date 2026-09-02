@@ -7,15 +7,27 @@ test_that("can create document from path", {
 })
 
 test_that("infers mime type from extension", {
-  expect_equal(document_mime_type("notes.md"), "text/markdown")
-  expect_equal(document_mime_type("data.json"), "application/json")
   expect_equal(
-    document_mime_type("report.DOCX"),
+    guess_mime_type("notes.md", default = "text/plain"),
+    "text/markdown"
+  )
+  expect_equal(
+    guess_mime_type("data.json", default = "text/plain"),
+    "application/json"
+  )
+  expect_equal(
+    guess_mime_type("report.DOCX", default = "text/plain"),
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   )
   # unknown extensions are assumed to be code/text
-  expect_equal(document_mime_type("script.R"), "text/plain")
-  expect_equal(document_mime_type("example.com"), "text/plain")
+  expect_equal(
+    guess_mime_type("script.R", default = "text/plain"),
+    "text/plain"
+  )
+  expect_equal(
+    guess_mime_type("example.com", default = "text/plain"),
+    "text/plain"
+  )
 })
 
 test_that("explicit mime_type overrides extension", {
