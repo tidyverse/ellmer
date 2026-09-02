@@ -6,16 +6,21 @@ method(file_upload, ProviderAnthropic) <- function(
   provider,
   path,
   mime_type = NULL,
+  expires_in_h = 48,
   ...
 ) {
-  check_string(path, allow_empty = FALSE)
-  if (!file.exists(path)) {
-    cli::cli_abort("{.arg path} must be an existing file.")
-  }
+  check_upload_path(path)
+  check_expires_in(expires_in_h, max = 90 * 24)
   mime_type <- mime_type %||% guess_mime_type(path)
 
   req <- anthropic_files_request(provider)
   req <- req_body_multipart(req, file = form_file(path, type = mime_type))
+  if (is.finite(expires_in_h)) {
+    req <- req_body_multipart(
+      req,
+      expires_in_seconds = hours_to_seconds(expires_in_h)
+    )
+  }
   resp <- req_perform(req)
   json <- resp_body_json(resp)
 
@@ -129,7 +134,7 @@ claude_file_upload <- function(
     "Chat$file_upload()"
   )
   provider <- anthropic_file_provider(base_url, beta_headers, credentials)
-  file_upload(provider, path)
+  file_upload(provider, path, expires_in_h = Inf)
 }
 
 #' @export

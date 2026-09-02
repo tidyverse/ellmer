@@ -7,6 +7,15 @@ test_that("file operations error on Vertex", {
   expect_snapshot(error = TRUE, file_upload(provider, "apples.pdf"))
 })
 
+test_that("file_upload() rejects expires_in_h other than 48 hours", {
+  provider <- chat_google_gemini_test()$get_provider()
+  path <- test_path("apples.pdf")
+  expect_snapshot(error = TRUE, {
+    file_upload(provider, path, expires_in_h = 1)
+    file_upload(provider, path, expires_in_h = Inf)
+  })
+})
+
 test_that("google_upload() is deprecated", {
   withr::local_options(lifecycle_verbosity = "warning")
   local_mocked_bindings(file_upload = function(...) invisible())

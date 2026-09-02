@@ -662,7 +662,13 @@ method(batch_submit, ProviderOpenAI) <- function(
 }
 
 # https://platform.openai.com/docs/api-reference/files/create
-openai_upload <- function(provider, path, purpose = "batch", mime_type = NULL) {
+openai_upload <- function(
+  provider,
+  path,
+  purpose = "batch",
+  mime_type = NULL,
+  expires_in_h = Inf
+) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/files")
   req <- req_body_multipart(
@@ -670,6 +676,13 @@ openai_upload <- function(provider, path, purpose = "batch", mime_type = NULL) {
     purpose = purpose,
     file = form_file(path, type = mime_type)
   )
+  if (is.finite(expires_in_h)) {
+    req <- req_body_multipart(
+      req,
+      `expires_after[anchor]` = "created_at",
+      `expires_after[seconds]` = hours_to_seconds(expires_in_h)
+    )
+  }
   req <- req_progress(req, "up")
 
   resp <- req_perform(req)
@@ -680,19 +693,19 @@ method(file_upload, ProviderOpenAI) <- function(
   provider,
   path,
   mime_type = NULL,
+  expires_in_h = 48,
   ...
 ) {
-  check_string(path, allow_empty = FALSE)
-  if (!file.exists(path)) {
-    cli::cli_abort("{.arg path} must be an existing file.")
-  }
+  check_upload_path(path)
+  check_expires_in(expires_in_h, max = 30 * 24)
   mime_type <- mime_type %||% guess_mime_type(path)
 
   json <- openai_upload(
     provider,
     path,
     purpose = "user_data",
-    mime_type = mime_type
+    mime_type = mime_type,
+    expires_in_h = expires_in_h
   )
 
   ContentUploaded(

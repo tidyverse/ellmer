@@ -274,11 +274,12 @@ Chat <- R6::R6Class(
     #' File management is supported by [chat_openai()], [chat_anthropic()],
     #' and [chat_google_gemini()]; other providers error. Provider notes:
     #'
-    #' * Gemini files expire after 48 hours, and uploading waits until Gemini
-    #'   finishes processing the file (which can take a while for large
-    #'   video/audio), so the returned reference is always ready to use. The
-    #'   Files API isn't available on Vertex AI; there, upload the file to a
-    #'   Cloud Storage bucket and reference it with
+    #' * Gemini files always expire after 48 hours (so `expires_in_h` can't be
+    #'   changed), and uploading waits until Gemini finishes processing the
+    #'   file (which can take a while for large video/audio), so the returned
+    #'   reference is always ready to use. The Files API isn't available on
+    #'   Vertex AI; there, upload the file to a Cloud Storage bucket and
+    #'   reference it with
     #'   `ContentUploaded(uri = "gs://bucket/object", mime_type = ...)`.
     #' * An OpenAI upload can also be referenced from a
     #'   [chat_openai_compatible()] chat pointed at OpenAI's Chat Completions
@@ -286,10 +287,23 @@ Chat <- R6::R6Class(
     #' @param path Path to a file to upload.
     #' @param mime_type MIME type of the file. If not supplied, it's guessed
     #'   from the file extension.
+    #' @param expires_in_h Number of hours until the provider deletes the
+    #'   file. Defaults to 48. Anthropic accepts 1 to 2160 (90 days), OpenAI
+    #'   1 to 720 (30 days), and both accept `Inf` to keep the file until you
+    #'   delete it yourself. Gemini always uses 48 and can't be changed.
     #' @return A [ContentUploaded] that can be passed to `$chat()` and
     #'   friends in place of the file itself.
-    file_upload = function(path, mime_type = NULL) {
-      file_upload(private$provider, path, mime_type = mime_type)
+    file_upload = function(
+      path,
+      mime_type = NULL,
+      expires_in_h = 48
+    ) {
+      file_upload(
+        private$provider,
+        path,
+        mime_type = mime_type,
+        expires_in_h = expires_in_h
+      )
     },
 
     #' @description

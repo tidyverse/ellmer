@@ -142,6 +142,7 @@ method(file_upload, ProviderPositAnthropic) <- function(
   provider,
   path,
   mime_type = NULL,
+  expires_in_h = 48,
   ...
 ) {
   no_file_support(provider)

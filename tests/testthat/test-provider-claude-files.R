@@ -3,6 +3,15 @@ test_that("file lifecycle works", {
   test_file_lifecycle(chat_anthropic_test)
 })
 
+test_that("file_upload() validates expires_in_h", {
+  provider <- chat_anthropic_test()$get_provider()
+  path <- test_path("apples.pdf")
+  expect_snapshot(error = TRUE, {
+    file_upload(provider, path, expires_in_h = 0.5)
+    file_upload(provider, path, expires_in_h = 91 * 24)
+  })
+})
+
 test_that("claude_file_upload() is deprecated", {
   withr::local_options(lifecycle_verbosity = "warning")
   local_mocked_bindings(file_upload = function(...) invisible())

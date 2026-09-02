@@ -83,6 +83,15 @@ test_that("file lifecycle works", {
   test_file_lifecycle(chat_openai_test)
 })
 
+test_that("file_upload() validates expires_in_h", {
+  provider <- chat_openai_test()$get_provider()
+  path <- test_path("apples.pdf")
+  expect_snapshot(error = TRUE, {
+    file_upload(provider, path, expires_in_h = 0.5)
+    file_upload(provider, path, expires_in_h = 31 * 24)
+  })
+})
+
 test_that("can match prices for some common models", {
   provider <- chat_openai_test()$get_provider()
 

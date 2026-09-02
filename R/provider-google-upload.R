@@ -157,12 +157,15 @@ method(file_upload, ProviderGoogleGemini) <- function(
   provider,
   path,
   mime_type = NULL,
+  expires_in_h = 48,
   ...
 ) {
   check_gemini_files_api(provider)
-  check_string(path, allow_empty = FALSE)
-  if (!file.exists(path)) {
-    cli::cli_abort("{.arg path} must be an existing file.")
+  check_upload_path(path)
+  if (!isTRUE(expires_in_h == 48)) {
+    cli::cli_abort(
+      "Gemini files always expire after 48 hours, so {.arg expires_in_h} must be 48."
+    )
   }
   mime_type <- mime_type %||% guess_mime_type(path)
 

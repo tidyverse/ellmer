@@ -375,11 +375,12 @@ or used across many turns.
 File management is supported by \code{\link[=chat_openai]{chat_openai()}}, \code{\link[=chat_anthropic]{chat_anthropic()}},
 and \code{\link[=chat_google_gemini]{chat_google_gemini()}}; other providers error. Provider notes:
 \itemize{
-\item Gemini files expire after 48 hours, and uploading waits until Gemini
-finishes processing the file (which can take a while for large
-video/audio), so the returned reference is always ready to use. The
-Files API isn't available on Vertex AI; there, upload the file to a
-Cloud Storage bucket and reference it with
+\item Gemini files always expire after 48 hours (so \code{expires_in_h} can't be
+changed), and uploading waits until Gemini finishes processing the
+file (which can take a while for large video/audio), so the returned
+reference is always ready to use. The Files API isn't available on
+Vertex AI; there, upload the file to a Cloud Storage bucket and
+reference it with
 \code{ContentUploaded(uri = "gs://bucket/object", mime_type = ...)}.
 \item An OpenAI upload can also be referenced from a
 \code{\link[=chat_openai_compatible]{chat_openai_compatible()}} chat pointed at OpenAI's Chat Completions
@@ -387,7 +388,7 @@ API, except for images, which that API can't reference by id.
 }
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
-    \preformatted{Chat$file_upload(path, mime_type = NULL)}
+    \preformatted{Chat$file_upload(path, mime_type = NULL, expires_in_h = 48)}
     \if{html}{\out{</div>}}
   }
   \subsection{Arguments}{
@@ -396,6 +397,10 @@ API, except for images, which that API can't reference by id.
       \item{\code{path}}{Path to a file to upload.}
       \item{\code{mime_type}}{MIME type of the file. If not supplied, it's guessed
 from the file extension.}
+      \item{\code{expires_in_h}}{Number of hours until the provider deletes the
+file. Defaults to 48. Anthropic accepts 1 to 2160 (90 days), OpenAI
+1 to 720 (30 days), and both accept \code{Inf} to keep the file until you
+delete it yourself. Gemini always uses 48 and can't be changed.}
     }
     \if{html}{\out{</div>}}
   }
