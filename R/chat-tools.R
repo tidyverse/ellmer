@@ -37,9 +37,7 @@ on_load({
     otel_span = NULL,
     tool_context = NULL
   ) {
-    if (is.null(tool_context)) {
-      tool_context <- new_tool_context
-    }
+    tool_context <- tool_context %||% new_tool_context
 
     tool_requests <- extract_tool_requests(turn)
 
@@ -91,9 +89,7 @@ on_load({
     otel_span = NULL,
     tool_context = NULL
   ) {
-    if (is.null(tool_context)) {
-      tool_context <- new_tool_context
-    }
+    tool_context <- tool_context %||% new_tool_context
 
     tool_requests <- extract_tool_requests(turn)
 
