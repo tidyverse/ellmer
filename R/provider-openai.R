@@ -777,18 +777,27 @@ method(file_get, ProviderOpenAI) <- function(provider, id, ...) {
   req <- req_url_path_append(req, "files", as_file_id(id))
   json <- resp_body_json(req_perform(req))
 
-  list(
-    id = json$id,
-    filename = json$filename,
-    mime_type = NA_character_,
-    size_bytes = as.numeric(json$bytes),
-    created_at = as.POSIXct(json$created_at, origin = "1970-01-01", tz = "UTC"),
-    expires_at = as.POSIXct(
-      json$expires_at %||% NA_real_,
-      origin = "1970-01-01",
-      tz = "UTC"
-    ),
-    purpose = json$purpose
+  # The OpenAI Files API doesn't report a mime type, so guess from the
+  # filename; an unknown extension gives "" which serializes as a document.
+  ContentUploaded(
+    uri = json$id,
+    mime_type = guess_mime_type(json$filename, default = ""),
+    provider = "openai",
+    extra = list(
+      filename = json$filename,
+      size_bytes = as.numeric(json$bytes),
+      created_at = as.POSIXct(
+        json$created_at,
+        origin = "1970-01-01",
+        tz = "UTC"
+      ),
+      expires_at = as.POSIXct(
+        json$expires_at %||% NA_real_,
+        origin = "1970-01-01",
+        tz = "UTC"
+      ),
+      purpose = json$purpose
+    )
   )
 }
 

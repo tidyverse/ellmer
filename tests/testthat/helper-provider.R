@@ -206,11 +206,17 @@ test_file_lifecycle <- function(chat_fun) {
   expect_s3_class(files$created_at, "POSIXct")
   expect_s3_class(files$expires_at, "POSIXct")
 
-  meta <- chat$file_get(upload)
-  expect_equal(meta$id, upload@uri)
-  expect_s3_class(meta$expires_at, "POSIXct")
+  file <- chat$file_get(upload@uri)
+  expect_s7_class(file, ContentUploaded)
+  expect_equal(file@uri, upload@uri)
+  expect_equal(file@mime_type, "application/pdf")
+  expect_s3_class(file@extra$expires_at, "POSIXct")
   expect_equal(
-    as.numeric(difftime(meta$expires_at, meta$created_at, units = "hours")),
+    as.numeric(difftime(
+      file@extra$expires_at,
+      file@extra$created_at,
+      units = "hours"
+    )),
     48,
     tolerance = 0.01
   )
