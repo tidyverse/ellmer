@@ -17,21 +17,19 @@
 #' it by id.
 #'
 #' @param path,url Path or URL to a document.
-#' @param mime_type MIME type of the document. The default, `"auto"`,
-#'   infers the type from the file extension; unknown extensions are
-#'   assumed to be plain text (e.g. code files).
+#' @param mime_type MIME type of the document. If not supplied, it's
+#'   inferred from the file extension; unknown extensions are assumed to be
+#'   plain text (e.g. code files).
 #' @return A `ContentDocument` object
 #' @export
-content_document_file <- function(path, mime_type = "auto") {
+content_document_file <- function(path, mime_type = NULL) {
   check_string(path, allow_empty = FALSE)
-  check_string(mime_type, allow_empty = FALSE)
+  check_string(mime_type, allow_empty = FALSE, allow_null = TRUE)
   if (!file.exists(path) || dir.exists(path)) {
     cli::cli_abort("{.arg path} must be an existing file.")
   }
 
-  if (mime_type == "auto") {
-    mime_type <- document_mime_type(path)
-  }
+  mime_type <- mime_type %||% document_mime_type(path)
   check_not_pdf(path, mime_type)
 
   ContentDocument(
@@ -43,9 +41,9 @@ content_document_file <- function(path, mime_type = "auto") {
 
 #' @rdname content_document_file
 #' @export
-content_document_url <- function(url, mime_type = "auto") {
+content_document_url <- function(url, mime_type = NULL) {
   check_string(url, allow_empty = FALSE)
-  check_string(mime_type, allow_empty = FALSE)
+  check_string(mime_type, allow_empty = FALSE, allow_null = TRUE)
 
   if (grepl("^data:", url)) {
     parsed <- parse_data_url(url)
@@ -58,9 +56,7 @@ content_document_url <- function(url, mime_type = "auto") {
     )
   } else {
     filename <- basename(sub("[?#].*$", "", url))
-    if (mime_type == "auto") {
-      mime_type <- document_mime_type(filename)
-    }
+    mime_type <- mime_type %||% document_mime_type(filename)
     check_not_pdf(filename, mime_type)
     if (tools::file_ext(filename) == "") {
       filename <- unique_document_name(mime_type)

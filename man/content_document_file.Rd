@@ -5,16 +5,16 @@
 \alias{content_document_url}
 \title{Encode documents for chat input}
 \usage{
-content_document_file(path, mime_type = "auto")
+content_document_file(path, mime_type = NULL)
 
-content_document_url(url, mime_type = "auto")
+content_document_url(url, mime_type = NULL)
 }
 \arguments{
 \item{path, url}{Path or URL to a document.}
 
-\item{mime_type}{MIME type of the document. The default, \code{"auto"},
-infers the type from the file extension; unknown extensions are
-assumed to be plain text (e.g. code files).}
+\item{mime_type}{MIME type of the document. If not supplied, it's
+inferred from the file extension; unknown extensions are assumed to be
+plain text (e.g. code files).}
 }
 \value{
 A \code{ContentDocument} object
