@@ -7,7 +7,14 @@ test_that("file operations error on Vertex", {
   expect_snapshot(error = TRUE, file_upload(provider, "apples.pdf"))
 })
 
-test_that("google_upload() works end-to-end", {
+test_that("google_upload() is deprecated", {
+  withr::local_options(lifecycle_verbosity = "warning")
+  local_mocked_bindings(file_upload = function(...) invisible())
+  expect_snapshot(. <- google_upload(test_path("apples.pdf")))
+})
+
+test_that("deprecated google_upload() still works end-to-end", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   vcr::local_cassette("google-upload")
   upload <- google_upload(test_path("apples.pdf"))
 

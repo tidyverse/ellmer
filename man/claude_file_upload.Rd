@@ -59,13 +59,11 @@ If you do need additional control, this argument takes a zero-argument function 
 \item{file_id}{ID of the file to get information about, download, or delete.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-These functions are superseded by the provider-neutral \link{Chat} methods
-\code{chat$file_upload()}, \code{chat$file_list()}, \code{chat$file_get()},
-\code{chat$file_download()}, and \code{chat$file_delete()}, which work across
-providers. They remain available for managing files without first
-creating a chat.
+These functions are deprecated in favour of the provider-neutral \link{Chat}
+methods: \code{chat$file_upload()}, \code{chat$file_list()}, \code{chat$file_get()},
+\code{chat$file_download()}, and \code{chat$file_delete()}.
 }
 \examples{
 \dontrun{

@@ -29,11 +29,10 @@ If not specified, will be guesses from the file extension.}
 A \verb{<ContentUploaded>} object that can be passed to \verb{$chat()}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-This function is superseded by the provider-neutral \link{Chat} method
-\code{chat$file_upload()}, which works across providers. It remains available
-for uploading a file without first creating a chat.
+This function is deprecated in favour of the provider-neutral \link{Chat}
+method \code{chat$file_upload()}.
 }
 \examples{
 \dontrun{
