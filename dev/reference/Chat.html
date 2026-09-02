@@ -130,6 +130,8 @@ its own.</p></dd>
 <li><p><a href="#method-Chat-set_tools"><code>Chat$set_tools()</code></a></p></li>
 <li><p><a href="#method-Chat-on_tool_request"><code>Chat$on_tool_request()</code></a></p></li>
 <li><p><a href="#method-Chat-on_tool_result"><code>Chat$on_tool_result()</code></a></p></li>
+<li><p><a href="#method-Chat-on_request_start"><code>Chat$on_request_start()</code></a></p></li>
+<li><p><a href="#method-Chat-on_request_end"><code>Chat$on_request_end()</code></a></p></li>
 <li><p><a href="#method-Chat-clone"><code>Chat$clone()</code></a></p></li>
 </ul></div><p></p><hr><a id="method-Chat-initialize"></a><div class="section">
 <h3 id="chat-new-"><code>Chat$new()</code><a class="anchor" aria-label="anchor" href="#chat-new-"></a></h3>
@@ -714,13 +716,67 @@ which must have <code>result</code> as its only argument.</p></dd>
 
 </div>
 
+<p></p><hr><a id="method-Chat-on_request_start"></a><div class="section">
+<h3 id="chat-on-request-start-"><code>Chat$on_request_start()</code><a class="anchor" aria-label="anchor" href="#chat-on-request-start-"></a></h3>
+<p>Register a callback that fires before each model request,
+including each round of the tool loop. Use it to inspect the outgoing
+request, or to compact the conversation with <code>$set_turns()</code>.</p>
+<p><code>turns</code> includes the pending turn about to be sent, which <code>$set_turns()</code>
+re-appends automatically. So compact with
+<code>chat$set_turns(compact(chat$get_turns()))</code> rather than passing <code>turns</code>
+back to <code>$set_turns()</code>, which would duplicate the pending turn.</p><div class="section">
+<h4 id="usage-28">Usage<a class="anchor" aria-label="anchor" href="#usage-28"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_request_start</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-22">Arguments<a class="anchor" aria-label="anchor" href="#arguments-22"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>callback</code></dt>
+<dd><p>A function called with a single argument <code>turns</code>, the
+list of turns about to be sent. The return value is ignored, but may be
+a promise when used with <code>$chat_async()</code> or <code>$stream_async()</code>.</p></dd>
+
+
+</dl><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns-5">Returns<a class="anchor" aria-label="anchor" href="#returns-5"></a></h4>
+<p>A function that can be called to remove the callback.</p>
+</div>
+
+</div>
+
+<p></p><hr><a id="method-Chat-on_request_end"></a><div class="section">
+<h3 id="chat-on-request-end-"><code>Chat$on_request_end()</code><a class="anchor" aria-label="anchor" href="#chat-on-request-end-"></a></h3>
+<p>Register a callback that fires after each model request,
+before any tool calls in the response are executed. Use it to track
+latency or cost per request, or to observe tool requests before they
+run.</p>
+<p>If the request is cancelled, <code>turn</code> is an <a href="Turn.html">AssistantPartialTurn</a> with
+<code>NA</code> tokens and cost. If the request errors, the callback does not fire.</p><div class="section">
+<h4 id="usage-29">Usage<a class="anchor" aria-label="anchor" href="#usage-29"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_request_end</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-23">Arguments<a class="anchor" aria-label="anchor" href="#arguments-23"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>callback</code></dt>
+<dd><p>A function called with a single argument <code>turn</code>, the
+assistant turn just returned by the model. The return value is ignored,
+but may be a promise when used with <code>$chat_async()</code> or
+<code>$stream_async()</code>.</p></dd>
+
+
+</dl><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns-6">Returns<a class="anchor" aria-label="anchor" href="#returns-6"></a></h4>
+<p>A function that can be called to remove the callback.</p>
+</div>
+
+</div>
+
 <p></p><hr><a id="method-Chat-clone"></a><div class="section">
 <h3 id="chat-clone-"><code>Chat$clone()</code><a class="anchor" aria-label="anchor" href="#chat-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-28">Usage<a class="anchor" aria-label="anchor" href="#usage-28"></a></h4>
+<h4 id="usage-30">Usage<a class="anchor" aria-label="anchor" href="#usage-30"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-22">Arguments<a class="anchor" aria-label="anchor" href="#arguments-22"></a></h4>
+<h4 id="arguments-24">Arguments<a class="anchor" aria-label="anchor" href="#arguments-24"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 

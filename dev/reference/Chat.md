@@ -90,6 +90,10 @@ A Chat object
 
 - [`Chat$on_tool_result()`](#method-Chat-on_tool_result)
 
+- [`Chat$on_request_start()`](#method-Chat-on_request_start)
+
+- [`Chat$on_request_end()`](#method-Chat-on_request_end)
+
 - [`Chat$clone()`](#method-Chat-clone)
 
 ------------------------------------------------------------------------
@@ -726,6 +730,64 @@ Register a callback for a tool result event.
 
   A function to be called when a tool result event occurs, which must
   have `result` as its only argument.
+
+#### Returns
+
+A function that can be called to remove the callback.
+
+------------------------------------------------------------------------
+
+### `Chat$on_request_start()`
+
+Register a callback that fires before each model request, including each
+round of the tool loop. Use it to inspect the outgoing request, or to
+compact the conversation with `$set_turns()`.
+
+`turns` includes the pending turn about to be sent, which `$set_turns()`
+re-appends automatically. So compact with
+`chat$set_turns(compact(chat$get_turns()))` rather than passing `turns`
+back to `$set_turns()`, which would duplicate the pending turn.
+
+#### Usage
+
+    Chat$on_request_start(callback)
+
+#### Arguments
+
+- `callback`:
+
+  A function called with a single argument `turns`, the list of turns
+  about to be sent. The return value is ignored, but may be a promise
+  when used with `$chat_async()` or `$stream_async()`.
+
+#### Returns
+
+A function that can be called to remove the callback.
+
+------------------------------------------------------------------------
+
+### `Chat$on_request_end()`
+
+Register a callback that fires after each model request, before any tool
+calls in the response are executed. Use it to track latency or cost per
+request, or to observe tool requests before they run.
+
+If the request is cancelled, `turn` is an
+[AssistantPartialTurn](https://ellmer.tidyverse.org/dev/reference/Turn.md)
+with `NA` tokens and cost. If the request errors, the callback does not
+fire.
+
+#### Usage
+
+    Chat$on_request_end(callback)
+
+#### Arguments
+
+- `callback`:
+
+  A function called with a single argument `turn`, the assistant turn
+  just returned by the model. The return value is ignored, but may be a
+  promise when used with `$chat_async()` or `$stream_async()`.
 
 #### Returns
 

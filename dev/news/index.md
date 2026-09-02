@@ -23,6 +23,14 @@
   [`claude_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_search.md),
   or `claude_tool_web_fetch(citations = TRUE)`
   ([\#1068](https://github.com/tidyverse/ellmer/issues/1068)).
+- `Chat` gains `$on_request_start()` and `$on_request_end()` callbacks
+  that fire before and after each model request, including each round of
+  the tool loop. `$on_request_start()` receives the turns about to be
+  sent, so you can inspect the request or compact the conversation with
+  `$set_turns()`. `$on_request_end()` receives the assistant turn just
+  returned, so you can track latency or cost per request
+  ([@kaipingyang](https://github.com/kaipingyang),
+  [\#1051](https://github.com/tidyverse/ellmer/issues/1051)).
 - `Chat$stream()` and `Chat$stream_async()` gain a `type` argument for
   streaming structured output from providers with native support
   ([@cpsievert](https://github.com/cpsievert),
