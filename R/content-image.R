@@ -4,6 +4,11 @@
 #' chatbot. The `content_image_url()` function is used to provide a URL to an
 #' image, while `content_image_file()` is used to provide the image data itself.
 #'
+#' `content_image_file()` embeds the image's contents in every request, so for
+#' a large image, or one you'll refer to across several turns, prefer
+#' `chat$file_upload()`. It uploads the file once and later turns reference
+#' it by id.
+#'
 #' @param url The URL of the image to include in the chat input. Can be a
 #'   `data:` URL or a regular URL. Valid image types are PNG, JPEG, WebP, and
 #'   non-animated GIF.

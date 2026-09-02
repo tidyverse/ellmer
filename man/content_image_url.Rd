@@ -49,6 +49,12 @@ These functions are used to prepare image URLs and files for input to the
 chatbot. The \code{content_image_url()} function is used to provide a URL to an
 image, while \code{content_image_file()} is used to provide the image data itself.
 }
+\details{
+\code{content_image_file()} embeds the image's contents in every request, so for
+a large image, or one you'll refer to across several turns, prefer
+\code{chat$file_upload()}. It uploads the file once and later turns reference
+it by id.
+}
 \examples{
 \dontrun{
 chat <- chat_openai()

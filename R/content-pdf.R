@@ -8,6 +8,11 @@
 #' Not all providers support PDF input, so check the documentation for the
 #' provider you are using.
 #'
+#' Both functions embed the PDF's contents in every request, so for a large
+#' PDF, or one you'll refer to across several turns, prefer
+#' `chat$file_upload()`. It uploads the file once and later turns reference
+#' it by id.
+#'
 #' @param path,url Path or URL to a PDF file.
 #' @return A `ContentPDF` object
 #' @export
