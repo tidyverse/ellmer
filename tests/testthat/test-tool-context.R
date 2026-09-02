@@ -49,6 +49,16 @@ test_that("with_tool_context() pops after normal exit", {
   expect_equal(length(the$tool_context_stack), 0L)
 })
 
+test_that("with_tool_context() leaves an existing context in place for NULL", {
+  ctx <- fake_ctx()
+
+  with_tool_context(ctx, {
+    expect_identical(with_tool_context(NULL, tool_context()), ctx)
+  })
+
+  expect_equal(length(the$tool_context_stack), 0L)
+})
+
 test_that("with_tool_context() pops after an error in code", {
   ctx <- fake_ctx()
   tryCatch(

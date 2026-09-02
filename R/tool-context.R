@@ -25,23 +25,9 @@ NULL
 #'    context frame closes at the first `await`, so you must capture the
 #'    context before yielding: `ctx <- tool_context()`.
 #'
-#' @section Async tools:
-#' In async (coro-based) tools the `with_tool_context()` frame is closed at
-#' the synchronous-prefix boundary — that is, when the tool's `do.call`
-#' returns its promise, before any `await()` resolves. Capture the context
-#' at the top of the tool body before any `await()` call:
-#'
-#' ```r
-#' my_tool <- tool(
-#'   coro::async(function() {
-#'     ctx <- tool_context()         # capture BEFORE await
-#'     result <- await(some_promise())
-#'     message("Handled request ", ctx$request@id)
-#'     result
-#'   }),
-#'   description = "An async tool that logs the request id"
-#' )
-#' ```
+#' The `with_tool_context()` and `local_tool_context()` helpers are useful for
+#' testing a tool function that calls `tool_context()` outside a live chat.
+#' They temporarily make a supplied context available while test code runs.
 #'
 #' @return `tool_context()` returns the current `ellmer_tool_context` object
 #'   (a classed list with fields `$request`, `$turns`).
@@ -50,8 +36,9 @@ NULL
 #'
 #'   `local_tool_context()` returns `context` invisibly.
 #'
-#' @param context An `ellmer_tool_context` object, or a list with fields
-#'   `request` and `turns` (which will be promoted automatically).
+#' @param context An `ellmer_tool_context` object, a list with fields
+#'   `request` and `turns` (which will be promoted automatically). For
+#'   `with_tool_context()`, it can also be `NULL`.
 #' @param code An expression to evaluate with `context` on top of the stack.
 #' @param .frame The environment whose exit triggers the pop. Defaults to
 #'   `parent.frame()` (the calling function's frame).
@@ -64,12 +51,21 @@ NULL
 #'     message("Handled request ", ctx$request@id)
 #'     "done"
 #'   },
+#'   name = "logging_tool",
 #'   description = "Log the current request id and return"
 #' )
 #'
 #' # Test a tool that uses tool_context() without a live chat
-#' local_tool_context(list(request = NULL, turns = list()))
-#' # now tool_context() returns the context inside this frame
+#' request <- ContentToolRequest(
+#'   id = "test-request",
+#'   name = "logging_tool",
+#'   arguments = list(),
+#'   tool = logging_tool
+#' )
+#' with_tool_context(
+#'   list(request = request, turns = list()),
+#'   logging_tool()
+#' )
 #'
 #' @rdname tool_context
 #' @export
@@ -94,6 +90,10 @@ tool_context <- function() {
 #' @rdname tool_context
 #' @export
 with_tool_context <- function(context, code) {
+  if (is.null(context)) {
+    return(force(code))
+  }
+
   push_tool_context(context)
   withr::defer(pop_tool_context())
   force(code)

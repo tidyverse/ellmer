@@ -13,8 +13,9 @@ with_tool_context(context, code)
 local_tool_context(context, .frame = parent.frame())
 }
 \arguments{
-\item{context}{An \code{ellmer_tool_context} object, or a list with fields
-\code{request} and \code{turns} (which will be promoted automatically).}
+\item{context}{An \code{ellmer_tool_context} object, a list with fields
+\code{request} and \code{turns} (which will be promoted automatically). For
+\code{with_tool_context()}, it can also be \code{NULL}.}
 
 \item{code}{An expression to evaluate with \code{context} on top of the stack.}
 
@@ -52,26 +53,11 @@ top-level script without a live chat).
 context frame closes at the first \code{await}, so you must capture the
 context before yielding: \code{ctx <- tool_context()}.
 }
+
+The \code{with_tool_context()} and \code{local_tool_context()} helpers are useful for
+testing a tool function that calls \code{tool_context()} outside a live chat.
+They temporarily make a supplied context available while test code runs.
 }
-\section{Async tools}{
-
-In async (coro-based) tools the \code{with_tool_context()} frame is closed at
-the synchronous-prefix boundary — that is, when the tool's \code{do.call}
-returns its promise, before any \code{await()} resolves. Capture the context
-at the top of the tool body before any \code{await()} call:
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{my_tool <- tool(
-  coro::async(function() \{
-    ctx <- tool_context()         # capture BEFORE await
-    result <- await(some_promise())
-    message("Handled request ", ctx$request@id)
-    result
-  \}),
-  description = "An async tool that logs the request id"
-)
-}\if{html}{\out{</div>}}
-}
-
 \examples{
 # Log the id of the request that triggered this tool call
 logging_tool <- tool(
@@ -80,11 +66,20 @@ logging_tool <- tool(
     message("Handled request ", ctx$request@id)
     "done"
   },
+  name = "logging_tool",
   description = "Log the current request id and return"
 )
 
 # Test a tool that uses tool_context() without a live chat
-local_tool_context(list(request = NULL, turns = list()))
-# now tool_context() returns the context inside this frame
+request <- ContentToolRequest(
+  id = "test-request",
+  name = "logging_tool",
+  arguments = list(),
+  tool = logging_tool
+)
+with_tool_context(
+  list(request = request, turns = list()),
+  logging_tool()
+)
 
 }
