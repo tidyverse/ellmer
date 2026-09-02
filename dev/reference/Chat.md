@@ -526,13 +526,24 @@ waiting for more content from the chatbot.
 
 #### Usage
 
-    Chat$stream(..., stream = c("text", "content"), controller = NULL)
+    Chat$stream(..., type = NULL, stream = c("text", "content"), controller = NULL)
 
 #### Arguments
 
 - `...`:
 
   The input to send to the chatbot. Can be strings or images.
+
+- `type`:
+
+  An optional `type_()` structured-data specification. When supplied,
+  registered tools are suppressed and the completed assistant turn
+  stores a `ContentJson`. The provider constrains the response to JSON.
+  With `stream = "text"` (the default), structured stream chunks are raw
+  JSON text; with `stream = "content"`, they are
+  [Content](https://ellmer.tidyverse.org/dev/reference/Content.md)
+  objects. Streaming structured output requires native provider support;
+  tool-based fallback is not supported.
 
 - `stream`:
 
@@ -560,6 +571,7 @@ yields string promises.
 
     Chat$stream_async(
       ...,
+      type = NULL,
       tool_mode = c("concurrent", "sequential"),
       stream = c("text", "content"),
       controller = NULL
@@ -570,6 +582,17 @@ yields string promises.
 - `...`:
 
   The input to send to the chatbot. Can be strings or images.
+
+- `type`:
+
+  An optional `type_()` structured-data specification. When supplied,
+  registered tools are suppressed and the completed assistant turn
+  stores a `ContentJson`. The provider constrains the response to JSON.
+  With `stream = "text"` (the default), structured stream chunks are raw
+  JSON text; with `stream = "content"`, they are
+  [Content](https://ellmer.tidyverse.org/dev/reference/Content.md)
+  objects. Streaming structured output requires native provider support;
+  tool-based fallback is not supported.
 
 - `tool_mode`:
 

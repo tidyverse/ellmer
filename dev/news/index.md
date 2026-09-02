@@ -23,6 +23,10 @@
   [`claude_tool_web_search()`](https://ellmer.tidyverse.org/dev/reference/claude_tool_web_search.md),
   or `claude_tool_web_fetch(citations = TRUE)`
   ([\#1068](https://github.com/tidyverse/ellmer/issues/1068)).
+- `Chat$stream()` and `Chat$stream_async()` gain a `type` argument for
+  streaming structured output from providers with native support
+  ([@cpsievert](https://github.com/cpsievert),
+  [\#1102](https://github.com/tidyverse/ellmer/issues/1102))
 - `Chat` gains a `$token_count()` method that estimates the number of
   tokens in new input using the provider’s token counting endpoint
   ([@thisisnic](https://github.com/thisisnic),
