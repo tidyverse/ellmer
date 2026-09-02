@@ -458,7 +458,9 @@ friends in place of the file itself.</p>
 <p></p><hr><a id="method-Chat-file_get"></a><div class="section">
 <h3 id="chat-file-get-"><code>Chat$file_get()</code><a class="anchor" aria-label="anchor" href="#chat-file-get-"></a></h3>
 <p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
-<p>Get metadata for a file previously uploaded to the chat's provider.</p><div class="section">
+<p>Get a reference to a file previously uploaded to the chat's provider,
+e.g. to reuse an upload from an earlier session. Use <code>$file_list()</code> to
+find the id.</p><div class="section">
 <h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">file_get</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
@@ -470,7 +472,11 @@ friends in place of the file itself.</p>
 </dl><p></p></div>
 </div><p></p><div class="section">
 <h4 id="returns-4">Returns<a class="anchor" aria-label="anchor" href="#returns-4"></a></h4>
-<p>A named list of file metadata.</p>
+<p>A <a href="Content.html">ContentUploaded</a> that can be passed to <code>$chat()</code> and
+friends, with file metadata (<code>filename</code>, <code>size_bytes</code>, <code>created_at</code>,
+<code>expires_at</code>, and any provider-specific fields) in its <code>extra</code>
+property. OpenAI doesn't report a file's MIME type, so it's guessed
+from the filename.</p>
 </div>
 
 </div>
