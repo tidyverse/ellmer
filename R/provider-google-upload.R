@@ -224,15 +224,18 @@ method(file_get, ProviderGoogleGemini) <- function(provider, id, ...) {
   req <- req_url_path_append(req, google_file_name(id))
   json <- resp_body_json(req_perform(req))
 
-  list(
-    id = json$uri %||% json$name,
-    filename = json$displayName,
+  ContentUploaded(
+    uri = json$uri %||% json$name,
     mime_type = json$mimeType,
-    size_bytes = as.numeric(json$sizeBytes),
-    created_at = parse_rfc3339(json$createTime),
-    expires_at = parse_rfc3339(json$expirationTime),
-    name = json$name,
-    state = json$state
+    provider = "google",
+    extra = list(
+      filename = json$displayName,
+      size_bytes = as.numeric(json$sizeBytes),
+      created_at = parse_rfc3339(json$createTime),
+      expires_at = parse_rfc3339(json$expirationTime),
+      name = json$name,
+      state = json$state
+    )
   )
 }
 

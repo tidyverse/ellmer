@@ -333,9 +333,15 @@ Chat <- R6::R6Class(
     #' @description
     #' `r lifecycle::badge("experimental")`
     #'
-    #' Get metadata for a file previously uploaded to the chat's provider.
+    #' Get a reference to a file previously uploaded to the chat's provider,
+    #' e.g. to reuse an upload from an earlier session. Use `$file_list()` to
+    #' find the id.
     #' @param id A file id string, or a [ContentUploaded].
-    #' @return A named list of file metadata.
+    #' @return A [ContentUploaded] that can be passed to `$chat()` and
+    #'   friends, with file metadata (`filename`, `size_bytes`, `created_at`,
+    #'   `expires_at`, and any provider-specific fields) in its `extra`
+    #'   property. OpenAI doesn't report a file's MIME type, so it's guessed
+    #'   from the filename.
     file_get = function(id) {
       file_get(private$provider, id)
     },

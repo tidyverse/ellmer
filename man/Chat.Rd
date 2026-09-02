@@ -440,7 +440,9 @@ List files previously uploaded to the chat's provider.
 \subsection{\code{Chat$file_get()}}{
   \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-Get metadata for a file previously uploaded to the chat's provider.
+Get a reference to a file previously uploaded to the chat's provider,
+e.g. to reuse an upload from an earlier session. Use \verb{$file_list()} to
+find the id.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$file_get(id)}
@@ -454,7 +456,11 @@ Get metadata for a file previously uploaded to the chat's provider.
     \if{html}{\out{</div>}}
   }
   \subsection{Returns}{
-    A named list of file metadata.
+    A \link{ContentUploaded} that can be passed to \verb{$chat()} and
+friends, with file metadata (\code{filename}, \code{size_bytes}, \code{created_at},
+\code{expires_at}, and any provider-specific fields) in its \code{extra}
+property. OpenAI doesn't report a file's MIME type, so it's guessed
+from the filename.
   }
 }
 
