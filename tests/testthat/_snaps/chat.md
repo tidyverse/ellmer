@@ -14,6 +14,72 @@
       Error in `chat$chat()`:
       ! `...` can only accept a single prompt.
 
+# streaming structured output rejects unsupported providers and types
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-3-haiku-20240307")
+      collect_stream(chat, "Extract John, age 15", type = person, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-3-haiku-20240307".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-sonnet-5")
+      collect_stream(chat, "Extract John", type = additional_props, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-sonnet-5".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-sonnet-5")
+      collect_stream(chat, "Extract John", type = nested_additional_props, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-sonnet-5".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-3-haiku-20240307")
+      collect_stream(chat, "Extract John, age 15", type = person, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-3-haiku-20240307".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-sonnet-5")
+      collect_stream(chat, "Extract John", type = additional_props, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-sonnet-5".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-sonnet-5")
+      collect_stream(chat, "Extract John", type = nested_additional_props, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-sonnet-5".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
 # has a basic print method
 
     Code

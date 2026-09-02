@@ -27,7 +27,8 @@ uses_tool_structured_output <- function(provider, model, type) {
   if (S7_inherits(provider, ProviderAWSBedrock)) {
     TRUE
   } else if (S7_inherits(provider, ProviderAnthropic)) {
-    !has_claude_structured_output(model@name)
+    !has_claude_structured_output(model@name) ||
+      type_has_additional_properties(type)
   } else {
     FALSE
   }

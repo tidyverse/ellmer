@@ -19,7 +19,7 @@
 #'   carefully choose the model.
 #'
 #' @family chatbots
-#' @param model `r param_model("meta-llama/Llama-3.1-8B-Instruct")`
+#' @param model `r param_model("Qwen/Qwen3-235B-A22B-Instruct-2507")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("HUGGINGFACE_API_KEY")`
 #' @export
@@ -40,7 +40,7 @@ chat_huggingface <- function(
   echo = NULL,
   api_headers = character()
 ) {
-  model <- set_default(model, "meta-llama/Llama-3.1-8B-Instruct")
+  model <- set_default(model, "Qwen/Qwen3-235B-A22B-Instruct-2507")
   echo <- check_echo(echo)
   params <- params %||% params()
 
@@ -80,7 +80,7 @@ chat_huggingface_test <- function(
   model = NULL,
   echo = "none"
 ) {
-  model <- model %||% "meta-llama/Llama-3.1-8B-Instruct"
+  model <- model %||% "Qwen/Qwen3-235B-A22B-Instruct-2507"
   chat_huggingface(model = model, ..., echo = echo)
 }
 

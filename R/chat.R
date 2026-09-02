@@ -40,15 +40,24 @@ Chat <- R6::R6Class(
     #'  by setting the `ellmer_echo` option.
     initialize = function(
       provider,
-      model,
+      model = NULL,
       system_prompt = NULL,
       echo = "none"
     ) {
+      # Fall back to the model set via deprecated Provider properties.
+      # Remove along with the deprecated properties (#1098).
+      model <- model %||% provider_model(provider)
+      if (is.null(model)) {
+        cli::cli_abort("{.arg model} is required.")
+      }
       private$provider <- provider
       private$model <- model
+      provider_model(private$provider) <- model
       private$echo <- echo
       private$callback_on_tool_request <- CallbackManager$new(args = "request")
       private$callback_on_tool_result <- CallbackManager$new(args = "result")
+      private$callback_on_request_start <- CallbackManager$new(args = "turns")
+      private$callback_on_request_end <- CallbackManager$new(args = "turn")
       self$set_system_prompt(system_prompt)
     },
 
@@ -147,6 +156,7 @@ Chat <- R6::R6Class(
     set_model = function(model) {
       check_string(model)
       private$model@name <- model
+      provider_model(private$provider) <- private$model
       invisible(self)
     },
 
@@ -519,14 +529,31 @@ Chat <- R6::R6Class(
     #'   that yields strings. While iterating, the generator will block while
     #'   waiting for more content from the chatbot.
     #' @param ... The input to send to the chatbot. Can be strings or images.
+    #' @param type An optional `type_()` structured-data specification. When
+    #'   supplied, registered tools are suppressed and the completed assistant
+    #'   turn stores a `ContentJson`. The provider constrains the response to
+    #'   JSON. With `stream = "text"` (the default), structured stream chunks
+    #'   are raw JSON text; with `stream = "content"`, they are [Content]
+    #'   objects. Streaming structured output requires native provider support;
+    #'   tool-based fallback is not supported.
     #' @param stream Whether the stream should yield only `"text"` or ellmer's
     #'   rich content types. When `stream = "content"`, `stream()` yields
     #'   [Content] objects.
     #' @param controller An optional [stream_controller()] used to cancel the
     #'   stream from outside the iteration loop.
-    stream = function(..., stream = c("text", "content"), controller = NULL) {
+    stream = function(
+      ...,
+      type = NULL,
+      stream = c("text", "content"),
+      controller = NULL
+    ) {
       controller <- as_controller(controller)
       finish_tools <- private$complete_dangling_tool_requests()
+
+      if (!is.null(type)) {
+        needs_wrapper <- type_needs_wrapper(type, private$provider)
+        type <- wrap_type_if_needed(type, needs_wrapper)
+      }
 
       turn <- user_turn(!!!finish_tools, ...)
       stream <- arg_match(stream)
@@ -534,6 +561,7 @@ Chat <- R6::R6Class(
         turn,
         stream = TRUE,
         echo = "none",
+        type = type,
         yield_as_content = stream == "content",
         controller = controller
       )
@@ -544,6 +572,13 @@ Chat <- R6::R6Class(
     #'   generator](https://coro.r-lib.org/reference/async_generator.html) that
     #'   yields string promises.
     #' @param ... The input to send to the chatbot. Can be strings or images.
+    #' @param type An optional `type_()` structured-data specification. When
+    #'   supplied, registered tools are suppressed and the completed assistant
+    #'   turn stores a `ContentJson`. The provider constrains the response to
+    #'   JSON. With `stream = "text"` (the default), structured stream chunks
+    #'   are raw JSON text; with `stream = "content"`, they are [Content]
+    #'   objects. Streaming structured output requires native provider support;
+    #'   tool-based fallback is not supported.
     #' @param tool_mode Whether tools should be invoked one-at-a-time
     #'   (`"sequential"`) or concurrently (`"concurrent"`). Sequential mode is
     #'   best for interactive applications, especially when a tool may involve
@@ -556,12 +591,18 @@ Chat <- R6::R6Class(
     #'   stream from outside the iteration loop.
     stream_async = function(
       ...,
+      type = NULL,
       tool_mode = c("concurrent", "sequential"),
       stream = c("text", "content"),
       controller = NULL
     ) {
       controller <- as_controller(controller)
       finish_tools <- private$complete_dangling_tool_requests()
+
+      if (!is.null(type)) {
+        needs_wrapper <- type_needs_wrapper(type, private$provider)
+        type <- wrap_type_if_needed(type, needs_wrapper)
+      }
 
       turn <- user_turn(!!!finish_tools, ...)
       tool_mode <- arg_match(tool_mode)
@@ -571,6 +612,7 @@ Chat <- R6::R6Class(
         stream = TRUE,
         echo = "none",
         tool_mode = tool_mode,
+        type = type,
         yield_as_content = stream == "content",
         controller = controller
       )
@@ -643,6 +685,42 @@ Chat <- R6::R6Class(
     #' @return A function that can be called to remove the callback.
     on_tool_result = function(callback) {
       private$callback_on_tool_result$add(callback)
+    },
+
+    #' @description Register a callback that fires before each model request,
+    #'   including each round of the tool loop. Use it to inspect the outgoing
+    #'   request, or to compact the conversation with `$set_turns()`.
+    #'
+    #'   `turns` includes the pending turn about to be sent, which `$set_turns()`
+    #'   re-appends automatically. So compact with
+    #'   `chat$set_turns(compact(chat$get_turns()))` rather than passing `turns`
+    #'   back to `$set_turns()`, which would duplicate the pending turn.
+    #'
+    #' @param callback A function called with a single argument `turns`, the
+    #'   list of turns about to be sent. The return value is ignored, but may be
+    #'   a promise when used with `$chat_async()` or `$stream_async()`.
+    #'
+    #' @return A function that can be called to remove the callback.
+    on_request_start = function(callback) {
+      private$callback_on_request_start$add(callback)
+    },
+
+    #' @description Register a callback that fires after each model request,
+    #'   before any tool calls in the response are executed. Use it to track
+    #'   latency or cost per request, or to observe tool requests before they
+    #'   run.
+    #'
+    #'   If the request is cancelled, `turn` is an [AssistantPartialTurn] with
+    #'   `NA` tokens and cost. If the request errors, the callback does not fire.
+    #'
+    #' @param callback A function called with a single argument `turn`, the
+    #'   assistant turn just returned by the model. The return value is ignored,
+    #'   but may be a promise when used with `$chat_async()` or
+    #'   `$stream_async()`.
+    #'
+    #' @return A function that can be called to remove the callback.
+    on_request_end = function(callback) {
+      private$callback_on_request_end$add(callback)
     }
   ),
   private = list(
@@ -655,6 +733,8 @@ Chat <- R6::R6Class(
     tools = list(),
     callback_on_tool_request = NULL,
     callback_on_tool_result = NULL,
+    callback_on_request_start = NULL,
+    callback_on_request_end = NULL,
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
     # complete assistant turns.
@@ -664,9 +744,21 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
+      type = NULL,
       yield_as_content = FALSE,
       controller = NULL
     ) {
+      if (
+        !is.null(type) &&
+          uses_tool_structured_output(private$provider, private$model, type)
+      ) {
+        cli::cli_abort(c(
+          "Can't stream structured output with {private$provider@name} model {.val {private$model@name}}.",
+          i = "Streaming requires native structured output, but this provider and model fall back to tool calling.",
+          i = "Use `$chat_structured()` instead."
+        ))
+      }
+
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
@@ -678,10 +770,15 @@ Chat <- R6::R6Class(
       )
 
       while (!is.null(user_turn)) {
+        private$callback_on_request_start$invoke(c(
+          private$.turns,
+          list(user_turn)
+        ))
         assistant_chunks <- private$submit_turns(
           user_turn,
           stream = stream,
           echo = echo,
+          type = type,
           yield_as_content = yield_as_content,
           controller = controller,
           otel_span = agent_span
@@ -691,6 +788,7 @@ Chat <- R6::R6Class(
         }
 
         assistant_turn <- self$last_turn()
+        private$callback_on_request_end$invoke(assistant_turn)
         user_turn <- NULL
 
         # Don't invoke tools if the stream was cancelled
@@ -738,10 +836,22 @@ Chat <- R6::R6Class(
       user_turn,
       stream,
       echo,
+      type = NULL,
       tool_mode = "concurrent",
       yield_as_content = FALSE,
       controller = NULL
     ) {
+      if (
+        !is.null(type) &&
+          uses_tool_structured_output(private$provider, private$model, type)
+      ) {
+        cli::cli_abort(c(
+          "Can't stream structured output with {private$provider@name} model {.val {private$model@name}}.",
+          i = "Streaming requires native structured output, but this provider and model fall back to tool calling.",
+          i = "Use `$chat_structured()` instead."
+        ))
+      }
+
       tool_errors <- list()
       defer(warn_tool_errors(tool_errors))
 
@@ -753,10 +863,15 @@ Chat <- R6::R6Class(
       )
 
       while (!is.null(user_turn)) {
+        await(private$callback_on_request_start$invoke_async(c(
+          private$.turns,
+          list(user_turn)
+        )))
         assistant_chunks <- private$submit_turns_async(
           user_turn,
           stream = stream,
           echo = echo,
+          type = type,
           yield_as_content = yield_as_content,
           controller = controller,
           otel_span = agent_span
@@ -766,6 +881,7 @@ Chat <- R6::R6Class(
         }
 
         assistant_turn <- self$last_turn()
+        await(private$callback_on_request_end$invoke_async(assistant_turn))
         user_turn <- NULL
 
         # Don't invoke tools if the stream was cancelled
@@ -963,7 +1079,7 @@ Chat <- R6::R6Class(
           emit(activity)
           emit("\n")
         }
-        if (!is_partial_turn(turn) && any_text) {
+        if (!is_partial_turn(turn) && any_text && is.null(type)) {
           if (!endsWith(turn@text, "\n")) {
             if (yield_as_content) {
               yield(ContentText("\n"))
@@ -1125,7 +1241,7 @@ Chat <- R6::R6Class(
           emit(activity)
           emit("\n")
         }
-        if (!is_partial_turn(turn) && any_text) {
+        if (!is_partial_turn(turn) && any_text && is.null(type)) {
           if (!endsWith(turn@text, "\n")) {
             if (yield_as_content) {
               yield(ContentText("\n"))

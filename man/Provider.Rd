@@ -8,7 +8,10 @@ Provider(
   name = stop("Required"),
   base_url = stop("Required"),
   extra_headers = character(0),
-  credentials = function() NULL
+  credentials = function() NULL,
+  model = NULL,
+  params = NULL,
+  extra_args = NULL
 )
 }
 \arguments{
@@ -21,6 +24,9 @@ Provider(
 \item{credentials}{A zero-argument function that returns the credentials
 to use for authentication. Can either return a string, representing an
 API key, or a named list of headers.}
+
+\item{model, params, extra_args}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} These now
+live on the \link{Model} object; use \code{chat$get_model_object()} instead.}
 }
 \value{
 An S7 Provider object.
