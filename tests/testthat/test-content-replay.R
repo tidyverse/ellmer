@@ -66,6 +66,26 @@ test_that("can round trip simple content types", {
   )
 })
 
+test_that("ContentUploaded round trips with provider and extra", {
+  test_record_replay(
+    ContentUploaded(
+      "file_123",
+      mime_type = "application/pdf",
+      provider = "anthropic",
+      extra = list(filename = "report.pdf", size_bytes = 123)
+    )
+  )
+
+  # recordings made before provider/extra existed still replay
+  recorded <- recorded_object(
+    "ellmer::ContentUploaded",
+    list(uri = "file_123", mime_type = "application/pdf")
+  )
+  replayed <- contents_replay(recorded)
+  expect_equal(replayed@provider, "")
+  expect_equal(replayed@extra, list())
+})
+
 test_that("can round trip of ContentToolRequest/ContentToolResult", {
   request <- ContentToolRequest(
     "ID",

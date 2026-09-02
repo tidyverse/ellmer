@@ -1,0 +1,166 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/files
+    body:
+      fields:
+        file:
+          path: apples.pdf
+          type: application/pdf
+          name: ~
+        expires_in_seconds: '172800'
+  response:
+    status: 200
+    headers:
+      date: Wed, 02 Sep 2026 10:35:43 GMT
+      content-type: application/json
+      request-id: req_011CeeTuGhLD81ZLWnUZEpBa
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
+      server: cloudflare
+      vary: Accept-Encoding
+      content-encoding: br
+      server-timing: x-originResponse;dur=392
+      x-robots-tag: none
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-cache-status: DYNAMIC
+      cf-ray: a34bde9a983fc605-LHR
+    body:
+      string: '{"type":"file","id":"file_01Xh73P933NwKQotkX5Q6nfR","size_bytes":14560,"created_at":"2026-09-02T10:35:43.411427Z","expires_at":"2026-09-04T10:35:43.411427Z","filename":"apples.pdf","mime_type":"application/pdf","downloadable":false}'
+  recorded_at: 2026-09-02 10:35:43
+- request:
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      string: '{"model":"claude-sonnet-5","messages":[{"role":"user","content":[{"type":"text","text":"What''s
+        the title of this document?"},{"type":"document","source":{"type":"file","file_id":"file_01Xh73P933NwKQotkX5Q6nfR"},"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
+  response:
+    status: 200
+    headers:
+      date: Wed, 02 Sep 2026 10:35:46 GMT
+      content-type: application/json
+      anthropic-ratelimit-input-tokens-limit: '10000000'
+      anthropic-ratelimit-input-tokens-remaining: '9998000'
+      anthropic-ratelimit-input-tokens-reset: '2026-09-02T10:35:45Z'
+      anthropic-ratelimit-output-tokens-limit: '2000000'
+      anthropic-ratelimit-output-tokens-remaining: '2000000'
+      anthropic-ratelimit-output-tokens-reset: '2026-09-02T10:35:46Z'
+      anthropic-ratelimit-requests-limit: '10000'
+      anthropic-ratelimit-requests-remaining: '9999'
+      anthropic-ratelimit-requests-reset: '2026-09-02T10:35:43Z'
+      anthropic-ratelimit-tokens-limit: '12000000'
+      anthropic-ratelimit-tokens-remaining: '11998000'
+      anthropic-ratelimit-tokens-reset: '2026-09-02T10:35:45Z'
+      request-id: req_011CeeTuKAQuRynJtDCFJxku
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
+      traceresponse: 00-8415265cc6feed90868747ffc8b30d78-795f552c50618f23-01
+      server: cloudflare
+      vary: Accept-Encoding
+      content-encoding: br
+      x-robots-tag: none
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-cache-status: DYNAMIC
+      cf-ray: a34bde9e2994c605-LHR
+    body:
+      string: '{"model":"claude-sonnet-5","id":"msg_011CeeTuNEDRbngRwCGAUUXg","type":"message","role":"assistant","content":[{"type":"text","text":"The
+        title of this document is **\"Apples are tasty\"** by Hadley Wickham."}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":2,"cache_creation_input_tokens":1650,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":1650,"ephemeral_1h_input_tokens":0},"output_tokens":29,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global"}}'
+  recorded_at: 2026-09-02 10:35:46
+- request:
+    method: GET
+    uri: https://api.anthropic.com/v1/files
+  response:
+    status: 200
+    headers:
+      date: Wed, 02 Sep 2026 10:35:46 GMT
+      content-type: application/json
+      request-id: req_011CeeTuXmh1fTPmM4Qax8DE
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
+      server: cloudflare
+      vary: Accept-Encoding
+      content-encoding: br
+      server-timing: x-originResponse;dur=160
+      x-robots-tag: none
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-cache-status: DYNAMIC
+      cf-ray: a34bdeb0dbfcc605-LHR
+    body:
+      string: '{"data":[{"type":"file","id":"file_01Xh73P933NwKQotkX5Q6nfR","size_bytes":14560,"created_at":"2026-09-02T10:35:43.411427Z","expires_at":"2026-09-04T10:35:43.411427Z","filename":"apples.pdf","mime_type":"application/pdf","downloadable":false},{"type":"file","id":"file_01TQ4ha5oNkxKPS4ydr9XTAj","size_bytes":14560,"created_at":"2026-09-01T15:34:38.929170Z","expires_at":null,"filename":"apples.pdf","mime_type":"application/pdf","downloadable":false}],"next_page":null}'
+  recorded_at: 2026-09-02 10:35:46
+- request:
+    method: GET
+    uri: https://api.anthropic.com/v1/files/file_01Xh73P933NwKQotkX5Q6nfR
+  response:
+    status: 200
+    headers:
+      date: Wed, 02 Sep 2026 10:35:47 GMT
+      content-type: application/json
+      request-id: req_011CeeTuZ2MGnbLNQim3bVQ5
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
+      server: cloudflare
+      vary: Accept-Encoding
+      content-encoding: br
+      server-timing: x-originResponse;dur=192
+      x-robots-tag: none
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-cache-status: DYNAMIC
+      cf-ray: a34bdeb29846c605-LHR
+    body:
+      string: '{"type":"file","id":"file_01Xh73P933NwKQotkX5Q6nfR","size_bytes":14560,"created_at":"2026-09-02T10:35:43.411427Z","expires_at":"2026-09-04T10:35:43.411427Z","filename":"apples.pdf","mime_type":"application/pdf","downloadable":false}'
+  recorded_at: 2026-09-02 10:35:47
+- request:
+    method: GET
+    uri: https://api.anthropic.com/v1/files/file_01Xh73P933NwKQotkX5Q6nfR/content
+  response:
+    status: 400
+    headers:
+      date: Wed, 02 Sep 2026 10:35:47 GMT
+      content-type: application/json
+      x-should-retry: 'false'
+      request-id: req_011CeeTuaTAzPZPvrPZDkDn8
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
+      server: cloudflare
+      vary: Accept-Encoding
+      content-encoding: br
+      server-timing: x-originResponse;dur=169
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: a34bdeb4bd4fc605-LHR
+    body:
+      string: '{"type":"error","error":{"type":"invalid_request_error","message":"File
+        `file_01Xh73P933NwKQotkX5Q6nfR` is not downloadable. Only files generated
+        by a tool (for example, the code execution tool) can be downloaded.","details":{"error_code":"file_not_downloadable"}},"request_id":"req_011CeeTuaTAzPZPvrPZDkDn8"}'
+  recorded_at: 2026-09-02 10:35:47
+- request:
+    method: DELETE
+    uri: https://api.anthropic.com/v1/files/file_01Xh73P933NwKQotkX5Q6nfR
+  response:
+    status: 200
+    headers:
+      date: Wed, 02 Sep 2026 10:35:48 GMT
+      content-type: application/json
+      request-id: req_011CeeTudBsh4Ljr9wQz2hAF
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
+      server: cloudflare
+      vary: Accept-Encoding
+      content-encoding: br
+      server-timing: x-originResponse;dur=287
+      x-robots-tag: none
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-cache-status: DYNAMIC
+      cf-ray: a34bdeb8bf81c605-LHR
+    body:
+      string: '{"id":"file_01Xh73P933NwKQotkX5Q6nfR","type":"file_deleted"}'
+  recorded_at: 2026-09-02 10:35:48
+recorded_with: VCR-vcr/2.1.0

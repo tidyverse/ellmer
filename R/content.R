@@ -433,12 +433,22 @@ method(contents_markdown, ContentJson) <- function(content) {
   sprintf('```json\n%s\n```\n', pretty_json(content@parsed))
 }
 
+#' @rdname Content
+#' @export
+#' @param uri The URI or provider-assigned id of the uploaded file.
+#' @param mime_type MIME type of the file.
+#' @param provider Lowercase name of the provider the file was uploaded to
+#'   (e.g. `"openai"`, `"anthropic"`, `"google"`), or `""` when unknown. Used
+#'   to detect a file uploaded to one provider being used with another.
+#' @param extra Provider-specific metadata about the uploaded file.
 ContentUploaded <- new_class(
   "ContentUploaded",
   parent = Content,
   properties = list(
     uri = prop_string(),
-    mime_type = prop_string(default = "")
+    mime_type = prop_string(default = ""),
+    provider = prop_string(default = ""),
+    extra = class_list
   )
 )
 method(format, ContentUploaded) <- function(x, ...) {

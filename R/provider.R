@@ -19,6 +19,8 @@ NULL
 #'   to use for authentication. Can either return a string, representing an
 #'   API key, or a named list of headers.
 #' @param extra_headers Arbitrary extra headers to be added to the request.
+#' @param model,params,extra_args `r lifecycle::badge("deprecated")` These now
+#'   live on the [Model] object; use `chat$get_model_object()` instead.
 #' @return An S7 Provider object.
 #' @examples
 #' Provider(
@@ -31,9 +33,29 @@ Provider <- new_class(
     name = prop_string(),
     base_url = prop_string(),
     extra_headers = class_character,
-    credentials = class_function | NULL
+    credentials = class_function | NULL,
+    # Deprecated in 0.5.0: model details now live on Model. Remove in 0.6.0 (#1098).
+    model = prop_deprecated("model", "name"),
+    params = prop_deprecated("params", "params"),
+    extra_args = prop_deprecated("extra_args", "extra_args")
   )
 )
+
+# Default S7 print calls every getter, which would trigger the deprecation
+# warnings. Remove along with the deprecated properties (#1098).
+method(print, Provider) <- function(x, ...) {
+  names <- setdiff(prop_names(x), c("model", "params", "extra_args"))
+  props <- set_names(lapply(names, \(name) prop(x, name)), names)
+  cat("<", class(x)[[1]], ">\n", sep = "")
+  str(
+    props,
+    no.list = TRUE,
+    give.attr = FALSE,
+    comp.str = "@ ",
+    indent.str = " "
+  )
+  invisible(x)
+}
 
 test_provider <- function(name = "", base_url = "", ...) {
   Provider(name = name, base_url = base_url, ...)
@@ -269,6 +291,13 @@ method(as_json, list(Provider, class_list)) <- function(provider, x, ...) {
 
 method(as_json, list(Provider, ContentCitation)) <- function(provider, x, ...) {
   NULL
+}
+
+method(as_json, list(Provider, ContentUploaded)) <- function(provider, x, ...) {
+  cli::cli_abort(
+    "{provider@name} doesn't support uploaded files.",
+    class = "not_implemented"
+  )
 }
 
 method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {

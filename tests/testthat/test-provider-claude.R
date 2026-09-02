@@ -146,7 +146,7 @@ test_that("can match prices for some common models", {
   expect_true(has_cost(chat$get_provider()@name, chat$get_model_object()@name))
 })
 
-test_that("removes empty final chat messages", {
+test_that("sends placeholder for empty assistant turns (#711, #1070)", {
   chat <- chat_anthropic_test()
   chat$set_turns(
     list(
@@ -157,11 +157,10 @@ test_that("removes empty final chat messages", {
 
   turns_json <- as_json(chat$get_provider(), chat$get_turns())
 
-  expect_length(turns_json, 1)
-  expect_equal(turns_json[[1]]$role, "user")
+  expect_length(turns_json, 2)
   expect_equal(
-    turns_json[[1]]$content,
-    list(list(type = "text", text = "Don't say anything"))
+    turns_json[[2]]$content,
+    list(list(type = "text", text = "[empty string]"))
   )
 })
 
@@ -626,6 +625,28 @@ test_that("value_turn() resolves Anthropic citations across request turns", {
   expect_equal(citations[[2]]@source@url, "https://current.example")
 })
 
+test_that("as_json() serializes uploaded file references", {
+  provider <- chat_anthropic_test()$get_provider()
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "application/pdf")),
+    list(type = "document", source = list(type = "file", file_id = "file-1"))
+  )
+  # unmapped mime types fall back to document, or image for image/*
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "audio/mpeg"))$type,
+    "document"
+  )
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "image/svg+xml"))$type,
+    "image"
+  )
+  # container_upload blocks take file_id directly, with no source wrapper
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "text/csv")),
+    list(type = "container_upload", file_id = "file-1")
+  )
+})
+
 test_that("value_turn() preserves unresolved Anthropic document slots", {
   provider <- chat_anthropic_test()$get_provider()
   turns <- list(UserTurn(list(
@@ -739,4 +760,16 @@ test_that("stream_content() resolves Anthropic citations across request turns", 
 test_that("can count tokens", {
   vcr::local_cassette("anthropic-count-tokens")
   test_token_count(chat_anthropic_test)
+})
+
+test_that("value_turn() handles empty content (#1070)", {
+  provider <- chat_anthropic_test()$get_provider()
+  result <- list(
+    content = list(),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 2)
+  )
+
+  turn <- value_turn(provider, test_model("claude-sonnet-5"), result)
+  expect_equal(turn@contents, list())
 })

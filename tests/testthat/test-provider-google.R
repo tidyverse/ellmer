@@ -97,6 +97,11 @@ test_that("can use pdfs", {
   test_pdf_local(chat_fun)
 })
 
+test_that("file lifecycle works", {
+  vcr::local_cassette("google-files")
+  test_file_lifecycle(chat_google_gemini_test)
+})
+
 test_that("can match prices for some common models", {
   provider <- chat_google_gemini_test()$get_provider()
 

@@ -29,24 +29,15 @@ If not specified, will be guesses from the file extension.}
 A \verb{<ContentUploaded>} object that can be passed to \verb{$chat()}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-This function uploads a file then waits for Gemini to finish processing it
-so that you can immediately use it in a prompt. It's experimental because
-it's currently Gemini specific, and we expect other providers to evolve
-similar feature in the future.
-
-Uploaded files are automatically deleted after 2 days. Each file must be
-less than 2 GB and you can upload a total of 20 GB. ellmer doesn't currently
-provide a way to delete files early; please
-\href{https://github.com/tidyverse/ellmer/issues}{file an issue} if this would
-be useful for you.
+This function is deprecated in favour of the provider-neutral \link{Chat}
+method \code{chat$file_upload()}.
 }
 \examples{
 \dontrun{
-file <- google_upload("path/to/file.pdf")
-
 chat <- chat_google_gemini()
+file <- chat$file_upload("path/to/file.pdf")
 chat$chat(file, "Give me a three paragraph summary of this PDF")
 }
 }

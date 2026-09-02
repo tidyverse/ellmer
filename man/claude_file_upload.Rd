@@ -6,26 +6,26 @@
 \alias{claude_file_get}
 \alias{claude_file_download}
 \alias{claude_file_delete}
-\title{Upload, downloand, and manage files for Claude}
+\title{Upload, download, and manage files for Claude}
 \usage{
 claude_file_upload(
   path,
   base_url = "https://api.anthropic.com/v1/",
-  beta_headers = "files-api-2025-04-14",
+  beta_headers = character(),
   credentials = NULL
 )
 
 claude_file_list(
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 
 claude_file_get(
   file_id,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 
 claude_file_download(
@@ -33,14 +33,14 @@ claude_file_download(
   path,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 
 claude_file_delete(
   file_id,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 }
 \arguments{
@@ -49,8 +49,7 @@ claude_file_delete(
 \item{base_url}{The base URL to the endpoint; the default is Claude's
 public API.}
 
-\item{beta_headers}{Beta headers to use for the request. Defaults to
-\code{files-api-2025-04-14}.}
+\item{beta_headers}{Beta headers to use for the request.}
 
 \item{credentials}{Override the default credentials. You generally should not need this argument; instead set the \code{ANTHROPIC_API_KEY} environment variable. The best place to set this is in \code{.Renviron},
 which you can easily edit by calling \code{usethis::edit_r_environ()}.
@@ -60,29 +59,16 @@ If you do need additional control, this argument takes a zero-argument function 
 \item{file_id}{ID of the file to get information about, download, or delete.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-Use the beta Files API to upload files to and manage files in Claude.
-This is currently experimental because the API is in beta and may change.
-Note that you need \code{beta-headers = "files-api-2025-04-14"} to use the API.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-Claude offers 100GB of file storage per organization, with each file
-having a maximum size of 500MB. For more details see
-\url{https://docs.claude.com/en/docs/build-with-claude/files}
-\itemize{
-\item \code{claude_file_upload()} uploads a file and returns an object that
-you can use in chat.
-\item \code{claude_file_list()} lists all uploaded files.
-\item \code{claude_file_get()} returns an object for an previously uploaded file.
-\item \code{claude_file_download()} downloads the file with the given ID. Note
-that you can only download files created by skills or the code execution
-tool.
-\item \code{claude_file_delete()} deletes the file with the given ID.
-}
+These functions are deprecated in favour of the provider-neutral \link{Chat}
+methods: \code{chat$file_upload()}, \code{chat$file_list()}, \code{chat$file_get()},
+\code{chat$file_download()}, and \code{chat$file_delete()}.
 }
 \examples{
 \dontrun{
-file <- claude_file_upload("path/to/file.pdf")
-chat <- chat_anthropic(beta_headers = "files-api-2025-04-14")
+chat <- chat_anthropic()
+file <- chat$file_upload("path/to/file.pdf")
 chat$chat("Please summarize the document.", file)
 }
 }

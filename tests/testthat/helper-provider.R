@@ -180,6 +180,46 @@ test_pdf_local <- function(chat_fun) {
   )
 }
 
+# Files -------------------------------------------------------------------
+
+test_file_lifecycle <- function(chat_fun) {
+  # Avoid using an absolute path in form_file
+  local_mocked_bindings(
+    form_file = function(path, type) {
+      structure(
+        list(path = path, type = type, name = NULL),
+        class = "form_file"
+      )
+    }
+  )
+
+  chat <- chat_fun()
+  upload <- chat$file_upload(test_path("apples.pdf"))
+  defer(chat$file_delete(upload))
+  expect_s7_class(upload, ContentUploaded)
+
+  response <- chat$chat("What's the title of this document?", upload)
+  expect_match(response, "Apples are tasty")
+
+  files <- chat$file_list()
+  expect_contains(files$id, upload@uri)
+  expect_s3_class(files$created_at, "POSIXct")
+  expect_s3_class(files$expires_at, "POSIXct")
+
+  meta <- chat$file_get(upload)
+  expect_equal(meta$id, upload@uri)
+  expect_s3_class(meta$expires_at, "POSIXct")
+  expect_equal(
+    as.numeric(difftime(meta$expires_at, meta$created_at, units = "hours")),
+    48,
+    tolerance = 0.01
+  )
+
+  # Providers only serve back model-generated files, not user uploads
+  path <- withr::local_tempfile()
+  expect_error(chat$file_download(upload, path))
+}
+
 # Models ------------------------------------------------------------------
 
 test_models <- function(models_fun) {

@@ -530,6 +530,7 @@ method(value_turn_with_turns, ProviderAnthropic) <- function(
       )
     }
   }))
+  contents <- contents %||% list()
 
   tokens <- value_tokens(provider, result)
   cache_write <- result$usage$cache_creation_input_tokens %||% 0
@@ -690,6 +691,8 @@ method(count_tokens, ProviderAnthropic) <- function(
   tools = list(),
   type = NULL
 ) {
+  turn <- user_turn(...)
+
   req <- base_request(provider)
   req <- req_url_path_append(req, "messages/count_tokens")
 
@@ -735,7 +738,7 @@ method(count_tokens, ProviderAnthropic) <- function(
   body <- compact(list(
     model = model@name,
     system = system,
-    messages = list(as_json(provider, user_turn(...), is_last = TRUE)),
+    messages = list(as_json(provider, turn, is_last = TRUE)),
     tools = tools,
     tool_choice = tool_choice,
     output_config = output_config
@@ -774,15 +777,15 @@ method(as_json, list(ProviderAnthropic, Turn)) <- function(
     # claude passes system prompt as separate arg
     NULL
   } else if (is_user_turn(x) || is_assistant_turn(x)) {
-    if (is_assistant_turn(x) && identical(x@contents, list())) {
-      # Drop empty assistant turns to avoid an API error
-      # (all messages must have non-empty content)
-      return(NULL)
-    }
     x <- turn_contents_expand(x)
     content <- as_json(provider, x@contents, ...)
     if (length(content) == 0) {
-      return(NULL)
+      if (!is_assistant_turn(x)) {
+        return()
+      }
+      # Dropping empty assistant turns confuses the model, so send a
+      # placeholder instead (#711, #1070)
+      content <- list(list(type = "text", text = "[empty string]"))
     }
 
     # Add caching to the last content block in the last turn
@@ -825,32 +828,32 @@ method(as_json, list(ProviderAnthropic, ContentPDF)) <- function(
 
 method(as_json, list(ProviderAnthropic, ContentUploaded)) <- function(
   provider,
-  x
+  x,
+  ...
 ) {
-  # https://docs.claude.com/en/docs/build-with-claude/files#using-a-file-in-messages
-  block_type <- switch(
-    x@mime_type,
-    "application/pdf" = "document",
-    "text/plain" = "document",
-    "image/jpeg" = "image",
-    "image/png" = "image",
-    "image/gif" = "image",
-    "image/webp" = "image",
-    "text/csv" = "container_upload",
-    "application/json" = "container_upload",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "container_upload",
-    "application/vnd.ms-excel" = "container_upload",
-    "text/xml" = "container_upload",
-    "application/xml" = "container_upload"
-  )
-
-  list(
-    type = block_type,
-    source = list(
-      type = "file",
-      file_id = x@uri
+  # https://platform.claude.com/docs/en/build-with-claude/files#file-types-and-content-blocks
+  block_type <- if (grepl("^image/", x@mime_type)) {
+    "image"
+  } else {
+    switch(
+      x@mime_type,
+      "text/csv" = "container_upload",
+      "application/json" = "container_upload",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "container_upload",
+      "application/vnd.ms-excel" = "container_upload",
+      "text/xml" = "container_upload",
+      "application/xml" = "container_upload",
+      "document"
     )
-  )
+  }
+
+  # Unlike document/image blocks, container_upload (for the code execution
+  # tool) takes file_id directly rather than a source object.
+  if (block_type == "container_upload") {
+    list(type = block_type, file_id = x@uri)
+  } else {
+    list(type = block_type, source = list(type = "file", file_id = x@uri))
+  }
 }
 
 method(as_json, list(ProviderAnthropic, ContentImageRemote)) <- function(

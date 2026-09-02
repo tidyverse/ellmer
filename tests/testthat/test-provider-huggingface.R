@@ -34,7 +34,7 @@ test_that("can extract data", {
 
 test_that("can use images", {
   chat_fun <- function(...) {
-    chat_huggingface_test(model = "Qwen/Qwen2.5-VL-7B-Instruct")
+    chat_huggingface_test(model = "Qwen/Qwen3-VL-30B-A3B-Instruct")
   }
 
   # Thinks hexagon is a diamond

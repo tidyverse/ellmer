@@ -472,3 +472,47 @@ test_that("aws_bedrock_models_url() resolves the model-listing endpoint", {
     "https://bedrock.example.com"
   )
 })
+
+test_that("sends placeholder for empty assistant turns (#1070)", {
+  provider <- test_aws_bedrock_provider()
+  turns_json <- as_json(provider, list(UserTurn("Hi"), AssistantTurn()))
+
+  expect_length(turns_json, 2)
+  expect_equal(turns_json[[2]]$content, list(list(text = "[empty string]")))
+})
+
+test_that("drops empty user turns (#1070)", {
+  provider <- test_aws_bedrock_provider()
+  turns_json <- as_json(
+    provider,
+    list(UserTurn("Hi"), AssistantTurn("Hello"), UserTurn())
+  )
+
+  expect_length(turns_json, 2)
+})
+
+test_that("value_turn() handles thinking blocks with no text (#1085)", {
+  provider <- test_aws_bedrock_provider()
+  result <- list(
+    output = list(
+      message = list(
+        content = list(
+          list(
+            reasoningContent = list(reasoningText = list(signature = "abc"))
+          ),
+          list(text = "Knock knock")
+        )
+      )
+    ),
+    stopReason = "end_turn",
+    usage = list(inputTokens = 10, outputTokens = 5)
+  )
+
+  turn <- value_turn(
+    provider,
+    test_model("us.anthropic.claude-sonnet-5"),
+    result
+  )
+  expect_equal(turn@contents[[1]]@thinking, "")
+  expect_equal(turn@contents[[1]]@extra$signature, "abc")
+})

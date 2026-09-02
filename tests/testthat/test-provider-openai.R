@@ -78,6 +78,20 @@ test_that("can use pdfs", {
   test_pdf_local(chat_fun)
 })
 
+test_that("file lifecycle works", {
+  vcr::local_cassette("openai-files")
+  test_file_lifecycle(chat_openai_test)
+})
+
+test_that("file_upload() validates expires_in_h", {
+  provider <- chat_openai_test()$get_provider()
+  path <- test_path("apples.pdf")
+  expect_snapshot(error = TRUE, {
+    file_upload(provider, path, expires_in_h = 0.5)
+    file_upload(provider, path, expires_in_h = 31 * 24)
+  })
+})
+
 test_that("can match prices for some common models", {
   provider <- chat_openai_test()$get_provider()
 
@@ -348,4 +362,24 @@ test_that("value_turn() handles web_search_call action types", {
 test_that("can count tokens", {
   vcr::local_cassette("openai-count-tokens")
   test_token_count(chat_openai_test)
+})
+
+test_that("as_json() serializes uploaded file references", {
+  provider <- chat_openai_test()$get_provider()
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "application/pdf")),
+    list(
+      role = "user",
+      content = list(list(type = "input_file", file_id = "file-1"))
+    )
+  )
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "image/png")),
+    list(
+      role = "user",
+      content = list(
+        list(type = "input_image", file_id = "file-1", detail = "auto")
+      )
+    )
+  )
 })

@@ -511,6 +511,22 @@ method(as_json, list(ProviderOpenAICompatible, ContentPDF)) <- function(
   )
 }
 
+method(as_json, list(ProviderOpenAICompatible, ContentUploaded)) <- function(
+  provider,
+  x,
+  ...
+) {
+  if (grepl("^image/", x@mime_type)) {
+    cli::cli_abort(
+      c(
+        "The Chat Completions API can't reference an uploaded image by id.",
+        i = "Send the image inline with {.fn content_image_file} instead."
+      )
+    )
+  }
+  list(type = "file", file = list(file_id = x@uri))
+}
+
 method(as_json, list(ProviderOpenAICompatible, ContentToolRequest)) <- function(
   provider,
   x,

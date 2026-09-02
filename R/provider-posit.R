@@ -1,5 +1,6 @@
 #' @include provider-claude.R
 #' @include provider-openai-compatible.R
+#' @include files.R
 NULL
 
 #' Chat with a model hosted by Posit AI
@@ -133,6 +134,35 @@ method(base_request, ProviderPositAnthropic) <- function(provider) {
 method(base_request, ProviderPositOpenAI) <- function(provider) {
   req <- base_request(super(provider, ProviderOpenAICompatible))
   req_error(req, body = posit_error_body)
+}
+
+# The Posit gateway doesn't serve Anthropic's beta Files API, so opt back out
+# of the file management otherwise inherited from ProviderAnthropic.
+method(file_upload, ProviderPositAnthropic) <- function(
+  provider,
+  path,
+  mime_type = NULL,
+  expires_in_h = 48,
+  ...
+) {
+  no_file_support(provider)
+}
+method(file_list, ProviderPositAnthropic) <- function(provider, ...) {
+  no_file_support(provider)
+}
+method(file_get, ProviderPositAnthropic) <- function(provider, id, ...) {
+  no_file_support(provider)
+}
+method(file_download, ProviderPositAnthropic) <- function(
+  provider,
+  id,
+  path,
+  ...
+) {
+  no_file_support(provider)
+}
+method(file_delete, ProviderPositAnthropic) <- function(provider, id, ...) {
+  no_file_support(provider)
 }
 
 method(models_list, ProviderPositAnthropic) <- function(provider) {
