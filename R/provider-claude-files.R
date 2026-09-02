@@ -113,12 +113,6 @@ anthropic_files_request <- function(provider) {
 #' @export
 #' @examples
 #' \dontrun{
-#' # Old:
-#' file <- claude_file_upload("path/to/file.pdf")
-#' chat <- chat_anthropic()
-#' chat$chat("Please summarize the document.", file)
-#'
-#' # New:
 #' chat <- chat_anthropic()
 #' file <- chat$file_upload("path/to/file.pdf")
 #' chat$chat("Please summarize the document.", file)

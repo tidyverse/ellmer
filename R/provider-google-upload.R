@@ -18,12 +18,6 @@ NULL
 #' @export
 #' @examples
 #' \dontrun{
-#' # Old:
-#' file <- google_upload("path/to/file.pdf")
-#' chat <- chat_google_gemini()
-#' chat$chat(file, "Give me a three paragraph summary of this PDF")
-#'
-#' # New:
 #' chat <- chat_google_gemini()
 #' file <- chat$file_upload("path/to/file.pdf")
 #' chat$chat(file, "Give me a three paragraph summary of this PDF")

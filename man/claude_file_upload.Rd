@@ -67,12 +67,6 @@ methods: \code{chat$file_upload()}, \code{chat$file_list()}, \code{chat$file_get
 }
 \examples{
 \dontrun{
-# Old:
-file <- claude_file_upload("path/to/file.pdf")
-chat <- chat_anthropic()
-chat$chat("Please summarize the document.", file)
-
-# New:
 chat <- chat_anthropic()
 file <- chat$file_upload("path/to/file.pdf")
 chat$chat("Please summarize the document.", file)
