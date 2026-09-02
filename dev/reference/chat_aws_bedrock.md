@@ -24,15 +24,24 @@ use and which request format to send:
   (like Claude Mythos) that Converse does not serve at all.
 
 - `"responses"` uses the OpenAI Responses API on the `bedrock-mantle`
-  endpoint. This is the only way to reach the GPT-5 family and Grok on
-  Bedrock. Note that mantle serves newer models from `/openai/v1` and
-  older open-weight models like gpt-oss from `/v1`; ellmer uses the
-  former, so reaching the latter needs an explicit `base_url`. They're
-  all available through `"converse"` anyway.
+  endpoint. This reaches OpenAI and xAI models that Converse can't
+  serve, typically newer models that Converse hasn't picked up yet. Note
+  that mantle serves newer models from `/openai/v1` and older
+  open-weight models like gpt-oss from `/v1`; ellmer uses the former, so
+  reaching the latter needs an explicit `base_url`. They're all
+  available through `"converse"` anyway.
 
-By default ellmer picks the API from `model`, falling back to
-`"converse"` for models it doesn't recognize. Set `api` explicitly to
-override this.
+By default ellmer picks the API from `model`, using `"converse"`
+whenever it can serve the model and for any model ellmer doesn't
+recognize. Set `api` explicitly to override this.
+
+The set of models that need mantle shrinks over time as AWS adds them to
+Converse, so a model that needs `"responses"` today may route to
+`"converse"` in a later ellmer release. Note also that Converse usually
+needs an inference profile ID (`"us.openai.gpt-5.6-sol"`) while mantle
+wants the bare model ID (`"openai.gpt-5.6-sol"`); ellmer strips the
+prefix for mantle, so the inference profile ID works with either and is
+the safer choice.
 
 Note that the two endpoints have separate token quotas, so moving a
 model from one to the other changes which quota it consumes.
