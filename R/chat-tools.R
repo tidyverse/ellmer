@@ -231,8 +231,10 @@ on_load(
   invoke_tool_async <- coro::async(function(
     request,
     otel_span = NULL,
-    tool_context = new_tool_context
+    tool_context = NULL
   ) {
+    tool_context <- tool_context %||% new_tool_context
+
     if (is.null(request@tool)) {
       return(new_tool_result(request, error = "Unknown tool"))
     }
