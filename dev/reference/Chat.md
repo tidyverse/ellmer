@@ -387,8 +387,13 @@ The estimated number of input tokens.
 
 Upload a file to the chat's provider, once, so later turns can reference
 it by id instead of re-sending its contents. Prefer this over
-[`content_pdf_file()`](https://ellmer.tidyverse.org/dev/reference/content_pdf_file.md)/[`content_image_file()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
-when a file is large or used across many turns.
+[`content_pdf_file()`](https://ellmer.tidyverse.org/dev/reference/content_pdf_file.md),
+[`content_image_file()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md),
+or
+[`content_document_file()`](https://ellmer.tidyverse.org/dev/reference/content_document_file.md)
+when a file is large or used across many turns. Otherwise, sending the
+file inline is simpler: it isn't limited to providers with a files API,
+and there's nothing stored on the provider's side to expire or clean up.
 
 File management is supported by
 [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md),

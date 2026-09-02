@@ -40,7 +40,7 @@ google_upload(
 - mime_type:
 
   Optionally, specify the mime type of the file. If not specified, will
-  be guesses from the file extension.
+  be guessed from the file extension.
 
 ## Value
 

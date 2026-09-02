@@ -124,6 +124,16 @@
   ([@xmarquez](https://github.com/xmarquez),
   [\#1059](https://github.com/tidyverse/ellmer/issues/1059)).
 - New
+  [`content_document_file()`](https://ellmer.tidyverse.org/dev/reference/content_document_file.md)
+  and
+  [`content_document_url()`](https://ellmer.tidyverse.org/dev/reference/content_document_file.md)
+  send text-based documents like CSV, markdown, and code files to the
+  model, and
+  [`content_pdf_url()`](https://ellmer.tidyverse.org/dev/reference/content_pdf_file.md)
+  now lets providers that can fetch URLs do so themselves
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1090](https://github.com/tidyverse/ellmer/issues/1090)).
+- New
   [`models_update_prices()`](https://ellmer.tidyverse.org/dev/reference/models_update_prices.md)
   downloads the latest model pricing data from GitHub and saves it to a
   local cache. Subsequent calls to

@@ -114,6 +114,9 @@ providers are especially welcome.
 
 - [`create_tool_def()`](https://ellmer.tidyverse.org/dev/reference/create_tool_def.md)
   : Create metadata for a tool
+- [`content_document_file()`](https://ellmer.tidyverse.org/dev/reference/content_document_file.md)
+  [`content_document_url()`](https://ellmer.tidyverse.org/dev/reference/content_document_file.md)
+  : Encode documents for chat input
 - [`content_image_url()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
   [`content_image_file()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
   [`content_image_plot()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
@@ -195,6 +198,7 @@ provider.
   [`ContentUploaded()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   [`ContentThinking()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   [`ContentPDF()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
+  [`ContentDocument()`](https://ellmer.tidyverse.org/dev/reference/Content.md)
   : Content types received from and sent to a chatbot
 - [`Source()`](https://ellmer.tidyverse.org/dev/reference/Source.md)
   [`WebSource()`](https://ellmer.tidyverse.org/dev/reference/Source.md)

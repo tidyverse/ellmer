@@ -79,7 +79,15 @@ ContentThinking(thinking = stop("Required"), extra = list())
 ContentPDF(
   type = stop("Required"),
   data = stop("Required"),
-  filename = stop("Required")
+  filename = stop("Required"),
+  url = NULL
+)
+
+ContentDocument(
+  mime_type = stop("Required"),
+  data = stop("Required"),
+  filename = stop("Required"),
+  url = NULL
 )
 ```
 
@@ -164,7 +172,7 @@ ContentPDF(
 
 - mime_type:
 
-  MIME type of the file.
+  MIME type of the file or document.
 
 - provider:
 

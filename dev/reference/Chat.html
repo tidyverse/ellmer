@@ -396,8 +396,11 @@ extraction, created with a <code><a href="type_boolean.html">type_()</a></code> 
 <p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
 <p>Upload a file to the chat's provider, once, so later turns can
 reference it by id instead of re-sending its contents. Prefer this
-over <code><a href="content_pdf_file.html">content_pdf_file()</a></code>/<code><a href="content_image_url.html">content_image_file()</a></code> when a file is large
-or used across many turns.</p>
+over <code><a href="content_pdf_file.html">content_pdf_file()</a></code>, <code><a href="content_image_url.html">content_image_file()</a></code>, or
+<code><a href="content_document_file.html">content_document_file()</a></code> when a file is large or used across many
+turns. Otherwise, sending the file inline is simpler: it isn't limited
+to providers with a files API, and there's nothing stored on the
+provider's side to expire or clean up.</p>
 <p>File management is supported by <code><a href="chat_openai.html">chat_openai()</a></code>, <code><a href="chat_anthropic.html">chat_anthropic()</a></code>,
 and <code><a href="chat_google_gemini.html">chat_google_gemini()</a></code>; other providers error. Provider notes:</p><ul><li><p>Gemini files always expire after 48 hours (so <code>expires_in_h</code> can't be
 changed), and uploading waits until Gemini finishes processing the
