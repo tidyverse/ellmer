@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "min_ellmer_version": "0.5.0",
-  "updated_at": "2026-08-31T12:21:15Z",
+  "updated_at": "2026-09-02T12:13:24Z",
   "data": [
     {
       "provider": "AWS/Bedrock",
@@ -63,6 +63,13 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "amazon.nova-2-sonic-v1:0",
+      "variant": "",
+      "input": 0.33,
+      "output": 2.75
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "amazon.nova-lite-v1:0",
       "variant": "",
       "input": 0.06,
@@ -81,6 +88,13 @@
       "variant": "",
       "input": 0.8,
       "output": 3.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "amazon.nova-sonic-v1:0",
+      "variant": "",
+      "input": 0.06,
+      "output": 0.24
     },
     {
       "provider": "AWS/Bedrock",
@@ -218,6 +232,14 @@
       "input": 10,
       "output": 50,
       "cached_input": 1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "anthropic.claude-fable-5-1",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 0.25
     },
     {
       "provider": "AWS/Bedrock",
@@ -1106,6 +1128,14 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu.anthropic.claude-fable-5-1",
+      "variant": "",
+      "input": 11,
+      "output": 55,
+      "cached_input": 0.275
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu.anthropic.claude-haiku-4-5-20251001-v1:0",
       "variant": "",
       "input": 1.1,
@@ -1286,6 +1316,14 @@
       "input": 10,
       "output": 50,
       "cached_input": 1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.anthropic.claude-fable-5-1",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 0.25
     },
     {
       "provider": "AWS/Bedrock",
@@ -2687,6 +2725,14 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.anthropic.claude-fable-5-1",
+      "variant": "",
+      "input": 11,
+      "output": 55,
+      "cached_input": 0.275
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
       "variant": "",
       "input": 1.1,
@@ -3105,6 +3151,14 @@
       "input": 10,
       "output": 50,
       "cached_input": 1
+    },
+    {
+      "provider": "Anthropic",
+      "model": "claude-fable-5-1",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 0.25
     },
     {
       "provider": "Anthropic",
