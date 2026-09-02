@@ -885,9 +885,63 @@ test_that("normalize_tool_result handles different return types", {
 
 # Tool context ----------------------------------------------------------------
 
+test_that("invoke_tools() supplies a minimal context when tool_context is NULL", {
+  captured <- NULL
+  t <- tool(
+    function() {
+      captured <<- tool_context()
+      "ok"
+    },
+    name = "ctx_tool",
+    description = "A tool that reads tool_context()"
+  )
+  req <- ContentToolRequest(
+    id = "c1",
+    name = "ctx_tool",
+    arguments = list(),
+    tool = t
+  )
+
+  coro::collect(invoke_tools(
+    AssistantTurn(list(req)),
+    tool_context = NULL
+  ))
+
+  expect_s3_class(captured, "ellmer_tool_context")
+  expect_identical(captured$request, req)
+  expect_equal(captured$turns, list())
+})
+
+test_that("invoke_tools_async() supplies a minimal context when tool_context is NULL", {
+  captured <- NULL
+  t <- tool(
+    coro::async(function() {
+      captured <<- tool_context()
+      "ok"
+    }),
+    name = "ctx_tool",
+    description = "An async tool that reads tool_context()"
+  )
+  req <- ContentToolRequest(
+    id = "c1",
+    name = "ctx_tool",
+    arguments = list(),
+    tool = t
+  )
+
+  sync(gen_async_promise_all(invoke_tools_async(
+    AssistantTurn(list(req)),
+    tool_context = NULL
+  )))
+
+  expect_s3_class(captured, "ellmer_tool_context")
+  expect_identical(captured$request, req)
+  expect_equal(captured$turns, list())
+})
+
 test_that("invoke_tool() passes tool_context to the tool (sync)", {
   turns <- list()
-  factory <- tool_context_factory(turns)
+  factory <- \(request) new_tool_context(request, turns)
 
   captured_name <- NULL
   t <- tool(
@@ -911,7 +965,7 @@ test_that("invoke_tool() passes tool_context to the tool (sync)", {
 })
 
 test_that("invoke_tool() stack depth returns to 0 after a tool error (sync)", {
-  factory <- tool_context_factory(list())
+  factory <- new_tool_context
 
   t <- tool(
     function() stop("boom"),
@@ -931,7 +985,7 @@ test_that("invoke_tool() stack depth returns to 0 after a tool error (sync)", {
 })
 
 test_that("invoke_tool_async() passes tool_context to the tool (B1 bracketing)", {
-  factory <- tool_context_factory(list())
+  factory <- new_tool_context
 
   captured <- list()
 
@@ -969,7 +1023,7 @@ test_that("invoke_tool_async() passes tool_context to the tool (B1 bracketing)",
 })
 
 test_that("invoke_tool_async() stack depth returns to 0 after a tool error (async)", {
-  factory <- tool_context_factory(list())
+  factory <- new_tool_context
 
   t <- tool(
     coro::async(function() stop("async boom")),
@@ -989,7 +1043,7 @@ test_that("invoke_tool_async() stack depth returns to 0 after a tool error (asyn
 })
 
 test_that("capture-before-await: context captured before await remains usable", {
-  factory <- tool_context_factory(list())
+  factory <- new_tool_context
 
   captured_name <- NULL
   t <- tool(
@@ -1015,7 +1069,7 @@ test_that("capture-before-await: context captured before await remains usable", 
 })
 
 test_that("tool_context() after await aborts with ellmer_error_tool_context_unavailable", {
-  factory <- tool_context_factory(list())
+  factory <- new_tool_context
 
   t <- tool(
     coro::async(function() {

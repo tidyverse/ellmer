@@ -613,6 +613,7 @@ Chat <- R6::R6Class(
         }
 
         if (turn_has_tool_request(assistant_turn)) {
+          turns <- self$get_turns(include_system_prompt = TRUE)
           tool_calls <- invoke_tools(
             assistant_turn,
             echo = echo,
@@ -620,9 +621,7 @@ Chat <- R6::R6Class(
             on_tool_result = private$callback_on_tool_result$invoke,
             yield_request = yield_as_content,
             otel_span = agent_span,
-            tool_context = tool_context_factory(
-              self$get_turns(include_system_prompt = TRUE)
-            )
+            tool_context = \(request) new_tool_context(request, turns)
           )
 
           tool_results <- list()
@@ -691,6 +690,7 @@ Chat <- R6::R6Class(
         }
 
         if (turn_has_tool_request(assistant_turn)) {
+          turns <- self$get_turns(include_system_prompt = TRUE)
           tool_calls <- invoke_tools_async(
             assistant_turn,
             echo = echo,
@@ -698,9 +698,7 @@ Chat <- R6::R6Class(
             on_tool_result = private$callback_on_tool_result$invoke_async,
             yield_request = yield_as_content,
             otel_span = agent_span,
-            tool_context = tool_context_factory(
-              self$get_turns(include_system_prompt = TRUE)
-            )
+            tool_context = \(request) new_tool_context(request, turns)
           )
           if (tool_mode == "sequential") {
             tool_results <- list()

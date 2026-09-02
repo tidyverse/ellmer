@@ -1754,9 +1754,12 @@ test_that("tool_context()$turns includes the system prompt", {
   )
   coro::collect(invoke_tools(
     turn,
-    tool_context = tool_context_factory(
-      chat$get_turns(include_system_prompt = TRUE)
-    )
+    tool_context = function(request) {
+      new_tool_context(
+        request,
+        chat$get_turns(include_system_prompt = TRUE)
+      )
+    }
   ))
 
   expect_equal(captured[[1]]@role, "system")

@@ -49,14 +49,9 @@ test_that("with_tool_context() pops after normal exit", {
   expect_equal(length(the$tool_context_stack), 0L)
 })
 
-test_that("with_tool_context() leaves an existing context in place for NULL", {
-  ctx <- fake_ctx()
-
-  with_tool_context(ctx, {
-    expect_identical(with_tool_context(NULL, tool_context()), ctx)
-  })
-
-  expect_equal(length(the$tool_context_stack), 0L)
+test_that("tool context helpers reject NULL", {
+  expect_error(with_tool_context(NULL, NULL), "context.*must be")
+  expect_error(local_tool_context(NULL), "context.*must be")
 })
 
 test_that("with_tool_context() pops after an error in code", {
@@ -127,20 +122,8 @@ test_that("as_tool_context() fills in defaults for omitted fields", {
 })
 
 test_that("new_tool_context() builds correct structure", {
-  ctx <- new_tool_context(request = "req", turns = list())
+  ctx <- new_tool_context(request = "req")
   expect_equal(class(ctx), "ellmer_tool_context")
   expect_identical(ctx$request, "req")
   expect_equal(ctx$turns, list())
-})
-
-test_that("tool_context_factory() builds contexts per request", {
-  turns <- list("turn1")
-  factory <- tool_context_factory(turns)
-
-  ctx1 <- factory("req1")
-  ctx2 <- factory("req2")
-
-  expect_equal(class(ctx1), "ellmer_tool_context")
-  expect_identical(ctx1$request, "req1")
-  expect_identical(ctx2$request, "req2")
 })

@@ -13,9 +13,8 @@ with_tool_context(context, code)
 local_tool_context(context, .frame = parent.frame())
 }
 \arguments{
-\item{context}{An \code{ellmer_tool_context} object, a list with fields
-\code{request} and \code{turns} (which will be promoted automatically). For
-\code{with_tool_context()}, it can also be \code{NULL}.}
+\item{context}{An \code{ellmer_tool_context} object, or a list with fields
+\code{request} and \code{turns} (which will be promoted automatically).}
 
 \item{code}{An expression to evaluate with \code{context} on top of the stack.}
 

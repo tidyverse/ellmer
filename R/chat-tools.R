@@ -37,6 +37,10 @@ on_load({
     otel_span = NULL,
     tool_context = NULL
   ) {
+    if (is.null(tool_context)) {
+      tool_context <- new_tool_context
+    }
+
     tool_requests <- extract_tool_requests(turn)
 
     for (request in tool_requests) {
@@ -87,6 +91,10 @@ on_load({
     otel_span = NULL,
     tool_context = NULL
   ) {
+    if (is.null(tool_context)) {
+      tool_context <- new_tool_context
+    }
+
     tool_requests <- extract_tool_requests(turn)
 
     invoke_tool_async_wrapper <- coro::async(function(request) {
@@ -191,12 +199,14 @@ normalize_tool_result <- function(result) {
 }
 
 # Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases
-invoke_tool <- function(request, otel_span = NULL, tool_context = NULL) {
-  context <- if (is.null(tool_context)) NULL else tool_context(request)
-  with_tool_context(context, invoke_tool_impl(request, otel_span))
-}
+invoke_tool <- function(
+  request,
+  otel_span = NULL,
+  tool_context = new_tool_context
+) {
+  context <- tool_context(request)
+  local_tool_context(context)
 
-invoke_tool_impl <- function(request, otel_span = NULL) {
   if (is.null(request@tool)) {
     return(new_tool_result(request, error = "Unknown tool"))
   }
@@ -221,16 +231,11 @@ invoke_tool_impl <- function(request, otel_span = NULL) {
   )
 }
 
-invoke_tool_async_call <- function(request, args, tool_context) {
-  context <- if (is.null(tool_context)) NULL else tool_context(request)
-  with_tool_context(context, do.call(request@tool, args))
-}
-
 on_load(
   invoke_tool_async <- coro::async(function(
     request,
     otel_span = NULL,
-    tool_context = NULL
+    tool_context = new_tool_context
   ) {
     if (is.null(request@tool)) {
       return(new_tool_result(request, error = "Unknown tool"))
@@ -243,10 +248,11 @@ on_load(
     }
 
     tool_span <- local_tool_otel_span(request, parent = otel_span)
+    context <- tool_context(request)
 
     tryCatch(
       {
-        value <- await(invoke_tool_async_call(request, args, tool_context))
+        value <- await(with_tool_context(context, do.call(request@tool, args)))
         new_tool_result(request, value)
       },
       error = function(e) {

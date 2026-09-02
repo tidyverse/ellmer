@@ -36,9 +36,8 @@ NULL
 #'
 #'   `local_tool_context()` returns `context` invisibly.
 #'
-#' @param context An `ellmer_tool_context` object, a list with fields
-#'   `request` and `turns` (which will be promoted automatically). For
-#'   `with_tool_context()`, it can also be `NULL`.
+#' @param context An `ellmer_tool_context` object, or a list with fields
+#'   `request` and `turns` (which will be promoted automatically).
 #' @param code An expression to evaluate with `context` on top of the stack.
 #' @param .frame The environment whose exit triggers the pop. Defaults to
 #'   `parent.frame()` (the calling function's frame).
@@ -90,10 +89,6 @@ tool_context <- function() {
 #' @rdname tool_context
 #' @export
 with_tool_context <- function(context, code) {
-  if (is.null(context)) {
-    return(force(code))
-  }
-
   push_tool_context(context)
   withr::defer(pop_tool_context())
   force(code)
@@ -107,7 +102,7 @@ local_tool_context <- function(context, .frame = parent.frame()) {
   invisible(context)
 }
 
-new_tool_context <- function(request, turns) {
+new_tool_context <- function(request, turns = list()) {
   structure(
     list(request = request, turns = turns),
     class = "ellmer_tool_context"
@@ -142,8 +137,4 @@ pop_tool_context <- function() {
     the$tool_context_stack <- stack[-length(stack)]
   }
   invisible(NULL)
-}
-
-tool_context_factory <- function(turns) {
-  function(request) new_tool_context(request, turns)
 }

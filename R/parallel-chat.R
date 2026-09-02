@@ -106,9 +106,10 @@ parallel_chat <- function(
     ok_idx <- which(is_ok)
     tool_turns <- map(ok_idx, function(i) {
       turn <- match_tools(assistant_turns[[i]], tools = chat$get_tools())
+      turns <- conversations[[i]]
       tool_results <- coro::collect(invoke_tools(
         turn,
-        tool_context = tool_context_factory(conversations[[i]])
+        tool_context = \(request) new_tool_context(request, turns)
       ))
       tool_results_as_turn(tool_results)
     })
