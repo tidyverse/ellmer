@@ -63,7 +63,7 @@ A \link{Chat} object.
 \description{
 \ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
 
-The \href{https://azure.microsoft.com/en-us/products/ai-services/openai-service}{Azure OpenAI server}
+\href{https://azure.microsoft.com/en-us/products/ai-foundry/models/openai/}{Azure OpenAI in Foundry Models}
 hosts a number of open source models as well as proprietary models
 from OpenAI.
 

@@ -28,7 +28,7 @@ stream after the next chunk arrives.
 
 The same controller can be reused across multiple streams. Call
 \verb{$reset()} to clear the cancelled state, or pass it directly to a new
-\verb{$stream()} call — it will be reset automatically.
+\verb{$stream()} call, where it will be reset automatically.
 }
 \section{Async cancellation in Shiny}{
 

@@ -69,7 +69,7 @@ local({
       if (length(turns)) {
         # Tool result values are typed `class_any`, so tools can return objects
         # (environments, R6, external pointers) that `jsonlite::toJSON` rejects.
-        # Skip emission rather than break the chat — the provider's tool_string
+        # Skip emission rather than break the chat; the provider's tool_string
         # path will surface a descriptive error.
         tryCatch(
           {
@@ -207,7 +207,7 @@ record_chat_otel_span_status <- function(span, provider, result) {
   span$set_status("ok")
 }
 
-# Convert a single Content into a GenAI semconv "part" — a named list emitted
+# Convert a single Content into a GenAI semconv "part", a named list emitted
 # as one entry of a ChatMessage's `parts` array. New content classes fall
 # through to the default method, which emits a schema-valid `generic` part.
 as_otel_part <- new_generic("as_otel_part", "content")
@@ -252,7 +252,7 @@ tool_otel_response <- function(content) {
 }
 
 # Produce a GenAI semconv ChatMessage from a Turn. Tool-result UserTurns get
-# role "tool" so consumers can filter them out of normal user input — matching
+# role "tool" so consumers can filter them out of normal user input, matching
 # Python's GenAI instrumentations.
 as_otel_message <- function(turn) {
   list(
