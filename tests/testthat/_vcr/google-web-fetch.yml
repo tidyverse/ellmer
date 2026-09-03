@@ -1,7 +1,7 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What''s the first movie
         listed on https://rvest.tidyverse.org/articles/starwars.html?"}]}],"tools":[{"url_context":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
@@ -10,109 +10,11 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '909'
+      content-length: '884'
       content-type: application/json; charset=UTF-8
-      date: Thu, 09 Jul 2026 10:31:39 GMT
+      date: Thu, 03 Sep 2026 05:36:15 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=2166
-      vary:
-      - Origin
-      - X-Origin
-      - Referer
-      x-content-type-options: nosniff
-      x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
-      x-xss-protection: '0'
-    body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "The first movie listed on that page is ***The Phantom Menace*** (released on May 19, 1999, and directed by George Lucas).",
-                    "thoughtSignature": "EssBCsgBARFNMg/QdQiBbXx9S2dmUH6Kmzpjvu46zcybIL2cKPLk5pb0Kes4ucHcvN4kwXYZT2J7UF7cbpBIeOdLqT9cXe/3O1DeRzpZ03bz/EU2Vv/JdYl2X0vfMGPze9W3nd57jy6L+OO4xgWXPEBTIA34i5jmiv9wdslgtVzR3gxnXXVCJc0lX+tVThgzAyu64tTQB3e5XXX/eYtrN8jT3tqraFoUogsDW5QBJ6m1SIY95czH0fTnoN4Yw25xmNLEfg4/rpfZ3Nhi/rQ="
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0,
-              "groundingMetadata": {
-                "groundingChunks": [
-                  {
-                    "web": {
-                      "uri": "https://rvest.tidyverse.org/articles/starwars.html",
-                      "title": "Star Wars films (static HTML) • rvest"
-                    }
-                  }
-                ],
-                "groundingSupports": [
-                  {
-                    "segment": {
-                      "endIndex": 120,
-                      "text": "The first movie listed on that page is ***The Phantom Menace*** (released on May 19, 1999, and directed by George Lucas)"
-                    },
-                    "groundingChunkIndices": [
-                      0
-                    ]
-                  }
-                ]
-              },
-              "urlContextMetadata": {
-                "urlMetadata": [
-                  {
-                    "retrievedUrl": "https://rvest.tidyverse.org/articles/starwars.html",
-                    "urlRetrievalStatus": "URL_RETRIEVAL_STATUS_SUCCESS"
-                  }
-                ]
-              }
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 132,
-            "candidatesTokenCount": 65,
-            "totalTokenCount": 1733,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 132
-              }
-            ],
-            "toolUsePromptTokenCount": 1387,
-            "toolUsePromptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 1387
-              }
-            ],
-            "thoughtsTokenCount": 149,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.5-flash",
-          "responseId": "iXhPar2PAuD5nsEPjJ-FmQ8"
-        }
-  recorded_at: 2026-07-09 10:31:39
-- request:
-    method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
-    body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the first movie
-        listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"model","parts":[{"text":"The
-        first movie listed on that page is ***The Phantom Menace*** (released on May
-        19, 1999, and directed by George Lucas)."}]},{"role":"user","parts":[{"text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]}],"tools":[{"url_context":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
-  response:
-    status: 200
-    headers:
-      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      content-encoding: gzip
-      content-length: '832'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 09 Jul 2026 10:31:41 GMT
-      server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=2082
+      server-timing: gfet4t7; dur=1702
       vary:
       - Origin
       - X-Origin
@@ -130,7 +32,7 @@ http_interactions:
                 "parts": [
                   {
                     "text": "The first movie listed on that page is ***The Phantom Menace***.",
-                    "thoughtSignature": "EqcBCqQBARFNMg8NZbTY5wxm4cQUX8X/MTQa5gZwlDEU3nOgSqoRLlgIDEoY0vzbq9EmsrdAe3AZF9622FWOFzIcp1c4ZnFy6KL41rnP6os3ujMDshfB72KVK0x5OJQtY7pBRcPHZGr5TfBEVcMECjeCPDP9XkSenuyKFT7LGF7xa5gfD87UaGaGCc+RZ8TSQn0KLpx+KDsB8Wf7UUFHF/d3dA29U/NXwyA="
+                    "thoughtSignature": "EtoBCtcBARFNMg+8r/8Ctj5tmR4KRRlyWNOv8zQeAZc3DSFnpkow6ZE7LD7EXtJLT8TvQYAfq4eFzKm2k7qF2CXNXWLclaPZ3Wqd+Topa1ZF2oDj3vmqM/rrolQZR2xu0rKXm3AT5Gdi6nrjpR1kIS4IzokNAqlLFvGMS4AEeLxrbdxqDw6RGGc6gt8i0hLsstQB9Kh5Nfk8tDYkGxeGf4KimalP08f5GqhtspPpJk9XJp23fFvFkpg8ihqp+XlrQ9M4cfiZje4M+lPqLrZEtJ0g2R5URDCgrfb0djQ="
                   }
                 ],
                 "role": "model"
@@ -169,37 +71,133 @@ http_interactions:
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 208,
+            "promptTokenCount": 72,
             "candidatesTokenCount": 45,
-            "totalTokenCount": 1861,
+            "totalTokenCount": 1525,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 208
+                "tokenCount": 72
               }
             ],
-            "toolUsePromptTokenCount": 1461,
+            "toolUsePromptTokenCount": 1327,
             "toolUsePromptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 1461
+                "tokenCount": 1327
               }
             ],
-            "thoughtsTokenCount": 147,
+            "thoughtsTokenCount": 81,
             "serviceTier": "standard"
           },
-          "modelVersion": "gemini-3.5-flash",
-          "responseId": "i3hPaoWvIZ-tkdUP3fbQ4QE"
+          "modelVersion": "gemini-3.7-flash",
+          "responseId": "TQeZasb8N_Ke28oP7LubqQc"
         }
-  recorded_at: 2026-07-09 10:31:41
+  recorded_at: 2026-09-03 05:36:15
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What''s the first movie
         listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"model","parts":[{"text":"The
-        first movie listed on that page is ***The Phantom Menace*** (released on May
-        19, 1999, and directed by George Lucas)."}]},{"role":"user","parts":[{"text":"What''s
+        first movie listed on that page is ***The Phantom Menace***."}]},{"role":"user","parts":[{"text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]}],"tools":[{"url_context":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '834'
+      content-type: application/json; charset=UTF-8
+      date: Thu, 03 Sep 2026 05:36:17 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=1673
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-gemini-service-tier: standard
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "The first movie listed on that page is ***The Phantom Menace***.",
+                    "thoughtSignature": "EqkBCqYBARFNMg+zgz0MlnUs3Xc6wGTDBIT35dTxOC0l2foteP41KOle+igJCS8WvJoLYqkV4BTB3wtLj15V+FCMN/ztUS0+JXx27xQi4nsgb9zIHiM9IUjEyU3u3bHViBhV19d3JWI6LnvY/2iPaKJHfwM00ieW4WHeVoXh4gBvdavmd4+0MAnJlwkPxcp4VGme6qcrw2258P+u37/rnm4QJCX7aRGXB9OYxA=="
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "index": 0,
+              "groundingMetadata": {
+                "groundingChunks": [
+                  {
+                    "web": {
+                      "uri": "https://rvest.tidyverse.org/articles/starwars.html",
+                      "title": "Star Wars films (static HTML) • rvest"
+                    }
+                  }
+                ],
+                "groundingSupports": [
+                  {
+                    "segment": {
+                      "endIndex": 63,
+                      "text": "The first movie listed on that page is ***The Phantom Menace***"
+                    },
+                    "groundingChunkIndices": [
+                      0
+                    ]
+                  }
+                ]
+              },
+              "urlContextMetadata": {
+                "urlMetadata": [
+                  {
+                    "retrievedUrl": "https://rvest.tidyverse.org/articles/starwars.html",
+                    "urlRetrievalStatus": "URL_RETRIEVAL_STATUS_SUCCESS"
+                  }
+                ]
+              }
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 104,
+            "candidatesTokenCount": 45,
+            "totalTokenCount": 1558,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 104
+              }
+            ],
+            "toolUsePromptTokenCount": 1357,
+            "toolUsePromptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 1357
+              }
+            ],
+            "thoughtsTokenCount": 52,
+            "serviceTier": "standard"
+          },
+          "modelVersion": "gemini-3.7-flash",
+          "responseId": "UAeZavrICYWKvdIPktub8AM"
+        }
+  recorded_at: 2026-09-03 05:36:17
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the first movie
+        listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"model","parts":[{"text":"The
+        first movie listed on that page is ***The Phantom Menace***."}]},{"role":"user","parts":[{"text":"What''s
         the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"model","parts":[{"text":"The
         first movie listed on that page is ***The Phantom Menace***."}]},{"role":"user","parts":[{"text":"Who
         directed it?"}]}],"tools":[{"url_context":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
@@ -208,11 +206,11 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '874'
+      content-length: '961'
       content-type: application/json; charset=UTF-8
-      date: Thu, 09 Jul 2026 10:31:44 GMT
+      date: Thu, 03 Sep 2026 05:36:19 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=2335
+      server-timing: gfet4t7; dur=1125
       vary:
       - Origin
       - X-Origin
@@ -229,91 +227,55 @@ http_interactions:
               "content": {
                 "parts": [
                   {
-                    "text": "It was directed by **George Lucas**.",
-                    "thoughtSignature": "Et8BCtwBARFNMg+tgYr/bEuppdfLvQq1yz9T032Fri4WdEGJaGn1vpN8ZbSP+0zFuXibCM7iqE4fV41+Mcl3TiXS8MykzqKtFiyt4qLTZawr+IB3tjuHh5yMQ9JlWsIdVtVesX6YpRrY8Fx8EQelR7fLuSSezRrKAG36TX5F7WSm1CnIljvQnz2lWW7YzAXhq4xTo10sg9ldsg2Vlsy6r2Y6uViBzOoBt1KpJsmNpEQQVZM75i6OhxdrwEj9g2cZ6Vtk7Dvh2OmoTmThO3CouxeuMa3lgTTRZ4EU1/Y2WPLHVw=="
+                    "text": "***The Phantom Menace* was directed by **George Lucas**.",
+                    "thoughtSignature": "Ep4ECpsEARFNMg/wXSWZZURC87//Eyh6ck1VUPkVlKMwHRN0km9LyD4SSd1GNJuXg0Aq75lbL5IG6TA7Y0r7ozorIpgxGGHBdrMoQt2iCZOqhmimmlsVHUReGGM4hbuz2Dy0pWbpVvUrJ+3K+bb8pnfgDJ6CXS64eBWnTRUaID80Cj570XnUqJbYxmFry+c7LBUvAObV6ldT7Vo541iCc4EHXP9roNj61+PBPm77sQNYYJtS4WnYTuAqBcmiExRdY4VY1VB4ffRVBhXWSWmpxfOx0n/0fPmiokWzWbs2rcXFNCbnpc4yJyL9eyTUOcv2bTyiRBP97kwgTu3+LPccz8vANkW0sU1ffXUPgbBRJExLmQe70bBfYEt5EzruwfGAOqDeHY66m2aJYQ7BcfV17sfJf4PEaim37hSJ5Q9tN2gHNWNIwYXEGskaEXw2B5ngTFX+s9w2J4GNN6Sg3PS2TWopvmsLq4L+PJadxpmkcnRs02fqnb1YDkl+1iXLAgR3PsGmDwJRBH+4A8sM1k7N9NBb7H+n7Eh1VpfV6bUMhWWEbUyOw7bIK1mR+fw5lZDrf4x8GhwsBlRgGqIYTWSMdjcikDUFLC5NmP/1wZuOtjQYiCHeZRHhcw01iYhNoOHUeliPHqm095tGnX9D9CmtBwqVXGvFO2sLvq45AodG1BlgQLy8yCMNBWRR1Iaw2d/RlXWTEfFSW5oj+mS+cpKPt80="
                   }
                 ],
                 "role": "model"
               },
               "finishReason": "STOP",
-              "index": 0,
-              "groundingMetadata": {
-                "groundingChunks": [
-                  {
-                    "web": {
-                      "uri": "https://rvest.tidyverse.org/articles/starwars.html",
-                      "title": "Star Wars films (static HTML) • rvest"
-                    }
-                  }
-                ],
-                "groundingSupports": [
-                  {
-                    "segment": {
-                      "endIndex": 35,
-                      "text": "It was directed by **George Lucas**"
-                    },
-                    "groundingChunkIndices": [
-                      0
-                    ]
-                  }
-                ]
-              },
-              "urlContextMetadata": {
-                "urlMetadata": [
-                  {
-                    "retrievedUrl": "https://rvest.tidyverse.org/articles/starwars.html",
-                    "urlRetrievalStatus": "URL_RETRIEVAL_STATUS_SUCCESS"
-                  }
-                ]
-              }
+              "index": 0
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 283,
-            "candidatesTokenCount": 39,
-            "totalTokenCount": 2084,
+            "promptTokenCount": 87,
+            "candidatesTokenCount": 13,
+            "totalTokenCount": 207,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 283
+                "tokenCount": 87
               }
             ],
-            "toolUsePromptTokenCount": 1534,
-            "toolUsePromptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 1534
-              }
-            ],
-            "thoughtsTokenCount": 228,
+            "thoughtsTokenCount": 107,
             "serviceTier": "standard"
           },
-          "modelVersion": "gemini-3.5-flash",
-          "responseId": "jXhPaqK1O4iYkdUPmrrG6QE"
+          "modelVersion": "gemini-3.7-flash",
+          "responseId": "UgeZaou2GoqrxN8PvNePoAk"
         }
-  recorded_at: 2026-07-09 10:31:44
+  recorded_at: 2026-09-03 05:36:19
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What''s the first movie
         listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"model","parts":[{"text":"The
-        first movie listed on that page is ***The Phantom Menace*** (released on May
-        19, 1999, and directed by George Lucas)."}]},{"role":"user","parts":[{"text":"What''s
+        first movie listed on that page is ***The Phantom Menace***."}]},{"role":"user","parts":[{"text":"What''s
         the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"model","parts":[{"text":"The
         first movie listed on that page is ***The Phantom Menace***."}]},{"role":"user","parts":[{"text":"Who
-        directed it?"}]},{"role":"model","parts":[{"text":"It was directed by **George
-        Lucas**."}]},{"role":"user","parts":[{"text":"Who directed it?"}]}],"tools":[{"url_context":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
+        directed it?"}]},{"role":"model","parts":[{"text":"***The Phantom Menace*
+        was directed by **George Lucas**."}]},{"role":"user","parts":[{"text":"Who
+        directed it?"}]}],"tools":[{"url_context":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '941'
+      content-length: '832'
       content-type: application/json; charset=UTF-8
-      date: Thu, 09 Jul 2026 10:31:47 GMT
+      date: Thu, 03 Sep 2026 05:36:22 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=2693
+      server-timing: gfet4t7; dur=1964
       vary:
       - Origin
       - X-Origin
@@ -330,8 +292,8 @@ http_interactions:
               "content": {
                 "parts": [
                   {
-                    "text": "As listed on the page, ***The Phantom Menace*** was directed by **George Lucas**.",
-                    "thoughtSignature": "Ev4BCvsBARFNMg9Kwm52ewCCkCMkoq1IiVNgJkmBTbF/88OIYz42aMyh+3ouwJiVIgd3l2fw6khoDkN/IMg9+jYduiwdJFS4FabW6X4kb27j/MSuFTgCyGPAEO1lHzh0PHbdRCSLNPc3NRera63dkDsIuVSVNhgPaSOkJxDrKI370wGX6dIBGygK8CU9xJ0GtXBeOmhqPzgxvE554DrJCPRgJn0D+Qz7T8OJ5VycxssGRUTIQL3luE1ZqY4uZJte+NuqWH1ZBCSpX25evKfvVVv7L29azStAoGRLgRQKWinwg3tC+fztNqEys3kbtT00ygLFHhJEeDgseCbV1Mz+2yI="
+                    "text": "***The Phantom Menace* was directed by **George Lucas**.",
+                    "thoughtSignature": "EqcBCqQBARFNMg/+3zXM6wE3tYZHxcOe1S3DLUhc4+ry+nT9QDQS2ZEWQaQbMLVg0UVFUjgmrKXplYb+oFclM8puzk39AeWd2UNxkLzHQlfjqW3cPkr7nUQp90xwGXzV8I0g6MMEoZS1PhQdxhp+hOWA42q/sdfdZnpp9KEV69a2fHG5DlzPh34/0Oa+45E1Mb2F+8xUW3gu4OQUX2KBGTYFldB/dMIbNZg="
                   }
                 ],
                 "role": "model"
@@ -350,8 +312,8 @@ http_interactions:
                 "groundingSupports": [
                   {
                     "segment": {
-                      "endIndex": 80,
-                      "text": "As listed on the page, ***The Phantom Menace*** was directed by **George Lucas**"
+                      "endIndex": 55,
+                      "text": "***The Phantom Menace* was directed by **George Lucas**"
                     },
                     "groundingChunkIndices": [
                       0
@@ -370,27 +332,27 @@ http_interactions:
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 356,
-            "candidatesTokenCount": 50,
-            "totalTokenCount": 2291,
+            "promptTokenCount": 198,
+            "candidatesTokenCount": 44,
+            "totalTokenCount": 1796,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 356
+                "tokenCount": 198
               }
             ],
-            "toolUsePromptTokenCount": 1605,
+            "toolUsePromptTokenCount": 1447,
             "toolUsePromptTokensDetails": [
               {
                 "modality": "TEXT",
-                "tokenCount": 1605
+                "tokenCount": 1447
               }
             ],
-            "thoughtsTokenCount": 280,
+            "thoughtsTokenCount": 107,
             "serviceTier": "standard"
           },
-          "modelVersion": "gemini-3.5-flash",
-          "responseId": "kHhParHbKaC9nsEPupnqkAU"
+          "modelVersion": "gemini-3.7-flash",
+          "responseId": "VAeZaqn9C-KO28oPrP3g2Qc"
         }
-  recorded_at: 2026-07-09 10:31:47
+  recorded_at: 2026-09-03 05:36:22
 recorded_with: VCR-vcr/2.1.0

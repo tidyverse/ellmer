@@ -118,7 +118,7 @@ test_that("binary documents are rejected", {
 test_that("can match prices for some common models", {
   provider <- chat_google_gemini_test()$get_provider()
 
-  expect_true(has_cost(provider@name, "gemini-3.5-flash"))
+  expect_true(has_cost(provider@name, "gemini-3.7-flash"))
 
   expect_false(has_cost(provider@name, "gemini-1.0-pro-latest"))
 })
@@ -404,7 +404,7 @@ test_that("can use thinking levels", {
   vcr::local_cassette("google-thinking-level")
 
   chat <- chat_google_gemini_test(
-    model = "gemini-3.5-flash",
+    model = "gemini-3.7-flash",
     params = params(temperature = 0, reasoning_effort = "low")
   )
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)

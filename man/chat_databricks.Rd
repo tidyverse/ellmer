@@ -22,12 +22,12 @@ environment variable \code{DATABRICKS_HOST}, if set.}
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{model}{The model to use for the chat (defaults to "databricks-claude-sonnet-4-6").
+\item{model}{The model to use for the chat (defaults to "databricks-claude-sonnet-5").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 
 Available foundational models include:
 \itemize{
-\item \code{databricks-claude-sonnet-4-6} (the default)
+\item \code{databricks-claude-sonnet-5} (the default)
 \item \verb{databricks-mixtral-8x7b-instruct}
 \item \verb{databricks-meta-llama-3-1-70b-instruct}
 \item \verb{databricks-meta-llama-3-1-405b-instruct}

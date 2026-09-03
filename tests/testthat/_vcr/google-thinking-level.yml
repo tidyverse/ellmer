@@ -1,7 +1,7 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
     body:
       string: '{"contents":[{"role":"user","parts":[{"text":"What is 1 + 1?"}]}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014,"thinkingConfig":{"thinkingLevel":"low","includeThoughts":true}}}'
   response:
@@ -9,11 +9,11 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '1097'
+      content-length: '1009'
       content-type: application/json; charset=UTF-8
-      date: Sun, 24 May 2026 20:06:20 GMT
+      date: Thu, 03 Sep 2026 05:36:49 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1995
+      server-timing: gfet4t7; dur=1576
       vary:
       - Origin
       - X-Origin
@@ -30,12 +30,12 @@ http_interactions:
               "content": {
                 "parts": [
                   {
-                    "text": "**My Approach to a Simple Sum**\n\nOkay, so the question is a classic: \"What is 1 + 1?\". Right, right. No need to overthink this. My brain automatically processes this type of query as a base-level arithmetic problem. Step one, and it's a quick one, is to *identify the core question*. It’s a straightforward addition.\n\nStep two, the *answer* is immediately apparent. 1 + 1 equals, without a shadow of a doubt, 2. No complex calculations, no edge cases, just basic addition.\n\nFinally, in *formulating the response*, the goal is clarity and efficiency. The reply needs to be simple, direct, and, above all, accurate. I'd go with \"2\" or, if more context is needed, \"1 + 1 = 2\". It is a closed system.\n\n\n",
+                    "text": "**My Immediate Response to the Query**\n\nOkay, so the user wants the sum of 1 and 1. Straightforward enough. My process is pretty automatic for something this basic. First, I identify the fundamental question: they're asking \"What is 1 + 1?\". Next, I perform the computation – it's a simple addition, so I know 1 + 1 equals 2. Finally, I construct the answer. Given the simplicity of the request, a direct and clear response is most appropriate. No need for complex explanations here.\n\n\n",
                     "thought": true
                   },
                   {
-                    "text": "1 + 1 = 2.",
-                    "thoughtSignature": "EpcCCpQCAQw51sczwVjIHy3S4TSVLWmVdRN0EZtnRquF3oYkQizGRpESoAsP4p97pbueF19u0Es2AgP1W5CHTNFqBfqfIIVV6fmoRYHCsrEwAfprPiN5l4vVBjMnFLt3NRYWG2sQErWv3p5rJSeAuyyinIEaEm7rRBKBYcCEyH1cpJHZUev9gqcu9pdMcVj5nF9JpRl0dSgIA3ilf1DxBeRGDytGuG085CDFfVcbsIUnyhFpUSp4FxPQKZWlOIFr+rZ9oIW7t7+BfFl8Q290tY/9Q0wZSGoSs81CTwrXw0TyRG7lgt3w9abpVShksTDJgehTg6hByt2Rlk9v+wcXhMKLa67VLLKWEmZ7kn23V36THMI5zlvwhZ5C"
+                    "text": "1 + 1 = 2",
+                    "thoughtSignature": "ErICCq8CARFNMg8O+gIQx62tx9jH/wi0+5vc3XqQDlSSR/H6aC1x6yn/ISFPv9aecfcenf0s1AMQ2BdHLVJc0OTF4KdqRC13bHNwCK1SB2a6VF7mwfeXkpIYounu/XD1e1Z+OeaDc30T/bbiekD0dcHoLdRi/cBS8ohjzsMiucGl8nBIRSKoAwuVZ3R0z2J+Qb5fDo3ppWO+hcAy9w5lMICCl4MjKMAgN56VWxMqLDgwFLp0zg5SYOOqhC38N89tzUhaCw/OsgmXHs9FDXqHL1AYI7TS6tBnEhaq2YqFhLkTWZ3WQOb/NiqXBVG+Dfvi7Ok2hWvg7c9PyPhh1kCLdyDs22Rd2AqbVM+AomUIIE/14QQ8TkGhj/wvOCVuFQQ+APPbKLT7im/iBBFJeIslofiqRZ36"
                   }
                 ],
                 "role": "model"
@@ -46,19 +46,19 @@ http_interactions:
           ],
           "usageMetadata": {
             "promptTokenCount": 9,
-            "candidatesTokenCount": 8,
-            "totalTokenCount": 93,
+            "candidatesTokenCount": 7,
+            "totalTokenCount": 80,
             "promptTokensDetails": [
               {
                 "modality": "TEXT",
                 "tokenCount": 9
               }
             ],
-            "thoughtsTokenCount": 76,
+            "thoughtsTokenCount": 64,
             "serviceTier": "standard"
           },
-          "modelVersion": "gemini-3.5-flash",
-          "responseId": "OloTaq-CIJzNkdUP2vKnMQ"
+          "modelVersion": "gemini-3.7-flash",
+          "responseId": "cAeZavewA_H6xN8PlsWGuQw"
         }
-  recorded_at: 2026-05-24 20:06:20
+  recorded_at: 2026-09-03 05:36:49
 recorded_with: VCR-vcr/2.1.0

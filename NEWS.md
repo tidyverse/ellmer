@@ -15,6 +15,7 @@
 * `chat_aws_bedrock()` now supports bearer token authentication for enterprise API gateways (@thisisnic, #1002).
 * `chat_databricks()` no longer errors with models that return content as an array of typed objects (e.g. `databricks-gpt-oss-120b`); reasoning parts are now captured as thinking content (@thisisnic, #1078).
 * `chat_databricks()` no longer errors when a registered tool has no arguments (@thisisnic, #1084).
+* `chat_databricks()` and `chat_snowflake()` now default to `claude-sonnet-5`, and `chat_google_gemini()` and `chat_google_vertex()` now default to `gemini-3.7-flash` (@thisisnic, #1125).
 * `chat_github()` and `models_github()` are now defunct because GitHub Models has been retired (@thisisnic, #1069).
 * `chat_google_gemini()` no longer errors when mixing regular tools and built-in tools like `google_tool_web_search()` (@thisisnic, #1054).
 * `chat_huggingface()` now defaults to `Qwen/Qwen3-235B-A22B-Instruct-2507` (@thisisnic, #1040).
