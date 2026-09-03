@@ -6,13 +6,13 @@
 
 ## revdepcheck results
 
-We checked 43 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 51 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 1 new problem
- * We failed to check 1 packages: llmjson
+ * We failed to check 0 packages
 
 ### New problems
 
-* constructive
+* querychat
   checking tests ... ERROR
-  Issue opened: https://github.com/cynkra/constructive/issues/664
+  Issue opened: https://github.com/posit-dev/querychat/issues/283
