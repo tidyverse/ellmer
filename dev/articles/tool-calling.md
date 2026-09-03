@@ -331,9 +331,10 @@ chat$chat("Describe the design aesthetic of https://tidyverse.org")
 
 ### Tool context
 
-A tool sometimes needs to know a little about the call it’s part of —
-the tool request that triggered it, or the conversation so far — without
-that information being part of its arguments. Inside a tool body,
+A tool sometimes needs to know a little about the call it’s part of,
+such as the tool request that triggered it or the conversation so far,
+without that information being part of its arguments. Inside a tool
+body,
 [`tool_context()`](https://ellmer.tidyverse.org/dev/reference/tool_context.md)
 returns a read-only context object with two fields:
 
@@ -361,8 +362,8 @@ report_tool <- tool(
 
 In an async tool,
 [`tool_context()`](https://ellmer.tidyverse.org/dev/reference/tool_context.md)
-is only valid during the synchronous prefix of the function — in other
-words, before the first `await()`. Capture it at the top of your tool
+is only valid during the synchronous prefix of the function, in other
+words before the first `await()`. Capture it at the top of your tool
 body:
 
 ``` r
@@ -390,11 +391,11 @@ MCP tools do.
 ### Sharing state across tools
 
 Related tools may need to share private state that the model should
-never see — a database connection, an authenticated user, or a running
-tally. A clean way to organise this is to bundle the tools together as
-methods of an R6 class, with the shared state living in the object’s
-fields. Each tool reads and writes that state through `self`, and a
-`$tools()` method returns the ellmer tools.
+never see, such as a database connection, an authenticated user, or a
+running tally. A clean way to organise this is to bundle the tools
+together as methods of an R6 class, with the shared state living in the
+object’s fields. Each tool reads and writes that state through `self`,
+and a `$tools()` method returns the ellmer tools.
 
 ``` r
 
@@ -443,7 +444,7 @@ Assistant <- R6::R6Class(
 ```
 
 Create the object once, register its tools, and the state accumulates
-across turns and across `$chat()` calls — all without exposing
+across turns and across `$chat()` calls, all without exposing
 `user_email` or the raw notes to the model:
 
 ``` r
@@ -456,7 +457,7 @@ chat$register_tools(assistant$tools())
 chat$chat("Remember that I need to buy milk.")
 chat$chat("What do I need to do?")
 
-# Inspect the state directly — this never passed through the model
+# Inspect the state directly; this never passed through the model
 assistant$list_notes()
 #> [1] "buy milk"
 ```

@@ -355,11 +355,11 @@ function. For example, here’s a simple tool to screenshot a website:</p>
 <div class="section level3">
 <h3 id="tool-context">Tool context<a class="anchor" aria-label="anchor" href="#tool-context"></a>
 </h3>
-<p>A tool sometimes needs to know a little about the call it’s part of —
-the tool request that triggered it, or the conversation so far — without
-that information being part of its arguments. Inside a tool body,
-<code><a href="../reference/tool_context.html">tool_context()</a></code> returns a read-only context object with two
-fields:</p>
+<p>A tool sometimes needs to know a little about the call it’s part of,
+such as the tool request that triggered it or the conversation so far,
+without that information being part of its arguments. Inside a tool
+body, <code><a href="../reference/tool_context.html">tool_context()</a></code> returns a read-only context object
+with two fields:</p>
 <ul>
 <li>
 <code>$request</code>: the <code>ContentToolRequest</code> for this
@@ -383,8 +383,8 @@ that produced them:</p>
 <span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>query <span class="op">=</span> <span class="fu"><a href="../reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"The report query."</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>In an async tool, <code><a href="../reference/tool_context.html">tool_context()</a></code> is only valid during
-the synchronous prefix of the function — in other words, before the
-first <code>await()</code>. Capture it at the top of your tool body:</p>
+the synchronous prefix of the function, in other words before the first
+<code>await()</code>. Capture it at the top of your tool body:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_async_tool</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tool.html">tool</a></span><span class="op">(</span></span>
 <span>  <span class="fu">coro</span><span class="fu">::</span><span class="fu"><a href="https://coro.r-lib.org/reference/async.html" class="external-link">async</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">query</span><span class="op">)</span> <span class="op">{</span></span>
@@ -406,11 +406,12 @@ do.</p>
 <h3 id="sharing-state-across-tools">Sharing state across tools<a class="anchor" aria-label="anchor" href="#sharing-state-across-tools"></a>
 </h3>
 <p>Related tools may need to share private state that the model should
-never see — a database connection, an authenticated user, or a running
-tally. A clean way to organise this is to bundle the tools together as
-methods of an R6 class, with the shared state living in the object’s
-fields. Each tool reads and writes that state through <code>self</code>,
-and a <code>$tools()</code> method returns the ellmer tools.</p>
+never see, such as a database connection, an authenticated user, or a
+running tally. A clean way to organise this is to bundle the tools
+together as methods of an R6 class, with the shared state living in the
+object’s fields. Each tool reads and writes that state through
+<code>self</code>, and a <code>$tools()</code> method returns the ellmer
+tools.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Assistant</span> <span class="op">&lt;-</span> <span class="fu">R6</span><span class="fu">::</span><span class="kw"><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Assistant"</span>,</span>
@@ -455,8 +456,8 @@ and a <code>$tools()</code> method returns the ellmer tools.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Create the object once, register its tools, and the state accumulates
-across turns and across <code>$chat()</code> calls — all without
-exposing <code>user_email</code> or the raw notes to the model:</p>
+across turns and across <code>$chat()</code> calls, all without exposing
+<code>user_email</code> or the raw notes to the model:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">assistant</span> <span class="op">&lt;-</span> <span class="va">Assistant</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>user_email <span class="op">=</span> <span class="st">"hadley@posit.co"</span><span class="op">)</span></span>
 <span></span>
@@ -466,7 +467,7 @@ exposing <code>user_email</code> or the raw notes to the model:</p>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Remember that I need to buy milk."</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"What do I need to do?"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Inspect the state directly — this never passed through the model</span></span>
+<span><span class="co"># Inspect the state directly; this never passed through the model</span></span>
 <span><span class="va">assistant</span><span class="op">$</span><span class="fu">list_notes</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "buy milk"</span></span></code></pre></div>
 <p>Because the state lives in the object rather than in ellmer, you stay

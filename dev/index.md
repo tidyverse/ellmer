@@ -55,8 +55,7 @@ community; contributions to improve them are especially welcome.
 - Posit AI:
   [`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md).
 - Snowflake Cortex:
-  [`chat_snowflake()`](https://ellmer.tidyverse.org/dev/reference/chat_snowflake.md)
-  and `chat_cortex_analyst()`.
+  [`chat_snowflake()`](https://ellmer.tidyverse.org/dev/reference/chat_snowflake.md).
 
 ### Community providers
 
@@ -97,10 +96,10 @@ freedom, so we have a few recommendations to help you get started:
   [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   are good places to start.
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  defaults to **GPT-5.4**, but you can use `model = "gpt-5.4-nano"` for
-  a cheaper, faster model.
+  defaults to **GPT-5.6 Terra**, but you can use
+  `model = "gpt-5.6-luna"` for a cheaper, faster model.
   [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
-  defaults to **Claude Sonnet 4.6**, which we have found to be
+  defaults to **Claude Sonnet 5**, which we have found to be
   particularly good at writing R code.
 
 - [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
@@ -194,14 +193,14 @@ method:
 
 chat$chat("What preceding languages most influenced R?")
 #> R was primarily influenced by:
-#> 
+#>
 #> 1. **S** - The predecessor to R, which introduced many foundational concepts.
-#> 2. **Scheme** - A dialect of Lisp that influenced R's functional programming 
+#> 2. **Scheme** - A dialect of Lisp that influenced R's functional programming
 #> aspects.
 #> 3. **Fortran** - Influenced R's efficiency and mathematical capabilities.
 #> 4. **C** - Impacted R's performance and low-level programming features.
-#> 
-#> These languages contributed to R's design and functionality in statistics and 
+#>
+#> These languages contributed to R's design and functionality in statistics and
 #> data analysis.
 ```
 
@@ -223,11 +222,11 @@ chat$chat(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   "Can you explain this logo?"
 )
-#> The logo features a stylized letter "R" within a circular shape. The design 
-#> reflects the programming language R, which is widely used for statistical 
-#> analysis and data visualization. The circular element suggests continuity and 
-#> completeness, while the bold "R" emphasizes its identity. Overall, the logo 
-#> conveys modernity and practicality, aligning with R's functionality in data 
+#> The logo features a stylized letter "R" within a circular shape. The design
+#> reflects the programming language R, which is widely used for statistical
+#> analysis and data visualization. The circular element suggests continuity and
+#> completeness, while the bold "R" emphasizes its identity. Overall, the logo
+#> conveys modernity and practicality, aligning with R's functionality in data
 #> science.
 ```
 
@@ -267,3 +266,6 @@ ellmer comes with a bunch of vignettes to help you learn more:
   [`vignette("structured-data")`](https://ellmer.tidyverse.org/dev/articles/structured-data.md).
 - Learn about streaming and async APIs in
   [`vignette("streaming-async")`](https://ellmer.tidyverse.org/dev/articles/streaming-async.md).
+- Learn tips for programming with ellmer, including inside your own
+  package, in
+  [`vignette("programming")`](https://ellmer.tidyverse.org/dev/articles/programming.md).
