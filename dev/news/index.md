@@ -2,6 +2,8 @@
 
 ## ellmer (development version)
 
+## ellmer 0.5.0
+
 ### Lifecycle changes
 
 - [`chat_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)

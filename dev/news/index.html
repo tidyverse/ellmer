@@ -10,7 +10,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.2.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,20 +49,23 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.4.2.9000/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/tidyverse/ellmer/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.0" id="ellmer-050">ellmer 0.5.0<a class="anchor" aria-label="anchor" href="#ellmer-050"></a></h2>
 <div class="section level3">
-<h3 id="lifecycle-changes-development-version">Lifecycle changes<a class="anchor" aria-label="anchor" href="#lifecycle-changes-development-version"></a></h3>
+<h3 id="lifecycle-changes-0-5-0">Lifecycle changes<a class="anchor" aria-label="anchor" href="#lifecycle-changes-0-5-0"></a></h3>
 <ul><li>
 <code><a href="../reference/chat_github.html">chat_github()</a></code> and <code><a href="../reference/chat_github.html">models_github()</a></code> are now defunct because GitHub Models has been retired (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1069" class="external-link">#1069</a>).</li>
 <li>
 <code><a href="../reference/tool.html">tool()</a></code> functions that return complex objects like data frames or lists now produce a deprecation warning. Tool functions should return a character vector, an atomic vector, a JSON string (from <code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code>), or a <code>Content</code> object. Use <code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code> to convert complex objects before returning (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/858" class="external-link">#858</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-0-5-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-5-0"></a></h3>
 <ul><li>When running on Posit Connect, ellmer now forwards the viewer’s session token to Connect’s LLM gateway so gateway usage can be attributed to the viewer. This happens automatically for Shiny content and only affects requests to the gateway (<a href="https://github.com/karawoo" class="external-link">@karawoo</a>, <a href="https://github.com/tidyverse/ellmer/issues/1105" class="external-link">#1105</a>).</li>
 <li>
 <code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> gains an <code>api</code> argument to select between the Converse API on the <code>bedrock-runtime</code> endpoint and the Anthropic Messages or OpenAI Responses APIs on the <code>bedrock-mantle</code> endpoint. This makes models that Converse can’t serve, like Claude Mythos and the GPT-5 family, available on Bedrock. The API is picked from <code>model</code> by default, so you only need to set <code>api</code> for models ellmer doesn’t recognize (<a href="https://github.com/tidyverse/ellmer/issues/1064" class="external-link">#1064</a>).</li>
@@ -85,7 +88,7 @@
 <code><a href="../reference/tool_context.html">tool_context()</a></code> lets a tool access its calling context, including the <code>ContentToolRequest</code> and the conversation history, during a tool call. <code><a href="../reference/tool_context.html">with_tool_context()</a></code> and <code><a href="../reference/tool_context.html">local_tool_context()</a></code> support testing tools that use it (<a href="https://github.com/tidyverse/ellmer/issues/871" class="external-link">#871</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-improvements-and-bug-fixes-development-version">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-development-version"></a></h3>
+<h3 id="minor-improvements-and-bug-fixes-0-5-0">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-0-5-0"></a></h3>
 <ul><li>Default models have been updated for a number of providers (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1040" class="external-link">#1040</a>, <a href="https://github.com/tidyverse/ellmer/issues/1066" class="external-link">#1066</a>, <a href="https://github.com/tidyverse/ellmer/issues/1125" class="external-link">#1125</a>):
 <ul><li>
 <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> now uses <code>claude-sonnet-5</code>.</li>
