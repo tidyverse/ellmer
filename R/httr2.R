@@ -55,7 +55,7 @@ on_load(
   ) {
     setup_active_promise_otel_span(otel_span)
 
-    resp <- req_perform_connection(req)
+    resp <- req_perform_connection(req, blocking = FALSE)
     on.exit(close(resp))
 
     repeat {
@@ -63,6 +63,11 @@ on_load(
         break
       }
       event <- chat_resp_stream(provider, resp)
+      if (is.null(event) && !resp_stream_is_complete(resp)) {
+        Sys.sleep(0.05)
+        next
+      }
+
       data <- stream_parse(provider, event)
       if (is.null(data)) {
         break
