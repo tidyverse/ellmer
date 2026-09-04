@@ -1,5 +1,204 @@
 # Changelog
 
+## ellmer 0.5.0
+
+### Lifecycle changes
+
+- [`chat_github()`](https://ellmer.tidyverse.org/reference/chat_github.md)
+  and
+  [`models_github()`](https://ellmer.tidyverse.org/reference/chat_github.md)
+  are now defunct because GitHub Models has been retired
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1069](https://github.com/tidyverse/ellmer/issues/1069)).
+- [`tool()`](https://ellmer.tidyverse.org/reference/tool.md) functions
+  that return complex objects like data frames or lists now produce a
+  deprecation warning. Tool functions should return a character vector,
+  an atomic vector, a JSON string (from
+  [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)),
+  or a `Content` object. Use
+  [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)
+  to convert complex objects before returning
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#858](https://github.com/tidyverse/ellmer/issues/858)).
+
+### New features
+
+- When running on Posit Connect, ellmer now forwards the viewer’s
+  session token to Connect’s LLM gateway so gateway usage can be
+  attributed to the viewer. This happens automatically for Shiny content
+  and only affects requests to the gateway
+  ([@karawoo](https://github.com/karawoo),
+  [\#1105](https://github.com/tidyverse/ellmer/issues/1105)).
+- [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/reference/chat_aws_bedrock.md)
+  gains an `api` argument to select between the Converse API on the
+  `bedrock-runtime` endpoint and the Anthropic Messages or OpenAI
+  Responses APIs on the `bedrock-mantle` endpoint. This makes models
+  that Converse can’t serve, like Claude Mythos and the GPT-5 family,
+  available on Bedrock. The API is picked from `model` by default, so
+  you only need to set `api` for models ellmer doesn’t recognize
+  ([\#1064](https://github.com/tidyverse/ellmer/issues/1064)).
+- `Chat` gains experimental `$file_upload()`, `$file_list()`,
+  `$file_get()`, `$file_download()`, and `$file_delete()` methods for
+  managing provider-hosted files with
+  [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md),
+  [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md),
+  and
+  [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md):
+  upload a file once, then pass the returned reference to `$chat()`
+  instead of re-sending the file’s contents every turn. Uploads expire
+  after 48 hours by default; use `expires_in_h` to change this.
+  [`claude_file_upload()`](https://ellmer.tidyverse.org/reference/claude_file_upload.md)
+  and friends and
+  [`google_upload()`](https://ellmer.tidyverse.org/reference/google_upload.md)
+  are deprecated in favor of these
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1091](https://github.com/tidyverse/ellmer/issues/1091)).
+- `Chat` gains `$get_rounds()` and `$last_round()` methods for
+  retrieving the conversation history grouped into `Round`s. The new
+  `Round` class groups a `Chat`’s flat turn history into rounds, each
+  containing a user turn and the assistant/tool-result turns that follow
+  it ([\#507](https://github.com/tidyverse/ellmer/issues/507)).
+- `Chat` gains `$on_request_start()` and `$on_request_end()` callbacks
+  that fire before and after each model request, including each round of
+  the tool loop. `$on_request_start()` receives the turns about to be
+  sent, so you can inspect the request or compact the conversation with
+  `$set_turns()`. `$on_request_end()` receives the assistant turn just
+  returned, so you can track latency or cost per request
+  ([@kaipingyang](https://github.com/kaipingyang),
+  [\#1051](https://github.com/tidyverse/ellmer/issues/1051)).
+- `Chat$stream()` and `Chat$stream_async()` gain a `type` argument for
+  streaming structured output from providers with native support
+  ([@cpsievert](https://github.com/cpsievert),
+  [\#1102](https://github.com/tidyverse/ellmer/issues/1102)).
+- `Chat` gains a `$token_count()` method that estimates the number of
+  tokens in new input using the provider’s token counting endpoint
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#814](https://github.com/tidyverse/ellmer/issues/814)).
+- [`claude_tool_web_search()`](https://ellmer.tidyverse.org/reference/claude_tool_web_search.md),
+  `claude_tool_web_fetch(citations = TRUE)`,
+  [`google_tool_web_search()`](https://ellmer.tidyverse.org/reference/google_tool_web_search.md),
+  and
+  [`openai_tool_web_search()`](https://ellmer.tidyverse.org/reference/openai_tool_web_search.md)
+  now return citations, which are preserved in chat history and streamed
+  content and shown as cited sources in console output
+  ([@cpsievert](https://github.com/cpsievert),
+  [\#775](https://github.com/tidyverse/ellmer/issues/775)).
+- New
+  [`content_document_file()`](https://ellmer.tidyverse.org/reference/content_document_file.md)
+  and
+  [`content_document_url()`](https://ellmer.tidyverse.org/reference/content_document_file.md)
+  send text-based documents like CSV, markdown, and code files to the
+  model, and
+  [`content_pdf_url()`](https://ellmer.tidyverse.org/reference/content_pdf_file.md)
+  now lets providers that can fetch URLs do so themselves
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1090](https://github.com/tidyverse/ellmer/issues/1090)).
+- New `Model` class separates model configuration (name, parameters,
+  extra arguments) from the `Provider` class, which now only captures
+  API endpoint details. `Chat` gains a new `$get_model_object()` method
+  to retrieve the `Model` object. `provider@model`, `provider@params`,
+  and `provider@extra_args` are deprecated and will be removed in a
+  future release; use the `Model` object instead
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1098](https://github.com/tidyverse/ellmer/issues/1098)).
+- New
+  [`models_update_prices()`](https://ellmer.tidyverse.org/reference/models_update_prices.md)
+  downloads the latest model pricing data from GitHub and saves it to a
+  local cache. Subsequent calls to
+  [`token_usage()`](https://ellmer.tidyverse.org/reference/token_usage.md)
+  and related functions will use the updated prices
+  ([\#968](https://github.com/tidyverse/ellmer/issues/968)).
+- [`tool_context()`](https://ellmer.tidyverse.org/reference/tool_context.md)
+  lets a tool access its calling context, including the
+  `ContentToolRequest` and the conversation history, during a tool call.
+  [`with_tool_context()`](https://ellmer.tidyverse.org/reference/tool_context.md)
+  and
+  [`local_tool_context()`](https://ellmer.tidyverse.org/reference/tool_context.md)
+  support testing tools that use it
+  ([\#871](https://github.com/tidyverse/ellmer/issues/871)).
+
+### Minor improvements and bug fixes
+
+- Default models have been updated for a number of providers
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1040](https://github.com/tidyverse/ellmer/issues/1040),
+  [\#1066](https://github.com/tidyverse/ellmer/issues/1066),
+  [\#1125](https://github.com/tidyverse/ellmer/issues/1125)):
+  - [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md)
+    now uses `claude-sonnet-5`.
+  - [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/reference/chat_aws_bedrock.md)
+    now uses `us.anthropic.claude-sonnet-5`.
+  - [`chat_databricks()`](https://ellmer.tidyverse.org/reference/chat_databricks.md)
+    now uses `databricks-claude-sonnet-5`.
+  - [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+    and
+    [`chat_google_vertex()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+    now use `gemini-3.7-flash`.
+  - [`chat_huggingface()`](https://ellmer.tidyverse.org/reference/chat_huggingface.md)
+    now uses `Qwen/Qwen3-235B-A22B-Instruct-2507`.
+  - [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md)
+    now uses `gpt-5.6-terra`.
+  - [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md)
+    now uses `gpt-5.6-terra`.
+  - [`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
+    now uses `claude-sonnet-5`.
+  - [`chat_snowflake()`](https://ellmer.tidyverse.org/reference/chat_snowflake.md)
+    now uses `claude-sonnet-5`.
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md)
+  and
+  [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/reference/chat_aws_bedrock.md)
+  now handle empty responses from the model
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1070](https://github.com/tidyverse/ellmer/issues/1070)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md)
+  now defaults `base_url` to the `ANTHROPIC_BASE_URL` environment
+  variable, and
+  [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/reference/chat_aws_bedrock.md)
+  to `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` or
+  `AWS_ENDPOINT_URL_BEDROCK_MANTLE` depending on `api`, matching the
+  official SDKs ([@karawoo](https://github.com/karawoo),
+  [\#1103](https://github.com/tidyverse/ellmer/issues/1103)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md)
+  now handles the `fallback` content block returned when a model’s
+  server-side refusal fallback (`server-side-fallback-2026-06-01`) is
+  triggered ([@simonpcouch](https://github.com/simonpcouch),
+  [\#1057](https://github.com/tidyverse/ellmer/issues/1057)).
+- [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/reference/chat_aws_bedrock.md)
+  now handles thinking blocks with no text
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1085](https://github.com/tidyverse/ellmer/issues/1085)).
+- [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/reference/chat_aws_bedrock.md)
+  now supports bearer token authentication for enterprise API gateways
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1002](https://github.com/tidyverse/ellmer/issues/1002)).
+- [`chat_databricks()`](https://ellmer.tidyverse.org/reference/chat_databricks.md)
+  now supports models that return content as an array of typed objects
+  (e.g. `databricks-gpt-oss-120b`), capturing reasoning parts as
+  thinking content ([@thisisnic](https://github.com/thisisnic),
+  [\#1078](https://github.com/tidyverse/ellmer/issues/1078)).
+- [`chat_databricks()`](https://ellmer.tidyverse.org/reference/chat_databricks.md)
+  now works with tools that have no arguments
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1084](https://github.com/tidyverse/ellmer/issues/1084)).
+- `Chat` gains a `conversation_id` active binding. When set, it is
+  recorded on the OpenTelemetry spans emitted for each model call so
+  that tracing backends can group spans belonging to the same
+  conversation ([@cpsievert](https://github.com/cpsievert),
+  [\#1106](https://github.com/tidyverse/ellmer/issues/1106)).
+- [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+  now supports mixing regular tools with built-in tools like
+  [`google_tool_web_search()`](https://ellmer.tidyverse.org/reference/google_tool_web_search.md)
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1054](https://github.com/tidyverse/ellmer/issues/1054)).
+- [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md)
+  now preserves provider error messages
+  ([@xmarquez](https://github.com/xmarquez),
+  [\#1059](https://github.com/tidyverse/ellmer/issues/1059)).
+- `params(top_k = )` is now sent as `top_k` rather than `top_logprobs`
+  for OpenAI-based providers
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1113](https://github.com/tidyverse/ellmer/issues/1113)).
+
 ## ellmer 0.4.2
 
 CRAN release: 2026-07-13
@@ -1215,8 +1414,8 @@ CRAN release: 2025-01-09
 
 - The general `ToolArg()` has been replaced by the more specific
   `type_*()` functions.
-  [`ToolDef()`](https://ellmer.tidyverse.org/reference/tool.md) has been
-  renamed to `tool`.
+  [`ToolDef()`](https://ellmer.tidyverse.org/reference/ToolDef.md) has
+  been renamed to `tool`.
 
 - [`content_image_url()`](https://ellmer.tidyverse.org/reference/content_image_url.md)
   will now create inline images when given a data url

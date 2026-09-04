@@ -1,17 +1,10 @@
 # Upload a file to gemini
 
-**\[experimental\]**
+**\[deprecated\]**
 
-This function uploads a file then waits for Gemini to finish processing
-it so that you can immediately use it in a prompt. It's experimental
-because it's currently Gemini specific, and we expect other providers to
-evolve similar feature in the future.
-
-Uploaded files are automatically deleted after 2 days. Each file must be
-less than 2 GB and you can upload a total of 20 GB. ellmer doesn't
-currently provide a way to delete files early; please [file an
-issue](https://github.com/tidyverse/ellmer/issues) if this would be
-useful for you.
+This function is deprecated in favour of the provider-neutral
+[Chat](https://ellmer.tidyverse.org/reference/Chat.md) method
+`chat$file_upload()`.
 
 ## Usage
 
@@ -47,7 +40,7 @@ google_upload(
 - mime_type:
 
   Optionally, specify the mime type of the file. If not specified, will
-  be guesses from the file extension.
+  be guessed from the file extension.
 
 ## Value
 
@@ -57,9 +50,8 @@ A `<ContentUploaded>` object that can be passed to `$chat()`.
 
 ``` r
 if (FALSE) { # \dontrun{
-file <- google_upload("path/to/file.pdf")
-
 chat <- chat_google_gemini()
+file <- chat$file_upload("path/to/file.pdf")
 chat$chat(file, "Give me a three paragraph summary of this PDF")
 } # }
 ```

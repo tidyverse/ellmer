@@ -10,12 +10,12 @@ model behind a different API.
 ``` r
 Provider(
   name = stop("Required"),
-  model = stop("Required"),
   base_url = stop("Required"),
-  params = list(),
-  extra_args = list(),
   extra_headers = character(0),
-  credentials = function() NULL
+  credentials = function() NULL,
+  model = NULL,
+  params = NULL,
+  extra_args = NULL
 )
 ```
 
@@ -25,22 +25,9 @@ Provider(
 
   Name of the provider.
 
-- model:
-
-  Name of the model.
-
 - base_url:
 
   The base URL for the API.
-
-- params:
-
-  A list of standard parameters created by
-  [`params()`](https://ellmer.tidyverse.org/reference/params.md).
-
-- extra_args:
-
-  Arbitrary extra arguments to be included in the request body.
 
 - extra_headers:
 
@@ -51,6 +38,12 @@ Provider(
   A zero-argument function that returns the credentials to use for
   authentication. Can either return a string, representing an API key,
   or a named list of headers.
+
+- model, params, extra_args:
+
+  **\[deprecated\]** These now live on the
+  [Model](https://ellmer.tidyverse.org/reference/Model.md) object; use
+  `chat$get_model_object()` instead.
 
 ## Value
 
@@ -68,15 +61,11 @@ provider.
 ``` r
 Provider(
   name = "CoolModels",
-  model = "my_model",
   base_url = "https://cool-models.com"
 )
 #> <ellmer::Provider>
 #>  @ name         : chr "CoolModels"
-#>  @ model        : chr "my_model"
 #>  @ base_url     : chr "https://cool-models.com"
-#>  @ params       : list()
-#>  @ extra_args   : list()
 #>  @ extra_headers: chr(0) 
-#>  @ credentials  : function ()  
+#>  @ credentials  :function ()  
 ```

@@ -60,13 +60,13 @@ chat_databricks(
 - model:
 
   The model to use for the chat (defaults to
-  "databricks-claude-sonnet-4-6"). We regularly update the default, so
-  we strongly recommend explicitly specifying a model for anything other
+  "databricks-claude-sonnet-5"). We regularly update the default, so we
+  strongly recommend explicitly specifying a model for anything other
   than casual use.
 
   Available foundational models include:
 
-  - `databricks-claude-sonnet-4-6` (the default)
+  - `databricks-claude-sonnet-5` (the default)
 
   - `databricks-mixtral-8x7b-instruct`
 

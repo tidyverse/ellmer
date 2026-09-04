@@ -79,7 +79,7 @@ capital <- function(chat, country) {
 capital(chat, "New Zealand")
 #> Wellington
 capital(chat, "France")
-#> Paris.
+#> Paris
 
 chat
 #> <Chat OpenAI/gpt-4.1-nano turns=1 input=0 output=0 cost=$0.00>
@@ -95,7 +95,7 @@ time:
 
 chat1 <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat1$chat("My name is Hadley and I'm a data scientist")
-#> Hello, Hadley. How can I assist you today?
+#> Hello, Hadley! How can I assist you today?
 chat2 <- chat1$clone()
 
 chat1$chat("what's my name?")
@@ -107,7 +107,7 @@ chat1
 #> ── user ───────────────────────────────────────────────────────────────
 #> My name is Hadley and I'm a data scientist
 #> ── assistant [input=23 output=13 cost=$0.00] ──────────────────────────
-#> Hello, Hadley. How can I assist you today?
+#> Hello, Hadley! How can I assist you today?
 #> ── user ───────────────────────────────────────────────────────────────
 #> what's my name?
 #> ── assistant [input=48 output=7 cost=$0.00] ───────────────────────────
@@ -122,7 +122,7 @@ chat2
 #> ── user ───────────────────────────────────────────────────────────────
 #> My name is Hadley and I'm a data scientist
 #> ── assistant [input=23 output=13 cost=$0.00] ──────────────────────────
-#> Hello, Hadley. How can I assist you today?
+#> Hello, Hadley! How can I assist you today?
 #> ── user ───────────────────────────────────────────────────────────────
 #> what's my job?
 #> ── assistant [input=48 output=6 cost=$0.00] ───────────────────────────
@@ -154,14 +154,14 @@ conversational history:
 
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
-#> Got it. The capital of New Zealand is Kiwicity.
+#> Understood. The capital of New Zealand is Kiwicity.
 
 capital <- function(chat, country) {
   chat <- chat$clone()$set_turns(list())
   chat$chat(interpolate("What's the capital of {{country}}"))
 }
 capital(chat, "New Zealand")
-#> Wellington
+#> Wellington.
 ```
 
 This is particularly useful when you want to use a chat object just as a
@@ -188,7 +188,7 @@ capital <- function(chat, country) {
   chat$chat(interpolate("What's the capital of {{country}}"), echo = "none")
 }
 capital(chat, "France")
-#> Paris
+#> Paris.
 ```
 
 Alternatively, if you want to embrace streaming in your UI, you may want
@@ -218,11 +218,11 @@ chat
 #> ── user ───────────────────────────────────────────────────────────────
 #> Roll two dice and tell me the total
 #> ── assistant [input=44 output=42 cost=$0.00] ──────────────────────────
-#> [tool request (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: tool_001()
-#> [tool request (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: tool_001()
+#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: tool_001()
+#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: tool_001()
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: 5
-#> [tool result  (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: 4
+#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: 5
+#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: 4
 #> ── assistant [input=82 output=8 cost=$0.00] ───────────────────────────
 #> The total is 9.
 ```
@@ -240,13 +240,13 @@ turns
 #> 
 #> [[2]]
 #> <Turn: assistant>
-#> [tool request (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: tool_001()
-#> [tool request (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: tool_001()
+#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: tool_001()
+#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: tool_001()
 #> 
 #> [[3]]
 #> <Turn: user>
-#> [tool result  (fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c)]: 5
-#> [tool result  (fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9)]: 4
+#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: 5
+#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: 4
 #> 
 #> [[4]]
 #> <Turn: assistant>
@@ -263,7 +263,7 @@ str(turns[[2]])
 #> <ellmer::AssistantTurn>
 #>  @ contents     :List of 2
 #>  .. $ : <ellmer::ContentToolRequest>
-#>  ..  ..@ id       : chr "fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c"
+#>  ..  ..@ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508"
 #>  ..  ..@ name     : chr "tool_001"
 #>  ..  ..@ arguments: Named list()
 #>  ..  ..@ tool     : <ellmer::ToolDef> function ()  
@@ -278,7 +278,7 @@ str(turns[[2]])
 #>  .. .. .. @ annotations: list()
 #>  ..  ..@ extra    : list()
 #>  .. $ : <ellmer::ContentToolRequest>
-#>  ..  ..@ id       : chr "fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9"
+#>  ..  ..@ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca"
 #>  ..  ..@ name     : chr "tool_001"
 #>  ..  ..@ arguments: Named list()
 #>  ..  ..@ tool     : <ellmer::ToolDef> function ()  
@@ -295,14 +295,14 @@ str(turns[[2]])
 #>  @ text         : chr ""
 #>  @ role         : chr "assistant"
 #>  @ json         :List of 36
-#>  .. $ id                    : chr "resp_0b7e98be9a085160016a422b84b57881a183da6d9d7a242ab8"
+#>  .. $ id                    : chr "resp_0d88ba63cd1f5915016a6fc5f9d5f08190ada4d225dc2797e7"
 #>  .. $ object                : chr "response"
-#>  .. $ created_at            : int 1782721412
+#>  .. $ created_at            : int 1785710073
 #>  .. $ status                : chr "completed"
 #>  .. $ background            : logi FALSE
 #>  .. $ billing               :List of 1
 #>  ..  ..$ payer: chr "developer"
-#>  .. $ completed_at          : int 1782721413
+#>  .. $ completed_at          : int 1785710074
 #>  .. $ error                 : NULL
 #>  .. $ frequency_penalty     : num 0
 #>  .. $ incomplete_details    : NULL
@@ -313,18 +313,18 @@ str(turns[[2]])
 #>  .. $ moderation            : NULL
 #>  .. $ output                :List of 2
 #>  ..  ..$ :List of 6
-#>  ..  .. ..$ id       : chr "fc_0b7e98be9a085160016a422b8519ac81a1bcb97855d514465c"
+#>  ..  .. ..$ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508"
 #>  ..  .. ..$ type     : chr "function_call"
 #>  ..  .. ..$ status   : chr "completed"
 #>  ..  .. ..$ arguments: chr "{}"
-#>  ..  .. ..$ call_id  : chr "call_WYxSlE3oJGaphda2Fd0ue0T3"
+#>  ..  .. ..$ call_id  : chr "call_kRB7ZaqK7VSV4Tr7QF3Nnk18"
 #>  ..  .. ..$ name     : chr "tool_001"
 #>  ..  ..$ :List of 6
-#>  ..  .. ..$ id       : chr "fc_0b7e98be9a085160016a422b8519c081a1850fc7afedb878c9"
+#>  ..  .. ..$ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca"
 #>  ..  .. ..$ type     : chr "function_call"
 #>  ..  .. ..$ status   : chr "completed"
 #>  ..  .. ..$ arguments: chr "{}"
-#>  ..  .. ..$ call_id  : chr "call_TCXYc7SBI0v40cqm7Do3VndD"
+#>  ..  .. ..$ call_id  : chr "call_PuVkqi6png5TLdhZotjQblIK"
 #>  ..  .. ..$ name     : chr "tool_001"
 #>  .. $ parallel_tool_calls   : logi TRUE
 #>  .. $ presence_penalty      : num 0
@@ -358,24 +358,26 @@ str(turns[[2]])
 #>  ..  ..$ web_search:List of 1
 #>  ..  .. ..$ num_requests: int 0
 #>  .. $ tools                 :List of 1
-#>  ..  ..$ :List of 5
-#>  ..  .. ..$ type       : chr "function"
-#>  ..  .. ..$ description: chr "Roll a die"
-#>  ..  .. ..$ name       : chr "tool_001"
-#>  ..  .. ..$ parameters :List of 5
+#>  ..  ..$ :List of 6
+#>  ..  .. ..$ type         : chr "function"
+#>  ..  .. ..$ description  : chr "Roll a die"
+#>  ..  .. ..$ name         : chr "tool_001"
+#>  ..  .. ..$ output_schema: NULL
+#>  ..  .. ..$ parameters   :List of 5
 #>  ..  .. .. ..$ type                : chr "object"
 #>  ..  .. .. ..$ description         : chr ""
 #>  ..  .. .. ..$ properties          : Named list()
 #>  ..  .. .. ..$ required            : list()
 #>  ..  .. .. ..$ additionalProperties: logi FALSE
-#>  ..  .. ..$ strict     : logi TRUE
+#>  ..  .. ..$ strict       : logi TRUE
 #>  .. $ top_logprobs          : int 0
 #>  .. $ top_p                 : num 1
 #>  .. $ truncation            : chr "disabled"
 #>  .. $ usage                 :List of 5
 #>  ..  ..$ input_tokens         : int 44
-#>  ..  ..$ input_tokens_details :List of 1
-#>  ..  .. ..$ cached_tokens: int 0
+#>  ..  ..$ input_tokens_details :List of 2
+#>  ..  .. ..$ cache_write_tokens: int 0
+#>  ..  .. ..$ cached_tokens     : int 0
 #>  ..  ..$ output_tokens        : int 42
 #>  ..  ..$ output_tokens_details:List of 1
 #>  ..  .. ..$ reasoning_tokens: int 0

@@ -1,9 +1,10 @@
 # Record and replay content
 
 These generic functions can be use to convert
-[Turn](https://ellmer.tidyverse.org/reference/Turn.md)/[Content](https://ellmer.tidyverse.org/reference/Content.md)
-objects into easily serializable representations (i.e. lists and atomic
-vectors).
+[Turn](https://ellmer.tidyverse.org/reference/Turn.md),
+[Content](https://ellmer.tidyverse.org/reference/Content.md), and
+[Source](https://ellmer.tidyverse.org/reference/Source.md) objects into
+easily serializable representations (i.e. lists and atomic vectors).
 
 - `contents_record()` accepts a
   [Turn](https://ellmer.tidyverse.org/reference/Turn.md) or

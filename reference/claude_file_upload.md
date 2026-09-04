@@ -1,26 +1,11 @@
-# Upload, downloand, and manage files for Claude
+# Upload, download, and manage files for Claude
 
-**\[experimental\]** Use the beta Files API to upload files to and
-manage files in Claude. This is currently experimental because the API
-is in beta and may change. Note that you need
-`beta-headers = "files-api-2025-04-14"` to use the API.
+**\[deprecated\]**
 
-Claude offers 100GB of file storage per organization, with each file
-having a maximum size of 500MB. For more details see
-<https://docs.claude.com/en/docs/build-with-claude/files>
-
-- `claude_file_upload()` uploads a file and returns an object that you
-  can use in chat.
-
-- `claude_file_list()` lists all uploaded files.
-
-- `claude_file_get()` returns an object for an previously uploaded file.
-
-- `claude_file_download()` downloads the file with the given ID. Note
-  that you can only download files created by skills or the code
-  execution tool.
-
-- `claude_file_delete()` deletes the file with the given ID.
+These functions are deprecated in favour of the provider-neutral
+[Chat](https://ellmer.tidyverse.org/reference/Chat.md) methods:
+`chat$file_upload()`, `chat$file_list()`, `chat$file_get()`,
+`chat$file_download()`, and `chat$file_delete()`.
 
 ## Usage
 
@@ -28,21 +13,21 @@ having a maximum size of 500MB. For more details see
 claude_file_upload(
   path,
   base_url = "https://api.anthropic.com/v1/",
-  beta_headers = "files-api-2025-04-14",
+  beta_headers = character(),
   credentials = NULL
 )
 
 claude_file_list(
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 
 claude_file_get(
   file_id,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 
 claude_file_download(
@@ -50,14 +35,14 @@ claude_file_download(
   path,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 
 claude_file_delete(
   file_id,
   base_url = "https://api.anthropic.com/v1/",
   credentials = NULL,
-  beta_headers = "files-api-2025-04-14"
+  beta_headers = character()
 )
 ```
 
@@ -73,8 +58,7 @@ claude_file_delete(
 
 - beta_headers:
 
-  Beta headers to use for the request. Defaults to
-  `files-api-2025-04-14`.
+  Beta headers to use for the request.
 
 - credentials:
 
@@ -96,8 +80,8 @@ claude_file_delete(
 
 ``` r
 if (FALSE) { # \dontrun{
-file <- claude_file_upload("path/to/file.pdf")
-chat <- chat_anthropic(beta_headers = "files-api-2025-04-14")
+chat <- chat_anthropic()
+file <- chat$file_upload("path/to/file.pdf")
 chat$chat("Please summarize the document.", file)
 } # }
 ```

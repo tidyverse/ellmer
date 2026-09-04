@@ -64,7 +64,7 @@ chat_snowflake(
 
 - model:
 
-  The model to use for the chat (defaults to "claude-sonnet-4-6"). We
+  The model to use for the chat (defaults to "claude-sonnet-5"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use.
 

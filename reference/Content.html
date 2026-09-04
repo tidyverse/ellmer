@@ -6,8 +6,12 @@ ellmer abstracts away differences in the way that different Providers
 represent various types of content, allowing you to more easily write
 code that works with any chatbot. This set of classes represents types of
 content that can be either sent to and received from a provider:
-ContentText: simple text (often in markdown format). This is the only
-type of content that can be streamed live as it's received.
+ContentText: simple text (often in markdown format). Text streams yield
+only text and thinking content, while content streams can also yield
+annotations such as citations and web activity.
+ContentCitation: provider-supplied evidence metadata associated with
+generated text. Citations are preserved in conversation history but are
+not sent back to providers.
 ContentImageRemote and ContentImageInline: images, either as a pointer
 to a remote URL or included inline in the object. See
 content_image_file() and friends for convenient ways to construct these
@@ -27,8 +31,12 @@ ellmer abstracts away differences in the way that different Providers
 represent various types of content, allowing you to more easily write
 code that works with any chatbot. This set of classes represents types of
 content that can be either sent to and received from a provider:
-ContentText: simple text (often in markdown format). This is the only
-type of content that can be streamed live as it's received.
+ContentText: simple text (often in markdown format). Text streams yield
+only text and thinking content, while content streams can also yield
+annotations such as citations and web activity.
+ContentCitation: provider-supplied evidence metadata associated with
+generated text. Citations are preserved in conversation history but are
+not sent back to providers.
 ContentImageRemote and ContentImageInline: images, either as a pointer
 to a remote URL or included inline in the object. See
 content_image_file() and friends for convenient ways to construct these
@@ -52,7 +60,7 @@ to customize the display of the result.
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +99,7 @@ to customize the display of the result.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Content types received from and sent to a chatbot</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.4.2/R/content.R" class="external-link"><code>R/content.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/content.R" class="external-link"><code>R/content.R</code></a></small>
       <div class="d-none name"><code>Content.Rd</code></div>
     </div>
 
@@ -102,8 +110,12 @@ to customise methods for various types of content. For normal use, see
 <p>ellmer abstracts away differences in the way that different <a href="Provider.html">Provider</a>s
 represent various types of content, allowing you to more easily write
 code that works with any chatbot. This set of classes represents types of
-content that can be either sent to and received from a provider:</p><ul><li><p><code>ContentText</code>: simple text (often in markdown format). This is the only
-type of content that can be streamed live as it's received.</p></li>
+content that can be either sent to and received from a provider:</p><ul><li><p><code>ContentText</code>: simple text (often in markdown format). Text streams yield
+only text and thinking content, while content streams can also yield
+annotations such as citations and web activity.</p></li>
+<li><p><code>ContentCitation</code>: provider-supplied evidence metadata associated with
+generated text. Citations are preserved in conversation history but are
+not sent back to providers.</p></li>
 <li><p><code>ContentImageRemote</code> and <code>ContentImageInline</code>: images, either as a pointer
 to a remote URL or included inline in the object. See
 <code><a href="content_image_url.html">content_image_file()</a></code> and friends for convenient ways to construct these
@@ -123,6 +135,13 @@ to customize the display of the result.</p></li>
 <span></span>
 <span><span class="fu">ContentText</span><span class="op">(</span>text <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">ContentCitation</span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  grounded_span <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cited_quote <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  extra <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">ContentImage</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ContentImageRemote</span><span class="op">(</span>url <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>, detail <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
@@ -139,12 +158,27 @@ to customize the display of the result.</p></li>
 <span></span>
 <span><span class="fu">ContentToolResult</span><span class="op">(</span>value <span class="op">=</span> <span class="cn">NULL</span>, error <span class="op">=</span> <span class="cn">NULL</span>, extra <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, request <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">ContentUploaded</span><span class="op">(</span></span>
+<span>  uri <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>,</span>
+<span>  mime_type <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  provider <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  extra <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">ContentThinking</span><span class="op">(</span>thinking <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>, extra <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ContentPDF</span><span class="op">(</span></span>
 <span>  type <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>,</span>
 <span>  data <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>,</span>
-<span>  filename <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span></span>
+<span>  filename <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>,</span>
+<span>  url <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ContentDocument</span><span class="op">(</span></span>
+<span>  mime_type <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>,</span>
+<span>  filename <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Required"</span><span class="op">)</span>,</span>
+<span>  url <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -154,6 +188,24 @@ to customize the display of the result.</p></li>
 
 <dl><dt id="arg-text">text<a class="anchor" aria-label="anchor" href="#arg-text"></a></dt>
 <dd><p>A single string.</p></dd>
+
+
+<dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
+<dd><p>A <a href="Source.html">Source</a> identifying the cited evidence, or <code>NULL</code> when the
+provider does not supply one.</p></dd>
+
+
+<dt id="arg-grounded-span">grounded_span<a class="anchor" aria-label="anchor" href="#arg-grounded-span"></a></dt>
+<dd><p>The answer text grounded by the citation, or <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-cited-quote">cited_quote<a class="anchor" aria-label="anchor" href="#arg-cited-quote"></a></dt>
+<dd><p>The source-side evidence quoted by the provider, or
+<code>NULL</code>.</p></dd>
+
+
+<dt id="arg-extra">extra<a class="anchor" aria-label="anchor" href="#arg-extra"></a></dt>
+<dd><p>Additional data.</p></dd>
 
 
 <dt id="arg-url">url<a class="anchor" aria-label="anchor" href="#arg-url"></a></dt>
@@ -190,12 +242,10 @@ Automatically managed by <span class="pkg">ellmer</span>.</p></dd>
 for the chatbot. If <code>NULL</code>, the request did not match a defined tool.</p></dd>
 
 
-<dt id="arg-extra">extra<a class="anchor" aria-label="anchor" href="#arg-extra"></a></dt>
-<dd><p>Additional data.</p></dd>
-
-
 <dt id="arg-value">value<a class="anchor" aria-label="anchor" href="#arg-value"></a></dt>
-<dd><p>The results of calling the tool function, if it succeeded.</p></dd>
+<dd><p>The results of calling the tool function, if it succeeded.
+<code>NULL</code>, a string, an atomic vector, a <code>json</code>-class object, a Content
+object, or a list of Content objects.</p></dd>
 
 
 <dt id="arg-error">error<a class="anchor" aria-label="anchor" href="#arg-error"></a></dt>
@@ -207,6 +257,20 @@ when the tool call is successful.</p></dd>
 <dt id="arg-request">request<a class="anchor" aria-label="anchor" href="#arg-request"></a></dt>
 <dd><p>The ContentToolRequest associated with the tool result,
 automatically added by <span class="pkg">ellmer</span> when evaluating the tool call.</p></dd>
+
+
+<dt id="arg-uri">uri<a class="anchor" aria-label="anchor" href="#arg-uri"></a></dt>
+<dd><p>The URI or provider-assigned id of the uploaded file.</p></dd>
+
+
+<dt id="arg-mime-type">mime_type<a class="anchor" aria-label="anchor" href="#arg-mime-type"></a></dt>
+<dd><p>MIME type of the file or document.</p></dd>
+
+
+<dt id="arg-provider">provider<a class="anchor" aria-label="anchor" href="#arg-provider"></a></dt>
+<dd><p>Lowercase name of the provider the file was uploaded to
+(e.g. <code>"openai"</code>, <code>"anthropic"</code>, <code>"google"</code>), or <code>""</code> when unknown. Used
+to detect a file uploaded to one provider being used with another.</p></dd>
 
 
 <dt id="arg-thinking">thinking<a class="anchor" aria-label="anchor" href="#arg-thinking"></a></dt>

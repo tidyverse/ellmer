@@ -78,24 +78,18 @@ Other tool calling helpers:
 tool_rnorm <- tool(
   rnorm,
   # Describe the tool function to the LLM
-  .description = "Drawn numbers from a random normal distribution",
+  description = "Drawn numbers from a random normal distribution",
   # Describe the parameters used by the tool function
-  n = type_integer("The number of observations. Must be a positive integer."),
-  mean = type_number("The mean value of the distribution."),
-  sd = type_number("The standard deviation of the distribution. Must be a non-negative number."),
+  arguments = list(
+    n = type_integer("The number of observations. Must be a positive integer."),
+    mean = type_number("The mean value of the distribution."),
+    sd = type_number("The standard deviation of the distribution. Must be a non-negative number.")
+  ),
   # Tool annotations optionally provide additional context to the LLM
-  .annotations = tool_annotations(
+  annotations = tool_annotations(
     title = "Draw Random Normal Numbers",
     read_only_hint = TRUE, # the tool does not modify any state
     open_world_hint = FALSE # the tool does not interact with the outside world
   )
 )
-#> Warning: The `...` argument of `tool()` is deprecated as of ellmer 0.3.0.
-#> ℹ Please use the `arguments` argument instead.
-#> Warning: The `.description` argument of `tool()` is deprecated as of ellmer
-#> 0.3.0.
-#> ℹ Please use the `description` argument instead.
-#> Warning: The `.annotations` argument of `tool()` is deprecated as of ellmer
-#> 0.3.0.
-#> ℹ Please use the `annotations` argument instead.
 ```

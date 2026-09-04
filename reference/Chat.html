@@ -24,7 +24,7 @@ but instead call chat_openai() or friends instead."><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@ but instead call chat_openai() or friends instead."><meta property="og:image" co
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>The Chat object</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.4.2/R/chat.R" class="external-link"><code>R/chat.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/chat.R" class="external-link"><code>R/chat.R</code></a></small>
       <div class="d-none name"><code>Chat.Rd</code></div>
     </div>
 
@@ -84,6 +84,20 @@ but instead call <code><a href="chat_openai.html">chat_openai()</a></code> or fr
     <p>A Chat object</p>
     </div>
     <div class="section level2">
+    <h2 id="active-bindings">Active bindings<a class="anchor" aria-label="anchor" href="#active-bindings"></a></h2>
+    <p></p><div class="r6-active-bindings"><dl><dt><code>conversation_id</code></dt>
+<dd><p>Identifier for the current conversation. When
+set, it is recorded as the <code>gen_ai.conversation.id</code> attribute on the
+OpenTelemetry spans emitted for subsequent model calls. Assign <code>NULL</code>
+to clear.</p>
+<p>Developer-facing: intended for frameworks that manage conversation
+history (e.g., Shiny apps). ellmer never generates an identifier on
+its own.</p></dd>
+
+
+</dl><p></p></div>
+    </div>
+    <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
 
 <div class="section">
@@ -91,13 +105,22 @@ but instead call <code><a href="chat_openai.html">chat_openai()</a></code> or fr
 <p></p><ul><li><p><a href="#method-Chat-initialize"><code>Chat$new()</code></a></p></li>
 <li><p><a href="#method-Chat-get_turns"><code>Chat$get_turns()</code></a></p></li>
 <li><p><a href="#method-Chat-set_turns"><code>Chat$set_turns()</code></a></p></li>
+<li><p><a href="#method-Chat-get_rounds"><code>Chat$get_rounds()</code></a></p></li>
+<li><p><a href="#method-Chat-last_round"><code>Chat$last_round()</code></a></p></li>
 <li><p><a href="#method-Chat-add_turn"><code>Chat$add_turn()</code></a></p></li>
 <li><p><a href="#method-Chat-get_system_prompt"><code>Chat$get_system_prompt()</code></a></p></li>
 <li><p><a href="#method-Chat-get_model"><code>Chat$get_model()</code></a></p></li>
+<li><p><a href="#method-Chat-get_model_object"><code>Chat$get_model_object()</code></a></p></li>
 <li><p><a href="#method-Chat-set_model"><code>Chat$set_model()</code></a></p></li>
 <li><p><a href="#method-Chat-set_system_prompt"><code>Chat$set_system_prompt()</code></a></p></li>
 <li><p><a href="#method-Chat-get_tokens"><code>Chat$get_tokens()</code></a></p></li>
 <li><p><a href="#method-Chat-get_cost"><code>Chat$get_cost()</code></a></p></li>
+<li><p><a href="#method-Chat-token_count"><code>Chat$token_count()</code></a></p></li>
+<li><p><a href="#method-Chat-file_upload"><code>Chat$file_upload()</code></a></p></li>
+<li><p><a href="#method-Chat-file_list"><code>Chat$file_list()</code></a></p></li>
+<li><p><a href="#method-Chat-file_get"><code>Chat$file_get()</code></a></p></li>
+<li><p><a href="#method-Chat-file_download"><code>Chat$file_download()</code></a></p></li>
+<li><p><a href="#method-Chat-file_delete"><code>Chat$file_delete()</code></a></p></li>
 <li><p><a href="#method-Chat-last_turn"><code>Chat$last_turn()</code></a></p></li>
 <li><p><a href="#method-Chat-chat"><code>Chat$chat()</code></a></p></li>
 <li><p><a href="#method-Chat-chat_structured"><code>Chat$chat_structured()</code></a></p></li>
@@ -112,26 +135,33 @@ but instead call <code><a href="chat_openai.html">chat_openai()</a></code> or fr
 <li><p><a href="#method-Chat-set_tools"><code>Chat$set_tools()</code></a></p></li>
 <li><p><a href="#method-Chat-on_tool_request"><code>Chat$on_tool_request()</code></a></p></li>
 <li><p><a href="#method-Chat-on_tool_result"><code>Chat$on_tool_result()</code></a></p></li>
+<li><p><a href="#method-Chat-on_request_start"><code>Chat$on_request_start()</code></a></p></li>
+<li><p><a href="#method-Chat-on_request_end"><code>Chat$on_request_end()</code></a></p></li>
 <li><p><a href="#method-Chat-clone"><code>Chat$clone()</code></a></p></li>
 </ul></div><p></p><hr><a id="method-Chat-initialize"></a><div class="section">
 <h3 id="chat-new-"><code>Chat$new()</code><a class="anchor" aria-label="anchor" href="#chat-new-"></a></h3>
 <p></p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/Chat.html">Chat</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">provider</span>, system_prompt <span class="op">=</span> <span class="cn">NULL</span>, echo <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/Chat.html">Chat</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">provider</span>, model <span class="op">=</span> <span class="cn">NULL</span>, system_prompt <span class="op">=</span> <span class="cn">NULL</span>, echo <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>provider</code></dt>
 <dd><p>A provider object.</p></dd>
+
+      <dt><code>model</code></dt>
+<dd><p>A <a href="Model.html">Model</a> object.</p></dd>
 
       <dt><code>system_prompt</code></dt>
 <dd><p>System prompt to start the conversation with.</p></dd>
 
       <dt><code>echo</code></dt>
 <dd><p>One of the following options:</p><ul><li><p><code>none</code>: don't emit any output (default when running in a function).</p></li>
-<li><p><code>output</code>: echo text and tool-calling output as it streams in (default
-when running at the console).</p></li>
+<li><p><code>output</code>: echo text and tool-calling output after the turn completes
+(default when running at the console).</p></li>
 <li><p><code>all</code>: echo all input and output.</p></li>
-</ul><p>Note this only affects the <code><a href="chat-any.html">chat()</a></code> method. You can override the default
+</ul><p>Console display occurs after a turn completes so ellmer can add citation
+markers and a source list to the response.</p>
+<p>Note this only affects the <code><a href="chat-any.html">chat()</a></code> method. You can override the default
 by setting the <code>ellmer_echo</code> option.</p></dd>
 
 
@@ -174,13 +204,48 @@ turns (if any exists).</p></dd>
 
 </div>
 
+<p></p><hr><a id="method-Chat-get_rounds"></a><div class="section">
+<h3 id="chat-get-rounds-"><code>Chat$get_rounds()</code><a class="anchor" aria-label="anchor" href="#chat-get-rounds-"></a></h3>
+<p>Retrieve the conversation grouped into <a href="Round.html">Round</a>s. Each
+<code>Round</code> pairs a user turn with the assistant and tool-result turns it
+produced.</p><div class="section">
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_rounds</span><span class="op">(</span>include_system_prompt <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>include_system_prompt</code></dt>
+<dd><p>Whether to include system turns in the
+rounds. When <code>FALSE</code> (the default), all system turns are dropped. When
+<code>TRUE</code>, each system turn is folded into the <code>input</code> of the round it
+precedes.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div>
+
+<p></p><hr><a id="method-Chat-last_round"></a><div class="section">
+<h3 id="chat-last-round-"><code>Chat$last_round()</code><a class="anchor" aria-label="anchor" href="#chat-last-round-"></a></h3>
+<p>The last <a href="Round.html">Round</a> of conversation. Note that system prompt
+turns are included, equivalent to the last item in the list of rounds
+returned by <code>$get_rounds(include_system_prompt = TRUE)</code>.</p><div class="section">
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">last_round</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
+<p>Either a <code>Round</code> or <code>NULL</code>, if no rounds have occurred.</p>
+</div>
+
+</div>
+
 <p></p><hr><a id="method-Chat-add_turn"></a><div class="section">
 <h3 id="chat-add-turn-"><code>Chat$add_turn()</code><a class="anchor" aria-label="anchor" href="#chat-add-turn-"></a></h3>
 <p>Add a pair of turns to the chat.</p><div class="section">
-<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">add_turn</span><span class="op">(</span><span class="va">user</span>, <span class="va">assistant</span>, log_tokens <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
+<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>user</code></dt>
 <dd><p>The user <a href="Turn.html">Turn</a>.</p></dd>
 
@@ -200,7 +265,7 @@ session counter?</p></dd>
 <p></p><hr><a id="method-Chat-get_system_prompt"></a><div class="section">
 <h3 id="chat-get-system-prompt-"><code>Chat$get_system_prompt()</code><a class="anchor" aria-label="anchor" href="#chat-get-system-prompt-"></a></h3>
 <p>If set, the system prompt, it not, <code>NULL</code>.</p><div class="section">
-<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_system_prompt</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -208,9 +273,18 @@ session counter?</p></dd>
 
 <p></p><hr><a id="method-Chat-get_model"></a><div class="section">
 <h3 id="chat-get-model-"><code>Chat$get_model()</code><a class="anchor" aria-label="anchor" href="#chat-get-model-"></a></h3>
-<p>Retrieve the model name</p><div class="section">
-<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
+<p>Retrieve the model name.</p><div class="section">
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_model</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+</div>
+
+<p></p><hr><a id="method-Chat-get_model_object"></a><div class="section">
+<h3 id="chat-get-model-object-"><code>Chat$get_model_object()</code><a class="anchor" aria-label="anchor" href="#chat-get-model-object-"></a></h3>
+<p>Retrieve the Model object. For expert use only.</p><div class="section">
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_model_object</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 </div>
@@ -220,10 +294,10 @@ session counter?</p></dd>
 <p>Update the model name. Note that unlike some of the
 <code>chat_*()</code> functions, the model name is not validated against available
 models for the provider.</p><div class="section">
-<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">set_model</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
+<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>model</code></dt>
 <dd><p>A single string giving the new model name.</p></dd>
 
@@ -236,10 +310,10 @@ models for the provider.</p><div class="section">
 <p></p><hr><a id="method-Chat-set_system_prompt"></a><div class="section">
 <h3 id="chat-set-system-prompt-"><code>Chat$set_system_prompt()</code><a class="anchor" aria-label="anchor" href="#chat-set-system-prompt-"></a></h3>
 <p>Update the system prompt</p><div class="section">
-<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">set_system_prompt</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
+<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>value</code></dt>
 <dd><p>A character vector giving the new system prompt</p></dd>
 
@@ -255,10 +329,10 @@ models for the provider.</p><div class="section">
 columns: <code>input</code>, <code>output</code>, <code>cached_input</code>, and <code>cost</code>. There is one
 row for each assistant turn, because token counts and costs are only
 available when the API returns the assistant's response.</p><div class="section">
-<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
+<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_tokens</span><span class="op">(</span>include_system_prompt <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
+<h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>include_system_prompt</code></dt>
 <dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p></dd>
 
@@ -271,10 +345,10 @@ available when the API returns the assistant's response.</p><div class="section"
 <p></p><hr><a id="method-Chat-get_cost"></a><div class="section">
 <h3 id="chat-get-cost-"><code>Chat$get_cost()</code><a class="anchor" aria-label="anchor" href="#chat-get-cost-"></a></h3>
 <p>The cost of this chat</p><div class="section">
-<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_cost</span><span class="op">(</span>include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"last"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
+<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>include</code></dt>
 <dd><p>The default, <code>"all"</code>, gives the total cumulative cost
 of this chat. Alternatively, use <code>"last"</code> to get the cost of just the
@@ -287,13 +361,175 @@ streams) are excluded because they lack token data.</p></dd>
 
 </div>
 
+<p></p><hr><a id="method-Chat-token_count"></a><div class="section">
+<h3 id="chat-token-count-"><code>Chat$token_count()</code><a class="anchor" aria-label="anchor" href="#chat-token-count-"></a></h3>
+<p>Estimate the token count for <code>...</code> using the
+provider's token counting endpoint.</p><div class="section">
+<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">token_count</span><span class="op">(</span><span class="va">...</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"new"</span>, <span class="st">"complete"</span><span class="op">)</span>, type <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>...</code></dt>
+<dd><p>Input to count tokens for.</p></dd>
+
+      <dt><code>include</code></dt>
+<dd><p>What to include in the count. <code>"new"</code> counts
+tokens only for the contents of <code>...</code>. <code>"complete"</code> estimates
+the total input tokens for the next request, including system
+prompt, tools, and conversation history.</p></dd>
+
+      <dt><code>type</code></dt>
+<dd><p>An optional type specification for structured data
+extraction, created with a <code><a href="type_boolean.html">type_()</a></code> function.</p></dd>
+
+
+</dl><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
+<p>The estimated number of input tokens.</p>
+</div>
+
+</div>
+
+<p></p><hr><a id="method-Chat-file_upload"></a><div class="section">
+<h3 id="chat-file-upload-"><code>Chat$file_upload()</code><a class="anchor" aria-label="anchor" href="#chat-file-upload-"></a></h3>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
+<p>Upload a file to the chat's provider, once, so later turns can
+reference it by id instead of re-sending its contents. Prefer this
+over <code><a href="content_pdf_file.html">content_pdf_file()</a></code>, <code><a href="content_image_url.html">content_image_file()</a></code>, or
+<code><a href="content_document_file.html">content_document_file()</a></code> when a file is large or used across many
+turns. Otherwise, sending the file inline is simpler: it isn't limited
+to providers with a files API, and there's nothing stored on the
+provider's side to expire or clean up.</p>
+<p>File management is supported by <code><a href="chat_openai.html">chat_openai()</a></code>, <code><a href="chat_anthropic.html">chat_anthropic()</a></code>,
+and <code><a href="chat_google_gemini.html">chat_google_gemini()</a></code>; other providers error. Provider notes:</p><ul><li><p>Gemini files always expire after 48 hours (so <code>expires_in_h</code> can't be
+changed), and uploading waits until Gemini finishes processing the
+file (which can take a while for large video/audio), so the returned
+reference is always ready to use. The Files API isn't available on
+Vertex AI; there, upload the file to a Cloud Storage bucket and
+reference it with
+<code>ContentUploaded(uri = "gs://bucket/object", mime_type = ...)</code>.</p></li>
+<li><p>An OpenAI upload can also be referenced from a
+<code><a href="chat_openai_compatible.html">chat_openai_compatible()</a></code> chat pointed at OpenAI's Chat Completions
+API, except for images, which that API can't reference by id.</p></li>
+</ul><p></p><div class="section">
+<h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">file_upload</span><span class="op">(</span><span class="va">path</span>, mime_type <span class="op">=</span> <span class="cn">NULL</span>, expires_in_h <span class="op">=</span> <span class="fl">48</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>path</code></dt>
+<dd><p>Path to a file to upload.</p></dd>
+
+      <dt><code>mime_type</code></dt>
+<dd><p>MIME type of the file. If not supplied, it's guessed
+from the file extension.</p></dd>
+
+      <dt><code>expires_in_h</code></dt>
+<dd><p>Number of hours until the provider deletes the
+file. Defaults to 48. Anthropic accepts 1 to 2160 (90 days), OpenAI
+1 to 720 (30 days), and both accept <code>Inf</code> to keep the file until you
+delete it yourself. Gemini always uses 48 and can't be changed.</p></dd>
+
+
+</dl><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns-2">Returns<a class="anchor" aria-label="anchor" href="#returns-2"></a></h4>
+<p>A <a href="Content.html">ContentUploaded</a> that can be passed to <code>$chat()</code> and
+friends in place of the file itself.</p>
+</div>
+
+</div>
+
+<p></p><hr><a id="method-Chat-file_list"></a><div class="section">
+<h3 id="chat-file-list-"><code>Chat$file_list()</code><a class="anchor" aria-label="anchor" href="#chat-file-list-"></a></h3>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
+<p>List files previously uploaded to the chat's provider.</p><div class="section">
+<h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">file_list</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns-3">Returns<a class="anchor" aria-label="anchor" href="#returns-3"></a></h4>
+<p>A data frame with one row per file: normalized columns
+(<code>id</code>, <code>filename</code>, <code>mime_type</code>, <code>size_bytes</code>, <code>created_at</code>,
+<code>expires_at</code>) first, then any provider-specific columns.</p>
+</div>
+
+</div>
+
+<p></p><hr><a id="method-Chat-file_get"></a><div class="section">
+<h3 id="chat-file-get-"><code>Chat$file_get()</code><a class="anchor" aria-label="anchor" href="#chat-file-get-"></a></h3>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
+<p>Get a reference to a file previously uploaded to the chat's provider,
+e.g. to reuse an upload from an earlier session. Use <code>$file_list()</code> to
+find the id.</p><div class="section">
+<h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">file_get</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>id</code></dt>
+<dd><p>A file id string, or a <a href="Content.html">ContentUploaded</a>.</p></dd>
+
+
+</dl><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns-4">Returns<a class="anchor" aria-label="anchor" href="#returns-4"></a></h4>
+<p>A <a href="Content.html">ContentUploaded</a> that can be passed to <code>$chat()</code> and
+friends, with file metadata (<code>filename</code>, <code>size_bytes</code>, <code>created_at</code>,
+<code>expires_at</code>, and any provider-specific fields) in its <code>extra</code>
+property. OpenAI doesn't report a file's MIME type, so it's guessed
+from the filename.</p>
+</div>
+
+</div>
+
+<p></p><hr><a id="method-Chat-file_download"></a><div class="section">
+<h3 id="chat-file-download-"><code>Chat$file_download()</code><a class="anchor" aria-label="anchor" href="#chat-file-download-"></a></h3>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
+<p>Download a file from the chat's provider, writing it to <code>path</code>.
+Note that providers only serve back model-generated files (e.g. batch
+outputs); files you uploaded yourself can't be re-downloaded.</p><div class="section">
+<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">file_download</span><span class="op">(</span><span class="va">id</span>, <span class="va">path</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-12">Arguments<a class="anchor" aria-label="anchor" href="#arguments-12"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>id</code></dt>
+<dd><p>A file id string, or a <a href="Content.html">ContentUploaded</a>.</p></dd>
+
+      <dt><code>path</code></dt>
+<dd><p>Path to write the downloaded file to.</p></dd>
+
+
+</dl><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns-5">Returns<a class="anchor" aria-label="anchor" href="#returns-5"></a></h4>
+<p><code>path</code>, invisibly.</p>
+</div>
+
+</div>
+
+<p></p><hr><a id="method-Chat-file_delete"></a><div class="section">
+<h3 id="chat-file-delete-"><code>Chat$file_delete()</code><a class="anchor" aria-label="anchor" href="#chat-file-delete-"></a></h3>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
+<p>Delete a file previously uploaded to the chat's provider.</p><div class="section">
+<h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">file_delete</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>id</code></dt>
+<dd><p>A file id string, or a <a href="Content.html">ContentUploaded</a>.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div>
+
 <p></p><hr><a id="method-Chat-last_turn"></a><div class="section">
 <h3 id="chat-last-turn-"><code>Chat$last_turn()</code><a class="anchor" aria-label="anchor" href="#chat-last-turn-"></a></h3>
 <p>The last turn returned by the assistant.</p><div class="section">
-<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">last_turn</span><span class="op">(</span>role <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"assistant"</span>, <span class="st">"user"</span>, <span class="st">"system"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
+<h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>role</code></dt>
 <dd><p>Optionally, specify a role to find the last turn with
 for the role.</p></dd>
@@ -301,7 +537,7 @@ for the role.</p></dd>
 
 </dl><p></p></div>
 </div><p></p><div class="section">
-<h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
+<h4 id="returns-6">Returns<a class="anchor" aria-label="anchor" href="#returns-6"></a></h4>
 <p>Either a <code>Turn</code> or <code>NULL</code>, if no turns with the specified
 role have occurred.</p>
 </div>
@@ -312,10 +548,10 @@ role have occurred.</p>
 <h3 id="chat-chat-"><code>Chat$chat()</code><a class="anchor" aria-label="anchor" href="#chat-chat-"></a></h3>
 <p>Submit input to the chatbot, and return the response as a
 simple string (probably Markdown).</p><div class="section">
-<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
+<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">...</span>, echo <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
+<h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. Can be strings or images
 (see <code><a href="content_image_url.html">content_image_file()</a></code> and <code><a href="content_image_url.html">content_image_url()</a></code>.</p></dd>
@@ -336,10 +572,10 @@ will be used.</p></dd>
 <p>Extract structured data.</p>
 <p>Note: tool calling is disabled during structured data extraction. See
 <code><a href="../articles/structured-data.html">vignette("structured-data")</a></code> for details and workarounds.</p><div class="section">
-<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
+<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">...</span>, <span class="va">type</span>, echo <span class="op">=</span> <span class="st">"none"</span>, convert <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
+<h4 id="arguments-16">Arguments<a class="anchor" aria-label="anchor" href="#arguments-16"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. This is typically the text
 you want to extract data from, but it can be omitted if the data is
@@ -369,10 +605,10 @@ data frames and arrays of strings into a character vector.</p></dd>
 <h3 id="chat-chat-structured-async-"><code>Chat$chat_structured_async()</code><a class="anchor" aria-label="anchor" href="#chat-chat-structured-async-"></a></h3>
 <p>Extract structured data, asynchronously. Returns a promise
 that resolves to an object matching the type specification.</p><div class="section">
-<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
+<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">chat_structured_async</span><span class="op">(</span><span class="va">...</span>, <span class="va">type</span>, echo <span class="op">=</span> <span class="st">"none"</span>, convert <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
+<h4 id="arguments-17">Arguments<a class="anchor" aria-label="anchor" href="#arguments-17"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. Will typically include
 the phrase "extract structured data".</p></dd>
@@ -402,10 +638,10 @@ data frames and arrays of strings into a character vector.</p></dd>
 <p>Submit input to the chatbot, and receive a promise that
 resolves with the response all at once. Returns a promise that resolves
 to a string (probably Markdown).</p><div class="section">
-<h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
+<h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">chat_async</span><span class="op">(</span><span class="va">...</span>, tool_mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"concurrent"</span>, <span class="st">"sequential"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-12">Arguments<a class="anchor" aria-label="anchor" href="#arguments-12"></a></h4>
+<h4 id="arguments-18">Arguments<a class="anchor" aria-label="anchor" href="#arguments-18"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. Can be strings or images.</p></dd>
 
@@ -428,12 +664,21 @@ best suited for automated scripts or non-interactive applications.</p></dd>
 Returns A <a href="https://coro.r-lib.org/articles/generator.html#iterating" class="external-link">coro generator</a>
 that yields strings. While iterating, the generator will block while
 waiting for more content from the chatbot.</p><div class="section">
-<h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">stream</span><span class="op">(</span><span class="va">...</span>, stream <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="st">"content"</span><span class="op">)</span>, controller <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">stream</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="cn">NULL</span>, stream <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="st">"content"</span><span class="op">)</span>, controller <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
+<h4 id="arguments-19">Arguments<a class="anchor" aria-label="anchor" href="#arguments-19"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. Can be strings or images.</p></dd>
+
+      <dt><code>type</code></dt>
+<dd><p>An optional <code>type_()</code> structured-data specification. When
+supplied, registered tools are suppressed and the completed assistant
+turn stores a <code>ContentJson</code>. The provider constrains the response to
+JSON. With <code>stream = "text"</code> (the default), structured stream chunks
+are raw JSON text; with <code>stream = "content"</code>, they are <a href="Content.html">Content</a>
+objects. Streaming structured output requires native provider support;
+tool-based fallback is not supported.</p></dd>
 
       <dt><code>stream</code></dt>
 <dd><p>Whether the stream should yield only <code>"text"</code> or ellmer's
@@ -455,17 +700,27 @@ stream from outside the iteration loop.</p></dd>
 <p>Submit input to the chatbot, returning asynchronously
 streaming results. Returns a <a href="https://coro.r-lib.org/reference/async_generator.html" class="external-link">coro async generator</a> that
 yields string promises.</p><div class="section">
-<h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
+<h4 id="usage-25">Usage<a class="anchor" aria-label="anchor" href="#usage-25"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span></span>
 <span>  <span class="va">...</span>,</span>
+<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tool_mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"concurrent"</span>, <span class="st">"sequential"</span><span class="op">)</span>,</span>
 <span>  stream <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="st">"content"</span><span class="op">)</span>,</span>
 <span>  controller <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
+<h4 id="arguments-20">Arguments<a class="anchor" aria-label="anchor" href="#arguments-20"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>The input to send to the chatbot. Can be strings or images.</p></dd>
+
+      <dt><code>type</code></dt>
+<dd><p>An optional <code>type_()</code> structured-data specification. When
+supplied, registered tools are suppressed and the completed assistant
+turn stores a <code>ContentJson</code>. The provider constrains the response to
+JSON. With <code>stream = "text"</code> (the default), structured stream chunks
+are raw JSON text; with <code>stream = "content"</code>, they are <a href="Content.html">Content</a>
+objects. Streaming structured output requires native provider support;
+tool-based fallback is not supported.</p></dd>
 
       <dt><code>tool_mode</code></dt>
 <dd><p>Whether tools should be invoked one-at-a-time
@@ -493,10 +748,10 @@ stream from outside the iteration loop.</p></dd>
 <h3 id="chat-register-tool-"><code>Chat$register_tool()</code><a class="anchor" aria-label="anchor" href="#chat-register-tool-"></a></h3>
 <p>Register a tool (an R function) that the chatbot can use.
 Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calling")</a></code>.</p><div class="section">
-<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
+<h4 id="usage-26">Usage<a class="anchor" aria-label="anchor" href="#usage-26"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">tool</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
+<h4 id="arguments-21">Arguments<a class="anchor" aria-label="anchor" href="#arguments-21"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>tool</code></dt>
 <dd><p>A tool definition created by <code><a href="tool.html">tool()</a></code>.</p></dd>
 
@@ -510,10 +765,10 @@ Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calli
 <h3 id="chat-register-tools-"><code>Chat$register_tools()</code><a class="anchor" aria-label="anchor" href="#chat-register-tools-"></a></h3>
 <p>Register a list of tools.
 Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calling")</a></code>.</p><div class="section">
-<h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
+<h4 id="usage-27">Usage<a class="anchor" aria-label="anchor" href="#usage-27"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">register_tools</span><span class="op">(</span><span class="va">tools</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-16">Arguments<a class="anchor" aria-label="anchor" href="#arguments-16"></a></h4>
+<h4 id="arguments-22">Arguments<a class="anchor" aria-label="anchor" href="#arguments-22"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>tools</code></dt>
 <dd><p>A list of tool definitions created by <code><a href="tool.html">tool()</a></code>.</p></dd>
 
@@ -526,7 +781,7 @@ Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calli
 <p></p><hr><a id="method-Chat-get_provider"></a><div class="section">
 <h3 id="chat-get-provider-"><code>Chat$get_provider()</code><a class="anchor" aria-label="anchor" href="#chat-get-provider-"></a></h3>
 <p>Get the underlying provider object. For expert use only.</p><div class="section">
-<h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
+<h4 id="usage-28">Usage<a class="anchor" aria-label="anchor" href="#usage-28"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_provider</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -535,7 +790,7 @@ Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calli
 <p></p><hr><a id="method-Chat-get_tools"></a><div class="section">
 <h3 id="chat-get-tools-"><code>Chat$get_tools()</code><a class="anchor" aria-label="anchor" href="#chat-get-tools-"></a></h3>
 <p>Retrieve the list of registered tools.</p><div class="section">
-<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
+<h4 id="usage-29">Usage<a class="anchor" aria-label="anchor" href="#usage-29"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">get_tools</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -545,10 +800,10 @@ Learn more in <code><a href="../articles/tool-calling.html">vignette("tool-calli
 <h3 id="chat-set-tools-"><code>Chat$set_tools()</code><a class="anchor" aria-label="anchor" href="#chat-set-tools-"></a></h3>
 <p>Sets the available tools. For expert use only; most users
 should use <code>register_tool()</code>.</p><div class="section">
-<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
+<h4 id="usage-30">Usage<a class="anchor" aria-label="anchor" href="#usage-30"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">set_tools</span><span class="op">(</span><span class="va">tools</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-17">Arguments<a class="anchor" aria-label="anchor" href="#arguments-17"></a></h4>
+<h4 id="arguments-23">Arguments<a class="anchor" aria-label="anchor" href="#arguments-23"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>tools</code></dt>
 <dd><p>A list of tool definitions created with <code><a href="tool.html">tool()</a></code>.</p></dd>
 
@@ -561,10 +816,10 @@ should use <code>register_tool()</code>.</p><div class="section">
 <p></p><hr><a id="method-Chat-on_tool_request"></a><div class="section">
 <h3 id="chat-on-tool-request-"><code>Chat$on_tool_request()</code><a class="anchor" aria-label="anchor" href="#chat-on-tool-request-"></a></h3>
 <p>Register a callback for a tool request event.</p><div class="section">
-<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
+<h4 id="usage-31">Usage<a class="anchor" aria-label="anchor" href="#usage-31"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_tool_request</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-18">Arguments<a class="anchor" aria-label="anchor" href="#arguments-18"></a></h4>
+<h4 id="arguments-24">Arguments<a class="anchor" aria-label="anchor" href="#arguments-24"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>callback</code></dt>
 <dd><p>A function to be called when a tool request event occurs,
 which must have <code>request</code> as its only argument.</p></dd>
@@ -572,7 +827,7 @@ which must have <code>request</code> as its only argument.</p></dd>
 
 </dl><p></p></div>
 </div><p></p><div class="section">
-<h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
+<h4 id="returns-7">Returns<a class="anchor" aria-label="anchor" href="#returns-7"></a></h4>
 <p>A function that can be called to remove the callback.</p>
 </div>
 
@@ -581,10 +836,10 @@ which must have <code>request</code> as its only argument.</p></dd>
 <p></p><hr><a id="method-Chat-on_tool_result"></a><div class="section">
 <h3 id="chat-on-tool-result-"><code>Chat$on_tool_result()</code><a class="anchor" aria-label="anchor" href="#chat-on-tool-result-"></a></h3>
 <p>Register a callback for a tool result event.</p><div class="section">
-<h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
+<h4 id="usage-32">Usage<a class="anchor" aria-label="anchor" href="#usage-32"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_tool_result</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-19">Arguments<a class="anchor" aria-label="anchor" href="#arguments-19"></a></h4>
+<h4 id="arguments-25">Arguments<a class="anchor" aria-label="anchor" href="#arguments-25"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>callback</code></dt>
 <dd><p>A function to be called when a tool result event occurs,
 which must have <code>result</code> as its only argument.</p></dd>
@@ -592,7 +847,61 @@ which must have <code>result</code> as its only argument.</p></dd>
 
 </dl><p></p></div>
 </div><p></p><div class="section">
-<h4 id="returns-2">Returns<a class="anchor" aria-label="anchor" href="#returns-2"></a></h4>
+<h4 id="returns-8">Returns<a class="anchor" aria-label="anchor" href="#returns-8"></a></h4>
+<p>A function that can be called to remove the callback.</p>
+</div>
+
+</div>
+
+<p></p><hr><a id="method-Chat-on_request_start"></a><div class="section">
+<h3 id="chat-on-request-start-"><code>Chat$on_request_start()</code><a class="anchor" aria-label="anchor" href="#chat-on-request-start-"></a></h3>
+<p>Register a callback that fires before each model request,
+including each round of the tool loop. Use it to inspect the outgoing
+request, or to compact the conversation with <code>$set_turns()</code>.</p>
+<p><code>turns</code> includes the pending turn about to be sent, which <code>$set_turns()</code>
+re-appends automatically. So compact with
+<code>chat$set_turns(compact(chat$get_turns()))</code> rather than passing <code>turns</code>
+back to <code>$set_turns()</code>, which would duplicate the pending turn.</p><div class="section">
+<h4 id="usage-33">Usage<a class="anchor" aria-label="anchor" href="#usage-33"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_request_start</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-26">Arguments<a class="anchor" aria-label="anchor" href="#arguments-26"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>callback</code></dt>
+<dd><p>A function called with a single argument <code>turns</code>, the
+list of turns about to be sent. The return value is ignored, but may be
+a promise when used with <code>$chat_async()</code> or <code>$stream_async()</code>.</p></dd>
+
+
+</dl><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns-9">Returns<a class="anchor" aria-label="anchor" href="#returns-9"></a></h4>
+<p>A function that can be called to remove the callback.</p>
+</div>
+
+</div>
+
+<p></p><hr><a id="method-Chat-on_request_end"></a><div class="section">
+<h3 id="chat-on-request-end-"><code>Chat$on_request_end()</code><a class="anchor" aria-label="anchor" href="#chat-on-request-end-"></a></h3>
+<p>Register a callback that fires after each model request,
+before any tool calls in the response are executed. Use it to track
+latency or cost per request, or to observe tool requests before they
+run.</p>
+<p>If the request is cancelled, <code>turn</code> is an <a href="Turn.html">AssistantPartialTurn</a> with
+<code>NA</code> tokens and cost. If the request errors, the callback does not fire.</p><div class="section">
+<h4 id="usage-34">Usage<a class="anchor" aria-label="anchor" href="#usage-34"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">on_request_end</span><span class="op">(</span><span class="va">callback</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
+<h4 id="arguments-27">Arguments<a class="anchor" aria-label="anchor" href="#arguments-27"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>callback</code></dt>
+<dd><p>A function called with a single argument <code>turn</code>, the
+assistant turn just returned by the model. The return value is ignored,
+but may be a promise when used with <code>$chat_async()</code> or
+<code>$stream_async()</code>.</p></dd>
+
+
+</dl><p></p></div>
+</div><p></p><div class="section">
+<h4 id="returns-10">Returns<a class="anchor" aria-label="anchor" href="#returns-10"></a></h4>
 <p>A function that can be called to remove the callback.</p>
 </div>
 
@@ -601,10 +910,10 @@ which must have <code>result</code> as its only argument.</p></dd>
 <p></p><hr><a id="method-Chat-clone"></a><div class="section">
 <h3 id="chat-clone-"><code>Chat$clone()</code><a class="anchor" aria-label="anchor" href="#chat-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
+<h4 id="usage-35">Usage<a class="anchor" aria-label="anchor" href="#usage-35"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Chat</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
-<h4 id="arguments-20">Arguments<a class="anchor" aria-label="anchor" href="#arguments-20"></a></h4>
+<h4 id="arguments-28">Arguments<a class="anchor" aria-label="anchor" href="#arguments-28"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
@@ -620,11 +929,11 @@ which must have <code>result</code> as its only argument.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.4"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.6-terra"</span>.</span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Tell me a funny joke"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Why don’t skeletons fight each other?</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> They don’t have the guts.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Because they don’t have the guts.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -20,7 +20,7 @@ developer account."><meta property="og:image" content="https://ellmer.tidyverse.
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,7 @@ developer account."><meta property="og:image" content="https://ellmer.tidyverse.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Chat with an Anthropic Claude model</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.4.2/R/provider-claude.R" class="external-link"><code>R/provider-claude.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/provider-claude.R" class="external-link"><code>R/provider-claude.R</code></a></small>
       <div class="d-none name"><code>chat_anthropic.Rd</code></div>
     </div>
 
@@ -80,7 +80,7 @@ API; instead, you will need to sign up (and pay for) a
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cache <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"5m"</span>, <span class="st">"1h"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  base_url <span class="op">=</span> <span class="st">"https://api.anthropic.com/v1"</span>,</span>
+<span>  base_url <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  beta_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -94,7 +94,7 @@ API; instead, you will need to sign up (and pay for) a
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cache <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"5m"</span>, <span class="st">"1h"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  base_url <span class="op">=</span> <span class="st">"https://api.anthropic.com/v1"</span>,</span>
+<span>  base_url <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  beta_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -102,17 +102,9 @@ API; instead, you will need to sign up (and pay for) a
 <span>  echo <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">models_claude</span><span class="op">(</span></span>
-<span>  base_url <span class="op">=</span> <span class="st">"https://api.anthropic.com/v1"</span>,</span>
-<span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  credentials <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span>
+<span><span class="fu">models_claude</span><span class="op">(</span>base_url <span class="op">=</span> <span class="cn">NULL</span>, api_key <span class="op">=</span> <span class="cn">NULL</span>, credentials <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">models_anthropic</span><span class="op">(</span></span>
-<span>  base_url <span class="op">=</span> <span class="st">"https://api.anthropic.com/v1"</span>,</span>
-<span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  credentials <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">models_anthropic</span><span class="op">(</span>base_url <span class="op">=</span> <span class="cn">NULL</span>, api_key <span class="op">=</span> <span class="cn">NULL</span>, credentials <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -128,7 +120,7 @@ API; instead, you will need to sign up (and pay for) a
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
-<dd><p>The model to use for the chat (defaults to "claude-sonnet-4-6").
+<dd><p>The model to use for the chat (defaults to "claude-sonnet-5").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use <code>models_anthropic()</code> to see all options.</p></dd>
 
@@ -146,8 +138,9 @@ with <code><a href="https://rdrr.io/r/utils/modifyList.html" class="external-lin
 
 
 <dt id="arg-base-url">base_url<a class="anchor" aria-label="anchor" href="#arg-base-url"></a></dt>
-<dd><p>The base URL to the endpoint; the default is Claude's
-public API.</p></dd>
+<dd><p>The base URL to the endpoint; the default is the
+<code>ANTHROPIC_BASE_URL</code> environment variable if set, and Claude's public
+API otherwise.</p></dd>
 
 
 <dt id="arg-beta-headers">beta_headers<a class="anchor" aria-label="anchor" href="#arg-beta-headers"></a></dt>
@@ -243,22 +236,24 @@ don't see any differences with caching if you have a short prompt.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">chat_anthropic</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-4-6"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"claude-sonnet-5"</span>.</span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Tell me three jokes about statisticians"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Here are three jokes about statisticians:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Here are three statistician jokes for you:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1. **A statistician drowned crossing a river that was, on average, 3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> feet deep.**</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1. A statistician's wife has twins. He is delighted. He tells the </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> vicar he'll be baptizing them separately. "Why?" asks the vicar. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "Because," the statistician replies, "I hate sampling with </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> replacement."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2. **A statistician's wife had twins. He called his friend excitedly </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> to share the news. His friend said, "That's great! What did you name </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> them?" The statistician replied, "Well, I named one of them. I'll name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> the other one when we have another child."**</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2. Three statisticians go hunting. They spot a deer. The first one </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> shoots and misses by a foot to the left. The second shoots and misses </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> by a foot to the right. The third one yells, "We got it!"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3. **How many statisticians does it take to change a light bulb?**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> *One — plus or minus three.*</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3. A statistician can have their head in an oven and feet in ice, and </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> they'll say on average they feel fine.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Hope those gave you at least an average number of laughs! 😄</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Want a few more, or maybe some on a specific topic like regression or </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p-values?</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

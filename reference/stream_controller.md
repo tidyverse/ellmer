@@ -8,7 +8,7 @@ chunk arrives.
 
 The same controller can be reused across multiple streams. Call
 `$reset()` to clear the cancelled state, or pass it directly to a new
-`$stream()` call — it will be reset automatically.
+`$stream()` call, where it will be reset automatically.
 
 ## Usage
 

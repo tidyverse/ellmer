@@ -10,7 +10,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,6 +81,13 @@
 
         </dt>
         <dd>Report on token usage in the current session</dd>
+
+        <dt>
+
+          <code><a href="models_update_prices.html">models_update_prices()</a></code>
+
+        </dt>
+        <dd>Update cached model pricing data</dd>
       </dl></div><div class="section level2">
 
       <h3 id="official-providers">Official providers<a class="anchor" aria-label="anchor" href="#official-providers"></a></h3>
@@ -129,7 +136,7 @@
         <dt>
 
           <code><a href="chat_github.html">chat_github()</a></code> <code><a href="chat_github.html">models_github()</a></code>
-
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
         <dd>Chat with a model hosted on the GitHub model marketplace</dd>
 
@@ -259,16 +266,16 @@
       <dl><dt>
 
           <code><a href="google_upload.html">google_upload()</a></code>
-          <span class="badge lifecycle lifecycle-experimental">experimental</span>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
         <dd>Upload a file to gemini</dd>
 
         <dt>
 
           <code><a href="claude_file_upload.html">claude_file_upload()</a></code> <code><a href="claude_file_upload.html">claude_file_list()</a></code> <code><a href="claude_file_upload.html">claude_file_get()</a></code> <code><a href="claude_file_upload.html">claude_file_download()</a></code> <code><a href="claude_file_upload.html">claude_file_delete()</a></code>
-          <span class="badge lifecycle lifecycle-experimental">experimental</span>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
-        <dd>Upload, downloand, and manage files for Claude</dd>
+        <dd>Upload, download, and manage files for Claude</dd>
 
         <dt>
 
@@ -320,6 +327,13 @@
 
         </dt>
         <dd>Create metadata for a tool</dd>
+
+        <dt>
+
+          <code><a href="content_document_file.html">content_document_file()</a></code> <code><a href="content_document_file.html">content_document_url()</a></code>
+
+        </dt>
+        <dd>Encode documents for chat input</dd>
 
         <dt>
 
@@ -404,6 +418,13 @@
 
         <dt>
 
+          <code><a href="tool_context.html">tool_context()</a></code> <code><a href="tool_context.html">with_tool_context()</a></code> <code><a href="tool_context.html">local_tool_context()</a></code>
+
+        </dt>
+        <dd>Access the current tool context</dd>
+
+        <dt>
+
           <code><a href="tool_reject.html">tool_reject()</a></code>
 
         </dt>
@@ -427,10 +448,24 @@
 
       <dl><dt>
 
+          <code><a href="Chat.html">Chat</a></code>
+
+        </dt>
+        <dd>The Chat object</dd>
+
+        <dt>
+
           <code><a href="Provider.html">Provider()</a></code>
 
         </dt>
         <dd>A chatbot provider</dd>
+
+        <dt>
+
+          <code><a href="Model.html">Model()</a></code>
+
+        </dt>
+        <dd>A model configuration</dd>
 
         <dt>
 
@@ -441,10 +476,31 @@
 
         <dt>
 
-          <code><a href="Content.html">Content()</a></code> <code><a href="Content.html">ContentText()</a></code> <code><a href="Content.html">ContentImage()</a></code> <code><a href="Content.html">ContentImageRemote()</a></code> <code><a href="Content.html">ContentImageInline()</a></code> <code><a href="Content.html">ContentToolRequest()</a></code> <code><a href="Content.html">ContentToolResult()</a></code> <code><a href="Content.html">ContentThinking()</a></code> <code><a href="Content.html">ContentPDF()</a></code>
+          <code><a href="Round.html">Round()</a></code>
+
+        </dt>
+        <dd>A round of conversation</dd>
+
+        <dt>
+
+          <code><a href="Content.html">Content()</a></code> <code><a href="Content.html">ContentText()</a></code> <code><a href="Content.html">ContentCitation()</a></code> <code><a href="Content.html">ContentImage()</a></code> <code><a href="Content.html">ContentImageRemote()</a></code> <code><a href="Content.html">ContentImageInline()</a></code> <code><a href="Content.html">ContentToolRequest()</a></code> <code><a href="Content.html">ContentToolResult()</a></code> <code><a href="Content.html">ContentUploaded()</a></code> <code><a href="Content.html">ContentThinking()</a></code> <code><a href="Content.html">ContentPDF()</a></code> <code><a href="Content.html">ContentDocument()</a></code>
 
         </dt>
         <dd>Content types received from and sent to a chatbot</dd>
+
+        <dt>
+
+          <code><a href="Source.html">Source()</a></code> <code><a href="Source.html">WebSource()</a></code>
+          <span class="badge lifecycle lifecycle-experimental">experimental</span>
+        </dt>
+        <dd>Sources referenced by model content</dd>
+
+        <dt>
+
+          <code><a href="ContentWebActivity.html">ContentToolRequestSearch()</a></code> <code><a href="ContentWebActivity.html">ContentToolResponseSearch()</a></code> <code><a href="ContentWebActivity.html">ContentToolRequestFetch()</a></code> <code><a href="ContentWebActivity.html">ContentToolResponseFetch()</a></code>
+          <span class="badge lifecycle lifecycle-experimental">experimental</span>
+        </dt>
+        <dd>Built-in web activity content</dd>
 
         <dt>
 
@@ -452,6 +508,13 @@
 
         </dt>
         <dd>Type definitions for function calling and structured data extraction.</dd>
+
+        <dt>
+
+          <code><a href="ToolDef.html">ToolDef()</a></code>
+
+        </dt>
+        <dd>A tool definition</dd>
       </dl></div><div class="section level2">
       <h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a></h2>
 

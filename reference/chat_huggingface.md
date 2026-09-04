@@ -63,9 +63,9 @@ chat_huggingface(
 - model:
 
   The model to use for the chat (defaults to
-  "meta-llama/Llama-3.1-8B-Instruct"). We regularly update the default,
-  so we strongly recommend explicitly specifying a model for anything
-  other than casual use.
+  "Qwen/Qwen3-235B-A22B-Instruct-2507"). We regularly update the
+  default, so we strongly recommend explicitly specifying a model for
+  anything other than casual use.
 
 - api_args:
 

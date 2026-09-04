@@ -14,7 +14,7 @@ image, while content_image_file() is used to provide the image data itself."><me
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@ image, while content_image_file() is used to provide the image data itself."><me
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Encode images for chat input</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.4.2/R/content-image.R" class="external-link"><code>R/content-image.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/content-image.R" class="external-link"><code>R/content-image.R</code></a></small>
       <div class="d-none name"><code>content_image_url.Rd</code></div>
     </div>
 
@@ -117,6 +117,13 @@ and <code>!</code> to ignore aspect ratio (e.g. <code>"300x200&gt;!"</code>).</p
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An input object suitable for including in the <code>...</code> parameter of
 the <code><a href="chat-any.html">chat()</a></code>, <code>stream()</code>, <code>chat_async()</code>, or <code>stream_async()</code> methods.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p><code>content_image_file()</code> embeds the image's contents in every request, so for
+a large image, or one you'll refer to across several turns, prefer
+<code>chat$file_upload()</code>. It uploads the file once and later turns reference
+it by id.</p>
     </div>
 
     <div class="section level2">

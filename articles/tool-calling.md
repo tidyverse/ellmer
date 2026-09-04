@@ -58,7 +58,7 @@ questions like these impossible.
 
 chat <- chat_openai(model = "gpt-4o")
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
-#> Neil Armstrong landed on the moon on July 20, 1969. As of now in 2023,
+#> Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, 
 #> that was 54 years ago.
 ```
 
@@ -137,8 +137,8 @@ That’s all we need to do! Let’s retry our query:
 ``` r
 
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
-#> Neil Armstrong landed on the moon on July 20, 1969. As of June 25, 
-#> 2025, that was 55 years ago.
+#> Neil Armstrong touched down on the moon on July 20, 1969. As of June 
+#> 25, 2025, that was almost 56 years ago.
 ```
 
 That’s correct! Without any further guidance, the chat model decided to
@@ -150,19 +150,19 @@ If we print the chat we can see where the model decided to use the tool:
 ``` r
 
 chat
-#> <Chat OpenAI/gpt-4o turns=6 input=356 output=81 cost=$0.00>
+#> <Chat OpenAI/gpt-4o turns=6 input=286 output=82 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> How long ago did Neil Armstrong touch down on the moon?
-#> ── assistant [input=19 output=31 cost=$0.00] ──────────────────────────
-#> Neil Armstrong landed on the moon on July 20, 1969. As of now in 2023, that was 54 years ago.
+#> ── assistant [input=19 output=30 cost=$0.00] ──────────────────────────
+#> Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, that was 54 years ago.
 #> ── user ───────────────────────────────────────────────────────────────
 #> How long ago did Neil Armstrong touch down on the moon?
-#> ── assistant [input=151 output=16 cost=$0.00] ─────────────────────────
-#> [tool request (fc_07fd060fbaac49e001692dba44f2fc8197a1cfd2d677f98e67)]: get_current_time(tz = "UTC")
+#> ── assistant [input=116 output=16 cost=$0.00] ─────────────────────────
+#> [tool request (fc_0f19f871ea49202b016a6fc5b589bc81968b2a20c52239f613)]: get_current_time(tz = "UTC")
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_07fd060fbaac49e001692dba44f2fc8197a1cfd2d677f98e67)]: 2025-06-25 16:53:23 UTC
-#> ── assistant [input=186 output=34 cost=$0.00] ─────────────────────────
-#> Neil Armstrong landed on the moon on July 20, 1969. As of June 25, 2025, that was 55 years ago.
+#> [tool result  (fc_0f19f871ea49202b016a6fc5b589bc81968b2a20c52239f613)]: 2025-06-25 16:53:23 UTC
+#> ── assistant [input=151 output=36 cost=$0.00] ─────────────────────────
+#> Neil Armstrong touched down on the moon on July 20, 1969. As of June 25, 2025, that was almost 56 years ago.
 ```
 
 (Full disclosure: I originally tried this example with the default model
@@ -195,20 +195,23 @@ We recommend keeping them as simple as possible, focusing on basic
 scalar types as much as you can.
 
 The output of the tool call will be interpreted by the LLM, just as if
-you had typed that information into the data. That means you’ll
-generally want to produce text or other atomic vectors. For more complex
-data, ellmer will automatically serialize the result to JSON, which LLMs
-generally seem to be good at understanding. If you must have more direct
-control of the structure of the JSON that’s returned, you can return a
-JSON-serializable value wrapped in
-[`I()`](https://rdrr.io/r/base/AsIs.html), which ellmer will leave alone
-until the entire request is JSON-serialized.
+you had typed that information into the chat. Tool functions should
+return a string, an atomic vector, a JSON string (e.g. from
+[`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)),
+or a `Content` object.
+
+For complex data like data frames or lists, use
+[`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)
+to convert them explicitly before returning. Returning JSON doesn’t let
+the model do anything extra with the data; unlike a program, it can’t
+parse the JSON and compute with the values. If the answer requires exact
+computation, compute it in the tool; the model’s job is only to read the
+result.
 
 To show off these ideas, here’s a slightly more complicated example
 simulating a weather API that returns data for multiple cities at once.
-The `get_weather()` function returns a data frame that ellmer will
-automatically convert into JSON in row-major format, which our
-experiments suggest is good for LLMs.
+The `get_weather()` function returns a data frame converted to JSON in
+row-major format, which our experiments suggest is good for LLMs.
 
 ``` r
 
@@ -218,12 +221,13 @@ get_weather <- tool(
     temperature <- c(London = "cool", Houston = "hot", Chicago = "warm")
     wind <- c(London = "strong", Houston = "weak", Chicago = "strong")
 
-    data.frame(
+    df <- data.frame(
       city = cities,
       raining = unname(raining[cities]),
       temperature = unname(temperature[cities]),
       wind = unname(wind[cities])
     )
+    jsonlite::toJSON(df, auto_unbox = TRUE)
   },
   name = "get_weather",
   description = "
@@ -241,11 +245,13 @@ Now we register and use it:
 ``` r
 
 chat <- chat_openai()
-#> Using model = "gpt-5.4".
+#> Using model = "gpt-5.6-terra".
 chat$register_tool(get_weather)
 chat$chat("Give me a weather update for London and Chicago")
-#> London: Heavy rain, cool temperatures, and strong wind.  
-#> Chicago: Overcast, warm temperatures, and strong wind.
+#> - **London:** Heavy rain, cool temperatures, and strong winds. Bring 
+#> waterproof layers and expect difficult conditions outdoors.
+#> - **Chicago:** Overcast, warm, and windy. No rain reported, but gusty 
+#> conditions are likely.
 ```
 
 We can print the chat to confirm that the model only performed a single
@@ -254,16 +260,16 @@ tool call:
 ``` r
 
 chat
-#> <Chat OpenAI/gpt-5.4 turns=4 input=214 output=50 cost=$0.00>
+#> <Chat OpenAI/gpt-5.6-terra turns=4 input=214 output=71 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> Give me a weather update for London and Chicago
 #> ── assistant [input=72 output=21 cost=$0.00] ──────────────────────────
-#> [tool request (fc_0ef6f7b602ab2d3f016a422b6ffd0c8191a412508c4191a4f2)]: get_weather(cities = c("London", "Chicago"))
+#> [tool request (fc_067a2e7696ea5827016a6fc5b7e76c8196894bff386923330d)]: get_weather(cities = c("London", "Chicago"))
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0ef6f7b602ab2d3f016a422b6ffd0c8191a412508c4191a4f2)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
-#> ── assistant [input=142 output=29 cost=$0.00] ─────────────────────────
-#> London: Heavy rain, cool temperatures, and strong wind.  
-#> Chicago: Overcast, warm temperatures, and strong wind.
+#> [tool result  (fc_067a2e7696ea5827016a6fc5b7e76c8196894bff386923330d)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
+#> ── assistant [input=142 output=50 cost=$0.00] ─────────────────────────
+#> - **London:** Heavy rain, cool temperatures, and strong winds. Bring waterproof layers and expect difficult conditions outdoors.
+#> - **Chicago:** Overcast, warm, and windy. No rain reported, but gusty conditions are likely.
 ```
 
 ### Image and PDF tool output
@@ -321,3 +327,139 @@ chat$chat("Describe the design aesthetic of https://tidyverse.org")
 #> Overall, the design communicates clarity, ease of use, and a focus on
 #> modern data science tools.
 ```
+
+### Tool context
+
+A tool sometimes needs to know a little about the call it’s part of,
+such as the tool request that triggered it or the conversation so far,
+without that information being part of its arguments. Inside a tool
+body,
+[`tool_context()`](https://ellmer.tidyverse.org/reference/tool_context.md)
+returns a read-only context object with two fields:
+
+- `$request`: the `ContentToolRequest` for this call, including `@id`,
+  `@name`, and `@arguments`.
+- `$turns`: a snapshot of the conversation history up to and including
+  the assistant turn that issued this request (a list of `Turn`
+  objects).
+
+This is handy for logging or correlating tool calls with the request
+that produced them:
+
+``` r
+
+report_tool <- tool(
+  function(query) {
+    ctx <- tool_context()
+    cli::cli_alert_info("Running report for request {ctx$request@id}")
+    run_report(query)
+  },
+  description = "Run a report for the given query.",
+  arguments = list(query = type_string("The report query."))
+)
+```
+
+In an async tool,
+[`tool_context()`](https://ellmer.tidyverse.org/reference/tool_context.md)
+is only valid during the synchronous prefix of the function, in other
+words before the first `await()`. Capture it at the top of your tool
+body:
+
+``` r
+
+my_async_tool <- tool(
+  coro::async(function(query) {
+    ctx <- tool_context()          # capture before any await()
+    result <- await(run_report_async(query))
+    cli::cli_alert_info("Finished request {ctx$request@id}")
+    result
+  }),
+  description = "Run a report asynchronously.",
+  arguments = list(query = type_string("The report query."))
+)
+```
+
+[`tool_context()`](https://ellmer.tidyverse.org/reference/tool_context.md)
+errors with a clear message if called after an `await()` or outside a
+tool invocation. Built-in provider tools (such as
+[`claude_tool_web_search()`](https://ellmer.tidyverse.org/reference/claude_tool_web_search.md))
+run provider-side and do not support
+[`tool_context()`](https://ellmer.tidyverse.org/reference/tool_context.md);
+MCP tools do.
+
+### Sharing state across tools
+
+Related tools may need to share private state that the model should
+never see, such as a database connection, an authenticated user, or a
+running tally. A clean way to organise this is to bundle the tools
+together as methods of an R6 class, with the shared state living in the
+object’s fields. Each tool reads and writes that state through `self`,
+and a `$tools()` method returns the ellmer tools.
+
+``` r
+
+Assistant <- R6::R6Class(
+  "Assistant",
+  public = list(
+    initialize = function(user_email) {
+      private$user_email <- user_email
+    },
+
+    # Return the ellmer tools, each wrapping a bound method. `tool()` can't
+    # infer a name from `self$method`, so we pass `name` explicitly.
+    tools = function() {
+      list(
+        tool(
+          self$add_note,
+          name = "add_note",
+          description = "Save a note for the current user.",
+          arguments = list(text = type_string("The note to save."))
+        ),
+        tool(
+          self$list_notes,
+          name = "list_notes",
+          description = "List the current user's saved notes."
+        )
+      )
+    },
+
+    add_note = function(text) {
+      private$notes <- c(private$notes, text)
+      sprintf("Saved. You now have %d note(s).", length(private$notes))
+    },
+
+    list_notes = function() {
+      if (length(private$notes) == 0) {
+        return("No notes yet.")
+      }
+      private$notes
+    }
+  ),
+  private = list(
+    user_email = NULL,
+    notes = character()
+  )
+)
+```
+
+Create the object once, register its tools, and the state accumulates
+across turns and across `$chat()` calls, all without exposing
+`user_email` or the raw notes to the model:
+
+``` r
+
+assistant <- Assistant$new(user_email = "hadley@posit.co")
+
+chat <- chat_openai()
+chat$register_tools(assistant$tools())
+
+chat$chat("Remember that I need to buy milk.")
+chat$chat("What do I need to do?")
+
+# Inspect the state directly; this never passed through the model
+assistant$list_notes()
+#> [1] "buy milk"
+```
+
+Because the state lives in the object rather than in ellmer, you stay in
+control of how it’s created, inspected, and persisted.

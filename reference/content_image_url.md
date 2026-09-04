@@ -66,6 +66,13 @@ An input object suitable for including in the `...` parameter of the
 [`chat()`](https://ellmer.tidyverse.org/reference/chat-any.md),
 `stream()`, `chat_async()`, or `stream_async()` methods.
 
+## Details
+
+`content_image_file()` embeds the image's contents in every request, so
+for a large image, or one you'll refer to across several turns, prefer
+`chat$file_upload()`. It uploads the file once and later turns reference
+it by id.
+
 ## Examples
 
 ``` r

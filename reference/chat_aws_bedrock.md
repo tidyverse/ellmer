@@ -4,16 +4,64 @@
 
 [AWS Bedrock](https://aws.amazon.com/bedrock/) provides a number of
 language models, including those from Anthropic's
-[Claude](https://aws.amazon.com/bedrock/claude/), using the Bedrock
-[Converse
-API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html).
+[Claude](https://aws.amazon.com/bedrock/claude/). Most are served
+through the Bedrock [Converse
+API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html),
+with some only available through the Anthropic Messages or OpenAI
+Responses APIs; see the `api` argument for details.
+
+### APIs and endpoints
+
+Bedrock serves models from two endpoints, and `api` selects which one to
+use and which request format to send:
+
+- `"converse"` uses the Converse API on the `bedrock-runtime` endpoint.
+  This reaches the great majority of Bedrock models, and is what ellmer
+  has always used.
+
+- `"messages"` uses the Anthropic Messages API on the `bedrock-mantle`
+  endpoint. Only Claude models are available here, but it includes some
+  (like Claude Mythos) that Converse does not serve at all.
+
+- `"responses"` uses the OpenAI Responses API on the `bedrock-mantle`
+  endpoint. This reaches OpenAI and xAI models that Converse can't
+  serve, typically newer models that Converse hasn't picked up yet. Note
+  that mantle serves newer models from `/openai/v1` and older
+  open-weight models like gpt-oss from `/v1`; ellmer uses the former, so
+  reaching the latter needs an explicit `base_url`. They're all
+  available through `"converse"` anyway.
+
+By default ellmer picks the API from `model`, using `"converse"`
+whenever it can serve the model and for any model ellmer doesn't
+recognize. Set `api` explicitly to override this.
+
+The set of models that need mantle shrinks over time as AWS adds them to
+Converse, so a model that needs `"responses"` today may route to
+`"converse"` in a later ellmer release. Note also that Converse usually
+needs an inference profile ID (`"us.openai.gpt-5.6-sol"`) while mantle
+wants the bare model ID (`"openai.gpt-5.6-sol"`); ellmer strips the
+prefix for mantle, so the inference profile ID works with either and is
+the safer choice.
+
+Note that the two endpoints have separate token quotas, so moving a
+model from one to the other changes which quota it consumes.
 
 ### Authentication
 
-Authentication is handled through {paws.common}, so if authentication
-does not work for you automatically, you'll need to follow the advice at
-<https://www.paws-r-sdk.com/#credentials>. In particular, if your org
-uses AWS SSO, you'll need to run `aws sso login` at the terminal.
+`chat_aws_bedrock()` uses {paws.common} to resolve credentials, trying
+the following strategies in order:
+
+- A bearer token set in the `AWS_BEARER_TOKEN_BEDROCK` or
+  `AWS_BEARER_TOKEN` environment variable. This is used by enterprise
+  API gateways that issue API keys instead of IAM credentials. See the
+  [AWS
+  documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-use.html)
+  for details.
+
+- Standard IAM credentials resolved from environment variables, AWS
+  config files, SSO, or instance metadata. See
+  <https://www.paws-r-sdk.com/#credentials> for details. If your org
+  uses AWS SSO, you'll need to run `aws sso login` at the terminal.
 
 ### Prompt caching
 
@@ -43,6 +91,7 @@ chat_aws_bedrock(
   system_prompt = NULL,
   base_url = NULL,
   model = NULL,
+  api = NULL,
   profile = NULL,
   cache = c("auto", "5m", "1h", "none"),
   params = NULL,
@@ -51,7 +100,7 @@ chat_aws_bedrock(
   echo = NULL
 )
 
-models_aws_bedrock(profile = NULL, base_url = NULL)
+models_aws_bedrock(profile = NULL, base_url = NULL, api = NULL)
 ```
 
 ## Arguments
@@ -62,12 +111,19 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
 
 - base_url:
 
-  The base URL to the API endpoint.
+  The base URL to the endpoint; the default is the standard endpoint for
+  the selected `api` and your region, matching the official SDKs'
+  endpoint override environment variables:
+  `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` for `"converse"`, and
+  `AWS_ENDPOINT_URL_BEDROCK_MANTLE` for `"messages"` and `"responses"`
+  (which append their API-specific path to the override).
+  `models_aws_bedrock()` talks to a different AWS service, so it honors
+  `AWS_ENDPOINT_URL_BEDROCK` instead.
 
 - model:
 
   The model to use for the chat (defaults to
-  "us.anthropic.claude-sonnet-4-6"). We regularly update the default, so
+  "us.anthropic.claude-sonnet-5"). We regularly update the default, so
   we strongly recommend explicitly specifying a model for anything other
   than casual use. Use `models_models_aws_bedrock()` to see all options.
   .
@@ -77,7 +133,15 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
   can. If you're using [cross-region
   inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
   you'll need to use the inference profile ID, e.g.
-  `model="us.anthropic.claude-sonnet-4-6"`.
+  `model="us.anthropic.claude-sonnet-5"`.
+
+- api:
+
+  Which Bedrock API to use: `"converse"`, `"messages"`, or
+  `"responses"`. The default, `NULL`, picks the API from `model`,
+  falling back to `"converse"` for unrecognized models.
+
+  See details below.
 
 - profile:
 
@@ -89,6 +153,8 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
   a 5-minute TTL for models known to support it (Anthropic Claude and
   Amazon Nova) and disables caching for all other models. Set to `"5m"`
   or `"1h"` to force caching on, or `"none"` to disable it.
+
+  Not supported when `api = "responses"`, which caches automatically.
 
   See details below.
 
@@ -102,8 +168,8 @@ models_aws_bedrock(profile = NULL, base_url = NULL)
   Named list of arbitrary extra arguments appended to the body of every
   chat API call. Use `params` for common parameters. Model-specific
   inference parameters can be provided using the
-  `additionalModelRequestFields` field, for example to enable thinking
-  effort in Anthropic Claude models:
+  `additionalModelRequestFields` field (`api = "converse"` only), for
+  example to enable thinking effort in Anthropic Claude models:
 
       api_args = list(
         additionalModelRequestFields = list(

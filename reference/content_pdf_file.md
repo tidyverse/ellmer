@@ -7,6 +7,11 @@ while `content_pdf_file()` is used to for local PDF files.
 Not all providers support PDF input, so check the documentation for the
 provider you are using.
 
+Both functions embed the PDF's contents in every request, so for a large
+PDF, or one you'll refer to across several turns, prefer
+`chat$file_upload()`. It uploads the file once and later turns reference
+it by id.
+
 ## Usage
 
 ``` r

@@ -108,131 +108,78 @@ different languages or different styles of R code:
 ``` r
 
 chat <- chat_anthropic()
-#> Using model = "claude-sonnet-4-6".
+#> Using model = "claude-sonnet-5".
 chat$chat(question)
 ```
 
-    #> # Computing Mean and Median Grouped by Age and Sex
+    #> # Computing Mean and Median for Multiple Variables Grouped by Age and 
+    #> Sex
     #> 
-    #> ## Sample Data Setup
+    #> Here are several approaches depending on your programming 
+    #> language/tool:
+    #> 
+    #> ## R (using dplyr)
+    #> 
+    #> ```r
+    #> library(dplyr)
+    #> 
+    #> df %>%
+    #>   group_by(age, sex) %>%
+    #>   summarise(across(a:z, list(mean = ~mean(., na.rm = TRUE), 
+    #>                                median = ~median(., na.rm = TRUE))))
+    #> ```
+    #> 
+    #> ## Python (using pandas)
     #> 
     #> ```python
     #> import pandas as pd
-    #> import numpy as np
     #> 
-    #> # Create sample data
-    #> np.random.seed(42)
-    #> n = 1000
+    #> # Assuming your columns a-z are literally named 'a' through 'z'
+    #> cols = list('abcdefghijklmnopqrstuvwxyz')
     #> 
-    #> df = pd.DataFrame({
-    #>     'age': np.random.randint(18, 65, n),
-    #>     'sex': np.random.choice(['M', 'F'], n),
-    #>     **{chr(i): np.random.randn(n) for i in range(ord('a'), 
-    #> ord('z')+1)}  # columns a-z
-    #> })
+    #> result = df.groupby(['age', 'sex'])[cols].agg(['mean', 'median'])
     #> ```
+    #> 
+    #> ## SQL
+    #> 
+    #> SQL doesn't have a shorthand for "all columns a-z," so you'd need to 
+    #> write it explicitly (or generate the query dynamically):
+    #> 
+    #> ```sql
+    #> SELECT 
+    #>     age, 
+    #>     sex,
+    #>     AVG(a) AS a_mean, 
+    #>     -- SQL lacks a native MEDIAN function in many dialects; 
+    #>     -- Postgres example using percentile_cont:
+    #>     PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY a) AS a_median,
+    #>     AVG(b) AS b_mean,
+    #>     PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY b) AS b_median
+    #>     -- ... continue for c through z
+    #> FROM your_table
+    #> GROUP BY age, sex;
+    #> ```
+    #> 
+    #> For SQL, it's often easier to **generate this query programmatically**
+    #> using Python/R string manipulation if you have 26 variables.
     #> 
     #> ---
     #> 
-    #> ## Method 1: Using `groupby` + `agg` ✅ Recommended
+    #> ### A few clarifying questions to give you a more precise answer:
     #> 
-    #> ```python
-    #> # Define variable columns
-    #> var_cols = [chr(i) for i in range(ord('a'), ord('z')+1)]  # ['a', 'b',
-    #> ..., 'z']
+    #> 1. **What tool/language are you using?** (R, Python, SQL, Stata, SPSS,
+    #> Excel, etc.)
+    #> 2. **Are your variables literally named `a`, `b`, `c`, ... `z`**, or 
+    #> is this a placeholder for differently-named variables (e.g., `var1`, 
+    #> `income`, `height`, etc.)?
+    #> 3. **Do you want the output in long format** (one row per 
+    #> variable/stat/group) **or wide format** (one row per group, with 
+    #> separate columns for each variable's mean/median)?
+    #> 4. **How should missing values (NA) be handled** — excluded from 
+    #> calculations, or should they affect the result some other way?
     #> 
-    #> # Compute mean and median
-    #> result = (
-    #>     df
-    #>     .groupby(['age', 'sex'])[var_cols]
-    #>     .agg(['mean', 'median'])
-    #> )
-    #> 
-    #> print(result.head())
-    #> ```
-    #> 
-    #> ---
-    #> 
-    #> ## Method 2: Separate Mean and Median DataFrames
-    #> 
-    #> ```python
-    #> group_mean   = df.groupby(['age', 'sex'])[var_cols].mean()
-    #> group_median = df.groupby(['age', 'sex'])[var_cols].median()
-    #> 
-    #> print("Means:")
-    #> print(group_mean.head())
-    #> 
-    #> print("\nMedians:")
-    #> print(group_median.head())
-    #> ```
-    #> 
-    #> ---
-    #> 
-    #> ## Method 3: Long Format (Tidy) Output
-    #> 
-    #> ```python
-    #> result_long = (
-    #>     df
-    #>     .groupby(['age', 'sex'])[var_cols]
-    #>     .agg(['mean', 'median'])
-    #>     .stack(level=0)              # unpivot variable columns
-    #>     .reset_index()
-    #>     .rename(columns={'level_2': 'variable'})
-    #> )
-    #> 
-    #> print(result_long.head(10))
-    #> ```
-    #> 
-    #> ```
-    #>    age sex variable      mean    median
-    #> 0   18   F        a  0.123456  0.112233
-    #> 1   18   F        b -0.234567 -0.221100
-    #> ...
-    #> ```
-    #> 
-    #> ---
-    #> 
-    #> ## Method 4: Custom Aggregation with Named Functions
-    #> 
-    #> ```python
-    #> result = (
-    #>     df
-    #>     .groupby(['age', 'sex'])[var_cols]
-    #>     .agg(
-    #>         **{f'{col}_mean':   (col, 'mean')   for col in var_cols},
-    #>         **{f'{col}_median': (col, 'median') for col in var_cols}
-    #>     )
-    #> )
-    #> 
-    #> print(result.head())
-    #> # Columns: a_mean, a_median, b_mean, b_median, ...
-    #> ```
-    #> 
-    #> ---
-    #> 
-    #> ## Flattening Multi-Level Column Names
-    #> 
-    #> ```python
-    #> result = df.groupby(['age', 'sex'])[var_cols].agg(['mean', 'median'])
-    #> 
-    #> # Flatten columns: ('a', 'mean') -> 'a_mean'
-    #> result.columns = ['_'.join(col) for col in result.columns]
-    #> result = result.reset_index()
-    #> 
-    #> print(result.columns.tolist())
-    #> # ['age', 'sex', 'a_mean', 'a_median', 'b_mean', 'b_median', ...]
-    #> ```
-    #> 
-    #> ---
-    #> 
-    #> ## Summary
-    #> 
-    #> | Method | Best For |
-    #> |--------|----------|
-    #> | `agg(['mean', 'median'])` | Quick multi-stat summary |
-    #> | Separate `mean()` / `median()` | Independent use of each stat |
-    #> | **Long format** (`stack`) | Plotting / further analysis |
-    #> | Named agg (`**{}`) | Flat, readable column names |
+    #> Let me know these details and I can tailor the exact code for your 
+    #> situation!
 
 I can ensure that I always get R code in a specific style by providing a
 system prompt:
@@ -244,84 +191,65 @@ chat <- chat_anthropic(
   You are an expert R programmer who prefers the tidyverse.
 "
 )
-#> Using model = "claude-sonnet-4-6".
+#> Using model = "claude-sonnet-5".
 chat$chat(question)
 ```
 
-    #> ## Computing Mean and Median for Multiple Variables
-    #> 
-    #> Here's how to efficiently compute grouped summary statistics across 
-    #> many variables using `dplyr`:
+    #> Here's how to compute the mean and median across variables `a` through
+    #> `z`, grouped by `age` and `sex`:
     #> 
     #> ```r
-    #> library(dplyr)
+    #> library(tidyverse)
     #> 
-    #> df |>
-    #>   group_by(age, sex) |>
+    #> df %>%
+    #>   group_by(age, sex) %>%
+    #>   summarise(
+    #>     across(a:z, list(mean = mean, median = median), na.rm = TRUE),
+    #>     .groups = "drop"
+    #>   )
+    #> ```
+    #> 
+    #> ### Notes:
+    #> 
+    #> - **`a:z`** uses tidy-select's column range syntax — it works as long 
+    #> as your columns are actually named `a`, `b`, `c`, ..., `z` and appear 
+    #> in that order in your data frame. This is often more convenient than 
+    #> typing out `all_of(letters)`.
+    #> 
+    #> - If your columns aren't contiguous or ordered alphabetically, use:
+    #>   ```r
+    #>   across(all_of(letters), list(mean = mean, median = median), na.rm = 
+    #> TRUE)
+    #>   ```
+    #>   since `letters` is a built-in R constant containing `"a"` through 
+    #> `"z"`.
+    #> 
+    #> - **`na.rm = TRUE`** ensures missing values don't cause `NA` results —
+    #> remove it if you want NAs to propagate.
+    #> 
+    #> - The output column names will look like `a_mean`, `a_median`, 
+    #> `b_mean`, `b_median`, etc.
+    #> 
+    #> ### Customizing names
+    #> 
+    #> If you want a different naming pattern, use the `.names` argument:
+    #> 
+    #> ```r
+    #> df %>%
+    #>   group_by(age, sex) %>%
     #>   summarise(
     #>     across(
-    #>       a:z,                                    # Select columns a 
-    #> through z
-    #>       list(
-    #>         mean   = \(x) mean(x, na.rm = TRUE),
-    #>         median = \(x) median(x, na.rm = TRUE)
-    #>       ),
-    #>       .names = "{.col}_{.fn}"                 # Output: a_mean, 
-    #> a_median, b_mean...
+    #>       all_of(letters),
+    #>       list(mean = mean, median = median),
+    #>       na.rm = TRUE,
+    #>       .names = "{.fn}_{.col}"
     #>     ),
     #>     .groups = "drop"
     #>   )
     #> ```
     #> 
-    #> ### Output Format
-    #> 
-    #> This produces columns named like:
-    #> 
-    #> | age | sex | a_mean | a_median | b_mean | b_median | ... |
-    #> |-----|-----|--------|----------|--------|----------|-----|
-    #> | 25  | M   | 3.2    | 3.0      | 1.5    | 1.0      | ... |
-    #> 
-    #> ### Key Components
-    #> 
-    #> | Component | Purpose |
-    #> |-----------|---------|
-    #> | `group_by(age, sex)` | Groups data before summarising |
-    #> | `across(a:z, ...)` | Applies functions to columns a through z |
-    #> | `list(mean = ..., median = ...)` | Defines multiple summary 
-    #> functions |
-    #> | `.names = "{.col}_{.fn}"` | Controls output column naming pattern |
-    #> | `na.rm = TRUE` | Handles missing values gracefully |
-    #> 
-    #> ### Alternative: Long Format (often easier to work with)
-    #> 
-    #> ```r
-    #> library(dplyr)
-    #> library(tidyr)
-    #> 
-    #> df |>
-    #>   group_by(age, sex) |>
-    #>   summarise(across(a:z, list(mean = \(x) mean(x, na.rm = TRUE),
-    #>                              median = \(x) median(x, na.rm = TRUE)),
-    #>                    .names = "{.col}_{.fn}"),
-    #>             .groups = "drop") |>
-    #>   pivot_longer(
-    #>     cols      = -c(age, sex),
-    #>     names_to  = c("variable", ".value"),  # Splits "a_mean" into 
-    #> variable="a", stat="mean"
-    #>     names_sep = "_"
-    #>   )
-    #> ```
-    #> 
-    #> This produces a tidy long-format output:
-    #> 
-    #> | age | sex | variable | mean | median |
-    #> |-----|-----|----------|------|--------|
-    #> | 25  | M   | a        | 3.2  | 3.0    |
-    #> | 25  | M   | b        | 1.5  | 1.0    |
-    #> | ... | ... | ...      | ...  | ...    |
-    #> 
-    #> The **long format** is generally preferable for further analysis or 
-    #> plotting with `ggplot2`.
+    #> This would produce names like `mean_a`, `median_a`, `mean_b`, 
+    #> `median_b`, etc.
 
 Note that I’m using both a system prompt (which defines the general
 behaviour) and a user prompt (which asks the specific question). You
@@ -340,17 +268,15 @@ chat <- chat_anthropic(
   Just give me the code. I don't want any explanation or sample data.
 "
 )
-#> Using model = "claude-sonnet-4-6".
+#> Using model = "claude-sonnet-5".
 chat$chat(question)
 ```
 
     #> ```r
-    #> library(tidyverse)
-    #> 
     #> df %>%
     #>   group_by(age, sex) %>%
     #>   summarise(across(a:z, list(mean = mean, median = median), na.rm = 
-    #> TRUE))
+    #> TRUE, .names = "{.col}_{.fn}"))
     #> ```
 
 And of course, if you want a different style of R code, just ask for it:
@@ -363,46 +289,24 @@ chat <- chat_anthropic(
   Just give me the code. I don't want any explanation or sample data.
 "
 )
-#> Using model = "claude-sonnet-4-6".
+#> Using model = "claude-sonnet-5".
 chat$chat(question)
 ```
 
     #> ```r
-    #> library(data.table)
-    #> 
-    #> result <- dt[, lapply(.SD, function(x) list(mean = mean(x, na.rm = 
-    #> TRUE), median = median(x, na.rm = TRUE))), 
-    #>              by = .(age, sex), 
-    #>              .SDcols = letters[1:26]]
+    #> dt[, lapply(.SD, function(x) list(mean = mean(x), median = 
+    #> median(x))),
+    #>    by = .(age, sex), .SDcols = letters]
     #> ```
     #> 
-    #> Or if you want long format with separate mean and median columns:
+    #> If you want mean and median as separate columns instead of a list 
+    #> column:
     #> 
     #> ```r
-    #> library(data.table)
-    #> 
-    #> result <- dt[, c(
-    #>   lapply(.SD, function(x) mean(x, na.rm = TRUE)),
-    #>   lapply(.SD, function(x) median(x, na.rm = TRUE))
-    #> ) |> setNames(c(paste0("mean_", letters[1:26]), paste0("median_", 
-    #> letters[1:26]))),
-    #>   by = .(age, sex),
-    #>   .SDcols = letters[1:26]]
-    #> ```
-    #> 
-    #> Or more cleanly:
-    #> 
-    #> ```r
-    #> library(data.table)
-    #> 
-    #> mean_cols   <- paste0("mean_", letters[1:26])
-    #> median_cols <- paste0("median_", letters[1:26])
-    #> 
-    #> result <- dt[, {
-    #>   means   <- lapply(.SD, mean,   na.rm = TRUE)
-    #>   medians <- lapply(.SD, median, na.rm = TRUE)
-    #>   setNames(c(means, medians), c(mean_cols, median_cols))
-    #> }, by = .(age, sex), .SDcols = letters[1:26]]
+    #> cols <- letters
+    #> dt[, unlist(lapply(.SD, function(x) list(mean = mean(x), median = 
+    #> median(x))), recursive = FALSE),
+    #>    by = .(age, sex), .SDcols = cols]
     #> ```
 
 ``` r
@@ -414,15 +318,15 @@ chat <- chat_anthropic(
   Just give me the code. I don't want any explanation or sample data.
 "
 )
-#> Using model = "claude-sonnet-4-6".
+#> Using model = "claude-sonnet-5".
 chat$chat(question)
 ```
 
     #> ```r
-    #> aggregate(cbind(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, 
-    #> s, t, u, v, w, x, y, z) ~ age + sex, 
-    #>           data = df, 
-    #>           FUN = function(x) c(mean = mean(x), median = median(x)))
+    #> vars <- letters
+    #> result <- aggregate(. ~ age + sex, data = df[c("age", "sex", vars)],
+    #>                      FUN = function(x) c(mean = mean(x), median = 
+    #> median(x)))
     #> ```
 
 ### Be explicit
@@ -446,16 +350,15 @@ chat <- chat_anthropic(
   * Use the base pipe, `|>`, not the magrittr pipe `%>%`.
 "
 )
-#> Using model = "claude-sonnet-4-6".
+#> Using model = "claude-sonnet-5".
 chat$chat(question)
 ```
 
     #> ```r
-    #> data |>
-    #>   group_by(age, sex) |>
+    #> df |>
     #>   summarise(
-    #>     across(a:z, list(mean = mean, median = median)),
-    #>     .groups = "drop"
+    #>     across(a:z, list(mean = mean, median = median), na.rm = TRUE),
+    #>     .by = c(age, sex)
     #>   )
     #> ```
 
@@ -476,32 +379,38 @@ chat <- chat_anthropic(
   argument. Just give me the code. I don't want any explanation or sample data.
 "
 )
-#> Using model = "claude-sonnet-4-6".
+#> Using model = "claude-sonnet-5".
 chat$chat(question)
 ```
 
     #> ```r
-    #> library(dplyr)
+    #> library(dplyr) # load dplyr for data manipulation (group_by, 
+    #> summarise, across)
     #> 
-    #> df %>%
-    #>   group_by(age, sex) %>%                        # group the data by 
-    #> age and sex
+    #> result <- df %>%                      # start pipeline with data frame
+    #> 'df'
+    #>   group_by(age, sex) %>%               # group rows by combinations of
+    #> 'age' and 'sex'
     #>   summarise(
     #>     across(
-    #>       a:z,                                       # select all columns 
-    #> from a to z
-    #>       list(
-    #>         mean = ~mean(.x, na.rm = TRUE),          # compute mean, 
-    #> ignoring NAs
-    #>         median = ~median(.x, na.rm = TRUE)       # compute median, 
-    #> ignoring NAs
+    #>       .cols = letters,                 # 'letters' is R's built-in 
+    #> vector c("a","b",...,"z")
+    #>                                         # selects all columns named a 
+    #> through z
+    #>       .fns = list(
+    #>         mean   = ~ mean(.x, na.rm = TRUE),   # compute mean of each 
+    #> column, ignoring NAs
+    #>         median = ~ median(.x, na.rm = TRUE)  # compute median of each 
+    #> column, ignoring NAs
     #>       ),
-    #>       .names = "{.col}_{.fn}"                    # name output as e.g.
-    #> a_mean, a_median
+    #>       .names = "{.col}_{.fn}"          # name output columns like 
+    #> "a_mean", "a_median", etc.
     #>     ),
-    #>     .groups = "drop"                             # remove grouping 
-    #> structure after summarising
+    #>     .groups = "drop"                   # drop grouping structure after
+    #> summarising
     #>   )
+    #> 
+    #> print(result) # display the resulting summary table
     #> ```
 
 ### Teach it about new features
@@ -535,7 +444,7 @@ chat <- chat_anthropic(
     )
 "
 )
-#> Using model = "claude-sonnet-4-6".
+#> Using model = "claude-sonnet-5".
 chat$chat(question)
 ```
 
@@ -596,82 +505,66 @@ instruct_json <- "
 "
 
 chat <- chat_openai(instruct_json)
-#> Using model = "gpt-5.4".
+#> Using model = "gpt-5.6-terra".
 chat$chat(ingredients)
 #> [
 #>   {
-#>     "quantity": 0.75,
-#>     "unit": "cup",
-#>     "metric_quantity": 150,
-#>     "metric_unit": "g",
 #>     "ingredient": "dark brown sugar",
-#>     "preparation": null
+#>     "quantity": {
+#>       "cups": "3/4",
+#>       "grams": 150
+#>     }
 #>   },
 #>   {
+#>     "ingredient": "eggs",
 #>     "quantity": 2,
-#>     "unit": null,
-#>     "metric_quantity": null,
-#>     "metric_unit": null,
-#>     "ingredient": "large eggs",
-#>     "preparation": null
+#>     "unit": "large"
 #>   },
 #>   {
-#>     "quantity": 0.75,
-#>     "unit": "cup",
-#>     "metric_quantity": 165,
-#>     "metric_unit": "g",
 #>     "ingredient": "sour cream",
-#>     "preparation": null
+#>     "quantity": {
+#>       "cups": "3/4",
+#>       "grams": 165
+#>     }
 #>   },
 #>   {
-#>     "quantity": 0.5,
-#>     "unit": "cup",
-#>     "metric_quantity": 113,
-#>     "metric_unit": "g",
 #>     "ingredient": "unsalted butter",
+#>     "quantity": {
+#>       "cups": "1/2",
+#>       "grams": 113
+#>     },
 #>     "preparation": "melted"
 #>   },
 #>   {
-#>     "quantity": 1,
-#>     "unit": "teaspoon",
-#>     "metric_quantity": null,
-#>     "metric_unit": null,
 #>     "ingredient": "vanilla extract",
-#>     "preparation": null
+#>     "quantity": 1,
+#>     "unit": "teaspoon"
 #>   },
 #>   {
-#>     "quantity": 0.75,
-#>     "unit": "teaspoon",
-#>     "metric_quantity": null,
-#>     "metric_unit": null,
 #>     "ingredient": "kosher salt",
-#>     "preparation": null
+#>     "quantity": "3/4",
+#>     "unit": "teaspoon"
 #>   },
 #>   {
-#>     "quantity": 0.3333333333,
-#>     "unit": "cup",
-#>     "metric_quantity": 80,
-#>     "metric_unit": "ml",
 #>     "ingredient": "neutral oil",
-#>     "preparation": null
+#>     "quantity": {
+#>       "cups": "1/3",
+#>       "milliliters": 80
+#>     }
 #>   },
 #>   {
-#>     "quantity": 1.5,
-#>     "unit": "cup",
-#>     "metric_quantity": 190,
-#>     "metric_unit": "g",
 #>     "ingredient": "all-purpose flour",
-#>     "preparation": null
+#>     "quantity": {
+#>       "cups": "1 1/2",
+#>       "grams": 190
+#>     }
 #>   },
 #>   {
-#>     "quantity": 150,
-#>     "unit": "g",
-#>     "metric_quantity": null,
-#>     "metric_unit": null,
 #>     "ingredient": "sugar",
-#>     "preparation": null,
-#>     "alternate_quantity": 1.5,
-#>     "alternate_unit": "teaspoons"
+#>     "quantity": {
+#>       "grams": 150,
+#>       "teaspoons": "1 1/2"
+#>     }
 #>   }
 #> ]
 ```
@@ -703,16 +596,57 @@ instruct_weight <- r"(
 )"
 
 chat <- chat_openai(paste(instruct_json, instruct_weight))
-#> Using model = "gpt-5.4".
+#> Using model = "gpt-5.6-terra".
 chat$chat(ingredients)
-#> [{"name":"dark brown sugar","quantity":150,"unit":"g"},{"name":"large 
-#> eggs","quantity":2,"unit":"count"},{"name":"sour 
-#> cream","quantity":165,"unit":"g"},{"name":"unsalted butter, 
-#> melted","quantity":113,"unit":"g"},{"name":"vanilla 
-#> extract","quantity":1,"unit":"teaspoon"},{"name":"kosher 
-#> salt","quantity":0.75,"unit":"teaspoon"},{"name":"neutral 
-#> oil","quantity":80,"unit":"ml"},{"name":"all-purpose 
-#> flour","quantity":190,"unit":"g"},{"name":"sugar","quantity":[{"amount":150,"unit":"g"},{"amount":1.5,"unit":"teaspoon"}]}]
+#> [
+#>   {
+#>     "name": "dark brown sugar",
+#>     "quantity": 150,
+#>     "unit": "g"
+#>   },
+#>   {
+#>     "name": "eggs",
+#>     "quantity": 2,
+#>     "unit": "large"
+#>   },
+#>   {
+#>     "name": "sour cream",
+#>     "quantity": 165,
+#>     "unit": "g"
+#>   },
+#>   {
+#>     "name": "unsalted butter, melted",
+#>     "quantity": 113,
+#>     "unit": "g"
+#>   },
+#>   {
+#>     "name": "vanilla extract",
+#>     "quantity": 1,
+#>     "unit": "teaspoon"
+#>   },
+#>   {
+#>     "name": "kosher salt",
+#>     "quantity": 0.75,
+#>     "unit": "teaspoon"
+#>   },
+#>   {
+#>     "name": "neutral oil",
+#>     "quantity": 80,
+#>     "unit": "ml"
+#>   },
+#>   {
+#>     "name": "all-purpose flour",
+#>     "quantity": 190,
+#>     "unit": "g"
+#>   },
+#>   {
+#>     "name": "sugar",
+#>     "quantity": 150,
+#>     "unit": "g",
+#>     "additional_quantity": 1.5,
+#>     "additional_unit": "teaspoon"
+#>   }
+#> ]
 ```
 
 Just providing the examples seems to work remarkably well. But I found
@@ -810,20 +744,21 @@ type_ingredient <- type_object(
 type_ingredients <- type_array(type_ingredient)
 
 chat <- chat_openai(c(instruct_json, instruct_weight))
-#> Using model = "gpt-5.4".
+#> Using model = "gpt-5.6-terra".
 chat$chat_structured(ingredients, type = type_ingredients)
-#> # A tibble: 9 × 3
-#>   name                    quantity unit      
-#>   <chr>                      <dbl> <chr>     
-#> 1 dark brown sugar          150    "g"       
-#> 2 large eggs                  2    ""        
-#> 3 sour cream                165    "g"       
-#> 4 unsalted butter, melted   113    "g"       
-#> 5 vanilla extract             1    "teaspoon"
-#> 6 kosher salt                 0.75 "teaspoon"
-#> 7 neutral oil                80    "ml"      
-#> 8 all-purpose flour         190    "g"       
-#> 9 sugar                     150    "g"
+#> # A tibble: 10 × 3
+#>    name                    quantity unit      
+#>    <chr>                      <dbl> <chr>     
+#>  1 dark brown sugar          150    "g"       
+#>  2 large eggs                  2    ""        
+#>  3 sour cream                165    "g"       
+#>  4 unsalted butter, melted   113    "g"       
+#>  5 vanilla extract             1    "teaspoon"
+#>  6 kosher salt                 0.75 "teaspoon"
+#>  7 neutral oil                80    "ml"      
+#>  8 all-purpose flour         190    "g"       
+#>  9 sugar                     150    "g"       
+#> 10 sugar                       1.5  "teaspoon"
 ```
 
 ### Capturing raw input
@@ -878,19 +813,46 @@ doing a good job:
 ``` r
 
 chat <- chat_openai(c(instruct_json, instruct_weight_input))
-#> Using model = "gpt-5.4".
+#> Using model = "gpt-5.6-terra".
 chat$chat(recipe)
-#> [{"name":"unsalted butter","quantity":1,"unit":"cup","input":"one cup 
-#> of softened unsalted butter"},{"name":"white 
-#> sugar","quantity":0.25,"unit":"cup","input":"a quarter cup of white 
-#> sugar"},{"name":"egg","quantity":1,"unit":null,"input":"an 
-#> egg"},{"name":"vanilla 
-#> extract","quantity":1,"unit":"teaspoon","input":"1 teaspoon of vanilla
-#> extract"},{"name":"all-purpose 
-#> flour","quantity":2,"unit":"cup","input":"2 cups of all-purpose 
-#> flour"},{"name":"semisweet chocolate 
-#> chips","quantity":1,"unit":"cup","input":"1 cup of semisweet chocolate
-#> chips"}]
+#> [
+#>   {
+#>     "name": "unsalted butter, softened",
+#>     "quantity": 1,
+#>     "unit": "cup",
+#>     "input": "one cup of softened unsalted butter"
+#>   },
+#>   {
+#>     "name": "white sugar",
+#>     "quantity": 0.25,
+#>     "unit": "cup",
+#>     "input": "a quarter cup of white sugar"
+#>   },
+#>   {
+#>     "name": "egg",
+#>     "quantity": 1,
+#>     "unit": "egg",
+#>     "input": "an egg"
+#>   },
+#>   {
+#>     "name": "vanilla extract",
+#>     "quantity": 1,
+#>     "unit": "teaspoon",
+#>     "input": "1 teaspoon of vanilla extract"
+#>   },
+#>   {
+#>     "name": "all-purpose flour",
+#>     "quantity": 2,
+#>     "unit": "cup",
+#>     "input": "2 cups of all-purpose flour"
+#>   },
+#>   {
+#>     "name": "semisweet chocolate chips",
+#>     "quantity": 1,
+#>     "unit": "cup",
+#>     "input": "1 cup of semisweet chocolate chips"
+#>   }
+#> ]
 ```
 
 When I ran it while writing this vignette, it seemed to be working out
@@ -900,7 +862,7 @@ my examples.
 
 ## Token usage
 
-| provider  | model             | input | output | cached_input |  price |
-|:----------|:------------------|------:|-------:|-------------:|-------:|
-| Anthropic | claude-sonnet-4-6 |   802 |   2361 |            0 | \$0.04 |
-| OpenAI    | gpt-5.4           |  1119 |    930 |            0 | \$0.02 |
+| provider  | model           | input | output | cached_input |  price |
+|:----------|:----------------|------:|-------:|-------------:|-------:|
+| Anthropic | claude-sonnet-5 |   964 |   2263 |            0 | \$0.02 |
+| OpenAI    | gpt-5.6-terra   |  1119 |   1170 |            0 | \$0.02 |

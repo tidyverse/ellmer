@@ -5,13 +5,13 @@ then call $cancel() from anywhere (e.g. a Shiny observer) to stop the
 stream after the next chunk arrives.
 The same controller can be reused across multiple streams. Call
 $reset() to clear the cancelled state, or pass it directly to a new
-$stream() call — it will be reset automatically."><meta property="og:description" content="Creates a controller that can cancel an in-progress stream. Pass it to
+$stream() call, where it will be reset automatically."><meta property="og:description" content="Creates a controller that can cancel an in-progress stream. Pass it to
 Chat's $stream() or $stream_async() via the controller argument,
 then call $cancel() from anywhere (e.g. a Shiny observer) to stop the
 stream after the next chunk arrives.
 The same controller can be reused across multiple streams. Call
 $reset() to clear the cancelled state, or pass it directly to a new
-$stream() call — it will be reset automatically."><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><!-- Privacy-friendly analytics by Plausible --><script async src="https://plausible.io/js/pa-lmXWrcHEOlmbr6pnO-yL-.js"></script><script>
+$stream() call, where it will be reset automatically."><meta property="og:image" content="https://ellmer.tidyverse.org/logo.png"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><!-- Privacy-friendly analytics by Plausible --><script async src="https://plausible.io/js/pa-lmXWrcHEOlmbr6pnO-yL-.js"></script><script>
   window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
   plausible.init()
 </script></head><body>
@@ -22,7 +22,7 @@ $stream() call — it will be reset automatically."><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@ $stream() call — it will be reset automatically."><meta property="og:image" co
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create a stream controller</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.4.2/R/stream-controller.R" class="external-link"><code>R/stream-controller.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/stream-controller.R" class="external-link"><code>R/stream-controller.R</code></a></small>
       <div class="d-none name"><code>stream_controller.Rd</code></div>
     </div>
 
@@ -72,7 +72,7 @@ then call <code>$cancel()</code> from anywhere (e.g. a Shiny observer) to stop t
 stream after the next chunk arrives.</p>
 <p>The same controller can be reused across multiple streams. Call
 <code>$reset()</code> to clear the cancelled state, or pass it directly to a new
-<code>$stream()</code> call — it will be reset automatically.</p>
+<code>$stream()</code> call, where it will be reset automatically.</p>
     </div>
 
     <div class="section level2">

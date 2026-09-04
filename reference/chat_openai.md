@@ -65,10 +65,10 @@ models_openai(
 
 - model:
 
-  The model to use for the chat (defaults to "gpt-5.4"). We regularly
-  update the default, so we strongly recommend explicitly specifying a
-  model for anything other than casual use. Use `models_openai()` to see
-  all options.
+  The model to use for the chat (defaults to "gpt-5.6-terra"). We
+  regularly update the default, so we strongly recommend explicitly
+  specifying a model for anything other than casual use. Use
+  `models_openai()` to see all options.
 
 - params:
 
@@ -143,59 +143,64 @@ Other chatbots:
 
 ``` r
 chat <- chat_openai()
-#> Using model = "gpt-5.4".
+#> Using model = "gpt-5.6-terra".
 chat$chat("
   What is the difference between a tibble and a data frame?
   Answer with a bulleted list
 ")
-#> - **Both store tabular data in R**, but a **tibble** is a modern 
-#> version of a **data frame**, provided by the **tibble** package and 
-#> commonly used in the **tidyverse**.
+#> - **Origin**
+#>   - A **data frame** is a base R data structure.
+#>   - A **tibble** is a modern reimplementation of a data frame from the
+#> **tibble** package, commonly used in the tidyverse.
 #> 
-#> - **Printing behavior**
-#>   - **Data frame:** prints the whole object by default.
-#>   - **Tibble:** prints only the first 10 rows and columns that fit on 
-#> screen, making large datasets easier to inspect.
+#> - **Printing**
+#>   - Data frames often print all rows and columns, which can be 
+#> overwhelming for large datasets.
+#>   - Tibbles print a compact preview: only the first few rows and 
+#> columns, along with column types.
 #> 
-#> - **Subsetting behavior**
-#>   - **Data frame:** may simplify results, for example returning a 
-#> vector instead of a one-column data frame.
-#>   - **Tibble:** is more strict and usually preserves the data 
-#> structure.
+#> - **Data types**
+#>   - Data frames may automatically convert character columns to factors
+#> in older versions of R (depending on settings).
+#>   - Tibbles do not automatically convert strings to factors.
 #> 
 #> - **Column names**
-#>   - **Data frame:** may change column names to make them syntactically
-#> valid unless told not to.
-#>   - **Tibble:** keeps column names more faithfully.
+#>   - Data frames can modify invalid or duplicate column names by 
+#> default (for example, adding dots).
+#>   - Tibbles preserve column names more consistently and can support 
+#> non-syntactic names.
 #> 
-#> - **Type handling**
-#>   - **Data frame:** older versions of R sometimes converted character 
-#> columns to factors automatically.
-#>   - **Tibble:** does not do automatic character-to-factor conversion.
+#> - **Subsetting**
+#>   - Extracting a single column from a data frame with `df[, "x"]` may 
+#> simplify the result to a vector.
+#>   - Extracting from a tibble with `tbl[, "x"]` always returns another 
+#> tibble; use `tbl[["x"]]` or `tbl$x` to get a vector.
 #> 
 #> - **Partial matching**
-#>   - **Data frame:** can allow partial matching in some cases.
-#>   - **Tibble:** does not allow partial matching, which helps avoid 
+#>   - Data frames may allow partial matching of column names, such as 
+#> `df$long` matching a column called `long_name`.
+#>   - Tibbles do not allow partial matching, helping prevent accidental 
 #> mistakes.
 #> 
-#> - **Input flexibility**
-#>   - **Data frame:** works well with base R functions.
-#>   - **Tibble:** is designed to work smoothly with tidyverse tools like
-#> `dplyr` and `ggplot2`.
+#> - **Recycling behavior**
+#>   - Data frames may silently recycle shorter vectors when creating or 
+#> modifying columns.
+#>   - Tibbles are stricter and generally require vectors to have 
+#> compatible lengths, reducing silent errors.
 #> 
-#> - **Summary**
-#>   - Use a **data frame** for base R compatibility.
-#>   - Use a **tibble** when you want cleaner printing, stricter 
-#> behavior, and tidyverse-friendly workflows.
+#> - **Compatibility**
+#>   - A tibble is still a type of data frame, so many functions that 
+#> work with data frames also work with tibbles.
+#>   - Some base R functions or older code may expect a plain data frame,
+#> in which case a tibble can be converted with `as.data.frame()`.
 
 chat$chat("Tell me three funny jokes about statisticians")
-#> - Why did the statistician bring a ladder to work?  
-#>   - Because the data had too many high points.
+#> - Why did the statistician drown crossing a river?  
+#>   Because it was three feet deep on average.
 #> 
-#> - A statistician drowned crossing a river that was, on average, 3 feet
-#> deep.  
-#>   - Moral: always check the distribution.
+#> - A statistician’s favorite type of joke?  
+#>   One with a significant *p*-unchline.
 #> 
-#> - Statisticians do it with significance.  
-#>   - But only if `p < 0.05`.
+#> - There are three kinds of statisticians:  
+#>   Those who can count, and those who can’t account for sampling error.
 ```

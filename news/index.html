@@ -10,7 +10,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,9 +49,87 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.4.2/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/tidyverse/ellmer/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.0" id="ellmer-050">ellmer 0.5.0<a class="anchor" aria-label="anchor" href="#ellmer-050"></a></h2>
+<div class="section level3">
+<h3 id="lifecycle-changes-0-5-0">Lifecycle changes<a class="anchor" aria-label="anchor" href="#lifecycle-changes-0-5-0"></a></h3>
+<ul><li>
+<code><a href="../reference/chat_github.html">chat_github()</a></code> and <code><a href="../reference/chat_github.html">models_github()</a></code> are now defunct because GitHub Models has been retired (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1069" class="external-link">#1069</a>).</li>
+<li>
+<code><a href="../reference/tool.html">tool()</a></code> functions that return complex objects like data frames or lists now produce a deprecation warning. Tool functions should return a character vector, an atomic vector, a JSON string (from <code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code>), or a <code>Content</code> object. Use <code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code> to convert complex objects before returning (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/858" class="external-link">#858</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-5-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-5-0"></a></h3>
+<ul><li>When running on Posit Connect, ellmer now forwards the viewer’s session token to Connect’s LLM gateway so gateway usage can be attributed to the viewer. This happens automatically for Shiny content and only affects requests to the gateway (<a href="https://github.com/karawoo" class="external-link">@karawoo</a>, <a href="https://github.com/tidyverse/ellmer/issues/1105" class="external-link">#1105</a>).</li>
+<li>
+<code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> gains an <code>api</code> argument to select between the Converse API on the <code>bedrock-runtime</code> endpoint and the Anthropic Messages or OpenAI Responses APIs on the <code>bedrock-mantle</code> endpoint. This makes models that Converse can’t serve, like Claude Mythos and the GPT-5 family, available on Bedrock. The API is picked from <code>model</code> by default, so you only need to set <code>api</code> for models ellmer doesn’t recognize (<a href="https://github.com/tidyverse/ellmer/issues/1064" class="external-link">#1064</a>).</li>
+<li>
+<code>Chat</code> gains experimental <code>$file_upload()</code>, <code>$file_list()</code>, <code>$file_get()</code>, <code>$file_download()</code>, and <code>$file_delete()</code> methods for managing provider-hosted files with <code><a href="../reference/chat_openai.html">chat_openai()</a></code>, <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code>, and <code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code>: upload a file once, then pass the returned reference to <code>$chat()</code> instead of re-sending the file’s contents every turn. Uploads expire after 48 hours by default; use <code>expires_in_h</code> to change this. <code><a href="../reference/claude_file_upload.html">claude_file_upload()</a></code> and friends and <code><a href="../reference/google_upload.html">google_upload()</a></code> are deprecated in favor of these (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1091" class="external-link">#1091</a>).</li>
+<li>
+<code>Chat</code> gains <code>$get_rounds()</code> and <code>$last_round()</code> methods for retrieving the conversation history grouped into <code>Round</code>s. The new <code>Round</code> class groups a <code>Chat</code>’s flat turn history into rounds, each containing a user turn and the assistant/tool-result turns that follow it (<a href="https://github.com/tidyverse/ellmer/issues/507" class="external-link">#507</a>).</li>
+<li>
+<code>Chat</code> gains <code>$on_request_start()</code> and <code>$on_request_end()</code> callbacks that fire before and after each model request, including each round of the tool loop. <code>$on_request_start()</code> receives the turns about to be sent, so you can inspect the request or compact the conversation with <code>$set_turns()</code>. <code>$on_request_end()</code> receives the assistant turn just returned, so you can track latency or cost per request (<a href="https://github.com/kaipingyang" class="external-link">@kaipingyang</a>, <a href="https://github.com/tidyverse/ellmer/issues/1051" class="external-link">#1051</a>).</li>
+<li>
+<code>Chat$stream()</code> and <code>Chat$stream_async()</code> gain a <code>type</code> argument for streaming structured output from providers with native support (<a href="https://github.com/cpsievert" class="external-link">@cpsievert</a>, <a href="https://github.com/tidyverse/ellmer/issues/1102" class="external-link">#1102</a>).</li>
+<li>
+<code>Chat</code> gains a <code>$token_count()</code> method that estimates the number of tokens in new input using the provider’s token counting endpoint (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/814" class="external-link">#814</a>).</li>
+<li>
+<code><a href="../reference/claude_tool_web_search.html">claude_tool_web_search()</a></code>, <code>claude_tool_web_fetch(citations = TRUE)</code>, <code><a href="../reference/google_tool_web_search.html">google_tool_web_search()</a></code>, and <code><a href="../reference/openai_tool_web_search.html">openai_tool_web_search()</a></code> now return citations, which are preserved in chat history and streamed content and shown as cited sources in console output (<a href="https://github.com/cpsievert" class="external-link">@cpsievert</a>, <a href="https://github.com/tidyverse/ellmer/issues/775" class="external-link">#775</a>).</li>
+<li>New <code><a href="../reference/content_document_file.html">content_document_file()</a></code> and <code><a href="../reference/content_document_file.html">content_document_url()</a></code> send text-based documents like CSV, markdown, and code files to the model, and <code><a href="../reference/content_pdf_file.html">content_pdf_url()</a></code> now lets providers that can fetch URLs do so themselves (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1090" class="external-link">#1090</a>).</li>
+<li>New <code>Model</code> class separates model configuration (name, parameters, extra arguments) from the <code>Provider</code> class, which now only captures API endpoint details. <code>Chat</code> gains a new <code>$get_model_object()</code> method to retrieve the <code>Model</code> object. <code>provider@model</code>, <code>provider@params</code>, and <code>provider@extra_args</code> are deprecated and will be removed in a future release; use the <code>Model</code> object instead (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1098" class="external-link">#1098</a>).</li>
+<li>New <code><a href="../reference/models_update_prices.html">models_update_prices()</a></code> downloads the latest model pricing data from GitHub and saves it to a local cache. Subsequent calls to <code><a href="../reference/token_usage.html">token_usage()</a></code> and related functions will use the updated prices (<a href="https://github.com/tidyverse/ellmer/issues/968" class="external-link">#968</a>).</li>
+<li>
+<code><a href="../reference/tool_context.html">tool_context()</a></code> lets a tool access its calling context, including the <code>ContentToolRequest</code> and the conversation history, during a tool call. <code><a href="../reference/tool_context.html">with_tool_context()</a></code> and <code><a href="../reference/tool_context.html">local_tool_context()</a></code> support testing tools that use it (<a href="https://github.com/tidyverse/ellmer/issues/871" class="external-link">#871</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-and-bug-fixes-0-5-0">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-0-5-0"></a></h3>
+<ul><li>Default models have been updated for a number of providers (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1040" class="external-link">#1040</a>, <a href="https://github.com/tidyverse/ellmer/issues/1066" class="external-link">#1066</a>, <a href="https://github.com/tidyverse/ellmer/issues/1125" class="external-link">#1125</a>):
+<ul><li>
+<code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> now uses <code>claude-sonnet-5</code>.</li>
+<li>
+<code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> now uses <code>us.anthropic.claude-sonnet-5</code>.</li>
+<li>
+<code><a href="../reference/chat_databricks.html">chat_databricks()</a></code> now uses <code>databricks-claude-sonnet-5</code>.</li>
+<li>
+<code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> and <code><a href="../reference/chat_google_gemini.html">chat_google_vertex()</a></code> now use <code>gemini-3.7-flash</code>.</li>
+<li>
+<code><a href="../reference/chat_huggingface.html">chat_huggingface()</a></code> now uses <code>Qwen/Qwen3-235B-A22B-Instruct-2507</code>.</li>
+<li>
+<code><a href="../reference/chat_openai.html">chat_openai()</a></code> now uses <code>gpt-5.6-terra</code>.</li>
+<li>
+<code><a href="../reference/chat_openrouter.html">chat_openrouter()</a></code> now uses <code>gpt-5.6-terra</code>.</li>
+<li>
+<code><a href="../reference/chat_posit.html">chat_posit()</a></code> now uses <code>claude-sonnet-5</code>.</li>
+<li>
+<code><a href="../reference/chat_snowflake.html">chat_snowflake()</a></code> now uses <code>claude-sonnet-5</code>.</li>
+</ul></li>
+<li>
+<code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> and <code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> now handle empty responses from the model (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1070" class="external-link">#1070</a>).</li>
+<li>
+<code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> now defaults <code>base_url</code> to the <code>ANTHROPIC_BASE_URL</code> environment variable, and <code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> to <code>AWS_ENDPOINT_URL_BEDROCK_RUNTIME</code> or <code>AWS_ENDPOINT_URL_BEDROCK_MANTLE</code> depending on <code>api</code>, matching the official SDKs (<a href="https://github.com/karawoo" class="external-link">@karawoo</a>, <a href="https://github.com/tidyverse/ellmer/issues/1103" class="external-link">#1103</a>).</li>
+<li>
+<code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> now handles the <code>fallback</code> content block returned when a model’s server-side refusal fallback (<code>server-side-fallback-2026-06-01</code>) is triggered (<a href="https://github.com/simonpcouch" class="external-link">@simonpcouch</a>, <a href="https://github.com/tidyverse/ellmer/issues/1057" class="external-link">#1057</a>).</li>
+<li>
+<code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> now handles thinking blocks with no text (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1085" class="external-link">#1085</a>).</li>
+<li>
+<code><a href="../reference/chat_aws_bedrock.html">chat_aws_bedrock()</a></code> now supports bearer token authentication for enterprise API gateways (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1002" class="external-link">#1002</a>).</li>
+<li>
+<code><a href="../reference/chat_databricks.html">chat_databricks()</a></code> now supports models that return content as an array of typed objects (e.g. <code>databricks-gpt-oss-120b</code>), capturing reasoning parts as thinking content (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1078" class="external-link">#1078</a>).</li>
+<li>
+<code><a href="../reference/chat_databricks.html">chat_databricks()</a></code> now works with tools that have no arguments (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1084" class="external-link">#1084</a>).</li>
+<li>
+<code>Chat</code> gains a <code>conversation_id</code> active binding. When set, it is recorded on the OpenTelemetry spans emitted for each model call so that tracing backends can group spans belonging to the same conversation (<a href="https://github.com/cpsievert" class="external-link">@cpsievert</a>, <a href="https://github.com/tidyverse/ellmer/issues/1106" class="external-link">#1106</a>).</li>
+<li>
+<code><a href="../reference/chat_google_gemini.html">chat_google_gemini()</a></code> now supports mixing regular tools with built-in tools like <code><a href="../reference/google_tool_web_search.html">google_tool_web_search()</a></code> (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1054" class="external-link">#1054</a>).</li>
+<li>
+<code><a href="../reference/chat_openrouter.html">chat_openrouter()</a></code> now preserves provider error messages (<a href="https://github.com/xmarquez" class="external-link">@xmarquez</a>, <a href="https://github.com/tidyverse/ellmer/issues/1059" class="external-link">#1059</a>).</li>
+<li>
+<code>params(top_k = )</code> is now sent as <code>top_k</code> rather than <code>top_logprobs</code> for OpenAI-based providers (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1113" class="external-link">#1113</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.2" id="ellmer-042">ellmer 0.4.2<a class="anchor" aria-label="anchor" href="#ellmer-042"></a></h2><p class="text-muted">CRAN release: 2026-07-13</p>
 <ul><li>
@@ -451,7 +529,7 @@
 <li><p>Async and streaming async chat are now event-driven and use <code><a href="https://later.r-lib.org/reference/later_fd.html" class="external-link">later::later_fd()</a></code> to wait efficiently on curl socket activity (<a href="https://github.com/tidyverse/ellmer/issues/157" class="external-link">#157</a>).</p></li>
 <li><p>New <code>chat_bedrock()</code> to chat with AWS bedrock models (<a href="https://github.com/tidyverse/ellmer/issues/50" class="external-link">#50</a>).</p></li>
 <li><p>New <code>chat$extract_data()</code> uses the structured data API where available (and tool calling otherwise) to extract data structured according to a known type specification. You can create specs with functions <code><a href="../reference/type_boolean.html">type_boolean()</a></code>, <code><a href="../reference/type_boolean.html">type_integer()</a></code>, <code><a href="../reference/type_boolean.html">type_number()</a></code>, <code><a href="../reference/type_boolean.html">type_string()</a></code>, <code><a href="../reference/type_boolean.html">type_enum()</a></code>, <code><a href="../reference/type_boolean.html">type_array()</a></code>, and <code><a href="../reference/type_boolean.html">type_object()</a></code> (<a href="https://github.com/tidyverse/ellmer/issues/31" class="external-link">#31</a>).</p></li>
-<li><p>The general <code>ToolArg()</code> has been replaced by the more specific <code>type_*()</code> functions. <code><a href="../reference/tool.html">ToolDef()</a></code> has been renamed to <code>tool</code>.</p></li>
+<li><p>The general <code>ToolArg()</code> has been replaced by the more specific <code>type_*()</code> functions. <code><a href="../reference/ToolDef.html">ToolDef()</a></code> has been renamed to <code>tool</code>.</p></li>
 <li><p><code><a href="../reference/content_image_url.html">content_image_url()</a></code> will now create inline images when given a data url (<a href="https://github.com/tidyverse/ellmer/issues/110" class="external-link">#110</a>).</p></li>
 <li><p>Streaming ollama results works once again (<a href="https://github.com/tidyverse/ellmer/issues/117" class="external-link">#117</a>).</p></li>
 <li><p>Streaming OpenAI results now capture more results, including <code>logprobs</code> (<a href="https://github.com/tidyverse/ellmer/issues/115" class="external-link">#115</a>).</p></li>

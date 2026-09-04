@@ -12,8 +12,13 @@ represent various types of content, allowing you to more easily write
 code that works with any chatbot. This set of classes represents types
 of content that can be either sent to and received from a provider:
 
-- `ContentText`: simple text (often in markdown format). This is the
-  only type of content that can be streamed live as it's received.
+- `ContentText`: simple text (often in markdown format). Text streams
+  yield only text and thinking content, while content streams can also
+  yield annotations such as citations and web activity.
+
+- `ContentCitation`: provider-supplied evidence metadata associated with
+  generated text. Citations are preserved in conversation history but
+  are not sent back to providers.
 
 - `ContentImageRemote` and `ContentImageInline`: images, either as a
   pointer to a remote URL or included inline in the object. See
@@ -38,6 +43,13 @@ Content()
 
 ContentText(text = stop("Required"))
 
+ContentCitation(
+  source = NULL,
+  grounded_span = NULL,
+  cited_quote = NULL,
+  extra = NULL
+)
+
 ContentImage()
 
 ContentImageRemote(url = stop("Required"), detail = "")
@@ -54,12 +66,27 @@ ContentToolRequest(
 
 ContentToolResult(value = NULL, error = NULL, extra = list(), request = NULL)
 
+ContentUploaded(
+  uri = stop("Required"),
+  mime_type = "",
+  provider = "",
+  extra = list()
+)
+
 ContentThinking(thinking = stop("Required"), extra = list())
 
 ContentPDF(
   type = stop("Required"),
   data = stop("Required"),
-  filename = stop("Required")
+  filename = stop("Required"),
+  url = NULL
+)
+
+ContentDocument(
+  mime_type = stop("Required"),
+  data = stop("Required"),
+  filename = stop("Required"),
+  url = NULL
 )
 ```
 
@@ -68,6 +95,24 @@ ContentPDF(
 - text:
 
   A single string.
+
+- source:
+
+  A [Source](https://ellmer.tidyverse.org/reference/Source.md)
+  identifying the cited evidence, or `NULL` when the provider does not
+  supply one.
+
+- grounded_span:
+
+  The answer text grounded by the citation, or `NULL`.
+
+- cited_quote:
+
+  The source-side evidence quoted by the provider, or `NULL`.
+
+- extra:
+
+  Additional data.
 
 - url:
 
@@ -103,13 +148,11 @@ ContentPDF(
   ellmer automatically matches a tool request to the tools defined for
   the chatbot. If `NULL`, the request did not match a defined tool.
 
-- extra:
-
-  Additional data.
-
 - value:
 
-  The results of calling the tool function, if it succeeded.
+  The results of calling the tool function, if it succeeded. `NULL`, a
+  string, an atomic vector, a `json`-class object, a Content object, or
+  a list of Content objects.
 
 - error:
 
@@ -121,6 +164,20 @@ ContentPDF(
 
   The ContentToolRequest associated with the tool result, automatically
   added by ellmer when evaluating the tool call.
+
+- uri:
+
+  The URI or provider-assigned id of the uploaded file.
+
+- mime_type:
+
+  MIME type of the file or document.
+
+- provider:
+
+  Lowercase name of the provider the file was uploaded to (e.g.
+  `"openai"`, `"anthropic"`, `"google"`), or `""` when unknown. Used to
+  detect a file uploaded to one provider being used with another.
 
 - thinking:
 

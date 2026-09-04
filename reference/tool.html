@@ -14,7 +14,7 @@ Learn more in vignette("tool-calling").'><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@ Learn more in vignette("tool-calling").'><meta property="og:image" content="http
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Define a tool</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/v0.4.2/R/tools-def.R" class="external-link"><code>R/tools-def.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/tools-def.R" class="external-link"><code>R/tools-def.R</code></a></small>
       <div class="d-none name"><code>tool.Rd</code></div>
     </div>
 
@@ -86,9 +86,17 @@ and type definition for the arguments.</p>
 
 <dl><dt id="arg-fun">fun<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
 <dd><p>The function to be invoked when the tool is called. The return
-value of the function is sent back to the chatbot.</p>
-<p>Expert users can customize the tool result by returning a
-<a href="Content.html">ContentToolResult</a> object.</p></dd>
+value of the function is sent back to the chatbot. The function should
+return one of:</p><ul><li><p>A character vector.</p></li>
+<li><p>An atomic vector.</p></li>
+<li><p>A <code>json</code>-class object (e.g. from <code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code>).</p></li>
+<li><p>A <a href="Content.html">Content</a> object (e.g. <a href="Content.html">ContentImageInline</a>).</p></li>
+<li><p>A list of <a href="Content.html">Content</a> objects.</p></li>
+<li><p>A <a href="Content.html">ContentToolResult</a> object (expert users who want to customize
+the tool result directly).</p></li>
+</ul><p>Other return types (e.g. data frames, lists) are
+<a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> and will error in a future release.
+Convert them to a string or JSON before returning.</p></dd>
 
 
 <dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
@@ -195,29 +203,33 @@ the following system prompt</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.400043517  0.255317055 -2.437263611 -0.005571287  0.621552721</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.4"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.6-terra"</span>.</span>
 <span class="r-in"><span><span class="co"># Then register it</span></span></span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">tool_rnorm</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Then ask a question that needs it.</span></span></span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Give me five numbers from a random normal distribution."</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Here are five numbers from a random normal distribution:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Five draws from a standard normal distribution \(N(0,1)\):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1484, -1.8218, -0.2473, -0.2442, -0.2827</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1484, −1.8218, −0.2473, −0.2442, −0.2827</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Look at the chat history to see how tool calling works:</span></span></span>
 <span class="r-in"><span><span class="va">chat</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-5.4 turns=4 input=253 output=68 cost=$0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-5.6-terra turns=4 input=277 output=97 cost=$0.00&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Give me five numbers from a random normal distribution.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=95 output=26 cost=$0.00] ──────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool request</span> (fc_08472d61bd24b5b4016a42337f9cdc8191a7f7974c4135746d)]: rnorm(n = 5L, mean = 0L, sd = 1L)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool result</span>  (fc_08472d61bd24b5b4016a42337f9cdc8191a7f7974c4135746d)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=158 output=42 cost=$0.00] ─────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Here are five numbers from a random normal distribution:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=95 output=50 cost=$0.00] ──────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;thinking&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1484, -1.8218, -0.2473, -0.2442, -0.2827</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/thinking&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool request</span> (fc_0cfc11607c070948016a6fc439230c8196b926d4a0f383ef70)]: rnorm(n = 5L, mean = 0L, sd = 1L)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool result</span>  (fc_0cfc11607c070948016a6fc439230c8196b926d4a0f383ef70)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=182 output=47 cost=$0.00] ─────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Five draws from a standard normal distribution \(N(0,1)\):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1484, −1.8218, −0.2473, −0.2442, −0.2827</span>
 <span class="r-in"><span><span class="co"># Assistant sends a tool request which is evaluated locally and</span></span></span>
 <span class="r-in"><span><span class="co"># results are sent back in a tool result.</span></span></span>
 <span class="r-in"><span></span></span>
