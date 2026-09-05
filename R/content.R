@@ -207,13 +207,14 @@ ContentImage <- new_class(
 #' @rdname Content
 #' @export
 #' @param url URL to a remote image.
-#' @param detail Not currently used.
+#' @param detail Image detail setting for OpenAI and OpenAI-compatible providers.
+#'   Can be `"auto"`, `"low"`, or `"high"`. Currently ignored by other providers.
 ContentImageRemote <- new_class(
   "ContentImageRemote",
   parent = ContentImage,
   properties = list(
     url = prop_string(),
-    detail = prop_string(default = "")
+    detail = prop_string(default = "auto")
   )
 )
 method(format, ContentImageRemote) <- function(x, ...) {
@@ -235,7 +236,8 @@ ContentImageInline <- new_class(
   parent = ContentImage,
   properties = list(
     type = prop_string(),
-    data = prop_string(allow_null = TRUE)
+    data = prop_string(allow_null = TRUE),
+    detail = prop_string(default = "auto")
   )
 )
 method(format, ContentImageInline) <- function(x, ...) {
