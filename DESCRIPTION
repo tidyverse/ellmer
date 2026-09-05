@@ -86,6 +86,7 @@ Collate:
     'content-image.R'
     'content-pdf.R'
     'content-replay.R'
+    'hash.R'
     'httr2.R'
     'import-standalone-defer.R'
     'import-standalone-obj-type.R'

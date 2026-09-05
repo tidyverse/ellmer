@@ -520,7 +520,11 @@ method(as_json, list(ProviderOpenAI, ContentImageRemote)) <- function(
     type = "message",
     role = "user",
     content = list(
-      list(type = "input_image", image_url = x@url)
+      compact(list(
+        type = "input_image",
+        image_url = x@url,
+        detail = if (x@detail != "auto") x@detail
+      ))
     )
   )
 }
@@ -534,10 +538,11 @@ method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(
     type = "message",
     role = "user",
     content = list(
-      list(
+      compact(list(
         type = "input_image",
-        image_url = paste0("data:", x@type, ";base64,", x@data)
-      )
+        image_url = paste0("data:", x@type, ";base64,", x@data),
+        detail = if (x@detail != "auto") x@detail
+      ))
     )
   )
 }

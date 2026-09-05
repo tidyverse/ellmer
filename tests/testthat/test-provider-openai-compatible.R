@@ -348,3 +348,22 @@ test_that("structured output includes `strict` only when the provider is strict"
   expect_equal(unlist(fn$parameters$required), c("x", "y"))
   expect_equal(fn$parameters$properties$y$type, c("number", "null"))
 })
+
+test_that("image detail is included in requests", {
+  provider <- ProviderOpenAICompatible(name = "", base_url = "")
+  urls <- c("https://example.com/image.png", "data:image/png;base64,abcd")
+
+  for (url in urls) {
+    for (detail in c("auto", "low", "high")) {
+      image <- content_image_url(url, detail = detail)
+      expected_image <- list(url = url)
+      if (detail != "auto") {
+        expected_image$detail <- detail
+      }
+      expect_equal(
+        as_json(provider, image),
+        list(type = "image_url", image_url = expected_image)
+      )
+    }
+  }
+})
