@@ -63,7 +63,10 @@ test_that("useful errors if no display", {
 })
 
 test_that("image detail defaults to auto", {
-  expect_equal(ContentImageRemote("https://example.com/image.png")@detail, "auto")
+  expect_equal(
+    ContentImageRemote("https://example.com/image.png")@detail,
+    "auto"
+  )
   expect_equal(ContentImageInline("image/png", "abcd")@detail, "auto")
   expect_equal(
     content_image_url("https://example.com/image.png")@detail,
