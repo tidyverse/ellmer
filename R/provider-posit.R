@@ -76,6 +76,8 @@ chat_posit <- function(
       base_url = paste0(base_url, "/openai/v1"),
       extra_headers = api_headers,
       credentials = credentials,
+      # Best guess: the gateway prefixes OpenAI-routed model ids with
+      # "openai/", but the catalog doesn't guarantee this yet.
       strict = startsWith(model, "openai/")
     )
   }
