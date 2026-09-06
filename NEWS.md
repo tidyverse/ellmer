@@ -1,6 +1,7 @@
 # ellmer (development version)
 
 * `Chat$get_tokens()` no longer errors when the conversation ends with a user turn that has no completed assistant response yet, or with a partial (interrupted) assistant turn (@taekop, #1131).
+* `chat_posit()` no longer marks optional tool arguments as required for models that aren't routed to the OpenAI API. Those models now get a standard tool schema where `required = FALSE` arguments stay out of `required`, and structured-output requests omit `strict`. Models whose id starts with `openai/` keep OpenAI's strict-mode schema (#1135).
 * `live_browser()` works again with shinychat >= 0.5.0 (#1167).
 
 # ellmer 0.5.0
