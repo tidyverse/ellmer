@@ -136,6 +136,32 @@ method(base_request, ProviderPositOpenAI) <- function(provider) {
   req_error(req, body = posit_error_body)
 }
 
+# The gateway serves non-OpenAI models that don't understand OpenAI's
+# strict-mode convention (every property listed in `required`, optional ones
+# nullable), so fall back to the standard schema serialization.
+method(as_json, list(ProviderPositOpenAI, TypeObject)) <- function(
+  provider,
+  x,
+  ...
+) {
+  as_json(super(provider, Provider), x, ...)
+}
+
+method(as_json, list(ProviderPositOpenAI, ToolDef)) <- function(
+  provider,
+  x,
+  ...
+) {
+  list(
+    type = "function",
+    "function" = compact(list(
+      name = x@name,
+      description = x@description,
+      parameters = as_json(provider, x@arguments, ...)
+    ))
+  )
+}
+
 # The Posit gateway doesn't serve Anthropic's beta Files API, so opt back out
 # of the file management otherwise inherited from ProviderAnthropic.
 method(file_upload, ProviderPositAnthropic) <- function(
