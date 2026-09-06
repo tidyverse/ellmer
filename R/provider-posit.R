@@ -75,7 +75,8 @@ chat_posit <- function(
       name = "Posit",
       base_url = paste0(base_url, "/openai/v1"),
       extra_headers = api_headers,
-      credentials = credentials
+      credentials = credentials,
+      strict = startsWith(model, "openai/")
     )
   }
   model <- Model(name = model, params = params, extra_args = api_args)
@@ -123,7 +124,13 @@ ProviderPositAnthropic <- new_class(
 
 ProviderPositOpenAI <- new_class(
   "ProviderPositOpenAI",
-  parent = ProviderOpenAICompatible
+  parent = ProviderOpenAICompatible,
+  properties = list(
+    # OpenAI's strict mode (every property `required`, optional ones nullable)
+    # only applies to models routed to the OpenAI API, keyed by an `openai/`
+    # prefix on the model id.
+    strict = new_property(class_logical, default = FALSE)
+  )
 )
 
 method(base_request, ProviderPositAnthropic) <- function(provider) {
@@ -136,14 +143,14 @@ method(base_request, ProviderPositOpenAI) <- function(provider) {
   req_error(req, body = posit_error_body)
 }
 
-# The gateway serves non-OpenAI models that don't understand OpenAI's
-# strict-mode convention (every property listed in `required`, optional ones
-# nullable), so fall back to the standard schema serialization.
 method(as_json, list(ProviderPositOpenAI, TypeObject)) <- function(
   provider,
   x,
   ...
 ) {
+  if (provider@strict) {
+    return(as_json(super(provider, ProviderOpenAICompatible), x, ...))
+  }
   as_json(super(provider, Provider), x, ...)
 }
 
@@ -157,9 +164,32 @@ method(as_json, list(ProviderPositOpenAI, ToolDef)) <- function(
     "function" = compact(list(
       name = x@name,
       description = x@description,
+      strict = if (provider@strict) TRUE,
       parameters = as_json(provider, x@arguments, ...)
     ))
   )
+}
+
+method(chat_body, ProviderPositOpenAI) <- function(
+  provider,
+  model,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  body <- chat_body(
+    super(provider, ProviderOpenAICompatible),
+    model,
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+  if (!provider@strict && !is.null(body$response_format)) {
+    body$response_format$json_schema$strict <- NULL
+  }
+  body
 }
 
 # The Posit gateway doesn't serve Anthropic's beta Files API, so opt back out
