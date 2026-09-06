@@ -46,6 +46,24 @@ test_that("gateway-specific errors get useful messages", {
   expect_equal(posit_error_body(string_error), "bad request")
 })
 
+test_that("optional tool arguments stay out of `required`", {
+  chat <- chat_posit(model = "google/gemma-4-26B-A4B-it")
+  provider <- chat$get_provider()
+
+  tool_def <- tool(
+    function(x, y = 1) x + y,
+    "Add numbers",
+    arguments = list(
+      x = type_number("First"),
+      y = type_number("Second", required = FALSE)
+    )
+  )
+  params <- as_json(provider, tool_def)$`function`$parameters
+
+  expect_equal(unlist(params$required), "x")
+  expect_equal(params$properties$y$type, "number")
+})
+
 # Checking the cache before calling models_posit() keeps an unauthenticated
 # machine from triggering (and hanging on) the interactive device flow.
 available_posit_models <- function() {
