@@ -47,9 +47,6 @@ test_that("gateway-specific errors get useful messages", {
 })
 
 test_that("optional tool arguments stay out of `required`", {
-  chat <- chat_posit(model = "google/gemma-4-26B-A4B-it")
-  provider <- chat$get_provider()
-
   tool_def <- tool(
     function(x, y = 1) x + y,
     "Add numbers",
@@ -58,10 +55,19 @@ test_that("optional tool arguments stay out of `required`", {
       y = type_number("Second", required = FALSE)
     )
   )
-  params <- as_json(provider, tool_def)$`function`$parameters
 
-  expect_equal(unlist(params$required), "x")
-  expect_equal(params$properties$y$type, "number")
+  provider <- chat_posit(model = "google/gemma-4-26B-A4B-it")$get_provider()
+  fn <- as_json(provider, tool_def)$`function`
+  expect_null(fn$strict)
+  expect_equal(unlist(fn$parameters$required), "x")
+  expect_equal(fn$parameters$properties$y$type, "number")
+
+  # Models routed to the OpenAI API keep OpenAI's strict-mode convention
+  provider <- chat_posit(model = "openai/gpt-5")$get_provider()
+  fn <- as_json(provider, tool_def)$`function`
+  expect_true(fn$strict)
+  expect_equal(unlist(fn$parameters$required), c("x", "y"))
+  expect_equal(fn$parameters$properties$y$type, c("number", "null"))
 })
 
 # Checking the cache before calling models_posit() keeps an unauthenticated
