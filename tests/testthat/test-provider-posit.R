@@ -25,7 +25,7 @@ test_that("can derive the gateway url from a flavored base url", {
 
 test_that("gateway-specific errors get useful messages", {
   agreement <- response_json(
-    status = 403L,
+    status_code = 403L,
     body = list(error_type = "prism_account_not_found")
   )
   expect_match(
@@ -34,13 +34,13 @@ test_that("gateway-specific errors get useful messages", {
   )
 
   other <- response_json(
-    status = 400L,
+    status_code = 400L,
     body = list(error = list(message = "bad request"))
   )
   expect_equal(posit_error_body(other), "bad request")
 
   string_error <- response_json(
-    status = 400L,
+    status_code = 400L,
     body = list(error = "bad request")
   )
   expect_equal(posit_error_body(string_error), "bad request")
