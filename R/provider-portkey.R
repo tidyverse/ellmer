@@ -21,6 +21,9 @@
 #'   if the model doesn't include a provider.
 #' @export
 #' @inheritParams chat_openai
+#' @param strict If `TRUE`, use OpenAI's strict-mode tool and structured-output
+#'   schemas (all properties `required`, optional ones nullable). Whether these
+#'   work depends on the upstream model Portkey routes to.
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
@@ -37,7 +40,8 @@ chat_portkey <- function(
   params = NULL,
   api_args = list(),
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 ) {
   check_string(model)
   echo <- check_echo(echo)
@@ -75,7 +79,8 @@ chat_portkey <- function(
     name = "PortkeyAI",
     base_url = base_url,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = strict
   )
   model <- Model(name = model, params = params, extra_args = api_args)
   Chat$new(

@@ -49,7 +49,8 @@ chat_mistral <- function(
     name = "Mistral",
     base_url = mistral_base_url,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = FALSE
   )
   model <- Model(name = model, params = params, extra_args = api_args)
   Chat$new(

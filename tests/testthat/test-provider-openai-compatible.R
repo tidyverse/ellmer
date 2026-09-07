@@ -278,7 +278,7 @@ test_that("as_json preserves reasoning_content when preserve_thinking = TRUE", {
 
 test_that("as_json specialised for OpenAI", {
   withr::local_options(lifecycle_verbosity = "quiet")
-  stub <- ProviderOpenAI(name = "", base_url = "")
+  stub <- ProviderOpenAI(name = "", base_url = "", strict = TRUE)
 
   expect_snapshot(
     as_json(stub, type_object(.additional_properties = TRUE)),
@@ -307,5 +307,96 @@ test_that("as_json() references uploaded documents but rejects images", {
   expect_snapshot(
     error = TRUE,
     as_json(provider, ContentUploaded("file-1", "image/png"))
+  )
+})
+
+test_that("structured output includes `strict` only when the provider is strict", {
+  tool_def <- tool(
+    function(x, y = 1) x + y,
+    "Add numbers",
+    arguments = list(
+      x = type_number("First"),
+      y = type_number("Second", required = FALSE)
+    )
+  )
+  type <- type_object(x = type_number())
+
+  non_strict <- ProviderOpenAICompatible(name = "", base_url = "")
+  body <- chat_body(
+    non_strict,
+    test_model(),
+    turns = list(),
+    tools = list(tool_def),
+    type = type
+  )
+  expect_null(body$response_format$json_schema$strict)
+  fn <- body$tools[[1]]$`function`
+  expect_null(fn$strict)
+  expect_equal(unlist(fn$parameters$required), "x")
+
+  strict <- ProviderOpenAICompatible(name = "", base_url = "", strict = TRUE)
+  body <- chat_body(
+    strict,
+    test_model(),
+    turns = list(),
+    tools = list(tool_def),
+    type = type
+  )
+  expect_true(body$response_format$json_schema$strict)
+  fn <- body$tools[[1]]$`function`
+  expect_true(fn$strict)
+  expect_equal(unlist(fn$parameters$required), c("x", "y"))
+  expect_equal(fn$parameters$properties$y$type, c("number", "null"))
+})
+
+test_that("strict defaults are set per provider", {
+  strict_providers <- list(
+    chat_openai(credentials = function() "key")$get_provider(),
+    chat_groq(credentials = function() "key")$get_provider(),
+    chat_azure_openai(
+      endpoint = "https://example.openai.azure.com",
+      model = "gpt-4o-mini",
+      credentials = function() "key"
+    )$get_provider()
+  )
+  for (provider in strict_providers) {
+    expect_true(provider@strict)
+  }
+
+  non_strict_providers <- list(
+    chat_openai_compatible(
+      base_url = "http://example.com",
+      model = "m",
+      credentials = function() "key"
+    )$get_provider(),
+    chat_vllm(
+      base_url = "http://example.com",
+      model = "m",
+      credentials = function() "key"
+    )$get_provider(),
+    chat_openrouter(credentials = function() "key")$get_provider(),
+    chat_portkey(model = "m", credentials = function() "key")$get_provider(),
+    chat_huggingface(credentials = function() "key")$get_provider(),
+    ProviderLMStudio(name = "LM Studio", base_url = "http://localhost:1234"),
+    chat_deepseek(credentials = function() "key")$get_provider(),
+    chat_mistral(credentials = function() "key")$get_provider(),
+    chat_perplexity(credentials = function() "key")$get_provider(),
+    chat_databricks(token = "key")$get_provider(),
+    chat_cloudflare(credentials = function() "key")$get_provider(),
+    chat_ollama(credentials = function() "key")$get_provider()
+  )
+  for (provider in non_strict_providers) {
+    expect_false(provider@strict)
+  }
+
+  expect_true(
+    chat_posit(model = "openai/gpt-4.1", credentials = function() {
+      "key"
+    })$get_provider()@strict
+  )
+  expect_false(
+    chat_posit(model = "google/gemma-4-26B-A4B-it", credentials = function() {
+      "key"
+    })$get_provider()@strict
   )
 })

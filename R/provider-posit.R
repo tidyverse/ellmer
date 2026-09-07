@@ -126,13 +126,7 @@ ProviderPositAnthropic <- new_class(
 
 ProviderPositOpenAI <- new_class(
   "ProviderPositOpenAI",
-  parent = ProviderOpenAICompatible,
-  properties = list(
-    # OpenAI's strict mode (every property `required`, optional ones nullable)
-    # only applies to models routed to the OpenAI API, keyed by an `openai/`
-    # prefix on the model id.
-    strict = new_property(class_logical, default = FALSE)
-  )
+  parent = ProviderOpenAICompatible
 )
 
 method(base_request, ProviderPositAnthropic) <- function(provider) {
@@ -143,55 +137,6 @@ method(base_request, ProviderPositAnthropic) <- function(provider) {
 method(base_request, ProviderPositOpenAI) <- function(provider) {
   req <- base_request(super(provider, ProviderOpenAICompatible))
   req_error(req, body = posit_error_body)
-}
-
-method(as_json, list(ProviderPositOpenAI, TypeObject)) <- function(
-  provider,
-  x,
-  ...
-) {
-  if (provider@strict) {
-    return(as_json(super(provider, ProviderOpenAICompatible), x, ...))
-  }
-  as_json(super(provider, Provider), x, ...)
-}
-
-method(as_json, list(ProviderPositOpenAI, ToolDef)) <- function(
-  provider,
-  x,
-  ...
-) {
-  list(
-    type = "function",
-    "function" = compact(list(
-      name = x@name,
-      description = x@description,
-      strict = if (provider@strict) TRUE,
-      parameters = as_json(provider, x@arguments, ...)
-    ))
-  )
-}
-
-method(chat_body, ProviderPositOpenAI) <- function(
-  provider,
-  model,
-  stream = TRUE,
-  turns = list(),
-  tools = list(),
-  type = NULL
-) {
-  body <- chat_body(
-    super(provider, ProviderOpenAICompatible),
-    model,
-    stream = stream,
-    turns = turns,
-    tools = tools,
-    type = type
-  )
-  if (!provider@strict && !is.null(body$response_format)) {
-    body$response_format$json_schema$strict <- NULL
-  }
-  body
 }
 
 # The Posit gateway doesn't serve Anthropic's beta Files API, so opt back out
