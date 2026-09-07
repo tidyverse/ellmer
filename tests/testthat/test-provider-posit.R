@@ -56,7 +56,7 @@ test_that("optional tool arguments stay out of `required`", {
     )
   )
 
-  provider <- chat_posit(model = "google/gemma-4-26B-A4B-it")$get_provider()
+  provider <- chat_posit()$get_provider()
   fn <- as_json(provider, tool_def)$`function`
   expect_null(fn$strict)
   expect_equal(unlist(fn$parameters$required), "x")
