@@ -24,6 +24,9 @@
 #' @param credentials `r api_key_param("HUGGINGFACE_API_KEY")`
 #' @export
 #' @inheritParams chat_openai
+#' @param strict If `TRUE`, use OpenAI's strict-mode tool and structured-output
+#'   schemas (all properties `required`, optional ones nullable). Support
+#'   varies by the inference provider serving the model.
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
@@ -38,7 +41,8 @@ chat_huggingface <- function(
   model = NULL,
   api_args = list(),
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 ) {
   model <- set_default(model, "Qwen/Qwen3-235B-A22B-Instruct-2507")
   echo <- check_echo(echo)
@@ -58,7 +62,8 @@ chat_huggingface <- function(
     name = "HuggingFace",
     base_url = base_url,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = strict
   )
   model <- Model(name = model, params = params, extra_args = api_args)
   Chat$new(

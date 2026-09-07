@@ -85,7 +85,8 @@ chat_openai <- function(
     base_url = base_url,
     extra_headers = api_headers,
     credentials = credentials,
-    service_tier = service_tier
+    service_tier = service_tier,
+    strict = TRUE
   )
   model_obj <- Model(
     name = model,

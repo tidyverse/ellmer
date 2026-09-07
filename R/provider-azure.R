@@ -83,7 +83,8 @@ chat_azure_openai <- function(
     base_url = paste0(endpoint, "/openai/deployments/", model),
     api_version = api_version,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = TRUE
   )
   model <- Model(name = model, params = params, extra_args = api_args)
   Chat$new(

@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* OpenAI-compatible providers no longer use OpenAI's strict-mode conventions (every tool argument listed in `required` with optional ones made nullable, plus `strict: true` request fields) unless the endpoint actually implements strict mode. Providers that serve OpenAI models keep strict mode (`chat_openai()`, `chat_azure_openai()`, and Groq's structured outputs); everything else, including `chat_posit()`, `chat_lmstudio()`, `chat_databricks()`, `chat_mistral()`, `chat_deepseek()`, `chat_perplexity()`, and `chat_cloudflare()`, now sends standard JSON Schema where `required = FALSE` arguments stay out of `required` (#1135).
+* `chat_openai_compatible()`, `chat_vllm()`, `chat_openrouter()`, `chat_portkey()`, and `chat_huggingface()` gain a `strict` argument for endpoints and models where the correct choice can't be determined automatically. It defaults to `FALSE`; set `strict = TRUE` when pointing these at genuine OpenAI chat-completions endpoints or strict-capable models.
 * `chat_posit()` no longer marks optional tool arguments as required for models that aren't routed to the OpenAI API. Those models now get a standard tool schema where `required = FALSE` arguments stay out of `required`, and structured-output requests omit `strict`. Models whose id starts with `openai/` keep OpenAI's strict-mode schema (#1135).
 
 # ellmer 0.5.0
