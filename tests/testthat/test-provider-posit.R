@@ -56,14 +56,14 @@ test_that("optional tool arguments stay out of `required`", {
     )
   )
 
-  provider <- chat_posit()$get_provider()
+  provider <- ProviderPositOpenAI(name = "", base_url = "")
   fn <- as_json(provider, tool_def)$`function`
   expect_null(fn$strict)
   expect_equal(unlist(fn$parameters$required), "x")
   expect_equal(fn$parameters$properties$y$type, "number")
 
   # Models routed to the OpenAI API keep OpenAI's strict-mode convention
-  provider <- chat_posit(model = "openai/gpt-5")$get_provider()
+  provider <- ProviderPositOpenAI(name = "", base_url = "", strict = TRUE)
   fn <- as_json(provider, tool_def)$`function`
   expect_true(fn$strict)
   expect_equal(unlist(fn$parameters$required), c("x", "y"))
