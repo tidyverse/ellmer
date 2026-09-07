@@ -11,5 +11,10 @@ aws_bedrock_model_apis <- c(
   "openai.gpt-5.4" = "responses",
   "openai.gpt-5.5" = "responses",
   "openai.gpt-5.6-cyber" = "responses",
+  "us-gov-east-1/openai.gpt-5.4" = "responses",
+  "us-gov-west-1/openai.gpt-5.4" = "responses",
+  "us-gov-west-1/openai.gpt-5.6-luna" = "responses",
+  "us-gov-west-1/openai.gpt-5.6-terra" = "responses",
+  "us-gov-west-1/xai.grok-4.3" = "responses",
   "xai.grok-4.3" = "responses"
 )
