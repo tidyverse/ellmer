@@ -141,7 +141,7 @@ method(chat_params, ProviderDatabricks) <- function(provider, params) {
 # Some Databricks models (e.g. GPT-OSS) return message content as an array of
 # typed objects rather than a plain string (#1078). Normalize to the standard
 # OpenAI-compatible shape: text parts pasted into a string `content`, reasoning
-# summaries moved to `reasoning_content`.
+# summaries moved to `reasoning`.
 databricks_normalize_message <- function(message) {
   if (!is.list(message$content)) {
     return(message)
@@ -158,7 +158,7 @@ databricks_normalize_message <- function(message) {
     recursive = FALSE
   )
   if (length(summaries)) {
-    message$reasoning_content <- paste0(
+    message$reasoning <- paste0(
       map_chr(summaries, function(s) s$text),
       collapse = ""
     )
