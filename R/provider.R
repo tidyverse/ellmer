@@ -44,7 +44,13 @@ Provider <- new_class(
 # Default S7 print calls every getter, which would trigger the deprecation
 # warnings. Remove along with the deprecated properties (#1098).
 method(print, Provider) <- function(x, ...) {
-  names <- setdiff(prop_names(x), c("model", "params", "extra_args"))
+  provider_print(x)
+  invisible(x)
+}
+
+provider_print <- function(x, hide = character()) {
+  hide <- c(hide, "model", "params", "extra_args")
+  names <- setdiff(prop_names(x), hide)
   props <- set_names(lapply(names, \(name) prop(x, name)), names)
   cat("<", class(x)[[1]], ">\n", sep = "")
   str(
@@ -355,6 +361,19 @@ method(models_list, Provider) <- function(provider) {
 
 method(models_list, new_S3_class("Chat")) <- function(provider) {
   models_list(provider$get_provider())
+}
+
+# Give a provider the chance to react to a model change, e.g. to swap in
+# a sibling provider with a different wire format. Returns a provider.
+provider_set_model <- new_generic(
+  "provider_set_model",
+  "provider",
+  function(provider, name) {
+    S7_dispatch()
+  }
+)
+method(provider_set_model, Provider) <- function(provider, name) {
+  provider
 }
 
 # Batch AI ---------------------------------------------------------------

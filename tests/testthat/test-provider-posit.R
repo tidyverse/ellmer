@@ -12,6 +12,76 @@ test_that("uses the OpenAI-compatible API for other models", {
   expect_equal(provider@base_url, "https://gateway.posit.ai/openai/v1")
 })
 
+test_that("set_model() swaps the provider when switching model families", {
+  chat <- chat_posit(model = "claude-sonnet-4-6")
+  chat$set_model("google/gemma-4-26B-A4B-it")
+  provider <- chat$get_provider()
+  expect_true(S7_inherits(provider, ProviderPositOpenAI))
+  expect_equal(provider@base_url, "https://gateway.posit.ai/openai/v1")
+  expect_equal(chat$get_model(), "google/gemma-4-26B-A4B-it")
+
+  chat$set_model("claude-sonnet-4-6")
+  provider <- chat$get_provider()
+  expect_true(S7_inherits(provider, ProviderPositAnthropic))
+  expect_equal(provider@base_url, "https://gateway.posit.ai/anthropic/v1")
+
+  chat$set_model("claude-sonnet-4-6")
+  expect_true(S7_inherits(chat$get_provider(), ProviderPositAnthropic))
+})
+
+test_that("set_model() keeps the same provider within a family", {
+  chat <- chat_posit(model = "google/gemma-4-26B-A4B-it")
+  provider <- chat$get_provider()
+  chat$set_model("zai-org/GLM-4-6")
+  expect_equal(chat$get_provider()@base_url, provider@base_url)
+  expect_true(S7_inherits(chat$get_provider(), ProviderPositOpenAI))
+
+  cache_chat <- chat_posit(model = "claude-sonnet-4-6", cache = "none")
+  claude_provider <- cache_chat$get_provider()
+  cache_chat$set_model("claude-opus-4-6")
+  expect_equal(cache_chat$get_provider()@base_url, claude_provider@base_url)
+  expect_equal(cache_chat$get_provider()@cache, "none")
+})
+
+test_that("set_model() carries over credentials and headers", {
+  headers <- c("X-Test" = "yes")
+  credentials <- function() list(Authorization = "Bearer test")
+  chat <- chat_posit(
+    model = "claude-sonnet-4-6",
+    credentials = credentials,
+    api_headers = headers
+  )
+  chat$set_model("google/gemma-4-26B-A4B-it")
+  provider <- chat$get_provider()
+  expect_equal(provider@extra_headers, headers)
+  expect_equal(provider@credentials, credentials)
+})
+
+test_that("set_model() preserves cache across model family switches", {
+  chat <- chat_posit(model = "claude-sonnet-4-6", cache = "1h")
+  expect_no_warning(chat$set_model("google/gemma-4-26B-A4B-it"))
+  expect_equal(chat$get_provider()@cache, "1h")
+
+  expect_no_warning(chat$set_model("claude-sonnet-4-6"))
+  expect_equal(chat$get_provider()@cache, "1h")
+
+  expect_no_warning(chat$set_model("claude-opus-4-6"))
+  expect_equal(chat$get_provider()@cache, "1h")
+})
+
+test_that("set_model() defaults cache when arriving at Claude", {
+  chat <- chat_posit(model = "google/gemma-4-26B-A4B-it")
+  chat$set_model("claude-sonnet-4-6")
+  expect_equal(chat$get_provider()@cache, "5m")
+
+  explicit <- chat_posit(
+    model = "google/gemma-4-26B-A4B-it",
+    cache = "none"
+  )
+  explicit$set_model("claude-sonnet-4-6")
+  expect_equal(explicit$get_provider()@cache, "none")
+})
+
 test_that("can derive the gateway url from a flavored base url", {
   expect_equal(
     posit_gateway_url("https://gateway.posit.ai/anthropic/v1"),
