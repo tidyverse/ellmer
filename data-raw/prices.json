@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "min_ellmer_version": "0.5.0",
-  "updated_at": "2026-09-02T12:13:24Z",
+  "updated_at": "2026-09-07T11:15:25Z",
   "data": [
     {
       "provider": "AWS/Bedrock",
@@ -2054,7 +2054,7 @@
       "provider": "AWS/Bedrock",
       "model": "qwen.qwen3-coder-480b-a35b-v1:0",
       "variant": "",
-      "input": 0.22,
+      "input": 0.45,
       "output": 1.8
     },
     {
@@ -2362,11 +2362,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/anthropic.claude-opus-4-8",
+      "variant": "",
+      "input": 6,
+      "output": 30,
+      "cached_input": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-east-1/anthropic.claude-sonnet-4-5-20250929-v1:0",
       "variant": "",
       "input": 3.6,
       "output": 18,
       "cached_input": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/anthropic.claude-sonnet-5",
+      "variant": "",
+      "input": 2.4,
+      "output": 12,
+      "cached_input": 0.24
     },
     {
       "provider": "AWS/Bedrock",
@@ -2389,6 +2405,49 @@
       "variant": "",
       "input": 0.3,
       "output": 2.65
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-nano-12b-v2",
+      "variant": "",
+      "input": 0.24,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-nano-3-30b",
+      "variant": "",
+      "input": 0.072,
+      "output": 0.288
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-super-3-120b",
+      "variant": "",
+      "input": 0.18,
+      "output": 0.78
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-5.4",
+      "variant": "",
+      "input": 3.3,
+      "output": 19.8,
+      "cached_input": 0.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-120b-1:0",
+      "variant": "",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-20b-1:0",
+      "variant": "",
+      "input": 0.084,
+      "output": 0.36
     },
     {
       "provider": "AWS/Bedrock",
@@ -2466,11 +2525,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/anthropic.claude-opus-4-8",
+      "variant": "",
+      "input": 6,
+      "output": 30,
+      "cached_input": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/anthropic.claude-sonnet-4-5-20250929-v1:0",
       "variant": "",
       "input": 3.6,
       "output": 18,
       "cached_input": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/anthropic.claude-sonnet-5",
+      "variant": "",
+      "input": 2.4,
+      "output": 12,
+      "cached_input": 0.24
     },
     {
       "provider": "AWS/Bedrock",
@@ -2492,7 +2567,98 @@
       "model": "us-gov-west-1/meta.llama3-8b-instruct-v1:0",
       "variant": "",
       "input": 0.3,
-      "output": 2.65
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-nano-12b-v2",
+      "variant": "",
+      "input": 0.24,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-nano-3-30b",
+      "variant": "",
+      "input": 0.072,
+      "output": 0.288
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-super-3-120b",
+      "variant": "",
+      "input": 0.18,
+      "output": 0.78
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.4",
+      "variant": "",
+      "input": 3.3,
+      "output": 19.8,
+      "cached_input": 0.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-luna",
+      "variant": "",
+      "input": 0.264,
+      "output": 1.584,
+      "cached_input": 0.0264
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-luna",
+      "variant": "above_272k_tokens",
+      "input": 0.528,
+      "output": 2.376,
+      "cached_input": 0.0528
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-terra",
+      "variant": "",
+      "input": 2.64,
+      "output": 15.84,
+      "cached_input": 0.264
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-terra",
+      "variant": "above_272k_tokens",
+      "input": 5.28,
+      "output": 23.76,
+      "cached_input": 0.528
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-120b-1:0",
+      "variant": "",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-20b-1:0",
+      "variant": "",
+      "input": 0.084,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/xai.grok-4.3",
+      "variant": "",
+      "input": 1.5,
+      "output": 3,
+      "cached_input": 0.24
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov.anthropic.claude-opus-4-8",
+      "variant": "",
+      "input": 6,
+      "output": 30,
+      "cached_input": 0.6
     },
     {
       "provider": "AWS/Bedrock",
@@ -2509,6 +2675,14 @@
       "input": 7.2,
       "output": 27,
       "cached_input": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov.anthropic.claude-sonnet-5",
+      "variant": "",
+      "input": 2.4,
+      "output": 12,
+      "cached_input": 0.24
     },
     {
       "provider": "AWS/Bedrock",
@@ -3183,6 +3357,14 @@
       "input": 10,
       "output": 50,
       "cached_input": 1
+    },
+    {
+      "provider": "Anthropic",
+      "model": "claude-mythos-5-1",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 0.25
     },
     {
       "provider": "Anthropic",
@@ -4770,6 +4952,22 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "gpt-6-astra",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 1
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-astra",
+      "variant": "above_272k_tokens",
+      "input": 20,
+      "output": 75,
+      "cached_input": 2
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "gpt-audio-1.5-2026-02-23",
       "variant": "",
       "input": 2.5,
@@ -4829,7 +5027,6 @@
       "model": "gpt-image-2",
       "variant": "",
       "input": 5,
-      "output": 10,
       "cached_input": 1.25
     },
     {
@@ -4837,7 +5034,6 @@
       "model": "gpt-image-2-2026-04-21",
       "variant": "",
       "input": 5,
-      "output": 10,
       "cached_input": 1.25
     },
     {
@@ -4847,6 +5043,30 @@
       "input": 4,
       "output": 16,
       "cached_input": 4
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-realtime-2",
+      "variant": "",
+      "input": 4,
+      "output": 24,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-realtime-2.1",
+      "variant": "",
+      "input": 4,
+      "output": 24,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-realtime-2.1-mini",
+      "variant": "",
+      "input": 0.6,
+      "output": 2.4,
+      "cached_input": 0.06
     },
     {
       "provider": "Azure/OpenAI",
@@ -5037,6 +5257,36 @@
       "model": "text-embedding-ada-002",
       "variant": "",
       "input": 0.1,
+      "output": 0
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us-gov/gpt-5.1",
+      "variant": "",
+      "input": 1.71875,
+      "output": 13.75,
+      "cached_input": 0.171875
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us-gov/o3-mini",
+      "variant": "",
+      "input": 1.513,
+      "output": 6.05,
+      "cached_input": 0.757
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us-gov/text-embedding-3-large",
+      "variant": "",
+      "input": 0.163,
+      "output": 0
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us-gov/text-embedding-3-small",
+      "variant": "",
+      "input": 0.025,
       "output": 0
     },
     {
@@ -5394,6 +5644,22 @@
       "input": 4.4,
       "output": 26.4,
       "cached_input": 0.44
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-6-astra",
+      "variant": "",
+      "input": 11,
+      "output": 55,
+      "cached_input": 1.1
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-6-astra",
+      "variant": "above_272k_tokens",
+      "input": 22,
+      "output": 82.5,
+      "cached_input": 2.2
     },
     {
       "provider": "Azure/OpenAI",
@@ -6047,6 +6313,37 @@
     },
     {
       "provider": "Google/Gemini",
+      "model": "gemini-3.8-flash",
+      "variant": "",
+      "input": 0.75,
+      "output": 3.75,
+      "cached_input": 0.075
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-3.8-flash",
+      "variant": "batches",
+      "input": 0.375,
+      "output": 1.875
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-3.8-flash",
+      "variant": "flex",
+      "input": 0.375,
+      "output": 1.875,
+      "cached_input": 0.0375
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-3.8-flash",
+      "variant": "priority",
+      "input": 1.35,
+      "output": 6.75,
+      "cached_input": 0.135
+    },
+    {
+      "provider": "Google/Gemini",
       "model": "gemini-embedding-001",
       "variant": "",
       "input": 0.15,
@@ -6657,6 +6954,37 @@
     },
     {
       "provider": "Google/Vertex",
+      "model": "gemini-3.8-flash",
+      "variant": "",
+      "input": 0.75,
+      "output": 3.75,
+      "cached_input": 0.075
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "gemini-3.8-flash",
+      "variant": "batches",
+      "input": 0.375,
+      "output": 1.875
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "gemini-3.8-flash",
+      "variant": "flex",
+      "input": 0.375,
+      "output": 1.875,
+      "cached_input": 0.0375
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "gemini-3.8-flash",
+      "variant": "priority",
+      "input": 1.35,
+      "output": 6.75,
+      "cached_input": 0.135
+    },
+    {
+      "provider": "Google/Vertex",
       "model": "gemini-live-2.5-flash-native-audio",
       "variant": "",
       "input": 0.5,
@@ -7076,8 +7404,9 @@
       "provider": "Mistral",
       "model": "magistral-medium-latest",
       "variant": "",
-      "input": 2,
-      "output": 5
+      "input": 1.5,
+      "output": 7.5,
+      "cached_input": 0.15
     },
     {
       "provider": "Mistral",
@@ -7097,22 +7426,25 @@
       "provider": "Mistral",
       "model": "magistral-small-latest",
       "variant": "",
-      "input": 0.5,
-      "output": 1.5
+      "input": 0.15,
+      "output": 0.6,
+      "cached_input": 0.015
     },
     {
       "provider": "Mistral",
       "model": "ministral-14b-2512",
       "variant": "",
       "input": 0.2,
-      "output": 0.2
+      "output": 0.2,
+      "cached_input": 0.02
     },
     {
       "provider": "Mistral",
       "model": "ministral-14b-latest",
       "variant": "",
       "input": 0.2,
-      "output": 0.2
+      "output": 0.2,
+      "cached_input": 0.02
     },
     {
       "provider": "Mistral",
@@ -7143,14 +7475,16 @@
       "model": "ministral-3b-2512",
       "variant": "",
       "input": 0.1,
-      "output": 0.1
+      "output": 0.1,
+      "cached_input": 0.01
     },
     {
       "provider": "Mistral",
       "model": "ministral-3b-latest",
       "variant": "",
       "input": 0.1,
-      "output": 0.1
+      "output": 0.1,
+      "cached_input": 0.01
     },
     {
       "provider": "Mistral",
@@ -7252,8 +7586,9 @@
       "provider": "Mistral",
       "model": "mistral-medium",
       "variant": "",
-      "input": 2.7,
-      "output": 8.1
+      "input": 1.5,
+      "output": 7.5,
+      "cached_input": 0.15
     },
     {
       "provider": "Mistral",
@@ -8643,6 +8978,14 @@
     {
       "provider": "OpenAI",
       "model": "gpt-5.4",
+      "variant": "above_272k_tokens_flex",
+      "input": 2.5,
+      "output": 11.25,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-5.4",
       "variant": "batches",
       "input": 1.25,
       "output": 7.5
@@ -8682,6 +9025,14 @@
     {
       "provider": "OpenAI",
       "model": "gpt-5.4-2026-03-05",
+      "variant": "above_272k_tokens_flex",
+      "input": 2.5,
+      "output": 11.25,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-5.4-2026-03-05",
       "variant": "batches",
       "input": 1.25,
       "output": 7.5
@@ -8829,6 +9180,13 @@
     {
       "provider": "OpenAI",
       "model": "gpt-5.4-pro",
+      "variant": "above_272k_tokens_flex",
+      "input": 30,
+      "output": 135
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-5.4-pro",
       "variant": "batches",
       "input": 15,
       "output": 90
@@ -8859,6 +9217,13 @@
     {
       "provider": "OpenAI",
       "model": "gpt-5.4-pro-2026-03-05",
+      "variant": "above_272k_tokens_flex",
+      "input": 30,
+      "output": 135
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-5.4-pro-2026-03-05",
       "variant": "batches",
       "input": 15,
       "output": 90
@@ -8889,6 +9254,14 @@
     {
       "provider": "OpenAI",
       "model": "gpt-5.5",
+      "variant": "above_272k_tokens_flex",
+      "input": 5,
+      "output": 22.5,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-5.5",
       "variant": "batches",
       "input": 2.5,
       "output": 15
@@ -8905,9 +9278,9 @@
       "provider": "OpenAI",
       "model": "gpt-5.5",
       "variant": "priority",
-      "input": 10,
-      "output": 60,
-      "cached_input": 1
+      "input": 12.5,
+      "output": 75,
+      "cached_input": 1.25
     },
     {
       "provider": "OpenAI",
@@ -8928,6 +9301,14 @@
     {
       "provider": "OpenAI",
       "model": "gpt-5.5-2026-04-23",
+      "variant": "above_272k_tokens_flex",
+      "input": 5,
+      "output": 22.5,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-5.5-2026-04-23",
       "variant": "batches",
       "input": 2.5,
       "output": 15
@@ -8944,9 +9325,9 @@
       "provider": "OpenAI",
       "model": "gpt-5.5-2026-04-23",
       "variant": "priority",
-      "input": 10,
-      "output": 60,
-      "cached_input": 1
+      "input": 12.5,
+      "output": 75,
+      "cached_input": 1.25
     },
     {
       "provider": "OpenAI",
@@ -9031,6 +9412,14 @@
       "input": 4,
       "output": 15,
       "cached_input": 0.4
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-5.6",
+      "variant": "above_272k_tokens_priority",
+      "input": 16,
+      "output": 60,
+      "cached_input": 1.6
     },
     {
       "provider": "OpenAI",
@@ -9098,6 +9487,14 @@
     {
       "provider": "OpenAI",
       "model": "gpt-5.6-luna",
+      "variant": "above_272k_tokens_priority",
+      "input": 0.8,
+      "output": 3.6,
+      "cached_input": 0.08
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-5.6-luna",
       "variant": "batches",
       "input": 0.1,
       "output": 0.6
@@ -9141,6 +9538,14 @@
       "input": 4,
       "output": 15,
       "cached_input": 0.4
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-5.6-sol",
+      "variant": "above_272k_tokens_priority",
+      "input": 16,
+      "output": 60,
+      "cached_input": 1.6
     },
     {
       "provider": "OpenAI",
@@ -9192,6 +9597,14 @@
     {
       "provider": "OpenAI",
       "model": "gpt-5.6-terra",
+      "variant": "above_272k_tokens_priority",
+      "input": 8,
+      "output": 36,
+      "cached_input": 0.8
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-5.6-terra",
       "variant": "batches",
       "input": 1,
       "output": 6
@@ -9211,6 +9624,61 @@
       "input": 4,
       "output": 24,
       "cached_input": 0.4
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-astra",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 1
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-astra",
+      "variant": "above_272k_tokens",
+      "input": 20,
+      "output": 75,
+      "cached_input": 2
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-astra",
+      "variant": "above_272k_tokens_flex",
+      "input": 10,
+      "output": 37.5,
+      "cached_input": 1
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-astra",
+      "variant": "above_272k_tokens_priority",
+      "input": 40,
+      "output": 150,
+      "cached_input": 4
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-astra",
+      "variant": "batches",
+      "input": 5,
+      "output": 25
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-astra",
+      "variant": "flex",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-astra",
+      "variant": "priority",
+      "input": 20,
+      "output": 100,
+      "cached_input": 2
     },
     {
       "provider": "OpenAI",
@@ -9256,6 +9724,38 @@
     },
     {
       "provider": "OpenAI",
+      "model": "gpt-daybreak-blue-latest",
+      "variant": "",
+      "input": 4,
+      "output": 20,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-daybreak-blue-latest",
+      "variant": "above_272k_tokens",
+      "input": 8,
+      "output": 30,
+      "cached_input": 0.8
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-daybreak-red-latest",
+      "variant": "",
+      "input": 12.5,
+      "output": 75,
+      "cached_input": 1.25
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-daybreak-red-latest",
+      "variant": "above_272k_tokens",
+      "input": 25,
+      "output": 112.5,
+      "cached_input": 2.5
+    },
+    {
+      "provider": "OpenAI",
       "model": "gpt-image-1",
       "variant": "",
       "input": 5,
@@ -9289,7 +9789,6 @@
       "model": "gpt-image-2",
       "variant": "",
       "input": 5,
-      "output": 10,
       "cached_input": 1.25
     },
     {
@@ -9297,7 +9796,6 @@
       "model": "gpt-image-2-2026-04-21",
       "variant": "",
       "input": 5,
-      "output": 10,
       "cached_input": 1.25
     },
     {
@@ -9321,7 +9819,7 @@
       "model": "gpt-realtime-2",
       "variant": "",
       "input": 4,
-      "output": 16,
+      "output": 24,
       "cached_input": 0.4
     },
     {
@@ -9687,6 +10185,22 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "anthropic/claude-fable-5",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 1
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "anthropic/claude-fable-5.1",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "OpenRouter",
       "model": "anthropic/claude-haiku-4.5",
       "variant": "",
       "input": 1,
@@ -9728,6 +10242,14 @@
     {
       "provider": "OpenRouter",
       "model": "anthropic/claude-opus-4.7",
+      "variant": "",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "anthropic/claude-opus-4.8",
       "variant": "",
       "input": 5,
       "output": 25,
@@ -9791,6 +10313,14 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "anthropic/claude-sonnet-5",
+      "variant": "",
+      "input": 2,
+      "output": 10,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "OpenRouter",
       "model": "bytedance/ui-tars-1.5-7b",
       "variant": "",
       "input": 0.1,
@@ -9800,15 +10330,15 @@
       "provider": "OpenRouter",
       "model": "deepseek/deepseek-chat",
       "variant": "",
-      "input": 0.14,
-      "output": 0.28
+      "input": 0.32,
+      "output": 0.89
     },
     {
       "provider": "OpenRouter",
       "model": "deepseek/deepseek-chat-v3-0324",
       "variant": "",
-      "input": 0.14,
-      "output": 0.28
+      "input": 0.25,
+      "output": 1
     },
     {
       "provider": "OpenRouter",
@@ -9827,8 +10357,8 @@
       "provider": "OpenRouter",
       "model": "deepseek/deepseek-r1",
       "variant": "",
-      "input": 0.55,
-      "output": 2.19
+      "input": 0.7,
+      "output": 2.5
     },
     {
       "provider": "OpenRouter",
@@ -9851,9 +10381,24 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "deepseek/deepseek-r1-distill-llama-70b",
+      "variant": "",
+      "input": 0.8,
+      "output": 0.8
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "deepseek/deepseek-v3.1-terminus",
+      "variant": "",
+      "input": 0.27,
+      "output": 1,
+      "cached_input": 0.135
+    },
+    {
+      "provider": "OpenRouter",
       "model": "deepseek/deepseek-v3.2",
       "variant": "",
-      "input": 0.28,
+      "input": 0.269,
       "output": 0.4
     },
     {
@@ -9866,14 +10411,38 @@
       "provider": "OpenRouter",
       "model": "deepseek/deepseek-v3.2-exp",
       "variant": "",
-      "input": 0.2,
-      "output": 0.4
+      "input": 0.27,
+      "output": 0.41
     },
     {
       "provider": "OpenRouter",
       "model": "deepseek/deepseek-v3.2-exp",
       "variant": "cache_hit",
       "input": 0.02
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "deepseek/deepseek-v4-flash",
+      "variant": "",
+      "input": 0.08778,
+      "output": 0.17556,
+      "cached_input": 0.017556
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "variant": "",
+      "input": 0.065,
+      "output": 0.18,
+      "cached_input": 0.016
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "deepseek/deepseek-v4-flash-vision-exp",
+      "variant": "",
+      "input": 0.22,
+      "output": 0.66,
+      "cached_input": 0.007
     },
     {
       "provider": "OpenRouter",
@@ -9913,14 +10482,64 @@
       "model": "google/gemini-2.5-flash",
       "variant": "",
       "input": 0.3,
-      "output": 2.5
+      "output": 2.5,
+      "cached_input": 0.03
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-2.5-flash-image",
+      "variant": "",
+      "input": 0.3,
+      "output": 2.5,
+      "cached_input": 0.03
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-2.5-flash-lite",
+      "variant": "",
+      "input": 0.1,
+      "output": 0.4,
+      "cached_input": 0.01
     },
     {
       "provider": "OpenRouter",
       "model": "google/gemini-2.5-pro",
       "variant": "",
       "input": 1.25,
-      "output": 10
+      "output": 10,
+      "cached_input": 0.125
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-2.5-pro-preview",
+      "variant": "",
+      "input": 1.25,
+      "output": 10,
+      "cached_input": 0.125
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-2.5-pro-preview",
+      "variant": "above_200k_tokens",
+      "input": 2.5,
+      "output": 15,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-2.5-pro-preview-05-06",
+      "variant": "",
+      "input": 1.25,
+      "output": 10,
+      "cached_input": 0.125
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-2.5-pro-preview-05-06",
+      "variant": "above_200k_tokens",
+      "input": 2.5,
+      "output": 15,
+      "cached_input": 0.25
     },
     {
       "provider": "OpenRouter",
@@ -9929,6 +10548,22 @@
       "input": 0.5,
       "output": 3,
       "cached_input": 0.05
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-3-pro-image",
+      "variant": "",
+      "input": 2,
+      "output": 12,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-3-pro-image-preview",
+      "variant": "",
+      "input": 2,
+      "output": 12,
+      "cached_input": 0.2
     },
     {
       "provider": "OpenRouter",
@@ -9955,11 +10590,32 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "google/gemini-3.1-flash-image",
+      "variant": "",
+      "input": 0.5,
+      "output": 3
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-3.1-flash-image-preview",
+      "variant": "",
+      "input": 0.5,
+      "output": 3
+    },
+    {
+      "provider": "OpenRouter",
       "model": "google/gemini-3.1-flash-lite",
       "variant": "",
       "input": 0.25,
       "output": 1.5,
       "cached_input": 0.025
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-3.1-flash-lite-image",
+      "variant": "",
+      "input": 0.25,
+      "output": 1.5
     },
     {
       "provider": "OpenRouter",
@@ -9987,17 +10643,117 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "google/gemini-3.1-pro-preview-customtools",
+      "variant": "",
+      "input": 2,
+      "output": 12,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-3.1-pro-preview-customtools",
+      "variant": "above_200k_tokens",
+      "input": 4,
+      "output": 18,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-3.5-flash",
+      "variant": "",
+      "input": 1.5,
+      "output": 9,
+      "cached_input": 0.15
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-3.5-flash-lite",
+      "variant": "",
+      "input": 0.3,
+      "output": 2.5,
+      "cached_input": 0.03
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-3.6-flash",
+      "variant": "",
+      "input": 0.75,
+      "output": 3.75,
+      "cached_input": 0.075
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-3.7-flash",
+      "variant": "",
+      "input": 0.75,
+      "output": 3.75,
+      "cached_input": 0.075
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemini-3.8-flash",
+      "variant": "",
+      "input": 0.75,
+      "output": 3.75,
+      "cached_input": 0.075
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemma-2-27b-it",
+      "variant": "",
+      "input": 0.65,
+      "output": 0.65
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemma-3-12b-it",
+      "variant": "",
+      "input": 0.05,
+      "output": 0.15
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemma-3-27b-it",
+      "variant": "",
+      "input": 0.08,
+      "output": 0.45,
+      "cached_input": 0.04
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemma-3-4b-it",
+      "variant": "",
+      "input": 0.05,
+      "output": 0.1
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemma-4-26b-a4b-it",
+      "variant": "",
+      "input": 0.07,
+      "output": 0.34
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "google/gemma-4-31b-it",
+      "variant": "",
+      "input": 0.09,
+      "output": 0.34,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "OpenRouter",
       "model": "gryphe/mythomax-l2-13b",
       "variant": "",
-      "input": 1.875,
-      "output": 1.875
+      "input": 0.06,
+      "output": 0.06
     },
     {
       "provider": "OpenRouter",
       "model": "mancer/weaver",
       "variant": "",
-      "input": 5.625,
-      "output": 5.625
+      "input": 0.4,
+      "output": 0.75
     },
     {
       "provider": "OpenRouter",
@@ -10008,6 +10764,77 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "meta-llama/llama-3.1-70b-instruct",
+      "variant": "",
+      "input": 0.4,
+      "output": 0.4
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "variant": "",
+      "input": 0.05,
+      "output": 0.08,
+      "cached_input": 0.025
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "meta-llama/llama-3.2-1b-instruct",
+      "variant": "",
+      "input": 0.027,
+      "output": 0.201
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "meta-llama/llama-3.2-3b-instruct",
+      "variant": "",
+      "input": 0.05,
+      "output": 0.33
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "meta-llama/llama-3.3-70b-instruct",
+      "variant": "",
+      "input": 0.1,
+      "output": 0.32
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "meta-llama/llama-4-maverick",
+      "variant": "",
+      "input": 0.2,
+      "output": 0.696
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "meta-llama/llama-4-scout",
+      "variant": "",
+      "input": 0.1,
+      "output": 0.3
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "meta-llama/llama-guard-4-12b",
+      "variant": "",
+      "input": 0.18,
+      "output": 0.18
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "minimax/minimax-01",
+      "variant": "",
+      "input": 0.2,
+      "output": 1.1
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "minimax/minimax-m1",
+      "variant": "",
+      "input": 0.55,
+      "output": 2.2
+    },
+    {
+      "provider": "OpenRouter",
       "model": "minimax/minimax-m2",
       "variant": "",
       "input": 0.255,
@@ -10015,26 +10842,58 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "minimax/minimax-m2-her",
+      "variant": "",
+      "input": 0.3,
+      "output": 1.2,
+      "cached_input": 0.03
+    },
+    {
+      "provider": "OpenRouter",
       "model": "minimax/minimax-m2.1",
       "variant": "",
-      "input": 0.27,
+      "input": 0.3,
       "output": 1.2,
-      "cached_input": 0
+      "cached_input": 0.03
     },
     {
       "provider": "OpenRouter",
       "model": "minimax/minimax-m2.5",
       "variant": "",
+      "input": 0.27,
+      "output": 1.08,
+      "cached_input": 0.027
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "minimax/minimax-m2.7",
+      "variant": "",
       "input": 0.3,
-      "output": 1.1,
-      "cached_input": 0.15
+      "output": 1.2,
+      "cached_input": 0.06
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "minimax/minimax-m3",
+      "variant": "",
+      "input": 0.3,
+      "output": 1.2,
+      "cached_input": 0.06
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "mistralai/codestral-2508",
+      "variant": "",
+      "input": 0.3,
+      "output": 0.9,
+      "cached_input": 0.03
     },
     {
       "provider": "OpenRouter",
       "model": "mistralai/devstral-2512",
       "variant": "",
-      "input": 0.15,
-      "output": 0.6
+      "input": 0.4,
+      "output": 2
     },
     {
       "provider": "OpenRouter",
@@ -10068,8 +10927,16 @@
       "provider": "OpenRouter",
       "model": "mistralai/mistral-large",
       "variant": "",
-      "input": 8,
-      "output": 24
+      "input": 2,
+      "output": 6
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "mistralai/mistral-large-2407",
+      "variant": "",
+      "input": 2,
+      "output": 6,
+      "cached_input": 0.2
     },
     {
       "provider": "OpenRouter",
@@ -10080,46 +10947,183 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "mistralai/mistral-medium-3",
+      "variant": "",
+      "input": 0.4,
+      "output": 2,
+      "cached_input": 0.04
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "mistralai/mistral-medium-3-5",
+      "variant": "",
+      "input": 1.5,
+      "output": 7.5
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "mistralai/mistral-medium-3.1",
+      "variant": "",
+      "input": 0.4,
+      "output": 2,
+      "cached_input": 0.04
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "mistralai/mistral-nemo",
+      "variant": "",
+      "input": 0.019,
+      "output": 0.03
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "mistralai/mistral-saba",
+      "variant": "",
+      "input": 0.2,
+      "output": 0.6,
+      "cached_input": 0.02
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "mistralai/mistral-small-24b-instruct-2501",
+      "variant": "",
+      "input": 0.05,
+      "output": 0.08
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "mistralai/mistral-small-2603",
+      "variant": "",
+      "input": 0.15,
+      "output": 0.6,
+      "cached_input": 0.015
+    },
+    {
+      "provider": "OpenRouter",
       "model": "mistralai/mistral-small-3.1-24b-instruct",
       "variant": "",
-      "input": 0.1,
-      "output": 0.3
+      "input": 0.351,
+      "output": 0.555
     },
     {
       "provider": "OpenRouter",
       "model": "mistralai/mistral-small-3.2-24b-instruct",
       "variant": "",
-      "input": 0.1,
-      "output": 0.3
+      "input": 0.075,
+      "output": 0.2
     },
     {
       "provider": "OpenRouter",
       "model": "mistralai/mixtral-8x22b-instruct",
       "variant": "",
-      "input": 0.65,
-      "output": 0.65
+      "input": 2,
+      "output": 6
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "mistralai/voxtral-small-24b-2507",
+      "variant": "",
+      "input": 0.1,
+      "output": 0.3,
+      "cached_input": 0.01
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "moonshotai/kimi-k2",
+      "variant": "",
+      "input": 0.57,
+      "output": 2.3
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "moonshotai/kimi-k2-0905",
+      "variant": "",
+      "input": 0.6,
+      "output": 2.5
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "moonshotai/kimi-k2-thinking",
+      "variant": "",
+      "input": 0.6,
+      "output": 2.5,
+      "cached_input": 0.15
     },
     {
       "provider": "OpenRouter",
       "model": "moonshotai/kimi-k2.5",
       "variant": "",
-      "input": 0.6,
-      "output": 3,
-      "cached_input": 0.1
+      "input": 0.45,
+      "output": 2.25,
+      "cached_input": 0.07
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "moonshotai/kimi-k2.6",
+      "variant": "",
+      "input": 0.95,
+      "output": 4,
+      "cached_input": 0.16
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "moonshotai/kimi-k2.7-code",
+      "variant": "",
+      "input": 0.66,
+      "output": 3.4,
+      "cached_input": 0.18
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "moonshotai/kimi-k3",
+      "variant": "",
+      "input": 3,
+      "output": 15,
+      "cached_input": 0.3
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "nvidia/nemotron-3-nano-30b-a3b",
+      "variant": "",
+      "input": 0.05,
+      "output": 0.2,
+      "cached_input": 0.03
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "variant": "",
+      "input": 0.085,
+      "output": 0.4
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "variant": "",
+      "input": 0.625,
+      "output": 3.125,
+      "cached_input": 0.1875
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "nvidia/nemotron-3.5-content-safety",
+      "variant": "",
+      "input": 0.2,
+      "output": 0.2
     },
     {
       "provider": "OpenRouter",
       "model": "nvidia/nemotron-3.5-lightning",
       "variant": "",
-      "input": 0.05,
+      "input": 0.08,
       "output": 0.2
     },
     {
       "provider": "OpenRouter",
       "model": "openai/gpt-3.5-turbo",
       "variant": "",
-      "input": 1.5,
-      "output": 2
+      "input": 0.5,
+      "output": 1.5
     },
     {
       "provider": "OpenRouter",
@@ -10130,10 +11134,31 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "openai/gpt-3.5-turbo-instruct",
+      "variant": "",
+      "input": 1.5,
+      "output": 2
+    },
+    {
+      "provider": "OpenRouter",
       "model": "openai/gpt-4",
       "variant": "",
       "input": 30,
       "output": 60
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-4-turbo",
+      "variant": "",
+      "input": 10,
+      "output": 30
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-4-turbo-preview",
+      "variant": "",
+      "input": 10,
+      "output": 30
     },
     {
       "provider": "OpenRouter",
@@ -10164,7 +11189,8 @@
       "model": "openai/gpt-4o",
       "variant": "",
       "input": 2.5,
-      "output": 10
+      "output": 10,
+      "cached_input": 1.25
     },
     {
       "provider": "OpenRouter",
@@ -10172,6 +11198,38 @@
       "variant": "",
       "input": 5,
       "output": 15
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-4o-2024-08-06",
+      "variant": "",
+      "input": 2.5,
+      "output": 10,
+      "cached_input": 1.25
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-4o-2024-11-20",
+      "variant": "",
+      "input": 2.5,
+      "output": 10,
+      "cached_input": 1.25
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-4o-mini",
+      "variant": "",
+      "input": 0.15,
+      "output": 0.6,
+      "cached_input": 0.075
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-4o-mini-2024-07-18",
+      "variant": "",
+      "input": 0.15,
+      "output": 0.6,
+      "cached_input": 0.075
     },
     {
       "provider": "OpenRouter",
@@ -10215,11 +11273,42 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "openai/gpt-5-pro",
+      "variant": "",
+      "input": 15,
+      "output": 120
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.1",
+      "variant": "",
+      "input": 1.25,
+      "output": 10,
+      "cached_input": 0.125
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.1-codex",
+      "variant": "",
+      "input": 1.25,
+      "output": 10,
+      "cached_input": 0.13
+    },
+    {
+      "provider": "OpenRouter",
       "model": "openai/gpt-5.1-codex-max",
       "variant": "",
       "input": 1.25,
       "output": 10,
       "cached_input": 0.125
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.1-codex-mini",
+      "variant": "",
+      "input": 0.25,
+      "output": 2,
+      "cached_input": 0.03
     },
     {
       "provider": "OpenRouter",
@@ -10254,17 +11343,139 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "",
+      "input": 1.75,
+      "output": 14,
+      "cached_input": 0.175
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.4",
+      "variant": "",
+      "input": 2.5,
+      "output": 15,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.4-mini",
+      "variant": "",
+      "input": 0.75,
+      "output": 4.5,
+      "cached_input": 0.075
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.4-nano",
+      "variant": "",
+      "input": 0.2,
+      "output": 1.25,
+      "cached_input": 0.02
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.4-pro",
+      "variant": "",
+      "input": 30,
+      "output": 180
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.4-pro",
+      "variant": "above_272k_tokens",
+      "input": 60,
+      "output": 270
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.5",
+      "variant": "",
+      "input": 5,
+      "output": 30,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.5-pro",
+      "variant": "",
+      "input": 30,
+      "output": 180
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.5-pro",
+      "variant": "above_272k_tokens",
+      "input": 60,
+      "output": 270
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.6-luna",
+      "variant": "",
+      "input": 0.2,
+      "output": 1.2,
+      "cached_input": 0.02
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-5.6-terra",
+      "variant": "",
+      "input": 2,
+      "output": 12,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-6-astra",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 1
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-6-astra",
+      "variant": "above_272k_tokens",
+      "input": 20,
+      "output": 75,
+      "cached_input": 2
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-audio",
+      "variant": "",
+      "input": 2.5,
+      "output": 10
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-audio-mini",
+      "variant": "",
+      "input": 0.6,
+      "output": 2.4
+    },
+    {
+      "provider": "OpenRouter",
       "model": "openai/gpt-oss-120b",
       "variant": "",
-      "input": 0.18,
-      "output": 0.8
+      "input": 0.037,
+      "output": 0.17
     },
     {
       "provider": "OpenRouter",
       "model": "openai/gpt-oss-20b",
       "variant": "",
-      "input": 0.02,
-      "output": 0.1
+      "input": 0.03,
+      "output": 0.13
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/gpt-oss-safeguard-20b",
+      "variant": "",
+      "input": 0.075,
+      "output": 0.3,
+      "cached_input": 0.0375
     },
     {
       "provider": "OpenRouter",
@@ -10276,24 +11487,124 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "openai/o1-pro",
+      "variant": "",
+      "input": 150,
+      "output": 600
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/o3",
+      "variant": "",
+      "input": 2,
+      "output": 8,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "OpenRouter",
       "model": "openai/o3-mini",
       "variant": "",
       "input": 1.1,
-      "output": 4.4
+      "output": 4.4,
+      "cached_input": 0.55
     },
     {
       "provider": "OpenRouter",
       "model": "openai/o3-mini-high",
       "variant": "",
       "input": 1.1,
-      "output": 4.4
+      "output": 4.4,
+      "cached_input": 0.55
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/o3-pro",
+      "variant": "",
+      "input": 20,
+      "output": 80
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/o4-mini",
+      "variant": "",
+      "input": 1.1,
+      "output": 4.4,
+      "cached_input": 0.275
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "openai/o4-mini-high",
+      "variant": "",
+      "input": 1.1,
+      "output": 4.4,
+      "cached_input": 0.275
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "poolside/laguna-s-2.1",
+      "variant": "",
+      "input": 0.09,
+      "output": 0.18,
+      "cached_input": 0.009
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "poolside/laguna-xs-2.1",
+      "variant": "",
+      "input": 0.06,
+      "output": 0.12,
+      "cached_input": 0.03
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen-2.5-72b-instruct",
+      "variant": "",
+      "input": 0.36,
+      "output": 0.4
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen-2.5-7b-instruct",
+      "variant": "",
+      "input": 0.1,
+      "output": 0.2
     },
     {
       "provider": "OpenRouter",
       "model": "qwen/qwen-2.5-coder-32b-instruct",
       "variant": "",
-      "input": 0.18,
-      "output": 0.18
+      "input": 0.66,
+      "output": 1
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen-plus",
+      "variant": "",
+      "input": 0.26,
+      "output": 0.78,
+      "cached_input": 0.052
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen-plus",
+      "variant": "above_256k_tokens",
+      "input": 0.78,
+      "output": 2.34,
+      "cached_input": 0.156
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen-plus-2025-07-28",
+      "variant": "",
+      "input": 0.26,
+      "output": 0.78
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen-plus-2025-07-28",
+      "variant": "above_256k_tokens",
+      "input": 0.78,
+      "output": 2.34
     },
     {
       "provider": "OpenRouter",
@@ -10304,73 +11615,263 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "qwen/qwen2.5-vl-72b-instruct",
+      "variant": "",
+      "input": 0.8,
+      "output": 1,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-14b",
+      "variant": "",
+      "input": 0.12,
+      "output": 0.24
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-235b-a22b",
+      "variant": "",
+      "input": 0.455,
+      "output": 1.82
+    },
+    {
+      "provider": "OpenRouter",
       "model": "qwen/qwen3-235b-a22b-2507",
       "variant": "",
-      "input": 0.071,
-      "output": 0.1
+      "input": 0.0875,
+      "output": 0.35
     },
     {
       "provider": "OpenRouter",
       "model": "qwen/qwen3-235b-a22b-thinking-2507",
       "variant": "",
-      "input": 0.11,
-      "output": 0.6
+      "input": 0.23,
+      "output": 2.3
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-30b-a3b",
+      "variant": "",
+      "input": 0.12,
+      "output": 0.5
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "variant": "",
+      "input": 0.04815,
+      "output": 0.19305
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-30b-a3b-thinking-2507",
+      "variant": "",
+      "input": 0.2,
+      "output": 2.4
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-32b",
+      "variant": "",
+      "input": 0.08,
+      "output": 0.28
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-8b",
+      "variant": "",
+      "input": 0.117,
+      "output": 0.455
     },
     {
       "provider": "OpenRouter",
       "model": "qwen/qwen3-coder",
       "variant": "",
-      "input": 0.22,
-      "output": 0.95
+      "input": 0.3,
+      "output": 1
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-coder-30b-a3b-instruct",
+      "variant": "",
+      "input": 0.07,
+      "output": 0.28
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-coder-flash",
+      "variant": "",
+      "input": 0.195,
+      "output": 0.975,
+      "cached_input": 0.039
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-coder-flash",
+      "variant": "above_128k_tokens",
+      "input": 0.52,
+      "output": 2.6,
+      "cached_input": 0.104
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-coder-next",
+      "variant": "",
+      "input": 0.12,
+      "output": 0.8,
+      "cached_input": 0.07
     },
     {
       "provider": "OpenRouter",
       "model": "qwen/qwen3-coder-plus",
       "variant": "",
-      "input": 1,
-      "output": 5
+      "input": 0.65,
+      "output": 3.25
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-max",
+      "variant": "",
+      "input": 0.78,
+      "output": 3.9,
+      "cached_input": 0.156
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-max",
+      "variant": "above_128k_tokens",
+      "input": 1.95,
+      "output": 9.75,
+      "cached_input": 0.39
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-max-thinking",
+      "variant": "",
+      "input": 0.78,
+      "output": 3.9
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-max-thinking",
+      "variant": "above_128k_tokens",
+      "input": 1.95,
+      "output": 9.75
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-next-80b-a3b-instruct",
+      "variant": "",
+      "input": 0.1,
+      "output": 1.1,
+      "cached_input": 0.07
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-next-80b-a3b-thinking",
+      "variant": "",
+      "input": 0.15,
+      "output": 1.2
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-vl-235b-a22b-instruct",
+      "variant": "",
+      "input": 0.21,
+      "output": 1.9,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-vl-235b-a22b-thinking",
+      "variant": "",
+      "input": 0.4,
+      "output": 4
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-vl-30b-a3b-instruct",
+      "variant": "",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-vl-30b-a3b-thinking",
+      "variant": "",
+      "input": 0.2,
+      "output": 2.4
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-vl-32b-instruct",
+      "variant": "",
+      "input": 0.104,
+      "output": 0.416
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-vl-8b-instruct",
+      "variant": "",
+      "input": 0.117,
+      "output": 0.455
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3-vl-8b-thinking",
+      "variant": "",
+      "input": 0.18,
+      "output": 2.1
     },
     {
       "provider": "OpenRouter",
       "model": "qwen/qwen3.5-122b-a10b",
       "variant": "",
-      "input": 0.4,
-      "output": 2
+      "input": 0.29,
+      "output": 2.4
     },
     {
       "provider": "OpenRouter",
       "model": "qwen/qwen3.5-27b",
       "variant": "",
-      "input": 0.3,
-      "output": 2.4
+      "input": 0.195,
+      "output": 1.56
     },
     {
       "provider": "OpenRouter",
       "model": "qwen/qwen3.5-35b-a3b",
       "variant": "",
       "input": 0.25,
-      "output": 2
+      "output": 1.25
     },
     {
       "provider": "OpenRouter",
       "model": "qwen/qwen3.5-397b-a17b",
       "variant": "",
-      "input": 0.6,
-      "output": 3.6
+      "input": 0.55,
+      "output": 3.5
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.5-9b",
+      "variant": "",
+      "input": 0.1,
+      "output": 0.15
     },
     {
       "provider": "OpenRouter",
       "model": "qwen/qwen3.5-flash-02-23",
       "variant": "",
-      "input": 0.1,
-      "output": 0.4
+      "input": 0.065,
+      "output": 0.26
     },
     {
       "provider": "OpenRouter",
       "model": "qwen/qwen3.5-plus-02-15",
       "variant": "",
-      "input": 0.4,
-      "output": 2.4
+      "input": 0.26,
+      "output": 1.56
     },
     {
       "provider": "OpenRouter",
@@ -10381,10 +11882,132 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "qwen/qwen3.5-plus-20260420",
+      "variant": "",
+      "input": 0.3,
+      "output": 1.8
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.5-plus-20260420",
+      "variant": "above_256k_tokens",
+      "input": 0.375,
+      "output": 2.25
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.6-27b",
+      "variant": "",
+      "input": 0.3,
+      "output": 2,
+      "cached_input": 0.03
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.6-35b-a3b",
+      "variant": "",
+      "input": 0.1,
+      "output": 0.9,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.6-flash",
+      "variant": "",
+      "input": 0.1875,
+      "output": 1.125
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.6-flash",
+      "variant": "above_256k_tokens",
+      "input": 0.75,
+      "output": 3
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.6-max-preview",
+      "variant": "",
+      "input": 1.027,
+      "output": 6.162
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.6-max-preview",
+      "variant": "above_128k_tokens",
+      "input": 1.58,
+      "output": 9.48
+    },
+    {
+      "provider": "OpenRouter",
       "model": "qwen/qwen3.6-plus",
       "variant": "",
       "input": 0.325,
       "output": 1.95
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.7-flash",
+      "variant": "",
+      "input": 0.03,
+      "output": 0.13,
+      "cached_input": 0.006
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.7-flash",
+      "variant": "above_256k_tokens",
+      "input": 0.2,
+      "output": 0.8,
+      "cached_input": 0.04
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.7-max",
+      "variant": "",
+      "input": 1.475,
+      "output": 4.425,
+      "cached_input": 0.295
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.7-plus",
+      "variant": "",
+      "input": 0.32,
+      "output": 1.28,
+      "cached_input": 0.064
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.8-2.4t-a95b",
+      "variant": "",
+      "input": 2,
+      "output": 6,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.8-27b",
+      "variant": "",
+      "input": 0.42,
+      "output": 3,
+      "cached_input": 0.085
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.8-flash",
+      "variant": "",
+      "input": 0.15,
+      "output": 0.47,
+      "cached_input": 0.016
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "qwen/qwen3.8-max",
+      "variant": "",
+      "input": 2,
+      "output": 6,
+      "cached_input": 0.25
     },
     {
       "provider": "OpenRouter",
@@ -10397,8 +12020,8 @@
       "provider": "OpenRouter",
       "model": "undi95/remm-slerp-l2-13b",
       "variant": "",
-      "input": 1.875,
-      "output": 1.875
+      "input": 0.45,
+      "output": 0.65
     },
     {
       "provider": "OpenRouter",
@@ -10406,6 +12029,54 @@
       "variant": "",
       "input": 3,
       "output": 15
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "x-ai/grok-4.20",
+      "variant": "",
+      "input": 1.25,
+      "output": 2.5,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "x-ai/grok-4.20-multi-agent",
+      "variant": "",
+      "input": 1.25,
+      "output": 2.5,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "x-ai/grok-4.3",
+      "variant": "",
+      "input": 1.25,
+      "output": 2.5,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "x-ai/grok-4.5",
+      "variant": "",
+      "input": 2,
+      "output": 6,
+      "cached_input": 0.3
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "x-ai/grok-4.6",
+      "variant": "",
+      "input": 2,
+      "output": 6,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "x-ai/grok-build-0.1",
+      "variant": "",
+      "input": 1,
+      "output": 2,
+      "cached_input": 0.2
     },
     {
       "provider": "OpenRouter",
@@ -10419,24 +12090,48 @@
       "provider": "OpenRouter",
       "model": "xiaomi/mimo-v2.5",
       "variant": "",
-      "input": 0.4,
-      "output": 2,
-      "cached_input": 0.08
+      "input": 0.14,
+      "output": 0.28,
+      "cached_input": 0.0028
     },
     {
       "provider": "OpenRouter",
       "model": "xiaomi/mimo-v2.5-pro",
       "variant": "",
-      "input": 1,
-      "output": 3,
-      "cached_input": 0.2
+      "input": 0.435,
+      "output": 0.87,
+      "cached_input": 0.0036
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "z-ai/glm-4.5",
+      "variant": "",
+      "input": 0.6,
+      "output": 2.2,
+      "cached_input": 0.11
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "z-ai/glm-4.5-air",
+      "variant": "",
+      "input": 0.13,
+      "output": 0.85,
+      "cached_input": 0.025
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "z-ai/glm-4.5v",
+      "variant": "",
+      "input": 0.6,
+      "output": 1.8,
+      "cached_input": 0.11
     },
     {
       "provider": "OpenRouter",
       "model": "z-ai/glm-4.6",
       "variant": "",
-      "input": 0.4,
-      "output": 1.75
+      "input": 0.55,
+      "output": 2.2
     },
     {
       "provider": "OpenRouter",
@@ -10447,34 +12142,82 @@
     },
     {
       "provider": "OpenRouter",
+      "model": "z-ai/glm-4.6v",
+      "variant": "",
+      "input": 0.3,
+      "output": 0.9,
+      "cached_input": 0.055
+    },
+    {
+      "provider": "OpenRouter",
       "model": "z-ai/glm-4.7",
       "variant": "",
       "input": 0.4,
-      "output": 1.5,
-      "cached_input": 0
+      "output": 1.75,
+      "cached_input": 0.08
     },
     {
       "provider": "OpenRouter",
       "model": "z-ai/glm-4.7-flash",
       "variant": "",
-      "input": 0.07,
+      "input": 0.06,
       "output": 0.4,
-      "cached_input": 0
+      "cached_input": 0.01
     },
     {
       "provider": "OpenRouter",
       "model": "z-ai/glm-5",
       "variant": "",
-      "input": 0.8,
-      "output": 2.56
+      "input": 0.6,
+      "output": 1.92
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "z-ai/glm-5-turbo",
+      "variant": "",
+      "input": 1.2,
+      "output": 4,
+      "cached_input": 0.24
     },
     {
       "provider": "OpenRouter",
       "model": "z-ai/glm-5.1",
       "variant": "",
-      "input": 1.05,
-      "output": 3.5,
-      "cached_input": 0.525
+      "input": 0.966,
+      "output": 3.036,
+      "cached_input": 0.1794
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "z-ai/glm-5.2",
+      "variant": "",
+      "input": 0.966,
+      "output": 3.036,
+      "cached_input": 0.1932
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "z-ai/glm-5.3",
+      "variant": "",
+      "input": 1.4,
+      "output": 4.4,
+      "cached_input": 0.14
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "z-ai/glm-5.3-flash",
+      "variant": "",
+      "input": 0.075,
+      "output": 0.25,
+      "cached_input": 0.015
+    },
+    {
+      "provider": "OpenRouter",
+      "model": "z-ai/glm-5v-turbo",
+      "variant": "",
+      "input": 1.2,
+      "output": 4,
+      "cached_input": 0.24
     },
     {
       "provider": "Posit",
