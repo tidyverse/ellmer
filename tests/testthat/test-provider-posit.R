@@ -79,6 +79,29 @@ test_that("set_model() defaults cache when arriving at Claude", {
   expect_equal(explicit$get_provider()@cache, "none")
 })
 
+test_that("unsigned thinking is replayed as text after switching to Claude", {
+  # The specific models don't matter, only that they resolve to the
+  # OpenAI-compatible and Anthropic provider paths; no API is called.
+  chat <- chat_posit(model = "google/gemma-4-26B-A4B-it")
+  chat$set_turns(list(
+    UserTurn("Hi"),
+    AssistantTurn(list(
+      ContentThinking("Internal reasoning.", extra = list(reasoning = "raw")),
+      ContentText("Hello!")
+    ))
+  ))
+  chat$set_model("claude-sonnet-4-6")
+
+  turns_json <- as_json(chat$get_provider(), chat$get_turns())
+  content <- turns_json[[2]]$content
+  expect_equal(content[[1]]$type, "text")
+  expect_match(
+    content[[1]]$text,
+    "<thinking>\nInternal reasoning.\n</thinking>"
+  )
+  expect_equal(content[[2]], list(type = "text", text = "Hello!"))
+})
+
 test_that("can derive the gateway url from a flavored base url", {
   expect_equal(
     posit_gateway_url("https://gateway.posit.ai/anthropic/v1"),
