@@ -46,6 +46,30 @@ test_that("gateway-specific errors get useful messages", {
   expect_equal(posit_error_body(string_error), "bad request")
 })
 
+test_that("optional tool arguments stay out of `required`", {
+  tool_def <- tool(
+    function(x, y = 1) x + y,
+    "Add numbers",
+    arguments = list(
+      x = type_number("First"),
+      y = type_number("Second", required = FALSE)
+    )
+  )
+
+  provider <- ProviderPositOpenAI(name = "", base_url = "")
+  fn <- as_json(provider, tool_def)$`function`
+  expect_null(fn$strict)
+  expect_equal(unlist(fn$parameters$required), "x")
+  expect_equal(fn$parameters$properties$y$type, "number")
+
+  # Models routed to the OpenAI API keep OpenAI's strict-mode convention
+  provider <- ProviderPositOpenAI(name = "", base_url = "", strict = TRUE)
+  fn <- as_json(provider, tool_def)$`function`
+  expect_true(fn$strict)
+  expect_equal(unlist(fn$parameters$required), c("x", "y"))
+  expect_equal(fn$parameters$properties$y$type, c("number", "null"))
+})
+
 # Checking the cache before calling models_posit() keeps an unauthenticated
 # machine from triggering (and hanging on) the interactive device flow.
 available_posit_models <- function() {

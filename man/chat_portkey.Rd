@@ -15,7 +15,8 @@ chat_portkey(
   params = NULL,
   api_args = list(),
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 )
 
 models_portkey(base_url = "https://api.portkey.ai/v1", api_key = portkey_key())
@@ -61,6 +62,10 @@ Note this only affects the \code{chat()} method.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
+
+\item{strict}{If \code{TRUE}, use OpenAI's strict-mode tool and structured-output
+schemas (all properties \code{required}, optional ones nullable). Whether these
+work depends on the upstream model Portkey routes to.}
 }
 \value{
 A \link{Chat} object.

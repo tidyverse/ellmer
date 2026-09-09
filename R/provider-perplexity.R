@@ -56,7 +56,8 @@ chat_perplexity <- function(
     name = "Perplexity",
     base_url = base_url,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = FALSE
   )
   model <- Model(name = model, params = params, extra_args = api_args)
   Chat$new(

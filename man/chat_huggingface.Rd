@@ -12,7 +12,8 @@ chat_huggingface(
   model = NULL,
   api_args = list(),
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 )
 }
 \arguments{
@@ -46,6 +47,10 @@ Note this only affects the \code{chat()} method.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
+
+\item{strict}{If \code{TRUE}, use OpenAI's strict-mode tool and structured-output
+schemas (all properties \code{required}, optional ones nullable). Support
+varies by the inference provider serving the model.}
 }
 \value{
 A \link{Chat} object.

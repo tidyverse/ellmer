@@ -31,6 +31,15 @@ NULL
 #'   with [modifyList()].
 #' @param api_headers Named character vector of arbitrary extra headers appended
 #'   to every chat API call.
+#' @param strict If `TRUE`, use OpenAI's strict-mode conventions: tool
+#'   definitions and structured outputs are sent with `strict: true`, and
+#'   every tool argument or type property is listed in `required`, with
+#'   optional ones made nullable. Only correct if the endpoint and model
+#'   actually implement strict mode (constrained decoding). If `FALSE` (the
+#'   default), standard JSON Schema is used: only truly required arguments
+#'   are listed in `required`. Set `strict = TRUE` if you're pointing this
+#'   function at OpenAI's chat completions API, though [chat_openai()] is
+#'   preferred for OpenAI.
 #' @param preserve_thinking If `TRUE`, reasoning content returned by the model
 #'   is included when sending conversation history back to the API. If `FALSE`
 #'   (the default), reasoning content is still captured in the turn but dropped
@@ -66,6 +75,7 @@ chat_openai_compatible <- function(
   api_args = list(),
   api_headers = character(),
   preserve_thinking = FALSE,
+  strict = FALSE,
   echo = c("none", "output", "all")
 ) {
   if (missing(base_url)) {
@@ -99,7 +109,8 @@ chat_openai_compatible <- function(
     base_url = base_url,
     extra_headers = api_headers,
     credentials = credentials,
-    preserve_thinking = preserve_thinking
+    preserve_thinking = preserve_thinking,
+    strict = strict
   )
   model_obj <- Model(
     name = model,
@@ -132,6 +143,7 @@ chat_openai_compatible_test <- function(
     system_prompt = system_prompt,
     model = model,
     params = params,
+    strict = TRUE,
     ...,
     echo = echo
   )
@@ -142,7 +154,12 @@ ProviderOpenAICompatible <- new_class(
   "ProviderOpenAICompatible",
   parent = Provider,
   properties = list(
-    preserve_thinking = new_property(class_logical, default = FALSE)
+    preserve_thinking = new_property(class_logical, default = FALSE),
+    # OpenAI's strict mode convention: every property is `required`, with
+    # optional ones made nullable, plus `strict: true` on tool definitions
+    # and structured outputs. Only correct when the backend actually
+    # implements strict mode; everything else uses standard JSON Schema.
+    strict = new_property(class_logical, default = FALSE)
   )
 )
 
@@ -208,11 +225,11 @@ method(chat_body, ProviderOpenAICompatible) <- function(
   if (!is.null(type)) {
     response_format <- list(
       type = "json_schema",
-      json_schema = list(
+      json_schema = compact(list(
         name = "structured_data",
         schema = as_json(provider, type),
-        strict = TRUE
-      )
+        strict = if (provider@strict) TRUE
+      ))
     )
   } else {
     response_format <- NULL
@@ -564,7 +581,7 @@ method(as_json, list(ProviderOpenAICompatible, ToolDef)) <- function(
     "function" = compact(list(
       name = x@name,
       description = x@description,
-      strict = TRUE,
+      strict = if (provider@strict) TRUE,
       parameters = as_json(provider, x@arguments, ...)
     ))
   )
@@ -576,6 +593,10 @@ method(as_json, list(ProviderOpenAICompatible, TypeObject)) <- function(
   x,
   ...
 ) {
+  if (!provider@strict) {
+    return(as_json(super(provider, Provider), x, ...))
+  }
+
   if (x@additional_properties) {
     cli::cli_abort("{.arg .additional_properties} not supported for OpenAI.")
   }

@@ -17,6 +17,9 @@ NULL
 #' @param credentials `r api_key_param("OPENROUTER_API_KEY")`
 #' @param model `r param_model("gpt-5.6-terra")`
 #' @param params Common model parameters, usually created by [params()].
+#' @param strict If `TRUE`, use OpenAI's strict-mode tool and structured-output
+#'   schemas (all properties `required`, optional ones nullable). Whether these
+#'   are enforced varies by the endpoint serving the model on OpenRouter.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @examples
@@ -32,7 +35,8 @@ chat_openrouter <- function(
   params = NULL,
   api_args = list(),
   echo = c("none", "output", "all"),
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 ) {
   model <- set_default(model, "gpt-5.6-terra")
   echo <- check_echo(echo)
@@ -51,7 +55,8 @@ chat_openrouter <- function(
     base_url = "https://openrouter.ai/api/v1",
     credentials = credentials,
     extra_headers = api_headers,
-    preserve_thinking = TRUE
+    preserve_thinking = TRUE,
+    strict = strict
   )
   model <- Model(name = model, params = params, extra_args = api_args)
   Chat$new(

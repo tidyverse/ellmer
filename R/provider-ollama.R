@@ -118,7 +118,8 @@ chat_ollama <- function(
     name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = FALSE
   )
   model <- Model(name = model, params = params, extra_args = api_args)
 
