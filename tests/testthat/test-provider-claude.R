@@ -683,6 +683,31 @@ test_that("as_json() serializes uploaded file references", {
   )
 })
 
+test_that("as_json() replays unsigned thinking blocks as text", {
+  provider <- chat_anthropic_test()$get_provider()
+
+  expect_equal(
+    as_json(provider, ContentThinking("Internal reasoning.")),
+    list(
+      type = "text",
+      text = "<thinking>\nInternal reasoning.\n</thinking>\n"
+    )
+  )
+
+  signed <- ContentThinking(
+    "Internal reasoning.",
+    extra = list(signature = "sig")
+  )
+  expect_equal(
+    as_json(provider, signed),
+    list(
+      type = "thinking",
+      thinking = "Internal reasoning.",
+      signature = "sig"
+    )
+  )
+})
+
 test_that("value_turn() preserves unresolved Anthropic document slots", {
   provider <- chat_anthropic_test()$get_provider()
   turns <- list(UserTurn(list(

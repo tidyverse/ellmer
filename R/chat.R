@@ -156,6 +156,7 @@ Chat <- R6::R6Class(
     set_model = function(model) {
       check_string(model)
       private$model@name <- model
+      private$provider <- provider_set_model(private$provider, model)
       provider_model(private$provider) <- private$model
       invisible(self)
     },
