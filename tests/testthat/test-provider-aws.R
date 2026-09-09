@@ -259,6 +259,31 @@ test_that("can use extended thinking", {
   expect_match(resp, "\\S")
 })
 
+test_that("as_json() replays unsigned thinking blocks as text", {
+  provider <- chat_aws_bedrock_test()$get_provider()
+
+  expect_equal(
+    as_json(provider, ContentThinking("Internal reasoning.")),
+    list(text = "<thinking>\nInternal reasoning.\n</thinking>\n")
+  )
+
+  signed <- ContentThinking(
+    "Internal reasoning.",
+    extra = list(signature = "sig")
+  )
+  expect_equal(
+    as_json(provider, signed),
+    list(
+      reasoningContent = list(
+        reasoningText = list(
+          text = "Internal reasoning.",
+          signature = "sig"
+        )
+      )
+    )
+  )
+})
+
 # Provider idiosynchronies -----------------------------------------------
 
 test_that("continues to work after whitespace only outputs (#376)", {

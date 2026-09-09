@@ -967,6 +967,12 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
     return()
   }
 
+  if (is.null(x@extra$signature) || !nzchar(x@extra$signature)) {
+    # Unsigned thinking blocks are rejected by the Anthropic API, so replay
+    # thinking from other providers as plain text.
+    return(as_json(provider, ContentText(format(x)), ...))
+  }
+
   list(
     type = "thinking",
     thinking = x@thinking,

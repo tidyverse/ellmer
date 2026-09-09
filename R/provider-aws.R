@@ -871,6 +871,12 @@ method(as_json, list(ProviderAWSBedrock, ContentThinking)) <- function(
     return()
   }
 
+  if (is.null(x@extra$signature) || !nzchar(x@extra$signature)) {
+    # Unsigned thinking blocks are rejected by Bedrock, so replay thinking
+    # from other providers as plain text.
+    return(as_json(provider, ContentText(format(x)), ...))
+  }
+
   list(
     reasoningContent = list(
       reasoningText = list(
