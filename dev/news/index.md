@@ -4,6 +4,8 @@
 
 ## ellmer 0.5.0
 
+CRAN release: 2026-09-04
+
 ### Lifecycle changes
 
 - [`chat_github()`](https://ellmer.tidyverse.org/dev/reference/chat_github.md)
