@@ -12,7 +12,7 @@ test_that("tracing works as expected for synchronous chats", {
   agent_spans <- Filter(function(x) x$name == "invoke_agent", spans)
   expect_length(agent_spans, 2L)
   expect_equal(agent_spans[[1L]]$parent, agent_spans[[2L]]$parent)
-  expect_equal(agent_spans[[1L]]$kind, "client")
+  expect_equal(agent_spans[[1L]]$kind, "internal")
   agent_span_ids <- sapply(agent_spans, function(x) x$span_id)
 
   # We should have (at least) two "execute_tool" spans
