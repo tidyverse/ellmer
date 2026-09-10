@@ -5,7 +5,7 @@
 * `chat_openai()` now sends `type = "message"` on every input item to the Responses API, so OpenAI-compatible servers that require it (e.g. llama.cpp) no longer reject replayed assistant turns (@taekop, #1153).
 * `live_browser()` works again with shinychat >= 0.5.0 (#1167).
 * Streamed responses now record the time to first token (in seconds) as the `gen_ai.response.time_to_first_chunk` attribute on the OpenTelemetry `chat` span (@schloerke).
-* ellmer now records OpenTelemetry metrics following the GenAI semantic conventions whenever a meter is active: `gen_ai.client.operation.duration`, `gen_ai.client.token.usage`, and `gen_ai.server.time_to_first_token` (@schloerke).
+* ellmer now records OpenTelemetry metrics following the GenAI semantic conventions whenever a meter is active: `gen_ai.client.operation.duration`, `gen_ai.client.operation.time_to_first_chunk`, `gen_ai.client.token.usage`, and `gen_ai.execute_tool.duration` (@schloerke).
 
 # ellmer 0.5.0
 
