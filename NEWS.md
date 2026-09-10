@@ -2,7 +2,7 @@
 
 * Streamed responses now record the time to first token (in seconds) as the `gen_ai.response.time_to_first_chunk` attribute on the OpenTelemetry `chat` span (@schloerke).
 * ellmer now records OpenTelemetry metrics following the GenAI semantic conventions whenever a meter is active: `gen_ai.client.operation.duration`, `gen_ai.client.operation.time_to_first_chunk`, `gen_ai.client.token.usage`, `gen_ai.execute_tool.duration`, `gen_ai.invoke_agent.duration`, `gen_ai.invoke_agent.inference_calls`, and `gen_ai.invoke_agent.tool_calls` (@schloerke).
-* The OpenTelemetry `invoke_agent` span is now of kind `internal` (it was `client`) and records total token usage across the tool loop. Both it and the `chat` span record `params()` as `gen_ai.request.*` attributes (@schloerke).
+* The OpenTelemetry `invoke_agent` span now records total token usage across the tool loop. Both it and the `chat` span record `params()` as `gen_ai.request.*` attributes (@schloerke).
 
 # ellmer 0.5.0
 
