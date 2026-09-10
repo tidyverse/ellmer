@@ -278,6 +278,20 @@ method(value_tokens, Provider) <- function(provider, json) {
   tokens()
 }
 
+# Number of reasoning tokens in the response, or NULL if the provider does
+# not report them separately. Used for the gen_ai.usage.reasoning.output_tokens
+# span attribute.
+value_reasoning_tokens <- new_generic(
+  "value_reasoning_tokens",
+  "provider",
+  function(provider, json) {
+    S7_dispatch()
+  }
+)
+method(value_reasoning_tokens, Provider) <- function(provider, json) {
+  NULL
+}
+
 value_finish_reason <- new_generic(
   "value_finish_reason",
   "provider",

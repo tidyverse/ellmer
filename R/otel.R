@@ -51,8 +51,34 @@ otel_request_attributes <- function(model) {
     "gen_ai.request.presence_penalty" = p$presence_penalty,
     "gen_ai.request.seed" = p$seed,
     "gen_ai.request.max_tokens" = p$max_tokens,
-    "gen_ai.request.stop_sequences" = p$stop_sequences
+    "gen_ai.request.stop_sequences" = p$stop_sequences,
+    "gen_ai.request.reasoning.level" = p$reasoning_effort
   ))
+}
+
+# `server.address` and `server.port` from the provider's base URL. The port
+# falls back to the scheme default since semconv requires it when the address
+# is set.
+otel_server_attributes <- function(provider) {
+  url <- tryCatch(httr2::url_parse(provider@base_url), error = function(e) NULL)
+  if (is.null(url) || is.null(url$hostname)) {
+    return(list())
+  }
+  port <- url$port %||% switch(url$scheme %||% "", https = 443, http = 80)
+  compact(list(
+    "server.address" = url$hostname,
+    "server.port" = if (!is.null(port)) as.integer(port)
+  ))
+}
+
+# A GenAI semconv tool definition for a ToolDef.
+as_otel_tool_definition <- function(tool, provider) {
+  list(
+    type = "function",
+    name = tool@name,
+    description = tool@description,
+    parameters = as_json(provider, tool@arguments)
+  )
 }
 
 local({
@@ -100,6 +126,8 @@ local({
     parent = NULL,
     conversation_id = NULL,
     stream = FALSE,
+    type = NULL,
+    tools = NULL,
     local_envir = parent.frame()
   ) {
     if (!otel_is_tracing) {
@@ -122,9 +150,11 @@ local({
             "gen_ai.request.model" = model@name,
             "gen_ai.conversation.id" = conversation_id,
             # Only set when streaming; unset means non-streaming per semconv.
-            "gen_ai.request.stream" = if (stream) TRUE
+            "gen_ai.request.stream" = if (stream) TRUE,
+            "gen_ai.output.type" = if (!is.null(type)) "json"
           )),
-          otel_request_attributes(model)
+          otel_request_attributes(model),
+          otel_server_attributes(provider)
         ),
         tracer = otel_tracer
       )
@@ -132,6 +162,17 @@ local({
     defer(otel::end_span(chat_span), envir = local_envir)
 
     if (otel_capture_content) {
+      if (length(tools)) {
+        defs <- lapply(
+          unname(tools),
+          as_otel_tool_definition,
+          provider = provider
+        )
+        chat_span$set_attribute(
+          "gen_ai.tool.definitions",
+          jsonlite::toJSON(defs, auto_unbox = TRUE, null = "null")
+        )
+      }
       if (!is.null(system_prompt)) {
         parts <- lapply(system_prompt@contents, as_otel_part)
         chat_span$set_attribute(
@@ -339,6 +380,13 @@ record_chat_otel_span_status <- function(span, provider, model, result, start) {
     span$set_attribute(
       "gen_ai.usage.cache_read.input_tokens",
       as.integer(tokens$cached_input)
+    )
+  }
+  reasoning <- value_reasoning_tokens(provider, result)
+  if (!is.null(reasoning) && reasoning > 0) {
+    span$set_attribute(
+      "gen_ai.usage.reasoning.output_tokens",
+      as.integer(reasoning)
     )
   }
   span$set_status("ok")

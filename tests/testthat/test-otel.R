@@ -472,7 +472,13 @@ test_that("request params are recorded as gen_ai.request.* attributes", {
   )
 
   spans <- with_otel_record({
-    model <- test_model(params = params(temperature = 0.5, max_tokens = 10))
+    model <- test_model(
+      params = params(
+        temperature = 0.5,
+        max_tokens = 10,
+        reasoning_effort = "low"
+      )
+    )
     chat <- Chat$new(test_provider(), model = model)
     chat$chat("hi")
   })[["traces"]]
@@ -480,8 +486,73 @@ test_that("request params are recorded as gen_ai.request.* attributes", {
   for (span in spans[c("invoke_agent", "chat ")]) {
     expect_equal(span$attributes[["gen_ai.request.temperature"]], 0.5)
     expect_equal(span$attributes[["gen_ai.request.max_tokens"]], 10)
+    expect_equal(span$attributes[["gen_ai.request.reasoning.level"]], "low")
     expect_null(span$attributes[["gen_ai.request.top_p"]])
   }
+})
+
+test_that("chat span records server, output type, and tool definitions", {
+  skip_if_not_installed("otelsdk")
+  withr::local_envvar(
+    OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = "true"
+  )
+
+  tool_f <- tool(
+    function(x) x,
+    name = "echo",
+    description = "Echo",
+    arguments = list(x = type_string("Input"))
+  )
+  spans <- with_otel_record({
+    provider <- test_provider(base_url = "https://example.com/v1")
+    local({
+      local_chat_otel_span(
+        provider,
+        test_model(),
+        type = type_string(),
+        tools = list(echo = tool_f)
+      )
+    })
+  })[["traces"]]
+
+  attrs <- spans[["chat "]]$attributes
+  expect_equal(attrs[["server.address"]], "example.com")
+  expect_equal(attrs[["server.port"]], 443L)
+  expect_equal(attrs[["gen_ai.output.type"]], "json")
+
+  defs <- jsonlite::fromJSON(
+    attrs[["gen_ai.tool.definitions"]],
+    simplifyVector = FALSE
+  )
+  expect_length(defs, 1L)
+  expect_equal(defs[[1]]$type, "function")
+  expect_equal(defs[[1]]$name, "echo")
+  expect_equal(defs[[1]]$description, "Echo")
+  expect_equal(defs[[1]]$parameters$properties$x$type, "string")
+})
+
+test_that("reasoning tokens are recorded on the chat span", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(
+    chat_perform = function(...) list(),
+    resp_body_json = function(...) list(),
+    resp_timing = function(...) list(total = 1),
+    value_reasoning_tokens = function(provider, json) 7,
+    value_turn = function(provider, model, result, has_type = FALSE) {
+      AssistantTurn(list(ContentText("hi")), tokens = c(0, 0, 0), cost = 0)
+    }
+  )
+
+  spans <- with_otel_record({
+    chat <- Chat$new(test_provider(), model = test_model())
+    chat$chat("hi")
+  })[["traces"]]
+
+  expect_equal(
+    spans[["chat "]]$attributes[["gen_ai.usage.reasoning.output_tokens"]],
+    7L
+  )
 })
 
 test_that("captures content when OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT is set", {
