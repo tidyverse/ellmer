@@ -328,15 +328,66 @@ test_that("time to first token is recorded at the first non-empty text token", {
     }
   )
 
-  spans <- with_otel_record({
-    chat <- Chat$new(test_provider(), model = test_model())
+  recorded <- with_otel_record({
+    chat <- Chat$new(test_provider("Test"), model = test_model("test-model"))
     coro::collect(chat$stream("hi"))
-  })[["traces"]]
+  })
 
-  chat_spans <- Filter(function(x) startsWith(x$name, "chat"), spans)
+  chat_spans <- Filter(function(x) startsWith(x$name, "chat"), recorded$traces)
   ttft <- chat_spans[[1L]]$attributes[["gen_ai.response.time_to_first_chunk"]]
   expect_type(ttft, "double")
   expect_gt(ttft, 0)
+
+  points <- otel_metric_points(recorded$metrics)
+  expect_setequal(
+    names(points),
+    c("gen_ai.client.operation.duration", "gen_ai.server.time_to_first_token")
+  )
+  ttft_point <- points[["gen_ai.server.time_to_first_token"]][[1L]]
+  expect_equal(ttft_point$count, 1L)
+  expect_equal(ttft_point$sum, ttft)
+  expect_equal(
+    ttft_point$attributes,
+    list(
+      "gen_ai.operation.name" = "chat",
+      "gen_ai.provider.name" = "test",
+      "gen_ai.request.model" = "test-model"
+    )
+  )
+})
+
+test_that("token usage and operation duration are recorded as metrics", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(
+    chat_perform = function(...) list(),
+    resp_body_json = function(...) list(),
+    resp_timing = function(...) list(total = 1),
+    value_tokens = function(provider, result) {
+      list(input = 3, cached_input = 1, output = 5)
+    },
+    value_turn = function(provider, model, result, has_type = FALSE) {
+      AssistantTurn(list(ContentText("hi")), tokens = c(0, 0, 0), cost = 0)
+    }
+  )
+
+  recorded <- with_otel_record({
+    chat <- Chat$new(test_provider(), model = test_model())
+    chat$chat("hi")
+  })
+
+  points <- otel_metric_points(recorded$metrics)
+  expect_setequal(
+    names(points),
+    c("gen_ai.client.operation.duration", "gen_ai.client.token.usage")
+  )
+  usage <- points[["gen_ai.client.token.usage"]]
+  usage <- set_names(
+    map_dbl(usage, \(x) x$sum),
+    map_chr(usage, \(x) x$attributes[["gen_ai.token.type"]])
+  )
+  expect_equal(usage, c(input = 4, output = 5))
+  expect_equal(points[["gen_ai.client.operation.duration"]][[1L]]$count, 1L)
 })
 
 test_that("captures content when OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT is set", {
