@@ -1022,7 +1022,7 @@ Chat <- R6::R6Class(
                 is_stream_text_content(content) &&
                 nzchar(text)
             ) {
-              record_chat_otel_span_ttft(chat_span, stream_start)
+              record_chat_otel_span_ttft_attr(chat_span, stream_start)
               stream_start <- NULL
             }
             if (yield_as_content) {
@@ -1192,7 +1192,7 @@ Chat <- R6::R6Class(
                 is_stream_text_content(content) &&
                 nzchar(text)
             ) {
-              record_chat_otel_span_ttft(chat_span, stream_start)
+              record_chat_otel_span_ttft_attr(chat_span, stream_start)
               stream_start <- NULL
             }
             if (yield_as_content) {
