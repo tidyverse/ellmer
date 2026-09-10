@@ -217,9 +217,8 @@ local({
     agent_span <-
       otel::start_span(
         "invoke_agent",
-        # ellmer's agent loop runs in-process, so the span is "internal" per
-        # the GenAI semantic conventions.
-        options = list(kind = "internal"),
+        # TODO: "client" vs "internal" is under discussion, see #1146.
+        options = list(kind = "client"),
         attributes = c(
           compact(list(
             "gen_ai.operation.name" = "invoke_agent",
