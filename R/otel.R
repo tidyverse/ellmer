@@ -454,27 +454,25 @@ tally_agent_otel_turn <- function(tally, turn) {
   invisible(tally)
 }
 
+# Records the invoke_agent metrics and, mirroring the chat span, also sets
+# them as attributes on the invoke_agent span.
 record_agent_otel <- function(span, provider, model, tally) {
   attributes <- otel_metric_attributes(provider, model)
   attributes[["gen_ai.operation.name"]] <- "invoke_agent"
-  otel_record_histogram(
-    "gen_ai.invoke_agent.duration",
-    elapsed_secs(tally$start),
-    attributes
+  values <- list(
+    "gen_ai.invoke_agent.duration" = elapsed_secs(tally$start),
+    "gen_ai.invoke_agent.inference_calls" = tally$inference_calls,
+    "gen_ai.invoke_agent.tool_calls" = tally$tool_calls
   )
-  otel_record_histogram(
-    "gen_ai.invoke_agent.inference_calls",
-    tally$inference_calls,
-    attributes
-  )
-  otel_record_histogram(
-    "gen_ai.invoke_agent.tool_calls",
-    tally$tool_calls,
-    attributes
-  )
+  for (name in names(values)) {
+    otel_record_histogram(name, values[[name]], attributes)
+  }
 
   if (is.null(span) || !span_recording(span)) {
     return()
+  }
+  for (name in names(values)) {
+    span$set_attribute(name, values[[name]])
   }
   input <- as.integer(tally$tokens[[1]] + tally$tokens[[3]])
   output <- as.integer(tally$tokens[[2]])
