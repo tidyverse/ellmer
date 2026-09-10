@@ -1016,21 +1016,20 @@ Chat <- R6::R6Class(
             result,
             turns = request_turns
           )
+          if (
+            !is.null(stream_start) &&
+              stream_output_started(private$provider, chunk)
+          ) {
+            record_chat_otel_ttft(
+              chat_span,
+              private$provider,
+              private$model,
+              stream_start
+            )
+            stream_start <- NULL
+          }
           for (content in contents) {
             text <- content_text(content)
-            if (
-              !is.null(stream_start) &&
-                is_stream_text_content(content) &&
-                nzchar(text)
-            ) {
-              record_chat_otel_ttft(
-                chat_span,
-                private$provider,
-                private$model,
-                stream_start
-              )
-              stream_start <- NULL
-            }
             if (yield_as_content) {
               yield(content)
             } else if (is_stream_text_content(content)) {
@@ -1204,21 +1203,20 @@ Chat <- R6::R6Class(
             result,
             turns = request_turns
           )
+          if (
+            !is.null(stream_start) &&
+              stream_output_started(private$provider, chunk)
+          ) {
+            record_chat_otel_ttft(
+              chat_span,
+              private$provider,
+              private$model,
+              stream_start
+            )
+            stream_start <- NULL
+          }
           for (content in contents) {
             text <- content_text(content)
-            if (
-              !is.null(stream_start) &&
-                is_stream_text_content(content) &&
-                nzchar(text)
-            ) {
-              record_chat_otel_ttft(
-                chat_span,
-                private$provider,
-                private$model,
-                stream_start
-              )
-              stream_start <- NULL
-            }
             if (yield_as_content) {
               yield(content)
             } else if (is_stream_text_content(content)) {

@@ -273,6 +273,9 @@ method(stream_content, ProviderOpenAI) <- function(
     list()
   }
 }
+method(stream_output_started, ProviderOpenAI) <- function(provider, chunk) {
+  identical(chunk$type, "response.output_item.added")
+}
 method(stream_merge_chunks, ProviderOpenAI) <- function(
   provider,
   result,
