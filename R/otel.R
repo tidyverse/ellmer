@@ -277,7 +277,7 @@ otel_chat_input <- function(private, user_turn) {
 
 # Records the time to first token (in seconds) on the chat span, following
 # the unit of the `gen_ai.server.time_to_first_token` semconv metric.
-record_chat_otel_span_ttft <- function(span, start) {
+record_chat_otel_span_ttft_attr <- function(span, start) {
   if (is.null(span) || !span_recording(span)) {
     return()
   }
