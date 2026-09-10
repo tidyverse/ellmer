@@ -5,11 +5,31 @@ otel_capture_content_enabled <- NULL
 local_chat_otel_span <- NULL
 local_tool_otel_span <- NULL
 local_agent_otel_span <- NULL
+otel_record_histogram <- NULL
+
+# Histograms from the GenAI semantic conventions for metrics.
+# See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/
+otel_histogram_specs <- list(
+  "gen_ai.client.operation.duration" = list(
+    description = "GenAI operation duration",
+    unit = "s"
+  ),
+  "gen_ai.client.token.usage" = list(
+    description = "Number of input and output tokens used",
+    unit = "{token}"
+  ),
+  "gen_ai.server.time_to_first_token" = list(
+    description = "Time to generate first token for successful responses",
+    unit = "s"
+  )
+)
 
 local({
   otel_is_tracing <- FALSE
   otel_tracer <- NULL
   otel_capture_content <- FALSE
+  otel_is_measuring <- FALSE
+  otel_histograms <- list()
 
   otel_cache_tracer <<- function() {
     if (!requireNamespace("otel", quietly = TRUE)) {
@@ -21,9 +41,25 @@ local({
       val <- Sys.getenv("OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT")
       tolower(val) %in% c("true", "1")
     }
+
+    otel_meter <- otel::get_meter(otel_tracer_name)
+    otel_is_measuring <<- otel::is_measuring_enabled(otel_meter)
+    otel_histograms <<- if (otel_is_measuring) {
+      imap(otel_histogram_specs, function(spec, name) {
+        otel_meter$create_histogram(name, spec$description, unit = spec$unit)
+      })
+    }
   }
 
   otel_capture_content_enabled <<- function() otel_capture_content
+
+  otel_record_histogram <<- function(name, value, attributes) {
+    if (!otel_is_measuring) {
+      return()
+    }
+    otel_histograms[[name]]$record(value, attributes = compact(attributes))
+    invisible()
+  }
 
   local_chat_otel_span <<- function(
     provider,
@@ -182,11 +218,69 @@ with_otel_record <- function(expr) {
   on.exit(otel_cache_tracer())
   otelsdk::with_otel_record({
     otel_cache_tracer()
-    expr
+    value <- expr
+    # otelsdk (<= 0.2.4) only exports in-memory metrics on shutdown, which
+    # happens after they are collected. Shut down early so they are returned.
+    meter_provider <- otel::get_default_meter_provider()
+    meter_provider$flush()
+    meter_provider$shutdown()
+    value
   })
 }
 
-record_chat_otel_span_status <- function(span, provider, result) {
+# Flatten recorded metrics into a list of data points named by instrument.
+otel_metric_points <- function(metrics) {
+  scopes <- unlist(lapply(metrics, \(x) x$scope_metric_data), recursive = FALSE)
+  data <- unlist(lapply(scopes, \(x) x$metric_data), recursive = FALSE)
+  points <- lapply(data, function(metric) {
+    lapply(metric$point_data_attr, function(point) {
+      list(
+        attributes = unclass(point$attributes),
+        count = point$value$count,
+        sum = point$value$sum
+      )
+    })
+  })
+  set_names(points, map_chr(data, \(x) x$instrument_name))
+}
+
+otel_metric_attributes <- function(provider, model, result = NULL) {
+  list(
+    "gen_ai.operation.name" = "chat",
+    "gen_ai.provider.name" = tolower(provider@name),
+    "gen_ai.request.model" = model@name,
+    "gen_ai.response.model" = result$model
+  )
+}
+
+elapsed_secs <- function(start) {
+  as.numeric(Sys.time() - start, units = "secs")
+}
+
+record_chat_otel_span_status <- function(span, provider, model, result, start) {
+  attributes <- otel_metric_attributes(provider, model, result)
+  otel_record_histogram(
+    "gen_ai.client.operation.duration",
+    elapsed_secs(start),
+    attributes
+  )
+
+  tokens <- value_tokens(provider, result)
+  input <- as.integer(tokens$input + tokens$cached_input)
+  output <- as.integer(tokens$output)
+  if (input > 0L || output > 0L) {
+    otel_record_histogram(
+      "gen_ai.client.token.usage",
+      input,
+      c(attributes, "gen_ai.token.type" = "input")
+    )
+    otel_record_histogram(
+      "gen_ai.client.token.usage",
+      output,
+      c(attributes, "gen_ai.token.type" = "output")
+    )
+  }
+
   if (is.null(span) || !span_recording(span)) {
     return()
   }
@@ -196,9 +290,6 @@ record_chat_otel_span_status <- function(span, provider, result) {
   if (!is.null(result$id)) {
     span$set_attribute("gen_ai.response.id", result$id)
   }
-  tokens <- value_tokens(provider, result)
-  input <- as.integer(tokens$input + tokens$cached_input)
-  output <- as.integer(tokens$output)
   if (input > 0L || output > 0L) {
     span$set_attribute("gen_ai.usage.input_tokens", input)
     span$set_attribute("gen_ai.usage.output_tokens", output)
@@ -275,16 +366,19 @@ otel_chat_input <- function(private, user_turn) {
   )
 }
 
-# Records the time to first token (in seconds) on the chat span as the
-# `gen_ai.response.time_to_first_chunk` semconv attribute.
-record_chat_otel_span_ttft_attr <- function(span, start) {
+# Records the time to first token (in seconds) as a chat span attribute and
+# as the `gen_ai.server.time_to_first_token` histogram.
+record_chat_otel_ttft <- function(span, provider, model, start) {
+  ttft <- elapsed_secs(start)
+  otel_record_histogram(
+    "gen_ai.server.time_to_first_token",
+    ttft,
+    otel_metric_attributes(provider, model)
+  )
   if (is.null(span) || !span_recording(span)) {
     return()
   }
-  span$set_attribute(
-    "gen_ai.response.time_to_first_chunk",
-    as.numeric(Sys.time() - start, units = "secs")
-  )
+  span$set_attribute("gen_ai.response.time_to_first_chunk", ttft)
 }
 
 record_chat_otel_span_output <- function(span, turn) {
