@@ -439,3 +439,12 @@ test_that("stream_output_started() detects the first output item", {
     list(type = "response.output_item.added")
   ))
 })
+
+test_that("value_reasoning_tokens() reads reasoning tokens from usage", {
+  provider <- chat_openai(credentials = \() "key")$get_provider()
+  json <- list(
+    usage = list(output_tokens_details = list(reasoning_tokens = 12))
+  )
+  expect_equal(value_reasoning_tokens(provider, json), 12)
+  expect_null(value_reasoning_tokens(provider, list(usage = list())))
+})
