@@ -222,7 +222,7 @@ invoke_tool <- function(
       new_tool_result(request, result)
     },
     error = function(e) {
-      record_tool_otel_span_error(tool_span, e)
+      record_otel_span_error(tool_span, e)
       new_tool_result(request, error = e)
     }
   )
@@ -258,7 +258,7 @@ on_load(
         new_tool_result(request, value)
       },
       error = function(e) {
-        record_tool_otel_span_error(tool_span, e)
+        record_otel_span_error(tool_span, e)
         new_tool_result(request, error = e)
       }
     )

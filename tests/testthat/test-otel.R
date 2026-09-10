@@ -337,6 +337,7 @@ test_that("time to first chunk is recorded on the first streamed chunk", {
   ttft <- chat_spans[[1L]]$attributes[["gen_ai.response.time_to_first_chunk"]]
   expect_type(ttft, "double")
   expect_gt(ttft, 0)
+  expect_equal(chat_spans[[1L]]$attributes[["gen_ai.request.stream"]], TRUE)
 
   points <- otel_metric_points(recorded$metrics)
   expect_setequal(
@@ -373,7 +374,12 @@ test_that("token usage and operation duration are recorded as metrics", {
       list(input = 3, cached_input = 1, output = 5)
     },
     value_turn = function(provider, model, result, has_type = FALSE) {
-      AssistantTurn(list(ContentText("hi")), tokens = c(3, 5, 1), cost = 0)
+      AssistantTurn(
+        list(ContentText("hi")),
+        tokens = c(3, 5, 1),
+        cost = 0,
+        finish_reason = "stop"
+      )
     }
   )
 
@@ -381,6 +387,14 @@ test_that("token usage and operation duration are recorded as metrics", {
     chat <- Chat$new(test_provider(), model = test_model())
     chat$chat("hi")
   })
+
+  chat_span <- recorded$traces[["chat "]]
+  expect_equal(
+    chat_span$attributes[["gen_ai.usage.cache_read.input_tokens"]],
+    1L
+  )
+  expect_equal(chat_span$attributes[["gen_ai.response.finish_reasons"]], "stop")
+  expect_null(chat_span$attributes[["gen_ai.request.stream"]])
 
   points <- otel_metric_points(recorded$metrics)
   expect_setequal(
@@ -429,6 +443,30 @@ test_that("gen_ai.provider.name uses semconv identifiers for known providers", {
     "azure.ai.openai"
   )
   expect_equal(otel_provider_name(test_provider("LM Studio")), "lm studio")
+})
+
+test_that("request errors are recorded on spans and metrics", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(chat_perform = function(...) stop("boom"))
+
+  recorded <- with_otel_record({
+    chat <- Chat$new(test_provider(), model = test_model())
+    expect_snapshot(chat$chat("hi"), error = TRUE)
+  })
+
+  for (span in recorded$traces[c("invoke_agent", "chat ")]) {
+    expect_equal(span$status, "error")
+    expect_equal(span$attributes[["error.type"]], "simpleError")
+  }
+
+  points <- otel_metric_points(recorded$metrics)
+  for (name in c(
+    "gen_ai.client.inference.duration",
+    "gen_ai.invoke_agent.duration"
+  )) {
+    expect_equal(points[[name]][[1L]]$attributes[["error.type"]], "simpleError")
+  }
 })
 
 test_that("request params are recorded as gen_ai.request.* attributes", {
