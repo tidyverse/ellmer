@@ -5,7 +5,6 @@ otel_capture_content_enabled <- NULL
 local_chat_otel_span <- NULL
 local_tool_otel_span <- NULL
 local_agent_otel_span <- NULL
-local_stream_otel_span <- NULL
 
 local({
   otel_is_tracing <- FALSE
@@ -169,29 +168,6 @@ local({
 
     agent_span
   }
-
-  # Starts a child span of a chat span covering the streamed portion of the
-  # response. Call it when the first text token arrives: the gap between the
-  # chat span start and this span's start is the time to first token.
-  local_stream_otel_span <<- function(
-    model,
-    parent = NULL,
-    local_envir = parent.frame()
-  ) {
-    if (!otel_is_tracing) {
-      return()
-    }
-    stream_span <-
-      otel::start_span(
-        sprintf("stream %s", model@name),
-        options = list(parent = parent),
-        tracer = otel_tracer
-      )
-
-    defer(otel::end_span(stream_span), envir = local_envir)
-
-    stream_span
-  }
 })
 
 tracer_enabled <- function(tracer) {
@@ -296,6 +272,18 @@ otel_chat_input <- function(private, user_turn) {
   list(
     turns = c(history, list(user_turn)),
     system_prompt = sys_turn
+  )
+}
+
+# Records the time to first token (in seconds) on the chat span, following
+# the unit of the `gen_ai.server.time_to_first_token` semconv metric.
+record_chat_otel_span_ttft <- function(span, start) {
+  if (is.null(span) || !span_recording(span)) {
+    return()
+  }
+  span$set_attribute(
+    "gen_ai.server.time_to_first_token",
+    as.numeric(Sys.time() - start, units = "secs")
   )
 }
 
