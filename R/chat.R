@@ -777,6 +777,13 @@ Chat <- R6::R6Class(
         activate = FALSE,
         conversation_id = private$.conversation_id
       )
+      agent_tally <- new_agent_otel_tally()
+      defer(record_agent_otel(
+        agent_span,
+        private$provider,
+        private$model,
+        agent_tally
+      ))
 
       while (!is.null(user_turn)) {
         private$callback_on_request_start$invoke(c(
@@ -797,6 +804,7 @@ Chat <- R6::R6Class(
         }
 
         assistant_turn <- self$last_turn()
+        tally_agent_otel_turn(agent_tally, assistant_turn)
         private$callback_on_request_end$invoke(assistant_turn)
         user_turn <- NULL
 
@@ -872,6 +880,13 @@ Chat <- R6::R6Class(
         activate = FALSE,
         conversation_id = private$.conversation_id
       )
+      agent_tally <- new_agent_otel_tally()
+      defer(record_agent_otel(
+        agent_span,
+        private$provider,
+        private$model,
+        agent_tally
+      ))
 
       while (!is.null(user_turn)) {
         await(private$callback_on_request_start$invoke_async(c(
@@ -892,6 +907,7 @@ Chat <- R6::R6Class(
         }
 
         assistant_turn <- self$last_turn()
+        tally_agent_otel_turn(agent_tally, assistant_turn)
         await(private$callback_on_request_end$invoke_async(assistant_turn))
         user_turn <- NULL
 
@@ -978,6 +994,7 @@ Chat <- R6::R6Class(
         conversation_id = private$.conversation_id
       )
 
+      request_start <- Sys.time()
       response <- chat_perform(
         provider = private$provider,
         model = private$model,
@@ -1005,7 +1022,7 @@ Chat <- R6::R6Class(
         acc$begin_turn(user_turn)
         on.exit(acc$finalize_turn(), add = TRUE)
 
-        stream_start <- Sys.time()
+        stream_start <- request_start
         result <- NULL
         for (chunk in response) {
           result <- stream_merge_chunks(private$provider, result, chunk)
@@ -1015,16 +1032,20 @@ Chat <- R6::R6Class(
             result,
             turns = request_turns
           )
+          if (
+            !is.null(stream_start) &&
+              stream_output_started(private$provider, chunk)
+          ) {
+            record_chat_otel_ttft(
+              chat_span,
+              private$provider,
+              private$model,
+              stream_start
+            )
+            stream_start <- NULL
+          }
           for (content in contents) {
             text <- content_text(content)
-            if (
-              !is.null(stream_start) &&
-                is_stream_text_content(content) &&
-                nzchar(text)
-            ) {
-              record_chat_otel_span_ttft_attr(chat_span, stream_start)
-              stream_start <- NULL
-            }
             if (yield_as_content) {
               yield(content)
             } else if (is_stream_text_content(content)) {
@@ -1050,7 +1071,13 @@ Chat <- R6::R6Class(
           }
         }
 
-        record_chat_otel_span_status(chat_span, private$provider, result)
+        record_chat_otel_span_status(
+          chat_span,
+          private$provider,
+          private$model,
+          result,
+          request_start
+        )
         turn <- acc$complete_turn(result, type = type)
         if (controller$cancelled) {
           turn <- self$last_turn()
@@ -1059,7 +1086,13 @@ Chat <- R6::R6Class(
       } else {
         result <- resp_body_json(response)
         duration <- resp_timing(response)[["total"]] %||% NA_real_
-        record_chat_otel_span_status(chat_span, private$provider, result)
+        record_chat_otel_span_status(
+          chat_span,
+          private$provider,
+          private$model,
+          result,
+          request_start
+        )
         turn <- acc$add_turn(user_turn, result, duration, type = type)
         record_chat_otel_span_output(chat_span, turn)
 
@@ -1148,6 +1181,7 @@ Chat <- R6::R6Class(
         conversation_id = private$.conversation_id
       )
 
+      request_start <- Sys.time()
       response <- chat_perform(
         provider = private$provider,
         model = private$model,
@@ -1175,7 +1209,7 @@ Chat <- R6::R6Class(
         acc$begin_turn(user_turn)
         on.exit(acc$finalize_turn(), add = TRUE)
 
-        stream_start <- Sys.time()
+        stream_start <- request_start
         result <- NULL
         for (chunk in await_each(response)) {
           result <- stream_merge_chunks(private$provider, result, chunk)
@@ -1185,16 +1219,20 @@ Chat <- R6::R6Class(
             result,
             turns = request_turns
           )
+          if (
+            !is.null(stream_start) &&
+              stream_output_started(private$provider, chunk)
+          ) {
+            record_chat_otel_ttft(
+              chat_span,
+              private$provider,
+              private$model,
+              stream_start
+            )
+            stream_start <- NULL
+          }
           for (content in contents) {
             text <- content_text(content)
-            if (
-              !is.null(stream_start) &&
-                is_stream_text_content(content) &&
-                nzchar(text)
-            ) {
-              record_chat_otel_span_ttft_attr(chat_span, stream_start)
-              stream_start <- NULL
-            }
             if (yield_as_content) {
               yield(content)
             } else if (is_stream_text_content(content)) {
@@ -1220,7 +1258,13 @@ Chat <- R6::R6Class(
           }
         }
 
-        record_chat_otel_span_status(chat_span, private$provider, result)
+        record_chat_otel_span_status(
+          chat_span,
+          private$provider,
+          private$model,
+          result,
+          request_start
+        )
         turn <- acc$complete_turn(result, type = type)
         if (controller$cancelled) {
           turn <- self$last_turn()
@@ -1230,7 +1274,13 @@ Chat <- R6::R6Class(
         response <- await(response)
         result <- resp_body_json(response)
         duration <- resp_timing(response)[["total"]] %||% NA_real_
-        record_chat_otel_span_status(chat_span, private$provider, result)
+        record_chat_otel_span_status(
+          chat_span,
+          private$provider,
+          private$model,
+          result,
+          request_start
+        )
         turn <- acc$add_turn(user_turn, result, duration, type = type)
         record_chat_otel_span_output(chat_span, turn)
 
