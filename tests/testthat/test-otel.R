@@ -98,7 +98,7 @@ test_that("tracing works as expected for synchronous streams", {
 
   # Time to first token is recorded on the streamed chat span.
   expect_gt(
-    chat_spans[[1L]]$attributes[["gen_ai.server.time_to_first_token"]],
+    chat_spans[[1L]]$attributes[["gen_ai.response.time_to_first_chunk"]],
     0
   )
 
@@ -285,7 +285,7 @@ test_that("tracing works as expected for asynchronous streams", {
 
   # Time to first token is recorded on the streamed chat span.
   expect_gt(
-    chat_spans[[1L]]$attributes[["gen_ai.server.time_to_first_token"]],
+    chat_spans[[1L]]$attributes[["gen_ai.response.time_to_first_chunk"]],
     0
   )
 
@@ -334,7 +334,7 @@ test_that("time to first token is recorded at the first non-empty text token", {
   })[["traces"]]
 
   chat_spans <- Filter(function(x) startsWith(x$name, "chat"), spans)
-  ttft <- chat_spans[[1L]]$attributes[["gen_ai.server.time_to_first_token"]]
+  ttft <- chat_spans[[1L]]$attributes[["gen_ai.response.time_to_first_chunk"]]
   expect_type(ttft, "double")
   expect_gt(ttft, 0)
 })

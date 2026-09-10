@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* Streamed responses now record the time to first token (in seconds) as the `gen_ai.server.time_to_first_token` attribute on the OpenTelemetry `chat` span (@schloerke).
+* Streamed responses now record the time to first token (in seconds) as the `gen_ai.response.time_to_first_chunk` attribute on the OpenTelemetry `chat` span (@schloerke).
 
 # ellmer 0.5.0
 
