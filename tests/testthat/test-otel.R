@@ -12,7 +12,7 @@ test_that("tracing works as expected for synchronous chats", {
   agent_spans <- Filter(function(x) x$name == "invoke_agent", spans)
   expect_length(agent_spans, 2L)
   expect_equal(agent_spans[[1L]]$parent, agent_spans[[2L]]$parent)
-  expect_equal(agent_spans[[1L]]$kind, "client")
+  expect_equal(agent_spans[[1L]]$kind, "internal")
   agent_span_ids <- sapply(agent_spans, function(x) x$span_id)
 
   # We should have (at least) two "execute_tool" spans
@@ -343,7 +343,10 @@ test_that("time to first token is recorded when output starts", {
     names(points),
     c(
       "gen_ai.client.operation.duration",
-      "gen_ai.client.operation.time_to_first_chunk"
+      "gen_ai.client.operation.time_to_first_chunk",
+      "gen_ai.invoke_agent.duration",
+      "gen_ai.invoke_agent.inference_calls",
+      "gen_ai.invoke_agent.tool_calls"
     )
   )
   ttft_point <- points[["gen_ai.client.operation.time_to_first_chunk"]][[1L]]
@@ -370,7 +373,7 @@ test_that("token usage and operation duration are recorded as metrics", {
       list(input = 3, cached_input = 1, output = 5)
     },
     value_turn = function(provider, model, result, has_type = FALSE) {
-      AssistantTurn(list(ContentText("hi")), tokens = c(0, 0, 0), cost = 0)
+      AssistantTurn(list(ContentText("hi")), tokens = c(3, 5, 1), cost = 0)
     }
   )
 
@@ -382,7 +385,13 @@ test_that("token usage and operation duration are recorded as metrics", {
   points <- otel_metric_points(recorded$metrics)
   expect_setequal(
     names(points),
-    c("gen_ai.client.operation.duration", "gen_ai.client.token.usage")
+    c(
+      "gen_ai.client.operation.duration",
+      "gen_ai.client.token.usage",
+      "gen_ai.invoke_agent.duration",
+      "gen_ai.invoke_agent.inference_calls",
+      "gen_ai.invoke_agent.tool_calls"
+    )
   )
   usage <- points[["gen_ai.client.token.usage"]]
   usage <- set_names(
@@ -391,6 +400,44 @@ test_that("token usage and operation duration are recorded as metrics", {
   )
   expect_equal(usage, c(input = 4, output = 5))
   expect_equal(points[["gen_ai.client.operation.duration"]][[1L]]$count, 1L)
+  expect_equal(points[["gen_ai.invoke_agent.inference_calls"]][[1L]]$sum, 1)
+  expect_equal(points[["gen_ai.invoke_agent.tool_calls"]][[1L]]$sum, 0)
+  expect_equal(
+    points[["gen_ai.invoke_agent.duration"]][[1L]]$attributes[[
+      "gen_ai.operation.name"
+    ]],
+    "invoke_agent"
+  )
+
+  # Token usage is also totalled on the invoke_agent span.
+  agent_span <- recorded$traces[["invoke_agent"]]
+  expect_equal(agent_span$attributes[["gen_ai.usage.input_tokens"]], 4L)
+  expect_equal(agent_span$attributes[["gen_ai.usage.output_tokens"]], 5L)
+})
+
+test_that("request params are recorded as gen_ai.request.* attributes", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(
+    chat_perform = function(...) list(),
+    resp_body_json = function(...) list(),
+    resp_timing = function(...) list(total = 1),
+    value_turn = function(provider, model, result, has_type = FALSE) {
+      AssistantTurn(list(ContentText("hi")), tokens = c(0, 0, 0), cost = 0)
+    }
+  )
+
+  spans <- with_otel_record({
+    model <- test_model(params = params(temperature = 0.5, max_tokens = 10))
+    chat <- Chat$new(test_provider(), model = model)
+    chat$chat("hi")
+  })[["traces"]]
+
+  for (span in spans[c("invoke_agent", "chat ")]) {
+    expect_equal(span$attributes[["gen_ai.request.temperature"]], 0.5)
+    expect_equal(span$attributes[["gen_ai.request.max_tokens"]], 10)
+    expect_null(span$attributes[["gen_ai.request.top_p"]])
+  }
 })
 
 test_that("captures content when OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT is set", {

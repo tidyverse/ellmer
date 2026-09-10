@@ -782,6 +782,13 @@ Chat <- R6::R6Class(
         activate = FALSE,
         conversation_id = private$.conversation_id
       )
+      agent_tally <- new_agent_otel_tally()
+      defer(record_agent_otel(
+        agent_span,
+        private$provider,
+        private$model,
+        agent_tally
+      ))
 
       while (!is.null(user_turn)) {
         private$callback_on_request_start$invoke(c(
@@ -802,6 +809,7 @@ Chat <- R6::R6Class(
         }
 
         assistant_turn <- self$last_turn()
+        tally_agent_otel_turn(agent_tally, assistant_turn)
         private$callback_on_request_end$invoke(assistant_turn)
         user_turn <- NULL
 
@@ -877,6 +885,13 @@ Chat <- R6::R6Class(
         activate = FALSE,
         conversation_id = private$.conversation_id
       )
+      agent_tally <- new_agent_otel_tally()
+      defer(record_agent_otel(
+        agent_span,
+        private$provider,
+        private$model,
+        agent_tally
+      ))
 
       while (!is.null(user_turn)) {
         await(private$callback_on_request_start$invoke_async(c(
@@ -897,6 +912,7 @@ Chat <- R6::R6Class(
         }
 
         assistant_turn <- self$last_turn()
+        tally_agent_otel_turn(agent_tally, assistant_turn)
         await(private$callback_on_request_end$invoke_async(assistant_turn))
         user_turn <- NULL
 
