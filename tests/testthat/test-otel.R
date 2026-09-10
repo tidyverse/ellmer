@@ -341,9 +341,12 @@ test_that("time to first token is recorded when output starts", {
   points <- otel_metric_points(recorded$metrics)
   expect_setequal(
     names(points),
-    c("gen_ai.client.operation.duration", "gen_ai.server.time_to_first_token")
+    c(
+      "gen_ai.client.operation.duration",
+      "gen_ai.client.operation.time_to_first_chunk"
+    )
   )
-  ttft_point <- points[["gen_ai.server.time_to_first_token"]][[1L]]
+  ttft_point <- points[["gen_ai.client.operation.time_to_first_chunk"]][[1L]]
   expect_equal(ttft_point$count, 1L)
   expect_equal(ttft_point$sum, ttft)
   expect_equal(
@@ -515,4 +518,33 @@ test_that("conversation id attribute is absent when unset", {
   expect_length(chat_spans, 1L)
   # Per the GenAI semantic conventions, no fallback identifier is invented
   expect_null(chat_spans[[1]]$attributes[["gen_ai.conversation.id"]])
+})
+
+test_that("tool execution duration is recorded as a metric", {
+  skip_if_not_installed("otelsdk")
+
+  request <- function(tool_f) {
+    ContentToolRequest(id = "x", name = "t", arguments = list(), tool = tool_f)
+  }
+  ok <- tool(function() 1, name = "t", description = "A tool")
+  bad <- tool(function() stop("boom"), name = "t", description = "A tool")
+
+  recorded <- with_otel_record({
+    invoke_tool(request(ok))
+    sync(invoke_tool_async(request(bad)))
+  })
+
+  points <- otel_metric_points(recorded$metrics)
+  expect_equal(names(points), "gen_ai.execute_tool.duration")
+  points <- points[["gen_ai.execute_tool.duration"]]
+  expect_length(points, 2L)
+  expect_all_equal(map_int(points, \(x) x$count), 1L)
+  expect_equal(
+    map(points, \(x) x$attributes[["gen_ai.tool.name"]]),
+    list("t", "t")
+  )
+  expect_equal(
+    map(points, \(x) x$attributes[["error.type"]]),
+    list(NULL, "simpleError")
+  )
 })

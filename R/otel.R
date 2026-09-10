@@ -18,8 +18,12 @@ otel_histogram_specs <- list(
     description = "Number of input and output tokens used",
     unit = "{token}"
   ),
-  "gen_ai.server.time_to_first_token" = list(
-    description = "Time to generate first token for successful responses",
+  "gen_ai.client.operation.time_to_first_chunk" = list(
+    description = "Time to receive the first chunk of a streamed response",
+    unit = "s"
+  ),
+  "gen_ai.execute_tool.duration" = list(
+    description = "The duration of a single tool execution",
     unit = "s"
   )
 )
@@ -367,11 +371,11 @@ otel_chat_input <- function(private, user_turn) {
 }
 
 # Records the time to first token (in seconds) as a chat span attribute and
-# as the `gen_ai.server.time_to_first_token` histogram.
+# as the `gen_ai.client.operation.time_to_first_chunk` histogram.
 record_chat_otel_ttft <- function(span, provider, model, start) {
   ttft <- elapsed_secs(start)
   otel_record_histogram(
-    "gen_ai.server.time_to_first_token",
+    "gen_ai.client.operation.time_to_first_chunk",
     ttft,
     otel_metric_attributes(provider, model)
   )
@@ -396,6 +400,23 @@ record_chat_otel_span_output <- function(span, turn) {
     "gen_ai.output.messages",
     jsonlite::toJSON(list(msg), auto_unbox = TRUE, null = "null")
   )
+}
+
+record_tool_otel_duration <- function(request, start, result) {
+  otel_record_histogram(
+    "gen_ai.execute_tool.duration",
+    elapsed_secs(start),
+    list(
+      "gen_ai.operation.name" = "execute_tool",
+      "gen_ai.tool.name" = request@tool@name,
+      "gen_ai.tool.type" = "function",
+      "error.type" = if (tool_errored(result)) tool_error_type(result)
+    )
+  )
+}
+
+tool_error_type <- function(result) {
+  if (is.character(result@error)) "error" else class(result@error)[1L]
 }
 
 record_tool_otel_span_error <- function(span, error) {
