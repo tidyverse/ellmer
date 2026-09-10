@@ -493,3 +493,12 @@ test_that("image detail is sent", {
   image <- content_image_url("https://example.com/image.png", detail = "low")
   expect_equal(as_json(provider, image)$content[[1]]$detail, "low")
 })
+
+test_that("value_reasoning_tokens() reads reasoning tokens from usage", {
+  provider <- chat_openai(credentials = \() "key")$get_provider()
+  json <- list(
+    usage = list(output_tokens_details = list(reasoning_tokens = 12))
+  )
+  expect_equal(value_reasoning_tokens(provider, json), 12)
+  expect_null(value_reasoning_tokens(provider, list(usage = list())))
+})
