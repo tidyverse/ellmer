@@ -409,10 +409,16 @@ test_that("token usage and operation duration are recorded as metrics", {
     "invoke_agent"
   )
 
-  # Token usage is also totalled on the invoke_agent span.
+  # Token usage and the agent metrics are also set on the invoke_agent span.
   agent_span <- recorded$traces[["invoke_agent"]]
   expect_equal(agent_span$attributes[["gen_ai.usage.input_tokens"]], 4L)
   expect_equal(agent_span$attributes[["gen_ai.usage.output_tokens"]], 5L)
+  expect_equal(
+    agent_span$attributes[["gen_ai.invoke_agent.inference_calls"]],
+    1L
+  )
+  expect_equal(agent_span$attributes[["gen_ai.invoke_agent.tool_calls"]], 0L)
+  expect_gt(agent_span$attributes[["gen_ai.invoke_agent.duration"]], 0)
 })
 
 test_that("request params are recorded as gen_ai.request.* attributes", {
