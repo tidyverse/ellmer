@@ -3,6 +3,7 @@
 * OpenAI-compatible providers, including `chat_posit()`, `chat_lmstudio()`, `chat_databricks()`, `chat_mistral()`, `chat_deepseek()`, `chat_perplexity()`, and `chat_cloudflare()`, now send standard JSON Schema instead of OpenAI's strict-mode schema, so `required = FALSE` tool arguments stay optional. `chat_openai()`, `chat_azure_openai()`, Groq's structured outputs, and `chat_posit()` models whose id starts with `openai/` keep strict mode. `chat_openai_compatible()`, `chat_vllm()`, `chat_openrouter()`, `chat_portkey()`, and `chat_huggingface()` gain a `strict` argument to opt back in (#1135).
 * `Chat$get_tokens()` no longer errors when the conversation ends with a user turn that has no completed assistant response yet, or with a partial (interrupted) assistant turn (@taekop, #1131).
 * `live_browser()` works again with shinychat >= 0.5.0 (#1167).
+* Streamed responses now emit an OpenTelemetry `stream` span, nested inside the `chat` span, that starts when the first text token arrives. The gap between the two span starts gives the time to first token (@schloerke).
 
 # ellmer 0.5.0
 

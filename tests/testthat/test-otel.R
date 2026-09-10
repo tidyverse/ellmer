@@ -96,6 +96,13 @@ test_that("tracing works as expected for synchronous streams", {
   expect_length(chat_spans, 1L)
   expect_equal(chat_spans[[1L]]$parent, spans[["invoke_agent"]]$span_id)
 
+  # And one "stream" span, starting at the first text token, nested in the
+  # chat span so the gap between their starts gives the time to first token.
+  stream_spans <- Filter(function(x) startsWith(x$name, "stream"), spans)
+  expect_length(stream_spans, 1L)
+  expect_equal(stream_spans[[1L]]$parent, chat_spans[[1L]]$span_id)
+  expect_gte(stream_spans[[1L]]$start_time, chat_spans[[1L]]$start_time)
+
   # Token usage attributes are recorded on the streamed chat span.
   expect_true(all(vapply(
     chat_spans,
@@ -277,6 +284,12 @@ test_that("tracing works as expected for asynchronous streams", {
   expect_length(chat_spans, 1L)
   expect_equal(chat_spans[[1L]]$parent, spans[["invoke_agent"]]$span_id)
 
+  # And one "stream" span nested in the chat span.
+  stream_spans <- Filter(function(x) startsWith(x$name, "stream"), spans)
+  expect_length(stream_spans, 1L)
+  expect_equal(stream_spans[[1L]]$parent, chat_spans[[1L]]$span_id)
+  expect_gte(stream_spans[[1L]]$start_time, chat_spans[[1L]]$start_time)
+
   # Verify that the spans started when the stream was suspended are not part of
   # the agent trace.
   expect_equal(spans[["concurrent"]]$parent, spans[["invoke_agent"]]$parent)
@@ -290,6 +303,42 @@ test_that("tracing works as expected for asynchronous streams", {
     function(x) x$parent %in% chat_span_ids,
     logical(1)
   )))
+})
+
+test_that("stream span starts at the first non-empty text token", {
+  skip_if_not_installed("otelsdk")
+
+  make_response <- function() {
+    coro::generator(function() {
+      yield(list(type = "chunk"))
+      yield(list(type = "chunk"))
+      yield(list(type = "chunk"))
+    })()
+  }
+  n <- 0
+  local_mocked_bindings(
+    chat_perform = function(...) make_response(),
+    stream_merge_chunks = function(provider, result, chunk) list(),
+    stream_content = function(provider, event, completion) {
+      n <<- n + 1
+      switch(n, list(ContentText("")), list(ContentText("hi")), list())
+    },
+    value_finish_reason = function(provider, result) "success",
+    value_turn = function(provider, model, result, has_type = FALSE) {
+      AssistantTurn(list(ContentText("hi")), tokens = c(0, 0, 0), cost = 0)
+    }
+  )
+
+  spans <- with_otel_record({
+    chat <- Chat$new(test_provider(), model = test_model())
+    coro::collect(chat$stream("hi"))
+  })[["traces"]]
+
+  chat_spans <- Filter(function(x) startsWith(x$name, "chat"), spans)
+  stream_spans <- Filter(function(x) startsWith(x$name, "stream"), spans)
+  expect_length(stream_spans, 1L)
+  expect_equal(stream_spans[[1L]]$parent, chat_spans[[1L]]$span_id)
+  expect_gte(stream_spans[[1L]]$start_time, chat_spans[[1L]]$start_time)
 })
 
 test_that("captures content when OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT is set", {
