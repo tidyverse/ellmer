@@ -25,8 +25,35 @@ otel_histogram_specs <- list(
   "gen_ai.execute_tool.duration" = list(
     description = "The duration of a single tool execution",
     unit = "s"
+  ),
+  "gen_ai.invoke_agent.duration" = list(
+    description = "The end-to-end duration of a single agent invocation",
+    unit = "s"
+  ),
+  "gen_ai.invoke_agent.inference_calls" = list(
+    description = "The number of inference calls made during an agent invocation",
+    unit = "{inference_call}"
+  ),
+  "gen_ai.invoke_agent.tool_calls" = list(
+    description = "The number of tool calls made during an agent invocation",
+    unit = "{tool_call}"
   )
 )
+
+# Map `params()` onto the `gen_ai.request.*` span attributes.
+otel_request_attributes <- function(model) {
+  p <- model@params
+  compact(list(
+    "gen_ai.request.temperature" = p$temperature,
+    "gen_ai.request.top_p" = p$top_p,
+    "gen_ai.request.top_k" = p$top_k,
+    "gen_ai.request.frequency_penalty" = p$frequency_penalty,
+    "gen_ai.request.presence_penalty" = p$presence_penalty,
+    "gen_ai.request.seed" = p$seed,
+    "gen_ai.request.max_tokens" = p$max_tokens,
+    "gen_ai.request.stop_sequences" = p$stop_sequences
+  ))
+}
 
 local({
   otel_is_tracing <- FALSE
@@ -87,12 +114,15 @@ local({
         # Per the GenAI semantic conventions, gen_ai.conversation.id is only
         # set when the caller has a conversation identifier readily available;
         # never invent a fallback value.
-        attributes = compact(list(
-          "gen_ai.operation.name" = "chat",
-          "gen_ai.provider.name" = tolower(provider@name),
-          "gen_ai.request.model" = model@name,
-          "gen_ai.conversation.id" = conversation_id
-        )),
+        attributes = c(
+          compact(list(
+            "gen_ai.operation.name" = "chat",
+            "gen_ai.provider.name" = tolower(provider@name),
+            "gen_ai.request.model" = model@name,
+            "gen_ai.conversation.id" = conversation_id
+          )),
+          otel_request_attributes(model)
+        ),
         tracer = otel_tracer
       )
 
@@ -187,13 +217,18 @@ local({
     agent_span <-
       otel::start_span(
         "invoke_agent",
-        options = list(kind = "client"),
-        attributes = compact(list(
-          "gen_ai.operation.name" = "invoke_agent",
-          "gen_ai.provider.name" = tolower(provider@name),
-          "gen_ai.request.model" = model@name,
-          "gen_ai.conversation.id" = conversation_id
-        )),
+        # ellmer's agent loop runs in-process, so the span is "internal" per
+        # the GenAI semantic conventions.
+        options = list(kind = "internal"),
+        attributes = c(
+          compact(list(
+            "gen_ai.operation.name" = "invoke_agent",
+            "gen_ai.provider.name" = tolower(provider@name),
+            "gen_ai.request.model" = model@name,
+            "gen_ai.conversation.id" = conversation_id
+          )),
+          otel_request_attributes(model)
+        ),
         tracer = otel_tracer
       )
 
@@ -400,6 +435,54 @@ record_chat_otel_span_output <- function(span, turn) {
     "gen_ai.output.messages",
     jsonlite::toJSON(list(msg), auto_unbox = TRUE, null = "null")
   )
+}
+
+# Per-invocation counts backing the invoke_agent span attributes and metrics.
+new_agent_otel_tally <- function() {
+  env(
+    start = Sys.time(),
+    inference_calls = 0L,
+    tool_calls = 0L,
+    tokens = c(0, 0, 0)
+  )
+}
+
+tally_agent_otel_turn <- function(tally, turn) {
+  tally$inference_calls <- tally$inference_calls + 1L
+  tally$tool_calls <- tally$tool_calls + length(extract_tool_requests(turn))
+  # tokens are c(input, output, cached_input)
+  tally$tokens <- tally$tokens + ifelse(is.na(turn@tokens), 0, turn@tokens)
+  invisible(tally)
+}
+
+record_agent_otel <- function(span, provider, model, tally) {
+  attributes <- otel_metric_attributes(provider, model)
+  attributes[["gen_ai.operation.name"]] <- "invoke_agent"
+  otel_record_histogram(
+    "gen_ai.invoke_agent.duration",
+    elapsed_secs(tally$start),
+    attributes
+  )
+  otel_record_histogram(
+    "gen_ai.invoke_agent.inference_calls",
+    tally$inference_calls,
+    attributes
+  )
+  otel_record_histogram(
+    "gen_ai.invoke_agent.tool_calls",
+    tally$tool_calls,
+    attributes
+  )
+
+  if (is.null(span) || !span_recording(span)) {
+    return()
+  }
+  input <- as.integer(tally$tokens[[1]] + tally$tokens[[3]])
+  output <- as.integer(tally$tokens[[2]])
+  if (input > 0L || output > 0L) {
+    span$set_attribute("gen_ai.usage.input_tokens", input)
+    span$set_attribute("gen_ai.usage.output_tokens", output)
+  }
 }
 
 record_tool_otel_duration <- function(request, start, result) {
