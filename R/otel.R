@@ -5,6 +5,7 @@ otel_capture_content_enabled <- NULL
 local_chat_otel_span <- NULL
 local_tool_otel_span <- NULL
 local_agent_otel_span <- NULL
+local_stream_otel_span <- NULL
 
 local({
   otel_is_tracing <- FALSE
@@ -167,6 +168,29 @@ local({
     defer(otel::end_span(agent_span), envir = local_envir)
 
     agent_span
+  }
+
+  # Starts a child span of a chat span covering the streamed portion of the
+  # response. Call it when the first text token arrives: the gap between the
+  # chat span start and this span's start is the time to first token.
+  local_stream_otel_span <<- function(
+    model,
+    parent = NULL,
+    local_envir = parent.frame()
+  ) {
+    if (!otel_is_tracing) {
+      return()
+    }
+    stream_span <-
+      otel::start_span(
+        sprintf("stream %s", model@name),
+        options = list(parent = parent),
+        tracer = otel_tracer
+      )
+
+    defer(otel::end_span(stream_span), envir = local_envir)
+
+    stream_span
   }
 })
 

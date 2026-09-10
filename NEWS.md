@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* Streamed responses now emit an OpenTelemetry `stream` span, nested inside the `chat` span, that starts when the first text token arrives. The gap between the two span starts gives the time to first token (@schloerke).
+
 # ellmer 0.5.0
 
 ## Lifecycle changes
