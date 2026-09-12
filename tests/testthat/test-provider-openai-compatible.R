@@ -309,3 +309,22 @@ test_that("as_json() references uploaded documents but rejects images", {
     as_json(provider, ContentUploaded("file-1", "image/png"))
   )
 })
+
+test_that("image detail is included in requests", {
+  provider <- ProviderOpenAICompatible(name = "", base_url = "")
+  urls <- c("https://example.com/image.png", "data:image/png;base64,abcd")
+
+  for (url in urls) {
+    for (detail in c("auto", "low", "high")) {
+      image <- content_image_url(url, detail = detail)
+      expected_image <- list(url = url)
+      if (detail != "auto") {
+        expected_image$detail <- detail
+      }
+      expect_equal(
+        as_json(provider, image),
+        list(type = "image_url", image_url = expected_image)
+      )
+    }
+  }
+})

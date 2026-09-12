@@ -481,7 +481,13 @@ method(as_json, list(ProviderOpenAICompatible, ContentImageRemote)) <- function(
   x,
   ...
 ) {
-  list(type = "image_url", image_url = list(url = x@url))
+  list(
+    type = "image_url",
+    image_url = compact(list(
+      url = x@url,
+      detail = if (x@detail != "auto") x@detail
+    ))
+  )
 }
 
 method(as_json, list(ProviderOpenAICompatible, ContentImageInline)) <- function(
@@ -491,9 +497,10 @@ method(as_json, list(ProviderOpenAICompatible, ContentImageInline)) <- function(
 ) {
   list(
     type = "image_url",
-    image_url = list(
-      url = paste0("data:", x@type, ";base64,", x@data)
-    )
+    image_url = compact(list(
+      url = paste0("data:", x@type, ";base64,", x@data),
+      detail = if (x@detail != "auto") x@detail
+    ))
   )
 }
 
