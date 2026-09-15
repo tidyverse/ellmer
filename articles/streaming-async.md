@@ -82,9 +82,9 @@ The simplest approach is to use shinychat’s Shiny module to add a chat
 UI to your app—similar to the app created by
 [`live_browser()`](https://ellmer.tidyverse.org/reference/live_console.md)—using
 the
-[`shinychat::chat_mod_ui()`](https://posit-dev.github.io/shinychat/r/reference/chat_app.html)
+[`shinychat::chat_mod_ui()`](https://posit-dev.github.io/shinychat/r/reference/chat_mod_ui.html)
 and
-[`shinychat::chat_mod_server()`](https://posit-dev.github.io/shinychat/r/reference/chat_app.html)
+[`shinychat::chat_mod_server()`](https://posit-dev.github.io/shinychat/r/reference/chat_mod_ui.html)
 functions. These module functions connect an
 [`ellmer::Chat`](https://ellmer.tidyverse.org/reference/Chat.md) object
 to
