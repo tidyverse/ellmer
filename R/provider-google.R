@@ -117,7 +117,7 @@ chat_google_vertex <- function(
   echo <- check_echo(echo)
   credentials <- default_google_credentials(variant = "vertex")
 
-  provider <- ProviderGoogleGemini(
+  provider <- ProviderGoogle(
     name = "Google/Vertex",
     base_url = vertex_url(location, project_id),
     extra_headers = api_headers,
@@ -148,8 +148,8 @@ vertex_url <- function(location, project_id) {
   )
 }
 
-ProviderGoogleGemini <- new_class(
-  "ProviderGoogleGemini",
+ProviderGoogle <- new_class(
+  "ProviderGoogle",
   parent = Provider,
   properties = list(
     project_id = prop_string(allow_null = TRUE)
@@ -158,7 +158,7 @@ ProviderGoogleGemini <- new_class(
 
 # Base request -----------------------------------------------------------------
 
-method(base_request, ProviderGoogleGemini) <- function(provider) {
+method(base_request, ProviderGoogle) <- function(provider) {
   req <- request(provider@base_url)
   req <- ellmer_req_credentials(req, provider@credentials(), "x-goog-api-key")
   req <- ellmer_req_robustify(req)
@@ -172,7 +172,7 @@ method(base_request, ProviderGoogleGemini) <- function(provider) {
 
 # Chat -------------------------------------------------------------------------
 
-method(chat_request, ProviderGoogleGemini) <- function(
+method(chat_request, ProviderGoogle) <- function(
   provider,
   model,
   stream = TRUE,
@@ -214,7 +214,7 @@ method(chat_request, ProviderGoogleGemini) <- function(
   req
 }
 
-method(chat_body, ProviderGoogleGemini) <- function(
+method(chat_body, ProviderGoogle) <- function(
   provider,
   model,
   stream = TRUE,
@@ -275,7 +275,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
   ))
 }
 
-method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
+method(chat_params, ProviderGoogle) <- function(provider, params) {
   standardise_params(
     params,
     c(
@@ -296,14 +296,14 @@ method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
 
 # Gemini -> ellmer --------------------------------------------------------------
 
-method(stream_parse, ProviderGoogleGemini) <- function(provider, event) {
+method(stream_parse, ProviderGoogle) <- function(provider, event) {
   if (is.null(event)) {
     NULL
   } else {
     jsonlite::parse_json(event$data)
   }
 }
-method(stream_content, ProviderGoogleGemini) <- function(
+method(stream_content, ProviderGoogle) <- function(
   provider,
   event,
   completion = NULL
@@ -335,7 +335,7 @@ method(stream_content, ProviderGoogleGemini) <- function(
     google_url_context_contents(merged$urlContextMetadata)
   )
 }
-method(stream_merge_chunks, ProviderGoogleGemini) <- function(
+method(stream_merge_chunks, ProviderGoogle) <- function(
   provider,
   result,
   chunk
@@ -347,7 +347,7 @@ method(stream_merge_chunks, ProviderGoogleGemini) <- function(
   }
 }
 
-method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
+method(value_tokens, ProviderGoogle) <- function(provider, json) {
   # https://ai.google.dev/api/generate-content#UsageMetadata
   usage <- json$usageMetadata
 
@@ -373,7 +373,7 @@ method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
 }
 
 # https://ai.google.dev/api/generate-content
-method(value_finish_reason, ProviderGoogleGemini) <- function(
+method(value_finish_reason, ProviderGoogle) <- function(
   provider,
   result
 ) {
@@ -394,7 +394,7 @@ method(value_finish_reason, ProviderGoogleGemini) <- function(
   )
 }
 
-method(value_turn, ProviderGoogleGemini) <- function(
+method(value_turn, ProviderGoogle) <- function(
   provider,
   model,
   result,
@@ -566,7 +566,7 @@ google_retrieval_status <- function(status) {
 # ellmer -> Gemini --------------------------------------------------------------
 
 # https://ai.google.dev/api/caching#Content
-method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
+method(as_json, list(ProviderGoogle, Turn)) <- function(
   provider,
   x,
   ...
@@ -592,7 +592,7 @@ method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
 }
 
 
-method(as_json, list(ProviderGoogleGemini, ToolDef)) <- function(
+method(as_json, list(ProviderGoogle, ToolDef)) <- function(
   provider,
   x,
   ...
@@ -604,7 +604,7 @@ method(as_json, list(ProviderGoogleGemini, ToolDef)) <- function(
   ))
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentText)) <- function(
+method(as_json, list(ProviderGoogle, ContentText)) <- function(
   provider,
   x,
   ...
@@ -618,7 +618,7 @@ method(as_json, list(ProviderGoogleGemini, ContentText)) <- function(
   }
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentThinking)) <- function(
+method(as_json, list(ProviderGoogle, ContentThinking)) <- function(
   provider,
   x,
   ...
@@ -627,7 +627,7 @@ method(as_json, list(ProviderGoogleGemini, ContentThinking)) <- function(
   list(thought = TRUE, text = x@thinking)
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
+method(as_json, list(ProviderGoogle, ContentPDF)) <- function(
   provider,
   x,
   ...
@@ -640,7 +640,7 @@ method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
   )
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentDocument)) <- function(
+method(as_json, list(ProviderGoogle, ContentDocument)) <- function(
   provider,
   x,
   ...
@@ -661,7 +661,7 @@ method(as_json, list(ProviderGoogleGemini, ContentDocument)) <- function(
 }
 
 # https://ai.google.dev/api/caching#FileData
-method(as_json, list(ProviderGoogleGemini, ContentUploaded)) <- function(
+method(as_json, list(ProviderGoogle, ContentUploaded)) <- function(
   provider,
   x,
   ...
@@ -675,7 +675,7 @@ method(as_json, list(ProviderGoogleGemini, ContentUploaded)) <- function(
 }
 
 # https://ai.google.dev/api/caching#FileData
-method(as_json, list(ProviderGoogleGemini, ContentImageRemote)) <- function(
+method(as_json, list(ProviderGoogle, ContentImageRemote)) <- function(
   provider,
   x,
   ...
@@ -684,7 +684,7 @@ method(as_json, list(ProviderGoogleGemini, ContentImageRemote)) <- function(
 }
 
 # https://ai.google.dev/api/caching#Blob
-method(as_json, list(ProviderGoogleGemini, ContentImageInline)) <- function(
+method(as_json, list(ProviderGoogle, ContentImageInline)) <- function(
   provider,
   x,
   ...
@@ -698,7 +698,7 @@ method(as_json, list(ProviderGoogleGemini, ContentImageInline)) <- function(
 }
 
 # https://ai.google.dev/api/caching#FunctionCall
-method(as_json, list(ProviderGoogleGemini, ContentToolRequest)) <- function(
+method(as_json, list(ProviderGoogle, ContentToolRequest)) <- function(
   provider,
   x,
   ...
@@ -713,7 +713,7 @@ method(as_json, list(ProviderGoogleGemini, ContentToolRequest)) <- function(
 }
 
 # https://ai.google.dev/api/caching#FunctionResponse
-method(as_json, list(ProviderGoogleGemini, ContentToolResult)) <- function(
+method(as_json, list(ProviderGoogle, ContentToolResult)) <- function(
   provider,
   x,
   ...
@@ -726,7 +726,7 @@ method(as_json, list(ProviderGoogleGemini, ContentToolResult)) <- function(
   )
 }
 
-method(as_json, list(ProviderGoogleGemini, TypeObject)) <- function(
+method(as_json, list(ProviderGoogle, TypeObject)) <- function(
   provider,
   x,
   ...
@@ -1031,7 +1031,7 @@ gemini_client <- function() {
   )
 }
 
-method(chat_body_tools, ProviderGoogleGemini) <- function(provider, tools) {
+method(chat_body_tools, ProviderGoogle) <- function(provider, tools) {
   if (length(tools) == 0) {
     return(NULL)
   }
@@ -1047,7 +1047,7 @@ method(chat_body_tools, ProviderGoogleGemini) <- function(provider, tools) {
 # Token counting ----------------------------------------------------------
 
 # https://ai.google.dev/api/tokens
-method(count_tokens, ProviderGoogleGemini) <- function(
+method(count_tokens, ProviderGoogle) <- function(
   provider,
   model,
   ...,
@@ -1146,7 +1146,7 @@ models_google_vertex <- function(
     "/publishers/google/"
   )
 
-  provider <- ProviderGoogleGemini(
+  provider <- ProviderGoogle(
     name = "Google/Vertex",
     base_url = base_url,
     credentials = credentials,
@@ -1155,7 +1155,7 @@ models_google_vertex <- function(
   models_list(provider)
 }
 
-method(models_list, ProviderGoogleGemini) <- function(provider) {
+method(models_list, ProviderGoogle) <- function(provider) {
   is_vertex <- grepl(
     "aiplatform.googleapis.com",
     provider@base_url,
@@ -1204,11 +1204,11 @@ google_location <- function(location) {
 # https://ai.google.dev/gemini-api/docs/batch-api
 # Only the Gemini Developer API is supported; Vertex AI's batch API has a
 # different request shape (GCS bucket URIs instead of file uploads).
-method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
-  identical(provider@name, "Google/Gemini")
+method(has_batch_support, ProviderGoogle) <- function(provider) {
+  FALSE
 }
 
-method(batch_submit, ProviderGoogleGemini) <- function(
+method(batch_submit, ProviderGoogle) <- function(
   provider,
   model,
   conversations,
@@ -1263,14 +1263,14 @@ method(batch_submit, ProviderGoogleGemini) <- function(
   resp_body_json(resp)
 }
 
-method(batch_poll, ProviderGoogleGemini) <- function(provider, batch) {
+method(batch_poll, ProviderGoogle) <- function(provider, batch) {
   req <- base_request(provider)
   req <- req_url_path_append(req, batch$name)
   resp <- req_perform(req)
   resp_body_json(resp)
 }
 
-method(batch_status, ProviderGoogleGemini) <- function(provider, batch) {
+method(batch_status, ProviderGoogle) <- function(provider, batch) {
   metadata <- batch$metadata %||% list()
   stats <- metadata$batchStats %||% list()
   state <- metadata$state %||% "BATCH_STATE_UNSPECIFIED"
@@ -1311,7 +1311,7 @@ method(batch_status, ProviderGoogleGemini) <- function(provider, batch) {
   )
 }
 
-method(batch_retrieve, ProviderGoogleGemini) <- function(provider, batch) {
+method(batch_retrieve, ProviderGoogle) <- function(provider, batch) {
   metadata <- batch$metadata %||% list()
   stats <- metadata$batchStats %||% list()
   request_count <- as.integer(stats$requestCount %||% 0L)
@@ -1347,7 +1347,7 @@ method(batch_retrieve, ProviderGoogleGemini) <- function(provider, batch) {
   results[order(ids)]
 }
 
-method(batch_result_turn, ProviderGoogleGemini) <- function(
+method(batch_result_turn, ProviderGoogle) <- function(
   provider,
   model,
   result,
