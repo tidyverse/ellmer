@@ -108,6 +108,7 @@ Collate:
     'provider-claude-files.R'
     'provider-claude-tools.R'
     'provider-google.R'
+    'provider-google-interactions.R'
     'provider-cloudflare.R'
     'provider-databricks.R'
     'provider-deepseek.R'
