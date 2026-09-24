@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `Chat$get_tokens()` no longer errors when the conversation ends with a user turn that has no completed assistant response yet, or with a partial (interrupted) assistant turn (@taekop, #1131).
 * `live_browser()` works again with shinychat >= 0.5.0 (#1167).
 
 # ellmer 0.5.0
