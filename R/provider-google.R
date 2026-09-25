@@ -705,7 +705,7 @@ method(as_json, list(ProviderGoogle, ContentToolRequest)) <- function(
 ) {
   compact(list(
     functionCall = list(
-      name = x@id,
+      name = x@name,
       args = x@arguments
     ),
     thoughtSignature = x@extra$thoughtSignature
@@ -720,7 +720,7 @@ method(as_json, list(ProviderGoogle, ContentToolResult)) <- function(
 ) {
   list(
     functionResponse = list(
-      name = x@request@id,
+      name = x@request@name,
       response = list(value = tool_string(x))
     )
   )
