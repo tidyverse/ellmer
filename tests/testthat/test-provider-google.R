@@ -60,9 +60,8 @@ test_that("can search web pages", {
 })
 
 test_that("can combine built-in and user tools", {
-  chat <- chat_google_gemini_test()
-  provider <- chat$get_provider()
-  model <- chat$get_model_object()
+  provider <- google_test_provider()
+  model <- test_model()
 
   regular_tool <- tool(
     function(x) x,
@@ -81,6 +80,20 @@ test_that("can combine built-in and user tools", {
   expect_length(body$tools, 2)
   expect_named(body$tools[[1]], "functionDeclarations")
   expect_named(body$tools[[2]], "google_search")
+})
+
+test_that("tool calls are named by function, not call id", {
+  provider <- google_test_provider()
+  request <- ContentToolRequest("call_1", "get_weather", list())
+
+  expect_equal(as_json(provider, request)$functionCall$name, "get_weather")
+  expect_equal(
+    as_json(
+      provider,
+      ContentToolResult("52F", request = request)
+    )$functionResponse$name,
+    "get_weather"
+  )
 })
 
 test_that("can use images", {
@@ -239,7 +252,7 @@ test_that("can handle citations", {
 })
 
 test_that("value_turn() preserves Google web metadata", {
-  provider <- chat_google_gemini_test()$get_provider()
+  provider <- google_test_provider()
   support_with_source <- list(
     segment = list(text = "Grounded answer"),
     groundingChunkIndices = list(0L)
@@ -293,7 +306,7 @@ test_that("value_turn() preserves Google web metadata", {
 })
 
 test_that("stream_content() emits Google citations before activity on the final chunk", {
-  provider <- chat_google_gemini_test()$get_provider()
+  provider <- google_test_provider()
   grounding <- list(
     webSearchQueries = list("ellmer citations"),
     groundingChunks = list(
@@ -334,7 +347,7 @@ test_that("stream_content() emits Google citations before activity on the final 
 })
 
 test_that("stream_content() defers early Google fetch activity until citations", {
-  provider <- chat_google_gemini_test()$get_provider()
+  provider <- google_test_provider()
   chunks <- list(
     list(
       candidates = list(
@@ -437,10 +450,8 @@ test_that("batch chat works", {
 })
 
 test_that("gemini_prepare_batch_body handles API quirks", {
-  chat <- chat_google_gemini_test()
-  # Batch requests use the generateContent format
-  provider <- convert(chat$get_provider(), ProviderGoogle)
-  model <- chat$get_model_object()
+  provider <- google_test_provider()
+  model <- test_model()
 
   body <- chat_body(
     provider,

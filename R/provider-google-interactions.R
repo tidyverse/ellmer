@@ -637,7 +637,8 @@ method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
 
 # The batch and countTokens endpoints still use generateContent, so these
 # methods run the ProviderGoogle implementations, which build and parse
-# that format
+# that format. This also means those requests use the generateContent error
+# handling and retry rules, as they did before the switch to Interactions.
 method(batch_submit, ProviderGoogleGemini) <- function(
   provider,
   model,
