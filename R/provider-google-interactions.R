@@ -317,6 +317,192 @@ method(as_json, list(ProviderGoogleGemini, ContentToolResult)) <- function(
   )
 }
 
+# Built-in tool activity is replayed verbatim from the raw step, when present
+gemini_replay_step <- function(provider, x, ...) {
+  if (!is.null(x@extra$type)) {
+    x@extra
+  }
+}
+method(as_json, list(ProviderGoogleGemini, ContentToolRequestSearch)) <-
+  gemini_replay_step
+method(as_json, list(ProviderGoogleGemini, ContentToolResponseSearch)) <-
+  gemini_replay_step
+method(as_json, list(ProviderGoogleGemini, ContentToolRequestFetch)) <-
+  gemini_replay_step
+method(as_json, list(ProviderGoogleGemini, ContentToolResponseFetch)) <-
+  gemini_replay_step
+
+# Interactions -> ellmer -------------------------------------------------------
+
+method(value_turn, ProviderGoogleGemini) <- function(
+  provider,
+  model,
+  result,
+  has_type = FALSE
+) {
+  steps <- result$steps
+  # The search result step only contains a widget for search suggestions;
+  # the sources come from the citations in the answer
+  sources <- gemini_web_sources(steps)
+
+  contents <- list_c(lapply(steps, function(step) {
+    switch(
+      step$type,
+      thought = list(gemini_thinking(step)),
+      model_output = gemini_output_contents(step, has_type),
+      function_call = list(gemini_tool_request(step)),
+      google_search_call = gemini_replayed(
+        step$arguments$queries,
+        step,
+        \(query, extra) ContentToolRequestSearch(query = query, extra = extra)
+      ),
+      google_search_result = list(
+        ContentToolResponseSearch(sources = sources, extra = step)
+      ),
+      url_context_call = gemini_replayed(
+        step$arguments$urls,
+        step,
+        \(url, extra) ContentToolRequestFetch(url = url, extra = extra)
+      ),
+      url_context_result = gemini_replayed(
+        step$result,
+        step,
+        function(result, extra) {
+          ContentToolResponseFetch(
+            url = result$url,
+            status = if (identical(result$status, "success")) {
+              "success"
+            } else {
+              "error"
+            },
+            extra = extra
+          )
+        }
+      ),
+      cli::cli_abort("Unknown step type {.str {step$type}}.", .internal = TRUE)
+    )
+  }))
+
+  tokens <- value_tokens(provider, result)
+  cost <- get_token_cost(provider@name, model@name, tokens)
+
+  AssistantTurn(
+    contents,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = value_finish_reason(provider, result)
+  )
+}
+
+gemini_thinking <- function(step) {
+  summary <- step$summary %||% list()
+  thinking <- paste0(map_chr(summary, "[[", "text"), collapse = "")
+  ContentThinking(thinking = thinking, extra = step)
+}
+
+gemini_output_contents <- function(step, has_type = FALSE) {
+  list_c(lapply(step$content, function(content) {
+    if (content$type == "text") {
+      if (has_type) {
+        list(ContentJson(string = content$text))
+      } else {
+        c(list(ContentText(content$text)), gemini_citations(content))
+      }
+    } else if (content$type == "image") {
+      list(ContentImageInline(type = content$mime_type, data = content$data))
+    } else {
+      cli::cli_abort(
+        "Unknown content type {.str {content$type}}.",
+        .internal = TRUE
+      )
+    }
+  }))
+}
+
+gemini_citations <- function(content) {
+  annotations <- gemini_url_citations(content$annotations)
+  lapply(annotations, function(annotation) {
+    ContentCitation(
+      source = WebSource(url = annotation$url, title = annotation$title),
+      grounded_span = substr(
+        content$text,
+        (annotation$start_index %||% 0) + 1,
+        annotation$end_index
+      ),
+      extra = annotation
+    )
+  })
+}
+
+gemini_url_citations <- function(annotations) {
+  keep(annotations %||% list(), function(annotation) {
+    identical(annotation$type, "url_citation")
+  })
+}
+
+gemini_web_sources <- function(steps) {
+  outputs <- keep(steps, function(step) step$type == "model_output")
+  annotations <- list_c(lapply(outputs, function(step) {
+    list_c(lapply(step$content, function(content) {
+      gemini_url_citations(content$annotations)
+    }))
+  }))
+  annotations <- annotations[!duplicated(map_chr(annotations, "[[", "url"))]
+  lapply(annotations, function(annotation) {
+    WebSource(url = annotation$url, title = annotation$title)
+  })
+}
+
+gemini_tool_request <- function(step) {
+  arguments <- step$arguments
+  if (is.character(arguments)) {
+    # Streamed arguments arrive as a JSON string
+    arguments <- jsonlite::parse_json(arguments)
+  }
+  ContentToolRequest(step$id, step$name, arguments)
+}
+
+# A built-in tool step may cover several queries or URLs, but must be replayed
+# exactly once, so only the first content carries the raw step in `extra`
+gemini_replayed <- function(items, step, make) {
+  lapply(seq_along(items), function(i) {
+    make(items[[i]], if (i == 1) step)
+  })
+}
+
+method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
+  usage <- json$usage
+  # total_input_tokens includes cached tokens; total_tokens also includes
+  # thinking and tool use, which we count as output
+  input <- usage$total_input_tokens %||% 0
+  cached <- usage$total_cached_tokens %||% 0
+  total <- usage$total_tokens %||% 0
+
+  tokens(
+    input = input - cached,
+    output = total - input,
+    cached_input = cached
+  )
+}
+
+method(value_finish_reason, ProviderGoogleGemini) <- function(
+  provider,
+  result
+) {
+  status <- result$status
+  if (is.null(status)) {
+    return(NA_character_)
+  }
+  switch(
+    status,
+    completed = "success",
+    requires_action = "tool_use",
+    incomplete = "max_tokens",
+    I(status)
+  )
+}
+
 # Batched requests -------------------------------------------------------------
 
 method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
