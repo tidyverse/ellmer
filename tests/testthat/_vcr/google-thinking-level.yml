@@ -1,64 +1,38 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What is 1 + 1?"}]}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014,"thinkingConfig":{"thinkingLevel":"low","includeThoughts":true}}}'
+      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What
+        is 1 + 1?"}]}],"generation_config":{"temperature":0,"thinking_level":"low","seed":1014,"thinking_summaries":"auto"}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '1009'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:49 GMT
+      content-type: application/json
+      date: Fri, 25 Sep 2026 11:48:17 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1576
+      server-timing: gfet4t7; dur=2091
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "**My Immediate Response to the Query**\n\nOkay, so the user wants the sum of 1 and 1. Straightforward enough. My process is pretty automatic for something this basic. First, I identify the fundamental question: they're asking \"What is 1 + 1?\". Next, I perform the computation – it's a simple addition, so I know 1 + 1 equals 2. Finally, I construct the answer. Given the simplicity of the request, a direct and clear response is most appropriate. No need for complex explanations here.\n\n\n",
-                    "thought": true
-                  },
-                  {
-                    "text": "1 + 1 = 2",
-                    "thoughtSignature": "ErICCq8CARFNMg8O+gIQx62tx9jH/wi0+5vc3XqQDlSSR/H6aC1x6yn/ISFPv9aecfcenf0s1AMQ2BdHLVJc0OTF4KdqRC13bHNwCK1SB2a6VF7mwfeXkpIYounu/XD1e1Z+OeaDc30T/bbiekD0dcHoLdRi/cBS8ohjzsMiucGl8nBIRSKoAwuVZ3R0z2J+Qb5fDo3ppWO+hcAy9w5lMICCl4MjKMAgN56VWxMqLDgwFLp0zg5SYOOqhC38N89tzUhaCw/OsgmXHs9FDXqHL1AYI7TS6tBnEhaq2YqFhLkTWZ3WQOb/NiqXBVG+Dfvi7Ok2hWvg7c9PyPhh1kCLdyDs22Rd2AqbVM+AomUIIE/14QQ8TkGhj/wvOCVuFQQ+APPbKLT7im/iBBFJeIslofiqRZ36"
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 9,
-            "candidatesTokenCount": 7,
-            "totalTokenCount": 80,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 9
-              }
-            ],
-            "thoughtsTokenCount": 64,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.7-flash",
-          "responseId": "cAeZavewA_H6xN8PlsWGuQw"
-        }
-  recorded_at: 2026-09-03 05:36:49
+      string: '{"status":"completed","usage":{"total_tokens":79,"total_input_tokens":9,"input_tokens_by_modality":[{"modality":"text","tokens":9}],"total_cached_tokens":0,"total_output_tokens":7,"total_tool_use_tokens":0,"total_thought_tokens":63,"raw_prompt_token":40,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":40}],"candidates_tokens_details":[{"modality":"text","tokens":11}],"thoughts_tokens_details":[{"modality":"text","tokens":63}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":40}],"candidates_tokens_details":[{"modality":"text","tokens":11}],"thoughts_tokens_details":[{"modality":"text","tokens":63}]}]},"created":"2026-09-25T11:48:17Z","updated":"2026-09-25T11:48:17Z","service_tier":"standard","steps":[{"signature":"EqsCCqgCAWkUfRPqeogdTuQ8rL2AmPTtWe8ia3cAgso1WajoXGnJZEDcRr7EtoK0qGDhE/5Mo4l9IHc0l9ltISc08jVGbJSfy5sHImnLHN3Fb9/K2OCwEQrSwDIvgjWCSzayFCYfNr6q0LdTPW9dRwBBbSfpNcPCfkg4XgW7Wk4qaYPlujM4B7osbbsUO4YewqqNc4fNMRxHVUjcWiKdTRFYBBUkfzJed/Q+h8ahMbBoE/JYpvmqwkENKdxmO9+Wjujf+FIZUlugAdhphyJc4BnvuY+XLWU2TycqgJbWuIUyUxYWfnCwnvG0lojuGRYwstyNHyF6MutlJhyDchu46Se68N/w9SvSGKM7v8ub9QZknGg3UNEK+7hJj6Xdl+3unvKW7A6d+y+ije6S1HI=","summary":[{"text":"**My
+        Analytical Approach to a Simple Sum**\n\nOkay, here''s how I''m breaking down
+        this user''s request. First, I need to pinpoint the essential query. They''re
+        asking for the sum of 1 and 1 – fundamentally, \"What is 1 + 1?\". This is
+        a straightforward arithmetic problem, nothing fancy, no complex variables
+        or hidden dependencies. My job is to be quick and accurate.\n\nSecond, the
+        actual computation itself. Let''s get right to it: 1 + 1 equals 2. Elementary,
+        but precision matters.\n\nFinally, presentation. While the calculation is
+        simple, it is important to communicate the answer clearly. There''s no need
+        for unnecessary jargon or lengthy explanations. A clean and concise response
+        is the order of the day.\n\n\n","type":"text"}],"type":"thought"},{"content":[{"text":"1
+        + 1 = 2","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
+  recorded_at: 2026-09-25 11:48:17
 recorded_with: VCR-vcr/2.1.0

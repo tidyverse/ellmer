@@ -1,358 +1,120 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the first movie
-        listed on https://rvest.tidyverse.org/articles/starwars.html?"}]}],"tools":[{"url_context":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
+      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]}],"tools":[{"type":"url_context"}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '884'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:15 GMT
+      content-type: application/json
+      date: Fri, 25 Sep 2026 11:47:03 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1702
+      server-timing: gfet4t7; dur=2207
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "The first movie listed on that page is ***The Phantom Menace***.",
-                    "thoughtSignature": "EtoBCtcBARFNMg+8r/8Ctj5tmR4KRRlyWNOv8zQeAZc3DSFnpkow6ZE7LD7EXtJLT8TvQYAfq4eFzKm2k7qF2CXNXWLclaPZ3Wqd+Topa1ZF2oDj3vmqM/rrolQZR2xu0rKXm3AT5Gdi6nrjpR1kIS4IzokNAqlLFvGMS4AEeLxrbdxqDw6RGGc6gt8i0hLsstQB9Kh5Nfk8tDYkGxeGf4KimalP08f5GqhtspPpJk9XJp23fFvFkpg8ihqp+XlrQ9M4cfiZje4M+lPqLrZEtJ0g2R5URDCgrfb0djQ="
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0,
-              "groundingMetadata": {
-                "groundingChunks": [
-                  {
-                    "web": {
-                      "uri": "https://rvest.tidyverse.org/articles/starwars.html",
-                      "title": "Star Wars films (static HTML) • rvest"
-                    }
-                  }
-                ],
-                "groundingSupports": [
-                  {
-                    "segment": {
-                      "endIndex": 63,
-                      "text": "The first movie listed on that page is ***The Phantom Menace***"
-                    },
-                    "groundingChunkIndices": [
-                      0
-                    ]
-                  }
-                ]
-              },
-              "urlContextMetadata": {
-                "urlMetadata": [
-                  {
-                    "retrievedUrl": "https://rvest.tidyverse.org/articles/starwars.html",
-                    "urlRetrievalStatus": "URL_RETRIEVAL_STATUS_SUCCESS"
-                  }
-                ]
-              }
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 72,
-            "candidatesTokenCount": 45,
-            "totalTokenCount": 1525,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 72
-              }
-            ],
-            "toolUsePromptTokenCount": 1327,
-            "toolUsePromptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 1327
-              }
-            ],
-            "thoughtsTokenCount": 81,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.7-flash",
-          "responseId": "TQeZasb8N_Ke28oP7LubqQc"
-        }
-  recorded_at: 2026-09-03 05:36:15
+      string: '{"status":"completed","usage":{"total_tokens":1518,"total_input_tokens":69,"input_tokens_by_modality":[{"modality":"text","tokens":69}],"total_cached_tokens":0,"total_output_tokens":45,"total_tool_use_tokens":1326,"tool_use_tokens_by_modality":[{"modality":"text","tokens":1326}],"total_thought_tokens":78,"raw_prompt_token":1512,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":222}],"candidates_tokens_details":[{"modality":"text","tokens":32}],"thoughts_tokens_details":[{"modality":"text","tokens":44}]},{"prompt_tokens_details":[{"modality":"text","tokens":1512}],"candidates_tokens_details":[{"modality":"text","tokens":23}],"thoughts_tokens_details":[{"modality":"text","tokens":34}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":222}],"candidates_tokens_details":[{"modality":"text","tokens":32}],"thoughts_tokens_details":[{"modality":"text","tokens":44}]},{"prompt_tokens_details":[{"modality":"text","tokens":1512}],"candidates_tokens_details":[{"modality":"text","tokens":23}],"thoughts_tokens_details":[{"modality":"text","tokens":34}]}]},"created":"2026-09-25T11:47:03Z","updated":"2026-09-25T11:47:03Z","service_tier":"standard","steps":[{"id":"call_767917","signature":"EqUDCqIDCAISnQMBaRR9EyCAlk7LJko17UWUIUp+aqcK7v7O5sPvYce70UXL7K4kity/lmvJ1FGvRe03JmlPBS08HZrbXL+dJqxUp82nePyP+0on4u8cGRVQDx/DCpX43Dsur05yYaZtMGea3pxVfVWVfG8TA/E7I2zNU/NM0RVLGY1/zpL/Psc2Ne34sjkISvzSiB9zmbDmJKf7fjoDxbxwNbhyCkhSEoEEpqCP36oAVssMChFUD9yzpqcKC3AdbICnT3IY9Gr8AqPjMaw+OVe05UQr2JR3wZ9D/omjsxODE8+18u15Hsz9uwRIiZKAMuOicAekTkb6WeKhW1lJqfGjvkVjD1XTbkc7K8kqIAl+pFI2elfJnNt9YB6RtQ3e4Me8UQHtApDdx6cfhq3whPwlQtAD3k9OcYs64uK/8zUN9xUhKzxMEVrt6PIIVWKvRSvZuOesEpL+PwEaOAjCekxf2O3mU1YP2ENopHxUMiHdVs87J8axxT0RXSV/sDczeNoW4212o/+tCk3HN8x0YU2T6zuNySlw7EwcCXui32JzMo4Et97wzg==","type":"url_context_call","arguments":{"urls":["https://rvest.tidyverse.org/articles/starwars.html"]}},{"call_id":"call_767917","signature":"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","type":"url_context_result","result":[{"url":"https://rvest.tidyverse.org/articles/starwars.html","status":"success"}],"is_error":false},{"signature":"Es4BCssBAWkUfRNagSACO9S9mk7a34HR4gbcZC+zhAdDgyrKL8GkI+hviRgbaBIhqlrD89TTqOggP1kpIdxYbL9i9jx0Ah8ZkSltVg7GErNCzhF5o/ElEiCxIWsBLwR7oCq2O+5aUzc6GWiMxk7r76JdmXAru3gd7NhvRmsrIHyPnGISp6TqOkuuqRsheqZlRdJCsIYYjVBY07FPTtpTUOHs754EeDfJKfiudIsS44bMQXtDd83ahUGyxsp3JsFE9LQL/mGS5oJAf8a5XjwP/U4=","type":"thought"},{"content":[{"text":"The
+        first movie listed on that page is ***The Phantom Menace***.","annotations":[{"start_index":0,"end_index":63,"url":"https://rvest.tidyverse.org/articles/starwars.html","title":"Star
+        Wars films (static HTML) • rvest","type":"url_citation"}],"type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
+  recorded_at: 2026-09-25 11:47:03
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the first movie
-        listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"model","parts":[{"text":"The
-        first movie listed on that page is ***The Phantom Menace***."}]},{"role":"user","parts":[{"text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]}],"tools":[{"url_context":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
+      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"id":"call_767917","signature":"EqUDCqIDCAISnQMBaRR9EyCAlk7LJko17UWUIUp+aqcK7v7O5sPvYce70UXL7K4kity/lmvJ1FGvRe03JmlPBS08HZrbXL+dJqxUp82nePyP+0on4u8cGRVQDx/DCpX43Dsur05yYaZtMGea3pxVfVWVfG8TA/E7I2zNU/NM0RVLGY1/zpL/Psc2Ne34sjkISvzSiB9zmbDmJKf7fjoDxbxwNbhyCkhSEoEEpqCP36oAVssMChFUD9yzpqcKC3AdbICnT3IY9Gr8AqPjMaw+OVe05UQr2JR3wZ9D/omjsxODE8+18u15Hsz9uwRIiZKAMuOicAekTkb6WeKhW1lJqfGjvkVjD1XTbkc7K8kqIAl+pFI2elfJnNt9YB6RtQ3e4Me8UQHtApDdx6cfhq3whPwlQtAD3k9OcYs64uK/8zUN9xUhKzxMEVrt6PIIVWKvRSvZuOesEpL+PwEaOAjCekxf2O3mU1YP2ENopHxUMiHdVs87J8axxT0RXSV/sDczeNoW4212o/+tCk3HN8x0YU2T6zuNySlw7EwcCXui32JzMo4Et97wzg==","type":"url_context_call","arguments":{"urls":["https://rvest.tidyverse.org/articles/starwars.html"]}},{"call_id":"call_767917","signature":"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","type":"url_context_result","result":[{"url":"https://rvest.tidyverse.org/articles/starwars.html","status":"success"}],"is_error":false},{"signature":"Es4BCssBAWkUfRNagSACO9S9mk7a34HR4gbcZC+zhAdDgyrKL8GkI+hviRgbaBIhqlrD89TTqOggP1kpIdxYbL9i9jx0Ah8ZkSltVg7GErNCzhF5o/ElEiCxIWsBLwR7oCq2O+5aUzc6GWiMxk7r76JdmXAru3gd7NhvRmsrIHyPnGISp6TqOkuuqRsheqZlRdJCsIYYjVBY07FPTtpTUOHs754EeDfJKfiudIsS44bMQXtDd83ahUGyxsp3JsFE9LQL/mGS5oJAf8a5XjwP/U4=","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"The
+        first movie listed on that page is ***The Phantom Menace***."}]},{"type":"user_input","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]}],"tools":[{"type":"url_context"}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '834'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:17 GMT
+      content-type: application/json
+      date: Fri, 25 Sep 2026 11:47:06 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1673
+      server-timing: gfet4t7; dur=2357
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "The first movie listed on that page is ***The Phantom Menace***.",
-                    "thoughtSignature": "EqkBCqYBARFNMg+zgz0MlnUs3Xc6wGTDBIT35dTxOC0l2foteP41KOle+igJCS8WvJoLYqkV4BTB3wtLj15V+FCMN/ztUS0+JXx27xQi4nsgb9zIHiM9IUjEyU3u3bHViBhV19d3JWI6LnvY/2iPaKJHfwM00ieW4WHeVoXh4gBvdavmd4+0MAnJlwkPxcp4VGme6qcrw2258P+u37/rnm4QJCX7aRGXB9OYxA=="
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0,
-              "groundingMetadata": {
-                "groundingChunks": [
-                  {
-                    "web": {
-                      "uri": "https://rvest.tidyverse.org/articles/starwars.html",
-                      "title": "Star Wars films (static HTML) • rvest"
-                    }
-                  }
-                ],
-                "groundingSupports": [
-                  {
-                    "segment": {
-                      "endIndex": 63,
-                      "text": "The first movie listed on that page is ***The Phantom Menace***"
-                    },
-                    "groundingChunkIndices": [
-                      0
-                    ]
-                  }
-                ]
-              },
-              "urlContextMetadata": {
-                "urlMetadata": [
-                  {
-                    "retrievedUrl": "https://rvest.tidyverse.org/articles/starwars.html",
-                    "urlRetrievalStatus": "URL_RETRIEVAL_STATUS_SUCCESS"
-                  }
-                ]
-              }
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 104,
-            "candidatesTokenCount": 45,
-            "totalTokenCount": 1558,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 104
-              }
-            ],
-            "toolUsePromptTokenCount": 1357,
-            "toolUsePromptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 1357
-              }
-            ],
-            "thoughtsTokenCount": 52,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.7-flash",
-          "responseId": "UAeZavrICYWKvdIPktub8AM"
-        }
-  recorded_at: 2026-09-03 05:36:17
+      string: '{"status":"completed","usage":{"total_tokens":4054,"total_input_tokens":1386,"input_tokens_by_modality":[{"modality":"text","tokens":1386}],"total_cached_tokens":0,"total_output_tokens":45,"total_tool_use_tokens":2623,"tool_use_tokens_by_modality":[{"modality":"text","tokens":2623}],"total_thought_tokens":0,"raw_prompt_token":2845,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":1599}],"candidates_tokens_details":[{"modality":"text","tokens":32}]},{"prompt_tokens_details":[{"modality":"text","tokens":2845}],"candidates_tokens_details":[{"modality":"text","tokens":23}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":1599}],"candidates_tokens_details":[{"modality":"text","tokens":32}]},{"prompt_tokens_details":[{"modality":"text","tokens":2845}],"candidates_tokens_details":[{"modality":"text","tokens":23}]}]},"created":"2026-09-25T11:47:06Z","updated":"2026-09-25T11:47:06Z","service_tier":"standard","steps":[{"id":"call_763157","signature":"Ev8BCvwBCAIS9wEBaRR9E5tImGCgVWK5sD4c8IoKaMGrXaZKgtIi9j2Q5Xpo7pPlm0ZhdEqXm70l5ceoDh4J4W/wpnq9QYg+WZfgI3cs6mcfmVYiKD75QipCQl3pAMIGo7ssRQ8vXx9qfvi9IthvirTK90Jw+y16DmQuWMcnJuaPcqdC9rG3AyRrNeQZ7bHHt5UTlIXmrOE2JbD+tFFznBklhvcWd1BZXNKEbQcQeJjR+Xk8/bRfuRQ4H0F9Y5iwoLMG90wm0hV5rTaLQooE+SVEKL/p5c//nN01DPgEawYb2RhqmobP2Ks6FulrBOzFWvBu5+IUu/Fx4GiO+uf9JYPw","type":"url_context_call","arguments":{"urls":["https://rvest.tidyverse.org/articles/starwars.html"]}},{"call_id":"call_763157","signature":"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","type":"url_context_result","result":[{"url":"https://rvest.tidyverse.org/articles/starwars.html","status":"success"}],"is_error":false},{"signature":"Em0KawFpFH0T86SnR0IFxkh4Qp7Ym+6eggxT1s4U+cImFg7uUmMx0kndqh1IpWrDc+eUIbcB9uB1UR39kS7dc8m2m3soOopbI1PPiNfKg4bq1kCno9QjGryVlFazWsx/vrreMKcJngOkpAbES1NA","type":"thought"},{"content":[{"text":"The
+        first movie listed on that page is ***The Phantom Menace***.","annotations":[{"start_index":0,"end_index":63,"url":"https://rvest.tidyverse.org/articles/starwars.html","title":"Star
+        Wars films (static HTML) • rvest","type":"url_citation"}],"type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
+  recorded_at: 2026-09-25 11:47:07
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the first movie
-        listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"model","parts":[{"text":"The
-        first movie listed on that page is ***The Phantom Menace***."}]},{"role":"user","parts":[{"text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"model","parts":[{"text":"The
-        first movie listed on that page is ***The Phantom Menace***."}]},{"role":"user","parts":[{"text":"Who
-        directed it?"}]}],"tools":[{"url_context":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
+      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"id":"call_767917","signature":"EqUDCqIDCAISnQMBaRR9EyCAlk7LJko17UWUIUp+aqcK7v7O5sPvYce70UXL7K4kity/lmvJ1FGvRe03JmlPBS08HZrbXL+dJqxUp82nePyP+0on4u8cGRVQDx/DCpX43Dsur05yYaZtMGea3pxVfVWVfG8TA/E7I2zNU/NM0RVLGY1/zpL/Psc2Ne34sjkISvzSiB9zmbDmJKf7fjoDxbxwNbhyCkhSEoEEpqCP36oAVssMChFUD9yzpqcKC3AdbICnT3IY9Gr8AqPjMaw+OVe05UQr2JR3wZ9D/omjsxODE8+18u15Hsz9uwRIiZKAMuOicAekTkb6WeKhW1lJqfGjvkVjD1XTbkc7K8kqIAl+pFI2elfJnNt9YB6RtQ3e4Me8UQHtApDdx6cfhq3whPwlQtAD3k9OcYs64uK/8zUN9xUhKzxMEVrt6PIIVWKvRSvZuOesEpL+PwEaOAjCekxf2O3mU1YP2ENopHxUMiHdVs87J8axxT0RXSV/sDczeNoW4212o/+tCk3HN8x0YU2T6zuNySlw7EwcCXui32JzMo4Et97wzg==","type":"url_context_call","arguments":{"urls":["https://rvest.tidyverse.org/articles/starwars.html"]}},{"call_id":"call_767917","signature":"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","type":"url_context_result","result":[{"url":"https://rvest.tidyverse.org/articles/starwars.html","status":"success"}],"is_error":false},{"signature":"Es4BCssBAWkUfRNagSACO9S9mk7a34HR4gbcZC+zhAdDgyrKL8GkI+hviRgbaBIhqlrD89TTqOggP1kpIdxYbL9i9jx0Ah8ZkSltVg7GErNCzhF5o/ElEiCxIWsBLwR7oCq2O+5aUzc6GWiMxk7r76JdmXAru3gd7NhvRmsrIHyPnGISp6TqOkuuqRsheqZlRdJCsIYYjVBY07FPTtpTUOHs754EeDfJKfiudIsS44bMQXtDd83ahUGyxsp3JsFE9LQL/mGS5oJAf8a5XjwP/U4=","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"The
+        first movie listed on that page is ***The Phantom Menace***."}]},{"type":"user_input","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"id":"call_763157","signature":"Ev8BCvwBCAIS9wEBaRR9E5tImGCgVWK5sD4c8IoKaMGrXaZKgtIi9j2Q5Xpo7pPlm0ZhdEqXm70l5ceoDh4J4W/wpnq9QYg+WZfgI3cs6mcfmVYiKD75QipCQl3pAMIGo7ssRQ8vXx9qfvi9IthvirTK90Jw+y16DmQuWMcnJuaPcqdC9rG3AyRrNeQZ7bHHt5UTlIXmrOE2JbD+tFFznBklhvcWd1BZXNKEbQcQeJjR+Xk8/bRfuRQ4H0F9Y5iwoLMG90wm0hV5rTaLQooE+SVEKL/p5c//nN01DPgEawYb2RhqmobP2Ks6FulrBOzFWvBu5+IUu/Fx4GiO+uf9JYPw","type":"url_context_call","arguments":{"urls":["https://rvest.tidyverse.org/articles/starwars.html"]}},{"call_id":"call_763157","signature":"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","type":"url_context_result","result":[{"url":"https://rvest.tidyverse.org/articles/starwars.html","status":"success"}],"is_error":false},{"signature":"Em0KawFpFH0T86SnR0IFxkh4Qp7Ym+6eggxT1s4U+cImFg7uUmMx0kndqh1IpWrDc+eUIbcB9uB1UR39kS7dc8m2m3soOopbI1PPiNfKg4bq1kCno9QjGryVlFazWsx/vrreMKcJngOkpAbES1NA","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"The
+        first movie listed on that page is ***The Phantom Menace***."}]},{"type":"user_input","content":[{"type":"text","text":"Who
+        directed it?"}]}],"tools":[{"type":"url_context"}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '961'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:19 GMT
+      content-type: application/json
+      date: Fri, 25 Sep 2026 11:47:09 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1125
+      server-timing: gfet4t7; dur=1660
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "***The Phantom Menace* was directed by **George Lucas**.",
-                    "thoughtSignature": "Ep4ECpsEARFNMg/wXSWZZURC87//Eyh6ck1VUPkVlKMwHRN0km9LyD4SSd1GNJuXg0Aq75lbL5IG6TA7Y0r7ozorIpgxGGHBdrMoQt2iCZOqhmimmlsVHUReGGM4hbuz2Dy0pWbpVvUrJ+3K+bb8pnfgDJ6CXS64eBWnTRUaID80Cj570XnUqJbYxmFry+c7LBUvAObV6ldT7Vo541iCc4EHXP9roNj61+PBPm77sQNYYJtS4WnYTuAqBcmiExRdY4VY1VB4ffRVBhXWSWmpxfOx0n/0fPmiokWzWbs2rcXFNCbnpc4yJyL9eyTUOcv2bTyiRBP97kwgTu3+LPccz8vANkW0sU1ffXUPgbBRJExLmQe70bBfYEt5EzruwfGAOqDeHY66m2aJYQ7BcfV17sfJf4PEaim37hSJ5Q9tN2gHNWNIwYXEGskaEXw2B5ngTFX+s9w2J4GNN6Sg3PS2TWopvmsLq4L+PJadxpmkcnRs02fqnb1YDkl+1iXLAgR3PsGmDwJRBH+4A8sM1k7N9NBb7H+n7Eh1VpfV6bUMhWWEbUyOw7bIK1mR+fw5lZDrf4x8GhwsBlRgGqIYTWSMdjcikDUFLC5NmP/1wZuOtjQYiCHeZRHhcw01iYhNoOHUeliPHqm095tGnX9D9CmtBwqVXGvFO2sLvq45AodG1BlgQLy8yCMNBWRR1Iaw2d/RlXWTEfFSW5oj+mS+cpKPt80="
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 87,
-            "candidatesTokenCount": 13,
-            "totalTokenCount": 207,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 87
-              }
-            ],
-            "thoughtsTokenCount": 107,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.7-flash",
-          "responseId": "UgeZaou2GoqrxN8PvNePoAk"
-        }
-  recorded_at: 2026-09-03 05:36:19
+      string: '{"status":"completed","usage":{"total_tokens":2732,"total_input_tokens":2649,"input_tokens_by_modality":[{"modality":"text","tokens":2649}],"total_cached_tokens":0,"total_output_tokens":13,"total_tool_use_tokens":0,"total_thought_tokens":70,"raw_prompt_token":2878,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":2878}],"candidates_tokens_details":[{"modality":"text","tokens":17}],"thoughts_tokens_details":[{"modality":"text","tokens":70}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":2878}],"candidates_tokens_details":[{"modality":"text","tokens":17}],"thoughts_tokens_details":[{"modality":"text","tokens":70}]}]},"created":"2026-09-25T11:47:09Z","updated":"2026-09-25T11:47:09Z","service_tier":"standard","steps":[{"signature":"EvQCCvECAWkUfRP/Bju0kxOIbSLmKsSzg8PwTjTX/pPnrH1byOh71JjQcZj/bi0V0gN/sCszSj6KPA5I7Z8UEGCsiz1m6ijVUK0dcvUe9sFZx6dF0UCg7q7AmL5zq5UzM8S02W5uFTWd6DiJdvIEZLbTc3d/bniNgT7NtKvjOeBS2znUN74ps2rkD1MWJoML7XiCDU0Wne5ajGkm4enY3cZuiCjZBWL0rJUV1ClVHCybyVEXt/wPf0YAvtJ1MRAFXRk0VrqH3Y41WGFgu8Ba4LXa71HtDtPSjTtQqeDQ8b0JjR7vnx0E2PaktgLo0HIfjxHha2u9J3GadwlZogi27PTLW1fAq0lfP1VRZfTx2D/3P///sFM7XfmpKjHNGxW9HysGN6Dxmzghi/K6dIIzNqmlH2W2WL0Rtkwf5AvjuPCJHh/1Zd9hNcfH+3QvnR184q8O2CTmCkH4ukOycBYHwL/JNXfk9/IbgMLh1xqnGXyAHFMjUOSU","type":"thought"},{"content":[{"text":"***The
+        Phantom Menace*** was directed by **George Lucas**.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
+  recorded_at: 2026-09-25 11:47:09
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the first movie
-        listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"model","parts":[{"text":"The
-        first movie listed on that page is ***The Phantom Menace***."}]},{"role":"user","parts":[{"text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"model","parts":[{"text":"The
-        first movie listed on that page is ***The Phantom Menace***."}]},{"role":"user","parts":[{"text":"Who
-        directed it?"}]},{"role":"model","parts":[{"text":"***The Phantom Menace*
-        was directed by **George Lucas**."}]},{"role":"user","parts":[{"text":"Who
-        directed it?"}]}],"tools":[{"url_context":{}}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
+      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"id":"call_767917","signature":"EqUDCqIDCAISnQMBaRR9EyCAlk7LJko17UWUIUp+aqcK7v7O5sPvYce70UXL7K4kity/lmvJ1FGvRe03JmlPBS08HZrbXL+dJqxUp82nePyP+0on4u8cGRVQDx/DCpX43Dsur05yYaZtMGea3pxVfVWVfG8TA/E7I2zNU/NM0RVLGY1/zpL/Psc2Ne34sjkISvzSiB9zmbDmJKf7fjoDxbxwNbhyCkhSEoEEpqCP36oAVssMChFUD9yzpqcKC3AdbICnT3IY9Gr8AqPjMaw+OVe05UQr2JR3wZ9D/omjsxODE8+18u15Hsz9uwRIiZKAMuOicAekTkb6WeKhW1lJqfGjvkVjD1XTbkc7K8kqIAl+pFI2elfJnNt9YB6RtQ3e4Me8UQHtApDdx6cfhq3whPwlQtAD3k9OcYs64uK/8zUN9xUhKzxMEVrt6PIIVWKvRSvZuOesEpL+PwEaOAjCekxf2O3mU1YP2ENopHxUMiHdVs87J8axxT0RXSV/sDczeNoW4212o/+tCk3HN8x0YU2T6zuNySlw7EwcCXui32JzMo4Et97wzg==","type":"url_context_call","arguments":{"urls":["https://rvest.tidyverse.org/articles/starwars.html"]}},{"call_id":"call_767917","signature":"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","type":"url_context_result","result":[{"url":"https://rvest.tidyverse.org/articles/starwars.html","status":"success"}],"is_error":false},{"signature":"Es4BCssBAWkUfRNagSACO9S9mk7a34HR4gbcZC+zhAdDgyrKL8GkI+hviRgbaBIhqlrD89TTqOggP1kpIdxYbL9i9jx0Ah8ZkSltVg7GErNCzhF5o/ElEiCxIWsBLwR7oCq2O+5aUzc6GWiMxk7r76JdmXAru3gd7NhvRmsrIHyPnGISp6TqOkuuqRsheqZlRdJCsIYYjVBY07FPTtpTUOHs754EeDfJKfiudIsS44bMQXtDd83ahUGyxsp3JsFE9LQL/mGS5oJAf8a5XjwP/U4=","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"The
+        first movie listed on that page is ***The Phantom Menace***."}]},{"type":"user_input","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"id":"call_763157","signature":"Ev8BCvwBCAIS9wEBaRR9E5tImGCgVWK5sD4c8IoKaMGrXaZKgtIi9j2Q5Xpo7pPlm0ZhdEqXm70l5ceoDh4J4W/wpnq9QYg+WZfgI3cs6mcfmVYiKD75QipCQl3pAMIGo7ssRQ8vXx9qfvi9IthvirTK90Jw+y16DmQuWMcnJuaPcqdC9rG3AyRrNeQZ7bHHt5UTlIXmrOE2JbD+tFFznBklhvcWd1BZXNKEbQcQeJjR+Xk8/bRfuRQ4H0F9Y5iwoLMG90wm0hV5rTaLQooE+SVEKL/p5c//nN01DPgEawYb2RhqmobP2Ks6FulrBOzFWvBu5+IUu/Fx4GiO+uf9JYPw","type":"url_context_call","arguments":{"urls":["https://rvest.tidyverse.org/articles/starwars.html"]}},{"call_id":"call_763157","signature":"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","type":"url_context_result","result":[{"url":"https://rvest.tidyverse.org/articles/starwars.html","status":"success"}],"is_error":false},{"signature":"Em0KawFpFH0T86SnR0IFxkh4Qp7Ym+6eggxT1s4U+cImFg7uUmMx0kndqh1IpWrDc+eUIbcB9uB1UR39kS7dc8m2m3soOopbI1PPiNfKg4bq1kCno9QjGryVlFazWsx/vrreMKcJngOkpAbES1NA","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"The
+        first movie listed on that page is ***The Phantom Menace***."}]},{"type":"user_input","content":[{"type":"text","text":"Who
+        directed it?"}]},{"signature":"EvQCCvECAWkUfRP/Bju0kxOIbSLmKsSzg8PwTjTX/pPnrH1byOh71JjQcZj/bi0V0gN/sCszSj6KPA5I7Z8UEGCsiz1m6ijVUK0dcvUe9sFZx6dF0UCg7q7AmL5zq5UzM8S02W5uFTWd6DiJdvIEZLbTc3d/bniNgT7NtKvjOeBS2znUN74ps2rkD1MWJoML7XiCDU0Wne5ajGkm4enY3cZuiCjZBWL0rJUV1ClVHCybyVEXt/wPf0YAvtJ1MRAFXRk0VrqH3Y41WGFgu8Ba4LXa71HtDtPSjTtQqeDQ8b0JjR7vnx0E2PaktgLo0HIfjxHha2u9J3GadwlZogi27PTLW1fAq0lfP1VRZfTx2D/3P///sFM7XfmpKjHNGxW9HysGN6Dxmzghi/K6dIIzNqmlH2W2WL0Rtkwf5AvjuPCJHh/1Zd9hNcfH+3QvnR184q8O2CTmCkH4ukOycBYHwL/JNXfk9/IbgMLh1xqnGXyAHFMjUOSU","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"***The
+        Phantom Menace*** was directed by **George Lucas**."}]},{"type":"user_input","content":[{"type":"text","text":"Who
+        directed it?"}]}],"tools":[{"type":"url_context"}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '832'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:22 GMT
+      content-type: application/json
+      date: Fri, 25 Sep 2026 11:47:12 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1964
+      server-timing: gfet4t7; dur=2651
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "***The Phantom Menace* was directed by **George Lucas**.",
-                    "thoughtSignature": "EqcBCqQBARFNMg/+3zXM6wE3tYZHxcOe1S3DLUhc4+ry+nT9QDQS2ZEWQaQbMLVg0UVFUjgmrKXplYb+oFclM8puzk39AeWd2UNxkLzHQlfjqW3cPkr7nUQp90xwGXzV8I0g6MMEoZS1PhQdxhp+hOWA42q/sdfdZnpp9KEV69a2fHG5DlzPh34/0Oa+45E1Mb2F+8xUW3gu4OQUX2KBGTYFldB/dMIbNZg="
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0,
-              "groundingMetadata": {
-                "groundingChunks": [
-                  {
-                    "web": {
-                      "uri": "https://rvest.tidyverse.org/articles/starwars.html",
-                      "title": "Star Wars films (static HTML) • rvest"
-                    }
-                  }
-                ],
-                "groundingSupports": [
-                  {
-                    "segment": {
-                      "endIndex": 55,
-                      "text": "***The Phantom Menace* was directed by **George Lucas**"
-                    },
-                    "groundingChunkIndices": [
-                      0
-                    ]
-                  }
-                ]
-              },
-              "urlContextMetadata": {
-                "urlMetadata": [
-                  {
-                    "retrievedUrl": "https://rvest.tidyverse.org/articles/starwars.html",
-                    "urlRetrievalStatus": "URL_RETRIEVAL_STATUS_SUCCESS"
-                  }
-                ]
-              }
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 198,
-            "candidatesTokenCount": 44,
-            "totalTokenCount": 1796,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 198
-              }
-            ],
-            "toolUsePromptTokenCount": 1447,
-            "toolUsePromptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 1447
-              }
-            ],
-            "thoughtsTokenCount": 107,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.7-flash",
-          "responseId": "VAeZaqn9C-KO28oPrP3g2Qc"
-        }
-  recorded_at: 2026-09-03 05:36:22
+      string: '{"status":"completed","usage":{"total_tokens":2809,"total_input_tokens":2738,"input_tokens_by_modality":[{"modality":"text","tokens":2738}],"total_cached_tokens":0,"total_output_tokens":13,"total_tool_use_tokens":0,"total_thought_tokens":58,"raw_prompt_token":2979,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":2979}],"candidates_tokens_details":[{"modality":"text","tokens":17}],"thoughts_tokens_details":[{"modality":"text","tokens":58}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":2979}],"candidates_tokens_details":[{"modality":"text","tokens":17}],"thoughts_tokens_details":[{"modality":"text","tokens":58}]}]},"created":"2026-09-25T11:47:12Z","updated":"2026-09-25T11:47:12Z","service_tier":"standard","steps":[{"signature":"Eu0CCuoCAWkUfRNloyt9sG5lnDWPDxHID4VcXzGvUKOOSmUnggC9zgkZVq8TK3pl6OKPwuKIoQPdcTjCp7DLi8Kd6wuBDDmCTQiB/8Xt7ET5abYFB8R0q+YVF6aSQSm5QPUdDC4mKyXXJ9nLUnCDDK5I0FkILOYdSujul6XjJomoGMMOr7tjc22jElBsY3YmxdnT3sH2SqXkA7ag4jUeYUL0uw1vIepJsdH1ARAqM83QbbQFZMQ+FJIElO4JLnVtYivAMcC+/H9URZMQdiFL7I1HUOPAadMH9iOdLc+1jYHr3Jwe8pG+Dm0F7OVXZlYj9UN/zuL6+3RJzK2hsmekvEwb9+06sNGxIjz53ijmm9JAB97exqllkP5ZsXiwmkkf7wG/4w7BqlO6tu1xvMxF1E0Iax/xmq9HbdCM51z/CBxT3bBfdUUogHmX63Lf5UeVR3AijzXGdU47DBPSJB8ldsPUxdRPaMOjTmBeBYIW6NU=","type":"thought"},{"content":[{"text":"***The
+        Phantom Menace*** was directed by **George Lucas**.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
+  recorded_at: 2026-09-25 11:47:13
 recorded_with: VCR-vcr/2.1.0

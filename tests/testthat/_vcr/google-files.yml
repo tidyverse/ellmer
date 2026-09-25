@@ -10,28 +10,28 @@ http_interactions:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-length: '0'
       content-type: text/plain; charset=utf-8
-      date: Thu, 03 Sep 2026 05:36:39 GMT
+      date: Fri, 25 Sep 2026 11:47:47 GMT
       server: UploadServer
       x-goog-upload-chunk-granularity: '8388608'
-      x-goog-upload-control-url: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AJjja9atfnTLi8lICwpNICFq689JzQqCIV-NxaC5iGff_6eZMCzfU7Es3-lNa-QyYXztiCQA3a69Z-C3BFOu13G5Ensk_jaA1K9u9BT3E7Rp2w&upload_protocol=resumable
+      x-goog-upload-control-url: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AP6rU80Vm53w4vzTio_KlNfWk5tQFHGsCkgU-sQPOsZwNgfotelOUiQUoab2s_2P4qfvMNFjShSmT8TLbWcFnTQP6JicesqRUkWXYCiCA9ka-dU&upload_protocol=resumable
       x-goog-upload-header-content-type: application/json; charset=UTF-8
       x-goog-upload-header-vary:
       - Origin
       - X-Origin
       - Referer
-      x-goog-upload-header-x-google-backends: unix:/tmp/esfbackend.1788375795.541176.3179417
+      x-goog-upload-header-x-google-backends: unix:/tmp/esfbackend.1790281856.344431.1364415
       x-goog-upload-header-x-google-esf-cloud-client-params: 'backend_service_name:
         "generativelanguage.googleapis.com" backend_fully_qualified_method: "google.ai.generativelanguage.v1beta.FileService.CreateFile"'
-      x-goog-upload-header-x-google-gfe-backend-request-cost: '15.6492'
+      x-goog-upload-header-x-google-gfe-backend-request-cost: '12.2354'
       x-goog-upload-header-x-google-security-signals: FRAMEWORK=ONE_PLATFORM,ENV=borg,ENV_DEBUG=borg_user:genai-api;borg_job:prod.genai-api
       x-goog-upload-header-x-google-session-info: GgQYECgLIAE6IxIhZ2VuZXJhdGl2ZWxhbmd1YWdlLmdvb2dsZWFwaXMuY29t
       x-goog-upload-status: active
-      x-goog-upload-url: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AJjja9atfnTLi8lICwpNICFq689JzQqCIV-NxaC5iGff_6eZMCzfU7Es3-lNa-QyYXztiCQA3a69Z-C3BFOu13G5Ensk_jaA1K9u9BT3E7Rp2w&upload_protocol=resumable
-      x-guploader-uploadid: AJjja9atfnTLi8lICwpNICFq689JzQqCIV-NxaC5iGff_6eZMCzfU7Es3-lNa-QyYXztiCQA3a69Z-C3BFOu13G5Ensk_jaA1K9u9BT3E7Rp2w
-  recorded_at: 2026-09-03 05:36:39
+      x-goog-upload-url: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AP6rU80Vm53w4vzTio_KlNfWk5tQFHGsCkgU-sQPOsZwNgfotelOUiQUoab2s_2P4qfvMNFjShSmT8TLbWcFnTQP6JicesqRUkWXYCiCA9ka-dU&upload_protocol=resumable
+      x-guploader-uploadid: AP6rU80Vm53w4vzTio_KlNfWk5tQFHGsCkgU-sQPOsZwNgfotelOUiQUoab2s_2P4qfvMNFjShSmT8TLbWcFnTQP6JicesqRUkWXYCiCA9ka-dU
+  recorded_at: 2026-09-25 11:47:47
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AJjja9atfnTLi8lICwpNICFq689JzQqCIV-NxaC5iGff_6eZMCzfU7Es3-lNa-QyYXztiCQA3a69Z-C3BFOu13G5Ensk_jaA1K9u9BT3E7Rp2w&upload_protocol=resumable
+    uri: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AP6rU80Vm53w4vzTio_KlNfWk5tQFHGsCkgU-sQPOsZwNgfotelOUiQUoab2s_2P4qfvMNFjShSmT8TLbWcFnTQP6JicesqRUkWXYCiCA9ka-dU&upload_protocol=resumable
     body:
       string: apples.pdf
   response:
@@ -40,95 +40,58 @@ http_interactions:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-length: '542'
       content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:41 GMT
+      date: Fri, 25 Sep 2026 11:47:48 GMT
       server: UploadServer
       vary:
       - Origin
       - X-Origin
       - Referer
       x-goog-upload-status: final
-      x-guploader-uploadid: AJjja9atfnTLi8lICwpNICFq689JzQqCIV-NxaC5iGff_6eZMCzfU7Es3-lNa-QyYXztiCQA3a69Z-C3BFOu13G5Ensk_jaA1K9u9BT3E7Rp2w
+      x-guploader-uploadid: AP6rU80Vm53w4vzTio_KlNfWk5tQFHGsCkgU-sQPOsZwNgfotelOUiQUoab2s_2P4qfvMNFjShSmT8TLbWcFnTQP6JicesqRUkWXYCiCA9ka-dU
     body:
       string: |
         {
           "file": {
-            "name": "files/57e50yb9a40c",
+            "name": "files/uno5dulp7zr3",
             "displayName": "apples.pdf",
             "mimeType": "application/pdf",
             "sizeBytes": "14560",
-            "createTime": "2026-09-03T05:36:41.161739Z",
-            "updateTime": "2026-09-03T05:36:41.161739Z",
-            "expirationTime": "2026-09-05T05:36:40.525864106Z",
+            "createTime": "2026-09-25T11:47:48.809341Z",
+            "updateTime": "2026-09-25T11:47:48.809341Z",
+            "expirationTime": "2026-09-27T11:47:48.599144777Z",
             "sha256Hash": "MWE4OWZhODBjYmU3ZmE0YzU3MTJmN2IxNTQxOGM0YmIzM2I5YzJjMDY4MGQwYzI3M2Q5NTMyOGEyZWVlMGU2Zg==",
-            "uri": "https://generativelanguage.googleapis.com/v1beta/files/57e50yb9a40c",
+            "uri": "https://generativelanguage.googleapis.com/v1beta/files/uno5dulp7zr3",
             "state": "ACTIVE",
             "source": "UPLOADED"
           }
         }
-  recorded_at: 2026-09-03 05:36:41
+  recorded_at: 2026-09-25 11:47:48
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the title of
-        this document?"},{"fileData":{"mimeType":"application/pdf","fileUri":"https://generativelanguage.googleapis.com/v1beta/files/57e50yb9a40c"}}]}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014}}'
+      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the title of this document?"},{"type":"document","uri":"https://generativelanguage.googleapis.com/v1beta/files/uno5dulp7zr3","mime_type":"application/pdf"}]}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '650'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:42 GMT
+      content-type: application/json
+      date: Fri, 25 Sep 2026 11:47:50 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1231
+      server-timing: gfet4t7; dur=1571
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "The title of the document is **Apples are tasty**.",
-                    "thoughtSignature": "EvIBCu8BARFNMg8oDryFDsOZAuAwYfix14sKdyQnmlx+ZcI8O+FeVAImD9EUYQKvdFXeiGEj70R76C0N7wmpM7DRoLoWUbTf/BbbegPPgz5OSb8Wf1pSqtASw250tfpqkLTyL0g1YxZ7B/hDd1rYmfPGIu2DNpyi94T0zRgFIBkXzpGawj/JhtKX3R4p3XtV5ACpqBt1mQVXTX+Y6NFHNZwiEirvvzvOUfFucA1byuzyFxFAgZ27usFh1fb1mx75sWALtfBh5pih7aJJ4p/a7+bVgM4dsYfa6HxMOjwR2ptHZZLjxzOqcCMmk1cA6sZTxM+ho8o="
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 530,
-            "candidatesTokenCount": 12,
-            "totalTokenCount": 582,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 10
-              },
-              {
-                "modality": "IMAGE",
-                "tokenCount": 520
-              }
-            ],
-            "thoughtsTokenCount": 40,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.7-flash",
-          "responseId": "aQeZava1GL61vdIP7vbX4Aw"
-        }
-  recorded_at: 2026-09-03 05:36:42
+      string: '{"status":"completed","usage":{"total_tokens":576,"total_input_tokens":530,"input_tokens_by_modality":[{"modality":"image","tokens":520},{"modality":"text","tokens":10}],"total_cached_tokens":0,"total_output_tokens":12,"total_tool_use_tokens":0,"total_thought_tokens":34,"raw_prompt_token":647,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":127},{"modality":"image","tokens":520}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":34}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":127},{"modality":"image","tokens":520}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":34}]}]},"created":"2026-09-25T11:47:50Z","updated":"2026-09-25T11:47:50Z","service_tier":"standard","steps":[{"signature":"EvUBCvIBAWkUfRPVJQ2hQwrcZ/fYlqCAOeETa9Eep/7+9kTFQJOsK3XLq2iSo2mvHFvjtUeKGc1mjzhfgCaMmw7n9UKBLaIm0fUJzDWhuHmWjJqBP6A1CEzywH+GyifZ7NgsGJ/WtNPMOQ13gaFCpNmYWrJU/YoJequ4640FHnv25NhiESTse1ExWcHTSbBHe3QuILOCAcD7RFTIpBxmYs+DX5uSb+/K2iEn3P7CPei2G2E+drub8W+2TRN5DlFRwFdOM66kWkv7u2oPsD6n2CmtpnJdI7eyYdKYSecggYZ7IA4Wn+15TDPuYEY7vWwZPLFvNmewCwA=","type":"thought"},{"content":[{"text":"The
+        title of the document is **Apples are tasty**.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
+  recorded_at: 2026-09-25 11:47:50
 - request:
     method: GET
     uri: https://generativelanguage.googleapis.com/v1beta/files?pageSize=100
@@ -137,11 +100,11 @@ http_interactions:
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '638'
+      content-length: '605'
       content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:43 GMT
+      date: Fri, 25 Sep 2026 11:47:51 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=274
+      server-timing: gfet4t7; dur=90
       vary:
       - Origin
       - X-Origin
@@ -154,76 +117,63 @@ http_interactions:
         {
           "files": [
             {
-              "name": "files/57e50yb9a40c",
+              "name": "files/uno5dulp7zr3",
               "displayName": "apples.pdf",
               "mimeType": "application/pdf",
               "sizeBytes": "14560",
-              "createTime": "2026-09-03T05:36:41.161739Z",
-              "updateTime": "2026-09-03T05:36:41.161739Z",
-              "expirationTime": "2026-09-05T05:36:40.525864106Z",
+              "createTime": "2026-09-25T11:47:48.809341Z",
+              "updateTime": "2026-09-25T11:47:48.809341Z",
+              "expirationTime": "2026-09-27T11:47:48.599144777Z",
               "sha256Hash": "MWE4OWZhODBjYmU3ZmE0YzU3MTJmN2IxNTQxOGM0YmIzM2I5YzJjMDY4MGQwYzI3M2Q5NTMyOGEyZWVlMGU2Zg==",
-              "uri": "https://generativelanguage.googleapis.com/v1beta/files/57e50yb9a40c",
+              "uri": "https://generativelanguage.googleapis.com/v1beta/files/uno5dulp7zr3",
               "state": "ACTIVE",
               "source": "UPLOADED"
             },
             {
-              "name": "files/4j4nq0kypwzv",
+              "name": "files/psooytwbxgkz",
               "displayName": "apples.pdf",
               "mimeType": "application/pdf",
               "sizeBytes": "14560",
-              "createTime": "2026-09-03T05:35:56.693702Z",
-              "updateTime": "2026-09-03T05:35:56.693702Z",
-              "expirationTime": "2026-09-05T05:35:56.099370766Z",
+              "createTime": "2026-09-25T11:46:42.021810Z",
+              "updateTime": "2026-09-25T11:46:42.021810Z",
+              "expirationTime": "2026-09-27T11:46:41.879519231Z",
               "sha256Hash": "MWE4OWZhODBjYmU3ZmE0YzU3MTJmN2IxNTQxOGM0YmIzM2I5YzJjMDY4MGQwYzI3M2Q5NTMyOGEyZWVlMGU2Zg==",
-              "uri": "https://generativelanguage.googleapis.com/v1beta/files/4j4nq0kypwzv",
+              "uri": "https://generativelanguage.googleapis.com/v1beta/files/psooytwbxgkz",
               "state": "ACTIVE",
               "source": "UPLOADED"
             },
             {
-              "name": "files/pgfjh1918tgh",
+              "name": "files/dsyibztqjvsy",
               "displayName": "apples.pdf",
               "mimeType": "application/pdf",
               "sizeBytes": "14560",
-              "createTime": "2026-09-02T13:32:29.121532Z",
-              "updateTime": "2026-09-02T13:32:29.121532Z",
-              "expirationTime": "2026-09-04T13:32:28.529137014Z",
+              "createTime": "2026-09-25T11:44:10.223276Z",
+              "updateTime": "2026-09-25T11:44:10.223276Z",
+              "expirationTime": "2026-09-27T11:44:10.080551869Z",
               "sha256Hash": "MWE4OWZhODBjYmU3ZmE0YzU3MTJmN2IxNTQxOGM0YmIzM2I5YzJjMDY4MGQwYzI3M2Q5NTMyOGEyZWVlMGU2Zg==",
-              "uri": "https://generativelanguage.googleapis.com/v1beta/files/pgfjh1918tgh",
+              "uri": "https://generativelanguage.googleapis.com/v1beta/files/dsyibztqjvsy",
               "state": "ACTIVE",
               "source": "UPLOADED"
             },
             {
-              "name": "files/98e4gqfemqi9",
-              "displayName": "penguin_race.csv",
-              "mimeType": "text/csv",
-              "sizeBytes": "122",
-              "createTime": "2026-09-02T13:32:27.085580Z",
-              "updateTime": "2026-09-02T13:32:27.085580Z",
-              "expirationTime": "2026-09-04T13:32:26.391450696Z",
-              "sha256Hash": "NzRkOTIwNjczMTFiOWRjNGYyYzA5MDIxY2YwMjliYTc5OWNmY2NiZjJiY2EzYzBiMDMwZGVkYjk1NzRkNmM0Yw==",
-              "uri": "https://generativelanguage.googleapis.com/v1beta/files/98e4gqfemqi9",
-              "state": "ACTIVE",
-              "source": "UPLOADED"
-            },
-            {
-              "name": "files/7w67ez0ne54g",
-              "displayName": "apples.pdf",
-              "mimeType": "application/pdf",
-              "sizeBytes": "14560",
-              "createTime": "2026-09-02T13:32:19.790072Z",
-              "updateTime": "2026-09-02T13:32:19.790072Z",
-              "expirationTime": "2026-09-04T13:32:19.201544582Z",
-              "sha256Hash": "MWE4OWZhODBjYmU3ZmE0YzU3MTJmN2IxNTQxOGM0YmIzM2I5YzJjMDY4MGQwYzI3M2Q5NTMyOGEyZWVlMGU2Zg==",
-              "uri": "https://generativelanguage.googleapis.com/v1beta/files/7w67ez0ne54g",
+              "name": "files/t62iecxzkhs5",
+              "displayName": "file3bf492ea66301.jsonl",
+              "mimeType": "application/jsonl",
+              "sizeBytes": "931",
+              "createTime": "2026-09-03T05:38:36.570412Z",
+              "updateTime": "2026-09-03T05:38:39.505627Z",
+              "expirationTime": "2026-10-03T05:38:39.314923539Z",
+              "sha256Hash": "ZGNjODUzZTFjNWIyN2ZlMjIyNzc0NjM1N2JjY2I5ODI5NDlmMTA4N2RjNThiZDRkZmQ1MGM1Y2RiYTc4YzUzNw==",
+              "uri": "https://generativelanguage.googleapis.com/v1beta/files/t62iecxzkhs5",
               "state": "ACTIVE",
               "source": "UPLOADED"
             }
           ]
         }
-  recorded_at: 2026-09-03 05:36:43
+  recorded_at: 2026-09-25 11:47:51
 - request:
     method: GET
-    uri: https://generativelanguage.googleapis.com/v1beta/files/57e50yb9a40c
+    uri: https://generativelanguage.googleapis.com/v1beta/files/uno5dulp7zr3
   response:
     status: 200
     headers:
@@ -231,9 +181,9 @@ http_interactions:
       content-encoding: gzip
       content-length: '334'
       content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:43 GMT
+      date: Fri, 25 Sep 2026 11:47:51 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=151
+      server-timing: gfet4t7; dur=78
       vary:
       - Origin
       - X-Origin
@@ -244,22 +194,22 @@ http_interactions:
     body:
       string: |
         {
-          "name": "files/57e50yb9a40c",
+          "name": "files/uno5dulp7zr3",
           "displayName": "apples.pdf",
           "mimeType": "application/pdf",
           "sizeBytes": "14560",
-          "createTime": "2026-09-03T05:36:41.161739Z",
-          "updateTime": "2026-09-03T05:36:41.161739Z",
-          "expirationTime": "2026-09-05T05:36:40.525864106Z",
+          "createTime": "2026-09-25T11:47:48.809341Z",
+          "updateTime": "2026-09-25T11:47:48.809341Z",
+          "expirationTime": "2026-09-27T11:47:48.599144777Z",
           "sha256Hash": "MWE4OWZhODBjYmU3ZmE0YzU3MTJmN2IxNTQxOGM0YmIzM2I5YzJjMDY4MGQwYzI3M2Q5NTMyOGEyZWVlMGU2Zg==",
-          "uri": "https://generativelanguage.googleapis.com/v1beta/files/57e50yb9a40c",
+          "uri": "https://generativelanguage.googleapis.com/v1beta/files/uno5dulp7zr3",
           "state": "ACTIVE",
           "source": "UPLOADED"
         }
-  recorded_at: 2026-09-03 05:36:43
+  recorded_at: 2026-09-25 11:47:51
 - request:
     method: GET
-    uri: https://generativelanguage.googleapis.com/v1beta/files/57e50yb9a40c:download?alt=media
+    uri: https://generativelanguage.googleapis.com/v1beta/files/uno5dulp7zr3:download?alt=media
   response:
     status: 400
     headers:
@@ -267,14 +217,14 @@ http_interactions:
       cache-control: private, max-age=0
       content-length: '129'
       content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:43 GMT
-      expires: Thu, 03 Sep 2026 05:36:43 GMT
+      date: Fri, 25 Sep 2026 11:47:51 GMT
+      expires: Fri, 25 Sep 2026 11:47:51 GMT
       server: UploadServer
       vary:
       - Origin
       - X-Origin
       - Referer
-      x-guploader-uploadid: AJjja9aTInwi_0i1FKIHQ_f2ev2kUlKyBEt_JDtA4sS2dwqJZnzVJVHWZNvlOOrT3VzXF7ur4s2Gjgkx-1km
+      x-guploader-uploadid: AP6rU820g49nFEbOT6oP7OFZNdbX78ZnmKDDDJVTQ1XPxZciljDZ-xAae39TQzBMHJRoQb7h
     body:
       string: |
         {
@@ -284,10 +234,10 @@ http_interactions:
             "status": "INVALID_ARGUMENT"
           }
         }
-  recorded_at: 2026-09-03 05:36:43
+  recorded_at: 2026-09-25 11:47:52
 - request:
     method: DELETE
-    uri: https://generativelanguage.googleapis.com/v1beta/files/57e50yb9a40c
+    uri: https://generativelanguage.googleapis.com/v1beta/files/uno5dulp7zr3
   response:
     status: 200
     headers:
@@ -295,9 +245,9 @@ http_interactions:
       content-encoding: gzip
       content-length: '23'
       content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:45 GMT
+      date: Fri, 25 Sep 2026 11:47:52 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1063
+      server-timing: gfet4t7; dur=464
       vary:
       - Origin
       - X-Origin
@@ -308,5 +258,5 @@ http_interactions:
     body:
       string: |
         {}
-  recorded_at: 2026-09-03 05:36:45
+  recorded_at: 2026-09-25 11:47:52
 recorded_with: VCR-vcr/2.1.0
