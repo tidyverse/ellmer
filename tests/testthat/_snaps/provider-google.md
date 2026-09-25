@@ -5,7 +5,7 @@
     Condition
       Error in `req_perform()`:
       ! HTTP 404 Not Found.
-      i models/doesnt-exist is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+      i Model 'doesnt-exist' not found. Did you mean 'gemini-pro-latest'? Please verify the model name against the supported list: https://ai.google.dev/gemini-api/docs/models [not_found]
 
 # defaults are reported
 
@@ -13,14 +13,6 @@
       . <- chat_google_gemini()
     Message
       Using model = "gemini-3.7-flash".
-
-# can use images
-
-    Code
-      . <- chat$chat("What's in this image?", image_remote)
-    Condition
-      Error in `method(as_json, list(ellmer::ProviderGoogleGemini, ellmer::ContentImageRemote))`:
-      ! Gemini doesn't support remote images
 
 # binary documents are rejected
 

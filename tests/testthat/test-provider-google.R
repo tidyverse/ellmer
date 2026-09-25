@@ -101,7 +101,7 @@ test_that("can use images", {
   chat_fun <- chat_google_gemini_test
 
   test_images_inline(chat_fun)
-  test_images_remote_error(chat_fun)
+  test_images_remote(chat_fun)
 })
 
 test_that("can use pdfs", {
@@ -410,7 +410,8 @@ test_that("can generate images", {
   chat$chat("Draw a cat")
 
   turn <- chat$get_turns()[[2]]
-  expect_s7_class(turn@contents[[1]], ContentImageInline)
+  images <- keep(turn@contents, S7_inherits, ContentImageInline)
+  expect_length(images, 1)
 })
 
 test_that("can use thinking levels", {

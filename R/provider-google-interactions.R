@@ -245,7 +245,9 @@ method(as_json, list(ProviderGoogleGemini, ContentImageRemote)) <- function(
   x,
   ...
 ) {
-  list(type = "image", uri = x@url)
+  # The API needs the type up front, so it's guessed from the URL's extension
+  path <- sub("[?#].*$", "", x@url)
+  list(type = "image", uri = x@url, mime_type = guess_mime_type(path))
 }
 
 method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(

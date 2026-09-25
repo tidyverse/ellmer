@@ -74,8 +74,12 @@ test_that("turns become steps", {
 test_that("content is serialized as Interactions blocks", {
   provider <- chat_google_gemini_test()$get_provider()
   expect_equal(
-    as_json(provider, ContentImageRemote("https://example.com/x.png")),
-    list(type = "image", uri = "https://example.com/x.png")
+    as_json(provider, ContentImageRemote("https://example.com/x.png?v=1")),
+    list(
+      type = "image",
+      uri = "https://example.com/x.png?v=1",
+      mime_type = "image/png"
+    )
   )
   expect_equal(
     as_json(provider, ContentPDF("application/pdf", "YQ==", "a.pdf")),
