@@ -340,12 +340,26 @@ method(value_turn, ProviderGoogleGemini) <- function(
   result,
   has_type = FALSE
 ) {
-  steps <- result$steps
+  contents <- gemini_step_contents(result$steps, has_type)
+
+  tokens <- value_tokens(provider, result)
+  cost <- get_token_cost(provider@name, model@name, tokens)
+
+  AssistantTurn(
+    contents,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = value_finish_reason(provider, result)
+  )
+}
+
+gemini_step_contents <- function(steps, has_type = FALSE) {
   # The search result step only contains a widget for search suggestions;
   # the sources come from the citations in the answer
   sources <- gemini_web_sources(steps)
 
-  contents <- list_c(lapply(steps, function(step) {
+  list_c(lapply(steps, function(step) {
     switch(
       step$type,
       thought = list(gemini_thinking(step)),
@@ -382,17 +396,6 @@ method(value_turn, ProviderGoogleGemini) <- function(
       cli::cli_abort("Unknown step type {.str {step$type}}.", .internal = TRUE)
     )
   }))
-
-  tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider@name, model@name, tokens)
-
-  AssistantTurn(
-    contents,
-    json = result,
-    tokens = unlist(tokens),
-    cost = cost,
-    finish_reason = value_finish_reason(provider, result)
-  )
 }
 
 gemini_thinking <- function(step) {
@@ -501,6 +504,120 @@ method(value_finish_reason, ProviderGoogleGemini) <- function(
     incomplete = "max_tokens",
     I(status)
   )
+}
+
+# Streaming --------------------------------------------------------------------
+
+# https://ai.google.dev/gemini-api/docs/streaming
+method(stream_parse, ProviderGoogleGemini) <- function(provider, event) {
+  if (is.null(event) || identical(event$data, "[DONE]")) {
+    NULL
+  } else {
+    jsonlite::parse_json(event$data)
+  }
+}
+
+# Rebuilds the same structure as a non-streaming response (`status`, `usage`,
+# `steps`), so that value_turn() can be shared. Steps are keyed by `index`.
+method(stream_merge_chunks, ProviderGoogleGemini) <- function(
+  provider,
+  result,
+  chunk
+) {
+  switch(
+    chunk$event_type,
+    interaction.created = c(chunk$interaction, list(steps = list())),
+    step.start = {
+      result$steps[[chunk$index + 1]] <- chunk$step
+      result
+    },
+    step.delta = {
+      i <- chunk$index + 1
+      result$steps[[i]] <- gemini_merge_delta(result$steps[[i]], chunk$delta)
+      result
+    },
+    interaction.completed = modify_list(result, chunk$interaction),
+    error = cli::cli_abort(c(
+      "Request failed ({chunk$error$code})",
+      "{chunk$error$message}"
+    )),
+    result
+  )
+}
+
+gemini_merge_delta <- function(step, delta) {
+  if (is_content_block(delta) && !identical(delta$type, "text")) {
+    step$content <- c(step$content, list(delta))
+    return(step)
+  }
+
+  switch(
+    delta$type,
+    text = {
+      content <- step$content
+      n <- length(content)
+      if (n > 0 && identical(content[[n]]$type, "text")) {
+        content[[n]]$text <- paste0(content[[n]]$text, delta$text)
+      } else {
+        content[[n + 1]] <- delta
+      }
+      step$content <- content
+      step
+    },
+    text_annotation_delta = {
+      n <- length(step$content)
+      step$content[[n]]$annotations <- c(
+        step$content[[n]]$annotations,
+        delta$annotations
+      )
+      step
+    },
+    thought_signature = {
+      step$signature <- delta$signature
+      step
+    },
+    thought_summary = {
+      step$summary <- c(step$summary, list(delta$content))
+      step
+    },
+    arguments_delta = {
+      # Arrives as fragments of a JSON string; parsed in value_turn()
+      previous <- if (is.character(step$arguments)) step$arguments else ""
+      step$arguments <- paste0(previous, delta$arguments)
+      step
+    },
+    # Built-in tool deltas carry the remaining fields of the step
+    modify_list(step, delta[names(delta) != "type"])
+  )
+}
+
+method(stream_content, ProviderGoogleGemini) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
+  if (event$event_type == "step.delta") {
+    delta <- event$delta
+    if (identical(delta$type, "text")) {
+      list(ContentText(delta$text))
+    } else if (identical(delta$type, "thought_summary")) {
+      list(ContentThinking(delta$content$text))
+    } else {
+      list()
+    }
+  } else if (
+    event$event_type == "interaction.completed" && !is.null(completion)
+  ) {
+    # Citations and tool activity are rebuilt from the merged steps, since
+    # the sources for a search only arrive with the answer text
+    contents <- gemini_step_contents(completion$steps)
+    keep(contents, function(content) {
+      !is_stream_text_content(content) &&
+        !S7_inherits(content, ContentToolRequest)
+    })
+  } else {
+    list()
+  }
 }
 
 # Batched requests -------------------------------------------------------------

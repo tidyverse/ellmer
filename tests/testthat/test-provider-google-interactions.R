@@ -100,7 +100,7 @@ test_that("quota errors are not retried", {
   resp <- function(status, code) {
     response_json(
       status,
-      body = list(error = list(code = code, message = "boom"))
+      body = list(error = list(code = code, message = "Quota exceeded"))
     )
   }
   expect_equal(gemini_is_transient(resp(429, "rate_limit_exceeded")), TRUE)
@@ -109,7 +109,7 @@ test_that("quota errors are not retried", {
   expect_equal(gemini_is_transient(resp(400, "invalid_request")), FALSE)
   expect_equal(
     gemini_error_body(resp(429, "quota_exceeded")),
-    "boom [quota_exceeded]"
+    "Quota exceeded [quota_exceeded]"
   )
 
   policies <- base_request(chat_google_gemini_test()$get_provider())$policies
@@ -261,4 +261,160 @@ test_that("value_finish_reason() maps interaction status", {
     "max_tokens"
   )
   expect_equal(value_finish_reason(provider, list()), NA_character_)
+})
+
+# Streaming --------------------------------------------------------------------
+
+stream_event <- function(type, ...) {
+  list(event_type = type, ...)
+}
+
+test_that("stream_merge_chunks() rebuilds the interaction from events", {
+  provider <- chat_google_gemini_test()$get_provider()
+  usage <- list(total_tokens = 30, total_input_tokens = 10)
+  events <- list(
+    stream_event(
+      "interaction.created",
+      interaction = list(status = "in_progress")
+    ),
+    stream_event("step.start", index = 0, step = list(type = "thought")),
+    stream_event(
+      "step.delta",
+      index = 0,
+      delta = list(type = "thought_signature", signature = "sig")
+    ),
+    stream_event("step.stop", index = 0),
+    stream_event(
+      "step.start",
+      index = 1,
+      step = list(
+        type = "function_call",
+        id = "call_1",
+        name = "f",
+        arguments = list()
+      )
+    ),
+    stream_event(
+      "step.delta",
+      index = 1,
+      delta = list(type = "arguments_delta", arguments = '{"x":')
+    ),
+    stream_event(
+      "step.delta",
+      index = 1,
+      delta = list(type = "arguments_delta", arguments = "1}")
+    ),
+    stream_event("step.stop", index = 1),
+    stream_event("step.start", index = 2, step = list(type = "model_output")),
+    stream_event(
+      "step.delta",
+      index = 2,
+      delta = list(type = "text", text = "Hel")
+    ),
+    stream_event(
+      "step.delta",
+      index = 2,
+      delta = list(type = "text", text = "lo")
+    ),
+    stream_event(
+      "step.delta",
+      index = 2,
+      delta = list(
+        type = "text_annotation_delta",
+        annotations = list(list(
+          type = "url_citation",
+          url = "u",
+          end_index = 5
+        ))
+      )
+    ),
+    stream_event("step.stop", index = 2),
+    stream_event(
+      "interaction.completed",
+      interaction = list(status = "completed", usage = usage)
+    )
+  )
+
+  result <- NULL
+  for (event in events) {
+    result <- stream_merge_chunks(provider, result, event)
+  }
+  expect_equal(result$status, "completed")
+  expect_equal(result$usage, usage)
+
+  contents <- value_turn(provider, test_model(), result)@contents
+  expect_equal(contents[[1]]@extra, list(type = "thought", signature = "sig"))
+  expect_equal(contents[[2]]@arguments, list(x = 1))
+  expect_equal(contents[[3]]@text, "Hello")
+  expect_equal(contents[[4]]@grounded_span, "Hello")
+
+  expect_null(stream_parse(provider, list(data = "[DONE]")))
+  expect_snapshot(
+    stream_merge_chunks(
+      provider,
+      result,
+      stream_event(
+        "error",
+        error = list(code = "api_error", message = "Something went wrong")
+      )
+    ),
+    error = TRUE
+  )
+})
+
+test_that("stream_content() emits text as it arrives and activity on completion", {
+  provider <- chat_google_gemini_test()$get_provider()
+  events <- list(
+    stream_event(
+      "interaction.created",
+      interaction = list(status = "in_progress")
+    ),
+    stream_event(
+      "step.start",
+      index = 0,
+      step = list(type = "google_search_call", id = "s1", signature = "sig")
+    ),
+    stream_event(
+      "step.delta",
+      index = 0,
+      delta = list(
+        type = "google_search_call",
+        arguments = list(queries = list("q"))
+      )
+    ),
+    stream_event("step.start", index = 1, step = list(type = "model_output")),
+    stream_event(
+      "step.delta",
+      index = 1,
+      delta = list(type = "text", text = "Hi")
+    ),
+    stream_event(
+      "step.delta",
+      index = 1,
+      delta = list(
+        type = "text_annotation_delta",
+        annotations = list(list(
+          type = "url_citation",
+          url = "u",
+          end_index = 2
+        ))
+      )
+    ),
+    stream_event(
+      "interaction.completed",
+      interaction = list(status = "completed")
+    )
+  )
+
+  result <- NULL
+  contents <- list()
+  for (event in events) {
+    result <- stream_merge_chunks(provider, result, event)
+    contents <- c(contents, stream_content(provider, event, result))
+  }
+  expect_length(contents, 3)
+  expect_s7_class(contents[[1]], ContentText)
+  expect_s7_class(contents[[2]], ContentToolRequestSearch)
+  expect_equal(contents[[2]]@query, "q")
+  expect_s7_class(contents[[3]], ContentCitation)
 })
