@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_google_gemini()` now uses Google's Interactions API (@thisisnic, #1155).
+
 # ellmer 0.5.0
 
 ## Lifecycle changes

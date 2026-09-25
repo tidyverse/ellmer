@@ -13,6 +13,12 @@ NULL
 #' Most enterprises are likely to use Vertex AI, and individuals are likely
 #' to use Gemini.
 #'
+#' `chat_google_gemini()` uses the
+#' [Interactions API](https://ai.google.dev/gemini-api/docs/interactions-overview),
+#' so `api_args` should use its request fields. `chat_google_vertex()` uses
+#' the `generateContent` API, as do batch requests and token counting for
+#' both.
+#'
 #' Use [google_upload()] to upload files (PDFs, images, video, audio, etc.)
 #'
 #' ## Authentication

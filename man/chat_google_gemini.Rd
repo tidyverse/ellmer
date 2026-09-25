@@ -90,6 +90,12 @@ Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 Most enterprises are likely to use Vertex AI, and individuals are likely
 to use Gemini.
 
+\code{chat_google_gemini()} uses the
+\href{https://ai.google.dev/gemini-api/docs/interactions-overview}{Interactions API},
+so \code{api_args} should use its request fields. \code{chat_google_vertex()} uses
+the \code{generateContent} API, as do batch requests and token counting for
+both.
+
 Use \code{\link[=google_upload]{google_upload()}} to upload files (PDFs, images, video, audio, etc.)
 \subsection{Authentication}{
 
