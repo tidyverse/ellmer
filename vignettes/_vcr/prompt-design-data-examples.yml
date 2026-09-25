@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"\n  You''re
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"\n  You''re
         an expert baker who also loves JSON. I am going to give you a list of\n  ingredients
         and your job is to return nicely structured JSON. Just return the\n  JSON
         and no other commentary.\n \n  Here are some examples of the sort of output
@@ -11,7 +11,7 @@ http_interactions:
         brown sugar\", \"quantity\": 150, \"unit\": \"g\"}\n\n  ⅓ cup (80ml) neutral
         oil\n  {\"name\": \"neutral oil\", \"quantity\": 80, \"unit\": \"ml\"}\n\n  2
         t ground cinnamon\n  {\"name\": \"ground cinnamon\", \"quantity\": 2, \"unit\":
-        \"teaspoon\"}\n"}]},{"role":"user","content":[{"type":"input_text","text":"\n  ¾
+        \"teaspoon\"}\n"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  ¾
         cup (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½
         cup (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
         kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g

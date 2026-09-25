@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"\n  You''re
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"\n  You''re
         an expert baker who also loves JSON. I am going to give you a list of\n  ingredients
         and your job is to return nicely structured JSON. Just return the\n  JSON
         and no other commentary.\n\n\n\n  * If an ingredient has both weight and volume,
@@ -13,7 +13,7 @@ http_interactions:
         extract that.\n\n    2 t ground cinnamon\n    ⅓ cup (80ml) neutral oil\n    [\n      {\"name\":
         \"ground cinnamon\", \"quantity\": 2, \"unit\": \"teaspoon\", \"input\": \"2
         t ground cinnamon\"},\n      {\"name\": \"neutral oil\", \"quantity\": 80,
-        \"unit\": \"ml\", \"input\": \"⅓ cup (80ml) neutral oil\"}\n    ]\n"}]},{"role":"user","content":[{"type":"input_text","text":"\n  In
+        \"unit\": \"ml\", \"input\": \"⅓ cup (80ml) neutral oil\"}\n    ]\n"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  In
         a large bowl, cream together one cup of softened unsalted butter and a\n  quarter
         cup of white sugar until smooth. Beat in an egg and 1 teaspoon of\n  vanilla
         extract. Gradually stir in 2 cups of all-purpose flour until the\n  dough

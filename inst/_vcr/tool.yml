@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Give
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Give
         me five numbers from a random normal distribution."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"tools":[{"type":"function","name":"rnorm","description":"Draw
         numbers from a random normal distribution","strict":true,"parameters":{"type":"object","description":"","properties":{"n":{"type":"integer","description":"The
         number of observations. Must be a positive integer."},"mean":{"type":"number","description":"The
@@ -172,7 +172,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Give
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Give
         me five numbers from a random normal distribution."}]},{"id":"rs_0cfc11607c070948016a6fc438c78881969cb35d846b942f95","type":"reasoning","content":[],"encrypted_content":"gAAAAABqb8Q5ZsWECJphzjqslFLgbBexUozZWX6x3Xlh_jz_Fxve2a7FYQ6Nq_9AKnzAzv4wvhyqHoSrtBWb_3BqqFqo_6du4IfffMU9LBaL792bGEYtBVVYmgVW2rgUKesBbI2u-LiTjRHDFncrgZGQy6r46oXbe6NhAq-g-pUDoNGGSkmc5kh13Ts84HH0UhivKB3x0cARyI0OgiDpMup8SBOry5vjCa54t5WKJggpVPr726tBc8huoUSBXcdcd36GDlRvWUPvUnCJcKv_EBWdptk4mE9etUnx-nREI0qZSpRYk8j-GTr_Mwl9ZB4Ea_ZOktpJP5R5uqZD7eykkohqmtVmCexHROFFusi7XlVlzxAHZ1SSu-jWu2mnzuj1DRuyUZUZYfxT8tWwpkDgde0z0y9EP2ekHilPP_fCN0mHFisDilRymA-9Q1SmZcX2ZBgTX_jlx1YnWSBuaRzaMLoU-RLyJsUKHJt3K2mxjnA4B7eS8vgCYI5qIsOkWWLpYVz0FXk7DS5leBSCXZ0XOWYpx6zK7iPKRJxOH8I4-4Y7_CmUGHZdvjRk8dAjI-Odndd5CqmyoBvLY3cvICD3xBXJJWLUatdt4n4bARBTte_pOnr4LkPzb-6SpavADfQmy6kwxc58pE5hFFoNx49QvQXQuLOGz6rUX1ZOVu2g19-xjITfQCMUPW_7LFUBvGI5fW6EjFFvQfNfiM3naj26HTTBCjF46Pf6z4Ue-Gh5vyGa0yxXU1kbva4f2KjFm3U6vf6mSXrvY0m4hdZNsVe-2dVoGKyLx624pWC8Sjk-xW10xOa_7SAXhgYjNVI5hIA3FlJR2qz3l2kQvR7DlbJzGVDX8N7Jr-lo8Hp2wFaZ-BbQIMTJk9ZZ2jfrtNy65JP5LjQ2dy8hN9DBObZM90yE2VGyL4Lt1SPK4Ok5B74T7WHZJZByshWOi8WoKUX0NhnmxixX5Mlxv-Z1X2NV3gLjoYAijUe86ewTgr2JOnTPjaEgJpwHci4fKP6EslSwych1YvNOPdYwbCDxXlymcn2RqDg2VHmgkXUtWQ==","summary":[]},{"type":"function_call","call_id":"fc_0cfc11607c070948016a6fc439230c8196b926d4a0f383ef70","name":"rnorm","arguments":"{\"n\":5,\"mean\":0,\"sd\":1}"},{"type":"function_call_output","call_id":"fc_0cfc11607c070948016a6fc439230c8196b926d4a0f383ef70","output":"[1.1484,-1.8218,-0.2473,-0.2442,-0.2827]"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"tools":[{"type":"function","name":"rnorm","description":"Draw
         numbers from a random normal distribution","strict":true,"parameters":{"type":"object","description":"","properties":{"n":{"type":"integer","description":"The
         number of observations. Must be a positive integer."},"mean":{"type":"number","description":"The

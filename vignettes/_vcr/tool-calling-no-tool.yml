@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"How
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"How
         long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
