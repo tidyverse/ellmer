@@ -438,7 +438,8 @@ test_that("batch chat works", {
 
 test_that("gemini_prepare_batch_body handles API quirks", {
   chat <- chat_google_gemini_test()
-  provider <- chat$get_provider()
+  # Batch requests use the generateContent format
+  provider <- convert(chat$get_provider(), ProviderGoogle)
   model <- chat$get_model_object()
 
   body <- chat_body(

@@ -634,3 +634,42 @@ method(stream_content, ProviderGoogleGemini) <- function(
 method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
   TRUE
 }
+
+# The batch and countTokens endpoints still use generateContent, so these
+# methods run the ProviderGoogle implementations, which build and parse
+# that format
+method(batch_submit, ProviderGoogleGemini) <- function(
+  provider,
+  model,
+  conversations,
+  type = NULL
+) {
+  batch_submit(convert(provider, ProviderGoogle), model, conversations, type)
+}
+
+method(batch_result_turn, ProviderGoogleGemini) <- function(
+  provider,
+  model,
+  result,
+  has_type = FALSE
+) {
+  batch_result_turn(convert(provider, ProviderGoogle), model, result, has_type)
+}
+
+method(count_tokens, ProviderGoogleGemini) <- function(
+  provider,
+  model,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  count_tokens(
+    convert(provider, ProviderGoogle),
+    model,
+    ...,
+    system_prompt = system_prompt,
+    tools = tools,
+    type = type
+  )
+}
