@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the capital of Canada?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -136,7 +136,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the capital of New Zealand?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -269,7 +269,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the capital of Jamaica?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -402,7 +402,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the capital of United States?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -535,7 +535,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"I
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"I
         go by Alex. 42 years on this planet and counting."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -690,7 +690,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Pleased
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Pleased
         to meet you! I''m Jamal, age 27."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -845,7 +845,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"They
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"They
         call me Li Wei. Nineteen years young."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -1007,7 +1007,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Fatima
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Fatima
         here. Just celebrated my 35th birthday last week."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -1162,7 +1162,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"The
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"The
         name''s Robert - 51 years old and proud of it."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -1317,7 +1317,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Kwame
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Kwame
         here - just hit the big 5-0 this year."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200

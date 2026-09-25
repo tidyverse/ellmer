@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"My name is
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"My name is
         Hadley and I''m a data scientist"}]}],"model":"gpt-4.1-nano","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -135,10 +135,10 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"My name is
-        Hadley and I''m a data scientist"}]},{"role":"assistant","content":[{"type":"output_text","text":"Hello,
-        Hadley! How can I assist you today?"}]},{"role":"user","content":[{"type":"input_text","text":"what''s
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"My name is
+        Hadley and I''m a data scientist"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"Hello,
+        Hadley! How can I assist you today?"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"what''s
         my name?"}]}],"model":"gpt-4.1-nano","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -269,10 +269,10 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"My name is
-        Hadley and I''m a data scientist"}]},{"role":"assistant","content":[{"type":"output_text","text":"Hello,
-        Hadley! How can I assist you today?"}]},{"role":"user","content":[{"type":"input_text","text":"what''s
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"My name is
+        Hadley and I''m a data scientist"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"Hello,
+        Hadley! How can I assist you today?"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"what''s
         my job?"}]}],"model":"gpt-4.1-nano","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200

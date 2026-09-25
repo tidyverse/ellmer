@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  The
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  The
         product was okay, but the customer service was terrible. I probably\n  won''t
         buy from them again.\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"Extract
         the sentiment scores of a given text. Sentiment scores should sum to 1.","properties":{"positive_score":{"type":"number","description":"Positive
