@@ -258,6 +258,13 @@ test_that("value_turn() preserves Google web metadata", {
   expect_equal(contents[[6]]@grounded_span, "Grounded")
 })
 
+test_that("value_turn() handles a response with no steps", {
+  provider <- chat_google_gemini_test()$get_provider()
+  turn <- value_turn(provider, test_model(), list(status = "incomplete"))
+  expect_equal(turn@contents, list())
+  expect_equal(turn@finish_reason, "max_tokens")
+})
+
 test_that("value_finish_reason() maps interaction status", {
   provider <- chat_google_gemini_test()$get_provider()
   expect_equal(
