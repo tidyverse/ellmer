@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* A tool result that can't be serialized to JSON (e.g. an image) no longer drops the entire `gen_ai.input.messages` OpenTelemetry attribute; only that part is replaced with a placeholder (@taekop, #1145).
+
 # ellmer 0.5.0
 
 ## Lifecycle changes

@@ -257,7 +257,35 @@ tool_otel_response <- function(content) {
 as_otel_message <- function(turn) {
   list(
     role = if (is_tool_result_turn(turn)) "tool" else turn@role,
-    parts = lapply(turn@contents, as_otel_part)
+    parts = lapply(turn@contents, as_otel_message_part)
+  )
+}
+
+# Convert a single Content to an otel part, replacing it with a placeholder
+# text part if that fails. Tool call arguments and tool result values are
+# typed `class_any`, so tools can pass or return objects (S7/R6 objects,
+# environments, external pointers, malformed `json`-class strings) that
+# `jsonlite::toJSON` can't encode. Test-serializing the part here, rather than
+# only catching errors raised while building it, also catches arguments that
+# build into a part fine but fail to encode (e.g. an environment nested in a
+# tool call's arguments) -- so one bad part doesn't drop the rest of the
+# message from `gen_ai.input.messages` (#1145).
+as_otel_message_part <- function(content) {
+  tryCatch(
+    {
+      part <- as_otel_part(content)
+      jsonlite::toJSON(part, auto_unbox = TRUE, null = "null")
+      part
+    },
+    error = function(e) {
+      list(
+        type = "text",
+        content = sprintf(
+          "(unable to serialize %s)",
+          obj_type_friendly(content)
+        )
+      )
+    }
   )
 }
 

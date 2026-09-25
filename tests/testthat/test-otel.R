@@ -352,6 +352,100 @@ test_that("tool_call_response part decodes json-class values", {
   )
 })
 
+test_that("unserializable tool result becomes a placeholder part", {
+  value <- ContentImageInline("image/png", "abc123")
+  part <- as_otel_message_part(ContentToolResult(value = value))
+  expect_equal(
+    part,
+    list(
+      type = "text",
+      content = "(unable to serialize a <ellmer::ContentToolResult> object)"
+    )
+  )
+})
+
+test_that("one unserializable turn doesn't drop the rest of the batch (#1145)", {
+  # The issue's case: an image tool result sits between two plain text turns.
+  # The image's turn should fall back to a placeholder part, but the text
+  # turns before and after it must survive.
+  turns <- list(
+    UserTurn(list(ContentText("before"))),
+    UserTurn(list(
+      ContentToolResult(
+        value = ContentImageInline("image/png", "abc123"),
+        request = ContentToolRequest(id = "1", name = "f", arguments = list())
+      )
+    )),
+    UserTurn(list(ContentText("after")))
+  )
+  msgs <- lapply(turns, as_otel_message)
+  encoded <- jsonlite::toJSON(msgs, auto_unbox = TRUE, null = "null")
+  decoded <- jsonlite::fromJSON(encoded, simplifyVector = FALSE)
+
+  expect_equal(decoded[[1]]$parts[[1]]$content, "before")
+  expect_equal(decoded[[3]]$parts[[1]]$content, "after")
+  expect_equal(decoded[[2]]$parts[[1]]$type, "text")
+  expect_equal(
+    decoded[[2]]$parts[[1]]$content,
+    "(unable to serialize a <ellmer::ContentToolResult> object)"
+  )
+})
+
+test_that("a tool request with unserializable arguments becomes a placeholder part", {
+  request <- ContentToolRequest(
+    id = "1",
+    name = "f",
+    arguments = list(x = new.env())
+  )
+  part <- as_otel_message_part(request)
+  expect_equal(
+    part,
+    list(
+      type = "text",
+      content = "(unable to serialize a <ellmer::ContentToolRequest> object)"
+    )
+  )
+})
+
+test_that("a malformed json-class tool result becomes a placeholder part", {
+  value <- structure("{not valid json", class = "json")
+  part <- as_otel_message_part(ContentToolResult(value = value))
+  expect_equal(
+    part,
+    list(
+      type = "text",
+      content = "(unable to serialize a <ellmer::ContentToolResult> object)"
+    )
+  )
+})
+
+test_that("local_chat_otel_span never errors, even when message conversion fails outright", {
+  skip_if_not_installed("otelsdk")
+  withr::local_envvar(
+    OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = "true"
+  )
+
+  chat <- chat_openai_test()
+  private <- chat$.__enclos_env__$private
+
+  # A malformed turn (not a real Turn object) fails before as_otel_message()
+  # ever reaches the per-part guard, exercising the outer tryCatch safety
+  # net instead.
+  bad_turns <- list(list())
+
+  expect_no_error(
+    with_otel_record({
+      (function() {
+        local_chat_otel_span(
+          private$provider,
+          private$model,
+          turns = bad_turns
+        )
+      })()
+    })
+  )
+})
+
 test_that("conversation id is recorded on agent and chat spans when set", {
   skip_if_not_installed("otelsdk")
   withr::local_envvar(OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = NA)
