@@ -320,7 +320,9 @@ method(as_json, list(ProviderGoogleGemini, ContentToolResult)) <- function(
     type = "function_result",
     call_id = x@request@id,
     name = x@request@name,
-    result = list(list(type = "text", text = tool_string(x))),
+    # A plain string is accepted by every model; the content-block form is
+    # rejected by older ones
+    result = tool_string(x),
     is_error = tool_errored(x)
   )
 }

@@ -60,7 +60,7 @@ test_that("turns become steps", {
         type = "function_result",
         call_id = "call_1",
         name = "get_weather",
-        result = list(list(type = "text", text = "52F")),
+        result = "52F",
         is_error = FALSE
       )
     )
