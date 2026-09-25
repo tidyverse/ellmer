@@ -74,12 +74,16 @@ test_that("turns become steps", {
 test_that("content is serialized as Interactions blocks", {
   provider <- chat_google_gemini_test()$get_provider()
   expect_equal(
-    as_json(provider, ContentImageRemote("https://example.com/x.png?v=1")),
+    as_json(provider, ContentImageRemote("https://example.com/x.PNG?v=1#top")),
     list(
       type = "image",
-      uri = "https://example.com/x.png?v=1",
+      uri = "https://example.com/x.PNG?v=1#top",
       mime_type = "image/png"
     )
+  )
+  expect_snapshot(
+    as_json(provider, ContentImageRemote("https://example.com/image")),
+    error = TRUE
   )
   expect_equal(
     as_json(provider, ContentPDF("application/pdf", "YQ==", "a.pdf")),
@@ -130,12 +134,12 @@ test_that("value_turn() converts steps to contents", {
     signature = "sig",
     summary = list(list(type = "text", text = "Thinking"))
   )
-  # start_index is omitted when zero
+  # Indices are bytes, and start_index is omitted when zero
   annotation <- list(
     type = "url_citation",
     url = "https://example.com",
     title = "Example",
-    end_index = 5
+    end_index = 6
   )
   result <- list(
     status = "requires_action",
@@ -153,7 +157,7 @@ test_that("value_turn() converts steps to contents", {
         content = list(
           list(
             type = "text",
-            text = "Hello world",
+            text = "Héllo world",
             annotations = list(annotation)
           )
         )
@@ -173,9 +177,9 @@ test_that("value_turn() converts steps to contents", {
   expect_equal(contents[[1]]@thinking, "Thinking")
   expect_equal(contents[[1]]@extra, thought)
   expect_s7_class(contents[[2]], ContentText)
-  expect_equal(contents[[2]]@text, "Hello world")
+  expect_equal(contents[[2]]@text, "Héllo world")
   expect_s7_class(contents[[3]], ContentCitation)
-  expect_equal(contents[[3]]@grounded_span, "Hello")
+  expect_equal(contents[[3]]@grounded_span, "Héllo")
   expect_equal(contents[[3]]@source@url, "https://example.com")
   expect_s7_class(contents[[4]], ContentToolRequest)
   expect_equal(contents[[4]]@id, "call_1")

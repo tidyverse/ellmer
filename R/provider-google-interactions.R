@@ -246,8 +246,14 @@ method(as_json, list(ProviderGoogleGemini, ContentImageRemote)) <- function(
   ...
 ) {
   # The API needs the type up front, so it's guessed from the URL's extension
-  path <- sub("[?#].*$", "", x@url)
-  list(type = "image", uri = x@url, mime_type = guess_mime_type(path))
+  mime_type <- guess_mime_type(sub("[?#].*$", "", x@url), default = NA)
+  if (is.na(mime_type) || !startsWith(mime_type, "image/")) {
+    cli::cli_abort(c(
+      "Can't guess the type of the image at {.url {x@url}} from its URL.",
+      i = "Download the image and use {.fn content_image_file} instead."
+    ))
+  }
+  list(type = "image", uri = x@url, mime_type = mime_type)
 }
 
 method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
@@ -430,14 +436,22 @@ gemini_citations <- function(content) {
   lapply(annotations, function(annotation) {
     ContentCitation(
       source = WebSource(url = annotation$url, title = annotation$title),
-      grounded_span = substr(
+      grounded_span = substr_bytes(
         content$text,
-        (annotation$start_index %||% 0) + 1,
+        annotation$start_index %||% 0,
         annotation$end_index
       ),
       extra = annotation
     )
   })
+}
+
+# Citation indices are zero-based byte offsets, with `end` exclusive
+substr_bytes <- function(text, start, end) {
+  bytes <- charToRaw(enc2utf8(text))
+  out <- rawToChar(bytes[seq2(start + 1, min(end, length(bytes)))])
+  Encoding(out) <- "UTF-8"
+  out
 }
 
 gemini_url_citations <- function(annotations) {
