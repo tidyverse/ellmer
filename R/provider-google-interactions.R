@@ -526,7 +526,11 @@ method(stream_merge_chunks, ProviderGoogleGemini) <- function(
 ) {
   switch(
     chunk$event_type,
-    interaction.created = c(chunk$interaction, list(steps = list())),
+    interaction.created = {
+      result <- chunk$interaction
+      result$steps <- list()
+      result
+    },
     step.start = {
       result$steps[[chunk$index + 1]] <- chunk$step
       result
@@ -586,8 +590,13 @@ gemini_merge_delta <- function(step, delta) {
       step$arguments <- paste0(previous, delta$arguments)
       step
     },
-    # Built-in tool deltas carry the remaining fields of the step
-    modify_list(step, delta[names(delta) != "type"])
+    # Built-in tool deltas carry the remaining fields of the step. Merge
+    # shallowly, since modifyList() would drop unnamed list elements
+    {
+      fields <- delta[names(delta) != "type"]
+      step[names(fields)] <- fields
+      step
+    }
   )
 }
 
