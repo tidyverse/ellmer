@@ -1,3 +1,12 @@
+# content is serialized as Interactions blocks
+
+    Code
+      as_json(provider, ContentImageRemote("https://example.com/image"))
+    Condition
+      Error in `method(as_json, list(ellmer::ProviderGoogleGemini, ellmer::ContentImageRemote))`:
+      ! Can't guess the type of the image at <https://example.com/image> from its URL.
+      i Download the image and use `content_image_file()` instead.
+
 # stream_merge_chunks() rebuilds the interaction from events
 
     Code
