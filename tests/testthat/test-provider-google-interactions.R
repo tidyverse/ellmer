@@ -85,6 +85,13 @@ test_that("content is serialized as Interactions blocks", {
     as_json(provider, ContentUploaded("files/abc", "video/mp4")),
     list(type = "video", uri = "files/abc", mime_type = "video/mp4")
   )
+
+  step <- list(type = "google_search_call", id = "search_1", signature = "sig")
+  expect_equal(
+    as_json(provider, ContentToolRequestSearch("q", extra = step)),
+    step
+  )
+  expect_null(as_json(provider, ContentToolRequestSearch("q")))
 })
 
 # Errors -----------------------------------------------------------------------
@@ -108,4 +115,150 @@ test_that("quota errors are not retried", {
   policies <- base_request(chat_google_gemini_test()$get_provider())$policies
   expect_equal(policies$retry_is_transient, gemini_is_transient)
   expect_equal(policies$error_body, gemini_error_body)
+})
+
+# Interactions -> ellmer -------------------------------------------------------
+
+test_that("value_turn() converts steps to contents", {
+  provider <- chat_google_gemini_test()$get_provider()
+  thought <- list(
+    type = "thought",
+    signature = "sig",
+    summary = list(list(type = "text", text = "Thinking"))
+  )
+  # start_index is omitted when zero
+  annotation <- list(
+    type = "url_citation",
+    url = "https://example.com",
+    title = "Example",
+    end_index = 5
+  )
+  result <- list(
+    status = "requires_action",
+    usage = list(
+      total_tokens = 30,
+      total_input_tokens = 10,
+      total_cached_tokens = 4,
+      total_output_tokens = 5,
+      total_thought_tokens = 15
+    ),
+    steps = list(
+      thought,
+      list(
+        type = "model_output",
+        content = list(
+          list(
+            type = "text",
+            text = "Hello world",
+            annotations = list(annotation)
+          )
+        )
+      ),
+      list(
+        type = "function_call",
+        id = "call_1",
+        name = "get_weather",
+        arguments = list(location = "Boston")
+      )
+    )
+  )
+
+  turn <- value_turn(provider, test_model(), result)
+  contents <- turn@contents
+  expect_s7_class(contents[[1]], ContentThinking)
+  expect_equal(contents[[1]]@thinking, "Thinking")
+  expect_equal(contents[[1]]@extra, thought)
+  expect_s7_class(contents[[2]], ContentText)
+  expect_equal(contents[[2]]@text, "Hello world")
+  expect_s7_class(contents[[3]], ContentCitation)
+  expect_equal(contents[[3]]@grounded_span, "Hello")
+  expect_equal(contents[[3]]@source@url, "https://example.com")
+  expect_s7_class(contents[[4]], ContentToolRequest)
+  expect_equal(contents[[4]]@id, "call_1")
+  expect_equal(contents[[4]]@arguments, list(location = "Boston"))
+
+  expect_equal(unname(turn@tokens), c(6, 20, 4))
+  expect_equal(turn@finish_reason, "tool_use")
+
+  json <- value_turn(provider, test_model(), result, has_type = TRUE)
+  expect_s7_class(json@contents[[2]], ContentJson)
+})
+
+test_that("value_turn() preserves Google web metadata", {
+  provider <- chat_google_gemini_test()$get_provider()
+  search_call <- list(
+    type = "google_search_call",
+    id = "search_1",
+    signature = "sig",
+    arguments = list(queries = list("ellmer citations"))
+  )
+  search_result <- list(
+    type = "google_search_result",
+    call_id = "search_1",
+    result = list(list(search_suggestions = "<div>...</div>"))
+  )
+  fetch_call <- list(
+    type = "url_context_call",
+    id = "fetch_1",
+    arguments = list(urls = list("https://fetch.example"))
+  )
+  fetch_result <- list(
+    type = "url_context_result",
+    call_id = "fetch_1",
+    result = list(list(url = "https://fetch.example", status = "success"))
+  )
+  annotation <- list(
+    type = "url_citation",
+    url = "https://example.com",
+    title = "Example",
+    start_index = 0,
+    end_index = 8
+  )
+  result <- list(
+    status = "completed",
+    usage = list(),
+    steps = list(
+      search_call,
+      search_result,
+      fetch_call,
+      fetch_result,
+      list(
+        type = "model_output",
+        content = list(
+          list(
+            type = "text",
+            text = "Grounded answer",
+            annotations = list(annotation)
+          )
+        )
+      )
+    )
+  )
+
+  contents <- value_turn(provider, test_model(), result)@contents
+  expect_s7_class(contents[[1]], ContentToolRequestSearch)
+  expect_equal(contents[[1]]@query, "ellmer citations")
+  expect_equal(contents[[1]]@extra, search_call)
+  expect_s7_class(contents[[2]], ContentToolResponseSearch)
+  expect_equal(contents[[2]]@sources[[1]]@url, "https://example.com")
+  expect_s7_class(contents[[3]], ContentToolRequestFetch)
+  expect_equal(contents[[3]]@url, "https://fetch.example")
+  expect_s7_class(contents[[4]], ContentToolResponseFetch)
+  expect_equal(contents[[4]]@status, "success")
+  expect_s7_class(contents[[5]], ContentText)
+  expect_s7_class(contents[[6]], ContentCitation)
+  expect_equal(contents[[6]]@grounded_span, "Grounded")
+})
+
+test_that("value_finish_reason() maps interaction status", {
+  provider <- chat_google_gemini_test()$get_provider()
+  expect_equal(
+    value_finish_reason(provider, list(status = "completed")),
+    "success"
+  )
+  expect_equal(
+    value_finish_reason(provider, list(status = "incomplete")),
+    "max_tokens"
+  )
+  expect_equal(value_finish_reason(provider, list()), NA_character_)
 })
