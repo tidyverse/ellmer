@@ -367,7 +367,7 @@ gemini_step_contents <- function(steps, has_type = FALSE) {
   # the sources come from the citations in the answer
   sources <- gemini_web_sources(steps)
 
-  list_c(lapply(steps, function(step) {
+  contents <- list_c(lapply(steps, function(step) {
     switch(
       step$type,
       thought = list(gemini_thinking(step)),
@@ -404,6 +404,8 @@ gemini_step_contents <- function(steps, has_type = FALSE) {
       cli::cli_abort("Unknown step type {.str {step$type}}.", .internal = TRUE)
     )
   }))
+  # list_c() of nothing is NULL
+  contents %||% list()
 }
 
 gemini_thinking <- function(step) {
