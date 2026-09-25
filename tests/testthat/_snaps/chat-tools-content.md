@@ -10,6 +10,7 @@
           "output": "See <tool-content call-id=\"123\"> below."
         },
         {
+          "type": "message",
           "role": "user",
           "content": [
             {
@@ -19,6 +20,7 @@
           ]
         },
         {
+          "type": "message",
           "role": "user",
           "content": [
             {
@@ -28,6 +30,7 @@
           ]
         },
         {
+          "type": "message",
           "role": "user",
           "content": [
             {
@@ -50,6 +53,7 @@
           "output": "See <tool-contents call-id=\"123\"> below."
         },
         {
+          "type": "message",
           "role": "user",
           "content": [
             {
@@ -59,6 +63,7 @@
           ]
         },
         {
+          "type": "message",
           "role": "user",
           "content": [
             {
@@ -68,6 +73,7 @@
           ]
         },
         {
+          "type": "message",
           "role": "user",
           "content": [
             {
@@ -77,6 +83,7 @@
           ]
         },
         {
+          "type": "message",
           "role": "user",
           "content": [
             {
@@ -86,6 +93,7 @@
           ]
         },
         {
+          "type": "message",
           "role": "user",
           "content": [
             {
@@ -95,6 +103,7 @@
           ]
         },
         {
+          "type": "message",
           "role": "user",
           "content": [
             {
@@ -104,6 +113,7 @@
           ]
         },
         {
+          "type": "message",
           "role": "user",
           "content": [
             {
@@ -113,6 +123,7 @@
           ]
         },
         {
+          "type": "message",
           "role": "user",
           "content": [
             {

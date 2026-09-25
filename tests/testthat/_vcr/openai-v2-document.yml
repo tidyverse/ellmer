@@ -3,9 +3,9 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"Which
-        penguin won the race? Answer with just the penguin''s name."}]},{"role":"user","content":[{"type":"input_file","filename":"penguin_race.csv","file_data":"data:text/csv;base64,cGVuZ3VpbixyYWNlX3RpbWVfc2Vjb25kcwpXYWRkbGVzd29ydGgsNDMuMgpGbGlwcGVyIE1jR2VlLDM4LjcKVHVyYm8gVHV4ZWRvLDMxLjkKQ2FwdGFpbiBCbHViYmVyLDQ1LjEKU2lyIFNsaWRlc2Fsb3QsMzYuNAo="}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"store":false,"service_tier":"auto"}'
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Which
+        penguin won the race? Answer with just the penguin''s name."}]},{"type":"message","role":"user","content":[{"type":"input_file","filename":"penguin_race.csv","file_data":"data:text/csv;base64,cGVuZ3VpbixyYWNlX3RpbWVfc2Vjb25kcwpXYWRkbGVzd29ydGgsNDMuMgpGbGlwcGVyIE1jR2VlLDM4LjcKVHVyYm8gVHV4ZWRvLDMxLjkKQ2FwdGFpbiBCbHViYmVyLDQ1LjEKU2lyIFNsaWRlc2Fsb3QsMzYuNAo="}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:

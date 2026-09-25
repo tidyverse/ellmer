@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"John,
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"John,
         age 15"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -159,8 +159,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"Jane,
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Jane,
         age 16"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200

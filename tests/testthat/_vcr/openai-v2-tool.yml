@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the current date in Y-M-D format?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -161,8 +161,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","output":"2024-01-01"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -326,10 +326,10 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
-        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","output":"2024-01-01"},{"role":"assistant","content":[{"type":"output_text","text":"It
-        is 2024-01-01."}]},{"role":"user","content":[{"type":"input_text","text":"What
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
+        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","output":"2024-01-01"},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"It
+        is 2024-01-01."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
         month is it? Provide the full name"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -486,10 +486,10 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
-        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","output":"2024-01-01"},{"role":"assistant","content":[{"type":"output_text","text":"It
-        is 2024-01-01."}]},{"role":"user","content":[{"type":"input_text","text":"What
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
+        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","output":"2024-01-01"},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"It
+        is 2024-01-01."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
         month is it? Provide the full name"}]},{"type":"function_call","call_id":"fc_03185aed14e5c547016a6f85850b2c81a1924c6e37021e6e0f","name":"current_month","arguments":"{}"},{"type":"function_call_output","call_id":"fc_03185aed14e5c547016a6f85850b2c81a1924c6e37021e6e0f","output":"February"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'

@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"INJECTED_BY_CALLBACK"}]},{"role":"user","content":[{"type":"input_text","text":"What
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"INJECTED_BY_CALLBACK"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
         are Joe and Hadley''s favorite colors?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
         name"}},"required":["user"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -162,8 +162,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"INJECTED_BY_CALLBACK"}]},{"role":"user","content":[{"type":"input_text","text":"What
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"INJECTED_BY_CALLBACK"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
         are Joe and Hadley''s favorite colors?"}]},{"type":"function_call","call_id":"fc_0c5e5371eb14eb04016a7260577d9c819ab4322d860c33f4f0","name":"user_favorite_color","arguments":"{\"user\":\"Joe\"}"},{"type":"function_call","call_id":"fc_0c5e5371eb14eb04016a7260577db0819ab1e9e609459e7073","name":"user_favorite_color","arguments":"{\"user\":\"Hadley\"}"},{"type":"function_call_output","call_id":"fc_0c5e5371eb14eb04016a7260577d9c819ab4322d860c33f4f0","output":"blue"},{"type":"function_call_output","call_id":"fc_0c5e5371eb14eb04016a7260577db0819ab1e9e609459e7073","output":"red"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
         name"}},"required":["user"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'

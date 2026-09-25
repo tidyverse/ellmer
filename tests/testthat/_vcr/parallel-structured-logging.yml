@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"Say
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Say
         hi"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"msg":{"type":"string","description":"A
         greeting message"}},"required":["msg"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
@@ -155,8 +155,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"Say
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Say
         bye"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"msg":{"type":"string","description":"A
         greeting message"}},"required":["msg"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:

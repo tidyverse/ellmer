@@ -3,10 +3,10 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"What year
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What year
         is it today?"}]},{"type":"function_call","call_id":"1","name":"get_date","arguments":"[]"},{"type":"function_call_output","call_id":"1","output":"Tool
-        calling failed with error Chat ended before the tool could be invoked."},{"role":"user","content":[{"type":"input_text","text":"try
+        calling failed with error Chat ended before the tool could be invoked."},{"type":"message","role":"user","content":[{"type":"input_text","text":"try
         again"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"get_date","description":"Get
         todays date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
@@ -148,10 +148,10 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"What year
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What year
         is it today?"}]},{"type":"function_call","call_id":"1","name":"get_date","arguments":"[]"},{"type":"function_call_output","call_id":"1","output":"Tool
-        calling failed with error Chat ended before the tool could be invoked."},{"role":"user","content":[{"type":"input_text","text":"try
+        calling failed with error Chat ended before the tool could be invoked."},{"type":"message","role":"user","content":[{"type":"input_text","text":"try
         again"}]},{"type":"function_call","call_id":"fc_090fe8d798c8167e016a6fcb1e5f348190955ea6fdc975378f","name":"get_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_090fe8d798c8167e016a6fcb1e5f348190955ea6fdc975378f","output":"2001-02-09"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"get_date","description":"Get
         todays date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
@@ -300,12 +300,12 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"What year
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What year
         is it today?"}]},{"type":"function_call","call_id":"1","name":"get_date","arguments":"[]"},{"type":"function_call_output","call_id":"1","output":"Tool
-        calling failed with error Chat ended before the tool could be invoked."},{"role":"user","content":[{"type":"input_text","text":"try
-        again"}]},{"type":"function_call","call_id":"fc_090fe8d798c8167e016a6fcb1e5f348190955ea6fdc975378f","name":"get_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_090fe8d798c8167e016a6fcb1e5f348190955ea6fdc975378f","output":"2001-02-09"},{"role":"assistant","content":[{"type":"output_text","text":"It’s
-        **2001** today."}]},{"role":"user","content":[{"type":"input_text","text":"try
+        calling failed with error Chat ended before the tool could be invoked."},{"type":"message","role":"user","content":[{"type":"input_text","text":"try
+        again"}]},{"type":"function_call","call_id":"fc_090fe8d798c8167e016a6fcb1e5f348190955ea6fdc975378f","name":"get_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_090fe8d798c8167e016a6fcb1e5f348190955ea6fdc975378f","output":"2001-02-09"},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"It’s
+        **2001** today."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"try
         again"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"get_date","description":"Get
         todays date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
@@ -447,12 +447,12 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"What year
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What year
         is it today?"}]},{"type":"function_call","call_id":"1","name":"get_date","arguments":"[]"},{"type":"function_call_output","call_id":"1","output":"Tool
-        calling failed with error Chat ended before the tool could be invoked."},{"role":"user","content":[{"type":"input_text","text":"try
-        again"}]},{"type":"function_call","call_id":"fc_090fe8d798c8167e016a6fcb1e5f348190955ea6fdc975378f","name":"get_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_090fe8d798c8167e016a6fcb1e5f348190955ea6fdc975378f","output":"2001-02-09"},{"role":"assistant","content":[{"type":"output_text","text":"It’s
-        **2001** today."}]},{"role":"user","content":[{"type":"input_text","text":"try
+        calling failed with error Chat ended before the tool could be invoked."},{"type":"message","role":"user","content":[{"type":"input_text","text":"try
+        again"}]},{"type":"function_call","call_id":"fc_090fe8d798c8167e016a6fcb1e5f348190955ea6fdc975378f","name":"get_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_090fe8d798c8167e016a6fcb1e5f348190955ea6fdc975378f","output":"2001-02-09"},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"It’s
+        **2001** today."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"try
         again"}]},{"type":"function_call","call_id":"fc_0c2e191c3bf3b81a016a6fcb2041608195bc0b9ef038eee98b","name":"get_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0c2e191c3bf3b81a016a6fcb2041608195bc0b9ef038eee98b","output":"2001-02-09"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"get_date","description":"Get
         todays date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
