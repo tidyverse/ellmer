@@ -372,7 +372,12 @@ test_that("stream_content() emits text as it arrives and activity on completion"
     stream_event(
       "step.start",
       index = 0,
-      step = list(type = "google_search_call", id = "s1", signature = "sig")
+      step = list(
+        type = "google_search_call",
+        id = "s1",
+        signature = "sig",
+        arguments = list(queries = list())
+      )
     ),
     stream_event(
       "step.delta",
