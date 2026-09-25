@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"Roll two
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Roll two
         dice and compute the total."}]}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
         a six-sided die","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
@@ -153,8 +153,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"Roll two
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Roll two
         dice and compute the total."}]},{"type":"function_call","call_id":"fc_0e90a1b8c334f9dd016a6fcc757b3081939c1312fb6592a1df","name":"dice","arguments":"{}"},{"type":"function_call","call_id":"fc_0e90a1b8c334f9dd016a6fcc757b408193baaa9c61298c7ab9","name":"dice","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0e90a1b8c334f9dd016a6fcc757b3081939c1312fb6592a1df","output":"2"},{"type":"function_call_output","call_id":"fc_0e90a1b8c334f9dd016a6fcc757b408193baaa9c61298c7ab9","output":"5"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
         a six-sided die","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:

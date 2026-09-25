@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"When
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"When
         was ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.\n\nThe
         CRAN archive page has this info."}]}],"model":"gpt-4.1","temperature":0,"stream":false,"tools":[{"type":"web_search","external_web_access":true}],"store":false,"service_tier":"auto"}'
   response:
@@ -164,12 +164,12 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"When
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"When
         was ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.\n\nThe
         CRAN archive page has this info."}]},{"id":"ws_0ce57514db34bd10016a6fd61ac42c8193aa208442a095794c","type":"web_search_call","status":"completed","action":{"type":"search","queries":["ggplot2
         1.0.0 CRAN archive release date"],"query":"ggplot2 1.0.0 CRAN archive release
-        date"}},{"role":"assistant","content":[{"type":"output_text","text":"2014‑05‑21"}]},{"role":"user","content":[{"type":"input_text","text":"What
+        date"}},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"2014‑05‑21"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
         month was that?"}]}],"model":"gpt-4.1","temperature":0,"stream":false,"tools":[{"type":"web_search","external_web_access":true}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -316,13 +316,13 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"When
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"When
         was ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.\n\nThe
         CRAN archive page has this info."}]},{"id":"ws_0ce57514db34bd10016a6fd61ac42c8193aa208442a095794c","type":"web_search_call","status":"completed","action":{"type":"search","queries":["ggplot2
         1.0.0 CRAN archive release date"],"query":"ggplot2 1.0.0 CRAN archive release
-        date"}},{"role":"assistant","content":[{"type":"output_text","text":"2014‑05‑21"}]},{"role":"user","content":[{"type":"input_text","text":"What
-        month was that?"}]},{"role":"assistant","content":[{"type":"output_text","text":"May"}]},{"role":"user","content":[{"type":"input_text","text":"What
+        date"}},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"2014‑05‑21"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
+        month was that?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"May"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
         month was that?"}]}],"model":"gpt-4.1","temperature":0,"stream":false,"tools":[{"type":"web_search","external_web_access":true}],"store":false,"service_tier":"auto"}'
   response:
     status: 200

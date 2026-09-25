@@ -113,6 +113,7 @@ test_that("documents and pdfs with a url are passed through as file_url", {
   expect_equal(
     as_json(provider, doc_url),
     list(
+      type = "message",
       role = "user",
       content = list(list(
         type = "input_file",
@@ -130,12 +131,30 @@ test_that("documents and pdfs with a url are passed through as file_url", {
   expect_equal(
     as_json(provider, pdf_url),
     list(
+      type = "message",
       role = "user",
       content = list(list(
         type = "input_file",
         file_url = "https://example.com/x.pdf"
       ))
     )
+  )
+})
+
+test_that("as_json() marks message items with type = 'message' (#1153)", {
+  provider <- chat_openai_test()$get_provider()
+
+  expect_equal(
+    as_json(provider, ContentText("Hi"), role = "user")$type,
+    "message"
+  )
+  expect_equal(
+    as_json(provider, ContentText("Hi"), role = "assistant")$type,
+    "message"
+  )
+  expect_equal(
+    as_json(provider, ContentText("Hi"), role = "system")$type,
+    "message"
   )
 })
 
@@ -452,6 +471,7 @@ test_that("as_json() serializes uploaded file references", {
   expect_equal(
     as_json(provider, ContentUploaded("file-1", "application/pdf")),
     list(
+      type = "message",
       role = "user",
       content = list(list(type = "input_file", file_id = "file-1"))
     )
@@ -459,6 +479,7 @@ test_that("as_json() serializes uploaded file references", {
   expect_equal(
     as_json(provider, ContentUploaded("file-1", "image/png")),
     list(
+      type = "message",
       role = "user",
       content = list(
         list(type = "input_image", file_id = "file-1", detail = "auto")
