@@ -382,15 +382,34 @@ test_that("stream_content() emits text as it arrives and activity on completion"
         arguments = list(queries = list("q"))
       )
     ),
-    stream_event("step.start", index = 1, step = list(type = "model_output")),
+    stream_event("step.start", index = 1, step = list(type = "thought")),
     stream_event(
       "step.delta",
       index = 1,
+      delta = list(
+        type = "thought_summary",
+        content = list(type = "text", text = "Thinking")
+      )
+    ),
+    stream_event(
+      "step.start",
+      index = 2,
+      step = list(
+        type = "function_call",
+        id = "c1",
+        name = "f",
+        arguments = list()
+      )
+    ),
+    stream_event("step.start", index = 3, step = list(type = "model_output")),
+    stream_event(
+      "step.delta",
+      index = 3,
       delta = list(type = "text", text = "Hi")
     ),
     stream_event(
       "step.delta",
-      index = 1,
+      index = 3,
       delta = list(
         type = "text_annotation_delta",
         annotations = list(list(
@@ -412,9 +431,12 @@ test_that("stream_content() emits text as it arrives and activity on completion"
     result <- stream_merge_chunks(provider, result, event)
     contents <- c(contents, stream_content(provider, event, result))
   }
-  expect_length(contents, 3)
-  expect_s7_class(contents[[1]], ContentText)
-  expect_s7_class(contents[[2]], ContentToolRequestSearch)
-  expect_equal(contents[[2]]@query, "q")
-  expect_s7_class(contents[[3]], ContentCitation)
+  # Tool requests are left to value_turn()
+  expect_length(contents, 4)
+  expect_s7_class(contents[[1]], ContentThinking)
+  expect_equal(contents[[1]]@thinking, "Thinking")
+  expect_s7_class(contents[[2]], ContentText)
+  expect_s7_class(contents[[3]], ContentToolRequestSearch)
+  expect_equal(contents[[3]]@query, "q")
+  expect_s7_class(contents[[4]], ContentCitation)
 })
