@@ -5,6 +5,7 @@
 * `chat_openai()` now sends `type = "message"` on every input item to the Responses API, so OpenAI-compatible servers that require it (e.g. llama.cpp) no longer reject replayed assistant turns (@taekop, #1153).
 * `live_browser()` works again with shinychat >= 0.5.0 (#1167).
 * Streamed responses now record the time to first token (in seconds) as the `gen_ai.response.time_to_first_chunk` attribute on the OpenTelemetry `chat` span (@schloerke, #1142).
+* `parallel_chat_structured()` and `batch_chat_structured()` now warn instead of silently ignoring `include_tokens` and `include_cost` when the result isn't a data frame, e.g. because `type` is a top-level `type_array()` or `convert = FALSE` (@taekop, #1129).
 
 # ellmer 0.5.0
 
