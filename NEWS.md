@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `parallel_chat_structured()` and `batch_chat_structured()` now warn instead of silently ignoring `include_tokens` and `include_cost` when the result isn't a data frame, e.g. because `type` is a top-level `type_array()` or `convert = FALSE` (@taekop, #1129).
+
 # ellmer 0.5.0
 
 ## Lifecycle changes
