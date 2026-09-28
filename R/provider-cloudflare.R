@@ -57,7 +57,7 @@ chat_cloudflare <- function(
 
   # https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility/
   cloudflare_api <- "https://api.cloudflare.com/client/v4/accounts/"
-  base_url <- paste0(cloudflare_api, cloudflare_account(), "/ai/v1/")
+  base_url <- paste0(cloudflare_api, account, "/ai/v1/")
 
   provider <- ProviderCloudflare(
     name = "Cloudflare",
