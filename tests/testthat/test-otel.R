@@ -352,22 +352,36 @@ test_that("tool_call_response part decodes json-class values", {
   )
 })
 
-test_that("unserializable tool result becomes a placeholder part", {
+test_that("tool_call_response part converts a Content value with as_otel_part", {
   value <- ContentImageInline("image/png", "abc123")
-  part <- as_otel_message_part(ContentToolResult(value = value))
+  part <- as_otel_part(ContentToolResult(value = value))
   expect_equal(
-    part,
+    part$response,
+    list(type = "generic", class = "ContentImageInline")
+  )
+
+  encoded <- jsonlite::toJSON(part, auto_unbox = TRUE, null = "null")
+  expect_equal(
+    jsonlite::fromJSON(encoded, simplifyVector = FALSE)$response,
+    list(type = "generic", class = "ContentImageInline")
+  )
+})
+
+test_that("tool_call_response part converts a list of Content values with as_otel_part", {
+  value <- list(ContentText("hi"), ContentImageInline("image/png", "abc123"))
+  part <- as_otel_part(ContentToolResult(value = value))
+  expect_equal(
+    part$response,
     list(
-      type = "text",
-      content = "(unable to serialize a <ellmer::ContentToolResult> object)"
+      list(type = "text", content = "hi"),
+      list(type = "generic", class = "ContentImageInline")
     )
   )
 })
 
-test_that("one unserializable turn doesn't drop the rest of the batch (#1145)", {
+test_that("a Content tool result doesn't drop the rest of the batch (#1145)", {
   # The issue's case: an image tool result sits between two plain text turns.
-  # The image's turn should fall back to a placeholder part, but the text
-  # turns before and after it must survive.
+  # All three turns must survive gen_ai.input.messages.
   turns <- list(
     UserTurn(list(ContentText("before"))),
     UserTurn(list(
@@ -384,38 +398,9 @@ test_that("one unserializable turn doesn't drop the rest of the batch (#1145)", 
 
   expect_equal(decoded[[1]]$parts[[1]]$content, "before")
   expect_equal(decoded[[3]]$parts[[1]]$content, "after")
-  expect_equal(decoded[[2]]$parts[[1]]$type, "text")
   expect_equal(
-    decoded[[2]]$parts[[1]]$content,
-    "(unable to serialize a <ellmer::ContentToolResult> object)"
-  )
-})
-
-test_that("a tool request with unserializable arguments becomes a placeholder part", {
-  request <- ContentToolRequest(
-    id = "1",
-    name = "f",
-    arguments = list(x = new.env())
-  )
-  part <- as_otel_message_part(request)
-  expect_equal(
-    part,
-    list(
-      type = "text",
-      content = "(unable to serialize a <ellmer::ContentToolRequest> object)"
-    )
-  )
-})
-
-test_that("a malformed json-class tool result becomes a placeholder part", {
-  value <- structure("{not valid json", class = "json")
-  part <- as_otel_message_part(ContentToolResult(value = value))
-  expect_equal(
-    part,
-    list(
-      type = "text",
-      content = "(unable to serialize a <ellmer::ContentToolResult> object)"
-    )
+    decoded[[2]]$parts[[1]]$response,
+    list(type = "generic", class = "ContentImageInline")
   )
 })
 
@@ -428,9 +413,8 @@ test_that("local_chat_otel_span never errors, even when message conversion fails
   chat <- chat_openai_test()
   private <- chat$.__enclos_env__$private
 
-  # A malformed turn (not a real Turn object) fails before as_otel_message()
-  # ever reaches the per-part guard, exercising the outer tryCatch safety
-  # net instead.
+  # A malformed turn (not a real Turn object) fails inside as_otel_message(),
+  # exercising the outer tryCatch safety net in local_chat_otel_span().
   bad_turns <- list(list())
 
   expect_no_error(
