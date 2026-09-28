@@ -91,6 +91,18 @@ method(base_request_error, ProviderCloudflare) <- function(provider, req) {
   })
 }
 
+# Cloudflare streams numeric-only content as a JSON number, e.g. `"content": 2`
+method(stream_parse, ProviderCloudflare) <- function(provider, event) {
+  event <- stream_parse(super(provider, ProviderOpenAICompatible), event)
+  for (i in seq_along(event$choices)) {
+    content <- event$choices[[i]]$delta$content
+    if (is.numeric(content)) {
+      event$choices[[i]]$delta$content <- as.character(content)
+    }
+  }
+  event
+}
+
 
 # Docs look like Gemini tool defs
 # https://developers.cloudflare.com/workers-ai/features/function-calling/traditional/
