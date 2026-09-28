@@ -350,8 +350,6 @@ test_that("structured output includes `strict` only when the provider is strict"
 })
 
 test_that("strict defaults are set per provider", {
-  withr::local_envvar(CLOUDFLARE_ACCOUNT_ID = "account")
-
   strict_providers <- list(
     chat_openai(credentials = function() "key")$get_provider(),
     chat_groq(credentials = function() "key")$get_provider(),
@@ -387,7 +385,10 @@ test_that("strict defaults are set per provider", {
       workspace = "https://example.cloud.databricks.com",
       token = "key"
     )$get_provider(),
-    chat_cloudflare(credentials = function() "key")$get_provider(),
+    chat_cloudflare(
+      account = "account",
+      credentials = function() "key"
+    )$get_provider(),
     ProviderOllama(name = "Ollama", base_url = "http://localhost:11434/v1")
   )
   for (provider in non_strict_providers) {
