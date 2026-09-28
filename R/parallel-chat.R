@@ -39,8 +39,12 @@
 #' For `parallel_chat_structured()`, a single structured data object with one
 #' element for each prompt. Typically, when `type` is an object, this will
 #' be a tibble with one row for each prompt, and one column for each
-#' property. If the output is a data frame, and some requests error,
-#' an `.error` column will be added with the error objects.
+#' property. If the output is a data frame, and any prompt failed to produce
+#' usable data, an `.error` column will be added with the error objects. A
+#' prompt fails if its request errored, if the provider reported an incomplete
+#' response (e.g. it hit the `max_tokens` limit or was filtered), or if no
+#' structured data could be extracted from the response. In each case the row
+#' itself is filled in with missing values.
 #' @export
 #' @examples
 #' \dontshow{ellmer:::vcr_example_start("parallel_chat")}
@@ -234,22 +238,34 @@ multi_convert <- function(
 ) {
   needs_wrapper <- type_needs_wrapper(type, provider)
 
+  # A turn yields no data for one of three reasons, in order of precedence:
+  # the request failed, the provider reported an incomplete response, or no
+  # data could be extracted from the response. The finish reason comes first
+  # because a truncated response often also fails to parse, and then it's the
+  # truncation that explains the failure and says how to fix it.
   rows <- map(turns, \(turn) {
     if (turn_failed(turn)) {
-      NULL
+      list(result = NULL, error = turn, request_failed = TRUE)
     } else {
-      safely(
-        extract_data(
-          turn = turn,
-          type = wrap_type_if_needed(type, needs_wrapper),
-          convert = FALSE,
-          needs_wrapper = needs_wrapper
+      cnd <- finish_reason_error(turn@finish_reason)
+      if (!is.null(cnd)) {
+        list(result = NULL, error = cnd, request_failed = FALSE)
+      } else {
+        extracted <- safely(
+          extract_data(
+            turn = turn,
+            type = wrap_type_if_needed(type, needs_wrapper),
+            convert = FALSE,
+            needs_wrapper = needs_wrapper
+          )
         )
-      )
+        c(extracted, list(request_failed = FALSE))
+      }
     }
   })
 
-  is_err <- map_lgl(rows, \(x) !is.null(x$error))
+  # Failed requests are already reported by parallel_turns() and batch_chat()
+  is_err <- map_lgl(rows, \(x) !x$request_failed && !is.null(x$error))
   n_error <- sum(is_err)
   if (n_error > 0) {
     msgs <- map(rows[is_err], \(x) conditionMessage(x$error))
@@ -270,11 +286,11 @@ multi_convert <- function(
   }
 
   if (is.data.frame(out)) {
-    is_error <- map_lgl(turns, turn_failed)
-    if (any(is_error)) {
-      errors <- vector("list", length(turns))
-      errors[is_error] <- turns[is_error]
-      out$.error <- errors
+    # A request that was never performed has no condition to record, but still
+    # counts as a failure, so `.error` is attached with NULL in its place
+    has_error <- map_lgl(rows, \(x) x$request_failed || !is.null(x$error))
+    if (any(has_error)) {
+      out$.error <- map(rows, \(x) x$error)
     }
 
     if (include_tokens) {

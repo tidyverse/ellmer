@@ -214,7 +214,130 @@ test_that("errors in conversion become warnings", {
   )
 
   expect_snapshot(out <- multi_convert(provider, turns, type = type))
-  expect_equal(out, tibble::tibble(x = c(1, NA, NA)))
+  expect_equal(out$x, c(1, NA, NA))
+})
+
+test_that("extraction failures are recorded in `.error` (#1121)", {
+  chat <- chat_openai_test()
+  provider <- chat$get_provider()
+  type <- type_object(
+    x = type_array(type_object(item = type_string()))
+  )
+
+  turns <- list(
+    AssistantTurn(list(ContentJson(list(x = list(list(item = "a")))))),
+    # a refusal in prose, which extracts no data, but converts to the same
+    # zero-row tibble as an array that's legitimately empty
+    AssistantTurn(list(ContentText("I'm sorry, I can't do that."))),
+    simpleError("Request failed"),
+    NULL
+  )
+
+  expect_warning(
+    out <- multi_convert(provider, turns, type = type),
+    "Failed to extract data from 1/4 turns"
+  )
+  expect_equal(map_int(out$x, nrow), c(1L, 0L, 0L, 0L))
+  expect_null(out$.error[[1]])
+  expect_s3_class(out$.error[[2]], "error")
+  expect_equal(conditionMessage(out$.error[[3]]), "Request failed")
+  expect_null(out$.error[[4]])
+})
+
+test_that("incomplete responses are recorded in `.error` (#1126)", {
+  chat <- chat_openai_test()
+  provider <- chat$get_provider()
+  type <- type_object(x = type_integer())
+
+  # The JSON is complete and valid: only the finish reason says the response
+  # was cut short, as when a truncated tool call arrives with an empty input
+  turns <- list(
+    AssistantTurn(list(ContentJson(list(x = 1))), finish_reason = "success"),
+    AssistantTurn(list(ContentJson(list(x = 2))), finish_reason = "max_tokens"),
+    AssistantTurn(
+      list(ContentJson(list(x = 3))),
+      finish_reason = "content_filter"
+    ),
+    AssistantTurn(
+      list(ContentJson(list(x = 4))),
+      finish_reason = I("who knows")
+    )
+  )
+
+  expect_snapshot(out <- multi_convert(provider, turns, type = type))
+  expect_equal(out$x, c(1, NA, NA, NA))
+  expect_null(out$.error[[1]])
+  expect_match(conditionMessage(out$.error[[2]]), "max_tokens")
+  expect_match(conditionMessage(out$.error[[3]]), "content moderation")
+  expect_match(conditionMessage(out$.error[[4]]), "unexpected finish reason")
+})
+
+test_that("finish reasons that aren't failures are left alone", {
+  chat <- chat_openai_test()
+  provider <- chat$get_provider()
+  type <- type_object(x = type_integer())
+
+  turns <- map(
+    c("success", "tool_use", "stop_sequence", NA_character_),
+    \(reason) {
+      AssistantTurn(list(ContentJson(list(x = 1))), finish_reason = reason)
+    }
+  )
+
+  expect_no_warning(out <- multi_convert(provider, turns, type = type))
+  expect_equal(out$x, rep(1, 4))
+  expect_named(out, "x")
+})
+
+test_that("an incomplete response takes precedence over its parse error", {
+  chat <- chat_openai_test()
+  provider <- chat$get_provider()
+  type <- type_object(x = type_integer())
+
+  # Truncated JSON fails to parse, but "premature EOF" describes the symptom
+  # and points at the wrong fix
+  turns <- list(
+    AssistantTurn(
+      list(ContentJson(string = '{"x": ')),
+      finish_reason = "max_tokens"
+    )
+  )
+
+  expect_warning(
+    out <- multi_convert(provider, turns, type = type),
+    "max_tokens"
+  )
+  expect_match(conditionMessage(out$.error[[1]]), "max_tokens")
+})
+
+test_that("usage is still reported for a row with no usable data", {
+  chat <- chat_openai_test()
+  provider <- chat$get_provider()
+  type <- type_object(x = type_integer())
+
+  # The request was performed and billed, whether or not its data survived
+  turns <- list(
+    AssistantTurn(
+      list(ContentJson(list(x = 1))),
+      tokens = c(10, 20, 0),
+      cost = 0.1,
+      finish_reason = "max_tokens"
+    ),
+    simpleError("Request failed")
+  )
+
+  suppressWarnings(
+    out <- multi_convert(
+      provider,
+      turns,
+      type = type,
+      include_tokens = TRUE,
+      include_cost = TRUE
+    )
+  )
+  expect_equal(out$input_tokens, c(10, 0))
+  expect_equal(out$output_tokens, c(20, 0))
+  expect_equal(out$cost, c(0.1, 0))
 })
 
 test_that("assistant turns track duration in parallel", {

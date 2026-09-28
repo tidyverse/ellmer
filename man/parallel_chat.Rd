@@ -87,8 +87,12 @@ prompt. Requests that weren't succesful get an \code{NA}.
 For \code{parallel_chat_structured()}, a single structured data object with one
 element for each prompt. Typically, when \code{type} is an object, this will
 be a tibble with one row for each prompt, and one column for each
-property. If the output is a data frame, and some requests error,
-an \code{.error} column will be added with the error objects.
+property. If the output is a data frame, and any prompt failed to produce
+usable data, an \code{.error} column will be added with the error objects. A
+prompt fails if its request errored, if the provider reported an incomplete
+response (e.g. it hit the \code{max_tokens} limit or was filtered), or if no
+structured data could be extracted from the response. In each case the row
+itself is filled in with missing values.
 }
 \description{
 If you have multiple prompts, you can submit them in parallel. This is
