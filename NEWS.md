@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `live_browser()` works again with shinychat >= 0.5.0, which renamed the `options` argument of `chat_app()` to `app_options` (#1167).
+
 # ellmer 0.5.0
 
 ## Lifecycle changes
