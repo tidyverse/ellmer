@@ -180,6 +180,19 @@ stream_content <- new_generic(
     S7_dispatch()
   }
 )
+# Does this streamed chunk mark the start of the model's output (text,
+# thinking, or a tool call)? Used to measure time to first token. By default
+# the first chunk counts; providers that send preamble events override this.
+stream_output_started <- new_generic(
+  "stream_output_started",
+  "provider",
+  function(provider, chunk) {
+    S7_dispatch()
+  }
+)
+method(stream_output_started, Provider) <- function(provider, chunk) {
+  TRUE
+}
 stream_content_with_turns <- new_generic(
   "stream_content_with_turns",
   "provider",

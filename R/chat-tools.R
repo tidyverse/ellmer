@@ -215,7 +215,8 @@ invoke_tool <- function(
 
   tool_span <- local_tool_otel_span(request, parent = otel_span)
 
-  tryCatch(
+  start <- Sys.time()
+  result <- tryCatch(
     {
       result <- do.call(request@tool, args)
       new_tool_result(request, result)
@@ -225,6 +226,8 @@ invoke_tool <- function(
       new_tool_result(request, error = e)
     }
   )
+  record_tool_otel_duration(request, start, result)
+  result
 }
 
 on_load(
@@ -248,7 +251,8 @@ on_load(
     tool_span <- local_tool_otel_span(request, parent = otel_span)
     context <- tool_context(request)
 
-    tryCatch(
+    start <- Sys.time()
+    result <- tryCatch(
       {
         value <- await(with_tool_context(context, do.call(request@tool, args)))
         new_tool_result(request, value)
@@ -258,6 +262,8 @@ on_load(
         new_tool_result(request, error = e)
       }
     )
+    record_tool_otel_duration(request, start, result)
+    result
   })
 )
 

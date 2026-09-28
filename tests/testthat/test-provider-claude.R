@@ -809,3 +809,12 @@ test_that("value_turn() handles empty content (#1070)", {
   turn <- value_turn(provider, test_model("claude-sonnet-5"), result)
   expect_equal(turn@contents, list())
 })
+
+test_that("stream_output_started() detects the first content block", {
+  provider <- chat_anthropic(credentials = \() "key")$get_provider()
+  expect_false(stream_output_started(provider, list(type = "message_start")))
+  expect_true(stream_output_started(
+    provider,
+    list(type = "content_block_start")
+  ))
+})
