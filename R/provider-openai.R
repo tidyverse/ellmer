@@ -305,6 +305,10 @@ method(value_tokens, ProviderOpenAI) <- function(provider, json) {
   )
 }
 
+method(value_reasoning_tokens, ProviderOpenAI) <- function(provider, json) {
+  json$usage$output_tokens_details$reasoning_tokens
+}
+
 # https://platform.openai.com/docs/api-reference/responses/get
 method(value_finish_reason, ProviderOpenAI) <- function(provider, result) {
   status <- result$status
