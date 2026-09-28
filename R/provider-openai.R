@@ -496,6 +496,7 @@ method(as_json, list(ProviderOpenAI, ContentText)) <- function(
 ) {
   type <- if (role %in% c("user", "system")) "input_text" else "output_text"
   list(
+    type = "message",
     role = role,
     content = list(list(type = type, text = x@text))
   )
@@ -515,6 +516,7 @@ method(as_json, list(ProviderOpenAI, ContentImageRemote)) <- function(
   ...
 ) {
   list(
+    type = "message",
     role = "user",
     content = list(
       list(type = "input_image", image_url = x@url)
@@ -528,6 +530,7 @@ method(as_json, list(ProviderOpenAI, ContentImageInline)) <- function(
   ...
 ) {
   list(
+    type = "message",
     role = "user",
     content = list(
       list(
@@ -545,6 +548,7 @@ method(as_json, list(ProviderOpenAI, ContentPDF)) <- function(
 ) {
   # https://platform.openai.com/docs/guides/pdf-files?api-mode=responses
   list(
+    type = "message",
     role = "user",
     content = list(openai_input_file(x, "application/pdf"))
   )
@@ -556,6 +560,7 @@ method(as_json, list(ProviderOpenAI, ContentDocument)) <- function(
   ...
 ) {
   list(
+    type = "message",
     role = "user",
     content = list(openai_input_file(x, x@mime_type))
   )
@@ -585,7 +590,7 @@ method(as_json, list(ProviderOpenAI, ContentUploaded)) <- function(
   } else {
     list(type = "input_file", file_id = x@uri)
   }
-  list(role = "user", content = list(part))
+  list(type = "message", role = "user", content = list(part))
 }
 
 method(as_json, list(ProviderOpenAI, ContentToolRequest)) <- function(

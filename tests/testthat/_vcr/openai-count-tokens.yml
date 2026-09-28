@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses/input_tokens
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the current date?"}]}],"model":"gpt-5.4-nano"}'
   response:
     status: 200
@@ -40,8 +40,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses/input_tokens
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Answer
-        succinctly"}]},{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Answer
+        succinctly"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the current date?"}]}],"model":"gpt-5.4-nano"}'
   response:
     status: 200
@@ -78,8 +78,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Answer
-        succinctly"}]},{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Answer
+        succinctly"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the current date?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -212,7 +212,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses/input_tokens
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"And
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"And
         tomorrow?"}]}],"model":"gpt-5.4-nano"}'
   response:
     status: 200
@@ -249,7 +249,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses/input_tokens
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"And
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"And
         tomorrow?"}]}],"model":"gpt-5.4-nano"}'
   response:
     status: 200
@@ -286,7 +286,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses/input_tokens
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Apples
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Apples
         are tasty. By Hadley Wickham."}]}],"model":"gpt-5.4-nano","text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"title":{"type":"string","description":"Content
         title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false},"strict":true}}}'
   response:

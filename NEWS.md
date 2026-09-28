@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_openai()` now sends `type = "message"` on every input item to the Responses API, so OpenAI-compatible servers that require it (e.g. llama.cpp) no longer reject replayed assistant turns (@taekop, #1153).
+
 # ellmer 0.5.0
 
 ## Lifecycle changes

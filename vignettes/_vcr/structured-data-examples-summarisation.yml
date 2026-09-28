@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Policy\n\nThird-party
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Policy\n\nThird-party
         testing as a key ingredient of AI policy\n\nMar 25, 2024●18 min read\n\n\n\nWe
         believe that the AI sector needs effective third-party testing for frontier
         AI systems. Developing a testing regime and associated policy interventions

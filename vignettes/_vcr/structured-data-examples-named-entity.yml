@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  John
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  John
         works at Google in New York. He met with Sarah, the CEO of\n  Acme Inc., last
         week in San Francisco.\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
         extracted entity name."},"type":{"type":"string","description":"The entity

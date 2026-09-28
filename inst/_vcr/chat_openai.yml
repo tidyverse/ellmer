@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  What
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  What
         is the difference between a tibble and a data frame?\n  Answer with a bulleted
         list\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
@@ -137,9 +137,9 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  What
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  What
         is the difference between a tibble and a data frame?\n  Answer with a bulleted
-        list\n"}]},{"role":"assistant","content":[{"type":"output_text","text":"-
+        list\n"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"-
         **Origin**\n  - A **data frame** is a base R data structure.\n  - A **tibble**
         is a modern reimplementation of a data frame from the **tibble** package,
         commonly used in the tidyverse.\n\n- **Printing**\n  - Data frames often print
@@ -162,7 +162,7 @@ http_interactions:
         reducing silent errors.\n\n- **Compatibility**\n  - A tibble is still a type
         of data frame, so many functions that work with data frames also work with
         tibbles.\n  - Some base R functions or older code may expect a plain data
-        frame, in which case a tibble can be converted with `as.data.frame()`."}]},{"role":"user","content":[{"type":"input_text","text":"Tell
+        frame, in which case a tibble can be converted with `as.data.frame()`."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Tell
         me three funny jokes about statisticians"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200

@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"Which clothes
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Which clothes
         should I wear today? Roll a dice to decide."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
         a dice","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"clothes","description":"Pick
         clothes to wear based on a dice roll","strict":true,"parameters":{"type":"object","description":"","properties":{"roll":{"type":"number","description":""}},"required":["roll"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -168,8 +168,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"Which clothes
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Which clothes
         should I wear today? Roll a dice to decide."}]},{"type":"function_call","call_id":"fc_0f1b7664f89aaeaf016a6fcafbd1508193ad125e45828ca9f3","name":"dice","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0f1b7664f89aaeaf016a6fcafbd1508193ad125e45828ca9f3","output":"1"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
         a dice","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"clothes","description":"Pick
         clothes to wear based on a dice roll","strict":true,"parameters":{"type":"object","description":"","properties":{"roll":{"type":"number","description":""}},"required":["roll"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -333,8 +333,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"Which clothes
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Which clothes
         should I wear today? Roll a dice to decide."}]},{"type":"function_call","call_id":"fc_0f1b7664f89aaeaf016a6fcafbd1508193ad125e45828ca9f3","name":"dice","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0f1b7664f89aaeaf016a6fcafbd1508193ad125e45828ca9f3","output":"1"},{"type":"function_call","call_id":"fc_0d0812f333d80fb8016a6fcafcbdb481938df0503d63cae62d","name":"clothes","arguments":"{\"roll\":1}"},{"type":"function_call_output","call_id":"fc_0d0812f333d80fb8016a6fcafcbdb481938df0503d63cae62d","output":"Pants"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
         a dice","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"clothes","description":"Pick
         clothes to wear based on a dice roll","strict":true,"parameters":{"type":"object","description":"","properties":{"roll":{"type":"number","description":""}},"required":["roll"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'

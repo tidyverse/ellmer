@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"What
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
         are Joe, Hadley, Simon, and Tom''s favorite colors?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
         name"}},"required":["user"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -178,8 +178,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"What
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
         are Joe, Hadley, Simon, and Tom''s favorite colors?"}]},{"type":"function_call","call_id":"fc_0475ee0ebd08dac4016a6fcaff58f08196a9d75a837401bc8f","name":"user_favorite_color","arguments":"{\"user\":\"Joe\"}"},{"type":"function_call","call_id":"fc_0475ee0ebd08dac4016a6fcaff5900819686516132e1dca09b","name":"user_favorite_color","arguments":"{\"user\":\"Hadley\"}"},{"type":"function_call","call_id":"fc_0475ee0ebd08dac4016a6fcaff590c81969100853bdc96925c","name":"user_favorite_color","arguments":"{\"user\":\"Simon\"}"},{"type":"function_call","call_id":"fc_0475ee0ebd08dac4016a6fcaff59148196ae60331f1a17c69f","name":"user_favorite_color","arguments":"{\"user\":\"Tom\"}"},{"type":"function_call_output","call_id":"fc_0475ee0ebd08dac4016a6fcaff58f08196a9d75a837401bc8f","output":"Tool
         calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_0475ee0ebd08dac4016a6fcaff5900819686516132e1dca09b","output":"Tool
         calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_0475ee0ebd08dac4016a6fcaff590c81969100853bdc96925c","output":"Tool

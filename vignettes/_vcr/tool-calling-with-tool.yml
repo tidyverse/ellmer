@@ -3,10 +3,10 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"output_text","text":"Neil
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"Neil
         Armstrong touched down on the moon on July 20, 1969. As of 2023, that was
-        54 years ago."}]},{"role":"user","content":[{"type":"input_text","text":"How
+        54 years ago."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"How
         long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -158,10 +158,10 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"output_text","text":"Neil
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"Neil
         Armstrong touched down on the moon on July 20, 1969. As of 2023, that was
-        54 years ago."}]},{"role":"user","content":[{"type":"input_text","text":"How
+        54 years ago."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"How
         long ago did Neil Armstrong touch down on the moon?"}]},{"type":"function_call","call_id":"fc_0f19f871ea49202b016a6fc5b589bc81968b2a20c52239f613","name":"get_current_time","arguments":"{\"tz\":\"UTC\"}"},{"type":"function_call_output","call_id":"fc_0f19f871ea49202b016a6fc5b589bc81968b2a20c52239f613","output":"2025-06-25
         16:53:23 UTC"}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
