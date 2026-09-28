@@ -1,5 +1,12 @@
 # ellmer (development version)
 
+* `parallel_chat_structured()` and `batch_chat_structured()` now record every
+  prompt that produced no usable data in the `.error` column: responses the
+  provider cut short or filtered, as well as responses no structured data could
+  be extracted from. Previously these came back as an ordinary row of missing
+  values, which for a `type_array()` property was indistinguishable from an
+  empty result (@kbenoit, #1121, #1126).
+
 # ellmer 0.5.0
 
 ## Lifecycle changes
