@@ -1005,6 +1005,7 @@ Chat <- R6::R6Class(
         acc$begin_turn(user_turn)
         on.exit(acc$finalize_turn(), add = TRUE)
 
+        stream_start <- Sys.time()
         result <- NULL
         for (chunk in response) {
           result <- stream_merge_chunks(private$provider, result, chunk)
@@ -1016,6 +1017,14 @@ Chat <- R6::R6Class(
           )
           for (content in contents) {
             text <- content_text(content)
+            if (
+              !is.null(stream_start) &&
+                is_stream_text_content(content) &&
+                nzchar(text)
+            ) {
+              record_chat_otel_span_ttft_attr(chat_span, stream_start)
+              stream_start <- NULL
+            }
             if (yield_as_content) {
               yield(content)
             } else if (is_stream_text_content(content)) {
@@ -1166,6 +1175,7 @@ Chat <- R6::R6Class(
         acc$begin_turn(user_turn)
         on.exit(acc$finalize_turn(), add = TRUE)
 
+        stream_start <- Sys.time()
         result <- NULL
         for (chunk in await_each(response)) {
           result <- stream_merge_chunks(private$provider, result, chunk)
@@ -1177,6 +1187,14 @@ Chat <- R6::R6Class(
           )
           for (content in contents) {
             text <- content_text(content)
+            if (
+              !is.null(stream_start) &&
+                is_stream_text_content(content) &&
+                nzchar(text)
+            ) {
+              record_chat_otel_span_ttft_attr(chat_span, stream_start)
+              stream_start <- NULL
+            }
             if (yield_as_content) {
               yield(content)
             } else if (is_stream_text_content(content)) {
