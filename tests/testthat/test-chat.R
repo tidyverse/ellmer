@@ -773,62 +773,7 @@ test_that("can compute costs", {
   expect_snapshot(details)
 })
 
-test_that("get_tokens() drops a trailing user turn with no response yet", {
-  chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
-  chat$set_turns(
-    list(
-      UserTurn("Input 1"),
-      AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
-      UserTurn("Input 2")
-    )
-  )
-
-  details <- chat$get_tokens()
-  expect_equal(nrow(details), 1)
-  expect_equal(
-    details$input_preview,
-    turn_contents_preview(UserTurn("Input 1"))
-  )
-})
-
-test_that("get_tokens() ignores a trailing partial assistant turn", {
-  chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
-  chat$set_turns(
-    list(
-      UserTurn("Input 1"),
-      AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
-      UserTurn("Input 2"),
-      AssistantPartialTurn("Partial output...")
-    )
-  )
-
-  details <- chat$get_tokens()
-  expect_equal(nrow(details), 1)
-  expect_equal(
-    details$input_preview,
-    turn_contents_preview(UserTurn("Input 1"))
-  )
-})
-
-test_that("get_tokens() pairs consecutive assistant turns with the same user turn", {
-  chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
-  chat$set_turns(
-    list(
-      UserTurn("Input 1"),
-      AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
-      AssistantTurn("Output 2", tokens = c(30000, 1000, 0), cost = 0.1)
-    )
-  )
-
-  details <- chat$get_tokens()
-  expect_equal(nrow(details), 2)
-  expect_equal(
-    details$input_preview,
-    rep(turn_contents_preview(UserTurn("Input 1")), 2)
-  )
-})
-
-test_that("get_tokens() pairs a tool-calling loop's turns positionally, like main", {
+test_that("get_tokens() pairs each response with its most recent user turn", {
   chat <- chat_openai_test(model = "gpt-4o", system_prompt = NULL)
   req <- ContentToolRequest(id = "x1", name = "my_tool", arguments = list())
   tool_result_turn <- UserTurn(list(ContentToolResult(
@@ -837,20 +782,36 @@ test_that("get_tokens() pairs a tool-calling loop's turns positionally, like mai
   )))
   chat$set_turns(
     list(
+      # normal pairs, including consecutive assistant turns and a
+      # tool-calling loop
       UserTurn("Input 1"),
+      AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2),
+      AssistantTurn("Output 2", tokens = c(30000, 1000, 0), cost = 0.1),
+      UserTurn("Input 2"),
       AssistantTurn(list(req), tokens = c(100, 10, 0), cost = 0.01),
       tool_result_turn,
-      AssistantTurn("Output 1", tokens = c(15000, 500, 0), cost = 0.2)
+      AssistantTurn("Output 3", tokens = c(15000, 500, 0), cost = 0.2),
+      # a partial turn in the middle of the conversation, followed by
+      # more conversation
+      UserTurn("Input 3"),
+      AssistantPartialTurn("Partial output..."),
+      UserTurn("Input 4"),
+      AssistantTurn("Output 4", tokens = c(20000, 700, 0), cost = 0.15),
+      # a trailing user turn with no response yet
+      UserTurn("Input 5")
     )
   )
 
   details <- chat$get_tokens()
-  expect_equal(nrow(details), 2)
+  expect_equal(nrow(details), 5)
   expect_equal(
     details$input_preview,
     c(
       turn_contents_preview(UserTurn("Input 1")),
-      turn_contents_preview(tool_result_turn)
+      turn_contents_preview(UserTurn("Input 1")),
+      turn_contents_preview(UserTurn("Input 2")),
+      turn_contents_preview(tool_result_turn),
+      turn_contents_preview(UserTurn("Input 4"))
     )
   )
 })
