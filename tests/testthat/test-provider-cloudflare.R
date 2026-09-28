@@ -32,6 +32,21 @@ test_that("account is used in the base url", {
   )
 })
 
+test_that("numeric streamed content is converted to text", {
+  provider <- ProviderCloudflare(name = "Cloudflare", base_url = "")
+  event <- list(data = '{"choices":[{"index":0,"delta":{"content":2}}]}')
+
+  parsed <- stream_parse(provider, event)
+  expect_equal(stream_content(provider, parsed), list(ContentText("2")))
+
+  first <- stream_parse(
+    provider,
+    list(data = '{"choices":[{"index":0,"delta":{"content":1}}]}')
+  )
+  merged <- stream_merge_chunks(provider, first, parsed)
+  expect_equal(merged$choices[[1]]$delta$content, "12")
+})
+
 # Not supported
 # test_that("supports standard parameters", {
 #   chat_fun <- chat_cloudflare_test
