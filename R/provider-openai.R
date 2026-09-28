@@ -85,7 +85,8 @@ chat_openai <- function(
     base_url = base_url,
     extra_headers = api_headers,
     credentials = credentials,
-    service_tier = service_tier
+    service_tier = service_tier,
+    strict = TRUE
   )
   model_obj <- Model(
     name = model,
@@ -172,12 +173,12 @@ method(chat_body, ProviderOpenAI) <- function(
   if (!is.null(type)) {
     # https://platform.openai.com/docs/api-reference/responses/create#responses-create-text
     text <- list(
-      format = list(
+      format = compact(list(
         type = "json_schema",
         name = "structured_data",
         schema = as_json(provider, type),
-        strict = TRUE
-      )
+        strict = if (provider@strict) TRUE
+      ))
     )
   } else {
     text <- NULL
@@ -449,12 +450,12 @@ method(count_tokens, ProviderOpenAI) <- function(
 
   if (!is.null(type)) {
     text <- list(
-      format = list(
+      format = compact(list(
         type = "json_schema",
         name = "structured_data",
         schema = as_json(provider, type),
-        strict = TRUE
-      )
+        strict = if (provider@strict) TRUE
+      ))
     )
   } else {
     text <- NULL
@@ -618,13 +619,13 @@ method(as_json, list(ProviderOpenAI, ToolDef)) <- function(
   x,
   ...
 ) {
-  list(
+  compact(list(
     type = "function",
     name = x@name,
     description = x@description,
-    strict = TRUE,
+    strict = if (provider@strict) TRUE,
     parameters = as_json(provider, x@arguments, ...)
-  )
+  ))
 }
 
 # Batched requests -------------------------------------------------------------

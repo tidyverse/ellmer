@@ -14,7 +14,8 @@ chat_vllm(
   api_key = NULL,
   credentials = NULL,
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 )
 
 models_vllm(base_url, api_key = NULL, credentials = NULL)
@@ -52,6 +53,11 @@ Note this only affects the \code{chat()} method.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
+
+\item{strict}{If \code{TRUE}, use OpenAI's strict-mode tool and structured-output
+schemas (all properties \code{required}, optional ones nullable). Whether these
+work depends on the model you're serving; vLLM itself ignores the \code{strict}
+request field.}
 }
 \value{
 A \link{Chat} object.
