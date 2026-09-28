@@ -173,9 +173,13 @@ parallel_chat_text <- function(
 #'   each property. If `FALSE`, returns a list.
 #' @param include_tokens If `TRUE`, and the result is a data frame, will
 #'   add `input_tokens` and `output_tokens` columns giving the total input
-#'   and output tokens for each prompt.
+#'   and output tokens for each prompt. If the result is not a data frame
+#'   (e.g. because `type` is a top-level [type_array()] or `convert = FALSE`),
+#'   this is ignored with a warning.
 #' @param include_cost If `TRUE`, and the result is a data frame, will
-#'   add `cost` column giving the cost of each prompt.
+#'   add `cost` column giving the cost of each prompt. If the result is not
+#'   a data frame (e.g. because `type` is a top-level [type_array()] or
+#'   `convert = FALSE`), this is ignored with a warning.
 #' @export
 #' @rdname parallel_chat
 parallel_chat_structured <- function(
@@ -291,6 +295,11 @@ multi_convert <- function(
         if (turn_failed(turn)) 0 else turn@cost
       })
     }
+  } else if (include_tokens || include_cost) {
+    args <- c("include_tokens", "include_cost")[c(include_tokens, include_cost)]
+    cli::cli_warn(
+      "{.arg {args}} {?is/are} ignored because the result is not a data frame."
+    )
   }
   out
 }

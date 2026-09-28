@@ -71,10 +71,14 @@ each property. If \code{FALSE}, returns a list.}
 
 \item{include_tokens}{If \code{TRUE}, and the result is a data frame, will
 add \code{input_tokens} and \code{output_tokens} columns giving the total input
-and output tokens for each prompt.}
+and output tokens for each prompt. If the result is not a data frame
+(e.g. because \code{type} is a top-level \code{\link[=type_array]{type_array()}} or \code{convert = FALSE}),
+this is ignored with a warning.}
 
 \item{include_cost}{If \code{TRUE}, and the result is a data frame, will
-add \code{cost} column giving the cost of each prompt.}
+add \code{cost} column giving the cost of each prompt. If the result is not
+a data frame (e.g. because \code{type} is a top-level \code{\link[=type_array]{type_array()}} or
+\code{convert = FALSE}), this is ignored with a warning.}
 }
 \value{
 For \code{parallel_chat()}, a list with one element for each prompt. Each element
