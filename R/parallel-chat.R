@@ -28,6 +28,11 @@
 #'      in flight requests to finish, then return.
 #'   * `"continue"`: keep going, performing every request.
 #'   * `"stop"`: stop processing and throw an error.
+#'
+#'   This controls request execution only. For `parallel_chat_structured()`,
+#'   incomplete responses and extraction failures are handled after requests
+#'   complete: they produce a warning and missing values regardless of
+#'   `on_error`.
 #' @returns
 #' For `parallel_chat()`, a list with one element for each prompt. Each element
 #' is either a [Chat] object (if successful), a `NULL` (if the request wasn't
@@ -44,7 +49,11 @@
 #' prompt fails if its request errored, if the provider reported an incomplete
 #' response (e.g. it hit the `max_tokens` limit or was filtered), or if no
 #' structured data could be extracted from the response. In each case the row
-#' itself is filled in with missing values.
+#' itself is filled in with missing values. Entries in `.error` are `NULL`
+#' for successful responses and requests that were not performed.
+#'
+#' Error metadata is only attached to data-frame outputs. With `convert = FALSE`
+#' or a type that produces a non-data-frame result, no `.error` column is added.
 #' @export
 #' @examples
 #' \dontshow{ellmer:::vcr_example_start("parallel_chat")}
