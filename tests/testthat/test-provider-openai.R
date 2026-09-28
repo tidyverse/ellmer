@@ -411,6 +411,42 @@ test_that("can count tokens", {
   test_token_count(chat_openai_test)
 })
 
+test_that("tools and structured output include `strict` only when strict", {
+  tool_def <- tool(
+    function(x, y = 1) x + y,
+    "Add numbers",
+    arguments = list(
+      x = type_number("First"),
+      y = type_number("Second", required = FALSE)
+    )
+  )
+  type <- type_object(x = type_number())
+
+  non_strict <- ProviderOpenAI(name = "", base_url = "")
+  body <- chat_body(
+    non_strict,
+    test_model(),
+    turns = list(),
+    tools = list(tool_def),
+    type = type
+  )
+  expect_null(body$text$format$strict)
+  expect_null(body$tools[[1]]$strict)
+  expect_equal(unlist(body$tools[[1]]$parameters$required), "x")
+
+  strict <- ProviderOpenAI(name = "", base_url = "", strict = TRUE)
+  body <- chat_body(
+    strict,
+    test_model(),
+    turns = list(),
+    tools = list(tool_def),
+    type = type
+  )
+  expect_true(body$text$format$strict)
+  expect_true(body$tools[[1]]$strict)
+  expect_equal(unlist(body$tools[[1]]$parameters$required), c("x", "y"))
+})
+
 test_that("as_json() serializes uploaded file references", {
   provider <- chat_openai_test()$get_provider()
   expect_equal(
