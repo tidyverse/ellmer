@@ -18,7 +18,8 @@ content_image_plot(width = 768, height = 768)
 non-animated GIF.}
 
 \item{detail}{The \href{https://developers.openai.com/api/docs/guides/images-vision#image-input-requirements}{detail setting}
-for this image. Can be \code{"auto"}, \code{"low"}, or \code{"high"}.}
+for this image. Can be \code{"auto"}, \code{"low"}, or \code{"high"}. Used by OpenAI
+and OpenAI-compatible providers; currently ignored by other providers.}
 
 \item{path}{The path to the image file to include in the chat input. Valid
 file extensions are \code{.png}, \code{.jpeg}, \code{.jpg}, \code{.webp}, and (non-animated)

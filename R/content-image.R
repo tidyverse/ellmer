@@ -14,7 +14,8 @@
 #'   non-animated GIF.
 #' @param detail The [detail
 #'   setting](https://developers.openai.com/api/docs/guides/images-vision#image-input-requirements)
-#'   for this image. Can be `"auto"`, `"low"`, or `"high"`.
+#'   for this image. Can be `"auto"`, `"low"`, or `"high"`. Used by OpenAI
+#'   and OpenAI-compatible providers; currently ignored by other providers.
 #' @returns An input object suitable for including in the `...` parameter of
 #'   the `chat()`, `stream()`, `chat_async()`, or `stream_async()` methods.
 #'
@@ -42,7 +43,7 @@ content_image_url <- function(url, detail = c("auto", "low", "high")) {
 
   if (grepl("^data:", url)) {
     parsed <- parse_data_url(url)
-    ContentImageInline(parsed$content_type, parsed$base64)
+    ContentImageInline(parsed$content_type, parsed$base64, detail = detail)
   } else {
     ContentImageRemote(url = url, detail = detail)
   }

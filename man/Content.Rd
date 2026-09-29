@@ -28,9 +28,9 @@ ContentCitation(
 
 ContentImage()
 
-ContentImageRemote(url = stop("Required"), detail = "")
+ContentImageRemote(url = stop("Required"), detail = "auto")
 
-ContentImageInline(type = stop("Required"), data = NULL)
+ContentImageInline(type = stop("Required"), data = NULL, detail = "auto")
 
 ContentToolRequest(
   id = stop("Required"),
@@ -80,7 +80,8 @@ provider does not supply one.}
 
 \item{url}{URL to a remote image.}
 
-\item{detail}{Not currently used.}
+\item{detail}{Image detail setting for OpenAI and OpenAI-compatible providers.
+Can be \code{"auto"}, \code{"low"}, or \code{"high"}. Currently ignored by other providers.}
 
 \item{type}{MIME type of the image.}
 

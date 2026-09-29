@@ -61,3 +61,16 @@ test_that("useful errors if no display", {
   withr::local_pdf(NULL)
   expect_snapshot(content_image_plot(), error = TRUE)
 })
+
+test_that("image detail defaults to auto", {
+  expect_equal(
+    ContentImageRemote("https://example.com/image.png")@detail,
+    "auto"
+  )
+  expect_equal(ContentImageInline("image/png", "abcd")@detail, "auto")
+  expect_equal(
+    content_image_url("https://example.com/image.png")@detail,
+    "auto"
+  )
+  expect_equal(content_image_url("data:image/png;base64,abcd")@detail, "auto")
+})

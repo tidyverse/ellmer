@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `content_image_url()` now forwards `detail` to OpenAI and OpenAI-compatible providers, including for data URLs (@kbenoit, #1132).
+
 # ellmer 0.5.0
 
 ## Lifecycle changes
