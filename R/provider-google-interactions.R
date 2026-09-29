@@ -682,13 +682,9 @@ method(has_batch_support, ProviderGoogleInteractions) <- function(provider) {
 # This also means those requests use the generateContent error handling and
 # retry rules, as they did before the switch to Interactions.
 as_generate_content <- function(provider) {
-  ProviderGoogleGenerateContent(
-    name = provider@name,
-    base_url = provider@base_url,
-    extra_headers = provider@extra_headers,
-    credentials = provider@credentials,
-    project_id = provider@project_id
-  )
+  props <- setdiff(prop_names(provider), c("model", "params", "extra_args"))
+  args <- lapply(set_names(props), function(name) prop(provider, name))
+  inject(ProviderGoogleGenerateContent(!!!args))
 }
 
 method(batch_submit, ProviderGoogleInteractions) <- function(
