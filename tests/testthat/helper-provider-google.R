@@ -1,10 +1,11 @@
-# A provider for the generateContent API, which is used by chat_google_vertex()
-# and by batch requests and token counting for chat_google_gemini(). Chat
-# requests for chat_google_gemini() use the Interactions API instead.
-google_test_provider <- function() {
+# The Gemini test provider as a generateContent provider: what
+# chat_google_gemini() uses for batch requests and token counting, and the
+# same class chat_google_vertex() uses for everything. Use
+# chat_google_gemini_test()$get_provider() for the Interactions API.
+google_gemini_test_provider <- function() {
   ProviderGoogleGenerateContent(
-    name = "Google/Vertex",
-    base_url = "https://aiplatform.googleapis.com/v1/",
+    name = "Google/Gemini",
+    base_url = "https://generativelanguage.googleapis.com/v1beta/",
     credentials = function() list()
   )
 }
