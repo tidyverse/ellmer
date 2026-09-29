@@ -94,7 +94,7 @@ method(base_request_error, ProviderCloudflare) <- function(provider, req) {
 # Docs look like Gemini tool defs
 # https://developers.cloudflare.com/workers-ai/features/function-calling/traditional/
 method(as_json, list(ProviderCloudflare, ToolDef)) <-
-  method(as_json, list(ProviderGoogle, ToolDef))
+  method(as_json, list(ProviderGoogleGenerateContent, ToolDef))
 
 method(as_json, list(ProviderCloudflare, TypeObject)) <-
   method(as_json, list(ProviderGoogle, TypeObject))
