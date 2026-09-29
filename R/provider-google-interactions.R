@@ -2,14 +2,14 @@
 #' @include tools-built-in.R
 NULL
 
-ProviderGoogleGemini <- new_class(
-  "ProviderGoogleGemini",
+ProviderGoogleInteractions <- new_class(
+  "ProviderGoogleInteractions",
   parent = ProviderGoogle
 )
 
 # Base request -----------------------------------------------------------------
 
-method(base_request, ProviderGoogleGemini) <- function(provider) {
+method(base_request, ProviderGoogleInteractions) <- function(provider) {
   req <- request(provider@base_url)
   req <- ellmer_req_credentials(req, provider@credentials(), "x-goog-api-key")
   req <- ellmer_req_robustify(req, is_transient = gemini_is_transient)
@@ -45,7 +45,7 @@ gemini_error <- function(resp) {
 # Chat -------------------------------------------------------------------------
 
 # https://ai.google.dev/api/interactions-api
-method(chat_request, ProviderGoogleGemini) <- function(
+method(chat_request, ProviderGoogleInteractions) <- function(
   provider,
   model,
   stream = TRUE,
@@ -74,7 +74,7 @@ method(chat_request, ProviderGoogleGemini) <- function(
   req
 }
 
-method(chat_body, ProviderGoogleGemini) <- function(
+method(chat_body, ProviderGoogleInteractions) <- function(
   provider,
   model,
   stream = TRUE,
@@ -115,7 +115,7 @@ method(chat_body, ProviderGoogleGemini) <- function(
   ))
 }
 
-method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
+method(chat_params, ProviderGoogleInteractions) <- function(provider, params) {
   standardise_params(
     params,
     c(
@@ -130,7 +130,10 @@ method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
   )
 }
 
-method(chat_body_tools, ProviderGoogleGemini) <- function(provider, tools) {
+method(chat_body_tools, ProviderGoogleInteractions) <- function(
+  provider,
+  tools
+) {
   as_json(provider, unname(tools))
 }
 
@@ -139,7 +142,7 @@ method(chat_body_tools, ProviderGoogleGemini) <- function(provider, tools) {
 # A turn becomes a list of steps. Text and media contents are grouped into a
 # single user_input or model_output step; everything else (thoughts, tool
 # calls, tool results) is already a step of its own.
-method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
+method(as_json, list(ProviderGoogleInteractions, Turn)) <- function(
   provider,
   x,
   ...
@@ -188,7 +191,7 @@ is_content_block <- function(x) {
   x$type %in% c("text", "image", "audio", "video", "document")
 }
 
-method(as_json, list(ProviderGoogleGemini, ToolDef)) <- function(
+method(as_json, list(ProviderGoogleInteractions, ToolDef)) <- function(
   provider,
   x,
   ...
@@ -201,7 +204,7 @@ method(as_json, list(ProviderGoogleGemini, ToolDef)) <- function(
   ))
 }
 
-method(as_json, list(ProviderGoogleGemini, ToolBuiltIn)) <- function(
+method(as_json, list(ProviderGoogleInteractions, ToolBuiltIn)) <- function(
   provider,
   x,
   ...
@@ -209,7 +212,7 @@ method(as_json, list(ProviderGoogleGemini, ToolBuiltIn)) <- function(
   list(type = names(x@json))
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentText)) <- function(
+method(as_json, list(ProviderGoogleInteractions, ContentText)) <- function(
   provider,
   x,
   ...
@@ -222,7 +225,7 @@ method(as_json, list(ProviderGoogleGemini, ContentText)) <- function(
 }
 
 # Thoughts are replayed verbatim so their signatures are preserved
-method(as_json, list(ProviderGoogleGemini, ContentThinking)) <- function(
+method(as_json, list(ProviderGoogleInteractions, ContentThinking)) <- function(
   provider,
   x,
   ...
@@ -232,7 +235,10 @@ method(as_json, list(ProviderGoogleGemini, ContentThinking)) <- function(
   }
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentImageInline)) <- function(
+method(
+  as_json,
+  list(ProviderGoogleInteractions, ContentImageInline)
+) <- function(
   provider,
   x,
   ...
@@ -240,7 +246,10 @@ method(as_json, list(ProviderGoogleGemini, ContentImageInline)) <- function(
   list(type = "image", data = x@data, mime_type = x@type)
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentImageRemote)) <- function(
+method(
+  as_json,
+  list(ProviderGoogleInteractions, ContentImageRemote)
+) <- function(
   provider,
   x,
   ...
@@ -256,7 +265,7 @@ method(as_json, list(ProviderGoogleGemini, ContentImageRemote)) <- function(
   list(type = "image", uri = x@url, mime_type = mime_type)
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
+method(as_json, list(ProviderGoogleInteractions, ContentPDF)) <- function(
   provider,
   x,
   ...
@@ -264,7 +273,7 @@ method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
   list(type = "document", data = x@data, mime_type = x@type)
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentDocument)) <- function(
+method(as_json, list(ProviderGoogleInteractions, ContentDocument)) <- function(
   provider,
   x,
   ...
@@ -278,7 +287,7 @@ method(as_json, list(ProviderGoogleGemini, ContentDocument)) <- function(
   list(type = "document", data = x@data, mime_type = x@mime_type)
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentUploaded)) <- function(
+method(as_json, list(ProviderGoogleInteractions, ContentUploaded)) <- function(
   provider,
   x,
   ...
@@ -293,7 +302,10 @@ method(as_json, list(ProviderGoogleGemini, ContentUploaded)) <- function(
   list(type = type, uri = x@uri, mime_type = x@mime_type)
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentToolRequest)) <- function(
+method(
+  as_json,
+  list(ProviderGoogleInteractions, ContentToolRequest)
+) <- function(
   provider,
   x,
   ...
@@ -311,7 +323,10 @@ method(as_json, list(ProviderGoogleGemini, ContentToolRequest)) <- function(
   )
 }
 
-method(as_json, list(ProviderGoogleGemini, ContentToolResult)) <- function(
+method(
+  as_json,
+  list(ProviderGoogleInteractions, ContentToolResult)
+) <- function(
   provider,
   x,
   ...
@@ -327,24 +342,31 @@ method(as_json, list(ProviderGoogleGemini, ContentToolResult)) <- function(
   )
 }
 
-# Built-in tool activity is replayed verbatim from the raw step, when present
+# Built-in tool activity is replayed verbatim from the raw step, when it came
+# from this API (other providers' annotations also have a `type`)
 gemini_replay_step <- function(provider, x, ...) {
-  if (!is.null(x@extra$type)) {
+  types <- c(
+    "google_search_call",
+    "google_search_result",
+    "url_context_call",
+    "url_context_result"
+  )
+  if (isTRUE(x@extra$type %in% types)) {
     x@extra
   }
 }
-method(as_json, list(ProviderGoogleGemini, ContentToolRequestSearch)) <-
+method(as_json, list(ProviderGoogleInteractions, ContentToolRequestSearch)) <-
   gemini_replay_step
-method(as_json, list(ProviderGoogleGemini, ContentToolResponseSearch)) <-
+method(as_json, list(ProviderGoogleInteractions, ContentToolResponseSearch)) <-
   gemini_replay_step
-method(as_json, list(ProviderGoogleGemini, ContentToolRequestFetch)) <-
+method(as_json, list(ProviderGoogleInteractions, ContentToolRequestFetch)) <-
   gemini_replay_step
-method(as_json, list(ProviderGoogleGemini, ContentToolResponseFetch)) <-
+method(as_json, list(ProviderGoogleInteractions, ContentToolResponseFetch)) <-
   gemini_replay_step
 
 # Interactions -> ellmer -------------------------------------------------------
 
-method(value_turn, ProviderGoogleGemini) <- function(
+method(value_turn, ProviderGoogleInteractions) <- function(
   provider,
   model,
   result,
@@ -494,7 +516,7 @@ gemini_replayed <- function(items, step, make) {
   })
 }
 
-method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
+method(value_tokens, ProviderGoogleInteractions) <- function(provider, json) {
   usage <- json$usage
   # total_input_tokens includes cached tokens; total_tokens also includes
   # thinking and tool use, which we count as output
@@ -509,7 +531,7 @@ method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
   )
 }
 
-method(value_finish_reason, ProviderGoogleGemini) <- function(
+method(value_finish_reason, ProviderGoogleInteractions) <- function(
   provider,
   result
 ) {
@@ -529,7 +551,7 @@ method(value_finish_reason, ProviderGoogleGemini) <- function(
 # Streaming --------------------------------------------------------------------
 
 # https://ai.google.dev/gemini-api/docs/streaming
-method(stream_parse, ProviderGoogleGemini) <- function(provider, event) {
+method(stream_parse, ProviderGoogleInteractions) <- function(provider, event) {
   if (is.null(event) || identical(event$data, "[DONE]")) {
     NULL
   } else {
@@ -539,7 +561,7 @@ method(stream_parse, ProviderGoogleGemini) <- function(provider, event) {
 
 # Rebuilds the same structure as a non-streaming response (`status`, `usage`,
 # `steps`), so that value_turn() can be shared. Steps are keyed by `index`.
-method(stream_merge_chunks, ProviderGoogleGemini) <- function(
+method(stream_merge_chunks, ProviderGoogleInteractions) <- function(
   provider,
   result,
   chunk
@@ -620,7 +642,7 @@ gemini_merge_delta <- function(step, delta) {
   )
 }
 
-method(stream_content, ProviderGoogleGemini) <- function(
+method(stream_content, ProviderGoogleInteractions) <- function(
   provider,
   event,
   completion = NULL
@@ -651,33 +673,43 @@ method(stream_content, ProviderGoogleGemini) <- function(
 
 # Batched requests -------------------------------------------------------------
 
-method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
+method(has_batch_support, ProviderGoogleInteractions) <- function(provider) {
   TRUE
 }
 
 # The batch and countTokens endpoints still use generateContent, so these
-# methods run the ProviderGoogle implementations, which build and parse
-# that format. This also means those requests use the generateContent error
-# handling and retry rules, as they did before the switch to Interactions.
-method(batch_submit, ProviderGoogleGemini) <- function(
+# methods hand over to the sibling class, which builds and parses that format.
+# This also means those requests use the generateContent error handling and
+# retry rules, as they did before the switch to Interactions.
+as_generate_content <- function(provider) {
+  ProviderGoogleGenerateContent(
+    name = provider@name,
+    base_url = provider@base_url,
+    extra_headers = provider@extra_headers,
+    credentials = provider@credentials,
+    project_id = provider@project_id
+  )
+}
+
+method(batch_submit, ProviderGoogleInteractions) <- function(
   provider,
   model,
   conversations,
   type = NULL
 ) {
-  batch_submit(convert(provider, ProviderGoogle), model, conversations, type)
+  batch_submit(as_generate_content(provider), model, conversations, type)
 }
 
-method(batch_result_turn, ProviderGoogleGemini) <- function(
+method(batch_result_turn, ProviderGoogleInteractions) <- function(
   provider,
   model,
   result,
   has_type = FALSE
 ) {
-  batch_result_turn(convert(provider, ProviderGoogle), model, result, has_type)
+  batch_result_turn(as_generate_content(provider), model, result, has_type)
 }
 
-method(count_tokens, ProviderGoogleGemini) <- function(
+method(count_tokens, ProviderGoogleInteractions) <- function(
   provider,
   model,
   ...,
@@ -686,7 +718,7 @@ method(count_tokens, ProviderGoogleGemini) <- function(
   type = NULL
 ) {
   count_tokens(
-    convert(provider, ProviderGoogle),
+    as_generate_content(provider),
     model,
     ...,
     system_prompt = system_prompt,

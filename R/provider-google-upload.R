@@ -38,7 +38,7 @@ google_upload <- function(
     api_key = api_key
   )
 
-  provider <- ProviderGoogleGemini(
+  provider <- ProviderGoogleInteractions(
     name = "Google/Gemini",
     base_url = paste0(base_url, "v1beta/"),
     credentials = credentials
