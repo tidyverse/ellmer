@@ -41,14 +41,20 @@ Provider <- new_class(
   )
 )
 
-# Default S7 print calls every getter, which would trigger the deprecation
-# warnings. Remove along with the deprecated properties (#1098).
-method(print, Provider) <- function(x, ...) {
+# Get all properties of a provider as a named list, skipping the deprecated
+# ones since reading them triggers a deprecation warning. Once the deprecated
+# properties are removed (#1098) this can be replaced by S7::props().
+provider_props <- function(x) {
   names <- setdiff(prop_names(x), c("model", "params", "extra_args"))
-  props <- set_names(lapply(names, \(name) prop(x, name)), names)
+  set_names(lapply(names, \(name) prop(x, name)), names)
+}
+
+# Default S7 print calls every getter, which would trigger the deprecation
+# warnings
+method(print, Provider) <- function(x, ...) {
   cat("<", class(x)[[1]], ">\n", sep = "")
   str(
-    props,
+    provider_props(x),
     no.list = TRUE,
     give.attr = FALSE,
     comp.str = "@ ",
