@@ -3,7 +3,7 @@
     Code
       file_upload(provider, "apples.pdf")
     Condition
-      Error in `method(file_upload, ellmer::ProviderGoogleGemini)`:
+      Error in `method(file_upload, ellmer::ProviderGoogle)`:
       ! The Gemini Files API is not available on Vertex AI.
       i Upload the file to a Cloud Storage bucket and reference it with `ContentUploaded(uri = "gs://bucket/object", mime_type = ...)`.
 
@@ -12,12 +12,12 @@
     Code
       file_upload(provider, path, expires_in_h = 1)
     Condition
-      Error in `method(file_upload, ellmer::ProviderGoogleGemini)`:
+      Error in `method(file_upload, ellmer::ProviderGoogle)`:
       ! Gemini files always expire after 48 hours, so `expires_in_h` must be 48.
     Code
       file_upload(provider, path, expires_in_h = Inf)
     Condition
-      Error in `method(file_upload, ellmer::ProviderGoogleGemini)`:
+      Error in `method(file_upload, ellmer::ProviderGoogle)`:
       ! Gemini files always expire after 48 hours, so `expires_in_h` must be 48.
 
 # google_upload() is deprecated
