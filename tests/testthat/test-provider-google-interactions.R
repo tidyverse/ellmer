@@ -1,8 +1,28 @@
-test_that("only the Gemini API supports batch requests", {
-  gemini <- chat_google_gemini_test()$get_provider()
-  vertex <- google_test_provider()
+test_that("only the Gemini Developer API supports batch requests", {
+  gemini <- ProviderGoogleInteractions(
+    name = "Google/Gemini",
+    base_url = "https://generativelanguage.googleapis.com/v1beta/",
+    credentials = function() list()
+  )
+  vertex <- ProviderGoogleGenerateContent(
+    name = "Google/Vertex",
+    base_url = "https://aiplatform.googleapis.com/v1/",
+    credentials = function() list()
+  )
   expect_equal(has_batch_support(gemini), TRUE)
   expect_equal(has_batch_support(vertex), FALSE)
+})
+
+test_that("as_generate_content() copies all provider properties", {
+  provider <- ProviderGoogleInteractions(
+    name = "Google/Gemini",
+    base_url = "https://generativelanguage.googleapis.com/v1beta/",
+    extra_headers = c(foo = "bar"),
+    credentials = function() list()
+  )
+  generate_content <- as_generate_content(provider)
+  expect_s7_class(generate_content, ProviderGoogleGenerateContent)
+  expect_equal(provider_props(generate_content), provider_props(provider))
 })
 
 # ellmer -> Interactions -------------------------------------------------------
