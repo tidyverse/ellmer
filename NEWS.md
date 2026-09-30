@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* A tool result whose value is a `Content` object (e.g. an image) no longer breaks the `gen_ai.input.messages` OpenTelemetry attribute; it's now converted to a part the same way other content is (@taekop, #1145).
+
 # ellmer 0.5.0
 
 ## Lifecycle changes

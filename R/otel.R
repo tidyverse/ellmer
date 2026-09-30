@@ -248,6 +248,13 @@ tool_otel_response <- function(content) {
     # JSON string itself as a quoted string under `auto_unbox = TRUE`.
     return(jsonlite::fromJSON(value, simplifyVector = FALSE))
   }
+  # `Content` values (e.g. an image) aren't JSON-serializable as-is (#1145).
+  if (S7_inherits(value, Content)) {
+    return(as_otel_part(value))
+  }
+  if (is_content_list(value)) {
+    return(lapply(value, as_otel_part))
+  }
   value
 }
 

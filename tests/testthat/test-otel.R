@@ -352,6 +352,84 @@ test_that("tool_call_response part decodes json-class values", {
   )
 })
 
+test_that("tool_call_response part converts a Content value with as_otel_part", {
+  value <- ContentImageInline("image/png", "abc123")
+  part <- as_otel_part(ContentToolResult(value = value))
+  expect_equal(
+    part$response,
+    list(type = "generic", class = "ContentImageInline")
+  )
+
+  encoded <- jsonlite::toJSON(part, auto_unbox = TRUE, null = "null")
+  expect_equal(
+    jsonlite::fromJSON(encoded, simplifyVector = FALSE)$response,
+    list(type = "generic", class = "ContentImageInline")
+  )
+})
+
+test_that("tool_call_response part converts a list of Content values with as_otel_part", {
+  value <- list(ContentText("hi"), ContentImageInline("image/png", "abc123"))
+  part <- as_otel_part(ContentToolResult(value = value))
+  expect_equal(
+    part$response,
+    list(
+      list(type = "text", content = "hi"),
+      list(type = "generic", class = "ContentImageInline")
+    )
+  )
+})
+
+test_that("a Content tool result doesn't drop the rest of the batch (#1145)", {
+  # The issue's case: an image tool result sits between two plain text turns.
+  # All three turns must survive gen_ai.input.messages.
+  turns <- list(
+    UserTurn(list(ContentText("before"))),
+    UserTurn(list(
+      ContentToolResult(
+        value = ContentImageInline("image/png", "abc123"),
+        request = ContentToolRequest(id = "1", name = "f", arguments = list())
+      )
+    )),
+    UserTurn(list(ContentText("after")))
+  )
+  msgs <- lapply(turns, as_otel_message)
+  encoded <- jsonlite::toJSON(msgs, auto_unbox = TRUE, null = "null")
+  decoded <- jsonlite::fromJSON(encoded, simplifyVector = FALSE)
+
+  expect_equal(decoded[[1]]$parts[[1]]$content, "before")
+  expect_equal(decoded[[3]]$parts[[1]]$content, "after")
+  expect_equal(
+    decoded[[2]]$parts[[1]]$response,
+    list(type = "generic", class = "ContentImageInline")
+  )
+})
+
+test_that("local_chat_otel_span never errors, even when message conversion fails outright", {
+  skip_if_not_installed("otelsdk")
+  withr::local_envvar(
+    OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = "true"
+  )
+
+  chat <- chat_openai_test()
+  private <- chat$.__enclos_env__$private
+
+  # A malformed turn (not a real Turn object) fails inside as_otel_message(),
+  # exercising the outer tryCatch safety net in local_chat_otel_span().
+  bad_turns <- list(list())
+
+  expect_no_error(
+    with_otel_record({
+      (function() {
+        local_chat_otel_span(
+          private$provider,
+          private$model,
+          turns = bad_turns
+        )
+      })()
+    })
+  )
+})
+
 test_that("conversation id is recorded on agent and chat spans when set", {
   skip_if_not_installed("otelsdk")
   withr::local_envvar(OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = NA)
