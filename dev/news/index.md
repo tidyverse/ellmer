@@ -2,6 +2,10 @@
 
 ## ellmer (development version)
 
+- [`live_browser()`](https://ellmer.tidyverse.org/dev/reference/live_console.md)
+  works again with shinychat \>= 0.5.0
+  ([\#1167](https://github.com/tidyverse/ellmer/issues/1167)).
+
 ## ellmer 0.5.0
 
 CRAN release: 2026-09-04
