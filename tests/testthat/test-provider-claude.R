@@ -298,8 +298,7 @@ test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens"
     cache = ""
   )
 
-  # Fixed test rates, independent of the live price table: $10/$100/$1 per 1M
-  # input/output/cached_input tokens.
+  # Fixed test rates, independent of the live price table
   cache_path <- local_prices_cache()
   write_prices_cache(
     cache_path,
