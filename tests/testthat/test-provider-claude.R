@@ -350,9 +350,6 @@ test_that("value_turn() prices a refusal fallback at the serving model's rate", 
   )
   model <- Model(name = "test-model-from")
 
-  # Fixed test rates, independent of the live price table: the "from" model
-  # is priced very differently from the "to" model, so pricing the wrong one
-  # would give an obviously wrong result.
   cache_path <- local_prices_cache()
   write_prices_cache(
     cache_path,
