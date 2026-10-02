@@ -97,14 +97,14 @@ These functions try a number of authentication strategies, in this order:
 \itemize{
 \item An API key set in the \code{GOOGLE_API_KEY} or \code{GEMINI_API_KEY} env var
 (Gemini only).
+\item Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
+package is installed.
 \item Google's default application credentials, if the \pkg{gargle} package
 is installed.
-\item Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
-package.
-\item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}. An browser-based OAuth flow, if
-you're in an interactive session. This currently uses an unverified
-OAuth app (so you will get a scary warning); we plan to verify in the
-near future.
+\item A browser-based OAuth flow, if you're in an interactive session (Gemini
+only). On a hosted session (e.g. Posit Workbench or Google Colab), the
+browser can't redirect back to R, so you'll be shown a code to paste into
+the console instead.
 }
 }
 }

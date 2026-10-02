@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_google_gemini()`'s browser-based OAuth flow now uses a verified Google OAuth app, so you no longer see the "unverified app" warning. It also works on hosted sessions like Posit Workbench and Google Colab, and `chat_google_vertex()` no longer falls back to it (@thisisnic, #1156).
 * `live_browser()` works again with shinychat >= 0.5.0 (#1167).
 
 # ellmer 0.5.0
