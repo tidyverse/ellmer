@@ -1,3 +1,4 @@
+#' @include provider.R
 #' @include provider-claude.R
 #' @include provider-openai-compatible.R
 #' @include files.R
@@ -75,7 +76,8 @@ chat_posit <- function(
       name = "Posit",
       base_url = paste0(base_url, "/openai/v1"),
       extra_headers = api_headers,
-      credentials = credentials
+      credentials = credentials,
+      cache = cache
     )
   }
   model <- Model(name = model, params = params, extra_args = api_args)
@@ -123,7 +125,12 @@ ProviderPositAnthropic <- new_class(
 
 ProviderPositOpenAI <- new_class(
   "ProviderPositOpenAI",
-  parent = ProviderOpenAICompatible
+  parent = ProviderOpenAICompatible,
+  properties = list(
+    # Inert on OpenAI models; carried over from/to ProviderPositAnthropic so
+    # it survives switching model families (#1138).
+    cache = prop_string(default = "5m")
+  )
 )
 
 method(base_request, ProviderPositAnthropic) <- function(provider) {
@@ -177,6 +184,41 @@ method(models_list, ProviderPositOpenAI) <- function(provider) {
     base_url = posit_gateway_url(provider@base_url),
     credentials = provider@credentials
   )
+}
+
+method(provider_set_model, ProviderPositAnthropic) <- function(provider, name) {
+  if (is_claude_model(name)) {
+    provider
+  } else {
+    ProviderPositOpenAI(
+      name = provider@name,
+      base_url = paste0(posit_gateway_url(provider@base_url), "/openai/v1"),
+      extra_headers = provider@extra_headers,
+      credentials = provider@credentials,
+      cache = provider@cache
+    )
+  }
+}
+
+# `cache` is inert on OpenAI models; it's only carried so it survives a switch
+# to Claude models (#1138). Hide it from print() to avoid suggesting it's used.
+method(print, ProviderPositOpenAI) <- function(x, ...) {
+  provider_print(x, hide = "cache")
+  invisible(x)
+}
+
+method(provider_set_model, ProviderPositOpenAI) <- function(provider, name) {
+  if (is_claude_model(name)) {
+    ProviderPositAnthropic(
+      name = provider@name,
+      base_url = paste0(posit_gateway_url(provider@base_url), "/anthropic/v1"),
+      extra_headers = provider@extra_headers,
+      credentials = provider@credentials,
+      cache = provider@cache
+    )
+  } else {
+    provider
+  }
 }
 
 is_claude_model <- function(model) {
