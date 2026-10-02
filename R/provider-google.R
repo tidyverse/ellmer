@@ -20,14 +20,14 @@ NULL
 #'
 #' * An API key set in the `GOOGLE_API_KEY` or `GEMINI_API_KEY` env var
 #'   (Gemini only).
+#' * Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
+#'   package is installed.
 #' * Google's default application credentials, if the \pkg{gargle} package
 #'   is installed.
-#' * Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
-#'   package.
-#' * `r lifecycle::badge("experimental")`. An browser-based OAuth flow, if
-#'   you're in an interactive session. This currently uses an unverified
-#'   OAuth app (so you will get a scary warning); we plan to verify in the
-#'   near future.
+#' * A browser-based OAuth flow, if you're in an interactive session (Gemini
+#'   only). On a hosted session (e.g. Posit Workbench or Google Colab), the
+#'   browser can't redirect back to R, so you'll be shown a code to paste into
+#'   the console instead.
 #'
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials A function that returns a list of authentication headers
@@ -962,14 +962,15 @@ default_google_credentials <- function(
     testthat::skip("no Google credentials available")
   }
 
-  if (is.null(token) && is_interactive()) {
+  if (is.null(token) && is_interactive() && variant == "gemini") {
     return(function() {
       function(req) {
-        req_oauth_auth_code(
+        exec(
+          req_oauth_auth_code,
           req,
-          client = gemini_client(),
+          !!!gemini_oauth_params(),
           auth_url = "https://accounts.google.com/o/oauth2/auth",
-          scope = "https://www.googleapis.com/auth/generative-language.retriever"
+          scope = gemini_scope
         )
       }
     })
@@ -1017,17 +1018,42 @@ default_google_credentials <- function(
 }
 
 google_oauth_reset <- function() {
-  httr2::oauth_cache_clear(gemini_client())
+  httr2::oauth_cache_clear(gemini_desktop_client())
+  httr2::oauth_cache_clear(gemini_web_client())
 }
 
-gemini_client <- function() {
+# Hosted sessions can't use a localhost redirect, so they get the web client
+# and paste a code back from the tidyverse.org callback page.
+gemini_oauth_params <- function() {
+  if (is_hosted_session()) {
+    list(
+      client = gemini_web_client(),
+      redirect_uri = "https://www.tidyverse.org/google-callback/"
+    )
+  } else {
+    list(client = gemini_desktop_client())
+  }
+}
+
+gemini_desktop_client <- function() {
   httr2::oauth_client(
-    id = "148439353047-kit3pok9u920mhmqbc3c0pdr50bvb7pt.apps.googleusercontent.com",
+    id = "692350949534-5mo5e14si0vh0sa4jpnt0aj583vn93v0.apps.googleusercontent.com",
     secret = httr2::obfuscated(
-      "o2yDPr_4BNgZvhLT9kIZS6jAYp43sAzAjMrmW60FUC-N4btRmTwOQ1650vS2pDRSvbKK"
+      "kzVEgj-9wpJ5okNiB1f7vAJqtEFhlA1sJYRr-cTITBmBqlIrQJC_kZ3UmbFMgNHrkql5"
     ),
     token_url = "https://oauth2.googleapis.com/token",
-    name = "gemini-r-client"
+    name = "ellmer-gemini-desktop"
+  )
+}
+
+gemini_web_client <- function() {
+  httr2::oauth_client(
+    id = "692350949534-8rnq1p720kld2ke9la4r828qn4ejn9tt.apps.googleusercontent.com",
+    secret = httr2::obfuscated(
+      "jA4z3vFmNGQL52ptN7nchaK_-nA04P6oEhFrAxc1zZevMx0zYCx9mLZ4y0ZEvq6g_G1B"
+    ),
+    token_url = "https://oauth2.googleapis.com/token",
+    name = "ellmer-gemini-web"
   )
 }
 
