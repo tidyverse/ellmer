@@ -420,8 +420,13 @@ default_databricks_credentials <- function(workspace = databricks_workspace()) {
 is_hosted_session <- function() {
   # If RStudio Server or Posit Workbench is running locally (which is possible,
   # though unusual), it's not acting as a hosted environment.
-  Sys.getenv("RSTUDIO_PROGRAM_MODE") == "server" &&
+  is_rstudio_server <- Sys.getenv("RSTUDIO_PROGRAM_MODE") == "server" &&
     !grepl("localhost", Sys.getenv("RSTUDIO_HTTP_REFERER"), fixed = TRUE)
+
+  is_rstudio_server ||
+    nzchar(Sys.getenv("RS_SERVER_URL")) ||
+    Sys.getenv("POSITRON_MODE") == "server" ||
+    nzchar(Sys.getenv("COLAB_RELEASE_TAG"))
 }
 
 databricks_cli_token <- function(cli_path, host) {
