@@ -14,14 +14,11 @@ NULL
 #' Uses OpenAI compatible API via `chat_openai_compatible()`.
 #'
 #' @inheritParams chat_openai
+#' @inheritParams chat_openai_compatible
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("VLLM_API_KEY")`
 #' @param model `r param_model(NULL, "vllm")`
 #' @param params Common model parameters, usually created by [params()].
-#' @param strict If `TRUE`, use OpenAI's strict-mode tool and structured-output
-#'   schemas (all properties `required`, optional ones nullable). Whether these
-#'   work depends on the model you're serving; vLLM itself ignores the `strict`
-#'   request field.
 #' @inherit chat_openai return
 #' @export
 #' @examples

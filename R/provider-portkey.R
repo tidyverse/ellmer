@@ -21,9 +21,7 @@
 #'   if the model doesn't include a provider.
 #' @export
 #' @inheritParams chat_openai
-#' @param strict If `TRUE`, use OpenAI's strict-mode tool and structured-output
-#'   schemas (all properties `required`, optional ones nullable). Whether these
-#'   work depends on the upstream model Portkey routes to.
+#' @inheritParams chat_openai_compatible
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{

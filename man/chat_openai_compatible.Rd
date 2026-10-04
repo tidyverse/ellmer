@@ -50,15 +50,8 @@ is included when sending conversation history back to the API. If \code{FALSE}
 from subsequent requests. Set to \code{TRUE} if your provider requires or
 benefits from seeing prior reasoning in multi-turn conversations.}
 
-\item{strict}{If \code{TRUE}, use OpenAI's strict-mode conventions: tool
-definitions and structured outputs are sent with \code{strict: true}, and
-every tool argument or type property is listed in \code{required}, with
-optional ones made nullable. Only correct if the endpoint and model
-actually implement strict mode (constrained decoding). If \code{FALSE} (the
-default), standard JSON Schema is used: only truly required arguments
-are listed in \code{required}. Set \code{strict = TRUE} if you're pointing this
-function at OpenAI's chat completions API, though \code{\link[=chat_openai]{chat_openai()}} is
-preferred for OpenAI.}
+\item{strict}{If \code{TRUE}, use OpenAI's strict mode for tool definitions and
+structured output. Only set this if the endpoint and model support it.}
 
 \item{echo}{One of the following options:
 \itemize{

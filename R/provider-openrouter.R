@@ -17,10 +17,8 @@ NULL
 #' @param credentials `r api_key_param("OPENROUTER_API_KEY")`
 #' @param model `r param_model("gpt-5.6-terra")`
 #' @param params Common model parameters, usually created by [params()].
-#' @param strict If `TRUE`, use OpenAI's strict-mode tool and structured-output
-#'   schemas (all properties `required`, optional ones nullable). Whether these
-#'   are enforced varies by the endpoint serving the model on OpenRouter.
 #' @inheritParams chat_openai
+#' @inheritParams chat_openai_compatible
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{

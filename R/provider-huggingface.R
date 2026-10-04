@@ -24,9 +24,7 @@
 #' @param credentials `r api_key_param("HUGGINGFACE_API_KEY")`
 #' @export
 #' @inheritParams chat_openai
-#' @param strict If `TRUE`, use OpenAI's strict-mode tool and structured-output
-#'   schemas (all properties `required`, optional ones nullable). Support
-#'   varies by the inference provider serving the model.
+#' @inheritParams chat_openai_compatible
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
