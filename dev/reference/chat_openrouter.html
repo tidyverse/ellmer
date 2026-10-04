@@ -77,7 +77,8 @@ https://openrouter.ai/models for details."><meta property="og:image" content="ht
 <span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  echo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"output"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
-<span>  api_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  api_headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  strict <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -125,6 +126,11 @@ when running at the console).</p></li>
 <dt id="arg-api-headers">api_headers<a class="anchor" aria-label="anchor" href="#arg-api-headers"></a></dt>
 <dd><p>Named character vector of arbitrary extra headers appended
 to every chat API call.</p></dd>
+
+
+<dt id="arg-strict">strict<a class="anchor" aria-label="anchor" href="#arg-strict"></a></dt>
+<dd><p>If <code>TRUE</code>, use OpenAI's strict mode for tool definitions and
+structured output. Only set this if the endpoint and model support it.</p></dd>
 
 </dl></div>
     <div class="section level2">

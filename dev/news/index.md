@@ -2,6 +2,30 @@
 
 ## ellmer (development version)
 
+- OpenAI-compatible providers, including
+  [`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md),
+  [`chat_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md),
+  [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md),
+  [`chat_mistral()`](https://ellmer.tidyverse.org/dev/reference/chat_mistral.md),
+  [`chat_deepseek()`](https://ellmer.tidyverse.org/dev/reference/chat_deepseek.md),
+  [`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md),
+  and
+  [`chat_cloudflare()`](https://ellmer.tidyverse.org/dev/reference/chat_cloudflare.md),
+  now send standard JSON Schema instead of OpenAI’s strict-mode schema,
+  so `required = FALSE` tool arguments stay optional.
+  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md),
+  [`chat_azure_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_azure_openai.md),
+  Groq’s structured outputs, and
+  [`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
+  models whose id starts with `openai/` keep strict mode.
+  [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md),
+  [`chat_vllm()`](https://ellmer.tidyverse.org/dev/reference/chat_vllm.md),
+  [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md),
+  [`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md),
+  and
+  [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md)
+  gain a `strict` argument to opt back in
+  ([\#1135](https://github.com/tidyverse/ellmer/issues/1135)).
 - `Chat$get_tokens()` no longer errors when the conversation ends with a
   user turn that has no completed assistant response yet, or with a
   partial (interrupted) assistant turn

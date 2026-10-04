@@ -29,7 +29,8 @@ chat_huggingface(
   model = NULL,
   api_args = list(),
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 )
 ```
 
@@ -92,6 +93,11 @@ chat_huggingface(
 
   Named character vector of arbitrary extra headers appended to every
   chat API call.
+
+- strict:
+
+  If `TRUE`, use OpenAI's strict mode for tool definitions and
+  structured output. Only set this if the endpoint and model support it.
 
 ## Value
 

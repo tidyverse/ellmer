@@ -21,7 +21,8 @@ chat_vllm(
   api_key = NULL,
   credentials = NULL,
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 )
 
 models_vllm(base_url, api_key = NULL, credentials = NULL)
@@ -87,6 +88,11 @@ models_vllm(base_url, api_key = NULL, credentials = NULL)
 
   Named character vector of arbitrary extra headers appended to every
   chat API call.
+
+- strict:
+
+  If `TRUE`, use OpenAI's strict mode for tool definitions and
+  structured output. Only set this if the endpoint and model support it.
 
 ## Value
 
