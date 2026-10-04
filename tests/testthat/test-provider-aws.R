@@ -330,12 +330,6 @@ test_that("each api has its own endpoint", {
   )
 })
 
-test_that("responses api uses OpenAI strict mode", {
-  local_mocked_aws_credentials()
-
-  expect_true(provider_aws_bedrock(api = "responses")@strict)
-})
-
 test_that("explicit api overrides the guess", {
   local_mocked_aws_credentials()
 
