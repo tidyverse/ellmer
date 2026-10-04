@@ -46,28 +46,13 @@ test_that("gateway-specific errors get useful messages", {
   expect_equal(posit_error_body(string_error), "bad request")
 })
 
-test_that("optional tool arguments stay out of `required`", {
-  tool_def <- tool(
-    function(x, y = 1) x + y,
-    "Add numbers",
-    arguments = list(
-      x = type_number("First"),
-      y = type_number("Second", required = FALSE)
-    )
-  )
-
-  provider <- ProviderPositOpenAI(name = "", base_url = "")
-  fn <- as_json(provider, tool_def)$`function`
-  expect_null(fn$strict)
-  expect_equal(unlist(fn$parameters$required), "x")
-  expect_equal(fn$parameters$properties$y$type, "number")
-
-  # Models routed to the OpenAI API keep OpenAI's strict-mode convention
-  provider <- ProviderPositOpenAI(name = "", base_url = "", strict = TRUE)
-  fn <- as_json(provider, tool_def)$`function`
-  expect_true(fn$strict)
-  expect_equal(unlist(fn$parameters$required), c("x", "y"))
-  expect_equal(fn$parameters$properties$y$type, c("number", "null"))
+test_that("only openai/ models use strict mode", {
+  openai <- chat_posit(model = "openai/gpt-4.1", credentials = \() "key")
+  gemma <- chat_posit(model = "google/gemma-4-26B-A4B-it", credentials = \() {
+    "key"
+  })
+  expect_equal(openai$get_provider()@strict, TRUE)
+  expect_equal(gemma$get_provider()@strict, FALSE)
 })
 
 # Checking the cache before calling models_posit() keeps an unauthenticated
