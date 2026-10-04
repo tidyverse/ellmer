@@ -47,10 +47,9 @@ test_that("gateway-specific errors get useful messages", {
 })
 
 test_that("only openai/ models use strict mode", {
-  openai <- chat_posit(model = "openai/gpt-4.1", credentials = \() "key")
-  gemma <- chat_posit(model = "google/gemma-4-26B-A4B-it", credentials = \() {
-    "key"
-  })
+  key <- \() "key"
+  openai <- chat_posit(model = "openai/gpt-4.1", credentials = key)
+  gemma <- chat_posit(model = "google/gemma-4-26B-A4B-it", credentials = key)
   expect_equal(openai$get_provider()@strict, TRUE)
   expect_equal(gemma$get_provider()@strict, FALSE)
 })
