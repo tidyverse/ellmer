@@ -206,16 +206,8 @@ Chat <- R6::R6Class(
 
       # Pair each complete assistant turn with the most recently seen user
       # turn, rather than assuming turns strictly alternate (#1131).
-      complete_turn_idx <- which(is_complete_turn)
-      tokens$input_preview <- map_chr(complete_turn_idx, function(i) {
-        preceding_turns <- turns[seq_len(i - 1)]
-        user_turn <- Find(is_user_turn, preceding_turns, right = TRUE)
-        if (is.null(user_turn)) {
-          NA_character_
-        } else {
-          turn_contents_preview(user_turn)
-        }
-      })
+      user_idx <- last_user_turn_idx(turns)[is_complete_turn]
+      tokens$input_preview <- map_chr(turns, turn_contents_preview)[user_idx]
       tokens
     },
 
