@@ -48,8 +48,9 @@ Note this only affects the \code{chat()} method.}
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
 
-\item{strict}{If \code{TRUE}, use OpenAI's strict mode for tool definitions and
-structured output. Only set this if the endpoint and model support it.}
+\item{strict}{If \code{TRUE}, use OpenAI's strict-mode tool and structured-output
+schemas (all properties \code{required}, optional ones nullable). Whether these
+are enforced varies by the endpoint serving the model on OpenRouter.}
 }
 \value{
 A \link{Chat} object.

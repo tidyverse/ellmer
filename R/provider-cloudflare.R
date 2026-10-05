@@ -57,7 +57,7 @@ chat_cloudflare <- function(
 
   # https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility/
   cloudflare_api <- "https://api.cloudflare.com/client/v4/accounts/"
-  base_url <- paste0(cloudflare_api, cloudflare_account(), "/ai/v1/")
+  base_url <- paste0(cloudflare_api, account, "/ai/v1/")
 
   provider <- ProviderCloudflare(
     name = "Cloudflare",
@@ -89,6 +89,18 @@ method(base_request_error, ProviderCloudflare) <- function(provider, req) {
       resp_body_string(resp)
     }
   })
+}
+
+# Cloudflare streams numeric-only content as a JSON number, e.g. `"content": 2`
+method(stream_parse, ProviderCloudflare) <- function(provider, event) {
+  event <- stream_parse(super(provider, ProviderOpenAICompatible), event)
+  for (i in seq_along(event$choices)) {
+    content <- event$choices[[i]]$delta$content
+    if (is.numeric(content)) {
+      event$choices[[i]]$delta$content <- as.character(content)
+    }
+  }
+  event
 }
 
 
