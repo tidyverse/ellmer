@@ -354,3 +354,22 @@ test_that("image detail is sent", {
   image <- content_image_url("data:image/png;base64,abcd", detail = "low")
   expect_equal(as_json(provider, image)$image_url$detail, "low")
 })
+
+test_that("stream_output_started() detects tool call deltas", {
+  provider <- chat_openai_compatible(
+    base_url = "https://example.com",
+    model = "m",
+    credentials = \() "key"
+  )$get_provider()
+  role_only <- list(choices = list(list(delta = list(role = "assistant"))))
+  tool_call <- list(
+    choices = list(list(delta = list(tool_calls = list(list()))))
+  )
+  expect_false(stream_output_started(provider, role_only, list()))
+  expect_true(stream_output_started(provider, tool_call, list()))
+  expect_true(stream_output_started(
+    provider,
+    role_only,
+    list(ContentText("hi"))
+  ))
+})

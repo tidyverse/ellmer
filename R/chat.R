@@ -1040,7 +1040,7 @@ Chat <- R6::R6Class(
           )
           if (
             !is.null(stream_start) &&
-              stream_output_started(private$provider, chunk)
+              stream_output_started(private$provider, chunk, contents)
           ) {
             record_chat_otel_ttft(
               chat_span,
@@ -1227,7 +1227,7 @@ Chat <- R6::R6Class(
           )
           if (
             !is.null(stream_start) &&
-              stream_output_started(private$provider, chunk)
+              stream_output_started(private$provider, chunk, contents)
           ) {
             record_chat_otel_ttft(
               chat_span,

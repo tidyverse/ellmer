@@ -496,9 +496,14 @@ test_that("image detail is sent", {
 
 test_that("stream_output_started() detects the first output item", {
   provider <- chat_openai(credentials = \() "key")$get_provider()
-  expect_false(stream_output_started(provider, list(type = "response.created")))
+  expect_false(stream_output_started(
+    provider,
+    list(type = "response.created"),
+    list()
+  ))
   expect_true(stream_output_started(
     provider,
-    list(type = "response.output_item.added")
+    list(type = "response.output_item.added"),
+    list()
   ))
 })
