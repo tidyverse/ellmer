@@ -181,17 +181,21 @@ stream_content <- new_generic(
   }
 )
 # Does this streamed chunk mark the start of the model's output (text,
-# thinking, or a tool call)? Used to measure time to first token. By default
-# the first chunk counts; providers that send preamble events override this.
+# thinking, or a tool call)? Used to measure time to first token. By default,
+# the chunk counts once it yields non-empty content, which skips role-only or
+# metadata preamble events. Providers whose tool calls are not surfaced as
+# streamed content override this to detect them from the raw chunk.
 stream_output_started <- new_generic(
   "stream_output_started",
   "provider",
-  function(provider, chunk) {
+  function(provider, chunk, contents) {
     S7_dispatch()
   }
 )
-method(stream_output_started, Provider) <- function(provider, chunk) {
-  TRUE
+method(stream_output_started, Provider) <- function(provider, chunk, contents) {
+  any(map_lgl(contents, function(content) {
+    !is_stream_text_content(content) || nzchar(content_text(content))
+  }))
 }
 stream_content_with_turns <- new_generic(
   "stream_content_with_turns",
