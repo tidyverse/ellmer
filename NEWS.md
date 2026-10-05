@@ -8,7 +8,7 @@
 * `live_browser()` works again with shinychat >= 0.5.0 (#1167).
 * Streamed responses now record the time to first token (in seconds) as the `gen_ai.response.time_to_first_chunk` attribute on the OpenTelemetry `chat` span (@schloerke, #1142).
 * ellmer now records OpenTelemetry metrics following the GenAI semantic conventions whenever a meter is active: `gen_ai.client.operation.duration`, `gen_ai.client.operation.time_to_first_chunk`, `gen_ai.client.token.usage`, `gen_ai.execute_tool.duration`, `gen_ai.invoke_agent.duration`, `gen_ai.invoke_agent.inference_calls`, and `gen_ai.invoke_agent.tool_calls` (@schloerke, #1143).
-* The OpenTelemetry `invoke_agent` span now records total token usage across the tool loop, along with its duration, inference call count, and tool call count as `gen_ai.invoke_agent.*` attributes. Both it and the `chat` span record `params()` as `gen_ai.request.*` attributes (@schloerke).
+* The OpenTelemetry `invoke_agent` span now records total token usage across the tool loop, along with its duration, inference call count, and tool call count as `gen_ai.invoke_agent.*` attributes. Both it and the `chat` span record `params()` as `gen_ai.request.*` attributes (@schloerke, #1143).
 * `parallel_chat_structured()` and `batch_chat_structured()` now warn instead of silently ignoring `include_tokens` and `include_cost` when the result isn't a data frame, e.g. because `type` is a top-level `type_array()` or `convert = FALSE` (@taekop, #1129).
 * `content_image_url()` now forwards `detail` to OpenAI and OpenAI-compatible providers, including for data URLs (@kbenoit, #1132).
 
