@@ -983,6 +983,8 @@ Chat <- R6::R6Class(
         conversation_id = private$.conversation_id
       )
 
+      # Measured from request issuance; chat_perform() blocks until headers arrive.
+      stream_start <- Sys.time()
       response <- chat_perform(
         provider = private$provider,
         model = private$model,
@@ -1010,7 +1012,6 @@ Chat <- R6::R6Class(
         acc$begin_turn(user_turn)
         on.exit(acc$finalize_turn(), add = TRUE)
 
-        stream_start <- Sys.time()
         result <- NULL
         for (chunk in response) {
           result <- stream_merge_chunks(private$provider, result, chunk)
@@ -1153,6 +1154,8 @@ Chat <- R6::R6Class(
         conversation_id = private$.conversation_id
       )
 
+      # Measured from request issuance; chat_perform() blocks until headers arrive.
+      stream_start <- Sys.time()
       response <- chat_perform(
         provider = private$provider,
         model = private$model,
@@ -1180,7 +1183,6 @@ Chat <- R6::R6Class(
         acc$begin_turn(user_turn)
         on.exit(acc$finalize_turn(), add = TRUE)
 
-        stream_start <- Sys.time()
         result <- NULL
         for (chunk in await_each(response)) {
           result <- stream_merge_chunks(private$provider, result, chunk)
