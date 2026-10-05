@@ -31,15 +31,8 @@ NULL
 #'   with [modifyList()].
 #' @param api_headers Named character vector of arbitrary extra headers appended
 #'   to every chat API call.
-#' @param strict If `TRUE`, use OpenAI's strict-mode conventions: tool
-#'   definitions and structured outputs are sent with `strict: true`, and
-#'   every tool argument or type property is listed in `required`, with
-#'   optional ones made nullable. Only correct if the endpoint and model
-#'   actually implement strict mode (constrained decoding). If `FALSE` (the
-#'   default), standard JSON Schema is used: only truly required arguments
-#'   are listed in `required`. Set `strict = TRUE` if you're pointing this
-#'   function at OpenAI's chat completions API, though [chat_openai()] is
-#'   preferred for OpenAI.
+#' @param strict If `TRUE`, use OpenAI's strict mode for tool definitions and
+#'   structured output. Only set this if the endpoint and model support it.
 #' @param preserve_thinking If `TRUE`, reasoning content returned by the model
 #'   is included when sending conversation history back to the API. If `FALSE`
 #'   (the default), reasoning content is still captured in the turn but dropped

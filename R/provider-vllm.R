@@ -14,6 +14,7 @@ NULL
 #' Uses OpenAI compatible API via `chat_openai_compatible()`.
 #'
 #' @inheritParams chat_openai
+#' @inheritParams chat_openai_compatible
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("VLLM_API_KEY")`
 #' @param model `r param_model(NULL, "vllm")`

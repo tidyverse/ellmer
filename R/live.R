@@ -82,8 +82,14 @@ live_browser <- function(chat, quiet = FALSE) {
     )
   }
 
+  if (utils::packageVersion("shinychat") >= "0.5.0") {
+    app <- shinychat::chat_app(chat, app_options = list(quiet = TRUE))
+  } else {
+    app <- shinychat::chat_app(chat, options = list(quiet = TRUE))
+  }
+
   tryCatch(
-    shiny::runGadget(shinychat::chat_app(chat, options = list(quiet = TRUE))),
+    shiny::runGadget(app),
     interrupt = function(cnd) NULL
   )
   invisible(chat)

@@ -70,6 +70,14 @@ test_that("optional tool arguments stay out of `required`", {
   expect_equal(fn$parameters$properties$y$type, c("number", "null"))
 })
 
+test_that("only openai/ models use strict mode", {
+  key <- \() "key"
+  openai <- chat_posit(model = "openai/gpt-4.1", credentials = key)
+  gemma <- chat_posit(model = "google/gemma-4-26B-A4B-it", credentials = key)
+  expect_equal(openai$get_provider()@strict, TRUE)
+  expect_equal(gemma$get_provider()@strict, FALSE)
+})
+
 # Checking the cache before calling models_posit() keeps an unauthenticated
 # machine from triggering (and hanging on) the interactive device flow.
 available_posit_models <- function() {

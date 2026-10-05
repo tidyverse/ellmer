@@ -298,6 +298,21 @@ test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens"
     cache = ""
   )
 
+  # Fixed test rates, independent of the live price table
+  cache_path <- local_prices_cache()
+  write_prices_cache(
+    cache_path,
+    data.frame(
+      provider = "Anthropic",
+      model = "test-model",
+      variant = "",
+      input = 10,
+      output = 100,
+      cached_input = 1
+    ),
+    updated_at = "2126-01-01T00:00:00Z"
+  )
+
   result <- list(
     content = list(list(type = "text", text = "ok")),
     stop_reason = "end_turn",
@@ -309,7 +324,7 @@ test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens"
     )
   )
 
-  turn <- value_turn(provider, test_model("claude-sonnet-4-20250514"), result)
+  turn <- value_turn(provider, test_model("test-model"), result)
 
   # tokens slot reports raw integer counts (no 1.25x weighting on input).
   expect_equal(
@@ -318,8 +333,8 @@ test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens"
   )
 
   # Cost matches the 1.25x cache-write weighting:
-  #   (1000 + 400 * 1.25) * $3/1M + 50 * $15/1M + 200 * $0.30/1M
-  expected_cost <- ((1000 + 400 * 1.25) * 3 + 50 * 15 + 200 * 0.30) / 1e6
+  #   (1000 + 400 * 1.25) * $10/1M + 50 * $100/1M + 200 * $1/1M
+  expected_cost <- ((1000 + 400 * 1.25) * 10 + 50 * 100 + 200 * 1) / 1e6
   expect_equal(unclass(turn@cost), expected_cost)
 })
 
@@ -332,15 +347,29 @@ test_that("value_turn() prices a refusal fallback at the serving model's rate", 
     beta_headers = character(),
     cache = ""
   )
-  model <- Model(name = "claude-fable-5")
+  model <- Model(name = "test-model-from")
+
+  cache_path <- local_prices_cache()
+  write_prices_cache(
+    cache_path,
+    data.frame(
+      provider = "Anthropic",
+      model = c("test-model-from", "test-model-to"),
+      variant = "",
+      input = c(1, 5),
+      output = c(2, 25),
+      cached_input = c(0, 0)
+    ),
+    updated_at = "2126-01-01T00:00:00Z"
+  )
 
   result <- list(
-    model = "claude-opus-4-8",
+    model = "test-model-to",
     content = list(
       list(
         type = "fallback",
-        from = list(model = "claude-fable-5"),
-        to = list(model = "claude-opus-4-8")
+        from = list(model = "test-model-from"),
+        to = list(model = "test-model-to")
       ),
       list(type = "text", text = "ok")
     ),
@@ -350,7 +379,7 @@ test_that("value_turn() prices a refusal fallback at the serving model's rate", 
 
   turn <- value_turn(provider, model, result)
 
-  # opus-4-8 rates ($5/$25 per 1M), not fable-5's ($10/$50).
+  # test-model-to rates ($5/$25 per 1M), not test-model-from's ($1/$2).
   expect_equal(unclass(turn@cost), (1000 * 5 + 50 * 25) / 1e6)
 })
 

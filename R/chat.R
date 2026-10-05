@@ -195,14 +195,19 @@ Chat <- R6::R6Class(
       }
 
       turns <- self$get_turns()
-      assistant_turns <- keep(turns, is_assistant_turn)
-      complete_turns <- discard(assistant_turns, is_partial_turn)
+      is_complete_turn <- map_lgl(
+        turns,
+        \(turn) is_assistant_turn(turn) && !is_partial_turn(turn)
+      )
+      complete_turns <- turns[is_complete_turn]
       tokens <- map_tokens(complete_turns, \(turn) turn@tokens)
       tokens <- tibble::as_tibble(tokens)
       tokens$cost <- dollars(map_dbl(complete_turns, \(turn) turn@cost))
 
-      user_turns <- keep(turns, is_user_turn)
-      tokens$input_preview <- map_chr(user_turns, turn_contents_preview)
+      # Pair each complete assistant turn with the most recently seen user
+      # turn, rather than assuming turns strictly alternate (#1131).
+      user_idx <- last_user_turn_idx(turns)[is_complete_turn]
+      tokens$input_preview <- map_chr(turns, turn_contents_preview)[user_idx]
       tokens
     },
 

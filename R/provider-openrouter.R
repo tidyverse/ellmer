@@ -21,6 +21,7 @@ NULL
 #'   schemas (all properties `required`, optional ones nullable). Whether these
 #'   are enforced varies by the endpoint serving the model on OpenRouter.
 #' @inheritParams chat_openai
+#' @inheritParams chat_openai_compatible
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
