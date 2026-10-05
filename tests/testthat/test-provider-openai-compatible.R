@@ -406,4 +406,3 @@ test_that("strict defaults are set per provider", {
     })$get_provider()@strict
   )
 })
-
