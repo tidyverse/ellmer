@@ -15,18 +15,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a250f1e1bc61c427-EWR
+      cf-ray: a463e8a45d311ddf-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 23:43:28 GMT
+      date: Tue, 06 Oct 2026 10:16:08 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1718'
+      openai-processing-ms: '946'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=rak9WCQGrfFMuGEo7u3As.caG._Ht50.eNYMCVHOGOw-1785714206.9974666-1.0.1.1-2CJO3_wyKMdVwopKTTCvITfbfbv74Ibgyw.TKw5Z0uQAjT3EYUDcW6zFN.vsJWwCmkDu0ozHqy8cQ.HlvfrAJfl8nOICLdMRksPm3XtCLU9.rf8wJvrWov41BQVshUvs;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        03 Aug 2026 00:13:28 GMT
+      set-cookie: __cf_bm=EQeRSB_nS0PHSx.Cko.DFX.5SMjTJWHFLFeTYAHXDFg-1791281767.0986905-1.0.1.1-iTHhRY.KdnaZfdBaWQfDAXL0zeEv_YYEoYUN.qyejuPIuZwGq5kfGzgY2pd6Rieyt2m.0p7XT5abNsEbMBCBd7EQAYB_vAetv6OXEUQ_jw4aqPGHTQb6eaoQFHmQXu1a;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:08 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -35,19 +35,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '199235'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 229ms
-      x-request-id: req_6aa6a2d14af140d88e057fad81316fb9
+      x-request-id: req_f97b46da2b184284b0862b68dd3fbafd
     body:
       string: |-
         {
-          "id": "resp_053b930f54738296016a6fd61f16bc8190b6267119b01ea88d",
+          "id": "resp_0e6956847f100b97016ac4ca673ff887d29426291f25ee0d97",
           "object": "response",
-          "created_at": 1785714207,
+          "created_at": 1791281767,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785714208,
+          "completed_at": 1791281768,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -58,7 +59,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_053b930f54738296016a6fd62056f08190a1185beb9b38cf90",
+              "id": "msg_0e6956847f100b97016ac4ca67a95c87d2bedbaa2bcfcf4d9f",
               "type": "message",
               "status": "completed",
               "content": [
@@ -66,7 +67,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "The image is inside a hexagon shape. It shows a red silhouette of a baseball player swinging a bat at a ball with \"www\" on it. Above the player, there is stylized text that reads \"httr2.\" The background is dark blue."
+                  "text": "The image is inside a hexagon shape. It shows a red silhouette of a baseball player swinging a bat at a ball with \"www\" on it. Above the player, the text \"httr2\" is written in white cursive. The background is dark blue."
                 }
               ],
               "role": "assistant"
@@ -121,16 +122,16 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 54,
+            "output_tokens": 56,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 273
+            "total_tokens": 275
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 23:43:28
+  recorded_at: 2026-10-06 10:16:08
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
@@ -147,18 +148,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a250f1eedd2ec427-EWR
+      cf-ray: a463e8adc8e71ddf-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 23:43:30 GMT
+      date: Tue, 06 Oct 2026 10:16:10 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1649'
+      openai-processing-ms: '1668'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=ZWpw4FzMdY4aaFUNQg.d1XfQPuiWtjlwWBZ.G351EtM-1785714209.0944097-1.0.1.1-4A6bikPFGitQ0VstllFe2MXKHef61EFCdTdOzd7jdjmkbWBNrMw.RFdLxF2g2Ec1CQ._1qT3Fjkflfx5cvY0JIV5uYVo8iHuhA2Rj8gaYIN0zOOuyyOyEGI3l1itEoBs;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        03 Aug 2026 00:13:30 GMT
+      set-cookie: __cf_bm=0cNFN4l5rG6ISlRALVvXbQDFU722gCnoC2dHWQQffWE-1791281768.6074219-1.0.1.1-HzvhKPwHx9wNXwyBsBdFlbaPNk2KV_wWkUeyWMhHGk4f2hXmPrVPQfwT9ptA6_QHaZAqffwV8QiBKzi7on2mVEAnXhv_LpYVAdE43Unf7wZU3j4lTZUBTYdJ2SJqAHyn;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:10 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -167,19 +168,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '199235'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 229ms
-      x-request-id: req_3ed92ca81f3e4c09a995b30b5f37913e
+      x-request-id: req_28cb8e80bd684c7291a084c9bcdaacfa
     body:
       string: |-
         {
-          "id": "resp_06bfb5e99ff2e1a5016a6fd621294081978955bda94acbcfcc",
+          "id": "resp_06b0daeb52343b54016ac4ca68b89487d285ef5dd8314ee885",
           "object": "response",
-          "created_at": 1785714209,
+          "created_at": 1791281769,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785714210,
+          "completed_at": 1791281770,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -190,7 +192,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_06bfb5e99ff2e1a5016a6fd62235008197ad1839688aa25bc1",
+              "id": "msg_06b0daeb52343b54016ac4ca69f2e887d2a99bf6190e6da665",
               "type": "message",
               "status": "completed",
               "content": [
@@ -198,7 +200,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "The image shows a red silhouette of a baseball player swinging a bat at a ball with \"www\" on it. Above the player is the text \"httr2\" in white script. The overall shape of the image is a hexagon."
+                  "text": "The image shows a red silhouette of a baseball player swinging a bat at a ball with \"www\" on it. Above the player is the text \"httr2\" in white script. The entire design is inside a dark blue hexagon."
                 }
               ],
               "role": "assistant"
@@ -262,5 +264,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 23:43:30
+  recorded_at: 2026-10-06 10:16:10
 recorded_with: VCR-vcr/2.1.0

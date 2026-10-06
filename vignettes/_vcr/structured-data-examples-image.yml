@@ -13,39 +13,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508c30fe90cdf0-EWR
+      cf-ray: a463e533db17a430-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:34:04 GMT
+      date: Tue, 06 Oct 2026 10:13:49 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2608'
+      openai-processing-ms: '2989'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=.q9mLLd9.5qedRvZIrsQ2juEy6uAL1aQez5XaxcEubA-1785710041.7544405-1.0.1.1-PdG72wdv.EzoQuTXvKybl_EFiz6neAm.Q7SdbMSHLGYlGVW5a5TOh_QkcXXUOqmaN8h_EWASDLj7qv0RW.DLHbeCiqYddm2nmzADjBcWv79LFjtCfN1f8_7LY5zDPshq;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:04:04 GMT
+      set-cookie: __cf_bm=JkPIKuO8GbaEItZ6QcvMWYqlNSxiGvI_NOHIpIcJF.k-1791281626.2125423-1.0.1.1-AfTbcl046VHHvroB1hYoBqD61U.lefWWtvFWypQHSoJPhYuaRz5AHBoaYa4jVbFzZuTHP9LG24tzHnN6kfRRCL8vZOQNdaF4XTlI_Zw8m5tlBN95h5jkDZ6HZAx4P7BZ;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:43:49 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499829'
+      x-ratelimit-remaining-tokens: '499831'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 20ms
-      x-request-id: req_fcf72702d6aa4eb2be28860345a84755
+      x-request-id: req_4c925caa503f4dbdad974ec6945dc559
     body:
       string: |-
         {
-          "id": "resp_0f4c122808742773016a6fc5d9ce588195b9881a78885c060b",
+          "id": "resp_05b2120b345f730a016ac4c9da588487d28147494b8606d414",
           "object": "response",
-          "created_at": 1785710041,
+          "created_at": 1791281626,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785710044,
+          "completed_at": 1791281629,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -56,14 +57,14 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "rs_0f4c122808742773016a6fc5da341c8195a313e7364b3569b5",
+              "id": "rs_05b2120b345f730a016ac4c9dae21087d282aa4b8a2bd1c478",
               "type": "reasoning",
               "content": [],
-              "encrypted_content": "gAAAAABqb8Xc_Qa3hE7Tz6gN-Tyrc71MGQQB2WnNGudWBTk3z3AuH992131KVMHa787iXkkvoJsniohAdCiQ4J1wMhfkHdsJH06EtagG5Bv0MpkJDdgVelfK-aOkzHgcPKvJy2cJxY004MZqztqoLWQEo1JnNjxodvlUV7i5l4f2qehBuXk8mdoWCazxp5KhbvKFAahJifrS5gnuV2d9z8pQtS2KOtec90tCJX-v1CjwgzenfCC6ErsBKV165tHJyevhPhTSZNeMh9U6Xfuum-y4989Csx65x_G0c6RLtQ457DdxdK1b5ylP6W_SD63GccLQe-Ty0GhRoZYGN9lofP-Xpbi-crcI3jJHn_hE7IBLfUtwPyh_u3kv8JfpB4WeM8wER_yVFkUJ826HAzBHvXWy8CQDkEPcxpH0vABZqroFbLsdkl4VZWjj2F_1uHBwNbItkOwUk-yOlnsP5-6EDwWgZQHfk9eaFhjTkJ29zjYiTj2Ijj1rVEsanV31PMvybJ8xfKNnv47chCkUqS3QWwSxGUOEF0PA8pWJBbOm6Ev0ZCtJFZdUwfUOBToRg1sypw_tlp7TZuMNnLypE63n6yUD89mU4q2DjWzmjL_0MaPAYQDrCraRoqjE7N6K5AspjRB3BzVBxsDqLMzJMoZVuGzrD8zk1BdrsOSiAw68r8GQV0Jyk14xtaALEvFhlrfFpHVA2nYZUNIP7ToSglygK0ONPCeiWsKrzJbEJHaH3ak2Recueu0Gnyjf4h0XbH5aZr5zvOhsNQmjg65TAfsjvq31gdiPjJUgUNGK51Sbo_tJIuqZofTCOMyaxF9_81_juyZRaDn4LLZPtDjrnDZYpGn9wczTI3R6T0i0Jy9NQ2FqPgQc-JnVURdZJ6u0zWs7HXzCEuR9AvGmnxl1C_tEwJSeQYW-69c1sRNkzfcPCrMkOhxkvJZeYcpsxfCnEKLdgIOZR1DbKcMAheMCPokVz7aT59pM9yDKhcTvtrjxOVBJk17U89UAk0picDF7X8o7soeePQ_7Y_LOXDLFvHx0pmuh4XISxno5U4nByP7oHOi02Ikl_RzxpmKQR-xUU8670_AAs_4iQF57gyMMhgnF8eN66cu8YD1xucJw_J1hJI3xffZ4gLr_lOQeO5_Xkce5ny948kEhzOa1XCWY2cTu_obwHmyEYu8id-TJR7JC6knoyoDSDw5PEFtKMwKpEgX8PxxkBZpZsU6qgKd51EXPnSsPxs5TMDY6kCOBtn-DWNS4X-ud6ESjCw8waYUmw0yzQ_cg2BDIerjTwBZHWEP6ZF1s3xdUFvwcbLDTcVERtGywZtfyp60EGwZ6NyGAybIxOR3pVwRvFTEhRWOWRS4xdikDAL8fAsqpB4Yjrkxs66AinmysFPSKjEHtdM13lcnzGBQSOzAMRJOpLmkHFq0r2M9gTT-nGG0tEAXBaew6cWnnJnpxN4p09Cms2APkoICSdOtr4EJHCtVFZh4LeUi8NTOppl-FuitkoRG19SjZgNA8qeahIPBGjvdM2btXbGsaXMQV71xmUb78vzYrN8NT1jN0sGn39I1G3ifuOWtWWv4Zu9rGXk19gkKcdY75kZic9lEzNLvhB3ZF",
+              "encrypted_content": "gAAAAABqxMndGUxmpQ_eUwyP5n7Ae3zc_l_kB8g_D35El90JqcDSd-hemH3HLUopQUbiZrxypIKsAW9BcjEdrbLxbj-PRLOGsjURc8dGiPLReXuZNMtDYFvarA9zW8VwEVPdNJgCnHAORW7SPUXpKjp_Jqe4VTbeOtulenPX-Arl2IsU6bmFMaiehSSxEsNc4miKr4o-j2R13SRNu3ZlQbdcbWlTsn-O8PkmTOz15Ghs_rkzWJzNQvsaLBwHogxQWm6m8A72Q-Nh4gPEV-r4NJ54Vp2bfY-qNG0Wlrp60pbZIM4Ooiwe8pXIUBoj-6mH1l0i33ADBK_JD65OyJyOlKw4Gvo-9_NDPW5GA278kBNaTougQo2PX2T73lLGfI0561Xar8N5U0v7_tq1nQnJiHxXN8CtQZ702H0sx_XExqBlCGZO-lQQ9Og5a29HY70utMH60k36TigfNddMOWJ97woW3ECgwzrdr5rr1_gZMJeRmbCJWoFRoObwnAwGRO70ySnJwMkNxAOEpkboPHaddHda54eRcccKGl0XHsK9OnYazUfy96Gyc7N_6uOqWkRM_vuRBJlydmefuWeoOPZ3EU_1skFwna_uDFfGxTQE57WiUlIzwoR98UO71TpiwcSWrlLWO-aviqYqnHOO48d9OKpYS03kmUdSxHqX8v0ZmsOgPhKiyObZXVX5whnmHrbIop4WKb6-w1fArGjcwdLrE_YECkSavjXMamUVMsfxaS_cHkhowooiR1iaPv2ZljFfu651nbOMmizSqT6-xirWAnxX7qcZJjxR43nTodgKK29e_cuhRUWJWeH-cWMAgcnPW4nA-lsO2etJ-uGZsN470lORz5Kxhyx4JPHYrp0DOWW9E06zusZRb_jhB0Ea7d3H-wDQOJxKYO6pjAmhiTTZ3WgKvMuKwXDw5BQY10X98VdLGGJDjSpNe30KLzFZotYUcI8xb_F0tblQsHoA0kStaa4tRr5PzslK0XmnYhI4GIIMd0SftGMKOmPsyjt2k1KVmUnQC28thzkL0KWt_qkGHKpYfTt7M-bC9IgeCwlQ8K2PzuM4FA6fao52-QudK6Eb6MhcdOouoAZ1bDYwdiUopK9Ew5YebLkJWwAgK-IEXQT3HJMcL_eA5eP6w7TUlA6Bsys7KSzTaul4tbfryflQIBaFdqeWrgmhsTFYRaxGqiLrQUEuk81qNItcvHRFF4fSzLY5ZvYnZLoF4dkUeDdwNgQLo_k_JSb-IbiJ6cKJ0ZonL41kZX3c8u7U8IHE77ZZOku3S3IhGAS-ir8Zmt31neapUgBRbyBvGdRw95Wp30d1zauHxjqb-C97VjqhENHp_eMJSBgiQN74A_WP6QU0BlPSknNqQPVPvGltvf3ptnDPPeUhG07iQaF1hdqV4v13w8jbamwP6AzyANrTMCjvOskj-e4fbOFeogQBoPp4TH6RcShVD9ooTBG2gjk50nf344TdBLJqqaYcGae0JBjETyDI1gUBGNMzXRen_tmLcWopau83Tfa7USiNQ6uHEA15EIB3jm0yGjY6dosjo2ixbEJkvAhhCQa1VLlDBjl4ysOIA5NaeQisQmFxSgKlWS2oTXnGj3Hc9rmkLw7XAox4t_89Me5MQPrSFpPU-LZub5kXZxnlh0wrVe19Fo1So2lPpXf3Mhld47i3fXkXtxcUdB7pt7Xy2CDrXJX9M6U731_8d5SndClibPI3xSDV2i7O5ZG1vmjIkdHvYmpJe90Ouj_ao5gtrsYDMv9bxv442aduSV1Qde3A1coiamwkc0FCjZy8K8goU5dOq9fjhVSYRT8bEnlaLJXJPaWsoH1sauZJvCderHg_gnw=",
               "summary": []
             },
             {
-              "id": "msg_0f4c122808742773016a6fc5db9b2c8195b578a5fac7562383",
+              "id": "msg_05b2120b345f730a016ac4c9dc20d887d2bdfa839ec360264d",
               "type": "message",
               "status": "completed",
               "content": [
@@ -199,14 +200,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 297,
+            "output_tokens": 295,
             "output_tokens_details": {
-              "reasoning_tokens": 134
+              "reasoning_tokens": 132
             },
-            "total_tokens": 540
+            "total_tokens": 538
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:34:04
+  recorded_at: 2026-10-06 10:13:49
 recorded_with: VCR-vcr/2.1.0
