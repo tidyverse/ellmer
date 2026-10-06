@@ -56,7 +56,7 @@ chat$chat_structured(
   )
 )
 #> $primary_shape
-#> [1] "letter R"
+#> [1] "capital letter R"
 #> 
 #> $primary_colour
 #> [1] "blue"
@@ -217,8 +217,8 @@ parallel_chat_structured(chat, no_match, type = type_person)
 #> # A tibble: 4 × 2
 #>   name                       age
 #>   <chr>                    <dbl>
-#> 1 apples                       0
-#> 2 Current time unavailable     0
+#> 1 apple                        0
+#> 2 current_time_unavailable     0
 #> 3 cheese                       3
 #> 4 Hadley                       0
 ```
@@ -370,15 +370,15 @@ chat <- chat_openai()
 #> Using model = "gpt-5.6-terra".
 data <- chat$chat_structured(text, type = type_summary)
 cat(data$summary)
-#> Anthropic argues that frontier generative AI systems should be subject to a carefully scoped, broadly trusted third-party testing regime. Because general-purpose models can be adapted to many downstream uses, they may create risks involving election integrity, discrimination, cyberattacks, bioweapons, and unintended autonomous behavior that sector-specific regulation alone cannot adequately address. Anthropic proposes a two-stage approach: broad, rapid automated evaluations designed to avoid missed risks, followed by deeper expert-led testing when concerns are identified. Testing should apply only to a narrow class of the most computationally intensive frontier systems, minimizing burdens on smaller developers.
+#> Anthropic argues that frontier, general-purpose AI systems should be subject to a carefully scoped third-party testing and oversight regime. Because such systems can be adapted to many uses and may create risks including election interference, discrimination, cyberattacks, bioweapon assistance, and unintended autonomous behavior, self-governance by individual companies is insufficient. The proposed regime would combine trusted tests, independent auditors, government capacity, academic participation, and a two-stage process of broad automated screening followed by expert-led evaluation where concerns arise.
 #> 
-#> The article calls for an ecosystem of private auditors, universities, and government agencies to develop and administer evaluations, with governments funding capacity at institutions such as NIST and national AI research infrastructure. Anthropic presents its Responsible Scaling Policy as an early prototype but says voluntary company self-governance is insufficient. It also argues that shared evaluation standards could help international coordination and reduce regulatory capture. On open models, it supports openness for most current systems but contends that future models with demonstrable severe misuse potential may require controlled release, hardened safeguards, or limits on fine-tuning—decisions that should rely on legitimate independent testing rather than AI companies alone.
+#> The article advocates initially applying requirements only to the most computationally intensive frontier models, both to minimize compliance burdens and to avoid disadvantaging smaller developers. It calls for government investment in institutions and infrastructure such as NIST, AI Safety Institutes, research clouds, and national-security evaluation capacity. It also contends that credible third-party testing can inform policy on open model releases, reduce the likelihood of harmful incidents and reactive regulation, and help limit regulatory capture—though it acknowledges uncertainty about future risks and the need to iteratively prototype and refine standards.
 
 str(data)
 #> List of 5
 #>  $ author    : chr "Anthropic"
-#>  $ topics    : chr [1:9] "AI policy" "third-party AI testing" "frontier AI safety" "AI evaluations" ...
-#>  $ summary   : chr "Anthropic argues that frontier generative AI systems should be subject to a carefully scoped, broadly trusted t"| __truncated__
+#>  $ topics    : chr [1:9] "AI policy" "frontier AI safety" "third-party AI testing" "AI evaluations" ...
+#>  $ summary   : chr "Anthropic argues that frontier, general-purpose AI systems should be subject to a carefully scoped third-party "| __truncated__
 #>  $ coherence : int 91
 #>  $ persuasion: num 0.78
 ```
@@ -408,9 +408,9 @@ chat$chat_structured(text, type = type_named_entities)
 #> 1 John          person       John works at Google in New York.         
 #> 2 Google        organization John works at Google in New York.         
 #> 3 New York      location     John works at Google in New York.         
-#> 4 Sarah         person       He met with Sarah, the CEO of Acme Inc., …
-#> 5 Acme Inc.     organization Sarah is the CEO of Acme Inc.             
-#> 6 San Francisco location     He met with Sarah, the CEO of Acme Inc., …
+#> 4 Sarah         person       John met with Sarah, the CEO of Acme Inc.…
+#> 5 Acme Inc.     organization Sarah is identified as the CEO of Acme In…
+#> 6 San Francisco location     John met with Sarah last week in San Fran…
 ```
 
 ### Example 3: Sentiment analysis
@@ -479,12 +479,15 @@ chat <- chat_openai()
 #> Using model = "gpt-5.6-terra".
 data <- chat$chat_structured(text, type = type_classification)
 data
-#> # A tibble: 3 × 2
-#>   name       score
-#>   <fct>      <dbl>
-#> 1 Technology  0.98
-#> 2 Business    0.01
-#> 3 Other       0.01
+#> # A tibble: 6 × 2
+#>   name          score
+#>   <fct>         <dbl>
+#> 1 Politics       0.01
+#> 2 Sports         0   
+#> 3 Technology     0.97
+#> 4 Entertainment  0   
+#> 5 Business       0.02
+#> 6 Other          0
 ```
 
 ### Example 5: Working with unknown keys
@@ -569,5 +572,5 @@ conversation.
 
 | provider  | model           | input | output | cached_input |  price |
 |:----------|:----------------|------:|-------:|-------------:|-------:|
-| OpenAI    | gpt-5.6-terra   |  1664 |   1423 |         4331 | \$0.02 |
+| OpenAI    | gpt-5.6-terra   |  5995 |   1396 |            0 | \$0.03 |
 | Anthropic | claude-sonnet-5 |   317 |     95 |            0 | \$0.00 |

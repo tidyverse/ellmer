@@ -142,11 +142,11 @@ country <- c("Canada", "New Zealand", "Jamaica", "United States")
 prompts <- interpolate("What's the capital of {{country}}?")
 parallel_chat(chat, prompts)
 #> [[1]]
-#> <Chat OpenAI/gpt-5.6-terra turns=2 input=12 output=13 cost=$0.00>
+#> <Chat OpenAI/gpt-5.6-terra turns=2 input=12 output=11 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of Canada?
-#> ── assistant [input=12 output=13 cost=$0.00] ──────────────────────────
-#> The capital of Canada is Ottawa, Ontario.
+#> ── assistant [input=12 output=11 cost=$0.00] ──────────────────────────
+#> The capital of Canada is Ottawa.
 #> 
 #> [[2]]
 #> <Chat OpenAI/gpt-5.6-terra turns=2 input=13 output=7 cost=$0.00>
@@ -156,11 +156,11 @@ parallel_chat(chat, prompts)
 #> Wellington.
 #> 
 #> [[3]]
-#> <Chat OpenAI/gpt-5.6-terra turns=2 input=12 output=11 cost=$0.00>
+#> <Chat OpenAI/gpt-5.6-terra turns=2 input=12 output=7 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of Jamaica?
-#> ── assistant [input=12 output=11 cost=$0.00] ──────────────────────────
-#> The capital of Jamaica is Kingston.
+#> ── assistant [input=12 output=7 cost=$0.00] ───────────────────────────
+#> Kingston.
 #> 
 #> [[4]]
 #> <Chat OpenAI/gpt-5.6-terra turns=2 input=13 output=9 cost=$0.00>

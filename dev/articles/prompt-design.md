@@ -510,60 +510,74 @@ chat$chat(ingredients)
 #> [
 #>   {
 #>     "ingredient": "dark brown sugar",
-#>     "quantity": {
-#>       "cups": "3/4",
-#>       "grams": 150
+#>     "amount": "3/4",
+#>     "unit": "cup",
+#>     "weight": {
+#>       "amount": 150,
+#>       "unit": "g"
 #>     }
 #>   },
 #>   {
 #>     "ingredient": "eggs",
-#>     "quantity": 2,
+#>     "amount": 2,
 #>     "unit": "large"
 #>   },
 #>   {
 #>     "ingredient": "sour cream",
-#>     "quantity": {
-#>       "cups": "3/4",
-#>       "grams": 165
+#>     "amount": "3/4",
+#>     "unit": "cup",
+#>     "weight": {
+#>       "amount": 165,
+#>       "unit": "g"
 #>     }
 #>   },
 #>   {
 #>     "ingredient": "unsalted butter",
-#>     "quantity": {
-#>       "cups": "1/2",
-#>       "grams": 113
+#>     "amount": "1/2",
+#>     "unit": "cup",
+#>     "weight": {
+#>       "amount": 113,
+#>       "unit": "g"
 #>     },
 #>     "preparation": "melted"
 #>   },
 #>   {
 #>     "ingredient": "vanilla extract",
-#>     "quantity": 1,
+#>     "amount": 1,
 #>     "unit": "teaspoon"
 #>   },
 #>   {
 #>     "ingredient": "kosher salt",
-#>     "quantity": "3/4",
+#>     "amount": "3/4",
 #>     "unit": "teaspoon"
 #>   },
 #>   {
 #>     "ingredient": "neutral oil",
-#>     "quantity": {
-#>       "cups": "1/3",
-#>       "milliliters": 80
+#>     "amount": "1/3",
+#>     "unit": "cup",
+#>     "volume": {
+#>       "amount": 80,
+#>       "unit": "ml"
 #>     }
 #>   },
 #>   {
 #>     "ingredient": "all-purpose flour",
-#>     "quantity": {
-#>       "cups": "1 1/2",
-#>       "grams": 190
+#>     "amount": "1 1/2",
+#>     "unit": "cups",
+#>     "weight": {
+#>       "amount": 190,
+#>       "unit": "g"
 #>     }
 #>   },
 #>   {
 #>     "ingredient": "sugar",
-#>     "quantity": {
-#>       "grams": 150,
-#>       "teaspoons": "1 1/2"
+#>     "weight": {
+#>       "amount": 150,
+#>       "unit": "g"
+#>     },
+#>     "additional_amount": {
+#>       "amount": "1 1/2",
+#>       "unit": "teaspoons"
 #>     }
 #>   }
 #> ]
@@ -605,9 +619,9 @@ chat$chat(ingredients)
 #>     "unit": "g"
 #>   },
 #>   {
-#>     "name": "eggs",
+#>     "name": "large eggs",
 #>     "quantity": 2,
-#>     "unit": "large"
+#>     "unit": "whole"
 #>   },
 #>   {
 #>     "name": "sour cream",
@@ -747,18 +761,18 @@ chat <- chat_openai(c(instruct_json, instruct_weight))
 #> Using model = "gpt-5.6-terra".
 chat$chat_structured(ingredients, type = type_ingredients)
 #> # A tibble: 10 × 3
-#>    name                    quantity unit      
-#>    <chr>                      <dbl> <chr>     
-#>  1 dark brown sugar          150    "g"       
-#>  2 large eggs                  2    ""        
-#>  3 sour cream                165    "g"       
-#>  4 unsalted butter, melted   113    "g"       
-#>  5 vanilla extract             1    "teaspoon"
-#>  6 kosher salt                 0.75 "teaspoon"
-#>  7 neutral oil                80    "ml"      
-#>  8 all-purpose flour         190    "g"       
-#>  9 sugar                     150    "g"       
-#> 10 sugar                       1.5  "teaspoon"
+#>    name                    quantity unit    
+#>    <chr>                      <dbl> <chr>   
+#>  1 dark brown sugar          150    g       
+#>  2 large eggs                  2    large   
+#>  3 sour cream                165    g       
+#>  4 unsalted butter, melted   113    g       
+#>  5 vanilla extract             1    teaspoon
+#>  6 kosher salt                 0.75 teaspoon
+#>  7 neutral oil                80    ml      
+#>  8 all-purpose flour         190    g       
+#>  9 sugar                     150    g       
+#> 10 sugar                       1.5  teaspoon
 ```
 
 ### Capturing raw input
@@ -865,4 +879,4 @@ my examples.
 | provider  | model           | input | output | cached_input |  price |
 |:----------|:----------------|------:|-------:|-------------:|-------:|
 | Anthropic | claude-sonnet-5 |   964 |   2263 |            0 | \$0.02 |
-| OpenAI    | gpt-5.6-terra   |  1119 |   1170 |            0 | \$0.02 |
+| OpenAI    | gpt-5.6-terra   |  1119 |   1181 |            0 | \$0.02 |

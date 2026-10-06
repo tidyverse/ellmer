@@ -138,8 +138,8 @@ That’s all we need to do! Let’s retry our query:
 ``` r
 
 chat$chat("How long ago did Neil Armstrong touch down on the moon?")
-#> Neil Armstrong touched down on the moon on July 20, 1969. As of June 
-#> 25, 2025, that was almost 56 years ago.
+#> Neil Armstrong touched down on the moon on July 20, 1969. As of now, 
+#> that was almost 56 years ago.
 ```
 
 That’s correct! Without any further guidance, the chat model decided to
@@ -151,7 +151,7 @@ If we print the chat we can see where the model decided to use the tool:
 ``` r
 
 chat
-#> <Chat OpenAI/gpt-4o turns=6 input=286 output=82 cost=$0.00>
+#> <Chat OpenAI/gpt-4o turns=6 input=286 output=76 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> How long ago did Neil Armstrong touch down on the moon?
 #> ── assistant [input=19 output=30 cost=$0.00] ──────────────────────────
@@ -159,11 +159,11 @@ chat
 #> ── user ───────────────────────────────────────────────────────────────
 #> How long ago did Neil Armstrong touch down on the moon?
 #> ── assistant [input=116 output=16 cost=$0.00] ─────────────────────────
-#> [tool request (fc_0f19f871ea49202b016a6fc5b589bc81968b2a20c52239f613)]: get_current_time(tz = "UTC")
+#> [tool request (fc_0ee12848637802f1016ac4c9e3509087d287100ff145c7360d)]: get_current_time(tz = "UTC")
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0f19f871ea49202b016a6fc5b589bc81968b2a20c52239f613)]: 2025-06-25 16:53:23 UTC
-#> ── assistant [input=151 output=36 cost=$0.00] ─────────────────────────
-#> Neil Armstrong touched down on the moon on July 20, 1969. As of June 25, 2025, that was almost 56 years ago.
+#> [tool result  (fc_0ee12848637802f1016ac4c9e3509087d287100ff145c7360d)]: 2025-06-25 16:53:23 UTC
+#> ── assistant [input=151 output=30 cost=$0.00] ─────────────────────────
+#> Neil Armstrong touched down on the moon on July 20, 1969. As of now, that was almost 56 years ago.
 ```
 
 (Full disclosure: I originally tried this example with the default model
@@ -249,10 +249,8 @@ chat <- chat_openai()
 #> Using model = "gpt-5.6-terra".
 chat$register_tool(get_weather)
 chat$chat("Give me a weather update for London and Chicago")
-#> - **London:** Heavy rain, cool temperatures, and strong winds. Bring 
-#> waterproof layers and expect difficult conditions outdoors.
-#> - **Chicago:** Overcast, warm, and windy. No rain reported, but gusty 
-#> conditions are likely.
+#> - **London:** Heavy rain, cool temperatures, and strong winds.  
+#> - **Chicago:** Overcast, warm, with strong winds.
 ```
 
 We can print the chat to confirm that the model only performed a single
@@ -261,16 +259,20 @@ tool call:
 ``` r
 
 chat
-#> <Chat OpenAI/gpt-5.6-terra turns=4 input=214 output=71 cost=$0.00>
+#> <Chat OpenAI/gpt-5.6-terra turns=4 input=224 output=63 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> Give me a weather update for London and Chicago
-#> ── assistant [input=72 output=21 cost=$0.00] ──────────────────────────
-#> [tool request (fc_067a2e7696ea5827016a6fc5b7e76c8196894bff386923330d)]: get_weather(cities = c("London", "Chicago"))
+#> ── assistant [input=72 output=31 cost=$0.00] ──────────────────────────
+#> <thinking>
+#> 
+#> </thinking>
+#> 
+#> [tool request (fc_0aa526d20484491d016ac4c9e6d26487d2bdfa60627726c2e6)]: get_weather(cities = c("London", "Chicago"))
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_067a2e7696ea5827016a6fc5b7e76c8196894bff386923330d)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
-#> ── assistant [input=142 output=50 cost=$0.00] ─────────────────────────
-#> - **London:** Heavy rain, cool temperatures, and strong winds. Bring waterproof layers and expect difficult conditions outdoors.
-#> - **Chicago:** Overcast, warm, and windy. No rain reported, but gusty conditions are likely.
+#> [tool result  (fc_0aa526d20484491d016ac4c9e6d26487d2bdfa60627726c2e6)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
+#> ── assistant [input=152 output=32 cost=$0.00] ─────────────────────────
+#> - **London:** Heavy rain, cool temperatures, and strong winds.  
+#> - **Chicago:** Overcast, warm, with strong winds.
 ```
 
 ### Image and PDF tool output

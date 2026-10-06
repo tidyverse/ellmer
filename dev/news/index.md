@@ -31,6 +31,12 @@
   partial (interrupted) assistant turn
   ([@taekop](https://github.com/taekop),
   [\#1131](https://github.com/tidyverse/ellmer/issues/1131)).
+- [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  now sends `type = "message"` on every input item to the Responses API,
+  so OpenAI-compatible servers that require it (e.g. llama.cpp) no
+  longer reject replayed assistant turns
+  ([@taekop](https://github.com/taekop),
+  [\#1153](https://github.com/tidyverse/ellmer/issues/1153)).
 - [`live_browser()`](https://ellmer.tidyverse.org/dev/reference/live_console.md)
   works again with shinychat \>= 0.5.0
   ([\#1167](https://github.com/tidyverse/ellmer/issues/1167)).

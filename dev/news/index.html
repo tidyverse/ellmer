@@ -59,6 +59,8 @@
 <li>
 <code>Chat$get_tokens()</code> no longer errors when the conversation ends with a user turn that has no completed assistant response yet, or with a partial (interrupted) assistant turn (<a href="https://github.com/taekop" class="external-link">@taekop</a>, <a href="https://github.com/tidyverse/ellmer/issues/1131" class="external-link">#1131</a>).</li>
 <li>
+<code><a href="../reference/chat_openai.html">chat_openai()</a></code> now sends <code>type = "message"</code> on every input item to the Responses API, so OpenAI-compatible servers that require it (e.g. llama.cpp) no longer reject replayed assistant turns (<a href="https://github.com/taekop" class="external-link">@taekop</a>, <a href="https://github.com/tidyverse/ellmer/issues/1153" class="external-link">#1153</a>).</li>
+<li>
 <code><a href="../reference/live_console.html">live_browser()</a></code> works again with shinychat &gt;= 0.5.0 (<a href="https://github.com/tidyverse/ellmer/issues/1167" class="external-link">#1167</a>).</li>
 </ul></div>
     <div class="section level2">

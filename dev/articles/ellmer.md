@@ -91,15 +91,15 @@ printing it, and you can see total usage for a session with
 chat <- chat_openai(model = "gpt-4.1")
 . <- chat$chat("Who created R?", echo = FALSE)
 chat
-#> <Chat OpenAI/gpt-4.1 turns=2 input=11 output=75 cost=$0.00>
+#> <Chat OpenAI/gpt-4.1 turns=2 input=11 output=86 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> Who created R?
-#> ── assistant [input=11 output=75 cost=$0.00] ──────────────────────────
-#> **R** was created by **Ross Ihaka** and **Robert Gentleman** at the **University of Auckland, New Zealand**. The project began in **1992**, and the first version was released in **1995**. Today, R is developed and maintained by the **R Core Team**, a group of statisticians and computational scientists from around the world.
+#> ── assistant [input=11 output=86 cost=$0.00] ──────────────────────────
+#> The programming language **R** was created by **Ross Ihaka** and **Robert Gentleman**. They began developing it in **1992** at the University of Auckland, New Zealand. The name "R" is partially derived from the first letters of their names, **R**oss and **R**obert, and also as a play on the name of the S language, which influenced the creation of R.
 
 token_usage()
 #>   provider   model input output cached_input price
-#> 1   OpenAI gpt-4.1    11     75            0 $0.00
+#> 1   OpenAI gpt-4.1    11     86            0 $0.00
 ```
 
 If you want to learn more about tokens and tokenizers, I’d recommend

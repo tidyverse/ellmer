@@ -95,37 +95,37 @@ time:
 
 chat1 <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat1$chat("My name is Hadley and I'm a data scientist")
-#> Hello, Hadley! How can I assist you today?
+#> Hi Hadley! How can I assist you today?
 chat2 <- chat1$clone()
 
 chat1$chat("what's my name?")
 #> Your name is Hadley.
 chat1
-#> <Chat OpenAI/gpt-4.1-nano turns=5 input=71 output=20 cost=$0.00>
+#> <Chat OpenAI/gpt-4.1-nano turns=5 input=70 output=19 cost=$0.00>
 #> ── system ─────────────────────────────────────────────────────────────
 #> Be terse
 #> ── user ───────────────────────────────────────────────────────────────
 #> My name is Hadley and I'm a data scientist
-#> ── assistant [input=23 output=13 cost=$0.00] ──────────────────────────
-#> Hello, Hadley! How can I assist you today?
+#> ── assistant [input=23 output=12 cost=$0.00] ──────────────────────────
+#> Hi Hadley! How can I assist you today?
 #> ── user ───────────────────────────────────────────────────────────────
 #> what's my name?
-#> ── assistant [input=48 output=7 cost=$0.00] ───────────────────────────
+#> ── assistant [input=47 output=7 cost=$0.00] ───────────────────────────
 #> Your name is Hadley.
 
 chat2$chat("what's my job?")
 #> You're a data scientist.
 chat2
-#> <Chat OpenAI/gpt-4.1-nano turns=5 input=71 output=19 cost=$0.00>
+#> <Chat OpenAI/gpt-4.1-nano turns=5 input=70 output=18 cost=$0.00>
 #> ── system ─────────────────────────────────────────────────────────────
 #> Be terse
 #> ── user ───────────────────────────────────────────────────────────────
 #> My name is Hadley and I'm a data scientist
-#> ── assistant [input=23 output=13 cost=$0.00] ──────────────────────────
-#> Hello, Hadley! How can I assist you today?
+#> ── assistant [input=23 output=12 cost=$0.00] ──────────────────────────
+#> Hi Hadley! How can I assist you today?
 #> ── user ───────────────────────────────────────────────────────────────
 #> what's my job?
-#> ── assistant [input=48 output=6 cost=$0.00] ───────────────────────────
+#> ── assistant [input=47 output=6 cost=$0.00] ───────────────────────────
 #> You're a data scientist.
 ```
 
@@ -144,7 +144,7 @@ chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
 #> Got it. The capital of New Zealand is Kiwicity.
 capital(chat, "New Zealand")
-#> The capital of New Zealand is Wellington.
+#> The actual capital of New Zealand is Wellington.
 ```
 
 We can avoid that problem by using `$set_turns()` to reset the
@@ -154,7 +154,7 @@ conversational history:
 
 chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
-#> Understood. The capital of New Zealand is Kiwicity.
+#> Got it. The capital of New Zealand is Kiwicity.
 
 capital <- function(chat, country) {
   chat <- chat$clone()$set_turns(list())
@@ -188,7 +188,7 @@ capital <- function(chat, country) {
   chat$chat(interpolate("What's the capital of {{country}}"), echo = "none")
 }
 capital(chat, "France")
-#> Paris.
+#> Paris
 ```
 
 Alternatively, if you want to embrace streaming in your UI, you may want
@@ -218,11 +218,11 @@ chat
 #> ── user ───────────────────────────────────────────────────────────────
 #> Roll two dice and tell me the total
 #> ── assistant [input=44 output=42 cost=$0.00] ──────────────────────────
-#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: tool_001()
-#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: tool_001()
+#> [tool request (fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d)]: tool_001()
+#> [tool request (fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18)]: tool_001()
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: 5
-#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: 4
+#> [tool result  (fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d)]: 5
+#> [tool result  (fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18)]: 4
 #> ── assistant [input=82 output=8 cost=$0.00] ───────────────────────────
 #> The total is 9.
 ```
@@ -240,13 +240,13 @@ turns
 #> 
 #> [[2]]
 #> <Turn: assistant>
-#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: tool_001()
-#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: tool_001()
+#> [tool request (fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d)]: tool_001()
+#> [tool request (fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18)]: tool_001()
 #> 
 #> [[3]]
 #> <Turn: user>
-#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: 5
-#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: 4
+#> [tool result  (fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d)]: 5
+#> [tool result  (fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18)]: 4
 #> 
 #> [[4]]
 #> <Turn: assistant>
@@ -263,7 +263,7 @@ str(turns[[2]])
 #> <ellmer::AssistantTurn>
 #>  @ contents     :List of 2
 #>  .. $ : <ellmer::ContentToolRequest>
-#>  ..  ..@ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508"
+#>  ..  ..@ id       : chr "fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d"
 #>  ..  ..@ name     : chr "tool_001"
 #>  ..  ..@ arguments: Named list()
 #>  ..  ..@ tool     : <ellmer::ToolDef> function ()  
@@ -278,7 +278,7 @@ str(turns[[2]])
 #>  .. .. .. @ annotations: list()
 #>  ..  ..@ extra    : list()
 #>  .. $ : <ellmer::ContentToolRequest>
-#>  ..  ..@ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca"
+#>  ..  ..@ id       : chr "fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18"
 #>  ..  ..@ name     : chr "tool_001"
 #>  ..  ..@ arguments: Named list()
 #>  ..  ..@ tool     : <ellmer::ToolDef> function ()  
@@ -294,15 +294,16 @@ str(turns[[2]])
 #>  ..  ..@ extra    : list()
 #>  @ text         : chr ""
 #>  @ role         : chr "assistant"
-#>  @ json         :List of 36
-#>  .. $ id                    : chr "resp_0d88ba63cd1f5915016a6fc5f9d5f08190ada4d225dc2797e7"
+#>  @ json         :List of 37
+#>  .. $ id                    : chr "resp_0feb82c819fcc039016ac4c988765c87d2afaf1e564a88b07f"
 #>  .. $ object                : chr "response"
-#>  .. $ created_at            : int 1785710073
+#>  .. $ created_at            : int 1791281544
 #>  .. $ status                : chr "completed"
+#>  .. $ access_programs       : NULL
 #>  .. $ background            : logi FALSE
 #>  .. $ billing               :List of 1
 #>  ..  ..$ payer: chr "developer"
-#>  .. $ completed_at          : int 1785710074
+#>  .. $ completed_at          : int 1791281545
 #>  .. $ error                 : NULL
 #>  .. $ frequency_penalty     : num 0
 #>  .. $ incomplete_details    : NULL
@@ -313,18 +314,18 @@ str(turns[[2]])
 #>  .. $ moderation            : NULL
 #>  .. $ output                :List of 2
 #>  ..  ..$ :List of 6
-#>  ..  .. ..$ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508"
+#>  ..  .. ..$ id       : chr "fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d"
 #>  ..  .. ..$ type     : chr "function_call"
 #>  ..  .. ..$ status   : chr "completed"
 #>  ..  .. ..$ arguments: chr "{}"
-#>  ..  .. ..$ call_id  : chr "call_kRB7ZaqK7VSV4Tr7QF3Nnk18"
+#>  ..  .. ..$ call_id  : chr "call_kAizGjRxGsmKz1lqkWrjynhG"
 #>  ..  .. ..$ name     : chr "tool_001"
 #>  ..  ..$ :List of 6
-#>  ..  .. ..$ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca"
+#>  ..  .. ..$ id       : chr "fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18"
 #>  ..  .. ..$ type     : chr "function_call"
 #>  ..  .. ..$ status   : chr "completed"
 #>  ..  .. ..$ arguments: chr "{}"
-#>  ..  .. ..$ call_id  : chr "call_PuVkqi6png5TLdhZotjQblIK"
+#>  ..  .. ..$ call_id  : chr "call_ox83V9ORZ6mltd8BHis42n98"
 #>  ..  .. ..$ name     : chr "tool_001"
 #>  .. $ parallel_tool_calls   : logi TRUE
 #>  .. $ presence_penalty      : num 0

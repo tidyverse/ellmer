@@ -140,7 +140,7 @@ specific values from a string:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; $primary_shape</span></span>
-<span><span class="co">#&gt; [1] "letter R"</span></span>
+<span><span class="co">#&gt; [1] "capital letter R"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $primary_colour</span></span>
 <span><span class="co">#&gt; [1] "blue"</span></span></code></pre></div>
@@ -277,8 +277,8 @@ have names and/or ages.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 2</span></span></span>
 <span><span class="co">#&gt;   name                       age</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> apples                       0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Current time unavailable     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> apple                        0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> current_time_unavailable     0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> cheese                       3</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Hadley                       0</span></span></code></pre></div>
 <p>You can often avoid this problem by setting
@@ -411,15 +411,15 @@ can use structured data extraction.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.6-terra"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_summary</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Anthropic argues that frontier generative AI systems should be subject to a carefully scoped, broadly trusted third-party testing regime. Because general-purpose models can be adapted to many downstream uses, they may create risks involving election integrity, discrimination, cyberattacks, bioweapons, and unintended autonomous behavior that sector-specific regulation alone cannot adequately address. Anthropic proposes a two-stage approach: broad, rapid automated evaluations designed to avoid missed risks, followed by deeper expert-led testing when concerns are identified. Testing should apply only to a narrow class of the most computationally intensive frontier systems, minimizing burdens on smaller developers.</span></span>
+<span><span class="co">#&gt; Anthropic argues that frontier, general-purpose AI systems should be subject to a carefully scoped third-party testing and oversight regime. Because such systems can be adapted to many uses and may create risks including election interference, discrimination, cyberattacks, bioweapon assistance, and unintended autonomous behavior, self-governance by individual companies is insufficient. The proposed regime would combine trusted tests, independent auditors, government capacity, academic participation, and a two-stage process of broad automated screening followed by expert-led evaluation where concerns arise.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The article calls for an ecosystem of private auditors, universities, and government agencies to develop and administer evaluations, with governments funding capacity at institutions such as NIST and national AI research infrastructure. Anthropic presents its Responsible Scaling Policy as an early prototype but says voluntary company self-governance is insufficient. It also argues that shared evaluation standards could help international coordination and reduce regulatory capture. On open models, it supports openness for most current systems but contends that future models with demonstrable severe misuse potential may require controlled release, hardened safeguards, or limits on fine-tuning—decisions that should rely on legitimate independent testing rather than AI companies alone.</span></span>
+<span><span class="co">#&gt; The article advocates initially applying requirements only to the most computationally intensive frontier models, both to minimize compliance burdens and to avoid disadvantaging smaller developers. It calls for government investment in institutions and infrastructure such as NIST, AI Safety Institutes, research clouds, and national-security evaluation capacity. It also contends that credible third-party testing can inform policy on open model releases, reduce the likelihood of harmful incidents and reactive regulation, and help limit regulatory capture—though it acknowledges uncertainty about future risks and the need to iteratively prototype and refine standards.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 5</span></span>
 <span><span class="co">#&gt;  $ author    : chr "Anthropic"</span></span>
-<span><span class="co">#&gt;  $ topics    : chr [1:9] "AI policy" "third-party AI testing" "frontier AI safety" "AI evaluations" ...</span></span>
-<span><span class="co">#&gt;  $ summary   : chr "Anthropic argues that frontier generative AI systems should be subject to a carefully scoped, broadly trusted t"| __truncated__</span></span>
+<span><span class="co">#&gt;  $ topics    : chr [1:9] "AI policy" "frontier AI safety" "third-party AI testing" "AI evaluations" ...</span></span>
+<span><span class="co">#&gt;  $ summary   : chr "Anthropic argues that frontier, general-purpose AI systems should be subject to a carefully scoped third-party "| __truncated__</span></span>
 <span><span class="co">#&gt;  $ coherence : int 91</span></span>
 <span><span class="co">#&gt;  $ persuasion: num 0.78</span></span></code></pre></div>
 </div>
@@ -448,9 +448,9 @@ can use structured data extraction.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> John          person       John works at Google in New York.         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Google        organization John works at Google in New York.         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> New York      location     John works at Google in New York.         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Sarah         person       He met with Sarah, the CEO of Acme Inc., …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Acme Inc.     organization Sarah is the CEO of Acme Inc.             </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> San Francisco location     He met with Sarah, the CEO of Acme Inc., …</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Sarah         person       John met with Sarah, the CEO of Acme Inc.…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Acme Inc.     organization Sarah is identified as the CEO of Acme In…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> San Francisco location     John met with Sarah last week in San Fran…</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-3-sentiment-analysis">Example 3: Sentiment analysis<a class="anchor" aria-label="anchor" href="#example-3-sentiment-analysis"></a>
@@ -516,12 +516,15 @@ guaranteed.</p>
 <span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.6-terra"</span>.</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_classification</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
-<span><span class="co">#&gt;   name       score</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Technology  0.98</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Business    0.01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Other       0.01</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
+<span><span class="co">#&gt;   name          score</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Politics       0.01</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Sports         0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Technology     0.97</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Entertainment  0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Business       0.02</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Other          0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-5-working-with-unknown-keys">Example 5: Working with unknown keys<a class="anchor" aria-label="anchor" href="#example-5-working-with-unknown-keys"></a>
@@ -613,10 +616,10 @@ conversation.</p>
 <tr class="odd">
 <td align="left">OpenAI</td>
 <td align="left">gpt-5.6-terra</td>
-<td align="right">1664</td>
-<td align="right">1423</td>
-<td align="right">4331</td>
-<td align="right">$0.02</td>
+<td align="right">5995</td>
+<td align="right">1396</td>
+<td align="right">0</td>
+<td align="right">$0.03</td>
 </tr>
 <tr class="even">
 <td align="left">Anthropic</td>

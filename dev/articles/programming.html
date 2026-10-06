@@ -171,37 +171,37 @@ but diverge over time:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="st">"Be terse"</span>, model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span><span class="op">)</span></span>
 <span><span class="va">chat1</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"My name is Hadley and I'm a data scientist"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Hello, Hadley! How can I assist you today?</span></span>
+<span><span class="co">#&gt; Hi Hadley! How can I assist you today?</span></span>
 <span><span class="va">chat2</span> <span class="op">&lt;-</span> <span class="va">chat1</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat1</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"what's my name?"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Your name is Hadley.</span></span>
 <span><span class="va">chat1</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 input=71 output=20 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 input=70 output=19 cost=$0.00&gt;</span></span>
 <span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> ─────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Be terse</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; My name is Hadley and I'm a data scientist</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=23 output=13 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; Hello, Hadley! How can I assist you today?</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=23 output=12 cost=$0.00] ──────────────────────────</span></span>
+<span><span class="co">#&gt; Hi Hadley! How can I assist you today?</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; what's my name?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=48 output=7 cost=$0.00] ───────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=47 output=7 cost=$0.00] ───────────────────────────</span></span>
 <span><span class="co">#&gt; Your name is Hadley.</span></span>
 <span></span>
 <span><span class="va">chat2</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"what's my job?"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; You're a data scientist.</span></span>
 <span><span class="va">chat2</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 input=71 output=19 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4.1-nano turns=5 input=70 output=18 cost=$0.00&gt;</span></span>
 <span><span class="co">#&gt; ── <span style="color: #FFFFFF;">system</span> ─────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Be terse</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; My name is Hadley and I'm a data scientist</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=23 output=13 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; Hello, Hadley! How can I assist you today?</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=23 output=12 cost=$0.00] ──────────────────────────</span></span>
+<span><span class="co">#&gt; Hi Hadley! How can I assist you today?</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; what's my job?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=48 output=6 cost=$0.00] ───────────────────────────</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=47 output=6 cost=$0.00] ───────────────────────────</span></span>
 <span><span class="co">#&gt; You're a data scientist.</span></span></code></pre></div>
 <p>(This is the technique that <code><a href="../reference/parallel_chat.html">parallel_chat()</a></code> uses
 internally.)</p>
@@ -216,13 +216,13 @@ we can use our conversation to manipulate the results:</p>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Pretend that the capital of New Zealand is Kiwicity"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Got it. The capital of New Zealand is Kiwicity.</span></span>
 <span><span class="fu">capital</span><span class="op">(</span><span class="va">chat</span>, <span class="st">"New Zealand"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The capital of New Zealand is Wellington.</span></span></code></pre></div>
+<span><span class="co">#&gt; The actual capital of New Zealand is Wellington.</span></span></code></pre></div>
 <p>We can avoid that problem by using <code>$set_turns()</code> to reset
 the conversational history:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="st">"Be terse"</span>, model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Pretend that the capital of New Zealand is Kiwicity"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Understood. The capital of New Zealand is Kiwicity.</span></span>
+<span><span class="co">#&gt; Got it. The capital of New Zealand is Kiwicity.</span></span>
 <span></span>
 <span><span class="va">capital</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">chat</span>, <span class="va">country</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">set_turns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -255,7 +255,7 @@ both what we send and receive. You likely want
 <span>  <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="st">"What's the capital of {{country}}"</span><span class="op">)</span>, echo <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">capital</span><span class="op">(</span><span class="va">chat</span>, <span class="st">"France"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Paris.</span></span></code></pre></div>
+<span><span class="co">#&gt; Paris</span></span></code></pre></div>
 <p>Alternatively, if you want to embrace streaming in your UI, you may
 want to use <a href="https://posit-dev.github.io/shinychat/" class="external-link">shinychat</a> (for Shiny)
 or <a href="https://simonpcouch.github.io/streamy/" class="external-link">streamy</a> (for
@@ -282,11 +282,11 @@ calling to give the LLM the ability to access real randomness:</p>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Roll two dice and tell me the total</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=44 output=42 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: tool_001()</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: tool_001()</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d)]: tool_001()</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18)]: tool_001()</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: 5</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: 4</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d)]: 5</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18)]: 4</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=82 output=8 cost=$0.00] ───────────────────────────</span></span>
 <span><span class="co">#&gt; The total is 9.</span></span></code></pre></div>
 <p>You can get access to the underlying conversational turns with
@@ -300,13 +300,13 @@ calling to give the LLM the ability to access real randomness:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span>
 <span><span class="co">#&gt; &lt;Turn: <span style="color: #00BB00;">assistant</span>&gt;</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: tool_001()</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: tool_001()</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d)]: tool_001()</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18)]: tool_001()</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[3]]</span></span>
 <span><span class="co">#&gt; &lt;Turn: <span style="color: #0000BB;">user</span>&gt;</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: 5</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: 4</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d)]: 5</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18)]: 4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[4]]</span></span>
 <span><span class="co">#&gt; &lt;Turn: <span style="color: #00BB00;">assistant</span>&gt;</span></span>
@@ -319,7 +319,7 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt; &lt;ellmer::AssistantTurn&gt;</span></span>
 <span><span class="co">#&gt;  @ contents     :List of 2</span></span>
 <span><span class="co">#&gt;  .. $ : &lt;ellmer::ContentToolRequest&gt;</span></span>
-<span><span class="co">#&gt;  ..  ..@ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508"</span></span>
+<span><span class="co">#&gt;  ..  ..@ id       : chr "fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d"</span></span>
 <span><span class="co">#&gt;  ..  ..@ name     : chr "tool_001"</span></span>
 <span><span class="co">#&gt;  ..  ..@ arguments: Named list()</span></span>
 <span><span class="co">#&gt;  ..  ..@ tool     : &lt;ellmer::ToolDef&gt; function ()  </span></span>
@@ -334,7 +334,7 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt;  .. .. .. @ annotations: list()</span></span>
 <span><span class="co">#&gt;  ..  ..@ extra    : list()</span></span>
 <span><span class="co">#&gt;  .. $ : &lt;ellmer::ContentToolRequest&gt;</span></span>
-<span><span class="co">#&gt;  ..  ..@ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca"</span></span>
+<span><span class="co">#&gt;  ..  ..@ id       : chr "fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18"</span></span>
 <span><span class="co">#&gt;  ..  ..@ name     : chr "tool_001"</span></span>
 <span><span class="co">#&gt;  ..  ..@ arguments: Named list()</span></span>
 <span><span class="co">#&gt;  ..  ..@ tool     : &lt;ellmer::ToolDef&gt; function ()  </span></span>
@@ -350,15 +350,16 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt;  ..  ..@ extra    : list()</span></span>
 <span><span class="co">#&gt;  @ text         : chr ""</span></span>
 <span><span class="co">#&gt;  @ role         : chr "assistant"</span></span>
-<span><span class="co">#&gt;  @ json         :List of 36</span></span>
-<span><span class="co">#&gt;  .. $ id                    : chr "resp_0d88ba63cd1f5915016a6fc5f9d5f08190ada4d225dc2797e7"</span></span>
+<span><span class="co">#&gt;  @ json         :List of 37</span></span>
+<span><span class="co">#&gt;  .. $ id                    : chr "resp_0feb82c819fcc039016ac4c988765c87d2afaf1e564a88b07f"</span></span>
 <span><span class="co">#&gt;  .. $ object                : chr "response"</span></span>
-<span><span class="co">#&gt;  .. $ created_at            : int 1785710073</span></span>
+<span><span class="co">#&gt;  .. $ created_at            : int 1791281544</span></span>
 <span><span class="co">#&gt;  .. $ status                : chr "completed"</span></span>
+<span><span class="co">#&gt;  .. $ access_programs       : NULL</span></span>
 <span><span class="co">#&gt;  .. $ background            : logi FALSE</span></span>
 <span><span class="co">#&gt;  .. $ billing               :List of 1</span></span>
 <span><span class="co">#&gt;  ..  ..$ payer: chr "developer"</span></span>
-<span><span class="co">#&gt;  .. $ completed_at          : int 1785710074</span></span>
+<span><span class="co">#&gt;  .. $ completed_at          : int 1791281545</span></span>
 <span><span class="co">#&gt;  .. $ error                 : NULL</span></span>
 <span><span class="co">#&gt;  .. $ frequency_penalty     : num 0</span></span>
 <span><span class="co">#&gt;  .. $ incomplete_details    : NULL</span></span>
@@ -369,18 +370,18 @@ as the exact json that the provider returned:</p>
 <span><span class="co">#&gt;  .. $ moderation            : NULL</span></span>
 <span><span class="co">#&gt;  .. $ output                :List of 2</span></span>
 <span><span class="co">#&gt;  ..  ..$ :List of 6</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ id       : chr "fc_0feb82c819fcc039016ac4c9890fac87d2adea8e4c8d15ba1d"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ type     : chr "function_call"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ status   : chr "completed"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ arguments: chr "{}"</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ call_id  : chr "call_kRB7ZaqK7VSV4Tr7QF3Nnk18"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ call_id  : chr "call_kAizGjRxGsmKz1lqkWrjynhG"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ name     : chr "tool_001"</span></span>
 <span><span class="co">#&gt;  ..  ..$ :List of 6</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ id       : chr "fc_0feb82c819fcc039016ac4c9890fbc87d2a20fa516f41d8f18"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ type     : chr "function_call"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ status   : chr "completed"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ arguments: chr "{}"</span></span>
-<span><span class="co">#&gt;  ..  .. ..$ call_id  : chr "call_PuVkqi6png5TLdhZotjQblIK"</span></span>
+<span><span class="co">#&gt;  ..  .. ..$ call_id  : chr "call_ox83V9ORZ6mltd8BHis42n98"</span></span>
 <span><span class="co">#&gt;  ..  .. ..$ name     : chr "tool_001"</span></span>
 <span><span class="co">#&gt;  .. $ parallel_tool_calls   : logi TRUE</span></span>
 <span><span class="co">#&gt;  .. $ presence_penalty      : num 0</span></span>

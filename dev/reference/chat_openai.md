@@ -149,59 +149,50 @@ chat$chat("
   What is the difference between a tibble and a data frame?
   Answer with a bulleted list
 ")
-#> - **Origin**
-#>   - A **data frame** is a base R data structure.
-#>   - A **tibble** is a modern reimplementation of a data frame from the
-#> **tibble** package, commonly used in the tidyverse.
+#> - A **data frame** is the traditional tabular data structure in base 
+#> R. A **tibble** is a modern, enhanced version of a data frame provided
+#> by the **tibble** package (part of the tidyverse).
 #> 
-#> - **Printing**
-#>   - Data frames often print all rows and columns, which can be 
-#> overwhelming for large datasets.
-#>   - Tibbles print a compact preview: only the first few rows and 
-#> columns, along with column types.
+#> - Tibbles print more compactly:
+#>   - They show only the first few rows and columns by default.
+#>   - They display column types and avoid flooding the console with 
+#> large datasets.
+#>   - Base data frames often print all rows unless limited manually.
 #> 
-#> - **Data types**
-#>   - Data frames may automatically convert character columns to factors
-#> in older versions of R (depending on settings).
-#>   - Tibbles do not automatically convert strings to factors.
+#> - Tibbles do not automatically convert character columns to factors.  
+#>   - Older versions of `data.frame()` converted strings to factors by 
+#> default (though modern R defaults no longer do this).
 #> 
-#> - **Column names**
-#>   - Data frames can modify invalid or duplicate column names by 
-#> default (for example, adding dots).
-#>   - Tibbles preserve column names more consistently and can support 
-#> non-syntactic names.
+#> - Tibbles preserve column names more strictly:
+#>   - They allow non-syntactic names such as `"total cost"` without 
+#> automatically changing them.
+#>   - Base data frames may modify invalid names unless `check.names = 
+#> FALSE` is used.
 #> 
-#> - **Subsetting**
-#>   - Extracting a single column from a data frame with `df[, "x"]` may 
-#> simplify the result to a vector.
-#>   - Extracting from a tibble with `tbl[, "x"]` always returns another 
-#> tibble; use `tbl[["x"]]` or `tbl$x` to get a vector.
+#> - Tibbles are stricter when subsetting:
+#>   - Extracting a single column with `tibble[, "x"]` returns a 
+#> one-column tibble.
+#>   - With a base data frame, `df[, "x"]` usually returns a vector 
+#> unless `drop = FALSE` is specified.
 #> 
-#> - **Partial matching**
-#>   - Data frames may allow partial matching of column names, such as 
-#> `df$long` matching a column called `long_name`.
-#>   - Tibbles do not allow partial matching, helping prevent accidental 
-#> mistakes.
+#> - Tibbles do not partially match column names, reducing the chance of 
+#> accidental mistakes:
+#>   - `tb$long` will not silently match a column named `long_name`.
+#>   - Base data frames may allow partial matching in some situations.
 #> 
-#> - **Recycling behavior**
-#>   - Data frames may silently recycle shorter vectors when creating or 
-#> modifying columns.
-#>   - Tibbles are stricter and generally require vectors to have 
-#> compatible lengths, reducing silent errors.
+#> - Tibbles support list-columns naturally, making them especially 
+#> useful in tidyverse workflows and nested data analysis.
 #> 
-#> - **Compatibility**
-#>   - A tibble is still a type of data frame, so many functions that 
-#> work with data frames also work with tibbles.
-#>   - Some base R functions or older code may expect a plain data frame,
-#> in which case a tibble can be converted with `as.data.frame()`.
+#> - Both store rectangular data with rows and columns, and most 
+#> functions that work with data frames also work with tibbles.
 
 chat$chat("Tell me three funny jokes about statisticians")
-#> - Why did the statistician drown crossing a river?  
-#>   Because it was three feet deep on average.
+#> 1. A statistician drowned crossing a river that was, on average, three
+#> feet deep.
 #> 
-#> - A statistician’s favorite type of joke?  
-#>   One with a significant *p*-unchline.
+#> 2. Why did the statistician bring a ladder to the bar?  
+#>    Because the drinks were on the house—but only with 95% confidence.
 #> 
-#> - There are three kinds of statisticians:  
-#>   Those who can count, and those who can’t account for sampling error.
+#> 3. A statistician’s favorite type of music?  
+#>    Heavy **meta**l—because they love a good analysis.
 ```

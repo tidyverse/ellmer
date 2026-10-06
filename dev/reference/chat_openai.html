@@ -198,61 +198,52 @@ when running at the console).</p></li>
 <span class="r-in"><span><span class="st">  What is the difference between a tibble and a data frame?</span></span></span>
 <span class="r-in"><span><span class="st">  Answer with a bulleted list</span></span></span>
 <span class="r-in"><span><span class="st">"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Origin**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - A **data frame** is a base R data structure.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - A **tibble** is a modern reimplementation of a data frame from the</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **tibble** package, commonly used in the tidyverse.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - A **data frame** is the traditional tabular data structure in base </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> R. A **tibble** is a modern, enhanced version of a data frame provided</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> by the **tibble** package (part of the tidyverse).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Printing**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Data frames often print all rows and columns, which can be </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> overwhelming for large datasets.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles print a compact preview: only the first few rows and </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> columns, along with column types.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Tibbles print more compactly:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - They show only the first few rows and columns by default.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - They display column types and avoid flooding the console with </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> large datasets.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Base data frames often print all rows unless limited manually.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Data types**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Data frames may automatically convert character columns to factors</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> in older versions of R (depending on settings).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles do not automatically convert strings to factors.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Tibbles do not automatically convert character columns to factors.  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Older versions of `data.frame()` converted strings to factors by </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> default (though modern R defaults no longer do this).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Column names**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Data frames can modify invalid or duplicate column names by </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> default (for example, adding dots).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles preserve column names more consistently and can support </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> non-syntactic names.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Tibbles preserve column names more strictly:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - They allow non-syntactic names such as `"total cost"` without </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> automatically changing them.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Base data frames may modify invalid names unless `check.names = </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FALSE` is used.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Subsetting**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Extracting a single column from a data frame with `df[, "x"]` may </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> simplify the result to a vector.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Extracting from a tibble with `tbl[, "x"]` always returns another </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tibble; use `tbl[["x"]]` or `tbl$x` to get a vector.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Tibbles are stricter when subsetting:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Extracting a single column with `tibble[, "x"]` returns a </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> one-column tibble.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - With a base data frame, `df[, "x"]` usually returns a vector </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> unless `drop = FALSE` is specified.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Partial matching**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Data frames may allow partial matching of column names, such as </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> `df$long` matching a column called `long_name`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles do not allow partial matching, helping prevent accidental </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mistakes.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Tibbles do not partially match column names, reducing the chance of </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> accidental mistakes:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - `tb$long` will not silently match a column named `long_name`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Base data frames may allow partial matching in some situations.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Recycling behavior**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Data frames may silently recycle shorter vectors when creating or </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> modifying columns.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Tibbles are stricter and generally require vectors to have </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> compatible lengths, reducing silent errors.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Tibbles support list-columns naturally, making them especially </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> useful in tidyverse workflows and nested data analysis.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - **Compatibility**</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - A tibble is still a type of data frame, so many functions that </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> work with data frames also work with tibbles.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - Some base R functions or older code may expect a plain data frame,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> in which case a tibble can be converted with `as.data.frame()`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Both store rectangular data with rows and columns, and most </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> functions that work with data frames also work with tibbles.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Tell me three funny jokes about statisticians"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Why did the statistician drown crossing a river?  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Because it was three feet deep on average.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1. A statistician drowned crossing a river that was, on average, three</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> feet deep.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - A statistician’s favorite type of joke?  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   One with a significant *p*-unchline.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2. Why did the statistician bring a ladder to the bar?  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Because the drinks were on the house—but only with 95% confidence.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - There are three kinds of statisticians:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Those who can count, and those who can’t account for sampling error.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3. A statistician’s favorite type of music?  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Heavy **meta**l—because they love a good analysis.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

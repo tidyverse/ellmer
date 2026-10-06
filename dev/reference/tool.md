@@ -172,27 +172,19 @@ chat$register_tool(tool_rnorm)
 
 # Then ask a question that needs it.
 chat$chat("Give me five numbers from a random normal distribution.")
-#> Five draws from a standard normal distribution \(N(0,1)\):
-#> 
-#> 1.1484, −1.8218, −0.2473, −0.2442, −0.2827
+#> 1.1484, -1.8218, -0.2473, -0.2442, -0.2827
 
 # Look at the chat history to see how tool calling works:
 chat
-#> <Chat OpenAI/gpt-5.6-terra turns=4 input=277 output=97 cost=$0.00>
+#> <Chat OpenAI/gpt-5.6-terra turns=4 input=253 output=58 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> Give me five numbers from a random normal distribution.
-#> ── assistant [input=95 output=50 cost=$0.00] ──────────────────────────
-#> <thinking>
-#> 
-#> </thinking>
-#> 
-#> [tool request (fc_0cfc11607c070948016a6fc439230c8196b926d4a0f383ef70)]: rnorm(n = 5L, mean = 0L, sd = 1L)
+#> ── assistant [input=95 output=26 cost=$0.00] ──────────────────────────
+#> [tool request (fc_08515aebae96ac45016ac4ca15582487d295182f97d395e341)]: rnorm(n = 5L, mean = 0L, sd = 1L)
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0cfc11607c070948016a6fc439230c8196b926d4a0f383ef70)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]
-#> ── assistant [input=182 output=47 cost=$0.00] ─────────────────────────
-#> Five draws from a standard normal distribution \(N(0,1)\):
-#> 
-#> 1.1484, −1.8218, −0.2473, −0.2442, −0.2827
+#> [tool result  (fc_08515aebae96ac45016ac4ca15582487d295182f97d395e341)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]
+#> ── assistant [input=158 output=32 cost=$0.00] ─────────────────────────
+#> 1.1484, -1.8218, -0.2473, -0.2442, -0.2827
 # Assistant sends a tool request which is evaluated locally and
 # results are sent back in a tool result.
 ```
