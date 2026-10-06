@@ -104,7 +104,13 @@ is installed.
 \item A browser-based OAuth flow, if you're in an interactive session (Gemini
 only). On a hosted session (e.g. Posit Workbench or Google Colab), the
 browser can't redirect back to R, so you'll be shown a code to paste into
-the console instead.
+the console instead. Set the \code{ELLMER_GEMINI_OAUTH_CLIENT} env var to
+\code{"desktop"} or \code{"web"} to force one flow or the other.
+
+Browser sign-in doesn't give access to file uploads, so the
+\verb{$file_upload()} and related methods, \code{\link[=google_upload]{google_upload()}}, and
+\code{\link[=batch_chat]{batch_chat()}} won't work with it. Use an API key or application default
+credentials for those.
 }
 }
 }

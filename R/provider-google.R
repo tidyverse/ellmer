@@ -27,7 +27,13 @@ NULL
 #' * A browser-based OAuth flow, if you're in an interactive session (Gemini
 #'   only). On a hosted session (e.g. Posit Workbench or Google Colab), the
 #'   browser can't redirect back to R, so you'll be shown a code to paste into
-#'   the console instead.
+#'   the console instead. Set the `ELLMER_GEMINI_OAUTH_CLIENT` env var to
+#'   `"desktop"` or `"web"` to force one flow or the other.
+#'
+#'   Browser sign-in doesn't give access to file uploads, so the
+#'   `$file_upload()` and related methods, [google_upload()], and
+#'   [batch_chat()] won't work with it. Use an API key or application default
+#'   credentials for those.
 #'
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials A function that returns a list of authentication headers
@@ -1025,7 +1031,8 @@ google_oauth_reset <- function() {
 # Hosted sessions can't use a localhost redirect, so they get the web client
 # and paste a code back from the tidyverse.org callback page.
 gemini_oauth_params <- function() {
-  if (is_hosted_session()) {
+  client <- Sys.getenv("ELLMER_GEMINI_OAUTH_CLIENT")
+  if (client == "web" || (!nzchar(client) && is_hosted_session())) {
     list(
       client = gemini_web_client(),
       redirect_uri = "https://www.tidyverse.org/google-callback/"
@@ -1042,7 +1049,7 @@ gemini_desktop_client <- function() {
       "kzVEgj-9wpJ5okNiB1f7vAJqtEFhlA1sJYRr-cTITBmBqlIrQJC_kZ3UmbFMgNHrkql5"
     ),
     token_url = "https://oauth2.googleapis.com/token",
-    name = "ellmer-gemini-desktop"
+    name = "ellmer-desktop-babar"
   )
 }
 
@@ -1053,7 +1060,7 @@ gemini_web_client <- function() {
       "jA4z3vFmNGQL52ptN7nchaK_-nA04P6oEhFrAxc1zZevMx0zYCx9mLZ4y0ZEvq6g_G1B"
     ),
     token_url = "https://oauth2.googleapis.com/token",
-    name = "ellmer-gemini-web"
+    name = "ellmer-web-babar"
   )
 }
 
