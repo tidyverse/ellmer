@@ -548,6 +548,48 @@ test_that("cancelled streams record an error finish reason", {
     recorded$traces[["chat "]]$attributes[["gen_ai.response.finish_reasons"]],
     "error"
   )
+  for (span in recorded$traces[c("invoke_agent", "chat ")]) {
+    expect_equal(span$status, "error")
+    expect_equal(span$attributes[["error.type"]], "cancelled")
+    expect_length(span$events, 0L)
+  }
+
+  points <- otel_metric_points(recorded$metrics)
+  for (name in c(
+    "gen_ai.client.inference.duration",
+    "gen_ai.invoke_agent.duration"
+  )) {
+    expect_equal(points[[name]][[1L]]$attributes[["error.type"]], "cancelled")
+  }
+})
+
+test_that("interrupted requests are recorded on spans and metrics", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(chat_perform = function(...) rlang::interrupt())
+
+  recorded <- with_otel_record({
+    chat <- Chat$new(test_provider(), model = test_model())
+    tryCatch(chat$chat("hi"), interrupt = function(e) NULL)
+  })
+
+  for (span in recorded$traces[c("invoke_agent", "chat ")]) {
+    expect_equal(span$status, "error")
+    expect_equal(span$attributes[["error.type"]], "interrupted")
+    expect_length(span$events, 0L)
+  }
+  expect_equal(
+    recorded$traces[["chat "]]$attributes[["gen_ai.response.finish_reasons"]],
+    "error"
+  )
+
+  points <- otel_metric_points(recorded$metrics)
+  for (name in c(
+    "gen_ai.client.inference.duration",
+    "gen_ai.invoke_agent.duration"
+  )) {
+    expect_equal(points[[name]][[1L]]$attributes[["error.type"]], "interrupted")
+  }
 })
 
 test_that("request params are recorded as gen_ai.request.* attributes", {
