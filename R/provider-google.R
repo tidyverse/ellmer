@@ -157,15 +157,6 @@ vertex_url <- function(location, project_id) {
   )
 }
 
-# ProviderGoogle holds what the two Google APIs share: credentials, the
-# Files API, model listing and batch polling. Each API's own request and
-# response format lives in a subclass:
-#
-# * ProviderGoogleGenerateContent (this file): the generateContent API, used
-#   by chat_google_vertex(), and by chat_google_gemini() for batch requests and
-#   token counting.
-# * ProviderGoogleInteractions (provider-google-interactions.R): the
-#   Interactions API, used by chat_google_gemini() for chat.
 ProviderGoogle <- new_class(
   "ProviderGoogle",
   parent = Provider,
