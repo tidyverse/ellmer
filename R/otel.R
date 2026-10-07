@@ -16,8 +16,8 @@ otel_record_histogram <- NULL
 # The conventions also advise explicit bucket boundaries (e.g. 0.01 to 81.92 s
 # for durations, 1 to 67,108,864 for token counts), but
 # `otel::meter$create_histogram()` only accepts a name, description, and unit,
-# so the SDK's default buckets are used. Users can configure views in their
-# collector or SDK to apply the advised boundaries.
+# so the SDK's default buckets are used (see r-lib/otel#49). Users can
+# configure views in their collector or SDK to apply the advised boundaries.
 otel_histogram_specs <- list(
   "gen_ai.client.inference.duration" = list(
     description = "GenAI client inference operation duration",
