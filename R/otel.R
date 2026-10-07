@@ -12,6 +12,12 @@ otel_record_histogram <- NULL
 # conventions; the agent and tool instruments by the general metrics page.
 # See: https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/client-inference.md
 # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/
+#
+# The conventions also advise explicit bucket boundaries (e.g. 0.01 to 81.92 s
+# for durations, 1 to 67,108,864 for token counts), but
+# `otel::meter$create_histogram()` only accepts a name, description, and unit,
+# so the SDK's default buckets are used. Users can configure views in their
+# collector or SDK to apply the advised boundaries.
 otel_histogram_specs <- list(
   "gen_ai.client.inference.duration" = list(
     description = "GenAI client inference operation duration",
