@@ -778,7 +778,15 @@ record_agent_otel <- function(span, provider, model, tally) {
   }
 }
 
-record_tool_otel_duration <- function(request, start, result) {
+record_tool_otel_result <- function(request, start, result) {
+  record_tool_otel_duration(
+    request,
+    start,
+    if (tool_errored(result)) tool_error_type(result)
+  )
+}
+
+record_tool_otel_duration <- function(request, start, error_type = NULL) {
   otel_record_histogram(
     "gen_ai.execute_tool.duration",
     elapsed_secs(start),
@@ -786,9 +794,24 @@ record_tool_otel_duration <- function(request, start, result) {
       "gen_ai.operation.name" = "execute_tool",
       "gen_ai.tool.name" = request@tool@name,
       "gen_ai.tool.type" = "function",
-      "error.type" = if (tool_errored(result)) tool_error_type(result)
+      "error.type" = error_type
     )
   )
+}
+
+# The tool counterpart of `record_chat_otel_span_interrupted()`: runs from
+# `defer()` and records the call only if it was unwound before
+# `record_tool_otel_result()` cleared `start`.
+record_tool_otel_interrupted <- function(span, request, start) {
+  if (is.null(start)) {
+    return()
+  }
+  record_tool_otel_duration(request, start, "interrupted")
+  if (is.null(span) || !span_recording(span)) {
+    return()
+  }
+  span$set_status("error")
+  span$set_attribute("error.type", "interrupted")
 }
 
 tool_error_type <- function(result) {
