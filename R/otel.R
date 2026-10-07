@@ -7,7 +7,10 @@ local_tool_otel_span <- NULL
 local_agent_otel_span <- NULL
 otel_record_histogram <- NULL
 
-# Histograms from the GenAI semantic conventions for metrics.
+# Histograms from the GenAI semantic conventions for metrics. The
+# `gen_ai.client.inference.*` instruments are defined by the client inference
+# conventions; the agent and tool instruments by the general metrics page.
+# See: https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/client-inference.md
 # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/
 otel_histogram_specs <- list(
   "gen_ai.client.inference.duration" = list(
@@ -434,7 +437,10 @@ otel_chat_input <- function(private, user_turn) {
 }
 
 # Records the time to first chunk (in seconds) as a chat span attribute and
-# as the `gen_ai.client.operation.time_to_first_chunk` histogram.
+# as the `gen_ai.client.inference.time_to_first_chunk` histogram. Per the
+# client inference conventions, this is measured from request issuance to the
+# first chunk received, whether or not that chunk contains model output.
+# See: https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/client-inference.md
 record_chat_otel_ttft <- function(span, provider, model, start) {
   ttft <- elapsed_secs(start)
   otel_record_histogram(
