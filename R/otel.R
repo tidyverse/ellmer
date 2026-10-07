@@ -58,9 +58,6 @@ otel_histogram_specs <- list(
   )
 )
 
-# `gen_ai.provider.name` well-known values, keyed by the provider's display
-# name. Other providers fall back to the lowercased display name.
-# See: https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/
 # Monotonic token usage counters from the client inference conventions. Each
 # counter is broken down by `gen_ai.token.modality`; providers only report
 # totals, so ellmer reports the `unknown` modality.
@@ -84,6 +81,9 @@ otel_counter_specs <- list(
   )
 )
 
+# `gen_ai.provider.name` well-known values, keyed by the provider's display
+# name. Other providers fall back to the lowercased display name.
+# See: https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/
 otel_provider_names <- c(
   "Anthropic" = "anthropic",
   "AWS/Bedrock" = "aws.bedrock",
