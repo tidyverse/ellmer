@@ -40,6 +40,10 @@
 - [`live_browser()`](https://ellmer.tidyverse.org/dev/reference/live_console.md)
   works again with shinychat \>= 0.5.0
   ([\#1167](https://github.com/tidyverse/ellmer/issues/1167)).
+- Streamed responses now record the time to first token (in seconds) as
+  the `gen_ai.response.time_to_first_chunk` attribute on the
+  OpenTelemetry `chat` span ([@schloerke](https://github.com/schloerke),
+  [\#1142](https://github.com/tidyverse/ellmer/issues/1142)).
 
 ## ellmer 0.5.0
 

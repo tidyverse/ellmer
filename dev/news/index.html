@@ -62,6 +62,7 @@
 <code><a href="../reference/chat_openai.html">chat_openai()</a></code> now sends <code>type = "message"</code> on every input item to the Responses API, so OpenAI-compatible servers that require it (e.g. llama.cpp) no longer reject replayed assistant turns (<a href="https://github.com/taekop" class="external-link">@taekop</a>, <a href="https://github.com/tidyverse/ellmer/issues/1153" class="external-link">#1153</a>).</li>
 <li>
 <code><a href="../reference/live_console.html">live_browser()</a></code> works again with shinychat &gt;= 0.5.0 (<a href="https://github.com/tidyverse/ellmer/issues/1167" class="external-link">#1167</a>).</li>
+<li>Streamed responses now record the time to first token (in seconds) as the <code>gen_ai.response.time_to_first_chunk</code> attribute on the OpenTelemetry <code>chat</code> span (<a href="https://github.com/schloerke" class="external-link">@schloerke</a>, <a href="https://github.com/tidyverse/ellmer/issues/1142" class="external-link">#1142</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="ellmer-050">ellmer 0.5.0<a class="anchor" aria-label="anchor" href="#ellmer-050"></a></h2><p class="text-muted">CRAN release: 2026-09-04</p>
