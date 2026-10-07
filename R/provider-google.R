@@ -17,7 +17,9 @@ NULL
 #' [Interactions API](https://ai.google.dev/gemini-api/docs/interactions-overview),
 #' so `api_args` should use its request fields. `chat_google_vertex()` uses
 #' the `generateContent` API, as do batch requests and token counting for
-#' both.
+#' both. Structured output isn't supported for Gemini 2.5 models in the
+#' Interactions API, so upgrade to a Gemini 3 model if you use
+#' `chat_structured()`.
 #'
 #' Use [google_upload()] to upload files (PDFs, images, video, audio, etc.)
 #'
