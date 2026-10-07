@@ -141,6 +141,15 @@ test_that("quota errors are not retried", {
   expect_equal(policies$error_body, gemini_error_body)
 })
 
+test_that("errors wrapped in an array are parsed", {
+  # Auth failures come from the API gateway, which wraps the error in an array
+  resp <- response_json(
+    400,
+    body = list(list(error = list(code = 400, message = "API key not valid")))
+  )
+  expect_equal(gemini_error_body(resp), "API key not valid [400]")
+})
+
 # Interactions -> ellmer -------------------------------------------------------
 
 test_that("value_turn() converts steps to contents", {
