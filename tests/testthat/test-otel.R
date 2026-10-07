@@ -562,6 +562,35 @@ test_that("request params are recorded as gen_ai.request.* attributes", {
   }
 })
 
+test_that("unsupported request params are not recorded on spans", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(
+    req_perform = function(req, ...) list(),
+    resp_body_json = function(...) list(),
+    resp_timing = function(...) list(total = 1),
+    value_turn = function(provider, model, result, has_type = FALSE) {
+      AssistantTurn(list(ContentText("hi")), tokens = c(0, 0, 0), cost = 0)
+    }
+  )
+
+  recorded <- with_otel_record({
+    # OpenAI-compatible providers don't support `reasoning_effort`.
+    chat <- chat_openai_compatible(
+      base_url = "https://example.com",
+      model = "m",
+      credentials = \() "key",
+      params = params(temperature = 0.5, reasoning_effort = "low")
+    )
+    expect_snapshot(. <- chat$chat("hi", echo = "none"))
+  })
+
+  for (span in recorded$traces[c("invoke_agent", "chat m")]) {
+    expect_equal(span$attributes[["gen_ai.request.temperature"]], 0.5)
+    expect_null(span$attributes[["gen_ai.request.reasoning.level"]])
+  }
+})
+
 test_that("chat span records server, output type, and tool definitions", {
   skip_if_not_installed("otelsdk")
   withr::local_envvar(

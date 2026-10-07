@@ -78,13 +78,15 @@ otel_provider_name <- function(provider) {
   }
 }
 
-# Map `params()` onto the `gen_ai.request.*` span attributes.
 as_otel_int <- function(x) {
   if (!is.null(x)) as.integer(x)
 }
 
-otel_request_attributes <- function(model) {
+# Map `params()` onto the `gen_ai.request.*` span attributes, dropping any
+# that the provider reported as unsupported (and so did not send).
+otel_request_attributes <- function(model, unsupported = character()) {
   p <- model@params
+  p[names(p) %in% unsupported] <- NULL
   compact(list(
     "gen_ai.request.temperature" = p$temperature,
     "gen_ai.request.top_p" = p$top_p,
@@ -201,7 +203,6 @@ local({
             "gen_ai.request.stream" = if (stream) TRUE,
             "gen_ai.output.type" = if (!is.null(type)) "json"
           )),
-          otel_request_attributes(model),
           otel_server_attributes(provider)
         ),
         tracer = otel_tracer
@@ -314,8 +315,7 @@ local({
             "gen_ai.provider.name" = otel_provider_name(provider),
             "gen_ai.request.model" = model@name,
             "gen_ai.conversation.id" = conversation_id
-          )),
-          otel_request_attributes(model)
+          ))
         ),
         tracer = otel_tracer
       )
@@ -438,6 +438,18 @@ record_chat_otel_span_status <- function(span, provider, model, result, start) {
     )
   }
   span$set_status("ok")
+}
+
+# Sets the `gen_ai.request.*` attributes once the provider has built the
+# request, so parameters it ignored (see `standardise_params()`) are omitted.
+record_otel_span_request_params <- function(span, model, unsupported) {
+  if (is.null(span) || !span_recording(span)) {
+    return()
+  }
+  attributes <- otel_request_attributes(model, unsupported)
+  for (name in names(attributes)) {
+    span$set_attribute(name, attributes[[name]])
+  }
 }
 
 otel_error_type <- function(error) {
