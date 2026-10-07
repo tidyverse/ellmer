@@ -1069,7 +1069,7 @@ Chat <- R6::R6Class(
             on.exit(acc$finalize_turn(), add = TRUE)
 
             stream_start <- request_start
-            last_chunk <- NULL
+            last_chunk_time <- NULL
             result <- NULL
             for (chunk in response) {
               result <- stream_merge_chunks(private$provider, result, chunk)
@@ -1091,10 +1091,13 @@ Chat <- R6::R6Class(
                 record_chat_otel_chunk(
                   private$provider,
                   private$model,
-                  last_chunk
+                  last_chunk_time
                 )
               }
-              last_chunk <- Sys.time()
+              # Taken as soon as the chunk is received, before its contents
+              # are yielded, so consecutive timestamps measure the interval
+              # between chunk arrivals.
+              last_chunk_time <- Sys.time()
               for (content in contents) {
                 text <- content_text(content)
                 if (yield_as_content) {
@@ -1295,7 +1298,7 @@ Chat <- R6::R6Class(
             on.exit(acc$finalize_turn(), add = TRUE)
 
             stream_start <- request_start
-            last_chunk <- NULL
+            last_chunk_time <- NULL
             result <- NULL
             for (chunk in await_each(response)) {
               result <- stream_merge_chunks(private$provider, result, chunk)
@@ -1317,10 +1320,13 @@ Chat <- R6::R6Class(
                 record_chat_otel_chunk(
                   private$provider,
                   private$model,
-                  last_chunk
+                  last_chunk_time
                 )
               }
-              last_chunk <- Sys.time()
+              # Taken as soon as the chunk is received, before its contents
+              # are yielded, so consecutive timestamps measure the interval
+              # between chunk arrivals.
+              last_chunk_time <- Sys.time()
               for (content in contents) {
                 text <- content_text(content)
                 if (yield_as_content) {
