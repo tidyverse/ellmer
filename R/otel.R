@@ -104,19 +104,24 @@ otel_server_attributes <- function(provider) {
   }
   port <- url$port %||% switch(url$scheme %||% "", https = 443, http = 80)
   compact(list(
-    "server.address" = url$hostname,
+    # IPv6 literals are bracketed in URLs but not in `server.address`.
+    "server.address" = sub("^\\[(.*)\\]$", "\\1", url$hostname),
     "server.port" = if (!is.null(port)) as.integer(port)
   ))
 }
 
-# A GenAI semconv tool definition for a ToolDef.
+# A GenAI semconv tool definition for a ToolDef. Built-in (provider-executed)
+# tools have no argument schema and are omitted by the caller.
 as_otel_tool_definition <- function(tool, provider) {
-  list(
+  parameters <- as_json(provider, tool@arguments)
+  compact(list(
     type = "function",
     name = tool@name,
     description = tool@description,
-    parameters = as_json(provider, tool@arguments)
-  )
+    # Some providers serialize an empty schema as `[]`, which is not a valid
+    # JSON Schema object, so omit it instead.
+    parameters = if (length(parameters)) parameters
+  ))
 }
 
 local({
@@ -200,12 +205,9 @@ local({
     defer(otel::end_span(chat_span), envir = local_envir)
 
     if (otel_capture_content) {
+      tools <- Filter(\(tool) S7_inherits(tool, ToolDef), unname(tools))
       if (length(tools)) {
-        defs <- lapply(
-          unname(tools),
-          as_otel_tool_definition,
-          provider = provider
-        )
+        defs <- lapply(tools, as_otel_tool_definition, provider = provider)
         chat_span$set_attribute(
           "gen_ai.tool.definitions",
           jsonlite::toJSON(defs, auto_unbox = TRUE, null = "null")
