@@ -336,7 +336,7 @@ method(
     call_id = x@request@id,
     name = x@request@name,
     # A plain string is accepted by every model; the content-block form is
-    # rejected by older ones
+    # rejected by older ones (e.g. gemini-2.5-flash)
     result = tool_string(x),
     is_error = tool_errored(x)
   )
@@ -660,7 +660,8 @@ method(stream_content, ProviderGoogleInteractions) <- function(
     event$event_type == "interaction.completed" && !is.null(completion)
   ) {
     # Citations and tool activity are rebuilt from the merged steps, since
-    # the sources for a search only arrive with the answer text
+    # the sources for a search only arrive with the answer text. So when
+    # streaming they appear after the text; the saved turn is unaffected
     contents <- gemini_step_contents(completion$steps)
     keep(contents, function(content) {
       !is_stream_text_content(content) &&
