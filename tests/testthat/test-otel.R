@@ -609,6 +609,21 @@ test_that("tool definitions omit an empty argument schema", {
   expect_named(def, c("type", "name", "description"))
 })
 
+test_that("integer request params are recorded as integers", {
+  model <- test_model(params = params(seed = 1, max_tokens = 10, top_k = 5))
+  attrs <- otel_request_attributes(model)
+  expect_identical(attrs[["gen_ai.request.seed"]], 1L)
+  expect_identical(attrs[["gen_ai.request.max_tokens"]], 10L)
+  expect_identical(attrs[["gen_ai.request.top_k"]], 5L)
+})
+
+test_that("metrics carry server.address and server.port", {
+  provider <- test_provider(base_url = "https://example.com/v1")
+  attrs <- otel_metric_attributes(provider, test_model())
+  expect_equal(attrs[["server.address"]], "example.com")
+  expect_equal(attrs[["server.port"]], 443L)
+})
+
 test_that("server.address strips IPv6 brackets", {
   attrs <- otel_server_attributes(test_provider(base_url = "http://[::1]:8080"))
   expect_equal(attrs, list("server.address" = "::1", "server.port" = 8080L))

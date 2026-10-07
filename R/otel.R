@@ -79,16 +79,21 @@ otel_provider_name <- function(provider) {
 }
 
 # Map `params()` onto the `gen_ai.request.*` span attributes.
+as_otel_int <- function(x) {
+  if (!is.null(x)) as.integer(x)
+}
+
 otel_request_attributes <- function(model) {
   p <- model@params
   compact(list(
     "gen_ai.request.temperature" = p$temperature,
     "gen_ai.request.top_p" = p$top_p,
-    "gen_ai.request.top_k" = p$top_k,
+    # semconv types these as `int`; `params()` stores them as doubles.
+    "gen_ai.request.top_k" = as_otel_int(p$top_k),
     "gen_ai.request.frequency_penalty" = p$frequency_penalty,
     "gen_ai.request.presence_penalty" = p$presence_penalty,
-    "gen_ai.request.seed" = p$seed,
-    "gen_ai.request.max_tokens" = p$max_tokens,
+    "gen_ai.request.seed" = as_otel_int(p$seed),
+    "gen_ai.request.max_tokens" = as_otel_int(p$max_tokens),
     "gen_ai.request.stop_sequences" = p$stop_sequences,
     "gen_ai.request.reasoning.level" = p$reasoning_effort
   ))
@@ -367,11 +372,14 @@ otel_metric_points <- function(metrics) {
 }
 
 otel_metric_attributes <- function(provider, model, result = NULL) {
-  list(
-    "gen_ai.operation.name" = "chat",
-    "gen_ai.provider.name" = otel_provider_name(provider),
-    "gen_ai.request.model" = model@name,
-    "gen_ai.response.model" = result$model
+  c(
+    list(
+      "gen_ai.operation.name" = "chat",
+      "gen_ai.provider.name" = otel_provider_name(provider),
+      "gen_ai.request.model" = model@name,
+      "gen_ai.response.model" = result$model
+    ),
+    otel_server_attributes(provider)
   )
 }
 
