@@ -348,24 +348,3 @@ test_that("structured output includes `strict` only when the provider is strict"
   expect_equal(unlist(fn$parameters$required), c("x", "y"))
   expect_equal(fn$parameters$properties$y$type, c("number", "null"))
 })
-
-test_that("stream_output_started() detects tool call deltas", {
-  provider <- chat_openai_compatible(
-    base_url = "https://example.com",
-    model = "m",
-    credentials = \() "key"
-  )$get_provider()
-  role_only <- list(choices = list(list(delta = list(role = "assistant"))))
-  tool_call <- list(
-    choices = list(list(delta = list(tool_calls = list(list()))))
-  )
-  usage_only <- list(choices = list(), usage = list(total_tokens = 1))
-  expect_false(stream_output_started(provider, role_only, list()))
-  expect_false(stream_output_started(provider, usage_only, list()))
-  expect_true(stream_output_started(provider, tool_call, list()))
-  expect_true(stream_output_started(
-    provider,
-    role_only,
-    list(ContentText("hi"))
-  ))
-})

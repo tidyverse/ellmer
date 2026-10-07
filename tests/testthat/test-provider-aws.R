@@ -623,22 +623,3 @@ test_that("value_turn() handles thinking blocks with no text (#1085)", {
   expect_equal(turn@contents[[1]]@thinking, "")
   expect_equal(turn@contents[[1]]@extra$signature, "abc")
 })
-
-test_that("stream_output_started() detects content block starts", {
-  provider <- test_aws_bedrock_provider()
-  expect_false(stream_output_started(
-    provider,
-    list(event_type = "messageStart"),
-    list()
-  ))
-  expect_true(stream_output_started(
-    provider,
-    list(event_type = "contentBlockStart"),
-    list()
-  ))
-  expect_true(stream_output_started(
-    provider,
-    list(event_type = "contentBlockDelta"),
-    list(ContentText("hi"))
-  ))
-})

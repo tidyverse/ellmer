@@ -304,7 +304,7 @@ test_that("tracing works as expected for asynchronous streams", {
   )))
 })
 
-test_that("time to first token is recorded when output starts", {
+test_that("time to first chunk is recorded on the first streamed chunk", {
   skip_if_not_installed("otelsdk")
 
   make_response <- function() {

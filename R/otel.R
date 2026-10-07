@@ -433,7 +433,7 @@ otel_chat_input <- function(private, user_turn) {
   )
 }
 
-# Records the time to first token (in seconds) as a chat span attribute and
+# Records the time to first chunk (in seconds) as a chat span attribute and
 # as the `gen_ai.client.operation.time_to_first_chunk` histogram.
 record_chat_otel_ttft <- function(span, provider, model, start) {
   ttft <- elapsed_secs(start)
