@@ -295,7 +295,8 @@ method(stream_output_started, ProviderOpenAICompatible) <- function(
   contents
 ) {
   # Tool call deltas are accumulated rather than streamed as content.
-  delta <- chunk$choices[[1]]$delta
+  # Usage-only and content-filter chunks have no choices.
+  delta <- if (length(chunk$choices)) chunk$choices[[1]]$delta
   length(delta$tool_calls) > 0 ||
     stream_output_started(super(provider, Provider), chunk, contents)
 }
