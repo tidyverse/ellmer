@@ -459,6 +459,13 @@ test_that("request errors are recorded on spans and metrics", {
     expect_equal(span$status, "error")
     expect_equal(span$attributes[["error.type"]], "simpleError")
   }
+  # The exception event is recorded once, on the chat span.
+  expect_length(recorded$traces[["chat "]]$events, 1L)
+  expect_length(recorded$traces[["invoke_agent"]]$events, 0L)
+  expect_equal(
+    recorded$traces[["chat "]]$attributes[["gen_ai.response.finish_reasons"]],
+    "error"
+  )
 
   points <- otel_metric_points(recorded$metrics)
   for (name in c(
@@ -467,6 +474,60 @@ test_that("request errors are recorded on spans and metrics", {
   )) {
     expect_equal(points[[name]][[1L]]$attributes[["error.type"]], "simpleError")
   }
+  # The failed request still counts as an inference call, and the count metrics
+  # don't carry error.type.
+  calls <- points[["gen_ai.invoke_agent.inference_calls"]][[1L]]
+  expect_equal(calls$sum, 1)
+  expect_null(calls$attributes[["error.type"]])
+})
+
+test_that("duration is recorded once when parsing fails after the response", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(
+    chat_perform = function(...) list(),
+    resp_body_json = function(...) list(),
+    resp_timing = function(...) list(total = 1),
+    value_turn = function(...) stop("bad response")
+  )
+
+  recorded <- with_otel_record({
+    chat <- Chat$new(test_provider(), model = test_model())
+    expect_snapshot(chat$chat("hi"), error = TRUE)
+  })
+
+  points <- otel_metric_points(recorded$metrics)
+  expect_length(points[["gen_ai.client.inference.duration"]], 1L)
+  expect_equal(recorded$traces[["chat "]]$status, "error")
+})
+
+test_that("cancelled streams record an error finish reason", {
+  skip_if_not_installed("otelsdk")
+
+  controller <- stream_controller()
+  make_response <- function() {
+    coro::generator(function() {
+      yield(list(type = "partial"))
+    })()
+  }
+  local_mocked_bindings(
+    chat_perform = function(...) make_response(),
+    stream_merge_chunks = function(provider, result, chunk) chunk,
+    stream_content = function(provider, event, completion) {
+      controller$cancel()
+      list(ContentText("partial"))
+    }
+  )
+
+  recorded <- with_otel_record({
+    chat <- Chat$new(test_provider(), model = test_model())
+    coro::collect(chat$stream("hi", controller = controller))
+  })
+
+  expect_equal(
+    recorded$traces[["chat "]]$attributes[["gen_ai.response.finish_reasons"]],
+    "error"
+  )
 })
 
 test_that("request params are recorded as gen_ai.request.* attributes", {

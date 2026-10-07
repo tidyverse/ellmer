@@ -798,6 +798,7 @@ Chat <- R6::R6Class(
               private$.turns,
               list(user_turn)
             ))
+            tally_agent_otel_request(agent_tally)
             assistant_chunks <- private$submit_turns(
               user_turn,
               stream = stream,
@@ -909,6 +910,7 @@ Chat <- R6::R6Class(
               private$.turns,
               list(user_turn)
             )))
+            tally_agent_otel_request(agent_tally)
             assistant_chunks <- private$submit_turns_async(
               user_turn,
               stream = stream,
@@ -1102,6 +1104,7 @@ Chat <- R6::R6Class(
               result,
               request_start
             )
+            request_start <- NULL # duration recorded; skip in error handler
             turn <- acc$complete_turn(result, type = type)
             if (controller$cancelled) {
               turn <- self$last_turn()
@@ -1117,6 +1120,7 @@ Chat <- R6::R6Class(
               result,
               request_start
             )
+            request_start <- NULL # duration recorded; skip in error handler
             turn <- acc$add_turn(user_turn, result, duration, type = type)
             record_chat_otel_span_output(chat_span, turn)
 
@@ -1301,6 +1305,7 @@ Chat <- R6::R6Class(
               result,
               request_start
             )
+            request_start <- NULL # duration recorded; skip in error handler
             turn <- acc$complete_turn(result, type = type)
             if (controller$cancelled) {
               turn <- self$last_turn()
@@ -1317,6 +1322,7 @@ Chat <- R6::R6Class(
               result,
               request_start
             )
+            request_start <- NULL # duration recorded; skip in error handler
             turn <- acc$add_turn(user_turn, result, duration, type = type)
             record_chat_otel_span_output(chat_span, turn)
 
