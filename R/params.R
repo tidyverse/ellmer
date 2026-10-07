@@ -71,7 +71,11 @@ standardise_params <- function(params, provider_params) {
 
   unknown <- setdiff(names(standard), provider_params)
   if (length(unknown) > 0) {
-    cli::cli_warn("Ignoring unsupported parameters: {.str {unknown}}")
+    cli::cli_warn(
+      "Ignoring unsupported parameters: {.str {unknown}}",
+      class = "ellmer_unsupported_params",
+      unknown = unknown
+    )
     standard <- standard[names(standard) %in% provider_params]
   }
 
