@@ -164,9 +164,7 @@ method(as_json, list(ProviderGoogleInteractions, Turn)) <- function(
   gemini_steps(as_json(provider, x@contents, ...), type)
 }
 
-# `json` is the serialized contents of a turn: a mix of content blocks
-# (text, image, ...) and steps (thought, function_call, ...). Consecutive
-# content blocks are wrapped in a single step of `type`, e.g.
+# Consecutive content blocks are wrapped in a single step of `type`, e.g.
 #
 #   thought, text, text, function_call, text
 #
