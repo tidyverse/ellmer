@@ -304,7 +304,7 @@ test_that("tracing works as expected for asynchronous streams", {
   )))
 })
 
-test_that("time to first token is recorded at the first non-empty text token", {
+test_that("time to first chunk is recorded on the first streamed chunk", {
   skip_if_not_installed("otelsdk")
 
   make_response <- function() {
@@ -328,15 +328,132 @@ test_that("time to first token is recorded at the first non-empty text token", {
     }
   )
 
-  spans <- with_otel_record({
-    chat <- Chat$new(test_provider(), model = test_model())
+  recorded <- with_otel_record({
+    chat <- Chat$new(test_provider("Test"), model = test_model("test-model"))
     coro::collect(chat$stream("hi"))
-  })[["traces"]]
+  })
 
-  chat_spans <- Filter(function(x) startsWith(x$name, "chat"), spans)
+  chat_spans <- Filter(function(x) startsWith(x$name, "chat"), recorded$traces)
   ttft <- chat_spans[[1L]]$attributes[["gen_ai.response.time_to_first_chunk"]]
   expect_type(ttft, "double")
   expect_gt(ttft, 0)
+
+  points <- otel_metric_points(recorded$metrics)
+  expect_setequal(
+    names(points),
+    c(
+      "gen_ai.client.inference.duration",
+      "gen_ai.client.inference.time_to_first_chunk",
+      "gen_ai.invoke_agent.duration",
+      "gen_ai.invoke_agent.inference_calls",
+      "gen_ai.invoke_agent.tool_calls"
+    )
+  )
+  ttft_point <- points[["gen_ai.client.inference.time_to_first_chunk"]][[1L]]
+  expect_equal(ttft_point$count, 1L)
+  expect_equal(ttft_point$sum, ttft)
+  expect_equal(
+    ttft_point$attributes,
+    list(
+      "gen_ai.operation.name" = "chat",
+      "gen_ai.provider.name" = "test",
+      "gen_ai.request.model" = "test-model"
+    )
+  )
+})
+
+test_that("token usage and operation duration are recorded as metrics", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(
+    chat_perform = function(...) list(),
+    resp_body_json = function(...) list(),
+    resp_timing = function(...) list(total = 1),
+    value_tokens = function(provider, result) {
+      list(input = 3, cached_input = 1, output = 5)
+    },
+    value_turn = function(provider, model, result, has_type = FALSE) {
+      AssistantTurn(list(ContentText("hi")), tokens = c(3, 5, 1), cost = 0)
+    }
+  )
+
+  recorded <- with_otel_record({
+    chat <- Chat$new(test_provider(), model = test_model())
+    chat$chat("hi")
+  })
+
+  points <- otel_metric_points(recorded$metrics)
+  expect_setequal(
+    names(points),
+    c(
+      "gen_ai.client.inference.duration",
+      "gen_ai.client.inference.operation.input_tokens",
+      "gen_ai.client.inference.operation.output_tokens",
+      "gen_ai.invoke_agent.duration",
+      "gen_ai.invoke_agent.inference_calls",
+      "gen_ai.invoke_agent.tool_calls"
+    )
+  )
+  input <- points[["gen_ai.client.inference.operation.input_tokens"]][[1L]]
+  output <- points[["gen_ai.client.inference.operation.output_tokens"]][[1L]]
+  expect_equal(input$sum, 4)
+  expect_equal(output$sum, 5)
+  expect_null(input$attributes[["gen_ai.token.type"]])
+  expect_equal(points[["gen_ai.client.inference.duration"]][[1L]]$count, 1L)
+  expect_equal(points[["gen_ai.invoke_agent.inference_calls"]][[1L]]$sum, 1)
+  expect_equal(points[["gen_ai.invoke_agent.tool_calls"]][[1L]]$sum, 0)
+  expect_equal(
+    points[["gen_ai.invoke_agent.duration"]][[1L]]$attributes[[
+      "gen_ai.operation.name"
+    ]],
+    "invoke_agent"
+  )
+
+  # Token usage and the agent metrics are also set on the invoke_agent span.
+  agent_span <- recorded$traces[["invoke_agent"]]
+  expect_equal(agent_span$attributes[["gen_ai.usage.input_tokens"]], 4L)
+  expect_equal(agent_span$attributes[["gen_ai.usage.output_tokens"]], 5L)
+  expect_equal(
+    agent_span$attributes[["gen_ai.invoke_agent.inference_calls"]],
+    1L
+  )
+  expect_equal(agent_span$attributes[["gen_ai.invoke_agent.tool_calls"]], 0L)
+  expect_gt(agent_span$attributes[["gen_ai.invoke_agent.duration"]], 0)
+})
+
+test_that("gen_ai.provider.name uses semconv identifiers for known providers", {
+  expect_equal(otel_provider_name(test_provider("AWS/Bedrock")), "aws.bedrock")
+  expect_equal(otel_provider_name(test_provider("Google/Gemini")), "gcp.gemini")
+  expect_equal(
+    otel_provider_name(test_provider("Azure/OpenAI")),
+    "azure.ai.openai"
+  )
+  expect_equal(otel_provider_name(test_provider("LM Studio")), "lm studio")
+})
+
+test_that("request params are recorded as gen_ai.request.* attributes", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(
+    chat_perform = function(...) list(),
+    resp_body_json = function(...) list(),
+    resp_timing = function(...) list(total = 1),
+    value_turn = function(provider, model, result, has_type = FALSE) {
+      AssistantTurn(list(ContentText("hi")), tokens = c(0, 0, 0), cost = 0)
+    }
+  )
+
+  spans <- with_otel_record({
+    model <- test_model(params = params(temperature = 0.5, max_tokens = 10))
+    chat <- Chat$new(test_provider(), model = model)
+    chat$chat("hi")
+  })[["traces"]]
+
+  for (span in spans[c("invoke_agent", "chat ")]) {
+    expect_equal(span$attributes[["gen_ai.request.temperature"]], 0.5)
+    expect_equal(span$attributes[["gen_ai.request.max_tokens"]], 10)
+    expect_null(span$attributes[["gen_ai.request.top_p"]])
+  }
 })
 
 test_that("captures content when OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT is set", {
@@ -464,4 +581,33 @@ test_that("conversation id attribute is absent when unset", {
   expect_length(chat_spans, 1L)
   # Per the GenAI semantic conventions, no fallback identifier is invented
   expect_null(chat_spans[[1]]$attributes[["gen_ai.conversation.id"]])
+})
+
+test_that("tool execution duration is recorded as a metric", {
+  skip_if_not_installed("otelsdk")
+
+  request <- function(tool_f) {
+    ContentToolRequest(id = "x", name = "t", arguments = list(), tool = tool_f)
+  }
+  ok <- tool(function() 1, name = "t", description = "A tool")
+  bad <- tool(function() stop("boom"), name = "t", description = "A tool")
+
+  recorded <- with_otel_record({
+    invoke_tool(request(ok))
+    sync(invoke_tool_async(request(bad)))
+  })
+
+  points <- otel_metric_points(recorded$metrics)
+  expect_equal(names(points), "gen_ai.execute_tool.duration")
+  points <- points[["gen_ai.execute_tool.duration"]]
+  expect_length(points, 2L)
+  expect_all_equal(map_int(points, \(x) x$count), 1L)
+  expect_equal(
+    map(points, \(x) x$attributes[["gen_ai.tool.name"]]),
+    list("t", "t")
+  )
+  expect_equal(
+    map(points, \(x) x$attributes[["error.type"]]),
+    list(NULL, "simpleError")
+  )
 })
