@@ -394,45 +394,60 @@ gemini_step_contents <- function(steps, has_type = FALSE) {
   # the sources come from the citations in the answer
   sources <- gemini_web_sources(steps)
 
-  contents <- list_c(lapply(steps, function(step) {
-    switch(
-      step$type,
-      thought = list(gemini_thinking(step)),
-      model_output = gemini_output_contents(step, has_type),
-      function_call = list(gemini_tool_request(step)),
-      google_search_call = gemini_replayed(
-        step$arguments$queries,
-        step,
-        \(query, extra) ContentToolRequestSearch(query = query, extra = extra)
-      ),
-      google_search_result = list(
-        ContentToolResponseSearch(sources = sources, extra = step)
-      ),
-      url_context_call = gemini_replayed(
-        step$arguments$urls,
-        step,
-        \(url, extra) ContentToolRequestFetch(url = url, extra = extra)
-      ),
-      url_context_result = gemini_replayed(
-        step$result,
-        step,
-        function(result, extra) {
-          ContentToolResponseFetch(
-            url = result$url,
-            status = if (identical(result$status, "success")) {
-              "success"
-            } else {
-              "error"
-            },
-            extra = extra
-          )
-        }
-      ),
-      cli::cli_abort("Unknown step type {.str {step$type}}.", .internal = TRUE)
-    )
-  }))
+  contents <- list_c(lapply(steps, gemini_step_content, sources, has_type))
   # list_c() of nothing is NULL
   contents %||% list()
+}
+
+# Each step becomes a list of contents, since a single built-in tool step can
+# cover several queries or URLs
+gemini_step_content <- function(step, sources, has_type = FALSE) {
+  type <- step$type
+  if (type == "thought") {
+    return(list(gemini_thinking(step)))
+  }
+  if (type == "model_output") {
+    return(gemini_output_contents(step, has_type))
+  }
+  if (type == "function_call") {
+    return(list(gemini_tool_request(step)))
+  }
+  if (type == "google_search_call") {
+    return(gemini_replayed(
+      step$arguments$queries,
+      step,
+      \(query, extra) ContentToolRequestSearch(query = query, extra = extra)
+    ))
+  }
+  if (type == "google_search_result") {
+    return(list(ContentToolResponseSearch(sources = sources, extra = step)))
+  }
+  if (type == "url_context_call") {
+    return(gemini_replayed(
+      step$arguments$urls,
+      step,
+      \(url, extra) ContentToolRequestFetch(url = url, extra = extra)
+    ))
+  }
+  if (type == "url_context_result") {
+    return(gemini_replayed(
+      step$result,
+      step,
+      function(result, extra) {
+        status <- if (identical(result$status, "success")) {
+          "success"
+        } else {
+          "error"
+        }
+        ContentToolResponseFetch(
+          url = result$url,
+          status = status,
+          extra = extra
+        )
+      }
+    ))
+  }
+  cli::cli_abort("Unknown step type {.str {type}}.", .internal = TRUE)
 }
 
 gemini_thinking <- function(step) {
@@ -491,10 +506,9 @@ gemini_url_citations <- function(annotations) {
 
 gemini_web_sources <- function(steps) {
   outputs <- keep(steps, function(step) step$type == "model_output")
-  annotations <- list_c(lapply(outputs, function(step) {
-    list_c(lapply(step$content, function(content) {
-      gemini_url_citations(content$annotations)
-    }))
+  contents <- list_c(lapply(outputs, "[[", "content"))
+  annotations <- list_c(lapply(contents, function(content) {
+    gemini_url_citations(content$annotations)
   }))
   annotations <- annotations[!duplicated(map_chr(annotations, "[[", "url"))]
   lapply(annotations, function(annotation) {
@@ -569,29 +583,31 @@ method(stream_merge_chunks, ProviderGoogleInteractions) <- function(
   result,
   chunk
 ) {
-  switch(
-    chunk$event_type,
-    interaction.created = {
-      result <- chunk$interaction
-      result$steps <- list()
-      result
-    },
-    step.start = {
-      result$steps[[chunk$index + 1]] <- chunk$step
-      result
-    },
-    step.delta = {
-      i <- chunk$index + 1
-      result$steps[[i]] <- gemini_merge_delta(result$steps[[i]], chunk$delta)
-      result
-    },
-    interaction.completed = modify_list(result, chunk$interaction),
-    error = cli::cli_abort(c(
+  type <- chunk$event_type
+  if (type == "interaction.created") {
+    result <- chunk$interaction
+    result$steps <- list()
+    return(result)
+  }
+  if (type == "step.start") {
+    result$steps[[chunk$index + 1]] <- chunk$step
+    return(result)
+  }
+  if (type == "step.delta") {
+    i <- chunk$index + 1
+    result$steps[[i]] <- gemini_merge_delta(result$steps[[i]], chunk$delta)
+    return(result)
+  }
+  if (type == "interaction.completed") {
+    return(modify_list(result, chunk$interaction))
+  }
+  if (type == "error") {
+    cli::cli_abort(c(
       "Request failed ({chunk$error$code})",
       "{chunk$error$message}"
-    )),
-    result
-  )
+    ))
+  }
+  result
 }
 
 gemini_merge_delta <- function(step, delta) {
@@ -600,49 +616,50 @@ gemini_merge_delta <- function(step, delta) {
     return(step)
   }
 
-  switch(
-    delta$type,
-    text = {
-      content <- step$content
-      n <- length(content)
-      if (n > 0 && identical(content[[n]]$type, "text")) {
-        content[[n]]$text <- paste0(content[[n]]$text, delta$text)
-      } else {
-        content[[n + 1]] <- delta
-      }
-      step$content <- content
-      step
-    },
-    text_annotation_delta = {
-      n <- length(step$content)
-      step$content[[n]]$annotations <- c(
-        step$content[[n]]$annotations,
-        delta$annotations
-      )
-      step
-    },
-    thought_signature = {
-      step$signature <- delta$signature
-      step
-    },
-    thought_summary = {
-      step$summary <- c(step$summary, list(delta$content))
-      step
-    },
-    arguments_delta = {
-      # Arrives as fragments of a JSON string; parsed in value_turn()
-      previous <- if (is.character(step$arguments)) step$arguments else ""
-      step$arguments <- paste0(previous, delta$arguments)
-      step
-    },
-    # Built-in tool deltas carry the remaining fields of the step. Merge
-    # shallowly, since modifyList() would drop unnamed list elements
-    {
-      fields <- delta[names(delta) != "type"]
-      step[names(fields)] <- fields
-      step
+  type <- delta$type
+  if (type == "text") {
+    content <- step$content
+    n <- length(content)
+    if (n > 0 && identical(content[[n]]$type, "text")) {
+      content[[n]]$text <- paste0(content[[n]]$text, delta$text)
+    } else {
+      content[[n + 1]] <- delta
     }
-  )
+    step$content <- content
+    return(step)
+  }
+  if (type == "text_annotation_delta") {
+    n <- length(step$content)
+    step$content[[n]]$annotations <- c(
+      step$content[[n]]$annotations,
+      delta$annotations
+    )
+    return(step)
+  }
+  if (type == "thought_signature") {
+    step$signature <- delta$signature
+    return(step)
+  }
+  if (type == "thought_summary") {
+    step$summary <- c(step$summary, list(delta$content))
+    return(step)
+  }
+  if (type == "arguments_delta") {
+    # Arrives as fragments of a JSON string; parsed in value_turn()
+    previous <- if (is.character(step$arguments)) {
+      step$arguments
+    } else {
+      ""
+    }
+    step$arguments <- paste0(previous, delta$arguments)
+    return(step)
+  }
+
+  # Built-in tool deltas carry the remaining fields of the step. Merge
+  # shallowly, since modifyList() would drop unnamed list elements
+  fields <- delta[names(delta) != "type"]
+  step[names(fields)] <- fields
+  step
 }
 
 method(stream_content, ProviderGoogleInteractions) <- function(
