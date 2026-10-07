@@ -342,14 +342,14 @@ test_that("time to first token is recorded when output starts", {
   expect_setequal(
     names(points),
     c(
-      "gen_ai.client.operation.duration",
-      "gen_ai.client.operation.time_to_first_chunk",
+      "gen_ai.client.inference.duration",
+      "gen_ai.client.inference.time_to_first_chunk",
       "gen_ai.invoke_agent.duration",
       "gen_ai.invoke_agent.inference_calls",
       "gen_ai.invoke_agent.tool_calls"
     )
   )
-  ttft_point <- points[["gen_ai.client.operation.time_to_first_chunk"]][[1L]]
+  ttft_point <- points[["gen_ai.client.inference.time_to_first_chunk"]][[1L]]
   expect_equal(ttft_point$count, 1L)
   expect_equal(ttft_point$sum, ttft)
   expect_equal(
@@ -386,20 +386,20 @@ test_that("token usage and operation duration are recorded as metrics", {
   expect_setequal(
     names(points),
     c(
-      "gen_ai.client.operation.duration",
-      "gen_ai.client.token.usage",
+      "gen_ai.client.inference.duration",
+      "gen_ai.client.inference.operation.input_tokens",
+      "gen_ai.client.inference.operation.output_tokens",
       "gen_ai.invoke_agent.duration",
       "gen_ai.invoke_agent.inference_calls",
       "gen_ai.invoke_agent.tool_calls"
     )
   )
-  usage <- points[["gen_ai.client.token.usage"]]
-  usage <- set_names(
-    map_dbl(usage, \(x) x$sum),
-    map_chr(usage, \(x) x$attributes[["gen_ai.token.type"]])
-  )
-  expect_equal(usage, c(input = 4, output = 5))
-  expect_equal(points[["gen_ai.client.operation.duration"]][[1L]]$count, 1L)
+  input <- points[["gen_ai.client.inference.operation.input_tokens"]][[1L]]
+  output <- points[["gen_ai.client.inference.operation.output_tokens"]][[1L]]
+  expect_equal(input$sum, 4)
+  expect_equal(output$sum, 5)
+  expect_null(input$attributes[["gen_ai.token.type"]])
+  expect_equal(points[["gen_ai.client.inference.duration"]][[1L]]$count, 1L)
   expect_equal(points[["gen_ai.invoke_agent.inference_calls"]][[1L]]$sum, 1)
   expect_equal(points[["gen_ai.invoke_agent.tool_calls"]][[1L]]$sum, 0)
   expect_equal(
@@ -419,6 +419,16 @@ test_that("token usage and operation duration are recorded as metrics", {
   )
   expect_equal(agent_span$attributes[["gen_ai.invoke_agent.tool_calls"]], 0L)
   expect_gt(agent_span$attributes[["gen_ai.invoke_agent.duration"]], 0)
+})
+
+test_that("gen_ai.provider.name uses semconv identifiers for known providers", {
+  expect_equal(otel_provider_name(test_provider("AWS/Bedrock")), "aws.bedrock")
+  expect_equal(otel_provider_name(test_provider("Google/Gemini")), "gcp.gemini")
+  expect_equal(
+    otel_provider_name(test_provider("Azure/OpenAI")),
+    "azure.ai.openai"
+  )
+  expect_equal(otel_provider_name(test_provider("LM Studio")), "lm studio")
 })
 
 test_that("request params are recorded as gen_ai.request.* attributes", {

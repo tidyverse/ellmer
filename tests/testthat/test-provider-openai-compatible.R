@@ -359,7 +359,9 @@ test_that("stream_output_started() detects tool call deltas", {
   tool_call <- list(
     choices = list(list(delta = list(tool_calls = list(list()))))
   )
+  usage_only <- list(choices = list(), usage = list(total_tokens = 1))
   expect_false(stream_output_started(provider, role_only, list()))
+  expect_false(stream_output_started(provider, usage_only, list()))
   expect_true(stream_output_started(provider, tool_call, list()))
   expect_true(stream_output_started(
     provider,

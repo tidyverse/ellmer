@@ -10,15 +10,19 @@ otel_record_histogram <- NULL
 # Histograms from the GenAI semantic conventions for metrics.
 # See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/
 otel_histogram_specs <- list(
-  "gen_ai.client.operation.duration" = list(
-    description = "GenAI operation duration",
+  "gen_ai.client.inference.duration" = list(
+    description = "GenAI client inference operation duration",
     unit = "s"
   ),
-  "gen_ai.client.token.usage" = list(
-    description = "Number of input and output tokens used",
+  "gen_ai.client.inference.operation.input_tokens" = list(
+    description = "Number of input tokens used per inference operation",
     unit = "{token}"
   ),
-  "gen_ai.client.operation.time_to_first_chunk" = list(
+  "gen_ai.client.inference.operation.output_tokens" = list(
+    description = "Number of output tokens used per inference operation",
+    unit = "{token}"
+  ),
+  "gen_ai.client.inference.time_to_first_chunk" = list(
     description = "Time to receive the first chunk of a streamed response",
     unit = "s"
   ),
@@ -39,6 +43,31 @@ otel_histogram_specs <- list(
     unit = "{tool_call}"
   )
 )
+
+# `gen_ai.provider.name` well-known values, keyed by the provider's display
+# name. Other providers fall back to the lowercased display name.
+# See: https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/
+otel_provider_names <- c(
+  "Anthropic" = "anthropic",
+  "AWS/Bedrock" = "aws.bedrock",
+  "Azure/OpenAI" = "azure.ai.openai",
+  "DeepSeek" = "deepseek",
+  "Google/Gemini" = "gcp.gemini",
+  "Google/Vertex" = "gcp.vertex_ai",
+  "Groq" = "groq",
+  "Mistral" = "mistral_ai",
+  "OpenAI" = "openai",
+  "Perplexity" = "perplexity"
+)
+
+otel_provider_name <- function(provider) {
+  name <- provider@name
+  if (name %in% names(otel_provider_names)) {
+    otel_provider_names[[name]]
+  } else {
+    tolower(name)
+  }
+}
 
 # Map `params()` onto the `gen_ai.request.*` span attributes.
 otel_request_attributes <- function(model) {
@@ -117,7 +146,7 @@ local({
         attributes = c(
           compact(list(
             "gen_ai.operation.name" = "chat",
-            "gen_ai.provider.name" = tolower(provider@name),
+            "gen_ai.provider.name" = otel_provider_name(provider),
             "gen_ai.request.model" = model@name,
             "gen_ai.conversation.id" = conversation_id
           )),
@@ -222,7 +251,7 @@ local({
         attributes = c(
           compact(list(
             "gen_ai.operation.name" = "invoke_agent",
-            "gen_ai.provider.name" = tolower(provider@name),
+            "gen_ai.provider.name" = otel_provider_name(provider),
             "gen_ai.request.model" = model@name,
             "gen_ai.conversation.id" = conversation_id
           )),
@@ -285,7 +314,7 @@ otel_metric_points <- function(metrics) {
 otel_metric_attributes <- function(provider, model, result = NULL) {
   list(
     "gen_ai.operation.name" = "chat",
-    "gen_ai.provider.name" = tolower(provider@name),
+    "gen_ai.provider.name" = otel_provider_name(provider),
     "gen_ai.request.model" = model@name,
     "gen_ai.response.model" = result$model
   )
@@ -298,7 +327,7 @@ elapsed_secs <- function(start) {
 record_chat_otel_span_status <- function(span, provider, model, result, start) {
   attributes <- otel_metric_attributes(provider, model, result)
   otel_record_histogram(
-    "gen_ai.client.operation.duration",
+    "gen_ai.client.inference.duration",
     elapsed_secs(start),
     attributes
   )
@@ -308,14 +337,14 @@ record_chat_otel_span_status <- function(span, provider, model, result, start) {
   output <- as.integer(tokens$output)
   if (input > 0L || output > 0L) {
     otel_record_histogram(
-      "gen_ai.client.token.usage",
+      "gen_ai.client.inference.operation.input_tokens",
       input,
-      c(attributes, "gen_ai.token.type" = "input")
+      attributes
     )
     otel_record_histogram(
-      "gen_ai.client.token.usage",
+      "gen_ai.client.inference.operation.output_tokens",
       output,
-      c(attributes, "gen_ai.token.type" = "output")
+      attributes
     )
   }
 
@@ -409,7 +438,7 @@ otel_chat_input <- function(private, user_turn) {
 record_chat_otel_ttft <- function(span, provider, model, start) {
   ttft <- elapsed_secs(start)
   otel_record_histogram(
-    "gen_ai.client.operation.time_to_first_chunk",
+    "gen_ai.client.inference.time_to_first_chunk",
     ttft,
     otel_metric_attributes(provider, model)
   )
