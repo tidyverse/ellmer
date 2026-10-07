@@ -216,6 +216,8 @@ invoke_tool <- function(
   tool_span <- local_tool_otel_span(request, parent = otel_span)
 
   start <- Sys.time()
+  # Covers unwinds that no handler sees (e.g. a keyboard interrupt).
+  defer(record_tool_otel_interrupted(tool_span, request, start))
   result <- tryCatch(
     {
       result <- do.call(request@tool, args)
@@ -226,7 +228,8 @@ invoke_tool <- function(
       new_tool_result(request, error = e)
     }
   )
-  record_tool_otel_duration(request, start, result)
+  record_tool_otel_result(request, start, result)
+  start <- NULL
   result
 }
 
@@ -252,6 +255,8 @@ on_load(
     context <- tool_context(request)
 
     start <- Sys.time()
+    # Covers unwinds that no handler sees (e.g. a keyboard interrupt).
+    defer(record_tool_otel_interrupted(tool_span, request, start))
     result <- tryCatch(
       {
         value <- await(with_tool_context(context, do.call(request@tool, args)))
@@ -262,7 +267,8 @@ on_load(
         new_tool_result(request, error = e)
       }
     )
-    record_tool_otel_duration(request, start, result)
+    record_tool_otel_result(request, start, result)
+    start <- NULL
     result
   })
 )
