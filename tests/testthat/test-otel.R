@@ -931,3 +931,34 @@ test_that("tool execution duration is recorded as a metric", {
     list(NULL, "simpleError")
   )
 })
+
+test_that("interrupted tool calls are recorded on the span and metric", {
+  skip_if_not_installed("otelsdk")
+
+  tool_f <- tool(function() rlang::interrupt(), name = "t", description = "A")
+  request <- ContentToolRequest(
+    id = "x",
+    name = "t",
+    arguments = list(),
+    tool = tool_f
+  )
+
+  recorded <- with_otel_record({
+    tryCatch(invoke_tool(request), interrupt = function(e) NULL)
+    tryCatch(sync(invoke_tool_async(request)), interrupt = function(e) NULL)
+  })
+
+  spans <- Filter(\(x) x$name == "execute_tool t", recorded$traces)
+  expect_length(spans, 2L)
+  expect_all_equal(map_chr(spans, \(x) x$status), "error")
+  expect_all_equal(
+    map_chr(spans, \(x) x$attributes[["error.type"]]),
+    "interrupted"
+  )
+  points <- otel_metric_points(recorded$metrics)[[
+    "gen_ai.execute_tool.duration"
+  ]]
+  expect_length(points, 1L)
+  expect_equal(points[[1L]]$count, 2L)
+  expect_equal(points[[1L]]$attributes[["error.type"]], "interrupted")
+})
