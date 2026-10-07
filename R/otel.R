@@ -212,6 +212,13 @@ local({
 
     if (otel_capture_content) {
       tools <- Filter(\(tool) S7_inherits(tool, ToolDef), unname(tools))
+      # Providers that implement structured output via tool calling add a
+      # private tool to the request; record it so the span matches.
+      if (
+        !is.null(type) && uses_tool_structured_output(provider, model, type)
+      ) {
+        tools <- c(tools, list(structured_output_tool(provider, type)))
+      }
       if (length(tools)) {
         defs <- lapply(tools, as_otel_tool_definition, provider = provider)
         chat_span$set_attribute(

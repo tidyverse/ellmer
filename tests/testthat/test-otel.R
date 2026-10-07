@@ -632,6 +632,38 @@ test_that("chat span records server, output type, and tool definitions", {
   expect_equal(defs[[1]]$parameters$properties$x$type, "string")
 })
 
+test_that("tool-based structured output records the private tool", {
+  skip_if_not_installed("otelsdk")
+  withr::local_envvar(
+    OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = "true"
+  )
+  type <- type_object(x = type_number())
+  defs_for <- function(provider, model) {
+    spans <- with_otel_record({
+      local({
+        local_chat_otel_span(provider, model, type = type)
+      })
+    })[["traces"]]
+    defs <- spans[[1L]]$attributes[["gen_ai.tool.definitions"]]
+    if (is.null(defs)) {
+      return(NULL)
+    }
+    jsonlite::fromJSON(defs, simplifyVector = FALSE)
+  }
+
+  # Bedrock always uses a tool.
+  defs <- defs_for(test_aws_bedrock_provider(), test_model("m"))
+  expect_length(defs, 1L)
+  expect_equal(defs[[1]]$name, "structured_tool_call__")
+  expect_equal(defs[[1]]$parameters$properties$data$properties$x$type, "number")
+
+  # Older Claude models fall back to a tool; newer ones use native output.
+  claude <- chat_anthropic(credentials = \() "key")$get_provider()
+  defs <- defs_for(claude, test_model("claude-3-5-sonnet-latest"))
+  expect_equal(defs[[1]]$name, "_structured_tool_call")
+  expect_null(defs_for(claude, test_model("claude-sonnet-4-5")))
+})
+
 test_that("tool definitions omit an empty argument schema", {
   provider <- chat_google_gemini(credentials = \() "key")$get_provider()
   def <- as_otel_tool_definition(tool(function() 1, "No args"), provider)

@@ -22,6 +22,27 @@ extract_data <- function(turn, type, convert = TRUE, needs_wrapper = FALSE) {
   out
 }
 
+# The private tool that providers which implement structured output via tool
+# calling add to the request. `NULL` for providers that don't.
+structured_output_tool <- new_generic(
+  "structured_output_tool",
+  "provider",
+  function(provider, type) {
+    S7_dispatch()
+  }
+)
+method(structured_output_tool, Provider) <- function(provider, type) {
+  NULL
+}
+new_structured_output_tool <- function(name, type) {
+  ToolDef(
+    function(...) {},
+    name = name,
+    description = "Extract structured data",
+    arguments = type_object(data = type)
+  )
+}
+
 # Tool-based structured output can't stream (#977)
 uses_tool_structured_output <- function(provider, model, type) {
   if (S7_inherits(provider, ProviderAWSBedrock)) {
