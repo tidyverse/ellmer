@@ -40,7 +40,7 @@ gemini_error <- function(resp) {
   if (identical(resp_content_type(resp), "application/json")) {
     body <- resp_body_json(resp)
     # Errors from the API gateway (e.g. a bad API key) are wrapped in an array
-    if (!is_named(body)) {
+    if (!is_named(body) && length(body) > 0) {
       body <- body[[1]]
     }
     body$error
