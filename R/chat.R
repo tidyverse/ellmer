@@ -818,6 +818,7 @@ Chat <- R6::R6Class(
 
             # Don't invoke tools if the stream was cancelled
             if (controller$cancelled) {
+              agent_tally$error_type <- "cancelled"
               break
             }
 
@@ -855,10 +856,12 @@ Chat <- R6::R6Class(
           }
         },
         error = function(e) {
-          agent_tally$error <- e
+          agent_tally$error_type <- otel_error_type(e)
           stop(e)
         }
       )
+      agent_tally$completed <- TRUE
+      coro::exhausted()
     }),
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
@@ -930,6 +933,7 @@ Chat <- R6::R6Class(
 
             # Don't invoke tools if the stream was cancelled
             if (controller$cancelled) {
+              agent_tally$error_type <- "cancelled"
               break
             }
 
@@ -985,10 +989,12 @@ Chat <- R6::R6Class(
           }
         },
         error = function(e) {
-          agent_tally$error <- e
+          agent_tally$error_type <- otel_error_type(e)
           stop(e)
         }
       )
+      agent_tally$completed <- TRUE
+      coro::exhausted()
     }),
 
     # If stream = TRUE, yields completion deltas. If stream = FALSE, yields
@@ -1023,6 +1029,13 @@ Chat <- R6::R6Class(
       )
 
       request_start <- Sys.time()
+      # Covers unwinds that no handler sees (e.g. a keyboard interrupt).
+      defer(record_chat_otel_span_interrupted(
+        chat_span,
+        private$provider,
+        private$model,
+        request_start
+      ))
       tryCatch(
         {
           # Parameters the provider doesn't support are dropped from the
@@ -1129,7 +1142,8 @@ Chat <- R6::R6Class(
               private$provider,
               private$model,
               result,
-              request_start
+              request_start,
+              error_type = if (controller$cancelled) "cancelled"
             )
             request_start <- NULL # duration recorded; skip in error handler
             turn <- acc$complete_turn(result, type = type)
@@ -1184,6 +1198,7 @@ Chat <- R6::R6Class(
             e,
             request_start
           )
+          request_start <<- NULL
           stop(e)
         }
       )
@@ -1252,6 +1267,13 @@ Chat <- R6::R6Class(
       )
 
       request_start <- Sys.time()
+      # Covers unwinds that no handler sees (e.g. a keyboard interrupt).
+      defer(record_chat_otel_span_interrupted(
+        chat_span,
+        private$provider,
+        private$model,
+        request_start
+      ))
       tryCatch(
         {
           # Parameters the provider doesn't support are dropped from the
@@ -1358,7 +1380,8 @@ Chat <- R6::R6Class(
               private$provider,
               private$model,
               result,
-              request_start
+              request_start,
+              error_type = if (controller$cancelled) "cancelled"
             )
             request_start <- NULL # duration recorded; skip in error handler
             turn <- acc$complete_turn(result, type = type)
@@ -1414,6 +1437,7 @@ Chat <- R6::R6Class(
             e,
             request_start
           )
+          request_start <<- NULL
           stop(e)
         }
       )
