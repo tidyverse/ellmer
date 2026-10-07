@@ -581,7 +581,8 @@ test_that("chat span records server, output type, and tool definitions", {
         provider,
         test_model(),
         type = type_string(),
-        tools = list(echo = tool_f)
+        # Built-in tools have no argument schema and are omitted.
+        tools = list(echo = tool_f, search = openai_tool_web_search())
       )
     })
   })[["traces"]]
@@ -600,6 +601,17 @@ test_that("chat span records server, output type, and tool definitions", {
   expect_equal(defs[[1]]$name, "echo")
   expect_equal(defs[[1]]$description, "Echo")
   expect_equal(defs[[1]]$parameters$properties$x$type, "string")
+})
+
+test_that("tool definitions omit an empty argument schema", {
+  provider <- chat_google_gemini(credentials = \() "key")$get_provider()
+  def <- as_otel_tool_definition(tool(function() 1, "No args"), provider)
+  expect_named(def, c("type", "name", "description"))
+})
+
+test_that("server.address strips IPv6 brackets", {
+  attrs <- otel_server_attributes(test_provider(base_url = "http://[::1]:8080"))
+  expect_equal(attrs, list("server.address" = "::1", "server.port" = 8080L))
 })
 
 test_that("reasoning tokens are recorded on the chat span", {
