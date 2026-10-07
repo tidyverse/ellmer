@@ -245,12 +245,7 @@ method(chat_body, ProviderAnthropic) <- function(
       )
       tool_choice <- NULL
     } else {
-      tool_def <- ToolDef(
-        function(...) {},
-        name = "_structured_tool_call",
-        description = "Extract structured data",
-        arguments = type_object(data = type)
-      )
+      tool_def <- structured_output_tool(provider, type)
       tools[[tool_def@name]] <- tool_def
       tool_choice <- list(type = "tool", name = tool_def@name)
       output_config <- NULL
@@ -719,12 +714,7 @@ method(count_tokens, ProviderAnthropic) <- function(
       )
       tool_choice <- NULL
     } else {
-      tool_def <- ToolDef(
-        function(...) {},
-        name = "_structured_tool_call",
-        description = "Extract structured data",
-        arguments = type_object(data = type)
-      )
+      tool_def <- structured_output_tool(provider, type)
       tools[[tool_def@name]] <- tool_def
       tool_choice <- list(type = "tool", name = tool_def@name)
       output_config <- NULL
@@ -1140,6 +1130,10 @@ cache_control <- function(provider) {
       ttl = provider@cache
     )
   }
+}
+
+method(structured_output_tool, ProviderAnthropic) <- function(provider, type) {
+  new_structured_output_tool("_structured_tool_call", type)
 }
 
 has_claude_structured_output <- function(model) {

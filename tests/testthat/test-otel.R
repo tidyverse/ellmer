@@ -543,7 +543,13 @@ test_that("request params are recorded as gen_ai.request.* attributes", {
   )
 
   spans <- with_otel_record({
-    model <- test_model(params = params(temperature = 0.5, max_tokens = 10))
+    model <- test_model(
+      params = params(
+        temperature = 0.5,
+        max_tokens = 10,
+        reasoning_effort = "low"
+      )
+    )
     chat <- Chat$new(test_provider(), model = model)
     chat$chat("hi")
   })[["traces"]]
@@ -551,8 +557,161 @@ test_that("request params are recorded as gen_ai.request.* attributes", {
   for (span in spans[c("invoke_agent", "chat ")]) {
     expect_equal(span$attributes[["gen_ai.request.temperature"]], 0.5)
     expect_equal(span$attributes[["gen_ai.request.max_tokens"]], 10)
+    expect_equal(span$attributes[["gen_ai.request.reasoning.level"]], "low")
     expect_null(span$attributes[["gen_ai.request.top_p"]])
   }
+})
+
+test_that("unsupported request params are not recorded on spans", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(
+    req_perform = function(req, ...) list(),
+    resp_body_json = function(...) list(),
+    resp_timing = function(...) list(total = 1),
+    value_turn = function(provider, model, result, has_type = FALSE) {
+      AssistantTurn(list(ContentText("hi")), tokens = c(0, 0, 0), cost = 0)
+    }
+  )
+
+  recorded <- with_otel_record({
+    # OpenAI-compatible providers don't support `reasoning_effort`.
+    chat <- chat_openai_compatible(
+      base_url = "https://example.com",
+      model = "m",
+      credentials = \() "key",
+      params = params(temperature = 0.5, reasoning_effort = "low")
+    )
+    expect_snapshot(. <- chat$chat("hi", echo = "none"))
+  })
+
+  for (span in recorded$traces[c("invoke_agent", "chat m")]) {
+    expect_equal(span$attributes[["gen_ai.request.temperature"]], 0.5)
+    expect_null(span$attributes[["gen_ai.request.reasoning.level"]])
+  }
+})
+
+test_that("chat span records server, output type, and tool definitions", {
+  skip_if_not_installed("otelsdk")
+  withr::local_envvar(
+    OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = "true"
+  )
+
+  tool_f <- tool(
+    function(x) x,
+    name = "echo",
+    description = "Echo",
+    arguments = list(x = type_string("Input"))
+  )
+  spans <- with_otel_record({
+    provider <- test_provider(base_url = "https://example.com/v1")
+    local({
+      local_chat_otel_span(
+        provider,
+        test_model(),
+        type = type_string(),
+        # Built-in tools have no argument schema and are omitted.
+        tools = list(echo = tool_f, search = openai_tool_web_search())
+      )
+    })
+  })[["traces"]]
+
+  attrs <- spans[["chat "]]$attributes
+  expect_equal(attrs[["server.address"]], "example.com")
+  expect_equal(attrs[["server.port"]], 443L)
+  expect_equal(attrs[["gen_ai.output.type"]], "json")
+
+  defs <- jsonlite::fromJSON(
+    attrs[["gen_ai.tool.definitions"]],
+    simplifyVector = FALSE
+  )
+  expect_length(defs, 1L)
+  expect_equal(defs[[1]]$type, "function")
+  expect_equal(defs[[1]]$name, "echo")
+  expect_equal(defs[[1]]$description, "Echo")
+  expect_equal(defs[[1]]$parameters$properties$x$type, "string")
+})
+
+test_that("tool-based structured output records the private tool", {
+  skip_if_not_installed("otelsdk")
+  withr::local_envvar(
+    OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = "true"
+  )
+  type <- type_object(x = type_number())
+  defs_for <- function(provider, model) {
+    spans <- with_otel_record({
+      local({
+        local_chat_otel_span(provider, model, type = type)
+      })
+    })[["traces"]]
+    defs <- spans[[1L]]$attributes[["gen_ai.tool.definitions"]]
+    if (is.null(defs)) {
+      return(NULL)
+    }
+    jsonlite::fromJSON(defs, simplifyVector = FALSE)
+  }
+
+  # Bedrock always uses a tool.
+  defs <- defs_for(test_aws_bedrock_provider(), test_model("m"))
+  expect_length(defs, 1L)
+  expect_equal(defs[[1]]$name, "structured_tool_call__")
+  expect_equal(defs[[1]]$parameters$properties$data$properties$x$type, "number")
+
+  # Older Claude models fall back to a tool; newer ones use native output.
+  claude <- chat_anthropic(credentials = \() "key")$get_provider()
+  defs <- defs_for(claude, test_model("claude-3-5-sonnet-latest"))
+  expect_equal(defs[[1]]$name, "_structured_tool_call")
+  expect_null(defs_for(claude, test_model("claude-sonnet-4-5")))
+})
+
+test_that("tool definitions omit an empty argument schema", {
+  provider <- chat_google_gemini(credentials = \() "key")$get_provider()
+  def <- as_otel_tool_definition(tool(function() 1, "No args"), provider)
+  expect_named(def, c("type", "name", "description"))
+})
+
+test_that("integer request params are recorded as integers", {
+  model <- test_model(params = params(seed = 1, max_tokens = 10, top_k = 5))
+  attrs <- otel_request_attributes(model)
+  expect_identical(attrs[["gen_ai.request.seed"]], 1L)
+  expect_identical(attrs[["gen_ai.request.max_tokens"]], 10L)
+  expect_identical(attrs[["gen_ai.request.top_k"]], 5L)
+})
+
+test_that("metrics carry server.address and server.port", {
+  provider <- test_provider(base_url = "https://example.com/v1")
+  attrs <- otel_metric_attributes(provider, test_model())
+  expect_equal(attrs[["server.address"]], "example.com")
+  expect_equal(attrs[["server.port"]], 443L)
+})
+
+test_that("server.address strips IPv6 brackets", {
+  attrs <- otel_server_attributes(test_provider(base_url = "http://[::1]:8080"))
+  expect_equal(attrs, list("server.address" = "::1", "server.port" = 8080L))
+})
+
+test_that("reasoning tokens are recorded on the chat span", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(
+    chat_perform = function(...) list(),
+    resp_body_json = function(...) list(),
+    resp_timing = function(...) list(total = 1),
+    value_reasoning_tokens = function(provider, json) 7,
+    value_turn = function(provider, model, result, has_type = FALSE) {
+      AssistantTurn(list(ContentText("hi")), tokens = c(0, 0, 0), cost = 0)
+    }
+  )
+
+  spans <- with_otel_record({
+    chat <- Chat$new(test_provider(), model = test_model())
+    chat$chat("hi")
+  })[["traces"]]
+
+  expect_equal(
+    spans[["chat "]]$attributes[["gen_ai.usage.reasoning.output_tokens"]],
+    7L
+  )
 })
 
 test_that("captures content when OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT is set", {

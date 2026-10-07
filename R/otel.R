@@ -78,18 +78,56 @@ otel_provider_name <- function(provider) {
   }
 }
 
-# Map `params()` onto the `gen_ai.request.*` span attributes.
-otel_request_attributes <- function(model) {
+as_otel_int <- function(x) {
+  if (!is.null(x)) as.integer(x)
+}
+
+# Map `params()` onto the `gen_ai.request.*` span attributes, dropping any
+# that the provider reported as unsupported (and so did not send).
+otel_request_attributes <- function(model, unsupported = character()) {
   p <- model@params
+  p[names(p) %in% unsupported] <- NULL
   compact(list(
     "gen_ai.request.temperature" = p$temperature,
     "gen_ai.request.top_p" = p$top_p,
-    "gen_ai.request.top_k" = p$top_k,
+    # semconv types these as `int`; `params()` stores them as doubles.
+    "gen_ai.request.top_k" = as_otel_int(p$top_k),
     "gen_ai.request.frequency_penalty" = p$frequency_penalty,
     "gen_ai.request.presence_penalty" = p$presence_penalty,
-    "gen_ai.request.seed" = p$seed,
-    "gen_ai.request.max_tokens" = p$max_tokens,
-    "gen_ai.request.stop_sequences" = p$stop_sequences
+    "gen_ai.request.seed" = as_otel_int(p$seed),
+    "gen_ai.request.max_tokens" = as_otel_int(p$max_tokens),
+    "gen_ai.request.stop_sequences" = p$stop_sequences,
+    "gen_ai.request.reasoning.level" = p$reasoning_effort
+  ))
+}
+
+# `server.address` and `server.port` from the provider's base URL. The port
+# falls back to the scheme default since semconv requires it when the address
+# is set.
+otel_server_attributes <- function(provider) {
+  url <- tryCatch(httr2::url_parse(provider@base_url), error = function(e) NULL)
+  if (is.null(url) || is.null(url$hostname)) {
+    return(list())
+  }
+  port <- url$port %||% switch(url$scheme %||% "", https = 443, http = 80)
+  compact(list(
+    # IPv6 literals are bracketed in URLs but not in `server.address`.
+    "server.address" = sub("^\\[(.*)\\]$", "\\1", url$hostname),
+    "server.port" = if (!is.null(port)) as.integer(port)
+  ))
+}
+
+# A GenAI semconv tool definition for a ToolDef. Built-in (provider-executed)
+# tools have no argument schema and are omitted by the caller.
+as_otel_tool_definition <- function(tool, provider) {
+  parameters <- as_json(provider, tool@arguments)
+  compact(list(
+    type = "function",
+    name = tool@name,
+    description = tool@description,
+    # Some providers serialize an empty schema as `[]`, which is not a valid
+    # JSON Schema object, so omit it instead.
+    parameters = if (length(parameters)) parameters
   ))
 }
 
@@ -138,6 +176,8 @@ local({
     parent = NULL,
     conversation_id = NULL,
     stream = FALSE,
+    type = NULL,
+    tools = NULL,
     local_envir = parent.frame()
   ) {
     if (!otel_is_tracing) {
@@ -160,9 +200,10 @@ local({
             "gen_ai.request.model" = model@name,
             "gen_ai.conversation.id" = conversation_id,
             # Only set when streaming; unset means non-streaming per semconv.
-            "gen_ai.request.stream" = if (stream) TRUE
+            "gen_ai.request.stream" = if (stream) TRUE,
+            "gen_ai.output.type" = if (!is.null(type)) "json"
           )),
-          otel_request_attributes(model)
+          otel_server_attributes(provider)
         ),
         tracer = otel_tracer
       )
@@ -170,6 +211,21 @@ local({
     defer(otel::end_span(chat_span), envir = local_envir)
 
     if (otel_capture_content) {
+      tools <- Filter(\(tool) S7_inherits(tool, ToolDef), unname(tools))
+      # Providers that implement structured output via tool calling add a
+      # private tool to the request; record it so the span matches.
+      if (
+        !is.null(type) && uses_tool_structured_output(provider, model, type)
+      ) {
+        tools <- c(tools, list(structured_output_tool(provider, type)))
+      }
+      if (length(tools)) {
+        defs <- lapply(tools, as_otel_tool_definition, provider = provider)
+        chat_span$set_attribute(
+          "gen_ai.tool.definitions",
+          jsonlite::toJSON(defs, auto_unbox = TRUE, null = "null")
+        )
+      }
       if (!is.null(system_prompt)) {
         parts <- lapply(system_prompt@contents, as_otel_part)
         chat_span$set_attribute(
@@ -266,8 +322,7 @@ local({
             "gen_ai.provider.name" = otel_provider_name(provider),
             "gen_ai.request.model" = model@name,
             "gen_ai.conversation.id" = conversation_id
-          )),
-          otel_request_attributes(model)
+          ))
         ),
         tracer = otel_tracer
       )
@@ -324,11 +379,14 @@ otel_metric_points <- function(metrics) {
 }
 
 otel_metric_attributes <- function(provider, model, result = NULL) {
-  list(
-    "gen_ai.operation.name" = "chat",
-    "gen_ai.provider.name" = otel_provider_name(provider),
-    "gen_ai.request.model" = model@name,
-    "gen_ai.response.model" = result$model
+  c(
+    list(
+      "gen_ai.operation.name" = "chat",
+      "gen_ai.provider.name" = otel_provider_name(provider),
+      "gen_ai.request.model" = model@name,
+      "gen_ai.response.model" = result$model
+    ),
+    otel_server_attributes(provider)
   )
 }
 
@@ -379,7 +437,26 @@ record_chat_otel_span_status <- function(span, provider, model, result, start) {
       as.integer(tokens$cached_input)
     )
   }
+  reasoning <- value_reasoning_tokens(provider, result)
+  if (!is.null(reasoning) && reasoning > 0) {
+    span$set_attribute(
+      "gen_ai.usage.reasoning.output_tokens",
+      as.integer(reasoning)
+    )
+  }
   span$set_status("ok")
+}
+
+# Sets the `gen_ai.request.*` attributes once the provider has built the
+# request, so parameters it ignored (see `standardise_params()`) are omitted.
+record_otel_span_request_params <- function(span, model, unsupported) {
+  if (is.null(span) || !span_recording(span)) {
+    return()
+  }
+  attributes <- otel_request_attributes(model, unsupported)
+  for (name in names(attributes)) {
+    span$set_attribute(name, attributes[[name]])
+  }
 }
 
 otel_error_type <- function(error) {

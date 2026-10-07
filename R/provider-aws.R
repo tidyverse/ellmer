@@ -473,12 +473,7 @@ method(chat_request, ProviderAWSBedrock) <- function(
   }))
 
   if (!is.null(type)) {
-    tool_def <- ToolDef(
-      function(...) {},
-      name = "structured_tool_call__",
-      description = "Extract structured data",
-      arguments = type_object(data = type)
-    )
+    tool_def <- structured_output_tool(provider, type)
     tools[[tool_def@name]] <- tool_def
     tool_choice <- list(tool = list(name = tool_def@name))
   } else {
@@ -543,6 +538,13 @@ method(stream_content, ProviderAWSBedrock) <- function(
     return(list(ContentText(text)))
   }
   list()
+}
+
+method(structured_output_tool, ProviderAWSBedrock) <- function(
+  provider,
+  type
+) {
+  new_structured_output_tool("structured_tool_call__", type)
 }
 
 method(stream_merge_chunks, ProviderAWSBedrock) <- function(

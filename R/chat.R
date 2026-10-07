@@ -1017,22 +1017,39 @@ Chat <- R6::R6Class(
         system_prompt = otel_input$system_prompt,
         parent = otel_span,
         conversation_id = private$.conversation_id,
-        stream = stream
+        stream = stream,
+        type = type,
+        tools = if (is.null(type)) private$tools
       )
 
       request_start <- Sys.time()
       tryCatch(
         {
-          response <- chat_perform(
-            provider = private$provider,
-            model = private$model,
-            mode = if (stream) "stream" else "value",
-            turns = request_turns,
-            tools = if (is.null(type)) private$tools,
-            type = type,
-            controller = controller,
-            otel_span = chat_span
+          # Parameters the provider doesn't support are dropped from the
+          # request (with a warning); omit them from the span too.
+          unsupported_params <- character()
+          response <- withCallingHandlers(
+            chat_perform(
+              provider = private$provider,
+              model = private$model,
+              mode = if (stream) "stream" else "value",
+              turns = request_turns,
+              tools = if (is.null(type)) private$tools,
+              type = type,
+              controller = controller,
+              otel_span = chat_span
+            ),
+            ellmer_unsupported_params = function(w) {
+              unsupported_params <<- union(unsupported_params, w$unknown)
+            }
           )
+          for (span in list(chat_span, otel_span)) {
+            record_otel_span_request_params(
+              span,
+              private$model,
+              unsupported_params
+            )
+          }
 
           emit <- emitter(echo)
           any_text <- FALSE
@@ -1218,22 +1235,39 @@ Chat <- R6::R6Class(
         system_prompt = otel_input$system_prompt,
         parent = otel_span,
         conversation_id = private$.conversation_id,
-        stream = stream
+        stream = stream,
+        type = type,
+        tools = if (is.null(type)) private$tools
       )
 
       request_start <- Sys.time()
       tryCatch(
         {
-          response <- chat_perform(
-            provider = private$provider,
-            model = private$model,
-            mode = if (stream) "async-stream" else "async-value",
-            turns = request_turns,
-            tools = if (is.null(type)) private$tools,
-            type = type,
-            controller = controller,
-            otel_span = chat_span
+          # Parameters the provider doesn't support are dropped from the
+          # request (with a warning); omit them from the span too.
+          unsupported_params <- character()
+          response <- withCallingHandlers(
+            chat_perform(
+              provider = private$provider,
+              model = private$model,
+              mode = if (stream) "async-stream" else "async-value",
+              turns = request_turns,
+              tools = if (is.null(type)) private$tools,
+              type = type,
+              controller = controller,
+              otel_span = chat_span
+            ),
+            ellmer_unsupported_params = function(w) {
+              unsupported_params <<- union(unsupported_params, w$unknown)
+            }
           )
+          for (span in list(chat_span, otel_span)) {
+            record_otel_span_request_params(
+              span,
+              private$model,
+              unsupported_params
+            )
+          }
 
           emit <- emitter(echo)
           any_text <- FALSE

@@ -14,3 +14,11 @@
       Error in `value_turn()`:
       ! bad response
 
+# unsupported request params are not recorded on spans
+
+    Code
+      . <- chat$chat("hi", echo = "none")
+    Condition
+      Warning:
+      Ignoring unsupported parameters: "reasoning_effort"
+
