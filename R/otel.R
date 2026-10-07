@@ -621,12 +621,15 @@ record_chat_otel_ttft <- function(span, provider, model, start) {
   span$set_attribute("gen_ai.response.time_to_first_chunk", ttft)
 }
 
-# Records the time since the previous chunk as the
-# `gen_ai.client.inference.time_per_output_chunk` histogram.
-record_chat_otel_chunk <- function(provider, model, previous) {
+# Records the `gen_ai.client.inference.time_per_output_chunk` histogram. Per
+# the client inference conventions, it is "recorded for each chunk received
+# after the first one, measured as the time elapsed from the end of the
+# previous chunk to the end of the current chunk". `previous_chunk_time` is
+# the time the previous chunk was received.
+record_chat_otel_chunk <- function(provider, model, previous_chunk_time) {
   otel_record_histogram(
     "gen_ai.client.inference.time_per_output_chunk",
-    elapsed_secs(previous),
+    elapsed_secs(previous_chunk_time),
     otel_metric_attributes(provider, model)
   )
 }
