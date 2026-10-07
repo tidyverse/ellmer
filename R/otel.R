@@ -6,6 +6,7 @@ local_chat_otel_span <- NULL
 local_tool_otel_span <- NULL
 local_agent_otel_span <- NULL
 otel_record_histogram <- NULL
+otel_add_counter <- NULL
 
 # Histograms from the GenAI semantic conventions for metrics. The
 # `gen_ai.client.inference.*` instruments are defined by the client inference
@@ -35,6 +36,10 @@ otel_histogram_specs <- list(
     description = "Time to receive the first chunk of a streamed response",
     unit = "s"
   ),
+  "gen_ai.client.inference.time_per_output_chunk" = list(
+    description = "Time per output chunk, for each chunk after the first",
+    unit = "s"
+  ),
   "gen_ai.execute_tool.duration" = list(
     description = "The duration of a single tool execution",
     unit = "s"
@@ -50,6 +55,29 @@ otel_histogram_specs <- list(
   "gen_ai.invoke_agent.tool_calls" = list(
     description = "The number of tool calls made during an agent invocation",
     unit = "{tool_call}"
+  )
+)
+
+# Monotonic token usage counters from the client inference conventions. Each
+# counter is broken down by `gen_ai.token.modality`; providers only report
+# totals, so ellmer reports the `unknown` modality.
+# See: https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-token-metrics.md
+otel_counter_specs <- list(
+  "gen_ai.client.inference.usage.input_tokens" = list(
+    description = "Number of input tokens used, including cached tokens",
+    unit = "{token}"
+  ),
+  "gen_ai.client.inference.usage.output_tokens" = list(
+    description = "Number of output tokens used, including reasoning tokens",
+    unit = "{token}"
+  ),
+  "gen_ai.client.inference.usage.cache_read.input_tokens" = list(
+    description = "Number of input tokens served from a provider-managed cache",
+    unit = "{token}"
+  ),
+  "gen_ai.client.inference.usage.reasoning.output_tokens" = list(
+    description = "Number of output tokens used for reasoning",
+    unit = "{token}"
   )
 )
 
@@ -137,6 +165,7 @@ local({
   otel_capture_content <- FALSE
   otel_is_measuring <- FALSE
   otel_histograms <- list()
+  otel_counters <- list()
 
   otel_cache_tracer <<- function() {
     if (!requireNamespace("otel", quietly = TRUE)) {
@@ -156,9 +185,22 @@ local({
         otel_meter$create_histogram(name, spec$description, unit = spec$unit)
       })
     }
+    otel_counters <<- if (otel_is_measuring) {
+      imap(otel_counter_specs, function(spec, name) {
+        otel_meter$create_counter(name, spec$description, unit = spec$unit)
+      })
+    }
   }
 
   otel_capture_content_enabled <<- function() otel_capture_content
+
+  otel_add_counter <<- function(name, value, attributes) {
+    if (!otel_is_measuring) {
+      return()
+    }
+    otel_counters[[name]]$add(value, attributes = compact(attributes))
+    invisible()
+  }
 
   otel_record_histogram <<- function(name, value, attributes) {
     if (!otel_is_measuring) {
@@ -372,7 +414,8 @@ otel_metric_points <- function(metrics) {
       list(
         attributes = unclass(point$attributes),
         count = point$value$count,
-        sum = point$value$sum
+        sum = point$value$sum,
+        value = point$value$value
       )
     })
   })
@@ -406,6 +449,7 @@ record_chat_otel_span_status <- function(span, provider, model, result, start) {
   tokens <- value_tokens(provider, result)
   input <- as.integer(tokens$input + tokens$cached_input)
   output <- as.integer(tokens$output)
+  reasoning <- as.integer(value_reasoning_tokens(provider, result) %||% 0L)
   if (input > 0L || output > 0L) {
     otel_record_histogram(
       "gen_ai.client.inference.operation.input_tokens",
@@ -417,6 +461,18 @@ record_chat_otel_span_status <- function(span, provider, model, result, start) {
       output,
       attributes
     )
+    usage <- c(
+      "gen_ai.client.inference.usage.input_tokens" = input,
+      "gen_ai.client.inference.usage.output_tokens" = output,
+      "gen_ai.client.inference.usage.cache_read.input_tokens" = as.integer(
+        tokens$cached_input
+      ),
+      "gen_ai.client.inference.usage.reasoning.output_tokens" = reasoning
+    )
+    usage_attributes <- c(attributes, "gen_ai.token.modality" = "unknown")
+    for (name in names(usage)[usage > 0L]) {
+      otel_add_counter(name, usage[[name]], usage_attributes)
+    }
   }
 
   if (is.null(span) || !span_recording(span)) {
@@ -438,12 +494,8 @@ record_chat_otel_span_status <- function(span, provider, model, result, start) {
       as.integer(tokens$cached_input)
     )
   }
-  reasoning <- value_reasoning_tokens(provider, result)
-  if (!is.null(reasoning) && reasoning > 0) {
-    span$set_attribute(
-      "gen_ai.usage.reasoning.output_tokens",
-      as.integer(reasoning)
-    )
+  if (reasoning > 0L) {
+    span$set_attribute("gen_ai.usage.reasoning.output_tokens", reasoning)
   }
   span$set_status("ok")
 }
@@ -567,6 +619,19 @@ record_chat_otel_ttft <- function(span, provider, model, start) {
     return()
   }
   span$set_attribute("gen_ai.response.time_to_first_chunk", ttft)
+}
+
+# Records the `gen_ai.client.inference.time_per_output_chunk` histogram. Per
+# the client inference conventions, it is "recorded for each chunk received
+# after the first one, measured as the time elapsed from the end of the
+# previous chunk to the end of the current chunk". `previous_chunk_time` is
+# the time the previous chunk was received.
+record_chat_otel_chunk <- function(provider, model, previous_chunk_time) {
+  otel_record_histogram(
+    "gen_ai.client.inference.time_per_output_chunk",
+    elapsed_secs(previous_chunk_time),
+    otel_metric_attributes(provider, model)
+  )
 }
 
 record_chat_otel_span_output <- function(span, turn) {
