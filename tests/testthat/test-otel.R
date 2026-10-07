@@ -345,11 +345,15 @@ test_that("time to first chunk is recorded on the first streamed chunk", {
     c(
       "gen_ai.client.inference.duration",
       "gen_ai.client.inference.time_to_first_chunk",
+      "gen_ai.client.inference.time_per_output_chunk",
       "gen_ai.invoke_agent.duration",
       "gen_ai.invoke_agent.inference_calls",
       "gen_ai.invoke_agent.tool_calls"
     )
   )
+  # Three chunks: one time to first chunk, two inter-chunk intervals.
+  chunk_point <- points[["gen_ai.client.inference.time_per_output_chunk"]][[1L]]
+  expect_equal(chunk_point$count, 2L)
   ttft_point <- points[["gen_ai.client.inference.time_to_first_chunk"]][[1L]]
   expect_equal(ttft_point$count, 1L)
   expect_equal(ttft_point$sum, ttft)
@@ -403,6 +407,9 @@ test_that("token usage and operation duration are recorded as metrics", {
       "gen_ai.client.inference.duration",
       "gen_ai.client.inference.operation.input_tokens",
       "gen_ai.client.inference.operation.output_tokens",
+      "gen_ai.client.inference.usage.input_tokens",
+      "gen_ai.client.inference.usage.output_tokens",
+      "gen_ai.client.inference.usage.cache_read.input_tokens",
       "gen_ai.invoke_agent.duration",
       "gen_ai.invoke_agent.inference_calls",
       "gen_ai.invoke_agent.tool_calls"
@@ -413,6 +420,19 @@ test_that("token usage and operation duration are recorded as metrics", {
   expect_equal(input$sum, 4)
   expect_equal(output$sum, 5)
   expect_null(input$attributes[["gen_ai.token.type"]])
+  usage <- points[["gen_ai.client.inference.usage.input_tokens"]][[1L]]
+  expect_equal(usage$value, 4)
+  expect_equal(usage$attributes[["gen_ai.token.modality"]], "unknown")
+  expect_equal(
+    points[["gen_ai.client.inference.usage.output_tokens"]][[1L]]$value,
+    5
+  )
+  expect_equal(
+    points[["gen_ai.client.inference.usage.cache_read.input_tokens"]][[
+      1L
+    ]]$value,
+    1
+  )
   expect_equal(points[["gen_ai.client.inference.duration"]][[1L]]$count, 1L)
   expect_equal(points[["gen_ai.invoke_agent.inference_calls"]][[1L]]$sum, 1)
   expect_equal(points[["gen_ai.invoke_agent.tool_calls"]][[1L]]$sum, 0)
