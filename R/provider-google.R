@@ -13,13 +13,8 @@ NULL
 #' Most enterprises are likely to use Vertex AI, and individuals are likely
 #' to use Gemini.
 #'
-#' `chat_google_gemini()` uses the
-#' [Interactions API](https://ai.google.dev/gemini-api/docs/interactions-overview),
-#' so `api_args` should use its request fields. `chat_google_vertex()` uses
-#' the `generateContent` API, as do batch requests and token counting for
-#' both. With `chat_google_gemini()`, structured output isn't supported for
-#' Gemini 2.5 models, so upgrade to a Gemini 3 model if you use
-#' `chat_structured()`.
+#' `chat_google_gemini()` doesn't support structured output with Gemini 2.5
+#' models, so upgrade to Gemini 3 or newer if you use `chat_structured()`.
 #'
 #' Use [google_upload()] to upload files (PDFs, images, video, audio, etc.)
 #'
@@ -41,6 +36,12 @@ NULL
 #' @param credentials A function that returns a list of authentication headers
 #'   or `NULL`, the default, to use ambient credentials. See above for details.
 #' @param model `r param_model("gemini-3.7-flash", "google_gemini")`
+#' @param api_args Named list of arbitrary extra arguments appended to the body
+#'   of every chat API call. `chat_google_gemini()` uses the
+#'   [Interactions API](https://ai.google.dev/gemini-api/docs/interactions-overview)
+#'   and `chat_google_vertex()` the
+#'   [generateContent API](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference),
+#'   so use the field names from the matching request body.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
