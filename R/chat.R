@@ -1068,6 +1068,7 @@ Chat <- R6::R6Class(
             on.exit(acc$finalize_turn(), add = TRUE)
 
             stream_start <- request_start
+            last_chunk <- NULL
             result <- NULL
             for (chunk in response) {
               result <- stream_merge_chunks(private$provider, result, chunk)
@@ -1085,7 +1086,14 @@ Chat <- R6::R6Class(
                   stream_start
                 )
                 stream_start <- NULL
+              } else {
+                record_chat_otel_chunk(
+                  private$provider,
+                  private$model,
+                  last_chunk
+                )
               }
+              last_chunk <- Sys.time()
               for (content in contents) {
                 text <- content_text(content)
                 if (yield_as_content) {
@@ -1286,6 +1294,7 @@ Chat <- R6::R6Class(
             on.exit(acc$finalize_turn(), add = TRUE)
 
             stream_start <- request_start
+            last_chunk <- NULL
             result <- NULL
             for (chunk in await_each(response)) {
               result <- stream_merge_chunks(private$provider, result, chunk)
@@ -1303,7 +1312,14 @@ Chat <- R6::R6Class(
                   stream_start
                 )
                 stream_start <- NULL
+              } else {
+                record_chat_otel_chunk(
+                  private$provider,
+                  private$model,
+                  last_chunk
+                )
               }
+              last_chunk <- Sys.time()
               for (content in contents) {
                 text <- content_text(content)
                 if (yield_as_content) {
