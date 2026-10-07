@@ -1038,10 +1038,7 @@ Chat <- R6::R6Class(
             result,
             turns = request_turns
           )
-          if (
-            !is.null(stream_start) &&
-              stream_output_started(private$provider, chunk, contents)
-          ) {
+          if (!is.null(stream_start)) {
             record_chat_otel_ttft(
               chat_span,
               private$provider,
@@ -1225,10 +1222,7 @@ Chat <- R6::R6Class(
             result,
             turns = request_turns
           )
-          if (
-            !is.null(stream_start) &&
-              stream_output_started(private$provider, chunk, contents)
-          ) {
+          if (!is.null(stream_start)) {
             record_chat_otel_ttft(
               chat_span,
               private$provider,

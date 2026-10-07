@@ -493,17 +493,3 @@ test_that("image detail is sent", {
   image <- content_image_url("https://example.com/image.png", detail = "low")
   expect_equal(as_json(provider, image)$content[[1]]$detail, "low")
 })
-
-test_that("stream_output_started() detects the first output item", {
-  provider <- chat_openai(credentials = \() "key")$get_provider()
-  expect_false(stream_output_started(
-    provider,
-    list(type = "response.created"),
-    list()
-  ))
-  expect_true(stream_output_started(
-    provider,
-    list(type = "response.output_item.added"),
-    list()
-  ))
-})

@@ -42,15 +42,3 @@ test_that("deprecated Provider properties warn but still work", {
 test_that("Provider print omits deprecated properties", {
   expect_snapshot(print(test_provider()))
 })
-
-test_that("stream_output_started() ignores empty preamble by default", {
-  provider <- test_provider()
-  expect_false(stream_output_started(provider, list(), list()))
-  expect_false(stream_output_started(provider, list(), list(ContentText(""))))
-  expect_true(stream_output_started(provider, list(), list(ContentText("hi"))))
-  expect_true(stream_output_started(
-    provider,
-    list(),
-    list(ContentThinking("hmm"))
-  ))
-})

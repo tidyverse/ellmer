@@ -380,13 +380,6 @@ method(stream_content_with_turns, ProviderAnthropic) <- function(
   }
   list()
 }
-method(stream_output_started, ProviderAnthropic) <- function(
-  provider,
-  chunk,
-  contents
-) {
-  identical(chunk$type, "content_block_start")
-}
 method(stream_merge_chunks, ProviderAnthropic) <- function(
   provider,
   result,

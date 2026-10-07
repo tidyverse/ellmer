@@ -545,16 +545,6 @@ method(stream_content, ProviderAWSBedrock) <- function(
   list()
 }
 
-method(stream_output_started, ProviderAWSBedrock) <- function(
-  provider,
-  chunk,
-  contents
-) {
-  # Tool use blocks start with contentBlockStart; text blocks have no start
-  # event and are detected from their first non-empty delta.
-  identical(chunk$event_type, "contentBlockStart") ||
-    stream_output_started(super(provider, Provider), chunk, contents)
-}
 method(stream_merge_chunks, ProviderAWSBedrock) <- function(
   provider,
   result,

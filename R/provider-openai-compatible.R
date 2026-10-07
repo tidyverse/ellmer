@@ -289,17 +289,6 @@ method(stream_content, ProviderOpenAICompatible) <- function(
   }
   list(ContentText(text))
 }
-method(stream_output_started, ProviderOpenAICompatible) <- function(
-  provider,
-  chunk,
-  contents
-) {
-  # Tool call deltas are accumulated rather than streamed as content.
-  # Usage-only and content-filter chunks have no choices.
-  delta <- if (length(chunk$choices)) chunk$choices[[1]]$delta
-  length(delta$tool_calls) > 0 ||
-    stream_output_started(super(provider, Provider), chunk, contents)
-}
 method(stream_merge_chunks, ProviderOpenAICompatible) <- function(
   provider,
   result,
