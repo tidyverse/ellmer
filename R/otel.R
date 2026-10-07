@@ -387,16 +387,22 @@ otel_error_type <- function(error) {
 }
 
 # Records a failed model request: the operation duration metric tagged with
-# `error.type`, plus the exception and error status on the chat span.
+# `error.type`, plus the exception and error status on the chat span. `start`
+# is `NULL` once the duration has already been recorded for this request.
 record_chat_otel_span_error <- function(span, provider, model, error, start) {
-  attributes <- otel_metric_attributes(provider, model)
-  attributes[["error.type"]] <- otel_error_type(error)
-  otel_record_histogram(
-    "gen_ai.client.inference.duration",
-    elapsed_secs(start),
-    attributes
-  )
+  if (!is.null(start)) {
+    attributes <- otel_metric_attributes(provider, model)
+    attributes[["error.type"]] <- otel_error_type(error)
+    otel_record_histogram(
+      "gen_ai.client.inference.duration",
+      elapsed_secs(start),
+      attributes
+    )
+  }
   record_otel_span_error(span, error)
+  if (!is.null(span) && span_recording(span)) {
+    span$set_attribute("gen_ai.response.finish_reasons", "error")
+  }
 }
 
 # Convert a single Content into a GenAI semconv "part", a named list emitted
@@ -492,7 +498,11 @@ record_chat_otel_span_output <- function(span, turn) {
   if (!S7_inherits(turn, AssistantTurn)) {
     return()
   }
-  if (!is.na(turn@finish_reason)) {
+  # Per semconv, a cancelled or interrupted stream reports an `error` finish
+  # reason rather than omitting it.
+  if (is_partial_turn(turn)) {
+    span$set_attribute("gen_ai.response.finish_reasons", "error")
+  } else if (!is.na(turn@finish_reason)) {
     span$set_attribute("gen_ai.response.finish_reasons", turn@finish_reason)
   }
   if (!otel_capture_content_enabled()) {
@@ -516,8 +526,14 @@ new_agent_otel_tally <- function() {
   )
 }
 
-tally_agent_otel_turn <- function(tally, turn) {
+# Inference calls are counted when the request starts (so failed requests are
+# included); tool calls and tokens come from the completed turn.
+tally_agent_otel_request <- function(tally) {
   tally$inference_calls <- tally$inference_calls + 1L
+  invisible(tally)
+}
+
+tally_agent_otel_turn <- function(tally, turn) {
   tally$tool_calls <- tally$tool_calls + length(extract_tool_requests(turn))
   # tokens are c(input, output, cached_input)
   tally$tokens <- tally$tokens + ifelse(is.na(turn@tokens), 0, turn@tokens)
@@ -529,15 +545,19 @@ tally_agent_otel_turn <- function(tally, turn) {
 record_agent_otel <- function(span, provider, model, tally) {
   attributes <- otel_metric_attributes(provider, model)
   attributes[["gen_ai.operation.name"]] <- "invoke_agent"
-  if (!is.null(tally$error)) {
-    attributes[["error.type"]] <- otel_error_type(tally$error)
-  }
+  error_type <- if (!is.null(tally$error)) otel_error_type(tally$error)
   values <- list(
     "gen_ai.invoke_agent.duration" = elapsed_secs(tally$start),
     "gen_ai.invoke_agent.inference_calls" = tally$inference_calls,
     "gen_ai.invoke_agent.tool_calls" = tally$tool_calls
   )
-  for (name in names(values)) {
+  # Only the duration metric defines `error.type` in the semantic conventions.
+  otel_record_histogram(
+    "gen_ai.invoke_agent.duration",
+    values[[1L]],
+    c(attributes, "error.type" = error_type)
+  )
+  for (name in names(values)[-1L]) {
     otel_record_histogram(name, values[[name]], attributes)
   }
 
@@ -547,8 +567,11 @@ record_agent_otel <- function(span, provider, model, tally) {
   for (name in names(values)) {
     span$set_attribute(name, values[[name]])
   }
-  if (!is.null(tally$error)) {
-    record_otel_span_error(span, tally$error)
+  if (!is.null(error_type)) {
+    # The exception event is recorded once, on the chat or tool span where it
+    # occurred; the agent span only carries the status and error type.
+    span$set_status("error")
+    span$set_attribute("error.type", error_type)
   }
   input <- as.integer(tally$tokens[[1]] + tally$tokens[[3]])
   output <- as.integer(tally$tokens[[2]])
