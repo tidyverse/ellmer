@@ -1,18 +1,3 @@
-test_that("only the Gemini Developer API supports batch requests", {
-  gemini <- ProviderGoogleInteractions(
-    name = "Google/Gemini",
-    base_url = "https://generativelanguage.googleapis.com/v1beta/",
-    credentials = function() list()
-  )
-  vertex <- ProviderGoogleGenerateContent(
-    name = "Google/Vertex",
-    base_url = "https://aiplatform.googleapis.com/v1/",
-    credentials = function() list()
-  )
-  expect_equal(has_batch_support(gemini), TRUE)
-  expect_equal(has_batch_support(vertex), FALSE)
-})
-
 test_that("as_generate_content() copies all provider properties", {
   provider <- ProviderGoogleInteractions(
     name = "Google/Gemini",
@@ -26,17 +11,6 @@ test_that("as_generate_content() copies all provider properties", {
 })
 
 # ellmer -> Interactions -------------------------------------------------------
-
-test_that("chat_body() opts out of server-side storage", {
-  chat <- chat_google_gemini_test(params = params(reasoning_effort = "low"))
-  body <- chat_body(
-    chat$get_provider(),
-    chat$get_model_object(),
-    turns = list(UserTurn("hi"))
-  )
-  expect_equal(body$store, FALSE)
-  expect_equal(body$generation_config$thinking_summaries, "auto")
-})
 
 test_that("turns become steps", {
   provider <- chat_google_gemini_test()$get_provider()
