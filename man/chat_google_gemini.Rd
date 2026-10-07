@@ -94,8 +94,8 @@ to use Gemini.
 \href{https://ai.google.dev/gemini-api/docs/interactions-overview}{Interactions API},
 so \code{api_args} should use its request fields. \code{chat_google_vertex()} uses
 the \code{generateContent} API, as do batch requests and token counting for
-both. Structured output isn't supported for Gemini 2.5 models in the
-Interactions API, so upgrade to a Gemini 3 model if you use
+both. With \code{chat_google_gemini()}, structured output isn't supported for
+Gemini 2.5 models, so upgrade to a Gemini 3 model if you use
 \code{chat_structured()}.
 
 Use \code{\link[=google_upload]{google_upload()}} to upload files (PDFs, images, video, audio, etc.)
