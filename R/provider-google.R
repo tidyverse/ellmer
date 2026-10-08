@@ -933,7 +933,7 @@ default_google_credentials <- function(
 
   gemini_scope <- switch(
     variant,
-    gemini = "https://www.googleapis.com/auth/generative-language.retriever",
+    gemini = "https://www.googleapis.com/auth/generative-language.retriever.readonly",
     # https://github.com/googleapis/python-genai/blob/cc9e470326e0c1b84ec3ce9891c9f96f6c74688e/google/genai/_api_client.py#L184
     vertex = "https://www.googleapis.com/auth/cloud-platform"
   )
