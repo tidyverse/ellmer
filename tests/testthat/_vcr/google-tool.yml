@@ -1,264 +1,120 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
-        in Y-M-D format?"}]}],"tools":[{"functionDeclarations":[{"name":"current_date","description":"Return
-        the current date"},{"name":"current_month","description":"Return the full
-        name of the current month"}]}],"systemInstruction":{"parts":{"text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
+      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"system_instruction":"Always
+        use a tool to answer. Reply with ''It is ____.''.","input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]}],"tools":[{"type":"function","name":"current_date","description":"Return
+        the current date"},{"type":"function","name":"current_month","description":"Return
+        the full name of the current month"}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '721'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:02 GMT
+      content-type: application/json
+      date: Fri, 25 Sep 2026 13:31:13 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1019
+      server-timing: gfet4t7; dur=2565
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "functionCall": {
-                      "name": "current_date",
-                      "args": {},
-                      "id": "call_373354"
-                    },
-                    "thoughtSignature": "EpsCCpgCARFNMg/xMz5pyxVvjOenEzEndLbnQ4NFpnI8T63o1I9JWAd04R3MrF8tEYurTTNaUL3JI+QNSruxjKfwBhOxD8y6O80Fk25hiGgXDX+MQG7YK+V2wr7+ILvn/xNYTWOAwMZXA3MrLqy8u7XIV7T4Uyi0S835LxDbqrhFVoyssXhyo4bPgRff8kVF+s33wCqn7FXL6sWpvzPOn/17F1IydXb2UfqMzYcTE1XwbR9Re0nSXeBRnKyXhAcuW0GMHQuJz4ybdztEa/X/HUwpxKf80z/rT89R0ZqWy1g7mwBOSOdtsbc3hL86s/G2lIxUA6QD0R/MLBsIyz/6mLibUMdCS5NhII0dlHaupdwjlqp3BxShQ1r5tAyQhw=="
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0,
-              "finishMessage": "Model generated function call(s)."
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 67,
-            "candidatesTokenCount": 10,
-            "totalTokenCount": 126,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 67
-              }
-            ],
-            "thoughtsTokenCount": 49,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.7-flash",
-          "responseId": "QQeZatTKD_z7xN8PiMXo4Qg"
-        }
-  recorded_at: 2026-09-03 05:36:02
+      string: '{"status":"requires_action","usage":{"total_tokens":160,"total_input_tokens":68,"input_tokens_by_modality":[{"modality":"text","tokens":68}],"total_cached_tokens":0,"total_output_tokens":10,"total_tool_use_tokens":0,"total_thought_tokens":82,"raw_prompt_token":111,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":111}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":82}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":111}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":82}]}]},"created":"2026-09-25T13:31:13Z","updated":"2026-09-25T13:31:13Z","service_tier":"standard","steps":[{"signature":"EpoDCpcDAWkUfRPIM0X8Lo4AdsSLqSleyHx8y5AS9eF8d9Lc4gMZOXYz/8oDKsHIcHfLKqrzfzxexXOcN50yMlE0vnHVrG10+CR2dVGX5FXmRRzPu5umwoif+oibNNA5OSfUGL3vDewE9qdSo7TlXdsafqv4MzX1vkqGDgVHb+KXsUv3A9EJO/dl08QLDs6B9bC5bpZxbu5E3kpT2TfC9i+R/ij9qppfQjYF/NIIl+NfZKjN55cOwvSP0CVpGeHpreX4b2eKeQcXTk3LPdD2wOGuXmwzYDPEBN+69nd2hdNXcKqcivrjZRdjsY44ltqa+P0vPpyoghOG99zLppL/BZWZHJHeSuPSSPL7Ga+pzUznYWrfsp9ZYqdMXG+9LtOgWlEpQC8raTs8yUWPqVlkHUco8DVU1eXDRY2ppIwcpozq159/hOdrvqnzRVHd7AMtL0byqR7+IfLr5n5ZwLVyffCL6mvTFDZxU16q1PZoyVWr4dQGWezqDJR16aVl+YFF/hSRMab4O49HvReztkWpisVoeG3AETwfdixYLrs=","type":"thought"},{"id":"call_1205409","type":"function_call","name":"current_date","arguments":{}}],"object":"interaction","model":"gemini-3.7-flash"}'
+  recorded_at: 2026-09-25 13:31:13
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
-        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"EpsCCpgCARFNMg/xMz5pyxVvjOenEzEndLbnQ4NFpnI8T63o1I9JWAd04R3MrF8tEYurTTNaUL3JI+QNSruxjKfwBhOxD8y6O80Fk25hiGgXDX+MQG7YK+V2wr7+ILvn/xNYTWOAwMZXA3MrLqy8u7XIV7T4Uyi0S835LxDbqrhFVoyssXhyo4bPgRff8kVF+s33wCqn7FXL6sWpvzPOn/17F1IydXb2UfqMzYcTE1XwbR9Re0nSXeBRnKyXhAcuW0GMHQuJz4ybdztEa/X/HUwpxKf80z/rT89R0ZqWy1g7mwBOSOdtsbc3hL86s/G2lIxUA6QD0R/MLBsIyz/6mLibUMdCS5NhII0dlHaupdwjlqp3BxShQ1r5tAyQhw=="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]}],"tools":[{"functionDeclarations":[{"name":"current_date","description":"Return
-        the current date"},{"name":"current_month","description":"Return the full
-        name of the current month"}]}],"systemInstruction":{"parts":{"text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
+      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"system_instruction":"Always
+        use a tool to answer. Reply with ''It is ____.''.","input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]},{"signature":"EpoDCpcDAWkUfRPIM0X8Lo4AdsSLqSleyHx8y5AS9eF8d9Lc4gMZOXYz/8oDKsHIcHfLKqrzfzxexXOcN50yMlE0vnHVrG10+CR2dVGX5FXmRRzPu5umwoif+oibNNA5OSfUGL3vDewE9qdSo7TlXdsafqv4MzX1vkqGDgVHb+KXsUv3A9EJO/dl08QLDs6B9bC5bpZxbu5E3kpT2TfC9i+R/ij9qppfQjYF/NIIl+NfZKjN55cOwvSP0CVpGeHpreX4b2eKeQcXTk3LPdD2wOGuXmwzYDPEBN+69nd2hdNXcKqcivrjZRdjsY44ltqa+P0vPpyoghOG99zLppL/BZWZHJHeSuPSSPL7Ga+pzUznYWrfsp9ZYqdMXG+9LtOgWlEpQC8raTs8yUWPqVlkHUco8DVU1eXDRY2ppIwcpozq159/hOdrvqnzRVHd7AMtL0byqR7+IfLr5n5ZwLVyffCL6mvTFDZxU16q1PZoyVWr4dQGWezqDJR16aVl+YFF/hSRMab4O49HvReztkWpisVoeG3AETwfdixYLrs=","type":"thought"},{"type":"function_call","id":"call_1205409","name":"current_date","arguments":{}},{"type":"function_result","call_id":"call_1205409","name":"current_date","result":"2024-01-01","is_error":false}],"tools":[{"type":"function","name":"current_date","description":"Return
+        the current date"},{"type":"function","name":"current_month","description":"Return
+        the full name of the current month"}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '747'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:03 GMT
+      content-type: application/json
+      date: Fri, 25 Sep 2026 13:31:16 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=977
+      server-timing: gfet4t7; dur=2217
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "It is 2024-01-01.",
-                    "thoughtSignature": "EvECCu4CARFNMg/n55ZCuHuyIiTPkx+GAiknSUBFO5SuAnDRAWnzYk1cSZO232ZevI3eZx8BEPxA/EPVUgZb5Wq6PD9Z3olaTGQ4WtfENmv8qPsAPfmUWoqSL6fUBUriL5Srp2kQ1mmFCnFEOsYy095X+H8wDy1wpyVpWhVox+/VW4CT8lQdezIDgMiUxqcU7GncpCU46fRNSHIdheXJ1cYXFiCloc41cY1Kgt0+Hja9rS/GRRMA+I+z6B3u291XvzgcccKO5jbMSoJKD57OyzaTXZoImue/Rp3lCG4KAJhek8rwo16iLdEME2h9Tfm8xcQ7dMaWzsQUngWdh+vFdC+8gubnNjUhOf2rFGMD+l5hUTYeNNh5yM+p8ryUqxL0RaxA538NlPl8rz0wCaIsKzGJabfBqtYMkRa0sgnAtftYSZnU1I7zKhjjkM59b1P1umFS2yVZKrS870AMiwu6NG0atFeVJiYvqbwSeNYOX91z8Ve0"
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 149,
-            "candidatesTokenCount": 14,
-            "totalTokenCount": 296,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 149
-              }
-            ],
-            "thoughtsTokenCount": 133,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.7-flash",
-          "responseId": "QgeZavnqNZGJvdIPkNz20Ac"
-        }
-  recorded_at: 2026-09-03 05:36:03
+      string: '{"status":"completed","usage":{"total_tokens":275,"total_input_tokens":183,"input_tokens_by_modality":[{"modality":"text","tokens":183}],"total_cached_tokens":0,"total_output_tokens":14,"total_tool_use_tokens":0,"total_thought_tokens":78,"raw_prompt_token":236,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":236}],"candidates_tokens_details":[{"modality":"text","tokens":18}],"thoughts_tokens_details":[{"modality":"text","tokens":78}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":236}],"candidates_tokens_details":[{"modality":"text","tokens":18}],"thoughts_tokens_details":[{"modality":"text","tokens":78}]}]},"created":"2026-09-25T13:31:16Z","updated":"2026-09-25T13:31:16Z","service_tier":"standard","steps":[{"signature":"ErQCCrECAWkUfRPzog2i0zMKbN6VeTYHYGchd6aVHQvzfogCG+zLp5WqXH8G7QGl8VkEqoCqivOD1gJoYDJTX5t88lGV4GhlSNY22g2XACkZ4/emKwTRov/ksluZEuyuhDvhWsPLUcNLVer7t09WVpWwYHR0d9cxqi7BmRXxjaTzI8o5bw+Dw77izKDn7uOF+16QIJDXkk8kAwEzDtdUXhWtURQgrIdYyuBQruJo6/BejY7L/r5gqqJcENh3O0fz05Fqc9lAjq/jIYpexjFSej6JEFHGhi/N2Da22FYPbR4lM/P90Bu+U7NPKS9tINZf8+ZMk7uhlaC5abSKpmCazQs4/fL6OkYz9Ou5a7oaBYRzvfc/ECvpCA9Oqousooh3FlAV9ES2421eV8H460mkd5wtL8oo+qo=","type":"thought"},{"content":[{"text":"It
+        is 2024-01-01.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
+  recorded_at: 2026-09-25 13:31:16
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
-        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"EpsCCpgCARFNMg/xMz5pyxVvjOenEzEndLbnQ4NFpnI8T63o1I9JWAd04R3MrF8tEYurTTNaUL3JI+QNSruxjKfwBhOxD8y6O80Fk25hiGgXDX+MQG7YK+V2wr7+ILvn/xNYTWOAwMZXA3MrLqy8u7XIV7T4Uyi0S835LxDbqrhFVoyssXhyo4bPgRff8kVF+s33wCqn7FXL6sWpvzPOn/17F1IydXb2UfqMzYcTE1XwbR9Re0nSXeBRnKyXhAcuW0GMHQuJz4ybdztEa/X/HUwpxKf80z/rT89R0ZqWy1g7mwBOSOdtsbc3hL86s/G2lIxUA6QD0R/MLBsIyz/6mLibUMdCS5NhII0dlHaupdwjlqp3BxShQ1r5tAyQhw=="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
-        is 2024-01-01."}]},{"role":"user","parts":[{"text":"What month is it? Provide
-        the full name"}]}],"tools":[{"functionDeclarations":[{"name":"current_date","description":"Return
-        the current date"},{"name":"current_month","description":"Return the full
-        name of the current month"}]}],"systemInstruction":{"parts":{"text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
+      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"system_instruction":"Always
+        use a tool to answer. Reply with ''It is ____.''.","input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]},{"signature":"EpoDCpcDAWkUfRPIM0X8Lo4AdsSLqSleyHx8y5AS9eF8d9Lc4gMZOXYz/8oDKsHIcHfLKqrzfzxexXOcN50yMlE0vnHVrG10+CR2dVGX5FXmRRzPu5umwoif+oibNNA5OSfUGL3vDewE9qdSo7TlXdsafqv4MzX1vkqGDgVHb+KXsUv3A9EJO/dl08QLDs6B9bC5bpZxbu5E3kpT2TfC9i+R/ij9qppfQjYF/NIIl+NfZKjN55cOwvSP0CVpGeHpreX4b2eKeQcXTk3LPdD2wOGuXmwzYDPEBN+69nd2hdNXcKqcivrjZRdjsY44ltqa+P0vPpyoghOG99zLppL/BZWZHJHeSuPSSPL7Ga+pzUznYWrfsp9ZYqdMXG+9LtOgWlEpQC8raTs8yUWPqVlkHUco8DVU1eXDRY2ppIwcpozq159/hOdrvqnzRVHd7AMtL0byqR7+IfLr5n5ZwLVyffCL6mvTFDZxU16q1PZoyVWr4dQGWezqDJR16aVl+YFF/hSRMab4O49HvReztkWpisVoeG3AETwfdixYLrs=","type":"thought"},{"type":"function_call","id":"call_1205409","name":"current_date","arguments":{}},{"type":"function_result","call_id":"call_1205409","name":"current_date","result":"2024-01-01","is_error":false},{"signature":"ErQCCrECAWkUfRPzog2i0zMKbN6VeTYHYGchd6aVHQvzfogCG+zLp5WqXH8G7QGl8VkEqoCqivOD1gJoYDJTX5t88lGV4GhlSNY22g2XACkZ4/emKwTRov/ksluZEuyuhDvhWsPLUcNLVer7t09WVpWwYHR0d9cxqi7BmRXxjaTzI8o5bw+Dw77izKDn7uOF+16QIJDXkk8kAwEzDtdUXhWtURQgrIdYyuBQruJo6/BejY7L/r5gqqJcENh3O0fz05Fqc9lAjq/jIYpexjFSej6JEFHGhi/N2Da22FYPbR4lM/P90Bu+U7NPKS9tINZf8+ZMk7uhlaC5abSKpmCazQs4/fL6OkYz9Ou5a7oaBYRzvfc/ECvpCA9Oqousooh3FlAV9ES2421eV8H460mkd5wtL8oo+qo=","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"It
+        is 2024-01-01."}]},{"type":"user_input","content":[{"type":"text","text":"What
+        month is it? Provide the full name"}]}],"tools":[{"type":"function","name":"current_date","description":"Return
+        the current date"},{"type":"function","name":"current_month","description":"Return
+        the full name of the current month"}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '725'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:04 GMT
+      content-type: application/json
+      date: Fri, 25 Sep 2026 13:31:18 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=779
+      server-timing: gfet4t7; dur=1528
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "functionCall": {
-                      "name": "current_month",
-                      "args": {},
-                      "id": "call_291699"
-                    },
-                    "thoughtSignature": "Ep4CCpsCARFNMg/1O8+yau2zPnxaFW1v9FCZtf68Ry8SwgA4/jBt1wSUgUbwruHDioteHchWAcD9cejImJpzvP8Sb11AX5lOLVJkhZ+yj0JwDNVTOqgmNxSh0w7AueuPXueX06t71kjIBI4MOk8+BB+eP+EKZmeD3gbY5eeVie4GTMmdUH7J1qsqALp4FtZtX1WjaYPN5wJTJOagj7UHkSOP/73oCvqdY7tXhcBaRKSjML88IQF/F/CLFYOHA2kVwD2/zLKzmzPRkpLFut9wnPHURnxr7JFifIe2QQJq1xN9mgxdc03RizDBc/GJNm41g/+pPJ3qArJ5OlWUGQIc/7sc+SsEiAa8tp0WGrxXmvaOye5m1PfdX6aZIQAPArJncA=="
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0,
-              "finishMessage": "Model generated function call(s)."
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 174,
-            "candidatesTokenCount": 10,
-            "totalTokenCount": 230,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 174
-              }
-            ],
-            "thoughtsTokenCount": 46,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.7-flash",
-          "responseId": "RAeZasLLD9ytvdIP2cSr2Qo"
-        }
-  recorded_at: 2026-09-03 05:36:04
+      string: '{"status":"requires_action","usage":{"total_tokens":351,"total_input_tokens":286,"input_tokens_by_modality":[{"modality":"text","tokens":286}],"total_cached_tokens":0,"total_output_tokens":10,"total_tool_use_tokens":0,"total_thought_tokens":55,"raw_prompt_token":351,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":351}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":55}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":351}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":55}]}]},"created":"2026-09-25T13:31:18Z","updated":"2026-09-25T13:31:18Z","service_tier":"standard","steps":[{"signature":"ErICCq8CAWkUfRO6d/Pp8ZZz2D2Js2uU8TtDAoQGbK2NuwVNe8v/vjQf3LmWWV43qdYlkNtl/QYEdRYiEKrjxL6yWkjJ2jsPxP+qfnKVIGnZkKG+LiQrMvfHawiFfaHnbOjywADpE1He2TXYUp1jhOMf6Qj4hpNYSY0vD56KjgP5J1DF5KqpTiyhMKAqouQ62sk6yNpdwGRU07YOKBiIlRrZ7LQxEZFM/92zpy7lIEhzprizM7R4k4sMzuITop/UQxW58uWWVudWyCxInOAvZLBaw7X7pygVIbU4jJpkgkbps32MnszMHlLWkAGAZ1Ef/n/lF7prOPDiUu8SZJisvN3dudrGCFUYHVbgtUNZDd7BnltLxtk/vsHFh2ZJFi/teHXQY9SpcCBZ5tirkOHdoGvd7Ct9","type":"thought"},{"id":"call_1482947","type":"function_call","name":"current_month","arguments":{}}],"object":"interaction","model":"gemini-3.7-flash"}'
+  recorded_at: 2026-09-25 13:31:18
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date
-        in Y-M-D format?"}]},{"role":"model","parts":[{"functionCall":{"name":"current_date","args":{}},"thoughtSignature":"EpsCCpgCARFNMg/xMz5pyxVvjOenEzEndLbnQ4NFpnI8T63o1I9JWAd04R3MrF8tEYurTTNaUL3JI+QNSruxjKfwBhOxD8y6O80Fk25hiGgXDX+MQG7YK+V2wr7+ILvn/xNYTWOAwMZXA3MrLqy8u7XIV7T4Uyi0S835LxDbqrhFVoyssXhyo4bPgRff8kVF+s33wCqn7FXL6sWpvzPOn/17F1IydXb2UfqMzYcTE1XwbR9Re0nSXeBRnKyXhAcuW0GMHQuJz4ybdztEa/X/HUwpxKf80z/rT89R0ZqWy1g7mwBOSOdtsbc3hL86s/G2lIxUA6QD0R/MLBsIyz/6mLibUMdCS5NhII0dlHaupdwjlqp3BxShQ1r5tAyQhw=="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_date","response":{"value":"2024-01-01"}}}]},{"role":"model","parts":[{"text":"It
-        is 2024-01-01."}]},{"role":"user","parts":[{"text":"What month is it? Provide
-        the full name"}]},{"role":"model","parts":[{"functionCall":{"name":"current_month","args":{}},"thoughtSignature":"Ep4CCpsCARFNMg/1O8+yau2zPnxaFW1v9FCZtf68Ry8SwgA4/jBt1wSUgUbwruHDioteHchWAcD9cejImJpzvP8Sb11AX5lOLVJkhZ+yj0JwDNVTOqgmNxSh0w7AueuPXueX06t71kjIBI4MOk8+BB+eP+EKZmeD3gbY5eeVie4GTMmdUH7J1qsqALp4FtZtX1WjaYPN5wJTJOagj7UHkSOP/73oCvqdY7tXhcBaRKSjML88IQF/F/CLFYOHA2kVwD2/zLKzmzPRkpLFut9wnPHURnxr7JFifIe2QQJq1xN9mgxdc03RizDBc/GJNm41g/+pPJ3qArJ5OlWUGQIc/7sc+SsEiAa8tp0WGrxXmvaOye5m1PfdX6aZIQAPArJncA=="}]},{"role":"user","parts":[{"functionResponse":{"name":"current_month","response":{"value":"February"}}}]}],"tools":[{"functionDeclarations":[{"name":"current_date","description":"Return
-        the current date"},{"name":"current_month","description":"Return the full
-        name of the current month"}]}],"systemInstruction":{"parts":{"text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}},"generationConfig":{"temperature":0,"seed":1014}}'
+      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"system_instruction":"Always
+        use a tool to answer. Reply with ''It is ____.''.","input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]},{"signature":"EpoDCpcDAWkUfRPIM0X8Lo4AdsSLqSleyHx8y5AS9eF8d9Lc4gMZOXYz/8oDKsHIcHfLKqrzfzxexXOcN50yMlE0vnHVrG10+CR2dVGX5FXmRRzPu5umwoif+oibNNA5OSfUGL3vDewE9qdSo7TlXdsafqv4MzX1vkqGDgVHb+KXsUv3A9EJO/dl08QLDs6B9bC5bpZxbu5E3kpT2TfC9i+R/ij9qppfQjYF/NIIl+NfZKjN55cOwvSP0CVpGeHpreX4b2eKeQcXTk3LPdD2wOGuXmwzYDPEBN+69nd2hdNXcKqcivrjZRdjsY44ltqa+P0vPpyoghOG99zLppL/BZWZHJHeSuPSSPL7Ga+pzUznYWrfsp9ZYqdMXG+9LtOgWlEpQC8raTs8yUWPqVlkHUco8DVU1eXDRY2ppIwcpozq159/hOdrvqnzRVHd7AMtL0byqR7+IfLr5n5ZwLVyffCL6mvTFDZxU16q1PZoyVWr4dQGWezqDJR16aVl+YFF/hSRMab4O49HvReztkWpisVoeG3AETwfdixYLrs=","type":"thought"},{"type":"function_call","id":"call_1205409","name":"current_date","arguments":{}},{"type":"function_result","call_id":"call_1205409","name":"current_date","result":"2024-01-01","is_error":false},{"signature":"ErQCCrECAWkUfRPzog2i0zMKbN6VeTYHYGchd6aVHQvzfogCG+zLp5WqXH8G7QGl8VkEqoCqivOD1gJoYDJTX5t88lGV4GhlSNY22g2XACkZ4/emKwTRov/ksluZEuyuhDvhWsPLUcNLVer7t09WVpWwYHR0d9cxqi7BmRXxjaTzI8o5bw+Dw77izKDn7uOF+16QIJDXkk8kAwEzDtdUXhWtURQgrIdYyuBQruJo6/BejY7L/r5gqqJcENh3O0fz05Fqc9lAjq/jIYpexjFSej6JEFHGhi/N2Da22FYPbR4lM/P90Bu+U7NPKS9tINZf8+ZMk7uhlaC5abSKpmCazQs4/fL6OkYz9Ou5a7oaBYRzvfc/ECvpCA9Oqousooh3FlAV9ES2421eV8H460mkd5wtL8oo+qo=","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"It
+        is 2024-01-01."}]},{"type":"user_input","content":[{"type":"text","text":"What
+        month is it? Provide the full name"}]},{"signature":"ErICCq8CAWkUfRO6d/Pp8ZZz2D2Js2uU8TtDAoQGbK2NuwVNe8v/vjQf3LmWWV43qdYlkNtl/QYEdRYiEKrjxL6yWkjJ2jsPxP+qfnKVIGnZkKG+LiQrMvfHawiFfaHnbOjywADpE1He2TXYUp1jhOMf6Qj4hpNYSY0vD56KjgP5J1DF5KqpTiyhMKAqouQ62sk6yNpdwGRU07YOKBiIlRrZ7LQxEZFM/92zpy7lIEhzprizM7R4k4sMzuITop/UQxW58uWWVudWyCxInOAvZLBaw7X7pygVIbU4jJpkgkbps32MnszMHlLWkAGAZ1Ef/n/lF7prOPDiUu8SZJisvN3dudrGCFUYHVbgtUNZDd7BnltLxtk/vsHFh2ZJFi/teHXQY9SpcCBZ5tirkOHdoGvd7Ct9","type":"thought"},{"type":"function_call","id":"call_1482947","name":"current_month","arguments":{}},{"type":"function_result","call_id":"call_1482947","name":"current_month","result":"February","is_error":false}],"tools":[{"type":"function","name":"current_date","description":"Return
+        the current date"},{"type":"function","name":"current_month","description":"Return
+        the full name of the current month"}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '623'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:06 GMT
+      content-type: application/json
+      date: Fri, 25 Sep 2026 13:31:19 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=710
+      server-timing: gfet4t7; dur=1143
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "It is February.",
-                    "thoughtSignature": "Ev4BCvsBARFNMg+R0MINsxwl8ZLYv35Tg+EfBE6DGgEtIiVnDE/Cc5n1Liyhkqd6SS6irWw/c1f2OxhYiu5EDFc2oJHUDyNUpuARULuDgqU5ANuhAoFBH7ChOJWhC3AI8Emb6WxKjWRkzbJ7oFHjsQtjlWQCBIIY6qWLZ6v0olwNTpajsJ972owOvyhipjLaDJJGWBDCMJ3vB1MjNFwPLVHCheO4oSmtVe9tqMw3GbVzFkKQ0ZO7MGlQYriOavv/TX0Q+FXHZHdWxHTmQAMG3fhCwQRuB9TC02J3kQ+6sasDqqxEIOuvuxWuUcNFXCnOhyjPR7Nbpo3WWAy0yFu+dwQ="
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 244,
-            "candidatesTokenCount": 4,
-            "totalTokenCount": 283,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 244
-              }
-            ],
-            "thoughtsTokenCount": 35,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.7-flash",
-          "responseId": "RQeZasr9Jfj7vdIP7OmlqAs"
-        }
-  recorded_at: 2026-09-03 05:36:06
+      string: '{"status":"completed","usage":{"total_tokens":399,"total_input_tokens":365,"input_tokens_by_modality":[{"modality":"text","tokens":365}],"total_cached_tokens":0,"total_output_tokens":4,"total_tool_use_tokens":0,"total_thought_tokens":30,"raw_prompt_token":440,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":440}],"candidates_tokens_details":[{"modality":"text","tokens":8}],"thoughts_tokens_details":[{"modality":"text","tokens":30}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":440}],"candidates_tokens_details":[{"modality":"text","tokens":8}],"thoughts_tokens_details":[{"modality":"text","tokens":30}]}]},"created":"2026-09-25T13:31:19Z","updated":"2026-09-25T13:31:19Z","service_tier":"standard","steps":[{"signature":"Et0BCtoBAWkUfRP7XvQc3oSgVv2QRQ0aM0yhQsIxnrx+Xb5RKZCC0F9WZICvfhXomtklhJ7KZIZ+Y64Xol3YbOu7GP10GVYKkrMHwv8w4mRN+ifLzHsvauaJtmVXoqAM0HTdtw33ta8Tt0esUqjk9Q3vB27+mSYO61nbcHG1/NVqiQhjsYyZDKwRksLDghEKNElUP5YWdJntlyPiI1K8/OrnBixAjWFSzBS522J3Toxdzku/yYUegO00K+u+bKtswA4IM0DrgN3DTz24Fethc0u86yP8TcS2GemZEVLtamw=","type":"thought"},{"content":[{"text":"It
+        is February.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
+  recorded_at: 2026-09-25 13:31:19
 recorded_with: VCR-vcr/2.1.0
