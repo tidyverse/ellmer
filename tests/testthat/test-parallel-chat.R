@@ -218,30 +218,17 @@ test_that("errors in conversion become warnings", {
 })
 
 test_that("include_tokens/include_cost warn when result isn't a data frame", {
-  chat <- chat_anthropic_test()
-  provider <- chat$get_provider()
-  items <- type_object(text = type_string(), label = type_string())
-  type <- type_array(items = items)
-
+  provider <- chat_anthropic_test()$get_provider()
+  type <- type_array(type_object(text = type_string()))
   turns <- list(
     AssistantTurn(
-      list(ContentJson(data = list(list(text = "a", label = "x")))),
+      list(ContentJson(data = list(list(text = "a")))),
       tokens = c(1, 2, 0)
     )
   )
 
-  out <- multi_convert(provider, turns, type = type)
-  expect_type(out, "list")
-  expect_false(is.data.frame(out))
-
   expect_snapshot(
-    multi_convert(provider, turns, type = type, include_tokens = TRUE)
-  )
-  expect_snapshot(
-    multi_convert(provider, turns, type = type, include_cost = TRUE)
-  )
-  expect_snapshot(
-    multi_convert(
+    . <- multi_convert(
       provider,
       turns,
       type = type,

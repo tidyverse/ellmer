@@ -173,13 +173,9 @@ parallel_chat_text <- function(
 #'   each property. If `FALSE`, returns a list.
 #' @param include_tokens If `TRUE`, and the result is a data frame, will
 #'   add `input_tokens` and `output_tokens` columns giving the total input
-#'   and output tokens for each prompt. If the result is not a data frame
-#'   (e.g. because `type` is a top-level [type_array()] or `convert = FALSE`),
-#'   this is ignored with a warning.
+#'   and output tokens for each prompt.
 #' @param include_cost If `TRUE`, and the result is a data frame, will
-#'   add `cost` column giving the cost of each prompt. If the result is not
-#'   a data frame (e.g. because `type` is a top-level [type_array()] or
-#'   `convert = FALSE`), this is ignored with a warning.
+#'   add `cost` column giving the cost of each prompt.
 #' @export
 #' @rdname parallel_chat
 parallel_chat_structured <- function(
@@ -297,9 +293,11 @@ multi_convert <- function(
     }
   } else if (include_tokens || include_cost) {
     args <- c("include_tokens", "include_cost")[c(include_tokens, include_cost)]
-    cli::cli_warn(
-      "{.arg {args}} {?is/are} ignored because the result is not a data frame."
-    )
+    cli::cli_warn(c(
+      "Can't add token or cost columns to a result that isn't a data frame.",
+      "!" = "Ignoring {.arg {args}}.",
+      "i" = "Use {.fn type_object} for {.arg type} and {.code convert = TRUE} to get a data frame."
+    ))
   }
   out
 }
