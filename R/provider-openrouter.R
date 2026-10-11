@@ -130,7 +130,12 @@ default_openrouter_credentials <- function(error_call = caller_env()) {
           openrouter_oauth_flow,
           cache_disk = TRUE
         )
-        if (!openrouter_key_is_valid(cached$access_token)) {
+        if (openrouter_key_is_valid(cached$access_token)) {
+          # httr2 deletes cache files untouched for 30 days when it loads, and
+          # only rewrites a file when it refreshes an expired token, so mark
+          # the key as used ourselves.
+          Sys.setFileTime(openrouter_oauth_cache_files(client), Sys.time())
+        } else {
           openrouter_oauth_reset()
           if (!is_interactive()) {
             cli::cli_abort(
@@ -138,7 +143,7 @@ default_openrouter_credentials <- function(error_call = caller_env()) {
                 "Your saved OpenRouter login is no longer valid.",
                 i = "Call {.fn chat_openrouter} in an interactive session to log in again."
               ),
-              call = error_call
+              call = NULL
             )
           }
           cli::cli_inform(
@@ -178,9 +183,16 @@ openrouter_oauth_client <- function() {
   )
 }
 
+openrouter_oauth_cache_files <- function(client) {
+  dir(
+    file.path(oauth_cache_path(), client$name),
+    pattern = "-token\\.rds\\.enc$",
+    full.names = TRUE
+  )
+}
+
 openrouter_oauth_has_cache <- function(client) {
-  cache_dir <- file.path(oauth_cache_path(), client$name)
-  length(dir(cache_dir, pattern = "token")) > 0
+  length(openrouter_oauth_cache_files(client)) > 0
 }
 
 openrouter_oauth_reset <- function() {

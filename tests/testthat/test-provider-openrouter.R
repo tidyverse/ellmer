@@ -89,8 +89,11 @@ local_cached_openrouter_key <- function(key, frame = caller_env()) {
   ))
 }
 
-test_that("a cached key is checked once and then reused", {
+test_that("a cached key is checked once, reused, and marked as used", {
   local_cached_openrouter_key("sk-or-cached")
+  cache_file <- openrouter_oauth_cache_files(openrouter_oauth_client())
+  Sys.setFileTime(cache_file, Sys.time() - 60 * 86400)
+
   checks <- 0
   local_mocked_responses(function(req) {
     checks <<- checks + 1
@@ -100,6 +103,7 @@ test_that("a cached key is checked once and then reused", {
   expect_equal(credentials(), "sk-or-cached")
   expect_equal(credentials(), "sk-or-cached")
   expect_equal(checks, 1)
+  expect_gt(file.mtime(cache_file), Sys.time() - 60)
 })
 
 test_that("a revoked cached key is cleared and the user logs in again", {
