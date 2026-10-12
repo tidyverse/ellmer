@@ -133,7 +133,7 @@ AssistantTurn <- new_class(
     json = class_list,
     tokens = new_property(
       class_numeric,
-      default = c(NA_real_, NA_real_, NA_real_),
+      default = quote(c(NA_real_, NA_real_, NA_real_)),
       validator = function(value) {
         if (length(value) != 3) {
           "must be length three"
@@ -171,6 +171,7 @@ AssistantTurn <- new_class(
     )
   }
 )
+#' @param ... Arguments passed on to [AssistantTurn].
 #' @param reason A character string describing why the turn was interrupted.
 #'   Defaults to `"interrupted"`.
 #' @export

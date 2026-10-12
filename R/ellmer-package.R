@@ -13,7 +13,7 @@ silence_r_cmd_check_note <- function() {
 ## usethis namespace: start
 #' @import httr2
 #' @import rlang
-#' @import S7
+#' @rawNamespace import(S7, except = `:=`)
 #' @importFrom lifecycle deprecated
 ## usethis namespace: end
 NULL
