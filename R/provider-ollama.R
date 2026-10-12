@@ -1,6 +1,8 @@
 #' Chat with a local Ollama model
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' To use `chat_ollama()` first download and install
 #' [Ollama](https://ollama.com). Then install some models either from the
 #' command line (e.g. with `ollama pull llama3.1`) or within R using
@@ -8,6 +10,25 @@
 #' `ollamar::pull("llama3.1")`).
 #'
 #' Built on top of [chat_openai_compatible()].
+#'
+#' ## Thinking models
+#'
+#' Some Ollama models (e.g. qwen3) support extended reasoning or "thinking".
+#' When using these models, thinking content is automatically captured in
+#' the turn. You can control thinking with
+#' `reasoning_effort`:
+#'
+#' ```r
+#' chat <- chat_ollama(
+#'   model = "qwen3:4b",
+#'   params = params(reasoning_effort = "none")
+#' )
+#' ```
+#'
+#' Which values are supported depends on the model. For example, qwen3 only
+#' supports `"none"` (off) vs the default (on), while gpt-oss supports
+#' `"low"`, `"medium"`, and `"high"` but ignores `"none"`. See
+#' <https://docs.ollama.com/capabilities/thinking> for details.
 #'
 #' ## Known limitations
 #'
@@ -53,8 +74,14 @@ chat_ollama <- function(
   # if ollama is served behind a proxy (see #501)
   credentials <- ollama_credentials(credentials, api_key)
 
+  is_local <- is_local_ollama(base_url)
+
   if (!has_ollama(base_url, credentials)) {
-    cli::cli_abort("Can't find locally running ollama.")
+    if (is_local) {
+      cli::cli_abort("Can't find locally running ollama.")
+    } else {
+      cli::cli_abort("Can't connect to ollama at {.url {base_url}}.")
+    }
   }
 
   models <- models_ollama(base_url, credentials)$id
@@ -62,39 +89,51 @@ chat_ollama <- function(
   if (missing(model)) {
     cli::cli_abort(c(
       "Must specify {.arg model}.",
-      i = "Locally installed models: {.str {models}}."
+      i = "Available models: {.str {models}}."
     ))
   } else if (!model %in% models) {
-    cli::cli_abort(
-      c(
-        "Model {.val {model}} is not installed locally.",
-        i = "Run {.code ollama pull {model}} in your terminal or {.run ollamar::pull(\"{model}\")} in R to install the model.",
-        i = "See locally installed models with {.run ellmer::models_ollama()}."
+    if (is_local) {
+      cli::cli_abort(
+        c(
+          "Model {.val {model}} is not installed locally.",
+          i = "Run {.code ollama pull {model}} in your terminal or {.run ollamar::pull(\"{model}\")} in R to install the model.",
+          i = "See locally installed models with {.run ellmer::models_ollama()}."
+        )
       )
-    )
+    } else {
+      cli::cli_abort(
+        c(
+          "Model {.val {model}} is not available on {.url {base_url}}.",
+          i = "See available models with {.code models_ollama(base_url = \"{base_url}\")}."
+        )
+      )
+    }
   }
 
   echo <- check_echo(echo)
 
+  params <- params %||% params()
+
   provider <- ProviderOllama(
     name = "Ollama",
     base_url = file.path(base_url, "v1"), ## the v1 portion of the path is added for openAI compatible API
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = FALSE
   )
+  model <- Model(name = model, params = params, extra_args = api_args)
 
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderOllama <- new_class(
   "ProviderOllama",
-  parent = ProviderOpenAICompatible,
-  properties = list(
-    model = prop_string()
-  )
+  parent = ProviderOpenAICompatible
 )
 
 ollama_credentials <- function(credentials = NULL, api_key = NULL) {
@@ -118,7 +157,8 @@ method(chat_params, ProviderOllama) <- function(provider, params) {
       temperature = "temperature",
       top_p = "top_p",
       top_k = "top_k",
-      max_tokens = "max_tokens"
+      max_tokens = "max_tokens",
+      reasoning_effort = "reasoning_effort"
     )
   )
 }
@@ -153,8 +193,20 @@ models_ollama <- function(
     credentials = credentials
   )
 
+  provider <- ProviderOllama(
+    name = "Ollama",
+    base_url = file.path(base_url, "v1"),
+    credentials = credentials
+  )
+
+  models_list(provider)
+}
+
+method(models_list, ProviderOllama) <- function(provider) {
+  base_url <- sub("/v1$", "", provider@base_url)
+
   req <- request(base_url)
-  req <- ellmer_req_credentials(req, credentials(), "Authorization")
+  req <- ellmer_req_credentials(req, provider@credentials(), "Authorization")
   req <- req_url_path_append(req, "api/tags")
   resp <- req_perform(req)
   json <- resp_body_json(resp)
@@ -169,7 +221,11 @@ models_ollama <- function(
     id = names,
     created_at = modified_at,
     size = size,
-    capabilities = ollama_model_capabilities(base_url, names, credentials)
+    capabilities = ollama_model_capabilities(
+      base_url,
+      names,
+      provider@credentials
+    )
   )
   df[order(-xtfrm(df$created_at)), ]
 }
@@ -214,6 +270,10 @@ ollama_model_capabilities <- function(
   map_chr(res, \(x) paste(x$capabilities, collapse = ","))
 }
 
+is_local_ollama <- function(base_url) {
+  host <- httr2::url_parse(base_url)$hostname
+  host %in% c("localhost", "127.0.0.1", "::1")
+}
 
 has_ollama <- function(
   base_url = "http://localhost:11434",
