@@ -5,6 +5,7 @@
 * `chat_openai()` now sends `type = "message"` on every input item to the Responses API, so OpenAI-compatible servers that require it (e.g. llama.cpp) no longer reject replayed assistant turns (@taekop, #1153).
 * `live_browser()` works again with shinychat >= 0.5.0 (#1167).
 * Streamed responses now record the time to first token (in seconds) as the `gen_ai.response.time_to_first_chunk` attribute on the OpenTelemetry `chat` span (@schloerke, #1142).
+* New `chat_llamacpp()` and `models_llamacpp()` add initial support for llama.cpp servers (@frankiethull).
 * New `list_llamacpp_models()` scans the machine for GGUF model files (by magic bytes, so Ollama's blob store is covered too), the llama.cpp analogue of `models_ollama()` (@frankiethull).
 
 # ellmer 0.5.0
