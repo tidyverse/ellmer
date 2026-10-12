@@ -2,6 +2,7 @@
 
 * `chat_github()` now uses `chat_openai_compatible()` for improved compatibility, and `models_github()` now supports custom `base_url` configuration (@D-M4rk, #877).
 * `chat_ollama()` now contains a slot for `top_k` within the `params` argument (@frankiethull).
+* New `list_llamacpp_models()` scans the machine for GGUF model files (by magic bytes, so Ollama's blob store is covered too), the llama.cpp analogue of `models_ollama()` (@frankiethull).
 
 # ellmer 0.4.0
 
